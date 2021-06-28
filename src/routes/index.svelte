@@ -1,10 +1,10 @@
 <script>
   import { onMount } from "svelte";
+  import { API_URL, THIS_SHOULD_NOT_WORK } from "./env.js";
   let msg = null;
 
-  const api_url = import.meta.env.VITE_API_URL || "http://localhost:8000";
   onMount(async () => {
-    const res = await fetch(`${api_url}/hello/`);
+    const res = await fetch(`${API_URL}/hello/`);
     const jsonResult = await res.json();
     console.log(jsonResult);
     msg = jsonResult.message;
@@ -26,8 +26,8 @@
     Base URL {import.meta.env.BASE_URL}
     PROD {import.meta.env.PROD}
     DEV {import.meta.env.DEV}
-    API_URL {import.meta.env.VITE_API_URL}
-    DJANGO_ALLOWED_HOSTS {import.meta.env.DJANGO_ALLOWED_HOSTS}
+    API_URL {API_URL}
+    DJANGO_ALLOWED_HOSTS {THIS_SHOULD_NOT_WORK}
 
   </pre>
 </div>
