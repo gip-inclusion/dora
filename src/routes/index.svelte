@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { API_URL, THIS_SHOULD_NOT_WORK } from "./env.js";
+  import { API_URL } from "./env.js";
   let msg = null;
 
   onMount(async () => {
@@ -21,13 +21,4 @@
   {:else}
     <p>Le backend n'est pas connecté</p>
   {/if}
-  <pre>
-    App Mode {import.meta.env.MODE}
-    Base URL {import.meta.env.BASE_URL}
-    PROD {import.meta.env.PROD}
-    DEV {import.meta.env.DEV}
-    API_URL {API_URL}
-    DJANGO_ALLOWED_HOSTS {THIS_SHOULD_NOT_WORK}
-
-  </pre>
 </div>
