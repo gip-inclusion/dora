@@ -4,10 +4,27 @@
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      /*https://stackoverflow.com/questions/2436749/how-to-add-multiple-font-files-for-the-same-font/4474252#4474252*/
+      @font-face {
+        font-family: "Marianne";
+        src: url("/Marianne/Marianne-Regular.woff") format("woff");
+      }
+      @font-face {
+        font-family: "Marianne";
+        src: url("/Marianne/Marianne-Bold.woff") format("woff");
+        font-weight: bold;
+      }
+      @font-face {
+        font-family: "Marianne";
+        src: url("/Marianne/Marianne-Regular_Italic.woff") format("woff");
+        font-style: italic;
+      }
+    </style>
     %svelte.head%
     <title>Dora</title>
   </head>
-  <body>
+  <body class="bg-white m-6 font-sans">
     <div id="svelte">%svelte.body%</div>
   </body>
 </html>

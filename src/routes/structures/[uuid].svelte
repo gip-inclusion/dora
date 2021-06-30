@@ -10,9 +10,11 @@
     });
 
     if (res.ok) {
+      const structure = await res.json();
+      console.log(structure);
       return {
         props: {
-          structure: await res.json(),
+          structure,
         },
       };
     }
@@ -24,11 +26,55 @@
 </script>
 
 <script>
+  import MarkdownIt from "markdown-it";
   export let structure;
+
+  const md = new MarkdownIt({
+    html: false,
+    breaks: true,
+    typographer: true,
+    quotes: ["«\xA0", "\xA0»", "‹\xA0", "\xA0›"],
+  });
+
+  function format_text(text) {
+    return md.render(
+      text
+        .replace(/ ;/gi, "&nbsp;;")
+        .replace(/ :/gi, "&nbsp;:")
+        .replace(/ !/gi, "&nbsp;!")
+        .replace(/ \?/gi, "&nbsp;?")
+    );
+  }
 </script>
 
 <svelte:head>
   <title>Dora: {structure.name}</title>
 </svelte:head>
 
-{structure.name}
+<h1 class="text-2xl mt-20 mb-4 font-bold">{structure.name}</h1>
+
+<div class="flex-col space-y-4 text-sm text-gray-600">
+  <div class="">
+    <span class="">{structure.address}</span><br />
+    <span class="">{structure.postal_code}</span>
+    <span class="">{structure.city}</span>
+  </div>
+
+  <div class="prose prose-xl">
+    {@html format_text(structure.short_desc)}
+  </div>
+
+  <div class="prose max-w-3xl bg-gray-200 p-5">
+    {@html format_text(structure.full_desc)}
+  </div>
+
+  <div class="text-blue-dora font-bold">
+    <a class="my-20" href="{structure.url}">{structure.url}</a>
+  </div>
+  <div class="flex-row space-x-2">
+    {#each structure.solutions_themes as theme}
+      <span class="rounded-xl bg-orange-400 p-0.5 px-4 text-white">
+        {theme}</span>
+    {/each}
+  </div>
+</div>
