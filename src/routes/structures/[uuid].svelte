@@ -3,7 +3,11 @@
 
   export async function load({ page, fetch, _session, _context }) {
     const url = `${API_URL}/structures/${page.params.uuid}/`;
-    const res = await fetch(url);
+    const res = await fetch(url, {
+      headers: {
+        Accept: "application/json; version=1.0",
+      },
+    });
 
     if (res.ok) {
       return {

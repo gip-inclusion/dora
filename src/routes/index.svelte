@@ -4,7 +4,11 @@
   let msg = null;
 
   onMount(async () => {
-    const res = await fetch(`${API_URL}/hello/`);
+    const res = await fetch(`${API_URL}/hello/`, {
+      headers: {
+        Accept: "application/json; version=1.0",
+      },
+    });
     const jsonResult = await res.json();
     console.log(jsonResult);
     msg = jsonResult.message;
