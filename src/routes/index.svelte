@@ -15,14 +15,17 @@
   });
 </script>
 
-<h1>Hello Dora !</h1>
+<h1 class="text-6xl font-extrabold mb-20">Hello Dora !</h1>
 
 <div>
   {#if msg}
-    Le backend dit : <span
-      style="background-color: grey; color: white; padding: 0.2em;">{msg}</span
-    >
+    Le backend dit :
+    <span class="text-xl bg-gray-600 text-white py-2 px-6 rounded shadow">
+      {msg}
+    </span>
   {:else}
-    <p>Le backend n'est pas connecté</p>
+    <span class="text-xl bg-gray-600 text-white py-2 px-6 rounded shadow">
+      Le backend n'est pas connecté
+    </span>
   {/if}
 </div>
