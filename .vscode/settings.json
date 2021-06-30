@@ -1,7 +1,18 @@
 {
   "editor.formatOnSave": true,
-  "files.trimTrailingWhitespace": true,
+
   "files.autoSave": "onFocusChange",
+  "files.trimTrailingWhitespace": true,
+
+  "eslint.probe": ["javascript", "svelte"],
+  "eslint.validate": ["javascript", "svelte"],
+
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[markdown]": {
     "files.trimTrailingWhitespace": false
   },
