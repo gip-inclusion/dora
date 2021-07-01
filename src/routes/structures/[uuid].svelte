@@ -57,23 +57,23 @@
 <div class="flex-col space-y-4 text-sm text-gray-600">
   <div class="">
     <span class="">{structure.address}</span><br />
-    <span class="">{structure.postal_code}</span>
+    <span class="">{structure.postalCode}</span>
     <span class="">{structure.city}</span>
   </div>
 
   <div class="prose prose-xl">
-    {@html format_text(structure.short_desc)}
+    {@html format_text(structure.shortDesc)}
   </div>
 
   <div class="prose max-w-3xl bg-gray-200 p-5">
-    {@html format_text(structure.full_desc)}
+    {@html format_text(structure.fullDesc)}
   </div>
 
   <div class="text-blue-dora font-bold">
     <a class="my-20" href="{structure.url}">{structure.url}</a>
   </div>
   <div class="flex-row space-x-2">
-    {#each structure.solutions_themes as theme}
+    {#each structure.solutionsThemes as theme}
       <span class="rounded-xl bg-orange-400 p-0.5 px-4 text-white">
         {theme}</span>
     {/each}
