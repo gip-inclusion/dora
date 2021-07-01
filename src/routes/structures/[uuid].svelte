@@ -1,8 +1,8 @@
 <script context="module">
-  import { API_URL } from "../env.js";
+  import { getApiURL } from "$lib/utils";
 
   export async function load({ page, fetch, _session, _context }) {
-    const url = `${API_URL}/structures/${page.params.uuid}/`;
+    const url = `${getApiURL()}/structures/${page.params.uuid}/`;
     const res = await fetch(url, {
       headers: {
         Accept: "application/json; version=1.0",
@@ -11,7 +11,6 @@
 
     if (res.ok) {
       const structure = await res.json();
-      console.log(structure);
       return {
         props: {
           structure,
