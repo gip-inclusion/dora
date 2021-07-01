@@ -26,23 +26,25 @@
 </script>
 
 <script>
-  import MarkdownIt from "markdown-it";
-  export let structure;
+  import marked from "marked";
+  import insane from "insane";
 
-  const md = new MarkdownIt({
-    html: false,
+  marked.setOptions({
     breaks: true,
-    typographer: true,
-    quotes: ["«\xA0", "\xA0»", "‹\xA0", "\xA0›"],
+    smartypants: true,
   });
 
+  export let structure;
+
   function format_text(text) {
-    return md.render(
-      text
-        .replace(/ ;/gi, "&nbsp;;")
-        .replace(/ :/gi, "&nbsp;:")
-        .replace(/ !/gi, "&nbsp;!")
-        .replace(/ \?/gi, "&nbsp;?")
+    return insane(
+      marked(
+        text
+          .replace(/ ;/gi, "&nbsp;;")
+          .replace(/ :/gi, "&nbsp;:")
+          .replace(/ !/gi, "&nbsp;!")
+          .replace(/ \?/gi, "&nbsp;?")
+      )
     );
   }
 </script>

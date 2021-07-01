@@ -8,7 +8,7 @@ const config = {
     target: "#svelte",
     vite: {
       optimizeDeps: {
-        include: ["markdown-it"],
+        include: ["insane"],
       },
       server: {
         hmr: {
