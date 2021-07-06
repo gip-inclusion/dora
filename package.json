@@ -41,7 +41,7 @@
       "prettier --write --plugin-search-dir=.",
       "eslint --ignore-path .gitignore --fix ."
     ],
-    "*.{json,css,html,md}": [
+    "*.{json,css,postcss,html,md}": [
       "prettier --write --plugin-search-dir=."
     ]
   }
