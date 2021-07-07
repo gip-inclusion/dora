@@ -29,11 +29,11 @@
 <script>
 </script>
 
-<h1 class="text-2xl font-extrabold my-20">Liste des structures&nbsp;:</h1>
+<h1 class="my-20 text-2xl font-extrabold">Liste des structures&nbsp;:</h1>
 
 <div class="flex-col space-y-2">
   {#each structures as structure}
-    <div class="text-xl text-blue-dora py-2 px-6">
+    <div class="px-6 py-2 text-xl text-blue-dora hover:text-accent">
       <a href="/structures/{structure.id}">{structure.name}</a>
     </div>
   {/each}

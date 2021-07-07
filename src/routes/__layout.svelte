@@ -1,19 +1,37 @@
 <script>
   import "../app.postcss";
+  import { token } from "$lib/stores";
 </script>
 
-<header>
-  <div class="flex-row">
-    <a href="/" class="">
+<header class="shadow-md">
+  <div class="flex flex-row items-center px-8 py-2">
+    <a class="block" href="/">
       <img
         class="inline"
         src="/logo-ministere.png"
         alt="Accueil Ministère du Travail, de l'Emploi et de l'Insertion"
-        width="98"
-        height="89" />
+        width="107"
+        height="86" />
+      <img
+        class="inline"
+        src="/logo-dora-text.png"
+        alt="Dora"
+        width="86"
+        height="54" />
     </a>
-    <div class="inline text-4xl font-bold text-blue-dora">DORA</div>
+    <div class="flex-grow" />
+    {#if $token}
+      <a
+        class="block p-2 px-4 border rounded text-action bg-back2 hover:border-accent"
+        href="/logout">Deconnexion</a>
+    {:else}
+      <a
+        class="block p-2 px-4 text-white rounded bg-action hover:bg-accent"
+        href="/login">Se connecter</a>
+    {/if}
   </div>
 </header>
 
-<slot />
+<div class="px-8 py-2">
+  <slot />
+</div>

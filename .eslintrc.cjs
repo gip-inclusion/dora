@@ -15,7 +15,7 @@ module.exports = {
   rules: {
     "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     "no-warning-comments": [
-      "error",
+      "warn",
       {
         terms: ["todo", "hack", "xxx", "fixme"],
         location: "start",
