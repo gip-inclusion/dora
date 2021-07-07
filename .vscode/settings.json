@@ -1,12 +1,16 @@
 {
+  "css.validate": false,
   "editor.formatOnSave": true,
-
+  "editor.quickSuggestions": {
+    "strings": true
+  },
   "files.autoSave": "onFocusChange",
   "files.trimTrailingWhitespace": true,
 
   "eslint.probe": ["javascript", "svelte"],
   "eslint.validate": ["javascript", "svelte"],
-
+  "headwind.runOnSave": true,
+  "tailwindCSS.validate": true,
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
