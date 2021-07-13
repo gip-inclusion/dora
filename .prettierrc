@@ -1,6 +1,6 @@
 {
   "svelteBracketNewLine": false,
-  "svelteSortOrder": "options-styles-scripts-markup",
+  "svelteSortOrder": "options-scripts-styles-markup",
   "svelteIndentScriptAndStyle": true,
   "svelteStrictMode": false
 }
