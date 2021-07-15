@@ -1,6 +1,7 @@
 <script>
+  import { token } from "$lib/auth";
+
   import "../app.postcss";
-  import { token } from "$lib/stores";
 </script>
 
 <header class="shadow-md">

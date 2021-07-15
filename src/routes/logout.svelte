@@ -1,8 +1,8 @@
 <script>
-  import { token } from "$lib/stores";
   import { goto } from "$app/navigation";
+  import { clearToken } from "$lib/auth";
 
-  $token = null;
+  clearToken();
   localStorage.clear();
   goto("/");
 </script>
