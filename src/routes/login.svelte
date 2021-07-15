@@ -1,7 +1,17 @@
+<script context="module">
+  export const load = async ({ page }) => ({
+    props: {
+      next: page.query.get("next"),
+    },
+  });
+</script>
+
 <script>
   import { getApiURL } from "$lib/utils";
   import { goto } from "$app/navigation";
   import { setToken } from "$lib/auth";
+
+  export let next;
 
   let email = "";
   let password = "";
@@ -23,7 +33,7 @@
     if (result.ok) {
       const jsonResult = await result.json();
       setToken(jsonResult.token);
-      await goto("/");
+      await goto(next || "/");
     }
     return {
       status: result.status,
