@@ -25,19 +25,14 @@
 </script>
 
 <script>
-  import marked from "marked";
   import insane from "insane";
 
-  marked.setOptions({
-    breaks: true,
-    smartypants: true,
-  });
-
+  import { markdownToHTML } from "$lib/utils";
   export let structure;
 
   function format_text(text) {
     return insane(
-      marked(
+      markdownToHTML(
         text
           .replace(/ ;/gi, "&nbsp;;")
           .replace(/ :/gi, "&nbsp;:")
@@ -70,7 +65,7 @@
   </div>
 
   <div class="text-blue-dora font-bold">
-    <a class="my-20" href="{structure.url}">{structure.url}</a>
+    <a class="my-20" href={structure.url}>{structure.url}</a>
   </div>
   <div class="flex-row space-x-2">
     {#each structure.solutionsThemes as theme}
