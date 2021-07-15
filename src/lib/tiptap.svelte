@@ -14,17 +14,18 @@
   let editor;
   export let className;
   export let htmlContent = "";
+  export let initialContent = "";
 
   onMount(() => {
     editor = new Editor({
       element: element,
       extensions: [StarterKit],
-      content: "",
+      content: initialContent,
       injectCSS: false,
       onTransaction: () => {
         // force re-render so `editor.isActive` works as expected
-        editor = editor;
         htmlContent = editor.getHTML();
+        editor = editor;
       },
       editorProps: {
         attributes: {
