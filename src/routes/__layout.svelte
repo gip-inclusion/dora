@@ -1,14 +1,7 @@
-<script context="module">
-  export const load = async ({ page }) => ({
-    props: {
-      path: page.path,
-    },
-  });
-</script>
-
 <script>
+  import { page } from "$app/stores";
   import { token } from "$lib/auth";
-  export let path;
+
   import "../app.postcss";
 </script>
 
@@ -32,11 +25,11 @@
     {#if $token}
       <a
         class="block p-2 px-4 border rounded text-action bg-back2 hover:border-accent"
-        href={`/logout?next=${encodeURIComponent(path)}`}>Deconnexion</a>
+        href={`/logout?next=${encodeURIComponent($page.path)}`}>Deconnexion</a>
     {:else}
       <a
         class="block p-2 px-4 text-white rounded bg-action hover:bg-accent"
-        href={`/login?next=${encodeURIComponent(path)}`}>Se connecter</a>
+        href={`/login?next=${encodeURIComponent($page.path)}`}>Se connecter</a>
     {/if}
   </div>
 </header>
