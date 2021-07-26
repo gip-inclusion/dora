@@ -77,7 +77,7 @@
           multiple />
       {:else if type === "text"}
         <span>{description}</span>
-        <input bind:value type="text" />
+        <input bind:value type="text" required={field.required} />
       {:else if type === "richtext"}
         <Tiptap
           bind:htmlContent={value}
@@ -85,7 +85,7 @@
           className="prose prose-sm p-2 bg-white whitespace-pre-wrap w-full max-w-none h-64 border-2 overflow-auto focus:outline-none" />
       {:else if type === "__multitext__"}
         <span>{description}</span>
-        <input bind:value type="text" />
+        <input bind:value type="text" required={field.required} />
       {:else if type === "toggle"}
         <Toggle bind:checked={value} />
       {:else if type === "date"}

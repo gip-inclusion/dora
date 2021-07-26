@@ -8,11 +8,14 @@
 
 <script>
   import { goto } from "$app/navigation";
+  import { browser } from "$app/env";
   import { clearToken } from "$lib/auth";
 
   export let next;
 
-  clearToken();
-  localStorage.clear();
-  goto(next || "/");
+  if (browser) {
+    clearToken();
+    localStorage.clear();
+    goto(next || "/");
+  }
 </script>
