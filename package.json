@@ -43,7 +43,7 @@
   "lint-staged": {
     "*.{js,svelte}": [
       "prettier --write --plugin-search-dir=.",
-      "eslint --ignore-path .gitignore --fix ."
+      "eslint --ignore-path .gitignore --fix"
     ],
     "*.{json,css,postcss,html,md}": [
       "prettier --write --plugin-search-dir=."
