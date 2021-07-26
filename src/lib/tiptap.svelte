@@ -51,45 +51,51 @@
   }
 </style>
 
-{#if editor}
-  <button
-    on:click={() => editor.chain().focus().toggleBold().run()}
-    class:active={editor.isActive("bold")}
-    class="tb-button">
-    {@html boldIcon}
-  </button>
-  <button
-    on:click={() => editor.chain().focus().toggleItalic().run()}
-    class:active={editor.isActive("italic")}
-    class="tb-button">
-    {@html italicIcon}
-  </button>
+<div class="flex flex-col w-full">
+  {#if editor}
+    <div class="flex flex-row">
+      <button
+        on:click={() => editor.chain().focus().toggleBold().run()}
+        class:active={editor.isActive("bold")}
+        class="tb-button">
+        {@html boldIcon}
+      </button>
+      <button
+        on:click={() => editor.chain().focus().toggleItalic().run()}
+        class:active={editor.isActive("italic")}
+        class="tb-button">
+        {@html italicIcon}
+      </button>
 
-  <button
-    on:click={() => editor.chain().focus().setParagraph().run()}
-    class:active={editor.isActive("paragraph")}
-    class="tb-button">
-    {@html paraIcon}
-  </button>
-  <button
-    on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-    class:active={editor.isActive("heading", { level: 2 })}
-    class="tb-button">
-    {@html h1Icon}
-  </button>
-  <button
-    on:click={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-    class:active={editor.isActive("heading", { level: 3 })}
-    class="tb-button">
-    {@html h2Icon}
-  </button>
-  <button
-    on:click={() => editor.chain().focus().toggleBulletList().run()}
-    class:active={editor.isActive("bulletList")}
-    class="tb-button">
-    {@html liIcon}
-  </button>
-{/if}
-<div>
-  <div bind:this={element} />
+      <button
+        on:click={() => editor.chain().focus().setParagraph().run()}
+        class:active={editor.isActive("paragraph")}
+        class="tb-button">
+        {@html paraIcon}
+      </button>
+      <button
+        on:click={() =>
+          editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        class:active={editor.isActive("heading", { level: 2 })}
+        class="tb-button">
+        {@html h1Icon}
+      </button>
+      <button
+        on:click={() =>
+          editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        class:active={editor.isActive("heading", { level: 3 })}
+        class="tb-button">
+        {@html h2Icon}
+      </button>
+      <button
+        on:click={() => editor.chain().focus().toggleBulletList().run()}
+        class:active={editor.isActive("bulletList")}
+        class="tb-button">
+        {@html liIcon}
+      </button>
+    </div>
+  {/if}
+  <div>
+    <div bind:this={element} />
+  </div>
 </div>
