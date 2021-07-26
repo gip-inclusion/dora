@@ -43,5 +43,5 @@
       field={$serviceOptions.feeDetails}
       bind:value={$service.feeDetails} />
   </div>
-  <NavButtons previousLink="etape1" nextLink="etape3" withValidate />
+  <NavButtons previousLink="etape1" nextLink="etape3" />
 {/if}

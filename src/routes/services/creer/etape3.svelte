@@ -52,5 +52,5 @@
       field={$serviceOptions.onlineForms}
       bind:value={$service.onlineForms} />
   </div>
-  <NavButtons previousLink="etape2" nextLink="etape4" withValidate />
+  <NavButtons previousLink="etape2" nextLink="etape4" />
 {/if}

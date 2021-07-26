@@ -55,5 +55,5 @@
       bind:value={$service.isCommonLaw} />
   </div>
 
-  <NavButtons nextLink="etape2" withValidate />
+  <NavButtons nextLink="etape2" />
 {/if}
