@@ -1,17 +1,10 @@
-<script context="module">
-  export const load = async ({ page }) => ({
-    props: {
-      next: page.query.get("next"),
-    },
-  });
-</script>
-
 <script>
-  import { getApiURL } from "$lib/utils";
+  import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+  import { getApiURL } from "$lib/utils";
   import { setToken } from "$lib/auth";
 
-  export let next;
+  const next = $page.query.get("next");
 
   let email = "";
   let password = "";
