@@ -56,7 +56,7 @@ const config = {
       "12xl": "2.375rem", // 38px
       "13xl": "2.8125rem", // 45px
     },
-    screens: { base: "375px", md: "768px", lg: "992px", xl: "1200px" },
+    screens: { md: "375px", lg: "768px", xl: "1200px" },
     spacing: {
       "1/2": "0.25rem",
       1: "0.5rem",
