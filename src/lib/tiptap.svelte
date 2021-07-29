@@ -3,12 +3,14 @@
   import { Editor } from "@tiptap/core";
   import StarterKit from "@tiptap/starter-kit";
 
-  import boldIcon from "remixicon/icons/Editor/bold.svg?raw";
-  import italicIcon from "remixicon/icons/Editor/italic.svg?raw";
-  import paraIcon from "remixicon/icons/Editor/paragraph.svg?raw";
-  import h1Icon from "remixicon/icons/Editor/h-1.svg?raw";
-  import h2Icon from "remixicon/icons/Editor/h-2.svg?raw";
-  import liIcon from "remixicon/icons/Editor/list-unordered.svg?raw";
+  import {
+    boldIcon,
+    italicIcon,
+    paraIcon,
+    h1Icon,
+    h2Icon,
+    liIcon,
+  } from "$lib/icons.js";
 
   let element;
   let editor;

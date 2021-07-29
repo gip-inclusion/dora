@@ -1,6 +1,5 @@
 <script>
-  import arrowRightIcon from "remixicon/icons/System/arrow-right-line.svg?raw";
-  import arrowLeftIcon from "remixicon/icons/System/arrow-left-line.svg?raw";
+  import { arrowRightIcon, arrowLeftIcon } from "$lib/icons.js";
   export let withBack, withForward, withValidate;
 </script>
 

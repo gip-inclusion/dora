@@ -56,11 +56,17 @@ const config = {
       "12xl": "2.375rem", // 38px
       "13xl": "2.8125rem", // 45px
     },
+    lineHeight: {
+      tight: "1.2",
+      normal: "1.5",
+    },
     screens: { md: "375px", lg: "768px", xl: "1200px" },
     spacing: {
       "1/2": "0.25rem",
       1: "0.5rem",
+      "3/2": "0.75rem",
       2: "1rem",
+      "5/2": "1.25rem",
       3: "1.5rem",
       4: "2rem",
       5: "2.5rem",

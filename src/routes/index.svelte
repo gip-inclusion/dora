@@ -1,5 +1,5 @@
 <script context="module">
-  import { getApiURL } from "$lib/utils";
+  import { getApiURL } from "$lib/utils.js";
 
   let structures = [];
 
