@@ -100,7 +100,7 @@
   <title>Dora: {structure.name}</title>
 </svelte:head>
 
-<h1 class="mt-20 mb-4 text-2xl font-bold">{structure.name}</h1>
+<h1 class="">{structure.name}</h1>
 {#if currentToken}
   {#if !editMode}
     <button

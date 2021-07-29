@@ -37,6 +37,60 @@ const config = {
     fontFamily: {
       sans: ["Marianne"],
     },
+    fontSize: {
+      xs: ".75rem", // 12px
+      sm: ".875rem", // 14px
+      base: "1rem", // 16px
+      lg: "1.0625rem", // 17px
+      xl: "1.125", // 18px
+      "2xl": "1.1875rem", // 19px
+      "3xl": "1.25rem", // 20px
+      "4xl": "1.3125rem", // 21px
+      "5xl": "1.375rem", // 22px
+      "6xl": "1.4375rem", // 23px
+      "7xl": "1.5rem", // 24px
+      "8xl": "1.625rem", // 26px
+      "9xl": "1.75rem", // 28px
+      "10xl": "1.875rem", // 30px
+      "11xl": "2rem", // 32px
+      "12xl": "2.375rem", // 38px
+      "13xl": "2.8125rem", // 45px
+    },
+    screens: { base: "375px", md: "768px", lg: "992px", xl: "1200px" },
+    spacing: {
+      "1/2": "0.25rem",
+      1: "0.5rem",
+      2: "1rem",
+      3: "1.5rem",
+      4: "2rem",
+      5: "2.5rem",
+      6: "3rem",
+      7: "3.5rem",
+      8: "4rem",
+      9: "4.5rem",
+      10: "5rem",
+      11: "5.5rem",
+      12: "6rem",
+      14: "7rem",
+      17: "8.5rem",
+      20: "10rem",
+    },
+    borderRadius: {
+      none: "0",
+      DEFAULT: "0.25rem",
+      md: "0.5rem",
+      lg: "1.5rem",
+    },
+    boxShadow: {
+      none: "none",
+      xs: "0 1px 0 0 rgba(0, 0, 0, 0.05)",
+      sm: "0 0 1px 0  rgba(0, 0, 0, 0.05), 0 2px 1px 0 rgba(0, 0, 0, 0.05)",
+      md: "0 2px 10px 0 rgba(0, 0, 0, 0.1), 0 0 2px 0 rgba(0, 0, 0, 0.2)",
+      l: "0 4px 20px 0 rgba(0, 0, 0, 0.15), 0 0 3px 0 rgba(0, 0, 0, 0.1)",
+      xl: "0 0 4px rgba(0, 0, 0, 0.1), 0px 8px 40px rgba(0, 0, 0, 0.2);",
+      inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)",
+      focus: "0px 0px 0px 2px #FFFFFF, 0px 0px 0px 4px #0A76F6",
+    },
   },
   plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
 };
