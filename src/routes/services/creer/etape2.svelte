@@ -18,7 +18,7 @@
       Conditions d'accès pour le bénéficiaire
     </h2>
 
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-back2">
+    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
       <Field
         type="multiselect"
         placeholder="Choisissez ou ajoutez vos critères d’admission"

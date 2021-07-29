@@ -17,7 +17,7 @@
     <h2 class="w-full mt-20 mb-4 text-xl font-bold ">
       Présentez votre offre de service
     </h2>
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-back2">
+    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
       <Field
         type="text"
         field={$serviceOptions.name}
@@ -35,7 +35,7 @@
     </div>
 
     <h2 class="w-full mt-20 mb-4 text-xl font-bold ">Typologie de l‘offre</h2>
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-back2">
+    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
       <Field
         type="checkboxes"
         field={$serviceOptions.kinds}

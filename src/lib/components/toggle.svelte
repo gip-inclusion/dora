@@ -17,7 +17,7 @@
     transform: translateX(100%);
   }
   input:checked ~ .toggle-path {
-    @apply bg-blue-400;
+    @apply bg-magenta-80;
   }
 </style>
 

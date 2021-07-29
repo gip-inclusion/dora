@@ -51,12 +51,12 @@
 
 <h1 class="mt-20 mb-4 text-4xl font-bold text-center">Se connecter</h1>
 <form
-  class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-back2"
+  class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01"
   on:submit|preventDefault={handleSubmit}>
   <label class="flex flex-row items-center">
     <span class="inline-block w-40 font-bold">Couriel</span>
     <input
-      class="flex-grow inline-block border-gray-300"
+      class="flex-grow inline-block border-gray-02"
       type="email"
       required
       bind:value={email}
@@ -66,7 +66,7 @@
   <label class="flex flex-row items-center">
     <span class="inline-block w-40 font-bold">Mot de passe</span>
     <input
-      class="flex-grow inline-block border-gray-300"
+      class="flex-grow inline-block border-gray-02"
       type="password"
       required
       bind:value={password}
@@ -76,7 +76,7 @@
   <button
     type="submit"
     disabled={!email || !password}
-    class="self-end block w-32 p-2 px-4 text-white border-2 rounded bg-action disabled:bg-back2 ">
+    class="self-end block w-32 p-2 px-4 text-white border-2 rounded bg-cta disabled:bg-gray-01 ">
     Connexion
   </button>
 </form>

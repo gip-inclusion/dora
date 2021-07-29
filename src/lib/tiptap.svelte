@@ -47,7 +47,7 @@
     @apply h-6 w-6;
   }
   .active {
-    @apply bg-gray-300;
+    @apply bg-gray-02;
   }
 </style>
 

@@ -24,11 +24,11 @@
     <div class="flex-grow" />
     {#if $token}
       <a
-        class="block p-2 px-4 border rounded text-action bg-back2 hover:border-accent"
+        class="block p-2 px-4 border rounded text-cta bg-gray-01 hover:border-dora-magenta-hover"
         href={`/logout?next=${encodeURIComponent($page.path)}`}>Deconnexion</a>
     {:else}
       <a
-        class="block p-2 px-4 text-white rounded bg-action hover:bg-accent"
+        class="block p-2 px-4 text-white rounded bg-cta hover:bg-dora-magenta-hover"
         href={`/login?next=${encodeURIComponent($page.path)}`}>Se connecter</a>
     {/if}
   </div>

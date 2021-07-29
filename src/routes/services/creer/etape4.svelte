@@ -20,7 +20,7 @@
 {#if $serviceOptions}
   <form on:submit|preventDefault={handleSubmit}>
     <h2 class="w-full mt-20 mb-4 text-xl font-bold ">Contact solution</h2>
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-back2">
+    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
       <Field
         type="text"
         field={$serviceOptions.contactName}
@@ -44,7 +44,7 @@
         bind:value={$service.isContactInfoPublic} />
     </div>
     <h2 class="w-full mt-20 mb-4 text-xl font-bold ">Lieu</h2>
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-back2">
+    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
       <Field
         type="checkboxes"
         field={$serviceOptions.locationKind}
@@ -93,7 +93,7 @@
       Durée et modalités de disponibilité
     </h2>
 
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-back2">
+    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
       <Field
         type="toggle"
         field={$serviceOptions.isTimeLimited}

@@ -107,7 +107,7 @@
       type="submit"
       on:click|preventDefault={handleEdit}
       disabled={false}
-      class="block px-2 py-1 text-white border-2 rounded bg-action disabled:bg-back2 hover:bg-blue-dora">
+      class="block px-2 py-1 text-white border-2 rounded bg-cta disabled:bg-gray-01 hover:bg-dora-magenta-hover">
       Éditer
     </button>
   {:else}
@@ -116,14 +116,14 @@
         type="cancel"
         on:click|preventDefault={handleCancel}
         disabled={false}
-        class="block px-2 py-1 text-white bg-gray-400 border-2 rounded disabled:bg-back2 hover:bg-blue-dora">
+        class="block px-2 py-1 text-white bg-gray-03 border-2 rounded disabled:bg-gray-01 hover:bg-dora-magenta-hover">
         Cancel
       </button>
       <button
         type="submit"
         on:click|preventDefault={handleSave}
         disabled={false}
-        class="block px-2 py-1 text-white border-2 rounded bg-action disabled:bg-back2 hover:bg-blue-dora">
+        class="block px-2 py-1 text-white border-2 rounded bg-cta disabled:bg-gray-01 hover:bg-dora-magenta-hover">
         Save
       </button>
     </div>
@@ -150,7 +150,7 @@
     </div>
   {/if}
 
-  <div class="font-bold text-blue-dora">
+  <div class="font-bold text-dora-magenta-brand">
     <a class="my-20" href={structure.url}>{structure.url}</a>
   </div>
   <!-- <div class="flex-row space-x-2">

@@ -33,7 +33,8 @@
 
 <div class="flex-col space-y-2">
   {#each structures as structure}
-    <div class="px-6 py-2 text-xl text-blue-dora hover:text-accent">
+    <div
+      class="px-6 py-2 text-xl text-dora-magenta-brand hover:text-dora-magenta-hover">
       <a href="/structures/{structure.id}">{structure.name}</a>
     </div>
   {/each}

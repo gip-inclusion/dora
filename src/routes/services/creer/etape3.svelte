@@ -18,7 +18,7 @@
       Modalités d'accès au service
     </h2>
 
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-back2">
+    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
       <Field
         type="checkboxes"
         field={$serviceOptions.beneficiariesAccessModes}

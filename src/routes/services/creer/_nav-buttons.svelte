@@ -9,7 +9,7 @@
     <button
       name="backward"
       type="submit"
-      class="flex flex-row p-2 px-4 text-center bg-white border-2 rounded text-action w-36 disabled:bg-back2 ">
+      class="flex flex-row p-2 px-4 text-center bg-white border-2 rounded text-cta w-36 disabled:bg-gray-01 ">
       <div class="relative w-5 mr-3 fill-current top-1">
         {@html arrowLeftIcon}
       </div>
@@ -20,7 +20,7 @@
     <button
       name="forward"
       type="submit"
-      class="flex flex-row w-32 p-2 px-4 text-center text-white border-2 rounded bg-action disabled:bg-back2 ">
+      class="flex flex-row w-32 p-2 px-4 text-center text-white border-2 rounded bg-cta disabled:bg-gray-01 ">
       <div>Suivant</div>
       <div class="relative w-5 ml-3 fill-current top-1">
         {@html arrowRightIcon}
@@ -31,7 +31,7 @@
     <button
       name="validate"
       type="submit"
-      class="flex flex-row w-32 p-2 px-4 text-center text-white border-2 rounded bg-action disabled:bg-back2 ">
+      class="flex flex-row w-32 p-2 px-4 text-center text-white border-2 rounded bg-cta disabled:bg-gray-01 ">
       <div>Valider</div>
       <div class="relative w-5 ml-3 fill-current top-1">
         {@html arrowRightIcon}

@@ -15,7 +15,7 @@
 
 <style>
   :global(.tag) {
-    @apply bg-red-300 rounded px-1;
+    @apply bg-magenta-80 rounded px-1;
   }
 </style>
 
@@ -34,7 +34,7 @@
             <input
               bind:group={value}
               value={choice.value}
-              class="inline-block border-gray-300 "
+              class="inline-block border-gray-02"
               type="checkbox" />
             <span class="inline-block w-40 ml-2 ">{choice.displayName}</span>
           </label>
@@ -45,7 +45,7 @@
             <input
               bind:group={value}
               value={choice.value}
-              class="inline-block border-gray-300 "
+              class="inline-block border-gray-02 "
               type="radio" />
             <span class="inline-block w-40 ml-2 ">{choice.displayName}</span>
           </label>
