@@ -35,14 +35,14 @@
     border =
       "border border-dora-magenta-cta hover:border-dora-magenta-hover disabled:border-gray-01 active:border-france-blue";
     text =
-      "font-bold text-dora-magenta-cta hover:text-dora-magenta-hover disabled:disabled:text-gray-text-alt2 active:text-france-blue";
-    background = "bg-white";
+      "font-bold text-dora-magenta-cta hover:text-white disabled:disabled:text-gray-text-alt2 active:text-france-blue";
+    background = "bg-white hover:bg-dora-magenta-hover";
   } else if (tertiary) {
     border =
       "border border-gray-dark  disabled:border-gray-01 active:border-france-blue";
     text =
-      "text-gray-text hover:text-gray-dark disabled:disabled:text-gray-text-alt2 active:text-france-blue";
-    background = "bg-white";
+      "text-gray-text hover:text-white disabled:disabled:text-gray-text-alt2 active:text-france-blue";
+    background = "bg-white hover:bg-gray-dark";
   } else {
     border = "border-0";
     text = "font-bold text-white disabled:text-gray-text";
