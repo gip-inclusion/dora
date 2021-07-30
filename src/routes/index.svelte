@@ -27,9 +27,14 @@
 </script>
 
 <script>
+  import LinkButton from "$lib/components/link-button.svelte";
 </script>
 
-<h1 class="my-20 text-2xl font-extrabold">Liste des structures&nbsp;:</h1>
+<div class="flex flex-col items-start gap-3">
+  <LinkButton label="Design System" to="design-system" />
+  <LinkButton label="Création de service" to="/services/creer" />
+</div>
+<h2>Liste des structures&nbsp;:</h2>
 
 <div class="flex-col space-y-2">
   {#each structures as structure}
