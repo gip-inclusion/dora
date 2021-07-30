@@ -3,6 +3,7 @@
 
   import RichText from "$lib/components/rich-text/editor.svelte";
   import Toggle from "$lib/components/toggle.svelte";
+  import Checkbox from "./checkbox.svelte";
 
   export let type;
   export let field;
@@ -25,16 +26,11 @@
 </style>
 
 {#if type === "checkboxes"}
-  {#each field.child?.choices || field.choices as choice}
-    <label class="flex flex-row items-center">
-      <input
-        bind:group={value}
-        value={choice.value}
-        class="inline-block border-gray-02"
-        type="checkbox" />
-      <span class="inline-block w-40 ml-2 ">{choice.displayName}</span>
-    </label>
-  {/each}
+  <div class="flex flex-col gap-1/2">
+    {#each field.child?.choices || field.choices as choice}
+      <Checkbox group={value} value={choice.value} label={choice.displayName} />
+    {/each}
+  </div>
 {:else if type === "radios"}
   {#each field.child?.choices || field.choices as choice}
     <label class="flex flex-row items-center">
