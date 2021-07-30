@@ -1,12 +1,11 @@
 <script>
   export let label = "";
-  export let icon;
-  export let iconOnLeft;
-  export let iconOnRight;
   export let type = "button";
+  export let icon;
+  export let iconOnLeft, iconOnRight;
   export let disabled;
-  export let small;
-  export let big;
+  export let small, big;
+  export let secondary, tertiary;
 
   let px, py, iw, ih, ts, lead;
   if (small) {
@@ -17,7 +16,7 @@
     ts = "text-sm";
     lead = "leading-normal";
   } else if (big) {
-    px = "px-3";
+    px = "px-5/2";
     py = "py-2";
     iw = "w-4";
     ih = "h-4";
@@ -31,11 +30,30 @@
     ts = "text-base";
     lead = "leading-normal";
   }
+  let border, text, background;
+  if (secondary) {
+    border =
+      "border border-dora-magenta-cta hover:border-dora-magenta-hover disabled:border-gray-01 active:border-france-blue";
+    text =
+      "font-bold text-dora-magenta-cta hover:text-dora-magenta-hover disabled:disabled:text-gray-text-alt2 active:text-france-blue";
+    background = "bg-white";
+  } else if (tertiary) {
+    border =
+      "border border-gray-dark  disabled:border-gray-01 active:border-france-blue";
+    text =
+      "text-gray-text hover:text-gray-dark disabled:disabled:text-gray-text-alt2 active:text-france-blue";
+    background = "bg-white";
+  } else {
+    border = "border-0";
+    text = "font-bold text-white disabled:text-gray-text";
+    background =
+      "bg-dora-magenta-cta hover:bg-dora-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
+  }
 </script>
 
 <button
   {type}
-  class="{px} {py} {ts} {lead} flex flex-row items-center justify-center text-center text-white rounded bg-dora-magenta-cta hover:bg-dora-magenta-hover disabled:bg-gray-01 disabled:text-gray-text active:bg-france-blue focus:shadow-focus outline-none "
+  class=" {px} {py} {ts} {lead} {border} {text} {background}  flex flex-row items-center justify-center text-center rounded focus:shadow-focus outline-none "
   {disabled}>
   {#if iconOnLeft}
     <div class="{iw} {ih} mr-1 fill-current ">
