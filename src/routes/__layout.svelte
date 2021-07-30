@@ -1,6 +1,7 @@
 <script>
   import { page } from "$app/stores";
   import { token } from "$lib/auth";
+  import LinkButton from "$lib/components/link-button.svelte";
 
   import "../app.postcss";
 </script>
@@ -22,14 +23,17 @@
         height="54" />
     </a>
     <div class="flex-grow" />
-    {#if $token}
-      <a
-        class="block p-2 px-4 border rounded text-cta bg-gray-01 hover:border-dora-magenta-hover"
-        href={`/logout?next=${encodeURIComponent($page.path)}`}>Deconnexion</a>
-    {:else}
-      <a
-        class="block p-2 px-4 text-white rounded bg-cta hover:bg-dora-magenta-hover"
-        href={`/login?next=${encodeURIComponent($page.path)}`}>Se connecter</a>
+    {#if $page.path !== "/login"}
+      {#if $token}
+        <LinkButton
+          label="Deconnexion"
+          to={`/logout?next=${encodeURIComponent($page.path)}`}
+          secondary />
+      {:else}
+        <LinkButton
+          label="Se connecter"
+          to={`/login?next=${encodeURIComponent($page.path)}`} />
+      {/if}
     {/if}
   </div>
 </header>

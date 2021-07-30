@@ -1,5 +1,6 @@
 <script context="module">
   import { getApiURL } from "$lib/utils";
+  import Button from "$lib/components/button.svelte";
 
   export async function load({ page, fetch, _session, _context }) {
     const url = `${getApiURL()}/structures/${page.params.uuid}/`;
@@ -103,29 +104,11 @@
 <h1 class="">{structure.name}</h1>
 {#if currentToken}
   {#if !editMode}
-    <button
-      type="submit"
-      on:click|preventDefault={handleEdit}
-      disabled={false}
-      class="block px-2 py-1 text-white border-2 rounded bg-cta disabled:bg-gray-01 hover:bg-dora-magenta-hover">
-      Éditer
-    </button>
+    <Button type="submit" on:click={handleEdit} label="Éditer" />
   {:else}
-    <div class="flex flex-row">
-      <button
-        type="cancel"
-        on:click|preventDefault={handleCancel}
-        disabled={false}
-        class="block px-2 py-1 text-white bg-gray-03 border-2 rounded disabled:bg-gray-01 hover:bg-dora-magenta-hover">
-        Cancel
-      </button>
-      <button
-        type="submit"
-        on:click|preventDefault={handleSave}
-        disabled={false}
-        class="block px-2 py-1 text-white border-2 rounded bg-cta disabled:bg-gray-01 hover:bg-dora-magenta-hover">
-        Save
-      </button>
+    <div class="flex flex-row gap-2">
+      <Button type="cancel" on:click={handleCancel} label="Annuler" secondary />
+      <Button type="submit" on:click={handleSave} label="Enregistrer" />
     </div>
   {/if}
 {/if}

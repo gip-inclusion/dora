@@ -2,9 +2,12 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { getApiURL } from "$lib/utils";
-  import { setToken } from "$lib/auth";
+  import { token, setToken } from "$lib/auth";
+  import { onMount } from "svelte";
 
-  const next = $page.query.get("next");
+  import Button from "$lib/components/button.svelte";
+
+  const next = $page.query.get("next") || "/";
 
   let email = "";
   let password = "";
@@ -47,6 +50,12 @@
     }
     return true;
   };
+
+  onMount(() => {
+    if ($token && $page.path === "/login") {
+      goto(next);
+    }
+  });
 </script>
 
 <h1 class="mt-20 mb-4 text-4xl font-bold text-center">Se connecter</h1>
@@ -73,10 +82,5 @@
       aria-live="polite" />
   </label>
 
-  <button
-    type="submit"
-    disabled={!email || !password}
-    class="self-end block w-32 p-2 px-4 text-white border-2 rounded bg-cta disabled:bg-gray-01 ">
-    Connexion
-  </button>
+  <Button type="submit" disabled={!email || !password} label="Connexion" />
 </form>

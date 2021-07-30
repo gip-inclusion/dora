@@ -1,40 +1,33 @@
 <script>
+  import Button from "$lib/components/button.svelte";
   import { arrowRightIcon, arrowLeftIcon } from "$lib/icons.js";
   export let withBack, withForward, withValidate;
 </script>
 
 <div class="flex flex-row justify-center max-w-xl gap-6 p-8 mx-auto mt-8">
   {#if withBack}
-    <button
+    <Button
       name="backward"
       type="submit"
-      class="flex flex-row p-2 px-4 text-center bg-white border-2 rounded text-cta w-36 disabled:bg-gray-01 ">
-      <div class="relative w-5 mr-3 fill-current top-1">
-        {@html arrowLeftIcon}
-      </div>
-      <div>Précédent</div>
-    </button>
+      label="Précédent"
+      secondary={withForward || withValidate}
+      icon={arrowLeftIcon}
+      iconOnLeft />
   {/if}
   {#if withForward}
-    <button
+    <Button
       name="forward"
       type="submit"
-      class="flex flex-row w-32 p-2 px-4 text-center text-white border-2 rounded bg-cta disabled:bg-gray-01 ">
-      <div>Suivant</div>
-      <div class="relative w-5 ml-3 fill-current top-1">
-        {@html arrowRightIcon}
-      </div>
-    </button>
+      label="Suivant"
+      icon={arrowRightIcon}
+      iconOnRight />
   {/if}
   {#if withValidate}
-    <button
+    <Button
       name="validate"
       type="submit"
-      class="flex flex-row w-32 p-2 px-4 text-center text-white border-2 rounded bg-cta disabled:bg-gray-01 ">
-      <div>Valider</div>
-      <div class="relative w-5 ml-3 fill-current top-1">
-        {@html arrowRightIcon}
-      </div>
-    </button>
+      label="Valider"
+      icon={arrowRightIcon}
+      iconOnRight />
   {/if}
 </div>

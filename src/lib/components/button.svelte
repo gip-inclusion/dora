@@ -1,6 +1,7 @@
 <script>
   export let label = "";
   export let type = "button";
+  export let name;
   export let icon;
   export let iconOnLeft, iconOnRight;
   export let disabled;
@@ -53,7 +54,9 @@
 
 <button
   {type}
-  class=" {px} {py} {ts} {lead} {border} {text} {background}  flex flex-row items-center justify-center text-center rounded focus:shadow-focus outline-none "
+  {name}
+  class=" {px} {py} {ts} {lead} {border} {text} {background}  flex flex-row items-center justify-center text-center rounded focus:shadow-focus outline-none"
+  on:click
   {disabled}>
   {#if iconOnLeft}
     <div class="{iw} {ih} mr-1 fill-current ">
