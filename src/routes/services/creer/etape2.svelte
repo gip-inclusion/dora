@@ -2,6 +2,7 @@
   import { service } from "./_creation-store.js";
   import { serviceOptions } from "./_services-store.js";
 
+  import FieldSet from "$lib/components/forms/fieldset.svelte";
   import Field from "$lib/components/forms/field.svelte";
 
   import NavButtons from "./_nav-buttons.svelte";
@@ -14,11 +15,7 @@
 
 {#if $serviceOptions}
   <form on:submit|preventDefault={handleSubmit}>
-    <h2 class="w-full mt-20 mb-4 text-xl font-bold ">
-      Conditions d'accès pour le bénéficiaire
-    </h2>
-
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
+    <FieldSet title="Conditions d'accès pour le bénéficiaire">
       <Field
         type="multiselect"
         placeholder="Choisissez ou ajoutez vos critères d’admission"
@@ -31,7 +28,6 @@
         field={$serviceOptions.concernedPublic}
         bind:value={$service.concernedPublic}
         bind:selectedItems={$service._concernedPublicItems} />
-
       <Field
         type="toggle"
         field={$serviceOptions.isCumulative}
@@ -40,7 +36,6 @@
         type="toggle"
         field={$serviceOptions.hasFee}
         bind:value={$service.hasFee} />
-
       <Field
         type="text"
         noLabel
@@ -48,7 +43,7 @@
       remboursement"
         field={$serviceOptions.feeDetails}
         bind:value={$service.feeDetails} />
-    </div>
+    </FieldSet>
     <NavButtons withBack withForward />
   </form>
 {/if}

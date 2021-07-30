@@ -9,9 +9,10 @@ const config = {
         "00": "#F5F5F5",
         "01": "#E0E0E0",
         "02": "#D5D5D5",
-        "03": "#CCCCC",
+        "03": "#CCCCCC",
         text: { DEFAULT: "#555555", alt: "#999999", alt2: "#777777" },
         dark: "#2E2E2E",
+        bg: "#F8F8F8",
       },
       "france-blue": "#000091",
       white: "#FFFFFF",
@@ -42,7 +43,7 @@ const config = {
       sm: ".875rem", // 14px
       base: "1rem", // 16px
       lg: "1.0625rem", // 17px
-      xl: "1.125", // 18px
+      xl: "1.125rem", // 18px
       "2xl": "1.1875rem", // 19px
       "3xl": "1.25rem", // 20px
       "4xl": "1.3125rem", // 21px
@@ -100,7 +101,7 @@ const config = {
       focus: "0px 0px 0px 2px #FFFFFF, 0px 0px 0px 4px #0A76F6",
     },
   },
-  plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/typography")],
 };
 
 module.exports = config;

@@ -2,6 +2,7 @@
   import { service } from "./_creation-store.js";
   import { serviceOptions } from "./_services-store.js";
 
+  import FieldSet from "$lib/components/forms/fieldset.svelte";
   import Field from "$lib/components/forms/field.svelte";
 
   import NavButtons from "./_nav-buttons.svelte";
@@ -14,21 +15,15 @@
 
 {#if $serviceOptions}
   <form on:submit|preventDefault={handleSubmit}>
-    <h2 class="w-full mt-20 mb-4 text-xl font-bold ">
-      Modalités d'accès au service
-    </h2>
-
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
+    <FieldSet title="Modalités d'accès au service">
       <Field
         type="checkboxes"
         field={$serviceOptions.beneficiariesAccessModes}
         bind:value={$service.beneficiariesAccessModes} />
-
       <Field
         type="text"
         field={$serviceOptions.beneficiariesAccessModesOther}
         bind:value={$service.beneficiariesAccessModesOther} />
-
       <Field
         type="checkboxes"
         field={$serviceOptions.coachOrientationModes}
@@ -47,17 +42,15 @@
         field={$serviceOptions.credentials}
         bind:value={$service.credentials}
         bind:selectedItems={$service._credentialsItems} />
-
       <Field
         type="upload"
         field={$serviceOptions.forms}
         bind:value={$service.forms} />
-
       <Field
         type="multitext"
         field={$serviceOptions.onlineForms}
         bind:value={$service.onlineForms} />
-    </div>
+    </FieldSet>
     <NavButtons withBack withForward />
   </form>
 {/if}

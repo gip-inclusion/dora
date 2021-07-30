@@ -12,9 +12,12 @@
     liIcon,
   } from "$lib/icons.js";
 
+  import Button from "./button.svelte";
+  import Separator from "./separator.svelte";
+
   let element;
   let editor;
-  export let className;
+  export let className = "prose bg-white h-20";
   export let htmlContent = "";
   export let initialContent = "";
 
@@ -31,7 +34,10 @@
       },
       editorProps: {
         attributes: {
-          class: className,
+          class:
+            className +
+            " " +
+            "p-2 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none",
         },
       },
     });
@@ -44,57 +50,46 @@
   });
 </script>
 
-<style>
-  .tb-button {
-    @apply h-6 w-6;
-  }
-  .active {
-    @apply bg-gray-02;
-  }
-</style>
-
-<div class="flex flex-col w-full">
+<div class="flex flex-col w-full border border-gray-03">
   {#if editor}
-    <div class="flex flex-row">
-      <button
+    <div class="flex flex-row items-center bg-gray-03 p-3/2 ">
+      <Button
         on:click={() => editor.chain().focus().toggleBold().run()}
-        class:active={editor.isActive("bold")}
-        class="tb-button">
-        {@html boldIcon}
-      </button>
-      <button
-        on:click={() => editor.chain().focus().toggleItalic().run()}
-        class:active={editor.isActive("italic")}
-        class="tb-button">
-        {@html italicIcon}
-      </button>
+        active={editor.isActive("bold")}
+        icon={boldIcon} />
 
-      <button
+      <Button
+        on:click={() => editor.chain().focus().toggleItalic().run()}
+        active={editor.isActive("italic")}
+        icon={italicIcon} />
+
+      <Separator />
+
+      <Button
         on:click={() => editor.chain().focus().setParagraph().run()}
-        class:active={editor.isActive("paragraph")}
-        class="tb-button">
-        {@html paraIcon}
-      </button>
-      <button
+        active={editor.isActive("paragraph")}
+        icon={paraIcon} />
+
+      <Button
         on:click={() =>
           editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        class:active={editor.isActive("heading", { level: 2 })}
-        class="tb-button">
-        {@html h1Icon}
-      </button>
-      <button
+        active={editor.isActive("heading", { level: 2 })}
+        icon={h1Icon} />
+
+      <Button
         on:click={() =>
           editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        class:active={editor.isActive("heading", { level: 3 })}
-        class="tb-button">
-        {@html h2Icon}
-      </button>
-      <button
+        active={editor.isActive("heading", { level: 3 })}
+        icon={h2Icon} />
+
+      <Separator />
+
+      <Button
         on:click={() => editor.chain().focus().toggleBulletList().run()}
-        class:active={editor.isActive("bulletList")}
-        class="tb-button">
-        {@html liIcon}
-      </button>
+        active={editor.isActive("bulletList")}
+        icon={liIcon} />
+
+      <Separator />
     </div>
   {/if}
   <div>

@@ -2,6 +2,7 @@
   import { service } from "./_creation-store.js";
   import { serviceOptions } from "./_services-store.js";
 
+  import FieldSet from "$lib/components/forms/fieldset.svelte";
   import Field from "$lib/components/forms/field.svelte";
 
   import NavButtons from "./_nav-buttons.svelte";
@@ -19,13 +20,11 @@
 
 {#if $serviceOptions}
   <form on:submit|preventDefault={handleSubmit}>
-    <h2 class="w-full mt-20 mb-4 text-xl font-bold ">Contact solution</h2>
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
+    <FieldSet title="Contact solution">
       <Field
         type="text"
         field={$serviceOptions.contactName}
         bind:value={$service.contactName} />
-
       <Field
         type="tel"
         field={$serviceOptions.contactPhone}
@@ -42,14 +41,13 @@
         type="toggle"
         field={$serviceOptions.isContactInfoPublic}
         bind:value={$service.isContactInfoPublic} />
-    </div>
-    <h2 class="w-full mt-20 mb-4 text-xl font-bold ">Lieu</h2>
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
+    </FieldSet>
+
+    <FieldSet title="Lieu">
       <Field
         type="checkboxes"
         field={$serviceOptions.locationKind}
         bind:value={$service.locationKind} />
-
       <Field
         type="url"
         field={$serviceOptions.remoteUrl}
@@ -62,43 +60,33 @@
         type="text"
         field={$serviceOptions.address2}
         bind:value={$service.address2} />
-
       <Field
         type="text"
         field={$serviceOptions.postalCode}
         bind:value={$service.postalCode} />
-
       <Field
         type="text"
         field={$serviceOptions.city}
         bind:value={$service.city} />
-
       <Field
         type="hidden"
         field={$serviceOptions.cityCode}
         bind:value={$service.cityCode} />
-
       <Field
         type="hidden"
         field={$serviceOptions.longitude}
         bind:value={$service.longitude} />
-
       <Field
         type="hidden"
         field={$serviceOptions.latitude}
         bind:value={$service.latitude} />
-    </div>
+    </FieldSet>
 
-    <h2 class="w-full mt-20 mb-4 text-xl font-bold ">
-      Durée et modalités de disponibilité
-    </h2>
-
-    <div class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01">
+    <FieldSet title="Durée et modalités de disponibilité">
       <Field
         type="toggle"
         field={$serviceOptions.isTimeLimited}
         bind:value={$service.isTimeLimited} />
-
       <Field
         type="date"
         field={$serviceOptions.startDate}
@@ -128,7 +116,7 @@
         type="date"
         field={$serviceOptions.suspensionDate}
         bind:value={$service.suspensionDate} />
-    </div>
+    </FieldSet>
     <NavButtons withBack withValidate />
   </form>
 {/if}

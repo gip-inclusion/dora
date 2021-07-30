@@ -28,7 +28,7 @@
 <script>
   import insane from "insane";
 
-  import Tiptap from "$lib/tiptap.svelte";
+  import RichText from "$lib/components/rich-text/editor.svelte";
   import { token } from "$lib/auth";
   import { markdownToHTML, htmlToMarkdown } from "$lib/utils";
 
@@ -123,10 +123,10 @@
     {@html format_text(structure.shortDesc)}
   </div>
   {#if editMode}
-    <Tiptap
+    <RichText
       bind:htmlContent={currentFullDesc}
       initialContent={currentFullDesc}
-      className="prose prose-sm p-2 whitespace-pre-wrap w-full max-w-none h-64 border-2 overflow-auto focus:outline-none" />
+      className="prose prose-sm h-20" />
   {:else}
     <div class="max-w-3xl p-5 prose bg-gray-200">
       {@html format_text(structure.fullDesc)}
