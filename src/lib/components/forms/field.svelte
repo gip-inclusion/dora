@@ -1,5 +1,6 @@
 <script>
   import Input from "./input.svelte";
+  import Label from "./label.svelte";
 
   export let value = undefined;
   export let selectedItems = undefined;
@@ -27,7 +28,9 @@
 </style>
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
-<label class="flex flex-row items-center">
+<Label
+  className="flex flex-row items-center"
+  isDOMLabel={type !== "checkboxes" && type !== "radios"}>
   <span
     class="{requiredClasses} {hiddenClasses} inline-block w-17 text-base text-gray-text-alt2">
     {hideLabel ? "" : label}
@@ -42,4 +45,4 @@
       {description}
       {minValue} />
   </div>
-</label>
+</Label>

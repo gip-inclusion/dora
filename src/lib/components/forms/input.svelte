@@ -36,6 +36,9 @@
       <Checkbox group={value} value={choice.value} label={choice.displayName} />
     {/each}
   </div>
+{:else if type === "checkbox"}
+  <span>{description}</span>
+  <Checkbox bind:value {label} />
 {:else if type === "radios"}
   {#each choices as choice}
     <label class="flex flex-row items-center">

@@ -1,6 +1,7 @@
 <script>
   import ButtonsKinds from "./_buttons-by-kind.svelte";
   import RichText from "$lib/components/rich-text/editor.svelte";
+  import Field from "$lib/components/forms/field.svelte";
 
   let richTextContent = "";
 </script>
@@ -19,5 +20,13 @@
   <ButtonsKinds tertiary />
 </div>
 
-<h1>Zone WYSIWYG</h1>
+<h1>Inputs</h1>
+<Field
+  type="text"
+  placeholder="Champ texte"
+  description="Description"
+  label="Label" />
+
+<Field type="checkbox" description="Description" label="Case à cocher" />
+<h1>Texte riche</h1>
 <RichText bind:htmlContent={richTextContent} className="prose bg-white h-10" />
