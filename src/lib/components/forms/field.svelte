@@ -28,9 +28,10 @@
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
 <Label
-  className="flex flex-row items-center"
+  className="flex flex-row items-top"
   isDOMLabel={type !== "checkboxes" && type !== "radios"}>
-  <span class="{hiddenClasses} inline-block w-17 text-base text-gray-text-alt2">
+  <span
+    class="{hiddenClasses} inline-block w-17 flex-shrink-0 text-base text-gray-text-alt2">
     {hideLabel ? "" : label}
     {#if required}<span class="text-error">*</span>{/if}
   </span>
