@@ -4,32 +4,30 @@
   export let checked = undefined;
 </script>
 
-<style>
+<style lang="postcss">
   .toggle-path {
-    transition: background 0.3s ease-in-out;
+    transition: all 0.15s ease-in-out;
   }
   .toggle-circle {
-    top: 0.1rem;
-    left: 0.15rem;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.15s ease-in-out;
+    top: 0.25rem;
+    left: 0.25rem;
   }
   input:checked ~ .toggle-circle {
     transform: translateX(100%);
+    @apply bg-dora-magenta-cta;
   }
   input:checked ~ .toggle-path {
-    @apply bg-magenta-80;
+    @apply border-dora-magenta-hover bg-magenta-20;
   }
 </style>
 
-<div class="flex flex-row">
-  <div>Non</div>
-  <div class="relative">
-    <input type="checkbox" bind:checked class="hidden" />
-    <!-- path -->
-    <div class="h-5 bg-gray-200 rounded-full shadow-inner toggle-path w-9" />
-    <!-- circle -->
-    <div
-      class="absolute inset-y-0 left-0 w-4 h-4 bg-white rounded-full shadow toggle-circle" />
-  </div>
-  <div>Oui</div>
+<div class="relative flex flex-row">
+  <input type="checkbox" bind:checked class="hidden" />
+  <!-- path -->
+  <div
+    class="w-5 h-3 bg-white border rounded-full toggle-path border-gray-03" />
+  <!-- circle -->
+  <div
+    class="absolute inset-y-0 left-0 w-2 h-2 rounded-full bg-gray-03 toggle-circle" />
 </div>
