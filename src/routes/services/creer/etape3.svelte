@@ -1,9 +1,8 @@
 <script>
-  import { service } from "./_creation-store.js";
-  import { serviceOptions } from "./_services-store.js";
+  import { serviceCache, serviceOptions } from "./_creation-store.js";
 
   import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import Field from "$lib/components/forms/field.svelte";
+  import ModelField from "$lib/components/forms/model-field.svelte";
 
   import NavButtons from "./_nav-buttons.svelte";
   import { persistAndGo } from "./_nav.js";
@@ -16,40 +15,40 @@
 {#if $serviceOptions}
   <form on:submit|preventDefault={handleSubmit}>
     <FieldSet title="Modalités d'accès au service">
-      <Field
+      <ModelField
         type="checkboxes"
         field={$serviceOptions.beneficiariesAccessModes}
-        bind:value={$service.beneficiariesAccessModes} />
-      <Field
+        bind:value={$serviceCache.beneficiariesAccessModes} />
+      <ModelField
         type="text"
         field={$serviceOptions.beneficiariesAccessModesOther}
-        bind:value={$service.beneficiariesAccessModesOther} />
-      <Field
+        bind:value={$serviceCache.beneficiariesAccessModesOther} />
+      <ModelField
         type="checkboxes"
         field={$serviceOptions.coachOrientationModes}
-        bind:value={$service.coachOrientationModes} />
-      <Field
+        bind:value={$serviceCache.coachOrientationModes} />
+      <ModelField
         type="text"
         field={$serviceOptions.coachOrientationModesOther}
-        bind:value={$service.coachOrientationModesOther} />
-      <Field
+        bind:value={$serviceCache.coachOrientationModesOther} />
+      <ModelField
         type="multiselect"
         field={$serviceOptions.requirements}
-        bind:value={$service.requirements}
-        bind:selectedItems={$service._requirementsItems} />
-      <Field
+        bind:value={$serviceCache.requirements}
+        bind:selectedItems={$serviceCache._requirementsItems} />
+      <ModelField
         type="multiselect"
         field={$serviceOptions.credentials}
-        bind:value={$service.credentials}
-        bind:selectedItems={$service._credentialsItems} />
-      <Field
+        bind:value={$serviceCache.credentials}
+        bind:selectedItems={$serviceCache._credentialsItems} />
+      <ModelField
         type="upload"
         field={$serviceOptions.forms}
-        bind:value={$service.forms} />
-      <Field
+        bind:value={$serviceCache.forms} />
+      <ModelField
         type="multitext"
         field={$serviceOptions.onlineForms}
-        bind:value={$service.onlineForms} />
+        bind:value={$serviceCache.onlineForms} />
     </FieldSet>
     <NavButtons withBack withForward />
   </form>

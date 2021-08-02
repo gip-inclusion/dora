@@ -1,7 +1,9 @@
 <script>
   import Button from "$lib/components/button.svelte";
   import { arrowRightIcon, arrowLeftIcon } from "$lib/icons.js";
-  export let withBack, withForward, withValidate;
+  export let withBack = false;
+  export let withForward = false;
+  export let withValidate = false;
 </script>
 
 <div class="flex flex-row justify-center max-w-xl gap-6 p-8 mx-auto mt-8">

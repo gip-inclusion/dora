@@ -1,6 +1,7 @@
 <script>
   import Buttons from "./_buttons-by-size.svelte";
-  export let secondary, tertiary;
+  export let secondary = false,
+    tertiary = false;
 </script>
 
 <div>

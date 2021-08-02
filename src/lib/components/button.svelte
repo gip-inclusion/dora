@@ -1,12 +1,15 @@
 <script>
   export let label = "";
   export let type = "button";
-  export let name;
-  export let icon;
-  export let iconOnLeft, iconOnRight;
-  export let disabled;
-  export let small, big;
-  export let secondary, tertiary;
+  export let name = null;
+  export let icon = null;
+  export let iconOnLeft = false,
+    iconOnRight = false;
+  export let disabled = false;
+  export let small = false,
+    big = false;
+  export let secondary = false,
+    tertiary = false;
 
   let px, py, iw, ih, ts, lead;
   if (small) {

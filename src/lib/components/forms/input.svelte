@@ -5,13 +5,18 @@
   import Toggle from "$lib/components/toggle.svelte";
   import Checkbox from "./checkbox.svelte";
 
-  export let type;
-  export let field;
-  export let value;
+  export let value = undefined;
   export let selectedItems = undefined;
-  export let placeholder = undefined;
+
+  export let type;
+
+  export let label = "";
+  export let required = false;
+  export let choices = [];
+
+  export let placeholder = "";
   export let description = "";
-  export let minValue = undefined;
+  export let minValue = null;
 </script>
 
 <style lang="postcss">
@@ -27,12 +32,12 @@
 
 {#if type === "checkboxes"}
   <div class="flex flex-col gap-1/2">
-    {#each field.child?.choices || field.choices as choice}
+    {#each choices as choice}
       <Checkbox group={value} value={choice.value} label={choice.displayName} />
     {/each}
   </div>
 {:else if type === "radios"}
-  {#each field.child?.choices || field.choices as choice}
+  {#each choices as choice}
     <label class="flex flex-row items-center">
       <input
         bind:group={value}
@@ -45,9 +50,9 @@
 {:else if type === "select"}
   <label class="flex flex-row items-center">
     <select bind:value>
-      <option value={null} disabled={field.required ? "disabled" : ""} selected
+      <option value={null} disabled={required ? "disabled" : ""} selected
         >{placeholder}</option>
-      {#each field.child?.choices || field.choices as choice}
+      {#each choices as choice}
         <option value={choice.value}>
           {choice.displayName}
         </option>
@@ -56,23 +61,23 @@
   </label>
 {:else if type === "multiselect"}
   <AutoComplete
-    items={field.child?.choices || field.choices}
+    items={choices}
     bind:value
     bind:selectedItem={selectedItems}
     labelFieldName="displayName"
     valueFieldName="value"
-    disabled={field.required ? "disabled" : ""}
-    inputId={field.label}
+    disabled={required ? "disabled" : ""}
+    inputId={label}
     {placeholder}
     multiple />
 {:else if type === "text"}
   <span>{description}</span>
-  <input bind:value type="text" required={field.required} />
+  <input bind:value type="text" {required} />
 {:else if type === "richtext"}
   <RichText bind:htmlContent={value} initialContent={value} />
 {:else if type === "__multitext__"}
   <span>{description}</span>
-  <input bind:value type="text" required={field.required} />
+  <input bind:value type="text" {required} />
 {:else if type === "toggle"}
   <Toggle bind:checked={value} />
 {:else if type === "date"}

@@ -1,9 +1,8 @@
 <script>
-  import { service } from "./_creation-store.js";
-  import { serviceOptions } from "./_services-store.js";
+  import { serviceCache, serviceOptions } from "./_creation-store.js";
 
   import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import Field from "$lib/components/forms/field.svelte";
+  import ModelField from "$lib/components/forms/model-field.svelte";
 
   import NavButtons from "./_nav-buttons.svelte";
   import { persistAndGo } from "./_nav.js";
@@ -16,41 +15,41 @@
 {#if $serviceOptions}
   <form on:submit|preventDefault={handleSubmit}>
     <FieldSet title="Présentez votre offre de service">
-      <Field
+      <ModelField
         type="text"
         field={$serviceOptions.name}
-        bind:value={$service.name} />
-      <Field
+        bind:value={$serviceCache.name} />
+      <ModelField
         type="text"
         field={$serviceOptions.shortDesc}
-        bind:value={$service.shortDesc} />
-      <Field
+        bind:value={$serviceCache.shortDesc} />
+      <ModelField
         type="richtext"
         field={$serviceOptions.fullDesc}
-        bind:value={$service.fullDesc} />
+        bind:value={$serviceCache.fullDesc} />
     </FieldSet>
 
     <FieldSet title="Typologie de l‘offre">
-      <Field
+      <ModelField
         type="checkboxes"
         field={$serviceOptions.kinds}
-        bind:value={$service.kinds} />
-      <Field
+        bind:value={$serviceCache.kinds} />
+      <ModelField
         type="multiselect"
         field={$serviceOptions.categories}
-        bind:value={$service.categories}
-        bind:selectedItems={$service._categoriesItems}
+        bind:value={$serviceCache.categories}
+        bind:selectedItems={$serviceCache._categoriesItems}
         placeholder="Choissisez une catégorie" />
-      <Field
+      <ModelField
         type="multiselect"
         field={$serviceOptions.subcategories}
-        bind:value={$service.subcategories}
-        bind:selectedItems={$service._subcategoriesItems}
+        bind:value={$serviceCache.subcategories}
+        bind:selectedItems={$serviceCache._subcategoriesItems}
         placeholder="Précisez la catégorie" />
-      <Field
+      <ModelField
         type="toggle"
         field={$serviceOptions.isCommonLaw}
-        bind:value={$service.isCommonLaw} />
+        bind:value={$serviceCache.isCommonLaw} />
     </FieldSet>
 
     <NavButtons withForward />

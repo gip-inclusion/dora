@@ -5,13 +5,13 @@ import { getApiURL } from "$lib/utils";
 import { token } from "$lib/auth";
 
 import { get } from "svelte/store";
-import { service } from "./_creation-store.js";
+import { serviceCache } from "./_creation-store.js";
 
 import { storageKey } from "./_constants.js";
 
 function persistStore() {
   if (browser) {
-    localStorage.setItem(storageKey, JSON.stringify(get(service)));
+    localStorage.setItem(storageKey, JSON.stringify(get(serviceCache)));
   }
 }
 
@@ -29,7 +29,7 @@ async function handleSubmit() {
 
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify(get(service)),
+    body: JSON.stringify(get(serviceCache)),
   });
 
   if (res.ok) {

@@ -3,8 +3,10 @@
   import Button from "$lib/components/button.svelte";
 
   export let label;
-  export let big, small;
-  export let secondary, tertiary;
+  export let big = false,
+    small = false;
+  export let secondary = false,
+    tertiary = false;
 </script>
 
 <Button type="button" {label} {big} {small} {secondary} {tertiary} />

@@ -1,7 +1,7 @@
 <script>
   // https://tailwindcomponents.com/component/toggle-button-1
 
-  export let checked;
+  export let checked = undefined;
 </script>
 
 <style>

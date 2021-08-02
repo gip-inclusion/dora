@@ -1,9 +1,8 @@
 <script>
-  import { service } from "./_creation-store.js";
-  import { serviceOptions } from "./_services-store.js";
+  import { serviceCache, serviceOptions } from "./_creation-store.js";
 
   import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import Field from "$lib/components/forms/field.svelte";
+  import ModelField from "$lib/components/forms/model-field.svelte";
 
   import NavButtons from "./_nav-buttons.svelte";
   import { persistAndGo } from "./_nav.js";
@@ -16,33 +15,33 @@
 {#if $serviceOptions}
   <form on:submit|preventDefault={handleSubmit}>
     <FieldSet title="Conditions d'accès pour le bénéficiaire">
-      <Field
+      <ModelField
         type="multiselect"
         placeholder="Choisissez ou ajoutez vos critères d’admission"
         field={$serviceOptions.accessConditions}
-        bind:value={$service.accessConditions}
-        bind:selectedItems={$service._accessConditionsItems} />
-      <Field
+        bind:value={$serviceCache.accessConditions}
+        bind:selectedItems={$serviceCache._accessConditionsItems} />
+      <ModelField
         type="multiselect"
         placeholder="Sélectionnez ou ajoutez les publics que vous adressez"
         field={$serviceOptions.concernedPublic}
-        bind:value={$service.concernedPublic}
-        bind:selectedItems={$service._concernedPublicItems} />
-      <Field
+        bind:value={$serviceCache.concernedPublic}
+        bind:selectedItems={$serviceCache._concernedPublicItems} />
+      <ModelField
         type="toggle"
         field={$serviceOptions.isCumulative}
-        bind:value={$service.isCumulative} />
-      <Field
+        bind:value={$serviceCache.isCumulative} />
+      <ModelField
         type="toggle"
         field={$serviceOptions.hasFee}
-        bind:value={$service.hasFee} />
-      <Field
+        bind:value={$serviceCache.hasFee} />
+      <ModelField
         type="text"
-        noLabel
+        hideLabel
         description="Merci de détailler les frais à charge et leurs éventuels critères de
       remboursement"
         field={$serviceOptions.feeDetails}
-        bind:value={$service.feeDetails} />
+        bind:value={$serviceCache.feeDetails} />
     </FieldSet>
     <NavButtons withBack withForward />
   </form>

@@ -10,12 +10,15 @@ if (browser) {
   }
 }
 
-export const service = writable(
+export const serviceCache = writable(
   stored || {
     kinds: [],
     categories: [],
+    subcategories: [],
     beneficiariesAccessModes: [],
     coachOrientationModes: [],
     locationKind: [],
   }
 );
+
+export const serviceOptions = writable(null);

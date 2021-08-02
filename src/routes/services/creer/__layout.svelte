@@ -7,7 +7,7 @@
   import { token } from "$lib/auth";
   import { getApiURL } from "$lib/utils";
 
-  import { serviceOptions } from "./_services-store.js";
+  import { serviceOptions } from "./_creation-store.js";
   import NavLink from "./_navlink.svelte";
 
   onMount(async () => {
