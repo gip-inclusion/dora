@@ -101,7 +101,7 @@
   <title>Dora: {structure.name}</title>
 </svelte:head>
 
-<h1 class="">{structure.name}</h1>
+<h1>{structure.name}</h1>
 {#if currentToken}
   {#if !editMode}
     <Button type="submit" on:click={handleEdit} label="Éditer" />

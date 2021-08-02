@@ -58,7 +58,7 @@
   });
 </script>
 
-<h1 class="mt-20 mb-4 text-4xl font-bold text-center">Se connecter</h1>
+<h1>Se connecter</h1>
 <form
   class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01"
   on:submit|preventDefault={handleSubmit}>

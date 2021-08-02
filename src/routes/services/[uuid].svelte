@@ -32,7 +32,7 @@
   <title>Dora: {service.name}</title>
 </svelte:head>
 
-<h1 class="mt-20 mb-4 text-2xl font-bold">{service.name}</h1>
+<h1>{service.name}</h1>
 
 <strong>id : </strong>{service.id} <br />
 <strong>name : </strong>{service.name} <br />

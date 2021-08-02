@@ -35,9 +35,7 @@
   });
 </script>
 
-<h1 class="w-full mt-20 mb-4 text-4xl font-bold text-center">
-  Votre solution d’accompagnement
-</h1>
+<h1>Votre solution d’accompagnement</h1>
 
 <nav class="flex flex-row">
   <NavLink target="etape1" name="1. Descriptif" />
