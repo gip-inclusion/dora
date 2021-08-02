@@ -1,5 +1,5 @@
 <script>
-  import AutoComplete from "simple-svelte-autocomplete";
+  import Select from "./select.svelte";
 
   import RichText from "$lib/components/rich-text/editor.svelte";
   import Toggle from "$lib/components/toggle.svelte";
@@ -63,14 +63,10 @@
     </select>
   </label>
 {:else if type === "multiselect"}
-  <AutoComplete
-    items={choices}
+  <Select
+    {choices}
     bind:value
     bind:selectedItem={selectedItems}
-    labelFieldName="displayName"
-    valueFieldName="value"
-    disabled={required ? "disabled" : ""}
-    inputId={label}
     {placeholder}
     multiple />
 {:else if type === "text"}
