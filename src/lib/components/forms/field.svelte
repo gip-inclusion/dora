@@ -17,7 +17,6 @@
 
   export let hideLabel = false;
 
-  $: requiredClasses = required ? "font-bold" : "";
   $: hiddenClasses = type === "hidden" ? "hidden" : "";
 </script>
 
@@ -31,9 +30,9 @@
 <Label
   className="flex flex-row items-center"
   isDOMLabel={type !== "checkboxes" && type !== "radios"}>
-  <span
-    class="{requiredClasses} {hiddenClasses} inline-block w-17 text-base text-gray-text-alt2">
+  <span class="{hiddenClasses} inline-block w-17 text-base text-gray-text-alt2">
     {hideLabel ? "" : label}
+    {#if required}<span class="text-error">*</span>{/if}
   </span>
   <div class="flex flex-col flex-grow">
     <Input
