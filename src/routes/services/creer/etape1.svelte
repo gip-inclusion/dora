@@ -39,7 +39,7 @@
         field={$serviceOptions.categories}
         bind:value={$serviceCache.categories}
         bind:selectedItems={$serviceCache._categoriesItems}
-        placeholder="Choissisez une catégorie" />
+        placeholder="Choisissez une catégorie" />
       <ModelField
         type="multiselect"
         field={$serviceOptions.subcategories}
