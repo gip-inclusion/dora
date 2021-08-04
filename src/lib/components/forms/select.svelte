@@ -3,8 +3,8 @@
   import { checkIcon } from "$lib/icons.js";
 
   export let choices;
-  export let value;
-  export let selectedItems;
+  export let value = undefined;
+  export let selectedItems = undefined;
   export let disabled = false;
   export let placeholder = "";
   export let multiple = false;

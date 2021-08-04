@@ -27,6 +27,5 @@
   description="Description"
   label="Label" />
 
-<Field type="checkbox" description="Description" label="Case à cocher" />
 <h1>Texte riche</h1>
 <RichText bind:htmlContent={richTextContent} className="prose bg-white h-10" />

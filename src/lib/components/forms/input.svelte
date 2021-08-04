@@ -3,14 +3,14 @@
 
   import RichText from "$lib/components/rich-text/editor.svelte";
   import Toggle from "$lib/components/toggle.svelte";
-  import Checkbox from "./checkbox.svelte";
+  import Checkboxes from "./checkboxes.svelte";
+  import RadioButtons from "./radio-buttons.svelte";
 
   export let value = undefined;
   export let selectedItems = undefined;
 
   export let type;
 
-  export let label = "";
   export let required = false;
   export let choices = [];
 
@@ -32,24 +32,10 @@
 
 {#if type === "checkboxes"}
   <div class="flex flex-col gap-1/2">
-    {#each choices as choice}
-      <Checkbox group={value} value={choice.value} label={choice.displayName} />
-    {/each}
+    <Checkboxes bind:group={value} {choices} />
   </div>
-{:else if type === "checkbox"}
-  <span>{description}</span>
-  <Checkbox bind:value {label} />
 {:else if type === "radios"}
-  {#each choices as choice}
-    <label class="flex flex-row items-center">
-      <input
-        bind:group={value}
-        value={choice.value}
-        class="inline-block border-gray-02 "
-        type="radio" />
-      <span class="inline-block w-40 ml-2 ">{choice.displayName}</span>
-    </label>
-  {/each}
+  <RadioButtons bind:group={value} {choices} />
 {:else if type === "select"}
   <label class="flex flex-row items-center">
     <select bind:value>
