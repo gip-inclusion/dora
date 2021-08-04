@@ -8,6 +8,15 @@
   export let disabled = false;
   export let placeholder = "";
   export let multiple = false;
+  export let hideArrow;
+  export let searchFunction;
+  export let delay;
+  export let localSearch;
+  export let labelFieldName = "displayName";
+  export let valueFieldName = "value";
+  export let minCharactersToSearch;
+
+  export let onChange;
 </script>
 
 <style lang="postcss">
@@ -39,19 +48,25 @@
 </style>
 
 <AutoComplete
+  {localSearch}
+  {labelFieldName}
+  {valueFieldName}
+  {minCharactersToSearch}
+  {onChange}
   items={choices}
   bind:value
   bind:selectedItem
-  labelFieldName="displayName"
-  valueFieldName="value"
   {disabled}
   {placeholder}
   {multiple}
+  {searchFunction}
+  {delay}
   className="rounded  focus-within:shadow-focus "
   inputClassName="outline-none border rounded border-gray-03"
   dropdownClassName="mt-2p rounded shadow-md !important"
   html5autocomplete={false}
-  showLoadingIndicator>
+  showLoadingIndicator
+  {hideArrow}>
   <div slot="item" let:item let:label class="flex flex-row">
     <div class="flex-grow">{@html label}</div>
     <div class="flex-grow-0 hidden checkmark">

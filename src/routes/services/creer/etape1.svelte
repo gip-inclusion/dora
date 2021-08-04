@@ -20,7 +20,7 @@
         field={$serviceOptions.structure}
         bind:value={$serviceCache.structure}
         bind:selectedItem={$serviceCache._structure}
-        placeholder="Précisez la catégorie" />
+        placeholder="Sélectionnez votre structure" />
     </FieldSet>
 
     <FieldSet title="Présentez votre offre de service">

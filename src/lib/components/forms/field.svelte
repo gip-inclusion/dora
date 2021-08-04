@@ -11,6 +11,7 @@
   export let required = false;
   export let choices = [];
 
+  export let disabled = undefined;
   export let placeholder = "";
   export let description = "";
   export let minValue = null;
@@ -43,6 +44,7 @@
       {choices}
       {placeholder}
       {description}
-      {minValue} />
+      {minValue}
+      {disabled} />
   </div>
 </Label>

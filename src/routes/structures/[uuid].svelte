@@ -114,9 +114,19 @@
 {/if}
 <div class="flex-col space-y-4 text-sm text-gray-600">
   <div class="">
-    <span class="">{structure.address}</span><br />
+    <span class="">{structure.address1}</span><br />
+    {#if structure.address2}<span class="">{structure.address2}</span
+      ><br />{/if}
     <span class="">{structure.postalCode}</span>
     <span class="">{structure.city}</span>
+  </div>
+  <div class="">
+    Code APE:
+    <span class="">{structure.ape} </span>
+  </div>
+  <div class="">
+    SIRET:
+    <span class="">{structure.siret} </span>
   </div>
 
   <div class="prose prose-xl">

@@ -13,6 +13,7 @@
 
 <div class="flex flex-col items-start gap-3">
   <LinkButton label="Design System" to="design-system" />
+  <LinkButton label="Création de structure" to="/structures/creer" />
   <LinkButton label="Création de service" to="/services/creer" />
 </div>
 <h2>Liste des structures&nbsp;:</h2>

@@ -1,10 +1,11 @@
 import { browser } from "$app/env";
 
 import { writable } from "svelte/store";
+import { storageKey } from "./_constants";
 
 let stored;
 if (browser) {
-  const lsContent = localStorage.getItem("currentSolution");
+  const lsContent = localStorage.getItem(storageKey);
   if (lsContent) {
     stored = JSON.parse(lsContent);
   }

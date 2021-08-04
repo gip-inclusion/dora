@@ -14,6 +14,7 @@
   export let required = false;
   export let choices = [];
 
+  export let disabled = undefined;
   export let placeholder = "";
   export let description = "";
   export let minValue = null;
@@ -32,37 +33,45 @@
 
 {#if type === "checkboxes"}
   <div class="flex flex-col gap-1/2">
-    <Checkboxes bind:group={value} {choices} />
+    <Checkboxes bind:group={value} {choices} {disabled} />
   </div>
 {:else if type === "radios"}
-  <RadioButtons bind:group={value} {choices} />
+  <div class="flex flex-col gap-1/2">
+    <RadioButtons bind:group={value} {choices} {disabled} />
+  </div>
 {:else if type === "select"}
-  <Select {choices} bind:value bind:selectedItem {placeholder} />
+  <Select {choices} bind:value bind:selectedItem {placeholder} {disabled} />
 {:else if type === "multiselect"}
-  <Select {choices} bind:value bind:selectedItem {placeholder} multiple />
+  <Select
+    {choices}
+    bind:value
+    bind:selectedItem
+    {placeholder}
+    multiple
+    {disabled} />
 {:else if type === "text"}
   <span>{description}</span>
-  <input bind:value type="text" {required} />
+  <input bind:value type="text" {required} {disabled} />
 {:else if type === "richtext"}
-  <RichText bind:htmlContent={value} initialContent={value} />
+  <RichText bind:htmlContent={value} initialContent={value} {disabled} />
 {:else if type === "__multitext__"}
   <span>{description}</span>
-  <input bind:value type="text" {required} />
+  <input bind:value type="text" {required} {disabled} />
 {:else if type === "toggle"}
-  <Toggle bind:checked={value} />
+  <Toggle bind:checked={value} {disabled} />
 {:else if type === "date"}
   <span>{description}</span>
-  <input bind:value type="date" />
+  <input bind:value type="date" {disabled} />
 {:else if type === "number"}
   <span>{description}</span>
-  <input bind:value type="number" {minValue} />
+  <input bind:value type="number" {minValue} {disabled} />
 {:else if type === "email"}
   <span>{description}</span>
-  <input bind:value type="email" />
+  <input bind:value type="email" {disabled} />
 {:else if type === "hidden"}
-  <input bind:value type="hidden" />
+  <input bind:value type="hidden" {disabled} />
 {:else if type === "tel"}
-  <input bind:value type="tel" />
+  <input bind:value type="tel" {disabled} />
 {:else if type === "url"}
-  <input bind:value type="url" />
+  <input bind:value type="url" {disabled} />
 {/if}

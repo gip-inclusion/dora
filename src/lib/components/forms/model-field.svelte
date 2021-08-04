@@ -7,6 +7,7 @@
   export let type;
   export let field;
 
+  export let disabled = undefined;
   export let placeholder = "";
   export let description = "";
   export let minValue = null;
@@ -24,4 +25,5 @@
   {placeholder}
   {description}
   {hideLabel}
-  {minValue} />
+  {minValue}
+  {disabled} />
