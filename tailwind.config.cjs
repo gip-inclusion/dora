@@ -64,6 +64,7 @@ const config = {
     screens: { md: "375px", lg: "768px", xl: "1200px" },
     spacing: {
       0: "0",
+      "2p": "0.125rem", //2px
       "1/2": "0.25rem", // 4px
       "3/4": "0.375rem", // 6px
       1: "0.5rem", // 8px

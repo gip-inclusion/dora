@@ -11,6 +11,12 @@
 </script>
 
 <style lang="postcss">
+  :global(.input-container) {
+    @apply shadow-none !important;
+  }
+  :global(.autocomplete-list) {
+    @apply border-none !important;
+  }
   :global(.autocomplete-list-item) {
     @apply text-gray-text-alt !important;
   }
@@ -41,9 +47,9 @@
   {disabled}
   {placeholder}
   {multiple}
-  className="rounded focus-within:shadow-focus"
-  inputClassName="outline-none "
-  dropdownClassName="rounded"
+  className="rounded  focus-within:shadow-focus "
+  inputClassName="outline-none border rounded border-gray-03"
+  dropdownClassName="mt-2p rounded shadow-md !important"
   html5autocomplete={false}
   showLoadingIndicator>
   <div slot="item" let:item let:label class="flex flex-row">
