@@ -7,7 +7,7 @@
   import RadioButtons from "./radio-buttons.svelte";
 
   export let value = undefined;
-  export let selectedItems = undefined;
+  export let selectedItem = undefined;
 
   export let type;
 
@@ -37,24 +37,9 @@
 {:else if type === "radios"}
   <RadioButtons bind:group={value} {choices} />
 {:else if type === "select"}
-  <label class="flex flex-row items-center">
-    <select bind:value>
-      <option value={null} disabled={required ? "disabled" : ""} selected
-        >{placeholder}</option>
-      {#each choices as choice}
-        <option value={choice.value}>
-          {choice.displayName}
-        </option>
-      {/each}
-    </select>
-  </label>
+  <Select {choices} bind:value bind:selectedItem {placeholder} />
 {:else if type === "multiselect"}
-  <Select
-    {choices}
-    bind:value
-    bind:selectedItem={selectedItems}
-    {placeholder}
-    multiple />
+  <Select {choices} bind:value bind:selectedItem {placeholder} multiple />
 {:else if type === "text"}
   <span>{description}</span>
   <input bind:value type="text" {required} />

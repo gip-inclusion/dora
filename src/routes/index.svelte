@@ -1,33 +1,14 @@
 <script context="module">
-  import { getApiURL } from "$lib/utils.js";
+  import { getStructures } from "$lib/structures.js";
 
-  let structures = [];
-
-  export async function load({ _page, fetch, _session, _context }) {
-    const url = `${getApiURL()}/structures/`;
-    const res = await fetch(url, {
-      headers: {
-        Accept: "application/json; version=1.0",
-      },
-    });
-
-    if (res.ok) {
-      structures = await res.json();
-      return {
-        props: {
-          structures,
-        },
-      };
-    }
-    return {
-      status: res.status,
-      error: new Error(`Could not load ${url}`),
-    };
+  export async function load({ _page, _fetch, _session, _context }) {
+    return await getStructures();
   }
 </script>
 
 <script>
   import LinkButton from "$lib/components/link-button.svelte";
+  export let structures;
 </script>
 
 <div class="flex flex-col items-start gap-3">

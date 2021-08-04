@@ -20,13 +20,13 @@
         placeholder="Choisissez ou ajoutez vos critères d’admission"
         field={$serviceOptions.accessConditions}
         bind:value={$serviceCache.accessConditions}
-        bind:selectedItems={$serviceCache._accessConditionsItems} />
+        bind:selectedItem={$serviceCache._accessConditionsItems} />
       <ModelField
         type="multiselect"
         placeholder="Sélectionnez ou ajoutez les publics que vous adressez"
         field={$serviceOptions.concernedPublic}
         bind:value={$serviceCache.concernedPublic}
-        bind:selectedItems={$serviceCache._concernedPublicItems} />
+        bind:selectedItem={$serviceCache._concernedPublicItems} />
       <ModelField
         type="toggle"
         field={$serviceOptions.isCumulative}

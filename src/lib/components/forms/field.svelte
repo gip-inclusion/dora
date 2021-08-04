@@ -3,7 +3,7 @@
   import Label from "./label.svelte";
 
   export let value = undefined;
-  export let selectedItems = undefined;
+  export let selectedItem = undefined;
 
   export let type;
 
@@ -39,7 +39,7 @@
     <Input
       {type}
       bind:value
-      bind:selectedItems
+      bind:selectedItem
       {choices}
       {placeholder}
       {description}

@@ -14,6 +14,15 @@
 
 {#if $serviceOptions}
   <form on:submit|preventDefault={handleSubmit}>
+    <FieldSet title="">
+      <ModelField
+        type="select"
+        field={$serviceOptions.structure}
+        bind:value={$serviceCache.structure}
+        bind:selectedItem={$serviceCache._structure}
+        placeholder="Précisez la catégorie" />
+    </FieldSet>
+
     <FieldSet title="Présentez votre offre de service">
       <ModelField
         type="text"
@@ -38,13 +47,13 @@
         type="multiselect"
         field={$serviceOptions.categories}
         bind:value={$serviceCache.categories}
-        bind:selectedItems={$serviceCache._categoriesItems}
+        bind:selectedItem={$serviceCache._categoriesItems}
         placeholder="Choisissez une catégorie" />
       <ModelField
         type="multiselect"
         field={$serviceOptions.subcategories}
         bind:value={$serviceCache.subcategories}
-        bind:selectedItems={$serviceCache._subcategoriesItems}
+        bind:selectedItem={$serviceCache._subcategoriesItems}
         placeholder="Précisez la catégorie" />
       <ModelField
         type="toggle"

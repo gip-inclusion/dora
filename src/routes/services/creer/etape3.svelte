@@ -35,12 +35,12 @@
         type="multiselect"
         field={$serviceOptions.requirements}
         bind:value={$serviceCache.requirements}
-        bind:selectedItems={$serviceCache._requirementsItems} />
+        bind:selectedItem={$serviceCache._requirementsItems} />
       <ModelField
         type="multiselect"
         field={$serviceOptions.credentials}
         bind:value={$serviceCache.credentials}
-        bind:selectedItems={$serviceCache._credentialsItems} />
+        bind:selectedItem={$serviceCache._credentialsItems} />
       <ModelField
         type="upload"
         field={$serviceOptions.forms}

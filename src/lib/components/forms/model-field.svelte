@@ -2,7 +2,7 @@
   import Field from "./field.svelte";
 
   export let value = undefined;
-  export let selectedItems = undefined;
+  export let selectedItem = undefined;
 
   export let type;
   export let field;
@@ -16,7 +16,7 @@
 
 <Field
   bind:value
-  bind:selectedItems
+  bind:selectedItem
   required={field.required}
   label={field.label}
   choices={field.child?.choices || field.choices}

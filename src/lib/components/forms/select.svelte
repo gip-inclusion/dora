@@ -4,7 +4,7 @@
 
   export let choices;
   export let value = undefined;
-  export let selectedItems = undefined;
+  export let selectedItem = undefined;
   export let disabled = false;
   export let placeholder = "";
   export let multiple = false;
@@ -35,7 +35,7 @@
 <AutoComplete
   items={choices}
   bind:value
-  bind:selectedItem={selectedItems}
+  bind:selectedItem
   labelFieldName="displayName"
   valueFieldName="value"
   {disabled}
