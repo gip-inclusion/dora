@@ -67,10 +67,8 @@
   </div>
 </header>
 
-<div class="flex row-start-2">
-  <div class="grid mx-auto grid-cols-main gap-x-3 gap-y-3">
-    <slot />
-  </div>
+<div class="row-start-2">
+  <slot />
 </div>
 
 <footer class="grid row-start-3 border-t-2 border-france-blue pt-5/2">

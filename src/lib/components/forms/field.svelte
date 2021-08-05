@@ -29,13 +29,16 @@
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
 <Label
-  className="flex flex-row items-top"
+  className="flex flex-row items-top relative "
   isDOMLabel={type !== "checkboxes" && type !== "radios"}>
-  <span
-    class="{hiddenClasses} inline-block w-17 flex-shrink-0 text-base text-gray-text-alt2">
-    {hideLabel ? "" : label}
-    {#if required}<span class="text-error">*</span>{/if}
-  </span>
+  <div class="flex flex-col w-250p">
+    <span
+      class="{hiddenClasses} inline-block w-17 flex-shrink-0 text-base font-bold text-gray-dark">
+      {hideLabel ? "" : label}
+      {#if required}<span class="text-error">*</span>{/if}
+    </span>
+    <span class="text-xs text-gray-text-alt2"> {description}</span>
+  </div>
   <div class="flex flex-col flex-grow">
     <Input
       {type}
@@ -43,8 +46,8 @@
       bind:selectedItem
       {choices}
       {placeholder}
-      {description}
       {minValue}
       {disabled} />
   </div>
+  <slot />
 </Label>

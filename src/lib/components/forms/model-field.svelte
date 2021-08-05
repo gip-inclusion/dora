@@ -26,4 +26,4 @@
   {description}
   {hideLabel}
   {minValue}
-  {disabled} />
+  {disabled}><slot /></Field>

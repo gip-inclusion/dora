@@ -6,7 +6,8 @@
   export let withValidate = false;
 </script>
 
-<div class="flex flex-row justify-center max-w-xl gap-6 p-8 mx-auto mt-8">
+<div
+  class="sticky flex flex-row justify-center max-w-xl gap-6 p-8 mx-auto mt-8 bottom-1">
   {#if withBack}
     <Button
       name="backward"

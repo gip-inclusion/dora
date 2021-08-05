@@ -67,6 +67,7 @@ const config = {
     lineHeight: {
       tight: "1.2",
       normal: "1.5",
+      large: "1.7",
     },
     screens: { md: "375px", lg: "768px", xl: "1200px" },
     spacing: {
@@ -92,12 +93,14 @@ const config = {
       14: "7rem",
       17: "8.5rem",
       20: "10rem",
+      "250p": "15.625rem",
     },
     borderRadius: {
       none: "0",
       DEFAULT: "0.25rem",
       md: "0.5rem",
       lg: "1.5rem",
+      xl: "2.5rem",
       full: "9999px",
     },
     boxShadow: {

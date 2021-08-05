@@ -16,7 +16,6 @@
 
   export let disabled = undefined;
   export let placeholder = "";
-  export let description = "";
   export let minValue = null;
 </script>
 
@@ -50,23 +49,18 @@
     multiple
     {disabled} />
 {:else if type === "text"}
-  <span>{description}</span>
   <input bind:value type="text" {required} {disabled} />
 {:else if type === "richtext"}
   <RichText bind:htmlContent={value} initialContent={value} {disabled} />
 {:else if type === "__multitext__"}
-  <span>{description}</span>
   <input bind:value type="text" {required} {disabled} />
 {:else if type === "toggle"}
   <Toggle bind:checked={value} {disabled} />
 {:else if type === "date"}
-  <span>{description}</span>
   <input bind:value type="date" {disabled} />
 {:else if type === "number"}
-  <span>{description}</span>
   <input bind:value type="number" {minValue} {disabled} />
 {:else if type === "email"}
-  <span>{description}</span>
   <input bind:value type="email" {disabled} />
 {:else if type === "hidden"}
   <input bind:value type="hidden" {disabled} />
