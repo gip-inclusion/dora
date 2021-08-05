@@ -53,7 +53,7 @@
       handleChange={handleEstablishmentChange} />
   </FieldSet>
 
-  <form on:submit|preventDefault={handleSubmit}>
+  <form on:submit|preventDefault={handleSubmit} class="col-start-5">
     <FieldSet title="Présentez votre Structure">
       <ModelField
         type="text"

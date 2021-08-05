@@ -2,6 +2,13 @@ const config = {
   mode: "jit",
   purge: ["./src/**/*.{html,js,svelte,ts}"],
   theme: {
+    extend: {
+      gridTemplateColumns: {
+        // Simple 16 column grid
+        main: "repeat(12, 78px)",
+        1: "1fr",
+      },
+    },
     colors: {
       transparent: "transparent",
       current: "currentColor",

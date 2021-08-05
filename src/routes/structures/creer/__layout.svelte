@@ -34,6 +34,8 @@
   });
 </script>
 
-<h1>Votre structure</h1>
+<div class="col-start-1 col-span-full">
+  <h1 class="col-start-6">Votre structure</h1>
 
-<slot />
+  <slot />
+</div>

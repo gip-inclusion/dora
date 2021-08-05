@@ -10,6 +10,7 @@
     big = false;
   export let secondary = false,
     tertiary = false;
+  export let noBackground = false;
 
   let px, py, iw, ih, ts, lead;
   if (small) {
@@ -49,9 +50,15 @@
     background = "bg-white hover:bg-gray-dark";
   } else {
     border = "border-0";
-    text = "font-bold text-white disabled:text-gray-text";
-    background =
-      "bg-dora-magenta-cta hover:bg-dora-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
+    if (noBackground) {
+      text =
+        "font-bold text-dora-magenta-cta hover:text-dora-magenta-hover disabled:text-gray-text active:text-france-blue";
+      background = "bg-white";
+    } else {
+      text = "font-bold text-white disabled:text-gray-text";
+      background =
+        "bg-dora-magenta-cta hover:bg-dora-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
+    }
   }
 </script>
 

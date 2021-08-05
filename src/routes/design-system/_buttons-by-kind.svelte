@@ -22,3 +22,11 @@
     <Buttons label="Bouton Petit" small {secondary} {tertiary} />
   </div>
 </div>
+{#if !secondary && !tertiary}
+  <div>
+    <h3>No Labels</h3>
+    <div class="flex flex-col items-start gap-3">
+      <Buttons label="Bouton Label" small {secondary} {tertiary} noBackground />
+    </div>
+  </div>
+{/if}

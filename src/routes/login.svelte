@@ -58,29 +58,31 @@
   });
 </script>
 
-<h1>Se connecter</h1>
-<form
-  class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01"
-  on:submit|preventDefault={handleSubmit}>
-  <label class="flex flex-row items-center">
-    <span class="inline-block w-40 font-bold">Couriel</span>
-    <input
-      class="flex-grow inline-block border-gray-02"
-      type="email"
-      required
-      bind:value={email}
-      on:invalid={validateMessageEmail} />
-  </label>
+<div class="col-start-1 col-span-full">
+  <h1>Se connecter</h1>
+  <form
+    class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01"
+    on:submit|preventDefault={handleSubmit}>
+    <label class="flex flex-row items-center">
+      <span class="inline-block w-40 font-bold">Couriel</span>
+      <input
+        class="flex-grow inline-block border-gray-02"
+        type="email"
+        required
+        bind:value={email}
+        on:invalid={validateMessageEmail} />
+    </label>
 
-  <label class="flex flex-row items-center">
-    <span class="inline-block w-40 font-bold">Mot de passe</span>
-    <input
-      class="flex-grow inline-block border-gray-02"
-      type="password"
-      required
-      bind:value={password}
-      aria-live="polite" />
-  </label>
+    <label class="flex flex-row items-center">
+      <span class="inline-block w-40 font-bold">Mot de passe</span>
+      <input
+        class="flex-grow inline-block border-gray-02"
+        type="password"
+        required
+        bind:value={password}
+        aria-live="polite" />
+    </label>
 
-  <Button type="submit" disabled={!email || !password} label="Connexion" />
-</form>
+    <Button type="submit" disabled={!email || !password} label="Connexion" />
+  </form>
+</div>

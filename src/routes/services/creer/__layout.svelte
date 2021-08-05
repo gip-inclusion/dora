@@ -35,13 +35,15 @@
   });
 </script>
 
-<h1>Votre solution d’accompagnement</h1>
+<div class="col-start-1 col-span-full">
+  <h1>Votre solution d’accompagnement</h1>
 
-<nav class="flex flex-row">
-  <NavLink target="etape1" name="1. Descriptif" />
-  <NavLink target="etape2" name="2. Condition d’accès du bénéficiaire" />
-  <NavLink target="etape3" name="3. Modalité d’accès à la solution" />
-  <NavLink target="etape4" name="4. Informations pratiques" />
-</nav>
+  <nav class="flex flex-row">
+    <NavLink target="etape1" name="1. Descriptif" />
+    <NavLink target="etape2" name="2. Condition d’accès du bénéficiaire" />
+    <NavLink target="etape3" name="3. Modalité d’accès à la solution" />
+    <NavLink target="etape4" name="4. Informations pratiques" />
+  </nav>
 
-<slot />
+  <slot />
+</div>
