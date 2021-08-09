@@ -6,19 +6,10 @@
   export let withBack = false;
   export let withForward = false;
   export let withValidate = false;
-  export let backlink, forwardlink;
-
-  import { persistAndGo } from "./_nav.js";
-
-  function handleSubmit(evt) {
-    persistAndGo(evt, backlink, forwardlink);
-  }
 </script>
 
 <CenteredGrid class1="sticky w-full p-3 bottom-1 shadow-l bg-white z-50 mt-3">
-  <form
-    on:submit|preventDefault={handleSubmit}
-    class="col-span-full col-start-1 ">
+  <form on:submit|preventDefault class="col-span-full col-start-1 ">
     <div class="flex flex-row gap-6">
       {#if withBack}
         <Button

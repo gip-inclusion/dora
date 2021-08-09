@@ -7,8 +7,8 @@
   import Field from "$lib/components/forms/field.svelte";
 
   import CustomLayout from "./_custom-layout.svelte";
-  import NavButtons from "./_nav-buttons.svelte";
 
+  import NavButtons from "./_nav.svelte";
   let autoSuspend = false;
 </script>
 

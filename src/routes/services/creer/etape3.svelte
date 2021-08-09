@@ -5,7 +5,8 @@
   import ModelField from "$lib/components/forms/model-field.svelte";
 
   import CustomLayout from "./_custom-layout.svelte";
-  import NavButtons from "./_nav-buttons.svelte";
+
+  import NavButtons from "./_nav.svelte";
 </script>
 
 <CustomLayout>

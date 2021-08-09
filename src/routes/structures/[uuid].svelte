@@ -31,6 +31,7 @@
   import RichText from "$lib/components/rich-text/editor.svelte";
   import { token } from "$lib/auth";
   import { markdownToHTML, htmlToMarkdown } from "$lib/utils";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   export let structure;
 
@@ -101,61 +102,63 @@
   <title>Dora: {structure.name}</title>
 </svelte:head>
 
-<div class="col-start-1 col-span-full">
-  <h1>{structure.name}</h1>
-  {#if currentToken}
-    {#if !editMode}
-      <Button type="submit" on:click={handleEdit} label="Éditer" />
-    {:else}
-      <div class="flex flex-row gap-2">
-        <Button
-          type="cancel"
-          on:click={handleCancel}
-          label="Annuler"
-          secondary />
-        <Button type="submit" on:click={handleSave} label="Enregistrer" />
-      </div>
+<CenteredGrid>
+  <div class="col-start-1 col-span-full">
+    <h1>{structure.name}</h1>
+    {#if currentToken}
+      {#if !editMode}
+        <Button type="submit" on:click={handleEdit} label="Éditer" />
+      {:else}
+        <div class="flex flex-row gap-2">
+          <Button
+            type="cancel"
+            on:click={handleCancel}
+            label="Annuler"
+            secondary />
+          <Button type="submit" on:click={handleSave} label="Enregistrer" />
+        </div>
+      {/if}
     {/if}
-  {/if}
-  <div class="flex-col space-y-4 text-sm text-gray-600">
-    <div class="">
-      <span class="">{structure.address1}</span><br />
-      {#if structure.address2}<span class="">{structure.address2}</span
-        ><br />{/if}
-      <span class="">{structure.postalCode}</span>
-      <span class="">{structure.city}</span>
-    </div>
-    <div class="">
-      Code APE:
-      <span class="">{structure.ape} </span>
-    </div>
-    <div class="">
-      SIRET:
-      <span class="">{structure.siret} </span>
-    </div>
-
-    <div class="prose prose-xl">
-      {@html format_text(structure.shortDesc)}
-    </div>
-    {#if editMode}
-      <RichText
-        bind:htmlContent={currentFullDesc}
-        initialContent={currentFullDesc}
-        className="prose prose-sm h-20" />
-    {:else}
-      <div class="max-w-3xl p-5 prose bg-gray-200">
-        {@html format_text(structure.fullDesc)}
+    <div class="flex-col space-y-4 text-sm text-gray-600">
+      <div class="">
+        <span class="">{structure.address1}</span><br />
+        {#if structure.address2}<span class="">{structure.address2}</span
+          ><br />{/if}
+        <span class="">{structure.postalCode}</span>
+        <span class="">{structure.city}</span>
       </div>
-    {/if}
+      <div class="">
+        Code APE:
+        <span class="">{structure.ape} </span>
+      </div>
+      <div class="">
+        SIRET:
+        <span class="">{structure.siret} </span>
+      </div>
 
-    <div class="font-bold text-dora-magenta-brand">
-      <a class="my-20" href={structure.url}>{structure.url}</a>
-    </div>
-    <!-- <div class="flex-row space-x-2">
+      <div class="prose prose-xl">
+        {@html format_text(structure.shortDesc)}
+      </div>
+      {#if editMode}
+        <RichText
+          bind:htmlContent={currentFullDesc}
+          initialContent={currentFullDesc}
+          className="prose prose-sm h-20" />
+      {:else}
+        <div class="max-w-3xl p-5 prose bg-gray-200">
+          {@html format_text(structure.fullDesc)}
+        </div>
+      {/if}
+
+      <div class="font-bold text-dora-magenta-brand">
+        <a class="my-20" href={structure.url}>{structure.url}</a>
+      </div>
+      <!-- <div class="flex-row space-x-2">
     {#each structure.solutionsThemes as theme}
       <span class="rounded-xl bg-orange-400 p-0.5 px-4 text-white">
         {theme}</span>
     {/each}
   </div> -->
+    </div>
   </div>
-</div>
+</CenteredGrid>

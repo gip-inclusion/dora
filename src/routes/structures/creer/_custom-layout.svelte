@@ -6,6 +6,7 @@
 
   import { token } from "$lib/auth";
   import { getApiURL } from "$lib/utils";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   import { structureOptions } from "./_creation-store.js";
 
@@ -34,8 +35,19 @@
   });
 </script>
 
-<div class="col-start-1 col-span-full">
-  <h1 class="col-start-6">Votre structure</h1>
+<CenteredGrid class1="col-start-1 row-start-1 col-span-full">
+  <div class="col-start-1 col-span-full">
+    <h1>Votre structure</h1>
 
-  <slot />
-</div>
+    <slot />
+  </div>
+</CenteredGrid>
+
+<CenteredGrid
+  class1="col-start-1 row-start-2 rounded-xl col-span-full bg-gray-bg">
+  <div class="col-span-8 col-start-1">
+    <slot name="content" />
+  </div>
+</CenteredGrid>
+
+<slot name="navbar" />
