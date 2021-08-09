@@ -11,6 +11,7 @@
 
     if (res.ok) {
       const service = await res.json();
+      console.log(service);
       return {
         props: {
           service,
@@ -62,7 +63,12 @@
       >coachOrientationModesOther :
     </strong>{service.coachOrientationModesOther}
     <br />
-    <strong>forms : </strong>{service.forms} <br />
+    <strong>forms : </strong>
+    <ul>
+      {#each service.formsInfo as form}
+        <li><a class="underline" href={form.url}>{form.name}</a></li>
+      {/each}
+    </ul>
     <strong>onlineForms : </strong>{service.onlineForms} <br />
     <strong>contactName : </strong>{service.contactName} <br />
     <strong>contactPhone : </strong>{service.contactPhone} <br />

@@ -26,6 +26,8 @@
   }
 
   export async function handleSubmit() {
+    console.log($serviceCache);
+    const body = get(serviceCache);
     const url = `${getApiURL()}/services/`;
     const res = await fetch(url, {
       method: "POST",
@@ -35,7 +37,7 @@
 
         Authorization: `Token ${get(token)}`,
       },
-      body: JSON.stringify(get(serviceCache)),
+      body: JSON.stringify(body),
     });
 
     if (res.ok) {
