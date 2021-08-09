@@ -6,7 +6,9 @@ export { default as h2Icon } from "remixicon/icons/Editor/h-2.svg?raw";
 export { default as liIcon } from "remixicon/icons/Editor/list-unordered.svg?raw";
 
 export { default as arrowRightIcon } from "remixicon/icons/System/arrow-right-line.svg?raw";
+export { default as arrowRightSIcon } from "remixicon/icons/System/arrow-right-s-line.svg?raw";
 export { default as arrowLeftIcon } from "remixicon/icons/System/arrow-left-line.svg?raw";
+export { default as arrowLeftCircleIcon } from "remixicon/icons/System/arrow-left-circle-fill.svg?raw";
 export { default as starFillIcon } from "remixicon/icons/System/star-fill.svg?raw";
 export { default as checkIcon } from "remixicon/icons/System/check-line.svg?raw";
 export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill.svg?raw";

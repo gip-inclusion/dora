@@ -53,7 +53,7 @@
     if (noBackground) {
       text =
         "font-bold text-dora-magenta-cta hover:text-dora-magenta-hover disabled:text-gray-text active:text-france-blue";
-      background = "bg-white";
+      background = "bg-transparent";
     } else {
       text = "font-bold text-white disabled:text-gray-text";
       background =

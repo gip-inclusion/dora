@@ -49,10 +49,12 @@
     </div>
   </div>
 </div>
+
 <div class="flex col-start-1 row-start-2 rounded-xl col-span-full bg-gray-bg">
   <div class="grid mx-auto grid-cols-main gap-x-3 gap-y-3">
     <div class="col-span-8 col-start-1">
-      <slot />
+      <slot name="content" />
     </div>
   </div>
 </div>
+<slot name="navbar" />

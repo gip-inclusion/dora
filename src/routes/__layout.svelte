@@ -67,7 +67,7 @@
   </div>
 </header>
 
-<div class="row-start-2">
+<div class="grid row-start-2 relative">
   <slot />
 </div>
 

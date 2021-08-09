@@ -1,36 +1,57 @@
 <script>
   import Button from "$lib/components/button.svelte";
-  import { arrowRightIcon, arrowLeftIcon } from "$lib/icons.js";
+  import { arrowRightSIcon, arrowLeftCircleIcon } from "$lib/icons.js";
   export let withBack = false;
   export let withForward = false;
   export let withValidate = false;
+  export let backlink, forwardlink;
+
+  import { persistAndGo } from "./_nav.js";
+
+  function handleSubmit(evt) {
+    persistAndGo(evt, backlink, forwardlink);
+  }
 </script>
 
-<div
-  class="sticky flex flex-row justify-center max-w-xl gap-6 p-8 mx-auto mt-8 bottom-1">
-  {#if withBack}
-    <Button
-      name="backward"
-      type="submit"
-      label="Précédent"
-      secondary={withForward || withValidate}
-      icon={arrowLeftIcon}
-      iconOnLeft />
-  {/if}
-  {#if withForward}
-    <Button
-      name="forward"
-      type="submit"
-      label="Suivant"
-      icon={arrowRightIcon}
-      iconOnRight />
-  {/if}
-  {#if withValidate}
-    <Button
-      name="validate"
-      type="submit"
-      label="Valider"
-      icon={arrowRightIcon}
-      iconOnRight />
-  {/if}
-</div>
+<form
+  on:submit|preventDefault={handleSubmit}
+  class="flex sticky w-full p-3 bottom-1 shadow-l bg-white z-50 mt-3">
+  <div class=" grid mx-auto grid-cols-main gap-x-3">
+    <div class="col-span-full col-start-1">
+      <div class="flex flex-row gap-6">
+        {#if withBack}
+          <Button
+            name="backward"
+            type="submit"
+            label="Retour"
+            icon={arrowLeftCircleIcon}
+            noBackground
+            iconOnLeft />
+        {/if}
+        <div class="flex-grow" />
+
+        <Button
+          name="save_draft"
+          type="submit"
+          label="Enregistrer comme brouillon"
+          tertiary />
+        {#if withForward}
+          <Button
+            name="forward"
+            type="submit"
+            label="Suivant"
+            icon={arrowRightSIcon}
+            iconOnRight />
+        {/if}
+        {#if withValidate}
+          <Button
+            name="validate"
+            type="submit"
+            label="Publier"
+            icon={arrowRightSIcon}
+            iconOnRight />
+        {/if}
+      </div>
+    </div>
+  </div>
+</form>
