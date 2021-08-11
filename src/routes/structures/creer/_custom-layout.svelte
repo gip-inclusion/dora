@@ -36,10 +36,11 @@
 </script>
 
 <CenteredGrid class1="col-start-1 row-start-1 col-span-full">
-  <div class="col-start-1 col-span-full">
-    <h1>Votre structure</h1>
-
-    <slot />
+  <div class="col-start-1 col-span-full text-center mb-6">
+    <h1 class="text-france-blue text-13xl">Création d’une structure</h1>
+    <p class="text-gray-text text-base">
+      Rendez visible vos offres de services sur la plateforme DORA.
+    </p>
   </div>
 </CenteredGrid>
 

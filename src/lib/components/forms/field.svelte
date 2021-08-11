@@ -7,6 +7,7 @@
 
   export let type;
 
+  export let vertical = false;
   export let label = "";
   export let required = false;
   export let choices = [];
@@ -18,6 +19,7 @@
 
   export let hideLabel = false;
 
+  let layoutClass = vertical ? "flex-col " : "flex-row";
   $: hiddenClasses = type === "hidden" ? "hidden" : "";
 </script>
 
@@ -29,25 +31,32 @@
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
 <Label
-  className="flex flex-row items-top relative "
+  className="flex {layoutClass} items-top relative"
   isDOMLabel={type !== "checkboxes" && type !== "radios"}>
-  <div class="flex flex-col w-250p">
+  <div
+    class="flex flex-col"
+    class:w-250p={!vertical}
+    class:w-full={vertical}
+    class:mb-2={vertical}>
     <span
-      class="{hiddenClasses} inline-block w-17 flex-shrink-0 text-base font-bold text-gray-dark">
+      class="{hiddenClasses} inline-block w-17 flex-shrink-0 text-base font-bold text-gray-dark"
+      class:w-17={!vertical}>
       {hideLabel ? "" : label}
       {#if required}<span class="text-error">*</span>{/if}
     </span>
     <span class="text-xs text-gray-text-alt2"> {description}</span>
   </div>
   <div class="flex flex-col flex-grow">
-    <Input
-      {type}
-      bind:value
-      bind:selectedItem
-      {choices}
-      {placeholder}
-      {minValue}
-      {disabled} />
+    <slot name="input">
+      <Input
+        {type}
+        bind:value
+        bind:selectedItem
+        {choices}
+        {placeholder}
+        {minValue}
+        {disabled} />
+    </slot>
   </div>
-  <slot />
+  <slot name="helptext" />
 </Label>

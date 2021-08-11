@@ -6,6 +6,7 @@
   export let selectedEstablishment;
   export let selectedCity;
   export let disabled;
+  export let placeholder;
 
   async function searchSirene(q) {
     const sireneAPIUrl = `${getApiURL()}/search-sirene/${
@@ -66,7 +67,7 @@
 <Select
   onChange={handleChange}
   {disabled}
-  placeholder="Nom ou SIRET"
+  {placeholder}
   hideArrow
   searchFunction={searchSirene}
   delay="200"

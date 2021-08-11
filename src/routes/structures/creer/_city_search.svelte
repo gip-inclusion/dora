@@ -4,6 +4,7 @@
   export let handleChange;
   export let selectedCity;
   export let disabled;
+  export let placeholder;
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
 
@@ -24,7 +25,7 @@
 <Select
   onChange={handleChange}
   {disabled}
-  placeholder="Commune"
+  {placeholder}
   hideArrow
   searchFunction={searchCity}
   delay="200"

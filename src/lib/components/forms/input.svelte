@@ -50,9 +50,13 @@
     multiple
     {disabled} />
 {:else if type === "text"}
-  <input bind:value type="text" {required} {disabled} />
+  <input bind:value type="text" {placeholder} {required} {disabled} />
 {:else if type === "richtext"}
-  <RichText bind:htmlContent={value} initialContent={value} {disabled} />
+  <RichText
+    bind:htmlContent={value}
+    {placeholder}
+    initialContent={value}
+    {disabled} />
 {:else if type === "__multitext__"}
   <input bind:value type="text" {required} {disabled} />
 {:else if type === "toggle"}

@@ -3,9 +3,10 @@
 
   export let value = undefined;
   export let selectedItem = undefined;
-
+  export let label;
   export let type;
   export let field;
+  export let vertical = false;
 
   export let disabled = undefined;
   export let placeholder = "";
@@ -19,11 +20,12 @@
   bind:value
   bind:selectedItem
   required={field.required}
-  label={field.label}
+  label={label || field.label}
   choices={field.child?.choices || field.choices}
   {type}
   {placeholder}
   {description}
   {hideLabel}
   {minValue}
-  {disabled}><slot /></Field>
+  {disabled}
+  {vertical}><slot /></Field>
