@@ -26,7 +26,8 @@
   input[type="url"],
   input[type="email"],
   input[type="tel"],
-  input[type="date"] {
+  input[type="date"],
+  textarea {
     @apply px-1 py-3/4 border border-gray-03 rounded outline-none placeholder-gray-text-alt focus:shadow-focus;
   }
 </style>
@@ -51,6 +52,14 @@
     {disabled} />
 {:else if type === "text"}
   <input bind:value type="text" {placeholder} {required} {disabled} />
+{:else if type === "textarea"}
+  <textarea
+    bind:value
+    type="text"
+    {placeholder}
+    {required}
+    {disabled}
+    rows="4" />
 {:else if type === "richtext"}
   <RichText
     bind:htmlContent={value}

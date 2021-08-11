@@ -29,34 +29,35 @@
   }
 </style>
 
-<!-- svelte-ignore a11y-label-has-associated-control -->
-<Label
-  className="flex {layoutClass} items-top relative"
-  isDOMLabel={type !== "checkboxes" && type !== "radios"}>
-  <div
-    class="flex flex-col"
-    class:w-250p={!vertical}
-    class:w-full={vertical}
-    class:mb-2={vertical}>
-    <span
-      class="{hiddenClasses} inline-block w-17 flex-shrink-0 text-base font-bold text-gray-dark"
-      class:w-17={!vertical}>
-      {hideLabel ? "" : label}
-      {#if required}<span class="text-error">*</span>{/if}
-    </span>
-    <span class="text-xs text-gray-text-alt2"> {description}</span>
-  </div>
-  <div class="flex flex-col flex-grow">
-    <slot name="input">
-      <Input
-        {type}
-        bind:value
-        bind:selectedItem
-        {choices}
-        {placeholder}
-        {minValue}
-        {disabled} />
-    </slot>
-  </div>
-  <slot name="helptext" />
-</Label>
+<div class:hidden={type == "hidden"}>
+  <Label
+    className="flex {layoutClass} items-top relative"
+    isDOMLabel={type !== "checkboxes" && type !== "radios"}>
+    <div
+      class="flex flex-col"
+      class:w-250p={!vertical}
+      class:w-full={vertical}
+      class:mb-2={vertical}>
+      <span
+        class="{hiddenClasses} inline-block w-17 flex-shrink-0 text-base font-bold text-gray-dark"
+        class:w-17={!vertical}>
+        {hideLabel ? "" : label}
+        {#if required}<span class="text-error">*</span>{/if}
+      </span>
+      <span class="text-xs text-gray-text-alt2"> {description}</span>
+    </div>
+    <div class="flex flex-col flex-grow">
+      <slot name="input">
+        <Input
+          {type}
+          bind:value
+          bind:selectedItem
+          {choices}
+          {placeholder}
+          {minValue}
+          {disabled} />
+      </slot>
+    </div>
+    <slot name="helptext" />
+  </Label>
+</div>

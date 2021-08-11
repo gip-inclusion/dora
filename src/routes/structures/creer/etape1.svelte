@@ -79,14 +79,20 @@
         </Field>
       </FieldSet>
 
-      {#if !$structureCache.siret}
+      {#if $structureCache.siret}
         <FieldSet title="Présentez votre Structure">
           <ModelField
             type="text"
             field={$structureOptions.siret}
             disabled
             bind:value={$structureCache.siret}
-            vertical />
+            vertical>
+            <FieldHelp title="Completez les informations" slot="helptext">
+              <p>
+                Vérifiez l’exactitude des informations récupérées et complétez
+                les autres.
+              </p>
+            </FieldHelp></ModelField>
           <ModelField
             type="text"
             label="Nom de la structure"
@@ -151,7 +157,7 @@
             vertical />
 
           <ModelField
-            type="text"
+            type="textarea"
             label="Présentez votre structure"
             description="Présentation résumée des missions de votre structure"
             placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre structure et ses spécificités."
@@ -186,7 +192,7 @@
   </svelte:fragment>
 
   <svelte:fragment slot="navbar">
-    {#if !$structureCache.siret}
+    {#if $structureCache.siret}
       <NavButtons withValidate />
     {/if}
   </svelte:fragment>
