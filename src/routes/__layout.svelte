@@ -12,7 +12,7 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 </script>
 
-<header class="grid row-start-1 shadow-md">
+<header class="grid row-start-1 shadow-md mb-7">
   <CenteredGrid class1="row-start-1">
     <div class="flex flex-row items-center row-start-1 col-span-full py-3/2 ">
       <a class="flex flex-row gap-5 " href="/">
@@ -20,8 +20,8 @@
           class="inline"
           src={LogoMinistere}
           alt=""
-          width="125"
-          height="102" />
+          width="114"
+          height="89" />
         <img class="inline" src={LogoDORA} alt="Dora" width="140" height="65" />
       </a>
       <div class="flex-grow" />
@@ -64,10 +64,10 @@
 </div>
 
 <footer class="grid row-start-3 border-t-2 border-france-blue pt-5/2">
-  <CenteredGrid class1="row-start-1">
+  <CenteredGrid class1="row-start-1 mb-5">
     <div class="col-span-5 col-start-1">
       <a class="block" href="/">
-        <img class="inline" src={LogoRF} alt="" width="169" height="151" />
+        <img class="inline" src={LogoRF} alt="" width="124" height="110" />
       </a>
     </div>
     <div class="col-span-6 col-start-7 text-sm leading-normal text-gray-text">

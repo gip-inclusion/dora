@@ -44,8 +44,8 @@
 </CenteredGrid>
 
 <CenteredGrid
-  class1="col-start-1 row-start-2 rounded-xl col-span-full bg-gray-bg">
-  <div class="col-span-8 col-start-1">
+  class1="col-start-1 row-start-2 rounded-t-xl col-span-full bg-gray-bg">
+  <div class="col-span-8 col-start-1 mb-8">
     <slot name="content" />
   </div>
 </CenteredGrid>
