@@ -1,10 +1,13 @@
 {
   "recommendations": [
-    "naumovs.color-highlight",
+    "svelte.svelte-vscode",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "svelte.svelte-vscode",
     "bradlc.vscode-tailwindcss",
-    "heybourn.headwind"
+    "heybourn.headwind",
+    "ms-vscode-remote.remote-containers",
+    "ms-azuretools.vscode-docker",
+    "davidanson.vscode-markdownlint",
+    "naumovs.color-highlight"
   ]
 }
