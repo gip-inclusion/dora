@@ -70,6 +70,8 @@
   {withBack}
   {withForward}
   {withValidate}
+  withDraft
+  validateLabel="Publier"
   {backlink}
   {forwardlink}
   on:submit={persistAndGo} />

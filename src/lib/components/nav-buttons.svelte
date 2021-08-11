@@ -6,9 +6,11 @@
   export let withBack = false;
   export let withForward = false;
   export let withValidate = false;
+  export let withDraft = false;
+  export let validateLabel = "Valider";
 </script>
 
-<CenteredGrid class1="sticky w-full p-3 bottom-1 shadow-l bg-white z-50 mt-3">
+<CenteredGrid class1="sticky w-full p-3 bottom-0 shadow-l bg-white z-50">
   <form on:submit|preventDefault class="col-span-full col-start-1 ">
     <div class="flex flex-row gap-6">
       {#if withBack}
@@ -21,12 +23,13 @@
           iconOnLeft />
       {/if}
       <div class="flex-grow" />
-
-      <Button
-        name="save_draft"
-        type="submit"
-        label="Enregistrer comme brouillon"
-        tertiary />
+      {#if withDraft}
+        <Button
+          name="save_draft"
+          type="submit"
+          label="Enregistrer comme brouillon"
+          tertiary />
+      {/if}
       {#if withForward}
         <Button
           name="forward"
@@ -39,7 +42,7 @@
         <Button
           name="validate"
           type="submit"
-          label="Publier"
+          label={validateLabel}
           icon={arrowRightSIcon}
           iconOnRight />
       {/if}

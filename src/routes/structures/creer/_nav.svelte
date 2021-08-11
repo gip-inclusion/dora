@@ -68,6 +68,7 @@
   {withBack}
   {withForward}
   {withValidate}
+  validateLabel="Validez les informations"
   {backlink}
   {forwardlink}
   on:submit={persistAndGo} />
