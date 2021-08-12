@@ -11,7 +11,7 @@
   export let hideArrow;
   export let searchFunction;
   export let delay;
-  export let localSearch;
+  export let localFiltering;
   export let labelFieldName = "displayName";
   export let valueFieldName = "value";
   export let minCharactersToSearch;
@@ -51,7 +51,7 @@
 </style>
 
 <AutoComplete
-  {localSearch}
+  {localFiltering}
   {labelFieldName}
   {valueFieldName}
   {minCharactersToSearch}
@@ -75,5 +75,11 @@
     <div class="flex-grow-0 hidden checkmark">
       <div class="w-3 h-3 ml-1 fill-current ">{@html checkIcon}</div>
     </div>
+  </div>
+  <div slot="loading">
+    <span class="text-gray-text-alt">Chargement des resultats…</span>
+  </div>
+  <div slot="no-results">
+    <span class="text-error">Aucun resultat</span>
   </div>
 </AutoComplete>

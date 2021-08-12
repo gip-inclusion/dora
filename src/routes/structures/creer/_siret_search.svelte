@@ -74,6 +74,5 @@
   labelFieldName="label"
   valueFieldName="siret"
   selectedItem={selectedEstablishment}
-  localSearch={false}
-  minCharactersToSearch="3"
-  localFiltering={false} />
+  localFiltering={false}
+  minCharactersToSearch="3" />
