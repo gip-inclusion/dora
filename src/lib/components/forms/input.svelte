@@ -32,7 +32,7 @@
   input[type="tel"],
   input[type="date"],
   textarea {
-    @apply px-1 min-h-6 border border-gray-03 rounded outline-none placeholder-gray-text-alt focus:shadow-focus;
+    @apply px-1 min-h-6 border border-gray-03 rounded outline-none placeholder-gray-text-alt focus:shadow-focus text-sm;
   }
 </style>
 

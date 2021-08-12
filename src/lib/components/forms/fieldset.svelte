@@ -4,14 +4,14 @@
 </script>
 
 <div
-  class="flex flex-col max-w-4xl gap-6 pt-4 mt-6 bg-white rounded-md shadow-sm px-7 pb-7 ">
+  class="flex flex-col max-w-4xl gap-2 pt-4 mt-6 bg-white rounded-md shadow-sm px-7 pb-7 ">
   {#if title}
-    <div class="border-gray-01 border-b pb-3">
+    <div class="pb-3 border-b border-gray-01">
       <h3 class="mb-1">
         {title}
       </h3>
       {#if description}
-        <p class="text-gray-text-alt2 text-xs">{description}</p>
+        <p class="text-xs text-gray-text-alt2">{description}</p>
       {/if}
     </div>
   {/if}

@@ -31,7 +31,7 @@
   }
 </style>
 
-<div class:hidden={type == "hidden"} class="flex-grow">
+<div class:hidden={type == "hidden"} class="flex-1">
   <Label
     className="flex {layoutClass} items-top relative "
     isDOMLabel={type !== "checkboxes" && type !== "radios"}>
@@ -39,7 +39,7 @@
       class="flex flex-col"
       class:w-250p={!vertical}
       class:w-full={vertical}
-      class:mb-2={vertical}>
+      class:mb-1={vertical}>
       <div
         class="{hiddenClasses} inline-block w-17 flex-shrink-0 text-base font-bold text-gray-dark"
         class:w-17={!vertical}>
