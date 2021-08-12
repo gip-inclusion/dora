@@ -3,7 +3,7 @@
   import Button from "$lib/components/button.svelte";
 
   export async function load({ page, fetch, _session, _context }) {
-    const url = `${getApiURL()}/structures/${page.params.uuid}/`;
+    const url = `${getApiURL()}/structures/${page.params.slug}/`;
     const res = await fetch(url, {
       headers: {
         Accept: "application/json; version=1.0",

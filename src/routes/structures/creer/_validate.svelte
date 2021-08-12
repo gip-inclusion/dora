@@ -24,7 +24,7 @@
 
     if (res.ok) {
       const structure = await res.json();
-      goto(`${structure.id}`);
+      goto(`${structure.slug}`);
     }
 
     return {
