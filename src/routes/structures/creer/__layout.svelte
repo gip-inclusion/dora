@@ -47,8 +47,6 @@
 <CenteredGrid
   class1="col-start-1 row-start-2 rounded-t-xl col-span-full bg-gray-bg">
   <div class="col-span-8 col-start-1 mb-4">
-    <slot name="content" />
+    <slot />
   </div>
 </CenteredGrid>
-
-<slot name="navbar" />
