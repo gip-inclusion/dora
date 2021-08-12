@@ -78,6 +78,7 @@
     <FieldSet title="Présentez votre Structure">
       <ModelField
         type="text"
+        label="SIRET"
         field={$structureOptions.siret}
         disabled
         bind:value={structure.siret}
@@ -95,6 +96,13 @@
         bind:value={structure.name}
         vertical />
       <ModelField
+        type="select"
+        label="Typologie de la structure"
+        placeholder="choisissez"
+        field={$structureOptions.typology}
+        bind:value={structure.typology}
+        vertical />
+      <ModelField
         type="text"
         label="Adresse"
         field={$structureOptions.address1}
@@ -106,7 +114,7 @@
         field={$structureOptions.address2}
         bind:value={structure.address2}
         vertical />
-      <div class="flex flex-row gap-x-4 justify-between">
+      <div class="flex flex-row justify-between gap-x-4">
         <div class="w-20">
           <ModelField
             type="text"
@@ -124,7 +132,7 @@
             vertical />
         </div>
       </div>
-      <div class="flex flex-row gap-x-4 justify-between ">
+      <div class="flex flex-row justify-between gap-x-4 ">
         <div class="flex-auto">
           <ModelField
             type="tel"
@@ -137,7 +145,7 @@
         <div class="flex-auto">
           <ModelField
             type="email"
-            label="E-mail"
+            label="Courriel"
             field={$structureOptions.email}
             bind:value={structure.email}
             vertical />
@@ -151,11 +159,18 @@
         vertical />
       <ModelField
         type="textarea"
+        label="Résumé"
+        description="280 caractères maximum"
+        placeholder="Décrivez brièvement votre structure"
+        field={$structureOptions.shortDesc}
+        bind:value={structure.shortDesc} />
+      <ModelField
+        type="richtext"
         label="Présentez votre structure"
         description="Présentation résumée des missions de votre structure"
         placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre structure et ses spécificités."
-        field={$structureOptions.shortDesc}
-        bind:value={structure.shortDesc}
+        field={$structureOptions.fullDesc}
+        bind:value={structure.fullDesc}
         vertical />
 
       <ModelField
@@ -179,7 +194,7 @@
         bind:value={structure.latitude}
         vertical />
 
-      <div class="border-gray-01 border-b" />
+      <div class="border-b border-gray-01" />
 
       <div class="self-end">
         <ValidateButton {structure} />
