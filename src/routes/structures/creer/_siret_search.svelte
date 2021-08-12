@@ -75,4 +75,8 @@
   valueFieldName="siret"
   selectedItem={selectedEstablishment}
   localFiltering={false}
-  minCharactersToSearch="3" />
+  minCharactersToSearch="3">
+  <span slot="postfix" let:item class="ml-1 text-gray-text-alt text-xs">
+    {item.siret}
+  </span>
+</Select>

@@ -71,9 +71,12 @@
   showLoadingIndicator
   {hideArrow}>
   <div slot="item" let:item let:label class="flex flex-row">
-    <div class="flex-grow">{@html label}</div>
+    <div class="flex-grow">
+      {@html label}
+      <slot name="postfix" {item} />
+    </div>
     <div class="flex-grow-0 hidden checkmark">
-      <div class="w-3 h-3 ml-1 fill-current ">{@html checkIcon}</div>
+      <div class="w-3 h-2 ml-1 fill-current ">{@html checkIcon}</div>
     </div>
   </div>
   <div slot="loading">
