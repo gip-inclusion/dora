@@ -1,5 +1,5 @@
 <script>
-  import { structureCache, structureOptions } from "./_creation-store.js";
+  import { structureOptions } from "./_creation-store.js";
 
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
@@ -13,32 +13,34 @@
   import CitySearch from "./_city_search.svelte";
 
   let selectedCity;
-
-  $: console.log($structureOptions);
-  $: console.log($structureCache);
+  let selectedEstablishment;
+  let structure = {};
 
   function handleCityChange(city) {
-    console.log("handleCityChange");
     selectedCity = city;
-    console.log(selectedCity);
+    structure = {};
+    selectedEstablishment = null;
   }
 
   function handleEstablishmentChange(establishment) {
-    console.log("handleEstablishmentChange", establishment);
-    $structureCache.siret = establishment.siret;
-    $structureCache.name = establishment.name || establishment.parent;
-    $structureCache.address1 = establishment.addr1;
-    $structureCache.address2 = establishment.addr2;
-    $structureCache.city = (
-      (establishment.city || "") +
-      " " +
-      (establishment.distrib || "")
-    ).trim();
-    $structureCache.cityCode = establishment.citycode;
-    $structureCache.postalCode = establishment.postcode;
-    $structureCache.ape = establishment.ape;
-    $structureCache.longitude = establishment.longitude;
-    $structureCache.latitude = establishment.latitude;
+    selectedEstablishment = establishment;
+    structure = {};
+    if (establishment) {
+      structure.siret = establishment.siret;
+      structure.name = establishment.name || establishment.parent;
+      structure.address1 = establishment.addr1;
+      structure.address2 = establishment.addr2;
+      structure.city = (
+        (establishment.city || "") +
+        " " +
+        (establishment.distrib || "")
+      ).trim();
+      structure.cityCode = establishment.citycode;
+      structure.postalCode = establishment.postcode;
+      structure.ape = establishment.ape;
+      structure.longitude = establishment.longitude;
+      structure.latitude = establishment.latitude;
+    }
   }
 </script>
 
@@ -49,7 +51,6 @@
     <Field label="Commune" vertical>
       <CitySearch
         slot="input"
-        selectedCity
         placeholder="Saisissez le nom de votre ville"
         handleChange={handleCityChange} />
       <FieldHelp title="Récupération des données existantes" slot="helptext">
@@ -65,7 +66,7 @@
     <Field label="Le nom de votre structure ou le numéro SIRET" vertical>
       <SiretSearch
         slot="input"
-        selectedEstablishment
+        {selectedEstablishment}
         {selectedCity}
         disabled={!selectedCity?.value?.properties?.citycode}
         handleChange={handleEstablishmentChange}
@@ -73,13 +74,13 @@
     </Field>
   </FieldSet>
 
-  {#if $structureCache.siret}
+  {#if structure.siret}
     <FieldSet title="Présentez votre Structure">
       <ModelField
         type="text"
         field={$structureOptions.siret}
         disabled
-        bind:value={$structureCache.siret}
+        bind:value={structure.siret}
         vertical>
         <FieldHelp title="Completez les informations" slot="helptext">
           <p>
@@ -91,19 +92,19 @@
         type="text"
         label="Nom de la structure"
         field={$structureOptions.name}
-        bind:value={$structureCache.name}
+        bind:value={structure.name}
         vertical />
       <ModelField
         type="text"
         label="Adresse"
         field={$structureOptions.address1}
-        bind:value={$structureCache.address1}
+        bind:value={structure.address1}
         vertical />
       <ModelField
         type="text"
         label="Complément d’adresse"
         field={$structureOptions.address2}
-        bind:value={$structureCache.address2}
+        bind:value={structure.address2}
         vertical />
       <div class="flex flex-row gap-x-4 justify-between">
         <div class="w-20">
@@ -111,7 +112,7 @@
             type="text"
             label="Code postal"
             field={$structureOptions.postalCode}
-            bind:value={$structureCache.postalCode}
+            bind:value={structure.postalCode}
             vertical />
         </div>
         <div class="flex-auto">
@@ -119,7 +120,7 @@
             type="text"
             label="Ville"
             field={$structureOptions.city}
-            bind:value={$structureCache.city}
+            bind:value={structure.city}
             vertical />
         </div>
       </div>
@@ -129,7 +130,7 @@
             type="tel"
             label="Téléphone"
             field={$structureOptions.phone}
-            bind:value={$structureCache.phone}
+            bind:value={structure.phone}
             vertical />
         </div>
 
@@ -138,7 +139,7 @@
             type="email"
             label="E-mail"
             field={$structureOptions.email}
-            bind:value={$structureCache.email}
+            bind:value={structure.email}
             vertical />
         </div>
       </div>
@@ -146,7 +147,7 @@
         type="url"
         label="Site web"
         field={$structureOptions.url}
-        bind:value={$structureCache.url}
+        bind:value={structure.url}
         vertical />
       <ModelField
         type="textarea"
@@ -154,34 +155,34 @@
         description="Présentation résumée des missions de votre structure"
         placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre structure et ses spécificités."
         field={$structureOptions.shortDesc}
-        bind:value={$structureCache.shortDesc}
+        bind:value={structure.shortDesc}
         vertical />
 
       <ModelField
         type="hidden"
         field={$structureOptions.cityCode}
-        bind:value={$structureCache.cityCode}
+        bind:value={structure.cityCode}
         vertical />
       <ModelField
         type="hidden"
         field={$structureOptions.ape}
-        bind:value={$structureCache.ape}
+        bind:value={structure.ape}
         vertical />
       <ModelField
         type="hidden"
         field={$structureOptions.longitude}
-        bind:value={$structureCache.longitude}
+        bind:value={structure.longitude}
         vertical />
       <ModelField
         type="hidden"
         field={$structureOptions.latitude}
-        bind:value={$structureCache.latitude}
+        bind:value={structure.latitude}
         vertical />
 
       <div class="border-gray-01 border-b" />
 
       <div class="self-end">
-        <ValidateButton />
+        <ValidateButton {structure} />
       </div>
     </FieldSet>
   {/if}

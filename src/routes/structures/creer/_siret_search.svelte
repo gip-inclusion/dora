@@ -51,12 +51,10 @@
         longitude: r.longitude,
       };
 
-      if (result.name.startsWith(result.parent)) {
-        result.label = result.name;
-      } else {
-        result.label = result.parent + " " + result.name;
+      if (!result.name.startsWith(result.parent)) {
+        result.name = result.parent + " " + result.name;
       }
-      result.label += " (" + result.addr1 + ")";
+      result.label = result.name + " (" + result.addr1 + ")";
       return result;
     });
     console.log(results);
@@ -72,7 +70,6 @@
   searchFunction={searchSirene}
   delay="200"
   labelFieldName="label"
-  valueFieldName="siret"
   selectedItem={selectedEstablishment}
   localFiltering={false}
   minCharactersToSearch="3">

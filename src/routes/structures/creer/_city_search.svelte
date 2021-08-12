@@ -2,8 +2,6 @@
   import Select from "$lib/components/forms/select.svelte";
 
   export let handleChange;
-  export let selectedCity;
-  export let disabled;
   export let placeholder;
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
@@ -24,13 +22,10 @@
 
 <Select
   onChange={handleChange}
-  {disabled}
   {placeholder}
   hideArrow
   searchFunction={searchCity}
   delay="200"
   labelFieldName="label"
-  valueFieldName="siret"
-  selectedItem={selectedCity}
   localFiltering={false}
   minCharactersToSearch="3" />

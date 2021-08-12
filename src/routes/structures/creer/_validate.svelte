@@ -7,8 +7,8 @@
   import { arrowRightSIcon } from "$lib/icons.js";
 
   import { get } from "svelte/store";
-  import { structureCache } from "./_creation-store.js";
 
+  export let structure;
   async function handleSubmit() {
     const url = `${getApiURL()}/structures/`;
     const res = await fetch(url, {
@@ -19,12 +19,12 @@
 
         Authorization: `Token ${get(token)}`,
       },
-      body: JSON.stringify(get(structureCache)),
+      body: JSON.stringify(structure),
     });
 
     if (res.ok) {
-      const structure = await res.json();
-      goto(`${structure.slug}`);
+      const createdStructure = await res.json();
+      goto(`${createdStructure.slug}`);
     }
 
     return {
