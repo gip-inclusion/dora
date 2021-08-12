@@ -113,6 +113,14 @@ const config = {
       inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)",
       focus: "0px 0px 0px 2px #FFFFFF, 0px 0px 0px 4px #0A76F6",
     },
+    minHeight: {
+      0: "0",
+      "1/4": "25%",
+      "1/2": "50%",
+      "3/4": "75%",
+      full: "100%",
+      6: "3rem", // 48px
+    },
   },
   plugins: [require("@tailwindcss/typography")],
 };

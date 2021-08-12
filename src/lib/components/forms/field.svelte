@@ -31,22 +31,22 @@
 
 <div class:hidden={type == "hidden"}>
   <Label
-    className="flex {layoutClass} items-top relative"
+    className="flex {layoutClass} items-top relative "
     isDOMLabel={type !== "checkboxes" && type !== "radios"}>
     <div
       class="flex flex-col"
       class:w-250p={!vertical}
       class:w-full={vertical}
       class:mb-2={vertical}>
-      <span
+      <div
         class="{hiddenClasses} inline-block w-17 flex-shrink-0 text-base font-bold text-gray-dark"
         class:w-17={!vertical}>
         {hideLabel ? "" : label}
         {#if required}<span class="text-error">*</span>{/if}
-      </span>
+      </div>
       <span class="text-xs text-gray-text-alt2"> {description}</span>
     </div>
-    <div class="flex flex-col flex-grow">
+    <div class="flex flex-col flex-grow min-h-6">
       <slot name="input">
         <Input
           {type}

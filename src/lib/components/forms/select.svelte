@@ -20,8 +20,11 @@
 </script>
 
 <style lang="postcss">
+  :global(.autocomplete) {
+    @apply h-6 !important;
+  }
   :global(.input-container) {
-    @apply shadow-none !important;
+    @apply shadow-none h-6 !important;
   }
   :global(.autocomplete-list) {
     @apply border-none !important;
@@ -61,9 +64,9 @@
   {multiple}
   {searchFunction}
   {delay}
-  className="rounded  focus-within:shadow-focus "
+  className="rounded focus-within:shadow-focus"
   inputClassName="outline-none border rounded border-gray-03"
-  dropdownClassName="mt-2p rounded shadow-md !important"
+  dropdownClassName="mt-2p rounded shadow-md"
   html5autocomplete={false}
   showLoadingIndicator
   {hideArrow}>
