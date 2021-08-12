@@ -18,6 +18,8 @@
   export let minValue = null;
 
   export let hideLabel = false;
+  export let toggleYesText;
+  export let toggleNoText;
 
   let layoutClass = vertical ? "flex-col " : "flex-row";
   $: hiddenClasses = type === "hidden" ? "hidden" : "";
@@ -29,7 +31,7 @@
   }
 </style>
 
-<div class:hidden={type == "hidden"}>
+<div class:hidden={type == "hidden"} class="flex-grow">
   <Label
     className="flex {layoutClass} items-top relative "
     isDOMLabel={type !== "checkboxes" && type !== "radios"}>
@@ -55,7 +57,9 @@
           {choices}
           {placeholder}
           {minValue}
-          {disabled} />
+          {disabled}
+          {toggleYesText}
+          {toggleNoText} />
       </slot>
     </div>
     <slot name="helptext" />

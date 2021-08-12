@@ -18,10 +18,14 @@
   export let disabled = undefined;
   export let placeholder = "";
   export let minValue = null;
+
+  export let toggleYesText;
+  export let toggleNoText;
 </script>
 
 <style lang="postcss">
   input[type="text"],
+  input[type="password"],
   input[type="number"],
   input[type="url"],
   input[type="email"],
@@ -66,22 +70,28 @@
     {placeholder}
     initialContent={value}
     {disabled} />
-{:else if type === "__multitext__"}
-  <input bind:value type="text" {required} {disabled} />
 {:else if type === "toggle"}
-  <Toggle bind:checked={value} {disabled} />
+  <Toggle bind:checked={value} {disabled} {toggleYesText} {toggleNoText} />
+{:else if type === "password"}
+  <input bind:value type="password" {placeholder} {required} {disabled} />
 {:else if type === "date"}
-  <input bind:value type="date" {disabled} />
+  <input bind:value type="date" {placeholder} {required} {disabled} />
 {:else if type === "number"}
-  <input bind:value type="number" {minValue} {disabled} />
+  <input
+    bind:value
+    type="number"
+    {minValue}
+    {placeholder}
+    {required}
+    {disabled} />
 {:else if type === "email"}
-  <input bind:value type="email" {disabled} />
+  <input bind:value type="email" {placeholder} {required} {disabled} />
 {:else if type === "hidden"}
   <input bind:value type="hidden" {disabled} />
 {:else if type === "tel"}
-  <input bind:value type="tel" {disabled} />
+  <input bind:value type="tel" {placeholder} {required} {disabled} />
 {:else if type === "url"}
-  <input bind:value type="url" {disabled} />
+  <input bind:value type="url" {placeholder} {required} {disabled} />
 {:else if type === "files"}
-  <Uploader bind:fileKeys={value} {disabled} />
+  <Uploader bind:fileKeys={value} {placeholder} {required} {disabled} />
 {/if}

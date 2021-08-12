@@ -2,6 +2,8 @@
   // https://tailwindcomponents.com/component/toggle-button-1
 
   export let checked = undefined;
+  export let toggleYesText = "oui";
+  export let toggleNoText = "non";
 </script>
 
 <style lang="postcss">
@@ -26,8 +28,11 @@
   <input type="checkbox" bind:checked class="hidden" />
   <!-- path -->
   <div
-    class="w-5 h-3 bg-white border rounded-full toggle-path border-gray-03" />
+    class="flex-shrink-0 w-5 h-3 bg-white border rounded-full toggle-path border-gray-03" />
   <!-- circle -->
   <div
-    class="absolute inset-y-0 left-0 w-2 h-2 rounded-full bg-gray-03 toggle-circle" />
+    class="absolute inset-y-0 left-0 flex-shrink-0 w-2 h-2 rounded-full bg-gray-03 toggle-circle" />
+  <div class="ml-2 text-sm text-gray-text">
+    {@html checked ? toggleYesText : toggleNoText}
+  </div>
 </div>

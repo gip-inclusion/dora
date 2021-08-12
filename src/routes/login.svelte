@@ -6,6 +6,9 @@
   import { onMount } from "svelte";
 
   import Button from "$lib/components/button.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import Fieldset from "$lib/components/forms/fieldset.svelte";
+  import Field from "$lib/components/forms/field.svelte";
 
   const next = $page.query.get("next") || "/";
 
@@ -56,33 +59,96 @@
       goto(next);
     }
   });
+  let toggleText =
+    "En cochant cette case je suis d’accord avec les <a class='underline' href='/mentions-legales'>mentions légales</a> et l’utilisation de mes données afin de créer un compte sur la plateforme DORA.";
 </script>
 
-<div class="col-start-1 col-span-full">
-  <h1>Se connecter</h1>
-  <form
-    class="flex flex-col max-w-xl gap-6 p-8 mx-auto mt-8 bg-gray-01"
-    on:submit|preventDefault={handleSubmit}>
-    <label class="flex flex-row items-center">
-      <span class="inline-block w-40 font-bold">Couriel</span>
-      <input
-        class="flex-grow inline-block border-gray-02"
-        type="email"
-        required
-        bind:value={email}
-        on:invalid={validateMessageEmail} />
-    </label>
+<CenteredGrid class1="col-start-1 row-start-1 col-span-full">
+  <div class="col-start-1 mb-6 text-center col-span-full">
+    <h1 class="text-france-blue text-13xl">Se connecter à DORA</h1>
+  </div>
+</CenteredGrid>
 
-    <label class="flex flex-row items-center">
-      <span class="inline-block w-40 font-bold">Mot de passe</span>
-      <input
-        class="flex-grow inline-block border-gray-02"
-        type="password"
-        required
-        bind:value={password}
-        aria-live="polite" />
-    </label>
+<CenteredGrid
+  class1="col-start-1 row-start-2 rounded-t-xl col-span-full bg-gray-bg">
+  <div class="col-start-2 col-end-6 mb-4 ">
+    <form on:submit|preventDefault={handleSubmit}>
+      <Fieldset title="Accédez à votre compte">
+        <Field
+          label="Courriel"
+          vertical
+          type="email"
+          bind:value={email}
+          _on:invalid={validateMessageEmail}
+          required
+          placeholder="Courriel" />
+        <Field
+          label="Mot de passe"
+          vertical
+          type="password"
+          placeholder="••••••••"
+          bind:value={password}
+          required />
+        <Button
+          type="submit"
+          disabled={!email || !password}
+          label="Se connecter" />
+      </Fieldset>
+    </form>
+  </div>
+  <div class="col-start-6 col-end-13 mb-4 ">
+    <Fieldset
+      title="Demandez un accès"
+      description="Pour la periode de test, la création de comptes est désactivée. Contactez-nous pour obtenir un compte.">
+      <div class="flex flex-row gap-x-4">
+        <Field
+          label="Votre nom"
+          vertical
+          type="text"
+          required
+          placeholder="Votre nom" />
+        <Field
+          label="Votre prénom"
+          vertical
+          type="text"
+          required
+          placeholder="Votre prénom" />
+      </div>
+      <div class="flex flex-row justify-between gap-x-4">
+        <Field
+          label="Courriel"
+          vertical
+          type="email"
+          required
+          placeholder="Votre courriel" />
+        <Field
+          label="Téléphone"
+          vertical
+          type="tel"
+          placeholder="Votre numéro de téléphone" />
+      </div>
+      <div class="flex flex-row justify-between gap-x-4">
+        <Field
+          label="Nom de votre structure"
+          vertical
+          type="text"
+          required
+          placeholder="Votre structure" />
+        <Field
+          label="Le numéro SIRET"
+          vertical
+          type="text"
+          required
+          placeholder="SIRET" />
+      </div>
+      <Field
+        vertical
+        type="toggle"
+        toggleYesText={toggleText}
+        toggleNoText={toggleText}
+        placeholder="" />
 
-    <Button type="submit" disabled={!email || !password} label="Connexion" />
-  </form>
-</div>
+      <Button type="button" label="Demandez votre accès" disabled />
+    </Fieldset>
+  </div>
+</CenteredGrid>

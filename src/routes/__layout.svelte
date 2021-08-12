@@ -10,6 +10,7 @@
 
   import "../app.postcss";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import { goto } from "$app/navigation";
 </script>
 
 <header class="grid row-start-1 shadow-md mb-7">
@@ -59,7 +60,7 @@
   </CenteredGrid>
 </header>
 
-<div class="grid row-start-2 relative">
+<div class="relative grid row-start-2">
   <slot />
 </div>
 
@@ -86,7 +87,11 @@
     <div class="flex col-start-1 col-span-full">
       <NavItem label="Plan du site" separator light />
       <NavItem label="Accessibilité" separator light />
-      <NavItem label="Mentions légales" separator light />
+      <NavItem
+        label="Mentions légales"
+        on:click={() => goto("/mentions-legales")}
+        separator
+        light />
       <NavItem label="Données personnelles" separator light />
       <NavItem label="Gestion des cookies" light />
     </div>
