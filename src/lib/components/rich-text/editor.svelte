@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from "svelte";
   import { Editor } from "@tiptap/core";
   import StarterKit from "@tiptap/starter-kit";
+  import Placeholder from "@tiptap/extension-placeholder";
 
   import {
     boldIcon,
@@ -20,11 +21,12 @@
   export let className = "prose bg-white h-20";
   export let htmlContent = "";
   export let initialContent = "";
+  export let placeholder;
 
   onMount(() => {
     editor = new Editor({
       element: element,
-      extensions: [StarterKit],
+      extensions: [StarterKit, Placeholder.configure({ placeholder })],
       content: initialContent,
       injectCSS: false,
       onTransaction: () => {
@@ -49,6 +51,13 @@
     }
   });
 </script>
+
+<style lang="postcss">
+  :global(.ProseMirror p.is-editor-empty:first-child::before) {
+    content: attr(data-placeholder);
+    @apply text-gray-text-alt pointer-events-none h-0 float-left;
+  }
+</style>
 
 <div class="flex flex-col w-full border border-gray-03">
   {#if editor}
