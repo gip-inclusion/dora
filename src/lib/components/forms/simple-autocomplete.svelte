@@ -643,6 +643,7 @@
       Tab: opened ? down.bind(this) : null,
       ShiftTab: opened ? up.bind(this) : null,
       ArrowDown: down.bind(this),
+      ArrowUp: up.bind(this),
       Escape: onEsc.bind(this),
       Backspace:
         multiple && selectedItem && selectedItem.length && !text
