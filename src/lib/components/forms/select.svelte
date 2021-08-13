@@ -59,8 +59,6 @@
   {onChange}
   items={choices}
   on:invalid
-  on:blur
-  on:input
   bind:value
   bind:selectedItem
   {disabled}

@@ -66,6 +66,7 @@
   export let maxItemsToShowInList = 0;
   export let multiple = false;
   export let create = false;
+  export let required = false;
 
   // ignores the accents when matching items
   export let ignoreAccents = true;
@@ -1163,11 +1164,13 @@
       autocomplete={html5autocomplete ? "on" : "off"}
       {placeholder}
       {name}
+      {required}
       {disabled}
       {title}
       readonly={readonly || (lock && selectedItem)}
       bind:this={input}
       bind:value={text}
+      on:invalid
       on:input={onInput}
       on:focus={onFocusInternal}
       on:blur={onBlurInternal}

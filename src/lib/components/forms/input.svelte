@@ -35,10 +35,6 @@
   textarea {
     @apply px-1 min-h-6 border border-gray-03 rounded outline-none placeholder-gray-text-alt focus:shadow-focus text-sm;
   }
-
-  * {
-    @apply invalid:border invalid:border-error !important;
-  }
 </style>
 
 {#if type === "checkboxes"}
@@ -52,6 +48,7 @@
 {:else if type === "select"}
   <Select
     {choices}
+    on:invalid
     bind:value
     bind:selectedItem
     {placeholder}
@@ -60,6 +57,7 @@
 {:else if type === "multiselect"}
   <Select
     {choices}
+    on:invalid
     bind:value
     bind:selectedItem
     multiple
