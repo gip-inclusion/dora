@@ -1,5 +1,5 @@
 <script>
-  import AutoComplete from "simple-svelte-autocomplete";
+  import AutoComplete from "./simple-autocomplete.svelte";
   import { checkIcon } from "$lib/icons.js";
 
   export let choices;
