@@ -26,6 +26,7 @@
 
     if (res.ok) {
       $structureOptions = (await res.json()).actions.POST;
+      console.log($structureOptions);
     }
 
     return {

@@ -18,6 +18,7 @@
   export let disabled = undefined;
   export let placeholder = "";
   export let minValue = null;
+  export let maxLength = undefined;
 
   export let toggleYesText;
   export let toggleNoText;
@@ -34,32 +35,55 @@
   textarea {
     @apply px-1 min-h-6 border border-gray-03 rounded outline-none placeholder-gray-text-alt focus:shadow-focus text-sm;
   }
+
+  * {
+    @apply invalid:border invalid:border-error !important;
+  }
 </style>
 
 {#if type === "checkboxes"}
   <div class="flex flex-col gap-1/2">
-    <Checkboxes bind:group={value} {choices} {disabled} />
+    <Checkboxes bind:group={value} {choices} {required} {disabled} />
   </div>
 {:else if type === "radios"}
   <div class="flex flex-col gap-1/2">
-    <RadioButtons bind:group={value} {choices} {disabled} />
+    <RadioButtons bind:group={value} {choices} {required} {disabled} />
   </div>
 {:else if type === "select"}
-  <Select {choices} bind:value bind:selectedItem {placeholder} {disabled} />
-{:else if type === "multiselect"}
   <Select
     {choices}
     bind:value
     bind:selectedItem
     {placeholder}
+    {required}
+    {disabled} />
+{:else if type === "multiselect"}
+  <Select
+    {choices}
+    bind:value
+    bind:selectedItem
     multiple
+    {placeholder}
+    {required}
     {disabled} />
 {:else if type === "text"}
-  <input bind:value type="text" {placeholder} {required} {disabled} />
-{:else if type === "textarea"}
-  <textarea
+  <input
+    on:invalid
+    on:blur
+    on:input
     bind:value
     type="text"
+    {placeholder}
+    {required}
+    {disabled} />
+{:else if type === "textarea"}
+  <textarea
+    on:invalid
+    on:blur
+    on:input
+    bind:value
+    type="text"
+    {maxLength}
     {placeholder}
     {required}
     {disabled}
@@ -69,15 +93,40 @@
     bind:htmlContent={value}
     {placeholder}
     initialContent={value}
+    {required}
     {disabled} />
 {:else if type === "toggle"}
-  <Toggle bind:checked={value} {disabled} {toggleYesText} {toggleNoText} />
+  <Toggle
+    bind:checked={value}
+    {required}
+    {disabled}
+    {toggleYesText}
+    {toggleNoText} />
 {:else if type === "password"}
-  <input bind:value type="password" {placeholder} {required} {disabled} />
+  <input
+    on:invalid
+    on:blur
+    on:input
+    bind:value
+    type="password"
+    {placeholder}
+    {required}
+    {disabled} />
 {:else if type === "date"}
-  <input bind:value type="date" {placeholder} {required} {disabled} />
+  <input
+    on:invalid
+    on:blur
+    on:input
+    bind:value
+    type="date"
+    {placeholder}
+    {required}
+    {disabled} />
 {:else if type === "number"}
   <input
+    on:invalid
+    on:blur
+    on:input
     bind:value
     type="number"
     {minValue}
@@ -85,13 +134,45 @@
     {required}
     {disabled} />
 {:else if type === "email"}
-  <input bind:value type="email" {placeholder} {required} {disabled} />
+  <input
+    on:invalid
+    on:blur
+    on:input
+    bind:value
+    type="email"
+    {placeholder}
+    {required}
+    {disabled} />
 {:else if type === "hidden"}
-  <input bind:value type="hidden" {disabled} />
+  <input on:invalid on:blur on:input bind:value type="hidden" {disabled} />
 {:else if type === "tel"}
-  <input bind:value type="tel" {placeholder} {required} {disabled} />
+  <input
+    on:invalid
+    on:blur
+    on:input
+    bind:value
+    type="tel"
+    {placeholder}
+    {required}
+    {disabled} />
 {:else if type === "url"}
-  <input bind:value type="url" {placeholder} {required} {disabled} />
+  <input
+    on:invalid
+    on:blur
+    on:input
+    bind:value
+    type="url"
+    {placeholder}
+    {required}
+    {disabled} />
 {:else if type === "files"}
-  <Uploader bind:fileKeys={value} {placeholder} {required} {disabled} />
+  <Uploader
+    on:invalid
+    on:blur
+    on:input
+    bind:fileKeys={value}
+    {placeholder}
+    {required}
+    {disabled} />
 {/if}
+<span />

@@ -7,6 +7,8 @@
   export let type;
   export let field;
   export let vertical = false;
+  export let errors;
+  export let errorMessages;
 
   export let disabled = undefined;
   export let placeholder = "";
@@ -19,7 +21,11 @@
 <Field
   bind:value
   bind:selectedItem
+  on:input
+  {errors}
+  {errorMessages}
   required={field.required}
+  maxLength={field.maxLength}
   label={label || field.label}
   choices={field.child?.choices || field.choices}
   {type}

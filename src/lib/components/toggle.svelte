@@ -25,7 +25,13 @@
 </style>
 
 <div class="relative flex flex-row">
-  <input type="checkbox" bind:checked class="hidden" />
+  <input
+    type="checkbox"
+    bind:checked
+    class="hidden"
+    on:invalid
+    on:blur
+    on:input />
   <!-- path -->
   <div
     class="flex-shrink-0 w-5 h-3 bg-white border rounded-full toggle-path border-gray-03" />

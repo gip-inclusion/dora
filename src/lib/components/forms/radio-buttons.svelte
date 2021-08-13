@@ -10,7 +10,14 @@
 
 {#each choices as choice}
   <label class="flex flex-row items-center focus-within:shadow-focus">
-    <input type="radio" bind:group value={choice.value} class="hidden" />
+    <input
+      type="radio"
+      on:invalid
+      on:blur
+      on:input
+      bind:group
+      value={choice.value}
+      class="hidden" />
     <div
       class="flex justify-center w-3 h-3 bg-white border rounded-full toggle-path border-gray-03 ">
       <div

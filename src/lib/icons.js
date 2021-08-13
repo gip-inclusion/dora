@@ -13,6 +13,7 @@ export { default as starFillIcon } from "remixicon/icons/System/star-fill.svg?ra
 export { default as checkIcon } from "remixicon/icons/System/check-line.svg?raw";
 export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill.svg?raw";
 export { default as externalLineIcon } from "remixicon/icons/System/external-link-line.svg?raw";
+export { default as alertIcon } from "remixicon/icons/System/alert-fill.svg?raw";
 
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
 

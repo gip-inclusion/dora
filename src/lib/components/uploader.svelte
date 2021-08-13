@@ -47,6 +47,9 @@
   <label>
     Ajouter un fichier
     <input
+      on:invalid
+      on:blur
+      on:input
       bind:this={uploadInput}
       on:change={handleSubmit}
       {disabled}
