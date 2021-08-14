@@ -4,16 +4,18 @@
 
   import { SENTRY_DSN, SENTRY_ENVIRONMENT } from "$lib/env.js";
   console.log(SENTRY_DSN, SENTRY_ENVIRONMENT);
-  Sentry.init({
-    dsn: SENTRY_DSN,
-    environment: SENTRY_ENVIRONMENT, // ,
-    integrations: [new Integrations.BrowserTracing()],
+  if (SENTRY_ENVIRONMENT !== "local") {
+    Sentry.init({
+      dsn: SENTRY_DSN,
+      environment: SENTRY_ENVIRONMENT, // ,
+      integrations: [new Integrations.BrowserTracing()],
 
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-  });
+      // Set tracesSampleRate to 1.0 to capture 100%
+      // of transactions for performance monitoring.
+      // We recommend adjusting this value in production
+      tracesSampleRate: 1.0,
+    });
+  }
 </script>
 
 <script>
