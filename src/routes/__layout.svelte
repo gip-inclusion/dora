@@ -20,17 +20,19 @@
 
 <script>
   import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
+
   import { token } from "$lib/auth";
+
+  import LinkButton from "$lib/components/link-button.svelte";
+  import NavItem from "$lib/components/nav-item.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+
+  import "../app.postcss";
+  import { addCircleIcon, userSmileIcon } from "$lib/icons.js";
   import LogoRF from "$lib/assets/logo-rf.svg";
   import LogoDORA from "$lib/assets/dora-logo-rvb.svg";
   import LogoMinistere from "$lib/assets/logo-ministere-travail.svg";
-  import { addCircleIcon, userSmileIcon } from "$lib/icons.js";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import NavItem from "$lib/components/nav-item.svelte";
-
-  import "../app.postcss";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import { goto } from "$app/navigation";
 </script>
 
 <header class="grid row-start-1 shadow-md mb-7">

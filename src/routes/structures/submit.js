@@ -1,12 +1,16 @@
 import { get } from "svelte/store";
 
-import { getApiURL } from "$lib/utils";
+import { getApiURL, htmlToMarkdown } from "$lib/utils";
 import { token } from "$lib/auth";
 
-export async function submit(structure) {
-  const url = `${getApiURL()}/structures/`;
+export async function submit(structure, modify = false) {
+  structure.fullDesc = htmlToMarkdown(structure.fullDesc);
+  const url = modify
+    ? `${getApiURL()}/structures/${structure.slug}/`
+    : `${getApiURL()}/structures/`;
+  const method = modify ? "PATCH" : "POST";
   const res = await fetch(url, {
-    method: "POST",
+    method: method,
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",

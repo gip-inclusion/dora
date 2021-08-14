@@ -12,4 +12,4 @@
   }
 </script>
 
-<Button {...$$restProps} on:click={handleClick} />
+<Button type="button" {...$$restProps} on:click={handleClick} />
