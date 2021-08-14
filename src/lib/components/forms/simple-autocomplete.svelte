@@ -48,10 +48,10 @@
   };
 
   // events
-  export let beforeChange = function (oldSelectedItem, newSelectedItem) {
+  export let beforeChange = function (_oldSelectedItem, _newSelectedItem) {
     return true;
   };
-  export let onChange = function (newSelectedItem) {};
+  export let onChange = function (_newSelectedItem) {};
   export let onFocus = function () {};
   export let onBlur = function () {};
   export let onCreate = function (text) {
@@ -724,7 +724,7 @@
     }
   }
 
-  function onBackspace(e) {
+  function onBackspace(_e) {
     if (debug) {
       console.log("onBackspace");
     }
@@ -820,7 +820,7 @@
     loading = false;
 
     if (!text && selectFirstIfEmpty) {
-      highlightFilter = 0;
+      // highlightFilter = 0;
       selectItem();
     }
   }
