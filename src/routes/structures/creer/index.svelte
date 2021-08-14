@@ -2,16 +2,21 @@
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
   import Field from "$lib/components/forms/field.svelte";
+  import Alert from "$lib/components/forms/alert.svelte";
 
   import StructureForm from "../_structure_form.svelte";
   import SiretSearch from "./_siret_search.svelte";
   import CitySearch from "./_city_search.svelte";
+  import { siretWasAlreadyClaimed } from "$lib/structures";
+
+  import { alertIcon } from "$lib/icons.js";
 
   let selectedCity;
   let selectedEstablishment;
   let structure = {};
 
   let formErrors = {};
+  let alreadyClaimedEstablishment;
 
   function handleCityChange(city) {
     selectedCity = city;
@@ -20,25 +25,39 @@
     formErrors = {};
   }
 
-  function handleEstablishmentChange(establishment) {
+  async function establishmentAlreadyCreated(siret) {
+    const result = await siretWasAlreadyClaimed(siret);
+    console.log(result);
+    if (result.ok) {
+      return result.result;
+    }
+  }
+
+  async function handleEstablishmentChange(establishment) {
     selectedEstablishment = establishment;
+    alreadyClaimedEstablishment = null;
     formErrors = {};
     structure = {};
     if (establishment) {
-      structure.siret = establishment.siret;
-      structure.name = establishment.name || establishment.parent;
-      structure.address1 = establishment.addr1;
-      structure.address2 = establishment.addr2;
-      structure.city = (
-        (establishment.city || "") +
-        " " +
-        (establishment.distrib || "")
-      ).trim();
-      structure.cityCode = establishment.citycode;
-      structure.postalCode = establishment.postcode;
-      structure.ape = establishment.ape;
-      structure.longitude = establishment.longitude;
-      structure.latitude = establishment.latitude;
+      alreadyClaimedEstablishment = await establishmentAlreadyCreated(
+        establishment.siret
+      );
+      if (!alreadyClaimedEstablishment) {
+        structure.siret = establishment.siret;
+        structure.name = establishment.name || establishment.parent;
+        structure.address1 = establishment.addr1;
+        structure.address2 = establishment.addr2;
+        structure.city = (
+          (establishment.city || "") +
+          " " +
+          (establishment.distrib || "")
+        ).trim();
+        structure.cityCode = establishment.citycode;
+        structure.postalCode = establishment.postcode;
+        structure.ape = establishment.ape;
+        structure.longitude = establishment.longitude;
+        structure.latitude = establishment.latitude;
+      }
     }
   }
 
@@ -73,6 +92,21 @@
   </Field>
 </FieldSet>
 
-{#if structure.siret}
+{#if alreadyClaimedEstablishment}
+  <div
+    class="text-error text-xl flex flex-row items-center justify-center pt-1/2 mt-2">
+    <div class="w-3 h-3 mr-1 fill-current ">
+      {@html alertIcon}
+    </div>
+    <p>
+      Cette structure a déjà été saisie dans DORA. Vous pouvez la
+      <a
+        class="underline"
+        href="/structures/{alreadyClaimedEstablishment?.slug}">
+        visualiser</a
+      >.
+    </p>
+  </div>
+{:else if structure.siret}
   <StructureForm {structure} formTitle="Présentez votre structure" />
 {/if}

@@ -57,7 +57,6 @@
       result.label = result.name + " (" + result.addr1 + ")";
       return result;
     });
-    console.log(results);
     return results;
   }
 </script>

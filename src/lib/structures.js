@@ -27,6 +27,31 @@ export async function getStructures() {
   };
 }
 
+export async function siretWasAlreadyClaimed(siret) {
+  const url = `${getApiURL()}/siret-claimed/${siret}`;
+  const res = await fetch(url, {
+    headers: {
+      Accept: "application/json; version=1.0",
+    },
+  });
+
+  const result = {
+    ok: res.ok,
+    status: res.status,
+  };
+
+  if (res.ok) {
+    result.result = await res.json();
+  } else {
+    try {
+      result.error = await res.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  return result;
+}
+
 export async function getStructure(slug) {
   const url = `${getApiURL()}/structures/${slug}`;
   const res = await fetch(url, {
