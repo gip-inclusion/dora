@@ -63,15 +63,14 @@
     "En cochant cette case je suis d’accord avec les <a class='underline' href='/mentions-legales'>mentions légales</a> et l’utilisation de mes données afin de créer un compte sur la plateforme DORA.";
 </script>
 
-<CenteredGrid class1="col-start-1 row-start-1 col-span-full">
+<CenteredGrid>
   <div class="col-start-1 mb-6 text-center col-span-full">
     <h1 class="text-france-blue text-13xl">Se connecter à DORA</h1>
   </div>
 </CenteredGrid>
 
-<CenteredGrid
-  class1="col-start-1 row-start-2 rounded-t-xl col-span-full bg-gray-bg">
-  <div class="col-start-2 col-end-6 mb-4 ">
+<CenteredGrid gridRow="2" roundedbg>
+  <div class="col-start-2 col-end-6 mb-4">
     <form on:submit|preventDefault={handleSubmit}>
       <Fieldset title="Accédez à votre compte">
         <Field

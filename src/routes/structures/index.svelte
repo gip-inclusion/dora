@@ -26,7 +26,7 @@
   }
 </style>
 
-<CenteredGrid class="row-start-1">
+<CenteredGrid>
   <div class="col-start-1 col-span-full">
     <table class="table-auto p-6">
       <thead>

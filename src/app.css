@@ -1,8 +1,10 @@
 :root {
   /* colors */
-  --color-background: white;
-  --color-marianne-red: #e1000f;
-  --color-france-blue: #000091;
+  --col-bg: white;
+  --col-marianne-red: #e1000f;
+  --col-france-blue: #000091;
+  --col-gray-bg: #f8f8f8;
+  --col-gray3: #cccccc;
 
   /* spacing */
   --s8: 0.5rem;
@@ -50,5 +52,5 @@
 
 body {
   font-family: Marianne;
-  background-color: var(--color-background);
+  background-color: var(--col-bg);
 }

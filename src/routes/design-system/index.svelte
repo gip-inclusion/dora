@@ -7,7 +7,7 @@
   let richTextContent = "";
 </script>
 
-<CenteredGrid class1="row-start-1">
+<CenteredGrid>
   <div class="col-start-1 col-span-full">
     <h1>Boutons</h1>
     <h2>Principaux</h2>

@@ -22,8 +22,7 @@
   <title>Dora: {structure.name}</title>
 </svelte:head>
 
-<CenteredGrid
-  class1="col-start-1 row-start-2 rounded-t-xl col-span-full bg-gray-bg">
+<CenteredGrid gridRow="2" roundedbg>
   <div class="col-span-8 col-start-1 mb-4 text-gray-text">
     <h3>{structure.name}</h3>
     <div class="flex flex-col gap-1">

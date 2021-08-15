@@ -4,7 +4,7 @@
 </script>
 
 <EnsureLoggedIn>
-  <CenteredGrid class1="col-start-1 row-start-1 col-span-full">
+  <CenteredGrid>
     <div class="col-start-1 col-span-full text-center mb-6">
       <h1 class="text-france-blue text-13xl">Création d’une structure</h1>
       <p class="text-gray-text text-base">
@@ -13,8 +13,7 @@
     </div>
   </CenteredGrid>
 
-  <CenteredGrid
-    class1="col-start-1 row-start-2 rounded-t-xl col-span-full bg-gray-bg">
+  <CenteredGrid gridRow="2" roundedbg>
     <div class="col-span-8 col-start-1 mb-4">
       <slot />
     </div>

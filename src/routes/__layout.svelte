@@ -37,7 +37,7 @@
 </script>
 
 <header class="grid row-start-1 shadow-md mb-7">
-  <CenteredGrid class1="row-start-1">
+  <CenteredGrid>
     <div class="flex flex-row items-center row-start-1 col-span-full py-3/2 ">
       <a class="flex flex-row gap-5 " href="/">
         <img
@@ -75,7 +75,7 @@
       </div>
     </div>
   </CenteredGrid>
-  <CenteredGrid class1="row-start-2 border-t border-gray-03">
+  <CenteredGrid gridRow="2" bordertop>
     <div class="flex flex-row col-span-full ">
       <NavItem label="Forum de l’inclusion" external />
       <NavItem label="Contacter l’équipe" />
@@ -83,13 +83,13 @@
   </CenteredGrid>
 </header>
 
-<div class="relative grid row-start-2">
+<div class="grid row-start-2">
   <slot />
 </div>
 
 <footer class="grid row-start-3 border-t-2 border-france-blue pt-5/2">
-  <CenteredGrid class1="row-start-1 mb-5">
-    <div class="col-span-5 col-start-1">
+  <CenteredGrid>
+    <div class="col-span-5 mb-5">
       <a class="block" href="/">
         <img class="inline" src={LogoRF} alt="" width="124" height="110" />
       </a>
@@ -106,7 +106,7 @@
       </div>
     </div>
   </CenteredGrid>
-  <CenteredGrid class1="row-start-2 border-t border-gray-03">
+  <CenteredGrid gridRow="2" bordertop>
     <div class="flex col-start-1 col-span-full">
       <NavItem label="Plan du site" separator light />
       <NavItem label="Accessibilité" separator light />

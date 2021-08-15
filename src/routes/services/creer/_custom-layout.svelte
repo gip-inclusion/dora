@@ -30,7 +30,7 @@
 </script>
 
 <EnsureLoggedIn>
-  <CenteredGrid class1="col-start-1 row-start-1 col-span-full">
+  <CenteredGrid>
     <div class="col-start-1 col-span-full">
       <h1>Votre offre d’accompagnement</h1>
 
@@ -43,12 +43,13 @@
     </div>
   </CenteredGrid>
 
-  <CenteredGrid
-    class1="col-start-1 row-start-2 rounded-t-xl col-span-full bg-gray-bg">
+  <CenteredGrid gridRow="2" roundedbg>
     <div class="col-span-8 col-start-1 mb-8">
       <slot name="content" />
     </div>
   </CenteredGrid>
 
-  <slot name="navbar" />
+  <CenteredGrid gridRow="3" sticky>
+    <slot name="navbar" />
+  </CenteredGrid>
 </EnsureLoggedIn>

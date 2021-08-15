@@ -23,5 +23,6 @@
   },
   "[svelte]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "svelte.plugin.css.globals": "src/app.css"
 }
