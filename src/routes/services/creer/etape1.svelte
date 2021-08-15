@@ -30,7 +30,7 @@
           type="text"
           field={$serviceOptions.shortDesc}
           bind:value={$serviceCache.shortDesc}>
-          <FieldHelp title="Présentation résumée">
+          <FieldHelp slot="helptext" title="Présentation résumée">
             <p>
               Lors de l’affichage de la solution, nous aurons besoin de voir une
               présentation brève de ce que propose votre solution avec seulement
@@ -68,7 +68,7 @@
           bind:value={$serviceCache.subcategories}
           bind:selectedItem={$serviceCache._subcategoriesItems}
           placeholder="Précisez la catégorie">
-          <FieldHelp title="Catégorisation">
+          <FieldHelp slot="helptext" title="Catégorisation">
             Pour permettre à nos utilisateurs de trouver facilement la solution
             que vous proposez. Il est nécessaire de classer les offres par
             catégorie et de préciser le type d’offre.

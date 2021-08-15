@@ -34,6 +34,7 @@
   {hideLabel}
   {minValue}
   {disabled}
-  {vertical}
-  ><slot name="input" slot="name" />
-  <slot name="helptext" slot="helptext" /></Field>
+  {vertical}>
+  <slot name="input" slot="name" />
+  <slot name="helptext" slot="helptext" />
+</Field>
