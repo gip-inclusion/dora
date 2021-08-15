@@ -4,10 +4,8 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
-    "heybourn.headwind",
     "ms-vscode-remote.remote-containers",
     "ms-azuretools.vscode-docker",
-    "davidanson.vscode-markdownlint",
-    "naumovs.color-highlight"
+    "davidanson.vscode-markdownlint"
   ]
 }

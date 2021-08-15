@@ -1,5 +1,4 @@
 {
-  "css.validate": true,
   "editor.formatOnSave": true,
   "editor.quickSuggestions": {
     "strings": true

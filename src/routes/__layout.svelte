@@ -29,6 +29,7 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   import "../app.postcss";
+  import "../app.css";
   import { addCircleIcon, userSmileIcon } from "$lib/icons.js";
   import LogoRF from "$lib/assets/logo-rf.svg";
   import LogoDORA from "$lib/assets/dora-logo-rvb.svg";
