@@ -2,8 +2,8 @@
   // https://tailwindcomponents.com/component/toggle-button-1
 
   export let checked = undefined;
-  export let toggleYesText = "oui";
-  export let toggleNoText = "non";
+  export let toggleYesText = "Oui";
+  export let toggleNoText = "Non";
 </script>
 
 <style lang="postcss">

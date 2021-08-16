@@ -4,14 +4,24 @@
   export let target;
   export let name;
 
-  $: isActive = $page.path.endsWith(target);
+  $: active = $page.path.endsWith(target);
 </script>
 
-<a
-  href={target}
-  class={"text-center text-xs px-2 " +
-    (isActive
-      ? "border-dora-magenta-brand border-b-4"
-      : "border-gray-02 border-b-2")}>
+<style>
+  a {
+    padding: 0 var(--s16);
+    border-bottom: 2px solid var(--col-gray-02);
+    color: var(--col-text-alt2);
+    font-size: var(--f16);
+    text-align: center;
+  }
+
+  .active {
+    border-bottom: 4px solid var(--col-magenta-brand);
+    color: var(--col-magenta-cta);
+  }
+</style>
+
+<a href={target} class:active>
   {name}
 </a>

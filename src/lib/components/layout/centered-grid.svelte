@@ -38,7 +38,7 @@
 
   .bordertop {
     border-top-width: 1px;
-    border-color: var(--col-gray3);
+    border-color: var(--col-gray-03);
   }
 </style>
 
