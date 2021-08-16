@@ -66,9 +66,24 @@
   :global(.tag) {
     @apply bg-magenta-80 rounded px-1;
   }
+
+  .wrapper {
+    opacity: 1;
+    transition: all 0.2s;
+    visibility: visible;
+  }
+
+  .invisible {
+    opacity: 0;
+    transition: all 0.2s;
+    visibility: none;
+  }
 </style>
 
-<div class:hidden={type == "hidden" || !visible} class="flex-1">
+<div
+  class:hidden={type == "hidden"}
+  class:invisible={!visible}
+  class="wrapper flex-1">
   <Label
     className="flex {layoutClass} items-top relative "
     isDOMLabel={type !== "checkboxes" && type !== "radios"}>
@@ -78,7 +93,7 @@
       class:w-full={vertical}
       class:mb-1={vertical}>
       <div
-        class="{hiddenClasses} inline-block w-full flex-shrink-0 text-base font-bold text-gray-dark">
+        class="inline-block w-full flex-shrink-0 text-base font-bold text-gray-dark">
         {hideLabel ? "" : label}
         {#if required}<span class="text-error">*</span>{/if}
       </div>

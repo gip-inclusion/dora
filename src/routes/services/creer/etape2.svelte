@@ -32,12 +32,13 @@
           type="toggle"
           field={$serviceOptions.hasFee}
           bind:value={$serviceCache.hasFee} />
+
         <ModelField
           type="text"
           hideLabel
           placeholder="Merci de détailler les frais à charge et leurs éventuels critères de
       remboursement"
-          visible={$serviceCache.hasFee}
+          visible={!!$serviceCache.hasFee}
           field={$serviceOptions.feeDetails}
           bind:value={$serviceCache.feeDetails} />
       </FieldSet>
