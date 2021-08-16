@@ -11,6 +11,7 @@
   export let errorMessages;
 
   export let disabled = undefined;
+  export let visible = true;
   export let placeholder = "";
   export let description = "";
   export let minValue = null;
@@ -34,6 +35,7 @@
   {hideLabel}
   {minValue}
   {disabled}
+  {visible}
   {vertical}>
   <slot name="input" slot="name" />
   <slot name="helptext" slot="helptext" />

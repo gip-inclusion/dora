@@ -17,6 +17,7 @@
   export let choices = [];
 
   export let disabled = undefined;
+  export let visible = true;
   export let placeholder = "";
   export let description = "";
   export let minValue = null;
@@ -67,7 +68,7 @@
   }
 </style>
 
-<div class:hidden={type == "hidden"} class="flex-1">
+<div class:hidden={type == "hidden" || !visible} class="flex-1">
   <Label
     className="flex {layoutClass} items-top relative "
     isDOMLabel={type !== "checkboxes" && type !== "radios"}>
@@ -77,14 +78,13 @@
       class:w-full={vertical}
       class:mb-1={vertical}>
       <div
-        class="{hiddenClasses} inline-block w-17 flex-shrink-0 text-base font-bold text-gray-dark"
-        class:w-17={!vertical}>
+        class="{hiddenClasses} inline-block w-full flex-shrink-0 text-base font-bold text-gray-dark">
         {hideLabel ? "" : label}
         {#if required}<span class="text-error">*</span>{/if}
       </div>
       <span class="text-xs text-gray-text-alt2"> {description}</span>
     </div>
-    <div class="flex flex-col flex-grow min-h-6">
+    <div class="flex flex-col flex-grow min-h-6 ml-4">
       <slot name="input">
         <Input
           on:invalid={handleInvalid}
