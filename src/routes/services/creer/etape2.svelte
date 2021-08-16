@@ -15,6 +15,7 @@
       <FieldSet title="Conditions d'accès pour le bénéficiaire">
         <ModelField
           type="multiselect"
+          label="Critères d’accès"
           placeholder="Choisissez ou ajoutez vos critères d’admission"
           field={$serviceOptions.accessConditions}
           bind:value={$serviceCache.accessConditions}

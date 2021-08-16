@@ -15,7 +15,7 @@
       <Button
         name="backward"
         type="submit"
-        label="Retour"
+        label="Étape précédente"
         icon={arrowLeftCircleIcon}
         noBackground
         iconOnLeft />
