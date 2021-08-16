@@ -2,6 +2,7 @@
   import { serviceCache, serviceOptions } from "./_creation-store.js";
 
   import FieldSet from "$lib/components/forms/fieldset.svelte";
+  import FieldHelp from "$lib/components/forms/field-help.svelte";
   import ModelField from "$lib/components/forms/model-field.svelte";
 
   import CustomLayout from "./_custom-layout.svelte";
@@ -17,7 +18,23 @@
           placeholder="Choisissez ou ajoutez vos critères d’admission"
           field={$serviceOptions.accessConditions}
           bind:value={$serviceCache.accessConditions}
-          bind:selectedItem={$serviceCache._accessConditionsItems} />
+          bind:selectedItem={$serviceCache._accessConditionsItems}>
+          <FieldHelp slot="helptext" title="Critères">
+            <p>
+              <strong>Critères d’admission</strong>
+              <br /> Précisez les critères d’éligibilité du public afin de recevoir
+              des orientations adéquates
+            </p>
+            <p>
+              <strong>Publics concernés</strong><br />Définissez bien les
+              publics concernés, cela permettra d’orienter le bon public.
+            </p>
+            <p>
+              <strong>Service cumulable</strong>
+              <br />Ce service peut-il être cumulé à un autre ?
+            </p>
+          </FieldHelp></ModelField>
+
         <ModelField
           type="multiselect"
           placeholder="Sélectionnez ou ajoutez les publics que vous adressez"

@@ -9,6 +9,10 @@
     right: -472px;
     width: 384px;
   }
+
+  .content :global(p) {
+    margin-bottom: var(--s16);
+  }
 </style>
 
 <div
@@ -22,7 +26,7 @@
       {title}
     </div>
   {/if}
-  <div class="text-sm leading-large text-gray-text">
+  <div class="content text-sm leading-large text-gray-text">
     <slot />
   </div>
 </div>
