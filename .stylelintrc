@@ -1,4 +1,12 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-config-idiomatic-order"],
-  "ignoreFiles": ["build/**", "src/app.css"]
+  "ignoreFiles": ["build/**", "src/app.css"],
+  "rules": {
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ]
+  }
 }

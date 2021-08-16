@@ -42,7 +42,7 @@
     <Checkboxes bind:group={value} {choices} {required} {disabled} />
   </div>
 {:else if type === "radios"}
-  <div class="flex flex-col gap-1/2">
+  <div class="flex flex-col gap-1">
     <RadioButtons bind:group={value} {choices} {required} {disabled} />
   </div>
 {:else if type === "select"}
