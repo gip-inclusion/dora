@@ -45,7 +45,6 @@
 
 <form on:submit|preventDefault={handleSubmit}>
   <label>
-    Ajouter un fichier
     <input
       on:invalid
       on:blur
