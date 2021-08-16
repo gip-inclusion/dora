@@ -22,7 +22,7 @@
   .sticky {
     position: sticky;
     z-index: 50;
-    bottom: 10px;
+    bottom: 0;
     width: 100%;
     padding: var(--s24);
     background-color: var(--col-bg);
