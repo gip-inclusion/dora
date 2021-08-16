@@ -25,6 +25,7 @@
             Quels sont les étapes à suivre pour pouvoir mobiliser le service ?
           </FieldHelp></ModelField>
         <ModelField
+          visible={$serviceCache.beneficiariesAccessModes.includes("OT")}
           hideLabel
           placeholder="Merci de préciser la modalité"
           type="text"
@@ -36,6 +37,7 @@
           field={$serviceOptions.coachOrientationModes}
           bind:value={$serviceCache.coachOrientationModes} />
         <ModelField
+          visible={$serviceCache.coachOrientationModes.includes("OT")}
           hideLabel
           placeholder="Merci de préciser la modalité"
           type="text"

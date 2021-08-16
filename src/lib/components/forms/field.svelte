@@ -68,15 +68,15 @@
   }
 
   .wrapper {
+    display: block;
     opacity: 1;
     transition: all 0.2s;
-    visibility: visible;
   }
 
   .invisible {
+    display: none;
     opacity: 0;
     transition: all 0.2s;
-    visibility: none;
   }
 </style>
 
