@@ -1,14 +1,4 @@
 {
-  "editor.formatOnSave": true,
-  "editor.quickSuggestions": {
-    "strings": true
-  },
-  "files.trimTrailingWhitespace": true,
-
-  "eslint.probe": ["javascript", "svelte"],
-  "eslint.validate": ["javascript", "svelte"],
-  "headwind.runOnSave": true,
-  "tailwindCSS.validate": true,
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -24,5 +14,16 @@
   "[svelte]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "svelte.plugin.css.globals": "src/app.css"
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "editor.formatOnSave": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "eslint.probe": ["javascript", "svelte"],
+  "eslint.validate": ["javascript", "svelte"],
+  "files.trimTrailingWhitespace": true,
+  "svelte.plugin.css.globals": "src/app.css",
+  "tailwindCSS.validate": true
 }
