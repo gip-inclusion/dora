@@ -84,10 +84,10 @@
               les éléments principaux.
             </p>
             <p>
-              <strong>Par exemple :</strong> Faciliter vos déplacements en cas
-              de recherche d'emploi (entretien d'embauche, concours public).
-              Voir
-              <a href="" class="underline text-information">lorem ipsum</a>
+              <strong>Par exemple :</strong>
+              <em
+                >Faciliter vos déplacements en cas de recherche d'emploi
+                (entretien d'embauche, concours public).</em>
             </p>
           </FieldHelp>
         </ModelField>
@@ -95,6 +95,7 @@
           label="Descriptif complet du service"
           placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre service et ses spécificités."
           type="richtext"
+          vertical
           field={$serviceOptions.fullDesc}
           bind:value={$serviceCache.fullDesc} />
       </FieldSet>
