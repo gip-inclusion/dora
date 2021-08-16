@@ -12,39 +12,39 @@
 
   .centered {
     display: grid;
-    margin-left: auto;
     margin-right: auto;
-    grid-template-columns: repeat(12, 78px);
+    margin-left: auto;
     column-gap: var(--s24);
+    grid-template-columns: repeat(12, 78px);
     row-gap: 1.5rem;
   }
 
   .sticky {
     position: sticky;
+    z-index: 50;
+    bottom: 10px;
     width: 100%;
     padding: var(--s24);
-    bottom: 10px;
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15), 0 0 3px 0 rgba(0, 0, 0, 0.1);
     background-color: var(--col-bg);
-    z-index: 50;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15), 0 0 3px 0 rgba(0, 0, 0, 0.1);
     will-change: transform;
   }
 
   .roundedbg {
+    background-color: var(--col-gray-bg);
     border-top-left-radius: 2.5rem /* 40px */;
     border-top-right-radius: 2.5rem /* 40px */;
-    background-color: var(--col-gray-bg);
   }
 
   .bordertop {
-    border-top-width: 1px;
     border-color: var(--col-gray-03);
+    border-top-width: 1px;
   }
 </style>
 
 <div
   class="wrapper"
-  style="grid-row-start: {gridRow}"
+  style="grid-row-start: {gridRow};"
   class:sticky
   class:roundedbg
   class:bordertop>

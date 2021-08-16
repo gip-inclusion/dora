@@ -961,34 +961,34 @@
 
 <style>
   .autocomplete {
-    min-width: 200px;
-    display: inline-block;
-    max-width: 100%;
     position: relative;
-    vertical-align: top;
+    display: inline-block;
+    min-width: 200px;
+    max-width: 100%;
     height: 2.25em;
+    vertical-align: top;
   }
 
   .autocomplete:not(.hide-arrow):not(.is-loading)::after {
-    border: 3px solid transparent;
-    border-radius: 2px;
-    border-right: 0;
-    border-top: 0;
-    content: " ";
-    display: block;
-    height: 0.625em;
-    margin-top: -0.4375em;
-    pointer-events: none;
     position: absolute;
+    z-index: 4;
     top: 50%;
+    right: 1.125em;
+    display: block;
+    width: 0.625em;
+    height: 0.625em;
+    border: 3px solid transparent;
+    border-color: #3273dc;
+    border-top: 0;
+    border-right: 0;
+    margin-top: -0.4375em;
+    border-radius: 2px;
+    content: " ";
+    pointer-events: none;
     -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
     -webkit-transform-origin: center;
     transform-origin: center;
-    width: 0.625em;
-    border-color: #3273dc;
-    right: 1.125em;
-    z-index: 4;
   }
 
   .autocomplete.show-clear:not(.hide-arrow)::after {
@@ -998,38 +998,43 @@
   .autocomplete * {
     box-sizing: border-box;
   }
+
   .autocomplete-input {
-    font: inherit;
     width: 100%;
     height: 100%;
     padding: 5px 11px;
+    font: inherit;
   }
 
   .autocomplete:not(.hide-arrow) .autocomplete-input {
     padding-right: 2em;
   }
+
   .autocomplete.show-clear:not(.hide-arrow) .autocomplete-input {
     padding-right: 3.2em;
   }
+
   .autocomplete.hide-arrow.show-clear .autocomplete-input {
     padding-right: 2em;
   }
 
   .autocomplete-list {
-    background: #fff;
     position: relative;
-    width: 100%;
-    overflow-y: auto;
     z-index: 99;
-    padding: 10px 0;
-    top: 0px;
-    border: 1px solid #999;
+    top: 0;
+    width: 100%;
     max-height: calc(15 * (1rem + 10px) + 15px);
+    padding: 10px 0;
+    border: 1px solid #999;
+    background: #fff;
+    overflow-y: auto;
     user-select: none;
   }
+
   .autocomplete-list:empty {
     padding: 0;
   }
+
   .autocomplete-list-item {
     padding: 5px 15px;
     color: #333;
@@ -1041,19 +1046,23 @@
     background-color: #789fed;
     color: #fff;
   }
+
   .autocomplete-list-item.selected {
     background-color: #2e69e2;
     color: #fff;
   }
+
   .autocomplete-list-item-no-results {
     padding: 5px 15px;
     color: #999;
     line-height: 1;
   }
+
   .autocomplete-list-item-create {
     padding: 5px 15px;
     line-height: 1;
   }
+
   .autocomplete-list-item-loading {
     padding: 5px 15px;
     line-height: 1;
@@ -1064,17 +1073,17 @@
   }
 
   .autocomplete.show-clear .autocomplete-clear-button {
-    cursor: pointer;
-    display: block;
-    text-align: center;
     position: absolute;
-    right: 0.1em;
-    padding: 0.3em 0.6em;
+    z-index: 4;
     top: 50%;
+    right: 0.1em;
+    display: block;
+    padding: 0.3em 0.6em;
+    cursor: pointer;
+    text-align: center;
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
-    z-index: 4;
   }
 
   .autocomplete:not(.show-clear) .autocomplete-clear-button {
@@ -1086,16 +1095,16 @@
   }
 
   .autocomplete.is-multiple .input-container {
-    height: auto;
-    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
-    border-radius: 4px;
-    border: 1px solid #b5b5b5;
-    padding-left: 0.4em;
-    padding-right: 0.4em;
     display: flex;
+    height: auto;
     flex-wrap: wrap;
     align-items: stretch;
+    padding-right: 0.4em;
+    padding-left: 0.4em;
+    border: 1px solid #b5b5b5;
     background-color: #fff;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
   }
 
   .autocomplete.is-multiple .tag {
@@ -1116,11 +1125,11 @@
   .autocomplete.is-multiple .autocomplete-input {
     display: flex;
     width: 100%;
-    flex: 1 1 50px;
     min-width: 3em;
+    flex: 1 1 50px;
     border: none;
-    box-shadow: none;
     background: none;
+    box-shadow: none;
   }
 </style>
 

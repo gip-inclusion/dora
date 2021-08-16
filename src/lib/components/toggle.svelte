@@ -10,15 +10,19 @@
   .toggle-path {
     transition: all 0.15s ease-in-out;
   }
+
   .toggle-circle {
-    transition: all 0.15s ease-in-out;
     top: 0.25rem;
     left: 0.25rem;
+    transition: all 0.15s ease-in-out;
   }
+
   input:checked ~ .toggle-circle {
     transform: translateX(100%);
+
     @apply bg-dora-magenta-cta;
   }
+
   input:checked ~ .toggle-path {
     @apply border-dora-magenta-hover bg-magenta-20;
   }

@@ -55,6 +55,7 @@
 <style lang="postcss">
   :global(.ProseMirror p.is-editor-empty:first-child::before) {
     content: attr(data-placeholder);
+
     @apply text-gray-text-alt pointer-events-none h-0 float-left;
   }
 </style>

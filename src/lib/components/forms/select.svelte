@@ -24,12 +24,15 @@
   :global(.autocomplete) {
     @apply h-6 !important;
   }
+
   :global(.input-container) {
     @apply shadow-none h-6 !important;
   }
+
   :global(.autocomplete-list) {
     @apply border-none !important;
   }
+
   :global(.autocomplete-list-item) {
     @apply text-gray-text-alt !important;
   }

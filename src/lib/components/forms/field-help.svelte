@@ -6,8 +6,8 @@
 <style>
   .help {
     position: absolute;
-    width: 384px;
     right: -472px;
+    width: 384px;
   }
 </style>
 

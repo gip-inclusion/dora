@@ -7,6 +7,7 @@
   .tb-button {
     @apply h-3 w-3;
   }
+
   .active {
     @apply bg-gray-02;
   }
