@@ -1,9 +1,8 @@
 <script>
   import { externalLineIcon } from "$lib/icons";
   export let label = "";
-  export let disabled;
-  export let target;
-  export let separator;
+  export let disabled = false;
+  export let separator = false;
   export let external = false;
   export let light = false;
 </script>

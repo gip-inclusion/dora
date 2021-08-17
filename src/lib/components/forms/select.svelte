@@ -2,22 +2,21 @@
   import AutoComplete from "./simple-autocomplete.svelte";
   import { checkIcon } from "$lib/icons.js";
 
-  export let choices;
+  export let choices = undefined;
   export let value = undefined;
   export let selectedItem = undefined;
   export let required = false;
   export let disabled = false;
   export let placeholder = "";
   export let multiple = false;
-  export let hideArrow;
-  export let searchFunction;
-  export let delay;
-  export let localFiltering;
+  export let hideArrow = false;
+  export let searchFunction = undefined;
+  export let delay = undefined;
+  export let localFiltering = undefined;
   export let labelFieldName = "displayName";
   export let valueFieldName = "value";
-  export let minCharactersToSearch;
-
-  export let onChange;
+  export let minCharactersToSearch = undefined;
+  export let onChange = undefined;
 </script>
 
 <style lang="postcss">

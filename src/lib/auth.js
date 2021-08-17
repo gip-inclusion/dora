@@ -3,12 +3,12 @@ import { writable } from "svelte/store";
 
 const tokenKey = "token";
 
-export const token = writable(getToken());
-
 function getToken() {
   if (browser) return localStorage.getItem(tokenKey);
   return null;
 }
+
+export const token = writable(getToken());
 
 export function setToken(t) {
   localStorage.setItem(tokenKey, t);

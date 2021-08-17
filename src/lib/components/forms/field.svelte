@@ -7,8 +7,8 @@
   export let selectedItem = undefined;
 
   export let type;
-  export let errors;
-  export let errorMessages;
+  export let errors = undefined;
+  export let errorMessages = undefined;
 
   export let vertical = false;
   export let label = "";
@@ -18,19 +18,18 @@
 
   export let disabled = undefined;
   export let visible = true;
-  export let placeholder = "";
+  export let placeholder = undefined;
   export let description = "";
-  export let minValue = null;
+  export let minValue = undefined;
 
   export let hideLabel = false;
-  export let toggleYesText;
-  export let toggleNoText;
+  export let toggleYesText = undefined;
+  export let toggleNoText = undefined;
 
   let validity;
   let validityError;
 
-  let layoutClass = vertical ? "flex-col " : "flex-row";
-  $: hiddenClasses = type === "hidden" ? "hidden" : "";
+  const layoutClass = vertical ? "flex-col " : "flex-row";
 
   let currentErrorMessage;
 
@@ -42,20 +41,17 @@
     currentErrorMessage = "";
   }
 
-  $: console.log(currentErrorMessage);
-
   function handleInvalid(elt) {
     validity = elt.target.validity;
-    let type = elt.target.type;
-    console.log(type, validity);
+    const eltType = elt.target.type;
     if (!validity.valid) {
       if (validity.valueMissing) {
         validityError = "Ce champ est requis";
       }
-      if (type == "email" && validity.typeMismatch) {
+      if (eltType === "email" && validity.typeMismatch) {
         validityError = "Renseignez une adresse email valide";
       }
-      if (type == "url" && validity.typeMismatch) {
+      if (eltType === "url" && validity.typeMismatch) {
         validityError = "Renseignez une URL valide";
       }
     }
@@ -69,7 +65,7 @@
 </style>
 
 {#if visible}
-  <div class=" flex-1" class:hidden={type == "hidden"}>
+  <div class=" flex-1" class:hidden={type === "hidden"}>
     <Label
       className="flex {layoutClass} items-top relative "
       isDOMLabel={type !== "checkboxes" && type !== "radios"}>
@@ -86,7 +82,7 @@
         <span class="text-xs text-gray-text-alt2"> {description}</span>
       </div>
       <div class="flex flex-col flex-grow min-h-6 ml-4">
-        <slot name="input">
+        {#if type !== "custom"}
           <Input
             on:invalid={handleInvalid}
             on:blur={(evt) => evt.target.checkValidity()}
@@ -102,7 +98,9 @@
             {disabled}
             {toggleYesText}
             {toggleNoText} />
-        </slot>
+        {:else}
+          <slot name="custom-input" />
+        {/if}
         {#if validity && !validity.valid}
           <Alert iconOnLeft label={validityError} />
         {/if}

@@ -8,8 +8,6 @@
   import CustomLayout from "./_custom-layout.svelte";
 
   import NavButtons from "./_nav.svelte";
-
-  $: console.log($serviceCache);
 </script>
 
 <CustomLayout>

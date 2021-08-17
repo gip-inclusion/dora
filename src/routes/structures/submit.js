@@ -10,7 +10,7 @@ export async function submit(structure, modify = false) {
     : `${getApiURL()}/structures/`;
   const method = modify ? "PATCH" : "POST";
   const res = await fetch(url, {
-    method: method,
+    method,
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",

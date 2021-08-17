@@ -12,7 +12,7 @@
     )}&limit=10&type=municipality`;
     const response = await fetch(url);
     const jsonResponse = await response.json();
-    let results = jsonResponse.features.map((feature) => ({
+    const results = jsonResponse.features.map((feature) => ({
       value: feature,
       label: `${feature.properties.label} (${feature.properties.postcode})`,
     }));

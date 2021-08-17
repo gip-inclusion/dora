@@ -3,12 +3,12 @@
 
   export let value = undefined;
   export let selectedItem = undefined;
-  export let label;
+  export let label = undefined;
   export let type;
   export let field;
   export let vertical = false;
-  export let errors;
-  export let errorMessages;
+  export let errors = undefined;
+  export let errorMessages = undefined;
 
   export let disabled = undefined;
   export let visible = true;
@@ -37,6 +37,6 @@
   {disabled}
   {visible}
   {vertical}>
-  <slot name="input" slot="name" />
+  <slot name="custom-input" slot="custom-input" />
   <slot name="helptext" slot="helptext" />
 </Field>

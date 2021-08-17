@@ -2,7 +2,6 @@
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
   import Field from "$lib/components/forms/field.svelte";
-  import Alert from "$lib/components/forms/alert.svelte";
 
   import StructureForm from "../_structure_form.svelte";
   import SiretSearch from "./_siret_search.svelte";
@@ -27,10 +26,10 @@
 
   async function establishmentAlreadyCreated(siret) {
     const result = await siretWasAlreadyClaimed(siret);
-    console.log(result);
     if (result.ok) {
       return result.result;
     }
+    return false;
   }
 
   async function handleEstablishmentChange(establishment) {
@@ -47,11 +46,9 @@
         structure.name = establishment.name || establishment.parent;
         structure.address1 = establishment.addr1;
         structure.address2 = establishment.addr2;
-        structure.city = (
-          (establishment.city || "") +
-          " " +
-          (establishment.distrib || "")
-        ).trim();
+        structure.city = `${establishment.city || ""} ${
+          establishment.distrib || ""
+        }`.trim();
         structure.cityCode = establishment.citycode;
         structure.postalCode = establishment.postcode;
         structure.ape = establishment.ape;
@@ -60,16 +57,14 @@
       }
     }
   }
-
-  $: console.log(formErrors);
 </script>
 
 <FieldSet
   title="Retrouvez votre structure"
   description="On peut récuperer automatiquement les informations importantes de votre structure via la base SIRENE. Saissisez votre département et le numéro SIRET pour commencer.">
-  <Field label="Commune" vertical>
+  <Field type="custom" label="Commune" vertical>
     <CitySearch
-      slot="input"
+      slot="custom-input"
       placeholder="Saisissez le nom de votre ville"
       handleChange={handleCityChange} />
     <FieldHelp title="Récupération des données existantes" slot="helptext">
@@ -81,9 +76,12 @@
       </p>
     </FieldHelp>
   </Field>
-  <Field label="Le nom de votre structure ou le numéro SIRET" vertical>
+  <Field
+    type="custom"
+    label="Le nom de votre structure ou le numéro SIRET"
+    vertical>
     <SiretSearch
-      slot="input"
+      slot="custom-input"
       {selectedEstablishment}
       {selectedCity}
       disabled={!selectedCity?.value?.properties?.citycode}

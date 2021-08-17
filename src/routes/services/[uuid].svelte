@@ -11,7 +11,6 @@
 
     if (res.ok) {
       const service = await res.json();
-      console.log(service);
       return {
         props: {
           service,

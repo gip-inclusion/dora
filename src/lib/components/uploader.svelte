@@ -2,13 +2,27 @@
   import { getApiURL } from "$lib/utils";
   export let fileKeys = [];
   export let disabled;
+  export let required;
   let progress = null;
   let uploadInput;
 
   async function handleSubmit() {
+    function updateProgress(loaded, total) {
+      progress = (loaded / total) * 100;
+    }
+
+    function handleUploadDone(request) {
+      const jsonResponse = JSON.parse(request.response);
+      fileKeys = [jsonResponse.key, ...fileKeys];
+      // Clear input
+      uploadInput.value = null;
+      uploadInput.disabled = false;
+      progress = null;
+    }
+
     uploadInput.disabled = true;
 
-    let files = uploadInput.files;
+    const files = uploadInput.files;
     for (let i = 0; i < files.length; i++) {
       const file = files.item(i);
       // We can't use fetch if we want a progress indicator
@@ -18,23 +32,14 @@
       request.setRequestHeader("Accept", "application/json; version=1.0");
 
       // upload progress event
-      request.upload.addEventListener("progress", function (e) {
+      request.upload.addEventListener("progress", (e) => {
         // upload progress as percentage
-        progress = (e.loaded / e.total) * 100;
+        updateProgress(e.loaded, e.total);
       });
 
       // request finished event
-      request.addEventListener("load", function () {
-        // HTTP status message (200, 404 etc)
-        console.log("done", request.status);
-        // request.response holds response from the server
-        console.log(request.response);
-        const jsonResponse = JSON.parse(request.response);
-        fileKeys = [jsonResponse.key, ...fileKeys];
-        // Clear input
-        uploadInput.value = null;
-        uploadInput.disabled = false;
-        progress = null;
+      request.addEventListener("load", () => {
+        handleUploadDone(request);
       });
 
       // send POST request to server
@@ -51,9 +56,10 @@
       on:input
       bind:this={uploadInput}
       on:change={handleSubmit}
+      {required}
       {disabled}
       type="file"
-      multiple />{progress != null ? Math.round(progress) + " %" : ""}</label>
+      multiple />{progress != null ? `${Math.round(progress)} %` : ""}</label>
 </form>
 <ul>
   {#each fileKeys as uploaded}

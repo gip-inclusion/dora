@@ -3,7 +3,6 @@
   import { Integrations } from "@sentry/tracing";
 
   import { SENTRY_DSN, SENTRY_ENVIRONMENT } from "$lib/env.js";
-  console.log(SENTRY_DSN, SENTRY_ENVIRONMENT);
   if (SENTRY_ENVIRONMENT !== "local") {
     Sentry.init({
       dsn: SENTRY_DSN,

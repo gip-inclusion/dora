@@ -13,7 +13,8 @@
   export let withBack = false;
   export let withForward = false;
   export let withValidate = false;
-  export let backlink, forwardlink;
+  export let backlink = null;
+  export let forwardlink = null;
 
   export function persistStore() {
     if (browser) {
@@ -26,7 +27,6 @@
   }
 
   export async function handleSubmit() {
-    console.log($serviceCache);
     const body = get(serviceCache);
     const url = `${getApiURL()}/services/`;
     const res = await fetch(url, {
@@ -72,6 +72,4 @@
   {withValidate}
   withDraft
   validateLabel="Publier"
-  {backlink}
-  {forwardlink}
   on:submit={persistAndGo} />

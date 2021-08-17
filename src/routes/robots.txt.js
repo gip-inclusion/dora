@@ -1,11 +1,11 @@
 import { ENVIRONMENT } from "$lib/env.js";
 
-let productionContent = `
+const productionContent = `
 User-agent: *
 Allow: /
 `.trim();
 
-let devContent = `
+const devContent = `
 User-agent: *
 Disallow: /
 `.trim();

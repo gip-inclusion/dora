@@ -16,7 +16,7 @@ export async function getStructures() {
   });
 
   if (res.ok) {
-    let structures = await res.json();
+    const structures = await res.json();
     return {
       props: { structures },
     };
@@ -43,11 +43,12 @@ export async function siretWasAlreadyClaimed(siret) {
   if (res.ok) {
     result.result = await res.json();
   } else {
-    try {
-      result.error = await res.json();
-    } catch (err) {
-      console.error(err);
-    }
+    if (res.status !== 404)
+      try {
+        result.error = await res.json();
+      } catch (err) {
+        console.error(err);
+      }
   }
   return result;
 }
@@ -61,7 +62,7 @@ export async function getStructure(slug) {
   });
 
   if (res.ok) {
-    let structure = await res.json();
+    const structure = await res.json();
     structure.fullDesc = insane(markdownToHTML(structure.fullDesc));
     return {
       props: { structure },
@@ -85,7 +86,6 @@ export async function fillStructuresOptions() {
 
   if (res.ok) {
     structureOptions.set((await res.json()).actions.POST);
-    console.log(get(structureOptions));
   }
 
   return {

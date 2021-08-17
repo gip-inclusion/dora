@@ -19,11 +19,11 @@
       },
     });
     const jsonResponse = await response.json();
-    console.log(jsonResponse);
+
     function cleanSpaces(string) {
-      return string.replace(/ +/gi, " ").trim();
+      return string.replaceAll("  ", " ").trim();
     }
-    let results = jsonResponse.map((r) => {
+    const results = jsonResponse.map((r) => {
       const result = {
         siret: r.siret,
         siren: r.siren,
@@ -37,13 +37,11 @@
         postcode: r.codeCedex || r.codePostal,
         citycode: r.codeCommune,
         parent: cleanSpaces(
-          `${r.denominationParent} ${
-            r.sigleParent ? "(" + r.sigleParent + ")" : ""
-          }`
+          `${r.denominationParent} ${r.sigleParent ? `(${r.sigleParent})` : ""}`
         ),
         name: cleanSpaces(
           `${r.denomination} ${
-            r.enseigne1 != r.denomination ? r.enseigne1 : ""
+            r.enseigne1 !== r.denomination ? r.enseigne1 : ""
           } ${r.enseigne2} ${r.enseigne3}`
         ),
         ape: r.ape,
@@ -52,9 +50,9 @@
       };
 
       if (!result.name.startsWith(result.parent)) {
-        result.name = result.parent + " " + result.name;
+        result.name = `${result.parent} ${result.name}`;
       }
-      result.label = result.name + " (" + result.addr1 + ")";
+      result.label = `${result.name} (${result.addr1})`;
       return result;
     });
     return results;

@@ -18,4 +18,5 @@ export function htmlToMarkdown(html) {
     const converter = new showdown.Converter();
     return converter.makeMarkdown(html);
   }
+  return "";
 }

@@ -11,15 +11,31 @@
   import { submit } from "./submit.js";
 
   export let formTitle;
-  export let theForm;
+
   export let structure;
   export let modify = false;
 
+  let theForm;
   let formErrors = {};
   let formIsValid = false;
 
   function handleChange() {
     formIsValid = theForm.checkValidity();
+  }
+
+  function displayErrors(errors) {
+    formErrors = {};
+    Object.entries(errors).forEach(([key, values]) => {
+      const fieldName = key;
+      values.forEach((value) => {
+        const errorCode = value.code;
+        const errorMessage = value.message;
+        // TODO append instead of overwrite; there might be more than one error
+        // by field
+        formErrors[fieldName] = { errorCode, errorMessage };
+        formErrors = formErrors;
+      });
+    });
   }
 
   async function handleSubmit() {
@@ -29,22 +45,6 @@
     } else {
       displayErrors(result.error);
     }
-    console.log(result.error);
-  }
-
-  function displayErrors(errors) {
-    formErrors = {};
-    Object.entries(errors).forEach(([key, values]) => {
-      let fieldName = key;
-      values.forEach((value) => {
-        let errorCode = value.code;
-        let errorMessage = value.message;
-        // TODO append instead of overwrite; there might be more than one error
-        // by field
-        formErrors[fieldName] = { errorCode, errorMessage };
-        formErrors = formErrors;
-      });
-    });
   }
 
   function getTypologyItem() {
@@ -83,7 +83,8 @@
             Vérifiez l’exactitude des informations récupérées et complétez les
             autres.
           </p>
-        </FieldHelp></ModelField>
+        </FieldHelp>
+      </ModelField>
 
       <ModelField
         type="text"

@@ -11,7 +11,7 @@
     "preview": "svelte-kit preview --host",
     "start": "node build",
     "lint": "stylelint \"**/*.{css,html,svelte}\" && prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-    "format": "prettier --write --plugin-search-dir=. .",
+    "format": "prettier --write --plugin-search-dir=. . && eslint --ignore-path .gitignore --fix .",
     "formatstyle": "stylelint --fix \"**/*.{css,html,svelte}\"",
     "prepare": "husky install"
   },
@@ -27,6 +27,7 @@
     "autoprefixer": "^10.2.6",
     "cssnano": "^5.0.6",
     "eslint": "^7.22.0",
+    "eslint-config-eslint": "^7.0.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-svelte3": "^3.2.0",
     "husky": "^7.0.0",

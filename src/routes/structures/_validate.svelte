@@ -2,7 +2,7 @@
   import Button from "$lib/components/button.svelte";
   import { arrowRightSIcon } from "$lib/icons.js";
 
-  export let disabled;
+  export let disabled = false;
 </script>
 
 <Button

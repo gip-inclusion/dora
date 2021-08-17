@@ -15,7 +15,7 @@
   let email = "";
   let password = "";
 
-  const handleSubmit = async () => {
+  async function handleSubmit() {
     const url = `${getApiURL()}/api-token-auth/`;
     const result = await fetch(url, {
       method: "POST",
@@ -38,10 +38,10 @@
       status: result.status,
       error: new Error(`Could not load ${url}`),
     };
-  };
+  }
 
-  const validateMessageEmail = (event) => {
-    let textbox = event.target;
+  function validateMessageEmail(event) {
+    const textbox = event.target;
     if (textbox.value === "") {
       textbox.setCustomValidity("Ce champ est requis");
     } else if (textbox.validity.typeMismatch) {
@@ -52,14 +52,14 @@
       textbox.setCustomValidity("");
     }
     return true;
-  };
+  }
 
   onMount(() => {
     if ($token && $page.path === "/login") {
       goto(next);
     }
   });
-  let toggleText =
+  const toggleText =
     "En cochant cette case je suis d’accord avec les <a class='underline' href='/mentions-legales'>mentions légales</a> et l’utilisation de mes données afin de créer un compte sur la plateforme DORA.";
 </script>
 
@@ -78,7 +78,7 @@
           vertical
           type="email"
           bind:value={email}
-          _on:invalid={validateMessageEmail}
+          on:invalid={validateMessageEmail}
           required
           placeholder="Courriel" />
         <Field

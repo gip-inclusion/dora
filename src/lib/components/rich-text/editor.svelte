@@ -21,11 +21,13 @@
   export let className = "prose bg-white h-20";
   export let htmlContent = "";
   export let initialContent = "";
-  export let placeholder;
+  export let placeholder = "";
+  export let disabled = false;
+  export let required = false;
 
   onMount(() => {
     editor = new Editor({
-      element: element,
+      element,
       extensions: [StarterKit, Placeholder.configure({ placeholder })],
       content: initialContent,
       injectCSS: false,
@@ -36,10 +38,9 @@
       },
       editorProps: {
         attributes: {
-          class:
-            className +
-            " " +
-            "p-2 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none",
+          required,
+          disabled,
+          class: `${className} p-2 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none`,
         },
       },
     });

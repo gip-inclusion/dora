@@ -15,7 +15,7 @@
   import LinkButton from "$lib/components/link-button.svelte";
   export let structure;
 
-  let editLink = `${$page.path}/edit`;
+  const editLink = `${$page.path}/edit`;
 </script>
 
 <svelte:head>

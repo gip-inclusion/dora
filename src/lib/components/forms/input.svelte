@@ -15,7 +15,7 @@
   export let required = false;
   export let choices = [];
 
-  export let disabled = undefined;
+  export let disabled = false;
   export let placeholder = "";
   export let minValue = null;
   export let maxLength = undefined;
@@ -169,7 +169,6 @@
     on:blur
     on:input
     bind:fileKeys={value}
-    {placeholder}
     {required}
     {disabled} />
 {/if}

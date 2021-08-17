@@ -4,6 +4,8 @@
   export let checked = undefined;
   export let toggleYesText = "Oui";
   export let toggleNoText = "Non";
+  export let required = false;
+  export let disabled = false;
 </script>
 
 <style lang="postcss">
@@ -35,7 +37,9 @@
     class="hidden"
     on:invalid
     on:blur
-    on:input />
+    on:input
+    {required}
+    {disabled} />
   <!-- path -->
   <div
     class="flex-shrink-0 w-5 h-3 bg-white border rounded-full toggle-path border-gray-03" />

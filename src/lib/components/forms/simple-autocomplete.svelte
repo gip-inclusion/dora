@@ -3,6 +3,7 @@
   https://github.com/pstanoev/simple-svelte-autocomplete/blob/2de0d7618b37192ec1ca47bbe4ffd47477b38792/src/SimpleAutocomplete.svelte
 -->
 <script>
+  /* eslint-disable */
   // the list of items  the user can select from
   export let items = [];
 
@@ -960,6 +961,7 @@
 </script>
 
 <style>
+  /* stylelint-disable */
   .autocomplete {
     position: relative;
     display: inline-block;
@@ -1170,7 +1172,7 @@
     <input
       type="text"
       class="{inputClassName ? inputClassName : ''} input autocomplete-input"
-      id={inputId ? inputId : ""}
+      id={inputId}
       autocomplete={html5autocomplete ? "on" : "off"}
       {placeholder}
       {name}
