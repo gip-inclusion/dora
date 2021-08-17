@@ -64,6 +64,8 @@
         (acc, e) => ({ ...acc, [e.path]: e.message }),
         {}
       );
+      displayYupErrors(errors);
+      return;
     }
     // Validation OK, let's send it to the API endpoint
     const result = await submit(structure, modify);
