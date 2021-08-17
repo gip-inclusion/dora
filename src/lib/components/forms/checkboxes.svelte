@@ -1,5 +1,5 @@
 <script>
-  export let group, choices, required, disabled;
+  export let group, choices, disabled;
 </script>
 
 <style lang="postcss">
@@ -11,14 +11,12 @@
 {#each choices as choice}
   <label class="flex flex-row items-center">
     <input
-      on:invalid
       on:blur
       on:input
       bind:group
       value={choice.value}
       type="checkbox"
       class="hidden"
-      {required}
       {disabled} />
     <div
       class="flex justify-center flex-shrink-0 w-3 h-3 border rounded border-gray-03">

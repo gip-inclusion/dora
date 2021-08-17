@@ -23,7 +23,6 @@
   export let initialContent = "";
   export let placeholder = "";
   export let disabled = false;
-  export let required = false;
 
   onMount(() => {
     editor = new Editor({
@@ -38,7 +37,6 @@
       },
       editorProps: {
         attributes: {
-          required,
           disabled,
           class: `${className} p-2 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none`,
         },

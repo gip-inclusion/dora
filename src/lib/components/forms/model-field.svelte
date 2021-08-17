@@ -7,8 +7,7 @@
   export let type;
   export let field;
   export let vertical = false;
-  export let errors = undefined;
-  export let errorMessages = undefined;
+  export let errorMessage = undefined;
 
   export let disabled = undefined;
   export let visible = true;
@@ -23,8 +22,7 @@
   bind:value
   bind:selectedItem
   on:input
-  {errors}
-  {errorMessages}
+  {errorMessage}
   required={field.required}
   maxLength={field.maxLength}
   label={label || field.label}

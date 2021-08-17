@@ -4,7 +4,6 @@
   export let checked = undefined;
   export let toggleYesText = "Oui";
   export let toggleNoText = "Non";
-  export let required = false;
   export let disabled = false;
 </script>
 
@@ -35,10 +34,8 @@
     type="checkbox"
     bind:checked
     class="hidden"
-    on:invalid
     on:blur
     on:input
-    {required}
     {disabled} />
   <!-- path -->
   <div

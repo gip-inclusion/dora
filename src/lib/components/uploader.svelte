@@ -2,7 +2,6 @@
   import { getApiURL } from "$lib/utils";
   export let fileKeys = [];
   export let disabled;
-  export let required;
   let progress = null;
   let uploadInput;
 
@@ -51,12 +50,10 @@
 <form on:submit|preventDefault={handleSubmit}>
   <label>
     <input
-      on:invalid
       on:blur
       on:input
       bind:this={uploadInput}
       on:change={handleSubmit}
-      {required}
       {disabled}
       type="file"
       multiple />{progress != null ? `${Math.round(progress)} %` : ""}</label>

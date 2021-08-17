@@ -6,6 +6,7 @@
   import ModelField from "$lib/components/forms/model-field.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
+  import structSchema from "$lib/schemas/structure.js";
 
   import ValidateButton from "./_validate.svelte";
   import { submit } from "./submit.js";
@@ -19,31 +20,57 @@
   let formErrors = {};
   let formIsValid = false;
 
+  const serverErrors = {
+    _default: {},
+    siret: { unique: "Cette structure existe déjà" },
+  };
+
   function handleChange() {
     formIsValid = theForm.checkValidity();
   }
 
-  function displayErrors(errors) {
+  function displayYupErrors(errors) {
+    formErrors = {};
+    Object.entries(errors).forEach(([fieldName, message]) => {
+      formErrors[fieldName] = message;
+    });
+    formErrors = formErrors;
+  }
+
+  function displayAPIErrors(errors) {
     formErrors = {};
     Object.entries(errors).forEach(([key, values]) => {
       const fieldName = key;
       values.forEach((value) => {
         const errorCode = value.code;
-        const errorMessage = value.message;
+        const errorMessage =
+          (serverErrors[fieldName] && serverErrors[fieldName][errorCode]) ||
+          serverErrors._default[errorCode] ||
+          value.message;
         // TODO append instead of overwrite; there might be more than one error
         // by field
-        formErrors[fieldName] = { errorCode, errorMessage };
-        formErrors = formErrors;
+        formErrors[fieldName] = errorMessage;
       });
     });
+    formErrors = formErrors;
   }
 
   async function handleSubmit() {
+    let errors = {};
+    try {
+      structSchema.validateSync(structure, { abortEarly: false });
+    } catch (err) {
+      errors = err.inner.reduce(
+        (acc, e) => ({ ...acc, [e.path]: e.message }),
+        {}
+      );
+    }
+    // Validation OK, let's send it to the API endpoint
     const result = await submit(structure, modify);
     if (result.ok) {
       goto(`/structures/${result.result.slug}`);
     } else {
-      displayErrors(result.error);
+      displayAPIErrors(result.error);
     }
   }
 
@@ -64,6 +91,7 @@
 
 {#if $structureOptions}
   <form
+    novalidate
     on:change={handleChange}
     on:submit|preventDefault={handleSubmit}
     on:input={handleChange}
@@ -73,9 +101,8 @@
         type="text"
         label="SIRET"
         field={$structureOptions.siret}
-        errors={formErrors.siret}
-        errorMessages={{ unique: "Cette structure existe déjà" }}
-        disabled
+        errorMessage={formErrors.siret}
+        disabled={false}
         bind:value={structure.siret}
         vertical>
         <FieldHelp title="Completez les informations" slot="helptext">
@@ -90,7 +117,7 @@
         type="text"
         label="Nom de la structure"
         field={$structureOptions.name}
-        errors={formErrors.name}
+        errorMessage={formErrors.name}
         bind:value={structure.name}
         vertical />
       <ModelField
@@ -98,7 +125,7 @@
         label="Typologie de la structure"
         placeholder="choisissez"
         field={$structureOptions.typology}
-        errors={formErrors.typology}
+        errorMessage={formErrors.typology}
         bind:value={structure.typology}
         bind:selectedItem={structure._typology}
         vertical />
@@ -106,14 +133,14 @@
         type="text"
         label="Adresse"
         field={$structureOptions.address1}
-        errors={formErrors.address1}
+        errorMessage={formErrors.address1}
         bind:value={structure.address1}
         vertical />
       <ModelField
         type="text"
         label="Complément d’adresse"
         field={$structureOptions.address2}
-        errors={formErrors.address2}
+        errorMessage={formErrors.address2}
         bind:value={structure.address2}
         vertical />
       <div class="flex flex-row justify-between gap-x-4">
@@ -122,7 +149,7 @@
             type="text"
             label="Code postal"
             field={$structureOptions.postalCode}
-            errors={formErrors.postalCode}
+            errorMessage={formErrors.postalCode}
             bind:value={structure.postalCode}
             vertical />
         </div>
@@ -131,7 +158,7 @@
             type="text"
             label="Ville"
             field={$structureOptions.city}
-            errors={formErrors.city}
+            errorMessage={formErrors.city}
             bind:value={structure.city}
             vertical />
         </div>
@@ -142,7 +169,7 @@
             type="tel"
             label="Téléphone"
             field={$structureOptions.phone}
-            errors={formErrors.phone}
+            errorMessage={formErrors.phone}
             bind:value={structure.phone}
             vertical />
         </div>
@@ -152,7 +179,7 @@
             type="email"
             label="Courriel"
             field={$structureOptions.email}
-            errors={formErrors.email}
+            errorMessage={formErrors.email}
             bind:value={structure.email}
             vertical />
         </div>
@@ -162,7 +189,7 @@
         label="Site web"
         placeholder="https://mastructure.fr"
         field={$structureOptions.url}
-        errors={formErrors.url}
+        errorMessage={formErrors.url}
         bind:value={structure.url}
         vertical />
       <ModelField
@@ -171,7 +198,7 @@
         description="280 caractères maximum"
         placeholder="Décrivez brièvement votre structure"
         field={$structureOptions.shortDesc}
-        errors={formErrors.shortDesc}
+        errorMessage={formErrors.shortDesc}
         bind:value={structure.shortDesc} />
       <ModelField
         type="richtext"
@@ -179,7 +206,7 @@
         description="Présentation résumée des missions de votre structure"
         placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre structure et ses spécificités."
         field={$structureOptions.fullDesc}
-        errors={formErrors.fullDesc}
+        errorMessage={formErrors.fullDesc}
         bind:value={structure.fullDesc}
         vertical />
 

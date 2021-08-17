@@ -7,8 +7,7 @@
   export let selectedItem = undefined;
 
   export let type;
-  export let errors = undefined;
-  export let errorMessages = undefined;
+  export let errorMessage = undefined;
 
   export let vertical = false;
   export let label = "";
@@ -26,36 +25,7 @@
   export let toggleYesText = undefined;
   export let toggleNoText = undefined;
 
-  let validity;
-  let validityError;
-
   const layoutClass = vertical ? "flex-col " : "flex-row";
-
-  let currentErrorMessage;
-
-  $: if (errors) {
-    currentErrorMessage = errorMessages
-      ? errorMessages[errors.errorCode]
-      : errors.errorMessage;
-  } else {
-    currentErrorMessage = "";
-  }
-
-  function handleInvalid(elt) {
-    validity = elt.target.validity;
-    const eltType = elt.target.type;
-    if (!validity.valid) {
-      if (validity.valueMissing) {
-        validityError = "Ce champ est requis";
-      }
-      if (eltType === "email" && validity.typeMismatch) {
-        validityError = "Renseignez une adresse email valide";
-      }
-      if (eltType === "url" && validity.typeMismatch) {
-        validityError = "Renseignez une URL valide";
-      }
-    }
-  }
 </script>
 
 <style lang="postcss">
@@ -84,13 +54,10 @@
       <div class="flex flex-col flex-grow min-h-6 ml-4">
         {#if type !== "custom"}
           <Input
-            on:invalid={handleInvalid}
-            on:blur={(evt) => evt.target.checkValidity()}
             on:input
             {type}
             bind:value
             bind:selectedItem
-            {required}
             {choices}
             {maxLength}
             {placeholder}
@@ -101,11 +68,8 @@
         {:else}
           <slot name="custom-input" />
         {/if}
-        {#if validity && !validity.valid}
-          <Alert iconOnLeft label={validityError} />
-        {/if}
-        {#if currentErrorMessage}
-          <Alert iconOnLeft label={currentErrorMessage} />
+        {#if errorMessage}
+          <Alert iconOnLeft label={errorMessage} />
         {/if}
       </div>
       <slot name="helptext" />

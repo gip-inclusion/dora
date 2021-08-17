@@ -40,20 +40,6 @@
     };
   }
 
-  function validateMessageEmail(event) {
-    const textbox = event.target;
-    if (textbox.value === "") {
-      textbox.setCustomValidity("Ce champ est requis");
-    } else if (textbox.validity.typeMismatch) {
-      textbox.setCustomValidity(
-        "Merci de renseigner une adresse de couriel valide"
-      );
-    } else {
-      textbox.setCustomValidity("");
-    }
-    return true;
-  }
-
   onMount(() => {
     if ($token && $page.path === "/login") {
       goto(next);
@@ -78,7 +64,6 @@
           vertical
           type="email"
           bind:value={email}
-          on:invalid={validateMessageEmail}
           required
           placeholder="Courriel" />
         <Field

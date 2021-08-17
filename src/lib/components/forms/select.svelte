@@ -5,7 +5,6 @@
   export let choices = undefined;
   export let value = undefined;
   export let selectedItem = undefined;
-  export let required = false;
   export let disabled = false;
   export let placeholder = "";
   export let multiple = false;
@@ -60,11 +59,9 @@
   {minCharactersToSearch}
   {onChange}
   items={choices}
-  on:invalid
   bind:value
   bind:selectedItem
   {disabled}
-  {required}
   {placeholder}
   {multiple}
   {searchFunction}
