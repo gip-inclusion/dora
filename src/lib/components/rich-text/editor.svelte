@@ -18,6 +18,7 @@
 
   let element;
   let editor;
+  export let name;
   export let className = "prose bg-white h-20";
   export let htmlContent = "";
   export let initialContent = "";
@@ -37,6 +38,7 @@
       },
       editorProps: {
         attributes: {
+          name,
           disabled,
           class: `${className} p-2 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none`,
         },

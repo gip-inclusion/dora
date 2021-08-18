@@ -1,12 +1,19 @@
 <script>
+  import { onMount, setContext } from "svelte";
+
   import { goto } from "$app/navigation";
-  import { onMount } from "svelte";
 
   import { structureOptions, fillStructuresOptions } from "$lib/structures.js";
   import ModelField from "$lib/components/forms/model-field.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
-  import structSchema from "$lib/schemas/structure.js";
+  import structureSchema from "$lib/schemas/structure.js";
+  import {
+    validate,
+    formErrors,
+    injectAPIErrors,
+    contextValidationKey,
+  } from "$lib/validation.js";
 
   import ValidateButton from "./_validate.svelte";
   import { submit } from "./submit.js";
@@ -15,64 +22,35 @@
 
   export let structure;
   export let modify = false;
+  export let visible;
 
-  let theForm;
-  let formErrors = {};
-  let formIsValid = false;
+  function handleBlur(elt) {
+    const schema = structureSchema.pick([elt.target.name]);
+    const validatedData = validate(structure, schema);
+    if (validatedData) {
+      structure = { ...structure, ...validatedData };
+    }
+  }
+
+  setContext(contextValidationKey, {
+    onBlur: handleBlur,
+  });
 
   const serverErrors = {
     _default: {},
     siret: { unique: "Cette structure existe déjà" },
   };
 
-  function handleChange() {
-    formIsValid = theForm.checkValidity();
-  }
-
-  function displayYupErrors(errors) {
-    formErrors = {};
-    Object.entries(errors).forEach(([fieldName, message]) => {
-      formErrors[fieldName] = message;
-    });
-    formErrors = formErrors;
-  }
-
-  function displayAPIErrors(errors) {
-    formErrors = {};
-    Object.entries(errors).forEach(([key, values]) => {
-      const fieldName = key;
-      values.forEach((value) => {
-        const errorCode = value.code;
-        const errorMessage =
-          (serverErrors[fieldName] && serverErrors[fieldName][errorCode]) ||
-          serverErrors._default[errorCode] ||
-          value.message;
-        // TODO append instead of overwrite; there might be more than one error
-        // by field
-        formErrors[fieldName] = errorMessage;
-      });
-    });
-    formErrors = formErrors;
-  }
-
   async function handleSubmit() {
-    let errors = {};
-    try {
-      structSchema.validateSync(structure, { abortEarly: false });
-    } catch (err) {
-      errors = err.inner.reduce(
-        (acc, e) => ({ ...acc, [e.path]: e.message }),
-        {}
-      );
-      displayYupErrors(errors);
-      return;
-    }
-    // Validation OK, let's send it to the API endpoint
-    const result = await submit(structure, modify);
-    if (result.ok) {
-      goto(`/structures/${result.result.slug}`);
-    } else {
-      displayAPIErrors(result.error);
+    const validatedData = validate(structure, structureSchema);
+    if (validatedData) {
+      // Validation OK, let's send it to the API endpoint
+      const result = await submit(validatedData, modify);
+      if (result.ok) {
+        goto(`/structures/${result.result.slug}`);
+      } else {
+        injectAPIErrors(result.error, serverErrors);
+      }
     }
   }
 
@@ -91,20 +69,16 @@
   });
 </script>
 
-{#if $structureOptions}
-  <form
-    novalidate
-    on:change={handleChange}
-    on:submit|preventDefault={handleSubmit}
-    on:input={handleChange}
-    bind:this={theForm}>
+{#if $structureOptions && visible}
+  <form novalidate on:submit|preventDefault={handleSubmit}>
     <FieldSet title={formTitle}>
       <ModelField
         type="text"
         label="SIRET"
         field={$structureOptions.siret}
-        errorMessage={formErrors.siret}
-        disabled={false}
+        name="siret"
+        errorMessage={$formErrors.siret}
+        disabled
         bind:value={structure.siret}
         vertical>
         <FieldHelp title="Completez les informations" slot="helptext">
@@ -119,7 +93,8 @@
         type="text"
         label="Nom de la structure"
         field={$structureOptions.name}
-        errorMessage={formErrors.name}
+        name="name"
+        errorMessage={$formErrors.name}
         bind:value={structure.name}
         vertical />
       <ModelField
@@ -127,7 +102,8 @@
         label="Typologie de la structure"
         placeholder="choisissez"
         field={$structureOptions.typology}
-        errorMessage={formErrors.typology}
+        name="typology"
+        errorMessage={$formErrors.typology}
         bind:value={structure.typology}
         bind:selectedItem={structure._typology}
         vertical />
@@ -135,14 +111,16 @@
         type="text"
         label="Adresse"
         field={$structureOptions.address1}
-        errorMessage={formErrors.address1}
+        name="address1"
+        errorMessage={$formErrors.address1}
         bind:value={structure.address1}
         vertical />
       <ModelField
         type="text"
         label="Complément d’adresse"
         field={$structureOptions.address2}
-        errorMessage={formErrors.address2}
+        name="address2"
+        errorMessage={$formErrors.address2}
         bind:value={structure.address2}
         vertical />
       <div class="flex flex-row justify-between gap-x-4">
@@ -151,7 +129,8 @@
             type="text"
             label="Code postal"
             field={$structureOptions.postalCode}
-            errorMessage={formErrors.postalCode}
+            name="postalCode"
+            errorMessage={$formErrors.postalCode}
             bind:value={structure.postalCode}
             vertical />
         </div>
@@ -160,7 +139,8 @@
             type="text"
             label="Ville"
             field={$structureOptions.city}
-            errorMessage={formErrors.city}
+            name="city"
+            errorMessage={$formErrors.city}
             bind:value={structure.city}
             vertical />
         </div>
@@ -171,7 +151,8 @@
             type="tel"
             label="Téléphone"
             field={$structureOptions.phone}
-            errorMessage={formErrors.phone}
+            name="phone"
+            errorMessage={$formErrors.phone}
             bind:value={structure.phone}
             vertical />
         </div>
@@ -181,7 +162,8 @@
             type="email"
             label="Courriel"
             field={$structureOptions.email}
-            errorMessage={formErrors.email}
+            name="email"
+            errorMessage={$formErrors.email}
             bind:value={structure.email}
             vertical />
         </div>
@@ -191,7 +173,8 @@
         label="Site web"
         placeholder="https://mastructure.fr"
         field={$structureOptions.url}
-        errorMessage={formErrors.url}
+        name="url"
+        errorMessage={$formErrors.url}
         bind:value={structure.url}
         vertical />
       <ModelField
@@ -200,7 +183,8 @@
         description="280 caractères maximum"
         placeholder="Décrivez brièvement votre structure"
         field={$structureOptions.shortDesc}
-        errorMessage={formErrors.shortDesc}
+        name="shortDesc"
+        errorMessage={$formErrors.shortDesc}
         bind:value={structure.shortDesc} />
       <ModelField
         type="richtext"
@@ -208,35 +192,40 @@
         description="Présentation résumée des missions de votre structure"
         placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre structure et ses spécificités."
         field={$structureOptions.fullDesc}
-        errorMessage={formErrors.fullDesc}
+        name="fullDesc"
+        errorMessage={$formErrors.fullDesc}
         bind:value={structure.fullDesc}
         vertical />
 
       <ModelField
         type="hidden"
         field={$structureOptions.cityCode}
+        name="cityCode"
         bind:value={structure.cityCode}
         vertical />
       <ModelField
         type="hidden"
         field={$structureOptions.ape}
+        name="ape"
         bind:value={structure.ape}
         vertical />
       <ModelField
         type="hidden"
         field={$structureOptions.longitude}
+        name="longitude"
         bind:value={structure.longitude}
         vertical />
       <ModelField
         type="hidden"
         field={$structureOptions.latitude}
+        name="latitude"
         bind:value={structure.latitude}
         vertical />
 
       <div class="border-b border-gray-01" />
 
       <div class="self-end">
-        <ValidateButton _disabled={!formIsValid} />
+        <ValidateButton _disabled={false} />
       </div>
     </FieldSet>
   </form>

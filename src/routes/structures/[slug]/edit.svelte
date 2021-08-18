@@ -21,7 +21,11 @@
 <EnsureLoggedIn>
   <CenteredGrid gridRow="2" roundedbg>
     <div class="col-span-8 col-start-1 mb-4">
-      <StructureForm {structure} formTitle="Modifiez votre structure" modify />
+      <StructureForm
+        {structure}
+        formTitle="Modifiez votre structure"
+        modify
+        visible />
     </div>
   </CenteredGrid>
 </EnsureLoggedIn>

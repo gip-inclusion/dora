@@ -1,12 +1,81 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, setContext } from "svelte";
+  import { get } from "svelte/store";
+
+  import { goto } from "$app/navigation";
+  import { browser } from "$app/env";
+
   import { token } from "$lib/auth";
   import { getApiURL } from "$lib/utils";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
+  import {
+    validate,
+    injectAPIErrors,
+    contextValidationKey,
+  } from "$lib/validation.js";
 
   import { serviceOptions } from "./_creation-store.js";
   import NavLink from "./_navlink.svelte";
+  import { serviceCache } from "./_creation-store.js";
+  import NavButtons from "./_nav-buttons.svelte";
+  import { storageKey } from "./_constants.js";
+
+  import serviceSchema, {
+    step1,
+    step2,
+    step3,
+    step4,
+  } from "$lib/schemas/service.js";
+  import { page } from "$app/stores";
+
+  function handleBlur(elt) {
+    const schema = serviceSchema.pick([elt.target.name]);
+    const validatedData = validate($serviceCache, schema);
+    if (validatedData) {
+      $serviceCache = { ...$serviceCache, ...validatedData };
+    }
+  }
+
+  setContext(contextValidationKey, {
+    onBlur: handleBlur,
+  });
+
+  const currentPath = $page.path.split("/").pop();
+  let navInfo = {
+    currentPath,
+  };
+  switch (currentPath) {
+    case "etape1":
+      navInfo = {
+        next: "etape2",
+        schema: step1,
+      };
+      break;
+    case "etape2":
+      navInfo = {
+        previous: "etape1",
+        next: "etape3",
+        schema: step2,
+      };
+      break;
+    case "etape3":
+      navInfo = {
+        previous: "etape2",
+        next: "etape4",
+        schema: step3,
+      };
+      break;
+    case "etape4":
+      navInfo = {
+        previous: "etape3",
+        last: true,
+        schema: step4,
+      };
+      break;
+    default:
+      console.log("?");
+  }
 
   onMount(async () => {
     const url = `${getApiURL()}/services/`;
@@ -27,6 +96,83 @@
       error: new Error(`Could not load ${url}`),
     };
   });
+
+  function clearStore() {
+    localStorage.removeItem(storageKey);
+  }
+
+  export function persistStore() {
+    if (browser) {
+      localStorage.setItem(storageKey, JSON.stringify(get(serviceCache)));
+    }
+  }
+
+  function isValid(schema) {
+    return schema.isValidSync($serviceCache);
+  }
+
+  async function submit(service) {
+    const url = `${getApiURL()}/services/`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json; version=1.0",
+        "Content-Type": "application/json",
+
+        Authorization: `Token ${get(token)}`,
+      },
+      body: JSON.stringify(service),
+    });
+
+    const result = {
+      ok: res.ok,
+      status: res.status,
+    };
+    if (res.ok) {
+      result.result = await res.json();
+    } else {
+      try {
+        result.error = await res.json();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    return result;
+  }
+
+  export async function handlePublish() {
+    const validatedData = validate($serviceCache, serviceSchema);
+    if (validatedData) {
+      // Validation OK, let's send it to the API endpoint
+
+      const result = await submit(validatedData);
+      if (result.ok) {
+        clearStore();
+        goto(`../${result.result.id}`);
+      } else {
+        injectAPIErrors(result.error, {});
+      }
+    }
+  }
+
+  function handleSubmit(evt) {
+    persistStore();
+    if (evt.submitter.name === "backward") {
+      goto(navInfo.previous);
+    } else if (evt.submitter.name === "forward") {
+      if (validate($serviceCache, navInfo.schema)) {
+        console.log("page is valid");
+        goto(navInfo.next);
+      }
+    } else if (evt.submitter.name === "validate") {
+      if (validate($serviceCache, navInfo.schema)) {
+        console.log("page is valid");
+        handlePublish();
+      }
+    } else {
+      console.log("Invalid submitter button name", evt.submitter.name);
+    }
+  }
 </script>
 
 <style>
@@ -64,14 +210,20 @@
       </div>
     </div>
   </CenteredGrid>
+  <form on:submit|preventDefault={handleSubmit} novalidate>
+    <CenteredGrid gridRow="2" roundedbg>
+      <div class="col-span-8 col-start-1 mb-8">
+        <slot />
+      </div>
+    </CenteredGrid>
 
-  <CenteredGrid gridRow="2" roundedbg>
-    <div class="col-span-8 col-start-1 mb-8">
-      <slot name="content" />
-    </div>
-  </CenteredGrid>
-
-  <CenteredGrid gridRow="3" sticky>
-    <slot name="navbar" />
-  </CenteredGrid>
+    <CenteredGrid gridRow="3" sticky>
+      <NavButtons
+        _currentPageIsValid={isValid(navInfo.schema)}
+        withBack={!!navInfo?.previous}
+        withForward={!!navInfo?.next}
+        withValidate={navInfo?.last}
+        withDraft />
+    </CenteredGrid>
+  </form>
 </EnsureLoggedIn>

@@ -4,7 +4,8 @@ import { getApiURL, htmlToMarkdown } from "$lib/utils";
 import { token } from "$lib/auth";
 
 export async function submit(structure, modify = false) {
-  structure.fullDesc = htmlToMarkdown(structure.fullDesc);
+  if (structure.fullDesc)
+    structure.fullDesc = htmlToMarkdown(structure.fullDesc);
   const url = modify
     ? `${getApiURL()}/structures/${structure.slug}/`
     : `${getApiURL()}/structures/`;

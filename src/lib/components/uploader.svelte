@@ -2,6 +2,8 @@
   import { getApiURL } from "$lib/utils";
   export let fileKeys = [];
   export let disabled;
+  export let name;
+
   let progress = null;
   let uploadInput;
 
@@ -50,8 +52,8 @@
 <form on:submit|preventDefault={handleSubmit}>
   <label>
     <input
+      {name}
       on:blur
-      on:input
       bind:this={uploadInput}
       on:change={handleSubmit}
       {disabled}

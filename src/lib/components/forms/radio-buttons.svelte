@@ -1,5 +1,5 @@
 <script>
-  export let group, choices, disabled;
+  export let group, choices, disabled, name;
 </script>
 
 <style lang="postcss">
@@ -12,8 +12,8 @@
   <label class="flex flex-row items-center focus-within:shadow-focus">
     <input
       type="radio"
+      {name}
       on:blur
-      on:input
       bind:group
       value={choice.value}
       class="hidden"

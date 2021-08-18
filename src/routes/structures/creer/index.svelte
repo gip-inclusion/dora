@@ -14,14 +14,12 @@
   let selectedEstablishment;
   let structure = {};
 
-  let formErrors = {};
   let alreadyClaimedEstablishment;
 
   function handleCityChange(city) {
     selectedCity = city;
     structure = {};
     selectedEstablishment = null;
-    formErrors = {};
   }
 
   async function establishmentAlreadyCreated(siret) {
@@ -35,7 +33,6 @@
   async function handleEstablishmentChange(establishment) {
     selectedEstablishment = establishment;
     alreadyClaimedEstablishment = null;
-    formErrors = {};
     structure = {};
     if (establishment) {
       alreadyClaimedEstablishment = await establishmentAlreadyCreated(
@@ -105,6 +102,9 @@
       >.
     </p>
   </div>
-{:else if structure.siret}
-  <StructureForm {structure} formTitle="Présentez votre structure" />
 {/if}
+
+<StructureForm
+  {structure}
+  formTitle="Présentez votre structure"
+  visible={structure.siret} />

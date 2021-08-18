@@ -6,10 +6,10 @@
   export let withForward = false;
   export let withValidate = false;
   export let withDraft = false;
-  export let validateLabel = "Valider";
+  export let currentPageIsValid;
 </script>
 
-<form on:submit|preventDefault class="col-span-full col-start-1 ">
+<div class="col-span-full col-start-1 ">
   <div class="flex flex-row gap-6">
     {#if withBack}
       <Button
@@ -33,6 +33,7 @@
         name="forward"
         type="submit"
         label="Suivant"
+        disabled={currentPageIsValid}
         icon={arrowRightSIcon}
         iconOnRight />
     {/if}
@@ -40,9 +41,10 @@
       <Button
         name="validate"
         type="submit"
-        label={validateLabel}
+        label="Publier"
+        disabled={currentPageIsValid}
         icon={arrowRightSIcon}
         iconOnRight />
     {/if}
   </div>
-</form>
+</div>

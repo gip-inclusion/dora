@@ -1,5 +1,5 @@
 <script>
-  export let group, choices, disabled;
+  export let group, choices, disabled, name;
 </script>
 
 <style lang="postcss">
@@ -12,8 +12,8 @@
   <label class="flex flex-row items-center">
     <input
       on:blur
-      on:input
       bind:group
+      {name}
       value={choice.value}
       type="checkbox"
       class="hidden"

@@ -5,6 +5,7 @@
   export let toggleYesText = "Oui";
   export let toggleNoText = "Non";
   export let disabled = false;
+  export let name;
 </script>
 
 <style lang="postcss">
@@ -31,11 +32,11 @@
 
 <div class="relative flex flex-row">
   <input
+    {name}
     type="checkbox"
     bind:checked
     class="hidden"
     on:blur
-    on:input
     {disabled} />
   <!-- path -->
   <div

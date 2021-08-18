@@ -12,6 +12,7 @@
     padding: 0 var(--s16);
     border-bottom: 2px solid var(--col-gray-02);
     color: var(--col-text-alt2);
+    cursor: default;
     font-size: var(--f16);
     text-align: center;
   }
@@ -22,6 +23,6 @@
   }
 </style>
 
-<a href={target} class:active>
+<a href="" class:active>
   {name}
 </a>

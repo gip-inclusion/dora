@@ -2,6 +2,7 @@
   import AutoComplete from "./simple-autocomplete.svelte";
   import { checkIcon } from "$lib/icons.js";
 
+  export let name;
   export let choices = undefined;
   export let value = undefined;
   export let selectedItem = undefined;
@@ -53,6 +54,8 @@
 </style>
 
 <AutoComplete
+  {name}
+  on:blur
   {localFiltering}
   {labelFieldName}
   {valueFieldName}

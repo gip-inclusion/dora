@@ -11,6 +11,7 @@
   export let selectedItem = undefined;
 
   export let type;
+  export let name;
 
   export let choices = [];
 
@@ -38,16 +39,23 @@
 
 {#if type === "checkboxes"}
   <div class="flex flex-col gap-1">
-    <Checkboxes bind:group={value} {choices} {disabled} />
+    <Checkboxes {name} bind:group={value} {choices} {disabled} />
   </div>
 {:else if type === "radios"}
   <div class="flex flex-col gap-1">
-    <RadioButtons bind:group={value} {choices} {disabled} />
+    <RadioButtons {name} bind:group={value} {choices} {disabled} />
   </div>
 {:else if type === "select"}
-  <Select {choices} bind:value bind:selectedItem {placeholder} {disabled} />
+  <Select
+    {name}
+    {choices}
+    bind:value
+    bind:selectedItem
+    {placeholder}
+    {disabled} />
 {:else if type === "multiselect"}
   <Select
+    {name}
     {choices}
     bind:value
     bind:selectedItem
@@ -55,11 +63,11 @@
     {placeholder}
     {disabled} />
 {:else if type === "text"}
-  <input on:blur on:input bind:value type="text" {placeholder} {disabled} />
+  <input {name} on:blur bind:value type="text" {placeholder} {disabled} />
 {:else if type === "textarea"}
   <textarea
+    {name}
     on:blur
-    on:input
     bind:value
     type="text"
     {maxLength}
@@ -68,34 +76,40 @@
     rows="4" />
 {:else if type === "richtext"}
   <RichText
+    {name}
     bind:htmlContent={value}
     {placeholder}
     initialContent={value}
     {disabled} />
 {:else if type === "toggle"}
-  <Toggle bind:checked={value} {disabled} {toggleYesText} {toggleNoText} />
+  <Toggle
+    {name}
+    bind:checked={value}
+    {disabled}
+    {toggleYesText}
+    {toggleNoText} />
 {:else if type === "password"}
-  <input on:blur on:input bind:value type="password" {placeholder} {disabled} />
+  <input {name} on:blur bind:value type="password" {placeholder} {disabled} />
 {:else if type === "date"}
-  <input on:blur on:input bind:value type="date" {placeholder} {disabled} />
+  <input {name} on:blur bind:value type="date" {placeholder} {disabled} />
 {:else if type === "number"}
   <input
+    {name}
     on:blur
-    on:input
     bind:value
     type="number"
-    {minValue}
+    min={minValue}
     {placeholder}
     {disabled} />
 {:else if type === "email"}
-  <input on:blur on:input bind:value type="email" {placeholder} {disabled} />
+  <input {name} on:blur bind:value type="email" {placeholder} {disabled} />
 {:else if type === "hidden"}
-  <input on:blur on:input bind:value type="hidden" {disabled} />
+  <input {name} on:blur bind:value type="hidden" {disabled} />
 {:else if type === "tel"}
-  <input on:blur on:input bind:value type="tel" {placeholder} {disabled} />
+  <input {name} on:blur bind:value type="tel" {placeholder} {disabled} />
 {:else if type === "url"}
-  <input on:blur on:input bind:value type="url" {placeholder} {disabled} />
+  <input {name} on:blur bind:value type="url" {placeholder} {disabled} />
 {:else if type === "files"}
-  <Uploader on:blur on:input bind:fileKeys={value} {disabled} />
+  <Uploader {name} on:blur bind:fileKeys={value} {disabled} />
 {/if}
 <span />

@@ -1,11 +1,15 @@
 <script>
+  import { contextValidationKey } from "$lib/validation";
+
+  import { getContext } from "svelte";
+
   import Input from "./input.svelte";
   import Label from "./label.svelte";
   import Alert from "./alert.svelte";
 
   export let value = undefined;
   export let selectedItem = undefined;
-
+  export let name;
   export let type;
   export let errorMessage = undefined;
 
@@ -26,6 +30,12 @@
   export let toggleNoText = undefined;
 
   const layoutClass = vertical ? "flex-col " : "flex-row";
+
+  const context = getContext(contextValidationKey);
+
+  function handleBlur(evt) {
+    if (context) context.onBlur(evt);
+  }
 </script>
 
 <style lang="postcss">
@@ -54,8 +64,9 @@
       <div class="flex flex-col flex-grow min-h-6 ml-4">
         {#if type !== "custom"}
           <Input
-            on:input
+            on:blur={handleBlur}
             {type}
+            {name}
             bind:value
             bind:selectedItem
             {choices}

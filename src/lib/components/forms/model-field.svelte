@@ -2,6 +2,7 @@
   import Field from "./field.svelte";
 
   export let value = undefined;
+  export let name;
   export let selectedItem = undefined;
   export let label = undefined;
   export let type;
@@ -21,7 +22,8 @@
 <Field
   bind:value
   bind:selectedItem
-  on:input
+  on:blur
+  {name}
   {errorMessage}
   required={field.required}
   maxLength={field.maxLength}

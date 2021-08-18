@@ -1,38 +1,20 @@
-import * as yup from "yup";
-import { setLocale } from "yup";
+import "./schema-i18n.js";
+import { object, string } from "yup";
+import { phone, postalCode } from "./schema-utils.js";
 
-setLocale({
-  mixed: {
-    required: "Ce champ est requis",
-  },
-  string: {
-    length: "Ce champ doit faire ${length} caractères",
-    min: "Ce champ ne doit pas avoir moins de ${min} caractères",
-    max: "Ce champ ne doit pas dépasser ${max} caractères",
-    email:
-      "Veuillez saisir une adresse e-mail valide (ex: nom.prenom@organisation.fr)",
-    url: "Veuillez saisir une URL valide (ex: https://exemple.fr)",
-  },
-});
-
-export default yup.object().shape({
-  siret: yup
-    .string()
+export default object().shape({
+  siret: string()
     .matches(/^\d{14}$/u, "Ce champ doit comporter 14 chiffres")
     .required(),
-  name: yup.string().max(255).required(),
-  typology: yup.string().ensure().max(10).required(),
-  address1: yup.string().max(255).required(),
-  address2: yup.string().max(255),
-  postalCode: yup
-    .string()
-    .matches(/^\d[0-9abAB]\d{3}$/u, "Veuillez saisir un code postal valide")
-    .length(5)
-    .required(),
-  city: yup.string().max(255).required(),
-  phone: yup.string().max(10),
-  email: yup.string().max(254).email().required(),
-  url: yup.string().max(200).url(),
-  shortDesc: yup.string().max(280).required(),
-  fullDesc: yup.string(),
+  name: string().max(255).required().trim(),
+  typology: string().ensure().max(10).required(),
+  address1: string().max(255).required().trim(),
+  address2: string().max(255).trim(),
+  postalCode: postalCode().required(),
+  city: string().max(255).required().trim(),
+  phone: phone(),
+  email: string().max(254).email().required().lowercase().trim(),
+  url: string().max(200).url().trim(),
+  shortDesc: string().max(280).required().trim(),
+  fullDesc: string().trim(),
 });
