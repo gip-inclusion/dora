@@ -140,11 +140,10 @@
     return result;
   }
 
-  export async function handlePublish() {
+  export async function publish() {
     const validatedData = validate($serviceCache, serviceSchema);
     if (validatedData) {
       // Validation OK, let's send it to the API endpoint
-
       const result = await submit(validatedData);
       if (result.ok) {
         clearStore();
@@ -155,23 +154,26 @@
     }
   }
 
-  function handleSubmit(evt) {
+  function handleGoBack() {
     persistStore();
-    if (evt.submitter.name === "backward") {
-      goto(navInfo.previous);
-    } else if (evt.submitter.name === "forward") {
-      if (validate($serviceCache, navInfo.schema)) {
-        console.log("page is valid");
-        goto(navInfo.next);
-      }
-    } else if (evt.submitter.name === "validate") {
-      if (validate($serviceCache, navInfo.schema)) {
-        console.log("page is valid");
-        handlePublish();
-      }
-    } else {
-      console.log("Invalid submitter button name", evt.submitter.name);
+    goto(navInfo.previous);
+  }
+  function handleGoForward() {
+    persistStore();
+    if (validate($serviceCache, navInfo.schema)) {
+      console.log("page is valid");
+      goto(navInfo.next);
     }
+  }
+  function handlePublish() {
+    persistStore();
+    if (validate($serviceCache, navInfo.schema)) {
+      console.log("page is valid");
+      publish();
+    }
+  }
+  function handleSaveDraft() {
+    console.error("Not implemented");
   }
 </script>
 
@@ -210,20 +212,22 @@
       </div>
     </div>
   </CenteredGrid>
-  <form on:submit|preventDefault={handleSubmit} novalidate>
-    <CenteredGrid gridRow="2" roundedbg>
-      <div class="col-span-8 col-start-1 mb-8">
-        <slot />
-      </div>
-    </CenteredGrid>
+  <CenteredGrid gridRow="2" roundedbg>
+    <div class="col-span-8 col-start-1 mb-8">
+      <slot />
+    </div>
+  </CenteredGrid>
 
-    <CenteredGrid gridRow="3" sticky>
-      <NavButtons
-        _currentPageIsValid={isValid(navInfo.schema)}
-        withBack={!!navInfo?.previous}
-        withForward={!!navInfo?.next}
-        withValidate={navInfo?.last}
-        withDraft />
-    </CenteredGrid>
-  </form>
+  <CenteredGrid gridRow="3" sticky>
+    <NavButtons
+      _currentPageIsValid={isValid(navInfo.schema)}
+      onGoBack={handleGoBack}
+      onGoForward={handleGoForward}
+      onPublish={handlePublish}
+      onSaveDraft={handleSaveDraft}
+      withBack={!!navInfo?.previous}
+      withForward={!!navInfo?.next}
+      withPublish={navInfo?.last}
+      withDraft />
+  </CenteredGrid>
 </EnsureLoggedIn>

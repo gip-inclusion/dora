@@ -4,8 +4,9 @@
   import { arrowRightSIcon, arrowLeftCircleIcon } from "$lib/icons.js";
   export let withBack = false;
   export let withForward = false;
-  export let withValidate = false;
+  export let withPublish = false;
   export let withDraft = false;
+  export let onGoBack, onGoForward, onPublish, onSaveDraft;
   export let currentPageIsValid;
 </script>
 
@@ -13,8 +14,8 @@
   <div class="flex flex-row gap-6">
     {#if withBack}
       <Button
+        on:click={onGoBack}
         name="backward"
-        type="submit"
         label="Étape précédente"
         icon={arrowLeftCircleIcon}
         noBackground
@@ -23,24 +24,24 @@
     <div class="flex-grow" />
     {#if withDraft}
       <Button
+        on:click={onSaveDraft}
         name="save_draft"
-        type="submit"
         label="Enregistrer comme brouillon"
         tertiary />
     {/if}
     {#if withForward}
       <Button
+        on:click={onGoForward}
         name="forward"
-        type="submit"
         label="Suivant"
         disabled={currentPageIsValid}
         icon={arrowRightSIcon}
         iconOnRight />
     {/if}
-    {#if withValidate}
+    {#if withPublish}
       <Button
+        on:click={onPublish}
         name="validate"
-        type="submit"
         label="Publier"
         disabled={currentPageIsValid}
         icon={arrowRightSIcon}
