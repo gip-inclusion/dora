@@ -54,7 +54,7 @@ export async function siretWasAlreadyClaimed(siret) {
 }
 
 export async function getStructure(slug) {
-  const url = `${getApiURL()}/structures/${slug}`;
+  const url = `${getApiURL()}/structures/${slug}/`;
   const res = await fetch(url, {
     headers: {
       Accept: "application/json; version=1.0",
