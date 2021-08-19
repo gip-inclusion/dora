@@ -5,11 +5,33 @@
   import FieldHelp from "$lib/components/forms/field-help.svelte";
   import ModelField from "$lib/components/forms/model-field.svelte";
   import Field from "$lib/components/forms/field.svelte";
+  import CitySearch from "$lib/components/forms/city-search.svelte";
+  import AddressSearch from "$lib/components/forms/street-search.svelte";
+
   import { formErrors } from "$lib/validation.js";
 
   import CustomLayout from "./_custom-layout.svelte";
 
   let autoSuspend = false;
+
+  function handleCityChange(city) {
+    const props = city?.value.properties;
+    $serviceCache.city = props?.name;
+    $serviceCache.cityCode = props?.citycode;
+  }
+
+  function handleAddressChange(address) {
+    const props = address?.value.properties;
+    const coords = address?.value.geometry.coordinates;
+    const lat = coords?.[1];
+    const long = coords?.[0];
+    $serviceCache.address1 = props?.name;
+    $serviceCache.postalCode = props?.postcode;
+    $serviceCache.longitude = long;
+    $serviceCache.latitude = lat;
+  }
+
+  $: console.log($serviceCache);
 </script>
 
 <CustomLayout>
@@ -70,20 +92,31 @@
         name="remoteUrl"
         errorMessage={$formErrors.remoteUrl}
         bind:value={$serviceCache.remoteUrl} />
-      <ModelField
-        type="text"
-        placeholder="Saisissez et validez votre ville"
-        field={$serviceOptions.city}
-        name="city"
+
+      <Field
+        type="custom"
+        label="Commune"
         errorMessage={$formErrors.city}
-        bind:value={$serviceCache.city} />
-      <ModelField
-        type="text"
-        placeholder="Saisissez et validez votre adresse"
-        field={$serviceOptions.address1}
-        name="address1"
+        required>
+        <CitySearch
+          slot="custom-input"
+          placeholder="Saisissez et validez votre ville"
+          bind:selectedItem={$serviceCache._currentCity}
+          handleChange={handleCityChange} />
+      </Field>
+      <Field
+        type="custom"
+        label="Adresse"
         errorMessage={$formErrors.address1}
-        bind:value={$serviceCache.address1} />
+        required>
+        <AddressSearch
+          slot="custom-input"
+          disabled={!$serviceCache.cityCode}
+          cityCode={$serviceCache.cityCode}
+          placeholder="Saisissez et validez votre adresse"
+          bind:selectedItem={$serviceCache._currentAddress}
+          handleChange={handleAddressChange} />
+      </Field>
       <ModelField
         type="text"
         placeholder="Compléments d’adresse"

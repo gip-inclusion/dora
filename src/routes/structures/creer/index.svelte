@@ -2,10 +2,10 @@
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
   import Field from "$lib/components/forms/field.svelte";
+  import CitySearch from "$lib/components/forms/city-search.svelte";
 
   import StructureForm from "../_structure_form.svelte";
   import SiretSearch from "./_siret_search.svelte";
-  import CitySearch from "./_city_search.svelte";
   import { siretWasAlreadyClaimed } from "$lib/structures";
 
   import { alertIcon } from "$lib/icons.js";
