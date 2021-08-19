@@ -36,7 +36,6 @@
 
   export let currentStep = Step1;
   export let modify = false;
-
   function handleBlur(elt) {
     const schema = serviceSchema.pick([elt.target.name]);
     const validatedData = validate($serviceCache, schema);
@@ -129,7 +128,7 @@
       const result = await submit(validatedData);
       if (result.ok) {
         resetServiceCache();
-        goto(`../${result.result.slug}`);
+        goto(`/services/${result.result.slug}`);
       } else {
         injectAPIErrors(result.error, {});
       }
