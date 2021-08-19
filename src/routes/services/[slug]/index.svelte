@@ -17,6 +17,7 @@
 <script>
   import { page } from "$app/stores";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
 
   export let service, structure;
 
@@ -30,7 +31,7 @@
 <CenteredGrid>
   <div class="col-start-1 col-span-full">
     <h1>{service.name}</h1>
-
+    <LinkButton type="submit" to={editLink} label="Éditer" />
     <strong>id : </strong>{service.id} <br />
     <strong>name : </strong>{service.name} <br />
     <strong>shortDesc : </strong>{service.shortDesc} <br />
