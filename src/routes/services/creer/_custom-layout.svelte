@@ -17,7 +17,11 @@
 
   import { serviceOptions } from "./_creation-store.js";
   import NavLink from "./_navlink.svelte";
-  import { serviceCache } from "./_creation-store.js";
+  import {
+    serviceCache,
+    resetServiceCache,
+    persistServiceCache,
+  } from "./_creation-store.js";
   import NavButtons from "./_nav-buttons.svelte";
   import { storageKey } from "./_constants.js";
 
@@ -97,16 +101,6 @@
     };
   });
 
-  function clearStore() {
-    localStorage.removeItem(storageKey);
-  }
-
-  export function persistStore() {
-    if (browser) {
-      localStorage.setItem(storageKey, JSON.stringify(get(serviceCache)));
-    }
-  }
-
   function isValid(schema) {
     return schema.isValidSync($serviceCache);
   }
@@ -142,12 +136,13 @@
 
   export async function publish() {
     const validatedData = validate($serviceCache, serviceSchema);
+
     if (validatedData) {
       // Validation OK, let's send it to the API endpoint
       const result = await submit(validatedData);
       if (result.ok) {
-        clearStore();
-        goto(`../${result.result.id}`);
+        resetServiceCache();
+        goto(`../${result.result.slug}`);
       } else {
         injectAPIErrors(result.error, {});
       }
@@ -155,18 +150,18 @@
   }
 
   function handleGoBack() {
-    persistStore();
+    persistServiceCache();
     goto(navInfo.previous);
   }
   function handleGoForward() {
-    persistStore();
+    persistServiceCache();
     if (validate($serviceCache, navInfo.schema)) {
       console.log("page is valid");
       goto(navInfo.next);
     }
   }
   function handlePublish() {
-    persistStore();
+    persistServiceCache();
     if (validate($serviceCache, navInfo.schema)) {
       console.log("page is valid");
       publish();
