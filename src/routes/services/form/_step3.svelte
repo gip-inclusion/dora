@@ -80,9 +80,9 @@
       label="Le formulaire en ligne à compléter"
       placeholder="URL"
       type="url"
-      field={serviceOptions.onlineForms}
-      name="onlineForms"
-      errorMessage={$formErrors.onlineForms}
-      bind:value={$serviceCache.onlineForms} />
+      field={serviceOptions.onlineForm}
+      name="onlineForm"
+      errorMessage={$formErrors.onlineForm}
+      bind:value={$serviceCache.onlineForm} />
   </FieldSet>
 {/if}

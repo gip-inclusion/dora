@@ -62,7 +62,7 @@
         <li><a class="underline" href={form.url}>{form.name}</a></li>
       {/each}
     </ul>
-    <strong>onlineForms : </strong>{service.onlineForms} <br />
+    <strong>onlineForm : </strong>{service.onlineForm} <br />
     <strong>contactName : </strong>{service.contactName} <br />
     <strong>contactPhone : </strong>{service.contactPhone} <br />
     <strong>contactEmail : </strong>{service.contactEmail} <br />
