@@ -35,7 +35,7 @@ const shape3 = {
   requirements: number().positive(),
   credentials: number().positive(),
   forms: array(string().max(1024)),
-  onlineForms: string().max(280).trim(),
+  onlineForm: string().max(280).trim(),
 };
 
 const shape4 = {

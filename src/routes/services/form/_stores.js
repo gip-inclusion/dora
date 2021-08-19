@@ -31,5 +31,3 @@ export function resetServiceCache() {
 export function persistServiceCache() {
   localStorage.setItem(storageKey, JSON.stringify(get(serviceCache)));
 }
-
-export const serviceOptions = writable(null);

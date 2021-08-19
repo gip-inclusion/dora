@@ -1,9 +1,8 @@
 <script>
-  import { onMount, setContext } from "svelte";
+  import { setContext } from "svelte";
   import { get } from "svelte/store";
 
   import { goto } from "$app/navigation";
-  import { browser } from "$app/env";
 
   import { token } from "$lib/auth";
   import { getApiURL } from "$lib/utils";
@@ -15,15 +14,13 @@
     contextValidationKey,
   } from "$lib/validation.js";
 
-  import { serviceOptions } from "./_creation-store.js";
   import NavLink from "./_navlink.svelte";
   import {
     serviceCache,
     resetServiceCache,
     persistServiceCache,
-  } from "./_creation-store.js";
+  } from "./_stores.js";
   import NavButtons from "./_nav-buttons.svelte";
-  import { storageKey } from "./_constants.js";
 
   import serviceSchema, {
     step1,
@@ -31,8 +28,14 @@
     step3,
     step4,
   } from "$lib/schemas/service.js";
-  import { page } from "$app/stores";
 
+  import Step1 from "./_step1.svelte";
+  import Step2 from "./_step2.svelte";
+  import Step3 from "./_step3.svelte";
+  import Step4 from "./_step4.svelte";
+
+  export let currentStep = Step1;
+  export let modify = false;
   function handleBlur(elt) {
     const schema = serviceSchema.pick([elt.target.name]);
     const validatedData = validate($serviceCache, schema);
@@ -45,34 +48,32 @@
     onBlur: handleBlur,
   });
 
-  const currentPath = $page.path.split("/").pop();
-  let navInfo = {
-    currentPath,
-  };
-  switch (currentPath) {
-    case "etape1":
+  let navInfo = {};
+
+  $: switch (currentStep) {
+    case Step1:
       navInfo = {
-        next: "etape2",
+        next: Step2,
         schema: step1,
       };
       break;
-    case "etape2":
+    case Step2:
       navInfo = {
-        previous: "etape1",
-        next: "etape3",
+        previous: Step1,
+        next: Step3,
         schema: step2,
       };
       break;
-    case "etape3":
+    case Step3:
       navInfo = {
-        previous: "etape2",
-        next: "etape4",
+        previous: Step2,
+        next: Step4,
         schema: step3,
       };
       break;
-    case "etape4":
+    case Step4:
       navInfo = {
-        previous: "etape3",
+        previous: Step3,
         last: true,
         schema: step4,
       };
@@ -81,34 +82,19 @@
       console.log("?");
   }
 
-  onMount(async () => {
-    const url = `${getApiURL()}/services/`;
-    const res = await fetch(url, {
-      method: "OPTIONS",
-      headers: {
-        Accept: "application/json; version=1.0",
-        Authorization: `Token ${$token}`,
-      },
-    });
-
-    if (res.ok) {
-      $serviceOptions = (await res.json()).actions.POST;
-    }
-
-    return {
-      status: res.status,
-      error: new Error(`Could not load ${url}`),
-    };
-  });
-
-  function isValid(schema) {
-    return schema.isValidSync($serviceCache);
+  function isValid(_schema) {
+    // TODO
+    // return schema.isValidSync($serviceCache);
   }
 
   async function submit(service) {
-    const url = `${getApiURL()}/services/`;
+    const url = modify
+      ? `${getApiURL()}/services/${service.slug}/`
+      : `${getApiURL()}/services/`;
+    const method = modify ? "PATCH" : "POST";
+
     const res = await fetch(url, {
-      method: "POST",
+      method,
       headers: {
         Accept: "application/json; version=1.0",
         "Content-Type": "application/json",
@@ -142,7 +128,7 @@
       const result = await submit(validatedData);
       if (result.ok) {
         resetServiceCache();
-        goto(`../${result.result.slug}`);
+        goto(`/services/${result.result.slug}`);
       } else {
         injectAPIErrors(result.error, {});
       }
@@ -151,13 +137,13 @@
 
   function handleGoBack() {
     persistServiceCache();
-    goto(navInfo.previous);
+    currentStep = navInfo.previous;
   }
   function handleGoForward() {
     persistServiceCache();
     if (validate($serviceCache, navInfo.schema)) {
       console.log("page is valid");
-      goto(navInfo.next);
+      currentStep = navInfo.next;
     }
   }
   function handlePublish() {
