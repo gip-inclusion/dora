@@ -3,7 +3,6 @@
   import { get } from "svelte/store";
 
   import { goto } from "$app/navigation";
-  import { browser } from "$app/env";
 
   import { token } from "$lib/auth";
   import { getApiURL } from "$lib/utils";
@@ -15,15 +14,14 @@
     contextValidationKey,
   } from "$lib/validation.js";
 
-  import { serviceOptions } from "./_creation-store.js";
   import NavLink from "./_navlink.svelte";
   import {
     serviceCache,
     resetServiceCache,
     persistServiceCache,
-  } from "./_creation-store.js";
+    serviceOptions,
+  } from "./_stores.js";
   import NavButtons from "./_nav-buttons.svelte";
-  import { storageKey } from "./_constants.js";
 
   import serviceSchema, {
     step1,
@@ -101,8 +99,9 @@
     };
   });
 
-  function isValid(schema) {
-    return schema.isValidSync($serviceCache);
+  function isValid(_schema) {
+    // TODO
+    // return schema.isValidSync($serviceCache);
   }
 
   async function submit(service) {

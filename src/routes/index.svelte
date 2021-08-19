@@ -11,6 +11,7 @@
       label="Créer une structure"
       to="/structures/creer"
       noBackground />
+    <LinkButton label="Voir les services" to="/services" noBackground />
     <LinkButton label="Créer un service" to="/services/creer" noBackground />
   </div>
 </CenteredGrid>
