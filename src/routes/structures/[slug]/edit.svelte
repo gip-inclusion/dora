@@ -19,7 +19,7 @@
 </svelte:head>
 
 <EnsureLoggedIn>
-  <CenteredGrid gridRow="2" roundedbg>
+  <CenteredGrid roundedbg>
     <div class="col-span-8 col-start-1 mb-4">
       <StructureForm
         {structure}

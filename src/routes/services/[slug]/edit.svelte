@@ -8,9 +8,7 @@
 
 <script>
   import { onMount } from "svelte";
-
-  import { getApiURL } from "$lib/utils";
-  import { token } from "$lib/auth";
+  import { getServiceOptions } from "$lib/services";
 
   import { serviceCache } from "../form/_stores.js";
 
@@ -23,24 +21,7 @@
 
   onMount(async () => {
     $serviceCache = service;
-
-    const url = `${getApiURL()}/services/`;
-    const res = await fetch(url, {
-      method: "OPTIONS",
-      headers: {
-        Accept: "application/json; version=1.0",
-        Authorization: `Token ${$token}`,
-      },
-    });
-
-    if (res.ok) {
-      serviceOptions = (await res.json()).actions.POST;
-    }
-
-    return {
-      status: res.status,
-      error: new Error(`Could not load ${url}`),
-    };
+    serviceOptions = await getServiceOptions();
   });
 </script>
 

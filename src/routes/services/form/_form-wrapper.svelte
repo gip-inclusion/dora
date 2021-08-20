@@ -142,14 +142,12 @@
   function handleGoForward() {
     persistServiceCache();
     if (validate($serviceCache, navInfo.schema)) {
-      console.log("page is valid");
       currentStep = navInfo.next;
     }
   }
   function handlePublish() {
     persistServiceCache();
     if (validate($serviceCache, navInfo.schema)) {
-      console.log("page is valid");
       publish();
     }
   }

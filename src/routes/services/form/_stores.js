@@ -16,7 +16,7 @@ const defaultServiceCache = {
   subcategories: [],
   beneficiariesAccessModes: [],
   coachOrientationModes: [],
-  locationKind: [],
+  locationKinds: [],
 };
 
 export const serviceCache = writable(

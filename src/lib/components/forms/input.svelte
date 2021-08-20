@@ -15,6 +15,7 @@
 
   export let choices = [];
 
+  export let readonly = false;
   export let disabled = false;
   export let placeholder = "";
   export let minValue = null;
@@ -39,15 +40,19 @@
   :global(input:disabled, textarea:disabled, select:disabled) {
     background-color: var(--col-gray-00);
   }
+
+  :global(input:read-only, textarea:read-only, select:read-only) {
+    color: var(--col-gray-03);
+  }
 </style>
 
 {#if type === "checkboxes"}
   <div class="flex flex-col gap-1">
-    <Checkboxes {name} bind:group={value} {choices} {disabled} />
+    <Checkboxes {name} bind:group={value} {choices} {disabled} {readonly} />
   </div>
 {:else if type === "radios"}
   <div class="flex flex-col gap-1">
-    <RadioButtons {name} bind:group={value} {choices} {disabled} />
+    <RadioButtons {name} bind:group={value} {choices} {disabled} {readonly} />
   </div>
 {:else if type === "select"}
   <Select
@@ -56,7 +61,8 @@
     bind:value
     bind:selectedItem
     {placeholder}
-    {disabled} />
+    {disabled}
+    {readonly} />
 {:else if type === "multiselect"}
   <Select
     {name}
@@ -65,9 +71,17 @@
     bind:selectedItem
     multiple
     {placeholder}
-    {disabled} />
+    {disabled}
+    {readonly} />
 {:else if type === "text"}
-  <input {name} on:blur bind:value type="text" {placeholder} {disabled} />
+  <input
+    {name}
+    on:blur
+    bind:value
+    type="text"
+    {placeholder}
+    {disabled}
+    {readonly} />
 {:else if type === "textarea"}
   <textarea
     {name}
@@ -77,6 +91,7 @@
     {maxLength}
     {placeholder}
     {disabled}
+    {readonly}
     rows="4" />
 {:else if type === "richtext"}
   <RichText
@@ -84,18 +99,34 @@
     bind:htmlContent={value}
     {placeholder}
     initialContent={value}
-    {disabled} />
+    {disabled}
+    {readonly} />
 {:else if type === "toggle"}
   <Toggle
     {name}
     bind:checked={value}
     {disabled}
+    {readonly}
     {toggleYesText}
     {toggleNoText} />
 {:else if type === "password"}
-  <input {name} on:blur bind:value type="password" {placeholder} {disabled} />
+  <input
+    {name}
+    on:blur
+    bind:value
+    type="password"
+    {placeholder}
+    {disabled}
+    {readonly} />
 {:else if type === "date"}
-  <input {name} on:blur bind:value type="date" {placeholder} {disabled} />
+  <input
+    {name}
+    on:blur
+    bind:value
+    type="date"
+    {placeholder}
+    {disabled}
+    {readonly} />
 {:else if type === "number"}
   <input
     {name}
@@ -104,16 +135,38 @@
     type="number"
     min={minValue}
     {placeholder}
-    {disabled} />
+    {disabled}
+    {readonly} />
 {:else if type === "email"}
-  <input {name} on:blur bind:value type="email" {placeholder} {disabled} />
+  <input
+    {name}
+    on:blur
+    bind:value
+    type="email"
+    {placeholder}
+    {disabled}
+    {readonly} />
 {:else if type === "hidden"}
-  <input {name} on:blur bind:value type="hidden" {disabled} />
+  <input {name} on:blur bind:value type="hidden" {disabled} {readonly} />
 {:else if type === "tel"}
-  <input {name} on:blur bind:value type="tel" {placeholder} {disabled} />
+  <input
+    {name}
+    on:blur
+    bind:value
+    type="tel"
+    {placeholder}
+    {disabled}
+    {readonly} />
 {:else if type === "url"}
-  <input {name} on:blur bind:value type="url" {placeholder} {disabled} />
+  <input
+    {name}
+    on:blur
+    bind:value
+    type="url"
+    {placeholder}
+    {disabled}
+    {readonly} />
 {:else if type === "files"}
-  <Uploader {name} on:blur bind:fileKeys={value} {disabled} />
+  <Uploader {name} on:blur bind:fileKeys={value} {disabled} {readonly} />
 {/if}
 <span />

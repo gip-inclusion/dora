@@ -1,6 +1,7 @@
 import insane from "insane";
-
+import { get } from "svelte/store";
 import { getApiURL, markdownToHTML } from "$lib/utils.js";
+import { token } from "$lib/auth";
 
 export async function getServices() {
   const url = `${getApiURL()}/services/`;
@@ -23,9 +24,7 @@ export async function getServices() {
 }
 
 export async function getService(slug) {
-  console.log(slug);
   const url = `${getApiURL()}/services/${slug}/`;
-  console.log(url);
   const res = await fetch(url, {
     headers: {
       Accept: "application/json; version=1.0",
@@ -43,4 +42,30 @@ export async function getService(slug) {
     status: res.status,
     error: new Error(`Could not load ${url}`),
   };
+}
+
+export async function getServiceOptions() {
+  const url = `${getApiURL()}/services/`;
+  const res = await fetch(url, {
+    method: "OPTIONS",
+    headers: {
+      Accept: "application/json; version=1.0",
+      Authorization: `Token ${get(token)}`,
+    },
+  });
+
+  const result = {
+    ok: res.ok,
+    status: res.status,
+  };
+  if (res.ok) {
+    result.result = (await res.json()).actions.POST;
+  } else {
+    try {
+      result.error = await res.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  return result;
 }

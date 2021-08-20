@@ -6,8 +6,9 @@
 </script>
 
 <style>
-  .wrapper {
+  .content {
     display: flex;
+    background-color: var(--col-bg);
   }
 
   .centered {
@@ -31,24 +32,36 @@
   }
 
   .roundedbg {
-    background-color: var(--col-gray-bg);
-    border-top-left-radius: 2.5rem /* 40px */;
-    border-top-right-radius: 2.5rem /* 40px */;
+    background-color: var(--col-content-bg, var(--col-gray-bg));
+    border-top-left-radius: var(--s40);
+    border-top-right-radius: var(--s40);
   }
 
   .bordertop {
     border-color: var(--col-gray-03);
     border-top-width: 1px;
   }
+
+  :global(.global-content-wrapper) .padded {
+    padding-top: var(--s56);
+    background-color: var(--col-bg);
+  }
+
+  /* Color under the rounded corners */
+  .wrapper {
+    background-color: var(--col-under-bg, var(--col-bg));
+  }
 </style>
 
-<div
-  class="wrapper"
-  style="grid-row-start: {gridRow};"
-  class:sticky
-  class:roundedbg
-  class:bordertop>
-  <div class="centered">
-    <slot />
+<div class="wrapper" class:padded={gridRow === 1}>
+  <div
+    class="content"
+    style="grid-row-start: {gridRow};"
+    class:sticky
+    class:roundedbg
+    class:bordertop>
+    <div class="centered">
+      <slot />
+    </div>
   </div>
 </div>

@@ -20,6 +20,7 @@
   export let choices = [];
 
   export let disabled = undefined;
+  export let readonly = false;
   export let visible = true;
   export let placeholder = undefined;
   export let description = "";
@@ -74,6 +75,7 @@
             {placeholder}
             {minValue}
             {disabled}
+            {readonly}
             {toggleYesText}
             {toggleNoText} />
         {:else}

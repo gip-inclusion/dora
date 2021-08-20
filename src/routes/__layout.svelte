@@ -35,7 +35,7 @@
   import LogoMinistere from "$lib/assets/logo-ministere-travail.svg";
 </script>
 
-<header class="grid row-start-1 shadow-md mb-7">
+<header class="grid row-start-1 shadow-md z-10 relative">
   <CenteredGrid>
     <div class="flex flex-row items-center row-start-1 col-span-full py-3/2 ">
       <a class="flex flex-row gap-5 " href="/">
@@ -75,14 +75,14 @@
     </div>
   </CenteredGrid>
   <CenteredGrid gridRow="2" bordertop>
-    <div class="flex flex-row col-span-full ">
+    <div class="flex flex-row col-span-full">
       <NavItem label="Forum de l’inclusion" external />
       <NavItem label="Contacter l’équipe" />
     </div>
   </CenteredGrid>
 </header>
 
-<div class="grid row-start-2">
+<div class="global-content-wrapper grid row-start-2">
   <slot />
 </div>
 

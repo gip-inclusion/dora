@@ -14,8 +14,8 @@ const shape1 = {
 };
 
 const shape2 = {
-  accessConditions: number().positive(),
-  concernedPublic: number().positive(),
+  accessConditions: array(string()),
+  concernedPublic: array(string()),
   isCumulative: boolean(),
   hasFee: boolean(),
   feeDetails: string().max(140).trim(),
@@ -32,8 +32,8 @@ const shape3 = {
     is: (value) => value.includes("OT"),
     then: string().max(280).required(),
   }),
-  requirements: number().positive(),
-  credentials: number().positive(),
+  requirements: array(string()),
+  credentials: array(string()),
   forms: array(string().max(1024)),
   onlineForm: string().max(280).trim(),
 };
@@ -43,7 +43,7 @@ const shape4 = {
   contactPhone: phone().required(),
   contactEmail: string().max(254).email().required().lowercase().trim(),
   isContactInfoPublic: boolean(),
-  locationKind: array(string().max(2)).required().min(1),
+  locationKinds: array(string().max(2)).required().min(1),
   remoteUrl: string().max(200).url().trim(),
   city: string().max(255).required().trim(),
   address1: string().max(255).required().trim(),

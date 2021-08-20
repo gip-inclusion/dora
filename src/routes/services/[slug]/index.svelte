@@ -15,83 +15,70 @@
 </script>
 
 <script>
-  import { page } from "$app/stores";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
-
+  import AccessBox from "./_access-box.svelte";
+  import ModalitiesBox from "./_modalities-box.svelte";
+  import OrientationBox from "./_orientation-box.svelte";
+  import ServiceHeader from "./_service-header.svelte";
+  import ServicePresentation from "./_service-presentation.svelte";
   export let service, structure;
-
-  const editLink = `${$page.path}/edit`;
 </script>
 
+<style>
+  .service-pres {
+    grid-column: 1 / 7;
+  }
+
+  .orientation {
+    grid-column: 9 / -1;
+  }
+
+  .service-info {
+    grid-column: 1 / -1;
+    grid-row-start: 2;
+  }
+</style>
+
 <svelte:head>
-  <title>Dora: {service.name}</title>
+  <title>Dora: {service.name} par {structure.name}</title>
 </svelte:head>
 
-<CenteredGrid>
-  <div class="col-start-1 col-span-full">
-    <h1>{service.name}</h1>
-    <LinkButton type="submit" to={editLink} label="Éditer" />
-    <strong>id : </strong>{service.id} <br />
-    <strong>name : </strong>{service.name} <br />
-    <strong>shortDesc : </strong>{service.shortDesc} <br />
-    <strong>fullDesc : </strong>{service.fullDesc} <br />
-    <strong>kinds : </strong>{service.kinds} <br />
-    <strong>categories : </strong>{service.categories} <br />
-    <strong>subcategories : </strong>{service.subcategories} <br />
-    <strong>isCommonLaw : </strong>{service.isCommonLaw} <br />
-    <strong>isCumulative : </strong>{service.isCumulative} <br />
-    <strong>hasFee : </strong>{service.hasFee} <br />
-    <strong>feeDetails : </strong>{service.feeDetails} <br />
-    <strong
-      >beneficiariesAccessModes :
-    </strong>{service.beneficiariesAccessModes}
-    <br />
-    <strong
-      >beneficiariesAccessModesOther :
-    </strong>{service.beneficiariesAccessModesOther} <br />
-    <strong>coachOrientationModes : </strong>{service.coachOrientationModes}
-    <br />
-    <strong
-      >coachOrientationModesOther :
-    </strong>{service.coachOrientationModesOther}
-    <br />
-    <strong>forms : </strong>
-    <ul>
-      {#each service.formsInfo as form}
-        <li><a class="underline" href={form.url}>{form.name}</a></li>
-      {/each}
-    </ul>
-    <strong>onlineForm : </strong>{service.onlineForm} <br />
-    <strong>contactName : </strong>{service.contactName} <br />
-    <strong>contactPhone : </strong>{service.contactPhone} <br />
-    <strong>contactEmail : </strong>{service.contactEmail} <br />
-    <strong>contactUrl : </strong>{service.contactUrl} <br />
-    <strong>isContactInfoPublic : </strong>{service.isContactInfoPublic} <br />
-    <strong>locationKind : </strong>{service.locationKind} <br />
-    <strong>remoteUrl : </strong>{service.remoteUrl} <br />
-    <strong>address1 : </strong>{service.address1} <br />
-    <strong>address2 : </strong>{service.address2} <br />
-    <strong>postalCode : </strong>{service.postalCode} <br />
-    <strong>cityCode : </strong>{service.cityCode} <br />
-    <strong>city : </strong>{service.city} <br />
-    <strong>longitude : </strong>{service.longitude} <br />
-    <strong>latitude : </strong>{service.latitude} <br />
-    <strong>isTimeLimited : </strong>{service.isTimeLimited} <br />
-    <strong>startDate : </strong>{service.startDate} <br />
-    <strong>endDate : </strong>{service.endDate} <br />
-    <strong>recurrence : </strong>{service.recurrence} <br />
-    <strong>recurrenceOther : </strong>{service.recurrenceOther} <br />
-    <strong>suspensionCount : </strong>{service.suspensionCount} <br />
-    <strong>suspensionDate : </strong>{service.suspensionDate} <br />
-    <strong>creationDate : </strong>{service.creationDate} <br />
-    <strong>modificationDate : </strong>{service.modificationDate} <br />
-    <strong>structure : </strong>{service.structure} <br />
-    <strong>creator : </strong>{service.creator} <br />
-    <strong>lastEditor : </strong>{service.lastEditor} <br />
-    <strong>accessConditions : </strong>{service.accessConditions} <br />
-    <strong>concernedPublic : </strong>{service.concernedPublic} <br />
-    <strong>requirements : </strong>{service.requirements} <br />
-    <strong>credentials : </strong>{service.credentials} <br />
+<CenteredGrid --col-bg="var(--col-france-blue)">
+  <ServiceHeader {service} {structure} />
+</CenteredGrid>
+
+<CenteredGrid
+  gridRow="2"
+  roundedbg
+  --col-under-bg="var(--col-france-blue)"
+  --col-content-bg="var(--col-bg)">
+  <div class="service-pres">
+    <ServicePresentation {service} />
+  </div>
+  <div class="orientation">
+    <OrientationBox {service} {structure} />
+    <h3>{structure.name}</h3>
+    <div>{structure.shortDesc}</div>
+    <div>
+      <a href="/structures/{structure.slug}" class="underline"
+        >Voir l’offre complète de services</a>
+    </div>
+  </div>
+  <div class="service-info">
+    <ModalitiesBox {service} />
+    <AccessBox {service} />
   </div>
 </CenteredGrid>
+<!--
+    Champs non utilisés:
+
+    <strong>sous-catégories : </strong>{service.subcategoriesDisplay}
+    <strong>Droit commun : </strong>{service.isCommonLaw}
+    <strong>Limité dans le temps : </strong>{service.isTimeLimited}
+    <strong>Date de début : </strong>{service.startDate}
+    <strong>Date de fin : </strong>{service.endDate}
+    <strong>Récurrence : </strong>{service.recurrence}
+    <strong>Details récurrence : </strong>{service.recurrenceOther}
+    <strong>Suspendre au bout de : </strong>{service.suspensionCount}
+    <strong>Suspendre le : </strong>{service.suspensionDate}
+-->
