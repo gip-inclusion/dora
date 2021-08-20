@@ -3,6 +3,8 @@
 
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
+  import Field from "$lib/components/forms/field.svelte";
+  import Uploader from "$lib/components/uploader.svelte";
   import ModelField from "$lib/components/forms/model-field.svelte";
   import { formErrors } from "$lib/validation.js";
 
@@ -64,16 +66,17 @@
     errorMessage={$formErrors.credentials}
     bind:value={$serviceCache.credentials}
     bind:selectedItem={$serviceCache._credentialsItems} />
-  <ModelField
-    type="files"
-    field={serviceOptions.forms}
-    name="forms"
-    errorMessage={$formErrors.forms}
-    bind:value={$serviceCache.forms}>
+  <Field type="custom" errorMessage={$formErrors.forms}>
     <FieldHelp slot="helptext" title="Justificatifs, documents">
       Mettre tous les documents maintenant, c’est permettre d’avoir des
       candidatures complètes avec moins d’aller/retour
-    </FieldHelp></ModelField>
+    </FieldHelp>
+    <Uploader
+      slot="custom-input"
+      folder={$serviceCache.structure}
+      on:blur
+      bind:fileKeys={$serviceCache.forms} />
+  </Field>
   <ModelField
     label="Le formulaire en ligne à compléter"
     placeholder="URL"

@@ -1,5 +1,7 @@
 <script>
   import { getApiURL } from "$lib/utils";
+
+  export let folder;
   export let fileKeys = [];
   export let disabled;
   export let name;
@@ -27,7 +29,7 @@
     for (let i = 0; i < files.length; i++) {
       const file = files.item(i);
       // We can't use fetch if we want a progress indicator
-      const url = `${getApiURL()}/upload/${file.name}/`;
+      const url = `${getApiURL()}/upload/${folder}/${file.name}/`;
       const request = new XMLHttpRequest();
       request.open("POST", url);
       request.setRequestHeader("Accept", "application/json; version=1.0");

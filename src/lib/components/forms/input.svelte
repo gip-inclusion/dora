@@ -3,7 +3,6 @@
 
   import RichText from "$lib/components/rich-text/editor.svelte";
   import Toggle from "$lib/components/toggle.svelte";
-  import Uploader from "$lib/components/uploader.svelte";
   import Checkboxes from "./checkboxes.svelte";
   import RadioButtons from "./radio-buttons.svelte";
 
@@ -166,7 +165,5 @@
     {placeholder}
     {disabled}
     {readonly} />
-{:else if type === "files"}
-  <Uploader {name} on:blur bind:fileKeys={value} {disabled} {readonly} />
 {/if}
 <span />
