@@ -33,6 +33,7 @@
   import Step2 from "./_step2.svelte";
   import Step3 from "./_step3.svelte";
   import Step4 from "./_step4.svelte";
+  import { createService, modifyService } from "$lib/services";
 
   export let currentStep = Step1;
   export let modify = false;
@@ -122,11 +123,15 @@
 
   export async function publish() {
     const validatedData = validate($serviceCache, serviceSchema);
-
     if (validatedData) {
       // Validation OK, let's send it to the API endpoint
-      const result = await submit(validatedData);
-      if (result.ok) {
+      let result;
+      if (modify) {
+        result = await modifyService(validatedData);
+      } else {
+        result = await createService(validatedData);
+      }
+      if (result?.ok) {
         resetServiceCache();
         goto(`/services/${result.result.slug}`);
       } else {

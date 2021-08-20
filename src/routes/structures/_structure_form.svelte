@@ -3,7 +3,12 @@
 
   import { goto } from "$app/navigation";
 
-  import { structureOptions, fillStructuresOptions } from "$lib/structures.js";
+  import {
+    structureOptions,
+    fillStructuresOptions,
+    modifyStructure,
+    createStructure,
+  } from "$lib/structures.js";
   import ModelField from "$lib/components/forms/model-field.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
@@ -16,7 +21,6 @@
   } from "$lib/validation.js";
 
   import ValidateButton from "./_validate.svelte";
-  import { submit } from "./submit.js";
 
   export let formTitle;
 
@@ -45,8 +49,13 @@
     const validatedData = validate(structure, structureSchema);
     if (validatedData) {
       // Validation OK, let's send it to the API endpoint
-      const result = await submit(validatedData, modify);
-      if (result.ok) {
+      let result;
+      if (modify) {
+        result = await modifyStructure(validatedData);
+      } else {
+        result = await createStructure(validatedData);
+      }
+      if (result?.ok) {
         goto(`/structures/${result.result.slug}`);
       } else {
         injectAPIErrors(result.error, serverErrors);

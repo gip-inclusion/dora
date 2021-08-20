@@ -1,6 +1,6 @@
 import insane from "insane";
 import { get } from "svelte/store";
-import { getApiURL, markdownToHTML } from "$lib/utils.js";
+import { getApiURL, markdownToHTML, htmlToMarkdown } from "$lib/utils.js";
 import { token } from "$lib/auth";
 
 export async function getServices() {
@@ -42,6 +42,71 @@ export async function getService(slug) {
     status: res.status,
     error: new Error(`Could not load ${url}`),
   };
+}
+
+export async function createService(service) {
+  if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
+  const url = `${getApiURL()}/services/`;
+  const method = "POST";
+
+  const res = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify(service),
+  });
+
+  const result = {
+    ok: res.ok,
+    status: res.status,
+  };
+  if (res.ok) {
+    result.result = await res.json();
+  } else {
+    try {
+      result.error = await res.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  return result;
+}
+
+export async function modifyService(service) {
+  if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
+  const url = `${getApiURL()}/services/${service.slug}/`;
+
+  const method = "PATCH";
+
+  const res = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify(service),
+  });
+
+  const result = {
+    ok: res.ok,
+    status: res.status,
+  };
+  if (res.ok) {
+    result.result = await res.json();
+  } else {
+    try {
+      result.error = await res.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  return result;
 }
 
 export async function getServiceOptions() {
