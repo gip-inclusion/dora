@@ -2,11 +2,11 @@
   import * as Sentry from "@sentry/browser";
   import { Integrations } from "@sentry/tracing";
 
-  import { SENTRY_DSN, SENTRY_ENVIRONMENT } from "$lib/env.js";
-  if (SENTRY_ENVIRONMENT !== "local") {
+  import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
+  if (ENVIRONMENT !== "local") {
     Sentry.init({
       dsn: SENTRY_DSN,
-      environment: SENTRY_ENVIRONMENT, // ,
+      environment: ENVIRONMENT, // ,
       integrations: [new Integrations.BrowserTracing()],
 
       // Set tracesSampleRate to 1.0 to capture 100%
