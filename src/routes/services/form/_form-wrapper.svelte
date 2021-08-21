@@ -108,13 +108,17 @@
   function handleGoBack() {
     persistServiceCache();
     currentStep = navInfo.previous;
+    scrollY = 0;
   }
+
   function handleGoForward() {
     persistServiceCache();
     if (validate($serviceCache, navInfo.schema)) {
       currentStep = navInfo.next;
+      scrollY = 0;
     }
   }
+
   function handlePublish() {
     persistServiceCache();
     if (validate($serviceCache, navInfo.schema)) {
@@ -124,6 +128,8 @@
   function handleSaveDraft() {
     console.error("Not implemented");
   }
+
+  let scrollY;
 </script>
 
 <style>
@@ -140,6 +146,8 @@
     margin-top: var(--s24);
   }
 </style>
+
+<svelte:window bind:scrollY />
 
 <EnsureLoggedIn>
   <CenteredGrid>
