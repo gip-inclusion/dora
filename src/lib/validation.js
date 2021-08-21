@@ -16,7 +16,7 @@ export function validate(data, schema) {
   try {
     validatedData = schema.validateSync(data, {
       abortEarly: false,
-      strict: false,
+      strict: true,
     });
   } catch (err) {
     const errors = err.inner.reduce(
@@ -25,11 +25,16 @@ export function validate(data, schema) {
     );
 
     Object.entries(errors).forEach(([fieldName, message]) => {
+      const field = fieldName.split("[")[0];
+      console.log(field);
       formErrors.update((value) => {
-        value[fieldName] = message;
+        value[field] = message;
         return value;
       });
+
+      console.log(field, data[field], message);
     });
+
     console.log("Validation errors", errors);
     return false;
   }

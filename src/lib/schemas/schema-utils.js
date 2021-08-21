@@ -13,3 +13,8 @@ export const postalCode = () =>
   string()
     .matches(/^\d[0-9abAB]\d{3}$/u, "Veuillez saisir un code postal valide")
     .length(5);
+
+export const isoDate = () =>
+  string().test(
+    (dateString) => new Date(dateString).toString() !== "Invalid Date"
+  );

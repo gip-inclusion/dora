@@ -1,6 +1,6 @@
 import "./schema-i18n.js";
 import { object, string, array, boolean, number, date } from "yup";
-import { phone, postalCode } from "./schema-utils.js";
+import { phone, postalCode, isoDate } from "./schema-utils.js";
 
 const shape1 = {
   structure: string().max(50).required(),
@@ -14,11 +14,16 @@ const shape1 = {
 };
 
 const shape2 = {
-  accessConditions: array(string()),
-  concernedPublic: array(string()),
+  accessConditions: array(number().integer()),
+  concernedPublic: array(number().integer()),
   isCumulative: boolean(),
   hasFee: boolean(),
-  feeDetails: string().max(140).trim(),
+  feeDetails: string()
+    .when("hasFee", {
+      is: true,
+      then: string().max(140).required(),
+    })
+    .trim(),
 };
 
 const shape3 = {
@@ -32,10 +37,10 @@ const shape3 = {
     is: (value) => value.includes("OT"),
     then: string().max(280).required(),
   }),
-  requirements: array(string()),
-  credentials: array(string()),
+  requirements: array(number().integer()),
+  credentials: array(number().integer()),
   forms: array(string().max(1024)),
-  onlineForm: string().max(280).trim(),
+  onlineForm: string().max(280).url().trim(),
 };
 
 const shape4 = {
@@ -50,12 +55,12 @@ const shape4 = {
   address2: string().max(255).trim(),
   postalCode: postalCode(),
   isTimeLimited: boolean(),
-  startDate: date(),
-  endDate: date(),
+  startDate: isoDate().nullable(),
+  endDate: isoDate().nullable(),
   recurrence: string().max(2),
   recurrenceOther: string().max(140).trim(),
-  suspensionCount: number().positive().min(1),
-  suspensionDate: date(),
+  suspensionCount: number().nullable().integer().positive().min(1),
+  suspensionDate: isoDate().nullable(),
 };
 
 export const step1 = object().shape(shape1);
