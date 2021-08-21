@@ -79,9 +79,8 @@
     vertical>
     <SiretSearch
       slot="custom-input"
-      {selectedEstablishment}
       {selectedCity}
-      disabled={!selectedCity?.value?.properties?.citycode}
+      disabled={!selectedCity?.properties?.citycode}
       handleChange={handleEstablishmentChange}
       placeholder="Commencez à saisir et choisissez dans la liste" />
   </Field>

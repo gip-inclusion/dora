@@ -17,8 +17,7 @@
     field={serviceOptions.accessConditions}
     name="accessConditions"
     errorMessage={$formErrors.accessConditions}
-    bind:value={$serviceCache.accessConditions}
-    bind:selectedItem={$serviceCache._accessConditionsItems}>
+    bind:value={$serviceCache.accessConditions}>
     <FieldHelp slot="helptext" title="Critères">
       <p>
         <strong>Critères d’admission</strong>
@@ -41,8 +40,7 @@
     field={serviceOptions.concernedPublic}
     name="concernedPublic"
     errorMessage={$formErrors.concernedPublic}
-    bind:value={$serviceCache.concernedPublic}
-    bind:selectedItem={$serviceCache._concernedPublicItems} />
+    bind:value={$serviceCache.concernedPublic} />
   <ModelField
     type="toggle"
     field={serviceOptions.isCumulative}

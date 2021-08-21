@@ -13,7 +13,7 @@
 </script>
 
 {#if serviceOptions}
-  <FormWrapper bind:currentStep>
+  <FormWrapper bind:currentStep title="Ajouter un service">
     <svelte:component this={currentStep} {serviceOptions} />
   </FormWrapper>
 {/if}

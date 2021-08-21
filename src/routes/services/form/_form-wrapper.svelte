@@ -35,6 +35,7 @@
   import Step4 from "./_step4.svelte";
   import { createService, modifyService } from "$lib/services";
 
+  export let title;
   export let currentStep = Step1;
   export let modify = false;
   function handleBlur(elt) {
@@ -86,39 +87,6 @@
   function isValid(_schema) {
     // TODO
     // return schema.isValidSync($serviceCache);
-  }
-
-  async function submit(service) {
-    const url = modify
-      ? `${getApiURL()}/services/${service.slug}/`
-      : `${getApiURL()}/services/`;
-    const method = modify ? "PATCH" : "POST";
-
-    const res = await fetch(url, {
-      method,
-      headers: {
-        Accept: "application/json; version=1.0",
-        "Content-Type": "application/json",
-
-        Authorization: `Token ${get(token)}`,
-      },
-      body: JSON.stringify(service),
-    });
-
-    const result = {
-      ok: res.ok,
-      status: res.status,
-    };
-    if (res.ok) {
-      result.result = await res.json();
-    } else {
-      try {
-        result.error = await res.json();
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    return result;
   }
 
   export async function publish() {
@@ -180,7 +148,9 @@
   <CenteredGrid>
     <div class="col-start-1 col-span-full text-center mb-6">
       <div class="mx-auto">
-        <h1 class="text-france-blue text-13xl">Ajouter un service</h1>
+        <h1 class="text-france-blue text-13xl">
+          {title}
+        </h1>
         <p class="text-gray-text text-base">
           Rendez visible votre offre de services sur la plateforme DORA.<br />
           Les champs marqués d’un astérisque<span

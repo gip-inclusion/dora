@@ -4,7 +4,8 @@
   export let handleChange;
   export let placeholder;
   export let disabled = false;
-  export let selectedItem = null;
+  export let value = undefined;
+  export let initialValue = undefined;
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
 
@@ -24,13 +25,13 @@
 
 <Select
   on:blur
-  bind:selectedItem
+  bind:value
   onChange={handleChange}
+  {initialValue}
   {placeholder}
   {disabled}
   hideArrow
   searchFunction={searchCity}
   delay="200"
-  labelFieldName="label"
   localFiltering={false}
   minCharactersToSearch="3" />

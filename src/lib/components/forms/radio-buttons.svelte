@@ -25,6 +25,6 @@
         class="self-center hidden rounded-full w-3/2 h-3/2 bg-dora-magenta-cta toggle-circle" />
     </div>
     <span class="inline-block w-40 ml-2 text-gray-text text-sm"
-      >{choice.displayName}</span>
+      >{choice.label}</span>
   </label>
 {/each}

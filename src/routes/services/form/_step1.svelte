@@ -18,7 +18,6 @@
     name="structure"
     errorMessage={$formErrors.structure}
     bind:value={$serviceCache.structure}
-    bind:selectedItem={$serviceCache._structure}
     placeholder="Sélectionnez votre structure" />
 </FieldSet>
 
@@ -37,7 +36,6 @@
     name="categories"
     errorMessage={$formErrors.categories}
     bind:value={$serviceCache.categories}
-    bind:selectedItem={$serviceCache._categoriesItems}
     placeholder="Choisissez la catégorie principale" />
   <ModelField
     type="multiselect"
@@ -45,7 +43,6 @@
     name="subcategories"
     errorMessage={$formErrors.subcategories}
     bind:value={$serviceCache.subcategories}
-    bind:selectedItem={$serviceCache._subcategoriesItems}
     placeholder="Choisissez les sous-catégories">
     <FieldHelp slot="helptext" title="Catégorisation">
       Pour permettre à nos utilisateurs de trouver facilement la solution que

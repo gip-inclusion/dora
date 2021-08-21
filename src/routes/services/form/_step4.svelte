@@ -14,14 +14,14 @@
   let autoSuspend = false;
 
   function handleCityChange(city) {
-    const props = city?.value.properties;
+    const props = city?.properties;
     $serviceCache.city = props?.name;
     $serviceCache.cityCode = props?.citycode;
   }
 
   function handleAddressChange(address) {
-    const props = address?.value.properties;
-    const coords = address?.value.geometry.coordinates;
+    const props = address?.properties;
+    const coords = address?.geometry.coordinates;
     const lat = coords?.[1];
     const long = coords?.[0];
     $serviceCache.address1 = props?.name;
@@ -91,7 +91,7 @@
     <CitySearch
       slot="custom-input"
       placeholder="Saisissez et validez votre ville"
-      bind:selectedItem={$serviceCache._currentCity}
+      initialValue={$serviceCache.city}
       handleChange={handleCityChange} />
   </Field>
   <Field
@@ -104,7 +104,7 @@
       disabled={!$serviceCache.cityCode}
       cityCode={$serviceCache.cityCode}
       placeholder="Saisissez et validez votre adresse"
-      bind:selectedItem={$serviceCache._currentAddress}
+      initialValue={$serviceCache.address1}
       handleChange={handleAddressChange} />
   </Field>
   <ModelField

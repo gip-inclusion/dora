@@ -5,7 +5,6 @@
   export let name = "";
   export let choices = undefined;
   export let value = undefined;
-  export let selectedItem = undefined;
   export let disabled = false;
   export let readonly = false;
   export let placeholder = "";
@@ -14,10 +13,9 @@
   export let searchFunction = undefined;
   export let delay = undefined;
   export let localFiltering = undefined;
-  export let labelFieldName = "displayName";
-  export let valueFieldName = "value";
   export let minCharactersToSearch = undefined;
   export let onChange = undefined;
+  export let initialValue = undefined;
 </script>
 
 <style lang="postcss">
@@ -58,13 +56,11 @@
   {name}
   on:blur
   {localFiltering}
-  {labelFieldName}
-  {valueFieldName}
   {minCharactersToSearch}
   {onChange}
   items={choices}
   bind:value
-  bind:selectedItem
+  {initialValue}
   {disabled}
   {readonly}
   {placeholder}

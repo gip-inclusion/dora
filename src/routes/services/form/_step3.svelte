@@ -53,8 +53,7 @@
     field={serviceOptions.requirements}
     name="requirements"
     errorMessage={$formErrors.requirements}
-    bind:value={$serviceCache.requirements}
-    bind:selectedItem={$serviceCache._requirementsItems}>
+    bind:value={$serviceCache.requirements}>
     <FieldHelp slot="helptext" title="Accès au service">
       Quels sont les compétences, les diplômes qui limitent l’accès au service ?
     </FieldHelp></ModelField>
@@ -64,9 +63,11 @@
     field={serviceOptions.credentials}
     name="credentials"
     errorMessage={$formErrors.credentials}
-    bind:value={$serviceCache.credentials}
-    bind:selectedItem={$serviceCache._credentialsItems} />
-  <Field type="custom" errorMessage={$formErrors.forms}>
+    bind:value={$serviceCache.credentials} />
+  <Field
+    type="custom"
+    label={serviceOptions.forms.label}
+    errorMessage={$formErrors.forms}>
     <FieldHelp slot="helptext" title="Justificatifs, documents">
       Mettre tous les documents maintenant, c’est permettre d’avoir des
       candidatures complètes avec moins d’aller/retour

@@ -3,14 +3,13 @@
   import Select from "$lib/components/forms/select.svelte";
 
   export let handleChange;
-  export let selectedEstablishment;
   export let selectedCity;
   export let disabled;
   export let placeholder;
 
   async function searchSirene(q) {
     const sireneAPIUrl = `${getApiURL()}/search-sirene/${
-      selectedCity.value.properties.citycode
+      selectedCity.properties.citycode
     }/?q=${encodeURIComponent(q)}`;
     const response = await fetch(sireneAPIUrl, {
       headers: {
@@ -53,7 +52,10 @@
         result.name = `${result.parent} ${result.name}`;
       }
       result.label = `${result.name} (${result.addr1})`;
-      return result;
+      return {
+        value: result,
+        label: result.label,
+      };
     });
     return results;
   }
@@ -66,8 +68,6 @@
   hideArrow
   searchFunction={searchSirene}
   delay="200"
-  labelFieldName="label"
-  selectedItem={selectedEstablishment}
   localFiltering={false}
   minCharactersToSearch="3">
   <span slot="postfix" let:item class="ml-1 text-gray-text-alt text-xs">

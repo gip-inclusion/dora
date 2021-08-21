@@ -7,7 +7,6 @@
   import RadioButtons from "./radio-buttons.svelte";
 
   export let value = undefined;
-  export let selectedItem = undefined;
 
   export let type;
   export let name;
@@ -54,20 +53,12 @@
     <RadioButtons {name} bind:group={value} {choices} {disabled} {readonly} />
   </div>
 {:else if type === "select"}
-  <Select
-    {name}
-    {choices}
-    bind:value
-    bind:selectedItem
-    {placeholder}
-    {disabled}
-    {readonly} />
+  <Select {name} {choices} bind:value {placeholder} {disabled} {readonly} />
 {:else if type === "multiselect"}
   <Select
     {name}
     {choices}
     bind:value
-    bind:selectedItem
     multiple
     {placeholder}
     {disabled}

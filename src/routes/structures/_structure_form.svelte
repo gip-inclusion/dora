@@ -114,7 +114,6 @@
         name="typology"
         errorMessage={$formErrors.typology}
         bind:value={structure.typology}
-        bind:selectedItem={structure._typology}
         vertical />
       <ModelField
         type="text"

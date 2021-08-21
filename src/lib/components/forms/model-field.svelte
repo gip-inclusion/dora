@@ -3,7 +3,6 @@
 
   export let value = undefined;
   export let name;
-  export let selectedItem = undefined;
   export let label = undefined;
   export let type;
   export let field;
@@ -22,7 +21,6 @@
 
 <Field
   bind:value
-  bind:selectedItem
   on:blur
   {name}
   {errorMessage}
