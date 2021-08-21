@@ -74,6 +74,7 @@
     <Uploader
       slot="custom-input"
       folder={$serviceCache.structure}
+      name="forms"
       on:blur
       bind:fileKeys={$serviceCache.forms} />
   </Field>

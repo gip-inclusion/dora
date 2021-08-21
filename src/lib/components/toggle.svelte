@@ -5,6 +5,7 @@
   export let toggleYesText = "Oui";
   export let toggleNoText = "Non";
   export let disabled = false;
+  export let readonly;
   export let name;
 </script>
 
@@ -37,7 +38,8 @@
     bind:checked
     class="hidden"
     on:blur
-    {disabled} />
+    {disabled}
+    {readonly} />
   <!-- path -->
   <div
     class="flex-shrink-0 w-5 h-3 bg-white border rounded-full toggle-path border-gray-03" />

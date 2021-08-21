@@ -9,7 +9,7 @@
 
   export let value = undefined;
   export let selectedItem = undefined;
-  export let name;
+  export let name = "";
   export let type;
   export let errorMessage = undefined;
 

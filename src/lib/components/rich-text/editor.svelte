@@ -24,6 +24,7 @@
   export let initialContent = "";
   export let placeholder = "";
   export let disabled = false;
+  export let readonly;
 
   onMount(() => {
     editor = new Editor({
@@ -40,6 +41,7 @@
         attributes: {
           name,
           disabled,
+          readonly,
           class: `${className} p-2 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none`,
         },
       },

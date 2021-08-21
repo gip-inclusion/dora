@@ -3,8 +3,8 @@
 
   export let handleChange;
   export let placeholder;
-  export let disabled;
-  export let selectedItem;
+  export let disabled = false;
+  export let selectedItem = null;
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
 

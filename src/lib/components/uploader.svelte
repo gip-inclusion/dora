@@ -3,7 +3,7 @@
 
   export let folder;
   export let fileKeys = [];
-  export let disabled;
+  export let disabled = false;
   export let name;
 
   let progress = null;

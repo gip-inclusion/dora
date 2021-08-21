@@ -5,7 +5,7 @@
   export let placeholder;
   export let cityCode;
   export let disabled;
-  export let selectedItem;
+  export let selectedItem = null;
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
 

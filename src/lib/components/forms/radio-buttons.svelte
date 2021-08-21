@@ -1,5 +1,5 @@
 <script>
-  export let group, choices, disabled, name;
+  export let group, choices, disabled, name, readonly;
 </script>
 
 <style lang="postcss">
@@ -17,7 +17,8 @@
       bind:group
       value={choice.value}
       class="hidden"
-      {disabled} />
+      {disabled}
+      {readonly} />
     <div
       class="flex justify-center w-3 h-3 bg-white border rounded-full toggle-path border-gray-03 ">
       <div

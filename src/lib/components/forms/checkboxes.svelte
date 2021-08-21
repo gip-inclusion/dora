@@ -1,5 +1,5 @@
 <script>
-  export let group, choices, disabled, name;
+  export let group, choices, disabled, name, readonly;
 </script>
 
 <style lang="postcss">
@@ -17,7 +17,8 @@
       value={choice.value}
       type="checkbox"
       class="hidden"
-      {disabled} />
+      {disabled}
+      {readonly} />
     <div
       class="flex justify-center flex-shrink-0 w-3 h-3 border rounded border-gray-03">
       <div class="self-center hidden w-3/2 h-3/2 bg-dora-magenta-cta" />

@@ -2,11 +2,12 @@
   import AutoComplete from "./simple-autocomplete.svelte";
   import { checkIcon } from "$lib/icons.js";
 
-  export let name;
+  export let name = "";
   export let choices = undefined;
   export let value = undefined;
   export let selectedItem = undefined;
   export let disabled = false;
+  export let readonly = false;
   export let placeholder = "";
   export let multiple = false;
   export let hideArrow = false;
@@ -65,6 +66,7 @@
   bind:value
   bind:selectedItem
   {disabled}
+  {readonly}
   {placeholder}
   {multiple}
   {searchFunction}
