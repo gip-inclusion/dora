@@ -21,10 +21,12 @@
 
   onMount(async () => {
     $serviceCache = service;
-    serviceOptions = await getServiceOptions();
+    serviceOptions = (await getServiceOptions()).result;
   });
 </script>
 
-<FormWrapper bind:currentStep modify>
-  <svelte:component this={currentStep} {serviceOptions} />
-</FormWrapper>
+{#if serviceOptions}
+  <FormWrapper bind:currentStep modify>
+    <svelte:component this={currentStep} {serviceOptions} />
+  </FormWrapper>
+{/if}
