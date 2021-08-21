@@ -53,11 +53,10 @@
   }
 </style>
 
-<div class="wrapper" class:padded={gridRow === 1}>
+<div class="wrapper" class:padded={gridRow === 1} class:sticky>
   <div
     class="content"
     style="grid-row-start: {gridRow};"
-    class:sticky
     class:roundedbg
     class:bordertop>
     <div class="centered">
