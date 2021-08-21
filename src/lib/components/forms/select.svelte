@@ -20,15 +20,18 @@
 
 <style lang="postcss">
   :global(.autocomplete) {
-    @apply h-6 !important;
+    /* min-height: var(--s48); */
   }
 
   :global(.input-container) {
-    @apply shadow-none h-6 !important;
+    @apply shadow-none !important;
+
+    /* min-height: var(--s48); */
   }
 
   :global(.autocomplete-list) {
     @apply border-none !important;
+
   }
 
   :global(.autocomplete-list-item) {

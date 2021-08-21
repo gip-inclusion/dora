@@ -61,7 +61,7 @@
         </div>
         <span class="text-xs text-gray-text-alt2"> {description}</span>
       </div>
-      <div class="flex flex-col flex-grow min-h-6 ml-4">
+      <div class="flex flex-col flex-1 flex-grow min-h-6 ml-4">
         {#if type !== "custom"}
           <Input
             on:blur={handleBlur}
