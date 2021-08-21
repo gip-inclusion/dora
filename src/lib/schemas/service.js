@@ -39,9 +39,9 @@ const shape3 = {
 };
 
 const shape4 = {
-  contactName: string().max(140).required().trim(),
-  contactPhone: phone().required(),
-  contactEmail: string().max(254).email().required().lowercase().trim(),
+  contactName: string().max(140).trim(),
+  contactPhone: phone(),
+  contactEmail: string().max(254).email().lowercase().trim(),
   isContactInfoPublic: boolean(),
   locationKinds: array(string().max(2)).required().min(1),
   remoteUrl: string().max(200).url().trim(),

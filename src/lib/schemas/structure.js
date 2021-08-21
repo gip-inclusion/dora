@@ -13,7 +13,7 @@ export default object().shape({
   postalCode: postalCode().required(),
   city: string().max(255).required().trim(),
   phone: phone(),
-  email: string().max(254).email().required().lowercase().trim(),
+  email: string().max(254).email().lowercase().trim(),
   url: string().max(200).url().trim(),
   shortDesc: string().max(280).required().trim(),
   fullDesc: string().trim(),
