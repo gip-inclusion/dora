@@ -33,6 +33,7 @@
 
 <div class="relative flex flex-row">
   <input
+    id={name}
     {name}
     type="checkbox"
     bind:checked

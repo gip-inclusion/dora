@@ -39,6 +39,7 @@
       },
       editorProps: {
         attributes: {
+          id: { name },
           name,
           disabled,
           readonly,

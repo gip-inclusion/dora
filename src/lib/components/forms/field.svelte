@@ -4,7 +4,6 @@
   import { getContext } from "svelte";
 
   import Input from "./input.svelte";
-  import Label from "./label.svelte";
   import Alert from "./alert.svelte";
 
   export let value = undefined;
@@ -46,8 +45,9 @@
 
 {#if visible}
   <div class=" flex-1" class:hidden={type === "hidden"}>
-    <Label
-      className="flex {layoutClass} items-top relative "
+    <div
+      {name}
+      class="flex {layoutClass} items-top relative "
       isDOMLabel={type !== "checkboxes" && type !== "radios"}>
       <div
         class="flex flex-col"
@@ -56,12 +56,12 @@
         class:mb-1={vertical}>
         <div
           class="inline-block w-full flex-shrink-0 text-base font-bold text-gray-dark">
-          {hideLabel ? "" : label}
+          <label for={name}>{hideLabel ? "" : label}</label>
           {#if required}<span class="text-error">*</span>{/if}
         </div>
         <span class="text-xs text-gray-text-alt2"> {description}</span>
       </div>
-      <div class="flex flex-col flex-1 flex-grow min-h-6 ml-4">
+      <div class="flex flex-col flex-1 flex-grow min-h-6">
         {#if type !== "custom"}
           <Input
             on:blur={handleBlur}
@@ -84,6 +84,6 @@
         {/if}
       </div>
       <slot name="helptext" />
-    </Label>
+    </div>
   </div>
 {/if}

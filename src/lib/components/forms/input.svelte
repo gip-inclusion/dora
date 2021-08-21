@@ -66,6 +66,7 @@
 {:else if type === "text"}
   <input
     {name}
+    id={name}
     on:blur
     bind:value
     type="text"
@@ -75,6 +76,7 @@
 {:else if type === "textarea"}
   <textarea
     {name}
+    id={name}
     on:blur
     bind:value
     type="text"
@@ -102,6 +104,7 @@
 {:else if type === "password"}
   <input
     {name}
+    id={name}
     on:blur
     bind:value
     type="password"
@@ -111,6 +114,7 @@
 {:else if type === "date"}
   <input
     {name}
+    id={name}
     on:blur
     bind:value
     type="date"
@@ -120,6 +124,7 @@
 {:else if type === "number"}
   <input
     {name}
+    id={name}
     on:blur
     bind:value
     type="number"
@@ -130,6 +135,7 @@
 {:else if type === "email"}
   <input
     {name}
+    id={name}
     on:blur
     bind:value
     type="email"
@@ -137,10 +143,18 @@
     {disabled}
     {readonly} />
 {:else if type === "hidden"}
-  <input {name} on:blur bind:value type="hidden" {disabled} {readonly} />
+  <input
+    {name}
+    id={name}
+    on:blur
+    bind:value
+    type="hidden"
+    {disabled}
+    {readonly} />
 {:else if type === "tel"}
   <input
     {name}
+    id={name}
     on:blur
     bind:value
     type="tel"
@@ -150,6 +164,7 @@
 {:else if type === "url"}
   <input
     {name}
+    id={name}
     on:blur
     bind:value
     type="url"

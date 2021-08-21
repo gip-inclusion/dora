@@ -31,7 +31,6 @@
 
   :global(.autocomplete-list) {
     @apply border-none !important;
-
   }
 
   :global(.autocomplete-list-item) {
@@ -57,6 +56,7 @@
 
 <AutoComplete
   {name}
+  inputId={name}
   on:blur
   {localFiltering}
   {minCharactersToSearch}
