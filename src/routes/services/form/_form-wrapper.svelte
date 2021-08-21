@@ -1,11 +1,8 @@
 <script>
   import { setContext } from "svelte";
-  import { get } from "svelte/store";
 
   import { goto } from "$app/navigation";
 
-  import { token } from "$lib/auth";
-  import { getApiURL } from "$lib/utils";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import {

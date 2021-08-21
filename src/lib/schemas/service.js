@@ -55,12 +55,12 @@ const shape4 = {
   address2: string().max(255).trim(),
   postalCode: postalCode(),
   isTimeLimited: boolean(),
-  startDate: isoDate().nullable(),
-  endDate: isoDate().nullable(),
+  // startDate: isoDate().nullable(),
+  // endDate: isoDate().nullable(),
   recurrence: string().max(2),
   recurrenceOther: string().max(140).trim(),
   suspensionCount: number().nullable().integer().positive().min(1),
-  suspensionDate: isoDate().nullable(),
+  // suspensionDate: isoDate().nullable(),
 };
 
 export const step1 = object().shape(shape1);

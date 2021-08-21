@@ -11,8 +11,6 @@
 
   export let serviceOptions;
 
-  let autoSuspend = false;
-
   function handleCityChange(city) {
     const props = city?.properties;
     $serviceCache.city = props?.name;
@@ -28,6 +26,12 @@
     $serviceCache.postalCode = props?.postcode;
     $serviceCache.longitude = long;
     $serviceCache.latitude = lat;
+  }
+
+  let autoSuspend;
+
+  $: if ($serviceCache.suspensionCount || $serviceCache.suspensionDate) {
+    autoSuspend = true;
   }
 </script>
 

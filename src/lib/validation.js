@@ -24,15 +24,20 @@ export function validate(data, schema) {
       {}
     );
 
+    let doneOnce = false;
     Object.entries(errors).forEach(([fieldName, message]) => {
-      const field = fieldName.split("[")[0];
-      console.log(field);
+      const name = fieldName.split("[")[0];
+      if (!doneOnce) {
+        const elt = document.getElementsByName(name);
+        elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        doneOnce = true;
+      }
       formErrors.update((value) => {
-        value[field] = message;
+        value[name] = message;
         return value;
       });
 
-      console.log(field, data[field], message);
+      console.log(name, data[name], typeof data[name], message);
     });
 
     console.log("Validation errors", errors);

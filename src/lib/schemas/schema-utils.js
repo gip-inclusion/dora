@@ -15,6 +15,10 @@ export const postalCode = () =>
     .length(5);
 
 export const isoDate = () =>
-  string().test(
-    (dateString) => new Date(dateString).toString() !== "Invalid Date"
-  );
+  string()
+    .notRequired()
+    .nullable()
+    .test(
+      (dateString) => true
+      // dateString == null || new Date(dateString).toString() !== "Invalid Date"
+    );
