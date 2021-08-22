@@ -31,7 +31,16 @@
   }
 </style>
 
-<div class="relative flex flex-row">
+<!--
+  That's a *second* label on the same input (the other one being the "real"
+  label from field.svelte)
+  This one is here only so that a click anywhere on the component will actually
+  toggle the hidden checkbox.
+  TODO: check accessibility, and maybe use
+  https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-describedby_attribute
+  Or just find a cleaner way to do it!
+-->
+<label class="relative flex flex-row">
   <input
     id={name}
     {name}
@@ -50,4 +59,4 @@
   <div class="ml-1 text-sm text-gray-text">
     {@html checked ? toggleYesText : toggleNoText}
   </div>
-</div>
+</label>
