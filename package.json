@@ -44,8 +44,7 @@
     "stylelint-config-standard": "^22.0.0",
     "svelte": "^3.34.0",
     "svelte-preprocess": "^4.7.4",
-    "tailwindcss": "^2.2.4",
-    "yup": "^0.32.9"
+    "tailwindcss": "^2.2.4"
   },
   "type": "module",
   "lint-staged": {

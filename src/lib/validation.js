@@ -7,42 +7,117 @@ formErrors.subscribe((value) => {
   currentErrors = value;
 });
 
-export function validate(data, schema) {
-  let validatedData;
+function addError(fieldname, msg) {
+  formErrors.update((previousErrors) => {
+    previousErrors[fieldname] = previousErrors[fieldname]?.length
+      ? [...previousErrors[fieldname], msg]
+      : [msg];
+    return previousErrors;
+  });
+}
 
-  Object.keys(schema.fields).forEach((key) => delete currentErrors[key]);
+function clearError(fieldname) {
+  formErrors.update((previousErrors) => {
+    delete previousErrors[fieldname];
+    return previousErrors;
+  });
+}
+
+function validateField(fieldname, shape, data) {
+  clearError(fieldname);
+  const originalValue = data[fieldname];
+  let value = originalValue;
+  if (shape.nullable && value == null) {
+    return { value, valid: true };
+  }
+  if (shape.pre) {
+    for (const prerun of shape.pre) {
+      value = prerun(value);
+    }
+  }
+  if (shape.required && (value == null || value === "" || value === [])) {
+    addError(fieldname, "Ce champ est requis");
+    return { originalValue, valid: false };
+  }
+  for (const rule of shape.rules) {
+    const result = rule(`${fieldname}`, value, data);
+
+    if (!result.valid) {
+      console.log(fieldname, value, typeof value, result);
+      addError(fieldname, result.msg);
+      return { originalValue, valid: false };
+    }
+  }
+  return { value, valid: true };
+}
+
+export function validate(data, schema, fullSchema, skipDeps = true) {
+  const validatedData = {};
+  let isValid = true;
+  let doneOnce = false;
+
+  Object.keys(schema).forEach((fieldname) => delete currentErrors[fieldname]);
   formErrors.set(currentErrors);
 
-  try {
-    validatedData = schema.validateSync(data, {
-      abortEarly: false,
-      strict: true,
-    });
-  } catch (err) {
-    const errors = err.inner.reduce(
-      (acc, e) => ({ ...acc, [e.path]: e.message }),
-      {}
-    );
-
-    let doneOnce = false;
-    Object.entries(errors).forEach(([fieldName, message]) => {
-      const name = fieldName.split("[")[0];
-      if (!doneOnce) {
-        const elt = document.getElementsByName(name);
-        elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        doneOnce = true;
-      }
-      formErrors.update((value) => {
-        value[name] = message;
-        return value;
+  Object.entries(schema).forEach(([fieldname, shape]) => {
+    // console.log("value", data[fieldname]);
+    const { value, valid } = validateField(fieldname, shape, data);
+    isValid &&= valid;
+    validatedData[fieldname] = value;
+    if (!doneOnce && !valid) {
+      const elt = document.getElementsByName(fieldname);
+      elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
+      doneOnce = true;
+    }
+    if (!skipDeps) {
+      shape.dependents?.forEach((depName) => {
+        const { depValue, depValid } = validateField(
+          depName,
+          fullSchema[depName],
+          data
+        );
+        isValid &&= depValid;
+        validatedData[depName] = depValue;
+        if (!doneOnce && !depValid) {
+          const elt = document.getElementsByName(depName);
+          elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
+          doneOnce = true;
+        }
       });
+    }
+  });
+  return { validatedData, valid: isValid };
+  // try {
+  //   validatedData = schema.validateSync(data, {
+  //     abortEarly: false,
+  //     strict: true,
+  //   });
+  // } catch (err) {
+  //   const errors = err.inner.reduce(
+  //     (acc, e) => ({ ...acc, [e.path]: e.message }),
+  //     {}
+  //   );
 
-      console.log(name, data[name], typeof data[name], message);
-    });
+  //   let doneOnce = false;
+  //   Object.entries(errors).forEach(([fieldName, message]) => {
+  //     const name = fieldName.split("[")[0];
+  //     if (!doneOnce) {
+  //       const elt = document.getElementsByName(name);
+  //       elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  //       doneOnce = true;
+  //     }
+  //     formErrors.update((value) => {
+  //       value[name] = message;
+  //       return value;
+  //     });
 
-    console.log("Validation errors", errors);
-    return false;
-  }
+  //     console.log(name, data[name], typeof data[name], message);
+  //   });
+
+  //   console.log("Validation errors", errors);
+  //   return false;
+  // }
+  return data;
   return validatedData;
 }
 

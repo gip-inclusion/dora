@@ -9,7 +9,7 @@
   export let value = undefined;
   export let name = "";
   export let type;
-  export let errorMessage = undefined;
+  export let errorMessages = [];
 
   export let vertical = false;
   export let label = "";
@@ -79,9 +79,9 @@
         {:else}
           <slot name="custom-input" />
         {/if}
-        {#if errorMessage}
-          <Alert iconOnLeft label={errorMessage} />
-        {/if}
+        {#each errorMessages || [] as msg}
+          <Alert iconOnLeft label={msg} />
+        {/each}
       </div>
       <slot name="helptext" />
     </div>

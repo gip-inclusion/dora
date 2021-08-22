@@ -16,7 +16,7 @@
     type="select"
     field={serviceOptions.structure}
     name="structure"
-    errorMessage={$formErrors.structure}
+    errorMessages={$formErrors.structure}
     bind:value={$serviceCache.structure}
     placeholder="Sélectionnez votre structure" />
 </FieldSet>
@@ -34,14 +34,14 @@
     type="multiselect"
     field={serviceOptions.categories}
     name="categories"
-    errorMessage={$formErrors.categories}
+    errorMessages={$formErrors.categories}
     bind:value={$serviceCache.categories}
     placeholder="Choisissez la catégorie principale" />
   <ModelField
     type="multiselect"
     field={serviceOptions.subcategories}
     name="subcategories"
-    errorMessage={$formErrors.subcategories}
+    errorMessages={$formErrors.subcategories}
     bind:value={$serviceCache.subcategories}
     placeholder="Choisissez les sous-catégories">
     <FieldHelp slot="helptext" title="Catégorisation">
@@ -55,7 +55,7 @@
     type="checkboxes"
     field={serviceOptions.kinds}
     name="kinds"
-    errorMessage={$formErrors.kinds}
+    errorMessages={$formErrors.kinds}
     bind:value={$serviceCache.kinds}
     description="Quel type de service proposez-vous ? " />
 
@@ -64,7 +64,7 @@
     label="Droit commun"
     field={serviceOptions.isCommonLaw}
     name="isCommonLaw"
-    errorMessage={$formErrors.isCommonLaw}
+    errorMessages={$formErrors.isCommonLaw}
     bind:value={$serviceCache.isCommonLaw}
     description="Il s’agit d’un service de Droit commun - mobilisé équitablement sur l’ensemble du territoire ?" />
 </FieldSet>
@@ -76,7 +76,7 @@
     placeholder="Ex. Aide aux frais liés à…"
     field={serviceOptions.name}
     name="name"
-    errorMessage={$formErrors.name}
+    errorMessages={$formErrors.name}
     bind:value={$serviceCache.name} />
   <ModelField
     description="280 caractères maximum"
@@ -84,7 +84,7 @@
     type="textarea"
     field={serviceOptions.shortDesc}
     name="shortDesc"
-    errorMessage={$formErrors.shortDesc}
+    errorMessages={$formErrors.shortDesc}
     bind:value={$serviceCache.shortDesc}>
     <FieldHelp slot="helptext" title="Résumé">
       <p>
@@ -107,6 +107,6 @@
     vertical
     field={serviceOptions.fullDesc}
     name="fullDesc"
-    errorMessage={$formErrors.fullDesc}
+    errorMessages={$formErrors.fullDesc}
     bind:value={$serviceCache.fullDesc} />
 </FieldSet>

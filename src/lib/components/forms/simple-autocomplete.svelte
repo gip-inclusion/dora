@@ -19,7 +19,6 @@
 
   export let onChange = function (_newValue) {};
   export let onFocus = function () {};
-  export let onBlur = function () {};
   export let onCreate = function (_text) {};
 
   // Behaviour properties
@@ -153,7 +152,14 @@
     }
   }
 
+  function onTextChanged() {
+    if (!multiple && (text == null || text === "")) {
+      value = null;
+    }
+  }
+
   $: value, onValueChanged();
+  $: text, onTextChanged();
 
   $: showList =
     opened && ((items && items.length > 0) || filteredTextLength > 0);
@@ -538,10 +544,6 @@
     onFocus();
 
     resetListToAllItemsAndOpen();
-  }
-
-  function onBlurInternal() {
-    onBlur();
   }
 
   function resetListToAllItemsAndOpen() {
@@ -945,7 +947,7 @@
       bind:value={text}
       on:input={onInput}
       on:focus={onFocusInternal}
-      on:blur={onBlurInternal}
+      on:blur
       on:keydown={onKeyDown}
       on:click={onInputClick}
       on:keypress={onKeyPress} />

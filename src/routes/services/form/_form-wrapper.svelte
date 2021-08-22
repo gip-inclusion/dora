@@ -35,10 +35,21 @@
   export let title;
   export let currentStep = Step1;
   export let modify = false;
+
   function handleBlur(elt) {
-    const schema = serviceSchema.pick([elt.target.name]);
-    const validatedData = validate($serviceCache, schema);
-    if (validatedData) {
+    console.log("Blur", elt.target.name);
+    const filteredSchema = Object.fromEntries(
+      Object.entries(serviceSchema).filter(
+        ([fieldName, _rules]) => fieldName === elt.target.name
+      )
+    );
+    const { validatedData, valid } = validate(
+      $serviceCache,
+      filteredSchema,
+      serviceSchema,
+      false
+    );
+    if (valid) {
       $serviceCache = { ...$serviceCache, ...validatedData };
     }
   }
@@ -48,6 +59,7 @@
   });
 
   let navInfo = {};
+  let scrollY;
 
   $: switch (currentStep) {
     case Step1:
@@ -87,8 +99,12 @@
   }
 
   export async function publish() {
-    const validatedData = validate($serviceCache, serviceSchema);
-    if (validatedData) {
+    const { validatedData, valid } = validate(
+      $serviceCache,
+      serviceSchema,
+      serviceSchema
+    );
+    if (valid) {
       // Validation OK, let's send it to the API endpoint
       let result;
       if (modify) {
@@ -113,7 +129,7 @@
 
   function handleGoForward() {
     persistServiceCache();
-    if (validate($serviceCache, navInfo.schema)) {
+    if (validate($serviceCache, navInfo.schema, serviceSchema).valid) {
       currentStep = navInfo.next;
       scrollY = 0;
     }
@@ -121,15 +137,13 @@
 
   function handlePublish() {
     persistServiceCache();
-    if (validate($serviceCache, navInfo.schema)) {
+    if (validate($serviceCache, navInfo.schema, serviceSchema).valid) {
       publish();
     }
   }
   function handleSaveDraft() {
     console.error("Not implemented");
   }
-
-  let scrollY;
 </script>
 
 <style>

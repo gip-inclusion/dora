@@ -7,7 +7,7 @@
   export let type;
   export let field;
   export let vertical = false;
-  export let errorMessage = undefined;
+  export let errorMessages = undefined;
 
   export let disabled = undefined;
   export let readonly = false;
@@ -23,7 +23,7 @@
   bind:value
   on:blur
   {name}
-  {errorMessage}
+  {errorMessages}
   required={field.required}
   maxLength={field.maxLength}
   label={label || field.label}
