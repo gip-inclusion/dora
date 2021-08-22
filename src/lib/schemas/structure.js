@@ -1,21 +1,70 @@
-import "./schema-i18n.js";
-// import { object, string } from "yup";
-// import { phone, postalCode } from "./schema-utils.js";
+import * as v from "./utils";
 
-export default {};
-// export default object().shape({
-//   siret: string()
-//     .matches(/^\d{14}$/u, "Ce champ doit comporter 14 chiffres")
-//     .required(),
-//   name: string().max(255).required().trim(),
-//   typology: string().ensure().max(10).required(),
-//   address1: string().max(255).required().trim(),
-//   address2: string().max(255).trim(),
-//   postalCode: postalCode().required(),
-//   city: string().max(255).required().trim(),
-//   phone: phone(),
-//   email: string().max(254).email().lowercase().trim(),
-//   url: string().max(200).url().trim(),
-//   shortDesc: string().max(280).required().trim(),
-//   fullDesc: string().trim(),
-// });
+export default {
+  siret: {
+    default: "",
+    required: true,
+    rules: [
+      (name, value, _data) => ({
+        valid:
+          typeof value === "string" &&
+          (value === "" || !!value.match(/^\d{14}$/u)),
+        msg: "Ce champ doit comporter 14 chiffres",
+      }),
+    ],
+  },
+  name: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  typology: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(10)],
+  },
+  address1: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  address2: {
+    default: "",
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  postalCode: {
+    default: "",
+    required: true,
+    rules: [v.isPostalCode()],
+  },
+  city: {
+    required: true,
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  phone: {
+    default: "",
+    pre: [v.removeAllSpaces],
+    rules: [v.isPhone()],
+  },
+  email: {
+    default: "",
+    rules: [v.isEmail(), v.maxStrLength(255)],
+    post: [v.lower, v.trim],
+  },
+  url: {
+    default: "",
+    rules: [v.isURL(), v.maxStrLength(200)],
+    post: [v.trim],
+  },
+  shortDesc: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(280)],
+    post: [v.trim],
+  },
+  fullDesc: { default: "", rules: [v.isString()], post: [v.trim] },
+};

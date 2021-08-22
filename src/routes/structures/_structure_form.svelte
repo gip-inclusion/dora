@@ -25,13 +25,23 @@
   export let formTitle;
 
   export let structure;
+
   export let modify = false;
   export let visible;
 
   function handleBlur(elt) {
-    const schema = structureSchema.pick([elt.target.name]);
-    const validatedData = validate(structure, schema);
-    if (validatedData) {
+    const filteredSchema = Object.fromEntries(
+      Object.entries(structureSchema).filter(
+        ([fieldName, _rules]) => fieldName === elt.target.name
+      )
+    );
+    const { validatedData, valid } = validate(
+      structure,
+      filteredSchema,
+      structureSchema,
+      false
+    );
+    if (valid) {
       structure = { ...structure, ...validatedData };
     }
   }
@@ -46,8 +56,12 @@
   };
 
   async function handleSubmit() {
-    const validatedData = validate(structure, structureSchema);
-    if (validatedData) {
+    const { validatedData, valid } = validate(
+      structure,
+      structureSchema,
+      structureSchema
+    );
+    if (valid) {
       // Validation OK, let's send it to the API endpoint
       let result;
       if (modify) {
@@ -154,7 +168,7 @@
         </div>
       </div>
       <div class="flex flex-row justify-between gap-x-4 ">
-        <div class="flex-auto">
+        <div class="w-250p">
           <ModelField
             type="tel"
             label="Téléphone"
@@ -165,7 +179,7 @@
             vertical />
         </div>
 
-        <div class="flex-auto">
+        <div class="flex-1 ">
           <ModelField
             type="email"
             label="Courriel"
