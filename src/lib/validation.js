@@ -27,12 +27,13 @@ function validateField(fieldname, shape, data) {
   clearError(fieldname);
   const originalValue = data[fieldname];
   let value = originalValue;
-  if (shape.nullable && value == null) {
+  if (shape.nullable && !shape.required && value == null) {
+    // Ignore null values for fields that are nullable and not required
     return { value, valid: true };
   }
   if (shape.pre) {
-    for (const prerun of shape.pre) {
-      value = prerun(value);
+    for (const preprocess of shape.pre) {
+      value = preprocess(value);
     }
   }
   if (shape.required && (value == null || value === "" || value === [])) {
@@ -47,12 +48,22 @@ function validateField(fieldname, shape, data) {
       addError(fieldname, result.msg);
       return { originalValue, valid: false };
     }
+    if (shape.post) {
+      for (const postprocess of shape.post) {
+        value = postprocess(value);
+      }
+    }
   }
   return { value, valid: true };
 }
 
+function scrollToField(fieldname) {
+  const elt = document.getElementsByName(fieldname);
+  elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 export function validate(data, schema, fullSchema, skipDeps = true) {
-  const validatedData = {};
+  let validatedData = {};
   let isValid = true;
   let doneOnce = false;
 
@@ -65,8 +76,7 @@ export function validate(data, schema, fullSchema, skipDeps = true) {
     isValid &&= valid;
     validatedData[fieldname] = value;
     if (!doneOnce && !valid) {
-      const elt = document.getElementsByName(fieldname);
-      elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToField(fieldname);
       doneOnce = true;
     }
     if (!skipDeps) {
@@ -79,63 +89,35 @@ export function validate(data, schema, fullSchema, skipDeps = true) {
         isValid &&= depValid;
         validatedData[depName] = depValue;
         if (!doneOnce && !depValid) {
-          const elt = document.getElementsByName(depName);
-          elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
+          scrollToField(depName);
           doneOnce = true;
         }
       });
     }
   });
+  // Ensure we pass the fields that are not in the validation schema untouched
+  // Those are mostly the hidden fields
+  validatedData = { ...data, ...validatedData };
+
   return { validatedData, valid: isValid };
-  // try {
-  //   validatedData = schema.validateSync(data, {
-  //     abortEarly: false,
-  //     strict: true,
-  //   });
-  // } catch (err) {
-  //   const errors = err.inner.reduce(
-  //     (acc, e) => ({ ...acc, [e.path]: e.message }),
-  //     {}
-  //   );
-
-  //   let doneOnce = false;
-  //   Object.entries(errors).forEach(([fieldName, message]) => {
-  //     const name = fieldName.split("[")[0];
-  //     if (!doneOnce) {
-  //       const elt = document.getElementsByName(name);
-  //       elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  //       doneOnce = true;
-  //     }
-  //     formErrors.update((value) => {
-  //       value[name] = message;
-  //       return value;
-  //     });
-
-  //     console.log(name, data[name], typeof data[name], message);
-  //   });
-
-  //   console.log("Validation errors", errors);
-  //   return false;
-  // }
-  return data;
-  return validatedData;
 }
 
 export function injectAPIErrors(errors, serverErrors) {
+  let doneOnce = false;
+
   Object.entries(errors).forEach(([key, values]) => {
-    const fieldName = key;
+    const fieldname = key;
     values.forEach((value) => {
       const errorCode = value.code;
-      const errorMessage =
-        (serverErrors[fieldName] && serverErrors[fieldName][errorCode]) ||
+      const errorMsg =
+        (serverErrors[fieldname] && serverErrors[fieldname][errorCode]) ||
         (serverErrors._default && serverErrors._default[errorCode]) ||
         value.message;
-      // TODO append instead of overwrite; there might be more than one error
-      // by field
-      formErrors.update((errValue) => {
-        errValue[fieldName] = errorMessage;
-        return errValue;
-      });
+      addError(fieldname, errorMsg);
+      if (!doneOnce) {
+        scrollToField(fieldname);
+        doneOnce = true;
+      }
     });
   });
 }

@@ -1,6 +1,7 @@
 import { browser } from "$app/env";
 
 import { writable, get } from "svelte/store";
+import serviceSchema from "$lib/schemas/service";
 import { storageKey } from "./_constants";
 
 let stored;
@@ -10,14 +11,13 @@ if (browser) {
     stored = JSON.parse(lsContent);
   }
 }
-const defaultServiceCache = {
-  kinds: [],
-  categories: [],
-  subcategories: [],
-  beneficiariesAccessModes: [],
-  coachOrientationModes: [],
-  locationKinds: [],
-};
+
+const defaultServiceCache = Object.fromEntries(
+  Object.entries(serviceSchema).map(([fieldName, props]) => [
+    fieldName,
+    props.default,
+  ])
+);
 
 export const serviceCache = writable(
   stored || JSON.parse(JSON.stringify(defaultServiceCache))

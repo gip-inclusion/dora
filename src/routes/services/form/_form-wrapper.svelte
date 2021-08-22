@@ -37,7 +37,6 @@
   export let modify = false;
 
   function handleBlur(elt) {
-    console.log("Blur", elt.target.name);
     const filteredSchema = Object.fromEntries(
       Object.entries(serviceSchema).filter(
         ([fieldName, _rules]) => fieldName === elt.target.name

@@ -11,15 +11,6 @@ const phoneRegexp = /^\d{10}$/u;
 const postalCodeRegexp = /^\d[0-9abAB]\d{3}$/u;
 /* eslint-enable */
 
-export const isoDate = () =>
-  string()
-    .notRequired()
-    .nullable()
-    .test(
-      (dateString) => true
-      // dateString == null || new Date(dateString).toString() !== "Invalid Date"
-    );
-
 function isString(msg) {
   return (name, value, _data) => ({
     valid: typeof value === "string",
@@ -45,7 +36,9 @@ function isDate(msg) {
   return (name, value, _data) => ({
     // TODO: that's probably not safe enough. Use Luxon?
     // https://stackoverflow.com/questions/7445328/check-if-a-string-is-a-date-value
-    valid: typeof value === "string" && new Date(value) !== "Invalid Date",
+    valid:
+      typeof value === "string" &&
+      (value === "" || new Date(value) !== "Invalid Date"),
     msg: msg || `Veuillez saisir une date valide`,
   });
 }
@@ -60,7 +53,8 @@ function isURL(msg) {
 
 function isEmail(msg) {
   return (name, value, _data) => ({
-    valid: typeof value === "string" && !!value.match(emailRegexp),
+    valid:
+      typeof value === "string" && (value === "" || !!value.match(emailRegexp)),
     msg:
       msg ||
       `Veuillez saisir une adresse e-mail valide (ex: nom.prenom@organisation.fr)`,
@@ -69,7 +63,8 @@ function isEmail(msg) {
 
 function isPhone(msg) {
   return (name, value, _data) => ({
-    valid: typeof value === "string" && !!value.match(phoneRegexp),
+    valid:
+      typeof value === "string" && (value === "" || !!value.match(phoneRegexp)),
     msg:
       msg ||
       `Veuillez saisir un numéro de téléphone valide (ex: 06 00 00 00 00 ou  0600000000`,
@@ -77,7 +72,9 @@ function isPhone(msg) {
 }
 function isPostalCode(msg) {
   return (name, value, _data) => ({
-    valid: typeof value === "string" && !!value.match(postalCodeRegexp),
+    valid:
+      typeof value === "string" &&
+      (value === "" || !!value.match(postalCodeRegexp)),
     msg: msg || `Veuillez saisir un code postal valide`,
   });
 }
@@ -140,6 +137,7 @@ function removeAllSpaces(value) {
   return value.replaceAll(" ", "");
 }
 
+// ----- Postprocessing
 function lower(value) {
   return value.toLowerCase();
 }
@@ -148,59 +146,69 @@ function trim(value) {
   return value.trim();
 }
 
-// TODO: trim
-
+// ------
 const shape1 = {
   structure: {
+    default: null,
     required: true,
     rules: [isString(), maxStrLength(50)],
   },
   categories: {
+    default: [],
     required: true,
     rules: [isArray([isString(), maxStrLength(2)]), arrNotEmpty()],
   },
   subcategories: {
+    default: [],
     required: true,
     rules: [isArray([isString(), maxStrLength(3)]), arrNotEmpty()],
   },
   kinds: {
+    default: [],
     required: true,
     rules: [isArray([isString(), maxStrLength(2)]), arrNotEmpty()],
   },
   isCommonLaw: {
-    nullable: true,
+    default: false,
     rules: [isBool()],
   },
   name: {
+    default: "",
     required: true,
-    pre: [trim],
+
     rules: [isString(), maxStrLength(140)],
+    post: [trim],
   },
   shortDesc: {
+    default: "",
     required: true,
-    pre: [trim],
+
     rules: [isString(), maxStrLength(280)],
+    post: [trim],
   },
-  fullDesc: { pre: [trim], rules: [isString()] },
+  fullDesc: { default: "", rules: [isString()], post: [trim] },
 };
 
 const shape2 = {
   accessConditions: {
+    default: [],
     rules: [isArray([isPK()])],
   },
   concernedPublic: {
+    default: [],
     rules: [isArray([isPK()])],
   },
   isCumulative: {
-    nullable: true,
+    default: true,
     rules: [isBool()],
   },
   hasFee: {
-    nullable: true,
+    default: false,
     rules: [isBool()],
   },
   feeDetails: {
-    pre: [trim],
+    default: "",
+    post: [trim],
     rules: [
       isString(),
       maxStrLength(140),
@@ -214,10 +222,12 @@ const shape2 = {
 
 const shape3 = {
   beneficiariesAccessModes: {
+    default: [],
     required: true,
     rules: [isArray([isString(), maxStrLength(2)]), arrNotEmpty()],
   },
   beneficiariesAccessModesOther: {
+    default: "",
     rules: [
       isString(),
       maxStrLength(280),
@@ -230,10 +240,12 @@ const shape3 = {
     ],
   },
   coachOrientationModes: {
+    default: [],
     required: true,
     rules: [isArray([isString(), maxStrLength(2)]), arrNotEmpty()],
   },
   coachOrientationModesOther: {
+    default: "",
     rules: [
       isString(),
       maxStrLength(280),
@@ -246,73 +258,88 @@ const shape3 = {
     ],
   },
   requirements: {
+    default: [],
     rules: [isArray([isPK()])],
   },
   credentials: {
+    default: [],
     rules: [isArray([isPK()])],
   },
   forms: {
+    default: [],
     rules: [isArray([isString(), maxStrLength(1024)])],
   },
   onlineForm: {
-    pre: [trim],
+    default: "",
     rules: [isURL(), maxStrLength(200)],
+    post: [trim],
   },
 };
 
 const shape4 = {
   contactName: {
-    pre: [trim],
+    default: "",
     rules: [isString(), maxStrLength(140)],
+    post: [trim],
   },
   contactPhone: {
+    default: "",
     pre: [removeAllSpaces],
     rules: [isPhone()],
   },
   contactEmail: {
-    pre: [lower, trim],
+    default: "",
     rules: [isEmail(), maxStrLength(255)],
+    post: [lower, trim],
   },
   isContactInfoPublic: {
-    nullable: true,
+    default: false,
     rules: [isBool()],
   },
 
   locationKinds: {
+    default: [],
     required: true,
     rules: [isArray([isString(), maxStrLength(2)]), arrNotEmpty()],
   },
   remoteUrl: {
-    pre: [trim],
+    default: "",
     rules: [isURL(), maxStrLength(200)],
+    post: [trim],
   },
   city: {
+    default: "",
     required: true,
-    pre: [trim],
+
     rules: [isString(), maxStrLength(255)],
+    post: [trim],
   },
   address1: {
+    default: "",
     required: true,
-    pre: [trim],
+
     rules: [isString(), maxStrLength(255)],
+    post: [trim],
   },
   address2: {
-    pre: [trim],
+    default: "",
     rules: [isString(), maxStrLength(255)],
+    post: [trim],
   },
   postalCode: {
+    default: "",
     required: true,
     rules: [isPostalCode()],
   },
-  // isTimeLimited: {
-  //   rules: [],
-  // },
-
   startDate: {
+    default: null,
+    nullable: true,
     rules: [isDate()],
     dependents: ["endDate"],
   },
   endDate: {
+    default: null,
+    nullable: true,
     rules: [
       isDate(),
       (name, value, data) => ({
@@ -322,10 +349,11 @@ const shape4 = {
     ],
   },
   recurrence: {
+    default: "",
     rules: [isString(), maxStrLength(2)],
   },
   recurrenceOther: {
-    pre: [trim],
+    default: "",
     rules: [
       isString(),
       maxStrLength(140),
@@ -334,12 +362,16 @@ const shape4 = {
         msg: `Ce champ est requis`,
       }),
     ],
+    post: [trim],
   },
   suspensionCount: {
+    default: null,
     nullable: true,
     rules: [isInteger(), minNum(1)],
   },
   suspensionDate: {
+    default: null,
+    nullable: true,
     rules: [isDate()],
   },
 };
