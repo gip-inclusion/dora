@@ -10,8 +10,8 @@
   import insane from "insane";
 
   import { page } from "$app/stores";
+  import { token } from "$lib/auth";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-
   import LinkButton from "$lib/components/link-button.svelte";
   export let structure;
 
@@ -76,6 +76,8 @@
         {@html insane(structure.fullDesc)}
       </div>
     </div>
-    <LinkButton type="submit" to={editLink} label="Éditer" />
+    {#if $token}
+      <LinkButton type="submit" to={editLink} label="Éditer" />
+    {/if}
   </div>
 </CenteredGrid>

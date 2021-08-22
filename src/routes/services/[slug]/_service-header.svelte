@@ -1,6 +1,7 @@
 <script>
   import { page } from "$app/stores";
 
+  import { token } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
 
   export let service, structure;
@@ -13,7 +14,9 @@
       {structure.name}
     </h3>
     <h1 class="text-white">{service.name}</h1>
-    <LinkButton type="submit" to={editLink} label="Éditer" />
+    {#if $token}
+      <LinkButton type="submit" to={editLink} label="Éditer" />
+    {/if}
     {#if service.isAvailable}Disponible{:else}Indisponible{/if}
     {#each service.kindsDisplay as kind}
       {kind}
