@@ -5,6 +5,7 @@
   export let placeholder;
   export let cityCode;
   export let disabled;
+  export let name;
   export let value = undefined;
   export let initialValue = undefined;
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
@@ -26,6 +27,7 @@
 <Select
   on:blur
   bind:value
+  {name}
   onChange={handleChange}
   {initialValue}
   {placeholder}

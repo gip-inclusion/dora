@@ -98,6 +98,7 @@
     required>
     <CitySearch
       slot="custom-input"
+      name="city"
       placeholder="Saisissez et validez votre ville"
       initialValue={$serviceCache.city}
       handleChange={handleCityChange} />
@@ -109,6 +110,7 @@
     required>
     <AddressSearch
       slot="custom-input"
+      name="address1"
       disabled={!$serviceCache.cityCode}
       cityCode={$serviceCache.cityCode}
       placeholder="Saisissez et validez votre adresse"

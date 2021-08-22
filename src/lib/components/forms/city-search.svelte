@@ -4,6 +4,7 @@
   export let handleChange;
   export let placeholder;
   export let disabled = false;
+  export let name;
   export let value = undefined;
   export let initialValue = undefined;
 
@@ -26,6 +27,7 @@
 <Select
   on:blur
   bind:value
+  {name}
   onChange={handleChange}
   {initialValue}
   {placeholder}
