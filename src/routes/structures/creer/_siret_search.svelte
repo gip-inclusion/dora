@@ -5,6 +5,7 @@
   export let handleChange;
   export let selectedCity;
   export let disabled;
+  export let name;
   export let placeholder;
 
   async function searchSirene(q) {
@@ -64,6 +65,7 @@
 <Select
   onChange={handleChange}
   {disabled}
+  {name}
   {placeholder}
   hideArrow
   searchFunction={searchSirene}

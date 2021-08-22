@@ -42,7 +42,7 @@
     type="text"
     field={serviceOptions.contactName}
     name="contactName"
-    errorMessage={$formErrors.contactName}
+    errorMessages={$formErrors.contactName}
     bind:value={$serviceCache.contactName}>
     <FieldHelp slot="helptext" title="Contact référent">
       Merci de préciser les coordonnées de la personne en charge de ce service.
@@ -52,21 +52,21 @@
     placeholder="05 ou 06 00 00 00 00"
     field={serviceOptions.contactPhone}
     name="contactPhone"
-    errorMessage={$formErrors.contactPhone}
+    errorMessages={$formErrors.contactPhone}
     bind:value={$serviceCache.contactPhone} />
   <ModelField
     type="email"
     placeholder="Votre adresse e-mail"
     field={serviceOptions.contactEmail}
     name="contactEmail"
-    errorMessage={$formErrors.contactEmail}
+    errorMessages={$formErrors.contactEmail}
     bind:value={$serviceCache.contactEmail} />
   <ModelField
     label="Rendre les informations publiques"
     type="toggle"
     field={serviceOptions.isContactInfoPublic}
     name="isContactInfoPublic"
-    errorMessage={$formErrors.isContactInfoPublic}
+    errorMessages={$formErrors.isContactInfoPublic}
     bind:value={$serviceCache.isContactInfoPublic} />
 </FieldSet>
 
@@ -75,7 +75,7 @@
     type="checkboxes"
     field={serviceOptions.locationKinds}
     name="locationKinds"
-    errorMessage={$formErrors.locationKinds}
+    errorMessages={$formErrors.locationKinds}
     bind:value={$serviceCache.locationKinds}>
     <FieldHelp slot="helptext" title="Lieu de déroulement">
       Merci de préciser si le service ou l’accompagnement se déroule en
@@ -88,12 +88,17 @@
     visible={$serviceCache.locationKinds.includes("RE")}
     field={serviceOptions.remoteUrl}
     name="remoteUrl"
-    errorMessage={$formErrors.remoteUrl}
+    errorMessages={$formErrors.remoteUrl}
     bind:value={$serviceCache.remoteUrl} />
 
-  <Field type="custom" label="Commune" errorMessage={$formErrors.city} required>
+  <Field
+    type="custom"
+    label="Commune"
+    errorMessages={$formErrors.city}
+    required>
     <CitySearch
       slot="custom-input"
+      name="city"
       placeholder="Saisissez et validez votre ville"
       initialValue={$serviceCache.city}
       handleChange={handleCityChange} />
@@ -101,10 +106,11 @@
   <Field
     type="custom"
     label="Adresse"
-    errorMessage={$formErrors.address1}
+    errorMessages={$formErrors.address1}
     required>
     <AddressSearch
       slot="custom-input"
+      name="address1"
       disabled={!$serviceCache.cityCode}
       cityCode={$serviceCache.cityCode}
       placeholder="Saisissez et validez votre adresse"
@@ -116,49 +122,49 @@
     placeholder="Compléments d’adresse"
     field={serviceOptions.address2}
     name="address2"
-    errorMessage={$formErrors.address2}
+    errorMessages={$formErrors.address2}
     bind:value={$serviceCache.address2} />
   <ModelField
     type="text"
     placeholder="Code postal"
     field={serviceOptions.postalCode}
     name="postalCode"
-    errorMessage={$formErrors.postalCode}
+    errorMessages={$formErrors.postalCode}
     bind:value={$serviceCache.postalCode} />
   <ModelField
     type="hidden"
     field={serviceOptions.cityCode}
     name="cityCode"
-    errorMessage={$formErrors.cityCode}
+    errorMessages={$formErrors.cityCode}
     bind:value={$serviceCache.cityCode} />
   <ModelField
     type="hidden"
     field={serviceOptions.longitude}
     name="longitude"
-    errorMessage={$formErrors.longitude}
+    errorMessages={$formErrors.longitude}
     bind:value={$serviceCache.longitude} />
   <ModelField
     type="hidden"
     field={serviceOptions.latitude}
     name="latitude"
-    errorMessage={$formErrors.latitude}
+    errorMessages={$formErrors.latitude}
     bind:value={$serviceCache.latitude} />
 </FieldSet>
 
 <FieldSet title="Durée et modalités de disponibilité">
-  <ModelField
+  <div>Votre service est limité dans le temps ?</div>
+  <!-- <ModelField
     label="Votre service est limité dans le temps ?"
     type="toggle"
     field={serviceOptions.isTimeLimited}
     name="isTimeLimited"
-    errorMessage={$formErrors.isTimeLimited}
-    bind:value={$serviceCache.isTimeLimited} />
+    errorMessages={$formErrors.isTimeLimited}
+    bind:value={$serviceCache.isTimeLimited} /> -->
   <ModelField
     type="date"
     field={serviceOptions.startDate}
     name="startDate"
-    errorMessage={$formErrors.startDate}
-    visible={!!$serviceCache.isTimeLimited}
+    errorMessages={$formErrors.startDate}
     bind:value={$serviceCache.startDate}>
     <FieldHelp slot="helptext" title="Suspension">
       En configurant la suspension de votre service (avec une limite de temps ou
@@ -167,16 +173,15 @@
     </FieldHelp></ModelField>
   <ModelField
     type="date"
-    visible={!!$serviceCache.isTimeLimited}
     field={serviceOptions.endDate}
     name="endDate"
-    errorMessage={$formErrors.endDate}
+    errorMessages={$formErrors.endDate}
     bind:value={$serviceCache.endDate} />
   <ModelField
     type="radios"
     field={serviceOptions.recurrence}
     name="recurrence"
-    errorMessage={$formErrors.recurrence}
+    errorMessages={$formErrors.recurrence}
     bind:value={$serviceCache.recurrence} />
   <ModelField
     type="text"
@@ -185,29 +190,28 @@
     visible={$serviceCache.recurrence === "OT"}
     field={serviceOptions.recurrenceOther}
     name="recurrenceOther"
-    errorMessage={$formErrors.recurrenceOther}
+    errorMessages={$formErrors.recurrenceOther}
     bind:value={$serviceCache.recurrenceOther} />
-  <Field
+  <div>Critères de suspension :</div>
+  <!-- <Field
     name="autoSuspend"
     type="toggle"
     label="Critères de suspension"
-    bind:value={autoSuspend} />
+    bind:value={autoSuspend} /> -->
   <ModelField
     label="Oui, à partir d’un nombre d’inscriptions :"
     placeholder="Préciser le nombre maximum"
-    visible={autoSuspend}
     type="number"
     minValue={1}
     field={serviceOptions.suspensionCount}
     name="suspensionCount"
-    errorMessage={$formErrors.suspensionCount}
+    errorMessages={$formErrors.suspensionCount}
     bind:value={$serviceCache.suspensionCount} />
   <ModelField
     label="Oui, à partir d’une date :"
     type="date"
-    visible={autoSuspend}
     field={serviceOptions.suspensionDate}
     name="suspensionDate"
-    errorMessage={$formErrors.suspensionDate}
+    errorMessages={$formErrors.suspensionDate}
     bind:value={$serviceCache.suspensionDate} />
 </FieldSet>

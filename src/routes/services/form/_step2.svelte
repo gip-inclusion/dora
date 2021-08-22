@@ -16,7 +16,7 @@
     placeholder="Choisissez ou ajoutez vos critères d’admission"
     field={serviceOptions.accessConditions}
     name="accessConditions"
-    errorMessage={$formErrors.accessConditions}
+    errorMessages={$formErrors.accessConditions}
     bind:value={$serviceCache.accessConditions}>
     <FieldHelp slot="helptext" title="Critères">
       <p>
@@ -39,19 +39,19 @@
     placeholder="Sélectionnez ou ajoutez les publics que vous adressez"
     field={serviceOptions.concernedPublic}
     name="concernedPublic"
-    errorMessage={$formErrors.concernedPublic}
+    errorMessages={$formErrors.concernedPublic}
     bind:value={$serviceCache.concernedPublic} />
   <ModelField
     type="toggle"
     field={serviceOptions.isCumulative}
     name="isCumulative"
-    errorMessage={$formErrors.isCumulative}
+    errorMessages={$formErrors.isCumulative}
     bind:value={$serviceCache.isCumulative} />
   <ModelField
     type="toggle"
     field={serviceOptions.hasFee}
     name="hasFee"
-    errorMessage={$formErrors.hasFee}
+    errorMessages={$formErrors.hasFee}
     bind:value={$serviceCache.hasFee} />
 
   <ModelField
@@ -62,6 +62,6 @@
     visible={!!$serviceCache.hasFee}
     field={serviceOptions.feeDetails}
     name="feeDetails"
-    errorMessage={$formErrors.feeDetails}
+    errorMessages={$formErrors.feeDetails}
     bind:value={$serviceCache.feeDetails} />
 </FieldSet>

@@ -25,13 +25,23 @@
   export let formTitle;
 
   export let structure;
+
   export let modify = false;
   export let visible;
 
   function handleBlur(elt) {
-    const schema = structureSchema.pick([elt.target.name]);
-    const validatedData = validate(structure, schema);
-    if (validatedData) {
+    const filteredSchema = Object.fromEntries(
+      Object.entries(structureSchema).filter(
+        ([fieldName, _rules]) => fieldName === elt.target.name
+      )
+    );
+    const { validatedData, valid } = validate(
+      structure,
+      filteredSchema,
+      structureSchema,
+      false
+    );
+    if (valid) {
       structure = { ...structure, ...validatedData };
     }
   }
@@ -46,8 +56,12 @@
   };
 
   async function handleSubmit() {
-    const validatedData = validate(structure, structureSchema);
-    if (validatedData) {
+    const { validatedData, valid } = validate(
+      structure,
+      structureSchema,
+      structureSchema
+    );
+    if (valid) {
       // Validation OK, let's send it to the API endpoint
       let result;
       if (modify) {
@@ -86,7 +100,7 @@
         label="SIRET"
         field={$structureOptions.siret}
         name="siret"
-        errorMessage={$formErrors.siret}
+        errorMessages={$formErrors.siret}
         disabled
         bind:value={structure.siret}
         vertical>
@@ -103,7 +117,7 @@
         label="Nom de la structure"
         field={$structureOptions.name}
         name="name"
-        errorMessage={$formErrors.name}
+        errorMessages={$formErrors.name}
         bind:value={structure.name}
         vertical />
       <ModelField
@@ -112,7 +126,7 @@
         placeholder="choisissez"
         field={$structureOptions.typology}
         name="typology"
-        errorMessage={$formErrors.typology}
+        errorMessages={$formErrors.typology}
         bind:value={structure.typology}
         vertical />
       <ModelField
@@ -120,7 +134,7 @@
         label="Adresse"
         field={$structureOptions.address1}
         name="address1"
-        errorMessage={$formErrors.address1}
+        errorMessages={$formErrors.address1}
         bind:value={structure.address1}
         vertical />
       <ModelField
@@ -128,7 +142,7 @@
         label="Complément d’adresse"
         field={$structureOptions.address2}
         name="address2"
-        errorMessage={$formErrors.address2}
+        errorMessages={$formErrors.address2}
         bind:value={structure.address2}
         vertical />
       <div class="flex flex-row justify-between gap-x-4">
@@ -138,7 +152,7 @@
             label="Code postal"
             field={$structureOptions.postalCode}
             name="postalCode"
-            errorMessage={$formErrors.postalCode}
+            errorMessages={$formErrors.postalCode}
             bind:value={structure.postalCode}
             vertical />
         </div>
@@ -148,30 +162,30 @@
             label="Ville"
             field={$structureOptions.city}
             name="city"
-            errorMessage={$formErrors.city}
+            errorMessages={$formErrors.city}
             bind:value={structure.city}
             vertical />
         </div>
       </div>
       <div class="flex flex-row justify-between gap-x-4 ">
-        <div class="flex-auto">
+        <div class="w-250p">
           <ModelField
             type="tel"
             label="Téléphone"
             field={$structureOptions.phone}
             name="phone"
-            errorMessage={$formErrors.phone}
+            errorMessages={$formErrors.phone}
             bind:value={structure.phone}
             vertical />
         </div>
 
-        <div class="flex-auto">
+        <div class="flex-1 ">
           <ModelField
             type="email"
             label="Courriel"
             field={$structureOptions.email}
             name="email"
-            errorMessage={$formErrors.email}
+            errorMessages={$formErrors.email}
             bind:value={structure.email}
             vertical />
         </div>
@@ -182,7 +196,7 @@
         placeholder="https://mastructure.fr"
         field={$structureOptions.url}
         name="url"
-        errorMessage={$formErrors.url}
+        errorMessages={$formErrors.url}
         bind:value={structure.url}
         vertical />
       <ModelField
@@ -192,7 +206,7 @@
         placeholder="Décrivez brièvement votre structure"
         field={$structureOptions.shortDesc}
         name="shortDesc"
-        errorMessage={$formErrors.shortDesc}
+        errorMessages={$formErrors.shortDesc}
         bind:value={structure.shortDesc} />
       <ModelField
         type="richtext"
@@ -201,7 +215,7 @@
         placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre structure et ses spécificités."
         field={$structureOptions.fullDesc}
         name="fullDesc"
-        errorMessage={$formErrors.fullDesc}
+        errorMessages={$formErrors.fullDesc}
         bind:value={structure.fullDesc}
         vertical />
 

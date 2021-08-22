@@ -17,7 +17,7 @@
     type="checkboxes"
     field={serviceOptions.beneficiariesAccessModes}
     name="beneficiariesAccessModes"
-    errorMessage={$formErrors.beneficiariesAccessModes}
+    errorMessages={$formErrors.beneficiariesAccessModes}
     bind:value={$serviceCache.beneficiariesAccessModes}>
     <FieldHelp slot="helptext" title="Mobiliser le service">
       Quels sont les étapes à suivre pour pouvoir mobiliser le service ?
@@ -29,14 +29,14 @@
     type="text"
     field={serviceOptions.beneficiariesAccessModesOther}
     name="beneficiariesAccessModesOther"
-    errorMessage={$formErrors.beneficiariesAccessModesOther}
+    errorMessages={$formErrors.beneficiariesAccessModesOther}
     bind:value={$serviceCache.beneficiariesAccessModesOther} />
   <ModelField
     label="Comment orienter un bénéficiaire en tant qu’accompagnateur ?"
     type="checkboxes"
     field={serviceOptions.coachOrientationModes}
     name="coachOrientationModes"
-    errorMessage={$formErrors.coachOrientationModes}
+    errorMessages={$formErrors.coachOrientationModes}
     bind:value={$serviceCache.coachOrientationModes} />
   <ModelField
     visible={$serviceCache.coachOrientationModes.includes("OT")}
@@ -45,14 +45,14 @@
     type="text"
     field={serviceOptions.coachOrientationModesOther}
     name="coachOrientationModesOther"
-    errorMessage={$formErrors.coachOrientationModesOther}
+    errorMessages={$formErrors.coachOrientationModesOther}
     bind:value={$serviceCache.coachOrientationModesOther} />
   <ModelField
     placeholder="Choisissez ou ajoutez vos critères d’admission"
     type="multiselect"
     field={serviceOptions.requirements}
     name="requirements"
-    errorMessage={$formErrors.requirements}
+    errorMessages={$formErrors.requirements}
     bind:value={$serviceCache.requirements}>
     <FieldHelp slot="helptext" title="Accès au service">
       Quels sont les compétences, les diplômes qui limitent l’accès au service ?
@@ -62,12 +62,12 @@
     type="multiselect"
     field={serviceOptions.credentials}
     name="credentials"
-    errorMessage={$formErrors.credentials}
+    errorMessages={$formErrors.credentials}
     bind:value={$serviceCache.credentials} />
   <Field
     type="custom"
     label={serviceOptions.forms.label}
-    errorMessage={$formErrors.forms}>
+    errorMessages={$formErrors.forms}>
     <FieldHelp slot="helptext" title="Justificatifs, documents">
       Mettre tous les documents maintenant, c’est permettre d’avoir des
       candidatures complètes avec moins d’aller/retour
@@ -85,6 +85,6 @@
     type="url"
     field={serviceOptions.onlineForm}
     name="onlineForm"
-    errorMessage={$formErrors.onlineForm}
+    errorMessages={$formErrors.onlineForm}
     bind:value={$serviceCache.onlineForm} />
 </FieldSet>

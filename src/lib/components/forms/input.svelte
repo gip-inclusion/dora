@@ -53,11 +53,19 @@
     <RadioButtons {name} bind:group={value} {choices} {disabled} {readonly} />
   </div>
 {:else if type === "select"}
-  <Select {name} {choices} bind:value {placeholder} {disabled} {readonly} />
+  <Select
+    {name}
+    {choices}
+    on:blur
+    bind:value
+    {placeholder}
+    {disabled}
+    {readonly} />
 {:else if type === "multiselect"}
   <Select
     {name}
     {choices}
+    on:blur
     bind:value
     multiple
     {placeholder}

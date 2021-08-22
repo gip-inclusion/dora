@@ -1,79 +1,238 @@
-import "./schema-i18n.js";
-import { object, string, array, boolean, number, date } from "yup";
-import { phone, postalCode, isoDate } from "./schema-utils.js";
+import * as v from "./utils";
 
 const shape1 = {
-  structure: string().max(50).required(),
-  categories: array(string().max(2)).required().min(1),
-  subcategories: array(string().max(3)).required().min(1),
-  kinds: array(string().max(2)).required().min(1),
-  isCommonLaw: boolean(),
-  name: string().max(140).required().trim(),
-  shortDesc: string().max(280).required().trim(),
-  fullDesc: string().trim(),
+  structure: {
+    default: null,
+    required: true,
+    rules: [v.isString(), v.maxStrLength(50)],
+  },
+  categories: {
+    default: [],
+    required: true,
+    rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
+  },
+  subcategories: {
+    default: [],
+    required: true,
+    rules: [v.isArray([v.isString(), v.maxStrLength(3)]), v.arrNotEmpty()],
+  },
+  kinds: {
+    default: [],
+    required: true,
+    rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
+  },
+  isCommonLaw: {
+    default: false,
+    rules: [v.isBool()],
+  },
+  name: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(140)],
+    post: [v.trim],
+  },
+  shortDesc: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(280)],
+    post: [v.trim],
+  },
+  fullDesc: { default: "", rules: [v.isString()], post: [v.trim] },
 };
 
 const shape2 = {
-  accessConditions: array(number().integer()),
-  concernedPublic: array(number().integer()),
-  isCumulative: boolean(),
-  hasFee: boolean(),
-  feeDetails: string()
-    .when("hasFee", {
-      is: true,
-      then: string().max(140).required(),
-    })
-    .trim(),
+  accessConditions: {
+    default: [],
+    rules: [v.isArray([v.isPK()])],
+  },
+  concernedPublic: {
+    default: [],
+    rules: [v.isArray([v.isPK()])],
+  },
+  isCumulative: {
+    default: true,
+    rules: [v.isBool()],
+  },
+  hasFee: {
+    default: false,
+    rules: [v.isBool()],
+  },
+  feeDetails: {
+    default: "",
+    post: [v.trim],
+    rules: [
+      v.isString(),
+      v.maxStrLength(140),
+      (name, value, data) => ({
+        valid: !data.hasFee || value.length,
+        msg: `Ce champ est requis`,
+      }),
+    ],
+  },
 };
 
 const shape3 = {
-  beneficiariesAccessModes: array(string().max(2)).required().min(1),
-  beneficiariesAccessModesOther: string().when("beneficiariesAccessModes", {
-    is: (value) => value.includes("OT"),
-    then: string().max(280).required(),
-  }),
-  coachOrientationModes: array(string().max(2)).required().min(1),
-  coachOrientationModesOther: string().when("coachOrientationModes", {
-    is: (value) => value.includes("OT"),
-    then: string().max(280).required(),
-  }),
-  requirements: array(number().integer()),
-  credentials: array(number().integer()),
-  forms: array(string().max(1024)),
-  onlineForm: string().max(280).url().trim(),
+  beneficiariesAccessModes: {
+    default: [],
+    required: true,
+    rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
+  },
+  beneficiariesAccessModesOther: {
+    default: "",
+    rules: [
+      v.isString(),
+      v.maxStrLength(280),
+      (name, value, data) => ({
+        valid: data.beneficiariesAccessModes.includes("OT")
+          ? !!value.length
+          : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
+  },
+  coachOrientationModes: {
+    default: [],
+    required: true,
+    rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
+  },
+  coachOrientationModesOther: {
+    default: "",
+    rules: [
+      v.isString(),
+      v.maxStrLength(280),
+      (name, value, data) => ({
+        valid: data.coachOrientationModes.includes("OT")
+          ? !!value.length
+          : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
+  },
+  requirements: {
+    default: [],
+    rules: [v.isArray([v.isPK()])],
+  },
+  credentials: {
+    default: [],
+    rules: [v.isArray([v.isPK()])],
+  },
+  forms: {
+    default: [],
+    rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
+  },
+  onlineForm: {
+    default: "",
+    rules: [v.isURL(), v.maxStrLength(200)],
+    post: [v.trim],
+  },
 };
 
 const shape4 = {
-  contactName: string().max(140).trim(),
-  contactPhone: phone(),
-  contactEmail: string().max(254).email().lowercase().trim(),
-  isContactInfoPublic: boolean(),
-  locationKinds: array(string().max(2)).required().min(1),
-  remoteUrl: string().max(200).url().trim(),
-  city: string().max(255).required().trim(),
-  address1: string().max(255).required().trim(),
-  address2: string().max(255).trim(),
-  postalCode: postalCode(),
-  isTimeLimited: boolean(),
-  // startDate: isoDate().nullable(),
-  // endDate: isoDate().nullable(),
-  recurrence: string().max(2),
-  recurrenceOther: string().max(140).trim(),
-  suspensionCount: number().nullable().integer().positive().min(1),
-  // suspensionDate: isoDate().nullable(),
+  contactName: {
+    default: "",
+    rules: [v.isString(), v.maxStrLength(140)],
+    post: [v.trim],
+  },
+  contactPhone: {
+    default: "",
+    pre: [v.removeAllSpaces],
+    rules: [v.isPhone()],
+  },
+  contactEmail: {
+    default: "",
+    rules: [v.isEmail(), v.maxStrLength(255)],
+    post: [v.lower, v.trim],
+  },
+  isContactInfoPublic: {
+    default: false,
+    rules: [v.isBool()],
+  },
+
+  locationKinds: {
+    default: [],
+    required: true,
+    rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
+  },
+  remoteUrl: {
+    default: "",
+    rules: [v.isURL(), v.maxStrLength(200)],
+    post: [v.trim],
+  },
+  city: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  address1: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  address2: {
+    default: "",
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  postalCode: {
+    default: "",
+    required: true,
+    rules: [v.isPostalCode()],
+  },
+  startDate: {
+    default: null,
+    nullable: true,
+    rules: [v.isDate()],
+    dependents: ["endDate"],
+  },
+  endDate: {
+    default: null,
+    nullable: true,
+    rules: [
+      v.isDate(),
+      (name, value, data) => ({
+        valid: !data.startDate || new Date(value) >= new Date(data.startDate),
+        msg: `La date de fin doit être postérieure à la date de début`,
+      }),
+    ],
+  },
+  recurrence: {
+    default: "",
+    rules: [v.isString(), v.maxStrLength(2)],
+  },
+  recurrenceOther: {
+    default: "",
+    rules: [
+      v.isString(),
+      v.maxStrLength(140),
+      (name, value, data) => ({
+        valid: data.recurrence === "OT" ? value.length : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
+    post: [v.trim],
+  },
+  suspensionCount: {
+    default: null,
+    nullable: true,
+    rules: [v.isInteger(), v.minNum(1)],
+  },
+  suspensionDate: {
+    default: null,
+    nullable: true,
+    rules: [v.isDate()],
+  },
 };
 
-export const step1 = object().shape(shape1);
+export const step1 = shape1;
+export const step2 = shape2;
+export const step3 = shape3;
+export const step4 = shape4;
 
-export const step2 = object().shape(shape2);
-
-export const step3 = object().shape(shape3);
-
-export const step4 = object().shape(shape4);
-
-export default object().shape({
+export default {
   ...shape1,
   ...shape2,
   ...shape3,
   ...shape4,
-});
+};

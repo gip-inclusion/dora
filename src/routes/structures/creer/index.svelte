@@ -7,18 +7,26 @@
   import StructureForm from "../_structure_form.svelte";
   import SiretSearch from "./_siret_search.svelte";
   import { siretWasAlreadyClaimed } from "$lib/structures";
+  import structureSchema from "$lib/schemas/structure.js";
 
   import { alertIcon } from "$lib/icons.js";
 
   let selectedCity;
   let selectedEstablishment;
-  let structure = {};
+
+  const defaultStructure = Object.fromEntries(
+    Object.entries(structureSchema).map(([fieldName, props]) => [
+      fieldName,
+      props.default,
+    ])
+  );
+  let structure = JSON.parse(JSON.stringify(defaultStructure));
 
   let alreadyClaimedEstablishment;
 
   function handleCityChange(city) {
     selectedCity = city;
-    structure = {};
+    structure = JSON.parse(JSON.stringify(defaultStructure));
     selectedEstablishment = null;
   }
 
@@ -33,7 +41,7 @@
   async function handleEstablishmentChange(establishment) {
     selectedEstablishment = establishment;
     alreadyClaimedEstablishment = null;
-    structure = {};
+    structure = JSON.parse(JSON.stringify(defaultStructure));
     if (establishment) {
       alreadyClaimedEstablishment = await establishmentAlreadyCreated(
         establishment.siret
@@ -62,6 +70,7 @@
   <Field type="custom" label="Commune" vertical>
     <CitySearch
       slot="custom-input"
+      name="city-select"
       placeholder="Saisissez le nom de votre ville"
       handleChange={handleCityChange} />
     <FieldHelp title="Récupération des données existantes" slot="helptext">
@@ -79,6 +88,7 @@
     vertical>
     <SiretSearch
       slot="custom-input"
+      name="siret-select"
       {selectedCity}
       disabled={!selectedCity?.properties?.citycode}
       handleChange={handleEstablishmentChange}
