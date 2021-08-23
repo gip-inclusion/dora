@@ -33,11 +33,11 @@
   <div class="infos">
     {#if service.isCumulative}
       <Info
-        label="Cette offre de service est cumulable avec d’autres dispositifs"
+        label="Ce service est cumulable avec d’autres dispositifs"
         positiveMood />
     {:else}
       <Info
-        label="Cette offre de service n’est pas cumulable avec d’autres dispositifs"
+        label="Ce service n’est pas cumulable avec d’autres dispositifs"
         negativeMood />
     {/if}
 

@@ -47,9 +47,12 @@
           icon={checkBoxBlankIcon}
           darkBg />
       {/if}
-      {#each service.kindsDisplay as kind}
-        <Label label={kind} iconOnLeft icon={compassDiscoverIcon} darkBg />
-      {/each}
+
+      <Label
+        label={service.kindsDisplay.join(", ")}
+        iconOnLeft
+        icon={compassDiscoverIcon}
+        darkBg />
 
       <Label
         label={`${service.postalCode}, ${service.city}`}

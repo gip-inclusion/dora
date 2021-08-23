@@ -1,7 +1,6 @@
 <style>
   .wrapper {
-    padding: var(--s4);
-    margin: var(--s4);
+    padding: var(--s2) var(--s8);
     background-color: var(--bg-color);
     border-radius: var(--s4);
     color: var(--col-white);
