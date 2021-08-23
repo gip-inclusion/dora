@@ -94,10 +94,10 @@
       </a>
     </div>
     <div class="col-span-6 col-start-7 text-sm leading-normal text-gray-text">
-      Dora est un service public numérique qui permet aux accompagnateurs des
-      personnes en difficulté de trouver rapidement une solution d’insertion
-      détaillée sur laquelle ils peuvent orienter leurs bénéficiaires
-      rapidement.<br />
+      Dora est un service public numérique qui permet aux professionnels,
+      intervenant dans le parcours d'insertion de la personne ayant des freins
+      périphériques, de trouver rapidement des services détaillés sur lesquels
+      ils peuvent orienter leurs bénéficiaires rapidement.<br />
       <div class="flex gap-3 mt-2 font-bold">
         <a href="https://gouvernement.fr">gouvernement.fr</a>
         <a href="https://service-public.fr">service-public.fr</a>
