@@ -17,6 +17,7 @@
     flex-direction: column;
     margin-top: var(--s20);
     margin-bottom: var(--s32);
+    color: var(--col-text);
     gap: var(--s8);
     list-style-position: inside;
     list-style-type: "– ";
