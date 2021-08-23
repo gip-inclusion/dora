@@ -4,7 +4,7 @@
   import Button from "./button.svelte";
 
   export let to;
-  export let small;
+  export let small = false;
 
   function handleClick() {
     if (to) {

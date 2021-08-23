@@ -3,8 +3,8 @@
   import { emotionHappyIcon, errorWarningIcon } from "$lib/icons";
 
   export let label;
-  export let positiveMood;
-  export let negativeMood;
+  export let positiveMood = false;
+  export let negativeMood = false;
 
   const icon = positiveMood ? emotionHappyIcon : errorWarningIcon;
 </script>
