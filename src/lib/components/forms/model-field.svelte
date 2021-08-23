@@ -21,7 +21,6 @@
 
 <Field
   bind:value
-  on:blur
   {name}
   {errorMessages}
   required={field.required}

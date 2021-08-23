@@ -9,7 +9,6 @@
     iconOnRight = false;
   export let darkBg = false;
   export let bigIcon = false;
-  console.log($$slots);
 </script>
 
 <style>

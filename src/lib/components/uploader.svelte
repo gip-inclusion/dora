@@ -55,8 +55,8 @@
   <label>
     <input
       {name}
-      on:blur
       bind:this={uploadInput}
+      on:blur
       on:change={handleSubmit}
       {disabled}
       type="file"

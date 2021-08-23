@@ -1,4 +1,8 @@
 <script>
+  import { getContext } from "svelte";
+
+  import { contextValidationKey } from "$lib/validation";
+
   import Select from "$lib/components/forms/select.svelte";
 
   export let handleChange;
@@ -22,11 +26,17 @@
     }));
     return results;
   }
+
+  const context = getContext(contextValidationKey);
+
+  function handleBlur(evt) {
+    if (context) context.onBlur(evt);
+  }
 </script>
 
 <Select
-  on:blur
   bind:value
+  on:blur={handleBlur}
   {name}
   onChange={handleChange}
   {initialValue}

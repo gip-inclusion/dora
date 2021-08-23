@@ -64,8 +64,8 @@
   <Select
     {name}
     {choices}
-    on:blur
     bind:value
+    on:blur
     {placeholder}
     {disabled}
     {readonly} />
@@ -73,8 +73,8 @@
   <Select
     {name}
     {choices}
-    on:blur
     bind:value
+    on:blur
     multiple
     {placeholder}
     {disabled}
@@ -83,8 +83,8 @@
   <input
     {name}
     id={name}
-    on:blur
     bind:value
+    on:blur
     type="text"
     {placeholder}
     {disabled}
@@ -93,8 +93,8 @@
   <textarea
     {name}
     id={name}
-    on:blur
     bind:value
+    on:blur
     type="text"
     {maxLength}
     {placeholder}
@@ -121,8 +121,8 @@
   <input
     {name}
     id={name}
-    on:blur
     bind:value
+    on:blur
     type="password"
     {placeholder}
     {disabled}
@@ -131,8 +131,8 @@
   <input
     {name}
     id={name}
-    on:blur
     bind:value
+    on:blur
     type="date"
     {placeholder}
     {disabled}
@@ -141,8 +141,8 @@
   <input
     {name}
     id={name}
-    on:blur
     bind:value
+    on:blur
     type="number"
     min={minValue}
     {placeholder}
@@ -152,8 +152,8 @@
   <input
     {name}
     id={name}
-    on:blur
     bind:value
+    on:blur
     type="email"
     {placeholder}
     {disabled}
@@ -162,8 +162,8 @@
   <input
     {name}
     id={name}
-    on:blur
     bind:value
+    on:blur
     type="hidden"
     {disabled}
     {readonly} />
@@ -171,8 +171,8 @@
   <input
     {name}
     id={name}
-    on:blur
     bind:value
+    on:blur
     type="tel"
     {placeholder}
     {disabled}
@@ -181,8 +181,8 @@
   <input
     {name}
     id={name}
-    on:blur
     bind:value
+    on:blur
     type="url"
     {placeholder}
     {disabled}

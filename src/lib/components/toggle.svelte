@@ -47,7 +47,6 @@
     type="checkbox"
     bind:checked
     class="hidden"
-    on:blur
     {disabled}
     {readonly} />
   <!-- path -->

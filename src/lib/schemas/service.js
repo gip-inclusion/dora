@@ -169,6 +169,7 @@ const shape4 = {
     required: true,
     rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
+    dependents: ["postalCode"],
   },
   address2: {
     default: "",

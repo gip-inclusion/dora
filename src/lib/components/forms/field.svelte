@@ -1,7 +1,7 @@
 <script>
-  import { contextValidationKey } from "$lib/validation";
-
   import { getContext } from "svelte";
+
+  import { contextValidationKey } from "$lib/validation";
 
   import Input from "./input.svelte";
   import Alert from "./alert.svelte";
@@ -68,11 +68,11 @@
       <div class="flex flex-col flex-1 flex-grow min-h-6">
         {#if type !== "custom"}
           <Input
+            bind:value
             on:blur={handleBlur}
             on:change={handleChange}
             {type}
             {name}
-            bind:value
             {choices}
             {maxLength}
             {placeholder}

@@ -33,20 +33,25 @@
     // We want to listen to both DOM and component events
     const fieldname = evt.target?.name || evt.detail;
 
-    const filteredSchema = Object.fromEntries(
-      Object.entries(structureSchema).filter(
-        ([name, _rules]) => name === fieldname
-      )
-    );
-    const { validatedData, valid } = validate(
-      structure,
-      filteredSchema,
-      structureSchema,
-      { skipDependenciesCheck: false, noScroll: true }
-    );
-    if (valid) {
-      structure = { ...structure, ...validatedData };
-    }
+    // Sometimes (particularly with Select components), the event is received
+    // before the field value is updated in  `structure`, although it's not
+    // supposed to happen. This setTimeout is a unsatisfying workaround to that.
+    setTimeout(() => {
+      const filteredSchema = Object.fromEntries(
+        Object.entries(structureSchema).filter(
+          ([name, _rules]) => name === fieldname
+        )
+      );
+      const { validatedData, valid } = validate(
+        structure,
+        filteredSchema,
+        structureSchema,
+        { skipDependenciesCheck: false, noScroll: true }
+      );
+      if (valid) {
+        structure = { ...structure, ...validatedData };
+      }
+    }, 100);
   }
 
   setContext(contextValidationKey, {

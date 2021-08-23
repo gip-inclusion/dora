@@ -36,24 +36,28 @@
   export let currentStep = Step1;
   export let modify = false;
 
-  async function handleEltChange(evt) {
+  function handleEltChange(evt) {
     // We want to listen to both DOM and component events
     const fieldname = evt.target?.name || evt.detail;
-
-    const filteredSchema = Object.fromEntries(
-      Object.entries(serviceSchema).filter(
-        ([name, _rules]) => name === fieldname
-      )
-    );
-    const { validatedData, valid } = validate(
-      $serviceCache,
-      filteredSchema,
-      serviceSchema,
-      { skipDependenciesCheck: false, noScroll: true }
-    );
-    if (valid) {
-      $serviceCache = { ...$serviceCache, ...validatedData };
-    }
+    // Sometimes (particularly with Select components), the event is received
+    // before the field value is updated in  $serviceCache, although it's not
+    // supposed to happen. This setTimeout is a unsatisfying workaround to that.
+    setTimeout(() => {
+      const filteredSchema = Object.fromEntries(
+        Object.entries(serviceSchema).filter(
+          ([name, _rules]) => name === fieldname
+        )
+      );
+      const { validatedData, valid } = validate(
+        $serviceCache,
+        filteredSchema,
+        serviceSchema,
+        { skipDependenciesCheck: false, noScroll: true }
+      );
+      if (valid) {
+        $serviceCache = { ...$serviceCache, ...validatedData };
+      }
+    }, 100);
   }
 
   setContext(contextValidationKey, {

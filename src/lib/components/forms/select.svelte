@@ -57,12 +57,12 @@
 <AutoComplete
   {name}
   inputId={name}
+  bind:value
   on:blur
   {localFiltering}
   {minCharactersToSearch}
   {onChange}
   items={choices}
-  bind:value
   {initialValue}
   {disabled}
   {readonly}
