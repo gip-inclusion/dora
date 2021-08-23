@@ -186,6 +186,7 @@ const shape4 = {
     nullable: true,
     rules: [v.isDate()],
     dependents: ["endDate"],
+    post: [v.nullEmpty],
   },
   endDate: {
     default: null,
@@ -197,6 +198,7 @@ const shape4 = {
         msg: `La date de fin doit être postérieure à la date de début`,
       }),
     ],
+    post: [v.nullEmpty],
   },
   recurrence: {
     default: "",
@@ -223,6 +225,7 @@ const shape4 = {
     default: null,
     nullable: true,
     rules: [v.isDate()],
+    post: [v.nullEmpty],
   },
 };
 

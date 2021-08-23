@@ -147,3 +147,7 @@ export function lower(value) {
 export function trim(value) {
   return value.trim();
 }
+
+export function nullEmpty(value) {
+  if (value === "") return null;
+}
