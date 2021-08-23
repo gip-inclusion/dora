@@ -4,18 +4,44 @@
   export let service;
 </script>
 
-<div class="flex flex-row">
-  {#each service.kindsDisplay as kind}
-    <Tag --bg-color="var(--col-magenta-20)">{kind}</Tag>
-  {/each}
+<style>
+  .tags-wrapper {
+    display: flex;
+    flex-direction: row;
+    margin-top: var(--s48);
+    margin-bottom: var(--s32);
+  }
+
+  h2 {
+    color: var(--col-france-blue) !important;
+  }
+
+  .markdown-wrapper {
+    margin-top: var(--s16);
+  }
+
+  .markdown-wrapper :global(h1),
+  .markdown-wrapper :global(h2),
+  .markdown-wrapper :global(h3) {
+    color: var(--col-france-blue);
+  }
+
+  .markdown-wrapper :global(p) {
+    color: var(--col-text);
+  }
+</style>
+
+<div class="tags-wrapper">
   {#each service.categoriesDisplay as cat}
-    <Tag --bg-color="var(--col-magenta-40)">{cat}</Tag><br />
+    <Tag --bg-color="var(--col-magenta-brand)">{cat}</Tag><br />
   {/each}
 </div>
-<div class="flex flex-row">
+<div class="description-wrapper">
   <div>
     <h2>Description du service</h2>
     <strong>{service.shortDesc}</strong>
-    {@html service.fullDesc}
+    <div class="markdown-wrapper prose prose">
+      {@html service.fullDesc}
+    </div>
   </div>
 </div>

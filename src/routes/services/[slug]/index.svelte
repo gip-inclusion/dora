@@ -21,6 +21,8 @@
   import OrientationBox from "./_orientation-box.svelte";
   import ServiceHeader from "./_service-header.svelte";
   import ServicePresentation from "./_service-presentation.svelte";
+  import Label from "$lib/components/label.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
   export let service, structure;
 </script>
 
@@ -36,6 +38,12 @@
   .service-info {
     grid-column: 1 / -1;
     grid-row-start: 2;
+  }
+
+  .structure-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s16);
   }
 </style>
 
@@ -57,11 +65,14 @@
   </div>
   <div class="orientation">
     <OrientationBox {service} {structure} />
-    <h3>{structure.name}</h3>
-    <div>{structure.shortDesc}</div>
-    <div>
-      <a href="/structures/{structure.slug}" class="underline"
-        >Voir l’offre complète de services</a>
+    <div class="structure-info">
+      <h4>{structure.name}</h4>
+      <Label label={structure.shortDesc} italic />
+      <LinkButton
+        to="/structures/{structure.slug}"
+        small
+        nogrow
+        label="Voir l’offre complète de services" />
     </div>
   </div>
   <div class="service-info">

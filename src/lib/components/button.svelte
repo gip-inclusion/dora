@@ -11,6 +11,7 @@
   export let secondary = false,
     tertiary = false;
   export let noBackground = false;
+  export let nogrow = false;
 
   let px, py, iw, ih, ts, lead;
   if (small) {
@@ -62,10 +63,17 @@
   }
 </script>
 
+<style>
+  .nogrow {
+    align-self: flex-start;
+  }
+</style>
+
 <button
   {type}
   {name}
-  class=" {px} {py} {ts} {lead} {border} {text} {background}  flex flex-row items-center justify-center text-center rounded focus:shadow-focus outline-none"
+  class="{px} {py} {ts} {lead} {border} {text} {background}  flex flex-row items-center justify-center text-center rounded focus:shadow-focus outline-none"
+  class:nogrow
   on:click
   {disabled}>
   {#if iconOnLeft}
