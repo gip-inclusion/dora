@@ -16,12 +16,15 @@ export { default as externalLineIcon } from "remixicon/icons/System/external-lin
 export { default as alertIcon } from "remixicon/icons/System/alert-fill.svg?raw";
 export { default as informationIcon } from "remixicon/icons/System/information-fill.svg?raw";
 export { default as checkBoxBlankIcon } from "remixicon/icons/System/checkbox-blank-circle-fill.svg?raw";
+export { default as errorWarningIcon } from "remixicon/icons/System/error-warning-fill.svg?raw";
 
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
+export { default as emotionHappyIcon } from "remixicon/icons/User/emotion-happy-fill.svg?raw";
 
 export { default as coperCoinFillIcon } from "remixicon/icons/Finance/copper-coin-fill.svg?raw";
 
 export { default as lightBulbIcon } from "remixicon/icons/Others/lightbulb-flash-line.svg?raw";
 
 export { default as compassDiscoverIcon } from "remixicon/icons/Map/compass-discover-line.svg?raw";
+export { default as compassFillIcon } from "remixicon/icons/Map/compass-fill.svg?raw";
 export { default as mapPinIcon } from "remixicon/icons/Map/map-pin-2-line.svg?raw";

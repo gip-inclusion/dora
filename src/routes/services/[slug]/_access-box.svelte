@@ -3,34 +3,61 @@
   export let service;
 </script>
 
+<style>
+  .list {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--s20);
+    margin-bottom: var(--s32);
+    gap: var(--s8);
+    list-style-position: inside;
+    list-style-type: "– ";
+  }
+
+  .list li span {
+    position: relative;
+    left: var(--s8);
+  }
+</style>
+
 <Box title="Conditions d’accès pour le bénéficiaire" --box-color="black">
   <div class="flex flex-row">
     <div class="flex-1">
       <h3>Mobiliser la solution</h3>
-      {#each service.beneficiariesAccessModesDisplay as mode}
-        {mode}<br />
-      {:else}
-        ## Non renseigné
-      {/each}
-      {service.beneficiariesAccessModesOther}
+      <ul class="list">
+        {#each service.beneficiariesAccessModesDisplay as mode}
+          <li>
+            <span
+              >{mode === "Autre (préciser)"
+                ? service.beneficiariesAccessModesOther
+                : mode}</span>
+          </li>
+        {:else}
+          <li><span>Non renseigné</span></li>
+        {/each}
+      </ul>
     </div>
 
     <div class="flex-1">
       <h3>Pré-requis, compétences</h3>
-      {#each service.requirementsDisplay as reqs}
-        {reqs}<br />
-      {:else}
-        ## Aucun
-      {/each}
+      <ul class="list">
+        {#each service.requirementsDisplay as reqs}
+          <li><span>{reqs}</span></li>
+        {:else}
+          <li><span>Aucun</span></li>
+        {/each}
+      </ul>
     </div>
 
     <div class="flex-1">
       <h3>Documents et justificatifs</h3>
-      {#each service.credentialsDisplay as creds}
-        {creds}<br />
-      {:else}
-        ## Aucun
-      {/each}
+      <ul class="list">
+        {#each service.credentialsDisplay as creds}
+          <li><span>{creds}</span></li>
+        {:else}
+          <li><span>Aucun</span></li>
+        {/each}
+      </ul>
     </div>
   </div>
 </Box>

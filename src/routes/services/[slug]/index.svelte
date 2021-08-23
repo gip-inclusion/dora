@@ -36,6 +36,10 @@
   }
 
   .service-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--s40);
+    gap: var(--s24);
     grid-column: 1 / -1;
     grid-row-start: 2;
   }

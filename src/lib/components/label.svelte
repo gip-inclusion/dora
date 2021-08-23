@@ -3,10 +3,13 @@
   export let bold = false;
   export let italic = false;
   export let success = false;
+  export let error = false;
   export let icon = null;
   export let iconOnLeft = false,
     iconOnRight = false;
   export let darkBg = false;
+  export let bigIcon = false;
+  console.log($$slots);
 </script>
 
 <style>
@@ -16,6 +19,10 @@
 
   .success {
     color: var(--col-success);
+  }
+
+  .error {
+    color: var(--col-error);
   }
 
   .bold {
@@ -33,6 +40,17 @@
   .dark-bg.success {
     color: var(--col-available-dark);
   }
+
+  .icon {
+    width: var(--s24);
+    height: var(--s24);
+    fill: currentColor;
+  }
+
+  .big-icon {
+    width: var(--s32);
+    height: var(--s32);
+  }
 </style>
 
 <div
@@ -40,20 +58,22 @@
   class:bold
   class:italic
   class:success
+  class:error
   class:dark-bg={darkBg}>
   {#if iconOnLeft}
-    <div class="w-3 h-3 mr-1 fill-current ">
+    <div class="icon mr-1" class:big-icon={bigIcon}>
       {@html icon}
     </div>
   {/if}
-  {#if icon && !label}
-    <div class="w-3 h-3 fill-current">
+  {#if icon && !(label || $$slots.default)}
+    <div class="icon" class:big-icon={bigIcon}>
       {@html icon}
     </div>
   {/if}
-  {label}
+
+  <slot>{label}</slot>
   {#if iconOnRight}
-    <div class="w-3 h-3 ml-1 fill-current">
+    <div class="icon ml-1" class:big-icon={bigIcon}>
       {@html icon}
     </div>
   {/if}

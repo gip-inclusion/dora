@@ -1,50 +1,81 @@
 <script>
+  import Info from "./_info.svelte";
   import Box from "./_box.svelte";
   export let service;
 </script>
 
-<Box title="Les modalités du dispositif" --box-color="blue">
-  <div>
-    {#if service.isCumulative}
-      Cette offre de service est cumulable avec d’autres dispositifs
-    {:else}
-      Cette offre de service n’est pas cumulable avec d’autres dispositifs
-    {/if}
-  </div>
+<style>
+  .infos {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--s32);
+    gap: var(--s8);
+  }
 
-  <div>
-    {#if service.hasFee}
-      Frais à charge du bénéficiaire.
-      {service.feeDetails}
+  .list {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--s20);
+    margin-bottom: var(--s32);
+    gap: var(--s8);
+    list-style-position: inside;
+    list-style-type: "– ";
+  }
+
+  .list li span {
+    position: relative;
+    left: var(--s8);
+  }
+</style>
+
+<Box title="Les modalités du dispositif" --box-color="var(--col-magenta-cta)">
+  <div class="infos">
+    {#if service.isCumulative}
+      <Info
+        label="Cette offre de service est cumulable avec d’autres dispositifs"
+        positiveMood />
     {:else}
-      ### Pas de frais
+      <Info
+        label="Cette offre de service n’est pas cumulable avec d’autres dispositifs"
+        negativeMood />
+    {/if}
+
+    {#if service.hasFee}
+      <Info
+        label="Frais à charge du bénéficiaire : {service.feeDetails}"
+        negativeMood />
     {/if}
   </div>
   <div class="flex flex-row">
     <div class="flex-1">
       <h3>Critères d’admission</h3>
-      {#each service.accessConditionsDisplay as condition}
-        {condition}<br />
-      {:else}
-        ## Aucune condition
-      {/each}
+      <ul class="list">
+        {#each service.accessConditionsDisplay as condition}
+          <li><span>{condition}</span></li>
+        {:else}
+          <li><span>Aucun</span></li>
+        {/each}
+      </ul>
     </div>
     <div class="flex-1">
       <h3>Public concerné</h3>
-      {#each service.concernedPublicDisplay as pub}
-        {pub}<br />
-      {:else}
-        ## Tout le monde
-      {/each}
+      <ul class="list">
+        {#each service.concernedPublicDisplay as pub}
+          <li><span>{pub}</span></li>
+        {:else}
+          <li><span>Tout le monde</span></li>
+        {/each}
+      </ul>
     </div>
 
     <div class="flex-1">
       <h3>Lieu de déroulement</h3>
-      {#each service.locationKindsDisplay as location}
-        {location}<br />
-      {:else}
-        ## Non renseigné
-      {/each}
+      <ul class="list">
+        {#each service.locationKindsDisplay as location}
+          <li><span>{location}</span></li>
+        {:else}
+          <li><span>Non renseigné</span></li>
+        {/each}
+      </ul>
     </div>
-  </div>
-</Box>
+  </div></Box>
