@@ -29,17 +29,20 @@
   export let modify = false;
   export let visible;
 
-  function handleBlur(elt) {
+  function handleEltChange(evt) {
+    // We want to listen to both DOM and component events
+    const fieldname = evt.target?.name || evt.detail;
+
     const filteredSchema = Object.fromEntries(
       Object.entries(structureSchema).filter(
-        ([fieldName, _rules]) => fieldName === elt.target.name
+        ([name, _rules]) => name === fieldname
       )
     );
     const { validatedData, valid } = validate(
       structure,
       filteredSchema,
       structureSchema,
-      false
+      { skipDependenciesCheck: false, noScroll: true }
     );
     if (valid) {
       structure = { ...structure, ...validatedData };
@@ -47,7 +50,8 @@
   }
 
   setContext(contextValidationKey, {
-    onBlur: handleBlur,
+    onBlur: handleEltChange,
+    onChange: handleEltChange,
   });
 
   const serverErrors = {
@@ -59,7 +63,8 @@
     const { validatedData, valid } = validate(
       structure,
       structureSchema,
-      structureSchema
+      structureSchema,
+      { skipDependenciesCheck: true, noScroll: false }
     );
     if (valid) {
       // Validation OK, let's send it to the API endpoint

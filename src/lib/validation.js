@@ -62,7 +62,12 @@ function scrollToField(fieldname) {
   elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-export function validate(data, schema, fullSchema, skipDeps = true) {
+export function validate(
+  data,
+  schema,
+  fullSchema,
+  { noScroll, skipDependenciesCheck }
+) {
   let validatedData = {};
   let isValid = true;
   let doneOnce = false;
@@ -75,11 +80,11 @@ export function validate(data, schema, fullSchema, skipDeps = true) {
     const { value, valid } = validateField(fieldname, shape, data);
     isValid &&= valid;
     validatedData[fieldname] = value;
-    if (!doneOnce && !valid) {
+    if (!noScroll && !doneOnce && !valid) {
       scrollToField(fieldname);
       doneOnce = true;
     }
-    if (!skipDeps) {
+    if (!skipDependenciesCheck) {
       shape.dependents?.forEach((depName) => {
         const { depValue, depValid } = validateField(
           depName,
@@ -88,7 +93,7 @@ export function validate(data, schema, fullSchema, skipDeps = true) {
         );
         isValid &&= depValid;
         validatedData[depName] = depValue;
-        if (!doneOnce && !depValid) {
+        if (!noScroll && !doneOnce && !depValid) {
           scrollToField(depName);
           doneOnce = true;
         }

@@ -35,6 +35,10 @@
   function handleBlur(evt) {
     if (context) context.onBlur(evt);
   }
+
+  function handleChange(evt) {
+    if (context) context.onChange(evt);
+  }
 </script>
 
 <style lang="postcss">
@@ -65,6 +69,7 @@
         {#if type !== "custom"}
           <Input
             on:blur={handleBlur}
+            on:change={handleChange}
             {type}
             {name}
             bind:value

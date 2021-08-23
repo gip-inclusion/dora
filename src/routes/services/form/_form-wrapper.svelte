@@ -36,17 +36,20 @@
   export let currentStep = Step1;
   export let modify = false;
 
-  function handleBlur(elt) {
+  async function handleEltChange(evt) {
+    // We want to listen to both DOM and component events
+    const fieldname = evt.target?.name || evt.detail;
+
     const filteredSchema = Object.fromEntries(
       Object.entries(serviceSchema).filter(
-        ([fieldName, _rules]) => fieldName === elt.target.name
+        ([name, _rules]) => name === fieldname
       )
     );
     const { validatedData, valid } = validate(
       $serviceCache,
       filteredSchema,
       serviceSchema,
-      false
+      { skipDependenciesCheck: false, noScroll: true }
     );
     if (valid) {
       $serviceCache = { ...$serviceCache, ...validatedData };
@@ -54,7 +57,8 @@
   }
 
   setContext(contextValidationKey, {
-    onBlur: handleBlur,
+    onBlur: handleEltChange,
+    onChange: handleEltChange,
   });
 
   let navInfo = {};
@@ -101,7 +105,8 @@
     const { validatedData, valid } = validate(
       $serviceCache,
       serviceSchema,
-      serviceSchema
+      serviceSchema,
+      { skipDependenciesCheck: true, noScroll: false }
     );
     if (valid) {
       // Validation OK, let's send it to the API endpoint
@@ -128,7 +133,12 @@
 
   function handleGoForward() {
     persistServiceCache();
-    if (validate($serviceCache, navInfo.schema, serviceSchema).valid) {
+    if (
+      validate($serviceCache, navInfo.schema, serviceSchema, {
+        skipDependenciesCheck: true,
+        noScroll: false,
+      }).valid
+    ) {
       currentStep = navInfo.next;
       scrollY = 0;
     }
@@ -136,7 +146,12 @@
 
   function handlePublish() {
     persistServiceCache();
-    if (validate($serviceCache, navInfo.schema, serviceSchema).valid) {
+    if (
+      validate($serviceCache, navInfo.schema, serviceSchema, {
+        skipDependenciesCheck: true,
+        noScroll: false,
+      }).valid
+    ) {
       publish();
     }
   }

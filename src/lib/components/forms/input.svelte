@@ -45,13 +45,21 @@
 </style>
 
 {#if type === "checkboxes"}
-  <div class="flex flex-col gap-1">
-    <Checkboxes {name} bind:group={value} {choices} {disabled} {readonly} />
-  </div>
+  <Checkboxes
+    {name}
+    bind:group={value}
+    on:change
+    {choices}
+    {disabled}
+    {readonly} />
 {:else if type === "radios"}
-  <div class="flex flex-col gap-1">
-    <RadioButtons {name} bind:group={value} {choices} {disabled} {readonly} />
-  </div>
+  <RadioButtons
+    {name}
+    bind:group={value}
+    on:change
+    {choices}
+    {disabled}
+    {readonly} />
 {:else if type === "select"}
   <Select
     {name}
