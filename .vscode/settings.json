@@ -23,6 +23,10 @@
   },
   "eslint.probe": ["javascript", "svelte"],
   "eslint.validate": ["javascript", "svelte"],
+  "files.exclude": {
+    ".svelte-kit": true,
+    "build": true
+  },
   "files.trimTrailingWhitespace": true,
   "stylelint.validate": ["css", "html", "svelte"],
   "svelte.plugin.css.globals": "src/app.css",
