@@ -6,8 +6,10 @@
   export let label = undefined;
   export let type;
   export let field;
+  export let choices = null;
   export let vertical = false;
   export let errorMessages = undefined;
+  export let onSelectChange = undefined;
 
   export let disabled = undefined;
   export let readonly = false;
@@ -21,12 +23,13 @@
 
 <Field
   bind:value
+  {onSelectChange}
   {name}
   {errorMessages}
   required={field.required}
   maxLength={field.maxLength}
   label={label || field.label}
-  choices={field.child?.choices || field.choices}
+  choices={choices != null ? choices : field.child?.choices || field.choices}
   {type}
   {placeholder}
   {description}

@@ -28,6 +28,8 @@
   export let toggleYesText = undefined;
   export let toggleNoText = undefined;
 
+  export let onSelectChange = undefined;
+
   const layoutClass = vertical ? "flex-col " : "flex-row";
 
   const context = getContext(contextValidationKey);
@@ -71,6 +73,7 @@
             bind:value
             on:blur={handleBlur}
             on:change={handleChange}
+            {onSelectChange}
             {type}
             {name}
             {choices}

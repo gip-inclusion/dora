@@ -21,6 +21,8 @@
 
   export let toggleYesText;
   export let toggleNoText;
+
+  export let onSelectChange = undefined;
 </script>
 
 <style lang="postcss">
@@ -66,6 +68,7 @@
     {choices}
     bind:value
     on:blur
+    onChange={onSelectChange}
     {placeholder}
     {disabled}
     {readonly} />
@@ -75,6 +78,7 @@
     {choices}
     bind:value
     on:blur
+    onChange={onSelectChange}
     multiple
     {placeholder}
     {disabled}

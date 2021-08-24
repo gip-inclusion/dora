@@ -8,6 +8,17 @@
 
   export let serviceOptions;
   export let service;
+  let subcategories = [];
+
+  function handleCategoryChange(category) {
+    subcategories = category
+      ? serviceOptions.subcategories.child.choices.filter((choice) =>
+          choice.value.startsWith(category)
+        )
+      : [];
+    service.subcategories = [];
+    service.category = category;
+  }
 </script>
 
 <FieldSet title="">
@@ -34,7 +45,7 @@
     field={serviceOptions.category}
     name="category"
     errorMessages={$formErrors.category}
-    bind:value={service.category}
+    onSelectChange={handleCategoryChange}
     placeholder="Choisissez la catégorie principale" />
   <ModelField
     type="multiselect"
@@ -42,6 +53,7 @@
     name="subcategories"
     errorMessages={$formErrors.subcategories}
     bind:value={service.subcategories}
+    choices={subcategories}
     placeholder="Choisissez les sous-catégories">
     <FieldHelp slot="helptext" title="Catégorisation">
       Pour permettre à nos utilisateurs de trouver facilement la solution que
