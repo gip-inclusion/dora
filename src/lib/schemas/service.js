@@ -229,10 +229,10 @@ const shape4 = {
   },
 };
 
-export const step1 = shape1;
-export const step2 = shape2;
-export const step3 = shape3;
-export const step4 = shape4;
+export const step1Schema = shape1;
+export const step2Schema = shape2;
+export const step3Schema = shape3;
+export const step4Schema = shape4;
 
 export default {
   ...shape1,

@@ -20,23 +20,25 @@
   import NavButtons from "./_nav-buttons.svelte";
 
   import serviceSchema, {
-    step1,
-    step2,
-    step3,
-    step4,
+    step1Schema,
+    step2Schema,
+    step3Schema,
+    step4Schema,
   } from "$lib/schemas/service.js";
 
-  import Step1 from "./_step1.svelte";
-  import Step2 from "./_step2.svelte";
-  import Step3 from "./_step3.svelte";
-  import Step4 from "./_step4.svelte";
   import { createService, modifyService } from "$lib/services";
 
+  const schemas = new Map([
+    [1, step1Schema],
+    [2, step2Schema],
+    [3, step3Schema],
+    [4, step4Schema],
+  ]);
   export let title;
-  export let currentStep = Step1;
+  export let currentStep = 1;
   export let modify = false;
   export let service;
-  export let noLocalStorage;
+  export let useLocalStorage = false;
 
   async function handleEltChange(evt) {
     // We want to listen to both DOM and component events
@@ -74,31 +76,27 @@
   let scrollY;
 
   $: switch (currentStep) {
-    case Step1:
+    case 1:
       navInfo = {
-        next: Step2,
-        schema: step1,
+        next: 2,
       };
       break;
-    case Step2:
+    case 2:
       navInfo = {
-        previous: Step1,
-        next: Step3,
-        schema: step2,
+        previous: 1,
+        next: 3,
       };
       break;
-    case Step3:
+    case 3:
       navInfo = {
-        previous: Step2,
-        next: Step4,
-        schema: step3,
+        previous: 2,
+        next: 4,
       };
       break;
-    case Step4:
+    case 4:
       navInfo = {
-        previous: Step3,
+        previous: 3,
         last: true,
-        schema: step4,
       };
       break;
     default:
@@ -126,7 +124,7 @@
         result = await createService(validatedData);
       }
       if (result?.ok) {
-        if (!noLocalStorage) resetServiceCache();
+        if (useLocalStorage) resetServiceCache();
         service = getNewService();
         goto(`/services/${result.result.slug}`);
       } else {
@@ -135,29 +133,31 @@
     }
   }
 
-  function handleGoBack() {
-    if (!noLocalStorage) persistServiceCache(service);
-    currentStep = navInfo.previous;
+  function goToPage(number) {
+    if (useLocalStorage) persistServiceCache(service);
+    currentStep = number;
     scrollY = 0;
   }
 
+  function handleGoBack() {
+    goToPage(navInfo.previous);
+  }
+
   function handleGoForward() {
-    if (!noLocalStorage) persistServiceCache(service);
     if (
-      validate(service, navInfo.schema, serviceSchema, {
+      validate(service, schemas.get(currentStep), serviceSchema, {
         skipDependenciesCheck: true,
         noScroll: false,
       }).valid
     ) {
-      currentStep = navInfo.next;
-      scrollY = 0;
+      goToPage(navInfo.next);
     }
   }
 
   function handlePublish() {
-    if (!noLocalStorage) persistServiceCache(service);
+    if (useLocalStorage) persistServiceCache(service);
     if (
-      validate(service, navInfo.schema, serviceSchema, {
+      validate(service, schemas.get(currentStep), serviceSchema, {
         skipDependenciesCheck: true,
         noScroll: false,
       }).valid
@@ -167,6 +167,10 @@
   }
   function handleSaveDraft() {
     console.error("Not implemented");
+  }
+
+  function handleNavLinkClick(step) {
+    goToPage(step);
   }
 </script>
 
@@ -201,10 +205,13 @@
         </p>
 
         <nav>
-          <NavLink target="etape1" name="Présentation du service" />
-          <NavLink target="etape2" name="Conditions d’accès" />
-          <NavLink target="etape3" name="Modalités d’accès" />
-          <NavLink target="etape4" name="Informations pratiques" />
+          {#each ["Présentation du service", "Conditions d’accès", "Modalités d’accès", "Informations pratiques"] as name, i}
+            <NavLink
+              lit={currentStep >= i + 1}
+              active={currentStep === i + 1}
+              {name}
+              on:click={() => handleNavLinkClick(i + 1)} />
+          {/each}
         </nav>
       </div>
     </div>
@@ -217,7 +224,7 @@
 
   <CenteredGrid gridRow="3" sticky>
     <NavButtons
-      _currentPageIsValid={isValid(navInfo.schema)}
+      _currentPageIsValid={isValid(schemas.get(currentStep))}
       onGoBack={handleGoBack}
       onGoForward={handleGoForward}
       onPublish={handlePublish}

@@ -1,18 +1,14 @@
 <script>
-  import { page } from "$app/stores";
-
-  export let target;
   export let name;
-
-  $: active = $page.path.endsWith(target);
+  export let active;
+  export let lit;
 </script>
 
 <style>
-  a {
+  button {
     padding: 0 var(--s16);
     border-bottom: 2px solid var(--col-gray-02);
     color: var(--col-text-alt2);
-    cursor: default;
     font-size: var(--f16);
     text-align: center;
   }
@@ -23,6 +19,6 @@
   }
 </style>
 
-<a href="" class:active>
+<button type="button" href="" on:click class:active disabled={!lit}>
   {name}
-</a>
+</button>
