@@ -14,7 +14,7 @@ const shape1 = {
   subcategories: {
     default: [],
     required: true,
-    rules: [v.isArray([v.isString(), v.maxStrLength(3)]), v.arrNotEmpty()],
+    rules: [v.isArray([v.isString(), v.maxStrLength(6)]), v.arrNotEmpty()],
   },
   kinds: {
     default: [],
