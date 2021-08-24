@@ -30,11 +30,11 @@
     </strong></Info>
 
   <ModelField
-    type="multiselect"
-    field={serviceOptions.categories}
-    name="categories"
-    errorMessages={$formErrors.categories}
-    bind:value={service.categories}
+    type="select"
+    field={serviceOptions.category}
+    name="category"
+    errorMessages={$formErrors.category}
+    bind:value={service.category}
     placeholder="Choisissez la catégorie principale" />
   <ModelField
     type="multiselect"

@@ -6,10 +6,10 @@ const shape1 = {
     required: true,
     rules: [v.isString(), v.maxStrLength(50)],
   },
-  categories: {
+  category: {
     default: [],
     required: true,
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
+    rules: [v.isString(), v.maxStrLength(2)],
   },
   subcategories: {
     default: [],
