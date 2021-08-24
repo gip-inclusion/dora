@@ -134,3 +134,23 @@ export async function getServiceOptions() {
   }
   return result;
 }
+
+export async function getPublicServicesOptions() {
+  const url = `${getApiURL()}/services-options/`;
+
+  const res = await fetch(url, {
+    headers: {
+      Accept: "application/json; version=1.0",
+    },
+  });
+  if (res.ok) {
+    const servicesOptions = await res.json();
+    return {
+      props: { servicesOptions },
+    };
+  }
+  return {
+    status: res.status,
+    error: new Error(`Could not load ${url}`),
+  };
+}

@@ -12,6 +12,7 @@
     tertiary = false;
   export let noBackground = false;
   export let nogrow = false;
+  export let horizontalBottom = false;
 
   let px, py, iw, ih, ts, lead;
   if (small) {
@@ -67,6 +68,11 @@
   .nogrow {
     align-self: flex-start;
   }
+
+  .hz-bottom {
+    align-self: flex-end;
+    margin-bottom: 15px;
+  }
 </style>
 
 <button
@@ -74,6 +80,7 @@
   {name}
   class="{px} {py} {ts} {lead} {border} {text} {background}  flex flex-row items-center justify-center text-center rounded focus:shadow-focus outline-none"
   class:nogrow
+  class:hz-bottom={horizontalBottom}
   on:click
   {disabled}>
   {#if iconOnLeft}
