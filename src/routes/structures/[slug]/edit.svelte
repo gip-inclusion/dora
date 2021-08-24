@@ -10,7 +10,7 @@
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import StructureForm from "../_structure_form.svelte";
+  import StructureFormWrapper from "../_structure-form-wrapper.svelte";
   export let structure;
 </script>
 
@@ -21,7 +21,7 @@
 <EnsureLoggedIn>
   <CenteredGrid roundedbg>
     <div class="col-span-8 col-start-1 mb-4">
-      <StructureForm
+      <StructureFormWrapper
         {structure}
         formTitle="Modifiez votre structure"
         modify

@@ -12,9 +12,7 @@
   import { getServiceOptions } from "$lib/services";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
 
-  import { serviceCache } from "../form/_stores.js";
-
-  import FormWrapper from "../form/_form-wrapper.svelte";
+  import ServiceFormWrapper from "../form/_service-form-wrapper.svelte";
 
   export let service;
 
@@ -22,15 +20,19 @@
   let serviceOptions;
 
   onMount(async () => {
-    $serviceCache = service;
     serviceOptions = (await getServiceOptions()).result;
   });
 </script>
 
 <EnsureLoggedIn>
   {#if serviceOptions}
-    <FormWrapper bind:currentStep modify title="Modifier un service">
-      <svelte:component this={currentStep} {serviceOptions} />
-    </FormWrapper>
+    <ServiceFormWrapper
+      bind:currentStep
+      bind:service
+      modify
+      noLocalStorage
+      title="Modifier un service">
+      <svelte:component this={currentStep} bind:service {serviceOptions} />
+    </ServiceFormWrapper>
   {/if}
 </EnsureLoggedIn>

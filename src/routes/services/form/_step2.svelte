@@ -1,12 +1,11 @@
 <script>
-  import { serviceCache } from "./_stores.js";
-
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
   import ModelField from "$lib/components/forms/model-field.svelte";
   import { formErrors } from "$lib/validation.js";
 
   export let serviceOptions;
+  export let service;
 </script>
 
 <FieldSet title="Conditions d'accès pour le bénéficiaire">
@@ -17,7 +16,7 @@
     field={serviceOptions.accessConditions}
     name="accessConditions"
     errorMessages={$formErrors.accessConditions}
-    bind:value={$serviceCache.accessConditions}>
+    bind:value={service.accessConditions}>
     <FieldHelp slot="helptext" title="Critères">
       <p>
         <strong>Critères d’admission</strong>
@@ -40,28 +39,28 @@
     field={serviceOptions.concernedPublic}
     name="concernedPublic"
     errorMessages={$formErrors.concernedPublic}
-    bind:value={$serviceCache.concernedPublic} />
+    bind:value={service.concernedPublic} />
   <ModelField
     type="toggle"
     field={serviceOptions.isCumulative}
     name="isCumulative"
     errorMessages={$formErrors.isCumulative}
-    bind:value={$serviceCache.isCumulative} />
+    bind:value={service.isCumulative} />
   <ModelField
     type="toggle"
     field={serviceOptions.hasFee}
     name="hasFee"
     errorMessages={$formErrors.hasFee}
-    bind:value={$serviceCache.hasFee} />
+    bind:value={service.hasFee} />
 
   <ModelField
     type="text"
     hideLabel
     placeholder="Merci de détailler les frais à charge et leurs éventuels critères de
       remboursement"
-    visible={!!$serviceCache.hasFee}
+    visible={!!service.hasFee}
     field={serviceOptions.feeDetails}
     name="feeDetails"
     errorMessages={$formErrors.feeDetails}
-    bind:value={$serviceCache.feeDetails} />
+    bind:value={service.feeDetails} />
 </FieldSet>

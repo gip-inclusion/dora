@@ -13,9 +13,9 @@
 
   import NavLink from "./_navlink.svelte";
   import {
-    serviceCache,
     resetServiceCache,
     persistServiceCache,
+    getNewService,
   } from "./_stores.js";
   import NavButtons from "./_nav-buttons.svelte";
 
@@ -35,29 +35,34 @@
   export let title;
   export let currentStep = Step1;
   export let modify = false;
+  export let service;
+  export let noLocalStorage;
 
-  function handleEltChange(evt) {
+  async function handleEltChange(evt) {
     // We want to listen to both DOM and component events
     const fieldname = evt.target?.name || evt.detail;
     // Sometimes (particularly with Select components), the event is received
-    // before the field value is updated in  $serviceCache, although it's not
+    // before the field value is updated in  `service`, although it's not
     // supposed to happen. This setTimeout is a unsatisfying workaround to that.
-    setTimeout(() => {
-      const filteredSchema = Object.fromEntries(
-        Object.entries(serviceSchema).filter(
-          ([name, _rules]) => name === fieldname
-        )
-      );
-      const { validatedData, valid } = validate(
-        $serviceCache,
-        filteredSchema,
-        serviceSchema,
-        { skipDependenciesCheck: false, noScroll: true }
-      );
-      if (valid) {
-        $serviceCache = { ...$serviceCache, ...validatedData };
-      }
-    }, 100);
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        const filteredSchema = Object.fromEntries(
+          Object.entries(serviceSchema).filter(
+            ([name, _rules]) => name === fieldname
+          )
+        );
+        const { validatedData, valid } = validate(
+          service,
+          filteredSchema,
+          serviceSchema,
+          { skipDependenciesCheck: false, noScroll: true }
+        );
+        if (valid) {
+          service = { ...service, ...validatedData };
+        }
+        resolve();
+      }, 200);
+    });
   }
 
   setContext(contextValidationKey, {
@@ -102,12 +107,12 @@
 
   function isValid(_schema) {
     // TODO
-    // return schema.isValidSync($serviceCache);
+    // return schema.isValidSync(service);
   }
 
   export async function publish() {
     const { validatedData, valid } = validate(
-      $serviceCache,
+      service,
       serviceSchema,
       serviceSchema,
       { skipDependenciesCheck: true, noScroll: false }
@@ -121,7 +126,8 @@
         result = await createService(validatedData);
       }
       if (result?.ok) {
-        resetServiceCache();
+        if (!noLocalStorage) resetServiceCache();
+        service = getNewService();
         goto(`/services/${result.result.slug}`);
       } else {
         injectAPIErrors(result.error, {});
@@ -130,15 +136,15 @@
   }
 
   function handleGoBack() {
-    persistServiceCache();
+    if (!noLocalStorage) persistServiceCache(service);
     currentStep = navInfo.previous;
     scrollY = 0;
   }
 
   function handleGoForward() {
-    persistServiceCache();
+    if (!noLocalStorage) persistServiceCache(service);
     if (
-      validate($serviceCache, navInfo.schema, serviceSchema, {
+      validate(service, navInfo.schema, serviceSchema, {
         skipDependenciesCheck: true,
         noScroll: false,
       }).valid
@@ -149,9 +155,9 @@
   }
 
   function handlePublish() {
-    persistServiceCache();
+    if (!noLocalStorage) persistServiceCache(service);
     if (
-      validate($serviceCache, navInfo.schema, serviceSchema, {
+      validate(service, navInfo.schema, serviceSchema, {
         skipDependenciesCheck: true,
         noScroll: false,
       }).valid

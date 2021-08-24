@@ -1,6 +1,4 @@
 <script>
-  import { serviceCache } from "./_stores.js";
-
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
   import Field from "$lib/components/forms/field.svelte";
@@ -9,6 +7,7 @@
   import { formErrors } from "$lib/validation.js";
 
   export let serviceOptions;
+  export let service;
 </script>
 
 <FieldSet title="Modalités d'accès au service">
@@ -18,42 +17,42 @@
     field={serviceOptions.beneficiariesAccessModes}
     name="beneficiariesAccessModes"
     errorMessages={$formErrors.beneficiariesAccessModes}
-    bind:value={$serviceCache.beneficiariesAccessModes}>
+    bind:value={service.beneficiariesAccessModes}>
     <FieldHelp slot="helptext" title="Mobiliser le service">
       Quels sont les étapes à suivre pour pouvoir mobiliser le service ?
     </FieldHelp></ModelField>
   <ModelField
-    visible={$serviceCache.beneficiariesAccessModes.includes("OT")}
+    visible={service.beneficiariesAccessModes.includes("OT")}
     hideLabel
     placeholder="Merci de préciser la modalité"
     type="text"
     field={serviceOptions.beneficiariesAccessModesOther}
     name="beneficiariesAccessModesOther"
     errorMessages={$formErrors.beneficiariesAccessModesOther}
-    bind:value={$serviceCache.beneficiariesAccessModesOther} />
+    bind:value={service.beneficiariesAccessModesOther} />
   <ModelField
     label="Comment orienter un bénéficiaire en tant qu’accompagnateur ?"
     type="checkboxes"
     field={serviceOptions.coachOrientationModes}
     name="coachOrientationModes"
     errorMessages={$formErrors.coachOrientationModes}
-    bind:value={$serviceCache.coachOrientationModes} />
+    bind:value={service.coachOrientationModes} />
   <ModelField
-    visible={$serviceCache.coachOrientationModes.includes("OT")}
+    visible={service.coachOrientationModes.includes("OT")}
     hideLabel
     placeholder="Merci de préciser la modalité"
     type="text"
     field={serviceOptions.coachOrientationModesOther}
     name="coachOrientationModesOther"
     errorMessages={$formErrors.coachOrientationModesOther}
-    bind:value={$serviceCache.coachOrientationModesOther} />
+    bind:value={service.coachOrientationModesOther} />
   <ModelField
     placeholder="Choisissez ou ajoutez vos critères d’admission"
     type="multiselect"
     field={serviceOptions.requirements}
     name="requirements"
     errorMessages={$formErrors.requirements}
-    bind:value={$serviceCache.requirements}>
+    bind:value={service.requirements}>
     <FieldHelp slot="helptext" title="Accès au service">
       Quels sont les compétences, les diplômes qui limitent l’accès au service ?
     </FieldHelp></ModelField>
@@ -63,7 +62,7 @@
     field={serviceOptions.credentials}
     name="credentials"
     errorMessages={$formErrors.credentials}
-    bind:value={$serviceCache.credentials} />
+    bind:value={service.credentials} />
   <Field
     type="custom"
     label={serviceOptions.forms.label}
@@ -74,10 +73,10 @@
     </FieldHelp>
     <Uploader
       slot="custom-input"
-      folder={$serviceCache.structure}
+      folder={service.structure}
       name="forms"
       on:blur
-      bind:fileKeys={$serviceCache.forms} />
+      bind:fileKeys={service.forms} />
   </Field>
   <ModelField
     label="Le formulaire en ligne à compléter"
@@ -86,5 +85,5 @@
     field={serviceOptions.onlineForm}
     name="onlineForm"
     errorMessages={$formErrors.onlineForm}
-    bind:value={$serviceCache.onlineForm} />
+    bind:value={service.onlineForm} />
 </FieldSet>

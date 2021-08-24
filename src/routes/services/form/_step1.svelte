@@ -1,6 +1,4 @@
 <script>
-  import { serviceCache } from "./_stores.js";
-
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
   import ModelField from "$lib/components/forms/model-field.svelte";
@@ -9,6 +7,7 @@
   import Info from "./_info.svelte";
 
   export let serviceOptions;
+  export let service;
 </script>
 
 <FieldSet title="">
@@ -17,7 +16,7 @@
     field={serviceOptions.structure}
     name="structure"
     errorMessages={$formErrors.structure}
-    bind:value={$serviceCache.structure}
+    bind:value={service.structure}
     placeholder="Sélectionnez votre structure" />
 </FieldSet>
 
@@ -35,14 +34,14 @@
     field={serviceOptions.categories}
     name="categories"
     errorMessages={$formErrors.categories}
-    bind:value={$serviceCache.categories}
+    bind:value={service.categories}
     placeholder="Choisissez la catégorie principale" />
   <ModelField
     type="multiselect"
     field={serviceOptions.subcategories}
     name="subcategories"
     errorMessages={$formErrors.subcategories}
-    bind:value={$serviceCache.subcategories}
+    bind:value={service.subcategories}
     placeholder="Choisissez les sous-catégories">
     <FieldHelp slot="helptext" title="Catégorisation">
       Pour permettre à nos utilisateurs de trouver facilement la solution que
@@ -56,7 +55,7 @@
     field={serviceOptions.kinds}
     name="kinds"
     errorMessages={$formErrors.kinds}
-    bind:value={$serviceCache.kinds}
+    bind:value={service.kinds}
     description="Quel type de service proposez-vous ? " />
 
   <ModelField
@@ -65,7 +64,7 @@
     field={serviceOptions.isCommonLaw}
     name="isCommonLaw"
     errorMessages={$formErrors.isCommonLaw}
-    bind:value={$serviceCache.isCommonLaw}
+    bind:value={service.isCommonLaw}
     description="Il s’agit d’un service de Droit commun - mobilisé équitablement sur l’ensemble du territoire ?" />
 </FieldSet>
 
@@ -77,7 +76,7 @@
     field={serviceOptions.name}
     name="name"
     errorMessages={$formErrors.name}
-    bind:value={$serviceCache.name} />
+    bind:value={service.name} />
   <ModelField
     description="280 caractères maximum"
     placeholder="Décrivez brièvement votre service"
@@ -85,7 +84,7 @@
     field={serviceOptions.shortDesc}
     name="shortDesc"
     errorMessages={$formErrors.shortDesc}
-    bind:value={$serviceCache.shortDesc}>
+    bind:value={service.shortDesc}>
     <FieldHelp slot="helptext" title="Résumé">
       <p>
         Lors de l’affichage du service, nous aurons besoin de voir une
@@ -108,5 +107,5 @@
     field={serviceOptions.fullDesc}
     name="fullDesc"
     errorMessages={$formErrors.fullDesc}
-    bind:value={$serviceCache.fullDesc} />
+    bind:value={service.fullDesc} />
 </FieldSet>

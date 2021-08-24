@@ -4,7 +4,7 @@
   import Field from "$lib/components/forms/field.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
 
-  import StructureForm from "../_structure_form.svelte";
+  import StructureFormWrapper from "../_structure-form-wrapper.svelte";
   import SiretSearch from "./_siret_search.svelte";
   import { siretWasAlreadyClaimed } from "$lib/structures";
   import structureSchema from "$lib/schemas/structure.js";
@@ -113,7 +113,7 @@
   </div>
 {/if}
 
-<StructureForm
+<StructureFormWrapper
   {structure}
   formTitle="Présentez votre structure"
   visible={structure.siret} />

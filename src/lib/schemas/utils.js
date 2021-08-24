@@ -149,5 +149,5 @@ export function trim(value) {
 }
 
 export function nullEmpty(value) {
-  if (value === "") return null;
+  return value === "" ? null : value;
 }

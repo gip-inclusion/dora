@@ -3,10 +3,12 @@
   import { getServiceOptions } from "$lib/services";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
 
-  import FormWrapper from "./form/_form-wrapper.svelte";
+  import { getNewService } from "./form/_stores.js";
+  import ServiceFormWrapper from "./form/_service-form-wrapper.svelte";
 
   let currentStep;
   let serviceOptions;
+  let service = getNewService();
 
   onMount(async () => {
     serviceOptions = (await getServiceOptions()).result;
@@ -15,8 +17,11 @@
 
 <EnsureLoggedIn>
   {#if serviceOptions}
-    <FormWrapper bind:currentStep title="Ajouter un service">
-      <svelte:component this={currentStep} {serviceOptions} />
-    </FormWrapper>
+    <ServiceFormWrapper
+      bind:currentStep
+      bind:service
+      title="Ajouter un service">
+      <svelte:component this={currentStep} bind:service {serviceOptions} />
+    </ServiceFormWrapper>
   {/if}
 </EnsureLoggedIn>
