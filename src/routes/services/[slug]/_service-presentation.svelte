@@ -32,9 +32,7 @@
 </style>
 
 <div class="tags-wrapper">
-  {#each service.categoriesDisplay as cat}
-    <Tag --bg-color="var(--col-magenta-brand)">{cat}</Tag><br />
-  {/each}
+  <Tag --bg-color="var(--col-magenta-brand)">{service.categoryDisplay}</Tag>
 </div>
 <div class="description-wrapper">
   <div>

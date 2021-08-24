@@ -16,8 +16,9 @@
           choice.value.startsWith(category)
         )
       : [];
-    service.subcategories = [];
-    service.category = category;
+    service.subcategories = service.subcategories.filter((scat) =>
+      scat.startsWith(category)
+    );
   }
 </script>
 
@@ -43,6 +44,7 @@
   <ModelField
     type="select"
     field={serviceOptions.category}
+    bind:value={service.category}
     name="category"
     errorMessages={$formErrors.category}
     onSelectChange={handleCategoryChange}
