@@ -37,8 +37,7 @@
     {result.shortDesc}
   </p>
   <div class="tags-wrapper">
-    {#each result.categoryDisplay as cat}
-      <Tag --bg-color="var(--col-magenta-brand)">{cat}</Tag><br />
-    {/each}
+    <Tag --bg-color="var(--col-magenta-brand)">{result.categoryDisplay}</Tag
+    ><br />
   </div>
 </div>
