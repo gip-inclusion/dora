@@ -76,8 +76,11 @@
   </CenteredGrid>
   <CenteredGrid gridRow="2" bordertop>
     <div class="flex flex-row col-span-full">
-      <NavItem label="Forum de l’inclusion" external />
-      <NavItem label="Contacter l’équipe" />
+      <NavItem
+        label="Communauté de l’inclusion"
+        href="https://communaute.inclusion.beta.gouv.fr/"
+        external />
+      <NavItem label="Contacter l’équipe" href="mailto:dora@beta.gouv.fr" />
     </div>
   </CenteredGrid>
 </header>
