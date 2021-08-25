@@ -6,12 +6,20 @@
 
   import CoverPic from "$lib/assets/illu_cover-optimise.svg";
   import MissionPic from "$lib/assets/illu_mission-optimise.svg";
+  import DefinePic from "$lib/assets/illu_definir.svg";
+  import ReferencePic from "$lib/assets/illu_referencer.svg";
+  import JoinPic from "$lib/assets/illu_rejoindre.svg";
+  import ValorisePic from "$lib/assets/illu_valoriser.svg";
+  import VisiblePic from "$lib/assets/illu_visibilite.svg";
+  import { arrowRightIcon } from "$lib/icons";
+
   export let servicesOptions;
 </script>
 
 <style>
   h1,
-  h2 {
+  h2,
+  h3 {
     color: var(--col-france-blue);
   }
 
@@ -111,15 +119,85 @@
 </CenteredGrid>
 
 <CenteredGrid gridRow="3">
-  <div class="col-start-1 col-span-full mb-5 text-center w-1/2 mx-auto">
-    Vous travaillez pour une structure porteuse/offreuse de services d'insertion
-    ?
-    <h2>
-      Référencez votre offre de services et commencez à recevoir des demandes
-      d'orientation qualifiées
-    </h2>
+  <div class="col-start-1 col-span-full mb-5 text-center ">
+    <div class="w-1/2 mx-auto mb-8">
+      <h5>
+        Vous travaillez pour une structure porteuse/offreuse de services
+        d'insertion ?
+      </h5>
+      <h2>
+        Référencez votre offre de services et commencez à recevoir des demandes
+        d'orientation qualifiées
+      </h2>
+    </div>
+    <div class="flex flex-row gap-8">
+      <div class="flex flex-col flex-1 ">
+        <div class="mx-auto">
+          <img src={VisiblePic} width="140" alt="" />
+        </div>
+        <h4>
+          Gagnez en visibilité auprès de vos partenaires locaux et nationaux
+        </h4>
+      </div>
+      <div class="flex flex-col flex-1">
+        <div class="mx-auto">
+          <img src={ValorisePic} width="140" alt="" />
+        </div>
+        <h4>
+          Valorisez, gérez et guidez la mise à jour de votre offre de services.
+          Collaborativement et à tout moment
+        </h4>
+      </div>
+      <div class="flex flex-col flex-1">
+        <div class="mx-auto">
+          <img src={DefinePic} width="140" alt="" />
+        </div>
+        <h4>
+          Définissez les modalités d'orientation de vos services, suivez et
+          traitez rapidement les demandes d'orientation à un seul endroit
+        </h4>
+      </div>
+      <div class="flex flex-col flex-1">
+        <div class="mx-auto">
+          <img src={ReferencePic} width="140" alt="" />
+        </div>
+        <h4>Référencer un service</h4>
+      </div>
+    </div>
+    <div class="mt-6 rounded-xl bg-information-light flex flex-row p-6">
+      <div class="flex-1">
+        <img src={JoinPic} width="380" alt="" />
+      </div>
+      <div class="flex-1 text-left">
+        <div class="flex flex-col gap-2 px-12">
+          <h5>Rejoignez l’aventure !</h5>
+          <h3>Aidez-nous à construire la *plateforme* de demain !</h3>
+          <p class="text-xs text-gray-text">
+            Nous sommes à l’écoute de vos besoins afin de construire un service
+            numérique qui vous correspond et vous permettra d’orienter plus
+            facilement et rapidement vos bénéficiaires.
+          </p>
+          <p class="text-xs text-gray-text font-bold">
+            Si vous souhaitez être tenu•e au courant de l’avancement du projet,
+            participer à des tests utilisateurs ou des sessions demo, n’hésitez
+            pas à vous rallier à la communauté DORA !
+          </p>
+          <div>
+            <LinkButton
+              to="https://itou.typeform.com/to/wVcrnlN9"
+              label="Adhérez à la communauté"
+              icon={arrowRightIcon}
+              iconOnRight
+              noBackground
+              noPadding
+              small />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </CenteredGrid>
+
 <CenteredGrid gridRow="4">
   <div class="col-start-1 col-span-full mb-5">
     <LinkButton label="Voir les structures" to="/structures" noBackground />

@@ -5,6 +5,7 @@
 
   export let to;
   export let small = false;
+  export let noPadding = false;
 
   function handleClick() {
     if (to) {
@@ -13,4 +14,9 @@
   }
 </script>
 
-<Button type="button" {...$$restProps} on:click={handleClick} {small} />
+<Button
+  type="button"
+  {...$$restProps}
+  on:click={handleClick}
+  {small}
+  {noPadding} />

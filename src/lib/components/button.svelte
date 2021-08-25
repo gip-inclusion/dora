@@ -13,7 +13,7 @@
   export let noBackground = false;
   export let nogrow = false;
   export let horizontalBottom = false;
-
+  export let noPadding = false;
   let px, py, iw, ih, ts, lead;
   if (small) {
     px = "px-5/4";
@@ -36,6 +36,9 @@
     ih = "h-3";
     ts = "text-base";
     lead = "leading-normal";
+  }
+  if (noPadding) {
+    px = "";
   }
   let border, text, background;
   if (secondary) {
@@ -71,7 +74,7 @@
 
   .hz-bottom {
     align-self: flex-end;
-    margin-bottom: 15px;
+    margin-bottom: 14px;
   }
 </style>
 
