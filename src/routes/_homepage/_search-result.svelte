@@ -15,23 +15,35 @@
     box-shadow: var(--shadow-sm);
   }
 
+  .header {
+    padding-left: var(--s16);
+    border-left: 4px solid var(--col-available);
+  }
+
   .tags-wrapper {
     display: flex;
     flex-direction: row;
-    margin-top: var(--s48);
-    margin-bottom: var(--s32);
+    margin-top: var(--s16);
+    margin-bottom: var(--s8);
+  }
+
+  p {
+    margin-top: var(--s16);
+    color: var(--col-text-alt2);
   }
 </style>
 
 <div class="wrapper">
-  <h4><a href="/services/{result.slug}">{result.name}</a></h4>
-  <div class="flex flex-row">
-    <Label label={`${result.structureName}`} iconOnLeft icon={homeIcon} />
+  <div class="header">
+    <h4><a href="/services/{result.slug}">{result.name}</a></h4>
+    <div class="flex flex-row gap-2 mt-1">
+      <Label label={`${result.structureName}`} iconOnLeft icon={homeIcon} />
 
-    <Label
-      label={`${result.postalCode}, ${result.city}`}
-      iconOnLeft
-      icon={mapPinIcon} />
+      <Label
+        label={`${result.postalCode}, ${result.city}`}
+        iconOnLeft
+        icon={mapPinIcon} />
+    </div>
   </div>
   <p>
     {result.shortDesc}

@@ -23,6 +23,10 @@
     color: var(--col-france-blue);
   }
 
+  h1 {
+    line-height: var(--s56);
+  }
+
   h2 {
     margin-top: var(--s24);
     margin-bottom: var(--s24);

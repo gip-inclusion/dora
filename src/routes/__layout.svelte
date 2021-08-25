@@ -110,15 +110,16 @@
   </CenteredGrid>
   <CenteredGrid gridRow="2" bordertop>
     <div class="flex col-start-1 col-span-full">
-      <NavItem label="Plan du site" separator light />
-      <NavItem label="Accessibilité" separator light />
+      <NavItem href="" label="Plan du site" separator light />
+      <NavItem href="" label="Accessibilité" separator light />
       <NavItem
+        href=""
         label="Mentions légales"
         on:click={() => goto("/mentions-legales")}
         separator
         light />
-      <NavItem label="Données personnelles" separator light />
-      <NavItem label="Gestion des cookies" light />
+      <NavItem href="" label="Données personnelles" separator light />
+      <NavItem href="" label="Gestion des cookies" light />
     </div>
   </CenteredGrid>
 </footer>

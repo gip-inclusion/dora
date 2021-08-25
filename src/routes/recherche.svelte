@@ -1,3 +1,11 @@
+<script context="module">
+  import { getPublicServicesOptions } from "$lib/services";
+
+  export async function load({ _page, _fetch, _session, _context }) {
+    return getPublicServicesOptions();
+  }
+</script>
+
 <script>
   import { onMount } from "svelte";
 
@@ -5,15 +13,18 @@
   import { getApiURL } from "$lib/utils";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import SearchResult from "./_homepage/_search-result.svelte";
+  import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
 
-  const category = $page.query.get("cat");
-  const subcategory = $page.query.get("sub");
-  const cityCode = $page.query.get("city");
-
+  let category = $page.query.get("cat");
+  let subcategory = $page.query.get("sub");
+  let cityCode = $page.query.get("city");
+  export let servicesOptions;
   let results = [];
 
   async function getResults() {
-    const url = `${getApiURL()}/search/?cat=${category}&sub=${subcategory}&city=${cityCode}`;
+    let url = `${getApiURL()}/search/?cat=${category}&city=${cityCode}`;
+    if (subcategory != null) url += `&subcat=${subcategory}`;
+    console.log(url);
     const res = await fetch(url, {
       headers: {
         Accept: "application/json; version=1.0",
@@ -36,19 +47,25 @@
     return result;
   }
 
-  onMount(async () => {
+  async function updateResults() {
     results = (await getResults()).result;
-    console.log(results);
-  });
+  }
+
+  $: $page.query, updateResults();
 </script>
 
 <style>
-  .wrapper {
+  .search-form {
+    padding-top: var(--s56);
+    grid-column: 1 / 5;
+  }
+
+  .results {
     display: flex;
     flex-direction: column;
-    padding-top: 40px;
+    padding-top: var(--s56);
     gap: var(--s16);
-    grid-column: 1 / -1;
+    grid-column: 5 / -1;
   }
 </style>
 
@@ -60,7 +77,15 @@
 </CenteredGrid>
 
 <CenteredGrid gridRow="2" roundedbg>
-  <div class="wrapper">
+  <div class="search-form">
+    <SearchTweakForm
+      numResults={results.length}
+      bind:category
+      bind:subcategory
+      bind:cityCode
+      {servicesOptions} />
+  </div>
+  <div class="results">
     {#each results as result}
       <SearchResult {result} />
     {/each}
