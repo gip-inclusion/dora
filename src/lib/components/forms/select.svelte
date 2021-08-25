@@ -4,6 +4,7 @@
 
   export let name = "";
   export let choices = undefined;
+  export let sort = undefined;
   export let value = undefined;
   export let disabled = false;
   export let readonly = false;
@@ -16,6 +17,10 @@
   export let minCharactersToSearch = undefined;
   export let onChange = undefined;
   export let initialValue = undefined;
+
+  function getSortedChoices(items) {
+    return items.sort((a, b) => a.label.localeCompare(b.label, "fr"));
+  }
 </script>
 
 <style lang="postcss">
@@ -62,7 +67,7 @@
   {localFiltering}
   {minCharactersToSearch}
   {onChange}
-  items={choices}
+  items={sort ? getSortedChoices(choices) : choices}
   {initialValue}
   {disabled}
   {readonly}

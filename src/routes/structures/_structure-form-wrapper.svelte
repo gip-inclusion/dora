@@ -138,6 +138,7 @@
         label="Typologie de la structure"
         placeholder="choisissez"
         field={$structureOptions.typology}
+        sortSelect
         name="typology"
         errorMessages={$formErrors.typology}
         bind:value={structure.typology}

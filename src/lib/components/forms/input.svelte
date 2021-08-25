@@ -12,6 +12,7 @@
   export let name;
 
   export let choices = [];
+  export let sortSelect = undefined;
 
   export let readonly = false;
   export let disabled = false;
@@ -66,6 +67,7 @@
   <Select
     {name}
     {choices}
+    sort={sortSelect}
     bind:value
     on:blur
     onChange={onSelectChange}
@@ -76,6 +78,7 @@
   <Select
     {name}
     {choices}
+    sort={sortSelect}
     bind:value
     on:blur
     onChange={onSelectChange}

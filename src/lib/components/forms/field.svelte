@@ -16,6 +16,7 @@
   export let required = false;
   export let maxLength = undefined;
   export let choices = [];
+  export let sortSelect = undefined;
 
   export let disabled = undefined;
   export let readonly = false;
@@ -77,6 +78,7 @@
             {type}
             {name}
             {choices}
+            {sortSelect}
             {maxLength}
             {placeholder}
             {minValue}

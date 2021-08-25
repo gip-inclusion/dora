@@ -7,6 +7,7 @@
   export let type;
   export let field;
   export let choices = null;
+  export let sortSelect = undefined;
   export let vertical = false;
   export let errorMessages = undefined;
   export let onSelectChange = undefined;
@@ -30,6 +31,7 @@
   maxLength={field.maxLength}
   label={label || field.label}
   choices={choices != null ? choices : field.child?.choices || field.choices}
+  {sortSelect}
   {type}
   {placeholder}
   {description}
