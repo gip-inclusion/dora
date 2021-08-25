@@ -3,6 +3,7 @@
   export let sticky = false;
   export let roundedbg = false;
   export let bordertop = false;
+  export let extraClass = "";
 </script>
 
 <style>
@@ -53,7 +54,7 @@
   }
 </style>
 
-<div class="wrapper" class:padded={gridRow === 1} class:sticky>
+<div class="{extraClass} wrapper" class:padded={gridRow === 1} class:sticky>
   <div
     class="content"
     style="grid-row-start: {gridRow};"

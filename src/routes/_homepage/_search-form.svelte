@@ -36,6 +36,7 @@
 <style>
   .wrapper {
     padding: 24px 24px 16px;
+    background-color: var(--col-white);
     border-radius: var(--s8);
     box-shadow: var(--shadow-l);
   }
