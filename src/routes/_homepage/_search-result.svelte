@@ -37,17 +37,16 @@
   <div class="header">
     <h4><a href="/services/{result.slug}">{result.name}</a></h4>
     <div class="flex flex-row gap-2 mt-1">
-      <Label label={`${result.structureName}`} iconOnLeft icon={homeIcon} />
-
+      <a href="/structures/{result.structure}">
+        <Label label={`${result.structureName}`} iconOnLeft icon={homeIcon} />
+      </a>
       <Label
         label={`${result.postalCode}, ${result.city}`}
         iconOnLeft
         icon={mapPinIcon} />
     </div>
   </div>
-  <p>
-    {result.shortDesc}
-  </p>
+  <p><a href="/services/{result.slug}">{result.shortDesc}</a></p>
   <div class="tags-wrapper">
     <Tag --bg-color="var(--col-magenta-brand)">{result.categoryDisplay}</Tag
     ><br />

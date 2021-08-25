@@ -7,8 +7,6 @@
 </script>
 
 <script>
-  import { onMount } from "svelte";
-
   import { page } from "$app/stores";
   import { getApiURL } from "$lib/utils";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
@@ -51,6 +49,7 @@
     results = (await getResults()).result;
   }
 
+  // eslint-disable-next-line
   $: $page.query, updateResults();
 </script>
 
