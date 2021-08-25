@@ -18,6 +18,7 @@ export { default as informationIcon } from "remixicon/icons/System/information-f
 export { default as checkBoxBlankIcon } from "remixicon/icons/System/checkbox-blank-circle-fill.svg?raw";
 export { default as errorWarningIcon } from "remixicon/icons/System/error-warning-fill.svg?raw";
 export { default as searchIcon } from "remixicon/icons/System/search-line.svg?raw";
+export { default as eyeIcon } from "remixicon/icons/System/eye-line.svg?raw";
 
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
 export { default as emotionHappyIcon } from "remixicon/icons/User/emotion-happy-fill.svg?raw";

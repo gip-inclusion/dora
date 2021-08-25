@@ -8,11 +8,13 @@
 
 <script>
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import { checkBoxBlankIcon, homeIcon, eyeIcon } from "$lib/icons";
+  import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
 
   export let services = [];
 
-  function shortenString(str, length = 40) {
+  function shortenString(str, length = 50) {
     if (str.length > length) {
       return `${str.slice(0, length)}…`;
     }
@@ -21,34 +23,60 @@
 </script>
 
 <style lang="postcss">
-  td {
-    @apply p-0 text-sm text-gray-text-alt;
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--s8);
+    padding-bottom: var(--s40);
+    gap: var(--s12);
+  }
+
+  .service {
+    padding: var(--s16);
+    background-color: var(--col-white);
+    border-radius: var(--s8);
   }
 </style>
 
-<CenteredGrid>
-  <div class="col-start-1 col-span-full">
-    <table class="table-auto p-6">
-      <thead>
-        <tr>
-          <th>Nom</th><th>Dept</th><th>Typologie</th><th>SIRET</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each services as service}
-          <tr>
-            <td>
-              <LinkButton
-                label={shortenString(service.name)}
-                to={`/services/${service.slug}`}
-                noBackground />
-            </td>
-            <td>xxx</td>
-            <td> xxx </td>
-            <td>xx</td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
+<CenteredGrid --col-bg="var(--col-gray-00)">
+  <div class="col-start-1 col-span-full text-left">
+    <div class="mb-4">
+      <h2>Services</h2>
+    </div>
+    <div class="border-t border-gray-03 py-3/2" />
+  </div>
+</CenteredGrid>
+
+<CenteredGrid --col-bg="var(--col-gray-00)">
+  <div class="wrapper col-start-1 col-span-full">
+    {#each services as service}
+      <div class="service flex flex-row gap-2">
+        <div class="flex-grow flex flex-row items-center">
+          <a href="/services/{service.slug}">
+            <h5>{shortenString(service.name)}</h5>
+          </a>
+        </div>
+        <Label
+          label={`${service.structureName}`}
+          smallIcon
+          iconOnLeft
+          icon={homeIcon} />
+        <Label label={service.cityCode.slice(0, 2)} bold />
+        <Label
+          label="Publié"
+          iconOnLeft
+          icon={checkBoxBlankIcon}
+          smallIcon
+          success
+          bold />
+
+        <div>
+          <LinkButton
+            to="/services/{service.slug}"
+            icon={eyeIcon}
+            noBackground />
+        </div>
+      </div>
+    {/each}
   </div>
 </CenteredGrid>

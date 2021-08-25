@@ -9,6 +9,7 @@
     iconOnRight = false;
   export let darkBg = false;
   export let bigIcon = false;
+  export let smallIcon = false;
 </script>
 
 <style>
@@ -50,6 +51,12 @@
     width: var(--s32);
     height: var(--s32);
   }
+
+  .small-icon {
+    width: var(--s16);
+    height: var(--s16);
+    fill: currentColor;
+  }
 </style>
 
 <div
@@ -60,7 +67,10 @@
   class:error
   class:dark-bg={darkBg}>
   {#if iconOnLeft}
-    <div class="icon mr-1" class:big-icon={bigIcon}>
+    <div
+      class="icon mr-1"
+      class:big-icon={bigIcon}
+      class:small-icon={smallIcon}>
       {@html icon}
     </div>
   {/if}
