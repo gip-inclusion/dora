@@ -6,10 +6,16 @@
   // TODO: lint this file properly
   /* eslint-disable */
   // the list of items  the user can select from
+
+  import { checkIcon } from "$lib/icons.js";
+
   export let items = [];
 
   // function to use to get all items (alternative to providing items)
   export let searchFunction = false;
+
+  // function which returns a postfix value to display in the list
+  export let postfixValueFunction = undefined;
 
   export let textCleanFunction = function (userEnteredText) {
     return userEnteredText;
@@ -64,10 +70,10 @@
   export let showLoadingIndicator = false;
 
   // text displayed when no items match the input text
-  export let noResultsText = "No results found";
+  export let noResultsText = "Aucun resultat";
 
   // text displayed when async data is being loaded
-  export let loadingText = "Loading results...";
+  export let loadingText = "Chargement des resultats…";
 
   // text displayed when async data is being loaded
   export let createText = "Not found, add anyway?";
@@ -785,13 +791,13 @@
   }
 
   .autocomplete-list {
-    position: relative;
+    position: absolute;
     z-index: 99;
-    top: 0;
+    top: 20px;
     width: 100%;
     max-height: calc(15 * (1rem + 10px) + 15px);
     padding: 10px 0;
-    border: 1px solid #999;
+
     background: #fff;
     overflow-y: auto;
     user-select: none;
@@ -803,19 +809,28 @@
 
   .autocomplete-list-item {
     padding: 5px 15px;
-    color: #333;
+    color: var(--col-text-alt);
     cursor: pointer;
     line-height: 1;
   }
 
   .autocomplete-list-item.confirmed {
-    background-color: #789fed;
-    color: #fff;
+    background-color: white;
+    color: var(--col-magenta-cta);
+  }
+
+  .autocomplete-list-item.confirmed .checkmark {
+    display: block;
   }
 
   .autocomplete-list-item.selected {
-    background-color: #2e69e2;
-    color: #fff;
+    background-color: var(--col-gray-bg);
+    color: var(--col-text);
+  }
+
+  .autocomplete-list-item.selected.confirmed {
+    background-color: var(--col-gray-bg);
+    color: var(--col-magenta-cta);
   }
 
   .autocomplete-list-item-no-results {
@@ -875,8 +890,8 @@
 
   .autocomplete.is-multiple .tag {
     display: flex;
-    margin-top: 0.5em;
-    margin-bottom: 0.3em;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
   }
 
   .autocomplete.is-multiple .tag.is-delete {
@@ -919,18 +934,12 @@
   <div class="input-container">
     {#if multiple && value}
       {#each value as tagItem}
-        <slot
-          name="tag"
-          label={getLabelForValue(tagItem)}
-          item={tagItem}
-          {unselectItem}>
-          <div class="tags has-addons">
-            <span class="tag">{getLabelForValue(tagItem)}</span>
-            <span
-              class="tag is-delete"
-              on:click|preventDefault={unselectItem(tagItem)} />
-          </div>
-        </slot>
+        <div class="tags has-addons">
+          <span class="tag">{getLabelForValue(tagItem)}</span>
+          <span
+            class="tag is-delete"
+            on:click|preventDefault={unselectItem(tagItem)} />
+        </div>
       {/each}
     {/if}
     <input
@@ -938,7 +947,7 @@
       class="{inputClassName ? inputClassName : ''} input autocomplete-input"
       id={inputId}
       autocomplete={html5autocomplete ? "on" : "off"}
-      {placeholder}
+      placeholder={multiple && value.length ? "" : placeholder}
       {name}
       {disabled}
       {title}
@@ -974,18 +983,23 @@
               on:pointerenter={() => {
                 highlightIndex = i;
               }}>
-              <slot
-                name="item"
-                item={listItem.value}
-                label={listItem.highlighted
-                  ? listItem.highlighted.label
-                  : listItem.label}>
-                {#if listItem.highlighted}
-                  {@html listItem.highlighted.label}
-                {:else}
-                  {@html listItem.label}
-                {/if}
-              </slot>
+              <div class="flex flex-row">
+                <div class="flex-grow">
+                  {@html listItem.highlighted
+                    ? listItem.highlighted.label
+                    : listItem.label}
+                  {#if postfixValueFunction}
+                    <div class="inline-block ml-1 text-gray-text-alt text-xs">
+                      {postfixValueFunction(listItem.value)}
+                    </div>
+                  {/if}
+                </div>
+                <div class="flex-grow-0 hidden checkmark">
+                  <div class="w-3 h-2 ml-1 fill-current ">
+                    {@html checkIcon}
+                  </div>
+                </div>
+              </div>
             </div>
           {/if}
         {/if}
@@ -998,7 +1012,7 @@
       {/if}
     {:else if loading && loadingText}
       <div class="autocomplete-list-item-loading">
-        <slot name="loading" {loadingText}>{loadingText}</slot>
+        <span class="text-gray-text-alt">{loadingText}</span>
       </div>
     {:else if create}
       <div class="autocomplete-list-item-create" on:click={selectItem}>
@@ -1006,7 +1020,7 @@
       </div>
     {:else if noResultsText}
       <div class="autocomplete-list-item-no-results">
-        <slot name="no-results" {noResultsText}>{noResultsText}</slot>
+        <span class="text-error">{noResultsText}</span>
       </div>
     {/if}
   </div>
