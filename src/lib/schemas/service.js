@@ -74,8 +74,7 @@ const shape2 = {
 const shape3 = {
   beneficiariesAccessModes: {
     default: [],
-    required: true,
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
+    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
   },
   beneficiariesAccessModesOther: {
     default: "",
