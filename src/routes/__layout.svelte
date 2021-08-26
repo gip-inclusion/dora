@@ -96,7 +96,7 @@
     </div>
     <div class="col-span-6 col-start-7 text-sm leading-normal text-gray-text">
       Dora est un service public numérique qui permet aux structures de
-      l'insertion de référencer simplement et mettre à jour en temps réel leur
+      l’insertion de référencer simplement et mettre à jour en temps réel leur
       offre de services, et aux professionnels prescripteurs de rechercher et
       mobiliser rapidement le service le plus adapté au besoin de leur
       bénéficiaire.
