@@ -19,17 +19,22 @@
     bind:value={service.accessConditions}>
     <FieldHelp slot="helptext" title="Critères">
       <p>
-        <strong>Critères d’admission</strong>
-        <br /> Précisez les critères d’éligibilité du public afin de recevoir des
-        orientations adéquates
+        <strong>Critères d’admission</strong><br />
+        Précisez les critères d’éligibilité du public afin de recevoir des orientations
+        adéquates
       </p>
       <p>
         <strong>Publics concernés</strong><br />Définissez bien les publics
         concernés, cela permettra d’orienter le bon public.
       </p>
       <p>
-        <strong>Service cumulable</strong>
-        <br />Ce service peut-il être cumulé à un autre ?
+        <strong>Pré-requis ou compétences</strong><br />
+        Quels sont les compétences, les diplômes qui limitent l’accès au service
+        ?
+      </p>
+      <p>
+        <strong>Service cumulable</strong><br />Ce service peut-il être cumulé à
+        un autre ?
       </p>
     </FieldHelp></ModelField>
 
@@ -40,6 +45,13 @@
     name="concernedPublic"
     errorMessages={$formErrors.concernedPublic}
     bind:value={service.concernedPublic} />
+  <ModelField
+    placeholder="Choisissez ou ajoutez vos critères d’admission"
+    type="multiselect"
+    field={serviceOptions.requirements}
+    name="requirements"
+    errorMessages={$formErrors.requirements}
+    bind:value={service.requirements} />
   <ModelField
     type="toggle"
     field={serviceOptions.isCumulative}

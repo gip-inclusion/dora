@@ -34,15 +34,14 @@
 
 <FieldSet title="Typologie de service">
   <Info title="Périmètre de test">
-    Pour tester rapidement un maximum de leviers et itérer rapidement, l’équipe
-    va se focaliser sur un périmètre d’expérimentation réduit en matière
-    d’offre. Thématiques d’offres ciblées : <strong
-      >mobilité, <strong>garde d’enfant</strong> et
-      <strong>hébergement/logement</strong>.
-    </strong></Info>
+    Dans un premier temps, seuls les services liés aux freins périphériques :
+    <strong>mobilités</strong>, <strong>garde d'enfant</strong> et
+    <strong>hébergement / logement</strong> sont testés.
+  </Info>
 
   <ModelField
     type="select"
+    label="Thématique"
     field={serviceOptions.category}
     bind:value={service.category}
     name="category"
@@ -51,6 +50,7 @@
     placeholder="Choisissez la catégorie principale" />
   <ModelField
     type="multiselect"
+    label="Besoin(s)"
     field={serviceOptions.subcategories}
     name="subcategories"
     errorMessages={$formErrors.subcategories}
@@ -59,8 +59,7 @@
     placeholder="Choisissez les sous-catégories">
     <FieldHelp slot="helptext" title="Catégorisation">
       Pour permettre à nos utilisateurs de trouver facilement la solution que
-      vous proposez. Il est nécessaire de classer les offres par catégorie et de
-      préciser le type d’offre.
+      vous proposez, il est nécessaire de classer les services par catégorie?
     </FieldHelp>
   </ModelField>
 
@@ -72,19 +71,19 @@
     bind:value={service.kinds}
     description="Quel type de service proposez-vous ? " />
 
-  <ModelField
+  <!-- <ModelField
     type="toggle"
     label="Droit commun"
     field={serviceOptions.isCommonLaw}
     name="isCommonLaw"
     errorMessages={$formErrors.isCommonLaw}
     bind:value={service.isCommonLaw}
-    description="Il s’agit d’un service de Droit commun - mobilisé équitablement sur l’ensemble du territoire ?" />
+    description="Il s’agit d’un service de Droit commun - mobilisé équitablement sur l’ensemble du territoire ?" /> -->
 </FieldSet>
 
 <FieldSet title="Présentez votre service">
   <ModelField
-    label="Nom de l’offre"
+    label="Nom du service"
     type="text"
     placeholder="Ex. Aide aux frais liés à…"
     field={serviceOptions.name}
@@ -107,9 +106,8 @@
       </p>
       <p>
         <strong>Par exemple :</strong>
-        <em
-          >Faciliter vos déplacements en cas de recherche d'emploi (entretien
-          d'embauche, concours public).</em>
+        Faciliter vos déplacements en cas de recherche d'emploi (entretien d'embauche,
+        concours public).
       </p>
     </FieldHelp>
   </ModelField>

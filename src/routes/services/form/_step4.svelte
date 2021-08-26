@@ -90,11 +90,7 @@
     errorMessages={$formErrors.remoteUrl}
     bind:value={service.remoteUrl} />
 
-  <Field
-    type="custom"
-    label="Commune"
-    errorMessages={$formErrors.city}
-    required>
+  <Field type="custom" label="Ville" errorMessages={$formErrors.city} required>
     <CitySearch
       slot="custom-input"
       name="city"

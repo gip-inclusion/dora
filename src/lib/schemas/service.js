@@ -49,6 +49,10 @@ const shape2 = {
     default: [],
     rules: [v.isArray([v.isPK()])],
   },
+  requirements: {
+    default: [],
+    rules: [v.isArray([v.isPK()])],
+  },
   isCumulative: {
     default: true,
     rules: [v.isBool()],
@@ -106,10 +110,7 @@ const shape3 = {
       }),
     ],
   },
-  requirements: {
-    default: [],
-    rules: [v.isArray([v.isPK()])],
-  },
+
   credentials: {
     default: [],
     rules: [v.isArray([v.isPK()])],

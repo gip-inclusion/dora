@@ -34,7 +34,7 @@
     <ServiceFormWrapper
       bind:currentStep
       bind:service
-      title="Ajouter un service"
+      title="Référencer un service"
       useLocalStorage>
       <svelte:component
         this={currentStepComponent}

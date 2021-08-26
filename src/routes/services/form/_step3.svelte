@@ -12,7 +12,7 @@
 
 <FieldSet title="Modalités d'accès au service">
   <ModelField
-    label="Comment mobiliser le service en tant que bénéficiaire ?"
+    label="Comment le bénéficiaire peut accéder à ce service ?"
     type="checkboxes"
     field={serviceOptions.beneficiariesAccessModes}
     name="beneficiariesAccessModes"
@@ -46,16 +46,7 @@
     name="coachOrientationModesOther"
     errorMessages={$formErrors.coachOrientationModesOther}
     bind:value={service.coachOrientationModesOther} />
-  <ModelField
-    placeholder="Choisissez ou ajoutez vos critères d’admission"
-    type="multiselect"
-    field={serviceOptions.requirements}
-    name="requirements"
-    errorMessages={$formErrors.requirements}
-    bind:value={service.requirements}>
-    <FieldHelp slot="helptext" title="Accès au service">
-      Quels sont les compétences, les diplômes qui limitent l’accès au service ?
-    </FieldHelp></ModelField>
+
   <ModelField
     placeholder="Sélectionnez les justificatifs à fournir"
     type="multiselect"
