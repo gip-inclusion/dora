@@ -70,7 +70,7 @@
 
 <CenteredGrid>
   <div class="col-start-1 col-span-full text-center mb-6">
-    <p class="text-gray-text text-base">Consultez les offres</p>
+    <p class="text-gray-text text-base">Consultez les services</p>
     <h1 class="text-france-blue text-13xl">Résultats de recherche</h1>
   </div>
 </CenteredGrid>
