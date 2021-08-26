@@ -92,15 +92,14 @@
 <footer class="grid row-start-3 border-t-2 border-france-blue pt-5/2">
   <CenteredGrid>
     <div class="col-span-5 mb-5">
-      <a class="block" href="/">
-        <img class="inline" src={LogoRF} alt="" width="124" height="110" />
-      </a>
+      <img class="inline" src={LogoRF} alt="" width="124" height="110" />
     </div>
     <div class="col-span-6 col-start-7 text-sm leading-normal text-gray-text">
-      Dora est un service public numérique qui permet aux professionnels,
-      intervenant dans le parcours d'insertion de la personne ayant des freins
-      périphériques, de trouver rapidement des services détaillés sur lesquels
-      ils peuvent orienter leurs bénéficiaires rapidement.<br />
+      Dora est un service public numérique qui permet aux structures de
+      l'insertion de référencer simplement et mettre à jour en temps réel leur
+      offre de services, et aux professionnels prescripteurs de rechercher et
+      mobiliser rapidement le service le plus adapté au besoin de leur
+      bénéficiaire.
       <div class="flex gap-3 mt-2 font-bold">
         <a href="https://gouvernement.fr">gouvernement.fr</a>
         <a href="https://service-public.fr">service-public.fr</a>
