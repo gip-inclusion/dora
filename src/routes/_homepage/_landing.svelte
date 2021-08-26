@@ -202,15 +202,3 @@
     </div>
   </div>
 </CenteredGrid>
-
-<CenteredGrid gridRow="4">
-  <div class="col-start-1 col-span-full mb-5">
-    <LinkButton label="Voir les structures" to="/structures" noBackground />
-    <LinkButton
-      label="Créer une structure"
-      to="/structures/creer"
-      noBackground />
-    <LinkButton label="Voir les services" to="/services" noBackground />
-    <LinkButton label="Créer un service" to="/services/creer" noBackground />
-  </div>
-</CenteredGrid>
