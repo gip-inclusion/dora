@@ -21,6 +21,12 @@
   .negative {
     background-color: #fbe4e5;
   }
+
+  .details {
+    padding-left: var(--s32);
+    color: var(--col-text);
+    font-size: var(--f14);
+  }
 </style>
 
 <div
@@ -34,4 +40,7 @@
     {icon}
     bold
     iconOnLeft />
+  <div class="details">
+    <slot name="details" />
+  </div>
 </div>

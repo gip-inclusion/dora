@@ -54,10 +54,9 @@
     bind:value={service.hasFee} />
 
   <ModelField
-    type="text"
+    type="textarea"
     hideLabel
-    placeholder="Merci de détailler les frais à charge et leurs éventuels critères de
-      remboursement"
+    placeholder="Merci de détailler les frais à charge et leurs éventuels critères de remboursement"
     visible={!!service.hasFee}
     field={serviceOptions.feeDetails}
     name="feeDetails"

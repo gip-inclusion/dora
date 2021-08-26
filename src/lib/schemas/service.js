@@ -62,7 +62,6 @@ const shape2 = {
     post: [v.trim],
     rules: [
       v.isString(),
-      v.maxStrLength(140),
       (name, value, data) => ({
         valid: !data.hasFee || value.length,
         msg: `Ce champ est requis`,

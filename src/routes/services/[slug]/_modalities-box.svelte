@@ -42,9 +42,9 @@
     {/if}
 
     {#if service.hasFee}
-      <Info
-        label="Frais à charge du bénéficiaire : {service.feeDetails}"
-        negativeMood />
+      <Info label="Frais à charge du bénéficiaire : " negativeMood>
+        <p slot="details">{service.feeDetails}</p>
+      </Info>
     {/if}
   </div>
   <div class="flex flex-row">
