@@ -808,10 +808,10 @@
   }
 
   .autocomplete-list-item {
-    padding: 5px 15px;
+    padding: 6px 15px;
     color: var(--col-text-alt);
     cursor: pointer;
-    line-height: 1;
+    line-height: 1.25;
   }
 
   .autocomplete-list-item.confirmed {
