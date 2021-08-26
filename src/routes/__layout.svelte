@@ -67,7 +67,7 @@
           {/if}
         {/if}
         <LinkButton
-          label="Ajouter une offre"
+          label="Référencer un service"
           icon={addCircleIcon}
           to={`/services/creer`}
           iconOnRight />

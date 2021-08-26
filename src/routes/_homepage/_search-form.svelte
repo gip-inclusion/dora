@@ -55,8 +55,11 @@
   }
 
   p {
+    width: 76%;
+    margin: 0 auto;
     color: var(--col-text-alt2);
     font-size: var(--f12);
+    text-align: center;
   }
 </style>
 
@@ -98,8 +101,11 @@
       small />
   </form>
   <p>
-    Le service DORA est actuellement en construction, et se concentre sur 3
-    thématiques de services (mobilité, garde d’enfant et hébergement/logement)
-    et 3 territoires (Loire-Atlantique, Ardennes et La Réunion).
+    Le service DORA est actuellement <a
+      class="underline"
+      href="https://beta.gouv.fr/startups/dora.html">en construction</a
+    >, et se concentre sur 3 thématiques de services (mobilité, garde d’enfant
+    et hébergement/logement) et 3 territoires (Loire-Atlantique, Ardennes et La
+    Réunion).
   </p>
 </div>

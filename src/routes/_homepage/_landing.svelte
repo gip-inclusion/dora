@@ -24,6 +24,7 @@
   }
 
   h1 {
+    margin-bottom: var(--s24);
     line-height: var(--s56);
   }
 

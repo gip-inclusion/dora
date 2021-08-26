@@ -109,7 +109,11 @@
     <Button type="submit" label="Mettre à jour" disabled={!category} />
   </form>
   <p>
-    Pour la periode de test, DORA se concentre sur 3 thématiques d’offres :
-    mobilité, garde d’enfant et hébergement/logement.
+    Le service DORA est actuellement <a
+      class="underline"
+      href="https://beta.gouv.fr/startups/dora.html">en construction</a
+    >, et se concentre sur 3 thématiques de services (mobilité, garde d’enfant
+    et hébergement/logement) et 3 territoires (Loire-Atlantique, Ardennes et La
+    Réunion).
   </p>
 </div>
