@@ -176,7 +176,7 @@
       <div class="flex-1 text-left">
         <div class="flex flex-col gap-2 px-12">
           <h5>Rejoignez l’aventure !</h5>
-          <h3>Aidez-nous à construire la *plateforme* de demain !</h3>
+          <h3>Aidez-nous à construire DORA&nbsp;!</h3>
           <p class="text-xs text-gray-text">
             Nous sommes à l’écoute de vos besoins afin de construire un service
             numérique qui vous correspond et vous permettra d’orienter plus
@@ -189,7 +189,7 @@
           </p>
           <div>
             <LinkButton
-              to="https://itou.typeform.com/to/wVcrnlN9"
+              to="https://itou.typeform.com/doraall"
               label="Adhérez à la communauté"
               icon={arrowRightIcon}
               iconOnRight

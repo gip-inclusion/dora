@@ -10,9 +10,11 @@
       <h3 class="mb-1">
         {title}
       </h3>
-      {#if description}
-        <p class="text-xs text-gray-text-alt2">{description}</p>
-      {/if}
+      <slot name="description">
+        {#if description}
+          <p class="text-xs text-gray-text-alt2">{description}</p>
+        {/if}
+      </slot>
     </div>
   {/if}
   <slot />
