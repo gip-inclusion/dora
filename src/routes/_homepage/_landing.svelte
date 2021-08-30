@@ -189,7 +189,7 @@
           </p>
           <div>
             <LinkButton
-              to="https://itou.typeform.com/to/wVcrnlN9"
+              to="https://itou.typeform.com/doraall"
               label="Adhérez à la communauté"
               icon={arrowRightIcon}
               iconOnRight
