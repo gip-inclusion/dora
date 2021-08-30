@@ -120,6 +120,13 @@ export function arrNotEmpty(msg) {
   });
 }
 
+export function minStrLength(max, msg) {
+  return (name, value, _data) => ({
+    valid: value.length >= max,
+    msg: msg || `Ce champ doit avoir au moins ${max} caractères`,
+  });
+}
+
 export function maxStrLength(max, msg) {
   return (name, value, _data) => ({
     valid: value.length <= max,
