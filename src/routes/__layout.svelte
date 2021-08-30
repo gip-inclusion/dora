@@ -35,6 +35,13 @@
   import LogoMinistere from "$lib/assets/logo-ministere-travail.svg";
 </script>
 
+<svelte:head>
+  <script
+    defer
+    data-domain={$page.host}
+    src="https://plausible.io/js/plausible.js"></script>
+</svelte:head>
+
 <header class="grid row-start-1 shadow-md z-10 relative">
   <CenteredGrid>
     <div class="flex flex-row items-center row-start-1 col-span-full py-3/2 ">
