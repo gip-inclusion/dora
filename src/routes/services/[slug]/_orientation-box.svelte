@@ -42,11 +42,11 @@
       secondary
       to={`/login?next=${encodeURIComponent($page.path)}`} />
   {:else}
-    <Button label="Orientez votre bénéficiaire" />
+    <Button label="Orientez votre bénéficiaire" disabled />
   {/if}
 
   <div class="text-xs">
-    {#if $token}
+    {#if false && $token}
       <strong>Formulaires uploadés : </strong><br />
       <ul>
         {#each service.formsInfo as form}
