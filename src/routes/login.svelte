@@ -118,65 +118,116 @@
       </Fieldset>
     </form>
   </div>
-  <div class="col-start-6 col-end-13 mb-4 ">
-    <Fieldset
-      title="Demandez un accès"
-      description="Pour la periode de test, la création de comptes est désactivée. Contactez-nous pour obtenir un compte.">
-      <div class="flex flex-row gap-x-4">
-        <Field
-          name="lastname"
-          label="Votre nom"
-          vertical
-          type="text"
-          required
-          placeholder="Votre nom" />
-        <Field
-          name="firstname"
-          label="Votre prénom"
-          vertical
-          type="text"
-          required
-          placeholder="Votre prénom" />
+  <div class="col-start-6 col-end-13 mb-4">
+    <Fieldset title="Demandez un accès">
+      <div slot="description">
+        <p class="text-xs text-gray-text-alt2">
+          Pendant la periode de test, la création de comptes est désactivée.<br />
+          <a class="underline" href="https://itou.typeform.com/doraall"
+            >Contactez-nous</a> pour obtenir un compte.
+        </p>
       </div>
-      <div class="flex flex-row justify-between gap-x-4">
+      <div class="relative">
+        <div
+          class="absolute top-0 left-0 w-full h-full opacity-80 bg-white z-10" />
+        <div class="flex flex-row gap-x-4">
+          <Field
+            name="lastname"
+            label="Votre nom"
+            vertical
+            type="text"
+            required
+            placeholder="Votre nom" />
+          <Field
+            name="firstname"
+            label="Votre prénom"
+            vertical
+            type="text"
+            required
+            placeholder="Votre prénom" />
+        </div>
+        <div class="relative">
+          <div
+            class="absolute top-0 left-0 w-full h-full opacity-80 bg-white z-10" />
+          <div class="flex flex-row gap-x-4">
+            <Field
+              label="Votre nom"
+              vertical
+              type="text"
+              required
+              placeholder="Votre nom" />
+            <Field
+              label="Votre prénom"
+              vertical
+              type="text"
+              required
+              placeholder="Votre prénom" />
+          </div>
+          <div class="flex flex-row justify-between gap-x-4">
+            <Field
+              label="Courriel"
+              vertical
+              type="email"
+              required
+              placeholder="Votre courriel" />
+            <Field
+              label="Téléphone"
+              vertical
+              type="tel"
+              placeholder="Votre numéro de téléphone" />
+          </div>
+          <div class="flex flex-row justify-between gap-x-4">
+            <Field
+              label="Nom de votre structure"
+              vertical
+              type="text"
+              required
+              placeholder="Votre structure" />
+            <Field
+              label="Le numéro SIRET"
+              vertical
+              type="text"
+              required
+              placeholder="SIRET" />
+          </div>
+          <Field
+            name="cr-courriel"
+            label="Courriel"
+            vertical
+            type="email"
+            required
+            placeholder="Votre courriel" />
+          <Field
+            name="phone"
+            label="Téléphone"
+            vertical
+            type="tel"
+            placeholder="Votre numéro de téléphone" />
+        </div>
+        <div class="flex flex-row justify-between gap-x-4">
+          <Field
+            name="struct-name"
+            label="Nom de votre structure"
+            vertical
+            type="text"
+            required
+            placeholder="Votre structure" />
+          <Field
+            name="siret"
+            label="Le numéro SIRET"
+            vertical
+            type="text"
+            required
+            placeholder="SIRET" />
+        </div>
         <Field
-          name="cr-courriel"
-          label="Courriel"
           vertical
-          type="email"
-          required
-          placeholder="Votre courriel" />
-        <Field
-          name="phone"
-          label="Téléphone"
-          vertical
-          type="tel"
-          placeholder="Votre numéro de téléphone" />
-      </div>
-      <div class="flex flex-row justify-between gap-x-4">
-        <Field
-          name="struct-name"
-          label="Nom de votre structure"
-          vertical
-          type="text"
-          required
-          placeholder="Votre structure" />
-        <Field
-          name="siret"
-          label="Le numéro SIRET"
-          vertical
-          type="text"
-          required
-          placeholder="SIRET" />
-      </div>
-      <Field
-        vertical
-        type="toggle"
-        toggleYesText={toggleText}
-        toggleNoText={toggleText}
-        placeholder="" />
+          type="toggle"
+          toggleYesText={toggleText}
+          toggleNoText={toggleText}
+          placeholder="" />
 
-      <Button type="button" label="Demandez votre accès" disabled />
-    </Fieldset>
+        <Button type="button" label="Demandez votre accès" disabled />
+      </div></Fieldset>
   </div>
 </CenteredGrid>
