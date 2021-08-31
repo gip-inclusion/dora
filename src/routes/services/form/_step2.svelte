@@ -18,7 +18,8 @@
     name="accessConditions"
     errorMessages={$formErrors.accessConditions}
     bind:value={service.accessConditions}
-    choices={servicesOptions.accessConditions}>
+    choices={servicesOptions.accessConditions}
+    sortSelect>
     <FieldHelp slot="helptext" title="Critères">
       <p>
         <strong>Critères d’admission</strong><br />
@@ -48,7 +49,8 @@
     name="concernedPublic"
     errorMessages={$formErrors.concernedPublic}
     bind:value={service.concernedPublic}
-    choices={servicesOptions.concernedPublic} />
+    choices={servicesOptions.concernedPublic}
+    sortSelect />
   <ModelField
     type="multiselect"
     label="Quels sont les pré-requis ou compétences ?"
@@ -57,7 +59,8 @@
     name="requirements"
     errorMessages={$formErrors.requirements}
     bind:value={service.requirements}
-    choices={servicesOptions.requirements} />
+    choices={servicesOptions.requirements}
+    sortSelect />
   <ModelField
     type="toggle"
     label="Service cumulable"

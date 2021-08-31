@@ -32,6 +32,7 @@
     name="structure"
     errorMessages={$formErrors.structure}
     bind:value={service.structure}
+    sortSelect
     placeholder="Sélectionnez votre structure" />
 </FieldSet>
 
@@ -51,7 +52,8 @@
     name="category"
     errorMessages={$formErrors.category}
     onSelectChange={handleCategoryChange}
-    placeholder="Choisissez la catégorie principale" />
+    placeholder="Choisissez la catégorie principale"
+    sortSelect />
   <ModelField
     type="multiselect"
     label="Besoin(s)"
@@ -60,7 +62,8 @@
     errorMessages={$formErrors.subcategories}
     bind:value={service.subcategories}
     choices={subcategories}
-    placeholder="Choisissez les sous-catégories">
+    placeholder="Choisissez les sous-catégories"
+    sortSelect>
     <FieldHelp slot="helptext" title="Catégorisation">
       Pour permettre à nos utilisateurs de trouver facilement la solution que
       vous proposez, il est nécessaire de classer les services par catégorie?

@@ -57,7 +57,8 @@
     name="credentials"
     errorMessages={$formErrors.credentials}
     bind:value={service.credentials}
-    choices={servicesOptions.credentials} />
+    choices={servicesOptions.credentials}
+    sortSelect />
   <Field
     type="custom"
     label="Partagez les documents à compléter"
