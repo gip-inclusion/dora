@@ -1,8 +1,12 @@
 <script context="module">
-  import { getPublicServicesOptions } from "$lib/services";
+  import { getServicesOptions } from "$lib/services";
 
   export async function load({ _page, _fetch, _session, _context }) {
-    return getPublicServicesOptions();
+    return {
+      props: {
+        servicesOptions: await getServicesOptions(),
+      },
+    };
   }
 </script>
 
@@ -22,7 +26,6 @@
   async function getResults() {
     let url = `${getApiURL()}/search/?cat=${category}&city=${cityCode}`;
     if (subcategory != null) url += `&subcat=${subcategory}`;
-    console.log(url);
     const res = await fetch(url, {
       headers: {
         Accept: "application/json; version=1.0",

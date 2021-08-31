@@ -2,7 +2,11 @@
   import { getStructures } from "$lib/structures";
 
   export async function load({ _page, _fetch, _session, _context }) {
-    return getStructures();
+    return {
+      props: {
+        structures: await getStructures(),
+      },
+    };
   }
 </script>
 
@@ -10,10 +14,10 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
 
-  export let structures = [];
+  export let structures;
 
   function shortenString(str, length = 40) {
-    if (str.length > length) {
+    if (str && str.length > length) {
       return `${str.slice(0, length)}…`;
     }
     return str;
@@ -43,7 +47,7 @@
                 to={`/structures/${structure.slug}`}
                 noBackground />
             </td>
-            <td>{structure.postalCode.slice(0, 2)}</td>
+            <td>{structure.department}</td>
             <td>
               {shortenString(structure.typologyDisplay)}
             </td>

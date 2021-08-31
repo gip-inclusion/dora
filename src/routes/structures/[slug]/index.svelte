@@ -2,7 +2,9 @@
   import { getStructure } from "$lib/structures";
 
   export async function load({ page, _fetch, _session, _context }) {
-    return getStructure(page.params.slug);
+    return {
+      props: { structure: await getStructure(page.params.slug) },
+    };
   }
 </script>
 

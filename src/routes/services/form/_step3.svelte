@@ -5,16 +5,17 @@
   import Uploader from "$lib/components/uploader.svelte";
   import ModelField from "$lib/components/forms/model-field.svelte";
   import { formErrors } from "$lib/validation.js";
+  import serviceSchema from "$lib/schemas/service.js";
 
-  export let serviceOptions;
-  export let service;
+  export let servicesOptions, service;
 </script>
 
 <FieldSet title="Modalités d'accès au service">
   <ModelField
     label="Comment le bénéficiaire peut accéder à ce service ?"
     type="checkboxes"
-    field={serviceOptions.beneficiariesAccessModes}
+    choices={servicesOptions.beneficiariesAccessModes}
+    schema={serviceSchema.beneficiariesAccessModes}
     name="beneficiariesAccessModes"
     errorMessages={$formErrors.beneficiariesAccessModes}
     bind:value={service.beneficiariesAccessModes}>
@@ -26,14 +27,15 @@
     hideLabel
     placeholder="Merci de préciser la modalité"
     type="text"
-    field={serviceOptions.beneficiariesAccessModesOther}
+    schema={serviceSchema.beneficiariesAccessModesOther}
     name="beneficiariesAccessModesOther"
     errorMessages={$formErrors.beneficiariesAccessModesOther}
     bind:value={service.beneficiariesAccessModesOther} />
   <ModelField
     label="Comment orienter un bénéficiaire en tant qu’accompagnateur ?"
     type="checkboxes"
-    field={serviceOptions.coachOrientationModes}
+    choices={servicesOptions.coachOrientationModes}
+    schema={serviceSchema.coachOrientationModes}
     name="coachOrientationModes"
     errorMessages={$formErrors.coachOrientationModes}
     bind:value={service.coachOrientationModes} />
@@ -42,21 +44,23 @@
     hideLabel
     placeholder="Merci de préciser la modalité"
     type="text"
-    field={serviceOptions.coachOrientationModesOther}
+    schema={serviceSchema.coachOrientationModesOther}
     name="coachOrientationModesOther"
     errorMessages={$formErrors.coachOrientationModesOther}
     bind:value={service.coachOrientationModesOther} />
 
   <ModelField
+    label="Quels sont les justificatifs à fournir ?"
     placeholder="Sélectionnez les justificatifs à fournir"
     type="multiselect"
-    field={serviceOptions.credentials}
+    schema={serviceSchema.credentials}
     name="credentials"
     errorMessages={$formErrors.credentials}
-    bind:value={service.credentials} />
+    bind:value={service.credentials}
+    choices={servicesOptions.credentials} />
   <Field
     type="custom"
-    label={serviceOptions.forms.label}
+    label="Partagez les documents à compléter"
     errorMessages={$formErrors.forms}>
     <FieldHelp slot="helptext" title="Justificatifs, documents">
       Mettre tous les documents maintenant, c’est permettre d’avoir des
@@ -73,7 +77,7 @@
     label="Le formulaire en ligne à compléter"
     placeholder="URL"
     type="url"
-    field={serviceOptions.onlineForm}
+    schema={serviceSchema.onlineForm}
     name="onlineForm"
     errorMessages={$formErrors.onlineForm}
     bind:value={service.onlineForm} />

@@ -20,3 +20,20 @@ export function htmlToMarkdown(html) {
   }
   return "";
 }
+
+export async function fetchData(
+  url,
+  { acceptHeader = "application/json; version=1.0" } = {}
+) {
+  const response = await fetch(url, {
+    headers: {
+      Accept: acceptHeader,
+    },
+  });
+
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+
+  return await response.json();
+}

@@ -1,47 +1,25 @@
 import insane from "insane";
 import { get } from "svelte/store";
-import { getApiURL, markdownToHTML, htmlToMarkdown } from "$lib/utils.js";
+import {
+  getApiURL,
+  markdownToHTML,
+  htmlToMarkdown,
+  fetchData,
+} from "$lib/utils.js";
 import { token } from "$lib/auth";
 
 export async function getServices() {
   const url = `${getApiURL()}/services/`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: "application/json; version=1.0",
-    },
-  });
-
-  if (res.ok) {
-    const services = await res.json();
-    return {
-      props: { services },
-    };
-  }
-  return {
-    status: res.status,
-    error: new Error(`Could not load ${url}`),
-  };
+  return await fetchData(url);
 }
 
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: "application/json; version=1.0",
-    },
-  });
-
-  if (res.ok) {
-    const service = await res.json();
-    service.fullDesc = insane(markdownToHTML(service.fullDesc));
-    return {
-      props: { service },
-    };
+  const result = await fetchData(url);
+  if (result.data) {
+    result.data.fullDesc = insane(markdownToHTML(result.data.fullDesc));
   }
-  return {
-    status: res.status,
-    error: new Error(`Could not load ${url}`),
-  };
+  return result;
 }
 
 export async function createService(service) {
@@ -109,48 +87,7 @@ export async function modifyService(service) {
   return result;
 }
 
-export async function getServiceOptions() {
-  const url = `${getApiURL()}/services/`;
-  const res = await fetch(url, {
-    method: "OPTIONS",
-    headers: {
-      Accept: "application/json; version=1.0",
-      Authorization: `Token ${get(token)}`,
-    },
-  });
-
-  const result = {
-    ok: res.ok,
-    status: res.status,
-  };
-  if (res.ok) {
-    result.result = (await res.json()).actions.POST;
-  } else {
-    try {
-      result.error = await res.json();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-  return result;
-}
-
-export async function getPublicServicesOptions() {
+export async function getServicesOptions() {
   const url = `${getApiURL()}/services-options/`;
-
-  const res = await fetch(url, {
-    headers: {
-      Accept: "application/json; version=1.0",
-    },
-  });
-  if (res.ok) {
-    const servicesOptions = await res.json();
-    return {
-      props: { servicesOptions },
-    };
-  }
-  return {
-    status: res.status,
-    error: new Error(`Could not load ${url}`),
-  };
+  return await fetchData(url);
 }

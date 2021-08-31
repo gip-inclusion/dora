@@ -1,6 +1,18 @@
+<script context="module">
+  import { getServicesOptions } from "$lib/services";
+  import { getStructures } from "$lib/structures";
+
+  export async function load({ _page, _fetch, _session, _context }) {
+    return {
+      props: {
+        servicesOptions: await getServicesOptions(),
+        structures: await getStructures(),
+      },
+    };
+  }
+</script>
+
 <script>
-  import { onMount } from "svelte";
-  import { getServiceOptions } from "$lib/services";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
 
   import { getNewService } from "./form/_stores.js";
@@ -11,13 +23,10 @@
   import Step3 from "./form/_step3.svelte";
   import Step4 from "./form/_step4.svelte";
 
-  let currentStep;
-  let serviceOptions;
-  let service = getNewService();
+  export let servicesOptions, structures;
 
-  onMount(async () => {
-    serviceOptions = (await getServiceOptions()).result;
-  });
+  let service = getNewService();
+  let currentStep;
 
   const steps = new Map([
     [1, Step1],
@@ -30,16 +39,15 @@
 </script>
 
 <EnsureLoggedIn>
-  {#if serviceOptions}
-    <ServiceFormWrapper
-      bind:currentStep
+  <ServiceFormWrapper
+    bind:currentStep
+    bind:service
+    title="Référencer un service"
+    useLocalStorage>
+    <svelte:component
+      this={currentStepComponent}
       bind:service
-      title="Référencer un service"
-      useLocalStorage>
-      <svelte:component
-        this={currentStepComponent}
-        bind:service
-        {serviceOptions} />
-    </ServiceFormWrapper>
-  {/if}
+      {servicesOptions}
+      {structures} />
+  </ServiceFormWrapper>
 </EnsureLoggedIn>

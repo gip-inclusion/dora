@@ -1,3 +1,11 @@
+<script context="module">
+  import { getStructuresOptions } from "$lib/structures";
+
+  export async function load({ _page, _fetch, _session, _context }) {
+    return { props: await getStructuresOptions() };
+  }
+</script>
+
 <script>
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
@@ -10,6 +18,8 @@
   import structureSchema from "$lib/schemas/structure.js";
 
   import { alertIcon } from "$lib/icons.js";
+
+  export let structuresOptions;
 
   let selectedCity;
   let selectedEstablishment;
@@ -115,5 +125,6 @@
 
 <StructureFormWrapper
   {structure}
+  {structuresOptions}
   formTitle="Présentez votre structure"
   visible={structure.siret} />
