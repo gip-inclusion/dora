@@ -2,7 +2,7 @@
   import { getStructuresOptions } from "$lib/structures";
 
   export async function load({ _page, _fetch, _session, _context }) {
-    return { props: await getStructuresOptions() };
+    return { props: { structuresOptions: await getStructuresOptions() } };
   }
 </script>
 
