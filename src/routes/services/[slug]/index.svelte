@@ -1,14 +1,10 @@
 <script context="module">
   import { getService } from "$lib/services";
-  import { getStructure } from "$lib/structures";
 
   export async function load({ page, _fetch, _session, _context }) {
-    const service = (await getService(`${page.params.slug}`)).props.service;
-    const structure = (await getStructure(service.structure)).props.structure;
     return {
       props: {
-        service,
-        structure,
+        service: await getService(`${page.params.slug}`),
       },
     };
   }
@@ -23,7 +19,7 @@
   import ServicePresentation from "./_service-presentation.svelte";
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
-  export let service, structure;
+  export let service;
 </script>
 
 <style>
@@ -52,11 +48,11 @@
 </style>
 
 <svelte:head>
-  <title>Dora: {service.name} par {structure.name}</title>
+  <title>Dora: {service.name} par {service.structureInfo.name}</title>
 </svelte:head>
 
 <CenteredGrid --col-bg="var(--col-france-blue)">
-  <ServiceHeader {service} {structure} />
+  <ServiceHeader {service} />
 </CenteredGrid>
 
 <CenteredGrid
@@ -68,12 +64,12 @@
     <ServicePresentation {service} />
   </div>
   <div class="orientation">
-    <OrientationBox {service} {structure} />
+    <OrientationBox {service} />
     <div class="structure-info">
-      <h4>{structure.name}</h4>
-      <Label label={structure.shortDesc} italic />
+      <h4>{service.structureInfo.name}</h4>
+      <Label label={service.structureInfo.shortDesc} italic />
       <LinkButton
-        to="/structures/{structure.slug}"
+        to="/structures/{service.structureInfo.slug}"
         small
         nogrow
         label="Voir l’offre complète de services" />

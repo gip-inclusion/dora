@@ -2,7 +2,11 @@
   import { getServices } from "$lib/services";
 
   export async function load({ _page, _fetch, _session, _context }) {
-    return getServices();
+    return {
+      props: {
+        services: await getServices(),
+      },
+    };
   }
 </script>
 
@@ -57,11 +61,11 @@
           </a>
         </div>
         <Label
-          label={`${service.structureName}`}
+          label={`${service.structureInfo.name}`}
           smallIcon
           iconOnLeft
           icon={homeIcon} />
-        <Label label={service.cityCode.slice(0, 2)} bold />
+        <Label label={service.department} bold />
         <Label
           label="Publié"
           iconOnLeft

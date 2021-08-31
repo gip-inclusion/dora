@@ -1,14 +1,9 @@
 <script>
-  import { onMount, setContext } from "svelte";
+  import { setContext } from "svelte";
 
   import { goto } from "$app/navigation";
 
-  import {
-    structureOptions,
-    fillStructuresOptions,
-    modifyStructure,
-    createStructure,
-  } from "$lib/structures.js";
+  import { modifyStructure, createStructure } from "$lib/structures.js";
   import ModelField from "$lib/components/forms/model-field.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
@@ -21,10 +16,7 @@
   } from "$lib/validation.js";
 
   import ValidateButton from "./_validate.svelte";
-
-  export let formTitle;
-
-  export let structure;
+  export let structure, structuresOptions, formTitle;
 
   export let modify = false;
   export let visible;
@@ -89,29 +81,15 @@
       }
     }
   }
-
-  function getTypologyItem() {
-    return structure.typology
-      ? $structureOptions.typology.choices.find(
-          (choice) => choice.value === structure.typology
-        )
-      : null;
-  }
-
-  $: structure._typology = $structureOptions ? getTypologyItem() : null;
-
-  onMount(async () => {
-    await fillStructuresOptions();
-  });
 </script>
 
-{#if $structureOptions && visible}
+{#if visible}
   <form novalidate on:submit|preventDefault={handleSubmit}>
     <FieldSet title={formTitle}>
       <ModelField
         type="text"
         label="SIRET"
-        field={$structureOptions.siret}
+        schema={structureSchema.siret}
         name="siret"
         errorMessages={$formErrors.siret}
         disabled
@@ -128,7 +106,7 @@
       <ModelField
         type="text"
         label="Nom de la structure"
-        field={$structureOptions.name}
+        schema={structureSchema.name}
         name="name"
         errorMessages={$formErrors.name}
         bind:value={structure.name}
@@ -137,16 +115,17 @@
         type="select"
         label="Typologie de la structure"
         placeholder="choisissez"
-        field={$structureOptions.typology}
+        schema={structureSchema.typologies}
         sortSelect
         name="typology"
         errorMessages={$formErrors.typology}
         bind:value={structure.typology}
+        choices={structuresOptions.typologies}
         vertical />
       <ModelField
         type="text"
         label="Adresse"
-        field={$structureOptions.address1}
+        schema={structureSchema.address1}
         name="address1"
         errorMessages={$formErrors.address1}
         bind:value={structure.address1}
@@ -154,7 +133,7 @@
       <ModelField
         type="text"
         label="Complément d’adresse"
-        field={$structureOptions.address2}
+        schema={structureSchema.address2}
         name="address2"
         errorMessages={$formErrors.address2}
         bind:value={structure.address2}
@@ -164,7 +143,7 @@
           <ModelField
             type="text"
             label="Code postal"
-            field={$structureOptions.postalCode}
+            schema={structureSchema.postalCode}
             name="postalCode"
             errorMessages={$formErrors.postalCode}
             bind:value={structure.postalCode}
@@ -174,7 +153,7 @@
           <ModelField
             type="text"
             label="Ville"
-            field={$structureOptions.city}
+            schema={structureSchema.city}
             name="city"
             errorMessages={$formErrors.city}
             bind:value={structure.city}
@@ -186,7 +165,7 @@
           <ModelField
             type="tel"
             label="Téléphone"
-            field={$structureOptions.phone}
+            schema={structureSchema.phone}
             name="phone"
             errorMessages={$formErrors.phone}
             bind:value={structure.phone}
@@ -197,7 +176,7 @@
           <ModelField
             type="email"
             label="Courriel"
-            field={$structureOptions.email}
+            schema={structureSchema.email}
             name="email"
             errorMessages={$formErrors.email}
             bind:value={structure.email}
@@ -208,7 +187,7 @@
         type="url"
         label="Site web"
         placeholder="https://mastructure.fr"
-        field={$structureOptions.url}
+        schema={structureSchema.url}
         name="url"
         errorMessages={$formErrors.url}
         bind:value={structure.url}
@@ -218,7 +197,7 @@
         label="Résumé"
         description="280 caractères maximum"
         placeholder="Décrivez brièvement votre structure"
-        field={$structureOptions.shortDesc}
+        schema={structureSchema.shortDesc}
         name="shortDesc"
         errorMessages={$formErrors.shortDesc}
         bind:value={structure.shortDesc} />
@@ -227,7 +206,7 @@
         label="Présentez votre structure"
         description="Présentation résumée des missions de votre structure"
         placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre structure et ses spécificités."
-        field={$structureOptions.fullDesc}
+        schema={structureSchema.fullDesc}
         name="fullDesc"
         errorMessages={$formErrors.fullDesc}
         bind:value={structure.fullDesc}
@@ -235,25 +214,25 @@
 
       <ModelField
         type="hidden"
-        field={$structureOptions.cityCode}
+        schema={structureSchema.cityCode}
         name="cityCode"
         bind:value={structure.cityCode}
         vertical />
       <ModelField
         type="hidden"
-        field={$structureOptions.ape}
+        schema={structureSchema.ape}
         name="ape"
         bind:value={structure.ape}
         vertical />
       <ModelField
         type="hidden"
-        field={$structureOptions.longitude}
+        schema={structureSchema.longitude}
         name="longitude"
         bind:value={structure.longitude}
         vertical />
       <ModelField
         type="hidden"
-        field={$structureOptions.latitude}
+        schema={structureSchema.latitude}
         name="latitude"
         bind:value={structure.latitude}
         vertical />

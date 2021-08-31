@@ -7,17 +7,13 @@
   import { searchIcon } from "$lib/icons";
 
   export let servicesOptions;
+  const categoryChoices = servicesOptions.categories;
 
   let category;
   let subcategory;
   let cityCode;
 
-  $: catChoices = servicesOptions.categories.map(([key, value]) => ({
-    value: key,
-    label: value,
-  }));
-
-  let subCatChoices = [];
+  let subCategoryChoices = [];
 
   function handleSearch() {
     let url = `recherche/?cat=${encodeURIComponent(
@@ -28,13 +24,10 @@
   }
 
   function handleCategoryChange(cat) {
-    subCatChoices = cat
-      ? servicesOptions.subCategories
-          .filter(([key, _value]) => key.startsWith(cat))
-          .map(([key, value]) => ({
-            value: key,
-            label: value,
-          }))
+    subCategoryChoices = cat
+      ? servicesOptions.subcategories.filter(({ value }) =>
+          value.startsWith(cat)
+        )
       : [];
     if (cat && subcategory && !subcategory.startsWith(cat)) subcategory = null;
   }
@@ -70,7 +63,7 @@
       bind:value={category}
       onSelectChange={handleCategoryChange}
       placeholder="Choisissez"
-      choices={catChoices}
+      choices={categoryChoices}
       label="Thématique"
       vertical
       required />
@@ -79,7 +72,7 @@
       type="select"
       bind:value={subcategory}
       placeholder="Choisissez"
-      choices={subCatChoices}
+      choices={subCategoryChoices}
       label="Besoin(s)"
       vertical />
 

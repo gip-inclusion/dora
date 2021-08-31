@@ -76,7 +76,6 @@ export function validate(
   formErrors.set(currentErrors);
 
   Object.entries(schema).forEach(([fieldname, shape]) => {
-    // console.log("value", data[fieldname]);
     const { value, valid } = validateField(fieldname, shape, data);
     isValid &&= valid;
     validatedData[fieldname] = value;

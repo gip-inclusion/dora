@@ -1,8 +1,13 @@
 <script context="module">
-  import { getStructure } from "$lib/structures";
+  import { getStructure, getStructuresOptions } from "$lib/structures";
 
   export async function load({ page, _fetch, _session, _context }) {
-    return getStructure(page.params.slug);
+    return {
+      props: {
+        structure: await getStructure(page.params.slug),
+        structuresOptions: await getStructuresOptions(),
+      },
+    };
   }
 </script>
 
@@ -11,7 +16,7 @@
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import StructureFormWrapper from "../_structure-form-wrapper.svelte";
-  export let structure;
+  export let structure, structuresOptions;
 </script>
 
 <svelte:head>
@@ -23,6 +28,7 @@
     <div class="col-span-8 col-start-1 mb-4">
       <StructureFormWrapper
         {structure}
+        {structuresOptions}
         formTitle="Modifiez votre structure"
         modify
         visible />
