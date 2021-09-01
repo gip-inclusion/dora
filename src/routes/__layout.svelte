@@ -40,6 +40,10 @@
     defer
     data-domain={$page.host}
     src="https://plausible.io/js/plausible.js"></script>
+
+  {#if ENVIRONMENT !== "production"}
+    <meta name="robots" content="noindex" />
+  {/if}
 </svelte:head>
 
 <header class="grid row-start-1 shadow-md z-10 relative">
