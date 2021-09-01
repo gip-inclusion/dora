@@ -20,6 +20,7 @@
   import NavButtons from "./_nav-buttons.svelte";
 
   import serviceSchema, {
+    draftServiceSchema,
     step1Schema,
     step2Schema,
     step3Schema,
@@ -34,11 +35,14 @@
     [3, step3Schema],
     [4, step4Schema],
   ]);
+
   export let title;
   export let currentStep = 1;
   export let modify = false;
   export let service;
   export let useLocalStorage = false;
+
+  let flashSaveDraftButton = false;
 
   async function handleEltChange(evt) {
     // We want to listen to both DOM and component events
@@ -133,6 +137,38 @@
     }
   }
 
+  export async function saveDraft() {
+    // HACK: Empty <Select> are casted to null for now
+    // but the server wants an empty string
+    // We should fix the <Select> instead
+    if (service.category == null) {
+      service.category = "";
+    }
+    const { validatedData, valid } = validate(
+      service,
+      draftServiceSchema,
+      draftServiceSchema,
+      { skipDependenciesCheck: true, noScroll: false }
+    );
+    if (valid) {
+      // Validation OK, let's send it to the API endpoint
+      let result;
+      if (modify) {
+        result = await modifyService(validatedData);
+      } else {
+        result = await createService(validatedData);
+      }
+      if (result?.ok) {
+        flashSaveDraftButton = true;
+        setTimeout(() => {
+          flashSaveDraftButton = false;
+        }, 1000);
+      } else {
+        injectAPIErrors(result.error, {});
+      }
+    }
+  }
+
   function goToPage(number) {
     if (useLocalStorage) persistServiceCache(service);
     currentStep = number;
@@ -140,10 +176,12 @@
   }
 
   function handleGoBack() {
+    saveDraft();
     goToPage(navInfo.previous);
   }
 
   function handleGoForward() {
+    saveDraft();
     if (
       validate(service, schemas.get(currentStep), serviceSchema, {
         skipDependenciesCheck: true,
@@ -166,7 +204,8 @@
     }
   }
   function handleSaveDraft() {
-    console.error("Not implemented");
+    if (useLocalStorage) persistServiceCache(service);
+    saveDraft();
   }
 
   function handleNavLinkClick(step) {
@@ -232,6 +271,7 @@
       withBack={!!navInfo?.previous}
       withForward={!!navInfo?.next}
       withPublish={navInfo?.last}
+      {flashSaveDraftButton}
       withDraft />
   </CenteredGrid>
 </EnsureLoggedIn>
