@@ -49,6 +49,9 @@ export async function createOrModifyService(service) {
   };
   if (response.ok) {
     result.data = await response.json();
+    if (result.data) {
+      result.data.fullDesc = insane(markdownToHTML(result.data.fullDesc));
+    }
   } else {
     try {
       result.error = await response.json();
