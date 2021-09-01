@@ -16,8 +16,8 @@ export async function getServices() {
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
   const result = await fetchData(url);
-  if (result.data) {
-    result.data.fullDesc = insane(markdownToHTML(result.data.fullDesc));
+  if (result) {
+    result.fullDesc = insane(markdownToHTML(result.fullDesc));
   }
   return result;
 }
