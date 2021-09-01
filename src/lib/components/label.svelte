@@ -4,6 +4,7 @@
   export let italic = false;
   export let success = false;
   export let error = false;
+  export let wait = false;
   export let icon = null;
   export let iconOnLeft = false,
     iconOnRight = false;
@@ -23,6 +24,10 @@
 
   .error {
     color: var(--col-error);
+  }
+
+  .wait {
+    color: var(--col-wait);
   }
 
   .bold {
@@ -65,6 +70,7 @@
   class:italic
   class:success
   class:error
+  class:wait
   class:dark-bg={darkBg}>
   {#if iconOnLeft}
     <div
