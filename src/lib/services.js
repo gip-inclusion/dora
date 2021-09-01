@@ -22,31 +22,36 @@ export async function getService(slug) {
   return result;
 }
 
-export async function createService(service) {
+export async function createOrModifyService(service) {
   if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
-  const url = `${getApiURL()}/services/`;
-  const method = "POST";
+  let method, url;
+  if (service.slug) {
+    url = `${getApiURL()}/services/${service.slug}/`;
+    method = "PATCH";
+  } else {
+    url = `${getApiURL()}/services/`;
+    method = "POST";
+  }
 
-  const res = await fetch(url, {
+  const response = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-
       Authorization: `Token ${get(token)}`,
     },
     body: JSON.stringify(service),
   });
 
   const result = {
-    ok: res.ok,
-    status: res.status,
+    ok: response.ok,
+    status: response.status,
   };
-  if (res.ok) {
-    result.result = await res.json();
+  if (response.ok) {
+    result.data = await response.json();
   } else {
     try {
-      result.error = await res.json();
+      result.error = await response.json();
     } catch (err) {
       console.error(err);
     }
@@ -54,37 +59,22 @@ export async function createService(service) {
   return result;
 }
 
-export async function modifyService(service) {
-  if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
-  const url = `${getApiURL()}/services/${service.slug}/`;
-
+export async function publishDraft(serviceSlug) {
+  const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";
-
-  const res = await fetch(url, {
+  const response = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify(service),
+    body: JSON.stringify({ isDraft: false }),
   });
-
-  const result = {
-    ok: res.ok,
-    status: res.status,
-  };
-  if (res.ok) {
-    result.result = await res.json();
-  } else {
-    try {
-      result.error = await res.json();
-    } catch (err) {
-      console.error(err);
-    }
+  if (!response.ok) {
+    throw Error(response.statusText);
   }
-  return result;
+  return await response.json();
 }
 
 export async function getServicesOptions() {

@@ -27,7 +27,8 @@
     step4Schema,
   } from "$lib/schemas/service.js";
 
-  import { createService, modifyService } from "$lib/services";
+  import { createOrModifyService, publishDraft } from "$lib/services";
+  import { assert, logException } from "$lib/logger";
 
   const schemas = new Map([
     [1, step1Schema],
@@ -38,7 +39,6 @@
 
   export let title;
   export let currentStep = 1;
-  export let modify = false;
   export let service;
   export let useLocalStorage = false;
 
@@ -113,26 +113,24 @@
   }
 
   export async function publish() {
-    const { validatedData, valid } = validate(
+    const { _validatedData, valid } = validate(
       service,
       serviceSchema,
       serviceSchema,
       { skipDependenciesCheck: true, noScroll: false }
     );
+
     if (valid) {
+      assert(service.slug);
+
       // Validation OK, let's send it to the API endpoint
-      let result;
-      if (modify) {
-        result = await modifyService(validatedData);
-      } else {
-        result = await createService(validatedData);
-      }
-      if (result?.ok) {
+      try {
+        const result = await publishDraft(service.slug);
         if (useLocalStorage) resetServiceCache();
         service = getNewService();
-        goto(`/services/${result.result.slug}`);
-      } else {
-        injectAPIErrors(result.error, {});
+        goto(`/services/${result.slug}`);
+      } catch (error) {
+        logException(error);
       }
     }
   }
@@ -152,13 +150,9 @@
     );
     if (valid) {
       // Validation OK, let's send it to the API endpoint
-      let result;
-      if (modify) {
-        result = await modifyService(validatedData);
-      } else {
-        result = await createService(validatedData);
-      }
-      if (result?.ok) {
+      const result = await createOrModifyService(validatedData);
+      if (result.ok) {
+        service = result.data;
         flashSaveDraftButton = true;
         setTimeout(() => {
           flashSaveDraftButton = false;
@@ -192,7 +186,7 @@
     }
   }
 
-  function handlePublish() {
+  async function handlePublish() {
     if (useLocalStorage) persistServiceCache(service);
     if (
       validate(service, schemas.get(currentStep), serviceSchema, {
@@ -200,9 +194,11 @@
         noScroll: false,
       }).valid
     ) {
+      await saveDraft();
       publish();
     }
   }
+
   function handleSaveDraft() {
     if (useLocalStorage) persistServiceCache(service);
     saveDraft();

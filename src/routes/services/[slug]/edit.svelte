@@ -38,11 +38,7 @@
 </script>
 
 <EnsureLoggedIn>
-  <ServiceFormWrapper
-    bind:currentStep
-    bind:service
-    modify
-    title="Modifier un service">
+  <ServiceFormWrapper bind:currentStep bind:service title="Modifier un service">
     <svelte:component
       this={currentStepComponent}
       bind:service
