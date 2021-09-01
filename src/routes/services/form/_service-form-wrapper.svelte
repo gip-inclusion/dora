@@ -4,7 +4,6 @@
   import { goto } from "$app/navigation";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import {
     validate,
     injectAPIErrors,
@@ -12,21 +11,20 @@
   } from "$lib/validation.js";
 
   import NavLink from "./_navlink.svelte";
-  import {
-    resetServiceCache,
-    persistServiceCache,
-    getNewService,
-  } from "./_stores.js";
+  import { resetServiceCache, persistServiceCache } from "./_stores.js";
   import NavButtons from "./_nav-buttons.svelte";
 
   import serviceSchema, {
+    draftServiceSchema,
     step1Schema,
     step2Schema,
     step3Schema,
     step4Schema,
   } from "$lib/schemas/service.js";
 
-  import { createService, modifyService } from "$lib/services";
+  import { createOrModifyService, publishDraft } from "$lib/services";
+  import { assert, logException } from "$lib/logger";
+  import Preview from "./_preview.svelte";
 
   const schemas = new Map([
     [1, step1Schema],
@@ -34,11 +32,13 @@
     [3, step3Schema],
     [4, step4Schema],
   ]);
+
   export let title;
   export let currentStep = 1;
-  export let modify = false;
   export let service;
   export let useLocalStorage = false;
+
+  let flashSaveDraftButton = false;
 
   async function handleEltChange(evt) {
     // We want to listen to both DOM and component events
@@ -96,7 +96,15 @@
     case 4:
       navInfo = {
         previous: 3,
-        last: true,
+        next: 5,
+        showPublish: true,
+        showPreview: true,
+      };
+      break;
+    case 5:
+      navInfo = {
+        previous: 4,
+        showPublish: true,
       };
       break;
     default:
@@ -109,24 +117,50 @@
   }
 
   export async function publish() {
-    const { validatedData, valid } = validate(
+    // Validate the whole form
+    const { _validatedData, valid } = validate(
       service,
       serviceSchema,
       serviceSchema,
       { skipDependenciesCheck: true, noScroll: false }
     );
+
+    if (valid) {
+      assert(service.slug);
+
+      // Validation OK, let's send it to the API endpoint
+      try {
+        const result = await publishDraft(service.slug);
+        if (useLocalStorage) resetServiceCache();
+        goto(`/services/${result.slug}`);
+      } catch (error) {
+        logException(error);
+      }
+    }
+  }
+
+  export async function saveDraft() {
+    // HACK: Empty <Select> are casted to null for now
+    // but the server wants an empty string
+    // We should fix the <Select> instead
+    if (service.category == null) {
+      service.category = "";
+    }
+    const { validatedData, valid } = validate(
+      service,
+      draftServiceSchema,
+      draftServiceSchema,
+      { skipDependenciesCheck: true, noScroll: false }
+    );
     if (valid) {
       // Validation OK, let's send it to the API endpoint
-      let result;
-      if (modify) {
-        result = await modifyService(validatedData);
-      } else {
-        result = await createService(validatedData);
-      }
-      if (result?.ok) {
-        if (useLocalStorage) resetServiceCache();
-        service = getNewService();
-        goto(`/services/${result.result.slug}`);
+      const result = await createOrModifyService(validatedData);
+      if (result.ok) {
+        service = result.data;
+        flashSaveDraftButton = true;
+        setTimeout(() => {
+          flashSaveDraftButton = false;
+        }, 1000);
       } else {
         injectAPIErrors(result.error, {});
       }
@@ -140,10 +174,12 @@
   }
 
   function handleGoBack() {
+    saveDraft();
     goToPage(navInfo.previous);
   }
 
   function handleGoForward() {
+    saveDraft();
     if (
       validate(service, schemas.get(currentStep), serviceSchema, {
         skipDependenciesCheck: true,
@@ -154,19 +190,30 @@
     }
   }
 
-  function handlePublish() {
-    if (useLocalStorage) persistServiceCache(service);
-    if (
-      validate(service, schemas.get(currentStep), serviceSchema, {
-        skipDependenciesCheck: true,
-        noScroll: false,
-      }).valid
-    ) {
+  async function handlePublish() {
+    if (currentStep === 5) {
       publish();
+    } else {
+      if (useLocalStorage) persistServiceCache(service);
+      if (
+        validate(service, schemas.get(currentStep), serviceSchema, {
+          skipDependenciesCheck: true,
+          noScroll: false,
+        }).valid
+      ) {
+        await saveDraft();
+        publish();
+      }
     }
   }
+
   function handleSaveDraft() {
-    console.error("Not implemented");
+    if (useLocalStorage) persistServiceCache(service);
+    saveDraft();
+  }
+
+  function handlePreview() {
+    handleGoForward();
   }
 
   function handleNavLinkClick(step) {
@@ -191,7 +238,9 @@
 
 <svelte:window bind:scrollY />
 
-<EnsureLoggedIn>
+{#if currentStep === 5}
+  <Preview {service} />
+{:else}
   <CenteredGrid>
     <div class="col-start-1 col-span-full text-center mb-6">
       <div class="mx-auto">
@@ -221,17 +270,19 @@
       <slot />
     </div>
   </CenteredGrid>
-
-  <CenteredGrid gridRow="3" sticky>
-    <NavButtons
-      _currentPageIsValid={isValid(schemas.get(currentStep))}
-      onGoBack={handleGoBack}
-      onGoForward={handleGoForward}
-      onPublish={handlePublish}
-      onSaveDraft={handleSaveDraft}
-      withBack={!!navInfo?.previous}
-      withForward={!!navInfo?.next}
-      withPublish={navInfo?.last}
-      withDraft />
-  </CenteredGrid>
-</EnsureLoggedIn>
+{/if}
+<CenteredGrid gridRow="3" sticky>
+  <NavButtons
+    _currentPageIsValid={isValid(schemas.get(currentStep))}
+    onGoBack={handleGoBack}
+    onGoForward={handleGoForward}
+    onPublish={handlePublish}
+    onSaveDraft={handleSaveDraft}
+    onPreview={handlePreview}
+    withBack={!!navInfo?.previous}
+    withForward={!!navInfo?.next && !navInfo?.showPreview}
+    withPublish={navInfo?.showPublish}
+    withPreview={navInfo?.showPreview}
+    {flashSaveDraftButton}
+    withDraft />
+</CenteredGrid>

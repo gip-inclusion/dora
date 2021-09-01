@@ -30,6 +30,7 @@ module.exports = {
       "error",
       {
         argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
       },
     ],
     "no-warning-comments": [
@@ -43,6 +44,7 @@ module.exports = {
     "node/no-unpublished-import": "off",
     "node/no-unpublished-require": "off",
     "padding-line-between-statements": "off",
+    "unused-export-let": "warn",
   },
   settings: {
     "svelte3/ignore-styles": () => true,

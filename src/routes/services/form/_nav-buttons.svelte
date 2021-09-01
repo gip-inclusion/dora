@@ -1,13 +1,15 @@
 <script>
   import Button from "$lib/components/button.svelte";
 
-  import { arrowRightSIcon, arrowLeftCircleIcon } from "$lib/icons.js";
+  import { arrowRightSIcon, arrowLeftCircleIcon, eyeIcon } from "$lib/icons.js";
   export let withBack = false;
   export let withForward = false;
   export let withPublish = false;
   export let withDraft = false;
-  export let onGoBack, onGoForward, onPublish, onSaveDraft;
+  export let withPreview = false;
+  export let onGoBack, onGoForward, onPublish, onSaveDraft, onPreview;
   export let currentPageIsValid;
+  export let flashSaveDraftButton = false;
 </script>
 
 <div class="col-span-full col-start-1 ">
@@ -25,8 +27,11 @@
     {#if withDraft}
       <Button
         on:click={onSaveDraft}
+        flashSuccess={flashSaveDraftButton}
         name="save_draft"
-        label="Enregistrer comme brouillon"
+        label={flashSaveDraftButton
+          ? "Enregistré !"
+          : "Enregistrer comme brouillon"}
         tertiary />
     {/if}
     {#if withForward}
@@ -36,6 +41,15 @@
         label="Suivant"
         disabled={currentPageIsValid}
         icon={arrowRightSIcon}
+        iconOnRight />
+    {/if}
+    {#if withPreview}
+      <Button
+        on:click={onPreview}
+        name="preview"
+        label="Prévisualiser"
+        disabled={currentPageIsValid}
+        icon={eyeIcon}
         iconOnRight />
     {/if}
     {#if withPublish}

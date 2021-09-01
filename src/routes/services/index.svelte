@@ -65,15 +65,27 @@
           smallIcon
           iconOnLeft
           icon={homeIcon} />
-        <Label label={service.department} bold />
-        <Label
-          label="Publié"
-          iconOnLeft
-          icon={checkBoxBlankIcon}
-          smallIcon
-          success
-          bold />
 
+        <Label label={service.department} bold />
+        {#if service.isDraft}
+          <Label
+            label="Brouillon"
+            iconOnLeft
+            icon={checkBoxBlankIcon}
+            smallIcon
+            wait
+            bold />
+        {:else}
+          <Label
+            label="Publié"
+            iconOnLeft
+            icon={checkBoxBlankIcon}
+            smallIcon
+            success
+            bold />
+        {/if}
+        <Label
+          label={`${new Date(service.modificationDate).toLocaleString()}`} />
         <div>
           <LinkButton
             to="/services/{service.slug}"

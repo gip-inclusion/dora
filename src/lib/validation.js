@@ -48,10 +48,10 @@ function validateField(fieldname, shape, data) {
       addError(fieldname, result.msg);
       return { originalValue, valid: false };
     }
-    if (shape.post) {
-      for (const postprocess of shape.post) {
-        value = postprocess(value);
-      }
+  }
+  if (shape.post) {
+    for (const postprocess of shape.post) {
+      value = postprocess(value);
     }
   }
   return { value, valid: true };

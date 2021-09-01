@@ -30,7 +30,6 @@
         {structure}
         {structuresOptions}
         formTitle="Modifiez votre structure"
-        modify
         visible />
     </div>
   </CenteredGrid>
