@@ -22,6 +22,7 @@
   import Step2 from "../form/_step2.svelte";
   import Step3 from "../form/_step3.svelte";
   import Step4 from "../form/_step4.svelte";
+  import Preview from "../form/_preview.svelte";
 
   export let service, servicesOptions, structures;
 
@@ -32,6 +33,7 @@
     [2, Step2],
     [3, Step3],
     [4, Step4],
+    [5, Preview],
   ]);
 
   $: currentStepComponent = steps.get(currentStep);

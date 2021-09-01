@@ -8,7 +8,7 @@
   import serviceSchema from "$lib/schemas/service.js";
 
   export let servicesOptions, service;
-  export const structure = undefined;
+  export let structures = undefined;
 </script>
 
 <FieldSet title="Modalités d'accès au service">

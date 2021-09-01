@@ -7,7 +7,7 @@
 
   export let servicesOptions;
   export let service;
-  export const structure = undefined;
+  export let structures = undefined;
 </script>
 
 <FieldSet title="Conditions d'accès pour le bénéficiaire">

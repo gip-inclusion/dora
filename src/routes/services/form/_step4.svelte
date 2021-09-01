@@ -9,7 +9,7 @@
   import serviceSchema from "$lib/schemas/service.js";
 
   export let servicesOptions, service;
-  export const structure = undefined;
+  export let structures = undefined;
 
   function handleCityChange(city) {
     const props = city?.properties;

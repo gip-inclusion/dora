@@ -4,7 +4,6 @@
   import { goto } from "$app/navigation";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import {
     validate,
     injectAPIErrors,
@@ -12,11 +11,7 @@
   } from "$lib/validation.js";
 
   import NavLink from "./_navlink.svelte";
-  import {
-    resetServiceCache,
-    persistServiceCache,
-    getNewService,
-  } from "./_stores.js";
+  import { resetServiceCache, persistServiceCache } from "./_stores.js";
   import NavButtons from "./_nav-buttons.svelte";
 
   import serviceSchema, {
@@ -29,6 +24,7 @@
 
   import { createOrModifyService, publishDraft } from "$lib/services";
   import { assert, logException } from "$lib/logger";
+  import Preview from "./_preview.svelte";
 
   const schemas = new Map([
     [1, step1Schema],
@@ -100,7 +96,15 @@
     case 4:
       navInfo = {
         previous: 3,
-        last: true,
+        next: 5,
+        showPublish: true,
+        showPreview: true,
+      };
+      break;
+    case 5:
+      navInfo = {
+        previous: 4,
+        showPublish: true,
       };
       break;
     default:
@@ -113,6 +117,7 @@
   }
 
   export async function publish() {
+    // Validate the whole form
     const { _validatedData, valid } = validate(
       service,
       serviceSchema,
@@ -127,7 +132,6 @@
       try {
         const result = await publishDraft(service.slug);
         if (useLocalStorage) resetServiceCache();
-        service = getNewService();
         goto(`/services/${result.slug}`);
       } catch (error) {
         logException(error);
@@ -187,21 +191,29 @@
   }
 
   async function handlePublish() {
-    if (useLocalStorage) persistServiceCache(service);
-    if (
-      validate(service, schemas.get(currentStep), serviceSchema, {
-        skipDependenciesCheck: true,
-        noScroll: false,
-      }).valid
-    ) {
-      await saveDraft();
+    if (currentStep === 5) {
       publish();
+    } else {
+      if (useLocalStorage) persistServiceCache(service);
+      if (
+        validate(service, schemas.get(currentStep), serviceSchema, {
+          skipDependenciesCheck: true,
+          noScroll: false,
+        }).valid
+      ) {
+        await saveDraft();
+        publish();
+      }
     }
   }
 
   function handleSaveDraft() {
     if (useLocalStorage) persistServiceCache(service);
     saveDraft();
+  }
+
+  function handlePreview() {
+    handleGoForward();
   }
 
   function handleNavLinkClick(step) {
@@ -226,7 +238,9 @@
 
 <svelte:window bind:scrollY />
 
-<EnsureLoggedIn>
+{#if currentStep === 5}
+  <Preview {service} />
+{:else}
   <CenteredGrid>
     <div class="col-start-1 col-span-full text-center mb-6">
       <div class="mx-auto">
@@ -256,18 +270,19 @@
       <slot />
     </div>
   </CenteredGrid>
-
-  <CenteredGrid gridRow="3" sticky>
-    <NavButtons
-      _currentPageIsValid={isValid(schemas.get(currentStep))}
-      onGoBack={handleGoBack}
-      onGoForward={handleGoForward}
-      onPublish={handlePublish}
-      onSaveDraft={handleSaveDraft}
-      withBack={!!navInfo?.previous}
-      withForward={!!navInfo?.next}
-      withPublish={navInfo?.last}
-      {flashSaveDraftButton}
-      withDraft />
-  </CenteredGrid>
-</EnsureLoggedIn>
+{/if}
+<CenteredGrid gridRow="3" sticky>
+  <NavButtons
+    _currentPageIsValid={isValid(schemas.get(currentStep))}
+    onGoBack={handleGoBack}
+    onGoForward={handleGoForward}
+    onPublish={handlePublish}
+    onSaveDraft={handleSaveDraft}
+    onPreview={handlePreview}
+    withBack={!!navInfo?.previous}
+    withForward={!!navInfo?.next && !navInfo?.showPreview}
+    withPublish={navInfo?.showPublish}
+    withPreview={navInfo?.showPreview}
+    {flashSaveDraftButton}
+    withDraft />
+</CenteredGrid>
