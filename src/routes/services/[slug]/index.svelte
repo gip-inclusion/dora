@@ -4,7 +4,7 @@
   export async function load({ page, _fetch, _session, _context }) {
     return {
       props: {
-        service: await getService(`${page.params.slug}`),
+        service: await getService(page.params.slug),
       },
     };
   }
@@ -17,7 +17,11 @@
 </script>
 
 <svelte:head>
-  <title>Dora: {service.name} par {service.structureInfo.name}</title>
+  <title>Dora: {service?.name} par {service?.structureInfo.name}</title>
 </svelte:head>
 
-<ServiceCard {service} />
+{#if service}
+  <ServiceCard {service} />
+{:else}
+  <!-- TODO: 404 -->
+{/if}

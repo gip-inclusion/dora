@@ -10,16 +10,16 @@ import { token } from "$lib/auth";
 
 export async function getServices() {
   const url = `${getApiURL()}/services/`;
-  return await fetchData(url);
+  return (await fetchData(url)).data;
 }
 
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
-  const result = await fetchData(url);
-  if (result) {
-    result.fullDesc = insane(markdownToHTML(result.fullDesc));
+  const data = (await fetchData(url)).data;
+  if (data) {
+    data.fullDesc = insane(markdownToHTML(data.fullDesc));
   }
-  return result;
+  return data;
 }
 
 export async function createOrModifyService(service) {
@@ -79,5 +79,5 @@ export async function publishDraft(serviceSlug) {
 
 export async function getServicesOptions() {
   const url = `${getApiURL()}/services-options/`;
-  return await fetchData(url);
+  return (await fetchData(url)).data;
 }

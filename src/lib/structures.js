@@ -37,12 +37,12 @@ export async function siretWasAlreadyClaimed(siret) {
 
 export async function getStructures() {
   const url = `${getApiURL()}/structures/`;
-  return await fetchData(url);
+  return (await fetchData(url)).data;
 }
 
 export async function getStructure(slug) {
   const url = `${getApiURL()}/structures/${slug}/`;
-  const result = await fetchData(url);
+  const result = (await fetchData(url)).data;
   if (result) {
     result.fullDesc = insane(markdownToHTML(result.fullDesc));
   }
@@ -116,5 +116,5 @@ export async function modifyStructure(structure) {
 
 export async function getStructuresOptions() {
   const url = `${getApiURL()}/structures-options/`;
-  return await fetchData(url);
+  return (await fetchData(url)).data;
 }
