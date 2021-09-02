@@ -1,6 +1,10 @@
 import * as v from "./utils";
 
 const shape1 = {
+  isDraft: {
+    default: true,
+    rules: [v.isBool()],
+  },
   structure: {
     default: null,
     required: true,
