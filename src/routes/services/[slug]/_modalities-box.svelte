@@ -29,7 +29,7 @@
   }
 </style>
 
-<Box title="Les modalités du dispositif" --box-color="var(--col-magenta-cta)">
+<Box title="Les modalités" --box-color="var(--col-magenta-cta)">
   <div class="infos">
     {#if service.isCumulative}
       <Info

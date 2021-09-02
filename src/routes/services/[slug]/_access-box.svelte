@@ -21,10 +21,10 @@
   }
 </style>
 
-<Box title="Conditions d’accès pour le bénéficiaire" --box-color="black">
+<Box title="Conditions d’accès" --box-color="black">
   <div class="flex flex-row">
     <div class="flex-1">
-      <h3>Mobiliser la solution</h3>
+      <h3>Mobiliser ce service</h3>
       <ul class="list">
         {#each service.beneficiariesAccessModesDisplay as mode}
           <li>
