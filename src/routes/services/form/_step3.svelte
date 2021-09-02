@@ -70,7 +70,7 @@
     </FieldHelp>
     <Uploader
       slot="custom-input"
-      folder={service.structure}
+      structureSlug={service.structure}
       name="forms"
       on:blur
       bind:fileKeys={service.forms} />
