@@ -52,6 +52,29 @@
   .wrapper {
     background-color: var(--col-under-bg, var(--col-bg));
   }
+
+  @media print {
+    :global(.global-content-wrapper) .padded {
+      padding-top: 0;
+    }
+
+    .wrapper {
+      background-color: var(--col-white) !important;
+    }
+
+    .content {
+      background-color: var(--col-white) !important;
+    }
+
+    .roundedbg {
+      background-color: var(--col-white) !important;
+    }
+
+    .centered {
+      column-gap: var(--s12);
+      grid-template-columns: repeat(12, 78px);
+    }
+  }
 </style>
 
 <div class="{extraClass} wrapper" class:padded={gridRow === 1} class:sticky>

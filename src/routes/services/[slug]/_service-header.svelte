@@ -22,6 +22,12 @@
     flex-direction: row;
     gap: var(--s16);
   }
+
+  @media print {
+    h1 {
+      color: var(--col-france-blue);
+    }
+  }
 </style>
 
 <div class="col-start-1 col-span-full  mb-6  text-white">
@@ -29,7 +35,7 @@
     <Label label={service.structureInfo.name} darkBg />
     <h1 class="text-white">{service.name}</h1>
     {#if $token && !isPreview}
-      <div class="my-2">
+      <div class="my-2 noprint">
         <LinkButton type="submit" to={editLink} label="Éditer" small />
       </div>
     {/if}

@@ -29,7 +29,7 @@
   }
 </style>
 
-<div class="wrapper ">
+<div class="wrapper noprint">
   <div>
     <h3>Orientez votre bénéficiaire</h3>
   </div>

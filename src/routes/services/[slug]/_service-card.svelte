@@ -34,6 +34,12 @@
     flex-direction: column;
     gap: var(--s16);
   }
+
+  @media print {
+    .service-info {
+      margin-bottom: 0;
+    }
+  }
 </style>
 
 <CenteredGrid --col-bg="var(--col-france-blue)">
@@ -53,11 +59,13 @@
     <div class="structure-info">
       <h4>{service.structureInfo.name}</h4>
       <Label label={service.structureInfo.shortDesc} italic />
-      <LinkButton
-        to="/structures/{service.structure}"
-        small
-        nogrow
-        label="Voir l’offre complète de services" />
+      <div class="noprint">
+        <LinkButton
+          to="/structures/{service.structure}"
+          small
+          nogrow
+          label="Voir l’offre complète de services" />
+      </div>
     </div>
   </div>
   <div class="service-info">

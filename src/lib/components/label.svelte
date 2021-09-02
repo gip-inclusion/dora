@@ -62,6 +62,16 @@
     height: var(--s16);
     fill: currentColor;
   }
+
+  @media print {
+    .dark-bg {
+      color: var(--col-text);
+    }
+
+    .dark-bg.success {
+      color: var(--col-success);
+    }
+  }
 </style>
 
 <div

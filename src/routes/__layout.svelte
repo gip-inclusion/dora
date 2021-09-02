@@ -46,7 +46,7 @@
   {/if}
 </svelte:head>
 
-<header class="grid row-start-1 shadow-md z-10 relative">
+<header class="grid row-start-1 shadow-md z-10 relative noprint">
   <CenteredGrid>
     <div class="flex flex-row items-center row-start-1 col-span-full py-3/2 ">
       <a class="flex flex-row gap-5 " href="/">
@@ -100,7 +100,7 @@
   <slot />
 </div>
 
-<footer class="grid row-start-3 border-t-2 border-france-blue pt-5/2">
+<footer class="grid row-start-3 border-t-2 border-france-blue pt-5/2 noprint">
   <CenteredGrid>
     <div class="col-span-5 mb-5">
       <img class="inline" src={LogoRF} alt="" width="124" height="110" />

@@ -234,3 +234,15 @@ h5 {
   font-size: var(--f14);
   color: var(--col-gray-02);
 }
+
+@media print {
+  /* styles here */
+  .noprint {
+    display: none !important;
+  }
+}
+
+@page {
+  size: A4 portrait;
+  margin: 1cm;
+}
