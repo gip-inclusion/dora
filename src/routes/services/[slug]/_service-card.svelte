@@ -8,6 +8,7 @@
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   export let service;
+  export let isPreview = false;
 </script>
 
 <style>
@@ -36,7 +37,7 @@
 </style>
 
 <CenteredGrid --col-bg="var(--col-france-blue)">
-  <ServiceHeader {service} />
+  <ServiceHeader {service} {isPreview} />
 </CenteredGrid>
 
 <CenteredGrid

@@ -8,4 +8,4 @@
   <title>Dora: {service.name} par {service?.structureInfo.name}</title>
 </svelte:head>
 
-<ServiceCard {service} />
+<ServiceCard {service} isPreview />

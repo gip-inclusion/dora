@@ -7,7 +7,8 @@
   export let withPublish = false;
   export let withDraft = false;
   export let withPreview = false;
-  export let onGoBack, onGoForward, onPublish, onSaveDraft, onPreview;
+  export let isDraft;
+  export let onGoBack, onGoForward, onPublish, onModify, onSaveDraft, onPreview;
   export let currentPageIsValid;
   export let flashSaveDraftButton = false;
 </script>
@@ -54,9 +55,9 @@
     {/if}
     {#if withPublish}
       <Button
-        on:click={onPublish}
+        on:click={isDraft ? onPublish : onModify}
         name="validate"
-        label="Publier"
+        label={isDraft ? "Publier" : "Modifier"}
         disabled={currentPageIsValid}
         icon={arrowRightSIcon}
         iconOnRight />

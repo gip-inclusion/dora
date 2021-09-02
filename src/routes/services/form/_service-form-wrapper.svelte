@@ -139,7 +139,34 @@
     }
   }
 
+  export async function modify() {
+    // Validate the whole form
+    const { validatedData, valid } = validate(
+      service,
+      serviceSchema,
+      serviceSchema,
+      { skipDependenciesCheck: true, noScroll: false }
+    );
+
+    if (valid) {
+      assert(service.slug);
+
+      // Validation OK, let's send it to the API endpoint
+
+      const result = await createOrModifyService(validatedData);
+      if (result.ok) {
+        service = result.data;
+        if (useLocalStorage) resetServiceCache();
+        goto(`/services/${service.slug}`);
+      } else {
+        injectAPIErrors(result.error, {});
+      }
+    }
+  }
+
   export async function saveDraft() {
+    if (!service.isDraft) return;
+
     // HACK: Empty <Select> are casted to null for now
     // but the server wants an empty string
     // We should fix the <Select> instead
@@ -203,6 +230,22 @@
       ) {
         await saveDraft();
         publish();
+      }
+    }
+  }
+
+  async function handleModify() {
+    if (currentStep === 5) {
+      modify();
+    } else {
+      if (useLocalStorage) persistServiceCache(service);
+      if (
+        validate(service, schemas.get(currentStep), serviceSchema, {
+          skipDependenciesCheck: true,
+          noScroll: false,
+        }).valid
+      ) {
+        await modify();
       }
     }
   }
@@ -274,15 +317,17 @@
 <CenteredGrid gridRow="3" sticky>
   <NavButtons
     _currentPageIsValid={isValid(schemas.get(currentStep))}
+    isDraft={service.isDraft}
     onGoBack={handleGoBack}
     onGoForward={handleGoForward}
     onPublish={handlePublish}
+    onModify={handleModify}
     onSaveDraft={handleSaveDraft}
     onPreview={handlePreview}
     withBack={!!navInfo?.previous}
     withForward={!!navInfo?.next && !navInfo?.showPreview}
     withPublish={navInfo?.showPublish}
     withPreview={navInfo?.showPreview}
-    {flashSaveDraftButton}
-    withDraft />
+    withDraft={currentStep !== 5 && service.isDraft}
+    {flashSaveDraftButton} />
 </CenteredGrid>
