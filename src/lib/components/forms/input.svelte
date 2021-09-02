@@ -10,6 +10,7 @@
 
   export let type;
   export let name;
+  export let autocomplete;
 
   export let choices = [];
   export let sortSelect = undefined;
@@ -95,7 +96,8 @@
     type="text"
     {placeholder}
     {disabled}
-    {readonly} />
+    {readonly}
+    {autocomplete} />
 {:else if type === "textarea"}
   <textarea
     {name}
@@ -107,6 +109,7 @@
     {placeholder}
     {disabled}
     {readonly}
+    {autocomplete}
     rows="4" />
 {:else if type === "richtext"}
   <RichText
@@ -133,7 +136,8 @@
     type="password"
     {placeholder}
     {disabled}
-    {readonly} />
+    {readonly}
+    {autocomplete} />
 {:else if type === "date"}
   <input
     {name}
@@ -143,7 +147,8 @@
     type="date"
     {placeholder}
     {disabled}
-    {readonly} />
+    {readonly}
+    {autocomplete} />
 {:else if type === "number"}
   <input
     {name}
@@ -154,7 +159,8 @@
     min={minValue}
     {placeholder}
     {disabled}
-    {readonly} />
+    {readonly}
+    {autocomplete} />
 {:else if type === "email"}
   <input
     {name}
@@ -164,7 +170,8 @@
     type="email"
     {placeholder}
     {disabled}
-    {readonly} />
+    {readonly}
+    {autocomplete} />
 {:else if type === "hidden"}
   <input
     {name}
@@ -173,7 +180,8 @@
     on:blur
     type="hidden"
     {disabled}
-    {readonly} />
+    {readonly}
+    {autocomplete} />
 {:else if type === "tel"}
   <input
     {name}
@@ -183,7 +191,8 @@
     type="tel"
     {placeholder}
     {disabled}
-    {readonly} />
+    {readonly}
+    {autocomplete} />
 {:else if type === "url"}
   <input
     {name}
@@ -193,6 +202,7 @@
     type="url"
     {placeholder}
     {disabled}
-    {readonly} />
+    {readonly}
+    {autocomplete} />
 {/if}
 <span />

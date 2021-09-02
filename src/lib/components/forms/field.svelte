@@ -10,6 +10,7 @@
   export let name = "";
   export let type;
   export let errorMessages = [];
+  export let autocomplete = undefined;
 
   export let vertical = false;
   export let label = "";
@@ -85,7 +86,8 @@
             {disabled}
             {readonly}
             {toggleYesText}
-            {toggleNoText} />
+            {toggleNoText}
+            {autocomplete} />
         {:else}
           <slot name="custom-input" />
         {/if}
