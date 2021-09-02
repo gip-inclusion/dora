@@ -80,6 +80,24 @@ export async function publishDraft(serviceSlug) {
   return await response.json();
 }
 
+export async function unPublishDraft(serviceSlug) {
+  const url = `${getApiURL()}/services/${serviceSlug}/`;
+  const method = "PATCH";
+  const response = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({ isDraft: true }),
+  });
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return await response.json();
+}
+
 export async function getServicesOptions() {
   const url = `${getApiURL()}/services-options/`;
   return (await fetchData(url)).data;

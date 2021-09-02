@@ -19,6 +19,7 @@ export { default as checkBoxBlankIcon } from "remixicon/icons/System/checkbox-bl
 export { default as errorWarningIcon } from "remixicon/icons/System/error-warning-fill.svg?raw";
 export { default as searchIcon } from "remixicon/icons/System/search-line.svg?raw";
 export { default as eyeIcon } from "remixicon/icons/System/eye-line.svg?raw";
+export { default as moreIcon } from "remixicon/icons/System/more-2-fill.svg?raw";
 
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
 export { default as emotionHappyIcon } from "remixicon/icons/User/emotion-happy-fill.svg?raw";
@@ -32,3 +33,7 @@ export { default as compassFillIcon } from "remixicon/icons/Map/compass-fill.svg
 export { default as mapPinIcon } from "remixicon/icons/Map/map-pin-2-line.svg?raw";
 
 export { default as homeIcon } from "remixicon/icons/Buildings/home-6-line.svg?raw";
+
+export { default as fileTransferIcon } from "remixicon/icons/Document/file-transfer-line.svg?raw";
+export { default as fileEditIcon } from "remixicon/icons/Document/file-edit-line.svg?raw";
+export { default as fileCloudIcon } from "remixicon/icons/Document/file-cloud-line.svg?raw";

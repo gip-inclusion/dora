@@ -1,0 +1,64 @@
+<script>
+  import Button from "$lib/components/button.svelte";
+
+  export let icon;
+  let isOpen = false;
+  let childrenListNode;
+  function clickOutside(node) {
+    const handleClick = (event) => {
+      if (node && !node.contains(event.target) && !event.defaultPrevented) {
+        node.dispatchEvent(new CustomEvent("click_outside", node));
+      }
+    };
+
+    document.addEventListener("click", handleClick, true);
+
+    return {
+      destroy() {
+        document.removeEventListener("click", handleClick, true);
+      },
+    };
+  }
+
+  function handleClickOutside(_event) {
+    isOpen = false;
+  }
+</script>
+
+<style>
+  .wrapper {
+    position: relative;
+  }
+
+  .children {
+    position: absolute;
+    z-index: 1000;
+    top: 64px;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: var(--s8);
+    background-color: var(--col-white);
+    border-radius: var(--s8);
+    box-shadow: var(--shadow-md);
+  }
+
+  .open {
+    display: flex;
+  }
+</style>
+
+<div class="wrapper">
+  <div class="title">
+    <Button {icon} noBackground on:click={() => (isOpen = !isOpen)} />
+  </div>
+  <div
+    class="children"
+    class:open={isOpen}
+    bind:this={childrenListNode}
+    use:clickOutside
+    on:click_outside={handleClickOutside}>
+    <slot />
+  </div>
+</div>
