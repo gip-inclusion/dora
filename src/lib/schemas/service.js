@@ -163,14 +163,26 @@ const shape4 = {
   },
   city: {
     default: "",
-    required: true,
-    rules: [v.isString(), v.maxStrLength(255)],
+    rules: [
+      v.isString(),
+      v.maxStrLength(255),
+      (name, value, data) => ({
+        valid: data.locationKinds.includes("OS") ? !!value.length : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
     post: [v.trim],
   },
   address1: {
     default: "",
-    required: true,
-    rules: [v.isString(), v.maxStrLength(255)],
+    rules: [
+      v.isString(),
+      v.maxStrLength(255),
+      (name, value, data) => ({
+        valid: data.locationKinds.includes("OS") ? !!value.length : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
     post: [v.trim],
     dependents: ["postalCode"],
   },
@@ -181,8 +193,13 @@ const shape4 = {
   },
   postalCode: {
     default: "",
-    required: true,
-    rules: [v.isPostalCode()],
+    rules: [
+      v.isPostalCode(),
+      (name, value, data) => ({
+        valid: data.locationKinds.includes("OS") ? !!value.length : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
   },
   startDate: {
     default: null,

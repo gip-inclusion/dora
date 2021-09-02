@@ -96,7 +96,11 @@
     errorMessages={$formErrors.remoteUrl}
     bind:value={service.remoteUrl} />
 
-  <Field type="custom" label="Ville" errorMessages={$formErrors.city} required>
+  <Field
+    type="custom"
+    label="Ville"
+    errorMessages={$formErrors.city}
+    schema={serviceSchema.city}>
     <CitySearch
       slot="custom-input"
       name="city"
@@ -108,7 +112,7 @@
     type="custom"
     label="Adresse"
     errorMessages={$formErrors.address1}
-    required>
+    schema={serviceSchema.address1}>
     <AddressSearch
       slot="custom-input"
       name="address1"
