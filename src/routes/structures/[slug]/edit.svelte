@@ -29,6 +29,7 @@
       <StructureFormWrapper
         {structure}
         {structuresOptions}
+        modify
         formTitle="Modifiez votre structure"
         visible />
     </div>

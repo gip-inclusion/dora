@@ -22,7 +22,6 @@
   export let structuresOptions;
 
   let selectedCity;
-  let selectedEstablishment;
 
   const defaultStructure = Object.fromEntries(
     Object.entries(structureSchema).map(([fieldName, props]) => [
@@ -37,7 +36,6 @@
   function handleCityChange(city) {
     selectedCity = city;
     structure = JSON.parse(JSON.stringify(defaultStructure));
-    selectedEstablishment = null;
   }
 
   async function establishmentAlreadyCreated(siret) {
@@ -49,7 +47,6 @@
   }
 
   async function handleEstablishmentChange(establishment) {
-    selectedEstablishment = establishment;
     alreadyClaimedEstablishment = null;
     structure = JSON.parse(JSON.stringify(defaultStructure));
     if (establishment) {
