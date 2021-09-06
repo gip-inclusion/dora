@@ -5,8 +5,8 @@
   export let name;
   export let label = undefined;
   export let type;
-  export let field;
-  export let choices = null;
+  export let schema;
+  export let choices = [];
   export let sortSelect = undefined;
   export let vertical = false;
   export let errorMessages = undefined;
@@ -27,10 +27,10 @@
   {onSelectChange}
   {name}
   {errorMessages}
-  required={field.required}
-  maxLength={field.maxLength}
-  label={label || field.label}
-  choices={choices != null ? choices : field.child?.choices || field.choices}
+  required={schema?.required}
+  maxLength={schema?.maxLength}
+  {label}
+  {choices}
   {sortSelect}
   {type}
   {placeholder}

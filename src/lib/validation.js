@@ -48,10 +48,10 @@ function validateField(fieldname, shape, data) {
       addError(fieldname, result.msg);
       return { originalValue, valid: false };
     }
-    if (shape.post) {
-      for (const postprocess of shape.post) {
-        value = postprocess(value);
-      }
+  }
+  if (shape.post) {
+    for (const postprocess of shape.post) {
+      value = postprocess(value);
     }
   }
   return { value, valid: true };
@@ -76,7 +76,6 @@ export function validate(
   formErrors.set(currentErrors);
 
   Object.entries(schema).forEach(([fieldname, shape]) => {
-    // console.log("value", data[fieldname]);
     const { value, valid } = validateField(fieldname, shape, data);
     isValid &&= valid;
     validatedData[fieldname] = value;

@@ -28,12 +28,24 @@
   .content {
     padding: var(--s32) var(--s40) var(--s40);
   }
+
+  @media print {
+    .title {
+      background: var(--col-white);
+      color: var(--box-color);
+    }
+
+    .title h3 {
+      color: var(--col-gray-dark);
+    }
+  }
 </style>
 
 <div class="wrapper">
   <div class="title">
-    <Label icon={compassFillIcon} iconOnLeft darkBg bigIcon
-      ><h3>{title}</h3></Label>
+    <Label icon={compassFillIcon} iconOnLeft darkBg bigIcon>
+      <h3>{title}</h3>
+    </Label>
   </div>
   <div class="content">
     <slot />

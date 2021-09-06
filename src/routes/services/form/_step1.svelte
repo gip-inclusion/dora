@@ -3,19 +3,20 @@
   import FieldHelp from "$lib/components/forms/field-help.svelte";
   import ModelField from "$lib/components/forms/model-field.svelte";
   import { formErrors } from "$lib/validation.js";
+  import serviceSchema from "$lib/schemas/service.js";
 
   import Info from "./_info.svelte";
 
-  export let serviceOptions;
-  export let service;
+  export let servicesOptions, service, structures;
   let subcategories = [];
 
   function handleCategoryChange(category) {
     subcategories = category
-      ? serviceOptions.subcategories.child.choices.filter((choice) =>
-          choice.value.startsWith(category)
+      ? servicesOptions.subcategories.filter(({ value }) =>
+          value.startsWith(category)
         )
       : [];
+
     service.subcategories = service.subcategories.filter((scat) =>
       scat.startsWith(category)
     );
@@ -25,10 +26,13 @@
 <FieldSet title="">
   <ModelField
     type="select"
-    field={serviceOptions.structure}
+    schema={serviceSchema.structure}
+    label="Structure"
+    choices={structures.map((s) => ({ value: s.slug, label: s.name }))}
     name="structure"
     errorMessages={$formErrors.structure}
     bind:value={service.structure}
+    sortSelect
     placeholder="Sélectionnez votre structure" />
 </FieldSet>
 
@@ -42,21 +46,24 @@
   <ModelField
     type="select"
     label="Thématique"
-    field={serviceOptions.category}
+    schema={serviceSchema.category}
     bind:value={service.category}
+    choices={servicesOptions.categories}
     name="category"
     errorMessages={$formErrors.category}
     onSelectChange={handleCategoryChange}
-    placeholder="Choisissez la catégorie principale" />
+    placeholder="Choisissez la catégorie principale"
+    sortSelect />
   <ModelField
     type="multiselect"
     label="Besoin(s)"
-    field={serviceOptions.subcategories}
+    schema={serviceSchema.subcategories}
     name="subcategories"
     errorMessages={$formErrors.subcategories}
     bind:value={service.subcategories}
     choices={subcategories}
-    placeholder="Choisissez les sous-catégories">
+    placeholder="Choisissez les sous-catégories"
+    sortSelect>
     <FieldHelp slot="helptext" title="Catégorisation">
       Pour permettre à nos utilisateurs de trouver facilement la solution que
       vous proposez, il est nécessaire de classer les services par catégorie?
@@ -65,20 +72,13 @@
 
   <ModelField
     type="checkboxes"
-    field={serviceOptions.kinds}
+    label="Type de service"
+    schema={serviceSchema.kinds}
     name="kinds"
     errorMessages={$formErrors.kinds}
     bind:value={service.kinds}
+    choices={servicesOptions.kinds}
     description="Quel type de service proposez-vous ? " />
-
-  <!-- <ModelField
-    type="toggle"
-    label="Droit commun"
-    field={serviceOptions.isCommonLaw}
-    name="isCommonLaw"
-    errorMessages={$formErrors.isCommonLaw}
-    bind:value={service.isCommonLaw}
-    description="Il s’agit d’un service de Droit commun - mobilisé équitablement sur l’ensemble du territoire ?" /> -->
 </FieldSet>
 
 <FieldSet title="Présentez votre service">
@@ -86,7 +86,7 @@
     label="Nom du service"
     type="text"
     placeholder="Ex. Aide aux frais liés à…"
-    field={serviceOptions.name}
+    schema={serviceSchema.name}
     name="name"
     errorMessages={$formErrors.name}
     bind:value={service.name} />
@@ -94,7 +94,8 @@
     description="280 caractères maximum"
     placeholder="Décrivez brièvement votre service"
     type="textarea"
-    field={serviceOptions.shortDesc}
+    label="Résumé"
+    schema={serviceSchema.shortDesc}
     name="shortDesc"
     errorMessages={$formErrors.shortDesc}
     bind:value={service.shortDesc}>
@@ -116,7 +117,7 @@
     placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre service et ses spécificités."
     type="richtext"
     vertical
-    field={serviceOptions.fullDesc}
+    schema={serviceSchema.fullDesc}
     name="fullDesc"
     errorMessages={$formErrors.fullDesc}
     bind:value={service.fullDesc} />

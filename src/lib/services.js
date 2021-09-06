@@ -1,74 +1,60 @@
 import insane from "insane";
 import { get } from "svelte/store";
-import { getApiURL, markdownToHTML, htmlToMarkdown } from "$lib/utils.js";
+import {
+  getApiURL,
+  markdownToHTML,
+  htmlToMarkdown,
+  fetchData,
+} from "$lib/utils.js";
 import { token } from "$lib/auth";
 
 export async function getServices() {
   const url = `${getApiURL()}/services/`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: "application/json; version=1.0",
-    },
-  });
-
-  if (res.ok) {
-    const services = await res.json();
-    return {
-      props: { services },
-    };
-  }
-  return {
-    status: res.status,
-    error: new Error(`Could not load ${url}`),
-  };
+  return (await fetchData(url)).data;
 }
 
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: "application/json; version=1.0",
-    },
-  });
-
-  if (res.ok) {
-    const service = await res.json();
-    service.fullDesc = insane(markdownToHTML(service.fullDesc));
-    return {
-      props: { service },
-    };
+  const data = (await fetchData(url)).data;
+  if (data) {
+    data.fullDesc = insane(markdownToHTML(data.fullDesc));
   }
-  return {
-    status: res.status,
-    error: new Error(`Could not load ${url}`),
-  };
+  return data;
 }
 
-export async function createService(service) {
+export async function createOrModifyService(service) {
   if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
-  const url = `${getApiURL()}/services/`;
-  const method = "POST";
+  let method, url;
+  if (service.slug) {
+    url = `${getApiURL()}/services/${service.slug}/`;
+    method = "PATCH";
+  } else {
+    url = `${getApiURL()}/services/`;
+    method = "POST";
+  }
 
-  const res = await fetch(url, {
+  const response = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-
       Authorization: `Token ${get(token)}`,
     },
     body: JSON.stringify(service),
   });
 
   const result = {
-    ok: res.ok,
-    status: res.status,
+    ok: response.ok,
+    status: response.status,
   };
-  if (res.ok) {
-    result.result = await res.json();
+  if (response.ok) {
+    result.data = await response.json();
+    if (result.data) {
+      result.data.fullDesc = insane(markdownToHTML(result.data.fullDesc));
+    }
   } else {
     try {
-      result.error = await res.json();
+      result.error = await response.json();
     } catch (err) {
       console.error(err);
     }
@@ -76,81 +62,43 @@ export async function createService(service) {
   return result;
 }
 
-export async function modifyService(service) {
-  if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
-  const url = `${getApiURL()}/services/${service.slug}/`;
-
+export async function publishDraft(serviceSlug) {
+  const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";
-
-  const res = await fetch(url, {
+  const response = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify(service),
+    body: JSON.stringify({ isDraft: false }),
   });
-
-  const result = {
-    ok: res.ok,
-    status: res.status,
-  };
-  if (res.ok) {
-    result.result = await res.json();
-  } else {
-    try {
-      result.error = await res.json();
-    } catch (err) {
-      console.error(err);
-    }
+  if (!response.ok) {
+    throw Error(response.statusText);
   }
-  return result;
+  return await response.json();
 }
 
-export async function getServiceOptions() {
-  const url = `${getApiURL()}/services/`;
-  const res = await fetch(url, {
-    method: "OPTIONS",
+export async function unPublishDraft(serviceSlug) {
+  const url = `${getApiURL()}/services/${serviceSlug}/`;
+  const method = "PATCH";
+  const response = await fetch(url, {
+    method,
     headers: {
       Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
+    body: JSON.stringify({ isDraft: true }),
   });
-
-  const result = {
-    ok: res.ok,
-    status: res.status,
-  };
-  if (res.ok) {
-    result.result = (await res.json()).actions.POST;
-  } else {
-    try {
-      result.error = await res.json();
-    } catch (err) {
-      console.error(err);
-    }
+  if (!response.ok) {
+    throw Error(response.statusText);
   }
-  return result;
+  return await response.json();
 }
 
-export async function getPublicServicesOptions() {
+export async function getServicesOptions() {
   const url = `${getApiURL()}/services-options/`;
-
-  const res = await fetch(url, {
-    headers: {
-      Accept: "application/json; version=1.0",
-    },
-  });
-  if (res.ok) {
-    const servicesOptions = await res.json();
-    return {
-      props: { servicesOptions },
-    };
-  }
-  return {
-    status: res.status,
-    error: new Error(`Could not load ${url}`),
-  };
+  return (await fetchData(url)).data;
 }

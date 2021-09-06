@@ -1,99 +1,27 @@
 <script context="module">
   import { getService } from "$lib/services";
-  import { getStructure } from "$lib/structures";
 
   export async function load({ page, _fetch, _session, _context }) {
-    const service = (await getService(`${page.params.slug}`)).props.service;
-    const structure = (await getStructure(service.structure)).props.structure;
     return {
       props: {
-        service,
-        structure,
+        service: await getService(page.params.slug),
       },
     };
   }
 </script>
 
 <script>
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import AccessBox from "./_access-box.svelte";
-  import ModalitiesBox from "./_modalities-box.svelte";
-  import OrientationBox from "./_orientation-box.svelte";
-  import ServiceHeader from "./_service-header.svelte";
-  import ServicePresentation from "./_service-presentation.svelte";
-  import Label from "$lib/components/label.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
-  export let service, structure;
+  import ServiceCard from "./_service-card.svelte";
+
+  export let service;
 </script>
 
-<style>
-  .service-pres {
-    grid-column: 1 / 7;
-  }
-
-  .orientation {
-    grid-column: 9 / -1;
-  }
-
-  .service-info {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: var(--s40);
-    gap: var(--s24);
-    grid-column: 1 / -1;
-    grid-row-start: 2;
-  }
-
-  .structure-info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--s16);
-  }
-</style>
-
 <svelte:head>
-  <title>Dora: {service.name} par {structure.name}</title>
+  <title>Dora: {service?.name} par {service?.structureInfo.name}</title>
 </svelte:head>
 
-<CenteredGrid --col-bg="var(--col-france-blue)">
-  <ServiceHeader {service} {structure} />
-</CenteredGrid>
-
-<CenteredGrid
-  gridRow="2"
-  roundedbg
-  --col-under-bg="var(--col-france-blue)"
-  --col-content-bg="var(--col-bg)">
-  <div class="service-pres">
-    <ServicePresentation {service} />
-  </div>
-  <div class="orientation">
-    <OrientationBox {service} {structure} />
-    <div class="structure-info">
-      <h4>{structure.name}</h4>
-      <Label label={structure.shortDesc} italic />
-      <LinkButton
-        to="/structures/{structure.slug}"
-        small
-        nogrow
-        label="Voir l’offre complète de services" />
-    </div>
-  </div>
-  <div class="service-info">
-    <ModalitiesBox {service} />
-    <AccessBox {service} />
-  </div>
-</CenteredGrid>
-<!--
-    Champs non utilisés:
-
-    <strong>sous-catégories : </strong>{service.subcategoriesDisplay}
-    <strong>Droit commun : </strong>{service.isCommonLaw}
-    <strong>Limité dans le temps : </strong>{service.isTimeLimited}
-    <strong>Date de début : </strong>{service.startDate}
-    <strong>Date de fin : </strong>{service.endDate}
-    <strong>Récurrence : </strong>{service.recurrence}
-    <strong>Details récurrence : </strong>{service.recurrenceOther}
-    <strong>Suspendre au bout de : </strong>{service.suspensionCount}
-    <strong>Suspendre le : </strong>{service.suspensionDate}
--->
+{#if service}
+  <ServiceCard {service} />
+{:else}
+  <!-- TODO: 404 -->
+{/if}

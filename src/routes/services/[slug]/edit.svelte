@@ -1,15 +1,19 @@
 <script context="module">
-  import { getService } from "$lib/services";
+  import { getServicesOptions, getService } from "$lib/services";
+  import { getStructures } from "$lib/structures";
 
   export async function load({ page, _fetch, _session, _context }) {
-    return getService(page.params.slug);
+    return {
+      props: {
+        service: await getService(page.params.slug),
+        servicesOptions: await getServicesOptions(),
+        structures: await getStructures(),
+      },
+    };
   }
 </script>
 
 <script>
-  import { onMount } from "svelte";
-
-  import { getServiceOptions } from "$lib/services";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
 
   import ServiceFormWrapper from "../form/_service-form-wrapper.svelte";
@@ -18,37 +22,29 @@
   import Step2 from "../form/_step2.svelte";
   import Step3 from "../form/_step3.svelte";
   import Step4 from "../form/_step4.svelte";
+  import Preview from "../form/_preview.svelte";
 
-  export let service;
+  export let service, servicesOptions, structures;
 
   let currentStep;
-  let serviceOptions;
 
   const steps = new Map([
     [1, Step1],
     [2, Step2],
     [3, Step3],
     [4, Step4],
+    [5, Preview],
   ]);
-
-  onMount(async () => {
-    serviceOptions = (await getServiceOptions()).result;
-  });
 
   $: currentStepComponent = steps.get(currentStep);
 </script>
 
 <EnsureLoggedIn>
-  {#if serviceOptions}
-    <ServiceFormWrapper
-      bind:currentStep
+  <ServiceFormWrapper bind:currentStep bind:service title="Modifier un service">
+    <svelte:component
+      this={currentStepComponent}
       bind:service
-      modify
-      title="Modifier un service">
-      <svelte:component
-        this={currentStepComponent}
-        bind:service
-        {serviceOptions} />
-    </ServiceFormWrapper>
-  {/if}
+      {servicesOptions}
+      {structures} />
+  </ServiceFormWrapper>
 </EnsureLoggedIn>

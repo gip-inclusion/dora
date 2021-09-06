@@ -6,9 +6,10 @@
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import AddressSearch from "$lib/components/forms/street-search.svelte";
   import { formErrors } from "$lib/validation.js";
+  import serviceSchema from "$lib/schemas/service.js";
 
-  export let serviceOptions;
-  export let service;
+  export let servicesOptions, service;
+  export let structures = undefined;
 
   function handleCityChange(city) {
     const props = city?.properties;
@@ -39,7 +40,7 @@
     label="Nom du contact"
     placeholder="Prénom et nom"
     type="text"
-    field={serviceOptions.contactName}
+    schema={serviceSchema.contactName}
     name="contactName"
     errorMessages={$formErrors.contactName}
     bind:value={service.contactName}>
@@ -48,22 +49,24 @@
     </FieldHelp></ModelField>
   <ModelField
     type="tel"
+    label="Numéro de téléphone"
     placeholder="05 ou 06 00 00 00 00"
-    field={serviceOptions.contactPhone}
+    schema={serviceSchema.contactPhone}
     name="contactPhone"
     errorMessages={$formErrors.contactPhone}
     bind:value={service.contactPhone} />
   <ModelField
     type="email"
+    label="Courriel"
     placeholder="Votre adresse e-mail"
-    field={serviceOptions.contactEmail}
+    schema={serviceSchema.contactEmail}
     name="contactEmail"
     errorMessages={$formErrors.contactEmail}
     bind:value={service.contactEmail} />
   <ModelField
     label="Rendre les informations publiques"
     type="toggle"
-    field={serviceOptions.isContactInfoPublic}
+    schema={serviceSchema.isContactInfoPublic}
     name="isContactInfoPublic"
     errorMessages={$formErrors.isContactInfoPublic}
     bind:value={service.isContactInfoPublic} />
@@ -72,10 +75,12 @@
 <FieldSet title="Lieu">
   <ModelField
     type="checkboxes"
-    field={serviceOptions.locationKinds}
+    label="Lieu de déroulement"
+    schema={serviceSchema.locationKinds}
     name="locationKinds"
     errorMessages={$formErrors.locationKinds}
-    bind:value={service.locationKinds}>
+    bind:value={service.locationKinds}
+    choices={servicesOptions.locationKinds}>
     <FieldHelp slot="helptext" title="Lieu de déroulement">
       Merci de préciser si le service ou l’accompagnement se déroule en
       présentiel ou bien à distance. Si c’est à distance, merci de préciser le
@@ -84,13 +89,18 @@
   <ModelField
     placeholder="https://"
     type="url"
+    label="Lien visioconférence"
     visible={service.locationKinds.includes("RE")}
-    field={serviceOptions.remoteUrl}
+    schema={serviceSchema.remoteUrl}
     name="remoteUrl"
     errorMessages={$formErrors.remoteUrl}
     bind:value={service.remoteUrl} />
 
-  <Field type="custom" label="Ville" errorMessages={$formErrors.city} required>
+  <Field
+    type="custom"
+    label="Ville"
+    errorMessages={$formErrors.city}
+    schema={serviceSchema.city}>
     <CitySearch
       slot="custom-input"
       name="city"
@@ -102,7 +112,7 @@
     type="custom"
     label="Adresse"
     errorMessages={$formErrors.address1}
-    required>
+    schema={serviceSchema.address1}>
     <AddressSearch
       slot="custom-input"
       name="address1"
@@ -114,33 +124,35 @@
   </Field>
   <ModelField
     type="text"
+    label="Complément d’adresse"
     placeholder="Compléments d’adresse"
-    field={serviceOptions.address2}
+    schema={serviceSchema.address2}
     name="address2"
     errorMessages={$formErrors.address2}
     bind:value={service.address2} />
   <ModelField
     type="text"
+    label="Code postal"
     placeholder="Code postal"
-    field={serviceOptions.postalCode}
+    schema={serviceSchema.postalCode}
     name="postalCode"
     errorMessages={$formErrors.postalCode}
     bind:value={service.postalCode} />
   <ModelField
     type="hidden"
-    field={serviceOptions.cityCode}
+    schema={serviceSchema.cityCode}
     name="cityCode"
     errorMessages={$formErrors.cityCode}
     bind:value={service.cityCode} />
   <ModelField
     type="hidden"
-    field={serviceOptions.longitude}
+    schema={serviceSchema.longitude}
     name="longitude"
     errorMessages={$formErrors.longitude}
     bind:value={service.longitude} />
   <ModelField
     type="hidden"
-    field={serviceOptions.latitude}
+    schema={serviceSchema.latitude}
     name="latitude"
     errorMessages={$formErrors.latitude}
     bind:value={service.latitude} />
@@ -157,7 +169,8 @@
     bind:value={service.isTimeLimited} /> -->
   <ModelField
     type="date"
-    field={serviceOptions.startDate}
+    label="Date de début"
+    schema={serviceSchema.startDate}
     name="startDate"
     errorMessages={$formErrors.startDate}
     bind:value={service.startDate}>
@@ -168,22 +181,25 @@
     </FieldHelp></ModelField>
   <ModelField
     type="date"
-    field={serviceOptions.endDate}
+    label="Date de fin"
+    schema={serviceSchema.endDate}
     name="endDate"
     errorMessages={$formErrors.endDate}
     bind:value={service.endDate} />
   <ModelField
     type="radios"
-    field={serviceOptions.recurrence}
+    label="Récurrences"
+    schema={serviceSchema.recurrence}
     name="recurrence"
     errorMessages={$formErrors.recurrence}
-    bind:value={service.recurrence} />
+    bind:value={service.recurrence}
+    choices={servicesOptions.recurrence} />
   <ModelField
     type="text"
     placeholder="Préciser"
     hideLabel
     visible={service.recurrence === "OT"}
-    field={serviceOptions.recurrenceOther}
+    schema={serviceSchema.recurrenceOther}
     name="recurrenceOther"
     errorMessages={$formErrors.recurrenceOther}
     bind:value={service.recurrenceOther} />
@@ -198,14 +214,14 @@
     placeholder="Préciser le nombre maximum"
     type="number"
     minValue={1}
-    field={serviceOptions.suspensionCount}
+    schema={serviceSchema.suspensionCount}
     name="suspensionCount"
     errorMessages={$formErrors.suspensionCount}
     bind:value={service.suspensionCount} />
   <ModelField
     label="Oui, à partir d’une date :"
     type="date"
-    field={serviceOptions.suspensionDate}
+    schema={serviceSchema.suspensionDate}
     name="suspensionDate"
     errorMessages={$formErrors.suspensionDate}
     bind:value={service.suspensionDate} />

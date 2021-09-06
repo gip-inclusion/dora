@@ -30,6 +30,7 @@ module.exports = {
       "error",
       {
         argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
       },
     ],
     "no-warning-comments": [

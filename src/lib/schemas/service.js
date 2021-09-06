@@ -1,13 +1,17 @@
 import * as v from "./utils";
 
 const shape1 = {
+  isDraft: {
+    default: true,
+    rules: [v.isBool()],
+  },
   structure: {
     default: null,
     required: true,
     rules: [v.isString(), v.maxStrLength(50)],
   },
   category: {
-    default: [],
+    default: "",
     required: true,
     rules: [v.isString(), v.maxStrLength(2)],
   },
@@ -159,14 +163,26 @@ const shape4 = {
   },
   city: {
     default: "",
-    required: true,
-    rules: [v.isString(), v.maxStrLength(255)],
+    rules: [
+      v.isString(),
+      v.maxStrLength(255),
+      (name, value, data) => ({
+        valid: data.locationKinds.includes("OS") ? !!value.length : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
     post: [v.trim],
   },
   address1: {
     default: "",
-    required: true,
-    rules: [v.isString(), v.maxStrLength(255)],
+    rules: [
+      v.isString(),
+      v.maxStrLength(255),
+      (name, value, data) => ({
+        valid: data.locationKinds.includes("OS") ? !!value.length : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
     post: [v.trim],
     dependents: ["postalCode"],
   },
@@ -177,8 +193,13 @@ const shape4 = {
   },
   postalCode: {
     default: "",
-    required: true,
-    rules: [v.isPostalCode()],
+    rules: [
+      v.isPostalCode(),
+      (name, value, data) => ({
+        valid: data.locationKinds.includes("OS") ? !!value.length : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
   },
   startDate: {
     default: null,
@@ -238,4 +259,151 @@ export default {
   ...shape2,
   ...shape3,
   ...shape4,
+};
+
+export const draftServiceSchema = {
+  structure: {
+    required: true,
+    rules: [v.isString(), v.maxStrLength(50)],
+  },
+  name: {
+    required: true,
+    rules: [v.isString(), v.maxStrLength(140)],
+    post: [v.trim],
+  },
+  category: {
+    rules: [v.isString(), v.maxStrLength(2)],
+  },
+  subcategories: {
+    rules: [v.isArray([v.isString(), v.maxStrLength(6)])],
+  },
+  kinds: {
+    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+  },
+  isCommonLaw: {
+    rules: [v.isBool()],
+  },
+
+  shortDesc: {
+    rules: [v.isString(), v.maxStrLength(280)],
+    post: [v.trim],
+  },
+  fullDesc: { rules: [v.isString()], post: [v.trim] },
+
+  accessConditions: {
+    rules: [v.isArray([v.isPK()])],
+  },
+  concernedPublic: {
+    rules: [v.isArray([v.isPK()])],
+  },
+  requirements: {
+    rules: [v.isArray([v.isPK()])],
+  },
+  isCumulative: {
+    rules: [v.isBool()],
+  },
+  hasFee: {
+    rules: [v.isBool()],
+  },
+  feeDetails: {
+    post: [v.trim],
+    rules: [v.isString()],
+  },
+
+  beneficiariesAccessModes: {
+    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+  },
+  beneficiariesAccessModesOther: {
+    rules: [v.isString(), v.maxStrLength(280)],
+  },
+  coachOrientationModes: {
+    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+  },
+  coachOrientationModesOther: {
+    rules: [v.isString(), v.maxStrLength(280)],
+  },
+
+  credentials: {
+    rules: [v.isArray([v.isPK()])],
+  },
+  forms: {
+    rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
+  },
+  onlineForm: {
+    rules: [v.isURL(), v.maxStrLength(200)],
+    post: [v.trim],
+  },
+
+  contactName: {
+    rules: [v.isString(), v.maxStrLength(140)],
+    post: [v.trim],
+  },
+  contactPhone: {
+    pre: [v.removeAllSpaces],
+    rules: [v.isPhone()],
+  },
+  contactEmail: {
+    rules: [v.isEmail(), v.maxStrLength(255)],
+    post: [v.lower, v.trim],
+  },
+  isContactInfoPublic: {
+    rules: [v.isBool()],
+  },
+
+  locationKinds: {
+    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+  },
+  remoteUrl: {
+    rules: [v.isURL(), v.maxStrLength(200)],
+    post: [v.trim],
+  },
+  city: {
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  address1: {
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+    dependents: ["postalCode"],
+  },
+  address2: {
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  postalCode: {
+    rules: [v.isPostalCode()],
+  },
+  startDate: {
+    nullable: true,
+    rules: [v.isDate()],
+    post: [v.nullEmpty],
+  },
+  endDate: {
+    nullable: true,
+    rules: [v.isDate()],
+    post: [v.nullEmpty],
+  },
+  recurrence: {
+    rules: [v.isString(), v.maxStrLength(2)],
+  },
+  recurrenceOther: {
+    rules: [
+      v.isString(),
+      v.maxStrLength(140),
+      (name, value, data) => ({
+        valid: data.recurrence === "OT" ? value.length : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
+    post: [v.trim],
+  },
+  suspensionCount: {
+    nullable: true,
+    rules: [v.isInteger(), v.minNum(1)],
+  },
+  suspensionDate: {
+    nullable: true,
+    rules: [v.isDate()],
+    post: [v.nullEmpty],
+  },
 };

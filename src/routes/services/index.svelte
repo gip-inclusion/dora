@@ -1,16 +1,29 @@
 <script context="module">
-  import { getServices } from "$lib/services";
+  import { getServices, unPublishDraft } from "$lib/services";
 
   export async function load({ _page, _fetch, _session, _context }) {
-    return getServices();
+    return {
+      props: {
+        services: await getServices(),
+      },
+    };
   }
 </script>
 
 <script>
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import { checkBoxBlankIcon, homeIcon, eyeIcon } from "$lib/icons";
+  import {
+    checkBoxBlankIcon,
+    homeIcon,
+    eyeIcon,
+    fileCloudIcon,
+    fileEditIcon,
+    moreIcon,
+  } from "$lib/icons";
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
+  import Button from "$lib/components/button.svelte";
+  import ButtonMenu from "./_button-menu.svelte";
 
   export let services = [];
 
@@ -19,6 +32,13 @@
       return `${str.slice(0, length)}…`;
     }
     return str;
+  }
+
+  async function handleUnpublish(service) {
+    const result = await unPublishDraft(service.slug);
+    service.isDraft = result.isDraft;
+    // force reactive update
+    services = services;
   }
 </script>
 
@@ -57,24 +77,60 @@
           </a>
         </div>
         <Label
-          label={`${service.structureName}`}
+          label={`${service.structureInfo.name}`}
           smallIcon
           iconOnLeft
           icon={homeIcon} />
-        <Label label={service.cityCode.slice(0, 2)} bold />
-        <Label
-          label="Publié"
-          iconOnLeft
-          icon={checkBoxBlankIcon}
-          smallIcon
-          success
-          bold />
 
+        <Label label={service.department} bold />
+        {#if service.isDraft}
+          <Label
+            label="Brouillon"
+            iconOnLeft
+            icon={checkBoxBlankIcon}
+            smallIcon
+            wait
+            bold />
+        {:else}
+          <Label
+            label="Publié"
+            iconOnLeft
+            icon={checkBoxBlankIcon}
+            smallIcon
+            success
+            bold />
+        {/if}
+        <Label
+          label={`${new Date(service.modificationDate).toLocaleString()}`} />
         <div>
           <LinkButton
             to="/services/{service.slug}"
             icon={eyeIcon}
             noBackground />
+        </div>
+        <div>
+          <ButtonMenu icon={moreIcon}>
+            {#if !service.isDraft}
+              <div>
+                <Button
+                  label="Désactiver"
+                  on:click={() => handleUnpublish(service)}
+                  icon={fileCloudIcon}
+                  iconOnRight
+                  small
+                  noBackground />
+              </div>
+            {/if}
+            <div>
+              <LinkButton
+                label="Modifier"
+                to="/services/{service.slug}/edit"
+                icon={fileEditIcon}
+                iconOnRight
+                small
+                noBackground />
+            </div>
+          </ButtonMenu>
         </div>
       </div>
     {/each}

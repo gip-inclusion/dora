@@ -19,26 +19,17 @@
     goto(url);
   }
 
-  $: catChoices = servicesOptions.categories.map(([key, value]) => ({
-    value: key,
-    label: value,
-  }));
+  $: catChoices = servicesOptions.categories;
 
-  $: subCatChoices = servicesOptions.subCategories
-    .filter(([key, _value]) => key.startsWith(category))
-    .map(([key, value]) => ({
-      value: key,
-      label: value,
-    }));
+  $: subCatChoices = servicesOptions.subcategories.filter(({ value }) =>
+    value.startsWith(category)
+  );
 
   function handleCategoryChange(cat) {
     subCatChoices = cat
-      ? servicesOptions.subCategories
-          .filter(([key, _value]) => key.startsWith(cat))
-          .map(([key, value]) => ({
-            value: key,
-            label: value,
-          }))
+      ? servicesOptions.subcategories.filter(({ value }) =>
+          value.startsWith(cat)
+        )
       : [];
     if (cat && subcategory && !subcategory.startsWith(cat)) subcategory = null;
   }

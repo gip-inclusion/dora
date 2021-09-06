@@ -14,6 +14,7 @@
   export let nogrow = false;
   export let horizontalBottom = false;
   export let noPadding = false;
+  export let flashSuccess = false;
   let px, py, iw, ih, ts, lead;
   if (small) {
     px = "px-5/4";
@@ -51,7 +52,7 @@
     border =
       "border border-gray-dark  disabled:border-gray-01 active:border-france-blue";
     text =
-      "text-gray-text hover:text-white disabled:disabled:text-gray-text-alt2 active:text-france-blue";
+      "text-gray-text hover:text-white disabled:text-gray-text-alt2 active:text-france-blue";
     background = "bg-white hover:bg-gray-dark";
   } else {
     border = "border-0";
@@ -76,6 +77,21 @@
     align-self: flex-end;
     margin-bottom: 14px;
   }
+
+  .flash-success {
+    border: none;
+    background-color: var(--col-success);
+    color: var(--col-white);
+  }
+
+  .flash-success:hover {
+    background-color: var(--col-success);
+    color: var(--col-white);
+  }
+
+  .flash-success:focus {
+    box-shadow: none;
+  }
 </style>
 
 <button
@@ -84,6 +100,7 @@
   class="{px} {py} {ts} {lead} {border} {text} {background}  flex flex-row items-center justify-center text-center rounded focus:shadow-focus outline-none"
   class:nogrow
   class:hz-bottom={horizontalBottom}
+  class:flash-success={flashSuccess}
   on:click
   {disabled}>
   {#if iconOnLeft}
