@@ -8,31 +8,6 @@ import {
 } from "$lib/utils.js";
 import { token } from "$lib/auth";
 
-function toBack(service) {
-  if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
-  if (service.longitude && service.latitude) {
-    service.geom = {
-      type: "Point",
-      coordinates: [service.longitude, service.latitude],
-    };
-  } else {
-    service.geom = null;
-  }
-  return service;
-}
-
-function toFront(service) {
-  if (service.fullDesc)
-    service.fullDesc = insane(markdownToHTML(service.fullDesc));
-  let lng, lat;
-  if (service.geom) {
-    [lng, lat] = service.geom.coordinates;
-  }
-  service.longitude = lng;
-  service.latitude = lat;
-  return service;
-}
-
 export async function getServices() {
   const url = `${getApiURL()}/services/`;
   return (await fetchData(url)).data;
@@ -41,10 +16,14 @@ export async function getServices() {
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
   const data = (await fetchData(url)).data;
-  return toFront(data);
+  if (data) {
+    data.fullDesc = insane(markdownToHTML(data.fullDesc));
+  }
+  return data;
 }
 
 export async function createOrModifyService(service) {
+  if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
   let method, url;
   if (service.slug) {
     url = `${getApiURL()}/services/${service.slug}/`;
@@ -61,7 +40,7 @@ export async function createOrModifyService(service) {
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify(toBack(service)),
+    body: JSON.stringify(service),
   });
 
   const result = {
@@ -69,7 +48,10 @@ export async function createOrModifyService(service) {
     status: response.status,
   };
   if (response.ok) {
-    result.data = toFront(await response.json());
+    result.data = await response.json();
+    if (result.data) {
+      result.data.fullDesc = insane(markdownToHTML(result.data.fullDesc));
+    }
   } else {
     try {
       result.error = await response.json();
