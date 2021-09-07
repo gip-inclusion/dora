@@ -3,6 +3,8 @@
   import { Integrations } from "@sentry/tracing";
 
   import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
+  import { initToken } from "$lib/auth";
+
   if (ENVIRONMENT !== "local") {
     Sentry.init({
       dsn: SENTRY_DSN,
@@ -14,6 +16,11 @@
       // We recommend adjusting this value in production
       tracesSampleRate: 1.0,
     });
+  }
+
+  export async function load({ _page, _fetch, _session, _context }) {
+    await initToken();
+    return {};
   }
 </script>
 

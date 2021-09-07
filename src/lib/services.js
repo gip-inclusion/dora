@@ -1,11 +1,8 @@
 import insane from "insane";
 import { get } from "svelte/store";
-import {
-  getApiURL,
-  markdownToHTML,
-  htmlToMarkdown,
-  fetchData,
-} from "$lib/utils.js";
+
+import { markdownToHTML, htmlToMarkdown, fetchData } from "$lib/utils.js";
+import { getApiURL } from "$lib/utils/api.js";
 import { token } from "$lib/auth";
 
 function toBack(service) {

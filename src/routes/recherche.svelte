@@ -12,7 +12,7 @@
 
 <script>
   import { page } from "$app/stores";
-  import { getApiURL } from "$lib/utils";
+  import { getApiURL } from "$lib/utils/api.js";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import SearchResult from "./_homepage/_search-result.svelte";
   import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
