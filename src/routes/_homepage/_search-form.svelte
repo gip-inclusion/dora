@@ -5,6 +5,7 @@
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import { searchIcon } from "$lib/icons";
+  import { getQuery } from "./_search";
 
   export let servicesOptions;
   const categoryChoices = servicesOptions.categories;
@@ -16,11 +17,8 @@
   let subCategoryChoices = [];
 
   function handleSearch() {
-    let url = `recherche/?cat=${encodeURIComponent(
-      category
-    )}&city=${encodeURIComponent(cityCode)}`;
-    if (subcategory != null) url += `&sub=${encodeURIComponent(subcategory)}`;
-    goto(url);
+    const query = getQuery(category, subcategory, cityCode);
+    goto(`recherche/?${query}`);
   }
 
   function handleCategoryChange(cat) {

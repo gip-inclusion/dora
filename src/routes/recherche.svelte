@@ -16,6 +16,7 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import SearchResult from "./_homepage/_search-result.svelte";
   import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
+  import { getQuery } from "./_homepage/_search";
 
   let category = $page.query.get("cat");
   let subcategory = $page.query.get("sub");
@@ -24,8 +25,11 @@
   let results = [];
 
   async function getResults() {
-    let url = `${getApiURL()}/search/?cat=${category}&city=${cityCode}`;
-    if (subcategory != null) url += `&subcat=${subcategory}`;
+    const url = `${getApiURL()}/search/?${getQuery(
+      category,
+      subcategory,
+      cityCode
+    )}`;
     const res = await fetch(url, {
       headers: {
         Accept: "application/json; version=1.0",

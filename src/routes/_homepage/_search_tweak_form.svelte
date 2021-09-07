@@ -4,6 +4,7 @@
   import Button from "$lib/components/button.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import Field from "$lib/components/forms/field.svelte";
+  import { getQuery } from "./_search";
 
   export let servicesOptions;
   export let numResults;
@@ -12,11 +13,8 @@
   export let cityCode;
 
   function handleSearch() {
-    let url = `recherche/?cat=${encodeURIComponent(
-      category
-    )}&city=${encodeURIComponent(cityCode)}`;
-    if (subcategory != null) url += `&sub=${encodeURIComponent(subcategory)}`;
-    goto(url);
+    const query = getQuery(category, subcategory, cityCode);
+    goto(`recherche/?${query}`);
   }
 
   $: catChoices = servicesOptions.categories;
