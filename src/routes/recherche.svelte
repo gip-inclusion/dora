@@ -45,6 +45,13 @@
     } else {
       try {
         result.error = await res.json();
+
+        if (res.status === 404) {
+          //  TODO: When the city is incorrect, return an empty list
+          // instead of throwing an error. But we should really
+          // surface the error to the user.
+          result.result = [];
+        }
       } catch (err) {
         console.error(err);
       }
