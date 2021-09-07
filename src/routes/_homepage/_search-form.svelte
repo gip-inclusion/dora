@@ -88,7 +88,7 @@
       type="submit"
       label="Trouver"
       icon={searchIcon}
-      disabled={!category}
+      disabled={!category || !cityCode}
       iconOnLeft
       horizontalBottom
       small />

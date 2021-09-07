@@ -97,7 +97,10 @@
         handleChange={(city) => (cityCode = city.properties.citycode)} />
     </Field>
 
-    <Button type="submit" label="Mettre à jour" disabled={!category} />
+    <Button
+      type="submit"
+      label="Mettre à jour"
+      disabled={!category || !cityCode} />
   </form>
   <p>
     Le service DORA est actuellement <a
