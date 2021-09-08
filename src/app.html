@@ -6,6 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     %svelte.head%
     <title>DORA</title>
+    <style>
+      /* These @font-face declaration should really be in app.css, but in that case
+        Puppeteer's generated PDF are incorrect.
+       */
+      @font-face {
+        font-display: swap;
+        font-family: "Marianne";
+        font-style: normal;
+        font-weight: normal;
+        src: url("/Marianne/Marianne-Regular.woff2") format("woff2"),
+          url("/Marianne/Marianne-Regular.woff") format("woff");
+      }
+
+      @font-face {
+        font-display: swap;
+        font-family: "Marianne";
+        font-style: normal;
+        font-weight: bold;
+        src: url("/Marianne/Marianne-Bold.woff2") format("woff2"),
+          url("/Marianne/Marianne-Bold.woff") format("woff");
+      }
+
+      @font-face {
+        font-display: swap;
+        font-family: "Marianne";
+        font-style: italic;
+        font-weight: normal;
+        src: url("/Marianne/Marianne-Regular_Italic.woff2") format("woff2"),
+          url("/Marianne/Marianne-Regular_Italic.woff") format("woff");
+      }
+
+      @font-face {
+        font-display: swap;
+        font-family: "Marianne";
+        font-style: italic;
+        font-weight: bold;
+        src: url("/Marianne/Marianne-Bold_Italic.woff2") format("woff2"),
+          url("/Marianne/Marianne-Bold_Italic.woff") format("woff");
+      }
+    </style>
   </head>
 
   <body>

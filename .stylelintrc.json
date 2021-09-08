@@ -2,6 +2,7 @@
   "extends": ["stylelint-config-standard", "stylelint-config-idiomatic-order"],
   "ignoreFiles": ["build/**", "src/app.css"],
   "rules": {
+    "declaration-colon-newline-after": null,
     "selector-pseudo-class-no-unknown": [
       true,
       {
