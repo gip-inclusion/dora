@@ -17,6 +17,8 @@
   import SearchResult from "./_homepage/_search-result.svelte";
   import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
   import { getQuery } from "./_homepage/_search";
+  import { addCircleIcon } from "$lib/icons";
+  import LinkButton from "$lib/components/link-button.svelte";
 
   let category = $page.query.get("cat");
   let subcategory = $page.query.get("sub");
@@ -81,6 +83,14 @@
     gap: var(--s16);
     grid-column: 5 / -1;
   }
+
+  .no-results {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--s56);
+    gap: var(--s16);
+    grid-column: 6 / -2;
+  }
 </style>
 
 <CenteredGrid>
@@ -100,9 +110,51 @@
       bind:cityLabel
       {servicesOptions} />
   </div>
-  <div class="results">
-    {#each results as result}
-      <SearchResult {result} />
-    {/each}
-  </div>
+  {#if results.length}
+    <div class="results">
+      {#each results as result}
+        <SearchResult {result} />
+      {/each}
+    </div>
+  {:else}
+    <div class="no-results">
+      <h2>Ooopsie !</h2>
+
+      <p class="text-base">
+        Aucun résultat ne correspond à vos critères 😞<br />
+        Essayez d’affiner votre recherche.
+      </p>
+      <p class="text-sm">
+        Le service DORA est actuellement
+        <a class="underline" href="https://beta.gouv.fr/startups/dora.html">
+          en construction
+        </a>, et se concentre sur 3 thématiques de services (mobilité, garde
+        d’enfant et hébergement/logement) et 3 territoires (Loire-Atlantique,
+        Ardennes et La Réunion).
+      </p>
+
+      <h4>
+        Vous connaissez des structures proposant des services correspondant à
+        ces critères ?
+      </h4>
+      <div>
+        <LinkButton
+          label="Proposez une structure"
+          icon={addCircleIcon}
+          to={`/structures/creer`}
+          iconOnRight />
+      </div>
+      <h4>
+        Vous êtes une structure proposant des services correspondant à ces
+        critères ?
+      </h4>
+      <div>
+        <LinkButton
+          label="Référencer un service"
+          icon={addCircleIcon}
+          to={`/services/creer`}
+          iconOnRight />
+      </div>
+    </div>
+  {/if}
 </CenteredGrid>
