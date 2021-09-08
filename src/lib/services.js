@@ -38,7 +38,9 @@ export async function getServices() {
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
   const data = (await fetchData(url)).data;
-  return toFront(data);
+  if (data) return toFront(data);
+  // TODO: 404
+  return null;
 }
 
 export async function createOrModifyService(service) {
