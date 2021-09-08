@@ -13,11 +13,12 @@
   let category;
   let subcategory;
   let cityCode;
+  let cityLabel;
 
   let subCategoryChoices = [];
 
   function handleSearch() {
-    const query = getQuery(category, subcategory, cityCode);
+    const query = getQuery(category, subcategory, cityCode, cityLabel);
     goto(`recherche/?${query}`);
   }
 
@@ -79,7 +80,13 @@
         slot="custom-input"
         name="city"
         placeholder="Ville du bénéficiaire"
-        handleChange={(city) => (cityCode = city.properties.citycode)} />
+        handleChange={(city) => {
+          console.log(city.properties);
+          cityCode = city.properties.citycode;
+          cityLabel = `${
+            city.properties.label
+          } (${city.properties.postcode.slice(0, 2)})`;
+        }} />
     </Field>
 
     <Button

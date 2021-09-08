@@ -22,7 +22,10 @@
     const jsonResponse = await response.json();
     const results = jsonResponse.features.map((feature) => ({
       value: feature,
-      label: `${feature.properties.label} (${feature.properties.postcode})`,
+      label: `${feature.properties.label} (${feature.properties.postcode.slice(
+        0,
+        2
+      )})`,
     }));
     return results;
   }

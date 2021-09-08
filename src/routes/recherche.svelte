@@ -21,6 +21,7 @@
   let category = $page.query.get("cat");
   let subcategory = $page.query.get("sub");
   let cityCode = $page.query.get("city");
+  let cityLabel = $page.query.get("cl");
   export let servicesOptions;
   let results = [];
 
@@ -96,6 +97,7 @@
       bind:category
       bind:subcategory
       bind:cityCode
+      bind:cityLabel
       {servicesOptions} />
   </div>
   <div class="results">
