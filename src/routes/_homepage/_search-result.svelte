@@ -48,10 +48,12 @@
         label={`${result.postalCode}, ${result.city}`}
         iconOnLeft
         icon={mapPinIcon} />
-      <Label
-        label={`${result.distance} km`}
-        iconOnLeft
-        icon={pinDistanceIcon} />
+      {#if result.distance}
+        <Label
+          label={`${result.distance} km`}
+          iconOnLeft
+          icon={pinDistanceIcon} />
+      {/if}
     </div>
   </div>
   <p><a href="/services/{result.slug}">{result.shortDesc}</a></p>
