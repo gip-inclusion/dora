@@ -24,15 +24,9 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import Button from "$lib/components/button.svelte";
   import ButtonMenu from "./_button-menu.svelte";
+  import { shortenString } from "$lib/utils";
 
   export let services = [];
-
-  function shortenString(str, length = 50) {
-    if (str.length > length) {
-      return `${str.slice(0, length)}…`;
-    }
-    return str;
-  }
 
   async function handleUnpublish(service) {
     const result = await unPublishDraft(service.slug);

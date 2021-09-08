@@ -42,3 +42,10 @@ export async function fetchData(
     statusText: response.statusText,
   };
 }
+
+export function shortenString(str, length = 50) {
+  if (str.length > length) {
+    return `${str.slice(0, length)}…`;
+  }
+  return str;
+}

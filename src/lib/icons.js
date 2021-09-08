@@ -31,6 +31,7 @@ export { default as lightBulbIcon } from "remixicon/icons/Others/lightbulb-flash
 export { default as compassDiscoverIcon } from "remixicon/icons/Map/compass-discover-line.svg?raw";
 export { default as compassFillIcon } from "remixicon/icons/Map/compass-fill.svg?raw";
 export { default as mapPinIcon } from "remixicon/icons/Map/map-pin-2-line.svg?raw";
+export { default as pinDistanceIcon } from "remixicon/icons/Map/pin-distance-fill.svg?raw";
 
 export { default as homeIcon } from "remixicon/icons/Buildings/home-6-line.svg?raw";
 

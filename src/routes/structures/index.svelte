@@ -13,15 +13,9 @@
 <script>
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
+  import { shortenString } from "$lib/utils";
 
   export let structures;
-
-  function shortenString(str, length = 40) {
-    if (str && str.length > length) {
-      return `${str.slice(0, length)}…`;
-    }
-    return str;
-  }
 </script>
 
 <style lang="postcss">
