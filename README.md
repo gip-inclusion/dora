@@ -6,3 +6,5 @@
   https://github.com/betagouv/dora-back
 - dépôt du frontend :
   https://github.com/betagouv/dora-front
+- dépôt du service PDF :
+  https://github.com/betagouv/dora-pdf
