@@ -79,8 +79,9 @@
       vertical
       readonly />
   </div>
-
-  <LinkButton label="Téléchargez le PDF" to={pdfUrl} />
+  {#if !service.isDraft}
+    <LinkButton label="Téléchargez le PDF" to={pdfUrl} />
+  {/if}
 </div>
 
 <!--
