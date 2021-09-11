@@ -10,11 +10,14 @@ const config = {
       optimizeDeps: {
         include: ["insane"],
       },
+      build: {
+        sourcemap: true,
+      },
     },
     adapter: node({
       // default options are shown
       out: "build",
-      precompress: false,
+      precompress: true,
     }),
   },
 

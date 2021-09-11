@@ -1,5 +1,5 @@
 <script>
-  import { getApiURL } from "$lib/utils";
+  import { getApiURL } from "$lib/utils/api.js";
 
   export let structureSlug;
   export let fileKeys = [];

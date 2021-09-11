@@ -1,17 +1,10 @@
 import showdown from "showdown";
-
 import { get } from "svelte/store";
 
 import { browser } from "$app/env";
 
 import { token } from "$lib/auth";
-
-import { API_URL, INTERNAL_API_URL } from "$lib/env.js";
-
-export function getApiURL() {
-  if (browser || !INTERNAL_API_URL) return API_URL;
-  return INTERNAL_API_URL;
-}
+import { defaultAcceptHeader } from "$lib/utils/api";
 
 export function markdownToHTML(md) {
   const converter = new showdown.Converter();
@@ -28,7 +21,7 @@ export function htmlToMarkdown(html) {
 
 export async function fetchData(
   url,
-  { acceptHeader = "application/json; version=1.0" } = {}
+  { acceptHeader = defaultAcceptHeader } = {}
 ) {
   const headers = {
     Accept: acceptHeader,
@@ -48,4 +41,11 @@ export async function fetchData(
     status: response.status,
     statusText: response.statusText,
   };
+}
+
+export function shortenString(str, length = 50) {
+  if (str.length > length) {
+    return `${str.slice(0, length)}…`;
+  }
+  return str;
 }

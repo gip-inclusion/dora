@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import { getApiURL } from "$lib/utils";
+  import { getApiURL } from "$lib/utils/api.js";
   import { token, setToken } from "$lib/auth";
 
   import { validate, formErrors, injectAPIErrors } from "$lib/validation.js";

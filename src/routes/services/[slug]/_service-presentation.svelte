@@ -29,6 +29,11 @@
   .markdown-wrapper :global(p) {
     color: var(--col-text);
   }
+
+  .maj {
+    color: var(--col-text-alt2);
+    font-size: var(--f12);
+  }
 </style>
 
 <div class="tags-wrapper">
@@ -40,6 +45,12 @@
     <strong>{service.shortDesc}</strong>
     <div class="markdown-wrapper prose prose">
       {@html service.fullDesc}
+    </div>
+    <div class="maj">
+      Mise à jour le {new Date(service.modificationDate).toLocaleDateString(
+        "fr-FR",
+        { year: "numeric", month: "long", day: "numeric" }
+      )}
     </div>
   </div>
 </div>

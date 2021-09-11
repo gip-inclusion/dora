@@ -1,6 +1,7 @@
 <script>
   import Label from "$lib/components/label.svelte";
-  import { mapPinIcon, homeIcon } from "$lib/icons";
+  import { mapPinIcon, homeIcon, pinDistanceIcon } from "$lib/icons";
+  import { shortenString } from "$lib/utils";
 
   import Tag from "../services/[slug]/_tag.svelte";
 
@@ -39,7 +40,7 @@
     <div class="flex flex-row gap-2 mt-1">
       <a href="/structures/{result.structure}">
         <Label
-          label={`${result.structureInfo.name}`}
+          label={shortenString(result.structureInfo.name)}
           iconOnLeft
           icon={homeIcon} />
       </a>
@@ -47,6 +48,12 @@
         label={`${result.postalCode}, ${result.city}`}
         iconOnLeft
         icon={mapPinIcon} />
+      {#if result.distance}
+        <Label
+          label={`${result.distance} km`}
+          iconOnLeft
+          icon={pinDistanceIcon} />
+      {/if}
     </div>
   </div>
   <p><a href="/services/{result.slug}">{result.shortDesc}</a></p>

@@ -1,13 +1,11 @@
 import insane from "insane";
 
-import {
-  fetchData,
-  getApiURL,
-  htmlToMarkdown,
-  markdownToHTML,
-} from "$lib/utils.js";
-import { token } from "$lib/auth";
 import { get } from "svelte/store";
+
+import { fetchData, htmlToMarkdown, markdownToHTML } from "$lib/utils.js";
+import { getApiURL } from "$lib/utils/api.js";
+
+import { token } from "$lib/auth";
 
 export async function siretWasAlreadyClaimed(siret) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;

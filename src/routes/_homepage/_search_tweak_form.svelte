@@ -4,19 +4,18 @@
   import Button from "$lib/components/button.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import Field from "$lib/components/forms/field.svelte";
+  import { getQuery } from "./_search";
 
   export let servicesOptions;
   export let numResults;
   export let category;
   export let subcategory;
   export let cityCode;
+  export let cityLabel;
 
   function handleSearch() {
-    let url = `recherche/?cat=${encodeURIComponent(
-      category
-    )}&city=${encodeURIComponent(cityCode)}`;
-    if (subcategory != null) url += `&sub=${encodeURIComponent(subcategory)}`;
-    goto(url);
+    const query = getQuery(category, subcategory, cityCode, cityLabel);
+    goto(`recherche/?${query}`);
   }
 
   $: catChoices = servicesOptions.categories;
@@ -94,10 +93,19 @@
         slot="custom-input"
         name="city"
         placeholder="Ville du bénéficiaire"
-        handleChange={(city) => (cityCode = city.properties.citycode)} />
+        initialValue={cityLabel}
+        handleChange={(city) => {
+          cityCode = city.properties.citycode;
+          cityLabel = `${
+            city.properties.label
+          } (${city.properties.postcode.slice(0, 2)})`;
+        }} />
     </Field>
 
-    <Button type="submit" label="Mettre à jour" disabled={!category} />
+    <Button
+      type="submit"
+      label="Mettre à jour"
+      disabled={!category || !cityCode} />
   </form>
   <p>
     Le service DORA est actuellement <a

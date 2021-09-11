@@ -1,12 +1,34 @@
 import insane from "insane";
 import { get } from "svelte/store";
-import {
-  getApiURL,
-  markdownToHTML,
-  htmlToMarkdown,
-  fetchData,
-} from "$lib/utils.js";
+
+import { markdownToHTML, htmlToMarkdown, fetchData } from "$lib/utils.js";
+import { getApiURL } from "$lib/utils/api.js";
 import { token } from "$lib/auth";
+
+function toBack(service) {
+  if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
+  if (service.longitude && service.latitude) {
+    service.geom = {
+      type: "Point",
+      coordinates: [service.longitude, service.latitude],
+    };
+  } else {
+    service.geom = null;
+  }
+  return service;
+}
+
+function toFront(service) {
+  if (service.fullDesc)
+    service.fullDesc = insane(markdownToHTML(service.fullDesc));
+  let lng, lat;
+  if (service.geom) {
+    [lng, lat] = service.geom.coordinates;
+  }
+  service.longitude = lng;
+  service.latitude = lat;
+  return service;
+}
 
 export async function getServices() {
   const url = `${getApiURL()}/services/`;
@@ -16,14 +38,12 @@ export async function getServices() {
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
   const data = (await fetchData(url)).data;
-  if (data) {
-    data.fullDesc = insane(markdownToHTML(data.fullDesc));
-  }
-  return data;
+  if (data) return toFront(data);
+  // TODO: 404
+  return null;
 }
 
 export async function createOrModifyService(service) {
-  if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
   let method, url;
   if (service.slug) {
     url = `${getApiURL()}/services/${service.slug}/`;
@@ -40,7 +60,7 @@ export async function createOrModifyService(service) {
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify(service),
+    body: JSON.stringify(toBack(service)),
   });
 
   const result = {
@@ -48,10 +68,7 @@ export async function createOrModifyService(service) {
     status: response.status,
   };
   if (response.ok) {
-    result.data = await response.json();
-    if (result.data) {
-      result.data.fullDesc = insane(markdownToHTML(result.data.fullDesc));
-    }
+    result.data = toFront(await response.json());
   } else {
     try {
       result.error = await response.json();

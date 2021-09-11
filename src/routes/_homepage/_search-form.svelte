@@ -5,6 +5,7 @@
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import { searchIcon } from "$lib/icons";
+  import { getQuery } from "./_search";
 
   export let servicesOptions;
   const categoryChoices = servicesOptions.categories;
@@ -12,15 +13,13 @@
   let category;
   let subcategory;
   let cityCode;
+  let cityLabel;
 
   let subCategoryChoices = [];
 
   function handleSearch() {
-    let url = `recherche/?cat=${encodeURIComponent(
-      category
-    )}&city=${encodeURIComponent(cityCode)}`;
-    if (subcategory != null) url += `&sub=${encodeURIComponent(subcategory)}`;
-    goto(url);
+    const query = getQuery(category, subcategory, cityCode, cityLabel);
+    goto(`recherche/?${query}`);
   }
 
   function handleCategoryChange(cat) {
@@ -81,14 +80,20 @@
         slot="custom-input"
         name="city"
         placeholder="Ville du bénéficiaire"
-        handleChange={(city) => (cityCode = city.properties.citycode)} />
+        handleChange={(city) => {
+          console.log(city.properties);
+          cityCode = city.properties.citycode;
+          cityLabel = `${
+            city.properties.label
+          } (${city.properties.postcode.slice(0, 2)})`;
+        }} />
     </Field>
 
     <Button
       type="submit"
       label="Trouver"
       icon={searchIcon}
-      disabled={!category}
+      disabled={!category || !cityCode}
       iconOnLeft
       horizontalBottom
       small />

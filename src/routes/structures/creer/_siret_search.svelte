@@ -1,5 +1,5 @@
 <script>
-  import { getApiURL } from "$lib/utils";
+  import { getApiURL } from "$lib/utils/api.js";
   import Select from "$lib/components/forms/select.svelte";
 
   export let handleChange;

@@ -5,10 +5,12 @@
   import Field from "$lib/components/forms/field.svelte";
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
+  import { PDF_SERVICE_URL } from "$lib/env";
 
   export let service;
 
-  export let url = `https://${$page.host}${$page.path}`;
+  export let sharingUrl = `https://${$page.host}${$page.path}`;
+  export let pdfUrl = `${PDF_SERVICE_URL}/service-pdf/${service.slug}`;
 </script>
 
 <style>
@@ -73,10 +75,13 @@
     <Field
       type="text"
       label="Partagez cette offre"
-      value={url}
+      value={sharingUrl}
       vertical
       readonly />
   </div>
+  {#if !service.isDraft}
+    <LinkButton label="Téléchargez le PDF" to={pdfUrl} />
+  {/if}
 </div>
 
 <!--
