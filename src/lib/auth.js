@@ -22,17 +22,19 @@ export async function initToken() {
     const lsToken = localStorage.getItem(tokenKey);
     if (lsToken) {
       // Check if the token is still valid
-      const url = `${getApiURL()}/me/`;
+      const url = `${getApiURL()}/auth/token/verify/`;
       const result = await fetch(url, {
+        method: "POST",
         headers: {
           Accept: defaultAcceptHeader,
-          Authorization: `token ${lsToken}`,
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ key: lsToken }),
       });
       if (result.ok) {
         token.set(lsToken);
       }
-      if (!result.ok && result.status === 401) {
+      if (!result.ok && result.status === 404) {
         // The token is invalid, clear localStorage
         clearToken();
       }

@@ -34,12 +34,12 @@
       { skipDependenciesCheck: true }
     );
     if (valid) {
-      const url = `${getApiURL()}/api-token-auth/`;
+      const url = `${getApiURL()}/auth/login/`;
       try {
         const result = await fetch(url, {
           method: "POST",
           body: JSON.stringify({
-            username: validatedData.email,
+            email: validatedData.email,
             password: validatedData.password,
           }),
           headers: {
