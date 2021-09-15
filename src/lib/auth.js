@@ -6,6 +6,14 @@ const tokenKey = "token";
 
 export const token = writable(null);
 
+// Rules for auto generation by password managers
+// https://developer.apple.com/password-rules/
+// https://support.1password.com/compatible-website-design/
+// - between 9 and 129 chars
+// - not only numbers
+export const passwordRules =
+  "minlength: 9; maxlength: 128; required: upper,lower,special; allowed: unicode;";
+
 export function setToken(t) {
   token.set(t);
   localStorage.setItem(tokenKey, t);

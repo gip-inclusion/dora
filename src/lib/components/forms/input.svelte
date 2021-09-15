@@ -11,7 +11,7 @@
   export let type;
   export let name;
   export let autocomplete;
-
+  export let passwordrules;
   export let choices = [];
   export let sortSelect = undefined;
 
@@ -137,7 +137,8 @@
     {placeholder}
     {disabled}
     {readonly}
-    {autocomplete} />
+    {autocomplete}
+    {passwordrules} />
 {:else if type === "date"}
   <input
     {name}

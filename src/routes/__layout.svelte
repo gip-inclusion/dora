@@ -67,11 +67,11 @@
       </a>
       <div class="flex-grow" />
       <div class="flex flex-row">
-        {#if $page.path !== "/login"}
+        {#if $page.path !== "/auth/login"}
           {#if $token}
             <LinkButton
               label="Deconnexion"
-              to={`/logout?next=${encodeURIComponent($page.path)}`}
+              to={`/auth/logout?next=${encodeURIComponent($page.path)}`}
               icon={userSmileIcon}
               iconOnLeft
               noBackground />
@@ -81,7 +81,7 @@
               icon={userSmileIcon}
               iconOnLeft
               noBackground
-              to={`/login?next=${encodeURIComponent($page.path)}`} />
+              to={`/auth/login?next=${encodeURIComponent($page.path)}`} />
           {/if}
         {/if}
         <LinkButton

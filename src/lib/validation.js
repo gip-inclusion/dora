@@ -106,16 +106,29 @@ export function validate(
   return { validatedData, valid: isValid };
 }
 
-export function injectAPIErrors(errors, serverErrors) {
-  let doneOnce = false;
+function parseServerError(error) {
+  // https://www.django-rest-framework.org/api-guide/exceptions/#exception-handling-in-rest-framework-views
+  // We need to differenciate ValidationErrors from the rest of them
+  if (error.detail) {
+    // Other error
+    return { nonFieldErrors: [{ ...error.detail }] };
+  }
+  // Validation error
+  return error;
+}
 
-  Object.entries(errors).forEach(([key, values]) => {
+export function injectAPIErrors(err, serverErrorsTranslation) {
+  let doneOnce = false;
+  const parsedErrors = parseServerError(err);
+  Object.entries(parsedErrors).forEach(([key, values]) => {
     const fieldname = key;
     values.forEach((value) => {
       const errorCode = value.code;
       const errorMsg =
-        (serverErrors[fieldname] && serverErrors[fieldname][errorCode]) ||
-        (serverErrors._default && serverErrors._default[errorCode]) ||
+        (serverErrorsTranslation[fieldname] &&
+          serverErrorsTranslation[fieldname][errorCode]) ||
+        (serverErrorsTranslation._default &&
+          serverErrorsTranslation._default[errorCode]) ||
         value.message;
       addError(fieldname, errorMsg);
       if (!doneOnce) {
