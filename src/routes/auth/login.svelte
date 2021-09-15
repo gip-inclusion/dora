@@ -16,8 +16,6 @@
   import Alert from "$lib/components/forms/alert.svelte";
   import Form from "$lib/components/forms/form.svelte";
 
-  const next = $page.query.get("next") || "/";
-
   let email = "";
   let password = "";
 
@@ -43,14 +41,20 @@
     });
   }
 
+  function getNextPage() {
+    const next = $page.query.get("next");
+    if (next.startsWith("/") && !next.startsWith("/auth/")) return next;
+    return "/";
+  }
+
   function handleSuccess(jsonResult) {
     setToken(jsonResult.token);
-    goto(next || "/");
+    goto(getNextPage() || "/");
   }
 
   onMount(() => {
     if ($token && $page.path === "/auth/login") {
-      goto(next);
+      goto(getNextPage());
     }
   });
 </script>

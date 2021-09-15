@@ -71,7 +71,7 @@
           {#if $token}
             <LinkButton
               label="Deconnexion"
-              to={`/auth/logout?next=${encodeURIComponent($page.path)}`}
+              to={`/auth/logout`}
               icon={userSmileIcon}
               iconOnLeft
               noBackground />
