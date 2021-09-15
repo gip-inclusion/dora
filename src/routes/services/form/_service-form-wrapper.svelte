@@ -8,6 +8,7 @@
     validate,
     injectAPIErrors,
     contextValidationKey,
+    formErrors,
   } from "$lib/validation.js";
 
   import NavLink from "./_navlink.svelte";
@@ -25,6 +26,7 @@
   import { createOrModifyService, publishDraft } from "$lib/services";
   import { assert, logException } from "$lib/logger";
   import Preview from "./_preview.svelte";
+  import Alert from "$lib/components/forms/alert.svelte";
 
   const schemas = new Map([
     [1, step1Schema],
@@ -74,6 +76,7 @@
 
   let navInfo = {};
   let scrollY;
+  let errorDiv;
 
   $: switch (currentStep) {
     case 1:
@@ -189,7 +192,18 @@
           flashSaveDraftButton = false;
         }, 1000);
       } else {
-        injectAPIErrors(result.error, {});
+        injectAPIErrors(
+          result.error || {
+            nonFieldErrors: [
+              {
+                code: "fetch-error",
+                message: "Erreur de connexion au serveur",
+              },
+            ],
+          },
+          {}
+        );
+        errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
   }
@@ -310,6 +324,11 @@
   </CenteredGrid>
   <CenteredGrid gridRow="2" roundedbg>
     <div class="col-span-8 col-start-1 mb-8">
+      <div bind:this={errorDiv}>
+        {#each $formErrors.nonFieldErrors || [] as msg}
+          <Alert iconOnLeft label={msg} />
+        {/each}
+      </div>
       <slot />
     </div>
   </CenteredGrid>
