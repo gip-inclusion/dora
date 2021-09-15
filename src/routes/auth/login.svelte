@@ -98,7 +98,8 @@
         <Button
           type="submit"
           disabled={!email || !password}
-          label="Se connecter" />
+          label="Se connecter"
+          preventDefaultOnMouseDown />
         <a
           class="underline text-center text-gray-text-alt2 text-xs"
           href="/auth/password-lost">Mot de passe oublié ?</a>

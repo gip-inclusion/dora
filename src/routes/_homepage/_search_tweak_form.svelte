@@ -105,7 +105,8 @@
     <Button
       type="submit"
       label="Mettre à jour"
-      disabled={!category || !cityCode} />
+      disabled={!category || !cityCode}
+      preventDefaultOnMouseDown />
   </form>
   <p>
     Le service DORA est actuellement <a

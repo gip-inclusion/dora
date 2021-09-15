@@ -106,7 +106,8 @@
           <Button
             type="submit"
             disabled={!password1 || !password2}
-            label="Changer" />
+            label="Changer"
+            preventDefaultOnMouseDown />
         </Fieldset>
       </Form>
     </div>

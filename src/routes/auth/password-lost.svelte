@@ -83,7 +83,8 @@
           <Button
             type="submit"
             disabled={!email || requesting}
-            label="Envoyer" />
+            label="Envoyer"
+            preventDefaultOnMouseDown />
         </Fieldset>
       </Form>
     </div>

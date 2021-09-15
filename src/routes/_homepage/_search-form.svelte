@@ -96,7 +96,8 @@
       disabled={!category || !cityCode}
       iconOnLeft
       horizontalBottom
-      small />
+      small
+      preventDefaultOnMouseDown />
   </form>
   <p>
     Le service DORA est actuellement <a
