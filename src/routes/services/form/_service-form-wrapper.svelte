@@ -35,7 +35,7 @@
   ]);
 
   export let title;
-  export let currentStep = 1;
+  export let currentStep;
   export let service;
 
   let flashSaveDraftButton = false;

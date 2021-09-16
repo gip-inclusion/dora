@@ -32,7 +32,7 @@
 
   let service = getNewService();
   let lastDraftNotificationVisible = true;
-  let currentStep;
+  let currentStep = 1;
 
   const steps = new Map([
     [1, Step1],
@@ -50,6 +50,14 @@
     lastDraftNotificationVisible = false;
   }
   $: currentStepComponent = steps.get(currentStep);
+
+  $: {
+    if (currentStep > 1) {
+      // avoid displaying lastDraft notification on ulterior steps
+      // AND when going back to first step
+      lastDraft = null;
+    }
+  }
 </script>
 
 <EnsureLoggedIn>

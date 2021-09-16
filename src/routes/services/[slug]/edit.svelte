@@ -27,7 +27,7 @@
 
   export let service, servicesOptions, structures;
 
-  let currentStep;
+  let currentStep = 1;
 
   const steps = new Map([
     [1, Step1],
