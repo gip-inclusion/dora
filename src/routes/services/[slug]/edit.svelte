@@ -3,9 +3,10 @@
   import { getStructures } from "$lib/structures";
 
   export async function load({ page, _fetch, _session, _context }) {
+    const service = await getService(page.params.slug);
     return {
       props: {
-        service: await getService(page.params.slug),
+        service,
         servicesOptions: await getServicesOptions(),
         structures: await getStructures(),
       },
@@ -35,16 +36,20 @@
     [4, Step4],
     [5, Preview],
   ]);
-
   $: currentStepComponent = steps.get(currentStep);
 </script>
 
 <EnsureLoggedIn>
-  <ServiceFormWrapper bind:currentStep bind:service title="Modifier un service">
-    <svelte:component
-      this={currentStepComponent}
+  {#if service}
+    <ServiceFormWrapper
+      bind:currentStep
       bind:service
-      {servicesOptions}
-      {structures} />
-  </ServiceFormWrapper>
+      title="Modifier un service">
+      <svelte:component
+        this={currentStepComponent}
+        bind:service
+        {servicesOptions}
+        {structures} />
+    </ServiceFormWrapper>
+  {/if}
 </EnsureLoggedIn>

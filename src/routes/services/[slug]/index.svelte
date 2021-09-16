@@ -2,9 +2,10 @@
   import { getService } from "$lib/services";
 
   export async function load({ page, _fetch, _session, _context }) {
+    const service = await getService(page.params.slug);
     return {
       props: {
-        service: await getService(page.params.slug),
+        service,
       },
     };
   }
