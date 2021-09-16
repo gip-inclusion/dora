@@ -80,7 +80,7 @@
   <ModelField
     type="textarea"
     hideLabel
-    placeholder="Merci de détailler les frais à charge et leurs éventuels critères de remboursement"
+    placeholder="Merci de détailler ici les frais à charge du bénéficiaire : adhésion, frais de location, frais de garde, etc., et les montants."
     visible={!!service.hasFee}
     schema={serviceSchema.feeDetails}
     name="feeDetails"

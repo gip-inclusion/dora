@@ -35,7 +35,7 @@
   }
 </script>
 
-<FieldSet title="Contact référent">
+<FieldSet title="Personne à contacter">
   <ModelField
     label="Nom du contact"
     placeholder="Prénom et nom"

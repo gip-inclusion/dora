@@ -76,7 +76,7 @@
       bind:fileKeys={service.forms} />
   </Field>
   <ModelField
-    label="Le formulaire en ligne à compléter"
+    label="Liens pratiques"
     placeholder="URL"
     type="url"
     schema={serviceSchema.onlineForm}
