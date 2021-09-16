@@ -14,14 +14,14 @@
 </script>
 
 <script>
+  import { goto } from "$app/navigation";
+
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import Label from "$lib/components/label.svelte";
+  import TempInlineInfo from "$lib/components/temp-inline-info.svelte";
 
   import { getNewService } from "./form/_stores.js";
   import ServiceFormWrapper from "./form/_service-form-wrapper.svelte";
-
   import Step1 from "./form/_step1.svelte";
   import Step2 from "./form/_step2.svelte";
   import Step3 from "./form/_step3.svelte";
@@ -41,30 +41,21 @@
     [5, Preview],
   ]);
 
+  function handleOpenLastDraft() {
+    goto(`/services/${lastDraft.slug}/edit`);
+  }
+
   $: currentStepComponent = steps.get(currentStep);
 </script>
-
-<style>
-  .draft-wrapper {
-    display: flex;
-    flex-direction: row;
-    grid-column: 1/-1;
-  }
-</style>
 
 <EnsureLoggedIn>
   {#if lastDraft}
     <CenteredGrid>
-      <div class="draft-wrapper">
-        <Label>
-          <div class="mr-1">
-            Voulez vous reprendre votre dernier brouillon “{lastDraft.name}” ?
-          </div>
-          <LinkButton
-            to="/services/{lastDraft.slug}/edit"
-            label="Reprendre"
-            small /></Label>
-      </div>
+      <TempInlineInfo
+        label="Vous n’avez pas finalisé votre précédente saisie"
+        description="Souhaitez-vous continuer la saisie du service « {lastDraft.name} » ?"
+        buttonLabel="Reprendre"
+        onAction={handleOpenLastDraft} />
     </CenteredGrid>
   {/if}
 
