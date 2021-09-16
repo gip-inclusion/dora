@@ -20,6 +20,7 @@ export { default as errorWarningIcon } from "remixicon/icons/System/error-warnin
 export { default as searchIcon } from "remixicon/icons/System/search-line.svg?raw";
 export { default as eyeIcon } from "remixicon/icons/System/eye-line.svg?raw";
 export { default as moreIcon } from "remixicon/icons/System/more-2-fill.svg?raw";
+export { default as closeIcon } from "remixicon/icons/System/close-fill.svg?raw";
 
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
 export { default as emotionHappyIcon } from "remixicon/icons/User/emotion-happy-fill.svg?raw";

@@ -12,7 +12,6 @@
   } from "$lib/validation.js";
 
   import NavLink from "./_navlink.svelte";
-  import { resetServiceCache, persistServiceCache } from "./_stores.js";
   import NavButtons from "./_nav-buttons.svelte";
 
   import serviceSchema, {
@@ -38,7 +37,6 @@
   export let title;
   export let currentStep = 1;
   export let service;
-  export let useLocalStorage = false;
 
   let flashSaveDraftButton = false;
 
@@ -134,7 +132,6 @@
       // Validation OK, let's send it to the API endpoint
       try {
         const result = await publishDraft(service.slug);
-        if (useLocalStorage) resetServiceCache();
         goto(`/services/${result.slug}`);
       } catch (error) {
         logException(error);
@@ -159,7 +156,6 @@
       const result = await createOrModifyService(validatedData);
       if (result.ok) {
         service = result.data;
-        if (useLocalStorage) resetServiceCache();
         goto(`/services/${service.slug}`);
       } else {
         injectAPIErrors(result.error, {});
@@ -209,7 +205,6 @@
   }
 
   function goToPage(number) {
-    if (useLocalStorage) persistServiceCache(service);
     currentStep = number;
     scrollY = 0;
   }
@@ -235,7 +230,6 @@
     if (currentStep === 5) {
       publish();
     } else {
-      if (useLocalStorage) persistServiceCache(service);
       if (
         validate(service, schemas.get(currentStep), serviceSchema, {
           skipDependenciesCheck: true,
@@ -252,7 +246,6 @@
     if (currentStep === 5) {
       modify();
     } else {
-      if (useLocalStorage) persistServiceCache(service);
       if (
         validate(service, schemas.get(currentStep), serviceSchema, {
           skipDependenciesCheck: true,
@@ -265,7 +258,6 @@
   }
 
   function handleSaveDraft() {
-    if (useLocalStorage) persistServiceCache(service);
     saveDraft();
   }
 

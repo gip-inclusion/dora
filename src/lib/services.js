@@ -115,6 +115,14 @@ export async function unPublishDraft(serviceSlug) {
   return await response.json();
 }
 
+export async function getLastDraft() {
+  if (token) {
+    const url = `${getApiURL()}/services/last-draft/`;
+    return (await fetchData(url)).data;
+  }
+  return null;
+}
+
 export async function getServicesOptions() {
   const url = `${getApiURL()}/services-options/`;
   return (await fetchData(url)).data;
