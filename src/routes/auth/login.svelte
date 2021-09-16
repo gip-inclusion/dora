@@ -10,11 +10,13 @@
   import { loginSchema } from "$lib/schemas/auth.js";
 
   import Button from "$lib/components/button.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import Alert from "$lib/components/forms/alert.svelte";
   import Form from "$lib/components/forms/form.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+
+  import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
 
   let email = "";
   let password = "";
@@ -66,7 +68,10 @@
 </CenteredGrid>
 
 <CenteredGrid gridRow="2" roundedbg>
-  <div class="col-start-4 col-end-11 mb-4">
+  <div class="col-start-1 col-end-7 mb-4 mt-6">
+    <img src={connexionPic} alt="" />
+  </div>
+  <div class="col-start-8 col-end-12 mb-4">
     <Form
       data={{ email, password }}
       schema={loginSchema}
@@ -87,7 +92,7 @@
           type="email"
           bind:value={email}
           required
-          placeholder="Courriel"
+          placeholder="Courriel utilisé lors de l’inscription"
           autocomplete="email" />
         <Field
           name="password"

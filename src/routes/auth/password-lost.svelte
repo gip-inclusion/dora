@@ -12,6 +12,10 @@
   import Alert from "$lib/components/forms/alert.svelte";
   import Form from "$lib/components/forms/form.svelte";
 
+  import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
+  import Info from "./_info.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
+
   let email = "";
 
   let success = false;
@@ -46,36 +50,55 @@
 
 <CenteredGrid>
   <div class="col-start-1 mb-6 text-center col-span-full">
-    <h1 class="text-france-blue text-13xl">Réinitialiser votre mot de passe</h1>
+    <h1 class="text-france-blue text-13xl">Se connecter à DORA</h1>
   </div>
 </CenteredGrid>
 
-{#if success}
-  Vérifiez votre boite mail
-{:else}
-  <CenteredGrid gridRow="2" roundedbg>
-    <div class="col-start-5 col-end-9 mb-4">
-      <Form
-        data={{ email }}
-        schema={passwordLostSchema}
-        serverErrorsDict={authErrors}
-        onChange={handleChange}
-        onSubmit={handleSubmit}
-        onSuccess={handleSuccess}
-        bind:requesting>
-        <Fieldset>
-          <div>
-            {#each $formErrors.nonFieldErrors || [] as msg}
-              <Alert iconOnLeft label={msg} />
-            {/each}
-          </div>
+<CenteredGrid gridRow="2" roundedbg>
+  <div class="col-start-1 col-end-7 mb-4 mt-6">
+    <img src={connexionPic} alt="" />
+  </div>
+  <div class="col-start-7 col-end-12 mb-4">
+    <Form
+      data={{ email }}
+      schema={passwordLostSchema}
+      serverErrorsDict={authErrors}
+      onChange={handleChange}
+      onSubmit={handleSubmit}
+      onSuccess={handleSuccess}
+      bind:requesting>
+      <Fieldset
+        title="Mot de passe oublié ?"
+        description="Pour réinitialiser votre mot de passe, saisissez l’adresse email que vous avez utilisé lors de l’inscription.">
+        {#if success}
+          <Info label="C’est tout bon !" positiveMood>
+            <p>
+              Si vous avez un compte DORA avec cette adresse, vous allez
+              recevoir un e-mail avec un lien pour réinitialiser votre mot de
+              passe.
+            </p>
+          </Info>
+          <LinkButton
+            type="submit"
+            to="/auth/login"
+            label="Revenir à la page de connexion"
+            preventDefaultOnMouseDown />
+        {:else}
+          {#if $formErrors.nonFieldErrors}
+            <div>
+              {#each $formErrors.nonFieldErrors || [] as msg}
+                <Alert iconOnLeft label={msg} />
+              {/each}
+            </div>
+          {/if}
+
           <Field
             name="email"
             errorMessages={$formErrors.email}
             label="Courriel"
             vertical
             type="email"
-            placeholder="email"
+            placeholder="Courriel utilisé lors de l’inscription"
             bind:value={email}
             autocomplete="current-password"
             required />
@@ -83,10 +106,14 @@
           <Button
             type="submit"
             disabled={!email || requesting}
-            label="Envoyer"
+            label="Envoyer un mail de récupération"
             preventDefaultOnMouseDown />
-        </Fieldset>
-      </Form>
-    </div>
-  </CenteredGrid>
-{/if}
+          <p class=" text-center text-gray-text-alt2 text-xs">
+            Vous vous souvenez de votre mot de passe ?
+            <a class="underline " href="/auth/login">Connexion</a>
+          </p>
+        {/if}
+      </Fieldset>
+    </Form>
+  </div>
+</CenteredGrid>
