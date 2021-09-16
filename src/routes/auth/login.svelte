@@ -43,7 +43,7 @@
 
   function getNextPage() {
     const next = $page.query.get("next");
-    if (next.startsWith("/") && !next.startsWith("/auth/")) return next;
+    if (next && next.startsWith("/") && !next.startsWith("/auth/")) return next;
     return "/";
   }
 
