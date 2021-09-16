@@ -31,6 +31,7 @@
   export let servicesOptions, structures, lastDraft;
 
   let service = getNewService();
+  let lastDraftNotificationVisible = true;
   let currentStep;
 
   const steps = new Map([
@@ -45,17 +46,21 @@
     goto(`/services/${lastDraft.slug}/edit`);
   }
 
+  function handleHideLastDraftNotification() {
+    lastDraftNotificationVisible = false;
+  }
   $: currentStepComponent = steps.get(currentStep);
 </script>
 
 <EnsureLoggedIn>
-  {#if lastDraft}
+  {#if lastDraft && lastDraftNotificationVisible}
     <CenteredGrid>
       <TempInlineInfo
         label="Vous n’avez pas finalisé votre précédente saisie"
         description="Souhaitez-vous continuer la saisie du service « {lastDraft.name} » ?"
         buttonLabel="Reprendre"
-        onAction={handleOpenLastDraft} />
+        onAction={handleOpenLastDraft}
+        onHide={handleHideLastDraftNotification} />
     </CenteredGrid>
   {/if}
 

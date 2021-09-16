@@ -6,7 +6,16 @@
   export let description;
   export let buttonLabel;
   export let onAction;
+  export let onHide;
   let visible = true;
+
+  function handleHide() {
+    if (onHide) {
+      onHide();
+    } else {
+      visible = false;
+    }
+  }
 </script>
 
 <style>
@@ -43,10 +52,7 @@
     </div>
     <div class="buttons">
       <Button label={buttonLabel} on:click={onAction} />
-      <Button
-        icon={closeIcon}
-        noBackground
-        on:click={() => (visible = false)} />
+      <Button icon={closeIcon} noBackground on:click={handleHide} />
     </div>
   </div>
 {/if}
