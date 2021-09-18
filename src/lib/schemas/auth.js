@@ -42,3 +42,40 @@ export const passwordLostSchema = {
     post: [v.lower, v.trim],
   },
 };
+
+export const accountSchema = {
+  name: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(140)],
+    post: [v.trim],
+  },
+  email: {
+    default: "",
+    required: true,
+    rules: [v.isEmail(), v.maxStrLength(255)],
+    post: [v.lower, v.trim],
+  },
+  password: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.minStrLength(9)],
+  },
+  password2: {
+    default: "",
+    required: true,
+    rules: [
+      v.isString(),
+      v.minStrLength(9),
+      (name, value, data) => ({
+        valid: value === data.password,
+        msg: `Les mots de passe ne sont pas identiques`,
+      }),
+    ],
+  },
+  siret: {
+    default: "",
+    required: true,
+    rules: [v.isString()],
+  },
+};

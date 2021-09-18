@@ -36,7 +36,7 @@
 
   import "../app.postcss";
   import "../app.css";
-  import { addCircleIcon, userSmileIcon } from "$lib/icons.js";
+  import { addCircleIcon, userSmileIcon, loginIcon } from "$lib/icons.js";
   import LogoRF from "$lib/assets/logo-rf.svg";
   import LogoDORA from "$lib/assets/dora-logo-rvb.svg";
   import LogoMinistere from "$lib/assets/logo-ministere-travail.svg";
@@ -76,6 +76,13 @@
               iconOnLeft
               noBackground />
           {:else}
+            <LinkButton
+              label="Inscription"
+              icon={loginIcon}
+              iconOnLeft
+              noBackground
+              to={`/auth/register`} />
+
             <LinkButton
               label="Connexion"
               icon={userSmileIcon}

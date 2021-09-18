@@ -10,9 +10,10 @@
 
   export let data;
   export let schema;
-  export let requesting;
-  export let serverErrorsDict;
-  export let onSubmit, onSuccess, onChange;
+  export let requesting = undefined;
+  export let serverErrorsDict = {};
+  export let onSubmit, onSuccess;
+  export let onChange = undefined;
 
   onMount(() => {
     $formErrors = {};
@@ -31,7 +32,7 @@
       skipDependenciesCheck: false,
       noScroll: true,
     });
-    if (valid) {
+    if (valid && onChange) {
       onChange(validatedData);
     }
   }
@@ -43,7 +44,6 @@
 
   async function handleSubmit() {
     $formErrors = {};
-
     const { validatedData, valid } = validate(data, schema, schema, {
       skipDependenciesCheck: false,
     });
@@ -52,7 +52,7 @@
         requesting = true;
         const result = await onSubmit(validatedData);
         if (result.ok) {
-          onSuccess(result.status === 204 ? "" : await result.json());
+          onSuccess(result.status === 201 ? "" : await result.json());
         } else {
           const jsonResult = await result.json();
           injectAPIErrors(jsonResult, serverErrorsDict);
