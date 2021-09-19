@@ -10,7 +10,7 @@ export const loginSchema = {
   password: {
     default: "",
     required: true,
-    rules: [v.isString(), v.minStrLength(8)],
+    rules: [v.isString(), v.minStrLength(9)],
   },
 };
 
