@@ -42,6 +42,15 @@
     onChange: handleEltChange,
   });
 
+  async function getJsonResult(result) {
+    let jsonResult;
+    try {
+      jsonResult = await result.json();
+    } catch (err) {
+      jsonResult = null;
+    }
+    return jsonResult;
+  }
   async function handleSubmit() {
     $formErrors = {};
     const { validatedData, valid } = validate(data, schema, schema, {
@@ -52,10 +61,9 @@
         requesting = true;
         const result = await onSubmit(validatedData);
         if (result.ok) {
-          onSuccess(result.status === 201 ? "" : await result.json());
+          onSuccess(await getJsonResult(result));
         } else {
-          const jsonResult = await result.json();
-          injectAPIErrors(jsonResult, serverErrorsDict);
+          injectAPIErrors(await getJsonResult(result), serverErrorsDict);
         }
       } catch (err) {
         injectAPIErrors(

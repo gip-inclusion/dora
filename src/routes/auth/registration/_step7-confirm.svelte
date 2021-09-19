@@ -1,7 +1,12 @@
 <script>
+  import Button from "$lib/components/button.svelte";
+
   import Fieldset from "$lib/components/forms/fieldset.svelte";
+  import { arrowLeftSIcon } from "$lib/icons";
   import Info from "../_info.svelte";
   import { registrationInfo } from "./_store.js";
+
+  export let currentStep;
 </script>
 
 <Fieldset
@@ -19,4 +24,11 @@
       <a href="mailto:">contactez-nous</a>.
     </p>
   </Info>
+  <Button
+    label="Retour"
+    on:click={() => (currentStep = 6)}
+    icon={arrowLeftSIcon}
+    noPadding
+    noBackground
+    iconOnLeft />
 </Fieldset>

@@ -17,9 +17,12 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
+  import Info from "./_info.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
 
   let email = "";
   let password = "";
+  let invalidUser = false;
 
   const authErrors = {
     _default: {},
@@ -50,8 +53,12 @@
   }
 
   function handleSuccess(jsonResult) {
-    setToken(jsonResult.token);
-    goto(getNextPage() || "/");
+    if (jsonResult.validUser) {
+      setToken(jsonResult.token);
+      goto(getNextPage() || "/");
+    } else {
+      invalidUser = true;
+    }
   }
 
   onMount(() => {
@@ -80,38 +87,48 @@
       onSubmit={handleSubmit}
       onSuccess={handleSuccess}>
       <Fieldset title="Accédez à votre compte">
-        {#each $formErrors.nonFieldErrors || [] as msg}
-          <Alert iconOnLeft label={msg} />
-        {/each}
+        {#if invalidUser}
+          <Info
+            label="Votre adresse email n’a pas encore été validée"
+            negativeMood />
+          <LinkButton
+            to="/auth/resend-email-validation?email={encodeURIComponent(email)}"
+            label="Demander un nouveau lien"
+            preventDefaultOnMouseDown />
+        {:else}
+          {#each $formErrors.nonFieldErrors || [] as msg}
+            <Alert iconOnLeft label={msg} />
+          {/each}
 
-        <Field
-          name="email"
-          errorMessages={$formErrors.email}
-          label="Courriel"
-          vertical
-          type="email"
-          bind:value={email}
-          required
-          placeholder="Courriel utilisé lors de l’inscription"
-          autocomplete="email" />
-        <Field
-          name="password"
-          errorMessages={$formErrors.password}
-          label="Mot de passe"
-          vertical
-          type="password"
-          placeholder="••••••••"
-          bind:value={password}
-          autocomplete="current-password"
-          required />
-        <Button
-          type="submit"
-          disabled={!email || !password}
-          label="Se connecter"
-          preventDefaultOnMouseDown />
-        <a
-          class="underline text-center text-gray-text-alt2 text-xs"
-          href="/auth/password-lost">Mot de passe oublié ?</a>
+          <Field
+            name="email"
+            errorMessages={$formErrors.email}
+            label="Courriel"
+            vertical
+            type="email"
+            bind:value={email}
+            required
+            placeholder="Courriel utilisé lors de l’inscription"
+            autocomplete="email" />
+          <Field
+            name="password"
+            errorMessages={$formErrors.password}
+            label="Mot de passe"
+            vertical
+            type="password"
+            placeholder="••••••••"
+            bind:value={password}
+            autocomplete="current-password"
+            required />
+          <Button
+            type="submit"
+            disabled={!email || !password}
+            label="Se connecter"
+            preventDefaultOnMouseDown />
+          <a
+            class="underline text-center text-gray-text-alt2 text-xs"
+            href="/auth/password-lost">Mot de passe oublié ?</a>
+        {/if}
       </Fieldset>
     </Form>
   </div>

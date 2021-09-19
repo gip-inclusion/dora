@@ -13,12 +13,14 @@
   import { registrationInfo } from "./_store.js";
 
   export let currentStep;
+  let requesting = false;
   let hasAgreedToLegalMentions = false;
+
   const toggleText =
     "En cochant cette case je suis d’accord avec les <a class='underline' href='/mentions-legales'>mentions légales</a> et l’utilisation de mes données afin de créer un compte sur la plateforme DORA.";
 
   function handleSubmit(validatedData) {
-    const url = `${getApiURL()}/register-service-and-user/`;
+    const url = `${getApiURL()}/auth/register-service-and-user/`;
     return fetch(url, {
       method: "POST",
       body: JSON.stringify({
@@ -43,7 +45,8 @@
     data={$registrationInfo}
     schema={accountSchema}
     onSubmit={handleSubmit}
-    onSuccess={handleSuccess}>
+    onSuccess={handleSuccess}
+    bind:requesting>
     <Fieldset
       title="Informations personnelles"
       description="Merci de renseigner les informations nécessaires à la création de votre compte.">
@@ -109,7 +112,7 @@
         <Button
           type="submit"
           label="Demandez votre accès"
-          disabled={!hasAgreedToLegalMentions} />
+          disabled={!hasAgreedToLegalMentions || requesting} />
       </div></Fieldset>
   </Form>
 </div>
