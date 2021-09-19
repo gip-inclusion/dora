@@ -53,14 +53,12 @@
           </p>
         </Info>
         <LinkButton
-          type="submit"
           to="/auth/login"
           label="Aller à la page de connexion"
           preventDefaultOnMouseDown />
       {:else}
         <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
         <LinkButton
-          type="submit"
           to="/auth/resend-email-validation"
           label="Demander un nouveau lien"
           preventDefaultOnMouseDown />

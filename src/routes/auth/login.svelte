@@ -2,11 +2,10 @@
   import { onMount } from "svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+
   import { getApiURL } from "$lib/utils/api.js";
   import { token, setToken } from "$lib/auth";
-
   import { formErrors } from "$lib/validation.js";
-
   import { loginSchema } from "$lib/schemas/auth.js";
 
   import Button from "$lib/components/button.svelte";
@@ -15,10 +14,11 @@
   import Alert from "$lib/components/forms/alert.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
 
   import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
+
   import Info from "./_info.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
 
   let email = "";
   let password = "";

@@ -79,7 +79,6 @@
             </p>
           </Info>
           <LinkButton
-            type="submit"
             to="/auth/login"
             label="Revenir à la page de connexion"
             preventDefaultOnMouseDown />

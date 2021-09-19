@@ -109,7 +109,6 @@
           {#if !resetToken}
             <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
             <LinkButton
-              type="submit"
               to="/auth/password-lost"
               label="Demander un nouveau lien"
               preventDefaultOnMouseDown />
@@ -121,7 +120,6 @@
               </p>
             </Info>
             <LinkButton
-              type="submit"
               to="/auth/login"
               label="Revenir à la page de connexion"
               preventDefaultOnMouseDown />

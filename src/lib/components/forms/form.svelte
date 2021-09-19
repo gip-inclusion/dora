@@ -1,5 +1,5 @@
 <script>
-  import { setContext, onMount } from "svelte";
+  import { setContext, onMount, onDestroy } from "svelte";
 
   import {
     validate,
@@ -16,6 +16,10 @@
   export let onChange = undefined;
 
   onMount(() => {
+    $formErrors = {};
+  });
+
+  onDestroy(() => {
     $formErrors = {};
   });
 

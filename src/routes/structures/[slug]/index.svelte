@@ -79,7 +79,7 @@
       </div>
     </div>
     {#if $token}
-      <LinkButton type="submit" to={editLink} label="Éditer" />
+      <LinkButton to={editLink} label="Éditer" />
     {/if}
   </div>
 </CenteredGrid>
