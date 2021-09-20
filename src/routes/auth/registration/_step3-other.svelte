@@ -16,7 +16,7 @@
 
   function handleJoin() {
     $registrationInfo.siret = establishment.siret;
-    currentStep = 6;
+    currentStep = 4;
   }
 </script>
 

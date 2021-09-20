@@ -36,7 +36,7 @@
     });
   }
   function handleSuccess() {
-    currentStep = 7;
+    currentStep = 5;
   }
 </script>
 

@@ -79,3 +79,12 @@ export const accountSchema = {
     rules: [v.isString()],
   },
 };
+
+export const safirSearchSchema = {
+  safirCode: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.isSafir()],
+    post: [v.trim],
+  },
+};

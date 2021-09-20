@@ -15,5 +15,5 @@
   <ButtonDetails
     label="Autre type de structures"
     details="Vous êtes salarié, bénévole, agent d'Etat rattaché à une structure d'insertion."
-    on:click={() => (currentStep = 4)} />
+    on:click={() => (currentStep = 3)} />
 </Fieldset>
