@@ -1,8 +1,8 @@
-import * as Sentry from "@sentry/browser";
+// import * as Sentry from "@sentry/browser";
 
-export async function handleError({ error, request }) {
-  Sentry.captureException(error, { request });
-}
+// export async function handleError({ error, request }) {
+//   Sentry.captureException(error, { request });
+// }
 
 export async function handle({ request, resolve }) {
   const response = await resolve(request);
