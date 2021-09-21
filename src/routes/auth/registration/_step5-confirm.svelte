@@ -18,7 +18,7 @@
     <p>
       Si d’ici 10 minutes vous n’avez toujours rien reçu, consultez votre
       dossier « indésirable » ou « spam ». Si le problème persiste,
-      <a href="mailto:">contactez-nous</a>.
+      <a class="underline" href="mailto:">contactez-nous</a>.
     </p>
   </Info>
 </Fieldset>

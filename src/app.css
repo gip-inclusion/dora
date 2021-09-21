@@ -150,10 +150,6 @@ h5 {
   font-size: var(--f14);
 }
 
-a {
-  text-decoration: underline;
-}
-
 /* MD */
 @media (min-width: 375px) {
   h1 {
