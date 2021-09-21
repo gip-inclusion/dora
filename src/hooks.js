@@ -13,6 +13,7 @@ export async function handle({ request, resolve }) {
       ...response.headers,
       "X-Frame-Options": "DENY",
       "X-XSS-Protection": "1; mode=block",
+      "X-Content-Type-Options": "nosniff",
     },
   };
 }
