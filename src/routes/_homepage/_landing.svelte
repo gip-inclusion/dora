@@ -106,12 +106,15 @@
       <div class="content-mission flex-1">
         <h5>La mission DORA</h5>
         <h2>Découvrir, orienter, renseigner, accompagner</h2>
+
         <p>
           La solution DORA est un service public numérique alimenté par les
           offreurs de services d’insertion — locaux, nationaux et numériques.
-          Cette base de données centralisée permet aux accompagnateurs de
-          mobiliser rapidement l’offre adaptée aux besoins de leurs
-          bénéficiaires.
+          Base de données centralisée, DORA permet de gagner du temps en
+          recherchant au même endroit tous les services dédiés à palier aux
+          difficultés freinant l’insertion vers un emploi durable d’un
+          bénéficiaire. Connaître la disponibilité d’un service et pouvoir le
+          mobiliser en quelques clics.
         </p>
         <ul>
           <li>Une recherche simple et personnalisée</li>
