@@ -2,8 +2,6 @@
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Info from "../_info.svelte";
   import { registrationInfo } from "./_store.js";
-
-  export let currentStep;
 </script>
 
 <Fieldset

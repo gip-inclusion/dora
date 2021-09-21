@@ -36,7 +36,10 @@ function validateField(fieldname, shape, data) {
       value = preprocess(value);
     }
   }
-  if (shape.required && (value == null || value === "" || value === [])) {
+  if (
+    shape.required &&
+    (value == null || value === "" || value?.length === 0)
+  ) {
     addError(fieldname, "Ce champ est requis");
     return { originalValue, valid: false };
   }
