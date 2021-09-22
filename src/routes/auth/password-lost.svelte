@@ -23,7 +23,6 @@
 
   const authErrors = {
     _default: {},
-    // eslint-disable-next-line
     nonFieldErrors: { authorization: "Courriel ou mot de passe incorrects" },
   };
 
