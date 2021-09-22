@@ -1,9 +1,10 @@
 <script context="module">
-  // import * as Sentry from "@sentry/browser";
-  import { Integrations } from "@sentry/tracing";
-
-  import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
   import { initToken } from "$lib/auth";
+  import { ENVIRONMENT } from "$lib/env.js";
+
+  // import * as Sentry from "@sentry/browser";
+  // import { Integrations } from "@sentry/tracing";
+  // import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
 
   // if (ENVIRONMENT !== "local") {
   //   Sentry.init({
@@ -28,18 +29,16 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
 
-  import { token } from "$lib/auth";
-
-  import LinkButton from "$lib/components/link-button.svelte";
   import NavItem from "$lib/components/nav-item.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   import "../app.postcss";
   import "../app.css";
-  import { addCircleIcon, userSmileIcon, loginIcon } from "$lib/icons.js";
   import LogoRF from "$lib/assets/logo-rf.svg";
   import LogoDORA from "$lib/assets/dora-logo-rvb.svg";
   import LogoMinistere from "$lib/assets/logo-ministere-travail.svg";
+
+  import MenuActions from "./_menu_actions.svelte";
 </script>
 
 <svelte:head>
@@ -67,35 +66,7 @@
       </a>
       <div class="flex-grow" />
       <div class="flex flex-row">
-        {#if $page.path !== "/auth/login"}
-          {#if $token}
-            <LinkButton
-              label="Deconnexion"
-              to={`/auth/logout`}
-              icon={userSmileIcon}
-              iconOnLeft
-              noBackground />
-          {:else}
-            <LinkButton
-              label="Inscription"
-              icon={loginIcon}
-              iconOnLeft
-              noBackground
-              to={`/auth/register`} />
-
-            <LinkButton
-              label="Connexion"
-              icon={userSmileIcon}
-              iconOnLeft
-              noBackground
-              to={`/auth/login?next=${encodeURIComponent($page.path)}`} />
-          {/if}
-        {/if}
-        <LinkButton
-          label="Référencer un service"
-          icon={addCircleIcon}
-          to={`/services/creer`}
-          iconOnRight />
+        <MenuActions />
       </div>
     </div>
   </CenteredGrid>

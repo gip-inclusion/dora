@@ -23,7 +23,7 @@
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import Button from "$lib/components/button.svelte";
-  import ButtonMenu from "./_button-menu.svelte";
+  import ButtonMenu from "$lib/components/button-menu.svelte";
   import { shortenString } from "$lib/utils";
 
   export let services = [];
