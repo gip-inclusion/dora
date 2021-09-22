@@ -8,14 +8,14 @@
     loginIcon,
     dashboardIcon,
   } from "$lib/icons.js";
-  import { userInfo } from "$lib/auth";
+  import { token } from "$lib/auth";
 
   import LinkButton from "$lib/components/link-button.svelte";
   import ButtonMenu from "$lib/components/button-menu.svelte";
 </script>
 
 {#if $page.path !== "/auth/login" && browser}
-  {#if $userInfo}
+  {#if $token}
     <ButtonMenu label="Mon compte" iconOnLeft icon={userSmileIcon}>
       <LinkButton
         label="Mon espace"
