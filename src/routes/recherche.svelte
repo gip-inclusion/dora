@@ -1,33 +1,9 @@
 <script context="module">
   import { getServicesOptions } from "$lib/services";
-
-  export async function load({ _page, _fetch, _session, _context }) {
-    return {
-      props: {
-        servicesOptions: await getServicesOptions(),
-      },
-    };
-  }
-</script>
-
-<script>
-  import { page } from "$app/stores";
   import { getApiURL } from "$lib/utils/api.js";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import SearchResult from "./_homepage/_search-result.svelte";
-  import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
   import { getQuery } from "./_homepage/_search";
-  import { addCircleIcon } from "$lib/icons";
-  import LinkButton from "$lib/components/link-button.svelte";
 
-  let category = $page.query.get("cat");
-  let subcategory = $page.query.get("sub");
-  let cityCode = $page.query.get("city");
-  let cityLabel = $page.query.get("cl");
-  export let servicesOptions;
-  let results = [];
-
-  async function getResults() {
+  async function getResults(category, subcategory, cityCode) {
     const url = `${getApiURL()}/search/?${getQuery(
       category,
       subcategory,
@@ -38,36 +14,47 @@
         Accept: "application/json; version=1.0",
       },
     });
-
-    const result = {
-      ok: res.ok,
-      status: res.status,
-    };
     if (res.ok) {
-      result.result = await res.json();
-    } else {
-      try {
-        result.error = await res.json();
-
-        if (res.status === 404) {
-          //  TODO: When the city is incorrect, return an empty list
-          // instead of throwing an error. But we should really
-          // surface the error to the user.
-          result.result = [];
-        }
-      } catch (err) {
-        console.error(err);
-      }
+      return await res.json();
     }
-    return result;
+    // TODO: log errors
+    try {
+      console.error(await res.json());
+    } catch (err) {
+      console.error(err);
+    }
+    return [];
   }
 
-  async function updateResults() {
-    results = (await getResults()).result;
-  }
+  export async function load({ page, _fetch, _session, _context }) {
+    const category = page.query.get("cat");
+    const subcategory = page.query.get("sub");
+    const cityCode = page.query.get("city");
+    const cityLabel = page.query.get("cl");
 
-  // eslint-disable-next-line
-  $: $page.query, updateResults();
+    return {
+      props: {
+        category,
+        subcategory,
+        cityCode,
+        cityLabel,
+        results: await getResults(category, subcategory, cityCode),
+        servicesOptions: await getServicesOptions(),
+      },
+    };
+  }
+</script>
+
+<script>
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import SearchResult from "./_homepage/_search-result.svelte";
+  import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
+  import { addCircleIcon } from "$lib/icons";
+  import LinkButton from "$lib/components/link-button.svelte";
+
+  export let servicesOptions;
+  export let category, subcategory, cityCode, cityLabel;
+  export let results;
 </script>
 
 <style>

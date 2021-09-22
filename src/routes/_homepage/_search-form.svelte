@@ -81,7 +81,6 @@
         name="city"
         placeholder="Ville du bénéficiaire"
         handleChange={(city) => {
-          console.log(city.properties);
           cityCode = city.properties.citycode;
           cityLabel = `${
             city.properties.label
