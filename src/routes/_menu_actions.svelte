@@ -1,5 +1,6 @@
 <script>
   import { page } from "$app/stores";
+  import { browser } from "$app/env";
 
   import {
     addCircleIcon,
@@ -13,7 +14,7 @@
   import ButtonMenu from "$lib/components/button-menu.svelte";
 </script>
 
-{#if $page.path !== "/auth/login"}
+{#if $page.path !== "/auth/login" && browser}
   {#if $token}
     <ButtonMenu label="Mon compte" iconOnLeft icon={userSmileIcon}>
       <LinkButton
