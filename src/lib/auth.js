@@ -5,6 +5,7 @@ import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
 const tokenKey = "token";
 
 export const token = writable(null);
+export const userInfo = writable({});
 
 // Rules for auto generation by password managers
 // https://developer.apple.com/password-rules/
@@ -24,13 +25,18 @@ export function clearToken() {
   localStorage.removeItem(tokenKey);
 }
 
-export async function initToken() {
+export function clearUserInfo() {
+  userInfo.set({});
+}
+
+export async function getUserInfo() {
   token.set(null);
+  userInfo.set({});
   if (browser) {
     const lsToken = localStorage.getItem(tokenKey);
     if (lsToken) {
       // Check if the token is still valid
-      const url = `${getApiURL()}/auth/token/verify/`;
+      const url = `${getApiURL()}/auth/user-info/`;
       const result = await fetch(url, {
         method: "POST",
         headers: {
@@ -39,12 +45,14 @@ export async function initToken() {
         },
         body: JSON.stringify({ key: lsToken }),
       });
-      if (result.ok) {
+      if (result.status === 200) {
         token.set(lsToken);
+        userInfo.set(await result.json());
       }
-      if (!result.ok && result.status === 404) {
+      if (result.status === 404) {
         // The token is invalid, clear localStorage
         clearToken();
+        clearUserInfo();
       }
     }
   }

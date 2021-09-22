@@ -1,5 +1,5 @@
 <script context="module">
-  import { initToken } from "$lib/auth";
+  import { getUserInfo } from "$lib/auth";
   import { ENVIRONMENT } from "$lib/env.js";
 
   // import * as Sentry from "@sentry/browser";
@@ -20,7 +20,7 @@
   // }
 
   export async function load({ _page, _fetch, _session, _context }) {
-    await initToken();
+    await getUserInfo();
     return {};
   }
 </script>
