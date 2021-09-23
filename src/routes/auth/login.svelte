@@ -4,7 +4,7 @@
   import { goto } from "$app/navigation";
 
   import { getApiURL } from "$lib/utils/api.js";
-  import { token, setToken } from "$lib/auth";
+  import { token, setToken, getUserInfo } from "$lib/auth";
   import { formErrors } from "$lib/validation.js";
   import { loginSchema } from "$lib/schemas/auth.js";
 
@@ -52,9 +52,10 @@
     return "/";
   }
 
-  function handleSuccess(jsonResult) {
+  async function handleSuccess(jsonResult) {
     if (jsonResult.validUser) {
       setToken(jsonResult.token);
+      await getUserInfo();
       goto(getNextPage() || "/");
     } else {
       invalidUser = true;

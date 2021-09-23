@@ -4,8 +4,13 @@ import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
 
 const tokenKey = "token";
 
+/**
+ * @typedef { import("svelte/store").Writable } Writable
+ */
+
 export const token = writable(null);
-export const userInfo = writable({});
+/** @type {Writable<{name: string, isStaff: boolean} | null>} */
+export const userInfo = writable(null);
 
 // Rules for auto generation by password managers
 // https://developer.apple.com/password-rules/
@@ -26,12 +31,12 @@ export function clearToken() {
 }
 
 export function clearUserInfo() {
-  userInfo.set({});
+  userInfo.set(null);
 }
 
 export async function getUserInfo() {
   token.set(null);
-  userInfo.set({});
+  userInfo.set(null);
   if (browser) {
     const lsToken = localStorage.getItem(tokenKey);
     if (lsToken) {

@@ -1,11 +1,14 @@
 <script>
-  import { goto } from "$app/navigation";
+  // import { goto } from "$app/navigation";
   import { browser } from "$app/env";
-  import { clearToken } from "$lib/auth";
+  import { clearToken, clearUserInfo } from "$lib/auth";
 
   if (browser) {
     clearToken();
+    clearUserInfo();
     localStorage.clear();
-    goto("/");
+    // goto("/");
+    // Forces a browser reload
+    window.location = "/";
   }
 </script>
