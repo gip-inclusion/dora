@@ -34,7 +34,7 @@
   <div class="mx-auto">
     <Label label={service.structureInfo.name} darkBg />
     <h1 class="text-white">{service.name}</h1>
-    {#if $token && !isPreview}
+    {#if $token && service.canWrite && !isPreview}
       <div class="my-2 noprint">
         <LinkButton to={editLink} label="Éditer" small />
       </div>

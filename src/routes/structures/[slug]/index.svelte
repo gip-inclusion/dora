@@ -78,7 +78,7 @@
         {@html insane(structure.fullDesc)}
       </div>
     </div>
-    {#if $token}
+    {#if $token && structure.canWrite}
       <LinkButton to={editLink} label="Éditer" />
     {/if}
   </div>
