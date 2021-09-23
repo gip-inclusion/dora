@@ -53,13 +53,13 @@
           </p>
         </Info>
         <LinkButton
-          to="/auth/login"
+          to="/auth/connexion"
           label="Aller à la page de connexion"
           preventDefaultOnMouseDown />
       {:else}
         <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
         <LinkButton
-          to="/auth/resend-email-validation"
+          to="/auth/renvoyer-email-validation"
           label="Demander un nouveau lien"
           preventDefaultOnMouseDown />
       {/if}

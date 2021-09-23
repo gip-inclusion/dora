@@ -97,7 +97,7 @@
             <div>
               <LinkButton
                 label="Modifier"
-                to="/services/{service.slug}/edit"
+                to="/services/{service.slug}/editer"
                 icon={fileEditIcon}
                 iconOnRight
                 small

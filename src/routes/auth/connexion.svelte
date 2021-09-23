@@ -63,7 +63,7 @@
   }
 
   onMount(() => {
-    if ($token && $page.path === "/auth/login") {
+    if ($token && $page.path === "/auth/connexion") {
       goto(getNextPage());
     }
   });
@@ -93,7 +93,9 @@
             label="Votre adresse email n’a pas encore été validée"
             negativeMood />
           <LinkButton
-            to="/auth/resend-email-validation?email={encodeURIComponent(email)}"
+            to="/auth/renvoyer-email-validation?email={encodeURIComponent(
+              email
+            )}"
             label="Demander un nouveau lien"
             preventDefaultOnMouseDown />
         {:else}
@@ -128,7 +130,7 @@
             preventDefaultOnMouseDown />
           <a
             class="underline text-center text-gray-text-alt2 text-xs"
-            href="/auth/password-lost">Mot de passe oublié ?</a>
+            href="/auth/mdp-perdu">Mot de passe oublié ?</a>
         {/if}
       </Fieldset>
     </Form>

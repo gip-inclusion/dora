@@ -14,7 +14,7 @@
   import ButtonMenu from "$lib/components/button-menu.svelte";
 </script>
 
-{#if $page.path !== "/auth/login" && browser}
+{#if $page.path !== "/auth/connexion" && browser}
   {#if $userInfo}
     <ButtonMenu label="Mon compte" iconOnLeft icon={userSmileIcon}>
       <LinkButton
@@ -25,7 +25,7 @@
         noBackground />
       <LinkButton
         label="Deconnexion"
-        to={`/auth/logout`}
+        to={`/auth/deconnexion`}
         icon={loginIcon}
         iconOnRight
         noBackground />
@@ -37,14 +37,14 @@
       icon={loginIcon}
       iconOnLeft
       noBackground
-      to={`/auth/register`} />
+      to={`/auth/inscription`} />
 
     <LinkButton
       label="Connexion"
       icon={userSmileIcon}
       iconOnLeft
       noBackground
-      to={`/auth/login?next=${encodeURIComponent($page.path)}`} />
+      to={`/auth/connexion?next=${encodeURIComponent($page.path)}`} />
     <LinkButton
       label="Référencer un service"
       icon={addCircleIcon}

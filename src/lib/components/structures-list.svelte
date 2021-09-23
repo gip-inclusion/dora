@@ -59,7 +59,7 @@
           noBackground />
         <LinkButton
           label="Modifier"
-          to="/structures/{structure.slug}/edit"
+          to="/structures/{structure.slug}/editer"
           iconOnRight
           icon={settingsIcon}
           noBackground />

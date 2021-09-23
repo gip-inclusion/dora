@@ -48,7 +48,7 @@
   ]);
 
   function handleOpenLastDraft() {
-    goto(`/services/${lastDraft.slug}/edit`);
+    goto(`/services/${lastDraft.slug}/editer`);
   }
 
   function handleHideLastDraftNotification() {

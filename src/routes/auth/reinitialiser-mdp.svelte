@@ -109,7 +109,7 @@
           {#if !resetToken}
             <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
             <LinkButton
-              to="/auth/password-lost"
+              to="/auth/mdp-perdu"
               label="Demander un nouveau lien"
               preventDefaultOnMouseDown />
           {:else if success}
@@ -120,7 +120,7 @@
               </p>
             </Info>
             <LinkButton
-              to="/auth/login"
+              to="/auth/connexion"
               label="Revenir à la page de connexion"
               preventDefaultOnMouseDown />
           {:else}
@@ -169,7 +169,7 @@
               preventDefaultOnMouseDown />
             <p class=" text-center text-gray-text-alt2 text-xs">
               Vous vous souvenez de votre mot de passe ?
-              <a class="underline " href="/auth/login">Connexion</a>
+              <a class="underline " href="/auth/connexion">Connexion</a>
             </p>
           {/if}
         </Fieldset>
