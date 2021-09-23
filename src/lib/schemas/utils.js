@@ -9,6 +9,8 @@ const emailRegexp =
 const phoneRegexp = /^\d{10}$/u;
 
 const postalCodeRegexp = /^\d[0-9abAB]\d{3}$/u;
+
+const safirRegexp = /^\d{5}$/u;
 /* eslint-enable */
 
 // ----- Rules
@@ -81,6 +83,14 @@ export function isPostalCode(msg) {
       typeof value === "string" &&
       (value === "" || !!value.match(postalCodeRegexp)),
     msg: msg || `Veuillez saisir un code postal valide`,
+  });
+}
+
+export function isSafir(msg) {
+  return (name, value, _data) => ({
+    valid:
+      typeof value === "string" && (value === "" || !!value.match(safirRegexp)),
+    msg: msg || `Veuillez saisir un code Safir valide`,
   });
 }
 

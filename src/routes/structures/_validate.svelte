@@ -12,4 +12,5 @@
   type="submit"
   label="Validez les informations"
   icon={arrowRightSIcon}
-  iconOnRight />
+  iconOnRight
+  preventDefaultOnMouseDown />

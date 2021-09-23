@@ -15,6 +15,11 @@
   export let horizontalBottom = false;
   export let noPadding = false;
   export let flashSuccess = false;
+  // This will call preventDefault() on a mouseDown event
+  // which will prevent the blur event on other nodes
+  // which was changing the validation messages, which moved the
+  // button, and broke the click event
+  export let preventDefaultOnMouseDown = false;
   let px, py, iw, ih, ts, lead;
   if (small) {
     px = "px-5/4";
@@ -66,6 +71,10 @@
         "bg-dora-magenta-cta hover:bg-dora-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
     }
   }
+
+  function handleMouseDown(evt) {
+    if (preventDefaultOnMouseDown) evt.preventDefault();
+  }
 </script>
 
 <style>
@@ -102,6 +111,7 @@
   class:hz-bottom={horizontalBottom}
   class:flash-success={flashSuccess}
   on:click
+  on:mousedown={handleMouseDown}
   {disabled}>
   {#if iconOnLeft}
     <div class="{iw} {ih} mr-1 fill-current ">

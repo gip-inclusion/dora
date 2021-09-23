@@ -1,16 +1,5 @@
-<script context="module">
-  import { getServices, unPublishDraft } from "$lib/services";
-
-  export async function load({ _page, _fetch, _session, _context }) {
-    return {
-      props: {
-        services: await getServices(),
-      },
-    };
-  }
-</script>
-
 <script>
+  import { unPublishDraft } from "$lib/services";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import {
     checkBoxBlankIcon,
@@ -23,7 +12,7 @@
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import Button from "$lib/components/button.svelte";
-  import ButtonMenu from "./_button-menu.svelte";
+  import ButtonMenu from "$lib/components/button-menu.svelte";
   import { shortenString } from "$lib/utils";
 
   export let services = [];
@@ -40,7 +29,6 @@
   .wrapper {
     display: flex;
     flex-direction: column;
-    padding-top: var(--s8);
     padding-bottom: var(--s40);
     gap: var(--s12);
   }
@@ -51,15 +39,6 @@
     border-radius: var(--s8);
   }
 </style>
-
-<CenteredGrid --col-bg="var(--col-gray-00)">
-  <div class="col-start-1 col-span-full text-left">
-    <div class="mb-4">
-      <h2>Services</h2>
-    </div>
-    <div class="border-t border-gray-03 py-3/2" />
-  </div>
-</CenteredGrid>
 
 <CenteredGrid --col-bg="var(--col-gray-00)">
   <div class="wrapper col-start-1 col-span-full">
@@ -118,7 +97,7 @@
             <div>
               <LinkButton
                 label="Modifier"
-                to="/services/{service.slug}/edit"
+                to="/services/{service.slug}/editer"
                 icon={fileEditIcon}
                 iconOnRight
                 small

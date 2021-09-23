@@ -4,7 +4,21 @@ import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
 
 const tokenKey = "token";
 
+/**
+ * @typedef { import("svelte/store").Writable } Writable
+ */
+
 export const token = writable(null);
+/** @type {Writable<{name: string, isStaff: boolean} | null>} */
+export const userInfo = writable(null);
+
+// Rules for auto generation by password managers
+// https://developer.apple.com/password-rules/
+// https://support.1password.com/compatible-website-design/
+// - between 9 and 129 chars
+// - not only numbers
+export const passwordRules =
+  "minlength: 9; maxlength: 128; required: upper,lower,special; allowed: unicode;";
 
 export function setToken(t) {
   token.set(t);
@@ -16,25 +30,34 @@ export function clearToken() {
   localStorage.removeItem(tokenKey);
 }
 
-export async function initToken() {
+export function clearUserInfo() {
+  userInfo.set(null);
+}
+
+export async function getUserInfo() {
   token.set(null);
+  userInfo.set(null);
   if (browser) {
     const lsToken = localStorage.getItem(tokenKey);
     if (lsToken) {
       // Check if the token is still valid
-      const url = `${getApiURL()}/me/`;
+      const url = `${getApiURL()}/auth/user-info/`;
       const result = await fetch(url, {
+        method: "POST",
         headers: {
           Accept: defaultAcceptHeader,
-          Authorization: `token ${lsToken}`,
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ key: lsToken }),
       });
-      if (result.ok) {
+      if (result.status === 200) {
         token.set(lsToken);
+        userInfo.set(await result.json());
       }
-      if (!result.ok && result.status === 401) {
+      if (result.status === 404) {
         // The token is invalid, clear localStorage
         clearToken();
+        clearUserInfo();
       }
     }
   }

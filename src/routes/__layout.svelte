@@ -1,25 +1,26 @@
 <script context="module">
-  import * as Sentry from "@sentry/browser";
-  import { Integrations } from "@sentry/tracing";
+  import { getUserInfo } from "$lib/auth";
+  import { ENVIRONMENT } from "$lib/env.js";
 
-  import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
-  import { initToken } from "$lib/auth";
+  // import * as Sentry from "@sentry/browser";
+  // import { Integrations } from "@sentry/tracing";
+  // import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
 
-  if (ENVIRONMENT !== "local") {
-    Sentry.init({
-      dsn: SENTRY_DSN,
-      environment: ENVIRONMENT, // ,
-      integrations: [new Integrations.BrowserTracing()],
+  // if (ENVIRONMENT !== "local") {
+  //   Sentry.init({
+  //     dsn: SENTRY_DSN,
+  //     environment: ENVIRONMENT, // ,
+  //     integrations: [new Integrations.BrowserTracing()],
 
-      // Set tracesSampleRate to 1.0 to capture 100%
-      // of transactions for performance monitoring.
-      // We recommend adjusting this value in production
-      tracesSampleRate: 1.0,
-    });
-  }
+  //     // Set tracesSampleRate to 1.0 to capture 100%
+  //     // of transactions for performance monitoring.
+  //     // We recommend adjusting this value in production
+  //     tracesSampleRate: 1.0,
+  //   });
+  // }
 
   export async function load({ _page, _fetch, _session, _context }) {
-    await initToken();
+    await getUserInfo();
     return {};
   }
 </script>
@@ -28,18 +29,16 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
 
-  import { token } from "$lib/auth";
-
-  import LinkButton from "$lib/components/link-button.svelte";
   import NavItem from "$lib/components/nav-item.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   import "../app.postcss";
   import "../app.css";
-  import { addCircleIcon, userSmileIcon } from "$lib/icons.js";
   import LogoRF from "$lib/assets/logo-rf.svg";
   import LogoDORA from "$lib/assets/dora-logo-rvb.svg";
   import LogoMinistere from "$lib/assets/logo-ministere-travail.svg";
+
+  import MenuActions from "./_menu_actions.svelte";
 </script>
 
 <svelte:head>
@@ -67,28 +66,7 @@
       </a>
       <div class="flex-grow" />
       <div class="flex flex-row">
-        {#if $page.path !== "/login"}
-          {#if $token}
-            <LinkButton
-              label="Deconnexion"
-              to={`/logout?next=${encodeURIComponent($page.path)}`}
-              icon={userSmileIcon}
-              iconOnLeft
-              noBackground />
-          {:else}
-            <LinkButton
-              label="Connexion"
-              icon={userSmileIcon}
-              iconOnLeft
-              noBackground
-              to={`/login?next=${encodeURIComponent($page.path)}`} />
-          {/if}
-        {/if}
-        <LinkButton
-          label="Référencer un service"
-          icon={addCircleIcon}
-          to={`/services/creer`}
-          iconOnRight />
+        <MenuActions />
       </div>
     </div>
   </CenteredGrid>

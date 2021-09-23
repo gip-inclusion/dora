@@ -13,7 +13,7 @@
   export let service;
   export let isPreview = false;
 
-  const editLink = `${$page.path}/edit`;
+  const editLink = `${$page.path}/editer`;
 </script>
 
 <style>
@@ -34,9 +34,9 @@
   <div class="mx-auto">
     <Label label={service.structureInfo.name} darkBg />
     <h1 class="text-white">{service.name}</h1>
-    {#if $token && !isPreview}
+    {#if $token && service.canWrite && !isPreview}
       <div class="my-2 noprint">
-        <LinkButton type="submit" to={editLink} label="Éditer" small />
+        <LinkButton to={editLink} label="Éditer" small />
       </div>
     {/if}
     <div class="tags">

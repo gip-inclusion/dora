@@ -8,7 +8,6 @@
   import serviceSchema from "$lib/schemas/service.js";
 
   export let servicesOptions, service;
-  export let structures = undefined;
 </script>
 
 <FieldSet title="Modalités d'accès au service">
@@ -76,7 +75,7 @@
       bind:fileKeys={service.forms} />
   </Field>
   <ModelField
-    label="Le formulaire en ligne à compléter"
+    label="Liens pratiques"
     placeholder="URL"
     type="url"
     schema={serviceSchema.onlineForm}

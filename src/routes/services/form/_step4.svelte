@@ -9,7 +9,6 @@
   import serviceSchema from "$lib/schemas/service.js";
 
   export let servicesOptions, service;
-  export let structures = undefined;
 
   function handleCityChange(city) {
     const props = city?.properties;
@@ -35,7 +34,7 @@
   }
 </script>
 
-<FieldSet title="Contact référent">
+<FieldSet title="Personne à contacter">
   <ModelField
     label="Nom du contact"
     placeholder="Prénom et nom"

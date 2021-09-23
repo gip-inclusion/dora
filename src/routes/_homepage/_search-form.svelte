@@ -81,7 +81,6 @@
         name="city"
         placeholder="Ville du bénéficiaire"
         handleChange={(city) => {
-          console.log(city.properties);
           cityCode = city.properties.citycode;
           cityLabel = `${
             city.properties.label
@@ -96,7 +95,8 @@
       disabled={!category || !cityCode}
       iconOnLeft
       horizontalBottom
-      small />
+      small
+      preventDefaultOnMouseDown />
   </form>
   <p>
     Le service DORA est actuellement <a

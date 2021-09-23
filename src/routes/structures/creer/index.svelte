@@ -13,7 +13,7 @@
   import CitySearch from "$lib/components/forms/city-search.svelte";
 
   import StructureFormWrapper from "../_structure-form-wrapper.svelte";
-  import SiretSearch from "./_siret_search.svelte";
+  import SiretSearch from "$lib/components/structures/siret-autocomplete.svelte";
   import { siretWasAlreadyClaimed } from "$lib/structures";
   import structureSchema from "$lib/schemas/structure.js";
 
@@ -55,14 +55,12 @@
       );
       if (!alreadyClaimedEstablishment) {
         structure.siret = establishment.siret;
-        structure.name = establishment.name || establishment.parent;
-        structure.address1 = establishment.addr1;
-        structure.address2 = establishment.addr2;
-        structure.city = `${establishment.city || ""} ${
-          establishment.distrib || ""
-        }`.trim();
-        structure.cityCode = establishment.citycode;
-        structure.postalCode = establishment.postcode;
+        structure.name = establishment.name;
+        structure.address1 = establishment.address1;
+        structure.address2 = establishment.address2;
+        structure.city = establishment.city;
+        structure.cityCode = establishment.cityCode;
+        structure.postalCode = establishment.postalCode;
         structure.ape = establishment.ape;
         structure.longitude = establishment.longitude;
         structure.latitude = establishment.latitude;

@@ -16,10 +16,13 @@
   } from "$lib/validation.js";
 
   import ValidateButton from "./_validate.svelte";
+  import Alert from "$lib/components/forms/alert.svelte";
   export let structure, structuresOptions, formTitle;
 
   export let modify = false;
   export let visible;
+
+  let errorDiv;
 
   async function handleEltChange(evt) {
     // We want to listen to both DOM and component events
@@ -60,6 +63,7 @@
   };
 
   async function handleSubmit() {
+    $formErrors = {};
     const { validatedData, valid } = validate(
       structure,
       structureSchema,
@@ -77,7 +81,18 @@
       if (result?.ok) {
         goto(`/structures/${result.result.slug}`);
       } else {
-        injectAPIErrors(result.error, serverErrors);
+        injectAPIErrors(
+          result.error || {
+            nonFieldErrors: [
+              {
+                code: "fetch-error",
+                message: "Erreur de connexion au serveur",
+              },
+            ],
+          },
+          serverErrors
+        );
+        errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
   }
@@ -86,6 +101,11 @@
 {#if visible}
   <form novalidate on:submit|preventDefault={handleSubmit}>
     <FieldSet title={formTitle}>
+      <div bind:this={errorDiv}>
+        {#each $formErrors.nonFieldErrors || [] as msg}
+          <Alert iconOnLeft label={msg} />
+        {/each}
+      </div>
       <ModelField
         type="text"
         label="SIRET"

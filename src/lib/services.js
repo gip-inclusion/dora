@@ -35,6 +35,11 @@ export async function getServices() {
   return (await fetchData(url)).data;
 }
 
+export async function getMyServices() {
+  const url = `${getApiURL()}/services/?mine=1`;
+  return (await fetchData(url)).data;
+}
+
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
   const data = (await fetchData(url)).data;
@@ -113,6 +118,14 @@ export async function unPublishDraft(serviceSlug) {
     throw Error(response.statusText);
   }
   return await response.json();
+}
+
+export async function getLastDraft() {
+  if (token) {
+    const url = `${getApiURL()}/services/last-draft/`;
+    return (await fetchData(url)).data;
+  }
+  return null;
 }
 
 export async function getServicesOptions() {

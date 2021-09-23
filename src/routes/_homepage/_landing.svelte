@@ -88,7 +88,9 @@
           bénéficiaire
         </p>
       </div>
-      <div class="flex-1"><img src={CoverPic} alt="" /></div>
+      <div class="flex-1">
+        <img src={CoverPic} width="600" height="400" alt="" />
+      </div>
     </div>
     <SearchForm {servicesOptions} />
   </div>
@@ -101,17 +103,20 @@
   <div class="col-start-1 col-span-full mb-5">
     <div class="flex flex-row gap-8">
       <div class="flex-1">
-        <img src={MissionPic} width="440" alt="" />
+        <img src={MissionPic} width="440" height="420" alt="" />
       </div>
       <div class="content-mission flex-1">
         <h5>La mission DORA</h5>
         <h2>Découvrir, orienter, renseigner, accompagner</h2>
+
         <p>
           La solution DORA est un service public numérique alimenté par les
           offreurs de services d’insertion — locaux, nationaux et numériques.
-          Cette base de données centralisée permet aux accompagnateurs de
-          mobiliser rapidement l’offre adaptée aux besoins de leurs
-          bénéficiaires.
+          Base de données centralisée, DORA permet de gagner du temps en
+          recherchant au même endroit tous les services dédiés à palier aux
+          difficultés freinant l’insertion vers un emploi durable d’un
+          bénéficiaire. Connaître la disponibilité d’un service et pouvoir le
+          mobiliser en quelques clics.
         </p>
         <ul>
           <li>Une recherche simple et personnalisée</li>
@@ -138,7 +143,7 @@
     <div class="flex flex-row gap-8">
       <div class="flex flex-col flex-1 ">
         <div class="mx-auto">
-          <img src={VisiblePic} width="140" alt="" />
+          <img src={VisiblePic} width="140" height="140" alt="" />
         </div>
         <h4>
           Gagnez en visibilité auprès de vos partenaires locaux et nationaux
@@ -146,7 +151,7 @@
       </div>
       <div class="flex flex-col flex-1">
         <div class="mx-auto">
-          <img src={ValorisePic} width="140" alt="" />
+          <img src={ValorisePic} width="140" height="140" alt="" />
         </div>
         <h4>
           Valorisez, gérez et guidez la mise à jour de votre offre de services.
@@ -155,7 +160,7 @@
       </div>
       <div class="flex flex-col flex-1">
         <div class="mx-auto">
-          <img src={DefinePic} width="140" alt="" />
+          <img src={DefinePic} width="140" height="140" alt="" />
         </div>
         <h4>
           Définissez les modalités d'orientation de vos services, suivez et
@@ -164,14 +169,14 @@
       </div>
       <div class="flex flex-col flex-1">
         <div class="mx-auto">
-          <img src={ReferencePic} width="140" alt="" />
+          <img src={ReferencePic} width="140" height="140" alt="" />
         </div>
         <h4>Référencer un service</h4>
       </div>
     </div>
     <div class="mt-6 rounded-xl bg-information-light flex flex-row p-6">
       <div class="flex-1">
-        <img src={JoinPic} width="380" alt="" />
+        <img src={JoinPic} width="380" height="380" alt="" />
       </div>
       <div class="flex-1 text-left">
         <div class="flex flex-col gap-2 px-12">

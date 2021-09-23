@@ -25,7 +25,7 @@
 
   export let onChange = function (_newValue) {};
   export let onFocus = function () {};
-  export let onCreate = function (_text) {};
+  // export let onCreate = function (_text) {};
 
   // Behaviour properties
   export let selectFirstIfEmpty = false;

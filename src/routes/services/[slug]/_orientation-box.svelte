@@ -42,7 +42,7 @@
     <LinkButton
       label="Se connecter"
       secondary
-      to={`/login?next=${encodeURIComponent($page.path)}`} />
+      to={`/auth/connexion?next=${encodeURIComponent($page.path)}`} />
   {:else}
     <Button label="Orientez votre bénéficiaire" disabled />
   {/if}

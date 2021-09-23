@@ -1,5 +1,5 @@
 <script>
-  import { setContext } from "svelte";
+  import { setContext, onMount, onDestroy } from "svelte";
 
   import { goto } from "$app/navigation";
 
@@ -8,10 +8,10 @@
     validate,
     injectAPIErrors,
     contextValidationKey,
+    formErrors,
   } from "$lib/validation.js";
 
   import NavLink from "./_navlink.svelte";
-  import { resetServiceCache, persistServiceCache } from "./_stores.js";
   import NavButtons from "./_nav-buttons.svelte";
 
   import serviceSchema, {
@@ -25,6 +25,7 @@
   import { createOrModifyService, publishDraft } from "$lib/services";
   import { assert, logException } from "$lib/logger";
   import Preview from "./_preview.svelte";
+  import Alert from "$lib/components/forms/alert.svelte";
 
   const schemas = new Map([
     [1, step1Schema],
@@ -34,11 +35,18 @@
   ]);
 
   export let title;
-  export let currentStep = 1;
+  export let currentStep;
   export let service;
-  export let useLocalStorage = false;
 
   let flashSaveDraftButton = false;
+
+  onMount(() => {
+    $formErrors = {};
+  });
+
+  onDestroy(() => {
+    $formErrors = {};
+  });
 
   async function handleEltChange(evt) {
     // We want to listen to both DOM and component events
@@ -74,6 +82,7 @@
 
   let navInfo = {};
   let scrollY;
+  let errorDiv;
 
   $: switch (currentStep) {
     case 1:
@@ -131,7 +140,6 @@
       // Validation OK, let's send it to the API endpoint
       try {
         const result = await publishDraft(service.slug);
-        if (useLocalStorage) resetServiceCache();
         goto(`/services/${result.slug}`);
       } catch (error) {
         logException(error);
@@ -156,7 +164,6 @@
       const result = await createOrModifyService(validatedData);
       if (result.ok) {
         service = result.data;
-        if (useLocalStorage) resetServiceCache();
         goto(`/services/${service.slug}`);
       } else {
         injectAPIErrors(result.error, {});
@@ -189,13 +196,23 @@
           flashSaveDraftButton = false;
         }, 1000);
       } else {
-        injectAPIErrors(result.error, {});
+        injectAPIErrors(
+          result.error || {
+            nonFieldErrors: [
+              {
+                code: "fetch-error",
+                message: "Erreur de connexion au serveur",
+              },
+            ],
+          },
+          {}
+        );
+        errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
   }
 
   function goToPage(number) {
-    if (useLocalStorage) persistServiceCache(service);
     currentStep = number;
     scrollY = 0;
   }
@@ -221,7 +238,6 @@
     if (currentStep === 5) {
       publish();
     } else {
-      if (useLocalStorage) persistServiceCache(service);
       if (
         validate(service, schemas.get(currentStep), serviceSchema, {
           skipDependenciesCheck: true,
@@ -238,7 +254,6 @@
     if (currentStep === 5) {
       modify();
     } else {
-      if (useLocalStorage) persistServiceCache(service);
       if (
         validate(service, schemas.get(currentStep), serviceSchema, {
           skipDependenciesCheck: true,
@@ -251,7 +266,6 @@
   }
 
   function handleSaveDraft() {
-    if (useLocalStorage) persistServiceCache(service);
     saveDraft();
   }
 
@@ -310,6 +324,11 @@
   </CenteredGrid>
   <CenteredGrid gridRow="2" roundedbg>
     <div class="col-span-8 col-start-1 mb-8">
+      <div bind:this={errorDiv}>
+        {#each $formErrors.nonFieldErrors || [] as msg}
+          <Alert iconOnLeft label={msg} />
+        {/each}
+      </div>
       <slot />
     </div>
   </CenteredGrid>

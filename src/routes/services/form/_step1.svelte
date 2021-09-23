@@ -23,18 +23,20 @@
   }
 </script>
 
-<FieldSet title="">
-  <ModelField
-    type="select"
-    schema={serviceSchema.structure}
-    label="Structure"
-    choices={structures.map((s) => ({ value: s.slug, label: s.name }))}
-    name="structure"
-    errorMessages={$formErrors.structure}
-    bind:value={service.structure}
-    sortSelect
-    placeholder="Sélectionnez votre structure" />
-</FieldSet>
+{#if structures.length > 1}
+  <FieldSet title="">
+    <ModelField
+      type="select"
+      schema={serviceSchema.structure}
+      label="Structure"
+      choices={structures.map((s) => ({ value: s.slug, label: s.name }))}
+      name="structure"
+      errorMessages={$formErrors.structure}
+      bind:value={service.structure}
+      sortSelect
+      placeholder="Sélectionnez votre structure" />
+  </FieldSet>
+{/if}
 
 <FieldSet title="Typologie de service">
   <Info title="Périmètre de test">

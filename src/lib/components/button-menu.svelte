@@ -2,6 +2,9 @@
   import Button from "$lib/components/button.svelte";
 
   export let icon;
+  export let label = undefined;
+  export let iconOnLeft = undefined,
+    iconOnRight = undefined;
   let isOpen = false;
   let childrenListNode;
   function clickOutside(node) {
@@ -51,7 +54,13 @@
 
 <div class="wrapper">
   <div class="title">
-    <Button {icon} noBackground on:click={() => (isOpen = !isOpen)} />
+    <Button
+      {icon}
+      {iconOnLeft}
+      {iconOnRight}
+      {label}
+      noBackground
+      on:click={() => (isOpen = !isOpen)} />
   </div>
   <div
     class="children"

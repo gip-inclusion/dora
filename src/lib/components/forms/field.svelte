@@ -11,7 +11,7 @@
   export let type;
   export let errorMessages = [];
   export let autocomplete = undefined;
-
+  export let passwordrules = undefined;
   export let vertical = false;
   export let label = "";
   export let required = false;
@@ -87,7 +87,8 @@
             {readonly}
             {toggleYesText}
             {toggleNoText}
-            {autocomplete} />
+            {autocomplete}
+            {passwordrules} />
         {:else}
           <slot name="custom-input" />
         {/if}

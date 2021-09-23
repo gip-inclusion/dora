@@ -17,7 +17,7 @@
   import LinkButton from "$lib/components/link-button.svelte";
   export let structure;
 
-  const editLink = `${$page.path}/edit`;
+  const editLink = `${$page.path}/editer`;
 </script>
 
 <svelte:head>
@@ -78,8 +78,8 @@
         {@html insane(structure.fullDesc)}
       </div>
     </div>
-    {#if $token}
-      <LinkButton type="submit" to={editLink} label="Éditer" />
+    {#if $token && structure.canWrite}
+      <LinkButton to={editLink} label="Éditer" />
     {/if}
   </div>
 </CenteredGrid>
