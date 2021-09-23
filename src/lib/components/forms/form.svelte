@@ -65,7 +65,7 @@
         requesting = true;
         const result = await onSubmit(validatedData);
         if (result.ok) {
-          onSuccess(await getJsonResult(result));
+          await onSuccess(await getJsonResult(result));
         } else {
           injectAPIErrors(await getJsonResult(result), serverErrorsDict);
         }

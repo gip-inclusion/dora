@@ -1,13 +1,15 @@
 <script context="module">
+  export const ssr = false;
+
   import { getLastDraft, getServicesOptions } from "$lib/services";
-  import { getStructures } from "$lib/structures";
+  import { getMyStructures } from "$lib/structures";
 
   export async function load({ _page, _fetch, _session, _context }) {
     return {
       props: {
         lastDraft: await getLastDraft(),
         servicesOptions: await getServicesOptions(),
-        structures: await getStructures(),
+        structures: await getMyStructures(),
       },
     };
   }
@@ -31,6 +33,9 @@
   export let servicesOptions, structures, lastDraft;
 
   let service = getNewService();
+  if (structures.length === 1) {
+    service.structure = structures[0].slug;
+  }
   let lastDraftNotificationVisible = true;
   let currentStep = 1;
 
@@ -61,25 +66,32 @@
 </script>
 
 <EnsureLoggedIn>
-  {#if lastDraft && lastDraftNotificationVisible}
+  {#if !structures.length}
     <CenteredGrid>
-      <TempInlineInfo
-        label="Vous n’avez pas finalisé votre précédente saisie"
-        description="Souhaitez-vous continuer la saisie du service « {lastDraft.name} » ?"
-        buttonLabel="Reprendre"
-        onAction={handleOpenLastDraft}
-        onHide={handleHideLastDraftNotification} />
-    </CenteredGrid>
-  {/if}
+      <div class="col-start-1 col-span-full  mb-6">
+        <h4>Vous n’êtes rattaché à aucune structure !</h4>
+      </div></CenteredGrid>
+  {:else}
+    {#if lastDraft && lastDraftNotificationVisible}
+      <CenteredGrid>
+        <TempInlineInfo
+          label="Vous n’avez pas finalisé votre précédente saisie"
+          description="Souhaitez-vous continuer la saisie du service « {lastDraft.name} » ?"
+          buttonLabel="Reprendre"
+          onAction={handleOpenLastDraft}
+          onHide={handleHideLastDraftNotification} />
+      </CenteredGrid>
+    {/if}
 
-  <ServiceFormWrapper
-    bind:currentStep
-    bind:service
-    title="Référencer un service">
-    <svelte:component
-      this={currentStepComponent}
+    <ServiceFormWrapper
+      bind:currentStep
       bind:service
-      {servicesOptions}
-      {structures} />
-  </ServiceFormWrapper>
+      title="Référencer un service">
+      <svelte:component
+        this={currentStepComponent}
+        bind:service
+        {servicesOptions}
+        {structures} />
+    </ServiceFormWrapper>
+  {/if}
 </EnsureLoggedIn>
