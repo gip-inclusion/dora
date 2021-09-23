@@ -1,15 +1,3 @@
-<script context="module">
-  import { getStructures } from "$lib/structures";
-
-  export async function load({ _page, _fetch, _session, _context }) {
-    return {
-      props: {
-        structures: await getStructures(),
-      },
-    };
-  }
-</script>
-
 <script>
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";

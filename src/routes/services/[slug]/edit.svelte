@@ -1,6 +1,6 @@
 <script context="module">
   import { getServicesOptions, getService } from "$lib/services";
-  import { getStructures } from "$lib/structures";
+  import { getMyStructures } from "$lib/structures";
 
   export async function load({ page, _fetch, _session, _context }) {
     const service = await getService(page.params.slug);
@@ -8,7 +8,7 @@
       props: {
         service,
         servicesOptions: await getServicesOptions(),
-        structures: await getStructures(),
+        structures: await getMyStructures(),
       },
     };
   }
