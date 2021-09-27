@@ -79,4 +79,5 @@
         {/each}
       </ul>
     </div>
-  </div></Box>
+  </div>
+</Box>
