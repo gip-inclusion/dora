@@ -1,4 +1,5 @@
 <script context="module">
+  export const ssr = false;
   import { getServicesOptions } from "$lib/services";
   import { getApiURL } from "$lib/utils/api.js";
   import { getQuery } from "./_homepage/_search";
