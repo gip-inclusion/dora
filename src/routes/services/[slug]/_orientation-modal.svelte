@@ -1,4 +1,8 @@
 <script>
+  import { page } from "$app/stores";
+
+  import { token } from "$lib/auth";
+
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import Modal from "$lib/components/modal.svelte";
@@ -6,6 +10,8 @@
 
   export let isOpen = false;
   export let service;
+
+  $: showContact = service?.isContactInfoPublic || $token;
 
   function basename(path) {
     return shortenString(path.split("/").slice(-1)[0], 35);
@@ -119,8 +125,16 @@
         <div class="flex-1">
           <h3>Personne à contacter</h3>
           <ul class="list">
-            {#if service.contactName}
-              <h4 class="pb-2">{service.contactName}</h4>
+            {#if showContact}
+              {#if service.contactName}
+                <h4 class="pb-2">{service.contactName}</h4>
+              {/if}
+            {:else}
+              <Label
+                label="Vous devez être connecté•e pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire." />
+              <LinkButton
+                label="Connexion"
+                to={`/auth/connexion?next=${encodeURIComponent($page.path)}`} />
             {/if}
             <p><strong>{service.structureInfo.name}</strong></p>
             <p class="text-sm pb-2">
@@ -130,17 +144,20 @@
               {service.structureInfo.postalCode}
               {service.structureInfo.city}
             </p>
-            {#if service.contactPhone}
-              <p class="text-sm">
-                <a href="tel:{service.contactPhone}">{service.contactPhone}</a>
-              </p>
-            {/if}
-            {#if service.contactEmail}
-              <p class="text-sm">
-                <a href="mailto:{service.contactEmail}">
-                  {service.contactEmail}
-                </a>
-              </p>
+            {#if showContact}
+              {#if service.contactPhone}
+                <p class="text-sm">
+                  <a href="tel:{service.contactPhone}"
+                    >{service.contactPhone}</a>
+                </p>
+              {/if}
+              {#if service.contactEmail}
+                <p class="text-sm">
+                  <a href="mailto:{service.contactEmail}">
+                    {service.contactEmail}
+                  </a>
+                </p>
+              {/if}
             {/if}
             {#if service.structureInfo.url}
               <p class="text-sm">
@@ -154,7 +171,7 @@
         </div>
       </div>
     </div>
-    {#if service.contactEmail}
+    {#if service.contactEmail && showContact}
       <div class="action-line">
         <Label label="Au clic, ouverture de votre client e-mail :" />
         <LinkButton

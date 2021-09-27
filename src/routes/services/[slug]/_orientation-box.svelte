@@ -1,6 +1,5 @@
 <script>
   import { page } from "$app/stores";
-  import { token } from "$lib/auth";
   import Button from "$lib/components/button.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import Label from "$lib/components/label.svelte";
@@ -39,19 +38,8 @@
     <h3>Mobiliser ce service</h3>
   </div>
 
-  {#if !$token}
-    <Label
-      label="Vous devez être connecté•e pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire." />
-    <LinkButton
-      label="Connexion"
-      to={`/auth/connexion?next=${encodeURIComponent($page.path)}`} />
-  {:else}
-    <Label
-      label="Découvrez les modalités prévues pour mobiliser ce service :" />
-    <Button
-      on:click={() => (orientationModalIsOpen = true)}
-      label="Mobiliser" />
-  {/if}
+  <Label label="Découvrez les modalités prévues pour mobiliser ce service :" />
+  <Button on:click={() => (orientationModalIsOpen = true)} label="Mobiliser" />
 
   <OrientationModal {service} bind:isOpen={orientationModalIsOpen} />
 
