@@ -130,11 +130,15 @@
                 <h4 class="pb-2">{service.contactName}</h4>
               {/if}
             {:else}
-              <Label
-                label="Vous devez être connecté•e pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire." />
-              <LinkButton
-                label="Connexion"
-                to={`/auth/connexion?next=${encodeURIComponent($page.path)}`} />
+              <div class="pb-1 flex flex-col gap-2">
+                <Label
+                  label="Vous devez être connecté•e pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire." />
+                <LinkButton
+                  label="Connexion"
+                  to={`/auth/connexion?next=${encodeURIComponent(
+                    $page.path
+                  )}`} />
+              </div>
             {/if}
             <p><strong>{service.structureInfo.name}</strong></p>
             <p class="text-sm pb-2">
