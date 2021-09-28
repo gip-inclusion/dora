@@ -1,5 +1,5 @@
 <script>
-  import LinkButton from "$lib/components/link-button.svelte";
+  import Button from "$lib/components/button.svelte";
 
   import SearchResultWrapper from "./_search_result_wrapper.svelte";
 </script>
@@ -37,7 +37,9 @@
       </p>
     </div>
     <div class="flex-shrink-0">
-      <LinkButton label="Accéder au site" to="https://monenfant.fr/" />
+      <a target="_blank" rel="noopener" href="https://monenfant.fr/">
+        <Button type="button" label="Accéder au site" />
+      </a>
     </div>
   </div>
 </SearchResultWrapper>

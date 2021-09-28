@@ -99,15 +99,6 @@
     gap: var(--s16);
     grid-column: 6 / -2;
   }
-
-  .promo {
-    display: flex;
-    flex-direction: column;
-    padding-top: var(--s56);
-    padding-bottom: var(--s56);
-    gap: var(--s16);
-    grid-column: 5 / -1;
-  }
 </style>
 
 <CenteredGrid>
