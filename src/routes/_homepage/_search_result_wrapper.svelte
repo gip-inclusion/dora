@@ -1,0 +1,15 @@
+<script>
+</script>
+
+<style>
+  .wrapper {
+    padding: 20px 20px 24px 24px;
+    background-color: var(--col-white);
+    border-radius: var(--s8);
+    box-shadow: var(--shadow-sm);
+  }
+</style>
+
+<div class="wrapper">
+  <slot />
+</div>

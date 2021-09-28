@@ -1,6 +1,8 @@
 <script>
   import Info from "./_info.svelte";
   import Box from "./_box.svelte";
+  import { shortenString } from "$lib/utils";
+
   export let service;
 </script>
 
@@ -26,6 +28,11 @@
   .list li span {
     position: relative;
     left: var(--s8);
+  }
+
+  a {
+    color: var(--col-magenta-cta);
+    font-weight: bold;
   }
 </style>
 
@@ -71,12 +78,27 @@
 
     <div class="flex-1">
       <h3>Lieu de déroulement</h3>
-      <ul class="list">
-        {#each service.locationKindsDisplay as location}
-          <li><span>{location}</span></li>
-        {:else}
-          <li><span>Non renseigné</span></li>
-        {/each}
-      </ul>
+
+      {#if !service.locationKinds.length}
+        Non renseigné
+      {:else}
+        {#if service.locationKinds.includes("OS")}
+          <h4 class="pt-2 pb-1">En présentiel</h4>
+          <p class="text-sm pb-2 text-gray-text">
+            {service.address1}<br />
+            {#if service.address2}{service.address2}<br />{/if}
+            {service.postalCode}
+            {service.city}
+          </p>
+        {/if}
+        {#if service.locationKinds.includes("RE")}
+          <h4 class="pt-2 pb-1">À distance</h4>
+          <p class="text-sm pb-2">
+            <a target="_blank" rel="noopener nofollow" href={service.remoteUrl}
+              >{shortenString(service.remoteUrl, 35)}</a>
+          </p>
+        {/if}
+      {/if}
     </div>
-  </div></Box>
+  </div>
+</Box>
