@@ -4,18 +4,12 @@
   import { shortenString } from "$lib/utils";
 
   import Tag from "../services/[slug]/_tag.svelte";
+  import SearchResultWrapper from "./_search_result_wrapper.svelte";
 
   export let result;
 </script>
 
 <style>
-  .wrapper {
-    padding: 20px 20px 24px 24px;
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-    box-shadow: var(--shadow-sm);
-  }
-
   .header {
     padding-left: var(--s16);
     border-left: 4px solid var(--col-available);
@@ -34,7 +28,7 @@
   }
 </style>
 
-<div class="wrapper">
+<SearchResultWrapper>
   <div class="header">
     <h4><a href="/services/{result.slug}">{result.name}</a></h4>
     <div class="flex flex-row gap-2 mt-1">
@@ -61,4 +55,4 @@
     <Tag --bg-color="var(--col-magenta-brand)">{result.categoryDisplay}</Tag
     ><br />
   </div>
-</div>
+</SearchResultWrapper>
