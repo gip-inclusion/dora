@@ -22,7 +22,11 @@
     step4Schema,
   } from "$lib/schemas/service.js";
 
-  import { createOrModifyService, publishDraft } from "$lib/services";
+  import {
+    createOrModifyService,
+    getServicesOptions,
+    publishDraft,
+  } from "$lib/services";
   import { assert, logException } from "$lib/logger";
   import Preview from "./_preview.svelte";
   import Alert from "$lib/components/forms/alert.svelte";
@@ -34,6 +38,7 @@
     [4, step4Schema],
   ]);
 
+  export let servicesOptions;
   export let title;
   export let currentStep;
   export let service;
@@ -190,6 +195,8 @@
       // Validation OK, let's send it to the API endpoint
       const result = await createOrModifyService(validatedData);
       if (result.ok) {
+        // We might have added options to the editable multiselect
+        servicesOptions = await getServicesOptions();
         service = result.data;
         flashSaveDraftButton = true;
         setTimeout(() => {

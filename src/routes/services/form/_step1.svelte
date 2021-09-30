@@ -65,6 +65,7 @@
     bind:value={service.subcategories}
     choices={subcategories}
     placeholder="Choisissez les sous-catégories"
+    placeholderMulti="Choisissez les sous-catégories"
     sortSelect>
     <FieldHelp slot="helptext" title="Catégorisation">
       Pour permettre à nos utilisateurs de trouver facilement la solution que

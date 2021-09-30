@@ -16,6 +16,7 @@
   export let readonly = false;
   export let visible = true;
   export let placeholder = "";
+  export let placeholderMulti = "";
   export let description = "";
   export let minValue = null;
 
@@ -34,6 +35,7 @@
   {sortSelect}
   {type}
   {placeholder}
+  {placeholderMulti}
   {description}
   {hideLabel}
   {minValue}

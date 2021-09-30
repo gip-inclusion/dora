@@ -6,6 +6,7 @@
   import ModelField from "$lib/components/forms/model-field.svelte";
   import { formErrors } from "$lib/validation.js";
   import serviceSchema from "$lib/schemas/service.js";
+  import AddableMultiselect from "$lib/components/forms/addable-multiselect.svelte";
 
   export let servicesOptions, service;
 </script>
@@ -49,16 +50,17 @@
     errorMessages={$formErrors.coachOrientationModesOther}
     bind:value={service.coachOrientationModesOther} />
 
-  <ModelField
-    label="Quels sont les justificatifs à fournir ?"
-    placeholder="Sélectionnez les justificatifs à fournir"
-    type="multiselect"
-    schema={serviceSchema.credentials}
-    name="credentials"
-    errorMessages={$formErrors.credentials}
-    bind:value={service.credentials}
+  <AddableMultiselect
+    bind:values={service.credentials}
     choices={servicesOptions.credentials}
+    errorMessages={$formErrors.credentials}
+    name="credentials"
+    label="Sélectionnez les justificatifs à fournir"
+    placeholder="Aucun"
+    placeholderMulti="Choisir un autre justificatif"
+    schema={serviceSchema.credentials}
     sortSelect />
+
   <Field
     type="custom"
     label="Partagez les documents à compléter"

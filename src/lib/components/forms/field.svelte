@@ -23,6 +23,7 @@
   export let readonly = false;
   export let visible = true;
   export let placeholder = undefined;
+  export let placeholderMulti = undefined;
   export let description = "";
   export let minValue = undefined;
 
@@ -44,12 +45,6 @@
     if (context) context.onChange(evt);
   }
 </script>
-
-<style lang="postcss">
-  :global(.tag) {
-    @apply bg-magenta-80 rounded px-1;
-  }
-</style>
 
 {#if visible}
   <div class=" flex-1" class:hidden={type === "hidden"}>
@@ -82,6 +77,7 @@
             {sortSelect}
             {maxLength}
             {placeholder}
+            {placeholderMulti}
             {minValue}
             {disabled}
             {readonly}

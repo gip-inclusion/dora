@@ -47,15 +47,15 @@ const shape1 = {
 const shape2 = {
   accessConditions: {
     default: [],
-    rules: [v.isArray([v.isPK()])],
+    rules: [v.isArray([v.isCustomizablePK()])],
   },
   concernedPublic: {
     default: [],
-    rules: [v.isArray([v.isPK()])],
+    rules: [v.isArray([v.isCustomizablePK()])],
   },
   requirements: {
     default: [],
-    rules: [v.isArray([v.isPK()])],
+    rules: [v.isArray([v.isCustomizablePK()])],
   },
   isCumulative: {
     default: true,
@@ -117,7 +117,7 @@ const shape3 = {
 
   credentials: {
     default: [],
-    rules: [v.isArray([v.isPK()])],
+    rules: [v.isArray([v.isCustomizablePK()])],
   },
   forms: {
     default: [],
@@ -291,13 +291,13 @@ export const draftServiceSchema = {
   fullDesc: { rules: [v.isString()], post: [v.trim] },
 
   accessConditions: {
-    rules: [v.isArray([v.isPK()])],
+    rules: [v.isArray([v.isCustomizablePK()])],
   },
   concernedPublic: {
-    rules: [v.isArray([v.isPK()])],
+    rules: [v.isArray([v.isCustomizablePK()])],
   },
   requirements: {
-    rules: [v.isArray([v.isPK()])],
+    rules: [v.isArray([v.isCustomizablePK()])],
   },
   isCumulative: {
     rules: [v.isBool()],
@@ -324,7 +324,7 @@ export const draftServiceSchema = {
   },
 
   credentials: {
-    rules: [v.isArray([v.isPK()])],
+    rules: [v.isArray([v.isCustomizablePK()])],
   },
   forms: {
     rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
