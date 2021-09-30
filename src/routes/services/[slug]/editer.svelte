@@ -44,6 +44,7 @@
     <ServiceFormWrapper
       bind:currentStep
       bind:service
+      bind:servicesOptions
       title="Modifier un service">
       <svelte:component
         this={currentStepComponent}

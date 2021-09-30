@@ -8,6 +8,7 @@
   export let disabled = false;
   export let readonly = false;
   export let placeholder = "";
+  export let placeholderMulti = "";
   export let multiple = false;
   export let hideArrow = false;
   export let searchFunction = undefined;
@@ -36,6 +37,7 @@
   {disabled}
   {readonly}
   {placeholder}
+  {placeholderMulti}
   {multiple}
   {searchFunction}
   {postfixValueFunction}
@@ -45,6 +47,4 @@
   dropdownClassName="mt-2 rounded shadow-md"
   html5autocomplete={false}
   showLoadingIndicator
-  {hideArrow}>
-  <!-- <slot name="postfix" slot="postfix" {item} /> -->
-</AutoComplete>
+  {hideArrow} />

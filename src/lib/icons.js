@@ -22,6 +22,7 @@ export { default as searchIcon } from "remixicon/icons/System/search-line.svg?ra
 export { default as eyeIcon } from "remixicon/icons/System/eye-line.svg?raw";
 export { default as moreIcon } from "remixicon/icons/System/more-2-fill.svg?raw";
 export { default as closeIcon } from "remixicon/icons/System/close-fill.svg?raw";
+export { default as closeCircleIcon } from "remixicon/icons/System/close-circle-fill.svg?raw";
 export { default as loginIcon } from "remixicon/icons/System/login-circle-fill.svg?raw";
 export { default as dashboardIcon } from "remixicon/icons/System/dashboard-fill.svg?raw";
 export { default as settingsIcon } from "remixicon/icons/System/settings-5-line.svg?raw";

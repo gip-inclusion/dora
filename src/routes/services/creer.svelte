@@ -86,6 +86,7 @@
     <ServiceFormWrapper
       bind:currentStep
       bind:service
+      bind:servicesOptions
       title="Référencer un service">
       <svelte:component
         this={currentStepComponent}

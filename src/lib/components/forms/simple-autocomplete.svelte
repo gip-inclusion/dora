@@ -7,7 +7,7 @@
   /* eslint-disable */
   // the list of items  the user can select from
 
-  import { checkIcon } from "$lib/icons.js";
+  import { checkIcon, closeCircleIcon } from "$lib/icons.js";
 
   export let items = [];
 
@@ -25,14 +25,12 @@
 
   export let onChange = function (_newValue) {};
   export let onFocus = function () {};
-  // export let onCreate = function (_text) {};
 
   // Behaviour properties
   export let selectFirstIfEmpty = false;
   export let minCharactersToSearch = 1;
   export let maxItemsToShowInList = 0;
   export let multiple = false;
-  export let create = false;
 
   // ignores the accents when matching items
   export let ignoreAccents = true;
@@ -75,11 +73,11 @@
   // text displayed when async data is being loaded
   export let loadingText = "Chargement des resultats…";
 
-  // text displayed when async data is being loaded
-  export let createText = "Not found, add anyway?";
-
   // the text displayed when no option is selected
   export let placeholder = undefined;
+
+  // the text displayed when at least one option is selected
+  export let placeholderMulti = undefined;
 
   // apply a className to the control
   export let className = undefined;
@@ -391,16 +389,6 @@
   }
 
   function selectListItem(newValue) {
-    // if (typeof listItem === "undefined") {
-    //   // allow undefined items if create is enabled
-    //   if (create) {
-    //     onCreate(text);
-    //     return true;
-    //   }
-
-    //   return false;
-    // }
-
     // simple selection
     if (!multiple) {
       value = newValue;
@@ -839,11 +827,6 @@
     line-height: 1;
   }
 
-  .autocomplete-list-item-create {
-    padding: 5px 15px;
-    line-height: 1;
-  }
-
   .autocomplete-list-item-loading {
     padding: 5px 15px;
     line-height: 1;
@@ -875,42 +858,38 @@
     display: none;
   }
 
-  .autocomplete.is-multiple .input-container {
+  .tags-container {
     display: flex;
-    height: auto;
+    margin-top: var(--s16);
+    flex-direction: row;
     flex-wrap: wrap;
-    align-items: stretch;
-    padding-right: 0.4em;
-    padding-left: 0.4em;
-    border: 1px solid #b5b5b5;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+    gap: var(--s8);
   }
 
-  .autocomplete.is-multiple .tag {
+  .tags {
     display: flex;
-    margin-top: 0.1em;
-    margin-bottom: 0.1em;
+    flex-direction: row;
+    background-color: var(--col-magenta-brand);
+    border-radius: var(--s4);
+    padding: var(--s2) var(--s8);
   }
 
-  .autocomplete.is-multiple .tag.is-delete {
+  .tag {
+    color: var(--col-white);
+    font-size: var(--f12);
+    text-transform: uppercase;
+    line-height: 20px;
+  }
+
+  .tag.is-delete {
+    position: relative;
+    top: 2px;
+    margin-left: 4px;
     cursor: pointer;
-  }
-
-  .autocomplete.is-multiple .tags {
-    margin-right: 0.3em;
-    margin-bottom: 0;
-  }
-
-  .autocomplete.is-multiple .autocomplete-input {
-    display: flex;
-    width: 100%;
-    min-width: 3em;
-    flex: 1 1 50px;
-    border: none;
-    background: none;
-    box-shadow: none;
+    fill: currentColor;
+    width: var(--s16);
+    height: var(--s16);
+    flex-shrink: 0;
   }
 </style>
 
@@ -932,22 +911,12 @@
     {/if}
   </select>
   <div class="input-container">
-    {#if multiple && value}
-      {#each value as tagItem}
-        <div class="tags has-addons">
-          <span class="tag">{getLabelForValue(tagItem)}</span>
-          <span
-            class="tag is-delete"
-            on:click|preventDefault={unselectItem(tagItem)} />
-        </div>
-      {/each}
-    {/if}
     <input
       type="text"
       class="{inputClassName ? inputClassName : ''} input autocomplete-input"
       id={inputId}
       autocomplete={html5autocomplete ? "on" : "off"}
-      placeholder={multiple && value.length ? "" : placeholder}
+      placeholder={multiple && value.length ? placeholderMulti : placeholder}
       {name}
       {disabled}
       {title}
@@ -964,6 +933,7 @@
       <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
     {/if}
   </div>
+
   <div
     class="{dropdownClassName
       ? dropdownClassName
@@ -1014,10 +984,6 @@
       <div class="autocomplete-list-item-loading">
         <span class="text-gray-text-alt">{loadingText}</span>
       </div>
-    {:else if create}
-      <div class="autocomplete-list-item-create" on:click={selectItem}>
-        <slot name="create" {createText}>{createText}</slot>
-      </div>
     {:else if noResultsText}
       <div class="autocomplete-list-item-no-results">
         <span class="text-error">{noResultsText}</span>
@@ -1025,5 +991,19 @@
     {/if}
   </div>
 </div>
+{#if multiple && value}
+  <div class="tags-container">
+    {#each value as tagItem}
+      <div class="tags has-addons">
+        <span class="tag">{getLabelForValue(tagItem)}</span>
 
+        <div
+          class="tag is-delete"
+          on:click|preventDefault={unselectItem(tagItem)}>
+          {@html closeCircleIcon}
+        </div>
+      </div>
+    {/each}
+  </div>
+{/if}
 <svelte:window on:click={onDocumentClick} />

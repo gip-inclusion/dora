@@ -94,9 +94,11 @@ export function isSafir(msg) {
   });
 }
 
-export function isPK(msg) {
+export function isCustomizablePK(msg) {
   return (name, value, _data) => ({
-    valid: Number.isInteger(value) && value > 0,
+    valid:
+      (typeof value === "string" && value.length > 0) ||
+      (Number.isInteger(value) && value > 0),
     msg: msg || `Ce champ doit être une clé étrangère`, // TODO: this is not a valid enduser message
   });
 }

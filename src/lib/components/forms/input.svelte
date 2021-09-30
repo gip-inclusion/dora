@@ -18,6 +18,7 @@
   export let readonly = false;
   export let disabled = false;
   export let placeholder = "";
+  export let placeholderMulti = "";
   export let minValue = null;
   export let maxLength = undefined;
 
@@ -73,6 +74,7 @@
     on:blur
     onChange={onSelectChange}
     {placeholder}
+    {placeholderMulti}
     {disabled}
     {readonly} />
 {:else if type === "multiselect"}
@@ -85,6 +87,7 @@
     onChange={onSelectChange}
     multiple
     {placeholder}
+    {placeholderMulti}
     {disabled}
     {readonly} />
 {:else if type === "text"}

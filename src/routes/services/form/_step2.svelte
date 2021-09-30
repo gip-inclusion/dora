@@ -4,21 +4,23 @@
   import ModelField from "$lib/components/forms/model-field.svelte";
   import { formErrors } from "$lib/validation.js";
   import serviceSchema from "$lib/schemas/service.js";
+  import AddableMultiselect from "$lib/components/forms/addable-multiselect.svelte";
 
   export let servicesOptions;
   export let service;
 </script>
 
 <FieldSet title="Conditions d'accès pour le bénéficiaire">
-  <ModelField
-    type="multiselect"
-    label="Critères d’accès"
-    placeholder="Choisissez ou ajoutez vos critères d’admission"
-    schema={serviceSchema.accessConditions}
-    name="accessConditions"
-    errorMessages={$formErrors.accessConditions}
-    bind:value={service.accessConditions}
+  <AddableMultiselect
+    bind:values={service.accessConditions}
+    structure={service.structure}
     choices={servicesOptions.accessConditions}
+    errorMessages={$formErrors.accessConditions}
+    name="accessConditions"
+    label="Critères d’accès"
+    placeholder="Aucun"
+    placeholderMulti="Choisir un autre critères d’admission"
+    schema={serviceSchema.accessConditions}
     sortSelect>
     <FieldHelp slot="helptext" title="Critères">
       <p>
@@ -39,28 +41,33 @@
         <strong>Service cumulable</strong><br />Ce service peut-il être cumulé à
         un autre ?
       </p>
-    </FieldHelp></ModelField>
+    </FieldHelp>
+  </AddableMultiselect>
 
-  <ModelField
-    type="multiselect"
-    label="Publics concernés"
-    placeholder="Sélectionnez ou ajoutez les publics que vous adressez"
-    schema={serviceSchema.concernedPublic}
-    name="concernedPublic"
-    errorMessages={$formErrors.concernedPublic}
-    bind:value={service.concernedPublic}
+  <AddableMultiselect
+    bind:values={service.concernedPublic}
+    structure={service.structure}
     choices={servicesOptions.concernedPublic}
+    errorMessages={$formErrors.concernedPublic}
+    name="concernedPublic"
+    label="Publics concernés"
+    placeholder="Tous publics"
+    placeholderMulti="Choisir un autre type de publics"
+    schema={serviceSchema.concernedPublic}
     sortSelect />
-  <ModelField
-    type="multiselect"
-    label="Quels sont les pré-requis ou compétences ?"
-    placeholder="Choisissez ou ajoutez vos critères d’admission"
-    schema={serviceSchema.requirements}
-    name="requirements"
-    errorMessages={$formErrors.requirements}
-    bind:value={service.requirements}
+
+  <AddableMultiselect
+    bind:values={service.requirements}
+    structure={service.structure}
     choices={servicesOptions.requirements}
+    errorMessages={$formErrors.requirements}
+    name="requirements"
+    label="Quels sont les pré-requis ou compétences ?"
+    placeholder="Aucun"
+    placeholderMulti="Choisir un autre pré-requis"
+    schema={serviceSchema.requirements}
     sortSelect />
+
   <ModelField
     type="toggle"
     label="Service cumulable"
