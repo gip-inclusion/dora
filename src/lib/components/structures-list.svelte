@@ -4,7 +4,7 @@
   import { shortenString } from "$lib/utils";
   import {
     homeIcon,
-    briefcaseIcon,
+    // briefcaseIcon,
     addCircleIcon,
     settingsIcon,
   } from "$lib/icons";
@@ -46,11 +46,11 @@
             iconOnLeft
             icon={homeIcon} />
         {/if}
-        <Label
+        <!-- <Label
           label={`${structure.numServices} fiche(s)`}
           smallIcon
           iconOnLeft
-          icon={briefcaseIcon} />
+          icon={briefcaseIcon} /> -->
         <LinkButton
           label="Ajouter une offre"
           to="/services/creer"
