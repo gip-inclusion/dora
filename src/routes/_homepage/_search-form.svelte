@@ -19,7 +19,7 @@
 
   function handleSearch() {
     const query = getQuery(category, subcategory, cityCode, cityLabel);
-    goto(`recherche/?${query}`);
+    goto(`recherche?${query}`);
   }
 
   function handleCategoryChange(cat) {
