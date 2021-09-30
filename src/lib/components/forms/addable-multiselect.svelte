@@ -12,9 +12,13 @@
   export let placeholder;
   export let placeholderMulti;
   export let schema;
-
+  export let structure = null;
   let textInputVisible = false;
   let newValue;
+
+  $: filteredChoices = choices.filter(
+    (c) => c.structure == null || c.structure === structure
+  );
 
   function handleAddValue() {
     const value = newValue;
@@ -41,7 +45,7 @@
     {name}
     {errorMessages}
     bind:value={values}
-    {choices}
+    choices={filteredChoices}
     {sortSelect}>
     <slot name="helptext" slot="helptext" />
   </ModelField>
@@ -58,17 +62,17 @@
       <div class="flex flex-row gap-2 " class:hidden={!textInputVisible}>
         <Field type="text" bind:value={newValue} vertical />
         <div class="self-center">
-          <div class="flex flex-col">
+          <div class="flex flex-col gap-1">
             <Button
               label="Ajouter"
-              secondary
               nogrow
               small
+              disabled={!newValue}
               on:click={handleAddValue} />
 
             <Button
               label="Annuler"
-              tertiary
+              secondary
               nogrow
               small
               on:click={() => (textInputVisible = false)} />

@@ -21,6 +21,21 @@
       scat.startsWith(category)
     );
   }
+
+  function cleanOptions(field, structure) {
+    const flatChoices = servicesOptions[field]
+      .filter((c) => c.structure == null || c.structure === structure)
+      .map((c) => c.value);
+    service[field] = service[field].filter((value) =>
+      flatChoices.includes(value)
+    );
+  }
+  function handleStructureChange(structure) {
+    cleanOptions("accessConditions", structure);
+    cleanOptions("concernedPublic", structure);
+    cleanOptions("requirements", structure);
+    cleanOptions("credentials", structure);
+  }
 </script>
 
 {#if structures.length > 1}
@@ -33,6 +48,7 @@
       name="structure"
       errorMessages={$formErrors.structure}
       bind:value={service.structure}
+      onSelectChange={handleStructureChange}
       sortSelect
       placeholder="Sélectionnez votre structure" />
   </FieldSet>

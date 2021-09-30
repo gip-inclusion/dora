@@ -13,6 +13,7 @@
 <FieldSet title="Conditions d'accès pour le bénéficiaire">
   <AddableMultiselect
     bind:values={service.accessConditions}
+    structure={service.structure}
     choices={servicesOptions.accessConditions}
     errorMessages={$formErrors.accessConditions}
     name="accessConditions"
@@ -20,8 +21,8 @@
     placeholder="Aucun"
     placeholderMulti="Choisir un autre critères d’admission"
     schema={serviceSchema.accessConditions}
-    sortSelect
-    ><FieldHelp slot="helptext" title="Critères">
+    sortSelect>
+    <FieldHelp slot="helptext" title="Critères">
       <p>
         <strong>Critères d’admission</strong><br />
         Précisez les critères d’éligibilité du public afin de recevoir des orientations
@@ -45,6 +46,7 @@
 
   <AddableMultiselect
     bind:values={service.concernedPublic}
+    structure={service.structure}
     choices={servicesOptions.concernedPublic}
     errorMessages={$formErrors.concernedPublic}
     name="concernedPublic"
@@ -56,6 +58,7 @@
 
   <AddableMultiselect
     bind:values={service.requirements}
+    structure={service.structure}
     choices={servicesOptions.requirements}
     errorMessages={$formErrors.requirements}
     name="requirements"

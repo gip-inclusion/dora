@@ -52,6 +52,7 @@
 
   <AddableMultiselect
     bind:values={service.credentials}
+    structure={service.structure}
     choices={servicesOptions.credentials}
     errorMessages={$formErrors.credentials}
     name="credentials"
