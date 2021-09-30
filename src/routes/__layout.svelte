@@ -119,7 +119,8 @@
         separator
         light />
       <NavItem href="" label="Données personnelles" separator light />
-      <NavItem href="" label="Gestion des cookies" light />
+      <NavItem href="" label="Gestion des cookies" separator light />
+      <NavItem href="" label="Accessibilité : non conforme" light />
     </div>
   </CenteredGrid>
 </footer>
