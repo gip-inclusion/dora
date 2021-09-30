@@ -76,7 +76,9 @@
         label="Communauté de l’inclusion"
         href="https://communaute.inclusion.beta.gouv.fr/"
         external />
-      <NavItem label="Contacter l’équipe" href="mailto:dora@beta.gouv.fr" />
+      <NavItem
+        label="Contacter l’équipe"
+        href="https://itou.typeform.com/doracontactsupp" />
     </div>
   </CenteredGrid>
 </header>
@@ -97,9 +99,12 @@
       mobiliser rapidement le service le plus adapté au besoin de leur
       bénéficiaire.
       <div class="flex gap-3 mt-2 font-bold">
-        <a href="https://gouvernement.fr">gouvernement.fr</a>
-        <a href="https://service-public.fr">service-public.fr</a>
-        <a href="https://data.gouv.fr">data.gouv.fr</a>
+        <a target="_blank" rel="noopener" href="https://gouvernement.fr"
+          >gouvernement.fr</a>
+        <a target="_blank" rel="noopener" href="https://service-public.fr"
+          >service-public.fr</a>
+        <a target="_blank" rel="noopener" href="https://data.gouv.fr"
+          >data.gouv.fr</a>
       </div>
     </div>
   </CenteredGrid>

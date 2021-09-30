@@ -14,6 +14,8 @@
   class:text-gray-dark={!light}
   class:pr-4={!separator}
   {href}
+  target="_blank"
+  rel="noopener"
   {disabled}>
   {label}
   {#if external}
