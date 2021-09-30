@@ -32,12 +32,12 @@
   <div class="header">
     <h4><a href="/services/{result.slug}">{result.name}</a></h4>
     <div class="flex flex-row gap-2 mt-1">
-      <a href="/structures/{result.structure}">
-        <Label
-          label={shortenString(result.structureInfo.name)}
-          iconOnLeft
-          icon={homeIcon} />
-      </a>
+      <!-- <a href="/structures/{result.structure}"> -->
+      <Label
+        label={shortenString(result.structureInfo.name)}
+        iconOnLeft
+        icon={homeIcon} />
+      <!-- </a> -->
       <Label
         label={`${result.postalCode}, ${result.city}`}
         iconOnLeft
