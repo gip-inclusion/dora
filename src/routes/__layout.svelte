@@ -1,23 +1,17 @@
 <script context="module">
   import { getUserInfo } from "$lib/auth";
-  import { ENVIRONMENT } from "$lib/env.js";
 
-  // import * as Sentry from "@sentry/browser";
-  // import { Integrations } from "@sentry/tracing";
-  // import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
+  import * as Sentry from "@sentry/browser";
 
-  // if (ENVIRONMENT !== "local") {
-  //   Sentry.init({
-  //     dsn: SENTRY_DSN,
-  //     environment: ENVIRONMENT, // ,
-  //     integrations: [new Integrations.BrowserTracing()],
+  import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
 
-  //     // Set tracesSampleRate to 1.0 to capture 100%
-  //     // of transactions for performance monitoring.
-  //     // We recommend adjusting this value in production
-  //     tracesSampleRate: 1.0,
-  //   });
-  // }
+  if (ENVIRONMENT !== "local") {
+    Sentry.init({
+      dsn: SENTRY_DSN,
+      environment: ENVIRONMENT,
+      tracesSampleRate: 0,
+    });
+  }
 
   export async function load({ _page, _fetch, _session, _context }) {
     await getUserInfo();
