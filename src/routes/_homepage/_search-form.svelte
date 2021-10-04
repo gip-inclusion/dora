@@ -53,14 +53,6 @@
     flex-direction: row;
     gap: var(--s16);
   }
-
-  p {
-    width: 76%;
-    margin: 0 auto;
-    color: var(--col-text-alt2);
-    font-size: var(--f12);
-    text-align: center;
-  }
 </style>
 
 <div class="wrapper-top">
