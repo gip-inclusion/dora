@@ -69,6 +69,7 @@
   <form on:submit|preventDefault={handleSearch}>
     <Field
       type="select"
+      name="category"
       bind:value={category}
       onSelectChange={handleCategoryChange}
       placeholder="Choisissez"
@@ -79,13 +80,14 @@
 
     <Field
       type="select"
+      name="subcategory"
       bind:value={subcategory}
       placeholder="Choisissez"
       choices={subCategoryChoices}
       label="Besoin(s)"
       vertical />
 
-    <Field type="custom" label="Lieu" required vertical>
+    <Field type="custom" label="Lieu" name="city" required vertical>
       <CitySearch
         slot="custom-input"
         name="city"
