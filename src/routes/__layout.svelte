@@ -113,7 +113,12 @@
         separator
         light />
       <NavItem href="" label="Données personnelles" separator light />
-      <NavItem href="" label="Gestion des cookies" separator light />
+      <NavItem
+        href=""
+        label="Gestion des cookies"
+        separator
+        light
+        on:click={() => tarteaucitron.userInterface.openPanel()} />
       <NavItem href="" label="Accessibilité : non conforme" light />
     </div>
   </CenteredGrid>

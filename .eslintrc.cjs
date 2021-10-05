@@ -13,6 +13,9 @@ module.exports = {
     es2021: true,
     node: true,
   },
+  globals: {
+    tarteaucitron: "readonly",
+  },
   rules: {
     eqeqeq: ["error", "smart"],
     "func-style": [

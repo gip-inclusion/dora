@@ -9,10 +9,11 @@
 </script>
 
 <a
-  class="flex flex-row items-center justify-center py-2 text-sm text-center rounded outline-none  focus:shadow-focus"
+  class="flex flex-row items-center justify-center py-2 text-sm text-center rounded outline-none"
   class:text-gray-text-alt2={light}
   class:text-gray-dark={!light}
   class:pr-4={!separator}
+  on:click
   {href}
   target="_blank"
   rel="noopener"
