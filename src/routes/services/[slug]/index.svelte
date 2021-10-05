@@ -12,9 +12,24 @@
 </script>
 
 <script>
+  import { onMount } from "svelte";
+  import { browser } from "$app/env";
   import ServiceCard from "./_service-card.svelte";
 
   export let service;
+
+  onMount(() => {
+    if (browser) {
+      plausible("service", {
+        props: {
+          service: service.name,
+          slug: service.slug,
+          structure: service.structureInfo.name,
+          departement: service.department,
+        },
+      });
+    }
+  });
 </script>
 
 <svelte:head>
