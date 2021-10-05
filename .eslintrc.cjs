@@ -15,6 +15,7 @@ module.exports = {
   },
   globals: {
     tarteaucitron: "readonly",
+    plausible: "readonly",
   },
   rules: {
     eqeqeq: ["error", "smart"],

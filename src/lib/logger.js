@@ -7,9 +7,9 @@ export function assert(condition, message) {
   Sentry.captureException(new Error(message));
 }
 
-export function logException(exc) {
+export function logException(exc, ...args) {
   console.error(exc);
-  Sentry.captureException(exc);
+  Sentry.captureException(exc, { extra: { ...args } });
 }
 export function log(message, ...args) {
   console.log(message);
