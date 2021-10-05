@@ -1,6 +1,6 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-config-idiomatic-order"],
-  "ignoreFiles": ["build/**", "src/app.css"],
+  "ignoreFiles": ["build/**", "src/app.css", "static/**"],
   "rules": {
     "declaration-colon-newline-after": null,
     "selector-pseudo-class-no-unknown": [

@@ -6,7 +6,7 @@
   import ServiceHeader from "./_service-header.svelte";
   import ServicePresentation from "./_service-presentation.svelte";
   import Label from "$lib/components/label.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
+  // import LinkButton from "$lib/components/link-button.svelte";
   export let service;
   export let isPreview = false;
 </script>
@@ -59,13 +59,13 @@
     <div class="structure-info">
       <h4>{service.structureInfo.name}</h4>
       <Label label={service.structureInfo.shortDesc} italic />
-      <div class="noprint">
+      <!-- <div class="noprint">
         <LinkButton
           to="/structures/{service.structure}"
           small
           nogrow
           label="Voir l’offre complète de services" />
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="service-info">

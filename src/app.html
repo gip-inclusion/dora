@@ -49,9 +49,25 @@
           url("/Marianne/Marianne-Bold_Italic.woff") format("woff");
       }
     </style>
+
+    <!-- Tarte au citron (cookies) -->
+    <script
+      type="text/javascript"
+      src="/tarteaucitron-1.9.4/tarteaucitron.js"
+    ></script>
+    <script type="text/javascript" src="/tarteaucitron.init.js"></script>
+
+    <!-- Hotjar -->
+    <script type="text/javascript">
+      tarteaucitron.user.hotjarId = 2493322;
+      tarteaucitron.user.HotjarSv = 6;
+    </script>
   </head>
 
   <body>
     <div id="svelte">%svelte.body%</div>
+    <script type="text/javascript">
+      (tarteaucitron.job = tarteaucitron.job || []).push("hotjar");
+    </script>
   </body>
 </html>

@@ -16,7 +16,12 @@
     <p>
       Si d’ici 10 minutes vous n’avez toujours rien reçu, consultez votre
       dossier « indésirable » ou « spam ». Si le problème persiste,
-      <a class="underline" href="mailto:dora@beta.gouv.fr">contactez-nous</a>.
+      <a
+        class="underline"
+        target="_blank"
+        rel="noopener"
+        href="https://itou.typeform.com/doracontactsupp">contactez-nous</a
+      >.
     </p>
   </Info>
 </Fieldset>

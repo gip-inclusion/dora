@@ -14,7 +14,7 @@
   import ButtonMenu from "$lib/components/button-menu.svelte";
 </script>
 
-{#if $page.path !== "/auth/connexion" && browser}
+{#if browser}
   {#if $userInfo}
     <ButtonMenu label="Mon compte" iconOnLeft icon={userSmileIcon}>
       <LinkButton
@@ -30,21 +30,27 @@
         iconOnRight
         noBackground />
     </ButtonMenu>
-    <LinkButton icon={addCircleIcon} to={`/services/creer`} />
+    <LinkButton
+      icon={addCircleIcon}
+      to={`/services/creer`}
+      ariaLabel="Référencer un service" />
   {:else}
-    <LinkButton
-      label="Inscription"
-      icon={loginIcon}
-      iconOnLeft
-      noBackground
-      to={`/auth/inscription`} />
-
-    <LinkButton
-      label="Connexion"
-      icon={userSmileIcon}
-      iconOnLeft
-      noBackground
-      to={`/auth/connexion?next=${encodeURIComponent($page.path)}`} />
+    {#if $page.path !== "/auth/inscription"}
+      <LinkButton
+        label="Inscription"
+        icon={loginIcon}
+        iconOnLeft
+        noBackground
+        to={`/auth/inscription`} />
+    {/if}
+    {#if $page.path !== "/auth/connexion"}
+      <LinkButton
+        label="Connexion"
+        icon={userSmileIcon}
+        iconOnLeft
+        noBackground
+        to={`/auth/connexion?next=${encodeURIComponent($page.path)}`} />
+    {/if}
     <LinkButton
       label="Référencer un service"
       icon={addCircleIcon}

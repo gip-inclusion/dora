@@ -1,5 +1,6 @@
 <script>
   export let label = "";
+  export let ariaLabel = undefined;
   export let type = "button";
   export let name = null;
   export let icon = null;
@@ -112,6 +113,7 @@
   class:flash-success={flashSuccess}
   on:click
   on:mousedown={handleMouseDown}
+  aria-label={ariaLabel}
   {disabled}>
   {#if iconOnLeft}
     <div class="{iw} {ih} mr-1 fill-current ">
@@ -124,6 +126,7 @@
     </div>
   {/if}
   {label}
+
   {#if iconOnRight}
     <div class="{iw} {ih} ml-1 fill-current">
       {@html icon}

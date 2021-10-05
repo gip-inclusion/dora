@@ -1,23 +1,17 @@
 <script context="module">
   import { getUserInfo } from "$lib/auth";
-  import { ENVIRONMENT } from "$lib/env.js";
 
-  // import * as Sentry from "@sentry/browser";
-  // import { Integrations } from "@sentry/tracing";
-  // import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
+  import * as Sentry from "@sentry/browser";
 
-  // if (ENVIRONMENT !== "local") {
-  //   Sentry.init({
-  //     dsn: SENTRY_DSN,
-  //     environment: ENVIRONMENT, // ,
-  //     integrations: [new Integrations.BrowserTracing()],
+  import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
 
-  //     // Set tracesSampleRate to 1.0 to capture 100%
-  //     // of transactions for performance monitoring.
-  //     // We recommend adjusting this value in production
-  //     tracesSampleRate: 1.0,
-  //   });
-  // }
+  if (ENVIRONMENT !== "local") {
+    Sentry.init({
+      dsn: SENTRY_DSN,
+      environment: ENVIRONMENT,
+      tracesSampleRate: 0,
+    });
+  }
 
   export async function load({ _page, _fetch, _session, _context }) {
     await getUserInfo();
@@ -76,7 +70,9 @@
         label="Communauté de l’inclusion"
         href="https://communaute.inclusion.beta.gouv.fr/"
         external />
-      <NavItem label="Contacter l’équipe" href="mailto:dora@beta.gouv.fr" />
+      <NavItem
+        label="Contacter l’équipe"
+        href="https://itou.typeform.com/doracontactsupp" />
     </div>
   </CenteredGrid>
 </header>
@@ -97,9 +93,12 @@
       mobiliser rapidement le service le plus adapté au besoin de leur
       bénéficiaire.
       <div class="flex gap-3 mt-2 font-bold">
-        <a href="https://gouvernement.fr">gouvernement.fr</a>
-        <a href="https://service-public.fr">service-public.fr</a>
-        <a href="https://data.gouv.fr">data.gouv.fr</a>
+        <a target="_blank" rel="noopener" href="https://gouvernement.fr"
+          >gouvernement.fr</a>
+        <a target="_blank" rel="noopener" href="https://service-public.fr"
+          >service-public.fr</a>
+        <a target="_blank" rel="noopener" href="https://data.gouv.fr"
+          >data.gouv.fr</a>
       </div>
     </div>
   </CenteredGrid>
@@ -114,7 +113,13 @@
         separator
         light />
       <NavItem href="" label="Données personnelles" separator light />
-      <NavItem href="" label="Gestion des cookies" light />
+      <NavItem
+        href=""
+        label="Gestion des cookies"
+        separator
+        light
+        on:click={() => tarteaucitron.userInterface.openPanel()} />
+      <NavItem href="" label="Accessibilité : non conforme" light />
     </div>
   </CenteredGrid>
 </footer>

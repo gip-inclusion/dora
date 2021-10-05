@@ -15,7 +15,7 @@
 
   function handleSearch() {
     const query = getQuery(category, subcategory, cityCode, cityLabel);
-    goto(`recherche/?${query}`);
+    goto(`recherche?${query}`);
   }
 
   $: catChoices = servicesOptions.categories;
@@ -111,6 +111,8 @@
   <p>
     Le service DORA est actuellement <a
       class="underline"
+      target="_blank"
+      rel="noopener"
       href="https://beta.gouv.fr/startups/dora.html">en construction</a
     >, et se concentre sur 3 thématiques de services (mobilité, garde d’enfant
     et hébergement/logement) et 3 territoires (Loire-Atlantique, Ardennes et La

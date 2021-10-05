@@ -1,22 +1,17 @@
 <script>
-  import { goto } from "$app/navigation";
-
   import Button from "./button.svelte";
 
   export let to;
+  export let otherTab = false;
+  export let nofollow = false;
   export let small = false;
   export let noPadding = false;
-
-  function handleClick() {
-    if (to) {
-      goto(to);
-    }
-  }
+  export let ariaLabel = undefined;
 </script>
 
-<Button
-  type="button"
-  {...$$restProps}
-  on:click={handleClick}
-  {small}
-  {noPadding} />
+<a
+  target={otherTab ? "_blank" : "_self"}
+  rel="noopener {nofollow ? 'nofollow' : ''}"
+  href={to}>
+  <Button type="button" {...$$restProps} {ariaLabel} {small} {noPadding} />
+</a>

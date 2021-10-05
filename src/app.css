@@ -211,3 +211,46 @@ h5 {
   size: A4 portrait;
   margin: 1cm;
 }
+
+/* Tarte au citron */
+
+#tarteaucitronRoot #tarteaucitronAlertBig {
+  background-color: var(--col-white) !important;
+  box-shadow: var(--shadow-md) !important;
+  color: var(--col-text) !important;
+}
+
+#tarteaucitronAlertBig #tarteaucitronDisclaimerAlert {
+  font-family: Marianne !important;
+
+  color: var(--col-text) !important;
+}
+#tarteaucitronAlertBig #tarteaucitronPersonalize2 {
+  font-family: Marianne !important;
+
+  background-color: var(--col-magenta-cta) !important;
+}
+
+#tarteaucitronAlertBig #tarteaucitronAllDenied2 {
+  font-family: Marianne !important;
+
+  background-color: var(--col-gray-dark) !important;
+}
+
+#tarteaucitronAlertBig #tarteaucitronCloseAlert {
+  font-family: Marianne !important;
+
+  color: var(--col-text-alt2) !important;
+}
+
+#tarteaucitronAlertBig #tarteaucitronPrivacyUrl {
+  font-family: Marianne !important;
+
+  color: var(--col-magenta-cta) !important;
+}
+
+#tarteaucitronRoot #tarteaucitronCloseCross {
+  font-family: Marianne !important;
+
+  color: var(--col-text) !important;
+}

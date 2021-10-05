@@ -137,7 +137,11 @@
           </p>
           <p class="text-sm">
             Le service DORA est actuellement
-            <a class="underline" href="https://beta.gouv.fr/startups/dora.html">
+            <a
+              class="underline"
+              target="_blank"
+              rel="noopener"
+              href="https://beta.gouv.fr/startups/dora.html">
               en construction
             </a>, et se concentre sur 3 thématiques de services (mobilité, garde
             d’enfant et hébergement/logement) et 3 territoires
