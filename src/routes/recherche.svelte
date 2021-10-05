@@ -47,6 +47,8 @@
 </script>
 
 <script>
+  import { onMount } from "svelte";
+  import { browser } from "$app/env";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
 
@@ -62,6 +64,14 @@
   export let servicesOptions;
   export let category, subcategory, cityCode, cityLabel;
   export let results;
+
+  onMount(() => {
+    if (browser) {
+      plausible("recherche", {
+        props: { category, subcategory, cityCode, cityLabel },
+      });
+    }
+  });
 </script>
 
 <style>

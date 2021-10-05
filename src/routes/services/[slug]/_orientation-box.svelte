@@ -1,5 +1,6 @@
 <script>
   import { page } from "$app/stores";
+  import { browser } from "$app/env";
   import Button from "$lib/components/button.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import Label from "$lib/components/label.svelte";
@@ -13,6 +14,19 @@
   export let pdfUrl = `${PDF_SERVICE_URL}/service-pdf/${service.slug}`;
 
   let orientationModalIsOpen = false;
+  function handleMobilize() {
+    orientationModalIsOpen = true;
+    if (browser) {
+      plausible("mobilisation", {
+        props: {
+          service: service.name,
+          slug: service.slug,
+          structure: service.structureInfo.name,
+          departement: service.department,
+        },
+      });
+    }
+  }
 </script>
 
 <style>
@@ -39,7 +53,7 @@
   </div>
 
   <Label label="Découvrez les modalités prévues pour mobiliser ce service :" />
-  <Button on:click={() => (orientationModalIsOpen = true)} label="Mobiliser" />
+  <Button on:click={handleMobilize} label="Mobiliser" />
 
   <OrientationModal {service} bind:isOpen={orientationModalIsOpen} />
 
