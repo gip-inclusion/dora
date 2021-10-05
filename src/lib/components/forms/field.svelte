@@ -70,6 +70,7 @@
             bind:value
             on:blur={handleBlur}
             on:change={handleChange}
+            on:input
             {onSelectChange}
             {type}
             {name}

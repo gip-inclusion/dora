@@ -15,6 +15,11 @@
   export let structure = null;
   let textInputVisible = false;
   let newValue;
+  let newValueErrors = [];
+
+  // TODO: this should come from the schema
+  const maxLength = 140;
+  const errorMsg = `${maxLength} caractères maximum`;
 
   $: filteredChoices = choices.filter(
     (c) => c.structure == null || c.structure === structure
@@ -22,6 +27,11 @@
 
   function handleAddValue() {
     const value = newValue;
+    if (value.length > maxLength) {
+      newValueErrors = [errorMsg];
+      return;
+    }
+
     choices = [
       ...choices,
       {
@@ -30,8 +40,17 @@
       },
     ];
     values = [...values, value];
-
+    newValue = "";
     textInputVisible = false;
+  }
+
+  function handleChangeValue(evt) {
+    const length = evt.target.value.length;
+    if (length > maxLength) {
+      newValueErrors = [errorMsg];
+    } else {
+      newValueErrors = [];
+    }
   }
 </script>
 
@@ -60,7 +79,12 @@
           on:click={() => (textInputVisible = true)} />
       </div>
       <div class="flex flex-row gap-2 " class:hidden={!textInputVisible}>
-        <Field type="text" bind:value={newValue} vertical />
+        <Field
+          type="text"
+          bind:value={newValue}
+          on:input={handleChangeValue}
+          errorMessages={newValueErrors}
+          vertical />
         <div class="self-center">
           <div class="flex flex-col gap-1">
             <Button

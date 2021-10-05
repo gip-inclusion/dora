@@ -96,6 +96,7 @@
     id={name}
     bind:value
     on:blur
+    on:input
     type="text"
     {placeholder}
     {disabled}
