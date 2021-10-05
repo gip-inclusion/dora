@@ -112,7 +112,6 @@
   <CenteredGrid gridRow="2" bordertop>
     <div class="flex col-start-1 col-span-full">
       <NavItem href="" label="Plan du site" separator light />
-      <NavItem href="" label="Accessibilité" separator light />
       <NavItem
         href=""
         label="Mentions légales"
