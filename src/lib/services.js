@@ -4,6 +4,7 @@ import { get } from "svelte/store";
 import { markdownToHTML, htmlToMarkdown, fetchData } from "$lib/utils.js";
 import { getApiURL } from "$lib/utils/api.js";
 import { token } from "$lib/auth";
+import { logException } from "./logger";
 
 function toBack(service) {
   if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
@@ -130,5 +131,10 @@ export async function getLastDraft() {
 
 export async function getServicesOptions() {
   const url = `${getApiURL()}/services-options/`;
-  return (await fetchData(url)).data;
+  try {
+    return (await fetchData(url)).data;
+  } catch (err) {
+    logException(err);
+    return {};
+  }
 }

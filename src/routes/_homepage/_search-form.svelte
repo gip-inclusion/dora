@@ -7,7 +7,7 @@
   import { searchIcon } from "$lib/icons";
   import { getQuery } from "./_search";
 
-  export let servicesOptions;
+  export let servicesOptions = {};
   const categoryChoices = servicesOptions.categories;
 
   let category;
@@ -66,48 +66,52 @@
 </div>
 
 <div class="wrapper">
-  <form on:submit|preventDefault={handleSearch}>
-    <Field
-      type="select"
-      name="category"
-      bind:value={category}
-      onSelectChange={handleCategoryChange}
-      placeholder="Choisissez"
-      choices={categoryChoices}
-      label="Thématique"
-      vertical
-      required />
+  {#if categoryChoices}
+    <form on:submit|preventDefault={handleSearch}>
+      <Field
+        type="select"
+        name="category"
+        bind:value={category}
+        onSelectChange={handleCategoryChange}
+        placeholder="Choisissez"
+        choices={categoryChoices}
+        label="Thématique"
+        vertical
+        required />
 
-    <Field
-      type="select"
-      name="subcategory"
-      bind:value={subcategory}
-      placeholder="Choisissez"
-      choices={subCategoryChoices}
-      label="Besoin(s)"
-      vertical />
+      <Field
+        type="select"
+        name="subcategory"
+        bind:value={subcategory}
+        placeholder="Choisissez"
+        choices={subCategoryChoices}
+        label="Besoin(s)"
+        vertical />
 
-    <Field type="custom" label="Lieu" name="city" required vertical>
-      <CitySearch
-        slot="custom-input"
-        name="city"
-        placeholder="Ville du bénéficiaire"
-        handleChange={(city) => {
-          cityCode = city.properties.citycode;
-          cityLabel = `${
-            city.properties.label
-          } (${city.properties.postcode.slice(0, 2)})`;
-        }} />
-    </Field>
+      <Field type="custom" label="Lieu" name="city" required vertical>
+        <CitySearch
+          slot="custom-input"
+          name="city"
+          placeholder="Ville du bénéficiaire"
+          handleChange={(city) => {
+            cityCode = city.properties.citycode;
+            cityLabel = `${
+              city.properties.label
+            } (${city.properties.postcode.slice(0, 2)})`;
+          }} />
+      </Field>
 
-    <Button
-      type="submit"
-      label="Trouver"
-      icon={searchIcon}
-      disabled={!category || !cityCode}
-      iconOnLeft
-      horizontalBottom
-      small
-      preventDefaultOnMouseDown />
-  </form>
+      <Button
+        type="submit"
+        label="Trouver"
+        icon={searchIcon}
+        disabled={!category || !cityCode}
+        iconOnLeft
+        horizontalBottom
+        small
+        preventDefaultOnMouseDown />
+    </form>
+  {:else}
+    <p class="text-gray-text">Impossible de contacter le serveur</p>
+  {/if}
 </div>

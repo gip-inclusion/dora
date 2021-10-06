@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 import { browser } from "$app/env";
 import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
+import { log, logException } from "./logger";
 
 const tokenKey = "token";
 
@@ -42,22 +43,27 @@ export async function getUserInfo() {
     if (lsToken) {
       // Check if the token is still valid
       const url = `${getApiURL()}/auth/user-info/`;
-      const result = await fetch(url, {
-        method: "POST",
-        headers: {
-          Accept: defaultAcceptHeader,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ key: lsToken }),
-      });
-      if (result.status === 200) {
-        token.set(lsToken);
-        userInfo.set(await result.json());
-      }
-      if (result.status === 404) {
-        // The token is invalid, clear localStorage
-        clearToken();
-        clearUserInfo();
+      try {
+        const result = await fetch(url, {
+          method: "POST",
+          headers: {
+            Accept: defaultAcceptHeader,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ key: lsToken }),
+        });
+        if (result.status === 200) {
+          token.set(lsToken);
+          userInfo.set(await result.json());
+        } else if (result.status === 404) {
+          // The token is invalid, clear localStorage
+          clearToken();
+          clearUserInfo();
+        } else {
+          log("Unexpected status code", { result });
+        }
+      } catch (err) {
+        logException(err);
       }
     }
   }
