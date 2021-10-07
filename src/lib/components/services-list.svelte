@@ -82,12 +82,15 @@
             noBackground />
         </div>
         <div>
-          <ButtonMenu icon={moreIcon}>
+          <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
             {#if !service.isDraft}
               <div>
                 <Button
                   label="Désactiver"
-                  on:click={() => handleUnpublish(service)}
+                  on:click={() => {
+                    handleUnpublish(service);
+                    onCloseParent();
+                  }}
                   icon={fileCloudIcon}
                   iconOnRight
                   small
