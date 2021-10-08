@@ -56,6 +56,7 @@
   <AddUserModal
     bind:isOpen={addUserModalIsOpen}
     {structure}
+    {members}
     onRefresh={handleRefreshMemberList} />
   <CenteredGrid --col-bg="var(--col-gray-00)">
     <div class="col-start-1 col-span-full mb-10">

@@ -26,6 +26,7 @@
   ];
   export let isOpen = false;
   export let structure;
+  export let members;
   export let onRefresh;
 
   let firstName, lastName, email;
@@ -37,6 +38,17 @@
   function handleChange(_validatedData) {}
 
   function handleSubmit(validatedData) {
+    const membersEmails = members.map((m) => m.user.email);
+    if (membersEmails.includes(validatedData.email)) {
+      return {
+        ok: false,
+        json: () => ({
+          email: [
+            { message: "Cet utilisateur fait déjà partie de votre structure" },
+          ],
+        }),
+      };
+    }
     const url = `${getApiURL()}/structure-members/?structure=${structure.slug}`;
     return fetch(url, {
       method: "POST",
@@ -107,6 +119,7 @@
         bind:value={email}
         required
         placeholder="email_pro@e-mail.com" />
+
       <Field
         name="level"
         errorMessages={$formErrors.level}
