@@ -2,7 +2,8 @@ import { ENVIRONMENT } from "$lib/env.js";
 
 const productionContent = `
 User-agent: *
-Allow: /
+Disallow: /tableau-de-bord/
+Disallow: /auth/
 `.trim();
 
 const devContent = `
