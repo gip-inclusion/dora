@@ -72,7 +72,7 @@
             <p class="text-gray-text-alt">SIRET: {structure.siret}</p>
           </Fieldset>
         </div>
-        <div>
+        <div class="flex-1">
           {#if members}
             <div class="mt-6">
               <h3>Vos collaborateurs</h3>

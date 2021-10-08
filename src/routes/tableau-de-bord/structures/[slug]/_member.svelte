@@ -1,13 +1,12 @@
 <script>
-  import { userInfo } from "$lib/auth";
+  // import { userInfo } from "$lib/auth";
 
   import ButtonMenu from "$lib/components/button-menu.svelte";
   import Button from "$lib/components/button.svelte";
   import Label from "$lib/components/label.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
 
   import { fileEditIcon, fileForbidIcon, userIcon, moreIcon } from "$lib/icons";
-  import { deleteMember } from "$lib/structures";
+  import { deleteMember, resendInvite } from "$lib/structures";
   import ChangeUserModal from "./_change-user-modal.svelte";
 
   export let member;
@@ -15,7 +14,7 @@
   export let isMyself;
 
   let changeUserModalIsOpen = false;
-
+  let flashInviteButtonSuccess = false;
   $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
   async function handleDelete() {
     if (
@@ -27,8 +26,11 @@
       await onRefresh();
     }
   }
-
-  $: console.log($userInfo);
+  async function handleResendInvite() {
+    flashInviteButtonSuccess = true;
+    await resendInvite(member.id);
+    flashInviteButtonSuccess = false;
+  }
 </script>
 
 <style>
@@ -50,7 +52,13 @@
     {#if !member.isValid}
       <Label>
         <p class="text-gray-text-alt">Invitation envoyée</p>
-        <LinkButton label="Renvoyer" noBackground small />
+        <Button
+          label="Renvoyer"
+          noBackground
+          small
+          flashSuccess={flashInviteButtonSuccess}
+          disabled={flashInviteButtonSuccess}
+          on:click={handleResendInvite} />
       </Label>
     {/if}
   </div>
