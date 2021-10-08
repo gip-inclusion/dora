@@ -1,6 +1,6 @@
 <script>
   import Fieldset from "$lib/components/forms/fieldset.svelte";
-  import Info from "../_info.svelte";
+  import Info from "$lib/components/info.svelte";
   import { registrationInfo } from "./_store.js";
 </script>
 

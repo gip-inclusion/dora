@@ -25,7 +25,7 @@
 
 <script>
   import Fieldset from "$lib/components/forms/fieldset.svelte";
-  import Info from "./_info.svelte";
+  import Info from "$lib/components/info.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import connexionPic from "$lib/assets/illu_connexion-optimise.svg";

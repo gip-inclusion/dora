@@ -18,7 +18,7 @@
 
   import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
 
-  import Info from "./_info.svelte";
+  import Info from "$lib/components/info.svelte";
 
   let email = "";
   let password = "";
