@@ -1,14 +1,21 @@
 <script context="module">
+  export const ssr = false;
   import { getStructure, getMembers } from "$lib/structures";
+  import { getMyStructures } from "$lib/structures";
 
   export async function load({ page, _fetch, _session, _context }) {
+    const structures = await getMyStructures();
     const structureSlug = page.params.slug;
-    return {
-      props: {
-        structure: await getStructure(structureSlug),
-        members: await getMembers(structureSlug),
-      },
-    };
+    const structure = structures.find((s) => (s.slug = structureSlug));
+    if (structure) {
+      return {
+        props: {
+          structure: await getStructure(structureSlug),
+          members: await getMembers(structureSlug),
+        },
+      };
+    }
+    return null;
   }
 </script>
 
