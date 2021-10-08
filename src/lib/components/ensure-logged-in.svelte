@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { userInfo } from "$lib/auth";
 
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
@@ -13,4 +14,6 @@
   });
 </script>
 
-<slot />
+{#if $userInfo}
+  <slot />
+{/if}
