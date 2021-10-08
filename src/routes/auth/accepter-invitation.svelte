@@ -59,21 +59,23 @@
         <Info
           label="Vous avez rejoint la structure {structureName}"
           positiveMood>
-          {#if mustSetPassword}
-            <LinkButton
-              label="Choisissez votre mot de passe"
-              to="/auth/reinitialiser-mdp?token={resetToken}" />
-          {:else}
+          {#if !mustSetPassword}
             <p class="mb-2">
               Utilisez l’adresse e-mail et le mot de passe saisis lors de
               l’inscription pour vous connecter.
             </p>
           {/if}
         </Info>
-        <LinkButton
-          to="/auth/connexion"
-          label="Aller à la page de connexion"
-          preventDefaultOnMouseDown />
+        {#if mustSetPassword}
+          <LinkButton
+            label="Choisissez votre mot de passe"
+            to="/auth/reinitialiser-mdp?token={resetToken}" />
+        {:else}
+          <LinkButton
+            to="/auth/connexion"
+            label="Aller à la page de connexion"
+            preventDefaultOnMouseDown />
+        {/if}
       {:else}
         <Info label="Le lien a expiré ou n’est pas valide" negativeMood>
           <p>
