@@ -33,7 +33,7 @@
     {#each structures as structure}
       <div class="structure flex flex-row gap-2">
         <div class="flex-grow flex flex-row items-center">
-          <a href="/structures/{structure.slug}">
+          <a href="/tableau-de-bord/structures/{structure.slug}">
             <h5>
               {shortenString(structure.name)}
               {#if structure.typologyDisplay}({structure.typologyDisplay}){/if}
