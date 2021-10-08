@@ -82,7 +82,9 @@
                   <Member
                     {member}
                     onRefresh={handleRefreshMemberList}
-                    isMyself={member.user.email === $userInfo.email} />
+                    isMyself={member.user.email === $userInfo.email}
+                    isOnlyAdmin={member.user.email === $userInfo.email &&
+                      members.filter((m) => m.isAdmin).length === 1} />
                 {/each}
               </div>
               <div class="flex justify-end">

@@ -3,6 +3,7 @@
 
   export let icon;
   export let label = undefined;
+  export let disabled = false;
   export let iconOnLeft = undefined,
     iconOnRight = undefined;
   let isOpen = false;
@@ -61,6 +62,7 @@
       {iconOnRight}
       {label}
       noBackground
+      {disabled}
       on:click={() => (isOpen = !isOpen)} />
   </div>
   <div

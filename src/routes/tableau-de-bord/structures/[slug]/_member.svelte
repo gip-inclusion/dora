@@ -11,7 +11,7 @@
 
   export let member;
   export let onRefresh;
-  export let isMyself;
+  export let isMyself, isOnlyAdmin;
 
   let changeUserModalIsOpen = false;
   let flashInviteButtonSuccess = false;
@@ -39,10 +39,14 @@
     box-shadow: var(--shadow-sm);
     gap: var(--s16);
   }
+
+  .is-own {
+    background-color: var(--col-gray-01);
+  }
 </style>
 
 <ChangeUserModal bind:isOpen={changeUserModalIsOpen} bind:member {onRefresh} />
-<div class="wrapper">
+<div class="wrapper" class:is-own={isMyself}>
   <h5>{member.user.fullName}</h5>
   <div class="flex-grow ">
     {#if !member.isValid}
@@ -61,7 +65,10 @@
   <div class="flex-grow" />
   <Label label={userLevel} smallIcon iconOnLeft icon={userIcon} />
   <div>
-    <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
+    <ButtonMenu
+      icon={moreIcon}
+      let:onClose={onCloseParent}
+      disabled={isOnlyAdmin}>
       <div>
         <Button
           label="Modifier"
