@@ -1,0 +1,89 @@
+<script>
+  import { userInfo } from "$lib/auth";
+
+  import ButtonMenu from "$lib/components/button-menu.svelte";
+  import Button from "$lib/components/button.svelte";
+  import Label from "$lib/components/label.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
+
+  import { fileEditIcon, fileForbidIcon, userIcon, moreIcon } from "$lib/icons";
+  import { deleteMember } from "$lib/structures";
+  import ChangeUserModal from "./_change-user-modal.svelte";
+
+  export let member;
+  export let onRefresh;
+  export let isMyself;
+
+  let changeUserModalIsOpen = false;
+
+  $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
+  async function handleDelete() {
+    if (
+      confirm(
+        `Supprimer l’utilisateur ${member.user.name || member.user.email} ?`
+      )
+    ) {
+      await deleteMember(member.id);
+      await onRefresh();
+    }
+  }
+
+  $: console.log($userInfo);
+</script>
+
+<style>
+  .wrapper {
+    display: flex;
+    align-items: center;
+    padding: 6px 16px;
+    background-color: var(--col-white);
+    border-radius: var(--s8);
+    box-shadow: var(--shadow-sm);
+    gap: var(--s16);
+  }
+</style>
+
+<ChangeUserModal bind:isOpen={changeUserModalIsOpen} bind:member {onRefresh} />
+<div class="wrapper">
+  <h5>{member.user.name || member.user.email}</h5>
+  <div class="flex-grow ">
+    {#if !member.isValid}
+      <Label>
+        <p class="text-gray-text-alt">Invitation envoyée</p>
+        <LinkButton label="Renvoyer" noBackground small />
+      </Label>
+    {/if}
+  </div>
+  <div class="flex-grow" />
+  <Label label={userLevel} smallIcon iconOnLeft icon={userIcon} />
+  <div>
+    <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
+      <div>
+        <Button
+          label="Modifier"
+          on:click={() => {
+            changeUserModalIsOpen = true;
+            onCloseParent();
+          }}
+          icon={fileEditIcon}
+          iconOnRight
+          small
+          noBackground />
+      </div>
+      {#if !isMyself}
+        <div>
+          <Button
+            label="Supprimer"
+            on:click={() => {
+              handleDelete();
+              onCloseParent();
+            }}
+            icon={fileForbidIcon}
+            iconOnRight
+            small
+            noBackground />
+        </div>
+      {/if}
+    </ButtonMenu>
+  </div>
+</div>

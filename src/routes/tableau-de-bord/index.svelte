@@ -20,6 +20,7 @@
   import ServicesList from "$lib/components/services-list.svelte";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import StructuresList from "$lib/components/structures-list.svelte";
+  import { settingsIcon } from "$lib/icons";
 
   export let services;
   export let structures;
@@ -27,9 +28,17 @@
 
 <EnsureLoggedIn>
   <CenteredGrid --col-bg="var(--col-gray-00)">
-    <h2 class="col-start-1 col-span-full">
-      Bonjour{#if $userInfo.name}&nbsp;{$userInfo.name}{/if},
-    </h2>
+    <div class="flex flex-row col-span-full justify-between">
+      <h2 class="col-start-1 col-span-full">
+        Bonjour{#if $userInfo.name}&nbsp;{$userInfo.name}{/if},
+      </h2>
+      <LinkButton
+        label="Ma structure"
+        noBackground
+        icon={settingsIcon}
+        iconOnRight
+        to={`/tableau-de-bord/structures/${structures[0].slug}`} />
+    </div>
     <div class="col-start-1 col-span-full text-left">
       {#if $userInfo.isStaff}
         <div class="flex">

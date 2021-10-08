@@ -6,6 +6,7 @@ import { fetchData, htmlToMarkdown, markdownToHTML } from "$lib/utils.js";
 import { getApiURL } from "$lib/utils/api.js";
 
 import { token } from "$lib/auth";
+import { logException } from "./logger";
 
 export async function siretWasAlreadyClaimed(siret) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;
@@ -120,4 +121,37 @@ export async function modifyStructure(structure) {
 export async function getStructuresOptions() {
   const url = `${getApiURL()}/structures-options/`;
   return (await fetchData(url)).data;
+}
+
+export async function getMembers(slug) {
+  const url = `${getApiURL()}/structure-members/?structure=${slug}`;
+
+  const result = await fetchData(url);
+  if (result.ok) return result.data;
+  return null;
+}
+
+export async function deleteMember(uuid) {
+  const url = `${getApiURL()}/structure-members/${uuid}/`;
+  const method = "DELETE";
+  const res = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      Authorization: `Token ${get(token)}`,
+    },
+  });
+
+  const result = {
+    ok: res.ok,
+    status: res.status,
+  };
+  if (!res.ok) {
+    try {
+      result.error = await res.json();
+    } catch (err) {
+      logException(err);
+    }
+  }
+  return result;
 }

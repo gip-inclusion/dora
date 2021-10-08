@@ -27,6 +27,7 @@ module.exports = {
       },
     ],
     "jsdoc/require-jsdoc": "off",
+    "no-alert": "warn",
     "no-console": "warn",
     "no-undef-init": "off",
     "no-undefined": "off",

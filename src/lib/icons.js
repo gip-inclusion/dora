@@ -27,6 +27,7 @@ export { default as loginIcon } from "remixicon/icons/System/login-circle-fill.s
 export { default as dashboardIcon } from "remixicon/icons/System/dashboard-fill.svg?raw";
 export { default as settingsIcon } from "remixicon/icons/System/settings-5-line.svg?raw";
 
+export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
 export { default as emotionHappyIcon } from "remixicon/icons/User/emotion-happy-fill.svg?raw";
 
@@ -43,6 +44,7 @@ export { default as homeIcon } from "remixicon/icons/Buildings/home-6-line.svg?r
 
 export { default as fileTransferIcon } from "remixicon/icons/Document/file-transfer-line.svg?raw";
 export { default as fileEditIcon } from "remixicon/icons/Document/file-edit-line.svg?raw";
+export { default as fileForbidIcon } from "remixicon/icons/Document/file-forbid-line.svg?raw";
 export { default as fileCloudIcon } from "remixicon/icons/Document/file-cloud-line.svg?raw";
 
 export { default as briefcaseIcon } from "remixicon/icons/Business/briefcase-3-fill.svg?raw";
