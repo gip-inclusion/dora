@@ -20,11 +20,12 @@
     "En cochant cette case je suis d’accord avec les <a class='underline' href='/mentions-legales'>mentions légales</a> et l’utilisation de mes données afin de créer un compte sur la plateforme DORA.";
 
   function handleSubmit(validatedData) {
-    const url = `${getApiURL()}/auth/register-service-and-user/`;
+    const url = `${getApiURL()}/auth/register-structure-and-user/`;
     return fetch(url, {
       method: "POST",
       body: JSON.stringify({
-        name: validatedData.name,
+        firstName: validatedData.firstName,
+        lastName: validatedData.lastName,
         email: validatedData.email,
         password: validatedData.password,
         siret: validatedData.siret,
@@ -55,15 +56,26 @@
       {/each}
       <div class="relative flex flex-col gap-y-4">
         <Field
-          name="name"
-          errorMessages={$formErrors.name}
+          name="firstName"
+          errorMessages={$formErrors.firstName}
+          label="Votre prénom"
+          vertical
+          type="text"
+          required
+          placeholder="Aurélien"
+          autocomplete="given-name"
+          bind:value={$registrationInfo.firstName} />
+
+        <Field
+          name="lastName"
+          errorMessages={$formErrors.lastName}
           label="Votre nom"
           vertical
           type="text"
           required
-          placeholder="Votre nom complet. Ex. Aurélien Durand"
-          autocomplete="name"
-          bind:value={$registrationInfo.name} />
+          placeholder="Durand"
+          autocomplete="family-name"
+          bind:value={$registrationInfo.lastName} />
 
         <Field
           name="email"

@@ -66,7 +66,7 @@
         label="Nom"
         vertical
         type="text"
-        value={member.user.name}
+        value={member.user.fullName}
         disabled />
       <Field
         name="email"

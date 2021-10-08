@@ -10,7 +10,7 @@ const tokenKey = "token";
  */
 
 export const token = writable(null);
-/** @type {Writable<{name: string, email: string, isStaff: boolean} | null>} */
+/** @type {Writable<{firstName: string, lastName: string, fullName: string, shortName: string, email: string, isStaff: boolean} | null>} */
 export const userInfo = writable(null);
 
 // Rules for auto generation by password managers

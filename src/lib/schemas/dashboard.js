@@ -1,7 +1,13 @@
 import * as v from "./utils";
 
 export const addUserSchema = {
-  name: {
+  firstName: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(140)],
+    post: [v.trim],
+  },
+  lastName: {
     default: "",
     required: true,
     rules: [v.isString(), v.maxStrLength(140)],

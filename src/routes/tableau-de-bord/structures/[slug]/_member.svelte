@@ -17,11 +17,7 @@
   let flashInviteButtonSuccess = false;
   $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
   async function handleDelete() {
-    if (
-      confirm(
-        `Supprimer l’utilisateur ${member.user.name || member.user.email} ?`
-      )
-    ) {
+    if (confirm(`Supprimer l’utilisateur ${member.user.fullName} ?`)) {
       await deleteMember(member.id);
       await onRefresh();
     }
@@ -47,7 +43,7 @@
 
 <ChangeUserModal bind:isOpen={changeUserModalIsOpen} bind:member {onRefresh} />
 <div class="wrapper">
-  <h5>{member.user.name || member.user.email}</h5>
+  <h5>{member.user.fullName}</h5>
   <div class="flex-grow ">
     {#if !member.isValid}
       <Label>

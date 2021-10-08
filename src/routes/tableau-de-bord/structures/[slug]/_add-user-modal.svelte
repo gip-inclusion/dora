@@ -28,7 +28,7 @@
   export let structure;
   export let onRefresh;
 
-  let name, email;
+  let firstName, lastName, email;
   let level = "user";
   let successEmailMsg;
   let confirmationModalIsOpen = false;
@@ -42,7 +42,8 @@
       method: "POST",
       body: JSON.stringify({
         user: {
-          name: validatedData.name,
+          firstName: validatedData.firstName,
+          lastName: validatedData.lastName,
           email: validatedData.email,
         },
         isAdmin: validatedData.level === "admin",
@@ -59,7 +60,8 @@
     await onRefresh();
     isOpen = false;
     successEmailMsg = email;
-    name = null;
+    firstName = null;
+    lastName = null;
     email = null;
     level = "user";
     confirmationModalIsOpen = true;
@@ -68,7 +70,7 @@
 
 <Modal bind:isOpen>
   <Form
-    data={{ name, email, level }}
+    data={{ firstName, lastName, email, level }}
     schema={addUserSchema}
     onChange={handleChange}
     onSubmit={handleSubmit}
@@ -78,14 +80,24 @@
       title="Ajouter des collaborateurs"
       description="Merci de renseigner les informations de contact de l’utilisateur que vous souhaitez inviter.">
       <Field
-        name="name"
-        errorMessages={$formErrors.name}
-        label="Son nom complet"
+        name="firstName"
+        errorMessages={$formErrors.firstName}
+        label="Son prénom"
         vertical
         type="text"
-        placeholder="Aurélien Durand"
-        bind:value={name}
+        placeholder="Aurélien"
+        bind:value={firstName}
         required />
+      <Field
+        name="lastName"
+        errorMessages={$formErrors.lastName}
+        label="Son nom"
+        vertical
+        type="text"
+        placeholder="Durand"
+        bind:value={lastName}
+        required />
+
       <Field
         name="email"
         errorMessages={$formErrors.email}
@@ -108,7 +120,7 @@
       <Button
         type="submit"
         label="Envoyer l’invitation"
-        disabled={!name || !email || !level || requesting}
+        disabled={!firstName || !lastName || !email || !level || requesting}
         preventDefaultOnMouseDown />
     </Fieldset>
   </Form>
