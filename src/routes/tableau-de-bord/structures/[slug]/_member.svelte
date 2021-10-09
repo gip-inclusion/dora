@@ -49,7 +49,7 @@
 <div class="wrapper" class:is-own={isMyself}>
   <h5>{member.user.fullName}</h5>
   <div class="flex-grow ">
-    {#if !member.isValid}
+    {#if !member.isValid || member.mustSetPassword}
       <Label>
         <p class="text-gray-text-alt">Invitation envoyée</p>
         <Button
