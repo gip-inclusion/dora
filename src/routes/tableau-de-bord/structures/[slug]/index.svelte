@@ -1,10 +1,13 @@
 <script context="module">
   export const ssr = false;
   import { getStructure, getMembers } from "$lib/structures";
-  import { getMyStructures } from "$lib/structures";
+  import { getMyStructures, getStructures } from "$lib/structures";
+  import { isStaff } from "$lib/auth";
 
   export async function load({ page, _fetch, _session, _context }) {
-    const structures = await getMyStructures();
+    const structures = isStaff
+      ? await getStructures()
+      : await getMyStructures();
     const structureSlug = page.params.slug;
     const structure = structures.find((s) => (s.slug = structureSlug));
     if (structure) {
@@ -28,6 +31,7 @@
   import Button from "$lib/components/button.svelte";
   import AddUserModal from "./_add-user-modal.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
 
   export let structure, members;
 
@@ -71,6 +75,11 @@
             description="Vous trouvez ici les informations concernant votre structure, tels qu’ils sont visibles sur le site DORA.">
             <h4>{structure.name}</h4>
             <p class="text-gray-text-alt">SIRET: {structure.siret}</p>
+            <div class="flex justify-end">
+              <LinkButton
+                label="Modifier les informations"
+                to="/structures/{structure.slug}/editer" />
+            </div>
           </Fieldset>
         </div>
         <div class="flex-1">
