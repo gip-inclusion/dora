@@ -124,7 +124,8 @@
         <Button
           type="submit"
           label="Demandez votre accès"
-          disabled={!hasAgreedToLegalMentions || requesting} />
+          disabled={!hasAgreedToLegalMentions || requesting}
+          preventDefaultOnMouseDown />
       </div></Fieldset>
   </Form>
 </div>
