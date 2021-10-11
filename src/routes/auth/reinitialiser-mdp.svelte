@@ -1,5 +1,10 @@
 <script context="module">
+  // We don't need ssr here, and don't want to api call done twice
+  // given that the token will be deleted after validation
+  export const ssr = false;
+
   import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
+  import { disconnect } from "$lib/auth";
 
   export async function load({ page, _fetch, _session, _context }) {
     const token = page.query.get("token");
@@ -12,7 +17,13 @@
       },
       body: JSON.stringify({ key: token }),
     });
-    const resetToken = result.ok ? token : null;
+    let resetToken = null;
+    if (result.ok) {
+      // log out of the current session in case we were already connected with
+      // a different account
+      disconnect();
+      resetToken = token;
+    }
 
     return {
       props: { resetToken },

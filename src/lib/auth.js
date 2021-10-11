@@ -73,3 +73,9 @@ export function isStaff() {
   const info = get(userInfo);
   return info?.isStaff;
 }
+
+export function disconnect() {
+  clearToken();
+  clearUserInfo();
+  localStorage.clear();
+}
