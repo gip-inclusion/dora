@@ -1,6 +1,7 @@
 <script>
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
+  import Label from "$lib/components/label.svelte";
   import { shortenString } from "$lib/utils";
   import {
     homeIcon,
@@ -8,7 +9,6 @@
     addCircleIcon,
     settingsIcon,
   } from "$lib/icons";
-  import Label from "./label.svelte";
 
   export let structures;
 </script>
@@ -33,9 +33,10 @@
     {#each structures as structure}
       <div class="structure flex flex-row gap-2">
         <div class="flex-grow flex flex-row items-center">
-          <a href="/structures/{structure.slug}">
+          <a href="/tableau-de-bord/structures/{structure.slug}">
             <h5>
-              {shortenString(structure.name)} ({structure.typologyDisplay})
+              {shortenString(structure.name)}
+              {#if structure.typologyDisplay}({structure.typologyDisplay}){/if}
             </h5>
           </a>
         </div>
@@ -58,8 +59,8 @@
           iconOnRight
           noBackground />
         <LinkButton
-          label="Modifier"
-          to="/structures/{structure.slug}/editer"
+          label="Gérer"
+          to="/tableau-de-bord/structures/{structure.slug}"
           iconOnRight
           icon={settingsIcon}
           noBackground />

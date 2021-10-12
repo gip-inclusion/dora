@@ -33,20 +33,39 @@
   import LogoMinistere from "$lib/assets/logo-ministere-travail.svg";
 
   import MenuActions from "./_menu_actions.svelte";
+
+  function handleOpenCookiesPanel() {
+    tarteaucitron.userInterface.openPanel();
+  }
 </script>
+
+<style>
+  .dev-banner {
+    border-top: 8px solid orange;
+  }
+</style>
 
 <svelte:head>
   <script
     defer
     data-domain={$page.host}
     src="https://plausible.io/js/plausible.js"></script>
+  <script>
+    window.plausible =
+      window.plausible ||
+      function () {
+        (window.plausible.q = window.plausible.q || []).push(arguments);
+      };
+  </script>
 
   {#if ENVIRONMENT !== "production"}
     <meta name="robots" content="noindex" />
   {/if}
 </svelte:head>
 
-<header class="grid row-start-1 shadow-md z-10 relative noprint">
+<header
+  class="grid row-start-1 shadow-md z-10 relative noprint"
+  class:dev-banner={ENVIRONMENT !== "production"}>
   <CenteredGrid>
     <div class="flex flex-row items-center row-start-1 col-span-full py-3/2 ">
       <a class="flex flex-row gap-5 " href="/">
@@ -105,7 +124,6 @@
   <CenteredGrid gridRow="2" bordertop>
     <div class="flex col-start-1 col-span-full">
       <NavItem href="" label="Plan du site" separator light />
-      <NavItem href="" label="Accessibilité" separator light />
       <NavItem
         href=""
         label="Mentions légales"
@@ -118,7 +136,7 @@
         label="Gestion des cookies"
         separator
         light
-        on:click={() => tarteaucitron.userInterface.openPanel()} />
+        on:click={() => handleOpenCookiesPanel} />
       <NavItem href="" label="Accessibilité : non conforme" light />
     </div>
   </CenteredGrid>

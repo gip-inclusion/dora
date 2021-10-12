@@ -1,0 +1,30 @@
+<script context="module">
+  import { getServices } from "$lib/services";
+
+  export async function load({ _page, _fetch, _session, _context }) {
+    return {
+      props: {
+        services: await getServices(),
+      },
+    };
+  }
+</script>
+
+<script>
+  import EnsureStaff from "$lib/components/ensure-staff.svelte";
+  import ServicesList from "../_services-list.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  export let services;
+</script>
+
+<EnsureStaff>
+  <CenteredGrid --col-bg="var(--col-gray-00)">
+    <div class="col-start-1 col-span-full text-left">
+      <div class="mb-1">
+        <h2>Tous les services</h2>
+      </div>
+      <div class="border-t border-gray-03" />
+      <ServicesList {services} />
+    </div>
+  </CenteredGrid>
+</EnsureStaff>

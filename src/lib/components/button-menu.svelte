@@ -3,10 +3,12 @@
 
   export let icon;
   export let label = undefined;
+  export let disabled = false;
   export let iconOnLeft = undefined,
     iconOnRight = undefined;
   let isOpen = false;
   let childrenListNode;
+
   function clickOutside(node) {
     const handleClick = (event) => {
       if (node && !node.contains(event.target) && !event.defaultPrevented) {
@@ -60,6 +62,7 @@
       {iconOnRight}
       {label}
       noBackground
+      {disabled}
       on:click={() => (isOpen = !isOpen)} />
   </div>
   <div
@@ -68,6 +71,6 @@
     bind:this={childrenListNode}
     use:clickOutside
     on:click_outside={handleClickOutside}>
-    <slot />
+    <slot onClose={() => (isOpen = false)} />
   </div>
 </div>

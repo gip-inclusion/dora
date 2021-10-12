@@ -44,7 +44,12 @@ export const passwordLostSchema = {
 };
 
 export const accountSchema = {
-  name: {
+  firstName: {
+    default: "",
+    rules: [v.isString(), v.maxStrLength(140)],
+    post: [v.trim],
+  },
+  lastName: {
     default: "",
     required: true,
     rules: [v.isString(), v.maxStrLength(140)],

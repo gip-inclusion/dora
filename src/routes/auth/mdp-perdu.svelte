@@ -13,7 +13,7 @@
   import Form from "$lib/components/forms/form.svelte";
 
   import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
-  import Info from "./_info.svelte";
+  import Info from "$lib/components/info.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
 
   let email = "";

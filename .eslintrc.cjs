@@ -15,6 +15,7 @@ module.exports = {
   },
   globals: {
     tarteaucitron: "readonly",
+    plausible: "readonly",
   },
   rules: {
     eqeqeq: ["error", "smart"],
@@ -26,6 +27,7 @@ module.exports = {
       },
     ],
     "jsdoc/require-jsdoc": "off",
+    "no-alert": "warn",
     "no-console": "warn",
     "no-undef-init": "off",
     "no-undefined": "off",

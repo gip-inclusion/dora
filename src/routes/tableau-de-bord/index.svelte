@@ -17,22 +17,28 @@
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
-  import ServicesList from "$lib/components/services-list.svelte";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import StructuresList from "$lib/components/structures-list.svelte";
+
+  import StructuresList from "./_structures-list.svelte";
+  import ServicesList from "./_services-list.svelte";
 
   export let services;
   export let structures;
 </script>
 
-{#if $userInfo}
-  <EnsureLoggedIn>
-    <CenteredGrid --col-bg="var(--col-gray-00)">
+<EnsureLoggedIn>
+  <CenteredGrid --col-bg="var(--col-gray-00)">
+    <div class="flex flex-row col-span-full justify-between">
       <h2 class="col-start-1 col-span-full">
-        Bonjour{#if $userInfo.name}&nbsp;{$userInfo.name}{/if},
+        Bonjour {$userInfo.shortName},
       </h2>
-      <div class="col-start-1 col-span-full text-left">
-        {#if $userInfo.isStaff}
+    </div>
+    <div class="col-start-1 col-span-full text-left">
+      {#if $userInfo.isStaff}
+        <div class="rounded-md p-1 bg-gray-bg mb-6">
+          <h4 class="text-information">
+            ⚠️ Seulement pour les super-utilisateurs
+          </h4>
           <div class="flex">
             <LinkButton
               label="Créer une structure"
@@ -40,25 +46,33 @@
               noBackground />
 
             <LinkButton
-              label="Référencer un service"
-              to="/services/creer"
+              label="Afficher toutes les structures"
+              to="/tableau-de-bord/admin/structures"
+              noBackground />
+
+            <LinkButton
+              label="Afficher tous les services"
+              to="/tableau-de-bord/admin/services"
               noBackground />
           </div>
-        {/if}
-
-        <div class="mb-4">
-          <h2>Services</h2>
         </div>
-        <div class="border-t border-gray-03" />
+      {/if}
 
-        <ServicesList {services} />
-
-        <div class="mb-4">
-          <h2>Structures</h2>
+      {#if structures.length}
+        <div class="mb-1">
+          <h2>Mes Structures</h2>
         </div>
         <div class="border-t border-gray-03" />
         <StructuresList {structures} />
-      </div>
-    </CenteredGrid>
-  </EnsureLoggedIn>
-{/if}
+      {/if}
+
+      {#if services.length}
+        <div class="mb-1">
+          <h2>Mes Services</h2>
+        </div>
+        <div class="border-t border-gray-03" />
+        <ServicesList {services} />
+      {/if}
+    </div>
+  </CenteredGrid>
+</EnsureLoggedIn>

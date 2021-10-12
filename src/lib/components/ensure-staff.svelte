@@ -14,6 +14,6 @@
   });
 </script>
 
-{#if $userInfo}
+{#if $userInfo && $userInfo.isStaff}
   <slot />
 {/if}
