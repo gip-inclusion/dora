@@ -136,7 +136,7 @@
         label="Gestion des cookies"
         separator
         light
-        on:click={() => handleOpenCookiesPanel} />
+        on:click={handleOpenCookiesPanel} />
       <NavItem href="" label="Accessibilité : non conforme" light />
     </div>
   </CenteredGrid>
