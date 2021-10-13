@@ -151,7 +151,7 @@
               class="underline"
               target="_blank"
               rel="noopener"
-              href="https://beta.gouv.fr/startups/dora.html">
+              href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090">
               en construction
             </a>, et se concentre sur 3 thématiques de services (mobilité, garde
             d’enfant et hébergement/logement) et 3 territoires
