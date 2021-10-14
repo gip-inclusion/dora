@@ -16,6 +16,7 @@ module.exports = {
   globals: {
     tarteaucitron: "readonly",
     plausible: "readonly",
+    iFrameResize: "readonly",
   },
   rules: {
     eqeqeq: ["error", "smart"],
