@@ -14,6 +14,8 @@
 
   .content {
     display: flex;
+    padding-right: var(--s16);
+    padding-left: var(--s16);
     background-color: var(--col-bg);
   }
 
