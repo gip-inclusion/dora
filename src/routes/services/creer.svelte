@@ -67,13 +67,13 @@
 
 <EnsureLoggedIn>
   {#if !structures.length}
-    <CenteredGrid>
+    <CenteredGrid topPadded>
       <div class="col-start-1 col-span-full  mb-6">
         <h4>Vous n’êtes rattaché à aucune structure !</h4>
       </div></CenteredGrid>
   {:else}
     {#if lastDraft && lastDraftNotificationVisible}
-      <CenteredGrid>
+      <CenteredGrid topPadded>
         <TempInlineInfo
           label="Vous n’avez pas finalisé votre précédente saisie"
           description="Souhaitez-vous continuer la saisie du service « {lastDraft.name} » ?"

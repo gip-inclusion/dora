@@ -46,10 +46,9 @@
     <meta name="robots" content="noindex" />
   {/if}
 </svelte:head>
-
 <Header />
 
-<main class="global-content-wrapper grid row-start-2">
+<main>
   <slot />
 </main>
 

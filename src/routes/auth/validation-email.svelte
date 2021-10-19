@@ -39,13 +39,13 @@
   export let validated;
 </script>
 
-<CenteredGrid>
+<CenteredGrid topPadded>
   <div class="col-start-1 mb-6 text-center col-span-full">
     <h1 class="text-france-blue text-13xl">Créer son compte DORA</h1>
   </div>
 </CenteredGrid>
 
-<CenteredGrid gridRow="2" roundedbg>
+<CenteredGrid roundedbg>
   <div class="col-start-1 col-end-7 mb-4 mt-6">
     <img src={connexionPic} alt="" />
   </div>

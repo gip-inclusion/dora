@@ -19,7 +19,7 @@
 </style>
 
 <header
-  class="grid row-start-1 shadow-md z-10 relative noprint"
+  class="shadow-md z-10 relative noprint"
   class:dev-banner={ENVIRONMENT !== "production"}>
   <CenteredGrid>
     <div class="flex flex-row items-center row-start-1 col-span-full py-3/2 ">
@@ -38,7 +38,7 @@
       </div>
     </div>
   </CenteredGrid>
-  <CenteredGrid gridRow="2" bordertop>
+  <CenteredGrid bordertop>
     <nav class="flex flex-row col-span-full">
       <NavItem
         label="Communauté de l’inclusion"

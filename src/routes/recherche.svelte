@@ -111,14 +111,14 @@
   }
 </style>
 
-<CenteredGrid>
+<CenteredGrid topPadded>
   <div class="col-start-1 col-span-full text-center mb-6">
     <p class="text-gray-text text-base">Consultez les services</p>
     <h1 class="text-france-blue text-13xl">Résultats de recherche</h1>
   </div>
 </CenteredGrid>
 
-<CenteredGrid gridRow="2" roundedbg>
+<CenteredGrid roundedbg>
   <div class="search-form">
     <SearchTweakForm
       numResults={results.length}

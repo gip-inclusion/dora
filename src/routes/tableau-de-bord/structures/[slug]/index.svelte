@@ -62,7 +62,7 @@
     {structure}
     {members}
     onRefresh={handleRefreshMemberList} />
-  <CenteredGrid --col-bg="var(--col-gray-00)">
+  <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
     <div class="col-start-1 col-span-full mb-10">
       <div class="mb-4">
         <h2>Ma structure</h2>

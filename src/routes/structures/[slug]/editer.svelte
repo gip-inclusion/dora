@@ -24,7 +24,7 @@
 </svelte:head>
 
 <EnsureLoggedIn>
-  <CenteredGrid roundedbg>
+  <CenteredGrid roundedbg topPadded>
     <div class="col-span-8 col-start-1 mb-4">
       <StructureFormWrapper
         {structure}

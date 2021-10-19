@@ -75,7 +75,7 @@
   }
 </style>
 
-<CenteredGrid --col-bg="var(--col-transparent)">
+<CenteredGrid --col-bg="var(--col-transparent)" topPadded>
   <div class="col-start-1 col-span-full mb-5">
     <div class="flex flex-row">
       <div class="flex-1">
@@ -97,7 +97,6 @@
 </CenteredGrid>
 
 <CenteredGrid
-  gridRow="2"
   extraClass="homepage-second-row"
   --col-bg="var(--col-magenta-dark)">
   <div class="col-start-1 col-span-full mb-5">
@@ -128,7 +127,7 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid gridRow="3">
+<CenteredGrid>
   <div class="col-start-1 col-span-full mb-5 text-center ">
     <div class="w-1/2 mx-auto mb-8">
       <h5>

@@ -40,7 +40,7 @@
   }
 </style>
 
-<CenteredGrid --col-bg="var(--col-gray-00)">
+<CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
   <div class="wrapper col-start-1 col-span-full">
     {#each services as service}
       <div class="service flex flex-row gap-2">

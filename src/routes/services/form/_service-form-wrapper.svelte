@@ -305,7 +305,7 @@
 {#if currentStep === 5}
   <Preview {service} />
 {:else}
-  <CenteredGrid>
+  <CenteredGrid topPadded>
     <div class="col-start-1 col-span-full text-center mb-6">
       <div class="mx-auto">
         <h1 class="text-france-blue text-13xl">
@@ -329,7 +329,7 @@
       </div>
     </div>
   </CenteredGrid>
-  <CenteredGrid gridRow="2" roundedbg>
+  <CenteredGrid roundedbg>
     <div class="col-span-8 col-start-1 mb-8">
       <div bind:this={errorDiv}>
         {#each $formErrors.nonFieldErrors || [] as msg}
@@ -340,7 +340,7 @@
     </div>
   </CenteredGrid>
 {/if}
-<CenteredGrid gridRow="3" sticky>
+<CenteredGrid sticky>
   <NavButtons
     _currentPageIsValid={isValid(schemas.get(currentStep))}
     isDraft={service.isDraft}

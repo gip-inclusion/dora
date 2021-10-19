@@ -11,7 +11,7 @@
   }
 </script>
 
-<footer class="grid row-start-3 border-t-2 border-france-blue pt-5/2 noprint">
+<footer class="border-t-2 border-france-blue pt-5/2 noprint">
   <CenteredGrid>
     <div class="col-span-5 mb-5">
       <img class="inline" src={LogoRF} alt="" width="124" height="110" />
@@ -32,7 +32,7 @@
       </div>
     </div>
   </CenteredGrid>
-  <CenteredGrid gridRow="2" bordertop>
+  <CenteredGrid bordertop>
     <nav class="flex col-start-1 col-span-full">
       <NavItem href="" label="Plan du site" separator light />
       <NavItem

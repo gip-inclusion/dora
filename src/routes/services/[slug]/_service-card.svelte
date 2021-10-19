@@ -42,12 +42,11 @@
   }
 </style>
 
-<CenteredGrid --col-bg="var(--col-france-blue)">
+<CenteredGrid --col-bg="var(--col-france-blue)" topPadded>
   <ServiceHeader {service} {isPreview} />
 </CenteredGrid>
 
 <CenteredGrid
-  gridRow="2"
   roundedbg
   --col-under-bg="var(--col-france-blue)"
   --col-content-bg="var(--col-bg)">
