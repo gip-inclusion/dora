@@ -50,12 +50,18 @@
 
   form {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: var(--s16);
+  }
+
+  @media (min-width: 820px) {
+    form {
+      flex-direction: row;
+    }
   }
 </style>
 
-<div class="wrapper-top">
+<div class="wrapper-top text-center lg:text-left">
   ⚠️ Le service DORA est actuellement <a
     class="underline"
     target="_blank"

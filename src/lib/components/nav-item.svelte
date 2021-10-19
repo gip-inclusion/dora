@@ -9,7 +9,7 @@
 </script>
 
 <a
-  class="flex flex-row items-center justify-center py-2 text-sm text-center rounded outline-none"
+  class="flex flex-row items-center py-1 text-sm rounded outline-none"
   class:text-gray-text-alt2={light}
   class:text-gray-dark={!light}
   class:pr-4={!separator}

@@ -26,6 +26,7 @@ export { default as closeCircleIcon } from "remixicon/icons/System/close-circle-
 export { default as loginIcon } from "remixicon/icons/System/login-circle-fill.svg?raw";
 export { default as dashboardIcon } from "remixicon/icons/System/dashboard-fill.svg?raw";
 export { default as settingsIcon } from "remixicon/icons/System/settings-5-line.svg?raw";
+export { default as menuIcon } from "remixicon/icons/System/menu-line.svg?raw";
 
 export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";

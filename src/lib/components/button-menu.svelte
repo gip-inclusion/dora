@@ -52,6 +52,12 @@
   .open {
     display: flex;
   }
+
+  @media (min-width: 375px) {
+    .children {
+      flex-direction: row;
+    }
+  }
 </style>
 
 <div class="wrapper">

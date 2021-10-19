@@ -14,6 +14,7 @@
 
   .content {
     display: flex;
+    justify-content: center;
     padding-right: var(--s16);
     padding-left: var(--s16);
     background-color: var(--col-bg);
@@ -21,10 +22,9 @@
 
   .centered-grid {
     display: grid;
-    margin-right: auto;
-    margin-left: auto;
+    margin: 0 auto;
     column-gap: var(--s24);
-    grid-template-columns: repeat(12, 78px);
+    grid-template-columns: repeat(12, minmax(1px, 78px));
     row-gap: 1.5rem;
   }
 
