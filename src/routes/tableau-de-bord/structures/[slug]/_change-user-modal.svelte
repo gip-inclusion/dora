@@ -60,7 +60,7 @@
     onChange={handleChange}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}>
-    <Fieldset title="Modifier les informations">
+    <Fieldset title="Modifier les informations" noTopPadding>
       <Field
         name="name"
         label="Nom"

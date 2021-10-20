@@ -90,7 +90,8 @@
     bind:requesting>
     <Fieldset
       title="Ajouter des collaborateurs"
-      description="Merci de renseigner les informations de contact de l’utilisateur que vous souhaitez inviter.">
+      description="Merci de renseigner les informations de contact de l’utilisateur que vous souhaitez inviter."
+      noTopPadding>
       <Field
         name="firstName"
         errorMessages={$formErrors.firstName}

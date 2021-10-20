@@ -1,5 +1,6 @@
 <script>
   import { browser } from "$app/env";
+  import { closeLineIcon } from "$lib/icons";
 
   export let isOpen;
 
@@ -12,6 +13,10 @@
 
   function handleKeydown(event) {
     if (event.key === "Escape") isOpen = false;
+  }
+
+  function handleClose() {
+    isOpen = false;
   }
 </script>
 
@@ -50,5 +55,10 @@
 <div id="background" class:show={isOpen} on:click={() => (isOpen = false)} />
 
 <div id="modal" class:show={isOpen}>
+  <div
+    class="w-3 h-3 ml-1 fixed right-1 top-1 text-gray-text-alt fill-current"
+    on:click={handleClose}>
+    {@html closeLineIcon}
+  </div>
   <slot />
 </div>
