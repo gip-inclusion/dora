@@ -14,13 +14,6 @@
     border-left: 4px solid var(--col-available);
   }
 
-  .tags-wrapper {
-    display: flex;
-    flex-direction: row;
-    margin-top: var(--s16);
-    margin-bottom: var(--s8);
-  }
-
   p {
     margin-top: var(--s16);
     color: var(--col-text-alt2);

@@ -43,11 +43,6 @@
   .show {
     display: block !important;
   }
-
-  .no-scroll {
-    position: fixed;
-    overflow: hidden;
-  }
 </style>
 
 <svelte:window on:keydown={handleKeydown} />

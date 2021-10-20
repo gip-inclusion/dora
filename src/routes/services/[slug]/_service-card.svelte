@@ -19,12 +19,6 @@
     gap: var(--s24);
   }
 
-  .structure-info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--s16);
-  }
-
   @media print {
     .service-info {
       margin-bottom: 0;

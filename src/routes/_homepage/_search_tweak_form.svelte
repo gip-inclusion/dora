@@ -14,7 +14,6 @@
   export let subcategory;
   export let cityCode;
   export let cityLabel;
-  export let collapsed = false;
 
   function handleSearch() {
     const query = getQuery(category, subcategory, cityCode, cityLabel);
