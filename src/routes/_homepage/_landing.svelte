@@ -16,7 +16,7 @@
   export let servicesOptions;
 </script>
 
-<style>
+<style lang="postcss">
   h1,
   h2,
   h3 {
@@ -73,7 +73,7 @@
     list-style-position: inside;
   }
 
-  @media (min-width: 768px) {
+  @screen lg {
     h1 {
       line-height: var(--s56);
     }

@@ -151,7 +151,7 @@ h5 {
 }
 
 /* MD */
-@media (min-width: 375px) {
+@media (min-width: 576px) {
   h1 {
     font-size: var(--f30);
   }
@@ -181,7 +181,7 @@ h5 {
 }
 
 /* XL */
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
   h1 {
     font-size: var(--f45);
   }

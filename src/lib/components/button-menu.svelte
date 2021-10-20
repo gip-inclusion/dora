@@ -30,7 +30,7 @@
   }
 </script>
 
-<style>
+<style lang="postcss">
   .wrapper {
     position: relative;
   }
@@ -53,7 +53,7 @@
     display: flex;
   }
 
-  @media (min-width: 375px) {
+  @screen md {
     .children {
       flex-direction: row;
     }

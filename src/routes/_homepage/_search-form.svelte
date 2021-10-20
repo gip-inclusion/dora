@@ -32,7 +32,7 @@
   }
 </script>
 
-<style>
+<style lang="postcss">
   .wrapper {
     padding: 24px 24px 16px;
     background-color: var(--col-white);
@@ -54,7 +54,7 @@
     gap: var(--s16);
   }
 
-  @media (min-width: 820px) {
+  @screen lg {
     form {
       flex-direction: row;
     }
