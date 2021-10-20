@@ -74,15 +74,15 @@
   });
 </script>
 
-<style>
+<style lang="postcss">
   .search-form {
     padding-top: var(--s56);
-    grid-column: 1 / 5;
+    grid-column: 1 / -1;
   }
 
   .results-wrapper {
     padding-bottom: var(--s56);
-    grid-column: 5 / -1;
+    grid-column: 1 / -1;
   }
 
   .results {
@@ -91,7 +91,6 @@
     padding-top: var(--s56);
     padding-bottom: var(--s16);
     gap: var(--s16);
-    grid-column: 5 / -1;
   }
 
   .no-results-wrapper {
@@ -108,6 +107,17 @@
     padding-top: var(--s56);
     gap: var(--s16);
     grid-column: 6 / -2;
+  }
+
+  @screen xl {
+    .search-form {
+      padding-top: var(--s56);
+      grid-column: 1 / 5;
+    }
+
+    .results-wrapper {
+      grid-column: 5 / -1;
+    }
   }
 </style>
 

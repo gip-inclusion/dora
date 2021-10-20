@@ -11,6 +11,7 @@
   export let darkBg = false;
   export let bigIcon = false;
   export let smallIcon = false;
+  export let truncate = false;
 </script>
 
 <style>
@@ -75,7 +76,7 @@
 </style>
 
 <div
-  class="wrapper text-sm leading-normal flex flex-row items-center"
+  class="flex flex-row items-center text-sm leading-normal wrapper"
   class:bold
   class:italic
   class:success
@@ -84,7 +85,7 @@
   class:dark-bg={darkBg}>
   {#if iconOnLeft}
     <div
-      class="icon mr-1"
+      class="mr-1 icon"
       class:big-icon={bigIcon}
       class:small-icon={smallIcon}>
       {@html icon}
@@ -96,9 +97,10 @@
     </div>
   {/if}
 
-  <slot>{label}</slot>
+  <span class:truncate><slot>{label}</slot></span>
+
   {#if iconOnRight}
-    <div class="icon ml-1" class:big-icon={bigIcon}>
+    <div class="ml-1 icon" class:big-icon={bigIcon}>
       {@html icon}
     </div>
   {/if}

@@ -11,13 +11,13 @@
   export let isPreview = false;
 </script>
 
-<style>
+<style lang="postcss">
   .service-pres {
     grid-column: 1 / 7;
   }
 
   .orientation {
-    grid-column: 9 / -1;
+    grid-column: 1 / -1;
   }
 
   .service-info {
@@ -40,6 +40,12 @@
       margin-bottom: 0;
     }
   }
+
+  @screen lg {
+    .orientation {
+      grid-column: 9 / -1;
+    }
+  }
 </style>
 
 <CenteredGrid --col-bg="var(--col-france-blue)" topPadded>
@@ -50,26 +56,30 @@
   roundedbg
   --col-under-bg="var(--col-france-blue)"
   --col-content-bg="var(--col-bg)">
-  <div class="service-pres">
-    <ServicePresentation {service} />
-  </div>
-  <div class="orientation">
-    <OrientationBox {service} />
-    <div class="structure-info">
-      <h4>{service.structureInfo.name}</h4>
-      <Label label={service.structureInfo.shortDesc} italic />
-      <!-- <div class="noprint">
+  <div class="flex flex-col col-span-full">
+    <div class="flex flex-col lg:flex-row-reverse">
+      <div class="row-start-1 orientation">
+        <OrientationBox {service} />
+        <div class="flex-col hidden gap-2 lg:flex">
+          <h4>{service.structureInfo.name}</h4>
+          <Label label={service.structureInfo.shortDesc} italic />
+          <!-- <div class="noprint">
         <LinkButton
           to="/structures/{service.structure}"
           small
           nogrow
           label="Voir l’offre complète de services" />
       </div> -->
+        </div>
+      </div>
+      <div class="row-start-2 service-pres">
+        <ServicePresentation {service} />
+      </div>
     </div>
-  </div>
-  <div class="service-info">
-    <ModalitiesBox {service} />
-    <AccessBox {service} />
+    <div class="row-start-3 service-info">
+      <ModalitiesBox {service} />
+      <AccessBox {service} />
+    </div>
   </div>
 </CenteredGrid>
 <!--

@@ -19,7 +19,7 @@
 </style>
 
 <header
-  class="shadow-md z-10 relative noprint"
+  class="relative shadow-md noprint"
   class:dev-banner={ENVIRONMENT !== "production"}>
   <CenteredGrid>
     <div class="flex flex-row items-center row-start-1 col-span-full py-3/2 ">

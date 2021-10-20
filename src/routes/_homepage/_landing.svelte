@@ -104,12 +104,12 @@
 <CenteredGrid
   extraClass="homepage-second-row"
   --col-bg="var(--col-magenta-dark)">
-  <div class="col-start-1 col-span-full mb-5">
-    <div class="flex gap-8 flex-col lg:flex-row-reverse">
+  <div class="col-start-1 mb-5 col-span-full">
+    <div class="flex flex-col gap-8 lg:flex-row">
       <div class="flex-1">
         <img src={MissionPic} width="440" height="420" alt="" />
       </div>
-      <div class="content-mission flex-1">
+      <div class="flex-1 content-mission">
         <h5>La mission DORA</h5>
         <h2>Découvrir, orienter, renseigner, accompagner</h2>
 

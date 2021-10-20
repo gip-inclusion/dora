@@ -723,7 +723,6 @@
   .autocomplete {
     position: relative;
     display: inline-block;
-    min-width: 200px;
     max-width: 100%;
     /* height: 2.25em; */
     vertical-align: top;

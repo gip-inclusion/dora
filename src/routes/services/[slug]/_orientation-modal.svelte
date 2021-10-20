@@ -21,7 +21,6 @@
 <style>
   .contents {
     display: block;
-    width: 1264px;
     padding: var(--s32);
     background-color: var(--col-white);
     border-radius: var(--s8);
@@ -66,7 +65,7 @@
   <div class="contents">
     <h2 class="pb-2">Comment mobiliser ce service pour votre bénéficiaire</h2>
     <div class="box">
-      <div class="flex flex-row">
+      <div class="flex flex-row flex-wrap">
         <div class="flex-1">
           <h3>Mobiliser la solution</h3>
           <ul class="list">
@@ -93,7 +92,7 @@
             {/each}
           </ul>
           {#if service.forms.length || service.onlineForm}
-            <div class="border-t border-gray-03 mx-5" />
+            <div class="mx-5 border-t border-gray-03" />
           {/if}
           {#if service.forms.length}
             <ul class="list">
@@ -130,7 +129,7 @@
                 <h4 class="pb-2">{service.contactName}</h4>
               {/if}
             {:else}
-              <div class="pb-1 flex flex-col gap-2">
+              <div class="flex flex-col gap-2 pb-1">
                 <Label
                   label="Vous devez être connecté•e pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire." />
                 <LinkButton
@@ -141,7 +140,7 @@
               </div>
             {/if}
             <p><strong>{service.structureInfo.name}</strong></p>
-            <p class="text-sm pb-2">
+            <p class="pb-2 text-sm">
               {service.structureInfo.address1}<br />
               {#if service.structureInfo.address2}{service.structureInfo
                   .address2}<br />{/if}

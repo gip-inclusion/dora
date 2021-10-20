@@ -5,7 +5,7 @@
   export let title = "";
 </script>
 
-<style>
+<style lang="postcss">
   .wrapper {
     overflow: hidden;
     border: 3px solid var(--box-color);
@@ -23,10 +23,6 @@
 
   .title h3 {
     color: var(--col-white);
-  }
-
-  .content {
-    padding: var(--s32) var(--s40) var(--s40);
   }
 
   @media print {
@@ -47,7 +43,7 @@
       <h3>{title}</h3>
     </Label>
   </div>
-  <div class="content">
+  <div class="p-1 lg:p-4">
     <slot />
   </div>
 </div>

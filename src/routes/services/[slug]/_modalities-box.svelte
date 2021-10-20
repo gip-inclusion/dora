@@ -54,8 +54,8 @@
       </Info>
     {/if}
   </div>
-  <div class="flex flex-row">
-    <div class="flex-1">
+  <div class="flex flex-row flex-wrap gap-2">
+    <div class="flex-grow">
       <h3>Critères d’admission</h3>
       <ul class="list">
         {#each service.accessConditionsDisplay as condition}
@@ -65,7 +65,7 @@
         {/each}
       </ul>
     </div>
-    <div class="flex-1">
+    <div class="flex-grow">
       <h3>Public concerné</h3>
       <ul class="list">
         {#each service.concernedPublicDisplay as pub}
@@ -76,7 +76,7 @@
       </ul>
     </div>
 
-    <div class="flex-1">
+    <div class="flex-grow">
       <h3>Lieu de déroulement</h3>
 
       {#if !service.locationKinds.length}
@@ -84,7 +84,7 @@
       {:else}
         {#if service.locationKinds.includes("OS")}
           <h4 class="pt-2 pb-1">En présentiel</h4>
-          <p class="text-sm pb-2 text-gray-text">
+          <p class="pb-2 text-sm text-gray-text">
             {service.address1}<br />
             {#if service.address2}{service.address2}<br />{/if}
             {service.postalCode}
@@ -93,7 +93,7 @@
         {/if}
         {#if service.locationKinds.includes("RE")}
           <h4 class="pt-2 pb-1">À distance</h4>
-          <p class="text-sm pb-2">
+          <p class="pb-2 text-sm">
             <a target="_blank" rel="noopener nofollow" href={service.remoteUrl}
               >{shortenString(service.remoteUrl, 35)}</a>
           </p>

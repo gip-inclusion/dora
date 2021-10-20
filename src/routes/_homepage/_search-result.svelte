@@ -1,7 +1,6 @@
 <script>
   import Label from "$lib/components/label.svelte";
-  import { mapPinIcon, homeIcon, pinDistanceIcon } from "$lib/icons";
-  import { shortenString } from "$lib/utils";
+  import { mapPinIcon, pinDistanceIcon } from "$lib/icons";
 
   import Tag from "../services/[slug]/_tag.svelte";
   import SearchResultWrapper from "./_search_result_wrapper.svelte";
@@ -30,14 +29,12 @@
 
 <SearchResultWrapper>
   <div class="header">
+    <!-- <a href="/structures/{result.structure}"> -->
+    <Label label={result.structureInfo.name} truncate />
     <h4><a href="/services/{result.slug}">{result.name}</a></h4>
-    <div class="flex flex-row gap-2 mt-1">
-      <!-- <a href="/structures/{result.structure}"> -->
-      <Label
-        label={shortenString(result.structureInfo.name)}
-        iconOnLeft
-        icon={homeIcon} />
+    <div class="flex flex-col gap-2 mt-1 md:flex-row">
       <!-- </a> -->
+      <Tag --bg-color="var(--col-magenta-20)">{result.categoryDisplay}</Tag>
       <Label
         label={`${result.postalCode}, ${result.city}`}
         iconOnLeft
@@ -50,9 +47,8 @@
       {/if}
     </div>
   </div>
-  <p><a href="/services/{result.slug}">{result.shortDesc}</a></p>
-  <div class="tags-wrapper">
-    <Tag --bg-color="var(--col-magenta-brand)">{result.categoryDisplay}</Tag
-    ><br />
-  </div>
+
+  <p class="hidden md:block">
+    <a href="/services/{result.slug}">{result.shortDesc}</a>
+  </p>
 </SearchResultWrapper>
