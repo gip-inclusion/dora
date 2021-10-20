@@ -201,7 +201,6 @@ h5 {
 }
 
 @media print {
-  /* styles here */
   .noprint {
     display: none !important;
   }

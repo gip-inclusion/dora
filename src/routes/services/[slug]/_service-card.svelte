@@ -12,21 +12,11 @@
 </script>
 
 <style lang="postcss">
-  .service-pres {
-    grid-column: 1 / 7;
-  }
-
-  .orientation {
-    grid-column: 1 / -1;
-  }
-
   .service-info {
     display: flex;
     flex-direction: column;
     margin-bottom: var(--s40);
     gap: var(--s24);
-    grid-column: 1 / -1;
-    grid-row-start: 2;
   }
 
   .structure-info {
@@ -38,12 +28,6 @@
   @media print {
     .service-info {
       margin-bottom: 0;
-    }
-  }
-
-  @screen lg {
-    .orientation {
-      grid-column: 9 / -1;
     }
   }
 </style>
@@ -58,7 +42,7 @@
   --col-content-bg="var(--col-bg)">
   <div class="flex flex-col col-span-full">
     <div class="flex flex-col lg:flex-row-reverse">
-      <div class="row-start-1 orientation">
+      <div class=" orientation">
         <OrientationBox {service} />
         <div class="flex-col hidden gap-2 lg:flex">
           <h4>{service.structureInfo.name}</h4>
@@ -72,11 +56,11 @@
       </div> -->
         </div>
       </div>
-      <div class="row-start-2 service-pres">
+      <div class=" service-pres">
         <ServicePresentation {service} />
       </div>
     </div>
-    <div class="row-start-3 service-info">
+    <div class=" service-info">
       <ModalitiesBox {service} />
       <AccessBox {service} />
     </div>

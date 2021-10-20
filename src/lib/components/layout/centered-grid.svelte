@@ -71,11 +71,6 @@
     .roundedbg {
       background-color: var(--col-white) !important;
     }
-
-    .centered-grid {
-      column-gap: var(--s12);
-      grid-template-columns: repeat(12, 78px);
-    }
   }
 </style>
 
