@@ -8,7 +8,7 @@
 </script>
 
 <Modal bind:isOpen>
-  <div style="width: 600px;">
+  <div>
     <Fieldset title="Ajouter des collaborateurs">
       <Info label="Votre demande a été enregistrée" positiveMood>
         Une invitation a été envoyée à l’adresse <strong>{email}</strong>

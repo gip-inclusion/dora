@@ -34,7 +34,7 @@
     top: 50%;
     left: 50%;
     display: none;
-    width: 95vw;
+    max-width: 95vw;
     max-height: 95vh;
     overflow-y: auto;
     transform: translate(-50%, -50%);

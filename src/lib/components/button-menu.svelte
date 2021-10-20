@@ -52,12 +52,6 @@
   .open {
     display: flex;
   }
-
-  @screen md {
-    .children {
-      flex-direction: row;
-    }
-  }
 </style>
 
 <div class="wrapper">

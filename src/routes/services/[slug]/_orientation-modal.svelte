@@ -21,6 +21,7 @@
 <style>
   .contents {
     display: block;
+    width: 95vw;
     padding: var(--s32);
     background-color: var(--col-white);
     border-radius: var(--s8);
