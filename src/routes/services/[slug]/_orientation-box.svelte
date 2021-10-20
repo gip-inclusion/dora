@@ -49,7 +49,7 @@
   @screen lg {
     .wrapper {
       position: relative;
-      top: -4rem;
+      top: -1.5rem;
     }
   }
 </style>

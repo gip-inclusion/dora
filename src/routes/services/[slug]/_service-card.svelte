@@ -41,7 +41,7 @@
   --col-under-bg="var(--col-france-blue)"
   --col-content-bg="var(--col-bg)">
   <div class="flex flex-col col-span-full">
-    <div class="flex flex-col lg:flex-row-reverse">
+    <div class="flex flex-col gap-3 lg:flex-row-reverse">
       <div class=" orientation">
         <OrientationBox {service} />
         <div class="flex-col hidden gap-2 lg:flex">
