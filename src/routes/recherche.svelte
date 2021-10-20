@@ -109,7 +109,7 @@
     grid-column: 6 / -2;
   }
 
-  @screen xl {
+  @screen lg {
     .search-form {
       padding-top: var(--s56);
       grid-column: 1 / 5;
