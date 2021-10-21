@@ -52,8 +52,8 @@
 </CenteredGrid>
 
 <CenteredGrid roundedbg>
-  <div class="col-span-full flex  lg:col-end-7 lg:mb-4 mt-6">
-    <img src={connexionPic} alt="" class="max-w-xl justify-self-center" />
+  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-4 mt-6">
+    <img src={connexionPic} alt="" class="max-h-[460px]" />
   </div>
   <div class="col-span-full lg:col-start-8 lg:col-end-12 mb-4">
     <Form
@@ -63,8 +63,7 @@
       onChange={handleChange}
       onSubmit={handleSubmit}
       onSuccess={handleSuccess}
-      bind:requesting
-    >
+      bind:requesting>
       <Fieldset>
         {#if success}
           <Info label="C’est tout bon !" positiveMood>
@@ -91,15 +90,13 @@
             placeholder="Courriel utilisé lors de l’inscription"
             bind:value={email}
             autocomplete="current-password"
-            required
-          />
+            required />
 
           <Button
             type="submit"
             disabled={!email || requesting}
             label="Valider votre compte"
-            preventDefaultOnMouseDown
-          />
+            preventDefaultOnMouseDown />
         {/if}
       </Fieldset>
     </Form>

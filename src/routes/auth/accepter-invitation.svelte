@@ -55,10 +55,10 @@
 </CenteredGrid>
 
 <CenteredGrid roundedbg>
-  <div class="col-start-1 col-end-7 mb-4 mt-6">
-    <img src={connexionPic} alt="" />
+  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-4 mt-6">
+    <img src={connexionPic} alt="" class="max-h-[460px]" />
   </div>
-  <div class="col-start-7 col-end-13 mb-4">
+  <div class="col-span-full lg:col-start-8 lg:col-end-12 mb-4">
     <Fieldset title="Accédez à votre compte">
       {#if validated}
         <Info

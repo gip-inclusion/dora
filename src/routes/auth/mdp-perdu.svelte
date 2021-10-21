@@ -54,8 +54,8 @@
 </CenteredGrid>
 
 <CenteredGrid roundedbg>
-  <div class="col-span-full flex  lg:col-end-7 lg:mb-4 mt-6">
-    <img src={connexionPic} alt="" class="max-w-xl justify-self-center" />
+  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-4 mt-6">
+    <img src={connexionPic} alt="" class="max-h-[460px]" />
   </div>
   <div class="col-span-full lg:col-start-8 lg:col-end-12 mb-4">
     <Form
@@ -65,12 +65,10 @@
       onChange={handleChange}
       onSubmit={handleSubmit}
       onSuccess={handleSuccess}
-      bind:requesting
-    >
+      bind:requesting>
       <Fieldset
         title="Mot de passe oublié ?"
-        description="Pour réinitialiser votre mot de passe, saisissez l’adresse email que vous avez utilisé lors de l’inscription."
-      >
+        description="Pour réinitialiser votre mot de passe, saisissez l’adresse email que vous avez utilisé lors de l’inscription.">
         {#if success}
           <Info label="C’est tout bon !" positiveMood>
             <p>
@@ -82,8 +80,7 @@
           <LinkButton
             to="/auth/connexion"
             label="Revenir à la page de connexion"
-            preventDefaultOnMouseDown
-          />
+            preventDefaultOnMouseDown />
         {:else}
           {#if $formErrors.nonFieldErrors}
             <div>
@@ -102,15 +99,13 @@
             placeholder="Courriel utilisé lors de l’inscription"
             bind:value={email}
             autocomplete="current-password"
-            required
-          />
+            required />
 
           <Button
             type="submit"
             disabled={!email || requesting}
             label="Envoyer un mail de récupération"
-            preventDefaultOnMouseDown
-          />
+            preventDefaultOnMouseDown />
           <p class=" text-center text-gray-text-alt2 text-xs">
             Vous vous souvenez de votre mot de passe ?
             <a class="underline " href="/auth/connexion">Connexion</a>

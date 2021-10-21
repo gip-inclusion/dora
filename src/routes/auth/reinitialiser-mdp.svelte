@@ -102,8 +102,8 @@
 </CenteredGrid>
 
 <CenteredGrid roundedbg>
-  <div class="col-span-full flex  lg:col-end-7 lg:mb-4 mt-6">
-    <img src={connexionPic} alt="" class="max-w-xl justify-self-center" />
+  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-4 mt-6">
+    <img src={connexionPic} alt="" class="max-h-[460px]" />
   </div>
   <div class="col-span-full lg:col-start-8 lg:col-end-12 mb-4">
     <Form
@@ -112,19 +112,16 @@
       serverErrorsDict={authErrors}
       onChange={handleChange}
       onSubmit={handleSubmit}
-      onSuccess={handleSuccess}
-    >
+      onSuccess={handleSuccess}>
       <Fieldset
         title="Nouveau mot de passe"
-        description="Pour réinitialiser votre mot de passe, saisissez un nouveau mot de passe et confirmez."
-      >
+        description="Pour réinitialiser votre mot de passe, saisissez un nouveau mot de passe et confirmez.">
         {#if !resetToken}
           <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
           <LinkButton
             to="/auth/mdp-perdu"
             label="Demander un nouveau lien"
-            preventDefaultOnMouseDown
-          />
+            preventDefaultOnMouseDown />
         {:else if success}
           <Info label="C’est tout bon !" positiveMood>
             <p>
@@ -135,8 +132,7 @@
           <LinkButton
             to="/auth/connexion"
             label="Revenir à la page de connexion"
-            preventDefaultOnMouseDown
-          />
+            preventDefaultOnMouseDown />
         {:else}
           {#if $formErrors.nonFieldErrors}
             <div>
@@ -155,8 +151,7 @@
             bind:value={password1}
             autocomplete="new-password"
             passwordrules={passwordRules}
-            required
-          />
+            required />
           <Field
             name="password2"
             errorMessages={$formErrors.password2}
@@ -167,8 +162,7 @@
             bind:value={password2}
             autocomplete="new-password"
             passwordrules={passwordRules}
-            required
-          />
+            required />
           <Info>
             <p class="mb-2">
               Votre mot de passe doit respecter quelques règles :
@@ -182,8 +176,7 @@
             type="submit"
             disabled={!password1 || !password2}
             label="Modifier le mot de passe"
-            preventDefaultOnMouseDown
-          />
+            preventDefaultOnMouseDown />
           <p class=" text-center text-gray-text-alt2 text-xs">
             Vous vous souvenez de votre mot de passe ?
             <a class="underline " href="/auth/connexion">Connexion</a>

@@ -76,8 +76,8 @@
 </CenteredGrid>
 
 <CenteredGrid roundedbg>
-  <div class="col-span-full flex  lg:col-end-7 lg:mb-4 mt-6">
-    <img src={connexionPic} alt="" class="max-w-xl justify-self-center" />
+  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-4 mt-6">
+    <img src={connexionPic} alt="" class="max-h-[460px]" />
   </div>
   <div class="col-span-full lg:col-start-8 lg:col-end-12 mb-4">
     <Form
@@ -86,21 +86,18 @@
       serverErrorsDict={authErrors}
       onChange={handleChange}
       onSubmit={handleSubmit}
-      onSuccess={handleSuccess}
-    >
+      onSuccess={handleSuccess}>
       <Fieldset title="Accédez à votre compte">
         {#if invalidUser}
           <Info
             label="Votre adresse email n’a pas encore été validée"
-            negativeMood
-          />
+            negativeMood />
           <LinkButton
             to="/auth/renvoyer-email-validation?email={encodeURIComponent(
               email
             )}"
             label="Demander un nouveau lien"
-            preventDefaultOnMouseDown
-          />
+            preventDefaultOnMouseDown />
         {:else}
           {#each $formErrors.nonFieldErrors || [] as msg}
             <Alert iconOnLeft label={msg} />
@@ -115,8 +112,7 @@
               bind:value={email}
               required
               placeholder="Courriel utilisé lors de l’inscription"
-              autocomplete="email"
-            />
+              autocomplete="email" />
             <Field
               name="password"
               errorMessages={$formErrors.password}
@@ -126,19 +122,16 @@
               placeholder="••••••••"
               bind:value={password}
               autocomplete="current-password"
-              required
-            />
+              required />
           </div>
           <Button
             type="submit"
             disabled={!email || !password}
             label="Se connecter"
-            preventDefaultOnMouseDown
-          />
+            preventDefaultOnMouseDown />
           <a
             class="underline text-center text-gray-text-alt2 text-xs"
-            href="/auth/mdp-perdu">Mot de passe oublié ?</a
-          >
+            href="/auth/mdp-perdu">Mot de passe oublié ?</a>
         {/if}
       </Fieldset>
     </Form>

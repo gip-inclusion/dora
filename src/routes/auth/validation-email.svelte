@@ -46,8 +46,8 @@
 </CenteredGrid>
 
 <CenteredGrid roundedbg>
-  <div class="col-span-full flex  lg:col-end-7 lg:mb-4 mt-6">
-    <img src={connexionPic} alt="" class="max-w-xl justify-self-center" />
+  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-4 mt-6">
+    <img src={connexionPic} alt="" class="max-h-[460px]" />
   </div>
   <div class="col-span-full lg:col-start-8 lg:col-end-12 mb-4">
     <Fieldset title="Accédez à votre compte">
@@ -61,15 +61,13 @@
         <LinkButton
           to="/auth/connexion"
           label="Aller à la page de connexion"
-          preventDefaultOnMouseDown
-        />
+          preventDefaultOnMouseDown />
       {:else}
         <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
         <LinkButton
           to="/auth/renvoyer-email-validation"
           label="Demander un nouveau lien"
-          preventDefaultOnMouseDown
-        />
+          preventDefaultOnMouseDown />
       {/if}
     </Fieldset>
   </div>
