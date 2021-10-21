@@ -30,10 +30,10 @@
 </CenteredGrid>
 
 <CenteredGrid roundedbg>
-  <div class="col-start-1 col-end-7 mb-4 mt-6">
-    <img src={connexionPic} alt="" />
+  <div class="col-span-full flex  lg:col-end-7 lg:mb-4 mt-6">
+    <img src={connexionPic} alt="" class="max-w-xl justify-self-center" />
   </div>
-  <div class="col-start-7 col-end-13 mb-4">
+  <div class="col-span-full lg:col-start-8 lg:col-end-13 mb-4">
     <svelte:component this={currentStepComponent} bind:currentStep />
   </div>
 </CenteredGrid>
