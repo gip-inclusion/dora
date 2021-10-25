@@ -81,12 +81,10 @@
   schema={safirSearchSchema}
   serverErrorsDict={serverErrors}
   onSubmit={handleSubmit}
-  onSuccess={handleSuccess}
->
+  onSuccess={handleSuccess}>
   <FieldSet
     title="Votre structure"
-    description="Vous avez declaré être attaché a une agence Pôle Emploi. Merci de renseigner le code SAFIR de votre agence afin de l’identifier."
-  >
+    description="Vous avez declaré être attaché a une agence Pôle Emploi. Merci de renseigner le code SAFIR de votre agence afin de l’identifier.">
     {#if $formErrors.nonFieldErrors?.length}
       <div>
         {#each $formErrors.nonFieldErrors || [] as msg}
@@ -102,8 +100,7 @@
       type="text"
       placeholder="Code numérique correspondant à votre structure"
       bind:value={safirCode}
-      required
-    />
+      required />
 
     {#if structure && structureVisible}
       <div class="establishment-details">
@@ -119,8 +116,7 @@
         <Toggle
           toggleYesText=""
           toggleNoText=""
-          bind:checked={hasCheckedConsent}
-        />
+          bind:checked={hasCheckedConsent} />
         <p>
           En cochant cette case je déclare faire partie de la structure
           mentionnée ci-dessus et je suis conscient•e des risques j’encours en
@@ -136,22 +132,19 @@
         icon={arrowLeftSIcon}
         noPadding
         noBackground
-        iconOnLeft
-      />
+        iconOnLeft />
       {#if !structureVisible}
         <Button
           type="submit"
           label="Chercher la structure"
           disabled={!safirCode}
-          preventDefaultOnMouseDown
-        />
+          preventDefaultOnMouseDown />
       {:else}
         <Button
           label="Adhérez à la structure"
           disabled={!hasCheckedConsent}
           on:click={handleJoin}
-          preventDefaultOnMouseDown
-        />
+          preventDefaultOnMouseDown />
       {/if}
     </div>
   </FieldSet>

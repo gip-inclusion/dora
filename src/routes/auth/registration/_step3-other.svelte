@@ -42,8 +42,7 @@
 
 <FieldSet
   title="Votre structure"
-  description="Merci de renseigner le numéro SIRET de votre structure afin de l’identifier."
->
+  description="Merci de renseigner le numéro SIRET de votre structure afin de l’identifier.">
   <SearchBySiret bind:establishment />
   {#if establishment && establishmentVisible}
     <div class="establishment-details">
@@ -59,8 +58,7 @@
       <Toggle
         toggleYesText=""
         toggleNoText=""
-        bind:checked={hasCheckedConsent}
-      />
+        bind:checked={hasCheckedConsent} />
       <p>
         En cochant cette case je déclare faire partie de la structure mentionnée
         ci-dessus et je suis conscient•e des risques j’encours en cas de faux et
@@ -76,20 +74,17 @@
       icon={arrowLeftSIcon}
       noPadding
       noBackground
-      iconOnLeft
-    />
+      iconOnLeft />
     {#if !establishmentVisible}
       <Button
         label="Chercher la structure"
         disabled={!establishment}
-        on:click={() => (establishmentVisible = true)}
-      />
+        on:click={() => (establishmentVisible = true)} />
     {:else}
       <Button
         label="Adhérez à la structure"
         disabled={!hasCheckedConsent}
-        on:click={handleJoin}
-      />
+        on:click={handleJoin} />
     {/if}
   </div>
 </FieldSet>
