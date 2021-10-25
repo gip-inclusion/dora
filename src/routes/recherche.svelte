@@ -95,7 +95,8 @@
 
   .no-results-wrapper {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    padding-top: var(--s56);
     padding-bottom: var(--s24);
     color: var(--col-text);
     gap: var(--s56);
@@ -104,9 +105,13 @@
   .no-results {
     display: flex;
     flex-direction: column;
-    padding-top: var(--s56);
     gap: var(--s16);
-    grid-column: 6 / -2;
+  }
+
+  @screen xl {
+    .no-results-wrapper {
+      flex-direction: row;
+    }
   }
 
   @screen lg {
@@ -147,7 +152,12 @@
       </div>
     {:else}
       <div class="no-results-wrapper">
-        <img src={NoResultsPic} width="312" height="269" alt="" />
+        <img
+          src={NoResultsPic}
+          width="312"
+          height="269"
+          alt=""
+          class="self-center" />
         <div class="no-results">
           <h2>Ooopsie !</h2>
 
