@@ -12,9 +12,9 @@
   import Alert from "$lib/components/forms/alert.svelte";
   import Form from "$lib/components/forms/form.svelte";
 
-  import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
   import Info from "$lib/components/info.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
+  import AuthLayout from "./_auth_layout.svelte";
 
   let email = "";
 
@@ -53,65 +53,59 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid roundedbg>
-  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-4 mt-6">
-    <img src={connexionPic} alt="" class="max-h-[460px]" />
-  </div>
-  <div class="col-span-full lg:col-start-8 lg:col-end-12 mb-4">
-    <Form
-      data={{ email }}
-      schema={passwordLostSchema}
-      serverErrorsDict={authErrors}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-      onSuccess={handleSuccess}
-      bind:requesting>
-      <Fieldset
-        title="Mot de passe oublié ?"
-        description="Pour réinitialiser votre mot de passe, saisissez l’adresse email que vous avez utilisé lors de l’inscription.">
-        {#if success}
-          <Info label="C’est tout bon !" positiveMood>
-            <p>
-              Si vous avez un compte DORA avec cette adresse, vous allez
-              recevoir un e-mail avec un lien pour réinitialiser votre mot de
-              passe.
-            </p>
-          </Info>
-          <LinkButton
-            to="/auth/connexion"
-            label="Revenir à la page de connexion"
-            preventDefaultOnMouseDown />
-        {:else}
-          {#if $formErrors.nonFieldErrors}
-            <div>
-              {#each $formErrors.nonFieldErrors || [] as msg}
-                <Alert iconOnLeft label={msg} />
-              {/each}
-            </div>
-          {/if}
-
-          <Field
-            name="email"
-            errorMessages={$formErrors.email}
-            label="Courriel"
-            vertical
-            type="email"
-            placeholder="Courriel utilisé lors de l’inscription"
-            bind:value={email}
-            autocomplete="current-password"
-            required />
-
-          <Button
-            type="submit"
-            disabled={!email || requesting}
-            label="Envoyer un mail de récupération"
-            preventDefaultOnMouseDown />
-          <p class=" text-center text-gray-text-alt2 text-xs">
-            Vous vous souvenez de votre mot de passe ?
-            <a class="underline " href="/auth/connexion">Connexion</a>
+<AuthLayout>
+  <Form
+    data={{ email }}
+    schema={passwordLostSchema}
+    serverErrorsDict={authErrors}
+    onChange={handleChange}
+    onSubmit={handleSubmit}
+    onSuccess={handleSuccess}
+    bind:requesting>
+    <Fieldset
+      title="Mot de passe oublié ?"
+      description="Pour réinitialiser votre mot de passe, saisissez l’adresse email que vous avez utilisé lors de l’inscription.">
+      {#if success}
+        <Info label="C’est tout bon !" positiveMood>
+          <p>
+            Si vous avez un compte DORA avec cette adresse, vous allez recevoir
+            un e-mail avec un lien pour réinitialiser votre mot de passe.
           </p>
+        </Info>
+        <LinkButton
+          to="/auth/connexion"
+          label="Revenir à la page de connexion"
+          preventDefaultOnMouseDown />
+      {:else}
+        {#if $formErrors.nonFieldErrors}
+          <div>
+            {#each $formErrors.nonFieldErrors || [] as msg}
+              <Alert iconOnLeft label={msg} />
+            {/each}
+          </div>
         {/if}
-      </Fieldset>
-    </Form>
-  </div>
-</CenteredGrid>
+
+        <Field
+          name="email"
+          errorMessages={$formErrors.email}
+          label="Courriel"
+          vertical
+          type="email"
+          placeholder="Courriel utilisé lors de l’inscription"
+          bind:value={email}
+          autocomplete="current-password"
+          required />
+
+        <Button
+          type="submit"
+          disabled={!email || requesting}
+          label="Envoyer un mail de récupération"
+          preventDefaultOnMouseDown />
+        <p class=" text-center text-gray-text-alt2 text-xs">
+          Vous vous souvenez de votre mot de passe ?
+          <a class="underline " href="/auth/connexion">Connexion</a>
+        </p>
+      {/if}
+    </Fieldset>
+  </Form>
+</AuthLayout>

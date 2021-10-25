@@ -43,7 +43,7 @@
   import Info from "$lib/components/info.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
+  import AuthLayout from "./_auth_layout.svelte";
 
   export let validated, mustSetPassword, structureName, resetToken;
 </script>
@@ -54,41 +54,34 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid roundedbg>
-  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-4 mt-6">
-    <img src={connexionPic} alt="" class="max-h-[460px]" />
-  </div>
-  <div class="col-span-full lg:col-start-8 lg:col-end-12 mb-4">
-    <Fieldset title="Accédez à votre compte">
-      {#if validated}
-        <Info
-          label="Vous avez rejoint la structure {structureName}"
-          positiveMood>
-          {#if !mustSetPassword}
-            <p class="mb-2">
-              Utilisez l’adresse e-mail et le mot de passe saisis lors de
-              l’inscription pour vous connecter.
-            </p>
-          {/if}
-        </Info>
-        {#if mustSetPassword}
-          <LinkButton
-            label="Choisissez votre mot de passe"
-            to="/auth/reinitialiser-mdp?token={resetToken}" />
-        {:else}
-          <LinkButton
-            to="/auth/connexion"
-            label="Aller à la page de connexion"
-            preventDefaultOnMouseDown />
-        {/if}
-      {:else}
-        <Info label="Le lien a expiré ou n’est pas valide" negativeMood>
-          <p>
-            Contactez l’administrateur de votre structure pour en obtenir un
-            nouveau
+<AuthLayout>
+  <Fieldset title="Accédez à votre compte">
+    {#if validated}
+      <Info label="Vous avez rejoint la structure {structureName}" positiveMood>
+        {#if !mustSetPassword}
+          <p class="mb-2">
+            Utilisez l’adresse e-mail et le mot de passe saisis lors de
+            l’inscription pour vous connecter.
           </p>
-        </Info>
+        {/if}
+      </Info>
+      {#if mustSetPassword}
+        <LinkButton
+          label="Choisissez votre mot de passe"
+          to="/auth/reinitialiser-mdp?token={resetToken}" />
+      {:else}
+        <LinkButton
+          to="/auth/connexion"
+          label="Aller à la page de connexion"
+          preventDefaultOnMouseDown />
       {/if}
-    </Fieldset>
-  </div>
-</CenteredGrid>
+    {:else}
+      <Info label="Le lien a expiré ou n’est pas valide" negativeMood>
+        <p>
+          Contactez l’administrateur de votre structure pour en obtenir un
+          nouveau
+        </p>
+      </Info>
+    {/if}
+  </Fieldset>
+</AuthLayout>

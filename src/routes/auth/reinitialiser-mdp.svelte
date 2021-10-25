@@ -43,11 +43,10 @@
   import Alert from "$lib/components/forms/alert.svelte";
   import Form from "$lib/components/forms/form.svelte";
 
-  import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
-
   import { passwordRules } from "$lib/auth";
   import Info from "$lib/components/info.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
+  import AuthLayout from "./_auth_layout.svelte";
 
   export let resetToken;
 
@@ -101,88 +100,82 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid roundedbg>
-  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-4 mt-6">
-    <img src={connexionPic} alt="" class="max-h-[460px]" />
-  </div>
-  <div class="col-span-full lg:col-start-8 lg:col-end-12 mb-4">
-    <Form
-      data={{ password1, password2 }}
-      schema={pwChangeSchema}
-      serverErrorsDict={authErrors}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-      onSuccess={handleSuccess}>
-      <Fieldset
-        title="Nouveau mot de passe"
-        description="Pour réinitialiser votre mot de passe, saisissez un nouveau mot de passe et confirmez.">
-        {#if !resetToken}
-          <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
-          <LinkButton
-            to="/auth/mdp-perdu"
-            label="Demander un nouveau lien"
-            preventDefaultOnMouseDown />
-        {:else if success}
-          <Info label="C’est tout bon !" positiveMood>
-            <p>
-              Vous pouvez maintenant vous connecter avec le nouveau mot de
-              passe.
-            </p>
-          </Info>
-          <LinkButton
-            to="/auth/connexion"
-            label="Revenir à la page de connexion"
-            preventDefaultOnMouseDown />
-        {:else}
-          {#if $formErrors.nonFieldErrors}
-            <div>
-              {#each $formErrors.nonFieldErrors || [] as msg}
-                <Alert iconOnLeft label={msg} />
-              {/each}
-            </div>
-          {/if}
-          <Field
-            name="password1"
-            errorMessages={$formErrors.password1}
-            label="Nouveau mot de passe"
-            vertical
-            type="password"
-            placeholder="••••••••"
-            bind:value={password1}
-            autocomplete="new-password"
-            passwordrules={passwordRules}
-            required />
-          <Field
-            name="password2"
-            errorMessages={$formErrors.password2}
-            label="Confirmer"
-            vertical
-            type="password"
-            placeholder="••••••••"
-            bind:value={password2}
-            autocomplete="new-password"
-            passwordrules={passwordRules}
-            required />
-          <Info>
-            <p class="mb-2">
-              Votre mot de passe doit respecter quelques règles :
-            </p>
-            <ul>
-              <li>9 caractères ou plus</li>
-              <li>Pas entièrement numérique</li>
-            </ul>
-          </Info>
-          <Button
-            type="submit"
-            disabled={!password1 || !password2}
-            label="Modifier le mot de passe"
-            preventDefaultOnMouseDown />
-          <p class=" text-center text-gray-text-alt2 text-xs">
-            Vous vous souvenez de votre mot de passe ?
-            <a class="underline " href="/auth/connexion">Connexion</a>
+<AuthLayout>
+  <Form
+    data={{ password1, password2 }}
+    schema={pwChangeSchema}
+    serverErrorsDict={authErrors}
+    onChange={handleChange}
+    onSubmit={handleSubmit}
+    onSuccess={handleSuccess}>
+    <Fieldset
+      title="Nouveau mot de passe"
+      description="Pour réinitialiser votre mot de passe, saisissez un nouveau mot de passe et confirmez.">
+      {#if !resetToken}
+        <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
+        <LinkButton
+          to="/auth/mdp-perdu"
+          label="Demander un nouveau lien"
+          preventDefaultOnMouseDown />
+      {:else if success}
+        <Info label="C’est tout bon !" positiveMood>
+          <p>
+            Vous pouvez maintenant vous connecter avec le nouveau mot de passe.
           </p>
+        </Info>
+        <LinkButton
+          to="/auth/connexion"
+          label="Revenir à la page de connexion"
+          preventDefaultOnMouseDown />
+      {:else}
+        {#if $formErrors.nonFieldErrors}
+          <div>
+            {#each $formErrors.nonFieldErrors || [] as msg}
+              <Alert iconOnLeft label={msg} />
+            {/each}
+          </div>
         {/if}
-      </Fieldset>
-    </Form>
-  </div>
-</CenteredGrid>
+        <Field
+          name="password1"
+          errorMessages={$formErrors.password1}
+          label="Nouveau mot de passe"
+          vertical
+          type="password"
+          placeholder="••••••••"
+          bind:value={password1}
+          autocomplete="new-password"
+          passwordrules={passwordRules}
+          required />
+        <Field
+          name="password2"
+          errorMessages={$formErrors.password2}
+          label="Confirmer"
+          vertical
+          type="password"
+          placeholder="••••••••"
+          bind:value={password2}
+          autocomplete="new-password"
+          passwordrules={passwordRules}
+          required />
+        <Info>
+          <p class="mb-2">
+            Votre mot de passe doit respecter quelques règles :
+          </p>
+          <ul>
+            <li>9 caractères ou plus</li>
+            <li>Pas entièrement numérique</li>
+          </ul>
+        </Info>
+        <Button
+          type="submit"
+          disabled={!password1 || !password2}
+          label="Modifier le mot de passe"
+          preventDefaultOnMouseDown />
+        <p class=" text-center text-gray-text-alt2 text-xs">
+          Vous vous souvenez de votre mot de passe ?
+          <a class="underline " href="/auth/connexion">Connexion</a>
+        </p>
+      {/if}
+    </Fieldset>
+  </Form>
+</AuthLayout>

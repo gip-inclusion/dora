@@ -1,14 +1,12 @@
 <script>
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
-  import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
-
   import StepTypology from "./registration/_step1-typology.svelte";
-
   import StepPoleEmploi from "./registration/_step2-pe.svelte";
   import StepOther from "./registration/_step3-other.svelte";
   import StepUser from "./registration/_step4-user.svelte";
   import StepConfirm from "./registration/_step5-confirm.svelte";
+  import AuthLayout from "./_auth_layout.svelte";
 
   const steps = new Map([
     [1, StepTypology],
@@ -29,11 +27,6 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid roundedbg>
-  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-4 mt-6">
-    <img src={connexionPic} alt="" class="max-h-[460px]" />
-  </div>
-  <div class="col-span-full lg:col-start-8 lg:col-end-13 mb-4">
-    <svelte:component this={currentStepComponent} bind:currentStep />
-  </div>
-</CenteredGrid>
+<AuthLayout wideForm>
+  <svelte:component this={currentStepComponent} bind:currentStep />
+</AuthLayout>
