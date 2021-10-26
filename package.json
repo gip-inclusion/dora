@@ -2,8 +2,8 @@
   "name": "dora-front",
   "version": "0.0.1",
   "engines": {
-    "npm": ">=8",
-    "node": ">=17"
+    "npm": "8",
+    "node": "16"
   },
   "scripts": {
     "dev": "svelte-kit dev --host",
