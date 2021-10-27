@@ -20,7 +20,9 @@
 </script>
 
 <script>
+  import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import { HOTJAR_ID, HOTJAR_SV } from "$lib/env";
 
   import favicoIco from "$lib/assets/favicon.ico";
   import favicoSvg from "$lib/assets/favicon.svg";
@@ -31,6 +33,11 @@
 
   import Footer from "./_layout/_footer.svelte";
   import Header from "./_layout/_header.svelte";
+
+  onMount(() => {
+    tarteaucitron.user.hotjarId = HOTJAR_ID;
+    tarteaucitron.user.HotjarSv = HOTJAR_SV;
+  });
 </script>
 
 <svelte:head>
