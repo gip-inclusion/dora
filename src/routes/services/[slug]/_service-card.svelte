@@ -37,7 +37,7 @@
 >
   <div class="flex flex-col col-span-full">
     <div class="flex flex-col gap-3 lg:flex-row-reverse">
-      <div class=" orientation">
+      <div class="orientation">
         <OrientationBox {service} />
         <div class="flex-col hidden gap-2 lg:flex">
           <h4>{service.structureInfo.name}</h4>
@@ -51,11 +51,11 @@
       </div> -->
         </div>
       </div>
-      <div class=" service-pres">
+      <div class="service-pres flex-1">
         <ServicePresentation {service} />
       </div>
     </div>
-    <div class=" service-info">
+    <div class="service-info">
       <ModalitiesBox {service} />
       <AccessBox {service} />
     </div>
