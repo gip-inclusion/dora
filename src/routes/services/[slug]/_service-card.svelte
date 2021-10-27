@@ -37,21 +37,14 @@
 >
   <div class="flex flex-col col-span-full">
     <div class="flex flex-col gap-3 lg:flex-row-reverse">
-      <div class="orientation">
+      <div class="flex-initial orientation">
         <OrientationBox {service} />
-        <div class="flex-col hidden gap-2 lg:flex">
+        <div class="flex-col hidden max-w-md gap-2 lg:flex">
           <h4>{service.structureInfo.name}</h4>
           <Label label={service.structureInfo.shortDesc} italic />
-          <!-- <div class="noprint">
-        <LinkButton
-          to="/structures/{service.structure}"
-          small
-          nogrow
-          label="Voir l’offre complète de services" />
-      </div> -->
         </div>
       </div>
-      <div class="service-pres flex-1">
+      <div class="flex-1 service-pres">
         <ServicePresentation {service} />
       </div>
     </div>
@@ -61,16 +54,3 @@
     </div>
   </div>
 </CenteredGrid>
-<!--
-    Champs non utilisés:
-
-    <strong>sous-catégories : </strong>{service.subcategoriesDisplay}
-    <strong>Droit commun : </strong>{service.isCommonLaw}
-    <strong>Limité dans le temps : </strong>{service.isTimeLimited}
-    <strong>Date de début : </strong>{service.startDate}
-    <strong>Date de fin : </strong>{service.endDate}
-    <strong>Récurrence : </strong>{service.recurrence}
-    <strong>Details récurrence : </strong>{service.recurrenceOther}
-    <strong>Suspendre au bout de : </strong>{service.suspensionCount}
-    <strong>Suspendre le : </strong>{service.suspensionDate}
--->
