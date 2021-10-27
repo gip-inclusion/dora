@@ -31,7 +31,8 @@
             <span
               >{mode === "Autre (préciser)"
                 ? service.beneficiariesAccessModesOther
-                : mode}</span>
+                : mode}</span
+            >
           </li>
         {:else}
           <li><span>Non renseigné</span></li>

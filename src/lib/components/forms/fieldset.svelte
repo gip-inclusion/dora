@@ -12,7 +12,8 @@
 
 <div
   class="flex flex-col max-w-4xl gap-3 pt-4 mt-6 bg-white rounded-md shadow-md px-5 pb-7 "
-  class:no-top-padding={noTopPadding}>
+  class:no-top-padding={noTopPadding}
+>
   {#if title}
     <div class="pb-3 border-b border-gray-01">
       <h3 class="mb-1 text-france-blue">

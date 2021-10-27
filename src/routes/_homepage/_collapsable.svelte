@@ -49,7 +49,8 @@
   <slot name="above-fold" />
   <div
     class="w-3 h-3 ml-1 text-dora-magenta-cta fill-current"
-    on:click={handleToggleFold}>
+    on:click={handleToggleFold}
+  >
     {@html folded ? arrowDownSIcon : arrowUpSIcon}
   </div>
 </div>

@@ -70,7 +70,8 @@
       label="Partagez cette offre"
       value={sharingUrl}
       vertical
-      readonly />
+      readonly
+    />
   </div>
   {#if !service.isDraft}
     <LinkButton secondary label="Téléchargez le PDF" to={pdfUrl} nofollow />

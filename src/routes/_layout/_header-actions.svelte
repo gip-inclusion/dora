@@ -25,7 +25,8 @@
       <LinkButton
         icon={addCircleIcon}
         to={`/services/creer`}
-        ariaLabel="Référencer un service" />
+        ariaLabel="Référencer un service"
+      />
     </div>
   {:else}
     {#if $page.path !== "/auth/inscription"}
@@ -34,7 +35,8 @@
         icon={loginIcon}
         iconOnLeft
         noBackground
-        to={`/auth/inscription`} />
+        to={`/auth/inscription`}
+      />
     {/if}
     {#if $page.path !== "/auth/connexion"}
       <LinkButton
@@ -42,7 +44,8 @@
         icon={userSmileIcon}
         iconOnLeft
         noBackground
-        to={`/auth/connexion?next=${encodeURIComponent($page.path)}`} />
+        to={`/auth/connexion?next=${encodeURIComponent($page.path)}`}
+      />
     {/if}
     <div class="block md:hidden">
       <div class="border-t border-gray-01" />
@@ -55,7 +58,8 @@
         label="Référencer un service"
         icon={addCircleIcon}
         to={`/services/creer`}
-        iconOnRight />
+        iconOnRight
+      />
     </div>
   {/if}
 </HamburgerMenu>

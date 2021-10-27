@@ -114,7 +114,8 @@
   on:click
   on:mousedown={handleMouseDown}
   aria-label={ariaLabel}
-  {disabled}>
+  {disabled}
+>
   {#if iconOnLeft}
     <div class="{iw} {ih} mr-1 fill-current ">
       {@html icon}

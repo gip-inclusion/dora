@@ -10,7 +10,8 @@
   </div>
   <div
     class="col-span-full lg:col-start-7 lg:col-end-12 mb-4"
-    class:lg:col-end-13={wideForm}>
+    class:lg:col-end-13={wideForm}
+  >
     <slot />
   </div>
 </CenteredGrid>

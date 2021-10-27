@@ -59,7 +59,8 @@
     onChange={handleChange}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
-    bind:requesting>
+    bind:requesting
+  >
     <Fieldset>
       {#if success}
         <Info label="C’est tout bon !" positiveMood>
@@ -86,13 +87,15 @@
           placeholder="Courriel utilisé lors de l’inscription"
           bind:value={email}
           autocomplete="current-password"
-          required />
+          required
+        />
 
         <Button
           type="submit"
           disabled={!email || requesting}
           label="Valider votre compte"
-          preventDefaultOnMouseDown />
+          preventDefaultOnMouseDown
+        />
       {/if}
     </Fieldset>
   </Form>

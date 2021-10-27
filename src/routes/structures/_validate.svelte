@@ -13,4 +13,5 @@
   label="Validez les informations"
   icon={arrowRightSIcon}
   iconOnRight
-  preventDefaultOnMouseDown />
+  preventDefaultOnMouseDown
+/>

@@ -42,10 +42,12 @@
     schema={serviceSchema.contactName}
     name="contactName"
     errorMessages={$formErrors.contactName}
-    bind:value={service.contactName}>
+    bind:value={service.contactName}
+  >
     <FieldHelp slot="helptext" title="Contact référent">
       Merci de préciser les coordonnées de la personne en charge de ce service.
-    </FieldHelp></ModelField>
+    </FieldHelp></ModelField
+  >
   <ModelField
     type="tel"
     label="Numéro de téléphone"
@@ -53,7 +55,8 @@
     schema={serviceSchema.contactPhone}
     name="contactPhone"
     errorMessages={$formErrors.contactPhone}
-    bind:value={service.contactPhone} />
+    bind:value={service.contactPhone}
+  />
   <ModelField
     type="email"
     label="Courriel"
@@ -61,14 +64,16 @@
     schema={serviceSchema.contactEmail}
     name="contactEmail"
     errorMessages={$formErrors.contactEmail}
-    bind:value={service.contactEmail} />
+    bind:value={service.contactEmail}
+  />
   <ModelField
     label="Rendre les informations publiques"
     type="toggle"
     schema={serviceSchema.isContactInfoPublic}
     name="isContactInfoPublic"
     errorMessages={$formErrors.isContactInfoPublic}
-    bind:value={service.isContactInfoPublic} />
+    bind:value={service.isContactInfoPublic}
+  />
 </FieldSet>
 
 <FieldSet title="Lieu">
@@ -79,12 +84,14 @@
     name="locationKinds"
     errorMessages={$formErrors.locationKinds}
     bind:value={service.locationKinds}
-    choices={servicesOptions.locationKinds}>
+    choices={servicesOptions.locationKinds}
+  >
     <FieldHelp slot="helptext" title="Lieu de déroulement">
       Merci de préciser si le service ou l’accompagnement se déroule en
       présentiel ou bien à distance. Si c’est à distance, merci de préciser le
       lien de la visioconférence.
-    </FieldHelp></ModelField>
+    </FieldHelp></ModelField
+  >
   <ModelField
     placeholder="https://"
     type="url"
@@ -93,25 +100,29 @@
     schema={serviceSchema.remoteUrl}
     name="remoteUrl"
     errorMessages={$formErrors.remoteUrl}
-    bind:value={service.remoteUrl} />
+    bind:value={service.remoteUrl}
+  />
 
   <Field
     type="custom"
     label="Ville"
     errorMessages={$formErrors.city}
-    schema={serviceSchema.city}>
+    schema={serviceSchema.city}
+  >
     <CitySearch
       slot="custom-input"
       name="city"
       placeholder="Saisissez et validez votre ville"
       initialValue={service.city}
-      handleChange={handleCityChange} />
+      handleChange={handleCityChange}
+    />
   </Field>
   <Field
     type="custom"
     label="Adresse"
     errorMessages={$formErrors.address1}
-    schema={serviceSchema.address1}>
+    schema={serviceSchema.address1}
+  >
     <AddressSearch
       slot="custom-input"
       name="address1"
@@ -119,7 +130,8 @@
       cityCode={service.cityCode}
       placeholder="Saisissez et validez votre adresse"
       initialValue={service.address1}
-      handleChange={handleAddressChange} />
+      handleChange={handleAddressChange}
+    />
   </Field>
   <ModelField
     type="text"
@@ -128,7 +140,8 @@
     schema={serviceSchema.address2}
     name="address2"
     errorMessages={$formErrors.address2}
-    bind:value={service.address2} />
+    bind:value={service.address2}
+  />
   <ModelField
     type="text"
     label="Code postal"
@@ -136,25 +149,29 @@
     schema={serviceSchema.postalCode}
     name="postalCode"
     errorMessages={$formErrors.postalCode}
-    bind:value={service.postalCode} />
+    bind:value={service.postalCode}
+  />
   <ModelField
     type="hidden"
     schema={serviceSchema.cityCode}
     name="cityCode"
     errorMessages={$formErrors.cityCode}
-    bind:value={service.cityCode} />
+    bind:value={service.cityCode}
+  />
   <ModelField
     type="hidden"
     schema={serviceSchema.longitude}
     name="longitude"
     errorMessages={$formErrors.longitude}
-    bind:value={service.longitude} />
+    bind:value={service.longitude}
+  />
   <ModelField
     type="hidden"
     schema={serviceSchema.latitude}
     name="latitude"
     errorMessages={$formErrors.latitude}
-    bind:value={service.latitude} />
+    bind:value={service.latitude}
+  />
 </FieldSet>
 
 <FieldSet title="Durée et modalités de disponibilité">
@@ -172,19 +189,22 @@
     schema={serviceSchema.startDate}
     name="startDate"
     errorMessages={$formErrors.startDate}
-    bind:value={service.startDate}>
+    bind:value={service.startDate}
+  >
     <FieldHelp slot="helptext" title="Suspension">
       En configurant la suspension de votre service (avec une limite de temps ou
       de candidatures), vous pouvez mieux gérer la visibilité de votre service
       et sa mise à jour.
-    </FieldHelp></ModelField>
+    </FieldHelp></ModelField
+  >
   <ModelField
     type="date"
     label="Date de fin"
     schema={serviceSchema.endDate}
     name="endDate"
     errorMessages={$formErrors.endDate}
-    bind:value={service.endDate} />
+    bind:value={service.endDate}
+  />
   <ModelField
     type="radios"
     label="Récurrences"
@@ -192,7 +212,8 @@
     name="recurrence"
     errorMessages={$formErrors.recurrence}
     bind:value={service.recurrence}
-    choices={servicesOptions.recurrence} />
+    choices={servicesOptions.recurrence}
+  />
   <ModelField
     type="text"
     placeholder="Préciser"
@@ -201,7 +222,8 @@
     schema={serviceSchema.recurrenceOther}
     name="recurrenceOther"
     errorMessages={$formErrors.recurrenceOther}
-    bind:value={service.recurrenceOther} />
+    bind:value={service.recurrenceOther}
+  />
   <div>Critères de suspension :</div>
   <!-- <Field
     name="autoSuspend"
@@ -216,12 +238,14 @@
     schema={serviceSchema.suspensionCount}
     name="suspensionCount"
     errorMessages={$formErrors.suspensionCount}
-    bind:value={service.suspensionCount} />
+    bind:value={service.suspensionCount}
+  />
   <ModelField
     label="Oui, à partir d’une date :"
     type="date"
     schema={serviceSchema.suspensionDate}
     name="suspensionDate"
     errorMessages={$formErrors.suspensionDate}
-    bind:value={service.suspensionDate} />
+    bind:value={service.suspensionDate}
+  />
 </FieldSet>

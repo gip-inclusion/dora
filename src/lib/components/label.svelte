@@ -82,12 +82,14 @@
   class:success
   class:error
   class:wait
-  class:dark-bg={darkBg}>
+  class:dark-bg={darkBg}
+>
   {#if iconOnLeft}
     <div
       class="mr-1 icon"
       class:big-icon={bigIcon}
-      class:small-icon={smallIcon}>
+      class:small-icon={smallIcon}
+    >
       {@html icon}
     </div>
   {/if}

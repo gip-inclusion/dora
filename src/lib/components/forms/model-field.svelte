@@ -42,7 +42,8 @@
   {disabled}
   {readonly}
   {visible}
-  {vertical}>
+  {vertical}
+>
   <slot name="custom-input" slot="custom-input" />
   <slot name="helptext" slot="helptext" />
 </Field>

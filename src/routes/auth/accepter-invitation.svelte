@@ -68,12 +68,14 @@
       {#if mustSetPassword}
         <LinkButton
           label="Choisissez votre mot de passe"
-          to="/auth/reinitialiser-mdp?token={resetToken}" />
+          to="/auth/reinitialiser-mdp?token={resetToken}"
+        />
       {:else}
         <LinkButton
           to="/auth/connexion"
           label="Aller à la page de connexion"
-          preventDefaultOnMouseDown />
+          preventDefaultOnMouseDown
+        />
       {/if}
     {:else}
       <Info label="Le lien a expiré ou n’est pas valide" negativeMood>

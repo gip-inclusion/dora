@@ -41,26 +41,30 @@
           icon={checkBoxBlankIcon}
           success
           darkBg
-          bold />
+          bold
+        />
       {:else}
         <Label
           label="Indisponible"
           iconOnLeft
           icon={checkBoxBlankIcon}
-          darkBg />
+          darkBg
+        />
       {/if}
 
       <Label
         label={service.kindsDisplay.join(", ")}
         iconOnLeft
         icon={compassDiscoverIcon}
-        darkBg />
+        darkBg
+      />
 
       <Label
         label={`${service.postalCode}, ${service.city}`}
         iconOnLeft
         icon={mapPinIcon}
-        darkBg />
+        darkBg
+      />
     </div>
   </div>
 </div>

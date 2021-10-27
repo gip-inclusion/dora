@@ -103,7 +103,8 @@
 
 <CenteredGrid
   extraClass="homepage-second-row"
-  --col-bg="var(--col-magenta-dark)">
+  --col-bg="var(--col-magenta-dark)"
+>
   <div class="col-start-1 mb-5 col-span-full">
     <div class="flex flex-col gap-8 lg:flex-row">
       <div class="flex-1">
@@ -179,7 +180,8 @@
       </div>
     </div>
     <div
-      class="mt-6 rounded-xl bg-information-light flex  flex-col lg:flex-row lg:p-6 ">
+      class="mt-6 rounded-xl bg-information-light flex  flex-col lg:flex-row lg:p-6 "
+    >
       <div class="flex-1">
         <img src={JoinPic} width="380" height="380" alt="" />
       </div>
@@ -205,7 +207,8 @@
               iconOnRight
               noBackground
               noPadding
-              small />
+              small
+            />
           </div>
         </div>
       </div>

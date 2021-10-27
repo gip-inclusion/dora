@@ -47,4 +47,5 @@
   dropdownClassName="mt-2 rounded shadow-md"
   html5autocomplete={false}
   showLoadingIndicator
-  {hideArrow} />
+  {hideArrow}
+/>

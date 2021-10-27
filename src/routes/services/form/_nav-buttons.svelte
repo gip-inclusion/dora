@@ -22,7 +22,8 @@
         label="Étape précédente"
         icon={arrowLeftCircleIcon}
         noBackground
-        iconOnLeft />
+        iconOnLeft
+      />
     {/if}
     <div class="flex-grow" />
     {#if withDraft}
@@ -33,7 +34,8 @@
         label={flashSaveDraftButton
           ? "Enregistré !"
           : "Enregistrer comme brouillon"}
-        tertiary />
+        tertiary
+      />
     {/if}
     {#if withForward}
       <Button
@@ -42,7 +44,8 @@
         label="Suivant"
         disabled={currentPageIsValid}
         icon={arrowRightSIcon}
-        iconOnRight />
+        iconOnRight
+      />
     {/if}
     {#if withPreview}
       <Button
@@ -51,7 +54,8 @@
         label="Prévisualiser"
         disabled={currentPageIsValid}
         icon={eyeIcon}
-        iconOnRight />
+        iconOnRight
+      />
     {/if}
     {#if withPublish}
       <Button
@@ -60,7 +64,8 @@
         label={isDraft ? "Publier" : "Modifier"}
         disabled={currentPageIsValid}
         icon={arrowRightSIcon}
-        iconOnRight />
+        iconOnRight
+      />
     {/if}
   </div>
 </div>

@@ -60,7 +60,9 @@
       on:change={handleSubmit}
       {disabled}
       type="file"
-      multiple />{progress != null ? `${Math.round(progress)} %` : ""}</label>
+      multiple
+    />{progress != null ? `${Math.round(progress)} %` : ""}</label
+  >
 </form>
 <ul>
   {#each fileKeys as uploaded}

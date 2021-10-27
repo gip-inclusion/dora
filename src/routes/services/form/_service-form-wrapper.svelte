@@ -314,7 +314,8 @@
         <p class="text-gray-text text-base">
           Rendez visible votre offre de services sur la plateforme DORA.<br />
           Les champs marqués d’un astérisque<span
-            style="color: var(--col-error);">*</span> sont obligatoires.
+            style="color: var(--col-error);">*</span
+          > sont obligatoires.
         </p>
 
         <nav>
@@ -323,7 +324,8 @@
               lit={currentStep >= i + 1}
               active={currentStep === i + 1}
               {name}
-              on:click={() => handleNavLinkClick(i + 1)} />
+              on:click={() => handleNavLinkClick(i + 1)}
+            />
           {/each}
         </nav>
       </div>
@@ -355,5 +357,6 @@
     withPublish={navInfo?.showPublish}
     withPreview={navInfo?.showPreview}
     withDraft={currentStep !== 5 && service.isDraft}
-    {flashSaveDraftButton} />
+    {flashSaveDraftButton}
+  />
 </CenteredGrid>

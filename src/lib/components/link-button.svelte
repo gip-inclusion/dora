@@ -12,6 +12,7 @@
 <a
   target={otherTab ? "_blank" : "_self"}
   rel="noopener {nofollow ? 'nofollow' : ''}"
-  href={to}>
+  href={to}
+>
   <Button type="button" {...$$restProps} {ariaLabel} {small} {noPadding} />
 </a>

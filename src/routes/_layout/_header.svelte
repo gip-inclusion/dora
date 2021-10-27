@@ -20,7 +20,8 @@
 
 <header
   class="relative shadow-md noprint"
-  class:dev-banner={ENVIRONMENT !== "production"}>
+  class:dev-banner={ENVIRONMENT !== "production"}
+>
   <CenteredGrid>
     <div class="flex flex-row items-center row-start-1 col-span-full py-3/2 ">
       <a class="flex flex-row gap-5 " href="/">
@@ -30,7 +31,8 @@
             src={LogoMinistere}
             alt=""
             width="114"
-            height="89" />
+            height="89"
+          />
         </div>
         <img class="inline" src={LogoDORA} alt="Dora" width="140" height="65" />
       </a>

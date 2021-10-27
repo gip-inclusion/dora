@@ -19,10 +19,12 @@
     schema={serviceSchema.beneficiariesAccessModes}
     name="beneficiariesAccessModes"
     errorMessages={$formErrors.beneficiariesAccessModes}
-    bind:value={service.beneficiariesAccessModes}>
+    bind:value={service.beneficiariesAccessModes}
+  >
     <FieldHelp slot="helptext" title="Mobiliser le service">
       Quels sont les étapes à suivre pour pouvoir mobiliser le service ?
-    </FieldHelp></ModelField>
+    </FieldHelp></ModelField
+  >
   <ModelField
     visible={service.beneficiariesAccessModes.includes("OT")}
     hideLabel
@@ -31,7 +33,8 @@
     schema={serviceSchema.beneficiariesAccessModesOther}
     name="beneficiariesAccessModesOther"
     errorMessages={$formErrors.beneficiariesAccessModesOther}
-    bind:value={service.beneficiariesAccessModesOther} />
+    bind:value={service.beneficiariesAccessModesOther}
+  />
   <ModelField
     label="Comment orienter un bénéficiaire en tant qu’accompagnateur ?"
     type="checkboxes"
@@ -39,7 +42,8 @@
     schema={serviceSchema.coachOrientationModes}
     name="coachOrientationModes"
     errorMessages={$formErrors.coachOrientationModes}
-    bind:value={service.coachOrientationModes} />
+    bind:value={service.coachOrientationModes}
+  />
   <ModelField
     visible={service.coachOrientationModes.includes("OT")}
     hideLabel
@@ -48,7 +52,8 @@
     schema={serviceSchema.coachOrientationModesOther}
     name="coachOrientationModesOther"
     errorMessages={$formErrors.coachOrientationModesOther}
-    bind:value={service.coachOrientationModesOther} />
+    bind:value={service.coachOrientationModesOther}
+  />
 
   <AddableMultiselect
     bind:values={service.credentials}
@@ -60,12 +65,14 @@
     placeholder="Aucun"
     placeholderMulti="Choisir un autre justificatif"
     schema={serviceSchema.credentials}
-    sortSelect />
+    sortSelect
+  />
 
   <Field
     type="custom"
     label="Partagez les documents à compléter"
-    errorMessages={$formErrors.forms}>
+    errorMessages={$formErrors.forms}
+  >
     <FieldHelp slot="helptext" title="Justificatifs, documents">
       Mettre tous les documents maintenant, c’est permettre d’avoir des
       candidatures complètes avec moins d’aller/retour
@@ -75,7 +82,8 @@
       structureSlug={service.structure}
       name="forms"
       on:blur
-      bind:fileKeys={service.forms} />
+      bind:fileKeys={service.forms}
+    />
   </Field>
   <ModelField
     label="Liens pratiques"
@@ -84,5 +92,6 @@
     schema={serviceSchema.onlineForm}
     name="onlineForm"
     errorMessages={$formErrors.onlineForm}
-    bind:value={service.onlineForm} />
+    bind:value={service.onlineForm}
+  />
 </FieldSet>

@@ -33,7 +33,8 @@
 <CenteredGrid
   roundedbg
   --col-under-bg="var(--col-france-blue)"
-  --col-content-bg="var(--col-bg)">
+  --col-content-bg="var(--col-bg)"
+>
   <div class="flex flex-col col-span-full">
     <div class="flex flex-col gap-3 lg:flex-row-reverse">
       <div class=" orientation">

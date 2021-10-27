@@ -43,17 +43,20 @@
             <LinkButton
               label="Créer une structure"
               to="/structures/creer"
-              noBackground />
+              noBackground
+            />
 
             <LinkButton
               label="Afficher toutes les structures"
               to="/tableau-de-bord/admin/structures"
-              noBackground />
+              noBackground
+            />
 
             <LinkButton
               label="Afficher tous les services"
               to="/tableau-de-bord/admin/services"
-              noBackground />
+              noBackground
+            />
           </div>
         </div>
       {/if}

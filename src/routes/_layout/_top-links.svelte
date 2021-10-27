@@ -7,9 +7,11 @@
     label="Communauté de l’inclusion"
     href="https://communaute.inclusion.beta.gouv.fr/"
     external
-    vertical />
+    vertical
+  />
   <NavItem
     label="Contacter l’équipe"
     href="https://itou.typeform.com/doracontactsupp"
-    vertical />
+    vertical
+  />
 </nav>

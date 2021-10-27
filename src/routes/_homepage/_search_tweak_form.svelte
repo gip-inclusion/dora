@@ -83,7 +83,8 @@
           choices={catChoices}
           label="Thématique"
           vertical
-          required />
+          required
+        />
 
         <Field
           type="select"
@@ -91,7 +92,8 @@
           placeholder="Choisissez"
           choices={subCatChoices}
           label="Besoin(s)"
-          vertical />
+          vertical
+        />
 
         <Field type="custom" label="Lieu" required vertical>
           <CitySearch
@@ -104,14 +106,16 @@
               cityLabel = `${
                 city.properties.label
               } (${city.properties.postcode.slice(0, 2)})`;
-            }} />
+            }}
+          />
         </Field>
 
         <Button
           type="submit"
           label="Mettre à jour"
           disabled={!category || !cityCode}
-          preventDefaultOnMouseDown />
+          preventDefaultOnMouseDown
+        />
       </form>
       <p>
         Le service DORA est actuellement <a

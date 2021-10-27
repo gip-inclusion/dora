@@ -46,4 +46,5 @@
   searchFunction={searchAddress}
   delay="200"
   localFiltering={false}
-  minCharactersToSearch="3" />
+  minCharactersToSearch="3"
+/>

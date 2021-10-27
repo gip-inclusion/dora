@@ -57,13 +57,15 @@
       <LinkButton
         to="/auth/connexion"
         label="Aller à la page de connexion"
-        preventDefaultOnMouseDown />
+        preventDefaultOnMouseDown
+      />
     {:else}
       <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
       <LinkButton
         to="/auth/renvoyer-email-validation"
         label="Demander un nouveau lien"
-        preventDefaultOnMouseDown />
+        preventDefaultOnMouseDown
+      />
     {/if}
   </Fieldset>
 </AuthLayout>

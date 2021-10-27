@@ -59,7 +59,8 @@
     schema={modifyUserSchema}
     onChange={handleChange}
     onSubmit={handleSubmit}
-    onSuccess={handleSuccess}>
+    onSuccess={handleSuccess}
+  >
     <Fieldset title="Modifier les informations" noTopPadding>
       <Field
         name="name"
@@ -67,14 +68,16 @@
         vertical
         type="text"
         value={member.user.fullName}
-        disabled />
+        disabled
+      />
       <Field
         name="email"
         label="Courriel"
         vertical
         type="email"
         value={member.user.email}
-        disabled />
+        disabled
+      />
       <Field
         name="level"
         errorMessages={$formErrors.level}
@@ -83,11 +86,13 @@
         type="select"
         bind:value={level}
         choices={levelChoices}
-        required />
+        required
+      />
       <Button
         type="submit"
         label="Modifier les informations"
-        preventDefaultOnMouseDown />
+        preventDefaultOnMouseDown
+      />
     </Fieldset>
   </Form>
 </Modal>

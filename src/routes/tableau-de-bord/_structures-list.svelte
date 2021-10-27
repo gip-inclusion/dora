@@ -45,7 +45,8 @@
             label={structure.department || " "}
             smallIcon
             iconOnLeft
-            icon={homeIcon} />
+            icon={homeIcon}
+          />
         {/if}
         <!-- <Label
           label={`${structure.numServices} fiche(s)`}
@@ -57,13 +58,15 @@
           to="/services/creer"
           icon={addCircleIcon}
           iconOnRight
-          noBackground />
+          noBackground
+        />
         <LinkButton
           label="Gérer"
           to="/tableau-de-bord/structures/{structure.slug}"
           iconOnRight
           icon={settingsIcon}
-          noBackground />
+          noBackground
+        />
       </div>
     {/each}
   </div>

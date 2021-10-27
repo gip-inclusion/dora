@@ -31,12 +31,14 @@
       <Label
         label={`${result.postalCode}, ${result.city}`}
         iconOnLeft
-        icon={mapPinIcon} />
+        icon={mapPinIcon}
+      />
       {#if result.distance}
         <Label
           label={`${result.distance} km`}
           iconOnLeft
-          icon={pinDistanceIcon} />
+          icon={pinDistanceIcon}
+        />
       {/if}
     </div>
   </div>

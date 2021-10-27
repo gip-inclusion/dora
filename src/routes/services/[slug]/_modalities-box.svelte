@@ -41,11 +41,13 @@
     {#if service.isCumulative}
       <Info
         label="Ce service est cumulable avec d’autres dispositifs"
-        positiveMood />
+        positiveMood
+      />
     {:else}
       <Info
         label="Ce service n’est pas cumulable avec d’autres dispositifs"
-        negativeMood />
+        negativeMood
+      />
     {/if}
 
     {#if service.hasFee}
@@ -95,7 +97,8 @@
           <h4 class="pt-2 pb-1">À distance</h4>
           <p class="pb-2 text-sm">
             <a target="_blank" rel="noopener nofollow" href={service.remoteUrl}
-              >{shortenString(service.remoteUrl, 35)}</a>
+              >{shortenString(service.remoteUrl, 35)}</a
+            >
           </p>
         {/if}
       {/if}

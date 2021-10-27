@@ -17,7 +17,8 @@
       <img class="inline" src={LogoRF} alt="" width="124" height="110" />
     </div>
     <div
-      class="col-start-1 col-span-full text-sm leading-normal text-gray-text lg:col-span-6 lg:col-start-7">
+      class="col-start-1 col-span-full text-sm leading-normal text-gray-text lg:col-span-6 lg:col-start-7"
+    >
       Dora est un service public numérique qui permet aux structures de
       l’insertion de référencer simplement et mettre à jour en temps réel leur
       offre de services, et aux professionnels prescripteurs de rechercher et
@@ -25,11 +26,14 @@
       bénéficiaire.
       <div class="flex gap-x-3 gap-y-1 mt-2 font-bold flex-wrap">
         <a target="_blank" rel="noopener" href="https://gouvernement.fr"
-          >gouvernement.fr</a>
+          >gouvernement.fr</a
+        >
         <a target="_blank" rel="noopener" href="https://service-public.fr"
-          >service-public.fr</a>
+          >service-public.fr</a
+        >
         <a target="_blank" rel="noopener" href="https://data.gouv.fr"
-          >data.gouv.fr</a>
+          >data.gouv.fr</a
+        >
       </div>
     </div>
   </CenteredGrid>
@@ -41,14 +45,16 @@
         label="Mentions légales"
         on:click={() => goto("/mentions-legales")}
         separator
-        light />
+        light
+      />
       <NavItem href="" label="Données personnelles" separator light />
       <NavItem
         href=""
         label="Gestion des cookies"
         separator
         light
-        on:click={handleOpenCookiesPanel} />
+        on:click={handleOpenCookiesPanel}
+      />
       <NavItem href="" label="Accessibilité : non conforme" light />
     </nav>
   </CenteredGrid>

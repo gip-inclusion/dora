@@ -101,7 +101,8 @@
                 <li>
                   <span>
                     <a target="_blank" rel="noopener nofollow" href={form}
-                      >{basename(form)}</a>
+                      >{basename(form)}</a
+                    >
                   </span>
                 </li>
               {/each}
@@ -115,7 +116,8 @@
                     target="_blank"
                     rel="noopener nofollow"
                     href={service.onlineForm}
-                    >{shortenString(service.onlineForm, 35)}</a>
+                    >{shortenString(service.onlineForm, 35)}</a
+                  >
                 </span>
               </li>
             </ul>
@@ -132,12 +134,12 @@
             {:else}
               <div class="flex flex-col gap-2 pb-1">
                 <Label
-                  label="Vous devez être connecté•e pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire." />
+                  label="Vous devez être connecté•e pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire."
+                />
                 <LinkButton
                   label="Connexion"
-                  to={`/auth/connexion?next=${encodeURIComponent(
-                    $page.path
-                  )}`} />
+                  to={`/auth/connexion?next=${encodeURIComponent($page.path)}`}
+                />
               </div>
             {/if}
             <p><strong>{service.structureInfo.name}</strong></p>
@@ -151,8 +153,8 @@
             {#if showContact}
               {#if service.contactPhone}
                 <p class="text-sm">
-                  <a href="tel:{service.contactPhone}"
-                    >{service.contactPhone}</a>
+                  <a href="tel:{service.contactPhone}">{service.contactPhone}</a
+                  >
                 </p>
               {/if}
               {#if service.contactEmail}
@@ -168,7 +170,8 @@
                 <a
                   target="_blank"
                   rel="noopener nofollow"
-                  href={service.structureInfo.url}>Voir leur site internet</a>
+                  href={service.structureInfo.url}>Voir leur site internet</a
+                >
               </p>
             {/if}
           </ul>
@@ -180,7 +183,8 @@
         <Label label="Au clic, ouverture de votre client e-mail :" />
         <LinkButton
           label="Orientez votre bénéficiaire"
-          to="mailto:{service.contactEmail}" />
+          to="mailto:{service.contactEmail}"
+        />
       </div>
     {/if}
   </div>

@@ -17,7 +17,8 @@
   {href}
   target="_blank"
   rel="noopener"
-  {disabled}>
+  {disabled}
+>
   {label}
   {#if external}
     <div class="w-2 h-2 ml-1 fill-current">

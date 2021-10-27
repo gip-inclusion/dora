@@ -45,12 +45,14 @@
       bind:currentStep
       bind:service
       bind:servicesOptions
-      title="Modifier un service">
+      title="Modifier un service"
+    >
       <svelte:component
         this={currentStepComponent}
         bind:service
         {servicesOptions}
-        {structures} />
+        {structures}
+      />
     </ServiceFormWrapper>
   {/if}
 </EnsureLoggedIn>

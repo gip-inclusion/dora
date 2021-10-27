@@ -31,7 +31,8 @@
         {structuresOptions}
         modify
         formTitle="Modifiez votre structure"
-        visible />
+        visible
+      />
     </div>
   </CenteredGrid>
 </EnsureLoggedIn>

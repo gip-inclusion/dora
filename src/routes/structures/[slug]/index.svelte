@@ -67,7 +67,8 @@
             class="underline"
             target="_blank"
             rel="noopener nofollow"
-            href={structure.url}>
+            href={structure.url}
+          >
             {structure.url}
           </a>
         </div>

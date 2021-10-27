@@ -897,7 +897,8 @@
   {hideArrow || !items.length ? 'hide-arrow' : ''}
   {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
-  class:is-loading={showLoadingIndicator && loading}>
+  class:is-loading={showLoadingIndicator && loading}
+>
   <select name={selectName} id={selectId} bind:value use:multipleAction>
     {#if !multiple && value}
       <option {value} selected>{text}</option>
@@ -927,7 +928,8 @@
       on:blur
       on:keydown={onKeyDown}
       on:click={onInputClick}
-      on:keypress={onKeyPress} />
+      on:keypress={onKeyPress}
+    />
     {#if clearable}
       <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
     {/if}
@@ -938,7 +940,8 @@
       ? dropdownClassName
       : ''} autocomplete-list {showList ? '' : 'hidden'}
     is-fullwidth"
-    bind:this={list}>
+    bind:this={list}
+  >
     {#if filteredListItems && filteredListItems.length > 0}
       {#each filteredListItems as listItem, i}
         {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
@@ -951,7 +954,8 @@
               on:click={() => onListItemClick(listItem)}
               on:pointerenter={() => {
                 highlightIndex = i;
-              }}>
+              }}
+            >
               <div class="flex flex-row">
                 <div class="flex-grow">
                   {@html listItem.highlighted
@@ -998,7 +1002,8 @@
 
         <div
           class="tag is-delete"
-          on:click|preventDefault={unselectItem(tagItem)}>
+          on:click|preventDefault={unselectItem(tagItem)}
+        >
           {@html closeCircleIcon}
         </div>
       </div>

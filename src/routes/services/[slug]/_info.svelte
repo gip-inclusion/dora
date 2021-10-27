@@ -32,14 +32,16 @@
 <div
   class="wrapper"
   class:positive={positiveMood}
-  class:negative={negativeMood}>
+  class:negative={negativeMood}
+>
   <Label
     {label}
     success={positiveMood}
     error={negativeMood}
     {icon}
     bold
-    iconOnLeft />
+    iconOnLeft
+  />
   <div class="details">
     <slot name="details" />
   </div>

@@ -47,10 +47,12 @@
     schema={accountSchema}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
-    bind:requesting>
+    bind:requesting
+  >
     <Fieldset
       title="Informations personnelles"
-      description="Merci de renseigner les informations nécessaires à la création de votre compte.">
+      description="Merci de renseigner les informations nécessaires à la création de votre compte."
+    >
       {#each $formErrors.nonFieldErrors || [] as msg}
         <Alert iconOnLeft label={msg} />
       {/each}
@@ -64,7 +66,8 @@
           required
           placeholder="Aurélien"
           autocomplete="given-name"
-          bind:value={$registrationInfo.firstName} />
+          bind:value={$registrationInfo.firstName}
+        />
 
         <Field
           name="lastName"
@@ -75,7 +78,8 @@
           required
           placeholder="Durand"
           autocomplete="family-name"
-          bind:value={$registrationInfo.lastName} />
+          bind:value={$registrationInfo.lastName}
+        />
 
         <Field
           name="email"
@@ -86,7 +90,8 @@
           required
           placeholder="Votre courriel"
           autocomplete="email"
-          bind:value={$registrationInfo.email} />
+          bind:value={$registrationInfo.email}
+        />
         <div class="flex flex-col md:flex-row justify-between gap-x-4">
           <Field
             name="password"
@@ -98,7 +103,8 @@
             bind:value={$registrationInfo.password}
             autocomplete="new-password"
             passwordrules={passwordRules}
-            required />
+            required
+          />
           <Field
             name="password2"
             errorMessages={$formErrors.password2}
@@ -109,7 +115,8 @@
             bind:value={$registrationInfo.password2}
             autocomplete="new-password"
             passwordrules={passwordRules}
-            required />
+            required
+          />
         </div>
         <Field name="siret" type="hidden" value={$registrationInfo.siret} />
 
@@ -119,13 +126,16 @@
           bind:value={hasAgreedToLegalMentions}
           toggleYesText={toggleText}
           toggleNoText={toggleText}
-          placeholder="" />
+          placeholder=""
+        />
 
         <Button
           type="submit"
           label="Demandez votre accès"
           disabled={!hasAgreedToLegalMentions || requesting}
-          preventDefaultOnMouseDown />
-      </div></Fieldset>
+          preventDefaultOnMouseDown
+        />
+      </div></Fieldset
+    >
   </Form>
 </div>

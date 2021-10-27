@@ -47,7 +47,8 @@
         type="button"
         label="Accéder au site"
         to="https://monenfant.fr/"
-        otherTab />
+        otherTab
+      />
     </div>
   </div>
 </SearchResultWrapper>

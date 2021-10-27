@@ -56,7 +56,8 @@
     on:change
     {choices}
     {disabled}
-    {readonly} />
+    {readonly}
+  />
 {:else if type === "radios"}
   <RadioButtons
     {name}
@@ -64,7 +65,8 @@
     on:change
     {choices}
     {disabled}
-    {readonly} />
+    {readonly}
+  />
 {:else if type === "select"}
   <Select
     {name}
@@ -76,7 +78,8 @@
     {placeholder}
     {placeholderMulti}
     {disabled}
-    {readonly} />
+    {readonly}
+  />
 {:else if type === "multiselect"}
   <Select
     {name}
@@ -89,7 +92,8 @@
     {placeholder}
     {placeholderMulti}
     {disabled}
-    {readonly} />
+    {readonly}
+  />
 {:else if type === "text"}
   <input
     {name}
@@ -101,7 +105,8 @@
     {placeholder}
     {disabled}
     {readonly}
-    {autocomplete} />
+    {autocomplete}
+  />
 {:else if type === "textarea"}
   <textarea
     {name}
@@ -114,7 +119,8 @@
     {disabled}
     {readonly}
     {autocomplete}
-    rows="4" />
+    rows="4"
+  />
 {:else if type === "richtext"}
   <RichText
     {name}
@@ -122,7 +128,8 @@
     {placeholder}
     initialContent={value}
     {disabled}
-    {readonly} />
+    {readonly}
+  />
 {:else if type === "toggle"}
   <Toggle
     {name}
@@ -130,7 +137,8 @@
     {disabled}
     {readonly}
     {toggleYesText}
-    {toggleNoText} />
+    {toggleNoText}
+  />
 {:else if type === "password"}
   <input
     {name}
@@ -142,7 +150,8 @@
     {disabled}
     {readonly}
     {autocomplete}
-    {passwordrules} />
+    {passwordrules}
+  />
 {:else if type === "date"}
   <input
     {name}
@@ -153,7 +162,8 @@
     {placeholder}
     {disabled}
     {readonly}
-    {autocomplete} />
+    {autocomplete}
+  />
 {:else if type === "number"}
   <input
     {name}
@@ -165,7 +175,8 @@
     {placeholder}
     {disabled}
     {readonly}
-    {autocomplete} />
+    {autocomplete}
+  />
 {:else if type === "email"}
   <input
     {name}
@@ -176,7 +187,8 @@
     {placeholder}
     {disabled}
     {readonly}
-    {autocomplete} />
+    {autocomplete}
+  />
 {:else if type === "hidden"}
   <input
     {name}
@@ -186,7 +198,8 @@
     type="hidden"
     {disabled}
     {readonly}
-    {autocomplete} />
+    {autocomplete}
+  />
 {:else if type === "tel"}
   <input
     {name}
@@ -197,7 +210,8 @@
     {placeholder}
     {disabled}
     {readonly}
-    {autocomplete} />
+    {autocomplete}
+  />
 {:else if type === "url"}
   <input
     {name}
@@ -208,6 +222,7 @@
     {placeholder}
     {disabled}
     {readonly}
-    {autocomplete} />
+    {autocomplete}
+  />
 {/if}
 <span />

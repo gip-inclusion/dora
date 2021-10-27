@@ -65,7 +65,8 @@
     {errorMessages}
     bind:value={values}
     choices={filteredChoices}
-    {sortSelect}>
+    {sortSelect}
+  >
     <slot name="helptext" slot="helptext" />
   </ModelField>
   <Field type="custom">
@@ -76,7 +77,8 @@
           secondary
           nogrow
           small
-          on:click={() => (textInputVisible = true)} />
+          on:click={() => (textInputVisible = true)}
+        />
       </div>
       <div class="flex flex-row gap-2 " class:hidden={!textInputVisible}>
         <Field
@@ -84,7 +86,8 @@
           bind:value={newValue}
           on:input={handleChangeValue}
           errorMessages={newValueErrors}
-          vertical />
+          vertical
+        />
         <div class="self-center">
           <div class="flex flex-col gap-1">
             <Button
@@ -92,14 +95,16 @@
               nogrow
               small
               disabled={!newValue}
-              on:click={handleAddValue} />
+              on:click={handleAddValue}
+            />
 
             <Button
               label="Annuler"
               secondary
               nogrow
               small
-              on:click={() => (textInputVisible = false)} />
+              on:click={() => (textInputVisible = false)}
+            />
           </div>
         </div>
       </div>

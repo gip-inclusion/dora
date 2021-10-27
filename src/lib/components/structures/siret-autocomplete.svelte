@@ -41,4 +41,5 @@
   delay="200"
   localFiltering={false}
   postfixValueFunction={(item) => item.siret}
-  minCharactersToSearch="3" />
+  minCharactersToSearch="3"
+/>

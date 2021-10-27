@@ -63,14 +63,16 @@
       {label}
       noBackground
       {disabled}
-      on:click={() => (isOpen = !isOpen)} />
+      on:click={() => (isOpen = !isOpen)}
+    />
   </div>
   <div
     class="children"
     class:open={isOpen}
     bind:this={childrenListNode}
     use:clickOutside
-    on:click_outside={handleClickOutside}>
+    on:click_outside={handleClickOutside}
+  >
     <slot onClose={() => (isOpen = false)} />
   </div>
 </div>

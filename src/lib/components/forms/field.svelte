@@ -51,14 +51,17 @@
     <div
       {name}
       class="flex {layoutClass} items-top relative "
-      isDOMLabel={type !== "checkboxes" && type !== "radios"}>
+      isDOMLabel={type !== "checkboxes" && type !== "radios"}
+    >
       <div
         class="flex flex-col"
         class:w-250p={!vertical}
         class:w-full={vertical}
-        class:mb-1={vertical}>
+        class:mb-1={vertical}
+      >
         <div
-          class="inline-block w-full flex-shrink-0 text-base font-bold text-gray-dark">
+          class="inline-block w-full flex-shrink-0 text-base font-bold text-gray-dark"
+        >
           <label for={name}>{hideLabel ? "" : label}</label>
           {#if required}<span class="text-error">*</span>{/if}
         </div>
@@ -85,7 +88,8 @@
             {toggleYesText}
             {toggleNoText}
             {autocomplete}
-            {passwordrules} />
+            {passwordrules}
+          />
         {:else}
           <slot name="custom-input" />
         {/if}

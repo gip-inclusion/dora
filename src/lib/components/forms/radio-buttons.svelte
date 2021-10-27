@@ -27,14 +27,18 @@
         value={choice.value}
         class="hidden"
         {disabled}
-        {readonly} />
+        {readonly}
+      />
       <div
-        class="flex justify-center w-3 h-3 bg-white border rounded-full toggle-path border-gray-03 ">
+        class="flex justify-center w-3 h-3 bg-white border rounded-full toggle-path border-gray-03 "
+      >
         <div
-          class="self-center hidden rounded-full w-3/2 h-3/2 bg-dora-magenta-cta toggle-circle" />
+          class="self-center hidden rounded-full w-3/2 h-3/2 bg-dora-magenta-cta toggle-circle"
+        />
       </div>
       <span class="inline-block w-40 ml-2 text-gray-text text-sm"
-        >{choice.label}</span>
+        >{choice.label}</span
+      >
     </label>
   {/each}
 </div>
