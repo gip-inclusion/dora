@@ -69,6 +69,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Retrouvez votre structure | DORA</title>
+</svelte:head>
+
 <FieldSet
   title="Retrouvez votre structure"
   description="On peut récuperer automatiquement les informations importantes de votre structure via la base SIRENE. Saissisez votre département et le numéro SIRET pour commencer."
@@ -107,7 +111,7 @@
 
 {#if alreadyClaimedEstablishment}
   <div
-    class="text-error text-xl flex flex-row items-center justify-center pt-1/2 mt-2"
+    class="flex flex-row items-center justify-center mt-2 text-xl text-error pt-1/2"
   >
     <div class="w-3 h-3 mr-1 fill-current ">
       {@html alertIcon}

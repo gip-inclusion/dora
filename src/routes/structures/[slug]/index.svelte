@@ -21,7 +21,8 @@
 </script>
 
 <svelte:head>
-  <title>Dora: {structure.name}</title>
+  <title>{structure.name} | DORA</title>
+  <meta name="description" content={structure.shortDesc} />
 </svelte:head>
 
 <CenteredGrid roundedbg topPadded>

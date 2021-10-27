@@ -39,6 +39,10 @@
   $: currentStepComponent = steps.get(currentStep);
 </script>
 
+<svelte:head>
+  <title>{service?.name} | {service?.structureInfo.name} | DORA</title>
+</svelte:head>
+
 <EnsureLoggedIn>
   {#if service}
     <ServiceFormWrapper

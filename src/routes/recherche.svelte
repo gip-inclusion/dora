@@ -126,6 +126,10 @@
   }
 </style>
 
+<svelte:head>
+  <title>Résultats de recherche | DORA</title>
+</svelte:head>
+
 <CenteredGrid topPadded>
   <div class="col-start-1 col-span-full text-center mb-6">
     <p class="text-gray-text text-base">Consultez les services</p>

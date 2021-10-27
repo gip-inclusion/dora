@@ -20,7 +20,7 @@
 </script>
 
 <svelte:head>
-  <title>Dora: {structure.name}</title>
+  <title>{structure.name} | DORA</title>
 </svelte:head>
 
 <EnsureLoggedIn>

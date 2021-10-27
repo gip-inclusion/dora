@@ -16,4 +16,12 @@
   export let servicesOptions;
 </script>
 
+<svelte:head>
+  <title>DORA: l’offre de services de l’insertion</title>
+  <meta
+    name="description"
+    content="Service public permettant aux structures de l’insertion de référencer leurs services et aux prescripteurs de trouver le meilleur service pour leur bénéficiaire."
+  />
+</svelte:head>
+
 <Landing {servicesOptions} />

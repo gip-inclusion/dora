@@ -68,6 +68,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Se connecter | DORA</title>
+</svelte:head>
+
 <CenteredGrid topPadded>
   <div class="col-start-1 mb-6 text-center col-span-full">
     <h1 class="text-france-blue text-13xl">Se connecter à DORA</h1>

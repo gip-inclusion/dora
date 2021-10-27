@@ -65,6 +65,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Référencer votre service | DORA</title>
+</svelte:head>
+
 <EnsureLoggedIn>
   {#if !structures.length}
     <CenteredGrid topPadded>

@@ -21,6 +21,10 @@
   $: currentStepComponent = steps.get(currentStep);
 </script>
 
+<svelte:head>
+  <title>Créer son compte | DORA</title>
+</svelte:head>
+
 <CenteredGrid topPadded>
   <div class="col-start-1 mb-6 text-center col-span-full">
     <h1 class="text-france-blue text-13xl">Créer son compte DORA</h1>

@@ -48,6 +48,10 @@
   export let validated, mustSetPassword, structureName, resetToken;
 </script>
 
+<svelte:head>
+  <title>Rejoindre une structure | DORA</title>
+</svelte:head>
+
 <CenteredGrid topPadded>
   <div class="col-start-1 mb-6 text-center col-span-full">
     <h1 class="text-france-blue text-13xl">Rejoindre une structure</h1>

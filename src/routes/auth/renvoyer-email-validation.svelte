@@ -45,6 +45,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Renvoyer un email de validation | DORA</title>
+</svelte:head>
+
 <CenteredGrid topPadded>
   <div class="col-start-1 mb-6 text-center col-span-full">
     <h1 class="text-france-blue text-13xl">Créer son compte DORA</h1>
@@ -61,7 +65,7 @@
     onSuccess={handleSuccess}
     bind:requesting
   >
-    <Fieldset>
+    <Fieldset title="Renvoyer un email de validation">
       {#if success}
         <Info label="C’est tout bon !" positiveMood>
           <p>
