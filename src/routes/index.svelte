@@ -17,10 +17,10 @@
 </script>
 
 <svelte:head>
-  <title>DORA: l’offre de services de l’insertion</title>
+  <title>DORA : le référentiel de l'offre d’insertion</title>
   <meta
     name="description"
-    content="Service public permettant aux structures de l’insertion de référencer leurs services et aux prescripteurs de trouver le meilleur service pour leur bénéficiaire."
+    content="Plateforme publique dédiée au référencement de l’offre d’insertion et à l’identification et l’activation des leviers adaptés aux besoins des bénéficiaires."
   />
 </svelte:head>
 
