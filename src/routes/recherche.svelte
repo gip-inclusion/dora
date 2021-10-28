@@ -74,15 +74,15 @@
   });
 </script>
 
-<style>
+<style lang="postcss">
   .search-form {
     padding-top: var(--s56);
-    grid-column: 1 / 5;
+    grid-column: 1 / -1;
   }
 
   .results-wrapper {
     padding-bottom: var(--s56);
-    grid-column: 5 / -1;
+    grid-column: 1 / -1;
   }
 
   .results {
@@ -91,12 +91,12 @@
     padding-top: var(--s56);
     padding-bottom: var(--s16);
     gap: var(--s16);
-    grid-column: 5 / -1;
   }
 
   .no-results-wrapper {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    padding-top: var(--s56);
     padding-bottom: var(--s24);
     color: var(--col-text);
     gap: var(--s56);
@@ -105,20 +105,39 @@
   .no-results {
     display: flex;
     flex-direction: column;
-    padding-top: var(--s56);
     gap: var(--s16);
-    grid-column: 6 / -2;
+  }
+
+  @screen xl {
+    .no-results-wrapper {
+      flex-direction: row;
+    }
+  }
+
+  @screen lg {
+    .search-form {
+      padding-top: var(--s56);
+      grid-column: 1 / 5;
+    }
+
+    .results-wrapper {
+      grid-column: 5 / -1;
+    }
   }
 </style>
 
-<CenteredGrid>
+<svelte:head>
+  <title>Résultats de recherche | DORA</title>
+</svelte:head>
+
+<CenteredGrid topPadded>
   <div class="col-start-1 col-span-full text-center mb-6">
     <p class="text-gray-text text-base">Consultez les services</p>
     <h1 class="text-france-blue text-13xl">Résultats de recherche</h1>
   </div>
 </CenteredGrid>
 
-<CenteredGrid gridRow="2" roundedbg>
+<CenteredGrid roundedbg>
   <div class="search-form">
     <SearchTweakForm
       numResults={results.length}
@@ -126,7 +145,8 @@
       bind:subcategory
       bind:cityCode
       bind:cityLabel
-      {servicesOptions} />
+      {servicesOptions}
+    />
   </div>
   <div class="results-wrapper">
     {#if results.length}
@@ -137,7 +157,13 @@
       </div>
     {:else}
       <div class="no-results-wrapper">
-        <img src={NoResultsPic} width="312" height="269" alt="" />
+        <img
+          src={NoResultsPic}
+          width="312"
+          height="269"
+          alt=""
+          class="self-center"
+        />
         <div class="no-results">
           <h2>Ooopsie !</h2>
 
@@ -151,7 +177,8 @@
               class="underline"
               target="_blank"
               rel="noopener"
-              href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090">
+              href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090"
+            >
               en construction
             </a>, et se concentre sur 3 thématiques de services (mobilité, garde
             d’enfant et hébergement/logement) et 3 territoires
@@ -167,7 +194,8 @@
               label="Recommander DORA"
               icon={addCircleIcon}
               disabled
-              iconOnRight />
+              iconOnRight
+            />
           </div>
           <h4>
             Vous êtes une structure proposant des services correspondant à ces
@@ -178,7 +206,8 @@
               label="Référencer un service"
               icon={addCircleIcon}
               to={`/services/creer`}
-              iconOnRight />
+              iconOnRight
+            />
           </div>
         </div>
       </div>

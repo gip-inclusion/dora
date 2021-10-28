@@ -22,8 +22,8 @@
 </style>
 
 <Box title="Conditions d’accès" --box-color="black">
-  <div class="flex flex-row">
-    <div class="flex-1">
+  <div class="flex flex-row flex-wrap gap-2">
+    <div class="flex-grow">
       <h3>Mobiliser ce service</h3>
       <ul class="list">
         {#each service.beneficiariesAccessModesDisplay as mode}
@@ -31,7 +31,8 @@
             <span
               >{mode === "Autre (préciser)"
                 ? service.beneficiariesAccessModesOther
-                : mode}</span>
+                : mode}</span
+            >
           </li>
         {:else}
           <li><span>Non renseigné</span></li>
@@ -39,7 +40,7 @@
       </ul>
     </div>
 
-    <div class="flex-1">
+    <div class="flex-grow">
       <h3>Pré-requis, compétences</h3>
       <ul class="list">
         {#each service.requirementsDisplay as reqs}
@@ -50,7 +51,7 @@
       </ul>
     </div>
 
-    <div class="flex-1">
+    <div class="flex-grow">
       <h3>Documents et justificatifs</h3>
       <ul class="list">
         {#each service.credentialsDisplay as creds}

@@ -17,12 +17,6 @@
 </script>
 
 <style>
-  .tags {
-    display: flex;
-    flex-direction: row;
-    gap: var(--s16);
-  }
-
   @media print {
     h1 {
       color: var(--col-france-blue);
@@ -30,7 +24,7 @@
   }
 </style>
 
-<div class="col-start-1 col-span-full  mb-6  text-white">
+<div class="col-start-1 mb-6 text-white col-span-full">
   <div class="mx-auto">
     <Label label={service.structureInfo.name} darkBg />
     <h1 class="text-white">{service.name}</h1>
@@ -39,7 +33,7 @@
         <LinkButton to={editLink} label="Éditer" small />
       </div>
     {/if}
-    <div class="tags">
+    <div class="flex flex-col gap-2 md:flex-row">
       {#if service.isAvailable}
         <Label
           label="Disponible"
@@ -47,26 +41,30 @@
           icon={checkBoxBlankIcon}
           success
           darkBg
-          bold />
+          bold
+        />
       {:else}
         <Label
           label="Indisponible"
           iconOnLeft
           icon={checkBoxBlankIcon}
-          darkBg />
+          darkBg
+        />
       {/if}
 
       <Label
         label={service.kindsDisplay.join(", ")}
         iconOnLeft
         icon={compassDiscoverIcon}
-        darkBg />
+        darkBg
+      />
 
       <Label
         label={`${service.postalCode}, ${service.city}`}
         iconOnLeft
         icon={mapPinIcon}
-        darkBg />
+        darkBg
+      />
     </div>
   </div>
 </div>

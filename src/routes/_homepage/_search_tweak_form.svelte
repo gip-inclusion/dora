@@ -4,6 +4,8 @@
   import Button from "$lib/components/button.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import Field from "$lib/components/forms/field.svelte";
+
+  import Collapsable from "./_collapsable.svelte";
   import { getQuery } from "./_search";
 
   export let servicesOptions;
@@ -61,62 +63,71 @@
 </style>
 
 <div class="wrapper">
-  <h3>Affinez votre recherche</h3>
-
-  {#if numResults}
-    <div class="text-gray-text-alt2 text-sm mt-2">
-      {numResults} résultat{#if numResults > 1}s{/if}
+  <Collapsable>
+    <div slot="above-fold">
+      <h3 class="mb-2">Affinez votre recherche</h3>
     </div>
-  {/if}
-  <div class="border-t border-gray-01 my-3/2" />
-  <form on:submit|preventDefault={handleSearch}>
-    <Field
-      type="select"
-      bind:value={category}
-      onSelectChange={handleCategoryChange}
-      placeholder="Choisissez"
-      choices={catChoices}
-      label="Thématique"
-      vertical
-      required />
+    <div slot="under-fold">
+      {#if numResults}
+        <div class="text-gray-text-alt2 text-sm">
+          {numResults} résultat{#if numResults > 1}s{/if}
+        </div>
+      {/if}
+      <div class="border-t border-gray-01 my-3/2" />
+      <form on:submit|preventDefault={handleSearch}>
+        <Field
+          type="select"
+          bind:value={category}
+          onSelectChange={handleCategoryChange}
+          placeholder="Choisissez"
+          choices={catChoices}
+          label="Thématique"
+          vertical
+          required
+        />
 
-    <Field
-      type="select"
-      bind:value={subcategory}
-      placeholder="Choisissez"
-      choices={subCatChoices}
-      label="Besoin(s)"
-      vertical />
+        <Field
+          type="select"
+          bind:value={subcategory}
+          placeholder="Choisissez"
+          choices={subCatChoices}
+          label="Besoin(s)"
+          vertical
+        />
 
-    <Field type="custom" label="Lieu" required vertical>
-      <CitySearch
-        slot="custom-input"
-        name="city"
-        placeholder="Ville du bénéficiaire"
-        initialValue={cityLabel}
-        handleChange={(city) => {
-          cityCode = city.properties.citycode;
-          cityLabel = `${
-            city.properties.label
-          } (${city.properties.postcode.slice(0, 2)})`;
-        }} />
-    </Field>
+        <Field type="custom" label="Lieu" required vertical>
+          <CitySearch
+            slot="custom-input"
+            name="city"
+            placeholder="Ville du bénéficiaire"
+            initialValue={cityLabel}
+            handleChange={(city) => {
+              cityCode = city.properties.citycode;
+              cityLabel = `${
+                city.properties.label
+              } (${city.properties.postcode.slice(0, 2)})`;
+            }}
+          />
+        </Field>
 
-    <Button
-      type="submit"
-      label="Mettre à jour"
-      disabled={!category || !cityCode}
-      preventDefaultOnMouseDown />
-  </form>
-  <p>
-    Le service DORA est actuellement <a
-      class="underline"
-      target="_blank"
-      rel="noopener"
-      href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090"
-      >en construction</a
-    >, et se concentre sur 3 thématiques de services (mobilité, garde d’enfant
-    et hébergement/logement) et 3 territoires (Loire-Atlantique, Ardennes et La
-    Réunion).
-  </p>
+        <Button
+          type="submit"
+          label="Mettre à jour"
+          disabled={!category || !cityCode}
+          preventDefaultOnMouseDown
+        />
+      </form>
+      <p>
+        Le service DORA est actuellement <a
+          class="underline"
+          target="_blank"
+          rel="noopener"
+          href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090"
+          >en construction</a
+        >, et se concentre sur 3 thématiques de services (mobilité, garde
+        d’enfant et hébergement/logement) et 3 territoires (Loire-Atlantique,
+        Ardennes et La Réunion).
+      </p>
+    </div>
+  </Collapsable>
 </div>

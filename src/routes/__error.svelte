@@ -30,7 +30,7 @@
   });
 </script>
 
-<CenteredGrid>
+<CenteredGrid topPadded>
   <div class="wrapper col-start-1 col-span-full mb-8">
     {#if notFound}
       Cette page n’existe pas.

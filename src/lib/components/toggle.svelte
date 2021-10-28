@@ -48,13 +48,16 @@
     bind:checked
     class="hidden"
     {disabled}
-    {readonly} />
+    {readonly}
+  />
   <!-- path -->
   <div
-    class="flex-shrink-0 w-5 h-3 bg-white border rounded-full toggle-path border-gray-03" />
+    class="flex-shrink-0 w-5 h-3 bg-white border rounded-full toggle-path border-gray-03"
+  />
   <!-- circle -->
   <div
-    class="absolute inset-y-0 left-0 flex-shrink-0 w-2 h-2 rounded-full bg-gray-text-alt toggle-circle" />
+    class="absolute inset-y-0 left-0 flex-shrink-0 w-2 h-2 rounded-full bg-gray-text-alt toggle-circle"
+  />
   <div class="ml-1 text-sm text-gray-text">
     {@html checked ? toggleYesText : toggleNoText}
   </div>

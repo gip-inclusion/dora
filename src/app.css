@@ -1,3 +1,42 @@
+@font-face {
+  font-display: swap;
+  font-family: "Marianne";
+  font-style: normal;
+  font-weight: normal;
+  src: url("$lib/assets/fonts/Marianne/Marianne-Regular.woff2") format("woff2"),
+    url("$lib/assets/fonts/Marianne/Marianne-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Marianne";
+  font-style: normal;
+  font-weight: bold;
+  src: url("$lib/assets/fonts/Marianne/Marianne-Bold.woff2") format("woff2"),
+    url("$lib/assets/fonts/Marianne/Marianne-Bold.woff") format("woff");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Marianne";
+  font-style: italic;
+  font-weight: normal;
+  src: url("$lib/assets/fonts/Marianne/Marianne-Regular_Italic.woff2")
+      format("woff2"),
+    url("$lib/assets/fonts/Marianne/Marianne-Regular_Italic.woff")
+      format("woff");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Marianne";
+  font-style: italic;
+  font-weight: bold;
+  src: url("$lib/assets/fonts/Marianne/Marianne-Bold_Italic.woff2")
+      format("woff2"),
+    url("$lib/assets/fonts/Marianne/Marianne-Bold_Italic.woff") format("woff");
+}
+
 /* stylelint-disable */
 :root {
   /***********************/
@@ -151,7 +190,7 @@ h5 {
 }
 
 /* MD */
-@media (min-width: 375px) {
+@media (min-width: 576px) {
   h1 {
     font-size: var(--f30);
   }
@@ -181,7 +220,7 @@ h5 {
 }
 
 /* XL */
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
   h1 {
     font-size: var(--f45);
   }
@@ -201,7 +240,6 @@ h5 {
 }
 
 @media print {
-  /* styles here */
   .noprint {
     display: none !important;
   }

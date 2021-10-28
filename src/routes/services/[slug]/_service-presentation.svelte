@@ -34,6 +34,10 @@
     color: var(--col-text-alt2);
     font-size: var(--f12);
   }
+
+  .prose {
+    max-width: 100%;
+  }
 </style>
 
 <div class="tags-wrapper">
@@ -43,10 +47,10 @@
   <div>
     <h2>Description du service</h2>
     <strong>{service.shortDesc}</strong>
-    <div class="markdown-wrapper prose prose">
+    <div class="markdown-wrapper prose w-full">
       {@html service.fullDesc}
     </div>
-    <div class="maj">
+    <div class="maj my-2">
       Mise à jour le {new Date(service.modificationDate).toLocaleDateString(
         "fr-FR",
         { year: "numeric", month: "long", day: "numeric" }

@@ -22,18 +22,21 @@
     slot="custom-input"
     name="city-select"
     placeholder="Saisissez et sélectionnez le nom de la ville"
-    handleChange={handleCityChange} />
+    handleChange={handleCityChange}
+  />
 </Field>
 <Field
   type="custom"
   label="Nom de votre structure ou son numéro SIRET"
   required
-  vertical>
+  vertical
+>
   <SiretSearch
     slot="custom-input"
     name="siret-select"
     selectedCity={city}
     disabled={!city?.properties?.citycode}
     handleChange={handleEstablishmentChange}
-    placeholder="Commencez à saisir et choisissez dans la liste" />
+    placeholder="Commencez à saisir et choisissez dans la liste"
+  />
 </Field>

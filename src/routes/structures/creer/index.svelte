@@ -69,15 +69,21 @@
   }
 </script>
 
+<svelte:head>
+  <title>Retrouvez votre structure | DORA</title>
+</svelte:head>
+
 <FieldSet
   title="Retrouvez votre structure"
-  description="On peut récuperer automatiquement les informations importantes de votre structure via la base SIRENE. Saissisez votre département et le numéro SIRET pour commencer.">
+  description="On peut récuperer automatiquement les informations importantes de votre structure via la base SIRENE. Saissisez votre département et le numéro SIRET pour commencer."
+>
   <Field type="custom" label="Commune" vertical>
     <CitySearch
       slot="custom-input"
       name="city-select"
       placeholder="Saisissez le nom de votre ville"
-      handleChange={handleCityChange} />
+      handleChange={handleCityChange}
+    />
     <FieldHelp title="Récupération des données existantes" slot="helptext">
       <p>
         Pour faciliter l’étape de saisie, nous récupérons pour vous des données
@@ -90,20 +96,23 @@
   <Field
     type="custom"
     label="Le nom de votre structure ou le numéro SIRET"
-    vertical>
+    vertical
+  >
     <SiretSearch
       slot="custom-input"
       name="siret-select"
       {selectedCity}
       disabled={!selectedCity?.properties?.citycode}
       handleChange={handleEstablishmentChange}
-      placeholder="Commencez à saisir et choisissez dans la liste" />
+      placeholder="Commencez à saisir et choisissez dans la liste"
+    />
   </Field>
 </FieldSet>
 
 {#if alreadyClaimedEstablishment}
   <div
-    class="text-error text-xl flex flex-row items-center justify-center pt-1/2 mt-2">
+    class="flex flex-row items-center justify-center mt-2 text-xl text-error pt-1/2"
+  >
     <div class="w-3 h-3 mr-1 fill-current ">
       {@html alertIcon}
     </div>
@@ -111,7 +120,8 @@
       Cette structure a déjà été saisie dans DORA. Vous pouvez la
       <a
         class="underline"
-        href="/structures/{alreadyClaimedEstablishment?.slug}">
+        href="/structures/{alreadyClaimedEstablishment?.slug}"
+      >
         visualiser</a
       >.
     </p>
@@ -122,4 +132,5 @@
   {structure}
   {structuresOptions}
   formTitle="Présentez votre structure"
-  visible={structure.siret} />
+  visible={structure.siret}
+/>

@@ -305,7 +305,7 @@
 {#if currentStep === 5}
   <Preview {service} />
 {:else}
-  <CenteredGrid>
+  <CenteredGrid topPadded>
     <div class="col-start-1 col-span-full text-center mb-6">
       <div class="mx-auto">
         <h1 class="text-france-blue text-13xl">
@@ -314,7 +314,8 @@
         <p class="text-gray-text text-base">
           Rendez visible votre offre de services sur la plateforme DORA.<br />
           Les champs marqués d’un astérisque<span
-            style="color: var(--col-error);">*</span> sont obligatoires.
+            style="color: var(--col-error);">*</span
+          > sont obligatoires.
         </p>
 
         <nav>
@@ -323,13 +324,14 @@
               lit={currentStep >= i + 1}
               active={currentStep === i + 1}
               {name}
-              on:click={() => handleNavLinkClick(i + 1)} />
+              on:click={() => handleNavLinkClick(i + 1)}
+            />
           {/each}
         </nav>
       </div>
     </div>
   </CenteredGrid>
-  <CenteredGrid gridRow="2" roundedbg>
+  <CenteredGrid roundedbg>
     <div class="col-span-8 col-start-1 mb-8">
       <div bind:this={errorDiv}>
         {#each $formErrors.nonFieldErrors || [] as msg}
@@ -340,7 +342,7 @@
     </div>
   </CenteredGrid>
 {/if}
-<CenteredGrid gridRow="3" sticky>
+<CenteredGrid sticky>
   <NavButtons
     _currentPageIsValid={isValid(schemas.get(currentStep))}
     isDraft={service.isDraft}
@@ -355,5 +357,6 @@
     withPublish={navInfo?.showPublish}
     withPreview={navInfo?.showPreview}
     withDraft={currentStep !== 5 && service.isDraft}
-    {flashSaveDraftButton} />
+    {flashSaveDraftButton}
+  />
 </CenteredGrid>

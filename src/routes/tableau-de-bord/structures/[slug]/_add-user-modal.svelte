@@ -87,10 +87,13 @@
     onChange={handleChange}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
-    bind:requesting>
+    bind:requesting
+  >
     <Fieldset
       title="Ajouter des collaborateurs"
-      description="Merci de renseigner les informations de contact de l’utilisateur que vous souhaitez inviter.">
+      description="Merci de renseigner les informations de contact de l’utilisateur que vous souhaitez inviter."
+      noTopPadding
+    >
       <Field
         name="firstName"
         errorMessages={$formErrors.firstName}
@@ -99,7 +102,8 @@
         type="text"
         placeholder="Aurélien"
         bind:value={firstName}
-        required />
+        required
+      />
       <Field
         name="lastName"
         errorMessages={$formErrors.lastName}
@@ -108,7 +112,8 @@
         type="text"
         placeholder="Durand"
         bind:value={lastName}
-        required />
+        required
+      />
 
       <Field
         name="email"
@@ -118,7 +123,8 @@
         type="email"
         bind:value={email}
         required
-        placeholder="email_pro@e-mail.com" />
+        placeholder="email_pro@e-mail.com"
+      />
 
       <Field
         name="level"
@@ -129,15 +135,18 @@
         bind:value={level}
         choices={levelChoices}
         required
-        placeholder="Permissions" />
+        placeholder="Permissions"
+      />
       <Button
         type="submit"
         label="Envoyer l’invitation"
         disabled={!firstName || !lastName || !email || !level || requesting}
-        preventDefaultOnMouseDown />
+        preventDefaultOnMouseDown
+      />
     </Fieldset>
   </Form>
 </Modal>
 <ConfirmationModal
   bind:isOpen={confirmationModalIsOpen}
-  email={successEmailMsg} />
+  email={successEmailMsg}
+/>

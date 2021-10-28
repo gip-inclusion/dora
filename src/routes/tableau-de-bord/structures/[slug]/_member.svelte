@@ -58,7 +58,8 @@
           small
           flashSuccess={flashInviteButtonSuccess}
           disabled={flashInviteButtonSuccess}
-          on:click={handleResendInvite} />
+          on:click={handleResendInvite}
+        />
       </Label>
     {/if}
   </div>
@@ -68,7 +69,8 @@
     <ButtonMenu
       icon={moreIcon}
       let:onClose={onCloseParent}
-      disabled={isOnlyAdmin}>
+      disabled={isOnlyAdmin}
+    >
       <div>
         <Button
           label="Modifier"
@@ -79,7 +81,8 @@
           icon={fileEditIcon}
           iconOnRight
           small
-          noBackground />
+          noBackground
+        />
       </div>
       {#if !isMyself}
         <div>
@@ -92,7 +95,8 @@
             icon={fileForbidIcon}
             iconOnRight
             small
-            noBackground />
+            noBackground
+          />
         </div>
       {/if}
     </ButtonMenu>

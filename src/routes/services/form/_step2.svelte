@@ -21,7 +21,8 @@
     placeholder="Aucun"
     placeholderMulti="Choisir un autre critères d’admission"
     schema={serviceSchema.accessConditions}
-    sortSelect>
+    sortSelect
+  >
     <FieldHelp slot="helptext" title="Critères">
       <p>
         <strong>Critères d’admission</strong><br />
@@ -54,7 +55,8 @@
     placeholder="Tous publics"
     placeholderMulti="Choisir un autre type de publics"
     schema={serviceSchema.concernedPublic}
-    sortSelect />
+    sortSelect
+  />
 
   <AddableMultiselect
     bind:values={service.requirements}
@@ -66,7 +68,8 @@
     placeholder="Aucun"
     placeholderMulti="Choisir un autre pré-requis"
     schema={serviceSchema.requirements}
-    sortSelect />
+    sortSelect
+  />
 
   <ModelField
     type="toggle"
@@ -74,14 +77,16 @@
     schema={serviceSchema.isCumulative}
     name="isCumulative"
     errorMessages={$formErrors.isCumulative}
-    bind:value={service.isCumulative} />
+    bind:value={service.isCumulative}
+  />
   <ModelField
     type="toggle"
     label="Frais à charge du bénéficiaire"
     schema={serviceSchema.hasFee}
     name="hasFee"
     errorMessages={$formErrors.hasFee}
-    bind:value={service.hasFee} />
+    bind:value={service.hasFee}
+  />
 
   <ModelField
     type="textarea"
@@ -91,5 +96,6 @@
     schema={serviceSchema.feeDetails}
     name="feeDetails"
     errorMessages={$formErrors.feeDetails}
-    bind:value={service.feeDetails} />
+    bind:value={service.feeDetails}
+  />
 </FieldSet>

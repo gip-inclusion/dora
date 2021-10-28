@@ -70,38 +70,44 @@
       <Button
         on:click={() => editor.chain().focus().toggleBold().run()}
         active={editor.isActive("bold")}
-        icon={boldIcon} />
+        icon={boldIcon}
+      />
 
       <Button
         on:click={() => editor.chain().focus().toggleItalic().run()}
         active={editor.isActive("italic")}
-        icon={italicIcon} />
+        icon={italicIcon}
+      />
 
       <Separator />
 
       <Button
         on:click={() => editor.chain().focus().setParagraph().run()}
         active={editor.isActive("paragraph")}
-        icon={paraIcon} />
+        icon={paraIcon}
+      />
 
       <Button
         on:click={() =>
           editor.chain().focus().toggleHeading({ level: 2 }).run()}
         active={editor.isActive("heading", { level: 2 })}
-        icon={h1Icon} />
+        icon={h1Icon}
+      />
 
       <Button
         on:click={() =>
           editor.chain().focus().toggleHeading({ level: 3 }).run()}
         active={editor.isActive("heading", { level: 3 })}
-        icon={h2Icon} />
+        icon={h2Icon}
+      />
 
       <Separator />
 
       <Button
         on:click={() => editor.chain().focus().toggleBulletList().run()}
         active={editor.isActive("bulletList")}
-        icon={liIcon} />
+        icon={liIcon}
+      />
 
       <Separator />
     </div>

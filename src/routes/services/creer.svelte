@@ -65,21 +65,27 @@
   }
 </script>
 
+<svelte:head>
+  <title>Référencer votre service | DORA</title>
+</svelte:head>
+
 <EnsureLoggedIn>
   {#if !structures.length}
-    <CenteredGrid>
+    <CenteredGrid topPadded>
       <div class="col-start-1 col-span-full  mb-6">
         <h4>Vous n’êtes rattaché à aucune structure !</h4>
-      </div></CenteredGrid>
+      </div></CenteredGrid
+    >
   {:else}
     {#if lastDraft && lastDraftNotificationVisible}
-      <CenteredGrid>
+      <CenteredGrid topPadded>
         <TempInlineInfo
           label="Vous n’avez pas finalisé votre précédente saisie"
           description="Souhaitez-vous continuer la saisie du service « {lastDraft.name} » ?"
           buttonLabel="Reprendre"
           onAction={handleOpenLastDraft}
-          onHide={handleHideLastDraftNotification} />
+          onHide={handleHideLastDraftNotification}
+        />
       </CenteredGrid>
     {/if}
 
@@ -87,12 +93,14 @@
       bind:currentStep
       bind:service
       bind:servicesOptions
-      title="Référencer un service">
+      title="Référencer un service"
+    >
       <svelte:component
         this={currentStepComponent}
         bind:service
         {servicesOptions}
-        {structures} />
+        {structures}
+      />
     </ServiceFormWrapper>
   {/if}
 </EnsureLoggedIn>

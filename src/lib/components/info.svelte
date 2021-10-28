@@ -37,7 +37,8 @@
         error={negativeMood}
         {icon}
         bold
-        iconOnLeft={!!icon} />
+        iconOnLeft={!!icon}
+      />
     </div>
   {/if}
   <div class="details">

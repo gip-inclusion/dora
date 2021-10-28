@@ -27,13 +27,16 @@
         type="checkbox"
         class="hidden"
         {disabled}
-        {readonly} />
+        {readonly}
+      />
       <div
-        class="flex justify-center flex-shrink-0 w-3 h-3 border rounded border-gray-03">
+        class="flex justify-center flex-shrink-0 w-3 h-3 border rounded border-gray-03"
+      >
         <div class="self-center hidden w-3/2 h-3/2 bg-dora-magenta-cta" />
       </div>
       <span class="inline-block w-40 ml-2 text-gray-text text-sm"
-        >{choice.label}</span>
+        >{choice.label}</span
+      >
     </label>
   {/each}
 </div>

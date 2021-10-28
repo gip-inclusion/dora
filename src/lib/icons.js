@@ -9,6 +9,8 @@ export { default as arrowRightIcon } from "remixicon/icons/System/arrow-right-li
 export { default as arrowRightSIcon } from "remixicon/icons/System/arrow-right-s-line.svg?raw";
 export { default as arrowLeftIcon } from "remixicon/icons/System/arrow-left-line.svg?raw";
 export { default as arrowLeftSIcon } from "remixicon/icons/System/arrow-left-s-line.svg?raw";
+export { default as arrowUpSIcon } from "remixicon/icons/System/arrow-up-s-line.svg?raw";
+export { default as arrowDownSIcon } from "remixicon/icons/System/arrow-down-s-line.svg?raw";
 export { default as arrowLeftCircleIcon } from "remixicon/icons/System/arrow-left-circle-fill.svg?raw";
 export { default as starFillIcon } from "remixicon/icons/System/star-fill.svg?raw";
 export { default as checkIcon } from "remixicon/icons/System/check-line.svg?raw";
@@ -22,10 +24,12 @@ export { default as searchIcon } from "remixicon/icons/System/search-line.svg?ra
 export { default as eyeIcon } from "remixicon/icons/System/eye-line.svg?raw";
 export { default as moreIcon } from "remixicon/icons/System/more-2-fill.svg?raw";
 export { default as closeIcon } from "remixicon/icons/System/close-fill.svg?raw";
+export { default as closeLineIcon } from "remixicon/icons/System/close-line.svg?raw";
 export { default as closeCircleIcon } from "remixicon/icons/System/close-circle-fill.svg?raw";
 export { default as loginIcon } from "remixicon/icons/System/login-circle-fill.svg?raw";
 export { default as dashboardIcon } from "remixicon/icons/System/dashboard-fill.svg?raw";
 export { default as settingsIcon } from "remixicon/icons/System/settings-5-line.svg?raw";
+export { default as menuIcon } from "remixicon/icons/System/menu-line.svg?raw";
 
 export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";

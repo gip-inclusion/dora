@@ -16,9 +16,8 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
 
-  import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
-
   import Info from "$lib/components/info.svelte";
+  import AuthLayout from "./_auth_layout.svelte";
 
   let email = "";
   let password = "";
@@ -69,40 +68,41 @@
   });
 </script>
 
-<CenteredGrid>
+<svelte:head>
+  <title>Se connecter | DORA</title>
+</svelte:head>
+
+<CenteredGrid topPadded>
   <div class="col-start-1 mb-6 text-center col-span-full">
     <h1 class="text-france-blue text-13xl">Se connecter à DORA</h1>
   </div>
 </CenteredGrid>
 
-<CenteredGrid gridRow="2" roundedbg>
-  <div class="col-start-1 col-end-7 mb-4 mt-6">
-    <img src={connexionPic} alt="" />
-  </div>
-  <div class="col-start-8 col-end-12 mb-4">
-    <Form
-      data={{ email, password }}
-      schema={loginSchema}
-      serverErrorsDict={authErrors}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-      onSuccess={handleSuccess}>
-      <Fieldset title="Accédez à votre compte">
-        {#if invalidUser}
-          <Info
-            label="Votre adresse email n’a pas encore été validée"
-            negativeMood />
-          <LinkButton
-            to="/auth/renvoyer-email-validation?email={encodeURIComponent(
-              email
-            )}"
-            label="Demander un nouveau lien"
-            preventDefaultOnMouseDown />
-        {:else}
-          {#each $formErrors.nonFieldErrors || [] as msg}
-            <Alert iconOnLeft label={msg} />
-          {/each}
-
+<AuthLayout>
+  <Form
+    data={{ email, password }}
+    schema={loginSchema}
+    serverErrorsDict={authErrors}
+    onChange={handleChange}
+    onSubmit={handleSubmit}
+    onSuccess={handleSuccess}
+  >
+    <Fieldset title="Accédez à votre compte">
+      {#if invalidUser}
+        <Info
+          label="Votre adresse email n’a pas encore été validée"
+          negativeMood
+        />
+        <LinkButton
+          to="/auth/renvoyer-email-validation?email={encodeURIComponent(email)}"
+          label="Demander un nouveau lien"
+          preventDefaultOnMouseDown
+        />
+      {:else}
+        {#each $formErrors.nonFieldErrors || [] as msg}
+          <Alert iconOnLeft label={msg} />
+        {/each}
+        <div class="flex flex-col md:flex-row lg:flex-col md:gap-2">
           <Field
             name="email"
             errorMessages={$formErrors.email}
@@ -112,7 +112,8 @@
             bind:value={email}
             required
             placeholder="Courriel utilisé lors de l’inscription"
-            autocomplete="email" />
+            autocomplete="email"
+          />
           <Field
             name="password"
             errorMessages={$formErrors.password}
@@ -122,17 +123,20 @@
             placeholder="••••••••"
             bind:value={password}
             autocomplete="current-password"
-            required />
-          <Button
-            type="submit"
-            disabled={!email || !password}
-            label="Se connecter"
-            preventDefaultOnMouseDown />
-          <a
-            class="underline text-center text-gray-text-alt2 text-xs"
-            href="/auth/mdp-perdu">Mot de passe oublié ?</a>
-        {/if}
-      </Fieldset>
-    </Form>
-  </div>
-</CenteredGrid>
+            required
+          />
+        </div>
+        <Button
+          type="submit"
+          disabled={!email || !password}
+          label="Se connecter"
+          preventDefaultOnMouseDown
+        />
+        <a
+          class="underline text-center text-gray-text-alt2 text-xs"
+          href="/auth/mdp-perdu">Mot de passe oublié ?</a
+        >
+      {/if}
+    </Fieldset>
+  </Form>
+</AuthLayout>

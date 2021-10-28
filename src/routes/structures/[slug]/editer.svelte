@@ -20,18 +20,19 @@
 </script>
 
 <svelte:head>
-  <title>Dora: {structure.name}</title>
+  <title>{structure.name} | DORA</title>
 </svelte:head>
 
 <EnsureLoggedIn>
-  <CenteredGrid roundedbg>
+  <CenteredGrid roundedbg topPadded>
     <div class="col-span-8 col-start-1 mb-4">
       <StructureFormWrapper
         {structure}
         {structuresOptions}
         modify
         formTitle="Modifiez votre structure"
-        visible />
+        visible
+      />
     </div>
   </CenteredGrid>
 </EnsureLoggedIn>

@@ -16,7 +16,7 @@
   export let servicesOptions;
 </script>
 
-<style>
+<style lang="postcss">
   h1,
   h2,
   h3 {
@@ -25,7 +25,6 @@
 
   h1 {
     margin-bottom: var(--s24);
-    line-height: var(--s56);
   }
 
   h2 {
@@ -73,23 +72,29 @@
     list-style-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgICA8Zz4KICAgICAgICA8cGF0aCBmaWxsPSJub25lIiBkPSJNMCAwaDI0djI0SDB6Ii8+CiAgICAgICAgPHBhdGggc3Ryb2tlPSJ3aGl0ZSIgZD0iTTEwIDE1LjE3Mmw5LjE5Mi05LjE5MyAxLjQxNSAxLjQxNEwxMCAxOGwtNi4zNjQtNi4zNjQgMS40MTQtMS40MTR6Ii8+CiAgICA8L2c+Cjwvc3ZnPgo=");
     list-style-position: inside;
   }
+
+  @screen lg {
+    h1 {
+      line-height: var(--s56);
+    }
+  }
 </style>
 
-<CenteredGrid --col-bg="var(--col-transparent)">
+<CenteredGrid --col-bg="var(--col-transparent)" topPadded>
   <div class="col-start-1 col-span-full mb-5">
-    <div class="flex flex-row">
+    <div class="flex flex-col lg:flex-row-reverse">
       <div class="flex-1">
+        <img src={CoverPic} width="600" height="400" alt="" />
+      </div>
+      <div class="flex-1 text-center lg:text-left">
         <h1>
           Tous les services d’insertion de votre territoire à un seul endroit.
           Mobilisables en 1 clic.
         </h1>
-        <p>
+        <p class="pb-2">
           Trouvez et mobilisez rapidement le service adapté au besoin de votre
           bénéficiaire
         </p>
-      </div>
-      <div class="flex-1">
-        <img src={CoverPic} width="600" height="400" alt="" />
       </div>
     </div>
     <SearchForm {servicesOptions} />
@@ -97,15 +102,15 @@
 </CenteredGrid>
 
 <CenteredGrid
-  gridRow="2"
   extraClass="homepage-second-row"
-  --col-bg="var(--col-magenta-dark)">
-  <div class="col-start-1 col-span-full mb-5">
-    <div class="flex flex-row gap-8">
+  --col-bg="var(--col-magenta-dark)"
+>
+  <div class="col-start-1 mb-5 col-span-full">
+    <div class="flex flex-col gap-8 lg:flex-row">
       <div class="flex-1">
         <img src={MissionPic} width="440" height="420" alt="" />
       </div>
-      <div class="content-mission flex-1">
+      <div class="flex-1 content-mission">
         <h5>La mission DORA</h5>
         <h2>Découvrir, orienter, renseigner, accompagner</h2>
 
@@ -128,9 +133,9 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid gridRow="3">
+<CenteredGrid>
   <div class="col-start-1 col-span-full mb-5 text-center ">
-    <div class="w-1/2 mx-auto mb-8">
+    <div class=" mx-auto mb-8 lg:w-1/2">
       <h5>
         Vous travaillez pour une structure porteuse/offreuse de services
         d'insertion ?
@@ -140,7 +145,7 @@
         d'orientation qualifiées
       </h2>
     </div>
-    <div class="flex flex-row gap-8">
+    <div class="flex gap-8 flex-col lg:flex-row-reverse">
       <div class="flex flex-col flex-1 ">
         <div class="mx-auto">
           <img src={VisiblePic} width="140" height="140" alt="" />
@@ -174,12 +179,14 @@
         <h4>Référencer un service</h4>
       </div>
     </div>
-    <div class="mt-6 rounded-xl bg-information-light flex flex-row p-6">
+    <div
+      class="mt-6 rounded-xl bg-information-light flex  flex-col lg:flex-row lg:p-6 "
+    >
       <div class="flex-1">
         <img src={JoinPic} width="380" height="380" alt="" />
       </div>
       <div class="flex-1 text-left">
-        <div class="flex flex-col gap-2 px-12">
+        <div class="flex flex-col gap-2 md:px-12">
           <h5>Rejoignez l’aventure !</h5>
           <h3>Aidez-nous à construire DORA&nbsp;!</h3>
           <p class="text-xs text-gray-text">
@@ -200,7 +207,8 @@
               iconOnRight
               noBackground
               noPadding
-              small />
+              small
+            />
           </div>
         </div>
       </div>

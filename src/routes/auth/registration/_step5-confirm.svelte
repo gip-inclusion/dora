@@ -6,7 +6,8 @@
 
 <Fieldset
   title="Confirmation"
-  description="Chaque utilisateur DORA est attaché à une structure d’insertion (de l’Etat ou associative/independante. Afin de mieux vous aider à identifier votre structure, merci de choisir la typologie de votre structure :">
+  description="Chaque utilisateur DORA est attaché à une structure d’insertion (de l’Etat ou associative/independante. Afin de mieux vous aider à identifier votre structure, merci de choisir la typologie de votre structure :"
+>
   <Info label="Votre demande a été enregistrée" positiveMood>
     <p class="mb-2">
       Un e-mail vous a été envoyé à l’adresse <strong

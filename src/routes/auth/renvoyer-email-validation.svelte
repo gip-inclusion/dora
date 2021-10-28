@@ -11,8 +11,8 @@
   import Alert from "$lib/components/forms/alert.svelte";
   import Form from "$lib/components/forms/form.svelte";
 
-  import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
   import Info from "$lib/components/info.svelte";
+  import AuthLayout from "./_auth_layout.svelte";
 
   let email = $page.query.get("email") || "";
 
@@ -45,60 +45,62 @@
   }
 </script>
 
-<CenteredGrid>
+<svelte:head>
+  <title>Renvoyer un email de validation | DORA</title>
+</svelte:head>
+
+<CenteredGrid topPadded>
   <div class="col-start-1 mb-6 text-center col-span-full">
     <h1 class="text-france-blue text-13xl">Créer son compte DORA</h1>
   </div>
 </CenteredGrid>
 
-<CenteredGrid gridRow="2" roundedbg>
-  <div class="col-start-1 col-end-7 mb-4 mt-6">
-    <img src={connexionPic} alt="" />
-  </div>
-  <div class="col-start-7 col-end-13 mb-4">
-    <Form
-      data={{ email }}
-      schema={passwordLostSchema}
-      serverErrorsDict={authErrors}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-      onSuccess={handleSuccess}
-      bind:requesting>
-      <Fieldset>
-        {#if success}
-          <Info label="C’est tout bon !" positiveMood>
-            <p>
-              Si vous avez un compte DORA avec cette adresse, vous allez
-              recevoir un e-mail contenant un lien pour le valider.
-            </p>
-          </Info>
-        {:else}
-          {#if $formErrors.nonFieldErrors}
-            <div>
-              {#each $formErrors.nonFieldErrors || [] as msg}
-                <Alert iconOnLeft label={msg} />
-              {/each}
-            </div>
-          {/if}
-
-          <Field
-            name="email"
-            errorMessages={$formErrors.email}
-            label="Courriel"
-            vertical
-            type="email"
-            placeholder="Courriel utilisé lors de l’inscription"
-            bind:value={email}
-            autocomplete="current-password"
-            required />
-
-          <Button
-            type="submit"
-            disabled={!email || requesting}
-            label="Valider votre compte"
-            preventDefaultOnMouseDown />
+<AuthLayout>
+  <Form
+    data={{ email }}
+    schema={passwordLostSchema}
+    serverErrorsDict={authErrors}
+    onChange={handleChange}
+    onSubmit={handleSubmit}
+    onSuccess={handleSuccess}
+    bind:requesting
+  >
+    <Fieldset title="Renvoyer un email de validation">
+      {#if success}
+        <Info label="C’est tout bon !" positiveMood>
+          <p>
+            Si vous avez un compte DORA avec cette adresse, vous allez recevoir
+            un e-mail contenant un lien pour le valider.
+          </p>
+        </Info>
+      {:else}
+        {#if $formErrors.nonFieldErrors}
+          <div>
+            {#each $formErrors.nonFieldErrors || [] as msg}
+              <Alert iconOnLeft label={msg} />
+            {/each}
+          </div>
         {/if}
-      </Fieldset>
-    </Form>
-  </div>
-</CenteredGrid>
+
+        <Field
+          name="email"
+          errorMessages={$formErrors.email}
+          label="Courriel"
+          vertical
+          type="email"
+          placeholder="Courriel utilisé lors de l’inscription"
+          bind:value={email}
+          autocomplete="current-password"
+          required
+        />
+
+        <Button
+          type="submit"
+          disabled={!email || requesting}
+          label="Valider votre compte"
+          preventDefaultOnMouseDown
+        />
+      {/if}
+    </Fieldset>
+  </Form>
+</AuthLayout>

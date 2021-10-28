@@ -1,9 +1,10 @@
-import { ENVIRONMENT } from "$lib/env.js";
+import { ENVIRONMENT, CANONICAL_URL } from "$lib/env.js";
 
 const productionContent = `
 User-agent: *
 Disallow: /tableau-de-bord/
 Disallow: /auth/
+Sitemap: ${CANONICAL_URL}/sitemap.xml
 `.trim();
 
 const devContent = `

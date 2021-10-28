@@ -13,8 +13,9 @@
 </style>
 
 <svelte:head>
-  <script
-    src="https://metabase.dora.beta.gouv.fr/app/iframeResizer.js"></script>
+  <title>Statistiques | DORA</title>
+  <script src="https://metabase.dora.beta.gouv.fr/app/iframeResizer.js">
+  </script>
 </svelte:head>
 
 <CG>
@@ -31,5 +32,6 @@
     frameborder="0"
     allowtransparency
     on:load={hR}
-    id="myIframe" />
+    id="myIframe"
+  />
 </CG>

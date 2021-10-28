@@ -1,23 +1,30 @@
 <script>
-  export let gridRow = 1;
   export let sticky = false;
+  export let topPadded = false;
   export let roundedbg = false;
   export let bordertop = false;
   export let extraClass = "";
 </script>
 
 <style>
+  /* Color under the rounded corners */
+  .wrapper {
+    background-color: var(--col-under-bg, var(--col-bg));
+  }
+
   .content {
     display: flex;
+    justify-content: center;
+    padding-right: var(--s16);
+    padding-left: var(--s16);
     background-color: var(--col-bg);
   }
 
-  .centered {
+  .centered-grid {
     display: grid;
-    margin-right: auto;
-    margin-left: auto;
+    margin: 0 auto;
     column-gap: var(--s24);
-    grid-template-columns: repeat(12, 78px);
+    grid-template-columns: repeat(12, minmax(1px, 78px));
     row-gap: 1.5rem;
   }
 
@@ -43,18 +50,13 @@
     border-top-width: 1px;
   }
 
-  :global(.global-content-wrapper) .padded {
+  .top-padded {
     padding-top: var(--s56);
     background-color: var(--col-bg);
   }
 
-  /* Color under the rounded corners */
-  .wrapper {
-    background-color: var(--col-under-bg, var(--col-bg));
-  }
-
   @media print {
-    :global(.global-content-wrapper) .padded {
+    .top-padded {
       padding-top: 0;
     }
 
@@ -69,21 +71,12 @@
     .roundedbg {
       background-color: var(--col-white) !important;
     }
-
-    .centered {
-      column-gap: var(--s12);
-      grid-template-columns: repeat(12, 78px);
-    }
   }
 </style>
 
-<div class="{extraClass} wrapper" class:padded={gridRow === 1} class:sticky>
-  <div
-    class="content"
-    style="grid-row-start: {gridRow};"
-    class:roundedbg
-    class:bordertop>
-    <div class="centered">
+<div class="{extraClass} wrapper" class:top-padded={topPadded} class:sticky>
+  <div class="content" class:roundedbg class:bordertop>
+    <div class="centered-grid">
       <slot />
     </div>
   </div>

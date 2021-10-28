@@ -33,7 +33,8 @@
 </script>
 
 <svelte:head>
-  <title>Dora: {service?.name} par {service?.structureInfo.name}</title>
+  <title>{service?.name} | {service?.structureInfo.name} | DORA</title>
+  <meta name="description" content={service?.shortDesc} />
 </svelte:head>
 
 {#if service}

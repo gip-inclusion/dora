@@ -40,7 +40,7 @@
   }
 </style>
 
-<CenteredGrid --col-bg="var(--col-gray-00)">
+<CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
   <div class="wrapper col-start-1 col-span-full">
     {#each services as service}
       <div class="service flex flex-row gap-2">
@@ -53,7 +53,8 @@
           label={`${service.structureInfo.name}`}
           smallIcon
           iconOnLeft
-          icon={homeIcon} />
+          icon={homeIcon}
+        />
 
         <Label label={service.department} bold />
         {#if service.isDraft}
@@ -63,7 +64,8 @@
             icon={checkBoxBlankIcon}
             smallIcon
             wait
-            bold />
+            bold
+          />
         {:else}
           <Label
             label="Publié"
@@ -71,15 +73,18 @@
             icon={checkBoxBlankIcon}
             smallIcon
             success
-            bold />
+            bold
+          />
         {/if}
         <Label
-          label={`${new Date(service.modificationDate).toLocaleString()}`} />
+          label={`${new Date(service.modificationDate).toLocaleString()}`}
+        />
         <div>
           <LinkButton
             to="/services/{service.slug}"
             icon={eyeIcon}
-            noBackground />
+            noBackground
+          />
         </div>
         <div>
           <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
@@ -94,7 +99,8 @@
                   icon={fileCloudIcon}
                   iconOnRight
                   small
-                  noBackground />
+                  noBackground
+                />
               </div>
             {/if}
             <div>
@@ -104,7 +110,8 @@
                 icon={fileEditIcon}
                 iconOnRight
                 small
-                noBackground />
+                noBackground
+              />
             </div>
           </ButtonMenu>
         </div>

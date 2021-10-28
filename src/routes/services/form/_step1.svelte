@@ -50,7 +50,8 @@
       bind:value={service.structure}
       onSelectChange={handleStructureChange}
       sortSelect
-      placeholder="Sélectionnez votre structure" />
+      placeholder="Sélectionnez votre structure"
+    />
   </FieldSet>
 {/if}
 
@@ -71,7 +72,8 @@
     errorMessages={$formErrors.category}
     onSelectChange={handleCategoryChange}
     placeholder="Choisissez la catégorie principale"
-    sortSelect />
+    sortSelect
+  />
   <ModelField
     type="multiselect"
     label="Besoin(s)"
@@ -82,7 +84,8 @@
     choices={subcategories}
     placeholder="Choisissez les sous-catégories"
     placeholderMulti="Choisissez les sous-catégories"
-    sortSelect>
+    sortSelect
+  >
     <FieldHelp slot="helptext" title="Catégorisation">
       Pour permettre à nos utilisateurs de trouver facilement la solution que
       vous proposez, il est nécessaire de classer les services par catégorie?
@@ -97,7 +100,8 @@
     errorMessages={$formErrors.kinds}
     bind:value={service.kinds}
     choices={servicesOptions.kinds}
-    description="Quel type de service proposez-vous ? " />
+    description="Quel type de service proposez-vous ? "
+  />
 </FieldSet>
 
 <FieldSet title="Présentez votre service">
@@ -108,7 +112,8 @@
     schema={serviceSchema.name}
     name="name"
     errorMessages={$formErrors.name}
-    bind:value={service.name} />
+    bind:value={service.name}
+  />
   <ModelField
     description="280 caractères maximum"
     placeholder="Décrivez brièvement votre service"
@@ -117,7 +122,8 @@
     schema={serviceSchema.shortDesc}
     name="shortDesc"
     errorMessages={$formErrors.shortDesc}
-    bind:value={service.shortDesc}>
+    bind:value={service.shortDesc}
+  >
     <FieldHelp slot="helptext" title="Résumé">
       <p>
         Lors de l’affichage du service, nous aurons besoin de voir une
@@ -139,5 +145,6 @@
     schema={serviceSchema.fullDesc}
     name="fullDesc"
     errorMessages={$formErrors.fullDesc}
-    bind:value={service.fullDesc} />
+    bind:value={service.fullDesc}
+  />
 </FieldSet>

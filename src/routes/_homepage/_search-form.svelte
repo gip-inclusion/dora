@@ -32,7 +32,7 @@
   }
 </script>
 
-<style>
+<style lang="postcss">
   .wrapper {
     padding: 24px 24px 16px;
     background-color: var(--col-white);
@@ -50,12 +50,18 @@
 
   form {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: var(--s16);
+  }
+
+  @screen lg {
+    form {
+      flex-direction: row;
+    }
   }
 </style>
 
-<div class="wrapper-top">
+<div class="wrapper-top text-center lg:text-left">
   ⚠️ Le service DORA est actuellement <a
     class="underline"
     target="_blank"
@@ -78,7 +84,8 @@
         choices={categoryChoices}
         label="Thématique"
         vertical
-        required />
+        required
+      />
 
       <Field
         type="select"
@@ -87,7 +94,8 @@
         placeholder="Choisissez"
         choices={subCategoryChoices}
         label="Besoin(s)"
-        vertical />
+        vertical
+      />
 
       <Field type="custom" label="Lieu" name="city" required vertical>
         <CitySearch
@@ -99,7 +107,8 @@
             cityLabel = `${
               city.properties.label
             } (${city.properties.postcode.slice(0, 2)})`;
-          }} />
+          }}
+        />
       </Field>
 
       <Button
@@ -110,7 +119,8 @@
         iconOnLeft
         horizontalBottom
         small
-        preventDefaultOnMouseDown />
+        preventDefaultOnMouseDown
+      />
     </form>
   {:else}
     <p class="text-gray-text">Impossible de contacter le serveur</p>

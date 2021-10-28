@@ -27,7 +27,7 @@
 </script>
 
 <EnsureLoggedIn>
-  <CenteredGrid --col-bg="var(--col-gray-00)">
+  <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
     <div class="flex flex-row col-span-full justify-between">
       <h2 class="col-start-1 col-span-full">
         Bonjour {$userInfo.shortName},
@@ -43,17 +43,20 @@
             <LinkButton
               label="Créer une structure"
               to="/structures/creer"
-              noBackground />
+              noBackground
+            />
 
             <LinkButton
               label="Afficher toutes les structures"
               to="/tableau-de-bord/admin/structures"
-              noBackground />
+              noBackground
+            />
 
             <LinkButton
               label="Afficher tous les services"
               to="/tableau-de-bord/admin/services"
-              noBackground />
+              noBackground
+            />
           </div>
         </div>
       {/if}

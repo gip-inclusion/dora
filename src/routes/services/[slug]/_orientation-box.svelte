@@ -32,7 +32,7 @@
 <style>
   .wrapper {
     position: relative;
-    top: -4rem;
+    top: 2.5rem;
     display: flex;
     flex-direction: column;
     padding: var(--s32);
@@ -44,6 +44,13 @@
     box-shadow: var(--shadow-md);
     gap: var(--s16);
     text-align: left;
+  }
+
+  @screen lg {
+    .wrapper {
+      position: relative;
+      top: -1.5rem;
+    }
   }
 </style>
 
@@ -63,9 +70,10 @@
       label="Partagez cette offre"
       value={sharingUrl}
       vertical
-      readonly />
+      readonly
+    />
   </div>
   {#if !service.isDraft}
-    <LinkButton secondary label="Téléchargez le PDF" to={pdfUrl} />
+    <LinkButton secondary label="Téléchargez le PDF" to={pdfUrl} nofollow />
   {/if}
 </div>

@@ -4,10 +4,10 @@
   import SearchResultWrapper from "./_search_result_wrapper.svelte";
 </script>
 
-<style>
+<style lang="postcss">
   .wrapper {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     gap: var(--s24);
   }
@@ -21,6 +21,12 @@
     color: var(--col-text);
     font-size: var(--f14);
     line-height: var(--f24);
+  }
+
+  @screen lg {
+    .wrapper {
+      flex-direction: row;
+    }
   }
 </style>
 
@@ -41,7 +47,8 @@
         type="button"
         label="Accéder au site"
         to="https://monenfant.fr/"
-        otherTab />
+        otherTab
+      />
     </div>
   </div>
 </SearchResultWrapper>

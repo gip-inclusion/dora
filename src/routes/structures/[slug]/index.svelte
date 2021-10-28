@@ -21,10 +21,11 @@
 </script>
 
 <svelte:head>
-  <title>Dora: {structure.name}</title>
+  <title>{structure.name} | DORA</title>
+  <meta name="description" content={structure.shortDesc} />
 </svelte:head>
 
-<CenteredGrid roundedbg>
+<CenteredGrid roundedbg topPadded>
   <div class="col-span-8 col-start-1 mb-4 text-gray-text">
     <h3>{structure.name}</h3>
     <div class="flex flex-col gap-1">
@@ -67,7 +68,8 @@
             class="underline"
             target="_blank"
             rel="noopener nofollow"
-            href={structure.url}>
+            href={structure.url}
+          >
             {structure.url}
           </a>
         </div>

@@ -61,8 +61,9 @@
     bind:isOpen={addUserModalIsOpen}
     {structure}
     {members}
-    onRefresh={handleRefreshMemberList} />
-  <CenteredGrid --col-bg="var(--col-gray-00)">
+    onRefresh={handleRefreshMemberList}
+  />
+  <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
     <div class="col-start-1 col-span-full mb-10">
       <div class="mb-4">
         <h2>Ma structure</h2>
@@ -72,13 +73,15 @@
         <div class="flex-1">
           <Fieldset
             title="Présentation de ma structure"
-            description="Vous trouvez ici les informations concernant votre structure, tels qu’ils sont visibles sur le site DORA.">
+            description="Vous trouvez ici les informations concernant votre structure, tels qu’ils sont visibles sur le site DORA."
+          >
             <h4>{structure.name}</h4>
             <p class="text-gray-text-alt">SIRET: {structure.siret}</p>
             <div class="flex justify-end">
               <LinkButton
                 label="Modifier les informations"
-                to="/structures/{structure.slug}/editer" />
+                to="/structures/{structure.slug}/editer"
+              />
             </div>
           </Fieldset>
         </div>
@@ -93,14 +96,16 @@
                     onRefresh={handleRefreshMemberList}
                     isMyself={member.user.email === $userInfo.email}
                     isOnlyAdmin={member.user.email === $userInfo.email &&
-                      members.filter((m) => m.isAdmin).length === 1} />
+                      members.filter((m) => m.isAdmin).length === 1}
+                  />
                 {/each}
               </div>
               <div class="flex justify-end">
                 <Button
                   label="Ajouter des collaborateurs"
                   secondary
-                  on:click={() => (addUserModalIsOpen = true)} />
+                  on:click={() => (addUserModalIsOpen = true)}
+                />
               </div>
             </div>
           {/if}

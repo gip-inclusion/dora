@@ -114,7 +114,8 @@
         errorMessages={$formErrors.siret}
         disabled
         bind:value={structure.siret}
-        vertical>
+        vertical
+      >
         <FieldHelp title="Completez les informations" slot="helptext">
           <p>
             Vérifiez l’exactitude des informations récupérées et complétez les
@@ -130,7 +131,8 @@
         name="name"
         errorMessages={$formErrors.name}
         bind:value={structure.name}
-        vertical />
+        vertical
+      />
       <ModelField
         type="select"
         label="Typologie de la structure"
@@ -141,7 +143,8 @@
         errorMessages={$formErrors.typology}
         bind:value={structure.typology}
         choices={structuresOptions.typologies}
-        vertical />
+        vertical
+      />
       <ModelField
         type="text"
         label="Adresse"
@@ -149,7 +152,8 @@
         name="address1"
         errorMessages={$formErrors.address1}
         bind:value={structure.address1}
-        vertical />
+        vertical
+      />
       <ModelField
         type="text"
         label="Complément d’adresse"
@@ -157,7 +161,8 @@
         name="address2"
         errorMessages={$formErrors.address2}
         bind:value={structure.address2}
-        vertical />
+        vertical
+      />
       <div class="flex flex-row justify-between gap-x-4">
         <div class="w-20">
           <ModelField
@@ -167,7 +172,8 @@
             name="postalCode"
             errorMessages={$formErrors.postalCode}
             bind:value={structure.postalCode}
-            vertical />
+            vertical
+          />
         </div>
         <div class="flex-auto">
           <ModelField
@@ -177,7 +183,8 @@
             name="city"
             errorMessages={$formErrors.city}
             bind:value={structure.city}
-            vertical />
+            vertical
+          />
         </div>
       </div>
       <div class="flex flex-row justify-between gap-x-4 ">
@@ -189,7 +196,8 @@
             name="phone"
             errorMessages={$formErrors.phone}
             bind:value={structure.phone}
-            vertical />
+            vertical
+          />
         </div>
 
         <div class="flex-1 ">
@@ -200,7 +208,8 @@
             name="email"
             errorMessages={$formErrors.email}
             bind:value={structure.email}
-            vertical />
+            vertical
+          />
         </div>
       </div>
       <ModelField
@@ -211,7 +220,8 @@
         name="url"
         errorMessages={$formErrors.url}
         bind:value={structure.url}
-        vertical />
+        vertical
+      />
       <ModelField
         type="textarea"
         label="Résumé"
@@ -220,7 +230,8 @@
         schema={structureSchema.shortDesc}
         name="shortDesc"
         errorMessages={$formErrors.shortDesc}
-        bind:value={structure.shortDesc} />
+        bind:value={structure.shortDesc}
+      />
       <ModelField
         type="richtext"
         label="Présentez votre structure"
@@ -230,32 +241,37 @@
         name="fullDesc"
         errorMessages={$formErrors.fullDesc}
         bind:value={structure.fullDesc}
-        vertical />
+        vertical
+      />
 
       <ModelField
         type="hidden"
         schema={structureSchema.cityCode}
         name="cityCode"
         bind:value={structure.cityCode}
-        vertical />
+        vertical
+      />
       <ModelField
         type="hidden"
         schema={structureSchema.ape}
         name="ape"
         bind:value={structure.ape}
-        vertical />
+        vertical
+      />
       <ModelField
         type="hidden"
         schema={structureSchema.longitude}
         name="longitude"
         bind:value={structure.longitude}
-        vertical />
+        vertical
+      />
       <ModelField
         type="hidden"
         schema={structureSchema.latitude}
         name="latitude"
         bind:value={structure.latitude}
-        vertical />
+        vertical
+      />
 
       <div class="border-b border-gray-01" />
 

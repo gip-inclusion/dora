@@ -69,7 +69,12 @@ const config = {
       normal: "1.5",
       large: "1.7",
     },
-    screens: { md: "375px", lg: "768px", xl: "1200px" },
+    screens: {
+      md: "576px",
+      lg: "768px",
+      xl: "1024px",
+      print: { raw: "print" },
+    },
     spacing: {
       0: "0",
       "2p": "0.125rem", // 2px

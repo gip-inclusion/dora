@@ -18,7 +18,7 @@
 </script>
 
 <EnsureStaff>
-  <CenteredGrid --col-bg="var(--col-gray-00)">
+  <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
     <div class="col-start-1 col-span-full text-left">
       <div class="mb-1">
         <h2>Toutes les structures</h2>
