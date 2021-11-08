@@ -44,6 +44,7 @@
         icon={userSmileIcon}
         iconOnLeft
         noBackground
+        nofollow
         to={`/auth/connexion?next=${encodeURIComponent($page.path)}`}
       />
     {/if}
