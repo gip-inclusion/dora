@@ -5,6 +5,7 @@
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import { searchIcon } from "$lib/icons";
+  import { getDepartmentFromCityCode } from "$lib/utils";
   import { getQuery } from "./_search";
 
   export let servicesOptions = {};
@@ -104,9 +105,9 @@
           placeholder="Ville du bénéficiaire"
           handleChange={(city) => {
             cityCode = city.properties.citycode;
-            cityLabel = `${
-              city.properties.label
-            } (${city.properties.postcode.slice(0, 2)})`;
+            cityLabel = `${city.properties.label} (${getDepartmentFromCityCode(
+              city.properties.postcode
+            )})`;
           }}
         />
       </Field>

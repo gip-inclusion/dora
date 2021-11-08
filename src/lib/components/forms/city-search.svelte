@@ -2,7 +2,7 @@
   import { getContext } from "svelte";
 
   import { contextValidationKey } from "$lib/validation";
-
+  import { getDepartmentFromCityCode } from "$lib/utils";
   import Select from "$lib/components/forms/select.svelte";
 
   export let handleChange;
@@ -22,9 +22,8 @@
     const jsonResponse = await response.json();
     const results = jsonResponse.features.map((feature) => ({
       value: feature,
-      label: `${feature.properties.label} (${feature.properties.postcode.slice(
-        0,
-        2
+      label: `${feature.properties.label} (${getDepartmentFromCityCode(
+        feature.properties.postcode
       )})`,
     }));
     return results;

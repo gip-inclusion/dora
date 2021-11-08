@@ -15,6 +15,7 @@
   import { token } from "$lib/auth";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
+  import { getDepartmentFromCityCode } from "$lib/utils";
   export let structure;
 
   const editLink = `${$page.path}/editer`;
@@ -41,7 +42,7 @@
       <div class="ml-2">{structure.shortDesc}</div>
       <div>
         <span class="font-bold">Département :</span>
-        {structure.postalCode.slice(0, 2)}
+        {getDepartmentFromCityCode(structure.postalCode)}
       </div>
 
       <div><span class="font-bold">Adresse :</span></div>

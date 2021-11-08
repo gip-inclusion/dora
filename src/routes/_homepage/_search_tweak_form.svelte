@@ -4,6 +4,7 @@
   import Button from "$lib/components/button.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import Field from "$lib/components/forms/field.svelte";
+  import { getDepartmentFromCityCode } from "$lib/utils";
 
   import Collapsable from "./_collapsable.svelte";
   import { getQuery } from "./_search";
@@ -105,7 +106,7 @@
               cityCode = city.properties.citycode;
               cityLabel = `${
                 city.properties.label
-              } (${city.properties.postcode.slice(0, 2)})`;
+              } (${getDepartmentFromCityCode(city.properties.postcode)})`;
             }}
           />
         </Field>
