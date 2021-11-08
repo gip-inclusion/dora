@@ -42,7 +42,7 @@
           <div class="flex">
             <LinkButton
               label="Créer une structure"
-              to="/structures/creer"
+              to="/tableau-de-bord/structures/creer"
               noBackground
             />
 

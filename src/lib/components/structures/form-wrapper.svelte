@@ -15,8 +15,11 @@
     contextValidationKey,
   } from "$lib/validation.js";
 
-  import ValidateButton from "./_validate.svelte";
   import Alert from "$lib/components/forms/alert.svelte";
+  import { arrowRightSIcon } from "$lib/icons";
+
+  import Button from "$lib/components/button.svelte";
+
   export let structure, structuresOptions, formTitle;
 
   export let modify = false;
@@ -79,7 +82,7 @@
         result = await createStructure(validatedData);
       }
       if (result?.ok) {
-        goto(`/structures/${result.result.slug}`);
+        goto(`/tableau-de-bord/structures/${result.result.slug}`);
       } else {
         injectAPIErrors(
           result.error || {
@@ -276,7 +279,15 @@
       <div class="border-b border-gray-01" />
 
       <div class="self-end">
-        <ValidateButton _disabled={false} />
+        <Button
+          on:submit
+          name="validate"
+          type="submit"
+          label="Validez les informations"
+          icon={arrowRightSIcon}
+          iconOnRight
+          preventDefaultOnMouseDown
+        />
       </div>
     </FieldSet>
   </form>

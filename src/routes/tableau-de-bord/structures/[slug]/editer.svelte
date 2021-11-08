@@ -13,9 +13,9 @@
 
 <script>
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import StructureFormWrapper from "../_structure-form-wrapper.svelte";
+  import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
+
   export let structure, structuresOptions;
 </script>
 

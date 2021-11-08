@@ -75,12 +75,50 @@
             title="Présentation de ma structure"
             description="Vous trouvez ici les informations concernant votre structure, tels qu’ils sont visibles sur le site DORA."
           >
-            <h4>{structure.name}</h4>
-            <p class="text-gray-text-alt">SIRET: {structure.siret}</p>
+            <div class="border border-gray-01 rounded px-3 py-2">
+              <h4 class="text-gray-text ">{structure.name}</h4>
+              <p class="text-gray-text-alt2 mt-3/2">SIRET: {structure.siret}</p>
+            </div>
+            <div class="border border-gray-01 rounded px-3 py-2">
+              <h5 class="">Adresse</h5>
+              <p class="text-gray-text-alt2">
+                {structure.address1}<br />
+                {#if structure.address2}{structure.address2}<br />{/if}
+                {structure.postalCode}
+                {structure.city}<br />
+              </p>
+              <h5 class="mt-3/2">Contact</h5>
+              <p class="text-gray-text-alt2">
+                {#if structure.phone}
+                  <a class="underline" href="tel:{structure.phone}">
+                    {structure.phone}
+                  </a>
+                  <br />
+                {/if}
+                {#if structure.email}
+                  <a class="underline" href="mailto:{structure.email}">
+                    {structure.email}
+                  </a>
+                  <br />
+                {/if}
+                {#if structure.url}
+                  <a
+                    class="underline"
+                    target="_blank"
+                    rel="noopener nofollow"
+                    href={structure.url}
+                  >
+                    {structure.url}
+                  </a>
+                {/if}
+              </p>
+              <h5 class="mt-3/2">Résumé</h5>
+              <p class="text-gray-text-alt2">{structure.shortDesc}</p>
+            </div>
             <div class="flex justify-end">
               <LinkButton
                 label="Modifier les informations"
-                to="/structures/{structure.slug}/editer"
+                to="/tableau-de-bord/structures/{structure.slug}/editer"
               />
             </div>
           </Fieldset>
