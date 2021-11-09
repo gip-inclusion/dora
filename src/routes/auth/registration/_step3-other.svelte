@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import SearchBySiret from "$lib/components/structures/search-by-siret.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import Button from "$lib/components/button.svelte";
@@ -7,8 +8,9 @@
   import Toggle from "$lib/components/toggle.svelte";
 
   import { registrationInfo } from "./_store.js";
+  import { getApiURL } from "$lib/utils/api.js";
 
-  export let currentStep;
+  export let currentStep, siret;
   let establishment;
 
   let establishmentVisible = false;
@@ -18,6 +20,37 @@
     $registrationInfo.siret = establishment.siret;
     currentStep = 4;
   }
+
+  async function searchSiret(q) {
+    const sireneAPIUrl = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(
+      q
+    )}`;
+    const response = await fetch(sireneAPIUrl, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json; version=1.0",
+      },
+    });
+    if (response.ok) {
+      const result = await response.json();
+      console.log(result);
+      return result;
+    }
+    return null;
+  }
+
+  onMount(async () => {
+    if (siret) {
+      establishment = await searchSiret(siret);
+      if (establishment) {
+        establishmentVisible = true;
+      } else {
+        siret = null;
+      }
+    }
+  });
+
+  $: console.log(siret);
 </script>
 
 <style>
@@ -44,7 +77,9 @@
   title="Votre structure"
   description="Merci de renseigner le numéro SIRET de votre structure afin de l’identifier."
 >
-  <SearchBySiret bind:establishment />
+  {#if !siret}
+    <SearchBySiret bind:establishment />
+  {/if}
   {#if establishment && establishmentVisible}
     <div class="establishment-details">
       <h4>{establishment.name}</h4>
@@ -63,8 +98,8 @@
       />
       <p>
         En cochant cette case je déclare faire partie de la structure mentionnée
-        ci-dessus et je suis conscient•e des risques j’encours en cas de faux et
-        d’usage de faux.
+        ci-dessus et je suis conscient•e des risques que j’encours en cas de
+        faux et d’usage de faux.
       </p>
     </div>
   {/if}

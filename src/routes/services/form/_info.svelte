@@ -1,6 +1,7 @@
 <script>
   import { informationIcon } from "$lib/icons.js";
   export let title;
+  export let icon;
 </script>
 
 <style>
@@ -38,7 +39,7 @@
   {#if title}
     <div class="title">
       <div class="icon">
-        {@html informationIcon}
+        {@html icon || informationIcon}
       </div>
       {title}
     </div>

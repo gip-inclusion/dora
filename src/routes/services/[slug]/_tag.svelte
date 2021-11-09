@@ -4,7 +4,7 @@
     padding: var(--s2) var(--s8);
     background-color: var(--bg-color);
     border-radius: var(--s4);
-    color: var(--col-magenta-cta);
+    color: var(--fg-color);
     font-size: var(--f12);
     font-weight: bold;
     text-transform: uppercase;
