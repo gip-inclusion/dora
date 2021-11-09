@@ -229,8 +229,8 @@
     goToPage(navInfo.previous);
   }
 
-  function handleGoForward() {
-    saveDraft();
+  async function handleGoForward() {
+    await saveDraft();
     if (
       validate(service, schemas.get(currentStep), serviceSchema, {
         skipDependenciesCheck: true,
