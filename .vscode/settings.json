@@ -28,7 +28,6 @@
     "build": true
   },
   "files.trimTrailingWhitespace": true,
-  "stylelint.validate": ["css", "html", "svelte"],
   "svelte.plugin.css.globals": "src/app.css",
   "tailwindCSS.validate": true
 }
