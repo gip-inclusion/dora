@@ -14,7 +14,8 @@
 
 <svelte:head>
   <title>Statistiques | DORA</title>
-  <script src="https://metabase.dora.beta.gouv.fr/app/iframeResizer.js">
+  <script
+    src="https://metabase.dora.fabrique.social.gouv.fr/app/iframeResizer.js">
   </script>
 </svelte:head>
 
@@ -28,7 +29,7 @@
   <iframe
     class="col-span-full"
     title="Dashboard Metabase"
-    src="https://metabase.dora.beta.gouv.fr/public/dashboard/9f65d982-fe2e-48f6-bb41-b829b89c29f9#bordered=false&titled=false"
+    src="https://metabase.dora.fabrique.social.gouv.fr/public/dashboard/9f65d982-fe2e-48f6-bb41-b829b89c29f9#bordered=false&titled=false"
     frameborder="0"
     allowtransparency
     on:load={hR}
