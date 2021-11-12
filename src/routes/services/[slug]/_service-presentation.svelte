@@ -58,6 +58,7 @@
         <LinkButton
           label="Demander l’accès"
           to="https://itou.typeform.com/doracontactsupp"
+          otherTab
           nofollow
           small
         />
@@ -65,6 +66,7 @@
         <LinkButton
           label="Demander l’accès"
           to="/auth/inscription?siret={service.structureInfo.siret}"
+          otherTab
           nofollow
           small
         />
