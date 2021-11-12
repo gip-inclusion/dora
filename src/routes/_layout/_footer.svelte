@@ -39,7 +39,12 @@
   </CenteredGrid>
   <CenteredGrid bordertop topPadded>
     <nav class="flex col-start-1 col-span-full flex-wrap py-2 gap-y-1">
-      <NavItem href="" label="Plan du site" separator light />
+      <NavItem
+        href="https://documentation.dora.fabrique.social.gouv.fr"
+        label="Documentation"
+        separator
+        light
+      />
       <NavItem
         href=""
         label="Mentions légales"
