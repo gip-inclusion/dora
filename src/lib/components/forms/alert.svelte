@@ -3,6 +3,7 @@
   export let iconOnLeft = false,
     iconOnRight = false;
   export let label;
+  export let isHTML = false;
 </script>
 
 <div class="text-error text-xs flex flex-row items-center pt-1/2 ">
@@ -11,7 +12,11 @@
       {@html alertIcon}
     </div>
   {/if}
-  {label}
+  {#if isHTML}
+    {@html label}
+  {:else}
+    {label}
+  {/if}
   {#if iconOnRight}
     <div class="w-2 h-2 ml-1 fill-current">
       {@html alertIcon}

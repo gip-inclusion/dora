@@ -10,6 +10,7 @@
   export let name = "";
   export let type;
   export let errorMessages = [];
+  export let allowHTMLError = false;
   export let autocomplete = undefined;
   export let passwordrules = undefined;
   export let vertical = false;
@@ -94,7 +95,7 @@
           <slot name="custom-input" />
         {/if}
         {#each errorMessages || [] as msg}
-          <Alert iconOnLeft label={msg} />
+          <Alert iconOnLeft label={msg} isHTML={allowHTMLError} />
         {/each}
       </div>
       <slot name="helptext" />

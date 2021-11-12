@@ -1,4 +1,5 @@
 <script>
+  import { userInfo } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
   import { lightBulbIcon } from "$lib/icons";
 
@@ -53,12 +54,21 @@
     compte et ainsi avoir la possibilité de mettre à jour les fiches de votre
     établissement.
     <div class="mt-2">
-      <LinkButton
-        label="Demander l'accès"
-        to="/auth/inscription?siret={service.structureInfo.siret}"
-        nofollow
-        small
-      />
+      {#if $userInfo}
+        <LinkButton
+          label="Demander l’accès"
+          to="https://itou.typeform.com/doracontactsupp"
+          nofollow
+          small
+        />
+      {:else}
+        <LinkButton
+          label="Demander l’accès"
+          to="/auth/inscription?siret={service.structureInfo.siret}"
+          nofollow
+          small
+        />
+      {/if}
     </div>
   </Info>
 {/if}

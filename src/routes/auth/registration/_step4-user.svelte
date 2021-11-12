@@ -16,6 +16,14 @@
   let requesting = false;
   let hasAgreedToLegalMentions = false;
 
+  const serverErrors = {
+    // eslint-disable-next-line
+    email: {
+      invalid:
+        "Cet utilisateur existe déjà.&nbsp;<a target='_blank' rel='noopener' class='underline' href='https://itou.typeform.com/doracontactsupp'>Nous contacter</a>.",
+    },
+  };
+
   const toggleText =
     "En cochant cette case je suis d’accord avec les <a class='underline' href='/mentions-legales'>mentions légales</a> et l’utilisation de mes données afin de créer un compte sur la plateforme DORA.";
 
@@ -45,6 +53,7 @@
   <Form
     data={$registrationInfo}
     schema={accountSchema}
+    serverErrorsDict={serverErrors}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
     bind:requesting
@@ -91,6 +100,7 @@
           placeholder="Votre courriel"
           autocomplete="email"
           bind:value={$registrationInfo.email}
+          allowHTMLError
         />
         <div class="flex flex-col md:flex-row justify-between gap-x-4">
           <Field
