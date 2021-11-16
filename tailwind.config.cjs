@@ -29,6 +29,7 @@ const config = {
           brand: "#9C6FF4",
           hover: "#7B40F0",
           cta: "#5B12EB",
+          dark: "#19004a",
         },
       },
       magenta: {

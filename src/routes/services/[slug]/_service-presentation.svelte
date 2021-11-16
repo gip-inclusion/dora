@@ -4,7 +4,7 @@
   import { lightBulbIcon } from "$lib/icons";
 
   import Info from "../form/_info.svelte";
-  import Tag from "./_tag.svelte";
+  import Tag from "$lib/components/tag.svelte";
 
   export let service;
 </script>

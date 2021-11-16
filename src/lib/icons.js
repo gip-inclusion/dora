@@ -52,3 +52,7 @@ export { default as fileForbidIcon } from "remixicon/icons/Document/file-forbid-
 export { default as fileCloudIcon } from "remixicon/icons/Document/file-cloud-line.svg?raw";
 
 export { default as briefcaseIcon } from "remixicon/icons/Business/briefcase-3-fill.svg?raw";
+export { default as mailIcon } from "remixicon/icons/Business/mail-send-fill.svg?raw";
+
+export { default as phoneIcon } from "remixicon/icons/Device/phone-fill.svg?raw";
+export { default as computerIcon } from "remixicon/icons/Device/computer-line.svg?raw";

@@ -6,7 +6,7 @@
   export let extraClass = "";
 </script>
 
-<style>
+<style lang="postcss">
   /* Color under the rounded corners */
   .wrapper {
     background-color: var(--col-under-bg, var(--col-bg));
@@ -41,8 +41,6 @@
 
   .roundedbg {
     background-color: var(--col-content-bg, var(--col-gray-bg));
-    border-top-left-radius: var(--s40);
-    border-top-right-radius: var(--s40);
   }
 
   .bordertop {
@@ -70,6 +68,14 @@
 
     .roundedbg {
       background-color: var(--col-white) !important;
+    }
+  }
+
+  @screen md {
+    .roundedbg {
+      background-color: var(--col-content-bg, var(--col-gray-bg));
+      border-top-left-radius: var(--s40);
+      border-top-right-radius: var(--s40);
     }
   }
 </style>

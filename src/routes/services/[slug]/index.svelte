@@ -39,6 +39,4 @@
 
 {#if service}
   <ServiceCard {service} />
-{:else}
-  <!-- TODO: 404 -->
 {/if}
