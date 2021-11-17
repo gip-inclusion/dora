@@ -1,10 +1,8 @@
 <script>
-  import { get } from "svelte/store";
-
+  import { userInfo } from "$lib/auth";
   import { formErrors } from "$lib/validation.js";
   import { suggestionSchema } from "$lib/schemas/service";
   import { getApiURL } from "$lib/utils/api";
-  import { token } from "$lib/auth";
 
   import Button from "$lib/components/button.svelte";
   import Field from "$lib/components/forms/field.svelte";
@@ -16,7 +14,9 @@
   export let isOpen = false;
   export let service;
 
-  let fullName, email, message;
+  $: fullName = $userInfo ? $userInfo.fullName : null;
+  $: email = $userInfo ? $userInfo.email : null;
+  let message;
   let confirmationModalIsOpen = false;
   let requesting = false;
 
@@ -33,7 +33,6 @@
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json; version=1.0",
-        Authorization: `Token ${get(token)}`,
       },
     });
   }
