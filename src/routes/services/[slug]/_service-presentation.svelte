@@ -1,12 +1,31 @@
 <script>
+  import { browser } from "$app/env";
   import { userInfo } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
-  import { lightBulbIcon } from "$lib/icons";
+  import { lightBulbIcon, messageIcon } from "$lib/icons";
 
   import Info from "../form/_info.svelte";
   import Tag from "$lib/components/tag.svelte";
+  import Button from "$lib/components/button.svelte";
+  import SuggestionModal from "./_suggestion-modal.svelte";
 
   export let service;
+
+  let suggestionModalIsOpen = false;
+
+  function handleSuggestion() {
+    suggestionModalIsOpen = true;
+    if (browser) {
+      plausible("suggestion", {
+        props: {
+          service: service.name,
+          slug: service.slug,
+          structure: service.structureInfo.name,
+          departement: service.department,
+        },
+      });
+    }
+  }
 </script>
 
 <style>
@@ -33,7 +52,9 @@
   }
 </style>
 
-<div class="flex mt-6 mb-4">
+<SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
+
+<div class="flex mt-6 mb-4 items-baseline">
   <Tag --bg-color="var(--col-gray-01)" --fg-color="var(--col-gray-dark)">
     {service.categoryDisplay}
   </Tag>
@@ -43,6 +64,16 @@
       { year: "numeric", month: "long", day: "numeric" }
     )}
   </div>
+  <div class="flex-auto" />
+
+  <Button
+    label="Suggérer une modification"
+    noBackground
+    icon={messageIcon}
+    iconOnRight
+    small
+    on:click={handleSuggestion}
+  />
 </div>
 {#if !service.structureInfo.hasAdmin}
   <Info

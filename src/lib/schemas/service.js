@@ -407,3 +407,23 @@ export const draftServiceSchema = {
     post: [v.nullEmpty],
   },
 };
+
+export const suggestionSchema = {
+  fullName: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(140)],
+    post: [v.trim],
+  },
+  email: {
+    default: "",
+    required: true,
+    rules: [v.isEmail(), v.maxStrLength(255)],
+    post: [v.lower, v.trim],
+  },
+  message: {
+    default: "",
+    required: true,
+    rules: [v.isString()],
+  },
+};

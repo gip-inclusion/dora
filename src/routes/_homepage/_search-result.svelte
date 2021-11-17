@@ -29,8 +29,11 @@
     <div class="flex flex-col gap-2 mt-1 md:flex-row">
       <Tag
         --bg-color="var(--col-magenta-20)"
-        --fg-color="var(--col-magenta-cta)">{result.categoryDisplay}</Tag
+        --fg-color="var(--col-magenta-cta)"
+        selfStart
       >
+        {result.categoryDisplay}
+      </Tag>
       <Label
         label={`${result.postalCode}, ${result.city}`}
         iconOnLeft

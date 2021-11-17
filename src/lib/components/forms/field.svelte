@@ -17,6 +17,7 @@
   export let label = "";
   export let required = false;
   export let maxLength = undefined;
+  export let rows = undefined;
   export let choices = [];
   export let sortSelect = undefined;
 
@@ -81,6 +82,7 @@
             {choices}
             {sortSelect}
             {maxLength}
+            {rows}
             {placeholder}
             {placeholderMulti}
             {minValue}

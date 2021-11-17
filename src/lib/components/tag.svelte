@@ -1,6 +1,9 @@
+<script>
+  export let selfStart = false;
+</script>
+
 <style>
   .wrapper {
-    align-self: flex-start;
     padding: var(--s2) var(--s8);
     background-color: var(--bg-color);
     border-radius: var(--s4);
@@ -11,6 +14,6 @@
   }
 </style>
 
-<div class="wrapper">
+<div class="wrapper" class:self-start={selfStart}>
   <slot />
 </div>

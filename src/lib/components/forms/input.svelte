@@ -21,6 +21,7 @@
   export let placeholderMulti = "";
   export let minValue = null;
   export let maxLength = undefined;
+  export let rows = 4;
 
   export let toggleYesText;
   export let toggleNoText;
@@ -119,7 +120,7 @@
     {disabled}
     {readonly}
     {autocomplete}
-    rows="4"
+    {rows}
   />
 {:else if type === "richtext"}
   <RichText

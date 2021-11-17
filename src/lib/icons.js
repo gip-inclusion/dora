@@ -56,3 +56,5 @@ export { default as mailIcon } from "remixicon/icons/Business/mail-send-fill.svg
 
 export { default as phoneIcon } from "remixicon/icons/Device/phone-fill.svg?raw";
 export { default as computerIcon } from "remixicon/icons/Device/computer-line.svg?raw";
+
+export { default as messageIcon } from "remixicon/icons/Communication/message-3-line.svg?raw";

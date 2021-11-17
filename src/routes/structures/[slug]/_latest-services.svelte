@@ -24,7 +24,8 @@
         <div class="flex flex-col gap-2 mt-1 ">
           <Tag
             --bg-color="var(--col-magenta-20)"
-            --fg-color="var(--col-magenta-cta)">{service.categoryDisplay}</Tag
+            --fg-color="var(--col-magenta-cta)"
+            selfStart>{service.categoryDisplay}</Tag
           >
           <Label
             label={`${service.postalCode}, ${service.city}`}
