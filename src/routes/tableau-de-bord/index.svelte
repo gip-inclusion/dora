@@ -26,6 +26,10 @@
   export let structures;
 </script>
 
+<svelte:head>
+  <title>Tableau de bord | DORA</title>
+</svelte:head>
+
 <EnsureLoggedIn>
   <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
     <div class="flex flex-row col-span-full justify-between">

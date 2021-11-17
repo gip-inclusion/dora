@@ -17,6 +17,10 @@
   export let services;
 </script>
 
+<svelte:head>
+  <title>Tous les services | DORA</title>
+</svelte:head>
+
 <EnsureStaff>
   <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
     <div class="col-start-1 col-span-full text-left">

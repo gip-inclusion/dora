@@ -40,7 +40,7 @@
 </script>
 
 <svelte:head>
-  <title>{service?.name} | {service?.structureInfo.name} | DORA</title>
+  <title>Éditer | {service?.name} | {service?.structureInfo.name} | DORA</title>
 </svelte:head>
 
 <EnsureLoggedIn>

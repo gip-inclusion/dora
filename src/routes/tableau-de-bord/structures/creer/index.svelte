@@ -70,7 +70,7 @@
 </script>
 
 <svelte:head>
-  <title>Retrouvez votre structure | DORA</title>
+  <title>Créer une structure | DORA</title>
 </svelte:head>
 
 <FieldSet

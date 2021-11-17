@@ -53,7 +53,7 @@
 </script>
 
 <svelte:head>
-  <title>Dora: Ma structure</title>
+  <title>Ma structure | {structure.name} | DORA</title>
 </svelte:head>
 
 <EnsureLoggedIn>

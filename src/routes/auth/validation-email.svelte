@@ -40,7 +40,7 @@
 </script>
 
 <svelte:head>
-  <title>Accédez à votre compte | DORA</title>
+  <title>Valider votre compte | DORA</title>
 </svelte:head>
 
 <CenteredGrid topPadded>
