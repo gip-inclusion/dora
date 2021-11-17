@@ -54,12 +54,10 @@
 
   import SearchResult from "./_homepage/_search-result.svelte";
   import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
-
   import SearchPromo from "./_homepage/_search-promo.svelte";
 
   import { addCircleIcon } from "$lib/icons";
   import NoResultsPic from "$lib/assets/illu_zero-resultats-optimise.svg";
-  import Button from "$lib/components/button.svelte";
 
   export let servicesOptions;
   export let category, subcategory, cityCode, cityLabel;
@@ -72,6 +70,26 @@
       });
     }
   });
+
+  const sharingEmailSubject = encodeURIComponent("Connaissez-vous Dora ?");
+  const sharingEmailBody = encodeURIComponent(
+    `
+Bonjour,
+Je me permets de vous partager un projet qui devrait vous intéresser.
+
+Connaissez-vous Dora ?
+
+Lancé en Mai 2021, Dora est un service public numérique porté par la DGEFP qui permet aux structures de l'insertion de référencer simplement et mettre à jour en temps réel leur offre de services, et aux professionnels prescripteurs de rechercher et mobiliser rapidement le service le plus adapté au besoin de leur bénéficiaire.
+
+J'ai le plaisir de vous annoncer que Dora est accessible dès aujourd'hui pour l'ensemble les acteurs de l'insertion du territoire. De nombreux partenaires ont d'ores et déjà mis en visibilité leur offre de service sur Dora. Vous pouvez également vous inscrire et bénéficier de ce service !
+
+👉 Pour accéder à Dora cliquez sur ce lien (pensez à l'ajouter à vos favoris 😉) :
+https://dora.fabrique.social.gouv.fr/
+
+Dans l'attente de pouvoir consulter votre offre de service sur cet outil.
+Cordialement,
+`.trim()
+  );
 </script>
 
 <style lang="postcss">
@@ -185,28 +203,16 @@
             (Loire-Atlantique, Ardennes et La Réunion).
           </p>
 
-          <h4 class="mt-6">
+          <h4 class="mt-6 leading-large">
             Vous connaissez des structures proposant des services correspondant
             à ces critères ? Invitez vos partenaires à se référencer :
           </h4>
           <div>
-            <Button
+            <LinkButton
               label="Recommander DORA"
               icon={addCircleIcon}
-              disabled
               iconOnRight
-            />
-          </div>
-          <h4>
-            Vous êtes une structure proposant des services correspondant à ces
-            critères ?
-          </h4>
-          <div>
-            <LinkButton
-              label="Référencer un service"
-              icon={addCircleIcon}
-              to={`/services/creer`}
-              iconOnRight
+              to="mailto:?subject={sharingEmailSubject}&body={sharingEmailBody}"
             />
           </div>
         </div>
