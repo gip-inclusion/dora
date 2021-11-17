@@ -1,17 +1,25 @@
-<script>
-  import { structureStore, servicesStore } from "./_store";
+<script context="module">
+  export async function load({ stuff }) {
+    return {
+      props: {
+        structure: stuff.structure,
+        services: stuff.services,
+      },
+    };
+  }
+</script>
 
+<script>
   import LatestServices from "./_latest-services.svelte";
   import StructurePres from "./_structure-pres.svelte";
+
+  export let structure, services;
 </script>
 
 <svelte:head>
-  <title>{$structureStore.name} | DORA</title>
-  <meta name="description" content={$structureStore.shortDesc} />
+  <title>{structure.name} | DORA</title>
+  <meta name="description" content={structure.shortDesc} />
 </svelte:head>
 
-<StructurePres structure={$structureStore} />
-<LatestServices
-  structure={$structureStore}
-  services={$servicesStore.slice(0, 3)}
-/>
+<StructurePres {structure} />
+<LatestServices {structure} services={services.slice(0, 3)} />

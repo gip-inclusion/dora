@@ -2,29 +2,30 @@
   import { getStructure, getStructureServices } from "$lib/structures";
 
   export async function load({ page }) {
-    const currentTab = page.path.endsWith("/services") ? 2 : 1;
+    const structure = await getStructure(page.params.slug);
+    const services = await getStructureServices(page.params.slug, {
+      publishedOnly: true,
+    });
     return {
       props: {
-        structure: await getStructure(page.params.slug),
-        services: await getStructureServices(page.params.slug, {
-          publishedOnly: true,
-        }),
-        currentTab,
+        structure,
+      },
+      stuff: {
+        structure,
+        services,
       },
     };
   }
 </script>
 
 <script>
-  import { structureStore, servicesStore } from "./_store";
+  import { page } from "$app/stores";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import StructureHeader from "./_structure-header.svelte";
 
-  export let structure, services, currentTab;
-
-  structureStore.set(structure);
-  servicesStore.set(services);
+  export let structure;
+  $: currentTab = $page.path.endsWith("/services") ? 2 : 1;
 </script>
 
 <CenteredGrid --col-bg="var(--col-magenta-brand)" topPadded>
