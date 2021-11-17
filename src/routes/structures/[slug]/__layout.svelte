@@ -27,11 +27,6 @@
   servicesStore.set(services);
 </script>
 
-<svelte:head>
-  <title>{structure.name} | DORA</title>
-  <meta name="description" content={structure.shortDesc} />
-</svelte:head>
-
 <CenteredGrid --col-bg="var(--col-magenta-brand)" topPadded>
   <div class="col-span-full">
     <StructureHeader {structure} {currentTab} />

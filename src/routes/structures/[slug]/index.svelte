@@ -5,6 +5,11 @@
   import StructurePres from "./_structure-pres.svelte";
 </script>
 
+<svelte:head>
+  <title>{$structureStore.name} | DORA</title>
+  <meta name="description" content={$structureStore.shortDesc} />
+</svelte:head>
+
 <StructurePres structure={$structureStore} />
 <LatestServices
   structure={$structureStore}
