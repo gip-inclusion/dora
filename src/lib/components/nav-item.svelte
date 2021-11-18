@@ -6,6 +6,7 @@
   export let external = false;
   export let light = false;
   export let href;
+  export let nofollow = false;
 </script>
 
 <a
@@ -16,7 +17,7 @@
   on:click
   {href}
   target="_blank"
-  rel="noopener"
+  rel="noopener {nofollow ? 'nofollow' : ''}"
   {disabled}
 >
   {label}

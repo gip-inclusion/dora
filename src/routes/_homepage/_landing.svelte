@@ -11,15 +11,14 @@
   import JoinPic from "$lib/assets/illu_rejoindre.svg";
   import ValorisePic from "$lib/assets/illu_valoriser.svg";
   import VisiblePic from "$lib/assets/illu_visibilite.svg";
-  import { arrowRightIcon } from "$lib/icons";
+  import { arrowRightIcon, newspaperIcon } from "$lib/icons";
 
   export let servicesOptions;
 </script>
 
 <style lang="postcss">
   h1,
-  h2,
-  h3 {
+  h2 {
     color: var(--col-france-blue);
   }
 
@@ -35,7 +34,6 @@
 
   p {
     color: var(--col-text);
-    font-size: var(--f16);
   }
 
   :global(.homepage-second-row) {
@@ -188,7 +186,7 @@
       <div class="flex-1 text-left">
         <div class="flex flex-col gap-2 md:px-12">
           <h5>Rejoignez l’aventure !</h5>
-          <h3>Aidez-nous à construire DORA&nbsp;!</h3>
+          <h3 class="text-france-blue">Aidez-nous à construire DORA&nbsp;!</h3>
           <p class="text-xs text-gray-text">
             Nous sommes à l’écoute de vos besoins afin de construire un service
             numérique qui vous correspond et vous permettra d’orienter plus
@@ -202,6 +200,8 @@
           <div>
             <LinkButton
               to="https://itou.typeform.com/doraall"
+              otherTab
+              nofollow
               label="Adhérez à la communauté"
               icon={arrowRightIcon}
               iconOnRight
@@ -213,5 +213,35 @@
         </div>
       </div>
     </div>
+  </div>
+</CenteredGrid>
+
+<CenteredGrid --col-bg="var(--col-magenta-10)">
+  <div
+    class="col-span-full flex flex-col gap-2 md:flex-row mb-5 mt-4 justify-between items-center"
+  >
+    <div>
+      <h3 class="text-gray-dark mb-1">
+        Abonnez-vous à notre lettre d’information
+      </h3>
+      <p class="text-xs text-gray-dark leading-large max-w-2xl">
+        En renseignant votre adresse électronique, vous acceptez de recevoir nos
+        actualités par courriel. Vous pouvez vous désinscrire à tout moment à
+        l’aide des liens de désinscription ou en <a
+          target="_blank"
+          rel="noopener nofollow"
+          class="underline"
+          href="https://itou.typeform.com/doracontactsupp">nous contactant</a
+        >.
+      </p>
+    </div>
+    <LinkButton
+      label="Recevoir les actualités"
+      to="https://itou.typeform.com/doraall"
+      otherTab
+      nofollow
+      iconOnRight
+      icon={newspaperIcon}
+    />
   </div>
 </CenteredGrid>

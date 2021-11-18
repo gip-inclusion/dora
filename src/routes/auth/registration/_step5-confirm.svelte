@@ -20,7 +20,7 @@
       <a
         class="underline"
         target="_blank"
-        rel="noopener"
+        rel="noopener nofollow"
         href="https://itou.typeform.com/doracontactsupp">contactez-nous</a
       >.
     </p>

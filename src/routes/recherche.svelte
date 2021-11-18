@@ -56,7 +56,7 @@
   import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
   import SearchPromo from "./_homepage/_search-promo.svelte";
 
-  import { addCircleIcon } from "$lib/icons";
+  import { mailIcon, newspaperIcon } from "$lib/icons";
   import NoResultsPic from "$lib/assets/illu_zero-resultats-optimise.svg";
 
   export let servicesOptions;
@@ -210,9 +210,24 @@ Cordialement,
           <div>
             <LinkButton
               label="Recommander DORA"
-              icon={addCircleIcon}
+              icon={mailIcon}
               iconOnRight
               to="mailto:?subject={sharingEmailSubject}&body={sharingEmailBody}"
+            />
+          </div>
+
+          <h4 class="mt-6 leading-large">
+            Infolettre : nouveautés et les prochains territoires ouverts sur
+            Dora.
+          </h4>
+          <div>
+            <LinkButton
+              label="Recevoir les actualités"
+              icon={newspaperIcon}
+              iconOnRight
+              to="https://itou.typeform.com/doraall"
+              otherTab
+              nofollow
             />
           </div>
         </div>

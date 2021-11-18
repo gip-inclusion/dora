@@ -50,6 +50,7 @@ export { default as fileTransferIcon } from "remixicon/icons/Document/file-trans
 export { default as fileEditIcon } from "remixicon/icons/Document/file-edit-line.svg?raw";
 export { default as fileForbidIcon } from "remixicon/icons/Document/file-forbid-line.svg?raw";
 export { default as fileCloudIcon } from "remixicon/icons/Document/file-cloud-line.svg?raw";
+export { default as newspaperIcon } from "remixicon/icons/Document/newspaper-line.svg?raw";
 
 export { default as briefcaseIcon } from "remixicon/icons/Business/briefcase-3-fill.svg?raw";
 export { default as mailIcon } from "remixicon/icons/Business/mail-send-fill.svg?raw";
