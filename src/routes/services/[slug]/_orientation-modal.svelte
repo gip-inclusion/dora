@@ -134,7 +134,7 @@
             {:else}
               <div class="flex flex-col gap-2 pb-1">
                 <Label
-                  label="Vous devez être connecté•e pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire."
+                  label="Connectez-vous pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire."
                 />
                 <LinkButton
                   label="Connexion"

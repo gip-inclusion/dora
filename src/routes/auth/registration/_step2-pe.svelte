@@ -122,8 +122,8 @@
           bind:checked={hasCheckedConsent}
         />
         <p>
-          En cochant cette case je déclare faire partie de la structure
-          mentionnée ci-dessus et je suis conscient•e des risques j’encours en
+          En cochant cette case, je déclare faire partie de la structure
+          mentionnée ci-dessus et j’atteste connaître les risques encourus en
           cas de faux et d’usage de faux.
         </p>
       </div>

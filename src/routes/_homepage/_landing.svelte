@@ -195,9 +195,9 @@
             facilement et rapidement vos bénéficiaires.
           </p>
           <p class="text-xs text-gray-text font-bold">
-            Si vous souhaitez être tenu•e au courant de l’avancement du projet,
-            participer à des tests utilisateurs ou des sessions demo, n’hésitez
-            pas à vous rallier à la communauté DORA !
+            Recevez l’infolettre et suivez l’avancement du projet, participez à
+            des tests utilisateurs ou des sessions de démo. N’hésitez pas à vous
+            rallier à la communauté Dora&nbsp;!
           </p>
           <div>
             <LinkButton
