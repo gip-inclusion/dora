@@ -6,22 +6,22 @@
 
 <style lang="postcss">
   .no-top-padding {
-    @apply mt-0;
+    @apply mt-s0;
   }
 </style>
 
 <div
-  class="flex flex-col max-w-4xl gap-3 pt-4 mt-6 bg-white rounded-md shadow-md px-5 pb-7 "
+  class="flex flex-col max-w-4xl gap-s24 pt-s32 mt-s48 bg-white rounded-md shadow-md px-s40 pb-s56 "
   class:no-top-padding={noTopPadding}
 >
   {#if title}
-    <div class="pb-3 border-b border-gray-01">
-      <h3 class="mb-1 text-france-blue">
+    <div class="pb-s24 border-b border-gray-01">
+      <h3 class="mb-s8 text-france-blue">
         {title}
       </h3>
       <slot name="description">
         {#if description}
-          <p class="text-sm text-gray-text-alt2">{description}</p>
+          <p class="text-f14 text-gray-text-alt2">{description}</p>
         {/if}
       </slot>
     </div>

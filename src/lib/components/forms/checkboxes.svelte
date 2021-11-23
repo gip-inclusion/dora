@@ -17,7 +17,7 @@
   }
 </style>
 
-<div class="flex flex-col gap-1">
+<div class="flex flex-col gap-s8">
   {#each choices as choice}
     <label class="flex flex-row items-center">
       <input
@@ -30,11 +30,11 @@
         {readonly}
       />
       <div
-        class="flex justify-center flex-shrink-0 w-3 h-3 border rounded border-gray-03"
+        class="flex justify-center flex-shrink-0 w-s24 h-s24 border rounded border-gray-03"
       >
-        <div class="self-center hidden w-3/2 h-3/2 bg-dora-magenta-cta" />
+        <div class="self-center hidden w-s12 h-s12 bg-magenta-cta" />
       </div>
-      <span class="inline-block w-40 ml-2 text-gray-text text-sm"
+      <span class="inline-block ml-s16 text-gray-text text-f14"
         >{choice.label}</span
       >
     </label>

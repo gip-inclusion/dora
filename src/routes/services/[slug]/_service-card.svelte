@@ -36,10 +36,10 @@
   --col-content-bg="var(--col-bg)"
 >
   <div class="flex flex-col col-span-full">
-    <div class="flex flex-col gap-3 lg:flex-row-reverse">
+    <div class="flex flex-col gap-s24 lg:flex-row-reverse">
       <div class="flex-initial orientation">
         <OrientationBox {service} />
-        <div class="flex-col hidden max-w-md gap-2 mb-2 lg:flex">
+        <div class="flex-col hidden max-w-md gap-s16 mb-s16 lg:flex">
           <h4>{service.structureInfo.name}</h4>
           <Label label={service.structureInfo.shortDesc} italic />
           <LinkButton

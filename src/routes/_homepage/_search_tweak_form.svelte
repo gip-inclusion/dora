@@ -54,27 +54,20 @@
     flex-direction: column;
     gap: var(--s16);
   }
-
-  p {
-    margin-top: var(--s16);
-    color: var(--col-text-alt2);
-    font-size: var(--f12);
-    text-align: center;
-  }
 </style>
 
 <div class="wrapper">
   <Collapsable>
     <div slot="above-fold">
-      <h3 class="mb-2">Affinez votre recherche</h3>
+      <h3 class="mb-s16">Affinez votre recherche</h3>
     </div>
     <div slot="under-fold">
       {#if numResults}
-        <div class="text-gray-text-alt2 text-sm">
+        <div class="text-gray-text-alt2 text-f14">
           {numResults} résultat{#if numResults > 1}s{/if}
         </div>
       {/if}
-      <div class="border-t border-gray-01 my-3/2" />
+      <div class="border-t border-gray-01 my-s12" />
       <form on:submit|preventDefault={handleSearch}>
         <Field
           type="select"
@@ -118,7 +111,7 @@
           preventDefaultOnMouseDown
         />
       </form>
-      <p>
+      <p class="mt-s16 text-gray-text-alt2 text-f12 text-center">
         Le service DORA est actuellement <a
           class="underline"
           target="_blank"

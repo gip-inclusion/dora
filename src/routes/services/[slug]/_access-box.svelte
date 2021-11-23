@@ -22,7 +22,7 @@
 </style>
 
 <Box title="Conditions d’accès" --box-color="black">
-  <div class="flex flex-row flex-wrap gap-2">
+  <div class="flex flex-row flex-wrap gap-s16">
     <div class="flex-grow">
       <h3>Mobiliser ce service</h3>
       <ul class="list">

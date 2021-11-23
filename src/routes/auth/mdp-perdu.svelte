@@ -52,8 +52,8 @@
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 mb-6 text-center col-span-full">
-    <h1 class="text-france-blue text-13xl">Se connecter à DORA</h1>
+  <div class="col-start-1 mb-s48 text-center col-span-full">
+    <h1 class="text-france-blue">Se connecter à DORA</h1>
   </div>
 </CenteredGrid>
 
@@ -110,7 +110,7 @@
           label="Envoyer un mail de récupération"
           preventDefaultOnMouseDown
         />
-        <p class=" text-center text-gray-text-alt2 text-xs">
+        <p class=" text-center text-gray-text-alt2 text-f12">
           Vous vous souvenez de votre mot de passe ?
           <a class="underline " href="/auth/connexion">Connexion</a>
         </p>

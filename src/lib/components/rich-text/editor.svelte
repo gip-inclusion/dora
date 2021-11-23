@@ -19,7 +19,7 @@
   let element;
   let editor;
   export let name;
-  export let className = "prose bg-white h-20";
+  export let className = "prose bg-white h-s160";
   export let htmlContent = "";
   export let initialContent = "";
   export let placeholder = "";
@@ -43,7 +43,7 @@
           name,
           disabled,
           readonly,
-          class: `${className} p-2 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none`,
+          class: `${className} p-s16 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none`,
         },
       },
     });
@@ -60,13 +60,13 @@
   :global(.ProseMirror p.is-editor-empty:first-child::before) {
     content: attr(data-placeholder);
 
-    @apply text-gray-text-alt pointer-events-none h-0 float-left;
+    @apply text-gray-text-alt pointer-events-none h-s0 float-left;
   }
 </style>
 
 <div class="flex flex-col w-full border border-gray-03">
   {#if editor}
-    <div class="flex flex-row items-center bg-gray-03 p-3/2 ">
+    <div class="flex flex-row items-center bg-gray-03 p-s12 ">
       <Button
         on:click={() => editor.chain().focus().toggleBold().run()}
         active={editor.isActive("bold")}

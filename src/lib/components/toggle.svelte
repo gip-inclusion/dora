@@ -23,11 +23,11 @@
   input:checked ~ .toggle-circle {
     transform: translateX(100%);
 
-    @apply bg-dora-magenta-cta;
+    @apply bg-magenta-cta;
   }
 
   input:checked ~ .toggle-path {
-    @apply border-dora-magenta-hover bg-magenta-20;
+    @apply border-magenta-hover bg-magenta-20;
   }
 </style>
 
@@ -52,13 +52,13 @@
   />
   <!-- path -->
   <div
-    class="flex-shrink-0 w-5 h-3 bg-white border rounded-full toggle-path border-gray-03"
+    class="flex-shrink-0 w-s40 h-s24 bg-white border rounded-full toggle-path border-gray-03"
   />
   <!-- circle -->
   <div
-    class="absolute inset-y-0 left-0 flex-shrink-0 w-2 h-2 rounded-full bg-gray-text-alt toggle-circle"
+    class="absolute inset-y-s0 left-s0 flex-shrink-0 w-s16 h-s16 rounded-full bg-gray-text-alt toggle-circle"
   />
-  <div class="ml-1 text-sm text-gray-text">
+  <div class="ml-s8 text-f14 text-gray-text">
     {@html checked ? toggleYesText : toggleNoText}
   </div>
 </label>

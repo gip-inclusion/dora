@@ -17,7 +17,7 @@
       small
     />
   </div>
-  <div class="grid md:grid-cols-2 lg:grid-cols-s24 gap-s16 mt-s24 mb-s48">
+  <div class="grid md:grid-cols-s16 lg:grid-cols-s24 gap-s16 mt-s24 mb-s48">
     {#each services as service}
       <div class="shadow-md rounded-md px-s20 py-s24">
         <h4><a href="/services/{service.slug}">{service.name}</a></h4>

@@ -124,6 +124,6 @@
       />
     </form>
   {:else}
-    <p class="text-gray-text">Impossible de contacter le serveur</p>
+    <p>Impossible de contacter le serveur</p>
   {/if}
 </div>

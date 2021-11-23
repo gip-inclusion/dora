@@ -111,9 +111,9 @@
 
 {#if alreadyClaimedEstablishment}
   <div
-    class="flex flex-row items-center justify-center mt-2 text-xl text-error pt-1/2"
+    class="flex flex-row items-center justify-center mt-s16 text-f18 text-error pt-s4"
   >
-    <div class="w-3 h-3 mr-1 fill-current ">
+    <div class="w-s24 h-s24 mr-s8 fill-current ">
       {@html alertIcon}
     </div>
     <p>

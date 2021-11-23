@@ -1,3 +1,228 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /***********************/
+    /*       colors        */
+    /***********************/
+
+    /* Grays  */
+    --col-gray-bg: #f8f8f8;
+    --col-gray-00: #f5f5f5;
+    --col-gray-01: #e0e0e0;
+    --col-gray-02: #d5d5d5;
+    --col-gray-03: #cccccc;
+    --col-gray-dark: #2e2e2e;
+
+    /* Text */
+    --col-text: #555555;
+    --col-text-alt: #999999;
+    --col-text-alt2: #777777;
+
+    /* DSFR */
+    --col-france-blue: #000091;
+    --col-white: #ffffff;
+    --col-marianne-red: #e1000f;
+
+    /* DORA */
+    --col-magenta-dark: #19004a;
+    --col-magenta-brand: #9c6ff4;
+    --col-magenta-hover: #7b40f0;
+    --col-magenta-cta: #5b12eb;
+
+    /* Magenta */
+    --col-magenta-80: #af8ef3;
+    --col-magenta-60: #c3aaf6;
+    --col-magenta-40: #d7c6f9;
+    --col-magenta-20: #ebe3fb;
+    --col-magenta-10: #f5f0fd;
+
+    /* Functional Colors */
+    --col-bg: white;
+    --col-success: #008941;
+    --col-error: #e10600;
+
+    --col-info: #0762c8;
+    --col-info-bg: #dbf0ff;
+    --col-info-light: #f0f8ff;
+
+    --col-available: var(--col-success);
+    --col-available-dark: #1cda76;
+
+    --col-na: var(--col-error);
+    --col-na-dark: #ff504c;
+
+    --col-wait: #f29023;
+    --col-wait-dark: #fe9800;
+
+    /***********************/
+    /*       spacing       */
+    /***********************/
+
+    --s0: 0;
+    --s2: 0.125rem;
+    --s4: 0.25rem;
+    --s6: 0.375rem;
+    --s8: 0.5rem;
+    --s10: 0.625rem;
+    --s12: 0.75rem;
+    --s16: 1rem;
+    --s20: 1.25rem;
+    --s24: 1.5rem;
+    --s32: 2rem;
+    --s40: 2.5rem;
+    --s48: 3rem;
+    --s56: 3.5rem;
+    --s64: 4rem;
+    --s72: 4.5rem;
+    --s80: 5rem;
+    --s88: 5.5rem;
+    --s96: 6rem;
+    --s112: 7rem;
+    --s136: 8.5rem;
+    --s160: 10rem;
+    --s250: 15.625rem;
+
+    /***********************/
+    /*       shadows       */
+    /***********************/
+
+    --shadow-xs: 0 1px 0 0 rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 0 1px 0 rgba(0, 0, 0, 0.05), 0 2px 1px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 10px 0 rgba(0, 0, 0, 0.1), 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    --shadow-l: 0 4px 20px 0 rgba(0, 0, 0, 0.15), 0 0 3px 0 rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 0 4px rgba(0, 0, 0, 0.1), 0px 8px 40px rgba(0, 0, 0, 0.2);
+    --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+    --shadow-focus: 0px 0px 0px 2px #ffffff, 0px 0px 0px 4px #0a76f6;
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: normal;
+    font-weight: normal;
+    src: url("$lib/assets/fonts/Marianne/Marianne-Regular.woff2")
+        format("woff2"),
+      url("$lib/assets/fonts/Marianne/Marianne-Regular.woff") format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: normal;
+    font-weight: bold;
+    src: url("$lib/assets/fonts/Marianne/Marianne-Bold.woff2") format("woff2"),
+      url("$lib/assets/fonts/Marianne/Marianne-Bold.woff") format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: italic;
+    font-weight: normal;
+    src: url("$lib/assets/fonts/Marianne/Marianne-Regular_Italic.woff2")
+        format("woff2"),
+      url("$lib/assets/fonts/Marianne/Marianne-Regular_Italic.woff")
+        format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: italic;
+    font-weight: bold;
+    src: url("$lib/assets/fonts/Marianne/Marianne-Bold_Italic.woff2")
+        format("woff2"),
+      url("$lib/assets/fonts/Marianne/Marianne-Bold_Italic.woff") format("woff");
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply font-bold text-gray-dark;
+  }
+
+  h1 {
+    @apply text-f26 leading-32 md:text-f30 md:leading-40 lg:text-f38 lg:leading-48 xl:text-f45 xl:leading-56;
+  }
+
+  h2 {
+    @apply text-f22 leading-32 md:text-f24 lg:text-f28 lg:leading-40 xl:text-f32;
+  }
+
+  h3 {
+    @apply text-f19 leading-24 md:text-f20 md:leading-32 lg:text-f21 xl:text-f23;
+  }
+
+  h4 {
+    @apply text-f17 leading-32;
+  }
+
+  h5 {
+    @apply text-f14 leading-24;
+  }
+
+  p {
+    @apply text-f18 leading-normal text-gray-text;
+  }
+
+  .paragraph {
+    @apply text-f18 leading-32 text-gray-text;
+  }
+
+  .paragraph-small {
+    @apply text-f16 leading-24 text-gray-text;
+  }
+
+  .legend {
+    @apply text-gray-text-alt2 text-f14 leading-24;
+  }
+
+  .legend-xs {
+    @apply text-gray-text-alt2 text-f12 leading-20;
+  }
+
+  @media print {
+    .noprint {
+      @apply !hidden;
+    }
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 1cm;
+  }
+
+  /* Tarte au citron */
+
+  #tarteaucitronAlertBig {
+    @apply !font-sans !bg-white !shadow-md !text-gray-text;
+  }
+
+  #tarteaucitronAlertBig #tarteaucitronDisclaimerAlert {
+    @apply !font-sans !text-gray-text;
+  }
+  #tarteaucitronAlertBig #tarteaucitronPersonalize2 {
+    @apply !font-sans !bg-magenta-cta;
+  }
+
+  #tarteaucitronAlertBig #tarteaucitronAllDenied2 {
+    @apply !font-sans !bg-gray-dark;
+  }
+
+  #tarteaucitronAlertBig #tarteaucitronCloseAlert {
+    @apply !font-sans !text-gray-text-alt2;
+  }
+
+  #tarteaucitronAlertBig #tarteaucitronPrivacyUrl {
+    @apply !font-sans !text-magenta-cta;
+  }
+
+  #tarteaucitronRoot #tarteaucitronCloseCross {
+    @apply !font-sans !text-gray-text;
+  }
+}

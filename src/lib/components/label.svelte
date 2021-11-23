@@ -76,7 +76,7 @@
 </style>
 
 <div
-  class="flex flex-row items-center text-sm leading-normal wrapper"
+  class="flex flex-row items-center text-f14 leading-normal wrapper"
   class:bold
   class:italic
   class:success
@@ -86,7 +86,7 @@
 >
   {#if iconOnLeft}
     <div
-      class="mr-1 icon"
+      class="mr-s8 icon"
       class:big-icon={bigIcon}
       class:small-icon={smallIcon}
     >
@@ -102,7 +102,7 @@
   <span class:truncate><slot>{label}</slot></span>
 
   {#if iconOnRight}
-    <div class="ml-1 icon" class:big-icon={bigIcon}>
+    <div class="ml-s8 icon" class:big-icon={bigIcon}>
       {@html icon}
     </div>
   {/if}

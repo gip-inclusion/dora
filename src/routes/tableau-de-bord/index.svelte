@@ -39,7 +39,7 @@
     </div>
     <div class="col-start-1 col-span-full text-left">
       {#if $userInfo.isStaff}
-        <div class="rounded-md p-1 bg-gray-bg mb-6">
+        <div class="rounded-md p-s8 bg-gray-bg mb-s48">
           <h4 class="text-information">
             ⚠️ Seulement pour les super-utilisateurs
           </h4>
@@ -66,7 +66,7 @@
       {/if}
 
       {#if structures.length}
-        <div class="mb-1">
+        <div class="mb-s8">
           <h2>Mes Structures</h2>
         </div>
         <div class="border-t border-gray-03" />
@@ -74,7 +74,7 @@
       {/if}
 
       {#if services.length}
-        <div class="mb-1">
+        <div class="mb-s8">
           <h2>Mes Services</h2>
         </div>
         <div class="border-t border-gray-03" />

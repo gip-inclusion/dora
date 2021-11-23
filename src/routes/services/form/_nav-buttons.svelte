@@ -14,7 +14,7 @@
 </script>
 
 <div class="col-span-full col-start-1 ">
-  <div class="flex flex-row gap-6">
+  <div class="flex flex-row gap-s48">
     {#if withBack}
       <Button
         on:click={onGoBack}

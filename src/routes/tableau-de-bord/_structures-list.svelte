@@ -31,7 +31,7 @@
 <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
   <div class="wrapper col-start-1 col-span-full">
     {#each structures as structure}
-      <div class="structure flex flex-row gap-2">
+      <div class="structure flex flex-row gap-s16">
         <div class="flex-grow flex flex-row items-center">
           <a href="/tableau-de-bord/structures/{structure.slug}">
             <h5>

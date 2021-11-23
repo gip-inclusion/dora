@@ -44,8 +44,8 @@
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 mb-6 text-center col-span-full">
-    <h1 class="text-france-blue text-13xl">Créer son compte DORA</h1>
+  <div class="col-start-1 mb-s48 text-center col-span-full">
+    <h1 class="text-france-blue">Créer son compte DORA</h1>
   </div>
 </CenteredGrid>
 
@@ -53,7 +53,7 @@
   <Fieldset title="Accédez à votre compte">
     {#if validated}
       <Info label="Inscription complète !" positiveMood>
-        <p class="mb-2">
+        <p class="mb-s16">
           Utilisez l’adresse e-mail et le mot de passe saisis lors de
           l’inscription pour vous connecter.
         </p>

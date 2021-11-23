@@ -166,8 +166,8 @@
         bind:value={structure.address2}
         vertical
       />
-      <div class="flex flex-row justify-between gap-x-4">
-        <div class="w-20">
+      <div class="flex flex-row justify-between gap-x-s32">
+        <div class="w-s160">
           <ModelField
             type="text"
             label="Code postal"
@@ -190,8 +190,8 @@
           />
         </div>
       </div>
-      <div class="flex flex-row justify-between gap-x-4 ">
-        <div class="w-250p">
+      <div class="flex flex-row justify-between gap-x-s32 ">
+        <div class="w-s250">
           <ModelField
             type="tel"
             label="Téléphone"

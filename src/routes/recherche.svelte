@@ -149,9 +149,9 @@ Cordialement,
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 col-span-full text-center mb-6">
-    <p class="text-gray-text text-base">Consultez les services</p>
-    <h1 class="text-france-blue text-13xl">Résultats de recherche</h1>
+  <div class="col-start-1 col-span-full text-center mb-s48">
+    <p class="text-f16">Consultez les services</p>
+    <h1 class="text-france-blue">Résultats de recherche</h1>
   </div>
 </CenteredGrid>
 
@@ -185,11 +185,11 @@ Cordialement,
         <div class="no-results">
           <h2>Ooopsie !</h2>
 
-          <p class="text-base">
+          <p class="text-f16">
             Aucun résultat ne correspond à vos critères 😞<br />
             Essayez d’affiner votre recherche.
           </p>
-          <p class="text-sm">
+          <p class="text-f14">
             Le service DORA est actuellement
             <a
               class="underline"
@@ -203,7 +203,7 @@ Cordialement,
             (Loire-Atlantique, Ardennes et La Réunion).
           </p>
 
-          <h4 class="mt-6 leading-large">
+          <h4 class="mt-s48">
             Vous connaissez des structures proposant des services correspondant
             à ces critères ? Invitez vos partenaires à se référencer :
           </h4>
@@ -216,7 +216,7 @@ Cordialement,
             />
           </div>
 
-          <h4 class="mt-6 leading-large">
+          <h4 class="mt-s48">
             Infolettre : nouveautés et les prochains territoires ouverts sur
             Dora.
           </h4>

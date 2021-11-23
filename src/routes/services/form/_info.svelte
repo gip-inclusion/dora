@@ -11,40 +11,18 @@
     background-color: var(--col-info-light);
     border-radius: var(--s4);
   }
-
-  .title {
-    display: flex;
-    align-items: center;
-    margin-bottom: var(--s8);
-    color: var(--col-info);
-    font-size: var(--f17);
-    font-weight: bold;
-  }
-
-  .icon {
-    width: var(--s24);
-    height: var(--s24);
-    margin-right: var(--s8);
-    fill: currentColor;
-  }
-
-  .text {
-    color: var(--col-text);
-    font-size: var(--f14);
-    line-height: var(--s24);
-  }
 </style>
 
 <div class="wrapper ">
   {#if title}
-    <div class="title">
-      <div class="icon">
+    <div class="flex text-f17 font-bold text-information mb-s8 items-center">
+      <div class="w-s24 h-s24 mr-s8 fill-current">
         {@html icon || informationIcon}
       </div>
       {title}
     </div>
   {/if}
-  <div class="text">
+  <div class="text-gray-text text-f14 leading-24">
     <slot />
   </div>
 </div>

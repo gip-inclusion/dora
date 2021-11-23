@@ -49,7 +49,7 @@
   }
 </script>
 
-<div class="col-span-full md:col-start-6 md:col-end-13 mb-4">
+<div class="col-span-full md:col-start-6 md:col-end-13 mb-s32">
   <Form
     data={$registrationInfo}
     schema={accountSchema}
@@ -65,7 +65,7 @@
       {#each $formErrors.nonFieldErrors || [] as msg}
         <Alert iconOnLeft label={msg} />
       {/each}
-      <div class="relative flex flex-col gap-y-4">
+      <div class="relative flex flex-col gap-y-s32">
         <Field
           name="firstName"
           errorMessages={$formErrors.firstName}
@@ -102,7 +102,7 @@
           bind:value={$registrationInfo.email}
           allowHTMLError
         />
-        <div class="flex flex-col md:flex-row justify-between gap-x-4">
+        <div class="flex flex-col md:flex-row justify-between gap-x-s32">
           <Field
             name="password"
             errorMessages={$formErrors.password}

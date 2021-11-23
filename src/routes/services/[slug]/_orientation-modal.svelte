@@ -64,7 +64,7 @@
 
 <Modal bind:isOpen>
   <div class="contents">
-    <h2 class="pb-2">Comment mobiliser ce service pour votre bénéficiaire</h2>
+    <h2 class="pb-s16">Comment mobiliser ce service pour votre bénéficiaire</h2>
     <div class="box">
       <div class="flex flex-row flex-wrap">
         <div class="flex-1">
@@ -93,7 +93,7 @@
             {/each}
           </ul>
           {#if service.forms.length || service.onlineForm}
-            <div class="mx-5 border-t border-gray-03" />
+            <div class="mx-s40 border-t border-gray-03" />
           {/if}
           {#if service.forms.length}
             <ul class="list">
@@ -129,10 +129,10 @@
           <ul class="list">
             {#if showContact}
               {#if service.contactName}
-                <h4 class="pb-2">{service.contactName}</h4>
+                <h4 class="pb-s16">{service.contactName}</h4>
               {/if}
             {:else}
-              <div class="flex flex-col gap-2 pb-1">
+              <div class="flex flex-col gap-s16 pb-s8">
                 <Label
                   label="Connectez-vous pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire."
                 />
@@ -143,7 +143,7 @@
               </div>
             {/if}
             <p><strong>{service.structureInfo.name}</strong></p>
-            <p class="pb-2 text-sm">
+            <p class="pb-s16 text-f14">
               {service.structureInfo.address1}<br />
               {#if service.structureInfo.address2}{service.structureInfo
                   .address2}<br />{/if}
@@ -152,13 +152,13 @@
             </p>
             {#if showContact}
               {#if service.contactPhone}
-                <p class="text-sm">
+                <p class="text-f14">
                   <a href="tel:{service.contactPhone}">{service.contactPhone}</a
                   >
                 </p>
               {/if}
               {#if service.contactEmail}
-                <p class="text-sm">
+                <p class="text-f14">
                   <a href="mailto:{service.contactEmail}">
                     {service.contactEmail}
                   </a>
@@ -166,7 +166,7 @@
               {/if}
             {/if}
             {#if service.structureInfo.url}
-              <p class="text-sm">
+              <p class="text-f14">
                 <a
                   target="_blank"
                   rel="noopener nofollow"

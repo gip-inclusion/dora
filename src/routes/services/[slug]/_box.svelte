@@ -43,7 +43,7 @@
       <h3>{title}</h3>
     </Label>
   </div>
-  <div class="p-1 lg:p-4">
+  <div class="p-s8 lg:p-s32">
     <slot />
   </div>
 </div>

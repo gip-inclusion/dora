@@ -65,15 +65,6 @@
   .establishment-details p {
     color: var(--col-text-alt2);
   }
-
-  .toggle {
-    display: flex;
-  }
-
-  .toggle p {
-    color: var(--col-text);
-    font-size: var(--f14);
-  }
 </style>
 
 <Form
@@ -115,13 +106,13 @@
           {structure.city}
         </p>
       </div>
-      <div class="toggle">
+      <div class="flex">
         <Toggle
           toggleYesText=""
           toggleNoText=""
           bind:checked={hasCheckedConsent}
         />
-        <p>
+        <p class="text-f14">
           En cochant cette case, je déclare faire partie de la structure
           mentionnée ci-dessus et j’atteste connaître les risques encourus en
           cas de faux et d’usage de faux.

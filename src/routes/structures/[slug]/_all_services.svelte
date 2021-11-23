@@ -7,17 +7,14 @@
   export let services;
 </script>
 
-<div class="col-span-full mt-8 mb-6">
-  <div class="flex flex-col gap-2">
+<div class="col-span-full mt-s64 mb-s48">
+  <div class="flex flex-col gap-s16">
     {#each services as service}
-      <div class="shadow-md rounded-md px-5/2 py-3">
+      <div class="shadow-md rounded-md px-s20 py-s24">
         <h4><a href="/services/{service.slug}">{service.name}</a></h4>
-        <div class="flex flex-col gap-2">
-          <div class="flex flex-row gap-2 mt-1 ">
-            <Tag
-              --bg-color="var(--col-magenta-20)"
-              --fg-color="var(--col-magenta-cta)">{service.categoryDisplay}</Tag
-            >
+        <div class="flex flex-col gap-s16">
+          <div class="flex flex-row gap-s16 mt-s8">
+            <Tag>{service.categoryDisplay}</Tag>
             <Label
               label={`${service.postalCode}, ${service.city}`}
               iconOnLeft

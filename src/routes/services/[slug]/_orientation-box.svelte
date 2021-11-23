@@ -64,7 +64,7 @@
 
   <OrientationModal {service} bind:isOpen={orientationModalIsOpen} />
 
-  <div class="mt-2">
+  <div class="mt-s16">
     <Field
       type="text"
       label="Partagez cette offre"

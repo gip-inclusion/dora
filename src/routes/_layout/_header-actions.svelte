@@ -52,7 +52,7 @@
       {/if}
       <div class="block md:hidden">
         <div class="border-t border-gray-01" />
-        <div class="p-3 text-right">
+        <div class="p-s24 text-right">
           <TopLinks />
         </div>
       </div>

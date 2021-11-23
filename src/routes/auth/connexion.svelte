@@ -73,8 +73,8 @@
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 mb-6 text-center col-span-full">
-    <h1 class="text-france-blue text-13xl">Se connecter à DORA</h1>
+  <div class="col-start-1 mb-s48 text-center col-span-full">
+    <h1 class="text-france-blue">Se connecter à DORA</h1>
   </div>
 </CenteredGrid>
 
@@ -102,7 +102,7 @@
         {#each $formErrors.nonFieldErrors || [] as msg}
           <Alert iconOnLeft label={msg} />
         {/each}
-        <div class="flex flex-col md:flex-row lg:flex-col md:gap-2">
+        <div class="flex flex-col md:flex-row lg:flex-col md:gap-s16">
           <Field
             name="email"
             errorMessages={$formErrors.email}
@@ -133,7 +133,7 @@
           preventDefaultOnMouseDown
         />
         <a
-          class="underline text-center text-gray-text-alt2 text-xs"
+          class="underline text-center text-gray-text-alt2 text-f12"
           href="/auth/mdp-perdu">Mot de passe oublié ?</a
         >
       {/if}

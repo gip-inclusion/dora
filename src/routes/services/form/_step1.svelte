@@ -88,7 +88,7 @@
   >
     <FieldHelp slot="helptext" title="Catégorisation">
       Pour permettre à nos utilisateurs de trouver facilement la solution que
-      vous proposez, il est nécessaire de classer les services par catégorie?
+      vous proposez, il est nécessaire de classer les services par catégorie.
     </FieldHelp>
   </ModelField>
 

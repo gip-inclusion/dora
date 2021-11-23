@@ -7,7 +7,7 @@
 
 <style lang="postcss">
   .tab {
-    @apply bg-dora-magenta-dark text-white text-base font-bold px-5/2 py-3/2 rounded-t mr-1 cursor-pointer;
+    @apply bg-magenta-dark text-white text-f16 font-bold px-s20 py-s12 rounded-t mr-s8 cursor-pointer;
   }
 
   .tab.active {
@@ -15,7 +15,7 @@
   }
 </style>
 
-<h1 class="text-white mb-3">{structure.name}</h1>
+<h1 class="text-white mb-s24">{structure.name}</h1>
 
 <Label
   label={`${structure.address1}${
@@ -26,9 +26,9 @@
   darkBg
   smallIcon
 />
-<div class="mb-6" />
+<div class="mb-s48" />
 
-<div class="flex flex-row md:ml-3">
+<div class="flex flex-row md:ml-s24">
   <a
     class="tab"
     class:active={currentTab === 1}

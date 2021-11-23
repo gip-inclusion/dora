@@ -99,8 +99,8 @@
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 mb-6 text-center col-span-full">
-    <h1 class="text-france-blue text-13xl">Réinitialiser votre mot de passe</h1>
+  <div class="col-start-1 mb-s48 text-center col-span-full">
+    <h1 class="text-france-blue">Réinitialiser votre mot de passe</h1>
   </div>
 </CenteredGrid>
 
@@ -168,7 +168,7 @@
           required
         />
         <Info>
-          <p class="mb-2">
+          <p class="mb-s16">
             Votre mot de passe doit respecter quelques règles :
           </p>
           <ul>
@@ -182,7 +182,7 @@
           label="Modifier le mot de passe"
           preventDefaultOnMouseDown
         />
-        <p class=" text-center text-gray-text-alt2 text-xs">
+        <p class=" text-center text-gray-text-alt2 text-f12">
           Vous vous souvenez de votre mot de passe ?
           <a class="underline " href="/auth/connexion">Connexion</a>
         </p>

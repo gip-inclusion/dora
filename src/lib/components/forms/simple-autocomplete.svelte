@@ -718,13 +718,15 @@
   }
 </script>
 
-<style>
-  /* stylelint-disable */
+<style lang="postcss">
+  input {
+    @apply disabled:bg-gray-00 read-only:text-gray-03;
+  }
+
   .autocomplete {
     position: relative;
     display: inline-block;
     max-width: 100%;
-    /* height: 2.25em; */
     vertical-align: top;
   }
 
@@ -874,10 +876,7 @@
   }
 
   .tag {
-    color: var(--col-white);
-    font-size: var(--f12);
-    text-transform: uppercase;
-    line-height: 20px;
+    @apply text-white text-f12 uppercase leading-20;
   }
 
   .tag.is-delete {
@@ -962,13 +961,13 @@
                     ? listItem.highlighted.label
                     : listItem.label}
                   {#if postfixValueFunction}
-                    <div class="inline-block ml-1 text-gray-text-alt text-xs">
+                    <div class="inline-block ml-s8 text-gray-text-alt text-f12">
                       {postfixValueFunction(listItem.value)}
                     </div>
                   {/if}
                 </div>
                 <div class="flex-grow-0 hidden checkmark">
-                  <div class="w-3 h-2 ml-1 fill-current ">
+                  <div class="w-s24 h-s16 ml-s8 fill-current ">
                     {@html checkIcon}
                   </div>
                 </div>

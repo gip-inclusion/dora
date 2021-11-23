@@ -72,7 +72,7 @@
 <EnsureLoggedIn>
   {#if !structures.length}
     <CenteredGrid topPadded>
-      <div class="col-start-1 col-span-full  mb-6">
+      <div class="col-start-1 col-span-full  mb-s48">
         <h4>Vous n’êtes rattaché à aucune structure !</h4>
       </div></CenteredGrid
     >

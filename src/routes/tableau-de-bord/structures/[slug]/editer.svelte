@@ -25,7 +25,7 @@
 
 <EnsureLoggedIn>
   <CenteredGrid roundedbg topPadded>
-    <div class="col-span-8 col-start-1 mb-4">
+    <div class="col-span-8 col-start-1 mb-s32">
       <StructureFormWrapper
         {structure}
         {structuresOptions}

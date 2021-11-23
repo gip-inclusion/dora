@@ -23,25 +23,25 @@
   export let preventDefaultOnMouseDown = false;
   let px, py, iw, ih, ts, lead;
   if (small) {
-    px = "px-1 lg:px-5/4";
-    py = "py-3/4";
-    iw = "w-3";
-    ih = "h-3";
-    ts = "text-sm";
+    px = "px-s8 lg:px-s10";
+    py = "py-s6";
+    iw = "w-s24";
+    ih = "h-s24";
+    ts = "text-f14";
     lead = "leading-normal";
   } else if (big) {
-    px = "px-1 lg:px-5/2";
-    py = "py-2";
-    iw = "w-4";
-    ih = "h-4";
-    ts = "text-base";
+    px = "px-s8 lg:px-s20";
+    py = "py-s16";
+    iw = "w-s32";
+    ih = "h-s32";
+    ts = "text-f16";
     lead = "leading-normal";
   } else {
-    px = "px-1 lg:px-5/2";
-    py = "py-3/2";
-    iw = "w-3";
-    ih = "h-3";
-    ts = "text-base";
+    px = "px-s8 lg:px-s20";
+    py = "py-s12";
+    iw = "w-s24";
+    ih = "h-s24";
+    ts = "text-f16";
     lead = "leading-normal";
   }
   if (noPadding) {
@@ -50,10 +50,10 @@
   let border, text, background;
   if (secondary) {
     border =
-      "border border-dora-magenta-cta hover:border-dora-magenta-hover disabled:border-gray-01 active:border-france-blue";
+      "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue";
     text =
-      "font-bold text-dora-magenta-cta hover:text-white disabled:disabled:text-gray-text-alt2 active:text-france-blue";
-    background = "bg-white hover:bg-dora-magenta-hover";
+      "font-bold text-magenta-cta hover:text-white disabled:disabled:text-gray-text-alt2 active:text-france-blue";
+    background = "bg-white hover:bg-magenta-hover";
   } else if (tertiary) {
     border =
       "border border-gray-dark  disabled:border-gray-01 active:border-france-blue";
@@ -61,15 +61,15 @@
       "text-gray-text hover:text-white disabled:text-gray-text-alt2 active:text-france-blue";
     background = "bg-white hover:bg-gray-dark";
   } else {
-    border = "border-0";
+    border = "border-s0";
     if (noBackground) {
       text =
-        "font-bold text-dora-magenta-cta hover:text-dora-magenta-hover disabled:text-gray-text active:text-france-blue";
+        "font-bold text-magenta-cta hover:text-magenta-hover disabled:text-gray-text active:text-france-blue";
       background = "bg-transparent";
     } else {
       text = "font-bold text-white disabled:text-gray-text";
       background =
-        "bg-dora-magenta-cta hover:bg-dora-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
+        "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
     }
   }
 
@@ -117,7 +117,7 @@
   {disabled}
 >
   {#if iconOnLeft}
-    <div class="{iw} {ih} mr-1 fill-current ">
+    <div class="{iw} {ih} mr-s8 fill-current ">
       {@html icon}
     </div>
   {/if}
@@ -129,7 +129,7 @@
   {label}
 
   {#if iconOnRight}
-    <div class="{iw} {ih} ml-1 fill-current">
+    <div class="{iw} {ih} ml-s8 fill-current">
       {@html icon}
     </div>
   {/if}

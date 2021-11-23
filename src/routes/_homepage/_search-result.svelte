@@ -13,11 +13,6 @@
     padding-left: var(--s16);
     border-left: 4px solid var(--col-available);
   }
-
-  p {
-    margin-top: var(--s16);
-    color: var(--col-text-alt2);
-  }
 </style>
 
 <SearchResultWrapper>
@@ -26,12 +21,8 @@
       <Label label={result.structureInfo.name} truncate />
     </a>
     <h4><a href="/services/{result.slug}">{result.name}</a></h4>
-    <div class="flex flex-col gap-2 mt-1 md:flex-row">
-      <Tag
-        --bg-color="var(--col-magenta-20)"
-        --fg-color="var(--col-magenta-cta)"
-        selfStart
-      >
+    <div class="flex flex-col gap-s16 mt-s8 md:flex-row">
+      <Tag selfStart>
         {result.categoryDisplay}
       </Tag>
       <Label
@@ -49,7 +40,7 @@
     </div>
   </div>
 
-  <p class="hidden md:block">
+  <div class="paragraph-small text-gray-text-alt2 mt-s16 hidden md:block">
     <a href="/services/{result.slug}">{result.shortDesc}</a>
-  </p>
+  </div>
 </SearchResultWrapper>

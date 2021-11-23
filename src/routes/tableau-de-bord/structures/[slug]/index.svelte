@@ -64,30 +64,30 @@
     onRefresh={handleRefreshMemberList}
   />
   <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-    <div class="col-start-1 col-span-full mb-10">
-      <div class="mb-4">
+    <div class="col-start-1 col-span-full mb-s80">
+      <div class="mb-s32">
         <h2>Ma structure</h2>
       </div>
       <div class="border-t border-gray-03" />
-      <div class="flex gap-3">
+      <div class="flex gap-s24">
         <div class="flex-1">
           <Fieldset
             title="Présentation de ma structure"
             description="Vous trouvez ici les informations concernant votre structure, tels qu’ils sont visibles sur le site DORA."
           >
-            <div class="border border-gray-01 rounded px-3 py-2">
+            <div class="border border-gray-01 rounded px-s24 py-s16">
               <h4 class="text-gray-text ">{structure.name}</h4>
-              <p class="text-gray-text-alt2 mt-3/2">SIRET: {structure.siret}</p>
+              <p class="text-gray-text-alt2 mt-s12">SIRET: {structure.siret}</p>
             </div>
-            <div class="border border-gray-01 rounded px-3 py-2">
-              <h5 class="">Adresse</h5>
+            <div class="border border-gray-01 rounded px-s24 py-s16">
+              <h5>Adresse</h5>
               <p class="text-gray-text-alt2">
                 {structure.address1}<br />
                 {#if structure.address2}{structure.address2}<br />{/if}
                 {structure.postalCode}
                 {structure.city}<br />
               </p>
-              <h5 class="mt-3/2">Contact</h5>
+              <h5 class="mt-s12">Contact</h5>
               <p class="text-gray-text-alt2">
                 {#if structure.phone}
                   <a class="underline" href="tel:{structure.phone}">
@@ -112,7 +112,7 @@
                   </a>
                 {/if}
               </p>
-              <h5 class="mt-3/2">Résumé</h5>
+              <h5 class="mt-s12">Résumé</h5>
               <p class="text-gray-text-alt2">{structure.shortDesc}</p>
             </div>
             <div class="flex justify-end">
@@ -125,9 +125,9 @@
         </div>
         <div class="flex-1">
           {#if members}
-            <div class="mt-6">
+            <div class="mt-s48">
               <h3>Vos collaborateurs</h3>
-              <div class="flex flex-col gap-1 mt-4 mb-4">
+              <div class="flex flex-col gap-s8 mt-s32 mb-s32">
                 {#each sortedMembers(members) as member}
                   <Member
                     {member}

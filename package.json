@@ -6,9 +6,9 @@
     "node": "16"
   },
   "scripts": {
-    "dev": "svelte-kit dev --host",
+    "dev": "svelte-kit dev",
     "build": "svelte-kit build",
-    "preview": "svelte-kit preview --host",
+    "preview": "svelte-kit preview",
     "start": "node build",
     "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --write --plugin-search-dir=. . && eslint --ignore-path .gitignore --fix .",

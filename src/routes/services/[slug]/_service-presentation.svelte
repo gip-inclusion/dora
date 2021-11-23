@@ -54,11 +54,11 @@
 
 <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
 
-<div class="flex mt-6 mb-4 items-baseline">
-  <Tag --bg-color="var(--col-gray-01)" --fg-color="var(--col-gray-dark)">
+<div class="flex mt-s48 mb-s32 items-baseline">
+  <Tag bgColorClass="bg-gray-01" fgColorClass="text-gray-dark">
     {service.categoryDisplay}
   </Tag>
-  <div class="text-gray-text-alt2 text-xs maj ml-3">
+  <div class="text-gray-text-alt2 text-f12 maj ml-s24">
     Mise à jour le {new Date(service.modificationDate).toLocaleDateString(
       "fr-FR",
       { year: "numeric", month: "long", day: "numeric" }
@@ -84,7 +84,7 @@
     d’expérimentation. Vous pouvez revendiquer ces contenus en créant votre
     compte et ainsi avoir la possibilité de mettre à jour les fiches de votre
     établissement.
-    <div class="mt-2">
+    <div class="mt-s16">
       {#if $userInfo}
         <LinkButton
           label="Demander l’accès"

@@ -56,7 +56,7 @@
 
 <div id="modal" class:show={isOpen}>
   <div
-    class="w-3 h-3 ml-1 fixed right-1 top-1 text-gray-text-alt fill-current"
+    class="w-s24 h-s24 ml-s8 fixed right-s8 top-s8 text-gray-text-alt fill-current"
     on:click={handleClose}
   >
     {@html closeLineIcon}
