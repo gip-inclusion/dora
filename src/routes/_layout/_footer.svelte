@@ -11,7 +11,7 @@
   }
 </script>
 
-<footer class="border-t-s16 border-france-blue pt-s20 noprint">
+<footer class="border-t-2 border-france-blue pt-s20 noprint">
   <CenteredGrid>
     <div class="col-span-5 lg:mb-s40">
       <img class="inline" src={LogoRF} alt="" width="124" height="110" />

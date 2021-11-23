@@ -10,13 +10,14 @@
     width: 384px;
   }
 
+  .help-content,
   .help-content :global(p) {
-    @apply mb-s16 last:mb-s0;
+    @apply mb-s16 last:mb-s0 text-f14 text-gray-text leading-relaxed;
   }
 </style>
 
 <div
-  class="px-s16 pt-s16 pb-s24 bg-white border-l-s32 rounded-r help border-information"
+  class="help px-s16 pt-s16 pb-s24 bg-white border-l-4 rounded-r border-information"
 >
   {#if title}
     <div
@@ -28,7 +29,7 @@
       {title}
     </div>
   {/if}
-  <div class="help-content text-f14 leading-relaxed text-gray-text">
+  <div class="help-content">
     <slot />
   </div>
 </div>

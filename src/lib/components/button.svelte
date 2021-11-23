@@ -61,7 +61,7 @@
       "text-gray-text hover:text-white disabled:text-gray-text-alt2 active:text-france-blue";
     background = "bg-white hover:bg-gray-dark";
   } else {
-    border = "border-s0";
+    border = "border-0";
     if (noBackground) {
       text =
         "font-bold text-magenta-cta hover:text-magenta-hover disabled:text-gray-text active:text-france-blue";
