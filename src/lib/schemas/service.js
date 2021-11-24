@@ -25,10 +25,6 @@ const shape1 = {
     required: true,
     rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
   },
-  isCommonLaw: {
-    default: false,
-    rules: [v.isBool()],
-  },
   name: {
     default: "",
     required: true,
@@ -39,6 +35,11 @@ const shape1 = {
     default: "",
     required: true,
     rules: [v.isString(), v.maxStrLength(280)],
+    post: [v.trim],
+  },
+  recurrence: {
+    default: "",
+    rules: [v.isString(), v.maxStrLength(140)],
     post: [v.trim],
   },
   fullDesc: { default: "", rules: [v.isString()], post: [v.trim] },
@@ -220,27 +221,6 @@ const shape4 = {
     ],
     post: [v.nullEmpty],
   },
-  recurrence: {
-    default: "",
-    rules: [v.isString(), v.maxStrLength(2)],
-  },
-  recurrenceOther: {
-    default: "",
-    rules: [
-      v.isString(),
-      v.maxStrLength(140),
-      (name, value, data) => ({
-        valid: data.recurrence === "OT" ? value.length : true,
-        msg: `Ce champ est requis`,
-      }),
-    ],
-    post: [v.trim],
-  },
-  suspensionCount: {
-    default: null,
-    nullable: true,
-    rules: [v.isInteger(), v.minNum(1)],
-  },
   suspensionDate: {
     default: null,
     nullable: true,
@@ -280,12 +260,12 @@ export const draftServiceSchema = {
   kinds: {
     rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
   },
-  isCommonLaw: {
-    rules: [v.isBool()],
-  },
-
   shortDesc: {
     rules: [v.isString(), v.maxStrLength(280)],
+    post: [v.trim],
+  },
+  recurrence: {
+    rules: [v.isString(), v.maxStrLength(140)],
     post: [v.trim],
   },
   fullDesc: { rules: [v.isString()], post: [v.trim] },
@@ -382,24 +362,6 @@ export const draftServiceSchema = {
     nullable: true,
     rules: [v.isDate()],
     post: [v.nullEmpty],
-  },
-  recurrence: {
-    rules: [v.isString(), v.maxStrLength(2)],
-  },
-  recurrenceOther: {
-    rules: [
-      v.isString(),
-      v.maxStrLength(140),
-      (name, value, data) => ({
-        valid: data.recurrence === "OT" ? value.length : true,
-        msg: `Ce champ est requis`,
-      }),
-    ],
-    post: [v.trim],
-  },
-  suspensionCount: {
-    nullable: true,
-    rules: [v.isInteger(), v.minNum(1)],
   },
   suspensionDate: {
     nullable: true,

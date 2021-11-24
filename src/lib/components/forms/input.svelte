@@ -132,6 +132,7 @@
   <Toggle
     {name}
     bind:checked={value}
+    on:change
     {disabled}
     {readonly}
     {toggleYesText}

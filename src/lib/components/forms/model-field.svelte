@@ -25,6 +25,7 @@
 
 <Field
   bind:value
+  on:change
   {onSelectChange}
   {name}
   {errorMessages}

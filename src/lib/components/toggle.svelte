@@ -40,12 +40,13 @@
   https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-describedby_attribute
   Or just find a cleaner way to do it!
 -->
-<label class="relative flex flex-row">
+<label class="relative flex flex-row self-start">
   <input
     id={name}
     {name}
     type="checkbox"
     bind:checked
+    on:change
     class="hidden"
     {disabled}
     {readonly}

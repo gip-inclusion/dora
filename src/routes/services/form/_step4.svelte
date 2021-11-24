@@ -1,4 +1,6 @@
 <script>
+  import { onMount } from "svelte";
+
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
   import ModelField from "$lib/components/forms/model-field.svelte";
@@ -27,7 +29,6 @@
     service.longitude = long;
     service.latitude = lat;
   }
-  let autoSuspend;
   let promise;
   if (!service.city && !service.address1 && !service.postalCode) {
     promise = getStructure(service.structure);
@@ -43,9 +44,17 @@
   } else {
     promise = Promise.resolve();
   }
+  let isTimeLimited;
 
-  $: if (service.suspensionCount || service.suspensionDate) {
-    autoSuspend = true;
+  onMount(() => {
+    isTimeLimited = !!service.suspensionDate;
+  });
+
+  function handleCheckTimeLimited(evt) {
+    const checked = evt.target.checked;
+    if (!checked) {
+      service.suspensionDate = null;
+    }
   }
 </script>
 
@@ -192,79 +201,28 @@
     />
   </FieldSet>
 
-  <FieldSet title="Durée et modalités de disponibilité">
-    <div>Votre service est limité dans le temps ?</div>
-    <!-- <ModelField
-    label="Votre service est limité dans le temps ?"
-    type="toggle"
-    field={serviceOptions.isTimeLimited}
-    name="isTimeLimited"
-    errorMessages={$formErrors.isTimeLimited}
-    bind:value={service.isTimeLimited} /> -->
+  <FieldSet title="Désactivation automatique">
     <ModelField
-      type="date"
-      label="Date de début"
-      schema={serviceSchema.startDate}
-      name="startDate"
-      errorMessages={$formErrors.startDate}
-      bind:value={service.startDate}
+      label="Votre service est limité dans le temps ?"
+      type="toggle"
+      name="isTimeLimited"
+      bind:value={isTimeLimited}
+      on:change={handleCheckTimeLimited}
     >
       <FieldHelp slot="helptext" title="Suspension">
-        En configurant la suspension de votre service (avec une limite de temps
-        ou de candidatures), vous pouvez mieux gérer la visibilité de votre
-        service et sa mise à jour.
+        En configurant la suspension de votre service avec une limite de temps,
+        vous pouvez mieux gérer sa visibilité et sa mise à jour.
       </FieldHelp></ModelField
     >
     <ModelField
-      type="date"
-      label="Date de fin"
-      schema={serviceSchema.endDate}
-      name="endDate"
-      errorMessages={$formErrors.endDate}
-      bind:value={service.endDate}
-    />
-    <ModelField
-      type="radios"
-      label="Récurrences"
-      schema={serviceSchema.recurrence}
-      name="recurrence"
-      errorMessages={$formErrors.recurrence}
-      bind:value={service.recurrence}
-      choices={servicesOptions.recurrence}
-    />
-    <ModelField
-      type="text"
-      placeholder="Préciser"
-      hideLabel
-      visible={service.recurrence === "OT"}
-      schema={serviceSchema.recurrenceOther}
-      name="recurrenceOther"
-      errorMessages={$formErrors.recurrenceOther}
-      bind:value={service.recurrenceOther}
-    />
-    <div>Critères de suspension :</div>
-    <!-- <Field
-    name="autoSuspend"
-    type="toggle"
-    label="Critères de suspension"
-    bind:value={autoSuspend} /> -->
-    <ModelField
-      label="Oui, à partir d’un nombre d’inscriptions :"
-      placeholder="Préciser le nombre maximum"
-      type="number"
-      minValue={1}
-      schema={serviceSchema.suspensionCount}
-      name="suspensionCount"
-      errorMessages={$formErrors.suspensionCount}
-      bind:value={service.suspensionCount}
-    />
-    <ModelField
       label="Oui, à partir d’une date :"
       type="date"
+      vertical
       schema={serviceSchema.suspensionDate}
       name="suspensionDate"
       errorMessages={$formErrors.suspensionDate}
       bind:value={service.suspensionDate}
+      visible={isTimeLimited}
     />
   </FieldSet>
 {/await}
