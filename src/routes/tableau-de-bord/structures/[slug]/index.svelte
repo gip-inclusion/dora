@@ -77,18 +77,18 @@
           >
             <div class="border border-gray-01 rounded px-s24 py-s16">
               <h4 class="text-gray-text ">{structure.name}</h4>
-              <p class="text-gray-text-alt2 mt-s12">SIRET: {structure.siret}</p>
+              <div class="legend mt-s12">SIRET: {structure.siret}</div>
             </div>
             <div class="border border-gray-01 rounded px-s24 py-s16">
               <h5>Adresse</h5>
-              <p class="text-gray-text-alt2">
+              <div class="legend ">
                 {structure.address1}<br />
                 {#if structure.address2}{structure.address2}<br />{/if}
                 {structure.postalCode}
                 {structure.city}<br />
-              </p>
+              </div>
               <h5 class="mt-s12">Contact</h5>
-              <p class="text-gray-text-alt2">
+              <div class="legend">
                 {#if structure.phone}
                   <a class="underline" href="tel:{structure.phone}">
                     {structure.phone}
@@ -111,9 +111,9 @@
                     {structure.url}
                   </a>
                 {/if}
-              </p>
+              </div>
               <h5 class="mt-s12">Résumé</h5>
-              <p class="text-gray-text-alt2">{structure.shortDesc}</p>
+              <div class="legend">{structure.shortDesc}</div>
             </div>
             <div class="flex justify-end">
               <LinkButton

@@ -50,8 +50,8 @@
   <h5>{member.user.fullName}</h5>
   <div class="flex-grow ">
     {#if !member.isValid || member.mustSetPassword}
-      <Label>
-        <p class="text-gray-text-alt">Invitation envoyée</p>
+      <div class="flex items-baseline">
+        <div class="legend-xs text-gray-text-alt">Invitation envoyée</div>
         <Button
           label="Renvoyer"
           noBackground
@@ -60,7 +60,7 @@
           disabled={flashInviteButtonSuccess}
           on:click={handleResendInvite}
         />
-      </Label>
+      </div>
     {/if}
   </div>
   <div class="flex-grow" />
