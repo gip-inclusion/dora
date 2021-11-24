@@ -7,7 +7,7 @@
 
 <Fieldset
   title="Votre structure"
-  description="Chaque utilisateur DORA est attaché à une structure d’insertion (de l’Etat ou associative/independante. Afin de mieux vous aider à identifier votre structure, merci de choisir la typologie de votre structure :"
+  description="Chaque utilisateur DORA est attaché à une structure d’insertion (de l’État ou associative/independante). Afin de mieux vous aider à identifier votre structure, merci de choisir la typologie de votre structure :"
 >
   <ButtonDetails
     label="Pôle Emploi"
