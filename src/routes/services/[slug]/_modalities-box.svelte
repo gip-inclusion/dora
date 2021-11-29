@@ -21,8 +21,11 @@
     margin-bottom: var(--s32);
     color: var(--col-text);
     gap: var(--s8);
-    list-style-position: inside;
+    list-style-position: outside;
+    position: relative;
+    left: var(--s16);
     list-style-type: "– ";
+    max-width: 40ch;
   }
 
   .list li span {
@@ -56,7 +59,7 @@
       </Info>
     {/if}
   </div>
-  <div class="flex flex-row flex-wrap gap-s16">
+  <div class="flex flex-row flex-wrap gap-s24">
     <div class="flex-grow">
       <h3>Critères d’admission</h3>
       <ul class="list">

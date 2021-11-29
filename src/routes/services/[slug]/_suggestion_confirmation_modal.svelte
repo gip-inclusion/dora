@@ -7,13 +7,10 @@
 </script>
 
 <Modal bind:isOpen>
-  <div>
-    <Fieldset noTopPadding>
-      <Info label="Votre suggestion a bien été envoyée." positiveMood>
-        Vos remarques et suggestions ont été transmises aux personnes
-        concernées. Merci pour votre participation à l’amélioration de
-        DORA&nbsp;! 🙌
-      </Info>
-    </Fieldset>
-  </div>
+  <Fieldset noTopPadding>
+    <Info label="Votre suggestion a bien été envoyée." positiveMood>
+      Vos remarques et suggestions ont été transmises aux personnes concernées.
+      Merci pour votre participation à l’amélioration de DORA&nbsp;! 🙌
+    </Info>
+  </Fieldset>
 </Modal>
