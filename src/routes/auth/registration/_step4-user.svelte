@@ -106,7 +106,9 @@
           bind:value={$registrationInfo.email}
           allowHTMLError
         />
-        <div class="flex flex-col md:flex-row justify-between gap-x-s32">
+        <div
+          class="flex flex-col md:flex-row lg:flex-col xl:flex-row justify-between gap-x-s32"
+        >
           <Field
             name="password"
             errorMessages={$formErrors.password}
@@ -122,7 +124,7 @@
           <Field
             name="password2"
             errorMessages={$formErrors.password2}
-            label="Confirmer"
+            label="Répéter le mot de passe"
             vertical
             type="password"
             placeholder="••••••••"

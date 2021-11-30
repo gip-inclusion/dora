@@ -158,7 +158,7 @@
         <Field
           name="password2"
           errorMessages={$formErrors.password2}
-          label="Confirmer"
+          label="Confirmer le mot de passe"
           vertical
           type="password"
           placeholder="••••••••"
