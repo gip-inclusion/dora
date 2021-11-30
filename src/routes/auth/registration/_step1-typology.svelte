@@ -7,7 +7,7 @@
 
 <Fieldset
   title="Votre structure"
-  description="Chaque utilisateur DORA est attaché à une structure d’insertion (de l’État ou associative/independante). Afin de mieux vous aider à identifier votre structure, merci de choisir la typologie de votre structure :"
+  description="Sur Dora, chaque utilisateur est rattaché à une structure, cette étape nous permet de faciliter votre inscription. Si vous êtes agent Pôle emploi, cliquez sur l’option correspondante. Sinon, cliquez sur l'option “Autre structure”."
 >
   <ButtonDetails
     label="Pôle Emploi"
