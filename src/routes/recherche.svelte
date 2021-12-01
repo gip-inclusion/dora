@@ -58,6 +58,7 @@
 
   import { mailIcon, newspaperIcon } from "$lib/icons";
   import NoResultsPic from "$lib/assets/illu_zero-resultats-optimise.svg";
+  import { showNewsletter } from "$lib/flags";
 
   export let servicesOptions;
   export let category, subcategory, cityCode, cityLabel;
@@ -215,21 +216,22 @@ Cordialement,
               to="mailto:?subject={sharingEmailSubject}&body={sharingEmailBody}"
             />
           </div>
-
-          <h4 class="mt-s48">
-            Infolettre : nouveautés et les prochains territoires ouverts sur
-            Dora.
-          </h4>
-          <div>
-            <LinkButton
-              label="Recevoir les actualités"
-              icon={newspaperIcon}
-              iconOnRight
-              to="https://itou.typeform.com/doraall"
-              otherTab
-              nofollow
-            />
-          </div>
+          {#if showNewsletter}
+            <h4 class="mt-s48">
+              Infolettre : nouveautés et les prochains territoires ouverts sur
+              Dora.
+            </h4>
+            <div>
+              <LinkButton
+                label="Recevoir les actualités"
+                icon={newspaperIcon}
+                iconOnRight
+                to="https://itou.typeform.com/doraall"
+                otherTab
+                nofollow
+              />
+            </div>
+          {/if}
         </div>
       </div>
     {/if}

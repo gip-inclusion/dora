@@ -12,6 +12,7 @@
   import ValorisePic from "$lib/assets/illu_valoriser.svg";
   import VisiblePic from "$lib/assets/illu_visibilite.svg";
   import { arrowRightIcon, newspaperIcon } from "$lib/icons";
+  import { showNewsletter } from "$lib/flags";
 
   export let servicesOptions;
 </script>
@@ -209,32 +210,35 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid --col-bg="var(--col-magenta-10)">
-  <div
-    class="col-span-full flex flex-col gap-s16 md:flex-row mb-s40 mt-s32 justify-between items-center"
-  >
-    <div>
-      <h3 class="text-gray-dark mb-s8">
-        Abonnez-vous à notre lettre d’information
-      </h3>
-      <p class="text-f12 text-gray-dark leading-relaxed max-w-2xl">
-        En renseignant votre adresse électronique, vous acceptez de recevoir nos
-        actualités par courriel. Vous pouvez vous désinscrire à tout moment à
-        l’aide des liens de désinscription ou en <a
-          target="_blank"
-          rel="noopener nofollow"
-          class="underline"
-          href="https://itou.typeform.com/doracontactsupp">nous contactant</a
-        >.
-      </p>
+{#if showNewsletter}
+  <CenteredGrid --col-bg="var(--col-magenta-10)">
+    <div
+      class="col-span-full flex flex-col gap-s16 md:flex-row mb-s40 mt-s32 justify-between items-center"
+    >
+      <div>
+        <h3 class="text-gray-dark mb-s8">
+          Abonnez-vous à notre lettre d’information
+        </h3>
+        <p class="text-f12 text-gray-dark leading-relaxed max-w-2xl">
+          En renseignant votre adresse électronique, vous acceptez de recevoir
+          nos actualités par courriel. Vous pouvez vous désinscrire à tout
+          moment à l’aide des liens de désinscription ou en <a
+            target="_blank"
+            rel="noopener nofollow"
+            class="underline"
+            href="https://itou.typeform.com/doracontactsupp">nous contactant</a
+          >.
+        </p>
+      </div>
+
+      <LinkButton
+        label="Recevoir les actualités"
+        to="https://itou.typeform.com/doraall"
+        otherTab
+        nofollow
+        iconOnRight
+        icon={newspaperIcon}
+      />
     </div>
-    <LinkButton
-      label="Recevoir les actualités"
-      to="https://itou.typeform.com/doraall"
-      otherTab
-      nofollow
-      iconOnRight
-      icon={newspaperIcon}
-    />
-  </div>
-</CenteredGrid>
+  </CenteredGrid>
+{/if}

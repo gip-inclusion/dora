@@ -1,0 +1,1 @@
+export const showNewsletter = false;
