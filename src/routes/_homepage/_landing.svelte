@@ -11,15 +11,15 @@
   import JoinPic from "$lib/assets/illu_rejoindre.svg";
   import ValorisePic from "$lib/assets/illu_valoriser.svg";
   import VisiblePic from "$lib/assets/illu_visibilite.svg";
-  import { arrowRightIcon } from "$lib/icons";
+  import { arrowRightIcon, newspaperIcon } from "$lib/icons";
+  import { showNewsletter } from "$lib/flags";
 
   export let servicesOptions;
 </script>
 
 <style lang="postcss">
   h1,
-  h2,
-  h3 {
+  h2 {
     color: var(--col-france-blue);
   }
 
@@ -35,14 +35,6 @@
 
   p {
     color: var(--col-text);
-    font-size: var(--f16);
-  }
-
-  :global(.homepage-second-row) {
-    position: relative;
-    z-index: -10;
-    top: -75px;
-    padding-top: 80px;
   }
 
   .content-mission {
@@ -81,7 +73,7 @@
 </style>
 
 <CenteredGrid --col-bg="var(--col-transparent)" topPadded>
-  <div class="col-start-1 col-span-full mb-5">
+  <div class="col-start-1 col-span-full mb-s40">
     <div class="flex flex-col lg:flex-row-reverse">
       <div class="flex-1">
         <img src={CoverPic} width="600" height="400" alt="" />
@@ -91,7 +83,7 @@
           Tous les services d’insertion de votre territoire à un seul endroit.
           Mobilisables en 1 clic.
         </h1>
-        <p class="pb-2">
+        <p class="pb-s16">
           Trouvez et mobilisez rapidement le service adapté au besoin de votre
           bénéficiaire
         </p>
@@ -102,11 +94,11 @@
 </CenteredGrid>
 
 <CenteredGrid
-  extraClass="homepage-second-row"
+  extraClass="relative z-[-10] -top-s72 pt-s80"
   --col-bg="var(--col-magenta-dark)"
 >
-  <div class="col-start-1 mb-5 col-span-full">
-    <div class="flex flex-col gap-8 lg:flex-row">
+  <div class="col-start-1 mb-s40 col-span-full">
+    <div class="flex flex-col gap-s64 lg:flex-row">
       <div class="flex-1">
         <img src={MissionPic} width="440" height="420" alt="" />
       </div>
@@ -134,8 +126,8 @@
 </CenteredGrid>
 
 <CenteredGrid>
-  <div class="col-start-1 col-span-full mb-5 text-center ">
-    <div class=" mx-auto mb-8 lg:w-1/2">
+  <div class="col-start-1 col-span-full mb-s40 text-center ">
+    <div class="mx-auto mb-s64 lg:w-1/2">
       <h5>
         Vous travaillez pour une structure porteuse/offreuse de services
         d'insertion ?
@@ -145,7 +137,7 @@
         d'orientation qualifiées
       </h2>
     </div>
-    <div class="flex gap-8 flex-col lg:flex-row-reverse">
+    <div class="flex gap-s64 flex-col lg:flex-row-reverse">
       <div class="flex flex-col flex-1 ">
         <div class="mx-auto">
           <img src={VisiblePic} width="140" height="140" alt="" />
@@ -180,28 +172,30 @@
       </div>
     </div>
     <div
-      class="mt-6 rounded-xl bg-information-light flex  flex-col lg:flex-row lg:p-6 "
+      class="mt-s48 rounded-xl bg-information-light flex  flex-col lg:flex-row lg:p-s48 "
     >
       <div class="flex-1">
         <img src={JoinPic} width="380" height="380" alt="" />
       </div>
       <div class="flex-1 text-left">
-        <div class="flex flex-col gap-2 md:px-12">
+        <div class="flex flex-col gap-s16 md:px-s96">
           <h5>Rejoignez l’aventure !</h5>
-          <h3>Aidez-nous à construire DORA&nbsp;!</h3>
-          <p class="text-xs text-gray-text">
+          <h3 class="text-france-blue">Aidez-nous à construire DORA&nbsp;!</h3>
+          <p class="text-f12 text-gray-text">
             Nous sommes à l’écoute de vos besoins afin de construire un service
             numérique qui vous correspond et vous permettra d’orienter plus
             facilement et rapidement vos bénéficiaires.
           </p>
-          <p class="text-xs text-gray-text font-bold">
-            Si vous souhaitez être tenu•e au courant de l’avancement du projet,
-            participer à des tests utilisateurs ou des sessions demo, n’hésitez
-            pas à vous rallier à la communauté DORA !
+          <p class="text-f12 text-gray-text font-bold">
+            Recevez l’infolettre et suivez l’avancement du projet, participez à
+            des tests utilisateurs ou des sessions de démo. N’hésitez pas à vous
+            rallier à la communauté Dora&nbsp;!
           </p>
           <div>
             <LinkButton
               to="https://itou.typeform.com/doraall"
+              otherTab
+              nofollow
               label="Adhérez à la communauté"
               icon={arrowRightIcon}
               iconOnRight
@@ -215,3 +209,36 @@
     </div>
   </div>
 </CenteredGrid>
+
+{#if showNewsletter}
+  <CenteredGrid --col-bg="var(--col-magenta-10)">
+    <div
+      class="col-span-full flex flex-col gap-s16 md:flex-row mb-s40 mt-s32 justify-between items-center"
+    >
+      <div>
+        <h3 class="text-gray-dark mb-s8">
+          Abonnez-vous à notre lettre d’information
+        </h3>
+        <p class="text-f12 text-gray-dark leading-relaxed max-w-2xl">
+          En renseignant votre adresse électronique, vous acceptez de recevoir
+          nos actualités par courriel. Vous pouvez vous désinscrire à tout
+          moment à l’aide des liens de désinscription ou en <a
+            target="_blank"
+            rel="noopener nofollow"
+            class="underline"
+            href="https://itou.typeform.com/doracontactsupp">nous contactant</a
+          >.
+        </p>
+      </div>
+
+      <LinkButton
+        label="Recevoir les actualités"
+        to="https://itou.typeform.com/doraall"
+        otherTab
+        nofollow
+        iconOnRight
+        icon={newspaperIcon}
+      />
+    </div>
+  </CenteredGrid>
+{/if}

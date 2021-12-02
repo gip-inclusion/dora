@@ -24,16 +24,16 @@
   }
 </style>
 
-<div class="col-start-1 mb-6 text-white col-span-full">
+<div class="col-start-1 mb-s48 text-white col-span-full">
   <div class="mx-auto">
     <Label label={service.structureInfo.name} darkBg />
     <h1 class="text-white">{service.name}</h1>
     {#if $token && service.canWrite && !isPreview}
-      <div class="my-2 noprint">
+      <div class="my-s16 noprint">
         <LinkButton to={editLink} label="Éditer" small />
       </div>
     {/if}
-    <div class="flex flex-col gap-2 md:flex-row">
+    <div class="flex flex-col gap-s16 md:flex-row">
       {#if service.isAvailable}
         <Label
           label="Disponible"

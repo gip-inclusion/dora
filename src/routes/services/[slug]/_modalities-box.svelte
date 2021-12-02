@@ -21,8 +21,11 @@
     margin-bottom: var(--s32);
     color: var(--col-text);
     gap: var(--s8);
-    list-style-position: inside;
+    list-style-position: outside;
+    position: relative;
+    left: var(--s16);
     list-style-type: "– ";
+    max-width: 40ch;
   }
 
   .list li span {
@@ -52,11 +55,11 @@
 
     {#if service.hasFee}
       <Info label="Frais à charge du bénéficiaire : " negativeMood>
-        <p slot="details">{service.feeDetails}</p>
+        <svelte:fragment slot="details">{service.feeDetails}</svelte:fragment>
       </Info>
     {/if}
   </div>
-  <div class="flex flex-row flex-wrap gap-2">
+  <div class="flex flex-row flex-wrap gap-s24">
     <div class="flex-grow">
       <h3>Critères d’admission</h3>
       <ul class="list">
@@ -85,8 +88,8 @@
         Non renseigné
       {:else}
         {#if service.locationKinds.includes("OS")}
-          <h4 class="pt-2 pb-1">En présentiel</h4>
-          <p class="pb-2 text-sm text-gray-text">
+          <h4 class="pt-s16 pb-s8">En présentiel</h4>
+          <p class="pb-s16 text-f14">
             {service.address1}<br />
             {#if service.address2}{service.address2}<br />{/if}
             {service.postalCode}
@@ -94,8 +97,8 @@
           </p>
         {/if}
         {#if service.locationKinds.includes("RE")}
-          <h4 class="pt-2 pb-1">À distance</h4>
-          <p class="pb-2 text-sm">
+          <h4 class="pt-s16 pb-s8">À distance</h4>
+          <p class="pb-s16 text-f14">
             <a target="_blank" rel="noopener nofollow" href={service.remoteUrl}
               >{shortenString(service.remoteUrl, 35)}</a
             >

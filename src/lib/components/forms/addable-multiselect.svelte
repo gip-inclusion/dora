@@ -70,7 +70,7 @@
     <slot name="helptext" slot="helptext" />
   </ModelField>
   <Field type="custom">
-    <div slot="custom-input" class="mt-2 flex flex-col">
+    <div slot="custom-input" class="mt-s16 flex flex-col">
       <div class:hidden={textInputVisible}>
         <Button
           label="Ajouter une autre option"
@@ -80,7 +80,7 @@
           on:click={() => (textInputVisible = true)}
         />
       </div>
-      <div class="flex flex-row gap-2 " class:hidden={!textInputVisible}>
+      <div class="flex flex-row gap-s16 " class:hidden={!textInputVisible}>
         <Field
           type="text"
           bind:value={newValue}
@@ -89,7 +89,7 @@
           vertical
         />
         <div class="self-center">
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col gap-s8">
             <Button
               label="Ajouter"
               nogrow

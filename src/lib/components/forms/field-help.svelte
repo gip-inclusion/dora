@@ -3,32 +3,33 @@
   export let title;
 </script>
 
-<style>
+<style lang="postcss">
   .help {
     position: absolute;
     right: -472px;
     width: 384px;
   }
 
-  .content :global(p) {
-    margin-bottom: var(--s16);
+  .help-content,
+  .help-content :global(p) {
+    @apply mb-s16 last:mb-s0 text-f14 text-gray-text leading-relaxed;
   }
 </style>
 
 <div
-  class="px-2 pt-2 pb-3 bg-white border-l-4 rounded-r help border-information"
+  class="help px-s16 pt-s16 pb-s24 bg-white border-l-4 rounded-r border-information"
 >
   {#if title}
     <div
-      class="flex font-bold flex-row items-center mb-1 text-lg leading-normal text-information"
+      class="flex font-bold flex-row items-center mb-s8 text-f17 leading-normal text-information"
     >
-      <div class="w-3 h-3 mr-1 fill-current">
+      <div class="w-s24 h-s24 mr-s8 fill-current">
         {@html lightBulbIcon}
       </div>
       {title}
     </div>
   {/if}
-  <div class="content text-sm leading-large text-gray-text">
+  <div class="help-content">
     <slot />
   </div>
 </div>

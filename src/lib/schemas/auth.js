@@ -83,6 +83,11 @@ export const accountSchema = {
     required: true,
     rules: [v.isString()],
   },
+  newsletter: {
+    default: false,
+    required: true,
+    rules: [v.isBool()],
+  },
 };
 
 export const safirSearchSchema = {

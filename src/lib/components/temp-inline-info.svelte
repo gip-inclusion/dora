@@ -18,39 +18,13 @@
   }
 </script>
 
-<style>
-  .wrapper {
-    display: flex;
-    justify-content: space-between;
-    padding: var(--s24);
-    background: var(--col-info-light);
-    grid-column: 1/-1;
-  }
-
-  .label {
-    margin-bottom: var(--s16);
-    color: var(--col-info);
-    font-size: var(--f17);
-    font-weight: bold;
-  }
-
-  .description {
-    color: var(--col-text);
-    font-size: var(--f14);
-  }
-
-  .buttons {
-    display: flex;
-  }
-</style>
-
 {#if visible}
-  <div class="wrapper">
+  <div class="flex justify-between p-s24 bg-information-light col-span-full">
     <div>
-      <div class="label">{label}</div>
-      <div class="description">{description}</div>
+      <div class="mb-s16 text-information text-f17 font-bold">{label}</div>
+      <div class="text-gray-text text-f14">{description}</div>
     </div>
-    <div class="buttons">
+    <div class="flex items-baseline">
       <Button label={buttonLabel} on:click={onAction} />
       <Button icon={closeIcon} noBackground on:click={handleHide} />
     </div>

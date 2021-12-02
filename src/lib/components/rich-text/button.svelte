@@ -5,7 +5,7 @@
 
 <style lang="postcss">
   .tb-button {
-    @apply h-3 w-3;
+    @apply h-s24 w-s24;
   }
 
   .active {

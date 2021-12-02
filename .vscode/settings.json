@@ -12,7 +12,7 @@
     "files.trimTrailingWhitespace": false
   },
   "[svelte]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "svelte.svelte-vscode"
   },
   "editor.codeActionsOnSave": {
     "source.fixAll": true
@@ -28,7 +28,6 @@
     "build": true
   },
   "files.trimTrailingWhitespace": true,
-  "stylelint.validate": ["css", "html", "svelte"],
-  "svelte.plugin.css.globals": "src/app.css",
+  "svelte.plugin.css.globals": "src/app.postcss",
   "tailwindCSS.validate": true
 }

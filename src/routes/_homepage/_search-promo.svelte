@@ -16,13 +16,6 @@
     color: var(--col-info);
   }
 
-  p {
-    margin-top: var(--s16);
-    color: var(--col-text);
-    font-size: var(--f14);
-    line-height: var(--f24);
-  }
-
   @screen lg {
     .wrapper {
       flex-direction: row;
@@ -34,7 +27,7 @@
   <div class="wrapper">
     <div class="">
       <h4>Connaissez-vous monenfant.fr ?</h4>
-      <p>
+      <p class="mt-s16 text-gray-text text-f14 leading-24">
         Conçu par les Caf et la Cnaf, le portail « monenfant.fr » référence les
         structures d’accueil destinées aux jeunes enfants, les services
         existants pour informer et accompagner les parents de jeunes enfants

@@ -29,7 +29,6 @@
   import favicoPng from "$lib/assets/favicon.png";
 
   import "../app.postcss";
-  import "../app.css";
 
   import Footer from "./_layout/_footer.svelte";
   import Header from "./_layout/_header.svelte";

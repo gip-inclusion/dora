@@ -30,8 +30,12 @@
   });
 </script>
 
+<svelte:head>
+  <title>Erreur | DORA</title>
+</svelte:head>
+
 <CenteredGrid topPadded>
-  <div class="wrapper col-start-1 col-span-full mb-8">
+  <div class="wrapper col-start-1 col-span-full mb-s64">
     {#if notFound}
       Cette page n’existe pas.
     {:else}

@@ -6,7 +6,7 @@
   import ServiceHeader from "./_service-header.svelte";
   import ServicePresentation from "./_service-presentation.svelte";
   import Label from "$lib/components/label.svelte";
-  // import LinkButton from "$lib/components/link-button.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
   export let service;
   export let isPreview = false;
 </script>
@@ -36,12 +36,17 @@
   --col-content-bg="var(--col-bg)"
 >
   <div class="flex flex-col col-span-full">
-    <div class="flex flex-col gap-3 lg:flex-row-reverse">
+    <div class="flex flex-col gap-s24 lg:flex-row-reverse">
       <div class="flex-initial orientation">
         <OrientationBox {service} />
-        <div class="flex-col hidden max-w-md gap-2 lg:flex">
+        <div class="flex-col hidden max-w-md gap-s16 mb-s16 lg:flex">
           <h4>{service.structureInfo.name}</h4>
           <Label label={service.structureInfo.shortDesc} italic />
+          <LinkButton
+            label="Voir l’offre de services complète"
+            to="/structures/{service.structure}"
+            nogrow
+          />
         </div>
       </div>
       <div class="flex-1 service-pres">

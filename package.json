@@ -6,45 +6,41 @@
     "node": "16"
   },
   "scripts": {
-    "dev": "svelte-kit dev --host",
+    "dev": "svelte-kit dev",
     "build": "svelte-kit build",
-    "preview": "svelte-kit preview --host",
+    "preview": "svelte-kit preview",
     "start": "node build",
-    "lint": "stylelint \"**/*.{css,html,svelte}\" && prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
+    "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --write --plugin-search-dir=. . && eslint --ignore-path .gitignore --fix .",
-    "formatstyle": "stylelint --fix \"**/*.{css,html,svelte}\"",
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@sentry/browser": "^6.13.3",
-    "@sentry/tracing": "^6.13.3",
+    "@sentry/browser": "^6.15.0",
+    "@sentry/tracing": "^6.15.0",
     "@sveltejs/adapter-node": "next",
     "@sveltejs/kit": "next",
     "@tailwindcss/typography": "^0.4.1",
-    "@tiptap/core": "^2.0.0-beta.125",
-    "@tiptap/extension-placeholder": "^2.0.0-beta.35",
-    "@tiptap/starter-kit": "^2.0.0-beta.127",
-    "autoprefixer": "^10.3.7",
-    "cssnano": "^5.0.8",
-    "eslint": "^7.32.0",
+    "@tiptap/core": "^2.0.0-beta.138",
+    "@tiptap/extension-placeholder": "^2.0.0-beta.43",
+    "@tiptap/starter-kit": "^2.0.0-beta.140",
+    "autoprefixer": "^10.4.0",
+    "cssnano": "^5.0.10",
+    "eslint": "^8.2.0",
     "eslint-config-eslint": "^7.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^3.2.1",
     "husky": "^7.0.2",
     "insane": "^2.6.2",
-    "lint-staged": "^11.2.3",
+    "lint-staged": "^12.0.2",
     "postcss": "^8.3.9",
     "postcss-load-config": "^3.1.0",
     "prettier": "~2.4.1",
-    "prettier-plugin-svelte": "^2.4.0",
+    "prettier-plugin-svelte": "2.4.0",
     "remixicon": "^2.5.0",
-    "showdown": "^1.9.1",
-    "stylelint": "^13.13.1",
-    "stylelint-config-idiomatic-order": "^8.1.0",
-    "stylelint-config-standard": "^22.0.0",
-    "svelte": "^3.42.6",
+    "showdown": "^1.9.0",
+    "svelte": "^3.44.1",
     "svelte-preprocess": "^4.9.5",
-    "tailwindcss": "^2.2.17"
+    "tailwindcss": "^2.2.19"
   },
   "type": "module",
   "lint-staged": {
@@ -54,9 +50,6 @@
     ],
     "*.{json,css,postcss,html,md}": [
       "prettier --write --plugin-search-dir=."
-    ],
-    "*.{css,html,svelte}": [
-      "stylelint --fix"
     ]
   }
 }

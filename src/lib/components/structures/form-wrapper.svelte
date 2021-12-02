@@ -15,8 +15,11 @@
     contextValidationKey,
   } from "$lib/validation.js";
 
-  import ValidateButton from "./_validate.svelte";
   import Alert from "$lib/components/forms/alert.svelte";
+  import { arrowRightSIcon } from "$lib/icons";
+
+  import Button from "$lib/components/button.svelte";
+
   export let structure, structuresOptions, formTitle;
 
   export let modify = false;
@@ -79,7 +82,7 @@
         result = await createStructure(validatedData);
       }
       if (result?.ok) {
-        goto(`/structures/${result.result.slug}`);
+        goto(`/tableau-de-bord/structures/${result.result.slug}`);
       } else {
         injectAPIErrors(
           result.error || {
@@ -163,8 +166,8 @@
         bind:value={structure.address2}
         vertical
       />
-      <div class="flex flex-row justify-between gap-x-4">
-        <div class="w-20">
+      <div class="flex flex-row justify-between gap-x-s32">
+        <div class="w-s160">
           <ModelField
             type="text"
             label="Code postal"
@@ -187,8 +190,8 @@
           />
         </div>
       </div>
-      <div class="flex flex-row justify-between gap-x-4 ">
-        <div class="w-250p">
+      <div class="flex flex-row justify-between gap-x-s32 ">
+        <div class="w-s250">
           <ModelField
             type="tel"
             label="Téléphone"
@@ -276,7 +279,15 @@
       <div class="border-b border-gray-01" />
 
       <div class="self-end">
-        <ValidateButton _disabled={false} />
+        <Button
+          on:submit
+          name="validate"
+          type="submit"
+          label="Validez les informations"
+          icon={arrowRightSIcon}
+          iconOnRight
+          preventDefaultOnMouseDown
+        />
       </div>
     </FieldSet>
   </form>

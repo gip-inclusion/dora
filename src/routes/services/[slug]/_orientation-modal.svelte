@@ -1,35 +1,58 @@
 <script>
   import { page } from "$app/stores";
 
-  import { token } from "$lib/auth";
+  import { token, userInfo } from "$lib/auth";
 
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import Modal from "$lib/components/modal.svelte";
-  import { shortenString } from "$lib/utils";
+  import { CANONICAL_URL } from "$lib/env";
+  import { mailIcon } from "$lib/icons";
 
   export let isOpen = false;
   export let service;
 
   $: showContact = service?.isContactInfoPublic || $token;
 
-  function basename(path) {
-    return shortenString(path.split("/").slice(-1)[0], 35);
-  }
+  const emailSubject = encodeURIComponent(
+    `Candidature ${service.name} / Demande d'orientation`
+  );
+  const emailBody = encodeURIComponent(
+    `
+Bonjour,
+
+Je vous contacte concernant l’offre ${
+      service.name
+    } sur dora.fabrique.social.gouv.fr.
+${CANONICAL_URL}/services/${service.slug}
+
+
+[Votre message ici]
+
+
+Cordialement,
+${$userInfo?.fullName}
+[Votre affiliation]
+
+[Rappel des justificatifs à joindre:]
+
+${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
+`.trim()
+  );
 </script>
 
-<style>
-  .contents {
-    display: block;
-    width: 95vw;
-    padding: var(--s32);
+<style lang="postcss">
+  .modal-contents {
+    @apply p-s16 md:p-s32;
+
     background-color: var(--col-white);
     border-radius: var(--s8);
     box-shadow: var(--shadow-md);
   }
 
   .box {
-    padding: var(--s32) var(--s32) var(--s32);
+    @apply p-s16 md:p-s32;
+
     border: 3px solid var(--col-gray-dark);
     border-radius: var(--s8);
   }
@@ -47,8 +70,11 @@
     margin: var(--s20) var(--s20) var(--s32) 0;
     color: var(--col-text);
     gap: var(--s8);
-    list-style-position: inside;
+    list-style-position: outside;
     list-style-type: "– ";
+    position: relative;
+    left: var(--s16);
+    max-width: 40ch;
   }
 
   .list li span {
@@ -63,10 +89,10 @@
 </style>
 
 <Modal bind:isOpen>
-  <div class="contents">
-    <h2 class="pb-2">Comment mobiliser ce service pour votre bénéficiaire</h2>
+  <div class="modal-contents">
+    <h2 class="pb-s16">Comment mobiliser ce service pour votre bénéficiaire</h2>
     <div class="box">
-      <div class="flex flex-row flex-wrap">
+      <div class="flex flex-row flex-wrap gap-s24">
         <div class="flex-1">
           <h3>Mobiliser la solution</h3>
           <ul class="list">
@@ -93,15 +119,15 @@
             {/each}
           </ul>
           {#if service.forms.length || service.onlineForm}
-            <div class="mx-5 border-t border-gray-03" />
+            <div class="mx-s40 border-t border-gray-03" />
           {/if}
           {#if service.forms.length}
             <ul class="list">
               {#each service.forms as form}
                 <li>
-                  <span>
+                  <span class="break-all">
                     <a target="_blank" rel="noopener nofollow" href={form}
-                      >{basename(form)}</a
+                      >{form}</a
                     >
                   </span>
                 </li>
@@ -111,14 +137,15 @@
           {#if service.onlineForm}
             <ul class="list">
               <li>
-                <span>
-                  <a
-                    target="_blank"
-                    rel="noopener nofollow"
-                    href={service.onlineForm}
-                    >{shortenString(service.onlineForm, 35)}</a
-                  >
-                </span>
+                <div class=" ">
+                  <span class="break-all">
+                    <a
+                      target="_blank"
+                      rel="noopener nofollow"
+                      href={service.onlineForm}>{service.onlineForm}x</a
+                    >
+                  </span>
+                </div>
               </li>
             </ul>
           {/if}
@@ -129,12 +156,12 @@
           <ul class="list">
             {#if showContact}
               {#if service.contactName}
-                <h4 class="pb-2">{service.contactName}</h4>
+                <h4 class="pb-s16">{service.contactName}</h4>
               {/if}
             {:else}
-              <div class="flex flex-col gap-2 pb-1">
+              <div class="flex flex-col gap-s16 pb-s8">
                 <Label
-                  label="Vous devez être connecté•e pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire."
+                  label="Connectez-vous pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire."
                 />
                 <LinkButton
                   label="Connexion"
@@ -143,7 +170,7 @@
               </div>
             {/if}
             <p><strong>{service.structureInfo.name}</strong></p>
-            <p class="pb-2 text-sm">
+            <p class="pb-s16 text-f14">
               {service.structureInfo.address1}<br />
               {#if service.structureInfo.address2}{service.structureInfo
                   .address2}<br />{/if}
@@ -152,13 +179,13 @@
             </p>
             {#if showContact}
               {#if service.contactPhone}
-                <p class="text-sm">
+                <p class="text-f14">
                   <a href="tel:{service.contactPhone}">{service.contactPhone}</a
                   >
                 </p>
               {/if}
               {#if service.contactEmail}
-                <p class="text-sm">
+                <p class="text-f14 break-all">
                   <a href="mailto:{service.contactEmail}">
                     {service.contactEmail}
                   </a>
@@ -166,13 +193,13 @@
               {/if}
             {/if}
             {#if service.structureInfo.url}
-              <p class="text-sm">
+              <!-- <p class="text-f14">
                 <a
                   target="_blank"
                   rel="noopener nofollow"
                   href={service.structureInfo.url}>Voir leur site internet</a
                 >
-              </p>
+              </p> -->
             {/if}
           </ul>
         </div>
@@ -182,8 +209,10 @@
       <div class="action-line">
         <Label label="Au clic, ouverture de votre client e-mail :" />
         <LinkButton
-          label="Orientez votre bénéficiaire"
-          to="mailto:{service.contactEmail}"
+          label="Faire une demande"
+          to="mailto:{service.contactEmail}?subject={emailSubject}&body={emailBody}"
+          icon={mailIcon}
+          iconOnRight
         />
       </div>
     {/if}

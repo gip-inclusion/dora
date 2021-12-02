@@ -12,7 +12,7 @@
   }
 </script>
 
-<style>
+<style lang="postcss">
   .wrapper {
     padding: var(--s24);
     background-color: var(--col-gray-bg);
@@ -23,8 +23,7 @@
   }
 
   .details {
-    color: var(--col-text);
-    font-size: var(--f14);
+    @apply text-gray-text text-f14;
   }
 </style>
 

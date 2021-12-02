@@ -88,7 +88,7 @@
   >
     <FieldHelp slot="helptext" title="Catégorisation">
       Pour permettre à nos utilisateurs de trouver facilement la solution que
-      vous proposez, il est nécessaire de classer les services par catégorie?
+      vous proposez, il est nécessaire de classer les services par catégorie.
     </FieldHelp>
   </ModelField>
 
@@ -137,6 +137,16 @@
       </p>
     </FieldHelp>
   </ModelField>
+  <ModelField
+    label="Sessions & récurrence"
+    description="À quelle fréquence votre service est-il disponible ?"
+    type="text"
+    placeholder="Ex. Tous les jours, une fois par mois, etc."
+    schema={serviceSchema.recurrence}
+    name="recurrence"
+    errorMessages={$formErrors.recurrence}
+    bind:value={service.recurrence}
+  />
   <ModelField
     label="Descriptif complet du service"
     placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre service et ses spécificités."

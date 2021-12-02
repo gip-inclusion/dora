@@ -49,3 +49,9 @@ export function shortenString(str, length = 50) {
   }
   return str;
 }
+
+export function getDepartmentFromCityCode(cityCode) {
+  return cityCode.startsWith("97")
+    ? cityCode.slice(0, 3)
+    : cityCode.slice(0, 2);
+}

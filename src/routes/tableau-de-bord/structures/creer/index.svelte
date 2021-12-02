@@ -12,7 +12,7 @@
   import Field from "$lib/components/forms/field.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
 
-  import StructureFormWrapper from "../_structure-form-wrapper.svelte";
+  import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
   import SiretSearch from "$lib/components/structures/siret-autocomplete.svelte";
   import { siretWasAlreadyClaimed } from "$lib/structures";
   import structureSchema from "$lib/schemas/structure.js";
@@ -70,7 +70,7 @@
 </script>
 
 <svelte:head>
-  <title>Retrouvez votre structure | DORA</title>
+  <title>Créer une structure | DORA</title>
 </svelte:head>
 
 <FieldSet
@@ -111,19 +111,19 @@
 
 {#if alreadyClaimedEstablishment}
   <div
-    class="flex flex-row items-center justify-center mt-2 text-xl text-error pt-1/2"
+    class="flex flex-row items-center justify-center mt-s16 text-f18 text-error pt-s4"
   >
-    <div class="w-3 h-3 mr-1 fill-current ">
+    <div class="w-s24 h-s24 mr-s8 fill-current ">
       {@html alertIcon}
     </div>
     <p>
       Cette structure a déjà été saisie dans DORA. Vous pouvez la
       <a
         class="underline"
-        href="/structures/{alreadyClaimedEstablishment?.slug}"
+        href="/tableau-de-bord/structures/{alreadyClaimedEstablishment?.slug}"
       >
-        visualiser</a
-      >.
+        visualiser
+      </a>.
     </p>
   </div>
 {/if}

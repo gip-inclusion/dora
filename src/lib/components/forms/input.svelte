@@ -21,6 +21,7 @@
   export let placeholderMulti = "";
   export let minValue = null;
   export let maxLength = undefined;
+  export let rows = 4;
 
   export let toggleYesText;
   export let toggleNoText;
@@ -37,15 +38,12 @@
   input[type="tel"],
   input[type="date"],
   textarea {
-    @apply px-1 min-h-6 border border-gray-03 rounded outline-none placeholder-gray-text-alt focus:shadow-focus text-sm;
+    @apply px-s8 min-h-[3rem] border border-gray-03 rounded outline-none placeholder-gray-text-alt focus:shadow-focus text-f14;
   }
 
-  :global(input:disabled, textarea:disabled, select:disabled) {
-    background-color: var(--col-gray-00);
-  }
-
-  :global(input:read-only, textarea:read-only, select:read-only) {
-    color: var(--col-gray-03);
+  input,
+  textarea {
+    @apply disabled:bg-gray-00 read-only:text-gray-03;
   }
 </style>
 
@@ -119,7 +117,7 @@
     {disabled}
     {readonly}
     {autocomplete}
-    rows="4"
+    {rows}
   />
 {:else if type === "richtext"}
   <RichText
@@ -134,6 +132,7 @@
   <Toggle
     {name}
     bind:checked={value}
+    on:change
     {disabled}
     {readonly}
     {toggleYesText}

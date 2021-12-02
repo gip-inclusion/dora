@@ -26,6 +26,10 @@
   export let structures;
 </script>
 
+<svelte:head>
+  <title>Tableau de bord | DORA</title>
+</svelte:head>
+
 <EnsureLoggedIn>
   <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
     <div class="flex flex-row col-span-full justify-between">
@@ -35,14 +39,14 @@
     </div>
     <div class="col-start-1 col-span-full text-left">
       {#if $userInfo.isStaff}
-        <div class="rounded-md p-1 bg-gray-bg mb-6">
+        <div class="rounded-md p-s8 bg-gray-bg mb-s48">
           <h4 class="text-information">
             ⚠️ Seulement pour les super-utilisateurs
           </h4>
           <div class="flex">
             <LinkButton
               label="Créer une structure"
-              to="/structures/creer"
+              to="/tableau-de-bord/structures/creer"
               noBackground
             />
 
@@ -62,7 +66,7 @@
       {/if}
 
       {#if structures.length}
-        <div class="mb-1">
+        <div class="mb-s8">
           <h2>Mes Structures</h2>
         </div>
         <div class="border-t border-gray-03" />
@@ -70,7 +74,7 @@
       {/if}
 
       {#if services.length}
-        <div class="mb-1">
+        <div class="mb-s8">
           <h2>Mes Services</h2>
         </div>
         <div class="border-t border-gray-03" />

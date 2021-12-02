@@ -53,7 +53,7 @@
 </script>
 
 <svelte:head>
-  <title>Dora: Ma structure</title>
+  <title>Ma structure | {structure.name} | DORA</title>
 </svelte:head>
 
 <EnsureLoggedIn>
@@ -64,32 +64,70 @@
     onRefresh={handleRefreshMemberList}
   />
   <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-    <div class="col-start-1 col-span-full mb-10">
-      <div class="mb-4">
+    <div class="col-start-1 col-span-full mb-s80">
+      <div class="mb-s32">
         <h2>Ma structure</h2>
       </div>
       <div class="border-t border-gray-03" />
-      <div class="flex gap-3">
+      <div class="flex gap-s24">
         <div class="flex-1">
           <Fieldset
             title="Présentation de ma structure"
             description="Vous trouvez ici les informations concernant votre structure, tels qu’ils sont visibles sur le site DORA."
           >
-            <h4>{structure.name}</h4>
-            <p class="text-gray-text-alt">SIRET: {structure.siret}</p>
+            <div class="border border-gray-01 rounded px-s24 py-s16">
+              <h4 class="text-gray-text ">{structure.name}</h4>
+              <div class="legend mt-s12">SIRET: {structure.siret}</div>
+            </div>
+            <div class="border border-gray-01 rounded px-s24 py-s16">
+              <h5>Adresse</h5>
+              <div class="legend ">
+                {structure.address1}<br />
+                {#if structure.address2}{structure.address2}<br />{/if}
+                {structure.postalCode}
+                {structure.city}<br />
+              </div>
+              <h5 class="mt-s12">Contact</h5>
+              <div class="legend">
+                {#if structure.phone}
+                  <a class="underline" href="tel:{structure.phone}">
+                    {structure.phone}
+                  </a>
+                  <br />
+                {/if}
+                {#if structure.email}
+                  <a class="underline" href="mailto:{structure.email}">
+                    {structure.email}
+                  </a>
+                  <br />
+                {/if}
+                {#if structure.url}
+                  <a
+                    class="underline"
+                    target="_blank"
+                    rel="noopener nofollow"
+                    href={structure.url}
+                  >
+                    {structure.url}
+                  </a>
+                {/if}
+              </div>
+              <h5 class="mt-s12">Résumé</h5>
+              <div class="legend">{structure.shortDesc}</div>
+            </div>
             <div class="flex justify-end">
               <LinkButton
                 label="Modifier les informations"
-                to="/structures/{structure.slug}/editer"
+                to="/tableau-de-bord/structures/{structure.slug}/editer"
               />
             </div>
           </Fieldset>
         </div>
         <div class="flex-1">
           {#if members}
-            <div class="mt-6">
+            <div class="mt-s48">
               <h3>Vos collaborateurs</h3>
-              <div class="flex flex-col gap-1 mt-4 mb-4">
+              <div class="flex flex-col gap-s8 mt-s32 mb-s32">
                 {#each sortedMembers(members) as member}
                   <Member
                     {member}

@@ -21,7 +21,7 @@
 
 <CG>
   <div class="text-center col-span-full">
-    <h1 class="text-france-blue text-13xl">Statistiques</h1>
+    <h1 class="text-france-blue">Statistiques</h1>
   </div>
 </CG>
 

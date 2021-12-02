@@ -15,6 +15,9 @@
     if (event.key === "Escape") isOpen = false;
   }
 
+  function handleBackgroundClick() {
+    isOpen = false;
+  }
   function handleClose() {
     isOpen = false;
   }
@@ -29,37 +32,38 @@
     display: none;
     width: 100vw;
     height: 100vh;
-    background-color: black;
-    opacity: 0.5;
-  }
-
-  #modal {
-    position: fixed;
-    z-index: 1;
-    top: 50%;
-    left: 50%;
-    display: none;
-    max-width: 95vw;
-    max-height: 95vh;
-    overflow-y: auto;
-    transform: translate(-50%, -50%);
+    background-color: #000000cc;
   }
 
   .show {
     display: block !important;
   }
+
+  .showb {
+    display: flex !important;
+  }
 </style>
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div id="background" class:show={isOpen} on:click={() => (isOpen = false)} />
-
-<div id="modal" class:show={isOpen}>
+<div
+  id="background"
+  class="hidden justify-center items-center"
+  class:showb={isOpen}
+  on:click={handleBackgroundClick}
+>
   <div
-    class="w-3 h-3 ml-1 fixed right-1 top-1 text-gray-text-alt fill-current"
-    on:click={handleClose}
+    class="shadow-md hidden max-h-screen overflow-y-auto"
+    class:show={isOpen}
   >
-    {@html closeLineIcon}
+    <div class="md:m-s32" on:click|stopPropagation>
+      <div
+        class="sticky w-s24 h-s24 ml-auto right-s8 top-s56 text-gray-text-alt fill-current"
+        on:click={handleClose}
+      >
+        {@html closeLineIcon}
+      </div>
+      <slot />
+    </div>
   </div>
-  <slot />
 </div>

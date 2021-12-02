@@ -12,6 +12,7 @@
   <NavItem
     label="Contacter l’équipe"
     href="https://itou.typeform.com/doracontactsupp"
+    nofollow
     vertical
   />
 </nav>

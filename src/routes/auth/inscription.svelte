@@ -1,4 +1,6 @@
 <script>
+  import { page } from "$app/stores";
+
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   import StepTypology from "./registration/_step1-typology.svelte";
@@ -8,6 +10,7 @@
   import StepConfirm from "./registration/_step5-confirm.svelte";
   import AuthLayout from "./_auth_layout.svelte";
 
+  const siret = $page.query.get("siret");
   const steps = new Map([
     [1, StepTypology],
     [2, StepPoleEmploi],
@@ -16,7 +19,7 @@
     [5, StepConfirm],
   ]);
 
-  let currentStep = 1;
+  let currentStep = siret ? 3 : 1;
 
   $: currentStepComponent = steps.get(currentStep);
 </script>
@@ -26,11 +29,11 @@
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 mb-6 text-center col-span-full">
-    <h1 class="text-france-blue text-13xl">Créer son compte DORA</h1>
+  <div class="col-start-1 mb-s48 text-center col-span-full">
+    <h1 class="text-france-blue">Créer son compte DORA</h1>
   </div>
 </CenteredGrid>
 
 <AuthLayout wideForm>
-  <svelte:component this={currentStepComponent} bind:currentStep />
+  <svelte:component this={currentStepComponent} bind:currentStep {siret} />
 </AuthLayout>

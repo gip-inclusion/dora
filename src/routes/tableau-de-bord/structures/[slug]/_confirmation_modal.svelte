@@ -8,11 +8,9 @@
 </script>
 
 <Modal bind:isOpen>
-  <div>
-    <Fieldset title="Ajouter des collaborateurs" noTopPadding>
-      <Info label="Votre demande a été enregistrée" positiveMood>
-        Une invitation a été envoyée à l’adresse <strong>{email}</strong>
-      </Info>
-    </Fieldset>
-  </div>
+  <Fieldset title="Ajouter des collaborateurs" noTopPadding>
+    <Info label="Votre demande a été enregistrée" positiveMood>
+      Une invitation a été envoyée à l’adresse <strong>{email}</strong>
+    </Info>
+  </Fieldset>
 </Modal>

@@ -3,8 +3,6 @@
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
-  import "../../app.postcss";
-  import "../../app.css";
   import LogoDORA from "$lib/assets/dora-logo-rvb.svg";
   import LogoMinistere from "$lib/assets/logo-ministere-travail.svg";
 
@@ -23,8 +21,8 @@
   class:dev-banner={ENVIRONMENT !== "production"}
 >
   <CenteredGrid>
-    <div class="flex flex-row items-center row-start-1 col-span-full py-3/2 ">
-      <a class="flex flex-row gap-5 " href="/">
+    <div class="flex flex-row items-center row-start-1 col-span-full py-s12 ">
+      <a class="flex flex-row gap-s40 " href="/">
         <div class="hidden lg:block">
           <img
             class="inline"

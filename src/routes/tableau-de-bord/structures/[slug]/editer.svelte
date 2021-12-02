@@ -13,19 +13,19 @@
 
 <script>
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import StructureFormWrapper from "../_structure-form-wrapper.svelte";
+  import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
+
   export let structure, structuresOptions;
 </script>
 
 <svelte:head>
-  <title>{structure.name} | DORA</title>
+  <title>Éditer ma structure | {structure.name} | DORA</title>
 </svelte:head>
 
 <EnsureLoggedIn>
   <CenteredGrid roundedbg topPadded>
-    <div class="col-span-8 col-start-1 mb-4">
+    <div class="col-span-8 col-start-1 mb-s32">
       <StructureFormWrapper
         {structure}
         {structuresOptions}

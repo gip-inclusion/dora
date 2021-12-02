@@ -54,12 +54,11 @@
 
   import SearchResult from "./_homepage/_search-result.svelte";
   import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
-
   import SearchPromo from "./_homepage/_search-promo.svelte";
 
-  import { addCircleIcon } from "$lib/icons";
+  import { mailIcon, newspaperIcon } from "$lib/icons";
   import NoResultsPic from "$lib/assets/illu_zero-resultats-optimise.svg";
-  import Button from "$lib/components/button.svelte";
+  import { showNewsletter } from "$lib/flags";
 
   export let servicesOptions;
   export let category, subcategory, cityCode, cityLabel;
@@ -72,6 +71,26 @@
       });
     }
   });
+
+  const sharingEmailSubject = encodeURIComponent("Connaissez-vous Dora ?");
+  const sharingEmailBody = encodeURIComponent(
+    `
+Bonjour,
+Je me permets de vous partager un projet qui devrait vous intéresser.
+
+Connaissez-vous Dora ?
+
+Lancé en Mai 2021, Dora est un service public numérique porté par la DGEFP qui permet aux structures de l'insertion de référencer simplement et mettre à jour en temps réel leur offre de services, et aux professionnels prescripteurs de rechercher et mobiliser rapidement le service le plus adapté au besoin de leur bénéficiaire.
+
+J'ai le plaisir de vous annoncer que Dora est accessible dès aujourd'hui pour l'ensemble les acteurs de l'insertion du territoire. De nombreux partenaires ont d'ores et déjà mis en visibilité leur offre de service sur Dora. Vous pouvez également vous inscrire et bénéficier de ce service !
+
+👉 Pour accéder à Dora cliquez sur ce lien (pensez à l'ajouter à vos favoris 😉) :
+https://dora.fabrique.social.gouv.fr/
+
+Dans l'attente de pouvoir consulter votre offre de service sur cet outil.
+Cordialement,
+`.trim()
+  );
 </script>
 
 <style lang="postcss">
@@ -131,9 +150,9 @@
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 col-span-full text-center mb-6">
-    <p class="text-gray-text text-base">Consultez les services</p>
-    <h1 class="text-france-blue text-13xl">Résultats de recherche</h1>
+  <div class="col-start-1 col-span-full text-center mb-s48">
+    <p class="text-f16">Consultez les services</p>
+    <h1 class="text-france-blue">Résultats de recherche</h1>
   </div>
 </CenteredGrid>
 
@@ -167,11 +186,11 @@
         <div class="no-results">
           <h2>Ooopsie !</h2>
 
-          <p class="text-base">
+          <p class="text-f16">
             Aucun résultat ne correspond à vos critères 😞<br />
             Essayez d’affiner votre recherche.
           </p>
-          <p class="text-sm">
+          <p class="text-f14">
             Le service DORA est actuellement
             <a
               class="underline"
@@ -185,30 +204,34 @@
             (Loire-Atlantique, Ardennes et La Réunion).
           </p>
 
-          <h4 class="mt-6">
+          <h4 class="mt-s48">
             Vous connaissez des structures proposant des services correspondant
             à ces critères ? Invitez vos partenaires à se référencer :
           </h4>
           <div>
-            <Button
-              label="Recommander DORA"
-              icon={addCircleIcon}
-              disabled
-              iconOnRight
-            />
-          </div>
-          <h4>
-            Vous êtes une structure proposant des services correspondant à ces
-            critères ?
-          </h4>
-          <div>
             <LinkButton
-              label="Référencer un service"
-              icon={addCircleIcon}
-              to={`/services/creer`}
+              label="Recommander DORA"
+              icon={mailIcon}
               iconOnRight
+              to="mailto:?subject={sharingEmailSubject}&body={sharingEmailBody}"
             />
           </div>
+          {#if showNewsletter}
+            <h4 class="mt-s48">
+              Infolettre : nouveautés et les prochains territoires ouverts sur
+              Dora.
+            </h4>
+            <div>
+              <LinkButton
+                label="Recevoir les actualités"
+                icon={newspaperIcon}
+                iconOnRight
+                to="https://itou.typeform.com/doraall"
+                otherTab
+                nofollow
+              />
+            </div>
+          {/if}
         </div>
       </div>
     {/if}
