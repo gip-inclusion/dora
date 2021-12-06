@@ -2,10 +2,10 @@
   export const ssr = false;
   import { getStructure, getMembers } from "$lib/structures";
   import { getMyStructures, getStructures } from "$lib/structures";
-  import { isStaff } from "$lib/auth";
+  import { userInfo } from "$lib/auth";
 
   export async function load({ page, _fetch, _session, _context }) {
-    const structures = isStaff
+    const structures = userInfo.isStaff
       ? await getStructures()
       : await getMyStructures();
     const structureSlug = page.params.slug;
@@ -23,8 +23,6 @@
 </script>
 
 <script>
-  import { userInfo } from "$lib/auth";
-
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Member from "./_member.svelte";

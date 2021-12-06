@@ -1,15 +1,20 @@
 <script context="module">
   export const ssr = false;
+  import { get } from "svelte/store";
 
   import { getLastDraft, getServicesOptions } from "$lib/services";
-  import { getMyStructures } from "$lib/structures";
+  import { getStructures, getMyStructures } from "$lib/structures";
+
+  import { userInfo } from "$lib/auth";
 
   export async function load({ _page, _fetch, _session, _context }) {
     return {
       props: {
         lastDraft: await getLastDraft(),
         servicesOptions: await getServicesOptions(),
-        structures: await getMyStructures(),
+        structures: get(userInfo).isStaff
+          ? await getStructures()
+          : await getMyStructures(),
       },
     };
   }
