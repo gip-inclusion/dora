@@ -1,6 +1,5 @@
 <script>
   import { page } from "$app/stores";
-
   import { token, userInfo } from "$lib/auth";
 
   import Label from "$lib/components/label.svelte";
@@ -39,6 +38,17 @@ ${$userInfo?.fullName}
 ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
 `.trim()
   );
+
+  function trackClick() {
+    plausible("mobilisation-contact", {
+      props: {
+        service: service.name,
+        slug: service.slug,
+        structure: service.structureInfo.name,
+        departement: service.department,
+      },
+    });
+  }
 </script>
 
 <style lang="postcss">
@@ -209,6 +219,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
       <div class="action-line">
         <Label label="Au clic, ouverture de votre client e-mail :" />
         <LinkButton
+          on:click={trackClick}
           label="Faire une demande"
           to="mailto:{service.contactEmail}?subject={emailSubject}&body={emailBody}"
           icon={mailIcon}
