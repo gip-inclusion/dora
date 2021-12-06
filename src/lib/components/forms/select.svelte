@@ -18,6 +18,7 @@
   export let onChange = undefined;
   export let initialValue = undefined;
   export let postfixValueFunction = undefined;
+  export let showClear = true;
 
   function getSortedChoices(items) {
     return items.sort((a, b) => a.label.localeCompare(b.label, "fr"));
@@ -48,4 +49,5 @@
   html5autocomplete={false}
   showLoadingIndicator
   {hideArrow}
+  {showClear}
 />
