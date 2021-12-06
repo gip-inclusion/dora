@@ -602,6 +602,7 @@
 
   function clear() {
     value = multiple ? [] : null;
+    text = "";
 
     setTimeout(() => {
       input.focus();
