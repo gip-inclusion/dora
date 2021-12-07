@@ -59,10 +59,6 @@
     padding: var(--s24);
     border: 1px solid var(--col-gray-01);
   }
-
-  .establishment-details p {
-    color: var(--col-text-alt2);
-  }
 </style>
 
 <FieldSet
