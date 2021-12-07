@@ -27,6 +27,7 @@
 
   function handleJoin() {
     $registrationInfo.siret = structure.siret;
+    $registrationInfo.isPoleEmploi = true;
     currentStep = 4;
   }
 

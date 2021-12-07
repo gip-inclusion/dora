@@ -11,7 +11,7 @@
 >
   <ButtonDetails
     label="Pôle Emploi"
-    details="Vous êtes un agent d’Etat rattaché à une agence Pôle emploi"
+    details="Vous êtes un agent d’Etat rattaché à une agence Pôle emploi. Une adresse en @pole-emploi.fr ou @pole-emploi.net est requise."
     on:click={() => (currentStep = 2)}
   />
   <ButtonDetails
