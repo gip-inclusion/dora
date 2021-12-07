@@ -16,10 +16,10 @@
   {disabled}
 >
   <div>
-    <h4 class="pb-s8">{label}</h4>
-    <p class="text-gray-text-alt2 text-f14">{details}</p>
+    <h4 class="pb-s8 text-gray-text">{label}</h4>
+    <p class="flex-auto text-gray-text-alt2 text-f14">{details}</p>
   </div>
-  <div class="w-s24 h-s24 ml-s8 fill-current">
+  <div class="flex-none w-s32 h-s32 ml-s8 text-gray-text-alt fill-current">
     {@html arrowRightSIcon}
   </div>
 </button>

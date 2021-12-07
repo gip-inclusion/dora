@@ -74,13 +74,13 @@
   {/if}
   {#if establishment && establishmentVisible}
     <div class="establishment-details">
-      <h4>{establishment.name}</h4>
-      <p>{establishment.address1}</p>
-      <p>{establishment.address2}</p>
-      <p>
+      <h4 class="text-gray-text">{establishment.name}</h4>
+      <div class="legend">{establishment.address1}</div>
+      <div class="legend">{establishment.address2}</div>
+      <div class="legend">
         {establishment.postalCode}
         {establishment.city}
-      </p>
+      </div>
     </div>
     <div class="flex">
       <Toggle
@@ -88,7 +88,7 @@
         toggleNoText=""
         bind:checked={hasCheckedConsent}
       />
-      <p class="text-f14">
+      <p class="legend">
         En cochant cette case, je déclare faire partie de la structure
         mentionnée ci-dessus et j’atteste connaître les risques encourus en cas
         de faux et d’usage de faux.

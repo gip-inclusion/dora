@@ -99,13 +99,13 @@
 
     {#if structure && structureVisible}
       <div class="establishment-details">
-        <h4>{structure.name}</h4>
-        <p>{structure.address1}</p>
-        <p>{structure.address2}</p>
-        <p>
+        <h4 class="text-gray-text">{structure.name}</h4>
+        <div class="legend">{structure.address1}</div>
+        <div class="legend">{structure.address2}</div>
+        <div class="legend">
           {structure.postalCode}
           {structure.city}
-        </p>
+        </div>
       </div>
       <div class="flex">
         <Toggle
@@ -113,11 +113,11 @@
           toggleNoText=""
           bind:checked={hasCheckedConsent}
         />
-        <p class="text-f14">
+        <div class="legend">
           En cochant cette case, je déclare faire partie de la structure
           mentionnée ci-dessus et j’atteste connaître les risques encourus en
           cas de faux et d’usage de faux.
-        </p>
+        </div>
       </div>
     {/if}
 
