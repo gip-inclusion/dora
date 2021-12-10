@@ -49,7 +49,7 @@
 <div class="wrapper" class:is-own={isMyself}>
   <h5>{member.user.fullName}</h5>
   <div class="flex-grow ">
-    {#if !member.isValid || member.mustSetPassword}
+    {#if !member.hasAcceptedInvitation || member.mustSetPassword}
       <div class="flex items-baseline">
         <div class="legend-xs text-gray-text-alt">Invitation envoyée</div>
         <Button
