@@ -12,7 +12,8 @@
     "start": "node build",
     "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --write --plugin-search-dir=. . && eslint --ignore-path .gitignore --fix .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "security-scan": "ggshield scan  path -r . -y"
   },
   "devDependencies": {
     "@sentry/browser": "^6.15.0",
@@ -50,6 +51,9 @@
     ],
     "*.{json,css,postcss,html,md}": [
       "prettier --write --plugin-search-dir=."
+    ],
+    "*": [
+      "ggshield scan pre-commit"
     ]
   }
 }
