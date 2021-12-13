@@ -191,17 +191,16 @@ Cordialement,
             Essayez d’affiner votre recherche.
           </p>
           <p class="text-f14">
-            Le service DORA est actuellement
+            Pendant la
             <a
               class="underline"
               target="_blank"
               rel="noopener"
               href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090"
             >
-              en construction
-            </a>, et se concentre sur 3 thématiques de services (mobilité, garde
-            d’enfant et hébergement/logement) et 3 territoires
-            (Loire-Atlantique, Ardennes et La Réunion).
+              période de construction</a
+            >, la recherche est restreinte aux territoires test :
+            Loire-Atlantique, Ardennes et La Réunion.
           </p>
 
           <h4 class="mt-s48">

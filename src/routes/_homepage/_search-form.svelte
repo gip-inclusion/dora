@@ -63,13 +63,15 @@
 </style>
 
 <div class="wrapper-top text-center lg:text-left">
-  ⚠️ Le service DORA est actuellement <a
+  ⚠️ Pendant la
+  <a
     class="underline"
     target="_blank"
     rel="noopener"
     href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090"
-    >en construction</a
-  >, la recherche concerne uniquement ces 3 territoires : Loire-Atlantique,
+  >
+    période de construction</a
+  >, la recherche est restreinte aux territoires test : Loire-Atlantique,
   Ardennes et La Réunion.
 </div>
 
