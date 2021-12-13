@@ -78,6 +78,7 @@
           label="Thématique"
           vertical
           required
+          sortSelect
         />
 
         <Field
@@ -87,6 +88,7 @@
           choices={subCatChoices}
           label="Besoin(s)"
           vertical
+          sortSelect
         />
 
         <Field type="custom" label="Lieu" required vertical>
@@ -120,8 +122,8 @@
           href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090"
         >
           période de construction</a
-        >, la recherche est restreinte aux territoires test : Loire-Atlantique,
-        Ardennes et La Réunion.
+        >, la recherche est restreinte aux territoires test : départements des
+        Ardennes et de La Réunion.
       </p>
     </div>
   </Collapsable>

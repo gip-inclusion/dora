@@ -199,8 +199,8 @@ Cordialement,
               href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090"
             >
               période de construction</a
-            >, la recherche est restreinte aux territoires test :
-            Loire-Atlantique, Ardennes et La Réunion.
+            >, la recherche est restreinte aux territoires test : départements
+            des Ardennes et de La Réunion.
           </p>
 
           <h4 class="mt-s48">
