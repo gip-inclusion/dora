@@ -191,16 +191,16 @@ Cordialement,
             Essayez d’affiner votre recherche.
           </p>
           <p class="text-f14">
-            Pendant la
+            Les premiers départements accessibles à la recherche sont les
+            Ardennes et l’Ile de la Réunion.
             <a
               class="underline"
               target="_blank"
               rel="noopener"
-              href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090"
+              href="https://documentation.dora.fabrique.social.gouv.fr/le-projet-dora/lancement-du-projet-dora/acceleration-de-dora-des-octobre-2021"
             >
-              période de construction</a
-            >, la recherche est restreinte aux territoires test : départements
-            des Ardennes et de La Réunion.
+              Suivez l’ouverture des autres territoires</a
+            >.
           </p>
 
           <h4 class="mt-s48">
