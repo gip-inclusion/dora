@@ -1,4 +1,4 @@
-import { writable, get } from "svelte/store";
+import { writable } from "svelte/store";
 import { browser } from "$app/env";
 import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
 import { log, logException } from "./logger";
@@ -67,11 +67,6 @@ export async function getUserInfo() {
       }
     }
   }
-}
-
-export function isStaff() {
-  const info = get(userInfo);
-  return info?.isStaff;
 }
 
 export function disconnect() {

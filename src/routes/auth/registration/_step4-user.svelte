@@ -96,6 +96,9 @@
 
         <Field
           name="email"
+          description={$registrationInfo.isPoleEmploi
+            ? "Une adresse en @pole-emploi.fr ou @pole-emploi.net est requise pour s’inscrire."
+            : ""}
           errorMessages={$formErrors.email}
           label="Courriel"
           vertical

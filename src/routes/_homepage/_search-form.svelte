@@ -63,14 +63,16 @@
 </style>
 
 <div class="wrapper-top text-center lg:text-left">
-  ⚠️ Le service DORA est actuellement <a
+  ⚠️ Les premiers départements accessibles à la recherche sont les Ardennes et
+  l’Ile de la Réunion.
+  <a
     class="underline"
     target="_blank"
     rel="noopener"
-    href="https://communaute.inclusion.beta.gouv.fr/t/mise-en-visibilite-de-loffre-dinsertion-lancement-de-dora/4090"
-    >en construction</a
-  >, la recherche concerne uniquement ces 3 territoires : Loire-Atlantique,
-  Ardennes et La Réunion.
+    href="https://documentation.dora.fabrique.social.gouv.fr/le-projet-dora/lancement-du-projet-dora/acceleration-de-dora-des-octobre-2021"
+  >
+    Suivez l’ouverture des autres territoires</a
+  >.
 </div>
 
 <div class="wrapper">
@@ -86,6 +88,7 @@
         label="Thématique"
         vertical
         required
+        sortSelect
       />
 
       <Field
@@ -96,6 +99,7 @@
         choices={subCategoryChoices}
         label="Besoin(s)"
         vertical
+        sortSelect
       />
 
       <Field type="custom" label="Lieu" name="city" required vertical>
