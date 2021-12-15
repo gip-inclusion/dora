@@ -58,7 +58,6 @@
 
   import { mailIcon, newspaperIcon } from "$lib/icons";
   import NoResultsPic from "$lib/assets/illu_zero-resultats-optimise.svg";
-  import { showNewsletter } from "$lib/flags";
 
   export let servicesOptions;
   export let category, subcategory, cityCode, cityLabel;
@@ -215,22 +214,20 @@ Cordialement,
               to="mailto:?subject={sharingEmailSubject}&body={sharingEmailBody}"
             />
           </div>
-          {#if showNewsletter}
-            <h4 class="mt-s48">
-              Infolettre : nouveautés et les prochains territoires ouverts sur
-              Dora.
-            </h4>
-            <div>
-              <LinkButton
-                label="Recevoir les actualités"
-                icon={newspaperIcon}
-                iconOnRight
-                to="https://itou.typeform.com/doraall"
-                otherTab
-                nofollow
-              />
-            </div>
-          {/if}
+          <h4 class="mt-s48">
+            Infolettre : nouveautés et les prochains territoires ouverts sur
+            Dora.
+          </h4>
+          <div>
+            <LinkButton
+              label="Recevoir les actualités"
+              icon={newspaperIcon}
+              iconOnRight
+              to="https://d4c653e7.sibforms.com/serve/MUIEAEkY4naptXBIq5NdRg5UPxP1wmwbGCinne5c1gynY-wfrZ0Dz0QP_NqkXtfyYqhdaq3AO8VFZJ9giRi9ZT0eah7Ut2U0LeKSTVIHQb_5nhvTLUMWXo9ZMeIYCHVlzmjkXGQ66S5ewcYpSADUgV--2RVZ_mrnsRJQoCNwZ8y-sWzfQsEzfKuTA7SLbZ_dWeqaigudym3EaiHT"
+              otherTab
+              nofollow
+            />
+          </div>
         </div>
       </div>
     {/if}
