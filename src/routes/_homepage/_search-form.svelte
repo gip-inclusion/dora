@@ -10,6 +10,11 @@
 
   export let servicesOptions = {};
   const categoryChoices = servicesOptions.categories;
+  categoryChoices.forEach((choice) => {
+    if (["GL", "FL", "CR", "FI", "IL", "DI"].includes(choice.value)) {
+      choice.tags = ["nouv."];
+    }
+  });
 
   let category;
   let subcategory;
@@ -88,7 +93,6 @@
         label="Thématique"
         vertical
         required
-        sortSelect
       />
 
       <Field
@@ -108,9 +112,9 @@
           name="city"
           placeholder="Ville du bénéficiaire"
           handleChange={(city) => {
-            cityCode = city.properties.citycode;
-            cityLabel = `${city.properties.label} (${getDepartmentFromCityCode(
-              city.properties.postcode
+            cityCode = city?.properties.citycode;
+            cityLabel = `${city?.properties.label} (${getDepartmentFromCityCode(
+              city?.properties.postcode
             )})`;
           }}
         />

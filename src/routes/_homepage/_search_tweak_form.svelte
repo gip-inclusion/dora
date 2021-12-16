@@ -21,7 +21,12 @@
     goto(`recherche?${query}`);
   }
 
-  $: catChoices = servicesOptions.categories;
+  $: catChoices = servicesOptions.categories.map((choice) => {
+    if (["GL", "FL", "CR", "FI", "IL", "DI"].includes(choice.value)) {
+      choice.tags = ["nouv."];
+    }
+    return choice;
+  });
 
   $: subCatChoices = servicesOptions.subcategories.filter(({ value }) =>
     value.startsWith(category)
@@ -78,7 +83,6 @@
           label="Thématique"
           vertical
           required
-          sortSelect
         />
 
         <Field
@@ -98,10 +102,10 @@
             placeholder="Ville du bénéficiaire"
             initialValue={cityLabel}
             handleChange={(city) => {
-              cityCode = city.properties.citycode;
+              cityCode = city?.properties.citycode;
               cityLabel = `${
-                city.properties.label
-              } (${getDepartmentFromCityCode(city.properties.postcode)})`;
+                city?.properties.label
+              } (${getDepartmentFromCityCode(city?.properties.postcode)})`;
             }}
           />
         </Field>

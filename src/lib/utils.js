@@ -51,6 +51,7 @@ export function shortenString(str, length = 50) {
 }
 
 export function getDepartmentFromCityCode(cityCode) {
+  if (cityCode == null) return null;
   return cityCode.startsWith("97")
     ? cityCode.slice(0, 3)
     : cityCode.slice(0, 2);

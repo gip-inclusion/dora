@@ -41,6 +41,7 @@ const config = {
       sans: ["Marianne"],
     },
     fontSize: {
+      f10: ".625rem",
       f12: ".75rem",
       f14: ".875rem",
       f16: "1rem",

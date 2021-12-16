@@ -205,6 +205,7 @@
       keywords: safeKeywordsFunction(item),
       // item label
       label: item.label,
+      tags: item.tags || [],
       // store reference to the origial item
       item,
     };
@@ -957,19 +958,33 @@
               }}
             >
               <div class="flex flex-row">
-                <div class="flex-grow">
-                  {@html listItem.highlighted
-                    ? listItem.highlighted.label
-                    : listItem.label}
-                  {#if postfixValueFunction}
-                    <div class="inline-block ml-s8 text-gray-text-alt text-f12">
-                      {postfixValueFunction(listItem.value)}
+                <div class="flex-grow flex justify-between ">
+                  <div>
+                    {@html listItem.highlighted
+                      ? listItem.highlighted.label
+                      : listItem.label}
+                  </div>
+                  <div class="flex flex-shrink-0 items-baseline">
+                    {#each listItem.tags as tag}
+                      <div
+                        class="flex-shrink-0 px-s6 py-s2 rounded text-gray-text text-f10 font-bold uppercase bg-gray-01"
+                      >
+                        {tag}
+                      </div>
+                    {/each}
+                    {#if postfixValueFunction}
+                      <div
+                        class="inline-block ml-s8 text-gray-text-alt text-f12"
+                      >
+                        {postfixValueFunction(listItem.value)}
+                      </div>
+                    {/if}
+
+                    <div class="flex-grow-0 hidden checkmark">
+                      <div class="w-s24 h-s16 ml-s8 fill-current ">
+                        {@html checkIcon}
+                      </div>
                     </div>
-                  {/if}
-                </div>
-                <div class="flex-grow-0 hidden checkmark">
-                  <div class="w-s24 h-s16 ml-s8 fill-current ">
-                    {@html checkIcon}
                   </div>
                 </div>
               </div>
