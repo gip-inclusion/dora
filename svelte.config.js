@@ -9,7 +9,6 @@ const config = {
     vite: {
       optimizeDeps: {
         include: ["insane"],
-        exclude: ["@sentry/node", "@sentry/browser"],
       },
       build: {
         sourcemap: true,

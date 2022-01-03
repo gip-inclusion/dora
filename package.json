@@ -16,8 +16,6 @@
     "security-scan": "ggshield scan  path -r . -y"
   },
   "devDependencies": {
-    "@sentry/browser": "^6.15.0",
-    "@sentry/tracing": "^6.15.0",
     "@sveltejs/adapter-node": "next",
     "@sveltejs/kit": "next",
     "@tailwindcss/typography": "^0.4.1",
