@@ -8,7 +8,7 @@ const config = {
     target: "#svelte",
     vite: {
       optimizeDeps: {
-        include: ["insane"],
+        include: ["insane", "@sentry/node", "@sentry/browser"],
       },
       build: {
         sourcemap: true,
