@@ -46,7 +46,7 @@
   }
 
   function getNextPage() {
-    const next = $page.query.get("next");
+    const next = $page.url.searchParams.get("next");
     if (next && next.startsWith("/") && !next.startsWith("/auth/")) return next;
     return "/";
   }
@@ -62,7 +62,7 @@
   }
 
   onMount(() => {
-    if ($token && $page.path === "/auth/connexion") {
+    if ($token && $page.url.pathname === "/auth/connexion") {
       goto(getNextPage());
     }
   });

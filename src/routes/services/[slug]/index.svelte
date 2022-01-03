@@ -1,8 +1,8 @@
 <script context="module">
   import { getService } from "$lib/services";
 
-  export async function load({ page, _fetch, _session, _context }) {
-    const service = await getService(page.params.slug);
+  export async function load({ params }) {
+    const service = await getService(params.slug);
     return {
       props: {
         service,

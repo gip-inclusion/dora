@@ -1,9 +1,9 @@
 <script context="module">
   import { getStructure, getStructureServices } from "$lib/structures";
 
-  export async function load({ page }) {
-    const structure = await getStructure(page.params.slug);
-    const services = await getStructureServices(page.params.slug, {
+  export async function load({ params }) {
+    const structure = await getStructure(params.slug);
+    const services = await getStructureServices(params.slug, {
       publishedOnly: true,
     });
     return {
@@ -25,7 +25,7 @@
   import StructureHeader from "./_structure-header.svelte";
 
   export let structure;
-  $: currentTab = $page.path.endsWith("/services") ? 2 : 1;
+  $: currentTab = $page.url.pathname.endsWith("/services") ? 2 : 1;
 </script>
 
 <CenteredGrid --col-bg="var(--col-magenta-brand)" topPadded>

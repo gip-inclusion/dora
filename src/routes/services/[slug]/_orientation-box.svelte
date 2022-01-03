@@ -10,7 +10,7 @@
 
   export let service;
 
-  export let sharingUrl = `https://${$page.host}${$page.path}`;
+  export let sharingUrl = $page.url;
   export let pdfUrl = `${PDF_SERVICE_URL}/service-pdf/${service.slug}`;
 
   let orientationModalIsOpen = false;

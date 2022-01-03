@@ -6,10 +6,11 @@
   import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
   import { disconnect } from "$lib/auth";
 
-  export async function load({ page, _fetch, _session, _context }) {
-    const token = page.query.get("token");
-    const url = `${getApiURL()}/auth/token/verify/`;
-    const result = await fetch(url, {
+  export async function load({ url }) {
+    const query = url.searchParams;
+    const token = query.get("token");
+    const targetUrl = `${getApiURL()}/auth/token/verify/`;
+    const result = await fetch(targetUrl, {
       method: "POST",
       headers: {
         Accept: defaultAcceptHeader,

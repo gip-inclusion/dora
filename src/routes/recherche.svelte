@@ -27,11 +27,12 @@
     return [];
   }
 
-  export async function load({ page, _fetch, _session, _context }) {
-    const category = page.query.get("cat");
-    const subcategory = page.query.get("sub");
-    const cityCode = page.query.get("city");
-    const cityLabel = page.query.get("cl");
+  export async function load({ url }) {
+    const query = url.searchParams;
+    const category = query.get("cat");
+    const subcategory = query.get("sub");
+    const cityCode = query.get("city");
+    const cityLabel = query.get("cl");
 
     return {
       props: {

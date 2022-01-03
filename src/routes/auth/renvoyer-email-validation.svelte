@@ -14,7 +14,7 @@
   import Info from "$lib/components/info.svelte";
   import AuthLayout from "./_auth_layout.svelte";
 
-  let email = $page.query.get("email") || "";
+  let email = $page.url.searchParams.get("email") || "";
 
   let success = false;
   let requesting = false;
