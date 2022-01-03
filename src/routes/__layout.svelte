@@ -1,6 +1,18 @@
 <script context="module">
   import { getUserInfo } from "$lib/auth";
 
+  import * as Sentry from "@sentry/browser";
+
+  import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
+
+  if (ENVIRONMENT !== "local") {
+    Sentry.init({
+      dsn: SENTRY_DSN,
+      environment: ENVIRONMENT,
+      tracesSampleRate: 0,
+    });
+  }
+
   export async function load() {
     await getUserInfo();
     return {};
@@ -10,7 +22,7 @@
 <script>
   import { onMount } from "svelte";
   import { page } from "$app/stores";
-  import { HOTJAR_ID, HOTJAR_SV, ENVIRONMENT } from "$lib/env";
+  import { HOTJAR_ID, HOTJAR_SV } from "$lib/env";
 
   import favicoIco from "$lib/assets/favicon.ico";
   import favicoSvg from "$lib/assets/favicon.svg";
