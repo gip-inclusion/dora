@@ -53,11 +53,11 @@
   />
   <!-- path -->
   <div
-    class="flex-shrink-0 w-s40 h-s24 bg-white border rounded-full toggle-path border-gray-03"
+    class="shrink-0 w-s40 h-s24 bg-white border rounded-full toggle-path border-gray-03"
   />
   <!-- circle -->
   <div
-    class="absolute inset-y-s0 left-s0 flex-shrink-0 w-s16 h-s16 rounded-full bg-gray-text-alt toggle-circle"
+    class="absolute inset-y-s0 left-s0 shrink-0 w-s16 h-s16 rounded-full bg-gray-text-alt toggle-circle"
   />
   <div class="ml-s8 text-f14 text-gray-text">
     {@html checked ? toggleYesText : toggleNoText}

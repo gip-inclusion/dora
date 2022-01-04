@@ -48,7 +48,7 @@
 <ChangeUserModal bind:isOpen={changeUserModalIsOpen} bind:member {onRefresh} />
 <div class="wrapper" class:is-own={isMyself}>
   <h5>{member.user.fullName}</h5>
-  <div class="flex-grow ">
+  <div class="grow">
     {#if !member.hasAcceptedInvitation || member.mustSetPassword}
       <div class="flex items-baseline">
         <div class="legend-xs text-gray-text-alt">Invitation envoyée</div>
@@ -63,7 +63,7 @@
       </div>
     {/if}
   </div>
-  <div class="flex-grow" />
+  <div class="grow" />
   <Label label={userLevel} smallIcon iconOnLeft icon={userIcon} />
   <div>
     <ButtonMenu

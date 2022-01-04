@@ -26,7 +26,7 @@
 
 <Box title="Conditions d’accès" --box-color="black">
   <div class="flex flex-row flex-wrap gap-s24">
-    <div class="flex-grow">
+    <div class="grow">
       <h3>Mobiliser ce service</h3>
       <ul class="list">
         {#each service.beneficiariesAccessModesDisplay as mode}
@@ -43,7 +43,7 @@
       </ul>
     </div>
 
-    <div class="flex-grow">
+    <div class="grow">
       <h3>Pré-requis, compétences</h3>
       <ul class="list">
         {#each service.requirementsDisplay as reqs}
@@ -54,7 +54,7 @@
       </ul>
     </div>
 
-    <div class="flex-grow">
+    <div class="grow">
       <h3>Documents et justificatifs</h3>
       <ul class="list">
         {#each service.credentialsDisplay as creds}

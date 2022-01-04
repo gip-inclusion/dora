@@ -25,7 +25,7 @@
         iconOnLeft
       />
     {/if}
-    <div class="flex-grow" />
+    <div class="grow" />
     {#if withDraft}
       <Button
         on:click={onSaveDraft}
