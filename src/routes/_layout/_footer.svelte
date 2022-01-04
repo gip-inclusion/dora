@@ -1,12 +1,11 @@
 <script>
-  import { goto } from "$app/navigation";
-
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import NavItem from "$lib/components/nav-item.svelte";
 
   import LogoRF from "$lib/assets/logo-rf.svg";
 
-  function handleOpenCookiesPanel() {
+  function handleOpenCookiesPanel(evt) {
+    evt.preventDefault();
     tarteaucitron.userInterface.openPanel();
   }
 </script>
@@ -46,21 +45,31 @@
         light
       />
       <NavItem
-        href=""
+        href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/mentions-legales"
         label="Mentions légales"
-        on:click={() => goto("/mentions-legales")}
         separator
         light
       />
-      <NavItem href="" label="Données personnelles" separator light />
       <NavItem
-        href=""
+        href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/conditions-generales-dutilisation"
+        label="CGU"
+        separator
+        light
+      />
+      <NavItem
+        label="Données personnelles"
+        href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/politique-de-confidentialite"
+        separator
+        light
+      />
+      <NavItem
+        href="#"
         label="Gestion des cookies"
         separator
         light
         on:click={handleOpenCookiesPanel}
       />
-      <NavItem href="" label="Accessibilité : non conforme" light />
+      <NavItem href="#" label="Accessibilité : non conforme" light />
     </nav>
   </CenteredGrid>
 </footer>
