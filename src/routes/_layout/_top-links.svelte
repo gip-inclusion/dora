@@ -7,19 +7,16 @@
     href="https://documentation.dora.fabrique.social.gouv.fr"
     label="Documentation"
     external
-    vertical
   />
   <NavItem
     label="Communauté de l’inclusion"
     href="https://communaute.inclusion.beta.gouv.fr/"
     external
-    vertical
   />
   <NavItem
     href="https://itou.typeform.com/doracontactsupp"
     label="Contacter l’équipe"
     external
     nofollow
-    vertical
   />
 </nav>
