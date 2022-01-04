@@ -12,7 +12,7 @@
       props: {
         lastDraft: await getLastDraft(),
         servicesOptions: await getServicesOptions(),
-        structures: get(userInfo).isStaff
+        structures: get(userInfo)?.isStaff
           ? await getStructures()
           : await getMyStructures(),
       },
