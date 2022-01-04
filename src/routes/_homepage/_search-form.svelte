@@ -10,7 +10,7 @@
 
   export let servicesOptions = {};
   const categoryChoices = servicesOptions.categories;
-  categoryChoices.forEach((choice) => {
+  categoryChoices?.forEach((choice) => {
     if (["GL", "FL", "CR", "FI", "IL", "DI"].includes(choice.value)) {
       choice.tags = ["nouv."];
     }
