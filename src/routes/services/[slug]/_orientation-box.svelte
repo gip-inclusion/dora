@@ -11,7 +11,10 @@
   export let service;
 
   export let sharingUrl = $page.url;
-  export let pdfUrl = `${PDF_SERVICE_URL}/service-pdf/${service.slug}`;
+  export let pagePath = `/services/${service.slug}`;
+  export let pdfUrl = `${PDF_SERVICE_URL}/print/?page=${encodeURIComponent(
+    pagePath
+  )}&name=${service.slug}.pdf`;
 
   let orientationModalIsOpen = false;
   function handleMobilize() {
