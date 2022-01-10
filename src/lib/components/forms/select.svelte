@@ -21,7 +21,9 @@
   export let showClear = true;
 
   function getSortedChoices(items) {
-    return items.sort((a, b) => a.label.localeCompare(b.label, "fr"));
+    return items.sort((a, b) =>
+      a.label.localeCompare(b.label, "fr", { numeric: true })
+    );
   }
 </script>
 

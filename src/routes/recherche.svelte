@@ -4,11 +4,12 @@
   import { getApiURL } from "$lib/utils/api.js";
   import { getQuery } from "./_homepage/_search";
 
-  async function getResults(category, subcategory, cityCode) {
+  async function getResults(category, subcategory, cityCode, radius) {
     const url = `${getApiURL()}/search/?${getQuery(
       category,
       subcategory,
-      cityCode
+      cityCode,
+      radius
     )}`;
     const res = await fetch(url, {
       headers: {
@@ -27,12 +28,20 @@
     return [];
   }
 
+  const radiusChoices = [
+    { value: "10", label: "10 km" },
+    { value: "20", label: "20 km" },
+    { value: "50", label: "50 km" },
+    { value: "100", label: "100 km" },
+  ];
+
   export async function load({ url }) {
     const query = url.searchParams;
     const category = query.get("cat");
     const subcategory = query.get("sub");
     const cityCode = query.get("city");
     const cityLabel = query.get("cl");
+    const radius = query.get("radius") || radiusChoices[0].value;
 
     return {
       props: {
@@ -40,7 +49,8 @@
         subcategory,
         cityCode,
         cityLabel,
-        results: await getResults(category, subcategory, cityCode),
+        radius,
+        results: await getResults(category, subcategory, cityCode, radius),
         servicesOptions: await getServicesOptions(),
       },
     };
@@ -61,7 +71,7 @@
   import NoResultsPic from "$lib/assets/illu_zero-resultats-optimise.svg";
 
   export let servicesOptions;
-  export let category, subcategory, cityCode, cityLabel;
+  export let category, subcategory, cityCode, cityLabel, radius;
   export let results;
 
   onMount(() => {
@@ -164,7 +174,9 @@ Cordialement,
       bind:subcategory
       bind:cityCode
       bind:cityLabel
+      bind:radius
       {servicesOptions}
+      {radiusChoices}
     />
   </div>
   <div class="results-wrapper">

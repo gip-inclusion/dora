@@ -49,7 +49,7 @@
 </script>
 
 {#if visible}
-  <div class="flex-1 " class:hidden={type === "hidden"}>
+  <div class="flex-1" class:hidden={type === "hidden"}>
     <div
       {name}
       class="flex {layoutClass} items-top relative"
