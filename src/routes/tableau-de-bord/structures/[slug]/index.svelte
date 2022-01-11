@@ -1,6 +1,10 @@
 <script context="module">
   export const ssr = false;
-  import { getStructure, getMembers } from "$lib/structures";
+  import {
+    getStructure,
+    getMembers,
+    getPutativeMembers,
+  } from "$lib/structures";
   import { getMyStructures, getStructures } from "$lib/structures";
   import { userInfo } from "$lib/auth";
 
@@ -15,6 +19,7 @@
         props: {
           structure: await getStructure(structureSlug),
           members: await getMembers(structureSlug),
+          putativeMembers: await getPutativeMembers(structureSlug),
         },
       };
     }
@@ -26,17 +31,20 @@
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Member from "./_member.svelte";
+  import MemberInvited from "./_member_invited.svelte";
+  import MemberToConfirm from "./_member_to_confirm.svelte";
   import Button from "$lib/components/button.svelte";
   import AddUserModal from "./_add-user-modal.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
 
-  export let structure, members;
+  export let structure, members, putativeMembers;
 
   let addUserModalIsOpen = false;
 
   async function handleRefreshMemberList() {
     members = await getMembers(structure.slug);
+    putativeMembers = await getPutativeMembers(structure.slug);
   }
 
   function sortedMembers(items) {
@@ -122,29 +130,37 @@
           </Fieldset>
         </div>
         <div class="flex-1">
-          {#if members}
-            <div class="mt-s48">
-              <h3>Vos collaborateurs</h3>
-              <div class="flex flex-col gap-s8 mt-s32 mb-s32">
-                {#each sortedMembers(members) as member}
-                  <Member
+          <div class="mt-s48">
+            <h3>Vos collaborateurs</h3>
+            <div class="flex flex-col gap-s8 mt-s32 mb-s32">
+              {#each sortedMembers(putativeMembers) as member}
+                {#if member.invitedByAdmin}
+                  <MemberInvited {member} onRefresh={handleRefreshMemberList} />
+                {:else}
+                  <MemberToConfirm
                     {member}
                     onRefresh={handleRefreshMemberList}
-                    isMyself={member.user.email === $userInfo.email}
-                    isOnlyAdmin={member.user.email === $userInfo.email &&
-                      members.filter((m) => m.isAdmin).length === 1}
                   />
-                {/each}
-              </div>
-              <div class="flex justify-end">
-                <Button
-                  label="Ajouter des collaborateurs"
-                  secondary
-                  on:click={() => (addUserModalIsOpen = true)}
+                {/if}
+              {/each}
+              {#each sortedMembers(members) as member}
+                <Member
+                  {member}
+                  onRefresh={handleRefreshMemberList}
+                  isMyself={member.user.email === $userInfo.email}
+                  isOnlyAdmin={member.user.email === $userInfo.email &&
+                    members.filter((m) => m.isAdmin).length === 1}
                 />
-              </div>
+              {/each}
             </div>
-          {/if}
+            <div class="flex justify-end">
+              <Button
+                label="Ajouter des collaborateurs"
+                secondary
+                on:click={() => (addUserModalIsOpen = true)}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
