@@ -6,16 +6,21 @@
   import Label from "$lib/components/label.svelte";
 
   import { fileEditIcon, fileForbidIcon, userIcon, moreIcon } from "$lib/icons";
-  import { deleteMember } from "$lib/structures";
+  import { deleteMember, acceptMember } from "$lib/structures";
   import ChangeUserModal from "./_change-user-modal.svelte";
 
   export let member;
   export let onRefresh;
-  export let isMyself, isOnlyAdmin;
 
   let changeUserModalIsOpen = false;
   $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
-  async function handleDelete() {
+
+  async function handleAcceptRequest() {
+    await acceptMember(member.id);
+    await onRefresh();
+  }
+
+  async function handleCancelRequest() {
     if (confirm(`Supprimer l’utilisateur ${member.user.fullName} ?`)) {
       await deleteMember(member.id);
       await onRefresh();
@@ -33,31 +38,30 @@
     box-shadow: var(--shadow-sm);
     gap: var(--s16);
   }
-
-  .is-own {
-    background-color: var(--col-gray-01);
-  }
 </style>
 
 <ChangeUserModal bind:isOpen={changeUserModalIsOpen} bind:member {onRefresh} />
-<div class="wrapper" class:is-own={isMyself}>
+<div class="wrapper">
   <div class="flex flex-col">
     <h5>{member.user.fullName}</h5>
     <div class="text-gray-text-alt text-f14">{member.user.email}</div>
   </div>
+
   <div class="grow" />
-  <Label label={userLevel} smallIcon iconOnLeft icon={userIcon} />
+  <Label
+    label={`${userLevel} – Adhésion en attente`}
+    smallIcon
+    iconOnLeft
+    icon={userIcon}
+    wait
+  />
   <div>
-    <ButtonMenu
-      icon={moreIcon}
-      let:onClose={onCloseParent}
-      disabled={isOnlyAdmin}
-    >
+    <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
       <div>
         <Button
-          label="Modifier"
+          label="Accepter"
           on:click={() => {
-            changeUserModalIsOpen = true;
+            handleAcceptRequest();
             onCloseParent();
           }}
           icon={fileEditIcon}
@@ -66,21 +70,19 @@
           noBackground
         />
       </div>
-      {#if !isMyself}
-        <div>
-          <Button
-            label="Supprimer"
-            on:click={() => {
-              handleDelete();
-              onCloseParent();
-            }}
-            icon={fileForbidIcon}
-            iconOnRight
-            small
-            noBackground
-          />
-        </div>
-      {/if}
+      <div>
+        <Button
+          label="Révoquer"
+          on:click={() => {
+            handleCancelRequest();
+            onCloseParent();
+          }}
+          icon={fileForbidIcon}
+          iconOnRight
+          small
+          noBackground
+        />
+      </div>
     </ButtonMenu>
   </div>
 </div>

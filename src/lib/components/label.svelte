@@ -5,6 +5,7 @@
   export let success = false;
   export let error = false;
   export let wait = false;
+  export let light = false;
   export let icon = null;
   export let iconOnLeft = false,
     iconOnRight = false;
@@ -19,6 +20,9 @@
     color: var(--col-text);
   }
 
+  .light {
+    color: var(--col-text-alt);
+  }
   .success {
     color: var(--col-success);
   }
@@ -82,6 +86,7 @@
   class:success
   class:error
   class:wait
+  class:light
   class:dark-bg={darkBg}
 >
   {#if iconOnLeft}

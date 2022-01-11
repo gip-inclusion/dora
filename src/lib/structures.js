@@ -141,6 +141,14 @@ export async function getMembers(slug) {
   return null;
 }
 
+export async function getPutativeMembers(slug) {
+  const url = `${getApiURL()}/structure-putative-members/?structure=${slug}`;
+
+  const result = await fetchData(url);
+  if (result.ok) return result.data;
+  return null;
+}
+
 export async function deleteMember(uuid) {
   const url = `${getApiURL()}/structure-members/${uuid}/`;
   const method = "DELETE";
@@ -167,7 +175,32 @@ export async function deleteMember(uuid) {
 }
 
 export async function resendInvite(uuid) {
-  const url = `${getApiURL()}/structure-members/${uuid}/resend-invite/`;
+  const url = `${getApiURL()}/structure-putative-members/${uuid}/resend-invite/`;
+  const method = "POST";
+  const res = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      Authorization: `Token ${get(token)}`,
+    },
+  });
+
+  const result = {
+    ok: res.ok,
+    status: res.status,
+  };
+  if (!res.ok) {
+    try {
+      result.error = await res.json();
+    } catch (err) {
+      logException(err);
+    }
+  }
+  return result;
+}
+
+export async function acceptMember(uuid) {
+  const url = `${getApiURL()}/structure-putative-members/${uuid}/accept/`;
   const method = "POST";
   const res = await fetch(url, {
     method,

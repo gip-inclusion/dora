@@ -49,7 +49,9 @@
         }),
       };
     }
-    const url = `${getApiURL()}/structure-members/?structure=${structure.slug}`;
+    const url = `${getApiURL()}/structure-putative-members/?structure=${
+      structure.slug
+    }`;
     return fetch(url, {
       method: "POST",
       body: JSON.stringify({
