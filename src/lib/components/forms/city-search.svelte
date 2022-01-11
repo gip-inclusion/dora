@@ -4,6 +4,7 @@
   import { contextValidationKey } from "$lib/validation";
   import { getDepartmentFromCityCode } from "$lib/utils";
   import Select from "$lib/components/forms/select.svelte";
+  import Button from "$lib/components/button.svelte";
 
   export let handleChange;
   export let placeholder;
@@ -26,6 +27,7 @@
         feature.properties.postcode
       )})`,
     }));
+
     return results;
   }
 
@@ -33,6 +35,27 @@
 
   function handleBlur(evt) {
     if (context) context.onBlur(evt);
+  }
+
+  let geolocLabel = "À proximité";
+
+  function geoFindMe() {
+    function success(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      geolocLabel = `Lat: ${latitude} °, Long: ${longitude} °`;
+    }
+
+    function error() {
+      geolocLabel = "Unable to retrieve your location";
+    }
+
+    if (!navigator.geolocation) {
+      geolocLabel = "Geolocation is not supported by your browser";
+    } else {
+      geolocLabel = "Locating…";
+      navigator.geolocation.getCurrentPosition(success, error);
+    }
   }
 </script>
 
@@ -49,4 +72,15 @@
   delay="200"
   localFiltering={false}
   minCharactersToSearch="3"
-/>
+>
+  <div slot="prepend">
+    <Button
+      label={geolocLabel}
+      small
+      iconOnLeft
+      tertiary
+      wFull
+      on:click={geoFindMe}
+    />
+  </div>
+</Select>

@@ -20,6 +20,10 @@
   export let postfixValueFunction = undefined;
   export let showClear = true;
 
+  // on pourra supprimer cette ligne lorsque cette issue sera résolue
+  // https://github.com/sveltejs/svelte/issues/5604
+  const hasPreprendSlot = $$slots.prepend;
+
   function getSortedChoices(items) {
     return items.sort((a, b) =>
       a.label.localeCompare(b.label, "fr", { numeric: true })
@@ -52,4 +56,9 @@
   showLoadingIndicator
   {hideArrow}
   {showClear}
-/>
+  {hasPreprendSlot}
+>
+  <!-- {#if $$slots.prepend} -->
+  <slot name="prepend" slot="prepend" />
+  <!-- {/if} -->
+</AutoComplete>

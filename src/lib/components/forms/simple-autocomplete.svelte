@@ -3,7 +3,7 @@
   https://github.com/pstanoev/simple-svelte-autocomplete/blob/2de0d7618b37192ec1ca47bbe4ffd47477b38792/src/SimpleAutocomplete.svelte
 -->
 <script>
-  // TODO: lint this file properly
+  // lint this file properly
   /* eslint-disable */
   // the list of items  the user can select from
 
@@ -31,6 +31,8 @@
   export let minCharactersToSearch = 1;
   export let maxItemsToShowInList = 0;
   export let multiple = false;
+
+  export let hasPreprendSlot = false;
 
   // ignores the accents when matching items
   export let ignoreAccents = true;
@@ -68,10 +70,10 @@
   export let showLoadingIndicator = false;
 
   // text displayed when no items match the input text
-  export let noResultsText = "Aucun resultat";
+  export let noResultsText = "Aucun résultat";
 
   // text displayed when async data is being loaded
-  export let loadingText = "Chargement des resultats…";
+  export let loadingText = "Chargement des résultats…";
 
   // the text displayed when no option is selected
   export let placeholder = undefined;
@@ -120,6 +122,7 @@
   // UI state
   let opened = false;
   let loading = false;
+
   let highlightIndex = -1;
   let text;
 
@@ -166,7 +169,10 @@
   $: text, onTextChanged();
 
   $: showList =
-    opened && ((items && items.length > 0) || filteredTextLength > 0);
+    (minCharactersToSearch === 1 ||
+      (minCharactersToSearch > 1 &&
+        filteredTextLength > minCharactersToSearch)) &&
+    ((items && items.length > 0) || filteredTextLength > 0);
 
   $: clearable = showClear || ((lock || multiple) && value);
 
@@ -263,7 +269,7 @@
       } else {
         filteredListItems = listItems;
       }
-      closeIfMinCharsToSearchReached();
+      closeIfNoList();
 
       return;
     }
@@ -385,7 +391,7 @@
     const filteredListItemsHighlighted = tempfilteredListItems.map(hlfilter);
 
     filteredListItems = filteredListItemsHighlighted;
-    closeIfMinCharsToSearchReached();
+    closeIfNoList();
     return true;
   }
 
@@ -421,13 +427,11 @@
   }
 
   function up() {
-    open();
     if (highlightIndex > 0) highlightIndex--;
     highlight();
   }
 
   function down() {
-    open();
     if (highlightIndex < filteredListItems.length - 1) highlightIndex++;
     highlight();
   }
@@ -572,7 +576,7 @@
 
   function open() {
     // check if the search text has more than the min chars required
-    if (isMinCharsToSearchReached()) {
+    if (!hasPreprendSlot && !showList) {
       return;
     }
 
@@ -589,14 +593,16 @@
     }
   }
 
-  function isMinCharsToSearchReached() {
-    return (
-      minCharactersToSearch > 1 && filteredTextLength < minCharactersToSearch
+  function closeIfNoList() {
+    console.log(
+      "closeIfNoList",
+      showList,
+      (minCharactersToSearch === 1 ||
+        (minCharactersToSearch > 1 &&
+          filteredTextLength > minCharactersToSearch)) &&
+        ((items && items.length > 0) || filteredTextLength > 0)
     );
-  }
-
-  function closeIfMinCharsToSearchReached() {
-    if (isMinCharsToSearchReached()) {
+    if (!hasPreprendSlot && !showList) {
       close();
     }
   }
@@ -787,15 +793,9 @@
     top: 20px;
     width: 100%;
     max-height: calc(15 * (1rem + 10px) + 15px);
-    padding: 10px 0;
-
     background: #fff;
     overflow-y: auto;
     user-select: none;
-  }
-
-  .autocomplete-list:empty {
-    padding: 0;
   }
 
   .autocomplete-list-item {
@@ -894,7 +894,7 @@
 </style>
 
 <div
-  class="{className ? className : ''}
+  class="{className || ''}
   {hideArrow || !items.length ? 'hide-arrow' : ''}
   {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
@@ -911,10 +911,11 @@
       {/each}
     {/if}
   </select>
+
   <div class="input-container">
     <input
       type="text"
-      class="{inputClassName ? inputClassName : ''} input autocomplete-input"
+      class="{inputClassName || ''} input autocomplete-input"
       id={inputId}
       autocomplete={html5autocomplete ? "on" : "off"}
       placeholder={multiple && value.length ? placeholderMulti : placeholder}
@@ -937,76 +938,78 @@
   </div>
 
   <div
-    class="{dropdownClassName
-      ? dropdownClassName
-      : ''} autocomplete-list {showList ? '' : 'hidden'}
-    is-fullwidth"
+    class="{dropdownClassName || ''} autocomplete-list is-fullwidth"
+    class:hidden={!opened}
     bind:this={list}
   >
-    {#if filteredListItems && filteredListItems.length > 0}
-      {#each filteredListItems as listItem, i}
-        {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
-          {#if listItem}
-            <div
-              class="autocomplete-list-item {i === highlightIndex
-                ? 'selected'
-                : ''}"
-              class:confirmed={isConfirmed(listItem.value)}
-              on:click={() => onListItemClick(listItem)}
-              on:pointerenter={() => {
-                highlightIndex = i;
-              }}
-            >
-              <div class="flex flex-row">
-                <div class="grow flex justify-between ">
-                  <div>
-                    {@html listItem.highlighted
-                      ? listItem.highlighted.label
-                      : listItem.label}
-                  </div>
-                  <div class="flex shrink-0 items-baseline">
-                    {#each listItem.tags as tag}
-                      <div
-                        class="shrink-0 px-s6 py-s2 rounded text-gray-text text-f10 font-bold uppercase bg-gray-01"
-                      >
-                        {tag}
-                      </div>
-                    {/each}
-                    {#if postfixValueFunction}
-                      <div
-                        class="inline-block ml-s8 text-gray-text-alt text-f12"
-                      >
-                        {postfixValueFunction(listItem.value)}
-                      </div>
-                    {/if}
+    <slot name="prepend" />
 
-                    <div class="grow-0 hidden checkmark">
-                      <div class="w-s24 h-s16 ml-s8 fill-current ">
-                        {@html checkIcon}
+    <div class:hidden={!showList} class="py-10">
+      {#if filteredListItems && filteredListItems.length > 0}
+        {#each filteredListItems as listItem, i}
+          {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
+            {#if listItem}
+              <div
+                class="autocomplete-list-item {i === highlightIndex
+                  ? 'selected'
+                  : ''}"
+                class:confirmed={isConfirmed(listItem.value)}
+                on:click={() => onListItemClick(listItem)}
+                on:pointerenter={() => {
+                  highlightIndex = i;
+                }}
+              >
+                <div class="flex flex-row">
+                  <div class="grow flex justify-between ">
+                    <div>
+                      {@html listItem.highlighted
+                        ? listItem.highlighted.label
+                        : listItem.label}
+                    </div>
+                    <div class="flex shrink-0 items-baseline">
+                      {#each listItem.tags as tag}
+                        <div
+                          class="shrink-0 px-s6 py-s2 rounded text-gray-text text-f10 font-bold uppercase bg-gray-01"
+                        >
+                          {tag}
+                        </div>
+                      {/each}
+                      {#if postfixValueFunction}
+                        <div
+                          class="inline-block ml-s8 text-gray-text-alt text-f12"
+                        >
+                          {postfixValueFunction(listItem.value)}
+                        </div>
+                      {/if}
+
+                      <div class="grow-0 hidden checkmark">
+                        <div class="w-s24 h-s16 ml-s8 fill-current ">
+                          {@html checkIcon}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            {/if}
           {/if}
-        {/if}
-      {/each}
+        {/each}
 
-      {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
+        {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
+          <div class="autocomplete-list-item-no-results">
+            ...{filteredListItems.length - maxItemsToShowInList} results not shown
+          </div>
+        {/if}
+      {:else if loading && loadingText}
+        <div class="autocomplete-list-item-loading">
+          <span class="text-gray-text-alt">{loadingText}</span>
+        </div>
+      {:else if noResultsText}
         <div class="autocomplete-list-item-no-results">
-          ...{filteredListItems.length - maxItemsToShowInList} results not shown
+          <span class="text-error">{noResultsText}</span>
         </div>
       {/if}
-    {:else if loading && loadingText}
-      <div class="autocomplete-list-item-loading">
-        <span class="text-gray-text-alt">{loadingText}</span>
-      </div>
-    {:else if noResultsText}
-      <div class="autocomplete-list-item-no-results">
-        <span class="text-error">{noResultsText}</span>
-      </div>
-    {/if}
+    </div>
   </div>
 </div>
 {#if multiple && value}
