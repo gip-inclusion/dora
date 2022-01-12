@@ -1,8 +1,7 @@
 // Defaults: https://github.com/tailwindlabs/tailwindcss/blob/master/stubs/defaultConfig.stub.js
 
 const config = {
-  mode: "jit",
-  purge: ["./src/**/*.{html,js,svelte,ts}"],
+  content: ["./src/**/*.{html,js,svelte,ts}"],
   theme: {
     colors: {
       transparent: "transparent",

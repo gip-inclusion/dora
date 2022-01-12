@@ -34,7 +34,7 @@
         </div>
         <img class="inline" src={LogoDORA} alt="Dora" width="140" height="65" />
       </a>
-      <div class="flex-grow" />
+      <div class="grow" />
       <div class="flex flex-row">
         <HeaderActions />
       </div>

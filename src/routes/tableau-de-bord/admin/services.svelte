@@ -1,7 +1,7 @@
 <script context="module">
   import { getServices } from "$lib/services";
 
-  export async function load({ _page, _fetch, _session, _context }) {
+  export async function load() {
     return {
       props: {
         services: await getServices(),

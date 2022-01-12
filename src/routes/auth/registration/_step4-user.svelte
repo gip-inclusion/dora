@@ -25,7 +25,7 @@
   };
 
   const toggleText =
-    "En cochant cette case je suis d’accord avec les <a class='underline' href='/mentions-legales'>mentions légales</a> et l’utilisation de mes données afin de créer un compte sur la plateforme DORA.";
+    "En cochant cette case je suis d’accord avec les <a target='_blank' rel='noopener' class='underline' href='https://documentation.dora.fabrique.social.gouv.fr/informations-legales/mentions-legales'>mentions légales</a> et l’utilisation de mes données afin de créer un compte sur la plateforme DORA.";
 
   const newsletterText =
     "Je souhaite rester au courant de l'actualité de l'offre d'insertion de mon territoire : nouveaux services référencés, nouvelles structures, etc. Fréquence d'envoi 1 email par semaine. Vous pouvez-vous désabonner à tout moment.";

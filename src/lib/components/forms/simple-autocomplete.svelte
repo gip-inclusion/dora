@@ -958,16 +958,16 @@
               }}
             >
               <div class="flex flex-row">
-                <div class="flex-grow flex justify-between ">
+                <div class="grow flex justify-between ">
                   <div>
                     {@html listItem.highlighted
                       ? listItem.highlighted.label
                       : listItem.label}
                   </div>
-                  <div class="flex flex-shrink-0 items-baseline">
+                  <div class="flex shrink-0 items-baseline">
                     {#each listItem.tags as tag}
                       <div
-                        class="flex-shrink-0 px-s6 py-s2 rounded text-gray-text text-f10 font-bold uppercase bg-gray-01"
+                        class="shrink-0 px-s6 py-s2 rounded text-gray-text text-f10 font-bold uppercase bg-gray-01"
                       >
                         {tag}
                       </div>
@@ -980,7 +980,7 @@
                       </div>
                     {/if}
 
-                    <div class="flex-grow-0 hidden checkmark">
+                    <div class="grow-0 hidden checkmark">
                       <div class="w-s24 h-s16 ml-s8 fill-current ">
                         {@html checkIcon}
                       </div>

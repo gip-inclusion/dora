@@ -30,7 +30,7 @@
         {readonly}
       />
       <div
-        class="flex justify-center flex-shrink-0 w-s24 h-s24 border rounded border-gray-03"
+        class="flex justify-center shrink-0 w-s24 h-s24 border rounded border-gray-03"
       >
         <div class="self-center hidden w-s12 h-s12 bg-magenta-cta" />
       </div>

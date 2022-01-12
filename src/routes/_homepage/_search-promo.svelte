@@ -35,7 +35,7 @@
         activité.
       </p>
     </div>
-    <div class="flex-shrink-0">
+    <div class="shrink-0">
       <LinkButton
         type="button"
         label="Accéder au site"

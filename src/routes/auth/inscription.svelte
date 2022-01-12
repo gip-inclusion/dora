@@ -10,7 +10,7 @@
   import StepConfirm from "./registration/_step5-confirm.svelte";
   import AuthLayout from "./_auth_layout.svelte";
 
-  const siret = $page.query.get("siret");
+  const siret = $page.url.searchParams.get("siret");
   const steps = new Map([
     [1, StepTypology],
     [2, StepPoleEmploi],

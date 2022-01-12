@@ -9,7 +9,7 @@
 
   onMount(() => {
     if (!$token) {
-      goto(`/auth/connexion?next=${encodeURIComponent($page.path)}`);
+      goto(`/auth/connexion?next=${encodeURIComponent($page.url.pathname)}`);
     }
   });
 </script>

@@ -60,7 +60,7 @@
     {/if}
   </div>
   <div class="flex flex-row flex-wrap gap-s24">
-    <div class="flex-grow">
+    <div class="grow">
       <h3>Critères d’admission</h3>
       <ul class="list">
         {#each service.accessConditionsDisplay as condition}
@@ -70,7 +70,7 @@
         {/each}
       </ul>
     </div>
-    <div class="flex-grow">
+    <div class="grow">
       <h3>Public concerné</h3>
       <ul class="list">
         {#each service.concernedPublicDisplay as pub}
@@ -81,7 +81,7 @@
       </ul>
     </div>
 
-    <div class="flex-grow">
+    <div class="grow">
       <h3>Lieu de déroulement</h3>
 
       {#if !service.locationKinds.length}

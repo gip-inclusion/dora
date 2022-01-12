@@ -31,7 +31,7 @@
         />
       </div>
     {:else}
-      {#if $page.path !== "/auth/inscription"}
+      {#if $page.url.pathname !== "/auth/inscription"}
         <LinkButton
           label="Inscription"
           icon={loginIcon}
@@ -40,14 +40,14 @@
           to={`/auth/inscription`}
         />
       {/if}
-      {#if $page.path !== "/auth/connexion"}
+      {#if $page.url.pathname !== "/auth/connexion"}
         <LinkButton
           label="Connexion"
           icon={userSmileIcon}
           iconOnLeft
           noBackground
           nofollow
-          to={`/auth/connexion?next=${encodeURIComponent($page.path)}`}
+          to={`/auth/connexion?next=${encodeURIComponent($page.url.pathname)}`}
         />
       {/if}
       <div class="block md:hidden">

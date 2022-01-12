@@ -5,11 +5,13 @@
   import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
   import { disconnect } from "$lib/auth";
 
-  export async function load({ page, _fetch, _session, _context }) {
-    const token = page.query.get("token");
-    const membership = page.query.get("membership");
-    const url = `${getApiURL()}/structures/accept-invite/`;
-    const result = await fetch(url, {
+  export async function load({ url }) {
+    const query = url.searchParams;
+
+    const token = query.get("token");
+    const membership = query.get("membership");
+    const targetUrl = `${getApiURL()}/structures/accept-invite/`;
+    const result = await fetch(targetUrl, {
       method: "POST",
       headers: {
         Accept: defaultAcceptHeader,

@@ -175,7 +175,9 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
                 />
                 <LinkButton
                   label="Connexion"
-                  to={`/auth/connexion?next=${encodeURIComponent($page.path)}`}
+                  to={`/auth/connexion?next=${encodeURIComponent(
+                    $page.url.pathname
+                  )}`}
                 />
               </div>
             {/if}

@@ -2,8 +2,8 @@
   "name": "dora-front",
   "version": "0.0.1",
   "engines": {
-    "npm": "8",
-    "node": "16"
+    "npm": ">= 8",
+    "node": ">= 16"
   },
   "scripts": {
     "dev": "svelte-kit dev",
@@ -15,33 +15,35 @@
     "prepare": "husky install",
     "security-scan": "ggshield scan  path -r . -y"
   },
-  "devDependencies": {
+  "dependencies": {
     "@sentry/browser": "^6.15.0",
     "@sentry/tracing": "^6.15.0",
     "@sveltejs/adapter-node": "next",
     "@sveltejs/kit": "next",
-    "@tailwindcss/typography": "^0.4.1",
+    "@tailwindcss/typography": "^0.5.0",
     "@tiptap/core": "^2.0.0-beta.138",
     "@tiptap/extension-placeholder": "^2.0.0-beta.43",
     "@tiptap/starter-kit": "^2.0.0-beta.140",
-    "autoprefixer": "^10.4.0",
+    "autoprefixer": "^10.4.1",
     "cssnano": "^5.0.10",
+    "insane": "^2.6.2",
+    "postcss": "^8.4.5",
+    "postcss-load-config": "^3.1.0",
+    "remixicon": "^2.5.0",
+    "showdown": "^1.9.0",
+    "svelte": "^3.44.1",
+    "svelte-preprocess": "^4.9.5",
+    "tailwindcss": "^3.0.8"
+  },
+  "devDependencies": {
     "eslint": "^8.2.0",
     "eslint-config-eslint": "^7.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^3.2.1",
     "husky": "^7.0.2",
-    "insane": "^2.6.2",
     "lint-staged": "^12.0.2",
-    "postcss": "^8.3.9",
-    "postcss-load-config": "^3.1.0",
     "prettier": "~2.4.1",
-    "prettier-plugin-svelte": "2.4.0",
-    "remixicon": "^2.5.0",
-    "showdown": "^1.9.0",
-    "svelte": "^3.44.1",
-    "svelte-preprocess": "^4.9.5",
-    "tailwindcss": "^2.2.19"
+    "prettier-plugin-svelte": "2.4.0"
   },
   "type": "module",
   "lint-staged": {

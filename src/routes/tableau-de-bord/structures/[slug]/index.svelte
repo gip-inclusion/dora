@@ -4,11 +4,11 @@
   import { getMyStructures, getStructures } from "$lib/structures";
   import { userInfo } from "$lib/auth";
 
-  export async function load({ page, _fetch, _session, _context }) {
+  export async function load({ params }) {
     const structures = userInfo.isStaff
       ? await getStructures()
       : await getMyStructures();
-    const structureSlug = page.params.slug;
+    const structureSlug = params.slug;
     const structure = structures.find((s) => (s.slug = structureSlug));
     if (structure) {
       return {

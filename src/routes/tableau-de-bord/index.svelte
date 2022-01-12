@@ -2,7 +2,7 @@
   import { getMyServices } from "$lib/services";
   import { getMyStructures } from "$lib/structures";
 
-  export async function load({ _page, _fetch, _session, _context }) {
+  export async function load() {
     return {
       props: {
         services: await getMyServices(),

@@ -7,7 +7,7 @@
 
   import { userInfo } from "$lib/auth";
 
-  export async function load({ _page, _fetch, _session, _context }) {
+  export async function load() {
     return {
       props: {
         lastDraft: await getLastDraft(),

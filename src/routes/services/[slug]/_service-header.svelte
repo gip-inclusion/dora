@@ -13,7 +13,7 @@
   export let service;
   export let isPreview = false;
 
-  const editLink = `${$page.path}/editer`;
+  const editLink = `${$page.url.pathname}/editer`;
 </script>
 
 <style>

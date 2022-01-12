@@ -13,7 +13,7 @@
     });
   }
 
-  export async function load({ _page, _fetch, _session, _context }) {
+  export async function load() {
     await getUserInfo();
     return {};
   }
@@ -46,7 +46,7 @@
 
   <script
     defer
-    data-domain={$page.host}
+    data-domain={$page.url.hostname}
     src="https://plausible.io/js/plausible.outbound-links.js"></script>
   <script>
     window.plausible =
