@@ -14,12 +14,12 @@
   export let value = undefined;
   export let initialValue = undefined;
 
-  const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
+  const banAPIUrl = "https://api-adresse.data.gouv.fr/";
 
-  async function searchCity(q, reverse) {
-    const url = `${banAPIUrl}${
-      reverse ? "reverse/" : ""
-    }?q=${encodeURIComponent(q)}&limit=10&type=municipality`;
+  async function searchCity(q) {
+    const url = `${banAPIUrl}search/?q=${encodeURIComponent(
+      q
+    )}&limit=10&type=municipality`;
     const response = await fetch(url);
     const jsonResponse = await response.json();
     const results = jsonResponse.features.map((feature) => ({
@@ -46,11 +46,23 @@
 
     geolocLabel = `Lat: ${latitude} °, Long: ${longitude} °`;
 
-    const q = `lon=${longitude}&Lat=${latitude}`;
+    const q = `lon=${encodeURIComponent(longitude)}&lat=${encodeURIComponent(
+      latitude
+    )}`;
 
-    const res = await searchCity(q, true);
+    const url = `${banAPIUrl}reverse/?${q}`;
+    const response = await fetch(url);
+    const jsonResponse = await response.json();
+    const results = jsonResponse.features.map((feature) => ({
+      value: feature,
+      label: `${feature.properties.label} (${getDepartmentFromCityCode(
+        feature.properties.postcode
+      )})`,
+    }));
 
-    console.log(res);
+    // return results;
+
+    console.log(results);
   }
 
   function searchCityFromLocationError() {
