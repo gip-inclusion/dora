@@ -167,7 +167,7 @@
 
   $: value, onValueChanged();
   $: text, onTextChanged();
-
+  let showList = false;
   $: showList =
     (minCharactersToSearch === 1 ||
       (minCharactersToSearch > 1 &&
@@ -269,7 +269,6 @@
       } else {
         filteredListItems = listItems;
       }
-      closeIfNoList();
 
       return;
     }
@@ -391,7 +390,7 @@
     const filteredListItemsHighlighted = tempfilteredListItems.map(hlfilter);
 
     filteredListItems = filteredListItemsHighlighted;
-    closeIfNoList();
+
     return true;
   }
 
@@ -552,6 +551,7 @@
     // must be loaded when the input is focused.
     if (!listItems.length && value && searchFunction) {
       search();
+      closeIfNoList();
     }
 
     open();
@@ -588,20 +588,11 @@
     loading = false;
 
     if (!text && selectFirstIfEmpty) {
-      // highlightFilter = 0;
       selectItem();
     }
   }
 
   function closeIfNoList() {
-    console.log(
-      "closeIfNoList",
-      showList,
-      (minCharactersToSearch === 1 ||
-        (minCharactersToSearch > 1 &&
-          filteredTextLength > minCharactersToSearch)) &&
-        ((items && items.length > 0) || filteredTextLength > 0)
-    );
     if (!hasPreprendSlot && !showList) {
       close();
     }
@@ -944,7 +935,7 @@
   >
     <slot name="prepend" />
 
-    <div class:hidden={!showList} class="py-10">
+    <div class:hidden={!showList} class="py-s10">
       {#if filteredListItems && filteredListItems.length > 0}
         {#each filteredListItems as listItem, i}
           {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}

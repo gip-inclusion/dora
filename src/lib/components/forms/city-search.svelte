@@ -5,6 +5,7 @@
   import { getDepartmentFromCityCode } from "$lib/utils";
   import Select from "$lib/components/forms/select.svelte";
   import Button from "$lib/components/button.svelte";
+  import { pinDistanceIcon } from "$lib/icons";
 
   export let handleChange;
   export let placeholder;
@@ -15,10 +16,10 @@
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
 
-  async function searchCity(q) {
-    const url = `${banAPIUrl}?q=${encodeURIComponent(
-      q
-    )}&limit=10&type=municipality`;
+  async function searchCity(q, reverse) {
+    const url = `${banAPIUrl}${
+      reverse ? "reverse/" : ""
+    }?q=${encodeURIComponent(q)}&limit=10&type=municipality`;
     const response = await fetch(url);
     const jsonResponse = await response.json();
     const results = jsonResponse.features.map((feature) => ({
@@ -39,22 +40,33 @@
 
   let geolocLabel = "À proximité";
 
-  function geoFindMe() {
-    function success(position) {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      geolocLabel = `Lat: ${latitude} °, Long: ${longitude} °`;
-    }
+  async function searchCityFromLocationSuccess(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
 
-    function error() {
-      geolocLabel = "Unable to retrieve your location";
-    }
+    geolocLabel = `Lat: ${latitude} °, Long: ${longitude} °`;
 
+    const q = `lon=${longitude}&Lat=${latitude}`;
+
+    const res = await searchCity(q, true);
+
+    console.log(res);
+  }
+
+  function searchCityFromLocationError() {
+    geolocLabel = "Impossible de trouver votre position";
+  }
+
+  async function searchCityFromLocation() {
     if (!navigator.geolocation) {
-      geolocLabel = "Geolocation is not supported by your browser";
+      geolocLabel =
+        "La géolocalisation n'est pas supportée par votre navigateur";
     } else {
-      geolocLabel = "Locating…";
-      navigator.geolocation.getCurrentPosition(success, error);
+      geolocLabel = "Recherche de votre position…";
+      navigator.geolocation.getCurrentPosition(
+        searchCityFromLocationSuccess,
+        searchCityFromLocationError
+      );
     }
   }
 </script>
@@ -76,11 +88,11 @@
   <div slot="prepend">
     <Button
       label={geolocLabel}
-      small
-      iconOnLeft
-      tertiary
+      iconOnLeftF
       wFull
-      on:click={geoFindMe}
+      noBackground
+      icon={pinDistanceIcon}
+      on:click={searchCityFromLocation}
     />
   </div>
 </Select>
