@@ -157,6 +157,7 @@
     } else if (initialValue) {
       text = initialValue;
     }
+    close();
   }
 
   function onTextChanged() {

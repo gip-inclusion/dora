@@ -14,6 +14,8 @@
   export let value = undefined;
   export let initialValue = undefined;
 
+  let choices = [];
+
   const banAPIUrl = "https://api-adresse.data.gouv.fr/";
 
   async function searchCity(q) {
@@ -38,17 +40,19 @@
     if (context) context.onBlur(evt);
   }
 
-  let geolocLabel = "À proximité";
+  const geolocLabelInit = "À proximité";
+  let geolocLabel = geolocLabelInit;
 
   async function searchCityFromLocationSuccess(position) {
-    const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-
-    geolocLabel = `Lat: ${latitude} °, Long: ${longitude} °`;
+    const latitude = position.coords.latitude;
 
     const q = `lon=${encodeURIComponent(longitude)}&lat=${encodeURIComponent(
       latitude
     )}`;
+
+    // pour tester l'API, décommenter:
+    // const q = `lon=2.37&lat=48.357`;
 
     const url = `${banAPIUrl}reverse/?${q}`;
     const response = await fetch(url);
@@ -60,9 +64,14 @@
       )})`,
     }));
 
-    // return results;
+    geolocLabel = geolocLabelInit;
 
-    console.log(results);
+    if (results[0]) {
+      choices = [
+        { label: results[0].value.properties.city, value: results[0].value },
+      ];
+      value = results[0].value;
+    }
   }
 
   function searchCityFromLocationError() {
@@ -71,10 +80,9 @@
 
   async function searchCityFromLocation() {
     if (!navigator.geolocation) {
-      geolocLabel =
-        "La géolocalisation n'est pas supportée par votre navigateur";
+      geolocLabel = "La géolocalisation n'est pas supportée";
     } else {
-      geolocLabel = "Recherche de votre position…";
+      geolocLabel = "Recherche…";
       navigator.geolocation.getCurrentPosition(
         searchCityFromLocationSuccess,
         searchCityFromLocationError
@@ -91,20 +99,20 @@
   {initialValue}
   {placeholder}
   {disabled}
+  {choices}
   hideArrow
   searchFunction={searchCity}
   delay="200"
   localFiltering={false}
   minCharactersToSearch="3"
 >
-  <div slot="prepend">
-    <Button
-      label={geolocLabel}
-      iconOnLeftF
-      wFull
-      noBackground
-      icon={pinDistanceIcon}
-      on:click={searchCityFromLocation}
-    />
-  </div>
+  <Button
+    slot="prepend"
+    label={geolocLabel}
+    iconOnLeft
+    wFull
+    noBackground
+    icon={pinDistanceIcon}
+    on:click={searchCityFromLocation}
+  />
 </Select>
