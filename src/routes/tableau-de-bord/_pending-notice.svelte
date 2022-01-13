@@ -6,6 +6,8 @@
   export let structure;
 
   const requestResent = false;
+
+  const resendRequestFlag = false;
 </script>
 
 <div
@@ -22,18 +24,20 @@
         Si au bout de quelques jours vous n’avez pas de réponse, vous pouvez
         relancer le responsable de votre structure.
       </p>
-      {#if requestResent}
-        <Info
-          label="Votre demande a été enregistrée"
-          icon={adminIcon}
-          info
-          whiteBg
-          leftBorder
-        >
-          Un message à été envoyé au responsable de votre structure.
-        </Info>
-      {:else}
-        <Button label="Relancer l’administrateur" disabled />
+      {#if resendRequestFlag}
+        {#if requestResent}
+          <Info
+            label="Votre demande a été enregistrée"
+            icon={adminIcon}
+            info
+            whiteBg
+            leftBorder
+          >
+            Un message à été envoyé au responsable de votre structure.
+          </Info>
+        {:else}
+          <Button label="Relancer l’administrateur" disabled />
+        {/if}
       {/if}
     </div>
     <div class="flex-1">
