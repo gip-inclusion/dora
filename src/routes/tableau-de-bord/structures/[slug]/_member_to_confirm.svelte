@@ -6,7 +6,7 @@
   import Label from "$lib/components/label.svelte";
 
   import { fileEditIcon, fileForbidIcon, userIcon, moreIcon } from "$lib/icons";
-  import { deleteMember, acceptMember } from "$lib/structures";
+  import { rejectMembershipRequest, acceptMember } from "$lib/structures";
   import ChangeUserModal from "./_change-user-modal.svelte";
 
   export let member;
@@ -21,8 +21,8 @@
   }
 
   async function handleCancelRequest() {
-    if (confirm(`Supprimer l’utilisateur ${member.user.fullName} ?`)) {
-      await deleteMember(member.id);
+    if (confirm(`Refuser la requête de ${member.user.fullName} ?`)) {
+      await rejectMembershipRequest(member.id);
       await onRefresh();
     }
   }
