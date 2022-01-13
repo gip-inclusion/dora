@@ -204,8 +204,58 @@ export async function resendInvite(uuid) {
   return result;
 }
 
+export async function cancelInvite(uuid) {
+  const url = `${getApiURL()}/structure-putative-members/${uuid}/cancel-invite/`;
+  const method = "POST";
+  const res = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      Authorization: `Token ${get(token)}`,
+    },
+  });
+
+  const result = {
+    ok: res.ok,
+    status: res.status,
+  };
+  if (!res.ok) {
+    try {
+      result.error = await res.json();
+    } catch (err) {
+      logException(err);
+    }
+  }
+  return result;
+}
+
 export async function acceptMember(uuid) {
-  const url = `${getApiURL()}/structure-putative-members/${uuid}/accept/`;
+  const url = `${getApiURL()}/structure-putative-members/${uuid}/accept-membership-request/`;
+  const method = "POST";
+  const res = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      Authorization: `Token ${get(token)}`,
+    },
+  });
+
+  const result = {
+    ok: res.ok,
+    status: res.status,
+  };
+  if (!res.ok) {
+    try {
+      result.error = await res.json();
+    } catch (err) {
+      logException(err);
+    }
+  }
+  return result;
+}
+
+export async function rejectMembershipRequest(uuid) {
+  const url = `${getApiURL()}/structure-putative-members/${uuid}/reject-membership-request/`;
   const method = "POST";
   const res = await fetch(url, {
     method,

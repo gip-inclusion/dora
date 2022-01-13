@@ -6,7 +6,7 @@
   import Label from "$lib/components/label.svelte";
 
   import { fileEditIcon, fileForbidIcon, userIcon, moreIcon } from "$lib/icons";
-  import { deleteMember, resendInvite } from "$lib/structures";
+  import { resendInvite, cancelInvite } from "$lib/structures";
   import ChangeUserModal from "./_change-user-modal.svelte";
 
   export let member;
@@ -15,8 +15,12 @@
   let changeUserModalIsOpen = false;
   $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
   async function handleCancelInvite() {
-    if (confirm(`Supprimer l’utilisateur ${member.user.fullName} ?`)) {
-      await deleteMember(member.id);
+    if (
+      confirm(
+        `Souhaitez-vous annuler votre invitation à l’utilisateur “${member.user.fullName}” ?`
+      )
+    ) {
+      await cancelInvite(member.id);
       await onRefresh();
     }
   }
