@@ -8,16 +8,16 @@
   export async function load({ url }) {
     const query = url.searchParams;
 
-    const token = query.get("token");
-    const membership = query.get("membership");
-    const targetUrl = `${getApiURL()}/structures/accept-invite/`;
+    const inviteToken = query.get("token");
+    const membershipId = query.get("membership");
+    const targetUrl = `${getApiURL()}/structure-putative-members/${membershipId}/accept-invite/`;
+    const method = "POST";
     const result = await fetch(targetUrl, {
-      method: "POST",
+      method,
       headers: {
         Accept: defaultAcceptHeader,
-        "Content-Type": "application/json",
+        Authorization: `Token ${inviteToken}`,
       },
-      body: JSON.stringify({ key: token, member: membership }),
     });
     if (result.ok) {
       // log out of the current session in case we were already connected with
