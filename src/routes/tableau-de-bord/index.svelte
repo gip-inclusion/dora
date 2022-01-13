@@ -1,12 +1,13 @@
 <script context="module">
   import { getMyServices } from "$lib/services";
-  import { getMyStructures } from "$lib/structures";
+  import { getMyStructures, getMyPendingStructures } from "$lib/structures";
 
   export async function load() {
     return {
       props: {
         services: await getMyServices(),
         structures: await getMyStructures(),
+        pendingStructures: await getMyPendingStructures(),
       },
     };
   }
@@ -21,9 +22,10 @@
 
   import StructuresList from "./_structures-list.svelte";
   import ServicesList from "./_services-list.svelte";
+  import PendingNotice from "./_pending-notice.svelte";
 
   export let services;
-  export let structures;
+  export let structures, pendingStructures;
 </script>
 
 <svelte:head>
@@ -63,6 +65,12 @@
             />
           </div>
         </div>
+      {/if}
+
+      {#if pendingStructures.length}
+        {#each pendingStructures as structure}
+          <PendingNotice {structure} />
+        {/each}
       {/if}
 
       {#if structures.length}

@@ -2,6 +2,7 @@
   export let label = "";
   export let bold = false;
   export let italic = false;
+  export let info = false;
   export let success = false;
   export let error = false;
   export let wait = false;
@@ -18,6 +19,10 @@
 <style>
   .wrapper {
     color: var(--col-text);
+  }
+
+  .info {
+    color: var(--col-info);
   }
 
   .light {
@@ -85,6 +90,7 @@
   class:italic
   class:success
   class:error
+  class:info
   class:wait
   class:light
   class:dark-bg={darkBg}
