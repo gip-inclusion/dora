@@ -152,7 +152,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
                     <a
                       target="_blank"
                       rel="noopener nofollow"
-                      href={service.onlineForm}>{service.onlineForm}x</a
+                      href={service.onlineForm}>{service.onlineForm}</a
                     >
                   </span>
                 </div>
