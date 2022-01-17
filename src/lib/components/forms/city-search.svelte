@@ -47,30 +47,34 @@
     const longitude = position.coords.longitude;
     const latitude = position.coords.latitude;
 
+    // pour tester l'API, décommenter:
+    // const q = `lon=2.37&lat=48.357`;
     const q = `lon=${encodeURIComponent(longitude)}&lat=${encodeURIComponent(
       latitude
     )}`;
 
-    // pour tester l'API, décommenter:
-    // const q = `lon=2.37&lat=48.357`;
-
     const url = `${banAPIUrl}reverse/?${q}`;
     const response = await fetch(url);
     const jsonResponse = await response.json();
-    const results = jsonResponse.features.map((feature) => ({
+    const result = jsonResponse.features.map((feature) => ({
       value: feature,
-      label: `${feature.properties.label} (${getDepartmentFromCityCode(
-        feature.properties.postcode
-      )})`,
-    }));
+    }))[0];
 
     geolocLabel = geolocLabelInit;
 
-    if (results[0]) {
+    if (result) {
+      const label = `${
+        result.value.properties.city
+      } (${getDepartmentFromCityCode(result.value.properties.postcode)})`;
+
+      result.value.properties.label = result.value.properties.city;
       choices = [
-        { label: results[0].value.properties.city, value: results[0].value },
+        {
+          label,
+          value: result.value,
+        },
       ];
-      value = results[0].value;
+      value = result.value;
     }
   }
 
