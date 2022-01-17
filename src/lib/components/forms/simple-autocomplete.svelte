@@ -3,7 +3,7 @@
   https://github.com/pstanoev/simple-svelte-autocomplete/blob/2de0d7618b37192ec1ca47bbe4ffd47477b38792/src/SimpleAutocomplete.svelte
 -->
 <script>
-  // lint this file properly
+  // TODO: lint this file properly
   /* eslint-disable */
   // the list of items  the user can select from
 
@@ -32,7 +32,7 @@
   export let maxItemsToShowInList = 0;
   export let multiple = false;
 
-  export let hasPreprendSlot = false;
+  export let hasPrependSlot = false;
 
   // ignores the accents when matching items
   export let ignoreAccents = true;
@@ -579,7 +579,7 @@
 
   function open() {
     // check if the search text has more than the min chars required
-    if (!hasPreprendSlot && !showList) {
+    if (!hasPrependSlot && !showList) {
       return;
     }
 
@@ -596,7 +596,7 @@
   }
 
   function closeIfNoList() {
-    if (!hasPreprendSlot && !showList) {
+    if (!hasPrependSlot && !showList) {
       close();
     }
   }

@@ -22,7 +22,7 @@
 
   // on pourra supprimer cette ligne lorsque cette issue sera résolue
   // https://github.com/sveltejs/svelte/issues/5604
-  const hasPreprendSlot = $$slots.prepend;
+  const hasPrependSlot = $$slots.prepend;
 
   function getSortedChoices(items) {
     return items.sort((a, b) =>
@@ -56,7 +56,7 @@
   showLoadingIndicator
   {hideArrow}
   {showClear}
-  {hasPreprendSlot}
+  {hasPrependSlot}
 >
   <!-- {#if $$slots.prepend} -->
   <slot name="prepend" slot="prepend" />
