@@ -157,7 +157,9 @@
     } else if (initialValue) {
       text = initialValue;
     }
-    close();
+    if (!multiple) {
+      close();
+    }
   }
 
   function onTextChanged() {
