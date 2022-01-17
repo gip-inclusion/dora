@@ -30,13 +30,13 @@
 <script>
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import Member from "./_member.svelte";
   import MemberInvited from "./_member_invited.svelte";
   import MemberToConfirm from "./_member_to_confirm.svelte";
   import Button from "$lib/components/button.svelte";
   import AddUserModal from "./_add-user-modal.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
+  import MemberStandard from "./_member_standard.svelte";
 
   export let structure, members, putativeMembers;
 
@@ -144,7 +144,7 @@
                 {/if}
               {/each}
               {#each sortedMembers(members) as member}
-                <Member
+                <MemberStandard
                   {member}
                   onRefresh={handleRefreshMemberList}
                   isMyself={member.user.email === $userInfo.email}

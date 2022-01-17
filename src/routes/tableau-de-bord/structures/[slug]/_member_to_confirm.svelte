@@ -1,18 +1,14 @@
 <script>
-  // import { userInfo } from "$lib/auth";
-
-  import ButtonMenu from "$lib/components/button-menu.svelte";
   import Button from "$lib/components/button.svelte";
   import Label from "$lib/components/label.svelte";
 
-  import { fileEditIcon, fileForbidIcon, userIcon, moreIcon } from "$lib/icons";
+  import { fileEditIcon, fileForbidIcon, userIcon } from "$lib/icons";
   import { rejectMembershipRequest, acceptMember } from "$lib/structures";
-  import ChangeUserModal from "./_change-user-modal.svelte";
+  import Member from "./_member.svelte";
 
   export let member;
   export let onRefresh;
 
-  let changeUserModalIsOpen = false;
   $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
 
   async function handleAcceptRequest() {
@@ -28,61 +24,43 @@
   }
 </script>
 
-<style>
-  .wrapper {
-    display: flex;
-    align-items: center;
-    padding: 6px 16px;
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-    box-shadow: var(--shadow-sm);
-    gap: var(--s16);
-  }
-</style>
-
-<ChangeUserModal bind:isOpen={changeUserModalIsOpen} bind:member {onRefresh} />
-<div class="wrapper">
-  <div class="flex flex-col">
-    <h5>{member.user.fullName}</h5>
-    <div class="text-gray-text-alt text-f14">{member.user.email}</div>
+<Member {member}>
+  <div slot="label">
+    <Label
+      label={`${userLevel} – Adhésion en attente`}
+      smallIcon
+      iconOnLeft
+      icon={userIcon}
+      wait
+    />
   </div>
 
-  <div class="grow" />
-  <Label
-    label={`${userLevel} – Adhésion en attente`}
-    smallIcon
-    iconOnLeft
-    icon={userIcon}
-    wait
-  />
-  <div>
-    <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
-      <div>
-        <Button
-          label="Accepter"
-          on:click={() => {
-            handleAcceptRequest();
-            onCloseParent();
-          }}
-          icon={fileEditIcon}
-          iconOnRight
-          small
-          noBackground
-        />
-      </div>
-      <div>
-        <Button
-          label="Révoquer"
-          on:click={() => {
-            handleCancelRequest();
-            onCloseParent();
-          }}
-          icon={fileForbidIcon}
-          iconOnRight
-          small
-          noBackground
-        />
-      </div>
-    </ButtonMenu>
+  <div slot="actions" let:onCloseParent>
+    <div>
+      <Button
+        label="Accepter"
+        on:click={() => {
+          handleAcceptRequest();
+          onCloseParent();
+        }}
+        icon={fileEditIcon}
+        iconOnRight
+        small
+        noBackground
+      />
+    </div>
+    <div>
+      <Button
+        label="Révoquer"
+        on:click={() => {
+          handleCancelRequest();
+          onCloseParent();
+        }}
+        icon={fileForbidIcon}
+        iconOnRight
+        small
+        noBackground
+      />
+    </div>
   </div>
-</div>
+</Member>
