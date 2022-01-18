@@ -131,37 +131,44 @@
           </Fieldset>
         </div>
         <div class="flex-1">
-          <div class="mt-s48">
-            <h3>Vos collaborateurs</h3>
-            <div class="flex flex-col gap-s8 mt-s32 mb-s32">
-              {#each sortedMembers(putativeMembers) as member}
-                {#if member.invitedByAdmin}
-                  <MemberInvited {member} onRefresh={handleRefreshMemberList} />
-                {:else}
-                  <MemberToConfirm
+          {#if members}
+            <div class="mt-s48">
+              <h3>Vos collaborateurs</h3>
+              <div class="flex flex-col gap-s8 mt-s32 mb-s32">
+                {#if putativeMembers}
+                  {#each sortedMembers(putativeMembers) as member}
+                    {#if member.invitedByAdmin}
+                      <MemberInvited
+                        {member}
+                        onRefresh={handleRefreshMemberList}
+                      />
+                    {:else}
+                      <MemberToConfirm
+                        {member}
+                        onRefresh={handleRefreshMemberList}
+                      />
+                    {/if}
+                  {/each}
+                {/if}
+                {#each sortedMembers(members) as member}
+                  <MemberStandard
                     {member}
                     onRefresh={handleRefreshMemberList}
+                    isMyself={member.user.email === $userInfo.email}
+                    isOnlyAdmin={member.user.email === $userInfo.email &&
+                      members.filter((m) => m.isAdmin).length === 1}
                   />
-                {/if}
-              {/each}
-              {#each sortedMembers(members) as member}
-                <MemberStandard
-                  {member}
-                  onRefresh={handleRefreshMemberList}
-                  isMyself={member.user.email === $userInfo.email}
-                  isOnlyAdmin={member.user.email === $userInfo.email &&
-                    members.filter((m) => m.isAdmin).length === 1}
+                {/each}
+              </div>
+              <div class="flex justify-end">
+                <Button
+                  label="Ajouter des collaborateurs"
+                  secondary
+                  on:click={() => (addUserModalIsOpen = true)}
                 />
-              {/each}
+              </div>
             </div>
-            <div class="flex justify-end">
-              <Button
-                label="Ajouter des collaborateurs"
-                secondary
-                on:click={() => (addUserModalIsOpen = true)}
-              />
-            </div>
-          </div>
+          {/if}
         </div>
       </div>
     </div>
