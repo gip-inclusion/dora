@@ -1,5 +1,6 @@
 <script context="module">
   export const ssr = false;
+  import { get } from "svelte/store";
   import {
     getStructure,
     getMembers,
@@ -9,7 +10,7 @@
   import { userInfo } from "$lib/auth";
 
   export async function load({ params }) {
-    const structures = userInfo.isStaff
+    const structures = get(userInfo)?.isStaff
       ? await getStructures()
       : await getMyStructures();
     const structureSlug = params.slug;
