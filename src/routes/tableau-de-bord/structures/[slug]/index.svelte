@@ -1,11 +1,16 @@
 <script context="module">
   export const ssr = false;
-  import { getStructure, getMembers } from "$lib/structures";
+  import { get } from "svelte/store";
+  import {
+    getStructure,
+    getMembers,
+    getPutativeMembers,
+  } from "$lib/structures";
   import { getMyStructures, getStructures } from "$lib/structures";
   import { userInfo } from "$lib/auth";
 
   export async function load({ params }) {
-    const structures = userInfo.isStaff
+    const structures = get(userInfo)?.isStaff
       ? await getStructures()
       : await getMyStructures();
     const structureSlug = params.slug;
@@ -15,6 +20,7 @@
         props: {
           structure: await getStructure(structureSlug),
           members: await getMembers(structureSlug),
+          putativeMembers: await getPutativeMembers(structureSlug),
         },
       };
     }
@@ -25,18 +31,21 @@
 <script>
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import Member from "./_member.svelte";
+  import MemberInvited from "./_member_invited.svelte";
+  import MemberToConfirm from "./_member_to_confirm.svelte";
   import Button from "$lib/components/button.svelte";
   import AddUserModal from "./_add-user-modal.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
+  import MemberStandard from "./_member_standard.svelte";
 
-  export let structure, members;
+  export let structure, members, putativeMembers;
 
   let addUserModalIsOpen = false;
 
   async function handleRefreshMemberList() {
     members = await getMembers(structure.slug);
+    putativeMembers = await getPutativeMembers(structure.slug);
   }
 
   function sortedMembers(items) {
@@ -126,8 +135,23 @@
             <div class="mt-s48">
               <h3>Vos collaborateurs</h3>
               <div class="flex flex-col gap-s8 mt-s32 mb-s32">
+                {#if putativeMembers}
+                  {#each sortedMembers(putativeMembers) as member}
+                    {#if member.invitedByAdmin}
+                      <MemberInvited
+                        {member}
+                        onRefresh={handleRefreshMemberList}
+                      />
+                    {:else}
+                      <MemberToConfirm
+                        {member}
+                        onRefresh={handleRefreshMemberList}
+                      />
+                    {/if}
+                  {/each}
+                {/if}
                 {#each sortedMembers(members) as member}
-                  <Member
+                  <MemberStandard
                     {member}
                     onRefresh={handleRefreshMemberList}
                     isMyself={member.user.email === $userInfo.email}
