@@ -22,7 +22,7 @@
 
       <p class="text-gray-text-alt2 mb-s16">
         Si au bout de quelques jours vous n’avez pas de réponse, vous pouvez
-        relancer le responsable de votre structure.
+        relancer les responsables de votre structure.
       </p>
       {#if resendRequestFlag}
         {#if requestResent}
