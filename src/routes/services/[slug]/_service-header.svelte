@@ -16,14 +16,6 @@
   const editLink = `${$page.url.pathname}/editer`;
 </script>
 
-<style>
-  @media print {
-    h1 {
-      color: var(--col-france-blue);
-    }
-  }
-</style>
-
 <div class="col-start-1 mb-s48 text-white col-span-full">
   <div class="mx-auto">
     <Label label={service.structureInfo.name} darkBg />
@@ -68,3 +60,11 @@
     </div>
   </div>
 </div>
+
+<style>
+  @media print {
+    h1 {
+      color: var(--col-france-blue);
+    }
+  }
+</style>

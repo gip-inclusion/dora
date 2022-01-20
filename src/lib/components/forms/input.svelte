@@ -29,24 +29,6 @@
   export let onSelectChange = undefined;
 </script>
 
-<style lang="postcss">
-  input[type="text"],
-  input[type="password"],
-  input[type="number"],
-  input[type="url"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="date"],
-  textarea {
-    @apply px-s8 min-h-[3rem] border border-gray-03 rounded outline-none placeholder-gray-text-alt focus:shadow-focus text-f14;
-  }
-
-  input,
-  textarea {
-    @apply disabled:bg-gray-00 read-only:text-gray-03;
-  }
-</style>
-
 {#if type === "checkboxes"}
   <Checkboxes
     {name}
@@ -225,3 +207,21 @@
   />
 {/if}
 <span />
+
+<style lang="postcss">
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  input[type="url"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  textarea {
+    @apply px-s8 min-h-[3rem] border border-gray-03 rounded outline-none placeholder-gray-text-alt focus:shadow-focus text-f14;
+  }
+
+  input,
+  textarea {
+    @apply disabled:bg-gray-00 read-only:text-gray-03;
+  }
+</style>

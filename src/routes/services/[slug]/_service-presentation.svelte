@@ -28,30 +28,6 @@
   }
 </script>
 
-<style>
-  h2 {
-    color: var(--col-france-blue) !important;
-  }
-
-  .markdown-wrapper {
-    margin-top: var(--s16);
-  }
-
-  .markdown-wrapper :global(h1),
-  .markdown-wrapper :global(h2),
-  .markdown-wrapper :global(h3) {
-    color: var(--col-france-blue);
-  }
-
-  .markdown-wrapper :global(p) {
-    color: var(--col-text);
-  }
-
-  .prose {
-    max-width: 100%;
-  }
-</style>
-
 <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
 
 <div class="flex mt-s48 mb-s32 items-baseline">
@@ -114,3 +90,27 @@
     </div>
   </div>
 </div>
+
+<style>
+  h2 {
+    color: var(--col-france-blue) !important;
+  }
+
+  .markdown-wrapper {
+    margin-top: var(--s16);
+  }
+
+  .markdown-wrapper :global(h1),
+  .markdown-wrapper :global(h2),
+  .markdown-wrapper :global(h3) {
+    color: var(--col-france-blue);
+  }
+
+  .markdown-wrapper :global(p) {
+    color: var(--col-text);
+  }
+
+  .prose {
+    max-width: 100%;
+  }
+</style>

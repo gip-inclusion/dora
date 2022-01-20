@@ -5,6 +5,17 @@
   export let title = "";
 </script>
 
+<div class="wrapper">
+  <div class="title">
+    <Label icon={compassFillIcon} iconOnLeft darkBg bigIcon>
+      <h3>{title}</h3>
+    </Label>
+  </div>
+  <div class="p-s8 lg:p-s32">
+    <slot />
+  </div>
+</div>
+
 <style lang="postcss">
   .wrapper {
     overflow: hidden;
@@ -36,14 +47,3 @@
     }
   }
 </style>
-
-<div class="wrapper">
-  <div class="title">
-    <Label icon={compassFillIcon} iconOnLeft darkBg bigIcon>
-      <h3>{title}</h3>
-    </Label>
-  </div>
-  <div class="p-s8 lg:p-s32">
-    <slot />
-  </div>
-</div>

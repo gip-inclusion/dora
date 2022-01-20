@@ -3,19 +3,6 @@
   export let title;
 </script>
 
-<style lang="postcss">
-  .help {
-    position: absolute;
-    right: -472px;
-    width: 384px;
-  }
-
-  .help-content,
-  .help-content :global(p) {
-    @apply mb-s16 last:mb-s0 text-f14 text-gray-text leading-relaxed;
-  }
-</style>
-
 <div
   class="help px-s16 pt-s16 pb-s24 bg-white border-l-4 rounded-r border-information"
 >
@@ -33,3 +20,16 @@
     <slot />
   </div>
 </div>
+
+<style lang="postcss">
+  .help {
+    position: absolute;
+    right: -472px;
+    width: 384px;
+  }
+
+  .help-content,
+  .help-content :global(p) {
+    @apply mb-s16 last:mb-s0 text-f14 text-gray-text leading-relaxed;
+  }
+</style>

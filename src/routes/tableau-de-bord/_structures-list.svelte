@@ -13,21 +13,6 @@
   export let structures;
 </script>
 
-<style lang="postcss">
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: var(--s40);
-    gap: var(--s12);
-  }
-
-  .structure {
-    padding: var(--s16);
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-  }
-</style>
-
 <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
   <div class="wrapper col-start-1 col-span-full">
     {#each structures as structure}
@@ -71,3 +56,18 @@
     {/each}
   </div>
 </CenteredGrid>
+
+<style lang="postcss">
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--s40);
+    gap: var(--s12);
+  }
+
+  .structure {
+    padding: var(--s16);
+    background-color: var(--col-white);
+    border-radius: var(--s8);
+  }
+</style>

@@ -30,6 +30,29 @@
   }
 </script>
 
+<div class="wrapper">
+  <div class="title">
+    <Button
+      {icon}
+      {iconOnLeft}
+      {iconOnRight}
+      {label}
+      noBackground
+      {disabled}
+      on:click={() => (isOpen = !isOpen)}
+    />
+  </div>
+  <div
+    class="children"
+    class:open={isOpen}
+    bind:this={childrenListNode}
+    use:clickOutside
+    on:click_outside={handleClickOutside}
+  >
+    <slot onClose={() => (isOpen = false)} />
+  </div>
+</div>
+
 <style lang="postcss">
   .wrapper {
     position: relative;
@@ -53,26 +76,3 @@
     display: flex;
   }
 </style>
-
-<div class="wrapper">
-  <div class="title">
-    <Button
-      {icon}
-      {iconOnLeft}
-      {iconOnRight}
-      {label}
-      noBackground
-      {disabled}
-      on:click={() => (isOpen = !isOpen)}
-    />
-  </div>
-  <div
-    class="children"
-    class:open={isOpen}
-    bind:this={childrenListNode}
-    use:clickOutside
-    on:click_outside={handleClickOutside}
-  >
-    <slot onClose={() => (isOpen = false)} />
-  </div>
-</div>

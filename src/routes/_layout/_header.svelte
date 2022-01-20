@@ -10,12 +10,6 @@
   import TopLinks from "./_top-links.svelte";
 </script>
 
-<style>
-  .dev-banner {
-    border-top: 8px solid orange;
-  }
-</style>
-
 <header
   class="relative shadow-md noprint"
   class:dev-banner={ENVIRONMENT !== "production"}
@@ -46,3 +40,9 @@
     </CenteredGrid>
   </div>
 </header>
+
+<style>
+  .dev-banner {
+    border-top: 8px solid orange;
+  }
+</style>

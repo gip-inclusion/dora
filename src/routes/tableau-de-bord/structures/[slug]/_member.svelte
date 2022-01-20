@@ -8,22 +8,6 @@
   export let isOnlyAdmin = false;
 </script>
 
-<style>
-  .wrapper {
-    display: flex;
-    align-items: center;
-    padding: 6px 16px;
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-    box-shadow: var(--shadow-sm);
-    gap: var(--s16);
-  }
-
-  .is-own {
-    background-color: var(--col-gray-01);
-  }
-</style>
-
 <div class="wrapper" class:is-own={isMyself}>
   <div class="flex flex-col">
     <h5>{member.user.fullName}</h5>
@@ -42,3 +26,19 @@
     </ButtonMenu>
   </div>
 </div>
+
+<style>
+  .wrapper {
+    display: flex;
+    align-items: center;
+    padding: 6px 16px;
+    background-color: var(--col-white);
+    border-radius: var(--s8);
+    box-shadow: var(--shadow-sm);
+    gap: var(--s16);
+  }
+
+  .is-own {
+    background-color: var(--col-gray-01);
+  }
+</style>

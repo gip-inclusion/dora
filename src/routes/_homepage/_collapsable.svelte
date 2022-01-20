@@ -19,6 +19,19 @@
   });
 </script>
 
+<div class="flex justify-between wrapper" bind:this={wrapper}>
+  <slot name="above-fold" />
+  <div
+    class="w-s24 h-s24 ml-s8 text-magenta-cta fill-current"
+    on:click={handleToggleFold}
+  >
+    {@html folded ? arrowDownSIcon : arrowUpSIcon}
+  </div>
+</div>
+<div class:hidden={folded}>
+  <slot name="under-fold" />
+</div>
+
 <style lang="postcss">
   .wrapper::before {
     display: none;
@@ -44,16 +57,3 @@
     }
   }
 </style>
-
-<div class="flex justify-between wrapper" bind:this={wrapper}>
-  <slot name="above-fold" />
-  <div
-    class="w-s24 h-s24 ml-s8 text-magenta-cta fill-current"
-    on:click={handleToggleFold}
-  >
-    {@html folded ? arrowDownSIcon : arrowUpSIcon}
-  </div>
-</div>
-<div class:hidden={folded}>
-  <slot name="under-fold" />
-</div>

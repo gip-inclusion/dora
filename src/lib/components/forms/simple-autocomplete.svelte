@@ -721,6 +721,143 @@
   }
 </script>
 
+<div
+  class="{className || ''}
+  {hideArrow || !items.length ? 'hide-arrow' : ''}
+  {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
+  class:show-clear={clearable}
+  class:is-loading={showLoadingIndicator && loading}
+>
+  <select name={selectName} id={selectId} bind:value use:multipleAction>
+    {#if !multiple && value}
+      <option {value} selected>{text}</option>
+    {:else if multiple && value}
+      {#each value as i}
+        <option value={i} selected>
+          {getLabelForValue(i)}
+        </option>
+      {/each}
+    {/if}
+  </select>
+
+  <div class="input-container">
+    <input
+      type="text"
+      class="{inputClassName || ''} input autocomplete-input"
+      id={inputId}
+      autocomplete={html5autocomplete ? "on" : "off"}
+      placeholder={multiple && value.length ? placeholderMulti : placeholder}
+      {name}
+      {disabled}
+      {title}
+      readonly={readonly || (lock && value)}
+      bind:this={input}
+      bind:value={text}
+      on:input={onInput}
+      on:focus={onFocusInternal}
+      on:blur
+      on:keydown={onKeyDown}
+      on:click={onInputClick}
+      on:keypress={onKeyPress}
+    />
+    {#if clearable}
+      <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
+    {/if}
+  </div>
+
+  <div
+    class="{dropdownClassName || ''} autocomplete-list is-fullwidth"
+    class:hidden={!opened}
+    bind:this={list}
+  >
+    <slot name="prepend" />
+
+    <div class:hidden={!showList} class="py-s10">
+      {#if filteredListItems && filteredListItems.length > 0}
+        {#each filteredListItems as listItem, i}
+          {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
+            {#if listItem}
+              <div
+                class="autocomplete-list-item {i === highlightIndex
+                  ? 'selected'
+                  : ''}"
+                class:confirmed={isConfirmed(listItem.value)}
+                on:click={() => onListItemClick(listItem)}
+                on:pointerenter={() => {
+                  highlightIndex = i;
+                }}
+              >
+                <div class="flex flex-row">
+                  <div class="grow flex justify-between ">
+                    <div>
+                      {@html listItem.highlighted
+                        ? listItem.highlighted.label
+                        : listItem.label}
+                    </div>
+                    <div class="flex shrink-0 items-baseline">
+                      {#each listItem.tags as tag}
+                        <div
+                          class="shrink-0 px-s6 py-s2 rounded text-gray-text text-f10 font-bold uppercase bg-gray-01"
+                        >
+                          {tag}
+                        </div>
+                      {/each}
+                      {#if postfixValueFunction}
+                        <div
+                          class="inline-block ml-s8 text-gray-text-alt text-f12"
+                        >
+                          {postfixValueFunction(listItem.value)}
+                        </div>
+                      {/if}
+
+                      <div class="grow-0 hidden checkmark">
+                        <div class="w-s24 h-s16 ml-s8 fill-current ">
+                          {@html checkIcon}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {/if}
+          {/if}
+        {/each}
+
+        {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
+          <div class="autocomplete-list-item-no-results">
+            ...{filteredListItems.length - maxItemsToShowInList} results not shown
+          </div>
+        {/if}
+      {:else if loading && loadingText}
+        <div class="autocomplete-list-item-loading">
+          <span class="text-gray-text-alt">{loadingText}</span>
+        </div>
+      {:else if noResultsText}
+        <div class="autocomplete-list-item-no-results">
+          <span class="text-error">{noResultsText}</span>
+        </div>
+      {/if}
+    </div>
+  </div>
+</div>
+{#if multiple && value}
+  <div class="tags-container">
+    {#each value as tagItem}
+      <div class="tags has-addons">
+        <span class="tag">{getLabelForValue(tagItem)}</span>
+
+        <div
+          class="tag is-delete"
+          on:click|preventDefault={unselectItem(tagItem)}
+        >
+          {@html closeCircleIcon}
+        </div>
+      </div>
+    {/each}
+  </div>
+{/if}
+<svelte:window on:click={onDocumentClick} />
+
 <style lang="postcss">
   input {
     @apply disabled:bg-gray-00 read-only:text-gray-03;
@@ -887,140 +1024,3 @@
     flex-shrink: 0;
   }
 </style>
-
-<div
-  class="{className || ''}
-  {hideArrow || !items.length ? 'hide-arrow' : ''}
-  {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
-  class:show-clear={clearable}
-  class:is-loading={showLoadingIndicator && loading}
->
-  <select name={selectName} id={selectId} bind:value use:multipleAction>
-    {#if !multiple && value}
-      <option {value} selected>{text}</option>
-    {:else if multiple && value}
-      {#each value as i}
-        <option value={i} selected>
-          {getLabelForValue(i)}
-        </option>
-      {/each}
-    {/if}
-  </select>
-
-  <div class="input-container">
-    <input
-      type="text"
-      class="{inputClassName || ''} input autocomplete-input"
-      id={inputId}
-      autocomplete={html5autocomplete ? "on" : "off"}
-      placeholder={multiple && value.length ? placeholderMulti : placeholder}
-      {name}
-      {disabled}
-      {title}
-      readonly={readonly || (lock && value)}
-      bind:this={input}
-      bind:value={text}
-      on:input={onInput}
-      on:focus={onFocusInternal}
-      on:blur
-      on:keydown={onKeyDown}
-      on:click={onInputClick}
-      on:keypress={onKeyPress}
-    />
-    {#if clearable}
-      <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
-    {/if}
-  </div>
-
-  <div
-    class="{dropdownClassName || ''} autocomplete-list is-fullwidth"
-    class:hidden={!opened}
-    bind:this={list}
-  >
-    <slot name="prepend" />
-
-    <div class:hidden={!showList} class="py-s10">
-      {#if filteredListItems && filteredListItems.length > 0}
-        {#each filteredListItems as listItem, i}
-          {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
-            {#if listItem}
-              <div
-                class="autocomplete-list-item {i === highlightIndex
-                  ? 'selected'
-                  : ''}"
-                class:confirmed={isConfirmed(listItem.value)}
-                on:click={() => onListItemClick(listItem)}
-                on:pointerenter={() => {
-                  highlightIndex = i;
-                }}
-              >
-                <div class="flex flex-row">
-                  <div class="grow flex justify-between ">
-                    <div>
-                      {@html listItem.highlighted
-                        ? listItem.highlighted.label
-                        : listItem.label}
-                    </div>
-                    <div class="flex shrink-0 items-baseline">
-                      {#each listItem.tags as tag}
-                        <div
-                          class="shrink-0 px-s6 py-s2 rounded text-gray-text text-f10 font-bold uppercase bg-gray-01"
-                        >
-                          {tag}
-                        </div>
-                      {/each}
-                      {#if postfixValueFunction}
-                        <div
-                          class="inline-block ml-s8 text-gray-text-alt text-f12"
-                        >
-                          {postfixValueFunction(listItem.value)}
-                        </div>
-                      {/if}
-
-                      <div class="grow-0 hidden checkmark">
-                        <div class="w-s24 h-s16 ml-s8 fill-current ">
-                          {@html checkIcon}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            {/if}
-          {/if}
-        {/each}
-
-        {#if maxItemsToShowInList > 0 && filteredListItems.length > maxItemsToShowInList}
-          <div class="autocomplete-list-item-no-results">
-            ...{filteredListItems.length - maxItemsToShowInList} results not shown
-          </div>
-        {/if}
-      {:else if loading && loadingText}
-        <div class="autocomplete-list-item-loading">
-          <span class="text-gray-text-alt">{loadingText}</span>
-        </div>
-      {:else if noResultsText}
-        <div class="autocomplete-list-item-no-results">
-          <span class="text-error">{noResultsText}</span>
-        </div>
-      {/if}
-    </div>
-  </div>
-</div>
-{#if multiple && value}
-  <div class="tags-container">
-    {#each value as tagItem}
-      <div class="tags has-addons">
-        <span class="tag">{getLabelForValue(tagItem)}</span>
-
-        <div
-          class="tag is-delete"
-          on:click|preventDefault={unselectItem(tagItem)}
-        >
-          {@html closeCircleIcon}
-        </div>
-      </div>
-    {/each}
-  </div>
-{/if}
-<svelte:window on:click={onDocumentClick} />

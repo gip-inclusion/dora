@@ -11,12 +11,6 @@
   }
 </script>
 
-<style lang="postcss">
-  input[type="radio"]:checked + div div {
-    @apply block;
-  }
-</style>
-
 <div class="flex flex-col gap-s8">
   {#each choices as choice}
     <label class="flex flex-row items-center focus-within:shadow-focus">
@@ -42,3 +36,9 @@
     </label>
   {/each}
 </div>
+
+<style lang="postcss">
+  input[type="radio"]:checked + div div {
+    @apply block;
+  }
+</style>

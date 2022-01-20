@@ -1,6 +1,10 @@
 <script>
 </script>
 
+<div class="wrapper">
+  <slot />
+</div>
+
 <style>
   .wrapper {
     padding: 20px 20px 24px 24px;
@@ -9,7 +13,3 @@
     box-shadow: var(--shadow-sm);
   }
 </style>
-
-<div class="wrapper">
-  <slot />
-</div>
