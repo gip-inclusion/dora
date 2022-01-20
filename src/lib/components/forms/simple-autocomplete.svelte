@@ -138,7 +138,6 @@
 
   // other state
   let inputDelayTimeout;
-  let showList = false;
 
   // -- Reactivity --
 
@@ -171,6 +170,13 @@
 
   $: value, onValueChanged();
   $: text, onTextChanged();
+  let showList = false;
+  $: showList =
+    (minCharactersToSearch === 1 ||
+      (minCharactersToSearch > 1 &&
+        filteredTextLength > minCharactersToSearch)) &&
+    ((items && items.length > 0) || filteredTextLength > 0);
+
   $: clearable = showClear || ((lock || multiple) && value);
 
   // --- Functions ---
@@ -512,9 +518,7 @@
   }
 
   function processInput() {
-    console.log("processInput a");
     if (search()) {
-      console.log("processInput b");
       highlightIndex = 0;
       open();
     }
@@ -574,12 +578,7 @@
   }
 
   function open() {
-    showList =
-      (minCharactersToSearch === "1" ||
-        (minCharactersToSearch > 1 &&
-          filteredTextLength >= minCharactersToSearch)) &&
-      ((items && items.length > 0) || filteredTextLength > 0);
-
+    // check if the search text has more than the min chars required
     if (!hasPrependSlot && !showList) {
       return;
     }
