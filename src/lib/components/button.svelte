@@ -88,6 +88,7 @@
   class:hz-bottom={horizontalBottom}
   class:flash-success={flashSuccess}
   class:w-full={wFull}
+  class:justify-center={!iconOnLeft && !iconOnRight}
   on:click
   on:mousedown={handleMouseDown}
   aria-label={ariaLabel}
