@@ -5,9 +5,11 @@
   export let label;
   export let positiveMood = false;
   export let negativeMood = false;
-
-  let icon = undefined;
-  if (positiveMood || negativeMood) {
+  export let info = false;
+  export let icon = undefined;
+  export let whiteBg = false;
+  export let leftBorder = false;
+  if (!icon && (positiveMood || negativeMood)) {
     icon = positiveMood ? emotionHappyIcon : errorWarningIcon;
   }
 </script>
@@ -18,6 +20,10 @@
     background-color: var(--col-gray-bg);
   }
 
+  .white-bg {
+    background-color: var(--col-white);
+  }
+
   .label-wrapper {
     padding-bottom: var(--s16);
   }
@@ -25,15 +31,20 @@
   .details {
     @apply text-gray-text text-f14;
   }
+
+  .left-border {
+    @apply border-l-4 border-information;
+  }
 </style>
 
-<div class="wrapper">
+<div class="wrapper" class:white-bg={whiteBg} class:left-border={leftBorder}>
   {#if label}
     <div class="label-wrapper">
       <Label
         {label}
         success={positiveMood}
         error={negativeMood}
+        {info}
         {icon}
         bold
         iconOnLeft={!!icon}

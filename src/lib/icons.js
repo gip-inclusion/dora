@@ -33,6 +33,7 @@ export { default as menuIcon } from "remixicon/icons/System/menu-line.svg?raw";
 
 export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
+export { default as adminIcon } from "remixicon/icons/User/admin-fill.svg?raw";
 export { default as emotionHappyIcon } from "remixicon/icons/User/emotion-happy-fill.svg?raw";
 
 export { default as coperCoinFillIcon } from "remixicon/icons/Finance/copper-coin-fill.svg?raw";

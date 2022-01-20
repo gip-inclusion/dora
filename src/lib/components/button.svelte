@@ -16,6 +16,8 @@
   export let horizontalBottom = false;
   export let noPadding = false;
   export let flashSuccess = false;
+  export let wFull = false;
+
   // This will call preventDefault() on a mouseDown event
   // which will prevent the blur event on other nodes
   // which was changing the validation messages, which moved the
@@ -107,29 +109,30 @@
 <button
   {type}
   {name}
-  class="{px} {py} {ts} {lead} {border} {text} {background}  flex flex-row items-center justify-center text-center rounded focus:shadow-focus outline-none"
+  class="{px} {py} {ts} {lead} {border} {text} {background} flex flex-row items-center rounded focus:shadow-focus outline-none"
   class:nogrow
   class:hz-bottom={horizontalBottom}
   class:flash-success={flashSuccess}
+  class:w-full={wFull}
   on:click
   on:mousedown={handleMouseDown}
   aria-label={ariaLabel}
   {disabled}
 >
   {#if iconOnLeft}
-    <div class="{iw} {ih} mr-s8 fill-current ">
+    <div class="{iw} {ih} mr-s8 fill-current">
       {@html icon}
     </div>
   {/if}
   {#if icon && !label}
-    <div class="{iw} {ih} fill-current ">
+    <div class="{iw} {ih} fill-current">
       {@html icon}
     </div>
   {/if}
   {label}
 
   {#if iconOnRight}
-    <div class="{iw} {ih} ml-s8 fill-current">
+    <div class="{iw} {ih} ml-s8 fill-current justify-end">
       {@html icon}
     </div>
   {/if}

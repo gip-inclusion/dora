@@ -32,7 +32,6 @@
   function handleChange(_validatedData) {}
 
   function handleSubmit(validatedData) {
-    console.log(validatedData);
     const url = `${getApiURL()}/structure-members/${member.id}/`;
     return fetch(url, {
       method: "PATCH",

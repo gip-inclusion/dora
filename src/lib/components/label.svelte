@@ -2,9 +2,11 @@
   export let label = "";
   export let bold = false;
   export let italic = false;
+  export let info = false;
   export let success = false;
   export let error = false;
   export let wait = false;
+  export let light = false;
   export let icon = null;
   export let iconOnLeft = false,
     iconOnRight = false;
@@ -19,6 +21,13 @@
     color: var(--col-text);
   }
 
+  .info {
+    color: var(--col-info);
+  }
+
+  .light {
+    color: var(--col-text-alt);
+  }
   .success {
     color: var(--col-success);
   }
@@ -81,7 +90,9 @@
   class:italic
   class:success
   class:error
+  class:info
   class:wait
+  class:light
   class:dark-bg={darkBg}
 >
   {#if iconOnLeft}
