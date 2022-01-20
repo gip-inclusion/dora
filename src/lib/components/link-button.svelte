@@ -10,7 +10,7 @@
 </script>
 
 <a
-  target={otherTab ? "_blank" : "_self"}
+  target={otherTab ? "_blank" : ""}
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
   on:click

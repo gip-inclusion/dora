@@ -1,9 +1,10 @@
 <script>
   import { externalLineIcon } from "$lib/icons";
   export let label = "";
+  export let otherTab = false;
   export let disabled = false;
   export let separator = false;
-  export let external = false;
+  export let externalIcon = false;
   export let light = false;
   export let href;
   export let nofollow = false;
@@ -16,12 +17,12 @@
   class:pr-s32={!separator}
   on:click
   {href}
-  target="_blank"
+  target={otherTab ? "_blank" : ""}
   rel="noopener {nofollow ? 'nofollow' : ''}"
   {disabled}
 >
   {label}
-  {#if external}
+  {#if externalIcon}
     <div class="w-s16 h-s16 ml-s8 fill-current">
       {@html externalLineIcon}
     </div>

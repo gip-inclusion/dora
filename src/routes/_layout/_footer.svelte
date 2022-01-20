@@ -43,27 +43,35 @@
         label="Mentions légales"
         separator
         light
+        otherTab
+        nofollow
       />
       <NavItem
         href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/conditions-generales-dutilisation"
         label="CGU"
         separator
         light
+        otherTab
+        nofollow
       />
       <NavItem
         label="Données personnelles"
         href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/politique-de-confidentialite"
         separator
         light
+        otherTab
+        nofollow
       />
       <NavItem
         href="#"
+        on:click={handleOpenCookiesPanel}
         label="Gestion des cookies"
         separator
         light
-        on:click={handleOpenCookiesPanel}
+        otherTab
+        nofollow
       />
-      <NavItem href="#" label="Accessibilité : non conforme" light />
+      <NavItem label="Accessibilité : non conforme" light />
     </nav>
   </CenteredGrid>
 </footer>
