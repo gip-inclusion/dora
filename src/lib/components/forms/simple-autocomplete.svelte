@@ -138,6 +138,7 @@
 
   // other state
   let inputDelayTimeout;
+  let showList = false;
 
   // -- Reactivity --
 
@@ -170,13 +171,6 @@
 
   $: value, onValueChanged();
   $: text, onTextChanged();
-  let showList = false;
-  $: showList =
-    (minCharactersToSearch === 1 ||
-      (minCharactersToSearch > 1 &&
-        filteredTextLength > minCharactersToSearch)) &&
-    ((items && items.length > 0) || filteredTextLength > 0);
-
   $: clearable = showClear || ((lock || multiple) && value);
 
   // --- Functions ---
@@ -579,6 +573,12 @@
 
   function open() {
     // check if the search text has more than the min chars required
+    showList =
+      (minCharactersToSearch === 1 ||
+        (minCharactersToSearch > 1 &&
+          filteredTextLength >= minCharactersToSearch)) &&
+      ((items && items.length > 0) || filteredTextLength > 0);
+
     if (!hasPrependSlot && !showList) {
       return;
     }
