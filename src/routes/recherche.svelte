@@ -103,58 +103,6 @@ Cordialement,
   );
 </script>
 
-<style lang="postcss">
-  .search-form {
-    padding-top: var(--s56);
-    grid-column: 1 / -1;
-  }
-
-  .results-wrapper {
-    padding-bottom: var(--s56);
-    grid-column: 1 / -1;
-  }
-
-  .results {
-    display: flex;
-    flex-direction: column;
-    padding-top: var(--s56);
-    padding-bottom: var(--s16);
-    gap: var(--s16);
-  }
-
-  .no-results-wrapper {
-    display: flex;
-    flex-direction: column;
-    padding-top: var(--s56);
-    padding-bottom: var(--s24);
-    color: var(--col-text);
-    gap: var(--s56);
-  }
-
-  .no-results {
-    display: flex;
-    flex-direction: column;
-    gap: var(--s16);
-  }
-
-  @screen xl {
-    .no-results-wrapper {
-      flex-direction: row;
-    }
-  }
-
-  @screen lg {
-    .search-form {
-      padding-top: var(--s56);
-      grid-column: 1 / 5;
-    }
-
-    .results-wrapper {
-      grid-column: 5 / -1;
-    }
-  }
-</style>
-
 <svelte:head>
   <title>Résultats de recherche | DORA</title>
 </svelte:head>
@@ -249,3 +197,55 @@ Cordialement,
     {/if}
   </div>
 </CenteredGrid>
+
+<style lang="postcss">
+  .search-form {
+    padding-top: var(--s56);
+    grid-column: 1 / -1;
+  }
+
+  .results-wrapper {
+    padding-bottom: var(--s56);
+    grid-column: 1 / -1;
+  }
+
+  .results {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--s56);
+    padding-bottom: var(--s16);
+    gap: var(--s16);
+  }
+
+  .no-results-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--s56);
+    padding-bottom: var(--s24);
+    color: var(--col-text);
+    gap: var(--s56);
+  }
+
+  .no-results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s16);
+  }
+
+  @screen xl {
+    .no-results-wrapper {
+      flex-direction: row;
+    }
+  }
+
+  @screen lg {
+    .search-form {
+      padding-top: var(--s56);
+      grid-column: 1 / 5;
+    }
+
+    .results-wrapper {
+      grid-column: 5 / -1;
+    }
+  }
+</style>

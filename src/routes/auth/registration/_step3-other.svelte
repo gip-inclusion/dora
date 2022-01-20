@@ -54,13 +54,6 @@
   $: console.log(siret);
 </script>
 
-<style>
-  .establishment-details {
-    padding: var(--s24);
-    border: 1px solid var(--col-gray-01);
-  }
-</style>
-
 <FieldSet
   title="Votre structure"
   description="Merci de renseigner le numéro SIRET de votre structure afin de l’identifier."
@@ -116,3 +109,10 @@
     {/if}
   </div>
 </FieldSet>
+
+<style>
+  .establishment-details {
+    padding: var(--s24);
+    border: 1px solid var(--col-gray-01);
+  }
+</style>

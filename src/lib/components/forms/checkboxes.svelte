@@ -11,12 +11,6 @@
   }
 </script>
 
-<style lang="postcss">
-  input[type="checkbox"]:checked + div div {
-    @apply block;
-  }
-</style>
-
 <div class="flex flex-col gap-s8">
   {#each choices as choice}
     <label class="flex flex-row items-center">
@@ -40,3 +34,9 @@
     </label>
   {/each}
 </div>
+
+<style lang="postcss">
+  input[type="checkbox"]:checked + div div {
+    @apply block;
+  }
+</style>

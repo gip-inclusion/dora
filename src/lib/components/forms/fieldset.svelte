@@ -4,12 +4,6 @@
   export let noTopPadding = false;
 </script>
 
-<style lang="postcss">
-  .no-top-padding {
-    @apply mt-s0;
-  }
-</style>
-
 <div
   class="flex flex-col max-w-4xl gap-s24 pt-s32 mt-s48 bg-white rounded-md shadow-md px-s40 pb-s56 "
   class:no-top-padding={noTopPadding}
@@ -28,3 +22,9 @@
   {/if}
   <slot />
 </div>
+
+<style lang="postcss">
+  .no-top-padding {
+    @apply mt-s0;
+  }
+</style>

@@ -57,13 +57,6 @@
   }
 </script>
 
-<style>
-  .establishment-details {
-    padding: var(--s24);
-    border: 1px solid var(--col-gray-01);
-  }
-</style>
-
 <Form
   data={{ safirCode }}
   schema={safirSearchSchema}
@@ -144,3 +137,10 @@
     </div>
   </FieldSet>
 </Form>
+
+<style>
+  .establishment-details {
+    padding: var(--s24);
+    border: 1px solid var(--col-gray-01);
+  }
+</style>

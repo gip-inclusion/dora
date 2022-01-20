@@ -16,61 +16,6 @@
   export let servicesOptions;
 </script>
 
-<style lang="postcss">
-  h1,
-  h2 {
-    color: var(--col-france-blue);
-  }
-
-  h1 {
-    margin-bottom: var(--s24);
-  }
-
-  h2 {
-    margin-top: var(--s24);
-    margin-bottom: var(--s24);
-    line-height: var(--s40);
-  }
-
-  p {
-    color: var(--col-text);
-  }
-
-  .content-mission {
-    margin-top: var(--s32);
-  }
-
-  .content-mission h2,
-  .content-mission h5 {
-    color: var(--col-white);
-  }
-
-  .content-mission p,
-  .content-mission li {
-    color: var(--col-gray-02);
-  }
-
-  .content-mission ul {
-    margin-top: var(--s16);
-    margin-bottom: var(--s16);
-  }
-
-  .content-mission li {
-    margin-bottom: var(--s8);
-
-    /* base64 encoded from remixicon/icons/System/check-line.svg,
-       adding stroke="white" on the 2nd path */
-    list-style-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgICA8Zz4KICAgICAgICA8cGF0aCBmaWxsPSJub25lIiBkPSJNMCAwaDI0djI0SDB6Ii8+CiAgICAgICAgPHBhdGggc3Ryb2tlPSJ3aGl0ZSIgZD0iTTEwIDE1LjE3Mmw5LjE5Mi05LjE5MyAxLjQxNSAxLjQxNEwxMCAxOGwtNi4zNjQtNi4zNjQgMS40MTQtMS40MTR6Ii8+CiAgICA8L2c+Cjwvc3ZnPgo=");
-    list-style-position: inside;
-  }
-
-  @screen lg {
-    h1 {
-      line-height: var(--s56);
-    }
-  }
-</style>
-
 <CenteredGrid --col-bg="var(--col-transparent)" topPadded>
   <div class="col-start-1 col-span-full mb-s40">
     <div class="flex flex-col lg:flex-row-reverse">
@@ -239,3 +184,58 @@
     />
   </div>
 </CenteredGrid>
+
+<style lang="postcss">
+  h1,
+  h2 {
+    color: var(--col-france-blue);
+  }
+
+  h1 {
+    margin-bottom: var(--s24);
+  }
+
+  h2 {
+    margin-top: var(--s24);
+    margin-bottom: var(--s24);
+    line-height: var(--s40);
+  }
+
+  p {
+    color: var(--col-text);
+  }
+
+  .content-mission {
+    margin-top: var(--s32);
+  }
+
+  .content-mission h2,
+  .content-mission h5 {
+    color: var(--col-white);
+  }
+
+  .content-mission p,
+  .content-mission li {
+    color: var(--col-gray-02);
+  }
+
+  .content-mission ul {
+    margin-top: var(--s16);
+    margin-bottom: var(--s16);
+  }
+
+  .content-mission li {
+    margin-bottom: var(--s8);
+
+    /* base64 encoded from remixicon/icons/System/check-line.svg,
+       adding stroke="white" on the 2nd path */
+    list-style-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgICA8Zz4KICAgICAgICA8cGF0aCBmaWxsPSJub25lIiBkPSJNMCAwaDI0djI0SDB6Ii8+CiAgICAgICAgPHBhdGggc3Ryb2tlPSJ3aGl0ZSIgZD0iTTEwIDE1LjE3Mmw5LjE5Mi05LjE5MyAxLjQxNSAxLjQxNEwxMCAxOGwtNi4zNjQtNi4zNjQgMS40MTQtMS40MTR6Ii8+CiAgICA8L2c+Cjwvc3ZnPgo=");
+    list-style-position: inside;
+  }
+
+  @screen lg {
+    h1 {
+      line-height: var(--s56);
+    }
+  }
+</style>

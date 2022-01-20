@@ -8,13 +8,6 @@
   export let result;
 </script>
 
-<style>
-  .header {
-    padding-left: var(--s16);
-    border-left: 4px solid var(--col-available);
-  }
-</style>
-
 <SearchResultWrapper>
   <div class="header">
     <a href="/structures/{result.structure}">
@@ -44,3 +37,10 @@
     <a href="/services/{result.slug}">{result.shortDesc}</a>
   </div>
 </SearchResultWrapper>
+
+<style>
+  .header {
+    padding-left: var(--s16);
+    border-left: 4px solid var(--col-available);
+  }
+</style>

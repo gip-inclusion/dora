@@ -14,26 +14,6 @@
   const editLink = `/tableau-de-bord/structures/${structure.slug}/editer`;
 </script>
 
-<style lang="postcss">
-  .icon-label {
-    @apply flex flex-row  items-baseline justify-start;
-  }
-  .icon-label a {
-    @apply flex-initial;
-  }
-
-  .icon-label p {
-    @apply flex-initial;
-  }
-  .icon {
-    @apply w-s16 h-s16 mr-s8 fill-current text-magenta-cta relative top-s2 flex-none;
-  }
-
-  .ext-icon {
-    @apply w-s16 h-s16 ml-s8 fill-current relative top-s2 flex-none;
-  }
-</style>
-
 <div class="col-span-full lg:col-start-1 lg:col-end-5 flex flex-col gap-s16">
   <div
     class=" mt-s64 text-gray-text text-f14 flex flex-row flex-wrap gap-x-s24 lg:gap-s8 lg:flex-col"
@@ -95,3 +75,23 @@
   <p class="text-gray-dark font-bold mb-s24">{structure.shortDesc}</p>
   <p class="prose">{@html structure.fullDesc}</p>
 </div>
+
+<style lang="postcss">
+  .icon-label {
+    @apply flex flex-row  items-baseline justify-start;
+  }
+  .icon-label a {
+    @apply flex-initial;
+  }
+
+  .icon-label p {
+    @apply flex-initial;
+  }
+  .icon {
+    @apply w-s16 h-s16 mr-s8 fill-current text-magenta-cta relative top-s2 flex-none;
+  }
+
+  .ext-icon {
+    @apply w-s16 h-s16 ml-s8 fill-current relative top-s2 flex-none;
+  }
+</style>

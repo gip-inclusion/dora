@@ -4,25 +4,6 @@
   import SearchResultWrapper from "./_search_result_wrapper.svelte";
 </script>
 
-<style lang="postcss">
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--s24);
-  }
-
-  h4 {
-    color: var(--col-info);
-  }
-
-  @screen lg {
-    .wrapper {
-      flex-direction: row;
-    }
-  }
-</style>
-
 <SearchResultWrapper>
   <div class="wrapper">
     <div class="">
@@ -45,3 +26,22 @@
     </div>
   </div>
 </SearchResultWrapper>
+
+<style lang="postcss">
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--s24);
+  }
+
+  h4 {
+    color: var(--col-info);
+  }
+
+  @screen lg {
+    .wrapper {
+      flex-direction: row;
+    }
+  }
+</style>

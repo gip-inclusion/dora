@@ -285,14 +285,6 @@
   }
 </script>
 
-<style>
-  nav {
-    display: flex;
-    justify-content: center;
-    margin-top: var(--s24);
-  }
-</style>
-
 <svelte:window bind:scrollY />
 
 {#if currentStep === 5}
@@ -353,3 +345,11 @@
     {flashSaveDraftButton}
   />
 </CenteredGrid>
+
+<style>
+  nav {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--s24);
+  }
+</style>

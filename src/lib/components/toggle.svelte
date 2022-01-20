@@ -9,28 +9,6 @@
   export let name;
 </script>
 
-<style lang="postcss">
-  .toggle-path {
-    transition: all 0.15s ease-in-out;
-  }
-
-  .toggle-circle {
-    top: 0.25rem;
-    left: 0.25rem;
-    transition: all 0.15s ease-in-out;
-  }
-
-  input:checked ~ .toggle-circle {
-    transform: translateX(100%);
-
-    @apply bg-magenta-cta;
-  }
-
-  input:checked ~ .toggle-path {
-    @apply border-magenta-hover bg-magenta-20;
-  }
-</style>
-
 <!--
   That's a *second* label on the same input (the other one being the "real"
   label from field.svelte)
@@ -63,3 +41,25 @@
     {@html checked ? toggleYesText : toggleNoText}
   </div>
 </label>
+
+<style lang="postcss">
+  .toggle-path {
+    transition: all 0.15s ease-in-out;
+  }
+
+  .toggle-circle {
+    top: 0.25rem;
+    left: 0.25rem;
+    transition: all 0.15s ease-in-out;
+  }
+
+  input:checked ~ .toggle-circle {
+    transform: translateX(100%);
+
+    @apply bg-magenta-cta;
+  }
+
+  input:checked ~ .toggle-path {
+    @apply border-magenta-hover bg-magenta-20;
+  }
+</style>

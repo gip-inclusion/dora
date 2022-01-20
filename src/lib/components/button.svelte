@@ -80,32 +80,6 @@
   }
 </script>
 
-<style>
-  .nogrow {
-    align-self: flex-start;
-  }
-
-  .hz-bottom {
-    align-self: flex-end;
-    margin-bottom: 14px;
-  }
-
-  .flash-success {
-    border: none;
-    background-color: var(--col-success);
-    color: var(--col-white);
-  }
-
-  .flash-success:hover {
-    background-color: var(--col-success);
-    color: var(--col-white);
-  }
-
-  .flash-success:focus {
-    box-shadow: none;
-  }
-</style>
-
 <button
   {type}
   {name}
@@ -137,3 +111,29 @@
     </div>
   {/if}
 </button>
+
+<style>
+  .nogrow {
+    align-self: flex-start;
+  }
+
+  .hz-bottom {
+    align-self: flex-end;
+    margin-bottom: 14px;
+  }
+
+  .flash-success {
+    border: none;
+    background-color: var(--col-success);
+    color: var(--col-white);
+  }
+
+  .flash-success:hover {
+    background-color: var(--col-success);
+    color: var(--col-white);
+  }
+
+  .flash-success:focus {
+    box-shadow: none;
+  }
+</style>

@@ -4,15 +4,6 @@
   export let icon;
 </script>
 
-<style>
-  .wrapper {
-    padding: var(--s16);
-    margin: var(--s32) 0;
-    background-color: var(--col-info-light);
-    border-radius: var(--s4);
-  }
-</style>
-
 <div class="wrapper ">
   {#if title}
     <div class="flex text-f17 font-bold text-information mb-s8 items-center">
@@ -26,3 +17,12 @@
     <slot />
   </div>
 </div>
+
+<style>
+  .wrapper {
+    padding: var(--s16);
+    margin: var(--s32) 0;
+    background-color: var(--col-info-light);
+    border-radius: var(--s4);
+  }
+</style>

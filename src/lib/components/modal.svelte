@@ -23,27 +23,6 @@
   }
 </script>
 
-<style lang="postcss">
-  #background {
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    display: none;
-    width: 100vw;
-    height: 100vh;
-    background-color: #000000cc;
-  }
-
-  .show {
-    display: block !important;
-  }
-
-  .showb {
-    display: flex !important;
-  }
-</style>
-
 <svelte:window on:keydown={handleKeydown} />
 
 <div
@@ -67,3 +46,24 @@
     </div>
   </div>
 </div>
+
+<style lang="postcss">
+  #background {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000cc;
+  }
+
+  .show {
+    display: block !important;
+  }
+
+  .showb {
+    display: flex !important;
+  }
+</style>

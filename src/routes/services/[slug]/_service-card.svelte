@@ -11,21 +11,6 @@
   export let isPreview = false;
 </script>
 
-<style lang="postcss">
-  .service-info {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: var(--s40);
-    gap: var(--s24);
-  }
-
-  @media print {
-    .service-info {
-      margin-bottom: 0;
-    }
-  }
-</style>
-
 <CenteredGrid --col-bg="var(--col-france-blue)" topPadded>
   <ServiceHeader {service} {isPreview} />
 </CenteredGrid>
@@ -59,3 +44,18 @@
     </div>
   </div>
 </CenteredGrid>
+
+<style lang="postcss">
+  .service-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--s40);
+    gap: var(--s24);
+  }
+
+  @media print {
+    .service-info {
+      margin-bottom: 0;
+    }
+  }
+</style>

@@ -32,6 +32,30 @@
   }
 </script>
 
+<div class="wrapper noprint">
+  <div>
+    <h3>Mobiliser ce service</h3>
+  </div>
+
+  <Label label="Découvrez les modalités prévues pour mobiliser ce service :" />
+  <Button on:click={handleMobilize} label="Mobiliser" />
+
+  <OrientationModal {service} bind:isOpen={orientationModalIsOpen} />
+
+  <div class="mt-s16">
+    <Field
+      type="text"
+      label="Partagez cette offre"
+      value={sharingUrl}
+      vertical
+      readonly
+    />
+  </div>
+  {#if !service.isDraft}
+    <LinkButton secondary label="Téléchargez le PDF" to={pdfUrl} nofollow />
+  {/if}
+</div>
+
 <style>
   .wrapper {
     position: relative;
@@ -56,27 +80,3 @@
     }
   }
 </style>
-
-<div class="wrapper noprint">
-  <div>
-    <h3>Mobiliser ce service</h3>
-  </div>
-
-  <Label label="Découvrez les modalités prévues pour mobiliser ce service :" />
-  <Button on:click={handleMobilize} label="Mobiliser" />
-
-  <OrientationModal {service} bind:isOpen={orientationModalIsOpen} />
-
-  <div class="mt-s16">
-    <Field
-      type="text"
-      label="Partagez cette offre"
-      value={sharingUrl}
-      vertical
-      readonly
-    />
-  </div>
-  {#if !service.isDraft}
-    <LinkButton secondary label="Téléchargez le PDF" to={pdfUrl} nofollow />
-  {/if}
-</div>

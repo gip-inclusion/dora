@@ -6,39 +6,6 @@
   export let service;
 </script>
 
-<style>
-  .infos {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: var(--s32);
-    gap: var(--s8);
-  }
-
-  .list {
-    display: flex;
-    flex-direction: column;
-    margin-top: var(--s20);
-    margin-bottom: var(--s32);
-    color: var(--col-text);
-    gap: var(--s8);
-    list-style-position: outside;
-    position: relative;
-    left: var(--s16);
-    list-style-type: "– ";
-    max-width: 40ch;
-  }
-
-  .list li span {
-    position: relative;
-    left: var(--s8);
-  }
-
-  a {
-    color: var(--col-magenta-cta);
-    font-weight: bold;
-  }
-</style>
-
 <Box title="Les modalités" --box-color="var(--col-magenta-cta)">
   <div class="infos">
     {#if service.isCumulative}
@@ -108,3 +75,36 @@
     </div>
   </div>
 </Box>
+
+<style>
+  .infos {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--s32);
+    gap: var(--s8);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--s20);
+    margin-bottom: var(--s32);
+    color: var(--col-text);
+    gap: var(--s8);
+    list-style-position: outside;
+    position: relative;
+    left: var(--s16);
+    list-style-type: "– ";
+    max-width: 40ch;
+  }
+
+  .list li span {
+    position: relative;
+    left: var(--s8);
+  }
+
+  a {
+    color: var(--col-magenta-cta);
+    font-weight: bold;
+  }
+</style>

@@ -88,13 +88,6 @@
   }
 </script>
 
-<style>
-  li {
-    list-style-position: inside;
-    list-style-type: disc;
-  }
-</style>
-
 <svelte:head>
   <title>Réinitialiser votre mot de passe | DORA</title>
 </svelte:head>
@@ -191,3 +184,10 @@
     </Fieldset>
   </Form>
 </AuthLayout>
+
+<style>
+  li {
+    list-style-position: inside;
+    list-style-type: disc;
+  }
+</style>
