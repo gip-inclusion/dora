@@ -16,8 +16,8 @@
   <div class="flex p-s40 gap-s112">
     <div class="flex-1">
       <h3 class="mb-s16">
-        Votre adhésion à « {structure.name} » est en attente de validation par le
-        responsable de votre structure.
+        Votre adhésion à « {structure.name} » est en attente de validation par les
+        responsables de votre structure.
       </h3>
 
       <p class="text-gray-text-alt2 mb-s16">
@@ -33,10 +33,10 @@
             whiteBg
             leftBorder
           >
-            Un message à été envoyé au responsable de votre structure.
+            Un message à été envoyé aux responsables de votre structure.
           </Info>
         {:else}
-          <Button label="Relancer l’administrateur" disabled />
+          <Button label="Relancer les administrateurs" disabled />
         {/if}
       {/if}
     </div>
