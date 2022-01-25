@@ -110,7 +110,7 @@
   </div>
 </FieldSet>
 
-<style>
+<style lang="postcss">
   .establishment-details {
     padding: var(--s24);
     border: 1px solid var(--col-gray-01);

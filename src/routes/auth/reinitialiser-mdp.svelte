@@ -1,8 +1,4 @@
 <script context="module">
-  // We don't need ssr here, and don't want to api call done twice
-  // given that the token will be deleted after validation
-  export const ssr = false;
-
   import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
   import { disconnect } from "$lib/auth";
 
@@ -185,7 +181,7 @@
   </Form>
 </AuthLayout>
 
-<style>
+<style lang="postcss">
   li {
     list-style-position: inside;
     list-style-type: disc;

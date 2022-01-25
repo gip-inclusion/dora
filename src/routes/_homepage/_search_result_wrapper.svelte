@@ -5,7 +5,7 @@
   <slot />
 </div>
 
-<style>
+<style lang="postcss">
   .wrapper {
     padding: 20px 20px 24px 24px;
     background-color: var(--col-white);

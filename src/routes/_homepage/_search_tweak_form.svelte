@@ -126,7 +126,7 @@
   </Collapsable>
 </div>
 
-<style>
+<style lang="postcss">
   .wrapper {
     padding: 24px 24px 16px;
     background-color: var(--col-white);

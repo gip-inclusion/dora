@@ -113,7 +113,7 @@
   <div
     class="flex flex-row items-center justify-center mt-s16 text-f18 text-error pt-s4"
   >
-    <div class="w-s24 h-s24 mr-s8 fill-current ">
+    <div class="w-s24 h-s24 mr-s8 fill-current">
       {@html alertIcon}
     </div>
     <p>

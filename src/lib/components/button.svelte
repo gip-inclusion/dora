@@ -13,7 +13,6 @@
     tertiary = false;
   export let noBackground = false;
   export let nogrow = false;
-  export let horizontalBottom = false;
   export let noPadding = false;
   export let flashSuccess = false;
   export let wFull = false;
@@ -83,9 +82,8 @@
 <button
   {type}
   {name}
-  class="{px} {py} {ts} {lead} {border} {text} {background} flex flex-row items-center rounded focus:shadow-focus outline-none"
-  class:nogrow
-  class:hz-bottom={horizontalBottom}
+  class="{px} {py} {ts} {lead} {border} {text} {background} flex flex-row rounded items-center focus:shadow-focus outline-none"
+  class:items-start={nogrow}
   class:flash-success={flashSuccess}
   class:w-full={wFull}
   class:justify-center={!iconOnLeft && !iconOnRight}
@@ -112,29 +110,3 @@
     </div>
   {/if}
 </button>
-
-<style>
-  .nogrow {
-    align-self: flex-start;
-  }
-
-  .hz-bottom {
-    align-self: flex-end;
-    margin-bottom: 14px;
-  }
-
-  .flash-success {
-    border: none;
-    background-color: var(--col-success);
-    color: var(--col-white);
-  }
-
-  .flash-success:hover {
-    background-color: var(--col-success);
-    color: var(--col-white);
-  }
-
-  .flash-success:focus {
-    box-shadow: none;
-  }
-</style>

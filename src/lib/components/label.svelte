@@ -51,7 +51,7 @@
   {/if}
 </div>
 
-<style>
+<style lang="postcss">
   .wrapper {
     color: var(--col-text);
   }

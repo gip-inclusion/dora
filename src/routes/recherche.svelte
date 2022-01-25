@@ -1,5 +1,4 @@
 <script context="module">
-  export const ssr = false;
   import { getServicesOptions } from "$lib/services";
   import { getApiURL } from "$lib/utils/api.js";
   import { getQuery } from "./_homepage/_search";
@@ -11,14 +10,17 @@
       cityCode,
       radius
     )}`;
+
     const res = await fetch(url, {
       headers: {
         Accept: "application/json; version=1.0",
       },
     });
+
     if (res.ok) {
       return await res.json();
     }
+
     // TODO: log errors
     try {
       console.error(await res.json());

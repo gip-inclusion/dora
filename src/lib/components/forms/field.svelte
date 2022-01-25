@@ -70,7 +70,7 @@
         </div>
         <span class="text-f12 text-gray-text-alt2"> {description}</span>
       </div>
-      <div class="flex flex-col flex-1 grow min-h-[3rem]">
+      <div class="flex flex-col flex-1 grow mb-s16">
         {#if type !== "custom"}
           <Input
             bind:value

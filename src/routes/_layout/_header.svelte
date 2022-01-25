@@ -41,7 +41,7 @@
   </div>
 </header>
 
-<style>
+<style lang="postcss">
   .dev-banner {
     border-top: 8px solid orange;
   }

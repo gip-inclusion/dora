@@ -31,7 +31,7 @@
   />
 </CG>
 
-<style>
+<style lang="postcss">
   iframe {
     width: 100%;
   }

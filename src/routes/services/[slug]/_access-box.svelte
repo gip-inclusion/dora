@@ -46,7 +46,7 @@
   </div>
 </Box>
 
-<style>
+<style lang="postcss">
   .list {
     display: flex;
     flex-direction: column;

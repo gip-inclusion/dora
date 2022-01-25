@@ -56,7 +56,7 @@
   {/if}
 </div>
 
-<style>
+<style lang="postcss">
   .wrapper {
     position: relative;
     top: 2.5rem;

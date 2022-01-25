@@ -61,7 +61,7 @@
   </div>
 </div>
 
-<style>
+<style lang="postcss">
   @media print {
     h1 {
       color: var(--col-france-blue);

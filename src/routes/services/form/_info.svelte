@@ -18,7 +18,7 @@
   </div>
 </div>
 
-<style>
+<style lang="postcss">
   .wrapper {
     padding: var(--s16);
     margin: var(--s32) 0;

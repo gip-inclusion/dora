@@ -76,7 +76,7 @@
   </div>
 </Box>
 
-<style>
+<style lang="postcss">
   .infos {
     display: flex;
     flex-direction: column;

@@ -38,7 +38,7 @@
   </div>
 </SearchResultWrapper>
 
-<style>
+<style lang="postcss">
   .header {
     padding-left: var(--s16);
     border-left: 4px solid var(--col-available);

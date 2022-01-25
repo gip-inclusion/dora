@@ -111,16 +111,17 @@
         />
       </div>
 
-      <Button
-        type="submit"
-        label="Trouver"
-        icon={searchIcon}
-        disabled={!category || !cityCode}
-        iconOnLeft
-        horizontalBottom
-        small
-        preventDefaultOnMouseDown
-      />
+      <div class="self-end mb-s16">
+        <Button
+          type="submit"
+          label="Trouver"
+          icon={searchIcon}
+          disabled={!category || !cityCode}
+          iconOnLeft
+          small
+          preventDefaultOnMouseDown
+        />
+      </div>
     </form>
   {:else}
     <p>Impossible de contacter le serveur</p>

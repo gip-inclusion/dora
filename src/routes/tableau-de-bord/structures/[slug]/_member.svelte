@@ -27,7 +27,7 @@
   </div>
 </div>
 
-<style>
+<style lang="postcss">
   .wrapper {
     display: flex;
     align-items: center;

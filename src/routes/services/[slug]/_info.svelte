@@ -27,7 +27,7 @@
   </div>
 </div>
 
-<style>
+<style lang="postcss">
   .wrapper {
     padding: var(--s24);
   }

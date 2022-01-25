@@ -1,5 +1,4 @@
 <script context="module">
-  export const ssr = false;
   import { get } from "svelte/store";
   import {
     getStructure,

@@ -346,7 +346,7 @@
   />
 </CenteredGrid>
 
-<style>
+<style lang="postcss">
   nav {
     display: flex;
     justify-content: center;
