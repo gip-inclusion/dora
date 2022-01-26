@@ -30,6 +30,8 @@ export { default as loginIcon } from "remixicon/icons/System/login-circle-fill.s
 export { default as dashboardIcon } from "remixicon/icons/System/dashboard-fill.svg?raw";
 export { default as settingsIcon } from "remixicon/icons/System/settings-5-line.svg?raw";
 export { default as menuIcon } from "remixicon/icons/System/menu-line.svg?raw";
+export { default as timerFlashIcon } from "remixicon/icons/System/timer-flash-line.svg?raw";
+export { default as uploadCloudIcon } from "remixicon/icons/System/upload-cloud-2-line.svg?raw";
 
 export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
@@ -60,3 +62,5 @@ export { default as phoneIcon } from "remixicon/icons/Device/phone-fill.svg?raw"
 export { default as computerIcon } from "remixicon/icons/Device/computer-line.svg?raw";
 
 export { default as messageIcon } from "remixicon/icons/Communication/message-3-line.svg?raw";
+
+export { default as quillPenIcon } from "remixicon/icons/Design/quill-pen-line.svg?raw";

@@ -5,7 +5,7 @@
   import { formErrors } from "$lib/validation.js";
   import serviceSchema from "$lib/schemas/service.js";
 
-  import Info from "./_info.svelte";
+  import Info from "$lib/components/forms/form-info.svelte";
 
   export let servicesOptions, service, structures;
   let subcategories = [];

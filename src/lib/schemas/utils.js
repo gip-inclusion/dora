@@ -94,6 +94,14 @@ export function isSafir(msg) {
   });
 }
 
+export function isSiret(msg) {
+  return (name, value, _data) => ({
+    valid:
+      typeof value === "string" && (value === "" || !!value.match(/^\d{14}$/u)),
+    msg: msg || "Ce champ doit comporter 14 chiffres",
+  });
+}
+
 export function isCustomizablePK(msg) {
   return (name, value, _data) => ({
     valid:

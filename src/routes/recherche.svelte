@@ -69,8 +69,9 @@
   import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
   import SearchPromo from "./_homepage/_search-promo.svelte";
 
-  import { mailIcon, newspaperIcon } from "$lib/icons";
+  import { newspaperIcon } from "$lib/icons";
   import NoResultsPic from "$lib/assets/illu_zero-resultats-optimise.svg";
+  import ShareButton from "$lib/components/share-button.svelte";
 
   export let servicesOptions;
   export let category, subcategory, cityCode, cityLabel, radius;
@@ -83,26 +84,6 @@
       });
     }
   });
-
-  const sharingEmailSubject = encodeURIComponent("Connaissez-vous Dora ?");
-  const sharingEmailBody = encodeURIComponent(
-    `
-Bonjour,
-Je me permets de vous partager un projet qui devrait vous intéresser.
-
-Connaissez-vous Dora ?
-
-Lancé en Mai 2021, Dora est un service public numérique porté par la DGEFP qui permet aux structures de l'insertion de référencer simplement et mettre à jour en temps réel leur offre de services, et aux professionnels prescripteurs de rechercher et mobiliser rapidement le service le plus adapté au besoin de leur bénéficiaire.
-
-J'ai le plaisir de vous annoncer que Dora est accessible dès aujourd'hui pour l'ensemble les acteurs de l'insertion du territoire. De nombreux partenaires ont d'ores et déjà mis en visibilité leur offre de service sur Dora. Vous pouvez également vous inscrire et bénéficier de ce service !
-
-👉 Pour accéder à Dora cliquez sur ce lien (pensez à l'ajouter à vos favoris 😉) :
-https://dora.fabrique.social.gouv.fr/
-
-Dans l'attente de pouvoir consulter votre offre de service sur cet outil.
-Cordialement,
-`.trim()
-  );
 </script>
 
 <svelte:head>
@@ -169,14 +150,7 @@ Cordialement,
             Vous connaissez des structures proposant des services correspondant
             à ces critères ? Invitez vos partenaires à se référencer :
           </h4>
-          <div>
-            <LinkButton
-              label="Recommander DORA"
-              icon={mailIcon}
-              iconOnRight
-              to="mailto:?subject={sharingEmailSubject}&body={sharingEmailBody}"
-            />
-          </div>
+          <ShareButton />
           <h4 class="mt-s48">
             Infolettre : nouveautés et les prochains territoires ouverts sur
             Dora.

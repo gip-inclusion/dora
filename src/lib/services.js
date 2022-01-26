@@ -129,12 +129,46 @@ export async function getLastDraft() {
   return null;
 }
 
-export async function getServicesOptions() {
+export async function getServicesOptions({ kitFetch } = {}) {
   const url = `${getApiURL()}/services-options/`;
   try {
-    return (await fetchData(url)).data;
+    return (await fetchData(url, { kitFetch })).data;
   } catch (err) {
     logException(err);
     return {};
   }
+}
+
+export async function publishServiceSuggestion(service) {
+  const url = `${getApiURL()}/services-suggestions/`;
+  const method = "POST";
+  const { siret, name, ...contents } = service;
+  const response = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({
+      siret,
+      name,
+      contents,
+    }),
+  });
+
+  const result = {
+    ok: response.ok,
+    status: response.status,
+  };
+  if (response.ok) {
+    result.data = await response.json();
+  } else {
+    try {
+      result.error = await response.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  return result;
 }

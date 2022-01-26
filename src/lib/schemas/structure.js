@@ -4,14 +4,7 @@ export default {
   siret: {
     default: "",
     required: true,
-    rules: [
-      (name, value, _data) => ({
-        valid:
-          typeof value === "string" &&
-          (value === "" || !!value.match(/^\d{14}$/u)),
-        msg: "Ce champ doit comporter 14 chiffres",
-      }),
-    ],
+    rules: [v.isSiret()],
   },
   name: {
     default: "",

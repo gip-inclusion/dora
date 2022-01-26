@@ -4,7 +4,8 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import { lightBulbIcon, messageIcon } from "$lib/icons";
 
-  import Info from "../form/_info.svelte";
+  import Info from "$lib/components/forms/form-info.svelte";
+
   import Tag from "$lib/components/tag.svelte";
   import Button from "$lib/components/button.svelte";
   import SuggestionModal from "./_suggestion-modal.svelte";

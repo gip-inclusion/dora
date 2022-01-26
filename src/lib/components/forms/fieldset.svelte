@@ -8,6 +8,7 @@
   class="flex flex-col max-w-4xl gap-s24 pt-s32 mt-s48 bg-white rounded-md shadow-md px-s40 pb-s56 "
   class:no-top-padding={noTopPadding}
 >
+  <slot name="prefix" />
   {#if title}
     <div class="pb-s24 border-b border-gray-01">
       <h3 class="mb-s8 text-france-blue">
