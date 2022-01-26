@@ -143,12 +143,13 @@ export async function publishServiceSuggestion(service) {
   const url = `${getApiURL()}/services-suggestions/`;
   const method = "POST";
   const { siret, name, ...contents } = service;
+  const authToken = get(token);
   const response = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${get(token)}`,
+      Authorization: authToken ? `Token ${get(token)}` : undefined,
     },
     body: JSON.stringify({
       siret,
