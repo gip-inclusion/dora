@@ -1,5 +1,6 @@
 <script>
   import { getApiURL } from "$lib/utils/api.js";
+  import { deleteBinIcon } from "$lib/icons.js";
 
   export let structureSlug;
   export let fileKeys = [];
@@ -8,6 +9,10 @@
 
   let progress = null;
   let uploadInput;
+
+  function handleRemove(fileKey) {
+    fileKeys = fileKeys.filter((k) => k !== fileKey);
+  }
 
   async function handleSubmit() {
     function updateProgress(loaded, total) {
@@ -26,6 +31,7 @@
     uploadInput.disabled = true;
 
     const files = uploadInput.files;
+
     for (let i = 0; i < files.length; i++) {
       const file = files.item(i);
       // We can't use fetch if we want a progress indicator
@@ -51,7 +57,7 @@
   }
 </script>
 
-<form on:submit|preventDefault={handleSubmit}>
+<form on:submit|preventDefault={handleSubmit} class="cursor-pointer mb-s8">
   <label>
     <input
       {name}
@@ -61,11 +67,20 @@
       {disabled}
       type="file"
       multiple
-    />{progress != null ? `${Math.round(progress)} %` : ""}</label
-  >
+      class="file:px-s8 file:lg:px-s10 file:py-s6 file:text-f14 file:leading-normal file:border file:border-magenta-cta file:hover:border-magenta-hover file:disabled:border-gray-01 file:active:border-france-blue font-bold file:text-magenta-cta file:hover:text-white file:disabled:disabled:text-gray-text-alt2 file:active:text-france-blue file:bg-white file:hover:bg-magenta-hover file:rounded"
+    />{progress != null ? `${Math.round(progress)} %` : ""}
+  </label>
 </form>
 <ul>
   {#each fileKeys as uploaded}
-    <li>• {uploaded}</li>
+    <li class="mb-s8 flex">
+      <div class="text-f14">{uploaded}</div>
+      <button
+        on:click={handleRemove(uploaded)}
+        class="w-s24 h-s24 ml-s16 fill-error"
+      >
+        {@html deleteBinIcon}
+      </button>
+    </li>
   {/each}
 </ul>

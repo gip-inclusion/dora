@@ -64,3 +64,5 @@ export { default as computerIcon } from "remixicon/icons/Device/computer-line.sv
 export { default as messageIcon } from "remixicon/icons/Communication/message-3-line.svg?raw";
 
 export { default as quillPenIcon } from "remixicon/icons/Design/quill-pen-line.svg?raw";
+
+export { default as deleteBinIcon } from "remixicon/icons/System/delete-bin-line.svg?raw";

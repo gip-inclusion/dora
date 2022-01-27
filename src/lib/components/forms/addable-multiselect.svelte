@@ -33,13 +33,7 @@
       return;
     }
 
-    choices = [
-      ...choices,
-      {
-        value,
-        label: value,
-      },
-    ];
+    choices = [...choices, { value, label: value }];
     values = [...values, value];
     newValue = "";
     textInputVisible = false;
