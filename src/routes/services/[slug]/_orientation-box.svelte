@@ -45,7 +45,7 @@
   <div class="mt-s16">
     <Field
       type="text"
-      label="Partagez cette offre"
+      label="Partagez ce service"
       value={sharingUrl}
       vertical
       readonly

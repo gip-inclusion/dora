@@ -71,7 +71,7 @@
     name="category"
     errorMessages={$formErrors.category}
     onSelectChange={handleCategoryChange}
-    placeholder="Choisissez la catégorie principale"
+    placeholder="Choisissez la thématique principale"
     sortSelect
   />
   <ModelField
@@ -82,13 +82,15 @@
     errorMessages={$formErrors.subcategories}
     bind:value={service.subcategories}
     choices={subcategories}
-    placeholder="Choisissez les sous-catégories"
-    placeholderMulti="Choisissez les sous-catégories"
+    placeholder="Choisissez le besoin correspondant"
+    placeholderMulti="Choisissez les besoins correspondants"
     sortSelect
+    description="Besoin(s) auxquels votre service répond."
   >
     <FieldHelp slot="helptext" title="Catégorisation">
-      Pour permettre à nos utilisateurs de trouver facilement la solution que
-      vous proposez, il est nécessaire de classer les services par catégorie.
+      Pour faciliter le référencement et la mise en avant de votre service, il
+      est nécessaire de classer les services par thématiques et besoins auxquels
+      ils répondent.
     </FieldHelp>
   </ModelField>
 
@@ -100,25 +102,30 @@
     errorMessages={$formErrors.kinds}
     bind:value={service.kinds}
     choices={servicesOptions.kinds}
-    description="Quel type de service proposez-vous ? "
+    description="Quelle est la nature de votre service."
   />
 </FieldSet>
 
 <FieldSet title="Présentez votre service">
   <ModelField
-    label="Nom du service"
+    label="Titre du service"
     type="text"
     placeholder="Ex. Aide aux frais liés à…"
     schema={serviceSchema.name}
     name="name"
     errorMessages={$formErrors.name}
     bind:value={service.name}
-  />
+  >
+    <FieldHelp slot="helptext" title="Titre du service">
+      Le nom de votre service, tel qui va être affiché dans les résultats de
+      recherche et les fiches détail.
+    </FieldHelp>
+  </ModelField>
   <ModelField
     description="280 caractères maximum"
     placeholder="Décrivez brièvement votre service"
     type="textarea"
-    label="Résumé"
+    label="Présentation résumée"
     schema={serviceSchema.shortDesc}
     name="shortDesc"
     errorMessages={$formErrors.shortDesc}
@@ -126,19 +133,19 @@
   >
     <FieldHelp slot="helptext" title="Résumé">
       <p>
-        Lors de l’affichage du service, nous aurons besoin de voir une
-        présentation brève de ce que propose votre service avec seulement les
-        éléments principaux.
+        Contenu de présentation court qui apparait dans les résultats de
+        recherche du site DORA. Résumez en une phrase les besoins auxquels votre
+        service répond et apportez plus de détails dans la partie « Descriptif
+        complet », si besoin est.
       </p>
       <p>
-        <strong>Par exemple :</strong>
-        Faciliter vos déplacements en cas de recherche d'emploi (entretien d'embauche,
-        concours public).
+        <strong>Exemple de résumé</strong> : Faciliter vos déplacements en cas de
+        reprise d'emploi ou de formation (entretien d'embauche, concours public...)
       </p>
     </FieldHelp>
   </ModelField>
   <ModelField
-    label="Sessions & récurrence"
+    label="Sessions et récurrence"
     description="À quelle fréquence votre service est-il disponible ?"
     type="text"
     placeholder="Ex. Tous les jours, une fois par mois, etc."

@@ -39,7 +39,7 @@
           iconOnLeft
           icon={briefcaseIcon} /> -->
         <LinkButton
-          label="Ajouter une offre"
+          label="Ajouter un service"
           to="/services/creer"
           icon={addCircleIcon}
           iconOnRight

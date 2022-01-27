@@ -22,25 +22,17 @@
     placeholderMulti="Choisir un autre critères d’admission"
     schema={serviceSchema.accessConditions}
     sortSelect
+    description="Précisez les critères d’éligibilité du public afin de recevoir des orientations adéquates. Plusieurs choix possibles."
   >
     <FieldHelp slot="helptext" title="Critères">
       <p>
-        <strong>Critères d’admission</strong><br />
-        Précisez les critères d’éligibilité du public afin de recevoir des orientations
-        adéquates
-      </p>
-      <p>
-        <strong>Publics concernés</strong><br />Définissez bien les publics
-        concernés, cela permettra d’orienter le bon public.
-      </p>
-      <p>
-        <strong>Pré-requis ou compétences</strong><br />
-        Quels sont les compétences, les diplômes qui limitent l’accès au service
-        ?
-      </p>
-      <p>
-        <strong>Service cumulable</strong><br />Ce service peut-il être cumulé à
-        un autre ?
+        <strong>Critères d’éligibilité</strong><br />
+        Définissez le type de publics auxquels votre service s’adresse. Si parmi
+        les choix proposés pour les « critères d’accès », pour les « publics concernés »
+        ou pour « les prérequis ou compétences » vous pouvez ajouter vos propres
+        critères grâce au bouton « Ajouter une autre option ». Si votre service est
+        ouvert à tout le monde, sans critères ou prérequis, laissez les champs avec
+        les options par défaut.
       </p>
     </FieldHelp>
   </AddableMultiselect>
@@ -56,6 +48,7 @@
     placeholderMulti="Choisir un autre type de publics"
     schema={serviceSchema.concernedPublic}
     sortSelect
+    description="Ces critères permettent d’orienter le bon public vers votre service. Plusieurs choix possibles."
   />
 
   <AddableMultiselect
@@ -69,6 +62,7 @@
     placeholderMulti="Choisir un autre pré-requis"
     schema={serviceSchema.requirements}
     sortSelect
+    description="Plusieurs choix possibles."
   />
 
   <ModelField
@@ -78,6 +72,7 @@
     name="isCumulative"
     errorMessages={$formErrors.isCumulative}
     bind:value={service.isCumulative}
+    description="Votre service est cumulable avec d’autres services ? "
   />
   <ModelField
     type="toggle"
