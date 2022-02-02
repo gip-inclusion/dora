@@ -7,7 +7,7 @@
   export let currentPageIsValid;
 </script>
 
-<div class="col-span-full col-start-1 ">
+<div class="col-span-full col-start-1">
   <div class="flex flex-row gap-s48">
     <div class="grow" />
 

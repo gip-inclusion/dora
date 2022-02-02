@@ -70,7 +70,7 @@
 </CenteredGrid>
 
 <CenteredGrid>
-  <div class="col-start-1 col-span-full mb-s40 text-center ">
+  <div class="col-start-1 col-span-full mb-s40 text-center">
     <div class="mx-auto mb-s64 lg:w-1/2">
       <h5>
         Vous travaillez pour une structure porteuse/offreuse de services
@@ -82,7 +82,7 @@
       </h2>
     </div>
     <div class="flex gap-s64 flex-col lg:flex-row-reverse">
-      <div class="flex flex-col flex-1 ">
+      <div class="flex flex-col flex-1">
         <div class="mx-auto">
           <img src={VisiblePic} width="140" height="140" alt="" />
         </div>

@@ -100,7 +100,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
           {#if service.onlineForm}
             <ul class="list">
               <li>
-                <div class=" ">
+                <div>
                   <span class="break-all">
                     <a
                       target="_blank"

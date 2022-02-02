@@ -19,7 +19,7 @@
   extraClass="bg-gradient-to-b from-magenta-10 to-magenta-10/0"
 >
   <div class="col-span-full mb-s40">
-    <div class="flex gap-s24 ">
+    <div class="flex gap-s24">
       <img
         class="flex-none"
         src={ContributionPic}

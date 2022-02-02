@@ -787,7 +787,7 @@
                 }}
               >
                 <div class="flex flex-row">
-                  <div class="grow flex justify-between ">
+                  <div class="grow flex justify-between">
                     <div>
                       {@html listItem.highlighted
                         ? listItem.highlighted.label
@@ -810,7 +810,7 @@
                       {/if}
 
                       <div class="grow-0 hidden checkmark">
-                        <div class="w-s24 h-s16 ml-s8 fill-current ">
+                        <div class="w-s24 h-s16 ml-s8 fill-current">
                           {@html checkIcon}
                         </div>
                       </div>

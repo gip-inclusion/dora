@@ -15,7 +15,7 @@
   class:dev-banner={ENVIRONMENT !== "production"}
 >
   <CenteredGrid>
-    <div class="flex flex-row items-center row-start-1 col-span-full py-s12 ">
+    <div class="flex flex-row items-center row-start-1 col-span-full py-s12">
       <a class="flex flex-row gap-s40 items-center" href="/">
         <div class="hidden lg:block">
           <img

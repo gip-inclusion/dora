@@ -6,9 +6,9 @@
   export let isHTML = false;
 </script>
 
-<div class="text-error text-f12 flex flex-row items-center pt-s4 ">
+<div class="text-error text-f12 flex flex-row items-center pt-s4">
   {#if iconOnLeft}
-    <div class="w-s16 h-s16 mr-s8 fill-current ">
+    <div class="w-s16 h-s16 mr-s8 fill-current">
       {@html alertIcon}
     </div>
   {/if}

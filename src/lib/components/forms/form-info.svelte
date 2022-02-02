@@ -4,7 +4,7 @@
   export let icon;
 </script>
 
-<div class="wrapper ">
+<div class="wrapper">
   {#if title}
     <div class="flex text-f17 font-bold text-information mb-s8 items-center">
       <div class="w-s24 h-s24 mr-s8 fill-current">

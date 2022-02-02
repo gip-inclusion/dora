@@ -34,12 +34,31 @@
 
 <EnsureLoggedIn>
   <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-    <div class="flex flex-row col-span-full justify-between">
-      <h2 class="col-start-1 col-span-full">
-        Bonjour {$userInfo.shortName},
-      </h2>
+    <h2 class="col-span-full">
+      Bonjour {$userInfo.shortName},
+    </h2>
+    <div
+      class="col-span-full lg:flex lg:flex-row lg:gap-s16 p-s16 bg-white rounded-md justify-between"
+    >
+      <div class="mb-s16 lg:mb-s0">
+        <h4 class="text-magenta-cta">Aidez-nous à améliorer DORA !</h4>
+        <p class="text-f14">
+          Faites nous part de vos retours d'expérience, des problemes que vous
+          rencontrez ou porpositions d’amelioration.
+        </p>
+      </div>
+      <div class="shrink-0 py-s16 self-end">
+        <a
+          href="https://itou.typeform.com/to/DPQOe5pP"
+          target="_blank"
+          rel="noopener nofollow"
+          label="Participer (3min)"
+          class="px-s16 py-s12 text-f16 font-bold text-white bg-magenta-cta hover:bg-magenta-hover active:bg-france-blue rounded focus:shadow-focus"
+          >Participer (3 min.)</a
+        >
+      </div>
     </div>
-    <div class="col-start-1 col-span-full text-left">
+    <div class="col-span-full">
       {#if $userInfo.isStaff}
         <div class="rounded-md p-s8 bg-gray-bg mb-s48">
           <h4 class="text-information">

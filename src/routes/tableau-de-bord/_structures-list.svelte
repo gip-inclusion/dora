@@ -14,9 +14,9 @@
 </script>
 
 <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-  <div class="wrapper col-start-1 col-span-full">
+  <div class="col-start-1 col-span-full flex flex-col pb-s40 gap-s12">
     {#each structures as structure}
-      <div class="structure flex flex-row gap-s16">
+      <div class="flex flex-row gap-s16 p-s16 bg-white rounded-md">
         <div class="grow flex flex-row items-center">
           <a href="/tableau-de-bord/structures/{structure.slug}">
             <h5>
@@ -56,18 +56,3 @@
     {/each}
   </div>
 </CenteredGrid>
-
-<style lang="postcss">
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: var(--s40);
-    gap: var(--s12);
-  }
-
-  .structure {
-    padding: var(--s16);
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-  }
-</style>

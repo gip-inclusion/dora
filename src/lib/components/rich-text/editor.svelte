@@ -58,7 +58,7 @@
 
 <div class="flex flex-col w-full border border-gray-03">
   {#if editor}
-    <div class="flex flex-row items-center bg-gray-03 p-s12 ">
+    <div class="flex flex-row items-center bg-gray-03 p-s12">
       <Button
         on:click={() => editor.chain().focus().toggleBold().run()}
         active={editor.isActive("bold")}

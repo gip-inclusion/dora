@@ -82,12 +82,12 @@
             description="Vous trouvez ici les informations concernant votre structure, tels qu’ils sont visibles sur le site DORA."
           >
             <div class="border border-gray-01 rounded px-s24 py-s16">
-              <h4 class="text-gray-text ">{structure.name}</h4>
+              <h4 class="text-gray-text">{structure.name}</h4>
               <div class="legend mt-s12">SIRET: {structure.siret}</div>
             </div>
             <div class="border border-gray-01 rounded px-s24 py-s16">
               <h5>Adresse</h5>
-              <div class="legend ">
+              <div class="legend">
                 {structure.address1}<br />
                 {#if structure.address2}{structure.address2}<br />{/if}
                 {structure.postalCode}
