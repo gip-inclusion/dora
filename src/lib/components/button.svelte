@@ -53,8 +53,8 @@
     border =
       "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue";
     text =
-      "font-bold text-magenta-cta hover:text-white disabled:disabled:text-gray-text-alt2 active:text-france-blue";
-    background = "bg-white hover:bg-magenta-hover";
+      "font-bold text-magenta-cta hover:text-white disabled:text-gray-text-alt2 active:text-france-blue";
+    background = "bg-white hover:bg-magenta-hover disabled:bg-white";
   } else if (tertiary) {
     border =
       "border border-gray-dark  disabled:border-gray-01 active:border-france-blue";
