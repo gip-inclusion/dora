@@ -43,8 +43,8 @@
       <div class="mb-s16 lg:mb-s0">
         <h4 class="text-magenta-cta">Aidez-nous à améliorer DORA !</h4>
         <p class="text-f14">
-          Faites nous part de vos retours d'expérience, des problemes que vous
-          rencontrez ou porpositions d’amelioration.
+          Faites-nous part de vos retours d’expérience, de problèmes que vous
+          rencontrez ou de propositions d’amélioration.
         </p>
       </div>
       <div class="shrink-0 py-s16 self-end">
