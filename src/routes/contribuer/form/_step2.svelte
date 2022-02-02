@@ -11,6 +11,7 @@
 
   export let servicesOptions;
   export let service;
+  export let establishment;
 
   function handleCityChange(city) {
     const props = city?.properties;
@@ -28,6 +29,14 @@
     service.longitude = long;
     service.latitude = lat;
   }
+
+  service.city = establishment.city;
+  service.address1 = establishment.address1;
+  service.address2 = establishment.address2;
+  service.postalCode = establishment.postalCode;
+  service.cityCode = establishment.cityCode;
+  service.latitude = establishment.latitude;
+  service.longitude = establishment.longitude;
 </script>
 
 <FieldSet title="Conditions d'accès pour le bénéficiaire">

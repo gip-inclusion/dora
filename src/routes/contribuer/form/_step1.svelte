@@ -7,7 +7,7 @@
   import SearchBySiret from "$lib/components/structures/search-by-siret.svelte";
 
   export let servicesOptions, service;
-  let establishment = {};
+  export let establishment;
 
   let subcategories = [];
   function handleCategoryChange(category) {

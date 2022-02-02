@@ -23,6 +23,7 @@
       props.default,
     ])
   );
+  let establishment = null;
 
   let currentStep = 1;
 
@@ -42,6 +43,7 @@
   <svelte:component
     this={currentStepComponent}
     bind:service
+    bind:establishment
     {servicesOptions}
   />
 </FormWrapper>
