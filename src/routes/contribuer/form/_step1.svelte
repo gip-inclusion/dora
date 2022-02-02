@@ -33,7 +33,7 @@
 
 <FieldSet
   title="Identifions la structure concernée"
-  description="Merci de renseigner le numéro SIRET de votre structure afin de l’identifier."
+  description="Merci de renseigner le numéro SIRET de la structure afin de l’identifier."
 >
   <SearchBySiret
     bind:establishment
