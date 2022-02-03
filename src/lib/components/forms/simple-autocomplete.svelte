@@ -787,7 +787,7 @@
                 }}
               >
                 <div class="flex flex-row">
-                  <div class="grow flex justify-between">
+                  <div class="flex grow justify-between">
                     <div>
                       {@html listItem.highlighted
                         ? listItem.highlighted.label
@@ -796,21 +796,21 @@
                     <div class="flex shrink-0 items-baseline">
                       {#each listItem.tags as tag}
                         <div
-                          class="shrink-0 px-s6 py-s2 rounded text-gray-text text-f10 font-bold uppercase bg-gray-01"
+                          class="shrink-0 rounded bg-gray-01 px-s6 py-s2 text-f10 font-bold uppercase text-gray-text"
                         >
                           {tag}
                         </div>
                       {/each}
                       {#if postfixValueFunction}
                         <div
-                          class="inline-block ml-s8 text-gray-text-alt text-f12"
+                          class="ml-s8 inline-block text-f12 text-gray-text-alt"
                         >
                           {postfixValueFunction(listItem.value)}
                         </div>
                       {/if}
 
-                      <div class="grow-0 hidden checkmark">
-                        <div class="w-s24 h-s16 ml-s8 fill-current">
+                      <div class="checkmark hidden grow-0">
+                        <div class="ml-s8 h-s16 w-s24 fill-current">
                           {@html checkIcon}
                         </div>
                       </div>
@@ -859,7 +859,7 @@
 
 <style lang="postcss">
   input {
-    @apply disabled:bg-gray-00 read-only:text-gray-03;
+    @apply read-only:text-gray-03 disabled:bg-gray-00;
   }
 
   .autocomplete {
@@ -1009,7 +1009,7 @@
   }
 
   .tag {
-    @apply text-white text-f12 uppercase leading-20;
+    @apply text-f12 uppercase leading-20 text-white;
   }
 
   .tag.is-delete {

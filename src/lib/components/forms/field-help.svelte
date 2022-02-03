@@ -4,13 +4,13 @@
 </script>
 
 <div
-  class="help px-s16 pt-s16 pb-s24 bg-white border-l-4 rounded-r border-information"
+  class="help rounded-r border-l-4 border-information bg-white px-s16 pt-s16 pb-s24"
 >
   {#if title}
     <div
-      class="flex font-bold flex-row items-center mb-s8 text-f17 leading-normal text-information"
+      class="mb-s8 flex flex-row items-center text-f17 font-bold leading-normal text-information"
     >
-      <div class="w-s24 h-s24 mr-s8 fill-current">
+      <div class="mr-s8 h-s24 w-s24 fill-current">
         {@html lightBulbIcon}
       </div>
       {title}
@@ -30,6 +30,6 @@
 
   .help-content,
   .help-content :global(p) {
-    @apply mb-s16 last:mb-s0 text-f14 text-gray-text leading-relaxed;
+    @apply mb-s16 text-f14 leading-relaxed text-gray-text last:mb-s0;
   }
 </style>

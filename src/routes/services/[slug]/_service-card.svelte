@@ -20,11 +20,11 @@
   --col-under-bg="var(--col-france-blue)"
   --col-content-bg="var(--col-bg)"
 >
-  <div class="flex flex-col col-span-full">
+  <div class="col-span-full flex flex-col">
     <div class="flex flex-col gap-s24 lg:flex-row-reverse">
-      <div class="flex-initial orientation">
+      <div class="orientation flex-initial">
         <OrientationBox {service} />
-        <div class="flex-col hidden max-w-md gap-s16 mb-s16 lg:flex">
+        <div class="mb-s16 hidden max-w-md flex-col gap-s16 lg:flex">
           <h4>{service.structureInfo.name}</h4>
           <Label label={service.structureInfo.shortDesc} italic />
           <LinkButton
@@ -34,7 +34,7 @@
           />
         </div>
       </div>
-      <div class="flex-1 service-pres">
+      <div class="service-pres flex-1">
         <ServicePresentation {service} />
       </div>
     </div>

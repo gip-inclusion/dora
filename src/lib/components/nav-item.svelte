@@ -11,7 +11,7 @@
 </script>
 
 <a
-  class="flex flex-row items-center py-s8 text-f14 rounded outline-none"
+  class="flex flex-row items-center rounded py-s8 text-f14 outline-none"
   class:text-gray-text-alt2={light}
   class:text-gray-dark={!light}
   class:pr-s32={!separator}
@@ -23,11 +23,11 @@
 >
   {label}
   {#if externalIcon}
-    <div class="w-s16 h-s16 ml-s8 fill-current">
+    <div class="ml-s8 h-s16 w-s16 fill-current">
       {@html externalLineIcon}
     </div>
   {/if}
   {#if separator}
-    <div class="h-s16 mx-s16 border-l border-gray-03" />
+    <div class="mx-s16 h-s16 border-l border-gray-03" />
   {/if}
 </a>

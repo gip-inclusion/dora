@@ -23,7 +23,7 @@
 
 <EnsureStaff>
   <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-    <div class="col-start-1 col-span-full text-left">
+    <div class="col-span-full col-start-1 text-left">
       <div class="mb-s8">
         <h2>Tous les services</h2>
       </div>

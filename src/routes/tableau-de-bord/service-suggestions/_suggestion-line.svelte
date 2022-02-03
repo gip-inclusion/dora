@@ -11,7 +11,7 @@
   class:flex-col={verticalLayout}
   class:hidden={isList ? !data.length : !data}
 >
-  <div class="font-bold mr-s16 w-1/3 text-gray-text">{label}</div>
+  <div class="mr-s16 w-1/3 font-bold text-gray-text">{label}</div>
   <div class="text-gray-text">
     {#if isList}
       {#each data as item}

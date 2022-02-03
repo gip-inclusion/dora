@@ -5,12 +5,12 @@
 </script>
 
 <div
-  class="flex flex-col max-w-4xl gap-s24 pt-s32 mt-s48 bg-white rounded-md shadow-md px-s40 pb-s56 "
+  class="mt-s48 flex max-w-4xl flex-col gap-s24 rounded-md bg-white px-s40 pt-s32 pb-s56 shadow-md "
   class:no-top-padding={noTopPadding}
 >
   <slot name="prefix" />
   {#if title}
-    <div class="pb-s24 border-b border-gray-01">
+    <div class="border-b border-gray-01 pb-s24">
       <h3 class="mb-s8 text-france-blue">
         {title}
       </h3>

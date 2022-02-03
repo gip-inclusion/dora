@@ -1,1 +1,1 @@
-<div class="h-s24 border-l border-gray-text-alt mx-s12" />
+<div class="mx-s12 h-s24 border-l border-gray-text-alt" />

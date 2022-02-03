@@ -11,12 +11,12 @@
 </script>
 
 <header
-  class="relative shadow-md noprint"
+  class="noprint relative shadow-md"
   class:dev-banner={ENVIRONMENT !== "production"}
 >
   <CenteredGrid>
-    <div class="flex flex-row items-center row-start-1 col-span-full py-s12">
-      <a class="flex flex-row gap-s40 items-center" href="/">
+    <div class="col-span-full row-start-1 flex flex-row items-center py-s12">
+      <a class="flex flex-row items-center gap-s40" href="/">
         <div class="hidden lg:block">
           <img
             class="inline"

@@ -22,7 +22,7 @@
     bold
     iconOnLeft
   />
-  <div class=" pl-s32 text-gray-text text-f14">
+  <div class=" pl-s32 text-f14 text-gray-text">
     <slot name="details" />
   </div>
 </div>

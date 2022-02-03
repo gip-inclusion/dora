@@ -17,7 +17,7 @@
 </script>
 
 <CenteredGrid --col-bg="var(--col-transparent)" topPadded>
-  <div class="col-start-1 col-span-full mb-s40">
+  <div class="col-span-full col-start-1 mb-s40">
     <div class="flex flex-col lg:flex-row-reverse">
       <div class="flex-1">
         <img src={CoverPic} width="600" height="400" alt="" />
@@ -41,12 +41,12 @@
   extraClass="relative z-[-10] -top-s72 pt-s80"
   --col-bg="var(--col-magenta-dark)"
 >
-  <div class="col-start-1 mb-s40 col-span-full">
+  <div class="col-span-full col-start-1 mb-s40">
     <div class="flex flex-col gap-s64 lg:flex-row">
       <div class="flex-1">
         <img src={MissionPic} width="440" height="420" alt="" />
       </div>
-      <div class="flex-1 content-mission">
+      <div class="content-mission flex-1">
         <h5>La mission DORA</h5>
         <h2>Découvrir, orienter, renseigner, accompagner</h2>
 
@@ -70,7 +70,7 @@
 </CenteredGrid>
 
 <CenteredGrid>
-  <div class="col-start-1 col-span-full mb-s40 text-center">
+  <div class="col-span-full col-start-1 mb-s40 text-center">
     <div class="mx-auto mb-s64 lg:w-1/2">
       <h5>
         Vous travaillez pour une structure porteuse/offreuse de services
@@ -81,8 +81,8 @@
         d'orientation qualifiées
       </h2>
     </div>
-    <div class="flex gap-s64 flex-col lg:flex-row-reverse">
-      <div class="flex flex-col flex-1">
+    <div class="flex flex-col gap-s64 lg:flex-row-reverse">
+      <div class="flex flex-1 flex-col">
         <div class="mx-auto">
           <img src={VisiblePic} width="140" height="140" alt="" />
         </div>
@@ -90,7 +90,7 @@
           Gagnez en visibilité auprès de vos partenaires locaux et nationaux
         </h4>
       </div>
-      <div class="flex flex-col flex-1">
+      <div class="flex flex-1 flex-col">
         <div class="mx-auto">
           <img src={ValorisePic} width="140" height="140" alt="" />
         </div>
@@ -99,7 +99,7 @@
           Collaborativement et à tout moment
         </h4>
       </div>
-      <div class="flex flex-col flex-1">
+      <div class="flex flex-1 flex-col">
         <div class="mx-auto">
           <img src={DefinePic} width="140" height="140" alt="" />
         </div>
@@ -108,7 +108,7 @@
           traitez rapidement les demandes d'orientation à un seul endroit
         </h4>
       </div>
-      <div class="flex flex-col flex-1">
+      <div class="flex flex-1 flex-col">
         <div class="mx-auto">
           <img src={ReferencePic} width="140" height="140" alt="" />
         </div>
@@ -116,7 +116,7 @@
       </div>
     </div>
     <div
-      class="mt-s48 rounded-xl bg-information-light flex  flex-col lg:flex-row lg:p-s48 "
+      class="mt-s48 flex flex-col rounded-xl  bg-information-light lg:flex-row lg:p-s48 "
     >
       <div class="flex-1">
         <img src={JoinPic} width="380" height="380" alt="" />
@@ -130,7 +130,7 @@
             numérique qui vous correspond et vous permettra d’orienter plus
             facilement et rapidement vos bénéficiaires.
           </p>
-          <p class="text-f12 text-gray-text font-bold">
+          <p class="text-f12 font-bold text-gray-text">
             Recevez l’infolettre et suivez l’avancement du projet, participez à
             des tests utilisateurs ou des sessions de démo. N’hésitez pas à vous
             rallier à la communauté Dora&nbsp;!
@@ -156,13 +156,13 @@
 
 <CenteredGrid --col-bg="var(--col-magenta-10)">
   <div
-    class="col-span-full flex flex-col gap-s16 md:flex-row mb-s40 mt-s32 justify-between items-center"
+    class="col-span-full mb-s40 mt-s32 flex flex-col items-center justify-between gap-s16 md:flex-row"
   >
     <div>
-      <h3 class="text-gray-dark mb-s8">
+      <h3 class="mb-s8 text-gray-dark">
         Abonnez-vous à notre lettre d’information
       </h3>
-      <p class="text-f12 text-gray-dark leading-relaxed max-w-2xl">
+      <p class="max-w-2xl text-f12 leading-relaxed text-gray-dark">
         En renseignant votre adresse électronique, vous acceptez de recevoir nos
         actualités par courriel. Vous pouvez vous désinscrire à tout moment à
         l’aide des liens de désinscription ou en <a

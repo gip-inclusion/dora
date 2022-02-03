@@ -41,7 +41,7 @@
     onEstablishmentChange={handleEstablishmentChange}
   />
   {#if establishment?.siret}
-    <div class="p-s24 border border-gray-01">
+    <div class="border border-gray-01 p-s24">
       <h4 class="text-gray-text">{establishment.name}</h4>
       <div class="legend">{establishment.siret}</div>
       <div class="legend">{establishment.address1}</div>

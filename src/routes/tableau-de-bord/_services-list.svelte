@@ -43,10 +43,10 @@
 </script>
 
 <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-  <div class="wrapper col-start-1 col-span-full">
+  <div class="wrapper col-span-full col-start-1">
     {#each services as service}
       <div class="service flex flex-row gap-s16">
-        <div class="grow flex flex-row items-center">
+        <div class="flex grow flex-row items-center">
           <a href="/services/{service.slug}">
             <h5>{shortenString(service.name)}</h5>
           </a>

@@ -24,13 +24,13 @@
         {readonly}
       />
       <div
-        class="flex justify-center w-s24 h-s24 bg-white border rounded-full toggle-path border-gray-03 "
+        class="toggle-path flex h-s24 w-s24 justify-center rounded-full border border-gray-03 bg-white "
       >
         <div
-          class="self-center hidden rounded-full w-s12 h-s12 bg-magenta-cta toggle-circle"
+          class="toggle-circle hidden h-s12 w-s12 self-center rounded-full bg-magenta-cta"
         />
       </div>
-      <span class="inline-block ml-s16 text-gray-text text-f14"
+      <span class="ml-s16 inline-block text-f14 text-gray-text"
         >{choice.label}</span
       >
     </label>

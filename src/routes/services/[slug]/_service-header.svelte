@@ -16,12 +16,12 @@
   const editLink = `${$page.url.pathname}/editer`;
 </script>
 
-<div class="col-start-1 mb-s48 text-white col-span-full">
+<div class="col-span-full col-start-1 mb-s48 text-white">
   <div class="mx-auto">
     <Label label={service.structureInfo.name} darkBg />
     <h1 class="text-white">{service.name}</h1>
     {#if $token && service.canWrite && !isPreview}
-      <div class="my-s16 noprint">
+      <div class="noprint my-s16">
         <LinkButton to={editLink} label="Éditer" small />
       </div>
     {/if}

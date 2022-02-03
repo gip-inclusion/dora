@@ -31,11 +31,11 @@
   />
   <!-- path -->
   <div
-    class="shrink-0 w-s40 h-s24 bg-white border rounded-full toggle-path border-gray-03"
+    class="toggle-path h-s24 w-s40 shrink-0 rounded-full border border-gray-03 bg-white"
   />
   <!-- circle -->
   <div
-    class="absolute inset-y-s0 left-s0 shrink-0 w-s16 h-s16 rounded-full bg-gray-text-alt toggle-circle"
+    class="toggle-circle absolute inset-y-s0 left-s0 h-s16 w-s16 shrink-0 rounded-full bg-gray-text-alt"
   />
   <div class="ml-s8 text-f14 text-gray-text">
     {@html checked ? toggleYesText : toggleNoText}

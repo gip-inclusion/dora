@@ -14,10 +14,10 @@
 </script>
 
 <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-  <div class="col-start-1 col-span-full flex flex-col pb-s40 gap-s12">
+  <div class="col-span-full col-start-1 flex flex-col gap-s12 pb-s40">
     {#each structures as structure}
-      <div class="flex flex-row gap-s16 p-s16 bg-white rounded-md">
-        <div class="grow flex flex-row items-center">
+      <div class="flex flex-row gap-s16 rounded-md bg-white p-s16">
+        <div class="flex grow flex-row items-center">
           <a href="/tableau-de-bord/structures/{structure.slug}">
             <h5>
               {shortenString(structure.name)}

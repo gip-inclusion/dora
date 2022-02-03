@@ -91,7 +91,7 @@
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 col-span-full text-center mb-s48">
+  <div class="col-span-full col-start-1 mb-s48 text-center">
     <p class="text-f16">Consultez les services</p>
     <h1 class="text-france-blue">Résultats de recherche</h1>
   </div>

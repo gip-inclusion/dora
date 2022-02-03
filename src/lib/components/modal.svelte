@@ -27,17 +27,17 @@
 
 <div
   id="background"
-  class="hidden justify-center items-center"
+  class="hidden items-center justify-center"
   class:showb={isOpen}
   on:click={handleBackgroundClick}
 >
   <div
-    class="shadow-md hidden max-h-screen overflow-y-auto"
+    class="hidden max-h-screen overflow-y-auto shadow-md"
     class:show={isOpen}
   >
     <div class="md:m-s32" on:click|stopPropagation>
       <div
-        class="sticky w-s24 h-s24 ml-auto right-s8 top-s56 text-gray-text-alt fill-current"
+        class="sticky right-s8 top-s56 ml-auto h-s24 w-s24 fill-current text-gray-text-alt"
         on:click={handleClose}
       >
         {@html closeLineIcon}

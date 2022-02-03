@@ -63,14 +63,14 @@
         class:mb-s8={vertical}
       >
         <div
-          class="shrink-0 inline-block w-full font-bold text-f16 text-gray-dark"
+          class="inline-block w-full shrink-0 text-f16 font-bold text-gray-dark"
         >
           <label for={name}>{hideLabel ? "" : label}</label>
           {#if required}<span class="text-error">*</span>{/if}
         </div>
         <span class="text-f12 text-gray-text-alt2"> {description}</span>
       </div>
-      <div class="flex flex-col flex-1 grow mb-s16">
+      <div class="mb-s16 flex flex-1 grow flex-col">
         {#if type !== "custom"}
           <Input
             bind:value

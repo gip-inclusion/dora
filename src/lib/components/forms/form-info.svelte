@@ -6,14 +6,14 @@
 
 <div class="wrapper">
   {#if title}
-    <div class="flex text-f17 font-bold text-information mb-s8 items-center">
-      <div class="w-s24 h-s24 mr-s8 fill-current">
+    <div class="mb-s8 flex items-center text-f17 font-bold text-information">
+      <div class="mr-s8 h-s24 w-s24 fill-current">
         {@html icon || informationIcon}
       </div>
       {title}
     </div>
   {/if}
-  <div class="text-gray-text text-f14 leading-24">
+  <div class="text-f14 leading-24 text-gray-text">
     <slot />
   </div>
 </div>

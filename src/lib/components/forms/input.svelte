@@ -217,11 +217,11 @@
   input[type="tel"],
   input[type="date"],
   textarea {
-    @apply px-s12 py-s6 border border-gray-03 rounded outline-none placeholder-gray-text-alt focus:shadow-focus text-f14;
+    @apply rounded border border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt outline-none focus:shadow-focus;
   }
 
   input,
   textarea {
-    @apply disabled:bg-gray-00 read-only:text-gray-03;
+    @apply read-only:text-gray-03 disabled:bg-gray-00;
   }
 </style>

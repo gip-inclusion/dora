@@ -57,7 +57,7 @@
   }
 </script>
 
-<form on:submit|preventDefault={handleSubmit} class="cursor-pointer mb-s8">
+<form on:submit|preventDefault={handleSubmit} class="mb-s8 cursor-pointer">
   <label>
     <input
       {name}
@@ -67,7 +67,7 @@
       {disabled}
       type="file"
       multiple
-      class="file:px-s8 file:lg:px-s10 file:py-s6 file:text-f14 file:leading-normal file:border file:border-magenta-cta file:hover:border-magenta-hover file:disabled:border-gray-01 file:active:border-france-blue font-bold file:text-magenta-cta file:hover:text-white file:disabled:disabled:text-gray-text-alt2 file:active:text-france-blue file:bg-white file:hover:bg-magenta-hover file:rounded"
+      class="font-bold file:rounded file:border file:border-magenta-cta file:bg-white file:px-s8 file:py-s6 file:text-f14 file:leading-normal file:text-magenta-cta file:hover:border-magenta-hover file:hover:bg-magenta-hover file:hover:text-white file:active:border-france-blue file:active:text-france-blue file:disabled:border-gray-01 file:disabled:disabled:text-gray-text-alt2 file:lg:px-s10"
     />{progress != null ? `${Math.round(progress)} %` : ""}
   </label>
 </form>
@@ -77,7 +77,7 @@
       <div class="text-f14">{uploaded}</div>
       <button
         on:click={handleRemove(uploaded)}
-        class="w-s24 h-s24 ml-s16 fill-error"
+        class="ml-s16 h-s24 w-s24 fill-error"
       >
         {@html deleteBinIcon}
       </button>

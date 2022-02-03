@@ -124,9 +124,9 @@
 <svelte:window bind:scrollY />
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 col-span-full text-center mb-s48">
+  <div class="col-span-full col-start-1 mb-s48 text-center">
     <div class="mx-auto">
-      <h1 class="text-france-blue text-f45">Proposez un service</h1>
+      <h1 class="text-f45 text-france-blue">Proposez un service</h1>
       <div class="paragraph-small mt-s16">
         Aidez-nous à identifier et référencer l’ensemble de l’offre de
         l’insertion.<br />

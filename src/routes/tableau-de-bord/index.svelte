@@ -41,7 +41,7 @@
       Bonjour {$userInfo.shortName},
     </h2>
     <div
-      class="col-span-full lg:flex lg:flex-row lg:gap-s16 p-s16 bg-white rounded-md justify-between"
+      class="col-span-full justify-between rounded-md bg-white p-s16 lg:flex lg:flex-row lg:gap-s16"
     >
       <div class="mb-s16 lg:mb-s0">
         <h4 class="text-magenta-cta">Aidez-nous à améliorer DORA !</h4>
@@ -50,20 +50,20 @@
           rencontrez ou de propositions d’amélioration.
         </p>
       </div>
-      <div class="shrink-0 py-s16 self-end">
+      <div class="shrink-0 self-end py-s16">
         <a
           href="https://itou.typeform.com/to/DPQOe5pP"
           target="_blank"
           rel="noopener nofollow"
           label="Participer (3min)"
-          class="px-s16 py-s12 text-f16 font-bold text-white bg-magenta-cta hover:bg-magenta-hover active:bg-france-blue rounded focus:shadow-focus"
+          class="rounded bg-magenta-cta px-s16 py-s12 text-f16 font-bold text-white hover:bg-magenta-hover focus:shadow-focus active:bg-france-blue"
           >Participer (3 min.)</a
         >
       </div>
     </div>
     <div class="col-span-full">
       {#if $userInfo.isStaff}
-        <div class="rounded-md p-s8 bg-gray-bg mb-s48">
+        <div class="mb-s48 rounded-md bg-gray-bg p-s8">
           <h4 class="text-information">
             ⚠️ Seulement pour les super-utilisateurs
           </h4>
@@ -89,7 +89,7 @@
         </div>
       {/if}
       {#if $userInfo.isBizdev}
-        <div class="rounded-md p-s8 bg-gray-bg mb-s48">
+        <div class="mb-s48 rounded-md bg-gray-bg p-s8">
           <h4 class="text-information">⚠️ Seulement pour les bizdev</h4>
           <div class="flex">
             <LinkButton

@@ -5,11 +5,11 @@
 </script>
 
 <CenteredGrid roundedbg>
-  <div class="col-span-full flex justify-center lg:col-end-7 lg:mb-s32 mt-s48">
+  <div class="col-span-full mt-s48 flex justify-center lg:col-end-7 lg:mb-s32">
     <img src={connexionPic} alt="" class="max-h-[460px]" />
   </div>
   <div
-    class="col-span-full lg:col-start-7 lg:col-end-12 mb-s32"
+    class="col-span-full mb-s32 lg:col-start-7 lg:col-end-12"
     class:lg:col-end-13={wideForm}
   >
     <slot />

@@ -111,7 +111,7 @@
         />
       </div>
 
-      <div class="self-end mb-s16">
+      <div class="mb-s16 self-end">
         <Button
           type="submit"
           label="Trouver"

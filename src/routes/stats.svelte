@@ -14,7 +14,7 @@
 </svelte:head>
 
 <CG>
-  <div class="text-center col-span-full">
+  <div class="col-span-full text-center">
     <h1 class="text-france-blue">Statistiques</h1>
   </div>
 </CG>

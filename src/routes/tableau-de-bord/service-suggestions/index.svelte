@@ -28,12 +28,12 @@
 </svelte:head>
 <EnsureLoggedIn>
   <CenteredGrid topPadded>
-    <div class="col-start-1 col-span-full text-left">
+    <div class="col-span-full col-start-1 text-left">
       <div class="mb-s8">
         <h2>Suggestions de services</h2>
       </div>
       <div class="border-t border-gray-03" />
-      <div class="rounded-md p-s16 mt-s32 bg-gray-bg mb-s48">
+      <div class="mt-s32 mb-s48 rounded-md bg-gray-bg p-s16">
         <div class="flex">
           <SuggestionsList {suggestions} onRefresh={handleRefresh} />
         </div>

@@ -5,7 +5,7 @@
   export let structure, currentTab;
 </script>
 
-<h1 class="text-white mb-s24">{structure.name}</h1>
+<h1 class="mb-s24 text-white">{structure.name}</h1>
 
 <Label
   label={`${structure.address1}${
@@ -39,7 +39,7 @@
 
 <style lang="postcss">
   .tab {
-    @apply bg-magenta-dark text-white text-f16 font-bold px-s20 py-s12 rounded-t mr-s8 cursor-pointer;
+    @apply mr-s8 cursor-pointer rounded-t bg-magenta-dark px-s20 py-s12 text-f16 font-bold text-white;
   }
 
   .tab.active {

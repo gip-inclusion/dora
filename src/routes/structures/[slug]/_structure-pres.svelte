@@ -14,9 +14,9 @@
   const editLink = `/tableau-de-bord/structures/${structure.slug}/editer`;
 </script>
 
-<div class="col-span-full lg:col-start-1 lg:col-end-5 flex flex-col gap-s16">
+<div class="col-span-full flex flex-col gap-s16 lg:col-start-1 lg:col-end-5">
   <div
-    class=" mt-s64 text-gray-text text-f14 flex flex-row flex-wrap gap-x-s24 lg:gap-s8 lg:flex-col"
+    class=" mt-s64 flex flex-row flex-wrap gap-x-s24 text-f14 text-gray-text lg:flex-col lg:gap-s8"
   >
     <div class="icon-label">
       <div class="icon">
@@ -72,7 +72,7 @@
   {/if}
 </div>
 <div class="col-span-full lg:col-start-6 lg:col-end-13 lg:mt-s64">
-  <p class="text-gray-dark font-bold mb-s24">{structure.shortDesc}</p>
+  <p class="mb-s24 font-bold text-gray-dark">{structure.shortDesc}</p>
   <p class="prose">{@html structure.fullDesc}</p>
 </div>
 
@@ -88,10 +88,10 @@
     @apply flex-initial;
   }
   .icon {
-    @apply w-s16 h-s16 mr-s8 fill-current text-magenta-cta relative top-s2 flex-none;
+    @apply relative top-s2 mr-s8 h-s16 w-s16 flex-none fill-current text-magenta-cta;
   }
 
   .ext-icon {
-    @apply w-s16 h-s16 ml-s8 fill-current relative top-s2 flex-none;
+    @apply relative top-s2 ml-s8 h-s16 w-s16 flex-none fill-current;
   }
 </style>

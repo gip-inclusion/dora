@@ -39,24 +39,24 @@
   onReject={(s) => handleReject(s)}
 />
 
-<div class="flex flex-col gap-s12 w-full">
+<div class="flex w-full flex-col gap-s12">
   {#each suggestions as suggestion}
-    <div class="flex flex-row gap-s16 p-s16 bg-white rounded-md items-center">
-      <div class="italic flex-1 truncate">
+    <div class="flex flex-row items-center gap-s16 rounded-md bg-white p-s16">
+      <div class="flex-1 truncate italic">
         {suggestion.name}
       </div>
-      <div class="font-bold flex-1 text-ellipsis">
+      <div class="flex-1 text-ellipsis font-bold">
         {suggestion.structureInfo.name} ({suggestion.structureInfo.department})
         {#if suggestion.structureInfo.new}
           <div
-            class="inline-block text-white text-f12 uppercase leading-20 bg-magenta-brand rounded px-s8 py-s2"
+            class="inline-block rounded bg-magenta-brand px-s8 py-s2 text-f12 uppercase leading-20 text-white"
           >
             NOUV.
           </div>
         {/if}
       </div>
 
-      <div class="flex flex-col flex-1 text-gray-text-alt truncate">
+      <div class="flex flex-1 flex-col truncate text-gray-text-alt">
         {#if suggestion.creator}
           <div class="truncate">{suggestion.creator.getFullName}</div>
           <div class="truncate">{suggestion.creator.email}</div>

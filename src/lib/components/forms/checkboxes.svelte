@@ -24,11 +24,11 @@
         {readonly}
       />
       <div
-        class="flex justify-center shrink-0 w-s24 h-s24 border rounded border-gray-03"
+        class="flex h-s24 w-s24 shrink-0 justify-center rounded border border-gray-03"
       >
-        <div class="self-center hidden w-s12 h-s12 bg-magenta-cta" />
+        <div class="hidden h-s12 w-s12 self-center bg-magenta-cta" />
       </div>
-      <span class="inline-block ml-s16 text-gray-text text-f14"
+      <span class="ml-s16 inline-block text-f14 text-gray-text"
         >{choice.label}</span
       >
     </label>

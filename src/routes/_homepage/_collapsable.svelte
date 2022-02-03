@@ -19,10 +19,10 @@
   });
 </script>
 
-<div class="flex justify-between wrapper" bind:this={wrapper}>
+<div class="wrapper flex justify-between" bind:this={wrapper}>
   <slot name="above-fold" />
   <div
-    class="w-s24 h-s24 ml-s8 text-magenta-cta fill-current"
+    class="ml-s8 h-s24 w-s24 fill-current text-magenta-cta"
     on:click={handleToggleFold}
   >
     {@html folded ? arrowDownSIcon : arrowUpSIcon}

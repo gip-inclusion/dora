@@ -8,7 +8,7 @@
   <div class="wrapper">
     <div class="">
       <h4>Connaissez-vous monenfant.fr ?</h4>
-      <p class="mt-s16 text-gray-text text-f14 leading-24">
+      <p class="mt-s16 text-f14 leading-24 text-gray-text">
         Conçu par les Caf et la Cnaf, le portail « monenfant.fr » référence les
         structures d’accueil destinées aux jeunes enfants, les services
         existants pour informer et accompagner les parents de jeunes enfants

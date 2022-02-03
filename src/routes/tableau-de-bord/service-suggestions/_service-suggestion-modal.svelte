@@ -11,7 +11,7 @@
 
 {#if suggestion}
   <Modal bind:isOpen>
-    <div class="bg-white rounded-md shadow-md p-s40 min-w-[80vw]">
+    <div class="min-w-[80vw] rounded-md bg-white p-s40 shadow-md">
       <div class="flex flex-col gap-s8">
         <SuggestionLine
           label="Nom de la structure"
@@ -21,7 +21,7 @@
           ({suggestion.structureInfo.department})
           {#if suggestion.structureInfo.new}
             <div
-              class="inline-block text-white text-f12 uppercase leading-20 bg-magenta-brand rounded px-s8 py-s2 ml-s8"
+              class="ml-s8 inline-block rounded bg-magenta-brand px-s8 py-s2 text-f12 uppercase leading-20 text-white"
             >
               NOUV.
             </div>
@@ -47,7 +47,7 @@
           data={suggestion.serviceInfo.fullDesc}
           verticalLayout
         >
-          <div class="border-l-8 border-gray-02 pl-s16 m-s16">
+          <div class="m-s16 border-l-8 border-gray-02 pl-s16">
             {@html suggestion.serviceInfo.fullDesc}
           </div>
         </SuggestionLine>
@@ -104,7 +104,7 @@
           verticalLayout
           data={suggestion.serviceInfo.feeDetails}
         >
-          <div class="border-l-8 border-gray-02 pl-s16 m-s16">
+          <div class="m-s16 border-l-8 border-gray-02 pl-s16">
             {suggestion.serviceInfo.feeDetails}
           </div>
         </SuggestionLine>
@@ -153,7 +153,7 @@
         />
       </div>
 
-      <div class="flex flex-row gap-s16 mt-s32 justify-end">
+      <div class="mt-s32 flex flex-row justify-end gap-s16">
         <Button
           label="Rejeter"
           secondary
@@ -173,7 +173,7 @@
     @apply flex flex-col;
   }
   .label {
-    @apply font-bold mr-s16 w-1/3;
+    @apply mr-s16 w-1/3 font-bold;
   }
   .empty {
     @apply hidden;

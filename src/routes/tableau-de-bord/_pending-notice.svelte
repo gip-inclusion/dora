@@ -11,16 +11,16 @@
 </script>
 
 <div
-  class="border border-gray-03 border-dashed rounded-xl my-s24 px-s40 max-w-5xl"
+  class="my-s24 max-w-5xl rounded-xl border border-dashed border-gray-03 px-s40"
 >
-  <div class="flex p-s40 gap-s112">
+  <div class="flex gap-s112 p-s40">
     <div class="flex-1">
       <h3 class="mb-s16">
         Votre adhésion à « {structure.name} » est en attente de validation par les
         responsables de votre structure.
       </h3>
 
-      <p class="text-gray-text-alt2 mb-s16">
+      <p class="mb-s16 text-gray-text-alt2">
         Si au bout de quelques jours vous n’avez pas de réponse, vous pouvez
         relancer les responsables de votre structure.
       </p>

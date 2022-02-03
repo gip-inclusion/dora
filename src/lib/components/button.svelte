@@ -82,7 +82,7 @@
 <button
   {type}
   {name}
-  class="{px} {py} {ts} {lead} {border} {text} {background} flex flex-row rounded items-center focus:shadow-focus outline-none whitespace-nowrap"
+  class="{px} {py} {ts} {lead} {border} {text} {background} flex flex-row items-center whitespace-nowrap rounded outline-none focus:shadow-focus"
   class:items-start={nogrow}
   class:flash-success={flashSuccess}
   class:w-full={wFull}
@@ -93,7 +93,7 @@
   {disabled}
 >
   {#if iconOnLeft}
-    <div class="{iw} {ih} mr-s8 fill-current shrink-0">
+    <div class="{iw} {ih} mr-s8 shrink-0 fill-current">
       {@html icon}
     </div>
   {/if}
@@ -105,7 +105,7 @@
   {label}
 
   {#if iconOnRight}
-    <div class="{iw} {ih} ml-s8 fill-current justify-end shrink-0">
+    <div class="{iw} {ih} ml-s8 shrink-0 justify-end fill-current">
       {@html icon}
     </div>
   {/if}

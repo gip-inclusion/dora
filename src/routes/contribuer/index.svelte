@@ -88,6 +88,6 @@
 
 <style lang="postcss">
   .icon {
-    @apply w-s32 mr-s12 fill-current text-france-blue flex-none self-center;
+    @apply mr-s12 w-s32 flex-none self-center fill-current text-france-blue;
   }
 </style>

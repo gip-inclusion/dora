@@ -10,10 +10,10 @@
 <div class="col-span-full mt-s64 mb-s48">
   <div class="flex flex-col gap-s16">
     {#each services as service}
-      <div class="shadow-md rounded-md px-s20 py-s24">
+      <div class="rounded-md px-s20 py-s24 shadow-md">
         <h4><a href="/services/{service.slug}">{service.name}</a></h4>
         <div class="flex flex-col gap-s16">
-          <div class="flex flex-row gap-s16 mt-s8">
+          <div class="mt-s8 flex flex-row gap-s16">
             <Tag>{service.categoryDisplay}</Tag>
             <Label
               label={`${service.postalCode}, ${service.city}`}

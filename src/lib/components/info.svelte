@@ -48,7 +48,7 @@
   }
 
   .details {
-    @apply text-gray-text text-f14;
+    @apply text-f14 text-gray-text;
   }
 
   .left-border {

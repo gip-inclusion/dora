@@ -150,7 +150,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
                 </p>
               {/if}
               {#if service.contactEmail}
-                <p class="text-f14 break-all">
+                <p class="break-all text-f14">
                   <a href="mailto:{service.contactEmail}">
                     {service.contactEmail}
                   </a>

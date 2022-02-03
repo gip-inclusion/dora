@@ -11,15 +11,15 @@
 <button
   {type}
   {name}
-  class="px-s24 py-s12 text-f14 leading-normal border text-gray-01 border-gray-01 flex flex-row items-center justify-between text-left rounded focus:shadow-focus outline-none"
+  class="flex flex-row items-center justify-between rounded border border-gray-01 px-s24 py-s12 text-left text-f14 leading-normal text-gray-01 outline-none focus:shadow-focus"
   on:click
   {disabled}
 >
   <div>
     <h4 class="pb-s8 text-gray-text">{label}</h4>
-    <p class="flex-auto text-gray-text-alt2 text-f14">{details}</p>
+    <p class="flex-auto text-f14 text-gray-text-alt2">{details}</p>
   </div>
-  <div class="flex-none w-s32 h-s32 ml-s8 text-gray-text-alt fill-current">
+  <div class="ml-s8 h-s32 w-s32 flex-none fill-current text-gray-text-alt">
     {@html arrowRightSIcon}
   </div>
 </button>

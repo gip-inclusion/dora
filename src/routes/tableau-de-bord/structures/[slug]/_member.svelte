@@ -11,7 +11,7 @@
 <div class="wrapper" class:is-own={isMyself}>
   <div class="flex flex-col">
     <h5>{member.user.fullName}</h5>
-    <div class="text-gray-text-alt text-f14">{member.user.email}</div>
+    <div class="text-f14 text-gray-text-alt">{member.user.email}</div>
   </div>
   <div class="grow" />
   <slot name="label" />
