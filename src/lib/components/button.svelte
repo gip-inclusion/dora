@@ -13,7 +13,6 @@
     tertiary = false;
   export let noBackground = false;
   export let nogrow = false;
-  export let horizontalBottom = false;
   export let noPadding = false;
   export let flashSuccess = false;
   export let wFull = false;
@@ -54,8 +53,8 @@
     border =
       "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue";
     text =
-      "font-bold text-magenta-cta hover:text-white disabled:disabled:text-gray-text-alt2 active:text-france-blue";
-    background = "bg-white hover:bg-magenta-hover";
+      "font-bold text-magenta-cta hover:text-white disabled:text-gray-text-alt2 active:text-france-blue";
+    background = "bg-white hover:bg-magenta-hover disabled:bg-white";
   } else if (tertiary) {
     border =
       "border border-gray-dark  disabled:border-gray-01 active:border-france-blue";
@@ -80,47 +79,21 @@
   }
 </script>
 
-<style>
-  .nogrow {
-    align-self: flex-start;
-  }
-
-  .hz-bottom {
-    align-self: flex-end;
-    margin-bottom: 14px;
-  }
-
-  .flash-success {
-    border: none;
-    background-color: var(--col-success);
-    color: var(--col-white);
-  }
-
-  .flash-success:hover {
-    background-color: var(--col-success);
-    color: var(--col-white);
-  }
-
-  .flash-success:focus {
-    box-shadow: none;
-  }
-</style>
-
 <button
   {type}
   {name}
-  class="{px} {py} {ts} {lead} {border} {text} {background} flex flex-row items-center rounded focus:shadow-focus outline-none"
-  class:nogrow
-  class:hz-bottom={horizontalBottom}
+  class="{px} {py} {ts} {lead} {border} {text} {background} flex flex-row items-center whitespace-nowrap rounded outline-none focus:shadow-focus"
+  class:items-start={nogrow}
   class:flash-success={flashSuccess}
   class:w-full={wFull}
+  class:justify-center={!iconOnLeft && !iconOnRight}
   on:click
   on:mousedown={handleMouseDown}
   aria-label={ariaLabel}
   {disabled}
 >
   {#if iconOnLeft}
-    <div class="{iw} {ih} mr-s8 fill-current">
+    <div class="{iw} {ih} mr-s8 shrink-0 fill-current">
       {@html icon}
     </div>
   {/if}
@@ -132,7 +105,7 @@
   {label}
 
   {#if iconOnRight}
-    <div class="{iw} {ih} ml-s8 fill-current justify-end">
+    <div class="{iw} {ih} ml-s8 shrink-0 justify-end fill-current">
       {@html icon}
     </div>
   {/if}

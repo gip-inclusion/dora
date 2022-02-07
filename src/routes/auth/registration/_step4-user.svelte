@@ -53,7 +53,7 @@
   }
 </script>
 
-<div class="col-span-full md:col-start-6 md:col-end-13 mb-s32">
+<div class="col-span-full mb-s32 md:col-start-6 md:col-end-13">
   <Form
     data={$registrationInfo}
     schema={accountSchema}
@@ -110,7 +110,7 @@
           allowHTMLError
         />
         <div
-          class="flex flex-col md:flex-row lg:flex-col xl:flex-row justify-between gap-x-s32"
+          class="flex flex-col justify-between gap-x-s32 md:flex-row lg:flex-col xl:flex-row"
         >
           <Field
             name="password"

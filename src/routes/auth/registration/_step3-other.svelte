@@ -54,13 +54,6 @@
   $: console.log(siret);
 </script>
 
-<style>
-  .establishment-details {
-    padding: var(--s24);
-    border: 1px solid var(--col-gray-01);
-  }
-</style>
-
 <FieldSet
   title="Votre structure"
   description="Merci de renseigner le numéro SIRET de votre structure afin de l’identifier."
@@ -92,7 +85,7 @@
     </div>
   {/if}
 
-  <div class="flex flex-col items-start md:justify-between md:flex-row">
+  <div class="flex flex-col items-start md:flex-row md:justify-between">
     <Button
       label="Retour"
       on:click={() => (currentStep = 1)}
@@ -116,3 +109,10 @@
     {/if}
   </div>
 </FieldSet>
+
+<style lang="postcss">
+  .establishment-details {
+    padding: var(--s24);
+    border: 1px solid var(--col-gray-01);
+  }
+</style>

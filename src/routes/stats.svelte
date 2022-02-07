@@ -6,12 +6,6 @@
   }
 </script>
 
-<style>
-  iframe {
-    width: 100%;
-  }
-</style>
-
 <svelte:head>
   <title>Statistiques | DORA</title>
   <script
@@ -20,7 +14,7 @@
 </svelte:head>
 
 <CG>
-  <div class="text-center col-span-full">
+  <div class="col-span-full text-center">
     <h1 class="text-france-blue">Statistiques</h1>
   </div>
 </CG>
@@ -36,3 +30,9 @@
     id="myIframe"
   />
 </CG>
+
+<style lang="postcss">
+  iframe {
+    width: 100%;
+  }
+</style>

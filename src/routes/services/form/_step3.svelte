@@ -13,7 +13,7 @@
 
 <FieldSet title="Modalités d'accès au service">
   <ModelField
-    label="Comment le bénéficiaire peut accéder à ce service ?"
+    label="Comment un bénéficiaire peut accéder à ce service ?"
     type="checkboxes"
     choices={servicesOptions.beneficiariesAccessModes}
     schema={serviceSchema.beneficiariesAccessModes}
@@ -21,8 +21,8 @@
     errorMessages={$formErrors.beneficiariesAccessModes}
     bind:value={service.beneficiariesAccessModes}
   >
-    <FieldHelp slot="helptext" title="Mobiliser le service">
-      Quels sont les étapes à suivre pour pouvoir mobiliser le service ?
+    <FieldHelp slot="helptext" title="Comment mobiliser ce service">
+      Quelles sont les modalités à suivre pour pouvoir mobiliser votre service ?
     </FieldHelp></ModelField
   >
   <ModelField
@@ -61,7 +61,7 @@
     choices={servicesOptions.credentials}
     errorMessages={$formErrors.credentials}
     name="credentials"
-    label="Sélectionnez les justificatifs à fournir"
+    label="Quels sont les justificatifs à fournir ?"
     placeholder="Aucun"
     placeholderMulti="Choisir un autre justificatif"
     schema={serviceSchema.credentials}
@@ -73,9 +73,12 @@
     label="Partagez les documents à compléter"
     errorMessages={$formErrors.forms}
   >
-    <FieldHelp slot="helptext" title="Justificatifs, documents">
-      Mettre tous les documents maintenant, c’est permettre d’avoir des
-      candidatures complètes avec moins d’aller/retour
+    <FieldHelp slot="helptext" title="Documents requis">
+      Listez les justificatifs à fournir et mettez à disposition les documents à
+      compléter afin de recevoir des candidatures complètes, avec moins
+      d’aller-retour. Utilisez la section liens pratiques pour rediriger vers
+      plus d’informations concernant la mobilisation de votre service
+      (formulaire, fiche de prescription, simulateurs, etc.)..
     </FieldHelp>
     <Uploader
       slot="custom-input"
@@ -87,7 +90,7 @@
   </Field>
   <ModelField
     label="Liens pratiques"
-    placeholder="URL"
+    placeholder="URL que vous souhaitez mettre en avant"
     type="url"
     schema={serviceSchema.onlineForm}
     name="onlineForm"

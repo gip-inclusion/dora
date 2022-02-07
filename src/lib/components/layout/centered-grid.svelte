@@ -6,6 +6,14 @@
   export let extraClass = "";
 </script>
 
+<div class="{extraClass} wrapper" class:top-padded={topPadded} class:sticky>
+  <div class="content" class:roundedbg class:bordertop>
+    <div class="centered-grid">
+      <slot />
+    </div>
+  </div>
+</div>
+
 <style lang="postcss">
   /* Color under the rounded corners */
   .wrapper {
@@ -17,7 +25,6 @@
     justify-content: center;
     padding-right: var(--s16);
     padding-left: var(--s16);
-    background-color: var(--col-bg);
   }
 
   .centered-grid {
@@ -79,11 +86,3 @@
     }
   }
 </style>
-
-<div class="{extraClass} wrapper" class:top-padded={topPadded} class:sticky>
-  <div class="content" class:roundedbg class:bordertop>
-    <div class="centered-grid">
-      <slot />
-    </div>
-  </div>
-</div>

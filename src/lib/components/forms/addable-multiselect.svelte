@@ -13,6 +13,7 @@
   export let placeholderMulti;
   export let schema;
   export let structure = null;
+  export let description = "";
   let textInputVisible = false;
   let newValue;
   let newValueErrors = [];
@@ -32,13 +33,7 @@
       return;
     }
 
-    choices = [
-      ...choices,
-      {
-        value,
-        label: value,
-      },
-    ];
+    choices = [...choices, { value, label: value }];
     values = [...values, value];
     newValue = "";
     textInputVisible = false;
@@ -66,6 +61,7 @@
     bind:value={values}
     choices={filteredChoices}
     {sortSelect}
+    {description}
   >
     <slot name="helptext" slot="helptext" />
   </ModelField>

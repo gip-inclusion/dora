@@ -13,26 +13,11 @@
   export let structures;
 </script>
 
-<style lang="postcss">
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: var(--s40);
-    gap: var(--s12);
-  }
-
-  .structure {
-    padding: var(--s16);
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-  }
-</style>
-
 <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-  <div class="wrapper col-start-1 col-span-full">
+  <div class="col-span-full col-start-1 flex flex-col gap-s12 pb-s40">
     {#each structures as structure}
-      <div class="structure flex flex-row gap-s16">
-        <div class="grow flex flex-row items-center">
+      <div class="flex flex-row gap-s16 rounded-md bg-white p-s16">
+        <div class="flex grow flex-row items-center">
           <a href="/tableau-de-bord/structures/{structure.slug}">
             <h5>
               {shortenString(structure.name)}
@@ -54,7 +39,7 @@
           iconOnLeft
           icon={briefcaseIcon} /> -->
         <LinkButton
-          label="Ajouter une offre"
+          label="Ajouter un service"
           to="/services/creer"
           icon={addCircleIcon}
           iconOnRight

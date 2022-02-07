@@ -51,53 +51,6 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
   }
 </script>
 
-<style lang="postcss">
-  .modal-contents {
-    @apply p-s16 md:p-s32;
-
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-    box-shadow: var(--shadow-md);
-  }
-
-  .box {
-    @apply p-s16 md:p-s32;
-
-    border: 3px solid var(--col-gray-dark);
-    border-radius: var(--s8);
-  }
-
-  .action-line {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: var(--s24);
-    gap: var(--s16);
-  }
-
-  .list {
-    display: flex;
-    flex-direction: column;
-    margin: var(--s20) var(--s20) var(--s32) 0;
-    color: var(--col-text);
-    gap: var(--s8);
-    list-style-position: outside;
-    list-style-type: "– ";
-    position: relative;
-    left: var(--s16);
-    max-width: 40ch;
-  }
-
-  .list li span {
-    position: relative;
-    left: var(--s8);
-  }
-
-  a {
-    color: var(--col-magenta-cta);
-    font-weight: bold;
-  }
-</style>
-
 <Modal bind:isOpen>
   <div class="modal-contents">
     <h2 class="pb-s16">Comment mobiliser ce service pour votre bénéficiaire</h2>
@@ -147,7 +100,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
           {#if service.onlineForm}
             <ul class="list">
               <li>
-                <div class=" ">
+                <div>
                   <span class="break-all">
                     <a
                       target="_blank"
@@ -197,7 +150,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
                 </p>
               {/if}
               {#if service.contactEmail}
-                <p class="text-f14 break-all">
+                <p class="break-all text-f14">
                   <a href="mailto:{service.contactEmail}">
                     {service.contactEmail}
                   </a>
@@ -231,3 +184,50 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
     {/if}
   </div>
 </Modal>
+
+<style lang="postcss">
+  .modal-contents {
+    @apply p-s16 md:p-s32;
+
+    background-color: var(--col-white);
+    border-radius: var(--s8);
+    box-shadow: var(--shadow-md);
+  }
+
+  .box {
+    @apply p-s16 md:p-s32;
+
+    border: 3px solid var(--col-gray-dark);
+    border-radius: var(--s8);
+  }
+
+  .action-line {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--s24);
+    gap: var(--s16);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    margin: var(--s20) var(--s20) var(--s32) 0;
+    color: var(--col-text);
+    gap: var(--s8);
+    list-style-position: outside;
+    list-style-type: "– ";
+    position: relative;
+    left: var(--s16);
+    max-width: 40ch;
+  }
+
+  .list li span {
+    position: relative;
+    left: var(--s8);
+  }
+
+  a {
+    color: var(--col-magenta-cta);
+    font-weight: bold;
+  }
+</style>

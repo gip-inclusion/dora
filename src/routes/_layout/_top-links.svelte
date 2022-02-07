@@ -2,21 +2,26 @@
   import NavItem from "$lib/components/nav-item.svelte";
 </script>
 
-<nav class="flex flex-col col-span-full text-right md:flex-row">
+<nav class="col-span-full flex flex-col text-right md:flex-row">
+  <NavItem href="/contribuer" label="Contribuer" />
   <NavItem
     href="https://documentation.dora.fabrique.social.gouv.fr"
     label="Documentation"
-    external
+    externalIcon
+    otherTab
+    nofollow
   />
   <NavItem
     label="Communauté de l’inclusion"
     href="https://communaute.inclusion.beta.gouv.fr/"
-    external
+    externalIcon
+    otherTab
   />
   <NavItem
     href="https://itou.typeform.com/doracontactsupp"
     label="Contacter l’équipe"
-    external
+    externalIcon
+    otherTab
     nofollow
   />
 </nav>

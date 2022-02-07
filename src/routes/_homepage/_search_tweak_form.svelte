@@ -44,25 +44,6 @@
   }
 </script>
 
-<style>
-  .wrapper {
-    padding: 24px 24px 16px;
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-    box-shadow: var(--shadow-md);
-  }
-
-  h3 {
-    color: var(--col-france-blue);
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--s16);
-  }
-</style>
-
 <div class="wrapper">
   <Collapsable>
     <div slot="above-fold">
@@ -70,11 +51,11 @@
     </div>
     <div slot="under-fold">
       {#if numResults}
-        <div class="text-gray-text-alt2 text-f14">
+        <div class="text-f14 text-gray-text-alt2">
           {numResults} résultat{#if numResults > 1}s{/if}
         </div>
       {/if}
-      <div class="border-t border-gray-01 my-s12" />
+      <div class="my-s12 border-t border-gray-01" />
       <form on:submit|preventDefault={handleSearch}>
         <Field
           type="select"
@@ -129,7 +110,7 @@
           preventDefaultOnMouseDown
         />
       </form>
-      <p class="mt-s16 text-gray-text-alt2 text-f12 text-center">
+      <p class="mt-s16 text-center text-f12 text-gray-text-alt2">
         Les premiers départements accessibles à la recherche sont les Ardennes
         et l’Ile de la Réunion.
         <a
@@ -144,3 +125,22 @@
     </div>
   </Collapsable>
 </div>
+
+<style lang="postcss">
+  .wrapper {
+    padding: 24px 24px 16px;
+    background-color: var(--col-white);
+    border-radius: var(--s8);
+    box-shadow: var(--shadow-md);
+  }
+
+  h3 {
+    color: var(--col-france-blue);
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s16);
+  }
+</style>

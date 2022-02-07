@@ -9,20 +9,6 @@
   const icon = positiveMood ? emotionHappyIcon : errorWarningIcon;
 </script>
 
-<style>
-  .wrapper {
-    padding: var(--s24);
-  }
-
-  .positive {
-    background-color: #deedea;
-  }
-
-  .negative {
-    background-color: #fbe4e5;
-  }
-</style>
-
 <div
   class="wrapper"
   class:positive={positiveMood}
@@ -36,7 +22,21 @@
     bold
     iconOnLeft
   />
-  <div class=" pl-s32 text-gray-text text-f14">
+  <div class=" pl-s32 text-f14 text-gray-text">
     <slot name="details" />
   </div>
 </div>
+
+<style lang="postcss">
+  .wrapper {
+    padding: var(--s24);
+  }
+
+  .positive {
+    background-color: #deedea;
+  }
+
+  .negative {
+    background-color: #fbe4e5;
+  }
+</style>

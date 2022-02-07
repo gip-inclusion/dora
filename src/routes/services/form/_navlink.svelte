@@ -4,14 +4,8 @@
   export let lit;
 </script>
 
-<style lang="postcss">
-  .active {
-    @apply border-b-4 border-magenta-brand text-magenta-cta;
-  }
-</style>
-
 <button
-  class="text-center text-f16 text-gray-text-alt2 border-b-2 border-gray-02 px-s16 py-0"
+  class="py-0 border-b-2 border-gray-02 px-s16 text-center text-f16 text-gray-text-alt2"
   type="button"
   href=""
   on:click
@@ -20,3 +14,9 @@
 >
   {name}
 </button>
+
+<style lang="postcss">
+  .active {
+    @apply border-b-4 border-magenta-brand text-magenta-cta;
+  }
+</style>

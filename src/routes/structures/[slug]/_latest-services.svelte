@@ -9,7 +9,7 @@
 </script>
 
 <div class="col-span-full mt-s32">
-  <div class="flex flex-col md:flex-row justify-between">
+  <div class="flex flex-col justify-between md:flex-row">
     <h2 class="text-france-blue">Derniers services ajoutés</h2>
     <LinkButton
       label="Voir tout"
@@ -17,11 +17,11 @@
       small
     />
   </div>
-  <div class="grid md:grid-cols-2 lg:grid-cols-s24 gap-s16 mt-s24 mb-s48">
+  <div class="lg:grid-cols-s24 mt-s24 mb-s48 grid gap-s16 md:grid-cols-2">
     {#each services as service}
-      <div class="shadow-md rounded-md px-s20 py-s24">
+      <div class="rounded-md px-s20 py-s24 shadow-md">
         <h4><a href="/services/{service.slug}">{service.name}</a></h4>
-        <div class="flex flex-col gap-s16 mt-s8">
+        <div class="mt-s8 flex flex-col gap-s16">
           <Tag selfStart>{service.categoryDisplay}</Tag>
           <Label
             label={`${service.postalCode}, ${service.city}`}

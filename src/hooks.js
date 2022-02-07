@@ -3,14 +3,26 @@ import { dev } from "$app/env";
 import { API_URL } from "$lib/env";
 import * as Sentry from "@sentry/browser";
 
-export async function handleError({ error, request }) {
-  Sentry.captureException(error, { request });
+export async function handleError({ error, event }) {
+  Sentry.captureException(error, { event });
 }
 
-export async function handle({ request, resolve }) {
-  const response = await resolve(request);
+// /auth utilise un token qui est invalidé sur le serveur après le premier appel.
+// on ne veut donc pas qu'il soit requêté par le ssr puis par le le client
+// on devrait pouvoir utiliser la function `fetch` disponible en paramètre de la function load.
+const noSsrPaths = [
+  "/recherche",
+  "/auth",
+  "/sentry-debug-client",
+  "/services/creer",
+  "/tableau-de-bord",
+];
 
-  // https://help.hotjar.com/hc/en-us/articles/115011640307-Content-Security-Policies
+export async function handle({ event, resolve }) {
+  const ssr = !noSsrPaths.some((s) => event.url.pathname.startsWith(s));
+  const response = await resolve(event, { ssr });
+
+  // https://help.hotjar.com/hc/en-us/aFrticles/115011640307-Content-Security-Policies
 
   const connectSrc = `connect-src ${API_URL} ${
     dev ? "ws:" : ""
@@ -19,14 +31,14 @@ export async function handle({ request, resolve }) {
   const frameSrc = `frame-src http://metabase.dora.fabrique.social.gouv.fr https://*.hotjar.com http://*.hotjar.io https://*.hotjar.io`;
   const fontSrc = `font-src 'self' http://*.hotjar.com https://*.hotjar.com http://*.hotjar.io https://*.hotjar.io`;
   const imgSrc = `img-src 'self' data: http://*.hotjar.com https://*.hotjar.com http://*.hotjar.io https://*.hotjar.io`;
-  return {
-    ...response,
-    headers: {
-      ...response.headers,
-      "X-Frame-Options": "DENY",
-      "X-XSS-Protection": "1; mode=block",
-      "X-Content-Type-Options": "nosniff",
-      "Content-Security-Policy": `default-src 'none';  ${connectSrc}; ${scriptSrc}; ${fontSrc}; ${imgSrc}; style-src 'self' 'unsafe-inline'; ${frameSrc}`,
-    },
-  };
+
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("X-XSS-Protection", "1; mode=block");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set(
+    "Content-Security-Policy",
+    `default-src 'none';  ${connectSrc}; ${scriptSrc}; ${fontSrc}; ${imgSrc}; style-src 'self' 'unsafe-inline'; ${frameSrc}`
+  );
+
+  return response;
 }

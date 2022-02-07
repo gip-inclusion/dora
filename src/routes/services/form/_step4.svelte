@@ -59,7 +59,7 @@
 </script>
 
 {#await promise then structure}
-  <FieldSet title="Personne à contacter">
+  <FieldSet title="Contact">
     <ModelField
       label="Nom du contact"
       placeholder="Prénom et nom"
@@ -70,8 +70,13 @@
       bind:value={service.contactName}
     >
       <FieldHelp slot="helptext" title="Contact référent">
-        Merci de préciser les coordonnées de la personne en charge de ce
-        service.
+        Merci de préciser les coordonnées de la personne responsable de la
+        réception et du traitement des demandes d’orientation. À défaut,
+        renseignez le courriel et le numéro de téléphone de votre structure.Par
+        défaut, ces informations sont disponibles uniquement aux accompagnateurs
+        qui ont un compte DORA. En cochant la case « Rendre les informations
+        publiques », les informations seront rendues disponibles à tous les
+        visiteurs du site.
       </FieldHelp></ModelField
     >
     <ModelField

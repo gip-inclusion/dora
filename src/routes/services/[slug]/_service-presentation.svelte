@@ -4,7 +4,8 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import { lightBulbIcon, messageIcon } from "$lib/icons";
 
-  import Info from "../form/_info.svelte";
+  import Info from "$lib/components/forms/form-info.svelte";
+
   import Tag from "$lib/components/tag.svelte";
   import Button from "$lib/components/button.svelte";
   import SuggestionModal from "./_suggestion-modal.svelte";
@@ -28,37 +29,13 @@
   }
 </script>
 
-<style>
-  h2 {
-    color: var(--col-france-blue) !important;
-  }
-
-  .markdown-wrapper {
-    margin-top: var(--s16);
-  }
-
-  .markdown-wrapper :global(h1),
-  .markdown-wrapper :global(h2),
-  .markdown-wrapper :global(h3) {
-    color: var(--col-france-blue);
-  }
-
-  .markdown-wrapper :global(p) {
-    color: var(--col-text);
-  }
-
-  .prose {
-    max-width: 100%;
-  }
-</style>
-
 <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
 
-<div class="flex mt-s48 mb-s32 items-baseline">
+<div class="mt-s48 mb-s32 flex items-baseline">
   <Tag bgColorClass="bg-gray-01" fgColorClass="text-gray-dark">
     {service.categoryDisplay}
   </Tag>
-  <div class="text-gray-text-alt2 text-f12 maj ml-s24">
+  <div class="maj ml-s24 text-f12 text-gray-text-alt2">
     Mise à jour le {new Date(service.modificationDate).toLocaleDateString(
       "fr-FR",
       { year: "numeric", month: "long", day: "numeric" }
@@ -114,3 +91,27 @@
     </div>
   </div>
 </div>
+
+<style lang="postcss">
+  h2 {
+    color: var(--col-france-blue) !important;
+  }
+
+  .markdown-wrapper {
+    margin-top: var(--s16);
+  }
+
+  .markdown-wrapper :global(h1),
+  .markdown-wrapper :global(h2),
+  .markdown-wrapper :global(h3) {
+    color: var(--col-france-blue);
+  }
+
+  .markdown-wrapper :global(p) {
+    color: var(--col-text);
+  }
+
+  .prose {
+    max-width: 100%;
+  }
+</style>

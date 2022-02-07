@@ -8,26 +8,10 @@
   export let isOnlyAdmin = false;
 </script>
 
-<style>
-  .wrapper {
-    display: flex;
-    align-items: center;
-    padding: 6px 16px;
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-    box-shadow: var(--shadow-sm);
-    gap: var(--s16);
-  }
-
-  .is-own {
-    background-color: var(--col-gray-01);
-  }
-</style>
-
 <div class="wrapper" class:is-own={isMyself}>
   <div class="flex flex-col">
     <h5>{member.user.fullName}</h5>
-    <div class="text-gray-text-alt text-f14">{member.user.email}</div>
+    <div class="text-f14 text-gray-text-alt">{member.user.email}</div>
   </div>
   <div class="grow" />
   <slot name="label" />
@@ -42,3 +26,19 @@
     </ButtonMenu>
   </div>
 </div>
+
+<style lang="postcss">
+  .wrapper {
+    display: flex;
+    align-items: center;
+    padding: 6px 16px;
+    background-color: var(--col-white);
+    border-radius: var(--s8);
+    box-shadow: var(--shadow-sm);
+    gap: var(--s16);
+  }
+
+  .is-own {
+    background-color: var(--col-gray-01);
+  }
+</style>

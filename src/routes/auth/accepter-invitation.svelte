@@ -1,7 +1,4 @@
 <script context="module">
-  // We don't need ssr here, and don't want to api call done twice
-  // given that the token will be deleted after validation
-  export const ssr = false;
   import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
   import { disconnect } from "$lib/auth";
 
@@ -55,7 +52,7 @@
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 mb-s48 text-center col-span-full">
+  <div class="col-span-full col-start-1 mb-s48 text-center">
     <h1 class="text-france-blue">Rejoindre une structure</h1>
   </div>
 </CenteredGrid>

@@ -56,17 +56,9 @@
   });
 </script>
 
-<style lang="postcss">
-  :global(.ProseMirror p.is-editor-empty:first-child::before) {
-    content: attr(data-placeholder);
-
-    @apply text-gray-text-alt pointer-events-none h-s0 float-left;
-  }
-</style>
-
-<div class="flex flex-col w-full border border-gray-03">
+<div class="flex w-full flex-col border border-gray-03">
   {#if editor}
-    <div class="flex flex-row items-center bg-gray-03 p-s12 ">
+    <div class="flex flex-row items-center bg-gray-03 p-s12">
       <Button
         on:click={() => editor.chain().focus().toggleBold().run()}
         active={editor.isActive("bold")}
@@ -116,3 +108,11 @@
     <div bind:this={element} />
   </div>
 </div>
+
+<style lang="postcss">
+  :global(.ProseMirror p.is-editor-empty:first-child::before) {
+    content: attr(data-placeholder);
+
+    @apply pointer-events-none float-left h-s0 text-gray-text-alt;
+  }
+</style>

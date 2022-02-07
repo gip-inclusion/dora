@@ -1,5 +1,4 @@
 <script context="module">
-  export const ssr = false;
   import { getServicesOptions } from "$lib/services";
   import { getApiURL } from "$lib/utils/api.js";
   import { getQuery } from "./_homepage/_search";
@@ -11,14 +10,17 @@
       cityCode,
       radius
     )}`;
+
     const res = await fetch(url, {
       headers: {
         Accept: "application/json; version=1.0",
       },
     });
+
     if (res.ok) {
       return await res.json();
     }
+
     // TODO: log errors
     try {
       console.error(await res.json());
@@ -67,8 +69,9 @@
   import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
   import SearchPromo from "./_homepage/_search-promo.svelte";
 
-  import { mailIcon, newspaperIcon } from "$lib/icons";
+  import { newspaperIcon } from "$lib/icons";
   import NoResultsPic from "$lib/assets/illu_zero-resultats-optimise.svg";
+  import ShareButton from "$lib/components/share-button.svelte";
 
   export let servicesOptions;
   export let category, subcategory, cityCode, cityLabel, radius;
@@ -81,86 +84,14 @@
       });
     }
   });
-
-  const sharingEmailSubject = encodeURIComponent("Connaissez-vous Dora ?");
-  const sharingEmailBody = encodeURIComponent(
-    `
-Bonjour,
-Je me permets de vous partager un projet qui devrait vous intéresser.
-
-Connaissez-vous Dora ?
-
-Lancé en Mai 2021, Dora est un service public numérique porté par la DGEFP qui permet aux structures de l'insertion de référencer simplement et mettre à jour en temps réel leur offre de services, et aux professionnels prescripteurs de rechercher et mobiliser rapidement le service le plus adapté au besoin de leur bénéficiaire.
-
-J'ai le plaisir de vous annoncer que Dora est accessible dès aujourd'hui pour l'ensemble les acteurs de l'insertion du territoire. De nombreux partenaires ont d'ores et déjà mis en visibilité leur offre de service sur Dora. Vous pouvez également vous inscrire et bénéficier de ce service !
-
-👉 Pour accéder à Dora cliquez sur ce lien (pensez à l'ajouter à vos favoris 😉) :
-https://dora.fabrique.social.gouv.fr/
-
-Dans l'attente de pouvoir consulter votre offre de service sur cet outil.
-Cordialement,
-`.trim()
-  );
 </script>
-
-<style lang="postcss">
-  .search-form {
-    padding-top: var(--s56);
-    grid-column: 1 / -1;
-  }
-
-  .results-wrapper {
-    padding-bottom: var(--s56);
-    grid-column: 1 / -1;
-  }
-
-  .results {
-    display: flex;
-    flex-direction: column;
-    padding-top: var(--s56);
-    padding-bottom: var(--s16);
-    gap: var(--s16);
-  }
-
-  .no-results-wrapper {
-    display: flex;
-    flex-direction: column;
-    padding-top: var(--s56);
-    padding-bottom: var(--s24);
-    color: var(--col-text);
-    gap: var(--s56);
-  }
-
-  .no-results {
-    display: flex;
-    flex-direction: column;
-    gap: var(--s16);
-  }
-
-  @screen xl {
-    .no-results-wrapper {
-      flex-direction: row;
-    }
-  }
-
-  @screen lg {
-    .search-form {
-      padding-top: var(--s56);
-      grid-column: 1 / 5;
-    }
-
-    .results-wrapper {
-      grid-column: 5 / -1;
-    }
-  }
-</style>
 
 <svelte:head>
   <title>Résultats de recherche | DORA</title>
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 col-span-full text-center mb-s48">
+  <div class="col-span-full col-start-1 mb-s48 text-center">
     <p class="text-f16">Consultez les services</p>
     <h1 class="text-france-blue">Résultats de recherche</h1>
   </div>
@@ -219,14 +150,7 @@ Cordialement,
             Vous connaissez des structures proposant des services correspondant
             à ces critères ? Invitez vos partenaires à se référencer :
           </h4>
-          <div>
-            <LinkButton
-              label="Recommander DORA"
-              icon={mailIcon}
-              iconOnRight
-              to="mailto:?subject={sharingEmailSubject}&body={sharingEmailBody}"
-            />
-          </div>
+          <ShareButton />
           <h4 class="mt-s48">
             Infolettre : nouveautés et les prochains territoires ouverts sur
             Dora.
@@ -249,3 +173,55 @@ Cordialement,
     {/if}
   </div>
 </CenteredGrid>
+
+<style lang="postcss">
+  .search-form {
+    padding-top: var(--s56);
+    grid-column: 1 / -1;
+  }
+
+  .results-wrapper {
+    padding-bottom: var(--s56);
+    grid-column: 1 / -1;
+  }
+
+  .results {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--s56);
+    padding-bottom: var(--s16);
+    gap: var(--s16);
+  }
+
+  .no-results-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--s56);
+    padding-bottom: var(--s24);
+    color: var(--col-text);
+    gap: var(--s56);
+  }
+
+  .no-results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s16);
+  }
+
+  @screen xl {
+    .no-results-wrapper {
+      flex-direction: row;
+    }
+  }
+
+  @screen lg {
+    .search-form {
+      padding-top: var(--s56);
+      grid-column: 1 / 5;
+    }
+
+    .results-wrapper {
+      grid-column: 5 / -1;
+    }
+  }
+</style>

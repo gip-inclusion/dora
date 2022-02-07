@@ -1,8 +1,4 @@
 <script context="module">
-  // We don't need ssr here, and don't want to api call done twice
-  // given that the token will be deleted after validation
-  export const ssr = false;
-
   import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
   import { disconnect } from "$lib/auth";
 
@@ -88,19 +84,12 @@
   }
 </script>
 
-<style>
-  li {
-    list-style-position: inside;
-    list-style-type: disc;
-  }
-</style>
-
 <svelte:head>
   <title>Réinitialiser votre mot de passe | DORA</title>
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 mb-s48 text-center col-span-full">
+  <div class="col-span-full col-start-1 mb-s48 text-center">
     <h1 class="text-france-blue">Réinitialiser votre mot de passe</h1>
   </div>
 </CenteredGrid>
@@ -191,3 +180,10 @@
     </Fieldset>
   </Form>
 </AuthLayout>
+
+<style lang="postcss">
+  li {
+    list-style-position: inside;
+    list-style-type: disc;
+  }
+</style>

@@ -57,13 +57,6 @@
   }
 </script>
 
-<style>
-  .establishment-details {
-    padding: var(--s24);
-    border: 1px solid var(--col-gray-01);
-  }
-</style>
-
 <Form
   data={{ safirCode }}
   schema={safirSearchSchema}
@@ -117,7 +110,7 @@
       </div>
     {/if}
 
-    <div class="flex flex-col items-start md:justify-between md:flex-row">
+    <div class="flex flex-col items-start md:flex-row md:justify-between">
       <Button
         label="Retour"
         on:click={handleBackButton}
@@ -144,3 +137,10 @@
     </div>
   </FieldSet>
 </Form>
+
+<style lang="postcss">
+  .establishment-details {
+    padding: var(--s24);
+    border: 1px solid var(--col-gray-01);
+  }
+</style>

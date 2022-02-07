@@ -1,5 +1,9 @@
 <script>
-  import { unPublishDraft } from "$lib/services";
+  import {
+    convertSuggestionToDraft,
+    deleteService,
+    unPublishService,
+  } from "$lib/services";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import {
     checkBoxBlankIcon,
@@ -8,6 +12,8 @@
     fileCloudIcon,
     fileEditIcon,
     moreIcon,
+    checkIcon,
+    deleteBinIcon,
   } from "$lib/icons";
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
@@ -16,35 +22,31 @@
   import { shortenString } from "$lib/utils";
 
   export let services = [];
+  export let onRefresh;
 
   async function handleUnpublish(service) {
-    const result = await unPublishDraft(service.slug);
-    service.isDraft = result.isDraft;
-    // force reactive update
-    services = services;
+    await unPublishService(service.slug);
+    await onRefresh();
+  }
+
+  async function handleConvertToDraft(service) {
+    await convertSuggestionToDraft(service.slug);
+    await onRefresh();
+  }
+
+  async function handleDelete(service) {
+    if (confirm(`Supprimer la suggestion ${service.name} ?`)) {
+      await deleteService(service.slug);
+      await onRefresh();
+    }
   }
 </script>
 
-<style lang="postcss">
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: var(--s40);
-    gap: var(--s12);
-  }
-
-  .service {
-    padding: var(--s16);
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-  }
-</style>
-
 <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-  <div class="wrapper col-start-1 col-span-full">
+  <div class="wrapper col-span-full col-start-1">
     {#each services as service}
       <div class="service flex flex-row gap-s16">
-        <div class="grow flex flex-row items-center">
+        <div class="flex grow flex-row items-center">
           <a href="/services/{service.slug}">
             <h5>{shortenString(service.name)}</h5>
           </a>
@@ -57,7 +59,16 @@
         />
 
         <Label label={service.department} bold />
-        {#if service.isDraft}
+        {#if service.isSuggestion}
+          <Label
+            label="Suggestion"
+            iconOnLeft
+            icon={checkBoxBlankIcon}
+            smallIcon
+            error
+            bold
+          />
+        {:else if service.isDraft}
           <Label
             label="Brouillon"
             iconOnLeft
@@ -88,34 +99,78 @@
         </div>
         <div>
           <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
-            {#if !service.isDraft}
+            {#if service.isSuggestion}
               <div>
                 <Button
-                  label="Désactiver"
+                  label="Convertir en brouillon"
                   on:click={() => {
-                    handleUnpublish(service);
+                    handleConvertToDraft(service);
                     onCloseParent();
                   }}
-                  icon={fileCloudIcon}
+                  icon={checkIcon}
+                  iconOnRight
+                  small
+                  noBackground
+                />
+              </div>
+              <div>
+                <Button
+                  label="Rejeter"
+                  on:click={() => {
+                    handleDelete(service);
+                    onCloseParent();
+                  }}
+                  icon={deleteBinIcon}
+                  iconOnRight
+                  small
+                  noBackground
+                />
+              </div>
+            {:else}
+              {#if !service.isDraft}
+                <div>
+                  <Button
+                    label="Désactiver"
+                    on:click={() => {
+                      handleUnpublish(service);
+                      onCloseParent();
+                    }}
+                    icon={fileCloudIcon}
+                    iconOnRight
+                    small
+                    noBackground
+                  />
+                </div>
+              {/if}
+              <div>
+                <LinkButton
+                  label="Modifier"
+                  to="/services/{service.slug}/editer"
+                  icon={fileEditIcon}
                   iconOnRight
                   small
                   noBackground
                 />
               </div>
             {/if}
-            <div>
-              <LinkButton
-                label="Modifier"
-                to="/services/{service.slug}/editer"
-                icon={fileEditIcon}
-                iconOnRight
-                small
-                noBackground
-              />
-            </div>
           </ButtonMenu>
         </div>
       </div>
     {/each}
   </div>
 </CenteredGrid>
+
+<style lang="postcss">
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--s40);
+    gap: var(--s12);
+  }
+
+  .service {
+    padding: var(--s16);
+    background-color: var(--col-white);
+    border-radius: var(--s8);
+  }
+</style>

@@ -11,6 +11,40 @@
   export let isPreview = false;
 </script>
 
+<CenteredGrid --col-bg="var(--col-france-blue)" topPadded>
+  <ServiceHeader {service} {isPreview} />
+</CenteredGrid>
+
+<CenteredGrid
+  roundedbg
+  --col-under-bg="var(--col-france-blue)"
+  --col-content-bg="var(--col-bg)"
+>
+  <div class="col-span-full flex flex-col">
+    <div class="flex flex-col gap-s24 lg:flex-row-reverse">
+      <div class="orientation flex-initial">
+        <OrientationBox {service} />
+        <div class="mb-s16 hidden max-w-md flex-col gap-s16 lg:flex">
+          <h4>{service.structureInfo.name}</h4>
+          <Label label={service.structureInfo.shortDesc} italic />
+          <LinkButton
+            label="Voir l’offre de services complète"
+            to="/structures/{service.structure}"
+            nogrow
+          />
+        </div>
+      </div>
+      <div class="service-pres flex-1">
+        <ServicePresentation {service} />
+      </div>
+    </div>
+    <div class="service-info">
+      <ModalitiesBox {service} />
+      <AccessBox {service} />
+    </div>
+  </div>
+</CenteredGrid>
+
 <style lang="postcss">
   .service-info {
     display: flex;
@@ -25,37 +59,3 @@
     }
   }
 </style>
-
-<CenteredGrid --col-bg="var(--col-france-blue)" topPadded>
-  <ServiceHeader {service} {isPreview} />
-</CenteredGrid>
-
-<CenteredGrid
-  roundedbg
-  --col-under-bg="var(--col-france-blue)"
-  --col-content-bg="var(--col-bg)"
->
-  <div class="flex flex-col col-span-full">
-    <div class="flex flex-col gap-s24 lg:flex-row-reverse">
-      <div class="flex-initial orientation">
-        <OrientationBox {service} />
-        <div class="flex-col hidden max-w-md gap-s16 mb-s16 lg:flex">
-          <h4>{service.structureInfo.name}</h4>
-          <Label label={service.structureInfo.shortDesc} italic />
-          <LinkButton
-            label="Voir l’offre de services complète"
-            to="/structures/{service.structure}"
-            nogrow
-          />
-        </div>
-      </div>
-      <div class="flex-1 service-pres">
-        <ServicePresentation {service} />
-      </div>
-    </div>
-    <div class="service-info">
-      <ModalitiesBox {service} />
-      <AccessBox {service} />
-    </div>
-  </div>
-</CenteredGrid>

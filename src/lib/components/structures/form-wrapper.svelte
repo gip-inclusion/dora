@@ -190,7 +190,7 @@
           />
         </div>
       </div>
-      <div class="flex flex-row justify-between gap-x-s32 ">
+      <div class="flex flex-row justify-between gap-x-s32">
         <div class="w-s250">
           <ModelField
             type="tel"
@@ -203,7 +203,7 @@
           />
         </div>
 
-        <div class="flex-1 ">
+        <div class="flex-1">
           <ModelField
             type="email"
             label="Courriel"

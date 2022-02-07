@@ -7,7 +7,6 @@
   export let iconOnLeft = undefined,
     iconOnRight = undefined;
   let isOpen = false;
-  let childrenListNode;
 
   function clickOutside(node) {
     const handleClick = (event) => {
@@ -29,6 +28,28 @@
     isOpen = false;
   }
 </script>
+
+<div class="wrapper">
+  <div class="title">
+    <Button
+      {icon}
+      {iconOnLeft}
+      {iconOnRight}
+      {label}
+      noBackground
+      {disabled}
+      on:click={() => (isOpen = !isOpen)}
+    />
+  </div>
+  <div
+    class="children"
+    class:open={isOpen}
+    use:clickOutside
+    on:click_outside={handleClickOutside}
+  >
+    <slot onClose={() => (isOpen = false)} />
+  </div>
+</div>
 
 <style lang="postcss">
   .wrapper {
@@ -53,26 +74,3 @@
     display: flex;
   }
 </style>
-
-<div class="wrapper">
-  <div class="title">
-    <Button
-      {icon}
-      {iconOnLeft}
-      {iconOnRight}
-      {label}
-      noBackground
-      {disabled}
-      on:click={() => (isOpen = !isOpen)}
-    />
-  </div>
-  <div
-    class="children"
-    class:open={isOpen}
-    bind:this={childrenListNode}
-    use:clickOutside
-    on:click_outside={handleClickOutside}
-  >
-    <slot onClose={() => (isOpen = false)} />
-  </div>
-</div>

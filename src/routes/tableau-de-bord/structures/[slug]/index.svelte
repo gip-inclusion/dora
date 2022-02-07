@@ -1,5 +1,4 @@
 <script context="module">
-  export const ssr = false;
   import { get } from "svelte/store";
   import {
     getStructure,
@@ -71,7 +70,7 @@
     onRefresh={handleRefreshMemberList}
   />
   <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-    <div class="col-start-1 col-span-full mb-s80">
+    <div class="col-span-full col-start-1 mb-s80">
       <div class="mb-s32">
         <h2>Ma structure</h2>
       </div>
@@ -82,13 +81,13 @@
             title="Présentation de ma structure"
             description="Vous trouvez ici les informations concernant votre structure, tels qu’ils sont visibles sur le site DORA."
           >
-            <div class="border border-gray-01 rounded px-s24 py-s16">
-              <h4 class="text-gray-text ">{structure.name}</h4>
+            <div class="rounded border border-gray-01 px-s24 py-s16">
+              <h4 class="text-gray-text">{structure.name}</h4>
               <div class="legend mt-s12">SIRET: {structure.siret}</div>
             </div>
-            <div class="border border-gray-01 rounded px-s24 py-s16">
+            <div class="rounded border border-gray-01 px-s24 py-s16">
               <h5>Adresse</h5>
-              <div class="legend ">
+              <div class="legend">
                 {structure.address1}<br />
                 {#if structure.address2}{structure.address2}<br />{/if}
                 {structure.postalCode}
@@ -134,7 +133,7 @@
           {#if members}
             <div class="mt-s48">
               <h3>Vos collaborateurs</h3>
-              <div class="flex flex-col gap-s8 mt-s32 mb-s32">
+              <div class="mt-s32 mb-s32 flex flex-col gap-s8">
                 {#if putativeMembers}
                   {#each sortedMembers(putativeMembers) as member}
                     {#if member.invitedByAdmin}

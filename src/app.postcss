@@ -179,11 +179,11 @@
   }
 
   .legend {
-    @apply text-gray-text-alt2 text-f14 leading-24;
+    @apply text-f14 leading-24 text-gray-text-alt2;
   }
 
   .legend-xs {
-    @apply text-gray-text-alt2 text-f12 leading-20;
+    @apply text-f12 leading-20 text-gray-text-alt2;
   }
 
   @media print {
@@ -200,18 +200,18 @@
   /* Tarte au citron */
 
   #tarteaucitronAlertBig {
-    @apply !font-sans !bg-white !shadow-md !text-gray-text;
+    @apply !bg-white !font-sans !text-gray-text !shadow-md;
   }
 
   #tarteaucitronAlertBig #tarteaucitronDisclaimerAlert {
     @apply !font-sans !text-gray-text;
   }
   #tarteaucitronAlertBig #tarteaucitronPersonalize2 {
-    @apply !font-sans !bg-magenta-cta;
+    @apply !bg-magenta-cta !font-sans;
   }
 
   #tarteaucitronAlertBig #tarteaucitronAllDenied2 {
-    @apply !font-sans !bg-gray-dark;
+    @apply !bg-gray-dark !font-sans;
   }
 
   #tarteaucitronAlertBig #tarteaucitronCloseAlert {
@@ -225,4 +225,26 @@
   #tarteaucitronRoot #tarteaucitronCloseCross {
     @apply !font-sans !text-gray-text;
   }
+}
+
+/*
+    styles du composant Button.svelte
+    provisoirement déplacés ici
+    car si ils sont dans le composant la compilation bug
+    avec cette erreur: https://github.com/withastro/astro/issues/2273
+*/
+
+.flash-success {
+  border: none;
+  background-color: var(--col-success);
+  color: var(--col-white);
+}
+
+.flash-success:hover {
+  background-color: var(--col-success);
+  color: var(--col-white);
+}
+
+.flash-success:focus {
+  box-shadow: none;
 }

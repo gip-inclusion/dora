@@ -16,7 +16,42 @@
   export let truncate = false;
 </script>
 
-<style>
+<div
+  class="wrapper flex flex-row items-center text-f14 leading-normal"
+  class:bold
+  class:italic
+  class:success
+  class:error
+  class:info
+  class:wait
+  class:light
+  class:dark-bg={darkBg}
+>
+  {#if iconOnLeft}
+    <div
+      class="icon mr-s8"
+      class:big-icon={bigIcon}
+      class:small-icon={smallIcon}
+    >
+      {@html icon}
+    </div>
+  {/if}
+  {#if icon && !(label || $$slots.default)}
+    <div class="icon" class:big-icon={bigIcon}>
+      {@html icon}
+    </div>
+  {/if}
+
+  <span class:truncate><slot>{label}</slot></span>
+
+  {#if iconOnRight}
+    <div class="icon ml-s8" class:big-icon={bigIcon}>
+      {@html icon}
+    </div>
+  {/if}
+</div>
+
+<style lang="postcss">
   .wrapper {
     color: var(--col-text);
   }
@@ -83,38 +118,3 @@
     }
   }
 </style>
-
-<div
-  class="flex flex-row items-center text-f14 leading-normal wrapper"
-  class:bold
-  class:italic
-  class:success
-  class:error
-  class:info
-  class:wait
-  class:light
-  class:dark-bg={darkBg}
->
-  {#if iconOnLeft}
-    <div
-      class="mr-s8 icon"
-      class:big-icon={bigIcon}
-      class:small-icon={smallIcon}
-    >
-      {@html icon}
-    </div>
-  {/if}
-  {#if icon && !(label || $$slots.default)}
-    <div class="icon" class:big-icon={bigIcon}>
-      {@html icon}
-    </div>
-  {/if}
-
-  <span class:truncate><slot>{label}</slot></span>
-
-  {#if iconOnRight}
-    <div class="ml-s8 icon" class:big-icon={bigIcon}>
-      {@html icon}
-    </div>
-  {/if}
-</div>

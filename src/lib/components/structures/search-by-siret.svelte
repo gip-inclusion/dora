@@ -7,13 +7,18 @@
   export let establishment;
 
   let city;
+  export let onCityChange = null;
+  export let onEstablishmentChange = null;
 
   function handleCityChange(newCity) {
     city = newCity;
+    establishment = null;
+    if (onCityChange) onCityChange(newCity);
   }
 
   async function handleEstablishmentChange(newEstablishment) {
     establishment = newEstablishment;
+    if (onEstablishmentChange) onEstablishmentChange(newEstablishment);
   }
 </script>
 

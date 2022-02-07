@@ -52,7 +52,7 @@
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-start-1 mb-s48 text-center col-span-full">
+  <div class="col-span-full col-start-1 mb-s48 text-center">
     <h1 class="text-france-blue">Se connecter à DORA</h1>
   </div>
 </CenteredGrid>
