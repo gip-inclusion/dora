@@ -185,12 +185,13 @@ export async function getServicesOptions({ kitFetch } = {}) {
 export async function getServiceSuggestions() {
   const url = `${getApiURL()}/services-suggestions/`;
   const results = (await fetchData(url)).data;
-  console.log(results);
-  results.forEach((result) => {
-    result.serviceInfo.fullDesc = insane(
-      markdownToHTML(result.serviceInfo.fullDesc)
-    );
-  });
+  if (results) {
+    results.forEach((result) => {
+      result.serviceInfo.fullDesc = insane(
+        markdownToHTML(result.serviceInfo.fullDesc)
+      );
+    });
+  }
   return results;
 }
 
