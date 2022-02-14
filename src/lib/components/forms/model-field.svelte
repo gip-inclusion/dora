@@ -17,6 +17,7 @@
   export let visible = true;
   export let placeholder = "";
   export let placeholderMulti = "";
+  export let initialValue = undefined;
   export let description = "";
   export let minValue = null;
 
@@ -37,6 +38,7 @@
   {type}
   {placeholder}
   {placeholderMulti}
+  {initialValue}
   {description}
   {hideLabel}
   {minValue}

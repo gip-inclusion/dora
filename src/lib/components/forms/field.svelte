@@ -26,6 +26,7 @@
   export let visible = true;
   export let placeholder = undefined;
   export let placeholderMulti = undefined;
+  export let initialValue = undefined;
   export let description = "";
   export let minValue = undefined;
 
@@ -87,6 +88,7 @@
             {rows}
             {placeholder}
             {placeholderMulti}
+            {initialValue}
             {minValue}
             {disabled}
             {readonly}

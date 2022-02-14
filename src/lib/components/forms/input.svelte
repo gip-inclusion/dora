@@ -19,6 +19,7 @@
   export let disabled = false;
   export let placeholder = "";
   export let placeholderMulti = "";
+  export let initialValue = undefined;
   export let minValue = null;
   export let maxLength = undefined;
   export let rows = 4;
@@ -59,6 +60,7 @@
     {placeholderMulti}
     {disabled}
     {readonly}
+    {initialValue}
   />
 {:else if type === "multiselect"}
   <Select
@@ -73,6 +75,7 @@
     {placeholderMulti}
     {disabled}
     {readonly}
+    {initialValue}
   />
 {:else if type === "text"}
   <input

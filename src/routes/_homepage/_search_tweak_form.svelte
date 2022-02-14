@@ -15,11 +15,9 @@
   export let subcategory;
   export let cityCode;
   export let cityLabel;
-  export let radius;
-  export let radiusChoices;
 
   function handleSearch() {
-    const query = getQuery(category, subcategory, cityCode, radius, cityLabel);
+    const query = getQuery(category, subcategory, cityCode, cityLabel);
     goto(`recherche?${query}`);
   }
 
@@ -92,16 +90,6 @@
             }}
           />
         </Field>
-
-        <Field
-          type="select"
-          name="radius"
-          bind:value={radius}
-          choices={radiusChoices}
-          label="Rayon"
-          vertical
-          sortSelect
-        />
 
         <Button
           type="submit"

@@ -22,17 +22,9 @@
   let cityLabel;
 
   let subCategoryChoices = [];
-  const radiusChoices = [
-    { value: "10", label: "10 km" },
-    { value: "20", label: "20 km" },
-    { value: "50", label: "50 km" },
-    { value: "100", label: "100 km" },
-  ];
-
-  let radius = radiusChoices[0].value;
 
   function handleSearch() {
-    const query = getQuery(category, subcategory, cityCode, radius, cityLabel);
+    const query = getQuery(category, subcategory, cityCode, cityLabel);
     goto(`recherche?${query}`);
   }
 
@@ -98,18 +90,6 @@
           }}
         />
       </Field>
-
-      <div class="basis-s112">
-        <Field
-          type="select"
-          name="radius"
-          bind:value={radius}
-          choices={radiusChoices}
-          label="Rayon"
-          vertical
-          sortSelect
-        />
-      </div>
 
       <div class="mb-s16 self-end">
         <Button

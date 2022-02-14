@@ -10,13 +10,27 @@
   import { formErrors } from "$lib/validation.js";
   import serviceSchema from "$lib/schemas/service.js";
   import { getStructure } from "$lib/structures";
+  import AdminDivisionSearch from "$lib/components/forms/admin-division-search.svelte";
 
   export let servicesOptions, service;
+  export let adminDivisionChoices = [];
 
   function handleCityChange(city) {
     const props = city?.properties;
     service.city = props?.name;
     service.cityCode = props?.citycode;
+  }
+
+  function handleDiffusionZoneTypeChange(type) {
+    if (type !== service.diffusionZoneType) {
+      service.diffusionZoneType = type;
+      service.diffusionZoneDetails = "";
+      service.diffusionZoneDetailsDisplay = "";
+      adminDivisionChoices = [];
+    }
+  }
+  function handlediffusionZoneDetailsChange(details) {
+    service.diffusionZoneDetails = details;
   }
 
   function handleAddressChange(address) {
@@ -134,7 +148,8 @@
       bind:value={service.remoteUrl}
     />
 
-    <Field
+    <ModelField
+      name="city"
       type="custom"
       label="Ville"
       errorMessages={$formErrors.city}
@@ -147,10 +162,11 @@
         initialValue={service.city}
         handleChange={handleCityChange}
       />
-    </Field>
+    </ModelField>
 
-    <Field
+    <ModelField
       type="custom"
+      name="address1"
       label="Adresse"
       errorMessages={$formErrors.address1}
       schema={serviceSchema.address1}
@@ -164,7 +180,7 @@
         initialValue={service.address1}
         handleChange={handleAddressChange}
       />
-    </Field>
+    </ModelField>
     <ModelField
       type="text"
       label="Complément d’adresse"
@@ -206,8 +222,63 @@
     />
   </FieldSet>
 
-  <FieldSet title="Désactivation automatique">
+  <FieldSet title="Zone de diffusion">
     <ModelField
+      type="select"
+      label="Territoire concerné ?"
+      schema={serviceSchema.diffusionZoneType}
+      choices={servicesOptions.diffusionZoneType}
+      name="diffusionZoneType"
+      errorMessages={$formErrors.diffusionZoneType}
+      onSelectChange={handleDiffusionZoneTypeChange}
+      initialValue={service.diffusionZoneTypeDisplay}
+    >
+      <FieldHelp slot="helptext" title="Zone de difusion">
+        <p>
+          Avec cette option, vous pouvez régler le niveau de visibilité de votre
+          service au niveau du territoire, et ainsi obtenir des candidatures
+          qualifiées.
+        </p>
+        <p>
+          <strong>QPV et ZRR</strong><br />
+          Votre offre s’adresse uniquement aux bénéficiaires résidants dans des Quartiers
+          Prioritaires de la politique de la Ville ou des Zones de Revitalisation
+          Rurale ? Si oui, activez cette option.
+        </p>
+      </FieldHelp>
+    </ModelField>
+
+    <ModelField
+      type="custom"
+      name="diffusionZoneDetails"
+      label="Confirmez la zone choisie"
+      description="Commencez à saisir le nom de la zone et choisissez-la dans la liste."
+      errorMessages={$formErrors.diffusionZoneDetails}
+      schema={serviceSchema.diffusionZoneDetails}
+      visible={service.diffusionZoneType !== "country"}
+    >
+      <AdminDivisionSearch
+        slot="custom-input"
+        name="diffusionZoneDetails"
+        searchType={service.diffusionZoneType}
+        handleChange={handlediffusionZoneDetailsChange}
+        initialValue={service.diffusionZoneDetailsDisplay}
+        bind:choices={adminDivisionChoices}
+      />
+    </ModelField>
+
+    <ModelField
+      label="Uniquement QPV + ZRR ?"
+      type="toggle"
+      name="qpvOrZrr"
+      schema={serviceSchema.qpvOrZrr}
+      errorMessages={$formErrors.qpvOrZrr}
+      bind:value={service.qpvOrZrr}
+    />
+  </FieldSet>
+
+  <FieldSet title="Désactivation automatique">
+    <Field
       label="Votre service est limité dans le temps ?"
       type="toggle"
       name="isTimeLimited"
@@ -217,8 +288,8 @@
       <FieldHelp slot="helptext" title="Suspension">
         En configurant la suspension de votre service avec une limite de temps,
         vous pouvez mieux gérer sa visibilité et sa mise à jour.
-      </FieldHelp></ModelField
-    >
+      </FieldHelp>
+    </Field>
     <ModelField
       label="Oui, à partir d’une date :"
       type="date"

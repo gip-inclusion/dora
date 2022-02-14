@@ -52,7 +52,7 @@
       />
 
       <Label
-        label={`${service.postalCode}, ${service.city}`}
+        label={service.diffusionZoneDetailsDisplay}
         iconOnLeft
         icon={mapPinIcon}
         darkBg

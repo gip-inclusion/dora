@@ -202,6 +202,24 @@ const shape4 = {
       }),
     ],
   },
+  diffusionZoneType: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(10)],
+  },
+
+  diffusionZoneDetails: {
+    default: "",
+    rules: [
+      v.isString(),
+      v.maxStrLength(9),
+      (name, value, data) => ({
+        valid: data.diffusionZoneType !== "country" ? !!value.length : true,
+        msg: `Ce champ est requis`,
+      }),
+    ],
+  },
+  qpvOrZrr: { default: false, rules: [v.isBool()] },
   startDate: {
     default: null,
     nullable: true,
@@ -353,6 +371,24 @@ export const draftServiceSchema = {
   postalCode: {
     rules: [v.isPostalCode()],
   },
+  diffusionZoneType: {
+    default: "",
+    rules: [v.isString(), v.maxStrLength(10)],
+  },
+  diffusionZoneDetails: {
+    default: "",
+    rules: [
+      v.isString(),
+      v.maxStrLength(9),
+      (name, value, data) => ({
+        valid:
+          data.diffusionZoneType === "" ||
+          (data.diffusionZoneType !== "country" ? !!value.length : true),
+        msg: `Ce champ est requis`,
+      }),
+    ],
+  },
+  qpvOrZrr: { default: false, rules: [v.isBool()] },
   startDate: {
     nullable: true,
     rules: [v.isDate()],

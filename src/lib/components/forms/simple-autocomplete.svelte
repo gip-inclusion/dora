@@ -5,10 +5,10 @@
 <script>
   // TODO: lint this file properly
   /* eslint-disable */
-  // the list of items  the user can select from
 
   import { checkIcon, closeCircleIcon } from "$lib/icons.js";
 
+  // the list of items  the user can select from
   export let items = [];
 
   // function to use to get all items (alternative to providing items)
@@ -40,7 +40,7 @@
   // all the input keywords should be matched in the item keywords
   export let matchAllKeywords = true;
 
-  // sorts the items by the number of matchink keywords
+  // sorts the items by the number of matching keywords
   export let sortByMatchedKeywords = false;
 
   // allow users to use a custom item filter function
