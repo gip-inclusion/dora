@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   extends: ["eslint:recommended", "eslint", "prettier"],
-  ignorePatterns: ["static/**"],
+  ignorePatterns: ["static/**", "storybook-static/**"],
   plugins: ["svelte3"],
   overrides: [{ files: ["*.svelte"], processor: "svelte3/svelte3" }],
   parserOptions: {

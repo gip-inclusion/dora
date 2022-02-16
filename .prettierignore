@@ -1,4 +1,5 @@
 .svelte-kit/**
 static/**
+storybook-static/**
 build/**
 node_modules/**
