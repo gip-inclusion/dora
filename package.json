@@ -15,7 +15,7 @@
     "prepare": "husky install",
     "security-scan": "ggshield scan  path -r . -y",
     "sb": "start-storybook -p 6006",
-    "sb-build": "build-storybook"
+    "sb-build": "build-storybook -o design-system"
   },
   "@comment dependencies": {
     "dependencies-vs-devdependencies": "Les librairies qui sont dans dependencies sont utilisées depuis node_modules par le bundle ssr (voir: https://vitejs.dev/guide/ssr.html#ssr-externals). Pour tester: `npm i && npm run build && rm -rf node_modules/ && npm i --production && node build`."

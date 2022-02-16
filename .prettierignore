@@ -1,5 +1,5 @@
 .svelte-kit/**
 static/**
-storybook-static/**
+design-system/**
 build/**
 node_modules/**
