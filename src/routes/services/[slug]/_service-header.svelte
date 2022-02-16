@@ -29,31 +29,23 @@
       {#if service.isAvailable}
         <Label
           label="Disponible"
-          iconOnLeft
           icon={checkBoxBlankIcon}
           success
           darkBg
           bold
         />
       {:else}
-        <Label
-          label="Indisponible"
-          iconOnLeft
-          icon={checkBoxBlankIcon}
-          darkBg
-        />
+        <Label label="Indisponible" icon={checkBoxBlankIcon} darkBg />
       {/if}
 
       <Label
         label={service.kindsDisplay.join(", ")}
-        iconOnLeft
         icon={compassDiscoverIcon}
         darkBg
       />
 
       <Label
         label={service.diffusionZoneDetailsDisplay}
-        iconOnLeft
         icon={mapPinIcon}
         darkBg
       />

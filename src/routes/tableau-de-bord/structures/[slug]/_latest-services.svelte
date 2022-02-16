@@ -25,7 +25,6 @@
           <Tag selfStart>{service.categoryDisplay}</Tag>
           <Label
             label={`${service.postalCode}, ${service.city}`}
-            iconOnLeft
             smallIcon
             icon={mapPinIcon}
           />

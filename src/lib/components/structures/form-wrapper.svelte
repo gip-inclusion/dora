@@ -106,7 +106,7 @@
     <FieldSet title={formTitle}>
       <div bind:this={errorDiv}>
         {#each $formErrors.nonFieldErrors || [] as msg}
-          <Alert iconOnLeft label={msg} />
+          <Alert label={msg} />
         {/each}
       </div>
       <ModelField

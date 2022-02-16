@@ -71,7 +71,6 @@
         <Button
           label="Ajouter une autre option"
           secondary
-          nogrow
           small
           on:click={() => (textInputVisible = true)}
         />
@@ -88,7 +87,6 @@
           <div class="flex flex-col gap-s8">
             <Button
               label="Ajouter"
-              nogrow
               small
               disabled={!newValue}
               on:click={handleAddValue}
@@ -97,7 +95,6 @@
             <Button
               label="Annuler"
               secondary
-              nogrow
               small
               on:click={() => (textInputVisible = false)}
             />

@@ -81,13 +81,12 @@
         <LinkButton
           to="/auth/connexion"
           label="Revenir à la page de connexion"
-          preventDefaultOnMouseDown
         />
       {:else}
         {#if $formErrors.nonFieldErrors}
           <div>
             {#each $formErrors.nonFieldErrors || [] as msg}
-              <Alert iconOnLeft label={msg} />
+              <Alert label={msg} />
             {/each}
           </div>
         {/if}

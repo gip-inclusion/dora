@@ -97,7 +97,6 @@
           label="Trouver"
           icon={searchIcon}
           disabled={!category || !cityCode}
-          iconOnLeft
           small
           preventDefaultOnMouseDown
         />

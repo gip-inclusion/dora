@@ -11,7 +11,6 @@
   label={`${structure.address1}${
     structure.address2 ? `, ${structure.address2}` : ""
   }, ${structure.postalCode} ${structure.city}`}
-  iconOnLeft
   icon={mapPinIcon}
   darkBg
   smallIcon

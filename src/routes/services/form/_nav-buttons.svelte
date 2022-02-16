@@ -22,7 +22,6 @@
         label="Étape précédente"
         icon={arrowLeftCircleIcon}
         noBackground
-        iconOnLeft
       />
     {/if}
     <div class="grow" />
@@ -34,7 +33,7 @@
         label={flashSaveDraftButton
           ? "Enregistré !"
           : "Enregistrer comme brouillon"}
-        tertiary
+        secondary
       />
     {/if}
     {#if withForward}

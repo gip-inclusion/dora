@@ -17,12 +17,7 @@
       </p>
     </div>
     <div class="shrink-0">
-      <LinkButton
-        type="button"
-        label="Accéder au site"
-        to="https://monenfant.fr/"
-        otherTab
-      />
+      <LinkButton label="Accéder au site" to="https://monenfant.fr/" otherTab />
     </div>
   </div>
 </SearchResultWrapper>

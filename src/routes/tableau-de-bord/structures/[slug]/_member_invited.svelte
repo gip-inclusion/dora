@@ -32,7 +32,6 @@
     <Label
       label={`${userLevel} – Invitation envoyée`}
       smallIcon
-      iconOnLeft
       icon={userIcon}
       light
     />

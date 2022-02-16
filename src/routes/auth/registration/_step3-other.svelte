@@ -92,7 +92,6 @@
       icon={arrowLeftSIcon}
       noPadding
       noBackground
-      iconOnLeft
     />
     {#if !establishmentVisible}
       <Button

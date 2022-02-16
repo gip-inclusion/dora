@@ -54,7 +54,6 @@
         <Label
           label={`${service.structureInfo.name}`}
           smallIcon
-          iconOnLeft
           icon={homeIcon}
         />
 
@@ -62,7 +61,6 @@
         {#if service.isSuggestion}
           <Label
             label="Suggestion"
-            iconOnLeft
             icon={checkBoxBlankIcon}
             smallIcon
             error
@@ -71,7 +69,6 @@
         {:else if service.isDraft}
           <Label
             label="Brouillon"
-            iconOnLeft
             icon={checkBoxBlankIcon}
             smallIcon
             wait
@@ -80,7 +77,6 @@
         {:else}
           <Label
             label="Publié"
-            iconOnLeft
             icon={checkBoxBlankIcon}
             smallIcon
             success

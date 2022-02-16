@@ -29,7 +29,6 @@
     <Label
       label={`${userLevel} – Adhésion en attente`}
       smallIcon
-      iconOnLeft
       icon={userIcon}
       wait
     />

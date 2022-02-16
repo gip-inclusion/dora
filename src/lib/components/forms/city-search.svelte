@@ -113,7 +113,6 @@
   <Button
     slot="prepend"
     label={geolocLabel}
-    iconOnLeft
     wFull
     noBackground
     icon={pinDistanceIcon}

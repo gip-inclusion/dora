@@ -71,7 +71,7 @@
     {#if $formErrors.nonFieldErrors?.length}
       <div>
         {#each $formErrors.nonFieldErrors || [] as msg}
-          <Alert iconOnLeft label={msg} />
+          <Alert label={msg} />
         {/each}
       </div>
     {/if}
@@ -117,7 +117,6 @@
         icon={arrowLeftSIcon}
         noPadding
         noBackground
-        iconOnLeft
       />
       {#if !structureVisible}
         <Button

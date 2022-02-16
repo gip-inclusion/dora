@@ -320,7 +320,7 @@
     <div class="col-span-8 col-start-1 mb-s64">
       <div bind:this={errorDiv}>
         {#each $formErrors.nonFieldErrors || [] as msg}
-          <Alert iconOnLeft label={msg} />
+          <Alert label={msg} />
         {/each}
       </div>
       <slot />

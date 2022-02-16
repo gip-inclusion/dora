@@ -30,7 +30,6 @@
           <LinkButton
             label="Voir l’offre de services complète"
             to="/structures/{service.structure}"
-            nogrow
           />
         </div>
       </div>

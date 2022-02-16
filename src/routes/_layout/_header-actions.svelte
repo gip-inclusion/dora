@@ -16,7 +16,7 @@
   <HamburgerMenu>
     {#if $userInfo}
       <div class="hidden md:block">
-        <ButtonMenu label="Mon compte" iconOnLeft icon={userSmileIcon}>
+        <ButtonMenu label="Mon compte" icon={userSmileIcon}>
           <HeaderMenu />
         </ButtonMenu>
       </div>
@@ -35,7 +35,6 @@
         <LinkButton
           label="Inscription"
           icon={loginIcon}
-          iconOnLeft
           noBackground
           to={`/auth/inscription`}
         />
@@ -44,7 +43,6 @@
         <LinkButton
           label="Connexion"
           icon={userSmileIcon}
-          iconOnLeft
           noBackground
           nofollow
           to={`/auth/connexion?next=${encodeURIComponent($page.url.pathname)}`}

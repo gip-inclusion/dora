@@ -18,17 +18,9 @@
       <Tag selfStart>
         {result.categoryDisplay}
       </Tag>
-      <Label
-        label={`${result.postalCode}, ${result.city}`}
-        iconOnLeft
-        icon={mapPinIcon}
-      />
+      <Label label={`${result.postalCode}, ${result.city}`} icon={mapPinIcon} />
       {#if result.distance}
-        <Label
-          label={`${result.distance} km`}
-          iconOnLeft
-          icon={pinDistanceIcon}
-        />
+        <Label label={`${result.distance} km`} icon={pinDistanceIcon} />
       {/if}
     </div>
   </div>

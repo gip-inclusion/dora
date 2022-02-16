@@ -25,7 +25,7 @@
 
 <Member {isOnlyAdmin} {member} {isMyself}>
   <div slot="label">
-    <Label label={userLevel} smallIcon iconOnLeft icon={userIcon} />
+    <Label label={userLevel} smallIcon icon={userIcon} />
   </div>
 
   <div slot="actions" let:onCloseParent>

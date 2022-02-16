@@ -101,7 +101,7 @@
           <slot name="custom-input" />
         {/if}
         {#each errorMessages || [] as msg}
-          <Alert iconOnLeft label={msg} isHTML={allowHTMLError} />
+          <Alert label={msg} isHTML={allowHTMLError} />
         {/each}
       </div>
       <slot name="helptext" />

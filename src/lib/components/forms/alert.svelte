@@ -1,25 +1,16 @@
 <script>
   import { alertIcon } from "$lib/icons.js";
-  export let iconOnLeft = false,
-    iconOnRight = false;
   export let label;
   export let isHTML = false;
 </script>
 
 <div class="flex flex-row items-center pt-s4 text-f12 text-error">
-  {#if iconOnLeft}
-    <div class="mr-s8 h-s16 w-s16 fill-current">
-      {@html alertIcon}
-    </div>
-  {/if}
+  <div class="mr-s8 h-s16 w-s16 fill-current">
+    {@html alertIcon}
+  </div>
   {#if isHTML}
     {@html label}
   {:else}
     {label}
-  {/if}
-  {#if iconOnRight}
-    <div class="ml-s8 h-s16 w-s16 fill-current">
-      {@html alertIcon}
-    </div>
   {/if}
 </div>
