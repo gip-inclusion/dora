@@ -42,6 +42,7 @@ const Template = (props) => ({
 export const Default = Template.bind({});
 Default.args = {
   label: "Button label",
+  name: "Button label",
 };
 
 export const Icon = Template.bind({});
