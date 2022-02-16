@@ -11,7 +11,7 @@ jobs:
       - name: Install and Build
         run: |
           npm i -f
-          npm run sb-build
+          BASE_URL=/dora-front/ npm run sb-build
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.2.3
         with:
