@@ -56,13 +56,7 @@
   aria-label={ariaLabel}
 >
   {#if icon && !iconOnRight}
-    <div class="{iw} {ih} mr-s8 shrink-0 fill-current">
-      {@html icon}
-    </div>
-  {/if}
-
-  {#if icon && !label}
-    <div class="{iw} {ih} fill-current">
+    <div class="{iw} {ih} shrink-0 fill-current" class:mr-s8={!!label}>
       {@html icon}
     </div>
   {/if}
