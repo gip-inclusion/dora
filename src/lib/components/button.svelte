@@ -11,6 +11,7 @@
   export let noPadding = false;
   export let flashSuccess = false;
   export let wFull = false;
+  export let preventDefaultOnMouseDown = false;
 
   let px, py, ts;
 
@@ -54,6 +55,10 @@
 
   const iw = "w-s24";
   const ih = "h-s24";
+
+  function handleMouseDown(evt) {
+    if (preventDefaultOnMouseDown) evt.preventDefault();
+  }
 </script>
 
 <button
@@ -64,6 +69,7 @@
   class:w-full={wFull}
   class:justify-center={!icon}
   on:click
+  on:mousedown={handleMouseDown}
   {disabled}
 >
   {#if icon && !iconOnRight}

@@ -51,7 +51,7 @@
   target={otherTab ? "_blank" : ""}
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
-  class="{px} {py} {ts} {border} {text} {background}  flex flex-row items-center whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
+  class="{px} {py} {ts} {border} {text} {background} flex flex-row items-center whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
   class:justify-center={!icon}
   aria-label={ariaLabel}
 >
