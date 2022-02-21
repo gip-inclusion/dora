@@ -14,7 +14,7 @@
 </script>
 
 <script>
-  import { userInfo } from "$lib/auth";
+  import { userInfo, userInfoIsComplete } from "$lib/auth";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
@@ -23,6 +23,8 @@
   import StructuresList from "./_structures-list.svelte";
   import ServicesList from "./_services-list.svelte";
   import PendingNotice from "./_pending-notice.svelte";
+  import UpdateProfileNotif from "./notifications/_update-profile-notif.svelte";
+  import ImproveDoraNotif from "./notifications/_improve-dora-notif.svelte";
 
   export let services, structures, pendingStructures;
 
@@ -43,24 +45,13 @@
     <div
       class="col-span-full justify-between rounded-md bg-white p-s16 lg:flex lg:flex-row lg:gap-s16"
     >
-      <div class="mb-s16 lg:mb-s0">
-        <h4 class="text-magenta-cta">Aidez-nous à améliorer DORA !</h4>
-        <p class="text-f14">
-          Faites-nous part de vos retours d’expérience, de problèmes que vous
-          rencontrez ou de propositions d’amélioration.
-        </p>
-      </div>
-      <div class="shrink-0 self-end py-s16">
-        <a
-          href="https://itou.typeform.com/to/DPQOe5pP"
-          target="_blank"
-          rel="noopener nofollow"
-          label="Participer (3min)"
-          class="rounded bg-magenta-cta px-s16 py-s12 text-f16 font-bold text-white hover:bg-magenta-hover focus:shadow-focus active:bg-france-blue"
-          >Participer (3 min.)</a
-        >
-      </div>
+      {#if !userInfoIsComplete()}
+        <UpdateProfileNotif />
+      {:else}
+        <ImproveDoraNotif />
+      {/if}
     </div>
+
     <div class="col-span-full">
       {#if $userInfo.isStaff}
         <div class="mb-s48 rounded-md bg-gray-bg p-s8">

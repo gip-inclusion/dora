@@ -22,6 +22,10 @@
   export let minValue = null;
 
   export let hideLabel = false;
+  export let toggleYesText = undefined;
+  export let toggleNoText = undefined;
+  export let autocomplete = undefined;
+  export let passwordrules = undefined;
 </script>
 
 <Field
@@ -46,6 +50,9 @@
   {readonly}
   {visible}
   {vertical}
+  {toggleYesText}
+  {toggleNoText}
+  {autocomplete}
 >
   <slot name="custom-input" slot="custom-input" />
   <slot name="helptext" slot="helptext" />

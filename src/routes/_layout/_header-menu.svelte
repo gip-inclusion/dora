@@ -1,5 +1,5 @@
 <script>
-  import { loginIcon, dashboardIcon } from "$lib/icons.js";
+  import { loginIcon, dashboardIcon, userFillIcon } from "$lib/icons.js";
 
   import LinkButton from "$lib/components/link-button.svelte";
   import TopLinks from "./_top-links.svelte";
@@ -9,6 +9,13 @@
   label="Mon espace"
   to={`/tableau-de-bord`}
   icon={dashboardIcon}
+  iconOnRight
+  noBackground
+/>
+<LinkButton
+  label="Mon profil"
+  to={`/tableau-de-bord/profil`}
+  icon={userFillIcon}
   iconOnRight
   noBackground
 />

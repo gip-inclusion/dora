@@ -5,6 +5,7 @@
   import Toggle from "$lib/components/toggle.svelte";
   import Checkboxes from "./checkboxes.svelte";
   import RadioButtons from "./radio-buttons.svelte";
+  import PasswordInput from "./password-input.svelte";
 
   export let value = undefined;
 
@@ -124,12 +125,10 @@
     {toggleNoText}
   />
 {:else if type === "password"}
-  <input
-    {name}
-    id={name}
-    bind:value
+  <PasswordInput
     on:blur
-    type="password"
+    {name}
+    bind:value
     {placeholder}
     {disabled}
     {readonly}

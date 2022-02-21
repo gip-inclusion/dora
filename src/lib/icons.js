@@ -32,8 +32,11 @@ export { default as settingsIcon } from "remixicon/icons/System/settings-5-line.
 export { default as menuIcon } from "remixicon/icons/System/menu-line.svg?raw";
 export { default as timerFlashIcon } from "remixicon/icons/System/timer-flash-line.svg?raw";
 export { default as uploadCloudIcon } from "remixicon/icons/System/upload-cloud-2-line.svg?raw";
+export { default as eyeFillIcon } from "remixicon/icons/System/eye-fill.svg?raw";
+export { default as eyeOffIcon } from "remixicon/icons/System/eye-off-line.svg?raw";
 
 export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
+export { default as userFillIcon } from "remixicon/icons/User/user-3-fill.svg?raw";
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
 export { default as adminIcon } from "remixicon/icons/User/admin-fill.svg?raw";
 export { default as emotionHappyIcon } from "remixicon/icons/User/emotion-happy-fill.svg?raw";

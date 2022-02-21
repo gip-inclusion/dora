@@ -1,5 +1,5 @@
 <script context="module">
-  import { getUserInfo } from "$lib/auth";
+  import { validateCredsAndFillUserInfo } from "$lib/auth";
 
   import * as Sentry from "@sentry/browser";
 
@@ -14,7 +14,7 @@
   }
 
   export async function load() {
-    await getUserInfo();
+    await validateCredsAndFillUserInfo();
     return {};
   }
 </script>

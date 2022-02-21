@@ -3,7 +3,7 @@
 
   import { getApiURL } from "$lib/utils/api.js";
   import { formErrors } from "$lib/validation.js";
-  import { passwordLostSchema } from "$lib/schemas/auth.js";
+  import { currentEmailSchema } from "$lib/schemas/auth.js";
   import Button from "$lib/components/button.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
@@ -58,7 +58,7 @@
 <AuthLayout>
   <Form
     data={{ email }}
-    schema={passwordLostSchema}
+    schema={currentEmailSchema}
     serverErrorsDict={authErrors}
     onChange={handleChange}
     onSubmit={handleSubmit}

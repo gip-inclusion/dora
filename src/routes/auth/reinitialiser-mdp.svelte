@@ -31,7 +31,7 @@
 <script>
   import { formErrors } from "$lib/validation.js";
 
-  import { pwChangeSchema } from "$lib/schemas/auth.js";
+  import { passwordLostSchema } from "$lib/schemas/auth.js";
 
   import Button from "$lib/components/button.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
@@ -97,7 +97,7 @@
 <AuthLayout>
   <Form
     data={{ password1, password2 }}
-    schema={pwChangeSchema}
+    schema={passwordLostSchema}
     serverErrorsDict={authErrors}
     onChange={handleChange}
     onSubmit={handleSubmit}
