@@ -109,7 +109,7 @@
     bind:value={service.name}
   >
     <FieldHelp slot="helptext" title="Titre du service">
-      Le nom de votre service, tel qui va être affiché dans les résultats de
+      Le nom de votre service, tel qu’il va être affiché dans les résultats de
       recherche et les fiches détail.
     </FieldHelp>
   </ModelField>
