@@ -7,6 +7,7 @@
   import StructureSearch from "$lib/components/structures/search.svelte";
 
   export let servicesOptions, service;
+  export let establishment;
 
   let subcategories = [];
 
@@ -34,6 +35,7 @@
 <StructureSearch
   onEstablishmentChange={handleEstablishmentChange}
   onCityChange={handleCityChange}
+  bind:establishment
 />
 
 {#if service.siret}

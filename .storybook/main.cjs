@@ -24,7 +24,8 @@ module.exports = {
     return config;
   },
   // lorsqu'on génère storybook pour l'afficher sur github pages (dans un sous-dossier),
-  // on veut modifier l'url des import des fichier @font-face
+  // on veut modifier l'url des imports des fichier @font-face
+  // https://github.com/eirslett/storybook-builder-vite/issues/247
   previewHead: (head) => {
     const baseUrl = process.env.BASE_URL || "";
 

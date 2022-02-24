@@ -8,7 +8,7 @@
   export let onCityChange = null;
   export let onEstablishmentChange = null;
 
-  let establishment = {};
+  export let establishment = {};
 
   function handleCityChange(newCity) {
     establishment = {};
