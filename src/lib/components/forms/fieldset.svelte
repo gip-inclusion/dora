@@ -10,7 +10,6 @@
   class="flex max-w-4xl flex-col rounded-md shadow-md"
   class:mt-s48={!noTopPadding}
 >
-  <slot name="prefix" />
   {#if title}
     <div
       class="rounded-t-md px-s40 pt-s32 {headerBg} {noHeaderBorder

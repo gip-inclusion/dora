@@ -39,15 +39,15 @@
   service.longitude = establishment.longitude;
 </script>
 
-<FieldSet title="Conditions d'accès pour le bénéficiaire">
-  <Info slot="prefix" title="Informations non obligatoires">
-    Vous avez décidé de rajouter des informations supplémentaires concernant le
-    service saisi. Ces informations ne sont pas obligatoires, mais nous
-    permettent d’enregistrer des informations qualifiées et ainsi de faciliter
-    le travail des structures porteuses. Renseignez ce que vous connaissez et
-    cliquez sur «&nbsp;Envoyer la contribution&nbsp;».
-  </Info>
+<Info title="Informations non obligatoires">
+  Vous avez décidé de rajouter des informations supplémentaires concernant le
+  service saisi. Ces informations ne sont pas obligatoires, mais nous permettent
+  d’enregistrer des informations qualifiées et ainsi de faciliter le travail des
+  structures porteuses. Renseignez ce que vous connaissez et cliquez sur
+  «&nbsp;Envoyer la contribution&nbsp;».
+</Info>
 
+<FieldSet title="Conditions d'accès pour le bénéficiaire">
   <ModelField
     type="multiselect"
     label="Critères d’accès"
