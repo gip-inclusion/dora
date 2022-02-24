@@ -224,6 +224,6 @@
 
   input,
   textarea {
-    @apply read-only:text-gray-03 disabled:bg-gray-00;
+    @apply grow read-only:text-gray-03 disabled:bg-gray-00;
   }
 </style>

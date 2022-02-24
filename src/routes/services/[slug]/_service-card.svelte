@@ -24,7 +24,9 @@
     <div class="flex flex-col gap-s24 lg:flex-row-reverse">
       <div class="orientation flex-initial">
         <OrientationBox {service} />
-        <div class="mb-s16 hidden max-w-md flex-col gap-s16 lg:flex">
+        <div
+          class="mb-s16 hidden max-w-md flex-col items-start gap-s16 lg:flex"
+        >
           <h4>{service.structureInfo.name}</h4>
           <Label label={service.structureInfo.shortDesc} italic />
           <LinkButton

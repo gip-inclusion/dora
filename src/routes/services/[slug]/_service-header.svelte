@@ -21,7 +21,7 @@
     <Label label={service.structureInfo.name} darkBg />
     <h1 class="text-white">{service.name}</h1>
     {#if $token && service.canWrite && !isPreview}
-      <div class="noprint my-s16 flex items-start">
+      <div class="noprint my-s16">
         <LinkButton to={editLink} label="Éditer" small />
       </div>
     {/if}

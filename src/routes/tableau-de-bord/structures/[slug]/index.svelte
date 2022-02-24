@@ -83,7 +83,7 @@
           >
             <div class="rounded border border-gray-01 px-s24 py-s16">
               <h4 class="text-gray-text">{structure.name}</h4>
-              <div class="legend mt-s12">SIRET: {structure.siret}</div>
+              <div class="legend mt-s12">Siret : {structure.siret}</div>
             </div>
             <div class="rounded border border-gray-01 px-s24 py-s16">
               <h5>Adresse</h5>

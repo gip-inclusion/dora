@@ -759,7 +759,7 @@
       on:click={onInputClick}
       on:keypress={onKeyPress}
     />
-    {#if clearable}
+    {#if clearable && text?.length}
       <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
     {/if}
   </div>

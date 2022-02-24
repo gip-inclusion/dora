@@ -111,7 +111,7 @@
       </div>
       <ModelField
         type="text"
-        label="SIRET"
+        label="Siret"
         schema={structureSchema.siret}
         name="siret"
         errorMessages={$formErrors.siret}

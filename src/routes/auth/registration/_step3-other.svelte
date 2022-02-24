@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import SearchBySiret from "$lib/components/structures/search-by-siret.svelte";
+  import SearchByCommune from "$lib/components/structures/search-by-commune.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import Button from "$lib/components/button.svelte";
 
@@ -34,7 +34,7 @@
     });
     if (response.ok) {
       const result = await response.json();
-      console.log(result);
+
       return result;
     }
     return null;
@@ -50,8 +50,6 @@
       }
     }
   });
-
-  $: console.log(siret);
 </script>
 
 <FieldSet
@@ -59,10 +57,10 @@
   description="Merci de renseigner le numéro SIRET de votre structure afin de l’identifier."
 >
   {#if !siret}
-    <SearchBySiret bind:establishment />
+    <SearchByCommune bind:establishment />
   {/if}
   {#if establishment && establishmentVisible}
-    <div class="establishment-details">
+    <div class="establishment-details mb-s16">
       <h4 class="text-gray-text">{establishment.name}</h4>
       <div class="legend">{establishment.address1}</div>
       <div class="legend">{establishment.address2}</div>

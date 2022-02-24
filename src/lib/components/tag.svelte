@@ -6,7 +6,7 @@
 </script>
 
 <div
-  class="rounded px-s8 py-s2 {fgColorClass} text-f12 font-bold uppercase {bgColorClass}"
+  class="px-s8 py-s2 text-f12 rounded font-bold uppercase {fgColorClass} {bgColorClass}"
   class:self-start={selfStart}
 >
   <slot />

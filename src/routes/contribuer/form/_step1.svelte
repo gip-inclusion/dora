@@ -4,12 +4,12 @@
   import ModelField from "$lib/components/forms/model-field.svelte";
   import { formErrors } from "$lib/validation.js";
   import serviceSchema from "$lib/schemas/service-contrib.js";
-  import SearchBySiret from "$lib/components/structures/search-by-siret.svelte";
+  import StructureSearch from "$lib/components/structures/search.svelte";
 
   export let servicesOptions, service;
-  export let establishment;
 
   let subcategories = [];
+
   function handleCategoryChange(category) {
     subcategories = category
       ? servicesOptions.subcategories.filter(({ value }) =>
@@ -31,35 +31,10 @@
   }
 </script>
 
-<FieldSet
-  title="Identifions la structure concernée"
-  description="Merci de renseigner le numéro SIRET de la structure afin de l’identifier."
->
-  <SearchBySiret
-    bind:establishment
-    onCityChange={handleCityChange}
-    onEstablishmentChange={handleEstablishmentChange}
-  />
-  {#if establishment?.siret}
-    <div class="border border-gray-01 p-s24">
-      <h4 class="text-gray-text">{establishment.name}</h4>
-      <div class="legend">{establishment.siret}</div>
-      <div class="legend">{establishment.address1}</div>
-      <div class="legend">{establishment.address2}</div>
-      <div class="legend">
-        {establishment.postalCode}
-        {establishment.city}
-      </div>
-    </div>
-  {/if}
-  <ModelField
-    type="hidden"
-    schema={serviceSchema.siret}
-    name="siret"
-    errorMessages={$formErrors.siret}
-    bind:value={service.siret}
-  />
-</FieldSet>
+<StructureSearch
+  onEstablishmentChange={handleEstablishmentChange}
+  onCityChange={handleCityChange}
+/>
 
 {#if service.siret}
   <FieldSet title="Présentez le service">

@@ -16,11 +16,11 @@ module.exports = {
   },
 
   async viteFinal(config, { configType }) {
-    // nécessaire pour le déploiement dans un sous dossier sur github pages
+    // déploiement dans un sous dossier sur github pages
     // github.com/storybookjs/storybook/discussions/17433
+    // BASE_URL est défini dans `.github/workflows/storybook.yml`
     config.base = process.env.BASE_URL || config.base;
 
-    // return the customized config
     return config;
   },
 };
