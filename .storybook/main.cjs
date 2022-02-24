@@ -23,4 +23,49 @@ module.exports = {
 
     return config;
   },
+  // lorsqu'on génère storybook pour l'afficher sur github pages (dans un sous-dossier),
+  // on veut modifier l'url des import des fichier @font-face
+  previewHead: (head) => {
+    const baseUrl = process.env.BASE_URL || "";
+
+    return `${head}
+<style>
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: normal;
+    font-weight: normal;
+    src: url("${baseUrl}/fonts/Marianne/Marianne-Regular.woff2") format("woff2"),
+         url("${baseUrl}/fonts/Marianne/Marianne-Regular.woff") format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: normal;
+    font-weight: bold;
+    src: url("${baseUrl}/fonts/Marianne/Marianne-Bold.woff2") format("woff2"),
+        url("${baseUrl}/fonts/Marianne/Marianne-Bold.woff") format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: italic;
+    font-weight: normal;
+    src: url("${baseUrl}/fonts/Marianne/Marianne-Regular_Italic.woff2") format("woff2"),
+        url("${baseUrl}/fonts/Marianne/Marianne-Regular_Italic.woff") format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: italic;
+    font-weight: bold;
+    src: url("${baseUrl}/fonts/Marianne/Marianne-Bold_Italic.woff2") format("woff2"),
+        url("${baseUrl}/fonts/Marianne/Marianne-Bold_Italic.woff") format("woff");
+  }
+</style>
+  `;
+  },
 };

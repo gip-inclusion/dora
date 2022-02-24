@@ -45,6 +45,7 @@ Default.args = {
   name: "Button label",
   small: false,
   flashSuccess: false,
+  noPadding: false,
 };
 
 export const Icon = Template.bind({});

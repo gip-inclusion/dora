@@ -29,6 +29,10 @@
   import favicoPng from "$lib/assets/favicon.png";
 
   import "../app.postcss";
+  // les polices sont importées séparément à cause d'un bug de storybook :
+  // https://github.com/eirslett/storybook-builder-vite/issues/247
+  // voir `./storybook/main.js` `previewHead`
+  import "$lib/styles/fonts.css";
 
   import Footer from "./_layout/_footer.svelte";
   import Header from "./_layout/_header.svelte";
