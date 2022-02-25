@@ -24,10 +24,12 @@
   // https://github.com/sveltejs/svelte/issues/5604
   const hasPrependSlot = $$slots.prepend;
 
-  function getSortedChoices(items) {
-    return items.sort((a, b) =>
-      a.label.localeCompare(b.label, "fr", { numeric: true })
-    );
+  $: {
+    if (sort) {
+      choices = choices.sort((a, b) =>
+        a.label.localeCompare(b.label, "fr", { numeric: true })
+      );
+    }
   }
 </script>
 
@@ -39,7 +41,7 @@
   {localFiltering}
   {minCharactersToSearch}
   {onChange}
-  items={sort ? getSortedChoices(choices) : choices}
+  bind:items={choices}
   {initialValue}
   {disabled}
   {readonly}

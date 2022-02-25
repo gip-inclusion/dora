@@ -52,7 +52,13 @@
     />
   </div>
   {#if !service.isDraft}
-    <LinkButton secondary label="Téléchargez le PDF" to={pdfUrl} nofollow />
+    <LinkButton
+      noBackground
+      noPadding
+      label="Téléchargez le PDF"
+      to={pdfUrl}
+      nofollow
+    />
   {/if}
 </div>
 

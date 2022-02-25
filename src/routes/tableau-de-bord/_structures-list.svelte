@@ -29,14 +29,12 @@
           <Label
             label={structure.department || " "}
             smallIcon
-            iconOnLeft
             icon={homeIcon}
           />
         {/if}
         <!-- <Label
           label={`${structure.numServices} fiche(s)`}
           smallIcon
-          iconOnLeft
           icon={briefcaseIcon} /> -->
         <LinkButton
           label="Ajouter un service"

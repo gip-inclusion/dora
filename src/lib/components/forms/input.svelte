@@ -5,6 +5,7 @@
   import Toggle from "$lib/components/toggle.svelte";
   import Checkboxes from "./checkboxes.svelte";
   import RadioButtons from "./radio-buttons.svelte";
+  import PasswordInput from "./password-input.svelte";
 
   export let value = undefined;
 
@@ -19,6 +20,7 @@
   export let disabled = false;
   export let placeholder = "";
   export let placeholderMulti = "";
+  export let initialValue = undefined;
   export let minValue = null;
   export let maxLength = undefined;
   export let rows = 4;
@@ -59,6 +61,7 @@
     {placeholderMulti}
     {disabled}
     {readonly}
+    {initialValue}
   />
 {:else if type === "multiselect"}
   <Select
@@ -73,6 +76,7 @@
     {placeholderMulti}
     {disabled}
     {readonly}
+    {initialValue}
   />
 {:else if type === "text"}
   <input
@@ -121,12 +125,10 @@
     {toggleNoText}
   />
 {:else if type === "password"}
-  <input
-    {name}
-    id={name}
-    bind:value
+  <PasswordInput
     on:blur
-    type="password"
+    {name}
+    bind:value
     {placeholder}
     {disabled}
     {readonly}
@@ -222,6 +224,6 @@
 
   input,
   textarea {
-    @apply read-only:text-gray-03 disabled:bg-gray-00;
+    @apply grow read-only:text-gray-03 disabled:bg-gray-00;
   }
 </style>

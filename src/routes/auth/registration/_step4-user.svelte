@@ -67,7 +67,7 @@
       description="Merci de renseigner les informations nécessaires à la création de votre compte."
     >
       {#each $formErrors.nonFieldErrors || [] as msg}
-        <Alert iconOnLeft label={msg} />
+        <Alert label={msg} />
       {/each}
       <div class="relative flex flex-col gap-y-s32">
         <Field

@@ -106,12 +106,12 @@
     <FieldSet title={formTitle}>
       <div bind:this={errorDiv}>
         {#each $formErrors.nonFieldErrors || [] as msg}
-          <Alert iconOnLeft label={msg} />
+          <Alert label={msg} />
         {/each}
       </div>
       <ModelField
         type="text"
-        label="SIRET"
+        label="Siret"
         schema={structureSchema.siret}
         name="siret"
         errorMessages={$formErrors.siret}

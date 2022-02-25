@@ -4,8 +4,6 @@
   export let icon;
   export let label = undefined;
   export let disabled = false;
-  export let iconOnLeft = undefined,
-    iconOnRight = undefined;
   let isOpen = false;
 
   function clickOutside(node) {
@@ -33,8 +31,6 @@
   <div class="title">
     <Button
       {icon}
-      {iconOnLeft}
-      {iconOnRight}
       {label}
       noBackground
       {disabled}

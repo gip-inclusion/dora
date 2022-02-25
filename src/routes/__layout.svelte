@@ -1,5 +1,5 @@
 <script context="module">
-  import { getUserInfo } from "$lib/auth";
+  import { validateCredsAndFillUserInfo } from "$lib/auth";
 
   import * as Sentry from "@sentry/browser";
 
@@ -14,7 +14,7 @@
   }
 
   export async function load() {
-    await getUserInfo();
+    await validateCredsAndFillUserInfo();
     return {};
   }
 </script>
@@ -29,6 +29,9 @@
   import favicoPng from "$lib/assets/favicon.png";
 
   import "../app.postcss";
+  // les polices sont importées séparément à cause d'un bug de storybook :
+  // voir `./storybook/main.js` `previewHead`
+  import "$lib/styles/fonts.css";
 
   import Footer from "./_layout/_footer.svelte";
   import Header from "./_layout/_header.svelte";

@@ -28,7 +28,7 @@
         <h2>Tous les services</h2>
       </div>
       <div class="border-t border-gray-03" />
-      <ServicesList {services} />
+      <ServicesList {services} showStructure />
     </div>
   </CenteredGrid>
 </EnsureStaff>

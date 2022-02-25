@@ -3,12 +3,11 @@
   import { getApiURL } from "$lib/utils/api.js";
   import { getQuery } from "./_homepage/_search";
 
-  async function getResults(category, subcategory, cityCode, radius) {
+  async function getResults(category, subcategory, cityCode) {
     const url = `${getApiURL()}/search/?${getQuery(
       category,
       subcategory,
-      cityCode,
-      radius
+      cityCode
     )}`;
 
     const res = await fetch(url, {
@@ -43,7 +42,6 @@
     const subcategory = query.get("sub");
     const cityCode = query.get("city");
     const cityLabel = query.get("cl");
-    const radius = query.get("radius") || radiusChoices[0].value;
 
     return {
       props: {
@@ -51,8 +49,7 @@
         subcategory,
         cityCode,
         cityLabel,
-        radius,
-        results: await getResults(category, subcategory, cityCode, radius),
+        results: await getResults(category, subcategory, cityCode),
         servicesOptions: await getServicesOptions(),
       },
     };
@@ -74,7 +71,7 @@
   import ShareButton from "$lib/components/share-button.svelte";
 
   export let servicesOptions;
-  export let category, subcategory, cityCode, cityLabel, radius;
+  export let category, subcategory, cityCode, cityLabel;
   export let results;
 
   onMount(() => {
@@ -105,7 +102,6 @@
       bind:subcategory
       bind:cityCode
       bind:cityLabel
-      bind:radius
       {servicesOptions}
       {radiusChoices}
     />

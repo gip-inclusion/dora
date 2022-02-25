@@ -23,6 +23,7 @@
 
   export let services = [];
   export let onRefresh;
+  export let showStructure = true;
 
   async function handleUnpublish(service) {
     await unPublishService(service.slug);
@@ -46,58 +47,67 @@
   <div class="wrapper col-span-full col-start-1">
     {#each services as service}
       <div class="service flex flex-row gap-s16">
-        <div class="flex grow flex-row items-center">
+        <div class="flex-auto basis-1/3 self-center">
           <a href="/services/{service.slug}">
             <h5>{shortenString(service.name)}</h5>
           </a>
         </div>
-        <Label
-          label={`${service.structureInfo.name}`}
-          smallIcon
-          iconOnLeft
-          icon={homeIcon}
-        />
-
-        <Label label={service.department} bold />
-        {#if service.isSuggestion}
-          <Label
-            label="Suggestion"
-            iconOnLeft
-            icon={checkBoxBlankIcon}
-            smallIcon
-            error
-            bold
-          />
-        {:else if service.isDraft}
-          <Label
-            label="Brouillon"
-            iconOnLeft
-            icon={checkBoxBlankIcon}
-            smallIcon
-            wait
-            bold
-          />
-        {:else}
-          <Label
-            label="Publié"
-            iconOnLeft
-            icon={checkBoxBlankIcon}
-            smallIcon
-            success
-            bold
-          />
+        {#if showStructure}
+          <div class="flex-none basis-s160 self-center">
+            <Label
+              label={`${service.structureInfo.name}`}
+              smallIcon
+              icon={homeIcon}
+            />
+          </div>
         {/if}
-        <Label
-          label={`${new Date(service.modificationDate).toLocaleString()}`}
-        />
-        <div>
+        <div class="flex flex-none basis-1/6 flex-col items-center">
+          <Label label="Diffusion:" italic light />
+          {#if service.diffusionZoneType !== "country"}
+            <Label label={service.diffusionZoneTypeDisplay} />
+          {/if}
+          <Label label={service.diffusionZoneDetailsDisplay} bold />
+        </div>
+        <div class="flex-none basis-s112 items-center  self-center">
+          {#if service.isSuggestion}
+            <Label
+              label="Suggestion"
+              icon={checkBoxBlankIcon}
+              smallIcon
+              error
+              bold
+            />
+          {:else if service.isDraft}
+            <Label
+              label="Brouillon"
+              icon={checkBoxBlankIcon}
+              smallIcon
+              wait
+              bold
+            />
+          {:else}
+            <Label
+              label="Publié"
+              icon={checkBoxBlankIcon}
+              smallIcon
+              success
+              bold
+            />
+          {/if}
+        </div>
+        <div class="flex-none basis-s32 self-center">
+          <Label
+            label={`${new Date(service.modificationDate).toLocaleString()}`}
+          />
+        </div>
+        <div class="flex-none basis-s32 self-center">
           <LinkButton
             to="/services/{service.slug}"
             icon={eyeIcon}
             noBackground
           />
         </div>
-        <div>
+        <div class="flex-none basis-s32 self-center">
           <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
             {#if service.isSuggestion}
               <div>

@@ -24,7 +24,6 @@
         {info}
         {icon}
         bold
-        iconOnLeft={!!icon}
       />
     </div>
   {/if}

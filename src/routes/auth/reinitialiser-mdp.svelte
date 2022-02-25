@@ -31,7 +31,7 @@
 <script>
   import { formErrors } from "$lib/validation.js";
 
-  import { pwChangeSchema } from "$lib/schemas/auth.js";
+  import { passwordLostSchema } from "$lib/schemas/auth.js";
 
   import Button from "$lib/components/button.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
@@ -97,7 +97,7 @@
 <AuthLayout>
   <Form
     data={{ password1, password2 }}
-    schema={pwChangeSchema}
+    schema={passwordLostSchema}
     serverErrorsDict={authErrors}
     onChange={handleChange}
     onSubmit={handleSubmit}
@@ -109,11 +109,7 @@
     >
       {#if !resetToken}
         <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
-        <LinkButton
-          to="/auth/mdp-perdu"
-          label="Demander un nouveau lien"
-          preventDefaultOnMouseDown
-        />
+        <LinkButton to="/auth/mdp-perdu" label="Demander un nouveau lien" />
       {:else if success}
         <Info label="C’est tout bon !" positiveMood>
           <p>
@@ -123,13 +119,12 @@
         <LinkButton
           to="/auth/connexion"
           label="Revenir à la page de connexion"
-          preventDefaultOnMouseDown
         />
       {:else}
         {#if $formErrors.nonFieldErrors}
           <div>
             {#each $formErrors.nonFieldErrors || [] as msg}
-              <Alert iconOnLeft label={msg} />
+              <Alert label={msg} />
             {/each}
           </div>
         {/if}

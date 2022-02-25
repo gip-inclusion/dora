@@ -7,6 +7,12 @@
 </script>
 
 <Box title="Les modalités" --box-color="var(--col-magenta-cta)">
+  <div class="mb-s16">
+    <strong>Lieu de diffusion : {service.diffusionZoneDetailsDisplay}</strong>
+    {#if service.qpvOrZrr}
+      (uniquement QPV + ZRR)
+    {/if}
+  </div>
   <div class="infos">
     {#if service.isCumulative}
       <Info

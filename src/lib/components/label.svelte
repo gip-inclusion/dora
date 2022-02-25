@@ -8,8 +8,6 @@
   export let wait = false;
   export let light = false;
   export let icon = null;
-  export let iconOnLeft = false,
-    iconOnRight = false;
   export let darkBg = false;
   export let bigIcon = false;
   export let smallIcon = false;
@@ -27,9 +25,9 @@
   class:light
   class:dark-bg={darkBg}
 >
-  {#if iconOnLeft}
+  {#if icon}
     <div
-      class="icon mr-s8"
+      class="icon mr-s8 flex-none"
       class:big-icon={bigIcon}
       class:small-icon={smallIcon}
     >
@@ -37,18 +35,12 @@
     </div>
   {/if}
   {#if icon && !(label || $$slots.default)}
-    <div class="icon" class:big-icon={bigIcon}>
+    <div class="icon flex-none" class:big-icon={bigIcon}>
       {@html icon}
     </div>
   {/if}
 
   <span class:truncate><slot>{label}</slot></span>
-
-  {#if iconOnRight}
-    <div class="icon ml-s8" class:big-icon={bigIcon}>
-      {@html icon}
-    </div>
-  {/if}
 </div>
 
 <style lang="postcss">

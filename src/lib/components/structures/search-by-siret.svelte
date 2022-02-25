@@ -1,47 +1,93 @@
 <script>
+  import { getApiURL } from "$lib/utils/api.js";
+  import { formErrors } from "$lib/validation.js";
+  import * as v from "$lib/schemas/utils";
+
   import Field from "$lib/components/forms/field.svelte";
-  import CitySearch from "$lib/components/forms/city-search.svelte";
+  import Alert from "$lib/components/forms/alert.svelte";
+  import Button from "$lib/components/button.svelte";
+  import Input from "$lib/components/forms/input.svelte";
+  import Form from "$lib/components/forms/form.svelte";
 
-  import SiretSearch from "./siret-autocomplete.svelte";
-
-  export let establishment;
-
-  let city;
-  export let onCityChange = null;
   export let onEstablishmentChange = null;
 
-  function handleCityChange(newCity) {
-    city = newCity;
-    establishment = null;
-    if (onCityChange) onCityChange(newCity);
+  let siretCode = "";
+  let searching = false;
+  let siretIsValid = false;
+
+  $: siretIsValid = !!siretCode.match(/^\d{14}$/u);
+
+  const siretSearchSchema = {
+    siretCode: {
+      default: "",
+      required: true,
+      rules: [v.isString(), v.isSiret()],
+      post: [v.trim],
+    },
+  };
+
+  const serverErrors = {
+    // eslint-disable-next-line
+    nonFieldErrors: { not_found: "Numéro SIRET non reconnu." },
+  };
+
+  async function handleSubmit(validatedData) {
+    if (onEstablishmentChange) onEstablishmentChange({});
+
+    const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(
+      validatedData.siretCode
+    )}`;
+
+    return fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json; version=1.0",
+      },
+    });
   }
 
-  async function handleEstablishmentChange(newEstablishment) {
-    establishment = newEstablishment;
-    if (onEstablishmentChange) onEstablishmentChange(newEstablishment);
+  function handleSuccess(result) {
+    if (onEstablishmentChange) onEstablishmentChange(result);
+
+    searching = false;
   }
 </script>
 
-<Field type="custom" label="Commune" required vertical>
-  <CitySearch
-    slot="custom-input"
-    name="city-select"
-    placeholder="Saisissez et sélectionnez le nom de la ville"
-    handleChange={handleCityChange}
-  />
-</Field>
-<Field
-  type="custom"
-  label="Nom de votre structure ou son numéro SIRET"
-  required
-  vertical
+<Form
+  data={{ siretCode }}
+  schema={siretSearchSchema}
+  serverErrorsDict={serverErrors}
+  onSubmit={handleSubmit}
+  onSuccess={handleSuccess}
 >
-  <SiretSearch
-    slot="custom-input"
-    name="siret-select"
-    selectedCity={city}
-    disabled={!city?.properties?.citycode}
-    handleChange={handleEstablishmentChange}
-    placeholder="Commencez à saisir et choisissez dans la liste"
-  />
-</Field>
+  {#if $formErrors.nonFieldErrors?.length}
+    <div>
+      {#each $formErrors.nonFieldErrors || [] as msg}
+        <Alert label={msg} />
+      {/each}
+    </div>
+  {/if}
+  <Field
+    type="custom"
+    label="Numéro Siret"
+    required
+    vertical
+    description="Sur 14 chiffres"
+  >
+    <div slot="custom-input" class="flex gap-s12">
+      <div class="flex grow">
+        <Input
+          type="text"
+          name="siret-select"
+          placeholder="1234567891234"
+          bind:value={siretCode}
+        />
+      </div>
+      {#if searching}
+        <p class="py-s12 px-s8 lg:px-s20">Chargement…</p>
+      {:else}
+        <Button label="Rechercher" disabled={!siretIsValid} type="submit" />
+      {/if}
+    </div>
+  </Field>
+</Form>

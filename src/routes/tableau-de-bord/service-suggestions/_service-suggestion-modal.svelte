@@ -6,7 +6,7 @@
 
   export let suggestion;
   export let isOpen = false;
-  export let onAccept, onReject, onRefresh;
+  export let onAccept, onReject;
 </script>
 
 {#if suggestion}
@@ -164,18 +164,3 @@
     </div>
   </Modal>
 {/if}
-
-<style lang="postcss">
-  .line-wrapper {
-    @apply flex flex-row;
-  }
-  .line-wrapper-hz {
-    @apply flex flex-col;
-  }
-  .label {
-    @apply mr-s16 w-1/3 font-bold;
-  }
-  .empty {
-    @apply hidden;
-  }
-</style>

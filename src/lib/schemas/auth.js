@@ -15,7 +15,32 @@ export const loginSchema = {
   },
 };
 
-export const pwChangeSchema = {
+export const passwordChangeSchema = {
+  currentPassword: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.minStrLength(9)],
+  },
+  newPassword1: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.minStrLength(9)],
+  },
+  newPassword2: {
+    default: "",
+    required: true,
+    rules: [
+      v.isString(),
+      v.minStrLength(9),
+      (name, value, data) => ({
+        valid: value === data.newPassword1,
+        msg: `Les mots de passe ne sont pas identiques`,
+      }),
+    ],
+  },
+};
+
+export const passwordLostSchema = {
   password1: {
     default: "",
     required: true,
@@ -35,7 +60,7 @@ export const pwChangeSchema = {
   },
 };
 
-export const passwordLostSchema = {
+export const currentEmailSchema = {
   email: {
     default: "",
     required: true,
@@ -115,5 +140,36 @@ export const safirSearchSchema = {
     required: true,
     rules: [v.isString(), v.isSafir()],
     post: [v.trim],
+  },
+};
+
+export const userProfileSchema = {
+  firstName: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(140)],
+    post: [v.trim],
+  },
+  lastName: {
+    default: "",
+    required: true,
+    rules: [v.isString(), v.maxStrLength(140)],
+    post: [v.trim],
+  },
+  email: {
+    default: "",
+    required: true,
+    rules: [v.isEmail(), v.maxStrLength(255)],
+    post: [v.lower, v.trim],
+  },
+  phoneNumber: {
+    default: "",
+    required: true,
+    pre: [v.removeAllSpaces],
+    rules: [v.isPhone()],
+  },
+  newsletter: {
+    default: false,
+    rules: [v.isBool()],
   },
 };

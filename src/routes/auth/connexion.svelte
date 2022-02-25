@@ -4,7 +4,7 @@
   import { goto } from "$app/navigation";
 
   import { getApiURL } from "$lib/utils/api.js";
-  import { token, setToken, getUserInfo } from "$lib/auth";
+  import { token, setToken, validateCredsAndFillUserInfo } from "$lib/auth";
   import { formErrors } from "$lib/validation.js";
   import { loginSchema } from "$lib/schemas/auth.js";
 
@@ -54,7 +54,7 @@
   async function handleSuccess(jsonResult) {
     if (jsonResult.validUser) {
       setToken(jsonResult.token);
-      await getUserInfo();
+      await validateCredsAndFillUserInfo();
       goto(getNextPage() || "/");
     } else {
       invalidUser = true;
@@ -96,11 +96,10 @@
         <LinkButton
           to="/auth/renvoyer-email-validation?email={encodeURIComponent(email)}"
           label="Demander un nouveau lien"
-          preventDefaultOnMouseDown
         />
       {:else}
         {#each $formErrors.nonFieldErrors || [] as msg}
-          <Alert iconOnLeft label={msg} />
+          <Alert label={msg} />
         {/each}
         <div class="flex flex-col md:flex-row lg:flex-col md:gap-s16">
           <Field

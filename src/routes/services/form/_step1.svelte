@@ -5,8 +5,6 @@
   import { formErrors } from "$lib/validation.js";
   import serviceSchema from "$lib/schemas/service.js";
 
-  import Info from "$lib/components/forms/form-info.svelte";
-
   export let servicesOptions, service, structures;
   let subcategories = [];
 
@@ -56,12 +54,6 @@
 {/if}
 
 <FieldSet title="Typologie de service">
-  <Info title="Périmètre de test">
-    Dans un premier temps, seuls les services liés aux freins périphériques :
-    <strong>mobilités</strong>, <strong>garde d'enfant</strong> et
-    <strong>hébergement / logement</strong> sont testés.
-  </Info>
-
   <ModelField
     type="select"
     label="Thématique"
@@ -117,7 +109,7 @@
     bind:value={service.name}
   >
     <FieldHelp slot="helptext" title="Titre du service">
-      Le nom de votre service, tel qui va être affiché dans les résultats de
+      Le nom de votre service, tel qu’il va être affiché dans les résultats de
       recherche et les fiches détail.
     </FieldHelp>
   </ModelField>

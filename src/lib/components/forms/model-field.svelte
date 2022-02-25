@@ -17,10 +17,15 @@
   export let visible = true;
   export let placeholder = "";
   export let placeholderMulti = "";
+  export let initialValue = undefined;
   export let description = "";
   export let minValue = null;
 
   export let hideLabel = false;
+  export let toggleYesText = undefined;
+  export let toggleNoText = undefined;
+  export let autocomplete = undefined;
+  export let passwordrules = undefined;
 </script>
 
 <Field
@@ -37,6 +42,7 @@
   {type}
   {placeholder}
   {placeholderMulti}
+  {initialValue}
   {description}
   {hideLabel}
   {minValue}
@@ -44,6 +50,9 @@
   {readonly}
   {visible}
   {vertical}
+  {toggleYesText}
+  {toggleNoText}
+  {autocomplete}
 >
   <slot name="custom-input" slot="custom-input" />
   <slot name="helptext" slot="helptext" />

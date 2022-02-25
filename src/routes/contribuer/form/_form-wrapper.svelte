@@ -72,6 +72,15 @@
   let navInfo = {};
   let scrollY;
   let errorDiv;
+  const requiredFields = Object.keys(step1Schema).filter(
+    (k) => step1Schema[k].required
+  );
+
+  let currentPageIsValid = false;
+
+  $: currentPageIsValid = requiredFields.every((f) =>
+    Array.isArray(service[f]) ? service[f].length : service[f]
+  );
 
   $: switch (currentStep) {
     case 1:
@@ -141,7 +150,7 @@
   <div class="col-span-8 col-start-1 mb-s64">
     <div bind:this={errorDiv}>
       {#each $formErrors.nonFieldErrors || [] as msg}
-        <Alert iconOnLeft label={msg} />
+        <Alert label={msg} />
       {/each}
     </div>
     <slot />
@@ -150,7 +159,7 @@
 
 <CenteredGrid sticky>
   <NavButtons
-    currentPageIsValid={service.siret}
+    {currentPageIsValid}
     onGoForward={handleGoForward}
     onPublish={handlePublish}
     withForward={!!navInfo?.next && !navInfo?.showPreview}

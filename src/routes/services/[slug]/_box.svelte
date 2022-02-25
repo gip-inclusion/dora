@@ -7,7 +7,7 @@
 
 <div class="wrapper">
   <div class="title">
-    <Label icon={compassFillIcon} iconOnLeft darkBg bigIcon>
+    <Label icon={compassFillIcon} darkBg bigIcon>
       <h3>{title}</h3>
     </Label>
   </div>

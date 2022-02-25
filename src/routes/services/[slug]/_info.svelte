@@ -14,14 +14,7 @@
   class:positive={positiveMood}
   class:negative={negativeMood}
 >
-  <Label
-    {label}
-    success={positiveMood}
-    error={negativeMood}
-    {icon}
-    bold
-    iconOnLeft
-  />
+  <Label {label} success={positiveMood} error={negativeMood} {icon} bold />
   <div class=" pl-s32 text-f14 text-gray-text">
     <slot name="details" />
   </div>

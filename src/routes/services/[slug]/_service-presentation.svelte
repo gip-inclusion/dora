@@ -82,7 +82,13 @@
     </div>
   </Info>
 {/if}
-<div class="description-wrapper">
+
+{#if service.recurrence}
+  <div class="legend-bold text-gray-dark">SESSIONS &amp; RÉCURRENCE</div>
+  <p class="legend">{service.recurrence}</p>
+{/if}
+
+<div class="description-wrapper mt-s16">
   <div>
     <h2>Description du service</h2>
     <strong>{service.shortDesc}</strong>

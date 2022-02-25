@@ -26,6 +26,7 @@
   export let visible = true;
   export let placeholder = undefined;
   export let placeholderMulti = undefined;
+  export let initialValue = undefined;
   export let description = "";
   export let minValue = undefined;
 
@@ -87,6 +88,7 @@
             {rows}
             {placeholder}
             {placeholderMulti}
+            {initialValue}
             {minValue}
             {disabled}
             {readonly}
@@ -99,7 +101,7 @@
           <slot name="custom-input" />
         {/if}
         {#each errorMessages || [] as msg}
-          <Alert iconOnLeft label={msg} isHTML={allowHTMLError} />
+          <Alert label={msg} isHTML={allowHTMLError} />
         {/each}
       </div>
       <slot name="helptext" />

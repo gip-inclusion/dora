@@ -3,7 +3,7 @@
 
   import { formErrors } from "$lib/validation.js";
 
-  import { passwordLostSchema } from "$lib/schemas/auth.js";
+  import { currentEmailSchema } from "$lib/schemas/auth.js";
 
   import Button from "$lib/components/button.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
@@ -60,7 +60,7 @@
 <AuthLayout>
   <Form
     data={{ email }}
-    schema={passwordLostSchema}
+    schema={currentEmailSchema}
     serverErrorsDict={authErrors}
     onChange={handleChange}
     onSubmit={handleSubmit}
@@ -81,13 +81,12 @@
         <LinkButton
           to="/auth/connexion"
           label="Revenir à la page de connexion"
-          preventDefaultOnMouseDown
         />
       {:else}
         {#if $formErrors.nonFieldErrors}
           <div>
             {#each $formErrors.nonFieldErrors || [] as msg}
-              <Alert iconOnLeft label={msg} />
+              <Alert label={msg} />
             {/each}
           </div>
         {/if}

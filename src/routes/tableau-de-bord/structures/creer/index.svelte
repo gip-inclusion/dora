@@ -7,13 +7,8 @@
 </script>
 
 <script>
-  import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import FieldHelp from "$lib/components/forms/field-help.svelte";
-  import Field from "$lib/components/forms/field.svelte";
-  import CitySearch from "$lib/components/forms/city-search.svelte";
-
   import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
-  import SiretSearch from "$lib/components/structures/siret-autocomplete.svelte";
+  import StructureSearch from "$lib/components/structures/search.svelte";
   import { siretWasAlreadyClaimed } from "$lib/structures";
   import structureSchema from "$lib/schemas/structure.js";
 
@@ -73,41 +68,10 @@
   <title>Créer une structure | DORA</title>
 </svelte:head>
 
-<FieldSet
-  title="Retrouvez votre structure"
-  description="On peut récuperer automatiquement les informations importantes de votre structure via la base SIRENE. Saissisez votre département et le numéro SIRET pour commencer."
->
-  <Field type="custom" label="Commune" vertical>
-    <CitySearch
-      slot="custom-input"
-      name="city-select"
-      placeholder="Saisissez le nom de votre ville"
-      handleChange={handleCityChange}
-    />
-    <FieldHelp title="Récupération des données existantes" slot="helptext">
-      <p>
-        Pour faciliter l’étape de saisie, nous récupérons pour vous des données
-        que l’État possède déjà. Une série d’éléments complémentaires vous
-        seront demandés afin de réaliser et promouvoir un profil complet de
-        votre structure. Pensez à mettre à jour régulièrement ces informations.
-      </p>
-    </FieldHelp>
-  </Field>
-  <Field
-    type="custom"
-    label="Le nom de votre structure ou le numéro SIRET"
-    vertical
-  >
-    <SiretSearch
-      slot="custom-input"
-      name="siret-select"
-      {selectedCity}
-      disabled={!selectedCity?.properties?.citycode}
-      handleChange={handleEstablishmentChange}
-      placeholder="Commencez à saisir et choisissez dans la liste"
-    />
-  </Field>
-</FieldSet>
+<StructureSearch
+  onEstablishmentChange={handleEstablishmentChange}
+  onCityChange={handleCityChange}
+/>
 
 {#if alreadyClaimedEstablishment}
   <div

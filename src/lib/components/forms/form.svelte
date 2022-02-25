@@ -55,6 +55,7 @@
     }
     return jsonResult;
   }
+
   async function handleSubmit() {
     $formErrors = {};
     const { validatedData, valid } = validate(data, schema, schema, {

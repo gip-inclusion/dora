@@ -4,8 +4,6 @@ import node from "@sveltejs/adapter-node";
 
 const config = {
   kit: {
-    // hydrate the <div id="svelte"> element in src/app.html
-    target: "#svelte",
     vite: {
       optimizeDeps: {},
       build: {
@@ -19,11 +17,7 @@ const config = {
     }),
   },
 
-  preprocess: [
-    preprocess({
-      postcss: true,
-    }),
-  ],
+  preprocess: [preprocess({ postcss: true })],
 };
 
 export default config;
