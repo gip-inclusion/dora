@@ -27,7 +27,7 @@
 >
   {#if icon}
     <div
-      class="icon mr-s8"
+      class="icon mr-s8 flex-none"
       class:big-icon={bigIcon}
       class:small-icon={smallIcon}
     >
@@ -35,7 +35,7 @@
     </div>
   {/if}
   {#if icon && !(label || $$slots.default)}
-    <div class="icon" class:big-icon={bigIcon}>
+    <div class="icon flex-none" class:big-icon={bigIcon}>
       {@html icon}
     </div>
   {/if}

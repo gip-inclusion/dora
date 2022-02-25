@@ -110,7 +110,11 @@
           <h2>Mes Services</h2>
         </div>
         <div class="border-t border-gray-03" />
-        <ServicesList {services} onRefresh={handleRefresh} />
+        <ServicesList
+          {services}
+          onRefresh={handleRefresh}
+          showStructure={false}
+        />
       {/if}
     </div>
   </CenteredGrid>
