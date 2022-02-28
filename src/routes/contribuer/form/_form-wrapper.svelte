@@ -157,11 +157,13 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid sticky>
-  <NavButtons
-    {currentPageIsValid}
-    onGoForward={handleGoForward}
-    onPublish={handlePublish}
-    withForward={!!navInfo?.next && !navInfo?.showPreview}
-  />
-</CenteredGrid>
+{#if service.siret}
+  <CenteredGrid sticky>
+    <NavButtons
+      {currentPageIsValid}
+      onGoForward={handleGoForward}
+      onPublish={handlePublish}
+      withForward={!!navInfo?.next && !navInfo?.showPreview}
+    />
+  </CenteredGrid>
+{/if}
