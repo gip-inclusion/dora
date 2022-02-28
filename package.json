@@ -14,6 +14,7 @@
     "format": "prettier --write --plugin-search-dir=. . && eslint --ignore-path .gitignore --fix . && svgo --pretty -f src/lib/assets",
     "prepare": "husky install",
     "security-scan": "ggshield scan  path -r . -y",
+    "commit": "cz",
     "sb": "start-storybook -p 6006",
     "sb-build": "build-storybook -o design-system"
   },
@@ -32,6 +33,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
+    "@commitlint/cli": "^16.2.1",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
     "@storybook/addon-docs": "^6.5.0-alpha.39",
     "@storybook/addon-essentials": "^6.5.0-alpha.39",
     "@storybook/addon-links": "^6.5.0-alpha.39",
@@ -42,7 +47,9 @@
     "@tailwindcss/typography": "^0.5.2",
     "autoprefixer": "^10.4.2",
     "babel-loader": "^8.2.3",
+    "commitizen": "^4.2.4",
     "cssnano": "^5.0.17",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.9.0",
     "eslint-config-eslint": "^7.0.0",
     "eslint-config-prettier": "^8.4.0",
@@ -55,6 +62,7 @@
     "prettier": "^2.5.1",
     "prettier-plugin-tailwindcss": "^0.1.7",
     "remixicon": "^2.5.0",
+    "semantic-release": "^19.0.2",
     "storybook-builder-vite": "^0.1.17",
     "svelte": "^3.46.4",
     "svelte-loader": "^3.1.2",
@@ -74,5 +82,22 @@
     "*": [
       "ggshield scan pre-commit"
     ]
+  },
+  "release": {
+    "branches": [
+      "release"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/github",
+      "@semantic-release/git"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
