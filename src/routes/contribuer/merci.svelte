@@ -42,7 +42,7 @@
           accompagnées.
         </p>
 
-        <div class="flex flex-col gap-s16">
+        <div class="flex flex-col items-start gap-s16">
           <LinkButton
             label="Proposer un nouveau service"
             to={"/contribuer/saisie"}
