@@ -24,6 +24,7 @@
   export let services = [];
   export let onRefresh;
   export let showStructure = true;
+  export let readOnly = false;
 
   async function handleUnpublish(service) {
     await unPublishService(service.slug);
@@ -107,64 +108,66 @@
             noBackground
           />
         </div>
-        <div class="flex-none basis-s32 self-center">
-          <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
-            {#if service.isSuggestion}
-              <div>
-                <Button
-                  label="Convertir en brouillon"
-                  on:click={() => {
-                    handleConvertToDraft(service);
-                    onCloseParent();
-                  }}
-                  icon={checkIcon}
-                  iconOnRight
-                  small
-                  noBackground
-                />
-              </div>
-              <div>
-                <Button
-                  label="Rejeter"
-                  on:click={() => {
-                    handleDelete(service);
-                    onCloseParent();
-                  }}
-                  icon={deleteBinIcon}
-                  iconOnRight
-                  small
-                  noBackground
-                />
-              </div>
-            {:else}
-              {#if !service.isDraft}
+        {#if !readOnly}
+          <div class="flex-none basis-s32 self-center">
+            <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
+              {#if service.isSuggestion}
                 <div>
                   <Button
-                    label="Désactiver"
+                    label="Convertir en brouillon"
                     on:click={() => {
-                      handleUnpublish(service);
+                      handleConvertToDraft(service);
                       onCloseParent();
                     }}
-                    icon={fileCloudIcon}
+                    icon={checkIcon}
+                    iconOnRight
+                    small
+                    noBackground
+                  />
+                </div>
+                <div>
+                  <Button
+                    label="Rejeter"
+                    on:click={() => {
+                      handleDelete(service);
+                      onCloseParent();
+                    }}
+                    icon={deleteBinIcon}
+                    iconOnRight
+                    small
+                    noBackground
+                  />
+                </div>
+              {:else}
+                {#if !service.isDraft}
+                  <div>
+                    <Button
+                      label="Désactiver"
+                      on:click={() => {
+                        handleUnpublish(service);
+                        onCloseParent();
+                      }}
+                      icon={fileCloudIcon}
+                      iconOnRight
+                      small
+                      noBackground
+                    />
+                  </div>
+                {/if}
+                <div>
+                  <LinkButton
+                    label="Modifier"
+                    to="/services/{service.slug}/editer"
+                    icon={fileEditIcon}
                     iconOnRight
                     small
                     noBackground
                   />
                 </div>
               {/if}
-              <div>
-                <LinkButton
-                  label="Modifier"
-                  to="/services/{service.slug}/editer"
-                  icon={fileEditIcon}
-                  iconOnRight
-                  small
-                  noBackground
-                />
-              </div>
-            {/if}
-          </ButtonMenu>
-        </div>
+            </ButtonMenu>
+          </div>
+        {/if}
       </div>
     {/each}
   </div>

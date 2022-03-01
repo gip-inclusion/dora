@@ -53,11 +53,9 @@
     </div>
 
     <div class="col-span-full">
-      {#if $userInfo.isStaff}
+      {#if $userInfo.isStaff || $userInfo.isBizdev}
         <div class="mb-s48 rounded-md bg-gray-bg p-s8">
-          <h4 class="text-information">
-            ⚠️ Seulement pour les super-utilisateurs
-          </h4>
+          <h4 class="text-information">⚠️ Seulement pour l’équipe DORA</h4>
           <div class="flex">
             <LinkButton
               label="Créer une structure"
@@ -76,13 +74,6 @@
               to="/tableau-de-bord/admin/services"
               noBackground
             />
-          </div>
-        </div>
-      {/if}
-      {#if $userInfo.isBizdev}
-        <div class="mb-s48 rounded-md bg-gray-bg p-s8">
-          <h4 class="text-information">⚠️ Seulement pour les bizdev</h4>
-          <div class="flex">
             <LinkButton
               label="Voir les suggestions de service"
               to="/tableau-de-bord/service-suggestions"

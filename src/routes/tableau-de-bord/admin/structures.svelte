@@ -11,7 +11,8 @@
 </script>
 
 <script>
-  import EnsureStaff from "$lib/components/ensure-staff.svelte";
+  import { userInfo } from "$lib/auth";
+  import EnsureStaffOrBizdev from "$lib/components/ensure-staff-or-bizdev.svelte";
   import StructuresList from "../_structures-list.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   export let structures;
@@ -21,14 +22,14 @@
   <title>Toutes les structures | DORA</title>
 </svelte:head>
 
-<EnsureStaff>
+<EnsureStaffOrBizdev>
   <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
     <div class="col-span-full col-start-1 text-left">
       <div class="mb-s8">
         <h2>Toutes les structures</h2>
       </div>
       <div class="border-t border-gray-03" />
-      <StructuresList {structures} />
+      <StructuresList {structures} readOnly={!$userInfo?.isStaff} />
     </div>
   </CenteredGrid>
-</EnsureStaff>
+</EnsureStaffOrBizdev>

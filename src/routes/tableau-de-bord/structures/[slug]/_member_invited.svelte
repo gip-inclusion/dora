@@ -8,6 +8,7 @@
 
   export let member;
   export let onRefresh;
+  export let readOnly = false;
 
   $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
 
@@ -27,7 +28,7 @@
   }
 </script>
 
-<Member {member}>
+<Member {member} {readOnly}>
   <div slot="label">
     <Label
       label={`${userLevel} – Invitation envoyée`}

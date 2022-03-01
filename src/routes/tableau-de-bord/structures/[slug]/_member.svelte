@@ -6,6 +6,7 @@
   export let member;
   export let isMyself = false;
   export let isOnlyAdmin = false;
+  export let readOnly = false;
 </script>
 
 <div class="wrapper" class:is-own={isMyself}>
@@ -16,15 +17,17 @@
   <div class="grow" />
   <slot name="label" />
 
-  <div>
-    <ButtonMenu
-      icon={moreIcon}
-      let:onClose={onCloseParent}
-      disabled={isOnlyAdmin}
-    >
-      <slot name="actions" {onCloseParent} />
-    </ButtonMenu>
-  </div>
+  {#if !readOnly}
+    <div>
+      <ButtonMenu
+        icon={moreIcon}
+        let:onClose={onCloseParent}
+        disabled={isOnlyAdmin}
+      >
+        <slot name="actions" {onCloseParent} />
+      </ButtonMenu>
+    </div>
+  {/if}
 </div>
 
 <style lang="postcss">

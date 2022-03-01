@@ -14,6 +14,6 @@
   });
 </script>
 
-{#if $userInfo?.isStaff}
+{#if $userInfo?.isStaff || $userInfo?.isBizdev}
   <slot />
 {/if}

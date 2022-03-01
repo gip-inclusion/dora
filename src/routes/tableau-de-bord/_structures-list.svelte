@@ -11,6 +11,7 @@
   } from "$lib/icons";
 
   export let structures;
+  export let readOnly = false;
 </script>
 
 <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
@@ -36,20 +37,30 @@
           label={`${structure.numServices} fiche(s)`}
           smallIcon
           icon={briefcaseIcon} /> -->
-        <LinkButton
-          label="Ajouter un service"
-          to="/services/creer"
-          icon={addCircleIcon}
-          iconOnRight
-          noBackground
-        />
-        <LinkButton
-          label="Gérer"
-          to="/tableau-de-bord/structures/{structure.slug}"
-          iconOnRight
-          icon={settingsIcon}
-          noBackground
-        />
+        {#if !readOnly}
+          <LinkButton
+            label="Ajouter un service"
+            to="/services/creer"
+            icon={addCircleIcon}
+            iconOnRight
+            noBackground
+          />
+          <LinkButton
+            label="Gérer"
+            to="/tableau-de-bord/structures/{structure.slug}"
+            iconOnRight
+            icon={settingsIcon}
+            noBackground
+          />
+        {:else}
+          <LinkButton
+            label="Voir"
+            to="/tableau-de-bord/structures/{structure.slug}"
+            iconOnRight
+            icon={settingsIcon}
+            noBackground
+          />
+        {/if}
       </div>
     {/each}
   </div>
