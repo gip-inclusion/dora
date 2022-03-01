@@ -18,7 +18,7 @@ const shape1 = {
   subcategories: {
     default: [],
     required: false,
-    rules: [v.isArray([v.isString(), v.maxStrLength(6)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(100)])],
   },
   kinds: {
     default: [],
@@ -273,7 +273,7 @@ export const draftServiceSchema = {
     rules: [v.isString(), v.maxStrLength(2)],
   },
   subcategories: {
-    rules: [v.isArray([v.isString(), v.maxStrLength(6)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(100)])],
   },
   kinds: {
     rules: [v.isArray([v.isString(), v.maxStrLength(2)])],

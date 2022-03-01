@@ -11,7 +11,23 @@
   export let servicesOptions = {};
   const categoryChoices = servicesOptions.categories;
   categoryChoices?.forEach((choice) => {
-    if (["GL", "FL", "CR", "FI", "IL", "DI"].includes(choice.value)) {
+    if (
+      [
+        "GL",
+        "FL",
+        "CR",
+        "FI",
+        "IL",
+        "DI",
+        "FA",
+        "RE",
+        "RI",
+        "EQ",
+        "HE",
+        "HA",
+        "JO",
+      ].includes(choice.value)
+    ) {
       choice.tags = ["nouv."];
     }
   });
@@ -64,6 +80,7 @@
         label="Thématique"
         vertical
         required
+        sortSelect
       />
 
       <Field

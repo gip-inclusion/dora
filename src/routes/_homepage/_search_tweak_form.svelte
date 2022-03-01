@@ -22,7 +22,23 @@
   }
 
   $: catChoices = servicesOptions.categories.map((choice) => {
-    if (["GL", "FL", "CR", "FI", "IL", "DI"].includes(choice.value)) {
+    if (
+      [
+        "GL",
+        "FL",
+        "CR",
+        "FI",
+        "IL",
+        "DI",
+        "FA",
+        "RE",
+        "RI",
+        "EQ",
+        "HE",
+        "HA",
+        "JO",
+      ].includes(choice.value)
+    ) {
       choice.tags = ["nouv."];
     }
     return choice;
@@ -64,6 +80,7 @@
           label="Thématique"
           vertical
           required
+          sortSelect
         />
 
         <Field
