@@ -21,10 +21,10 @@
     if (onEstablishmentChange) onEstablishmentChange(newEstablishment);
   }
 
-  let structureSearchTabId = "siret";
+  let structureSearchTabId = "nom";
   const structureSearchTabs = [
-    { id: "siret", name: "Siret" },
     { id: "nom", name: "Nom" },
+    { id: "siret", name: "Siret" },
   ];
 
   function handleSelectedTabChange(newTab) {
