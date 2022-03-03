@@ -50,6 +50,25 @@ Publier une nouvelle version consiste à :
 Afin de pouvoir publier une nouvelle version sur Github, il faut définir un token `CONVENTIONAL_GITHUB_RELEASER_TOKEN` comme indiqué [ici](https://github.com/conventional-changelog/releaser-tools/tree/master/packages/conventional-github-releaser#setup-token-for-cli).
 
 ```bash
+# Basculer sur la branche main
+git checkout main
+
+# Récupèrer la dernière version sur github
+git pull --rebase origin main
+
 # Publier une nouvelle version
 npm run release
+```
+
+### Déployer en prod
+
+```bash
+# Basculer sur la branche release
+git checkout release
+
+# Inclure le contenu de la branche main (fast forward)
+git merge main
+
+# Pousser sur Github
+git push origin release
 ```
