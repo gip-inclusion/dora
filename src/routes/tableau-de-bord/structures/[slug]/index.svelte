@@ -19,6 +19,7 @@
     const userIsAdminOfStruct = structMembers?.find(
       (m) => m.user.email === info.email && m.isAdmin
     );
+
     if (canSeeStructure || info?.isBizdev || info?.isStaff) {
       const canSeeMembers =
         userIsAdminOfStruct || info?.isBizdev || info?.isStaff;
@@ -32,6 +33,8 @@
           canEditStructure: userIsAdminOfStruct || info?.isStaff,
           canSeeMembers,
           canEditMembers: userIsAdminOfStruct || info?.isStaff,
+          canInviteMembers:
+            userIsAdminOfStruct || info?.isStaff || info?.isBizdev,
         },
       };
     }
@@ -51,7 +54,7 @@
   import MemberStandard from "./_member_standard.svelte";
 
   export let structure, members, putativeMembers;
-  export let canEditStructure, canSeeMembers, canEditMembers;
+  export let canEditStructure, canSeeMembers, canEditMembers, canInviteMembers;
   let addUserModalIsOpen = false;
 
   async function handleRefreshMemberList() {
@@ -134,7 +137,7 @@
                 <h5 class="mt-s12">Résumé</h5>
                 <div class="legend">{structure.shortDesc}</div>
               </div>
-              {#if !canEditStructure}
+              {#if canEditStructure}
                 <div class="flex justify-end">
                   <LinkButton
                     label="Modifier les informations"
@@ -177,7 +180,7 @@
                     />
                   {/each}
                 </div>
-                {#if !canEditMembers}
+                {#if canInviteMembers}
                   <div class="flex justify-end">
                     <Button
                       label="Ajouter des collaborateurs"
