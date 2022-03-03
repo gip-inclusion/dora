@@ -140,7 +140,7 @@
               to="https://itou.typeform.com/doraall"
               otherTab
               nofollow
-              label="Adhérez à la communauté"
+              label="Adhérer à la communauté"
               icon={arrowRightIcon}
               iconOnRight
               noBackground

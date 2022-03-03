@@ -111,7 +111,7 @@
       <div class="mb-s16 self-end">
         <Button
           type="submit"
-          label="Trouver"
+          label="Rechercher"
           icon={searchIcon}
           disabled={!category || !cityCode}
           small
