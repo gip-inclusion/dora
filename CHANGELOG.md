@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/betagouv/dora-front/compare/v0.0.3...v0.0.4) (2022-03-03)
+
+### Features
+
+- **tableau de bord:** les bizdev peuvent inviter des utilisateurs dans toutes les structures ([32b0cf6](https://github.com/betagouv/dora-front/commit/32b0cf6a5b325f8ec5d3792e8d56726c82f75a7c))
+
 ### [0.0.3](https://github.com/betagouv/dora-front/compare/v0.0.2...v0.0.3) (2022-03-02)
 
 ### Features
