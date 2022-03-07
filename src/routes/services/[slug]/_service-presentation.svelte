@@ -54,7 +54,7 @@
 </div>
 {#if !service.structureInfo.hasAdmin}
   <Info
-    title="Vous êtes le gestionaire de cet établissement ?"
+    title="Vous êtes le gestionnaire de cet établissement ?"
     icon={lightBulbIcon}
   >
     Ces données ont été saisies par l’équipe DORA lors de l’étape
