@@ -3,17 +3,24 @@
   import { getApiURL } from "$lib/utils/api.js";
   import { getQuery } from "./_homepage/_search";
 
-  async function getResults(category, subcategory, cityCode) {
-    const url = `${getApiURL()}/search/?${getQuery(
-      category,
-      subcategory,
-      cityCode
-    )}`;
+  async function getResults({
+    categoryId,
+    subCategoryId,
+    cityCode,
+    kindId,
+    hasNoFees,
+  }) {
+    const query = getQuery({
+      categoryId,
+      subCategoryId,
+      cityCode,
+      kindId,
+      hasNoFees,
+    });
+    const url = `${getApiURL()}/search/?${query}`;
 
     const res = await fetch(url, {
-      headers: {
-        Accept: "application/json; version=1.0",
-      },
+      headers: { Accept: "application/json; version=1.0" },
     });
 
     if (res.ok) {
@@ -38,18 +45,28 @@
 
   export async function load({ url }) {
     const query = url.searchParams;
-    const category = query.get("cat");
-    const subcategory = query.get("sub");
+    const categoryId = query.get("cat");
+    const subCategoryId = query.get("sub");
     const cityCode = query.get("city");
     const cityLabel = query.get("cl");
+    const kindId = query.get("kinds");
+    const hasNoFees = query.get("has_fee") === "0";
 
     return {
       props: {
-        category,
-        subcategory,
+        categoryId,
+        subCategoryId,
         cityCode,
         cityLabel,
-        results: await getResults(category, subcategory, cityCode),
+        kindId,
+        hasNoFees,
+        results: await getResults({
+          categoryId,
+          subCategoryId,
+          cityCode,
+          kindId,
+          hasNoFees,
+        }),
         servicesOptions: await getServicesOptions(),
       },
     };
@@ -66,158 +83,148 @@
   import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
   import SearchPromo from "./_homepage/_search-promo.svelte";
 
-  import { newspaperIcon } from "$lib/icons";
-  import NoResultsPic from "$lib/assets/illu_zero-resultats-optimise.svg";
   import ShareButton from "$lib/components/share-button.svelte";
+  import NewsletterButton from "$lib/components/newsletter-button.svelte";
+  import Tag from "$lib/components/tag.svelte";
 
   export let servicesOptions;
-  export let category, subcategory, cityCode, cityLabel;
+  export let categoryId, subCategoryId, cityCode, cityLabel, kindId, hasNoFees;
   export let results;
 
   onMount(() => {
     if (browser) {
       plausible("recherche", {
-        props: { category, subcategory, cityCode, cityLabel },
+        props: {
+          categoryId,
+          subCategoryId,
+          cityCode,
+          cityLabel,
+          kindId,
+          hasNoFees,
+        },
       });
     }
   });
+
+  let tags = [];
+
+  $: {
+    tags = [];
+
+    if (categoryId) {
+      const categoryTag = servicesOptions.categories.find(
+        (c) => c.value === categoryId
+      );
+
+      if (categoryTag) {
+        tags = [categoryTag];
+      }
+
+      if (categoryTag && subCategoryId) {
+        const subCategoryTag = servicesOptions.subcategories.find(
+          (c) => c.value === subCategoryId
+        );
+
+        if (subCategoryTag) {
+          tags = [...tags, subCategoryTag];
+        }
+      }
+    }
+
+    if (cityLabel) {
+      tags = [...tags, { label: cityLabel }];
+    }
+
+    if (kindId) {
+      const kindTag = servicesOptions.kinds.find((c) => c.value === kindId);
+
+      if (kindTag) {
+        tags = [...tags, kindTag];
+      }
+    }
+
+    if (hasNoFees) {
+      tags = [...tags, { label: "Sans frais à charge" }];
+    }
+  }
 </script>
 
 <svelte:head>
-  <title>Résultats de recherche | DORA</title>
+  <title
+    >Services d'insertion : {tags.map((t) => t.label).join(", ")} | Recherche | DORA</title
+  >
 </svelte:head>
 
 <CenteredGrid topPadded>
-  <div class="col-span-full col-start-1 mb-s48 text-center">
-    <p class="text-f16">Consultez les services</p>
-    <h1 class="text-france-blue">Résultats de recherche</h1>
+  <div class="col-span-full mb-s48 text-center">
+    <p class="text-f16">Recherche</p>
+    <h1 class="text-france-blue">Services d'insertion</h1>
+    <div class="mt-s8 flex flex-row justify-center gap-s16">
+      {#each tags as tag}
+        <Tag>{tag.label}</Tag>
+      {/each}
+    </div>
   </div>
 </CenteredGrid>
 
 <CenteredGrid roundedbg>
-  <div class="search-form">
+  <div class="col-span-12 lg:col-span-4 lg:mt-s56 lg:mb-s48">
     <SearchTweakForm
-      numResults={results.length}
-      bind:category
-      bind:subcategory
-      bind:cityCode
-      bind:cityLabel
+      {categoryId}
+      {subCategoryId}
+      {cityCode}
+      {cityLabel}
+      {hasNoFees}
+      {kindId}
       {servicesOptions}
       {radiusChoices}
     />
   </div>
-  <div class="results-wrapper">
+  <div class="col-span-12 lg:col-span-8 lg:mt-s56">
+    <div class="mt-s16 text-f14 text-gray-text-alt2">
+      {results.length} résultat{#if results.length > 1}s{/if}
+    </div>
+
     {#if results.length}
-      <div class="results">
+      <div class="mt-s32 flex flex-col gap-s16">
         {#each results as result}
           <SearchResult {result} />
         {/each}
       </div>
     {:else}
-      <div class="no-results-wrapper">
-        <img
-          src={NoResultsPic}
-          width="312"
-          height="269"
-          alt=""
-          class="self-center"
-        />
-        <div class="no-results">
-          <h2>Ooopsie !</h2>
-
-          <p class="text-f16">
-            Aucun résultat ne correspond à vos critères 😞<br />
-            Essayez d’affiner votre recherche.
-          </p>
-          <p class="text-f14">
-            Les premiers départements accessibles à la recherche sont les
-            Ardennes et l’Ile de la Réunion.
-            <a
-              class="underline"
-              target="_blank"
-              rel="noopener"
-              href="https://documentation.dora.fabrique.social.gouv.fr/le-projet-dora/lancement-du-projet-dora/acceleration-de-dora-des-octobre-2021"
-            >
-              Suivez l’ouverture des autres territoires</a
-            >.
-          </p>
-
-          <h4 class="mt-s48">
-            Vous connaissez des structures proposant des services correspondant
-            à ces critères ? Invitez vos partenaires à se référencer :
+      <p class="text-f16 mt-s32">
+        Aucun résultat ne correspond à votre recherche.<br />
+        Essayez d’autres filtres.
+      </p>
+      <div class="lg:flex lg:gap-s24 mt-s48">
+        <div
+          class="p-s24 bg-white rounded-md border-gray-01 border lg:flex-1 mb-s24"
+        >
+          <h4>
+            Vous connaissez un service d'insertion qui n'est pas référencé ?
           </h4>
-          <ShareButton />
-          <h4 class="mt-s48">
-            Infolettre : nouveautés et les prochains territoires ouverts sur
-            Dora.
-          </h4>
-          <div>
+          <div class="flex flex-col gap-s16">
             <LinkButton
-              label="Recevoir les actualités"
-              icon={newspaperIcon}
-              iconOnRight
-              to="https://d4c653e7.sibforms.com/serve/MUIEAEkY4naptXBIq5NdRg5UPxP1wmwbGCinne5c1gynY-wfrZ0Dz0QP_NqkXtfyYqhdaq3AO8VFZJ9giRi9ZT0eah7Ut2U0LeKSTVIHQb_5nhvTLUMWXo9ZMeIYCHVlzmjkXGQ66S5ewcYpSADUgV--2RVZ_mrnsRJQoCNwZ8y-sWzfQsEzfKuTA7SLbZ_dWeqaigudym3EaiHT"
-              otherTab
-              nofollow
+              label="Proposer un service"
+              wFull
+              to="/contribuer"
+              secondary
             />
+            <ShareButton wFull />
+          </div>
+        </div>
+        <div
+          class="p-s24 bg-white rounded-md border-gray-01 border lg:flex-1 mb-s24"
+        >
+          <h4>Dora évolue rapidement. Vous souhaitez rester informé ?</h4>
+          <div>
+            <NewsletterButton wFull />
           </div>
         </div>
       </div>
     {/if}
-    {#if category === "CC"}
+    {#if categoryId === "CC"}
       <SearchPromo />
     {/if}
   </div>
 </CenteredGrid>
-
-<style lang="postcss">
-  .search-form {
-    padding-top: var(--s56);
-    grid-column: 1 / -1;
-  }
-
-  .results-wrapper {
-    padding-bottom: var(--s56);
-    grid-column: 1 / -1;
-  }
-
-  .results {
-    display: flex;
-    flex-direction: column;
-    padding-top: var(--s56);
-    padding-bottom: var(--s16);
-    gap: var(--s16);
-  }
-
-  .no-results-wrapper {
-    display: flex;
-    flex-direction: column;
-    padding-top: var(--s56);
-    padding-bottom: var(--s24);
-    color: var(--col-text);
-    gap: var(--s56);
-  }
-
-  .no-results {
-    display: flex;
-    flex-direction: column;
-    gap: var(--s16);
-  }
-
-  @screen xl {
-    .no-results-wrapper {
-      flex-direction: row;
-    }
-  }
-
-  @screen lg {
-    .search-form {
-      padding-top: var(--s56);
-      grid-column: 1 / 5;
-    }
-
-    .results-wrapper {
-      grid-column: 5 / -1;
-    }
-  }
-</style>

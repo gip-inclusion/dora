@@ -1,6 +1,7 @@
 <script>
   import { mailIcon } from "$lib/icons";
   import LinkButton from "./link-button.svelte";
+  export let wFull = false;
 
   const sharingEmailSubject = encodeURIComponent("Connaissez-vous Dora ?");
   const sharingEmailBody = encodeURIComponent(
@@ -24,8 +25,10 @@ Cordialement,
 </script>
 
 <LinkButton
-  label="Recommander DORA"
+  label="Inviter un porteur de service"
   icon={mailIcon}
   iconOnRight
+  secondary
+  {wFull}
   to="mailto:?subject={sharingEmailSubject}&body={sharingEmailBody}"
 />

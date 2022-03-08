@@ -30,6 +30,7 @@ module.exports = {
     "jsdoc/require-jsdoc": "off",
     "no-alert": "warn",
     "no-console": "warn",
+    "no-return-assign": "error",
     "no-undef-init": "off",
     "no-undefined": "off",
     "no-underscore-dangle": "off",

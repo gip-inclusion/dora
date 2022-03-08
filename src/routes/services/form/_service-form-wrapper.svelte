@@ -122,7 +122,7 @@
       };
       break;
     default:
-      console.log("?");
+      console.warning("?");
   }
 
   function isValid(_schema) {

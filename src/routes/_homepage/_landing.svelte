@@ -11,7 +11,8 @@
   import JoinPic from "$lib/assets/illu_rejoindre.svg";
   import ValorisePic from "$lib/assets/illu_valoriser.svg";
   import VisiblePic from "$lib/assets/illu_visibilite.svg";
-  import { arrowRightIcon, newspaperIcon } from "$lib/icons";
+  import { arrowRightIcon } from "$lib/icons";
+  import NewsletterButton from "$lib/components/newsletter-button.svelte";
 
   export let servicesOptions;
 </script>
@@ -174,14 +175,7 @@
       </p>
     </div>
 
-    <LinkButton
-      label="Recevoir les actualités"
-      to="https://d4c653e7.sibforms.com/serve/MUIEAEkY4naptXBIq5NdRg5UPxP1wmwbGCinne5c1gynY-wfrZ0Dz0QP_NqkXtfyYqhdaq3AO8VFZJ9giRi9ZT0eah7Ut2U0LeKSTVIHQb_5nhvTLUMWXo9ZMeIYCHVlzmjkXGQ66S5ewcYpSADUgV--2RVZ_mrnsRJQoCNwZ8y-sWzfQsEzfKuTA7SLbZ_dWeqaigudym3EaiHT"
-      otherTab
-      nofollow
-      iconOnRight
-      icon={newspaperIcon}
-    />
+    <NewsletterButton />
   </div>
 </CenteredGrid>
 

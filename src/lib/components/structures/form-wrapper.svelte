@@ -139,7 +139,7 @@
       <ModelField
         type="select"
         label="Typologie de la structure"
-        placeholder="choisissez"
+        placeholder="Sélectionner"
         schema={structureSchema.typologies}
         sortSelect
         name="typology"

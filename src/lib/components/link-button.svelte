@@ -10,6 +10,9 @@
   export let small = false;
   export let noBackground = false;
   export let noPadding = false;
+  export let secondary = false;
+
+  export let wFull = false;
 
   let px, py, ts;
 
@@ -33,14 +36,24 @@
 
   border = "border-0";
 
-  if (noBackground) {
+  if (secondary) {
+    border =
+      "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue";
     text =
-      "font-bold text-magenta-cta hover:text-magenta-hover disabled:text-gray-text active:text-france-blue";
-    background = "bg-transparent";
+      "font-bold text-magenta-cta hover:text-white disabled:text-gray-text-alt2 active:text-france-blue";
+    background = "bg-white hover:bg-magenta-hover disabled:bg-white";
   } else {
-    text = "font-bold text-white disabled:text-gray-text";
-    background =
-      "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
+    border = "border-0";
+
+    if (noBackground) {
+      text =
+        "font-bold text-magenta-cta hover:text-magenta-hover disabled:text-gray-text active:text-france-blue";
+      background = "bg-transparent";
+    } else {
+      text = "font-bold text-white disabled:text-gray-text";
+      background =
+        "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
+    }
   }
 
   const iw = "w-s24";
@@ -51,8 +64,8 @@
   target={otherTab ? "_blank" : ""}
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
-  class="{px} {py} {ts} {border} {text} {background} inline-flex items-center whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
-  class:justify-center={!icon}
+  class="{px} {py} {ts} {border} {text} {background} inline-flex items-center justify-center whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
+  class:w-full={wFull}
   aria-label={ariaLabel}
 >
   {#if icon && !iconOnRight}
@@ -64,7 +77,7 @@
   {label}
 
   {#if iconOnRight}
-    <div class="{iw} {ih} ml-s8 shrink-0 justify-end fill-current">
+    <div class="{iw} {ih} ml-s8 shrink-0 fill-current">
       {@html icon}
     </div>
   {/if}

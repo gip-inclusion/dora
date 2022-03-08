@@ -32,15 +32,15 @@
     }
   });
 
-  let category;
-  let subcategory;
+  let categoryId;
+  let subCategoryId;
   let cityCode;
   let cityLabel;
 
   let subCategoryChoices = [];
 
   function handleSearch() {
-    const query = getQuery(category, subcategory, cityCode, cityLabel);
+    const query = getQuery({ categoryId, subCategoryId, cityCode, cityLabel });
     goto(`recherche?${query}`);
   }
 
@@ -50,7 +50,8 @@
           value.startsWith(cat)
         )
       : [];
-    if (cat && subcategory && !subcategory.startsWith(cat)) subcategory = null;
+    if (cat && subCategoryId && !subCategoryId.startsWith(cat))
+      subCategoryId = null;
   }
 </script>
 
@@ -73,9 +74,9 @@
       <Field
         type="select"
         name="category"
-        bind:value={category}
+        bind:value={categoryId}
         onSelectChange={handleCategoryChange}
-        placeholder="Choisissez"
+        placeholder="Sélectionner"
         choices={categoryChoices}
         label="Thématique"
         vertical
@@ -86,10 +87,10 @@
       <Field
         type="select"
         name="subcategory"
-        bind:value={subcategory}
-        placeholder="Choisissez"
+        bind:value={subCategoryId}
+        placeholder="Sélectionner"
         choices={subCategoryChoices}
-        label="Besoin(s)"
+        label="Besoin"
         vertical
         sortSelect
       />
@@ -113,7 +114,7 @@
           type="submit"
           label="Rechercher"
           icon={searchIcon}
-          disabled={!category || !cityCode}
+          disabled={!categoryId || !cityCode}
           small
           preventDefaultOnMouseDown
         />

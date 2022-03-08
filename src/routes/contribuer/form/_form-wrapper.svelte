@@ -93,7 +93,7 @@
       break;
 
     default:
-      console.log("?");
+      console.warning("?");
   }
 
   function goToPage(number) {
