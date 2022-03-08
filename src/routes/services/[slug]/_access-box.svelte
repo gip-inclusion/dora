@@ -1,4 +1,5 @@
 <script>
+  import { addlinkToUrls } from "$lib/utils";
   import Box from "./_box.svelte";
   export let service;
 </script>
@@ -10,11 +11,11 @@
       <ul class="list">
         {#each service.beneficiariesAccessModesDisplay as mode}
           <li>
-            <span
-              >{mode === "Autre (préciser)"
-                ? service.beneficiariesAccessModesOther
-                : mode}</span
-            >
+            {#if mode === "Autre (préciser)"}
+              {@html addlinkToUrls(service.beneficiariesAccessModesOther)}
+            {:else}
+              {mode}
+            {/if}
           </li>
         {:else}
           <li><span>Non renseigné</span></li>

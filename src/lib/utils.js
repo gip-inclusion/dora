@@ -1,4 +1,5 @@
 import showdown from "showdown";
+import insane from "insane";
 import { get } from "svelte/store";
 
 import { browser } from "$app/env";
@@ -56,4 +57,17 @@ export function getDepartmentFromCityCode(cityCode) {
   return cityCode.startsWith("97")
     ? cityCode.slice(0, 3)
     : cityCode.slice(0, 2);
+}
+
+export function addlinkToUrls(text) {
+  const urlRegex = /((https?|mailto):\/\/[^\s]+\.[^\s]+)/gu;
+
+  return insane(
+    text.replace(
+      urlRegex,
+      (url) =>
+        `<a href="${url}" class="underline" rel="noopener nofollow">${url}</a>`
+    ),
+    { allowedTags: ["a"], allowedAttributes: { a: ["class", "rel", "href"] } }
+  );
 }

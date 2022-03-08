@@ -7,6 +7,7 @@
   import Modal from "$lib/components/modal.svelte";
   import { CANONICAL_URL } from "$lib/env";
   import { mailIcon } from "$lib/icons";
+  import { addlinkToUrls } from "$lib/utils";
 
   export let isOpen = false;
   export let service;
@@ -61,11 +62,11 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
           <ul class="list">
             {#each service.coachOrientationModesDisplay as mode}
               <li>
-                <span>
-                  {mode === "Autre (préciser)"
-                    ? service.coachOrientationModesOther
-                    : mode}
-                </span>
+                {#if mode === "Autre (préciser)"}
+                  {@html addlinkToUrls(service.coachOrientationModesOther)}
+                {:else}
+                  {mode}
+                {/if}
               </li>
             {:else}
               <li><span>Non renseigné</span></li>
