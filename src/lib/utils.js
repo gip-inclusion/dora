@@ -8,7 +8,17 @@ import { token } from "$lib/auth";
 import { defaultAcceptHeader } from "$lib/utils/api";
 
 export function markdownToHTML(md) {
-  const converter = new showdown.Converter();
+  const converter = new showdown.Converter({
+    extensions: [
+      () => ({
+        type: "output",
+        filter(html) {
+          return html.replaceAll("<a href=", '<a rel="nofollow" href=');
+        },
+      }),
+    ],
+  });
+
   return converter.makeHtml(md);
 }
 
@@ -17,6 +27,7 @@ export function htmlToMarkdown(html) {
     const converter = new showdown.Converter();
     return converter.makeMarkdown(html);
   }
+
   return "";
 }
 

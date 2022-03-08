@@ -3,7 +3,7 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import {
     computerIcon,
-    externalLineIcon,
+    externalLinkIcon,
     mailIcon,
     mapPinIcon,
     phoneIcon,
@@ -40,7 +40,7 @@
           {structure.url}
         </a>
         <div class="ext-icon">
-          {@html externalLineIcon}
+          {@html externalLinkIcon}
         </div>
       </div>
     {/if}
@@ -54,7 +54,7 @@
           {structure.email}
         </a>
         <div class="ext-icon">
-          {@html externalLineIcon}
+          {@html externalLinkIcon}
         </div>
       </div>
     {/if}

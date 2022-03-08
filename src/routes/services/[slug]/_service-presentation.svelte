@@ -92,7 +92,7 @@
   <div>
     <h2>Description du service</h2>
     <strong>{service.shortDesc}</strong>
-    <div class="markdown-wrapper prose w-full">
+    <div class="markdown-wrapper prose mb-s24 w-full">
       {@html service.fullDesc}
     </div>
   </div>

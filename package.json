@@ -30,6 +30,7 @@
     "@sentry/browser": "^6.17.9",
     "@sentry/tracing": "^6.17.9",
     "@tiptap/core": "^2.0.0-beta.174",
+    "@tiptap/extension-link": "^2.0.0-beta.36",
     "@tiptap/extension-placeholder": "^2.0.0-beta.48",
     "@tiptap/starter-kit": "^2.0.0-beta.183",
     "husky": "^7.0.4",

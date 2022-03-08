@@ -21,7 +21,9 @@ function toBack(service) {
 
 function toFront(service) {
   if (service.fullDesc)
-    service.fullDesc = insane(markdownToHTML(service.fullDesc));
+    service.fullDesc = insane(markdownToHTML(service.fullDesc), {
+      allowedAttributes: { a: ["class", "rel", "href"] },
+    });
   let lng, lat;
   if (service.geom) {
     [lng, lat] = service.geom.coordinates;

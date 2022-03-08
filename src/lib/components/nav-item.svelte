@@ -1,5 +1,5 @@
 <script>
-  import { externalLineIcon } from "$lib/icons";
+  import { externalLinkIcon } from "$lib/icons";
   export let label = "";
   export let otherTab = false;
   export let disabled = false;
@@ -24,7 +24,7 @@
   {label}
   {#if externalIcon}
     <div class="ml-s8 h-s16 w-s16 fill-current">
-      {@html externalLineIcon}
+      {@html externalLinkIcon}
     </div>
   {/if}
   {#if separator}

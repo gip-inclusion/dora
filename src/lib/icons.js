@@ -15,7 +15,7 @@ export { default as arrowLeftCircleIcon } from "remixicon/icons/System/arrow-lef
 export { default as starFillIcon } from "remixicon/icons/System/star-fill.svg?raw";
 export { default as checkIcon } from "remixicon/icons/System/check-line.svg?raw";
 export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill.svg?raw";
-export { default as externalLineIcon } from "remixicon/icons/System/external-link-line.svg?raw";
+export { default as externalLinkIcon } from "remixicon/icons/System/external-link-line.svg?raw";
 export { default as alertIcon } from "remixicon/icons/System/alert-fill.svg?raw";
 export { default as informationIcon } from "remixicon/icons/System/information-fill.svg?raw";
 export { default as checkBoxBlankIcon } from "remixicon/icons/System/checkbox-blank-circle-fill.svg?raw";
@@ -69,3 +69,4 @@ export { default as messageIcon } from "remixicon/icons/Communication/message-3-
 export { default as quillPenIcon } from "remixicon/icons/Design/quill-pen-line.svg?raw";
 
 export { default as deleteBinIcon } from "remixicon/icons/System/delete-bin-line.svg?raw";
+export { default as linkIcon } from "remixicon/icons/Editor/link.svg?raw";
