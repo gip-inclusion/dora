@@ -52,4 +52,8 @@ export const Icon = Template.bind({});
 Icon.args = {
   label: "Button label",
   icon: menuIcon,
+  name: "Button label",
+  small: false,
+  flashSuccess: false,
+  noPadding: false,
 };
