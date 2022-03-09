@@ -6,7 +6,7 @@ import { getApiURL } from "$lib/utils/api.js";
 import { token } from "$lib/auth";
 import { logException } from "./logger";
 
-function toBack(service) {
+function serviceToBack(service) {
   if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
   if (service.longitude && service.latitude) {
     service.geom = {
@@ -16,10 +16,13 @@ function toBack(service) {
   } else {
     service.geom = null;
   }
+  // Dans le futur, un service pourra appartenir à plusieurs categories
+  // Le back-end le gère déjà, mais pour le moment on reste sur une categorie ici
+  service.categories = [service.category];
   return service;
 }
 
-function toFront(service) {
+function serviceToFront(service) {
   if (service.fullDesc)
     service.fullDesc = insane(markdownToHTML(service.fullDesc), {
       allowedAttributes: { a: ["class", "rel", "href"] },
@@ -30,7 +33,34 @@ function toFront(service) {
   }
   service.longitude = lng;
   service.latitude = lat;
+  // Dans le futur, un service pourra appartenir à plusieurs categories
+  // Le back-end le gère déjà, mais pour le moment on reste sur une categorie ici
+  service.category = service.categories?.[0];
+  service.categoryDisplay = service.categoriesDisplay?.[0];
   return service;
+}
+
+function serviceSuggestiontoBack(serviceSuggestion) {
+  if (serviceSuggestion.fullDesc)
+    serviceSuggestion.fullDesc = htmlToMarkdown(serviceSuggestion.fullDesc);
+
+  // Dans le futur, un service pourra appartenir à plusieurs categories
+  // Le back-end le gère déjà, mais pour le moment on reste sur une categorie ici
+  serviceSuggestion.categories = [serviceSuggestion.category];
+  return serviceSuggestion;
+}
+
+function serviceSuggestionToFront(serviceSuggestion) {
+  const serviceInfo = serviceSuggestion.serviceInfo;
+  if (serviceInfo.fullDesc)
+    serviceInfo.fullDesc = insane(markdownToHTML(serviceInfo.fullDesc), {
+      allowedAttributes: { a: ["class", "rel", "href"] },
+    });
+  // Dans le futur, un service pourra appartenir à plusieurs categories
+  // Le back-end le gère déjà, mais pour le moment on reste sur une categorie ici
+  serviceInfo.category = serviceInfo.categories?.[0];
+  serviceInfo.categoryDisplay = serviceInfo.categoriesDisplay?.[0];
+  return serviceSuggestion;
 }
 
 export async function getServices() {
@@ -46,7 +76,7 @@ export async function getMyServices() {
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
   const data = (await fetchData(url)).data;
-  if (data) return toFront(data);
+  if (data) return serviceToFront(data);
   // TODO: 404
   return null;
 }
@@ -68,7 +98,7 @@ export async function createOrModifyService(service) {
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify(toBack(service)),
+    body: JSON.stringify(serviceToBack(service)),
   });
 
   const result = {
@@ -76,7 +106,7 @@ export async function createOrModifyService(service) {
     status: response.status,
   };
   if (response.ok) {
-    result.data = toFront(await response.json());
+    result.data = serviceToFront(await response.json());
   } else {
     try {
       result.error = await response.json();
@@ -187,14 +217,8 @@ export async function getServicesOptions({ kitFetch } = {}) {
 export async function getServiceSuggestions() {
   const url = `${getApiURL()}/services-suggestions/`;
   const results = (await fetchData(url)).data;
-  if (results) {
-    results.forEach((result) => {
-      result.serviceInfo.fullDesc = insane(
-        markdownToHTML(result.serviceInfo.fullDesc)
-      );
-    });
-  }
-  return results;
+  if (results) return results.map((s) => serviceSuggestionToFront(s));
+  return [];
 }
 
 export async function deleteServiceSuggestion(suggestion) {
@@ -250,8 +274,7 @@ export async function acceptServiceSuggestion(suggestion) {
 export async function publishServiceSuggestion(suggestion) {
   const url = `${getApiURL()}/services-suggestions/`;
   const method = "POST";
-  const { siret, name, ...contents } = suggestion;
-  contents.fullDesc = htmlToMarkdown(contents.fullDesc);
+  const { siret, name, ...contents } = serviceSuggestiontoBack(suggestion);
   const authToken = get(token);
   const response = await fetch(url, {
     method,
