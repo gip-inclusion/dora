@@ -10,7 +10,7 @@
       <h3>Mobiliser ce service</h3>
       <ul class="list">
         {#each service.beneficiariesAccessModesDisplay as mode}
-          <li>
+          <li class="break-words">
             {#if mode === "Autre (préciser)"}
               {@html addlinkToUrls(service.beneficiariesAccessModesOther)}
             {:else}

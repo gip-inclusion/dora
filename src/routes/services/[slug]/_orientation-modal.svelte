@@ -61,7 +61,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
           <h3>Mobiliser la solution</h3>
           <ul class="list">
             {#each service.coachOrientationModesDisplay as mode}
-              <li>
+              <li class="break-words">
                 {#if mode === "Autre (préciser)"}
                   {@html addlinkToUrls(service.coachOrientationModesOther)}
                 {:else}
