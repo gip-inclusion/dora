@@ -47,7 +47,7 @@ function validateField(fieldname, shape, data) {
     const result = rule(`${fieldname}`, value, data);
 
     if (!result.valid) {
-      console.warning(fieldname, value, typeof value, result);
+      console.warn(fieldname, value, typeof value, result);
       addError(fieldname, result.msg);
       return { originalValue, valid: false };
     }

@@ -12,6 +12,6 @@ export function logException(exc, ...args) {
   Sentry.captureException(exc, { extra: { ...args } });
 }
 export function log(message, ...args) {
-  console.warning(message);
+  console.warn(message);
   Sentry.captureMessage(message, { extra: { ...args } });
 }
