@@ -223,7 +223,7 @@
         </div>
       </div>
     {/if}
-    {#if ["FA-CHILD", "FA-PARENT"].includes(subCategoryId)}
+    {#if ["FA_CHILD", "FA_PARENT"].includes(subCategoryId)}
       <SearchPromo />
     {/if}
   </div>
