@@ -24,7 +24,7 @@
   }
 
   function handleCityChange() {
-    service.siret = null;
+    service.siret = "";
   }
 
   async function handleEstablishmentChange(newEstablishment) {

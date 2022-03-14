@@ -1,7 +1,8 @@
 <script>
+  import { onMount } from "svelte";
   import { getApiURL } from "$lib/utils/api.js";
   import { formErrors } from "$lib/validation.js";
-  import * as v from "$lib/schemas/utils";
+  import { siretRegexp, isString, isSiret, trim } from "$lib/schemas/utils";
 
   import Field from "$lib/components/forms/field.svelte";
   import Alert from "$lib/components/forms/alert.svelte";
@@ -10,19 +11,19 @@
   import Form from "$lib/components/forms/form.svelte";
 
   export let onEstablishmentChange = null;
+  export let siret = "";
 
-  let siretCode = "";
   let searching = false;
   let siretIsValid = false;
 
-  $: siretIsValid = !!siretCode.match(/^\d{14}$/u);
+  $: siretIsValid = !!siret?.match(siretRegexp);
 
   const siretSearchSchema = {
-    siretCode: {
+    siret: {
       default: "",
       required: true,
-      rules: [v.isString(), v.isSiret()],
-      post: [v.trim],
+      rules: [isString(), isSiret()],
+      post: [trim],
     },
   };
 
@@ -31,12 +32,8 @@
     nonFieldErrors: { not_found: "Numéro SIRET non reconnu." },
   };
 
-  async function handleSubmit(validatedData) {
-    if (onEstablishmentChange) onEstablishmentChange({});
-
-    const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(
-      validatedData.siretCode
-    )}`;
+  async function siretSearch(s) {
+    const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(s)}`;
 
     return fetch(url, {
       headers: {
@@ -46,15 +43,36 @@
     });
   }
 
-  function handleSuccess(result) {
-    if (onEstablishmentChange) onEstablishmentChange(result);
+  async function handleSubmit(validatedData) {
+    searching = true;
+    if (onEstablishmentChange) onEstablishmentChange({});
+
+    return siretSearch(validatedData.siret);
+  }
+
+  function handleSuccess(establishment) {
+    if (onEstablishmentChange) onEstablishmentChange(establishment);
 
     searching = false;
   }
+
+  onMount(async () => {
+    if (siret) {
+      searching = true;
+      const response = await siretSearch(siret);
+
+      if (response.status === 200) {
+        const establishment = await response.json();
+        handleSuccess(establishment);
+      } else {
+        siret = "";
+      }
+    }
+  });
 </script>
 
 <Form
-  data={{ siretCode }}
+  data={{ siret }}
   schema={siretSearchSchema}
   serverErrorsDict={serverErrors}
   onSubmit={handleSubmit}
@@ -80,7 +98,7 @@
           type="text"
           name="siret-select"
           placeholder="1234567891234"
-          bind:value={siretCode}
+          bind:value={siret}
         />
       </div>
       {#if searching}

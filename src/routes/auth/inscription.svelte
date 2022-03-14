@@ -3,23 +3,20 @@
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
-  import StepTypology from "./registration/_step1-typology.svelte";
-  import StepPoleEmploi from "./registration/_step2-pe.svelte";
-  import StepOther from "./registration/_step3-other.svelte";
-  import StepUser from "./registration/_step4-user.svelte";
-  import StepConfirm from "./registration/_step5-confirm.svelte";
+  import StepStructureSearch from "./registration/_step1-structure-search.svelte";
+  import StepUser from "./registration/_step2-user.svelte";
+  import StepConfirm from "./registration/_step3-confirm.svelte";
   import AuthLayout from "./_auth_layout.svelte";
 
   const siret = $page.url.searchParams.get("siret");
+
   const steps = new Map([
-    [1, StepTypology],
-    [2, StepPoleEmploi],
-    [3, StepOther],
-    [4, StepUser],
-    [5, StepConfirm],
+    [1, StepStructureSearch],
+    [2, StepUser],
+    [3, StepConfirm],
   ]);
 
-  let currentStep = siret ? 3 : 1;
+  let currentStep = 1;
 
   $: currentStepComponent = steps.get(currentStep);
 </script>
@@ -30,7 +27,7 @@
 
 <CenteredGrid topPadded>
   <div class="col-span-full col-start-1 mb-s48 text-center">
-    <h1 class="text-france-blue">Créer son compte DORA</h1>
+    <h1 class="text-france-blue">Création de compte</h1>
   </div>
 </CenteredGrid>
 

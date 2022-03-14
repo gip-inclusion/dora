@@ -10,7 +10,8 @@ const phoneRegexp = /^\d{10}$/u;
 
 const postalCodeRegexp = /^\d[0-9abAB]\d{3}$/u;
 
-const safirRegexp = /^\d{5}$/u;
+export const safirRegexp = /^\d{5}$/u;
+export const siretRegexp = /^\d{14}$/u;
 /* eslint-enable */
 
 // ----- Rules
@@ -97,7 +98,7 @@ export function isSafir(msg) {
 export function isSiret(msg) {
   return (name, value, _data) => ({
     valid:
-      typeof value === "string" && (value === "" || !!value.match(/^\d{14}$/u)),
+      typeof value === "string" && (value === "" || !!value.match(siretRegexp)),
     msg: msg || "Ce champ doit comporter 14 chiffres",
   });
 }

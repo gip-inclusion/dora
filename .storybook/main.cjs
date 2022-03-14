@@ -28,7 +28,7 @@ module.exports = {
     // bug en production :
     // `Uncaught Error: Singleton client API not yet initialized, cannot call addParameters`
     // github.com/storybookjs/storybook/issues/10887#issuecomment-901109891
-    https: config.resolve.dedupe = ["@storybook/client-api"];
+    config.resolve.dedupe = ["@storybook/client-api"];
 
     return config;
   },

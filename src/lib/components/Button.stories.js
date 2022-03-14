@@ -43,7 +43,7 @@ export const Default = Template.bind({});
 Default.args = {
   label: "Button label",
   name: "Button label",
-  small: false,
+  small: true,
   flashSuccess: false,
   noPadding: false,
 };

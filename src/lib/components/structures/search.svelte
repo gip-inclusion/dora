@@ -1,43 +1,57 @@
 <script>
   import Tabs from "$lib/components/tabs.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import SearchBySiret from "$lib/components/structures/search-by-siret.svelte";
-
   import SearchByCommune from "$lib/components/structures/search-by-commune.svelte";
+  import SearchBySiret from "$lib/components/structures/search-by-siret.svelte";
+  import SearchBySafir from "$lib/components/structures/search-by-safir.svelte";
+  import Button from "../button.svelte";
+  import Toggle from "../toggle.svelte";
 
   export let onCityChange = null;
   export let onEstablishmentChange = null;
+  export let onValidate = null;
+  export let establishment = null;
+  export let hasValidation = false;
+  export let hasSafir = false;
+  export let siret = "";
 
-  export let establishment = {};
+  export let tabId = "nom";
 
   function handleCityChange(newCity) {
-    establishment = {};
+    establishment = null;
 
     if (onCityChange) onCityChange(newCity);
   }
 
   async function handleEstablishmentChange(newEstablishment) {
     establishment = newEstablishment;
+
     if (onEstablishmentChange) onEstablishmentChange(newEstablishment);
   }
 
-  let structureSearchTabId = "nom";
-  const structureSearchTabs = [
+  function handleTabChange(newTab) {
+    establishment = null;
+    tabId = newTab;
+
+    if (onEstablishmentChange) onEstablishmentChange(establishment);
+  }
+
+  let hasCheckedConsent = false;
+  const tabs = [
     { id: "nom", name: "Nom" },
     { id: "siret", name: "Siret" },
   ];
 
-  function handleSelectedTabChange(newTab) {
-    establishment = {};
-    structureSearchTabId = newTab;
+  if (hasSafir) {
+    tabs.push({ id: "safir", name: "Safir" });
+  }
+
+  if (siret) {
+    tabId = "siret";
   }
 </script>
 
-<FieldSet
-  title="Identifiez la structure"
-  headerBg="bg-france-blue"
-  noHeaderBorder
->
+<FieldSet title="Structure" headerBg="bg-france-blue" noHeaderBorder>
   <div slot="description">
     <p class="text-f14 text-white">
       Choisissez une méthode d'identification. En cas de doute, <a
@@ -46,17 +60,20 @@
       >.
     </p>
 
-    <Tabs
-      items={structureSearchTabs}
-      onSelectedChange={handleSelectedTabChange}
-      itemId={structureSearchTabId}
-    />
+    <Tabs items={tabs} onSelectedChange={handleTabChange} itemId={tabId} />
   </div>
 
-  {#if structureSearchTabId === "siret"}
-    <SearchBySiret onEstablishmentChange={handleEstablishmentChange} />
-  {:else if structureSearchTabId === "nom"}
+  {#if tabId === "siret"}
+    <SearchBySiret onEstablishmentChange={handleEstablishmentChange} {siret} />
+  {:else if tabId === "nom"}
     <SearchByCommune
+      bind:establishment
+      onEstablishmentChange={handleEstablishmentChange}
+      onCityChange={handleCityChange}
+    />
+  {:else if hasSafir && tabId === "safir"}
+    <SearchBySafir
+      bind:establishment
       onEstablishmentChange={handleEstablishmentChange}
       onCityChange={handleCityChange}
     />
@@ -71,6 +88,32 @@
       <div class="legend">
         {establishment.postalCode}
         {establishment.city}
+      </div>
+    </div>
+  {/if}
+
+  {#if establishment?.siret && hasValidation}
+    <div class="mt-s24">
+      <div class="flex">
+        <Toggle
+          toggleYesText=""
+          toggleNoText=""
+          bind:checked={hasCheckedConsent}
+        />
+        <div class="legend">
+          En cochant cette case, je déclare faire partie de la structure
+          mentionnée ci-dessus et j’atteste connaître les risques encourus en
+          cas de faux et d’usage de faux.
+        </div>
+      </div>
+
+      <div class="mt-s24 flex justify-end">
+        <Button
+          label="Adhérer à la structure"
+          disabled={!hasCheckedConsent}
+          on:click={onValidate}
+          preventDefaultOnMouseDown
+        />
       </div>
     </div>
   {/if}
