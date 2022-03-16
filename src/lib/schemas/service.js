@@ -13,17 +13,17 @@ const shape1 = {
   category: {
     default: "",
     required: true,
-    rules: [v.isString(), v.maxStrLength(2)],
+    rules: [v.isString(), v.maxStrLength(255)],
   },
   subcategories: {
     default: [],
     required: false,
-    rules: [v.isArray([v.isString(), v.maxStrLength(100)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   kinds: {
     default: [],
     required: true,
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)]), v.arrNotEmpty()],
   },
   name: {
     default: "",
@@ -82,7 +82,7 @@ const shape2 = {
 const shape3 = {
   beneficiariesAccessModes: {
     default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   beneficiariesAccessModesOther: {
     default: "",
@@ -100,7 +100,7 @@ const shape3 = {
   coachOrientationModes: {
     default: [],
     required: true,
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)]), v.arrNotEmpty()],
   },
   coachOrientationModesOther: {
     default: "",
@@ -155,7 +155,7 @@ const shape4 = {
   locationKinds: {
     default: [],
     required: true,
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)]), v.arrNotEmpty()],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)]), v.arrNotEmpty()],
   },
   remoteUrl: {
     default: "",
@@ -276,13 +276,13 @@ export const draftServiceSchema = {
     post: [v.trim],
   },
   category: {
-    rules: [v.isString(), v.maxStrLength(2)],
+    rules: [v.isString(), v.maxStrLength(255)],
   },
   subcategories: {
-    rules: [v.isArray([v.isString(), v.maxStrLength(100)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   kinds: {
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   shortDesc: {
     rules: [v.isString(), v.maxStrLength(280)],
@@ -315,13 +315,13 @@ export const draftServiceSchema = {
   },
 
   beneficiariesAccessModes: {
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   beneficiariesAccessModesOther: {
     rules: [v.isString(), v.maxStrLength(280)],
   },
   coachOrientationModes: {
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   coachOrientationModesOther: {
     rules: [v.isString(), v.maxStrLength(280)],
@@ -355,7 +355,7 @@ export const draftServiceSchema = {
   },
 
   locationKinds: {
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   remoteUrl: {
     rules: [v.isURL(), v.maxStrLength(200)],

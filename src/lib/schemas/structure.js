@@ -15,7 +15,7 @@ export default {
   typology: {
     default: "",
     required: true,
-    rules: [v.isString(), v.maxStrLength(10)],
+    rules: [v.isString(), v.maxStrLength(255)],
   },
   address1: {
     default: "",

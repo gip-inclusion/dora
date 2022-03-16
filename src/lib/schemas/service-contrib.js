@@ -27,16 +27,16 @@ const shape1 = {
   category: {
     default: "",
     required: true,
-    rules: [v.isString(), v.maxStrLength(2)],
+    rules: [v.isString(), v.maxStrLength(255)],
   },
   subcategories: {
     default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(100)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   kinds: {
     default: [],
     required: true,
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
 };
 
@@ -91,7 +91,7 @@ const shape2 = {
 
   locationKinds: {
     default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(2)])],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   remoteUrl: {
     default: "",
