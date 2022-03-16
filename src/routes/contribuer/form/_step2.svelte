@@ -185,7 +185,7 @@
     placeholder="https://"
     type="url"
     label="Lien visioconférence"
-    visible={service.locationKinds.includes("RE")}
+    visible={service.locationKinds.includes("a-distance")}
     schema={serviceSchema.remoteUrl}
     name="remoteUrl"
     errorMessages={$formErrors.remoteUrl}

@@ -26,7 +26,7 @@
     </FieldHelp></ModelField
   >
   <ModelField
-    visible={service.beneficiariesAccessModes.includes("OT")}
+    visible={service.beneficiariesAccessModes.includes("autre")}
     hideLabel
     placeholder="Merci de préciser la modalité"
     type="text"
@@ -45,7 +45,7 @@
     bind:value={service.coachOrientationModes}
   />
   <ModelField
-    visible={service.coachOrientationModes.includes("OT")}
+    visible={service.coachOrientationModes.includes("autre")}
     hideLabel
     placeholder="Merci de préciser la modalité"
     type="text"

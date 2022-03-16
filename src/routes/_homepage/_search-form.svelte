@@ -13,19 +13,19 @@
   categoryChoices?.forEach((choice) => {
     if (
       [
-        "GL",
-        "FL",
-        "CR",
-        "FI",
-        "IL",
-        "DI",
-        "FA",
-        "RE",
-        "RI",
-        "EQ",
-        "HE",
-        "HA",
-        "JO",
+        "acc-global-indiv",
+        "apprendre-francais",
+        "creation-activite",
+        "difficultes-financieres",
+        "illettrisme",
+        "numerique",
+        "famille",
+        "remobilisation",
+        "acces-aux-droits",
+        "equipement-alimentation",
+        "sante",
+        "handicap",
+        "emploi",
       ].includes(choice.value)
     ) {
       choice.tags = ["nouv."];

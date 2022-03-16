@@ -223,7 +223,7 @@
         </div>
       </div>
     {/if}
-    {#if ["FA_CHILD", "FA_PARENT"].includes(subCategoryId)}
+    {#if ["famille--garde-enfants", "famille--accompagnement-parents"].includes(subCategoryId)}
       <SearchPromo />
     {/if}
   </div>

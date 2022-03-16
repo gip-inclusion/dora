@@ -60,7 +60,7 @@
       {#if !service.locationKinds.length}
         Non renseigné
       {:else}
-        {#if service.locationKinds.includes("OS")}
+        {#if service.locationKinds.includes("en-presentiel")}
           <h4 class="pt-s16 pb-s8">En présentiel</h4>
           <p class="pb-s16 text-f14">
             {service.address1}<br />
@@ -69,7 +69,7 @@
             {service.city}
           </p>
         {/if}
-        {#if service.locationKinds.includes("RE")}
+        {#if service.locationKinds.includes("a-distance")}
           <h4 class="pt-s16 pb-s8">À distance</h4>
           <p class="pb-s16 text-f14">
             <a target="_blank" rel="noopener nofollow" href={service.remoteUrl}

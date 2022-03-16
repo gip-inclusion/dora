@@ -90,7 +90,7 @@ const shape3 = {
       v.isString(),
       v.maxStrLength(280),
       (name, value, data) => ({
-        valid: data.beneficiariesAccessModes.includes("OT")
+        valid: data.beneficiariesAccessModes.includes("autre")
           ? !!value.length
           : true,
         msg: `Ce champ est requis`,
@@ -108,7 +108,7 @@ const shape3 = {
       v.isString(),
       v.maxStrLength(280),
       (name, value, data) => ({
-        valid: data.coachOrientationModes.includes("OT")
+        valid: data.coachOrientationModes.includes("autre")
           ? !!value.length
           : true,
         msg: `Ce champ est requis`,
@@ -168,7 +168,9 @@ const shape4 = {
       v.isString(),
       v.maxStrLength(255),
       (name, value, data) => ({
-        valid: data.locationKinds.includes("OS") ? !!value.length : true,
+        valid: data.locationKinds.includes("en-presentiel")
+          ? !!value.length
+          : true,
         msg: `Ce champ est requis`,
       }),
     ],
@@ -180,7 +182,9 @@ const shape4 = {
       v.isString(),
       v.maxStrLength(255),
       (name, value, data) => ({
-        valid: data.locationKinds.includes("OS") ? !!value.length : true,
+        valid: data.locationKinds.includes("en-presentiel")
+          ? !!value.length
+          : true,
         msg: `Ce champ est requis`,
       }),
     ],
@@ -197,7 +201,9 @@ const shape4 = {
     rules: [
       v.isPostalCode(),
       (name, value, data) => ({
-        valid: data.locationKinds.includes("OS") ? !!value.length : true,
+        valid: data.locationKinds.includes("en-presentiel")
+          ? !!value.length
+          : true,
         msg: `Ce champ est requis`,
       }),
     ],
