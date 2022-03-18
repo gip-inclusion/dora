@@ -32,125 +32,129 @@
           {suggestion.creator?.getFullName} ({suggestion.creator?.email})
         </SuggestionLine>
 
-        <SuggestionLine
-          label="Titre du service"
-          data={suggestion.serviceInfo.name}
-        />
+        {#if suggestion.serviceInfo.name}
+          <SuggestionLine
+            label="Titre du service"
+            data={suggestion.serviceInfo.name}
+          />
 
-        <SuggestionLine
-          label="Présentation résumée"
-          data={suggestion.serviceInfo.shortDesc}
-        />
+          <SuggestionLine
+            label="Présentation résumée"
+            data={suggestion.serviceInfo.shortDesc}
+          />
 
-        <SuggestionLine
-          label="Descriptif complet du service"
-          data={suggestion.serviceInfo.fullDesc}
-          verticalLayout
-        >
-          <div class="m-s16 border-l-8 border-gray-02 pl-s16">
-            {@html suggestion.serviceInfo.fullDesc}
-          </div>
-        </SuggestionLine>
+          <SuggestionLine
+            label="Descriptif complet du service"
+            data={suggestion.serviceInfo.fullDesc}
+            verticalLayout
+          >
+            <div class="m-s16 border-l-8 border-gray-02 pl-s16">
+              {@html suggestion.serviceInfo.fullDesc}
+            </div>
+          </SuggestionLine>
 
-        <SuggestionLine
-          label="Thématique"
-          data={suggestion.serviceInfo.categoryDisplay}
-        />
+          <SuggestionLine
+            label="Thématique"
+            data={suggestion.serviceInfo.categoryDisplay}
+          />
 
-        <SuggestionLine
-          label="Besoin(s) auxquels ce service répond"
-          data={suggestion.serviceInfo.subcategoriesDisplay}
-          isList
-        />
+          <SuggestionLine
+            label="Besoin(s) auxquels ce service répond"
+            data={suggestion.serviceInfo.subcategoriesDisplay}
+            isList
+          />
 
-        <SuggestionLine
-          label="Type de service"
-          data={suggestion.serviceInfo.kindsDisplay}
-          isList
-        />
+          <SuggestionLine
+            label="Type de service"
+            data={suggestion.serviceInfo.kindsDisplay}
+            isList
+          />
 
-        <SuggestionLine
-          label="Critères d’accès"
-          data={suggestion.serviceInfo.accessConditionsDisplay}
-          isList
-        />
+          <SuggestionLine
+            label="Critères d’accès"
+            data={suggestion.serviceInfo.accessConditionsDisplay}
+            isList
+          />
 
-        <SuggestionLine
-          label="Publics concernés"
-          data={suggestion.serviceInfo.concernedPublicDisplay}
-          isList
-        />
+          <SuggestionLine
+            label="Publics concernés"
+            data={suggestion.serviceInfo.concernedPublicDisplay}
+            isList
+          />
 
-        <SuggestionLine
-          label="Pré-requis"
-          data={suggestion.serviceInfo.requirementsDisplay}
-          isList
-        />
+          <SuggestionLine
+            label="Pré-requis"
+            data={suggestion.serviceInfo.requirementsDisplay}
+            isList
+          />
 
-        <SuggestionLine
-          label="Service cumulable"
-          data={suggestion.serviceInfo.isCumulative}
-          isBool
-        />
+          <SuggestionLine
+            label="Service cumulable"
+            data={suggestion.serviceInfo.isCumulative}
+            isBool
+          />
 
-        <SuggestionLine
-          label="Frais à charge du bénéficiaire"
-          data={suggestion.serviceInfo.hasFee}
-          isBool
-        />
+          <SuggestionLine
+            label="Frais à charge du bénéficiaire"
+            data={suggestion.serviceInfo.hasFee}
+            isBool
+          />
 
-        <SuggestionLine
-          label="Détail des frais"
-          verticalLayout
-          data={suggestion.serviceInfo.feeDetails}
-        >
-          <div class="m-s16 border-l-8 border-gray-02 pl-s16">
-            {suggestion.serviceInfo.feeDetails}
-          </div>
-        </SuggestionLine>
+          <SuggestionLine
+            label="Détail des frais"
+            verticalLayout
+            data={suggestion.serviceInfo.feeDetails}
+          >
+            <div class="m-s16 border-l-8 border-gray-02 pl-s16">
+              {suggestion.serviceInfo.feeDetails}
+            </div>
+          </SuggestionLine>
 
-        <SuggestionLine
-          label="Nom du contact"
-          data={suggestion.serviceInfo.contactName}
-        />
+          <SuggestionLine
+            label="Nom du contact"
+            data={suggestion.serviceInfo.contactName}
+          />
 
-        <SuggestionLine
-          label="Numéro de téléphone"
-          data={suggestion.serviceInfo.contactPhone}
-        />
+          <SuggestionLine
+            label="Numéro de téléphone"
+            data={suggestion.serviceInfo.contactPhone}
+          />
 
-        <SuggestionLine
-          label="Courriel"
-          data={suggestion.serviceInfo.contactEmail}
-        />
+          <SuggestionLine
+            label="Courriel"
+            data={suggestion.serviceInfo.contactEmail}
+          />
 
-        <SuggestionLine
-          label="Lieu de déroulement"
-          data={suggestion.serviceInfo.locationKindsDisplay}
-          isList
-        />
+          <SuggestionLine
+            label="Lieu de déroulement"
+            data={suggestion.serviceInfo.locationKindsDisplay}
+            isList
+          />
 
-        <SuggestionLine
-          label="Lien visioconférence"
-          data={suggestion.serviceInfo.remoteUrl}
-        />
+          <SuggestionLine
+            label="Lien visioconférence"
+            data={suggestion.serviceInfo.remoteUrl}
+          />
 
-        <SuggestionLine label="Ville" data={suggestion.serviceInfo.city} />
+          <SuggestionLine label="Ville" data={suggestion.serviceInfo.city} />
 
-        <SuggestionLine
-          label="Adresse"
-          data={suggestion.serviceInfo.address1}
-        />
+          <SuggestionLine
+            label="Adresse"
+            data={suggestion.serviceInfo.address1}
+          />
 
-        <SuggestionLine
-          label="Complément d’adresse"
-          data={suggestion.serviceInfo.address2}
-        />
+          <SuggestionLine
+            label="Complément d’adresse"
+            data={suggestion.serviceInfo.address2}
+          />
 
-        <SuggestionLine
-          label="Code postal"
-          data={suggestion.serviceInfo.postalCode}
-        />
+          <SuggestionLine
+            label="Code postal"
+            data={suggestion.serviceInfo.postalCode}
+          />
+        {:else}
+          Contenu invalide
+        {/if}
       </div>
 
       <div class="mt-s32 flex flex-row justify-end gap-s16">
