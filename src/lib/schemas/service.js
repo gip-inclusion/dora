@@ -139,7 +139,7 @@ const shape4 = {
   },
   contactPhone: {
     default: "",
-    pre: [v.removeAllSpaces],
+    pre: [v.removeAllNonDigits],
     rules: [v.isPhone()],
   },
   contactEmail: {
@@ -343,7 +343,7 @@ export const draftServiceSchema = {
     post: [v.trim],
   },
   contactPhone: {
-    pre: [v.removeAllSpaces],
+    pre: [v.removeAllNonDigits],
     rules: [v.isPhone()],
   },
   contactEmail: {

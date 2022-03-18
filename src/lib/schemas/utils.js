@@ -170,6 +170,10 @@ export function removeAllSpaces(value) {
   return value.replaceAll(" ", "");
 }
 
+export function removeAllNonDigits(value) {
+  return value.replace(/\D/gu, "");
+}
+
 // ----- Postprocessing
 export function lower(value) {
   return value.toLowerCase();

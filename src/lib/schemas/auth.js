@@ -165,7 +165,7 @@ export const userProfileSchema = {
   phoneNumber: {
     default: "",
     required: true,
-    pre: [v.removeAllSpaces],
+    pre: [v.removeAllNonDigits],
     rules: [v.isPhone()],
   },
   newsletter: {

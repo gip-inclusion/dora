@@ -40,7 +40,7 @@ export default {
   },
   phone: {
     default: "",
-    pre: [v.removeAllSpaces],
+    pre: [v.removeAllNonDigits],
     rules: [v.isPhone()],
   },
   email: {

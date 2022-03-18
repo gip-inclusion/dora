@@ -80,7 +80,7 @@ const shape2 = {
   },
   contactPhone: {
     default: "",
-    pre: [v.removeAllSpaces],
+    pre: [v.removeAllNonDigits],
     rules: [v.isPhone()],
   },
   contactEmail: {
