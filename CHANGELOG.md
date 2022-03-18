@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/betagouv/dora-front/compare/v0.0.5...v0.0.6) (2022-03-18)
+
+### Features
+
+- fiabilise la saisie des numéros de téléphone ([156119f](https://github.com/betagouv/dora-front/commit/156119f286c86663ca9eabbce252a66ff99d5459))
+- **inscription:** utilise le nouveau formulaire de recherche de structure ([#37](https://github.com/betagouv/dora-front/issues/37)) ([3b23c7e](https://github.com/betagouv/dora-front/commit/3b23c7e9ec5865f94da31de5bdc1e13a070e4c79))
+
+### Bug Fixes
+
+- fiabilise l'affichage des suggestions en cas de données incorrectes ([e395803](https://github.com/betagouv/dora-front/commit/e395803b1ede82e1920b4895419e829a217f6932))
+
 ### [0.0.5](https://github.com/betagouv/dora-front/compare/v0.0.4...v0.0.5) (2022-03-11)
 
 ### Features
