@@ -2,6 +2,10 @@
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Info from "$lib/components/info.svelte";
   import { registrationInfo } from "./_store.js";
+
+  // Ne pas supprimer cette ligne:
+  // le composant parent a besoin de binder cette valeur
+  export let currentStep;
 </script>
 
 <Fieldset title="Confirmation">
