@@ -17,6 +17,10 @@
   import ServicesList from "../_services-list.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   export let services;
+
+  async function handleRefresh() {
+    services = await getServices();
+  }
 </script>
 
 <svelte:head>
@@ -30,7 +34,12 @@
         <h2>Tous les services</h2>
       </div>
       <div class="border-t border-gray-03" />
-      <ServicesList {services} showStructure readOnly={!$userInfo?.isStaff} />
+      <ServicesList
+        {services}
+        onRefresh={handleRefresh}
+        showStructure
+        readOnly={!$userInfo?.isStaff}
+      />
     </div>
   </CenteredGrid>
 </EnsureStaffOrBizdev>
