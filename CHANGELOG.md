@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/betagouv/dora-front/compare/v0.0.6...v0.0.7) (2022-03-19)
+
+### Bug Fixes
+
+- acceptation d'une suggestion depuis la vue admin ([fcc2a9a](https://github.com/betagouv/dora-front/commit/fcc2a9a6de7c553e1c99f08a89a4d4dcc1bca232))
+- l'écran de confirmation de création de compte n'apparaissait plus ([dd02aea](https://github.com/betagouv/dora-front/commit/dd02aea0bc574b18d6539b13de3894948e746749))
+
 ### [0.0.6](https://github.com/betagouv/dora-front/compare/v0.0.5...v0.0.6) (2022-03-18)
 
 ### Features
