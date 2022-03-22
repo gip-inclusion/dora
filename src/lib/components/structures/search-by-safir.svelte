@@ -14,7 +14,7 @@
   export let onEstablishmentChange = null;
 
   let safirCode = "";
-  let searching = false;
+  let requesting = false;
   let safirIsValid = false;
 
   $: safirIsValid = !!safirCode.match(safirRegexp);
@@ -25,8 +25,6 @@
   };
 
   function handleSubmit(validatedData) {
-    searching = true;
-
     const url = `${getApiURL()}/search-safir/?safir=${validatedData.safirCode}`;
     return fetch(url, {
       headers: {
@@ -38,8 +36,6 @@
 
   function handleSuccess(result) {
     if (onEstablishmentChange) onEstablishmentChange(result);
-
-    searching = false;
   }
 </script>
 
@@ -49,6 +45,7 @@
   serverErrorsDict={serverErrors}
   onSubmit={handleSubmit}
   onSuccess={handleSuccess}
+  bind:requesting
 >
   {#if $formErrors.nonFieldErrors?.length}
     <div>
@@ -74,7 +71,7 @@
           bind:value={safirCode}
         />
       </div>
-      {#if searching}
+      {#if requesting}
         <p class="py-s12 px-s8 lg:px-s20">Chargement…</p>
       {:else}
         <Button label="Rechercher" disabled={!safirIsValid} type="submit" />

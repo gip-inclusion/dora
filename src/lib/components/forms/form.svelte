@@ -32,10 +32,12 @@
     const filteredSchema = Object.fromEntries(
       Object.entries(schema).filter(([name, _rules]) => name === fieldname)
     );
+
     const { validatedData, valid } = validate(data, filteredSchema, schema, {
       skipDependenciesCheck: false,
       noScroll: true,
     });
+
     if (valid && onChange) {
       onChange(validatedData);
     }
