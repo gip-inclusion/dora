@@ -164,7 +164,7 @@
         Abonnez-vous à notre lettre d’information
       </h3>
       <p class="max-w-2xl text-f12 leading-relaxed text-gray-dark">
-        En renseignant votre adresse électronique, vous acceptez de recevoir nos
+        En renseignant votre adresse courriel, vous acceptez de recevoir nos
         actualités par courriel. Vous pouvez vous désinscrire à tout moment à
         l’aide des liens de désinscription ou en <a
           target="_blank"

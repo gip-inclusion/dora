@@ -34,7 +34,7 @@
       </div>
     </div>
   </CenteredGrid>
-  <div class="hidden md:block">
+  <div class="hidden lg:block">
     <CenteredGrid bordertop>
       <TopLinks />
     </CenteredGrid>

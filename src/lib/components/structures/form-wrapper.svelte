@@ -82,7 +82,7 @@
         result = await createStructure(validatedData);
       }
       if (result?.ok) {
-        goto(`/tableau-de-bord/structures/${result.result.slug}`);
+        goto(`/structures/${result.result.slug}`);
       } else {
         injectAPIErrors(
           result.error || {
@@ -119,7 +119,7 @@
         bind:value={structure.siret}
         vertical
       >
-        <FieldHelp title="Completez les informations" slot="helptext">
+        <FieldHelp title="Complétez les informations" slot="helptext">
           <p>
             Vérifiez l’exactitude des informations récupérées et complétez les
             autres.
@@ -129,7 +129,7 @@
 
       <ModelField
         type="text"
-        label="Nom de la structure"
+        label="Nom"
         schema={structureSchema.name}
         name="name"
         errorMessages={$formErrors.name}
@@ -138,7 +138,7 @@
       />
       <ModelField
         type="select"
-        label="Typologie de la structure"
+        label="Typologie"
         placeholder="Sélectionner"
         schema={structureSchema.typologies}
         sortSelect
@@ -237,7 +237,7 @@
       />
       <ModelField
         type="richtext"
-        label="Présentez votre structure"
+        label="Présentation"
         description="Présentation résumée des missions de votre structure"
         placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre structure et ses spécificités."
         schema={structureSchema.fullDesc}
@@ -276,14 +276,14 @@
         vertical
       />
 
-      <div class="border-b border-gray-01" />
+      <div class="mb-s16 border-b border-gray-01" />
 
-      <div class="self-end">
+      <div class="flex justify-end">
         <Button
           on:submit
           name="validate"
           type="submit"
-          label="Validez les informations"
+          label="Valider"
           icon={arrowRightSIcon}
           iconOnRight
           preventDefaultOnMouseDown

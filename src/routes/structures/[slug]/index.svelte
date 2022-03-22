@@ -10,8 +10,10 @@
 </script>
 
 <script>
-  import LatestServices from "./_latest-services.svelte";
-  import StructurePres from "./_structure-pres.svelte";
+  import { userInfo } from "$lib/auth";
+
+  import ServicesList from "./services/_list.svelte";
+  import Informations from "./_informations.svelte";
 
   export let structure, services;
 </script>
@@ -21,5 +23,9 @@
   <meta name="description" content={structure.shortDesc} />
 </svelte:head>
 
-<StructurePres {structure} />
-<LatestServices {structure} services={services.slice(0, 3)} />
+<Informations {structure} />
+
+{#if !!services.length || structure.isMember || $userInfo.isStaff}
+  <div class="col-span-full mb-s24 border-b border-b-gray-03" />
+  <ServicesList {structure} services={services.slice(0, 3)} hasButton />
+{/if}

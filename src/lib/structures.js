@@ -39,16 +39,6 @@ export async function getStructures() {
   return (await fetchData(url)).data;
 }
 
-export async function getMyStructures() {
-  const url = `${getApiURL()}/structures/?mine=1`;
-  return (await fetchData(url)).data;
-}
-
-export async function getMyPendingStructures() {
-  const url = `${getApiURL()}/structures/?pending=1`;
-  return (await fetchData(url)).data;
-}
-
 export async function getStructure(slug) {
   const url = `${getApiURL()}/structures/${slug}/`;
   const result = (await fetchData(url)).data;

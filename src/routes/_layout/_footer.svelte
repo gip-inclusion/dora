@@ -18,11 +18,8 @@
     <div
       class="col-span-full col-start-1 text-f14 leading-normal text-gray-text lg:col-span-6 lg:col-start-7"
     >
-      Dora est un service public numérique qui permet aux structures de
-      l’insertion de référencer simplement et mettre à jour en temps réel leur
-      offre de services, et aux professionnels prescripteurs de rechercher et
-      mobiliser rapidement le service le plus adapté au besoin de leur
-      bénéficiaire.
+      Dora, le service public numérique de recensement et mise à jour de l’offre
+      d’insertion.
       <div class="mt-s16 flex flex-wrap gap-x-s24 gap-y-s8 font-bold">
         <a target="_blank" rel="noopener" href="https://gouvernement.fr"
           >gouvernement.fr</a

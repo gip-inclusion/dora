@@ -15,6 +15,7 @@
 
   export async function load() {
     await validateCredsAndFillUserInfo();
+
     return {};
   }
 </script>

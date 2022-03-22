@@ -3,7 +3,6 @@
   export let label = "";
   export let otherTab = false;
   export let disabled = false;
-  export let separator = false;
   export let externalIcon = false;
   export let light = false;
   export let href;
@@ -11,10 +10,9 @@
 </script>
 
 <a
-  class="flex flex-row items-center rounded py-s8 text-f14 outline-none"
+  class="flex flex-row justify-between py-s8 text-f14 lg:items-center lg:pr-s32"
   class:text-gray-text-alt2={light}
   class:text-gray-dark={!light}
-  class:pr-s32={!separator}
   on:click
   {href}
   target={otherTab ? "_blank" : ""}
@@ -26,8 +24,5 @@
     <div class="ml-s8 h-s16 w-s16 fill-current">
       {@html externalLinkIcon}
     </div>
-  {/if}
-  {#if separator}
-    <div class="mx-s16 h-s16 border-l border-gray-03" />
   {/if}
 </a>

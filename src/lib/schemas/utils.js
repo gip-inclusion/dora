@@ -62,7 +62,7 @@ export function isEmail(msg) {
       typeof value === "string" && (value === "" || !!value.match(emailRegexp)),
     msg:
       msg ||
-      `Veuillez saisir une adresse e-mail valide (ex: nom.prenom@organisation.fr)`,
+      `Veuillez saisir une adresse courriel valide (ex: nom.prenom@organisation.fr)`,
   });
 }
 

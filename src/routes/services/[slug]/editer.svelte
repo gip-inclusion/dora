@@ -1,14 +1,28 @@
 <script context="module">
+  import { get } from "svelte/store";
+
+  import { browser } from "$app/env";
+  import { userInfo } from "$lib/auth";
   import { getServicesOptions, getService } from "$lib/services";
-  import { getMyStructures } from "$lib/structures";
+  import { getStructures } from "$lib/structures";
 
   export async function load({ params }) {
+    const user = get(userInfo);
     const service = await getService(params.slug);
+
+    let structures = [];
+
+    if (browser && user.isStaff) {
+      structures = await getStructures();
+    } else if (browser && user) {
+      structures = user.structures;
+    }
+
     return {
       props: {
         service,
         servicesOptions: await getServicesOptions(),
-        structures: await getMyStructures(),
+        structures,
       },
     };
   }
@@ -16,7 +30,6 @@
 
 <script>
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-
   import ServiceFormWrapper from "../form/_service-form-wrapper.svelte";
 
   import Step1 from "../form/_step1.svelte";

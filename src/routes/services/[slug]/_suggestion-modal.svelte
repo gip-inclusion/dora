@@ -86,7 +86,7 @@
           type="email"
           bind:value={$suggesterEmail}
           required
-          placeholder="email_pro@e-mail.com"
+          placeholder="nom@exemple.org"
           autocomplete="email"
         />
       {/if}

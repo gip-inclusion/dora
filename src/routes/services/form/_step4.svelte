@@ -75,7 +75,7 @@
 {#await promise then structure}
   <FieldSet title="Contact">
     <ModelField
-      label="Nom du contact"
+      label="Prénom et Nom"
       placeholder="Prénom et nom"
       type="text"
       schema={serviceSchema.contactName}
@@ -95,8 +95,8 @@
     >
     <ModelField
       type="tel"
-      label="Numéro de téléphone"
-      placeholder="05 ou 06 00 00 00 00"
+      label="Téléphone"
+      placeholder="00 00 00 00 00"
       schema={serviceSchema.contactPhone}
       name="contactPhone"
       errorMessages={$formErrors.contactPhone}
@@ -105,7 +105,7 @@
     <ModelField
       type="email"
       label="Courriel"
-      placeholder="Votre adresse e-mail"
+      placeholder="nom@exemple.org"
       schema={serviceSchema.contactEmail}
       name="contactEmail"
       errorMessages={$formErrors.contactEmail}
@@ -176,7 +176,7 @@
         name="address1"
         disabled={!service.cityCode}
         cityCode={service.cityCode}
-        placeholder="Saisissez et validez votre adresse"
+        placeholder="3 rue du parc"
         initialValue={service.address1}
         handleChange={handleAddressChange}
       />
@@ -184,7 +184,7 @@
     <ModelField
       type="text"
       label="Complément d’adresse"
-      placeholder="Compléments d’adresse"
+      placeholder="batiment, escalier, etc."
       schema={serviceSchema.address2}
       name="address2"
       errorMessages={$formErrors.address2}
@@ -193,7 +193,7 @@
     <ModelField
       type="text"
       label="Code postal"
-      placeholder="Code postal"
+      placeholder="00000"
       schema={serviceSchema.postalCode}
       name="postalCode"
       errorMessages={$formErrors.postalCode}

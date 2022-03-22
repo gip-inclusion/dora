@@ -58,7 +58,7 @@
     nonFieldErrors: {
       // eslint-disable-next-line
       password_too_similar:
-        "Le mot de passe est trop semblable à votre nom ou à votre adresse email",
+        "Le mot de passe est trop semblable à votre nom ou à votre adresse courriel",
     },
   };
 

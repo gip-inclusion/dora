@@ -63,7 +63,7 @@
       <Info label="Vous avez rejoint la structure {structureName}" positiveMood>
         {#if !mustSetPassword}
           <p class="mb-s16">
-            Utilisez l’adresse e-mail et le mot de passe saisis lors de
+            Utilisez l’adresse courriel et le mot de passe saisis lors de
             l’inscription pour vous connecter.
           </p>
         {/if}

@@ -3,12 +3,12 @@
   import ButtonMenu from "./button-menu.svelte";
 </script>
 
-<div class="flex md:hidden">
+<div class="flex lg:hidden">
   <ButtonMenu icon={menuIcon}>
     <slot />
   </ButtonMenu>
 </div>
 
-<div class="hidden md:flex">
+<div class="hidden lg:flex">
   <slot />
 </div>

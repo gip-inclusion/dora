@@ -35,10 +35,9 @@ export async function fetchData(
   url,
   { acceptHeader = defaultAcceptHeader, kitFetch } = {}
 ) {
-  const headers = {
-    Accept: acceptHeader,
-  };
+  const headers = { Accept: acceptHeader };
   const tk = get(token);
+
   if (tk) {
     headers.Authorization = `Token ${tk}`;
   }
@@ -60,11 +59,15 @@ export function shortenString(str, length = 50) {
   if (str && str.length > length) {
     return `${str.slice(0, length)}…`;
   }
+
   return str;
 }
 
 export function getDepartmentFromCityCode(cityCode) {
-  if (cityCode == null) return null;
+  if (cityCode == null) {
+    return null;
+  }
+
   return cityCode.startsWith("97")
     ? cityCode.slice(0, 3)
     : cityCode.slice(0, 2);

@@ -11,7 +11,7 @@
 <Fieldset title="Confirmation">
   <Info label="Votre demande a été enregistrée" positiveMood>
     <p class="mb-s16">
-      Un e-mail vous a été envoyé à l’adresse <strong
+      Un courriel vous a été envoyé à l’adresse <strong
         >{$registrationInfo.email}</strong
       >. Cliquez sur le lien reçu afin de valider la création de votre compte.
     </p>

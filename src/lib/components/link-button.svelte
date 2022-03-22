@@ -27,9 +27,9 @@
   if (noPadding) {
     px = "";
   } else if (small) {
-    px = "px-s8 lg:px-s10";
+    px = "px-s16";
   } else {
-    px = "px-s8 lg:px-s20";
+    px = "px-s20";
   }
 
   let border, text, background;

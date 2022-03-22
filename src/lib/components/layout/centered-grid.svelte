@@ -6,9 +6,16 @@
   export let extraClass = "";
 </script>
 
-<div class="{extraClass} wrapper" class:top-padded={topPadded} class:sticky>
-  <div class="content" class:roundedbg class:bordertop>
-    <div class="centered-grid">
+<div class="{extraClass} wrapper" class:sticky>
+  <div
+    class="flex justify-center px-s16 md:px-s40"
+    class:roundedbg
+    class:bordertop
+  >
+    <div
+      class="centered-grid mx-auto grid gap-s24"
+      class:top-padded={topPadded}
+    >
       <slot />
     </div>
   </div>
@@ -20,19 +27,8 @@
     background-color: var(--col-under-bg, var(--col-bg));
   }
 
-  .content {
-    display: flex;
-    justify-content: center;
-    padding-right: var(--s16);
-    padding-left: var(--s16);
-  }
-
   .centered-grid {
-    display: grid;
-    margin: 0 auto;
-    column-gap: var(--s24);
     grid-template-columns: repeat(12, minmax(1px, 78px));
-    row-gap: 1.5rem;
   }
 
   .sticky {
@@ -56,8 +52,7 @@
   }
 
   .top-padded {
-    padding-top: var(--s56);
-    background-color: var(--col-bg);
+    padding-top: var(--s40);
   }
 
   @media print {
@@ -78,7 +73,7 @@
     }
   }
 
-  @screen md {
+  @screen lg {
     .roundedbg {
       background-color: var(--col-content-bg, var(--col-gray-bg));
       border-top-left-radius: var(--s40);

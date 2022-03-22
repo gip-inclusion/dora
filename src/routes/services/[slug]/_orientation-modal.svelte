@@ -173,7 +173,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
     </div>
     {#if service.contactEmail && showContact}
       <div class="action-line">
-        <Label label="Au clic, ouverture de votre client e-mail :" />
+        <Label label="Au clic, ouverture de votre client courriel :" />
         <LinkButton
           on:click={trackClick}
           label="Faire une demande"

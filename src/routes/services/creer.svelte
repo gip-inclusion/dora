@@ -1,19 +1,25 @@
 <script context="module">
   import { get } from "svelte/store";
-
-  import { getLastDraft, getServicesOptions } from "$lib/services";
-  import { getStructures, getMyStructures } from "$lib/structures";
-
   import { userInfo } from "$lib/auth";
 
+  import { getLastDraft, getServicesOptions } from "$lib/services";
+  import { getStructures } from "$lib/structures";
+
   export async function load() {
+    const user = get(userInfo);
+    let structures = [];
+
+    if (user?.isStaff) {
+      structures = await getStructures();
+    } else if (user) {
+      structures = user.structures;
+    }
+
     return {
       props: {
         lastDraft: await getLastDraft(),
         servicesOptions: await getServicesOptions(),
-        structures: get(userInfo)?.isStaff
-          ? await getStructures()
-          : await getMyStructures(),
+        structures,
       },
     };
   }

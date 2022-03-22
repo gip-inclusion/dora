@@ -77,12 +77,6 @@ const config = {
       48: "3rem",
       56: "3.5rem",
     },
-    screens: {
-      md: "576px",
-      lg: "768px",
-      xl: "1024px",
-      print: { raw: "print" },
-    },
     spacing: {
       s0: "0",
       s2: "0.125rem",

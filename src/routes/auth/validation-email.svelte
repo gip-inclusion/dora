@@ -52,7 +52,7 @@
     {#if validated}
       <Info label="Inscription complète !" positiveMood>
         <p class="mb-s16">
-          Utilisez l’adresse e-mail et le mot de passe saisis lors de
+          Utilisez l’adresse courriel et le mot de passe saisis lors de
           l’inscription pour vous connecter.
         </p>
       </Info>

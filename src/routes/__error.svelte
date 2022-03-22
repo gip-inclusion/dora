@@ -22,6 +22,7 @@
     if (browser) {
       plausible(`${status}`, { props: { path: document.location.pathname } });
     }
+
     if (!notFound) {
       const exc = new Error(error.message);
       exc.stack = error.stack;

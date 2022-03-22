@@ -63,6 +63,7 @@ export async function refreshUserInfo() {
 export async function validateCredsAndFillUserInfo() {
   token.set(null);
   userInfo.set(null);
+
   if (browser) {
     const lsToken = localStorage.getItem(tokenKey);
     if (lsToken) {
@@ -95,6 +96,7 @@ export function disconnect() {
 
 export function userInfoIsComplete() {
   const info = get(userInfo);
+
   return (
     !!info.email && !!info.firstName && !!info.lastName && !!info.phoneNumber
   );

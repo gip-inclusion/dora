@@ -2,8 +2,10 @@
   import NavItem from "$lib/components/nav-item.svelte";
 </script>
 
-<nav class="col-span-full flex flex-col text-right md:flex-row">
-  <NavItem href="/contribuer" label="Contribuer" />
+<nav
+  class="flex flex-col items-stretch px-s16 lg:col-span-full lg:flex-row lg:px-s0"
+>
+  <NavItem href="/contribuer" label="Contribuer…" />
   <NavItem
     href="https://documentation.dora.fabrique.social.gouv.fr"
     label="Documentation"

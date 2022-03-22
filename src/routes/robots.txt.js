@@ -2,7 +2,7 @@ import { ENVIRONMENT, CANONICAL_URL } from "$lib/env.js";
 
 const productionContent = `
 User-agent: *
-Disallow: /tableau-de-bord/
+Disallow: /mon-compte/
 Disallow: /auth/
 Sitemap: ${CANONICAL_URL}/sitemap.xml
 `.trim();

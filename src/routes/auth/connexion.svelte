@@ -55,6 +55,7 @@
     if (jsonResult.validUser) {
       setToken(jsonResult.token);
       await validateCredsAndFillUserInfo();
+
       goto(getNextPage() || "/");
     } else {
       invalidUser = true;
@@ -74,7 +75,7 @@
 
 <CenteredGrid topPadded>
   <div class="col-span-full col-start-1 mb-s48 text-center">
-    <h1 class="text-france-blue">Se connecter à DORA</h1>
+    <h1 class="text-france-blue">Connexion</h1>
   </div>
 </CenteredGrid>
 
@@ -87,10 +88,10 @@
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
   >
-    <Fieldset title="Accédez à votre compte">
+    <Fieldset title="Votre compte">
       {#if invalidUser}
         <Info
-          label="Votre adresse email n’a pas encore été validée"
+          label="Votre adresse courriel n’a pas encore été validée"
           negativeMood
         />
         <LinkButton

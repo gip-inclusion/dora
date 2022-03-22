@@ -15,7 +15,8 @@ const noSsrPaths = [
   "/auth",
   "/sentry-debug-client",
   "/services/creer",
-  "/tableau-de-bord",
+  "/structures/creer",
+  "/mon-compte",
 ];
 
 export async function handle({ event, resolve }) {
