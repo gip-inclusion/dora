@@ -13,12 +13,10 @@
   import HeaderMenu from "./_header-menu.svelte";
 
   let structures = [];
-  if ($userInfo) {
-    structures = structures.concat(
-      $userInfo.structures,
-      $userInfo.pendingStructures
-    );
-  }
+
+  $: structures = $userInfo
+    ? structures.concat($userInfo.structures, $userInfo.pendingStructures)
+    : [];
 </script>
 
 {#if browser}

@@ -6,6 +6,14 @@
   export async function load({ params }) {
     const slug = params.slug;
     const structure = await getStructure(slug);
+
+    if (!structure) {
+      return {
+        status: 404,
+        error: "Page Not Found",
+      };
+    }
+
     const info = get(userInfo);
     const canEdit = structure.isMember || info?.isStaff;
     const services = await getStructureServices(slug, {

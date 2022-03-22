@@ -25,7 +25,7 @@
 
 <Informations {structure} />
 
-{#if !!services.length || structure.isMember || $userInfo.isStaff}
+{#if !!services.length || structure.isMember || $userInfo?.isStaff}
   <div class="col-span-full mb-s24 border-b border-b-gray-03" />
   <ServicesList {structure} services={services.slice(0, 3)} hasButton />
 {/if}

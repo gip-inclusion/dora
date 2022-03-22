@@ -15,7 +15,7 @@
 <div class="col-span-full md:flex md:items-center md:justify-between">
   <h2 class="mb-s24 text-france-blue">Informations</h2>
 
-  {#if $token && (structure.isAdmin || $userInfo.isStaff)}
+  {#if $token && (structure.isAdmin || $userInfo?.isStaff)}
     <LinkButton
       to={`/structures/${structure.slug}/editer`}
       label="Modifier…"
