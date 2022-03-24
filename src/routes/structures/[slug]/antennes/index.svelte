@@ -10,7 +10,7 @@
 
 <script>
   import List from "./_list.svelte";
-  export let structure, antennes;
+  export let structure;
 </script>
 
 <svelte:head>
@@ -18,4 +18,4 @@
   <meta name="description" content={structure.shortDesc} />
 </svelte:head>
 
-<List {antennes} {structure} />
+<List branches={structure.branches} {structure} />
