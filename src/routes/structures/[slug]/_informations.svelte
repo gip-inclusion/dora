@@ -24,7 +24,7 @@
   {/if}
 </div>
 
-<div class="col-span-full mb-s24 lg:col-start-1 lg:col-end-5">
+<div class="col-span-full mb-s24 lg:col-start-1 lg:col-end-4">
   <p class="icon-label text-f14">
     <i class="icon mr-s8 text-magenta-cta">
       {@html mapPinIcon}
@@ -76,7 +76,7 @@
   </p>
 </div>
 
-<div class="col-span-full lg:col-start-6 lg:col-end-13">
+<div class="col-span-full lg:col-start-4 lg:col-end-11">
   <p class="mb-s24 font-bold text-gray-dark">{structure.shortDesc}</p>
   <p class="prose mb-s24">{@html structure.fullDesc}</p>
 </div>

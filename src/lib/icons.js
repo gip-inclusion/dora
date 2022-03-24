@@ -70,3 +70,7 @@ export { default as quillPenIcon } from "remixicon/icons/Design/quill-pen-line.s
 
 export { default as deleteBinIcon } from "remixicon/icons/System/delete-bin-line.svg?raw";
 export { default as linkIcon } from "remixicon/icons/Editor/link.svg?raw";
+export { default as checkboxCircleLine } from "remixicon/icons/System/checkbox-circle-line.svg?raw";
+export { default as alertLine } from "remixicon/icons/System/alert-line.svg?raw";
+export { default as closeCircleLine } from "remixicon/icons/System/close-circle-line.svg?raw";
+export { default as informationLine } from "remixicon/icons/System/information-line.svg?raw";

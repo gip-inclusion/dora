@@ -6,7 +6,7 @@
 
 <div class="wrapper">
   {#if title}
-    <div class="mb-s8 flex items-center text-f17 font-bold text-information">
+    <div class="mb-s8 flex items-center text-f17 font-bold text-info">
       <div class="mr-s8 h-s24 w-s24 fill-current">
         {@html icon || informationIcon}
       </div>

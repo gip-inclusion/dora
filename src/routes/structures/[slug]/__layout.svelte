@@ -1,7 +1,5 @@
 <script context="module">
-  import { get } from "svelte/store";
-  import { userInfo } from "$lib/auth";
-  import { getStructure, getStructureServices } from "$lib/structures";
+  import { getStructure } from "$lib/structures";
 
   export async function load({ params }) {
     const slug = params.slug;
@@ -14,20 +12,12 @@
       };
     }
 
-    const info = get(userInfo);
-    const canEdit = structure.isMember || info?.isStaff;
-    const services = await getStructureServices(slug, {
-      publishedOnly: !canEdit,
-    });
-
     return {
       props: {
         structure,
-        services,
       },
       stuff: {
         structure,
-        services,
       },
     };
   }
@@ -38,12 +28,15 @@
   import Header from "./_header.svelte";
 
   export let structure;
-  export let services;
 </script>
 
 <CenteredGrid --col-bg="var(--col-magenta-brand)" topPadded>
   <div class="col-span-full">
-    <Header {structure} hasServices={!!services?.length} />
+    <Header
+      {structure}
+      hasServices={!!structure?.services?.length}
+      hasBranches={!!structure?.branches?.length}
+    />
   </div>
 </CenteredGrid>
 

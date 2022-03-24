@@ -1,15 +1,14 @@
 <script>
   import LinkButton from "$lib/components/link-button.svelte";
+  import Notice from "$lib/components/notice.svelte";
 </script>
 
-<div class="lg:mb-s0">
-  <h4>Aidez-nous à améliorer DORA</h4>
+<Notice title="Aidez-nous à améliorer DORA">
   <p class="text-f14">
     Partagez votre expérience, des problèmes que vous rencontrez ou des
     propositions d’amélioration.
   </p>
-</div>
-<div class="self-end">
+
   <LinkButton
     to="https://itou.typeform.com/to/DPQOe5pP"
     label="Participer (3min.)…"
@@ -17,5 +16,6 @@
     nofollow
     small
     secondary
+    slot="button"
   />
-</div>
+</Notice>

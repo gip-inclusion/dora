@@ -100,7 +100,6 @@
 
     {#if canInviteMembers}
       <Button
-        to={`/structures/${structure.slug}/editer`}
         label="Inviter un collaborateur…"
         small
         on:click={() => (addUserModalIsOpen = true)}

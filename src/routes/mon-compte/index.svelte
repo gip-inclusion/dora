@@ -33,16 +33,12 @@
       <p>{$userInfo.email}</p>
     </div>
 
-    <div class="flex-1">
-      <div
-        class="mb-s24 rounded-md border border-gray-03 p-s24 lg:flex lg:flex-row lg:justify-between lg:gap-s16"
-      >
-        {#if !userInfoIsComplete()}
-          <UpdateProfileNotif />
-        {:else}
-          <ImproveDoraNotif />
-        {/if}
-      </div>
+    <div class="flex flex-1 flex-col gap-s24">
+      {#if !userInfoIsComplete()}
+        <UpdateProfileNotif />
+      {:else}
+        <ImproveDoraNotif />
+      {/if}
 
       {#if $userInfo.isStaff || $userInfo.isBizdev}
         <div class="mb-s24 rounded-md  border border-gray-03 p-s24">

@@ -4,11 +4,11 @@
 </script>
 
 <div
-  class="help rounded-r border-l-4 border-information bg-white px-s16 pt-s16 pb-s24"
+  class="help rounded-r border-l-4 border-info bg-white px-s16 pt-s16 pb-s24"
 >
   {#if title}
     <div
-      class="mb-s8 flex flex-row items-center text-f17 font-bold leading-normal text-information"
+      class="mb-s8 flex flex-row items-center text-f17 font-bold leading-normal text-info"
     >
       <div class="mr-s8 h-s24 w-s24 fill-current">
         {@html lightBulbIcon}

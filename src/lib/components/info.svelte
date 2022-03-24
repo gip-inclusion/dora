@@ -51,6 +51,6 @@
   }
 
   .left-border {
-    @apply border-l-4 border-information;
+    @apply border-l-4 border-info;
   }
 </style>

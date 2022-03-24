@@ -10,13 +10,12 @@
 
 <script>
   import List from "./_list.svelte";
-
-  export let structure;
+  export let structure, antennes;
 </script>
 
 <svelte:head>
-  <title>Services | {structure.name} | DORA</title>
+  <title>{structure.name} | Antennes | DORA</title>
   <meta name="description" content={structure.shortDesc} />
 </svelte:head>
 
-<List services={structure.services || []} {structure} />
+<List {antennes} {structure} />

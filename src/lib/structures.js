@@ -48,16 +48,6 @@ export async function getStructure(slug) {
   return result;
 }
 
-export async function getStructureServices(
-  structureSlug,
-  { publishedOnly = false } = {}
-) {
-  const url = `${getApiURL()}/services/?structure=${structureSlug}${
-    publishedOnly ? "&published=1" : ""
-  }`;
-  return (await fetchData(url)).data;
-}
-
 export async function createStructure(structure) {
   if (structure.fullDesc)
     structure.fullDesc = htmlToMarkdown(structure.fullDesc);

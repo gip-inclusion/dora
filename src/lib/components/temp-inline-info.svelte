@@ -19,9 +19,9 @@
 </script>
 
 {#if visible}
-  <div class="col-span-full flex justify-between bg-information-light p-s24">
+  <div class="col-span-full flex justify-between bg-info-light p-s24">
     <div>
-      <div class="mb-s16 text-f17 font-bold text-information">{label}</div>
+      <div class="mb-s16 text-f17 font-bold text-info">{label}</div>
       <div class="text-f14 text-gray-text">{description}</div>
     </div>
     <div class="flex items-baseline">
