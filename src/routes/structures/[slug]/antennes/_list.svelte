@@ -1,10 +1,18 @@
 <script>
+  import { API_URL, CANONICAL_URL } from "$lib/env";
   import { userInfo } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
   import StructureCard from "$lib/components/structures/card.svelte";
   import { addCircleIcon } from "$lib/icons";
   export let structure, branches;
   export let hasListLink = false;
+
+  $: structureFrontEndLink = `${CANONICAL_URL}/structures/${encodeURIComponent(
+    structure.slug
+  )}/collaborateurs`;
+  $: structureBackEndLink = `${API_URL}/admin/structures/structure/?q=${encodeURIComponent(
+    structure.slug
+  )}`;
 </script>
 
 <div class="col-span-full md:flex md:items-center md:justify-between">
@@ -28,7 +36,11 @@
       >
         <LinkButton
           label="Ajouter une antenne…"
-          to={`https://itou.typeform.com/to/IXADRw7j#id_user=${$userInfo.email}$id_structure=${structure.slug}`}
+          to={`https://itou.typeform.com/to/IXADRw7j#courriel_demandeur=${encodeURIComponent(
+            $userInfo.email
+          )}&lien_frontend=${encodeURIComponent(
+            structureFrontEndLink
+          )}&lien_backend=${encodeURIComponent(structureBackEndLink)}`}
           icon={addCircleIcon}
           noBackground
           otherTab
