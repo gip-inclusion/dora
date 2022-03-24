@@ -10,7 +10,7 @@ tarteaucitron.services.iframe = {
     "needConsent": true,
     "cookies": [],
     "js" () {
-        
+
         tarteaucitron.fallback(['tac_iframe'], (x) => {
             const frame_title = tarteaucitron.fixSelfXSS(x.getAttribute("title")),
                 width = x.getAttribute("width"),
@@ -22,7 +22,7 @@ tarteaucitron.services.iframe = {
         });
     },
     "fallback" () {
-        
+
         const id = 'iframe';
         tarteaucitron.fallback(['tac_iframe'], (elem) => {
             elem.style.width = `${elem.getAttribute('width')  }px`;
@@ -52,7 +52,7 @@ tarteaucitron.services.hotjar = {
     "needConsent": true,
     "cookies": ["hjClosedSurveyInvites", "_hjDonePolls", "_hjMinimizedPolls", "_hjDoneTestersWidgets", "_hjMinimizedTestersWidgets", "_hjDoneSurveys", "_hjIncludedInSample", "_hjShownFeedbackMessage", "_hjAbsoluteSessionInProgress", "_hjIncludeInPageviewSample", "_hjid"],
     "js" () {
-        
+
         if (tarteaucitron.user.hotjarId === undefined || tarteaucitron.user.HotjarSv === undefined) {
             return;
         }
@@ -66,5 +66,27 @@ tarteaucitron.services.hotjar = {
         const uri = 'https://static.hotjar.com/c/hotjar-';
         const extension = '.js?sv=';
         tarteaucitron.addScript(uri + window._hjSettings.hjid + extension + window._hjSettings.hjsv);
+    }
+};
+
+// crisp
+tarteaucitron.services.crisp = {
+    "key": "crisp",
+    "type": "other",
+    "name": "Crisp Chat",
+    "uri": "https://help.crisp.chat/en/article/crisp-chatbox-cookie-ip-policy-1147xor/",
+    "needConsent": false,
+    "cookies": ['crisp-client', '__cfduid'],
+    "js": function () {
+        "use strict";
+
+        if (tarteaucitron.user.crispID === undefined) {
+            return;
+        }
+
+        window.$crisp = [];
+        window.CRISP_WEBSITE_ID = tarteaucitron.user.crispID;
+
+        tarteaucitron.addScript('https://client.crisp.chat/l.js');
     }
 };
