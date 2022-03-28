@@ -98,7 +98,9 @@ export function isSafir(msg) {
 export function isSiret(msg) {
   return (name, value, _data) => ({
     valid:
-      typeof value === "string" && (value === "" || !!value.match(siretRegexp)),
+      value == null ||
+      (typeof value === "string" &&
+        (value === "" || !!value.match(siretRegexp))),
     msg: msg || "Ce champ doit comporter 14 chiffres",
   });
 }

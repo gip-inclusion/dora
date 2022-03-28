@@ -3,7 +3,6 @@ import * as v from "./utils";
 export default {
   siret: {
     default: "",
-    required: true,
     rules: [v.isSiret()],
   },
   name: {
