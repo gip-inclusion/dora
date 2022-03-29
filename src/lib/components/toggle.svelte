@@ -2,8 +2,8 @@
   // https://tailwindcomponents.com/component/toggle-button-1
 
   export let checked = undefined;
-  export let toggleYesText = "Oui";
-  export let toggleNoText = "Non";
+  export let toggleTextYes = "Oui";
+  export let toggleTextNo = "Non";
   export let disabled = false;
   export let readonly;
   export let name;
@@ -38,7 +38,7 @@
     class="toggle-circle absolute inset-y-s0 left-s0 h-s16 w-s16 shrink-0 rounded-full bg-gray-text-alt"
   />
   <div class="ml-s8 text-f14 text-gray-text">
-    {@html checked ? toggleYesText : toggleNoText}
+    {@html checked ? toggleTextYes : toggleTextNo}
   </div>
 </label>
 

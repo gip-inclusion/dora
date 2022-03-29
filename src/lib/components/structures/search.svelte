@@ -5,7 +5,6 @@
   import SearchBySiret from "$lib/components/structures/search-by-siret.svelte";
   import SearchBySafir from "$lib/components/structures/search-by-safir.svelte";
   import Button from "../button.svelte";
-  import Toggle from "../toggle.svelte";
 
   export let onCityChange = null;
   export let onEstablishmentChange = null;
@@ -36,7 +35,6 @@
     if (onEstablishmentChange) onEstablishmentChange(establishment);
   }
 
-  let hasCheckedConsent = false;
   const tabs = [
     { id: "nom", name: "Nom" },
     { id: "siret", name: "Siret" },
@@ -94,23 +92,15 @@
 
   {#if establishment?.siret && hasValidation}
     <div class="mt-s24">
-      <div class="flex">
-        <Toggle
-          toggleYesText=""
-          toggleNoText=""
-          bind:checked={hasCheckedConsent}
-        />
-        <div class="legend">
-          En cochant cette case, je déclare faire partie de la structure
-          mentionnée ci-dessus et j’atteste connaître les risques encourus en
-          cas de faux et d’usage de faux.
-        </div>
+      <div class="legend">
+        En cliquant sur <span class="italic">Adhérer à la structure</span>, je
+        déclare faire partie de la structure mentionnée ci-dessus et j’atteste
+        connaître les risques encourus en cas de faux et d’usage de faux.
       </div>
 
       <div class="mt-s24 flex justify-end">
         <Button
           label="Adhérer à la structure"
-          disabled={!hasCheckedConsent}
           on:click={onValidate}
           preventDefaultOnMouseDown
         />

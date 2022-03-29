@@ -77,7 +77,7 @@
 />
 
 {#if structure.isPendingMember}
-  <div class="mt-s24"><PendingNotice {structure} /></div>
+  <div class="mt-s24"><PendingNotice /></div>
 {/if}
 
 <div class="noprint mt-s24">

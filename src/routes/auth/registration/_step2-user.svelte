@@ -24,11 +24,8 @@
     },
   };
 
-  const toggleText =
-    "En cochant cette case je suis d’accord avec les <a target='_blank' rel='noopener' class='underline' href='https://documentation.dora.fabrique.social.gouv.fr/informations-legales/mentions-legales'>mentions légales</a> et l’utilisation de mes données afin de créer un compte sur la plateforme DORA.";
-
   const newsletterText =
-    "Je souhaite rester au courant de l'actualité de l'offre d'insertion de mon territoire : nouveaux services référencés, nouvelles structures, etc. Fréquence d'envoi : 1 courriel par semaine. Vous pouvez-vous désabonner à tout moment.";
+    "Je souhaite rester au courant de l’actualité de l’offre d’insertion de mon territoire : nouveaux services référencés, nouvelles structures, etc. Fréquence d’envoi : 1 courriel par semaine. Vous pouvez vous désabonner à tout moment, en cliquant sur le lien prévu à ce sujet à la fin de l’infolettre.";
 
   function handleSubmit(validatedData) {
     const url = `${getApiURL()}/auth/register-structure-and-user/`;
@@ -142,16 +139,14 @@
           vertical
           type="toggle"
           bind:value={$registrationInfo.newsletter}
-          toggleYesText={newsletterText}
-          toggleNoText={newsletterText}
+          toggleTextYes={newsletterText}
+          toggleTextNo={newsletterText}
           placeholder=""
         />
         <Field
           vertical
           type="toggle"
           bind:value={hasAgreedToLegalMentions}
-          toggleYesText={toggleText}
-          toggleNoText={toggleText}
           placeholder=""
         />
 
