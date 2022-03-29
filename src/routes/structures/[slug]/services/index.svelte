@@ -19,4 +19,8 @@
   <meta name="description" content={structure.shortDesc} />
 </svelte:head>
 
-<List services={structure.services || []} {structure} />
+<List
+  services={structure.services || []}
+  {structure}
+  total={structure.services.length}
+/>

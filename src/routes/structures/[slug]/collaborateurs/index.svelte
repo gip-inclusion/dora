@@ -2,45 +2,29 @@
   import { browser } from "$app/env";
   import { get } from "svelte/store";
   import { userInfo } from "$lib/auth";
-  import {
-    getStructure,
-    getMembers,
-    getPutativeMembers,
-  } from "$lib/structures";
+  import { getMembers, getPutativeMembers } from "$lib/structures";
 
-  export async function load({ params }) {
+  export async function load({ stuff }) {
     // sur le serveur, info est toujours null,
     // on retourne une 404 uniquement sur le client
     if (!browser) {
       return {};
     }
 
+    const structure = stuff.structure;
     const info = get(userInfo);
 
-    if (!info) {
+    const canSeeMembers = structure.isMember || info?.isBizdev || info?.isStaff;
+
+    if (!info || !structure || !canSeeMembers) {
       return {
         status: 404,
         error: "Page Not Found",
       };
     }
 
-    const slug = params.slug;
-    const structure = await getStructure(slug);
-    const isMember = info.structures.some((s) => (s.slug = slug));
-    const members = await getMembers(slug);
-    const isAdmin = members?.some(
-      (m) => m.user.email === info.email && m.isAdmin
-    );
-
-    if (!structure || !(isMember || info.isBizdev || info.isStaff)) {
-      return {
-        status: 404,
-        error: "Page Not Found",
-      };
-    }
-
-    const canSeeMembers = isAdmin || info?.isBizdev || info?.isStaff;
-    const putativeMembers = canSeeMembers ? await getPutativeMembers(slug) : [];
+    const members = await getMembers(structure.slug);
+    const putativeMembers = await getPutativeMembers(structure.slug);
 
     return {
       props: {
@@ -48,8 +32,8 @@
         members,
         putativeMembers,
         canSeeMembers,
-        canEditMembers: isAdmin || info?.isStaff,
-        canInviteMembers: isAdmin || info?.isStaff || info?.isBizdev,
+        canEditMembers: structure.isAdmin || info?.isStaff,
+        canInviteMembers: structure.isAdmin || info?.isStaff || info?.isBizdev,
       },
     };
   }

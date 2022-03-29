@@ -2,8 +2,7 @@
   import { getStructure } from "$lib/structures";
 
   export async function load({ params }) {
-    const slug = params.slug;
-    const structure = await getStructure(slug);
+    const structure = await getStructure(params.slug);
 
     if (!structure) {
       return {
@@ -32,11 +31,7 @@
 
 <CenteredGrid --col-bg="var(--col-magenta-brand)" topPadded>
   <div class="col-span-full">
-    <Header
-      {structure}
-      hasServices={!!structure?.services?.length}
-      hasBranches={!!structure?.branches?.length}
-    />
+    <Header {structure} />
   </div>
 </CenteredGrid>
 

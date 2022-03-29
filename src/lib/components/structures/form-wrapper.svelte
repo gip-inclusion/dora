@@ -3,7 +3,11 @@
 
   import { goto } from "$app/navigation";
 
-  import { modifyStructure, createStructure } from "$lib/structures.js";
+  import {
+    modifyStructure,
+    createStructure,
+    getStructure,
+  } from "$lib/structures.js";
   import ModelField from "$lib/components/forms/model-field.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
@@ -81,7 +85,11 @@
       } else {
         result = await createStructure(validatedData);
       }
+
       if (result?.ok) {
+        if (modify) {
+          structure = await getStructure(structure.slug);
+        }
         goto(`/structures/${result.result.slug}`);
       } else {
         injectAPIErrors(

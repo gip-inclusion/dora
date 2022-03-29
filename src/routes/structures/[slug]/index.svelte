@@ -10,11 +10,11 @@
 
 <script>
   import { userInfo } from "$lib/auth";
+  import { getStructure } from "$lib/structures";
 
   import Informations from "./_informations.svelte";
   import ServicesList from "./services/_list.svelte";
   import BranchesList from "./antennes/_list.svelte";
-  import { getStructure } from "$lib/structures";
 
   export let structure;
 
@@ -37,10 +37,11 @@
     services={structure.services.slice(0, 3)}
     hasListLink
     onRefresh={handleRefresh}
+    total={structure.services.length}
   />
 {/if}
 
-{#if !!structure.branches?.length || structure.isAdmin || $userInfo?.isStaff}
+{#if !structure.parent && (structure.branches?.length || structure.isAdmin || $userInfo?.isStaff)}
   <div class="col-span-full mb-s24 border-b border-b-gray-03" />
   <BranchesList
     {structure}

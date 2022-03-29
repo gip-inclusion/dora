@@ -5,7 +5,7 @@
   import ServiceCard from "$lib/components/services/card.svelte";
   import { addCircleIcon } from "$lib/icons";
 
-  export let structure, services;
+  export let structure, services, total;
   export let hasListLink = false;
   export let onRefresh;
   const canEdit = structure.isMember || $userInfo?.isStaff;
@@ -22,7 +22,7 @@
   <div class="flex gap-s16">
     {#if !!services.length && hasListLink}
       <LinkButton
-        label={`Voir tous les services (${services.length})`}
+        label={`Voir tous les services (${total})`}
         to="/structures/{structure.slug}/services"
         small
         secondary

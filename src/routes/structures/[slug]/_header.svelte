@@ -8,8 +8,49 @@
 
   export let structure;
   export let tabId = "informations";
-  export let hasServices = false;
-  export let hasBranches = false;
+
+  let tabs = [];
+
+  $: {
+    tabs = [
+      {
+        id: "informations",
+        name: "Informations",
+        href: `/structures/${structure.slug}/`,
+      },
+    ];
+
+    if (
+      !structure.parent &&
+      (structure.branches?.length || structure.isAdmin || $userInfo?.isStaff)
+    ) {
+      tabs.splice(1, 0, {
+        id: "antennes",
+        name: "Antennes",
+        href: `/structures/${structure.slug}/antennes`,
+      });
+    }
+
+    if (
+      !!structure.services?.length ||
+      structure.isMember ||
+      $userInfo?.isStaff
+    ) {
+      tabs.splice(1, 0, {
+        id: "services",
+        name: "Services",
+        href: `/structures/${structure.slug}/services`,
+      });
+    }
+
+    if (structure.isMember || $userInfo?.isStaff || $userInfo?.isBizdev) {
+      tabs.splice(1, 0, {
+        id: "collaborateurs",
+        name: "Collaborateurs",
+        href: `/structures/${structure.slug}/collaborateurs`,
+      });
+    }
+  }
 
   $: {
     if ($page.url.pathname.endsWith("/services")) {
@@ -21,38 +62,6 @@
     } else {
       tabId = "informations";
     }
-  }
-
-  const tabs = [
-    {
-      id: "informations",
-      name: "Informations",
-      href: `/structures/${structure.slug}/`,
-    },
-  ];
-
-  if (hasBranches || structure.isMember || $userInfo?.isStaff) {
-    tabs.splice(1, 0, {
-      id: "antennes",
-      name: "Antennes",
-      href: `/structures/${structure.slug}/antennes`,
-    });
-  }
-
-  if (hasServices || structure.isMember || $userInfo?.isStaff) {
-    tabs.splice(1, 0, {
-      id: "services",
-      name: "Services",
-      href: `/structures/${structure.slug}/services`,
-    });
-  }
-
-  if (structure.isMember || $userInfo?.isStaff || $userInfo?.isBizdev) {
-    tabs.splice(1, 0, {
-      id: "collaborateurs",
-      name: "Collaborateurs",
-      href: `/structures/${structure.slug}/collaborateurs`,
-    });
   }
 </script>
 
