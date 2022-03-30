@@ -15,7 +15,7 @@
   let structures = [];
 
   $: structures = $userInfo
-    ? structures.concat($userInfo.structures, $userInfo.pendingStructures)
+    ? [...$userInfo.structures, ...$userInfo.pendingStructures]
     : [];
 </script>
 

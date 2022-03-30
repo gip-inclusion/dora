@@ -14,9 +14,9 @@
     const structure = stuff.structure;
     const info = get(userInfo);
 
-    const canSeeMembers = structure.isMember || info?.isBizdev || info?.isStaff;
+    const canEditMembers = structure.isAdmin || info?.isBizdev || info?.isStaff;
 
-    if (!info || !structure || !canSeeMembers) {
+    if (!info || !structure || !canEditMembers) {
       return {
         status: 404,
         error: "Page Not Found",
@@ -31,9 +31,6 @@
         structure,
         members,
         putativeMembers,
-        canSeeMembers,
-        canEditMembers: structure.isAdmin || info?.isStaff,
-        canInviteMembers: structure.isAdmin || info?.isStaff || info?.isBizdev,
       },
     };
   }
@@ -48,7 +45,6 @@
   import MemberStandard from "./_member_standard.svelte";
 
   export let structure, members, putativeMembers;
-  export let canSeeMembers, canEditMembers, canInviteMembers;
   let addUserModalIsOpen = false;
 
   async function handleRefreshMemberList() {
@@ -82,16 +78,14 @@
   <div class="col-span-full md:flex md:items-center md:justify-between">
     <h2 class="mb-s24 text-france-blue">Collaborateurs</h2>
 
-    {#if canInviteMembers}
-      <Button
-        label="Inviter un collaborateur…"
-        small
-        on:click={() => (addUserModalIsOpen = true)}
-      />
-    {/if}
+    <Button
+      label="Inviter un collaborateur…"
+      small
+      on:click={() => (addUserModalIsOpen = true)}
+    />
   </div>
 
-  {#if canSeeMembers && members}
+  {#if members}
     <div class="col-span-full mt-s32 mb-s32 flex flex-col gap-s8">
       {#if putativeMembers}
         {#each sortedMembers(putativeMembers) as member}
@@ -99,13 +93,13 @@
             <MemberInvited
               {member}
               onRefresh={handleRefreshMemberList}
-              readOnly={!canEditMembers}
+              readOnly="false"
             />
           {:else}
             <MemberToConfirm
               {member}
               onRefresh={handleRefreshMemberList}
-              readOnly={!canEditMembers}
+              readOnly="false"
             />
           {/if}
         {/each}
@@ -117,7 +111,7 @@
           isMyself={member.user.email === $userInfo.email}
           isOnlyAdmin={member.user.email === $userInfo.email &&
             members.filter((m) => m.isAdmin).length === 1}
-          readOnly={!canEditMembers}
+          readOnly="false"
         />
       {/each}
     </div>

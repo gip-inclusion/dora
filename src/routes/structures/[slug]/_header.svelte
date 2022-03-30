@@ -20,10 +20,7 @@
       },
     ];
 
-    if (
-      !structure.parent &&
-      (structure.branches?.length || structure.isAdmin || $userInfo?.isStaff)
-    ) {
+    if (!structure.parent && structure.branches?.length) {
       tabs.splice(1, 0, {
         id: "antennes",
         name: "Antennes",
@@ -43,7 +40,7 @@
       });
     }
 
-    if (structure.isMember || $userInfo?.isStaff || $userInfo?.isBizdev) {
+    if (structure.isAdmin || $userInfo?.isStaff || $userInfo?.isBizdev) {
       tabs.splice(1, 0, {
         id: "collaborateurs",
         name: "Collaborateurs",
