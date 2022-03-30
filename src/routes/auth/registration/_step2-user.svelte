@@ -14,7 +14,6 @@
 
   export let currentStep;
   let requesting = false;
-  let hasAgreedToLegalMentions = false;
 
   const serverErrors = {
     // eslint-disable-next-line
@@ -143,17 +142,11 @@
           toggleTextNo={newsletterText}
           placeholder=""
         />
-        <Field
-          vertical
-          type="toggle"
-          bind:value={hasAgreedToLegalMentions}
-          placeholder=""
-        />
 
         <Button
           type="submit"
           label="Demandez votre accès"
-          disabled={!hasAgreedToLegalMentions || requesting}
+          disabled={requesting}
           preventDefaultOnMouseDown
         />
       </div></Fieldset

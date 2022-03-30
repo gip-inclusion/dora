@@ -25,7 +25,7 @@
 <EnsureLoggedIn>
   <div class="col-span-8 col-start-1 mb-s32">
     <StructureFormWrapper
-      {structure}
+      bind:structure
       {structuresOptions}
       modify
       formTitle="Informations"

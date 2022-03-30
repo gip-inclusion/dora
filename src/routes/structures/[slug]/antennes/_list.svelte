@@ -4,7 +4,7 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import StructureCard from "$lib/components/structures/card.svelte";
   import { addCircleIcon } from "$lib/icons";
-  export let structure, branches;
+  export let structure, branches, total;
   export let hasListLink = false;
 
   $: structureFrontEndLink = `${CANONICAL_URL}/structures/${encodeURIComponent(
@@ -20,7 +20,7 @@
   <div class="flex gap-s16">
     {#if !!branches.length && hasListLink}
       <LinkButton
-        label={`Voir toutes les antennes (${branches.length})`}
+        label={`Voir toutes les antennes (${total})`}
         to="/structures/{structure.slug}/antennes"
         small
         secondary

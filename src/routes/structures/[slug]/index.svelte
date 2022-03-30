@@ -45,7 +45,8 @@
   <div class="col-span-full mb-s24 border-b border-b-gray-03" />
   <BranchesList
     {structure}
-    branches={structure.branches?.slice(0, 3) || []}
+    branches={structure.branches.slice(0, 3) || []}
     hasListLink
+    total={structure.branches.length}
   />
 {/if}

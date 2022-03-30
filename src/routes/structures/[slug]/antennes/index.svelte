@@ -18,4 +18,8 @@
   <meta name="description" content={structure.shortDesc} />
 </svelte:head>
 
-<List branches={structure.branches} {structure} />
+<List
+  branches={structure.branches}
+  {structure}
+  total={structure.branches.length}
+/>
