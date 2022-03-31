@@ -5,7 +5,7 @@
   import List from "./_list.svelte";
 
   async function handleRefresh() {
-    $structure = await getStructure(structure.slug);
+    $structure = await getStructure($structure.slug);
   }
 </script>
 

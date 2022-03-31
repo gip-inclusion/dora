@@ -22,12 +22,20 @@
     <h4><a href="/services/{service.slug}">{service.name}</a></h4>
 
     <Tag selfStart>{service.categoryDisplay}</Tag>
-    {#if service.postalCode || service.city}
+
+    {#if service.diffusionZoneDetailsDisplay}
       <Label
-        label={`${service.postalCode}, ${service.city}`}
+        label={`${service.diffusionZoneDetailsDisplay}`}
         smallIcon
         icon={mapPinIcon}
       />
     {/if}
+
+    <p class="text-f14">
+      Mis à jour le {new Date(service.modificationDate).toLocaleDateString(
+        "fr",
+        "short"
+      )}
+    </p>
   </div>
 </div>

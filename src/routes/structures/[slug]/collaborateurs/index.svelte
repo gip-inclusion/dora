@@ -16,10 +16,10 @@
     const info = get(userInfo);
     const struct = get(structure);
 
-    const canSeeMembers = struct.isMember || info?.isBizdev || info?.isStaff;
-    const canEditMembers = struct.isMember || info?.isBizdev || info?.isStaff;
+    // const canSeeMembers = struct.isMember || info?.isBizdev || info?.isStaff;
+    const canEditMembers = struct.isAdmin || info?.isBizdev || info?.isStaff;
 
-    if (!info || !struct || !canSeeMembers) {
+    if (!info || !struct || !canEditMembers) {
       return {
         status: 404,
         error: "Page Not Found",
@@ -83,12 +83,13 @@
 
   <div class="col-span-full md:flex md:items-center md:justify-between">
     <h2 class="mb-s24 text-france-blue">Collaborateurs</h2>
-
-    <Button
-      label="Inviter un collaborateur…"
-      small
-      on:click={() => (addUserModalIsOpen = true)}
-    />
+    {#if canEditMembers}
+      <Button
+        label="Inviter un collaborateur…"
+        small
+        on:click={() => (addUserModalIsOpen = true)}
+      />
+    {/if}
   </div>
 
   {#if members}

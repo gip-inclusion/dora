@@ -42,12 +42,18 @@
       <i class="icon mr-s8 text-magenta-cta">
         {@html computerIcon}
       </i>
-      <a target="_blank" rel="noopener nofollow" href={structure.url}>
+      <a
+        target="_blank"
+        rel="noopener nofollow"
+        href={structure.url}
+        class="flex"
+      >
         {structure.url}
+
+        <i class="ml-s8 mt-s2 h-s16 w-s16 fill-current">
+          {@html externalLinkIcon}
+        </i>
       </a>
-      <i class="icon ml-s8">
-        {@html externalLinkIcon}
-      </i>
     </p>
   {/if}
 
@@ -57,12 +63,12 @@
         {@html mailIcon}
       </i>
 
-      <a href="mailto:{structure.email}">
+      <a href="mailto:{structure.email}" class="flex">
         {structure.email}
+        <i class="ml-s8 mt-s2 h-s16 w-s16 fill-current">
+          {@html externalLinkIcon}
+        </i>
       </a>
-      <i class="icon ml-s8">
-        {@html externalLinkIcon}
-      </i>
     </p>
   {/if}
 
