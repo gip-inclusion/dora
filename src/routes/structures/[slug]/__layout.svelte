@@ -1,37 +1,32 @@
 <script context="module">
   import { getStructure } from "$lib/structures";
 
-  export async function load({ params }) {
-    const structure = await getStructure(params.slug);
+  import { structure } from "./_store";
 
-    if (!structure) {
+  export async function load({ params }) {
+    const s = await getStructure(params.slug);
+
+    if (!s) {
       return {
         status: 404,
         error: "Page Not Found",
       };
     }
 
-    return {
-      props: {
-        structure,
-      },
-      stuff: {
-        structure,
-      },
-    };
+    structure.set(s);
+
+    return {};
   }
 </script>
 
 <script>
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Header from "./_header.svelte";
-
-  export let structure;
 </script>
 
 <CenteredGrid --col-bg="var(--col-magenta-brand)" topPadded>
   <div class="col-span-full">
-    <Header {structure} />
+    <Header structure={$structure} />
   </div>
 </CenteredGrid>
 

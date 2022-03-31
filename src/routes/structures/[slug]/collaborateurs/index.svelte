@@ -2,35 +2,38 @@
   import { browser } from "$app/env";
   import { get } from "svelte/store";
   import { userInfo } from "$lib/auth";
+  import { structure } from "../_store";
+
   import { getMembers, getPutativeMembers } from "$lib/structures";
 
-  export async function load({ stuff }) {
+  export async function load() {
     // sur le serveur, info est toujours null,
     // on retourne une 404 uniquement sur le client
     if (!browser) {
       return {};
     }
 
-    const structure = stuff.structure;
     const info = get(userInfo);
+    const struct = get(structure);
 
-    const canEditMembers = structure.isAdmin || info?.isBizdev || info?.isStaff;
+    const canSeeMembers = struct.isMember || info?.isBizdev || info?.isStaff;
+    const canEditMembers = struct.isMember || info?.isBizdev || info?.isStaff;
 
-    if (!info || !structure || !canEditMembers) {
+    if (!info || !struct || !canSeeMembers) {
       return {
         status: 404,
         error: "Page Not Found",
       };
     }
 
-    const members = await getMembers(structure.slug);
-    const putativeMembers = await getPutativeMembers(structure.slug);
+    const members = await getMembers(struct.slug);
+    const putativeMembers = await getPutativeMembers(struct.slug);
 
     return {
       props: {
-        structure,
         members,
         putativeMembers,
+        canEditMembers,
       },
     };
   }
@@ -44,12 +47,13 @@
   import AddUserModal from "./_add-user-modal.svelte";
   import MemberStandard from "./_member_standard.svelte";
 
-  export let structure, members, putativeMembers;
+  export let members, putativeMembers, canEditMembers;
+
   let addUserModalIsOpen = false;
 
   async function handleRefreshMemberList() {
-    members = await getMembers(structure.slug);
-    putativeMembers = await getPutativeMembers(structure.slug);
+    members = await getMembers($structure.slug);
+    putativeMembers = await getPutativeMembers($structure.slug);
   }
 
   function sortedMembers(items) {
@@ -64,16 +68,18 @@
 </script>
 
 <svelte:head>
-  <title>{structure?.name} | Collaborateurs | DORA</title>
+  <title>{$structure?.name} | Collaborateurs | DORA</title>
 </svelte:head>
 
 <EnsureLoggedIn>
-  <AddUserModal
-    bind:isOpen={addUserModalIsOpen}
-    {structure}
-    {members}
-    onRefresh={handleRefreshMemberList}
-  />
+  {#if canEditMembers}
+    <AddUserModal
+      bind:isOpen={addUserModalIsOpen}
+      structure={$structure}
+      {members}
+      onRefresh={handleRefreshMemberList}
+    />
+  {/if}
 
   <div class="col-span-full md:flex md:items-center md:justify-between">
     <h2 class="mb-s24 text-france-blue">Collaborateurs</h2>
@@ -93,13 +99,13 @@
             <MemberInvited
               {member}
               onRefresh={handleRefreshMemberList}
-              readOnly="false"
+              readOnly={!canEditMembers}
             />
           {:else}
             <MemberToConfirm
               {member}
               onRefresh={handleRefreshMemberList}
-              readOnly="false"
+              readOnly={!canEditMembers}
             />
           {/if}
         {/each}
@@ -111,7 +117,7 @@
           isMyself={member.user.email === $userInfo.email}
           isOnlyAdmin={member.user.email === $userInfo.email &&
             members.filter((m) => m.isAdmin).length === 1}
-          readOnly="false"
+          readOnly={!canEditMembers}
         />
       {/each}
     </div>
