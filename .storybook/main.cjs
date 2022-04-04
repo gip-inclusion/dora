@@ -8,7 +8,7 @@ module.exports = {
   addons: ["@storybook/addon-essentials", "@storybook/addon-links"],
   framework: "@storybook/svelte",
   core: {
-    builder: "storybook-builder-vite",
+    builder: "@storybook/builder-vite",
   },
   staticDirs: ["../static"],
   svelteOptions: {
