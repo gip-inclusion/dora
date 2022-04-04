@@ -8,7 +8,9 @@
   export let structure, services, total;
   export let hasListLink = false;
   export let onRefresh;
-  const canEdit = structure.isMember || $userInfo?.isStaff;
+  let canEdit;
+
+  $: canEdit = structure.isMember || $userInfo?.isStaff;
 
   async function handleRefresh() {
     if (onRefresh) {
