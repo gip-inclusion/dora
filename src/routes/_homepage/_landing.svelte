@@ -81,7 +81,7 @@
 
 <CenteredGrid --col-bg="var(--col-transparent)" topPadded>
   <div class="col-span-full mb-s40">
-    <h2 class="mb-s32 text-center text-france-blue">Comment ça fonctionne</h2>
+    <h2 class="mb-s32 text-center text-france-blue">Comment cela fonctionne</h2>
     <div class="flex flex-col gap-s24 md:flex-row">
       <div class="md:flex-1">
         <img
@@ -91,8 +91,9 @@
         />
         <h3>Recensement de l’offre d’insertion</h3>
         <p class="text-f16">
-          Vous proposez des services d'insertion ? Renseignez votre offre sur
-          DORA et touchez les acteurs de l'insertion de votre territoire.
+          Vous proposez des services d’insertion ? Renseignez votre offre et
+          rendez la visible à tous les acteurs de l’insertion de votre
+          territoire.
         </p>
       </div>
       <div class="md:flex-1">
@@ -101,11 +102,11 @@
           alt="illustration d'un ordinateur avec le visage d'un personnage satisfait sur l'écran"
           class="mb-s16 w-full"
         />
-        <h3>Mobilisation de service d’insertion</h3>
+        <h3>Identification du service adapté</h3>
         <p class="text-f16">
-          Vous accompagnez des bénéficiaire ? Retrouvez facilement et rapidement
-          les services adaptés à vos bénéficiaires, les modalités, le bon
-          contact et les bons documents à fournir.
+          Vous accompagnez des bénéficiaires ? Trouvez rapidement les services
+          d’insertion adaptés, les modalités, le bon contact et les documents à
+          fournir.
         </p>
       </div>
       <div class="md:flex-1">
@@ -114,10 +115,10 @@
           alt="illustration avec deux personnages souriants, face à face, chacun dans une bulle qui communiquent avec leur ordinateur."
           class="mb-s16 w-full"
         />
-        <h3>Accompagnement des bénéficiaires</h3>
+        <h3>Mobilisation du service</h3>
         <p class="text-f16">
-          Nous sommes tous acteurs de l'insertion ! Simplifions le retour vers
-          un emploi durable des personnes qui en ont besoin.
+          Vous avez identifié le bon service ? Aidez votre bénéficiaire en
+          facilitant ses démarches et son retour vers un emploi durable.
         </p>
       </div>
     </div>

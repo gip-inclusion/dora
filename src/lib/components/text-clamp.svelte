@@ -19,7 +19,7 @@
 
   $: textIsTooLong = text.split(" ").length > maxLen;
   $: textVisible = showAll || !textIsTooLong ? text : shorten(text);
-  $: label = showAll ? "réduire" : "Lire la suite";
+  $: label = showAll ? "Réduire" : "Lire la suite";
 </script>
 
 <p class="prose mb-s24">{@html textVisible}</p>
