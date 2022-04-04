@@ -151,14 +151,14 @@
 
 <svelte:head>
   <title
-    >Services d'insertion : {tags.map((t) => t.label).join(", ")} | Recherche | DORA</title
+    >Services d’insertion : {tags.map((t) => t.label).join(", ")} | Recherche | DORA</title
   >
 </svelte:head>
 
 <CenteredGrid topPadded>
   <div class="col-span-full mb-s48 text-center">
     <p class="text-f16">Recherche</p>
-    <h1 class="text-france-blue">Services d'insertion</h1>
+    <h1 class="text-france-blue">Services d’insertion</h1>
     <div class="mt-s8 flex flex-row justify-center gap-s16">
       {#each tags as tag}
         <Tag>{tag.label}</Tag>
@@ -167,7 +167,7 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid roundedbg>
+<CenteredGrid roundedTop>
   <div class="col-span-12 lg:col-span-4 lg:mt-s56 lg:mb-s48">
     <SearchTweakForm
       {categoryId}
@@ -201,7 +201,7 @@
           class="p-s24 bg-white rounded-md border-gray-01 border lg:flex-1 mb-s24"
         >
           <h4>
-            Vous connaissez un service d'insertion qui n'est pas référencé ?
+            Vous connaissez un service d’insertion qui n'est pas référencé ?
           </h4>
           <div class="flex flex-col gap-s16">
             <LinkButton

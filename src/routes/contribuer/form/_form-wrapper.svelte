@@ -146,7 +146,7 @@
     </div>
   </div>
 </CenteredGrid>
-<CenteredGrid roundedbg>
+<CenteredGrid roundedTop>
   <div class="col-span-8 col-start-1 mb-s64">
     <div bind:this={errorDiv}>
       {#each $formErrors.nonFieldErrors || [] as msg}

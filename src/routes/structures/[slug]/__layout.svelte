@@ -31,7 +31,7 @@
 </CenteredGrid>
 
 <CenteredGrid
-  roundedbg
+  roundedTop
   --col-under-bg="var(--col-magenta-brand)"
   --col-content-bg="var(--col-bg)"
   topPadded

@@ -18,6 +18,7 @@
 
   import Info from "$lib/components/info.svelte";
   import AuthLayout from "./_auth_layout.svelte";
+  import Notice from "$lib/components/notice.svelte";
 
   let email = "";
   let password = "";
@@ -80,63 +81,82 @@
 </CenteredGrid>
 
 <AuthLayout>
-  <Form
-    data={{ email, password }}
-    schema={loginSchema}
-    serverErrorsDict={authErrors}
-    onChange={handleChange}
-    onSubmit={handleSubmit}
-    onSuccess={handleSuccess}
-  >
-    <Fieldset title="Votre compte">
-      {#if invalidUser}
-        <Info
-          label="Votre adresse courriel n’a pas encore été validée"
-          negativeMood
-        />
-        <LinkButton
-          to="/auth/renvoyer-email-validation?email={encodeURIComponent(email)}"
-          label="Demander un nouveau lien"
-        />
-      {:else}
-        {#each $formErrors.nonFieldErrors || [] as msg}
-          <Alert label={msg} />
-        {/each}
-        <div class="flex flex-col md:flex-row lg:flex-col md:gap-s16">
-          <Field
-            name="email"
-            errorMessages={$formErrors.email}
-            label="Courriel"
-            vertical
-            type="email"
-            bind:value={email}
-            required
-            placeholder="Courriel utilisé lors de l’inscription"
-            autocomplete="email"
+  <div class="mb-s40">
+    <Form
+      data={{ email, password }}
+      schema={loginSchema}
+      serverErrorsDict={authErrors}
+      onChange={handleChange}
+      onSubmit={handleSubmit}
+      onSuccess={handleSuccess}
+    >
+      <Fieldset title="Votre compte">
+        {#if invalidUser}
+          <Info
+            label="Votre adresse courriel n’a pas encore été validée"
+            negativeMood
           />
-          <Field
-            name="password"
-            errorMessages={$formErrors.password}
-            label="Mot de passe"
-            vertical
-            type="password"
-            placeholder="••••••••"
-            bind:value={password}
-            autocomplete="current-password"
-            required
+          <LinkButton
+            to="/auth/renvoyer-email-validation?email={encodeURIComponent(
+              email
+            )}"
+            label="Demander un nouveau lien"
           />
-        </div>
-        <Button
-          type="submit"
-          disabled={!email || !password}
-          label="Se connecter"
-          preventDefaultOnMouseDown
-        />
-        <a
-          class="underline text-center text-gray-text-alt2 text-f12"
-          href="/auth/mdp-perdu">Mot de passe oublié ?</a
-        >
-      {/if}
-    </Fieldset>
-  </Form>
+        {:else}
+          {#each $formErrors.nonFieldErrors || [] as msg}
+            <Alert label={msg} />
+          {/each}
+          <div class="flex flex-col md:flex-row lg:flex-col md:gap-s16 mb-s16">
+            <Field
+              name="email"
+              errorMessages={$formErrors.email}
+              label="Courriel"
+              vertical
+              type="email"
+              bind:value={email}
+              required
+              placeholder="Courriel utilisé lors de l’inscription"
+              autocomplete="email"
+            />
+            <Field
+              name="password"
+              errorMessages={$formErrors.password}
+              label="Mot de passe"
+              vertical
+              type="password"
+              placeholder="••••••••"
+              bind:value={password}
+              autocomplete="current-password"
+              required
+            />
+          </div>
+
+          <div class="flex flex-col">
+            <Button
+              type="submit"
+              disabled={!email || !password}
+              label="Se connecter"
+              preventDefaultOnMouseDown
+            />
+          </div>
+          <div class="mt-s16">
+            <a
+              class="underline text-center text-gray-text-alt2 text-f12"
+              href="/auth/mdp-perdu">Mot de passe oublié ?</a
+            >
+          </div>
+        {/if}
+      </Fieldset>
+    </Form>
+  </div>
+
+  <Notice title="Vous n'avez pas encore de compte ?">
+    <LinkButton
+      label="Créer un compte…"
+      secondary
+      nofollow
+      small
+      to={`/auth/inscription`}
+    />
+  </Notice>
 </AuthLayout>

@@ -74,3 +74,4 @@ export { default as checkboxCircleLine } from "remixicon/icons/System/checkbox-c
 export { default as alertLine } from "remixicon/icons/System/alert-line.svg?raw";
 export { default as closeCircleLine } from "remixicon/icons/System/close-circle-line.svg?raw";
 export { default as informationLine } from "remixicon/icons/System/information-line.svg?raw";
+export { default as questionFillIcon } from "remixicon/icons/System/question-fill.svg?raw";

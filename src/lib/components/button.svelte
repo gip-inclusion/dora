@@ -64,25 +64,27 @@
 <button
   {type}
   {name}
-  class="{px} {py} {ts} {border} {text} {background} flex flex-row items-center whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
+  class="{px} {py} {ts} {border} {text} {background} whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
   class:flash-success={flashSuccess}
   class:w-full={wFull}
-  class:justify-center={!icon}
+  class:flex={icon}
+  class:flex-row={icon}
+  class:items-center={icon}
   on:click
   on:mousedown={handleMouseDown}
   {disabled}
 >
   {#if icon && !iconOnRight}
-    <div class="{iw} {ih} shrink-0 fill-current" class:mr-s8={!!label}>
+    <span class="{iw} {ih} fill-current" class:mr-s8={!!label}>
       {@html icon}
-    </div>
+    </span>
   {/if}
 
   {label}
 
   {#if iconOnRight}
-    <div class="{iw} {ih} ml-s8 shrink-0 justify-end fill-current">
+    <span class="{iw} {ih} ml-s8 justify-end fill-current">
       {@html icon}
-    </div>
+    </span>
   {/if}
 </button>

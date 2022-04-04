@@ -10,5 +10,5 @@
 </div>
 
 <div class="hidden lg:flex">
-  <slot />
+  <slot name="lg" />
 </div>

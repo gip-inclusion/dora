@@ -37,19 +37,19 @@
 </script>
 
 <div
-  class="rounded-r-md border-l-8 {types[type].border} {types[type]
-    .bg} p-s24 lg:flex lg:flex-row lg:justify-between lg:gap-s16"
+  class="rounded-r-md border-l-8 {types[type].border} {types[type].bg} p-s24"
 >
-  <div>
-    <h4 class="mb-s16 {types[type].text} flex">
-      <div class="mr-s8 h-s24 w-s24 shrink-0 fill-current">
-        {@html types[type].icon}
-      </div>
-      {title}
-    </h4>
+  <h4 class="mb-s16 {types[type].text} flex">
+    <div class="mr-s8 h-s24 w-s24 shrink-0 fill-current">
+      {@html types[type].icon}
+    </div>
+    {title}
+  </h4>
+  <div class="lg:flex lg:flex-row lg:justify-between lg:gap-s16">
     <slot />
-  </div>
-  <div class="self-end">
-    <slot name="button" />
+
+    <div class="self-end">
+      <slot name="button" />
+    </div>
   </div>
 </div>

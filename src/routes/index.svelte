@@ -17,7 +17,7 @@
 </script>
 
 <svelte:head>
-  <title>DORA : le référentiel de l'offre d’insertion</title>
+  <title>DORA : recensement et mise à jour de l’offre d’insertion</title>
   <meta
     name="description"
     content="Plateforme publique dédiée au référencement de l’offre d’insertion et à l’identification et l’activation des leviers adaptés aux besoins des bénéficiaires."

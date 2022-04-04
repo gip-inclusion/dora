@@ -1,15 +1,16 @@
 <script>
   export let sticky = false;
   export let topPadded = false;
-  export let roundedbg = false;
+  export let roundedTop = false;
+  export let roundedBottom = false;
   export let bordertop = false;
   export let extraClass = "";
 </script>
 
-<div class="{extraClass} wrapper" class:sticky>
+<div class="{extraClass} wrapper" class:sticky class:roundedBottom>
   <div
     class="flex justify-center px-s16 md:px-s40"
-    class:roundedbg
+    class:roundedTop
     class:bordertop
   >
     <div
@@ -42,10 +43,6 @@
     will-change: transform;
   }
 
-  .roundedbg {
-    background-color: var(--col-content-bg, var(--col-gray-bg));
-  }
-
   .bordertop {
     border-color: var(--col-gray-03);
     border-top-width: 1px;
@@ -68,16 +65,29 @@
       background-color: var(--col-white) !important;
     }
 
-    .roundedbg {
+    .roundedTop,
+    .roundedBottom {
       background-color: var(--col-white) !important;
     }
   }
 
   @screen lg {
-    .roundedbg {
+    .roundedTop {
       background-color: var(--col-content-bg, var(--col-gray-bg));
+    }
+
+    .roundedBottom {
+      background-color: var(--col-bg, var(--col-gray-bg));
+    }
+
+    .roundedTop {
       border-top-left-radius: var(--s40);
       border-top-right-radius: var(--s40);
+    }
+
+    .roundedBottom {
+      border-bottom-left-radius: var(--s40);
+      border-bottom-right-radius: var(--s40);
     }
   }
 </style>

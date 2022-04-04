@@ -1,13 +1,13 @@
 <script>
   import { ENVIRONMENT } from "$lib/env.js";
+  import { browser } from "$app/env";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   import LogoDORA from "$lib/assets/dora-logo-rvb.svg";
   import LogoMinistere from "$lib/assets/logo-ministere-travail.svg";
 
-  import HeaderActions from "./_header-actions.svelte";
-  import TopLinks from "./_top-links.svelte";
+  import HeaderActions from "./_menu.svelte";
 </script>
 
 <header
@@ -28,17 +28,12 @@
         </div>
         <img class="inline" src={LogoDORA} alt="Dora" width="140" height="65" />
       </a>
-      <div class="grow" />
-      <div class="flex flex-row">
+      {#if browser}
+        <div class="grow" />
         <HeaderActions />
-      </div>
+      {/if}
     </div>
   </CenteredGrid>
-  <div class="hidden lg:block">
-    <CenteredGrid bordertop>
-      <TopLinks />
-    </CenteredGrid>
-  </div>
 </header>
 
 <style lang="postcss">

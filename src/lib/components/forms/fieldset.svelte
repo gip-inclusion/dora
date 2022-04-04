@@ -60,7 +60,7 @@
     </div>
   {/if}
   <div
-    class="rounded-b-md bg-white px-s40 pb-s40 pt-s24"
+    class="flex flex-col gap-s24 rounded-b-md bg-white px-s40 pb-s40 pt-s24"
     class:pt-s32={!title}
     class:hidden={collapsable && collapsed}
   >

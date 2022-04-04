@@ -90,6 +90,10 @@
   }
 </script>
 
-<form on:submit|preventDefault={handleSubmit} novalidate>
+<form
+  on:submit|preventDefault={handleSubmit}
+  novalidate
+  class="flex-row gap-s24"
+>
   <slot />
 </form>

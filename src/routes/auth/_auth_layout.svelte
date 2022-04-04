@@ -4,7 +4,7 @@
   export let wideForm = false;
 </script>
 
-<CenteredGrid roundedbg>
+<CenteredGrid roundedTop>
   <div class="col-span-full mt-s48 flex justify-center lg:col-end-7 lg:mb-s32">
     <img src={connexionPic} alt="" class="max-h-[460px]" />
   </div>

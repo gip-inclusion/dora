@@ -15,7 +15,7 @@
 </CenteredGrid>
 
 <CenteredGrid
-  roundedbg
+  roundedTop
   --col-under-bg="var(--col-gray-dark)"
   --col-content-bg="var(--col-bg)"
   topPadded

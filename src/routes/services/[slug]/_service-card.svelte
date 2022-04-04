@@ -16,7 +16,7 @@
 </CenteredGrid>
 
 <CenteredGrid
-  roundedbg
+  roundedTop
   --col-under-bg="var(--col-france-blue)"
   --col-content-bg="var(--col-bg)"
 >
