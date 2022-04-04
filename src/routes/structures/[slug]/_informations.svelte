@@ -1,6 +1,7 @@
 <script>
   import { token, userInfo } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
+  import TextClamp from "$lib/components/text-clamp.svelte";
   import {
     computerIcon,
     externalLinkIcon,
@@ -84,7 +85,8 @@
 
 <div class="col-span-full lg:col-start-4 lg:col-end-11">
   <p class="mb-s24 font-bold text-gray-dark">{structure.shortDesc}</p>
-  <p class="prose mb-s24">{@html structure.fullDesc}</p>
+
+  <TextClamp text={structure.fullDesc} />
 </div>
 
 <style lang="postcss">
@@ -93,10 +95,6 @@
   }
 
   .icon-label a {
-    @apply flex-initial;
-  }
-
-  .icon-label p {
     @apply flex-initial;
   }
 
