@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/betagouv/dora-front/compare/v0.0.7...v0.0.8) (2022-04-05)
+
+### Features
+
+- ajoute un chat ([#42](https://github.com/betagouv/dora-front/issues/42)) ([5290717](https://github.com/betagouv/dora-front/commit/529071702f2fc1660d06ca2944696117dc50e809))
+- deplace le tableau de bord sur la page de structure ([#39](https://github.com/betagouv/dora-front/issues/39)) ([ec4a1c0](https://github.com/betagouv/dora-front/commit/ec4a1c0bb4c3ea273576534a20ae6c7c410746b9))
+- **homepage:** met a jour le texte ([e9a2521](https://github.com/betagouv/dora-front/commit/e9a2521533a709478cdbade1aacd866ba2c7056b))
+- **homepage:** optimise le contenu et le menu ([#43](https://github.com/betagouv/dora-front/issues/43)) ([42f071f](https://github.com/betagouv/dora-front/commit/42f071fdc8fb7df520f55761ba0b953590f69d16))
+- **mentions legales:** modifie les textes ([5163eb9](https://github.com/betagouv/dora-front/commit/5163eb93c7519bc43168103e238390f829ad6eab))
+- **structure:** raccourci le texte de description s'il est trop long ([5caa1ee](https://github.com/betagouv/dora-front/commit/5caa1ee4fd9e671ca91a92118479462e8a452abc))
+- **structures:** ajoute les antennes ([#40](https://github.com/betagouv/dora-front/issues/40)) ([eaa1fe9](https://github.com/betagouv/dora-front/commit/eaa1fe99d330dc0673164e1919debe2367c60dd3))
+
+### Bug Fixes
+
+- **chat:** corrige l'upload de fichier ([f9c64a5](https://github.com/betagouv/dora-front/commit/f9c64a5f8d15236c763e7863fe639042b0a59ee1))
+- **chat:** corrige la csp pour permettre le chargement de crisp ([33318dc](https://github.com/betagouv/dora-front/commit/33318dc3a238919586afc9329886a0694397a38c))
+- **chat:** desactive le consentement par defaut ([2de6fb3](https://github.com/betagouv/dora-front/commit/2de6fb318fafbac49fcec0eaf3ff42bd4b8e290a))
+- **service:** affiche la zone de diffusion et la date de mise a jour ([93974c2](https://github.com/betagouv/dora-front/commit/93974c29e48b6ef8a38cb8f4346008410db4d27f))
+- **structure:** conserve les infos mises a jour lors du changement d'onglet ([c3d3362](https://github.com/betagouv/dora-front/commit/c3d33623ef79a1fee2127740c6ef03d9a7329ba0))
+- **structure:** corrige les permissions sur les onglets ([4f676a6](https://github.com/betagouv/dora-front/commit/4f676a669b12632762cd550d6dddefdd1bd2a505))
+- **structure:** corrige une erreur lors du chargement ([2c16211](https://github.com/betagouv/dora-front/commit/2c16211c92149c3b526091accb028147e829930a))
+- **structure:** met a jour les onglets lors du changement de page ([e197a30](https://github.com/betagouv/dora-front/commit/e197a30fbc93eaeb5f0d2c986efd05ce5ba9448e))
+- **structure:** permet une nouvelle recherche apres une erreur ([#41](https://github.com/betagouv/dora-front/issues/41)) ([fa02190](https://github.com/betagouv/dora-front/commit/fa0219060389428e3f3643d15aa5207d09646014))
+- **structure:** rafraichi apres la mise a jour du statut d'un service ([2628413](https://github.com/betagouv/dora-front/commit/262841374c02ec7ab5ac153fd5538a3e3db2c207))
+- **structure:** rafraichi les options d'edition lorsqu'on change de structure ([b5f2db2](https://github.com/betagouv/dora-front/commit/b5f2db200c43726854ee17a4518672a304b7947f))
+- **structure:** rafraichit le contenu lors de la mise a jour ([c6226f6](https://github.com/betagouv/dora-front/commit/c6226f65c28817d5bb7242232e6ac8c6904a5ea5))
+
 ### [0.0.7](https://github.com/betagouv/dora-front/compare/v0.0.6...v0.0.7) (2022-03-19)
 
 ### Bug Fixes
