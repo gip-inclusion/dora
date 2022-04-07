@@ -29,7 +29,7 @@
         Publiez et mettez à jour vos services en toute simplicité.
       </p>
     </div>
-    <div class="flex justify-center gap-s16">
+    <div class="flex flex-col justify-center gap-s16 md:flex-row">
       <LinkButton label="Référencer un service" to={`/services/creer`} />
       <LinkButton
         label="Participer à un webinaire"
@@ -44,8 +44,8 @@
       <p class="text-center text-f12">
         Plus de 450 structures ont déjà référencé leurs services sur DORA.
       </p>
-      <div class="flex justify-center gap-s24">
-        <div class="flex gap-s24">
+      <div class="flex flex-col justify-center gap-s24 md:flex-row">
+        <div class="flex justify-center gap-s24">
           <img src={logoPoleEmploi} alt="logo Pole Emploi" />
 
           <img src={logoMobIn} alt="logo Mob'In" />
@@ -55,7 +55,7 @@
             alt="logo Conseil Départemental des Ardennes"
           />
         </div>
-        <div class="flex gap-s24">
+        <div class="flex justify-center gap-s24">
           <img
             src={logoDepartementReunion}
             alt="logo Conseil départemental de la Réunion"
