@@ -85,3 +85,13 @@ export function addlinkToUrls(text) {
     { allowedTags: ["a"], allowedAttributes: { a: ["class", "rel", "href"] } }
   );
 }
+
+export function moveToTheEnd(array, key, value) {
+  const element = array.find((e) => e[key] === value);
+
+  if (!element) {
+    return array;
+  }
+
+  return [...array.filter((e) => e[key] !== value), element];
+}

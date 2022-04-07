@@ -1,4 +1,5 @@
 <script>
+  import { moveToTheEnd } from "$lib/utils";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import FieldHelp from "$lib/components/forms/field-help.svelte";
   import Field from "$lib/components/forms/field.svelte";
@@ -15,7 +16,11 @@
   <ModelField
     label="Comment un bénéficiaire peut accéder à ce service ?"
     type="checkboxes"
-    choices={servicesOptions.beneficiariesAccessModes}
+    choices={moveToTheEnd(
+      servicesOptions.beneficiariesAccessModes,
+      "value",
+      "autre"
+    )}
     schema={serviceSchema.beneficiariesAccessModes}
     name="beneficiariesAccessModes"
     errorMessages={$formErrors.beneficiariesAccessModes}
@@ -38,7 +43,11 @@
   <ModelField
     label="Comment orienter un bénéficiaire en tant qu’accompagnateur ?"
     type="checkboxes"
-    choices={servicesOptions.coachOrientationModes}
+    choices={moveToTheEnd(
+      servicesOptions.coachOrientationModes,
+      "value",
+      "autre"
+    )}
     schema={serviceSchema.coachOrientationModes}
     name="coachOrientationModes"
     errorMessages={$formErrors.coachOrientationModes}
