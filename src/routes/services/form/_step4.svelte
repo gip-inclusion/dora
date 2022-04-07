@@ -16,9 +16,8 @@
   export let adminDivisionChoices = [];
 
   function handleCityChange(city) {
-    const props = city?.properties;
-    service.city = props?.name;
-    service.cityCode = props?.citycode;
+    service.city = city?.name;
+    service.cityCode = city?.code;
   }
 
   function handleDiffusionZoneTypeChange(type) {
@@ -160,7 +159,7 @@
         name="city"
         placeholder="Saisissez et validez votre ville"
         initialValue={service.city}
-        handleChange={handleCityChange}
+        onChange={handleCityChange}
       />
     </ModelField>
 

@@ -90,10 +90,10 @@
           slot="custom-input"
           name="city"
           placeholder="Ville du bénéficiaire"
-          handleChange={(city) => {
-            cityCode = city?.properties.citycode;
-            cityLabel = `${city?.properties.label} (${getDepartmentFromCityCode(
-              city?.properties.postcode
+          onChange={(city) => {
+            cityCode = city?.code;
+            cityLabel = `${city?.name} (${getDepartmentFromCityCode(
+              city?.code
             )})`;
           }}
         />
