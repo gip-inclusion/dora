@@ -48,8 +48,8 @@
           </Line>
 
           <Line
-            label="Thématique"
-            data={suggestion.serviceInfo.categoryDisplay}
+            label="Thématiques"
+            data={suggestion.serviceInfo.categoriesDisplay.join(", ")}
           />
 
           <Line

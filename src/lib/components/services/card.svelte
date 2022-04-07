@@ -21,8 +21,11 @@
   <div class="my-s8 flex flex-col gap-s16">
     <h4><a href="/services/{service.slug}">{service.name}</a></h4>
 
-    <Tag selfStart>{service.categoryDisplay}</Tag>
-
+    <div class="flex flex-wrap gap-s8">
+      {#each service.categoriesDisplay as categoryDisplay}
+        <Tag selfStart>{categoryDisplay}</Tag>
+      {/each}
+    </div>
     {#if service.diffusionZoneDetailsDisplay}
       <Label
         label={`${service.diffusionZoneDetailsDisplay}`}

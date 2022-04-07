@@ -11,15 +11,15 @@
 
   let subcategories = [];
 
-  function handleCategoryChange(category) {
-    subcategories = category
+  function handleCategoriesChange(categories) {
+    subcategories = categories.length
       ? servicesOptions.subcategories.filter(({ value }) =>
-          value.startsWith(category)
+          categories.some((category) => value.startsWith(category))
         )
       : [];
 
     service.subcategories = service.subcategories.filter((scat) =>
-      scat.startsWith(category)
+      categories.some((category) => scat.startsWith(category))
     );
   }
 
@@ -92,14 +92,14 @@
 
   <FieldSet title="Typologie de service">
     <ModelField
-      type="select"
-      label="Thématique"
-      schema={serviceSchema.category}
-      bind:value={service.category}
+      type="multiselect"
+      label="Thématiques"
+      schema={serviceSchema.categories}
+      bind:value={service.categories}
       choices={servicesOptions.categories}
-      name="category"
-      errorMessages={$formErrors.category}
-      onSelectChange={handleCategoryChange}
+      name="categories"
+      errorMessages={$formErrors.categories}
+      onSelectChange={handleCategoriesChange}
       placeholder="Choisissez la thématique principale"
       sortSelect
     >

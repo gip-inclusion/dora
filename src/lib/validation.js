@@ -26,6 +26,7 @@ function clearError(fieldname) {
 function validateField(fieldname, shape, data) {
   clearError(fieldname);
   const originalValue = data[fieldname];
+
   let value = originalValue;
   if (shape.nullable && !shape.required && value == null) {
     // Ignore null values for fields that are nullable and not required
@@ -80,12 +81,15 @@ export function validate(
 
   Object.entries(schema).forEach(([fieldname, shape]) => {
     const { value, valid } = validateField(fieldname, shape, data);
+
     isValid &&= valid;
     validatedData[fieldname] = value;
+
     if (!noScroll && !doneOnce && !valid) {
       scrollToField(fieldname);
       doneOnce = true;
     }
+
     if (!skipDependenciesCheck) {
       shape.dependents?.forEach((depName) => {
         const { depValue, depValid } = validateField(
@@ -93,6 +97,7 @@ export function validate(
           fullSchema[depName],
           data
         );
+
         isValid &&= depValid;
         validatedData[depName] = depValue;
         if (!noScroll && !doneOnce && !depValid) {
@@ -102,6 +107,7 @@ export function validate(
       });
     }
   });
+
   // Ensure we pass the fields that are not in the validation schema untouched
   // Those are mostly the hidden fields
   validatedData = { ...data, ...validatedData };

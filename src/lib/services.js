@@ -16,9 +16,7 @@ function serviceToBack(service) {
   } else {
     service.geom = null;
   }
-  // Dans le futur, un service pourra appartenir à plusieurs categories
-  // Le back-end le gère déjà, mais pour le moment on reste sur une categorie ici
-  service.categories = [service.category];
+
   return service;
 }
 
@@ -33,10 +31,7 @@ function serviceToFront(service) {
   }
   service.longitude = lng;
   service.latitude = lat;
-  // Dans le futur, un service pourra appartenir à plusieurs categories
-  // Le back-end le gère déjà, mais pour le moment on reste sur une categorie ici
-  service.category = service.categories?.[0];
-  service.categoryDisplay = service.categoriesDisplay?.[0];
+
   return service;
 }
 
@@ -44,9 +39,6 @@ function serviceSuggestiontoBack(serviceSuggestion) {
   if (serviceSuggestion.fullDesc)
     serviceSuggestion.fullDesc = htmlToMarkdown(serviceSuggestion.fullDesc);
 
-  // Dans le futur, un service pourra appartenir à plusieurs categories
-  // Le back-end le gère déjà, mais pour le moment on reste sur une categorie ici
-  serviceSuggestion.categories = [serviceSuggestion.category];
   return serviceSuggestion;
 }
 
@@ -56,10 +48,7 @@ function serviceSuggestionToFront(serviceSuggestion) {
     serviceInfo.fullDesc = insane(markdownToHTML(serviceInfo.fullDesc), {
       allowedAttributes: { a: ["class", "rel", "href"] },
     });
-  // Dans le futur, un service pourra appartenir à plusieurs categories
-  // Le back-end le gère déjà, mais pour le moment on reste sur une categorie ici
-  serviceInfo.category = serviceInfo.categories?.[0];
-  serviceInfo.categoryDisplay = serviceInfo.categoriesDisplay?.[0];
+
   return serviceSuggestion;
 }
 

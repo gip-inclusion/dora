@@ -8,15 +8,15 @@
   export let servicesOptions, service, structures;
   let subcategories = [];
 
-  function handleCategoryChange(category) {
-    subcategories = category
+  function handleCategoryChange(categories) {
+    subcategories = categories.length
       ? servicesOptions.subcategories.filter(({ value }) =>
-          value.startsWith(category)
+          categories.some((cat) => value.startsWith(cat))
         )
       : [];
 
     service.subcategories = service.subcategories.filter((scat) =>
-      scat.startsWith(category)
+      categories.some((cat) => scat.startsWith(cat))
     );
   }
 
@@ -28,6 +28,7 @@
       flatChoices.includes(value)
     );
   }
+
   function handleStructureChange(structure) {
     cleanOptions("accessConditions", structure);
     cleanOptions("concernedPublic", structure);
@@ -55,13 +56,13 @@
 
 <FieldSet title="Typologie de service">
   <ModelField
-    type="select"
-    label="Thématique"
-    schema={serviceSchema.category}
-    bind:value={service.category}
+    type="multiselect"
+    label="Thématiques"
+    schema={serviceSchema.categories}
+    bind:value={service.categories}
     choices={servicesOptions.categories}
-    name="category"
-    errorMessages={$formErrors.category}
+    name="categories"
+    errorMessages={$formErrors.categories}
     onSelectChange={handleCategoryChange}
     placeholder="Choisissez la thématique principale"
     sortSelect
@@ -88,7 +89,7 @@
 
   <ModelField
     type="checkboxes"
-    label="Type de service"
+    label="Type"
     schema={serviceSchema.kinds}
     name="kinds"
     errorMessages={$formErrors.kinds}

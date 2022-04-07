@@ -49,6 +49,7 @@
     [4, Step4],
     [5, Preview],
   ]);
+
   $: currentStepComponent = steps.get(currentStep);
 </script>
 

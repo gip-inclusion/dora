@@ -24,10 +24,10 @@ const shape1 = {
     post: [v.trim],
   },
   fullDesc: { default: "", rules: [v.isString()], post: [v.trim] },
-  category: {
-    default: "",
+  categories: {
+    default: [],
     required: true,
-    rules: [v.isString(), v.maxStrLength(255)],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)]), v.arrNotEmpty()],
   },
   subcategories: {
     default: [],

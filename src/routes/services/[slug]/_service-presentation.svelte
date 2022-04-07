@@ -32,9 +32,6 @@
 <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
 
 <div class="mt-s48 mb-s32 flex items-baseline">
-  <Tag bgColorClass="bg-gray-01" fgColorClass="text-gray-dark">
-    {service.categoryDisplay}
-  </Tag>
   <div class="maj ml-s24 text-f12 text-gray-text-alt2">
     Mise à jour le {new Date(service.modificationDate).toLocaleDateString(
       "fr-FR",
@@ -51,6 +48,11 @@
     small
     on:click={handleSuggestion}
   />
+</div>
+<div class="flex flex-wrap gap-s8">
+  {#each service.categoriesDisplay as categoryDisplay}
+    <Tag selfStart>{categoryDisplay}</Tag>
+  {/each}
 </div>
 {#if !service.structureInfo.hasAdmin}
   <Info

@@ -10,10 +10,10 @@ const shape1 = {
     required: true,
     rules: [v.isString(), v.maxStrLength(50)],
   },
-  category: {
-    default: "",
+  categories: {
+    default: [],
     required: true,
-    rules: [v.isString(), v.maxStrLength(255)],
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)]), v.arrNotEmpty()],
   },
   subcategories: {
     default: [],
@@ -275,8 +275,8 @@ export const draftServiceSchema = {
     rules: [v.isString(), v.maxStrLength(140)],
     post: [v.trim],
   },
-  category: {
-    rules: [v.isString(), v.maxStrLength(255)],
+  categories: {
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   subcategories: {
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
