@@ -82,16 +82,16 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
               <li><span>Aucun</span></li>
             {/each}
           </ul>
-          {#if service.forms.length || service.onlineForm}
+          {#if service.formsInfo.length || service.onlineForm}
             <div class="mx-s40 border-t border-gray-03" />
           {/if}
-          {#if service.forms.length}
+          {#if service.formsInfo.length}
             <ul class="list">
-              {#each service.forms as form}
+              {#each service.formsInfo as form}
                 <li>
                   <span class="break-all">
-                    <a target="_blank" rel="noopener nofollow" href={form}
-                      >{form}</a
+                    <a target="_blank" rel="noopener nofollow" href={form.url}
+                      >{form.name}</a
                     >
                   </span>
                 </li>
