@@ -16,6 +16,8 @@
 
   export let structuresOptions;
 
+  let selectedCity;
+
   const defaultStructure = Object.fromEntries(
     Object.entries(structureSchema).map(([fieldName, props]) => [
       fieldName,
@@ -26,7 +28,8 @@
 
   let alreadyClaimedEstablishment;
 
-  function handleCityChange(_city) {
+  function handleCityChange(city) {
+    selectedCity = city;
     structure = JSON.parse(JSON.stringify(defaultStructure));
   }
 

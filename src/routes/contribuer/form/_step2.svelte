@@ -14,8 +14,9 @@
   export let establishment;
 
   function handleCityChange(city) {
-    service.city = city?.name;
-    service.cityCode = city?.code;
+    const props = city?.properties;
+    service.city = props?.name;
+    service.cityCode = props?.citycode;
   }
 
   function handleAddressChange(address) {
@@ -197,7 +198,7 @@
       name="city"
       placeholder="Saisissez et validez votre ville"
       initialValue={service.city}
-      onChange={handleCityChange}
+      handleChange={handleCityChange}
     />
   </Field>
 

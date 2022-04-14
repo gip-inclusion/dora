@@ -23,7 +23,7 @@
 
   async function searchSirene(q) {
     const url = `${getApiURL()}/search-sirene/${
-      city.code
+      city.properties.citycode
     }/?q=${encodeURIComponent(q)}`;
 
     const response = await fetch(url, {
@@ -51,7 +51,7 @@
     slot="custom-input"
     name="city-select"
     placeholder="Saisissez et sélectionnez le nom de la ville"
-    onChange={handleCityChange}
+    handleChange={handleCityChange}
   />
 </Field>
 <Field type="custom" label="Nom de votre structure" required vertical>
@@ -59,7 +59,7 @@
     slot="custom-input"
     name="siret-select"
     onChange={handleEstablishmentChange}
-    disabled={!city?.code}
+    disabled={!city?.properties?.citycode}
     placeholder="Commencez à saisir et choisissez dans la liste"
     hideArrow
     searchFunction={searchSirene}
