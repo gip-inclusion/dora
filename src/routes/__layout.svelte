@@ -49,7 +49,7 @@
   <script
     defer
     data-domain={$page.url.hostname}
-    src="https://plausible.io/js/plausible.outbound-links.js"></script>
+    src="https://plausible.io/js/plausible.js"></script>
   <script>
     window.plausible =
       window.plausible ||
