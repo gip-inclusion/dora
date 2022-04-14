@@ -3,12 +3,11 @@
 
   import { contextValidationKey } from "$lib/validation";
   import { getDepartmentFromCityCode } from "$lib/utils";
-  import { getApiURL } from "$lib/utils/api.js";
   import Select from "$lib/components/forms/select.svelte";
   import Button from "$lib/components/button.svelte";
   import { pinDistanceIcon } from "$lib/icons";
 
-  export let onChange;
+  export let handleChange;
   export let placeholder;
   export let disabled = false;
   export let name;
@@ -17,16 +16,19 @@
 
   let choices = [];
 
-  async function searchCity(q) {
-    const url = `${getApiURL()}/admin-division-search/?type=city&q=${encodeURIComponent(
-      q
-    )}`;
+  const banAPIUrl = "https://api-adresse.data.gouv.fr/";
 
+  async function searchCity(q) {
+    const url = `${banAPIUrl}search/?q=${encodeURIComponent(
+      q
+    )}&limit=10&type=municipality`;
     const response = await fetch(url);
     const jsonResponse = await response.json();
-    const results = jsonResponse.map((result) => ({
-      value: result,
-      label: `${result.name} (${getDepartmentFromCityCode(result.code)})`,
+    const results = jsonResponse.features.map((feature) => ({
+      value: feature,
+      label: `${feature.properties.label} (${getDepartmentFromCityCode(
+        feature.properties.postcode
+      )})`,
     }));
 
     return results;
@@ -47,23 +49,32 @@
 
     // pour tester l'API, décommenter:
     // const q = `lon=2.37&lat=48.357`;
-    const url = `${getApiURL()}/admin-division-reverse-search/?type=city&lon=${encodeURIComponent(
-      longitude
-    )}&lat=${encodeURIComponent(latitude)}`;
+    const q = `lon=${encodeURIComponent(longitude)}&lat=${encodeURIComponent(
+      latitude
+    )}`;
 
+    const url = `${banAPIUrl}reverse/?${q}`;
     const response = await fetch(url);
-    const city = await response.json();
+    const jsonResponse = await response.json();
+    const result = jsonResponse.features.map((feature) => ({
+      value: feature,
+    }))[0];
 
     geolocLabel = geolocLabelInit;
 
-    if (city) {
+    if (result) {
+      const label = `${
+        result.value.properties.city
+      } (${getDepartmentFromCityCode(result.value.properties.postcode)})`;
+
+      result.value.properties.label = result.value.properties.city;
       choices = [
         {
-          label: `${city.name} (${getDepartmentFromCityCode(city.code)})`,
-          value: city,
+          label,
+          value: result.value,
         },
       ];
-      value = city;
+      value = result.value;
     }
   }
 
@@ -88,7 +99,7 @@
   bind:value
   on:blur={handleBlur}
   {name}
-  {onChange}
+  onChange={handleChange}
   {initialValue}
   {placeholder}
   {disabled}
