@@ -52,6 +52,10 @@
     padding-top: var(--s40);
   }
 
+  .roundedTop {
+    background-color: var(--col-content-bg, var(--col-gray-bg));
+  }
+
   @media print {
     .top-padded {
       padding-top: 0;
@@ -72,10 +76,6 @@
   }
 
   @screen lg {
-    .roundedTop {
-      background-color: var(--col-content-bg, var(--col-gray-bg));
-    }
-
     .roundedBottom {
       background-color: var(--col-bg, var(--col-gray-bg));
     }
