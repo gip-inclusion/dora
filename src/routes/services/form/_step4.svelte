@@ -11,6 +11,7 @@
   import serviceSchema from "$lib/schemas/service.js";
   import { getStructure } from "$lib/structures";
   import AdminDivisionSearch from "$lib/components/forms/admin-division-search.svelte";
+  import { moveToTheEnd } from "$lib/utils";
 
   export let servicesOptions, service;
   export let adminDivisionChoices = [];
@@ -129,7 +130,11 @@
       name="locationKinds"
       errorMessages={$formErrors.locationKinds}
       bind:value={service.locationKinds}
-      choices={servicesOptions.locationKinds}
+      choices={moveToTheEnd(
+        servicesOptions.locationKinds,
+        "value",
+        "a-distance"
+      )}
     >
       <FieldHelp slot="helptext" title="Lieu de déroulement">
         Merci de préciser si le service ou l’accompagnement se déroule en

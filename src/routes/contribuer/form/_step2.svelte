@@ -8,6 +8,7 @@
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import AddressSearch from "$lib/components/forms/street-search.svelte";
   import Info from "$lib/components/forms/form-info.svelte";
+  import { moveToTheEnd } from "$lib/utils";
 
   export let servicesOptions;
   export let service;
@@ -173,7 +174,7 @@
     name="locationKinds"
     errorMessages={$formErrors.locationKinds}
     bind:value={service.locationKinds}
-    choices={servicesOptions.locationKinds}
+    choices={moveToTheEnd(servicesOptions.locationKinds, "value", "a-distance")}
   >
     <FieldHelp slot="helptext" title="Lieu de déroulement">
       Merci de préciser si le service ou l’accompagnement se déroule en

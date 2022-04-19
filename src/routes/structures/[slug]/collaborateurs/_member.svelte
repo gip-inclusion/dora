@@ -19,14 +19,9 @@
   </div>
   <div class="grow" />
   <slot name="label" />
-
-  {#if !readOnly}
+  {#if !readOnly && !isOnlyAdmin}
     <div>
-      <ButtonMenu
-        icon={moreIcon}
-        let:onClose={onCloseParent}
-        disabled={isOnlyAdmin}
-      >
+      <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
         <slot name="actions" {onCloseParent} />
       </ButtonMenu>
     </div>

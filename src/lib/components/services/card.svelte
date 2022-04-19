@@ -22,7 +22,7 @@
     <h4><a href="/services/{service.slug}">{service.name}</a></h4>
 
     <div class="flex flex-wrap gap-s8">
-      {#each service.categoriesDisplay as categoryDisplay}
+      {#each service.categoriesDisplay.sort( (a, b) => a.localeCompare( b, "fr", { numeric: true } ) ) as categoryDisplay}
         <Tag selfStart>{categoryDisplay}</Tag>
       {/each}
     </div>
