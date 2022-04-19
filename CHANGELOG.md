@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/betagouv/dora-front/compare/v0.0.8...v0.0.9) (2022-04-19)
+
+### Features
+
+- **services:** ajoute plusieurs thematiques ([#44](https://github.com/betagouv/dora-front/issues/44)) ([ee2fe4c](https://github.com/betagouv/dora-front/commit/ee2fe4cf052fbeb21b06f89a284ef8a3eeee93a9))
+
+### Bug Fixes
+
+- **homepage:** corrige l'affichage sur mobile ([c58dbd8](https://github.com/betagouv/dora-front/commit/c58dbd87a2b8c84cdcb29683fd66369b7ea19fe4))
+- **service, structure:** corrige l'affichage de l'arriere plan sur mobile ([64b9361](https://github.com/betagouv/dora-front/commit/64b93610b25132ace9c21e946c244b560c45b6ce))
+- **service:** corrige le telechargement de fichier ([1336e89](https://github.com/betagouv/dora-front/commit/1336e89eb5ec902dfcbe49996c5aee42b0d9556d))
+- **service:** deplace les champs "autre" en fin de liste ([4f35657](https://github.com/betagouv/dora-front/commit/4f35657d750b7af7dc1282729e71ac405c61d467))
+- **services:** affiche les thematiques par ordre alphabetique ([96c069a](https://github.com/betagouv/dora-front/commit/96c069a5f68aed0d716b0c63ffff43f24315d3d7))
+
 ### [0.0.8](https://github.com/betagouv/dora-front/compare/v0.0.7...v0.0.8) (2022-04-05)
 
 ### Features
