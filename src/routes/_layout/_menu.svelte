@@ -3,6 +3,7 @@
 
   import { questionFillIcon } from "$lib/icons.js";
   import { userInfo } from "$lib/auth";
+  import { userPreferences } from "$lib/preferences";
   import { shortenString } from "$lib/utils";
 
   import LinkButton from "$lib/components/link-button.svelte";
@@ -15,13 +16,44 @@
   let structures = [];
 
   $: structures = $userInfo
-    ? [...$userInfo.structures, ...$userInfo.pendingStructures]
+    ? [...$userInfo.structures, ...$userInfo.pendingStructures].sort((a, b) => {
+        // si l'utilisateur a visité la page de la structure
+        // elle est remontée en tête de liste
+        if (
+          $userPreferences.visitedStructures.includes(a.slug) &&
+          !$userPreferences.visitedStructures.includes(b.slug)
+        ) {
+          return -1;
+        }
+
+        if (
+          !$userPreferences.visitedStructures.includes(a.slug) &&
+          $userPreferences.visitedStructures.includes(b.slug)
+        ) {
+          return 1;
+        }
+
+        if (
+          $userPreferences.visitedStructures.includes(a.slug) &&
+          $userPreferences.visitedStructures.includes(b.slug)
+        ) {
+          return $userPreferences.visitedStructures.indexOf(a.slug) <
+            $userPreferences.visitedStructures.indexOf(b.slug)
+            ? -1
+            : 1;
+        }
+
+        // les structures dont l'utilisateur n'a pas visité la page
+        // restent en fin de liste par ordre alphabétique
+        return a.name.localeCompare(b.name, "fr", { numeric: true });
+      })
     : [];
 </script>
 
 <HamburgerMenu>
   {#if $userInfo}
     <MenuMonCompte />
+
     {#if !!structures?.length}
       <hr class="my-s8 self-stretch border-t-gray-03" />
       <MenuStructures {structures} />
@@ -36,7 +68,9 @@
     />
     <hr class="my-s8 self-stretch border-t-gray-03" />
   {/if}
+
   <MenuAide />
+
   <div slot="lg" class="flex gap-s40">
     <ButtonMenu icon={questionFillIcon}>
       <MenuAide />

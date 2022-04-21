@@ -2,6 +2,7 @@ import { get, writable } from "svelte/store";
 import { browser } from "$app/env";
 import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
 import { log, logException } from "./logger";
+import { userPreferencesSet } from "./preferences";
 
 const tokenKey = "token";
 
@@ -52,6 +53,7 @@ export async function refreshUserInfo() {
     const result = await getUserInfo(get(token));
     if (result.status === 200) {
       userInfo.set(await result.json());
+      userPreferencesSet();
     } else {
       log("Unexpected status code", { result });
     }
@@ -74,6 +76,7 @@ export async function validateCredsAndFillUserInfo() {
         if (result.status === 200) {
           token.set(lsToken);
           userInfo.set(await result.json());
+          userPreferencesSet();
         } else if (result.status === 404) {
           // Le token est invalide, on vide le localStorage
           clearToken();
@@ -91,7 +94,7 @@ export async function validateCredsAndFillUserInfo() {
 export function disconnect() {
   clearToken();
   clearUserInfo();
-  localStorage.clear();
+  localStorage.removeItem(tokenKey);
 }
 
 export function userInfoIsComplete() {
