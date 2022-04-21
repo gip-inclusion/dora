@@ -1,16 +1,61 @@
 <script>
   import { userInfo } from "$lib/auth";
+  import Input from "$lib/components/forms/input.svelte";
+  import Select from "$lib/components/forms/select.svelte";
 
   import LinkButton from "$lib/components/link-button.svelte";
   import ServiceCard from "$lib/components/services/card.svelte";
   import { addCircleIcon } from "$lib/icons";
 
   export let structure, services, total;
-  export let hasListLink = false;
+  export let hasOptions = true;
   export let onRefresh;
   let canEdit;
 
+  const orders = [
+    { value: "date", label: "Date de mise à jour" },
+    { value: "alpha", label: "Alphabétique" },
+    { value: "etat", label: "Publication" },
+  ];
+  let order = orders[0].value;
+  let servicesOrdered;
+  let filters;
+
   $: canEdit = structure.isMember || $userInfo?.isStaff;
+  $: servicesOrdered = services
+    .sort((a, b) => {
+      if (order === "etat") {
+        if (
+          (a.isSuggestion && b.isSuggestion) ||
+          (!a.isSuggestion && a.isDraft && !b.isSuggestion && b.isDraft) ||
+          (!a.isSuggestion && !a.isDraft && !b.isSuggestion && !b.isDraft)
+        )
+          return 0;
+
+        if (a.isSuggestion) return 1;
+
+        if (b.isSuggestion) return -1;
+
+        if (!a.isSuggestion && !a.isDraft) return -1;
+
+        if (!b.isSuggestion && !b.isDraft) return 1;
+
+        return 0;
+      }
+
+      if (order === "alpha") {
+        return a.name.localeCompare(b.name, "fr", { numeric: true });
+      }
+
+      return new Date(b.modificationDate) - new Date(a.modificationDate);
+    })
+    .filter(
+      (s) =>
+        !filters ||
+        filters
+          .split(" ")
+          .every((f) => s.name.toLowerCase().includes(f.toLowerCase()))
+    );
 
   async function handleRefresh() {
     if (onRefresh) {
@@ -22,13 +67,29 @@
 <div class="col-span-full md:flex md:items-center md:justify-between">
   <h2 class="mb-s24 text-france-blue">Services</h2>
   <div class="flex gap-s16">
-    {#if !!services.length && hasListLink}
+    {#if !!services.length && !hasOptions}
       <LinkButton
         label={`Voir tous les services (${total})`}
         to="/structures/{structure.slug}/services"
         small
         secondary
       />
+    {/if}
+    {#if hasOptions}
+      <div class="flex flex-col gap-s16 md:flex-row md:items-center">
+        <div>Ordre</div>
+        <div>
+          <Select
+            choices={orders}
+            bind:value={order}
+            initialValue={order}
+            on:blur
+            showClear={false}
+          />
+        </div>
+
+        <Input type="text" bind:value={filters} placeholder="Mots-clé" />
+      </div>
     {/if}
   </div>
 </div>
@@ -46,7 +107,7 @@
         />
       </div>
     {/if}
-    {#each services as service}
+    {#each servicesOrdered as service}
       <ServiceCard {service} readOnly={!canEdit} onRefresh={handleRefresh} />
     {/each}
   </div>

@@ -3,7 +3,7 @@
 
   export let name = "";
   export let choices = undefined;
-  export let sort = undefined;
+  export let sort = false;
   export let value = undefined;
   export let disabled = false;
   export let readonly = false;

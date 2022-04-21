@@ -64,7 +64,7 @@
   export let hideArrow = false;
 
   // option to show clear selection button
-  export let showClear = false;
+  export let showClear = true;
 
   // option to show loading indicator when the async function is executed
   export let showLoadingIndicator = false;
@@ -171,7 +171,7 @@
 
   $: value, onValueChanged();
   $: text, onTextChanged();
-  $: clearable = showClear || ((lock || multiple) && value);
+  $: clearable = showClear && (lock || multiple) && value;
 
   // --- Functions ---
 

@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-  <title>{structure.name} | Antennes | DORA</title>
+  <title>Antennes | {$structure.name} | DORA</title>
   <meta name="description" content={$structure.shortDesc} />
 </svelte:head>
 

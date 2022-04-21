@@ -24,7 +24,7 @@
   <ServicesList
     structure={$structure}
     services={$structure.services.slice(0, 3)}
-    hasListLink
+    hasOptions={false}
     onRefresh={handleRefresh}
     total={$structure.services.length}
   />
@@ -35,7 +35,7 @@
   <BranchesList
     structure={$structure}
     branches={$structure.branches.slice(0, 3) || []}
-    hasListLink
+    hasOptions={false}
     total={$structure.branches.length}
   />
 {/if}
