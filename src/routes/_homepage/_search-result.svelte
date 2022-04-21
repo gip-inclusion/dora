@@ -1,8 +1,6 @@
 <script>
   import Label from "$lib/components/label.svelte";
   import { mapPinIcon, pinDistanceIcon } from "$lib/icons";
-
-  import Tag from "$lib/components/tag.svelte";
   import SearchResultWrapper from "./_search_result_wrapper.svelte";
 
   export let result;
@@ -15,9 +13,6 @@
     </a>
     <h4><a href="/services/{result.slug}">{result.name}</a></h4>
     <div class="mt-s8 flex flex-col gap-s16 md:flex-row">
-      <Tag selfStart>
-        {result.categoryDisplay}
-      </Tag>
       <Label label={`${result.postalCode}, ${result.city}`} icon={mapPinIcon} />
       {#if result.distance}
         <Label label={`${result.distance} km`} icon={pinDistanceIcon} />

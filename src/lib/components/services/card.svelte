@@ -1,5 +1,4 @@
 <script>
-  import Tag from "$lib/components/tag.svelte";
   import { mapPinIcon } from "$lib/icons";
   import Label from "$lib/components/label.svelte";
   import StateLabel from "./state-label.svelte";
@@ -21,11 +20,6 @@
   <div class="my-s8 flex flex-col gap-s16">
     <h4><a href="/services/{service.slug}">{service.name}</a></h4>
 
-    <div class="flex flex-wrap gap-s8">
-      {#each service.categoriesDisplay.sort( (a, b) => a.localeCompare( b, "fr", { numeric: true } ) ) as categoryDisplay}
-        <Tag selfStart>{categoryDisplay}</Tag>
-      {/each}
-    </div>
     {#if service.diffusionZoneDetailsDisplay}
       <Label
         label={`${service.diffusionZoneDetailsDisplay}`}
