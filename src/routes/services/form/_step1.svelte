@@ -64,7 +64,7 @@
     name="categories"
     errorMessages={$formErrors.categories}
     onSelectChange={handleCategoryChange}
-    placeholder="Choisissez la ou les thématiques"
+    placeholderMulti="Choisissez la ou les thématiques"
     sortSelect
   />
   <ModelField

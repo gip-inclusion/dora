@@ -100,7 +100,7 @@
       name="categories"
       errorMessages={$formErrors.categories}
       onSelectChange={handleCategoriesChange}
-      placeholder="Choisissez la ou les thématiques"
+      placeholderMulti="Choisissez la ou les thématiques"
       sortSelect
     >
       <FieldHelp slot="helptext" title="Catégorisation">
