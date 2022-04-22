@@ -26,6 +26,7 @@
 
       if (userStructuresSlugs.includes(s.slug)) {
         const slugIndex = preferences.visitedStructures.indexOf(s.slug);
+
         if (slugIndex > 0) {
           preferences.visitedStructures.splice(slugIndex, 1);
         }
@@ -33,7 +34,7 @@
         preferences.visitedStructures.unshift(s.slug);
 
         localStorage.setItem(
-          "structuresViewed",
+          "visitedStructures",
           JSON.stringify(preferences.visitedStructures)
         );
 

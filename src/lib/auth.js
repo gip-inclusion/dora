@@ -52,8 +52,9 @@ export async function refreshUserInfo() {
   try {
     const result = await getUserInfo(get(token));
     if (result.status === 200) {
-      userInfo.set(await result.json());
-      userPreferencesSet();
+      const info = await result.json();
+      userInfo.set(info);
+      userPreferencesSet([...info.structures, info.pendingStructures]);
     } else {
       log("Unexpected status code", { result });
     }
@@ -75,8 +76,9 @@ export async function validateCredsAndFillUserInfo() {
         const result = await getUserInfo(lsToken);
         if (result.status === 200) {
           token.set(lsToken);
-          userInfo.set(await result.json());
-          userPreferencesSet();
+          const info = await result.json();
+          userInfo.set(info);
+          userPreferencesSet([...info.structures, ...info.pendingStructures]);
         } else if (result.status === 404) {
           // Le token est invalide, on vide le localStorage
           clearToken();
