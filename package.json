@@ -2,8 +2,8 @@
   "name": "dora-front",
   "version": "0.0.9",
   "engines": {
-    "npm": ">= 8",
-    "node": ">= 16"
+    "npm": ">=8 <9",
+    "node": ">=16 <18"
   },
   "repository": {
     "type": "git",
