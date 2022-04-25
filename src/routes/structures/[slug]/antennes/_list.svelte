@@ -4,13 +4,14 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import StructureCard from "$lib/components/structures/card.svelte";
   import { addCircleIcon } from "$lib/icons";
-  import Select from "$lib/components/forms/select.svelte";
-  import Input from "$lib/components/forms/input.svelte";
+  // import Select from "$lib/components/forms/select.svelte";
+  // import Input from "$lib/components/forms/input.svelte";
   export let structure, branches, total;
   export let hasOptions = true;
 
   let departements = [];
-  let departement = "tous";
+  // let departement = "tous";
+  const departement = "tous";
   let filters;
   let branchesFiltered = [];
 
@@ -52,7 +53,7 @@
       />
     {/if}
 
-    {#if hasOptions}
+    <!-- {#if hasOptions}
       <div class="flex flex-col gap-s16 md:flex-row md:items-center">
         <div>Départements</div>
         <div>
@@ -67,7 +68,7 @@
 
         <Input type="text" bind:value={filters} placeholder="Mots-clé" />
       </div>
-    {/if}
+    {/if} -->
   </div>
 </div>
 <div class="col-span-full">
