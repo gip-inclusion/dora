@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/betagouv/dora-front/compare/v0.0.9...v0.0.10) (2022-04-25)
+
+### Features
+
+- **menu:** organise la liste des structures selon l'ordre des visites ([#49](https://github.com/betagouv/dora-front/issues/49)) ([73f4eb2](https://github.com/betagouv/dora-front/commit/73f4eb2e5acced8603b0c78acc82a08a8d22249b))
+- **structure:** ajoute des filtres sur les services et les antennes ([#48](https://github.com/betagouv/dora-front/issues/48)) ([55dbb5a](https://github.com/betagouv/dora-front/commit/55dbb5a33fdee863354dee37a4d858a27bce66f3))
+- **structure:** correction de texte ([0fa393f](https://github.com/betagouv/dora-front/commit/0fa393f5820334cdfb7c64bc9edbeff1f5b6b4ad))
+
+### Bug Fixes
+
+- **menu:** supprime les structures visitees si l'utilisateur n'en fait pas parti ([fd8de58](https://github.com/betagouv/dora-front/commit/fd8de585b34570fd32b8ede8a22c01edcfe100ee))
+- **service:** affiche le placeholder sur le champs thematiques ([9b7103c](https://github.com/betagouv/dora-front/commit/9b7103cd9b5aaeb663a7be0d8fbed9ef36a37cc9))
+- **service:** supprime l'affichage des thematiques sur la vue reduite ([db1c408](https://github.com/betagouv/dora-front/commit/db1c408cfb5497ca059b8a7fe17e0a29b7703f0e))
+
 ### [0.0.9](https://github.com/betagouv/dora-front/compare/v0.0.8...v0.0.9) (2022-04-19)
 
 ### Features
