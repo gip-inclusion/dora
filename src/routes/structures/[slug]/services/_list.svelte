@@ -77,7 +77,7 @@
     {/if}
     {#if hasOptions}
       <div class="flex flex-col gap-s16 md:flex-row md:items-center">
-        <div>Ordre</div>
+        <div>Trier par</div>
         <div>
           <Select
             choices={orders}
