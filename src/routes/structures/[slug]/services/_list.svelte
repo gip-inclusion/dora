@@ -1,7 +1,7 @@
 <script>
   import { userInfo } from "$lib/auth";
-  import Input from "$lib/components/forms/input.svelte";
-  import Select from "$lib/components/forms/select.svelte";
+  // import Input from "$lib/components/forms/input.svelte";
+  // import Select from "$lib/components/forms/select.svelte";
 
   import LinkButton from "$lib/components/link-button.svelte";
   import ServiceCard from "$lib/components/services/card.svelte";
@@ -17,7 +17,7 @@
     { value: "alpha", label: "Alphabétique" },
     { value: "etat", label: "Publication" },
   ];
-  let order = orders[0].value;
+  const order = orders[0].value;
   let servicesOrdered;
   let filters;
 
@@ -75,7 +75,7 @@
         secondary
       />
     {/if}
-    {#if hasOptions}
+    <!-- {#if hasOptions}
       <div class="flex flex-col gap-s16 md:flex-row md:items-center">
         <div>Trier par</div>
         <div>
@@ -90,7 +90,7 @@
 
         <Input type="text" bind:value={filters} placeholder="Mots-clé" />
       </div>
-    {/if}
+    {/if} -->
   </div>
 </div>
 <div class="col-span-full">
