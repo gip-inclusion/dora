@@ -1,8 +1,8 @@
 <script>
   import CG from "$lib/components/layout/centered-grid.svelte";
-
-  function hR() {
-    iFrameResize({}, "#myIframe");
+  import { METABASE_EMBED_URL, PLAUSIBLE_EMBED_URL } from "$lib/env.js";
+  function hR(id) {
+    iFrameResize({}, id);
   }
 </script>
 
@@ -22,12 +22,24 @@
 <CG>
   <iframe
     class="col-span-full"
-    title="Dashboard Metabase"
-    src="https://metabase.dora.fabrique.social.gouv.fr/public/dashboard/9f65d982-fe2e-48f6-bb41-b829b89c29f9#bordered=false&titled=false"
+    title="Dashboard Plausible"
+    src={PLAUSIBLE_EMBED_URL}
     frameborder="0"
     allowtransparency
-    on:load={hR}
-    id="myIframe"
+    on:load={hR("#plausibleIframe")}
+    id="plausibleIframe"
+  />
+
+  <script async src="https://plausible.io/js/embed.host.js"></script>
+
+  <iframe
+    class="col-span-full"
+    title="Dashboard Metabase"
+    src={METABASE_EMBED_URL}
+    frameborder="0"
+    allowtransparency
+    on:load={hR("#metabaseIframe")}
+    id="metabaseIframe"
   />
 </CG>
 
