@@ -11,6 +11,7 @@
   <script
     src="https://metabase.dora.fabrique.social.gouv.fr/app/iframeResizer.js">
   </script>
+  <script src="https://plausible.io/js/embed.host.js"></script>
 </svelte:head>
 
 <CG>
@@ -20,6 +21,8 @@
 </CG>
 
 <CG>
+  <h2 class="col-span-full">Statistiques d’usage</h2>
+
   <iframe
     class="col-span-full"
     title="Dashboard Plausible"
@@ -30,7 +33,7 @@
     id="plausibleIframe"
   />
 
-  <script async src="https://plausible.io/js/embed.host.js"></script>
+  <h2 class="col-span-full">Statistiques de référencement</h2>
 
   <iframe
     class="col-span-full"
@@ -46,5 +49,9 @@
 <style lang="postcss">
   iframe {
     width: 100%;
+  }
+
+  h2 {
+    @apply mb-s0 mt-s20 text-f28;
   }
 </style>
