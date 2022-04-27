@@ -35,9 +35,16 @@
     cleanOptions("requirements", structure);
     cleanOptions("credentials", structure);
   }
+
+  let showStructures = structures.length > 1;
+  if (service.structure) {
+    // Il s'agit d'une édition de service existant, ou alors la structure
+    // est renseignée dans l'URL: ne pas montrer le selecteur
+    showStructures = false;
+  }
 </script>
 
-{#if structures.length > 1}
+{#if showStructures}
   <FieldSet title="">
     <ModelField
       type="select"

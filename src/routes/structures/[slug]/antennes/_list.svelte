@@ -73,7 +73,7 @@
 </div>
 <div class="col-span-full">
   <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
-    {#if structure.isAdmin || $userInfo?.isStaff}
+    {#if $userInfo && (structure.isAdmin || $userInfo?.isStaff)}
       <div
         class="flex items-center justify-center rounded-md px-s20 py-s24 shadow-md"
       >

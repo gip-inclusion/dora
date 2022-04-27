@@ -101,7 +101,7 @@
       >
         <LinkButton
           label="Ajouter un service…"
-          to="/services/creer"
+          to="/services/creer?structure={structure.slug}"
           icon={addCircleIcon}
           noBackground
         />

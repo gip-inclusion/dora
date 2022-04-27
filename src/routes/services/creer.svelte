@@ -27,6 +27,7 @@
 
 <script>
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
 
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
@@ -45,6 +46,18 @@
   let service = getNewService();
   if (structures.length === 1) {
     service.structure = structures[0].slug;
+  } else {
+    // si la structure est renseignée dans l'URL, forcer celle-là
+    const structureSlug = $page.url.searchParams.get("structure");
+    if (
+      structureSlug &&
+      structures.map((s) => s.slug).includes(structureSlug)
+    ) {
+      service.structure = structureSlug;
+    }
+  }
+  if (service.structure && lastDraft.structure !== service.structure) {
+    lastDraft = null;
   }
   let lastDraftNotificationVisible = true;
   let currentStep = 1;
