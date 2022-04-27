@@ -8,9 +8,7 @@
     createStructure,
     getStructure,
   } from "$lib/structures.js";
-  import ModelField from "$lib/components/forms/model-field.svelte";
-  import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import FieldHelp from "$lib/components/forms/field-help.svelte";
+
   import structureSchema from "$lib/schemas/structure.js";
   import {
     validate,
@@ -19,10 +17,16 @@
     contextValidationKey,
   } from "$lib/validation.js";
 
+  import ModelField from "$lib/components/forms/model-field.svelte";
+  import FieldSet from "$lib/components/forms/fieldset.svelte";
+  import FieldHelp from "$lib/components/forms/field-help.svelte";
+
   import Alert from "$lib/components/forms/alert.svelte";
   import { arrowRightSIcon } from "$lib/icons";
 
   import Button from "$lib/components/button.svelte";
+  import CitySearch from "$lib/components/forms/city-search.svelte";
+  import AddressSearch from "$lib/components/forms/street-search.svelte";
 
   export let structure, structuresOptions, formTitle;
 
@@ -107,6 +111,22 @@
       }
     }
   }
+
+  function handleCityChange(city) {
+    structure.city = city?.name;
+    structure.cityCode = city?.code;
+  }
+
+  function handleAddressChange(address) {
+    const props = address?.properties;
+    const coords = address?.geometry.coordinates;
+    const lat = coords?.[1];
+    const long = coords?.[0];
+    structure.address1 = props?.name;
+    structure.postalCode = props?.postcode;
+    structure.longitude = long;
+    structure.latitude = lat;
+  }
 </script>
 
 {#if visible}
@@ -148,7 +168,7 @@
         type="select"
         label="Typologie"
         placeholder="Sélectionner"
-        schema={structureSchema.typologies}
+        schema={structureSchema.typology}
         sortSelect
         name="typology"
         errorMessages={$formErrors.typology}
@@ -156,15 +176,41 @@
         choices={structuresOptions.typologies}
         vertical
       />
+
       <ModelField
-        type="text"
-        label="Adresse"
-        schema={structureSchema.address1}
+        name="city"
+        type="custom"
+        label="Ville"
+        errorMessages={$formErrors.city}
+        schema={structureSchema.city}
+      >
+        <CitySearch
+          slot="custom-input"
+          name="city"
+          placeholder="Saisissez et validez votre ville"
+          initialValue={structure.city}
+          onChange={handleCityChange}
+          vertical
+        />
+      </ModelField>
+
+      <ModelField
+        type="custom"
         name="address1"
+        label="Adresse"
         errorMessages={$formErrors.address1}
-        bind:value={structure.address1}
-        vertical
-      />
+        schema={structureSchema.address1}
+      >
+        <AddressSearch
+          slot="custom-input"
+          name="address1"
+          disabled={!structure.cityCode}
+          cityCode={structure.cityCode}
+          placeholder="3 rue du parc"
+          initialValue={structure.address1}
+          handleChange={handleAddressChange}
+        />
+      </ModelField>
       <ModelField
         type="text"
         label="Complément d’adresse"
@@ -172,32 +218,39 @@
         name="address2"
         errorMessages={$formErrors.address2}
         bind:value={structure.address2}
-        vertical
       />
-      <div class="flex flex-row justify-between gap-x-s32">
-        <div class="w-s160">
-          <ModelField
-            type="text"
-            label="Code postal"
-            schema={structureSchema.postalCode}
-            name="postalCode"
-            errorMessages={$formErrors.postalCode}
-            bind:value={structure.postalCode}
-            vertical
-          />
-        </div>
-        <div class="flex-auto">
-          <ModelField
-            type="text"
-            label="Ville"
-            schema={structureSchema.city}
-            name="city"
-            errorMessages={$formErrors.city}
-            bind:value={structure.city}
-            vertical
-          />
-        </div>
-      </div>
+
+      <ModelField
+        type="text"
+        label="Code postal"
+        schema={structureSchema.postalCode}
+        name="postalCode"
+        errorMessages={$formErrors.postalCode}
+        bind:value={structure.postalCode}
+      />
+
+      <ModelField
+        type="hidden"
+        schema={structureSchema.cityCode}
+        name="cityCode"
+        errorMessages={$formErrors.cityCode}
+        bind:value={structure.cityCode}
+      />
+      <ModelField
+        type="hidden"
+        schema={structureSchema.longitude}
+        name="longitude"
+        errorMessages={$formErrors.longitude}
+        bind:value={structure.longitude}
+      />
+      <ModelField
+        type="hidden"
+        schema={structureSchema.latitude}
+        name="latitude"
+        errorMessages={$formErrors.latitude}
+        bind:value={structure.latitude}
+      />
+
       <div class="flex flex-row justify-between gap-x-s32">
         <div class="w-s250">
           <ModelField
@@ -257,31 +310,9 @@
 
       <ModelField
         type="hidden"
-        schema={structureSchema.cityCode}
-        name="cityCode"
-        bind:value={structure.cityCode}
-        vertical
-      />
-      <ModelField
-        type="hidden"
         schema={structureSchema.ape}
         name="ape"
         bind:value={structure.ape}
-        vertical
-      />
-      <ModelField
-        type="hidden"
-        schema={structureSchema.longitude}
-        name="longitude"
-        bind:value={structure.longitude}
-        vertical
-      />
-      <ModelField
-        type="hidden"
-        schema={structureSchema.latitude}
-        name="latitude"
-        bind:value={structure.latitude}
-        vertical
       />
 
       <div class="mb-s16 border-b border-gray-01" />
