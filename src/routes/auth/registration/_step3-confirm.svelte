@@ -6,6 +6,7 @@
   // Ne pas supprimer cette ligne:
   // le composant parent a besoin de binder cette valeur
   export let currentStep;
+  currentStep = currentStep; // Pour supprimer l'avertissement
 </script>
 
 <Fieldset title="Confirmation">

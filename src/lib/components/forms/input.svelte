@@ -212,7 +212,6 @@
 
 <style lang="postcss">
   input[type="text"],
-  input[type="password"],
   input[type="number"],
   input[type="url"],
   input[type="email"],
