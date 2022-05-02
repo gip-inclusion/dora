@@ -3,11 +3,7 @@
 
   import { goto } from "$app/navigation";
 
-  import {
-    modifyStructure,
-    createStructure,
-    getStructure,
-  } from "$lib/structures.js";
+  import { modifyStructure, createStructure } from "$lib/structures.js";
 
   import structureSchema from "$lib/schemas/structure.js";
   import {
@@ -32,6 +28,7 @@
 
   export let modify = false;
   export let visible;
+  export let onRefresh;
 
   let errorDiv;
 
@@ -91,9 +88,10 @@
       }
 
       if (result?.ok) {
-        if (modify) {
-          structure = await getStructure(structure.slug);
+        if (modify && onRefresh) {
+          await onRefresh();
         }
+
         goto(`/structures/${result.result.slug}`);
       } else {
         injectAPIErrors(
