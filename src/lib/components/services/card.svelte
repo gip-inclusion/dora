@@ -15,7 +15,7 @@
 
       <Menu {service} {onRefresh} />
     </div>
-    <hr class="mt-s8 border-t border-gray-03 " />
+    <hr class="mt-s8 mb-s20 border-t border-gray-03 " />
   {/if}
   <div class="my-s8 flex flex-col gap-s16">
     <h4><a href="/services/{service.slug}">{service.name}</a></h4>

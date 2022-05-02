@@ -1,6 +1,7 @@
 <script>
   import { getApiURL } from "$lib/utils/api.js";
   import { deleteBinIcon } from "$lib/icons.js";
+  import { shortenString } from "$lib/utils";
 
   export let structureSlug;
   export let fileKeys = [];
@@ -55,6 +56,12 @@
       request.send(file);
     }
   }
+
+  function urlStringPathRemove(string) {
+    const pathElements = string.split("/");
+
+    return pathElements[2];
+  }
 </script>
 
 <form on:submit|preventDefault={handleSubmit} class="mb-s8 cursor-pointer">
@@ -73,14 +80,16 @@
 </form>
 <ul>
   {#each fileKeys as uploaded}
-    <li class="mb-s8 flex">
-      <div class="text-f14">{uploaded}</div>
-      <button
-        on:click={handleRemove(uploaded)}
-        class="ml-s16 h-s24 w-s24 fill-error"
-      >
-        {@html deleteBinIcon}
-      </button>
+    <li class="mb-s8 flex justify-between">
+      <div class="text-f14">{shortenString(urlStringPathRemove(uploaded))}</div>
+      <div class="h-s24 w-s24">
+        <button
+          on:click={handleRemove(uploaded)}
+          class="ml-s16 h-s24 w-s24 fill-error"
+        >
+          {@html deleteBinIcon}
+        </button>
+      </div>
     </li>
   {/each}
 </ul>
