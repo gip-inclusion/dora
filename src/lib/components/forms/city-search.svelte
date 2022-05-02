@@ -2,7 +2,7 @@
   import { getContext } from "svelte";
 
   import { contextValidationKey } from "$lib/validation";
-  import { getDepartmentFromCityCode } from "$lib/utils";
+  import { fetchData, getDepartmentFromCityCode } from "$lib/utils";
   import { getApiURL } from "$lib/utils/api.js";
   import Select from "$lib/components/forms/select.svelte";
   import Button from "$lib/components/button.svelte";
@@ -41,6 +41,10 @@
   const geolocLabelInit = "À proximité";
   let geolocLabel = geolocLabelInit;
 
+  function searchCityFromLocationError() {
+    geolocLabel = "Position introuvable";
+  }
+
   async function searchCityFromLocationSuccess(position) {
     const longitude = position.coords.longitude;
     const latitude = position.coords.latitude;
@@ -51,24 +55,24 @@
       longitude
     )}&lat=${encodeURIComponent(latitude)}`;
 
-    const response = await fetch(url);
-    const city = await response.json();
+    const response = await fetchData(url);
+    if (response.ok) {
+      const city = response.data;
 
-    geolocLabel = geolocLabelInit;
+      geolocLabel = geolocLabelInit;
 
-    if (city) {
-      choices = [
-        {
-          label: `${city.name} (${getDepartmentFromCityCode(city.code)})`,
-          value: city,
-        },
-      ];
-      value = city;
+      if (city) {
+        choices = [
+          {
+            label: `${city.name} (${getDepartmentFromCityCode(city.code)})`,
+            value: city,
+          },
+        ];
+        value = city;
+      }
+    } else {
+      searchCityFromLocationError();
     }
-  }
-
-  function searchCityFromLocationError() {
-    geolocLabel = "Impossible de trouver votre position";
   }
 
   async function searchCityFromLocation() {
