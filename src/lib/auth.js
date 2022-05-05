@@ -28,15 +28,6 @@ export function setToken(t) {
   localStorage.setItem(tokenKey, t);
 }
 
-export function clearToken() {
-  token.set(null);
-  localStorage.removeItem(tokenKey);
-}
-
-export function clearUserInfo() {
-  userInfo.set(null);
-}
-
 async function getUserInfo(authToken) {
   return await fetch(`${getApiURL()}/auth/user-info/`, {
     method: "POST",
@@ -63,6 +54,37 @@ export async function refreshUserInfo() {
   }
 }
 
+export function deleteCookies() {
+  const cookies = document.cookie.split(";").reduce((acc, cookie) => {
+    const [name] = cookie.split("=").map((c) => c.trim());
+    acc.push(name);
+
+    return acc;
+  }, []);
+
+  const cookieNames = Object.keys(tarteaucitron.services).reduce(
+    (acc, name) => {
+      acc.push(...tarteaucitron.services[name].cookies);
+
+      return acc;
+    },
+    ["tarteaucitron"]
+  );
+
+  cookieNames.forEach((n) => {
+    const name = cookies.find((c) => c.includes(n));
+
+    document.cookie = `${name}=; Max-Age=0; path=/; domain=${location.hostname}`;
+  });
+}
+
+export function disconnect() {
+  token.set(null);
+  userInfo.set(null);
+  localStorage.clear();
+  deleteCookies();
+}
+
 export async function validateCredsAndFillUserInfo() {
   token.set(null);
   userInfo.set(null);
@@ -80,9 +102,8 @@ export async function validateCredsAndFillUserInfo() {
           userInfo.set(info);
           userPreferencesSet([...info.structures, ...info.pendingStructures]);
         } else if (result.status === 404) {
-          // Le token est invalide, on vide le localStorage
-          clearToken();
-          clearUserInfo();
+          // Le token est invalide, on déconnecte l'utilisateur
+          disconnect();
         } else {
           log("Unexpected status code", { result });
         }
@@ -91,12 +112,6 @@ export async function validateCredsAndFillUserInfo() {
       }
     }
   }
-}
-
-export function disconnect() {
-  clearToken();
-  clearUserInfo();
-  localStorage.removeItem(tokenKey);
 }
 
 export function userInfoIsComplete() {
