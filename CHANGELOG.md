@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.11](https://github.com/betagouv/dora-front/compare/v0.0.10...v0.0.11) (2022-05-09)
+
+### Features
+
+- **stats:** ajout des données Plausible sur la page /stats ([0e0b4f9](https://github.com/betagouv/dora-front/commit/0e0b4f91f6bc3a9daf24350d9d394b3968a44c5c))
+- **structure:** ajout de la complétion automatique des adresses ([ec70b95](https://github.com/betagouv/dora-front/commit/ec70b952c16376a161d1a17171b1221b17107065))
+
+### Bug Fixes
+
+- **service:** corrige l'affichage des noms de fichier ([d783037](https://github.com/betagouv/dora-front/commit/d7830375aecb0c9a41cde7475ab3793e6863fb01))
+- **structure:** met a jour le nom dans le menu ([#52](https://github.com/betagouv/dora-front/issues/52)) ([36a0538](https://github.com/betagouv/dora-front/commit/36a0538313b1feb640477d3b6aa456907b2de840))
+- supprime les donnees utilisateur lors de la deconnexion ([#53](https://github.com/betagouv/dora-front/issues/53)) ([de81d0e](https://github.com/betagouv/dora-front/commit/de81d0ea92580fa75453e3ef223dfe2d99df0480))
+
 ### [0.0.10](https://github.com/betagouv/dora-front/compare/v0.0.9...v0.0.10) (2022-04-25)
 
 ### Features
