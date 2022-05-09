@@ -39,13 +39,17 @@
 <div
   class="rounded-r-md border-l-8 {types[type].border} {types[type].bg} p-s24"
 >
-  <h4 class="mb-s16 {types[type].text} flex">
-    <div class="mr-s8 h-s24 w-s24 shrink-0 fill-current">
-      {@html types[type].icon}
-    </div>
-    {title}
-  </h4>
-  <div class="lg:flex lg:flex-row lg:justify-between lg:gap-s16">
+  {#if title}
+    <h4 class="mb-s16 {types[type].text} flex">
+      <div class="mr-s8 h-s24 w-s24 shrink-0 fill-current">
+        {@html types[type].icon}
+      </div>
+      {title}
+    </h4>
+  {/if}
+  <div
+    class="items-end text-f14 lg:flex lg:flex-row lg:justify-between lg:gap-s24"
+  >
     <slot />
 
     <div class="self-end">

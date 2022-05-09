@@ -9,6 +9,7 @@
   export let noHeaderBorder = false;
   export let collapsable = false;
   export let collapsed = true;
+  export let noSpacing = false;
   let wrapper;
 
   onMount(() => {
@@ -31,13 +32,13 @@
 >
   {#if title}
     <div
-      class="rounded-t-md px-s40 pt-s32 {headerBg} {noHeaderBorder
+      class="rounded-t-md px-s32 pt-s32 {headerBg} {noHeaderBorder
         ? ''
         : 'border-b border-gray-01 pb-s24'}"
     >
       <div class="flex justify-between">
         <h3
-          class="mb-s8 {headerBg !== 'bg-white'
+          class="mb-s0 {headerBg !== 'bg-white'
             ? 'text-white'
             : 'text-france-blue'}"
         >
@@ -54,15 +55,18 @@
       </div>
       <slot name="description">
         {#if description}
-          <p class="text-f14 text-gray-text-alt2">{description}</p>
+          <p class="mb-s0 text-f14 text-gray-text-alt2">{description}</p>
         {/if}
       </slot>
     </div>
   {/if}
   <div
-    class="flex flex-col gap-s24 rounded-b-md bg-white px-s40 pb-s40 pt-s24"
+    class="rounded-b-md bg-white px-s32 pb-s32 pt-s24"
     class:pt-s32={!title}
     class:hidden={collapsable && collapsed}
+    class:flex={!noSpacing}
+    class:flex-col={!noSpacing}
+    class:gap-s24={!noSpacing}
   >
     <slot />
   </div>

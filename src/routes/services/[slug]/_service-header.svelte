@@ -1,55 +1,62 @@
 <script>
-  import { page } from "$app/stores";
-
-  import { token } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
   import Label from "$lib/components/label.svelte";
-  import {
-    checkBoxBlankIcon,
-    compassDiscoverIcon,
-    mapPinIcon,
-  } from "$lib/icons";
+
+  import Tag from "$lib/components/tag.svelte";
+  import { mapPinIcon } from "$lib/icons";
+  import StateLabel from "$lib/components/services/state-label.svelte";
+  import AdminNotice from "$lib/components/structures/admin-notice.svelte";
 
   export let service;
-  export let isPreview = false;
-
-  const editLink = `${$page.url.pathname}/editer`;
 </script>
 
-<div class="col-span-full col-start-1 mb-s48 text-white">
+<div class="col-span-full col-start-1 py-s32 text-white">
   <div class="mx-auto">
-    <Label label={service.structureInfo.name} darkBg />
-    <h1 class="text-white">{service.name}</h1>
-    {#if $token && service.canWrite && !isPreview}
-      <div class="noprint my-s16">
-        <LinkButton to={editLink} label="Éditer" small />
-      </div>
-    {/if}
-    <div class="flex flex-col gap-s16 md:flex-row">
-      {#if service.isAvailable}
+    <div class="flex flex-col gap-s16 lg:flex-row lg:justify-between">
+      <div class="lg:w-2/3">
+        <div class="flex items-center">
+          <StateLabel {service} />
+          <p class="ml-s12 mb-s0 text-f12 text-gray-03">|</p>
+
+          <p class="ml-s12 mb-s0 text-f12 text-gray-01">
+            Mis à jour le {new Date(
+              service.modificationDate
+            ).toLocaleDateString("fr-FR", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+        </div>
+        <h1 class="text-white">{service.name}</h1>
+        <div class="mb-s16 flex flex-wrap gap-s8">
+          {#each service.categoriesDisplay.sort( (a, b) => a.localeCompare( b, "fr", { numeric: true } ) ) as categoryDisplay}
+            <Tag
+              selfStart
+              bgColorClass="bg-magenta-brand"
+              textColorClass="text-white">{categoryDisplay}</Tag
+            >
+          {/each}
+        </div>
+
         <Label
-          label="Disponible"
-          icon={checkBoxBlankIcon}
-          success
+          label={service.diffusionZoneDetailsDisplay}
+          icon={mapPinIcon}
           darkBg
-          bold
         />
-      {:else}
-        <Label label="Indisponible" icon={checkBoxBlankIcon} darkBg />
-      {/if}
+      </div>
 
-      <Label
-        label={service.kindsDisplay.join(", ")}
-        icon={compassDiscoverIcon}
-        darkBg
-      />
-
-      <Label
-        label={service.diffusionZoneDetailsDisplay}
-        icon={mapPinIcon}
-        darkBg
-      />
+      <div class="lg:w-1/3 lg:self-end">
+        <LinkButton
+          label={service.structureInfo.name}
+          to="/structures/{service.structure}"
+          secondary
+          small
+        />
+      </div>
     </div>
+
+    <div class="mt-s24"><AdminNotice structure={service.structureInfo} /></div>
   </div>
 </div>
 

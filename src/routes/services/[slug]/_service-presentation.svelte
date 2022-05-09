@@ -1,110 +1,12 @@
 <script>
-  import { browser } from "$app/env";
-  import { userInfo } from "$lib/auth";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import { lightBulbIcon, messageIcon } from "$lib/icons";
-
-  import Info from "$lib/components/forms/form-info.svelte";
-
-  import Tag from "$lib/components/tag.svelte";
-  import Button from "$lib/components/button.svelte";
-  import SuggestionModal from "./_suggestion-modal.svelte";
-
   export let service;
-
-  let suggestionModalIsOpen = false;
-
-  function handleSuggestion() {
-    suggestionModalIsOpen = true;
-    if (browser) {
-      plausible("suggestion", {
-        props: {
-          service: service.name,
-          slug: service.slug,
-          structure: service.structureInfo.name,
-          departement: service.department,
-        },
-      });
-    }
-  }
 </script>
 
-<SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
-
-<div class="mt-s48 mb-s32 flex items-baseline">
-  <div class="maj ml-s24 text-f12 text-gray-text-alt2">
-    Mise à jour le {new Date(service.modificationDate).toLocaleDateString(
-      "fr-FR",
-      { year: "numeric", month: "long", day: "numeric" }
-    )}
-  </div>
-  <div class="flex-auto" />
-
-  <Button
-    label="Suggérer une modification"
-    noBackground
-    icon={messageIcon}
-    iconOnRight
-    small
-    on:click={handleSuggestion}
-  />
-</div>
-<div class="flex flex-wrap gap-s8">
-  {#each service.categoriesDisplay.sort( (a, b) => a.localeCompare( b, "fr", { numeric: true } ) ) as categoryDisplay}
-    <Tag selfStart>{categoryDisplay}</Tag>
-  {/each}
-</div>
-{#if !service.structureInfo.hasAdmin}
-  <Info
-    title="Vous êtes le gestionnaire de cet établissement ?"
-    icon={lightBulbIcon}
-  >
-    Ces données ont été saisies par l’équipe DORA lors de l’étape
-    d’expérimentation. Vous pouvez revendiquer ces contenus en créant votre
-    compte et ainsi avoir la possibilité de mettre à jour les fiches de votre
-    établissement.
-    <div class="mt-s16">
-      {#if $userInfo}
-        <LinkButton
-          label="Demander l’accès"
-          to="https://itou.typeform.com/doracontactsupp"
-          otherTab
-          nofollow
-          small
-        />
-      {:else}
-        <LinkButton
-          label="Demander l’accès"
-          to="/auth/inscription?siret={service.structureInfo.siret}"
-          otherTab
-          nofollow
-          small
-        />
-      {/if}
-    </div>
-  </Info>
-{/if}
-
-{#if service.recurrence}
-  <div class="legend-bold text-gray-dark">SESSIONS &amp; RÉCURRENCE</div>
-  <p class="legend">{service.recurrence}</p>
-{/if}
-
-<div class="description-wrapper mt-s16">
-  <div>
-    <h2>Description du service</h2>
-    <strong>{service.shortDesc}</strong>
-    <div class="markdown-wrapper prose mb-s24 w-full">
-      {@html service.fullDesc}
-    </div>
-  </div>
+<div class="markdown-wrapper prose mb-s24 w-full">
+  {@html service.fullDesc}
 </div>
 
 <style lang="postcss">
-  h2 {
-    color: var(--col-france-blue) !important;
-  }
-
   .markdown-wrapper {
     margin-top: var(--s16);
   }

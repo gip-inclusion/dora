@@ -5,6 +5,7 @@
   import Tabs from "$lib/components/tabs-links.svelte";
   import { userInfo } from "$lib/auth";
   import PendingNotice from "./_pending-notice.svelte";
+  import AdminNotice from "$lib/components/structures/admin-notice.svelte";
 
   export let structure;
   export let tabId = "informations";
@@ -75,6 +76,12 @@
 
 {#if structure.isPendingMember}
   <div class="mt-s24"><PendingNotice /></div>
+{/if}
+
+{#if !structure.hasAdmin}
+  <div class="mt-s24">
+    <AdminNotice {structure} />
+  </div>
 {/if}
 
 <div class="noprint mt-s24">

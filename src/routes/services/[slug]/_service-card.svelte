@@ -5,58 +5,88 @@
   import OrientationBox from "./_orientation-box.svelte";
   import ServiceHeader from "./_service-header.svelte";
   import ServicePresentation from "./_service-presentation.svelte";
-  import Label from "$lib/components/label.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
+  import { shortenString } from "$lib/utils";
+  import Tag from "$lib/components/tag.svelte";
+  import Toolbar from "./_toolbar.svelte";
+
   export let service;
   export let isPreview = false;
 </script>
 
-<CenteredGrid --col-bg="var(--col-france-blue)" topPadded>
-  <ServiceHeader {service} {isPreview} />
+<CenteredGrid --col-bg="var(--col-france-blue)">
+  <ServiceHeader {service} />
 </CenteredGrid>
 
 <CenteredGrid
   roundedTop
   --col-under-bg="var(--col-france-blue)"
   --col-content-bg="var(--col-bg)"
+  topPadded
 >
-  <div class="col-span-full flex flex-col">
-    <div class="flex flex-col gap-s24 lg:flex-row-reverse">
-      <div class="orientation flex-initial">
-        <OrientationBox {service} />
-        <div
-          class="mb-s16 hidden max-w-md flex-col items-start gap-s16 lg:flex"
-        >
-          <h4>{service.structureInfo.name}</h4>
-          <Label label={service.structureInfo.shortDesc} italic />
-          <LinkButton
-            label="Voir l’offre de services complète"
-            to="/structures/{service.structure}"
-          />
-        </div>
-      </div>
-      <div class="service-pres flex-1">
-        <ServicePresentation {service} />
+  {#if !isPreview}
+    <div class="col-span-full">
+      <Toolbar {service} />
+    </div>
+  {/if}
+  <div class="col-span-full flex flex-col gap-s24 lg:flex-row-reverse">
+    <div class="lg:w-1/3">
+      {#if service.locationKinds.length}
+        {#if service.locationKinds.includes("en-presentiel")}
+          <p class="pb-s16 text-f14">
+            {service.address1}<br />
+            {#if service.address2}{service.address2}<br />{/if}
+            {service.postalCode}
+            {service.city}
+          </p>
+        {/if}
+        {#if service.locationKinds.includes("a-distance")}
+          <h4 class="pt-s16 pb-s8">À distance</h4>
+          <p class="pb-s16 text-f14">
+            <a target="_blank" rel="noopener nofollow" href={service.remoteUrl}
+              >{shortenString(service.remoteUrl, 35)}</a
+            >
+          </p>
+        {/if}
+      {/if}
+
+      {#if service.recurrence}
+        <p class="legend">{service.recurrence}</p>
+      {/if}
+    </div>
+    <div class="lg:w-2/3">
+      <p class="text-f18"><strong>{service.shortDesc}</strong></p>
+      <p class="list-inside list-disc text-f12 text-gray-text-alt">
+        {service.kindsDisplay.join(", ")}
+      </p>
+      <div class="mb-s24">
+        {#if service.isCumulative}
+          <Tag bgColorClass="bg-info" textColorClass="text-white"
+            >Service cumulable</Tag
+          >
+        {:else}
+          <Tag bgColorClass="bg-warning" textColorClass="text-white"
+            >Service non cumulable</Tag
+          >
+        {/if}
+        {#if service.hasFee}
+          <Tag bgColorClass="bg-warning" textColorClass="text-white"
+            >Frais à charge du bénéficiaire</Tag
+          >
+        {/if}
       </div>
     </div>
-    <div class="service-info">
-      <ModalitiesBox {service} />
-      <AccessBox {service} />
+  </div>
+
+  <div class="col-span-full flex flex-col gap-s24 lg:flex-row-reverse">
+    <div class="lg:w-1/3">
+      <OrientationBox {service} />
+    </div>
+    <div class="lg:w-2/3">
+      <div class="mb-s48 flex flex-col gap-s32 lg:flex-row">
+        <div class="flex-1"><AccessBox {service} /></div>
+        <div class="flex-1"><ModalitiesBox {service} /></div>
+      </div>
+      <div class="mb-s48"><ServicePresentation {service} /></div>
     </div>
   </div>
 </CenteredGrid>
-
-<style lang="postcss">
-  .service-info {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: var(--s40);
-    gap: var(--s24);
-  }
-
-  @media print {
-    .service-info {
-      margin-bottom: 0;
-    }
-  }
-</style>

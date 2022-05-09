@@ -1,88 +1,123 @@
 <script>
-  import { page } from "$app/stores";
-  import { browser } from "$app/env";
-  import Button from "$lib/components/button.svelte";
-  import Field from "$lib/components/forms/field.svelte";
+  import { token, userInfo } from "$lib/auth";
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
-  import { PDF_SERVICE_URL } from "$lib/env";
-  import OrientationModal from "./_orientation-modal.svelte";
+  import { PDF_SERVICE_URL, CANONICAL_URL } from "$lib/env";
 
   export let service;
 
-  export let sharingUrl = $page.url;
   export let pagePath = `/services/${service.slug}`;
   export let pdfUrl = `${PDF_SERVICE_URL}/print/?page=${encodeURIComponent(
     pagePath
   )}&name=${service.slug}.pdf`;
 
-  let orientationModalIsOpen = false;
-  function handleMobilize() {
-    orientationModalIsOpen = true;
-    if (browser) {
-      plausible("mobilisation", {
-        props: {
-          service: service.name,
-          slug: service.slug,
-          structure: service.structureInfo.name,
-          departement: service.department,
-        },
-      });
-    }
+  const emailSubject = encodeURIComponent(
+    `Candidature ${service.name} / Demande d'orientation`
+  );
+  const emailBody = encodeURIComponent(
+    `
+Bonjour,
+
+Je vous contacte concernant l’offre ${
+      service.name
+    } sur dora.fabrique.social.gouv.fr.
+${CANONICAL_URL}/services/${service.slug}
+
+
+[Votre message ici]
+
+
+Cordialement,
+${$userInfo?.fullName}
+[Votre affiliation]
+
+[Rappel des justificatifs à joindre:]
+
+${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
+`.trim()
+  );
+
+  function trackClick() {
+    plausible("mobilisation-contact", {
+      props: {
+        service: service.name,
+        slug: service.slug,
+        structure: service.structureInfo.name,
+        departement: service.department,
+      },
+    });
   }
+
+  $: showContact = service?.isContactInfoPublic || $token;
 </script>
 
-<div class="wrapper noprint">
-  <div>
-    <h3>Mobiliser ce service</h3>
-  </div>
+<div class="mb-s24 rounded-md p-s24 shadow-md ">
+  <h4>Justificatifs</h4>
+  <ul class="mb-s24 list-inside list-disc text-f14">
+    {#each service.credentialsDisplay as creds}
+      <li><span>{creds}</span></li>
+    {:else}
+      <li><span>Aucun</span></li>
+    {/each}
+  </ul>
 
-  <Label label="Découvrez les modalités prévues pour mobiliser ce service :" />
-  <Button on:click={handleMobilize} label="Mobiliser" />
+  {#if service.formsInfo.length}
+    <h4>À compléter</h4>
+    <ul class="mb-s24 list-inside list-disc text-f14">
+      {#each service.formsInfo as form}
+        <li>
+          <span class="break-all">
+            <a target="_blank" rel="noopener nofollow" href={form.url}
+              >{form.name}</a
+            >
+          </span>
+        </li>
+      {/each}
+    </ul>
+  {/if}
 
-  <OrientationModal {service} bind:isOpen={orientationModalIsOpen} />
+  {#if showContact && service.contactName}
+    <h4>Contact</h4>
+    <p class="text-f14">
+      {service.contactName}
+      {#if service.contactPhone}
+        <br />
+        <a href="tel:{service.contactPhone}">{service.contactPhone}</a>
+      {/if}
+      {#if service.contactEmail}
+        <br /><a href="mailto:{service.contactEmail}">{service.contactEmail}</a>
+      {/if}
+    </p>
+  {:else}
+    <div class="flex flex-col gap-s16 pb-s8">
+      <Label
+        label="Connectez-vous pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire."
+      />
+    </div>
+  {/if}
 
-  <div class="mt-s16">
-    <Field
-      type="text"
-      label="Partagez ce service"
-      value={sharingUrl}
-      vertical
-      readonly
-    />
-  </div>
+  {#if service.contactEmail && showContact}
+    <div class="noprint">
+      <LinkButton
+        on:click={trackClick}
+        label="Mobiliser le service"
+        wFull
+        to="mailto:{service.contactEmail}?subject={emailSubject}&body={emailBody}"
+      />
+    </div>
+  {/if}
+</div>
+
+<div class="noprint">
   {#if !service.isDraft}
     <LinkButton
-      noBackground
+      secondary
+      wFull
+      small
       noPadding
-      label="Téléchargez le PDF"
+      label="Télécharger la page (.pdf)"
       to={pdfUrl}
       nofollow
     />
   {/if}
 </div>
-
-<style lang="postcss">
-  .wrapper {
-    position: relative;
-    top: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    padding: var(--s32);
-    border: 3px solid var(--col-gray-dark);
-    margin-right: auto;
-    margin-left: auto;
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-    box-shadow: var(--shadow-md);
-    gap: var(--s16);
-    text-align: left;
-  }
-
-  @screen lg {
-    .wrapper {
-      position: relative;
-      top: -1.5rem;
-    }
-  }
-</style>

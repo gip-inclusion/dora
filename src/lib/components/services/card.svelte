@@ -2,7 +2,7 @@
   import { mapPinIcon } from "$lib/icons";
   import Label from "$lib/components/label.svelte";
   import StateLabel from "./state-label.svelte";
-  import Menu from "./menu.svelte";
+  import ButtonMenu from "./button-menu.svelte";
   export let service;
   export let readOnly = true;
   export let onRefresh;
@@ -13,7 +13,7 @@
     <div class="flex items-center justify-between">
       <StateLabel {service} />
 
-      <Menu {service} {onRefresh} />
+      <ButtonMenu {service} {onRefresh} />
     </div>
     <hr class="mt-s8 mb-s20 border-t border-gray-03 " />
   {/if}

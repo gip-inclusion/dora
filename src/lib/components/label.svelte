@@ -9,13 +9,12 @@
   export let light = false;
   export let icon = null;
   export let darkBg = false;
-  export let bigIcon = false;
   export let smallIcon = false;
   export let truncate = false;
 </script>
 
 <div
-  class="wrapper flex flex-row items-center text-f14 leading-normal"
+  class="flex flex-row items-center text-f14"
   class:bold
   class:italic
   class:success
@@ -26,16 +25,12 @@
   class:dark-bg={darkBg}
 >
   {#if icon}
-    <div
-      class="icon mr-s8 flex-none"
-      class:big-icon={bigIcon}
-      class:small-icon={smallIcon}
-    >
+    <div class="icon mr-s8 flex-none" class:small-icon={smallIcon}>
       {@html icon}
     </div>
   {/if}
   {#if icon && !(label || $$slots.default)}
-    <div class="icon flex-none" class:big-icon={bigIcon}>
+    <div class="icon flex-none">
       {@html icon}
     </div>
   {/if}
@@ -44,10 +39,6 @@
 </div>
 
 <style lang="postcss">
-  .wrapper {
-    color: var(--col-text);
-  }
-
   .info {
     color: var(--col-info);
   }
@@ -87,11 +78,6 @@
     width: var(--s24);
     height: var(--s24);
     fill: currentColor;
-  }
-
-  .big-icon {
-    width: var(--s32);
-    height: var(--s32);
   }
 
   .small-icon {
