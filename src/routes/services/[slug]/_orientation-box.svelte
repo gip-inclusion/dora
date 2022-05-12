@@ -1,7 +1,7 @@
 <script>
   import { token, userInfo } from "$lib/auth";
-  import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
+  import Notice from "$lib/components/notice.svelte";
   import { PDF_SERVICE_URL, CANONICAL_URL } from "$lib/env";
 
   export let service;
@@ -76,23 +76,32 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
     </ul>
   {/if}
 
-  {#if showContact && service.contactName}
-    <h4>Contact</h4>
-    <p class="text-f14">
-      {service.contactName}
-      {#if service.contactPhone}
-        <br />
-        <a href="tel:{service.contactPhone}">{service.contactPhone}</a>
-      {/if}
-      {#if service.contactEmail}
-        <br /><a href="mailto:{service.contactEmail}">{service.contactEmail}</a>
-      {/if}
-    </p>
+  {#if showContact}
+    {#if service.contactName || service.contactPhone || service.contactEmail}
+      <h4>Contact</h4>
+      <p class="text-f14">
+        {#if service.contactName}
+          {service.contactName}
+        {/if}
+        {#if service.contactPhone}
+          <br />
+          <a href="tel:{service.contactPhone}">{service.contactPhone}</a>
+        {/if}
+        {#if service.contactEmail}
+          <br /><a href="mailto:{service.contactEmail}"
+            >{service.contactEmail}</a
+          >
+        {/if}
+      </p>
+    {/if}
   {:else}
-    <div class="flex flex-col gap-s16 pb-s8">
-      <Label
-        label="Connectez-vous pour accéder aux informations de contact et mobiliser ce service pour votre bénéficiaire."
-      />
+    <div class="mb-s24">
+      <Notice title="Connectez-vous"
+        ><p class="text-f14">
+          Accédez aux informations de contact et mobilisez ce service pour votre
+          bénéficiaire.
+        </p>
+      </Notice>
     </div>
   {/if}
 
@@ -108,7 +117,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
   {/if}
 </div>
 
-<div class="noprint">
+<div class="noprint mb-s24">
   {#if !service.isDraft}
     <LinkButton
       secondary

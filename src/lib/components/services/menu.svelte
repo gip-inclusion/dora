@@ -59,7 +59,7 @@
   {#if !service.isDraft}
     <div>
       <Button
-        label="Désactiver"
+        label="Enregistrer en brouillon"
         on:click={() => {
           handleUnpublish(service);
         }}

@@ -1,11 +1,11 @@
 <script>
-  import LinkButton from "$lib/components/link-button.svelte";
   import Label from "$lib/components/label.svelte";
 
   import Tag from "$lib/components/tag.svelte";
   import { mapPinIcon } from "$lib/icons";
   import StateLabel from "$lib/components/services/state-label.svelte";
-  import AdminNotice from "$lib/components/structures/admin-notice.svelte";
+
+  import StructureCard from "$lib/components/structures/card.svelte";
 
   export let service;
 </script>
@@ -47,16 +47,9 @@
       </div>
 
       <div class="lg:w-1/3 lg:self-end">
-        <LinkButton
-          label={service.structureInfo.name}
-          to="/structures/{service.structure}"
-          secondary
-          small
-        />
+        <StructureCard structure={service.structureInfo} />
       </div>
     </div>
-
-    <div class="mt-s24"><AdminNotice structure={service.structureInfo} /></div>
   </div>
 </div>
 

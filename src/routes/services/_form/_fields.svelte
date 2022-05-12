@@ -1,0 +1,667 @@
+<script>
+  import FieldSet from "$lib/components/forms/fieldset.svelte";
+  import ModelField from "$lib/components/forms/model-field.svelte";
+  import { formErrors } from "$lib/validation.js";
+  import serviceSchema from "$lib/schemas/service.js";
+  import AddableMultiselect from "$lib/components/forms/addable-multiselect.svelte";
+  import { moveToTheEnd } from "$lib/utils";
+  import Field from "$lib/components/forms/field.svelte";
+  import Uploader from "$lib/components/uploader.svelte";
+  import { onMount, tick } from "svelte";
+  import CitySearch from "$lib/components/forms/city-search.svelte";
+  import AddressSearch from "$lib/components/forms/street-search.svelte";
+  import AdminDivisionSearch from "$lib/components/forms/admin-division-search.svelte";
+  import Fieldset from "$lib/components/forms/fieldset.svelte";
+  import Button from "$lib/components/button.svelte";
+  import { getStructure } from "$lib/structures";
+
+  export let servicesOptions, service, structures, structure;
+  let subcategories = [];
+
+  function handleCategoryChange(categories) {
+    subcategories = categories.length
+      ? servicesOptions.subcategories.filter(({ value }) =>
+          categories.some((cat) => value.startsWith(cat))
+        )
+      : [];
+
+    service.subcategories = service.subcategories.filter((scat) =>
+      categories.some((cat) => scat.startsWith(cat))
+    );
+  }
+
+  function cleanOptions(field, slug) {
+    const flatChoices = servicesOptions[field]
+      .filter((c) => c.structure == null || c.structure === slug)
+      .map((c) => c.value);
+
+    service[field] = service[field].filter((value) =>
+      flatChoices.includes(value)
+    );
+  }
+
+  async function handleStructureChange(slug) {
+    cleanOptions("accessConditions", slug);
+    cleanOptions("concernedPublic", slug);
+    cleanOptions("requirements", slug);
+    cleanOptions("credentials", slug);
+    if (slug) {
+      structure = await getStructure(slug);
+    }
+  }
+
+  // Il s'agit d'une édition de service existant, ou alors la structure
+  const showStructures = service.structure ? false : structures.length > 1;
+
+  export let adminDivisionChoices = [];
+
+  function handleCityChange(city) {
+    service.city = city?.name;
+    service.cityCode = city?.code;
+  }
+
+  function handleDiffusionZoneTypeChange(type) {
+    if (type !== service.diffusionZoneType) {
+      service.diffusionZoneType = type;
+      service.diffusionZoneDetails = "";
+      service.diffusionZoneDetailsDisplay = "";
+      adminDivisionChoices = [];
+    }
+  }
+
+  function handlediffusionZoneDetailsChange(details) {
+    service.diffusionZoneDetails = details;
+  }
+
+  function handleAddressChange(address) {
+    const props = address?.properties;
+    const coords = address?.geometry.coordinates;
+    const lat = coords?.[1];
+    const long = coords?.[0];
+    service.address1 = props?.name;
+    service.postalCode = props?.postcode;
+    service.longitude = long;
+    service.latitude = lat;
+  }
+
+  let isTimeLimited;
+
+  onMount(() => {
+    isTimeLimited = !!service.suspensionDate;
+  });
+
+  function handleCheckTimeLimited(evt) {
+    const checked = evt.target.checked;
+    if (!checked) {
+      service.suspensionDate = null;
+    }
+  }
+
+  let showServiceAddress = true;
+
+  async function fillAdress() {
+    showServiceAddress = false;
+
+    if (structure) {
+      const {
+        city,
+        address1,
+        address2,
+        postalCode,
+        cityCode,
+        latitude,
+        longitude,
+      } = structure;
+      service.city = city;
+      service.address1 = address1;
+      service.address2 = address2;
+      service.postalCode = postalCode;
+      service.cityCode = cityCode;
+      service.latitude = latitude;
+      service.longitude = longitude;
+    }
+    await tick();
+    showServiceAddress = true;
+  }
+</script>
+
+<FieldSet title="Présentation">
+  <div slot="help">
+    <p class="text-f14">
+      Le <b>Résumé</b> présente le service en une phrase courte. Il apparait dans
+      les résultats de recherche.
+    </p>
+    <p class="text-f14">
+      <strong>Exemple</strong> :
+      <i>
+        Faciliter vos déplacements en cas de reprise d’emploi ou de formation
+        (entretien d’embauche, concours public…)
+      </i>
+    </p>
+    <p class="text-f14">
+      Si besoin, détaillez dans la partie
+      <b>Description</b>.
+    </p>
+  </div>
+
+  <ModelField
+    type="select"
+    schema={serviceSchema.structure}
+    label="Structure"
+    choices={structures.map((s) => ({ value: s.slug, label: s.name }))}
+    name="structure"
+    errorMessages={$formErrors.structure}
+    bind:value={service.structure}
+    onSelectChange={handleStructureChange}
+    sortSelect
+    placeholder="Sélectionner…"
+    disabled={!showStructures}
+  />
+
+  <ModelField
+    label="Nom"
+    type="text"
+    placeholder="Compléter…"
+    schema={serviceSchema.name}
+    name="name"
+    errorMessages={$formErrors.name}
+    bind:value={service.name}
+  />
+  <ModelField
+    description="280 caractères maximum"
+    placeholder="Compléter…"
+    type="textarea"
+    label="Résumé"
+    schema={serviceSchema.shortDesc}
+    name="shortDesc"
+    errorMessages={$formErrors.shortDesc}
+    bind:value={service.shortDesc}
+  />
+  <ModelField
+    label="Description"
+    placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre service et ses spécificités."
+    type="richtext"
+    vertical
+    schema={serviceSchema.fullDesc}
+    name="fullDesc"
+    errorMessages={$formErrors.fullDesc}
+    bind:value={service.fullDesc}
+  />
+</FieldSet>
+
+<FieldSet title="Typologie">
+  <div slot="help">
+    <p class="text-f14">
+      Classez le service par thématiques et besoins pour faciliter son
+      référencement et sa mise en avant.
+    </p>
+  </div>
+  <ModelField
+    type="multiselect"
+    label="Thématiques"
+    schema={serviceSchema.categories}
+    bind:value={service.categories}
+    choices={servicesOptions.categories}
+    name="categories"
+    errorMessages={$formErrors.categories}
+    onSelectChange={handleCategoryChange}
+    placeholderMulti="Sélectionner…"
+    sortSelect
+  />
+  <ModelField
+    type="multiselect"
+    label="Besoin(s)"
+    schema={serviceSchema.subcategories}
+    name="subcategories"
+    errorMessages={$formErrors.subcategories}
+    bind:value={service.subcategories}
+    choices={subcategories}
+    placeholder="Sélectionner…"
+    placeholderMulti="Sélectionner…"
+    sortSelect
+  />
+
+  <ModelField
+    type="checkboxes"
+    label="Type"
+    schema={serviceSchema.kinds}
+    name="kinds"
+    errorMessages={$formErrors.kinds}
+    bind:value={service.kinds}
+    choices={servicesOptions.kinds}
+  />
+
+  <ModelField
+    type="toggle"
+    label="Service cumulable"
+    schema={serviceSchema.isCumulative}
+    name="isCumulative"
+    errorMessages={$formErrors.isCumulative}
+    bind:value={service.isCumulative}
+    description="Votre service est cumulable avec d’autres services ? "
+  />
+</FieldSet>
+
+<FieldSet title="Diffusion">
+  <div slot="help">
+    <p class="text-f14">Territoire sur lequel le service est accessible.</p>
+  </div>
+  <ModelField
+    type="select"
+    label="Territoire"
+    schema={serviceSchema.diffusionZoneType}
+    choices={servicesOptions.diffusionZoneType}
+    name="diffusionZoneType"
+    errorMessages={$formErrors.diffusionZoneType}
+    onSelectChange={handleDiffusionZoneTypeChange}
+    initialValue={service.diffusionZoneTypeDisplay}
+  />
+
+  <ModelField
+    type="custom"
+    name="diffusionZoneDetails"
+    label="Nom"
+    description="Commencez à saisir le nom et choisissez dans la liste."
+    errorMessages={$formErrors.diffusionZoneDetails}
+    schema={serviceSchema.diffusionZoneDetails}
+    visible={service.diffusionZoneType !== "country"}
+  >
+    <AdminDivisionSearch
+      slot="custom-input"
+      name="diffusionZoneDetails"
+      searchType={service.diffusionZoneType}
+      handleChange={handlediffusionZoneDetailsChange}
+      initialValue={service.diffusionZoneDetailsDisplay}
+      bind:choices={adminDivisionChoices}
+    />
+  </ModelField>
+</FieldSet>
+
+<FieldSet title="Publics">
+  <div slot="help">
+    <p class="text-f14">
+      Publics auxquels le service s’adresse. Vous pouvez ajouter vos propres
+      valeurs avec le bouton « Ajouter une autre option ». Si votre service est
+      ouvert à tous, sans critères ou prérequis, laissez les champs avec les
+      options par défaut.
+    </p>
+
+    <h5>QPV et ZRR</h5>
+    <p class="text-f14">
+      Activez cette option si votre offre s’adresse uniquement aux bénéficiaires
+      résidants dans des Quartiers Prioritaires de la politique de la Ville ou
+      des Zones de Revitalisation Rurale.
+    </p>
+  </div>
+  <AddableMultiselect
+    bind:values={service.concernedPublic}
+    structure={service.structure}
+    choices={servicesOptions.concernedPublic}
+    errorMessages={$formErrors.concernedPublic}
+    name="concernedPublic"
+    label="Profils"
+    placeholder="Tous publics"
+    placeholderMulti="Sélectionner…"
+    schema={serviceSchema.concernedPublic}
+    sortSelect
+    description="Plusieurs choix possibles."
+  />
+
+  <AddableMultiselect
+    bind:values={service.accessConditions}
+    structure={service.structure}
+    choices={servicesOptions.accessConditions}
+    errorMessages={$formErrors.accessConditions}
+    name="accessConditions"
+    label="Critères"
+    placeholder="Aucun"
+    placeholderMulti="Choisir un autre critères d’admission"
+    schema={serviceSchema.accessConditions}
+    sortSelect
+    description="Plusieurs choix possibles."
+  />
+
+  <ModelField
+    label="Uniquement QPV + ZRR ?"
+    type="toggle"
+    name="qpvOrZrr"
+    schema={serviceSchema.qpvOrZrr}
+    errorMessages={$formErrors.qpvOrZrr}
+    bind:value={service.qpvOrZrr}
+  />
+
+  <AddableMultiselect
+    bind:values={service.requirements}
+    structure={service.structure}
+    choices={servicesOptions.requirements}
+    errorMessages={$formErrors.requirements}
+    name="requirements"
+    label="Pré-requis ou compétences"
+    placeholder="Aucun"
+    placeholderMulti="Choisir un autre pré-requis"
+    schema={serviceSchema.requirements}
+    sortSelect
+    description="Plusieurs choix possibles."
+  />
+</FieldSet>
+
+<FieldSet title="Modalités">
+  <div slot="help">
+    <p class="text-f14">Modalités pour mobiliser le service.</p>
+  </div>
+  <ModelField
+    label="Pour l'accompagnateur"
+    type="checkboxes"
+    choices={moveToTheEnd(
+      servicesOptions.coachOrientationModes,
+      "value",
+      "autre"
+    )}
+    schema={serviceSchema.coachOrientationModes}
+    name="coachOrientationModes"
+    errorMessages={$formErrors.coachOrientationModes}
+    bind:value={service.coachOrientationModes}
+  />
+
+  <ModelField
+    visible={service.coachOrientationModes.includes("autre")}
+    hideLabel
+    placeholder="Compléter…"
+    type="text"
+    schema={serviceSchema.coachOrientationModesOther}
+    name="coachOrientationModesOther"
+    errorMessages={$formErrors.coachOrientationModesOther}
+    bind:value={service.coachOrientationModesOther}
+  />
+
+  <ModelField
+    label="Pour le bénéficiaire"
+    type="checkboxes"
+    choices={moveToTheEnd(
+      servicesOptions.beneficiariesAccessModes,
+      "value",
+      "autre"
+    )}
+    schema={serviceSchema.beneficiariesAccessModes}
+    name="beneficiariesAccessModes"
+    errorMessages={$formErrors.beneficiariesAccessModes}
+    bind:value={service.beneficiariesAccessModes}
+  />
+  <ModelField
+    visible={service.beneficiariesAccessModes.includes("autre")}
+    hideLabel
+    placeholder="Merci de préciser la modalité"
+    type="text"
+    schema={serviceSchema.beneficiariesAccessModesOther}
+    name="beneficiariesAccessModesOther"
+    errorMessages={$formErrors.beneficiariesAccessModesOther}
+    bind:value={service.beneficiariesAccessModesOther}
+  />
+
+  <ModelField
+    type="toggle"
+    label="Frais à charge"
+    schema={serviceSchema.hasFee}
+    name="hasFee"
+    errorMessages={$formErrors.hasFee}
+    bind:value={service.hasFee}
+  />
+
+  <ModelField
+    type="textarea"
+    hideLabel
+    placeholder="Adhésion, frais de location, frais de garde, etc., et les montants."
+    visible={!!service.hasFee}
+    schema={serviceSchema.feeDetails}
+    name="feeDetails"
+    errorMessages={$formErrors.feeDetails}
+    bind:value={service.feeDetails}
+  />
+</FieldSet>
+
+<Fieldset title="Documents">
+  <div slot="help">
+    <p class="text-f14">
+      Justificatifs à fournir et documents à compléter pour postuler. Le lien
+      redirige vers une page web qui présente le service (formulaire, fiche de
+      prescription, simulateurs, etc.)
+    </p>
+  </div>
+  <Field
+    type="custom"
+    label="Documents à compléter"
+    errorMessages={$formErrors.forms}
+  >
+    <Uploader
+      slot="custom-input"
+      structureSlug={service.structure}
+      name="forms"
+      on:blur
+      bind:fileKeys={service.forms}
+    />
+  </Field>
+
+  <AddableMultiselect
+    bind:values={service.credentials}
+    structure={service.structure}
+    choices={servicesOptions.credentials}
+    errorMessages={$formErrors.credentials}
+    name="credentials"
+    label="Justificatifs à fournir"
+    placeholder="Aucun"
+    placeholderMulti="Choisir un autre justificatif"
+    schema={serviceSchema.credentials}
+    sortSelect
+  />
+
+  <ModelField
+    label="Lien"
+    placeholder="URL"
+    type="url"
+    schema={serviceSchema.onlineForm}
+    name="onlineForm"
+    errorMessages={$formErrors.onlineForm}
+    bind:value={service.onlineForm}
+  />
+</Fieldset>
+
+{#if structure}
+  <FieldSet title="Lieu">
+    <ModelField
+      type="checkboxes"
+      label="Lieu de déroulement"
+      schema={serviceSchema.locationKinds}
+      name="locationKinds"
+      errorMessages={$formErrors.locationKinds}
+      bind:value={service.locationKinds}
+      choices={moveToTheEnd(
+        servicesOptions.locationKinds,
+        "value",
+        "a-distance"
+      )}
+    />
+    <ModelField
+      placeholder="https://"
+      type="url"
+      label="Lien visioconférence"
+      visible={service.locationKinds.includes("a-distance")}
+      schema={serviceSchema.remoteUrl}
+      name="remoteUrl"
+      errorMessages={$formErrors.remoteUrl}
+      bind:value={service.remoteUrl}
+    />
+
+    {#if service.locationKinds.includes("en-presentiel")}
+      <Button
+        on:click={fillAdress(structure)}
+        secondary
+        small
+        label="Utiliser l'adresse de la structure"
+      />
+    {/if}
+    {#if showServiceAddress}
+      <ModelField
+        name="city"
+        type="custom"
+        label="Ville"
+        errorMessages={$formErrors.city}
+        schema={serviceSchema.city}
+        visible={service.locationKinds.includes("en-presentiel")}
+      >
+        <CitySearch
+          slot="custom-input"
+          name="city"
+          placeholder="Saisissez et validez votre ville"
+          initialValue={service.city}
+          onChange={handleCityChange}
+        />
+      </ModelField>
+
+      <ModelField
+        type="custom"
+        name="address1"
+        label="Adresse"
+        errorMessages={$formErrors.address1}
+        schema={serviceSchema.address1}
+        visible={service.locationKinds.includes("en-presentiel")}
+      >
+        <AddressSearch
+          slot="custom-input"
+          name="address1"
+          disabled={!service.cityCode}
+          cityCode={service.cityCode}
+          placeholder="3 rue du parc"
+          initialValue={service.address1}
+          handleChange={handleAddressChange}
+        />
+      </ModelField>
+      <ModelField
+        type="text"
+        label="Complément d’adresse"
+        placeholder="batiment, escalier, etc."
+        schema={serviceSchema.address2}
+        name="address2"
+        errorMessages={$formErrors.address2}
+        bind:value={service.address2}
+        visible={service.locationKinds.includes("en-presentiel")}
+      />
+      <ModelField
+        type="text"
+        label="Code postal"
+        placeholder="00000"
+        schema={serviceSchema.postalCode}
+        name="postalCode"
+        errorMessages={$formErrors.postalCode}
+        bind:value={service.postalCode}
+        visible={service.locationKinds.includes("en-presentiel")}
+      />
+      <ModelField
+        type="hidden"
+        schema={serviceSchema.cityCode}
+        name="cityCode"
+        errorMessages={$formErrors.cityCode}
+        bind:value={service.cityCode}
+        visible={service.locationKinds.includes("en-presentiel")}
+      />
+      <ModelField
+        type="hidden"
+        schema={serviceSchema.longitude}
+        name="longitude"
+        errorMessages={$formErrors.longitude}
+        bind:value={service.longitude}
+        visible={service.locationKinds.includes("en-presentiel")}
+      />
+      <ModelField
+        type="hidden"
+        schema={serviceSchema.latitude}
+        name="latitude"
+        errorMessages={$formErrors.latitude}
+        bind:value={service.latitude}
+        visible={service.locationKinds.includes("en-presentiel")}
+      />
+    {/if}
+  </FieldSet>
+
+  <FieldSet title="Périodicité">
+    <div slot="help">
+      <p class="text-f14">
+        La durée limitée permet de supendre automatiquement la visibilité du
+        service dans les résultat de recherche.
+      </p>
+    </div>
+    <ModelField
+      label="Fréquence et horaires"
+      type="text"
+      placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
+      schema={serviceSchema.recurrence}
+      name="recurrence"
+      errorMessages={$formErrors.recurrence}
+      bind:value={service.recurrence}
+    />
+
+    <Field
+      label="Durée limitée"
+      type="toggle"
+      name="isTimeLimited"
+      bind:value={isTimeLimited}
+      on:change={handleCheckTimeLimited}
+    />
+    <ModelField
+      label="Date de fin"
+      type="date"
+      schema={serviceSchema.suspensionDate}
+      name="suspensionDate"
+      errorMessages={$formErrors.suspensionDate}
+      bind:value={service.suspensionDate}
+      visible={isTimeLimited}
+    />
+  </FieldSet>
+
+  <FieldSet title="Contact">
+    <div slot="help">
+      <p class="text-f14">
+        Coordonnées de la personne responsable de la réception et du traitement
+        des demandes d’orientation. À défaut, renseignez le courriel et le
+        numéro de téléphone de votre structure. Par défaut, ces informations
+        sont disponibles uniquement aux accompagnateurs qui ont un compte DORA.
+        En cochant la case « Rendre les informations publiques », les
+        informations seront rendues disponibles à tous les visiteurs du site.
+      </p>
+    </div>
+    <ModelField
+      label="Prénom et Nom"
+      placeholder="Prénom et nom"
+      type="text"
+      schema={serviceSchema.contactName}
+      name="contactName"
+      errorMessages={$formErrors.contactName}
+      bind:value={service.contactName}
+    />
+    <ModelField
+      type="tel"
+      label="Téléphone"
+      placeholder="00 00 00 00 00"
+      schema={serviceSchema.contactPhone}
+      name="contactPhone"
+      errorMessages={$formErrors.contactPhone}
+      bind:value={service.contactPhone}
+    />
+    <ModelField
+      type="email"
+      label="Courriel"
+      placeholder="nom@exemple.org"
+      schema={serviceSchema.contactEmail}
+      name="contactEmail"
+      errorMessages={$formErrors.contactEmail}
+      bind:value={service.contactEmail}
+    />
+    <ModelField
+      label="Rendre les informations publiques"
+      type="toggle"
+      schema={serviceSchema.isContactInfoPublic}
+      name="isContactInfoPublic"
+      errorMessages={$formErrors.isContactInfoPublic}
+      bind:value={service.isContactInfoPublic}
+    />
+  </FieldSet>
+{/if}

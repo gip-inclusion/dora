@@ -15,7 +15,6 @@
 
   import ModelField from "$lib/components/forms/model-field.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import FieldHelp from "$lib/components/forms/field-help.svelte";
 
   import Alert from "$lib/components/forms/alert.svelte";
   import { arrowRightSIcon } from "$lib/icons";
@@ -130,6 +129,12 @@
 {#if visible}
   <form novalidate on:submit|preventDefault={handleSubmit}>
     <FieldSet title={formTitle}>
+      <div slot="help">
+        <p class="text-f14">
+          Vérifiez l’exactitude des informations récupérées et complétez les
+          autres.
+        </p>
+      </div>
       <div bind:this={errorDiv}>
         {#each $formErrors.nonFieldErrors || [] as msg}
           <Alert label={msg} />
@@ -144,14 +149,7 @@
         disabled
         bind:value={structure.siret}
         vertical
-      >
-        <FieldHelp title="Complétez les informations" slot="helptext">
-          <p>
-            Vérifiez l’exactitude des informations récupérées et complétez les
-            autres.
-          </p>
-        </FieldHelp>
-      </ModelField>
+      />
 
       <ModelField
         type="text"

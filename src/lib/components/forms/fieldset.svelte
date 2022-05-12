@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+  import Button from "../button.svelte";
 
   export let title = "";
   export let description = "";
@@ -20,8 +21,14 @@
     collapsed = bp === "xs" || bp === "md";
   });
 
-  function handleToggleFold() {
+  function toggleFold() {
     collapsed = !collapsed;
+  }
+
+  let showHelp = false;
+
+  function toggleHelp() {
+    showHelp = !showHelp;
   }
 </script>
 
@@ -44,20 +51,39 @@
         >
           {title}
         </h3>
-        {#if collapsable}
-          <div
-            class="ml-s8 h-s24 w-s24 fill-current text-magenta-cta"
-            on:click={handleToggleFold}
-          >
-            {@html collapsed ? arrowDownSIcon : arrowUpSIcon}
-          </div>
-        {/if}
+        <div class="flex">
+          {#if $$slots.help}
+            <Button
+              label="Aide"
+              on:click={toggleHelp}
+              icon={!showHelp ? arrowDownSIcon : arrowUpSIcon}
+              iconOnRight
+              noBackground
+              small
+            />
+          {/if}
+
+          {#if collapsable}
+            <Button
+              on:click={toggleFold}
+              icon={collapsed ? arrowDownSIcon : arrowUpSIcon}
+              noBackground
+              small
+            />
+          {/if}
+        </div>
       </div>
       <slot name="description">
         {#if description}
           <p class="mb-s0 text-f14 text-gray-text-alt2">{description}</p>
         {/if}
       </slot>
+    </div>
+  {/if}
+
+  {#if $$slots.help && showHelp}
+    <div class="border-l-8 border-info bg-info-light  pl-s24 pr-s32  pt-s16">
+      <slot name="help" />
     </div>
   {/if}
   <div

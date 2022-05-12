@@ -232,28 +232,6 @@
   }
 }
 
-/*
-    styles du composant Button.svelte
-    provisoirement déplacés ici
-    car si ils sont dans le composant la compilation bug
-    avec cette erreur: https://github.com/withastro/astro/issues/2273
-*/
-
-.flash-success {
-  border: none;
-  background-color: var(--col-success);
-  color: var(--col-white);
-}
-
-.flash-success:hover {
-  background-color: var(--col-success);
-  color: var(--col-white);
-}
-
-.flash-success:focus {
-  box-shadow: none;
-}
-
 .breakpoint-hack::before {
   display: none;
   content: "xs";

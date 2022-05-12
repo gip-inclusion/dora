@@ -31,60 +31,36 @@
 
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import TempInlineInfo from "$lib/components/temp-inline-info.svelte";
 
-  import { getNewService } from "./form/_stores.js";
-  import ServiceFormWrapper from "./form/_service-form-wrapper.svelte";
-  import Step1 from "./form/_step1.svelte";
-  import Step2 from "./form/_step2.svelte";
-  import Step3 from "./form/_step3.svelte";
-  import Step4 from "./form/_step4.svelte";
-  import Preview from "./form/_preview.svelte";
+  import Notice from "$lib/components/notice.svelte";
+  import Button from "$lib/components/button.svelte";
+
+  import { getNewService } from "./_form/_stores.js";
+  import ServiceFormWrapper from "./_form/_service-form-wrapper.svelte";
+  import Card from "$lib/components/structures/card.svelte";
 
   export let servicesOptions, structures, lastDraft;
 
   let service = getNewService();
+
   if (structures.length === 1) {
     service.structure = structures[0].slug;
+    service.structureInfo = structures[0];
   } else {
-    // si la structure est renseignée dans l'URL, forcer celle-là
+    // si la structure est renseignée dans l'URL, force celle-là
     const structureSlug = $page.url.searchParams.get("structure");
-    if (
-      structureSlug &&
-      structures.map((s) => s.slug).includes(structureSlug)
-    ) {
+    if (structureSlug) {
+      const structure = structures.find((s) => s.slug === structureSlug);
       service.structure = structureSlug;
+      service.structureInfo = structure;
     }
   }
   if (service.structure && lastDraft?.structure !== service.structure) {
     lastDraft = null;
   }
-  let lastDraftNotificationVisible = true;
-  let currentStep = 1;
-
-  const steps = new Map([
-    [1, Step1],
-    [2, Step2],
-    [3, Step3],
-    [4, Step4],
-    [5, Preview],
-  ]);
 
   function handleOpenLastDraft() {
     goto(`/services/${lastDraft.slug}/editer`);
-  }
-
-  function handleHideLastDraftNotification() {
-    lastDraftNotificationVisible = false;
-  }
-  $: currentStepComponent = steps.get(currentStep);
-
-  $: {
-    if (currentStep > 1) {
-      // avoid displaying lastDraft notification on ulterior steps
-      // AND when going back to first step
-      lastDraft = null;
-    }
   }
 </script>
 
@@ -93,37 +69,42 @@
 </svelte:head>
 
 <EnsureLoggedIn>
-  {#if !structures.length}
-    <CenteredGrid topPadded>
-      <div class="col-span-full col-start-1  mb-s48">
-        <h4>Vous n’êtes rattaché à aucune structure !</h4>
-      </div></CenteredGrid
-    >
-  {:else}
-    {#if lastDraft && lastDraftNotificationVisible}
-      <CenteredGrid topPadded>
-        <TempInlineInfo
-          label="Vous n’avez pas finalisé votre précédente saisie"
-          description="Souhaitez-vous continuer la saisie du service « {lastDraft.name} » ?"
-          buttonLabel="Reprendre"
-          onAction={handleOpenLastDraft}
-          onHide={handleHideLastDraftNotification}
-        />
-      </CenteredGrid>
-    {/if}
+  <CenteredGrid>
+    <div class="col-span-full pt-s48 pb-s24">
+      <div class="flex flex-wrap justify-between">
+        <div class="w-2/3"><h1>Création du service</h1></div>
+        {#if service.structureInfo}
+          <div class="w-1/3"><Card structure={service.structureInfo} /></div>
+        {/if}
+      </div>
 
-    <ServiceFormWrapper
-      bind:currentStep
-      bind:service
-      bind:servicesOptions
-      title="Référencer un service"
-    >
-      <svelte:component
-        this={currentStepComponent}
-        bind:service
-        {servicesOptions}
-        {structures}
-      />
-    </ServiceFormWrapper>
+      {#if !structures.length}
+        <Notice title="Impossible de créer un nouveau service" type="error">
+          <p class="text-f14">
+            Vous n’êtes rattaché à aucune structure.
+          </p></Notice
+        >
+      {:else if lastDraft}
+        <Notice
+          title="Vous n’avez pas finalisé votre précédente saisie"
+          hasCloseButton
+        >
+          <p class="text-f14">
+            Souhaitez-vous continuer la saisie du service ?
+          </p>
+
+          <Button
+            on:click={handleOpenLastDraft}
+            slot="button"
+            small
+            secondary
+            label="Reprendre"
+          />
+        </Notice>
+      {/if}
+    </div>
+  </CenteredGrid>
+  {#if structures.length}
+    <ServiceFormWrapper bind:service bind:servicesOptions {structures} />
   {/if}
 </EnsureLoggedIn>

@@ -7,6 +7,11 @@
     closeCircleLine,
     informationLine,
   } from "$lib/icons";
+  import Button from "./button.svelte";
+
+  import { closeIcon } from "$lib/icons.js";
+
+  export let hasCloseButton = false;
 
   const types = {
     info: {
@@ -34,26 +39,42 @@
       icon: closeCircleLine,
     },
   };
+
+  let visible = true;
+
+  function handleHide() {
+    visible = !visible;
+  }
 </script>
 
-<div
-  class="rounded-r-md border-l-8 {types[type].border} {types[type].bg} p-s24"
->
-  {#if title}
-    <h4 class="mb-s16 {types[type].text} flex">
-      <div class="mr-s8 h-s24 w-s24 shrink-0 fill-current">
-        {@html types[type].icon}
-      </div>
-      {title}
-    </h4>
-  {/if}
+{#if visible}
   <div
-    class="items-end text-f14 lg:flex lg:flex-row lg:justify-between lg:gap-s24"
+    class="rounded-r-md border-l-8 {types[type].border} {types[type]
+      .bg} px-s24 pt-s24"
   >
-    <slot />
+    <div class="flex justify-between">
+      {#if title}
+        <h4 class="mb-s16 {types[type].text} flex">
+          <div class="mr-s8 h-s24 w-s24 shrink-0 fill-current">
+            {@html types[type].icon}
+          </div>
+          {title}
+        </h4>
+      {/if}
+      {#if hasCloseButton}
+        <div class="-mt-s8">
+          <Button icon={closeIcon} noBackground on:click={handleHide} small />
+        </div>
+      {/if}
+    </div>
+    <div class="flex flex-row flex-wrap items-start justify-between gap-s12">
+      <slot />
 
-    <div class="self-end">
-      <slot name="button" />
+      {#if $$slots.button}
+        <div class="mb-s24 self-end">
+          <slot name="button" />
+        </div>
+      {/if}
     </div>
   </div>
-</div>
+{/if}

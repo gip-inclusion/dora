@@ -53,7 +53,7 @@
   <div class="flex-1" class:hidden={type === "hidden"}>
     <div
       {name}
-      class="flex {layoutClass} items-top relative"
+      class="flex {layoutClass} items-top"
       isDOMLabel={type !== "checkboxes" && type !== "radios"}
     >
       <!-- #1# -->
@@ -104,7 +104,6 @@
           <Alert label={msg} isHTML={allowHTMLError} />
         {/each}
       </div>
-      <slot name="helptext" />
     </div>
   </div>
 {/if}

@@ -8,6 +8,7 @@
   import Menu from "$lib/components/services/menu.svelte";
 
   export let service;
+  export let onRefresh;
 
   let suggestionModalIsOpen = false;
   function handleSuggestion() {
@@ -27,7 +28,7 @@
 
 <div class="inline-flex flex-wrap gap-s8">
   {#if $token && service.canWrite}
-    <Menu {service} secondary />
+    <Menu {service} secondary {onRefresh} />
   {:else}
     <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
     <Button

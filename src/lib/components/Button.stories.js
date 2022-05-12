@@ -24,7 +24,6 @@ export default {
     secondary: { control: "boolean" },
     noBackground: { control: "boolean" },
     noPadding: { control: "boolean" },
-    flashSuccess: { control: "boolean" },
     wFull: { control: "boolean" },
   },
 };
@@ -44,7 +43,6 @@ Default.args = {
   label: "Button label",
   name: "Button label",
   small: true,
-  flashSuccess: false,
   noPadding: false,
 };
 
@@ -54,6 +52,5 @@ Icon.args = {
   icon: menuIcon,
   name: "Button label",
   small: false,
-  flashSuccess: false,
   noPadding: false,
 };

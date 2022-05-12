@@ -5,7 +5,7 @@
   export let structure;
 </script>
 
-<div class="rounded-md shadow-md">
+<div class="rounded-md bg-white shadow-md">
   <div class="rounded-t-md bg-magenta-brand px-s20 py-s12">
     <h4 class="mb-s8 text-white">
       <a href="/structures/{structure.slug}">{structure.name}</a>

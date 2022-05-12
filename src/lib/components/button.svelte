@@ -9,7 +9,6 @@
   export let secondary = false;
   export let noBackground = false;
   export let noPadding = false;
-  export let flashSuccess = false;
   export let wFull = false;
   export let preventDefaultOnMouseDown = false;
 
@@ -26,7 +25,7 @@
   if (noPadding) {
     px = "";
   } else if (small) {
-    px = "px-s16";
+    px = label ? "px-s12" : "px-s8";
   } else {
     px = "px-s20";
   }
@@ -65,7 +64,6 @@
   {type}
   {name}
   class="{px} {py} {ts} {border} {text} {background} whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
-  class:flash-success={flashSuccess}
   class:w-full={wFull}
   class:flex={icon}
   class:flex-row={icon}

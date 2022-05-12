@@ -62,9 +62,7 @@
     choices={filteredChoices}
     {sortSelect}
     {description}
-  >
-    <slot name="helptext" slot="helptext" />
-  </ModelField>
+  />
   <Field type="custom">
     <div slot="custom-input" class="mt-s16 flex flex-col">
       <div class:hidden={textInputVisible}>

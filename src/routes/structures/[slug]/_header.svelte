@@ -76,12 +76,8 @@
 
 {#if structure.isPendingMember}
   <div class="mt-s24"><PendingNotice /></div>
-{/if}
-
-{#if !structure.hasAdmin}
-  <div class="mt-s24">
-    <AdminNotice {structure} />
-  </div>
+{:else if !structure.hasAdmin}
+  <div class="mt-s24"><AdminNotice {structure} /></div>
 {/if}
 
 <div class="noprint mt-s24">

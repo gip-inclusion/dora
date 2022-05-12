@@ -56,5 +56,4 @@
   {passwordrules}
 >
   <slot name="custom-input" slot="custom-input" />
-  <slot name="helptext" slot="helptext" />
 </Field>

@@ -20,7 +20,7 @@
   <title>DORA : recensement et mise à jour de l’offre d’insertion</title>
   <meta
     name="description"
-    content="Plateforme publique dédiée au référencement de l’offre d’insertion et à l’identification et l’activation des leviers adaptés aux besoins des bénéficiaires."
+    content="Le service public numérique de recensement et mise à jour de l’offre d’insertion."
   />
 </svelte:head>
 

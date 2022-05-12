@@ -7,25 +7,20 @@
   export let structure;
 </script>
 
-<Notice title="Vous êtes le gestionnaire de cette structure ?">
-  <p class="mb-s4 text-f14">
-    Créez votre compte sur DORA. Vous pourrez ensuite mettre à jour les services
-    de votre structure.
-  </p>
-
+<Notice title="Vous gérez cette structure ?">
   <div slot="button">
     {#if $userInfo}
       <LinkButton
-        label="Demander l’accès"
+        label="Demander l’accès…"
         to="https://itou.typeform.com/doracontactsupp"
         otherTab
-        nofollowsmall
+        nofollow
         secondary
         small
       />
     {:else}
       <LinkButton
-        label="Demander l’accès"
+        label="Créer un compte…"
         to="/auth/inscription?siret={structure.siret}"
         otherTab
         nofollow
