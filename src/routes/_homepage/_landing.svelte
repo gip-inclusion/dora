@@ -11,6 +11,7 @@
   import logoDepartementReunion from "$lib/assets/logo-departement-reunion.svg";
   import logoAfpa from "$lib/assets/logo-afpa.svg";
   import logoCaf from "$lib/assets/logo-caf.svg";
+  import logoDataInclusion from "$lib/assets/data-inclusion-logo.svg";
 
   import illuRecenser from "$lib/assets/illu-recenser.svg";
   import illuMobiliser from "$lib/assets/illu-mobiliser.svg";
@@ -26,7 +27,8 @@
         Donnez de la visibilité <br />à votre offre d’insertion
       </h1>
       <p class="mb-s0">
-        Publiez et mettez à jour vos services en toute simplicité.
+        Publiez, mettez à jour et rendez vos services disponibles partout grace
+        à l'Open Data.
       </p>
     </div>
     <div class="flex flex-col justify-center gap-s16 md:flex-row">
@@ -91,10 +93,12 @@
         />
         <h3>Recensement de l’offre d’insertion</h3>
         <p class="text-f16">
-          Vous proposez des services d’insertion ? Renseignez votre offre et
-          rendez la visible à tous les acteurs de l’insertion de votre
-          territoire.
+          Vous proposez des services d'insertion ? Rendez les visibles sur votre
+          territoire et sur tous les sites partenaires grace à notre démarche
+          collective d'open data.
         </p>
+
+        <img src={logoDataInclusion} alt="logo data inclusion" />
       </div>
       <div class="md:flex-1">
         <img
