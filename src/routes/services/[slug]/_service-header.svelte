@@ -2,8 +2,7 @@
   import Label from "$lib/components/label.svelte";
 
   import Tag from "$lib/components/tag.svelte";
-  import { mapPinIcon } from "$lib/icons";
-  import StateLabel from "$lib/components/services/state-label.svelte";
+  import { checkBoxBlankIcon, mapPinIcon } from "$lib/icons";
 
   import StructureCard from "$lib/components/structures/card.svelte";
 
@@ -15,10 +14,19 @@
     <div class="flex flex-col gap-s16 lg:flex-row lg:justify-between">
       <div class="lg:w-2/3">
         <div class="flex items-center">
-          <StateLabel {service} />
-          <p class="ml-s12 mb-s0 text-f12 text-gray-03">|</p>
+          {#if !service.isDraft && !service.isSuggestion}
+            <Label
+              label="Disponible"
+              icon={checkBoxBlankIcon}
+              success
+              darkBg
+              bold
+              smallIcon
+            />
+            <p class="mx-s12 mb-s0 text-f12 text-gray-03">|</p>
+          {/if}
 
-          <p class="ml-s12 mb-s0 text-f12 text-gray-01">
+          <p class="mb-s0 text-f12 text-gray-01">
             Mis à jour le {new Date(
               service.modificationDate
             ).toLocaleDateString("fr-FR", {

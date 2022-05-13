@@ -6,7 +6,7 @@
 <div>
   <h2>Modalités</h2>
   <h4>Pour l'accompagnateur</h4>
-  <ul class="mb-s24 list-inside list-disc">
+  <ul class="mb-s24 list-inside list-disc text-f14">
     {#each service.coachOrientationModesDisplay as mode}
       <li class="break-words">
         {#if mode === "Autre (préciser)"}
@@ -21,7 +21,7 @@
   </ul>
 
   <h4>Pour le bénéficiaire</h4>
-  <ul class="mb-s24 list-inside list-disc">
+  <ul class="mb-s24 list-inside list-disc text-f14">
     {#each service.beneficiariesAccessModesDisplay as mode}
       <li class="break-words">
         {#if mode === "Autre (préciser)"}
@@ -39,7 +39,7 @@
     <div class="mb-s24">
       <h4>Frais</h4>
 
-      <p>{service.feeDetails}</p>
+      <p class="text-f14">{service.feeDetails}</p>
     </div>
   {/if}
 </div>

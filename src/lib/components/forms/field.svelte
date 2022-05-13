@@ -66,8 +66,10 @@
         <div
           class="inline-block w-full shrink-0 text-f16 font-bold text-gray-dark"
         >
-          <label for={name}>{hideLabel ? "" : label}</label>
-          {#if required}<span class="text-error">*</span>{/if}
+          <label for={name} class="block first-letter:capitalize"
+            >{hideLabel ? "" : label}
+            {#if required}<span class="text-error">*</span>{/if}</label
+          >
         </div>
         <span class="text-f12 text-gray-text-alt2"> {description}</span>
       </div>

@@ -51,7 +51,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
   $: showContact = service?.isContactInfoPublic || $token;
 </script>
 
-<div class="mb-s24 rounded-md p-s24 shadow-md ">
+<div class="mb-s24 rounded-md border border-gray-00 px-s24 pt-s24 shadow-md">
   <h4>Justificatifs</h4>
   <ul class="mb-s24 list-inside list-disc text-f14">
     {#each service.credentialsDisplay as creds}
@@ -106,7 +106,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
   {/if}
 
   {#if service.contactEmail && showContact}
-    <div class="noprint">
+    <div class="noprint mb-s24">
       <LinkButton
         on:click={trackClick}
         label="Mobiliser le service"
@@ -123,7 +123,6 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
       secondary
       wFull
       small
-      noPadding
       label="Télécharger la page (.pdf)"
       to={pdfUrl}
       nofollow

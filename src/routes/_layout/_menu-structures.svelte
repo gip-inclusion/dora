@@ -1,13 +1,13 @@
 <script>
   import LinkButton from "$lib/components/link-button.svelte";
-  import { shortenString } from "$lib/utils";
+  import { capitalize, shortenString } from "$lib/utils";
 
   export let structures;
 </script>
 
 {#each structures as structure}
   <LinkButton
-    label={shortenString(structure.name, 24)}
+    label={shortenString(capitalize(structure.name), 24)}
     to={`/structures/${structure.slug}`}
     noBackground
     small

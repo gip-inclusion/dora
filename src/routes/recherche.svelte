@@ -60,7 +60,7 @@
         cityLabel,
         kindId,
         hasNoFees,
-        results: await getResults({
+        services: await getResults({
           categoryId,
           subCategoryId,
           cityCode,
@@ -89,7 +89,7 @@
 
   export let servicesOptions;
   export let categoryId, subCategoryId, cityCode, cityLabel, kindId, hasNoFees;
-  export let results;
+  export let services;
 
   onMount(() => {
     if (browser) {
@@ -182,13 +182,13 @@
   </div>
   <div class="col-span-12 lg:col-span-8 lg:mt-s56">
     <div class="mt-s16 text-f14 text-gray-text-alt2">
-      {results.length} résultat{#if results.length > 1}s{/if}
+      {services.length} résultat{#if services.length > 1}s{/if}
     </div>
 
-    {#if results.length}
+    {#if services.length}
       <div class="mt-s32 flex flex-col gap-s16">
-        {#each results as result}
-          <SearchResult {result} />
+        {#each services as service}
+          <SearchResult result={service} />
         {/each}
       </div>
     {:else}

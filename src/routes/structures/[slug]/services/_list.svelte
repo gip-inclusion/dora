@@ -4,12 +4,12 @@
   // import Select from "$lib/components/forms/select.svelte";
 
   import LinkButton from "$lib/components/link-button.svelte";
-  import ServiceCard from "$lib/components/services/card.svelte";
-  import { addCircleIcon } from "$lib/icons";
+  import ServiceCard from "$lib/components/services/service-card.svelte";
 
   export let structure, services, total;
   export let hasOptions = true;
   export let onRefresh;
+  export let limit;
   let canEdit;
 
   const orders = [
@@ -21,41 +21,51 @@
   let servicesOrdered;
   let filters;
 
-  $: canEdit = structure.isMember || $userInfo?.isStaff;
-  $: servicesOrdered = services
-    .sort((a, b) => {
-      if (order === "etat") {
-        if (
-          (a.isSuggestion && b.isSuggestion) ||
-          (!a.isSuggestion && a.isDraft && !b.isSuggestion && b.isDraft) ||
-          (!a.isSuggestion && !a.isDraft && !b.isSuggestion && !b.isDraft)
-        )
+  function serviceOrder() {
+    let ss = services
+      .sort((a, b) => {
+        if (order === "etat") {
+          if (
+            (a.isSuggestion && b.isSuggestion) ||
+            (!a.isSuggestion && a.isDraft && !b.isSuggestion && b.isDraft) ||
+            (!a.isSuggestion && !a.isDraft && !b.isSuggestion && !b.isDraft)
+          )
+            return 0;
+
+          if (a.isSuggestion) return 1;
+
+          if (b.isSuggestion) return -1;
+
+          if (!a.isSuggestion && !a.isDraft) return -1;
+
+          if (!b.isSuggestion && !b.isDraft) return 1;
+
           return 0;
+        }
 
-        if (a.isSuggestion) return 1;
+        if (order === "alpha") {
+          return a.name.localeCompare(b.name, "fr", { numeric: true });
+        }
 
-        if (b.isSuggestion) return -1;
+        return new Date(b.modificationDate) - new Date(a.modificationDate);
+      })
+      .filter(
+        (s) =>
+          !filters ||
+          filters
+            .split(" ")
+            .every((f) => s.name.toLowerCase().includes(f.toLowerCase()))
+      );
 
-        if (!a.isSuggestion && !a.isDraft) return -1;
+    if (limit) {
+      ss = ss.slice(0, limit);
+    }
 
-        if (!b.isSuggestion && !b.isDraft) return 1;
+    return ss;
+  }
 
-        return 0;
-      }
-
-      if (order === "alpha") {
-        return a.name.localeCompare(b.name, "fr", { numeric: true });
-      }
-
-      return new Date(b.modificationDate) - new Date(a.modificationDate);
-    })
-    .filter(
-      (s) =>
-        !filters ||
-        filters
-          .split(" ")
-          .every((f) => s.name.toLowerCase().includes(f.toLowerCase()))
-    );
+  $: canEdit = structure.isMember || $userInfo?.isStaff;
+  $: servicesOrdered = serviceOrder(services);
 
   async function handleRefresh() {
     if (onRefresh) {
@@ -67,6 +77,13 @@
 <div class="col-span-full md:flex md:items-center md:justify-between">
   <h2 class="mb-s24 text-france-blue">Services</h2>
   <div class="flex gap-s16">
+    {#if canEdit}
+      <LinkButton
+        label="Ajouter un service…"
+        to="/services/creer?structure={structure.slug}"
+        small
+      />
+    {/if}
     {#if !!services.length && !hasOptions}
       <LinkButton
         label={`Voir tous les services (${total})`}
@@ -95,18 +112,6 @@
 </div>
 <div class="col-span-full">
   <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
-    {#if canEdit}
-      <div
-        class="flex items-center justify-center rounded-md px-s20 py-s24 shadow-md"
-      >
-        <LinkButton
-          label="Ajouter un service…"
-          to="/services/creer?structure={structure.slug}"
-          icon={addCircleIcon}
-          noBackground
-        />
-      </div>
-    {/if}
     {#each servicesOrdered as service}
       <ServiceCard {service} readOnly={!canEdit} onRefresh={handleRefresh} />
     {/each}

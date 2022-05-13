@@ -1,25 +1,22 @@
 <script>
   import Button from "$lib/components/button.svelte";
+  import RadioButtons from "$lib/components/forms/radio-buttons.svelte";
 
-  export let onPublish, onSaveDraft;
-  export let isValid;
+  export let onSave, service;
 </script>
 
 <div class="col-span-full py-s24">
   <div class="flex flex-row gap-s12">
-    <Button
-      on:click={onSaveDraft}
-      name="save_draft"
-      label="Enregistrer en brouillon"
-      secondary
-    />
-
-    <Button
-      on:click={onPublish}
-      name="validate"
-      label="Enregistrer et publier"
-      disabled={!isValid}
-      iconOnRight
-    />
+    <div class="p-s12">
+      <RadioButtons
+        inline
+        bind:group={service.isDraft}
+        choices={[
+          { label: "Brouillon", value: true },
+          { label: "Publié", value: false },
+        ]}
+      />
+    </div>
+    <Button on:click={onSave} name="validate" label="Enregistrer" />
   </div>
 </div>

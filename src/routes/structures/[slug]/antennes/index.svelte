@@ -2,10 +2,11 @@
   import List from "./_list.svelte";
 
   import { structure } from "../_store";
+  import { capitalize } from "$lib/utils";
 </script>
 
 <svelte:head>
-  <title>Antennes | {$structure.name} | DORA</title>
+  <title>Antennes | {capitalize($structure.name)} | DORA</title>
   <meta name="description" content={$structure.shortDesc} />
 </svelte:head>
 

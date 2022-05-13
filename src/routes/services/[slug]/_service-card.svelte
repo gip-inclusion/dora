@@ -49,8 +49,10 @@
         {/if}
         {#if service.locationKinds.includes("a-distance")}
           <p class="pb-s16 text-f14">
-            <a target="_blank" rel="noopener nofollow" href={service.remoteUrl}
-              >{shortenString(service.remoteUrl, 35)}</a
+            <strong>Lien : </strong><a
+              target="_blank"
+              rel="noopener nofollow"
+              href={service.remoteUrl}>{shortenString(service.remoteUrl, 35)}</a
             >
           </p>
         {/if}

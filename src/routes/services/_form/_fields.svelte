@@ -147,7 +147,7 @@
   <ModelField
     type="select"
     schema={serviceSchema.structure}
-    label="Structure"
+    label={serviceSchema.structure.name}
     choices={structures.map((s) => ({ value: s.slug, label: s.name }))}
     name="structure"
     errorMessages={$formErrors.structure}
@@ -159,7 +159,7 @@
   />
 
   <ModelField
-    label="Nom"
+    label={serviceSchema.name.name}
     type="text"
     placeholder="Compléter…"
     schema={serviceSchema.name}
@@ -171,14 +171,14 @@
     description="280 caractères maximum"
     placeholder="Compléter…"
     type="textarea"
-    label="Résumé"
+    label={serviceSchema.shortDesc.name}
     schema={serviceSchema.shortDesc}
     name="shortDesc"
     errorMessages={$formErrors.shortDesc}
     bind:value={service.shortDesc}
   />
   <ModelField
-    label="Description"
+    label={serviceSchema.fullDesc.name}
     placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre service et ses spécificités."
     type="richtext"
     vertical
@@ -198,7 +198,7 @@
   </div>
   <ModelField
     type="multiselect"
-    label="Thématiques"
+    label={serviceSchema.categories.name}
     schema={serviceSchema.categories}
     bind:value={service.categories}
     choices={servicesOptions.categories}
@@ -210,7 +210,7 @@
   />
   <ModelField
     type="multiselect"
-    label="Besoin(s)"
+    label={serviceSchema.subcategories.name}
     schema={serviceSchema.subcategories}
     name="subcategories"
     errorMessages={$formErrors.subcategories}
@@ -223,7 +223,7 @@
 
   <ModelField
     type="checkboxes"
-    label="Type"
+    label={serviceSchema.kinds.name}
     schema={serviceSchema.kinds}
     name="kinds"
     errorMessages={$formErrors.kinds}
@@ -233,7 +233,7 @@
 
   <ModelField
     type="toggle"
-    label="Service cumulable"
+    label={serviceSchema.isCumulative.name}
     schema={serviceSchema.isCumulative}
     name="isCumulative"
     errorMessages={$formErrors.isCumulative}
@@ -248,7 +248,7 @@
   </div>
   <ModelField
     type="select"
-    label="Territoire"
+    label={serviceSchema.diffusionZoneType.name}
     schema={serviceSchema.diffusionZoneType}
     choices={servicesOptions.diffusionZoneType}
     name="diffusionZoneType"
@@ -260,7 +260,7 @@
   <ModelField
     type="custom"
     name="diffusionZoneDetails"
-    label="Nom"
+    label={serviceSchema.diffusionZoneDetails.name}
     description="Commencez à saisir le nom et choisissez dans la liste."
     errorMessages={$formErrors.diffusionZoneDetails}
     schema={serviceSchema.diffusionZoneDetails}
@@ -299,7 +299,7 @@
     choices={servicesOptions.concernedPublic}
     errorMessages={$formErrors.concernedPublic}
     name="concernedPublic"
-    label="Profils"
+    label={serviceSchema.concernedPublic.name}
     placeholder="Tous publics"
     placeholderMulti="Sélectionner…"
     schema={serviceSchema.concernedPublic}
@@ -313,7 +313,7 @@
     choices={servicesOptions.accessConditions}
     errorMessages={$formErrors.accessConditions}
     name="accessConditions"
-    label="Critères"
+    label={serviceSchema.accessConditions.name}
     placeholder="Aucun"
     placeholderMulti="Choisir un autre critères d’admission"
     schema={serviceSchema.accessConditions}
@@ -322,7 +322,7 @@
   />
 
   <ModelField
-    label="Uniquement QPV + ZRR ?"
+    label={serviceSchema.qpvOrZrr.name}
     type="toggle"
     name="qpvOrZrr"
     schema={serviceSchema.qpvOrZrr}
@@ -336,7 +336,7 @@
     choices={servicesOptions.requirements}
     errorMessages={$formErrors.requirements}
     name="requirements"
-    label="Pré-requis ou compétences"
+    label={serviceSchema.requirements.name}
     placeholder="Aucun"
     placeholderMulti="Choisir un autre pré-requis"
     schema={serviceSchema.requirements}
@@ -350,7 +350,7 @@
     <p class="text-f14">Modalités pour mobiliser le service.</p>
   </div>
   <ModelField
-    label="Pour l'accompagnateur"
+    label={serviceSchema.coachOrientationModes.name}
     type="checkboxes"
     choices={moveToTheEnd(
       servicesOptions.coachOrientationModes,
@@ -375,7 +375,7 @@
   />
 
   <ModelField
-    label="Pour le bénéficiaire"
+    label={serviceSchema.beneficiariesAccessModes.name}
     type="checkboxes"
     choices={moveToTheEnd(
       servicesOptions.beneficiariesAccessModes,
@@ -400,7 +400,7 @@
 
   <ModelField
     type="toggle"
-    label="Frais à charge"
+    label={serviceSchema.hasFee.name}
     schema={serviceSchema.hasFee}
     name="hasFee"
     errorMessages={$formErrors.hasFee}
@@ -429,7 +429,7 @@
   </div>
   <Field
     type="custom"
-    label="Documents à compléter"
+    label={serviceSchema.forms.name}
     errorMessages={$formErrors.forms}
   >
     <Uploader
@@ -447,7 +447,7 @@
     choices={servicesOptions.credentials}
     errorMessages={$formErrors.credentials}
     name="credentials"
-    label="Justificatifs à fournir"
+    label={serviceSchema.credentials.name}
     placeholder="Aucun"
     placeholderMulti="Choisir un autre justificatif"
     schema={serviceSchema.credentials}
@@ -455,7 +455,7 @@
   />
 
   <ModelField
-    label="Lien"
+    label={serviceSchema.onlineForm.name}
     placeholder="URL"
     type="url"
     schema={serviceSchema.onlineForm}
@@ -469,7 +469,7 @@
   <FieldSet title="Lieu">
     <ModelField
       type="checkboxes"
-      label="Lieu de déroulement"
+      label={serviceSchema.locationKinds.name}
       schema={serviceSchema.locationKinds}
       name="locationKinds"
       errorMessages={$formErrors.locationKinds}
@@ -483,7 +483,7 @@
     <ModelField
       placeholder="https://"
       type="url"
-      label="Lien visioconférence"
+      label={serviceSchema.remoteUrl.name}
       visible={service.locationKinds.includes("a-distance")}
       schema={serviceSchema.remoteUrl}
       name="remoteUrl"
@@ -503,7 +503,7 @@
       <ModelField
         name="city"
         type="custom"
-        label="Ville"
+        label={serviceSchema.city.name}
         errorMessages={$formErrors.city}
         schema={serviceSchema.city}
         visible={service.locationKinds.includes("en-presentiel")}
@@ -520,7 +520,7 @@
       <ModelField
         type="custom"
         name="address1"
-        label="Adresse"
+        label={serviceSchema.address1.name}
         errorMessages={$formErrors.address1}
         schema={serviceSchema.address1}
         visible={service.locationKinds.includes("en-presentiel")}
@@ -537,7 +537,7 @@
       </ModelField>
       <ModelField
         type="text"
-        label="Complément d’adresse"
+        label={serviceSchema.address2.name}
         placeholder="batiment, escalier, etc."
         schema={serviceSchema.address2}
         name="address2"
@@ -547,7 +547,7 @@
       />
       <ModelField
         type="text"
-        label="Code postal"
+        label={serviceSchema.postalCode.name}
         placeholder="00000"
         schema={serviceSchema.postalCode}
         name="postalCode"
@@ -590,7 +590,7 @@
       </p>
     </div>
     <ModelField
-      label="Fréquence et horaires"
+      label={serviceSchema.recurrence.name}
       type="text"
       placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
       schema={serviceSchema.recurrence}
@@ -607,7 +607,7 @@
       on:change={handleCheckTimeLimited}
     />
     <ModelField
-      label="Date de fin"
+      label={serviceSchema.suspensionDate.name}
       type="date"
       schema={serviceSchema.suspensionDate}
       name="suspensionDate"
@@ -629,7 +629,7 @@
       </p>
     </div>
     <ModelField
-      label="Prénom et Nom"
+      label={serviceSchema.contactName.name}
       placeholder="Prénom et nom"
       type="text"
       schema={serviceSchema.contactName}
@@ -639,7 +639,7 @@
     />
     <ModelField
       type="tel"
-      label="Téléphone"
+      label={serviceSchema.contactPhone.name}
       placeholder="00 00 00 00 00"
       schema={serviceSchema.contactPhone}
       name="contactPhone"
@@ -648,7 +648,7 @@
     />
     <ModelField
       type="email"
-      label="Courriel"
+      label={serviceSchema.contactEmail.name}
       placeholder="nom@exemple.org"
       schema={serviceSchema.contactEmail}
       name="contactEmail"
@@ -656,7 +656,7 @@
       bind:value={service.contactEmail}
     />
     <ModelField
-      label="Rendre les informations publiques"
+      label={serviceSchema.isContactInfoPublic.name}
       type="toggle"
       schema={serviceSchema.isContactInfoPublic}
       name="isContactInfoPublic"

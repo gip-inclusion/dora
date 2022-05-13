@@ -6,6 +6,7 @@
   import { userInfo } from "$lib/auth";
   import PendingNotice from "./_pending-notice.svelte";
   import AdminNotice from "$lib/components/structures/admin-notice.svelte";
+  import { capitalize } from "$lib/utils";
 
   export let structure;
   export let tabId = "informations";
@@ -63,7 +64,9 @@
   }
 </script>
 
-<h1 class="mb-s24 text-white">{structure.name}</h1>
+<h1 class="mb-s24 text-white">
+  {capitalize(structure.name)}
+</h1>
 
 <Label
   label={`${structure.address1}${

@@ -33,7 +33,7 @@ function validateField(fieldname, shape, data) {
     return { value, valid: true };
   }
 
-  if (shape.pre) {
+  if (shape.pre && value) {
     for (const preprocess of shape.pre) {
       value = preprocess(value);
     }
@@ -43,7 +43,7 @@ function validateField(fieldname, shape, data) {
     shape.required &&
     (value == null || value === "" || value?.length === 0)
   ) {
-    return { originalValue, valid: false, msg: "Ce champ est requis" };
+    return { originalValue, valid: false, msg: "Information requise" };
   }
 
   for (const rule of shape.rules) {
@@ -77,6 +77,7 @@ export function validate(
   let validatedData = {};
   let isValid = true;
   let doneOnce = false;
+  const errorFields = [];
 
   if (showErrors) {
     Object.keys(schema).forEach((fieldname) => delete currentErrors[fieldname]);
@@ -88,6 +89,9 @@ export function validate(
 
     isValid &&= valid;
     validatedData[fieldname] = value;
+    if (!valid) {
+      errorFields.push(shape.name);
+    }
 
     if (showErrors) {
       clearError(fieldname);
@@ -111,6 +115,9 @@ export function validate(
 
         isValid &&= depValid;
         validatedData[depName] = depValue;
+        if (!valid) {
+          errorFields.push(fullSchema[depName].name);
+        }
 
         if (showErrors) {
           if (!valid) {
@@ -129,7 +136,7 @@ export function validate(
   // Those are mostly the hidden fields
   validatedData = { ...data, ...validatedData };
 
-  return { validatedData, valid: isValid };
+  return { validatedData, valid: isValid, errorFields };
 }
 
 function parseServerError(error) {

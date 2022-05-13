@@ -9,7 +9,6 @@
   export let iconOnRight = false;
   export let small = false;
   export let noBackground = false;
-  export let noPadding = false;
   export let secondary = false;
 
   export let wFull = false;
@@ -24,9 +23,7 @@
     ts = "text-f16";
   }
 
-  if (noPadding) {
-    px = "";
-  } else if (small) {
+  if (small) {
     px = "px-s16";
   } else {
     px = "px-s20";
@@ -69,16 +66,16 @@
   aria-label={ariaLabel}
 >
   {#if icon && !iconOnRight}
-    <div class="{iw} {ih} shrink-0 fill-current" class:mr-s8={!!label}>
+    <i class="{iw} {ih} shrink-0 fill-current" class:mr-s8={!!label}>
       {@html icon}
-    </div>
+    </i>
   {/if}
 
   {label}
 
   {#if iconOnRight}
-    <div class="{iw} {ih} ml-s8 shrink-0 fill-current">
+    <i class="{iw} {ih} ml-s8 shrink-0 fill-current">
       {@html icon}
-    </div>
+    </i>
   {/if}
 </a>

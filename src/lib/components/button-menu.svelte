@@ -33,7 +33,7 @@
     {label}
     noBackground
     {disabled}
-    noPadding
+    small
     on:click={() => (isOpen = !isOpen)}
   />
   <div
@@ -54,7 +54,7 @@
   .children {
     position: absolute;
     z-index: 1000;
-    top: 64px;
+    top: 40px;
     right: 0;
     display: none;
     flex-direction: column;

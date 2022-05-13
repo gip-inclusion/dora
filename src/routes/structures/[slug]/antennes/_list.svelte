@@ -3,17 +3,34 @@
   import { userInfo } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
   import StructureCard from "$lib/components/structures/card.svelte";
-  import { addCircleIcon } from "$lib/icons";
   // import Select from "$lib/components/forms/select.svelte";
   // import Input from "$lib/components/forms/input.svelte";
   export let structure, branches, total;
   export let hasOptions = true;
+  export let limit;
 
   let departements = [];
   // let departement = "tous";
   const departement = "tous";
   let filters;
   let branchesFiltered = [];
+
+  function branchesFilter() {
+    let bb = branches.filter(
+      (b) =>
+        (departement === "tous" || b.department === departement) &&
+        (!filters ||
+          filters
+            .split(" ")
+            .every((f) => b.name.toLowerCase().includes(f.toLowerCase())))
+    );
+
+    if (limit) {
+      bb = bb.slice(0, limit);
+    }
+
+    return bb;
+  }
 
   $: structureFrontEndLink = `${CANONICAL_URL}/structures/${encodeURIComponent(
     structure.slug
@@ -31,19 +48,25 @@
     },
     [{ value: "tous", label: "Tous" }]
   );
-  $: branchesFiltered = branches.filter(
-    (b) =>
-      (departement === "tous" || b.department === departement) &&
-      (!filters ||
-        filters
-          .split(" ")
-          .every((f) => b.name.toLowerCase().includes(f.toLowerCase())))
-  );
+  $: branchesFiltered = branchesFilter();
 </script>
 
 <div class="col-span-full md:flex md:items-center md:justify-between">
   <h2 class="mb-s24 text-france-blue">Antennes</h2>
   <div class="flex gap-s16">
+    {#if $userInfo && (structure.isAdmin || $userInfo?.isStaff)}
+      <LinkButton
+        label="Ajouter une antenne…"
+        to={`https://itou.typeform.com/to/IXADRw7j#courriel_demandeur=${encodeURIComponent(
+          $userInfo.email
+        )}&lien_frontend=${encodeURIComponent(
+          structureFrontEndLink
+        )}&lien_backend=${encodeURIComponent(structureBackEndLink)}`}
+        small
+        otherTab
+        nofollow
+      />
+    {/if}
     {#if !!branches.length && !hasOptions}
       <LinkButton
         label={`Voir toutes les antennes (${total})`}
@@ -73,24 +96,6 @@
 </div>
 <div class="col-span-full">
   <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
-    {#if $userInfo && (structure.isAdmin || $userInfo?.isStaff)}
-      <div
-        class="flex items-center justify-center rounded-md px-s20 py-s24 shadow-md"
-      >
-        <LinkButton
-          label="Ajouter une antenne…"
-          to={`https://itou.typeform.com/to/IXADRw7j#courriel_demandeur=${encodeURIComponent(
-            $userInfo.email
-          )}&lien_frontend=${encodeURIComponent(
-            structureFrontEndLink
-          )}&lien_backend=${encodeURIComponent(structureBackEndLink)}`}
-          icon={addCircleIcon}
-          noBackground
-          otherTab
-          nofollow
-        />
-      </div>
-    {/if}
     {#each branchesFiltered as branch}
       <StructureCard structure={branch} />
     {/each}

@@ -25,14 +25,14 @@
   class:dark-bg={darkBg}
 >
   {#if icon}
-    <div class="icon mr-s8 flex-none" class:small-icon={smallIcon}>
+    <i class="icon mr-s8 flex-none" class:small-icon={smallIcon}>
       {@html icon}
-    </div>
+    </i>
   {/if}
   {#if icon && !(label || $$slots.default)}
-    <div class="icon flex-none">
+    <i class="icon flex-none">
       {@html icon}
-    </div>
+    </i>
   {/if}
 
   <span class:truncate><slot>{label}</slot></span>

@@ -71,13 +71,6 @@
   });
 
   let errorDiv;
-  let isValid = false;
-
-  $: isValid = validate(service, serviceSchema, serviceSchema, {
-    skipDependenciesCheck: true,
-    noScroll: true,
-    showErrors: false,
-  }).valid;
 
   async function publish() {
     // Validate the whole form
@@ -103,8 +96,6 @@
   }
 
   async function saveDraft() {
-    service.isDraft = true;
-
     // eslint-disable-next-line no-warning-comments
     // HACK: Empty <Select> are casted to null for now
     // but the server wants an empty string
@@ -152,19 +143,12 @@
     }
   }
 
-  async function handlePublish() {
-    if (
-      validate(service, serviceSchema, serviceSchema, {
-        skipDependenciesCheck: true,
-        noScroll: false,
-      }).valid
-    ) {
+  function handleSave() {
+    if (service.isDraft) {
+      saveDraft();
+    } else {
       publish();
     }
-  }
-
-  function handleSaveDraft() {
-    saveDraft();
   }
 </script>
 
@@ -180,9 +164,5 @@
 </CenteredGrid>
 
 <CenteredGrid>
-  <NavButtons
-    {isValid}
-    onPublish={handlePublish}
-    onSaveDraft={handleSaveDraft}
-  />
+  <NavButtons onSave={handleSave} bind:service />
 </CenteredGrid>

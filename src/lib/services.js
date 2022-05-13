@@ -167,6 +167,24 @@ export async function unPublishService(serviceSlug) {
   return await response.json();
 }
 
+export async function publishService(serviceSlug) {
+  const url = `${getApiURL()}/services/${serviceSlug}/`;
+  const method = "PATCH";
+  const response = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({ isDraft: false }),
+  });
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return await response.json();
+}
+
 export async function convertSuggestionToDraft(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";

@@ -2,7 +2,7 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import Label from "$lib/components/label.svelte";
-  import { shortenString } from "$lib/utils";
+  import { capitalize, shortenString } from "$lib/utils";
   import {
     homeIcon,
     // briefcaseIcon,
@@ -20,7 +20,7 @@
         <div class="flex grow flex-row items-center">
           <a href="/structures/{structure.slug}">
             <h5>
-              {shortenString(structure.name)}
+              {shortenString(capitalize(structure.name))}
               {#if structure.typologyDisplay}({structure.typologyDisplay}){/if}
             </h5>
           </a>

@@ -1,14 +1,15 @@
 <script>
   import { mapPinIcon } from "$lib/icons";
   import Label from "$lib/components/label.svelte";
+  import { capitalize } from "$lib/utils";
 
   export let structure;
 </script>
 
-<div class="rounded-md bg-white shadow-md">
-  <div class="rounded-t-md bg-magenta-brand px-s20 py-s12">
+<div class="flex flex-col rounded-md bg-white shadow-md">
+  <div class="grow rounded-t-md bg-magenta-brand px-s20 py-s12">
     <h4 class="mb-s8 text-white">
-      <a href="/structures/{structure.slug}">{structure.name}</a>
+      <a href="/structures/{structure.slug}">{capitalize(structure.name)}</a>
     </h4>
 
     {#if structure.postalCode || structure.city}

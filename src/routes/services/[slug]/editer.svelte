@@ -31,12 +31,27 @@
 </script>
 
 <script>
+  import { validate } from "$lib/validation.js";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import ServiceFormWrapper from "../_form/_service-form-wrapper.svelte";
+  import serviceSchema from "$lib/schemas/service.js";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import Notice from "$lib/components/notice.svelte";
 
   export let service, servicesOptions, structures, structure;
+
+  let validation;
+  $: validation =
+    service &&
+    validate(service, serviceSchema, serviceSchema, {
+      skipDependenciesCheck: true,
+      noScroll: true,
+      showErrors: false,
+    });
+
+  let errors;
+  $: errors = validation?.errorFields.length > 1;
 </script>
 
 <svelte:head>
@@ -48,6 +63,18 @@
     <CenteredGrid>
       <div class="col-span-full pt-s48 pb-s24">
         <h1>Modification du service</h1>
+        {#if !validation?.valid}
+          <Notice
+            title={`Information${errors ? "s" : ""} requise${
+              errors ? "s" : ""
+            } pour publier`}
+            type="warning"
+          >
+            <p class="text-f14 first-letter:capitalize">
+              {validation?.errorFields.join(", ")}.
+            </p>
+          </Notice>
+        {/if}
       </div>
     </CenteredGrid>
 

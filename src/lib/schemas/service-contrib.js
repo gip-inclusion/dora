@@ -68,7 +68,7 @@ const shape2 = {
       v.isString(),
       (name, value, data) => ({
         valid: !data.hasFee || value.length,
-        msg: `Ce champ est requis`,
+        msg: `Information requise`,
       }),
     ],
   },

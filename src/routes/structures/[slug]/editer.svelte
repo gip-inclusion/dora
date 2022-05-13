@@ -16,6 +16,7 @@
   import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
   import { structure } from "./_store";
   import { refreshUserInfo } from "$lib/auth";
+  import { capitalize } from "$lib/utils";
 
   export let structuresOptions;
 
@@ -27,7 +28,9 @@
 </script>
 
 <svelte:head>
-  <title>{$structure.name} | Éditer | DORA</title>
+  <title>
+    {capitalize($structure.name)} | Éditer | DORA
+  </title>
 </svelte:head>
 
 <EnsureLoggedIn>

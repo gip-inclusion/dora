@@ -1,5 +1,6 @@
 <script>
   import { getStructure } from "$lib/structures";
+  import { capitalize } from "$lib/utils.js";
   import { structure } from "../_store.js";
 
   import List from "./_list.svelte";
@@ -10,7 +11,7 @@
 </script>
 
 <svelte:head>
-  <title>Services | {$structure.name} | DORA</title>
+  <title>Services | {capitalize($structure.name)} | DORA</title>
   <meta name="description" content={$structure.shortDesc} />
 </svelte:head>
 
