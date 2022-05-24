@@ -97,8 +97,6 @@
           territoire et sur tous les sites partenaires grace à notre démarche
           collective d'open data.
         </p>
-
-        <img src={logoDataInclusion} alt="logo data inclusion" />
       </div>
       <div class="md:flex-1">
         <img
@@ -125,6 +123,25 @@
           facilitant ses démarches et son retour vers un emploi durable.
         </p>
       </div>
+    </div>
+  </div>
+
+  <div
+    class="desktop:flex-col col-span-full mb-s40 flex gap-s24 rounded-md bg-magenta-10 p-s24"
+  >
+    <div class="w-1/3 self-center text-center">
+      <a href="https://github.com/betagouv/data-inclusion">
+        <img src={logoDataInclusion} alt="logo data inclusion" class="inline" />
+      </a>
+    </div>
+    <div class="w-2/3">
+      <h4>Dites le nous qu’une fois</h4>
+      <p class="text-f16">
+        DORA est engagé sur une démarche d'Open Data. Vous renseignez vos
+        services sur DORA, plus besoin de saisir ces mêmes informations sur
+        d'autres plateformes, sites web et partenaires ! La donnée est partagée
+        dans le cadre de cette dynamique collective.
+      </p>
     </div>
   </div>
 </CenteredGrid>
