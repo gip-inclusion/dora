@@ -73,7 +73,7 @@
   {disabled}
 >
   {#if icon && !iconOnRight}
-    <span class="{iw} {ih} fill-current" class:mr-s8={!!label}>
+    <span class="{iw} {ih} -my-s2 fill-current" class:mr-s8={!!label}>
       {@html icon}
     </span>
   {/if}
@@ -81,7 +81,7 @@
   {label}
 
   {#if iconOnRight}
-    <span class="{iw} {ih} ml-s8 justify-end fill-current">
+    <span class="{iw} {ih} -my-s2 ml-s8 justify-end fill-current">
       {@html icon}
     </span>
   {/if}

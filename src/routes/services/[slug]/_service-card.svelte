@@ -30,7 +30,7 @@
   --col-content-bg="var(--col-bg)"
   topPadded
 >
-  <div class="noprint col-span-full h-s40">
+  <div class="noprint col-span-full">
     {#if browser && !isPreview}
       <Toolbar {service} onRefresh={handleRefresh} />
     {/if}
@@ -49,16 +49,16 @@
         {/if}
         {#if service.locationKinds.includes("a-distance")}
           <p class="pb-s16 text-f14">
-            <strong>Lien : </strong><a
-              target="_blank"
-              rel="noopener nofollow"
-              href={service.remoteUrl}>{shortenString(service.remoteUrl, 35)}</a
+            <strong>Lien : </strong>
+            <a target="_blank" rel="noopener nofollow" href={service.remoteUrl}
+              >{shortenString(service.remoteUrl, 35)}</a
             >
           </p>
         {/if}
       {/if}
 
       {#if service.recurrence}
+        <h4>Fréquence et horaires</h4>
         <p class="text-f14">{service.recurrence}</p>
       {/if}
 
@@ -103,10 +103,16 @@
     </div>
     <div class="lg:w-2/3">
       <div class="mb-s48 flex flex-col gap-s32 lg:flex-row">
-        <div class="flex-1"><AccessBox {service} /></div>
-        <div class="flex-1"><ModalitiesBox {service} /></div>
+        <div class="flex-1">
+          <AccessBox {service} />
+        </div>
+        <div class="flex-1">
+          <ModalitiesBox {service} />
+        </div>
       </div>
-      <div class="mb-s48"><ServicePresentation {service} /></div>
+      <div class="mb-s48">
+        <ServicePresentation {service} />
+      </div>
     </div>
   </div>
 </CenteredGrid>

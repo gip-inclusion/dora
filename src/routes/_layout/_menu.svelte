@@ -71,7 +71,7 @@
 
   <MenuAide />
 
-  <div slot="lg" class="flex gap-s40">
+  <div slot="lg" class="flex gap-s12">
     <ButtonMenu icon={questionFillIcon}>
       <MenuAide />
     </ButtonMenu>

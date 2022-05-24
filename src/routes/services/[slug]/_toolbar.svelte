@@ -27,10 +27,10 @@
   }
 </script>
 
-<div class="inline-flex flex-wrap gap-s12">
+<div class="inline-flex flex-wrap items-start gap-s8">
   {#if $token && service.canWrite}
     <StateButtonMenu {service} {onRefresh} />
-    <Menu {service} secondary {onRefresh} />
+    <Menu {service} secondary {onRefresh} inline />
   {:else}
     <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
     <Button

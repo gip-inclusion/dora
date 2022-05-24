@@ -7,6 +7,6 @@
   export let service;
 </script>
 
-<ButtonMenu icon={moreIcon}>
+<ButtonMenu icon={moreIcon} small>
   <Menu {service} />
 </ButtonMenu>

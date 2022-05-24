@@ -25,8 +25,7 @@
   export let maxLength = undefined;
   export let rows = 4;
 
-  export let toggleTextYes;
-  export let toggleTextNo;
+  export let toggleText;
 
   export let onSelectChange = undefined;
 </script>
@@ -121,8 +120,7 @@
     on:change
     {disabled}
     {readonly}
-    {toggleTextYes}
-    {toggleTextNo}
+    {toggleText}
   />
 {:else if type === "password"}
   <PasswordInput

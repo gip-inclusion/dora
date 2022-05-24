@@ -22,8 +22,7 @@
   export let minValue = null;
 
   export let hideLabel = false;
-  export let toggleTextYes = undefined;
-  export let toggleTextNo = undefined;
+  export let toggleText = undefined;
   export let autocomplete = undefined;
   export let passwordrules = undefined;
 </script>
@@ -50,8 +49,7 @@
   {readonly}
   {visible}
   {vertical}
-  {toggleTextYes}
-  {toggleTextNo}
+  {toggleText}
   {autocomplete}
   {passwordrules}
 >

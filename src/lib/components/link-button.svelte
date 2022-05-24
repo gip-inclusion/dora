@@ -24,7 +24,7 @@
   }
 
   if (small) {
-    px = "px-s16";
+    px = label ? "px-s12" : "px-s8";
   } else {
     px = "px-s20";
   }
@@ -66,7 +66,7 @@
   aria-label={ariaLabel}
 >
   {#if icon && !iconOnRight}
-    <i class="{iw} {ih} shrink-0 fill-current" class:mr-s8={!!label}>
+    <i class="{iw} {ih} -my-s2 shrink-0 fill-current" class:mr-s8={!!label}>
       {@html icon}
     </i>
   {/if}
@@ -74,7 +74,7 @@
   {label}
 
   {#if iconOnRight}
-    <i class="{iw} {ih} ml-s8 shrink-0 fill-current">
+    <i class="{iw} {ih} -my-s2 ml-s8 shrink-0 fill-current">
       {@html icon}
     </i>
   {/if}

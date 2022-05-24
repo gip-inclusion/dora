@@ -138,8 +138,7 @@
           vertical
           type="toggle"
           bind:value={$registrationInfo.newsletter}
-          toggleTextYes={newsletterText}
-          toggleTextNo={newsletterText}
+          toggleText={newsletterText}
           placeholder=""
         />
 

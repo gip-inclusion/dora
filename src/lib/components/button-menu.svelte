@@ -4,6 +4,7 @@
   export let icon;
   export let label = undefined;
   export let disabled = false;
+  export let small = false;
   let isOpen = false;
 
   function clickOutside(node) {
@@ -33,7 +34,7 @@
     {label}
     noBackground
     {disabled}
-    small
+    {small}
     on:click={() => (isOpen = !isOpen)}
   />
   <div
@@ -41,6 +42,8 @@
     class:open={isOpen}
     use:clickOutside
     on:click_outside={handleClickOutside}
+    class:top-s40={small}
+    class:top-s48={!small}
   >
     <slot onClose={() => (isOpen = false)} />
   </div>
@@ -54,7 +57,6 @@
   .children {
     position: absolute;
     z-index: 1000;
-    top: 40px;
     right: 0;
     display: none;
     flex-direction: column;

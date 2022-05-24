@@ -10,10 +10,10 @@
 </script>
 
 <div class="flex items-center rounded border border-gray-01">
-  <div class="px-s12"><StateLabel {service} /></div>
+  <div class="px-s12 py-s6"><StateLabel {service} /></div>
   <div class="text-gray-02">|</div>
 
-  <ButtonMenu icon={arrowDownSIcon} let:onClose={onCloseParent}>
+  <ButtonMenu icon={arrowDownSIcon} let:onClose={onCloseParent} small>
     <StateMenu
       {service}
       onRefresh={async () => {

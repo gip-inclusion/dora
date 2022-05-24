@@ -3,9 +3,10 @@
 
   export let service;
   export let secondary = false;
+  export let inline = false;
 </script>
 
-<div>
+<div class:flex={inline} class:gap-s8={inline} class:items-start={inline}>
   <LinkButton
     label="Modifier"
     to="/services/{service.slug}/editer"
