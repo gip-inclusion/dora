@@ -40,6 +40,7 @@
     <div class="lg:w-1/3">
       {#if service.locationKinds.length}
         {#if service.locationKinds.includes("en-presentiel")}
+          <h4>En présentiel</h4>
           <p class="pb-s16 text-f14">
             {service.address1}<br />
             {#if service.address2}{service.address2}<br />{/if}
@@ -48,8 +49,8 @@
           </p>
         {/if}
         {#if service.locationKinds.includes("a-distance")}
+          <strong>À distance</strong>
           <p class="pb-s16 text-f14">
-            <strong>Lien : </strong>
             <a target="_blank" rel="noopener nofollow" href={service.remoteUrl}
               >{shortenString(service.remoteUrl, 35)}</a
             >
@@ -97,7 +98,9 @@
     </div>
   </div>
 
-  <div class="col-span-full flex flex-col gap-s24 lg:flex-row-reverse">
+  <div
+    class="col-span-full flex flex-col gap-s24 break-all lg:flex-row-reverse"
+  >
     <div class="lg:w-1/3">
       <OrientationBox {service} />
     </div>
@@ -110,9 +113,11 @@
           <ModalitiesBox {service} />
         </div>
       </div>
-      <div class="mb-s48">
-        <ServicePresentation {service} />
-      </div>
+      {#if service.fullDesc}
+        <div class="mb-s48">
+          <ServicePresentation {service} />
+        </div>
+      {/if}
     </div>
   </div>
 </CenteredGrid>

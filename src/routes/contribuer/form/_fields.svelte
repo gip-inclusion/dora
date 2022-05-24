@@ -215,8 +215,8 @@
       errorMessages={$formErrors.concernedPublic}
       bind:value={service.concernedPublic}
       choices={servicesOptions.concernedPublic}
-      placeholder="Sélectionner…"
-      placeholderMulti="Sélectionner…"
+      placeholder="Sélectionner"
+      placeholderMulti="Sélectionner"
       sortSelect
     />
 
@@ -229,8 +229,8 @@
       errorMessages={$formErrors.accessConditions}
       bind:value={service.accessConditions}
       choices={servicesOptions.accessConditions}
-      placeholder="Sélectionner…"
-      placeholderMulti="Sélectionner…"
+      placeholder="Sélectionner"
+      placeholderMulti="Sélectionner"
       sortSelect
     />
 
@@ -243,8 +243,8 @@
       bind:value={service.requirements}
       choices={servicesOptions.requirements}
       label="Pré-requis ou compétences"
-      placeholder="Sélectionner…"
-      placeholderMulti="Sélectionner…"
+      placeholder="Sélectionner"
+      placeholderMulti="Sélectionner"
       sortSelect
     />
 

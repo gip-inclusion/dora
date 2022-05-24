@@ -15,7 +15,7 @@
   <div class="col-span-full md:flex md:items-center md:justify-between">
     <h2 class="mb-s24 text-france-blue">Mon compte</h2>
     <div class="flex gap-s16">
-      <LinkButton label="Modifier…" to="/mon-compte/editer" small />
+      <LinkButton label="Modifier" to="/mon-compte/editer" small />
 
       <LinkButton
         label="Changer de mot de passe…"

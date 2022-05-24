@@ -118,14 +118,12 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
 </div>
 
 <div class="noprint mb-s24">
-  {#if !service.isDraft}
-    <LinkButton
-      secondary
-      wFull
-      small
-      label="Télécharger la page (.pdf)"
-      to={pdfUrl}
-      nofollow
-    />
-  {/if}
+  <LinkButton
+    secondary
+    wFull
+    small
+    label="Télécharger la page (.pdf)"
+    to={pdfUrl}
+    nofollow
+  />
 </div>

@@ -10,7 +10,7 @@
   </p>
 
   <LinkButton
-    label="Modifier…"
+    label="Modifier"
     to="/mon-compte/editer"
     small
     secondary

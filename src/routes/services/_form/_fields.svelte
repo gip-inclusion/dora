@@ -154,14 +154,14 @@
     bind:value={service.structure}
     onSelectChange={handleStructureChange}
     sortSelect
-    placeholder="Sélectionner…"
+    placeholder="Sélectionner"
     disabled={!showStructures}
   />
 
   <ModelField
     label={serviceSchema.name.name}
     type="text"
-    placeholder="Compléter…"
+    placeholder="Compléter"
     schema={serviceSchema.name}
     name="name"
     errorMessages={$formErrors.name}
@@ -169,7 +169,7 @@
   />
   <ModelField
     description="280 caractères maximum"
-    placeholder="Compléter…"
+    placeholder="Compléter"
     type="textarea"
     label={serviceSchema.shortDesc.name}
     schema={serviceSchema.shortDesc}
@@ -205,7 +205,7 @@
     name="categories"
     errorMessages={$formErrors.categories}
     onSelectChange={handleCategoryChange}
-    placeholderMulti="Sélectionner…"
+    placeholderMulti="Sélectionner"
     sortSelect
   />
   <ModelField
@@ -216,8 +216,8 @@
     errorMessages={$formErrors.subcategories}
     bind:value={service.subcategories}
     choices={subcategories}
-    placeholder="Sélectionner…"
-    placeholderMulti="Sélectionner…"
+    placeholder="Sélectionner"
+    placeholderMulti="Sélectionner"
     sortSelect
   />
 
@@ -301,7 +301,7 @@
     name="concernedPublic"
     label={serviceSchema.concernedPublic.name}
     placeholder="Tous publics"
-    placeholderMulti="Sélectionner…"
+    placeholderMulti="Sélectionner"
     schema={serviceSchema.concernedPublic}
     sortSelect
     description="Plusieurs choix possibles."
@@ -366,7 +366,7 @@
   <ModelField
     visible={service.coachOrientationModes.includes("autre")}
     hideLabel
-    placeholder="Compléter…"
+    placeholder="Compléter"
     type="text"
     schema={serviceSchema.coachOrientationModesOther}
     name="coachOrientationModesOther"

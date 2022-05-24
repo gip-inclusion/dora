@@ -79,7 +79,7 @@
   <div class="flex gap-s16">
     {#if canEdit}
       <LinkButton
-        label="Ajouter un service…"
+        label="Ajouter un service"
         to="/services/creer?structure={structure.slug}"
         small
       />

@@ -66,7 +66,11 @@
   aria-label={ariaLabel}
 >
   {#if icon && !iconOnRight}
-    <i class="{iw} {ih} -my-s2 shrink-0 fill-current" class:mr-s8={!!label}>
+    <i
+      class="{iw} {ih} shrink-0 fill-current"
+      class:mr-s8={!!label}
+      class:-my-s2={small}
+    >
       {@html icon}
     </i>
   {/if}
@@ -74,7 +78,7 @@
   {label}
 
   {#if iconOnRight}
-    <i class="{iw} {ih} -my-s2 ml-s8 shrink-0 fill-current">
+    <i class="{iw} {ih} ml-s8 shrink-0 fill-current" class:-my-s2={small}>
       {@html icon}
     </i>
   {/if}

@@ -130,17 +130,18 @@
     class="desktop:flex-col col-span-full mb-s40 flex gap-s24 rounded-md bg-magenta-10 p-s24"
   >
     <div class="w-1/3 self-center text-center">
-      <a href="https://github.com/betagouv/data-inclusion">
+      <a href="https://www.data.inclusion.beta.gouv.fr/">
         <img src={logoDataInclusion} alt="logo data inclusion" class="inline" />
       </a>
     </div>
     <div class="w-2/3">
-      <h4>Dites le nous qu’une fois</h4>
+      <h4>Dites-le-nous une fois</h4>
       <p class="text-f16">
-        DORA est engagé sur une démarche d'Open Data. Vous renseignez vos
-        services sur DORA, plus besoin de saisir ces mêmes informations sur
-        d'autres plateformes, sites web et partenaires ! La donnée est partagée
-        dans le cadre de cette dynamique collective.
+        Nous sommes engagés dans une démarche d’Open Data et rendons disponibles
+        nos données à travers un référentiel commun — partagé par toutes les
+        plateformes et sites web partenaires. Grâce à cette dynamique
+        collective, vous référencez votre offre une seule fois tout en la
+        rendant disponible partout.
       </p>
     </div>
   </div>

@@ -19,7 +19,7 @@
   {#if $token && (structure.isAdmin || $userInfo?.isStaff)}
     <LinkButton
       to={`/structures/${structure.slug}/editer`}
-      label="Modifier…"
+      label="Modifier"
       small
     />
   {/if}
