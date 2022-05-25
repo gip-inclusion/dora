@@ -53,7 +53,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
 
 <div class="mb-s24 rounded-md border border-gray-00 px-s24 pt-s24 shadow-md">
   <h4>Justificatifs</h4>
-  <ul class="mb-s24 list-inside list-disc text-f14">
+  <ul class="mb-s24 list-outside list-disc pl-s20 text-f14">
     {#each service.credentialsDisplay as creds}
       <li><span>{creds}</span></li>
     {:else}
@@ -63,10 +63,10 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
 
   {#if service.formsInfo.length}
     <h4>À compléter</h4>
-    <ul class="mb-s24 list-inside list-disc text-f14">
+    <ul class="mb-s24 list-outside list-disc pl-s20 text-f14">
       {#each service.formsInfo as form}
         <li>
-          <span class="break-all">
+          <span class="break-word">
             <a target="_blank" rel="noopener nofollow" href={form.url}
               >{form.name}</a
             >

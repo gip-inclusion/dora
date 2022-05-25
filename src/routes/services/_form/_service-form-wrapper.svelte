@@ -73,6 +73,8 @@
   let errorDiv;
 
   async function publish() {
+    service.isDraft = false;
+
     // Validate the whole form
     const { validatedData, valid } = validate(
       service,
@@ -96,6 +98,7 @@
   }
 
   async function saveDraft() {
+    service.isDraft = true;
     // eslint-disable-next-line no-warning-comments
     // HACK: Empty <Select> are casted to null for now
     // but the server wants an empty string
@@ -142,14 +145,6 @@
       errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }
-
-  function handleSave() {
-    if (service.isDraft) {
-      saveDraft();
-    } else {
-      publish();
-    }
-  }
 </script>
 
 <CenteredGrid roundedTop>
@@ -164,5 +159,5 @@
 </CenteredGrid>
 
 <CenteredGrid>
-  <NavButtons onSave={handleSave} bind:service />
+  <NavButtons onSaveDraft={saveDraft} onPublish={publish} />
 </CenteredGrid>

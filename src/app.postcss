@@ -191,6 +191,10 @@
     @apply text-f12 leading-20 text-gray-text-alt2;
   }
 
+  .break-word {
+    word-break: break-word;
+  }
+
   @media print {
     .noprint {
       @apply !hidden;
@@ -237,16 +241,19 @@
   content: "xs";
   visibility: hidden;
 }
+
 @screen md {
   .breakpoint-hack::before {
     content: "md";
   }
 }
+
 @screen lg {
   .breakpoint-hack::before {
     content: "lg";
   }
 }
+
 @screen xl {
   .breakpoint-hack::before {
     content: "xl";

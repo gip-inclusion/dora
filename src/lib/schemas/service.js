@@ -245,7 +245,7 @@ const shape4 = {
     ],
   },
   diffusionZoneType: {
-    name: "territoire",
+    name: "habitants de",
     default: "",
     required: true,
     rules: [v.isString(), v.maxStrLength(10)],
@@ -453,7 +453,7 @@ export const draftServiceSchema = {
     rules: [v.isPostalCode()],
   },
   diffusionZoneType: {
-    name: "territoire",
+    name: "habitants de",
     default: "",
     rules: [v.isString(), v.maxStrLength(10)],
   },

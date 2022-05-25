@@ -37,7 +37,6 @@
 
   import { getNewService } from "./_form/_stores.js";
   import ServiceFormWrapper from "./_form/_service-form-wrapper.svelte";
-  import Card from "$lib/components/structures/card.svelte";
 
   export let servicesOptions, structures, lastDraft;
 
@@ -65,18 +64,13 @@
 </script>
 
 <svelte:head>
-  <title>Référencer votre service | DORA</title>
+  <title>Création d'un service | DORA</title>
 </svelte:head>
 
 <EnsureLoggedIn>
   <CenteredGrid>
     <div class="col-span-full pt-s48 pb-s24">
-      <div class="flex flex-wrap justify-between">
-        <div class="w-2/3"><h1>Création du service</h1></div>
-        {#if service.structureInfo}
-          <div class="w-1/3"><Card structure={service.structureInfo} /></div>
-        {/if}
-      </div>
+      <h1>Création d'un service</h1>
 
       {#if !structures.length}
         <Notice title="Impossible de créer un nouveau service" type="error">

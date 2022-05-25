@@ -25,8 +25,6 @@
   export let maxLength = undefined;
   export let rows = 4;
 
-  export let toggleText;
-
   export let onSelectChange = undefined;
 </script>
 
@@ -114,14 +112,7 @@
     {readonly}
   />
 {:else if type === "toggle"}
-  <Toggle
-    {name}
-    bind:checked={value}
-    on:change
-    {disabled}
-    {readonly}
-    {toggleText}
-  />
+  <Toggle {name} bind:checked={value} on:change {disabled} {readonly} />
 {:else if type === "password"}
   <PasswordInput
     on:blur

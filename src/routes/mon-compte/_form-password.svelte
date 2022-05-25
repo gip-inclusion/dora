@@ -111,7 +111,7 @@
         <p class="legend mb-s16">
           Votre mot de passe doit respecter quelques règles :
         </p>
-        <ul class="legend list-inside list-disc">
+        <ul class="legend list-outside list-disc pl-s16">
           <li>9 caractères ou plus</li>
           <li>Pas entièrement numérique</li>
         </ul>

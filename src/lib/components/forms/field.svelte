@@ -31,7 +31,6 @@
   export let minValue = undefined;
 
   export let hideLabel = false;
-  export let toggleText = undefined;
 
   export let onSelectChange = undefined;
 
@@ -93,7 +92,6 @@
             {minValue}
             {disabled}
             {readonly}
-            {toggleText}
             {autocomplete}
             {passwordrules}
           />

@@ -56,7 +56,7 @@
   <div class="flex gap-s16">
     {#if $userInfo && (structure.isAdmin || $userInfo?.isStaff)}
       <LinkButton
-        label="Ajouter une antenne…"
+        label="Ajouter une antenne"
         to={`https://itou.typeform.com/to/IXADRw7j#courriel_demandeur=${encodeURIComponent(
           $userInfo.email
         )}&lien_frontend=${encodeURIComponent(

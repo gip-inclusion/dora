@@ -125,6 +125,22 @@
   }
 </script>
 
+<FieldSet>
+  <ModelField
+    type="select"
+    schema={serviceSchema.structure}
+    label={serviceSchema.structure.name}
+    choices={structures.map((s) => ({ value: s.slug, label: s.name }))}
+    name="structure"
+    errorMessages={$formErrors.structure}
+    bind:value={service.structure}
+    onSelectChange={handleStructureChange}
+    sortSelect
+    placeholder="Sélectionner"
+    disabled={!showStructures}
+  />
+</FieldSet>
+
 <FieldSet title="Présentation">
   <div slot="help">
     <p class="text-f14">
@@ -143,20 +159,6 @@
       <b>Description</b>.
     </p>
   </div>
-
-  <ModelField
-    type="select"
-    schema={serviceSchema.structure}
-    label={serviceSchema.structure.name}
-    choices={structures.map((s) => ({ value: s.slug, label: s.name }))}
-    name="structure"
-    errorMessages={$formErrors.structure}
-    bind:value={service.structure}
-    onSelectChange={handleStructureChange}
-    sortSelect
-    placeholder="Sélectionner"
-    disabled={!showStructures}
-  />
 
   <ModelField
     label={serviceSchema.name.name}
@@ -242,41 +244,6 @@
   />
 </FieldSet>
 
-<FieldSet title="Diffusion">
-  <div slot="help">
-    <p class="text-f14">Territoire sur lequel le service est accessible.</p>
-  </div>
-  <ModelField
-    type="select"
-    label={serviceSchema.diffusionZoneType.name}
-    schema={serviceSchema.diffusionZoneType}
-    choices={servicesOptions.diffusionZoneType}
-    name="diffusionZoneType"
-    errorMessages={$formErrors.diffusionZoneType}
-    onSelectChange={handleDiffusionZoneTypeChange}
-    initialValue={service.diffusionZoneTypeDisplay}
-  />
-
-  <ModelField
-    type="custom"
-    name="diffusionZoneDetails"
-    label={serviceSchema.diffusionZoneDetails.name}
-    description="Commencez à saisir le nom et choisissez dans la liste."
-    errorMessages={$formErrors.diffusionZoneDetails}
-    schema={serviceSchema.diffusionZoneDetails}
-    visible={service.diffusionZoneType !== "country"}
-  >
-    <AdminDivisionSearch
-      slot="custom-input"
-      name="diffusionZoneDetails"
-      searchType={service.diffusionZoneType}
-      handleChange={handlediffusionZoneDetailsChange}
-      initialValue={service.diffusionZoneDetailsDisplay}
-      bind:choices={adminDivisionChoices}
-    />
-  </ModelField>
-</FieldSet>
-
 <FieldSet title="Publics">
   <div slot="help">
     <p class="text-f14">
@@ -321,15 +288,6 @@
     description="Plusieurs choix possibles."
   />
 
-  <ModelField
-    label={serviceSchema.qpvOrZrr.name}
-    type="toggle"
-    name="qpvOrZrr"
-    schema={serviceSchema.qpvOrZrr}
-    errorMessages={$formErrors.qpvOrZrr}
-    bind:value={service.qpvOrZrr}
-  />
-
   <AddableMultiselect
     bind:values={service.requirements}
     structure={service.structure}
@@ -342,6 +300,52 @@
     schema={serviceSchema.requirements}
     sortSelect
     description="Plusieurs choix possibles."
+  />
+</FieldSet>
+
+<FieldSet title="Territoire">
+  <div slot="help">
+    <p class="text-f14">
+      Si le service est reservé aux habitants d'un territoire.
+    </p>
+  </div>
+  <ModelField
+    type="select"
+    label={serviceSchema.diffusionZoneType.name}
+    schema={serviceSchema.diffusionZoneType}
+    choices={servicesOptions.diffusionZoneType}
+    name="diffusionZoneType"
+    errorMessages={$formErrors.diffusionZoneType}
+    onSelectChange={handleDiffusionZoneTypeChange}
+    initialValue={service.diffusionZoneTypeDisplay}
+  />
+
+  <ModelField
+    type="custom"
+    name="diffusionZoneDetails"
+    label={serviceSchema.diffusionZoneDetails.name}
+    description="Commencez à saisir le nom et choisissez dans la liste."
+    errorMessages={$formErrors.diffusionZoneDetails}
+    schema={serviceSchema.diffusionZoneDetails}
+    visible={service.diffusionZoneType !== "country"}
+  >
+    <AdminDivisionSearch
+      slot="custom-input"
+      name="diffusionZoneDetails"
+      searchType={service.diffusionZoneType}
+      handleChange={handlediffusionZoneDetailsChange}
+      initialValue={service.diffusionZoneDetailsDisplay}
+      bind:choices={adminDivisionChoices}
+    />
+  </ModelField>
+
+  <ModelField
+    label={serviceSchema.qpvOrZrr.name}
+    type="toggle"
+    name="qpvOrZrr"
+    schema={serviceSchema.qpvOrZrr}
+    errorMessages={$formErrors.qpvOrZrr}
+    bind:value={service.qpvOrZrr}
   />
 </FieldSet>
 
@@ -465,203 +469,197 @@
   />
 </Fieldset>
 
-{#if structure}
-  <FieldSet title="Lieu">
-    <ModelField
-      type="checkboxes"
-      label={serviceSchema.locationKinds.name}
-      schema={serviceSchema.locationKinds}
-      name="locationKinds"
-      errorMessages={$formErrors.locationKinds}
-      bind:value={service.locationKinds}
-      choices={moveToTheEnd(
-        servicesOptions.locationKinds,
-        "value",
-        "a-distance"
-      )}
-    />
-    <ModelField
-      placeholder="https://"
-      type="url"
-      label={serviceSchema.remoteUrl.name}
-      visible={service.locationKinds.includes("a-distance")}
-      schema={serviceSchema.remoteUrl}
-      name="remoteUrl"
-      errorMessages={$formErrors.remoteUrl}
-      bind:value={service.remoteUrl}
-    />
+<FieldSet title="Périodicité">
+  <div slot="help">
+    <p class="text-f14">
+      La durée limitée permet de supendre automatiquement la visibilité du
+      service dans les résultat de recherche.
+    </p>
+  </div>
+  <ModelField
+    label={serviceSchema.recurrence.name}
+    type="text"
+    placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
+    schema={serviceSchema.recurrence}
+    name="recurrence"
+    errorMessages={$formErrors.recurrence}
+    bind:value={service.recurrence}
+  />
 
-    {#if service.locationKinds.includes("en-presentiel")}
-      <Button
-        on:click={fillAdress(structure)}
-        secondary
-        small
-        label="Utiliser l'adresse de la structure"
-      />
-    {/if}
-    {#if showServiceAddress}
-      <ModelField
+  <Field
+    label="Durée limitée"
+    type="toggle"
+    name="isTimeLimited"
+    bind:value={isTimeLimited}
+    on:change={handleCheckTimeLimited}
+  />
+  <ModelField
+    label={serviceSchema.suspensionDate.name}
+    type="date"
+    schema={serviceSchema.suspensionDate}
+    name="suspensionDate"
+    errorMessages={$formErrors.suspensionDate}
+    bind:value={service.suspensionDate}
+    visible={isTimeLimited}
+  />
+</FieldSet>
+
+<FieldSet title="Lieu">
+  <ModelField
+    type="checkboxes"
+    label={serviceSchema.locationKinds.name}
+    schema={serviceSchema.locationKinds}
+    name="locationKinds"
+    errorMessages={$formErrors.locationKinds}
+    bind:value={service.locationKinds}
+    choices={moveToTheEnd(servicesOptions.locationKinds, "value", "a-distance")}
+  />
+  <ModelField
+    placeholder="https://"
+    type="url"
+    label={serviceSchema.remoteUrl.name}
+    visible={service.locationKinds.includes("a-distance")}
+    schema={serviceSchema.remoteUrl}
+    name="remoteUrl"
+    errorMessages={$formErrors.remoteUrl}
+    bind:value={service.remoteUrl}
+  />
+
+  {#if structure && service.locationKinds.includes("en-presentiel")}
+    <Button
+      on:click={fillAdress(structure)}
+      secondary
+      small
+      label="Utiliser l'adresse de la structure"
+    />
+  {/if}
+  {#if showServiceAddress}
+    <ModelField
+      name="city"
+      type="custom"
+      label={serviceSchema.city.name}
+      errorMessages={$formErrors.city}
+      schema={serviceSchema.city}
+      visible={service.locationKinds.includes("en-presentiel")}
+    >
+      <CitySearch
+        slot="custom-input"
         name="city"
-        type="custom"
-        label={serviceSchema.city.name}
-        errorMessages={$formErrors.city}
-        schema={serviceSchema.city}
-        visible={service.locationKinds.includes("en-presentiel")}
-      >
-        <CitySearch
-          slot="custom-input"
-          name="city"
-          placeholder="Saisissez et validez votre ville"
-          initialValue={service.city}
-          onChange={handleCityChange}
-        />
-      </ModelField>
+        placeholder="Saisissez et validez votre ville"
+        initialValue={service.city}
+        onChange={handleCityChange}
+      />
+    </ModelField>
 
-      <ModelField
-        type="custom"
+    <ModelField
+      type="custom"
+      name="address1"
+      label={serviceSchema.address1.name}
+      errorMessages={$formErrors.address1}
+      schema={serviceSchema.address1}
+      visible={service.locationKinds.includes("en-presentiel")}
+    >
+      <AddressSearch
+        slot="custom-input"
         name="address1"
-        label={serviceSchema.address1.name}
-        errorMessages={$formErrors.address1}
-        schema={serviceSchema.address1}
-        visible={service.locationKinds.includes("en-presentiel")}
-      >
-        <AddressSearch
-          slot="custom-input"
-          name="address1"
-          disabled={!service.cityCode}
-          cityCode={service.cityCode}
-          placeholder="3 rue du parc"
-          initialValue={service.address1}
-          handleChange={handleAddressChange}
-        />
-      </ModelField>
-      <ModelField
-        type="text"
-        label={serviceSchema.address2.name}
-        placeholder="batiment, escalier, etc."
-        schema={serviceSchema.address2}
-        name="address2"
-        errorMessages={$formErrors.address2}
-        bind:value={service.address2}
-        visible={service.locationKinds.includes("en-presentiel")}
+        disabled={!service.cityCode}
+        cityCode={service.cityCode}
+        placeholder="3 rue du parc"
+        initialValue={service.address1}
+        handleChange={handleAddressChange}
       />
-      <ModelField
-        type="text"
-        label={serviceSchema.postalCode.name}
-        placeholder="00000"
-        schema={serviceSchema.postalCode}
-        name="postalCode"
-        errorMessages={$formErrors.postalCode}
-        bind:value={service.postalCode}
-        visible={service.locationKinds.includes("en-presentiel")}
-      />
-      <ModelField
-        type="hidden"
-        schema={serviceSchema.cityCode}
-        name="cityCode"
-        errorMessages={$formErrors.cityCode}
-        bind:value={service.cityCode}
-        visible={service.locationKinds.includes("en-presentiel")}
-      />
-      <ModelField
-        type="hidden"
-        schema={serviceSchema.longitude}
-        name="longitude"
-        errorMessages={$formErrors.longitude}
-        bind:value={service.longitude}
-        visible={service.locationKinds.includes("en-presentiel")}
-      />
-      <ModelField
-        type="hidden"
-        schema={serviceSchema.latitude}
-        name="latitude"
-        errorMessages={$formErrors.latitude}
-        bind:value={service.latitude}
-        visible={service.locationKinds.includes("en-presentiel")}
-      />
-    {/if}
-  </FieldSet>
-
-  <FieldSet title="Périodicité">
-    <div slot="help">
-      <p class="text-f14">
-        La durée limitée permet de supendre automatiquement la visibilité du
-        service dans les résultat de recherche.
-      </p>
-    </div>
+    </ModelField>
     <ModelField
-      label={serviceSchema.recurrence.name}
       type="text"
-      placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
-      schema={serviceSchema.recurrence}
-      name="recurrence"
-      errorMessages={$formErrors.recurrence}
-      bind:value={service.recurrence}
-    />
-
-    <Field
-      label="Durée limitée"
-      type="toggle"
-      name="isTimeLimited"
-      bind:value={isTimeLimited}
-      on:change={handleCheckTimeLimited}
+      label={serviceSchema.address2.name}
+      placeholder="batiment, escalier, etc."
+      schema={serviceSchema.address2}
+      name="address2"
+      errorMessages={$formErrors.address2}
+      bind:value={service.address2}
+      visible={service.locationKinds.includes("en-presentiel")}
     />
     <ModelField
-      label={serviceSchema.suspensionDate.name}
-      type="date"
-      schema={serviceSchema.suspensionDate}
-      name="suspensionDate"
-      errorMessages={$formErrors.suspensionDate}
-      bind:value={service.suspensionDate}
-      visible={isTimeLimited}
-    />
-  </FieldSet>
-
-  <FieldSet title="Contact">
-    <div slot="help">
-      <p class="text-f14">
-        Coordonnées de la personne responsable de la réception et du traitement
-        des demandes d’orientation. À défaut, renseignez le courriel et le
-        numéro de téléphone de votre structure. Par défaut, ces informations
-        sont disponibles uniquement aux accompagnateurs qui ont un compte DORA.
-        En cochant la case « Rendre les informations publiques », les
-        informations seront rendues disponibles à tous les visiteurs du site.
-      </p>
-    </div>
-    <ModelField
-      label={serviceSchema.contactName.name}
-      placeholder="Prénom et nom"
       type="text"
-      schema={serviceSchema.contactName}
-      name="contactName"
-      errorMessages={$formErrors.contactName}
-      bind:value={service.contactName}
+      label={serviceSchema.postalCode.name}
+      placeholder="00000"
+      schema={serviceSchema.postalCode}
+      name="postalCode"
+      errorMessages={$formErrors.postalCode}
+      bind:value={service.postalCode}
+      visible={service.locationKinds.includes("en-presentiel")}
     />
     <ModelField
-      type="tel"
-      label={serviceSchema.contactPhone.name}
-      placeholder="00 00 00 00 00"
-      schema={serviceSchema.contactPhone}
-      name="contactPhone"
-      errorMessages={$formErrors.contactPhone}
-      bind:value={service.contactPhone}
+      type="hidden"
+      schema={serviceSchema.cityCode}
+      name="cityCode"
+      errorMessages={$formErrors.cityCode}
+      bind:value={service.cityCode}
+      visible={service.locationKinds.includes("en-presentiel")}
     />
     <ModelField
-      type="email"
-      label={serviceSchema.contactEmail.name}
-      placeholder="nom@exemple.org"
-      schema={serviceSchema.contactEmail}
-      name="contactEmail"
-      errorMessages={$formErrors.contactEmail}
-      bind:value={service.contactEmail}
+      type="hidden"
+      schema={serviceSchema.longitude}
+      name="longitude"
+      errorMessages={$formErrors.longitude}
+      bind:value={service.longitude}
+      visible={service.locationKinds.includes("en-presentiel")}
     />
     <ModelField
-      label={serviceSchema.isContactInfoPublic.name}
-      type="toggle"
-      schema={serviceSchema.isContactInfoPublic}
-      name="isContactInfoPublic"
-      errorMessages={$formErrors.isContactInfoPublic}
-      bind:value={service.isContactInfoPublic}
+      type="hidden"
+      schema={serviceSchema.latitude}
+      name="latitude"
+      errorMessages={$formErrors.latitude}
+      bind:value={service.latitude}
+      visible={service.locationKinds.includes("en-presentiel")}
     />
-  </FieldSet>
-{/if}
+  {/if}
+</FieldSet>
+
+<FieldSet title="Contact">
+  <div slot="help">
+    <p class="text-f14">
+      Coordonnées de la personne responsable de la réception et du traitement
+      des demandes d’orientation. À défaut, renseignez le courriel et le numéro
+      de téléphone de votre structure. Par défaut, ces informations sont
+      disponibles uniquement aux accompagnateurs qui ont un compte DORA. En
+      cochant la case « Rendre les informations publiques », les informations
+      seront rendues disponibles à tous les visiteurs du site.
+    </p>
+  </div>
+  <ModelField
+    label={serviceSchema.contactName.name}
+    placeholder="Prénom et nom"
+    type="text"
+    schema={serviceSchema.contactName}
+    name="contactName"
+    errorMessages={$formErrors.contactName}
+    bind:value={service.contactName}
+  />
+  <ModelField
+    type="tel"
+    label={serviceSchema.contactPhone.name}
+    placeholder="00 00 00 00 00"
+    schema={serviceSchema.contactPhone}
+    name="contactPhone"
+    errorMessages={$formErrors.contactPhone}
+    bind:value={service.contactPhone}
+  />
+  <ModelField
+    type="email"
+    label={serviceSchema.contactEmail.name}
+    placeholder="nom@exemple.org"
+    schema={serviceSchema.contactEmail}
+    name="contactEmail"
+    errorMessages={$formErrors.contactEmail}
+    bind:value={service.contactEmail}
+  />
+  <ModelField
+    label={serviceSchema.isContactInfoPublic.name}
+    type="toggle"
+    schema={serviceSchema.isContactInfoPublic}
+    name="isContactInfoPublic"
+    errorMessages={$formErrors.isContactInfoPublic}
+    bind:value={service.isContactInfoPublic}
+  />
+</FieldSet>

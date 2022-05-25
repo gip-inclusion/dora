@@ -79,15 +79,17 @@
         {/if}
       </slot>
     </div>
-  {/if}
 
-  {#if $$slots.help && showHelp}
-    <div class="border-l-8 border-info bg-info-light  pl-s24 pr-s32  pt-s16">
-      <slot name="help" />
-    </div>
+    {#if $$slots.help && showHelp}
+      <div class="border-l-8 border-info bg-info-light  pl-s24 pr-s32  pt-s16">
+        <slot name="help" />
+      </div>
+    {/if}
   {/if}
   <div
-    class="rounded-b-md bg-white px-s32 pb-s32 pt-s24"
+    class="bg-white px-s32 pb-s32 pt-s24"
+    class:rounded-b-md={title}
+    class:rounded-md={!title}
     class:pt-s32={!title}
     class:hidden={collapsable && collapsed}
     class:flex={!noSpacing}

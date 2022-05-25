@@ -796,7 +796,7 @@
                     <div class="flex shrink-0 items-baseline">
                       {#each listItem.tags as tag}
                         <div
-                          class="shrink-0 break-all rounded bg-gray-01 px-s6 py-s2 text-f10 font-bold uppercase text-gray-text"
+                          class="break-word shrink-0 rounded bg-gray-01 px-s6 py-s2 text-f10 font-bold uppercase text-gray-text"
                         >
                           {tag}
                         </div>

@@ -6,9 +6,9 @@
 <div>
   <h2>Modalités</h2>
   <h4>Pour l'accompagnateur</h4>
-  <ul class="mb-s24 list-inside list-disc text-f14">
+  <ul class="mb-s24 list-outside list-disc pl-s20 text-f14">
     {#each service.coachOrientationModesDisplay as mode}
-      <li class="break-words">
+      <li>
         {#if mode === "Autre (préciser)"}
           {@html addlinkToUrls(service.coachOrientationModesOther)}
         {:else}
@@ -21,9 +21,9 @@
   </ul>
 
   <h4>Pour le bénéficiaire</h4>
-  <ul class="mb-s24 list-inside list-disc text-f14">
+  <ul class="mb-s24 list-outside list-disc pl-s20 text-f14">
     {#each service.beneficiariesAccessModesDisplay as mode}
-      <li class="break-words">
+      <li>
         {#if mode === "Autre (préciser)"}
           {@html addlinkToUrls(service.beneficiariesAccessModesOther)}
         {:else}

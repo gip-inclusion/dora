@@ -23,9 +23,6 @@
     },
   };
 
-  const newsletterText =
-    "Je souhaite rester au courant de l’actualité de l’offre d’insertion de mon territoire : nouveaux services référencés, nouvelles structures, etc. Fréquence d’envoi : 1 courriel par semaine. Vous pouvez vous désabonner à tout moment, en cliquant sur le lien prévu à ce sujet à la fin de l’infolettre.";
-
   function handleSubmit(validatedData) {
     const url = `${getApiURL()}/auth/register-structure-and-user/`;
     return fetch(url, {
@@ -135,10 +132,10 @@
         </div>
         <Field name="siret" type="hidden" value={$registrationInfo.siret} />
         <Field
+          label="S'abonner à l'infolettre"
           vertical
           type="toggle"
           bind:value={$registrationInfo.newsletter}
-          toggleText={newsletterText}
           placeholder=""
         />
 

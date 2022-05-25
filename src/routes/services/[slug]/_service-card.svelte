@@ -71,7 +71,7 @@
     </div>
     <div class="lg:w-2/3">
       <p class="text-f18"><strong>{service.shortDesc}</strong></p>
-      <p class="list-inside list-disc text-f12 text-gray-text-alt">
+      <p class="text-f12 text-gray-text-alt">
         {service.kindsDisplay.join(", ")}
       </p>
       <div class="mb-s24">
@@ -99,7 +99,7 @@
   </div>
 
   <div
-    class="col-span-full flex flex-col gap-s24 break-all lg:flex-row-reverse"
+    class="break-word col-span-full flex flex-col gap-s24 lg:flex-row-reverse"
   >
     <div class="lg:w-1/3">
       <OrientationBox {service} />
