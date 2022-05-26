@@ -1,6 +1,6 @@
 <script context="module">
   import { browser } from "$app/env";
-  import { HOTJAR_ID, HOTJAR_SV, CRISP_ID } from "$lib/env";
+  import { CRISP_ID } from "$lib/env";
   import { validateCredsAndFillUserInfo } from "$lib/auth";
 
   import * as Sentry from "@sentry/browser";
@@ -23,8 +23,6 @@
 
   if (browser) {
     tarteaucitron.user.crispID = CRISP_ID;
-    tarteaucitron.user.hotjarId = HOTJAR_ID;
-    tarteaucitron.user.HotjarSv = HOTJAR_SV;
   }
 </script>
 
