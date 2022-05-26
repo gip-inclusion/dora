@@ -177,7 +177,7 @@ const shape4 = {
     post: [v.lower, v.trim],
   },
   isContactInfoPublic: {
-    name: "rendre les informations publiques",
+    name: "rendre publiques",
     default: false,
     rules: [v.isBool()],
   },
@@ -419,7 +419,7 @@ export const draftServiceSchema = {
     post: [v.lower, v.trim],
   },
   isContactInfoPublic: {
-    name: "rendre les informations publiques",
+    name: "rendre publiques",
     rules: [v.isBool()],
   },
 

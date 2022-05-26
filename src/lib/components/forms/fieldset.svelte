@@ -10,7 +10,6 @@
   export let noHeaderBorder = false;
   export let collapsable = false;
   export let collapsed = true;
-  export let noSpacing = false;
   let wrapper;
 
   onMount(() => {
@@ -93,9 +92,6 @@
     class:rounded-md={!title}
     class:pt-s32={!title}
     class:hidden={collapsable && collapsed}
-    class:flex={!noSpacing}
-    class:flex-col={!noSpacing}
-    class:gap-s24={!noSpacing}
   >
     <slot />
   </div>

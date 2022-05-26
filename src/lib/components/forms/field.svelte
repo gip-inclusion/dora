@@ -34,8 +34,6 @@
 
   export let onSelectChange = undefined;
 
-  const layoutClass = vertical ? "flex-col " : "flex-row";
-
   const context = getContext(contextValidationKey);
 
   function handleBlur(evt) {
@@ -51,16 +49,12 @@
   <div class="flex-1" class:hidden={type === "hidden"}>
     <div
       {name}
-      class="flex {layoutClass} items-top"
+      class="items-top flex flex-col gap-s12"
+      class:lg:flex-row={!vertical}
       isDOMLabel={type !== "checkboxes" && type !== "radios"}
     >
       <!-- #1# -->
-      <div
-        class="flex flex-col"
-        class:w-s250={!vertical}
-        class:w-full={vertical}
-        class:mb-s8={vertical}
-      >
+      <div class="flex flex-col{vertical ? '' : ' lg:w-1/4'}">
         <div
           class="inline-block w-full shrink-0 text-f16 font-bold text-gray-dark"
         >
@@ -71,7 +65,7 @@
         </div>
         <span class="text-f12 text-gray-text-alt2"> {description}</span>
       </div>
-      <div class="flex flex-1 grow flex-col">
+      <div class="flex flex-col{vertical ? '' : ' lg:w-3/4'}">
         {#if type !== "custom"}
           <Input
             bind:value
