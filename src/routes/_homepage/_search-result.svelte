@@ -13,7 +13,7 @@
     </a>
     <h4><a href="/services/{result.slug}">{result.name}</a></h4>
     <div class="mt-s8 flex flex-col gap-s16 md:flex-row">
-      <Label label={`${result.postalCode}, ${result.city}`} icon={mapPinIcon} />
+      <Label label={result.location} icon={mapPinIcon} />
       {#if result.distance}
         <Label label={`${result.distance} km`} icon={pinDistanceIcon} />
       {/if}
