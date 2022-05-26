@@ -35,12 +35,12 @@
   <title>Erreur | DORA</title>
 </svelte:head>
 
-<CenteredGrid topPadded>
-  <div class="wrapper col-span-full col-start-1 mb-s64">
+<CenteredGrid>
+  <p>
     {#if notFound}
       Cette page n’existe pas.
     {:else}
       Erreur inattendue.
     {/if}
-  </div>
+  </p>
 </CenteredGrid>

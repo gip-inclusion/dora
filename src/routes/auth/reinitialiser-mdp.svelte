@@ -88,8 +88,8 @@
   <title>Réinitialiser votre mot de passe | DORA</title>
 </svelte:head>
 
-<CenteredGrid topPadded>
-  <div class="col-span-full col-start-1 mb-s48 text-center">
+<CenteredGrid>
+  <div class="text-center">
     <h1 class="text-france-blue">Réinitialiser votre mot de passe</h1>
   </div>
 </CenteredGrid>

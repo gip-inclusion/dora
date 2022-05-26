@@ -5,11 +5,9 @@
   export let currentPageIsValid;
 </script>
 
-<div class="col-span-full py-s24">
-  <Button
-    on:click={onPublish}
-    name="validate"
-    label="Envoyer la contribution"
-    disabled={!currentPageIsValid}
-  />
-</div>
+<Button
+  on:click={onPublish}
+  name="validate"
+  label="Envoyer la contribution"
+  disabled={!currentPageIsValid}
+/>

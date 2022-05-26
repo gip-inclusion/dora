@@ -96,22 +96,21 @@
   }
 </script>
 
-<CenteredGrid topPadded>
-  <div class="col-span-full mb-s48 text-center">
-    <div class="mx-auto">
-      <h1 class="text-f45 text-france-blue">Proposez un service</h1>
-      <div class="paragraph-small mt-s16">
-        Aidez-nous à identifier et référencer l’ensemble de l’offre de
-        l’insertion.<br />
-        Seuls les champs marqués d’un astérisque<span
-          style="color: var(--col-error);">*</span
-        > sont obligatoires.
-      </div>
+<CenteredGrid>
+  <div class="text-center">
+    <h1 class="text-f45 text-france-blue">Proposez un service</h1>
+    <div class="paragraph-small mt-s16">
+      Aidez-nous à identifier et référencer l’ensemble de l’offre de
+      l’insertion.<br />
+      Seuls les champs marqués d’un astérisque<span
+        style="color: var(--col-error);">*</span
+      > sont obligatoires.
     </div>
   </div>
 </CenteredGrid>
+
 <CenteredGrid roundedTop>
-  <div class="col-span-full mb-s64 lg:col-span-8 lg:col-start-1">
+  <div class="lg:w-2/3">
     <div bind:this={errorDiv}>
       {#each $formErrors.nonFieldErrors || [] as msg}
         <Alert label={msg} />

@@ -147,16 +147,17 @@
   }
 </script>
 
-<CenteredGrid roundedTop>
-  <div class="col-span-full mb-s64 lg:col-span-8 lg:col-start-1">
+{#if $formErrors?.nonFieldErrors?.length}
+  <CenteredGrid --col-bg="var(--col-gray-bg)">
     <div bind:this={errorDiv}>
-      {#each $formErrors.nonFieldErrors || [] as msg}
+      {#each $formErrors.nonFieldErrors as msg}
         <Alert label={msg} />
       {/each}
     </div>
-    <Fields bind:service {servicesOptions} {structures} {structure} />
-  </div>
-</CenteredGrid>
+  </CenteredGrid>
+{/if}
+
+<Fields bind:service {servicesOptions} {structures} {structure} />
 
 <CenteredGrid>
   <NavButtons onSaveDraft={saveDraft} onPublish={publish} />

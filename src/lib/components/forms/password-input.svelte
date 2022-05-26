@@ -29,7 +29,7 @@
   };
 </script>
 
-<div class="flex items-center">
+<div class="relative flex items-center">
   <input
     class="w-full"
     {name}

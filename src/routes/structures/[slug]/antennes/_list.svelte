@@ -51,8 +51,8 @@
   $: branchesFiltered = branchesFilter();
 </script>
 
-<div class="col-span-full md:flex md:items-center md:justify-between">
-  <h2 class="mb-s24 text-france-blue">Antennes</h2>
+<div class="md:flex md:items-center md:justify-between">
+  <h2 class="text-france-blue">Antennes</h2>
   <div class="flex gap-s16">
     {#if $userInfo && (structure.isAdmin || $userInfo?.isStaff)}
       <LinkButton
@@ -94,10 +94,9 @@
     {/if} -->
   </div>
 </div>
-<div class="col-span-full">
-  <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
-    {#each branchesFiltered as branch}
-      <StructureCard structure={branch} />
-    {/each}
-  </div>
+
+<div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
+  {#each branchesFiltered as branch}
+    <StructureCard structure={branch} />
+  {/each}
 </div>

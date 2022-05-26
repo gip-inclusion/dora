@@ -155,8 +155,8 @@
   >
 </svelte:head>
 
-<CenteredGrid topPadded>
-  <div class="col-span-full mb-s48 text-center">
+<CenteredGrid>
+  <div class="text-center">
     <p class="text-f16">Recherche</p>
     <h1 class="text-france-blue">Services d’insertion</h1>
     <div class="mt-s8 flex flex-row justify-center gap-s16">
@@ -168,63 +168,65 @@
 </CenteredGrid>
 
 <CenteredGrid roundedTop>
-  <div class="col-span-12 lg:col-span-4 lg:mt-s56 lg:mb-s48">
-    <SearchTweakForm
-      {categoryId}
-      {subCategoryId}
-      {cityCode}
-      {cityLabel}
-      {hasNoFees}
-      {kindId}
-      {servicesOptions}
-      {radiusChoices}
-    />
-  </div>
-  <div class="col-span-12 lg:col-span-8 lg:mt-s56">
-    <div class="mt-s16 text-f14 text-gray-text-alt2">
-      {services.length} résultat{#if services.length > 1}s{/if}
+  <div class="flex flex-col gap-s24 lg:flex-row">
+    <div class="lg:mb-s48 lg:w-1/3">
+      <SearchTweakForm
+        {categoryId}
+        {subCategoryId}
+        {cityCode}
+        {cityLabel}
+        {hasNoFees}
+        {kindId}
+        {servicesOptions}
+        {radiusChoices}
+      />
     </div>
+    <div class="lg:w-2/3">
+      <div class="mt-s16 text-f14 text-gray-text-alt2">
+        {services.length} résultat{#if services.length > 1}s{/if}
+      </div>
 
-    {#if services.length}
-      <div class="mt-s32 flex flex-col gap-s16">
-        {#each services as service}
-          <SearchResult result={service} />
-        {/each}
-      </div>
-    {:else}
-      <p class="text-f16 mt-s32">
-        Aucun résultat ne correspond à votre recherche.<br />
-        Essayez d’autres filtres.
-      </p>
-      <div class="lg:flex lg:gap-s24 mt-s48">
-        <div
-          class="p-s24 bg-white rounded-md border-gray-01 border lg:flex-1 mb-s24"
-        >
-          <h4>
-            Vous connaissez un service d’insertion qui n'est pas référencé ?
-          </h4>
-          <div class="flex flex-col gap-s16">
-            <LinkButton
-              label="Proposer un service"
-              wFull
-              to="/contribuer"
-              secondary
-            />
-            <ShareButton wFull />
+      {#if services.length}
+        <div class="mt-s32 flex flex-col gap-s16">
+          {#each services as service}
+            <SearchResult result={service} />
+          {/each}
+        </div>
+      {:else}
+        <p class="text-f16 mt-s32">
+          Aucun résultat ne correspond à votre recherche.<br />
+          Essayez d’autres filtres.
+        </p>
+        <div class="lg:flex lg:gap-s24 mt-s48">
+          <div
+            class="p-s24 bg-white rounded-md border-gray-01 border lg:flex-1 mb-s24"
+          >
+            <h4>
+              Vous connaissez un service d’insertion qui n'est pas référencé ?
+            </h4>
+            <div class="flex flex-col gap-s16">
+              <LinkButton
+                label="Proposer un service"
+                wFull
+                to="/contribuer"
+                secondary
+              />
+              <ShareButton wFull />
+            </div>
+          </div>
+          <div
+            class="p-s24 bg-white rounded-md border-gray-01 border lg:flex-1 mb-s24"
+          >
+            <h4>Dora évolue rapidement. Vous souhaitez rester informé ?</h4>
+            <div>
+              <NewsletterButton wFull />
+            </div>
           </div>
         </div>
-        <div
-          class="p-s24 bg-white rounded-md border-gray-01 border lg:flex-1 mb-s24"
-        >
-          <h4>Dora évolue rapidement. Vous souhaitez rester informé ?</h4>
-          <div>
-            <NewsletterButton wFull />
-          </div>
-        </div>
-      </div>
-    {/if}
-    {#if ["famille--garde-enfants", "famille--accompagnement-parents"].includes(subCategoryId)}
-      <SearchPromo />
-    {/if}
+      {/if}
+      {#if ["famille--garde-enfants", "famille--accompagnement-parents"].includes(subCategoryId)}
+        <SearchPromo />
+      {/if}
+    </div>
   </div>
 </CenteredGrid>

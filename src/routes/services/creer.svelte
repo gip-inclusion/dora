@@ -69,35 +69,30 @@
 
 <EnsureLoggedIn>
   <CenteredGrid>
-    <div class="col-span-full pt-s48 pb-s24">
-      <h1>Création d'un service</h1>
+    <h1>Création d'un service</h1>
 
-      {#if !structures.length}
-        <Notice title="Impossible de créer un nouveau service" type="error">
-          <p class="text-f14">
-            Vous n’êtes rattaché à aucune structure.
-          </p></Notice
-        >
-      {:else if lastDraft}
-        <Notice
-          title="Vous n’avez pas finalisé votre précédente saisie"
-          hasCloseButton
-        >
-          <p class="text-f14">
-            Souhaitez-vous continuer la saisie du service ?
-          </p>
+    {#if !structures.length}
+      <Notice title="Impossible de créer un nouveau service" type="error">
+        <p class="text-f14">Vous n’êtes rattaché à aucune structure.</p></Notice
+      >
+    {:else if lastDraft}
+      <Notice
+        title="Vous n’avez pas finalisé votre précédente saisie"
+        hasCloseButton
+      >
+        <p class="text-f14">Souhaitez-vous continuer la saisie du service ?</p>
 
-          <Button
-            on:click={handleOpenLastDraft}
-            slot="button"
-            small
-            secondary
-            label="Reprendre"
-          />
-        </Notice>
-      {/if}
-    </div>
+        <Button
+          on:click={handleOpenLastDraft}
+          slot="button"
+          small
+          secondary
+          label="Reprendre"
+        />
+      </Notice>
+    {/if}
   </CenteredGrid>
+
   {#if structures.length}
     <ServiceFormWrapper bind:service bind:servicesOptions {structures} />
   {/if}

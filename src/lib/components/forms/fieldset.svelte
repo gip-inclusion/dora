@@ -42,6 +42,7 @@
       class="rounded-t-md px-s32 pt-s32 {headerBg} {noHeaderBorder
         ? ''
         : 'border-b border-gray-01 pb-s24'}"
+      class:rounded-b-md={collapsed}
     >
       <div class="flex justify-between">
         <h3

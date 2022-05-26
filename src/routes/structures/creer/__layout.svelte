@@ -4,15 +4,11 @@
 </script>
 
 <EnsureLoggedIn>
-  <CenteredGrid topPadded>
-    <div class="col-span-full col-start-1 mb-s48 text-center">
-      <h1 class="text-france-blue">Création d’une structure</h1>
-    </div>
+  <CenteredGrid>
+    <h1 class="text-france-blue">Création d’une structure</h1>
   </CenteredGrid>
 
   <CenteredGrid roundedTop>
-    <div class="col-span-8 col-start-1 mb-s32">
-      <slot />
-    </div>
+    <slot />
   </CenteredGrid>
 </EnsureLoggedIn>

@@ -67,7 +67,7 @@
   onSuccess={handleSuccess}
   bind:requesting
 >
-  <Fieldset title="Informations">
+  <Fieldset title="Informations" noTopPadding>
     <ModelField
       name="firstName"
       errorMessages={$formErrors.firstName}

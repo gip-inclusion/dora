@@ -51,8 +51,8 @@
   <title>Rejoindre une structure | DORA</title>
 </svelte:head>
 
-<CenteredGrid topPadded>
-  <div class="col-span-full col-start-1 mb-s48 text-center">
+<CenteredGrid>
+  <div class="text-center">
     <h1 class="text-france-blue">Rejoindre une structure</h1>
   </div>
 </CenteredGrid>

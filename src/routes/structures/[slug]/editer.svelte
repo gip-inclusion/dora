@@ -34,14 +34,12 @@
 </svelte:head>
 
 <EnsureLoggedIn>
-  <div class="col-span-8 col-start-1 mb-s32">
-    <StructureFormWrapper
-      structure={$structure}
-      {structuresOptions}
-      modify
-      formTitle="Informations"
-      visible
-      onRefresh={handleRefresh}
-    />
-  </div>
+  <StructureFormWrapper
+    structure={$structure}
+    {structuresOptions}
+    modify
+    formTitle="Informations"
+    visible
+    onRefresh={handleRefresh}
+  />
 </EnsureLoggedIn>

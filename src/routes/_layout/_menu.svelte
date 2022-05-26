@@ -58,6 +58,7 @@
       <hr class="my-s8 self-stretch border-t-gray-03" />
       <MenuStructures {structures} />
     {/if}
+    <hr class="my-s8 self-stretch border-t-gray-03" />
   {:else if $page.url.pathname !== "/auth/connexion"}
     <LinkButton
       label="Se connecter"

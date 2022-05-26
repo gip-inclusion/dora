@@ -46,106 +46,101 @@
   }
 </script>
 
-<div class="col-span-full mb-s32 md:col-start-6 md:col-end-13">
-  <Form
-    data={$registrationInfo}
-    schema={accountSchema}
-    serverErrorsDict={serverErrors}
-    onSubmit={handleSubmit}
-    onSuccess={handleSuccess}
-    bind:requesting
+<Form
+  data={$registrationInfo}
+  schema={accountSchema}
+  serverErrorsDict={serverErrors}
+  onSubmit={handleSubmit}
+  onSuccess={handleSuccess}
+  bind:requesting
+>
+  <Fieldset title="Informations personnelles" noTopPadding>
+    {#each $formErrors.nonFieldErrors || [] as msg}
+      <Alert label={msg} />
+    {/each}
+    <div class="relative flex flex-col gap-y-s32">
+      <Field
+        name="firstName"
+        errorMessages={$formErrors.firstName}
+        label="Votre prénom"
+        vertical
+        type="text"
+        required
+        placeholder="Aurélien"
+        autocomplete="given-name"
+        bind:value={$registrationInfo.firstName}
+      />
+
+      <Field
+        name="lastName"
+        errorMessages={$formErrors.lastName}
+        label="Votre nom"
+        vertical
+        type="text"
+        required
+        placeholder="Durand"
+        autocomplete="family-name"
+        bind:value={$registrationInfo.lastName}
+      />
+
+      <Field
+        name="email"
+        description={$registrationInfo.isPoleEmploi
+          ? "Une adresse en @pole-emploi.fr ou @pole-emploi.net est requise pour s’inscrire."
+          : ""}
+        errorMessages={$formErrors.email}
+        label="Courriel"
+        vertical
+        type="email"
+        required
+        placeholder="Votre courriel"
+        autocomplete="email"
+        bind:value={$registrationInfo.email}
+        allowHTMLError
+      />
+      <div
+        class="flex flex-col justify-between gap-x-s32 md:flex-row lg:flex-col xl:flex-row"
+      >
+        <Field
+          name="password"
+          errorMessages={$formErrors.password}
+          label="Mot de passe"
+          vertical
+          type="password"
+          placeholder="••••••••"
+          bind:value={$registrationInfo.password}
+          autocomplete="new-password"
+          passwordrules={passwordRules}
+          required
+        />
+        <Field
+          name="password2"
+          errorMessages={$formErrors.password2}
+          label="Répéter le mot de passe"
+          vertical
+          type="password"
+          placeholder="••••••••"
+          bind:value={$registrationInfo.password2}
+          autocomplete="new-password"
+          passwordrules={passwordRules}
+          required
+        />
+      </div>
+      <Field name="siret" type="hidden" value={$registrationInfo.siret} />
+      <Field
+        label="S'abonner à l'infolettre"
+        vertical
+        type="toggle"
+        bind:value={$registrationInfo.newsletter}
+        placeholder=""
+      />
+
+      <Button
+        type="submit"
+        label="Demandez votre accès"
+        disabled={requesting}
+        preventDefaultOnMouseDown
+      />
+    </div></Fieldset
   >
-    <Fieldset
-      title="Informations personnelles"
-      description="Merci de renseigner les informations nécessaires à la création de votre compte."
-    >
-      {#each $formErrors.nonFieldErrors || [] as msg}
-        <Alert label={msg} />
-      {/each}
-      <div class="relative flex flex-col gap-y-s32">
-        <Field
-          name="firstName"
-          errorMessages={$formErrors.firstName}
-          label="Votre prénom"
-          vertical
-          type="text"
-          required
-          placeholder="Aurélien"
-          autocomplete="given-name"
-          bind:value={$registrationInfo.firstName}
-        />
-
-        <Field
-          name="lastName"
-          errorMessages={$formErrors.lastName}
-          label="Votre nom"
-          vertical
-          type="text"
-          required
-          placeholder="Durand"
-          autocomplete="family-name"
-          bind:value={$registrationInfo.lastName}
-        />
-
-        <Field
-          name="email"
-          description={$registrationInfo.isPoleEmploi
-            ? "Une adresse en @pole-emploi.fr ou @pole-emploi.net est requise pour s’inscrire."
-            : ""}
-          errorMessages={$formErrors.email}
-          label="Courriel"
-          vertical
-          type="email"
-          required
-          placeholder="Votre courriel"
-          autocomplete="email"
-          bind:value={$registrationInfo.email}
-          allowHTMLError
-        />
-        <div
-          class="flex flex-col justify-between gap-x-s32 md:flex-row lg:flex-col xl:flex-row"
-        >
-          <Field
-            name="password"
-            errorMessages={$formErrors.password}
-            label="Mot de passe"
-            vertical
-            type="password"
-            placeholder="••••••••"
-            bind:value={$registrationInfo.password}
-            autocomplete="new-password"
-            passwordrules={passwordRules}
-            required
-          />
-          <Field
-            name="password2"
-            errorMessages={$formErrors.password2}
-            label="Répéter le mot de passe"
-            vertical
-            type="password"
-            placeholder="••••••••"
-            bind:value={$registrationInfo.password2}
-            autocomplete="new-password"
-            passwordrules={passwordRules}
-            required
-          />
-        </div>
-        <Field name="siret" type="hidden" value={$registrationInfo.siret} />
-        <Field
-          label="S'abonner à l'infolettre"
-          vertical
-          type="toggle"
-          bind:value={$registrationInfo.newsletter}
-          placeholder=""
-        />
-
-        <Button
-          type="submit"
-          label="Demandez votre accès"
-          disabled={requesting}
-          preventDefaultOnMouseDown
-        />
-      </div></Fieldset
-    >
-  </Form>
-</div>
+</Form>

@@ -12,9 +12,9 @@
 </svelte:head>
 
 <EnsureLoggedIn>
-  <div class="col-span-full md:flex md:items-center md:justify-between">
-    <h2 class="mb-s24 text-france-blue">Mon compte</h2>
-    <div class="flex gap-s16">
+  <div class="mb-s24 md:flex md:items-center md:justify-between">
+    <h2 class="text-france-blue">Mon compte</h2>
+    <div class="flex gap-s12">
       <LinkButton label="Modifier" to="/mon-compte/editer" small />
 
       <LinkButton
@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div class="col-span-full md:flex md:gap-s24">
+  <div class="md:flex md:gap-s24">
     <div class="mb-s24 flex-1 rounded-md bg-gray-00 p-s24">
       <h3>{$userInfo.fullName}</h3>
       <p>{$userInfo.phoneNumber}</p>

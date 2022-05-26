@@ -61,21 +61,19 @@
 <EnsureLoggedIn>
   {#if service}
     <CenteredGrid>
-      <div class="col-span-full pt-s48 pb-s24">
-        <h1>Modification du service</h1>
-        {#if !validation?.valid}
-          <Notice
-            title={`Information${errors ? "s" : ""} requise${
-              errors ? "s" : ""
-            } pour publier`}
-            type="warning"
-          >
-            <p class="text-f14 first-letter:capitalize">
-              {validation?.errorFields.join(", ")}.
-            </p>
-          </Notice>
-        {/if}
-      </div>
+      <h1>Modification du service</h1>
+      {#if !validation?.valid}
+        <Notice
+          title={`Information${errors ? "s" : ""} requise${
+            errors ? "s" : ""
+          } pour publier`}
+          type="warning"
+        >
+          <p class="text-f14 first-letter:capitalize">
+            {validation?.errorFields.join(", ")}.
+          </p>
+        </Notice>
+      {/if}
     </CenteredGrid>
 
     <ServiceFormWrapper

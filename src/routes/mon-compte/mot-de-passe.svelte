@@ -8,7 +8,5 @@
 </svelte:head>
 
 <EnsureLoggedIn>
-  <div class="col-span-8 col-start-1 mb-s32">
-    <PasswordForm />
-  </div>
+  <PasswordForm />
 </EnsureLoggedIn>

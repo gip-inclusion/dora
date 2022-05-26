@@ -81,8 +81,8 @@
     />
   {/if}
 
-  <div class="col-span-full md:flex md:items-center md:justify-between">
-    <h2 class="mb-s24 text-france-blue">Collaborateurs</h2>
+  <div class="md:flex md:items-center md:justify-between">
+    <h2 class="text-france-blue">Collaborateurs</h2>
     {#if canEditMembers}
       <Button
         label="Inviter un collaborateur…"
@@ -93,7 +93,7 @@
   </div>
 
   {#if members}
-    <div class="col-span-full mt-s32 mb-s32 flex flex-col gap-s8">
+    <div class="mt-s32 mb-s32 flex flex-col gap-s8">
       {#if putativeMembers}
         {#each sortedMembers(putativeMembers) as member}
           {#if member.invitedByAdmin}

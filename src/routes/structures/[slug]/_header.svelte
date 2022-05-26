@@ -64,7 +64,7 @@
   }
 </script>
 
-<h1 class="mb-s24 text-white">
+<h1 class="pt-s40 text-white">
   {capitalize(structure.name)}
 </h1>
 

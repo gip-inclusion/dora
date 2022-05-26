@@ -1,17 +1,15 @@
 <script>
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import connexionPic from "$lib/assets/illu_connexion-optimise.svg";
-  export let wideForm = false;
 </script>
 
 <CenteredGrid roundedTop>
-  <div class="col-span-full mt-s48 flex justify-center lg:col-end-7 lg:mb-s32">
-    <img src={connexionPic} alt="" class="max-h-[460px]" />
-  </div>
-  <div
-    class="col-span-full mb-s32 lg:col-start-7 lg:col-end-12"
-    class:lg:col-end-13={wideForm}
-  >
-    <slot />
+  <div class="flex flex-col gap-s24 lg:flex-row">
+    <div class="mt-s48 hidden justify-center lg:flex lg:w-1/2">
+      <img src={connexionPic} alt="" class="max-h-[460px]" />
+    </div>
+    <div class="lg:w-1/2">
+      <slot />
+    </div>
   </div>
 </CenteredGrid>

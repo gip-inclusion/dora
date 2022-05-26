@@ -74,8 +74,8 @@
   <title>Se connecter | DORA</title>
 </svelte:head>
 
-<CenteredGrid topPadded>
-  <div class="col-span-full col-start-1 mb-s48 text-center">
+<CenteredGrid>
+  <div class="text-center">
     <h1 class="text-france-blue">Connexion</h1>
   </div>
 </CenteredGrid>
@@ -152,6 +152,7 @@
 
   <Notice title="Vous n'avez pas encore de compte ?">
     <LinkButton
+      slot="button"
       label="Créer un compte…"
       secondary
       nofollow

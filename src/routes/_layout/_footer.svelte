@@ -10,49 +10,47 @@
   }
 </script>
 
-<footer class="noprint border-t-2 border-france-blue pt-s20">
+<footer class="noprint border-t-2 border-france-blue">
   <CenteredGrid>
-    <div class="col-span-5 lg:mb-s40">
-      <img class="inline" src={LogoRF} alt="" width="124" height="110" />
-    </div>
-    <div
-      class="col-span-full col-start-1 text-f14 leading-normal text-gray-text lg:col-span-6 lg:col-start-7"
-    >
-      Dora, le service public numérique de recensement et mise à jour de l’offre
-      d’insertion.
-      <div class="mt-s16 flex flex-wrap gap-x-s24 gap-y-s8 font-bold">
-        <a target="_blank" rel="noopener" href="https://gouvernement.fr"
-          >gouvernement.fr</a
-        >
-        <a target="_blank" rel="noopener" href="https://service-public.fr"
-          >service-public.fr</a
-        >
-        <a target="_blank" rel="noopener" href="https://data.gouv.fr"
-          >data.gouv.fr</a
-        >
+    <div class="flex gap-s24 lg:flex-row">
+      <div class="mb-s24 lg:w-1/2">
+        <img class="inline" src={LogoRF} alt="" width="124" height="110" />
+      </div>
+      <div class="text-f14 leading-normal text-gray-text lg:w-1/2">
+        Dora, le service public numérique de recensement et mise à jour de
+        l’offre d’insertion.
+        <div class="mt-s16 flex flex-wrap gap-x-s24 gap-y-s8 font-bold">
+          <a target="_blank" rel="noopener" href="https://gouvernement.fr"
+            >gouvernement.fr</a
+          >
+          <a target="_blank" rel="noopener" href="https://service-public.fr"
+            >service-public.fr</a
+          >
+          <a target="_blank" rel="noopener" href="https://data.gouv.fr"
+            >data.gouv.fr</a
+          >
+        </div>
       </div>
     </div>
-  </CenteredGrid>
-  <CenteredGrid bordertop topPadded>
-    <nav class="col-span-full col-start-1 flex flex-wrap gap-y-s8 py-s16">
+
+    <hr class="mb-s16 border-t border-t-gray-03" />
+
+    <nav class="flex flex-wrap gap-s32">
       <NavItem
         href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/mentions-legales"
         label="Mentions légales"
-        light
         otherTab
         nofollow
       />
       <NavItem
         href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/conditions-generales-dutilisation"
         label="CGU"
-        light
         otherTab
         nofollow
       />
       <NavItem
         label="Données personnelles"
         href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/politique-de-confidentialite"
-        light
         otherTab
         nofollow
       />
@@ -60,11 +58,10 @@
         href="#"
         on:click={handleOpenCookiesPanel}
         label="Gestion des cookies"
-        light
         otherTab
         nofollow
       />
-      <NavItem label="Accessibilité : non conforme" light />
+      <NavItem label="Accessibilité : non conforme" />
     </nav>
   </CenteredGrid>
 </footer>

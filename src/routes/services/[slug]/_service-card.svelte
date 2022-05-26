@@ -28,15 +28,14 @@
   roundedTop
   --col-under-bg="var(--col-france-blue)"
   --col-content-bg="var(--col-bg)"
-  topPadded
 >
-  <div class="noprint col-span-full">
+  <div class="noprint mb-s24">
     {#if browser && !isPreview}
       <Toolbar {service} onRefresh={handleRefresh} />
     {/if}
   </div>
 
-  <div class="col-span-full flex flex-col gap-s24 lg:flex-row-reverse">
+  <div class="flex flex-col gap-s24 lg:flex-row-reverse">
     <div class="lg:w-1/3">
       {#if service.locationKinds.length}
         {#if service.locationKinds.includes("en-presentiel")}
@@ -98,9 +97,7 @@
     </div>
   </div>
 
-  <div
-    class="break-word col-span-full flex flex-col gap-s24 lg:flex-row-reverse"
-  >
+  <div class="break-word flex flex-col gap-s24 lg:flex-row-reverse">
     <div class="lg:w-1/3">
       <OrientationBox {service} />
     </div>

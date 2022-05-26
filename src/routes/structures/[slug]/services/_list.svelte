@@ -74,7 +74,7 @@
   }
 </script>
 
-<div class="col-span-full md:flex md:items-center md:justify-between">
+<div class="md:flex md:items-center md:justify-between">
   <h2 class="mb-s24 text-france-blue">Services</h2>
   <div class="flex gap-s16">
     {#if canEdit}
@@ -110,10 +110,9 @@
     {/if} -->
   </div>
 </div>
-<div class="col-span-full">
-  <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
-    {#each servicesOrdered as service}
-      <ServiceCard {service} readOnly={!canEdit} onRefresh={handleRefresh} />
-    {/each}
-  </div>
+
+<div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
+  {#each servicesOrdered as service}
+    <ServiceCard {service} readOnly={!canEdit} onRefresh={handleRefresh} />
+  {/each}
 </div>

@@ -25,12 +25,12 @@
   <title>Créer son compte | DORA</title>
 </svelte:head>
 
-<CenteredGrid topPadded>
-  <div class="col-span-full col-start-1 mb-s48 text-center">
+<CenteredGrid>
+  <div class="text-center">
     <h1 class="text-france-blue">Création de compte</h1>
   </div>
 </CenteredGrid>
 
-<AuthLayout wideForm>
+<AuthLayout>
   <svelte:component this={currentStepComponent} bind:currentStep {siret} />
 </AuthLayout>

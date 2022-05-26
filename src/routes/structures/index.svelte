@@ -23,12 +23,9 @@
 </svelte:head>
 
 <EnsureStaffOrBizdev>
-  <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-    <div class="col-span-full col-start-1 text-left">
-      <div class="mb-s8">
-        <h1>Structures</h1>
-      </div>
-      <StructuresList {structures} readOnly={!$userInfo?.isStaff} />
-    </div>
+  <CenteredGrid --col-bg="var(--col-gray-00)">
+    <h1>Structures</h1>
+
+    <StructuresList {structures} readOnly={!$userInfo?.isStaff} />
   </CenteredGrid>
 </EnsureStaffOrBizdev>

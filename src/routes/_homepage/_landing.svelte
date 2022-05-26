@@ -20,8 +20,8 @@
   export let servicesOptions;
 </script>
 
-<CenteredGrid --col-bg="var(--col-magenta-10)" topPadded roundedBottom>
-  <div class="col-span-full mb-s40 flex flex-col gap-s24">
+<CenteredGrid --col-bg="var(--col-magenta-10)" roundedBottom>
+  <div class="flex flex-col gap-s24">
     <div class="text-center">
       <h1 class="text-france-blue">
         Donnez de la visibilité <br />à votre offre d’insertion
@@ -72,63 +72,57 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid --col-bg="var(--col-transparent)" topPadded>
-  <div class="col-span-full mb-s40">
-    <h2 class="mb-s32 text-center text-france-blue">
-      Tous les services d’insertion sur votre territoire
-    </h2>
-    <SearchForm {servicesOptions} />
-  </div>
+<CenteredGrid --col-bg="var(--col-transparent)">
+  <h2 class="mb-s32 text-center text-france-blue">
+    Tous les services d’insertion sur votre territoire
+  </h2>
+  <SearchForm {servicesOptions} />
 </CenteredGrid>
 
-<CenteredGrid --col-bg="var(--col-transparent)" topPadded>
-  <div class="col-span-full mb-s40">
-    <h2 class="mb-s32 text-center text-france-blue">Comment cela fonctionne</h2>
-    <div class="flex flex-col gap-s24 md:flex-row">
-      <div class="md:flex-1">
-        <img
-          src={illuRecenser}
-          alt="illustration d'un personnage avec une machine à écrire"
-          class="mb-s16 w-full"
-        />
-        <h3>Recensement de l’offre d’insertion</h3>
-        <p class="text-f16">
-          Vous proposez des services d'insertion ? Rendez les visibles sur votre
-          territoire et sur tous les sites partenaires grace à notre démarche
-          collective d'open data.
-        </p>
-      </div>
-      <div class="md:flex-1">
-        <img
-          src={illuMobiliser}
-          alt="illustration d'un ordinateur avec le visage d'un personnage satisfait sur l'écran"
-          class="mb-s16 w-full"
-        />
-        <h3>Identification du service adapté</h3>
-        <p class="text-f16">
-          Vous accompagnez des bénéficiaires ? Trouvez rapidement les services
-          d’insertion adaptés, les modalités, le bon contact et les documents à
-          fournir.
-        </p>
-      </div>
-      <div class="md:flex-1">
-        <img
-          src={illuAccompagner}
-          alt="illustration avec deux personnages souriants, face à face, chacun dans une bulle qui communiquent avec leur ordinateur."
-          class="mb-s16 w-full"
-        />
-        <h3>Mobilisation du service</h3>
-        <p class="text-f16">
-          Vous avez identifié le bon service ? Aidez votre bénéficiaire en
-          facilitant ses démarches et son retour vers un emploi durable.
-        </p>
-      </div>
+<CenteredGrid --col-bg="var(--col-transparent)">
+  <h2 class="mb-s32 text-center text-france-blue">Comment cela fonctionne</h2>
+  <div class="mb-s24 flex flex-col gap-s24 md:flex-row">
+    <div class="md:flex-1">
+      <img
+        src={illuRecenser}
+        alt="illustration d'un personnage avec une machine à écrire"
+        class="mb-s16 w-full"
+      />
+      <h3>Recensement de l’offre d’insertion</h3>
+      <p class="text-f16">
+        Vous proposez des services d'insertion ? Rendez les visibles sur votre
+        territoire et sur tous les sites partenaires grace à notre démarche
+        collective d'open data.
+      </p>
+    </div>
+    <div class="md:flex-1">
+      <img
+        src={illuMobiliser}
+        alt="illustration d'un ordinateur avec le visage d'un personnage satisfait sur l'écran"
+        class="mb-s16 w-full"
+      />
+      <h3>Identification du service adapté</h3>
+      <p class="text-f16">
+        Vous accompagnez des bénéficiaires ? Trouvez rapidement les services
+        d’insertion adaptés, les modalités, le bon contact et les documents à
+        fournir.
+      </p>
+    </div>
+    <div class="md:flex-1">
+      <img
+        src={illuAccompagner}
+        alt="illustration avec deux personnages souriants, face à face, chacun dans une bulle qui communiquent avec leur ordinateur."
+        class="mb-s16 w-full"
+      />
+      <h3>Mobilisation du service</h3>
+      <p class="text-f16">
+        Vous avez identifié le bon service ? Aidez votre bénéficiaire en
+        facilitant ses démarches et son retour vers un emploi durable.
+      </p>
     </div>
   </div>
 
-  <div
-    class="desktop:flex-col col-span-full mb-s40 flex gap-s24 rounded-md bg-magenta-10 p-s24"
-  >
+  <div class="flex gap-s24 rounded-md bg-magenta-10 p-s24">
     <div class="w-1/3 self-center text-center">
       <a href="https://www.data.inclusion.beta.gouv.fr/">
         <img src={logoDataInclusion} alt="logo data inclusion" class="inline" />
@@ -148,12 +142,10 @@
 </CenteredGrid>
 
 <CenteredGrid --col-bg="var(--col-gray-00)">
-  <div
-    class="col-span-full mb-s40 mt-s32 flex flex-col items-center justify-between gap-s16 md:flex-row"
-  >
+  <div class="flex flex-col items-center justify-between gap-s16 md:flex-row">
     <div>
       <h3 class="mb-s8 text-gray-dark">Infolettre</h3>
-      <p class="max-w-2xl text-f12 leading-relaxed text-gray-dark">
+      <p class="text-f12 text-gray-dark">
         Une fois par mois, recevez un courriel pour être informé des évolutions
         de DORA.
       </p>

@@ -15,16 +15,15 @@
 </svelte:head>
 
 <CG>
-  <div class="col-span-full text-center">
+  <div class="text-center">
     <h1 class="text-france-blue">Statistiques</h1>
   </div>
 </CG>
 
 <CG>
-  <h2 class="col-span-full">Statistiques d’usage</h2>
+  <h2>Statistiques d’usage</h2>
 
   <iframe
-    class="col-span-full"
     title="Dashboard Plausible"
     src={PLAUSIBLE_EMBED_URL}
     frameborder="0"
@@ -33,10 +32,9 @@
     id="plausibleIframe"
   />
 
-  <h2 class="col-span-full">Statistiques de référencement</h2>
+  <h2>Statistiques de référencement</h2>
 
   <iframe
-    class="col-span-full"
     title="Dashboard Metabase"
     src={METABASE_EMBED_URL}
     frameborder="0"

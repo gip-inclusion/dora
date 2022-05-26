@@ -13,7 +13,7 @@
   export let structure;
 </script>
 
-<div class="col-span-full md:flex md:items-center md:justify-between">
+<div class="md:flex md:items-center md:justify-between">
   <h2 class="mb-s24 text-france-blue">Informations</h2>
 
   {#if $token && (structure.isAdmin || $userInfo?.isStaff)}
@@ -25,68 +25,70 @@
   {/if}
 </div>
 
-<div class="col-span-full mb-s24 lg:col-start-1 lg:col-end-4">
-  <p class="icon-label text-f14">
-    <i class="icon mr-s8 text-magenta-cta">
-      {@html mapPinIcon}
-    </i>
-    {structure.address1}
-    {#if structure.address2}
-      <br />{structure.address2}
+<div class="flex flex-col gap-s40 md:flex-row">
+  <div class="mb-s24 md:w-1/3">
+    <p class="icon-label text-f14">
+      <i class="icon mr-s8 text-magenta-cta">
+        {@html mapPinIcon}
+      </i>
+      {structure.address1}
+      {#if structure.address2}
+        <br />{structure.address2}
+      {/if}
+      <br />{structure.postalCode}
+      {structure.city}
+    </p>
+
+    {#if structure.url}
+      <p class="icon-label text-f14">
+        <i class="icon mr-s8 text-magenta-cta">
+          {@html computerIcon}
+        </i>
+        <a
+          target="_blank"
+          rel="noopener nofollow"
+          href={structure.url}
+          class="flex"
+        >
+          {structure.url}
+
+          <i class="ml-s8 mt-s2 h-s16 w-s16 fill-current">
+            {@html externalLinkIcon}
+          </i>
+        </a>
+      </p>
     {/if}
-    <br />{structure.postalCode}
-    {structure.city}
-  </p>
 
-  {#if structure.url}
+    {#if structure.email}
+      <p class="icon-label text-f14">
+        <i class="icon mr-s8 text-magenta-cta">
+          {@html mailIcon}
+        </i>
+
+        <a href="mailto:{structure.email}" class="flex">
+          {structure.email}
+          <i class="ml-s8 mt-s2 h-s16 w-s16 fill-current">
+            {@html externalLinkIcon}
+          </i>
+        </a>
+      </p>
+    {/if}
+
     <p class="icon-label text-f14">
       <i class="icon mr-s8 text-magenta-cta">
-        {@html computerIcon}
+        {@html phoneIcon}
       </i>
-      <a
-        target="_blank"
-        rel="noopener nofollow"
-        href={structure.url}
-        class="flex"
-      >
-        {structure.url}
-
-        <i class="ml-s8 mt-s2 h-s16 w-s16 fill-current">
-          {@html externalLinkIcon}
-        </i>
+      <a href="tel:{structure.phone}">
+        {structure.phone}
       </a>
     </p>
-  {/if}
+  </div>
 
-  {#if structure.email}
-    <p class="icon-label text-f14">
-      <i class="icon mr-s8 text-magenta-cta">
-        {@html mailIcon}
-      </i>
+  <div class="mb-s24 md:w-2/3">
+    <p class="mb-s24 font-bold text-gray-dark">{structure.shortDesc}</p>
 
-      <a href="mailto:{structure.email}" class="flex">
-        {structure.email}
-        <i class="ml-s8 mt-s2 h-s16 w-s16 fill-current">
-          {@html externalLinkIcon}
-        </i>
-      </a>
-    </p>
-  {/if}
-
-  <p class="icon-label text-f14">
-    <i class="icon mr-s8 text-magenta-cta">
-      {@html phoneIcon}
-    </i>
-    <a href="tel:{structure.phone}">
-      {structure.phone}
-    </a>
-  </p>
-</div>
-
-<div class="col-span-full lg:col-start-4 lg:col-end-11">
-  <p class="mb-s24 font-bold text-gray-dark">{structure.shortDesc}</p>
-
-  <TextClamp text={structure.fullDesc} />
+    <TextClamp text={structure.fullDesc} />
+  </div>
 </div>
 
 <style lang="postcss">

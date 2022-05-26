@@ -28,17 +28,16 @@
 </svelte:head>
 
 <EnsureStaffOrBizdev>
-  <CenteredGrid --col-bg="var(--col-gray-00)" topPadded>
-    <div class="col-span-full col-start-1 text-left">
-      <h2>Services</h2>
+  <CenteredGrid --col-bg="var(--col-gray-00)">
+    <h1>Services</h1>
 
-      <div class="mb-s16 border-t border-gray-03" />
-      <ServicesList
-        {services}
-        onRefresh={handleRefresh}
-        showStructure
-        readOnly={!$userInfo?.isStaff}
-      />
-    </div>
+    <hr class="border-t border-gray-03" />
+
+    <ServicesList
+      {services}
+      onRefresh={handleRefresh}
+      showStructure
+      readOnly={!$userInfo?.isStaff}
+    />
   </CenteredGrid>
 </EnsureStaffOrBizdev>

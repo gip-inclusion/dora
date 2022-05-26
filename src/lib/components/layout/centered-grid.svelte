@@ -1,21 +1,17 @@
 <script>
-  export let sticky = false;
-  export let topPadded = false;
+  export let noPadding = false;
   export let roundedTop = false;
   export let roundedBottom = false;
   export let bordertop = false;
   export let extraClass = "";
 </script>
 
-<div class="{extraClass} wrapper" class:sticky class:roundedBottom>
-  <div
-    class="flex justify-center px-s16 md:px-s40"
-    class:roundedTop
-    class:bordertop
-  >
+<div class="{extraClass} wrapper" class:roundedBottom>
+  <div class="px-s16 md:px-s40" class:roundedTop class:bordertop>
     <div
-      class="centered-grid mx-auto grid gap-s24"
-      class:top-padded={topPadded}
+      class="mx-auto max-w-6xl"
+      class:top-padded={!noPadding}
+      class:pb-s40={!noPadding}
     >
       <slot />
     </div>
@@ -26,21 +22,6 @@
   /* Color under the rounded corners */
   .wrapper {
     background-color: var(--col-under-bg, var(--col-bg));
-  }
-
-  .centered-grid {
-    grid-template-columns: repeat(12, minmax(1px, 78px));
-  }
-
-  .sticky {
-    position: sticky;
-    z-index: 50;
-    bottom: 0;
-    width: 100%;
-    padding: var(--s24);
-    background-color: var(--col-bg);
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15), 0 0 3px 0 rgba(0, 0, 0, 0.1);
-    will-change: transform;
   }
 
   .bordertop {
