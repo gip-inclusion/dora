@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.12](https://github.com/betagouv/dora-front/compare/v0.0.11...v0.0.12) (2022-05-30)
+
+### Features
+
+- ajoute l'encart data-inclusion ([445772f](https://github.com/betagouv/dora-front/commit/445772f320d03da91e6f9735748c72d0e98b098c))
+- **homepage:** ajoute le logo data inclusion ([#56](https://github.com/betagouv/dora-front/issues/56)) ([cedecd2](https://github.com/betagouv/dora-front/commit/cedecd205a918b076dc982c7dd3eb2bb9a5ddcaa))
+- **homepage:** ajoute le logo data inclusion ([#56](https://github.com/betagouv/dora-front/issues/56)) ([9c25306](https://github.com/betagouv/dora-front/commit/9c25306e5436ab9a29734383e32921687a87bec5))
+- **page service:** optimise la lisibité ([#54](https://github.com/betagouv/dora-front/issues/54)) ([3d43065](https://github.com/betagouv/dora-front/commit/3d4306578dab0f167c3391a40ebfd1609f11b8f7))
+- redirige le lien de la doc vers crisp ([1504e1a](https://github.com/betagouv/dora-front/commit/1504e1a9984d04ecbf504c90a3ac2762f570871e))
+- **service:** affiche le formulaire sur une seule page ([#55](https://github.com/betagouv/dora-front/issues/55)) ([963170f](https://github.com/betagouv/dora-front/commit/963170f72ccd462af6b62da9d437df906850d9a8))
+- **service:** ajoute un selecteur de statut ([#57](https://github.com/betagouv/dora-front/issues/57)) ([3dd9465](https://github.com/betagouv/dora-front/commit/3dd946523103dd3faebcac3de7d2baf2a13b4182))
+- supprime Hotjar ([8813f4b](https://github.com/betagouv/dora-front/commit/8813f4b795eb7f1f848c388ac032a1aa41eeac4f))
+
+### Bug Fixes
+
+- corrige la taille du texte sur le menu ([fbb6dc2](https://github.com/betagouv/dora-front/commit/fbb6dc2b1f6cef5df8c8b2d215c2e6d26619a29b))
+- **formulaires:** rend les formulaires responsives ([72313c3](https://github.com/betagouv/dora-front/commit/72313c364e72c67b5d2d655adc01a8d4a21755af))
+- **recherche:** affiche 'à distance' dans les résultats non présentiels ([6e144db](https://github.com/betagouv/dora-front/commit/6e144db3f45425f6f71259909fa9bb150addd27e))
+- **service:** affiche un bouton enregistrer en brouillon ([3dd41e4](https://github.com/betagouv/dora-front/commit/3dd41e457233d54f2ecd7642cad40d645cc3f766))
+- **service:** corrige l'affichage du lieu de deroulement ([1ebe936](https://github.com/betagouv/dora-front/commit/1ebe936f061da40c2db284b51d4ee0f01db7a310))
+- **services:** corrige la mise en page ([b17b8d5](https://github.com/betagouv/dora-front/commit/b17b8d54feac8e1e949c0d84345c7133be6d416c))
+
 ### [0.0.11](https://github.com/betagouv/dora-front/compare/v0.0.10...v0.0.11) (2022-05-09)
 
 ### Features
