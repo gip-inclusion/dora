@@ -8,7 +8,7 @@
     <h1 class="text-france-blue">Création d’une structure</h1>
   </CenteredGrid>
 
-  <CenteredGrid roundedTop>
+  <CenteredGrid --col-bg="var(--col-gray-00)">
     <slot />
   </CenteredGrid>
 </EnsureLoggedIn>

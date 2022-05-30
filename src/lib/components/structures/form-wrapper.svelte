@@ -140,6 +140,7 @@
           <Alert label={msg} />
         {/each}
       </div>
+
       <ModelField
         type="text"
         label="Siret"
@@ -148,7 +149,6 @@
         errorMessages={$formErrors.siret}
         disabled
         bind:value={structure.siret}
-        vertical
       />
 
       <ModelField
@@ -158,8 +158,8 @@
         name="name"
         errorMessages={$formErrors.name}
         bind:value={structure.name}
-        vertical
       />
+
       <ModelField
         type="select"
         label="Typologie"
@@ -170,7 +170,6 @@
         errorMessages={$formErrors.typology}
         bind:value={structure.typology}
         choices={structuresOptions.typologies}
-        vertical
       />
 
       <ModelField
@@ -207,6 +206,7 @@
           handleChange={handleAddressChange}
         />
       </ModelField>
+
       <ModelField
         type="text"
         label="Complément d’adresse"
@@ -247,31 +247,24 @@
         bind:value={structure.latitude}
       />
 
-      <div class="flex flex-row justify-between gap-x-s32">
-        <div class="w-s250">
-          <ModelField
-            type="tel"
-            label="Téléphone"
-            schema={structureSchema.phone}
-            name="phone"
-            errorMessages={$formErrors.phone}
-            bind:value={structure.phone}
-            vertical
-          />
-        </div>
+      <ModelField
+        type="tel"
+        label="Téléphone"
+        schema={structureSchema.phone}
+        name="phone"
+        errorMessages={$formErrors.phone}
+        bind:value={structure.phone}
+      />
 
-        <div class="flex-1">
-          <ModelField
-            type="email"
-            label="Courriel"
-            schema={structureSchema.email}
-            name="email"
-            errorMessages={$formErrors.email}
-            bind:value={structure.email}
-            vertical
-          />
-        </div>
-      </div>
+      <ModelField
+        type="email"
+        label="Courriel"
+        schema={structureSchema.email}
+        name="email"
+        errorMessages={$formErrors.email}
+        bind:value={structure.email}
+      />
+
       <ModelField
         type="url"
         label="Site web"
@@ -280,7 +273,6 @@
         name="url"
         errorMessages={$formErrors.url}
         bind:value={structure.url}
-        vertical
       />
       <ModelField
         type="textarea"
@@ -311,7 +303,7 @@
         bind:value={structure.ape}
       />
 
-      <div class="mb-s16 border-b border-gray-01" />
+      <hr class="border-b border-gray-01" />
 
       <div class="flex justify-end">
         <Button

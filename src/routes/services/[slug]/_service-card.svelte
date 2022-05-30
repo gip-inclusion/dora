@@ -20,22 +20,46 @@
   }
 </script>
 
-<CenteredGrid --col-bg="var(--col-france-blue)">
+<CenteredGrid --col-bg="var(--col-gray-00)">
   <ServiceHeader {service} />
 </CenteredGrid>
 
-<CenteredGrid
-  roundedTop
-  --col-under-bg="var(--col-france-blue)"
-  --col-content-bg="var(--col-bg)"
->
+<CenteredGrid bordertop --col-content-bg="var(--col-bg)">
   <div class="noprint mb-s24">
     {#if browser && !isPreview}
       <Toolbar {service} onRefresh={handleRefresh} />
     {/if}
   </div>
 
-  <div class="flex flex-col gap-s24 lg:flex-row-reverse">
+  <div class="flex flex-col gap-s24 lg:flex-row">
+    <div class="lg:w-2/3">
+      <p class="text-f18"><strong>{service.shortDesc}</strong></p>
+      <p class="text-f12 text-gray-text-alt">
+        {service.kindsDisplay.join(", ")}
+      </p>
+      <div class="mb-s24">
+        {#if service.isCumulative}
+          <Tag bgColorClass="bg-info" textColorClass="text-white"
+            >Service cumulable</Tag
+          >
+        {:else}
+          <Tag bgColorClass="bg-warning" textColorClass="text-white"
+            >Service non cumulable</Tag
+          >
+        {/if}
+        {#if service.hasFee}
+          <Tag bgColorClass="bg-warning" textColorClass="text-white"
+            >Frais à charge du bénéficiaire</Tag
+          >
+        {/if}
+        {#if service.locationKinds.includes("a-distance")}
+          <Tag bgColorClass="bg-info" textColorClass="text-white"
+            >À distance</Tag
+          >
+        {/if}
+      </div>
+    </div>
+
     <div class="lg:w-1/3">
       {#if service.locationKinds.length}
         {#if service.locationKinds.includes("en-presentiel")}
@@ -68,39 +92,9 @@
         </div>
       {/if}
     </div>
-    <div class="lg:w-2/3">
-      <p class="text-f18"><strong>{service.shortDesc}</strong></p>
-      <p class="text-f12 text-gray-text-alt">
-        {service.kindsDisplay.join(", ")}
-      </p>
-      <div class="mb-s24">
-        {#if service.isCumulative}
-          <Tag bgColorClass="bg-info" textColorClass="text-white"
-            >Service cumulable</Tag
-          >
-        {:else}
-          <Tag bgColorClass="bg-warning" textColorClass="text-white"
-            >Service non cumulable</Tag
-          >
-        {/if}
-        {#if service.hasFee}
-          <Tag bgColorClass="bg-warning" textColorClass="text-white"
-            >Frais à charge du bénéficiaire</Tag
-          >
-        {/if}
-        {#if service.locationKinds.includes("a-distance")}
-          <Tag bgColorClass="bg-info" textColorClass="text-white"
-            >À distance</Tag
-          >
-        {/if}
-      </div>
-    </div>
   </div>
 
-  <div class="break-word flex flex-col gap-s24 lg:flex-row-reverse">
-    <div class="lg:w-1/3">
-      <OrientationBox {service} />
-    </div>
+  <div class="break-word flex flex-col gap-s24 lg:flex-row">
     <div class="lg:w-2/3">
       <div class="mb-s48 flex flex-col gap-s32 lg:flex-row">
         <div class="flex-1">
@@ -110,11 +104,16 @@
           <ModalitiesBox {service} />
         </div>
       </div>
-      {#if service.fullDesc}
-        <div class="mb-s48">
-          <ServicePresentation {service} />
-        </div>
-      {/if}
+    </div>
+
+    <div class="lg:w-1/3">
+      <OrientationBox {service} />
     </div>
   </div>
+
+  {#if service.fullDesc}
+    <div class="mb-s48 lg:w-2/3">
+      <ServicePresentation {service} />
+    </div>
+  {/if}
 </CenteredGrid>

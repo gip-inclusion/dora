@@ -167,7 +167,7 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid roundedTop>
+<CenteredGrid --col-bg="var(--col-gray-00)">
   <div class="flex flex-col gap-s24 lg:flex-row">
     <div class="lg:mb-s48 lg:w-1/3">
       <SearchTweakForm

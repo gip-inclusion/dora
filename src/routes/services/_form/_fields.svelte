@@ -255,13 +255,6 @@
           est ouvert à tous, sans critères ou prérequis, laissez les champs avec
           les options par défaut.
         </p>
-
-        <h5>QPV et ZRR</h5>
-        <p class="text-f14">
-          Activez cette option si votre offre s’adresse uniquement aux
-          bénéficiaires résidants dans des Quartiers Prioritaires de la
-          politique de la Ville ou des Zones de Revitalisation Rurale.
-        </p>
       </div>
       <AddableMultiselect
         bind:values={service.concernedPublic}
@@ -306,10 +299,17 @@
       />
     </FieldSet>
 
-    <FieldSet title="Territoire">
+    <FieldSet title="Zone de diffusion">
       <div slot="help">
         <p class="text-f14">
           Si le service est reservé aux habitants d'un territoire.
+        </p>
+
+        <h5 class="mb-s0">QPV et ZRR</h5>
+        <p class="text-f14">
+          Activez cette option si votre offre s’adresse uniquement aux
+          bénéficiaires résidants dans des Quartiers Prioritaires de la
+          politique de la Ville ou des Zones de Revitalisation Rurale.
         </p>
       </div>
       <ModelField
@@ -628,10 +628,12 @@
         <p class="text-f14">
           Coordonnées de la personne responsable de la réception et du
           traitement des demandes d’orientation. À défaut, renseignez le
-          courriel et le numéro de téléphone de votre structure. Par défaut, ces
-          informations sont disponibles uniquement aux accompagnateurs qui ont
-          un compte DORA. En cochant la case « Rendre les informations
-          publiques », les informations seront rendues disponibles à tous les
+          courriel et le numéro de téléphone de votre structure.
+        </p>
+        <p class="text-f14">
+          Par défaut, ces informations sont disponibles uniquement aux
+          accompagnateurs qui ont un compte DORA. En cochant la case « Rendre
+          public », les informations seront rendues disponibles à tous les
           visiteurs du site.
         </p>
       </div>

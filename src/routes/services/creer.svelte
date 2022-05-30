@@ -35,7 +35,7 @@
   import Notice from "$lib/components/notice.svelte";
   import Button from "$lib/components/button.svelte";
 
-  import { getNewService } from "./_form/_stores.js";
+  import { getNewService } from "./_form/_store.js";
   import ServiceFormWrapper from "./_form/_service-form-wrapper.svelte";
 
   export let servicesOptions, structures, lastDraft;

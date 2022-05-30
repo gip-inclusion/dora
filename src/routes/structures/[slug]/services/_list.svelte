@@ -65,7 +65,7 @@
   }
 
   $: canEdit = structure.isMember || $userInfo?.isStaff;
-  $: servicesOrdered = serviceOrder(services);
+  $: servicesOrdered = serviceOrder();
 
   async function handleRefresh() {
     if (onRefresh) {
@@ -74,8 +74,8 @@
   }
 </script>
 
-<div class="md:flex md:items-center md:justify-between">
-  <h2 class="mb-s24 text-france-blue">Services</h2>
+<div class="mb-s24 md:flex md:items-center md:justify-between">
+  <h2 class="text-france-blue">Services</h2>
   <div class="flex gap-s16">
     {#if canEdit}
       <LinkButton

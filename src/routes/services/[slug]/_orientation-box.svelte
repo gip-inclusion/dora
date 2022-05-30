@@ -61,7 +61,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
     {/each}
   </ul>
 
-  {#if service.formsInfo.length}
+  {#if service.formsInfo.length || service.onlineForm}
     <h4>À compléter</h4>
     <ul class="mb-s24 list-outside list-disc pl-s20 text-f14">
       {#each service.formsInfo as form}
@@ -73,6 +73,15 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
           </span>
         </li>
       {/each}
+      {#if service.onlineForm}
+        <li>
+          <span class="break-word">
+            <a target="_blank" rel="noopener nofollow" href={service.onlineForm}
+              >{service.onlineForm}</a
+            >
+          </span>
+        </li>
+      {/if}
     </ul>
   {/if}
 

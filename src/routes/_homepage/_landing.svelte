@@ -20,7 +20,7 @@
   export let servicesOptions;
 </script>
 
-<CenteredGrid --col-bg="var(--col-magenta-10)" roundedBottom>
+<CenteredGrid --col-bg="var(--col-magenta-10)">
   <div class="flex flex-col gap-s24">
     <div class="text-center">
       <h1 class="text-france-blue">

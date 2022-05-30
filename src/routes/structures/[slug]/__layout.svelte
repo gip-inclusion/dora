@@ -64,10 +64,6 @@
   <Header structure={$structure} />
 </CenteredGrid>
 
-<CenteredGrid
-  roundedTop
-  --col-under-bg="var(--col-magenta-brand)"
-  --col-content-bg="var(--col-bg)"
->
+<CenteredGrid --col-content-bg="var(--col-bg)">
   <slot />
 </CenteredGrid>

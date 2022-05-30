@@ -51,7 +51,7 @@
   $: branchesFiltered = branchesFilter();
 </script>
 
-<div class="md:flex md:items-center md:justify-between">
+<div class="mb-s24 md:flex md:items-center md:justify-between">
   <h2 class="text-france-blue">Antennes</h2>
   <div class="flex gap-s16">
     {#if $userInfo && (structure.isAdmin || $userInfo?.isStaff)}

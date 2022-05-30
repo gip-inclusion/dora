@@ -109,7 +109,7 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid roundedTop>
+<CenteredGrid --col-bg="var(--col-gray-00)">
   <div class="lg:w-2/3">
     <div bind:this={errorDiv}>
       {#each $formErrors.nonFieldErrors || [] as msg}

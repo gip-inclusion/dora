@@ -99,9 +99,7 @@ const config = {
       s88: "5.5rem",
       s96: "6rem",
       s112: "7rem",
-      s136: "8.5rem",
       s160: "10rem",
-      s250: "15.625rem",
     },
     borderRadius: {
       none: "0",

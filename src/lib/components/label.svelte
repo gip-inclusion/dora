@@ -25,17 +25,14 @@
   class:dark-bg={darkBg}
 >
   {#if icon}
-    <i class="icon mr-s8 flex-none" class:small-icon={smallIcon}>
-      {@html icon}
-    </i>
-  {/if}
-  {#if icon && !(label || $$slots.default)}
-    <i class="icon flex-none">
+    <i class="icon flex-none" class:small-icon={smallIcon} class:mr-s8={label}>
       {@html icon}
     </i>
   {/if}
 
-  <span class:truncate><slot>{label}</slot></span>
+  {#if label}
+    <span class:truncate><slot>{label}</slot></span>
+  {/if}
 </div>
 
 <style lang="postcss">

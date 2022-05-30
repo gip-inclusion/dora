@@ -4,6 +4,7 @@
   import { capitalize } from "$lib/utils";
 
   export let structure;
+  export let showAddress = true;
 </script>
 
 <div class="flex flex-col rounded-md bg-white shadow-md">
@@ -12,7 +13,7 @@
       <a href="/structures/{structure.slug}">{capitalize(structure.name)}</a>
     </h4>
 
-    {#if structure.postalCode || structure.city}
+    {#if showAddress && (structure.postalCode || structure.city)}
       <Label
         label={`${structure.postalCode}, ${structure.city}`}
         smallIcon

@@ -85,7 +85,7 @@
     <h2 class="text-france-blue">Collaborateurs</h2>
     {#if canEditMembers}
       <Button
-        label="Inviter un collaborateur…"
+        label="Inviter un collaborateur"
         small
         on:click={() => (addUserModalIsOpen = true)}
       />

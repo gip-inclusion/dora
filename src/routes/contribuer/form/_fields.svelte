@@ -192,7 +192,54 @@
     />
   </FieldSet>
 
-  <div class="mt-s32">
+  <div class="mt-s48">
+    <Notice type="warning">
+      <p class="text-f14">
+        Renseignez le courriel du référent afin de faciliter la validation de
+        votre suggestion.
+      </p>
+    </Notice>
+  </div>
+
+  <FieldSet title="Contact du référent">
+    <div slot="help">
+      <p class="text-f14">
+        Coordonnées de la personne responsable de la réception et du traitement
+        des demandes d’orientation. À défaut, renseignez le courriel et le
+        numéro de téléphone de la structure.
+      </p>
+    </div>
+
+    <ModelField
+      label="Prénom et nom"
+      placeholder="Prénom et nom"
+      type="text"
+      schema={serviceSchema.contactName}
+      name="contactName"
+      errorMessages={$formErrors.contactName}
+      bind:value={service.contactName}
+    />
+    <ModelField
+      type="tel"
+      label="Numéro de téléphone"
+      placeholder="05 ou 06 00 00 00 00"
+      schema={serviceSchema.contactPhone}
+      name="contactPhone"
+      errorMessages={$formErrors.contactPhone}
+      bind:value={service.contactPhone}
+    />
+    <ModelField
+      type="email"
+      label="Courriel"
+      placeholder="Courriel de la personne à contacter"
+      schema={serviceSchema.contactEmail}
+      name="contactEmail"
+      errorMessages={$formErrors.contactEmail}
+      bind:value={service.contactEmail}
+    />
+  </FieldSet>
+
+  <div class="mt-s48">
     <Notice title="Informations facultatives">
       <p class="text-f14">
         Les informations ci-dessous sont facultatives, mais facilitent le
@@ -379,42 +426,5 @@
         visible={service.locationKinds.includes("en-presentiel")}
       />
     {/if}
-  </FieldSet>
-
-  <FieldSet title="Contact">
-    <div slot="help">
-      <p class="text-f14">
-        Coordonnées de la personne responsable de la réception et du traitement
-        des demandes d’orientation. À défaut, renseignez le courriel et le
-        numéro de téléphone de la structure.
-      </p>
-    </div>
-    <ModelField
-      label="Prénom et nom"
-      placeholder="Prénom et nom"
-      type="text"
-      schema={serviceSchema.contactName}
-      name="contactName"
-      errorMessages={$formErrors.contactName}
-      bind:value={service.contactName}
-    />
-    <ModelField
-      type="tel"
-      label="Numéro de téléphone"
-      placeholder="05 ou 06 00 00 00 00"
-      schema={serviceSchema.contactPhone}
-      name="contactPhone"
-      errorMessages={$formErrors.contactPhone}
-      bind:value={service.contactPhone}
-    />
-    <ModelField
-      type="email"
-      label="Courriel"
-      placeholder="Courriel de la personne à contacter"
-      schema={serviceSchema.contactEmail}
-      name="contactEmail"
-      errorMessages={$formErrors.contactEmail}
-      bind:value={service.contactEmail}
-    />
   </FieldSet>
 {/if}

@@ -7,7 +7,7 @@
   export let readOnly = false;
 </script>
 
-<div class="flex flex-col gap-s12 pb-s40">
+<div class="flex flex-col gap-s12">
   {#each services as service}
     <ServiceLine {service} {onRefresh} {showStructure} {readOnly} />
   {/each}

@@ -50,23 +50,25 @@
 {#if visible}
   <div
     class="rounded-r-md border-l-8 {types[type].border} {types[type]
-      .bg} px-s24 pt-s24"
+      .bg} px-s24 pt-s16"
   >
-    <div class="flex justify-between">
-      {#if title}
-        <h4 class="mb-s16 {types[type].text} flex">
-          <div class="mr-s8 h-s24 w-s24 shrink-0 fill-current">
-            {@html types[type].icon}
+    {#if title || hasCloseButton}
+      <div class="flex justify-between">
+        {#if title}
+          <h4 class="mb-s16 {types[type].text} flex">
+            <div class="mr-s8 h-s24 w-s24 shrink-0 fill-current">
+              {@html types[type].icon}
+            </div>
+            {title}
+          </h4>
+        {/if}
+        {#if hasCloseButton}
+          <div class="-mt-s8">
+            <Button icon={closeIcon} noBackground on:click={handleHide} small />
           </div>
-          {title}
-        </h4>
-      {/if}
-      {#if hasCloseButton}
-        <div class="-mt-s8">
-          <Button icon={closeIcon} noBackground on:click={handleHide} small />
-        </div>
-      {/if}
-    </div>
+        {/if}
+      </div>
+    {/if}
     <div class="flex flex-row flex-wrap items-start justify-between gap-s12">
       <slot />
 
