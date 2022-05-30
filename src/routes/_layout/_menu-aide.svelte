@@ -4,7 +4,7 @@
 
 <LinkButton
   label="Documentation"
-  to={`https://documentation.dora.fabrique.social.gouv.fr/`}
+  to={`https://aide.dora.fabrique.social.gouv.fr/fr/`}
   nofollow
   otherTab
   noBackground
