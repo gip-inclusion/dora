@@ -18,7 +18,9 @@
 
   async function handleUnpublish() {
     await unPublishService(service.slug);
-    await onRefresh();
+    if (onRefresh) {
+      await onRefresh();
+    }
   }
 
   async function handlePublish() {

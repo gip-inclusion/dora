@@ -15,8 +15,8 @@
   let filters;
   let branchesFiltered = [];
 
-  function branchesFilter() {
-    let bb = branches.filter(
+  function branchesFilter(br) {
+    let bb = br.filter(
       (b) =>
         (departement === "tous" || b.department === departement) &&
         (!filters ||
@@ -48,7 +48,7 @@
     },
     [{ value: "tous", label: "Tous" }]
   );
-  $: branchesFiltered = branchesFilter();
+  $: branchesFiltered = branchesFilter(branches);
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">

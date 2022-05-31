@@ -122,7 +122,12 @@
       sortSelect
     />
 
-    <Field type="toggle" label="Sans frais à charge" bind:value={hasNoFees} />
+    <Field
+      type="toggle"
+      label="Sans frais à charge"
+      bind:value={hasNoFees}
+      vertical
+    />
 
     <Button
       type="submit"

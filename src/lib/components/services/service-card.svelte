@@ -45,7 +45,7 @@
       <StateButtonMenu {service} {onRefresh} />
 
       {#if !service.isSuggestion}
-        <ButtonMenu {service} {onRefresh} />
+        <ButtonMenu {service} />
       {/if}
     </div>
   {/if}

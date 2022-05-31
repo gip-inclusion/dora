@@ -21,8 +21,8 @@
   let servicesOrdered;
   let filters;
 
-  function serviceOrder() {
-    let ss = services
+  function serviceOrder(se) {
+    let ss = se
       .sort((a, b) => {
         if (order === "etat") {
           if (
@@ -65,13 +65,7 @@
   }
 
   $: canEdit = structure.isMember || $userInfo?.isStaff;
-  $: servicesOrdered = serviceOrder();
-
-  async function handleRefresh() {
-    if (onRefresh) {
-      onRefresh();
-    }
-  }
+  $: servicesOrdered = serviceOrder(services);
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
@@ -113,6 +107,6 @@
 
 <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
   {#each servicesOrdered as service}
-    <ServiceCard {service} readOnly={!canEdit} onRefresh={handleRefresh} />
+    <ServiceCard {service} readOnly={!canEdit} {onRefresh} />
   {/each}
 </div>
