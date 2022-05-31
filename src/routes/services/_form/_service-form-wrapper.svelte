@@ -17,11 +17,7 @@
 
   import serviceSchema, { draftServiceSchema } from "$lib/schemas/service.js";
 
-  import {
-    createOrModifyService,
-    getServicesOptions,
-    publishDraft,
-  } from "$lib/services";
+  import { createOrModifyService, publishDraft } from "$lib/services";
   import { assert, logException } from "$lib/logger";
   import Alert from "$lib/components/forms/alert.svelte";
 
@@ -89,7 +85,7 @@
       // Validation OK, let's send it to the API endpoint
       try {
         let result = await createOrModifyService(validatedData);
-        result = await publishDraft(service.slug);
+        result = await publishDraft(result.data.slug);
         goto(`/services/${result.slug}`);
       } catch (error) {
         logException(error);
@@ -125,7 +121,7 @@
 
     if (result.ok) {
       // We might have added options to the editable multiselect
-      servicesOptions = await getServicesOptions();
+
       service = result.data;
 
       goto(`/services/${service.slug}`);

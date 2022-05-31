@@ -15,6 +15,7 @@
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Button from "$lib/components/button.svelte";
   import { getStructure } from "$lib/structures";
+  import { getServicesOptions } from "$lib/services";
 
   export let servicesOptions, service, structures, structure;
   let subcategories = [];
@@ -48,6 +49,7 @@
     cleanOptions("credentials", slug);
     if (slug) {
       structure = await getStructure(slug);
+      servicesOptions = await getServicesOptions();
     }
   }
 

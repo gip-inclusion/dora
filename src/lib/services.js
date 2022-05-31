@@ -143,6 +143,7 @@ export async function publishDraft(serviceSlug) {
     },
     body: JSON.stringify({ isDraft: false }),
   });
+
   if (!response.ok) {
     throw Error(response.statusText);
   }
