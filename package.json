@@ -19,7 +19,7 @@
     "prepare": "husky install",
     "security-scan": "ggshield scan  path -r . -y",
     "commit": "cz",
-    "release": "git pull --rebase --tags origin main && standard-version && git push --follow-tags origin main && conventional-github-releaser",
+    "release": "git pull --rebase --tags origin main && standard-version && git push --follow-tags origin main",
     "sb": "start-storybook -p 6006",
     "sb-build": "build-storybook -o design-system"
   },
@@ -52,7 +52,6 @@
     "autoprefixer": "^10.4.7",
     "babel-loader": "^8.2.5",
     "commitizen": "^4.2.4",
-    "conventional-github-releaser": "^3.1.5",
     "cssnano": "^5.1.10",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.16.0",

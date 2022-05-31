@@ -47,8 +47,6 @@ Publier une nouvelle version consiste à :
 - Ajouter un tag git avec le numéro de version
 - Publier la nouvelle version sur Github
 
-Afin de pouvoir publier une nouvelle version sur Github, il faut définir un token `CONVENTIONAL_GITHUB_RELEASER_TOKEN` comme indiqué [ici](https://github.com/conventional-changelog/releaser-tools/tree/master/packages/conventional-github-releaser#setup-token-for-cli).
-
 ```bash
 # Basculer sur la branche main
 git checkout main
