@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.13](https://github.com/betagouv/dora-front/compare/v0.0.12...v0.0.13) (2022-05-31)
+
+### Bug Fixes
+
+- **service:** corrige l'enregistrement d'un nouveau service ([5866f0c](https://github.com/betagouv/dora-front/commit/5866f0cb4d26fbe76e80b717d45ce06f81c4f352))
+- **service:** supprime un assert ([0c005c0](https://github.com/betagouv/dora-front/commit/0c005c0f867346fbb66d65e0e1ef3d7afee26d9f))
+- **structure:** rafraichi la page apres la mise a jour du statut d'un service ([f8034fe](https://github.com/betagouv/dora-front/commit/f8034feafe30f035c4f1a06f8f59a6a6f1a4ec31))
+
 ### [0.0.12](https://github.com/betagouv/dora-front/compare/v0.0.11...v0.0.12) (2022-05-30)
 
 ### Features
