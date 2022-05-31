@@ -80,8 +80,6 @@
     );
 
     if (valid) {
-      assert(service.slug);
-
       // Validation OK, let's send it to the API endpoint
       try {
         let result = await createOrModifyService(validatedData);
