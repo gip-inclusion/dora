@@ -62,6 +62,7 @@
         nofollow
       />
       <NavItem label="Accessibilité : non conforme" />
+      <NavItem label="Statistiques" href="/stats" />
     </nav>
   </CenteredGrid>
 </footer>
