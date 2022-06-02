@@ -19,7 +19,8 @@
   import Alert from "$lib/components/forms/alert.svelte";
   import { publishServiceSuggestion } from "$lib/services";
 
-  export let servicesOptions;
+  export let servicesOptions, source;
+
   let service = Object.fromEntries(
     Object.entries(serviceSchema).map(([fieldName, props]) => [
       fieldName,
@@ -86,7 +87,7 @@
         noScroll: false,
       }).valid
     ) {
-      const result = await publishServiceSuggestion(service);
+      const result = await publishServiceSuggestion(service, source);
       if (result.ok) {
         goto(`/contribuer/merci`);
       } else {
