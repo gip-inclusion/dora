@@ -9,28 +9,6 @@
   import { getQuery } from "./_search";
 
   export let servicesOptions = {};
-  const categoryChoices = servicesOptions.categories;
-  categoryChoices?.forEach((choice) => {
-    if (
-      [
-        "acc-global-indiv",
-        "apprendre-francais",
-        "creation-activite",
-        "difficultes-financieres",
-        "illettrisme",
-        "numerique",
-        "famille",
-        "remobilisation",
-        "acces-aux-droits",
-        "equipement-alimentation",
-        "sante",
-        "handicap",
-        "emploi",
-      ].includes(choice.value)
-    ) {
-      choice.tags = ["nouv."];
-    }
-  });
 
   let categoryId;
   let subCategoryId;
@@ -56,7 +34,7 @@
 </script>
 
 <div class="rounded-md bg-white p-s24 shadow-l">
-  {#if categoryChoices}
+  {#if servicesOptions.categories}
     <form
       on:submit|preventDefault={handleSearch}
       class="flex flex-col gap-s16 lg:flex-row"
@@ -67,7 +45,7 @@
         bind:value={categoryId}
         onSelectChange={handleCategoryChange}
         placeholder="Sélectionner"
-        choices={categoryChoices}
+        choices={servicesOptions.categories}
         label="Thématique"
         vertical
         required

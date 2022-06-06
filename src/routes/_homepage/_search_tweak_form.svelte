@@ -29,29 +29,6 @@
     goto(`recherche?${query}`);
   }
 
-  $: catChoices = servicesOptions.categories.map((choice) => {
-    if (
-      [
-        "acc-global-indiv",
-        "apprendre-francais",
-        "creation-activite",
-        "difficultes-financieres",
-        "illettrisme",
-        "numerique",
-        "famille",
-        "remobilisation",
-        "acces-aux-droits",
-        "equipement-alimentation",
-        "sante",
-        "handicap",
-        "emploi",
-      ].includes(choice.value)
-    ) {
-      choice.tags = ["nouv."];
-    }
-    return choice;
-  });
-
   $: subCatChoices = servicesOptions.subcategories.filter(({ value }) =>
     value.startsWith(categoryId)
   );
@@ -80,7 +57,7 @@
       bind:value={categoryId}
       onSelectChange={handleCategoryChange}
       placeholder="Sélectionner"
-      choices={catChoices}
+      choices={servicesOptions.categories}
       label="Thématique"
       vertical
       required
