@@ -1,16 +1,15 @@
 <script>
   import CG from "$lib/components/layout/centered-grid.svelte";
   import { METABASE_EMBED_URL, PLAUSIBLE_EMBED_URL } from "$lib/env.js";
+  import { iframeResize } from "iframe-resizer";
   function hR(id) {
-    iFrameResize({}, id);
+    iframeResize({}, id);
   }
 </script>
 
 <svelte:head>
   <title>Statistiques | DORA</title>
-  <script
-    src="https://metabase.dora.fabrique.social.gouv.fr/app/iframeResizer.js">
-  </script>
+
   <script src="https://plausible.io/js/embed.host.js"></script>
 </svelte:head>
 
