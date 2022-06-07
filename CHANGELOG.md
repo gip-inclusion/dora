@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/betagouv/dora-front/compare/v0.0.13...v0.0.14) (2022-06-07)
+
+### Features
+
+- ajoute un lien vers les statistiques dans le pied de page ([bc3409b](https://github.com/betagouv/dora-front/commit/bc3409b0ee7999ed8ca20917cecb9ccc0061ecbd))
+- garde la trace de l'utm_source lors d'une suggestion ([#58](https://github.com/betagouv/dora-front/issues/58)) ([628c7df](https://github.com/betagouv/dora-front/commit/628c7df86adecbdf144c5ccc1ed533482345bef3))
+- le champ "Besoins" est maintenant obligatoire ([62b21e2](https://github.com/betagouv/dora-front/commit/62b21e2f8e081fa2044947b171a7994df4fa994d))
+
 ### [0.0.13](https://github.com/betagouv/dora-front/compare/v0.0.12...v0.0.13) (2022-05-31)
 
 ### Bug Fixes
