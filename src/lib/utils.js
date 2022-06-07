@@ -90,12 +90,25 @@ export function addlinkToUrls(text) {
   );
 }
 
-export function moveToTheEnd(array, key, value) {
-  const element = array.find((e) => e[key] === value);
+export function moveToTheEnd(
+  array,
+  key,
+  value,
+  sortBeginning = false,
+  sortKey = "label"
+) {
+  const elementsToMove = array.filter((e) => e[key] === value);
 
-  if (!element) {
+  if (!elementsToMove.length) {
     return array;
   }
 
-  return [...array.filter((e) => e[key] !== value), element];
+  let beginning = array.filter((e) => e[key] !== value);
+  if (sortBeginning) {
+    beginning = beginning.sort((a, b) =>
+      a[sortKey].localeCompare(b[sortKey], "fr", { numeric: true })
+    );
+  }
+
+  return [...beginning, ...elementsToMove];
 }
