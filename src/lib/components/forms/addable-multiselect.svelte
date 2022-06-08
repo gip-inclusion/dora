@@ -1,6 +1,6 @@
 <script>
   import Field from "./field.svelte";
-  import ModelField from "./model-field.svelte";
+  import SchemaField from "./schema-field.svelte";
   import Button from "../button.svelte";
 
   export let values;
@@ -50,7 +50,7 @@
 </script>
 
 <div>
-  <ModelField
+  <SchemaField
     type="multiselect"
     {label}
     {placeholder}
@@ -75,6 +75,7 @@
       </div>
       <div class="flex flex-row gap-s16 " class:hidden={!textInputVisible}>
         <Field
+          {name}
           type="text"
           bind:value={newValue}
           on:input={handleChangeValue}

@@ -40,7 +40,6 @@
     --col-magenta-10: #f5f0fd;
 
     /* Functional Colors */
-    --col-bg: white;
     --col-success: #008941;
     --col-error: #e10600;
 
@@ -88,7 +87,6 @@
     /*       shadows       */
     /***********************/
 
-    --shadow-xs: 0 1px 0 0 rgba(0, 0, 0, 0.05);
     --shadow-sm: 0 0 1px 0 rgba(0, 0, 0, 0.05), 0 2px 1px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 2px 10px 0 rgba(0, 0, 0, 0.1), 0 0 2px 0 rgba(0, 0, 0, 0.2);
     --shadow-l: 0 4px 20px 0 rgba(0, 0, 0, 0.15), 0 0 3px 0 rgba(0, 0, 0, 0.1);
@@ -168,6 +166,14 @@
 
   p {
     @apply mb-s16 text-f18 leading-normal text-gray-text;
+  }
+
+  small {
+    @apply text-f14 italic text-gray-text-alt2;
+  }
+
+  hr {
+    @apply border-t-gray-03;
   }
 
   .paragraph {

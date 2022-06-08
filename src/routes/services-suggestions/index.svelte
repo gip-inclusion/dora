@@ -31,7 +31,7 @@
     <div class="text-left">
       <h2>Suggestions de services</h2>
 
-      <hr class="border-t border-gray-03" />
+      <hr />
       <div class="mt-s32 mb-s48 rounded-md bg-gray-bg p-s16">
         <div class="flex">
           <List {suggestions} onRefresh={handleRefresh} />

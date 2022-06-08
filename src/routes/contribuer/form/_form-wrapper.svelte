@@ -3,26 +3,31 @@
 
   import { goto } from "$app/navigation";
 
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import {
     validate,
     injectAPIErrors,
     contextValidationKey,
     formErrors,
   } from "$lib/validation.js";
+  import schema, { fields, fieldsRequired } from "$lib/schemas/service.js";
+  import { formatSchema } from "$lib/schemas/utils";
+  import { publishServiceSuggestion } from "$lib/services";
 
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import NavButtons from "./_nav-buttons.svelte";
   import Fields from "./_fields.svelte";
-
-  import serviceSchema from "$lib/schemas/service-contrib.js";
-
   import Alert from "$lib/components/forms/alert.svelte";
-  import { publishServiceSuggestion } from "$lib/services";
 
   export let servicesOptions, source;
 
+  const contribSchema = formatSchema(
+    schema,
+    fields.contrib,
+    fieldsRequired.contrib
+  );
+
   let service = Object.fromEntries(
-    Object.entries(serviceSchema).map(([fieldName, props]) => [
+    Object.entries(contribSchema).map(([fieldName, props]) => [
       fieldName,
       props.default,
     ])
@@ -44,17 +49,15 @@
     // supposed to happen. This setTimeout is a unsatisfying workaround to that.
     await new Promise((resolve) => {
       setTimeout(() => {
-        const filteredSchema = Object.fromEntries(
-          Object.entries(serviceSchema).filter(
-            ([name, _rules]) => name === fieldname
-          )
-        );
-        const { validatedData, valid } = validate(
-          service,
-          filteredSchema,
-          serviceSchema,
-          { skipDependenciesCheck: false, noScroll: true }
-        );
+        const filteredSchema =
+          fieldname && contribSchema[fieldname]
+            ? { [fieldname]: contribSchema[fieldname] }
+            : {};
+
+        const { validatedData, valid } = validate(service, filteredSchema, {
+          fullSchema: contribSchema,
+          noScroll: true,
+        });
         if (valid) {
           service = { ...service, ...validatedData };
         }
@@ -69,8 +72,8 @@
   });
 
   let errorDiv;
-  const requiredFields = Object.keys(serviceSchema).filter(
-    (k) => serviceSchema[k].required
+  const requiredFields = Object.keys(contribSchema).filter(
+    (k) => contribSchema[k].required
   );
 
   let currentPageIsValid = false;
@@ -81,13 +84,11 @@
 
   async function handlePublish() {
     // Validate the whole form
-    if (
-      validate(service, serviceSchema, serviceSchema, {
-        skipDependenciesCheck: true,
-        noScroll: false,
-      }).valid
-    ) {
+    const { valid } = validate(service, contribSchema);
+
+    if (valid) {
       const result = await publishServiceSuggestion(service, source);
+
       if (result.ok) {
         goto(`/contribuer/merci`);
       } else {
@@ -110,7 +111,7 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid --col-bg="var(--col-gray-00)">
+<CenteredGrid bgColor="bg-gray-bg">
   <div class="lg:w-2/3">
     <div bind:this={errorDiv}>
       {#each $formErrors.nonFieldErrors || [] as msg}

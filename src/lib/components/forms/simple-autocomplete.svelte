@@ -840,7 +840,7 @@
   </div>
 </div>
 {#if multiple && value}
-  <div class="tags-container">
+  <div class="tags-container mb-s8">
     {#each value as tagItem}
       <div class="tags has-addons">
         <span class="tag break-all">{getLabelForValue(tagItem)}</span>

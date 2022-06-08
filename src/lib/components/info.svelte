@@ -14,9 +14,14 @@
   }
 </script>
 
-<div class="wrapper" class:white-bg={whiteBg} class:left-border={leftBorder}>
+<div
+  class="bg-gray-bg p-s24"
+  class:bg-white={whiteBg}
+  class:border-l-4={leftBorder}
+  class:border-info={leftBorder}
+>
   {#if label}
-    <div class="label-wrapper">
+    <div class="pb-s16">
       <Label
         {label}
         success={positiveMood}
@@ -27,30 +32,7 @@
       />
     </div>
   {/if}
-  <div class="details">
+  <div class="text-f14 text-gray-text">
     <slot />
   </div>
 </div>
-
-<style lang="postcss">
-  .wrapper {
-    padding: var(--s24);
-    background-color: var(--col-gray-bg);
-  }
-
-  .white-bg {
-    background-color: var(--col-white);
-  }
-
-  .label-wrapper {
-    padding-bottom: var(--s16);
-  }
-
-  .details {
-    @apply text-f14 text-gray-text;
-  }
-
-  .left-border {
-    @apply border-l-4 border-info;
-  }
-</style>

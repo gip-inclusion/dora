@@ -1,17 +1,17 @@
 <script context="module">
   import { browser } from "$app/env";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import { getService } from "$lib/services";
+  import { getModel } from "$lib/services";
 
   export async function load({ params }) {
-    const service = await getService(params.slug);
+    const model = await getModel(params.slug);
 
     // on ne retourne une 404 que sur le client
-    if (!service && !browser) {
+    if (!model && !browser) {
       return {};
     }
 
-    if (!service) {
+    if (!model) {
       return {
         status: 404,
         error: "Page Not Found",
@@ -20,7 +20,7 @@
 
     return {
       props: {
-        service,
+        model,
       },
     };
   }
@@ -29,46 +29,46 @@
 <script>
   import { onMount } from "svelte";
   import ServiceHeader from "$lib/components/services/service-header.svelte";
-  import ServiceToolbar from "$lib/components/services/service-toolbar.svelte";
+  import ModelToolbar from "$lib/components/services/model-toolbar.svelte";
   import ServiceBody from "$lib/components/services/service-body.svelte";
 
-  export let service;
+  export let model;
 
   onMount(() => {
     if (browser) {
-      plausible("service", {
+      plausible("model", {
         props: {
-          service: service.name,
-          slug: service.slug,
-          structure: service.structureInfo.name,
-          departement: service.department,
+          model: model.name,
+          slug: model.slug,
+          structure: model.structureInfo.name,
+          departement: model.department,
         },
       });
     }
   });
 
   async function handleRefresh() {
-    service = await getService(service.slug);
+    model = await getModel(model.slug);
   }
 </script>
 
 <svelte:head>
-  <title>{service?.name} | {service?.structureInfo.name} | DORA</title>
-  <meta name="description" content={service?.shortDesc} />
+  <title>{model?.name} | {model?.structureInfo.name} | DORA</title>
+  <meta name="description" content={model?.shortDesc} />
 </svelte:head>
 
 <CenteredGrid bgColor="bg-gray-bg">
-  <ServiceHeader {service} />
+  <ServiceHeader service={model} isModel />
 </CenteredGrid>
 <hr />
 <CenteredGrid noPadding>
   <div class="noprint py-s24">
     {#if browser}
-      <ServiceToolbar {service} onRefresh={handleRefresh} />
+      <ModelToolbar {model} onRefresh={handleRefresh} />
     {/if}
   </div>
 </CenteredGrid>
 
 <CenteredGrid>
-  <ServiceBody {service} />
+  <ServiceBody service={model} isModel />
 </CenteredGrid>

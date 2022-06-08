@@ -10,6 +10,7 @@
   export let noHeaderBorder = false;
   export let collapsable = false;
   export let collapsed = true;
+  export let showModel = false;
   let wrapper;
 
   onMount(() => {
@@ -40,38 +41,49 @@
     <div
       class="rounded-t-md px-s32 pt-s32 {headerBg} {noHeaderBorder
         ? ''
-        : 'border-b border-gray-01 pb-s24'}"
+        : 'border-b border-gray-03 pb-s24'}"
       class:rounded-b-md={collapsed}
     >
-      <div class="flex justify-between">
-        <h3
-          class="mb-s0 {headerBg !== 'bg-white'
-            ? 'text-white'
-            : 'text-france-blue'}"
+      <div class="flex items-center" class:lg:gap-s32={showModel}>
+        <div
+          class="flex w-full items-center justify-between {showModel
+            ? 'lg:w-2/3'
+            : ''}"
         >
-          {title}
-        </h3>
-        <div class="flex">
-          {#if $$slots.help}
-            <Button
-              label="Aide"
-              on:click={toggleHelp}
-              icon={!showHelp ? arrowDownSIcon : arrowUpSIcon}
-              iconOnRight
-              noBackground
-              small
-            />
-          {/if}
+          <h3
+            class="mb-s0 {headerBg !== 'bg-white'
+              ? 'text-white'
+              : 'text-france-blue'}"
+          >
+            {title}
+          </h3>
+          <div class="flex">
+            {#if $$slots.help}
+              <Button
+                label="Aide"
+                on:click={toggleHelp}
+                icon={!showHelp ? arrowDownSIcon : arrowUpSIcon}
+                iconOnRight
+                noBackground
+                small
+              />
+            {/if}
 
-          {#if collapsable}
-            <Button
-              on:click={toggleFold}
-              icon={collapsed ? arrowDownSIcon : arrowUpSIcon}
-              noBackground
-              small
-            />
-          {/if}
+            {#if collapsable}
+              <Button
+                on:click={toggleFold}
+                icon={collapsed ? arrowDownSIcon : arrowUpSIcon}
+                noBackground
+                small
+              />
+            {/if}
+          </div>
         </div>
+        {#if showModel}
+          <div class="lg:w-1/3">
+            <h5 class="mb-s0 hidden lg:block">Modèle</h5>
+          </div>
+        {/if}
       </div>
       <slot name="description">
         {#if description}

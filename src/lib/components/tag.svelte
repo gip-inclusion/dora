@@ -1,8 +1,8 @@
 <script>
   export let selfStart = false;
 
-  export let bgColorClass = "bg-magenta-20";
-  export let textColorClass = "text-magenta-cta";
+  export let bgColorClass = "bg-gray-text-alt";
+  export let textColorClass = "text-white";
 </script>
 
 <span

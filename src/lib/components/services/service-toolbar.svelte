@@ -2,16 +2,18 @@
   import { browser } from "$app/env";
 
   import { token } from "$lib/auth";
+
   import Button from "$lib/components/button.svelte";
 
-  import SuggestionModal from "./_suggestion-modal.svelte";
-  import Menu from "$lib/components/services/menu.svelte";
-  import StateButtonMenu from "$lib/components/services/state-button-menu.svelte";
+  import SuggestionModal from "./suggestion-modal.svelte";
+  import ServiceMenu from "./service-menu.svelte";
+  import StateButtonMenu from "./state-button-menu.svelte";
 
   export let service;
   export let onRefresh;
 
   let suggestionModalIsOpen = false;
+
   function handleSuggestion() {
     suggestionModalIsOpen = true;
     if (browser) {
@@ -30,7 +32,7 @@
 <div class="inline-flex flex-wrap items-start gap-s8">
   {#if $token && service.canWrite}
     <StateButtonMenu {service} {onRefresh} />
-    <Menu {service} secondary {onRefresh} inline />
+    <ServiceMenu {service} secondary {onRefresh} inline />
   {:else}
     <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
     <Button

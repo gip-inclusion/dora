@@ -5,25 +5,24 @@
   import { suggestionSchema } from "$lib/schemas/service";
   import { getApiURL } from "$lib/utils/api";
 
-  import { suggesterFullName, suggesterEmail } from "./_store";
   import Button from "$lib/components/button.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/modal.svelte";
-  import SuggestionConfirmationModal from "./_suggestion_confirmation_modal.svelte";
+  import SuggestionConfirmationModal from "./suggestion-confirmation-modal.svelte";
 
   export let isOpen = false;
   export let service;
 
-  let message;
+  let message, suggesterFullName, suggesterEmail;
   let confirmationModalIsOpen = false;
   let requesting = false;
 
   onMount(() => {
     if ($userInfo) {
-      $suggesterFullName = $userInfo.fullName;
-      $suggesterEmail = $userInfo.email;
+      suggesterFullName = $userInfo.fullName;
+      suggesterEmail = $userInfo.email;
     }
   });
 
@@ -53,7 +52,7 @@
 
 <Modal bind:isOpen>
   <Form
-    data={{ fullName: $suggesterFullName, email: $suggesterEmail, message }}
+    data={{ fullName: suggesterFullName, email: suggesterEmail, message }}
     schema={suggestionSchema}
     onChange={handleChange}
     onSubmit={handleSubmit}
@@ -73,7 +72,7 @@
           vertical
           type="text"
           placeholder="Aurélien Durand"
-          bind:value={$suggesterFullName}
+          bind:value={suggesterFullName}
           required
           autocomplete="name"
         />
@@ -84,7 +83,7 @@
           label="Courriel"
           vertical
           type="email"
-          bind:value={$suggesterEmail}
+          bind:value={suggesterEmail}
           required
           placeholder="nom@exemple.org"
           autocomplete="email"
@@ -105,8 +104,8 @@
       <Button
         type="submit"
         label="Envoyer la suggestion"
-        disabled={!$suggesterEmail ||
-          !$suggesterFullName ||
+        disabled={!suggesterEmail ||
+          !suggesterFullName ||
           !message ||
           requesting}
         preventDefaultOnMouseDown

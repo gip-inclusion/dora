@@ -29,12 +29,11 @@
     // We want to listen to both DOM and component events
     const fieldname = evt.target?.name || evt.detail;
 
-    const filteredSchema = Object.fromEntries(
-      Object.entries(schema).filter(([name, _rules]) => name === fieldname)
-    );
+    const filteredSchema =
+      fieldname && schema[fieldname] ? { [fieldname]: schema[fieldname] } : {};
 
-    const { validatedData, valid } = validate(data, filteredSchema, schema, {
-      skipDependenciesCheck: false,
+    const { validatedData, valid } = validate(data, filteredSchema, {
+      fullSchema: schema,
       noScroll: true,
     });
 
@@ -60,9 +59,7 @@
 
   async function handleSubmit() {
     $formErrors = {};
-    const { validatedData, valid } = validate(data, schema, schema, {
-      skipDependenciesCheck: false,
-    });
+    const { validatedData, valid } = validate(data, schema);
     if (valid) {
       try {
         requesting = true;

@@ -22,11 +22,23 @@
       },
     ];
 
-    if (!structure.parent && structure.branches?.length) {
+    if (
+      (!structure.parent && structure.branches?.length) ||
+      structure.isMember ||
+      $userInfo?.isStaff
+    ) {
       tabs.splice(1, 0, {
         id: "antennes",
         name: "Antennes",
         href: `/structures/${structure.slug}/antennes`,
+      });
+    }
+
+    if (structure.isMember || $userInfo?.isStaff) {
+      tabs.splice(1, 0, {
+        id: "modeles",
+        name: "Modèles de service",
+        href: `/structures/${structure.slug}/modeles`,
       });
     }
 
@@ -41,7 +53,6 @@
         href: `/structures/${structure.slug}/services`,
       });
     }
-
     if (structure.isAdmin || $userInfo?.isStaff || $userInfo?.isBizdev) {
       tabs.splice(1, 0, {
         id: "collaborateurs",
@@ -54,6 +65,8 @@
   $: {
     if ($page.url.pathname.endsWith("/services")) {
       tabId = "services";
+    } else if ($page.url.pathname.endsWith("/modeles")) {
+      tabId = "modeles";
     } else if ($page.url.pathname.endsWith("/antennes")) {
       tabId = "antennes";
     } else if ($page.url.pathname.endsWith("/collaborateurs")) {

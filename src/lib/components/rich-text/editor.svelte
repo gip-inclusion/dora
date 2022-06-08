@@ -221,8 +221,8 @@
           on:click={setLink}
           disabled={!linkDialogButtonIsActive}
         >
-          {linkDialogButtontext}</button
-        >
+          {linkDialogButtontext}
+        </button>
         <button
           class="text-grayborder-gray-text rounded-md border border-gray-text py-s4 px-s8 text-f12 font-bold hover:bg-gray-text hover:text-white"
           on:click={linkDialogClose}>Annuler</button

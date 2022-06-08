@@ -55,10 +55,10 @@
     <MenuMonCompte />
 
     {#if !!structures?.length}
-      <hr class="my-s8 self-stretch border-t-gray-03" />
+      <hr class="my-s8 self-stretch" />
       <MenuStructures {structures} />
     {/if}
-    <hr class="my-s8 self-stretch border-t-gray-03" />
+    <hr class="my-s8 self-stretch" />
   {:else if $page.url.pathname !== "/auth/connexion"}
     <LinkButton
       label="Se connecter"
@@ -67,7 +67,7 @@
       small
       to={`/auth/connexion?next=${encodeURIComponent($page.url.pathname)}`}
     />
-    <hr class="my-s8 self-stretch border-t-gray-03" />
+    <hr class="my-s8 self-stretch" />
   {/if}
 
   <MenuAide />

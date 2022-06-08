@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <hr class="mb-s16 border-t border-t-gray-03" />
+    <hr class="mb-s16" />
 
     <nav class="flex flex-wrap gap-s32">
       <NavItem

@@ -20,7 +20,7 @@
   export let servicesOptions;
 </script>
 
-<CenteredGrid --col-bg="var(--col-magenta-10)">
+<CenteredGrid bgColor="bg-magenta-10">
   <div class="flex flex-col gap-s24">
     <div class="text-center">
       <h1 class="text-france-blue">
@@ -72,14 +72,14 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid --col-bg="var(--col-transparent)">
+<CenteredGrid>
   <h2 class="mb-s32 text-center text-france-blue">
     Tous les services d’insertion sur votre territoire
   </h2>
   <SearchForm {servicesOptions} />
 </CenteredGrid>
 
-<CenteredGrid --col-bg="var(--col-transparent)">
+<CenteredGrid>
   <h2 class="mb-s32 text-center text-france-blue">Comment cela fonctionne</h2>
   <div class="mb-s24 flex flex-col gap-s24 md:flex-row">
     <div class="md:flex-1">
@@ -141,7 +141,7 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid --col-bg="var(--col-gray-00)">
+<CenteredGrid bgColor="bg-gray-bg">
   <div class="flex flex-col items-center justify-between gap-s16 md:flex-row">
     <div>
       <h3 class="mb-s8 text-gray-dark">Infolettre</h3>

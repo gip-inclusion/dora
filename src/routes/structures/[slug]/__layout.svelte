@@ -60,10 +60,10 @@
   import Header from "./_header.svelte";
 </script>
 
-<CenteredGrid --col-bg="var(--col-magenta-brand)" noPadding>
+<CenteredGrid bgColor="bg-magenta-brand" noPadding>
   <Header structure={$structure} />
 </CenteredGrid>
 
-<CenteredGrid --col-content-bg="var(--col-bg)">
+<CenteredGrid>
   <slot />
 </CenteredGrid>

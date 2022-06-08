@@ -23,7 +23,7 @@
 </svelte:head>
 
 <EnsureStaffOrBizdev>
-  <CenteredGrid --col-bg="var(--col-gray-00)">
+  <CenteredGrid bgColor="bg-gray-bg">
     <h1>Structures</h1>
 
     <StructuresList {structures} readOnly={!$userInfo?.isStaff} />

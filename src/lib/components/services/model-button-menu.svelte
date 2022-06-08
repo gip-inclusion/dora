@@ -2,11 +2,11 @@
   import { moreIcon } from "$lib/icons";
 
   import ButtonMenu from "$lib/components/button-menu.svelte";
-  import Menu from "./menu.svelte";
+  import ModelMenu from "./model-menu.svelte";
 
-  export let service;
+  export let model;
 </script>
 
 <ButtonMenu icon={moreIcon} small>
-  <Menu {service} />
+  <ModelMenu {model} />
 </ButtonMenu>

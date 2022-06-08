@@ -1,7 +1,7 @@
 <script>
   import { checkBoxBlankIcon } from "$lib/icons";
   import Label from "$lib/components/label.svelte";
-  import ButtonMenu from "./button-menu.svelte";
+  import ServiceButtonMenu from "./service-button-menu.svelte";
   import StateButtonMenu from "./state-button-menu.svelte";
   export let service;
   export let readOnly = true;
@@ -40,12 +40,13 @@
     {/if}
   </div>
   {#if !readOnly}
-    <hr class="self-stretch border-t-gray-03" />
-    <div class="flex items-center justify-between  p-s20">
+    <div
+      class="flex items-center justify-between border-t  border-t-gray-03 p-s20"
+    >
       <StateButtonMenu {service} {onRefresh} />
 
       {#if !service.isSuggestion}
-        <ButtonMenu {service} />
+        <ServiceButtonMenu {service} />
       {/if}
     </div>
   {/if}

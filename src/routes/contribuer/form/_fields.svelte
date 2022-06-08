@@ -1,8 +1,8 @@
 <script>
   import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import ModelField from "$lib/components/forms/model-field.svelte";
+  import SchemaField from "$lib/components/forms/schema-field.svelte";
   import { formErrors } from "$lib/validation.js";
-  import serviceSchema from "$lib/schemas/service-contrib.js";
+  import schema, { fields, fieldsRequired } from "$lib/schemas/service.js";
   import StructureSearch from "$lib/components/structures/search.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
@@ -11,12 +11,19 @@
   import Notice from "$lib/components/notice.svelte";
   import Button from "$lib/components/button.svelte";
   import { tick } from "svelte";
+  import { formatSchema } from "$lib/schemas/utils";
 
   export let servicesOptions, service;
   let establishment = null;
 
   let subcategories = [];
   let showServiceAddress = true;
+
+  const contribSchema = formatSchema(
+    schema,
+    fields.contrib,
+    fieldsRequired.contrib
+  );
 
   function handleCategoriesChange(categories) {
     subcategories = categories.length
@@ -105,42 +112,42 @@
       </p>
     </div>
 
-    <ModelField
+    <SchemaField
       label="Nom"
       type="text"
       placeholder="Ex. Aide aux frais liés à…"
-      schema={serviceSchema.name}
+      schema={contribSchema.name}
       name="name"
       errorMessages={$formErrors.name}
       bind:value={service.name}
     />
 
-    <ModelField
+    <SchemaField
       description="280 caractères maximum"
       placeholder="Décrivez brièvement ce service"
       type="textarea"
       label="Résumé"
-      schema={serviceSchema.shortDesc}
+      schema={contribSchema.shortDesc}
       name="shortDesc"
       errorMessages={$formErrors.shortDesc}
       bind:value={service.shortDesc}
     />
 
-    <ModelField
+    <SchemaField
       label="Description"
       placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant ce service et ses spécificités."
       type="richtext"
       vertical
-      schema={serviceSchema.fullDesc}
+      schema={contribSchema.fullDesc}
       name="fullDesc"
       errorMessages={$formErrors.fullDesc}
       bind:value={service.fullDesc}
     />
 
-    <ModelField
+    <SchemaField
       type="toggle"
       label="Service cumulable"
-      schema={serviceSchema.isCumulative}
+      schema={contribSchema.isCumulative}
       name="isCumulative"
       errorMessages={$formErrors.isCumulative}
       bind:value={service.isCumulative}
@@ -151,13 +158,13 @@
     <div slot="help">
       <p class="text-f14">
         Classez le service par thématiques et besoins pour faciliter son
-        référencement et sa mise en avant.
+        référencement.
       </p>
     </div>
-    <ModelField
+    <SchemaField
       type="multiselect"
       label="Thématiques"
-      schema={serviceSchema.categories}
+      schema={contribSchema.categories}
       bind:value={service.categories}
       choices={servicesOptions.categories}
       name="categories"
@@ -167,10 +174,10 @@
       sortSelect
     />
 
-    <ModelField
+    <SchemaField
       type="multiselect"
       label="Besoin(s) auxquels ce service répond"
-      schema={serviceSchema.subcategories}
+      schema={contribSchema.subcategories}
       name="subcategories"
       errorMessages={$formErrors.subcategories}
       bind:value={service.subcategories}
@@ -179,10 +186,10 @@
       placeholderMulti="Choisissez les sous-catégories"
     />
 
-    <ModelField
+    <SchemaField
       type="checkboxes"
       label="Type de service"
-      schema={serviceSchema.kinds}
+      schema={contribSchema.kinds}
       name="kinds"
       errorMessages={$formErrors.kinds}
       bind:value={service.kinds}
@@ -209,29 +216,29 @@
       </p>
     </div>
 
-    <ModelField
+    <SchemaField
       label="Prénom et nom"
       placeholder="Prénom et nom"
       type="text"
-      schema={serviceSchema.contactName}
+      schema={contribSchema.contactName}
       name="contactName"
       errorMessages={$formErrors.contactName}
       bind:value={service.contactName}
     />
-    <ModelField
+    <SchemaField
       type="tel"
       label="Numéro de téléphone"
       placeholder="05 ou 06 00 00 00 00"
-      schema={serviceSchema.contactPhone}
+      schema={contribSchema.contactPhone}
       name="contactPhone"
       errorMessages={$formErrors.contactPhone}
       bind:value={service.contactPhone}
     />
-    <ModelField
+    <SchemaField
       type="email"
       label="Courriel"
       placeholder="Courriel de la personne à contacter"
-      schema={serviceSchema.contactEmail}
+      schema={contribSchema.contactEmail}
       name="contactEmail"
       errorMessages={$formErrors.contactEmail}
       bind:value={service.contactEmail}
@@ -252,11 +259,11 @@
       <p class="text-f14">Publics auxquels le service s’adresse.</p>
     </div>
 
-    <ModelField
+    <SchemaField
       type="multiselect"
       label="Profils"
-      description="Plusieurs choix possibles."
-      schema={serviceSchema.concernedPublic}
+      description="Plusieurs choix possibles"
+      schema={contribSchema.concernedPublic}
       name="concernedPublic"
       errorMessages={$formErrors.concernedPublic}
       bind:value={service.concernedPublic}
@@ -266,11 +273,11 @@
       sortSelect
     />
 
-    <ModelField
+    <SchemaField
       type="multiselect"
       label="Critères"
-      description="Plusieurs choix possibles."
-      schema={serviceSchema.accessConditions}
+      description="Plusieurs choix possibles"
+      schema={contribSchema.accessConditions}
       name="accessConditions"
       errorMessages={$formErrors.accessConditions}
       bind:value={service.accessConditions}
@@ -280,10 +287,10 @@
       sortSelect
     />
 
-    <ModelField
+    <SchemaField
       type="multiselect"
-      description="Plusieurs choix possibles."
-      schema={serviceSchema.requirements}
+      description="Plusieurs choix possibles"
+      schema={contribSchema.requirements}
       name="requirements"
       errorMessages={$formErrors.requirements}
       bind:value={service.requirements}
@@ -294,21 +301,21 @@
       sortSelect
     />
 
-    <ModelField
+    <SchemaField
       type="toggle"
       label="Frais à charge du bénéficiaire"
-      schema={serviceSchema.hasFee}
+      schema={contribSchema.hasFee}
       name="hasFee"
       errorMessages={$formErrors.hasFee}
       bind:value={service.hasFee}
     />
 
-    <ModelField
+    <SchemaField
       type="textarea"
       hideLabel
       placeholder="Adhésion, frais de location, frais de garde, etc., et les montants."
       visible={!!service.hasFee}
-      schema={serviceSchema.feeDetails}
+      schema={contribSchema.feeDetails}
       name="feeDetails"
       errorMessages={$formErrors.feeDetails}
       bind:value={service.feeDetails}
@@ -316,10 +323,10 @@
   </FieldSet>
 
   <FieldSet title="Lieu de déroulement">
-    <ModelField
+    <SchemaField
       type="checkboxes"
       label="Lieu de déroulement"
-      schema={serviceSchema.locationKinds}
+      schema={contribSchema.locationKinds}
       name="locationKinds"
       errorMessages={$formErrors.locationKinds}
       bind:value={service.locationKinds}
@@ -329,12 +336,12 @@
         "a-distance"
       )}
     />
-    <ModelField
+    <SchemaField
       placeholder="https://"
       type="url"
       label="Lien visioconférence"
       visible={service.locationKinds.includes("a-distance")}
-      schema={serviceSchema.remoteUrl}
+      schema={contribSchema.remoteUrl}
       name="remoteUrl"
       errorMessages={$formErrors.remoteUrl}
       bind:value={service.remoteUrl}
@@ -380,45 +387,45 @@
           handleChange={handleAddressChange}
         />
       </Field>
-      <ModelField
+      <SchemaField
         type="text"
         label="Complément d’adresse"
         placeholder="Compléments d’adresse"
-        schema={serviceSchema.address2}
+        schema={contribSchema.address2}
         name="address2"
         errorMessages={$formErrors.address2}
         bind:value={service.address2}
         visible={service.locationKinds.includes("en-presentiel")}
       />
-      <ModelField
+      <SchemaField
         type="text"
         label="Code postal"
         placeholder="Code postal"
-        schema={serviceSchema.postalCode}
+        schema={contribSchema.postalCode}
         name="postalCode"
         errorMessages={$formErrors.postalCode}
         bind:value={service.postalCode}
         visible={service.locationKinds.includes("en-presentiel")}
       />
-      <ModelField
+      <SchemaField
         type="hidden"
-        schema={serviceSchema.cityCode}
+        schema={contribSchema.cityCode}
         name="cityCode"
         errorMessages={$formErrors.cityCode}
         bind:value={service.cityCode}
         visible={service.locationKinds.includes("en-presentiel")}
       />
-      <ModelField
+      <SchemaField
         type="hidden"
-        schema={serviceSchema.longitude}
+        schema={contribSchema.longitude}
         name="longitude"
         errorMessages={$formErrors.longitude}
         bind:value={service.longitude}
         visible={service.locationKinds.includes("en-presentiel")}
       />
-      <ModelField
+      <SchemaField
         type="hidden"
-        schema={serviceSchema.latitude}
+        schema={contribSchema.latitude}
         name="latitude"
         errorMessages={$formErrors.latitude}
         bind:value={service.latitude}

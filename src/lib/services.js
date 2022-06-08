@@ -65,9 +65,35 @@ export async function getMyServices() {
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
   const data = (await fetchData(url)).data;
-  if (data) return serviceToFront(data);
+  if (!data) return null;
   // TODO: 404
-  return null;
+
+  return serviceToFront(data);
+}
+
+export async function getModel(slug) {
+  const url = `${getApiURL()}/models/${slug}/`;
+  const data = (await fetchData(url)).data;
+  if (!data) return null;
+  // TODO: 404
+
+  return serviceToFront(data);
+}
+
+export async function getServiceDiff(slug) {
+  const url = `${getApiURL()}/services/${slug}/diff`;
+  const data = (await fetchData(url)).data;
+  if (!data) return null;
+  // TODO: 404
+
+  return serviceToFront(data);
+}
+
+export async function unsyncService(slug) {
+  const url = `${getApiURL()}/services/${slug}/unsync`;
+  const data = (await fetchData(url)).data;
+
+  return data;
 }
 
 export async function createOrModifyService(service) {
@@ -94,6 +120,7 @@ export async function createOrModifyService(service) {
     ok: response.ok,
     status: response.status,
   };
+
   if (response.ok) {
     result.data = serviceToFront(await response.json());
   } else {
@@ -103,6 +130,77 @@ export async function createOrModifyService(service) {
       console.error(err);
     }
   }
+  return result;
+}
+
+export async function createOrModifyModel(model) {
+  let method, url;
+  if (model.slug) {
+    url = `${getApiURL()}/models/${model.slug}/`;
+    method = "PATCH";
+  } else {
+    url = `${getApiURL()}/models/`;
+    method = "POST";
+  }
+
+  const response = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify(serviceToBack(model)),
+  });
+
+  const result = {
+    ok: response.ok,
+    status: response.status,
+  };
+
+  if (response.ok) {
+    result.data = serviceToFront(await response.json());
+  } else {
+    try {
+      result.error = await response.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  return result;
+}
+
+export async function createModelFromService(serviceSlug, structureSlug) {
+  const url = `${getApiURL()}/services/${serviceSlug}/create-model/
+`;
+  const method = "POST";
+
+  const response = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({ structure: structureSlug }),
+  });
+
+  const result = {
+    ok: response.ok,
+    status: response.status,
+  };
+
+  if (response.ok) {
+    result.data = serviceToFront(await response.json());
+  } else {
+    try {
+      result.error = await response.json();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return result;
 }
 

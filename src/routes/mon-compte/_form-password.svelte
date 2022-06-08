@@ -11,7 +11,7 @@
   import Form from "$lib/components/forms/form.svelte";
   import Alert from "$lib/components/forms/alert.svelte";
   import Info from "$lib/components/info.svelte";
-  import ModelField from "$lib/components/forms/model-field.svelte";
+  import SchemaField from "$lib/components/forms/schema-field.svelte";
 
   import { arrowRightSIcon, lightBulbIcon } from "$lib/icons";
 
@@ -77,7 +77,7 @@
       </div>
     {/if}
     <div>
-      <ModelField
+      <SchemaField
         name="currentPassword"
         errorMessages={$formErrors.currentPassword}
         schema={passwordChangeSchema.currentPassword}
@@ -94,7 +94,7 @@
         href="/auth/mdp-perdu">Mot de passe oublié ?</a
       >
     </div>
-    <ModelField
+    <SchemaField
       name="newPassword1"
       errorMessages={$formErrors.newPassword1}
       schema={passwordChangeSchema.newPassword1}
@@ -117,7 +117,7 @@
         </ul>
       </div>
     </Info>
-    <ModelField
+    <SchemaField
       name="newPassword2"
       errorMessages={$formErrors.newPassword2}
       schema={passwordChangeSchema.newPassword2}

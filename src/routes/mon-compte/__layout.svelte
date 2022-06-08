@@ -8,7 +8,7 @@
   <meta name="robots" content="noindex" />
 </svelte:head>
 
-<CenteredGrid --col-bg="var(--col-gray-dark)">
+<CenteredGrid bgColor="bg-gray-03">
   <Header name={$userInfo?.fullName} />
 </CenteredGrid>
 

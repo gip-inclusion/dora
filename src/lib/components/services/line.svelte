@@ -4,7 +4,7 @@
 
   import Label from "$lib/components/label.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
-  import ButtonMenu from "$lib/components/services/button-menu.svelte";
+  import ServiceButtonMenu from "$lib/components/services/service-button-menu.svelte";
   import ServiceStateLabel from "$lib/components/services/state-label.svelte";
 
   export let service;
@@ -49,7 +49,7 @@
   </div>
   {#if !readOnly}
     <div class="flex-none basis-s32">
-      <ButtonMenu {service} {onRefresh} />
+      <ServiceButtonMenu {service} {onRefresh} />
     </div>
   {/if}
 </div>

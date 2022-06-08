@@ -27,7 +27,6 @@ function validateField(fieldname, shape, data) {
   const originalValue = data[fieldname];
 
   let value = originalValue;
-
   if (shape.nullable && !shape.required && value == null) {
     // Ignore null values for fields that are nullable and not required
     return { value, valid: true };
@@ -41,7 +40,8 @@ function validateField(fieldname, shape, data) {
 
   if (
     shape.required &&
-    (value == null || value === "" || value?.length === 0)
+    ((Array.isArray(value) && !value.length) ||
+      (!Array.isArray(value) && (value == null || value === "")))
   ) {
     return { originalValue, valid: false, msg: "Information requise" };
   }
@@ -71,8 +71,7 @@ function scrollToField(fieldname) {
 export function validate(
   data,
   schema,
-  fullSchema,
-  { noScroll, skipDependenciesCheck, showErrors = true }
+  { noScroll = false, fullSchema, showErrors = true } = {}
 ) {
   let validatedData = {};
   let isValid = true;
@@ -89,6 +88,7 @@ export function validate(
 
     isValid &&= valid;
     validatedData[fieldname] = value;
+
     if (!valid) {
       errorFields.push(shape.name);
     }
@@ -105,7 +105,9 @@ export function validate(
       }
     }
 
-    if (!skipDependenciesCheck) {
+    // si un schema complet est passé en paramètre.
+    // on vérifie les dépendances
+    if (fullSchema) {
       shape.dependents?.forEach((depName) => {
         const {
           value: depValue,
@@ -115,6 +117,7 @@ export function validate(
 
         isValid &&= depValid;
         validatedData[depName] = depValue;
+
         if (!valid) {
           errorFields.push(fullSchema[depName].name);
         }

@@ -1,12 +1,12 @@
 <script>
   import Label from "$lib/components/label.svelte";
 
-  import Tag from "$lib/components/tag.svelte";
   import { checkBoxBlankIcon } from "$lib/icons";
 
   import StructureCard from "$lib/components/structures/card.svelte";
 
   export let service;
+  export let isModel = false;
 </script>
 
 <div class="flex flex-col gap-s16 lg:flex-row-reverse lg:justify-between">
@@ -16,7 +16,7 @@
 
   <div class="lg:w-2/3">
     <div class="flex items-center">
-      {#if !service.isDraft && !service.isSuggestion}
+      {#if !isModel && !service.isDraft && !service.isSuggestion}
         <Label
           label="Disponible"
           icon={checkBoxBlankIcon}
@@ -39,24 +39,9 @@
       </p>
     </div>
     <h1 class="text-france-blue">{service.name}</h1>
-    <div class="mb-s16 flex flex-wrap gap-s8">
-      {#each service.categoriesDisplay.sort( (a, b) => a.localeCompare( b, "fr", { numeric: true } ) ) as categoryDisplay}
-        <Tag
-          selfStart
-          bgColorClass="bg-magenta-brand"
-          textColorClass="text-white">{categoryDisplay}</Tag
-        >
-      {/each}
-    </div>
 
-    <Label label={service.diffusionZoneDetailsDisplay} />
+    {#if !isModel}
+      <Label label={service.diffusionZoneDetailsDisplay} />
+    {/if}
   </div>
 </div>
-
-<style lang="postcss">
-  @media print {
-    h1 {
-      color: var(--col-france-blue);
-    }
-  }
-</style>

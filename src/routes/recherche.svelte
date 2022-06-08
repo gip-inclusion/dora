@@ -167,7 +167,7 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid --col-bg="var(--col-gray-00)">
+<CenteredGrid bgColor="bg-gray-bg">
   <div class="flex flex-col gap-s24 lg:flex-row">
     <div class="lg:mb-s48 lg:w-1/3">
       <SearchTweakForm
@@ -193,13 +193,13 @@
           {/each}
         </div>
       {:else}
-        <p class="text-f16 mt-s32">
+        <p class="mt-s32 text-f16">
           Aucun résultat ne correspond à votre recherche.<br />
           Essayez d’autres filtres.
         </p>
-        <div class="lg:flex lg:gap-s24 mt-s48">
+        <div class="mt-s48 lg:flex lg:gap-s24">
           <div
-            class="p-s24 bg-white rounded-md border-gray-01 border lg:flex-1 mb-s24"
+            class="mb-s24 rounded-md border border-gray-01 bg-white p-s24 lg:flex-1"
           >
             <h4>
               Vous connaissez un service d’insertion qui n'est pas référencé ?
@@ -215,7 +215,7 @@
             </div>
           </div>
           <div
-            class="p-s24 bg-white rounded-md border-gray-01 border lg:flex-1 mb-s24"
+            class="mb-s24 rounded-md border border-gray-01 bg-white p-s24 lg:flex-1"
           >
             <h4>Dora évolue rapidement. Vous souhaitez rester informé ?</h4>
             <div>

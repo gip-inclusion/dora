@@ -8,7 +8,7 @@
   import Button from "$lib/components/button.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Form from "$lib/components/forms/form.svelte";
-  import ModelField from "$lib/components/forms/model-field.svelte";
+  import SchemaField from "$lib/components/forms/schema-field.svelte";
   import Info from "$lib/components/info.svelte";
 
   import { arrowRightSIcon, lightBulbIcon } from "$lib/icons";
@@ -68,7 +68,7 @@
   bind:requesting
 >
   <Fieldset title="Informations" noTopPadding>
-    <ModelField
+    <SchemaField
       name="firstName"
       errorMessages={$formErrors.firstName}
       schema={userProfileSchema.firstName}
@@ -78,7 +78,7 @@
       placeholder="Aurélien"
       bind:value={firstName}
     />
-    <ModelField
+    <SchemaField
       name="lastName"
       errorMessages={$formErrors.lastName}
       schema={userProfileSchema.lastName}
@@ -88,7 +88,7 @@
       placeholder="Durand"
       bind:value={lastName}
     />
-    <ModelField
+    <SchemaField
       name="email"
       errorMessages={$formErrors.email}
       schema={userProfileSchema.email}
@@ -100,7 +100,7 @@
       disabled
     />
 
-    <ModelField
+    <SchemaField
       name="phoneNumber"
       errorMessages={$formErrors.phoneNumber}
       schema={userProfileSchema.phoneNumber}
