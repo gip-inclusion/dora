@@ -3,7 +3,7 @@
   "version": "0.0.14",
   "engines": {
     "npm": ">=8 <9",
-    "node": ">=16"
+    "node": ">=16 <18"
   },
   "repository": {
     "type": "git",
