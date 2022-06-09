@@ -33,7 +33,6 @@ export const fields = {
     "kinds",
     "name",
     "shortDesc",
-    "recurrence",
     "fullDesc",
     "accessConditions",
     "concernedPublic",
@@ -63,6 +62,7 @@ export const fields = {
     "qpvOrZrr",
     "startDate",
     "endDate",
+    "recurrence",
     "suspensionDate",
   ],
   model: [
@@ -86,6 +86,8 @@ export const fields = {
     "credentials",
     "forms",
     "onlineForm",
+    "recurrence",
+    "suspensionDate",
   ],
 };
 

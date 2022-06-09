@@ -51,19 +51,19 @@
 <div class="mb-s24 md:flex md:items-center md:justify-between">
   <h2 class="text-france-blue">Modèles</h2>
   <div class="flex gap-s16">
-    {#if canEdit}
-      <LinkButton
-        label="Ajouter un modèle de service"
-        to="/modeles/creer?structure={structure.slug}"
-        small
-      />
-    {/if}
     {#if !!models.length && !hasOptions}
       <LinkButton
-        label={`Voir tous les modèles de service (${total})`}
+        label={`Voir tous les modèles (${total})`}
         to="/structures/{structure.slug}/modeles"
         small
         secondary
+      />
+    {/if}
+    {#if canEdit}
+      <LinkButton
+        label="Ajouter un modèle"
+        to="/modeles/creer?structure={structure.slug}"
+        small
       />
     {/if}
     <!-- {#if hasOptions}

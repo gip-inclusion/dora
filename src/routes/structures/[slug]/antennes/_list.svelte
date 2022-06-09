@@ -54,6 +54,14 @@
 <div class="mb-s24 md:flex md:items-center md:justify-between">
   <h2 class="text-france-blue">Antennes</h2>
   <div class="flex gap-s16">
+    {#if !!branches.length && !hasOptions}
+      <LinkButton
+        label={`Voir toutes les antennes (${total})`}
+        to="/structures/{structure.slug}/antennes"
+        small
+        secondary
+      />
+    {/if}
     {#if $userInfo && (structure.isAdmin || $userInfo?.isStaff)}
       <LinkButton
         label="Ajouter une antenne"
@@ -65,14 +73,6 @@
         small
         otherTab
         nofollow
-      />
-    {/if}
-    {#if !!branches.length && !hasOptions}
-      <LinkButton
-        label={`Voir toutes les antennes (${total})`}
-        to="/structures/{structure.slug}/antennes"
-        small
-        secondary
       />
     {/if}
 

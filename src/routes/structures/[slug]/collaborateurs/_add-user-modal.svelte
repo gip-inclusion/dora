@@ -82,7 +82,7 @@
   }
 </script>
 
-<Modal bind:isOpen>
+<Modal bind:isOpen title="Nouveau collaborateur">
   <Form
     data={{ firstName, lastName, email, level }}
     schema={addUserSchema}
@@ -91,7 +91,7 @@
     onSuccess={handleSuccess}
     bind:requesting
   >
-    <Fieldset title="Nouveau collaborateur" noTopPadding>
+    <Fieldset>
       <Field
         name="firstName"
         errorMessages={$formErrors.firstName}
@@ -127,7 +127,7 @@
       <Field
         name="level"
         errorMessages={$formErrors.level}
-        label="Niveau"
+        label="Permissions"
         vertical
         type="select"
         bind:value={level}
@@ -135,15 +135,19 @@
         required
         placeholder="Permissions"
       />
+    </Fieldset>
+
+    <div class="mt-s32 flex flex-row justify-end gap-s16">
       <Button
         type="submit"
         label="Envoyer l’invitation"
         disabled={!firstName || !lastName || !email || !level || requesting}
         preventDefaultOnMouseDown
       />
-    </Fieldset>
+    </div>
   </Form>
 </Modal>
+
 <ConfirmationModal
   bind:isOpen={confirmationModalIsOpen}
   email={successEmailMsg}

@@ -64,36 +64,63 @@ export async function getMyServices() {
 
 export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
-  const data = (await fetchData(url)).data;
-  if (!data) return null;
+  const response = await fetchData(url);
+
+  if (!response.data) return null;
   // TODO: 404
 
-  return serviceToFront(data);
+  return serviceToFront(response.data);
 }
 
 export async function getModel(slug) {
   const url = `${getApiURL()}/models/${slug}/`;
-  const data = (await fetchData(url)).data;
-  if (!data) return null;
+  const response = await fetchData(url);
+
+  if (!response.data) return null;
   // TODO: 404
 
-  return serviceToFront(data);
+  return serviceToFront(response.data);
 }
 
 export async function getServiceDiff(slug) {
   const url = `${getApiURL()}/services/${slug}/diff`;
-  const data = (await fetchData(url)).data;
-  if (!data) return null;
+  const response = await fetchData(url);
+
+  if (!response.data) return null;
   // TODO: 404
 
-  return serviceToFront(data);
+  return serviceToFront(response.data);
 }
 
-export async function unsyncService(slug) {
-  const url = `${getApiURL()}/services/${slug}/unsync`;
-  const data = (await fetchData(url)).data;
+export async function createServiceFromModel(modelSlug, structureSlug) {
+  const method = "POST";
+  const url = `${getApiURL()}/models/${modelSlug}/instantiate/`;
 
-  return data;
+  const response = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({ structure: structureSlug }),
+  });
+
+  const result = {
+    ok: response.ok,
+    status: response.status,
+  };
+
+  if (!response.ok) {
+    try {
+      result.error = await response.json();
+      return result;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  return serviceToFront(await response.json());
 }
 
 export async function createOrModifyService(service) {

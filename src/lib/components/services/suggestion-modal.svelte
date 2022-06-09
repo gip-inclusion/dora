@@ -50,7 +50,7 @@
   }
 </script>
 
-<Modal bind:isOpen>
+<Modal bind:isOpen title="Suggestion">
   <Form
     data={{ fullName: suggesterFullName, email: suggesterEmail, message }}
     schema={suggestionSchema}
@@ -59,16 +59,12 @@
     onSuccess={handleSuccess}
     bind:requesting
   >
-    <Fieldset
-      title="Suggérer une modification"
-      description="Vos informations de contact seront transmises à l’équipe Dora pour des fins de traitement – le partenaire (auteur de la fiche) recevra uniquement votre message."
-      noTopPadding
-    >
+    <Fieldset>
       {#if !$userInfo}
         <Field
           name="fullName"
           errorMessages={$formErrors.fullName}
-          label="Votre nom complet"
+          label="Nom"
           vertical
           type="text"
           placeholder="Aurélien Durand"
@@ -92,8 +88,8 @@
       <Field
         name="message"
         errorMessages={$formErrors.message}
-        label="Vos propositions de modifications"
-        description="Merci de détailler ici les éléments qui vous semblent erronés ou incomplets."
+        label="Message"
+        description="Détaillez les éléments qui vous semblent erronés ou incomplets."
         vertical
         type="textarea"
         rows="6"
@@ -101,16 +97,25 @@
         required
         placeholder="Renseigner ici les détails"
       />
+    </Fieldset>
+    <p class="mt-s24">
+      <small>
+        Vos informations de contact sont transmises à l’équipe Dora pour des
+        fins de traitement.<br />L'administrateur du service reçoit uniquement
+        votre message.
+      </small>
+    </p>
+    <div class="mt-s32 flex justify-end">
       <Button
         type="submit"
-        label="Envoyer la suggestion"
+        label="Envoyer"
         disabled={!suggesterEmail ||
           !suggesterFullName ||
           !message ||
           requesting}
         preventDefaultOnMouseDown
       />
-    </Fieldset>
+    </div>
   </Form>
 </Modal>
 <SuggestionConfirmationModal bind:isOpen={confirmationModalIsOpen} />

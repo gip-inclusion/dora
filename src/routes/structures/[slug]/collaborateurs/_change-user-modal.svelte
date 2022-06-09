@@ -52,7 +52,7 @@
   }
 </script>
 
-<Modal bind:isOpen>
+<Modal bind:isOpen title="Utilisateur">
   <Form
     data={{ level }}
     schema={modifyUserSchema}
@@ -60,7 +60,7 @@
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
   >
-    <Fieldset title="Modifier les informations" noTopPadding>
+    <Fieldset>
       <Field
         name="name"
         label="Nom"
@@ -80,18 +80,17 @@
       <Field
         name="level"
         errorMessages={$formErrors.level}
-        label="Niveau"
+        label="Permissions"
         vertical
         type="select"
         bind:value={level}
         choices={levelChoices}
         required
       />
-      <Button
-        type="submit"
-        label="Modifier les informations"
-        preventDefaultOnMouseDown
-      />
     </Fieldset>
+
+    <div class="mt-s32 flex flex-row justify-end gap-s16">
+      <Button type="submit" label="Modifier" preventDefaultOnMouseDown />
+    </div>
   </Form>
 </Modal>

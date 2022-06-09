@@ -67,7 +67,7 @@
 
 <EnsureLoggedIn>
   <CenteredGrid>
-    <h1>Modification du modèle de service</h1>
+    <h1>Modification du modèle</h1>
   </CenteredGrid>
 
   {#if model}

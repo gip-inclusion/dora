@@ -91,7 +91,7 @@
           {:else}
             <li><span>Aucun</span></li>
           {/each}
-          {#if service.qpvOrZrr}
+          {#if service.qpvOrZrr && !service.isModel}
             <li>uniquement QPV + ZRR</li>
           {/if}
         </ul>

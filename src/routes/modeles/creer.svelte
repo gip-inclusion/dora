@@ -63,18 +63,15 @@
 </script>
 
 <svelte:head>
-  <title>Création d'un modèle de service | DORA</title>
+  <title>Création d'un modèle | DORA</title>
 </svelte:head>
 
 <EnsureLoggedIn>
   <CenteredGrid>
-    <h1>Création d'un modèle de service</h1>
+    <h1>Création d'un modèle</h1>
 
     {#if !structures.length}
-      <Notice
-        title="Impossible de créer un nouveau modèle de service"
-        type="error"
-      >
+      <Notice title="Impossible de créer un nouveau modèle" type="error">
         <p class="text-f14">Vous n’êtes rattaché à aucune structure.</p>
       </Notice>
     {/if}

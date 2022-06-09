@@ -1,8 +1,11 @@
 <script>
   import { browser } from "$app/env";
   import { closeLineIcon } from "$lib/icons";
+  import Button from "./button.svelte";
 
   export let isOpen;
+  export let overflow = false;
+  export let title = undefined;
 
   $: {
     // Prevent scrolling the background while the modal is open
@@ -27,23 +30,30 @@
 
 <div
   id="background"
-  class="hidden items-center justify-center"
-  class:showb={isOpen}
+  class="flex items-center justify-center"
+  class:hidden={!isOpen}
   on:click={handleBackgroundClick}
 >
   <div
-    class="hidden max-h-screen overflow-y-auto shadow-md"
-    class:show={isOpen}
+    class="max-h-screen min-w-[80vw] rounded-md bg-white p-s24 shadow-md"
+    class:overflow-y-auto={overflow}
+    on:click|stopPropagation
   >
-    <div class="md:m-s32" on:click|stopPropagation>
-      <div
-        class="sticky right-s8 top-s56 ml-auto h-s24 w-s24 fill-current text-gray-text-alt"
-        on:click={handleClose}
-      >
-        {@html closeLineIcon}
+    <div class="mb-s24 flex justify-between">
+      {#if title}
+        <h2>{title}</h2>
+      {/if}
+
+      <div class="ml-auto">
+        <Button
+          icon={closeLineIcon}
+          on:click={handleClose}
+          noBackground
+          secondary
+        />
       </div>
-      <slot />
     </div>
+    <slot />
   </div>
 </div>
 
@@ -53,17 +63,8 @@
     z-index: 1;
     top: 0;
     left: 0;
-    display: none;
     width: 100vw;
     height: 100vh;
     background-color: #000000cc;
-  }
-
-  .show {
-    display: block !important;
-  }
-
-  .showb {
-    display: flex !important;
   }
 </style>

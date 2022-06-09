@@ -1,6 +1,4 @@
 <script>
-  import { token } from "$lib/auth";
-
   import ModelMenu from "$lib/components/services/model-menu.svelte";
 
   export let model;
@@ -8,7 +6,5 @@
 </script>
 
 <div class="inline-flex flex-wrap items-start gap-s8">
-  {#if $token && model.canWrite}
-    <ModelMenu {model} secondary {onRefresh} inline />
-  {/if}
+  <ModelMenu {model} secondary {onRefresh} inline />
 </div>

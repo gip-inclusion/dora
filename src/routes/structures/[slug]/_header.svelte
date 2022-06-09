@@ -34,10 +34,13 @@
       });
     }
 
-    if (structure.isMember || $userInfo?.isStaff) {
+    if (
+      !!structure.services?.length &&
+      (structure.isMember || $userInfo?.isStaff)
+    ) {
       tabs.splice(1, 0, {
         id: "modeles",
-        name: "Modèles de service",
+        name: "Modèles",
         href: `/structures/${structure.slug}/modeles`,
       });
     }

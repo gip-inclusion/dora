@@ -607,6 +607,88 @@
         />
       </FieldModel>
     </FieldSet>
+
+    <FieldSet title="Documents">
+      <div slot="help">
+        <p class="text-f14">
+          Justificatifs à fournir et documents à compléter pour postuler. Le
+          lien redirige vers une page web qui présente le service (formulaire,
+          fiche de prescription, simulateurs, etc.)
+        </p>
+      </div>
+      <Field
+        type="custom"
+        label={serviceSchema.forms.name}
+        errorMessages={$formErrors.forms}
+      >
+        <Uploader
+          slot="custom-input"
+          structureSlug={service.structure}
+          name="forms"
+          on:blur
+          bind:fileKeys={service.forms}
+        />
+      </Field>
+
+      <AddableMultiselect
+        bind:values={service.credentials}
+        structure={service.structure}
+        choices={servicesOptions.credentials}
+        errorMessages={$formErrors.credentials}
+        name="credentials"
+        label={serviceSchema.credentials.name}
+        placeholder="Aucun"
+        placeholderMulti="Choisir un autre justificatif"
+        schema={serviceSchema.credentials}
+        sortSelect
+      />
+
+      <SchemaField
+        label={serviceSchema.onlineForm.name}
+        placeholder="URL"
+        type="url"
+        schema={serviceSchema.onlineForm}
+        name="onlineForm"
+        errorMessages={$formErrors.onlineForm}
+        bind:value={service.onlineForm}
+      />
+    </FieldSet>
+
+    <FieldSet title="Périodicité">
+      <div slot="help">
+        <p class="text-f14">
+          La durée limitée permet de supendre automatiquement la visibilité du
+          service dans les résultat de recherche.
+        </p>
+      </div>
+      <SchemaField
+        label={serviceSchema.recurrence.name}
+        type="text"
+        placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
+        schema={serviceSchema.recurrence}
+        name="recurrence"
+        errorMessages={$formErrors.recurrence}
+        bind:value={service.recurrence}
+      />
+
+      <Field
+        label="Durée limitée"
+        type="toggle"
+        name="isTimeLimited"
+        bind:value={isTimeLimited}
+        on:change={handleCheckTimeLimited}
+      />
+
+      <SchemaField
+        label={serviceSchema.suspensionDate.name}
+        type="date"
+        schema={serviceSchema.suspensionDate}
+        name="suspensionDate"
+        errorMessages={$formErrors.suspensionDate}
+        bind:value={service.suspensionDate}
+        visible={isTimeLimited}
+      />
+    </FieldSet>
   </div>
 </CenteredGrid>
 
@@ -665,88 +747,6 @@
           schema={serviceSchema.qpvOrZrr}
           errorMessages={$formErrors.qpvOrZrr}
           bind:value={service.qpvOrZrr}
-        />
-      </FieldSet>
-
-      <FieldSet title="Documents">
-        <div slot="help">
-          <p class="text-f14">
-            Justificatifs à fournir et documents à compléter pour postuler. Le
-            lien redirige vers une page web qui présente le service (formulaire,
-            fiche de prescription, simulateurs, etc.)
-          </p>
-        </div>
-        <Field
-          type="custom"
-          label={serviceSchema.forms.name}
-          errorMessages={$formErrors.forms}
-        >
-          <Uploader
-            slot="custom-input"
-            structureSlug={service.structure}
-            name="forms"
-            on:blur
-            bind:fileKeys={service.forms}
-          />
-        </Field>
-
-        <AddableMultiselect
-          bind:values={service.credentials}
-          structure={service.structure}
-          choices={servicesOptions.credentials}
-          errorMessages={$formErrors.credentials}
-          name="credentials"
-          label={serviceSchema.credentials.name}
-          placeholder="Aucun"
-          placeholderMulti="Choisir un autre justificatif"
-          schema={serviceSchema.credentials}
-          sortSelect
-        />
-
-        <SchemaField
-          label={serviceSchema.onlineForm.name}
-          placeholder="URL"
-          type="url"
-          schema={serviceSchema.onlineForm}
-          name="onlineForm"
-          errorMessages={$formErrors.onlineForm}
-          bind:value={service.onlineForm}
-        />
-      </FieldSet>
-
-      <FieldSet title="Périodicité">
-        <div slot="help">
-          <p class="text-f14">
-            La durée limitée permet de supendre automatiquement la visibilité du
-            service dans les résultat de recherche.
-          </p>
-        </div>
-        <SchemaField
-          label={serviceSchema.recurrence.name}
-          type="text"
-          placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
-          schema={serviceSchema.recurrence}
-          name="recurrence"
-          errorMessages={$formErrors.recurrence}
-          bind:value={service.recurrence}
-        />
-
-        <Field
-          label="Durée limitée"
-          type="toggle"
-          name="isTimeLimited"
-          bind:value={isTimeLimited}
-          on:change={handleCheckTimeLimited}
-        />
-
-        <SchemaField
-          label={serviceSchema.suspensionDate.name}
-          type="date"
-          schema={serviceSchema.suspensionDate}
-          name="suspensionDate"
-          errorMessages={$formErrors.suspensionDate}
-          bind:value={service.suspensionDate}
-          visible={isTimeLimited}
         />
       </FieldSet>
 

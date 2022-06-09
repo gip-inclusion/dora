@@ -71,19 +71,19 @@
 <div class="mb-s24 md:flex md:items-center md:justify-between">
   <h2 class="text-france-blue">Services</h2>
   <div class="flex gap-s16">
-    {#if canEdit}
-      <LinkButton
-        label="Ajouter un service"
-        to="/services/creer?structure={structure.slug}"
-        small
-      />
-    {/if}
     {#if !!services.length && !hasOptions}
       <LinkButton
         label={`Voir tous les services (${total})`}
         to="/structures/{structure.slug}/services"
         small
         secondary
+      />
+    {/if}
+    {#if canEdit}
+      <LinkButton
+        label="Ajouter un service"
+        to="/services/creer?structure={structure.slug}"
+        small
       />
     {/if}
     <!-- {#if hasOptions}

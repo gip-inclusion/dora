@@ -15,7 +15,9 @@
       service.structure
     );
 
-    goto(`/modeles/${result.data.slug}`);
+    if (result.data.slug) {
+      goto(`/modeles/${result.data.slug}`);
+    }
   }
 </script>
 
@@ -27,8 +29,8 @@
     noBackground={!secondary}
     {secondary}
   />
-  <!-- ajouter une condition pour n'afficher le bouton que si le service n'est pas lié à un modèle -->
-  {#if service.model}
+
+  {#if service.model && false}
     <LinkButton
       label="Voir le modèle"
       to="/modeles/{service.model}"
