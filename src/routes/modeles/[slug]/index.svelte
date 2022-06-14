@@ -28,7 +28,7 @@
 
 <script>
   import { onMount } from "svelte";
-  import ServiceHeader from "$lib/components/services/service-header.svelte";
+  import ModelHeader from "$lib/components/services/model-header.svelte";
   import ModelToolbar from "$lib/components/services/model-toolbar.svelte";
   import ServiceBody from "$lib/components/services/service-body.svelte";
 
@@ -58,7 +58,7 @@
 </svelte:head>
 
 <CenteredGrid bgColor="bg-gray-bg">
-  <ServiceHeader service={model} isModel />
+  <ModelHeader {model} />
 </CenteredGrid>
 <hr />
 <CenteredGrid noPadding>

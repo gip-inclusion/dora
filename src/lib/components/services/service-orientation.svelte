@@ -79,7 +79,11 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
 {/if}
 
 {#if service.contactEmail && showContact}
-  <div class="noprint mb-s12">
+  <div
+    class="noprint"
+    class:mb-s24={service.isDraft || service.isSuggestion}
+    class:mb-s12={!service.isDraft && !service.isSuggestion}
+  >
     <LinkButton
       on:click={trackClick}
       label="Mobiliser le service"
@@ -89,13 +93,15 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
   </div>
 {/if}
 
-<div class="noprint mb-s24">
-  <LinkButton
-    secondary
-    wFull
-    small
-    label="Télécharger la page (.pdf)"
-    to={pdfUrl}
-    nofollow
-  />
-</div>
+{#if !service.isDraft && !service.isSuggestion}
+  <div class="noprint mb-s24">
+    <LinkButton
+      secondary
+      wFull
+      small
+      label="Télécharger la page (.pdf)"
+      to={pdfUrl}
+      nofollow
+    />
+  </div>
+{/if}

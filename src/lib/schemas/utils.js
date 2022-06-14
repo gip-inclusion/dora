@@ -199,7 +199,6 @@ export function formatSchema(schema, fields, fieldsRequired) {
         rules: value.rules,
         post: value.post,
         dependents: value.dependents,
-        nullable: value.nullable,
         required:
           (typeof schema[key].required === "boolean" && schema[key].required) ||
           fieldsRequired.includes(key),

@@ -8,7 +8,8 @@
 
   export async function load({ url }) {
     const serviceSlug = url.searchParams.get("service");
-    const model = serviceSlug ? await getService(serviceSlug) : getNewModel();
+    const structureSlug = url.searchParams.get("structure");
+
     const user = get(userInfo);
     let structures = [];
 
@@ -18,42 +19,47 @@
       structures = user.structures;
     }
 
+    let model;
+
+    if (serviceSlug) {
+      model = await getService(serviceSlug);
+      model.slug = null;
+      model.structure = null;
+    } else {
+      model = getNewModel();
+    }
+
+    let structure;
+
+    if (structures.length === 1) {
+      model.structure = structures[0].slug;
+      structure = structures[0];
+    } else if (structureSlug) {
+      structure = structures.find((s) => s.slug === structureSlug);
+      model.structure = structureSlug;
+    }
+
     return {
       props: {
         model,
         servicesOptions: await getServicesOptions(),
         structures,
+        structure,
+        serviceSlug,
       },
     };
   }
 </script>
 
 <script>
-  import { page } from "$app/stores";
-
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Fields from "$lib/components/services/form/fields.svelte";
   import ModelNavButtons from "$lib/components/services/form/model-nav-buttons.svelte";
   import Errors from "$lib/components/services/form/errors.svelte";
-
   import Notice from "$lib/components/notice.svelte";
 
-  export let servicesOptions, structures, model;
-
-  let structure;
-
-  if (structures.length === 1) {
-    model.structure = structures[0].slug;
-    structure = structures[0];
-  } else {
-    // si la structure est renseignée dans l'URL, force celle-là
-    const structureSlug = $page.url.searchParams.get("structure");
-    if (structureSlug) {
-      structure = structures.find((s) => s.slug === structureSlug);
-      model.structure = structureSlug;
-    }
-  }
+  export let servicesOptions, structures, model, structure, serviceSlug;
 
   let errorDiv;
 
@@ -73,6 +79,17 @@
     {#if !structures.length}
       <Notice title="Impossible de créer un nouveau modèle" type="error">
         <p class="text-f14">Vous n’êtes rattaché à aucune structure.</p>
+      </Notice>
+    {/if}
+    {#if !serviceSlug}
+      <Notice
+        title="Le service utilisé comme base sera synchronisé avec ce modèle"
+        type="info"
+      >
+        <p class="text-f14">
+          À chaque mise à jour du modèle, vous pourrez implḿenter les
+          modifications sur ce service.
+        </p>
       </Notice>
     {/if}
   </CenteredGrid>

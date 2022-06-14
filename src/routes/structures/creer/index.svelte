@@ -89,9 +89,10 @@
   </div>
 {/if}
 
-<StructureFormWrapper
-  {structure}
-  {structuresOptions}
-  formTitle="Présentation"
-  visible={structure.siret}
-/>
+{#if structure.siret}
+  <StructureFormWrapper
+    {structure}
+    {structuresOptions}
+    formTitle="Présentation"
+  />
+{/if}

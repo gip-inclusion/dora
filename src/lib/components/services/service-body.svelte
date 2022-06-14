@@ -30,7 +30,7 @@
           >Frais à charge du bénéficiaire</Tag
         >
       {/if}
-      {#if service.locationKinds.includes("a-distance")}
+      {#if !isModel && service.locationKinds.includes("a-distance")}
         <Tag bgColorClass="bg-info" textColorClass="text-white">À distance</Tag>
       {/if}
     </div>
@@ -42,7 +42,7 @@
   </div>
 
   <div class="lg:w-1/3">
-    {#if service.locationKinds.length}
+    {#if !isModel && service.locationKinds.length}
       {#if service.locationKinds.includes("en-presentiel")}
         <h4>En présentiel</h4>
         <p class="pb-s16 text-f14">

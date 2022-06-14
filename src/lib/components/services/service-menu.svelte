@@ -1,24 +1,9 @@
 <script>
-  import { goto } from "$app/navigation";
-
   import LinkButton from "$lib/components/link-button.svelte";
-  import { createModelFromService } from "$lib/services";
-  import Button from "../button.svelte";
 
   export let service;
   export let secondary = false;
   export let inline = false;
-
-  async function createModel() {
-    const result = await createModelFromService(
-      service.slug,
-      service.structure
-    );
-
-    if (result.data.slug) {
-      goto(`/modeles/${result.data.slug}`);
-    }
-  }
 </script>
 
 <div class:flex={inline} class:gap-s8={inline} class:items-start={inline}>
@@ -30,7 +15,7 @@
     {secondary}
   />
 
-  {#if service.model && false}
+  {#if service.model}
     <LinkButton
       label="Voir le modèle"
       to="/modeles/{service.model}"
@@ -39,11 +24,11 @@
       {secondary}
     />
   {:else}
-    <Button
+    <LinkButton
       label="Créer un modèle"
+      to={`/modeles/creer?service=${service.slug}`}
       small
       {secondary}
-      on:click={createModel}
       noBackground={!secondary}
     />
   {/if}

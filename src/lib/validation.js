@@ -27,8 +27,8 @@ function validateField(fieldname, shape, data) {
   const originalValue = data[fieldname];
 
   let value = originalValue;
-  if (shape.nullable && !shape.required && value == null) {
-    // Ignore null values for fields that are nullable and not required
+  if (!shape.required && value == null) {
+    // Ignore null values for fields that are not required
     return { value, valid: true };
   }
 
@@ -95,6 +95,7 @@ export function validate(
 
     if (showErrors) {
       clearError(fieldname);
+
       if (!valid) {
         addError(fieldname, msg);
       }

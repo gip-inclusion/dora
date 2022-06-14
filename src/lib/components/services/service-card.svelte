@@ -3,6 +3,7 @@
   import Label from "$lib/components/label.svelte";
   import ServiceButtonMenu from "./service-button-menu.svelte";
   import StateButtonMenu from "./state-button-menu.svelte";
+  import Date from "../date.svelte";
   export let service;
   export let readOnly = true;
   export let onRefresh;
@@ -21,14 +22,7 @@
           </div>
         {/if}
         <p class="mb-s0 text-f12 text-gray-text">
-          Mis à jour le {new Date(service.modificationDate).toLocaleDateString(
-            "fr-FR",
-            {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }
-          )}
+          Mis à jour le <Date date={service.modificationDate} />
         </p>
       </div>
       <h4 class="mb-s8 text-france-blue">

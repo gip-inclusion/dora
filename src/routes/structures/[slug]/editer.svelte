@@ -39,7 +39,6 @@
     {structuresOptions}
     modify
     formTitle="Informations"
-    visible
     onRefresh={handleRefresh}
   />
 </EnsureLoggedIn>

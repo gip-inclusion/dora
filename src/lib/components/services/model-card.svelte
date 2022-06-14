@@ -1,5 +1,6 @@
 <script>
-  import Label from "$lib/components/label.svelte";
+  import Date from "../date.svelte";
+
   import ModelMenu from "./model-button-menu.svelte";
   export let model;
   export let readOnly = true;
@@ -13,29 +14,23 @@
     <div>
       <div class="mb-s8 flex items-center">
         <p class="mb-s0 text-f12 text-gray-text">
-          Mis à jour le {new Date(model.modificationDate).toLocaleDateString(
-            "fr-FR",
-            {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }
-          )}
+          Mis à jour le <Date date={model.modificationDate} />
         </p>
       </div>
       <h4 class="mb-s8 text-france-blue">
         <a href="/modeles/{model.slug}">{model.name}</a>
       </h4>
     </div>
-    {#if model.diffusionZoneDetailsDisplay}
-      <Label label={model.diffusionZoneDetailsDisplay} />
+    {#if model.numServices}
+      <p class="mb-s0 text-f14">
+        {model.numServices} service{model.numServices > 1 ? "s" : ""}
+      </p>
     {/if}
   </div>
-  {#if !readOnly}
-    <div
-      class="flex items-center justify-between border-t border-t-gray-03 p-s20"
-    >
-      <div class="ml-auto self-end"><ModelMenu {model} /></div>
-    </div>
-  {/if}
+
+  <div
+    class="flex items-center justify-between border-t border-t-gray-03 p-s20"
+  >
+    <div class="ml-auto self-end"><ModelMenu {model} /></div>
+  </div>
 </div>

@@ -1,7 +1,7 @@
 <script>
-  import { onMount, tick, setContext } from "svelte";
+  import { tick, setContext, onMount } from "svelte";
 
-  import { getServiceDiff, getServicesOptions } from "$lib/services";
+  import { getModel, getServicesOptions } from "$lib/services";
   import { getStructure } from "$lib/structures";
   import {
     formErrors,
@@ -22,12 +22,18 @@
   import AdminDivisionSearch from "$lib/components/forms/admin-division-search.svelte";
   import Button from "$lib/components/button.svelte";
   import { formatSchema } from "$lib/schemas/utils";
-  import Toggle from "$lib/components/toggle.svelte";
   import FieldModel from "./field-model.svelte";
 
   export let servicesOptions, service, structures, structure;
   export let isModel = false;
+  export let model = null;
   let subcategories = [];
+  const propsWithSpecificFields = [
+    "accessConditions",
+    "concernedPublic",
+    "requirements",
+    "credentials",
+  ];
 
   function handleCategoriesChange(categories) {
     subcategories = categories.length
@@ -43,28 +49,66 @@
     );
   }
 
-  function cleanOptions(field, slug) {
-    const flatChoices = servicesOptions[field]
-      .filter((c) => c.structure == null || c.structure === slug)
-      .map((c) => c.value);
+  // met à jour les options de service et le modèle en fonction des champs spécifiques
+  function updateServiceOptions() {
+    propsWithSpecificFields.forEach((propName) => {
+      // options de services qui appartiennent à la structure courante
+      const structureServicesOptions = servicesOptions[propName].filter(
+        (o) =>
+          !o.structure || (structure?.slug && o.structure === structure.slug)
+      );
 
-    service[field] = service[field].filter((value) =>
-      flatChoices.includes(value)
-    );
+      if (!isModel && service.model && model) {
+        // si ce champs spécifique existe dans les options de service
+        // -> on modifie le modèle avec l'id du champs spécifique
+        // sinon (le champs spécifique n'existe pas dans les options de service)
+        // -> on l'ajoute dans les options de service
+        model[propName].forEach((value, i) => {
+          // si le type est une string, c'est un champs spécifique
+          if (typeof value === "string") {
+            const option = structureServicesOptions.find(
+              (o) => o.label === value
+            );
+
+            if (option) {
+              model[propName][i] = option.value;
+            } else {
+              servicesOptions[propName] = [
+                ...servicesOptions[propName],
+                { value, label: value, structure: structure.slug },
+              ];
+            }
+          }
+        });
+      }
+
+      // sur le service,
+      // suprimme les champs spécifiques qui n'aapartiennent pas à la structure
+      if (structure) {
+        const structureOptionsValues = servicesOptions[propName]
+          .filter((c) => !c.structure || c.structure === structure.slug)
+          .map((c) => c.value);
+
+        service[propName] = service[propName].filter((value) =>
+          structureOptionsValues.includes(value)
+        );
+      }
+    });
   }
 
   async function handleStructureChange(slug) {
-    cleanOptions("accessConditions", slug);
-    cleanOptions("concernedPublic", slug);
-    cleanOptions("requirements", slug);
-    cleanOptions("credentials", slug);
     if (slug) {
       structure = await getStructure(slug);
       servicesOptions = await getServicesOptions();
+      service.structure = slug;
+      if (!isModel && service.model) {
+        model = await getModel(model.slug);
+      }
+      updateServiceOptions();
     }
   }
 
-  // Il s'agit d'une édition de service existant, ou alors la structure
+  // Il s'agit d'une édition de service existant
   const showStructures = service.structure ? false : structures.length > 1;
 
   export let adminDivisionChoices = [];
@@ -96,20 +140,6 @@
     service.postalCode = props?.postcode;
     service.longitude = long;
     service.latitude = lat;
-  }
-
-  let isTimeLimited;
-
-  onMount(() => {
-    isTimeLimited = !!service.suspensionDate;
-  });
-
-  function handleCheckTimeLimited(evt) {
-    const checked = evt.target.checked;
-
-    if (!checked) {
-      service.suspensionDate = null;
-    }
   }
 
   let showServiceAddress = true;
@@ -155,7 +185,9 @@
     await new Promise((resolve) => {
       setTimeout(() => {
         const filteredSchema = {
-          [fieldname]: serviceSchema[fieldname],
+          // si le champs n'existe pas dans le schéma,
+          // on l'initialise avec une valeur par défaut
+          [fieldname]: serviceSchema[fieldname] || { rules: [] },
         };
 
         const { validatedData, valid } = validate(service, filteredSchema, {
@@ -177,45 +209,22 @@
     onChange: handleEltChange,
   });
 
+  let showModel = !!model;
+
   async function unsync() {
     service.model = null;
+    showModel = false;
   }
-
-  let model = null;
-
-  // - modelIsVisible: dćlenche l'affichage du modèle (async)
-  // - showModel: teste si le modèle est chargé et visible
-  let modelIsVisible = false;
-  let showModel;
-
-  async function getDiff(visible) {
-    model = visible ? await getServiceDiff(service.slug) : null;
-  }
-
-  $: getDiff(modelIsVisible);
-  $: showModel = !!model;
 
   function useModelValue(propName) {
     return () => {
-      // ajoute les champs spécifiques du modèle dans les options du service
-      if (Array.isArray(model[propName])) {
-        const serviceOptionsValues = servicesOptions[propName].map(
-          (p) => p.value
-        );
-
-        model[propName].forEach((value) => {
-          if (!serviceOptionsValues.includes(value)) {
-            servicesOptions[propName] = [
-              ...servicesOptions[propName],
-              { value, label: value },
-            ];
-          }
-        });
-      }
-
       service[propName] = model[propName];
     };
   }
+
+  onMount(() => {
+    updateServiceOptions();
+  });
 </script>
 
 <CenteredGrid bgColor="bg-gray-bg">
@@ -241,18 +250,9 @@
 <hr />
 <CenteredGrid bgColor={service.model ? "bg-info-light" : "bg-gray-bg"}>
   {#if service.model}
-    <h3>Synchronisé avec un modèle</h3>
-    <hr class="mb-s16" />
-    <div
-      class="flex flex-wrap items-start justify-between gap-s12 lg:flex-nowrap"
-    >
-      <div class="flex flex-wrap items-center gap-s8 lg:w-2/3">
-        <Button label="Détacher du modèle" secondary small on:click={unsync} />
-      </div>
-      <div class="lg:w-1/3">
-        <h5 class="my-s8">Afficher les différences</h5>
-        <Toggle bind:checked={modelIsVisible} />
-      </div>
+    <div class="lg:flex lg:items-center lg:justify-between">
+      <h3>Synchronisé avec un modèle</h3>
+      <Button label="Détacher du modèle" secondary small on:click={unsync} />
     </div>
   {/if}
 
@@ -279,6 +279,7 @@
       <FieldModel
         {showModel}
         value={model?.name}
+        serviceValue={service.name}
         useValue={useModelValue("name")}
       >
         <SchemaField
@@ -295,6 +296,7 @@
       <FieldModel
         {showModel}
         value={model?.shortDesc}
+        serviceValue={service.shortDesc}
         useValue={useModelValue("shortDesc")}
       >
         <SchemaField
@@ -312,6 +314,7 @@
       <FieldModel
         {showModel}
         value={model?.fullDesc}
+        serviceValue={service.fullDesc}
         useValue={useModelValue("fullDesc")}
         paddingTop
         type="html"
@@ -340,9 +343,10 @@
       <FieldModel
         {showModel}
         value={model?.categories}
+        serviceValue={service.categories}
         options={servicesOptions.categories}
         useValue={useModelValue("categories")}
-        type="list"
+        type="array"
       >
         <SchemaField
           type="multiselect"
@@ -360,9 +364,10 @@
       <FieldModel
         {showModel}
         value={model?.subcategories}
+        serviceValue={service.subcategories}
         options={servicesOptions.subcategories}
         useValue={useModelValue("subcategories")}
-        type="list"
+        type="array"
       >
         <SchemaField
           type="multiselect"
@@ -381,9 +386,10 @@
       <FieldModel
         {showModel}
         value={model?.kinds}
+        serviceValue={service.kinds}
         options={servicesOptions.kinds}
         useValue={useModelValue("kinds")}
-        type="list"
+        type="array"
       >
         <SchemaField
           type="checkboxes"
@@ -399,6 +405,7 @@
       <FieldModel
         {showModel}
         value={model?.isCumulative}
+        serviceValue={service.isCumulative}
         useValue={useModelValue("isCumulative")}
         type="boolean"
       >
@@ -414,280 +421,323 @@
       </FieldModel>
     </FieldSet>
 
-    <FieldSet title="Publics" {showModel}>
-      <div slot="help">
-        <p class="text-f14">
-          Publics auxquels le service s’adresse. Vous pouvez ajouter vos propres
-          valeurs avec le bouton « Ajouter une autre option ». Si votre service
-          est ouvert à tous, sans critères ou prérequis, laissez les champs avec
-          les options par défaut.
-        </p>
-      </div>
+    {#if service.structure}
+      <FieldSet title="Publics" {showModel}>
+        <div slot="help">
+          <p class="text-f14">
+            Publics auxquels le service s’adresse. Vous pouvez ajouter vos
+            propres valeurs avec le bouton « Ajouter une autre option ». Si
+            votre service est ouvert à tous, sans critères ou prérequis, laissez
+            les champs avec les options par défaut.
+          </p>
+        </div>
 
-      <FieldModel
-        {showModel}
-        value={model?.concernedPublic}
-        options={servicesOptions.concernedPublic}
-        useValue={useModelValue("concernedPublic")}
-        type="list"
-      >
-        <AddableMultiselect
-          bind:values={service.concernedPublic}
-          structure={service.structure}
-          choices={servicesOptions.concernedPublic}
-          errorMessages={$formErrors.concernedPublic}
-          name="concernedPublic"
-          label={serviceSchema.concernedPublic.name}
-          placeholder="Tous publics"
-          placeholderMulti="Sélectionner"
-          schema={serviceSchema.concernedPublic}
-          sortSelect
-          description="Plusieurs choix possibles"
-        />
-      </FieldModel>
+        <FieldModel
+          {showModel}
+          value={model?.concernedPublic}
+          serviceValue={service.concernedPublic}
+          options={servicesOptions.concernedPublic}
+          useValue={useModelValue("concernedPublic")}
+          type="array"
+        >
+          <AddableMultiselect
+            bind:values={service.concernedPublic}
+            structure={service.structure}
+            choices={servicesOptions.concernedPublic}
+            errorMessages={$formErrors.concernedPublic}
+            name="concernedPublic"
+            label={serviceSchema.concernedPublic.name}
+            placeholder="Tous publics"
+            placeholderMulti="Sélectionner"
+            schema={serviceSchema.concernedPublic}
+            sortSelect
+            description="Plusieurs choix possibles"
+          />
+        </FieldModel>
 
-      <FieldModel
-        {showModel}
-        value={model?.accessConditions}
-        options={servicesOptions.accessConditions}
-        useValue={useModelValue("accessConditions")}
-        type="list"
-      >
-        <AddableMultiselect
-          bind:values={service.accessConditions}
-          structure={service.structure}
-          choices={servicesOptions.accessConditions}
-          errorMessages={$formErrors.accessConditions}
-          name="accessConditions"
-          label={serviceSchema.accessConditions.name}
-          placeholder="Aucun"
-          placeholderMulti="Choisir un autre critères d’admission"
-          schema={serviceSchema.accessConditions}
-          sortSelect
-          description="Plusieurs choix possibles"
-        />
-      </FieldModel>
+        <FieldModel
+          {showModel}
+          value={model?.accessConditions}
+          serviceValue={service.accessConditions}
+          options={servicesOptions.accessConditions}
+          useValue={useModelValue("accessConditions")}
+          type="array"
+        >
+          <AddableMultiselect
+            bind:values={service.accessConditions}
+            structure={service.structure}
+            choices={servicesOptions.accessConditions}
+            errorMessages={$formErrors.accessConditions}
+            name="accessConditions"
+            label={serviceSchema.accessConditions.name}
+            placeholder="Aucun"
+            placeholderMulti="Choisir un autre critères d’admission"
+            schema={serviceSchema.accessConditions}
+            sortSelect
+            description="Plusieurs choix possibles"
+          />
+        </FieldModel>
 
-      <FieldModel
-        {showModel}
-        value={model?.requirements}
-        options={servicesOptions.requirements}
-        useValue={useModelValue("requirements")}
-        type="list"
-      >
-        <AddableMultiselect
-          bind:values={service.requirements}
-          structure={service.structure}
-          choices={servicesOptions.requirements}
-          errorMessages={$formErrors.requirements}
-          name="requirements"
-          label={serviceSchema.requirements.name}
-          placeholder="Aucun"
-          placeholderMulti="Choisir un autre pré-requis"
-          schema={serviceSchema.requirements}
-          sortSelect
-          description="Plusieurs choix possibles"
-        />
-      </FieldModel>
-    </FieldSet>
+        <FieldModel
+          {showModel}
+          value={model?.requirements}
+          serviceValue={service.requirements}
+          options={servicesOptions.requirements}
+          useValue={useModelValue("requirements")}
+          type="array"
+        >
+          <AddableMultiselect
+            bind:values={service.requirements}
+            structure={service.structure}
+            choices={servicesOptions.requirements}
+            errorMessages={$formErrors.requirements}
+            name="requirements"
+            label={serviceSchema.requirements.name}
+            placeholder="Aucun"
+            placeholderMulti="Choisir un autre pré-requis"
+            schema={serviceSchema.requirements}
+            sortSelect
+            description="Plusieurs choix possibles"
+          />
+        </FieldModel>
+      </FieldSet>
 
-    <FieldSet title="Modalités" {showModel}>
-      <div slot="help">
-        <p class="text-f14">Modalités pour mobiliser le service.</p>
-      </div>
+      <FieldSet title="Modalités" {showModel}>
+        <div slot="help">
+          <p class="text-f14">Modalités pour mobiliser le service.</p>
+        </div>
 
-      <FieldModel
-        {showModel}
-        value={model?.coachOrientationModes}
-        options={servicesOptions.coachOrientationModes}
-        useValue={useModelValue("coachOrientationModes")}
-        type="list"
-      >
-        <SchemaField
-          label={serviceSchema.coachOrientationModes.name}
-          type="checkboxes"
-          choices={moveToTheEnd(
-            servicesOptions.coachOrientationModes,
-            "value",
-            "autre"
-          )}
-          schema={serviceSchema.coachOrientationModes}
-          name="coachOrientationModes"
-          errorMessages={$formErrors.coachOrientationModes}
-          bind:value={service.coachOrientationModes}
-        />
-      </FieldModel>
+        <FieldModel
+          {showModel}
+          value={model?.coachOrientationModes}
+          serviceValue={service.coachOrientationModes}
+          options={servicesOptions.coachOrientationModes}
+          useValue={useModelValue("coachOrientationModes")}
+          type="array"
+        >
+          <SchemaField
+            label={serviceSchema.coachOrientationModes.name}
+            type="checkboxes"
+            choices={moveToTheEnd(
+              servicesOptions.coachOrientationModes,
+              "value",
+              "autre"
+            )}
+            schema={serviceSchema.coachOrientationModes}
+            name="coachOrientationModes"
+            errorMessages={$formErrors.coachOrientationModes}
+            bind:value={service.coachOrientationModes}
+          />
+        </FieldModel>
 
-      <FieldModel
-        {showModel}
-        value={model?.coachOrientationModesOther}
-        useValue={useModelValue("coachOrientationModesOther")}
-      >
-        <SchemaField
-          visible={service.coachOrientationModes.includes("autre")}
-          hideLabel
-          placeholder="Compléter"
-          type="text"
-          schema={serviceSchema.coachOrientationModesOther}
-          name="coachOrientationModesOther"
-          errorMessages={$formErrors.coachOrientationModesOther}
-          bind:value={service.coachOrientationModesOther}
-        />
-      </FieldModel>
+        {#if service.coachOrientationModes.includes("autre")}
+          <FieldModel
+            {showModel}
+            value={model?.coachOrientationModesOther}
+            serviceValue={service.coachOrientationModesOther}
+            useValue={useModelValue("coachOrientationModesOther")}
+          >
+            <SchemaField
+              hideLabel
+              placeholder="Compléter"
+              type="text"
+              schema={serviceSchema.coachOrientationModesOther}
+              name="coachOrientationModesOther"
+              errorMessages={$formErrors.coachOrientationModesOther}
+              bind:value={service.coachOrientationModesOther}
+            />
+          </FieldModel>
+        {/if}
 
-      <FieldModel
-        {showModel}
-        value={model?.beneficiariesAccessModes}
-        options={servicesOptions.beneficiariesAccessModes}
-        useValue={useModelValue("beneficiariesAccessModes")}
-        type="list"
-      >
-        <SchemaField
-          label={serviceSchema.beneficiariesAccessModes.name}
-          type="checkboxes"
-          choices={moveToTheEnd(
-            servicesOptions.beneficiariesAccessModes,
-            "value",
-            "autre"
-          )}
-          schema={serviceSchema.beneficiariesAccessModes}
-          name="beneficiariesAccessModes"
-          errorMessages={$formErrors.beneficiariesAccessModes}
-          bind:value={service.beneficiariesAccessModes}
-        />
-      </FieldModel>
+        <FieldModel
+          {showModel}
+          value={model?.beneficiariesAccessModes}
+          serviceValue={service.beneficiariesAccessModes}
+          options={servicesOptions.beneficiariesAccessModes}
+          useValue={useModelValue("beneficiariesAccessModes")}
+          type="array"
+        >
+          <SchemaField
+            label={serviceSchema.beneficiariesAccessModes.name}
+            type="checkboxes"
+            choices={moveToTheEnd(
+              servicesOptions.beneficiariesAccessModes,
+              "value",
+              "autre"
+            )}
+            schema={serviceSchema.beneficiariesAccessModes}
+            name="beneficiariesAccessModes"
+            errorMessages={$formErrors.beneficiariesAccessModes}
+            bind:value={service.beneficiariesAccessModes}
+          />
+        </FieldModel>
 
-      <FieldModel
-        {showModel}
-        value={model?.beneficiariesAccessModesOther}
-        useValue={useModelValue("beneficiariesAccessModesOther")}
-      >
-        <SchemaField
-          visible={service.beneficiariesAccessModes.includes("autre")}
-          hideLabel
-          placeholder="Merci de préciser la modalité"
-          type="text"
-          schema={serviceSchema.beneficiariesAccessModesOther}
-          name="beneficiariesAccessModesOther"
-          errorMessages={$formErrors.beneficiariesAccessModesOther}
-          bind:value={service.beneficiariesAccessModesOther}
-        />
-      </FieldModel>
+        {#if service.beneficiariesAccessModes.includes("autre")}
+          <FieldModel
+            {showModel}
+            value={model?.beneficiariesAccessModesOther}
+            serviceValue={service.beneficiariesAccessModesOther}
+            useValue={useModelValue("beneficiariesAccessModesOther")}
+          >
+            <SchemaField
+              hideLabel
+              placeholder="Merci de préciser la modalité"
+              type="text"
+              schema={serviceSchema.beneficiariesAccessModesOther}
+              name="beneficiariesAccessModesOther"
+              errorMessages={$formErrors.beneficiariesAccessModesOther}
+              bind:value={service.beneficiariesAccessModesOther}
+            />
+          </FieldModel>
+        {/if}
 
-      <FieldModel
-        {showModel}
-        value={model?.hasFee}
-        useValue={useModelValue("hasFee")}
-        type="boolean"
-      >
-        <SchemaField
-          type="toggle"
-          label={serviceSchema.hasFee.name}
-          schema={serviceSchema.hasFee}
-          name="hasFee"
-          errorMessages={$formErrors.hasFee}
-          bind:value={service.hasFee}
-        />
-      </FieldModel>
+        <FieldModel
+          {showModel}
+          value={model?.hasFee}
+          serviceValue={service.hasFee}
+          useValue={useModelValue("hasFee")}
+          type="boolean"
+        >
+          <SchemaField
+            type="toggle"
+            label={serviceSchema.hasFee.name}
+            schema={serviceSchema.hasFee}
+            name="hasFee"
+            errorMessages={$formErrors.hasFee}
+            bind:value={service.hasFee}
+          />
+        </FieldModel>
 
-      <FieldModel
-        {showModel}
-        value={model?.feeDetails}
-        useValue={useModelValue("feeDetails")}
-      >
-        <SchemaField
-          type="textarea"
-          hideLabel
-          placeholder="Adhésion, frais de location, frais de garde, etc., et les montants."
-          visible={!!service.hasFee}
-          schema={serviceSchema.feeDetails}
-          name="feeDetails"
-          errorMessages={$formErrors.feeDetails}
-          bind:value={service.feeDetails}
-        />
-      </FieldModel>
-    </FieldSet>
+        {#if !!service.hasFee}
+          <FieldModel
+            {showModel}
+            value={model?.feeDetails}
+            serviceValue={service.feeDetails}
+            useValue={useModelValue("feeDetails")}
+          >
+            <SchemaField
+              type="textarea"
+              hideLabel
+              placeholder="Adhésion, frais de location, frais de garde, etc., et les montants."
+              schema={serviceSchema.feeDetails}
+              name="feeDetails"
+              errorMessages={$formErrors.feeDetails}
+              bind:value={service.feeDetails}
+            />
+          </FieldModel>
+        {/if}
+      </FieldSet>
 
-    <FieldSet title="Documents">
-      <div slot="help">
-        <p class="text-f14">
-          Justificatifs à fournir et documents à compléter pour postuler. Le
-          lien redirige vers une page web qui présente le service (formulaire,
-          fiche de prescription, simulateurs, etc.)
-        </p>
-      </div>
-      <Field
-        type="custom"
-        label={serviceSchema.forms.name}
-        errorMessages={$formErrors.forms}
-      >
-        <Uploader
-          slot="custom-input"
-          structureSlug={service.structure}
-          name="forms"
-          on:blur
-          bind:fileKeys={service.forms}
-        />
-      </Field>
+      <FieldSet title="Documents" {showModel}>
+        <div slot="help">
+          <p class="text-f14">
+            Justificatifs à fournir et documents à compléter pour postuler. Le
+            lien redirige vers une page web qui présente le service (formulaire,
+            fiche de prescription, simulateurs, etc.)
+          </p>
+        </div>
+        <FieldModel
+          {showModel}
+          value={model?.forms}
+          serviceValue={service.forms}
+          useValue={useModelValue("forms")}
+          type="files"
+        >
+          <Field
+            type="custom"
+            label={serviceSchema.forms.name}
+            errorMessages={$formErrors.forms}
+          >
+            <Uploader
+              slot="custom-input"
+              structureSlug={service.structure}
+              name="forms"
+              on:blur
+              bind:fileKeys={service.forms}
+            />
+          </Field>
+        </FieldModel>
 
-      <AddableMultiselect
-        bind:values={service.credentials}
-        structure={service.structure}
-        choices={servicesOptions.credentials}
-        errorMessages={$formErrors.credentials}
-        name="credentials"
-        label={serviceSchema.credentials.name}
-        placeholder="Aucun"
-        placeholderMulti="Choisir un autre justificatif"
-        schema={serviceSchema.credentials}
-        sortSelect
-      />
+        <FieldModel
+          {showModel}
+          value={model?.credentials}
+          serviceValue={service.credentials}
+          useValue={useModelValue("credentials")}
+          options={servicesOptions.credentials}
+          type="array"
+        >
+          <AddableMultiselect
+            bind:values={service.credentials}
+            structure={service.structure}
+            choices={servicesOptions.credentials}
+            errorMessages={$formErrors.credentials}
+            name="credentials"
+            label={serviceSchema.credentials.name}
+            placeholder="Aucun"
+            placeholderMulti="Choisir un autre justificatif"
+            schema={serviceSchema.credentials}
+            sortSelect
+          />
+        </FieldModel>
 
-      <SchemaField
-        label={serviceSchema.onlineForm.name}
-        placeholder="URL"
-        type="url"
-        schema={serviceSchema.onlineForm}
-        name="onlineForm"
-        errorMessages={$formErrors.onlineForm}
-        bind:value={service.onlineForm}
-      />
-    </FieldSet>
+        <FieldModel
+          {showModel}
+          value={model?.onlineForm}
+          serviceValue={service.onlineForm}
+          useValue={useModelValue("forms")}
+        >
+          <SchemaField
+            label={serviceSchema.onlineForm.name}
+            placeholder="URL"
+            type="url"
+            schema={serviceSchema.onlineForm}
+            name="onlineForm"
+            errorMessages={$formErrors.onlineForm}
+            bind:value={service.onlineForm}
+          />
+        </FieldModel>
+      </FieldSet>
+    {/if}
 
-    <FieldSet title="Périodicité">
+    <FieldSet title="Périodicité" {showModel}>
       <div slot="help">
         <p class="text-f14">
           La durée limitée permet de supendre automatiquement la visibilité du
           service dans les résultat de recherche.
         </p>
       </div>
-      <SchemaField
-        label={serviceSchema.recurrence.name}
-        type="text"
-        placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
-        schema={serviceSchema.recurrence}
-        name="recurrence"
-        errorMessages={$formErrors.recurrence}
-        bind:value={service.recurrence}
-      />
+      <FieldModel
+        {showModel}
+        value={model?.recurrence}
+        serviceValue={service.recurrence}
+        useValue={useModelValue("recurrence")}
+      >
+        <SchemaField
+          label={serviceSchema.recurrence.name}
+          type="text"
+          placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
+          schema={serviceSchema.recurrence}
+          name="recurrence"
+          errorMessages={$formErrors.recurrence}
+          bind:value={service.recurrence}
+        />
+      </FieldModel>
 
-      <Field
-        label="Durée limitée"
-        type="toggle"
-        name="isTimeLimited"
-        bind:value={isTimeLimited}
-        on:change={handleCheckTimeLimited}
-      />
-
-      <SchemaField
-        label={serviceSchema.suspensionDate.name}
-        type="date"
-        schema={serviceSchema.suspensionDate}
-        name="suspensionDate"
-        errorMessages={$formErrors.suspensionDate}
-        bind:value={service.suspensionDate}
-        visible={isTimeLimited}
-      />
+      <FieldModel
+        {showModel}
+        value={model?.suspensionDate}
+        serviceValue={service.suspensionDate}
+        useValue={useModelValue("suspensionDate")}
+      >
+        <SchemaField
+          label={serviceSchema.suspensionDate.name}
+          type="date"
+          schema={serviceSchema.suspensionDate}
+          name="suspensionDate"
+          errorMessages={$formErrors.suspensionDate}
+          bind:value={service.suspensionDate}
+        />
+      </FieldModel>
     </FieldSet>
   </div>
 </CenteredGrid>
@@ -721,24 +771,25 @@
           initialValue={service.diffusionZoneTypeDisplay}
         />
 
-        <SchemaField
-          type="custom"
-          name="diffusionZoneDetails"
-          label={serviceSchema.diffusionZoneDetails.name}
-          description="Commencez à saisir le nom et choisissez dans la liste."
-          errorMessages={$formErrors.diffusionZoneDetails}
-          schema={serviceSchema.diffusionZoneDetails}
-          visible={service.diffusionZoneType !== "country"}
-        >
-          <AdminDivisionSearch
-            slot="custom-input"
+        {#if service.diffusionZoneType !== "country"}
+          <SchemaField
+            type="custom"
             name="diffusionZoneDetails"
-            searchType={service.diffusionZoneType}
-            handleChange={handlediffusionZoneDetailsChange}
-            initialValue={service.diffusionZoneDetailsDisplay}
-            bind:choices={adminDivisionChoices}
-          />
-        </SchemaField>
+            label={serviceSchema.diffusionZoneDetails.name}
+            description="Commencez à saisir le nom et choisissez dans la liste."
+            errorMessages={$formErrors.diffusionZoneDetails}
+            schema={serviceSchema.diffusionZoneDetails}
+          >
+            <AdminDivisionSearch
+              slot="custom-input"
+              name="diffusionZoneDetails"
+              searchType={service.diffusionZoneType}
+              handleChange={handlediffusionZoneDetailsChange}
+              initialValue={service.diffusionZoneDetailsDisplay}
+              bind:choices={adminDivisionChoices}
+            />
+          </SchemaField>
+        {/if}
 
         <SchemaField
           label={serviceSchema.qpvOrZrr.name}
@@ -764,16 +815,18 @@
             "a-distance"
           )}
         />
-        <SchemaField
-          placeholder="https://"
-          type="url"
-          label={serviceSchema.remoteUrl.name}
-          visible={service.locationKinds.includes("a-distance")}
-          schema={serviceSchema.remoteUrl}
-          name="remoteUrl"
-          errorMessages={$formErrors.remoteUrl}
-          bind:value={service.remoteUrl}
-        />
+
+        {#if service.locationKinds.includes("a-distance")}
+          <SchemaField
+            placeholder="https://"
+            type="url"
+            label={serviceSchema.remoteUrl.name}
+            schema={serviceSchema.remoteUrl}
+            name="remoteUrl"
+            errorMessages={$formErrors.remoteUrl}
+            bind:value={service.remoteUrl}
+          />
+        {/if}
 
         {#if structure && service.locationKinds.includes("en-presentiel")}
           <Button
@@ -782,87 +835,86 @@
             small
             label="Utiliser l'adresse de la structure"
           />
-        {/if}
-        {#if showServiceAddress}
-          <SchemaField
-            name="city"
-            type="custom"
-            label={serviceSchema.city.name}
-            errorMessages={$formErrors.city}
-            schema={serviceSchema.city}
-            visible={service.locationKinds.includes("en-presentiel")}
-          >
-            <CitySearch
-              slot="custom-input"
-              name="city"
-              placeholder="Saisissez et validez votre ville"
-              initialValue={service.city}
-              onChange={handleCityChange}
-            />
-          </SchemaField>
 
-          <SchemaField
-            type="custom"
-            name="address1"
-            label={serviceSchema.address1.name}
-            errorMessages={$formErrors.address1}
-            schema={serviceSchema.address1}
-            visible={service.locationKinds.includes("en-presentiel")}
-          >
-            <AddressSearch
-              slot="custom-input"
+          {#if showServiceAddress}
+            <SchemaField
+              name="city"
+              type="custom"
+              label={serviceSchema.city.name}
+              errorMessages={$formErrors.city}
+              schema={serviceSchema.city}
+            >
+              <CitySearch
+                slot="custom-input"
+                name="city"
+                placeholder="Saisissez et validez votre ville"
+                initialValue={service.city}
+                onChange={handleCityChange}
+              />
+            </SchemaField>
+
+            <SchemaField
+              type="custom"
               name="address1"
-              disabled={!service.cityCode}
-              cityCode={service.cityCode}
-              placeholder="3 rue du parc"
-              initialValue={service.address1}
-              handleChange={handleAddressChange}
+              label={serviceSchema.address1.name}
+              errorMessages={$formErrors.address1}
+              schema={serviceSchema.address1}
+            >
+              <AddressSearch
+                slot="custom-input"
+                name="address1"
+                disabled={!service.cityCode}
+                cityCode={service.cityCode}
+                placeholder="3 rue du parc"
+                initialValue={service.address1}
+                handleChange={handleAddressChange}
+              />
+            </SchemaField>
+
+            <SchemaField
+              type="text"
+              label={serviceSchema.address2.name}
+              placeholder="batiment, escalier, etc."
+              schema={serviceSchema.address2}
+              name="address2"
+              errorMessages={$formErrors.address2}
+              bind:value={service.address2}
             />
-          </SchemaField>
-          <SchemaField
-            type="text"
-            label={serviceSchema.address2.name}
-            placeholder="batiment, escalier, etc."
-            schema={serviceSchema.address2}
-            name="address2"
-            errorMessages={$formErrors.address2}
-            bind:value={service.address2}
-            visible={service.locationKinds.includes("en-presentiel")}
-          />
-          <SchemaField
-            type="text"
-            label={serviceSchema.postalCode.name}
-            placeholder="00000"
-            schema={serviceSchema.postalCode}
-            name="postalCode"
-            errorMessages={$formErrors.postalCode}
-            bind:value={service.postalCode}
-            visible={service.locationKinds.includes("en-presentiel")}
-          />
-          <SchemaField
-            type="hidden"
-            schema={serviceSchema.cityCode}
-            name="cityCode"
-            errorMessages={$formErrors.cityCode}
-            bind:value={service.cityCode}
-            visible={service.locationKinds.includes("en-presentiel")}
-          />
-          <SchemaField
-            type="hidden"
-            schema={serviceSchema.longitude}
-            name="longitude"
-            errorMessages={$formErrors.longitude}
-            bind:value={service.longitude}
-            visible={service.locationKinds.includes("en-presentiel")}
-          />
-          <SchemaField
-            type="hidden"
-            schema={serviceSchema.latitude}
-            name="latitude"
-            errorMessages={$formErrors.latitude}
-            bind:value={service.latitude}
-            visible={service.locationKinds.includes("en-presentiel")}
-          />
+
+            <SchemaField
+              type="text"
+              label={serviceSchema.postalCode.name}
+              placeholder="00000"
+              schema={serviceSchema.postalCode}
+              name="postalCode"
+              errorMessages={$formErrors.postalCode}
+              bind:value={service.postalCode}
+            />
+
+            <SchemaField
+              type="hidden"
+              schema={serviceSchema.cityCode}
+              name="cityCode"
+              errorMessages={$formErrors.cityCode}
+              bind:value={service.cityCode}
+            />
+
+            <SchemaField
+              type="hidden"
+              schema={serviceSchema.longitude}
+              name="longitude"
+              errorMessages={$formErrors.longitude}
+              bind:value={service.longitude}
+            />
+
+            <SchemaField
+              type="hidden"
+              schema={serviceSchema.latitude}
+              name="latitude"
+              errorMessages={$formErrors.latitude}
+              bind:value={service.latitude}
+            />
+          {/if}
         {/if}
       </FieldSet>
 

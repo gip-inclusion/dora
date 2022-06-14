@@ -51,6 +51,7 @@
   import Fields from "$lib/components/services/form/fields.svelte";
   import ModelNavButtons from "$lib/components/services/form/model-nav-buttons.svelte";
   import Errors from "$lib/components/services/form/errors.svelte";
+  import Notice from "$lib/components/notice.svelte";
 
   export let model, servicesOptions, structures, structure;
 
@@ -68,6 +69,16 @@
 <EnsureLoggedIn>
   <CenteredGrid>
     <h1>Modification du modèle</h1>
+
+    <Notice
+      title="Ce modèle est utilisé par un ou plusieurs services"
+      type="warning"
+    >
+      <p class="text-f14">
+        Les modifications seront proposées sur tous les services utilisant ce
+        modèle.
+      </p>
+    </Notice>
   </CenteredGrid>
 
   {#if model}

@@ -310,16 +310,17 @@
       bind:value={service.hasFee}
     />
 
-    <SchemaField
-      type="textarea"
-      hideLabel
-      placeholder="Adhésion, frais de location, frais de garde, etc., et les montants."
-      visible={!!service.hasFee}
-      schema={contribSchema.feeDetails}
-      name="feeDetails"
-      errorMessages={$formErrors.feeDetails}
-      bind:value={service.feeDetails}
-    />
+    {#if !!service.hasFee}
+      <SchemaField
+        type="textarea"
+        hideLabel
+        placeholder="Adhésion, frais de location, frais de garde, etc., et les montants."
+        schema={contribSchema.feeDetails}
+        name="feeDetails"
+        errorMessages={$formErrors.feeDetails}
+        bind:value={service.feeDetails}
+      />
+    {/if}
   </FieldSet>
 
   <FieldSet title="Lieu de déroulement">
@@ -336,16 +337,17 @@
         "a-distance"
       )}
     />
-    <SchemaField
-      placeholder="https://"
-      type="url"
-      label="Lien visioconférence"
-      visible={service.locationKinds.includes("a-distance")}
-      schema={contribSchema.remoteUrl}
-      name="remoteUrl"
-      errorMessages={$formErrors.remoteUrl}
-      bind:value={service.remoteUrl}
-    />
+    {#if service.locationKinds.includes("a-distance")}
+      <SchemaField
+        placeholder="https://"
+        type="url"
+        label="Lien visioconférence"
+        schema={contribSchema.remoteUrl}
+        name="remoteUrl"
+        errorMessages={$formErrors.remoteUrl}
+        bind:value={service.remoteUrl}
+      />
+    {/if}
 
     {#if service.locationKinds.includes("en-presentiel")}
       <Button
@@ -354,83 +356,78 @@
         small
         label="Utiliser l'adresse de la structure"
       />
-    {/if}
-    {#if showServiceAddress}
-      <Field
-        type="custom"
-        label="Ville"
-        errorMessages={$formErrors.city}
-        visible={service.locationKinds.includes("en-presentiel")}
-      >
-        <CitySearch
-          slot="custom-input"
-          name="city"
-          placeholder="Saisissez et validez votre ville"
-          initialValue={service.city}
-          onChange={handleCityChange}
-        />
-      </Field>
 
-      <Field
-        type="custom"
-        label="Adresse"
-        errorMessages={$formErrors.address1}
-        visible={service.locationKinds.includes("en-presentiel")}
-      >
-        <AddressSearch
-          slot="custom-input"
-          name="address1"
-          disabled={!service.cityCode}
-          cityCode={service.cityCode}
-          placeholder="Saisissez et validez votre adresse"
-          initialValue={service.address1}
-          handleChange={handleAddressChange}
+      {#if showServiceAddress}
+        <Field type="custom" label="Ville" errorMessages={$formErrors.city}>
+          <CitySearch
+            slot="custom-input"
+            name="city"
+            placeholder="Saisissez et validez votre ville"
+            initialValue={service.city}
+            onChange={handleCityChange}
+          />
+        </Field>
+
+        <Field
+          type="custom"
+          label="Adresse"
+          errorMessages={$formErrors.address1}
+        >
+          <AddressSearch
+            slot="custom-input"
+            name="address1"
+            disabled={!service.cityCode}
+            cityCode={service.cityCode}
+            placeholder="Saisissez et validez votre adresse"
+            initialValue={service.address1}
+            handleChange={handleAddressChange}
+          />
+        </Field>
+
+        <SchemaField
+          type="text"
+          label="Complément d’adresse"
+          placeholder="Compléments d’adresse"
+          schema={contribSchema.address2}
+          name="address2"
+          errorMessages={$formErrors.address2}
+          bind:value={service.address2}
         />
-      </Field>
-      <SchemaField
-        type="text"
-        label="Complément d’adresse"
-        placeholder="Compléments d’adresse"
-        schema={contribSchema.address2}
-        name="address2"
-        errorMessages={$formErrors.address2}
-        bind:value={service.address2}
-        visible={service.locationKinds.includes("en-presentiel")}
-      />
-      <SchemaField
-        type="text"
-        label="Code postal"
-        placeholder="Code postal"
-        schema={contribSchema.postalCode}
-        name="postalCode"
-        errorMessages={$formErrors.postalCode}
-        bind:value={service.postalCode}
-        visible={service.locationKinds.includes("en-presentiel")}
-      />
-      <SchemaField
-        type="hidden"
-        schema={contribSchema.cityCode}
-        name="cityCode"
-        errorMessages={$formErrors.cityCode}
-        bind:value={service.cityCode}
-        visible={service.locationKinds.includes("en-presentiel")}
-      />
-      <SchemaField
-        type="hidden"
-        schema={contribSchema.longitude}
-        name="longitude"
-        errorMessages={$formErrors.longitude}
-        bind:value={service.longitude}
-        visible={service.locationKinds.includes("en-presentiel")}
-      />
-      <SchemaField
-        type="hidden"
-        schema={contribSchema.latitude}
-        name="latitude"
-        errorMessages={$formErrors.latitude}
-        bind:value={service.latitude}
-        visible={service.locationKinds.includes("en-presentiel")}
-      />
+
+        <SchemaField
+          type="text"
+          label="Code postal"
+          placeholder="Code postal"
+          schema={contribSchema.postalCode}
+          name="postalCode"
+          errorMessages={$formErrors.postalCode}
+          bind:value={service.postalCode}
+        />
+
+        <SchemaField
+          type="hidden"
+          schema={contribSchema.cityCode}
+          name="cityCode"
+          errorMessages={$formErrors.cityCode}
+          bind:value={service.cityCode}
+        />
+
+        <SchemaField
+          type="hidden"
+          schema={contribSchema.longitude}
+          name="longitude"
+          errorMessages={$formErrors.longitude}
+          bind:value={service.longitude}
+        />
+
+        <SchemaField
+          type="hidden"
+          schema={contribSchema.latitude}
+          name="latitude"
+          errorMessages={$formErrors.latitude}
+          bind:value={service.latitude}
+        />
+      {/if}
     {/if}
   </FieldSet>
 {/if}

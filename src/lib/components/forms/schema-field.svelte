@@ -14,7 +14,6 @@
 
   export let disabled = undefined;
   export let readonly = false;
-  export let visible = true;
   export let placeholder = "";
   export let placeholderMulti = "";
   export let initialValue = undefined;
@@ -46,7 +45,6 @@
   {minValue}
   {disabled}
   {readonly}
-  {visible}
   {vertical}
   {autocomplete}
   {passwordrules}

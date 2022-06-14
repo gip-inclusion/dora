@@ -383,7 +383,6 @@ export default {
   startDate: {
     name: "date de début",
     default: null,
-    nullable: true,
     rules: [v.isDate()],
     dependents: ["endDate"],
     post: [v.nullEmpty],
@@ -391,7 +390,6 @@ export default {
   endDate: {
     name: "date de fin",
     default: null,
-    nullable: true,
     rules: [
       v.isDate(),
       (name, value, data) => ({
@@ -404,7 +402,6 @@ export default {
   suspensionDate: {
     name: "date de fin",
     default: null,
-    nullable: true,
     rules: [v.isDate()],
     post: [v.nullEmpty],
   },

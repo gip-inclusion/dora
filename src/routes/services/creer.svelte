@@ -2,7 +2,7 @@
   import { get } from "svelte/store";
   import { userInfo } from "$lib/auth";
 
-  import { getLastDraft, getServicesOptions } from "$lib/services";
+  import { getLastDraft, getModel, getServicesOptions } from "$lib/services";
 
   import { getNewService } from "$lib/components/services/form/utils.js";
   import { getStructures } from "$lib/structures";
@@ -21,10 +21,17 @@
       structures = user.structures;
     }
 
-    const service = getNewService();
+    let service;
+    let model;
 
     if (modelSlug) {
+      model = await getModel(modelSlug);
+      service = JSON.parse(JSON.stringify(model));
       service.model = modelSlug;
+      service.structure = null;
+      service.slug = null;
+    } else {
+      service = getNewService();
     }
 
     let structure;
@@ -45,6 +52,7 @@
         structures,
         structure,
         service,
+        model,
       },
     };
   }
@@ -60,7 +68,7 @@
   import Notice from "$lib/components/notice.svelte";
   import Button from "$lib/components/button.svelte";
 
-  export let servicesOptions, structures, lastDraft, service, structure;
+  export let servicesOptions, structures, lastDraft, service, structure, model;
 
   if (service.structure && lastDraft?.structure !== service.structure) {
     lastDraft = null;
@@ -110,7 +118,7 @@
   <div bind:this={errorDiv} />
   {#if structures.length}
     <Errors />
-    <Fields bind:service {servicesOptions} {structures} {structure} />
+    <Fields bind:service {servicesOptions} {structures} {structure} {model} />
     <ServiceNavButtons {onError} bind:service />
   {/if}
 </EnsureLoggedIn>

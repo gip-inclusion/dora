@@ -8,5 +8,5 @@
 </svelte:head>
 
 <EnsureLoggedIn>
-  <InformationsForm modify formTitle="Informations" visible />
+  <InformationsForm modify formTitle="Informations" />
 </EnsureLoggedIn>

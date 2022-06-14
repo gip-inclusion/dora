@@ -9,9 +9,28 @@
   export let options = undefined;
 
   export let paddingTop = false;
-  let hasValue;
+  export let serviceValue;
 
-  $: hasValue = value !== null && value !== undefined;
+  let haveSameValue = false;
+
+  function compare(a, b) {
+    if (type === "array" || type === "files") {
+      if (a === b) return true;
+      if (a == null || b == null) return false;
+      if (a.length !== b.length) return false;
+
+      return a.every((val, i) => val === b[i]);
+    }
+
+    // l'éditeur de texte ajoute une balise <p> s'il est vide
+    if (type === "html" && b === "<p></p>" && a === "") {
+      return true;
+    }
+
+    return a === b;
+  }
+
+  $: haveSameValue = showModel && compare(value, serviceValue);
 </script>
 
 <div
@@ -28,18 +47,24 @@
     <div
       class="flex flex-col-reverse gap-s8 lg:w-1/3 lg:flex-col"
       class:lg:pt-s40={paddingTop}
-      class:lg:gap-s0={!hasValue}
+      class:lg:gap-s0={haveSameValue}
     >
-      {#if !hasValue}
+      {#if haveSameValue}
         <small class="lg:pt-s8">Pas de différence</small>
       {:else}
         <div class="rounded bg-info-light py-s8 px-s12">
-          {#if value === "" || (Array.isArray(value) && !value.length)}
+          {#if value === "" || value === undefined || value === null || (Array.isArray(value) && !value.length)}
             <small class="mb-s8 lg:pt-s8">Champs vide</small>
-          {:else if type === "list"}
+          {:else if type === "array"}
             <div class="flex flex-wrap gap-s8">
               {#each value as v}
                 <Tag>{options.find((o) => o.value === v)?.label || v}</Tag>
+              {/each}
+            </div>
+          {:else if type === "files"}
+            <div class="flex flex-wrap gap-s8">
+              {#each value as v}
+                <Tag>{v}</Tag>
               {/each}
             </div>
           {:else if type === "html"}
@@ -54,7 +79,7 @@
 
       <div class="flex items-center">
         <h5 class="mb-s0 lg:hidden">Modèle</h5>
-        {#if hasValue}
+        {#if !haveSameValue}
           <div class="ml-auto lg:ml-s0">
             <Button label="Utiliser" small secondary on:click={useValue} />
           </div>

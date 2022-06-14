@@ -3,7 +3,7 @@
   import { browser } from "$app/env";
 
   import { userInfo } from "$lib/auth";
-  import { getServicesOptions, getService } from "$lib/services";
+  import { getServicesOptions, getService, getModel } from "$lib/services";
   import { getStructure, getStructures } from "$lib/structures";
 
   export async function load({ params }) {
@@ -11,6 +11,7 @@
     const service = await getService(params.slug);
     let structure = {};
     let structures = [];
+    let model = null;
     const servicesOptions = await getServicesOptions();
 
     // on ne retourne une 404 que sur le client
@@ -33,12 +34,17 @@
       structures = user.structures;
     }
 
+    if (service.model) {
+      model = await getModel(service.model);
+    }
+
     return {
       props: {
         service,
         servicesOptions,
         structures,
         structure,
+        model,
       },
     };
   }
@@ -53,7 +59,7 @@
   import Errors from "$lib/components/services/form/errors.svelte";
   import NoticePublication from "$lib/components/services/form/notice-publication.svelte";
 
-  export let service, servicesOptions, structures, structure;
+  export let service, servicesOptions, structures, structure, model;
 
   let errorDiv;
 
@@ -75,7 +81,7 @@
   {#if service}
     <div bind:this={errorDiv} />
     <Errors />
-    <Fields bind:service {servicesOptions} {structures} {structure} />
+    <Fields bind:service {servicesOptions} {structures} {structure} {model} />
     <ServiceNavButtons {onError} bind:service />
   {/if}
 </EnsureLoggedIn>

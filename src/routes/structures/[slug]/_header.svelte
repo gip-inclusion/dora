@@ -35,7 +35,7 @@
     }
 
     if (
-      !!structure.services?.length &&
+      !!structure.models?.length &&
       (structure.isMember || $userInfo?.isStaff)
     ) {
       tabs.splice(1, 0, {

@@ -23,7 +23,6 @@
 
   export let disabled = undefined;
   export let readonly = false;
-  export let visible = true;
   export let placeholder = undefined;
   export let placeholderMulti = undefined;
   export let initialValue = undefined;
@@ -45,54 +44,52 @@
   }
 </script>
 
-{#if visible}
-  <div
-    {name}
-    class="items-top flex flex-col gap-s12"
-    class:lg:flex-row={!vertical}
-    class:hidden={type === "hidden"}
-    isDOMLabel={type !== "checkboxes" && type !== "radios"}
-  >
-    <!-- #1# -->
-    <div class="flex flex-col{vertical ? '' : ' lg:w-1/4'}">
-      <label for={name} class="flex">
-        <h4 class="my-s4 first-letter:capitalize" class:hidden={hideLabel}>
-          {label}
-        </h4>
-        {#if required} <span class="ml-s6 text-error"> *</span>{/if}</label
-      >
-      <small>{description}</small>
-    </div>
-    <div class="flex flex-col{vertical ? '' : ' lg:w-3/4'}">
-      {#if type !== "custom"}
-        <Input
-          bind:value
-          on:blur={handleBlur}
-          on:change={handleChange}
-          on:change
-          on:input
-          {onSelectChange}
-          {type}
-          {name}
-          {choices}
-          {sortSelect}
-          {maxLength}
-          {rows}
-          {placeholder}
-          {placeholderMulti}
-          {initialValue}
-          {minValue}
-          {disabled}
-          {readonly}
-          {autocomplete}
-          {passwordrules}
-        />
-      {:else}
-        <slot name="custom-input" />
-      {/if}
-      {#each errorMessages || [] as msg}
-        <Alert label={msg} isHTML={allowHTMLError} />
-      {/each}
-    </div>
+<div
+  {name}
+  class="items-top flex flex-col gap-s12"
+  class:lg:flex-row={!vertical}
+  class:hidden={type === "hidden"}
+  isDOMLabel={type !== "checkboxes" && type !== "radios"}
+>
+  <!-- #1# -->
+  <div class="flex flex-col{vertical ? '' : ' lg:w-1/4'}">
+    <label for={name} class="flex">
+      <h4 class="my-s4 first-letter:capitalize" class:hidden={hideLabel}>
+        {label}
+      </h4>
+      {#if required} <span class="ml-s6 text-error"> *</span>{/if}</label
+    >
+    <small>{description}</small>
   </div>
-{/if}
+  <div class="flex flex-col{vertical ? '' : ' lg:w-3/4'}">
+    {#if type !== "custom"}
+      <Input
+        bind:value
+        on:blur={handleBlur}
+        on:change={handleChange}
+        on:change
+        on:input
+        {onSelectChange}
+        {type}
+        {name}
+        {choices}
+        {sortSelect}
+        {maxLength}
+        {rows}
+        {placeholder}
+        {placeholderMulti}
+        {initialValue}
+        {minValue}
+        {disabled}
+        {readonly}
+        {autocomplete}
+        {passwordrules}
+      />
+    {:else}
+      <slot name="custom-input" />
+    {/if}
+    {#each errorMessages || [] as msg}
+      <Alert label={msg} isHTML={allowHTMLError} />
+    {/each}
+  </div>
+</div>

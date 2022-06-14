@@ -82,47 +82,6 @@ export async function getModel(slug) {
   return serviceToFront(response.data);
 }
 
-export async function getServiceDiff(slug) {
-  const url = `${getApiURL()}/services/${slug}/diff`;
-  const response = await fetchData(url);
-
-  if (!response.data) return null;
-  // TODO: 404
-
-  return serviceToFront(response.data);
-}
-
-export async function createServiceFromModel(modelSlug, structureSlug) {
-  const method = "POST";
-  const url = `${getApiURL()}/models/${modelSlug}/instantiate/`;
-
-  const response = await fetch(url, {
-    method,
-    headers: {
-      Accept: "application/json; version=1.0",
-      "Content-Type": "application/json",
-      Authorization: `Token ${get(token)}`,
-    },
-    body: JSON.stringify({ structure: structureSlug }),
-  });
-
-  const result = {
-    ok: response.ok,
-    status: response.status,
-  };
-
-  if (!response.ok) {
-    try {
-      result.error = await response.json();
-      return result;
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  return serviceToFront(await response.json());
-}
-
 export async function createOrModifyService(service) {
   let method, url;
   if (service.slug) {
@@ -178,39 +137,6 @@ export async function createOrModifyModel(model) {
       Authorization: `Token ${get(token)}`,
     },
     body: JSON.stringify(serviceToBack(model)),
-  });
-
-  const result = {
-    ok: response.ok,
-    status: response.status,
-  };
-
-  if (response.ok) {
-    result.data = serviceToFront(await response.json());
-  } else {
-    try {
-      result.error = await response.json();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  return result;
-}
-
-export async function createModelFromService(serviceSlug, structureSlug) {
-  const url = `${getApiURL()}/services/${serviceSlug}/create-model/
-`;
-  const method = "POST";
-
-  const response = await fetch(url, {
-    method,
-    headers: {
-      Accept: "application/json; version=1.0",
-      "Content-Type": "application/json",
-      Authorization: `Token ${get(token)}`,
-    },
-    body: JSON.stringify({ structure: structureSlug }),
   });
 
   const result = {
