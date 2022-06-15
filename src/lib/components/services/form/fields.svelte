@@ -23,6 +23,7 @@
   import Button from "$lib/components/button.svelte";
   import { formatSchema } from "$lib/schemas/utils";
   import FieldModel from "./field-model.svelte";
+  import Notice from "$lib/components/notice.svelte";
 
   export let servicesOptions, service, structures, structure;
   export let isModel = false;
@@ -209,11 +210,19 @@
     onChange: handleEltChange,
   });
 
+  let modelSlugTmp = null;
   let showModel = !!model;
 
   async function unsync() {
+    modelSlugTmp = service.model;
     service.model = null;
     showModel = false;
+  }
+
+  async function sync() {
+    service.model = modelSlugTmp;
+    modelSlugTmp = null;
+    showModel = true;
   }
 
   function useModelValue(propName) {
@@ -253,6 +262,24 @@
     <div class="lg:flex lg:items-center lg:justify-between">
       <h3>Synchronisé avec un modèle</h3>
       <Button label="Détacher du modèle" secondary small on:click={unsync} />
+    </div>
+  {/if}
+
+  {#if modelSlugTmp}
+    <div class="mb-s24">
+      <Notice title="Le service est détaché du modèle" type="warning">
+        <p class="text-f14">
+          Après l'enregistrement, cette action sera définitive.
+        </p>
+        <div slot="button">
+          <Button
+            label="Re-synchroniser avec le modèle"
+            secondary
+            small
+            on:click={sync}
+          />
+        </div>
+      </Notice>
     </div>
   {/if}
 
