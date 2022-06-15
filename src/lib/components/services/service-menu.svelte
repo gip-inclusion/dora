@@ -16,13 +16,23 @@
   />
 
   {#if service.model}
-    <LinkButton
-      label="Voir le modèle"
-      to="/modeles/{service.model}"
-      small
-      noBackground={!secondary}
-      {secondary}
-    />
+    <div
+      class="flex items-center rounded"
+      class:border={secondary}
+      class:border-gray-01={secondary}
+    >
+      <div class="px-s12 py-s6 text-f14 font-bold text-gray-text">
+        Synchronisé
+      </div>
+      <div class="text-gray-02">|</div>
+
+      <LinkButton
+        label="Voir le modèle"
+        to="/modeles/{service.model}"
+        small
+        noBackground
+      />
+    </div>
   {:else}
     <LinkButton
       label="Créer un modèle"

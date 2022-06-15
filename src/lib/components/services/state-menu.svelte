@@ -23,18 +23,19 @@
     fieldsRequired.service
   );
 
-  async function handleUnpublish() {
+  async function unpublish() {
     await unPublishService(service.slug);
     if (onRefresh) {
       await onRefresh();
     }
   }
 
-  async function handlePublish() {
+  async function publish() {
     let serviceFull = service;
     // teste si on a le service complet
-    // ça n'est pas le cas sur la page structure par exemple
-    if (!service.structure) {
+    // ça n'est pas le cas sur les cards de la page structure par exemple
+
+    if (!Object.prototype.hasOwnProperty.call(service, "canWrite")) {
       serviceFull = await getService(service.slug);
     }
 
@@ -51,65 +52,50 @@
     }
   }
 
-  async function handleConvertToDraft() {
+  async function convertToDraft() {
     await convertSuggestionToDraft(service.slug);
     await onRefresh();
   }
 
-  async function handleDelete() {
+  async function remove() {
     // eslint-disable-next-line no-alert
     if (confirm(`Supprimer la suggestion ${service.name} ?`)) {
       await deleteService(service.slug);
-      await onRefresh();
+      goto(`/structures/${service.structure}/`);
     }
   }
 </script>
 
 {#if service.isSuggestion}
-  <div>
-    <Button
-      label="Brouillon"
-      on:click={() => {
-        handleConvertToDraft(service);
-      }}
-      small
-      noBackground={!secondary}
-      {secondary}
-    />
-  </div>
-  <div>
-    <Button
-      label="Supprimer"
-      on:click={() => {
-        handleDelete(service);
-      }}
-      small
-      noBackground={!secondary}
-      {secondary}
-    />
-  </div>
+  <Button
+    label="Brouillon"
+    on:click={convertToDraft}
+    small
+    noBackground={!secondary}
+    {secondary}
+  />
+
+  <Button
+    label="Supprimer"
+    on:click={remove}
+    small
+    noBackground={!secondary}
+    {secondary}
+  />
 {:else if !service.isDraft}
-  <div>
-    <Button
-      label="Brouillon"
-      on:click={() => {
-        handleUnpublish(service);
-      }}
-      small
-      noBackground={!secondary}
-      {secondary}
-    />
-  </div>
+  <Button
+    label="Brouillon"
+    on:click={unpublish}
+    small
+    noBackground={!secondary}
+    {secondary}
+  />
 {:else}
-  <div>
-    <Button
-      label="Publié"
-      on:click={() => {
-        handlePublish(service);
-      }}
-      small
-      noBackground={!secondary}
-      {secondary}
-    />
-  </div>
+  <Button
+    label="Publié"
+    on:click={publish}
+    small
+    noBackground={!secondary}
+    {secondary}
+  />
 {/if}

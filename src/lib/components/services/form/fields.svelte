@@ -269,7 +269,7 @@
     <div class="mb-s24">
       <Notice title="Le service est détaché du modèle" type="warning">
         <p class="text-f14">
-          Après l'enregistrement, cette action sera définitive.
+          Après enregistrement, cette action sera définitive.
         </p>
         <div slot="button">
           <Button

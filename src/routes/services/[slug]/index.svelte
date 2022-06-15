@@ -5,10 +5,14 @@
 
   export async function load({ params }) {
     const service = await getService(params.slug);
-
-    // on ne retourne une 404 que sur le client
+    // si le service est en brouillon il faut un token pour y accéder
+    // on renvoit donc un objet vide cŏté serveur
     if (!service && !browser) {
-      return {};
+      return {
+        props: {
+          service: null,
+        },
+      };
     }
 
     if (!service) {
@@ -53,22 +57,24 @@
 </script>
 
 <svelte:head>
-  <title>{service?.name} | {service?.structureInfo.name} | DORA</title>
+  <title>{service?.name} | {service?.structureInfo?.name} | DORA</title>
   <meta name="description" content={service?.shortDesc} />
 </svelte:head>
 
-<CenteredGrid bgColor="bg-gray-bg">
-  <ServiceHeader {service} />
-</CenteredGrid>
-<hr />
-<CenteredGrid noPadding>
-  <div class="noprint py-s24">
-    {#if browser}
-      <ServiceToolbar {service} onRefresh={handleRefresh} />
-    {/if}
-  </div>
-</CenteredGrid>
+{#if service}
+  <CenteredGrid bgColor="bg-gray-bg">
+    <ServiceHeader {service} />
+  </CenteredGrid>
+  <hr />
+  <CenteredGrid noPadding>
+    <div class="noprint py-s24">
+      {#if browser}
+        <ServiceToolbar {service} onRefresh={handleRefresh} />
+      {/if}
+    </div>
+  </CenteredGrid>
 
-<CenteredGrid>
-  <ServiceBody {service} />
-</CenteredGrid>
+  <CenteredGrid>
+    <ServiceBody {service} />
+  </CenteredGrid>
+{/if}
