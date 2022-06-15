@@ -265,6 +265,16 @@
     </div>
   {/if}
 
+  {#if service.modelChanged}
+    <div class="my-s24">
+      <Notice title="Le modèle a été mis à jour" type="warning">
+        <p class="text-f14">
+          Vous pouvez voir ici les modification et les utiliser sur le service.
+        </p>
+      </Notice>
+    </div>
+  {/if}
+
   {#if modelSlugTmp}
     <div class="mb-s24">
       <Notice title="Le service est détaché du modèle" type="warning">
