@@ -30,6 +30,7 @@
       service.model = modelSlug;
       service.structure = null;
       service.slug = null;
+      service.locationKinds = [];
     } else {
       service = getNewService();
     }

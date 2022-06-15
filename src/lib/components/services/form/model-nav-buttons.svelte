@@ -10,7 +10,7 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import { formatSchema } from "$lib/schemas/utils";
 
-  export let model;
+  export let model, onError;
 
   const modelSchema = formatSchema(schema, fields.model, fieldsRequired.model);
 
@@ -25,6 +25,10 @@
         goto(`/modeles/${result.data.slug}`);
       } catch (error) {
         logException(error);
+
+        if (onError) {
+          onError();
+        }
       }
     }
   }

@@ -21,11 +21,10 @@
         <a href="/modeles/{model.slug}">{model.name}</a>
       </h4>
     </div>
-    {#if model.numServices}
-      <p class="mb-s0 text-f14">
-        {model.numServices} service{model.numServices > 1 ? "s" : ""}
-      </p>
-    {/if}
+
+    <p class="mb-s0 text-f14">
+      {model.numServices} service{model.numServices > 1 ? "s" : ""}
+    </p>
   </div>
 
   <div

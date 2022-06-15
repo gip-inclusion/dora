@@ -60,6 +60,10 @@
   function onError() {
     errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
   }
+
+  let multipleServices = 0;
+
+  $: multipleServices = model.numServices > 1;
 </script>
 
 <svelte:head>
@@ -70,15 +74,20 @@
   <CenteredGrid>
     <h1>Modification du modèle</h1>
 
-    <Notice
-      title="Ce modèle est utilisé par un ou plusieurs services"
-      type="warning"
-    >
-      <p class="text-f14">
-        Les modifications seront proposées sur tous les services utilisant ce
-        modèle.
-      </p>
-    </Notice>
+    {#if model.numServices}
+      <Notice
+        title={`Ce modèle est utilisé par ${
+          multipleServices ? model.numServices : "un"
+        } service${multipleServices ? "s" : ""}`}
+        type="warning"
+      >
+        <p class="text-f14">
+          Les modifications seront proposées sur tous le{`${
+            multipleServices ? "s" : ""
+          }`} service{`${multipleServices ? "s" : ""}`} utilisant ce modèle.
+        </p>
+      </Notice>
+    {/if}
   </CenteredGrid>
 
   {#if model}

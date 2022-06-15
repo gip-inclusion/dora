@@ -81,13 +81,13 @@
         <p class="text-f14">Vous n’êtes rattaché à aucune structure.</p>
       </Notice>
     {/if}
-    {#if !serviceSlug}
+    {#if serviceSlug}
       <Notice
         title="Le service utilisé comme base sera synchronisé avec ce modèle"
         type="info"
       >
         <p class="text-f14">
-          À chaque mise à jour du modèle, vous pourrez implḿenter les
+          À chaque mise à jour du modèle, vous pourrez implémenter les
           modifications sur ce service.
         </p>
       </Notice>
