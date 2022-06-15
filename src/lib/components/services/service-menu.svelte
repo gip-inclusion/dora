@@ -26,7 +26,7 @@
   {:else}
     <LinkButton
       label="Créer un modèle"
-      to={`/modeles/creer?service=${service.slug}`}
+      to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
       small
       {secondary}
       noBackground={!secondary}

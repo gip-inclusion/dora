@@ -25,6 +25,7 @@
       model = await getService(serviceSlug);
       model.slug = null;
       model.structure = null;
+      model.service = serviceSlug;
     } else {
       model = getNewModel();
     }
