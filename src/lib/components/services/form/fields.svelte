@@ -9,7 +9,7 @@
     contextValidationKey,
   } from "$lib/validation.js";
   import schema, { fields, fieldsRequired } from "$lib/schemas/service.js";
-  import { moveToTheEnd } from "$lib/utils";
+  import { moveToTheEnd, orderAndReformatSubcategories } from "$lib/utils";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
@@ -43,7 +43,10 @@
         )
       : [];
 
-    subcategories = moveToTheEnd(subcategories, "label", "Autre", true);
+    subcategories = orderAndReformatSubcategories(
+      subcategories,
+      servicesOptions.categories
+    );
 
     service.subcategories = service.subcategories.filter((scat) =>
       categories.some((cat) => scat.startsWith(cat))
@@ -406,7 +409,6 @@
           choices={subcategories}
           placeholder="Sélectionner"
           placeholderMulti="Sélectionner"
-          sortSelect
         />
       </FieldModel>
 

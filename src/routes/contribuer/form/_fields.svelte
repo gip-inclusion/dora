@@ -7,7 +7,7 @@
   import Field from "$lib/components/forms/field.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import AddressSearch from "$lib/components/forms/street-search.svelte";
-  import { moveToTheEnd } from "$lib/utils";
+  import { moveToTheEnd, orderAndReformatSubcategories } from "$lib/utils";
   import Notice from "$lib/components/notice.svelte";
   import Button from "$lib/components/button.svelte";
   import { tick } from "svelte";
@@ -31,7 +31,11 @@
           categories.some((category) => value.startsWith(category))
         )
       : [];
-    subcategories = moveToTheEnd(subcategories, "label", "Autre", true);
+    subcategories = orderAndReformatSubcategories(
+      subcategories,
+      servicesOptions.categories
+    );
+
     service.subcategories = service.subcategories.filter((scat) =>
       categories.some((category) => scat.startsWith(category))
     );

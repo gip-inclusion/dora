@@ -94,8 +94,7 @@ export function moveToTheEnd(
   array,
   key,
   value,
-  sortBeginning = false,
-  sortKey = "label"
+  { sortBeginning = false, sortKey = "label" } = {}
 ) {
   const elementsToMove = array.filter((e) => e[key] === value);
 
@@ -111,4 +110,20 @@ export function moveToTheEnd(
   }
 
   return [...beginning, ...elementsToMove];
+}
+
+export function orderAndReformatSubcategories(subcategories, categories) {
+  return moveToTheEnd(subcategories, "label", "Autre", {
+    sortBeginning: true,
+  }).map(({ value, label }) => {
+    const categorie = categories.find(
+      (cat) => cat.value === value.replace("--autre", "")
+    );
+    return {
+      value,
+      label: value.endsWith("--autre")
+        ? `${label} (${categorie?.label})`
+        : label,
+    };
+  });
 }
