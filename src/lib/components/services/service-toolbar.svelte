@@ -8,6 +8,7 @@
   import SuggestionModal from "./suggestion-modal.svelte";
   import ServiceMenu from "./service-menu.svelte";
   import StateButtonMenu from "./state-button-menu.svelte";
+  import ServiceSync from "./service-sync.svelte";
 
   export let service;
   export let onRefresh;
@@ -32,7 +33,13 @@
 <div class="inline-flex flex-wrap items-start gap-s8">
   {#if $token && service.canWrite}
     <StateButtonMenu {service} {onRefresh} />
-    <ServiceMenu {service} secondary {onRefresh} inline />
+    {#if service.model}
+      <ServiceSync modelChanged={service.modelChanged}>
+        <ServiceMenu {service} {onRefresh} inline />
+      </ServiceSync>
+    {:else}
+      <ServiceMenu {service} {onRefresh} inline />
+    {/if}
   {:else}
     <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
     <Button
