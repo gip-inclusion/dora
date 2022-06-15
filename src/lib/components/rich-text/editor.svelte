@@ -19,7 +19,6 @@
   import Separator from "./separator.svelte";
 
   export let name;
-  export let className = "prose bg-white h-s160";
   export let htmlContent = "";
   export let initialContent = "";
   export let placeholder = "";
@@ -62,7 +61,7 @@
           name,
           disabled,
           readonly,
-          class: `${className} p-s16 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none`,
+          class: `prose bg-white h-s160 p-s16 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none`,
         },
       },
     });
@@ -141,6 +140,8 @@
 
     linkDialogIsOpen = false;
   }
+
+  $: editor?.commands.setContent(htmlContent);
 </script>
 
 <div class="flex w-full flex-col border border-gray-03">
