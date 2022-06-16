@@ -15,23 +15,24 @@
     class="rounded-t-md bg-gray-00 px-s20 py-s12"
     class:rounded-b-md={readOnly}
   >
+    <p class="mb-s8 text-f14 text-gray-text">
+      Mis à jour le <Date date={service.modificationDate} />
+    </p>
+
+    <h4 class="mb-s8 text-france-blue">
+      <a href="/services/{service.slug}">{service.name}</a>
+    </h4>
+
     <div class="mb-s8 flex items-center">
       {#if !service.isDraft && !service.isSuggestion}
         <div class="mr-s8">
           <Label icon={checkBoxBlankIcon} success bold smallIcon />
         </div>
       {/if}
-      <p class="mb-s0 text-f12 text-gray-text">
-        Mis à jour le <Date date={service.modificationDate} />
-      </p>
+      {#if service.diffusionZoneDetailsDisplay}
+        <Label label={service.diffusionZoneDetailsDisplay} />
+      {/if}
     </div>
-    <h4 class="mb-s8 text-france-blue">
-      <a href="/services/{service.slug}">{service.name}</a>
-    </h4>
-
-    {#if service.diffusionZoneDetailsDisplay}
-      <Label label={service.diffusionZoneDetailsDisplay} />
-    {/if}
   </div>
   {#if !readOnly}
     <div class="flex grow flex-col justify-end border-t border-t-gray-03 p-s20">
