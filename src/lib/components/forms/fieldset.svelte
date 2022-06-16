@@ -51,9 +51,7 @@
             : ''}"
         >
           <h3
-            class="mb-s0 {headerBg !== 'bg-white'
-              ? 'text-white'
-              : 'text-france-blue'}"
+            class={headerBg !== "bg-white" ? "text-white" : "text-france-blue"}
           >
             {title}
           </h3>

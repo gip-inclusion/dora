@@ -59,7 +59,9 @@
       </h4>
       {#if required} <span class="ml-s6 text-error"> *</span>{/if}</label
     >
-    <small>{description}</small>
+    {#if description}
+      <small>{description}</small>
+    {/if}
   </div>
   <div class="flex flex-col{vertical ? '' : ' lg:w-3/4'}">
     {#if type !== "custom"}
