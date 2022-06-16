@@ -63,10 +63,6 @@
       );
 
       if (!isModel && service.model && model) {
-        // si ce champs spécifique existe dans les options de service
-        // -> on modifie le modèle avec l'id du champs spécifique
-        // sinon (le champs spécifique n'existe pas dans les options de service)
-        // -> on l'ajoute dans les options de service
         model[propName].forEach((value, i) => {
           // si le type est une string, c'est un champs spécifique
           if (typeof value === "string") {
@@ -74,12 +70,22 @@
               (o) => o.label === value
             );
 
+            // si ce champs spécifique existe dans les options de service
+            // -> on modifie le modèle avec l'id du champs spécifique
+            // sinon (le champs spécifique n'existe pas dans les options de service)
+            // -> on l'ajoute dans les options de service
+
             if (option) {
               model[propName][i] = option.value;
             } else {
+              const newOption = { value, label: value };
+              if (structure) {
+                newOption.structure = structure.slug;
+              }
+
               servicesOptions[propName] = [
                 ...servicesOptions[propName],
-                { value, label: value, structure: structure.slug },
+                newOption,
               ];
             }
           }
