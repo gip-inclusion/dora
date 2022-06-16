@@ -1,6 +1,6 @@
 <script>
   import { CANONICAL_URL } from "$lib/env";
-  import { token, userInfo } from "$lib/auth";
+  import { userInfo } from "$lib/auth";
 
   import LinkButton from "$lib/components/link-button.svelte";
   import Button from "$lib/components/button.svelte";
@@ -8,6 +8,7 @@
   export let model;
   export let secondary = false;
   export let inline = false;
+  export let readOnly = true;
 
   async function copyLink() {
     await navigator.clipboard.writeText(
@@ -17,7 +18,7 @@
 </script>
 
 <div class:flex={inline} class:gap-s8={inline} class:items-start={inline}>
-  {#if $token && model.canWrite}
+  {#if !readOnly}
     <LinkButton
       label="Modifier"
       to="/modeles/{model.slug}/editer"

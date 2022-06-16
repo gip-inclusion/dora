@@ -30,6 +30,8 @@
   <div
     class="flex items-center justify-between border-t border-t-gray-03 p-s20"
   >
-    <div class="ml-auto self-end"><ModelMenu {model} /></div>
+    <div class="ml-auto self-end">
+      <ModelMenu {model} {readOnly} />
+    </div>
   </div>
 </div>

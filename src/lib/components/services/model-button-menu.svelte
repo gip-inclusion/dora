@@ -5,8 +5,9 @@
   import ModelMenu from "./model-menu.svelte";
 
   export let model;
+  export let readOnly;
 </script>
 
 <ButtonMenu icon={moreIcon} small>
-  <ModelMenu {model} />
+  <ModelMenu {model} {readOnly} />
 </ButtonMenu>
