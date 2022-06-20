@@ -78,10 +78,14 @@
     <NoticePublication {service} />
   </CenteredGrid>
 
+  <div bind:this={errorDiv} />
+  <Errors />
+
   {#if service}
-    <div bind:this={errorDiv} />
-    <Errors />
     <Fields bind:service {servicesOptions} {structures} {structure} {model} />
+  {/if}
+
+  {#if service?.structure}
     <ServiceNavButtons {onError} bind:service />
   {/if}
 </EnsureLoggedIn>

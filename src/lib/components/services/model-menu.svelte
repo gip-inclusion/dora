@@ -1,6 +1,5 @@
 <script>
   import { CANONICAL_URL } from "$lib/env";
-  import { userInfo } from "$lib/auth";
 
   import LinkButton from "$lib/components/link-button.svelte";
   import Button from "$lib/components/button.svelte";
@@ -27,15 +26,15 @@
       {secondary}
     />
   {/if}
-  {#if $userInfo}
-    <LinkButton
-      label="Créer un service"
-      small
-      to={`/services/creer?modele=${model.slug}`}
-      noBackground={!secondary}
-      {secondary}
-    />
-  {/if}
+
+  <LinkButton
+    label="Créer un service"
+    small
+    to={`/services/creer?modele=${model.slug}`}
+    noBackground={!secondary}
+    {secondary}
+  />
+
   {#if false}
     <Button
       label="Copier le lien"

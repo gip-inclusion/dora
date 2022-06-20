@@ -85,7 +85,7 @@
   </div>
 
   <div class="mb-s24 md:w-2/3">
-    <p class="mb-s24 font-bold text-gray-dark">{structure.shortDesc}</p>
+    <p class="mb-s24 font-bold">{structure.shortDesc}</p>
 
     <TextClamp text={structure.fullDesc} />
   </div>

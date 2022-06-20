@@ -796,14 +796,14 @@
                     <div class="flex shrink-0 items-baseline">
                       {#each listItem.tags as tag}
                         <div
-                          class="break-word shrink-0 rounded bg-gray-01 px-s6 py-s2 text-f10 font-bold uppercase text-gray-text"
+                          class="break-word shrink-0 rounded bg-gray-01 px-s6 py-s2 text-f14 font-bold text-gray-text"
                         >
                           {tag}
                         </div>
                       {/each}
                       {#if postfixValueFunction}
                         <div
-                          class="ml-s8 inline-block text-f12 text-gray-text-alt"
+                          class="ml-s8 inline-block text-f14 text-gray-text-alt"
                         >
                           {postfixValueFunction(listItem.value)}
                         </div>
@@ -842,15 +842,17 @@
 {#if multiple && value}
   <div class="tags-container mb-s8">
     {#each value as tagItem}
-      <div class="tags has-addons">
-        <span class="tag break-all">{getLabelForValue(tagItem)}</span>
+      <div
+        class="tags break-all bg-magenta-brand text-f14 font-bold text-white"
+      >
+        {getLabelForValue(tagItem)}
 
-        <div
-          class="tag is-delete"
+        <span
+          class="tag-delete"
           on:click|preventDefault={unselectItem(tagItem)}
         >
           {@html closeCircleIcon}
-        </div>
+        </span>
       </div>
     {/each}
   </div>
@@ -1003,16 +1005,11 @@
   .tags {
     display: flex;
     flex-direction: row;
-    background-color: var(--col-magenta-brand);
     border-radius: var(--s4);
     padding: var(--s2) var(--s8);
   }
 
-  .tag {
-    @apply text-f12 uppercase leading-20 text-white;
-  }
-
-  .tag.is-delete {
+  .tag-delete {
     position: relative;
     top: 2px;
     margin-left: 4px;

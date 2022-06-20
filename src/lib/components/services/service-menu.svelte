@@ -5,7 +5,7 @@
   export let inline = false;
 </script>
 
-<div class:flex={inline} class:gap-s8={inline} class:items-start={inline}>
+<div class:flex={inline} class:items-start={inline}>
   {#if service.model}
     <LinkButton
       label="Modifier"

@@ -11,7 +11,7 @@
 
 <div
   class="flex items-center gap-s16 rounded-md border border-gray-01 py-s16 px-s24"
-  class:is-own={isMyself}
+  class:bg-gray-01={isMyself}
 >
   <div class="flex flex-col">
     <h4>{member.user.fullName}</h4>
@@ -27,9 +27,3 @@
     </div>
   {/if}
 </div>
-
-<style lang="postcss">
-  .is-own {
-    background-color: var(--col-gray-01);
-  }
-</style>
