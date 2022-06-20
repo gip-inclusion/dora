@@ -5,7 +5,7 @@
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import { searchIcon } from "$lib/icons";
-  import { getDepartmentFromCityCode } from "$lib/utils";
+  import { getDepartmentFromCityCode, moveToTheEnd } from "$lib/utils";
   import { getQuery } from "./_search";
 
   export let servicesOptions = {};
@@ -22,13 +22,18 @@
     goto(`recherche?${query}`);
   }
 
-  function handleCategoryChange(cat) {
-    subCategoryChoices = cat
+  function handleCategoryChange(category) {
+    subCategoryChoices = category
       ? servicesOptions.subcategories.filter(({ value }) =>
-          value.startsWith(cat)
+          value.startsWith(category)
         )
       : [];
-    if (cat && subCategoryId && !subCategoryId.startsWith(cat))
+
+    subCategoryChoices = moveToTheEnd(subCategoryChoices, "label", "Autre", {
+      sortBeginning: true,
+    });
+
+    if (category && subCategoryId && !subCategoryId.startsWith(category))
       subCategoryId = null;
   }
 </script>
@@ -60,7 +65,6 @@
         choices={subCategoryChoices}
         label="Besoin"
         vertical
-        sortSelect
       />
 
       <Field type="custom" label="Lieu" name="city" required vertical>

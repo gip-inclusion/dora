@@ -4,7 +4,7 @@
   import Button from "$lib/components/button.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import Field from "$lib/components/forms/field.svelte";
-  import { getDepartmentFromCityCode } from "$lib/utils";
+  import { getDepartmentFromCityCode, moveToTheEnd } from "$lib/utils";
 
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import { getQuery } from "./_search";
@@ -29,16 +29,27 @@
     goto(`recherche?${query}`);
   }
 
-  $: subCatChoices = servicesOptions.subcategories.filter(({ value }) =>
-    value.startsWith(categoryId)
+  $: subCategoryChoices = moveToTheEnd(
+    servicesOptions.subcategories.filter(
+      ({ value }) => value.startsWith(categoryId),
+      "label",
+      "Autre",
+      {
+        sortBeginning: true,
+      }
+    )
   );
 
   function handleCategoryChange(cat) {
-    subCatChoices = cat
+    subCategoryChoices = cat
       ? servicesOptions.subcategories.filter(({ value }) =>
           value.startsWith(cat)
         )
       : [];
+
+    subCategoryChoices = moveToTheEnd(subCategoryChoices, "label", "Autre", {
+      sortBeginning: true,
+    });
 
     if (cat && subCategoryId && !subCategoryId.startsWith(cat))
       subCategoryId = null;
@@ -68,10 +79,9 @@
       type="select"
       bind:value={subCategoryId}
       placeholder="Sélectionner"
-      choices={subCatChoices}
+      choices={subCategoryChoices}
       label="Besoin"
       vertical
-      sortSelect
     />
 
     <Field type="custom" label="Lieu" required vertical>
