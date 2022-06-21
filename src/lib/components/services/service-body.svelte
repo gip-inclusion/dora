@@ -10,12 +10,7 @@
 
 <div class="flex flex-col gap-s24 lg:flex-row">
   <div class="lg:w-2/3">
-    <div class="mb-s12 flex flex-wrap gap-s8">
-      {#each service.categoriesDisplay.sort( (a, b) => a.localeCompare( b, "fr", { numeric: true } ) ) as categoryDisplay}
-        <Tag bgColorClass="bg-magenta-brand" textColorClass="text-white"
-          >{categoryDisplay}</Tag
-        >
-      {/each}
+    <div class="mb-s8 flex flex-wrap gap-s8">
       {#if service.isCumulative}
         <Tag bgColorClass="bg-info" textColorClass="text-white"
           >Service cumulable</Tag
@@ -33,6 +28,13 @@
       {#if !isModel && service.locationKinds.includes("a-distance")}
         <Tag bgColorClass="bg-info" textColorClass="text-white">À distance</Tag>
       {/if}
+    </div>
+    <div class="mb-s12 flex flex-wrap gap-s8">
+      {#each service.categoriesDisplay.sort( (a, b) => a.localeCompare( b, "fr", { numeric: true } ) ) as categoryDisplay}
+        <Tag bgColorClass="bg-magenta-brand" textColorClass="text-white"
+          >{categoryDisplay}</Tag
+        >
+      {/each}
     </div>
     <p class="text-f12 text-gray-text-alt">
       {service.kindsDisplay.join(", ")}
@@ -91,7 +93,7 @@
           {:else}
             <li><span>Aucun</span></li>
           {/each}
-          {#if service.qpvOrZrr && !service.isModel}
+          {#if service.qpvOrZrr && !isModel}
             <li>uniquement QPV + ZRR</li>
           {/if}
         </ul>

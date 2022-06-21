@@ -2,11 +2,6 @@
   import Button from "./button.svelte";
 
   export let text = "";
-  export let maxLen = 60;
-
-  function shorten(str, separator = " ") {
-    return `${str.split(" ").splice(0, maxLen).join(separator)}…`;
-  }
 
   let showAll = false;
   let label;
@@ -15,15 +10,33 @@
     showAll = !showAll;
   }
 
-  let textVisible, textIsTooLong;
+  let textIsTooLong, height;
+  const defaultHeight = 240;
 
-  $: textIsTooLong = text.split(" ").length > maxLen;
-  $: textVisible = showAll || !textIsTooLong ? text : shorten(text);
+  $: textIsTooLong = height > defaultHeight;
   $: label = showAll ? "Réduire" : "Lire la suite";
 </script>
 
-<p class="prose mb-s24">{@html textVisible}</p>
+<div class:h-s160={!showAll} class="relative mb-s24 overflow-hidden">
+  <p class="prose mb-s24" bind:clientHeight={height}>{@html text}</p>
+  <div class:gradient={!showAll} />
+</div>
 
 {#if textIsTooLong}
   <Button {label} on:click={toggle} noBackground small noPadding />
 {/if}
+
+<style>
+  .gradient {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 100%
+    ); /* W3C */
+  }
+</style>

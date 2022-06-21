@@ -117,9 +117,12 @@
   </CenteredGrid>
 
   <div bind:this={errorDiv} />
+  <Errors />
+
   {#if structures.length}
-    <Errors />
     <Fields bind:service {servicesOptions} {structures} {structure} {model} />
+  {/if}
+  {#if service?.structure}
     <ServiceNavButtons {onError} bind:service />
   {/if}
 </EnsureLoggedIn>

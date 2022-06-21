@@ -96,8 +96,9 @@
   </CenteredGrid>
 
   <div bind:this={errorDiv} />
+  <Errors />
+
   {#if structures.length}
-    <Errors />
     <Fields
       bind:service={model}
       {servicesOptions}
@@ -105,6 +106,8 @@
       {structure}
       isModel
     />
+  {/if}
+  {#if model?.structure}
     <ModelNavButtons {onError} bind:model />
   {/if}
 </EnsureLoggedIn>

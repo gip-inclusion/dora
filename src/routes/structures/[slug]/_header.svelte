@@ -22,11 +22,7 @@
       },
     ];
 
-    if (
-      (!structure.parent && structure.branches?.length) ||
-      structure.isMember ||
-      $userInfo?.isStaff
-    ) {
+    if (!structure.parent && structure.branches?.length) {
       tabs.splice(1, 0, {
         id: "antennes",
         name: "Antennes",
@@ -45,11 +41,7 @@
       });
     }
 
-    if (
-      !!structure.services?.length ||
-      structure.isMember ||
-      $userInfo?.isStaff
-    ) {
+    if (structure.services?.length) {
       tabs.splice(1, 0, {
         id: "services",
         name: "Services",

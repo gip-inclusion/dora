@@ -144,8 +144,8 @@
 <CenteredGrid bgColor="bg-gray-bg">
   <div class="flex flex-col items-center justify-between gap-s16 md:flex-row">
     <div>
-      <h3 class="mb-s8 text-gray-dark">Infolettre</h3>
-      <p class="text-f12 text-gray-dark">
+      <h3 class="mb-s8">Infolettre</h3>
+      <p class="text-f16">
         Une fois par mois, recevez un courriel pour être informé des évolutions
         de DORA.
       </p>

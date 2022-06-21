@@ -63,7 +63,7 @@
 
   let multipleServices = 0;
 
-  $: multipleServices = model.numServices > 1;
+  $: multipleServices = model?.numServices > 1;
 </script>
 
 <svelte:head>
@@ -90,9 +90,10 @@
     {/if}
   </CenteredGrid>
 
+  <div bind:this={errorDiv} />
+  <Errors />
+
   {#if model}
-    <div bind:this={errorDiv} />
-    <Errors />
     <Fields
       bind:service={model}
       {servicesOptions}
@@ -100,6 +101,8 @@
       {structure}
       isModel
     />
+  {/if}
+  {#if model?.structure}
     <ModelNavButtons {onError} bind:model />
   {/if}
 </EnsureLoggedIn>

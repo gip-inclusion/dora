@@ -62,7 +62,19 @@
           !o.structure || (structure?.slug && o.structure === structure.slug)
       );
 
-      if (!isModel && service.model && model) {
+      if (isModel) {
+        // sur un modèle l'API retourne les champs les champs spécifiques sous forme de string,
+        // on leur attribue l'id numérique
+        service[propName].forEach((value, i) => {
+          // si le type est une string, c'est un champs spécifique
+          if (typeof value === "string") {
+            const option = structureServicesOptions.find(
+              (o) => o.label === value
+            );
+            service[propName][i] = option.value;
+          }
+        });
+      } else if (service.model && model) {
         model[propName].forEach((value, i) => {
           // si le type est une string, c'est un champs spécifique
           if (typeof value === "string") {
@@ -78,30 +90,13 @@
             if (option) {
               model[propName][i] = option.value;
             } else {
-              const newOption = { value, label: value };
-              if (structure) {
-                newOption.structure = structure.slug;
-              }
-
               servicesOptions[propName] = [
                 ...servicesOptions[propName],
-                newOption,
+                { value, label: value },
               ];
             }
           }
         });
-      }
-
-      // sur le service,
-      // suprimme les champs spécifiques qui n'aapartiennent pas à la structure
-      if (structure) {
-        const structureOptionsValues = servicesOptions[propName]
-          .filter((c) => !c.structure || c.structure === structure.slug)
-          .map((c) => c.value);
-
-        service[propName] = service[propName].filter((value) =>
-          structureOptionsValues.includes(value)
-        );
       }
     });
   }
@@ -265,206 +260,207 @@
   </div>
 </CenteredGrid>
 
-<hr />
-<CenteredGrid bgColor={service.model ? "bg-info-light" : "bg-gray-bg"}>
-  {#if service.model}
-    <div class="lg:flex lg:items-center lg:justify-between">
-      <h3>Synchronisé avec un modèle</h3>
-      <Button label="Détacher du modèle" secondary small on:click={unsync} />
-    </div>
-  {/if}
+{#if service.structure}
+  <hr />
+  <CenteredGrid bgColor={service.model ? "bg-info-light" : "bg-gray-bg"}>
+    {#if service.model}
+      <div class="lg:flex lg:items-center lg:justify-between">
+        <h3>Synchronisé avec un modèle</h3>
+        <Button label="Détacher du modèle" secondary small on:click={unsync} />
+      </div>
+    {/if}
 
-  {#if modelSlugTmp}
-    <div class="mb-s24">
-      <Notice title="Le service est détaché du modèle" type="warning">
-        <p class="text-f14">
-          Après enregistrement, cette action sera définitive.
-        </p>
-        <div slot="button">
-          <Button
-            label="Re-synchroniser avec le modèle"
-            secondary
-            small
-            on:click={sync}
-          />
+    {#if modelSlugTmp}
+      <div class="mb-s24">
+        <Notice title="Le service est détaché du modèle" type="warning">
+          <p class="text-f14">
+            Après enregistrement, cette action sera définitive.
+          </p>
+          <div slot="button">
+            <Button
+              label="Re-synchroniser avec le modèle"
+              secondary
+              small
+              on:click={sync}
+            />
+          </div>
+        </Notice>
+      </div>
+    {:else if service.modelChanged}
+      <div class="my-s24">
+        <Notice title="Le modèle a été mis à jour" type="warning">
+          <p class="text-f14">
+            Vous pouvez voir ici les modification et les utiliser sur le
+            service.
+          </p>
+        </Notice>
+      </div>
+    {/if}
+
+    <div class={showModel ? "" : "lg:w-2/3"}>
+      <FieldSet title="Présentation" {showModel} noTopPadding={!service.model}>
+        <div slot="help">
+          <p class="text-f14">
+            Le <b>Résumé</b> présente le service en une phrase courte. Il apparait
+            dans les résultats de recherche.
+          </p>
+          <p class="text-f14">
+            <strong>Exemple</strong> :
+            <i>
+              Faciliter vos déplacements en cas de reprise d’emploi ou de
+              formation (entretien d’embauche, concours public…)
+            </i>
+          </p>
+          <p class="text-f14">
+            Si besoin, détaillez dans la partie
+            <b>Description</b>.
+          </p>
         </div>
-      </Notice>
-    </div>
-  {:else if service.modelChanged}
-    <div class="my-s24">
-      <Notice title="Le modèle a été mis à jour" type="warning">
-        <p class="text-f14">
-          Vous pouvez voir ici les modification et les utiliser sur le service.
-        </p>
-      </Notice>
-    </div>
-  {/if}
 
-  <div class={showModel ? "" : "lg:w-2/3"}>
-    <FieldSet title="Présentation" {showModel} noTopPadding={!service.model}>
-      <div slot="help">
-        <p class="text-f14">
-          Le <b>Résumé</b> présente le service en une phrase courte. Il apparait
-          dans les résultats de recherche.
-        </p>
-        <p class="text-f14">
-          <strong>Exemple</strong> :
-          <i>
-            Faciliter vos déplacements en cas de reprise d’emploi ou de
-            formation (entretien d’embauche, concours public…)
-          </i>
-        </p>
-        <p class="text-f14">
-          Si besoin, détaillez dans la partie
-          <b>Description</b>.
-        </p>
-      </div>
+        <FieldModel
+          {showModel}
+          value={model?.name}
+          serviceValue={service.name}
+          useValue={useModelValue("name")}
+        >
+          <SchemaField
+            label={serviceSchema.name.name}
+            type="text"
+            placeholder="Compléter"
+            schema={serviceSchema.name}
+            name="name"
+            errorMessages={$formErrors.name}
+            bind:value={service.name}
+          />
+        </FieldModel>
 
-      <FieldModel
-        {showModel}
-        value={model?.name}
-        serviceValue={service.name}
-        useValue={useModelValue("name")}
-      >
-        <SchemaField
-          label={serviceSchema.name.name}
-          type="text"
-          placeholder="Compléter"
-          schema={serviceSchema.name}
-          name="name"
-          errorMessages={$formErrors.name}
-          bind:value={service.name}
-        />
-      </FieldModel>
+        <FieldModel
+          {showModel}
+          value={model?.shortDesc}
+          serviceValue={service.shortDesc}
+          useValue={useModelValue("shortDesc")}
+        >
+          <SchemaField
+            description="280 caractères maximum"
+            placeholder="Compléter"
+            type="textarea"
+            label={serviceSchema.shortDesc.name}
+            schema={serviceSchema.shortDesc}
+            name="shortDesc"
+            errorMessages={$formErrors.shortDesc}
+            bind:value={service.shortDesc}
+          />
+        </FieldModel>
 
-      <FieldModel
-        {showModel}
-        value={model?.shortDesc}
-        serviceValue={service.shortDesc}
-        useValue={useModelValue("shortDesc")}
-      >
-        <SchemaField
-          description="280 caractères maximum"
-          placeholder="Compléter"
-          type="textarea"
-          label={serviceSchema.shortDesc.name}
-          schema={serviceSchema.shortDesc}
-          name="shortDesc"
-          errorMessages={$formErrors.shortDesc}
-          bind:value={service.shortDesc}
-        />
-      </FieldModel>
+        <FieldModel
+          {showModel}
+          value={model?.fullDesc}
+          serviceValue={service.fullDesc}
+          useValue={useModelValue("fullDesc")}
+          paddingTop
+          type="html"
+        >
+          <SchemaField
+            label={serviceSchema.fullDesc.name}
+            placeholder="Informations concernants le service et ses spécificités."
+            type="richtext"
+            vertical
+            schema={serviceSchema.fullDesc}
+            name="fullDesc"
+            errorMessages={$formErrors.fullDesc}
+            bind:value={service.fullDesc}
+          />
+        </FieldModel>
+      </FieldSet>
 
-      <FieldModel
-        {showModel}
-        value={model?.fullDesc}
-        serviceValue={service.fullDesc}
-        useValue={useModelValue("fullDesc")}
-        paddingTop
-        type="html"
-      >
-        <SchemaField
-          label={serviceSchema.fullDesc.name}
-          placeholder="Informations concernants le service et ses spécificités."
-          type="richtext"
-          vertical
-          schema={serviceSchema.fullDesc}
-          name="fullDesc"
-          errorMessages={$formErrors.fullDesc}
-          bind:value={service.fullDesc}
-        />
-      </FieldModel>
-    </FieldSet>
+      <FieldSet title="Typologie" {showModel}>
+        <div slot="help">
+          <p class="text-f14">
+            Classez le service par thématiques et besoins pour faciliter son
+            référencement.
+          </p>
+        </div>
 
-    <FieldSet title="Typologie" {showModel}>
-      <div slot="help">
-        <p class="text-f14">
-          Classez le service par thématiques et besoins pour faciliter son
-          référencement.
-        </p>
-      </div>
+        <FieldModel
+          {showModel}
+          value={model?.categories}
+          serviceValue={service.categories}
+          options={servicesOptions.categories}
+          useValue={useModelValue("categories")}
+          type="array"
+        >
+          <SchemaField
+            type="multiselect"
+            label={serviceSchema.categories.name}
+            schema={serviceSchema.categories}
+            bind:value={service.categories}
+            choices={servicesOptions.categories}
+            name="categories"
+            errorMessages={$formErrors.categories}
+            onSelectChange={handleCategoriesChange}
+            placeholderMulti="Sélectionner"
+          />
+        </FieldModel>
 
-      <FieldModel
-        {showModel}
-        value={model?.categories}
-        serviceValue={service.categories}
-        options={servicesOptions.categories}
-        useValue={useModelValue("categories")}
-        type="array"
-      >
-        <SchemaField
-          type="multiselect"
-          label={serviceSchema.categories.name}
-          schema={serviceSchema.categories}
-          bind:value={service.categories}
-          choices={servicesOptions.categories}
-          name="categories"
-          errorMessages={$formErrors.categories}
-          onSelectChange={handleCategoriesChange}
-          placeholderMulti="Sélectionner"
-        />
-      </FieldModel>
+        <FieldModel
+          {showModel}
+          value={model?.subcategories}
+          serviceValue={service.subcategories}
+          options={servicesOptions.subcategories}
+          useValue={useModelValue("subcategories")}
+          type="array"
+        >
+          <SchemaField
+            type="multiselect"
+            label={serviceSchema.subcategories.name}
+            schema={serviceSchema.subcategories}
+            name="subcategories"
+            errorMessages={$formErrors.subcategories}
+            bind:value={service.subcategories}
+            choices={subcategories}
+            placeholder="Sélectionner"
+            placeholderMulti="Sélectionner"
+          />
+        </FieldModel>
 
-      <FieldModel
-        {showModel}
-        value={model?.subcategories}
-        serviceValue={service.subcategories}
-        options={servicesOptions.subcategories}
-        useValue={useModelValue("subcategories")}
-        type="array"
-      >
-        <SchemaField
-          type="multiselect"
-          label={serviceSchema.subcategories.name}
-          schema={serviceSchema.subcategories}
-          name="subcategories"
-          errorMessages={$formErrors.subcategories}
-          bind:value={service.subcategories}
-          choices={subcategories}
-          placeholder="Sélectionner"
-          placeholderMulti="Sélectionner"
-        />
-      </FieldModel>
+        <FieldModel
+          {showModel}
+          value={model?.kinds}
+          serviceValue={service.kinds}
+          options={servicesOptions.kinds}
+          useValue={useModelValue("kinds")}
+          type="array"
+        >
+          <SchemaField
+            type="checkboxes"
+            label={serviceSchema.kinds.name}
+            schema={serviceSchema.kinds}
+            name="kinds"
+            errorMessages={$formErrors.kinds}
+            bind:value={service.kinds}
+            choices={servicesOptions.kinds}
+          />
+        </FieldModel>
 
-      <FieldModel
-        {showModel}
-        value={model?.kinds}
-        serviceValue={service.kinds}
-        options={servicesOptions.kinds}
-        useValue={useModelValue("kinds")}
-        type="array"
-      >
-        <SchemaField
-          type="checkboxes"
-          label={serviceSchema.kinds.name}
-          schema={serviceSchema.kinds}
-          name="kinds"
-          errorMessages={$formErrors.kinds}
-          bind:value={service.kinds}
-          choices={servicesOptions.kinds}
-        />
-      </FieldModel>
+        <FieldModel
+          {showModel}
+          value={model?.isCumulative}
+          serviceValue={service.isCumulative}
+          useValue={useModelValue("isCumulative")}
+          type="boolean"
+        >
+          <SchemaField
+            type="toggle"
+            label={serviceSchema.isCumulative.name}
+            schema={serviceSchema.isCumulative}
+            name="isCumulative"
+            errorMessages={$formErrors.isCumulative}
+            bind:value={service.isCumulative}
+            description="Cumulable avec d’autres services"
+          />
+        </FieldModel>
+      </FieldSet>
 
-      <FieldModel
-        {showModel}
-        value={model?.isCumulative}
-        serviceValue={service.isCumulative}
-        useValue={useModelValue("isCumulative")}
-        type="boolean"
-      >
-        <SchemaField
-          type="toggle"
-          label={serviceSchema.isCumulative.name}
-          schema={serviceSchema.isCumulative}
-          name="isCumulative"
-          errorMessages={$formErrors.isCumulative}
-          bind:value={service.isCumulative}
-          description="Cumulable avec d’autres services"
-        />
-      </FieldModel>
-    </FieldSet>
-
-    {#if service.structure}
       <FieldSet title="Publics" {showModel}>
         <div slot="help">
           <p class="text-f14">
@@ -727,7 +723,7 @@
           {showModel}
           value={model?.onlineForm}
           serviceValue={service.onlineForm}
-          useValue={useModelValue("forms")}
+          useValue={useModelValue("onlineForm")}
         >
           <SchemaField
             label={serviceSchema.onlineForm.name}
@@ -740,277 +736,277 @@
           />
         </FieldModel>
       </FieldSet>
-    {/if}
 
-    <FieldSet title="Périodicité" {showModel}>
-      <div slot="help">
-        <p class="text-f14">
-          La durée limitée permet de supendre automatiquement la visibilité du
-          service dans les résultat de recherche.
-        </p>
-      </div>
-      <FieldModel
-        {showModel}
-        value={model?.recurrence}
-        serviceValue={service.recurrence}
-        useValue={useModelValue("recurrence")}
-      >
-        <SchemaField
-          label={serviceSchema.recurrence.name}
-          type="text"
-          placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
-          schema={serviceSchema.recurrence}
-          name="recurrence"
-          errorMessages={$formErrors.recurrence}
-          bind:value={service.recurrence}
-        />
-      </FieldModel>
-
-      <FieldModel
-        {showModel}
-        value={model?.suspensionDate}
-        serviceValue={service.suspensionDate}
-        useValue={useModelValue("suspensionDate")}
-      >
-        <SchemaField
-          label={serviceSchema.suspensionDate.name}
-          type="date"
-          schema={serviceSchema.suspensionDate}
-          name="suspensionDate"
-          errorMessages={$formErrors.suspensionDate}
-          bind:value={service.suspensionDate}
-        />
-      </FieldModel>
-    </FieldSet>
-  </div>
-</CenteredGrid>
-
-{#if !isModel}
-  <hr />
-
-  <CenteredGrid bgColor="bg-gray-bg">
-    <div class="lg:w-2/3">
-      <FieldSet title="Zone de diffusion" noTopPadding>
+      <FieldSet title="Périodicité" {showModel}>
         <div slot="help">
           <p class="text-f14">
-            Si le service est reservé aux habitants d'un territoire.
-          </p>
-
-          <h5 class="mb-s0">QPV et ZRR</h5>
-          <p class="text-f14">
-            Activez cette option si votre offre s’adresse uniquement aux
-            bénéficiaires résidants dans des Quartiers Prioritaires de la
-            politique de la Ville ou des Zones de Revitalisation Rurale.
+            La durée limitée permet de supendre automatiquement la visibilité du
+            service dans les résultat de recherche.
           </p>
         </div>
-        <SchemaField
-          type="select"
-          label={serviceSchema.diffusionZoneType.name}
-          schema={serviceSchema.diffusionZoneType}
-          choices={servicesOptions.diffusionZoneType}
-          name="diffusionZoneType"
-          errorMessages={$formErrors.diffusionZoneType}
-          onSelectChange={handleDiffusionZoneTypeChange}
-          initialValue={service.diffusionZoneTypeDisplay}
-        />
-
-        {#if service.diffusionZoneType !== "country"}
+        <FieldModel
+          {showModel}
+          value={model?.recurrence}
+          serviceValue={service.recurrence}
+          useValue={useModelValue("recurrence")}
+        >
           <SchemaField
-            type="custom"
-            name="diffusionZoneDetails"
-            label={serviceSchema.diffusionZoneDetails.name}
-            description="Commencez à saisir le nom et choisissez dans la liste."
-            errorMessages={$formErrors.diffusionZoneDetails}
-            schema={serviceSchema.diffusionZoneDetails}
-          >
-            <AdminDivisionSearch
-              slot="custom-input"
-              name="diffusionZoneDetails"
-              searchType={service.diffusionZoneType}
-              handleChange={handlediffusionZoneDetailsChange}
-              initialValue={service.diffusionZoneDetailsDisplay}
-              bind:choices={adminDivisionChoices}
-            />
-          </SchemaField>
-        {/if}
+            label={serviceSchema.recurrence.name}
+            type="text"
+            placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
+            schema={serviceSchema.recurrence}
+            name="recurrence"
+            errorMessages={$formErrors.recurrence}
+            bind:value={service.recurrence}
+          />
+        </FieldModel>
 
-        <SchemaField
-          label={serviceSchema.qpvOrZrr.name}
-          type="toggle"
-          name="qpvOrZrr"
-          schema={serviceSchema.qpvOrZrr}
-          errorMessages={$formErrors.qpvOrZrr}
-          bind:value={service.qpvOrZrr}
-        />
-      </FieldSet>
-
-      <FieldSet title="Lieu">
-        <SchemaField
-          type="checkboxes"
-          label={serviceSchema.locationKinds.name}
-          schema={serviceSchema.locationKinds}
-          name="locationKinds"
-          errorMessages={$formErrors.locationKinds}
-          bind:value={service.locationKinds}
-          choices={moveToTheEnd(
-            servicesOptions.locationKinds,
-            "value",
-            "a-distance"
-          )}
-        />
-
-        {#if service.locationKinds.includes("a-distance")}
+        <FieldModel
+          {showModel}
+          value={model?.suspensionDate}
+          serviceValue={service.suspensionDate}
+          useValue={useModelValue("suspensionDate")}
+        >
           <SchemaField
-            placeholder="https://"
-            type="url"
-            label={serviceSchema.remoteUrl.name}
-            schema={serviceSchema.remoteUrl}
-            name="remoteUrl"
-            errorMessages={$formErrors.remoteUrl}
-            bind:value={service.remoteUrl}
+            label={serviceSchema.suspensionDate.name}
+            type="date"
+            schema={serviceSchema.suspensionDate}
+            name="suspensionDate"
+            errorMessages={$formErrors.suspensionDate}
+            bind:value={service.suspensionDate}
           />
-        {/if}
-
-        {#if structure && service.locationKinds.includes("en-presentiel")}
-          <Button
-            on:click={fillAdress(structure)}
-            secondary
-            small
-            label="Utiliser l'adresse de la structure"
-          />
-
-          {#if showServiceAddress}
-            <SchemaField
-              name="city"
-              type="custom"
-              label={serviceSchema.city.name}
-              errorMessages={$formErrors.city}
-              schema={serviceSchema.city}
-            >
-              <CitySearch
-                slot="custom-input"
-                name="city"
-                placeholder="Saisissez et validez votre ville"
-                initialValue={service.city}
-                onChange={handleCityChange}
-              />
-            </SchemaField>
-
-            <SchemaField
-              type="custom"
-              name="address1"
-              label={serviceSchema.address1.name}
-              errorMessages={$formErrors.address1}
-              schema={serviceSchema.address1}
-            >
-              <AddressSearch
-                slot="custom-input"
-                name="address1"
-                disabled={!service.cityCode}
-                cityCode={service.cityCode}
-                placeholder="3 rue du parc"
-                initialValue={service.address1}
-                handleChange={handleAddressChange}
-              />
-            </SchemaField>
-
-            <SchemaField
-              type="text"
-              label={serviceSchema.address2.name}
-              placeholder="batiment, escalier, etc."
-              schema={serviceSchema.address2}
-              name="address2"
-              errorMessages={$formErrors.address2}
-              bind:value={service.address2}
-            />
-
-            <SchemaField
-              type="text"
-              label={serviceSchema.postalCode.name}
-              placeholder="00000"
-              schema={serviceSchema.postalCode}
-              name="postalCode"
-              errorMessages={$formErrors.postalCode}
-              bind:value={service.postalCode}
-            />
-
-            <SchemaField
-              type="hidden"
-              schema={serviceSchema.cityCode}
-              name="cityCode"
-              errorMessages={$formErrors.cityCode}
-              bind:value={service.cityCode}
-            />
-
-            <SchemaField
-              type="hidden"
-              schema={serviceSchema.longitude}
-              name="longitude"
-              errorMessages={$formErrors.longitude}
-              bind:value={service.longitude}
-            />
-
-            <SchemaField
-              type="hidden"
-              schema={serviceSchema.latitude}
-              name="latitude"
-              errorMessages={$formErrors.latitude}
-              bind:value={service.latitude}
-            />
-          {/if}
-        {/if}
-      </FieldSet>
-
-      <FieldSet title="Contact">
-        <div slot="help">
-          <p class="text-f14">
-            Coordonnées de la personne responsable de la réception et du
-            traitement des demandes d’orientation. À défaut, renseignez le
-            courriel et le numéro de téléphone de votre structure.
-          </p>
-          <p class="text-f14">
-            Par défaut, ces informations sont disponibles uniquement aux
-            accompagnateurs qui ont un compte DORA. En cochant la case « Rendre
-            public », les informations seront rendues disponibles à tous les
-            visiteurs du site.
-          </p>
-        </div>
-        <SchemaField
-          label={serviceSchema.contactName.name}
-          placeholder="Prénom et nom"
-          type="text"
-          schema={serviceSchema.contactName}
-          name="contactName"
-          errorMessages={$formErrors.contactName}
-          bind:value={service.contactName}
-        />
-        <SchemaField
-          type="tel"
-          label={serviceSchema.contactPhone.name}
-          placeholder="00 00 00 00 00"
-          schema={serviceSchema.contactPhone}
-          name="contactPhone"
-          errorMessages={$formErrors.contactPhone}
-          bind:value={service.contactPhone}
-        />
-        <SchemaField
-          type="email"
-          label={serviceSchema.contactEmail.name}
-          placeholder="nom@exemple.org"
-          schema={serviceSchema.contactEmail}
-          name="contactEmail"
-          errorMessages={$formErrors.contactEmail}
-          bind:value={service.contactEmail}
-        />
-        <SchemaField
-          label={serviceSchema.isContactInfoPublic.name}
-          type="toggle"
-          schema={serviceSchema.isContactInfoPublic}
-          name="isContactInfoPublic"
-          errorMessages={$formErrors.isContactInfoPublic}
-          bind:value={service.isContactInfoPublic}
-        />
+        </FieldModel>
       </FieldSet>
     </div>
   </CenteredGrid>
+
+  {#if !isModel}
+    <hr />
+
+    <CenteredGrid bgColor="bg-gray-bg">
+      <div class="lg:w-2/3">
+        <FieldSet title="Zone de diffusion" noTopPadding>
+          <div slot="help">
+            <p class="text-f14">
+              Si le service est reservé aux habitants d'un territoire.
+            </p>
+
+            <h5 class="mb-s0">QPV et ZRR</h5>
+            <p class="text-f14">
+              Activez cette option si votre offre s’adresse uniquement aux
+              bénéficiaires résidants dans des Quartiers Prioritaires de la
+              politique de la Ville ou des Zones de Revitalisation Rurale.
+            </p>
+          </div>
+          <SchemaField
+            type="select"
+            label={serviceSchema.diffusionZoneType.name}
+            schema={serviceSchema.diffusionZoneType}
+            choices={servicesOptions.diffusionZoneType}
+            name="diffusionZoneType"
+            errorMessages={$formErrors.diffusionZoneType}
+            onSelectChange={handleDiffusionZoneTypeChange}
+            initialValue={service.diffusionZoneTypeDisplay}
+          />
+
+          {#if service.diffusionZoneType !== "country"}
+            <SchemaField
+              type="custom"
+              name="diffusionZoneDetails"
+              label={serviceSchema.diffusionZoneDetails.name}
+              description="Commencez à saisir le nom et choisissez dans la liste."
+              errorMessages={$formErrors.diffusionZoneDetails}
+              schema={serviceSchema.diffusionZoneDetails}
+            >
+              <AdminDivisionSearch
+                slot="custom-input"
+                name="diffusionZoneDetails"
+                searchType={service.diffusionZoneType}
+                handleChange={handlediffusionZoneDetailsChange}
+                initialValue={service.diffusionZoneDetailsDisplay}
+                bind:choices={adminDivisionChoices}
+              />
+            </SchemaField>
+          {/if}
+
+          <SchemaField
+            label={serviceSchema.qpvOrZrr.name}
+            type="toggle"
+            name="qpvOrZrr"
+            schema={serviceSchema.qpvOrZrr}
+            errorMessages={$formErrors.qpvOrZrr}
+            bind:value={service.qpvOrZrr}
+          />
+        </FieldSet>
+
+        <FieldSet title="Lieu">
+          <SchemaField
+            type="checkboxes"
+            label={serviceSchema.locationKinds.name}
+            schema={serviceSchema.locationKinds}
+            name="locationKinds"
+            errorMessages={$formErrors.locationKinds}
+            bind:value={service.locationKinds}
+            choices={moveToTheEnd(
+              servicesOptions.locationKinds,
+              "value",
+              "a-distance"
+            )}
+          />
+
+          {#if service.locationKinds.includes("a-distance")}
+            <SchemaField
+              placeholder="https://"
+              type="url"
+              label={serviceSchema.remoteUrl.name}
+              schema={serviceSchema.remoteUrl}
+              name="remoteUrl"
+              errorMessages={$formErrors.remoteUrl}
+              bind:value={service.remoteUrl}
+            />
+          {/if}
+
+          {#if structure && service.locationKinds.includes("en-presentiel")}
+            <Button
+              on:click={fillAdress(structure)}
+              secondary
+              small
+              label="Utiliser l'adresse de la structure"
+            />
+
+            {#if showServiceAddress}
+              <SchemaField
+                name="city"
+                type="custom"
+                label={serviceSchema.city.name}
+                errorMessages={$formErrors.city}
+                schema={serviceSchema.city}
+              >
+                <CitySearch
+                  slot="custom-input"
+                  name="city"
+                  placeholder="Saisissez et validez votre ville"
+                  initialValue={service.city}
+                  onChange={handleCityChange}
+                />
+              </SchemaField>
+
+              <SchemaField
+                type="custom"
+                name="address1"
+                label={serviceSchema.address1.name}
+                errorMessages={$formErrors.address1}
+                schema={serviceSchema.address1}
+              >
+                <AddressSearch
+                  slot="custom-input"
+                  name="address1"
+                  disabled={!service.cityCode}
+                  cityCode={service.cityCode}
+                  placeholder="3 rue du parc"
+                  initialValue={service.address1}
+                  handleChange={handleAddressChange}
+                />
+              </SchemaField>
+
+              <SchemaField
+                type="text"
+                label={serviceSchema.address2.name}
+                placeholder="batiment, escalier, etc."
+                schema={serviceSchema.address2}
+                name="address2"
+                errorMessages={$formErrors.address2}
+                bind:value={service.address2}
+              />
+
+              <SchemaField
+                type="text"
+                label={serviceSchema.postalCode.name}
+                placeholder="00000"
+                schema={serviceSchema.postalCode}
+                name="postalCode"
+                errorMessages={$formErrors.postalCode}
+                bind:value={service.postalCode}
+              />
+
+              <SchemaField
+                type="hidden"
+                schema={serviceSchema.cityCode}
+                name="cityCode"
+                errorMessages={$formErrors.cityCode}
+                bind:value={service.cityCode}
+              />
+
+              <SchemaField
+                type="hidden"
+                schema={serviceSchema.longitude}
+                name="longitude"
+                errorMessages={$formErrors.longitude}
+                bind:value={service.longitude}
+              />
+
+              <SchemaField
+                type="hidden"
+                schema={serviceSchema.latitude}
+                name="latitude"
+                errorMessages={$formErrors.latitude}
+                bind:value={service.latitude}
+              />
+            {/if}
+          {/if}
+        </FieldSet>
+
+        <FieldSet title="Contact">
+          <div slot="help">
+            <p class="text-f14">
+              Coordonnées de la personne responsable de la réception et du
+              traitement des demandes d’orientation. À défaut, renseignez le
+              courriel et le numéro de téléphone de votre structure.
+            </p>
+            <p class="text-f14">
+              Par défaut, ces informations sont disponibles uniquement aux
+              accompagnateurs qui ont un compte DORA. En cochant la case
+              « Rendre public », les informations seront rendues disponibles à
+              tous les visiteurs du site.
+            </p>
+          </div>
+          <SchemaField
+            label={serviceSchema.contactName.name}
+            placeholder="Prénom et nom"
+            type="text"
+            schema={serviceSchema.contactName}
+            name="contactName"
+            errorMessages={$formErrors.contactName}
+            bind:value={service.contactName}
+          />
+          <SchemaField
+            type="tel"
+            label={serviceSchema.contactPhone.name}
+            placeholder="00 00 00 00 00"
+            schema={serviceSchema.contactPhone}
+            name="contactPhone"
+            errorMessages={$formErrors.contactPhone}
+            bind:value={service.contactPhone}
+          />
+          <SchemaField
+            type="email"
+            label={serviceSchema.contactEmail.name}
+            placeholder="nom@exemple.org"
+            schema={serviceSchema.contactEmail}
+            name="contactEmail"
+            errorMessages={$formErrors.contactEmail}
+            bind:value={service.contactEmail}
+          />
+          <SchemaField
+            label={serviceSchema.isContactInfoPublic.name}
+            type="toggle"
+            schema={serviceSchema.isContactInfoPublic}
+            name="isContactInfoPublic"
+            errorMessages={$formErrors.isContactInfoPublic}
+            bind:value={service.isContactInfoPublic}
+          />
+        </FieldSet>
+      </div>
+    </CenteredGrid>
+  {/if}
 {/if}

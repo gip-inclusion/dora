@@ -83,7 +83,7 @@
   import SearchTweakForm from "./_homepage/_search_tweak_form.svelte";
   import SearchPromo from "./_homepage/_search-promo.svelte";
 
-  import ShareButton from "$lib/components/share-button.svelte";
+  import EmailButton from "$lib/components/email-button.svelte";
   import NewsletterButton from "$lib/components/newsletter-button.svelte";
   import Tag from "$lib/components/tag.svelte";
 
@@ -211,7 +211,7 @@
                 to="/contribuer"
                 secondary
               />
-              <ShareButton wFull />
+              <EmailButton wFull />
             </div>
           </div>
           <div
