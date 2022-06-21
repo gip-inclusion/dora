@@ -796,14 +796,14 @@
                     <div class="flex shrink-0 items-baseline">
                       {#each listItem.tags as tag}
                         <div
-                          class="break-word shrink-0 rounded bg-gray-01 px-s6 py-s2 text-f14 font-bold text-gray-text"
+                          class="break-word shrink-0 rounded bg-gray-01 px-s6 py-s2 text-f12 font-bold text-gray-text"
                         >
                           {tag}
                         </div>
                       {/each}
                       {#if postfixValueFunction}
                         <div
-                          class="ml-s8 inline-block text-f14 text-gray-text-alt"
+                          class="ml-s8 inline-block text-f12 text-gray-text-alt"
                         >
                           {postfixValueFunction(listItem.value)}
                         </div>
