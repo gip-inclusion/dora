@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.15](https://github.com/betagouv/dora-front/compare/v0.0.14...v0.0.15) (2022-06-21)
+
+### Features
+
+- **modèles de service:** ajoute les modèles de service ([#59](https://github.com/betagouv/dora-front/issues/59)) ([cd905a6](https://github.com/betagouv/dora-front/commit/cd905a6acae7a3738588b4e1a127667f446481ad))
+- **modèle:** utilise le formulaire pour créer un modèle à partir d'un service ([#62](https://github.com/betagouv/dora-front/issues/62)) ([b2a3eec](https://github.com/betagouv/dora-front/commit/b2a3eec41fd6ddb8b85bf85ff4b21d4ef7110ca9))
+- **service:** affiche la synchro avec le modèle ([#63](https://github.com/betagouv/dora-front/issues/63)) ([7df4796](https://github.com/betagouv/dora-front/commit/7df479690168e1887dfdbda2d75c32840921a9c2))
+- **service:** affiche un notice d'avertissement lorsque le service est détaché du modèle ([be6825e](https://github.com/betagouv/dora-front/commit/be6825e24102171686b312ba994b6d3165544d64))
+- **service:** création à partir d'un modèle ([#60](https://github.com/betagouv/dora-front/issues/60)) ([49b787e](https://github.com/betagouv/dora-front/commit/49b787e2d211a823308f138163abd9c9672be344))
+
+### Bug Fixes
+
+- corrige la création de service à partir d'un modèle ([62c060b](https://github.com/betagouv/dora-front/commit/62c060b56e00ef4f67b5c0f08881c7da0d81aaf7))
+- masque le bouton `Créer un service` si l'utilisateur n'est pas loggué ([63bf65b](https://github.com/betagouv/dora-front/commit/63bf65b9d98468ab6dcb79cbba17c504bad24d98))
+- **modèle:** corrige l'affichage du bouton modifier sur la carte ([54337e7](https://github.com/betagouv/dora-front/commit/54337e72c1e450d8cc8bfe2071ba6d0296b0456c))
+- **modèle:** lors de la création du modèle depuis un service, celui-ci est lié ([863761d](https://github.com/betagouv/dora-front/commit/863761de5ccfc9afdd90ea776e43130bdd5c7419))
+- modifie l'affichage de la disponibilité ([8b6314b](https://github.com/betagouv/dora-front/commit/8b6314b3b0b71c12d16f49539638417f0a04afb4))
+- **service:** corrige l'édition du champs description ([ecc4781](https://github.com/betagouv/dora-front/commit/ecc47812fb40150f2e184a560d9a09e925f96faa))
+- **service:** corrige la copie des champs spécifiques du modèle ([4ea03b7](https://github.com/betagouv/dora-front/commit/4ea03b781486da2b17b1b396fc912d21562e2d89))
+- **service:** corrige la copie du champs description depuis le modèle ([78c52bc](https://github.com/betagouv/dora-front/commit/78c52bcd12f06653198d31557332b56aab0d61f1))
+- **service:** corrige la synchro avec le modèle ([61a7b9b](https://github.com/betagouv/dora-front/commit/61a7b9bd2aecbcb0518a9003de6ab768a6a39d7a))
+- **service:** corrige le menu de statut ([09561fb](https://github.com/betagouv/dora-front/commit/09561fbbd522ab455b13b3d39de2a6779d00f3c2))
+- **service:** met à jour le champs description depuis le modèle ([68e4328](https://github.com/betagouv/dora-front/commit/68e4328ae1256aa6beeb3a190102b3d3b5f84bfe))
+- **service:** n'affiche qu'une notice à la fois ([a0144e3](https://github.com/betagouv/dora-front/commit/a0144e33178e073d401b604189f228f168f6f2b4))
+- **structure:** corrige l'affichage de la description raccourcie ([c7abad7](https://github.com/betagouv/dora-front/commit/c7abad75d76920635ae7284c6b2472c9ca799b22))
+
 ### [0.0.14](https://github.com/betagouv/dora-front/compare/v0.0.13...v0.0.14) (2022-06-07)
 
 ### Features
