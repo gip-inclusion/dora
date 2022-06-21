@@ -2,6 +2,7 @@
   import Button from "$lib/components/button.svelte";
 
   import Modal from "$lib/components/modal.svelte";
+  import { markdownToHTML } from "$lib/utils";
   import Line from "./_line.svelte";
 
   export let suggestion;
@@ -38,11 +39,11 @@
 
         <Line
           label="Descriptif complet du service"
-          data={suggestion.serviceInfo.fullDesc}
+          data={markdownToHTML(suggestion.serviceInfo.fullDesc)}
           verticalLayout
         >
           <div class="m-s16 border-l-8 border-gray-02 pl-s16">
-            {@html suggestion.serviceInfo.fullDesc}
+            {@html markdownToHTML(suggestion.serviceInfo.fullDesc)}
           </div>
         </Line>
 

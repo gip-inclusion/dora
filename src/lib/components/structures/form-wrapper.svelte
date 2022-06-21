@@ -271,7 +271,7 @@
       type="textarea"
       label="Résumé"
       description="280 caractères maximum"
-      placeholder="Décrivez brièvement votre structure"
+      placeholder="Description résumée de la structure"
       schema={structureSchema.shortDesc}
       name="shortDesc"
       errorMessages={$formErrors.shortDesc}
@@ -280,8 +280,7 @@
     <SchemaField
       type="richtext"
       label="Présentation"
-      description="Présentation résumée des missions de votre structure"
-      placeholder="Veuillez ajouter ici toute autre information que vous jugerez utile — concernant votre structure et ses spécificités."
+      placeholder="Présentation détaillée de la structure"
       schema={structureSchema.fullDesc}
       name="fullDesc"
       errorMessages={$formErrors.fullDesc}

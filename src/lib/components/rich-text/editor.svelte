@@ -17,6 +17,7 @@
 
   import Button from "./button.svelte";
   import Separator from "./separator.svelte";
+  import { htmlToMarkdown, markdownToHTML } from "$lib/utils";
 
   export let name;
   export let htmlContent = "";
@@ -48,11 +49,11 @@
           openOnClick: false,
         }),
       ],
-      content: initialContent,
+      content: markdownToHTML(initialContent),
       injectCSS: false,
       onTransaction: () => {
         // force re-render so `editor.isActive` works as expected
-        htmlContent = editor.getHTML();
+        htmlContent = htmlToMarkdown(editor.getHTML());
         editor = editor;
       },
       editorProps: {
@@ -86,6 +87,10 @@
     } else {
       linkDialogButtontext = "Modifier le lien";
     }
+  }
+
+  export function udpateValue(v) {
+    editor.commands.setContent(markdownToHTML(v));
   }
 
   async function linkDialogOpen() {

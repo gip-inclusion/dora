@@ -19,7 +19,9 @@ export function markdownToHTML(md) {
     ],
   });
 
-  return converter.makeHtml(md);
+  return insane(converter.makeHtml(md), {
+    allowedAttributes: { a: ["class", "rel", "href"] },
+  });
 }
 
 export function htmlToMarkdown(html) {

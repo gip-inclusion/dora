@@ -1,11 +1,13 @@
 <script>
+  import { markdownToHTML } from "$lib/utils";
+
   export let service;
 </script>
 
 <h2>Description</h2>
 
 <div class="markdown-wrapper prose mb-s24 w-full">
-  {@html service.fullDesc}
+  {@html markdownToHTML(service.fullDesc)}
 </div>
 
 <style lang="postcss">

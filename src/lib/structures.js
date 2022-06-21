@@ -1,8 +1,6 @@
-import insane from "insane";
-
 import { get } from "svelte/store";
 
-import { fetchData, htmlToMarkdown, markdownToHTML } from "$lib/utils.js";
+import { fetchData } from "$lib/utils.js";
 import { getApiURL } from "$lib/utils/api.js";
 
 import { token } from "$lib/auth";
@@ -42,15 +40,11 @@ export async function getStructures() {
 export async function getStructure(slug) {
   const url = `${getApiURL()}/structures/${slug}/`;
   const result = (await fetchData(url)).data;
-  if (result) {
-    result.fullDesc = insane(markdownToHTML(result.fullDesc));
-  }
+
   return result;
 }
 
 export async function createStructure(structure) {
-  if (structure.fullDesc)
-    structure.fullDesc = htmlToMarkdown(structure.fullDesc);
   const url = `${getApiURL()}/structures/`;
   const method = "POST";
   const res = await fetch(url, {
@@ -81,8 +75,6 @@ export async function createStructure(structure) {
 }
 
 export async function modifyStructure(structure) {
-  if (structure.fullDesc)
-    structure.fullDesc = htmlToMarkdown(structure.fullDesc);
   const url = `${getApiURL()}/structures/${structure.slug}/`;
 
   const method = "PATCH";

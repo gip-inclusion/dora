@@ -5,7 +5,11 @@
   export let inline = false;
 </script>
 
-<div class:flex={inline} class:items-start={inline}>
+<div
+  class:flex={inline}
+  class:items-start={inline}
+  class:gap-s8={!service.model && inline}
+>
   {#if service.model}
     <LinkButton
       label="Modifier"
@@ -13,6 +17,7 @@
       small
       noBackground
     />
+
     <div class="py-s6 text-gray-02" class:hidden={!inline}>|</div>
 
     <LinkButton

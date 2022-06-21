@@ -229,9 +229,14 @@
     showModel = true;
   }
 
+  let fullDesc;
   function useModelValue(propName) {
     return () => {
       service[propName] = model[propName];
+
+      if (propName === "fullDesc") {
+        fullDesc.udpateValue(service.fullDesc);
+      }
     };
   }
 
@@ -361,6 +366,7 @@
           type="html"
         >
           <SchemaField
+            bind:this={fullDesc}
             label={serviceSchema.fullDesc.name}
             placeholder="Informations concernants le service et ses spécificités."
             type="richtext"

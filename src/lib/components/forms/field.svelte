@@ -33,6 +33,12 @@
 
   export let onSelectChange = undefined;
 
+  let field;
+
+  export function udpateValue(v) {
+    field.udpateValue(v);
+  }
+
   const context = getContext(contextValidationKey);
 
   function handleBlur(evt) {
@@ -66,6 +72,7 @@
   <div class="flex flex-col{vertical ? '' : ' lg:w-3/4'}">
     {#if type !== "custom"}
       <Input
+        bind:this={field}
         bind:value
         on:blur={handleBlur}
         on:change={handleChange}

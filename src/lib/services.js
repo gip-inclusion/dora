@@ -1,13 +1,11 @@
-import insane from "insane";
 import { get } from "svelte/store";
 
-import { markdownToHTML, htmlToMarkdown, fetchData } from "$lib/utils.js";
+import { fetchData } from "$lib/utils.js";
 import { getApiURL } from "$lib/utils/api.js";
 import { token } from "$lib/auth";
 import { logException } from "./logger";
 
 function serviceToBack(service) {
-  if (service.fullDesc) service.fullDesc = htmlToMarkdown(service.fullDesc);
   if (service.longitude && service.latitude) {
     service.geom = {
       type: "Point",
@@ -21,10 +19,6 @@ function serviceToBack(service) {
 }
 
 function serviceToFront(service) {
-  if (service.fullDesc)
-    service.fullDesc = insane(markdownToHTML(service.fullDesc), {
-      allowedAttributes: { a: ["class", "rel", "href"] },
-    });
   let lng, lat;
   if (service.geom) {
     [lng, lat] = service.geom.coordinates;
@@ -33,23 +27,6 @@ function serviceToFront(service) {
   service.latitude = lat;
 
   return service;
-}
-
-function serviceSuggestiontoBack(serviceSuggestion) {
-  if (serviceSuggestion.fullDesc)
-    serviceSuggestion.fullDesc = htmlToMarkdown(serviceSuggestion.fullDesc);
-
-  return serviceSuggestion;
-}
-
-function serviceSuggestionToFront(serviceSuggestion) {
-  const serviceInfo = serviceSuggestion.serviceInfo;
-  if (serviceInfo.fullDesc)
-    serviceInfo.fullDesc = insane(markdownToHTML(serviceInfo.fullDesc), {
-      allowedAttributes: { a: ["class", "rel", "href"] },
-    });
-
-  return serviceSuggestion;
 }
 
 export async function getServices() {
@@ -276,8 +253,9 @@ export async function getServicesOptions({ kitFetch } = {}) {
 export async function getServiceSuggestions() {
   const url = `${getApiURL()}/services-suggestions/`;
   const results = (await fetchData(url)).data;
-  if (results) return results.map((s) => serviceSuggestionToFront(s));
-  return [];
+  if (!results) return [];
+
+  return results;
 }
 
 export async function deleteServiceSuggestion(suggestion) {
@@ -333,7 +311,7 @@ export async function acceptServiceSuggestion(suggestion) {
 export async function publishServiceSuggestion(suggestion, source) {
   const url = `${getApiURL()}/services-suggestions/`;
   const method = "POST";
-  const { siret, name, ...contents } = serviceSuggestiontoBack(suggestion);
+  const { siret, name, ...contents } = suggestion;
   const authToken = get(token);
   const response = await fetch(url, {
     method,

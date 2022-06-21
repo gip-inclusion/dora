@@ -1,6 +1,7 @@
 <script>
   import Button from "$lib/components/button.svelte";
   import Tag from "$lib/components/tag.svelte";
+  import { markdownToHTML } from "$lib/utils";
 
   export let value;
   export let useValue;
@@ -22,9 +23,12 @@
       return a.every((val, i) => val === b[i]);
     }
 
-    // l'éditeur de texte ajoute une balise <p> s'il est vide
-    if (type === "html" && b === "<p></p>" && a === "") {
-      return true;
+    // tiptap insert des carctères en fin de chaine
+    // on les supprime pour faire la comparaison
+    if (type === "html") {
+      const ending = "-- -->";
+
+      return a.slice(0, a.indexOf(ending)) === b.slice(0, b.indexOf(ending));
     }
 
     return a === b;
@@ -45,7 +49,7 @@
   </div>
   {#if showModel}
     <div
-      class="flex flex-col-reverse gap-s8 lg:w-1/3 lg:flex-col"
+      class="flex flex-col-reverse gap-s12 lg:w-1/3 lg:flex-col"
       class:lg:pt-s40={paddingTop}
       class:lg:gap-s0={haveSameValue}
     >
@@ -68,7 +72,7 @@
               {/each}
             </div>
           {:else if type === "html"}
-            {@html value}
+            {@html markdownToHTML(value)}
           {:else if type === "boolean"}
             <p class="mb-s0 text-f14">{value === true ? "Oui" : "Non"}</p>
           {:else if type === "text"}

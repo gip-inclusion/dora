@@ -26,6 +26,12 @@
   export let rows = 4;
 
   export let onSelectChange = undefined;
+
+  let input;
+
+  export function udpateValue(v) {
+    input.udpateValue(v);
+  }
 </script>
 
 {#if type === "checkboxes"}
@@ -104,6 +110,7 @@
   />
 {:else if type === "richtext"}
   <RichText
+    bind:this={input}
     {name}
     bind:htmlContent={value}
     {placeholder}

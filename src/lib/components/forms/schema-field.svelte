@@ -23,9 +23,16 @@
   export let hideLabel = false;
   export let autocomplete = undefined;
   export let passwordrules = undefined;
+
+  let schemaField;
+
+  export function udpateValue(v) {
+    schemaField.udpateValue(v);
+  }
 </script>
 
 <Field
+  bind:this={schemaField}
   bind:value
   on:change
   {onSelectChange}
