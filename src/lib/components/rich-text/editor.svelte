@@ -89,7 +89,7 @@
     }
   }
 
-  export function udpateValue(v) {
+  export function updateValue(v) {
     editor.commands.setContent(markdownToHTML(v));
   }
 

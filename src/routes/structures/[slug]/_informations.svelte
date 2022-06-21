@@ -9,7 +9,7 @@
     mapPinIcon,
     phoneIcon,
   } from "$lib/icons";
-  import { htmlToMarkdown } from "$lib/utils";
+  import { markdownToHTML } from "$lib/utils";
 
   export let structure;
 </script>
@@ -88,7 +88,7 @@
   <div class="mb-s24 md:w-2/3">
     <p class="mb-s24 font-bold">{structure.shortDesc}</p>
 
-    <TextClamp text={htmlToMarkdown(structure.fullDesc)} />
+    <TextClamp text={markdownToHTML(structure.fullDesc)} />
   </div>
 </div>
 

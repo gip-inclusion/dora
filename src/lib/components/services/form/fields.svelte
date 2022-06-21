@@ -21,7 +21,7 @@
   import AddressSearch from "$lib/components/forms/street-search.svelte";
   import AdminDivisionSearch from "$lib/components/forms/admin-division-search.svelte";
   import Button from "$lib/components/button.svelte";
-  import { formatSchema } from "$lib/schemas/utils";
+  import { arraysCompare, formatSchema } from "$lib/schemas/utils";
   import FieldModel from "./field-model.svelte";
   import Notice from "$lib/components/notice.svelte";
 
@@ -29,6 +29,7 @@
   export let isModel = false;
   export let model = null;
   let subcategories = [];
+  let showModelSubcategoriesUseValue = true;
   const propsWithSpecificFields = [
     "accessConditions",
     "concernedPublic",
@@ -51,9 +52,20 @@
     service.subcategories = service.subcategories.filter((scat) =>
       categories.some((cat) => scat.startsWith(cat))
     );
+
+    if (!isModel && model) {
+      showModelSubcategoriesUseValue = arraysCompare(
+        categories,
+        model.categories
+      );
+    }
   }
 
   // met à jour les options de service et le modèle en fonction des champs spécifiques
+  // cette fonction est comliqué car sur les champs spécifiques,
+  // la `value` peut ĕtre soit une id numérique
+  // soit une string sur les modèles.
+  // on devrait pourvoir simplifier ici si l'API devient plus cohérente
   function updateServiceOptions() {
     propsWithSpecificFields.forEach((propName) => {
       // options de services qui appartiennent à la structure courante
@@ -94,6 +106,13 @@
                 ...servicesOptions[propName],
                 { value, label: value },
               ];
+            }
+
+            // si on est sur une création de service,
+            // le service a été copié depuis le modèle
+            // on modifie donc les champs spécifique du service
+            if (typeof service[propName][i] === "string") {
+              service[propName][i] = option ? option.value : value;
             }
           }
         });
@@ -235,13 +254,15 @@
       service[propName] = model[propName];
 
       if (propName === "fullDesc") {
-        fullDesc.udpateValue(service.fullDesc);
+        fullDesc.updateValue(service.fullDesc);
       }
     };
   }
 
   onMount(() => {
-    updateServiceOptions();
+    if (structure && service.structure) {
+      updateServiceOptions();
+    }
   });
 </script>
 
@@ -405,6 +426,7 @@
             errorMessages={$formErrors.categories}
             onSelectChange={handleCategoriesChange}
             placeholderMulti="Sélectionner"
+            sortSelect
           />
         </FieldModel>
 
@@ -414,6 +436,7 @@
           serviceValue={service.subcategories}
           options={servicesOptions.subcategories}
           useValue={useModelValue("subcategories")}
+          showUseValue={showModelSubcategoriesUseValue}
           type="array"
         >
           <SchemaField

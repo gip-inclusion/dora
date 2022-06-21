@@ -29,8 +29,8 @@
 
   let input;
 
-  export function udpateValue(v) {
-    input.udpateValue(v);
+  export function updateValue(v) {
+    input.updateValue(v);
   }
 </script>
 

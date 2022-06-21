@@ -35,8 +35,8 @@
 
   let field;
 
-  export function udpateValue(v) {
-    field.udpateValue(v);
+  export function updateValue(v) {
+    field.updateValue(v);
   }
 
   const context = getContext(contextValidationKey);

@@ -23,7 +23,10 @@
     </div>
 
     <p class="mb-s0 text-f14">
-      {model.numServices} service{model.numServices > 1 ? "s" : ""}
+      {model.numServices} service{model.numServices > 1 ? "s" : ""} synchronisé{model.numServices >
+      1
+        ? "s"
+        : ""}
     </p>
   </div>
 

@@ -26,8 +26,8 @@
 
   let schemaField;
 
-  export function udpateValue(v) {
-    schemaField.udpateValue(v);
+  export function updateValue(v) {
+    schemaField.updateValue(v);
   }
 </script>
 

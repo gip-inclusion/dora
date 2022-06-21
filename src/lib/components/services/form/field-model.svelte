@@ -1,10 +1,12 @@
 <script>
   import Button from "$lib/components/button.svelte";
   import Tag from "$lib/components/tag.svelte";
+  import { arraysCompare } from "$lib/schemas/utils";
   import { markdownToHTML } from "$lib/utils";
 
   export let value;
   export let useValue;
+  export let showUseValue = true;
   export let showModel = false;
   export let type = "text";
   export let options = undefined;
@@ -16,11 +18,7 @@
 
   function compare(a, b) {
     if (type === "array" || type === "files") {
-      if (a === b) return true;
-      if (a == null || b == null) return false;
-      if (a.length !== b.length) return false;
-
-      return a.every((val, i) => val === b[i]);
+      return arraysCompare(a, b);
     }
 
     // tiptap insert des carctères en fin de chaine
@@ -83,7 +81,7 @@
 
       <div class="flex items-center">
         <h5 class="mb-s0 lg:hidden">Modèle</h5>
-        {#if !haveSameValue}
+        {#if !haveSameValue && showUseValue}
           <div class="ml-auto lg:ml-s0">
             <Button label="Utiliser" small secondary on:click={useValue} />
           </div>

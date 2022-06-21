@@ -3,7 +3,7 @@
 </script>
 
 <LinkButton
-  label="Documentation"
+  label="Aide et Assistance"
   to={`https://aide.dora.fabrique.social.gouv.fr/fr/`}
   nofollow
   otherTab

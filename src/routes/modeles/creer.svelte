@@ -2,7 +2,10 @@
   import { get } from "svelte/store";
   import { userInfo } from "$lib/auth";
 
-  import { getNewModel } from "$lib/components/services/form/utils.js";
+  import {
+    createModelFromService,
+    getNewModel,
+  } from "$lib/components/services/form/utils.js";
   import { getService, getServicesOptions } from "$lib/services";
   import { getStructures } from "$lib/structures";
 
@@ -22,7 +25,8 @@
     let model;
 
     if (serviceSlug) {
-      model = await getService(serviceSlug);
+      const service = await getService(serviceSlug);
+      model = createModelFromService(service);
       model.slug = null;
       model.structure = null;
       model.service = serviceSlug;
