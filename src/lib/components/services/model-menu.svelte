@@ -1,20 +1,12 @@
 <script>
-  import { CANONICAL_URL } from "$lib/env";
   import { userInfo } from "$lib/auth";
 
   import LinkButton from "$lib/components/link-button.svelte";
-  import Button from "$lib/components/button.svelte";
 
   export let model;
   export let secondary = false;
   export let inline = false;
   export let readOnly = true;
-
-  async function copyLink() {
-    await navigator.clipboard.writeText(
-      `${CANONICAL_URL}/modeles/${model.slug}`
-    );
-  }
 </script>
 
 <div class:flex={inline} class:gap-s8={inline} class:items-start={inline}>
@@ -33,16 +25,6 @@
       label="Créer un service"
       small
       to={`/services/creer?modele=${model.slug}`}
-      noBackground={!secondary}
-      {secondary}
-    />
-  {/if}
-
-  {#if false}
-    <Button
-      label="Copier le lien"
-      on:click={copyLink}
-      small
       noBackground={!secondary}
       {secondary}
     />

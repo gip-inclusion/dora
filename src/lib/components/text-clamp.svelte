@@ -13,12 +13,12 @@
   let textIsTooLong, height;
   const defaultHeight = 240;
 
-  $: textIsTooLong = height > defaultHeight;
+  $: textIsTooLong = height + 100 > defaultHeight;
   $: label = showAll ? "Réduire" : "Lire la suite";
 </script>
 
 <div class:h-s160={!showAll} class="relative mb-s24 overflow-hidden">
-  <p class="prose mb-s24" bind:clientHeight={height}>{@html text}</p>
+  <div class="prose mb-s24" bind:clientHeight={height}>{@html text}</div>
   <div class:gradient={!showAll} />
 </div>
 

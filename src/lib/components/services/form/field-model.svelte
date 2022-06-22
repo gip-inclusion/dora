@@ -23,10 +23,10 @@
 
     // tiptap insert des carctères en fin de chaine
     // on les supprime pour faire la comparaison
-    if (type === "html") {
-      const ending = "-- -->";
+    if (type === "markdown") {
+      const bb = b.replace(/\n\n$/u, "");
 
-      return a.slice(0, a.indexOf(ending)) === b.slice(0, b.indexOf(ending));
+      return a === bb;
     }
 
     return a === b;
@@ -69,7 +69,7 @@
                 <Tag>{v}</Tag>
               {/each}
             </div>
-          {:else if type === "html"}
+          {:else if type === "markdown"}
             {@html markdownToHTML(value)}
           {:else if type === "boolean"}
             <p class="mb-s0 text-f14">{value === true ? "Oui" : "Non"}</p>

@@ -1,4 +1,6 @@
 <script>
+  import { userInfo } from "$lib/auth";
+
   import Date from "../date.svelte";
 
   import ModelMenu from "./model-button-menu.svelte";
@@ -29,12 +31,13 @@
         : ""}
     </p>
   </div>
-
-  <div
-    class="flex items-center justify-between border-t border-t-gray-03 p-s20"
-  >
-    <div class="ml-auto self-end">
-      <ModelMenu {model} {readOnly} />
+  {#if $userInfo}
+    <div
+      class="flex items-center justify-between border-t border-t-gray-03 p-s20"
+    >
+      <div class="ml-auto self-end">
+        <ModelMenu {model} {readOnly} />
+      </div>
     </div>
-  </div>
+  {/if}
 </div>

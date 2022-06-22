@@ -384,7 +384,7 @@
           serviceValue={service.fullDesc}
           useValue={useModelValue("fullDesc")}
           paddingTop
-          type="html"
+          type="markdown"
         >
           <SchemaField
             bind:this={fullDesc}
