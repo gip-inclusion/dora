@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.16](https://github.com/betagouv/dora-front/compare/v0.0.15...v0.0.16) (2022-06-22)
+
+### Bug Fixes
+
+- **service:** corrige la comparaison avec le champs description du modèle ([9fd8adf](https://github.com/betagouv/dora-front/commit/9fd8adf749529aa4401f473f36ecb00fe11b62d8))
+
 ### [0.0.15](https://github.com/betagouv/dora-front/compare/v0.0.14...v0.0.15) (2022-06-21)
 
 ### Features
