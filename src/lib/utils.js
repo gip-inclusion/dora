@@ -66,7 +66,7 @@ export function shortenString(str, length = 50) {
 }
 
 export function capitalize(str) {
-  return str.toLowerCase().replace(/\b\w/gu, (c) => c.toUpperCase());
+  return str.toLowerCase().replace(/^\w|\s\w/gu, (c) => c.toUpperCase());
 }
 
 export function getDepartmentFromCityCode(cityCode) {
