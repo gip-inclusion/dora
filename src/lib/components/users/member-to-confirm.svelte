@@ -4,7 +4,7 @@
 
   import { fileEditIcon, fileForbidIcon, userIcon } from "$lib/icons";
   import { rejectMembershipRequest, acceptMember } from "$lib/structures";
-  import Member from "./_member.svelte";
+  import Member from "./member.svelte";
 
   export let member;
   export let onRefresh;

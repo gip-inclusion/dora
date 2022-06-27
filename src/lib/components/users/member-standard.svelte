@@ -4,15 +4,15 @@
 
   import { fileEditIcon, fileForbidIcon, userIcon } from "$lib/icons";
   import { deleteMember } from "$lib/structures";
-  import ChangeUserModal from "./_change-user-modal.svelte";
-  import Member from "./_member.svelte";
+  import ModalChangeUser from "./modal-change-user.svelte";
+  import Member from "./member.svelte";
 
   export let member;
   export let onRefresh;
   export let readOnly = true;
   export let isMyself, isOnlyAdmin;
 
-  let changeUserModalIsOpen = false;
+  let modalChangeUserIsOpen = false;
   $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
   async function handleDelete() {
     if (confirm(`Supprimer l’utilisateur ${member.user.fullName} ?`)) {
@@ -22,7 +22,7 @@
   }
 </script>
 
-<ChangeUserModal bind:isOpen={changeUserModalIsOpen} bind:member {onRefresh} />
+<ModalChangeUser bind:isOpen={modalChangeUserIsOpen} bind:member {onRefresh} />
 <Member {isOnlyAdmin} {member} {isMyself} {readOnly}>
   <div slot="label">
     <Label label={userLevel} smallIcon icon={userIcon} />
@@ -33,7 +33,7 @@
       <Button
         label="Modifier"
         on:click={() => {
-          changeUserModalIsOpen = true;
+          modalChangeUserIsOpen = true;
           onCloseParent();
         }}
         icon={fileEditIcon}

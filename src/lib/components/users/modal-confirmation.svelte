@@ -1,7 +1,7 @@
 <script>
   import Info from "$lib/components/info.svelte";
-
   import Modal from "$lib/components/modal.svelte";
+
   export let email;
   export let isOpen = false;
 </script>

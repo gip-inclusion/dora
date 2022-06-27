@@ -11,7 +11,7 @@
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/modal.svelte";
-  import ConfirmationModal from "./_confirmation-modal.svelte";
+  import ConfirmationModal from "./modal-confirmation.svelte";
 
   const levelChoices = [
     {

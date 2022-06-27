@@ -41,15 +41,15 @@
 
 <script>
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import MemberInvited from "./_member_invited.svelte";
-  import MemberToConfirm from "./_member_to_confirm.svelte";
   import Button from "$lib/components/button.svelte";
-  import AddUserModal from "./_add-user-modal.svelte";
-  import MemberStandard from "./_member_standard.svelte";
+  import MemberInvited from "$lib/components/users/member-invited.svelte";
+  import MemberToConfirm from "$lib/components/users/member-to-confirm.svelte";
+  import MemberStandard from "$lib/components/users/member-standard.svelte";
+  import ModalAddUser from "$lib/components/users/modal-add-user.svelte";
 
   export let members, putativeMembers, canEditMembers;
 
-  let addUserModalIsOpen = false;
+  let modalAddUserIsOpen = false;
 
   async function handleRefreshMemberList() {
     members = await getMembers($structure.slug);
@@ -73,8 +73,8 @@
 
 <EnsureLoggedIn>
   {#if canEditMembers}
-    <AddUserModal
-      bind:isOpen={addUserModalIsOpen}
+    <ModalAddUser
+      bind:isOpen={modalAddUserIsOpen}
       structure={$structure}
       {members}
       onRefresh={handleRefreshMemberList}
@@ -87,7 +87,7 @@
       <Button
         label="Inviter un collaborateur"
         small
-        on:click={() => (addUserModalIsOpen = true)}
+        on:click={() => (modalAddUserIsOpen = true)}
       />
     {/if}
   </div>

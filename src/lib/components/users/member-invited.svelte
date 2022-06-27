@@ -1,10 +1,10 @@
 <script>
   import Button from "$lib/components/button.svelte";
   import Label from "$lib/components/label.svelte";
+  import Member from "./member.svelte";
 
   import { fileEditIcon, fileForbidIcon, userIcon } from "$lib/icons";
   import { resendInvite, cancelInvite } from "$lib/structures";
-  import Member from "./_member.svelte";
 
   export let member;
   export let onRefresh;
