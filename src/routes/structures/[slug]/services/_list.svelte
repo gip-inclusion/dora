@@ -5,6 +5,7 @@
 
   import LinkButton from "$lib/components/link-button.svelte";
   import ServiceCard from "$lib/components/services/service-card.svelte";
+  import { SERVICE_STATUSES } from "$lib/schemas/service";
 
   export let structure, services, total;
   export let hasOptions = true;
@@ -25,22 +26,14 @@
     let ss = se
       .sort((a, b) => {
         if (order === "etat") {
-          if (
-            (a.isSuggestion && b.isSuggestion) ||
-            (!a.isSuggestion && a.isDraft && !b.isSuggestion && b.isDraft) ||
-            (!a.isSuggestion && !a.isDraft && !b.isSuggestion && !b.isDraft)
-          )
-            return 0;
-
-          if (a.isSuggestion) return 1;
-
-          if (b.isSuggestion) return -1;
-
-          if (!a.isSuggestion && !a.isDraft) return -1;
-
-          if (!b.isSuggestion && !b.isDraft) return 1;
-
-          return 0;
+          const sortOrder = {
+            [SERVICE_STATUSES.suggestion]: 0,
+            [SERVICE_STATUSES.draft]: 1,
+            [SERVICE_STATUSES.published]: 2,
+          };
+          const orderA = sortOrder[a.status];
+          const orderB = sortOrder[b.status];
+          return orderA - orderB;
         }
 
         if (order === "alpha") {

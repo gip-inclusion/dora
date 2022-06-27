@@ -5,6 +5,7 @@
 
   import StructureCard from "$lib/components/structures/card.svelte";
   import Date from "../date.svelte";
+  import { SERVICE_STATUSES } from "$lib/schemas/service";
 
   export let service;
 </script>
@@ -25,7 +26,7 @@
     </div>
     <h1 class="text-france-blue">{service.name}</h1>
     <div class="flex items-center">
-      {#if !service.isDraft && !service.isSuggestion}
+      {#if service.status === SERVICE_STATUSES.published}
         <Label
           label="Disponible"
           icon={checkBoxBlankIcon}

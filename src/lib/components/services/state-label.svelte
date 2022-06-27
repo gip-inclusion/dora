@@ -1,13 +1,14 @@
 <script>
   import Label from "$lib/components/label.svelte";
+  import { SERVICE_STATUSES } from "$lib/schemas/service";
 
   export let service;
 </script>
 
-{#if service.isSuggestion}
+{#if service.status === SERVICE_STATUSES.suggestion}
   <Label label="Suggestion" error bold />
-{:else if service.isDraft}
+{:else if service.status === SERVICE_STATUSES.draft}
   <Label label="Brouillon" wait bold />
-{:else}
+{:else if service.status === SERVICE_STATUSES.published}
   <Label label="Publié" success bold />
 {/if}

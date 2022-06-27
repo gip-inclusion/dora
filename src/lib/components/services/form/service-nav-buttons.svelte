@@ -2,7 +2,11 @@
   import { goto } from "$app/navigation";
 
   import { validate, injectAPIErrors } from "$lib/validation.js";
-  import schema, { fields, fieldsRequired } from "$lib/schemas/service.js";
+  import schema, {
+    fields,
+    fieldsRequired,
+    SERVICE_STATUSES,
+  } from "$lib/schemas/service.js";
   import { createOrModifyService, publishDraft } from "$lib/services";
   import { assert, logException } from "$lib/logger";
 
@@ -24,7 +28,7 @@
   );
 
   async function publish() {
-    service.isDraft = false;
+    service.status = SERVICE_STATUSES.published;
     service.markSynced = true;
 
     // Validate the whole form
@@ -43,7 +47,7 @@
   }
 
   async function saveDraft() {
-    service.isDraft = true;
+    service.status = SERVICE_STATUSES.draft;
     service.markSynced = true;
 
     // eslint-disable-next-line no-warning-comments

@@ -3,6 +3,7 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import Notice from "$lib/components/notice.svelte";
   import { PDF_SERVICE_URL, CANONICAL_URL } from "$lib/env";
+  import { SERVICE_STATUSES } from "$lib/schemas/service";
 
   export let service;
 
@@ -81,8 +82,11 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
 {#if service.contactEmail && showContact}
   <div
     class="noprint"
-    class:mb-s24={service.isDraft || service.isSuggestion}
-    class:mb-s12={!service.isDraft && !service.isSuggestion}
+    class:mb-s24={[
+      SERVICE_STATUSES.draft,
+      SERVICE_STATUSES.suggestion,
+    ].includes(service.status)}
+    class:mb-s12={service.status === SERVICE_STATUSES.published}
   >
     <LinkButton
       on:click={trackClick}
@@ -93,7 +97,7 @@ ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
   </div>
 {/if}
 
-{#if !service.isDraft && !service.isSuggestion}
+{#if service.status === SERVICE_STATUSES.published}
   <div class="noprint mb-s24">
     <LinkButton
       secondary

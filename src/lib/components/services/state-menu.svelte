@@ -10,7 +10,11 @@
 
   import Button from "$lib/components/button.svelte";
   import { validate } from "$lib/validation";
-  import schema, { fields, fieldsRequired } from "$lib/schemas/service.js";
+  import schema, {
+    fields,
+    fieldsRequired,
+    SERVICE_STATUSES,
+  } from "$lib/schemas/service.js";
   import { formatSchema } from "$lib/schemas/utils";
 
   export let service;
@@ -66,7 +70,7 @@
   }
 </script>
 
-{#if service.isSuggestion}
+{#if service.status === SERVICE_STATUSES.suggestion}
   <Button
     label="Brouillon"
     on:click={convertToDraft}
@@ -82,7 +86,7 @@
     noBackground={!secondary}
     {secondary}
   />
-{:else if !service.isDraft}
+{:else if service.status === SERVICE_STATUSES.published}
   <Button
     label="Brouillon"
     on:click={unpublish}
@@ -90,7 +94,7 @@
     noBackground={!secondary}
     {secondary}
   />
-{:else}
+{:else if service.status === SERVICE_STATUSES.draft}
   <Button
     label="Publié"
     on:click={publish}

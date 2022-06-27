@@ -5,6 +5,7 @@
   import StateButtonMenu from "./state-button-menu.svelte";
   import Date from "../date.svelte";
   import ServiceSync from "./service-sync.svelte";
+  import { SERVICE_STATUSES } from "$lib/schemas/service";
   export let service;
   export let readOnly = true;
   export let onRefresh;
@@ -24,7 +25,7 @@
     </h4>
 
     <div class="mb-s8 flex items-center">
-      {#if !service.isDraft && !service.isSuggestion}
+      {#if service.status === SERVICE_STATUSES.published}
         <div class="mr-s8">
           <Label icon={checkBoxBlankIcon} success bold smallIcon />
         </div>
@@ -44,7 +45,7 @@
       <div class="flex items-center justify-between">
         <StateButtonMenu {service} {onRefresh} />
 
-        {#if !service.isSuggestion}
+        {#if service.status !== SERVICE_STATUSES.suggestion}
           <ServiceButtonMenu {service} />
         {/if}
       </div>

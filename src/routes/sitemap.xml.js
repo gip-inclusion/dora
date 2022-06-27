@@ -1,4 +1,5 @@
 import { ENVIRONMENT, CANONICAL_URL } from "$lib/env.js";
+import { SERVICE_STATUSES } from "$lib/schemas/service";
 import { getServices } from "$lib/services";
 import { getStructures } from "$lib/structures";
 
@@ -10,7 +11,7 @@ function toISODate(apiDate) {
 async function getAllServices() {
   const response = await getServices();
   return response
-    .filter((s) => !s.isDraft)
+    .filter((s) => (s.status = SERVICE_STATUSES.published))
     .map((s) =>
       `<url>
       <loc>${CANONICAL_URL}/services/${s.slug}</loc>

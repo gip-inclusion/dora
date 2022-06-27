@@ -1,5 +1,11 @@
 import * as v from "./utils";
 
+export const SERVICE_STATUSES = {
+  draft: "DRAFT",
+  suggestion: "SUGGESTION",
+  published: "PUBLISHED",
+};
+
 export const fields = {
   contrib: [
     "siret",
@@ -26,7 +32,6 @@ export const fields = {
     "postalCode",
   ],
   service: [
-    "isDraft",
     "structure",
     "categories",
     "subcategories",
@@ -124,11 +129,6 @@ export const fieldsRequired = {
 };
 
 export default {
-  isDraft: {
-    name: "brouillon",
-    default: true,
-    rules: [v.isBool()],
-  },
   siret: {
     default: "",
     rules: [v.isSiret()],
