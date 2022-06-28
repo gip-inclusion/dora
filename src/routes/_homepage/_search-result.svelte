@@ -7,7 +7,7 @@
 </script>
 
 <SearchResultWrapper>
-  <div class="header">
+  <div class="border-l-4 border-success pl-s16">
     <a href="/structures/{result.structure}">
       <Label label={result.structureInfo.name} truncate />
     </a>
@@ -20,14 +20,7 @@
     </div>
   </div>
 
-  <div class="paragraph-small mt-s16 hidden text-gray-text-alt2 md:block">
+  <p class="mt-s16 hidden text-gray-text-alt2 md:block">
     <a href="/services/{result.slug}">{result.shortDesc}</a>
-  </div>
+  </p>
 </SearchResultWrapper>
-
-<style lang="postcss">
-  .header {
-    padding-left: var(--s16);
-    border-left: 4px solid var(--col-available);
-  }
-</style>

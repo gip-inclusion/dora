@@ -33,7 +33,7 @@
         Participez à notre démarche collective en identifiant vos partenaires
       </h1>
 
-      <p class="paragraph mt-s24 mb-s24">
+      <p class="mt-s24 mb-s24">
         Vous pouvez des à présent contribuer à la construction de la première
         base de données publique de l’offre d’insertion nationale.
       </p>

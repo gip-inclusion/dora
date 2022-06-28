@@ -49,7 +49,12 @@
   }
 </script>
 
-<FieldSet title="Structure" headerBg="bg-france-blue" noHeaderBorder>
+<FieldSet
+  title="Structure"
+  headerBg="bg-france-blue"
+  noHeaderBorder
+  noTopPadding
+>
   <div slot="description">
     <p class="text-f14 text-white">
       Choisissez une méthode d'identification. En cas de doute, <a

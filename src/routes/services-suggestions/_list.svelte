@@ -49,9 +49,9 @@
         {suggestion.structureInfo.name} ({suggestion.structureInfo.department})
         {#if suggestion.structureInfo.new}
           <div
-            class="inline-block rounded bg-magenta-brand px-s8 py-s2 text-f12 uppercase leading-20 text-white"
+            class="inline-block rounded bg-info px-s8 py-s2 text-f12 leading-20 text-white"
           >
-            NOUV.
+            Nouv.
           </div>
         {/if}
       </div>

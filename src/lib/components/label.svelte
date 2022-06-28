@@ -43,6 +43,7 @@
   .light {
     color: var(--col-text-alt);
   }
+
   .success {
     color: var(--col-success);
   }
@@ -67,10 +68,6 @@
     color: var(--col-white);
   }
 
-  .dark-bg.success {
-    color: var(--col-available-dark);
-  }
-
   .icon {
     width: var(--s24);
     height: var(--s24);
@@ -86,10 +83,6 @@
   @media print {
     .dark-bg {
       color: var(--col-text);
-    }
-
-    .dark-bg.success {
-      color: var(--col-success);
     }
   }
 </style>

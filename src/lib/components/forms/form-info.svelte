@@ -4,7 +4,7 @@
   export let icon;
 </script>
 
-<div class="wrapper">
+<div class="my-s32 rounded-md bg-info-light p-s16">
   {#if title}
     <div class="mb-s8 flex items-center text-f17 font-bold text-info">
       <div class="mr-s8 h-s24 w-s24 fill-current">
@@ -17,12 +17,3 @@
     <slot />
   </div>
 </div>
-
-<style lang="postcss">
-  .wrapper {
-    padding: var(--s16);
-    margin: var(--s32) 0;
-    background-color: var(--col-info-light);
-    border-radius: var(--s4);
-  }
-</style>

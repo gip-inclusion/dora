@@ -24,6 +24,6 @@
 
   {#if $$slots.default}
     <div class="py-s6 text-gray-02">|</div>
+    <slot />
   {/if}
-  <slot />
 </div>

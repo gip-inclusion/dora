@@ -24,18 +24,11 @@
       alt=""
     />
     <div class="flex-1">
-      <h1 class="text-france-blue">Merci pour votre contribution&nbsp;!</h1>
+      <h1 class="text-france-blue">Merci pour votre contribution</h1>
 
-      <p class="paragraph mt-s24">
-        Les informations que vous avez proposées ont été enregistrées. Dès que
-        la structure validera et complètera vos propositions, le service sera
-        réferencé sur la plateforme DORA.
-      </p>
-
-      <p class="paragraph mt-s24 mb-s48">
-        N'hésitez pas à partager le lien de la plateforme DORA pour faire
-        grandir le nombre de services référencés et le nombre de personnes
-        accompagnées.
+      <p class="mt-s24">
+        Votre suggestion a été proposée. Une fois validée par la structure, elle
+        sera visible sur DORA.
       </p>
 
       <div class="flex flex-col items-start gap-s16">

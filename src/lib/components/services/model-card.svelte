@@ -15,7 +15,7 @@
   >
     <div>
       <div class="mb-s8 flex items-center">
-        <p class="mb-s0 text-f12 text-gray-text">
+        <p class="mb-s0 text-f14 text-gray-text">
           Mis à jour le <Date date={model.modificationDate} />
         </p>
       </div>

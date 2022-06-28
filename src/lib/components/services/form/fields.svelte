@@ -316,7 +316,7 @@
       <div class="my-s24">
         <Notice title="Le modèle a été mis à jour" type="warning">
           <p class="text-f14">
-            Vous pouvez voir ici les modification et les utiliser sur le
+            Vous pouvez voir ici les modifications et les utiliser sur le
             service.
           </p>
         </Notice>
@@ -389,7 +389,7 @@
           <SchemaField
             bind:this={fullDesc}
             label={serviceSchema.fullDesc.name}
-            placeholder="Informations concernants le service et ses spécificités."
+            placeholder="Informations concernant le service et ses spécificités."
             type="richtext"
             vertical
             schema={serviceSchema.fullDesc}
