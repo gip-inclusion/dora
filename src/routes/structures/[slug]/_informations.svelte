@@ -12,6 +12,10 @@
   import { markdownToHTML } from "$lib/utils";
 
   export let structure;
+
+  let fullDesc;
+
+  $: fullDesc = markdownToHTML(structure.fullDesc);
 </script>
 
 <div class="md:flex md:items-center md:justify-between">
@@ -87,8 +91,9 @@
 
   <div class="mb-s24 md:w-2/3">
     <p class="mb-s24 font-bold">{structure.shortDesc}</p>
-
-    <TextClamp text={markdownToHTML(structure.fullDesc)} />
+    {#if fullDesc}
+      <TextClamp text={fullDesc} />
+    {/if}
   </div>
 </div>
 

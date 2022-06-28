@@ -19,7 +19,7 @@
 
 <div class:h-s160={!showAll} class="relative mb-s24 overflow-hidden">
   <div class="prose mb-s24" bind:clientHeight={height}>{@html text}</div>
-  <div class:gradient={!showAll} />
+  <div class:gradient={!showAll && textIsTooLong} />
 </div>
 
 {#if textIsTooLong}
