@@ -15,6 +15,7 @@
   <div
     class="rounded-t-md bg-gray-00 px-s20 py-s12"
     class:rounded-b-md={readOnly}
+    class:grow={readOnly}
   >
     <p class="mb-s8 text-f14 text-gray-text">
       Mis à jour le <Date date={service.modificationDate} />
