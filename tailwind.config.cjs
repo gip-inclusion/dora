@@ -100,6 +100,7 @@ const config = {
       s96: "6rem",
       s112: "7rem",
       s160: "10rem",
+      s512: "32rem",
     },
     borderRadius: {
       none: "0",

@@ -7,18 +7,22 @@
   const sharingEmailBody = encodeURIComponent(
     `
 Bonjour,
-Je me permets de vous partager un projet qui devrait vous intéresser.
+
+Je me permets de vous partager un service qui devrait vous intéresser.
 
 Connaissez-vous Dora ?
 
-Lancé en Mai 2021, Dora est un service public numérique porté par la DGEFP qui permet aux structures de l'insertion de référencer simplement et mettre à jour en temps réel leur offre de services, et aux professionnels prescripteurs de rechercher et mobiliser rapidement le service le plus adapté au besoin de leur bénéficiaire.
+Lancé en Mai 2021, Dora est un service public numérique porté par la DGEFP pour recenser l'offre d'insertion.
+- Les structures de l'insertion référencent simplement et mettent à jour leur offre de services.
+- Les professionnels prescripteurs recherchent et mobilisent rapidement le service adapté aux besoins de leurs bénéficiaires.
 
-J'ai le plaisir de vous annoncer que Dora est accessible dès aujourd'hui pour l'ensemble les acteurs de l'insertion du territoire. De nombreux partenaires ont d'ores et déjà mis en visibilité leur offre de service sur Dora. Vous pouvez également vous inscrire et bénéficier de ce service !
+De nombreux partenaires ont déjà publié leur offre de service sur Dora. Vous pouvez également vous y inscrire.
 
-👉 Pour accéder à Dora cliquez sur ce lien (pensez à l'ajouter à vos favoris 😉) :
+👉 Cliquez sur ce lien (et pensez à l'ajouter à vos favoris) :
 https://dora.fabrique.social.gouv.fr/
 
-Dans l'attente de pouvoir consulter votre offre de service sur cet outil.
+Dans l'attente de consulter votre offre de services.
+
 Cordialement,
 `.trim()
   );

@@ -10,22 +10,11 @@
 
   import Button from "$lib/components/button.svelte";
   import { validate } from "$lib/validation";
-  import schema, {
-    fields,
-    fieldsRequired,
-    SERVICE_STATUSES,
-  } from "$lib/schemas/service.js";
-  import { formatSchema } from "$lib/schemas/utils";
+  import { serviceSchema, SERVICE_STATUSES } from "$lib/schemas/service.js";
 
   export let service;
   export let onRefresh;
   export let secondary = false;
-
-  const serviceSchema = formatSchema(
-    schema,
-    fields.service,
-    fieldsRequired.service
-  );
 
   async function unpublish() {
     await unPublishService(service.slug);

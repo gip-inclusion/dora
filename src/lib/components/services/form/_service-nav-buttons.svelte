@@ -2,30 +2,18 @@
   import { goto } from "$app/navigation";
 
   import { validate, injectAPIErrors } from "$lib/validation.js";
-  import schema, {
-    fields,
-    fieldsRequired,
+  import {
+    draftSchema,
+    serviceSchema,
     SERVICE_STATUSES,
   } from "$lib/schemas/service.js";
   import { createOrModifyService, publishDraft } from "$lib/services";
   import { assert, logException } from "$lib/logger";
 
   import Button from "$lib/components/button.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import { formatSchema } from "$lib/schemas/utils";
+  import { duration, serviceSlug } from "./_store";
 
-  export let onError, service;
-  const serviceSchema = formatSchema(
-    schema,
-    fields.service,
-    fieldsRequired.service
-  );
-
-  const draftSchema = formatSchema(
-    schema,
-    fields.service,
-    fieldsRequired.draft
-  );
+  export let onError, service, durationCounter;
 
   async function publish() {
     service.status = SERVICE_STATUSES.published;
@@ -35,11 +23,12 @@
     const { validatedData, valid } = validate(service, serviceSchema);
 
     if (valid) {
-      // Validation OK, let's send it to the API endpoint
       try {
         let result = await createOrModifyService(validatedData);
         result = await publishDraft(result.data.slug);
-        goto(`/services/${result.slug}`);
+        $serviceSlug = result.slug;
+        $duration = durationCounter;
+        goto(`/services/${result.slug}/avis`);
       } catch (error) {
         logException(error);
       }
@@ -73,8 +62,9 @@
       // We might have added options to the editable multiselect
 
       service = result.data;
-
-      goto(`/services/${service.slug}`);
+      $serviceSlug = service.slug;
+      $duration = durationCounter;
+      goto(`/services/${service.slug}/avis`);
     } else {
       injectAPIErrors(
         result.error || {
@@ -95,15 +85,11 @@
   }
 </script>
 
-<CenteredGrid>
-  <div class="flex flex-row gap-s12">
-    <Button
-      on:click={saveDraft}
-      name="save"
-      label="Enregistrer en brouillon"
-      secondary
-    />
+<Button
+  on:click={saveDraft}
+  name="save"
+  label="Enregistrer en brouillon"
+  secondary
+/>
 
-    <Button on:click={publish} name="publish" label="Publier" />
-  </div>
-</CenteredGrid>
+<Button on:click={publish} name="publish" label="Publier" />

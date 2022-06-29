@@ -6,7 +6,7 @@ export const SERVICE_STATUSES = {
   published: "PUBLISHED",
 };
 
-export const fields = {
+const fields = {
   contrib: [
     "siret",
     "categories",
@@ -96,7 +96,7 @@ export const fields = {
   ],
 };
 
-export const fieldsRequired = {
+const fieldsRequired = {
   contrib: [
     "siret",
     "categories",
@@ -128,7 +128,7 @@ export const fieldsRequired = {
   ],
 };
 
-export default {
+const schema = {
   siret: {
     default: "",
     rules: [v.isSiret()],
@@ -426,3 +426,27 @@ export const suggestionSchema = {
     rules: [v.isString()],
   },
 };
+
+export const serviceSchema = v.formatSchema(
+  schema,
+  fields.service,
+  fieldsRequired.service
+);
+
+export const modelSchema = v.formatSchema(
+  schema,
+  fields.model,
+  fieldsRequired.model
+);
+
+export const contribSchema = v.formatSchema(
+  schema,
+  fields.contrib,
+  fieldsRequired.contrib
+);
+
+export const draftSchema = v.formatSchema(
+  schema,
+  fields.service,
+  fieldsRequired.draft
+);

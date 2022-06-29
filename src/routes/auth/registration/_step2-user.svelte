@@ -141,6 +141,6 @@
         disabled={requesting}
         preventDefaultOnMouseDown
       />
-    </div></Fieldset
-  >
+    </div>
+  </Fieldset>
 </Form>

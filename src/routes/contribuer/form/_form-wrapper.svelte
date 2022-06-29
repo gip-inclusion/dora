@@ -9,22 +9,16 @@
     contextValidationKey,
     formErrors,
   } from "$lib/validation.js";
-  import schema, { fields, fieldsRequired } from "$lib/schemas/service.js";
-  import { formatSchema } from "$lib/schemas/utils";
+  import { contribSchema } from "$lib/schemas/service.js";
   import { publishServiceSuggestion } from "$lib/services";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import NavButtons from "./_nav-buttons.svelte";
   import Fields from "./_fields.svelte";
   import Alert from "$lib/components/forms/alert.svelte";
+  import { id, duration } from "../_store";
 
   export let servicesOptions, source;
-
-  const contribSchema = formatSchema(
-    schema,
-    fields.contrib,
-    fieldsRequired.contrib
-  );
 
   let service = Object.fromEntries(
     Object.entries(contribSchema).map(([fieldName, props]) => [
@@ -82,6 +76,14 @@
     Array.isArray(service[f]) ? service[f].length : service[f]
   );
 
+  let durationCounter = 0;
+
+  setInterval(() => {
+    if (document.hasFocus()) {
+      durationCounter++;
+    }
+  }, 1000);
+
   async function handlePublish() {
     // Validate the whole form
     const { valid } = validate(service, contribSchema);
@@ -89,7 +91,9 @@
     if (valid) {
       const result = await publishServiceSuggestion(service, source);
 
-      if (result.ok) {
+      if (result.ok && result.data) {
+        $id = result.data.id;
+        $duration = durationCounter;
         goto(`/contribuer/merci`);
       } else {
         injectAPIErrors(result.error, {});

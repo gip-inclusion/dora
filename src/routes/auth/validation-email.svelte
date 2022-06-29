@@ -7,6 +7,7 @@
 
     const token = query.get("token");
     const targetUrl = `${getApiURL()}/auth/registration/validate-email/`;
+
     const result = await fetch(targetUrl, {
       method: "POST",
       headers: {
@@ -15,12 +16,15 @@
       },
       body: JSON.stringify({ key: token }),
     });
+
     const validated = result.ok;
+
     if (validated) {
       // log out of the current session in case we were already connected with
       // a different account
       disconnect();
     }
+
     return {
       props: { validated },
     };

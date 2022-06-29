@@ -47,19 +47,10 @@
 <script>
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-
-  import Fields from "$lib/components/services/form/fields.svelte";
-  import ModelNavButtons from "$lib/components/services/form/model-nav-buttons.svelte";
-  import Errors from "$lib/components/services/form/errors.svelte";
   import Notice from "$lib/components/notice.svelte";
+  import ModelFields from "$lib/components/services/form/model-fields.svelte";
 
   export let model, servicesOptions, structures, structure;
-
-  let errorDiv;
-
-  function onError() {
-    errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
 
   let multipleServices = 0;
 
@@ -90,19 +81,5 @@
     {/if}
   </CenteredGrid>
 
-  <div bind:this={errorDiv} />
-  <Errors />
-
-  {#if model}
-    <Fields
-      bind:service={model}
-      {servicesOptions}
-      {structures}
-      {structure}
-      isModel
-    />
-  {/if}
-  {#if model?.structure}
-    <ModelNavButtons {onError} bind:model />
-  {/if}
+  <ModelFields {servicesOptions} {structures} {model} {structure} />
 </EnsureLoggedIn>

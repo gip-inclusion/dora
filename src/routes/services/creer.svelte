@@ -61,13 +61,13 @@
 
 <script>
   import { goto } from "$app/navigation";
+
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import Fields from "$lib/components/services/form/fields.svelte";
-  import ServiceNavButtons from "$lib/components/services/form/service-nav-buttons.svelte";
-  import Errors from "$lib/components/services/form/errors.svelte";
+
   import Notice from "$lib/components/notice.svelte";
   import Button from "$lib/components/button.svelte";
+  import ServiceFields from "$lib/components/services/form/service-fields.svelte";
 
   export let servicesOptions, structures, lastDraft, service, structure, model;
 
@@ -77,12 +77,6 @@
 
   function handleOpenLastDraft() {
     goto(`/services/${lastDraft.slug}/editer`);
-  }
-
-  let errorDiv;
-
-  function onError() {
-    errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 </script>
 
@@ -116,13 +110,5 @@
     {/if}
   </CenteredGrid>
 
-  <div bind:this={errorDiv} />
-  <Errors />
-
-  {#if structures.length}
-    <Fields bind:service {servicesOptions} {structures} {structure} {model} />
-  {/if}
-  {#if service?.structure}
-    <ServiceNavButtons {onError} bind:service />
-  {/if}
+  <ServiceFields {service} {servicesOptions} {structures} {structure} {model} />
 </EnsureLoggedIn>

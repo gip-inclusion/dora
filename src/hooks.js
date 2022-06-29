@@ -27,7 +27,7 @@ export async function handle({ event, resolve }) {
     dev ? "ws:" : ""
   } https://api-adresse.data.gouv.fr/ https://plausible.io/api/event https://sentry.incubateur.net https://*.sentry.incubateur.net https://client.crisp.chat/static/ wss://client.relay.crisp.chat/ https://storage.crisp.chat/users/upload/`;
   const scriptSrc = `script-src 'self' 'unsafe-inline' https://metabase.dora.fabrique.social.gouv.fr/app/iframeResizer.js https://plausible.io/js/ https://client.crisp.chat/`;
-  const frameSrc = `frame-src http://metabase.dora.fabrique.social.gouv.fr https://plausible.io`;
+  const frameSrc = `frame-src http://metabase.dora.fabrique.social.gouv.fr https://plausible.io https://tally.so`;
   const fontSrc = `font-src 'self' https://client.crisp.chat/static/`;
   const imgSrc = `img-src 'self' data: https://*.crisp.chat/`;
   const styleSrc = `style-src 'self' 'unsafe-inline' https://client.crisp.chat/`;

@@ -53,19 +53,10 @@
 <script>
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-
-  import Fields from "$lib/components/services/form/fields.svelte";
-  import ServiceNavButtons from "$lib/components/services/form/service-nav-buttons.svelte";
-  import Errors from "$lib/components/services/form/errors.svelte";
   import NoticePublication from "$lib/components/services/form/notice-publication.svelte";
+  import ServiceFields from "$lib/components/services/form/service-fields.svelte";
 
   export let service, servicesOptions, structures, structure, model;
-
-  let errorDiv;
-
-  function onError() {
-    errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
 </script>
 
 <svelte:head>
@@ -78,14 +69,5 @@
     <NoticePublication {service} />
   </CenteredGrid>
 
-  <div bind:this={errorDiv} />
-  <Errors />
-
-  {#if service}
-    <Fields bind:service {servicesOptions} {structures} {structure} {model} />
-  {/if}
-
-  {#if service?.structure}
-    <ServiceNavButtons {onError} bind:service />
-  {/if}
+  <ServiceFields {service} {servicesOptions} {structures} {structure} {model} />
 </EnsureLoggedIn>

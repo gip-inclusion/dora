@@ -1,17 +1,10 @@
 <script>
   import { validate } from "$lib/validation.js";
-  import schema, { fields, fieldsRequired } from "$lib/schemas/service.js";
+  import { serviceSchema } from "$lib/schemas/service.js";
 
   import Notice from "$lib/components/notice.svelte";
-  import { formatSchema } from "$lib/schemas/utils";
 
   export let service;
-
-  const serviceSchema = formatSchema(
-    schema,
-    fields.service,
-    fieldsRequired.service
-  );
 
   let validation;
   $: validation =
