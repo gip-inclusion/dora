@@ -62,9 +62,7 @@
       // We might have added options to the editable multiselect
 
       service = result.data;
-      $serviceSlug = service.slug;
-      $duration = durationCounter;
-      goto(`/services/${service.slug}/avis`);
+      goto(`/services/${service.slug}`);
     } else {
       injectAPIErrors(
         result.error || {
