@@ -40,7 +40,7 @@
       {service.kindsDisplay.join(", ")}
     </p>
 
-    <p class="text-f18"><strong>{service.shortDesc}</strong></p>
+    <p class="mb-s64 text-f18"><strong>{service.shortDesc}</strong></p>
   </div>
 
   <div class="lg:w-1/3">
