@@ -27,14 +27,6 @@
     ])
   );
 
-  onMount(() => {
-    $formErrors = {};
-  });
-
-  onDestroy(() => {
-    $formErrors = {};
-  });
-
   async function handleEltChange(evt) {
     // We want to listen to both DOM and component events
     const fieldname = evt.target?.name || evt.detail;
@@ -78,12 +70,6 @@
 
   let durationCounter = 0;
 
-  setInterval(() => {
-    if (document.hasFocus()) {
-      durationCounter++;
-    }
-  }, 1000);
-
   async function handlePublish() {
     // Validate the whole form
     const { valid } = validate(service, contribSchema);
@@ -100,6 +86,22 @@
       }
     }
   }
+
+  let intervalId;
+
+  onMount(() => {
+    $formErrors = {};
+    intervalId = setInterval(() => {
+      if (document.hasFocus()) {
+        durationCounter++;
+      }
+    }, 1000);
+  });
+
+  onDestroy(() => {
+    $formErrors = {};
+    clearInterval(intervalId);
+  });
 </script>
 
 <CenteredGrid>

@@ -62,6 +62,6 @@
 
   <hr />
   <CenteredGrid>
-    <Button on:click={next} label="Continuer" primary />
+    <Button on:click={next} label="Continuer" />
   </CenteredGrid>
 </EnsureLoggedIn>

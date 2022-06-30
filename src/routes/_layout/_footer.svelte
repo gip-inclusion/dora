@@ -61,7 +61,9 @@
         otherTab
         nofollow
       />
-      <NavItem label="Accessibilité : non conforme" />
+      <span class="text-f14 text-gray-text-alt2"
+        >Accessibilité : non conforme</span
+      >
       <NavItem label="Statistiques" href="/stats" />
     </nav>
   </CenteredGrid>

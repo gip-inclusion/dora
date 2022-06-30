@@ -1,4 +1,5 @@
 <script>
+  import { onDestroy, onMount } from "svelte";
   import { serviceSchema } from "$lib/schemas/service";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
@@ -32,12 +33,19 @@
   }
 
   let durationCounter = 0;
+  let intervalId;
 
-  setInterval(() => {
-    if (document.hasFocus()) {
-      durationCounter++;
-    }
-  }, 1000);
+  onMount(() => {
+    intervalId = setInterval(() => {
+      if (document.hasFocus()) {
+        durationCounter++;
+      }
+    }, 1000);
+  });
+
+  onDestroy(() => {
+    clearInterval(intervalId);
+  });
 </script>
 
 <hr />
