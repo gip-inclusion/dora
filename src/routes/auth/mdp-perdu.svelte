@@ -106,7 +106,7 @@
           label="Envoyer"
           preventDefaultOnMouseDown
         />
-        <p class=" text-center text-gray-text-alt2 text-f12">
+        <p class=" text-center text-f12 text-gray-text-alt2">
           Vous vous souvenez de votre mot de passe ?
           <a class="underline " href="/auth/connexion">Connexion</a>
         </p>

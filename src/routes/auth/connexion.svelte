@@ -106,7 +106,7 @@
           {#each $formErrors.nonFieldErrors || [] as msg}
             <Alert label={msg} />
           {/each}
-          <div class="flex flex-col md:flex-row lg:flex-col md:gap-s16 mb-s16">
+          <div class="mb-s16 flex flex-col md:flex-row md:gap-s16 lg:flex-col">
             <Field
               name="email"
               errorMessages={$formErrors.email}
@@ -141,7 +141,7 @@
           </div>
           <div class="mt-s16">
             <a
-              class="underline text-center text-gray-text-alt2 text-f12"
+              class="text-center text-f12 text-gray-text-alt2 underline"
               href="/auth/mdp-perdu">Mot de passe oublié ?</a
             >
           </div>

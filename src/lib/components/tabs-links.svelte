@@ -13,7 +13,7 @@
       {:else}
         <a
           href={item.href}
-          class="rounded-t-md p-s16 bg-magenta-dark text-white block"
+          class="block rounded-t-md bg-magenta-dark p-s16 text-white"
           >{item.name}</a
         >
       {/if}
