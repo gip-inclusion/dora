@@ -1,8 +1,7 @@
 <script>
   import { userInfo } from "$lib/auth";
-  // import Input from "$lib/components/forms/input.svelte";
-  // import Select from "$lib/components/forms/select.svelte";
 
+  import Tabs from "$lib/components/tabs-light.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import ServiceCard from "$lib/components/services/service-card.svelte";
   import { SERVICE_STATUSES } from "$lib/schemas/service";
@@ -19,7 +18,7 @@
     { value: "etat", label: "Publication" },
   ];
   const order = orders[0].value;
-  let servicesOrdered;
+  let servicesDisplayed;
   let filters;
 
   function serviceOrder(se) {
@@ -57,8 +56,26 @@
     return ss;
   }
 
+  let tabId = "default";
+
+  async function handleTabChange(newTab) {
+    tabId = newTab;
+  }
+
+  const tabs = [
+    { id: "default", name: "Défaut" },
+    { id: "archived", name: "Archivés" },
+  ];
+
   $: canEdit = structure.isMember || $userInfo?.isStaff;
-  $: servicesOrdered = serviceOrder(services);
+  $: servicesDisplayed = serviceOrder(services);
+  $: {
+    if (tabId === "archived") {
+      services = structure.archivedServices;
+    } else {
+      services = structure.services;
+    }
+  }
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
@@ -79,27 +96,19 @@
         small
       />
     {/if}
-    <!-- {#if hasOptions}
-      <div class="flex flex-col gap-s16 md:flex-row md:items-center">
-        <div>Trier par</div>
-        <div>
-          <Select
-            choices={orders}
-            bind:value={order}
-            initialValue={order}
-            on:blur
-            showClear={false}
-          />
-        </div>
-
-        <Input type="text" bind:value={filters} placeholder="Mots-clé" />
-      </div>
-    {/if} -->
   </div>
 </div>
+{#if hasOptions}
+  <div
+    class=" mb-s24 flex h-s72 flex-row items-center gap-s16 rounded-md bg-white px-s12 shadow-md"
+  >
+    <div class="text-f16 font-bold">Filtrer par&nbsp;:</div>
+    <Tabs items={tabs} onSelectedChange={handleTabChange} itemId={tabId} />
+  </div>
+{/if}
 
 <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
-  {#each servicesOrdered as service}
+  {#each servicesDisplayed as service}
     <ServiceCard {service} readOnly={!canEdit} {onRefresh} />
   {/each}
 </div>

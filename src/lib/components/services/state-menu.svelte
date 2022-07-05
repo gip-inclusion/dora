@@ -6,6 +6,8 @@
     getService,
     publishService,
     unPublishService,
+    archiveService,
+    unarchiveService,
   } from "$lib/services";
 
   import Button from "$lib/components/button.svelte";
@@ -42,6 +44,20 @@
       await onRefresh();
     } else {
       goto(`/services/${service.slug}/editer`);
+    }
+  }
+
+  async function archive() {
+    await archiveService(service.slug);
+    if (onRefresh) {
+      await onRefresh();
+    }
+  }
+
+  async function unarchive() {
+    await unarchiveService(service.slug);
+    if (onRefresh) {
+      await onRefresh();
     }
   }
 
@@ -83,10 +99,32 @@
     noBackground={!secondary}
     {secondary}
   />
+  <Button
+    label="Archivé"
+    on:click={archive}
+    small
+    noBackground={!secondary}
+    {secondary}
+  />
 {:else if service.status === SERVICE_STATUSES.draft}
   <Button
     label="Publié"
     on:click={publish}
+    small
+    noBackground={!secondary}
+    {secondary}
+  />
+  <Button
+    label="Archivé"
+    on:click={archive}
+    small
+    noBackground={!secondary}
+    {secondary}
+  />
+{:else if service.status === SERVICE_STATUSES.archived}
+  <Button
+    label="Brouillon"
+    on:click={unarchive}
     small
     noBackground={!secondary}
     {secondary}

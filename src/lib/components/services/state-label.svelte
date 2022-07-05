@@ -11,4 +11,6 @@
   <Label label="Brouillon" wait bold />
 {:else if service.status === SERVICE_STATUSES.published}
   <Label label="Publié" success bold />
+{:else if service.status === SERVICE_STATUSES.archived}
+  <Label label="Archivé" light bold />
 {/if}

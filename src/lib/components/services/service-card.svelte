@@ -49,7 +49,7 @@
       <div class="flex items-center justify-between">
         <StateButtonMenu {service} {onRefresh} />
 
-        {#if service.status !== SERVICE_STATUSES.suggestion}
+        {#if service.status !== SERVICE_STATUSES.suggestion && service.status !== SERVICE_STATUSES.archived}
           <ServiceButtonMenu {service} />
         {/if}
       </div>

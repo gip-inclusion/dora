@@ -4,6 +4,7 @@ export const SERVICE_STATUSES = {
   draft: "DRAFT",
   suggestion: "SUGGESTION",
   published: "PUBLISHED",
+  archived: "ARCHIVED",
 };
 
 const fields = {
