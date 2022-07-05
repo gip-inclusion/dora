@@ -51,7 +51,8 @@
         <EmailButton />
       </div>
 
-      {#if $id && $duration}
+      <!-- {#if $id && $duration}
+        // TODO: réactiver le formulaire de satisfaction après correction
         <div class="rounded-md border border-gray-03 p-s24">
           <div class="h-s512">
             <iframe
@@ -65,7 +66,7 @@
             />
           </div>
         </div>
-      {/if}
+      {/if} -->
     </div>
   </div>
 </CenteredGrid>

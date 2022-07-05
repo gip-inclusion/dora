@@ -28,7 +28,9 @@
         result = await publishDraft(result.data.slug);
         $serviceSlug = result.slug;
         $duration = durationCounter;
-        goto(`/services/${result.slug}/avis`);
+        // TODO: réactiver le formulaire de satisfaction après correction
+        // goto(`/services/${result.slug}/avis`);
+        goto(`/services/${result.slug}`);
       } catch (error) {
         logException(error);
       }
