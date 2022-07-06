@@ -38,50 +38,55 @@
   }
 </script>
 
-<div class="rounded-md bg-white p-s24 shadow-l">
+<div class="rounded-md p-s24 shadow-l">
   {#if servicesOptions.categories}
     <form
       on:submit|preventDefault={handleSearch}
-      class="flex flex-col gap-s16 lg:flex-row"
+      class="grid w-full gap-s16 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-11"
     >
-      <Field
-        type="select"
-        name="category"
-        bind:value={categoryId}
-        onSelectChange={handleCategoryChange}
-        placeholder="Sélectionner"
-        choices={servicesOptions.categories}
-        label="Thématique"
-        vertical
-        required
-        sortSelect
-      />
-
-      <Field
-        type="select"
-        name="subcategory"
-        bind:value={subCategoryId}
-        placeholder="Sélectionner"
-        choices={subCategoryChoices}
-        label="Besoin"
-        vertical
-      />
-
-      <Field type="custom" label="Lieu" name="city" required vertical>
-        <CitySearch
-          slot="custom-input"
-          name="city"
-          placeholder="Ville du bénéficiaire"
-          onChange={(city) => {
-            cityCode = city?.code;
-            cityLabel = `${city?.name} (${getDepartmentFromCityCode(
-              city?.code
-            )})`;
-          }}
+      <div class="md:col-span-1 lg:col-span-3">
+        <Field
+          type="select"
+          name="category"
+          bind:value={categoryId}
+          onSelectChange={handleCategoryChange}
+          placeholder="Sélectionner"
+          choices={servicesOptions.categories}
+          label="Thématique"
+          vertical
+          required
+          sortSelect
         />
-      </Field>
+      </div>
 
-      <div class="flex-1 lg:self-end">
+      <div class="md:col-span-1 lg:col-span-3">
+        <Field
+          type="select"
+          name="subcategory"
+          bind:value={subCategoryId}
+          placeholder="Sélectionner"
+          choices={subCategoryChoices}
+          label="Besoin"
+          vertical
+        />
+      </div>
+      <div class="md:col-span-2 lg:col-span-3">
+        <Field type="custom" label="Lieu" name="city" required vertical>
+          <CitySearch
+            slot="custom-input"
+            name="city"
+            placeholder="Ville du bénéficiaire"
+            onChange={(city) => {
+              cityCode = city?.code;
+              cityLabel = `${city?.name} (${getDepartmentFromCityCode(
+                city?.code
+              )})`;
+            }}
+          />
+        </Field>
+      </div>
+
+      <div class="self-end md:col-span-2 lg:col-span-2">
         <Button
           type="submit"
           label="Rechercher"
