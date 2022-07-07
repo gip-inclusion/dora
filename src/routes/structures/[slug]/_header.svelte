@@ -41,7 +41,7 @@
       });
     }
 
-    if (structure.services?.length) {
+    if (structure.services?.length || structure.archivedServices?.length) {
       tabs.splice(1, 0, {
         id: "services",
         name: "Services",
