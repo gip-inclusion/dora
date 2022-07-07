@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.17](https://github.com/betagouv/dora-front/compare/v0.0.16...v0.0.17) (2022-07-07)
+
+### Features
+
+- archivage des services ([2dc577f](https://github.com/betagouv/dora-front/commit/2dc577f9aa7f54d025232be9179f7157a653a2db))
+- met à jour le logo du ministère ([396b566](https://github.com/betagouv/dora-front/commit/396b566462f1e0c06a325e148ce0231d9079259a))
+- **service et contribution:** ajoute un questionnaire de satisfaction (tally) ([c0580cd](https://github.com/betagouv/dora-front/commit/c0580cd35acc55acf37dd8521d18fdd626446d15))
+
+### Bug Fixes
+
+- corrige l'affichage de la carte service ([12d812a](https://github.com/betagouv/dora-front/commit/12d812a4ae4ced2e6359f335bb6d54f16ef063e2))
+- corrige la capitalisation des noms de structure ([e410aed](https://github.com/betagouv/dora-front/commit/e410aedacf5f83b394f7fa48dc9ceb7ed40bf1d1))
+- **éditeur de texte:** ajoute une hauteur minimale ([ac855f6](https://github.com/betagouv/dora-front/commit/ac855f6ffdfb4911b1dd705c38e4e309268ef17b))
+- **formulaire de satisfaction:** supprime le compteur lorsqu'on quitte le composant ([51bbe0f](https://github.com/betagouv/dora-front/commit/51bbe0f8d1cf29072b1c5b24871db4cce25873f4))
+- **homepage:** correction du design cassé du formulaire de recherche ([#66](https://github.com/betagouv/dora-front/issues/66)) ([370833a](https://github.com/betagouv/dora-front/commit/370833a531393a9667a56df55abba55fa4568e0d))
+- **saisie de service:** supprime le nps lorsqu'on enregistre en brouillon ([8f49160](https://github.com/betagouv/dora-front/commit/8f4916026869fb95b53c0eaca49f7918b1eeac08))
+- **structure:** corrige l'affichage de la description longue ([aefc3f0](https://github.com/betagouv/dora-front/commit/aefc3f09a591e3529334c27b4b7a80d6bc5f38bf))
+
 ### [0.0.16](https://github.com/betagouv/dora-front/compare/v0.0.15...v0.0.16) (2022-06-22)
 
 ### Bug Fixes
