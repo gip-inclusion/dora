@@ -61,6 +61,7 @@
   target={otherTab ? "_blank" : ""}
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
+  on:click
   class="{px} {py} {ts} {border} {text} {background} inline-flex items-center justify-center whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
   class:w-full={wFull}
   aria-label={ariaLabel}
