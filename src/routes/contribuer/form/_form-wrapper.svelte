@@ -1,7 +1,7 @@
 <script>
   import { setContext, onMount, onDestroy } from "svelte";
-
   import { goto } from "$app/navigation";
+  import debounce from "lodash.debounce";
 
   import {
     validate,
@@ -16,7 +16,7 @@
   import NavButtons from "./_nav-buttons.svelte";
   import Fields from "./_fields.svelte";
   import Alert from "$lib/components/forms/alert.svelte";
-  import { id, duration } from "../_store";
+  import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
 
   export let servicesOptions, source;
 
@@ -68,8 +68,6 @@
     Array.isArray(service[f]) ? service[f].length : service[f]
   );
 
-  let durationCounter = 0;
-
   async function handlePublish() {
     // Validate the whole form
     const { valid } = validate(service, contribSchema);
@@ -78,8 +76,7 @@
       const result = await publishServiceSuggestion(service, source);
 
       if (result.ok && result.data) {
-        $id = result.data.id;
-        $duration = durationCounter;
+        serviceSubmissionTimeMeter.setId(result.data.id);
         goto(`/contribuer/merci`);
       } else {
         injectAPIErrors(result.error, {});
@@ -87,22 +84,40 @@
     }
   }
 
+  // Counter for filling duration
   let intervalId;
+  let lastUserActivity, userIsInactive;
+
+  // Note: we use debounce to limit update frequency
+  const updateLastUserActivity = debounce(() => {
+    lastUserActivity = Date.now();
+  }, 500);
 
   onMount(() => {
     $formErrors = {};
+    serviceSubmissionTimeMeter.clear(); // reset tracking values
+    lastUserActivity = Date.now();
+
     intervalId = setInterval(() => {
-      if (document.hasFocus()) {
-        durationCounter++;
+      userIsInactive = (Date.now() - lastUserActivity) / 1000 > 120; // 2 minutes
+      if (document.hasFocus() && !userIsInactive) {
+        serviceSubmissionTimeMeter.incrementDuration();
       }
     }, 1000);
   });
 
   onDestroy(() => {
     $formErrors = {};
+    serviceSubmissionTimeMeter.clear();
     clearInterval(intervalId);
   });
 </script>
+
+<svelte:window
+  on:keydown={updateLastUserActivity}
+  on:mousemove={updateLastUserActivity}
+  on:touchmove={updateLastUserActivity}
+/>
 
 <CenteredGrid>
   <div class="text-center">

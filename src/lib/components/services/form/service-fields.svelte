@@ -1,6 +1,7 @@
 <script>
   import { onDestroy, onMount } from "svelte";
   import { serviceSchema } from "$lib/schemas/service";
+  import debounce from "lodash.debounce";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Button from "$lib/components/button.svelte";
@@ -11,6 +12,7 @@
   import FieldsService from "./_fields-service.svelte";
   import ServiceNavButtons from "./_service-nav-buttons.svelte";
   import Errors from "./_errors.svelte";
+  import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
 
   export let service, servicesOptions, structures, structure, model;
 
@@ -32,13 +34,23 @@
     modelSlugTmp = null;
   }
 
-  let durationCounter = 0;
+  // Counter for filling duration
   let intervalId;
+  let lastUserActivity, userIsInactive;
+
+  // Note: we use debounce to limit update frequency
+  const updateLastUserActivity = debounce(() => {
+    lastUserActivity = Date.now();
+  }, 500);
 
   onMount(() => {
+    lastUserActivity = Date.now();
+    serviceSubmissionTimeMeter.clear(); // reset tracking values
+
     intervalId = setInterval(() => {
-      if (document.hasFocus()) {
-        durationCounter++;
+      userIsInactive = (Date.now() - lastUserActivity) / 1000 > 120; // 2 minutes
+      if (document.hasFocus() && !userIsInactive) {
+        serviceSubmissionTimeMeter.incrementDuration();
       }
     }, 1000);
   });
@@ -47,6 +59,12 @@
     clearInterval(intervalId);
   });
 </script>
+
+<svelte:window
+  on:keydown={updateLastUserActivity}
+  on:mousemove={updateLastUserActivity}
+  on:touchmove={updateLastUserActivity}
+/>
 
 <hr />
 <CenteredGrid bgColor="bg-gray-bg">
@@ -126,7 +144,7 @@
 
   <CenteredGrid>
     <div class="flex flex-row gap-s12">
-      <ServiceNavButtons {onError} bind:service {durationCounter} />
+      <ServiceNavButtons {onError} bind:service />
     </div>
   </CenteredGrid>
 {/if}

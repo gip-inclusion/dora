@@ -7,12 +7,10 @@
   import { addCircleIcon } from "$lib/icons";
   import EmailButton from "$lib/components/email-button.svelte";
 
-  import { id, duration } from "./_store";
+  import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
 
-  // initialise les valeur en quittant le composant
   onDestroy(() => {
-    $id = null;
-    $duration = null;
+    serviceSubmissionTimeMeter.clear();
   });
 </script>
 
@@ -51,22 +49,17 @@
         <EmailButton />
       </div>
 
-      <!-- {#if $id && $duration}
-        // TODO: réactiver le formulaire de satisfaction après correction
-        <div class="rounded-md border border-gray-03 p-s24">
-          <div class="h-s512">
-            <iframe
-              src={`https://tally.so/embed/n0Q749?alignLeft=1&hideTitle=1&transparentBackground=1&serviceSuggestionId=${$id}&duration=${$duration}`}
-              width="100%"
-              height="512"
-              frameborder="0"
-              marginheight="0"
-              marginwidth="0"
-              title="Évaluation saisie - Contribution"
-            />
-          </div>
-        </div>
-      {/if} -->
+      {#if $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration}
+        <iframe
+          src="https://tally.so/embed/n0Q749?alignLeft=1&hideTitle=1&transparentBackground=1&service={$serviceSubmissionTimeMeter.id}&temps={$serviceSubmissionTimeMeter.duration}"
+          width="100%"
+          height="512"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          title="Formulaire d'évaluation de la proposition d'un service"
+        />
+      {/if}
     </div>
   </div>
 </CenteredGrid>

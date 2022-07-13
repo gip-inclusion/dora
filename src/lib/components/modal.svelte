@@ -2,10 +2,13 @@
   import { browser } from "$app/env";
   import { closeLineIcon } from "$lib/icons";
   import Button from "./button.svelte";
+  import { createEventDispatcher } from "svelte";
 
   export let isOpen;
   export let overflow = false;
   export let title = undefined;
+
+  const dispatch = createEventDispatcher();
 
   $: {
     // Prevent scrolling the background while the modal is open
@@ -14,15 +17,12 @@
     }
   }
 
-  function handleKeydown(event) {
-    if (event.key === "Escape") isOpen = false;
-  }
-
-  function handleBackgroundClick() {
-    isOpen = false;
-  }
   function handleClose() {
     isOpen = false;
+    dispatch("close");
+  }
+  function handleKeydown(event) {
+    if (event.key === "Escape") handleClose();
   }
 </script>
 
@@ -32,7 +32,7 @@
   id="background"
   class="flex items-center justify-center"
   class:hidden={!isOpen}
-  on:click={handleBackgroundClick}
+  on:click={handleClose}
 >
   <div
     class="max-h-screen min-w-[80vw] rounded-md bg-white p-s24 shadow-md"
@@ -41,7 +41,11 @@
   >
     <div class="mb-s24 flex justify-between">
       {#if title}
-        <h2>{title}</h2>
+        <h1
+          class="text-f22 leading-32 text-france-blue md:text-f24 lg:text-f28 lg:leading-40 xl:text-f32"
+        >
+          {title}
+        </h1>
       {/if}
 
       <div class="ml-auto">

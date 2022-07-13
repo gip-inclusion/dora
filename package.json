@@ -36,6 +36,7 @@
     "husky": "^8.0.1",
     "iframe-resizer": "^4.3.2",
     "insane": "^2.6.2",
+    "lodash.debounce": "^4.0.8",
     "showdown": "^2.1.0"
   },
   "devDependencies": {

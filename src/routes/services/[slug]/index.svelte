@@ -6,7 +6,7 @@
   export async function load({ params }) {
     const service = await getService(params.slug);
     // si le service est en brouillon il faut un token pour y accéder
-    // on renvoit donc un objet vide cŏté serveur
+    // on renvoit donc un objet vide côté serveur
     if (!service && !browser) {
       return {
         props: {
@@ -31,12 +31,16 @@
 </script>
 
 <script>
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import ServiceHeader from "$lib/components/services/service-header.svelte";
   import ServiceToolbar from "$lib/components/services/service-toolbar.svelte";
   import ServiceBody from "$lib/components/services/service-body.svelte";
+  import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
+  import FeedbackModal from "./_feedback-modal.svelte";
 
   export let service;
+  let showFeedbackModal = false;
+  let feedbackTimeout = undefined;
 
   onMount(() => {
     if (browser) {
@@ -48,7 +52,20 @@
           departement: service.department,
         },
       });
+
+      // Show feedback modal after 15 seconds (if needed)
+      if (
+        $serviceSubmissionTimeMeter.showFeedbackModal &&
+        $serviceSubmissionTimeMeter.id === service.slug
+      ) {
+        feedbackTimeout = setTimeout(() => (showFeedbackModal = true), 15000);
+      }
     }
+  });
+
+  onDestroy(() => {
+    clearTimeout(feedbackTimeout);
+    serviceSubmissionTimeMeter.clear();
   });
 
   async function handleRefresh() {
@@ -77,4 +94,6 @@
   <CenteredGrid>
     <ServiceBody {service} />
   </CenteredGrid>
+
+  <FeedbackModal bind:isOpen={showFeedbackModal} {service} />
 {/if}
