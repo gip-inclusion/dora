@@ -44,6 +44,7 @@
   <link rel="icon" href={favicoSvg} type="image/svg+xml" />
   <link rel="apple-touch-icon" href={favicoPng} />
 
+  <script async src="https://tally.so/widgets/embed.js"></script>
   <script
     defer
     data-domain={$page.url.hostname}
