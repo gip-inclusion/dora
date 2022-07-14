@@ -16,10 +16,10 @@
     const info = get(userInfo);
     const struct = get(structure);
 
-    // const canSeeMembers = struct.isMember || info?.isBizdev || info?.isStaff;
+    const canSeeMembers = struct.isMember || info?.isBizdev || info?.isStaff;
     const canEditMembers = struct.isAdmin || info?.isBizdev || info?.isStaff;
 
-    if (!info || !struct || !canEditMembers) {
+    if (!info || !struct || !canSeeMembers) {
       return {
         status: 404,
         error: "Page Not Found",
@@ -33,6 +33,7 @@
       props: {
         members,
         putativeMembers,
+        canSeeMembers,
         canEditMembers,
       },
     };
@@ -47,7 +48,7 @@
   import MemberStandard from "$lib/components/users/member-standard.svelte";
   import ModalAddUser from "$lib/components/users/modal-add-user.svelte";
 
-  export let members, putativeMembers, canEditMembers;
+  export let members, putativeMembers, canSeeMembers, canEditMembers;
 
   let modalAddUserIsOpen = false;
 
@@ -94,7 +95,7 @@
 
   {#if members}
     <div class="mt-s32 mb-s32 flex flex-col gap-s8">
-      {#if putativeMembers}
+      {#if canEditMembers && putativeMembers}
         {#each sortedMembers(putativeMembers) as member}
           {#if member.invitedByAdmin}
             <MemberInvited
