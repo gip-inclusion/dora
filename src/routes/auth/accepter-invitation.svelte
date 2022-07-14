@@ -45,6 +45,12 @@
   import AuthLayout from "./_auth_layout.svelte";
 
   export let validated, mustSetPassword, structureName, resetToken;
+
+  function handleClickConnexionButton() {
+    plausible("inscription", {
+      props: { step: "Validation après invitation" },
+    });
+  }
 </script>
 
 <svelte:head>
@@ -78,6 +84,7 @@
           to="/auth/connexion"
           label="Aller à la page de connexion"
           preventDefaultOnMouseDown
+          on:click={handleClickConnexionButton}
         />
       {/if}
     {:else}

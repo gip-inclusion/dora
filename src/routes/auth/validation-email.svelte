@@ -39,6 +39,10 @@
   import AuthLayout from "./_auth_layout.svelte";
 
   export let validated;
+
+  function handleClickConnexionButton() {
+    plausible("inscription", { props: { step: "Validation après création" } });
+  }
 </script>
 
 <svelte:head>
@@ -60,7 +64,11 @@
           l’inscription pour vous connecter.
         </p>
       </Info>
-      <LinkButton to="/auth/connexion" label="Aller à la page de connexion" />
+      <LinkButton
+        to="/auth/connexion"
+        label="Aller à la page de connexion"
+        on:click={handleClickConnexionButton}
+      />
     {:else}
       <Info label="Le lien a expiré ou n’est pas valide" negativeMood />
       <LinkButton

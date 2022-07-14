@@ -9,6 +9,7 @@
   let tabId;
 
   function handleJoin() {
+    plausible("inscription", { props: { step: "Création structure" } });
     $registrationInfo.siret = establishment.siret;
     $registrationInfo.isPoleEmploi = tabId === "safir";
     currentStep = 2;

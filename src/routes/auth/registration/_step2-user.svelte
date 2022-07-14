@@ -24,6 +24,7 @@
   };
 
   function handleSubmit(validatedData) {
+    plausible("inscription", { props: { step: "Création compte" } });
     const url = `${getApiURL()}/auth/register-structure-and-user/`;
     return fetch(url, {
       method: "POST",
