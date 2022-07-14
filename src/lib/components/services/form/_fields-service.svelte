@@ -73,7 +73,7 @@
   }
 </script>
 
-<FieldSet title="Zone de diffusion" noTopPadding>
+<FieldSet title="Périmètre géographique d’intervention" noTopPadding>
   <div slot="help">
     <p class="text-f14">
       Si le service est reservé aux habitants d'un territoire.
@@ -127,7 +127,7 @@
   />
 </FieldSet>
 
-<FieldSet title="Lieu">
+<FieldSet title="Accueil">
   <SchemaField
     type="checkboxes"
     label={serviceSchema.locationKinds.name}

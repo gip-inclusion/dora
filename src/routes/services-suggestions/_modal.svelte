@@ -117,7 +117,7 @@
         <Line label="Courriel" data={suggestion.serviceInfo.contactEmail} />
 
         <Line
-          label="Lieu de déroulement"
+          label="Mode d’accueil"
           data={suggestion.serviceInfo.locationKindsDisplay}
           isList
         />

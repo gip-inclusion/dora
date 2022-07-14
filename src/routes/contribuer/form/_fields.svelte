@@ -320,10 +320,10 @@
     {/if}
   </FieldSet>
 
-  <FieldSet title="Lieu de déroulement">
+  <FieldSet title="Accueil">
     <SchemaField
       type="checkboxes"
-      label="Lieu de déroulement"
+      label={contribSchema.locationKinds.name}
       schema={contribSchema.locationKinds}
       name="locationKinds"
       errorMessages={$formErrors.locationKinds}

@@ -295,7 +295,7 @@ const schema = {
   },
 
   locationKinds: {
-    name: "lieu de déroulement",
+    name: "Mode d’accueil",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
@@ -356,13 +356,13 @@ const schema = {
     ],
   },
   diffusionZoneType: {
-    name: "habitants de",
+    name: "périmètre",
     default: "",
     rules: [v.isString(), v.maxStrLength(10)],
   },
 
   diffusionZoneDetails: {
-    name: "nom du territoire",
+    name: "territoire",
     default: "",
     rules: [
       v.isString(),
