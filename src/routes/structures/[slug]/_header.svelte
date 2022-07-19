@@ -48,7 +48,7 @@
         href: `/structures/${structure.slug}/services`,
       });
     }
-    if (structure.isAdmin || $userInfo?.isStaff || $userInfo?.isBizdev) {
+    if (structure.isMember || $userInfo?.isStaff || $userInfo?.isBizdev) {
       tabs.splice(1, 0, {
         id: "collaborateurs",
         name: "Collaborateurs",
