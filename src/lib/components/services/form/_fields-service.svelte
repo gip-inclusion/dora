@@ -76,7 +76,9 @@
 <FieldSet title="Périmètre géographique d’intervention" noTopPadding>
   <div slot="help">
     <p class="text-f14">
-      Si le service est reservé aux habitants d'un territoire.
+      Qu’il soit national, régional, départemental, intercommunal ou communal,
+      le service peut être délimité aux bénéficiaires habitant sur un territoire
+      spécifique.
     </p>
 
     <h5 class="mb-s0">QPV et ZRR</h5>
