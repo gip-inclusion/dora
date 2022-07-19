@@ -6,6 +6,18 @@
 
   export let service;
   export let isModel = false;
+
+  function formatFilePath(filePath) {
+    const file = filePath.split("/").pop();
+
+    const dotPosition = file.lastIndexOf(".");
+    if (dotPosition === -1) return file;
+
+    const name = file.slice(0, dotPosition);
+    const extension = file.slice(file.lastIndexOf("."), file.length);
+
+    return `${name} (${extension})`;
+  }
 </script>
 
 <div class="flex flex-col gap-s24 lg:flex-row">
@@ -57,7 +69,12 @@
       {#if service.locationKinds.includes("a-distance")}
         <strong>À distance</strong>
         <p class="pb-s16 text-f14">
-          <a target="_blank" rel="noopener nofollow" href={service.remoteUrl}>
+          <a
+            target="_blank"
+            rel="noopener nofollow"
+            href={service.remoteUrl}
+            title="Ouverture dans une nouvelle fenêtre"
+          >
             {shortenString(service.remoteUrl, 35)}
           </a>
         </p>
@@ -169,8 +186,12 @@
           {#each service.formsInfo as form}
             <li>
               <span class="break-word">
-                <a target="_blank" rel="noopener nofollow" href={form.url}
-                  >{form.name}</a
+                <a
+                  target="_blank"
+                  rel="noopener nofollow"
+                  href={form.url}
+                  title="Ouverture dans une nouvelle fenêtre"
+                  >{formatFilePath(form.name)}</a
                 >
               </span>
             </li>
@@ -181,6 +202,7 @@
                 <a
                   target="_blank"
                   rel="noopener nofollow"
+                  title="Ouverture dans une nouvelle fenêtre"
                   href={service.onlineForm}>{service.onlineForm}</a
                 >
               </span>
