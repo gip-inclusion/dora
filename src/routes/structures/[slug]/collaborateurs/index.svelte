@@ -93,7 +93,7 @@
     {/if}
   </div>
 
-  {#if members}
+  {#if canSeeMembers}
     <div class="mt-s32 mb-s32 flex flex-col gap-s8">
       {#if canEditMembers && putativeMembers}
         {#each sortedMembers(putativeMembers) as member}
