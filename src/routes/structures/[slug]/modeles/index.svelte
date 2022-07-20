@@ -14,8 +14,7 @@
     const info = get(userInfo);
     const struct = get(structure);
 
-    // const canSeeMembers = struct.isMember || info?.isBizdev || info?.isStaff;
-    const isMember = struct.isAdmin || info?.isBizdev || info?.isStaff;
+    const isMember = struct.isMember || info?.isBizdev || info?.isStaff;
 
     if (!info || !struct || !isMember) {
       return {
