@@ -1,21 +1,29 @@
 <script context="module">
   import { browser } from "$app/env";
+  import { get } from "svelte/store";
+
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import { getService } from "$lib/services";
+  import { token } from "$lib/auth";
 
-  export async function load({ params }) {
+  export async function load({ url, params }) {
     const service = await getService(params.slug);
     // si le service est en brouillon il faut un token pour y accéder
     // on renvoit donc un objet vide côté serveur
-    if (!service && !browser) {
-      return {
-        props: {
-          service: null,
-        },
-      };
-    }
-
     if (!service) {
+      if (!browser) {
+        return {
+          props: {
+            service: null,
+          },
+        };
+      }
+      if (!get(token)) {
+        return {
+          status: 302,
+          redirect: `/auth/connexion?next=${encodeURIComponent(url.pathname)}`,
+        };
+      }
       return {
         status: 404,
         error: "Page Not Found",
