@@ -12,7 +12,7 @@
     {#if $userInfo}
       <LinkButton
         label="Demander l’accès…"
-        to="https://itou.typeform.com/doracontactsupp"
+        to="https://aide.dora.fabrique.social.gouv.fr/fr/"
         otherTab
         nofollow
         secondary

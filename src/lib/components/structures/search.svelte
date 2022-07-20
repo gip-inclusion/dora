@@ -57,9 +57,13 @@
 >
   <div slot="description">
     <p class="text-f14 text-white">
-      Choisissez une méthode d'identification. En cas de doute, <a
+      Choisissez une méthode d'identification. En cas de doute,
+      <a
         class="underline"
-        href="https://itou.typeform.com/doracontactsupp">contactez-nous</a
+        target="_blank"
+        title="Ouverture dans une nouvelle fenêtre"
+        rel="noopener nofollow"
+        href="https://aide.dora.fabrique.social.gouv.fr/fr/">contactez-nous</a
       >.
     </p>
 

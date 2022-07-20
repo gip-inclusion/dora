@@ -19,7 +19,7 @@
     // eslint-disable-next-line
     email: {
       invalid:
-        "Cet utilisateur existe déjà.&nbsp;<a target='_blank' rel='noopener nofollow' class='underline' href='https://itou.typeform.com/doracontactsupp'>Nous contacter</a>.",
+        "Cet utilisateur existe déjà.&nbsp;<a target='_blank' rel='noopener nofollow' class='underline' title='Ouverture dans une nouvelle fenêtre' href='https://aide.dora.fabrique.social.gouv.fr/fr/'>Nous contacter</a>.",
     },
   };
 

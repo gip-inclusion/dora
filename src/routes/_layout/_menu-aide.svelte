@@ -31,7 +31,7 @@
 
 <LinkButton
   label="Contact"
-  to={`https://itou.typeform.com/doracontactsupp`}
+  to={`https://aide.dora.fabrique.social.gouv.fr/fr/`}
   nofollow
   otherTab
   noBackground
