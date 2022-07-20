@@ -8,22 +8,24 @@
     `
 Bonjour,
 
-Je me permets de vous partager un service qui devrait vous intéresser.
+J’ai identifié votre structure car les services qu’elle propose me semblent tout à fait adaptés au dispositif DORA.
 
-Connaissez-vous Dora ?
+DORA est une initiative portée par la Ministre du Travail, de l’Emploi et de l’Insertion et mise en œuvre dans le cadre de la création du SPIE (Service Public de l’Insertion et de l’Emploi). Il s‘agit de l‘outil de référencement national de l‘offre d‘insertion sociale, socioprofessionnelle et professionnelle.
 
-Lancé en Mai 2021, Dora est un service public numérique porté par la DGEFP pour recenser l'offre d'insertion.
-- Les structures de l'insertion référencent simplement et mettent à jour leur offre de services.
-- Les professionnels prescripteurs recherchent et mobilisent rapidement le service adapté aux besoins de leurs bénéficiaires.
+DORA va référencer gratuitement l‘ensemble des services de mobilités dédiés aux personnes exclues durablement de l‘emploi. Vous pourrez par la suite simplement mettre à jour en temps réel votre offre de services. Il permettra aux professionnels de l‘accompagnement social et professionnel de rechercher et mobiliser rapidement le service le plus adapté au besoin de leur bénéficiaire.
 
-De nombreux partenaires ont déjà publié leur offre de service sur Dora. Vous pouvez également vous y inscrire.
+Pour en savoir plus, je vous suggère de vous inscrire au prochain webinaire de démo :
+👩‍💻 Je m‘inscris ici : https://app.livestorm.co/dora-1
 
-👉 Cliquez sur ce lien (et pensez à l'ajouter à vos favoris) :
-https://dora.fabrique.social.gouv.fr/
 
-Dans l'attente de consulter votre offre de services.
+[DORA] Les documents et liens utiles :
 
-Cordialement,
+🚀 Le lien d‘accès au site : https://dora.fabrique.social.gouv.fr/
+🖥 Les tutoriels vidéos : https://www.youtube.com/channel/UCadIsy9gfHgLmLkutRGC5ew
+📚 La documentation dora : https://aide.dora.fabrique.social.gouv.fr/fr/
+👩‍💻 Lien d‘accès aux ateliers et webinaires d‘appropriation Dora : https://app.livestorm.co/dora-1
+
+En espérant vous voir très bientôt sur Dora !
 `.trim()
   );
 </script>
