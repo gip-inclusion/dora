@@ -14,20 +14,35 @@
   <CenteredGrid>
     <div class="flex gap-s24 lg:flex-row">
       <div class="mb-s24 lg:w-1/2">
-        <img class="inline" src={LogoRF} alt="" width="124" height="110" />
+        <img
+          class="inline"
+          src={LogoRF}
+          alt="République Française - Liberté, Égalité, Fraternité"
+          width="124"
+          height="110"
+        />
       </div>
       <div class="text-f14 leading-normal text-gray-text lg:w-1/2">
         Dora, le service public numérique de recensement et mise à jour de
         l’offre d’insertion.
         <div class="mt-s16 flex flex-wrap gap-x-s24 gap-y-s8 font-bold">
-          <a target="_blank" rel="noopener" href="https://gouvernement.fr"
-            >gouvernement.fr</a
+          <a
+            target="_blank"
+            title="Ouverture dans une nouvelle fenêtre"
+            rel="noopener"
+            href="https://gouvernement.fr">gouvernement.fr</a
           >
-          <a target="_blank" rel="noopener" href="https://service-public.fr"
-            >service-public.fr</a
+          <a
+            target="_blank"
+            title="Ouverture dans une nouvelle fenêtre"
+            rel="noopener"
+            href="https://service-public.fr">service-public.fr</a
           >
-          <a target="_blank" rel="noopener" href="https://data.gouv.fr"
-            >data.gouv.fr</a
+          <a
+            target="_blank"
+            title="Ouverture dans une nouvelle fenêtre"
+            rel="noopener"
+            href="https://data.gouv.fr">data.gouv.fr</a
           >
         </div>
       </div>

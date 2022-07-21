@@ -83,11 +83,7 @@
   <h2 class="mb-s32 text-center text-france-blue">Comment cela fonctionne</h2>
   <div class="mb-s24 flex flex-col gap-s24 md:flex-row">
     <div class="md:flex-1">
-      <img
-        src={illuRecenser}
-        alt="illustration d'un personnage avec une machine à écrire"
-        class="mb-s16 w-full"
-      />
+      <img src={illuRecenser} alt="" class="mb-s16 w-full" />
       <h3>Recensement de l’offre d’insertion</h3>
       <p class="text-f16">
         Vous proposez des services d'insertion ? Rendez les visibles sur votre
@@ -96,11 +92,7 @@
       </p>
     </div>
     <div class="md:flex-1">
-      <img
-        src={illuMobiliser}
-        alt="illustration d'un ordinateur avec le visage d'un personnage satisfait sur l'écran"
-        class="mb-s16 w-full"
-      />
+      <img src={illuMobiliser} alt="" class="mb-s16 w-full" />
       <h3>Identification du service adapté</h3>
       <p class="text-f16">
         Vous accompagnez des bénéficiaires ? Trouvez rapidement les services
@@ -109,11 +101,7 @@
       </p>
     </div>
     <div class="md:flex-1">
-      <img
-        src={illuAccompagner}
-        alt="illustration avec deux personnages souriants, face à face, chacun dans une bulle qui communiquent avec leur ordinateur."
-        class="mb-s16 w-full"
-      />
+      <img src={illuAccompagner} alt="" class="mb-s16 w-full" />
       <h3>Mobilisation du service</h3>
       <p class="text-f16">
         Vous avez identifié le bon service ? Aidez votre bénéficiaire en

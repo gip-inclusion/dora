@@ -51,6 +51,7 @@
         </i>
         <a
           target="_blank"
+          title="Ouverture dans une nouvelle fenêtre"
           rel="noopener nofollow"
           href={structure.url}
           class="flex"

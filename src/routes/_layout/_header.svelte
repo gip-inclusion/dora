@@ -21,12 +21,18 @@
           <img
             class="inline"
             src={LogoMinistere}
-            alt=""
+            alt="Ministère du Travail, du Plein emploi et de l’Insertion"
             width="114"
             height="89"
           />
         </div>
-        <img class="inline" src={LogoDORA} alt="Dora" width="140" height="65" />
+        <img
+          class="inline"
+          src={LogoDORA}
+          alt="Dora - Découvrir, Orienter, Renseigner, Accompagner"
+          width="140"
+          height="65"
+        />
       </a>
       {#if browser}
         <div class="grow" />

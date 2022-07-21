@@ -24,11 +24,7 @@
 <CenteredGrid extraClass="bg-gradient-to-b from-magenta-10 to-magenta-10/0">
   <div class="lg:flex lg:gap-s32">
     <div class="lg:flex-1">
-      <img
-        class="hidden flex-none lg:block"
-        src={ContributionPic}
-        alt="Illustration en bichromie avec un homme et une femme, face à face chacun dans un cercle, en train de prendre des notes, séparéss par des traits horizontaux abstraits, et une main tenant un crayon au premier plan."
-      />
+      <img class="hidden flex-none lg:block" src={ContributionPic} alt="" />
     </div>
     <div class="lg:flex-1">
       <h1 class="text-france-blue">Merci pour votre contribution</h1>
