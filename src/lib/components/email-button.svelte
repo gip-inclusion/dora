@@ -3,7 +3,9 @@
   import LinkButton from "./link-button.svelte";
   export let wFull = false;
 
-  const sharingEmailSubject = encodeURIComponent("Connaissez-vous Dora ?");
+  const sharingEmailSubject = encodeURIComponent(
+    "Référencement de votre offre d'insertion"
+  );
   const sharingEmailBody = encodeURIComponent(
     `
 Bonjour,
