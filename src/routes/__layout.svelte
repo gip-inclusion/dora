@@ -37,6 +37,7 @@
 
   import Footer from "./_layout/_footer.svelte";
   import Header from "./_layout/_header.svelte";
+  import SkipLink from "./_layout/_skip-link.svelte";
 </script>
 
 <svelte:head>
@@ -61,9 +62,11 @@
     <meta name="robots" content="noindex" />
   {/if}
 </svelte:head>
+
+<SkipLink />
 <Header />
 
-<main>
+<main id="main-content">
   <slot />
 </main>
 
