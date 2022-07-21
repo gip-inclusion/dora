@@ -44,13 +44,14 @@
   import ServiceToolbar from "$lib/components/services/service-toolbar.svelte";
   import ServiceBody from "$lib/components/services/service-body.svelte";
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
-  import FeedbackModal from "./_feedback-modal.svelte";
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
-  import { NPS_FORM_ID } from "$lib/const";
+  import { NPS_FORM_ID, SERVICE_CREATION_FORM_ID } from "$lib/const";
+  import { isAfter } from "$lib/utils/date";
 
   export let service;
-  let showFeedbackModal = false;
-  let feedbackTimeout = undefined;
+  // Nous ne voulons pas afficher le formulaire sur les services avant cette date
+  // afin de ne pas avoir une durée de contribution fausse
+  const MIN_DATE_FOR_SERVICE_FEEDBACK_FROM = new Date("2022-07-21");
 
   onMount(() => {
     if (browser) {
@@ -62,19 +63,10 @@
           departement: service.department,
         },
       });
-
-      // Show feedback modal after 15 seconds (if needed)
-      if (
-        $serviceSubmissionTimeMeter.showFeedbackModal &&
-        $serviceSubmissionTimeMeter.id === service.slug
-      ) {
-        feedbackTimeout = setTimeout(() => (showFeedbackModal = true), 15000);
-      }
     }
   });
 
   onDestroy(() => {
-    clearTimeout(feedbackTimeout);
     serviceSubmissionTimeMeter.clear();
   });
 
@@ -105,7 +97,16 @@
     <ServiceBody {service} />
   </CenteredGrid>
 
-  <FeedbackModal bind:isOpen={showFeedbackModal} {service} />
+  {#if $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM)}
+    <TallyNpsPopup
+      formId={SERVICE_CREATION_FORM_ID}
+      timeout="3000"
+      hiddenFields={{
+        service: $serviceSubmissionTimeMeter.id,
+        temps: $serviceSubmissionTimeMeter.duration,
+      }}
+    />
+  {/if}
 
   <!-- Do not display NPS to the service contributor -->
   {#if !service.canWrite}

@@ -108,7 +108,6 @@
 
   onDestroy(() => {
     $formErrors = {};
-    serviceSubmissionTimeMeter.clear();
     clearInterval(intervalId);
   });
 </script>

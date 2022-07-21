@@ -32,7 +32,6 @@
 
         // For feedback modal
         serviceSubmissionTimeMeter.setId(result.slug);
-        serviceSubmissionTimeMeter.enableFeedbackModal();
 
         goto(`/services/${result.slug}`);
       } catch (error) {
