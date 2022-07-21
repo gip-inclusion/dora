@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.18](https://github.com/betagouv/dora-front/compare/v0.0.17...v0.0.18) (2022-07-21)
+
+### Features
+
+- **a11y:** améliorations alt et précision nouvelle fenêtre si target=blank ([#74](https://github.com/betagouv/dora-front/issues/74)) ([b193023](https://github.com/betagouv/dora-front/commit/b1930231db59797121ea6de424b0e72a67bd35a1))
+- corrections de souci d'affichage avec le formulaire de retour utilisateur ([#76](https://github.com/betagouv/dora-front/issues/76)) ([c434bc7](https://github.com/betagouv/dora-front/commit/c434bc74cb868e81307efe62e2ca8f8ddb72dca0))
+- envoi d'évènements Plausible lors de l'inscription ([ae9dbce](https://github.com/betagouv/dora-front/commit/ae9dbcea0139fb24b4ac77cd95fe97ea8d6b2d6d))
+- **feedback:** ajout des formulaires de retours utilisateurs + tracking du temps de complétion ([#68](https://github.com/betagouv/dora-front/issues/68)) ([1844821](https://github.com/betagouv/dora-front/commit/18448216268d34511a1987f14b24bc309ced9a86))
+- les membres d'une structure peuvent voir leurs collègues ([f6330dd](https://github.com/betagouv/dora-front/commit/f6330dd7275c4866c25cf61575320803ee8ac319))
+- meilleur intitulé des liens de téléchargement ([#72](https://github.com/betagouv/dora-front/issues/72)) ([f4e91c4](https://github.com/betagouv/dora-front/commit/f4e91c42b385175d6c32b555ac1ccf43da82986f))
+- mise à jour du courriel d'invitation aux porteurs ([9b3175d](https://github.com/betagouv/dora-front/commit/9b3175d7a9ca84bb567227aecf223bc22ef18af5))
+- **nps:** ajout formulaire NPS ([#69](https://github.com/betagouv/dora-front/issues/69)) ([9e5a8cc](https://github.com/betagouv/dora-front/commit/9e5a8cc9f78bbac27c67deff57dcf3611b915ca2))
+
+### Bug Fixes
+
+- l'onglet Modèles est de nouveau accessible aux non-admins ([f106b95](https://github.com/betagouv/dora-front/commit/f106b9569123ddcb876616760cac9127df181337))
+- **mobiliser:** réparation du tracking plausible ([#70](https://github.com/betagouv/dora-front/issues/70)) ([ecd59bf](https://github.com/betagouv/dora-front/commit/ecd59bf2a8e014e199ac9fcb537d593d7edd7035))
+- slug pour contribution ([#77](https://github.com/betagouv/dora-front/issues/77)) ([9c1521d](https://github.com/betagouv/dora-front/commit/9c1521dc8d75de1d3165f00ff9fbb02898db5296))
+
 ### [0.0.17](https://github.com/betagouv/dora-front/compare/v0.0.16...v0.0.17) (2022-07-07)
 
 ### Features
