@@ -76,7 +76,11 @@
       const result = await publishServiceSuggestion(service, source);
 
       if (result.ok && result.data) {
-        serviceSubmissionTimeMeter.setId(result.data.id);
+        serviceSubmissionTimeMeter.setId(
+          encodeURIComponent(
+            `${result.data.serviceInfo.structureInfo.siret}--${result.data.name}`
+          )
+        );
         goto(`/contribuer/merci`);
       } else {
         injectAPIErrors(result.error, {});
