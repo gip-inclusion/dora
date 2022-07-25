@@ -8,7 +8,7 @@
     SERVICE_STATUSES,
   } from "$lib/schemas/service.js";
   import { createOrModifyService, publishDraft } from "$lib/services";
-  import { assert, logException } from "$lib/logger";
+  import { logException } from "$lib/logger";
 
   import Button from "$lib/components/button.svelte";
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
@@ -58,8 +58,6 @@
       return;
     }
 
-    assert(service.slug);
-
     // Validation OK, let's send it to the API endpoint
     const result = await createOrModifyService({
       ...validatedData,
@@ -67,12 +65,9 @@
     });
 
     if (result.ok) {
-      // We might have added options to the editable multiselect
-
       serviceSubmissionTimeMeter.clear();
 
-      service = result.data;
-      goto(`/services/${service.slug}`);
+      goto(`/services/${result.data.slug}`);
     } else {
       injectAPIErrors(
         result.error || {
