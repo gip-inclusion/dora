@@ -16,23 +16,26 @@
     if (hasAnsweredForm) return;
 
     timeoutFn = setTimeout(() => {
-      window.Tally.openPopup(formId, {
-        layout: "default",
-        width: 420,
-        hideTitle: true,
-        autoClose: 0,
-        hiddenFields,
+      if (window.Tally) {
+        window.Tally.openPopup(formId, {
+          layout: "default",
+          width: 420,
+          hideTitle: true,
+          autoClose: 0,
+          hiddenFields,
 
-        // Inspiré par : https://tally.so/help/popup-forms#f089d95828ef4e86a728611ded726822
-        onSubmit: () => {
-          localStorage.setItem(localStorageKey, "1");
-        },
-      });
+          // Inspiré par : https://tally.so/help/popup-forms#f089d95828ef4e86a728611ded726822
+          onSubmit: () => {
+            localStorage.setItem(localStorageKey, "1");
+          },
+        });
+      }
     }, timeout);
   });
 
   onDestroy(() => {
-    if (browser) window.Tally.closePopup(formId);
+    if (browser && window.Tally) window.Tally.closePopup(formId);
+
     clearTimeout(timeoutFn);
   });
 </script>
