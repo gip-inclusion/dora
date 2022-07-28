@@ -64,6 +64,7 @@
       } else {
         siret = "";
       }
+      requesting = false;
     }
   });
 </script>

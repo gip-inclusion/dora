@@ -78,7 +78,9 @@
       if (result.ok && result.data) {
         serviceSubmissionTimeMeter.setId(
           encodeURIComponent(
-            `${result.data.serviceInfo.structureInfo.siret}--${result.data.name}`
+            `${
+              result.data.serviceInfo?.structureInfo?.siret || "aucun-siret"
+            }--${result.data.name}`
           )
         );
         goto(`/contribuer/merci`);

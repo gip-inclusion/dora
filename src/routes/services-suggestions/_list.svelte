@@ -5,35 +5,54 @@
   } from "$lib/services";
 
   import Button from "$lib/components/button.svelte";
-  import Modal from "./_modal.svelte";
+  import SuggestionModal from "./_suggestion-modal.svelte";
 
   import { arrowRightSIcon, closeCircleIcon } from "$lib/icons";
+  import Modal from "$lib/components/modal.svelte";
 
   export let suggestions;
   export let onRefresh;
 
   let currentSuggestion;
-  let modalIsOpen = false;
+  let suggestionModalIsOpen = false;
+  let confirmationModalIsOpen = false;
+  let emailsContacted = null;
 
   async function handleAccept(suggestion) {
+    // eslint-disable-next-line no-alert
     if (confirm(`Accepter la suggestion ${suggestion.name} ?`)) {
-      await acceptServiceSuggestion(suggestion);
-      await onRefresh();
-      modalIsOpen = false;
+      const result = await acceptServiceSuggestion(suggestion);
+
+      // On confirme que la suggestion a bien été transformé en service
+      if (!result.ok) {
+        // eslint-disable-next-line no-alert
+        alert(result.error.detail.message); // FIXME: message "Pas trouvé." peu pertinent
+      } else {
+        emailsContacted = result?.data?.emailsContacted ?? [];
+        suggestionModalIsOpen = false;
+        confirmationModalIsOpen = true;
+      }
     }
   }
 
+  async function onConfirmationClose() {
+    confirmationModalIsOpen = false;
+    emailsContacted = null;
+    await onRefresh();
+  }
+
   async function handleReject(suggestion) {
+    // eslint-disable-next-line no-alert
     if (confirm(`Supprimer la suggestion ${suggestion.name} ?`)) {
       await deleteServiceSuggestion(suggestion);
       await onRefresh();
-      modalIsOpen = false;
+      suggestionModalIsOpen = false;
     }
   }
 </script>
 
-<Modal
-  bind:isOpen={modalIsOpen}
+<SuggestionModal
+  bind:isOpen={suggestionModalIsOpen}
   suggestion={currentSuggestion}
   onAccept={(s) => handleAccept(s)}
   onReject={(s) => handleReject(s)}
@@ -82,10 +101,36 @@
           noBackground
           on:click={() => {
             currentSuggestion = suggestion;
-            modalIsOpen = true;
+            suggestionModalIsOpen = true;
           }}
         />
       </div>
     </div>
   {/each}
 </div>
+
+<Modal
+  bind:isOpen={confirmationModalIsOpen}
+  on:close={onConfirmationClose}
+  title="Création du service réussie"
+  overflow
+>
+  {#if emailsContacted}
+    {#if emailsContacted.length === 0}
+      <p>
+        Toutefois, aucun courriel n’a été envoyé car aucun destinataire n’a pu
+        être déterminé…
+      </p>
+    {:else}
+      <p>
+        La ou les personnes suivantes ont reçu un courriel les invitant à
+        prendre connaissance de ce nouveau service&nbsp;:
+      </p>
+      <ul class="list-disc pl-s32">
+        {#each emailsContacted as mail}
+          <li>{mail}</li>
+        {/each}
+      </ul>
+    {/if}
+  {/if}
+</Modal>
