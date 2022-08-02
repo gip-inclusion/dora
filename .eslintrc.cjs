@@ -27,7 +27,6 @@ module.exports = {
         allowArrowFunctions: true,
       },
     ],
-    "jsdoc/require-jsdoc": "off",
     "no-alert": "warn",
     "no-console": "warn",
     "no-return-assign": "error",

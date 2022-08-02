@@ -1,5 +1,4 @@
 .svelte-kit/**
 static/**
-design-system/**
 build/**
 node_modules/**
