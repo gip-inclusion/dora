@@ -47,7 +47,7 @@
     return {
       props: {
         model,
-        servicesOptions: await getServicesOptions(),
+        servicesOptions: await getServicesOptions({ model }),
         structures,
         structure,
         serviceSlug,

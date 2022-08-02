@@ -11,7 +11,7 @@
     const model = await getModel(params.slug);
     let structure = {};
     let structures = [];
-    const servicesOptions = await getServicesOptions();
+    const servicesOptions = await getServicesOptions({ model });
 
     // on ne retourne une 404 que sur le client
     if (!browser) {

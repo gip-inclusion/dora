@@ -38,6 +38,7 @@
         bind:service={model}
         {servicesOptions}
         serviceSchema={modelSchema}
+        canAddChoices={!model.customizableChoicesSet}
       />
     {/if}
   </div>

@@ -124,7 +124,13 @@
     {/if}
 
     <div class={service.model ? "" : "lg:w-2/3"}>
-      <FieldsCommon bind:service {servicesOptions} {model} {serviceSchema} />
+      <FieldsCommon
+        bind:service
+        {servicesOptions}
+        {model}
+        {serviceSchema}
+        canAddChoices={!model?.customizableChoicesSet}
+      />
     </div>
   </CenteredGrid>
 

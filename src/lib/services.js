@@ -278,10 +278,23 @@ export async function getLastDraft() {
   return null;
 }
 
-export async function getServicesOptions({ kitFetch } = {}) {
+export async function getServicesOptions({ model = null, kitFetch } = {}) {
   const url = `${getApiURL()}/services-options/`;
   try {
-    return (await fetchData(url, { kitFetch })).data;
+    const data = (await fetchData(url, { kitFetch })).data;
+    if (model?.customizableChoicesSet) {
+      for (const field of [
+        "accessConditions",
+        "concernedPublic",
+        "requirements",
+        "credentials",
+      ]) {
+        data[field] = data[field].filter((option) =>
+          model.customizableChoicesSet[field].includes(option.value)
+        );
+      }
+    }
+    return data;
   } catch (err) {
     logException(err);
     return {};
