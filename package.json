@@ -1,6 +1,6 @@
 {
   "name": "dora-front",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "engines": {
     "npm": ">=8 <9",
     "node": ">=16 <18"

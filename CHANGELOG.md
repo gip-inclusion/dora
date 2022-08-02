@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.19](https://github.com/betagouv/dora-front/compare/v0.0.18...v0.0.19) (2022-08-02)
+
+### Features
+
+- **a11y:** ajout de lien d'évitement ([#73](https://github.com/betagouv/dora-front/issues/73)) ([57f40ee](https://github.com/betagouv/dora-front/commit/57f40ee635570f949ae144ec96ff22c969299082))
+
+### Bug Fixes
+
+- supprime un assert() incorrect ([40c9a11](https://github.com/betagouv/dora-front/commit/40c9a1131773c3d28d50571cd93988841fbd4af8))
+- undefined window.Tally ([#79](https://github.com/betagouv/dora-front/issues/79)) ([b4b0e13](https://github.com/betagouv/dora-front/commit/b4b0e13aed613e5b75e7ced5506add82c15b7d5b))
+
 ### [0.0.18](https://github.com/betagouv/dora-front/compare/v0.0.17...v0.0.18) (2022-07-21)
 
 ### Features
