@@ -10,7 +10,7 @@ type FormTrack = {
   subscribe: Writable<FormTrackValues>["subscribe"];
 
   incrementDuration: () => void;
-  setId: (slug: string) => void;
+  setId: (_slug: string) => void;
   clear: () => void;
 };
 
