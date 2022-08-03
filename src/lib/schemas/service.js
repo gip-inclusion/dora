@@ -116,6 +116,7 @@ const fieldsRequired = {
     "coachOrientationModes",
     "diffusionZoneType",
     "locationKinds",
+    "contactEmail",
   ],
   draft: ["structure", "name"],
   model: [
