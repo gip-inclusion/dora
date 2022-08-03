@@ -6,6 +6,9 @@ import { getApiURL } from "$lib/utils/api.js";
 import { token } from "$lib/auth";
 import { logException } from "./logger";
 
+import structureSchema from "$lib/schemas/structure.js";
+import { validate } from "$lib/validation.js";
+
 export async function siretWasAlreadyClaimed(siret) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;
   const res = await fetch(url, {
@@ -249,4 +252,8 @@ export async function rejectMembershipRequest(uuid) {
     }
   }
   return result;
+}
+
+export function isStructureInformationsComplete(structure) {
+  return validate(structure, structureSchema).valid;
 }

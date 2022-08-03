@@ -3,7 +3,6 @@
 
   import LinkButton from "$lib/components/link-button.svelte";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import UpdateProfileNotif from "./_notif-incomplete.svelte";
   import ImproveDoraNotif from "./_notif-improve.svelte";
 </script>
 
@@ -34,9 +33,7 @@
     </div>
 
     <div class="flex flex-1 flex-col gap-s24">
-      {#if !userInfoIsComplete()}
-        <UpdateProfileNotif />
-      {:else}
+      {#if userInfoIsComplete()}
         <ImproveDoraNotif />
       {/if}
 

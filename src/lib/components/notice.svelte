@@ -12,6 +12,7 @@
   import { closeIcon } from "$lib/icons.js";
 
   export let hasCloseButton = false;
+  export let showIcon = true;
 
   const types = {
     info: {
@@ -49,16 +50,18 @@
 
 {#if visible}
   <div
-    class="rounded-r-md border-l-8 {types[type].border} {types[type]
+    class="rounded-r-md border-l-4 {types[type].border} {types[type]
       .bg} px-s24 pt-s16"
   >
     {#if title || hasCloseButton}
       <div class="flex justify-between">
         {#if title}
           <h4 class="mb-s16 {types[type].text} flex">
-            <div class="mr-s8 h-s24 w-s24 shrink-0 fill-current">
-              {@html types[type].icon}
-            </div>
+            {#if showIcon}
+              <div class="mr-s8 h-s24 w-s24 shrink-0 fill-current">
+                {@html types[type].icon}
+              </div>
+            {/if}
             {title}
           </h4>
         {/if}
