@@ -97,7 +97,7 @@
     <ServiceBody {service} />
   </CenteredGrid>
 
-  {#if $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM)}
+  {#if $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !service.hasAlreadyBeenUnpublished}
     <TallyNpsPopup
       formId={SERVICE_CREATION_FORM_ID}
       timeout="3000"
