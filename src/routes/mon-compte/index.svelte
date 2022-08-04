@@ -17,7 +17,7 @@
       <LinkButton label="Modifier" to="/mon-compte/editer" small />
 
       <LinkButton
-        label="Changer de mot de passe…"
+        label="Changer de mot de passe"
         to="/mon-compte/mot-de-passe"
         secondary
         small
@@ -43,7 +43,7 @@
           <p class="text-f14">Pour l’équipe DORA.</p>
           <div class="flex flex-col gap-s8 lg:flex-row">
             <LinkButton
-              label="Créer une structure…"
+              label="Créer une structure"
               to="/structures/creer"
               secondary
               small

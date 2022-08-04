@@ -153,7 +153,7 @@
   <Notice title="Vous n'avez pas encore de compte ?">
     <LinkButton
       slot="button"
-      label="Créer un compte…"
+      label="Créer un compte"
       secondary
       nofollow
       small
