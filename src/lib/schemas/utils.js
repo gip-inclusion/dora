@@ -169,7 +169,7 @@ export function minNum(min, msg) {
 
 // ----- Preprocessing
 export function removeAllSpaces(value) {
-  return value.replaceAll(" ", "");
+  return value.replace(/ /g, "");
 }
 
 export function removeAllNonDigits(value) {

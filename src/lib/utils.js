@@ -13,7 +13,7 @@ export function markdownToHTML(md) {
       () => ({
         type: "output",
         filter(html) {
-          return html.replaceAll("<a href=", '<a rel="nofollow" href=');
+          return html.replace(/\bhref=/gi, 'rel="nofollow" href=');
         },
       }),
     ],
