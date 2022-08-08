@@ -38,7 +38,7 @@
   }
 </script>
 
-<div class="rounded-md p-s24 shadow-l">
+<div id="home-search-form" class="rounded-md p-s24 shadow-l">
   {#if servicesOptions.categories}
     <form
       on:submit|preventDefault={handleSearch}

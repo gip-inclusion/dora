@@ -12,9 +12,11 @@
   "scripts": {
     "dev": "vite dev --port 3000 --strictPort --open",
     "build": "vite build",
+    "build:test": "vite build --mode test",
     "start": "node build",
     "preview": "vite preview --port 3000 --strictPort --open",
-    "test": "playwright test",
+    "test-e2e": "playwright test e2e",
+    "test-e2e-debug": "playwright test --debug e2e",
     "test-unit": "vitest run",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",

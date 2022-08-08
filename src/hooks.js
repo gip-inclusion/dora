@@ -1,6 +1,6 @@
 import { dev } from "$app/env";
 
-import { API_URL } from "$lib/env";
+import { API_URL, ENVIRONMENT } from "$lib/env";
 import * as Sentry from "@sentry/browser";
 
 export async function handleError({ error, event }) {
@@ -20,7 +20,11 @@ const noSsrPaths = [
 ];
 
 export async function handle({ event, resolve }) {
-  const ssr = !noSsrPaths.some((s) => event.url.pathname.startsWith(s));
+  let ssr = !noSsrPaths.some((s) => event.url.pathname.startsWith(s));
+
+  // No SSR for testing => we can't intercept request server side
+  if (ENVIRONMENT === "testing") ssr = false;
+
   const response = await resolve(event, { ssr });
 
   const connectSrc = `connect-src ${API_URL} ${
