@@ -28,8 +28,8 @@ export function setToken(t) {
   localStorage.setItem(tokenKey, t);
 }
 
-async function getUserInfo(authToken) {
-  return await fetch(`${getApiURL()}/auth/user-info/`, {
+async function getUserInfo(authToken, { kitFetch } = {}) {
+  return await (kitFetch || fetch)(`${getApiURL()}/auth/user-info/`, {
     method: "POST",
     headers: {
       Accept: defaultAcceptHeader,
@@ -85,7 +85,7 @@ export function disconnect() {
   deleteCookies();
 }
 
-export async function validateCredsAndFillUserInfo() {
+export async function validateCredsAndFillUserInfo({ kitFetch } = {}) {
   token.set(null);
   userInfo.set(null);
 
@@ -95,7 +95,7 @@ export async function validateCredsAndFillUserInfo() {
       // Valide le token actuel, et rempli les informations
       // utilisateur
       try {
-        const result = await getUserInfo(lsToken);
+        const result = await getUserInfo(lsToken, { kitFetch });
         if (result.status === 200) {
           token.set(lsToken);
           const info = await result.json();

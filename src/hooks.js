@@ -17,6 +17,7 @@ const noSsrPaths = [
   "/services/creer",
   "/structures/creer",
   "/mon-compte",
+  "/admin",
 ];
 
 export async function handle({ event, resolve }) {

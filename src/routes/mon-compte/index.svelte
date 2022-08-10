@@ -49,16 +49,7 @@
               small
             />
 
-            <LinkButton label="Structures" to="/structures" secondary small />
-
-            <LinkButton label="Services" to="/services" secondary small />
-
-            <LinkButton
-              label="Suggestions de service"
-              to="/services-suggestions"
-              secondary
-              small
-            />
+            <LinkButton label="Administration" to="/admin" secondary small />
           </div>
         </div>
       {/if}
