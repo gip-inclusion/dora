@@ -6,7 +6,7 @@
   import Date from "../date.svelte";
   import ServiceSync from "./service-sync.svelte";
   import { SERVICE_STATUSES } from "$lib/schemas/service";
-  export let service;
+  export let service, servicesOptions;
   export let readOnly = true;
   export let onRefresh;
 </script>
@@ -47,10 +47,10 @@
         {/if}
       </div>
       <div class="flex items-center justify-between">
-        <StateButtonMenu {service} {onRefresh} />
+        <StateButtonMenu {service} {servicesOptions} {onRefresh} />
 
         {#if service.status !== SERVICE_STATUSES.suggestion && service.status !== SERVICE_STATUSES.archived}
-          <ServiceButtonMenu {service} />
+          <ServiceButtonMenu {service} {servicesOptions} />
         {/if}
       </div>
     </div>

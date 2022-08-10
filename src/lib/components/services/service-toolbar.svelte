@@ -9,8 +9,7 @@
   import ServiceMenu from "./service-menu.svelte";
   import StateButtonMenu from "./state-button-menu.svelte";
   import ServiceSync from "./service-sync.svelte";
-
-  export let service;
+  export let service, servicesOptions;
   export let onRefresh;
 
   let suggestionModalIsOpen = false;
@@ -32,7 +31,7 @@
 
 <div class="inline-flex flex-wrap items-start gap-s8">
   {#if $token && service.canWrite}
-    <StateButtonMenu {service} {onRefresh} />
+    <StateButtonMenu {service} {servicesOptions} {onRefresh} />
     {#if service.model}
       <ServiceSync modelChanged={service.modelChanged}>
         <ServiceMenu {service} {onRefresh} inline />

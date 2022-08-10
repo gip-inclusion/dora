@@ -65,7 +65,7 @@
 <EnsureLoggedIn>
   <CenteredGrid>
     <h1>Modification du service</h1>
-    <NoticePublication {service} />
+    <NoticePublication {service} {servicesOptions} />
   </CenteredGrid>
 
   <ServiceFields {service} {servicesOptions} {structures} {structure} {model} />

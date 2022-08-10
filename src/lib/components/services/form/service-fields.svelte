@@ -150,7 +150,7 @@
 
   <CenteredGrid>
     <div class="flex flex-row gap-s12">
-      <ServiceNavButtons {onError} bind:service />
+      <ServiceNavButtons {onError} {servicesOptions} bind:service />
     </div>
   </CenteredGrid>
 {/if}

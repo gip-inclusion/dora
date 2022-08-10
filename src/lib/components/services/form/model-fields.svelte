@@ -47,6 +47,6 @@
 {#if model?.structure}
   <hr />
   <CenteredGrid>
-    <ModelNavButtons {onError} bind:model />
+    <ModelNavButtons {onError} {servicesOptions} bind:model />
   </CenteredGrid>
 {/if}

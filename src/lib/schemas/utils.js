@@ -196,6 +196,7 @@ export function formatSchema(schema, fields, fieldsRequired) {
       schemaFormatted[key] = {
         name: value.name,
         default: value.default,
+        pre: value.pre,
         rules: value.rules,
         post: value.post,
         dependents: value.dependents,

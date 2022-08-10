@@ -3,7 +3,7 @@
   import { get } from "svelte/store";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import { getService } from "$lib/services";
+  import { getService, getServicesOptions, getModel } from "$lib/services";
   import { token } from "$lib/auth";
 
   export async function load({ url, params }) {
@@ -30,9 +30,12 @@
       };
     }
 
+    const model = service.model ? await getModel(service.model) : null;
+
     return {
       props: {
         service,
+        servicesOptions: await getServicesOptions({ model }),
       },
     };
   }
@@ -48,7 +51,7 @@
   import { NPS_FORM_ID, SERVICE_CREATION_FORM_ID } from "$lib/const";
   import { isAfter } from "$lib/utils/date";
 
-  export let service;
+  export let service, servicesOptions;
   // Nous ne voulons pas afficher le formulaire sur les services avant cette date
   // afin de ne pas avoir une durée de contribution fausse
   const MIN_DATE_FOR_SERVICE_FEEDBACK_FROM = new Date("2022-07-21");
@@ -88,7 +91,7 @@
   <CenteredGrid noPadding>
     <div class="noprint py-s24">
       {#if browser}
-        <ServiceToolbar {service} onRefresh={handleRefresh} />
+        <ServiceToolbar {service} {servicesOptions} onRefresh={handleRefresh} />
       {/if}
     </div>
   </CenteredGrid>

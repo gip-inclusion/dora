@@ -1,7 +1,11 @@
 <script>
-  import { tick } from "svelte";
+  import { tick, setContext } from "svelte";
 
-  import { formErrors } from "$lib/validation.js";
+  import {
+    formErrors,
+    validate,
+    contextValidationKey,
+  } from "$lib/validation.js";
   import { moveToTheEnd } from "$lib/utils";
 
   import FieldSet from "$lib/components/forms/fieldset.svelte";
@@ -71,6 +75,41 @@
     await tick();
     showServiceAddress = true;
   }
+
+  async function handleEltChange(evt) {
+    // We want to listen to both DOM and component events
+    const fieldname = evt.target?.name || evt.detail;
+
+    // Sometimes (particularly with Select components), the event is received
+    // before the field value is updated in `service`, although it's not
+    // supposed to happen. This setTimeout is a unsatisfying workaround to that.
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        const filteredSchema = {
+          // si le champs n'existe pas dans le schéma,
+          // on l'initialise avec une valeur par défaut
+          [fieldname]: serviceSchema[fieldname] || { rules: [] },
+        };
+
+        const { validatedData, valid } = validate(service, filteredSchema, {
+          fullSchema: serviceSchema,
+          noScroll: true,
+          extraData: servicesOptions,
+        });
+
+        if (valid) {
+          service = { ...service, ...validatedData };
+        }
+
+        resolve();
+      }, 200);
+    });
+  }
+
+  setContext(contextValidationKey, {
+    onBlur: handleEltChange,
+    onChange: handleEltChange,
+  });
 </script>
 
 <FieldSet title="Périmètre géographique d’intervention" noTopPadding>

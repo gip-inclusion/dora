@@ -1,3 +1,15 @@
+<script context="module">
+  import { getServicesOptions } from "$lib/services";
+
+  export async function load() {
+    return {
+      props: {
+        servicesOptions: await getServicesOptions(),
+      },
+    };
+  }
+</script>
+
 <script>
   import { getStructure } from "$lib/structures";
   import { capitalize } from "$lib/utils.js";
@@ -8,6 +20,8 @@
   async function handleRefresh() {
     $structure = await getStructure($structure.slug);
   }
+
+  export let servicesOptions;
 </script>
 
 <svelte:head>
@@ -17,6 +31,7 @@
 
 <List
   services={$structure.services || []}
+  {servicesOptions}
   structure={$structure}
   total={$structure.services.length}
   onRefresh={handleRefresh}

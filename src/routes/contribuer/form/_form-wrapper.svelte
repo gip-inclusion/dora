@@ -43,6 +43,7 @@
         const { validatedData, valid } = validate(service, filteredSchema, {
           fullSchema: contribSchema,
           noScroll: true,
+          extraData: servicesOptions,
         });
         if (valid) {
           service = { ...service, ...validatedData };
@@ -70,7 +71,9 @@
 
   async function handlePublish() {
     // Validate the whole form
-    const { valid } = validate(service, contribSchema);
+    const { valid } = validate(service, contribSchema, {
+      extraData: servicesOptions,
+    });
 
     if (valid) {
       const result = await publishServiceSuggestion(service, source);

@@ -114,18 +114,28 @@ export function moveToTheEnd(
   return [...beginning, ...elementsToMove];
 }
 
-export function orderAndReformatSubcategories(subcategories, categories) {
-  return moveToTheEnd(subcategories, "label", "Autre", {
+export function orderAndReformatSubcategories(
+  subcategoriesValues,
+  categoriesValues,
+  servicesOptions
+) {
+  const selectedCategories = servicesOptions.categories.filter((so) =>
+    categoriesValues.includes(so.value)
+  );
+
+  return moveToTheEnd(subcategoriesValues, "label", "Autre", {
     sortBeginning: true,
+    sortKey: "value",
   }).map(({ value, label }) => {
-    const categorie = categories.find(
-      (cat) => cat.value === value.replace("--autre", "")
+    const categorie = selectedCategories.find(
+      (cat) => cat.value === value.split("--")[0]
     );
     return {
       value,
-      label: value.endsWith("--autre")
-        ? `${label} (${categorie?.label})`
-        : label,
+      label:
+        selectedCategories.length > 1
+          ? `${label} (${categorie?.label})`
+          : label,
     };
   });
 }
