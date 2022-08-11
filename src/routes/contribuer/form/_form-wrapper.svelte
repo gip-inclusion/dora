@@ -43,6 +43,7 @@
         const { validatedData, valid } = validate(service, filteredSchema, {
           fullSchema: contribSchema,
           noScroll: true,
+          extraData: servicesOptions,
         });
         if (valid) {
           service = { ...service, ...validatedData };
@@ -70,18 +71,16 @@
 
   async function handlePublish() {
     // Validate the whole form
-    const { valid } = validate(service, contribSchema);
+    const { valid } = validate(service, contribSchema, {
+      extraData: servicesOptions,
+    });
 
     if (valid) {
       const result = await publishServiceSuggestion(service, source);
 
       if (result.ok && result.data) {
         serviceSubmissionTimeMeter.setId(
-          encodeURIComponent(
-            `${
-              result.data.serviceInfo?.structureInfo?.siret || "aucun-siret"
-            }--${result.data.name}`
-          )
+          encodeURIComponent(`${result.data.siret}--${result.data.name}`)
         );
         goto(`/contribuer/merci`);
       } else {

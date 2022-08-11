@@ -124,7 +124,13 @@
     {/if}
 
     <div class={service.model ? "" : "lg:w-2/3"}>
-      <FieldsCommon bind:service {servicesOptions} {model} {serviceSchema} />
+      <FieldsCommon
+        bind:service
+        {servicesOptions}
+        {model}
+        {serviceSchema}
+        canAddChoices={!model?.customizableChoicesSet}
+      />
     </div>
   </CenteredGrid>
 
@@ -144,7 +150,7 @@
 
   <CenteredGrid>
     <div class="flex flex-row gap-s12">
-      <ServiceNavButtons {onError} bind:service />
+      <ServiceNavButtons {onError} {servicesOptions} bind:service />
     </div>
   </CenteredGrid>
 {/if}

@@ -3,7 +3,6 @@
 
   import LinkButton from "$lib/components/link-button.svelte";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import UpdateProfileNotif from "./_notif-incomplete.svelte";
   import ImproveDoraNotif from "./_notif-improve.svelte";
 </script>
 
@@ -18,7 +17,7 @@
       <LinkButton label="Modifier" to="/mon-compte/editer" small />
 
       <LinkButton
-        label="Changer de mot de passe…"
+        label="Changer de mot de passe"
         to="/mon-compte/mot-de-passe"
         secondary
         small
@@ -34,9 +33,7 @@
     </div>
 
     <div class="flex flex-1 flex-col gap-s24">
-      {#if !userInfoIsComplete()}
-        <UpdateProfileNotif />
-      {:else}
+      {#if userInfoIsComplete()}
         <ImproveDoraNotif />
       {/if}
 
@@ -46,22 +43,13 @@
           <p class="text-f14">Pour l’équipe DORA.</p>
           <div class="flex flex-col gap-s8 lg:flex-row">
             <LinkButton
-              label="Créer une structure…"
+              label="Créer une structure"
               to="/structures/creer"
               secondary
               small
             />
 
-            <LinkButton label="Structures" to="/structures" secondary small />
-
-            <LinkButton label="Services" to="/services" secondary small />
-
-            <LinkButton
-              label="Suggestions de service"
-              to="/services-suggestions"
-              secondary
-              small
-            />
+            <LinkButton label="Administration" to="/admin" secondary small />
           </div>
         </div>
       {/if}

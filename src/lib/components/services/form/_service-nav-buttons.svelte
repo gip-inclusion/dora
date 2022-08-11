@@ -13,14 +13,16 @@
   import Button from "$lib/components/button.svelte";
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
 
-  export let onError, service;
+  export let onError, service, servicesOptions;
 
   async function publish() {
     service.status = SERVICE_STATUSES.published;
     service.markSynced = true;
 
     // Validate the whole form
-    const { validatedData, valid } = validate(service, serviceSchema);
+    const { validatedData, valid } = validate(service, serviceSchema, {
+      extraData: servicesOptions,
+    });
 
     if (valid) {
       try {
@@ -52,7 +54,9 @@
       service.category = "";
     }
 
-    const { validatedData, valid } = validate(service, draftSchema);
+    const { validatedData, valid } = validate(service, draftSchema, {
+      extraData: servicesOptions,
+    });
 
     if (!valid) {
       return;

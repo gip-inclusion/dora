@@ -4,12 +4,16 @@
 
   import Notice from "$lib/components/notice.svelte";
 
-  export let service;
+  export let service, servicesOptions;
 
   let validation;
   $: validation =
     service &&
-    validate(service, serviceSchema, { noScroll: true, showErrors: false });
+    validate(service, serviceSchema, {
+      noScroll: true,
+      showErrors: false,
+      extraData: servicesOptions,
+    });
 
   let errors;
   $: errors = validation?.errorFields.length > 1;

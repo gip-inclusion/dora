@@ -81,11 +81,15 @@
   async function handleStructureChange(slug) {
     if (slug) {
       structure = await getStructure(slug);
-      servicesOptions = await getServicesOptions();
+
       service.structure = slug;
       if (!isModel && service.model) {
         model = await getModel(model.slug);
       }
+      servicesOptions = isModel
+        ? await getServicesOptions({ model: service })
+        : await getServicesOptions({ model });
+
       updateServiceOptions();
     }
   }

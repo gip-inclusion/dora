@@ -14,6 +14,8 @@
   export let schema;
   export let structure = null;
   export let description = "";
+  export let canAdd = true;
+
   let textInputVisible = false;
   let newValue;
   let newValueErrors = [];
@@ -63,43 +65,46 @@
     {sortSelect}
     {description}
   />
-  <Field type="custom">
-    <div slot="custom-input" class="mt-s16 flex flex-col">
-      <div class:hidden={textInputVisible}>
-        <Button
-          label="Ajouter une autre option"
-          secondary
-          small
-          on:click={() => (textInputVisible = true)}
-        />
-      </div>
-      <div class="flex flex-row gap-s16 " class:hidden={!textInputVisible}>
-        <Field
-          {name}
-          type="text"
-          bind:value={newValue}
-          on:input={handleChangeValue}
-          errorMessages={newValueErrors}
-          vertical
-        />
-        <div class="self-center">
-          <div class="flex flex-col gap-s8">
-            <Button
-              label="Ajouter"
-              small
-              disabled={!newValue}
-              on:click={handleAddValue}
-            />
+  {#if canAdd}
+    <Field type="custom">
+      <div slot="custom-input" class="mt-s16 flex flex-col">
+        <div class:hidden={textInputVisible}>
+          <Button
+            label="Ajouter une autre option"
+            secondary
+            small
+            on:click={() => (textInputVisible = true)}
+          />
+        </div>
+        <div class="flex flex-row gap-s16 " class:hidden={!textInputVisible}>
+          <Field
+            {name}
+            type="text"
+            bind:value={newValue}
+            on:input={handleChangeValue}
+            errorMessages={newValueErrors}
+            vertical
+          />
 
-            <Button
-              label="Annuler"
-              secondary
-              small
-              on:click={() => (textInputVisible = false)}
-            />
+          <div class="self-center">
+            <div class="flex flex-col gap-s8">
+              <Button
+                label="Ajouter"
+                small
+                disabled={!newValue}
+                on:click={handleAddValue}
+              />
+
+              <Button
+                label="Annuler"
+                secondary
+                small
+                on:click={() => (textInputVisible = false)}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </Field>
+    </Field>
+  {/if}
 </div>

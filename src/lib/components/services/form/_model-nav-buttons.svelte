@@ -8,11 +8,13 @@
 
   import Button from "$lib/components/button.svelte";
 
-  export let model, onError;
+  export let model, onError, servicesOptions;
 
   async function save() {
     // Validate the whole form
-    const { validatedData, valid } = validate(model, modelSchema);
+    const { validatedData, valid } = validate(model, modelSchema, {
+      extraData: servicesOptions,
+    });
 
     if (valid) {
       // Validation OK, let's send it to the API endpoint

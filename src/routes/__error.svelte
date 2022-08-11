@@ -3,6 +3,7 @@
     return {
       props: {
         notFound: status === 404,
+        forbidden: status === 403,
         status,
         error,
       },
@@ -16,7 +17,7 @@
   import { logException } from "$lib/logger";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
-  export let status, error, notFound;
+  export let status, error, notFound, forbidden;
 
   onMount(() => {
     if (browser) {
@@ -39,6 +40,8 @@
   <p>
     {#if notFound}
       Cette page n’existe pas.
+    {:else if forbidden}
+      Accès réservé
     {:else}
       Erreur inattendue.
     {/if}

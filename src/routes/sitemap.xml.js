@@ -1,6 +1,6 @@
 import { ENVIRONMENT, CANONICAL_URL } from "$lib/env.js";
 import { SERVICE_STATUSES } from "$lib/schemas/service";
-import { getServices } from "$lib/services";
+import { getPublishedServices } from "$lib/services";
 import { getStructures } from "$lib/structures";
 
 function toISODate(apiDate) {
@@ -9,9 +9,10 @@ function toISODate(apiDate) {
 }
 
 async function getAllServices() {
-  const response = await getServices();
+  const response = await getPublishedServices();
+
   return response
-    .filter((s) => (s.status = SERVICE_STATUSES.published))
+    .filter((s) => (s.status = SERVICE_STATUSES.published)) // Pas indispensable, mais c'est une sécurité supplémentaire
     .map((s) =>
       `<url>
       <loc>${CANONICAL_URL}/services/${s.slug}</loc>
@@ -53,10 +54,9 @@ async function getContent() {
   return content;
 }
 
-export async function get() {
+export async function GET() {
   const content = await getContent();
-
-  if (ENVIRONMENT === "production") {
+  if (ENVIRONMENT === "production" || ENVIRONMENT === "local") {
     return {
       status: 200,
       headers: {

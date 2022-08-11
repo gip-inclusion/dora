@@ -26,7 +26,8 @@
       : [];
     subcategories = orderAndReformatSubcategories(
       subcategories,
-      servicesOptions.categories
+      categories,
+      servicesOptions
     );
 
     service.subcategories = service.subcategories.filter((scat) =>

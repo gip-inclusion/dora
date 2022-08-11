@@ -5,7 +5,7 @@
   import StateMenu from "./state-menu.svelte";
   import StateLabel from "./state-label.svelte";
 
-  export let service;
+  export let service, servicesOptions;
   export let onRefresh;
 </script>
 
@@ -16,6 +16,7 @@
   <ButtonMenu icon={arrowDownSIcon} let:onClose={onCloseParent} small>
     <StateMenu
       {service}
+      {servicesOptions}
       onRefresh={async () => {
         await onCloseParent();
         await onRefresh();

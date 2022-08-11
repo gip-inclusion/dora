@@ -49,7 +49,7 @@
     return {
       props: {
         lastDraft: await getLastDraft(),
-        servicesOptions: await getServicesOptions(),
+        servicesOptions: await getServicesOptions({ model }),
         structures,
         structure,
         service,

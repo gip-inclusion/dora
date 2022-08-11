@@ -30,11 +30,6 @@ function serviceToFront(service) {
   return service;
 }
 
-export async function getServices() {
-  const url = `${getApiURL()}/services/`;
-  return (await fetchData(url)).data;
-}
-
 export async function getMyServices() {
   const url = `${getApiURL()}/services/?mine=1`;
   return (await fetchData(url)).data;
@@ -48,6 +43,21 @@ export async function getService(slug) {
   // TODO: 404
 
   return serviceToFront(response.data);
+}
+
+export async function getPublishedServices({ kitFetch } = {}) {
+  const url = `${getApiURL()}/services/?published=1`;
+  return (await fetchData(url, { kitFetch })).data;
+}
+
+export async function getServicesAdmin({ kitFetch } = {}) {
+  const url = `${getApiURL()}/services-admin/`;
+  return (await fetchData(url, { kitFetch })).data;
+}
+
+export async function getServiceAdmin(slug, { kitFetch } = {}) {
+  const url = `${getApiURL()}/services-admin/${slug}/`;
+  return (await fetchData(url, { kitFetch })).data;
 }
 
 export async function getModel(slug) {
@@ -278,10 +288,23 @@ export async function getLastDraft() {
   return null;
 }
 
-export async function getServicesOptions({ kitFetch } = {}) {
+export async function getServicesOptions({ model = null, kitFetch } = {}) {
   const url = `${getApiURL()}/services-options/`;
   try {
-    return (await fetchData(url, { kitFetch })).data;
+    const data = (await fetchData(url, { kitFetch })).data;
+    if (model?.customizableChoicesSet) {
+      for (const field of [
+        "accessConditions",
+        "concernedPublic",
+        "requirements",
+        "credentials",
+      ]) {
+        data[field] = data[field].filter((option) =>
+          model.customizableChoicesSet[field].includes(option.value)
+        );
+      }
+    }
+    return data;
   } catch (err) {
     logException(err);
     return {};

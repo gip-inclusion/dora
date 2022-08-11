@@ -6,7 +6,7 @@
   import ServiceCard from "$lib/components/services/service-card.svelte";
   import { SERVICE_STATUSES } from "$lib/schemas/service";
 
-  export let structure, services, total;
+  export let structure, services, total, servicesOptions;
   export let hasOptions = true;
   export let onRefresh;
   export let limit;
@@ -109,6 +109,6 @@
 
 <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
   {#each servicesDisplayed as service}
-    <ServiceCard {service} readOnly={!canEdit} {onRefresh} />
+    <ServiceCard {service} {servicesOptions} readOnly={!canEdit} {onRefresh} />
   {/each}
 </div>

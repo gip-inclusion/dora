@@ -1,3 +1,4 @@
+import { log } from "$lib/logger";
 import * as v from "./utils";
 
 export const SERVICE_STATUSES = {
@@ -6,6 +7,31 @@ export const SERVICE_STATUSES = {
   published: "PUBLISHED",
   archived: "ARCHIVED",
 };
+
+export function allCategoriesHaveSubcategories() {
+  return (name, value, data, extraData) => {
+    const subcatRoots = new Set(
+      data.subcategories.map((value) => value.split("--")[0])
+    );
+    if (!extraData) {
+      log("Missing servicesOptions in rules check");
+      return {
+        valid: true,
+      };
+    }
+    const catWithoutSubCat = data.categories
+      .filter((value) => !subcatRoots.has(value))
+      .map(
+        (value) => extraData.categories.find((cat) => cat.value === value).label
+      );
+    return {
+      valid: catWithoutSubCat.length === 0,
+      msg: `Ces thématiques n’ont pas de besoin associé: ${catWithoutSubCat.join(
+        ", "
+      )} `,
+    };
+  };
+}
 
 const fields = {
   contrib: [
@@ -116,6 +142,7 @@ const fieldsRequired = {
     "coachOrientationModes",
     "diffusionZoneType",
     "locationKinds",
+    "contactEmail",
   ],
   draft: ["structure", "name"],
   model: [
@@ -143,11 +170,15 @@ const schema = {
     name: "thématiques",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    dependents: ["subcategories"],
   },
   subcategories: {
     name: "besoins",
     default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    rules: [
+      v.isArray([v.isString(), v.maxStrLength(255)]),
+      allCategoriesHaveSubcategories(),
+    ],
   },
   kinds: {
     name: "types",
@@ -295,7 +326,7 @@ const schema = {
   },
 
   locationKinds: {
-    name: "Mode d’accueil",
+    name: "mode d’accueil",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },

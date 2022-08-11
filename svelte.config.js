@@ -1,23 +1,19 @@
+import adapter from "@sveltejs/adapter-node";
 import preprocess from "svelte-preprocess";
+
 /** @type {import('@sveltejs/kit').Config} */
-import node from "@sveltejs/adapter-node";
-
 const config = {
-  kit: {
-    vite: {
-      optimizeDeps: {},
-      build: {
-        sourcemap: true,
-      },
-    },
-    adapter: node({
-      // default options are shown
-      out: "build",
-      precompress: true,
+  // Consult https://github.com/sveltejs/svelte-preprocess
+  // for more information about preprocessors
+  preprocess: [
+    preprocess({
+      postcss: true,
     }),
-  },
+  ],
 
-  preprocess: [preprocess({ postcss: true })],
+  kit: {
+    adapter: adapter(),
+  },
 };
 
 export default config;

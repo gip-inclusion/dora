@@ -1,16 +1,24 @@
 module.exports = {
   root: true,
-  extends: ["eslint:recommended", "eslint", "prettier"],
-  ignorePatterns: ["static/**", "design-system/**"],
-  plugins: ["svelte3"],
+  parser: "@typescript-eslint/parser",
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+  ],
+  plugins: ["svelte3", "@typescript-eslint"],
+  ignorePatterns: ["*.cjs"],
   overrides: [{ files: ["*.svelte"], processor: "svelte3/svelte3" }],
+  settings: {
+    "svelte3/typescript": () => require("typescript"),
+  },
   parserOptions: {
     sourceType: "module",
     ecmaVersion: "latest",
   },
   env: {
     browser: true,
-    es2021: true,
+    es2022: true,
     node: true,
   },
   globals: {
@@ -27,14 +35,22 @@ module.exports = {
         allowArrowFunctions: true,
       },
     ],
-    "jsdoc/require-jsdoc": "off",
     "no-alert": "warn",
     "no-console": "warn",
+    "no-empty-function": "warn",
+    "@typescript-eslint/no-empty-function": "warn",
     "no-return-assign": "error",
     "no-undef-init": "off",
     "no-undefined": "off",
     "no-underscore-dangle": "off",
     "no-unused-vars": [
+      "error",
+      {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+      },
+    ],
+    "@typescript-eslint/no-unused-vars": [
       "error",
       {
         argsIgnorePattern: "^_",
@@ -52,8 +68,5 @@ module.exports = {
     "node/no-unpublished-import": "off",
     "node/no-unpublished-require": "off",
     "padding-line-between-statements": "off",
-  },
-  settings: {
-    "svelte3/ignore-styles": () => true,
   },
 };

@@ -79,7 +79,7 @@
     if (!navigator.geolocation) {
       geolocLabel = "La géolocalisation n'est pas supportée";
     } else {
-      geolocLabel = "Recherche…";
+      geolocLabel = "Recherche";
       navigator.geolocation.getCurrentPosition(
         searchCityFromLocationSuccess,
         searchCityFromLocationError

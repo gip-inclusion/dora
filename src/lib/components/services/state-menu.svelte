@@ -14,7 +14,7 @@
   import { validate } from "$lib/validation";
   import { serviceSchema, SERVICE_STATUSES } from "$lib/schemas/service.js";
 
-  export let service;
+  export let service, servicesOptions;
   export let onRefresh;
   export let secondary = false;
 
@@ -37,6 +37,7 @@
     const isValid = validate(serviceFull, serviceSchema, {
       noScroll: true,
       showErrors: false,
+      extraData: servicesOptions,
     }).valid;
 
     if (isValid) {

@@ -11,7 +11,7 @@
   <div slot="button">
     {#if $userInfo}
       <LinkButton
-        label="Demander l’accès…"
+        label="Demander l’accès"
         to="https://aide.dora.fabrique.social.gouv.fr/fr/"
         otherTab
         nofollow
@@ -20,7 +20,7 @@
       />
     {:else}
       <LinkButton
-        label="Créer un compte…"
+        label="Créer un compte"
         to="/auth/inscription?siret={structure.siret}"
         otherTab
         nofollow

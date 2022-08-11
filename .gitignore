@@ -1,7 +1,10 @@
 .DS_Store
 node_modules
+/build
 /.svelte-kit
 /package
-/build
 .env
+.env.*
+!.env.test
+!.env.example
 .cache_ggshield

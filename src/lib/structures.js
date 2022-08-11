@@ -6,6 +6,9 @@ import { getApiURL } from "$lib/utils/api.js";
 import { token } from "$lib/auth";
 import { logException } from "./logger";
 
+import structureSchema from "$lib/schemas/structure.js";
+import { validate } from "$lib/validation.js";
+
 export async function siretWasAlreadyClaimed(siret) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;
   const res = await fetch(url, {
@@ -32,14 +35,26 @@ export async function siretWasAlreadyClaimed(siret) {
   return result;
 }
 
-export async function getStructures() {
+export async function getStructures({ kitFetch } = {}) {
   const url = `${getApiURL()}/structures/`;
-  return (await fetchData(url)).data;
+  return (await fetchData(url, { kitFetch })).data;
 }
 
 export async function getStructure(slug) {
   const url = `${getApiURL()}/structures/${slug}/`;
   const result = (await fetchData(url)).data;
+
+  return result;
+}
+
+export async function getStructuresAdmin({ kitFetch } = {}) {
+  const url = `${getApiURL()}/structures-admin/`;
+  return (await fetchData(url, { kitFetch })).data;
+}
+
+export async function getStructureAdmin(slug, { kitFetch } = {}) {
+  const url = `${getApiURL()}/structures-admin/${slug}/`;
+  const result = (await fetchData(url, { kitFetch })).data;
 
   return result;
 }
@@ -249,4 +264,8 @@ export async function rejectMembershipRequest(uuid) {
     }
   }
   return result;
+}
+
+export function isStructureInformationsComplete(structure) {
+  return validate(structure, structureSchema).valid;
 }

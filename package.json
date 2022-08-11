@@ -1,6 +1,6 @@
 {
   "name": "dora-front",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "engines": {
     "npm": ">=8 <9",
     "node": ">=16 <18"
@@ -10,18 +10,20 @@
     "url": "https://github.com/betagouv/dora-front"
   },
   "scripts": {
-    "dev": "svelte-kit dev",
-    "build": "svelte-kit build",
-    "preview": "svelte-kit preview",
+    "dev": "vite dev --port 3000 --strictPort --open",
+    "build": "vite build",
+    "build:test": "vite build --mode test",
     "start": "node build",
-    "lint": "prettier --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
-    "format": "prettier --write --plugin-search-dir=. . && eslint --ignore-path .gitignore --fix . && svgo --pretty -f src/lib/assets",
+    "preview": "vite preview --port 3000 --strictPort --open",
+    "test-e2e": "playwright test e2e",
+    "test-e2e-debug": "playwright test --debug e2e",
+    "test-unit": "vitest run",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --check --plugin-search-dir=. . && eslint .",
+    "format": "prettier --write --plugin-search-dir=. . && eslint --fix . && svgo --pretty -f src/lib/assets",
     "prepare": "husky install",
-    "security-scan": "ggshield scan  path -r . -y",
-    "commit": "cz",
-    "release": "git pull --rebase --tags origin main && standard-version && git push --follow-tags origin main",
-    "sb": "start-storybook -p 6006",
-    "sb-build": "build-storybook -o design-system"
+    "security-scan": "ggshield scan  path -r . -y"
   },
   "@comment dependencies": {
     "dependencies-vs-devdependencies": "Les librairies qui sont dans dependencies sont utilisées depuis node_modules par le bundle ssr (voir: https://vitejs.dev/guide/ssr.html#ssr-externals). Pour tester: `npm i && npm run build && rm -rf node_modules/ && npm i --production && node build`."
@@ -37,51 +39,41 @@
     "iframe-resizer": "^4.3.2",
     "insane": "^2.6.2",
     "lodash.debounce": "^4.0.8",
-    "showdown": "^2.1.0"
+    "showdown": "^2.1.0",
+    "vite": "^3.0.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.6",
-    "@commitlint/cli": "^17.0.3",
-    "@commitlint/config-conventional": "^17.0.3",
-    "@storybook/addon-docs": "^6.5.9",
-    "@storybook/addon-essentials": "^6.5.9",
-    "@storybook/addon-links": "^6.5.9",
-    "@storybook/builder-vite": "^0.1.38",
-    "@storybook/svelte": "^6.5.9",
+    "@playwright/test": "^1.22.2",
     "@sveltejs/adapter-node": "next",
     "@sveltejs/kit": "next",
     "@tailwindcss/typography": "^0.5.2",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
     "autoprefixer": "^10.4.7",
-    "babel-loader": "^8.2.5",
-    "commitizen": "^4.2.4",
-    "cssnano": "^5.1.12",
-    "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.18.0",
-    "eslint-config-eslint": "^7.0.0",
+    "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-jsdoc": "^39.3.3",
-    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-svelte3": "^4.0.0",
     "lint-staged": "^13.0.3",
     "postcss": "^8.4.14",
     "postcss-load-config": "^4.0.1",
-    "postcss-url": "^10.1.3",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.11",
     "remixicon": "^2.5.0",
-    "semantic-release": "^19.0.3",
-    "standard-version": "^9.5.0",
     "svelte": "^3.49.0",
-    "svelte-loader": "^3.1.3",
+    "svelte-check": "^2.8.0",
     "svelte-preprocess": "^4.10.7",
     "svgo": "^2.8.0",
-    "tailwindcss": "^3.1.4"
+    "tailwindcss": "^3.1.4",
+    "tslib": "^2.3.1",
+    "typescript": "^4.7.4",
+    "vite": "^3.0.0",
+    "vitest": "^0.20.3"
   },
   "type": "module",
   "lint-staged": {
-    "*.{js,svelte}": [
+    "*.{js,ts,svelte}": [
       "prettier --write --plugin-search-dir=.",
-      "eslint --ignore-path .gitignore --fix"
+      "eslint --fix"
     ],
     "*.{json,css,postcss,html,md}": [
       "prettier --write --plugin-search-dir=."
@@ -89,10 +81,5 @@
     "*": [
       "ggshield scan pre-commit"
     ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }

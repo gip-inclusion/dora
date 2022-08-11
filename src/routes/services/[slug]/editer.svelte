@@ -12,11 +12,10 @@
     let structure = {};
     let structures = [];
     let model = null;
-    const servicesOptions = await getServicesOptions();
 
     // on ne retourne une 404 que sur le client
     if (!browser) {
-      return { structure, structures, service, servicesOptions };
+      return { structure, structures, service, servicesOptions: {} };
     }
 
     if (!service) {
@@ -41,7 +40,7 @@
     return {
       props: {
         service,
-        servicesOptions,
+        servicesOptions: await getServicesOptions({ model }),
         structures,
         structure,
         model,
@@ -66,7 +65,7 @@
 <EnsureLoggedIn>
   <CenteredGrid>
     <h1>Modification du service</h1>
-    <NoticePublication {service} />
+    <NoticePublication {service} {servicesOptions} />
   </CenteredGrid>
 
   <ServiceFields {service} {servicesOptions} {structures} {structure} {model} />

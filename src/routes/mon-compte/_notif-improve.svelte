@@ -11,7 +11,7 @@
 
   <LinkButton
     to="https://itou.typeform.com/to/DPQOe5pP"
-    label="Participer (3min.)…"
+    label="Participer (3 min)"
     otherTab
     nofollow
     small
