@@ -1,5 +1,5 @@
 <script context="module">
-  import { getServiceAdmin } from "$lib/services";
+  import { getServiceAdmin } from "$lib/admin";
 
   export async function load({ params, fetch }) {
     const service = await getServiceAdmin(params.slug, { kitFetch: fetch });
@@ -30,40 +30,50 @@
 
   import Date from "$lib/components/date.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import ModerationButtonMenu from "../../_moderation-button-menu.svelte";
+  import History from "../../_history.svelte";
 
   export let service;
   const structure = service.structure;
   const description = markdownToHTML(service.fullDesc);
+
+  async function handleRefresh() {
+    service = await getServiceAdmin(service.slug);
+  }
 </script>
 
 <svelte:head>
-  <title
-    >Admin | {capitalize(service.name)} | {capitalize(structure.name)} | DORA</title
-  >
+  <title>
+    Admin | {capitalize(service.name)} | {capitalize(structure.name)} | DORA
+  </title>
 </svelte:head>
 
 <CenteredGrid bgColor="bg-gray-bg">
   <div class="text-f12">
-    <h2>
-      <a href="/admin/services">Services</a>
-      <span class="text-f10">
-        <a href="#contacts">Contacts</a> |
-        <a href="#infos">Informations</a>
-      </span>
-    </h2>
-
+    <div class="flex flex-row items-baseline justify-between">
+      <h2>
+        <a href="/admin/services">Services</a>
+        <span class="text-f10">
+          <a href="#contacts">Contacts</a> |
+          <a href="#infos">Informations</a>
+        </span>
+      </h2>
+      <ModerationButtonMenu entity={service} onRefresh={handleRefresh} />
+    </div>
     <h3>
       {service.name}
       <SmallLink link="/services/{service.slug}" label="front" />
       <SmallLink link="/admin/services/{service.slug}" label="admin" />
       <WebSearchLink searchString="{service.name} {structure.name}" />
     </h3>
-
     <InfoLine>
       Structure : <strong>{structure.name}</strong>
       <SmallLink link="/structures/{structure.slug}" label="front" />
       <SmallLink link="/admin/structures/{structure.slug}" label="admin" />
     </InfoLine>
+
+    <h4>Historique</h4>
+    <History notes={service.notes} />
 
     <h4 id="contacts">Contacts</h4>
 

@@ -30,7 +30,7 @@
     </i>
   {/if}
 
-  {#if label}
+  {#if label || $$slots.default}
     <span class:truncate><slot>{label}</slot></span>
   {/if}
 </div>

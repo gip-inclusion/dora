@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { getStructuresAdmin } from "$lib/structures";
+  import { getStructuresAdmin } from "$lib/admin";
 
   import { capitalize, shortenString } from "$lib/utils";
   import Label from "$lib/components/label.svelte";
@@ -11,14 +11,12 @@
   let structures, filteredStructures;
 
   onMount(async () => {
-    structures = await getStructuresAdmin({ kitFetch: fetch });
-    filteredStructures = structures;
+    structures = await getStructuresAdmin();
+    filteredStructures = filterAndSortEntities("");
   });
 
-  function handleFilterChange(event) {
-    const searchString = event.target.value;
-
-    filteredStructures = (
+  function filterAndSortEntities(searchString) {
+    return (
       searchString
         ? structures.filter(
             (s) =>
@@ -26,15 +24,18 @@
               s.department === searchString
           )
         : structures
-    )
-      .filter((s) => !s.parent)
-      .sort((s1, s2) =>
-        s1.department === s2.department
-          ? s1.name.toLowerCase() > s2.name.toLowerCase()
-            ? 1
-            : -1
-          : s1.department - s2.department
-      );
+    ).sort((s1, s2) =>
+      s1.department === s2.department
+        ? s1.name.toLowerCase().localeCompare(s2.name.toLowerCase(), "fr")
+        : s1.department.localeCompare(s2.department, "fr", {
+            numeric: true,
+          })
+    );
+  }
+
+  function handleFilterChange(event) {
+    const searchString = event.target.value.toLowerCase().trim();
+    filteredStructures = filterAndSortEntities(searchString);
   }
 </script>
 

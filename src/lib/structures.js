@@ -47,18 +47,6 @@ export async function getStructure(slug) {
   return result;
 }
 
-export async function getStructuresAdmin({ kitFetch } = {}) {
-  const url = `${getApiURL()}/structures-admin/`;
-  return (await fetchData(url, { kitFetch })).data;
-}
-
-export async function getStructureAdmin(slug, { kitFetch } = {}) {
-  const url = `${getApiURL()}/structures-admin/${slug}/`;
-  const result = (await fetchData(url, { kitFetch })).data;
-
-  return result;
-}
-
 export async function createStructure(structure) {
   const url = `${getApiURL()}/structures/`;
   const method = "POST";

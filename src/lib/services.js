@@ -50,16 +50,6 @@ export async function getPublishedServices({ kitFetch } = {}) {
   return (await fetchData(url, { kitFetch })).data;
 }
 
-export async function getServicesAdmin({ kitFetch } = {}) {
-  const url = `${getApiURL()}/services-admin/`;
-  return (await fetchData(url, { kitFetch })).data;
-}
-
-export async function getServiceAdmin(slug, { kitFetch } = {}) {
-  const url = `${getApiURL()}/services-admin/${slug}/`;
-  return (await fetchData(url, { kitFetch })).data;
-}
-
 export async function getModel(slug) {
   const url = `${getApiURL()}/models/${slug}/`;
   const response = await fetchData(url);

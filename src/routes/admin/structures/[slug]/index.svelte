@@ -1,5 +1,5 @@
 <script context="module">
-  import { getStructureAdmin } from "$lib/structures";
+  import { getStructureAdmin } from "$lib/admin";
 
   export async function load({ params, fetch }) {
     const structure = await getStructureAdmin(params.slug, { kitFetch: fetch });
@@ -28,10 +28,16 @@
   import Date from "$lib/components/date.svelte";
   import SmallLink from "../../_small-link.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import ModerationButtonMenu from "../../_moderation-button-menu.svelte";
+  import History from "../../_history.svelte";
 
   export let structure;
 
   const description = markdownToHTML(structure.fullDesc);
+
+  async function handleRefresh() {
+    structure = await getStructureAdmin(structure.slug);
+  }
 </script>
 
 <svelte:head>
@@ -40,23 +46,26 @@
 
 <CenteredGrid bgColor="bg-gray-bg">
   <div class="text-f12">
-    <h2>
-      <a href="/admin/structures">Structures</a>
-      <span class="text-f10">
-        <a href="#contacts">Contacts</a> |
-        <a href="#infos">Informations</a>
-        {#if structure.members.length}| <a href="#collabs"
-            >Collaborateurs•trices</a
-          >{/if}
-        {#if structure.pendingMembers.length}| <a href="#pending-collabs"
-            >Collaborateurs•trices en attente</a
-          >{/if}
-        {#if structure.branches.length}| <a href="#branches">Antennes</a>{/if}
-        {#if structure.models.length}| <a href="#models">Modèles</a>{/if}
-        {#if structure.services.length}| <a href="#services">Services</a>{/if}
-      </span>
-    </h2>
-
+    <div class="flex flex-row items-baseline justify-between">
+      <h2>
+        <a href="/admin/structures">Structures</a>
+        <span class="text-f10">
+          <a href="#contacts">Contacts</a> |
+          <a href="#infos">Informations</a>
+          {#if structure.members.length}| <a href="#collabs">
+              Collaborateurs•trices
+            </a>
+          {/if}
+          {#if structure.pendingMembers.length}| <a href="#pending-collabs"
+              >Collaborateurs•trices en attente</a
+            >{/if}
+          {#if structure.branches.length}| <a href="#branches">Antennes</a>{/if}
+          {#if structure.models.length}| <a href="#models">Modèles</a>{/if}
+          {#if structure.services.length}| <a href="#services">Services</a>{/if}
+        </span>
+      </h2>
+      <ModerationButtonMenu entity={structure} onRefresh={handleRefresh} />
+    </div>
     <h3>
       {structure.name}
       <SmallLink link="/structures/{structure.slug}" label="front" />
@@ -73,6 +82,9 @@
         />
       </InfoLine>
     {/if}
+
+    <h4>Historique</h4>
+    <History notes={structure.notes} />
 
     <h4 id="contacts">Contacts</h4>
 
