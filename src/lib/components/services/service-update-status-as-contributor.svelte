@@ -1,0 +1,69 @@
+<script lang="ts">
+  import type { Service } from "$lib/types";
+  import { SERVICE_UPDATE_STATUS } from "$lib/types";
+  import LinkButton from "../link-button.svelte";
+
+  import NoUpdateNeededIcon from "$lib/components/services/icons/no-update-needed.svelte";
+  import UpdateNeededIcon from "$lib/components/services/icons/update-needed.svelte";
+  import UpdateRequiredIcon from "$lib/components/services/icons/update-required.svelte";
+
+  import { editIcon } from "$lib/icons";
+
+  export let service: Service;
+
+  export let label: string;
+  export let monthDiff: number;
+  export let updateStatus: SERVICE_UPDATE_STATUS;
+</script>
+
+<div
+  class="flex w-full flex-col place-content-between items-center gap-s24 text-gray-text sm:flex-row"
+>
+  <div id="label-container" class="flex-[3]">
+    {#if updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED}
+      <div class="flex items-center">
+        <div class="mr-s16">
+          <NoUpdateNeededIcon />
+        </div>
+        <span>{label}</span>
+      </div>
+    {:else if updateStatus === SERVICE_UPDATE_STATUS.NEEDED}
+      <div class="flex items-center">
+        <span class="mr-s16">
+          <UpdateNeededIcon />
+        </span>
+        <div>
+          <div class="text-f18">
+            <strong>{label}</strong>
+          </div>
+          <div class="text-f14">
+            Vérifiez et/ou actualisez les informations de ce service dès
+            maintenant pour qu’il reste visible.
+          </div>
+        </div>
+      </div>
+    {:else}
+      <div class="flex items-center">
+        <span class="mr-s16">
+          <UpdateRequiredIcon />
+        </span>
+        <div>
+          <div class="text-f18">
+            <strong>Service en attente d’actualisation</strong>
+          </div>
+          <div class="text-f14">
+            Les informations sur ce service ne sont plus mis à jour par la
+            structure depuis {monthDiff} mois.
+          </div>
+        </div>
+      </div>
+    {/if}
+  </div>
+  <div class="flex w-full flex-[2] flex-col justify-end md:mt-s0 lg:flex-row">
+    <LinkButton
+      label="Modifier"
+      to="/services/{service.slug}/editer"
+      icon={editIcon}
+    />
+  </div>
+</div>

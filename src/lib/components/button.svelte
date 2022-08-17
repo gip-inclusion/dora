@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
   export let label = "";
   export let type = "button";
-  export let name = null;
-  export let icon = null;
+  export let id: string | undefined = undefined;
+  export let name: string | undefined = undefined;
+  export let icon: string | undefined = undefined;
+  export let extraClass = "";
   export let iconOnRight = false;
   export let disabled = false;
   export let small = false;
@@ -12,7 +14,7 @@
   export let wFull = false;
   export let preventDefaultOnMouseDown = false;
 
-  let px, py, ts;
+  let px: string, py: string, ts: string;
 
   if (small) {
     py = "py-s6";
@@ -30,7 +32,7 @@
     px = "px-s20";
   }
 
-  let border, text, background;
+  let border: string, text: string, background: string;
 
   if (secondary) {
     border =
@@ -61,9 +63,10 @@
 </script>
 
 <button
+  {id}
   {type}
   {name}
-  class="{px} {py} {ts} {border} {text} {background} whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
+  class="{px} {py} {ts} {border} {text} {extraClass} {background} whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
   class:w-full={wFull}
   class:flex={icon}
   class:flex-row={icon}

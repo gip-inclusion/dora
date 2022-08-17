@@ -1,11 +1,13 @@
-<script>
-  export let to;
+<script lang="ts">
+  export let to: string;
   export let otherTab = false;
   export let nofollow = false;
 
   export let label = "";
-  export let ariaLabel = undefined;
-  export let icon = null;
+  export let extraClass = "";
+  export let ariaLabel: string | undefined = undefined;
+  export let id: string | undefined = undefined;
+  export let icon: string | undefined = undefined;
   export let iconOnRight = false;
   export let small = false;
   export let noBackground = false;
@@ -13,7 +15,7 @@
 
   export let wFull = false;
 
-  let px, py, ts;
+  let px: string, py: string, ts: string;
 
   if (small) {
     py = "py-s6";
@@ -29,7 +31,7 @@
     px = "px-s20";
   }
 
-  let border, text, background;
+  let border: string, text: string, background: string;
 
   border = "border-0";
 
@@ -58,12 +60,13 @@
 </script>
 
 <a
+  {id}
   target={otherTab ? "_blank" : ""}
   title={otherTab ? "Ouverture dans une nouvelle fenêtre" : ""}
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
   on:click
-  class="{px} {py} {ts} {border} {text} {background} inline-flex items-center justify-center whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
+  class="{px} {py} {ts} {border} {text} {background} {extraClass} inline-flex items-center justify-center whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
   class:w-full={wFull}
   aria-label={ariaLabel}
 >

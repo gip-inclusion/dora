@@ -1,27 +1,12 @@
 <script>
   import Button from "$lib/components/button.svelte";
+  import { clickOutside } from "./use/click-outside";
 
-  export let icon;
+  export let icon = undefined;
   export let label = undefined;
   export let disabled = false;
   export let small = false;
   let isOpen = false;
-
-  function clickOutside(node) {
-    const handleClick = (event) => {
-      if (node && !node.contains(event.target) && !event.defaultPrevented) {
-        node.dispatchEvent(new CustomEvent("click_outside", node));
-      }
-    };
-
-    document.addEventListener("click", handleClick, true);
-
-    return {
-      destroy() {
-        document.removeEventListener("click", handleClick, true);
-      },
-    };
-  }
 
   function handleClickOutside(_event) {
     isOpen = false;

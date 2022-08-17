@@ -2,7 +2,7 @@
   import { checkBoxBlankIcon } from "$lib/icons";
   import Label from "$lib/components/label.svelte";
   import ServiceButtonMenu from "./service-button-menu.svelte";
-  import StateButtonMenu from "./state-button-menu.svelte";
+  import ServiceStateUpdateSelect from "./service-state-update-select.svelte";
   import Date from "../date.svelte";
   import ServiceSync from "./service-sync.svelte";
   import { SERVICE_STATUSES } from "$lib/schemas/service";
@@ -47,7 +47,7 @@
         {/if}
       </div>
       <div class="flex items-center justify-between">
-        <StateButtonMenu {service} {servicesOptions} {onRefresh} />
+        <ServiceStateUpdateSelect {service} {servicesOptions} {onRefresh} />
 
         {#if service.status !== SERVICE_STATUSES.suggestion && service.status !== SERVICE_STATUSES.archived}
           <ServiceButtonMenu {service} {servicesOptions} />

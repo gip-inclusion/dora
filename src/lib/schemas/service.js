@@ -1,6 +1,7 @@
 import { log } from "$lib/logger";
 import * as v from "./utils";
 
+// Deprecated : please use in SERVICE_STATUSES on "$lib/types"
 export const SERVICE_STATUSES = {
   draft: "DRAFT",
   suggestion: "SUGGESTION",

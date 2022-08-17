@@ -6,6 +6,19 @@ const config = {
     colors: {
       transparent: "transparent",
       current: "currentColor",
+
+      service: {
+        green: { DEFAULT: "#E6F3EC", dark: "#B3DCC6", darker: "#008941" },
+        orange: { DEFAULT: "#FFE9C9", dark: "#FFD79D", darker: "#f29023" },
+        red: { DEFAULT: "#FCE6E6", dark: "#E10600" },
+        gray: { DEFAULT: "#F5F5F5", dark: "#D5D5D5", darker: "#2E2E2E" },
+        violet: { DEFAULT: "#F5F0FD", dark: "#EBE3FB", darker: "#5B12EB" },
+        blue: { DEFAULT: "#DBF0FF", dark: "#000091" },
+
+        available: { DEFAULT: "#86F3A2", dark: "#005B17" },
+        unavailable: { DEFAULT: "#FF9A6C", dark: "#AF0000" },
+      },
+
       gray: {
         bg: "#F8F8F8",
         "00": "#F5F5F5",

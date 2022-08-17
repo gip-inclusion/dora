@@ -6,8 +6,8 @@
   import { getService, getServicesOptions, getModel } from "$lib/services";
   import { token } from "$lib/auth";
 
-  export async function load({ url, params }) {
-    const service = await getService(params.slug);
+  export async function load({ url, params, fetch }) {
+    const service = await getService(params.slug, { kitFetch: fetch });
     // si le service est en brouillon il faut un token pour y accéder
     // on renvoit donc un objet vide côté serveur
     if (!service) {
@@ -41,7 +41,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import { onDestroy, onMount } from "svelte";
   import ServiceHeader from "$lib/components/services/service-header.svelte";
   import ServiceToolbar from "$lib/components/services/service-toolbar.svelte";
@@ -50,15 +50,18 @@
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
   import { NPS_FORM_ID, SERVICE_CREATION_FORM_ID } from "$lib/const";
   import { isAfter } from "$lib/utils/date";
+  import type { Service } from "$lib/types";
 
-  export let service, servicesOptions;
+  export let service: Service;
+  export let servicesOptions;
+
   // Nous ne voulons pas afficher le formulaire sur les services avant cette date
   // afin de ne pas avoir une durée de contribution fausse
   const MIN_DATE_FOR_SERVICE_FEEDBACK_FROM = new Date("2022-07-21");
 
   onMount(() => {
     if (browser) {
-      plausible("service", {
+      window.plausible("service", {
         props: {
           service: service.name,
           slug: service.slug,
@@ -84,17 +87,15 @@
 </svelte:head>
 
 {#if service}
-  <CenteredGrid bgColor="bg-gray-bg">
+  <CenteredGrid bgColor="bg-france-blue">
     <ServiceHeader {service} />
   </CenteredGrid>
   <hr />
-  <CenteredGrid noPadding>
-    <div class="noprint py-s24">
-      {#if browser}
-        <ServiceToolbar {service} {servicesOptions} onRefresh={handleRefresh} />
-      {/if}
-    </div>
-  </CenteredGrid>
+  <div>
+    {#if browser}
+      <ServiceToolbar {service} {servicesOptions} onRefresh={handleRefresh} />
+    {/if}
+  </div>
 
   <CenteredGrid>
     <ServiceBody {service} />
