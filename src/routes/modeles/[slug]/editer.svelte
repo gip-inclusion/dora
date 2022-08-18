@@ -6,12 +6,15 @@
   import { getServicesOptions, getModel } from "$lib/services";
   import { getStructure, getStructures } from "$lib/structures";
 
-  export async function load({ params }) {
+  export async function load({ params, fetch }) {
     const user = get(userInfo);
     const model = await getModel(params.slug);
     let structure = {};
     let structures = [];
-    const servicesOptions = await getServicesOptions({ model });
+    const servicesOptions = await getServicesOptions({
+      model,
+      kitFetch: fetch,
+    });
 
     // on ne retourne une 404 que sur le client
     if (!browser) {
@@ -25,10 +28,10 @@
       };
     }
 
-    structure = await getStructure(model.structure);
+    structure = await getStructure(model.structure, { kitFetch: fetch });
 
     if (user.isStaff) {
-      structures = await getStructures();
+      structures = await getStructures({ kitFetch: fetch });
     } else if (user) {
       structures = user.structures;
     }

@@ -30,12 +30,14 @@
       };
     }
 
-    const model = service.model ? await getModel(service.model) : null;
+    const model = service.model
+      ? await getModel(service.model, { kitFetch: fetch })
+      : null;
 
     return {
       props: {
         service,
-        servicesOptions: await getServicesOptions({ model }),
+        servicesOptions: await getServicesOptions({ model, kitFetch: fetch }),
       },
     };
   }
