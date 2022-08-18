@@ -86,10 +86,11 @@
           />
         </div>
       {/if}
+      {#if service.contactEmail}
+        <EmailLine email={service.contactEmail} />
+      {/if}
       {#if service.contactPhone}
         <div>📞 {service.contactPhone}</div>
-      {/if}{#if service.contactcontactEmailName}
-        <EmailLine email={service.contactEmail} />
       {/if}
       <div>
         informations publiques ? {service.isContactInfoPublic ? "✅" : "❌"}
