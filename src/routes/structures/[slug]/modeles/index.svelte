@@ -28,6 +28,7 @@
 </script>
 
 <script>
+  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import { capitalize } from "$lib/utils.js";
 
   import List from "./_list.svelte";
@@ -38,8 +39,10 @@
   <meta name="description" content={$structure.shortDesc} />
 </svelte:head>
 
-<List
-  models={$structure.models || []}
-  structure={$structure}
-  total={$structure.models.length}
-/>
+<EnsureLoggedIn>
+  <List
+    models={$structure.models || []}
+    structure={$structure}
+    total={$structure.models.length}
+  />
+</EnsureLoggedIn>
