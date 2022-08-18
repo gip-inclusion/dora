@@ -1,10 +1,10 @@
 <script context="module">
   import { getStructuresOptions } from "$lib/structures";
 
-  export async function load({ fetch }) {
+  export async function load() {
     return {
       props: {
-        structuresOptions: await getStructuresOptions({ kitFetch: fetch }),
+        structuresOptions: await getStructuresOptions(),
       },
     };
   }

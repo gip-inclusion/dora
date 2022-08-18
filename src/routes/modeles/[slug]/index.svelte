@@ -3,8 +3,8 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import { getModel } from "$lib/services";
 
-  export async function load({ params, fetch }) {
-    const model = await getModel(params.slug, { kitFetch: fetch });
+  export async function load({ params }) {
+    const model = await getModel(params.slug);
 
     // on ne retourne une 404 que sur le client
     if (!model && !browser) {

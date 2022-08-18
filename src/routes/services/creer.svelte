@@ -7,7 +7,7 @@
   import { getNewService } from "$lib/components/services/form/utils.js";
   import { getStructures } from "$lib/structures";
 
-  export async function load({ url, fetch }) {
+  export async function load({ url }) {
     const query = url.searchParams;
     const structureSlug = query.get("structure");
     const modelSlug = query.get("modele");
@@ -16,7 +16,7 @@
     let structures = [];
 
     if (user?.isStaff) {
-      structures = await getStructures({ kitFetch: fetch });
+      structures = await getStructures();
     } else if (user) {
       structures = user.structures;
     }
@@ -25,7 +25,7 @@
     let model;
 
     if (modelSlug) {
-      model = await getModel(modelSlug, { kitFetch: fetch });
+      model = await getModel(modelSlug);
       service = JSON.parse(JSON.stringify(model));
       service.model = modelSlug;
       service.structure = null;
@@ -48,8 +48,8 @@
 
     return {
       props: {
-        lastDraft: await getLastDraft({ kitFetch: fetch }),
-        servicesOptions: await getServicesOptions({ model, kitFetch: fetch }),
+        lastDraft: await getLastDraft(),
+        servicesOptions: await getServicesOptions({ model }),
         structures,
         structure,
         service,

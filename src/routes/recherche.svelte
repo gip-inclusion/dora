@@ -9,7 +9,6 @@
     cityCode,
     kindId,
     hasNoFees,
-    kitFetch,
   }) {
     const query = getQuery({
       categoryId,
@@ -20,7 +19,7 @@
     });
     const url = `${getApiURL()}/search/?${query}`;
 
-    const res = await kitFetch(url, {
+    const res = await fetch(url, {
       headers: { Accept: "application/json; version=1.0" },
     });
 
@@ -44,7 +43,7 @@
     { value: "100", label: "100 km" },
   ];
 
-  export async function load({ url, fetch }) {
+  export async function load({ url }) {
     const query = url.searchParams;
     const categoryId = query.get("cat");
     const subCategoryId = query.get("sub");
@@ -67,9 +66,8 @@
           cityCode,
           kindId,
           hasNoFees,
-          kitFetch: fetch,
         }),
-        servicesOptions: await getServicesOptions({ kitFetch: fetch }),
+        servicesOptions: await getServicesOptions(),
       },
     };
   }

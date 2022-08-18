@@ -5,8 +5,8 @@
   import { userPreferences } from "$lib/preferences";
   import { userInfo } from "$lib/auth";
 
-  export async function load({ params, fetch }) {
-    const s = await getStructure(params.slug, { kitFetch: fetch });
+  export async function load({ params }) {
+    const s = await getStructure(params.slug);
     let preferences;
     let info;
 

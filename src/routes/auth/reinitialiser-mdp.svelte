@@ -2,7 +2,7 @@
   import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
   import { disconnect } from "$lib/auth";
 
-  export async function load({ url, fetch }) {
+  export async function load({ url }) {
     const query = url.searchParams;
     const token = query.get("token");
     const targetUrl = `${getApiURL()}/auth/token/verify/`;

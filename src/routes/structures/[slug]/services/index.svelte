@@ -1,10 +1,10 @@
 <script context="module">
   import { getServicesOptions } from "$lib/services";
 
-  export async function load({ fetch }) {
+  export async function load() {
     return {
       props: {
-        servicesOptions: await getServicesOptions({ kitFetch: fetch }),
+        servicesOptions: await getServicesOptions(),
       },
     };
   }

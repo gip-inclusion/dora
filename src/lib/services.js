@@ -35,9 +35,9 @@ export async function getMyServices() {
   return (await fetchData(url)).data;
 }
 
-export async function getService(slug, { kitFetch } = {}) {
+export async function getService(slug) {
   const url = `${getApiURL()}/services/${slug}/`;
-  const response = await fetchData(url, { kitFetch });
+  const response = await fetchData(url);
 
   if (!response.data) return null;
   // TODO: 404
@@ -50,19 +50,9 @@ export async function getPublishedServices({ kitFetch } = {}) {
   return (await fetchData(url, { kitFetch })).data;
 }
 
-export async function getServicesAdmin({ kitFetch } = {}) {
-  const url = `${getApiURL()}/services-admin/`;
-  return (await fetchData(url, { kitFetch })).data;
-}
-
-export async function getServiceAdmin(slug, { kitFetch } = {}) {
-  const url = `${getApiURL()}/services-admin/${slug}/`;
-  return (await fetchData(url, { kitFetch })).data;
-}
-
-export async function getModel(slug, { kitFetch } = {}) {
+export async function getModel(slug) {
   const url = `${getApiURL()}/models/${slug}/`;
-  const response = await fetchData(url, { kitFetch });
+  const response = await fetchData(url);
 
   if (!response.data) return null;
   // TODO: 404
@@ -280,10 +270,10 @@ export async function convertSuggestionToDraft(serviceSlug) {
   return await response.json();
 }
 
-export async function getLastDraft({ kitFetch } = {}) {
+export async function getLastDraft() {
   if (token) {
     const url = `${getApiURL()}/services/last-draft/`;
-    return (await fetchData(url, { kitFetch })).data;
+    return (await fetchData(url)).data;
   }
   return null;
 }

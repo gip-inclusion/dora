@@ -9,7 +9,7 @@
   import { getService, getServicesOptions } from "$lib/services";
   import { getStructures } from "$lib/structures";
 
-  export async function load({ url, fetch }) {
+  export async function load({ url }) {
     const serviceSlug = url.searchParams.get("service");
     const structureSlug = url.searchParams.get("structure");
 
@@ -17,7 +17,7 @@
     let structures = [];
 
     if (user?.isStaff) {
-      structures = await getStructures({ kitFetch: fetch });
+      structures = await getStructures();
     } else if (user) {
       structures = user.structures;
     }
@@ -25,7 +25,7 @@
     let model;
 
     if (serviceSlug) {
-      const service = await getService(serviceSlug, { kitFetch: fetch });
+      const service = await getService(serviceSlug);
       model = createModelFromService(service);
       model.slug = null;
       model.structure = null;
@@ -47,7 +47,7 @@
     return {
       props: {
         model,
-        servicesOptions: await getServicesOptions({ model, kitFetch: fetch }),
+        servicesOptions: await getServicesOptions({ model }),
         structures,
         structure,
         serviceSlug,

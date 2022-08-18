@@ -40,9 +40,9 @@ export async function getStructures({ kitFetch } = {}) {
   return (await fetchData(url, { kitFetch })).data;
 }
 
-export async function getStructure(slug, { kitFetch } = {}) {
+export async function getStructure(slug) {
   const url = `${getApiURL()}/structures/${slug}/`;
-  const result = (await fetchData(url, { kitFetch })).data;
+  const result = (await fetchData(url)).data;
 
   return result;
 }
@@ -108,23 +108,23 @@ export async function modifyStructure(structure) {
   return result;
 }
 
-export async function getStructuresOptions({ kitFetch } = {}) {
+export async function getStructuresOptions() {
   const url = `${getApiURL()}/structures-options/`;
-  return (await fetchData(url, { kitFetch })).data;
+  return (await fetchData(url)).data;
 }
 
-export async function getMembers(slug, { kitFetch } = {}) {
+export async function getMembers(slug) {
   const url = `${getApiURL()}/structure-members/?structure=${slug}`;
 
-  const result = await fetchData(url, { kitFetch });
+  const result = await fetchData(url);
   if (result.ok) return result.data;
   return null;
 }
 
-export async function getPutativeMembers(slug, { kitFetch } = {}) {
+export async function getPutativeMembers(slug) {
   const url = `${getApiURL()}/structure-putative-members/?structure=${slug}`;
 
-  const result = await fetchData(url, { kitFetch });
+  const result = await fetchData(url);
   if (result.ok) return result.data;
   return null;
 }

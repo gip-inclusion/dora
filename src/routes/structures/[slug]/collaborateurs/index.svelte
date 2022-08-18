@@ -6,7 +6,7 @@
 
   import { getMembers, getPutativeMembers } from "$lib/structures";
 
-  export async function load({ fetch }) {
+  export async function load() {
     // sur le serveur, info est toujours null,
     // on retourne une 404 uniquement sur le client
     if (!browser) {
@@ -26,10 +26,8 @@
       };
     }
 
-    const members = await getMembers(struct.slug, { kitFetch: fetch });
-    const putativeMembers = await getPutativeMembers(struct.slug, {
-      kitFetch: fetch,
-    });
+    const members = await getMembers(struct.slug);
+    const putativeMembers = await getPutativeMembers(struct.slug);
 
     return {
       props: {
