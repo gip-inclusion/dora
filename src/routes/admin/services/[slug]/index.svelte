@@ -1,8 +1,8 @@
 <script context="module">
   import { getServiceAdmin } from "$lib/admin";
 
-  export async function load({ params, fetch }) {
-    const service = await getServiceAdmin(params.slug, { kitFetch: fetch });
+  export async function load({ params }) {
+    const service = await getServiceAdmin(params.slug);
     if (!service) {
       return {
         status: 404,

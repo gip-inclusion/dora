@@ -45,9 +45,9 @@ export async function getService(slug) {
   return serviceToFront(response.data);
 }
 
-export async function getPublishedServices({ kitFetch } = {}) {
+export async function getPublishedServices() {
   const url = `${getApiURL()}/services/?published=1`;
-  return (await fetchData(url, { kitFetch })).data;
+  return (await fetchData(url)).data;
 }
 
 export async function getModel(slug) {
@@ -278,10 +278,10 @@ export async function getLastDraft() {
   return null;
 }
 
-export async function getServicesOptions({ model = null, kitFetch } = {}) {
+export async function getServicesOptions({ model = null } = {}) {
   const url = `${getApiURL()}/services-options/`;
   try {
-    const data = (await fetchData(url, { kitFetch })).data;
+    const data = (await fetchData(url)).data;
     if (model?.customizableChoicesSet) {
       for (const field of [
         "accessConditions",

@@ -1,8 +1,8 @@
 <script context="module">
   import { getStructureAdmin } from "$lib/admin";
 
-  export async function load({ params, fetch }) {
-    const structure = await getStructureAdmin(params.slug, { kitFetch: fetch });
+  export async function load({ params }) {
+    const structure = await getStructureAdmin(params.slug);
     if (!structure) {
       return {
         status: 404,

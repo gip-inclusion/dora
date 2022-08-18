@@ -35,9 +35,9 @@ export async function siretWasAlreadyClaimed(siret) {
   return result;
 }
 
-export async function getStructures({ kitFetch } = {}) {
+export async function getStructures() {
   const url = `${getApiURL()}/structures/`;
-  return (await fetchData(url, { kitFetch })).data;
+  return (await fetchData(url)).data;
 }
 
 export async function getStructure(slug) {

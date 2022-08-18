@@ -5,36 +5,36 @@ import { fetchData } from "$lib/utils.js";
 import { getApiURL } from "$lib/utils/api.js";
 import type { ModerationStatus } from "$lib/enums";
 
-export async function getStructuresAdmin({ kitFetch } = {}) {
+export async function getStructuresAdmin() {
   const url = `${getApiURL()}/structures-admin/`;
-  return (await fetchData(url, { kitFetch })).data;
+  return (await fetchData(url)).data;
 }
 
-export async function getStructureAdmin(slug, { kitFetch } = {}) {
+export async function getStructureAdmin(slug) {
   const url = `${getApiURL()}/structures-admin/${slug}/`;
-  const result = (await fetchData(url, { kitFetch })).data;
+  const result = (await fetchData(url)).data;
 
   return result;
 }
 
-export async function getStructuresToModerate({ kitFetch } = {}) {
+export async function getStructuresToModerate() {
   const url = `${getApiURL()}/structures-admin/?moderation=1`;
-  return (await fetchData(url, { kitFetch })).data;
+  return (await fetchData(url)).data;
 }
 
-export async function getServicesAdmin({ kitFetch } = {}) {
+export async function getServicesAdmin() {
   const url = `${getApiURL()}/services-admin/`;
-  return (await fetchData(url, { kitFetch })).data;
+  return (await fetchData(url)).data;
 }
 
-export async function getServiceAdmin(slug, { kitFetch } = {}) {
+export async function getServiceAdmin(slug) {
   const url = `${getApiURL()}/services-admin/${slug}/`;
-  return (await fetchData(url, { kitFetch })).data;
+  return (await fetchData(url)).data;
 }
 
-export async function getServicesToModerate({ kitFetch } = {}) {
+export async function getServicesToModerate() {
   const url = `${getApiURL()}/services-admin/?moderation=1`;
-  return (await fetchData(url, { kitFetch })).data;
+  return (await fetchData(url)).data;
 }
 
 export async function setModerationState(entity, status: ModerationStatus) {
