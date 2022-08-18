@@ -18,10 +18,20 @@ export enum SERVICE_UPDATE_STATUS {
 }
 
 export type Service = {
-  hasAlreadyBeenUnpublished: boolean;
-  creationDate: string;
   name: string;
   slug: string;
+
+  contactName: string | undefined;
+  contactPhone: string | undefined;
+  contactEmail: string | undefined;
+
+  locationKinds: string[] | undefined;
+  remoteUrl: string | undefined;
+  postalCode: string | undefined;
+  address1: string | undefined;
+  address2: string | undefined;
+  city: string | undefined;
+
   department: string;
   isAvailable: boolean;
   structureInfo: Structure;
@@ -30,6 +40,12 @@ export type Service = {
   status: SERVICE_STATUSES;
   model: string | undefined;
   shortDesc: string | undefined;
+  hasAlreadyBeenUnpublished: boolean;
+  isCumulative: boolean;
+  hasFee: boolean;
+  feeDetails: string | undefined;
+  recurrence: string | undefined;
+  creationDate: string;
   modificationDate: string | undefined;
   diffusionZoneDetailsDisplay: string | undefined;
 };

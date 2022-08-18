@@ -2,18 +2,23 @@
   import type { Service } from "$lib/types";
   import { SERVICE_UPDATE_STATUS } from "$lib/types";
   import LinkButton from "../link-button.svelte";
+  import SetAsUpdatedModal from "./set-as-updated-modal.svelte";
 
   import NoUpdateNeededIcon from "$lib/components/services/icons/no-update-needed.svelte";
   import UpdateNeededIcon from "$lib/components/services/icons/update-needed.svelte";
   import UpdateRequiredIcon from "$lib/components/services/icons/update-required.svelte";
 
-  import { editIcon } from "$lib/icons";
+  import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
+  import Button from "../button.svelte";
 
   export let service: Service;
 
   export let label: string;
   export let monthDiff: number;
   export let updateStatus: SERVICE_UPDATE_STATUS;
+  export let onRefresh: () => void;
+
+  let setAsUpdatedModalOpen = false;
 </script>
 
 <div
@@ -60,7 +65,24 @@
     {/if}
   </div>
   <div class="flex w-full flex-[2] flex-col justify-end md:mt-s0 lg:flex-row">
+    {#if updateStatus !== SERVICE_UPDATE_STATUS.NOT_NEEDED}
+      <Button
+        id="set-as-updated"
+        extraClass="mb-s10 lg:mb-s0 lg:mr-s16"
+        label="Marquer comme à jour"
+        icon={checkboxCircleFillIcon}
+        on:click={() => (setAsUpdatedModalOpen = true)}
+      />
+
+      <SetAsUpdatedModal
+        bind:isOpen={setAsUpdatedModalOpen}
+        {service}
+        {onRefresh}
+      />
+    {/if}
+
     <LinkButton
+      id="update"
       label="Modifier"
       to="/services/{service.slug}/editer"
       icon={editIcon}

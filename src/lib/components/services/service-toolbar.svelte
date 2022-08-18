@@ -12,7 +12,7 @@
     computeUpdateStatusData,
     computeUpdateStatusLabel,
   } from "$lib/utils/service";
-  import { copyIconIcon } from "$lib/icons";
+  import { copyIcon } from "$lib/icons";
 
   export let service: Service;
   export let servicesOptions;
@@ -46,6 +46,7 @@
         <ServiceUpdateStatusAsContributor
           monthDiff={updateStatusData.monthDiff}
           {label}
+          {onRefresh}
           updateStatus={updateStatusData.updateStatus}
           {service}
         />
@@ -88,7 +89,7 @@
           {:else}
             <LinkButton
               label="Utiliser comme modèle"
-              icon={copyIconIcon}
+              icon={copyIcon}
               iconOnRight
               secondary
               to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
