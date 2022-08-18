@@ -152,9 +152,10 @@
 </script>
 
 <svelte:head>
-  <title
-    >Services d’insertion : {tags.map((t) => t.label).join(", ")} | Recherche | DORA</title
-  >
+  <title>
+    Services d’insertion : {tags.map((t) => t.label).join(", ")} | Recherche | DORA
+  </title>
+  <meta name="robots" content="noindex" />
 </svelte:head>
 
 <CenteredGrid>

@@ -67,6 +67,7 @@
 
 <svelte:head>
   <title>Création d'un modèle | DORA</title>
+  <meta name="robots" content="noindex" />
 </svelte:head>
 
 <EnsureLoggedIn>
