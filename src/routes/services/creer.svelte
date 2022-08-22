@@ -82,6 +82,7 @@
 
 <svelte:head>
   <title>Création d'un service | DORA</title>
+  <meta name="robots" content="noindex" />
 </svelte:head>
 
 <EnsureLoggedIn>

@@ -17,7 +17,7 @@
   créée par: <UserInfo user={structure.creator} {structure} />
 </InfoLine>
 
-<InfoLine condition={structure.creator.email !== structure.lastEditor.email}>
+<InfoLine condition={structure.creator?.email !== structure.lastEditor?.email}>
   dernière modification par: <UserInfo
     user={structure.lastEditor}
     {structure}

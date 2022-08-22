@@ -1,13 +1,13 @@
 <script context="module">
   import { getServicesOptions } from "$lib/services";
 
-  export async function load({ fetch, url }) {
+  export async function load({ url }) {
     const query = url.searchParams;
     const source = query.get("utm_source");
 
     return {
       props: {
-        servicesOptions: await getServicesOptions({ kitFetch: fetch }),
+        servicesOptions: await getServicesOptions(),
         source,
       },
     };

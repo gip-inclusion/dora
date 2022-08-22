@@ -7,17 +7,25 @@ export async function handleError({ error, event }) {
   Sentry.captureException(error, { event });
 }
 
-// /auth utilise un token qui est invalidé sur le serveur après le premier appel.
-// on ne veut donc pas qu'il soit requêté par le ssr puis par le le client
-// on devrait pouvoir utiliser la function `fetch` disponible en paramètre de la function load.
+// Pages sur lesquelles ont ne veut pas de SSR…
 const noSsrPaths = [
+  // pour raison de performance, la requete étant lourde, et on ne tient pas forcément
+  // à ce qu'elles soient indexées
   "/recherche",
+
+  // pages authentifiée, ou faisant des actions particulières avec le token,
+  // que le SSR pourrait invalider
   "/auth",
-  "/sentry-debug-client",
+
+  // pages authentifiées, ou la première requête non authentifiée n'a pas de sens
   "/services/creer",
   "/structures/creer",
+  "/modeles/creer",
   "/mon-compte",
   "/admin",
+
+  // page de débug où on veut tester hors SSR
+  "/sentry-debug-client",
 ];
 
 export async function handle({ event, resolve }) {

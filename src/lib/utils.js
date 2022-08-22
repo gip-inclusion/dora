@@ -35,7 +35,7 @@ export function htmlToMarkdown(html) {
 
 export async function fetchData(
   url,
-  { acceptHeader = defaultAcceptHeader, kitFetch } = {}
+  { acceptHeader = defaultAcceptHeader } = {}
 ) {
   const headers = { Accept: acceptHeader };
   const tk = get(token);
@@ -44,7 +44,7 @@ export async function fetchData(
     headers.Authorization = `Token ${tk}`;
   }
 
-  const response = await (kitFetch || fetch)(url, {
+  const response = await fetch(url, {
     headers,
   });
 

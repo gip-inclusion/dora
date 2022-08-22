@@ -6,4 +6,5 @@
   <LinkButton label="Structures" to="/admin/structures" secondary small />
   <LinkButton label="Services" to="/admin/services" secondary small />
   <LinkButton label="Contributions" to="/admin/contributions" secondary small />
+  <LinkButton label="Moderation" to="/admin/moderation" secondary small />
 </div>

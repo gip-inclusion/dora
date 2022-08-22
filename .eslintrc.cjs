@@ -43,13 +43,7 @@ module.exports = {
     "no-undef-init": "off",
     "no-undefined": "off",
     "no-underscore-dangle": "off",
-    "no-unused-vars": [
-      "error",
-      {
-        argsIgnorePattern: "^_",
-        varsIgnorePattern: "^_",
-      },
-    ],
+    "no-unused-vars": ["off"],
     "@typescript-eslint/no-unused-vars": [
       "error",
       {

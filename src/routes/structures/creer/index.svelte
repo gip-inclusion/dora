@@ -63,6 +63,7 @@
 
 <svelte:head>
   <title>Créer une structure | DORA</title>
+  <meta name="robots" content="noindex" />
 </svelte:head>
 
 <StructureSearch

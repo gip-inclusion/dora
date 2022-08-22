@@ -20,6 +20,7 @@ export { default as alertIcon } from "remixicon/icons/System/alert-fill.svg?raw"
 export { default as informationIcon } from "remixicon/icons/System/information-fill.svg?raw";
 export { default as checkBoxBlankIcon } from "remixicon/icons/System/checkbox-blank-circle-fill.svg?raw";
 export { default as errorWarningIcon } from "remixicon/icons/System/error-warning-fill.svg?raw";
+export { default as errorWarningLineIcon } from "remixicon/icons/System/error-warning-line.svg?raw";
 export { default as searchIcon } from "remixicon/icons/System/search-line.svg?raw";
 export { default as eyeIcon } from "remixicon/icons/System/eye-line.svg?raw";
 export { default as moreIcon } from "remixicon/icons/System/more-2-fill.svg?raw";
@@ -31,10 +32,13 @@ export { default as dashboardIcon } from "remixicon/icons/System/dashboard-fill.
 export { default as settingsIcon } from "remixicon/icons/System/settings-5-line.svg?raw";
 export { default as menuIcon } from "remixicon/icons/System/menu-line.svg?raw";
 export { default as timerFlashIcon } from "remixicon/icons/System/timer-flash-line.svg?raw";
+export { default as timeLineIcon } from "remixicon/icons/System/time-line.svg?raw";
 export { default as uploadCloudIcon } from "remixicon/icons/System/upload-cloud-2-line.svg?raw";
 export { default as eyeFillIcon } from "remixicon/icons/System/eye-fill.svg?raw";
 export { default as eyeOffIcon } from "remixicon/icons/System/eye-off-line.svg?raw";
 
+export { default as fileEditIcon } from "remixicon/icons/Document/file-edit-line.svg?raw";
+export { default as fileEditFillIcon } from "remixicon/icons/Document/file-edit-fill.svg?raw";
 export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
 export { default as userFillIcon } from "remixicon/icons/User/user-3-fill.svg?raw";
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
@@ -42,36 +46,48 @@ export { default as adminIcon } from "remixicon/icons/User/admin-fill.svg?raw";
 export { default as emotionHappyIcon } from "remixicon/icons/User/emotion-happy-fill.svg?raw";
 
 export { default as coperCoinFillIcon } from "remixicon/icons/Finance/copper-coin-fill.svg?raw";
+export { default as euroLineIcon } from "remixicon/icons/Finance/money-euro-circle-line.svg?raw";
 
 export { default as lightBulbIcon } from "remixicon/icons/Others/lightbulb-flash-line.svg?raw";
 
 export { default as compassDiscoverIcon } from "remixicon/icons/Map/compass-discover-line.svg?raw";
 export { default as compassFillIcon } from "remixicon/icons/Map/compass-fill.svg?raw";
 export { default as mapPinIcon } from "remixicon/icons/Map/map-pin-2-line.svg?raw";
+export { default as mapPinUserFillIcon } from "remixicon/icons/Map/map-pin-user-fill.svg?raw";
 export { default as pinDistanceIcon } from "remixicon/icons/Map/pin-distance-fill.svg?raw";
+export { default as earthFillIcon } from "remixicon/icons/Map/earth-fill.svg?raw";
 
 export { default as homeIcon } from "remixicon/icons/Buildings/home-6-line.svg?raw";
 
 export { default as fileTransferIcon } from "remixicon/icons/Document/file-transfer-line.svg?raw";
-export { default as fileEditIcon } from "remixicon/icons/Document/file-edit-line.svg?raw";
 export { default as fileForbidIcon } from "remixicon/icons/Document/file-forbid-line.svg?raw";
 export { default as fileCloudIcon } from "remixicon/icons/Document/file-cloud-line.svg?raw";
 export { default as newspaperIcon } from "remixicon/icons/Document/newspaper-line.svg?raw";
+export { default as copyIcon } from "remixicon/icons/Document/file-copy-2-line.svg?raw";
+export { default as folderFillIcon } from "remixicon/icons/Document/folder-5-fill.svg?raw";
+export { default as draftFillIcon } from "remixicon/icons/Document/draft-fill.svg?raw";
 
 export { default as briefcaseIcon } from "remixicon/icons/Business/briefcase-3-fill.svg?raw";
 export { default as mailIcon } from "remixicon/icons/Business/mail-send-fill.svg?raw";
+export { default as mailLineIcon } from "remixicon/icons/Business/mail-send-line.svg?raw";
 
 export { default as phoneIcon } from "remixicon/icons/Device/phone-fill.svg?raw";
+export { default as phoneLineIcon } from "remixicon/icons/Device/phone-line.svg?raw";
+
 export { default as computerIcon } from "remixicon/icons/Device/computer-line.svg?raw";
 
 export { default as messageIcon } from "remixicon/icons/Communication/message-3-line.svg?raw";
 
 export { default as quillPenIcon } from "remixicon/icons/Design/quill-pen-line.svg?raw";
+export { default as editIcon } from "remixicon/icons/Design/edit-2-line.svg?raw";
 
 export { default as deleteBinIcon } from "remixicon/icons/System/delete-bin-line.svg?raw";
 export { default as linkIcon } from "remixicon/icons/Editor/link.svg?raw";
 export { default as checkboxCircleLine } from "remixicon/icons/System/checkbox-circle-line.svg?raw";
+export { default as checkboxCircleFillIcon } from "remixicon/icons/System/checkbox-circle-fill.svg?raw";
 export { default as alertLine } from "remixicon/icons/System/alert-line.svg?raw";
 export { default as closeCircleLine } from "remixicon/icons/System/close-circle-line.svg?raw";
+export { default as closeCircleFillIcon } from "remixicon/icons/System/close-circle-fill.svg?raw";
 export { default as informationLine } from "remixicon/icons/System/information-line.svg?raw";
+export { default as historyLineIcon } from "remixicon/icons/System/history-line.svg?raw";
 export { default as questionFillIcon } from "remixicon/icons/System/question-fill.svg?raw";

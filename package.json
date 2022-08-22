@@ -17,11 +17,12 @@
     "preview": "vite preview --port 3000 --strictPort --open",
     "test-e2e": "playwright test e2e",
     "test-e2e-debug": "playwright test --debug e2e",
-    "test-unit": "vitest run",
+    "test-unit": "vitest run --dir ./tests",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
     "format": "prettier --write --plugin-search-dir=. . && eslint --fix . && svgo --pretty -f src/lib/assets",
+    "svg-optimize": "svgo --pretty -f src/lib/assets",
     "prepare": "husky install",
     "security-scan": "ggshield scan  path -r . -y"
   },
@@ -35,11 +36,13 @@
     "@tiptap/extension-link": "^2.0.0-beta.43",
     "@tiptap/extension-placeholder": "^2.0.0-beta.53",
     "@tiptap/starter-kit": "^2.0.0-beta.190",
+    "dayjs": "^1.11.4",
     "husky": "^8.0.1",
     "iframe-resizer": "^4.3.2",
     "insane": "^2.6.2",
     "lodash.debounce": "^4.0.8",
     "showdown": "^2.1.0",
+    "uid": "^2.0.0",
     "vite": "^3.0.4"
   },
   "devDependencies": {

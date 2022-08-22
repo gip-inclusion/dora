@@ -7,24 +7,26 @@
   export let user, structure;
 </script>
 
-<div>
-  <strong>
-    {user.firstName}
-    {user.lastName}
-  </strong>
+{#if user}
+  <div>
+    <strong>
+      {user.firstName}
+      {user.lastName}
+    </strong>
 
-  <WebSearchLink
-    searchString="{user.firstName} {user.lastName} {structure.name}"
-  />
+    <WebSearchLink
+      searchString="{user.firstName} {user.lastName} {structure.name}"
+    />
 
-  <EmailLine email={user.email} />
+    <EmailLine email={user.email} />
 
-  {#if user.phoneNumber}
-    📞 {user.phoneNumber}
+    {#if user.phoneNumber}
+      📞 {user.phoneNumber}
+      <br />
+    {/if}
+    actif: {user.isActive ? "✅" : "❌"} valide: {user.isValid ? "✅" : "❌"} infolettre:
+    {user.newsletter ? "✅" : "❌"}
     <br />
-  {/if}
-  actif: {user.isActive ? "✅" : "❌"} valide: {user.isValid ? "✅" : "❌"} infolettre:
-  {user.newsletter ? "✅" : "❌"}
-  <br />
-  inscription: <Date date={user.dateJoined} />
-</div>
+    inscription: <Date date={user.dateJoined} />
+  </div>
+{/if}

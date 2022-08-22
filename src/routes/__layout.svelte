@@ -15,8 +15,8 @@
     });
   }
 
-  export async function load({ fetch }) {
-    await validateCredsAndFillUserInfo({ kitFetch: fetch });
+  export async function load() {
+    await validateCredsAndFillUserInfo();
 
     return {};
   }

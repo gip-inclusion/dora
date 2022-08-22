@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { getServicesAdmin } from "$lib/services";
+  import { getServicesAdmin } from "$lib/admin";
 
   import { shortenString } from "$lib/utils";
   import { eyeIcon, homeIcon } from "$lib/icons";
@@ -11,32 +11,42 @@
   let services, filteredServices;
 
   onMount(async () => {
-    services = await getServicesAdmin({ kitFetch: fetch });
-    filteredServices = services;
+    services = await getServicesAdmin();
+    filteredServices = filterAndSortEntities("");
   });
 
-  function handleFilterChange(event) {
-    const searchString = event.target.value;
-
-    filteredServices = (
+  function filterAndSortEntities(searchString) {
+    return (
       searchString
         ? services.filter(
             (s) =>
               s.name.toLowerCase().includes(searchString) ||
-              s.structureName.toLowerCase().includes(searchString)
+              s.structureName.toLowerCase().includes(searchString) ||
+              s.structureDept === searchString
           )
         : services
     )
       .filter((s) => !s.parent)
-      .sort((s1, s2) =>
-        s1.structureName.toLowerCase() === s2.structureName.toLowerCase()
-          ? s1.name.toLowerCase() > s2.name.toLowerCase()
-            ? 1
-            : -1
-          : s1.structureName.toLowerCase() > s2.structureName.toLowerCase()
-          ? 1
-          : -1
-      );
+      .sort((s1, s2) => {
+        if (s1.structureDept !== s2.structureDept) {
+          return s1.structureDept.localeCompare(s2.structureDept, "fr", {
+            numeric: true,
+          });
+        }
+
+        if (s1.structureName.toLowerCase() !== s2.structureName.toLowerCase()) {
+          return s1.structureName
+            .toLowerCase()
+            .localeCompare(s2.structureName.toLowerCase(), "fr");
+        }
+
+        return s1.name.toLowerCase().localeCompare(s2.name.toLowerCase(), "fr");
+      });
+  }
+
+  function handleFilterChange(event) {
+    const searchString = event.target.value.toLowerCase().trim();
+    filteredServices = filterAndSortEntities(searchString);
   }
 </script>
 
@@ -53,7 +63,7 @@
         <input
           on:input={handleFilterChange}
           class="w-full border border-gray-02 p-s8"
-          placeholder="rechercher (nom du service ou de sa structure)…"
+          placeholder="rechercher (nom du service, de sa structure, numéro du département)…"
         />
       </div>
       {#if services?.length !== filteredServices?.length}
@@ -74,7 +84,7 @@
             </a>
 
             <Label
-              label={`${service.structureName}`}
+              label="{service.structureName} ({service.structureDept})"
               smallIcon
               icon={homeIcon}
             />
