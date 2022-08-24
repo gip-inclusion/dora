@@ -1,6 +1,7 @@
 import {
   SERVICE_STATUSES,
   SERVICE_UPDATE_STATUS,
+  type DashboardService,
   type Service,
 } from "$lib/types";
 import dayjs from "dayjs";
@@ -33,7 +34,7 @@ type ServiceUpdateStatusData = {
   updateStatus: SERVICE_UPDATE_STATUS;
 };
 export function computeUpdateStatusData(
-  service: Service
+  service: Service | DashboardService
 ): ServiceUpdateStatusData {
   const lastUpdateDay = dayjs(service.modificationDate);
   const dayDiff = dayjs().diff(lastUpdateDay, "day");

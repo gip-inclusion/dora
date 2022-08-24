@@ -7,10 +7,10 @@
     mapPinUserFillIcon,
   } from "$lib/icons";
 
-  import type { Service } from "$lib/types";
+  import type { DashboardService, Service } from "$lib/types";
   import { shortenString } from "$lib/utils";
 
-  export let service: Service;
+  export let service: Service | DashboardService;
 </script>
 
 <h2>Informations clés</h2>
@@ -100,7 +100,7 @@
   {/if}
 </div>
 
-<style>
+<style lang="postcss">
   h3 {
     @apply mt-s10 mb-s2 flex items-center text-f17;
   }

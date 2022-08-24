@@ -13,24 +13,19 @@
   }
 </script>
 
-<div class="wrapper">
-  <Button
-    {icon}
-    {label}
-    noBackground
-    {disabled}
-    {small}
-    on:click={() => (isOpen = !isOpen)}
-  />
-  <div
-    class="children"
-    class:open={isOpen}
-    use:clickOutside
-    on:click_outside={handleClickOutside}
-    class:top-s40={small}
-    class:top-s48={!small}
-  >
-    <slot onClose={() => (isOpen = false)} />
+<div use:clickOutside on:click_outside={handleClickOutside}>
+  <div class="wrapper">
+    <Button
+      {icon}
+      {label}
+      noBackground
+      {disabled}
+      {small}
+      on:click={() => (isOpen = !isOpen)}
+    />
+    <div class="children top-[113%]" class:open={isOpen}>
+      <slot onClose={() => (isOpen = false)} />
+    </div>
   </div>
 </div>
 

@@ -2,6 +2,9 @@
   import { SERVICE_UPDATE_STATUS, type Service } from "$lib/types";
   import LinkButton from "../link-button.svelte";
 
+  import cornerLeftImg from "$lib/assets/corner-left.png";
+  import cornerRightImg from "$lib/assets/corner-right.png";
+
   import CenteredGrid from "../layout/centered-grid.svelte";
   import SynchronizedIcon from "$lib/components/services/icons/synchronized.svelte";
 
@@ -22,24 +25,21 @@
   $: label = computeUpdateStatusLabel(updateStatusData);
 </script>
 
-<div id="service-update-status">
+<div id="service-update-status" class="relative">
   <div class={updateStatusData.updateStatus}>
     <CenteredGrid
-      extraClass={`
+      extraClass="
         py-s32 mb-s14 w-full
-        ${
-          service.canWrite &&
-          updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NEEDED
-            ? "bg-service-orange"
-            : ""
-        }
-        ${
-          service.canWrite &&
-          updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.REQUIRED
-            ? "bg-service-red"
-            : ""
-        }
-      `}
+        {service.canWrite &&
+      updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NEEDED
+        ? 'bg-service-orange'
+        : ''}
+
+        {service.canWrite &&
+      updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.REQUIRED
+        ? 'bg-service-red'
+        : ''}
+      "
       noPadding
     >
       {#if service.canWrite}
@@ -67,6 +67,11 @@
     />
   {/if}
 
+  {#if updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED}
+    <img src={cornerLeftImg} alt="" class="absolute -top-[1px] left-s0" />
+    <img src={cornerRightImg} alt="" class="absolute -top-[1px] right-s0" />
+  {/if}
+
   {#if service.canWrite}
     <CenteredGrid extraClass="w-full" noPadding>
       <div
@@ -82,16 +87,29 @@
         </div>
         <div class="flex h-s48 items-center md:self-end">
           {#if service.model}
-            <div class="flex items-center text-f14 italic text-gray-text">
-              <span class="mr-s10"><SynchronizedIcon /></span>
-              Synchronisé avec un modèle
-            </div>
+            {#if service.modelChanged}
+              <LinkButton
+                label="Mise à jour disponible"
+                icon={copyIcon}
+                noBackground
+                hoverUnderline
+                to="/services/{service.slug}/editer"
+              />
+            {:else}
+              <div class="flex items-center text-f14 italic text-gray-text">
+                <span class="mr-s10"><SynchronizedIcon /></span>
+                <a href="/modeles/{service.model}" class="underline">
+                  Synchronisé avec un modèle
+                </a>
+              </div>
+            {/if}
           {:else}
             <LinkButton
               label="Utiliser comme modèle"
               icon={copyIcon}
               iconOnRight
-              secondary
+              noBackground
+              hoverUnderline
               to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
             />
           {/if}

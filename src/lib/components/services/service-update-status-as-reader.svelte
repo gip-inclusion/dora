@@ -5,9 +5,7 @@
   import Button from "$lib/components/button.svelte";
   import SuggestionModal from "./suggestion-modal.svelte";
 
-  import NoUpdateNeededIcon from "$lib/components/services/icons/no-update-needed.svelte";
-  import UpdateNeededIcon from "$lib/components/services/icons/update-needed.svelte";
-  import UpdateRequiredIcon from "$lib/components/services/icons/update-required.svelte";
+  import UpdateStatusIcon from "$lib/components/services/icons/update-status.svelte";
 
   import { editIcon } from "$lib/icons";
 
@@ -42,14 +40,14 @@
     {#if updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED}
       <div class="flex items-center">
         <span class="mr-s16">
-          <NoUpdateNeededIcon />
+          <UpdateStatusIcon updateStatus={SERVICE_UPDATE_STATUS.NOT_NEEDED} />
         </span>
         <span>{label}</span>
       </div>
     {:else if updateStatus === SERVICE_UPDATE_STATUS.NEEDED}
       <div class="flex items-center">
         <span class="mr-s16">
-          <UpdateNeededIcon />
+          <UpdateStatusIcon updateStatus={SERVICE_UPDATE_STATUS.NEEDED} />
         </span>
         <div>
           <div class="text-f18">
@@ -64,7 +62,7 @@
     {:else}
       <div class="flex items-center">
         <span class="mr-s16">
-          <UpdateRequiredIcon />
+          <UpdateStatusIcon updateStatus={SERVICE_UPDATE_STATUS.REQUIRED} />
         </span>
         <div>
           <div class="text-f18">

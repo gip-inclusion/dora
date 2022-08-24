@@ -14,7 +14,11 @@
     unPublishService,
   } from "$lib/services";
 
-  import { SERVICE_STATUSES, type Service } from "$lib/types";
+  import {
+    SERVICE_STATUSES,
+    type DashboardService,
+    type Service,
+  } from "$lib/types";
   import { getAvailableOptionsForStatus } from "$lib/utils/service";
   import { validate } from "$lib/validation";
   import { serviceSchema } from "$lib/schemas/service.js";
@@ -71,10 +75,11 @@
     },
   };
 
-  export let service: Service;
+  export let service: Service | DashboardService;
   export let servicesOptions;
   export let onRefresh: () => void;
   export let hideLabel = true;
+  export let fullWidth = false;
 
   // *** Valeurs pour l'affichage
   $: currentStatusPresentation = SERVICE_STATUS_PRESENTATION[service.status];
@@ -190,7 +195,7 @@
 
 <div
   id="service-state-update"
-  class={`relative flex cursor-pointer items-center rounded-md font-bold text-gray-dark ${currentStatusPresentation.bgClass} hover:${currentStatusPresentation.hoverBgClass}`}
+  class="relative flex cursor-pointer items-center rounded-md font-bold text-gray-dark {currentStatusPresentation.bgClass} hover:{currentStatusPresentation.hoverBgClass}"
   use:clickOutside
   on:click_outside={() => toggleCombobox(false)}
 >
@@ -213,7 +218,7 @@
     <span class:hidden={hideLabel} class="mr-s10">Statut du service :</span>
 
     <span
-      class={`${currentStatusPresentation.iconClass} mr-s8 h-s24 w-s24 fill-current`}
+      class="{currentStatusPresentation.iconClass} mr-s8 h-s24 w-s24 fill-current"
     >
       {@html currentStatusPresentation.icon}
     </span>
@@ -230,7 +235,8 @@
 
   <div
     class:hidden={!isDropdownOpen}
-    class="absolute top-s48 right-s0 z-20 rounded border border-gray-00 bg-white py-s12 px-s10 shadow-md"
+    class:w-full={fullWidth}
+    class="absolute top-s48 right-s0 z-20 min-w-[150px] rounded border border-gray-00 bg-white py-s12 px-s12 shadow-md"
     role="listbox"
     id={`listbox-values-${uuid}`}
     aria-labelledby={`button-label-${uuid}`}
@@ -239,9 +245,8 @@
     {#each availableOptions as option, index (option)}
       {#if option === "DELETE"}
         <div
-          class={`mb-s10 flex items-center rounded p-s10 ${
-            selectedOption === option ? "bg-service-red" : "bg-transparent"
-          }`}
+          class="mb-s10 flex items-center rounded bg-transparent p-s10"
+          class:bg-service-red={selectedOption === option}
           on:mouseenter={() => setAsSelected(option, index)}
           role="option"
           on:click={() => updateServiceStatus(option)}
@@ -254,15 +259,16 @@
       {:else}
         {@const data = SERVICE_STATUS_PRESENTATION[option]}
         <div
-          class={`mb-s10 flex items-center rounded p-s10 ${
-            selectedOption === option ? data.hoverBgClass : "bg-transparent"
-          }`}
+          class="mb-s10 flex items-center rounded p-s10 {selectedOption ===
+          option
+            ? data.hoverBgClass
+            : 'bg-transparent'}"
           role="option"
           id={option}
           on:mouseenter={() => setAsSelected(option, index)}
           on:click={() => updateServiceStatus(option)}
         >
-          <span class={`${data.iconClass} mr-s8 h-s24 w-s24 fill-current`}>
+          <span class="{data.iconClass} mr-s8 h-s24 w-s24 fill-current">
             {@html data.icon}
           </span>
           <span>{data.label}</span>

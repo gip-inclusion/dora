@@ -4,9 +4,7 @@
   import LinkButton from "../link-button.svelte";
   import SetAsUpdatedModal from "./set-as-updated-modal.svelte";
 
-  import NoUpdateNeededIcon from "$lib/components/services/icons/no-update-needed.svelte";
-  import UpdateNeededIcon from "$lib/components/services/icons/update-needed.svelte";
-  import UpdateRequiredIcon from "$lib/components/services/icons/update-required.svelte";
+  import UpdateStatusIcon from "$lib/components/services/icons/update-status.svelte";
 
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
   import Button from "../button.svelte";
@@ -28,14 +26,14 @@
     {#if updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED}
       <div class="flex items-center">
         <div class="mr-s16">
-          <NoUpdateNeededIcon />
+          <UpdateStatusIcon updateStatus={SERVICE_UPDATE_STATUS.NOT_NEEDED} />
         </div>
         <span>{label}</span>
       </div>
     {:else if updateStatus === SERVICE_UPDATE_STATUS.NEEDED}
       <div class="flex items-center">
         <span class="mr-s16">
-          <UpdateNeededIcon />
+          <UpdateStatusIcon updateStatus={SERVICE_UPDATE_STATUS.NEEDED} />
         </span>
         <div>
           <div class="text-f18">
@@ -50,7 +48,7 @@
     {:else}
       <div class="flex items-center">
         <span class="mr-s16">
-          <UpdateRequiredIcon />
+          <UpdateStatusIcon updateStatus={SERVICE_UPDATE_STATUS.REQUIRED} />
         </span>
         <div>
           <div class="text-f18">
@@ -68,7 +66,7 @@
     {#if updateStatus !== SERVICE_UPDATE_STATUS.NOT_NEEDED}
       <Button
         id="set-as-updated"
-        extraClass="mb-s10 lg:mb-s0 lg:mr-s16"
+        extraClass="mb-s10 lg:mb-s0 lg:mr-s16 justify-center"
         label="Marquer comme à jour"
         icon={checkboxCircleFillIcon}
         on:click={() => (setAsUpdatedModalOpen = true)}

@@ -1,10 +1,10 @@
 <script lang="ts">
   import { phoneLineIcon, mailLineIcon } from "$lib/icons";
 
-  import type { Service } from "$lib/types";
+  import type { DashboardService, Service } from "$lib/types";
   import { formatPhoneNumber } from "$lib/utils/phone";
 
-  export let service: Service;
+  export let service: Service | DashboardService;
 </script>
 
 <div>

@@ -169,7 +169,7 @@
 
   <div class="lg:w-1/3">
     <div
-      class="mb-s24 rounded-md border border-gray-00 px-s24 pt-s24 shadow-md"
+      class="mb-s24 rounded-md border border-gray-00 px-s24 py-s24 shadow-md"
     >
       <h4>Justificatifs</h4>
       <ul class="mb-s24 list-outside list-disc pl-s20 text-f14">

@@ -12,6 +12,7 @@
   export let small = false;
   export let noBackground = false;
   export let secondary = false;
+  export let hoverUnderline = false;
 
   export let wFull = false;
 
@@ -66,8 +67,9 @@
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
   on:click
-  class="{px} {py} {ts} {border} {text} {background} {extraClass} inline-flex items-center justify-center whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
+  class="{px} {py} {ts} {border} {text} {background} {extraClass} inline-flex items-center justify-center whitespace-nowrap rounded leading-normal focus:shadow-focus"
   class:w-full={wFull}
+  class:hover:underline={hoverUnderline}
   aria-label={ariaLabel}
 >
   {#if icon && !iconOnRight}
