@@ -78,7 +78,7 @@
 </script>
 
 <svelte:head>
-  <title>Admin | Structures | DORA</title>
+  <title>Admin | Modération | DORA</title>
 </svelte:head>
 
 <CenteredGrid bgColor="bg-gray-bg">
