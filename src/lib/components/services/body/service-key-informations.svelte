@@ -5,15 +5,17 @@
     euroLineIcon,
     timeLineIcon,
     mapPinUserFillIcon,
+    informationIcon,
   } from "$lib/icons";
 
   import type { DashboardService, Service } from "$lib/types";
   import { shortenString } from "$lib/utils";
 
   export let service: Service | DashboardService;
+  export let display: "sidebar" | "full" = "full";
 </script>
 
-<h2>Informations clés</h2>
+<h2 class:text-f23={display === "sidebar"}>Informations clés</h2>
 
 <div class="flex flex-col gap-s12">
   {#if service.isCumulative}
@@ -39,7 +41,22 @@
       </span>
       Frais à charge du bénéficiaire
     </div>
+  {/if}
 
+  {#if service.qpvOrZrr}
+    <div class="bold flex items-center font-bold text-info">
+      <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
+        {@html informationIcon}
+      </span>
+      Uniquement QPV + ZRR
+    </div>
+  {/if}
+
+  {#if display === "sidebar"}
+    <hr class="mt-s20 mb-s10" />
+  {/if}
+
+  {#if service.hasFee}
     <div>
       <h3>
         <span class="mr-s8 h-s24 w-s24 fill-current">
@@ -83,16 +100,19 @@
 
         {#if service.locationKinds.includes("a-distance")}
           <p>
-            <strong>À distance&nbsp;•&nbsp;</strong>
-            <a
-              target="_blank"
-              rel="noopener nofollow"
-              href={service.remoteUrl}
-              class="underline"
-              title="Ouverture dans une nouvelle fenêtre"
-            >
-              {shortenString(service.remoteUrl, 35)}
-            </a>
+            <strong>À distance</strong>
+            {#if service.remoteUrl}
+              <strong>&nbsp;•&nbsp;</strong>
+              <a
+                target="_blank"
+                rel="noopener nofollow"
+                href={service.remoteUrl}
+                class="underline"
+                title="Ouverture dans une nouvelle fenêtre"
+              >
+                {shortenString(service.remoteUrl, 35)}
+              </a>
+            {/if}
           </p>
         {/if}
       </div>

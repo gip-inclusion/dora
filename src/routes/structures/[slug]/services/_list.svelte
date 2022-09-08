@@ -62,10 +62,7 @@
     tabId = newTab;
   }
 
-  const tabs = [
-    { id: "default", name: "Défaut" },
-    { id: "archived", name: "Archivés" },
-  ];
+  const tabs = [{ id: "default", name: "Défaut" }];
 
   $: canEdit = structure.isMember || $userInfo?.isStaff;
   $: servicesDisplayed = serviceOrder(services);
@@ -75,6 +72,9 @@
     } else {
       services = structure.services;
     }
+  }
+  $: if (canEdit) {
+    tabs.push({ id: "archived", name: "Archivés" });
   }
 </script>
 

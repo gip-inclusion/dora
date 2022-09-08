@@ -5,6 +5,7 @@
     type Service,
     type DashboardService,
     SERVICE_UPDATE_STATUS,
+    SERVICE_STATUSES,
   } from "$lib/types";
   import Button from "../button.svelte";
   import SetAsUpdatedModal from "./set-as-updated-modal.svelte";
@@ -19,7 +20,7 @@
 </script>
 
 <div class="flex flex-col">
-  {#if updateStatus && updateStatus !== SERVICE_UPDATE_STATUS.NOT_NEEDED}
+  {#if updateStatus && service.status === SERVICE_STATUSES.PUBLISHED && updateStatus !== SERVICE_UPDATE_STATUS.NOT_NEEDED}
     <Button
       label="Marquer comme à jour"
       icon={checkboxCircleFillIcon}

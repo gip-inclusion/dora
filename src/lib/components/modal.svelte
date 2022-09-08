@@ -4,6 +4,8 @@
   import Button from "./button.svelte";
   import { createEventDispatcher } from "svelte";
 
+  import Portal from "svelte-portal/src/Portal.svelte";
+
   export let isOpen;
   export let overflow = false;
   export let title: string | undefined = undefined;
@@ -31,57 +33,59 @@
 <svelte:window on:keydown={handleKeydown} />
 
 {#if isOpen}
-  <div
-    id="background"
-    class="flex items-center justify-center"
-    on:click={handleClose}
-  >
+  <Portal target={document.body}>
     <div
-      class="max-h-screen min-w-[80vw] rounded-md bg-white p-s24 shadow-md"
-      class:small-width={smallWidth}
-      class:overflow-y-auto={overflow}
-      on:click|stopPropagation
+      id="background"
+      class="flex items-center justify-center"
+      on:click={handleClose}
     >
-      <div class="mb-s24">
-        <div class="flex justify-between">
-          {#if title}
-            <h1
-              class="text-f22 leading-32 text-france-blue md:text-f24 lg:text-f28 lg:leading-40 xl:text-f32"
-            >
-              {title}
-            </h1>
-          {/if}
+      <div
+        class="max-h-screen min-w-[80vw] rounded-md bg-white p-s24 shadow-md"
+        class:small-width={smallWidth}
+        class:overflow-y-auto={overflow}
+        on:click|stopPropagation
+      >
+        <div class="mb-s24">
+          <div class="flex justify-between">
+            {#if title}
+              <h1
+                class="text-f22 leading-32 text-france-blue md:text-f24 lg:text-f28 lg:leading-40 xl:text-f32"
+              >
+                {title}
+              </h1>
+            {/if}
 
-          <div class="ml-auto">
-            <Button
-              icon={closeLineIcon}
-              on:click={handleClose}
-              noBackground
-              noPadding
-              extraClass="-mt-s10"
-            />
+            <div class="ml-auto">
+              <Button
+                icon={closeLineIcon}
+                on:click={handleClose}
+                noBackground
+                noPadding
+                extraClass="-mt-s10"
+              />
+            </div>
           </div>
+          {#if subtitle}
+            <div>
+              <p class="text-f14 text-gray-text">{subtitle}</p>
+            </div>
+          {/if}
+          <hr class="my-s24 -mx-s24" />
         </div>
-        {#if subtitle}
-          <div>
-            <p class="text-f14 text-gray-text">{subtitle}</p>
+
+        <div class="body max-h-s512 overflow-auto">
+          <slot />
+        </div>
+
+        {#if $$slots.footer}
+          <div class="footer">
+            <hr class="my-s24 -mx-s24 mt-s32" />
+            <slot name="footer" />
           </div>
         {/if}
-        <hr class="my-s24 -mx-s24" />
       </div>
-
-      <div class="body max-h-s512 overflow-auto">
-        <slot />
-      </div>
-
-      {#if $$slots.footer}
-        <div class="footer">
-          <hr class="my-s24 -mx-s24 mt-s32" />
-          <slot name="footer" />
-        </div>
-      {/if}
     </div>
-  </div>
+  </Portal>
 {/if}
 
 <style lang="postcss">
@@ -91,7 +95,7 @@
 
   #background {
     position: fixed;
-    z-index: 1;
+    z-index: 5000;
     top: 0;
     left: 0;
     width: 100vw;

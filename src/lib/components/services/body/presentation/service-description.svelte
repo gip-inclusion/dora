@@ -1,13 +1,13 @@
 <script>
+  import TextClamp from "$lib/components/text-clamp.svelte";
+
   import { markdownToHTML } from "$lib/utils";
 
   export let service;
 </script>
 
-<h2>Description</h2>
-
 <div class="markdown-wrapper prose mb-s24 w-full">
-  {@html markdownToHTML(service.fullDesc)}
+  <TextClamp text={markdownToHTML(service.fullDesc)} />
 </div>
 
 <style lang="postcss">
@@ -18,10 +18,12 @@
   .markdown-wrapper :global(h1),
   .markdown-wrapper :global(h2),
   .markdown-wrapper :global(h3) {
-    color: var(--col-france-blue);
+    color: var(--col-gray-dark);
   }
 
-  .markdown-wrapper :global(p) {
+  .markdown-wrapper :global(p),
+  .markdown-wrapper :global(strong),
+  .markdown-wrapper :global(li) {
     color: var(--col-text);
   }
 

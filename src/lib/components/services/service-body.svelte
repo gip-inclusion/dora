@@ -1,23 +1,12 @@
 <script>
   import OrientationBox from "./service-orientation.svelte";
-  import ServicePresentation from "./service-presentation.svelte";
+  import ServicePresentation from "./body/presentation/service-description.svelte";
   import { addlinkToUrls, shortenString } from "$lib/utils";
   import Tag from "$lib/components/tag.svelte";
+  import { formatFilePath } from "$lib/utils/service";
 
   export let service;
   export let isModel = false;
-
-  function formatFilePath(filePath) {
-    const file = filePath.split("/").pop();
-
-    const dotPosition = file.lastIndexOf(".");
-    if (dotPosition === -1) return file;
-
-    const name = file.slice(0, dotPosition);
-    const extension = file.slice(file.lastIndexOf("."), file.length);
-
-    return `${name} (${extension})`;
-  }
 </script>
 
 <div class="flex flex-col gap-s24 lg:flex-row">

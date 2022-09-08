@@ -1,16 +1,21 @@
 <script lang="ts">
-  import { SERVICE_UPDATE_STATUS, type Service } from "$lib/types";
-  import LinkButton from "../link-button.svelte";
+  import {
+    SERVICE_STATUSES,
+    SERVICE_UPDATE_STATUS,
+    type Service,
+  } from "$lib/types";
+  import { token } from "$lib/auth";
+  import LinkButton from "$lib/components/link-button.svelte";
 
   import cornerLeftImg from "$lib/assets/corner-left.png";
   import cornerRightImg from "$lib/assets/corner-right.png";
 
-  import CenteredGrid from "../layout/centered-grid.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import SynchronizedIcon from "$lib/components/services/icons/synchronized.svelte";
 
   import ServiceUpdateStatusAsContributor from "./service-update-status-as-contributor.svelte";
   import ServiceUpdateStatusAsReader from "./service-update-status-as-reader.svelte";
-  import ServiceStateUpdateSelect from "./service-state-update-select.svelte";
+  import ServiceStateUpdateSelect from "../../service-state-update-select.svelte";
   import {
     computeUpdateStatusData,
     computeUpdateStatusLabel,
@@ -31,11 +36,13 @@
       extraClass="
         py-s32 mb-s14 w-full
         {service.canWrite &&
+      service.status === SERVICE_STATUSES.PUBLISHED &&
       updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NEEDED
         ? 'bg-service-orange'
         : ''}
 
         {service.canWrite &&
+      service.status === SERVICE_STATUSES.PUBLISHED &&
       updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.REQUIRED
         ? 'bg-service-red'
         : ''}
@@ -61,15 +68,23 @@
     </CenteredGrid>
   </div>
 
-  {#if !service.canWrite || updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED}
+  {#if !service.canWrite || updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED || service.status !== SERVICE_STATUSES.PUBLISHED}
     <div
       class="m-auto max-w-6xl border border-t-0 border-r-0 border-l-0 border-gray-02"
     />
   {/if}
 
-  {#if updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED}
-    <img src={cornerLeftImg} alt="" class="absolute -top-[1px] left-s0" />
-    <img src={cornerRightImg} alt="" class="absolute -top-[1px] right-s0" />
+  {#if updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED || !$token}
+    <img
+      src={cornerLeftImg}
+      alt=""
+      class="noprint absolute -top-[1px] left-s0"
+    />
+    <img
+      src={cornerRightImg}
+      alt=""
+      class="noprint absolute -top-[1px] right-s0"
+    />
   {/if}
 
   {#if service.canWrite}
@@ -88,13 +103,12 @@
         <div class="flex h-s48 items-center md:self-end">
           {#if service.model}
             {#if service.modelChanged}
-              <LinkButton
-                label="Mise à jour disponible"
-                icon={copyIcon}
-                noBackground
-                hoverUnderline
-                to="/services/{service.slug}/editer"
-              />
+              <div class="flex items-center text-f14 font-bold text-gray-text">
+                <span class="mr-s10"><SynchronizedIcon warning /></span>
+                <a href="/services/{service.slug}/editer" class="underline">
+                  Mise à jour du modèle disponible
+                </a>
+              </div>
             {:else}
               <div class="flex items-center text-f14 italic text-gray-text">
                 <span class="mr-s10"><SynchronizedIcon /></span>
