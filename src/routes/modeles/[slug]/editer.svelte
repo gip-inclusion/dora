@@ -73,9 +73,8 @@
         type="warning"
       >
         <p class="text-f14">
-          Les modifications seront proposées sur tous le{`${
-            multipleServices ? "s" : ""
-          }`} service{`${multipleServices ? "s" : ""}`} utilisant ce modèle.
+          Les modifications seront proposées sur tous les services utilisant ce
+          modèle.
         </p>
       </Notice>
     {/if}

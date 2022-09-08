@@ -8,3 +8,4 @@ node_modules
 !.env.test
 !.env.example
 .cache_ggshield
+.idea

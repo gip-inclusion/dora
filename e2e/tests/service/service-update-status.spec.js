@@ -285,7 +285,7 @@ test.describe("Page service", () => {
         "Service en attente d’actualisation"
       );
       expect(updateLabel?.trim()).toContain(
-        "Les informations sur ce service ne sont plus mis à jour"
+        "Les informations sur ce service n’ont plus été mises à jour depuis"
       );
 
       // ET le bouton de mise à jour est visible

@@ -23,7 +23,14 @@
 </div>
 
 {#if textIsTooLong}
-  <Button {label} on:click={toggle} noBackground small noPadding />
+  <Button
+    {label}
+    on:click={toggle}
+    noBackground
+    small
+    noPadding
+    hoverUnderline
+  />
 {/if}
 
 <style>

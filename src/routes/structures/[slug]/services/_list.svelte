@@ -62,10 +62,7 @@
     tabId = newTab;
   }
 
-  const tabs = [
-    { id: "default", name: "Défaut" },
-    { id: "archived", name: "Archivés" },
-  ];
+  const tabs = [{ id: "default", name: "Défaut" }];
 
   $: canEdit = structure.isMember || $userInfo?.isStaff;
   $: servicesDisplayed = serviceOrder(services);
@@ -75,6 +72,9 @@
     } else {
       services = structure.services;
     }
+  }
+  $: if (canEdit) {
+    tabs.push({ id: "archived", name: "Archivés" });
   }
 </script>
 
@@ -107,7 +107,7 @@
   </div>
 {/if}
 
-<div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
+<div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-3">
   {#each servicesDisplayed as service}
     <ServiceCard {service} {servicesOptions} readOnly={!canEdit} {onRefresh} />
   {/each}
