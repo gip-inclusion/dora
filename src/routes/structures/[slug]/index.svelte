@@ -22,6 +22,7 @@
 </svelte:head>
 
 <Informations structure={$structure} />
+<div class="mb-s64" />
 
 {#if !!$structure.services?.length || $structure.isMember || $userInfo?.isStaff}
   <hr class="mb-s24" />

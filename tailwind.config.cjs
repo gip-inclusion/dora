@@ -110,6 +110,7 @@ const config = {
       s24: "1.5rem",
       s28: "1.75rem",
       s32: "2rem",
+      s35: "35px",
       s40: "2.5rem",
       s48: "3rem",
       s56: "3.5rem",

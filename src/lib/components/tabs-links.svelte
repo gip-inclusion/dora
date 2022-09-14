@@ -7,15 +7,24 @@
   {#each items as item}
     <li>
       {#if itemId === item.id}
-        <span class="block rounded-t-md bg-white p-s16 text-france-blue"
-          >{item.name}</span
+        <span
+          class="block flex items-center rounded-t-md bg-white p-s16 text-france-blue"
         >
+          <span class="mr-s8 h-s24 w-s24 fill-current">
+            {@html item.icon}
+          </span>
+          {item.name}
+        </span>
       {:else}
         <a
           href={item.href}
-          class="block rounded-t-md bg-magenta-dark p-s16 text-white"
-          >{item.name}</a
+          class="block flex items-center rounded-t-md bg-magenta-dark p-s16 text-white"
         >
+          <span class="mr-s8 h-s24 w-s24 fill-current">
+            {@html item.icon}
+          </span>
+          {item.name}
+        </a>
       {/if}
     </li>
   {/each}

@@ -2,11 +2,49 @@
   // Source pour l'accessibilité : https://www.w3.org/WAI/ARIA/apg/example-index/breadcrumb/index.html
   import type { Structure, Service } from "$lib/types";
 
-  type BreadcrumbLocation = "home" | "structure" | "service";
+  type BreadcrumbLocation =
+    | "home"
+    | "structure-informations"
+    | "structure-collaborateurs"
+    | "structure-services"
+    | "structure-modeles"
+    | "structure-antennes"
+    | "service";
 
   export let structure: Structure;
-  export let service: Service;
+  export let service: Service | undefined = undefined;
   export let currentLocation: BreadcrumbLocation;
+
+  $: structureData = getStructureData(currentLocation);
+
+  function getStructureData(currentLocation) {
+    if (currentLocation === "structure-collaborateurs") {
+      return {
+        url: "collaborateurs",
+        name: "Collaborateurs",
+      };
+    } else if (currentLocation === "structure-services") {
+      return {
+        url: "services",
+        name: "Services",
+      };
+    } else if (currentLocation === "structure-modeles") {
+      return {
+        url: "modeles",
+        name: "Modèles",
+      };
+    } else if (currentLocation === "structure-antennes") {
+      return {
+        url: "antennes",
+        name: "Antennes",
+      };
+    }
+
+    return {
+      url: "",
+      name: "Informations",
+    };
+  }
 </script>
 
 <nav aria-label="Fil d'ariane">
@@ -19,15 +57,15 @@
         title="Retour à l'accueil du site">Accueil</a
       >
     </li>
+
     <li class="inline before:content-['/']">
-      <a
-        href="/structures/{structure.slug}"
-        class:current={currentLocation === "structure"}
-        aria-current={currentLocation === "structure" ? "page" : null}
-        ><span class="hidden lg:inline">Structure&nbsp;•&nbsp;</span
-        >{structure.name}</a
-      >
+      <a href="/structures/{structure.slug}">
+        <span class="hidden lg:inline"
+          >Structure&nbsp;•&nbsp;
+        </span>{structure.name}
+      </a>
     </li>
+
     {#if service}
       <li class="inline before:content-['/']">
         <a
@@ -37,6 +75,16 @@
           ><span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
           >{service.name}</a
         >
+      </li>
+    {:else if currentLocation.startsWith("structure-")}
+      <li class="inline before:content-['/']">
+        <a
+          href="/structures/{structure.slug}/{structureData.url}"
+          class="current"
+          aria-current="page"
+        >
+          <span>{structureData.name}</span>
+        </a>
       </li>
     {/if}
   </ol>

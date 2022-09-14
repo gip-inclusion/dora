@@ -7,8 +7,8 @@
   import { token } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
 
-  import cornerLeftImg from "$lib/assets/corner-left.png";
-  import cornerRightImg from "$lib/assets/corner-right.png";
+  import cornerLeftBlueImg from "$lib/assets/corner-left-blue.png";
+  import cornerRightBlueImg from "$lib/assets/corner-right.png";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import SynchronizedIcon from "$lib/components/services/icons/synchronized.svelte";
@@ -76,12 +76,12 @@
 
   {#if updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED || !$token}
     <img
-      src={cornerLeftImg}
+      src={cornerLeftBlueImg}
       alt=""
       class="noprint absolute -top-[1px] left-s0"
     />
     <img
-      src={cornerRightImg}
+      src={cornerRightBlueImg}
       alt=""
       class="noprint absolute -top-[1px] right-s0"
     />
