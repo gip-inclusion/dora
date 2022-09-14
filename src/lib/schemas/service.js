@@ -149,8 +149,6 @@ const fieldsRequired = {
   model: [
     "structure",
     "categories",
-    "subcategories",
-    "kinds",
     "name",
     "shortDesc",
     "coachOrientationModes",
