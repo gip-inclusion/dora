@@ -21,6 +21,7 @@
 
   export let servicesOptions, serviceSchema, service, canAddChoices;
   export let model = null;
+  export let typologyFieldDisabled = true;
 
   let subcategories = [];
   let showModelSubcategoriesUseValue = true;
@@ -203,6 +204,8 @@
       onSelectChange={handleCategoriesChange}
       placeholderMulti="Sélectionner"
       sortSelect
+      disabled={typologyFieldDisabled}
+      readonly={typologyFieldDisabled}
     />
   </FieldModel>
 

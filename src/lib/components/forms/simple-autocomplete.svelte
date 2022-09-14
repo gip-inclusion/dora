@@ -103,7 +103,7 @@
   export let readonly = undefined;
   // apply a className to the dropdown div
   export let dropdownClassName = undefined;
-  // adds the disabled tag to the HTML input
+  // adds the disabled tag to the HTML input and tag deletion
   export let disabled = false;
 
   // --- Public State ----
@@ -507,6 +507,8 @@
   }
 
   function unselectItem(tag) {
+    if (disabled || readonly) return;
+
     value = value.filter((i) => i !== tag);
     input.focus();
   }
@@ -847,12 +849,14 @@
       >
         {getLabelForValue(tagItem)}
 
-        <span
-          class="tag-delete"
-          on:click|preventDefault={unselectItem(tagItem)}
-        >
-          {@html closeCircleIcon}
-        </span>
+        {#if !disabled && !readonly}
+          <span
+            class="tag-delete"
+            on:click|preventDefault={unselectItem(tagItem)}
+          >
+            {@html closeCircleIcon}
+          </span>
+        {/if}
       </div>
     {/each}
   </div>
