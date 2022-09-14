@@ -8,7 +8,7 @@
   import LinkButton from "$lib/components/link-button.svelte";
 
   import cornerLeftBlueImg from "$lib/assets/corner-left-blue.png";
-  import cornerRightBlueImg from "$lib/assets/corner-right.png";
+  import cornerRightBlueImg from "$lib/assets/corner-right-blue.png";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import SynchronizedIcon from "$lib/components/services/icons/synchronized.svelte";
