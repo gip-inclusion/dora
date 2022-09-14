@@ -52,7 +52,7 @@
 
 <div
   {name}
-  class="items-top flex flex-col gap-s12"
+  class="items-top flex flex-col gap-s8"
   class:lg:flex-row={!vertical}
   class:hidden={type === "hidden"}
   isDOMLabel={type !== "checkboxes" && type !== "radios"}

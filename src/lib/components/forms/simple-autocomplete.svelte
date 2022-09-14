@@ -904,7 +904,7 @@
   .autocomplete-input {
     width: 100%;
     height: 100%;
-    padding: 6px 12px;
+    padding: 12px;
     font: inherit;
   }
 

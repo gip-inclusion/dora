@@ -1,6 +1,5 @@
-<script>
+<script lang="ts">
   import { setContext } from "svelte";
-
   import { goto } from "$app/navigation";
 
   import { modifyStructure, createStructure } from "$lib/structures.js";
@@ -14,16 +13,20 @@
   } from "$lib/validation.js";
 
   import SchemaField from "$lib/components/forms/schema-field.svelte";
-  import FieldSet from "$lib/components/forms/fieldset.svelte";
 
   import Alert from "$lib/components/forms/alert.svelte";
-  import { arrowRightSIcon } from "$lib/icons";
 
   import Button from "$lib/components/button.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import AddressSearch from "$lib/components/forms/street-search.svelte";
+  import TextField from "../form/text-field.svelte";
+  import SelectField from "../form/select-field.svelte";
+  import type { Structure, StructuresOptions } from "$lib/types";
+  import LinkButton from "../link-button.svelte";
+  import OpeningHoursField from "../form/openingHours/opening-hours-field.svelte";
 
-  export let structure, structuresOptions, formTitle;
+  export let structure: Structure;
+  export let structuresOptions: StructuresOptions;
 
   export let modify = false;
   export let onRefresh;
@@ -53,7 +56,7 @@
           structure = { ...structure, ...validatedData };
         }
 
-        resolve();
+        resolve(true);
       }, 200);
     });
   }
@@ -120,193 +123,259 @@
   }
 </script>
 
-<form novalidate on:submit|preventDefault={handleSubmit}>
-  <FieldSet title={formTitle}>
-    <div slot="help">
-      <p class="text-f14">
-        Vérifiez l’exactitude des informations récupérées et complétez les
-        autres.
-      </p>
-    </div>
+<form
+  novalidate
+  on:submit|preventDefault={handleSubmit}
+  class="flex flex-col gap-s32 rounded-t-md border border-gray-02 p-s32 lg:w-2/3"
+>
+  <div class="text-f14 text-gray-text">
+    <span class="text-error">*</span>
+    Champs obligatoires
+  </div>
+
+  {#if $formErrors.nonFieldErrors && $formErrors.nonFieldErrors.length}
     <div bind:this={errorDiv}>
       {#each $formErrors.nonFieldErrors || [] as msg}
         <Alert label={msg} />
       {/each}
     </div>
+  {/if}
 
-    <SchemaField
-      type="text"
-      label="Siret"
-      schema={structureSchema.siret}
-      name="siret"
-      errorMessages={$formErrors.siret}
-      disabled
-      bind:value={structure.siret}
-    />
+  <TextField
+    name="siret"
+    label="SIRET"
+    on:blur={handleEltChange}
+    bind:value={structure.siret}
+    errorMessages={$formErrors.siret}
+    maxlength={14}
+    required={structureSchema.siret.required}
+    disabled
+    helper="Format attendu : 14 chiffres"
+  />
 
-    <SchemaField
-      type="text"
-      label="Nom"
-      schema={structureSchema.name}
-      name="name"
-      errorMessages={$formErrors.name}
-      bind:value={structure.name}
-    />
+  <TextField
+    name="name"
+    label="Nom de la structure"
+    bind:value={structure.name}
+    on:blur={handleEltChange}
+    errorMessages={$formErrors.name}
+    maxlength={255}
+    required={structureSchema.name.required}
+  />
 
-    <SchemaField
-      type="select"
-      label="Typologie"
-      placeholder="Sélectionner"
-      schema={structureSchema.typology}
-      sortSelect
-      name="typology"
-      errorMessages={$formErrors.typology}
-      bind:value={structure.typology}
-      choices={structuresOptions.typologies}
-    />
+  <SelectField
+    label="Typologie"
+    name="typology"
+    placeholder="Choississez..."
+    errorMessages={$formErrors.typology}
+    bind:value={structure.typology}
+    {handleEltChange}
+    choices={structuresOptions.typologies}
+  />
 
-    <SchemaField
+  <SchemaField
+    name="city"
+    type="custom"
+    label="Ville"
+    errorMessages={$formErrors.city}
+    schema={structureSchema.city}
+    vertical
+  >
+    <CitySearch
+      slot="custom-input"
       name="city"
-      type="custom"
-      label="Ville"
-      errorMessages={$formErrors.city}
-      schema={structureSchema.city}
-    >
-      <CitySearch
-        slot="custom-input"
-        name="city"
-        placeholder="Saisissez et validez votre ville"
-        initialValue={structure.city}
-        onChange={handleCityChange}
-        vertical
-      />
-    </SchemaField>
+      placeholder="Saisissez et validez votre ville"
+      initialValue={structure.city}
+      onChange={handleCityChange}
+    />
+  </SchemaField>
 
-    <SchemaField
-      type="custom"
+  <SchemaField
+    type="custom"
+    name="address1"
+    label="Adresse"
+    errorMessages={$formErrors.address1}
+    schema={structureSchema.address1}
+    vertical
+  >
+    <AddressSearch
+      slot="custom-input"
       name="address1"
-      label="Adresse"
-      errorMessages={$formErrors.address1}
-      schema={structureSchema.address1}
-    >
-      <AddressSearch
-        slot="custom-input"
-        name="address1"
-        disabled={!structure.cityCode}
-        cityCode={structure.cityCode}
-        placeholder="3 rue du parc"
-        initialValue={structure.address1}
-        handleChange={handleAddressChange}
-      />
-    </SchemaField>
+      disabled={!structure.cityCode}
+      cityCode={structure.cityCode}
+      placeholder="3 rue du parc"
+      initialValue={structure.address1}
+      handleChange={handleAddressChange}
+    />
+  </SchemaField>
 
-    <SchemaField
-      type="text"
-      label="Complément d’adresse"
-      schema={structureSchema.address2}
-      name="address2"
-      errorMessages={$formErrors.address2}
-      bind:value={structure.address2}
-    />
+  <TextField
+    name="address2"
+    label="Complément d’adresse"
+    bind:value={structure.address2}
+    on:blur={handleEltChange}
+    errorMessages={$formErrors.address2}
+    maxlength={255}
+  />
 
-    <SchemaField
-      type="text"
-      label="Code postal"
-      schema={structureSchema.postalCode}
-      name="postalCode"
-      errorMessages={$formErrors.postalCode}
-      bind:value={structure.postalCode}
-    />
+  <TextField
+    name="accesslibreUrl"
+    label="Accessibilité"
+    helper="Afin de renseigner les informations d’accessibilité sur la structure, retrouvez-la via la plateforme <a href='https://acceslibre.beta.gouv.fr/' target='_blank' title='Ouverture dans une nouvelle fenêtre' rel='noopener'>accès libre</a> et copiez l’url dans le champs ci-dessous"
+    bind:value={structure.accesslibreUrl}
+    on:blur={handleEltChange}
+    placeholder="https://acceslibre.beta.gouv.fr/..."
+    errorMessages={$formErrors.accesslibreUrl}
+    maxlength={255}
+  />
 
-    <SchemaField
-      type="hidden"
-      schema={structureSchema.cityCode}
-      name="cityCode"
-      errorMessages={$formErrors.cityCode}
-      bind:value={structure.cityCode}
-    />
-    <SchemaField
-      type="hidden"
-      schema={structureSchema.longitude}
-      name="longitude"
-      errorMessages={$formErrors.longitude}
-      bind:value={structure.longitude}
-    />
-    <SchemaField
-      type="hidden"
-      schema={structureSchema.latitude}
-      name="latitude"
-      errorMessages={$formErrors.latitude}
-      bind:value={structure.latitude}
-    />
+  <TextField
+    inputType="text"
+    label="Code postal"
+    name="postalCode"
+    helper="Exemple : 44000"
+    on:blur={handleEltChange}
+    required
+    errorMessages={$formErrors.postalCode}
+    bind:value={structure.postalCode}
+  />
 
-    <SchemaField
-      type="tel"
-      label="Téléphone"
-      schema={structureSchema.phone}
-      name="phone"
-      errorMessages={$formErrors.phone}
-      bind:value={structure.phone}
-    />
+  <TextField
+    label="cityCode"
+    name="cityCode"
+    inputType="hidden"
+    bind:value={structure.cityCode}
+  />
+  <TextField
+    label="longitude"
+    name="longitude"
+    inputType="hidden"
+    bind:value={structure.longitude}
+  />
+  <TextField
+    label="latitude"
+    name="latitude"
+    inputType="hidden"
+    bind:value={structure.latitude}
+  />
 
-    <SchemaField
-      type="email"
-      label="Courriel"
-      schema={structureSchema.email}
-      name="email"
-      errorMessages={$formErrors.email}
-      bind:value={structure.email}
-    />
+  <TextField
+    inputType="tel"
+    label="Téléphone"
+    name="phone"
+    on:blur={handleEltChange}
+    helper="Exemples: 06 00 00 00 00 ou 0600000000"
+    errorMessages={$formErrors.phone}
+    bind:value={structure.phone}
+  />
 
-    <SchemaField
-      type="url"
-      label="Site web"
-      placeholder="https://mastructure.fr"
-      schema={structureSchema.url}
-      name="url"
-      errorMessages={$formErrors.url}
-      bind:value={structure.url}
-    />
-    <SchemaField
-      type="textarea"
-      label="Résumé"
-      description="280 caractères maximum"
-      placeholder="Description résumée de la structure"
-      schema={structureSchema.shortDesc}
-      name="shortDesc"
-      errorMessages={$formErrors.shortDesc}
-      bind:value={structure.shortDesc}
-    />
-    <SchemaField
-      type="richtext"
-      label="Présentation"
-      placeholder="Présentation détaillée de la structure"
-      schema={structureSchema.fullDesc}
-      name="fullDesc"
-      errorMessages={$formErrors.fullDesc}
-      bind:value={structure.fullDesc}
-      vertical
-    />
+  <TextField
+    inputType="email"
+    label="Courriel"
+    helper="Exemple: nom.prenom@organisation.fr"
+    name="email"
+    on:blur={handleEltChange}
+    required={structureSchema.email.required}
+    errorMessages={$formErrors.email}
+    bind:value={structure.email}
+  />
 
-    <SchemaField
-      type="hidden"
-      schema={structureSchema.ape}
-      name="ape"
-      bind:value={structure.ape}
+  <TextField
+    inputType="url"
+    label="Site web"
+    helper="Exemple: https://mastructure.fr"
+    placeholder="https://mastructure.fr"
+    name="url"
+    on:blur={handleEltChange}
+    errorMessages={$formErrors.url}
+    bind:value={structure.url}
+  />
+
+  <TextField
+    inputType="textarea"
+    label="Résumé"
+    helper="280 caractères maximum"
+    placeholder="Décrivez brièvement votre structure"
+    name="shortDesc"
+    maxlength={280}
+    on:blur={handleEltChange}
+    required={structureSchema.shortDesc.required}
+    errorMessages={$formErrors.shortDesc}
+    bind:value={structure.shortDesc}
+  />
+
+  <TextField
+    inputType="richtext"
+    label="Présentation"
+    name="fullDesc"
+    errorMessages={$formErrors.fullDesc}
+    bind:value={structure.fullDesc}
+    on:blur={handleEltChange}
+    placeholder="Présentation détaillée de la structure"
+  />
+
+  <SelectField
+    label="Labels nationaux"
+    name="nationalLabels"
+    helper="Indiquez si la structure fait partie d'un ou plusieurs réseaux nationaux"
+    placeholder="Choississez..."
+    errorMessages={$formErrors.nationalLabels}
+    bind:value={structure.nationalLabels}
+    {handleEltChange}
+    choices={structuresOptions.nationalLabels}
+    isMultiple
+  />
+
+  <TextField
+    name="otherLabels"
+    label="Autres labels"
+    helper="Indiquez si la structure fait partie d’autres labels (régionaux, locaux…)"
+    bind:value={structure.otherLabels}
+    on:blur={handleEltChange}
+    errorMessages={$formErrors.otherLabels}
+    maxlength={255}
+  />
+
+  <TextField
+    label="ape"
+    inputType="hidden"
+    name="ape"
+    bind:value={structure.ape}
+  />
+
+  <OpeningHoursField
+    label="Horaires de la structure"
+    name="openingHours"
+    on:change={handleEltChange}
+    errorMessages={$formErrors.openingHours}
+    bind:value={structure.openingHours}
+  />
+
+  <TextField
+    name="openingHoursDetails"
+    label="Détail horaires"
+    helper="Vous pouvez renseigner des informations spécifiques concernant les horaires dans ce champs"
+    bind:value={structure.openingHoursDetails}
+    on:blur={handleEltChange}
+    errorMessages={$formErrors.openingHoursDetails}
+    maxlength={255}
+  />
+
+  <hr />
+
+  <div class="flex justify-end">
+    <LinkButton
+      to="/structures/{structure.slug}"
+      on:submit
+      secondary
+      extraClass="mr-s16"
+      label="Annuler les modifications"
     />
-
-    <hr />
-
-    <div class="flex justify-end">
-      <Button
-        on:submit
-        name="validate"
-        type="submit"
-        label="Valider"
-        icon={arrowRightSIcon}
-        iconOnRight
-        preventDefaultOnMouseDown
-      />
-    </div>
-  </FieldSet>
+    <Button
+      on:submit
+      name="validate"
+      type="submit"
+      label="Valider les modifications"
+    />
+  </div>
 </form>

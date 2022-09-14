@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount, onDestroy, tick } from "svelte";
   import { Editor } from "@tiptap/core";
   import StarterKit from "@tiptap/starter-kit";
@@ -19,12 +19,14 @@
   import Separator from "./separator.svelte";
   import { htmlToMarkdown, markdownToHTML } from "$lib/utils";
 
-  export let name;
+  export let id: string;
+  export let name: string;
   export let htmlContent = "";
   export let initialContent = "";
   export let placeholder = "";
   export let disabled = false;
-  export let readonly;
+  export let readonly = false;
+  export let ariaDescribedBy = "";
 
   let element;
   let editor;
@@ -37,6 +39,10 @@
   let linkDialogHasSelection;
   let linkDialogTextInput;
   let linkDialogUrlInput;
+
+  function toString(bool: boolean) {
+    return bool ? "true" : "false";
+  }
 
   onMount(() => {
     editor = new Editor({
@@ -58,10 +64,10 @@
       },
       editorProps: {
         attributes: {
-          id: { name },
+          id: name,
           name,
-          disabled,
-          readonly,
+          disabled: toString(disabled),
+          readonly: toString(readonly),
           class: `prose bg-white p-s16 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none min-h-[160px]`,
         },
       },
@@ -233,7 +239,7 @@
         >
       </div>
     {/if}
-    <div bind:this={element} />
+    <div {id} aria-describedby={ariaDescribedBy} bind:this={element} />
   </div>
 </div>
 
