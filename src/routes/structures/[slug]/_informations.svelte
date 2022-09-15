@@ -96,7 +96,7 @@
       {#if structure.otherLabels}
         <div class="flex-1">
           <h3 class="mb-s10 text-f17 text-france-blue">Autres labels</h3>
-          <p class="m-s0 text-f14">{structure.otherLabels}</p>
+          <p class="m-s0 break-words text-f14">{structure.otherLabels}</p>
         </div>
       {/if}
     </div>
