@@ -20,7 +20,7 @@
 
   $: {
     if (isOpen && touched) {
-      inError = !closeAt || !openAt;
+      inError = !closeAt || !openAt || openAt >= closeAt;
       if (inError) {
         ariaDescribedBy = `error-${day}—${dayPeriod}`;
       }
@@ -108,7 +108,7 @@
     <span class="mr-s4 h-s16 w-s16 fill-current">
       {@html alertIcon}
     </span>
-    <span> Horaire incomplète </span>
+    <span> Horaire incomplète ou incohérente.</span>
   </div>
 {/if}
 

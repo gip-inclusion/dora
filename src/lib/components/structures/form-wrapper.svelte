@@ -353,7 +353,7 @@
 
   <TextField
     name="openingHoursDetails"
-    label="Détail horaires"
+    label="Détail horaire"
     helper="Vous pouvez renseigner des informations spécifiques concernant les horaires dans ce champs"
     bind:value={structure.openingHoursDetails}
     on:blur={handleEltChange}

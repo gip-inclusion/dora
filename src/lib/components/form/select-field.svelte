@@ -92,7 +92,7 @@
       value = newValue;
     }
     handleEltChange({ detail: name });
-    toggleCombobox(false);
+    if (!isMultiple) toggleCombobox(false);
   }
 
   function toggleCombobox(forceValue?: boolean) {

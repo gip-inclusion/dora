@@ -125,7 +125,7 @@ export function isNotStringInvalid(msg) {
         (value === "" || value !== INVALID_ERROR_MESSAGE)),
     msg:
       msg ||
-      "Horaires incomplètes. Veuillez corriger les champs manquants ou incorrects.",
+      "Horaires incomplètes. Veuillez finaliser la saisie de vos horaires, corriger les champs manquants ou incorrects.",
   });
 }
 

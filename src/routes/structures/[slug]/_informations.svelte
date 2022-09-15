@@ -6,22 +6,31 @@
   import {
     computerIcon,
     editIcon,
+    externalLinkIcon,
     mailLineIcon,
     phoneLineIcon,
     timeLineIcon,
     wheelChairIcon,
   } from "$lib/icons";
   import { isStructureInformationsComplete } from "$lib/structures";
-  import type { Structure } from "$lib/types";
+  import type { Structure, StructuresOptions } from "$lib/types";
   import { markdownToHTML } from "$lib/utils";
   import { formatPhoneNumber } from "$lib/utils/phone";
   import { formatOsmHours } from "$lib/utils/structures";
 
   export let structure: Structure;
+  export let structuresOptions: StructuresOptions;
 
   let fullDesc;
 
   $: fullDesc = markdownToHTML(structure.fullDesc);
+  $: nationalLabelsDisplay = structure.nationalLabels
+    .map((nationalLabel: string) => {
+      return structuresOptions.nationalLabels.find(
+        (n) => n.value === nationalLabel
+      ).label;
+    })
+    .join(", ");
 </script>
 
 <div class="mb-s40">
@@ -74,15 +83,22 @@
 
   <div class="data">
     <p class="bold mb-s32 text-f21">{structure.shortDesc}</p>
+
     <div class="flex flex-col gap-s32 md:flex-row">
-      <div class="flex-1">
-        <h3 class="mb-s10 text-f17 text-france-blue">Labels nationaux</h3>
-        <p class="m-s0 text-f14">{structure.typologyDisplay}</p>
-      </div>
-      <div class="flex-1">
-        <h3 class="mb-s10 text-f17 text-france-blue">Autres labels</h3>
-        <p class="m-s0 text-f14">{structure.typologyDisplay}</p>
-      </div>
+      {#if nationalLabelsDisplay}
+        <div class="flex-1">
+          <h3 class="mb-s10 text-f17 text-france-blue">Labels nationaux</h3>
+          <p class="m-s0 text-f14">
+            {nationalLabelsDisplay}
+          </p>
+        </div>
+      {/if}
+      {#if structure.otherLabels}
+        <div class="flex-1">
+          <h3 class="mb-s10 text-f17 text-france-blue">Autres labels</h3>
+          <p class="m-s0 text-f14">{structure.otherLabels}</p>
+        </div>
+      {/if}
     </div>
   </div>
 
@@ -160,7 +176,7 @@
             <span class="mr-s8 h-s24 w-s24 fill-current">
               {@html timeLineIcon}
             </span>
-            Horaire
+            Horaires
           </h4>
 
           <ul class="text-f16">
@@ -193,10 +209,14 @@
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
             rel="noopener nofollow"
-            class="break-all text-gray-text underline"
+            class="items-center break-words text-gray-text underline"
             href={structure.accesslibreUrl}
           >
-            {structure.accesslibreUrl}
+            Retrouvez toutes les infos via ce lien<span
+              class="ml-s8 mb-s2 inline-block h-s16 w-s16 justify-end fill-current align-sub"
+            >
+              {@html externalLinkIcon}
+            </span>
           </a>
         </div>
       {/if}

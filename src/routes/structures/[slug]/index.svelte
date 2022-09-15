@@ -1,3 +1,15 @@
+<script context="module">
+  import { getStructuresOptions } from "$lib/structures";
+
+  export async function load() {
+    return {
+      props: {
+        structuresOptions: await getStructuresOptions(),
+      },
+    };
+  }
+</script>
+
 <script>
   import { userInfo } from "$lib/auth";
   import { structure } from "./_store.js";
@@ -8,6 +20,8 @@
   import BranchesList from "./antennes/_list.svelte";
   import ModelesList from "./modeles/_list.svelte";
   import { capitalize } from "$lib/utils.js";
+
+  export let structuresOptions;
 
   async function handleRefresh() {
     $structure = await getStructure($structure.slug);
@@ -21,7 +35,7 @@
   <meta name="description" content={$structure.shortDesc} />
 </svelte:head>
 
-<Informations structure={$structure} />
+<Informations structure={$structure} {structuresOptions} />
 <div class="mb-s64" />
 
 {#if !!$structure.services?.length || $structure.isMember || $userInfo?.isStaff}
