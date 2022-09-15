@@ -15,13 +15,6 @@
     <h2 class="text-france-blue">Mon compte</h2>
     <div class="flex gap-s12">
       <LinkButton label="Modifier" to="/mon-compte/editer" small />
-
-      <LinkButton
-        label="Changer de mot de passe"
-        to="/mon-compte/mot-de-passe"
-        secondary
-        small
-      />
     </div>
   </div>
 

@@ -13,7 +13,6 @@ const phoneRegexp = /^\d{10}$/u;
 
 const postalCodeRegexp = /^\d[0-9abAB]\d{3}$/u;
 
-export const safirRegexp = /^\d{5}$/u;
 export const siretRegexp = /^\d{14}$/u;
 /* eslint-enable */
 
@@ -81,20 +80,13 @@ export function isPhone(msg) {
       `Veuillez saisir un numéro de téléphone valide (ex: 06 00 00 00 00 ou  0600000000`,
   });
 }
+
 export function isPostalCode(msg) {
   return (name, value, _data) => ({
     valid:
       typeof value === "string" &&
       (value === "" || !!value.match(postalCodeRegexp)),
     msg: msg || `Veuillez saisir un code postal valide`,
-  });
-}
-
-export function isSafir(msg) {
-  return (name, value, _data) => ({
-    valid:
-      typeof value === "string" && (value === "" || !!value.match(safirRegexp)),
-    msg: msg || `Veuillez saisir un code Safir valide`,
   });
 }
 

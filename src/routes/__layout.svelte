@@ -1,11 +1,12 @@
 <script context="module">
+  import { get } from "svelte/store";
   import { browser } from "$app/env";
   import { CRISP_ID } from "$lib/env";
-  import { validateCredsAndFillUserInfo } from "$lib/auth";
+  import { userInfo, validateCredsAndFillUserInfo } from "$lib/auth";
 
   import * as Sentry from "@sentry/browser";
 
-  import { SENTRY_DSN, ENVIRONMENT } from "$lib/env.js";
+  import { ENVIRONMENT, SENTRY_DSN } from "$lib/env.js";
 
   if (ENVIRONMENT !== "local") {
     Sentry.init({
@@ -15,9 +16,23 @@
     });
   }
 
-  export async function load() {
+  export async function load({ url }) {
     await validateCredsAndFillUserInfo();
-
+    const currentUserInfo = get(userInfo);
+    if (
+      currentUserInfo &&
+      !(
+        currentUserInfo.structures.length ||
+        currentUserInfo.pendingStructures.length
+      ) &&
+      !url.pathname.startsWith("/auth/rattachement") &&
+      !url.pathname.startsWith("/auth/deconnexion")
+    ) {
+      return {
+        status: 302,
+        redirect: "/auth/rattachement",
+      };
+    }
     return {};
   }
 

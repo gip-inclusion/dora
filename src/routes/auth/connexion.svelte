@@ -1,163 +1,125 @@
+<script context="module">
+  export const ssr = false;
+
+  import { get } from "svelte/store";
+  import { token } from "$lib/auth";
+  import { getNextPage } from "./utils.js";
+
+  export async function load({ url }) {
+    const nextPage = getNextPage(url);
+    // Si on a déjà un token, on redirige directement sur la destination
+    if (get(token)) {
+      return {
+        status: 302,
+        redirect: nextPage,
+      };
+    }
+    return {};
+  }
+</script>
+
 <script>
-  import { onMount } from "svelte";
   import { page } from "$app/stores";
-  import { goto } from "$app/navigation";
-
-  import { getApiURL } from "$lib/utils/api.js";
-  import { token, setToken, validateCredsAndFillUserInfo } from "$lib/auth";
-  import { formErrors } from "$lib/validation.js";
-  import { loginSchema } from "$lib/schemas/auth.js";
-
-  import Button from "$lib/components/button.svelte";
-  import Fieldset from "$lib/components/forms/fieldset.svelte";
-  import Field from "$lib/components/forms/field.svelte";
-  import Alert from "$lib/components/forms/alert.svelte";
-  import Form from "$lib/components/forms/form.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
-
-  import Info from "$lib/components/info.svelte";
+  import FieldSet from "$lib/components/forms/fieldset.svelte";
   import AuthLayout from "./_auth_layout.svelte";
-  import Notice from "$lib/components/notice.svelte";
+  import { informationLineIcon } from "$lib/icons.js";
+  import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
+  import logoC1 from "$lib/assets/inclusion-connect/logo-c1.svg";
+  import logoDora from "$lib/assets/inclusion-connect/logo_dora.svg";
 
-  let email = "";
-  let password = "";
-  let invalidUser = false;
+  function getLoginHint() {
+    const loginHint = $page.url.searchParams.get("login_hint");
 
-  const authErrors = {
-    _default: {},
-    nonFieldErrors: { authorization: "Courriel ou mot de passe incorrects" },
-  };
-
-  function handleChange(_validatedData) {}
-
-  function handleSubmit(validatedData) {
-    const url = `${getApiURL()}/auth/login/`;
-    return fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        email: validatedData.email,
-        password: validatedData.password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json; version=1.0",
-      },
-    });
-  }
-
-  function getNextPage() {
-    const next = $page.url.searchParams.get("next");
-    if (next && next.startsWith("/") && !next.startsWith("/auth/")) return next;
-    return "/";
-  }
-
-  async function handleSuccess(jsonResult) {
-    if (jsonResult.validUser) {
-      setToken(jsonResult.token);
-      await validateCredsAndFillUserInfo();
-
-      goto(getNextPage() || "/");
-    } else {
-      invalidUser = true;
+    if (loginHint) {
+      $page.url.searchParams.delete("login_hint");
+      return `&login_hint=${encodeURIComponent(loginHint)}`;
     }
+    return "";
   }
 
-  onMount(() => {
-    if ($token && $page.url.pathname === "/auth/connexion") {
-      goto(getNextPage());
-    }
-  });
+  const loginHint = getLoginHint();
+  const nextPage = getNextPage($page.url);
 </script>
 
 <svelte:head>
-  <title>Se connecter | DORA</title>
+  <title>Connexion / Inscription | DORA</title>
 </svelte:head>
 
-<CenteredGrid>
-  <div class="text-center">
-    <h1 class="text-france-blue">Connexion</h1>
-  </div>
-</CenteredGrid>
-
 <AuthLayout>
-  <div class="mb-s40">
-    <Form
-      data={{ email, password }}
-      schema={loginSchema}
-      serverErrorsDict={authErrors}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-      onSuccess={handleSuccess}
-    >
-      <Fieldset title="Votre compte">
-        {#if invalidUser}
-          <Info
-            label="Votre adresse courriel n’a pas encore été validée"
-            negativeMood
-          />
-          <LinkButton
-            to="/auth/renvoyer-email-validation?email={encodeURIComponent(
-              email
-            )}"
-            label="Demander un nouveau lien"
-          />
-        {:else}
-          {#each $formErrors.nonFieldErrors || [] as msg}
-            <Alert label={msg} />
-          {/each}
-          <div class="mb-s16 flex flex-col md:flex-row md:gap-s16 lg:flex-col">
-            <Field
-              name="email"
-              errorMessages={$formErrors.email}
-              label="Courriel"
-              vertical
-              type="email"
-              bind:value={email}
-              required
-              placeholder="Courriel utilisé lors de l’inscription"
-              autocomplete="email"
-            />
-            <Field
-              name="password"
-              errorMessages={$formErrors.password}
-              label="Mot de passe"
-              vertical
-              type="password"
-              placeholder="••••••••"
-              bind:value={password}
-              autocomplete="current-password"
-              required
-            />
-          </div>
+  <FieldSet headerBg="bg-magenta-brand" noHeaderBorder noTopPadding>
+    <div class="flex-1">
+      <h2 class="mb-s32 text-france-blue">Accédez à votre compte</h2>
 
-          <div class="flex flex-col">
-            <Button
-              type="submit"
-              disabled={!email || !password}
-              label="Se connecter"
-              preventDefaultOnMouseDown
-            />
+      <div class="rounded-lg bg-info-light p-s16">
+        <h4 class="flex text-info">
+          <div class="mr-s8 inline-block h-s24 w-s24 fill-current">
+            {@html informationLineIcon}
           </div>
-          <div class="mt-s16">
-            <a
-              class="text-center text-f12 text-gray-text-alt2 underline"
-              href="/auth/mdp-perdu">Mot de passe oublié ?</a
-            >
-          </div>
-        {/if}
-      </Fieldset>
-    </Form>
-  </div>
+          <div>DORA passe à Inclusion Connect&nbsp!</div>
+        </h4>
+        <div class="legend mb-s16 text-gray-text">
+          Si vous avez un Compte DORA, il vous suffit de créer un compte
+          Inclusion Connect avec la même adresse e-mail afin de retrouver les
+          mêmes droits et données.
+        </div>
+      </div>
 
-  <Notice title="Vous n'avez pas encore de compte ?">
-    <LinkButton
-      slot="button"
-      label="Créer un compte"
-      secondary
-      nofollow
-      small
-      to={`/auth/inscription`}
-    />
-  </Notice>
+      <p class="mt-s24 mb-s24" />
+      <div class="mb-s40">
+        <a
+          href="/auth/ic-connect?next={encodeURIComponent(nextPage)}{loginHint}"
+        >
+          <div
+            class="mx-auto flex items-center justify-center rounded bg-[#000638] px-s12 py-s12 text-f16 font-bold text-white "
+          >
+            <img src={logoIC} alt="" width="32" height="35" />
+            <div class="ml-s10">S’identifier avec Inclusion Connect</div>
+          </div>
+        </a>
+
+        <div class="my-s24 text-center">
+          <a
+            class="text-magenta-cta underline"
+            target="_blank"
+            title="Ouverture dans une nouvelle fenêtre"
+            rel="noopener nofollow noreferrer"
+            href="https://aide.dora.fabrique.social.gouv.fr/fr/"
+          >
+            Besoin d’aide&nbsp;? Contactez-nous
+          </a>
+        </div>
+
+        <hr class="my-s24 " />
+
+        <div class="flex h-s35 items-center justify-center gap-s48 ">
+          <img
+            width="126"
+            height="36"
+            src={logoC1}
+            alt="Les emplois de l'inclusion, la communauté de l'inclusion, DORA"
+          />
+          <img
+            width="126"
+            height="36"
+            src={logoDora}
+            alt="Les emplois de l'inclusion, la communauté de l'inclusion, DORA"
+          />
+        </div>
+        <div class="mt-s24 text-center">
+          Avec <strong>Inclusion Connect</strong> vous pouvez accéder aux différents
+          services partenaires avec le même identifiant et mot de passe.
+        </div>
+        <div class="text-center">
+          <a
+            class="text-magenta-cta underline"
+            target="_blank"
+            rel="noopener nofollow noreferrer"
+            href="https://kindly-sunscreen-95c.notion.site/Simplifions-l-utilisation-des-services-destination-des-professionnels-de-l-inclusion-ded9135197654da590f5dde41d8bb68b"
+          >
+            En savoir plus
+          </a>
+        </div>
+      </div>
+    </div>
+  </FieldSet>
 </AuthLayout>

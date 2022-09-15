@@ -1,5 +1,5 @@
 <script>
-  import { userInfo, refreshUserInfo, token } from "$lib/auth";
+  import { refreshUserInfo, token, userInfo } from "$lib/auth";
   import { getApiURL } from "$lib/utils/api.js";
   import { userProfileSchema } from "$lib/schemas/auth";
   import { formErrors } from "$lib/validation.js";
@@ -77,6 +77,7 @@
       type="text"
       placeholder="Aurélien"
       bind:value={firstName}
+      disabled
     />
     <SchemaField
       name="lastName"
@@ -87,6 +88,7 @@
       type="text"
       placeholder="Durand"
       bind:value={lastName}
+      disabled
     />
     <SchemaField
       name="email"

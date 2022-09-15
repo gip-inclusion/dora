@@ -9,15 +9,15 @@ export async function handleError({ error, event }) {
 
 // Pages sur lesquelles ont ne veut pas de SSR…
 const noSsrPaths = [
-  // pour raison de performance, la requete étant lourde, et on ne tient pas forcément
+  // pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
   // à ce qu'elles soient indexées
   "/recherche",
 
-  // pages authentifiée, ou faisant des actions particulières avec le token,
+  // pages authentifiée ou effectuant des actions particulières avec le token,
   // que le SSR pourrait invalider
   "/auth",
 
-  // pages authentifiées, ou la première requête non authentifiée n'a pas de sens
+  // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
   "/services/creer",
   "/structures/creer",
   "/modeles/creer",

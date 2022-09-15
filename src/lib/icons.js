@@ -18,6 +18,7 @@ export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill
 export { default as externalLinkIcon } from "remixicon/icons/System/external-link-line.svg?raw";
 export { default as alertIcon } from "remixicon/icons/System/alert-fill.svg?raw";
 export { default as informationIcon } from "remixicon/icons/System/information-fill.svg?raw";
+export { default as informationLineIcon } from "remixicon/icons/System/information-line.svg?raw";
 export { default as checkBoxBlankIcon } from "remixicon/icons/System/checkbox-blank-circle-fill.svg?raw";
 export { default as errorWarningIcon } from "remixicon/icons/System/error-warning-fill.svg?raw";
 export { default as errorWarningLineIcon } from "remixicon/icons/System/error-warning-line.svg?raw";

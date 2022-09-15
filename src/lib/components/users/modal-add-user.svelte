@@ -29,7 +29,7 @@
   export let members;
   export let onRefresh;
 
-  let firstName, lastName, email;
+  let email;
   let level = "user";
   let successEmailMsg;
   let confirmationModalIsOpen = false;
@@ -56,8 +56,6 @@
       method: "POST",
       body: JSON.stringify({
         user: {
-          firstName: validatedData.firstName,
-          lastName: validatedData.lastName,
           email: validatedData.email,
         },
         isAdmin: validatedData.level === "admin",
@@ -74,8 +72,7 @@
     await onRefresh();
     isOpen = false;
     successEmailMsg = email;
-    firstName = null;
-    lastName = null;
+
     email = null;
     level = "user";
     confirmationModalIsOpen = true;
@@ -84,7 +81,7 @@
 
 <Modal bind:isOpen title="Nouveau collaborateur">
   <Form
-    data={{ firstName, lastName, email, level }}
+    data={{ email, level }}
     schema={addUserSchema}
     onChange={handleChange}
     onSubmit={handleSubmit}
@@ -92,27 +89,6 @@
     bind:requesting
   >
     <Fieldset>
-      <Field
-        name="firstName"
-        errorMessages={$formErrors.firstName}
-        label="Prénom"
-        vertical
-        type="text"
-        placeholder="Aurélien"
-        bind:value={firstName}
-        required
-      />
-      <Field
-        name="lastName"
-        errorMessages={$formErrors.lastName}
-        label="Nom"
-        vertical
-        type="text"
-        placeholder="Durand"
-        bind:value={lastName}
-        required
-      />
-
       <Field
         name="email"
         errorMessages={$formErrors.email}
@@ -141,7 +117,7 @@
       <Button
         type="submit"
         label="Envoyer l’invitation"
-        disabled={!firstName || !lastName || !email || !level || requesting}
+        disabled={!email || !level || requesting}
         preventDefaultOnMouseDown
       />
     </div>
