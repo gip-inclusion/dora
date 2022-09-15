@@ -109,6 +109,7 @@ export async function modifyStructure(structure) {
 }
 
 let structuresOptions;
+
 export async function getStructuresOptions() {
   if (!structuresOptions) {
     const url = `${getApiURL()}/structures-options/`;
@@ -260,5 +261,5 @@ export async function rejectMembershipRequest(uuid) {
 }
 
 export function isStructureInformationsComplete(structure) {
-  return validate(structure, structureSchema).valid;
+  return validate(structure, structureSchema, { noScroll: true }).valid;
 }

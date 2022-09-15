@@ -1,4 +1,6 @@
 import { writable } from "svelte/store";
+import { browser } from "$app/env";
+
 export const contextValidationKey = {};
 export const formErrors = writable({});
 
@@ -64,8 +66,10 @@ function validateField(fieldname, shape, data, extraData, schema) {
 }
 
 function scrollToField(fieldname) {
-  const elt = document.getElementsByName(fieldname);
-  elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (browser) {
+    const elt = document.getElementsByName(fieldname);
+    elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 export function validate(
