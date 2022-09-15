@@ -35,22 +35,22 @@ export function fromJsonToOsmString(data: OsmOpeningHours) {
 }
 
 function formatDay(lineday: OsmDay, prefix: DayPrefix): string | undefined {
-  const { morning, afternoon } = lineday;
+  const { timeSlot1, timeSlot2 } = lineday;
 
-  if (!morning.isOpen && !afternoon.isOpen) return undefined;
+  if (!timeSlot1.isOpen && !timeSlot2.isOpen) return undefined;
 
   let str = `${prefix} `;
 
-  if (morning.isOpen) str += `${morning.openAt}-${morning.closeAt}`;
-  if (morning.isOpen && afternoon.isOpen) str += ",";
-  if (afternoon.isOpen) str += `${afternoon.openAt}-${afternoon.closeAt}`;
+  if (timeSlot1.isOpen) str += `${timeSlot1.openAt}-${timeSlot1.closeAt}`;
+  if (timeSlot1.isOpen && timeSlot2.isOpen) str += ",";
+  if (timeSlot2.isOpen) str += `${timeSlot2.openAt}-${timeSlot2.closeAt}`;
 
   return str;
 }
 
 function isDayValid(lineday: OsmDay): boolean {
   return (
-    isPeriodDayValid(lineday.morning) && isPeriodDayValid(lineday.afternoon)
+    isPeriodDayValid(lineday.timeSlot1) && isPeriodDayValid(lineday.timeSlot2)
   );
 }
 function isPeriodDayValid(period: OsmPeriodDay): boolean {
@@ -61,20 +61,20 @@ function isPeriodDayValid(period: OsmPeriodDay): boolean {
 export function getHoursFromStr(value: string): OsmOpeningHours {
   // Base object for all close
   const baseObject = returnEmptyHoursData();
-  baseObject.monday.morning.isOpen = false;
-  baseObject.monday.afternoon.isOpen = false;
-  baseObject.tuesday.morning.isOpen = false;
-  baseObject.tuesday.afternoon.isOpen = false;
-  baseObject.wednesday.morning.isOpen = false;
-  baseObject.wednesday.afternoon.isOpen = false;
-  baseObject.thursday.morning.isOpen = false;
-  baseObject.thursday.afternoon.isOpen = false;
-  baseObject.friday.morning.isOpen = false;
-  baseObject.friday.afternoon.isOpen = false;
-  baseObject.saturday.morning.isOpen = false;
-  baseObject.saturday.afternoon.isOpen = false;
-  baseObject.sunday.morning.isOpen = false;
-  baseObject.sunday.afternoon.isOpen = false;
+  baseObject.monday.timeSlot1.isOpen = false;
+  baseObject.monday.timeSlot2.isOpen = false;
+  baseObject.tuesday.timeSlot1.isOpen = false;
+  baseObject.tuesday.timeSlot2.isOpen = false;
+  baseObject.wednesday.timeSlot1.isOpen = false;
+  baseObject.wednesday.timeSlot2.isOpen = false;
+  baseObject.thursday.timeSlot1.isOpen = false;
+  baseObject.thursday.timeSlot2.isOpen = false;
+  baseObject.friday.timeSlot1.isOpen = false;
+  baseObject.friday.timeSlot2.isOpen = false;
+  baseObject.saturday.timeSlot1.isOpen = false;
+  baseObject.saturday.timeSlot2.isOpen = false;
+  baseObject.sunday.timeSlot1.isOpen = false;
+  baseObject.sunday.timeSlot2.isOpen = false;
 
   const hoursByDay = value.split(";");
 
@@ -92,26 +92,26 @@ export function getHoursFromStr(value: string): OsmOpeningHours {
     if (dayPrefix === "Su") dayKey = "sunday";
 
     if (hours.includes(",")) {
-      const [morningHours, afternoonHours] = hours.split(",");
+      const [timeSlot1Hours, timeSlot2Hours] = hours.split(",");
 
-      baseObject[dayKey].morning.isOpen = !!morningHours;
-      baseObject[dayKey].afternoon.isOpen = !!afternoonHours;
+      baseObject[dayKey].timeSlot1.isOpen = !!timeSlot1Hours;
+      baseObject[dayKey].timeSlot2.isOpen = !!timeSlot2Hours;
 
-      if (morningHours) {
-        const [openAt, closeAt] = morningHours.split("-");
-        baseObject[dayKey].morning.openAt = openAt;
-        baseObject[dayKey].morning.closeAt = closeAt;
+      if (timeSlot1Hours) {
+        const [openAt, closeAt] = timeSlot1Hours.split("-");
+        baseObject[dayKey].timeSlot1.openAt = openAt;
+        baseObject[dayKey].timeSlot1.closeAt = closeAt;
       }
-      if (afternoonHours) {
-        const [openAt, closeAt] = afternoonHours.split("-");
-        baseObject[dayKey].afternoon.openAt = openAt;
-        baseObject[dayKey].afternoon.closeAt = closeAt;
+      if (timeSlot2Hours) {
+        const [openAt, closeAt] = timeSlot2Hours.split("-");
+        baseObject[dayKey].timeSlot2.openAt = openAt;
+        baseObject[dayKey].timeSlot2.closeAt = closeAt;
       }
     } else {
-      // Horaire du matin ou de l'après-mdi
+      // Horaire du matin/journée ou de l'après-mdi
       const dayPeriodKey: DayPeriod = isAfternoonHour(hours)
-        ? "afternoon"
-        : "morning";
+        ? "timeSlot2"
+        : "timeSlot1";
 
       const [openAt, closeAt] = hours.split("-");
       baseObject[dayKey][dayPeriodKey].isOpen = true;
@@ -126,32 +126,32 @@ export function getHoursFromStr(value: string): OsmOpeningHours {
 export function returnEmptyHoursData(): OsmOpeningHours {
   return {
     monday: {
-      morning: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      afternoon: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
     },
     tuesday: {
-      morning: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      afternoon: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
     },
     wednesday: {
-      morning: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      afternoon: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
     },
     thursday: {
-      morning: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      afternoon: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
     },
     friday: {
-      morning: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      afternoon: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
     },
     saturday: {
-      morning: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-      afternoon: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
     },
     sunday: {
-      morning: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-      afternoon: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
     },
   };
 }

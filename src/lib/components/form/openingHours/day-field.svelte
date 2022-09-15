@@ -86,7 +86,9 @@
   >
     <label class="flex justify-center">
       <span class="sr-only">
-        Ouvert {dayPeriod === "morning" ? "le matin" : "l'après-midi"}
+        {dayPeriod === "timeSlot1"
+          ? "Ouvrir sur une première plage horaire"
+          : "Ouvrir une seconde plage horaire"}
       </span>
 
       <ToggleCheckboxInput

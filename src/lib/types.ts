@@ -42,8 +42,8 @@ export type OsmPeriodDay = {
   closeAt: string;
 };
 export type OsmDay = {
-  morning: OsmPeriodDay;
-  afternoon: OsmPeriodDay;
+  timeSlot1: OsmPeriodDay;
+  timeSlot2: OsmPeriodDay;
 };
 
 export type OsmOpeningHours = {
@@ -173,4 +173,4 @@ export type Day =
   | "saturday"
   | "sunday";
 export type DayPrefix = "Mo" | "Tu" | "We" | "Th" | "Fr" | "Sa" | "Su";
-export type DayPeriod = "morning" | "afternoon";
+export type DayPeriod = "timeSlot1" | "timeSlot2";

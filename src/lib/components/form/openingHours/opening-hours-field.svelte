@@ -48,41 +48,47 @@
   <div class="mt-s24">
     <div class="day-grid hidden md:block">
       <div>&nbsp;</div>
-      <div class="text-center font-bold" aria-hidden="true">Matin</div>
-      <div class="text-center font-bold" aria-hidden="true">Après-midi</div>
+      <div class="text-center font-bold" aria-hidden="true">
+        Plage horaire 1
+      </div>
+      <div class="text-center font-bold" aria-hidden="true">
+        Plage horaire 2
+      </div>
     </div>
 
     <!-- Lundi -->
     {#each weekDays as { label, day }}
       <div class="day-grid day">
         <div class="self-center font-bold text-gray-dark">{label}</div>
-        <div class="!mb-s10 block text-center font-bold md:hidden">Matin</div>
+        <div class="!mb-s10 block text-center font-bold md:hidden">
+          Plage horaire 1
+        </div>
 
         <div class="mr-s0 md:mr-s8">
           <DayField
-            bind:isOpen={data[day].morning.isOpen}
-            bind:touched={data[day].morning.touched}
-            bind:openAt={data[day].morning.openAt}
-            bind:closeAt={data[day].morning.closeAt}
-            label="{label.toLowerCase()} matin"
+            bind:isOpen={data[day].timeSlot1.isOpen}
+            bind:touched={data[day].timeSlot1.touched}
+            bind:openAt={data[day].timeSlot1.openAt}
+            bind:closeAt={data[day].timeSlot1.closeAt}
+            label="{label.toLowerCase()} matin ou toute la journée"
             {day}
-            dayPeriod="morning"
-            on:change={() => handleHourChange(day, "morning")}
+            dayPeriod="timeSlot1"
+            on:change={() => handleHourChange(day, "timeSlot1")}
           />
         </div>
         <div>
           <div class="mb-s10 block text-center font-bold md:hidden">
-            Après-midi
+            Plage horaire 2
           </div>
           <DayField
-            bind:isOpen={data[day].afternoon.isOpen}
-            bind:openAt={data[day].afternoon.openAt}
-            bind:touched={data[day].afternoon.touched}
-            bind:closeAt={data[day].afternoon.closeAt}
-            label="{label.toLowerCase()}  après-midi"
+            bind:isOpen={data[day].timeSlot2.isOpen}
+            bind:openAt={data[day].timeSlot2.openAt}
+            bind:touched={data[day].timeSlot2.touched}
+            bind:closeAt={data[day].timeSlot2.closeAt}
+            label="{label.toLowerCase()} après-midi"
             {day}
-            dayPeriod="afternoon"
-            on:change={() => handleHourChange(day, "afternoon")}
+            dayPeriod="timeSlot2"
+            on:change={() => handleHourChange(day, "timeSlot2")}
           />
         </div>
       </div>
