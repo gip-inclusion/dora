@@ -10,7 +10,7 @@ export type Structure = {
   openingHoursDetails: string | undefined;
   shortDesc: string;
   fullDesc: string;
-
+  isAdmin: boolean;
   address1: string;
   address2: string;
   latitude: number;

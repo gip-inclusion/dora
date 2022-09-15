@@ -3,6 +3,8 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import Notice from "$lib/components/notice.svelte";
   import TextClamp from "$lib/components/text-clamp.svelte";
+  import { token, userInfo } from "$lib/auth";
+
   import {
     computerIcon,
     editIcon,
@@ -31,6 +33,7 @@
       ).label;
     })
     .join(", ");
+  $: canManageStructure = $token && (structure.isAdmin || $userInfo?.isStaff);
 </script>
 
 <div class="mb-s40">
@@ -38,15 +41,17 @@
     class="flex flex-col justify-between border-b border-gray-03 pb-s40 sm:flex-row"
   >
     <h2 class="text-france-blue">Informations</h2>
-    <div class="text-right">
-      <LinkButton
-        id="update-structure"
-        label="Modifier les informations"
-        to="/structures/{structure.slug}/editer"
-        icon={editIcon}
-        iconOnRight
-      />
-    </div>
+    {#if canManageStructure}
+      <div class="text-right">
+        <LinkButton
+          id="update-structure"
+          label="Modifier les informations"
+          to="/structures/{structure.slug}/editer"
+          icon={editIcon}
+          iconOnRight
+        />
+      </div>
+    {/if}
   </div>
   {#if structure.modificationDate}
     <p class="mt-s40 mb-s0 text-f12 text-gray-dark">
@@ -58,26 +63,28 @@
 
 <div class="structure-body">
   <div class="notice">
-    {#if !isStructureInformationsComplete(structure)}
-      <Notice
-        title="Les informations de votre structure ne sont pas complètes"
-        type="warning"
-        showIcon={false}
-      >
-        <div class="flex flex-col">
-          <p class="mb-s24 text-f14">
-            En complétant votre fiche, vous gagnerez en visibilité auprès des
-            acteurs locaux et régionaux.
-          </p>
-          <p>
-            <LinkButton
-              to={`/structures/${structure.slug}/editer`}
-              label="Mettre à jour"
-              small
-            />
-          </p>
-        </div>
-      </Notice>
+    {#if canManageStructure}
+      {#if !isStructureInformationsComplete(structure)}
+        <Notice
+          title="Les informations de votre structure ne sont pas complètes"
+          type="warning"
+          showIcon={false}
+        >
+          <div class="flex flex-col">
+            <p class="mb-s24 text-f14">
+              En complétant votre fiche, vous gagnerez en visibilité auprès des
+              acteurs locaux et régionaux.
+            </p>
+            <p>
+              <LinkButton
+                to={`/structures/${structure.slug}/editer`}
+                label="Mettre à jour"
+                small
+              />
+            </p>
+          </div>
+        </Notice>
+      {/if}
     {/if}
   </div>
 
@@ -96,7 +103,7 @@
       {#if structure.otherLabels}
         <div class="flex-1">
           <h3 class="mb-s10 text-f17 text-france-blue">Autres labels</h3>
-          <p class="m-s0 break-words text-f14">{structure.otherLabels}</p>
+          <p class="m-s0 break-all text-f14">{structure.otherLabels}</p>
         </div>
       {/if}
     </div>
