@@ -21,7 +21,7 @@
 
   export let servicesOptions, serviceSchema, service, canAddChoices;
   export let model = null;
-  export let typologyFieldDisabled = true;
+  export let typologyFieldDisabled = false;
 
   let subcategories = [];
   let showModelSubcategoriesUseValue = true;

@@ -130,7 +130,7 @@
         {model}
         {serviceSchema}
         canAddChoices={!model?.customizableChoicesSet}
-        typologyFieldDisabled={model && model.canUpdateCategory === false}
+        typologyFieldDisabled={model && model.canUpdateCategories === false}
       />
     </div>
   </CenteredGrid>

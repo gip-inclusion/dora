@@ -10,10 +10,19 @@ export const SERVICE_STATUSES = {
 };
 
 export function allCategoriesHaveSubcategories() {
-  return (name, value, data, extraData) => {
+  return (name, value, data, extraData, schema) => {
     const subcatRoots = new Set(
       data.subcategories.map((value) => value.split("--")[0])
     );
+
+    // Pas besoin de vérifier les sous-catégories si le champs est optionnel
+    const required = schema[name]?.required ?? false;
+    if (!required) {
+      return {
+        valid: true,
+      };
+    }
+
     if (!extraData) {
       log("Missing servicesOptions in rules check");
       return {

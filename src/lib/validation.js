@@ -23,7 +23,7 @@ function clearError(fieldname) {
   });
 }
 
-function validateField(fieldname, shape, data, extraData) {
+function validateField(fieldname, shape, data, extraData, schema) {
   const originalValue = data[fieldname];
 
   let value = originalValue;
@@ -47,7 +47,7 @@ function validateField(fieldname, shape, data, extraData) {
   }
 
   for (const rule of shape.rules) {
-    const result = rule(`${fieldname}`, value, data, extraData);
+    const result = rule(`${fieldname}`, value, data, extraData, schema);
 
     if (!result.valid) {
       return { originalValue, valid: false, msg: result.msg };
@@ -88,7 +88,8 @@ export function validate(
       fieldname,
       shape,
       data,
-      extraData
+      extraData,
+      schema
     );
 
     isValid &&= valid;
@@ -118,7 +119,13 @@ export function validate(
           value: depValue,
           valid: depValid,
           msg: depMsg,
-        } = validateField(depName, fullSchema[depName], data, extraData);
+        } = validateField(
+          depName,
+          fullSchema[depName],
+          data,
+          extraData,
+          schema
+        );
 
         isValid &&= depValid;
         validatedData[depName] = depValue;
