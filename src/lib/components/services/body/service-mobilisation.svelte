@@ -1,39 +1,14 @@
 <script>
-  import { token, userInfo } from "$lib/auth";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import { CANONICAL_URL } from "$lib/env";
+  import { token } from "$lib/auth";
+  import Button from "$lib/components/button.svelte";
+  import ServiceContact from "$lib/components/services/body/service-contact.svelte";
+  import ServiceLoginNotice from "$lib/components/services/body/service-login-notice.svelte";
 
   export let service;
-
-  export let pagePath = `/services/${service.slug}`;
-
-  const emailSubject = encodeURIComponent(
-    `Candidature ${service.name} / Demande d'orientation`
-  );
-  const emailBody = encodeURIComponent(
-    `
-  Bonjour,
-
-  Je vous contacte concernant l’offre ${
-    service.name
-  } sur dora.fabrique.social.gouv.fr.
-  ${CANONICAL_URL}/services/${service.slug}
-
-
-  [Votre message ici]
-
-
-  Cordialement,
-  ${$userInfo?.fullName}
-  [Votre affiliation]
-
-  [Rappel des justificatifs à joindre:]
-
-  ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
-  `.trim()
-  );
+  let contactOpen = false;
 
   function trackClick() {
+    contactOpen = true;
     plausible("mobilisation-contact", {
       props: {
         service: service.name,
@@ -47,13 +22,22 @@
   $: showContact = service?.isContactInfoPublic || $token;
 </script>
 
-{#if service.contactEmail && showContact}
+<h2 class="text-f23">Mobiliser le service</h2>
+
+{#if showContact}
   <div class="noprint w-full sm:w-auto">
-    <LinkButton
-      on:click={trackClick}
-      label="Mobiliser le service"
-      wFull
-      to="mailto:{service.contactEmail}?subject={emailSubject}&body={emailBody}"
-    />
+    {#if !contactOpen}
+      <div class="mb-s16">
+        <Button
+          on:click={trackClick}
+          label="Voir les informations de contact"
+          wFull
+        />
+      </div>
+    {:else}
+      <ServiceContact {service} />
+    {/if}
   </div>
+{:else}
+  <ServiceLoginNotice />
 {/if}
