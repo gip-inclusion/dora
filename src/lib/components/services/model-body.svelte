@@ -1,12 +1,10 @@
 <script>
-  import OrientationBox from "./service-orientation.svelte";
   import ServicePresentation from "./body/presentation/service-description.svelte";
-  import { addlinkToUrls, shortenString } from "$lib/utils";
+  import { addlinkToUrls } from "$lib/utils";
   import Tag from "$lib/components/tag.svelte";
   import { formatFilePath } from "$lib/utils/service";
 
   export let service;
-  export let isModel = false;
 </script>
 
 <div class="flex flex-col gap-s24 lg:flex-row">
@@ -14,20 +12,17 @@
     <div class="mb-s8 flex flex-wrap gap-s8">
       {#if service.isCumulative}
         <Tag bgColorClass="bg-info" textColorClass="text-white"
-          >Service cumulable</Tag
-        >
+          >Service cumulable
+        </Tag>
       {:else}
         <Tag bgColorClass="bg-warning" textColorClass="text-white"
-          >Service non cumulable</Tag
-        >
+          >Service non cumulable
+        </Tag>
       {/if}
       {#if service.hasFee}
         <Tag bgColorClass="bg-warning" textColorClass="text-white"
-          >Frais à charge du bénéficiaire</Tag
-        >
-      {/if}
-      {#if !isModel && service.locationKinds.includes("a-distance")}
-        <Tag bgColorClass="bg-info" textColorClass="text-white">À distance</Tag>
+          >Frais à charge du bénéficiaire
+        </Tag>
       {/if}
     </div>
     <div class="mb-s12 flex flex-wrap gap-s8">
@@ -45,31 +40,6 @@
   </div>
 
   <div class="lg:w-1/3">
-    {#if !isModel && service.locationKinds.length}
-      {#if service.locationKinds.includes("en-presentiel")}
-        <h4>En présentiel</h4>
-        <p class="pb-s16 text-f14">
-          {service.address1}<br />
-          {#if service.address2}{service.address2}<br />{/if}
-          {service.postalCode}
-          {service.city}
-        </p>
-      {/if}
-      {#if service.locationKinds.includes("a-distance")}
-        <strong>À distance</strong>
-        <p class="pb-s16 text-f14">
-          <a
-            target="_blank"
-            rel="noopener nofollow"
-            href={service.remoteUrl}
-            title="Ouverture dans une nouvelle fenêtre"
-          >
-            {shortenString(service.remoteUrl, 35)}
-          </a>
-        </p>
-      {/if}
-    {/if}
-
     {#if service.recurrence}
       <h4>Fréquence et horaires</h4>
       <p class="text-f14">{service.recurrence}</p>
@@ -99,9 +69,6 @@
           {:else}
             <li><span>Aucun</span></li>
           {/each}
-          {#if service.qpvOrZrr && !isModel}
-            <li>uniquement QPV + ZRR</li>
-          {/if}
         </ul>
 
         <h4>Pré-requis, compétences</h4>
@@ -198,9 +165,6 @@
             </li>
           {/if}
         </ul>
-      {/if}
-      {#if !isModel}
-        <OrientationBox {service} />
       {/if}
     </div>
   </div>

@@ -28,23 +28,16 @@
 
 <script>
   import { onMount } from "svelte";
+  import { trackModel } from "$lib/utils/plausible";
+
   import ModelHeader from "$lib/components/services/model-header.svelte";
   import ModelToolbar from "$lib/components/services/model-toolbar.svelte";
-  import ServiceBody from "$lib/components/services/service-body.svelte";
+  import ModelBody from "$lib/components/services/model-body.svelte";
 
   export let model;
 
   onMount(() => {
-    if (browser) {
-      plausible("model", {
-        props: {
-          model: model.name,
-          slug: model.slug,
-          structure: model.structureInfo.name,
-          departement: model.department,
-        },
-      });
-    }
+    trackModel(model);
   });
 
   async function handleRefresh() {
@@ -70,5 +63,5 @@
 </CenteredGrid>
 
 <CenteredGrid>
-  <ServiceBody service={model} isModel />
+  <ModelBody service={model} />
 </CenteredGrid>

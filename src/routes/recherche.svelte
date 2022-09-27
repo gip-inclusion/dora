@@ -75,7 +75,8 @@
 
 <script>
   import { onMount } from "svelte";
-  import { browser } from "$app/env";
+  import { trackSearch } from "$lib/utils/plausible";
+
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
 
@@ -94,18 +95,14 @@
   export let services;
 
   onMount(() => {
-    if (browser) {
-      plausible("recherche", {
-        props: {
-          categoryId,
-          subCategoryId,
-          cityCode,
-          cityLabel,
-          kindId,
-          hasNoFees,
-        },
-      });
-    }
+    trackSearch(
+      categoryId,
+      subCategoryId,
+      cityCode,
+      cityLabel,
+      kindId,
+      hasNoFees
+    );
   });
 
   let tags = [];
@@ -186,7 +183,8 @@
     </div>
     <div class="lg:w-2/3">
       <div class="mt-s16 text-f14 text-gray-text-alt2">
-        {services.length} résultat{#if services.length > 1}s{/if}
+        {services.length}
+        {services.length > 1 ? "résultats" : "résultat"}
       </div>
 
       {#if services.length}

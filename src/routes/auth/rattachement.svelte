@@ -1,6 +1,8 @@
 <script>
   import { page } from "$app/stores";
   import { token, userInfo } from "$lib/auth";
+  import { trackJoinStructure } from "$lib/utils/plausible";
+
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api.js";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import Button from "$lib/components/button.svelte";
@@ -15,7 +17,8 @@
   let tabId;
 
   async function handleJoin() {
-    plausible("inscription", { props: { step: "Adhésion structure" } });
+    trackJoinStructure();
+
     const targetUrl = `${getApiURL()}/auth/join-structure/`;
     const response = await fetch(targetUrl, {
       method: "POST",

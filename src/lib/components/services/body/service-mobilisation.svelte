@@ -1,4 +1,6 @@
 <script>
+  import { trackMobilisation } from "$lib/utils/plausible";
+
   import { token } from "$lib/auth";
   import Button from "$lib/components/button.svelte";
   import ServiceContact from "$lib/components/services/body/service-contact.svelte";
@@ -9,14 +11,7 @@
 
   function trackClick() {
     contactOpen = true;
-    plausible("mobilisation-contact", {
-      props: {
-        service: service.name,
-        slug: service.slug,
-        structure: service.structureInfo.name,
-        departement: service.department,
-      },
-    });
+    trackMobilisation(service);
   }
 
   $: showContact = service?.isContactInfoPublic || $token;
@@ -39,5 +34,5 @@
     {/if}
   </div>
 {:else}
-  <ServiceLoginNotice />
+  <ServiceLoginNotice {service} />
 {/if}

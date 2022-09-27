@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { browser } from "$app/env";
+  import { trackSuggestion } from "$lib/utils/plausible";
 
   import {
     type Service,
@@ -24,16 +24,7 @@
 
   function handleSuggestion() {
     suggestionModalIsOpen = true;
-    if (browser) {
-      window.plausible("suggestion", {
-        props: {
-          service: service.name,
-          slug: service.slug,
-          structure: service.structureInfo.name,
-          departement: service.department,
-        },
-      });
-    }
+    trackSuggestion(service);
   }
 </script>
 

@@ -1,8 +1,14 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { trackMobilisationLogin } from "$lib/utils/plausible";
+
   import LinkButton from "$lib/components/link-button.svelte";
 
-  export let isOpen;
+  export let service;
+
+  function trackClick() {
+    trackMobilisationLogin(service);
+  }
 </script>
 
 <div class="flex w-full flex-col rounded-lg bg-info-light p-s16">
@@ -16,6 +22,7 @@
 
   <div>
     <LinkButton
+      on:click={trackClick}
       small
       label="Se connecter"
       nofollow

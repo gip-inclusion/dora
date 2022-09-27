@@ -1,4 +1,6 @@
 <script>
+  import { trackMobilisationEmail } from "$lib/utils/plausible";
+
   import { CANONICAL_URL } from "$lib/env.js";
   import { userInfo } from "$lib/auth.js";
   import { mailLineIcon } from "$lib/icons";
@@ -30,10 +32,16 @@
   ${service.credentialsDisplay.map((s) => `- ${s}`).join("\n")}
   `.trim()
   );
+
+  function trackClick() {
+    trackMobilisationEmail(service);
+  }
+
 </script>
 
 <div>
   <a
+    on:click={trackClick}
     class="flex items-center text-f16"
     class:font-bold={preferred}
     href="mailto:{service.contactEmail}?subject={emailSubject}&body={emailBody}"

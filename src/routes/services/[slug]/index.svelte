@@ -45,6 +45,8 @@
 
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
+  import { trackService } from "$lib/utils/plausible";
+
   import ServiceHeader from "$lib/components/services/body/service-header.svelte";
   import ServiceToolbar from "$lib/components/services/body/toolbar/service-toolbar.svelte";
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
@@ -67,16 +69,7 @@
   const MIN_DATE_FOR_SERVICE_FEEDBACK_FROM = new Date("2022-07-21");
 
   onMount(() => {
-    if (browser) {
-      window.plausible("service", {
-        props: {
-          service: service.name,
-          slug: service.slug,
-          structure: service.structureInfo.name,
-          departement: service.department,
-        },
-      });
-    }
+    trackService(service);
   });
 
   onDestroy(() => {
