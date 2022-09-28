@@ -53,11 +53,12 @@ export async function handle({ event, resolve }) {
     `default-src 'none';  ${connectSrc}; ${scriptSrc}; ${fontSrc}; ${imgSrc}; ${styleSrc}; ${frameSrc}`
   );
 
-  if (response.headers.get("content-type").startsWith("text/html")) {
+  if (response.headers.get("content-type")?.startsWith("text/html")) {
     const body = await response.text();
     return new Response(
       body.replace("%plausible-domain%", CANONICAL_URL.split("//")[1]),
       response
     );
   }
+  return response;
 }
