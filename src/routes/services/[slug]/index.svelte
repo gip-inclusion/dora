@@ -112,13 +112,15 @@
       </div>
 
       <div class="sidebar flex flex-col gap-y-s24">
-        <div class="block rounded-lg border border-gray-02 p-s24 px-s32">
+        <div
+          class="noprint block rounded-lg border border-gray-02 p-s24 px-s32"
+        >
           <ServiceMobilisation {service} />
         </div>
         <div class="rounded-lg border border-gray-02 p-s32 pb-s48">
           <ServiceKeyInformations {service} display="sidebar" />
         </div>
-        <div class="rounded-lg border border-gray-02 p-s32 pb-s48">
+        <div class="noprint rounded-lg border border-gray-02 p-s32 pb-s48">
           <ServiceShare {service} />
         </div>
       </div>
