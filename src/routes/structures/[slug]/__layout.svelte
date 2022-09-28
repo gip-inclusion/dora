@@ -1,6 +1,6 @@
 <script context="module">
   import { getStructure } from "$lib/structures";
-
+  import { trackStructure } from "$lib/utils/plausible";
   import { structure } from "./_store";
   import { userPreferences } from "$lib/preferences";
   import { userInfo } from "$lib/auth";
@@ -50,6 +50,7 @@
     }
 
     structure.set(s);
+    trackStructure(s);
 
     return {};
   }

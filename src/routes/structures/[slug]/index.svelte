@@ -11,8 +11,6 @@
 </script>
 
 <script>
-  import { onMount } from "svelte";
-  import { trackStructure } from "$lib/utils/plausible";
   import { userInfo } from "$lib/auth";
   import { structure } from "./_store.js";
   import { getStructure } from "$lib/structures";
@@ -28,10 +26,6 @@
   async function handleRefresh() {
     $structure = await getStructure($structure.slug);
   }
-
-  onMount(() => {
-    trackStructure(structure);
-  });
 </script>
 
 <svelte:head>
