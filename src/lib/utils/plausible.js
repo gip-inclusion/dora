@@ -41,6 +41,7 @@ function _getStructureProps(structure, withUserData = false) {
     structure: structure.name,
     slug: structure.slug,
     departement: structure.department,
+    department: structure.department,
     url: `${CANONICAL_URL}/structures/${structure.slug}`,
   };
   if (withUserData) {
