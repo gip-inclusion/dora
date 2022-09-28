@@ -102,7 +102,7 @@ export function trackModel(model) {
   const props = _getServiceProps(model, true);
   props.model = props.structure;
   delete props.model;
-  _track("model", props);
+  _track("modele", props);
 }
 
 export function trackService(service) {
