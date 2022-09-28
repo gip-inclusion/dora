@@ -2,6 +2,7 @@
   import { getServicesOptions } from "$lib/services";
   import { getApiURL } from "$lib/utils/api.js";
   import { getQuery } from "./_homepage/_search";
+  import { trackSearch } from "$lib/utils/plausible.js";
 
   async function getResults({
     categoryId,
@@ -52,6 +53,22 @@
     const kindId = query.get("kinds");
     const hasNoFees = query.get("has_fee") === "0";
 
+    const services = await getResults({
+      categoryId,
+      subCategoryId,
+      cityCode,
+      kindId,
+      hasNoFees,
+    });
+    trackSearch(
+      categoryId,
+      subCategoryId,
+      cityCode,
+      cityLabel,
+      kindId,
+      hasNoFees,
+      services.length
+    );
     return {
       props: {
         categoryId,
@@ -60,13 +77,7 @@
         cityLabel,
         kindId,
         hasNoFees,
-        services: await getResults({
-          categoryId,
-          subCategoryId,
-          cityCode,
-          kindId,
-          hasNoFees,
-        }),
+        services,
         servicesOptions: await getServicesOptions(),
       },
     };
@@ -74,9 +85,6 @@
 </script>
 
 <script>
-  import { onMount } from "svelte";
-  import { trackSearch } from "$lib/utils/plausible";
-
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
 
@@ -93,17 +101,6 @@
   export let servicesOptions;
   export let categoryId, subCategoryId, cityCode, cityLabel, kindId, hasNoFees;
   export let services;
-
-  onMount(() => {
-    trackSearch(
-      categoryId,
-      subCategoryId,
-      cityCode,
-      cityLabel,
-      kindId,
-      hasNoFees
-    );
-  });
 
   let tags = [];
 

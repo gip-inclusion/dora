@@ -1,6 +1,6 @@
 import { dev } from "$app/env";
 
-import { API_URL, ENVIRONMENT } from "$lib/env";
+import { API_URL, CANONICAL_URL, ENVIRONMENT } from "$lib/env";
 import * as Sentry from "@sentry/browser";
 
 export async function handleError({ error, event }) {
@@ -53,5 +53,11 @@ export async function handle({ event, resolve }) {
     `default-src 'none';  ${connectSrc}; ${scriptSrc}; ${fontSrc}; ${imgSrc}; ${styleSrc}; ${frameSrc}`
   );
 
-  return response;
+  if (response.headers.get("content-type").startsWith("text/html")) {
+    const body = await response.text();
+    return new Response(
+      body.replace("%plausible-domain%", CANONICAL_URL.split("//")[1]),
+      response
+    );
+  }
 }

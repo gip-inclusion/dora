@@ -19,7 +19,8 @@ function _getServiceProps(service, withUserData = false) {
     slug: service.slug,
     structure: service.structureInfo.name,
     departement: service.department || service.structureInfo.department,
-    perimetre: service.diffusionZoneType,
+    department: service.department || service.structureInfo.department,
+    perimeter: service.diffusionZoneType,
     url: `${CANONICAL_URL}/services/${service.slug}`,
   };
   if (withUserData) {
@@ -81,8 +82,17 @@ export function trackSearch(
   cityCode,
   cityLabel,
   kindId,
-  hasNoFees
+  hasNoFees,
+  numResults
 ) {
+  let numResultsCat;
+  if (numResults === 0) {
+    numResultsCat = "0";
+  } else if (numResults <= 5) {
+    numResultsCat = "Entre 1 et 5";
+  } else {
+    numResultsCat = "Plus de 5";
+  }
   _track("recherche", {
     categoryId,
     subCategoryId,
@@ -91,6 +101,8 @@ export function trackSearch(
     kindId,
     hasNoFees,
     loggedIn: !!get(token),
+    numResults: numResultsCat,
+    department: cityCode?.slice(0, 2),
   });
 }
 

@@ -3,14 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    %sveltekit.head%
+    <script
+      data-domain="%plausible-domain%"
+      src="https://plausible.io/js/plausible.js"
+    ></script>
+    <script>
+      window.plausible =
+        window.plausible ||
+        function () {
+          (window.plausible.q = window.plausible.q || []).push(arguments);
+        };
+    </script>
 
-    <!-- Tarte au citron (cookies) -->
+    %sveltekit.head%
     <script
       type="text/javascript"
       src="/tarteaucitron-1.9.4/tarteaucitron.js"
     ></script>
     <script type="text/javascript" src="/tarteaucitron.init.js"></script>
+    <script src="https://tally.so/widgets/embed.js"></script>
   </head>
 
   <body>
