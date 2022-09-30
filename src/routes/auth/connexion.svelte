@@ -83,7 +83,7 @@
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
             rel="noopener nofollow noreferrer"
-            href="https://aide.dora.fabrique.social.gouv.fr/fr/"
+            href="https://aide.dora.fabrique.social.gouv.fr/fr/category/inscription-et-gestion-du-compte-ha8m5b/"
           >
             Besoin d’aide&nbsp;? Contactez-nous
           </a>
@@ -114,7 +114,7 @@
             class="text-magenta-cta underline"
             target="_blank"
             rel="noopener nofollow noreferrer"
-            href="https://kindly-sunscreen-95c.notion.site/Simplifions-l-utilisation-des-services-destination-des-professionnels-de-l-inclusion-ded9135197654da590f5dde41d8bb68b"
+            href="https://aide.dora.fabrique.social.gouv.fr/fr/article/inclusion-connect-quesaco-y13f84/"
           >
             En savoir plus
           </a>
