@@ -91,9 +91,6 @@
 {/if}
 
 {#if structure.siret}
-  <StructureFormWrapper
-    {structure}
-    {structuresOptions}
-    formTitle="Présentation"
-  />
+  <h2 class="mb-s40 border border-b-2 border-gray-02">Présentation</h2>
+  <StructureFormWrapper {structure} {structuresOptions} />
 {/if}

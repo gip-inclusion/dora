@@ -7,7 +7,9 @@
     if (!myToken) {
       return {
         status: 302,
-        redirect: `/auth/connexion?next=${encodeURIComponent(url.pathname)}`,
+        redirect: `/auth/connexion?next=${encodeURIComponent(
+          url.pathname + url.search
+        )}`,
       };
     }
 

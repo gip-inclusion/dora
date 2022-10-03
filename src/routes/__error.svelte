@@ -13,16 +13,15 @@
 
 <script>
   import { onMount } from "svelte";
-  import { browser } from "$app/env";
+  import { trackError } from "$lib/utils/plausible";
+
   import { logException } from "$lib/logger";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   export let status, error, notFound, forbidden;
 
   onMount(() => {
-    if (browser) {
-      plausible(`${status}`, { props: { path: document.location.pathname } });
-    }
+    trackError(`${status}`, document.location.pathname);
 
     if (!notFound) {
       const exc = new Error(error.message);

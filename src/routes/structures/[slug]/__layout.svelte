@@ -1,6 +1,6 @@
 <script context="module">
   import { getStructure } from "$lib/structures";
-
+  import { trackStructure } from "$lib/utils/plausible";
   import { structure } from "./_store";
   import { userPreferences } from "$lib/preferences";
   import { userInfo } from "$lib/auth";
@@ -50,20 +50,49 @@
     }
 
     structure.set(s);
+    trackStructure(s);
 
     return {};
   }
 </script>
 
-<script>
+<script lang="ts">
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Header from "./_header.svelte";
+
+  import cornerLeftVioletImg from "$lib/assets/corner-left-violet.png";
+  import cornerRightVioletImg from "$lib/assets/corner-right-violet.png";
 </script>
 
 <CenteredGrid bgColor="bg-magenta-brand" noPadding>
   <Header structure={$structure} />
 </CenteredGrid>
 
+<div class="relative hidden w-full md:block">
+  <img
+    src={cornerLeftVioletImg}
+    alt=""
+    class="noprint md absolute top-s0 left-s0"
+  />
+  <img
+    src={cornerRightVioletImg}
+    alt=""
+    class="noprint top-0 absolute right-s0"
+  />
+</div>
+
 <CenteredGrid>
   <slot />
 </CenteredGrid>
+
+<style lang="postcss">
+  img {
+    zoom: 0.6;
+  }
+
+  @screen xl {
+    img {
+      zoom: 1;
+    }
+  }
+</style>

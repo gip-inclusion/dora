@@ -65,7 +65,9 @@
       nofollow
       noBackground
       small
-      to={`/auth/connexion?next=${encodeURIComponent($page.url.pathname)}`}
+      to={`/auth/connexion?next=${encodeURIComponent(
+        $page.url.pathname + $page.url.search
+      )}`}
     />
     <hr class="my-s8 self-stretch" />
   {/if}
@@ -97,7 +99,9 @@
         label="Se connecter"
         nofollow
         secondary
-        to={`/auth/connexion?next=${encodeURIComponent($page.url.pathname)}`}
+        to={`/auth/connexion?next=${encodeURIComponent(
+          $page.url.pathname + $page.url.search
+        )}`}
       />
     {/if}
   </div>

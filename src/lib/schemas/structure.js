@@ -32,6 +32,12 @@ export default {
     rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
   },
+  accesslibreUrl: {
+    default: "",
+    name: "URL accesslibre",
+    rules: [v.isString(), v.isURL(), v.maxStrLength(255), v.isAccessLibreUrl()],
+    post: [v.trim],
+  },
   postalCode: {
     default: "",
     name: "code postal",
@@ -53,6 +59,7 @@ export default {
   email: {
     default: "",
     name: "courriel",
+    required: true,
     rules: [v.isEmail(), v.maxStrLength(255)],
     post: [v.lower, v.trim],
   },
@@ -69,5 +76,33 @@ export default {
     rules: [v.isString(), v.maxStrLength(280)],
     post: [v.trim],
   },
-  fullDesc: { default: "", rules: [v.isString()], post: [v.trim] },
+  fullDesc: {
+    default: "",
+    rules: [v.isString()],
+    post: [v.trim],
+  },
+  nationalLabels: {
+    default: [],
+    name: "nationalLabels",
+    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    post: [],
+  },
+  otherLabels: {
+    default: "",
+    name: "otherLabels",
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  openingHours: {
+    default: "",
+    name: "openingHours",
+    rules: [v.isString(), v.isNotStringInvalid(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
+  openingHoursDetails: {
+    default: "",
+    name: "openingHoursDetails",
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+  },
 };

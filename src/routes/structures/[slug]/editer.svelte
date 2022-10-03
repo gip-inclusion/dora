@@ -34,11 +34,12 @@
 </svelte:head>
 
 <EnsureLoggedIn>
+  <h2 class="mb-s40 border-b border-gray-02 pb-s40">Informations</h2>
+
   <StructureFormWrapper
     structure={$structure}
     {structuresOptions}
     modify
-    formTitle="Informations"
     onRefresh={handleRefresh}
   />
 </EnsureLoggedIn>

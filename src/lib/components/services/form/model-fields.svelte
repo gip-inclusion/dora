@@ -33,12 +33,14 @@
         isModel
       />
     {/if}
+
     {#if model?.structure}
       <FieldsCommon
         bind:service={model}
         {servicesOptions}
         serviceSchema={modelSchema}
         canAddChoices={!model.customizableChoicesSet}
+        typologyFieldDisabled={model && model.canUpdateCategories === false}
       />
     {/if}
   </div>

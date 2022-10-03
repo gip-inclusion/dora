@@ -1,6 +1,6 @@
 import { get, writable } from "svelte/store";
 import { browser } from "$app/env";
-import { getApiURL, defaultAcceptHeader } from "$lib/utils/api.js";
+import { defaultAcceptHeader, getApiURL } from "$lib/utils/api.js";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
 
@@ -14,14 +14,6 @@ export const token = writable(null);
 /** @type {Writable<{firstName: string, lastName: string, fullName: string, shortName: string, email: string, phoneNumber: string, newsletter: boolean,
             isStaff: boolean, isBizdev: boolean} | null>} */
 export const userInfo = writable(null);
-
-// Rules for auto generation by password managers
-// https://developer.apple.com/password-rules/
-// https://support.1password.com/compatible-website-design/
-// - between 9 and 129 chars
-// - not only numbers
-export const passwordRules =
-  "minlength: 9; maxlength: 128; required: upper,lower,special; allowed: unicode;";
 
 export function setToken(t) {
   token.set(t);

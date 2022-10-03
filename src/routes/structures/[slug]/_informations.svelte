@@ -1,93 +1,69 @@
-<script>
-  import { token, userInfo } from "$lib/auth";
+<script lang="ts">
+  import Date from "$lib/components/date.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import Notice from "$lib/components/notice.svelte";
   import TextClamp from "$lib/components/text-clamp.svelte";
+  import { token, userInfo } from "$lib/auth";
+
   import {
     computerIcon,
+    editIcon,
     externalLinkIcon,
-    mailIcon,
-    mapPinIcon,
-    phoneIcon,
+    mailLineIcon,
+    phoneLineIcon,
+    timeLineIcon,
+    wheelChairIcon,
   } from "$lib/icons";
   import { isStructureInformationsComplete } from "$lib/structures";
+  import type { Structure, StructuresOptions } from "$lib/types";
   import { markdownToHTML } from "$lib/utils";
+  import { formatPhoneNumber } from "$lib/utils/phone";
+  import { formatOsmHours } from "$lib/utils/structures";
 
-  export let structure;
+  export let structure: Structure;
+  export let structuresOptions: StructuresOptions;
 
   let fullDesc;
 
   $: fullDesc = markdownToHTML(structure.fullDesc);
+  $: nationalLabelsDisplay = structure.nationalLabels
+    .map((nationalLabel: string) => {
+      return structuresOptions.nationalLabels.find(
+        (n) => n.value === nationalLabel
+      ).label;
+    })
+    .join(", ");
+  $: canManageStructure = $token && (structure.isAdmin || $userInfo?.isStaff);
 </script>
 
-<div class="flex-common-css flex-col-reverse md:flex-row">
-  <div class="flex-[1]">
-    <div class="flex flex-col md:flex-row">
-      <div class="mb-s24 md:mb-s0">
-        <p class="icon-label text-f14">
-          <i class="icon mr-s8 text-magenta-cta">
-            {@html mapPinIcon}
-          </i>
-          {structure.address1}
-          {#if structure.address2}
-            <br />{structure.address2}
-          {/if}
-          <br />{structure.postalCode}
-          {structure.city}
-        </p>
-
-        {#if structure.url}
-          <p class="icon-label text-f14">
-            <i class="icon mr-s8 text-magenta-cta">
-              {@html computerIcon}
-            </i>
-            <a
-              target="_blank"
-              title="Ouverture dans une nouvelle fenêtre"
-              rel="noopener nofollow"
-              href={structure.url}
-              class="flex"
-            >
-              {structure.url}
-
-              <i class="ml-s8 mt-s2 h-s16 w-s16 fill-current">
-                {@html externalLinkIcon}
-              </i>
-            </a>
-          </p>
-        {/if}
-
-        {#if structure.email}
-          <p class="icon-label text-f14">
-            <i class="icon mr-s8 text-magenta-cta">
-              {@html mailIcon}
-            </i>
-
-            <a href="mailto:{structure.email}" class="flex">
-              {structure.email}
-              <i class="ml-s8 mt-s2 h-s16 w-s16 fill-current">
-                {@html externalLinkIcon}
-              </i>
-            </a>
-          </p>
-        {/if}
-
-        {#if structure.phone}
-          <p class="icon-label text-f14">
-            <i class="icon mr-s8 text-magenta-cta">
-              {@html phoneIcon}
-            </i>
-            <a href="tel:{structure.phone}">
-              {structure.phone}
-            </a>
-          </p>
-        {/if}
+<div class="mb-s40">
+  <div
+    class="flex flex-col justify-between border-b border-gray-03 pb-s40 sm:flex-row"
+  >
+    <h2 class="text-france-blue">Informations</h2>
+    {#if canManageStructure}
+      <div class="text-right">
+        <LinkButton
+          id="update-structure"
+          label="Modifier les informations"
+          to="/structures/{structure.slug}/editer"
+          icon={editIcon}
+          iconOnRight
+        />
       </div>
-    </div>
+    {/if}
   </div>
+  {#if structure.modificationDate}
+    <p class="mt-s40 mb-s0 text-f12 text-gray-dark">
+      Informations sur la structure mises à jour le
+      <Date date={structure.modificationDate} />
+    </p>
+  {/if}
+</div>
 
-  <div class="flex-[3]">
-    {#if $token && (structure.isAdmin || $userInfo?.isStaff)}
+<div class="structure-body">
+  <div class="notice">
+    {#if canManageStructure}
       {#if !isStructureInformationsComplete(structure)}
         <Notice
           title="Les informations de votre structure ne sont pas complètes"
@@ -108,43 +84,198 @@
             </p>
           </div>
         </Notice>
-      {:else}
-        <div class="text-right">
-          <LinkButton
-            to={`/structures/${structure.slug}/editer`}
-            label="Modifier"
-            small
-          />
-        </div>
       {/if}
     {/if}
   </div>
-</div>
 
-<div class="flex-common-css">
-  <div class="hidden flex-[1] md:block" />
-  <div class="mb-s24 flex-[3] md:mt-s24">
-    <p class="mb-s24 font-bold">{structure.shortDesc}</p>
-    {#if fullDesc}
+  <div class="data">
+    <p class="bold mb-s32 text-f21">{structure.shortDesc}</p>
+
+    <div class="flex flex-col gap-s32 md:flex-row">
+      {#if nationalLabelsDisplay}
+        <div class="flex-1">
+          <h3 class="mb-s10 text-f17 text-france-blue">Labels nationaux</h3>
+          <p class="m-s0 text-f14">
+            {nationalLabelsDisplay}
+          </p>
+        </div>
+      {/if}
+      {#if structure.otherLabels}
+        <div class="flex-1">
+          <h3 class="mb-s10 text-f17 text-france-blue">Autres labels</h3>
+          <p class="m-s0 break-all text-f14">{structure.otherLabels}</p>
+        </div>
+      {/if}
+    </div>
+  </div>
+
+  <hr class="separator" />
+
+  {#if fullDesc}
+    <div class="presentation">
+      <h3 class="text-f32 leading-32 text-france-blue md:mt-s32">
+        Présentation de la structure
+      </h3>
       <TextClamp text={fullDesc} />
-    {/if}
+    </div>
+  {/if}
+
+  <div class="sidebar">
+    <div
+      class="flex flex-col gap-s24 rounded-lg border border-gray-02 py-s24 px-s32"
+    >
+      <h3 class="mb-s8 text-france-blue">Informations pratiques</h3>
+
+      {#if structure.phone}
+        <div>
+          <h4 class="mb-s8 flex items-center">
+            <span class="mr-s8 h-s24 w-s24 fill-current">
+              {@html phoneLineIcon}
+            </span>
+            Téléphone
+          </h4>
+
+          <a class="text-gray-text underline" href="tel:{structure.phone}">
+            {formatPhoneNumber(structure.phone)}
+          </a>
+        </div>
+      {/if}
+
+      {#if structure.email}
+        <div>
+          <h4 class="mb-s8 flex items-center">
+            <span class="mr-s8 h-s24 w-s24 fill-current">
+              {@html mailLineIcon}
+            </span>
+            E-mail
+          </h4>
+          <a
+            class="break-all text-gray-text  underline"
+            href="mailto:{structure.email}">{structure.email}</a
+          >
+        </div>
+      {/if}
+
+      {#if structure.url}
+        <div>
+          <h4 class="mb-s8 flex items-center">
+            <span class="mr-s8 h-s24 w-s24 fill-current">
+              {@html computerIcon}
+            </span>
+            Site web
+          </h4>
+
+          <a
+            target="_blank"
+            title="Ouverture dans une nouvelle fenêtre"
+            rel="noopener nofollow"
+            class="break-all text-gray-text  underline"
+            href={structure.url}
+          >
+            {structure.url}
+          </a>
+        </div>
+      {/if}
+
+      {#if structure.openingHours}
+        <div>
+          <h4 class="mb-s8 flex items-center">
+            <span class="mr-s8 h-s24 w-s24 fill-current">
+              {@html timeLineIcon}
+            </span>
+            Horaires
+          </h4>
+
+          <ul class="text-f16">
+            {#each formatOsmHours(structure.openingHours) as [prefix, hourStr]}
+              <li class="mb-s8 flex items-center text-gray-text">
+                <span class="mr-s16 w-s35">{prefix}</span>
+                <span>{hourStr}</span>
+              </li>
+            {/each}
+          </ul>
+
+          {#if structure.openingHoursDetails}
+            <p class="mt-s16 mb-s0 italic text-gray-text">
+              <up>*</up>
+              {structure.openingHoursDetails}
+            </p>
+          {/if}
+        </div>
+      {/if}
+
+      {#if structure.accesslibreUrl}
+        <div>
+          <h4 class="mb-s8 flex items-center">
+            <span class="mr-s8 h-s24 w-s24 fill-current">
+              {@html wheelChairIcon}
+            </span>
+            Accessibilité
+          </h4>
+          <a
+            target="_blank"
+            title="Ouverture dans une nouvelle fenêtre"
+            rel="noopener nofollow"
+            class="items-center break-words text-gray-text underline"
+            href={structure.accesslibreUrl}
+          >
+            Retrouvez toutes les infos via ce lien<span
+              class="ml-s8 mb-s2 inline-block h-s16 w-s16 justify-end fill-current align-sub"
+            >
+              {@html externalLinkIcon}
+            </span>
+          </a>
+        </div>
+      {/if}
+    </div>
   </div>
 </div>
 
 <style lang="postcss">
-  .icon-label {
-    @apply flex flex-row items-baseline justify-start;
+  .notice {
+    grid-area: notice;
+  }
+  .data {
+    grid-area: data;
+  }
+  .separator {
+    grid-area: separator;
+  }
+  .presentation {
+    grid-area: presentation;
+  }
+  .sidebar {
+    grid-area: sidebar;
   }
 
-  .icon-label a {
-    @apply flex-initial;
+  .structure-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 6rem;
+    row-gap: 2rem;
+    grid-template-areas:
+      "notice"
+      "data"
+      "sidebar"
+      "separator"
+      "presentation";
   }
 
-  .icon {
-    @apply relative top-s2 h-s16 w-s16 flex-none fill-current;
+  @screen md {
+    .structure-body {
+      grid-template-columns: 1fr 300px;
+      column-gap: 4rem;
+      row-gap: 1rem;
+      grid-template-areas:
+        "notice sidebar"
+        "data sidebar"
+        "separator sidebar"
+        "presentation sidebar";
+    }
   }
-
-  .flex-common-css {
-    @apply flex gap-s40 md:gap-s40 lg:gap-s96;
+  @screen lg {
+    .structure-body {
+      grid-template-columns: 1fr 375px;
+    }
   }
 </style>

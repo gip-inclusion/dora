@@ -10,7 +10,7 @@
   id="service-header"
   class="relative gap-s16 lg:flex-row-reverse lg:justify-between"
 >
-  <div class="mb-s48">
+  <div class="noprint mb-s48">
     <Breadcrumb
       {service}
       structure={service.structureInfo}
@@ -30,7 +30,7 @@
       <a
         class="underline"
         href="/structures/{service.structureInfo.slug}/services"
-        >Voir les autres services ({service.structureInfo.numServices})</a
+      >Voir les autres services ({service.structureInfo.numServices})</a
       >
     </div>
   </div>

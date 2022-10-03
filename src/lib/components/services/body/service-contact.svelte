@@ -1,71 +1,69 @@
 <script lang="ts">
-  import { phoneLineIcon, mailLineIcon } from "$lib/icons";
-
   import type { DashboardService, Service } from "$lib/types";
-  import { formatPhoneNumber } from "$lib/utils/phone";
+  import ContactEmail from "./contact-email.svelte";
+  import ContactPhone from "./contact-phone.svelte";
 
   export let service: Service | DashboardService;
-  export let presentation: "inline" | "block" = "block";
-
-  const isInline = presentation === "inline";
+  const orientationMode = service.coachOrientationModes;
+  const emailPreferred =
+    service.contactEmail &&
+    (orientationMode.includes("envoyer-courriel") ||
+      orientationMode.includes("envoyer-fiche-prescription"));
+  const phonePreferred =
+    service.contactPhone && orientationMode.includes("telephoner");
+  const allPreferred = emailPreferred && phonePreferred;
+  const nonePreferred = !emailPreferred && !phonePreferred;
 </script>
 
 <div>
-  <h2 class="mb-s24" class:inline-title={isInline}>Contact</h2>
+  <div class="flex flex-col gap-s4 text-f14">
+    {#if service.contactName}
+      <p class="mb-s6 mr-s24 text-gray-dark">
+        <strong>{service.contactName}</strong>
+      </p>
+    {/if}
+    {#if emailPreferred}
+      <ContactEmail {service} preferred />
+      {#if !phonePreferred}
+        <p class="text-f12 text-gray-text">
+          Cette structure privilégie l’e-mail comme moyen pour mobiliser ce
+          service.
+        </p>
+      {/if}
+    {/if}
+    {#if phonePreferred}
+      <ContactPhone {service} preferred />
+      {#if !emailPreferred}
+        <p class="text-f12 text-gray-text">
+          Cette structure privilégie le téléphone comme moyen pour mobiliser ce
+          service.
+        </p>
+      {/if}
+    {/if}
+    {#if nonePreferred}
+      Pensez à consulter les <a href="#orientation-modes" class="underline"
+        >conditions de mobilisation</a
+      >
+    {/if}
 
-  <div
-    class="flex flex-col gap-s4 text-f14 md:flex-row md:gap-s32"
-    class:inline-container={isInline}
-  >
-    {#if service.contactName || service.contactPhone || service.contactEmail}
-      {#if service.contactName}
-        <p class="mb-s6 mr-s24 text-gray-dark">
-          <strong>{service.contactName}</strong>
-        </p>
+    <div class="my-s8 rounded-md bg-info-light p-s16 text-f14 text-gray-text">
+      Pensez à préciser que vous avez identifié le service sur DORA 😇
+    </div>
+
+    {#if !allPreferred}
+      <p class="mb-s6 mr-s24 text-gray-dark">
+        {#if nonePreferred}
+          <strong>Coordonnées</strong>
+        {:else}
+          <strong>Autres coordonnées</strong>
+        {/if}
+      </p>
+      {#if !emailPreferred && service.contactEmail}
+        <ContactEmail {service} />
       {/if}
-      {#if service.contactPhone}
-        <p class="mb-s6 mr-s24">
-          <a
-            class="flex items-center text-f16"
-            href="tel:{service.contactPhone}"
-          >
-            <span
-              class="mr-s8 h-s24 w-s24 text-gray-text"
-              aria-label="Numéro de téléphone"
-            >
-              {@html phoneLineIcon}
-            </span>
-            {formatPhoneNumber(service.contactPhone)}
-          </a>
-        </p>
+      {#if !phonePreferred && service.contactPhone}
+        <ContactPhone {service} />
       {/if}
-      {#if service.contactEmail}
-        <p>
-          <a
-            class="flex items-center text-f16 underline"
-            href="mailto:{service.contactEmail}"
-          >
-            <span class="mr-s8 h-s24 w-s24 text-gray-text" aria-label="E-mail">
-              {@html mailLineIcon}
-            </span>
-            {service.contactEmail}
-          </a>
-        </p>
-      {/if}
-    {:else}
-      <p>Aucune information de contact</p>
     {/if}
   </div>
 </div>
-
-<style lang="postcss">
-  .inline-title {
-    @apply mr-s48 mb-s0 inline-flex text-f23;
-  }
-  .inline-container {
-    @apply inline-flex items-center md:gap-s24 lg:gap-s32;
-  }
-  .inline-container p {
-    @apply m-s0 mr-s10;
-  }
-</style>
