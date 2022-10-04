@@ -8,7 +8,6 @@
 
   import Button from "$lib/components/button.svelte";
   import Field from "$lib/components/forms/field.svelte";
-  import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/modal.svelte";
   import ConfirmationModal from "./modal-confirmation.svelte";
@@ -88,30 +87,28 @@
     onSuccess={handleSuccess}
     bind:requesting
   >
-    <Fieldset>
-      <Field
-        name="email"
-        errorMessages={$formErrors.email}
-        label="Courriel"
-        vertical
-        type="email"
-        bind:value={email}
-        required
-        placeholder="nom@exemple.org"
-      />
+    <Field
+      name="email"
+      errorMessages={$formErrors.email}
+      label="Courriel"
+      vertical
+      type="email"
+      bind:value={email}
+      required
+      placeholder="nom@exemple.org"
+    />
 
-      <Field
-        name="level"
-        errorMessages={$formErrors.level}
-        label="Permissions"
-        vertical
-        type="select"
-        bind:value={level}
-        choices={levelChoices}
-        required
-        placeholder="Permissions"
-      />
-    </Fieldset>
+    <Field
+      name="level"
+      errorMessages={$formErrors.level}
+      label="Permissions"
+      vertical
+      type="select"
+      bind:value={level}
+      choices={levelChoices}
+      required
+      placeholder="Permissions"
+    />
 
     <div class="mt-s32 flex flex-row justify-end gap-s16">
       <Button
