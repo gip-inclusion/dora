@@ -7,7 +7,7 @@
 </script>
 
 <div class="markdown-wrapper prose mb-s24 w-full">
-  <TextClamp text={markdownToHTML(service.fullDesc)} />
+  <TextClamp text={markdownToHTML(service.fullDesc, 4)} />
 </div>
 
 <style lang="postcss">

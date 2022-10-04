@@ -25,7 +25,7 @@
 
   let fullDesc;
 
-  $: fullDesc = markdownToHTML(structure.fullDesc);
+  $: fullDesc = markdownToHTML(structure.fullDesc, 4);
   $: nationalLabelsDisplay = structure.nationalLabels
     .map((nationalLabel: string) => {
       return structuresOptions.nationalLabels.find(

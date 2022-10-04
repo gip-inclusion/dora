@@ -178,15 +178,15 @@
 
       <Button
         on:click={() =>
-          editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        active={editor.isActive("heading", { level: 2 })}
+          editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        active={editor.isActive("heading", { level: 1 })}
         icon={h1Icon}
       />
 
       <Button
         on:click={() =>
-          editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        active={editor.isActive("heading", { level: 3 })}
+          editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        active={editor.isActive("heading", { level: 2 })}
         icon={h2Icon}
       />
 
