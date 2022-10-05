@@ -79,7 +79,7 @@
     <PoleEmploiWarning />
   {/if}
 
-  {#if blockPoleEmploi && tabId !== "pe" && establishment?.siret.startsWith("130005481")}
+  {#if blockPoleEmploi && tabId !== "pe" && establishment?.siret?.startsWith("130005481")}
     <PoleEmploiWarning />
   {:else}
     {#if establishment?.siret}
