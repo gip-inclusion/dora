@@ -14,8 +14,11 @@
   <Label label="Nouvelle modération nécessaire" bold error />
 {:else if status === "IN_PROGRESS"}
   <Label bold wait>
-    En cours depuis le <Date {date} />
+    En cours depuis le
+    <Date {date} />
   </Label>
 {:else if status === "VALIDATED"}
   <Label label="Validé" bold success />
+{:else}
+  <Label label="Non spécifié" bold error />
 {/if}
