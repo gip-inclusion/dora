@@ -12,6 +12,7 @@
   import UpdateStatusIcon from "$lib/components/services/icons/update-status.svelte";
 
   import { editIcon } from "$lib/icons";
+  import Date from "$lib/components/date.svelte";
 
   export let service: Service;
 
@@ -38,7 +39,11 @@
           <span class="mr-s16">
             <UpdateStatusIcon {updateStatus} />
           </span>
-          <span>{label}</span>
+
+          <span class="hidden print:inline">
+            Mis à jour le <Date date={service.modificationDate} />
+          </span>
+          <span class="print:hidden">{label}</span>
         </div>
       {:else if updateStatus === SERVICE_UPDATE_STATUS.NEEDED}
         <div class="flex items-center">
@@ -47,7 +52,10 @@
           </span>
           <div>
             <div class="text-f18">
-              <strong>{label}</strong>
+              <strong class="hidden print:inline">
+                Mis à jour le <Date date={service.modificationDate} />
+              </strong>
+              <strong class="print:hidden">{label}</strong>
             </div>
             <div class="text-f14">
               Ce service n’a pas été actualisé récemment, certaines informations
