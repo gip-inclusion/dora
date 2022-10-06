@@ -118,7 +118,11 @@
           <ServiceMobilisation {service} />
         </div>
         <div class="rounded-lg border border-gray-02 p-s32 pb-s48">
-          <ServiceKeyInformations {service} display="sidebar" />
+          <ServiceKeyInformations
+            {service}
+            {servicesOptions}
+            display="sidebar"
+          />
         </div>
         <div class="noprint rounded-lg border border-gray-02 p-s32 pb-s48">
           <ServiceShare {service} />

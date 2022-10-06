@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { goto } from "$app/navigation";
 
   import Button from "$lib/components/button.svelte";
@@ -8,14 +8,16 @@
 
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import { getQuery } from "./_search";
+  import SelectField from "$lib/components/form/select-field.svelte";
+  import type { FeeCondition, ServicesOptions } from "$lib/types";
 
-  export let servicesOptions;
-  export let categoryId;
-  export let subCategoryId;
-  export let cityCode;
-  export let cityLabel;
-  export let kindId = undefined;
-  export let hasNoFees = undefined;
+  export let servicesOptions: ServicesOptions;
+  export let categoryId: string;
+  export let subCategoryId: string;
+  export let cityCode: string;
+  export let cityLabel: string;
+  export let kindId: string | undefined = undefined;
+  export let fee: FeeCondition = undefined;
 
   function handleSearch() {
     const query = getQuery({
@@ -24,7 +26,7 @@
       cityCode,
       cityLabel,
       kindId,
-      hasNoFees,
+      fee,
     });
     goto(`recherche?${query}`);
   }
@@ -109,11 +111,12 @@
       sortSelect
     />
 
-    <Field
-      type="toggle"
-      label="Sans frais à charge"
-      bind:value={hasNoFees}
-      vertical
+    <SelectField
+      label="Frais à charge"
+      name="fee"
+      placeholder="Choississez"
+      bind:value={fee}
+      choices={[{ value: "", label: "" }, ...servicesOptions.feeConditions]}
     />
 
     <Button

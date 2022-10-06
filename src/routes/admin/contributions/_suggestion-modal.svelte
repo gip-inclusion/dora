@@ -89,9 +89,8 @@
         />
 
         <Line
-          label="Frais à charge du bénéficiaire"
-          data={suggestion.serviceInfo.hasFee}
-          isBool
+          label="Frais à charge"
+          data={suggestion.serviceInfo.feeCondition}
         />
 
         <Line

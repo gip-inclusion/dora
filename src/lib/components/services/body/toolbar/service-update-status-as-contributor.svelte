@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Service } from "$lib/types";
+  import type { Service, ServicesOptions } from "$lib/types";
   import { SERVICE_UPDATE_STATUS, SERVICE_STATUSES } from "$lib/types";
   import LinkButton from "$lib/components/link-button.svelte";
   import SetAsUpdatedModal from "$lib/components/services/set-as-updated-modal.svelte";
@@ -10,6 +10,7 @@
   import Button from "$lib/components/button.svelte";
 
   export let service: Service;
+  export let servicesOptions: ServicesOptions;
 
   export let label: string;
   export let monthDiff: number;
@@ -77,6 +78,7 @@
       <SetAsUpdatedModal
         bind:isOpen={setAsUpdatedModalOpen}
         {service}
+        {servicesOptions}
         {onRefresh}
       />
     {/if}

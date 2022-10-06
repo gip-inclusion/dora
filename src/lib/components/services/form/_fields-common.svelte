@@ -18,6 +18,8 @@
   import Field from "$lib/components/forms/field.svelte";
   import Uploader from "$lib/components/uploader.svelte";
   import FieldModel from "./_field-model.svelte";
+  import SelectField from "$lib/components/form/select-field.svelte";
+  import { isNotFreeService } from "$lib/utils/service";
 
   export let servicesOptions, serviceSchema, service, canAddChoices;
   export let model = null;
@@ -448,22 +450,23 @@
 
   <FieldModel
     {showModel}
-    value={model?.hasFee}
-    serviceValue={service.hasFee}
-    useValue={useModelValue("hasFee")}
-    type="boolean"
+    value={model?.feeCondition}
+    serviceValue={service.feeCondition}
+    useValue={useModelValue("feeCondition")}
+    type="text"
   >
-    <SchemaField
-      type="toggle"
-      label={serviceSchema.hasFee.name}
-      schema={serviceSchema.hasFee}
-      name="hasFee"
-      errorMessages={$formErrors.hasFee}
-      bind:value={service.hasFee}
+    <SelectField
+      label="Frais à charge"
+      name="feeCondition"
+      placeholder="Choississez..."
+      errorMessages={$formErrors.feeCondition}
+      bind:value={service.feeCondition}
+      choices={servicesOptions.feeConditions}
+      display="vertical"
     />
   </FieldModel>
 
-  {#if !!service.hasFee}
+  {#if isNotFreeService(service.feeCondition)}
     <FieldModel
       {showModel}
       value={model?.feeDetails}
@@ -472,8 +475,8 @@
     >
       <SchemaField
         type="textarea"
-        hideLabel
-        placeholder="Adhésion, frais de location, frais de garde, etc., et les montants."
+        label="Détails des frais à charge"
+        placeholder="Merci de détailler ici les frais à charge du bénéficiaire : adhésion, frais de location, frais de garde, etc., et les montants."
         schema={serviceSchema.feeDetails}
         name="feeDetails"
         errorMessages={$formErrors.feeDetails}

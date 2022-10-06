@@ -4,7 +4,7 @@ export function getQuery({
   cityCode,
   cityLabel,
   kindId,
-  hasNoFees,
+  fee,
 }) {
   const parameters = {
     cat: categoryId,
@@ -14,9 +14,8 @@ export function getQuery({
     kinds: kindId,
   };
 
-  if (hasNoFees) {
-    // eslint-disable-next-line camelcase
-    parameters.has_fee = "0";
+  if (fee) {
+    parameters.fee = fee;
   }
 
   const query = Object.entries(parameters)

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import SchemaField from "$lib/components/forms/schema-field.svelte";
   import { formErrors } from "$lib/validation.js";
@@ -11,8 +11,13 @@
   import Notice from "$lib/components/notice.svelte";
   import Button from "$lib/components/button.svelte";
   import { tick } from "svelte";
+  import SelectField from "$lib/components/form/select-field.svelte";
+  import type { Service, ServicesOptions } from "$lib/types";
+  import { isNotFreeService } from "$lib/utils/service";
 
-  export let servicesOptions, service;
+  export let servicesOptions: ServicesOptions;
+  export let service: Service;
+
   let establishment = null;
 
   let subcategories = [];
@@ -299,20 +304,21 @@
       sortSelect
     />
 
-    <SchemaField
-      type="toggle"
+    <SelectField
       label="Frais à charge du bénéficiaire"
-      schema={contribSchema.hasFee}
-      name="hasFee"
-      errorMessages={$formErrors.hasFee}
-      bind:value={service.hasFee}
+      name="feeCondition"
+      placeholder="Choississez..."
+      errorMessages={$formErrors.feeCondition}
+      bind:value={service.feeCondition}
+      choices={servicesOptions.feeConditions}
+      display="vertical"
     />
 
-    {#if !!service.hasFee}
+    {#if isNotFreeService(service.feeCondition)}
       <SchemaField
         type="textarea"
-        hideLabel
-        placeholder="Adhésion, frais de location, frais de garde, etc., et les montants."
+        label="Détails des frais à charge"
+        placeholder="Merci de détailler ici les frais à charge du bénéficiaire : adhésion, frais de location, frais de garde, etc., et les montants."
         schema={contribSchema.feeDetails}
         name="feeDetails"
         errorMessages={$formErrors.feeDetails}

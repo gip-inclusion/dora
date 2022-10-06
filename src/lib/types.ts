@@ -70,12 +70,28 @@ export enum SERVICE_UPDATE_STATUS {
   REQUIRED = "REQUIRED",
 }
 
+export type FeeCondition =
+  | "gratuit"
+  | "gratuit-sous-conditions"
+  | "payant"
+  | "adhesion";
+
 export type Service = {
+  siret: string;
   name: string;
   slug: string;
   contactName: string | undefined;
   contactPhone: string | undefined;
   contactEmail: string | undefined;
+
+  categoriesDisplay: string[];
+  requirements: string[];
+  concernedPublic: string[];
+  kinds: string[];
+  categories: string[];
+  latitude: number;
+  longitude: number;
+  cityCode: string;
 
   subcategories: string[] | undefined;
 
@@ -112,7 +128,7 @@ export type Service = {
   modelChanged: boolean | undefined;
   hasAlreadyBeenUnpublished: boolean;
   isCumulative: boolean;
-  hasFee: boolean;
+  feeCondition: FeeCondition;
   feeDetails: string | undefined;
   recurrence: string | undefined;
   creationDate: string;
@@ -152,18 +168,29 @@ export type DashboardService = Pick<
   | "address1"
   | "address2"
   | "remoteUrl"
-  | "hasFee"
+  | "feeCondition"
   | "model"
   | "structure"
   | "qpvOrZrr"
 >;
 
 export type ServicesOptions = {
+  requirements: string[];
+  locationKinds: string[];
+  feeConditions: Choice[];
+  concernedPublic: string[];
+  kinds: string[];
+  accessConditions: string[];
   categories: { value: string; label: string }[];
   subcategories: { value: string; label: string }[];
 };
 
 // FORM
+export type Choice = {
+  value: string;
+  label: string;
+};
+
 export type Day =
   | "monday"
   | "tuesday"

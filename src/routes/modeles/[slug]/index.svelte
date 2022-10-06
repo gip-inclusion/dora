@@ -1,7 +1,7 @@
 <script context="module">
   import { browser } from "$app/env";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import { getModel } from "$lib/services";
+  import { getModel, getServicesOptions } from "$lib/services";
 
   export async function load({ params }) {
     const model = await getModel(params.slug);
@@ -21,6 +21,7 @@
     return {
       props: {
         model,
+        servicesOptions: await getServicesOptions(),
       },
     };
   }
@@ -35,6 +36,7 @@
   import ModelBody from "$lib/components/services/model-body.svelte";
 
   export let model;
+  export let servicesOptions;
 
   onMount(() => {
     trackModel(model);
@@ -63,5 +65,5 @@
 </CenteredGrid>
 
 <CenteredGrid>
-  <ModelBody service={model} />
+  <ModelBody service={model} {servicesOptions} />
 </CenteredGrid>

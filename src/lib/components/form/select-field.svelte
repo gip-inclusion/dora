@@ -1,14 +1,11 @@
 <script lang="ts">
-  type Choice = {
-    value: string;
-    label: string;
-  };
-
   import FieldWrapper from "./field-wrapper.svelte";
   import { checkIcon, arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
 
   import { uid } from "uid";
   import { clickOutside } from "$lib/components/use/click-outside";
+  import type { Choice } from "$lib/types";
+  import { getLabelFromValue } from "$lib/utils/choice";
 
   export let label: string;
   export let name: string;
@@ -18,9 +15,11 @@
   export let required = false;
   export let isMultiple = false;
   export let choices: Choice[];
-  export let handleEltChange: (d: { detail: string }) => void;
+  export let display: "horizontal" | "vertical" = "horizontal";
+  export let errorMessages: string[] | undefined = undefined;
+  export let handleEltChange: (d: { detail: string }) => void | undefined =
+    undefined;
 
-  export let errorMessages: string[];
   let ariaDescribedBy = "";
 
   // AriaDescribedBy => TODO: move to wrapper
@@ -91,7 +90,7 @@
       // As string
       value = newValue;
     }
-    handleEltChange({ detail: name });
+    if (handleEltChange) handleEltChange({ detail: name });
     if (!isMultiple) toggleCombobox(false);
   }
 
@@ -112,14 +111,14 @@
   }
 </script>
 
-<FieldWrapper {label} {name} {helper} {required} {errorMessages}>
+<FieldWrapper {label} {name} {helper} {required} {errorMessages} {display}>
   <div
     id={name}
     aria-controls={`listbox-values-${uuid}`}
     aria-expanded={expanded}
     aria-haspopup="listbox"
     aria-labelledby={`button-label-${uuid}`}
-    class="relative rounded border border-gray-03 bg-white p-s12 font-sans disabled:bg-gray-bg disabled:text-gray-text-alt"
+    class="relative w-full rounded border border-gray-03 bg-white p-s12 font-sans disabled:bg-gray-bg disabled:text-gray-text-alt {display}"
     role="combobox"
     tabindex="0"
     aria-describedby={ariaDescribedBy}
@@ -138,11 +137,11 @@
       </span>
     </div>
 
-    <div class="w-[90%] overflow-hidden text-ellipsis whitespace-nowrap">
+    <div class="w-[90%] w-full overflow-hidden text-ellipsis whitespace-nowrap">
       {#if isMultiple && value.length > 0}
         {value.map((v) => choices.find((c) => c.value === v).label).join(", ")}
       {:else if !isMultiple && value}
-        {choices.find((c) => c.value === value).label}
+        {getLabelFromValue(value, choices)}
       {:else}
         <span class="text-gray-text-alt">{placeholder}</span>
       {/if}
@@ -161,7 +160,7 @@
           ? value.includes(optionValue)
           : optionValue === value}
         <div
-          class="flex cursor-pointer items-center justify-between p-s6 text-gray-text-alt"
+          class="flex min-h-[36px] cursor-pointer items-center justify-between p-s6 text-gray-text-alt"
           role="option"
           id={optionValue}
           class:hover={optionValue === selectedOption?.value}
@@ -170,7 +169,7 @@
           on:mouseenter={() => setAsSelected(index)}
         >
           {label}
-          {#if selected}
+          {#if selected && optionValue}
             <span class="h-s24 w-s24 fill-current">
               {@html checkIcon}
             </span>
@@ -184,6 +183,12 @@
 <style lang="postcss">
   .selected {
     @apply text-magenta-cta;
+  }
+
+  @screen lg {
+    .vertical {
+      @apply lg:w-3/4;
+    }
   }
 
   .hover:not(.selected) {

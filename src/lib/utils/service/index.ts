@@ -19,6 +19,7 @@ import {
   SERVICE_STATUSES,
   SERVICE_UPDATE_STATUS,
   type DashboardService,
+  type FeeCondition,
   type Service,
   type ServicesOptions,
 } from "$lib/types";
@@ -146,4 +147,8 @@ export function formatFilePath(filePath: string) {
   const extension = file.slice(file.lastIndexOf("."), file.length);
 
   return `${name} (${extension})`;
+}
+
+export function isNotFreeService(feeConditionValue: FeeCondition): boolean {
+  return feeConditionValue !== "gratuit";
 }

@@ -6,12 +6,16 @@
   export let helper = "";
   export let required = false;
   export let hidden = false;
+  export let display: "horizontal" | "vertical" = "horizontal";
   export let errorMessages: string[];
 </script>
 
-<div class="flex flex-col" class:hidden>
+<div
+  class="flex w-full {display === 'vertical' ? 'flex-row gap-s8' : 'flex-col'}"
+  class:hidden
+>
   <label
-    class="bold mb-s8 font-bold text-gray-dark first-letter:capitalize"
+    class="bold mb-s8 font-bold text-gray-dark first-letter:capitalize {display}"
     for={name}
   >
     {label}
@@ -38,5 +42,11 @@
 <style lang="postcss">
   .helper :global(a) {
     @apply text-magenta-cta underline;
+  }
+
+  @screen lg {
+    .vertical {
+      @apply lg:w-1/4;
+    }
   }
 </style>

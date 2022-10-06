@@ -3,6 +3,7 @@
     SERVICE_STATUSES,
     SERVICE_UPDATE_STATUS,
     type Service,
+    type ServicesOptions,
   } from "$lib/types";
   import { token } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
@@ -23,7 +24,7 @@
   import { copyIcon } from "$lib/icons";
 
   export let service: Service;
-  export let servicesOptions;
+  export let servicesOptions: ServicesOptions;
   export let onRefresh: () => void;
 
   $: updateStatusData = computeUpdateStatusData(service);
@@ -56,6 +57,7 @@
           {onRefresh}
           updateStatus={updateStatusData.updateStatus}
           {service}
+          {servicesOptions}
         />
       {:else}
         <ServiceUpdateStatusAsReader
