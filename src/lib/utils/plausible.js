@@ -77,6 +77,10 @@ export function trackSuggestion(service) {
   _track("suggestion", _getServiceProps(service, true));
 }
 
+export function trackPDFDownload(service) {
+  _track("pdf-download", _getServiceProps(service, true));
+}
+
 export function trackSearch(
   categoryId,
   subCategoryId,

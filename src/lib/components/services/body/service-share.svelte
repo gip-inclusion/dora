@@ -6,6 +6,7 @@
   import { checkIcon, downloadIcon, linkIcon } from "$lib/icons";
 
   import type { DashboardService, Service } from "$lib/types";
+  import { trackPDFDownload } from "$lib/utils/plausible";
 
   export let service: Service | DashboardService;
   export let copied = false;
@@ -60,6 +61,7 @@
     icon={downloadIcon}
     label="Télécharger en PDF"
     to={pdfUrl}
+    on:click={() => trackPDFDownload(service)}
     nofollow
   />
 </div>
