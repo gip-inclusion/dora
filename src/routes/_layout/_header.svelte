@@ -35,8 +35,8 @@
         />
       </a>
       {#if browser}
+        <div class="grow" />
         <div class="print:hidden">
-          <div class="grow" />
           <HeaderActions />
         </div>
       {/if}
