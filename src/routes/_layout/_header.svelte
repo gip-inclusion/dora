@@ -11,7 +11,7 @@
 </script>
 
 <header
-  class="noprint relative shadow-md"
+  class="relative shadow-md"
   class:dev-banner={ENVIRONMENT !== "production"}
 >
   <CenteredGrid noPadding>
@@ -35,8 +35,10 @@
         />
       </a>
       {#if browser}
-        <div class="grow" />
-        <HeaderActions />
+        <div class="print:hidden">
+          <div class="grow" />
+          <HeaderActions />
+        </div>
       {/if}
     </div>
   </CenteredGrid>

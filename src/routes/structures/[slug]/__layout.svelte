@@ -72,12 +72,12 @@
   <img
     src={cornerLeftVioletImg}
     alt=""
-    class="noprint md absolute top-s0 left-s0"
+    class="md absolute top-s0 left-s0 print:hidden"
   />
   <img
     src={cornerRightVioletImg}
     alt=""
-    class="noprint top-0 absolute right-s0"
+    class="top-0 absolute right-s0 print:hidden"
   />
 </div>
 

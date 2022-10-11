@@ -47,7 +47,7 @@
   }
 </script>
 
-<nav aria-label="Fil d'ariane">
+<nav aria-label="Fil d'ariane" class="print:hidden">
   <ol class="text-f14">
     <li class="inline">
       <a

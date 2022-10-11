@@ -80,12 +80,12 @@
     <img
       src={cornerLeftBlueImg}
       alt=""
-      class="noprint absolute -top-[1px] left-s0"
+      class="absolute -top-[1px] left-s0 print:hidden"
     />
     <img
       src={cornerRightBlueImg}
       alt=""
-      class="noprint absolute -top-[1px] right-s0"
+      class="absolute -top-[1px] right-s0 print:hidden"
     />
   {/if}
 
@@ -139,9 +139,11 @@
   .NOT_NEEDED {
     @apply mx-auto flex items-center;
   }
+
   .NEEDED {
     @apply bg-service-orange;
   }
+
   .REQUIRED {
     @apply bg-service-red;
   }

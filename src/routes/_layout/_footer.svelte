@@ -10,7 +10,7 @@
   }
 </script>
 
-<footer class="noprint border-t-2 border-france-blue">
+<footer class="border-t-2 border-france-blue print:hidden">
   <CenteredGrid>
     <div class="flex gap-s24 lg:flex-row">
       <div class="mb-s24 lg:w-1/2">

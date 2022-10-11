@@ -53,7 +53,8 @@
           <div>
             <div class="text-f18">
               <strong class="hidden print:inline">
-                Mis à jour le <Date date={service.modificationDate} />
+                Mis à jour le
+                <Date date={service.modificationDate} />
               </strong>
               <strong class="print:hidden">{label}</strong>
             </div>
@@ -82,7 +83,7 @@
     {/if}
   </div>
 
-  <div class="noprint">
+  <div class="print:hidden">
     <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
     <Button
       id="suggest-update"

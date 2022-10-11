@@ -17,7 +17,7 @@
   >
     {title}
 
-    <span class="ml-s10 h-s24 w-s24 fill-current text-magenta-cta">
+    <span class="ml-s10 h-s24 w-s24 fill-current text-magenta-cta print:hidden">
       {#if expanded}
         {@html arrowUpSIcon}
       {:else}

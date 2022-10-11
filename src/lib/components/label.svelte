@@ -65,7 +65,7 @@
   }
 
   .dark-bg {
-    color: var(--col-white);
+    @apply text-white print:text-gray-text;
   }
 
   .icon {
@@ -78,11 +78,5 @@
     width: var(--s16);
     height: var(--s16);
     fill: currentColor;
-  }
-
-  @media print {
-    .dark-bg {
-      color: var(--col-text);
-    }
   }
 </style>

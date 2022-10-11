@@ -57,7 +57,7 @@
 </CenteredGrid>
 <hr />
 <CenteredGrid noPadding>
-  <div class="noprint py-s24">
+  <div class="py-s24 print:hidden">
     {#if browser}
       <ModelToolbar {model} onRefresh={handleRefresh} />
     {/if}
