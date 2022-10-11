@@ -11,7 +11,7 @@
   import Notice from "$lib/components/notice.svelte";
   import Button from "$lib/components/button.svelte";
   import { tick } from "svelte";
-  import SelectField from "$lib/components/form/select-field.svelte";
+  import SelectField from "$lib/components/form/select/select-field.svelte";
   import type { Service, ServicesOptions } from "$lib/types";
   import { isNotFreeService } from "$lib/utils/service";
 

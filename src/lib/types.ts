@@ -189,6 +189,9 @@ export type ServicesOptions = {
 export type Choice = {
   value: string;
   label: string;
+  selectedLabel?: string;
+  icon?: string;
+  iconOnRight?: boolean;
 };
 
 export type Day =

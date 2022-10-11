@@ -10,7 +10,9 @@ export { default as arrowRightSIcon } from "remixicon/icons/System/arrow-right-s
 export { default as arrowLeftIcon } from "remixicon/icons/System/arrow-left-line.svg?raw";
 export { default as arrowLeftSIcon } from "remixicon/icons/System/arrow-left-s-line.svg?raw";
 export { default as arrowUpSIcon } from "remixicon/icons/System/arrow-up-s-line.svg?raw";
+export { default as arrowUpLineIcon } from "remixicon/icons/System/arrow-up-line.svg?raw";
 export { default as arrowDownSIcon } from "remixicon/icons/System/arrow-down-s-line.svg?raw";
+export { default as arrowDownLineIcon } from "remixicon/icons/System/arrow-down-line.svg?raw";
 export { default as arrowLeftCircleIcon } from "remixicon/icons/System/arrow-left-circle-fill.svg?raw";
 export { default as starFillIcon } from "remixicon/icons/System/star-fill.svg?raw";
 export { default as checkIcon } from "remixicon/icons/System/check-line.svg?raw";

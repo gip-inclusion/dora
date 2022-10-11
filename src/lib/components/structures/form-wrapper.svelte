@@ -20,7 +20,7 @@
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import AddressSearch from "$lib/components/forms/street-search.svelte";
   import TextField from "../form/text-field.svelte";
-  import SelectField from "../form/select-field.svelte";
+  import SelectField from "../form/select/select-field.svelte";
   import type { Structure, StructuresOptions } from "$lib/types";
   import LinkButton from "../link-button.svelte";
   import OpeningHoursField from "../form/openingHours/opening-hours-field.svelte";

@@ -18,7 +18,7 @@
   import Field from "$lib/components/forms/field.svelte";
   import Uploader from "$lib/components/uploader.svelte";
   import FieldModel from "./_field-model.svelte";
-  import SelectField from "$lib/components/form/select-field.svelte";
+  import SelectField from "$lib/components/form/select/select-field.svelte";
   import { isNotFreeService } from "$lib/utils/service";
 
   export let servicesOptions, serviceSchema, service, canAddChoices;

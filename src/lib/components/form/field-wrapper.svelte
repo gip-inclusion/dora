@@ -6,6 +6,7 @@
   export let helper = "";
   export let required = false;
   export let hidden = false;
+  export let hideLabel = false;
   export let display: "horizontal" | "vertical" = "horizontal";
   export let errorMessages: string[];
 </script>
@@ -15,6 +16,7 @@
   class:hidden
 >
   <label
+    class:sr-only={hideLabel}
     class="bold mb-s8 font-bold text-gray-dark first-letter:capitalize {display}"
     for={name}
   >
