@@ -74,8 +74,15 @@
               <strong>Service en attente d’actualisation</strong>
             </div>
             <div class="text-f14">
-              Les informations sur ce service n’ont plus été mises à jour depuis {monthDiff}
-              mois.
+              <strong class="hidden print:inline">
+                Mis à jour le
+                <Date date={service.modificationDate} />
+              </strong>
+              <span class="print:hidden">
+                Les informations sur ce service n’ont plus été mises à jour
+                depuis {monthDiff}
+                mois.
+              </span>
             </div>
           </div>
         </div>

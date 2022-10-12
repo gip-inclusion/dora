@@ -64,8 +64,14 @@
               <strong>Actualisation requise</strong>
             </div>
             <div class="text-f14">
-              Ce service est dépriorisé dans les résultats de recherche, il doit
-              être actualisé pour gagner à nouveau en visibilité
+              <strong class="hidden print:inline">
+                Mis à jour le
+                <Date date={service.modificationDate} />
+              </strong>
+              <span class="print:hidden">
+                Ce service est dépriorisé dans les résultats de recherche, il
+                doit être actualisé pour gagner à nouveau en visibilité
+              </span>
             </div>
           </div>
         </div>
