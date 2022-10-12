@@ -51,7 +51,7 @@
     const cityCode = query.get("city");
     const cityLabel = query.get("cl");
     const kindId = query.get("kinds");
-    const fee = query.get("fee");
+    const fee = query.get("fee") ? query.get("fee").split(",") : [];
 
     const services = await getResults({
       categoryId,

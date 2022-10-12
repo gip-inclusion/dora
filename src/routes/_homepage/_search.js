@@ -14,7 +14,7 @@ export function getQuery({
     kinds: kindId,
   };
 
-  if (fee) {
+  if (fee?.length) {
     parameters.fee = fee;
   }
 

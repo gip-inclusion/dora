@@ -17,7 +17,7 @@
   export let cityCode: string;
   export let cityLabel: string;
   export let kindId: string | undefined = undefined;
-  export let fee: FeeCondition = undefined;
+  export let fee: FeeCondition[];
 
   function handleSearch() {
     const query = getQuery({
@@ -116,10 +116,8 @@
       name="fee"
       placeholder="Choississez"
       bind:value={fee}
-      choices={[
-        { value: "", label: "Indifférent" },
-        ...servicesOptions.feeConditions,
-      ]}
+      isMultiple
+      choices={[...servicesOptions.feeConditions]}
     />
 
     <Button
