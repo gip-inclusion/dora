@@ -19,6 +19,7 @@ import {
   SERVICE_STATUSES,
   SERVICE_UPDATE_STATUS,
   type DashboardService,
+  type FeeCondition,
   type Service,
   type ServicesOptions,
 } from "$lib/types";
@@ -61,9 +62,11 @@ export function computeUpdateStatusData(
   const yearDiff = dayjs().diff(lastUpdateDay, "year");
 
   let updateStatus = SERVICE_UPDATE_STATUS.NOT_NEEDED;
-  if (monthDiff >= 6 && monthDiff < 8)
-    updateStatus = SERVICE_UPDATE_STATUS.NEEDED;
-  if (monthDiff >= 8) updateStatus = SERVICE_UPDATE_STATUS.REQUIRED;
+  if (service.status === SERVICE_STATUSES.PUBLISHED) {
+    if (monthDiff >= 6 && monthDiff < 8)
+      updateStatus = SERVICE_UPDATE_STATUS.NEEDED;
+    if (monthDiff >= 8) updateStatus = SERVICE_UPDATE_STATUS.REQUIRED;
+  }
 
   return {
     dayDiff,
@@ -146,4 +149,8 @@ export function formatFilePath(filePath: string) {
   const extension = file.slice(file.lastIndexOf("."), file.length);
 
   return `${name} (${extension})`;
+}
+
+export function isNotFreeService(feeConditionValue: FeeCondition): boolean {
+  return feeConditionValue !== "gratuit";
 }

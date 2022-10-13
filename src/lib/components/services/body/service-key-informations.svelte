@@ -8,10 +8,13 @@
     informationIcon,
   } from "$lib/icons";
 
-  import type { DashboardService, Service } from "$lib/types";
+  import type { DashboardService, Service, ServicesOptions } from "$lib/types";
   import { shortenString } from "$lib/utils";
+  import { getLabelFromValue } from "$lib/utils/choice";
+  import { isNotFreeService } from "$lib/utils/service";
 
   export let service: Service | DashboardService;
+  export let servicesOptions: ServicesOptions;
   export let display: "sidebar" | "full" = "full";
 </script>
 
@@ -34,7 +37,7 @@
     </div>
   {/if}
 
-  {#if service.hasFee}
+  {#if service.feeCondition && isNotFreeService(service.feeCondition)}
     <div class="bold flex items-center font-bold text-error">
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
         {@html errorWarningIcon}
@@ -56,7 +59,7 @@
     <hr class="mt-s20 mb-s10" />
   {/if}
 
-  {#if service.hasFee}
+  {#if service.feeCondition && isNotFreeService(service.feeCondition)}
     <div>
       <h3>
         <span class="mr-s8 h-s24 w-s24 fill-current">
@@ -64,7 +67,10 @@
         </span>
         Frais à charge
       </h3>
-      <p>{service.feeDetails}</p>
+      <p class="block">
+        {getLabelFromValue(service.feeCondition, servicesOptions.feeConditions)}
+      </p>
+      <p class="block">{service.feeDetails}</p>
     </div>
   {/if}
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Service } from "$lib/types";
+  import type { Service, ServicesOptions } from "$lib/types";
   import { SERVICE_UPDATE_STATUS, SERVICE_STATUSES } from "$lib/types";
   import LinkButton from "$lib/components/link-button.svelte";
   import SetAsUpdatedModal from "$lib/components/services/set-as-updated-modal.svelte";
@@ -8,11 +8,12 @@
 
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
   import Button from "$lib/components/button.svelte";
+  import Date from "$lib/components/date.svelte";
 
   export let service: Service;
+  export let servicesOptions: ServicesOptions;
 
   export let label: string;
-  export let monthDiff: number;
   export let updateStatus: SERVICE_UPDATE_STATUS;
   export let onRefresh: () => void;
 
@@ -29,7 +30,11 @@
           <div class="mr-s16">
             <UpdateStatusIcon {updateStatus} />
           </div>
-          <span>{label}</span>
+
+          <span class="hidden print:inline">
+            Mis à jour le <Date date={service.modificationDate} />
+          </span>
+          <span class="print:hidden">{label}</span>
         </div>
       {:else if updateStatus === SERVICE_UPDATE_STATUS.NEEDED}
         <div class="flex items-center">
@@ -38,7 +43,10 @@
           </span>
           <div>
             <div class="text-f18">
-              <strong>{label}</strong>
+              <strong class="hidden print:inline">
+                Mis à jour le <Date date={service.modificationDate} />
+              </strong>
+              <strong class="print:hidden">{label}</strong>
             </div>
             <div class="text-f14">
               Vérifiez et/ou actualisez les informations de ce service dès
@@ -56,8 +64,14 @@
               <strong>Actualisation requise</strong>
             </div>
             <div class="text-f14">
-              Ce service est dépriorisé dans les résultats de recherche, il doit
-              être actualisé pour gagner à nouveau en visibilité
+              <strong class="hidden print:inline">
+                Mis à jour le
+                <Date date={service.modificationDate} />
+              </strong>
+              <span class="print:hidden">
+                Ce service est dépriorisé dans les résultats de recherche, il
+                doit être actualisé pour gagner à nouveau en visibilité
+              </span>
             </div>
           </div>
         </div>
@@ -77,6 +91,7 @@
       <SetAsUpdatedModal
         bind:isOpen={setAsUpdatedModalOpen}
         {service}
+        {servicesOptions}
         {onRefresh}
       />
     {/if}

@@ -10,7 +10,7 @@
   id="service-header"
   class="relative gap-s16 lg:flex-row-reverse lg:justify-between"
 >
-  <div class="noprint mb-s48">
+  <div class="mb-s48 print:mb-s0">
     <Breadcrumb
       {service}
       structure={service.structureInfo}
@@ -25,12 +25,17 @@
     class="mb-s48 flex flex-col text-f18 text-white print:text-france-blue md:flex-row md:items-center"
   >
     <div><strong>{capitalize(service.structureInfo.name)}</strong></div>
-    <div class="mx-s8 hidden font-bold md:block" aria-hidden="true">•</div>
-    <div>
+    <div
+      class="mx-s8 hidden font-bold print:hidden md:block print:md:hidden"
+      aria-hidden="true"
+    >
+      •
+    </div>
+    <div class="print:hidden">
       <a
         class="underline"
         href="/structures/{service.structureInfo.slug}/services"
-      >Voir les autres services ({service.structureInfo.numServices})</a
+        >Voir les autres services ({service.structureInfo.numServices})</a
       >
     </div>
   </div>

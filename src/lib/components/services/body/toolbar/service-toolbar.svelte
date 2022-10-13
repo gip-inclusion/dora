@@ -3,6 +3,7 @@
     SERVICE_STATUSES,
     SERVICE_UPDATE_STATUS,
     type Service,
+    type ServicesOptions,
   } from "$lib/types";
   import { token } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
@@ -23,7 +24,7 @@
   import { copyIcon } from "$lib/icons";
 
   export let service: Service;
-  export let servicesOptions;
+  export let servicesOptions: ServicesOptions;
   export let onRefresh: () => void;
 
   $: updateStatusData = computeUpdateStatusData(service);
@@ -56,6 +57,7 @@
           {onRefresh}
           updateStatus={updateStatusData.updateStatus}
           {service}
+          {servicesOptions}
         />
       {:else}
         <ServiceUpdateStatusAsReader
@@ -78,12 +80,12 @@
     <img
       src={cornerLeftBlueImg}
       alt=""
-      class="noprint absolute -top-[1px] left-s0"
+      class="absolute -top-[1px] left-s0 print:hidden"
     />
     <img
       src={cornerRightBlueImg}
       alt=""
-      class="noprint absolute -top-[1px] right-s0"
+      class="absolute -top-[1px] right-s0 print:hidden"
     />
   {/if}
 
@@ -137,9 +139,11 @@
   .NOT_NEEDED {
     @apply mx-auto flex items-center;
   }
+
   .NEEDED {
     @apply bg-service-orange;
   }
+
   .REQUIRED {
     @apply bg-service-red;
   }

@@ -6,6 +6,8 @@
   import { checkIcon, downloadIcon, linkIcon } from "$lib/icons";
 
   import type { DashboardService, Service } from "$lib/types";
+  import { SERVICE_STATUSES } from "$lib/types";
+  import { trackPDFDownload } from "$lib/utils/plausible";
 
   export let service: Service | DashboardService;
   export let copied = false;
@@ -54,12 +56,15 @@
     </span>
   </button>
 
-  <LinkButton
-    secondary
-    wFull
-    icon={downloadIcon}
-    label="Télécharger en PDF"
-    to={pdfUrl}
-    nofollow
-  />
+  {#if service.status === SERVICE_STATUSES.PUBLISHED}
+    <LinkButton
+      secondary
+      wFull
+      icon={downloadIcon}
+      label="Télécharger en PDF"
+      to={pdfUrl}
+      on:click={() => trackPDFDownload(service)}
+      nofollow
+    />
+  {/if}
 </div>

@@ -38,7 +38,7 @@
   }
 </script>
 
-<div id="home-search-form" class="rounded-md p-s24 shadow-l">
+<div id="home-search-form" class="rounded-md p-s24 shadow-md">
   {#if servicesOptions.categories}
     <form
       on:submit|preventDefault={handleSearch}
@@ -88,6 +88,7 @@
 
       <div class="self-end md:col-span-2 lg:col-span-2">
         <Button
+          extraClass="h-s48"
           type="submit"
           label="Rechercher"
           icon={searchIcon}

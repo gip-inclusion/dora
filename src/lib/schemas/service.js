@@ -56,7 +56,7 @@ const fields = {
     "concernedPublic",
     "requirements",
     "isCumulative",
-    "hasFee",
+    "feeCondition",
     "feeDetails",
     "contactName",
     "contactPhone",
@@ -80,7 +80,7 @@ const fields = {
     "concernedPublic",
     "requirements",
     "isCumulative",
-    "hasFee",
+    "feeCondition",
     "feeDetails",
     "beneficiariesAccessModes",
     "beneficiariesAccessModesOther",
@@ -119,7 +119,7 @@ const fields = {
     "concernedPublic",
     "requirements",
     "isCumulative",
-    "hasFee",
+    "feeCondition",
     "feeDetails",
     "beneficiariesAccessModes",
     "beneficiariesAccessModesOther",
@@ -237,10 +237,10 @@ const schema = {
     default: true,
     rules: [v.isBool()],
   },
-  hasFee: {
+  feeCondition: {
+    default: "gratuit",
     name: "frais à charge",
-    default: false,
-    rules: [v.isBool()],
+    rules: [v.isString()],
   },
   feeDetails: {
     name: "frais à charge (détail)",
@@ -249,7 +249,7 @@ const schema = {
     rules: [
       v.isString(),
       (name, value, data) => ({
-        valid: !data.hasFee || value.length,
+        valid: data.feeCondition === "gratuit" || value.length,
         msg: `Information requise`,
       }),
     ],

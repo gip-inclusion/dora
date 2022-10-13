@@ -79,6 +79,8 @@
   async function handleRefresh() {
     service = await getService(service.slug);
   }
+
+  $: showContact = service?.isContactInfoPublic || $token;
 </script>
 
 <svelte:head>
@@ -92,9 +94,7 @@
   </CenteredGrid>
   <hr />
   <div>
-    {#if browser}
-      <ServiceToolbar {service} {servicesOptions} onRefresh={handleRefresh} />
-    {/if}
+    <ServiceToolbar {service} {servicesOptions} onRefresh={handleRefresh} />
   </div>
 
   <CenteredGrid>
@@ -113,14 +113,19 @@
 
       <div class="sidebar flex flex-col gap-y-s24">
         <div
-          class="noprint block rounded-lg border border-gray-02 p-s24 px-s32"
+          class="block rounded-lg border border-gray-02 p-s24 px-s32"
+          class:print:hidden={!showContact}
         >
-          <ServiceMobilisation {service} />
+          <ServiceMobilisation {service} {showContact} />
         </div>
         <div class="rounded-lg border border-gray-02 p-s32 pb-s48">
-          <ServiceKeyInformations {service} display="sidebar" />
+          <ServiceKeyInformations
+            {service}
+            {servicesOptions}
+            display="sidebar"
+          />
         </div>
-        <div class="noprint rounded-lg border border-gray-02 p-s32 pb-s48">
+        <div class="rounded-lg border border-gray-02 p-s32 pb-s48 print:hidden">
           <ServiceShare {service} />
         </div>
       </div>

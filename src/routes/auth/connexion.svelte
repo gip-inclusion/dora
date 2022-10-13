@@ -21,11 +21,16 @@
 <script>
   import { page } from "$app/stores";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
+  import Button from "$lib/components/button.svelte";
+
   import AuthLayout from "./_auth_layout.svelte";
   import { informationLineIcon } from "$lib/icons.js";
+
+  import PoleEmploiWarning from "$lib/components/structures/pole-emploi-warning.svelte";
   import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
   import logoC1 from "$lib/assets/inclusion-connect/logo-c1.svg";
   import logoDora from "$lib/assets/inclusion-connect/logo_dora.svg";
+  import logoPEFill from "$lib/assets/logo-pole-emploi-fill.svg";
 
   function getLoginHint() {
     const loginHint = $page.url.searchParams.get("login_hint");
@@ -39,6 +44,14 @@
 
   const loginHint = getLoginHint();
   const nextPage = getNextPage($page.url);
+
+  let showPEMessage = false;
+
+  function togglePEMessage() {
+    showPEMessage = !showPEMessage;
+  }
+
+  $: togglePEMessageLabel = showPEMessage ? "Réduire" : "Lire la suite";
 </script>
 
 <svelte:head>
@@ -50,7 +63,7 @@
     <div class="flex-1">
       <h2 class="mb-s32 text-france-blue">Accédez à votre compte</h2>
 
-      <div class="rounded-lg bg-info-light p-s16">
+      <div class="rounded-ml bg-info-light p-s16">
         <h4 class="flex text-info">
           <div class="mr-s8 inline-block h-s24 w-s24 fill-current">
             {@html informationLineIcon}
@@ -62,6 +75,25 @@
           Inclusion Connect avec la même adresse e-mail afin de retrouver les
           mêmes droits et données.
         </div>
+      </div>
+
+      <div class="shadow mt-s16  rounded-ml bg-info-light p-s16">
+        <div class="legend mb-s16 flex gap-s16 text-f14 text-gray-text">
+          <img src={logoPEFill} alt="" width="46" height="46" />
+          Agents Pôle emploi, vous n’avez pas besoin de créer de compte.
+        </div>
+        {#if showPEMessage}
+          <PoleEmploiWarning />
+        {/if}
+
+        <Button
+          label={togglePEMessageLabel}
+          on:click={togglePEMessage}
+          noBackground
+          small
+          noPadding
+          hoverUnderline
+        />
       </div>
 
       <p class="mt-s24 mb-s24" />

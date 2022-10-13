@@ -6,11 +6,13 @@
     type DashboardService,
     SERVICE_UPDATE_STATUS,
     SERVICE_STATUSES,
+    type ServicesOptions,
   } from "$lib/types";
   import Button from "../button.svelte";
   import SetAsUpdatedModal from "./set-as-updated-modal.svelte";
 
   export let service: Service | DashboardService;
+  export let servicesOptions: ServicesOptions;
   export let updateStatus: SERVICE_UPDATE_STATUS | undefined;
   export let onRefresh: () => void | undefined;
 
@@ -33,6 +35,7 @@
     <SetAsUpdatedModal
       bind:isOpen={setAsUpdatedModalOpen}
       {service}
+      {servicesOptions}
       {onRefresh}
     />
   {/if}

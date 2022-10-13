@@ -7,20 +7,17 @@ import { browser } from "$app/env";
 import { token } from "$lib/auth";
 import { defaultAcceptHeader } from "$lib/utils/api";
 
-export function markdownToHTML(md) {
+export function markdownToHTML(md, titleLevel) {
   const converter = new showdown.Converter({
-    extensions: [
-      () => ({
-        type: "output",
-        filter(html) {
-          return html.replace(/\bhref=/gi, 'rel="nofollow" href=');
-        },
-      }),
-    ],
+    headerLevelStart: titleLevel ?? 2,
   });
 
   return insane(converter.makeHtml(md), {
     allowedAttributes: { a: ["class", "rel", "href"] },
+    filter: (token) => {
+      if (token.tag === "a") token.attrs["rel"] = "nofollow";
+      return token;
+    },
   });
 }
 

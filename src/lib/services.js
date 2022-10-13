@@ -278,27 +278,33 @@ export async function getLastDraft() {
   return null;
 }
 
+let servicesOptionsBase;
 export async function getServicesOptions({ model = null } = {}) {
-  const url = `${getApiURL()}/services-options/`;
-  try {
-    const data = (await fetchData(url)).data;
-    if (model?.customizableChoicesSet) {
-      for (const field of [
-        "accessConditions",
-        "concernedPublic",
-        "requirements",
-        "credentials",
-      ]) {
-        data[field] = data[field].filter((option) =>
-          model.customizableChoicesSet[field].includes(option.value)
-        );
-      }
+  if (!servicesOptionsBase) {
+    const url = `${getApiURL()}/services-options/`;
+    try {
+      servicesOptionsBase = (await fetchData(url)).data;
+    } catch (err) {
+      logException(err);
+      return {};
     }
-    return data;
-  } catch (err) {
-    logException(err);
-    return {};
   }
+
+  const data = { ...servicesOptionsBase };
+  if (model?.customizableChoicesSet) {
+    for (const field of [
+      "accessConditions",
+      "concernedPublic",
+      "requirements",
+      "credentials",
+    ]) {
+      data[field] = data[field].filter((option) =>
+        model.customizableChoicesSet[field].includes(option.value)
+      );
+    }
+  }
+
+  return data;
 }
 
 export async function getServiceSuggestions() {

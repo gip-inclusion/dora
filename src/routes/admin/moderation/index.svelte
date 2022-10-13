@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { getStructuresToModerate, getServicesToModerate } from "$lib/admin";
+  import { getStructuresToModerate } from "$lib/admin";
 
   import { capitalize, shortenString } from "$lib/utils";
   import LinkButton from "$lib/components/link-button.svelte";
@@ -8,7 +8,9 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import ModerationLabel from "../_moderation-label.svelte";
   import { ModerationStatus } from "$lib/enums";
-  let services, structures, entities;
+
+  // let services,
+  let structures, entities;
   let filteredEntities = [];
 
   const STATUS_VALUE = {
@@ -20,8 +22,10 @@
   onMount(async () => {
     structures = await getStructuresToModerate();
     structures.forEach((s) => (s.isStructure = true));
-    services = await getServicesToModerate();
-    entities = [...structures, ...services];
+    // On désactive la modération des services pour l'instant
+    // services = await getServicesToModerate();
+    // entities = [...structures, ...services];
+    entities = [...structures];
     filteredEntities = filterAndSortEntities("");
   });
 

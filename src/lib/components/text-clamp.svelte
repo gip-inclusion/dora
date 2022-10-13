@@ -17,21 +17,26 @@
   $: label = showAll ? "Réduire" : "Lire la suite";
 </script>
 
-<div class:h-s160={!showAll} class="relative mb-s24 overflow-hidden">
-  <div class="prose mb-s24" bind:clientHeight={height}>{@html text}</div>
-  <div class:gradient={!showAll && textIsTooLong} />
+<div class="hidden print:inline">
+  <div class="prose mb-s24">{@html text}</div>
 </div>
+<div class="print:hidden">
+  <div class:h-s160={!showAll} class="relative mb-s24 overflow-hidden">
+    <div class="prose mb-s24" bind:clientHeight={height}>{@html text}</div>
+    <div class:gradient={!showAll && textIsTooLong} />
+  </div>
 
-{#if textIsTooLong}
-  <Button
-    {label}
-    on:click={toggle}
-    noBackground
-    small
-    noPadding
-    hoverUnderline
-  />
-{/if}
+  {#if textIsTooLong}
+    <Button
+      {label}
+      on:click={toggle}
+      noBackground
+      small
+      noPadding
+      hoverUnderline
+    />
+  {/if}
+</div>
 
 <style>
   .gradient {

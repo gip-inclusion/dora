@@ -1,10 +1,13 @@
-<script>
+<script lang="ts">
   import ServicePresentation from "./body/presentation/service-description.svelte";
   import { addlinkToUrls } from "$lib/utils";
   import Tag from "$lib/components/tag.svelte";
-  import { formatFilePath } from "$lib/utils/service";
+  import { formatFilePath, isNotFreeService } from "$lib/utils/service";
+  import type { Service, ServicesOptions } from "$lib/types";
+  import { getLabelFromValue } from "$lib/utils/choice";
 
-  export let service;
+  export let service: Service;
+  export let servicesOptions: ServicesOptions;
 </script>
 
 <div class="flex flex-col gap-s24 lg:flex-row">
@@ -19,7 +22,7 @@
           >Service non cumulable
         </Tag>
       {/if}
-      {#if service.hasFee}
+      {#if isNotFreeService(service.feeCondition)}
         <Tag bgColorClass="bg-warning" textColorClass="text-white"
           >Frais à charge du bénéficiaire
         </Tag>
@@ -112,11 +115,16 @@
           {/each}
         </ul>
 
-        {#if service.hasFee}
+        {#if service.feeCondition && isNotFreeService(service.feeCondition)}
           <div class="mb-s24">
-            <h4>Frais</h4>
-
-            <p class="text-f14">{service.feeDetails}</p>
+            <h4>Frais à charge</h4>
+            <p class="block text-f14">
+              {getLabelFromValue(
+                service.feeCondition,
+                servicesOptions.feeConditions
+              )}
+            </p>
+            <p class="block text-f14">{service.feeDetails}</p>
           </div>
         {/if}
       </div>

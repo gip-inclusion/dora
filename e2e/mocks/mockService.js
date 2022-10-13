@@ -30,7 +30,7 @@ export function createFakeService({
     accessConditions: [],
     concernedPublic: [44],
     isCumulative: true,
-    hasFee: false,
+    feeCondition: "gratuit",
     feeDetails: "",
     beneficiariesAccessModes: [
       "envoyer-courriel",

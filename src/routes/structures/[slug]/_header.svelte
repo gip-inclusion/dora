@@ -88,7 +88,7 @@
 <div class="relative mx-auto max-w-6xl pt-s40">
   <Breadcrumb {structure} currentLocation="structure-{tabId}" />
 
-  <h1 class="pt-s40 text-white">
+  <h1 class="pt-s40 text-white print:text-magenta-brand">
     {capitalize(structure.name)}
   </h1>
 
@@ -102,20 +102,16 @@
   />
 
   {#if structure.isPendingMember}
-    <div class="mt-s24"><PendingNotice /></div>
+    <div class="mt-s24">
+      <PendingNotice />
+    </div>
   {:else if !structure.hasAdmin}
-    <div class="mt-s24"><AdminNotice {structure} /></div>
+    <div class="mt-s24">
+      <AdminNotice {structure} />
+    </div>
   {/if}
 
-  <div class="noprint mt-s40">
+  <div class="mt-s40 print:hidden">
     <Tabs items={tabs} itemId={tabId} />
   </div>
 </div>
-
-<style lang="postcss">
-  @media print {
-    h1 {
-      color: var(--col-magenta-brand);
-    }
-  }
-</style>

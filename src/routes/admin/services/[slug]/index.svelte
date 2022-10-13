@@ -32,6 +32,7 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import ModerationButtonMenu from "../../_moderation-button-menu.svelte";
   import History from "../../_history.svelte";
+  import { isNotFreeService } from "$lib/utils/service";
 
   export let service;
   const structure = service.structure;
@@ -136,8 +137,8 @@
     </InfoLine>
 
     <InfoLine>
-      frais à charge : {service.hasFee ? "✅ – " : "❌"}
-      {#if service.hasFee}
+      frais à charge : {service.feeCondition}
+      {#if isNotFreeService(service.feeCondition)}
         <span class="italic">{service.feeDetails}</span>
       {/if}
     </InfoLine>

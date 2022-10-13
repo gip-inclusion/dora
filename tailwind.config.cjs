@@ -127,6 +127,7 @@ const config = {
       none: "0",
       DEFAULT: "0.25rem", // 4px
       md: "0.5rem", // 8px
+      ml: "1rem", // 16px
       lg: "1.5rem", // 12px
       xl: "2.5rem", // 40px
       full: "9999px",

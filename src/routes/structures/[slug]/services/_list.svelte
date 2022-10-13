@@ -1,10 +1,26 @@
-<script>
+<script lang="ts">
   import { userInfo } from "$lib/auth";
+  import SelectField from "$lib/components/form/select/select-field.svelte";
 
-  import Tabs from "$lib/components/tabs-light.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import ServiceCard from "$lib/components/services/service-card.svelte";
-  import { SERVICE_STATUSES } from "$lib/schemas/service";
+  import {
+    addCircleIcon,
+    arrowDownLineIcon,
+    arrowUpLineIcon,
+    earthFillIcon,
+    fileEditFillIcon,
+    folderFillIcon,
+    draftFillIcon,
+    alertIcon,
+    errorWarningIcon,
+  } from "$lib/icons";
+  import {
+    SERVICE_STATUSES,
+    SERVICE_UPDATE_STATUS,
+    type Choice,
+  } from "$lib/types";
+  import { computeUpdateStatusData } from "$lib/utils/service";
 
   export let structure, services, total, servicesOptions;
   export let hasOptions = true;
@@ -12,69 +28,125 @@
   export let limit;
   let canEdit;
 
-  const orders = [
-    { value: "date", label: "Date de mise à jour" },
-    { value: "alpha", label: "Alphabétique" },
-    { value: "etat", label: "Publication" },
+  // Status options
+  let selectedStatus = "";
+  const statusOptions: Choice[] = [
+    { value: "", label: "Tout" },
+    {
+      value: SERVICE_STATUSES.PUBLISHED,
+      label: "Publié",
+      icon: earthFillIcon,
+      selectedLabel: "Status : Publié",
+    },
+    {
+      value: SERVICE_STATUSES.DRAFT,
+      label: "Brouillon",
+      icon: draftFillIcon,
+      selectedLabel: "Status : Brouillon",
+    },
+    {
+      value: SERVICE_STATUSES.ARCHIVED,
+      label: "Archivé",
+      selectedLabel: "Status : Archivé",
+      icon: folderFillIcon,
+    },
+    {
+      value: SERVICE_STATUSES.SUGGESTION,
+      label: "Suggestion",
+      selectedLabel: "Status : Suggestion",
+      icon: fileEditFillIcon,
+    },
   ];
-  const order = orders[0].value;
+
+  // Update status
+  let selectedUpdateStatus = "";
+  const updateStatusOptions: Choice[] = [
+    { value: "", label: "Tout" },
+    {
+      value: SERVICE_UPDATE_STATUS.NEEDED,
+      label: "Actualisation conseillée",
+      selectedLabel: "Actualisation : conseillée",
+      icon: errorWarningIcon,
+    },
+    {
+      value: SERVICE_UPDATE_STATUS.REQUIRED,
+      label: "Actualisation requise",
+      selectedLabel: "Actualisation : requise",
+      icon: alertIcon,
+    },
+  ];
+
+  // Service order
+  let selectedOrder = "modificationDateDesc";
+  let serviceOrderOptions: Choice[] = [
+    {
+      value: "modificationDateDesc",
+      label: "Trier par ordre décroissant",
+      selectedLabel: "Tri : Par date d’actualisation",
+      icon: arrowUpLineIcon,
+      iconOnRight: true,
+    },
+    {
+      value: "modificationDateAsc",
+      label: "Trier par ordre croissant",
+      selectedLabel: "Tri : Par date d’actualisation",
+      icon: arrowDownLineIcon,
+      iconOnRight: true,
+    },
+  ];
+
   let servicesDisplayed;
-  let filters;
+  function sortService(se) {
+    let sse = se.sort((a, b) => {
+      let diff =
+        new Date(b.modificationDate).getTime() -
+        new Date(a.modificationDate).getTime();
 
-  function serviceOrder(se) {
-    let ss = se
-      .sort((a, b) => {
-        if (order === "etat") {
-          const sortOrder = {
-            [SERVICE_STATUSES.suggestion]: 0,
-            [SERVICE_STATUSES.draft]: 1,
-            [SERVICE_STATUSES.published]: 2,
-          };
-          const orderA = sortOrder[a.status];
-          const orderB = sortOrder[b.status];
-          return orderA - orderB;
-        }
+      if (selectedOrder === "modificationDateAsc") {
+        diff = -1 * diff;
+      }
 
-        if (order === "alpha") {
-          return a.name.localeCompare(b.name, "fr", { numeric: true });
-        }
+      // By name if needed
+      if (diff === 0) {
+        diff = a.name.localeCompare(b.name, "fr", { numeric: true });
+      }
 
-        return new Date(b.modificationDate) - new Date(a.modificationDate);
-      })
-      .filter(
-        (s) =>
-          !filters ||
-          filters
-            .split(" ")
-            .every((f) => s.name.toLowerCase().includes(f.toLowerCase()))
-      );
+      return diff;
+    });
 
     if (limit) {
-      ss = ss.slice(0, limit);
+      sse = sse.slice(0, limit);
     }
 
-    return ss;
+    return sse;
   }
-
-  let tabId = "default";
-
-  async function handleTabChange(newTab) {
-    tabId = newTab;
-  }
-
-  const tabs = [{ id: "default", name: "Défaut" }];
 
   $: canEdit = structure.isMember || $userInfo?.isStaff;
-  $: servicesDisplayed = serviceOrder(services);
   $: {
-    if (tabId === "archived") {
-      services = structure.archivedServices;
-    } else {
+    if (!selectedStatus && !selectedUpdateStatus) {
       services = structure.services;
+    } else {
+      // By status
+      if (selectedStatus) {
+        if (selectedStatus === SERVICE_STATUSES.ARCHIVED)
+          services = structure.archivedServices;
+        else {
+          services = structure.services.filter(
+            (s) => s.status === selectedStatus
+          );
+        }
+      }
+
+      // By update status
+      if (selectedUpdateStatus) {
+        services = services.filter(
+          (s) =>
+            computeUpdateStatusData(s).updateStatus === selectedUpdateStatus
+        );
+      }
     }
-  }
-  $: if (canEdit) {
-    tabs.push({ id: "archived", name: "Archivés" });
+
+    servicesDisplayed = sortService(services);
   }
 </script>
 
@@ -92,18 +164,85 @@
     {#if canEdit}
       <LinkButton
         label="Ajouter un service"
+        iconOnRight
+        icon={addCircleIcon}
         to="/services/creer?structure={structure.slug}"
-        small
       />
     {/if}
   </div>
 </div>
-{#if hasOptions}
+{#if hasOptions && canEdit}
   <div
-    class=" mb-s24 flex h-s72 flex-row items-center gap-s16 rounded-md bg-white px-s12 shadow-md"
+    class="mb-s40 flex h-s80 w-full items-center justify-between rounded-md bg-white px-s24 text-f14 shadow-md"
   >
-    <div class="text-f16 font-bold">Filtrer par&nbsp;:</div>
-    <Tabs items={tabs} onSelectedChange={handleTabChange} itemId={tabId} />
+    <div class="flex items-center gap-s16">
+      <div class="text-f16 font-bold">Filtrer par&nbsp;:</div>
+
+      <div>
+        <SelectField
+          label="Status"
+          name="status"
+          placeholder="Status"
+          bind:value={selectedStatus}
+          choices={statusOptions}
+          hideLabel
+          style="filter"
+          minDropdownWidth="min-w-[175px]"
+        />
+      </div>
+      <div>
+        <SelectField
+          label="Actualisation"
+          name="update-status"
+          placeholder="Actualisation"
+          bind:value={selectedUpdateStatus}
+          choices={updateStatusOptions}
+          hideLabel
+          style="filter"
+          minDropdownWidth="min-w-[265px]"
+        />
+      </div>
+    </div>
+
+    <div>
+      <button
+        class:!text-magenta-cta={selectedStatus || selectedUpdateStatus}
+        class="text-gray-text-alt"
+        on:click={() => {
+          selectedStatus = "";
+          selectedUpdateStatus = "";
+        }}
+      >
+        Tout effacer
+      </button>
+    </div>
+  </div>
+
+  <div class="mb-s40 flex justify-between gap-s16">
+    <span>
+      <strong>
+        {servicesDisplayed.length} service{servicesDisplayed.length > 1
+          ? "s"
+          : ""}
+      </strong>
+      <span class:hidden={!selectedStatus && !selectedUpdateStatus}>
+        correspond{servicesDisplayed.length > 1 ? "ent" : ""} à votre recherche
+      </span>
+    </span>
+
+    <div class="inline-block min-w-[280px] text-f14">
+      <SelectField
+        label="Tri"
+        name="services-order"
+        placeholder="Tri"
+        bind:value={selectedOrder}
+        choices={serviceOrderOptions}
+        hideLabel
+        showIconForSelectedOption
+        handleEltChange={() =>
+          (servicesDisplayed = sortService(servicesDisplayed))}
+      />
+    </div>
   </div>
 {/if}
 

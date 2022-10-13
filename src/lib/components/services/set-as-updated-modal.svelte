@@ -1,6 +1,6 @@
 <script lang="ts">
   import Modal from "$lib/components/modal.svelte";
-  import type { DashboardService, Service } from "$lib/types";
+  import type { DashboardService, Service, ServicesOptions } from "$lib/types";
   import LinkButton from "$lib/components/link-button.svelte";
   import Button from "$lib/components/button.svelte";
 
@@ -11,6 +11,7 @@
 
   export let isOpen = false;
   export let service: Service | DashboardService;
+  export let servicesOptions: ServicesOptions;
   export let onRefresh: () => void;
 
   async function setAsUpdated() {
@@ -35,7 +36,7 @@
   <hr class="my-s24 " />
   <ServiceContact {service} />
   <hr class="my-s24" />
-  <ServiceKeyInformations {service} />
+  <ServiceKeyInformations {service} {servicesOptions} />
 
   <div slot="footer">
     <div class="mt-s24 flex flex-col-reverse justify-end gap-s24 md:flex-row">
