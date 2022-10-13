@@ -66,7 +66,8 @@
 
     <div class="mt-s16">
       <p class="text-center text-f12">
-        Plus de 2000 structures ont déjà référencé leurs services sur DORA.
+        Plus de 1 000 structures ont déjà commencé à référencer leurs services
+        sur DORA
       </p>
       <div class="flex flex-col justify-center gap-s24 md:flex-row">
         <div class="flex justify-center gap-s24">
