@@ -106,6 +106,7 @@ const fields = {
     "endDate",
     "recurrence",
     "suspensionDate",
+    "useInclusionNumeriqueScheme",
   ],
   model: [
     "structure",
@@ -444,6 +445,11 @@ const schema = {
     default: null,
     rules: [v.isDate()],
     post: [v.nullEmpty],
+  },
+  useInclusionNumeriqueScheme: {
+    name: "utilise le schéma Inclusion Numérique",
+    default: null,
+    rules: [v.isBool()],
   },
 };
 
