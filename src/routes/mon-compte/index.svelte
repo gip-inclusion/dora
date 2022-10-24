@@ -1,5 +1,5 @@
 <script>
-  import { userInfo, userInfoIsComplete } from "$lib/auth";
+  import { userInfo } from "$lib/auth";
 
   import LinkButton from "$lib/components/link-button.svelte";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
@@ -26,9 +26,7 @@
     </div>
 
     <div class="flex flex-1 flex-col gap-s24">
-      {#if userInfoIsComplete()}
-        <ImproveDoraNotif />
-      {/if}
+      <ImproveDoraNotif />
 
       {#if $userInfo.isStaff || $userInfo.isBizdev}
         <div class="mb-s24 rounded-md  border border-gray-03 p-s24">

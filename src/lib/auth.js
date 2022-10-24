@@ -105,11 +105,3 @@ export async function validateCredsAndFillUserInfo() {
     }
   }
 }
-
-export function userInfoIsComplete() {
-  const info = get(userInfo);
-
-  return (
-    !!info.email && !!info.firstName && !!info.lastName && !!info.phoneNumber
-  );
-}
