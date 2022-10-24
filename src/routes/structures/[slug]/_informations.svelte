@@ -34,6 +34,13 @@
     })
     .join(", ");
   $: canManageStructure = $token && (structure.isAdmin || $userInfo?.isStaff);
+  $: structureHasInfo =
+    structure.phone ||
+    structure.email ||
+    structure.url ||
+    structure.openingHours ||
+    structure.openingHoursDetails ||
+    structure.accesslibreUrl;
 </script>
 
 <div class="mb-s40">
@@ -109,9 +116,9 @@
     </div>
   </div>
 
-  <hr class="separator" />
-
   {#if fullDesc}
+    <hr class="separator" />
+
     <div class="presentation">
       <h3 class="text-f32 leading-32 text-france-blue md:mt-s32">
         Présentation de la structure
@@ -119,116 +126,117 @@
       <TextClamp text={fullDesc} />
     </div>
   {/if}
+  {#if structureHasInfo}
+    <div class="sidebar">
+      <div
+        class="flex flex-col gap-s24 rounded-lg border border-gray-02 py-s24 px-s32"
+      >
+        <h3 class="mb-s8 text-france-blue">Informations pratiques</h3>
 
-  <div class="sidebar">
-    <div
-      class="flex flex-col gap-s24 rounded-lg border border-gray-02 py-s24 px-s32"
-    >
-      <h3 class="mb-s8 text-france-blue">Informations pratiques</h3>
+        {#if structure.phone}
+          <div>
+            <h4 class="mb-s8 flex items-center">
+              <span class="mr-s8 h-s24 w-s24 fill-current">
+                {@html phoneLineIcon}
+              </span>
+              Téléphone
+            </h4>
 
-      {#if structure.phone}
-        <div>
-          <h4 class="mb-s8 flex items-center">
-            <span class="mr-s8 h-s24 w-s24 fill-current">
-              {@html phoneLineIcon}
-            </span>
-            Téléphone
-          </h4>
+            <a class="text-gray-text underline" href="tel:{structure.phone}">
+              {formatPhoneNumber(structure.phone)}
+            </a>
+          </div>
+        {/if}
 
-          <a class="text-gray-text underline" href="tel:{structure.phone}">
-            {formatPhoneNumber(structure.phone)}
-          </a>
-        </div>
-      {/if}
-
-      {#if structure.email}
-        <div>
-          <h4 class="mb-s8 flex items-center">
-            <span class="mr-s8 h-s24 w-s24 fill-current">
-              {@html mailLineIcon}
-            </span>
-            E-mail
-          </h4>
-          <a
-            class="break-all text-gray-text  underline"
-            href="mailto:{structure.email}">{structure.email}</a
-          >
-        </div>
-      {/if}
-
-      {#if structure.url}
-        <div>
-          <h4 class="mb-s8 flex items-center">
-            <span class="mr-s8 h-s24 w-s24 fill-current">
-              {@html computerIcon}
-            </span>
-            Site web
-          </h4>
-
-          <a
-            target="_blank"
-            title="Ouverture dans une nouvelle fenêtre"
-            rel="noopener nofollow"
-            class="break-all text-gray-text  underline"
-            href={structure.url}
-          >
-            {structure.url}
-          </a>
-        </div>
-      {/if}
-
-      {#if structure.openingHours}
-        <div>
-          <h4 class="mb-s8 flex items-center">
-            <span class="mr-s8 h-s24 w-s24 fill-current">
-              {@html timeLineIcon}
-            </span>
-            Horaires
-          </h4>
-
-          <ul class="text-f16">
-            {#each formatOsmHours(structure.openingHours) as [prefix, hourStr]}
-              <li class="mb-s8 flex items-center text-gray-text">
-                <span class="mr-s16 w-s35">{prefix}</span>
-                <span>{hourStr}</span>
-              </li>
-            {/each}
-          </ul>
-
-          {#if structure.openingHoursDetails}
-            <p class="mt-s16 mb-s0 italic text-gray-text">
-              <up>*</up>
-              {structure.openingHoursDetails}
-            </p>
-          {/if}
-        </div>
-      {/if}
-
-      {#if structure.accesslibreUrl}
-        <div>
-          <h4 class="mb-s8 flex items-center">
-            <span class="mr-s8 h-s24 w-s24 fill-current">
-              {@html wheelChairIcon}
-            </span>
-            Accessibilité
-          </h4>
-          <a
-            target="_blank"
-            title="Ouverture dans une nouvelle fenêtre"
-            rel="noopener nofollow"
-            class="items-center break-words text-gray-text underline"
-            href={structure.accesslibreUrl}
-          >
-            Retrouvez toutes les infos via ce lien<span
-              class="ml-s8 mb-s2 inline-block h-s16 w-s16 justify-end fill-current align-sub"
+        {#if structure.email}
+          <div>
+            <h4 class="mb-s8 flex items-center">
+              <span class="mr-s8 h-s24 w-s24 fill-current">
+                {@html mailLineIcon}
+              </span>
+              E-mail
+            </h4>
+            <a
+              class="break-all text-gray-text  underline"
+              href="mailto:{structure.email}">{structure.email}</a
             >
-              {@html externalLinkIcon}
-            </span>
-          </a>
-        </div>
-      {/if}
+          </div>
+        {/if}
+
+        {#if structure.url}
+          <div>
+            <h4 class="mb-s8 flex items-center">
+              <span class="mr-s8 h-s24 w-s24 fill-current">
+                {@html computerIcon}
+              </span>
+              Site web
+            </h4>
+
+            <a
+              target="_blank"
+              title="Ouverture dans une nouvelle fenêtre"
+              rel="noopener nofollow"
+              class="break-all text-gray-text  underline"
+              href={structure.url}
+            >
+              {structure.url}
+            </a>
+          </div>
+        {/if}
+
+        {#if structure.openingHours}
+          <div>
+            <h4 class="mb-s8 flex items-center">
+              <span class="mr-s8 h-s24 w-s24 fill-current">
+                {@html timeLineIcon}
+              </span>
+              Horaires
+            </h4>
+
+            <ul class="text-f16">
+              {#each formatOsmHours(structure.openingHours) as [prefix, hourStr]}
+                <li class="mb-s8 flex items-center text-gray-text">
+                  <span class="mr-s16 w-s35">{prefix}</span>
+                  <span>{hourStr}</span>
+                </li>
+              {/each}
+            </ul>
+
+            {#if structure.openingHoursDetails}
+              <p class="mt-s16 mb-s0 italic text-gray-text">
+                <up>*</up>
+                {structure.openingHoursDetails}
+              </p>
+            {/if}
+          </div>
+        {/if}
+
+        {#if structure.accesslibreUrl}
+          <div>
+            <h4 class="mb-s8 flex items-center">
+              <span class="mr-s8 h-s24 w-s24 fill-current">
+                {@html wheelChairIcon}
+              </span>
+              Accessibilité
+            </h4>
+            <a
+              target="_blank"
+              title="Ouverture dans une nouvelle fenêtre"
+              rel="noopener nofollow"
+              class="items-center break-words text-gray-text underline"
+              href={structure.accesslibreUrl}
+            >
+              Retrouvez toutes les infos via ce lien<span
+                class="ml-s8 mb-s2 inline-block h-s16 w-s16 justify-end fill-current align-sub"
+              >
+                {@html externalLinkIcon}
+              </span>
+            </a>
+          </div>
+        {/if}
+      </div>
     </div>
-  </div>
+  {/if}
 </div>
 
 <style lang="postcss">
