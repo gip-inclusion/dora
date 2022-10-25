@@ -9,6 +9,7 @@
 
   import FieldsStructure from "./_fields-structure.svelte";
   import FieldsCommon from "./_fields-common.svelte";
+  import FieldsInclusionNumerique from "./_fields-inclusion-numerique.svelte";
   import FieldsService from "./_fields-service.svelte";
   import ServiceNavButtons from "./_service-nav-buttons.svelte";
   import Errors from "./_errors.svelte";
@@ -139,12 +140,21 @@
 
   <CenteredGrid bgColor="bg-gray-bg">
     <div class="lg:w-2/3">
-      <FieldsService
-        bind:service
-        {servicesOptions}
-        {serviceSchema}
-        {structure}
-      />
+      {#if service.useInclusionNumeriqueScheme}
+        <FieldsInclusionNumerique
+          bind:service
+          {servicesOptions}
+          {serviceSchema}
+          {structure}
+        />
+      {:else}
+        <FieldsService
+          bind:service
+          {servicesOptions}
+          {serviceSchema}
+          {structure}
+        />
+      {/if}
     </div>
   </CenteredGrid>
   <hr />

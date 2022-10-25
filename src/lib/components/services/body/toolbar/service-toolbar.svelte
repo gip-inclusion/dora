@@ -119,7 +119,7 @@
                 </a>
               </div>
             {/if}
-          {:else}
+          {:else if !service.useInclusionNumeriqueScheme}
             <LinkButton
               label="Utiliser comme modèle"
               icon={copyIcon}

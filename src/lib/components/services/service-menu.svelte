@@ -67,13 +67,15 @@
       icon={editIcon}
       {extraClass}
     />
-    <LinkButton
-      label="Créer un modèle"
-      to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
-      small
-      icon={copyIcon}
-      noBackground
-      {extraClass}
-    />
+    {#if !service.useInclusionNumeriqueScheme}
+      <LinkButton
+        label="Créer un modèle"
+        to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
+        small
+        icon={copyIcon}
+        noBackground
+        {extraClass}
+      />
+    {/if}
   {/if}
 </div>
