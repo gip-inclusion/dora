@@ -448,7 +448,7 @@ const schema = {
   },
   useInclusionNumeriqueScheme: {
     name: "utilise le schéma Inclusion Numérique",
-    default: null,
+    default: false,
     rules: [v.isBool()],
   },
 };

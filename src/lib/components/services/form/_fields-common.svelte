@@ -92,6 +92,7 @@
   $: showModel = !!service.model;
 
   let fullDesc;
+
   function useModelValue(propName) {
     return () => {
       service[propName] = model[propName];
@@ -461,7 +462,9 @@
       placeholder="Choississez..."
       errorMessages={$formErrors.feeCondition}
       bind:value={service.feeCondition}
-      choices={servicesOptions.feeConditions}
+      choices={servicesOptions.feeConditions.filter(
+        (fee) => fee.value !== "pass-numerique"
+      )}
       display="vertical"
     />
   </FieldModel>
