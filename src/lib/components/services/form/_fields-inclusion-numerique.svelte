@@ -6,11 +6,7 @@
     validate,
     contextValidationKey,
   } from "$lib/validation.js";
-  import {
-    arraysCompare,
-    orderAndReformatSubcategories,
-    moveToTheEnd,
-  } from "$lib/utils";
+  import { orderAndReformatSubcategories, moveToTheEnd } from "$lib/utils";
 
   import { isNotFreeService } from "$lib/utils/service";
 
@@ -27,10 +23,8 @@
   export let service: Service;
   export let structure: Structure;
   export let serviceSchema;
-  export let model = null;
 
   let subcategories = [];
-  let showModelSubcategoriesUseValue = true;
 
   let showServiceAddress = true;
 
@@ -47,10 +41,18 @@
       .includes(concernedPublicOption.label);
   }
 
-  const concernedPublicOptions: {
+  function addServicesOptionsConcernedPublicValues(concernedPublicOption: {
     label: string;
-    structure: null;
-  }[] = [
+  }): Choice {
+    return {
+      label: concernedPublicOption.label,
+      value: servicesOptions.concernedPublic.find(
+        (option: Choice) => option.label === concernedPublicOption.label
+      ).value,
+    };
+  }
+
+  const concernedPublicOptions: Choice[] = [
     {
       label: "Familles/enfants",
       structure: null,
@@ -97,7 +99,9 @@
       label: "Personnes en situation d’illettrisme",
       structure: null,
     },
-  ].filter(existInServicesOptionsConcernedPublic);
+  ]
+    .filter(existInServicesOptionsConcernedPublic)
+    .map(addServicesOptionsConcernedPublicValues);
 
   function existInServicesOptionsKinds(kindsOption) {
     return servicesOptions.kinds
@@ -153,13 +157,6 @@
     service.subcategories = service.subcategories.filter((scat) =>
       categories.some((cat) => scat.startsWith(cat))
     );
-
-    if (model) {
-      showModelSubcategoriesUseValue = arraysCompare(
-        categories,
-        model.categories
-      );
-    }
   }
 
   function fillAdress() {
@@ -178,8 +175,8 @@
       service.city = city;
       service.address1 = address1;
       service.address2 = address2;
-      service.postalCode = postalCode.toString();
-      service.cityCode = cityCode.toString();
+      service.postalCode = postalCode?.toString();
+      service.cityCode = cityCode?.toString();
       service.latitude = latitude;
       service.longitude = longitude;
     }
@@ -218,7 +215,7 @@
     service.concernedPublic = service.concernedPublic.filter(
       (concernedPublicValue: string): boolean =>
         concernedPublicOptions
-          .map((concernedPublicOption): string => concernedPublicOption.label)
+          .map((concernedPublicOption): string => concernedPublicOption.value)
           .includes(concernedPublicValue)
     );
   }
@@ -303,25 +300,9 @@
     onBlur: handleEltChange,
     onChange: handleEltChange,
   });
-
-  let showModel;
-
-  $: showModel = !!service.model;
-
-  let fullDesc;
-
-  function useModelValue(propName) {
-    return () => {
-      service[propName] = model[propName];
-
-      if (propName === "fullDesc") {
-        fullDesc.updateValue(service.fullDesc);
-      }
-    };
-  }
 </script>
 
-<FieldSet noTopPadding title="Service de l'inclusion numérique" {showModel}>
+<FieldSet noTopPadding title="Service de l'inclusion numérique">
   <div slot="help">
     <p class="text-f14">
       Le <b>Formulaire de l'inclusion numérique</b> est un outil de saisie
@@ -340,12 +321,8 @@
   </div>
 
   <FieldModel
-    {showModel}
-    value={model?.subcategories}
     serviceValue={service.subcategories}
     options={servicesOptions.subcategories}
-    useValue={useModelValue("subcategories")}
-    showUseValue={showModelSubcategoriesUseValue}
     type="array"
   >
     <SchemaField
@@ -364,11 +341,8 @@
 
   {#if concernedPublicOptions.length}
     <FieldModel
-      {showModel}
-      value={model?.concernedPublic}
       serviceValue={service.concernedPublic}
       options={concernedPublicOptions}
-      useValue={useModelValue("concernedPublic")}
       type="array"
     >
       <SchemaField
@@ -387,11 +361,8 @@
 
   {#if kindsOptions.length}
     <FieldModel
-      {showModel}
-      value={model?.kinds}
       serviceValue={service.kinds}
       options={kindsOptions}
-      useValue={useModelValue("kinds")}
       type="array"
     >
       <SchemaField
@@ -406,13 +377,7 @@
     </FieldModel>
   {/if}
 
-  <FieldModel
-    {showModel}
-    value={model?.feeCondition}
-    serviceValue={service.feeCondition}
-    useValue={useModelValue("feeCondition")}
-    type="text"
-  >
+  <FieldModel serviceValue={service.feeCondition} type="text">
     <SelectField
       label="Frais à charge"
       name="feeCondition"
@@ -425,12 +390,7 @@
   </FieldModel>
 
   {#if isNotFreeService(service.feeCondition)}
-    <FieldModel
-      {showModel}
-      value={model?.feeDetails}
-      serviceValue={service.feeDetails}
-      useValue={useModelValue("feeDetails")}
-    >
+    <FieldModel serviceValue={service.feeDetails}>
       <SchemaField
         type="textarea"
         label="Détails des frais à charge"
@@ -444,17 +404,14 @@
   {/if}
 </FieldSet>
 
-<FieldSet title="Modalités" {showModel}>
+<FieldSet title="Modalités">
   <div slot="help">
     <p class="text-f14">Modalités pour mobiliser le service.</p>
   </div>
 
   <FieldModel
-    {showModel}
-    value={model?.beneficiariesAccessModes}
     serviceValue={service.beneficiariesAccessModes}
     options={servicesOptions.beneficiariesAccessModes}
-    useValue={useModelValue("beneficiariesAccessModes")}
     type="array"
   >
     <SchemaField
@@ -473,12 +430,7 @@
   </FieldModel>
 
   {#if service.beneficiariesAccessModes.includes("autre")}
-    <FieldModel
-      {showModel}
-      value={model?.beneficiariesAccessModesOther}
-      serviceValue={service.beneficiariesAccessModesOther}
-      useValue={useModelValue("beneficiariesAccessModesOther")}
-    >
+    <FieldModel serviceValue={service.beneficiariesAccessModesOther}>
       <SchemaField
         hideLabel
         placeholder="Merci de préciser la modalité"
