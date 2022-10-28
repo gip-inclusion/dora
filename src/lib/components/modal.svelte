@@ -36,6 +36,8 @@
           document.querySelector(appSelector).setAttribute("inert", "");
         }, 10);
       } else {
+        document.body.style.overflow = "inherit";
+
         if (modalEl) {
           document.querySelector(appSelector).removeAttribute("inert");
         }

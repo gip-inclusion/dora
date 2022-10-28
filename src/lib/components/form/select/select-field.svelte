@@ -173,7 +173,7 @@
 
     <div
       class:hidden={!expanded}
-      class="absolute top-[52px] left-s0 z-20 flex max-h-s512 flex-col gap-s10 rounded border border-gray-00 bg-white p-s12 shadow-md {minDropdownWidth}"
+      class="absolute top-[52px] left-s0 z-20 flex max-h-s512 flex-col gap-s10 overflow-y-auto rounded border border-gray-00 bg-white p-s12 shadow-md {minDropdownWidth}"
       role="listbox"
       id={`listbox-values-${uuid}`}
       aria-labelledby={`button-label-${uuid}`}

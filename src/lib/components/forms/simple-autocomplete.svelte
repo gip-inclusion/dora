@@ -413,11 +413,13 @@
   }
 
   function selectItem() {
-    const listItem = filteredListItems[highlightIndex];
-    if (selectListItem(listItem.value)) {
-      close();
-      if (multiple) {
-        input.focus();
+    if (filteredListItems.length && highlightIndex >= 0) {
+      const listItem = filteredListItems[highlightIndex];
+      if (selectListItem(listItem.value)) {
+        close();
+        if (multiple) {
+          input.focus();
+        }
       }
     }
   }

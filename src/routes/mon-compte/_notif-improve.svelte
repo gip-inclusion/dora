@@ -10,8 +10,8 @@
   </p>
 
   <LinkButton
-    to="https://itou.typeform.com/to/DPQOe5pP"
-    label="Participer (3 min)"
+    to="https://tally.so/r/mVLr7J?source=tdbuser"
+    label="Participer"
     otherTab
     nofollow
     small
