@@ -1,4 +1,3 @@
-import { log } from "$lib/logger";
 import * as v from "./utils";
 
 // Deprecated : please use in SERVICE_STATUSES on "$lib/types"
@@ -24,7 +23,7 @@ export function allCategoriesHaveSubcategories() {
     }
 
     if (!extraData) {
-      log("Missing servicesOptions in rules check");
+      console.log("Missing servicesOptions in rules check");
       return {
         valid: true,
       };
