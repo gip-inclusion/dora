@@ -188,17 +188,18 @@
   function setModalites() {
     service.coachOrientationModes = ["autre"];
     service.coachOrientationModesOther =
-      "Même modalités que pour les bénéficiaires";
+      "Mêmes modalités que pour les bénéficiaires";
   }
 
   function setDiffusionZone() {
+    if (!structure.latitude || !structure.longitude) return;
     service.diffusionZoneType = "department";
     service.diffusionZoneDetails = structure.department;
   }
 
   function setLocationKinds() {
     service.locationKinds = ["en-presentiel"];
-    fillAdress();
+    if (!service.latitude || !service.longitude) fillAdress();
   }
 
   function setContact() {
@@ -444,7 +445,7 @@
   {/if}
 </FieldSet>
 
-{#if !service.diffusionZoneDetails}
+{#if !structure.latitude || !structure.longitude}
   <FieldSet title="Périmètre géographique d’intervention">
     <div slot="help">
       <p class="text-f14">

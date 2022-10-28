@@ -25,8 +25,11 @@
   import Modal from "$lib/components/modal.svelte";
 
   export let servicesOptions, serviceSchema, service, canAddChoices;
+  export let isModel = false;
   export let model = null;
   export let typologyFieldDisabled = false;
+
+  const useModel = model != null;
 
   let feeConditionClassic =
     service.feeCondition === "pass-numerique"
@@ -219,7 +222,7 @@
       readonly={typologyFieldDisabled}
     />
   </FieldModel>
-  {#if displayInclusionNumeriqueFormNotice}
+  {#if displayInclusionNumeriqueFormNotice && !(isModel || useModel)}
     <Notice title={selectedInclusionNumeriqueFormNotice.title} type="info">
       <p class="text-f14">
         Les services d'inclusion numérique répondent à un formulaire spécifique
@@ -242,7 +245,7 @@
   {/if}
 </FieldSet>
 
-{#if !service.useInclusionNumeriqueScheme}
+{#if !service.useInclusionNumeriqueScheme || isModel || useModel}
   <FieldSet title="Présentation" {showModel}>
     <div slot="help">
       <p class="text-f14">
@@ -568,7 +571,7 @@
     <FieldModel
       {showModel}
       value={model?.feeCondition}
-      serviceValue={service.feeCondition}
+      serviceValue={feeConditionClassic}
       useValue={useModelValue("feeCondition")}
       type="text"
     >
@@ -586,7 +589,7 @@
       />
     </FieldModel>
 
-    {#if isNotFreeService(service.feeCondition)}
+    {#if isNotFreeService(feeConditionClassic)}
       <FieldModel
         {showModel}
         value={model?.feeDetails}
