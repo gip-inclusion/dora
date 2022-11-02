@@ -84,7 +84,7 @@ export async function validateCredsAndFillUserInfo() {
   if (browser) {
     const lsToken = localStorage.getItem(tokenKey);
     if (lsToken) {
-      // Valide le token actuel, et rempli les informations
+      // Valide le token actuel et remplit les informations
       // utilisateur
       try {
         const result = await getUserInfo(lsToken);
