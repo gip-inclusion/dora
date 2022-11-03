@@ -77,7 +77,7 @@
         </div>
       </div>
 
-      <div class="shadow mt-s16  rounded-ml bg-info-light p-s16">
+      <div class="mt-s16  rounded-ml bg-info-light p-s16">
         <div class="legend mb-s16 flex gap-s16 text-f14 text-gray-text">
           <img src={logoPEFill} alt="" width="46" height="46" />
           Agents Pôle emploi, vous n’avez pas besoin de créer de compte.

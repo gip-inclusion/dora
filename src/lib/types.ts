@@ -28,11 +28,18 @@ export type Structure = {
   numServices: number;
   accesslibreUrl: string | undefined;
   modificationDate: string;
+  source: StructureSource | undefined;
+  hasBeenEdited: boolean | undefined;
 };
 
 export type StructuresOptions = {
   nationalLabels: { value: string; label: string }[];
   typologies: { value: string; label: string }[];
+};
+
+export type StructureSource = {
+  value: string;
+  label: string;
 };
 
 // OSM hours format
