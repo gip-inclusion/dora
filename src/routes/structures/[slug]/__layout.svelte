@@ -62,6 +62,8 @@
 
   import cornerLeftVioletImg from "$lib/assets/corner-left-violet.png";
   import cornerRightVioletImg from "$lib/assets/corner-right-violet.png";
+  import { NPS_OFFEROR_FORM_ID } from "$lib/const";
+  import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
 </script>
 
 <CenteredGrid bgColor="bg-magenta-brand" noPadding>
@@ -84,6 +86,10 @@
 <CenteredGrid>
   <slot />
 </CenteredGrid>
+
+{#if $structure.isMember}
+  <TallyNpsPopup formId={NPS_OFFEROR_FORM_ID} timeout={30000} />
+{/if}
 
 <style lang="postcss">
   img {
