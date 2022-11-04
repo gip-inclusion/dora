@@ -180,9 +180,9 @@
 
       <div>
         <SelectField
-          label="Status"
+          label="Statut"
           name="status"
-          placeholder="Status"
+          placeholder="Statut"
           bind:value={selectedStatus}
           choices={statusOptions}
           hideLabel
