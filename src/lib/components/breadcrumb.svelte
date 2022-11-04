@@ -42,7 +42,7 @@
 
     return {
       url: "",
-      name: "Informations",
+      name: "",
     };
   }
 </script>
@@ -59,7 +59,13 @@
     </li>
 
     <li class="inline before:content-['/']">
-      <a href="/structures/{structure.slug}">
+      <a
+        href="/structures/{structure.slug}"
+        class:current={currentLocation === "structure-informations"}
+        aria-current={currentLocation === "structure-informations"
+          ? "page"
+          : null}
+      >
         <span class="hidden lg:inline"
           >Structure&nbsp;•&nbsp;
         </span>{structure.name}
@@ -76,7 +82,7 @@
           >{service.name}</a
         >
       </li>
-    {:else if currentLocation.startsWith("structure-")}
+    {:else if currentLocation.startsWith("structure-") && currentLocation !== "structure-informations"}
       <li class="inline before:content-['/']">
         <a
           href="/structures/{structure.slug}/{structureData.url}"
