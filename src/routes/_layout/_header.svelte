@@ -5,7 +5,7 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   import LogoDORA from "$lib/assets/dora-logo-rvb.svg";
-  import LogoMinistere from "$lib/assets/logo-ministere-travail.svg";
+  import LogoMinistere from "$lib/assets/logo-ministere-travail-emploi.svg";
 
   import HeaderActions from "./_menu.svelte";
 </script>
@@ -23,7 +23,7 @@
             src={LogoMinistere}
             alt="Ministère du Travail, du Plein emploi et de l’Insertion"
             width="114"
-            height="89"
+            height="92"
           />
         </div>
         <img
