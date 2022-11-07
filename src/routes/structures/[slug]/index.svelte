@@ -42,7 +42,6 @@
   <hr class="mb-s24" />
   <ServicesList
     structure={$structure}
-    services={$structure.services}
     hasOptions={false}
     onRefresh={handleRefresh}
     total={$structure.services.length}

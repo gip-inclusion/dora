@@ -22,8 +22,10 @@
   export let display: "horizontal" | "vertical" = "horizontal";
   export let style: "common" | "filter" = "common";
   export let errorMessages: string[] | undefined = undefined;
-  export let handleEltChange: (d: { detail: string }) => void | undefined =
-    undefined;
+  export let onChange: (event: {
+    detail: string;
+    value: string | string[];
+  }) => void | undefined = undefined;
 
   let ariaDescribedBy = "";
 
@@ -95,7 +97,7 @@
       // As string
       value = newValue;
     }
-    if (handleEltChange) handleEltChange({ detail: name });
+    if (onChange) onChange({ detail: name, value });
     if (!isMultiple) toggleCombobox(false);
   }
 

@@ -30,7 +30,6 @@
 </svelte:head>
 
 <List
-  services={$structure.services || []}
   {servicesOptions}
   structure={$structure}
   total={$structure.services.length}
