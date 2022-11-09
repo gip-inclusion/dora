@@ -14,7 +14,7 @@ Disallow: /
 
 const content = ENVIRONMENT === "production" ? productionContent : devContent;
 
-export async function get() {
+export async function GET() {
   return {
     status: 200,
     headers: { "content-type": "text/plain" },
