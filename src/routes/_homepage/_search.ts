@@ -1,17 +1,25 @@
 export function getQuery({
-  categoryId,
-  subCategoryId,
+  categoryIds,
+  subCategoryIds,
   cityCode,
   cityLabel,
   kindId,
   fee,
+}: {
+  categoryIds: string[];
+  subCategoryIds: string[];
+  cityCode: string;
+  cityLabel: string;
+  kindId?: string;
+  fee?: string[];
 }) {
   const parameters = {
-    cat: categoryId,
-    sub: subCategoryId,
+    cat: categoryIds,
+    sub: subCategoryIds,
     city: cityCode,
     cl: cityLabel,
     kinds: kindId,
+    fee: undefined,
   };
 
   if (fee?.length) {

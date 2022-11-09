@@ -1,9 +1,11 @@
 <script lang="ts">
   // Source pour l'accessibilité : https://www.w3.org/WAI/ARIA/apg/example-index/breadcrumb/index.html
   import type { Structure, Service } from "$lib/types";
+  import { page } from "$app/stores";
 
   type BreadcrumbLocation =
     | "home"
+    | "search"
     | "structure-informations"
     | "structure-collaborateurs"
     | "structure-services"
@@ -11,7 +13,7 @@
     | "structure-antennes"
     | "service";
 
-  export let structure: Structure;
+  export let structure: Structure | undefined = undefined;
   export let service: Service | undefined = undefined;
   export let currentLocation: BreadcrumbLocation;
 
@@ -47,7 +49,11 @@
   }
 </script>
 
-<nav aria-label="Fil d'ariane" class="print:hidden">
+<nav
+  aria-label="Fil d'ariane"
+  class="print:hidden"
+  class:search-style={currentLocation === "search"}
+>
   <ol class="text-f14">
     <li class="inline">
       <a
@@ -58,19 +64,29 @@
       >
     </li>
 
-    <li class="inline before:content-['/']">
-      <a
-        href="/structures/{structure.slug}"
-        class:current={currentLocation === "structure-informations"}
-        aria-current={currentLocation === "structure-informations"
-          ? "page"
-          : null}
-      >
-        <span class="hidden lg:inline"
-          >Structure&nbsp;•&nbsp;
-        </span>{structure.name}
-      </a>
-    </li>
+    {#if structure}
+      <li class="inline before:content-['/']">
+        <a
+          href="/structures/{structure.slug}"
+          class:current={currentLocation === "structure-informations"}
+          aria-current={currentLocation === "structure-informations"
+            ? "page"
+            : null}
+        >
+          <span class="hidden lg:inline"
+            >Structure&nbsp;•&nbsp;
+          </span>{structure.name}
+        </a>
+      </li>
+    {/if}
+
+    {#if currentLocation === "search"}
+      <li class="inline before:content-['/']">
+        <a href={$page.url.href} aria-current="page" class="current">
+          Recherche
+        </a>
+      </li>
+    {/if}
 
     {#if service}
       <li class="inline before:content-['/']">
@@ -107,5 +123,13 @@
 
   nav li + li::before {
     @apply ml-s8 mr-s8 inline text-magenta-40 print:text-france-blue;
+  }
+
+  .search-style a {
+    @apply text-gray-text-alt2;
+  }
+  .search-style li::before,
+  .search-style .current {
+    @apply text-gray-text;
   }
 </style>

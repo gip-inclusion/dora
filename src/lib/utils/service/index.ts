@@ -18,12 +18,15 @@ import {
 import {
   SERVICE_STATUSES,
   SERVICE_UPDATE_STATUS,
+  type Choice,
   type DashboardService,
   type FeeCondition,
+  type ServiceSearchResult,
   type Service,
   type ServicesOptions,
 } from "$lib/types";
 import dayjs from "dayjs";
+import { getChoicesFromKey } from "../choice";
 
 export function getAvailableOptionsForStatus(
   status: SERVICE_STATUSES
@@ -53,7 +56,7 @@ type ServiceUpdateStatusData = {
   updateStatus: SERVICE_UPDATE_STATUS;
 };
 export function computeUpdateStatusData(
-  service: Service | DashboardService
+  service: Service | DashboardService | ServiceSearchResult
 ): ServiceUpdateStatusData {
   const lastUpdateDay = dayjs(service.modificationDate);
   const dayDiff = dayjs().diff(lastUpdateDay, "day");
@@ -153,4 +156,42 @@ export function formatFilePath(filePath: string) {
 
 export function isNotFreeService(feeConditionValue: FeeCondition): boolean {
   return feeConditionValue !== "gratuit";
+}
+
+export function associateIconToCategory(choices: Choice[]): Choice[] {
+  choices.forEach((choice) => {
+    choice.icon = getCategoryIcon(choice.value);
+  });
+  return choices;
+}
+
+export function sortCategory(categories: Choice[]) {
+  return categories.sort((a, b) => {
+    return a.label.localeCompare(b.label, "fr", { numeric: true });
+  });
+}
+
+function sortSubcategory(subcategories: Choice[]) {
+  return subcategories.sort((a, b) => {
+    if (a.value.endsWith("--autre")) return 1;
+    if (b.value.endsWith("--autre")) return -1;
+
+    if (a.value.endsWith("--all")) return -1;
+    if (b.value.endsWith("--all")) return 1;
+
+    return a.label.localeCompare(b.label, "fr", { numeric: true });
+  });
+}
+
+export function sortByCategories(
+  categories: Choice[],
+  subcategories: Choice[]
+) {
+  const result: Choice[] = [];
+
+  categories.forEach(({ value }) => {
+    const subCategoriesForCategory = getChoicesFromKey(value, subcategories);
+    result.push(...sortSubcategory(subCategoriesForCategory));
+  });
+  return result;
 }

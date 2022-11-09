@@ -21,8 +21,8 @@
 
   function handleSearch() {
     const query = getQuery({
-      categoryId,
-      subCategoryId,
+      categoryIds: [categoryId],
+      subCategoryIds: [subCategoryId],
       cityCode,
       cityLabel,
       kindId,
@@ -34,11 +34,7 @@
   $: subCategoryChoices = moveToTheEnd(
     servicesOptions.subcategories.filter(
       ({ value }) => value.startsWith(categoryId),
-      "label",
-      "Autre",
-      {
-        sortBeginning: true,
-      }
+      "label"
     )
   );
 

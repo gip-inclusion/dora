@@ -774,8 +774,9 @@
     bind:this={list}
   >
     <slot name="prepend" />
+    <hr class:hidden={!showList} class="mx-s8" />
 
-    <div class:hidden={!showList} class="py-s10">
+    <div class:hidden={!showList} class="py-s10 text-f14">
       {#if filteredListItems && filteredListItems.length > 0}
         {#each filteredListItems as listItem, i}
           {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}

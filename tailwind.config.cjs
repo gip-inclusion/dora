@@ -23,7 +23,9 @@ const config = {
         available: { DEFAULT: "#86F3A2", dark: "#005B17" },
         unavailable: { DEFAULT: "#FF9A6C", dark: "#AF0000" },
       },
-
+      blue: {
+        light: "#F0F8FF",
+      },
       gray: {
         bg: "#F8F8F8",
         "00": "#F5F5F5",

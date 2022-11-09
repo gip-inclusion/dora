@@ -52,8 +52,8 @@
   {postfixValueFunction}
   {delay}
   className="rounded focus-within:shadow-focus"
-  inputClassName="outline-none border rounded border-gray-03"
-  dropdownClassName="mt-s16 rounded shadow-md"
+  inputClassName="focus:outline-none border rounded border-gray-03"
+  dropdownClassName="!top-[48px] rounded shadow-md"
   html5autocomplete={false}
   showLoadingIndicator
   {hideArrow}

@@ -12,7 +12,7 @@
 
 <script>
   import { userInfo } from "$lib/auth";
-  import { structure } from "./_store.js";
+  import { structure } from "./_store";
   import { getStructure } from "$lib/structures";
 
   import Informations from "./_informations.svelte";
