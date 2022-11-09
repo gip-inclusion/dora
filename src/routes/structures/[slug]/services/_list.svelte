@@ -22,7 +22,7 @@
   } from "$lib/types";
   import { computeUpdateStatusData } from "$lib/utils/service";
 
-  export let structure, services, total, servicesOptions;
+  export let structure, total, servicesOptions;
   export let hasOptions = true;
   export let onRefresh;
   export let limit;
@@ -95,7 +95,6 @@
     },
   ];
 
-  let servicesDisplayed;
   function sortService(se) {
     let sse = se.sort((a, b) => {
       let diff =
@@ -121,39 +120,44 @@
     return sse;
   }
 
-  $: canEdit = structure.isMember || $userInfo?.isStaff;
-  $: {
-    if (!selectedStatus && !selectedUpdateStatus) {
-      services = structure.services;
-    } else {
-      // By status
-      if (selectedStatus) {
-        if (selectedStatus === SERVICE_STATUSES.ARCHIVED)
-          services = structure.archivedServices;
-        else {
-          services = structure.services.filter(
-            (s) => s.status === selectedStatus
-          );
-        }
-      }
+  function handleEltChange(event) {
+    let services = structure.services;
+    if (event.detail === "update-status") {
+      selectedUpdateStatus = event.value;
+    }
+    if (event.detail === "status") {
+      selectedStatus = event.value;
+    }
 
-      // By update status
-      if (selectedUpdateStatus) {
-        services = services.filter(
-          (s) =>
-            computeUpdateStatusData(s).updateStatus === selectedUpdateStatus
+    if (selectedStatus) {
+      // By status
+      if (selectedStatus === SERVICE_STATUSES.ARCHIVED)
+        services = structure.archivedServices;
+      else {
+        services = structure.services.filter(
+          (s) => s.status === selectedStatus
         );
       }
     }
 
+    // By update status
+    if (selectedUpdateStatus) {
+      services = services.filter(
+        (s) => computeUpdateStatusData(s).updateStatus === selectedUpdateStatus
+      );
+    }
+
     servicesDisplayed = sortService(services);
   }
+
+  $: servicesDisplayed = sortService(structure.services);
+  $: canEdit = structure.isMember || $userInfo?.isStaff;
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
   <h2 class="text-france-blue">Services</h2>
   <div class="flex gap-s16">
-    {#if !!services.length && !hasOptions}
+    {#if !!servicesDisplayed.length && !hasOptions}
       <LinkButton
         label={`Voir tous les services (${total})`}
         to="/structures/{structure.slug}/services"
@@ -180,14 +184,15 @@
 
       <div>
         <SelectField
-          label="Status"
+          label="Statut"
           name="status"
-          placeholder="Status"
-          bind:value={selectedStatus}
+          placeholder="Statut"
+          value={selectedStatus}
           choices={statusOptions}
           hideLabel
           style="filter"
           minDropdownWidth="min-w-[175px]"
+          onChange={handleEltChange}
         />
       </div>
       <div>
@@ -195,11 +200,12 @@
           label="Actualisation"
           name="update-status"
           placeholder="Actualisation"
-          bind:value={selectedUpdateStatus}
+          value={selectedUpdateStatus}
           choices={updateStatusOptions}
           hideLabel
           style="filter"
           minDropdownWidth="min-w-[265px]"
+          onChange={handleEltChange}
         />
       </div>
     </div>
@@ -239,8 +245,7 @@
         choices={serviceOrderOptions}
         hideLabel
         showIconForSelectedOption
-        handleEltChange={() =>
-          (servicesDisplayed = sortService(servicesDisplayed))}
+        onChange={() => (servicesDisplayed = sortService(servicesDisplayed))}
       />
     </div>
   </div>

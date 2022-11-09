@@ -17,8 +17,11 @@
   }
 
   export async function load({ url }) {
-    await validateCredsAndFillUserInfo();
-    const currentUserInfo = get(userInfo);
+    let currentUserInfo = get(userInfo);
+    if (!currentUserInfo) {
+      await validateCredsAndFillUserInfo();
+      currentUserInfo = get(userInfo);
+    }
     if (
       currentUserInfo &&
       !(

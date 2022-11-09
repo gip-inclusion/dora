@@ -3,6 +3,7 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import Notice from "$lib/components/notice.svelte";
   import TextClamp from "$lib/components/text-clamp.svelte";
+  import DataInclusionNotice from "./_data-inclusion-notice.svelte";
   import { token, userInfo } from "$lib/auth";
 
   import {
@@ -34,6 +35,7 @@
     })
     .join(", ");
   $: canManageStructure = $token && (structure.isAdmin || $userInfo?.isStaff);
+  $: sourceIsDataInclusion = structure.source?.value.startsWith("di-");
   $: structureHasInfo =
     structure.phone ||
     structure.email ||
@@ -66,12 +68,17 @@
       <Date date={structure.modificationDate} />
     </p>
   {/if}
+  {#if canManageStructure && sourceIsDataInclusion && !structure.hasBeenEdited}
+    <div>
+      <DataInclusionNotice {structure} />
+    </div>
+  {/if}
 </div>
 
 <div class="structure-body">
   <div class="notice">
     {#if canManageStructure}
-      {#if !isStructureInformationsComplete(structure)}
+      {#if !isStructureInformationsComplete(structure) && !(sourceIsDataInclusion && !structure.hasBeenEdited)}
         <Notice
           title="Les informations de votre structure ne sont pas complètes"
           type="warning"
@@ -243,15 +250,19 @@
   .notice {
     grid-area: notice;
   }
+
   .data {
     grid-area: data;
   }
+
   .separator {
     grid-area: separator;
   }
+
   .presentation {
     grid-area: presentation;
   }
+
   .sidebar {
     grid-area: sidebar;
   }

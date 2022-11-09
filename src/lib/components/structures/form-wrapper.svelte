@@ -169,7 +169,7 @@
     placeholder="Choississez..."
     errorMessages={$formErrors.typology}
     bind:value={structure.typology}
-    {handleEltChange}
+    onChange={handleEltChange}
     choices={structuresOptions.typologies}
   />
 
@@ -321,7 +321,7 @@
     placeholder="Choississez..."
     errorMessages={$formErrors.nationalLabels}
     bind:value={structure.nationalLabels}
-    {handleEltChange}
+    onChange={handleEltChange}
     choices={structuresOptions.nationalLabels}
     isMultiple
   />

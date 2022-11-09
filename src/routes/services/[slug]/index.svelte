@@ -51,7 +51,11 @@
   import ServiceToolbar from "$lib/components/services/body/toolbar/service-toolbar.svelte";
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
-  import { NPS_FORM_ID, SERVICE_CREATION_FORM_ID } from "$lib/const";
+  import {
+    NPS_OFFEROR_FORM_ID,
+    NPS_SEEKER_FORM_ID,
+    SERVICE_CREATION_FORM_ID,
+  } from "$lib/const";
   import { isAfter } from "$lib/utils/date";
   import type { Service } from "$lib/types";
   import ServicePresentation from "$lib/components/services/body/presentation/service-presentation.svelte";
@@ -60,6 +64,7 @@
   import ServiceBeneficiaries from "$lib/components/services/body/service-beneficiaries.svelte";
   import ServiceMobilize from "$lib/components/services/body/service-mobilize.svelte";
   import ServiceMobilisation from "$lib/components/services/body/service-mobilisation.svelte";
+  import { hasAnsweredNpsForm } from "$lib/utils/nps";
 
   export let service: Service;
   export let servicesOptions;
@@ -132,20 +137,21 @@
     </div>
   </CenteredGrid>
 
-  {#if $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !service.hasAlreadyBeenUnpublished}
-    <TallyNpsPopup
-      formId={SERVICE_CREATION_FORM_ID}
-      timeout={3000}
-      hiddenFields={{
-        service: $serviceSubmissionTimeMeter.id,
-        temps: $serviceSubmissionTimeMeter.duration,
-      }}
-    />
-  {/if}
-
-  <!-- Do not display NPS to the service contributor -->
-  {#if !service.canWrite}
-    <TallyNpsPopup formId={NPS_FORM_ID} />
+  {#if service.canWrite}
+    {#if !hasAnsweredNpsForm(SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !service.hasAlreadyBeenUnpublished}
+      <TallyNpsPopup
+        formId={SERVICE_CREATION_FORM_ID}
+        timeout={3000}
+        hiddenFields={{
+          service: $serviceSubmissionTimeMeter.id,
+          temps: $serviceSubmissionTimeMeter.duration,
+        }}
+      />
+    {:else}
+      <TallyNpsPopup formId={NPS_OFFEROR_FORM_ID} timeout={30000} />
+    {/if}
+  {:else}
+    <TallyNpsPopup formId={NPS_SEEKER_FORM_ID} />
   {/if}
 {/if}
 
