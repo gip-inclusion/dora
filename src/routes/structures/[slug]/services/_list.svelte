@@ -150,7 +150,7 @@
     servicesDisplayed = sortService(services);
   }
 
-  let servicesDisplayed = sortService(structure.services);
+  $: servicesDisplayed = sortService(structure.services);
   $: canEdit = structure.isMember || $userInfo?.isStaff;
 </script>
 
