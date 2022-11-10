@@ -36,7 +36,6 @@
   function trackClick() {
     trackMobilisationEmail(service);
   }
-
 </script>
 
 <div>
