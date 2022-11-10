@@ -194,9 +194,15 @@
       optGroupsOpen = [];
     } else {
       // On filtre les choix et les optGroups
-      choices = originalChoices.filter((c) =>
-        c.label.toLowerCase().includes(filterText.toLocaleLowerCase())
-      );
+      choices = originalChoices.filter((c) => {
+        const optGroupLabel = originalOptGroups.find(
+          (g) => g.value === c.optGroupKey
+        )?.label;
+        return (
+          c.label.toLowerCase().includes(filterText.toLocaleLowerCase()) ||
+          optGroupLabel.toLowerCase().includes(filterText.toLocaleLowerCase())
+        );
+      });
 
       // On réinitialise la sélection pour le clavier
       setAsSelected(null);
