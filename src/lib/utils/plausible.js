@@ -4,6 +4,7 @@ import { get } from "svelte/store";
 import { browser } from "$app/env";
 import { CANONICAL_URL } from "$lib/env.js";
 import { token, userInfo } from "$lib/auth.js";
+import { getDepartmentFromCityCode } from "$lib/utils";
 
 function _track(tag, props) {
   if (browser) {
@@ -107,7 +108,7 @@ export function trackSearch(
     hasNoFees,
     loggedIn: !!get(token),
     numResults: numResultsCat,
-    department: cityCode?.slice(0, 2),
+    department: getDepartmentFromCityCode(cityCode),
   });
 }
 
