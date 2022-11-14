@@ -188,6 +188,7 @@
           placeholder="Type de service"
           bind:value={kindId}
           choices={servicesOptions.kinds}
+          onChange={handleSearch}
         />
       </div>
       <div>
@@ -201,6 +202,7 @@
           placeholder="Frais à charge"
           bind:value={fee}
           choices={servicesOptions.feeConditions}
+          onChange={handleSearch}
         />
       </div>
     </div>
