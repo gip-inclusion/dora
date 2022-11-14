@@ -83,8 +83,8 @@ export function trackPDFDownload(service) {
 }
 
 export function trackSearch(
-  categoryIds: [],
-  subCategoryIds: [],
+  categoryIds,
+  subCategoryIds,
   cityCode,
   cityLabel,
   kindId,
