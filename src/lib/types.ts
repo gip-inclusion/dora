@@ -30,6 +30,8 @@ export type Structure = {
   modificationDate: string;
   source: StructureSource | undefined;
   hasBeenEdited: boolean | undefined;
+
+  services?: DashboardService[];
 };
 
 export type StructuresOptions = {

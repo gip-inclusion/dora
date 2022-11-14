@@ -1,19 +1,27 @@
 <script context="module">
   import { getServicesOptions } from "$lib/services";
 
-  export async function load() {
+  export async function load({ url }) {
+    const query = url.searchParams;
     return {
       props: {
+        serviceStatus: query.get("service-status"),
+        updateStatus: query.get("update-status"),
         servicesOptions: await getServicesOptions(),
       },
     };
   }
 </script>
 
-<script>
+<script lang="ts">
   import { getStructure } from "$lib/structures";
+  import type {
+    ServicesOptions,
+    SERVICE_STATUSES,
+    SERVICE_UPDATE_STATUS,
+  } from "$lib/types.js";
   import { capitalize } from "$lib/utils.js";
-  import { structure } from "../_store.js";
+  import { structure } from "../_store";
 
   import List from "./_list.svelte";
 
@@ -21,7 +29,9 @@
     $structure = await getStructure($structure.slug);
   }
 
-  export let servicesOptions;
+  export let servicesOptions: ServicesOptions;
+  export let serviceStatus: SERVICE_STATUSES | undefined;
+  export let updateStatus: SERVICE_UPDATE_STATUS | undefined;
 </script>
 
 <svelte:head>
@@ -31,6 +41,8 @@
 
 <List
   {servicesOptions}
+  {serviceStatus}
+  {updateStatus}
   structure={$structure}
   total={$structure.services.length}
   onRefresh={handleRefresh}
