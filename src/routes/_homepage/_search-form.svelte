@@ -72,11 +72,11 @@
   );
 </script>
 
-<div class="w-full rounded border border-gray-02 bg-white">
+<div class="w-full rounded-md border border-gray-02 bg-white">
   {#if servicesOptions.categories}
     <form class="grid" on:submit|preventDefault={handleSearch}>
       <div
-        class="city flex items-center border-b border-gray-02 p-s24 text-f14 lg:border-r lg:border-b-0"
+        class="city flex items-center border-b border-gray-02 p-s16 text-f14 lg:border-r lg:border-b-0"
         class:has-value={!!cityCode}
       >
         <div class="mr-s8 h-s24 w-s24 fill-current text-magenta-cta">
@@ -123,7 +123,7 @@
       </div>
 
       <div
-        class="flex justify-between border-b border-gray-02 p-s24 text-f14 lg:border-r lg:border-b-0"
+        class="flex justify-between border-b border-gray-02 p-s16 text-f14 lg:border-r lg:border-b-0"
       >
         <div
           class="mr-s8 h-s24 w-s24 self-center fill-current text-magenta-cta"
@@ -146,7 +146,7 @@
         />
       </div>
 
-      <div class="p-s12 text-center lg:p-s24">
+      <div class="p-s12 text-center lg:p-s16">
         <Button
           extraClass="h-s48"
           type="submit"
@@ -162,7 +162,7 @@
 
   {#if showDeploymentWarning && cityCode && !isInDeploymentDepartments(cityCode, servicesOptions)}
     <div
-      class="flex border-t border-gray-02 bg-blue-light p-s24 font-bold text-france-blue"
+      class="flex rounded-b-md border-t border-gray-02 bg-blue-light p-s16 font-bold text-france-blue"
     >
       <span class="mr-s16 h-s24 w-s24 fill-current">
         {@html informationIcon}
@@ -176,7 +176,7 @@
 
   {#if useAdditionalFilters}
     <div
-      class="flex flex-col border-t border-gray-02 bg-white p-s24 text-f14 md:flex-row"
+      class="flex flex-col rounded-b-md border-t border-gray-02 bg-white p-s16 text-f14 md:flex-row"
     >
       <div class="mr-s12 mb-s12 md:mb-s0">
         <SelectField

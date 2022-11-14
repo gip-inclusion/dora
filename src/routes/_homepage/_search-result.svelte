@@ -14,7 +14,7 @@
   const hasLocationTag = result.distance || result.location === "À distance";
 </script>
 
-<div {id} class="rounded-ml border border-gray-02 shadow-md" tabindex="-1">
+<div {id} class="rounded-ml border border-gray-02 shadow-sm" tabindex="-1">
   <div class="relative p-s32 pr-s64">
     <a
       href="/structures/{result.structure}"
