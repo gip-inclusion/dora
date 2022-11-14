@@ -83,12 +83,12 @@ export function trackPDFDownload(service) {
 }
 
 export function trackSearch(
-  categoryId,
-  subCategoryId,
+  categoryIds: [],
+  subCategoryIds: [],
   cityCode,
   cityLabel,
   kindId,
-  hasNoFees,
+  fee,
   numResults
 ) {
   let numResultsCat;
@@ -100,12 +100,12 @@ export function trackSearch(
     numResultsCat = "Plus de 5";
   }
   _track("recherche", {
-    categoryId,
-    subCategoryId,
+    categoryIds: categoryIds.join(", "),
+    subCategoryIds: subCategoryIds.join(", "),
     cityCode,
     cityLabel,
     kindId,
-    hasNoFees,
+    fee: fee.join(", "),
     loggedIn: !!get(token),
     numResults: numResultsCat,
     department: getDepartmentFromCityCode(cityCode),

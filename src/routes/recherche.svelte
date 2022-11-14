@@ -2,7 +2,7 @@
   import { getServicesOptions } from "$lib/services";
   import { getApiURL } from "$lib/utils/api.js";
   import { getQuery } from "./_homepage/_search";
-  import { trackSearch } from "$lib/utils/plausible.js";
+  import { trackSearch } from "$lib/utils/plausible";
 
   async function getResults({
     categoryIds,
