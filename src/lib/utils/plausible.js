@@ -87,8 +87,8 @@ export function trackSearch(
   subCategoryIds,
   cityCode,
   cityLabel,
-  kindId,
-  fee,
+  kindIds,
+  feeConditions,
   numResults
 ) {
   let numResultsCat;
@@ -100,12 +100,12 @@ export function trackSearch(
     numResultsCat = "Plus de 5";
   }
   _track("recherche", {
-    categoryIds: categoryIds.join(", "),
-    subCategoryIds: subCategoryIds.join(", "),
+    categoryIds: categoryIds.join(","),
+    subCategoryIds: subCategoryIds.join(","),
     cityCode,
     cityLabel,
-    kindId,
-    fee: fee.join(", "),
+    serviceKinds: kindIds.join(","),
+    feeConditions: feeConditions.join(","),
     loggedIn: !!get(token),
     numResults: numResultsCat,
     department: getDepartmentFromCityCode(cityCode),

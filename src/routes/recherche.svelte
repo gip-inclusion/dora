@@ -3,22 +3,23 @@
   import { getApiURL } from "$lib/utils/api.js";
   import { getQuery } from "./_homepage/_search";
   import { trackSearch } from "$lib/utils/plausible";
+  import type { SearchQuery } from "$lib/types";
 
   async function getResults({
     categoryIds,
     subCategoryIds,
     cityCode,
     cityLabel,
-    kindId,
-    fee,
-  }) {
+    kindIds,
+    feeConditions,
+  }: SearchQuery) {
     const query = getQuery({
       categoryIds,
       subCategoryIds,
       cityCode,
       cityLabel,
-      kindId,
-      fee,
+      kindIds,
+      feeConditions,
     });
     const url = `${getApiURL()}/search/?${query}`;
 
@@ -38,30 +39,33 @@
     }
     return [];
   }
+
   export async function load({ url }) {
     const query = url.searchParams;
-    const categoryIds = query.get("cat") ? query.get("cat").split(",") : [];
-    const subCategoryIds = query.get("sub") ? query.get("sub").split(",") : [];
+    const categoryIds = query.get("cats") ? query.get("cats").split(",") : [];
+    const subCategoryIds = query.get("subs")
+      ? query.get("subs").split(",")
+      : [];
     const cityCode = query.get("city");
     const cityLabel = query.get("cl");
-    const kindId = query.get("kinds");
-    const fee = query.get("fee") ? query.get("fee").split(",") : [];
+    const kindIds = query.get("kinds") ? query.get("kinds").split(",") : [];
+    const feeConditions = query.get("fees") ? query.get("fees").split(",") : [];
 
     const services = await getResults({
       categoryIds,
       subCategoryIds,
       cityCode,
       cityLabel,
-      kindId,
-      fee,
+      kindIds,
+      feeConditions,
     });
     trackSearch(
       categoryIds,
       subCategoryIds,
       cityCode,
       cityLabel,
-      kindId,
-      fee,
+      kindIds,
+      feeConditions,
       services.length
     );
     return {
@@ -70,8 +74,8 @@
         subCategoryIds,
         cityCode,
         cityLabel,
-        kindId,
-        fee,
+        kindIds,
+        feeConditions,
         services,
         servicesOptions: await getServicesOptions(),
       },
@@ -89,6 +93,7 @@
   import { NPS_SEEKER_FORM_ID } from "$lib/const";
   import type {
     FeeCondition,
+    ServiceKind,
     ServiceSearchResult,
     ServicesOptions,
   } from "$lib/types";
@@ -109,8 +114,8 @@
   export let subCategoryIds: string[];
   export let cityCode: string;
   export let cityLabel: string;
-  export let kindId: string;
-  export let fee: FeeCondition[];
+  export let kindIds: ServiceKind[];
+  export let feeConditions: FeeCondition[];
   export let services;
 
   let tags = [];
@@ -190,8 +195,8 @@
       {servicesOptions}
       {cityCode}
       {cityLabel}
-      {kindId}
-      {fee}
+      {kindIds}
+      {feeConditions}
       subCategoryIds={[
         ...subCategoryIds,
         ...categoryIds.map((c) => `${c}--all`),

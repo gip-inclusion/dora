@@ -12,7 +12,7 @@
     mapPinIcon,
     searchIcon,
   } from "$lib/icons";
-  import type { FeeCondition, ServicesOptions } from "$lib/types";
+  import type { FeeCondition, ServicesOptions, ServiceKind } from "$lib/types";
   import { getDepartmentFromCityCode } from "$lib/utils";
   import {
     injectOptGroupAllOptionsInSubCategories,
@@ -32,8 +32,8 @@
   export let subCategoryIds: string[] = [];
   export let showDeploymentWarning = true;
   export let useAdditionalFilters = false;
-  export let kindId: string | undefined = undefined;
-  export let fee: FeeCondition[] = [];
+  export let kindIds: ServiceKind[] = [];
+  export let feeConditions: FeeCondition[] = [];
 
   let cityChoiceList;
 
@@ -52,8 +52,8 @@
       subCategoryIds: finalSubCategoryIds,
       cityCode,
       cityLabel,
-      fee,
-      kindId,
+      kindIds,
+      feeConditions,
     });
     goto(`recherche?${query}`);
   }
@@ -181,12 +181,13 @@
       <div class="mr-s12 mb-s12 md:mb-s0">
         <SelectField
           hideLabel
+          isMultiple
           style="filter"
           label="Type de service"
           minDropdownWidth="min-w-[200px]"
           name="subcategories"
           placeholder="Type de service"
-          bind:value={kindId}
+          bind:value={kindIds}
           choices={servicesOptions.kinds}
           onChange={handleSearch}
         />
@@ -200,7 +201,7 @@
           label="Frais à charge"
           name="fee"
           placeholder="Frais à charge"
-          bind:value={fee}
+          bind:value={feeConditions}
           choices={servicesOptions.feeConditions}
           onChange={handleSearch}
         />

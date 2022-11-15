@@ -80,11 +80,34 @@ export enum SERVICE_UPDATE_STATUS {
   REQUIRED = "REQUIRED",
 }
 
+export type ServiceKind =
+  | "accompagnement"
+  | "accueil"
+  | "aide-financiere"
+  | "aide-materielle"
+  | "atelier"
+  | "autonomie"
+  | "delegation"
+  | "financement"
+  | "formation"
+  | "information"
+  | "numerique";
+
 export type FeeCondition =
   | "gratuit"
   | "gratuit-sous-conditions"
   | "payant"
-  | "adhesion";
+  | "adhesion"
+  | "pass-numerique";
+
+export type SearchQuery = {
+  categoryIds: string[];
+  subCategoryIds: string[];
+  cityCode: string;
+  cityLabel: string;
+  kindIds: ServiceKind[];
+  feeConditions: FeeCondition[];
+};
 
 export type ServiceSearchResult = {
   distance: number;
