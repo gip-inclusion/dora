@@ -1,4 +1,6 @@
-const config = {
+import type { PlaywrightTestConfig } from "@playwright/test";
+
+const config: PlaywrightTestConfig = {
   use: {
     // Eviter les erreurs "Content Security Policy" des appels back-end
     bypassCSP: true,
