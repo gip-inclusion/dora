@@ -1,6 +1,6 @@
 <script>
   import { page } from "$app/stores";
-  import { token, userInfo } from "$lib/auth";
+  import { token, userInfo, validateCredsAndFillUserInfo } from "$lib/auth";
   import { trackJoinStructure } from "$lib/utils/plausible";
 
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api.js";
@@ -39,6 +39,7 @@
 
     if (response.ok) {
       result.data = await response.json();
+      await validateCredsAndFillUserInfo();
       await goto(`/structures/${result.data.slug}`);
     } else {
       try {
