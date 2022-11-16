@@ -45,6 +45,9 @@ export async function handle({ event, resolve }) {
   const imgSrc = `img-src 'self' data: https://*.crisp.chat/`;
   const styleSrc = `style-src 'self' 'unsafe-inline' https://client.crisp.chat/`;
 
+  if (ENVIRONMENT !== "production") {
+    response.headers.set("X-Robots-Tag", "noindex");
+  }
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-XSS-Protection", "1; mode=block");
   response.headers.set("X-Content-Type-Options", "nosniff");
