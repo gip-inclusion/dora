@@ -163,6 +163,9 @@
       if (propName === "fullDesc") {
         fullDesc.updateValue(service.fullDesc);
       }
+      if (propName === "feeCondition") {
+        feeConditionClassic = service.feeCondition;
+      }
     };
   }
 
