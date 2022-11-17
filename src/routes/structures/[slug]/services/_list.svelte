@@ -159,6 +159,7 @@
       serviceStatus = event.value;
     }
     servicesDisplayed = filterAndSortServices(structure.services);
+    updateUrlQueryParams();
   }
 
   function filterAndSortServices(services) {
@@ -178,7 +179,6 @@
       );
     }
 
-    updateUrlQueryParams();
     return sortService(services);
   }
 
