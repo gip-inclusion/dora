@@ -25,7 +25,7 @@
       <br />
     {/if}
     actif: {user.isActive ? "✅" : "❌"} valide: {user.isValid ? "✅" : "❌"} infolettre:
-    {user.newsletter ? "✅" : "❌"}
+    {user.newsletter ? "✅" : "❌"} migré sur IC: {user.isOnIc ? "✅" : "❌"}
     <br />
     inscription: <Date date={user.dateJoined} />
   </div>
