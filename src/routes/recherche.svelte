@@ -241,7 +241,7 @@
     </div>
   {/if}
 
-  {#if services.length}
+  {#if services.length || servicesToUpdate.length}
     <div class="mt-s32 flex flex-col gap-s16">
       <h2 class="sr-only">Résultats de votre recherche</h2>
       {#each services as service, index}
