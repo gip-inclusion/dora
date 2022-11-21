@@ -3,7 +3,7 @@
   import { getApiURL } from "$lib/utils/api.js";
   import { getQuery } from "./_homepage/_search";
   import { trackSearch } from "$lib/utils/plausible";
-  import type { SearchQuery } from "$lib/types";
+  import { SERVICE_UPDATE_STATUS, type SearchQuery } from "$lib/types";
 
   async function getResults({
     categoryIds,
@@ -51,7 +51,7 @@
     const kindIds = query.get("kinds") ? query.get("kinds").split(",") : [];
     const feeConditions = query.get("fees") ? query.get("fees").split(",") : [];
 
-    const services = await getResults({
+    let services = await getResults({
       categoryIds,
       subCategoryIds,
       cityCode,
@@ -59,6 +59,10 @@
       kindIds,
       feeConditions,
     });
+    services.forEach((service) => {
+      service.updateStatus = computeUpdateStatusData(service).updateStatus;
+    });
+
     trackSearch(
       categoryIds,
       subCategoryIds,
@@ -76,7 +80,12 @@
         cityLabel,
         kindIds,
         feeConditions,
-        services,
+        services: services.filter(
+          (service) => service.updateStatus !== SERVICE_UPDATE_STATUS.REQUIRED
+        ),
+        servicesToUpdate: services.filter(
+          (service) => service.updateStatus === SERVICE_UPDATE_STATUS.REQUIRED
+        ),
         servicesOptions: await getServicesOptions(),
       },
     };
@@ -106,6 +115,8 @@
   import NewletterNotice from "./_homepage/_newletter-notice.svelte";
   import { tick } from "svelte";
   import Button from "$lib/components/button.svelte";
+  import { computeUpdateStatusData } from "$lib/utils/service";
+  import Notice from "$lib/components/notice.svelte";
 
   const PAGE_LENGTH = 10;
 
@@ -116,7 +127,8 @@
   export let cityLabel: string;
   export let kindIds: ServiceKind[];
   export let feeConditions: FeeCondition[];
-  export let services;
+  export let services: ServiceSearchResult[];
+  export let servicesToUpdate: ServiceSearchResult[];
 
   let tags = [];
 
@@ -209,9 +221,9 @@
 
 <CenteredGrid extraClass="max-w-4xl m-auto">
   <div class="mt-s16 text-f21 font-bold text-gray-dark">
-    {#if services.length > 0}
-      {services.length}
-      {services.length > 1 ? "résultats" : "résultat"}
+    {#if services.length + servicesToUpdate.length > 0}
+      {services.length + servicesToUpdate.length}
+      {services.length + servicesToUpdate.length > 1 ? "résultats" : "résultat"}
     {:else}
       Aucun résultat
     {/if}
@@ -241,11 +253,33 @@
       {#if services.length > currentPageLength}
         <div class="text-center">
           <Button
-            label="Charger plus de résultat"
+            label="Charger plus de résultats"
             on:click={loadMoreResult}
-            extraClass="!bg-transparent text-magenta-cta"
+            noBackground
           />
         </div>
+      {:else if servicesToUpdate.length}
+        <Notice
+          type="warning"
+          title="Les services qui suivent n’ont pas été mis à jour depuis plus de 8
+        mois"
+        />
+
+        {#each servicesToUpdate as service, index}
+          {#if index < currentPageLength}
+            <SearchResult id={getResultId(index)} result={service} />
+          {/if}
+        {/each}
+
+        {#if servicesToUpdate.length > currentPageLength}
+          <div class="text-center">
+            <Button
+              label="Charger plus de résultats"
+              on:click={loadMoreResult}
+              noBackground
+            />
+          </div>
+        {/if}
       {/if}
     </div>
   {/if}

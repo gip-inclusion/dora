@@ -49,7 +49,7 @@
 </script>
 
 {#if visible}
-  <div class="flex rounded-lg {types[type].bg} px-s16 py-s32">
+  <div class="flex rounded-lg {types[type].bg} px-s8 py-s24">
     {#if showIcon}
       <div class="hidden text-center sm:block sm:flex-[0_0_64px]">
         <div
@@ -64,7 +64,7 @@
       {#if title || hasCloseButton}
         <div class="flex items-center justify-between">
           {#if title}
-            <h4 class="mb-s16 {types[type].title} flex leading-32">
+            <h4 class="mb-s0 {types[type].title} flex leading-32">
               {#if showIcon}
                 <div class="mr-s8 inline-block text-center sm:hidden">
                   <div
@@ -80,7 +80,7 @@
             </h4>
           {/if}
           {#if hasCloseButton}
-            <div class="-mt-s8">
+            <div>
               <Button
                 icon={closeIcon}
                 noBackground
@@ -91,15 +91,19 @@
           {/if}
         </div>
       {/if}
-      <div class="flex flex-row flex-wrap items-start justify-between gap-s12">
-        <slot />
+      {#if $$slots?.default || $$slots.button}
+        <div
+          class="mt-s16 flex flex-row flex-wrap items-start justify-between gap-s12"
+        >
+          <slot />
 
-        {#if $$slots.button}
-          <div class="mb-s24 self-end">
-            <slot name="button" />
-          </div>
-        {/if}
-      </div>
+          {#if $$slots.button}
+            <div class="mb-s24 self-end">
+              <slot name="button" />
+            </div>
+          {/if}
+        </div>
+      {/if}
     </div>
   </div>
 {/if}
