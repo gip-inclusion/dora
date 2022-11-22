@@ -5,7 +5,6 @@
   import { fetchData, getDepartmentFromCityCode } from "$lib/utils";
   import { getApiURL } from "$lib/utils/api.js";
   import Select from "$lib/components/forms/select.svelte";
-  import Button from "$lib/components/button.svelte";
   import { pinDistanceIcon } from "$lib/icons";
 
   export let onChange;
@@ -16,7 +15,6 @@
   export let initialValue = undefined;
 
   let choices = [];
-
   async function searchCity(q) {
     const url = `${getApiURL()}/admin-division-search/?type=city&q=${encodeURIComponent(
       q
@@ -38,7 +36,7 @@
     if (context) context.onBlur(evt);
   }
 
-  const geolocLabelInit = "À proximité";
+  const geolocLabelInit = "Autour de moi";
   let geolocLabel = geolocLabelInit;
 
   function searchCityFromLocationError() {
@@ -103,12 +101,17 @@
   localFiltering={false}
   minCharactersToSearch="3"
 >
-  <Button
-    slot="prepend"
-    label={geolocLabel}
-    wFull
-    noBackground
-    icon={pinDistanceIcon}
-    on:click={searchCityFromLocation}
-  />
+  <div slot="prepend" class="px-s8 pt-s8" let:results>
+    <button
+      class="flex w-full border-gray-02 py-s12 px-s8 text-f14 text-gray-text"
+      on:click|preventDefault|stopPropagation={searchCityFromLocation}
+      class:border-b={results?.length}
+    >
+      <span class="mr-s8 h-s24 w-s24 fill-current ">
+        {@html pinDistanceIcon}
+      </span>
+
+      {geolocLabel}
+    </button>
+  </div>
 </Select>

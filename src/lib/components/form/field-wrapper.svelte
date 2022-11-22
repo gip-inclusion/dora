@@ -8,11 +8,13 @@
   export let hidden = false;
   export let hideLabel = false;
   export let display: "horizontal" | "vertical" = "horizontal";
-  export let errorMessages: string[];
+  export let errorMessages: string[] = [];
 </script>
 
 <div
-  class="flex w-full {display === 'vertical' ? 'flex-row gap-s8' : 'flex-col'}"
+  class="relative flex w-full {display === 'vertical'
+    ? 'flex-row gap-s8'
+    : 'flex-col'}"
   class:hidden
 >
   <label

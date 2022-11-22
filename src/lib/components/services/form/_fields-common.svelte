@@ -113,7 +113,7 @@
   }
 
   function handleFeeConditionChange(feeCondition) {
-    this.service.feeCondition = feeCondition;
+    service.feeCondition = feeCondition?.value;
   }
 
   async function handleEltChange(evt) {
@@ -162,6 +162,9 @@
 
       if (propName === "fullDesc") {
         fullDesc.updateValue(service.fullDesc);
+      }
+      if (propName === "feeCondition") {
+        feeConditionClassic = service.feeCondition;
       }
     };
   }
@@ -584,7 +587,7 @@
         choices={servicesOptions.feeConditions.filter(
           (fee) => fee.value !== "pass-numerique"
         )}
-        onSelectChange={handleFeeConditionChange}
+        onChange={handleFeeConditionChange}
         display="vertical"
       />
     </FieldModel>

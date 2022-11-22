@@ -30,6 +30,8 @@ export type Structure = {
   modificationDate: string;
   source: StructureSource | undefined;
   hasBeenEdited: boolean | undefined;
+
+  services?: DashboardService[];
 };
 
 export type StructuresOptions = {
@@ -78,11 +80,57 @@ export enum SERVICE_UPDATE_STATUS {
   REQUIRED = "REQUIRED",
 }
 
+export type ServiceKind =
+  | "accompagnement"
+  | "accueil"
+  | "aide-financiere"
+  | "aide-materielle"
+  | "atelier"
+  | "autonomie"
+  | "delegation"
+  | "financement"
+  | "formation"
+  | "information"
+  | "numerique";
+
 export type FeeCondition =
   | "gratuit"
   | "gratuit-sous-conditions"
   | "payant"
-  | "adhesion";
+  | "adhesion"
+  | "pass-numerique";
+
+export type SearchQuery = {
+  categoryIds: string[];
+  subCategoryIds: string[];
+  cityCode: string;
+  cityLabel: string;
+  kindIds: ServiceKind[];
+  feeConditions: FeeCondition[];
+};
+
+export type ServiceSearchResult = {
+  distance: number;
+  location: string;
+  diffusionZoneType: string;
+  modificationDate: string;
+  name: string;
+  shortDesc: string;
+  slug: string;
+  structure: string;
+  status: SERVICE_STATUSES;
+  structureInfo: {
+    address1: string;
+    address2: string;
+    city: string;
+    name: string;
+    postalCode: string;
+    shortDesc: string;
+    siret: string;
+    slug: string;
+    url: string;
+  };
+};
 
 export type Service = {
   siret: string;
@@ -193,6 +241,7 @@ export type DashboardService = Pick<
 
 export type ServicesOptions = {
   beneficiariesAccessModes: Choice[];
+  deploymentDepartments: string[];
   requirements: (Choice & { structure: string | null })[];
   locationKinds: Choice[];
   feeConditions: Choice[];
@@ -207,6 +256,7 @@ export type ServicesOptions = {
 export type Choice = {
   value: string;
   label: string;
+  optGroupKey?: string;
   selectedLabel?: string;
   icon?: string;
   iconOnRight?: boolean;

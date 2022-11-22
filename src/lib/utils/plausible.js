@@ -4,6 +4,7 @@ import { get } from "svelte/store";
 import { browser } from "$app/env";
 import { CANONICAL_URL } from "$lib/env.js";
 import { token, userInfo } from "$lib/auth.js";
+import { getDepartmentFromCityCode } from "$lib/utils";
 
 function _track(tag, props) {
   if (browser) {
@@ -82,12 +83,12 @@ export function trackPDFDownload(service) {
 }
 
 export function trackSearch(
-  categoryId,
-  subCategoryId,
+  categoryIds,
+  subCategoryIds,
   cityCode,
   cityLabel,
-  kindId,
-  hasNoFees,
+  kindIds,
+  feeConditions,
   numResults
 ) {
   let numResultsCat;
@@ -99,15 +100,15 @@ export function trackSearch(
     numResultsCat = "Plus de 5";
   }
   _track("recherche", {
-    categoryId,
-    subCategoryId,
+    categoryIds: categoryIds.join(","),
+    subCategoryIds: subCategoryIds.join(","),
     cityCode,
     cityLabel,
-    kindId,
-    hasNoFees,
+    serviceKinds: kindIds.join(","),
+    feeConditions: feeConditions.join(","),
     loggedIn: !!get(token),
     numResults: numResultsCat,
-    department: cityCode?.slice(0, 2),
+    department: getDepartmentFromCityCode(cityCode),
   });
 }
 

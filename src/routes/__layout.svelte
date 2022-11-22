@@ -29,6 +29,7 @@
         currentUserInfo.pendingStructures.length
       ) &&
       !url.pathname.startsWith("/auth/rattachement") &&
+      !url.pathname.startsWith("/auth/invitation") &&
       !url.pathname.startsWith("/auth/deconnexion")
     ) {
       return {

@@ -1,10 +1,8 @@
 <script>
   import LinkButton from "$lib/components/link-button.svelte";
-
-  import SearchResultWrapper from "./_search_result_wrapper.svelte";
 </script>
 
-<SearchResultWrapper>
+<div class="wrapper-container">
   <div class="wrapper">
     <div class="">
       <h4>Connaissez-vous monenfant.fr ?</h4>
@@ -20,9 +18,16 @@
       <LinkButton label="Accéder au site" to="https://monenfant.fr/" otherTab />
     </div>
   </div>
-</SearchResultWrapper>
+</div>
 
 <style lang="postcss">
+  .wrapper-container {
+    padding: 20px 20px 24px 24px;
+    background-color: var(--col-white);
+    border-radius: var(--s8);
+    box-shadow: var(--shadow-sm);
+  }
+
   .wrapper {
     display: flex;
     flex-direction: column;

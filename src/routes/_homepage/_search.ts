@@ -1,23 +1,21 @@
+import type { SearchQuery } from "$lib/types";
+
 export function getQuery({
-  categoryId,
-  subCategoryId,
+  categoryIds,
+  subCategoryIds,
   cityCode,
   cityLabel,
-  kindId,
-  fee,
-}) {
+  feeConditions,
+  kindIds,
+}: SearchQuery) {
   const parameters = {
-    cat: categoryId,
-    sub: subCategoryId,
+    cats: categoryIds.join(","),
+    subs: subCategoryIds.join(","),
     city: cityCode,
     cl: cityLabel,
-    kinds: kindId,
+    kinds: kindIds.join(","),
+    fees: feeConditions.join(","),
   };
-
-  if (fee?.length) {
-    parameters.fee = fee;
-  }
-
   const query = Object.entries(parameters)
     .filter(([_k, v]) => !!v)
     .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)

@@ -102,6 +102,7 @@ export { default as quillPenIcon } from "remixicon/icons/Design/quill-pen-line.s
 export { default as editIcon } from "remixicon/icons/Design/edit-2-line.svg?raw";
 
 export { default as deleteBinIcon } from "remixicon/icons/System/delete-bin-line.svg?raw";
+export { default as deleteBackIcon } from "remixicon/icons/System/delete-back-2-fill.svg?raw";
 export { default as linkIcon } from "remixicon/icons/Editor/link.svg?raw";
 export { default as textIcon } from "remixicon/icons/Editor/text.svg?raw";
 export { default as checkboxCircleLine } from "remixicon/icons/System/checkbox-circle-line.svg?raw";

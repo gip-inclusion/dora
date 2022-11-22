@@ -1,1 +1,12 @@
-{}
+{
+  "overrides": [
+    {
+      "files": "*.svelte",
+      "options": {
+        "parser": "svelte"
+      }
+    }
+  ],
+  "pluginSearchDirs": ["."],
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
