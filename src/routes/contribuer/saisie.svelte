@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { getServicesOptions } from "$lib/services";
 
   export async function load({ url }) {
@@ -14,7 +14,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import FormWrapper from "./form/_form-wrapper.svelte";
 
   export let servicesOptions, source;

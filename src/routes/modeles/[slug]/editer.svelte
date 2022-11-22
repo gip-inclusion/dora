@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { get } from "svelte/store";
   import { browser } from "$app/env";
 
@@ -44,7 +44,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Notice from "$lib/components/notice.svelte";

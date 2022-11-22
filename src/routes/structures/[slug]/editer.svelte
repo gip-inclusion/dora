@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { getStructuresOptions } from "$lib/structures";
 
   export async function load() {
@@ -10,7 +10,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import { getStructure } from "$lib/structures";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";

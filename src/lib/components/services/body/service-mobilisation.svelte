@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { trackMobilisation } from "$lib/utils/plausible";
 
   import Button from "$lib/components/button.svelte";

@@ -1,7 +1,7 @@
-<script context="module">
+<script context="module" lang="ts">
   import { CANONICAL_URL } from "$lib/env";
   import { disconnect } from "$lib/auth";
-  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api.js";
+  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
 
   export async function load() {
     const targetUrl = `${getApiURL()}/inclusion-connect-get-logout-info/`;

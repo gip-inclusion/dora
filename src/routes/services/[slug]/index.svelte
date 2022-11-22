@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { browser } from "$app/env";
   import { get } from "svelte/store";
 

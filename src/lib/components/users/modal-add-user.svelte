@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import { get } from "svelte/store";
 
-  import { formErrors } from "$lib/validation.js";
-  import { addUserSchema } from "$lib/schemas/dashboard.js";
+  import { formErrors } from "$lib/validation";
+  import { addUserSchema } from "$lib/schemas/dashboard";
   import { getApiURL } from "$lib/utils/api";
   import { token } from "$lib/auth";
 

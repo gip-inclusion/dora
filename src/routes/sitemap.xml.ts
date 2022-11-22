@@ -1,4 +1,4 @@
-import { ENVIRONMENT, CANONICAL_URL } from "$lib/env.js";
+import { ENVIRONMENT, CANONICAL_URL } from "$lib/env";
 import { SERVICE_STATUSES } from "$lib/schemas/service";
 import { getPublishedServices } from "$lib/services";
 import { getStructures } from "$lib/structures";

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import LinkButton from "$lib/components/link-button.svelte";
   import { capitalize, shortenString } from "$lib/utils";
 

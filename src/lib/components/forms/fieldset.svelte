@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
   import Button from "../button.svelte";

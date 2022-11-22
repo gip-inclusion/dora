@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { modelSchema } from "$lib/schemas/service";
 
   import FieldsCommon from "./_fields-common.svelte";

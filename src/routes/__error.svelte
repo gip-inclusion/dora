@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   export function load({ error, status }) {
     return {
       props: {
@@ -11,7 +11,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import { trackError } from "$lib/utils/plausible";
 

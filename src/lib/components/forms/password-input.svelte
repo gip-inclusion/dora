@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { eyeFillIcon, eyeOffIcon } from "$lib/icons";
 
   export let value = "";

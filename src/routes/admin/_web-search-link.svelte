@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import SmallLink from "./_small-link.svelte";
 
   export let searchString;

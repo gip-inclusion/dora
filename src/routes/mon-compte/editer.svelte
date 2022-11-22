@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import InformationsForm from "./_form-informations.svelte";
 </script>

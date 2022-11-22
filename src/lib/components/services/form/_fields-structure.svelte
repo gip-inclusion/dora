@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
 
-  import { formErrors } from "$lib/validation.js";
+  import { formErrors } from "$lib/validation";
 
   import { getModel, getServicesOptions } from "$lib/services";
   import { getStructure } from "$lib/structures";

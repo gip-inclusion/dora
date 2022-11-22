@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
-import { mockServiceOptions } from "../mocks/mockServiceOptions.js";
-import { HOME_SELECTORS, HOME_URL } from "../pages/home.js";
+import { mockServiceOptions } from "../mocks/mockServiceOptions";
+import { HOME_SELECTORS, HOME_URL } from "../pages/home";
 
 test.describe("La page d'accueil", () => {
   test.beforeEach(async ({ context, page }) => {

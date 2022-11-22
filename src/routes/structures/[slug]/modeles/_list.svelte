@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { userInfo } from "$lib/auth";
   // import Input from "$lib/components/forms/input.svelte";
   // import Select from "$lib/components/forms/select.svelte";

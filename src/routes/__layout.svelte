@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { get } from "svelte/store";
   import { browser } from "$app/env";
   import { CRISP_ID } from "$lib/env";
@@ -6,7 +6,7 @@
 
   import * as Sentry from "@sentry/browser";
 
-  import { ENVIRONMENT, SENTRY_DSN } from "$lib/env.js";
+  import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 
   if (ENVIRONMENT !== "local") {
     Sentry.init({
@@ -45,7 +45,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import favicoIco from "$lib/assets/favicon.ico";
   import favicoSvg from "$lib/assets/favicon.svg";
   import favicoPng from "$lib/assets/favicon.png";

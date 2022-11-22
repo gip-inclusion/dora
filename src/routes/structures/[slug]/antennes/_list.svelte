@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { API_URL, CANONICAL_URL } from "$lib/env";
   import { userInfo } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";

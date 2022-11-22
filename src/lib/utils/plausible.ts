@@ -2,7 +2,7 @@
 
 import { get } from "svelte/store";
 import { browser } from "$app/env";
-import { CANONICAL_URL } from "$lib/env.js";
+import { CANONICAL_URL } from "$lib/env";
 import { token, userInfo } from "$lib/auth";
 import { getDepartmentFromCityCode } from "$lib/utils";
 

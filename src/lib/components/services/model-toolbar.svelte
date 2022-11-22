@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { token } from "$lib/auth";
 
   import ModelMenu from "$lib/components/services/model-menu.svelte";

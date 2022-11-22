@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Button from "$lib/components/button.svelte";
   import Info from "$lib/components/info.svelte";
   import Notice from "$lib/components/notice.svelte";

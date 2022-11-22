@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Button from "$lib/components/button.svelte";
   import Label from "$lib/components/label.svelte";
   import Member from "./member.svelte";

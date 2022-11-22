@@ -1,9 +1,9 @@
-<script context="module">
+<script context="module" lang="ts">
   export const ssr = false;
 
   import { setToken, validateCredsAndFillUserInfo } from "$lib/auth";
   import { getApiURL, defaultAcceptHeader } from "$lib/utils/api";
-  import { getNextPage } from "./utils.js";
+  import { getNextPage } from "./utils";
 
   export async function load({ url, fetch }) {
     const nextPage = getNextPage(url);

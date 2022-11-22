@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { mapPinIcon } from "$lib/icons";
   import Label from "$lib/components/label.svelte";
   import { capitalize } from "$lib/utils";

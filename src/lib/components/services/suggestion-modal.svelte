@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import { userInfo } from "$lib/auth";
-  import { formErrors } from "$lib/validation.js";
+  import { formErrors } from "$lib/validation";
   import { suggestionSchema } from "$lib/schemas/service";
   import { getApiURL } from "$lib/utils/api";
 

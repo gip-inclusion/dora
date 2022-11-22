@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import { refreshUserInfo, token, userInfo } from "$lib/auth";
-  import { getApiURL } from "$lib/utils/api.js";
+  import { getApiURL } from "$lib/utils/api";
   import { userProfileSchema } from "$lib/schemas/auth";
-  import { formErrors } from "$lib/validation.js";
+  import { formErrors } from "$lib/validation";
   import { goto } from "$app/navigation";
 
   import Button from "$lib/components/button.svelte";

@@ -1,11 +1,7 @@
 <script lang="ts">
   import { onMount, setContext } from "svelte";
 
-  import {
-    formErrors,
-    validate,
-    contextValidationKey,
-  } from "$lib/validation.js";
+  import { formErrors, validate, contextValidationKey } from "$lib/validation";
   import { orderAndReformatSubcategories, moveToTheEnd } from "$lib/utils";
 
   import { isNotFreeService } from "$lib/utils/service";

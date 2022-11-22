@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { browser } from "$app/env";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import { getModel, getServicesOptions } from "$lib/services";
@@ -27,7 +27,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import { trackModel } from "$lib/utils/plausible";
 

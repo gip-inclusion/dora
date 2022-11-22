@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { getServicesOptions } from "$lib/services";
 
   export async function load() {
@@ -10,7 +10,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import Landing from "./_homepage/_landing.svelte";
 
   export let servicesOptions;

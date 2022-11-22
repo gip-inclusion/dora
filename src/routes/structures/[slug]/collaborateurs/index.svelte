@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { browser } from "$app/env";
   import { get } from "svelte/store";
   import { userInfo } from "$lib/auth";
@@ -40,7 +40,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import Button from "$lib/components/button.svelte";
   import MemberInvited from "$lib/components/users/member-invited.svelte";

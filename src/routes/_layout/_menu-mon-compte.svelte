@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import {
     accountCircleLineIcon,
     starSmileLineIcon,
     logoutBoxLineIcon,
-  } from "$lib/icons.js";
+  } from "$lib/icons";
 
   import LinkButton from "$lib/components/link-button.svelte";
 </script>

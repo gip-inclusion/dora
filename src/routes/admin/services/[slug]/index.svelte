@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { getServiceAdmin } from "$lib/admin";
 
   export async function load({ params }) {
@@ -18,7 +18,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import TextClamp from "$lib/components/text-clamp.svelte";
   import WebSearchLink from "../../_web-search-link.svelte";
   import { capitalize, markdownToHTML } from "$lib/utils";

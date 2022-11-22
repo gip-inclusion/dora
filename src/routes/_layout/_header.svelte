@@ -1,5 +1,5 @@
-<script>
-  import { ENVIRONMENT } from "$lib/env.js";
+<script lang="ts">
+  import { ENVIRONMENT } from "$lib/env";
   import { browser } from "$app/env";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";

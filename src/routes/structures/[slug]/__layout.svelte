@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { getStructure } from "$lib/structures";
   import { trackStructure } from "$lib/utils/plausible";
   import { structure } from "./_store";

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import NewsletterButton from "$lib/components/newsletter-button.svelte";
 </script>
 

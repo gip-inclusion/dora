@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { setContext, onMount, onDestroy } from "svelte";
 
   import {
@@ -6,7 +6,7 @@
     formErrors,
     injectAPIErrors,
     contextValidationKey,
-  } from "$lib/validation.js";
+  } from "$lib/validation";
 
   export let data;
   export let schema;

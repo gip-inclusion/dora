@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { userInfo } from "$lib/auth";
 
   import Date from "../date.svelte";

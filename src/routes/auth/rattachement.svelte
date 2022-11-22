@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { page } from "$app/stores";
   import { token, userInfo, validateCredsAndFillUserInfo } from "$lib/auth";
   import { trackJoinStructure } from "$lib/utils/plausible";
 
-  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api.js";
+  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import Button from "$lib/components/button.svelte";
   import AuthLayout from "./_auth_layout.svelte";

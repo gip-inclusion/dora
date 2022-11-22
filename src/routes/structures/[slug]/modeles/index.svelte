@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { browser } from "$app/env";
   import { get } from "svelte/store";
   import { userInfo } from "$lib/auth";
@@ -27,9 +27,9 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import { capitalize } from "$lib/utils.js";
+  import { capitalize } from "$lib/utils";
 
   import List from "./_list.svelte";
 </script>

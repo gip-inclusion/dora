@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { getStructure } from "$lib/structures";
 
   export async function load({ url }) {
@@ -21,11 +21,11 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import { token, validateCredsAndFillUserInfo } from "$lib/auth";
   import { trackJoinStructure } from "$lib/utils/plausible";
 
-  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api.js";
+  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import Button from "$lib/components/button.svelte";
   import AuthLayout from "./_auth_layout.svelte";

@@ -7,7 +7,7 @@
   } from "$lib/icons";
   import Button from "./button.svelte";
 
-  import { closeIcon } from "$lib/icons.js";
+  import { closeIcon } from "$lib/icons";
 
   export let title;
   export let type: "info" | "success" | "warning" | "error" = "info";

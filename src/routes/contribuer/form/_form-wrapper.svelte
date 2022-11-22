@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { setContext, onMount, onDestroy } from "svelte";
   import { goto } from "$app/navigation";
   import debounce from "lodash.debounce";
@@ -8,8 +8,8 @@
     injectAPIErrors,
     contextValidationKey,
     formErrors,
-  } from "$lib/validation.js";
-  import { contribSchema } from "$lib/schemas/service.js";
+  } from "$lib/validation";
+  import { contribSchema } from "$lib/schemas/service";
   import { publishServiceSuggestion } from "$lib/services";
 
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";

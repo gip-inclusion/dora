@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Date from "$lib/components/date.svelte";
 
   export let notes;

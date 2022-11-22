@@ -1,13 +1,13 @@
 import { get } from "svelte/store";
 
-import { fetchData } from "$lib/utils.js";
-import { getApiURL } from "$lib/utils/api.js";
+import { fetchData } from "$lib/utils";
+import { getApiURL } from "$lib/utils/api";
 
 import { token } from "$lib/auth";
 import { logException } from "./logger";
 
-import structureSchema from "$lib/schemas/structure.js";
-import { validate } from "$lib/validation.js";
+import structureSchema from "$lib/schemas/structure";
+import { validate } from "$lib/validation";
 
 export async function siretWasAlreadyClaimed(siret) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;

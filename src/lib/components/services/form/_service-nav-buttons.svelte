@@ -1,12 +1,12 @@
-<script>
+<script lang="ts">
   import { goto } from "$app/navigation";
 
-  import { validate, injectAPIErrors } from "$lib/validation.js";
+  import { validate, injectAPIErrors } from "$lib/validation";
   import {
     draftSchema,
     serviceSchema,
     SERVICE_STATUSES,
-  } from "$lib/schemas/service.js";
+  } from "$lib/schemas/service";
   import { createOrModifyService, publishDraft } from "$lib/services";
   import { logException } from "$lib/logger";
 

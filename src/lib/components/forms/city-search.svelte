@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { getContext } from "svelte";
 
   import { contextValidationKey } from "$lib/validation";
   import { fetchData, getDepartmentFromCityCode } from "$lib/utils";
-  import { getApiURL } from "$lib/utils/api.js";
+  import { getApiURL } from "$lib/utils/api";
   import Select from "$lib/components/forms/select.svelte";
   import { pinDistanceIcon } from "$lib/icons";
 

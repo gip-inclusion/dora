@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { getStructuresOptions } from "$lib/structures";
 
   export async function load() {
@@ -10,7 +10,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import { userInfo } from "$lib/auth";
   import { structure } from "./_store";
   import { getStructure } from "$lib/structures";
@@ -19,7 +19,7 @@
   import ServicesList from "./services/_list.svelte";
   import BranchesList from "./antennes/_list.svelte";
   import ModelesList from "./modeles/_list.svelte";
-  import { capitalize } from "$lib/utils.js";
+  import { capitalize } from "$lib/utils";
 
   export let structuresOptions;
 

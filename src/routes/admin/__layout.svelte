@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { token, userInfo } from "$lib/auth";
   import { get } from "svelte/store";
 
@@ -28,7 +28,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 </script>
 

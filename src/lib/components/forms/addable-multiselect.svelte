@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Field from "./field.svelte";
   import SchemaField from "./schema-field.svelte";
   import Button from "../button.svelte";

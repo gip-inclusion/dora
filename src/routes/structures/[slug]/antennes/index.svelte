@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import List from "./_list.svelte";
 
   import { structure } from "../_store";

@@ -1,11 +1,11 @@
-<script context="module">
+<script context="module" lang="ts">
   import { get } from "svelte/store";
   import { userInfo } from "$lib/auth";
 
   import {
     createModelFromService,
     getNewModel,
-  } from "$lib/components/services/form/utils.js";
+  } from "$lib/components/services/form/utils";
   import { getService, getServicesOptions } from "$lib/services";
   import { getStructures } from "$lib/structures";
 
@@ -56,7 +56,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Notice from "$lib/components/notice.svelte";

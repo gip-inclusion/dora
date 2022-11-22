@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   import SearchForm from "./_search-form.svelte";

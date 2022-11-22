@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   export let noPadding = false;
   export let extraClass = "";
   export let bgColor = "bg-white";

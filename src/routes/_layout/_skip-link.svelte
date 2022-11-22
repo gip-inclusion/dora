@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   /*
    * To know more about skip links:
    *    https://www.a11y-101.com/development/skip-link

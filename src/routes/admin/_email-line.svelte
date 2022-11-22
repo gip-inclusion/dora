@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import CopyableText from "./_copyable-text.svelte";
 
   import SmallLink from "./_small-link.svelte";

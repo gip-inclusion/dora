@@ -1,5 +1,5 @@
-<script>
-  import { informationLineIcon } from "$lib/icons.js";
+<script lang="ts">
+  import { informationLineIcon } from "$lib/icons";
 </script>
 
 <div class="rounded-lg bg-info-light p-s16">

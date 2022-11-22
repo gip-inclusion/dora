@@ -13,7 +13,7 @@
     h2Icon,
     liIcon,
     linkIcon,
-  } from "$lib/icons.js";
+  } from "$lib/icons";
 
   import Button from "./button.svelte";
   import Separator from "./separator.svelte";

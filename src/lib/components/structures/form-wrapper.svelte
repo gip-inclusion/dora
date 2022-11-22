@@ -2,15 +2,15 @@
   import { setContext } from "svelte";
   import { goto } from "$app/navigation";
 
-  import { modifyStructure, createStructure } from "$lib/structures.js";
+  import { modifyStructure, createStructure } from "$lib/structures";
 
-  import structureSchema from "$lib/schemas/structure.js";
+  import structureSchema from "$lib/schemas/structure";
   import {
     validate,
     formErrors,
     injectAPIErrors,
     contextValidationKey,
-  } from "$lib/validation.js";
+  } from "$lib/validation";
 
   import SchemaField from "$lib/components/forms/schema-field.svelte";
 

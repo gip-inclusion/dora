@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { page } from "$app/stores";
 
-  import { questionFillIcon } from "$lib/icons.js";
+  import { questionFillIcon } from "$lib/icons";
   import { userInfo } from "$lib/auth";
   import { userPreferences } from "$lib/preferences";
   import { shortenString } from "$lib/utils";

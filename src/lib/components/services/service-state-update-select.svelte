@@ -21,7 +21,7 @@
   } from "$lib/types";
   import { getAvailableOptionsForStatus } from "$lib/utils/service";
   import { validate } from "$lib/validation";
-  import { serviceSchema } from "$lib/schemas/service.js";
+  import { serviceSchema } from "$lib/schemas/service";
   import {
     arrowDownSIcon,
     arrowUpSIcon,

@@ -1,10 +1,10 @@
-<script context="module">
+<script context="module" lang="ts">
   import { get } from "svelte/store";
   import { userInfo } from "$lib/auth";
 
   import { getLastDraft, getModel, getServicesOptions } from "$lib/services";
 
-  import { getNewService } from "$lib/components/services/form/utils.js";
+  import { getNewService } from "$lib/components/services/form/utils";
   import { getStructures } from "$lib/structures";
 
   export async function load({ url }) {
@@ -59,7 +59,7 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import { goto } from "$app/navigation";
 
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";

@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
   import { getServicesOptions } from "$lib/services";
-  import { getApiURL } from "$lib/utils/api.js";
+  import { getApiURL } from "$lib/utils/api";
   import { getQuery } from "./_homepage/_search";
   import { trackSearch } from "$lib/utils/plausible";
   import { SERVICE_UPDATE_STATUS, type SearchQuery } from "$lib/types";

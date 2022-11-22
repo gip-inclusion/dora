@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Info from "$lib/components/info.svelte";
   import Modal from "$lib/components/modal.svelte";
 

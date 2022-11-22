@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Field from "./field.svelte";
 
   export let value = undefined;

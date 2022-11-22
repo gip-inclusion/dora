@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import ButtonMenu from "$lib/components/button-menu.svelte";
 
   import { moreIcon } from "$lib/icons";

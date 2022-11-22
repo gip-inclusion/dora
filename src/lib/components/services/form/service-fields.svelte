@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onDestroy, onMount } from "svelte";
   import { serviceSchema } from "$lib/schemas/service";
   import debounce from "lodash.debounce";

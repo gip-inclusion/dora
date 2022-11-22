@@ -1,8 +1,8 @@
 <script lang="ts">
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import SchemaField from "$lib/components/forms/schema-field.svelte";
-  import { formErrors } from "$lib/validation.js";
-  import { contribSchema } from "$lib/schemas/service.js";
+  import { formErrors } from "$lib/validation";
+  import { contribSchema } from "$lib/schemas/service";
   import StructureSearch from "$lib/components/structures/search.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";

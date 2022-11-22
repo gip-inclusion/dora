@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { getServicesOptions } from "$lib/services";
 
   export async function load({ url }) {
@@ -19,8 +19,8 @@
     ServicesOptions,
     SERVICE_STATUSES,
     SERVICE_UPDATE_STATUS,
-  } from "$lib/types.js";
-  import { capitalize } from "$lib/utils.js";
+  } from "$lib/types";
+  import { capitalize } from "$lib/utils";
   import { structure } from "../_store";
 
   import List from "./_list.svelte";

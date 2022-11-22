@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Tabs from "$lib/components/tabs.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import SearchByCommune from "$lib/components/structures/search-by-commune.svelte";

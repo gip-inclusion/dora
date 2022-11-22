@@ -1,9 +1,9 @@
-<script context="module">
-  import { CANONICAL_URL } from "$lib/env.js";
+<script context="module" lang="ts">
+  import { CANONICAL_URL } from "$lib/env";
   import { token } from "$lib/auth";
   import { get } from "svelte/store";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-  import { getNextPage } from "./utils.js";
+  import { getNextPage } from "./utils";
 
   export const ssr = false;
 

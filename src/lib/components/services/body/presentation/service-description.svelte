@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import TextClamp from "$lib/components/text-clamp.svelte";
 
   import { markdownToHTML } from "$lib/utils";

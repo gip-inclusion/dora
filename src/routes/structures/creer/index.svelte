@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   import { getStructuresOptions } from "$lib/structures";
 
   export async function load() {
@@ -6,13 +6,13 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
   import StructureSearch from "$lib/components/structures/search.svelte";
   import { siretWasAlreadyClaimed } from "$lib/structures";
-  import structureSchema from "$lib/schemas/structure.js";
+  import structureSchema from "$lib/schemas/structure";
 
-  import { alertIcon } from "$lib/icons.js";
+  import { alertIcon } from "$lib/icons";
 
   export let structuresOptions;
 

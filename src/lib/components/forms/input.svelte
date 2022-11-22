@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Select from "./select.svelte";
 
   import RichText from "$lib/components/rich-text/editor.svelte";

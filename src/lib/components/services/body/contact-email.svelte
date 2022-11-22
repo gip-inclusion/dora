@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { trackMobilisationEmail } from "$lib/utils/plausible";
 
-  import { CANONICAL_URL } from "$lib/env.js";
+  import { CANONICAL_URL } from "$lib/env";
   import { userInfo } from "$lib/auth";
   import { mailLineIcon } from "$lib/icons";
 

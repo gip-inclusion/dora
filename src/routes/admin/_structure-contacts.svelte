@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import EmailLine from "./_email-line.svelte";
 
   import InfoLine from "./_info-line.svelte";

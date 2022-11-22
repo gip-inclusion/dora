@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
-  import { getApiURL } from "$lib/utils/api.js";
-  import { formErrors } from "$lib/validation.js";
+  import { getApiURL } from "$lib/utils/api";
+  import { formErrors } from "$lib/validation";
   import { siretRegexp, isString, isSiret, trim } from "$lib/schemas/utils";
 
   import Field from "$lib/components/forms/field.svelte";

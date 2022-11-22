@@ -1,6 +1,6 @@
-<script>
-  import { getApiURL } from "$lib/utils/api.js";
-  import { deleteBinIcon } from "$lib/icons.js";
+<script lang="ts">
+  import { getApiURL } from "$lib/utils/api";
+  import { deleteBinIcon } from "$lib/icons";
   import { shortenString } from "$lib/utils";
 
   export let structureSlug;

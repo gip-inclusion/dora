@@ -1,5 +1,5 @@
-<script>
-  import { getApiURL } from "$lib/utils/api.js";
+<script lang="ts">
+  import { getApiURL } from "$lib/utils/api";
   import Field from "$lib/components/forms/field.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
   import Select from "$lib/components/forms/select.svelte";

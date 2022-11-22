@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import { goto } from "$app/navigation";
 
-  import { validate } from "$lib/validation.js";
-  import { modelSchema } from "$lib/schemas/service.js";
+  import { validate } from "$lib/validation";
+  import { modelSchema } from "$lib/schemas/service";
   import { createOrModifyModel } from "$lib/services";
   import { logException } from "$lib/logger";
 

@@ -1,6 +1,6 @@
-<script>
-  import { validate } from "$lib/validation.js";
-  import { serviceSchema } from "$lib/schemas/service.js";
+<script lang="ts">
+  import { validate } from "$lib/validation";
+  import { serviceSchema } from "$lib/schemas/service";
 
   import Notice from "$lib/components/notice.svelte";
 
