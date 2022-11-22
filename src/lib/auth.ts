@@ -3,6 +3,7 @@ import { browser } from "$app/env";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api.js";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
+import type { Bookmark } from "./types";
 
 const tokenKey = "token";
 
@@ -13,7 +14,21 @@ const tokenKey = "token";
 export const token = writable(null);
 /** @type {Writable<{firstName: string, lastName: string, fullName: string, shortName: string, email: string, phoneNumber: string, newsletter: boolean,
             isStaff: boolean, isBizdev: boolean} | null>} */
-export const userInfo = writable(null);
+
+interface UserInfo {
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  shortName: string;
+  email: string;
+  phoneNumber: string;
+  newsletter: boolean;
+  isStaff: boolean;
+  isBizdev: boolean;
+  bookmarks: Bookmark[];
+}
+
+export const userInfo = writable<UserInfo>(null);
 
 export function setToken(t) {
   token.set(t);

@@ -34,7 +34,7 @@
   </div>
 </div>
 
-<style>
+<style lang="postcss">
   .container.small {
     @apply p-s6;
   }

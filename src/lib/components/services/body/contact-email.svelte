@@ -2,7 +2,7 @@
   import { trackMobilisationEmail } from "$lib/utils/plausible";
 
   import { CANONICAL_URL } from "$lib/env.js";
-  import { userInfo } from "$lib/auth.js";
+  import { userInfo } from "$lib/auth";
   import { mailLineIcon } from "$lib/icons";
 
   export let service;

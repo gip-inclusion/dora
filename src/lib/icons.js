@@ -31,6 +31,7 @@ export { default as closeIcon } from "remixicon/icons/System/close-fill.svg?raw"
 export { default as closeLineIcon } from "remixicon/icons/System/close-line.svg?raw";
 export { default as closeCircleIcon } from "remixicon/icons/System/close-circle-fill.svg?raw";
 export { default as loginIcon } from "remixicon/icons/System/login-circle-fill.svg?raw";
+export { default as logoutBoxLineIcon } from "remixicon/icons/System/logout-box-line.svg?raw";
 export { default as dashboardIcon } from "remixicon/icons/System/dashboard-fill.svg?raw";
 export { default as dashboardLineIcon } from "remixicon/icons/System/dashboard-line.svg?raw";
 export { default as settingsIcon } from "remixicon/icons/System/settings-5-line.svg?raw";
@@ -51,6 +52,9 @@ export { default as adminIcon } from "remixicon/icons/User/admin-fill.svg?raw";
 export { default as teamLineIcon } from "remixicon/icons/User/team-line.svg?raw";
 export { default as emotionHappyIcon } from "remixicon/icons/User/emotion-happy-fill.svg?raw";
 export { default as parentIcon } from "remixicon/icons/User/parent-line.svg?raw";
+export { default as starSmileLineIcon } from "remixicon/icons/User/star-smile-line.svg?raw";
+export { default as starSmileFillIcon } from "remixicon/icons/User/star-smile-fill.svg?raw";
+export { default as accountCircleLineIcon } from "remixicon/icons/User/account-circle-line.svg?raw";
 
 export { default as coperCoinFillIcon } from "remixicon/icons/Finance/copper-coin-fill.svg?raw";
 export { default as euroLineIcon } from "remixicon/icons/Finance/money-euro-circle-line.svg?raw";
