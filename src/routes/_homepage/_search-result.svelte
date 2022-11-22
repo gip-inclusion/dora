@@ -4,7 +4,7 @@
   export let id: string;
   export let result: ServiceSearchResult;
 
-  const hasLocationTag = result.distance || result.location === "À distance";
+  $: hasLocationTag = result.distance || result.location === "À distance";
 </script>
 
 <div {id} class="rounded-ml border border-gray-02 shadow-sm" tabindex="-1">
