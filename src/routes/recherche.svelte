@@ -80,7 +80,8 @@
         cityLabel,
         kindIds,
         feeConditions,
-        services: services.filter(
+        allServices: services,
+        servicesUpToDate: services.filter(
           (service) => service.updateStatus !== SERVICE_UPDATE_STATUS.REQUIRED
         ),
         servicesToUpdate: services.filter(
@@ -127,7 +128,8 @@
   export let cityLabel: string;
   export let kindIds: ServiceKind[];
   export let feeConditions: FeeCondition[];
-  export let services: ServiceSearchResult[];
+  export let allServices: ServiceSearchResult[];
+  export let servicesUpToDate: ServiceSearchResult[];
   export let servicesToUpdate: ServiceSearchResult[];
 
   let tags = [];
@@ -219,9 +221,9 @@
 
 <CenteredGrid extraClass="max-w-4xl m-auto">
   <div class="mt-s16 text-f21 font-bold text-gray-dark">
-    {#if services.length + servicesToUpdate.length > 0}
-      {services.length + servicesToUpdate.length}
-      {services.length + servicesToUpdate.length > 1 ? "résultats" : "résultat"}
+    {#if allServices.length > 0}
+      {allServices.length}
+      {allServices.length > 1 ? "résultats" : "résultat"}
     {:else}
       Aucun résultat
     {/if}
@@ -233,22 +235,38 @@
     </div>
   {/if}
 
-  {#if hasOnlyNationalResults(services)}
+  {#if hasOnlyNationalResults(allServices)}
     <div class="mt-s24">
       <OnlyNationalResultsNotice />
     </div>
   {/if}
 
-  {#if services.length || servicesToUpdate.length}
+  {#if allServices.length}
     <div class="mt-s32 flex flex-col gap-s16">
       <h2 class="sr-only">Résultats de votre recherche</h2>
-      {#each services as service, index}
+      {#each servicesUpToDate as service, index}
         {#if index < currentPageLength}
           <SearchResult id={getResultId(index)} result={service} />
         {/if}
       {/each}
 
-      {#if services.length > currentPageLength}
+      {#if currentPageLength > servicesUpToDate.length && servicesToUpdate.length}
+        <Notice
+          type="warning"
+          title="Les services qui suivent n’ont pas été mis à jour depuis plus de 8
+        mois"
+        />
+        {#each servicesToUpdate as service, index}
+          {#if index + servicesUpToDate.length < currentPageLength}
+            <SearchResult
+              id={getResultId(index + servicesUpToDate.length)}
+              result={service}
+            />
+          {/if}
+        {/each}
+      {/if}
+
+      {#if allServices.length > currentPageLength}
         <div class="text-center">
           <Button
             label="Charger plus de résultats"
@@ -256,28 +274,6 @@
             noBackground
           />
         </div>
-      {:else if servicesToUpdate.length}
-        <Notice
-          type="warning"
-          title="Les services qui suivent n’ont pas été mis à jour depuis plus de 8
-        mois"
-        />
-
-        {#each servicesToUpdate as service, index}
-          {#if index < currentPageLength}
-            <SearchResult id={getResultId(index)} result={service} />
-          {/if}
-        {/each}
-
-        {#if servicesToUpdate.length > currentPageLength}
-          <div class="text-center">
-            <Button
-              label="Charger plus de résultats"
-              on:click={loadMoreResult}
-              noBackground
-            />
-          </div>
-        {/if}
       {/if}
     </div>
   {/if}
