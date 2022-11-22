@@ -155,10 +155,8 @@
     firstNewResult.focus();
   }
 
-  $: showDeploymentNotice = !isInDeploymentDepartments(
-    cityCode,
-    servicesOptions
-  );
+  $: showDeploymentNotice =
+    cityCode && !isInDeploymentDepartments(cityCode, servicesOptions);
   $: {
     tags = [];
 

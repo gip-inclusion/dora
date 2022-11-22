@@ -37,6 +37,11 @@
 
   let cityChoiceList;
 
+  function handleSearchIfNotDisabled() {
+    if (cityCode && subCategoryIds.length) {
+      handleSearch();
+    }
+  }
   function handleSearch() {
     const categoryIds = subCategoryIds
       .filter((v) => v.endsWith("--all"))
@@ -189,7 +194,7 @@
           placeholder="Type de service"
           bind:value={kindIds}
           choices={servicesOptions.kinds}
-          onChange={handleSearch}
+          onChange={handleSearchIfNotDisabled}
         />
       </div>
       <div>
@@ -203,7 +208,7 @@
           placeholder="Frais à charge"
           bind:value={feeConditions}
           choices={servicesOptions.feeConditions}
-          onChange={handleSearch}
+          onChange={handleSearchIfNotDisabled}
         />
       </div>
     </div>
