@@ -8,10 +8,12 @@
 </script>
 
 <div {id} class="rounded-ml border border-gray-02 shadow-sm" tabindex="-1">
-  <div class="relative p-s32 pr-s64">
+  <div class="relative p-s32 lg:pr-s64">
     <a
       href="/structures/{result.structure}"
-      class="mb-s24 block text-f14 {hasLocationTag ? 'mt-s48 lg:mt-s0' : ''}"
+      class="mb-s24 block text-f14 {hasLocationTag
+        ? 'mt-s48 lg:mt-s0'
+        : ''} lg:pr-s48"
     >
       {result.structureInfo.name}
       {#if result.location && result.location !== "À distance"}<span
