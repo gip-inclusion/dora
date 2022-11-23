@@ -1,5 +1,5 @@
 <script lang="ts">
-  // import { browser } from "$app/env";
+  // import { browser } from "$app/environment";
   // import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import type { PageData } from "./$types";
 
@@ -14,7 +14,7 @@
   import ModelToolbar from "$lib/components/services/model-toolbar.svelte";
   import ModelBody from "$lib/components/services/model-body.svelte";
   import { getModel } from "$lib/services";
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
 
   onMount(() => {
     trackModel(model);

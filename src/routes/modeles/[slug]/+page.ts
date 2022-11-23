@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { browser } from "$app/env";
+import { browser } from "$app/environment";
 import { getModel, getServicesOptions } from "$lib/services";
 
 export async function load({ params }) {

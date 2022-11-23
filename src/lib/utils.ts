@@ -2,7 +2,7 @@ import showdown from "showdown";
 import insane from "insane";
 import { get } from "svelte/store";
 
-import { browser } from "$app/env";
+import { browser } from "$app/environment";
 
 import { token } from "$lib/auth";
 import { defaultAcceptHeader } from "$lib/utils/api";

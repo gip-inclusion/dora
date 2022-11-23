@@ -1,7 +1,7 @@
 /* global plausible */
 
 import { get } from "svelte/store";
-import { browser } from "$app/env";
+import { browser } from "$app/environment";
 import { CANONICAL_URL } from "$lib/env";
 import { token, userInfo } from "$lib/auth";
 import { getDepartmentFromCityCode } from "$lib/utils";

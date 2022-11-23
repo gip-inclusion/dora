@@ -1,7 +1,7 @@
 <script lang="ts">
   import "wicg-inert";
 
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
   import { closeLineIcon } from "$lib/icons";
   import Button from "./button.svelte";
   import { createEventDispatcher } from "svelte";

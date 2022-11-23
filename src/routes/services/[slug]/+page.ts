@@ -1,5 +1,5 @@
 import { redirect, error } from "@sveltejs/kit";
-import { browser } from "$app/env";
+import { browser } from "$app/environment";
 import { get } from "svelte/store";
 
 import { getModel, getService, getServicesOptions } from "$lib/services";

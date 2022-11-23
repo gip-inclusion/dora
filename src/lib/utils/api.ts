@@ -1,4 +1,4 @@
-import { browser } from "$app/env";
+import { browser } from "$app/environment";
 import { API_URL, INTERNAL_API_URL } from "$lib/env";
 
 export function getApiURL() {

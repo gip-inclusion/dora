@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { browser } from "$app/env";
+import { browser } from "$app/environment";
 import { get } from "svelte/store";
 import { userInfo } from "$lib/auth";
 import { structure } from "../_store";
