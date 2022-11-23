@@ -7,34 +7,8 @@ export async function handleError({ error, event }) {
   Sentry.captureException(error, { event });
 }
 
-// Pages sur lesquelles ont ne veut pas de SSR…
-const noSsrPaths = [
-  // pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
-  // à ce qu'elles soient indexées
-  "/recherche",
-
-  // pages authentifiée ou effectuant des actions particulières avec le token,
-  // que le SSR pourrait invalider
-  "/auth",
-
-  // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
-  "/services/creer",
-  "/structures/creer",
-  "/modeles/creer",
-  "/mon-compte",
-  "/admin",
-
-  // page de débug où on veut tester hors SSR
-  "/sentry-debug-client",
-];
-
 export async function handle({ event, resolve }) {
-  let ssr = !noSsrPaths.some((s) => event.url.pathname.startsWith(s));
-
-  // No SSR for testing => we can't intercept request server side
-  if (ENVIRONMENT === "testing") ssr = false;
-
-  const response = await resolve(event, { ssr });
+  const response = await resolve(event);
 
   const connectSrc = `connect-src ${API_URL} ${
     dev ? "ws:" : ""

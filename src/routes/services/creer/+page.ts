@@ -6,6 +6,9 @@ import { getLastDraft, getModel, getServicesOptions } from "$lib/services";
 import { getNewService } from "$lib/components/services/form/utils";
 import { getStructures } from "$lib/structures";
 
+// pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
+export const ssr = false;
+
 export async function load({ url }) {
   const query = url.searchParams;
   const structureSlug = query.get("structure");

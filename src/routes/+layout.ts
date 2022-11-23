@@ -8,6 +8,9 @@ import * as Sentry from "@sentry/browser";
 
 import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 
+// No SSR for testing => we can't intercept request server side
+export const ssr = ENVIRONMENT === "testing" ? false : undefined;
+
 if (ENVIRONMENT !== "local") {
   Sentry.init({
     dsn: SENTRY_DSN,

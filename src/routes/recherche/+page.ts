@@ -5,6 +5,10 @@ import { trackSearch } from "$lib/utils/plausible";
 import { SERVICE_UPDATE_STATUS, type SearchQuery } from "$lib/types";
 import { computeUpdateStatusData } from "$lib/utils/service";
 
+// pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
+// à ce qu'elles soient indexées
+export const ssr = false;
+
 async function getResults({
   categoryIds,
   subCategoryIds,
