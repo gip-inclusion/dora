@@ -114,7 +114,7 @@
   {/if}
 {/if}
 
-<style>
+<style lang="postcss">
   .presentation {
     grid-area: presentation;
   }

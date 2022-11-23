@@ -49,7 +49,7 @@
   {/if}
 </div>
 
-<style>
+<style lang="postcss">
   .icon.small {
     @apply h-s20 w-s20;
   }

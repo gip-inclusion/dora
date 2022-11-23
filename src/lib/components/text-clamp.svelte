@@ -38,7 +38,7 @@
   {/if}
 </div>
 
-<style>
+<style lang="postcss">
   .gradient {
     position: absolute;
     bottom: 0px;
