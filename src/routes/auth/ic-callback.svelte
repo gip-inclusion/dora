@@ -3,7 +3,7 @@
 
   import { setToken, validateCredsAndFillUserInfo } from "$lib/auth";
   import { getApiURL, defaultAcceptHeader } from "$lib/utils/api";
-  import { getNextPage } from "./utils";
+  import { getNextPage } from "./_utils";
 
   export async function load({ url, fetch }) {
     const nextPage = getNextPage(url);

@@ -3,7 +3,7 @@
 
   import { get } from "svelte/store";
   import { token } from "$lib/auth";
-  import { getNextPage } from "./utils";
+  import { getNextPage } from "./_utils";
 
   export async function load({ url }) {
     const nextPage = getNextPage(url);

@@ -3,7 +3,7 @@
   import { token } from "$lib/auth";
   import { get } from "svelte/store";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-  import { getNextPage } from "./utils";
+  import { getNextPage } from "./_utils";
 
   export const ssr = false;
 
