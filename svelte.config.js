@@ -14,6 +14,14 @@ const config = {
   kit: {
     adapter: adapter(),
   },
+  vitePlugin: {
+    experimental: {
+      inspector: {
+        showToggleButton: "always",
+        toggleButtonPos: "bottom-right",
+      },
+    },
+  },
 };
 
 export default config;

@@ -25,10 +25,12 @@ export async function handle({ event, resolve }) {
   response.headers.set("X-Frame-Options", "DENY");
   response.headers.set("X-XSS-Protection", "1; mode=block");
   response.headers.set("X-Content-Type-Options", "nosniff");
-  response.headers.set(
-    "Content-Security-Policy",
-    `default-src 'none';  ${connectSrc}; ${scriptSrc}; ${fontSrc}; ${imgSrc}; ${styleSrc}; ${frameSrc}`
-  );
+  if (ENVIRONMENT !== "local") {
+    response.headers.set(
+      "Content-Security-Policy",
+      `default-src 'none';  ${connectSrc}; ${scriptSrc}; ${fontSrc}; ${imgSrc}; ${styleSrc}; ${frameSrc}`
+    );
+  }
 
   if (response.headers.get("content-type")?.startsWith("text/html")) {
     const body = await response.text();
