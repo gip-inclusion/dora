@@ -1,4 +1,4 @@
-import { json } from "@sveltejs/kit";
+import { error, json } from "@sveltejs/kit";
 import { ENVIRONMENT, CANONICAL_URL } from "$lib/env";
 import { SERVICE_STATUSES } from "$lib/schemas/service";
 import { getPublishedServices } from "$lib/services";

@@ -49,7 +49,7 @@
   "devDependencies": {
     "@playwright/test": "^1.28.0",
     "@sveltejs/adapter-node": "1.0.0-next.85",
-    "@sveltejs/kit": "1.0.0-next.406",
+    "@sveltejs/kit": "1.0.0-next.422",
     "@tailwindcss/typography": "^0.5.8",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
