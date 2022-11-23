@@ -30,8 +30,8 @@
     "dependencies-vs-devdependencies": "Les librairies qui sont dans dependencies sont utilisées depuis node_modules par le bundle ssr (voir: https://vitejs.dev/guide/ssr.html#ssr-externals). Pour tester: `npm i && npm run build && rm -rf node_modules/ && npm i --production && node build`."
   },
   "dependencies": {
-    "@sentry/browser": "^7.20.1",
-    "@sentry/tracing": "^7.20.1",
+    "@sentry/browser": "^7.21.0",
+    "@sentry/tracing": "^7.21.0",
     "@tiptap/core": "^2.0.0-beta.202",
     "@tiptap/extension-link": "^2.0.0-beta.202",
     "@tiptap/extension-placeholder": "^2.0.0-beta.202",
@@ -60,7 +60,7 @@
     "lint-staged": "^13.0.3",
     "postcss": "^8.4.19",
     "postcss-load-config": "^4.0.1",
-    "prettier": "^2.7.1",
+    "prettier": "^2.8.0",
     "prettier-plugin-tailwindcss": "^0.1.11",
     "remixicon": "^2.5.0",
     "svelte": "^3.53.1",
