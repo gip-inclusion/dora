@@ -29,8 +29,6 @@
 
   let level = member.isAdmin ? "admin" : "user";
 
-  function handleChange(_validatedData) {}
-
   function handleSubmit(validatedData) {
     const url = `${getApiURL()}/structure-members/${member.id}/`;
     return fetch(url, {
@@ -56,7 +54,6 @@
   <Form
     data={{ level }}
     schema={modifyUserSchema}
-    onChange={handleChange}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
   >

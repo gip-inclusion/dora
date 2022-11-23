@@ -1,6 +1,6 @@
 <script lang="ts">
   // import { browser } from "$app/environment";
-  // import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;

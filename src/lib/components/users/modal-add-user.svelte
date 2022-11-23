@@ -34,8 +34,6 @@
   let confirmationModalIsOpen = false;
   let requesting = false;
 
-  function handleChange(_validatedData) {}
-
   function handleSubmit(validatedData) {
     const membersEmails = members.map((m) => m.user.email);
     if (membersEmails.includes(validatedData.email)) {
@@ -82,7 +80,6 @@
   <Form
     data={{ email, level }}
     schema={addUserSchema}
-    onChange={handleChange}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
     bind:requesting

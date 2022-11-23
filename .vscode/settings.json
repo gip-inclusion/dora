@@ -33,5 +33,8 @@
   "files.trimTrailingWhitespace": true,
   "svelte.plugin.css.globals": "src/app.postcss",
   "svelte.enable-ts-plugin": true,
+  "svelte.plugin.svelte.compilerWarnings": {
+    "security-anchor-rel-noreferrer": "ignore"
+  },
   "tailwindCSS.validate": true
 }
