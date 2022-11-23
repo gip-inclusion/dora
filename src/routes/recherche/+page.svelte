@@ -1,103 +1,36 @@
-<script context="module" lang="ts">
-  import { getServicesOptions } from "$lib/services";
-  import { getApiURL } from "$lib/utils/api";
-  import { getQuery } from "./_homepage/_search";
-  import { trackSearch } from "$lib/utils/plausible";
-  import { SERVICE_UPDATE_STATUS, type SearchQuery } from "$lib/types";
+<script lang="ts">
+  import type { PageData } from "./$types";
 
-  async function getResults({
+  export let data: PageData;
+
+  let {
+    servicesOptions,
     categoryIds,
     subCategoryIds,
     cityCode,
     cityLabel,
     kindIds,
     feeConditions,
-  }: SearchQuery) {
-    const query = getQuery({
-      categoryIds,
-      subCategoryIds,
-      cityCode,
-      cityLabel,
-      kindIds,
-      feeConditions,
-    });
-    const url = `${getApiURL()}/search/?${query}`;
+    allServices,
+    servicesUpToDate,
+    servicesToUpdate,
+  }: {
+    servicesOptions: ServicesOptions;
+    categoryIds: string[];
+    subCategoryIds: string[];
+    cityCode: string;
+    cityLabel: string;
+    kindIds: ServiceKind[];
+    feeConditions: FeeCondition[];
+    allServices: ServiceSearchResult[];
+    servicesUpToDate: ServiceSearchResult[];
+    servicesToUpdate: ServiceSearchResult[];
+  } = data;
 
-    const res = await fetch(url, {
-      headers: { Accept: "application/json; version=1.0" },
-    });
-
-    if (res.ok) {
-      return await res.json();
-    }
-
-    // TODO: log errors
-    try {
-      console.error(await res.json());
-    } catch (err) {
-      console.error(err);
-    }
-    return [];
-  }
-
-  export async function load({ url }) {
-    const query = url.searchParams;
-    const categoryIds = query.get("cats") ? query.get("cats").split(",") : [];
-    const subCategoryIds = query.get("subs")
-      ? query.get("subs").split(",")
-      : [];
-    const cityCode = query.get("city");
-    const cityLabel = query.get("cl");
-    const kindIds = query.get("kinds") ? query.get("kinds").split(",") : [];
-    const feeConditions = query.get("fees") ? query.get("fees").split(",") : [];
-
-    let services = await getResults({
-      categoryIds,
-      subCategoryIds,
-      cityCode,
-      cityLabel,
-      kindIds,
-      feeConditions,
-    });
-    services.forEach((service) => {
-      service.updateStatus = computeUpdateStatusData(service).updateStatus;
-    });
-
-    trackSearch(
-      categoryIds,
-      subCategoryIds,
-      cityCode,
-      cityLabel,
-      kindIds,
-      feeConditions,
-      services.length
-    );
-    return {
-      props: {
-        categoryIds,
-        subCategoryIds,
-        cityCode,
-        cityLabel,
-        kindIds,
-        feeConditions,
-        allServices: services,
-        servicesUpToDate: services.filter(
-          (service) => service.updateStatus !== SERVICE_UPDATE_STATUS.REQUIRED
-        ),
-        servicesToUpdate: services.filter(
-          (service) => service.updateStatus === SERVICE_UPDATE_STATUS.REQUIRED
-        ),
-        servicesOptions: await getServicesOptions(),
-      },
-    };
-  }
-</script>
-
-<script lang="ts">
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
-  import SearchResult from "./_homepage/_search-result.svelte";
-  import SearchPromo from "./_homepage/_search-promo.svelte";
+  import SearchResult from "../_homepage/_search-result.svelte";
+  import SearchPromo from "../_homepage/_search-promo.svelte";
 
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
   import { NPS_SEEKER_FORM_ID } from "$lib/const";
@@ -108,29 +41,17 @@
     ServicesOptions,
   } from "$lib/types";
   import Breadcrumb from "$lib/components/breadcrumb.svelte";
-  import SearchForm from "./_homepage/_search-form.svelte";
-  import ServiceSuggestionNotice from "./_homepage/_service-suggestion-notice.svelte";
-  import DoraDeploymentNotice from "./_homepage/_dora-deployment-notice.svelte";
+  import SearchForm from "../_homepage/_search-form.svelte";
+  import ServiceSuggestionNotice from "../_homepage/_service-suggestion-notice.svelte";
+  import DoraDeploymentNotice from "../_homepage/_dora-deployment-notice.svelte";
   import { isInDeploymentDepartments } from "$lib/utils/city";
-  import OnlyNationalResultsNotice from "./_homepage/_only-national-results-notice.svelte";
-  import NewletterNotice from "./_homepage/_newletter-notice.svelte";
+  import OnlyNationalResultsNotice from "../_homepage/_only-national-results-notice.svelte";
+  import NewletterNotice from "../_homepage/_newletter-notice.svelte";
   import { tick } from "svelte";
   import Button from "$lib/components/button.svelte";
-  import { computeUpdateStatusData } from "$lib/utils/service";
   import Notice from "$lib/components/notice.svelte";
 
   const PAGE_LENGTH = 10;
-
-  export let servicesOptions: ServicesOptions;
-  export let categoryIds: string[];
-  export let subCategoryIds: string[];
-  export let cityCode: string;
-  export let cityLabel: string;
-  export let kindIds: ServiceKind[];
-  export let feeConditions: FeeCondition[];
-  export let allServices: ServiceSearchResult[];
-  export let servicesUpToDate: ServiceSearchResult[];
-  export let servicesToUpdate: ServiceSearchResult[];
 
   let tags = [];
 

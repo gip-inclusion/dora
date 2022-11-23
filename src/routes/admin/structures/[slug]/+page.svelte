@@ -1,24 +1,10 @@
-<script context="module" lang="ts">
-  import { getStructureAdmin } from "$lib/admin";
-
-  export async function load({ params }) {
-    const structure = await getStructureAdmin(params.slug);
-    if (!structure) {
-      return {
-        status: 404,
-        error: "Page Not Found",
-      };
-    }
-
-    return {
-      props: {
-        structure,
-      },
-    };
-  }
-</script>
-
 <script lang="ts">
+  import { getStructureAdmin } from "$lib/admin";
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
+
+  let { structure } = data;
   import TextClamp from "$lib/components/text-clamp.svelte";
   import WebSearchLink from "../../_web-search-link.svelte";
   import { capitalize, markdownToHTML } from "$lib/utils";
@@ -30,8 +16,6 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import ModerationButtonMenu from "../../_moderation-button-menu.svelte";
   import History from "../../_history.svelte";
-
-  export let structure;
 
   const description = markdownToHTML(structure.fullDesc);
 

@@ -1,65 +1,10 @@
-<script context="module" lang="ts">
-  import { get } from "svelte/store";
-  import { userInfo } from "$lib/auth";
-
-  import { getLastDraft, getModel, getServicesOptions } from "$lib/services";
-
-  import { getNewService } from "$lib/components/services/form/utils";
-  import { getStructures } from "$lib/structures";
-
-  export async function load({ url }) {
-    const query = url.searchParams;
-    const structureSlug = query.get("structure");
-    const modelSlug = query.get("modele");
-
-    const user = get(userInfo);
-    let structures = [];
-
-    if (user?.isStaff) {
-      structures = await getStructures();
-    } else if (user) {
-      structures = user.structures;
-    }
-
-    let service;
-    let model;
-
-    if (modelSlug) {
-      model = await getModel(modelSlug);
-      service = JSON.parse(JSON.stringify(model));
-      service.model = modelSlug;
-      service.structure = null;
-      service.slug = null;
-      service.locationKinds = [];
-    } else {
-      service = getNewService();
-    }
-
-    let structure;
-
-    if (structures.length === 1) {
-      service.structure = structures[0].slug;
-      structure = structures[0];
-    } else if (structureSlug) {
-      // si la structure est renseignée dans l'URL, force celle-là
-      structure = structures.find((s) => s.slug === structureSlug);
-      service.structure = structureSlug;
-    }
-
-    return {
-      props: {
-        lastDraft: await getLastDraft(),
-        servicesOptions: await getServicesOptions({ model }),
-        structures,
-        structure,
-        service,
-        model,
-      },
-    };
-  }
-</script>
-
 <script lang="ts">
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
+
+  let { servicesOptions, structures, lastDraft, service, structure, model } =
+    data;
   import { goto } from "$app/navigation";
 
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
@@ -68,8 +13,6 @@
   import Notice from "$lib/components/notice.svelte";
   import Button from "$lib/components/button.svelte";
   import ServiceFields from "$lib/components/services/form/service-fields.svelte";
-
-  export let servicesOptions, structures, lastDraft, service, structure, model;
 
   if (service.structure && lastDraft?.structure !== service.structure) {
     lastDraft = null;

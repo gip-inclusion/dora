@@ -1,16 +1,9 @@
-<script context="module" lang="ts">
-  import { getStructuresOptions } from "$lib/structures";
-
-  export async function load() {
-    return {
-      props: {
-        structuresOptions: await getStructuresOptions(),
-      },
-    };
-  }
-</script>
-
 <script lang="ts">
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
+
+  let { structuresOptions } = data;
   import { userInfo } from "$lib/auth";
   import { structure } from "./_store";
   import { getStructure } from "$lib/structures";
@@ -20,8 +13,6 @@
   import BranchesList from "./antennes/_list.svelte";
   import ModelesList from "./modeles/_list.svelte";
   import { capitalize } from "$lib/utils";
-
-  export let structuresOptions;
 
   async function handleRefresh() {
     $structure = await getStructure($structure.slug);

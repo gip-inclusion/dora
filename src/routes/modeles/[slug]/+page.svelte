@@ -1,42 +1,20 @@
-<script context="module" lang="ts">
-  import { browser } from "$app/env";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import { getModel, getServicesOptions } from "$lib/services";
-
-  export async function load({ params }) {
-    const model = await getModel(params.slug);
-
-    // on ne retourne une 404 que sur le client
-    if (!model && !browser) {
-      return {};
-    }
-
-    if (!model) {
-      return {
-        status: 404,
-        error: "Page Not Found",
-      };
-    }
-
-    return {
-      props: {
-        model,
-        servicesOptions: await getServicesOptions(),
-      },
-    };
-  }
-</script>
-
 <script lang="ts">
+  // import { browser } from "$app/env";
+  // import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
+
+  let { model, servicesOptions } = data;
+
   import { onMount } from "svelte";
   import { trackModel } from "$lib/utils/plausible";
 
   import ModelHeader from "$lib/components/services/model-header.svelte";
   import ModelToolbar from "$lib/components/services/model-toolbar.svelte";
   import ModelBody from "$lib/components/services/model-body.svelte";
-
-  export let model;
-  export let servicesOptions;
+  import { getModel } from "$lib/services";
+  import { browser } from "$app/env";
 
   onMount(() => {
     trackModel(model);

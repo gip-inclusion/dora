@@ -1,3 +1,4 @@
+import { json } from "@sveltejs/kit";
 import { ENVIRONMENT, CANONICAL_URL } from "$lib/env";
 import { SERVICE_STATUSES } from "$lib/schemas/service";
 import { getPublishedServices } from "$lib/services";
@@ -57,13 +58,12 @@ async function getContent() {
 export async function GET() {
   const content = await getContent();
   if (ENVIRONMENT === "production" || ENVIRONMENT === "local") {
-    return {
-      status: 200,
+    return json(content, {
       headers: {
         "Content-Type": "application/xml",
       },
-      body: content,
-    };
+    });
+  } else {
+    throw error(404, "Page Not Found");
   }
-  return null;
 }

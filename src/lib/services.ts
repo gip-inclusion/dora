@@ -5,6 +5,7 @@ import { getApiURL } from "$lib/utils/api";
 import { token } from "$lib/auth";
 import { logException } from "./logger";
 import { SERVICE_STATUSES } from "./schemas/service";
+import type { ServicesOptions } from "./types";
 
 function serviceToBack(service) {
   if (service.longitude && service.latitude) {
@@ -296,7 +297,9 @@ export async function getLastDraft() {
 }
 
 let servicesOptionsBase;
-export async function getServicesOptions({ model = null } = {}) {
+export async function getServicesOptions({
+  model = null,
+} = {}): Promise<ServicesOptions> {
   if (!servicesOptionsBase) {
     const url = `${getApiURL()}/services-options/`;
     try {

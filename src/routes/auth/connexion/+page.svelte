@@ -1,29 +1,10 @@
-<script context="module" lang="ts">
-  export const ssr = false;
-
-  import { get } from "svelte/store";
-  import { token } from "$lib/auth";
-  import { getNextPage } from "./_utils";
-
-  export async function load({ url }) {
-    const nextPage = getNextPage(url);
-    // Si on a déjà un token, on redirige directement sur la destination
-    if (get(token)) {
-      return {
-        status: 302,
-        redirect: nextPage,
-      };
-    }
-    return {};
-  }
-</script>
-
 <script lang="ts">
+  import { getNextPage } from "../_utils";
   import { page } from "$app/stores";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import Button from "$lib/components/button.svelte";
 
-  import AuthLayout from "./_auth_layout.svelte";
+  import AuthLayout from "../_auth_layout.svelte";
   import { informationLineIcon } from "$lib/icons";
 
   import PoleEmploiWarning from "$lib/components/structures/pole-emploi-warning.svelte";

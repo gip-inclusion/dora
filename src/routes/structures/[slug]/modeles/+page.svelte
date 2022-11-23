@@ -1,33 +1,5 @@
-<script context="module" lang="ts">
-  import { browser } from "$app/env";
-  import { get } from "svelte/store";
-  import { userInfo } from "$lib/auth";
-  import { structure } from "../_store";
-
-  export async function load() {
-    // sur le serveur, info est toujours null,
-    // on retourne une 404 uniquement sur le client
-    if (!browser) {
-      return {};
-    }
-
-    const info = get(userInfo);
-    const struct = get(structure);
-
-    const isMember = struct.isMember || info?.isBizdev || info?.isStaff;
-
-    if (!info || !struct || !isMember) {
-      return {
-        status: 404,
-        error: "Page Not Found",
-      };
-    }
-
-    return {};
-  }
-</script>
-
 <script lang="ts">
+  import { structure } from "../_store";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import { capitalize } from "$lib/utils";
 

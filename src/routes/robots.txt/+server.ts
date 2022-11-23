@@ -1,3 +1,4 @@
+import { json } from "@sveltejs/kit";
 import { ENVIRONMENT, CANONICAL_URL } from "$lib/env";
 
 const productionContent = `
@@ -15,9 +16,7 @@ Disallow: /
 const content = ENVIRONMENT === "production" ? productionContent : devContent;
 
 export async function GET() {
-  return {
-    status: 200,
+  return json(content, {
     headers: { "content-type": "text/plain" },
-    body: content,
-  };
+  });
 }

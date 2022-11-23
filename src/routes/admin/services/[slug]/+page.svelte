@@ -1,24 +1,10 @@
-<script context="module" lang="ts">
-  import { getServiceAdmin } from "$lib/admin";
-
-  export async function load({ params }) {
-    const service = await getServiceAdmin(params.slug);
-    if (!service) {
-      return {
-        status: 404,
-        error: "Page Not Found",
-      };
-    }
-
-    return {
-      props: {
-        service: service,
-      },
-    };
-  }
-</script>
-
 <script lang="ts">
+  import { getServiceAdmin } from "$lib/admin";
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
+
+  let { service } = data;
   import TextClamp from "$lib/components/text-clamp.svelte";
   import WebSearchLink from "../../_web-search-link.svelte";
   import { capitalize, markdownToHTML } from "$lib/utils";
@@ -34,7 +20,6 @@
   import History from "../../_history.svelte";
   import { isNotFreeService } from "$lib/utils/service";
 
-  export let service;
   const structure = service.structure;
   const description = markdownToHTML(service.fullDesc);
 

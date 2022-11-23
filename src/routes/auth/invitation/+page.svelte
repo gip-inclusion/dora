@@ -1,39 +1,19 @@
-<script context="module" lang="ts">
-  import { getStructure } from "$lib/structures";
-
-  export async function load({ url }) {
-    const structure = await getStructure(url.searchParams.get("structure"));
-    let parent = null;
-    if (!structure) {
-      return {
-        status: 404,
-        error: "Page Not Found",
-      };
-    }
-
-    if (structure.parent) {
-      parent = await getStructure(structure.parent);
-    }
-
-    return {
-      props: { structure, parent },
-    };
-  }
-</script>
-
 <script lang="ts">
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
+
+  let { structure, parent } = data;
   import { token, validateCredsAndFillUserInfo } from "$lib/auth";
   import { trackJoinStructure } from "$lib/utils/plausible";
 
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import Button from "$lib/components/button.svelte";
-  import AuthLayout from "./_auth_layout.svelte";
+  import AuthLayout from "../_auth_layout.svelte";
   import { get } from "svelte/store";
   import { goto } from "$app/navigation";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
-
-  export let structure, parent;
 
   async function handleJoin() {
     trackJoinStructure();

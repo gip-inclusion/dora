@@ -1,19 +1,9 @@
-<script context="module" lang="ts">
-  import { getServicesOptions } from "$lib/services";
-
-  export async function load() {
-    return {
-      props: {
-        servicesOptions: await getServicesOptions(),
-      },
-    };
-  }
-</script>
-
 <script lang="ts">
   import Landing from "./_homepage/_landing.svelte";
+  import type { PageData } from "./$types";
 
-  export let servicesOptions;
+  export let data: PageData;
+  export let { servicesOptions } = data;
 </script>
 
 <svelte:head>

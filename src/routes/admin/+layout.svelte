@@ -1,34 +1,6 @@
-<script context="module" lang="ts">
-  import { token, userInfo } from "$lib/auth";
-  import { get } from "svelte/store";
-
-  export async function load({ url }) {
-    const myToken = get(token);
-    if (!myToken) {
-      return {
-        status: 302,
-        redirect: `/auth/connexion?next=${encodeURIComponent(
-          url.pathname + url.search
-        )}`,
-      };
-    }
-
-    const user = get(userInfo);
-
-    if (!user?.isStaff) {
-      return {
-        status: 403,
-        error: "Accès réservé",
-      };
-    }
-
-    return {
-      props: {},
-    };
-  }
-</script>
-
 <script lang="ts">
+  // import { token, userInfo } from "$lib/auth";
+  // import { get } from "svelte/store";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 </script>
 

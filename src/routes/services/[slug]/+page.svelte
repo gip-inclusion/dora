@@ -1,49 +1,12 @@
-<script context="module" lang="ts">
-  import { browser } from "$app/env";
-  import { get } from "svelte/store";
-
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import { getModel, getService, getServicesOptions } from "$lib/services";
-  import { token } from "$lib/auth";
-
-  export async function load({ url, params }) {
-    const service = await getService(params.slug);
-    // si le service est en brouillon il faut un token pour y accéder
-    // on renvoie donc un objet vide côté serveur
-    if (!service) {
-      if (!browser) {
-        return {
-          props: {
-            service: null,
-          },
-        };
-      }
-      if (!get(token)) {
-        return {
-          status: 302,
-          redirect: `/auth/connexion?next=${encodeURIComponent(
-            url.pathname + url.search
-          )}`,
-        };
-      }
-      return {
-        status: 404,
-        error: "Page Not Found",
-      };
-    }
-
-    const model = service.model ? await getModel(service.model) : null;
-
-    return {
-      props: {
-        service,
-        servicesOptions: await getServicesOptions({ model }),
-      },
-    };
-  }
-</script>
-
 <script lang="ts">
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import { getService } from "$lib/services";
+  import { token } from "$lib/auth";
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
+
+  let { service, servicesOptions } = data;
   import { onDestroy, onMount } from "svelte";
   import { trackService } from "$lib/utils/plausible";
 
@@ -57,7 +20,6 @@
     SERVICE_CREATION_FORM_ID,
   } from "$lib/const";
   import { isAfter } from "$lib/utils/date";
-  import type { Service } from "$lib/types";
   import ServicePresentation from "$lib/components/services/body/presentation/service-presentation.svelte";
   import ServiceKeyInformations from "$lib/components/services/body/service-key-informations.svelte";
   import ServiceShare from "$lib/components/services/body/service-share.svelte";
@@ -65,9 +27,6 @@
   import ServiceMobilize from "$lib/components/services/body/service-mobilize.svelte";
   import ServiceMobilisation from "$lib/components/services/body/service-mobilisation.svelte";
   import { hasAnsweredNpsForm } from "$lib/utils/nps";
-
-  export let service: Service;
-  export let servicesOptions;
 
   // Nous ne voulons pas afficher le formulaire sur les services avant cette date
   // afin de ne pas avoir une durée de contribution fausse

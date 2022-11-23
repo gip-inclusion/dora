@@ -1,68 +1,14 @@
-<script context="module" lang="ts">
-  import { get } from "svelte/store";
-  import { userInfo } from "$lib/auth";
-
-  import {
-    createModelFromService,
-    getNewModel,
-  } from "$lib/components/services/form/utils";
-  import { getService, getServicesOptions } from "$lib/services";
-  import { getStructures } from "$lib/structures";
-
-  export async function load({ url }) {
-    const serviceSlug = url.searchParams.get("service");
-    const structureSlug = url.searchParams.get("structure");
-
-    const user = get(userInfo);
-    let structures = [];
-
-    if (user?.isStaff) {
-      structures = await getStructures();
-    } else if (user) {
-      structures = user.structures;
-    }
-
-    let model;
-
-    if (serviceSlug) {
-      const service = await getService(serviceSlug);
-      model = createModelFromService(service);
-      model.slug = null;
-      model.structure = null;
-      model.service = serviceSlug;
-    } else {
-      model = getNewModel();
-    }
-
-    let structure;
-
-    if (structures.length === 1) {
-      model.structure = structures[0].slug;
-      structure = structures[0];
-    } else if (structureSlug) {
-      structure = structures.find((s) => s.slug === structureSlug);
-      model.structure = structureSlug;
-    }
-
-    return {
-      props: {
-        model,
-        servicesOptions: await getServicesOptions({ model }),
-        structures,
-        structure,
-        serviceSlug,
-      },
-    };
-  }
-</script>
-
 <script lang="ts">
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
+
+  let { model, servicesOptions, structures, structure, serviceSlug } = data;
+
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Notice from "$lib/components/notice.svelte";
   import ModelFields from "$lib/components/services/form/model-fields.svelte";
-
-  export let servicesOptions, structures, model, structure, serviceSlug;
 </script>
 
 <svelte:head>

@@ -1,54 +1,19 @@
-<script context="module" lang="ts">
-  import { browser } from "$app/env";
-  import { get } from "svelte/store";
+<script lang="ts">
   import { userInfo } from "$lib/auth";
   import { structure } from "../_store";
 
-  import { getMembers, getPutativeMembers } from "$lib/structures";
+  import type { PageData } from "./$types";
 
-  export async function load() {
-    // sur le serveur, info est toujours null,
-    // on retourne une 404 uniquement sur le client
-    if (!browser) {
-      return {};
-    }
+  export let data: PageData;
 
-    const info = get(userInfo);
-    const struct = get(structure);
-
-    const canSeeMembers = struct.isMember || info?.isBizdev || info?.isStaff;
-    const canEditMembers = struct.isAdmin || info?.isBizdev || info?.isStaff;
-
-    if (!info || !struct || !canSeeMembers) {
-      return {
-        status: 404,
-        error: "Page Not Found",
-      };
-    }
-
-    const members = await getMembers(struct.slug);
-    const putativeMembers = await getPutativeMembers(struct.slug);
-
-    return {
-      props: {
-        members,
-        putativeMembers,
-        canSeeMembers,
-        canEditMembers,
-      },
-    };
-  }
-</script>
-
-<script lang="ts">
+  let { members, putativeMembers, canSeeMembers, canEditMembers } = data;
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import Button from "$lib/components/button.svelte";
   import MemberInvited from "$lib/components/users/member-invited.svelte";
   import MemberToConfirm from "$lib/components/users/member-to-confirm.svelte";
   import MemberStandard from "$lib/components/users/member-standard.svelte";
   import ModalAddUser from "$lib/components/users/modal-add-user.svelte";
-
-  export let members, putativeMembers, canSeeMembers, canEditMembers;
+  import { getMembers, getPutativeMembers } from "$lib/structures";
 
   let modalAddUserIsOpen = false;
 

@@ -1,23 +1,10 @@
-<script context="module" lang="ts">
-  import { getServicesOptions } from "$lib/services";
-
-  export async function load({ url }) {
-    const query = url.searchParams;
-    const source = query.get("utm_source");
-
-    return {
-      props: {
-        servicesOptions: await getServicesOptions(),
-        source,
-      },
-    };
-  }
-</script>
-
 <script lang="ts">
-  import FormWrapper from "./form/_form-wrapper.svelte";
+  import type { PageData } from "./$types";
 
-  export let servicesOptions, source;
+  export let data: PageData;
+
+  let { servicesOptions, source } = data;
+  import FormWrapper from "../form/_form-wrapper.svelte";
 </script>
 
 <svelte:head>
