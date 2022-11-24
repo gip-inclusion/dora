@@ -5,7 +5,7 @@ import { getApiURL } from "$lib/utils/api";
 import { token } from "$lib/auth";
 import { logException } from "./logger";
 import { SERVICE_STATUSES } from "./schemas/service";
-import type { ServicesOptions } from "./types";
+import type { Model, Service, ServicesOptions } from "./types";
 
 function serviceToBack(service) {
   if (service.longitude && service.latitude) {
@@ -36,7 +36,7 @@ export async function getMyServices() {
   return (await fetchData(url)).data;
 }
 
-export async function getService(slug) {
+export async function getService(slug): Promise<Service> {
   const url = `${getApiURL()}/services/${slug}/`;
   const response = await fetchData(url);
 
@@ -46,12 +46,12 @@ export async function getService(slug) {
   return serviceToFront(response.data);
 }
 
-export async function getPublishedServices() {
+export async function getPublishedServices(): Promise<Service[]> {
   const url = `${getApiURL()}/services/?published=1`;
   return (await fetchData(url)).data;
 }
 
-export async function getModel(slug) {
+export async function getModel(slug): Promise<Model> {
   const url = `${getApiURL()}/models/${slug}/`;
   const response = await fetchData(url);
 

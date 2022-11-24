@@ -8,6 +8,7 @@ import { logException } from "./logger";
 
 import structureSchema from "$lib/schemas/structure";
 import { validate } from "$lib/validation";
+import type { ShortStructure, Structure } from "./types";
 
 export async function siretWasAlreadyClaimed(siret) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;
@@ -35,12 +36,12 @@ export async function siretWasAlreadyClaimed(siret) {
   return result;
 }
 
-export async function getStructures() {
+export async function getStructures(): Promise<ShortStructure[]> {
   const url = `${getApiURL()}/structures/`;
   return (await fetchData(url)).data;
 }
 
-export async function getStructure(slug) {
+export async function getStructure(slug): Promise<Structure> {
   const url = `${getApiURL()}/structures/${slug}/`;
   const result = (await fetchData(url)).data;
 

@@ -2,7 +2,11 @@ import { getServicesOptions } from "$lib/services";
 import { getApiURL } from "$lib/utils/api";
 import { getQuery } from "../_homepage/_search";
 import { trackSearch } from "$lib/utils/plausible";
-import { SERVICE_UPDATE_STATUS, type SearchQuery } from "$lib/types";
+import {
+  SERVICE_UPDATE_STATUS,
+  type SearchQuery,
+  type ServiceSearchResult,
+} from "$lib/types";
 import { computeUpdateStatusData } from "$lib/utils/service";
 
 // pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
@@ -16,7 +20,7 @@ async function getResults({
   cityLabel,
   kindIds,
   feeConditions,
-}: SearchQuery) {
+}: SearchQuery): Promise<ServiceSearchResult[]> {
   const query = getQuery({
     categoryIds,
     subCategoryIds,
