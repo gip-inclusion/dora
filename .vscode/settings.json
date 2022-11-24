@@ -27,8 +27,10 @@
   "eslint.probe": ["javascript", "svelte"],
   "eslint.validate": ["javascript", "svelte"],
   "files.exclude": {
+    ".husky": true,
     ".svelte-kit": true,
-    "build": true
+    "build": true,
+    ".cache_ggshield": true
   },
   "files.trimTrailingWhitespace": true,
   "svelte.plugin.css.globals": "src/app.postcss",
