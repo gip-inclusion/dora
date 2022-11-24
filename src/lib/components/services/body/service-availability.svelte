@@ -1,8 +1,8 @@
 <script lang="ts">
   import { emotionHappyIcon, closeCircleFillIcon } from "$lib/icons";
-  import type { DashboardService, Service } from "$lib/types";
+  import type { ShortService, Service } from "$lib/types";
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let small = false;
   export let dark = false;
   export let bold = false;

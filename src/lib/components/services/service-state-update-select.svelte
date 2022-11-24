@@ -16,7 +16,7 @@
 
   import {
     SERVICE_STATUSES,
-    type DashboardService,
+    type ShortService,
     type Service,
   } from "$lib/types";
   import { getAvailableOptionsForStatus } from "$lib/utils/service";
@@ -75,7 +75,7 @@
     },
   };
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let servicesOptions;
   export let onRefresh: () => void;
   export let hideLabel = true;

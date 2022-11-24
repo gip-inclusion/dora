@@ -10,6 +10,7 @@
     formErrors,
     injectAPIErrors,
     contextValidationKey,
+    type ValidationContext,
   } from "$lib/validation";
 
   import SchemaField from "$lib/components/forms/schema-field.svelte";
@@ -61,7 +62,7 @@
     });
   }
 
-  setContext(contextValidationKey, {
+  setContext<ValidationContext>(contextValidationKey, {
     onBlur: handleEltChange,
     onChange: handleEltChange,
   });

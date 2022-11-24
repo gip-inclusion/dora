@@ -6,7 +6,7 @@
 
   function handleOpenCookiesPanel(evt) {
     evt.preventDefault();
-    tarteaucitron.userInterface.openPanel();
+    window.tarteaucitron.userInterface.openPanel();
   }
 </script>
 

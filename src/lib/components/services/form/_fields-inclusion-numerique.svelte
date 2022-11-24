@@ -1,7 +1,12 @@
 <script lang="ts">
   import { onMount, setContext } from "svelte";
 
-  import { formErrors, validate, contextValidationKey } from "$lib/validation";
+  import {
+    formErrors,
+    validate,
+    contextValidationKey,
+    type ValidationContext,
+  } from "$lib/validation";
   import { orderAndReformatSubcategories, moveToTheEnd } from "$lib/utils";
 
   import { isNotFreeService } from "$lib/utils/service";
@@ -293,7 +298,7 @@
     service.latitude = lat;
   }
 
-  setContext(contextValidationKey, {
+  setContext<ValidationContext>(contextValidationKey, {
     onBlur: handleEltChange,
     onChange: handleEltChange,
   });

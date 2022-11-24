@@ -1,6 +1,6 @@
 <script lang="ts">
   import Modal from "$lib/components/modal.svelte";
-  import type { DashboardService, Service, ServicesOptions } from "$lib/types";
+  import type { ShortService, Service, ServicesOptions } from "$lib/types";
   import LinkButton from "$lib/components/link-button.svelte";
   import Button from "$lib/components/button.svelte";
 
@@ -10,7 +10,7 @@
   import { createOrModifyService } from "$lib/services";
 
   export let isOpen = false;
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
   export let onRefresh: () => void;
 

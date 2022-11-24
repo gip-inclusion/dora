@@ -12,7 +12,7 @@
   export let items = [];
 
   // function to use to get all items (alternative to providing items)
-  export let searchFunction = false;
+  export let searchFunction = null;
 
   // function which returns a postfix value to display in the list
   export let postfixValueFunction = undefined;

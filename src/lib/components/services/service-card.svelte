@@ -6,7 +6,7 @@
   import {
     SERVICE_STATUSES,
     SERVICE_UPDATE_STATUS,
-    type DashboardService,
+    type ShortService,
     type ServicesOptions,
   } from "$lib/types";
   import {
@@ -18,7 +18,7 @@
   import SynchronizedIcon from "$lib/components/services/icons/synchronized.svelte";
   import Bookmarkable from "../bookmarkable.svelte";
 
-  export let service: DashboardService;
+  export let service: ShortService;
   export let servicesOptions: ServicesOptions;
   export let readOnly = true;
   export let onRefresh: () => void;

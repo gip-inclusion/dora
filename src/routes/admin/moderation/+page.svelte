@@ -7,17 +7,16 @@
   import { eyeIcon } from "$lib/icons";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import ModerationLabel from "../_moderation-label.svelte";
-  import { ModerationStatus } from "$lib/enums";
 
   // let services,
   let structures, entities;
   let filteredEntities = [];
 
   const STATUS_VALUE = {
-    [ModerationStatus.NEED_INITIAL_MODERATION]: 1,
-    [ModerationStatus.NEED_NEW_MODERATION]: 2,
-    [ModerationStatus.IN_PROGRESS]: 3,
-    [ModerationStatus.VALIDATED]: 4,
+    NEED_INITIAL_MODERATION: 1,
+    NEED_NEW_MODERATION: 2,
+    IN_PROGRESS: 3,
+    VALIDATED: 4,
   };
   onMount(async () => {
     structures = await getStructuresToModerate();

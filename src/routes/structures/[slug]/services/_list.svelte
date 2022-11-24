@@ -23,7 +23,7 @@
     SERVICE_STATUSES,
     SERVICE_UPDATE_STATUS,
     type Choice,
-    type DashboardService,
+    type ShortService,
   } from "$lib/types";
   import { computeUpdateStatusData } from "$lib/utils/service";
 
@@ -34,7 +34,7 @@
 
   export let serviceStatus: SERVICE_STATUSES | undefined;
   export let updateStatus: SERVICE_UPDATE_STATUS | undefined;
-  export let servicesDisplayed: DashboardService[] = [];
+  export let servicesDisplayed: ShortService[] = [];
 
   let canEdit;
 

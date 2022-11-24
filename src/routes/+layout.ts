@@ -41,5 +41,5 @@ export async function load({ url }) {
 }
 
 if (browser) {
-  tarteaucitron.user.crispID = CRISP_ID;
+  window.tarteaucitron.user.crispID = CRISP_ID;
 }

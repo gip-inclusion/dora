@@ -1,7 +1,12 @@
 <script lang="ts">
   import { setContext } from "svelte";
 
-  import { formErrors, validate, contextValidationKey } from "$lib/validation";
+  import {
+    formErrors,
+    validate,
+    contextValidationKey,
+    type ValidationContext,
+  } from "$lib/validation";
   import {
     moveToTheEnd,
     orderAndReformatSubcategories,
@@ -141,7 +146,7 @@
     });
   }
 
-  setContext(contextValidationKey, {
+  setContext<ValidationContext>(contextValidationKey, {
     onBlur: handleEltChange,
     onChange: handleEltChange,
   });

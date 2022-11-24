@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { DashboardService, Service } from "$lib/types";
+  import type { ShortService, Service } from "$lib/types";
   import ContactEmail from "./contact-email.svelte";
   import ContactPhone from "./contact-phone.svelte";
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   const orientationMode = service.coachOrientationModes;
   const emailPreferred =
     service.contactEmail &&

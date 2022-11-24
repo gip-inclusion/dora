@@ -6,6 +6,7 @@
     formErrors,
     injectAPIErrors,
     contextValidationKey,
+    type ValidationContext,
   } from "$lib/validation";
 
   export let data;
@@ -42,7 +43,7 @@
     }
   }
 
-  setContext(contextValidationKey, {
+  setContext<ValidationContext>(contextValidationKey, {
     onBlur: handleEltChange,
     onChange: handleEltChange,
   });

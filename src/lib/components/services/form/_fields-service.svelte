@@ -1,7 +1,12 @@
 <script lang="ts">
   import { tick, setContext } from "svelte";
 
-  import { formErrors, validate, contextValidationKey } from "$lib/validation";
+  import {
+    formErrors,
+    validate,
+    contextValidationKey,
+    type ValidationContext,
+  } from "$lib/validation";
   import { moveToTheEnd } from "$lib/utils";
 
   import FieldSet from "$lib/components/forms/fieldset.svelte";
@@ -102,7 +107,7 @@
     });
   }
 
-  setContext(contextValidationKey, {
+  setContext<ValidationContext>(contextValidationKey, {
     onBlur: handleEltChange,
     onChange: handleEltChange,
   });

@@ -2,7 +2,7 @@
   import { moreIcon } from "$lib/icons";
   import type {
     Service,
-    DashboardService,
+    ShortService,
     SERVICE_UPDATE_STATUS,
     ServicesOptions,
   } from "$lib/types";
@@ -10,7 +10,7 @@
   import ButtonMenu from "$lib/components/button-menu.svelte";
   import ServiceMenu from "./service-menu.svelte";
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
   export let updateStatus: SERVICE_UPDATE_STATUS | undefined;
   export let onRefresh: () => void | undefined;

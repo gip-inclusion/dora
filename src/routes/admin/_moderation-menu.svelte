@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from "$lib/components/button.svelte";
-  import type { ModerationStatus } from "$lib/enums";
+  import type { ModerationStatus } from "$lib/types";
   import { setModerationState } from "$lib/admin";
 
   export let entity; // either a Service or a Structure

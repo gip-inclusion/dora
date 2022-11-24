@@ -19,7 +19,7 @@ import {
   SERVICE_STATUSES,
   SERVICE_UPDATE_STATUS,
   type Choice,
-  type DashboardService,
+  type ShortService,
   type FeeCondition,
   type ServiceSearchResult,
   type Service,
@@ -56,7 +56,7 @@ type ServiceUpdateStatusData = {
   updateStatus: SERVICE_UPDATE_STATUS;
 };
 export function computeUpdateStatusData(
-  service: Service | DashboardService | ServiceSearchResult
+  service: Service | ShortService | ServiceSearchResult
 ): ServiceUpdateStatusData {
   const lastUpdateDay = dayjs(service.modificationDate);
   const dayDiff = dayjs().diff(lastUpdateDay, "day");

@@ -1,7 +1,10 @@
 <script lang="ts">
   import { getContext } from "svelte";
 
-  import { contextValidationKey } from "$lib/validation";
+  import {
+    contextValidationKey,
+    type ValidationContext,
+  } from "$lib/validation";
 
   import Select from "$lib/components/forms/select.svelte";
 
@@ -27,7 +30,7 @@
     return results;
   }
 
-  const context = getContext(contextValidationKey);
+  const context = getContext<ValidationContext>(contextValidationKey);
 
   function handleBlur(evt) {
     if (context) context.onBlur(evt);

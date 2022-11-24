@@ -8,6 +8,7 @@
     injectAPIErrors,
     contextValidationKey,
     formErrors,
+    type ValidationContext,
   } from "$lib/validation";
   import { contribSchema } from "$lib/schemas/service";
   import { publishServiceSuggestion } from "$lib/services";
@@ -53,7 +54,7 @@
     });
   }
 
-  setContext(contextValidationKey, {
+  setContext<ValidationContext>(contextValidationKey, {
     onBlur: handleEltChange,
     onChange: handleEltChange,
   });

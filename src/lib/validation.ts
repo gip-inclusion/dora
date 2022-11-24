@@ -1,6 +1,10 @@
 import { writable } from "svelte/store";
 import { browser } from "$app/environment";
 
+export type ValidationContext = {
+  onBlur: (evt: any) => Promise<void>;
+  onChange: (evt: any) => Promise<void>;
+};
 export const contextValidationKey = {};
 export const formErrors = writable({});
 

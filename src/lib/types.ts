@@ -1,3 +1,13 @@
+export type ShortStructure = {
+  slug: string;
+  siret: string;
+  name: string;
+  department: string;
+  typologyDisplay: string;
+  modificationDate: string;
+  parent: ShortStructure;
+};
+
 // STRUCTURE
 export type Structure = {
   name: string;
@@ -31,7 +41,8 @@ export type Structure = {
   source: StructureSource | undefined;
   hasBeenEdited: boolean | undefined;
 
-  services?: DashboardService[];
+  services?: ShortService[];
+  models: Model[];
 };
 
 export type StructuresOptions = {
@@ -79,6 +90,12 @@ export enum SERVICE_UPDATE_STATUS {
   NEEDED = "NEEDED",
   REQUIRED = "REQUIRED",
 }
+
+export type ModerationStatus =
+  | "NEED_INITIAL_MODERATION"
+  | "NEED_NEW_MODERATION"
+  | "IN_PROGRESS"
+  | "VALIDATED";
 
 export type ServiceKind =
   | "accompagnement"
@@ -211,11 +228,11 @@ export interface Service {
 }
 
 export interface Bookmark {
-  service: DashboardService;
+  service: ShortService;
   creationDate: string;
 }
 
-export type DashboardService = Pick<
+export type ShortService = Pick<
   Service,
   | "name"
   | "slug"
@@ -256,6 +273,10 @@ export type ServicesOptions = {
   accessConditions: (Choice & { structure: string | null })[];
   categories: Choice[];
   subcategories: Choice[];
+};
+
+export type Model = {
+  // TODO
 };
 
 // FORM

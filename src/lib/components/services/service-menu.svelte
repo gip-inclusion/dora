@@ -3,7 +3,7 @@
   import { checkboxCircleFillIcon, copyIcon, editIcon } from "$lib/icons";
   import {
     type Service,
-    type DashboardService,
+    type ShortService,
     SERVICE_UPDATE_STATUS,
     SERVICE_STATUSES,
     type ServicesOptions,
@@ -11,7 +11,7 @@
   import Button from "../button.svelte";
   import SetAsUpdatedModal from "./set-as-updated-modal.svelte";
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
   export let updateStatus: SERVICE_UPDATE_STATUS | undefined;
   export let onRefresh: () => void | undefined;
