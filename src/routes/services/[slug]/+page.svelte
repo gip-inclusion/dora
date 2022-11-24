@@ -6,7 +6,6 @@
 
   export let data: PageData;
 
-  let { service, servicesOptions } = data;
   import { onDestroy, onMount } from "svelte";
   import { trackService } from "$lib/utils/plausible";
 
@@ -33,7 +32,7 @@
   const MIN_DATE_FOR_SERVICE_FEEDBACK_FROM = new Date("2022-07-21");
 
   onMount(() => {
-    trackService(service);
+    trackService(data.service);
   });
 
   onDestroy(() => {
@@ -41,38 +40,47 @@
   });
 
   async function handleRefresh() {
-    service = await getService(service.slug);
+    data.service = await getService(data.service.slug);
   }
 
-  $: showContact = service?.isContactInfoPublic || $token;
+  $: showContact = data.service?.isContactInfoPublic || $token;
 </script>
 
 <svelte:head>
-  <title>{service?.name} | {service?.structureInfo?.name} | DORA</title>
-  <meta name="description" content={service?.shortDesc} />
+  <title
+    >{data.service?.name} | {data.service?.structureInfo?.name} | DORA</title
+  >
+  <meta name="description" content={data.service?.shortDesc} />
 </svelte:head>
 
-{#if service}
+{#if data.service}
   <CenteredGrid bgColor="bg-france-blue">
-    <ServiceHeader {service} />
+    <ServiceHeader service={data.service} />
   </CenteredGrid>
   <hr />
   <div>
-    <ServiceToolbar {service} {servicesOptions} onRefresh={handleRefresh} />
+    <ServiceToolbar
+      service={data.service}
+      servicesOptions={data.servicesOptions}
+      onRefresh={handleRefresh}
+    />
   </div>
 
   <CenteredGrid>
     <div class="service-body">
       <div class="presentation">
-        <ServicePresentation {service} {servicesOptions} />
+        <ServicePresentation
+          service={data.service}
+          servicesOptions={data.servicesOptions}
+        />
       </div>
       <hr class="separator-1" />
       <div class="beneficiaries">
-        <ServiceBeneficiaries {service} />
+        <ServiceBeneficiaries service={data.service} />
       </div>
       <hr class="separator-2" />
       <div class="mobilize">
-        <ServiceMobilize {service} />
+        <ServiceMobilize service={data.service} />
       </div>
 
       <div class="sidebar flex flex-col gap-y-s24">
@@ -80,24 +88,24 @@
           class="block rounded-lg border border-gray-02 p-s24 px-s32"
           class:print:hidden={!showContact}
         >
-          <ServiceMobilisation {service} {showContact} />
+          <ServiceMobilisation service={data.service} {showContact} />
         </div>
         <div class="rounded-lg border border-gray-02 p-s32 pb-s48">
           <ServiceKeyInformations
-            {service}
-            {servicesOptions}
+            service={data.service}
+            servicesOptions={data.servicesOptions}
             display="sidebar"
           />
         </div>
         <div class="rounded-lg border border-gray-02 p-s32 pb-s48 print:hidden">
-          <ServiceShare {service} />
+          <ServiceShare service={data.service} />
         </div>
       </div>
     </div>
   </CenteredGrid>
 
-  {#if service.canWrite}
-    {#if !hasAnsweredNpsForm(SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !service.hasAlreadyBeenUnpublished}
+  {#if data.service.canWrite}
+    {#if !hasAnsweredNpsForm(SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(data.service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !data.service.hasAlreadyBeenUnpublished}
       <TallyNpsPopup
         formId={SERVICE_CREATION_FORM_ID}
         timeout={3000}

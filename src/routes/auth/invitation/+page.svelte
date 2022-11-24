@@ -3,7 +3,6 @@
 
   export let data: PageData;
 
-  let { structure, parent } = data;
   import { token, validateCredsAndFillUserInfo } from "$lib/auth";
   import { trackJoinStructure } from "$lib/utils/plausible";
 
@@ -28,7 +27,7 @@
         Authorization: `Token ${get(token)}`,
       },
       body: JSON.stringify({
-        structureSlug: structure.slug,
+        structureSlug: data.structure.slug,
       }),
     });
 
@@ -65,29 +64,31 @@
       </p>
       <div>
         <div class="mb-s0 border border-gray-01 p-s24">
-          <h3 class="text-gray-text">{structure.name}</h3>
-          {#if structure.siret}
-            <div class="legend">{structure.siret}</div>
+          <h3 class="text-gray-text">{data.structure.name}</h3>
+          {#if data.structure.siret}
+            <div class="legend">{data.structure.siret}</div>
           {/if}
-          <div class="legend">{structure.address1}</div>
-          <div class="legend">{structure.address2}</div>
+          <div class="legend">{data.structure.address1}</div>
+          <div class="legend">{data.structure.address2}</div>
           <div class="legend">
-            {structure.postalCode}
-            {structure.city}
+            {data.structure.postalCode}
+            {data.structure.city}
           </div>
         </div>
-        {#if parent}
+        {#if data.parent}
           <div class="mt-s0 border border-t-0 border-gray-01 bg-gray-bg p-s24">
             <p class="legend mb-s8">
               Cette structure est une antenne de&nbsp;:
             </p>
-            <h4 class="mb-s8 text-gray-text">{parent.name}</h4>
-            <div class="legend">{parent.siret}</div>
+            <h4 class="mb-s8 text-gray-text">{data.parent.name}</h4>
+            <div class="legend">{data.parent.siret}</div>
             <div class="legend">
-              {#if parent.address1}{parent.address1}{/if}{#if parent.address2}
-                {parent.address2}{/if}{#if parent.address1 || parent.address2},{/if}
-              {parent.postalCode}
-              {parent.city}
+              {#if data.parent.address1}{data.parent
+                  .address1}{/if}{#if data.parent.address2}
+                {data.parent
+                  .address2}{/if}{#if data.parent.address1 || data.parent.address2},{/if}
+              {data.parent.postalCode}
+              {data.parent.city}
             </div>
           </div>
         {/if}

@@ -3,8 +3,6 @@
 
   export let data: PageData;
 
-  let { servicesOptions, structures, lastDraft, service, structure, model } =
-    data;
   import { goto } from "$app/navigation";
 
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
@@ -14,12 +12,15 @@
   import Button from "$lib/components/button.svelte";
   import ServiceFields from "$lib/components/services/form/service-fields.svelte";
 
-  if (service.structure && lastDraft?.structure !== service.structure) {
-    lastDraft = null;
+  if (
+    data.service.structure &&
+    data.lastDraft?.structure !== data.service.structure
+  ) {
+    data.lastDraft = null;
   }
 
   function handleOpenLastDraft() {
-    goto(`/services/${lastDraft.slug}/editer`);
+    goto(`/services/${data.lastDraft.slug}/editer`);
   }
 </script>
 
@@ -32,11 +33,11 @@
   <CenteredGrid>
     <h1>Création d'un service</h1>
 
-    {#if !structures.length}
+    {#if !data.structures.length}
       <Notice title="Impossible de créer un nouveau service" type="error">
         <p class="text-f14">Vous n’êtes rattaché à aucune structure.</p>
       </Notice>
-    {:else if lastDraft}
+    {:else if data.lastDraft}
       <Notice
         title="Vous n’avez pas finalisé votre précédente saisie"
         hasCloseButton
@@ -54,5 +55,11 @@
     {/if}
   </CenteredGrid>
 
-  <ServiceFields {service} {servicesOptions} {structures} {structure} {model} />
+  <ServiceFields
+    service={data.service}
+    servicesOptions={data.servicesOptions}
+    structures={data.structures}
+    structure={data.structure}
+    model={data.model}
+  />
 </EnsureLoggedIn>

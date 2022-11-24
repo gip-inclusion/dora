@@ -5,8 +5,6 @@
 
   export let data: PageData;
 
-  let { model, servicesOptions } = data;
-
   import { onMount } from "svelte";
   import { trackModel } from "$lib/utils/plausible";
 
@@ -17,31 +15,31 @@
   import { browser } from "$app/environment";
 
   onMount(() => {
-    trackModel(model);
+    trackModel(data.model);
   });
 
   async function handleRefresh() {
-    model = await getModel(model.slug);
+    data.model = await getModel(data.model.slug);
   }
 </script>
 
 <svelte:head>
-  <title>{model?.name} | {model?.structureInfo.name} | DORA</title>
-  <meta name="description" content={model?.shortDesc} />
+  <title>{data.model?.name} | {data.model?.structureInfo.name} | DORA</title>
+  <meta name="description" content={data.model?.shortDesc} />
 </svelte:head>
 
 <CenteredGrid bgColor="bg-gray-bg">
-  <ModelHeader {model} />
+  <ModelHeader model={data.model} />
 </CenteredGrid>
 <hr />
 <CenteredGrid noPadding>
   <div class="py-s24 print:hidden">
     {#if browser}
-      <ModelToolbar {model} onRefresh={handleRefresh} />
+      <ModelToolbar model={data.model} onRefresh={handleRefresh} />
     {/if}
   </div>
 </CenteredGrid>
 
 <CenteredGrid>
-  <ModelBody service={model} {servicesOptions} />
+  <ModelBody service={data.model} servicesOptions={data.servicesOptions} />
 </CenteredGrid>

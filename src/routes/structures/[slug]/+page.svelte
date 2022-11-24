@@ -3,7 +3,6 @@
 
   export let data: PageData;
 
-  let { structuresOptions } = data;
   import { userInfo } from "$lib/auth";
   import { structure } from "./_store";
   import { getStructure } from "$lib/structures";
@@ -26,7 +25,10 @@
   <meta name="description" content={$structure.shortDesc} />
 </svelte:head>
 
-<Informations structure={$structure} {structuresOptions} />
+<Informations
+  structure={$structure}
+  structuresOptions={data.structuresOptions}
+/>
 <div class="mb-s64" />
 
 {#if !!$structure.services?.length || $structure.isMember || $userInfo?.isStaff}

@@ -1,32 +1,5 @@
 <script lang="ts">
   import type { PageData } from "./$types";
-
-  export let data: PageData;
-
-  let {
-    servicesOptions,
-    categoryIds,
-    subCategoryIds,
-    cityCode,
-    cityLabel,
-    kindIds,
-    feeConditions,
-    allServices,
-    servicesUpToDate,
-    servicesToUpdate,
-  }: {
-    servicesOptions: ServicesOptions;
-    categoryIds: string[];
-    subCategoryIds: string[];
-    cityCode: string;
-    cityLabel: string;
-    kindIds: ServiceKind[];
-    feeConditions: FeeCondition[];
-    allServices: ServiceSearchResult[];
-    servicesUpToDate: ServiceSearchResult[];
-    servicesToUpdate: ServiceSearchResult[];
-  } = data;
-
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 
   import SearchResult from "../_homepage/_search-result.svelte";
@@ -34,12 +7,7 @@
 
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
   import { NPS_SEEKER_FORM_ID } from "$lib/const";
-  import type {
-    FeeCondition,
-    ServiceKind,
-    ServiceSearchResult,
-    ServicesOptions,
-  } from "$lib/types";
+  import type { ServiceSearchResult } from "$lib/types";
   import Breadcrumb from "$lib/components/breadcrumb.svelte";
   import SearchForm from "../_homepage/_search-form.svelte";
   import ServiceSuggestionNotice from "../_homepage/_service-suggestion-notice.svelte";
@@ -50,6 +18,8 @@
   import { tick } from "svelte";
   import Button from "$lib/components/button.svelte";
   import Notice from "$lib/components/notice.svelte";
+
+  export let data: PageData;
 
   const PAGE_LENGTH = 10;
 
@@ -79,22 +49,24 @@
   }
 
   $: showDeploymentNotice =
-    cityCode && !isInDeploymentDepartments(cityCode, servicesOptions);
+    data.cityCode &&
+    !isInDeploymentDepartments(data.cityCode, data.servicesOptions);
   $: {
     tags = [];
 
-    if (categoryIds.length) {
-      const categoryTags = categoryIds.map((id) => {
-        return servicesOptions.categories.find((c) => c.value === id).label;
+    if (data.categoryIds.length) {
+      const categoryTags = data.categoryIds.map((id) => {
+        return data.servicesOptions.categories.find((c) => c.value === id)
+          .label;
       });
 
       if (categoryTags.length) {
         tags = [...tags, ...categoryTags];
       }
 
-      if (subCategoryIds.length) {
-        const subCategoryTags = subCategoryIds.map((id) => {
-          return servicesOptions.subcategories.find((c) => c.value === id)
+      if (data.subCategoryIds.length) {
+        const subCategoryTags = data.subCategoryIds.map((id) => {
+          return data.servicesOptions.subcategories.find((c) => c.value === id)
             .label;
         });
 
@@ -108,7 +80,7 @@
 
 <svelte:head>
   <title>
-    Services d’insertion {cityLabel ? `à ${cityLabel}` : ""} : {tags
+    Services d’insertion {data.cityLabel ? `à ${data.cityLabel}` : ""} : {tags
       .filter(Boolean)
       .join(", ")} | Recherche | DORA
   </title>
@@ -125,14 +97,14 @@
     </div>
 
     <SearchForm
-      {servicesOptions}
-      {cityCode}
-      {cityLabel}
-      {kindIds}
-      {feeConditions}
+      servicesOptions={data.servicesOptions}
+      cityCode={data.cityCode}
+      cityLabel={data.cityLabel}
+      kindIds={data.kindIds}
+      feeConditions={data.feeConditions}
       subCategoryIds={[
-        ...subCategoryIds,
-        ...categoryIds.map((c) => `${c}--all`),
+        ...data.subCategoryIds,
+        ...data.categoryIds.map((c) => `${c}--all`),
       ]}
       showDeploymentWarning={false}
       useAdditionalFilters
@@ -142,9 +114,9 @@
 
 <CenteredGrid extraClass="max-w-4xl m-auto">
   <div class="mt-s16 text-f21 font-bold text-gray-dark">
-    {#if allServices.length > 0}
-      {allServices.length}
-      {allServices.length > 1 ? "résultats" : "résultat"}
+    {#if data.allServices.length > 0}
+      {data.allServices.length}
+      {data.allServices.length > 1 ? "résultats" : "résultat"}
     {:else}
       Aucun résultat
     {/if}
@@ -156,38 +128,38 @@
     </div>
   {/if}
 
-  {#if hasOnlyNationalResults(allServices)}
+  {#if hasOnlyNationalResults(data.allServices)}
     <div class="mt-s24">
       <OnlyNationalResultsNotice />
     </div>
   {/if}
 
-  {#if allServices.length}
+  {#if data.allServices.length}
     <div class="mt-s32 flex flex-col gap-s16">
       <h2 class="sr-only">Résultats de votre recherche</h2>
-      {#each servicesUpToDate as service, index}
+      {#each data.servicesUpToDate as service, index}
         {#if index < currentPageLength}
           <SearchResult id={getResultId(index)} result={service} />
         {/if}
       {/each}
 
-      {#if currentPageLength > servicesUpToDate.length && servicesToUpdate.length}
+      {#if currentPageLength > data.servicesUpToDate.length && data.servicesToUpdate.length}
         <Notice
           type="warning"
           title="Les services qui suivent n’ont pas été mis à jour depuis plus de 8
         mois"
         />
-        {#each servicesToUpdate as service, index}
-          {#if index + servicesUpToDate.length < currentPageLength}
+        {#each data.servicesToUpdate as service, index}
+          {#if index + data.servicesUpToDate.length < currentPageLength}
             <SearchResult
-              id={getResultId(index + servicesUpToDate.length)}
+              id={getResultId(index + data.servicesUpToDate.length)}
               result={service}
             />
           {/if}
         {/each}
       {/if}
 
-      {#if allServices.length > currentPageLength}
+      {#if data.allServices.length > currentPageLength}
         <div class="text-center">
           <Button
             label="Charger plus de résultats"
@@ -203,7 +175,7 @@
     <ServiceSuggestionNotice />
   </div>
 
-  {#if subCategoryIds.includes("famille--garde-enfants") || subCategoryIds.includes("famille--accompagnement-parents")}
+  {#if data.subCategoryIds.includes("famille--garde-enfants") || data.subCategoryIds.includes("famille--accompagnement-parents")}
     <SearchPromo />
   {/if}
 </CenteredGrid>

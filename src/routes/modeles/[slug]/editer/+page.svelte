@@ -3,7 +3,6 @@
 
   export let data: PageData;
 
-  let { model, servicesOptions, structures, structure } = data;
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Notice from "$lib/components/notice.svelte";
@@ -11,21 +10,21 @@
 
   let multipleServices = 0;
 
-  $: multipleServices = model?.numServices > 1;
+  $: multipleServices = data.model?.numServices > 1;
 </script>
 
 <svelte:head>
-  <title>Éditer | {model?.name} | {structure?.name} | DORA</title>
+  <title>Éditer | {data.model?.name} | {data.structure?.name} | DORA</title>
 </svelte:head>
 
 <EnsureLoggedIn>
   <CenteredGrid>
     <h1>Modification du modèle</h1>
 
-    {#if model.numServices}
+    {#if data.model.numServices}
       <Notice
         title={`Ce modèle est utilisé par ${
-          multipleServices ? model.numServices : "un"
+          multipleServices ? data.model.numServices : "un"
         } service${multipleServices ? "s" : ""}`}
         type="warning"
       >
@@ -37,5 +36,10 @@
     {/if}
   </CenteredGrid>
 
-  <ModelFields {servicesOptions} {structures} {model} {structure} />
+  <ModelFields
+    servicesOptions={data.servicesOptions}
+    structures={data.structures}
+    model={data.model}
+    structure={data.structure}
+  />
 </EnsureLoggedIn>

@@ -3,7 +3,6 @@
 
   export let data: PageData;
 
-  let { structuresOptions } = data;
   import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
   import StructureSearch from "$lib/components/structures/search.svelte";
   import { siretWasAlreadyClaimed } from "$lib/structures";
@@ -87,5 +86,8 @@
 
 {#if structure.siret}
   <h2 class="mb-s40 border border-b-2 border-gray-02">Présentation</h2>
-  <StructureFormWrapper {structure} {structuresOptions} />
+  <StructureFormWrapper
+    {structure}
+    structuresOptions={data.structuresOptions}
+  />
 {/if}

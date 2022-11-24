@@ -3,7 +3,6 @@
   import type { PageData } from "./$types";
 
   export let data: PageData;
-  export let { servicesOptions } = data;
 </script>
 
 <svelte:head>
@@ -14,4 +13,4 @@
   />
 </svelte:head>
 
-<Landing {servicesOptions} />
+<Landing servicesOptions={data.servicesOptions} />

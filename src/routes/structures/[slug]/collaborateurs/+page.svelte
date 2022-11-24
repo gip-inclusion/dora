@@ -6,7 +6,6 @@
 
   export let data: PageData;
 
-  let { members, putativeMembers, canSeeMembers, canEditMembers } = data;
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import Button from "$lib/components/button.svelte";
   import MemberInvited from "$lib/components/users/member-invited.svelte";
@@ -18,8 +17,8 @@
   let modalAddUserIsOpen = false;
 
   async function handleRefreshMemberList() {
-    members = await getMembers($structure.slug);
-    putativeMembers = await getPutativeMembers($structure.slug);
+    data.members = await getMembers($structure.slug);
+    data.putativeMembers = await getPutativeMembers($structure.slug);
   }
 
   function sortedMembers(items) {
@@ -38,18 +37,18 @@
 </svelte:head>
 
 <EnsureLoggedIn>
-  {#if canEditMembers}
+  {#if data.canEditMembers}
     <ModalAddUser
       bind:isOpen={modalAddUserIsOpen}
       structure={$structure}
-      {members}
+      members={data.members}
       onRefresh={handleRefreshMemberList}
     />
   {/if}
 
   <div class="md:flex md:items-center md:justify-between">
     <h2 class="text-france-blue">Collaborateurs</h2>
-    {#if canEditMembers}
+    {#if data.canEditMembers}
       <Button
         label="Inviter un collaborateur"
         small
@@ -58,33 +57,33 @@
     {/if}
   </div>
 
-  {#if canSeeMembers}
+  {#if data.canSeeMembers}
     <div class="mt-s32 mb-s32 flex flex-col gap-s8">
-      {#if canEditMembers && putativeMembers}
-        {#each sortedMembers(putativeMembers) as member}
+      {#if data.canEditMembers && data.putativeMembers}
+        {#each sortedMembers(data.putativeMembers) as member}
           {#if member.invitedByAdmin}
             <MemberInvited
               {member}
               onRefresh={handleRefreshMemberList}
-              readOnly={!canEditMembers}
+              readOnly={!data.canEditMembers}
             />
           {:else}
             <MemberToConfirm
               {member}
               onRefresh={handleRefreshMemberList}
-              readOnly={!canEditMembers}
+              readOnly={!data.canEditMembers}
             />
           {/if}
         {/each}
       {/if}
-      {#each sortedMembers(members) as member}
+      {#each sortedMembers(data.members) as member}
         <MemberStandard
           {member}
           onRefresh={handleRefreshMemberList}
           isMyself={member.user.email === $userInfo.email}
           isOnlyAdmin={member.user.email === $userInfo.email &&
-            members.filter((m) => m.isAdmin).length === 1}
-          readOnly={!canEditMembers}
+            data.members.filter((m) => m.isAdmin).length === 1}
+          readOnly={!data.canEditMembers}
         />
       {/each}
     </div>

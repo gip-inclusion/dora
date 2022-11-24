@@ -3,8 +3,6 @@
 
   export let data: PageData;
 
-  let { structuresOptions } = data;
-
   import { getStructure } from "$lib/structures";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
@@ -30,7 +28,7 @@
 
   <StructureFormWrapper
     structure={$structure}
-    {structuresOptions}
+    structuresOptions={data.structuresOptions}
     modify
     onRefresh={handleRefresh}
   />

@@ -4,7 +4,6 @@
 
   export let data: PageData;
 
-  let { structure } = data;
   import TextClamp from "$lib/components/text-clamp.svelte";
   import WebSearchLink from "../../_web-search-link.svelte";
   import { capitalize, markdownToHTML } from "$lib/utils";
@@ -17,15 +16,15 @@
   import ModerationButtonMenu from "../../_moderation-button-menu.svelte";
   import History from "../../_history.svelte";
 
-  const description = markdownToHTML(structure.fullDesc);
+  const description = markdownToHTML(data.structure.fullDesc);
 
   async function handleRefresh() {
-    structure = await getStructureAdmin(structure.slug);
+    data.structure = await getStructureAdmin(data.structure.slug);
   }
 </script>
 
 <svelte:head>
-  <title>Admin | {capitalize(structure.name)} | DORA</title>
+  <title>Admin | {capitalize(data.structure.name)} | DORA</title>
 </svelte:head>
 
 <CenteredGrid bgColor="bg-gray-bg">
@@ -36,138 +35,148 @@
         <span class="text-f10">
           <a href="#contacts">Contacts</a> |
           <a href="#infos">Informations</a>
-          {#if structure.members.length}| <a href="#collabs">
+          {#if data.structure.members.length}| <a href="#collabs">
               Collaborateurs•trices
             </a>
           {/if}
-          {#if structure.pendingMembers.length}| <a href="#pending-collabs"
+          {#if data.structure.pendingMembers.length}| <a href="#pending-collabs"
               >Collaborateurs•trices en attente</a
             >{/if}
-          {#if structure.branches.length}| <a href="#branches">Antennes</a>{/if}
-          {#if structure.models.length}| <a href="#models">Modèles</a>{/if}
-          {#if structure.services.length}| <a href="#services">Services</a>{/if}
+          {#if data.structure.branches.length}| <a href="#branches">Antennes</a
+            >{/if}
+          {#if data.structure.models.length}| <a href="#models">Modèles</a>{/if}
+          {#if data.structure.services.length}| <a href="#services">Services</a
+            >{/if}
         </span>
       </h2>
-      <ModerationButtonMenu entity={structure} onRefresh={handleRefresh} />
+      <ModerationButtonMenu entity={data.structure} onRefresh={handleRefresh} />
     </div>
     <h3>
-      {structure.name}
-      <SmallLink link="/structures/{structure.slug}" label="front" />
-      <WebSearchLink searchString={structure.name} />
+      {data.structure.name}
+      <SmallLink link="/structures/{data.structure.slug}" label="front" />
+      <WebSearchLink searchString={data.structure.name} />
     </h3>
 
-    {#if structure.parent.slug}
+    {#if data.structure.parent.slug}
       <InfoLine>
-        Antenne de <strong>{structure.parent.name}</strong>
-        <SmallLink link="/structures/{structure.parent.slug}" label="front" />
+        Antenne de <strong>{data.structure.parent.name}</strong>
         <SmallLink
-          link="/admin/structures/{structure.parent.slug}"
+          link="/structures/{data.structure.parent.slug}"
+          label="front"
+        />
+        <SmallLink
+          link="/admin/structures/{data.structure.parent.slug}"
           label="admin"
         />
       </InfoLine>
     {/if}
 
     <h4>Historique</h4>
-    <History notes={structure.notes} />
+    <History notes={data.structure.notes} />
 
     <h4 id="contacts">Contacts</h4>
 
-    <StructureContacts {structure} />
+    <StructureContacts structure={data.structure} />
 
     <h4 id="infos">Informations</h4>
-    <InfoLine condition={structure.shortDesc}>
+    <InfoLine condition={data.structure.shortDesc}>
       <div class="italic">
-        {structure.shortDesc}
+        {data.structure.shortDesc}
       </div>
     </InfoLine>
-    <InfoLine condition={structure.url}>
+    <InfoLine condition={data.structure.url}>
       <a
-        href={structure.url}
+        href={data.structure.url}
         class="underline"
         target="_blank"
-        rel="noopener nofollow">{structure.url}</a
+        rel="noopener nofollow">{data.structure.url}</a
       >
     </InfoLine>
 
-    <InfoLine condition={structure.source}>
-      source: {structure.source}
+    <InfoLine condition={data.structure.source}>
+      source: {data.structure.source}
     </InfoLine>
 
-    <InfoLine condition={structure.siret}>
-      siret: {structure.siret}
+    <InfoLine condition={data.structure.siret}>
+      siret: {data.structure.siret}
       <SmallLink
-        link="https://annuaire-entreprises.data.gouv.fr/etablissement/{structure.siret}"
+        link="https://annuaire-entreprises.data.gouv.fr/etablissement/{data
+          .structure.siret}"
         label="annuaire entreprise"
       />
-      <WebSearchLink searchString={structure.siret} />
+      <WebSearchLink searchString={data.structure.siret} />
     </InfoLine>
 
-    <InfoLine condition={structure.typologyDisplay}>
-      typologie: {structure.typologyDisplay}
+    <InfoLine condition={data.structure.typologyDisplay}>
+      typologie: {data.structure.typologyDisplay}
     </InfoLine>
 
-    <InfoLine condition={structure.fullDesc}>
+    <InfoLine condition={data.structure.fullDesc}>
       description longue:
       <div class="prose-sm rounded-md border-2 border-gray-02 p-s16">
         <TextClamp text={description} />
       </div>
     </InfoLine>
 
-    <InfoLine condition={structure.department}>
-      département: {structure.department}
+    <InfoLine condition={data.structure.department}>
+      département: {data.structure.department}
     </InfoLine>
 
     <InfoLine>
-      adresse: {#if structure.longitude && structure.latitude}
+      adresse: {#if data.structure.longitude && data.structure.latitude}
         <SmallLink
-          link="https://www.google.com/maps/search/?api=1&query={structure.latitude},{structure.longitude}"
+          link="https://www.google.com/maps/search/?api=1&query={data.structure
+            .latitude},{data.structure.longitude}"
           label="google map"
         />
       {/if}<br />
-      {#if structure.address1}{structure.address1} <br />{/if}
-      {#if structure.address2}{structure.address2}<br />{/if}
-      {#if structure.postalCode}{structure.postalCode}<br />{/if}
-      {#if structure.city}{structure.city}<br />{/if}
+      {#if data.structure.address1}{data.structure.address1} <br />{/if}
+      {#if data.structure.address2}{data.structure.address2}<br />{/if}
+      {#if data.structure.postalCode}{data.structure.postalCode}<br />{/if}
+      {#if data.structure.data.structure.city}{data.structure.city}<br />{/if}
     </InfoLine>
 
-    <InfoLine condition={structure.ape}>
-      code APE: {structure.ape}
+    <InfoLine condition={data.structure.ape}>
+      code APE: {data.structure.ape}
       <SmallLink
-        link="https://www.insee.fr/fr/metadonnees/nafr2/sousClasse/{structure.ape}"
+        link="https://www.insee.fr/fr/metadonnees/nafr2/sousClasse/{data
+          .structure.ape}"
         label="insee"
       />
     </InfoLine>
 
     <InfoLine>
-      date de création: <Date date={structure.creationDate} /><br />
-      date de dernière modification: <Date date={structure.modificationDate} />
+      date de création: <Date date={data.structure.creationDate} /><br />
+      date de dernière modification: <Date
+        date={data.structure.modificationDate}
+      />
     </InfoLine>
 
-    {#if structure.members.length}
+    {#if data.structure.members.length}
       <h4 id="collabs">Collaborateurs•trices</h4>
 
-      {#each structure.members as member}
+      {#each data.structure.members as member}
         <InfoLine>
-          <UserInfo user={member.user} {structure} />
+          <UserInfo user={member.user} structure={data.structure} />
           <strong>{member.isAdmin ? "Administrateur•trice" : ""}</strong>
         </InfoLine>
       {/each}
     {/if}
 
-    {#if structure.pendingMembers.length}
+    {#if data.structure.pendingMembers.length}
       <h4 id="pending-collabs">Collaborateurs•trices en attente</h4>
-      {#each structure.pendingMembers as member}
+      {#each data.structure.pendingMembers as member}
         <InfoLine>
-          <UserInfo user={member.user} {structure} />
+          <UserInfo user={member.user} structure={data.structure} />
           <strong>{member.isAdmin ? "Administrateur•trice" : ""}</strong>
           <strong>{member.invitedByAdmin ? "Invité•e" : ""}</strong>
         </InfoLine>
       {/each}
     {/if}
 
-    {#if structure.branches.length}
+    {#if data.structure.branches.length}
       <h4 id="branches">Antennes</h4>
-      {#each structure.branches as branch}
+      {#each data.structure.branches as branch}
         <div class="ml-s16">
           <h5>
             {branch.name}
@@ -183,10 +192,10 @@
       {/each}
     {/if}
 
-    {#if structure.models.length}
+    {#if data.structure.models.length}
       <h4 id="models">Modèles</h4>
 
-      {#each structure.models as model}
+      {#each data.structure.models as model}
         <div class="ml-s16">
           <h5>
             {model.name}
@@ -200,10 +209,10 @@
       {/each}
     {/if}
 
-    {#if structure.services.length}
+    {#if data.structure.services.length}
       <h4 id="services">Services</h4>
 
-      {#each structure.services as service}
+      {#each data.structure.services as service}
         <div class="ml-s16">
           <h5>
             {service.name}

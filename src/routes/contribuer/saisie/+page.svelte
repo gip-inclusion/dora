@@ -3,7 +3,6 @@
 
   export let data: PageData;
 
-  let { servicesOptions, source } = data;
   import FormWrapper from "../form/_form-wrapper.svelte";
 </script>
 
@@ -11,4 +10,4 @@
   <title>Contribuer | DORA</title>
 </svelte:head>
 
-<FormWrapper {servicesOptions} {source} />
+<FormWrapper servicesOptions={data.servicesOptions} source={data.source} />

@@ -3,8 +3,6 @@
 
   export let data: PageData;
 
-  let { model, servicesOptions, structures, structure, serviceSlug } = data;
-
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Notice from "$lib/components/notice.svelte";
@@ -20,12 +18,12 @@
   <CenteredGrid>
     <h1>Création d'un modèle</h1>
 
-    {#if !structures.length}
+    {#if !data.structures.length}
       <Notice title="Impossible de créer un nouveau modèle" type="error">
         <p class="text-f14">Vous n’êtes rattaché à aucune structure.</p>
       </Notice>
     {/if}
-    {#if serviceSlug}
+    {#if data.serviceSlug}
       <Notice
         title="Le service utilisé comme base sera synchronisé avec ce modèle"
         type="info"
@@ -38,5 +36,10 @@
     {/if}
   </CenteredGrid>
 
-  <ModelFields {servicesOptions} {structures} {model} {structure} />
+  <ModelFields
+    servicesOptions={data.servicesOptions}
+    structures={data.structures}
+    model={data.model}
+    structure={data.structure}
+  />
 </EnsureLoggedIn>

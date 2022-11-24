@@ -4,7 +4,6 @@
 
   export let data: PageData;
 
-  let { service } = data;
   import TextClamp from "$lib/components/text-clamp.svelte";
   import WebSearchLink from "../../_web-search-link.svelte";
   import { capitalize, markdownToHTML } from "$lib/utils";
@@ -20,17 +19,17 @@
   import History from "../../_history.svelte";
   import { isNotFreeService } from "$lib/utils/service";
 
-  const structure = service.structure;
-  const description = markdownToHTML(service.fullDesc);
+  const structure = data.service.structure;
+  const description = markdownToHTML(data.service.fullDesc);
 
   async function handleRefresh() {
-    service = await getServiceAdmin(service.slug);
+    data.service = await getServiceAdmin(data.service.slug);
   }
 </script>
 
 <svelte:head>
   <title>
-    Admin | {capitalize(service.name)} | {capitalize(structure.name)} | DORA
+    Admin | {capitalize(data.service.name)} | {capitalize(structure.name)} | DORA
   </title>
 </svelte:head>
 
@@ -44,13 +43,13 @@
           <a href="#infos">Informations</a>
         </span>
       </h2>
-      <ModerationButtonMenu entity={service} onRefresh={handleRefresh} />
+      <ModerationButtonMenu entity={data.service} onRefresh={handleRefresh} />
     </div>
     <h3>
-      {service.name}
-      <SmallLink link="/services/{service.slug}" label="front" />
-      <SmallLink link="/admin/services/{service.slug}" label="admin" />
-      <WebSearchLink searchString="{service.name} {structure.name}" />
+      {data.service.name}
+      <SmallLink link="/services/{data.service.slug}" label="front" />
+      <SmallLink link="/admin/services/{data.service.slug}" label="admin" />
+      <WebSearchLink searchString="{data.service.name} {structure.name}" />
     </h3>
     <InfoLine>
       Structure : <strong>{structure.name}</strong>
@@ -59,37 +58,41 @@
     </InfoLine>
 
     <h4>Historique</h4>
-    <History notes={service.notes} />
+    <History notes={data.service.notes} />
 
     <h4 id="contacts">Contacts</h4>
 
     <h5>Contact du service</h5>
     <InfoLine>
-      {#if service.contactName}<div>
-          <strong>{service.contactName}</strong>
+      {#if data.service.contactName}<div>
+          <strong>{data.service.contactName}</strong>
           <WebSearchLink
-            searchString="{service.contactName} {structure.name}"
+            searchString="{data.service.contactName} {structure.name}"
           />
         </div>
       {/if}
-      {#if service.contactEmail}
-        <EmailLine email={service.contactEmail} />
+      {#if data.service.contactEmail}
+        <EmailLine email={data.service.contactEmail} />
       {/if}
-      {#if service.contactPhone}
-        <div>📞 {service.contactPhone}</div>
+      {#if data.service.contactPhone}
+        <div>📞 {data.service.contactPhone}</div>
       {/if}
       <div>
-        informations publiques ? {service.isContactInfoPublic ? "✅" : "❌"}
+        informations publiques ? {data.service.isContactInfoPublic
+          ? "✅"
+          : "❌"}
       </div>
     </InfoLine>
 
     <InfoLine>
-      créé par: <UserInfo user={service.creator} {structure} />
+      créé par: <UserInfo user={data.service.creator} {structure} />
     </InfoLine>
 
-    <InfoLine condition={service.creator.email !== service.lastEditor.email}>
+    <InfoLine
+      condition={data.service.creator.email !== data.service.lastEditor.email}
+    >
       dernière modification par: <UserInfo
-        user={service.lastEditor}
+        user={data.service.lastEditor}
         {structure}
       />
     </InfoLine>
@@ -102,11 +105,11 @@
 
     <InfoLine>
       <div class="italic">
-        {service.shortDesc}
+        {data.service.shortDesc}
       </div>
     </InfoLine>
 
-    <InfoLine condition={service.fullDesc}>
+    <InfoLine condition={data.service.fullDesc}>
       Description longue:
       <div class="prose-sm rounded-md border-2 border-gray-02 p-s16">
         <TextClamp text={description} />
@@ -114,43 +117,45 @@
     </InfoLine>
 
     <InfoLine>
-      thématiques: {service.categoriesDisplay}
+      thématiques: {data.service.categoriesDisplay}
     </InfoLine>
     <InfoLine>
-      besoins: {service.subcategoriesDisplay}
+      besoins: {data.service.subcategoriesDisplay}
       (#TODO hierarchie)
     </InfoLine>
 
     <InfoLine>
-      frais à charge : {service.feeCondition}
-      {#if isNotFreeService(service.feeCondition)}
-        <span class="italic">{service.feeDetails}</span>
+      frais à charge : {data.service.feeCondition}
+      {#if isNotFreeService(data.service.feeCondition)}
+        <span class="italic">{data.service.feeDetails}</span>
       {/if}
     </InfoLine>
 
     <InfoLine>
-      Date de création: <Date date={service.creationDate} />
+      Date de création: <Date date={data.service.creationDate} />
     </InfoLine>
     <InfoLine>
-      Date de dernière modification: <Date date={service.modificationDate} />
+      Date de dernière modification: <Date
+        date={data.service.modificationDate}
+      />
     </InfoLine>
 
     <InfoLine>
-      {#if service.model.slug}
-        Model : name: {service.model.name}
-        <SmallLink link="/models/{service.model.slug}" label="front" />
+      {#if data.service.model.slug}
+        Model : name: {data.service.model.name}
+        <SmallLink link="/models/{data.service.model.slug}" label="front" />
       {/if}
     </InfoLine>
 
     <InfoLine>
-      périmètre : {service.diffusionZoneTypeDisplay}<br />
-      territoire : {service.diffusionZoneDetailsDisplay}
+      périmètre : {data.service.diffusionZoneTypeDisplay}<br />
+      territoire : {data.service.diffusionZoneDetailsDisplay}
     </InfoLine>
 
     <InfoLine>
-      code postal: {service.postalCode}<br />
-      ville: {service.city}<br />
-      département: {service.department}
+      code postal: {data.service.postalCode}<br />
+      ville: {data.service.city}<br />
+      département: {data.service.department}
     </InfoLine>
   </div>
 </CenteredGrid>

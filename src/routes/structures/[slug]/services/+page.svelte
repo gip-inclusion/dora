@@ -2,22 +2,8 @@
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  let {
-    servicesOptions,
-    serviceStatus,
-    updateStatus,
-  }: {
-    servicesOptions: ServicesOptions;
-    serviceStatus: SERVICE_STATUSES | undefined;
-    updateStatus: SERVICE_UPDATE_STATUS | undefined;
-  } = data;
   import { getStructure } from "$lib/structures";
-  import type {
-    ServicesOptions,
-    SERVICE_STATUSES,
-    SERVICE_UPDATE_STATUS,
-  } from "$lib/types";
+
   import { capitalize } from "$lib/utils";
   import { structure } from "../_store";
 
@@ -34,9 +20,9 @@
 </svelte:head>
 
 <List
-  {servicesOptions}
-  {serviceStatus}
-  {updateStatus}
+  servicesOptions={data.servicesOptions}
+  serviceStatus={data.serviceStatus}
+  updateStatus={data.updateStatus}
   structure={$structure}
   total={$structure.services.length}
   onRefresh={handleRefresh}
