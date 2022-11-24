@@ -3,8 +3,6 @@
     "svelte.svelte-vscode",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "bradlc.vscode-tailwindcss",
-    "ms-vscode-remote.remote-containers",
-    "ms-azuretools.vscode-docker"
+    "bradlc.vscode-tailwindcss"
   ]
 }
