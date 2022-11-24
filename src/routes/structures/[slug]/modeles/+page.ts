@@ -4,7 +4,9 @@ import { get } from "svelte/store";
 import { userInfo } from "$lib/auth";
 import { structure } from "../_store";
 
-export async function load() {
+export async function load({ parent }) {
+  await parent();
+
   // sur le serveur, info est toujours null,
   // on retourne une 404 uniquement sur le client
   if (!browser) {

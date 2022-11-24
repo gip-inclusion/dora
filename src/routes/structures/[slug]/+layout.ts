@@ -5,7 +5,9 @@ import { structure } from "./_store";
 import { userPreferences } from "$lib/preferences";
 import { userInfo } from "$lib/auth";
 
-export async function load({ params }) {
+export async function load({ params, parent }) {
+  await parent();
+
   const s = await getStructure(params.slug);
   let preferences;
   let info;

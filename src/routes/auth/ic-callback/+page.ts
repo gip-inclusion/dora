@@ -5,7 +5,9 @@ import { setToken, validateCredsAndFillUserInfo } from "$lib/auth";
 import { getApiURL, defaultAcceptHeader } from "$lib/utils/api";
 import { getNextPage } from "../_utils";
 
-export async function load({ url, fetch }) {
+export async function load({ url, fetch, parent }) {
+  await parent();
+
   const nextPage = getNextPage(url);
 
   const query = url.searchParams;

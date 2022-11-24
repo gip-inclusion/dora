@@ -1,16 +1,18 @@
 import { error } from "@sveltejs/kit";
 import { getStructure } from "$lib/structures";
 
-export async function load({ url }) {
+export async function load({ url, parent }) {
+  await parent();
+
   const structure = await getStructure(url.searchParams.get("structure"));
-  let parent = null;
+  let structureParent = null;
   if (!structure) {
     throw error(404, "Page Not Found");
   }
 
   if (structure.parent) {
-    parent = await getStructure(structure.parent);
+    structureParent = await getStructure(structure.parent);
   }
 
-  return { structure, parent };
+  return { structure, parent: structureParent };
 }

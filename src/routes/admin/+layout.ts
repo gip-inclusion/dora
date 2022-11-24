@@ -5,7 +5,9 @@ import { get } from "svelte/store";
 // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
 export const ssr = false;
 
-export async function load({ url }) {
+export async function load({ url, parent }) {
+  await parent();
+
   const myToken = get(token);
   if (!myToken) {
     throw redirect(

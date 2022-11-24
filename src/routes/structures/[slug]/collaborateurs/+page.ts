@@ -6,7 +6,9 @@ import { structure } from "../_store";
 
 import { getMembers, getPutativeMembers } from "$lib/structures";
 
-export async function load() {
+export async function load({ parent }) {
+  await parent();
+
   // sur le serveur, info est toujours null,
   // on retourne une 404 uniquement sur le client
   if (!browser) {

@@ -44,7 +44,9 @@ async function getResults({
   return [];
 }
 
-export async function load({ url }) {
+export async function load({ url, parent }) {
+  await parent();
+
   const query = url.searchParams;
   const categoryIds = query.get("cats") ? query.get("cats").split(",") : [];
   const subCategoryIds = query.get("subs") ? query.get("subs").split(",") : [];

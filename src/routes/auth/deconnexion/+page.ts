@@ -3,7 +3,9 @@ import { CANONICAL_URL } from "$lib/env";
 import { disconnect } from "$lib/auth";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
 
-export async function load() {
+export async function load({ parent }) {
+  await parent();
+
   const targetUrl = `${getApiURL()}/inclusion-connect-get-logout-info/`;
   const result = await fetch(targetUrl, {
     method: "POST",

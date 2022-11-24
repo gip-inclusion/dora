@@ -5,7 +5,9 @@ import { get } from "svelte/store";
 import { getModel, getService, getServicesOptions } from "$lib/services";
 import { token } from "$lib/auth";
 
-export async function load({ url, params }) {
+export async function load({ url, params, parent }) {
+  await parent();
+
   const service = await getService(params.slug);
   // si le service est en brouillon il faut un token pour y accéder
   // on renvoie donc un objet vide côté serveur

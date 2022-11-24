@@ -6,7 +6,9 @@ import { userInfo } from "$lib/auth";
 import { getServicesOptions, getService, getModel } from "$lib/services";
 import { getStructure, getStructures } from "$lib/structures";
 
-export async function load({ params }) {
+export async function load({ params, parent }) {
+  await parent();
+
   const user = get(userInfo);
   const service = await getService(params.slug);
   let structure = {};

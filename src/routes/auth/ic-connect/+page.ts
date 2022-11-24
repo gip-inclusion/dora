@@ -7,7 +7,9 @@ import { getNextPage } from "../_utils";
 
 export const ssr = false;
 
-export async function load({ url, fetch }) {
+export async function load({ url, fetch, parent }) {
+  await parent();
+
   const nextPage = getNextPage(url);
   // Si on a déjà un token, on redirige directement sur la destination
   if (get(token)) {

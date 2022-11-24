@@ -2,7 +2,9 @@ import { error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
 import { getModel, getServicesOptions } from "$lib/services";
 
-export async function load({ params }) {
+export async function load({ params, parent }) {
+  await parent();
+
   const model = await getModel(params.slug);
 
   // on ne retourne une 404 que sur le client
