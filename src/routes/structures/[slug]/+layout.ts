@@ -3,7 +3,7 @@ import { userPreferences } from "$lib/preferences";
 import { getStructure } from "$lib/structures";
 import { trackStructure } from "$lib/utils/plausible";
 import { error } from "@sveltejs/kit";
-import { structure } from "./_store";
+import { structure } from "./store";
 
 export async function load({ params, parent }) {
   await parent();

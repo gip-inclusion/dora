@@ -6,7 +6,7 @@
     acceptServiceSuggestion,
     deleteServiceSuggestion,
   } from "$lib/services";
-  import SuggestionModal from "./_suggestion-modal.svelte";
+  import SuggestionModal from "./suggestion-modal.svelte";
 
   export let suggestions;
   export let onRefresh;

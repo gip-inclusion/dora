@@ -7,9 +7,9 @@
   import { questionFillIcon } from "$lib/icons";
   import { userPreferences } from "$lib/preferences";
   import { shortenString } from "$lib/utils";
-  import MenuAide from "./_menu-aide.svelte";
-  import MenuMonCompte from "./_menu-mon-compte.svelte";
-  import MenuStructures from "./_menu-structures.svelte";
+  import MenuAide from "./menu-aide.svelte";
+  import MenuMonCompte from "./menu-mon-compte.svelte";
+  import MenuStructures from "./menu-structures.svelte";
 
   let structures = [];
 

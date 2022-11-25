@@ -8,13 +8,13 @@
   import type { ServiceSearchResult } from "$lib/types";
   import { isInDeploymentDepartments } from "$lib/utils/city";
   import { tick } from "svelte";
-  import DoraDeploymentNotice from "../_homepage/_dora-deployment-notice.svelte";
-  import NewletterNotice from "../_homepage/_newletter-notice.svelte";
-  import OnlyNationalResultsNotice from "../_homepage/_only-national-results-notice.svelte";
-  import SearchForm from "../_homepage/_search-form.svelte";
-  import SearchPromo from "../_homepage/_search-promo.svelte";
-  import SearchResult from "../_homepage/_search-result.svelte";
-  import ServiceSuggestionNotice from "../_homepage/_service-suggestion-notice.svelte";
+  import DoraDeploymentNotice from "../homepage/dora-deployment-notice.svelte";
+  import NewletterNotice from "../homepage/newletter-notice.svelte";
+  import OnlyNationalResultsNotice from "../homepage/only-national-results-notice.svelte";
+  import SearchForm from "../homepage/search-form.svelte";
+  import SearchPromo from "../homepage/search-promo.svelte";
+  import SearchResult from "../homepage/search-result.svelte";
+  import ServiceSuggestionNotice from "../homepage/service-suggestion-notice.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;

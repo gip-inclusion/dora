@@ -3,7 +3,7 @@ import { userInfo } from "$lib/auth";
 import { getMembers, getPutativeMembers } from "$lib/structures";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
-import { structure } from "../_store";
+import { structure } from "../store";
 
 export async function load({ parent }) {
   await parent();

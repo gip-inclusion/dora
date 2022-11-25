@@ -1,8 +1,8 @@
 <script lang="ts">
   import ButtonMenu from "$lib/components/button-menu.svelte";
   import { arrowDownSIcon } from "$lib/icons";
-  import ModerationLabel from "./_moderation-label.svelte";
-  import ModerationMenu from "./_moderation-menu.svelte";
+  import ModerationLabel from "./moderation-label.svelte";
+  import ModerationMenu from "./moderation-menu.svelte";
 
   export let entity, onRefresh;
 </script>

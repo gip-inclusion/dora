@@ -1,5 +1,5 @@
 <script lang="ts">
-  import FormWrapper from "../form/_form-wrapper.svelte";
+  import FormWrapper from "../form/form-wrapper.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;

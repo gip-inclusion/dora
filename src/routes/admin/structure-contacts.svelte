@@ -1,7 +1,7 @@
 <script lang="ts">
-  import EmailLine from "./_email-line.svelte";
-  import InfoLine from "./_info-line.svelte";
-  import UserInfo from "./_user-info.svelte";
+  import EmailLine from "./email-line.svelte";
+  import InfoLine from "./info-line.svelte";
+  import UserInfo from "./user-info.svelte";
 
   export let structure;
   const administrators = structure.members.filter((m) => m.isAdmin);

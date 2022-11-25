@@ -1,7 +1,7 @@
 import { setToken, validateCredsAndFillUserInfo } from "$lib/auth";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
 import { redirect } from "@sveltejs/kit";
-import { getNextPage } from "../_utils";
+import { getNextPage } from "../utils";
 export const ssr = false;
 
 export async function load({ url, fetch, parent }) {

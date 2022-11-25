@@ -4,8 +4,8 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
   import { NPS_OFFEROR_FORM_ID } from "$lib/const";
-  import Header from "./_header.svelte";
-  import { structure } from "./_store";
+  import Header from "./header.svelte";
+  import { structure } from "./store";
 </script>
 
 <CenteredGrid bgColor="bg-magenta-brand" noPadding>

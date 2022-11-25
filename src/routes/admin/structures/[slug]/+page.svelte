@@ -4,13 +4,13 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import TextClamp from "$lib/components/text-clamp.svelte";
   import { capitalize, markdownToHTML } from "$lib/utils";
-  import History from "../../_history.svelte";
-  import InfoLine from "../../_info-line.svelte";
-  import ModerationButtonMenu from "../../_moderation-button-menu.svelte";
-  import SmallLink from "../../_small-link.svelte";
-  import StructureContacts from "../../_structure-contacts.svelte";
-  import UserInfo from "../../_user-info.svelte";
-  import WebSearchLink from "../../_web-search-link.svelte";
+  import History from "../../history.svelte";
+  import InfoLine from "../../info-line.svelte";
+  import ModerationButtonMenu from "../../moderation-button-menu.svelte";
+  import SmallLink from "../../small-link.svelte";
+  import StructureContacts from "../../structure-contacts.svelte";
+  import UserInfo from "../../user-info.svelte";
+  import WebSearchLink from "../../web-search-link.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;

@@ -7,7 +7,7 @@
   import MemberToConfirm from "$lib/components/users/member-to-confirm.svelte";
   import ModalAddUser from "$lib/components/users/modal-add-user.svelte";
   import { getMembers, getPutativeMembers } from "$lib/structures";
-  import { structure } from "../_store";
+  import { structure } from "../store";
   import type { PageData } from "./$types";
 
   export let data: PageData;

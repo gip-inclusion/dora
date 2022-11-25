@@ -3,7 +3,7 @@ import { CANONICAL_URL } from "$lib/env";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
-import { getNextPage } from "../_utils";
+import { getNextPage } from "../utils";
 
 export const ssr = false;
 

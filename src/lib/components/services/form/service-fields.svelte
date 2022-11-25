@@ -6,12 +6,12 @@
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
   import debounce from "lodash.debounce";
   import { onDestroy, onMount } from "svelte";
-  import Errors from "./_errors.svelte";
-  import FieldsCommon from "./_fields-common.svelte";
-  import FieldsInclusionNumerique from "./_fields-inclusion-numerique.svelte";
-  import FieldsService from "./_fields-service.svelte";
-  import FieldsStructure from "./_fields-structure.svelte";
-  import ServiceNavButtons from "./_service-nav-buttons.svelte";
+  import Errors from "./errors.svelte";
+  import FieldsCommon from "./fields-common.svelte";
+  import FieldsInclusionNumerique from "./fields-inclusion-numerique.svelte";
+  import FieldsService from "./fields-service.svelte";
+  import FieldsStructure from "./fields-structure.svelte";
+  import ServiceNavButtons from "./service-nav-buttons.svelte";
 
   export let service, servicesOptions, structures, structure, model;
 

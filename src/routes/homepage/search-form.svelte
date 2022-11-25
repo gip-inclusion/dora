@@ -23,7 +23,7 @@
     sortByCategories,
     sortCategory,
   } from "$lib/utils/service";
-  import { getQuery } from "./_search";
+  import { getQuery } from "./search";
 
   export let servicesOptions: ServicesOptions;
   export let cityCode;

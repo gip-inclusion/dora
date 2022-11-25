@@ -2,7 +2,7 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import { getServiceSuggestions } from "$lib/services";
   import { onMount } from "svelte";
-  import List from "./_list.svelte";
+  import List from "./list.svelte";
 
   export let suggestions;
 

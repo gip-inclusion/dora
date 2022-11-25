@@ -3,11 +3,11 @@
   import { getStructure } from "$lib/structures";
   import { capitalize } from "$lib/utils";
   import type { PageData } from "./$types";
-  import BranchesList from "./antennes/_list.svelte";
-  import ModelesList from "./modeles/_list.svelte";
-  import ServicesList from "./services/_list.svelte";
-  import Informations from "./_informations.svelte";
-  import { structure } from "./_store";
+  import BranchesList from "./antennes/list.svelte";
+  import Informations from "./informations.svelte";
+  import ModelesList from "./modeles/list.svelte";
+  import ServicesList from "./services/list.svelte";
+  import { structure } from "./store";
 
   export let data: PageData;
 

@@ -4,7 +4,7 @@
   import LogoMinistere from "$lib/assets/logo-ministere-travail-emploi.svg";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import { ENVIRONMENT } from "$lib/env";
-  import HeaderActions from "./_menu.svelte";
+  import HeaderActions from "./menu.svelte";
 </script>
 
 ,ca

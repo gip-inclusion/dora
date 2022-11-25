@@ -6,7 +6,7 @@
   import { starSmileLineIcon } from "$lib/icons";
   import type { Bookmark } from "$lib/types";
   import { onMount } from "svelte";
-  import BookmarkCard from "./_bookmark-card.svelte";
+  import BookmarkCard from "./bookmark-card.svelte";
 
   let bookmarks: Bookmark[] = [];
 

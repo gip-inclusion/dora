@@ -4,7 +4,7 @@
   import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
   import { getStructure } from "$lib/structures";
   import { capitalize } from "$lib/utils";
-  import { structure } from "../_store";
+  import { structure } from "../store";
   import type { PageData } from "./$types";
 
   export let data: PageData;

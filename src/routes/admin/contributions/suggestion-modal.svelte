@@ -2,7 +2,7 @@
   import Button from "$lib/components/button.svelte";
   import Modal from "$lib/components/modal.svelte";
   import { markdownToHTML } from "$lib/utils";
-  import Line from "./_line.svelte";
+  import Line from "./line.svelte";
 
   export let suggestion;
   export let isOpen = false;

@@ -5,7 +5,7 @@
   import { eyeIcon } from "$lib/icons";
   import { capitalize, shortenString } from "$lib/utils";
   import { onMount } from "svelte";
-  import ModerationLabel from "../_moderation-label.svelte";
+  import ModerationLabel from "../moderation-label.svelte";
 
   // let services,
   let structures, entities;

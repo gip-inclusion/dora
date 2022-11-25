@@ -1,9 +1,9 @@
 <script lang="ts">
   import { getStructure } from "$lib/structures";
   import { capitalize } from "$lib/utils";
-  import { structure } from "../_store";
+  import { structure } from "../store";
   import type { PageData } from "./$types";
-  import List from "./_list.svelte";
+  import List from "./list.svelte";
 
   export let data: PageData;
   async function handleRefresh() {

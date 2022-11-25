@@ -14,7 +14,7 @@
     teamLineIcon,
   } from "$lib/icons";
   import { capitalize } from "$lib/utils";
-  import PendingNotice from "./_pending-notice.svelte";
+  import PendingNotice from "./pending-notice.svelte";
 
   export let structure;
   export let tabId = "informations";

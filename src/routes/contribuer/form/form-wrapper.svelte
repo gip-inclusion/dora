@@ -14,8 +14,8 @@
   } from "$lib/validation";
   import debounce from "lodash.debounce";
   import { onDestroy, onMount, setContext } from "svelte";
-  import Fields from "./_fields.svelte";
-  import NavButtons from "./_nav-buttons.svelte";
+  import Fields from "./fields.svelte";
+  import NavButtons from "./nav-buttons.svelte";
 
   export let servicesOptions, source;
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SmallLink from "./_small-link.svelte";
+  import SmallLink from "./small-link.svelte";
 
   export let searchString;
 </script>

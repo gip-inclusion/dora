@@ -8,7 +8,7 @@
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import { trackJoinStructure } from "$lib/utils/plausible";
   import { get } from "svelte/store";
-  import AuthLayout from "../_auth_layout.svelte";
+  import AuthLayout from "../auth-layout.svelte";
 
   let siret = $page.url.searchParams.get("siret");
 

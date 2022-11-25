@@ -18,7 +18,7 @@
   import { markdownToHTML } from "$lib/utils";
   import { formatPhoneNumber } from "$lib/utils/phone";
   import { formatOsmHours } from "$lib/utils/structures";
-  import DataInclusionNotice from "./_data-inclusion-notice.svelte";
+  import DataInclusionNotice from "./data-inclusion-notice.svelte";
 
   export let structure: Structure;
   export let structuresOptions: StructuresOptions;

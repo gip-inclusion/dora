@@ -1,7 +1,7 @@
 <script lang="ts">
-  import CopyableText from "./_copyable-text.svelte";
-  import SmallLink from "./_small-link.svelte";
-  import WebSearchLink from "./_web-search-link.svelte";
+  import CopyableText from "./copyable-text.svelte";
+  import SmallLink from "./small-link.svelte";
+  import WebSearchLink from "./web-search-link.svelte";
 
   export let email;
 </script>

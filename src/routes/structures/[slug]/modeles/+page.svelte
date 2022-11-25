@@ -1,8 +1,8 @@
 <script lang="ts">
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import { capitalize } from "$lib/utils";
-  import { structure } from "../_store";
-  import List from "./_list.svelte";
+  import { structure } from "../store";
+  import List from "./list.svelte";
 </script>
 
 <svelte:head>

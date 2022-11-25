@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ContributionPic from "$lib/assets/illu_contribution.svg";
+  import ContributionPic from "$lib/assets/illu-contribution.svg";
   import EmailButton from "$lib/components/email-button.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";

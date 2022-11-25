@@ -21,7 +21,7 @@
     type ValidationContext,
   } from "$lib/validation";
   import { setContext } from "svelte";
-  import FieldModel from "./_field-model.svelte";
+  import FieldModel from "./field-model.svelte";
 
   export let servicesOptions, serviceSchema, service, canAddChoices;
   export let isModel = false;

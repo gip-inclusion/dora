@@ -1,7 +1,7 @@
 <script lang="ts">
   import Date from "$lib/components/date.svelte";
-  import EmailLine from "./_email-line.svelte";
-  import WebSearchLink from "./_web-search-link.svelte";
+  import EmailLine from "./email-line.svelte";
+  import WebSearchLink from "./web-search-link.svelte";
 
   export let user, structure;
 </script>

@@ -1,7 +1,7 @@
 import { token } from "$lib/auth";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
-import { getNextPage } from "../_utils";
+import { getNextPage } from "../utils";
 export const ssr = false;
 
 export async function load({ url, parent }) {

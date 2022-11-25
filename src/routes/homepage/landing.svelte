@@ -11,8 +11,8 @@
   import logoPoleEmploi from "$lib/assets/logo-pole-emploi.svg";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
-  import NewletterNotice from "./_newletter-notice.svelte";
-  import SearchForm from "./_search-form.svelte";
+  import NewletterNotice from "./newletter-notice.svelte";
+  import SearchForm from "./search-form.svelte";
 
   export let servicesOptions;
 </script>

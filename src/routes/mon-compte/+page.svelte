@@ -2,7 +2,7 @@
   import { userInfo } from "$lib/auth";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
-  import ImproveDoraNotif from "./_notif-improve.svelte";
+  import ImproveDoraNotif from "./notif-improve.svelte";
 </script>
 
 <svelte:head>
