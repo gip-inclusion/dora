@@ -1,20 +1,19 @@
 <script lang="ts">
   import { getStructureAdmin } from "$lib/admin";
+  import Date from "$lib/components/date.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import TextClamp from "$lib/components/text-clamp.svelte";
+  import { capitalize, markdownToHTML } from "$lib/utils";
+  import History from "../../_history.svelte";
+  import InfoLine from "../../_info-line.svelte";
+  import ModerationButtonMenu from "../../_moderation-button-menu.svelte";
+  import SmallLink from "../../_small-link.svelte";
+  import StructureContacts from "../../_structure-contacts.svelte";
+  import UserInfo from "../../_user-info.svelte";
+  import WebSearchLink from "../../_web-search-link.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  import TextClamp from "$lib/components/text-clamp.svelte";
-  import WebSearchLink from "../../_web-search-link.svelte";
-  import { capitalize, markdownToHTML } from "$lib/utils";
-  import UserInfo from "../../_user-info.svelte";
-  import InfoLine from "../../_info-line.svelte";
-  import StructureContacts from "../../_structure-contacts.svelte";
-  import Date from "$lib/components/date.svelte";
-  import SmallLink from "../../_small-link.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import ModerationButtonMenu from "../../_moderation-button-menu.svelte";
-  import History from "../../_history.svelte";
 
   const description = markdownToHTML(data.structure.fullDesc);
 

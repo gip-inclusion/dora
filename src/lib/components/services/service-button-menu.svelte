@@ -1,13 +1,12 @@
 <script lang="ts">
+  import ButtonMenu from "$lib/components/button-menu.svelte";
   import { moreIcon } from "$lib/icons";
   import type {
     Service,
-    ShortService,
-    SERVICE_UPDATE_STATUS,
     ServicesOptions,
+    SERVICE_UPDATE_STATUS,
+    ShortService,
   } from "$lib/types";
-
-  import ButtonMenu from "$lib/components/button-menu.svelte";
   import ServiceMenu from "./service-menu.svelte";
 
   export let service: Service | ShortService;

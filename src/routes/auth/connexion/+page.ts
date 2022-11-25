@@ -1,9 +1,8 @@
-import { redirect } from "@sveltejs/kit";
-export const ssr = false;
-
-import { get } from "svelte/store";
 import { token } from "$lib/auth";
+import { redirect } from "@sveltejs/kit";
+import { get } from "svelte/store";
 import { getNextPage } from "../_utils";
+export const ssr = false;
 
 export async function load({ url, parent }) {
   await parent();

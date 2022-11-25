@@ -1,12 +1,10 @@
 <script lang="ts">
-  import { getContext } from "svelte";
-
+  import Select from "$lib/components/forms/select.svelte";
   import {
     contextValidationKey,
     type ValidationContext,
   } from "$lib/validation";
-
-  import Select from "$lib/components/forms/select.svelte";
+  import { getContext } from "svelte";
 
   export let handleChange;
   export let placeholder;

@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { getServiceSuggestions } from "$lib/services";
-
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-
+  import { getServiceSuggestions } from "$lib/services";
+  import { onMount } from "svelte";
   import List from "./_list.svelte";
 
   export let suggestions;

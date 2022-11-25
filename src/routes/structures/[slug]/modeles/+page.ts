@@ -1,7 +1,7 @@
-import { error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
-import { get } from "svelte/store";
 import { userInfo } from "$lib/auth";
+import { error } from "@sveltejs/kit";
+import { get } from "svelte/store";
 import { structure } from "../_store";
 
 export async function load({ parent }) {

@@ -1,18 +1,16 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
+  import { token, validateCredsAndFillUserInfo } from "$lib/auth";
+  import Button from "$lib/components/button.svelte";
+  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
+  import Fieldset from "$lib/components/forms/fieldset.svelte";
+  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+  import { trackJoinStructure } from "$lib/utils/plausible";
+  import { get } from "svelte/store";
+  import AuthLayout from "../_auth_layout.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  import { token, validateCredsAndFillUserInfo } from "$lib/auth";
-  import { trackJoinStructure } from "$lib/utils/plausible";
-
-  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import Button from "$lib/components/button.svelte";
-  import AuthLayout from "../_auth_layout.svelte";
-  import { get } from "svelte/store";
-  import { goto } from "$app/navigation";
-  import Fieldset from "$lib/components/forms/fieldset.svelte";
 
   async function handleJoin() {
     trackJoinStructure();

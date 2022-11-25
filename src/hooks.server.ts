@@ -1,5 +1,4 @@
 import { dev } from "$app/environment";
-
 import { API_URL, CANONICAL_URL, ENVIRONMENT } from "$lib/env";
 import * as Sentry from "@sentry/browser";
 

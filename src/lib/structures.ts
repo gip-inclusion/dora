@@ -1,13 +1,10 @@
-import { get } from "svelte/store";
-
+import { token } from "$lib/auth";
+import structureSchema from "$lib/schemas/structure";
 import { fetchData } from "$lib/utils";
 import { getApiURL } from "$lib/utils/api";
-
-import { token } from "$lib/auth";
-import { logException } from "./logger";
-
-import structureSchema from "$lib/schemas/structure";
 import { validate } from "$lib/validation";
+import { get } from "svelte/store";
+import { logException } from "./logger";
 import type { ShortStructure, Structure } from "./types";
 
 export async function siretWasAlreadyClaimed(siret) {

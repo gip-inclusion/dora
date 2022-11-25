@@ -1,7 +1,7 @@
-import { redirect } from "@sveltejs/kit";
-import { CANONICAL_URL } from "$lib/env";
 import { disconnect } from "$lib/auth";
+import { CANONICAL_URL } from "$lib/env";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+import { redirect } from "@sveltejs/kit";
 
 export async function load({ parent }) {
   await parent();

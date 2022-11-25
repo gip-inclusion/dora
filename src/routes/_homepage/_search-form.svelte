@@ -1,7 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import Button from "$lib/components/button.svelte";
-
   import FieldWrapper from "$lib/components/form/field-wrapper.svelte";
   import SelectField from "$lib/components/form/select/select-field.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
@@ -12,7 +11,7 @@
     mapPinIcon,
     searchIcon,
   } from "$lib/icons";
-  import type { FeeCondition, ServicesOptions, ServiceKind } from "$lib/types";
+  import type { FeeCondition, ServiceKind, ServicesOptions } from "$lib/types";
   import { getDepartmentFromCityCode } from "$lib/utils";
   import {
     injectOptGroupAllOptionsInSubCategories,

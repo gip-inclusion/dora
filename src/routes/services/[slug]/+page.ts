@@ -1,9 +1,8 @@
-import { redirect, error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
-import { get } from "svelte/store";
-
-import { getModel, getService, getServicesOptions } from "$lib/services";
 import { token } from "$lib/auth";
+import { getModel, getService, getServicesOptions } from "$lib/services";
+import { error, redirect } from "@sveltejs/kit";
+import { get } from "svelte/store";
 
 export async function load({ url, params, parent }) {
   await parent();

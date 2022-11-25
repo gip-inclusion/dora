@@ -19,11 +19,11 @@ import {
   SERVICE_STATUSES,
   SERVICE_UPDATE_STATUS,
   type Choice,
-  type ShortService,
   type FeeCondition,
-  type ServiceSearchResult,
   type Service,
+  type ServiceSearchResult,
   type ServicesOptions,
+  type ShortService,
 } from "$lib/types";
 import dayjs from "dayjs";
 import { getChoicesFromKey } from "../choice";

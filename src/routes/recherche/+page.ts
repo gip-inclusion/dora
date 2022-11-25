@@ -1,13 +1,13 @@
 import { getServicesOptions } from "$lib/services";
-import { getApiURL } from "$lib/utils/api";
-import { getQuery } from "../_homepage/_search";
-import { trackSearch } from "$lib/utils/plausible";
 import {
   SERVICE_UPDATE_STATUS,
   type SearchQuery,
   type ServiceSearchResult,
 } from "$lib/types";
+import { getApiURL } from "$lib/utils/api";
+import { trackSearch } from "$lib/utils/plausible";
 import { computeUpdateStatusData } from "$lib/utils/service";
+import { getQuery } from "../_homepage/_search";
 
 // pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
 // à ce qu'elles soient indexées

@@ -1,9 +1,8 @@
 <script lang="ts">
+  import FormWrapper from "../form/_form-wrapper.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  import FormWrapper from "../form/_form-wrapper.svelte";
 </script>
 
 <svelte:head>

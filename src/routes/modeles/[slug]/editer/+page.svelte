@@ -1,12 +1,11 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
-
-  export let data: PageData;
-
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Notice from "$lib/components/notice.svelte";
   import ModelFields from "$lib/components/services/form/model-fields.svelte";
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
 
   let multipleServices = 0;
 

@@ -1,18 +1,15 @@
 <script lang="ts">
-  // import { browser } from "$app/environment";
+  import { browser } from "$app/environment";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import ModelBody from "$lib/components/services/model-body.svelte";
+  import ModelHeader from "$lib/components/services/model-header.svelte";
+  import ModelToolbar from "$lib/components/services/model-toolbar.svelte";
+  import { getModel } from "$lib/services";
+  import { trackModel } from "$lib/utils/plausible";
+  import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  import { onMount } from "svelte";
-  import { trackModel } from "$lib/utils/plausible";
-
-  import ModelHeader from "$lib/components/services/model-header.svelte";
-  import ModelToolbar from "$lib/components/services/model-toolbar.svelte";
-  import ModelBody from "$lib/components/services/model-body.svelte";
-  import { getModel } from "$lib/services";
-  import { browser } from "$app/environment";
 
   onMount(() => {
     trackModel(data.model);

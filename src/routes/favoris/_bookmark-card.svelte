@@ -1,8 +1,7 @@
 <script lang="ts">
-  import type { Bookmark } from "$lib/types";
-
-  import FavoriteIcon from "$lib/components/favorite-icon.svelte";
   import Bookmarkable from "$lib/components/bookmarkable.svelte";
+  import FavoriteIcon from "$lib/components/favorite-icon.svelte";
+  import type { Bookmark } from "$lib/types";
 
   export let bookmark: Bookmark;
 

@@ -1,11 +1,10 @@
 <script lang="ts">
+  import LinkButton from "$lib/components/link-button.svelte";
   import {
     accountCircleLineIcon,
-    starSmileLineIcon,
     logoutBoxLineIcon,
+    starSmileLineIcon,
   } from "$lib/icons";
-
-  import LinkButton from "$lib/components/link-button.svelte";
 </script>
 
 <LinkButton

@@ -5,7 +5,6 @@
 <script lang="ts">
   // TODO: lint this file properly
   /* eslint-disable */
-
   import { checkIcon, closeCircleIcon } from "$lib/icons";
 
   // the list of items  the user can select from

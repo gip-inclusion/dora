@@ -1,10 +1,9 @@
+import { browser } from "$app/environment";
+import { userInfo } from "$lib/auth";
+import { getModel, getService, getServicesOptions } from "$lib/services";
+import { getStructure, getStructures } from "$lib/structures";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
-import { browser } from "$app/environment";
-
-import { userInfo } from "$lib/auth";
-import { getServicesOptions, getService, getModel } from "$lib/services";
-import { getStructure, getStructures } from "$lib/structures";
 
 export async function load({ params, parent }) {
   await parent();

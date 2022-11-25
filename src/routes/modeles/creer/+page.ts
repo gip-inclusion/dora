@@ -1,12 +1,11 @@
-import { get } from "svelte/store";
 import { userInfo } from "$lib/auth";
-
 import {
   createModelFromService,
   getNewModel,
 } from "$lib/components/services/form/utils";
 import { getService, getServicesOptions } from "$lib/services";
 import { getStructures } from "$lib/structures";
+import { get } from "svelte/store";
 
 // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
 export const ssr = false;

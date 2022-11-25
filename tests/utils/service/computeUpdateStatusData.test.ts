@@ -1,9 +1,9 @@
-import { describe, expect, beforeEach, afterEach, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import type { Service } from "../../../src/lib/types";
 import {
   computeUpdateStatusData,
   computeUpdateStatusLabel,
 } from "../../../src/lib/utils/service";
-import type { Service } from "../../../src/lib/types";
 
 describe("computeUpdateStatusData et computeUpdateStatusDataLabel", () => {
   beforeEach(() => {

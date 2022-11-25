@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { getStructuresToModerate } from "$lib/admin";
-
-  import { capitalize, shortenString } from "$lib/utils";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import { eyeIcon } from "$lib/icons";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import { capitalize, shortenString } from "$lib/utils";
+  import { onMount } from "svelte";
   import ModerationLabel from "../_moderation-label.svelte";
 
   // let services,

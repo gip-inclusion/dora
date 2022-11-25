@@ -1,6 +1,4 @@
 <script lang="ts">
-  // import { token, userInfo } from "$lib/auth";
-  // import { get } from "svelte/store";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 </script>
 

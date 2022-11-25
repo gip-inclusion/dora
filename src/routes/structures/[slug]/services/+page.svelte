@@ -1,14 +1,11 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
-
-  export let data: PageData;
   import { getStructure } from "$lib/structures";
-
   import { capitalize } from "$lib/utils";
   import { structure } from "../_store";
-
+  import type { PageData } from "./$types";
   import List from "./_list.svelte";
 
+  export let data: PageData;
   async function handleRefresh() {
     $structure = await getStructure($structure.slug);
   }

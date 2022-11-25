@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { getStructuresAdmin } from "$lib/admin";
-
-  import { capitalize, shortenString } from "$lib/utils";
   import Label from "$lib/components/label.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import { eyeIcon, homeIcon } from "$lib/icons";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import { capitalize, shortenString } from "$lib/utils";
+  import { onMount } from "svelte";
 
   let structures, filteredStructures;
 

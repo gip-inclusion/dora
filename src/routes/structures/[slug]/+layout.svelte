@@ -1,13 +1,11 @@
 <script lang="ts">
-  import { structure } from "./_store";
-
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import Header from "./_header.svelte";
-
   import cornerLeftVioletImg from "$lib/assets/corner-left-violet.png";
   import cornerRightVioletImg from "$lib/assets/corner-right-violet.png";
-  import { NPS_OFFEROR_FORM_ID } from "$lib/const";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
+  import { NPS_OFFEROR_FORM_ID } from "$lib/const";
+  import Header from "./_header.svelte";
+  import { structure } from "./_store";
 </script>
 
 <CenteredGrid bgColor="bg-magenta-brand" noPadding>

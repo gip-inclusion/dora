@@ -1,11 +1,10 @@
 <script lang="ts">
   // TODO: test error pages
   import { page } from "$app/stores";
-  import { onMount } from "svelte";
-  import { trackError } from "$lib/utils/plausible";
-
-  import { logException } from "$lib/logger";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import { logException } from "$lib/logger";
+  import { trackError } from "$lib/utils/plausible";
+  import { onMount } from "svelte";
 
   onMount(() => {
     trackError(`${$page.status}`, document.location.pathname);

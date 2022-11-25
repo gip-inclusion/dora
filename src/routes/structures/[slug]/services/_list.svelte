@@ -2,22 +2,20 @@
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-
   import { userInfo } from "$lib/auth";
   import SelectField from "$lib/components/form/select/select-field.svelte";
-
   import LinkButton from "$lib/components/link-button.svelte";
   import ServiceCard from "$lib/components/services/service-card.svelte";
   import {
     addCircleIcon,
+    alertIcon,
     arrowDownLineIcon,
     arrowUpLineIcon,
+    draftFillIcon,
     earthFillIcon,
+    errorWarningIcon,
     fileEditFillIcon,
     folderFillIcon,
-    draftFillIcon,
-    alertIcon,
-    errorWarningIcon,
   } from "$lib/icons";
   import {
     SERVICE_STATUSES,

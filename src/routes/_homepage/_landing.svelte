@@ -1,21 +1,18 @@
 <script lang="ts">
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-
-  import SearchForm from "./_search-form.svelte";
-
-  import LinkButton from "$lib/components/link-button.svelte";
-  import logoPoleEmploi from "$lib/assets/logo-pole-emploi.svg";
-  import logoMobIn from "$lib/assets/logo-mob-in.svg";
-  import logoDepartementArdennes from "$lib/assets/logo-departement-ardennes.svg";
-  import logoDepartementReunion from "$lib/assets/logo-departement-reunion.svg";
+  import logoDataInclusion from "$lib/assets/data-inclusion-logo.svg";
+  import illuAccompagner from "$lib/assets/illu-accompagner.svg";
+  import illuMobiliser from "$lib/assets/illu-mobiliser.svg";
+  import illuRecenser from "$lib/assets/illu-recenser.svg";
   import logoAfpa from "$lib/assets/logo-afpa.svg";
   import logoCaf from "$lib/assets/logo-caf.svg";
-  import logoDataInclusion from "$lib/assets/data-inclusion-logo.svg";
-
-  import illuRecenser from "$lib/assets/illu-recenser.svg";
-  import illuMobiliser from "$lib/assets/illu-mobiliser.svg";
-  import illuAccompagner from "$lib/assets/illu-accompagner.svg";
+  import logoDepartementArdennes from "$lib/assets/logo-departement-ardennes.svg";
+  import logoDepartementReunion from "$lib/assets/logo-departement-reunion.svg";
+  import logoMobIn from "$lib/assets/logo-mob-in.svg";
+  import logoPoleEmploi from "$lib/assets/logo-pole-emploi.svg";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
   import NewletterNotice from "./_newletter-notice.svelte";
+  import SearchForm from "./_search-form.svelte";
 
   export let servicesOptions;
 </script>

@@ -1,9 +1,8 @@
-import { redirect } from "@sveltejs/kit";
-export const ssr = false;
-
 import { setToken, validateCredsAndFillUserInfo } from "$lib/auth";
-import { getApiURL, defaultAcceptHeader } from "$lib/utils/api";
+import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+import { redirect } from "@sveltejs/kit";
 import { getNextPage } from "../_utils";
+export const ssr = false;
 
 export async function load({ url, fetch, parent }) {
   await parent();

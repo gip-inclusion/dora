@@ -3,12 +3,11 @@
     addCircleIcon,
     errorWarningIcon,
     euroLineIcon,
-    timeLineIcon,
-    mapPinUserFillIcon,
     informationIcon,
+    mapPinUserFillIcon,
+    timeLineIcon,
   } from "$lib/icons";
-
-  import type { ShortService, Service, ServicesOptions } from "$lib/types";
+  import type { Service, ServicesOptions, ShortService } from "$lib/types";
   import { shortenString } from "$lib/utils";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { isNotFreeService } from "$lib/utils/service";

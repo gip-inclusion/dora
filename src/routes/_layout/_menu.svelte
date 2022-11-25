@@ -1,17 +1,15 @@
 <script lang="ts">
   import { page } from "$app/stores";
-
-  import { questionFillIcon } from "$lib/icons";
   import { userInfo } from "$lib/auth";
-  import { userPreferences } from "$lib/preferences";
-  import { shortenString } from "$lib/utils";
-
-  import LinkButton from "$lib/components/link-button.svelte";
   import ButtonMenu from "$lib/components/button-menu.svelte";
   import HamburgerMenu from "$lib/components/hamburger.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
+  import { questionFillIcon } from "$lib/icons";
+  import { userPreferences } from "$lib/preferences";
+  import { shortenString } from "$lib/utils";
+  import MenuAide from "./_menu-aide.svelte";
   import MenuMonCompte from "./_menu-mon-compte.svelte";
   import MenuStructures from "./_menu-structures.svelte";
-  import MenuAide from "./_menu-aide.svelte";
 
   let structures = [];
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import connexionPic from "$lib/assets/illu-connexion.svg";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
 </script>
 
 <CenteredGrid bgColor="bg-magenta-10">

@@ -1,8 +1,7 @@
 <script lang="ts">
+  import LogoRF from "$lib/assets/logo-rf.svg";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import NavItem from "$lib/components/nav-item.svelte";
-
-  import LogoRF from "$lib/assets/logo-rf.svg";
 
   function handleOpenCookiesPanel(evt) {
     evt.preventDefault();

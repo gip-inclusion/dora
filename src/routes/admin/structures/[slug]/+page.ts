@@ -1,5 +1,5 @@
-import { error } from "@sveltejs/kit";
 import { getStructureAdmin } from "$lib/admin";
+import { error } from "@sveltejs/kit";
 
 export async function load({ params, parent }) {
   await parent();

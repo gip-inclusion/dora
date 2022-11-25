@@ -1,13 +1,11 @@
 <script lang="ts">
-  import { getContext } from "svelte";
-
   import {
     contextValidationKey,
     type ValidationContext,
   } from "$lib/validation";
-
-  import Input from "./input.svelte";
+  import { getContext } from "svelte";
   import Alert from "./alert.svelte";
+  import Input from "./input.svelte";
 
   export let value = undefined;
   export let name = "";

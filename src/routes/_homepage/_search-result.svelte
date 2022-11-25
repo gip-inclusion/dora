@@ -1,8 +1,7 @@
 <script lang="ts">
-  import type { ServiceSearchResult } from "$lib/types";
-
-  import FavoriteIcon from "$lib/components/favorite-icon.svelte";
   import Bookmarkable from "$lib/components/bookmarkable.svelte";
+  import FavoriteIcon from "$lib/components/favorite-icon.svelte";
+  import type { ServiceSearchResult } from "$lib/types";
 
   export let id: string;
   export let result: ServiceSearchResult;

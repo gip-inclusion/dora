@@ -1,23 +1,21 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
+  import Breadcrumb from "$lib/components/breadcrumb.svelte";
+  import Button from "$lib/components/button.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-
-  import SearchResult from "../_homepage/_search-result.svelte";
-  import SearchPromo from "../_homepage/_search-promo.svelte";
-
+  import Notice from "$lib/components/notice.svelte";
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
   import { NPS_SEEKER_FORM_ID } from "$lib/const";
   import type { ServiceSearchResult } from "$lib/types";
-  import Breadcrumb from "$lib/components/breadcrumb.svelte";
-  import SearchForm from "../_homepage/_search-form.svelte";
-  import ServiceSuggestionNotice from "../_homepage/_service-suggestion-notice.svelte";
-  import DoraDeploymentNotice from "../_homepage/_dora-deployment-notice.svelte";
   import { isInDeploymentDepartments } from "$lib/utils/city";
-  import OnlyNationalResultsNotice from "../_homepage/_only-national-results-notice.svelte";
-  import NewletterNotice from "../_homepage/_newletter-notice.svelte";
   import { tick } from "svelte";
-  import Button from "$lib/components/button.svelte";
-  import Notice from "$lib/components/notice.svelte";
+  import DoraDeploymentNotice from "../_homepage/_dora-deployment-notice.svelte";
+  import NewletterNotice from "../_homepage/_newletter-notice.svelte";
+  import OnlyNationalResultsNotice from "../_homepage/_only-national-results-notice.svelte";
+  import SearchForm from "../_homepage/_search-form.svelte";
+  import SearchPromo from "../_homepage/_search-promo.svelte";
+  import SearchResult from "../_homepage/_search-result.svelte";
+  import ServiceSuggestionNotice from "../_homepage/_service-suggestion-notice.svelte";
+  import type { PageData } from "./$types";
 
   export let data: PageData;
 

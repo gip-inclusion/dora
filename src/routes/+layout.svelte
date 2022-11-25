@@ -1,7 +1,6 @@
 <script lang="ts">
   import { ENVIRONMENT } from "$lib/env";
   import "../app.postcss";
-
   import Footer from "./_layout/_footer.svelte";
   import Header from "./_layout/_header.svelte";
   import SkipLink from "./_layout/_skip-link.svelte";

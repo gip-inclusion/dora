@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import { INVALID_ERROR_MESSAGE } from "$lib/utils/structure";
 
 // From https://github.com/jquense/yup/blob/03584f6758ff43409113c41f58fd41e065aa18a3/src/string.ts

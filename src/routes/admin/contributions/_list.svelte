@@ -1,14 +1,12 @@
 <script lang="ts">
-  import {
-    deleteServiceSuggestion,
-    acceptServiceSuggestion,
-  } from "$lib/services";
-
   import Button from "$lib/components/button.svelte";
-  import SuggestionModal from "./_suggestion-modal.svelte";
-
-  import { arrowRightSIcon, closeCircleIcon } from "$lib/icons";
   import Modal from "$lib/components/modal.svelte";
+  import { arrowRightSIcon, closeCircleIcon } from "$lib/icons";
+  import {
+    acceptServiceSuggestion,
+    deleteServiceSuggestion,
+  } from "$lib/services";
+  import SuggestionModal from "./_suggestion-modal.svelte";
 
   export let suggestions;
   export let onRefresh;

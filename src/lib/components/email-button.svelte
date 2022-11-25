@@ -1,6 +1,7 @@
 <script lang="ts">
   import { mailIcon } from "$lib/icons";
   import LinkButton from "./link-button.svelte";
+
   export let wFull = false;
 
   const sharingEmailSubject = encodeURIComponent(

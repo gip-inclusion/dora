@@ -1,23 +1,21 @@
 <script lang="ts">
-  import { setContext, onMount, onDestroy } from "svelte";
   import { goto } from "$app/navigation";
-  import debounce from "lodash.debounce";
-
-  import {
-    validate,
-    injectAPIErrors,
-    contextValidationKey,
-    formErrors,
-    type ValidationContext,
-  } from "$lib/validation";
+  import Alert from "$lib/components/forms/alert.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import { contribSchema } from "$lib/schemas/service";
   import { publishServiceSuggestion } from "$lib/services";
-
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import NavButtons from "./_nav-buttons.svelte";
-  import Fields from "./_fields.svelte";
-  import Alert from "$lib/components/forms/alert.svelte";
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
+  import {
+    contextValidationKey,
+    formErrors,
+    injectAPIErrors,
+    validate,
+    type ValidationContext,
+  } from "$lib/validation";
+  import debounce from "lodash.debounce";
+  import { onDestroy, onMount, setContext } from "svelte";
+  import Fields from "./_fields.svelte";
+  import NavButtons from "./_nav-buttons.svelte";
 
   export let servicesOptions, source;
 

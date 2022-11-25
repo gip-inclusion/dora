@@ -1,4 +1,4 @@
-import { serviceSchema, modelSchema } from "$lib/schemas/service";
+import { modelSchema, serviceSchema } from "$lib/schemas/service";
 
 const defaultServiceCache = Object.fromEntries(
   Object.entries(serviceSchema).map(([fieldName, props]) => [

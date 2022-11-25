@@ -1,13 +1,12 @@
 <script lang="ts">
-  import Modal from "$lib/components/modal.svelte";
-  import type { ShortService, Service, ServicesOptions } from "$lib/types";
-  import LinkButton from "$lib/components/link-button.svelte";
   import Button from "$lib/components/button.svelte";
-
+  import LinkButton from "$lib/components/link-button.svelte";
+  import Modal from "$lib/components/modal.svelte";
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
-  import ServiceKeyInformations from "./body/service-key-informations.svelte";
-  import ServiceContact from "./body/service-contact.svelte";
   import { createOrModifyService } from "$lib/services";
+  import type { Service, ServicesOptions, ShortService } from "$lib/types";
+  import ServiceContact from "./body/service-contact.svelte";
+  import ServiceKeyInformations from "./body/service-key-informations.svelte";
 
   export let isOpen = false;
   export let service: Service | ShortService;

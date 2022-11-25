@@ -1,18 +1,16 @@
 <script lang="ts">
   import { userInfo } from "$lib/auth";
+  import Button from "$lib/components/button.svelte";
+  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
+  import MemberInvited from "$lib/components/users/member-invited.svelte";
+  import MemberStandard from "$lib/components/users/member-standard.svelte";
+  import MemberToConfirm from "$lib/components/users/member-to-confirm.svelte";
+  import ModalAddUser from "$lib/components/users/modal-add-user.svelte";
+  import { getMembers, getPutativeMembers } from "$lib/structures";
   import { structure } from "../_store";
-
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import Button from "$lib/components/button.svelte";
-  import MemberInvited from "$lib/components/users/member-invited.svelte";
-  import MemberToConfirm from "$lib/components/users/member-to-confirm.svelte";
-  import MemberStandard from "$lib/components/users/member-standard.svelte";
-  import ModalAddUser from "$lib/components/users/modal-add-user.svelte";
-  import { getMembers, getPutativeMembers } from "$lib/structures";
 
   let modalAddUserIsOpen = false;
 

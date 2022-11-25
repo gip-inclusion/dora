@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { getApiURL } from "$lib/utils/api";
   import { deleteBinIcon } from "$lib/icons";
   import { shortenString } from "$lib/utils";
+  import { getApiURL } from "$lib/utils/api";
 
   export let structureSlug;
   export let fileKeys = [];

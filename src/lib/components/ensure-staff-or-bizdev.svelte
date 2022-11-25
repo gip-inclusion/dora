@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { token, userInfo } from "$lib/auth";
-
-  import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
+  import { token, userInfo } from "$lib/auth";
+  import { onMount } from "svelte";
 
   onMount(() => {
     if (!$token) {

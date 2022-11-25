@@ -1,13 +1,12 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { userInfo } from "$lib/auth";
-  import { starSmileLineIcon } from "$lib/icons";
   import illustration from "$lib/assets/ill-favs.svg";
-
+  import { userInfo } from "$lib/auth";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import BookmarkCard from "./_bookmark-card.svelte";
+  import { starSmileLineIcon } from "$lib/icons";
   import type { Bookmark } from "$lib/types";
+  import { onMount } from "svelte";
+  import BookmarkCard from "./_bookmark-card.svelte";
 
   let bookmarks: Bookmark[] = [];
 

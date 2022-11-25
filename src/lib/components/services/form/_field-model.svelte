@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/button.svelte";
   import Tag from "$lib/components/tag.svelte";
-  import { markdownToHTML, arraysCompare } from "$lib/utils";
+  import { arraysCompare, markdownToHTML } from "$lib/utils";
 
   export let value;
   export let useValue;

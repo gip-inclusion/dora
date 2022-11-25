@@ -1,12 +1,10 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-
-  import { formErrors } from "$lib/validation";
-
-  import { getModel, getServicesOptions } from "$lib/services";
-  import { getStructure } from "$lib/structures";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import SchemaField from "$lib/components/forms/schema-field.svelte";
+  import { getModel, getServicesOptions } from "$lib/services";
+  import { getStructure } from "$lib/structures";
+  import { formErrors } from "$lib/validation";
+  import { onMount } from "svelte";
 
   export let servicesOptions, serviceSchema, service, structures, structure;
   export let isModel = false;

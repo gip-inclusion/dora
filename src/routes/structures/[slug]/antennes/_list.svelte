@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { API_URL, CANONICAL_URL } from "$lib/env";
   import { userInfo } from "$lib/auth";
   import LinkButton from "$lib/components/link-button.svelte";
   import StructureCard from "$lib/components/structures/card.svelte";
+  import { API_URL, CANONICAL_URL } from "$lib/env";
   // import Select from "$lib/components/forms/select.svelte";
   // import Input from "$lib/components/forms/input.svelte";
   export let structure, branches, total;

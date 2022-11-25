@@ -1,8 +1,7 @@
 <script lang="ts">
   import { userInfo } from "$lib/auth";
-
-  import LinkButton from "$lib/components/link-button.svelte";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
   import ImproveDoraNotif from "./_notif-improve.svelte";
 </script>
 

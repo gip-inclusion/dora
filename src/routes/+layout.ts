@@ -1,12 +1,9 @@
+import { browser } from "$app/environment";
+import { userInfo, validateCredsAndFillUserInfo } from "$lib/auth";
+import { CRISP_ID, ENVIRONMENT, SENTRY_DSN } from "$lib/env";
+import * as Sentry from "@sentry/browser";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
-import { browser } from "$app/environment";
-import { CRISP_ID } from "$lib/env";
-import { userInfo, validateCredsAndFillUserInfo } from "$lib/auth";
-
-import * as Sentry from "@sentry/browser";
-
-import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 
 // No SSR for testing => we can't intercept request server side
 export const ssr = ENVIRONMENT === "testing" ? false : undefined;

@@ -1,5 +1,5 @@
-import { error } from "@sveltejs/kit";
 import { getServiceAdmin } from "$lib/admin";
+import { error } from "@sveltejs/kit";
 
 export async function load({ params, parent }) {
   await parent();

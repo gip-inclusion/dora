@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Landing from "./_homepage/_landing.svelte";
   import type { PageData } from "./$types";
+  import Landing from "./_homepage/_landing.svelte";
 
   export let data: PageData;
 </script>

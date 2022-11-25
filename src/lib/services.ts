@@ -1,8 +1,7 @@
-import { get } from "svelte/store";
-
+import { token } from "$lib/auth";
 import { fetchData } from "$lib/utils";
 import { getApiURL } from "$lib/utils/api";
-import { token } from "$lib/auth";
+import { get } from "svelte/store";
 import { logException } from "./logger";
 import { SERVICE_STATUSES } from "./schemas/service";
 import type { Model, Service, ServicesOptions } from "./types";

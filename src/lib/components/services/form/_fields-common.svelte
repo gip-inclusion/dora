@@ -1,29 +1,27 @@
 <script lang="ts">
-  import { setContext } from "svelte";
-
-  import {
-    formErrors,
-    validate,
-    contextValidationKey,
-    type ValidationContext,
-  } from "$lib/validation";
-  import {
-    moveToTheEnd,
-    orderAndReformatSubcategories,
-    arraysCompare,
-  } from "$lib/utils";
-
-  import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import SchemaField from "$lib/components/forms/schema-field.svelte";
+  import Button from "$lib/components/button.svelte";
+  import SelectField from "$lib/components/form/select/select-field.svelte";
   import AddableMultiselect from "$lib/components/forms/addable-multiselect.svelte";
   import Field from "$lib/components/forms/field.svelte";
-  import Uploader from "$lib/components/uploader.svelte";
-  import FieldModel from "./_field-model.svelte";
-  import SelectField from "$lib/components/form/select/select-field.svelte";
-  import { isNotFreeService } from "$lib/utils/service";
-  import Button from "$lib/components/button.svelte";
-  import Notice from "$lib/components/notice.svelte";
+  import FieldSet from "$lib/components/forms/fieldset.svelte";
+  import SchemaField from "$lib/components/forms/schema-field.svelte";
   import Modal from "$lib/components/modal.svelte";
+  import Notice from "$lib/components/notice.svelte";
+  import Uploader from "$lib/components/uploader.svelte";
+  import {
+    arraysCompare,
+    moveToTheEnd,
+    orderAndReformatSubcategories,
+  } from "$lib/utils";
+  import { isNotFreeService } from "$lib/utils/service";
+  import {
+    contextValidationKey,
+    formErrors,
+    validate,
+    type ValidationContext,
+  } from "$lib/validation";
+  import { setContext } from "svelte";
+  import FieldModel from "./_field-model.svelte";
 
   export let servicesOptions, serviceSchema, service, canAddChoices;
   export let isModel = false;

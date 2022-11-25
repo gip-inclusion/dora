@@ -1,13 +1,12 @@
 import { expect, test } from "@playwright/test";
-
 import { createFakeService } from "../../mocks/mockService.js";
 import { createFakeUser } from "../../mocks/mockUser.js";
-import {
-  SERVICE_SELECTORS,
-  mockGetServiceResponse,
-  goToServicePage,
-} from "../../pages/service.js";
 import { mockUserInfoRequest } from "../../pages/common.js";
+import {
+  goToServicePage,
+  mockGetServiceResponse,
+  SERVICE_SELECTORS,
+} from "../../pages/service.js";
 
 test.describe("Page service", () => {
   // *** Affichage correct

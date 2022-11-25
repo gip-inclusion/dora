@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { modelSchema } from "$lib/schemas/service";
-
-  import FieldsCommon from "./_fields-common.svelte";
-  import ModelNavButtons from "./_model-nav-buttons.svelte";
-  import Errors from "./_errors.svelte";
-  import FieldsStructure from "./_fields-structure.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import { modelSchema } from "$lib/schemas/service";
+  import Errors from "./_errors.svelte";
+  import FieldsCommon from "./_fields-common.svelte";
+  import FieldsStructure from "./_fields-structure.svelte";
+  import ModelNavButtons from "./_model-nav-buttons.svelte";
 
   export let servicesOptions, structures, model, structure;
 

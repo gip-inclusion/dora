@@ -1,8 +1,8 @@
-import { error, json } from "@sveltejs/kit";
-import { ENVIRONMENT, CANONICAL_URL } from "$lib/env";
+import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
 import { SERVICE_STATUSES } from "$lib/schemas/service";
 import { getPublishedServices } from "$lib/services";
 import { getStructures } from "$lib/structures";
+import { error, json } from "@sveltejs/kit";
 
 function toISODate(apiDate) {
   const date = new Date(apiDate).toISOString();

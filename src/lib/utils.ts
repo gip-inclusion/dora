@@ -1,11 +1,9 @@
-import showdown from "showdown";
-import insane from "insane";
-import { get } from "svelte/store";
-
 import { browser } from "$app/environment";
-
 import { token } from "$lib/auth";
 import { defaultAcceptHeader } from "$lib/utils/api";
+import insane from "insane";
+import showdown from "showdown";
+import { get } from "svelte/store";
 
 export function markdownToHTML(md, titleLevel) {
   const converter = new showdown.Converter({

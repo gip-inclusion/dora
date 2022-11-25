@@ -1,24 +1,21 @@
 <script lang="ts">
-  import { onMount, setContext } from "svelte";
-
-  import {
-    formErrors,
-    validate,
-    contextValidationKey,
-    type ValidationContext,
-  } from "$lib/validation";
-  import { orderAndReformatSubcategories, moveToTheEnd } from "$lib/utils";
-
-  import { isNotFreeService } from "$lib/utils/service";
-
+  import SelectField from "$lib/components/form/select/select-field.svelte";
+  import AdminDivisionSearch from "$lib/components/forms/admin-division-search.svelte";
+  import CitySearch from "$lib/components/forms/city-search.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import SchemaField from "$lib/components/forms/schema-field.svelte";
-  import CitySearch from "$lib/components/forms/city-search.svelte";
   import AddressSearch from "$lib/components/forms/street-search.svelte";
-  import AdminDivisionSearch from "$lib/components/forms/admin-division-search.svelte";
-  import FieldModel from "./_field-model.svelte";
-  import SelectField from "$lib/components/form/select/select-field.svelte";
   import type { Choice, Service, ServicesOptions, Structure } from "$lib/types";
+  import { moveToTheEnd, orderAndReformatSubcategories } from "$lib/utils";
+  import { isNotFreeService } from "$lib/utils/service";
+  import {
+    contextValidationKey,
+    formErrors,
+    validate,
+    type ValidationContext,
+  } from "$lib/validation";
+  import { onMount, setContext } from "svelte";
+  import FieldModel from "./_field-model.svelte";
 
   export let servicesOptions: ServicesOptions;
   export let service: Service;

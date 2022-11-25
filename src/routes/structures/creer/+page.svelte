@@ -1,14 +1,12 @@
 <script lang="ts">
+  import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
+  import StructureSearch from "$lib/components/structures/search.svelte";
+  import { alertIcon } from "$lib/icons";
+  import structureSchema from "$lib/schemas/structure";
+  import { siretWasAlreadyClaimed } from "$lib/structures";
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
-  import StructureSearch from "$lib/components/structures/search.svelte";
-  import { siretWasAlreadyClaimed } from "$lib/structures";
-  import structureSchema from "$lib/schemas/structure";
-
-  import { alertIcon } from "$lib/icons";
 
   const defaultStructure = Object.fromEntries(
     Object.entries(structureSchema).map(([fieldName, props]) => [
@@ -17,7 +15,6 @@
     ])
   );
   let structure = JSON.parse(JSON.stringify(defaultStructure));
-
   let alreadyClaimedEstablishment;
 
   function handleCityChange(_city) {

@@ -1,15 +1,13 @@
 <script lang="ts">
-  import { ENVIRONMENT } from "$lib/env";
   import { browser } from "$app/environment";
-
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-
   import LogoDORA from "$lib/assets/dora-logo-rvb.svg";
   import LogoMinistere from "$lib/assets/logo-ministere-travail-emploi.svg";
-
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import { ENVIRONMENT } from "$lib/env";
   import HeaderActions from "./_menu.svelte";
 </script>
 
+,ca
 <header
   class="relative shadow-md"
   class:dev-banner={ENVIRONMENT !== "production"}

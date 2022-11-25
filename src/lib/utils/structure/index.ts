@@ -1,9 +1,9 @@
 import type {
-  OsmOpeningHours,
-  OsmDay,
-  OsmPeriodDay,
-  DayPrefix,
   DayPeriod,
+  DayPrefix,
+  OsmDay,
+  OsmOpeningHours,
+  OsmPeriodDay,
 } from "$lib/types";
 
 export const INVALID_ERROR_MESSAGE = "Invalid";

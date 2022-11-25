@@ -1,11 +1,10 @@
 <script lang="ts">
   import Button from "$lib/components/button.svelte";
   import Label from "$lib/components/label.svelte";
-
   import { fileEditIcon, fileForbidIcon, userIcon } from "$lib/icons";
   import { deleteMember } from "$lib/structures";
-  import ModalChangeUser from "./modal-change-user.svelte";
   import Member from "./member.svelte";
+  import ModalChangeUser from "./modal-change-user.svelte";
 
   export let member;
   export let onRefresh;

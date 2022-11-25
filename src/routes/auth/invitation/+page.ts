@@ -1,5 +1,5 @@
-import { error } from "@sveltejs/kit";
 import { getStructure } from "$lib/structures";
+import { error } from "@sveltejs/kit";
 
 export async function load({ url, parent }) {
   await parent();

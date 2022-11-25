@@ -1,15 +1,13 @@
 <script lang="ts">
-  import { get } from "svelte/store";
-
-  import { formErrors } from "$lib/validation";
-  import { addUserSchema } from "$lib/schemas/dashboard";
-  import { getApiURL } from "$lib/utils/api";
   import { token } from "$lib/auth";
-
   import Button from "$lib/components/button.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/modal.svelte";
+  import { addUserSchema } from "$lib/schemas/dashboard";
+  import { getApiURL } from "$lib/utils/api";
+  import { formErrors } from "$lib/validation";
+  import { get } from "svelte/store";
   import ConfirmationModal from "./modal-confirmation.svelte";
 
   const levelChoices = [

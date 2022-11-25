@@ -1,11 +1,9 @@
 <script lang="ts">
+  import { token, userInfo } from "$lib/auth";
   import Date from "$lib/components/date.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import Notice from "$lib/components/notice.svelte";
   import TextClamp from "$lib/components/text-clamp.svelte";
-  import DataInclusionNotice from "./_data-inclusion-notice.svelte";
-  import { token, userInfo } from "$lib/auth";
-
   import {
     computerIcon,
     editIcon,
@@ -20,6 +18,7 @@
   import { markdownToHTML } from "$lib/utils";
   import { formatPhoneNumber } from "$lib/utils/phone";
   import { formatOsmHours } from "$lib/utils/structures";
+  import DataInclusionNotice from "./_data-inclusion-notice.svelte";
 
   export let structure: Structure;
   export let structuresOptions: StructuresOptions;

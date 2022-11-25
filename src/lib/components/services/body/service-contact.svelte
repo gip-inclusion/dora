@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ShortService, Service } from "$lib/types";
+  import type { Service, ShortService } from "$lib/types";
   import ContactEmail from "./contact-email.svelte";
   import ContactPhone from "./contact-phone.svelte";
 

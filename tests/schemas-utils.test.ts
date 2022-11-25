@@ -1,4 +1,4 @@
-import { describe, expect, test, it } from "vitest";
+import { describe, expect, it, test } from "vitest";
 import { removeAllSpaces } from "../src/lib/schemas/utils.js";
 
 describe("schema utils", () => {

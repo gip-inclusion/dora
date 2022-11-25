@@ -1,17 +1,15 @@
 <script lang="ts">
-  import { refreshUserInfo, token, userInfo } from "$lib/auth";
-  import { getApiURL } from "$lib/utils/api";
-  import { userProfileSchema } from "$lib/schemas/auth";
-  import { formErrors } from "$lib/validation";
   import { goto } from "$app/navigation";
-
+  import { refreshUserInfo, token, userInfo } from "$lib/auth";
   import Button from "$lib/components/button.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import SchemaField from "$lib/components/forms/schema-field.svelte";
   import Info from "$lib/components/info.svelte";
-
   import { arrowRightSIcon, lightBulbIcon } from "$lib/icons";
+  import { userProfileSchema } from "$lib/schemas/auth";
+  import { getApiURL } from "$lib/utils/api";
+  import { formErrors } from "$lib/validation";
 
   const authErrors = {};
   let success = false;

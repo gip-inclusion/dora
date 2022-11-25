@@ -1,23 +1,21 @@
 <script lang="ts">
-  import { onMount, onDestroy, tick } from "svelte";
-  import { Editor } from "@tiptap/core";
-  import StarterKit from "@tiptap/starter-kit";
-  import Placeholder from "@tiptap/extension-placeholder";
-  import Link from "@tiptap/extension-link";
-
   import {
     boldIcon,
-    italicIcon,
-    paraIcon,
     h1Icon,
     h2Icon,
+    italicIcon,
     liIcon,
     linkIcon,
+    paraIcon,
   } from "$lib/icons";
-
+  import { htmlToMarkdown, markdownToHTML } from "$lib/utils";
+  import { Editor } from "@tiptap/core";
+  import Link from "@tiptap/extension-link";
+  import Placeholder from "@tiptap/extension-placeholder";
+  import StarterKit from "@tiptap/starter-kit";
+  import { onDestroy, onMount, tick } from "svelte";
   import Button from "./button.svelte";
   import Separator from "./separator.svelte";
-  import { htmlToMarkdown, markdownToHTML } from "$lib/utils";
 
   export let id: string;
   export let name: string;

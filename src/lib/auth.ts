@@ -1,6 +1,6 @@
-import { get, writable } from "svelte/store";
 import { browser } from "$app/environment";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+import { get, writable } from "svelte/store";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
 import type { Bookmark, ShortStructure } from "./types";

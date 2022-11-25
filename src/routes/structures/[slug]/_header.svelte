@@ -1,20 +1,20 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { userInfo } from "$lib/auth";
+  import Breadcrumb from "$lib/components/breadcrumb.svelte";
   import Label from "$lib/components/label.svelte";
+  import AdminNotice from "$lib/components/structures/admin-notice.svelte";
+  import Tabs from "$lib/components/tabs-links.svelte";
   import {
-    mapPinIcon,
+    bookReadLineIcon,
     fileInfoLineIcon,
     homeSmile2Icon,
-    bookReadLineIcon,
+    mapPinIcon,
     pageLineIcon,
     teamLineIcon,
   } from "$lib/icons";
-  import Tabs from "$lib/components/tabs-links.svelte";
-  import { userInfo } from "$lib/auth";
-  import PendingNotice from "./_pending-notice.svelte";
-  import AdminNotice from "$lib/components/structures/admin-notice.svelte";
   import { capitalize } from "$lib/utils";
-  import Breadcrumb from "$lib/components/breadcrumb.svelte";
+  import PendingNotice from "./_pending-notice.svelte";
 
   export let structure;
   export let tabId = "informations";

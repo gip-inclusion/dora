@@ -1,8 +1,8 @@
-import { redirect } from "@sveltejs/kit";
-import { CANONICAL_URL } from "$lib/env";
 import { token } from "$lib/auth";
-import { get } from "svelte/store";
+import { CANONICAL_URL } from "$lib/env";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+import { redirect } from "@sveltejs/kit";
+import { get } from "svelte/store";
 import { getNextPage } from "../_utils";
 
 export const ssr = false;

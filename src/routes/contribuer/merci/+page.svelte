@@ -1,13 +1,11 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
+  import ContributionPic from "$lib/assets/illu_contribution.svg";
+  import EmailButton from "$lib/components/email-button.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
-
-  import ContributionPic from "$lib/assets/illu_contribution.svg";
   import { addCircleIcon } from "$lib/icons";
-  import EmailButton from "$lib/components/email-button.svelte";
-
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
+  import { onDestroy } from "svelte";
 
   onDestroy(() => {
     serviceSubmissionTimeMeter.clear();

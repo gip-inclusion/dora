@@ -1,5 +1,5 @@
+import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
 import { json } from "@sveltejs/kit";
-import { ENVIRONMENT, CANONICAL_URL } from "$lib/env";
 
 const productionContent = `
 User-agent: *

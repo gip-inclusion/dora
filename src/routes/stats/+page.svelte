@@ -2,6 +2,7 @@
   import CG from "$lib/components/layout/centered-grid.svelte";
   import { METABASE_EMBED_URL, PLAUSIBLE_EMBED_URL } from "$lib/env";
   import { iframeResize } from "iframe-resizer";
+
   function hR(id) {
     iframeResize({}, id);
   }

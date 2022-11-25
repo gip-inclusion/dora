@@ -1,6 +1,7 @@
 <script lang="ts">
   import { newspaperIcon } from "$lib/icons";
   import LinkButton from "./link-button.svelte";
+
   export let extraClass = "";
   export let wFull = false;
 </script>

@@ -1,15 +1,14 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { userInfo } from "$lib/auth";
-  import { formErrors } from "$lib/validation";
-  import { suggestionSchema } from "$lib/schemas/service";
-  import { getApiURL } from "$lib/utils/api";
-
   import Button from "$lib/components/button.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/modal.svelte";
+  import { suggestionSchema } from "$lib/schemas/service";
+  import { getApiURL } from "$lib/utils/api";
+  import { formErrors } from "$lib/validation";
+  import { onMount } from "svelte";
   import SuggestionConfirmationModal from "./suggestion-confirmation-modal.svelte";
 
   export let isOpen = false;

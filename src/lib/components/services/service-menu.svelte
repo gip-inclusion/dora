@@ -2,11 +2,11 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import { checkboxCircleFillIcon, copyIcon, editIcon } from "$lib/icons";
   import {
-    type Service,
-    type ShortService,
-    SERVICE_UPDATE_STATUS,
     SERVICE_STATUSES,
+    SERVICE_UPDATE_STATUS,
+    type Service,
     type ServicesOptions,
+    type ShortService,
   } from "$lib/types";
   import Button from "../button.svelte";
   import SetAsUpdatedModal from "./set-as-updated-modal.svelte";

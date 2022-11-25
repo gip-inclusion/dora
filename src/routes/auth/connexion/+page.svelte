@@ -1,17 +1,15 @@
 <script lang="ts">
-  import { getNextPage } from "../_utils";
   import { page } from "$app/stores";
-  import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import Button from "$lib/components/button.svelte";
-
-  import AuthLayout from "../_auth_layout.svelte";
-  import { informationLineIcon } from "$lib/icons";
-
-  import PoleEmploiWarning from "$lib/components/structures/pole-emploi-warning.svelte";
-  import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
   import logoC1 from "$lib/assets/inclusion-connect/logo-c1.svg";
+  import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
   import logoDora from "$lib/assets/inclusion-connect/logo_dora.svg";
   import logoPEFill from "$lib/assets/logo-pole-emploi-fill.svg";
+  import Button from "$lib/components/button.svelte";
+  import FieldSet from "$lib/components/forms/fieldset.svelte";
+  import PoleEmploiWarning from "$lib/components/structures/pole-emploi-warning.svelte";
+  import { informationLineIcon } from "$lib/icons";
+  import AuthLayout from "../_auth_layout.svelte";
+  import { getNextPage } from "../_utils";
 
   function getLoginHint() {
     const loginHint = $page.url.searchParams.get("login_hint");

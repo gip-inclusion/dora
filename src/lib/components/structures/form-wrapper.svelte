@@ -1,30 +1,25 @@
 <script lang="ts">
-  import { setContext } from "svelte";
   import { goto } from "$app/navigation";
-
-  import { modifyStructure, createStructure } from "$lib/structures";
-
+  import Button from "$lib/components/button.svelte";
+  import Alert from "$lib/components/forms/alert.svelte";
+  import CitySearch from "$lib/components/forms/city-search.svelte";
+  import SchemaField from "$lib/components/forms/schema-field.svelte";
+  import AddressSearch from "$lib/components/forms/street-search.svelte";
   import structureSchema from "$lib/schemas/structure";
+  import { createStructure, modifyStructure } from "$lib/structures";
+  import type { Structure, StructuresOptions } from "$lib/types";
   import {
-    validate,
+    contextValidationKey,
     formErrors,
     injectAPIErrors,
-    contextValidationKey,
+    validate,
     type ValidationContext,
   } from "$lib/validation";
-
-  import SchemaField from "$lib/components/forms/schema-field.svelte";
-
-  import Alert from "$lib/components/forms/alert.svelte";
-
-  import Button from "$lib/components/button.svelte";
-  import CitySearch from "$lib/components/forms/city-search.svelte";
-  import AddressSearch from "$lib/components/forms/street-search.svelte";
-  import TextField from "../form/text-field.svelte";
-  import SelectField from "../form/select/select-field.svelte";
-  import type { Structure, StructuresOptions } from "$lib/types";
-  import LinkButton from "../link-button.svelte";
+  import { setContext } from "svelte";
   import OpeningHoursField from "../form/openingHours/opening-hours-field.svelte";
+  import SelectField from "../form/select/select-field.svelte";
+  import TextField from "../form/text-field.svelte";
+  import LinkButton from "../link-button.svelte";
 
   export let structure: Structure;
   export let structuresOptions: StructuresOptions;

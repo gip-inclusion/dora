@@ -1,6 +1,5 @@
 <script lang="ts">
   import Date from "$lib/components/date.svelte";
-
   import Label from "$lib/components/label.svelte";
   import type { ModerationStatus } from "$lib/types";
 

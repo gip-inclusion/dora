@@ -1,14 +1,12 @@
 <script lang="ts">
-  import type { Service, ServicesOptions } from "$lib/types";
-  import { SERVICE_UPDATE_STATUS, SERVICE_STATUSES } from "$lib/types";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import SetAsUpdatedModal from "$lib/components/services/set-as-updated-modal.svelte";
-
-  import UpdateStatusIcon from "$lib/components/services/icons/update-status.svelte";
-
-  import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
   import Button from "$lib/components/button.svelte";
   import Date from "$lib/components/date.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
+  import UpdateStatusIcon from "$lib/components/services/icons/update-status.svelte";
+  import SetAsUpdatedModal from "$lib/components/services/set-as-updated-modal.svelte";
+  import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
+  import type { Service, ServicesOptions } from "$lib/types";
+  import { SERVICE_STATUSES, SERVICE_UPDATE_STATUS } from "$lib/types";
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;

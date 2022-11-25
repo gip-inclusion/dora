@@ -1,14 +1,13 @@
 <script lang="ts">
+  import { refreshUserInfo } from "$lib/auth";
+  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
+  import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
+  import { getStructure } from "$lib/structures";
+  import { capitalize } from "$lib/utils";
+  import { structure } from "../_store";
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  import { getStructure } from "$lib/structures";
-  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
-  import { structure } from "../_store";
-  import { refreshUserInfo } from "$lib/auth";
-  import { capitalize } from "$lib/utils";
 
   async function handleRefresh() {
     $structure = await getStructure($structure.slug);

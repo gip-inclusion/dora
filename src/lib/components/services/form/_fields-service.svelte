@@ -1,21 +1,18 @@
 <script lang="ts">
-  import { tick, setContext } from "svelte";
-
-  import {
-    formErrors,
-    validate,
-    contextValidationKey,
-    type ValidationContext,
-  } from "$lib/validation";
-  import { moveToTheEnd } from "$lib/utils";
-
+  import Button from "$lib/components/button.svelte";
+  import AdminDivisionSearch from "$lib/components/forms/admin-division-search.svelte";
+  import CitySearch from "$lib/components/forms/city-search.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import SchemaField from "$lib/components/forms/schema-field.svelte";
-  import Button from "$lib/components/button.svelte";
-
-  import CitySearch from "$lib/components/forms/city-search.svelte";
   import AddressSearch from "$lib/components/forms/street-search.svelte";
-  import AdminDivisionSearch from "$lib/components/forms/admin-division-search.svelte";
+  import { moveToTheEnd } from "$lib/utils";
+  import {
+    contextValidationKey,
+    formErrors,
+    validate,
+    type ValidationContext,
+  } from "$lib/validation";
+  import { setContext, tick } from "svelte";
 
   export let servicesOptions, serviceSchema, service, structure;
 

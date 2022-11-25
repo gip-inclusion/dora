@@ -1,13 +1,12 @@
 <script lang="ts">
+  import ContributionPic from "$lib/assets/illu_contribution.svg";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
-
-  import ContributionPic from "$lib/assets/illu_contribution.svg";
   import {
     addCircleIcon,
-    uploadCloudIcon,
     quillPenIcon,
     timerFlashIcon,
+    uploadCloudIcon,
   } from "$lib/icons";
 </script>
 

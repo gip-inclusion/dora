@@ -1,9 +1,9 @@
-import { error } from "@sveltejs/kit";
+import { userInfo } from "$lib/auth";
+import { userPreferences } from "$lib/preferences";
 import { getStructure } from "$lib/structures";
 import { trackStructure } from "$lib/utils/plausible";
+import { error } from "@sveltejs/kit";
 import { structure } from "./_store";
-import { userPreferences } from "$lib/preferences";
-import { userInfo } from "$lib/auth";
 
 export async function load({ params, parent }) {
   await parent();
