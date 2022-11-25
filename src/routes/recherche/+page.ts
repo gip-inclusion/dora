@@ -1,3 +1,4 @@
+import { getQuery } from "$lib/search";
 import { getServicesOptions } from "$lib/services";
 import {
   SERVICE_UPDATE_STATUS,
@@ -7,7 +8,6 @@ import {
 import { getApiURL } from "$lib/utils/api";
 import { trackSearch } from "$lib/utils/plausible";
 import { computeUpdateStatusData } from "$lib/utils/service";
-import { getQuery } from "../homepage/search";
 
 // pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
 // à ce qu'elles soient indexées

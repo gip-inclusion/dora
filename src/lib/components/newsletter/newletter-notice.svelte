@@ -1,5 +1,5 @@
 <script lang="ts">
-  import NewsletterButton from "$lib/components/newsletter-button.svelte";
+  import NewsletterButton from "$lib/components/newsletter/newsletter-button.svelte";
 </script>
 
 <div class="bg-gray-bg p-s24">

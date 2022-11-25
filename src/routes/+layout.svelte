@@ -1,9 +1,9 @@
 <script lang="ts">
   import { ENVIRONMENT } from "$lib/env";
   import "../app.postcss";
-  import Footer from "./layout/footer.svelte";
-  import Header from "./layout/header.svelte";
-  import SkipLink from "./layout/skip-link.svelte";
+  import Footer from "./footer.svelte";
+  import Header from "./header.svelte";
+  import SkipLink from "./skip-link.svelte";
 </script>
 
 <svelte:head>

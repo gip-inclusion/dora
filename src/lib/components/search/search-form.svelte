@@ -11,6 +11,7 @@
     mapPinIcon,
     searchIcon,
   } from "$lib/icons";
+  import { getQuery } from "$lib/search";
   import type { FeeCondition, ServiceKind, ServicesOptions } from "$lib/types";
   import { getDepartmentFromCityCode } from "$lib/utils";
   import {
@@ -23,7 +24,6 @@
     sortByCategories,
     sortCategory,
   } from "$lib/utils/service";
-  import { getQuery } from "./search";
 
   export let servicesOptions: ServicesOptions;
   export let cityCode;
