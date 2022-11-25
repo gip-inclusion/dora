@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { markdownToHTML } from "../src/lib/utils.js";
+import { markdownToHTML } from "../src/lib/utils/index";
 
 describe("markdownToHTML", () => {
   test("conversion basique", () => {

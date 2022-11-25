@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
-import { createFakeService } from "../../mocks/mockService.js";
-import { createFakeUser } from "../../mocks/mockUser.js";
-import { mockUserInfoRequest } from "../../pages/common.js";
+import { createFakeService } from "../../mocks/mockService";
+import { createFakeUser } from "../../mocks/mockUser";
+import { mockUserInfoRequest } from "../../pages/common";
 import {
   goToServicePage,
   mockGetServiceResponse,

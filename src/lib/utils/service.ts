@@ -26,7 +26,7 @@ import {
   type ShortService,
 } from "$lib/types";
 import dayjs from "dayjs";
-import { getChoicesFromKey } from "../choice";
+import { getChoicesFromKey } from "./choice";
 
 export function getAvailableOptionsForStatus(
   status: SERVICE_STATUSES
