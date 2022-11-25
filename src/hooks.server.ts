@@ -1,12 +1,13 @@
 import { dev } from "$app/environment";
 import { API_URL, CANONICAL_URL, ENVIRONMENT } from "$lib/env";
 import * as Sentry from "@sentry/browser";
+import type { Handle, HandleServerError } from "@sveltejs/kit";
 
-export async function handleError({ error, event }) {
+export const handleError: HandleServerError = ({ error, event }) => {
   Sentry.captureException(error, { event });
-}
+};
 
-export async function handle({ event, resolve }) {
+export const handle: Handle = async ({ event, resolve }) => {
   const response = await resolve(event);
 
   const connectSrc = `connect-src ${API_URL} ${
@@ -39,4 +40,4 @@ export async function handle({ event, resolve }) {
     );
   }
   return response;
-}
+};
