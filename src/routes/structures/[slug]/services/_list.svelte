@@ -58,7 +58,7 @@
     let newUrl = $page.url.pathname;
     if (searchParams.toString()) newUrl += `?${searchParams.toString()}`;
 
-    goto(newUrl, { replaceState: true, keepfocus: true, noscroll: true });
+    goto(newUrl, { replaceState: true, keepFocus: true, noScroll: true });
   }
 
   // Status options
