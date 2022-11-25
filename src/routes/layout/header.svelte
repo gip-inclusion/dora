@@ -7,7 +7,6 @@
   import HeaderActions from "./menu.svelte";
 </script>
 
-,ca
 <header
   class="relative shadow-md"
   class:dev-banner={ENVIRONMENT !== "production"}
