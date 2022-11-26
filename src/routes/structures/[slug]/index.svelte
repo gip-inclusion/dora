@@ -49,17 +49,6 @@
   />
 {/if}
 
-{#if !$structure.parent && ($structure.branches?.length || $structure.isAdmin || $userInfo?.isStaff)}
-  <hr class="mb-s24" />
-  <BranchesList
-    structure={$structure}
-    branches={$structure.branches || []}
-    hasOptions={false}
-    total={$structure.branches.length}
-    limit={4}
-  />
-{/if}
-
 {#if $structure.isMember || $userInfo?.isStaff}
   <hr class="mb-s24" />
   <ModelesList
@@ -67,6 +56,17 @@
     models={$structure.models}
     hasOptions={false}
     total={$structure.models.length}
+    limit={4}
+  />
+{/if}
+
+{#if !$structure.parent && ($structure.branches?.length || $structure.isAdmin || $userInfo?.isStaff)}
+  <hr class="mb-s24" />
+  <BranchesList
+    structure={$structure}
+    branches={$structure.branches || []}
+    hasOptions={false}
+    total={$structure.branches.length}
     limit={4}
   />
 {/if}
