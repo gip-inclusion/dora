@@ -38,6 +38,11 @@ export async function getStructures(): Promise<ShortStructure[]> {
   return (await fetchData(url)).data;
 }
 
+export async function getActiveStructures(): Promise<ShortStructure[]> {
+  const url = `${getApiURL()}/structures/?active=1`;
+  return (await fetchData(url)).data;
+}
+
 export async function getStructure(slug): Promise<Structure> {
   const url = `${getApiURL()}/structures/${slug}/`;
   const result = (await fetchData(url)).data;

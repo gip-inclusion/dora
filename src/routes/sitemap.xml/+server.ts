@@ -1,15 +1,15 @@
 import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
 import { SERVICE_STATUSES } from "$lib/schemas/service";
 import { getPublishedServices } from "$lib/services";
-import { getStructures } from "$lib/structures";
-import { error, json } from "@sveltejs/kit";
+import { getActiveStructures } from "$lib/structures";
+import { error } from "@sveltejs/kit";
 
 function toISODate(apiDate) {
   const date = new Date(apiDate).toISOString();
   return date.slice(0, date.indexOf("T"));
 }
 
-async function getAllServices() {
+async function getServicesEntries() {
   const response = await getPublishedServices();
 
   return response
@@ -24,8 +24,8 @@ async function getAllServices() {
     .join("\n");
 }
 
-async function getAllStructures() {
-  const response = await getStructures();
+async function getStructuresEntries() {
+  const response = await getActiveStructures();
   return response
     .map((s) =>
       `<url>
@@ -38,8 +38,8 @@ async function getAllStructures() {
 }
 
 async function getContent() {
-  const services = await getAllServices();
-  const structures = await getAllStructures();
+  const services = await getServicesEntries();
+  const structures = await getStructuresEntries();
   const content = `
   <?xml version="1.0" encoding="UTF-8" ?>
     <urlset
@@ -58,7 +58,7 @@ async function getContent() {
 export async function GET() {
   const content = await getContent();
   if (ENVIRONMENT === "production" || ENVIRONMENT === "local") {
-    return json(content, {
+    return new Response(content, {
       headers: {
         "Content-Type": "application/xml",
       },
