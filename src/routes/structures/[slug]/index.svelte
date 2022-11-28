@@ -60,7 +60,7 @@
   />
 {/if}
 
-{#if !$structure.parent && ($structure.branches?.length || $structure.isAdmin || $userInfo?.isStaff)}
+{#if !$structure.parent && $structure.branches?.length}
   <hr class="mb-s24" />
   <BranchesList
     structure={$structure}
