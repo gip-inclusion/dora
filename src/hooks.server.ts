@@ -1,10 +1,22 @@
 import { dev } from "$app/environment";
-import { API_URL, CANONICAL_URL, ENVIRONMENT } from "$lib/env";
-import * as Sentry from "@sentry/browser";
+import { API_URL, CANONICAL_URL, ENVIRONMENT, SENTRY_DSN } from "$lib/env";
+import * as Sentry from "@sentry/svelte";
 import type { Handle, HandleServerError } from "@sveltejs/kit";
+
+if (ENVIRONMENT !== "local") {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    environment: ENVIRONMENT,
+    tracesSampleRate: 0,
+  });
+}
 
 export const handleError: HandleServerError = ({ error, event }) => {
   Sentry.captureException(error, { event });
+
+  return {
+    message: "Erreur inattendue",
+  };
 };
 
 export const handle: Handle = async ({ event, resolve }) => {

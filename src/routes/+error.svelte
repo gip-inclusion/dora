@@ -10,9 +10,7 @@
     trackError(`${$page.status}`, document.location.pathname);
 
     if (!notFound) {
-      const exc = new Error($page.error.message);
-      exc.stack = $page.error.stack;
-      logException(exc, { error: $page.error });
+      logException($page.error);
     }
   });
 
