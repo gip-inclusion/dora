@@ -58,9 +58,11 @@
           class="full-card-link text-f19 font-bold text-france-blue hover:underline"
           href="/services/{service.slug}">{service.name}</a
         >
-        <div class="flex items-center gap-s8">
-          <FavoriteIcon on:click={onBookmark} active={isBookmarked} small />
-        </div>
+        {#if readOnly}
+          <div class="flex items-center gap-s8">
+            <FavoriteIcon on:click={onBookmark} active={isBookmarked} small />
+          </div>
+        {/if}
       </div>
 
       {#if service.diffusionZoneDetailsDisplay}
