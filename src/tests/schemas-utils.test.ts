@@ -1,5 +1,5 @@
+import { removeAllSpaces } from "$lib/schemas/utils";
 import { describe, expect, it, test } from "vitest";
-import { removeAllSpaces } from "../src/lib/schemas/utils";
 
 describe("schema utils", () => {
   it("removeAllSpaces", () => {

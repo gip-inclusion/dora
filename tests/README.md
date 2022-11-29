@@ -1,21 +1,21 @@
 # Commandes disponibles
 
-`npm run test-e2e` : lance les tests en mode headless
-`npm run test-e2e-debug` : lance les tests en liaison avec avec le Playwright Inspector, permettant de faire du pas-à-pas : https://playwright.dev/docs/debug
+`npm run test` : lance les tests en mode headless
+`npm run test:debug` : lance les tests en liaison avec avec le Playwright Inspector, permettant de faire du pas-à-pas : https://playwright.dev/docs/debug
 
 # Philosophie des tests
 
-## Organisation du dossier `e2e`
+## Organisation du dossier `tests`
 
-Dossier `tests` contient les tests de l'application : par page / par scénario...
+Dossier `tests/tests` contient les tests de l'application : par page / par scénario...
 
-Dossier `pages` contient pour chaque page :
+Dossier `tests/pages` contient pour chaque page :
 
 - son URL ou une fonction pour générer l'URL
 - ses différents sélecteurs
 - différentes fonction d'aide (remplissage d'un formulaire, récupération et formatages d'éléments de la page...)
 
-Dossier `mocks` contient des données de réponses de requête HTTP en vue de les mocker avec `page.route`
+Dossier `tests/mocks` contient des données de réponses de requête HTTP en vue de les mocker avec `page.route`
 
 ## Priviligégier les sélecteurs et les fonctions d'aide
 
