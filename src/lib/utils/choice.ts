@@ -26,19 +26,14 @@ export function injectOptGroupAllOptionsInSubCategories(
   choices: Choice[],
   allOptionLabel = "Tous"
 ) {
-  optGroups.forEach((optGroup: Choice) => {
-    const allKey = `${optGroup.value}--all`;
-
-    const currentValues = choices.map((v) => v.value);
-    if (currentValues.includes(allKey)) return;
-
-    choices.push({
-      value: allKey,
+  return [
+    ...choices,
+    ...optGroups.map((optGroup: Choice) => ({
+      value: `${optGroup.value}--all`,
       label: allOptionLabel,
       optGroupKey: optGroup.value,
       icon: optGroup.icon,
       selectedLabel: optGroup.label,
-    });
-  });
-  return choices;
+    })),
+  ];
 }
