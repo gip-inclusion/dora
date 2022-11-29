@@ -1,5 +1,4 @@
 <script lang="ts">
-  // TODO: test error pages
   import { page } from "$app/stores";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import { logException } from "$lib/logger";
