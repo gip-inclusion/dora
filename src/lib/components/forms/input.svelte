@@ -213,7 +213,7 @@
   input[type="tel"],
   input[type="date"],
   textarea {
-    @apply rounded border border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt outline-none focus:shadow-focus;
+    @apply min-h-[3rem] rounded border border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt outline-none focus:shadow-focus;
   }
 
   input,

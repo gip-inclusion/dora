@@ -14,7 +14,7 @@
   export let schema;
   export let structure = null;
   export let description = "";
-  export let canAdd = true;
+  let canAdd = false;
 
   let textInputVisible = false;
   let newValue;
@@ -64,10 +64,9 @@
     choices={filteredChoices}
     {sortSelect}
     {description}
-  />
-  {#if canAdd}
-    <Field type="custom">
-      <div slot="custom-input" class="mt-s16 flex flex-col">
+  >
+    <div slot="custom-input" class="flex flex-col" class:mt-s12={canAdd}>
+      {#if canAdd}
         <div class:hidden={textInputVisible}>
           <Button
             label="Ajouter une autre option"
@@ -104,7 +103,7 @@
             </div>
           </div>
         </div>
-      </div>
-    </Field>
-  {/if}
+      {/if}
+    </div>
+  </SchemaField>
 </div>

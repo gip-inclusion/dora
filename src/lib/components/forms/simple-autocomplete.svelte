@@ -841,8 +841,8 @@
     </div>
   </div>
 </div>
-{#if multiple && value}
-  <div class="tags-container mb-s8">
+{#if multiple && value.length}
+  <div class="tags-container">
     {#each value as tagItem}
       <div
         class="tags break-all bg-magenta-brand text-f14 font-bold text-white"
@@ -999,11 +999,7 @@
   }
 
   .tags-container {
-    display: flex;
-    margin-top: var(--s16);
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: var(--s8);
+    @apply mt-s12 flex flex-row flex-wrap gap-s8;
   }
 
   .tags {

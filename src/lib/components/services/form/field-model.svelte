@@ -41,7 +41,7 @@
   class:lg:gap-s32={showModel}
   class:gap-s16={showModel}
 >
-  <div class="{showModel ? 'lg:w-2/3' : ''} class">
+  <div class={showModel ? "lg:w-2/3" : ""}>
     <slot />
   </div>
   {#if showModel}

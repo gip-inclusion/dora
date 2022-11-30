@@ -486,129 +486,135 @@
       <p class="text-f14">Modalités pour mobiliser le service.</p>
     </div>
 
-    <FieldModel
-      {showModel}
-      value={model?.coachOrientationModes}
-      serviceValue={service.coachOrientationModes}
-      options={servicesOptions.coachOrientationModes}
-      useValue={useModelValue("coachOrientationModes")}
-      type="array"
-    >
-      <SchemaField
-        label={serviceSchema.coachOrientationModes.name}
-        type="checkboxes"
-        choices={moveToTheEnd(
-          servicesOptions.coachOrientationModes,
-          "value",
-          "autre"
-        )}
-        schema={serviceSchema.coachOrientationModes}
-        name="coachOrientationModes"
-        errorMessages={$formErrors.coachOrientationModes}
-        bind:value={service.coachOrientationModes}
-      />
-    </FieldModel>
-
-    {#if service.coachOrientationModes.includes("autre")}
+    <div class="flex flex-col lg:gap-s8">
       <FieldModel
         {showModel}
-        value={model?.coachOrientationModesOther}
-        serviceValue={service.coachOrientationModesOther}
-        useValue={useModelValue("coachOrientationModesOther")}
+        value={model?.coachOrientationModes}
+        serviceValue={service.coachOrientationModes}
+        options={servicesOptions.coachOrientationModes}
+        useValue={useModelValue("coachOrientationModes")}
+        type="array"
       >
         <SchemaField
-          hideLabel
-          placeholder="Compléter"
-          type="text"
-          schema={serviceSchema.coachOrientationModesOther}
-          name="coachOrientationModesOther"
-          errorMessages={$formErrors.coachOrientationModesOther}
-          bind:value={service.coachOrientationModesOther}
+          label={serviceSchema.coachOrientationModes.name}
+          type="checkboxes"
+          choices={moveToTheEnd(
+            servicesOptions.coachOrientationModes,
+            "value",
+            "autre"
+          )}
+          schema={serviceSchema.coachOrientationModes}
+          name="coachOrientationModes"
+          errorMessages={$formErrors.coachOrientationModes}
+          bind:value={service.coachOrientationModes}
         />
       </FieldModel>
-    {/if}
 
-    <FieldModel
-      {showModel}
-      value={model?.beneficiariesAccessModes}
-      serviceValue={service.beneficiariesAccessModes}
-      options={servicesOptions.beneficiariesAccessModes}
-      useValue={useModelValue("beneficiariesAccessModes")}
-      type="array"
-    >
-      <SchemaField
-        label={serviceSchema.beneficiariesAccessModes.name}
-        type="checkboxes"
-        choices={moveToTheEnd(
-          servicesOptions.beneficiariesAccessModes,
-          "value",
-          "autre"
-        )}
-        schema={serviceSchema.beneficiariesAccessModes}
-        name="beneficiariesAccessModes"
-        errorMessages={$formErrors.beneficiariesAccessModes}
-        bind:value={service.beneficiariesAccessModes}
-      />
-    </FieldModel>
+      {#if service.coachOrientationModes.includes("autre")}
+        <FieldModel
+          {showModel}
+          value={model?.coachOrientationModesOther}
+          serviceValue={service.coachOrientationModesOther}
+          useValue={useModelValue("coachOrientationModesOther")}
+        >
+          <SchemaField
+            hideLabel
+            placeholder="Compléter"
+            type="text"
+            schema={serviceSchema.coachOrientationModesOther}
+            name="coachOrientationModesOther"
+            errorMessages={$formErrors.coachOrientationModesOther}
+            bind:value={service.coachOrientationModesOther}
+          />
+        </FieldModel>
+      {/if}
+    </div>
 
-    {#if service.beneficiariesAccessModes.includes("autre")}
+    <div class="flex flex-col lg:gap-s8">
       <FieldModel
         {showModel}
-        value={model?.beneficiariesAccessModesOther}
-        serviceValue={service.beneficiariesAccessModesOther}
-        useValue={useModelValue("beneficiariesAccessModesOther")}
+        value={model?.beneficiariesAccessModes}
+        serviceValue={service.beneficiariesAccessModes}
+        options={servicesOptions.beneficiariesAccessModes}
+        useValue={useModelValue("beneficiariesAccessModes")}
+        type="array"
       >
         <SchemaField
-          hideLabel
-          placeholder="Merci de préciser la modalité"
-          type="text"
-          schema={serviceSchema.beneficiariesAccessModesOther}
-          name="beneficiariesAccessModesOther"
-          errorMessages={$formErrors.beneficiariesAccessModesOther}
-          bind:value={service.beneficiariesAccessModesOther}
+          label={serviceSchema.beneficiariesAccessModes.name}
+          type="checkboxes"
+          choices={moveToTheEnd(
+            servicesOptions.beneficiariesAccessModes,
+            "value",
+            "autre"
+          )}
+          schema={serviceSchema.beneficiariesAccessModes}
+          name="beneficiariesAccessModes"
+          errorMessages={$formErrors.beneficiariesAccessModes}
+          bind:value={service.beneficiariesAccessModes}
         />
       </FieldModel>
-    {/if}
 
-    <FieldModel
-      {showModel}
-      value={model?.feeCondition}
-      serviceValue={feeConditionClassic}
-      useValue={useModelValue("feeCondition")}
-      type="text"
-    >
-      <SelectField
-        label="Frais à charge"
-        name="feeCondition"
-        placeholder="Choississez..."
-        errorMessages={$formErrors.feeCondition}
-        bind:value={feeConditionClassic}
-        choices={servicesOptions.feeConditions.filter(
-          (fee) => fee.value !== "pass-numerique"
-        )}
-        onChange={handleFeeConditionChange}
-        display="vertical"
-      />
-    </FieldModel>
+      {#if service.beneficiariesAccessModes.includes("autre")}
+        <FieldModel
+          {showModel}
+          value={model?.beneficiariesAccessModesOther}
+          serviceValue={service.beneficiariesAccessModesOther}
+          useValue={useModelValue("beneficiariesAccessModesOther")}
+        >
+          <SchemaField
+            hideLabel
+            placeholder="Merci de préciser la modalité"
+            type="text"
+            schema={serviceSchema.beneficiariesAccessModesOther}
+            name="beneficiariesAccessModesOther"
+            errorMessages={$formErrors.beneficiariesAccessModesOther}
+            bind:value={service.beneficiariesAccessModesOther}
+          />
+        </FieldModel>
+      {/if}
+    </div>
 
-    {#if isNotFreeService(feeConditionClassic)}
+    <div class="flex flex-col gap-s4">
       <FieldModel
         {showModel}
-        value={model?.feeDetails}
-        serviceValue={service.feeDetails}
-        useValue={useModelValue("feeDetails")}
+        value={model?.feeCondition}
+        serviceValue={feeConditionClassic}
+        useValue={useModelValue("feeCondition")}
+        type="text"
       >
-        <SchemaField
-          type="textarea"
-          label="Détails des frais à charge"
-          placeholder="Merci de détailler ici les frais à charge du bénéficiaire : adhésion, frais de location, frais de garde, etc., et les montants."
-          schema={serviceSchema.feeDetails}
-          name="feeDetails"
-          errorMessages={$formErrors.feeDetails}
-          bind:value={service.feeDetails}
+        <SelectField
+          label="Frais à charge"
+          name="feeCondition"
+          placeholder="Choississez..."
+          errorMessages={$formErrors.feeCondition}
+          bind:value={feeConditionClassic}
+          choices={servicesOptions.feeConditions.filter(
+            (fee) => fee.value !== "pass-numerique"
+          )}
+          onChange={handleFeeConditionChange}
+          display="vertical"
         />
       </FieldModel>
-    {/if}
+
+      {#if isNotFreeService(feeConditionClassic)}
+        <FieldModel
+          {showModel}
+          value={model?.feeDetails}
+          serviceValue={service.feeDetails}
+          useValue={useModelValue("feeDetails")}
+        >
+          <SchemaField
+            type="textarea"
+            label="Détails des frais à charge"
+            placeholder="Merci de détailler ici les frais à charge du bénéficiaire : adhésion, frais de location, frais de garde, etc., et les montants."
+            schema={serviceSchema.feeDetails}
+            name="feeDetails"
+            errorMessages={$formErrors.feeDetails}
+            bind:value={service.feeDetails}
+          />
+        </FieldModel>
+      {/if}
+    </div>
   </FieldSet>
 
   <FieldSet title="Documents" {showModel}>

@@ -95,6 +95,7 @@
         {autocomplete}
         {passwordrules}
       />
+      <slot name="custom-input" />
     {:else}
       <slot name="custom-input" />
     {/if}
