@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Button from "$lib/components/button.svelte";
   import SelectField from "$lib/components/form/select/select-field.svelte";
   import AdminDivisionSearch from "$lib/components/forms/admin-division-search.svelte";
   import CitySearch from "$lib/components/forms/city-search.svelte";
@@ -14,7 +15,7 @@
     validate,
     type ValidationContext,
   } from "$lib/validation";
-  import { onMount, setContext } from "svelte";
+  import { onMount, setContext, tick } from "svelte";
   import FieldModel from "./field-model.svelte";
 
   export let servicesOptions: ServicesOptions;
@@ -157,7 +158,7 @@
     );
   }
 
-  function fillAdress() {
+  async function fillAdress() {
     showServiceAddress = false;
 
     if (structure) {
@@ -173,11 +174,12 @@
       service.city = city;
       service.address1 = address1;
       service.address2 = address2;
-      service.postalCode = postalCode?.toString();
-      service.cityCode = cityCode?.toString();
+      service.postalCode = postalCode.toString();
+      service.cityCode = cityCode.toString();
       service.latitude = latitude;
       service.longitude = longitude;
     }
+    await tick();
     showServiceAddress = true;
   }
 
@@ -197,15 +199,14 @@
 
   function setLocationKinds() {
     service.locationKinds = ["en-presentiel"];
-    if (!service.latitude || !service.longitude) fillAdress();
   }
 
   function setContact() {
-    if (structure.phone) {
+    if (structure.phone && !service.contactPhone) {
       service.contactPhone = structure.phone;
     }
 
-    if (structure.email) {
+    if (structure.email && !service.contactEmail) {
       service.contactEmail = structure.email;
     }
   }
@@ -221,12 +222,12 @@
 
   setCategories();
   setConcernedPublic();
+  setContact();
 
   onMount(() => {
     setModalites();
     setDiffusionZone();
     setLocationKinds();
-    setContact();
   });
 
   async function handleEltChange(evt) {
@@ -494,8 +495,15 @@
   </FieldSet>
 {/if}
 
-{#if !structure.latitude || !structure.longitude}
-  <FieldSet title="Accueil">
+<FieldSet title="Accueil">
+  <Button
+    on:click={fillAdress(structure)}
+    secondary
+    small
+    label="Utiliser l'adresse de la structure"
+  />
+
+  {#if showServiceAddress}
     <SchemaField
       name="city"
       type="custom"
@@ -573,9 +581,8 @@
       errorMessages={$formErrors.latitude}
       bind:value={service.latitude}
     />
-  </FieldSet>
-{/if}
-
+  {/if}
+</FieldSet>
 <FieldSet title="Contact">
   <div slot="help">
     <p class="text-f14">
