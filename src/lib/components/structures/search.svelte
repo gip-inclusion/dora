@@ -10,6 +10,7 @@
   export let onEstablishmentChange = null;
   export let establishment = null;
   export let siret = "";
+  export let isOwnStructure = true;
 
   export let tabId = "nom";
 
@@ -74,6 +75,7 @@
       bind:establishment
       onEstablishmentChange={handleEstablishmentChange}
       onCityChange={handleCityChange}
+      {isOwnStructure}
     />
   {:else if tabId === "pe"}
     <PoleEmploiWarning />

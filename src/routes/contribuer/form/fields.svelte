@@ -93,6 +93,7 @@
   onEstablishmentChange={handleEstablishmentChange}
   onCityChange={handleStructureCityChange}
   bind:establishment
+  isOwnStructure={false}
 />
 
 {#if service.siret}
