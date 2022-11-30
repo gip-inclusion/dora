@@ -15,7 +15,7 @@
         <a href="/structures/{service.structure}" class="block text-f14">
           {bookmark.service.structureInfo.name}
           {#if service.postalCode}<span
-              class="legend ml-s8 font-bold uppercase text-gray-dark"
+              class="legend ml-s8 font-bold text-gray-dark"
               >{service.postalCode} {service.city}</span
             >{/if}
         </a>

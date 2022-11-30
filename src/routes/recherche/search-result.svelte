@@ -16,7 +16,7 @@
         <div class="text-f14">
           {result.structureInfo.name}
           {#if result.location && result.location !== "À distance"}<span
-              class="legend ml-s8 font-bold uppercase text-gray-dark"
+              class="legend ml-s8 font-bold text-gray-dark"
               >{result.location}</span
             >{/if}
         </div>
