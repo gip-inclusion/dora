@@ -14,7 +14,7 @@
   export let schema;
   export let structure = null;
   export let description = "";
-  let canAdd = false;
+  export let canAdd = true;
 
   let textInputVisible = false;
   let newValue;
