@@ -8,7 +8,6 @@
   import {
     arrowDownSIcon,
     deleteBackIcon,
-    informationIcon,
     mapPinIcon,
     searchIcon,
   } from "$lib/icons";
@@ -167,14 +166,11 @@
 
   {#if showDeploymentWarning && cityCode && !isInDeploymentDepartments(cityCode, servicesOptions)}
     <div
-      class="flex rounded-b-md border-t border-gray-02 bg-blue-light p-s16 font-bold text-france-blue"
+      class=" rounded-b-md border-t border-gray-02 bg-blue-light p-s16 text-center text-france-blue"
     >
-      <span class="mr-s16 h-s24 w-s24 fill-current">
-        {@html informationIcon}
-      </span>
       <span>
-        La plateforme DORA n’est pas encore déployée sur votre territoire, il se
-        peut que votre recherche aboutisse à peu de résultats.
+        Sur votre territoire, le référencement des services débute – il se peut
+        que votre recherche aboutisse à peu de résultats.
       </span>
     </div>
   {/if}
