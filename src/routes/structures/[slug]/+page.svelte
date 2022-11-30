@@ -36,7 +36,7 @@
     hasOptions={false}
     onRefresh={handleRefresh}
     total={$structure.services.length}
-    limit={4}
+    limit={3}
   />
 {/if}
 
