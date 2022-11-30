@@ -3,7 +3,7 @@
 import { get } from "svelte/store";
 import { browser } from "$app/env";
 import { CANONICAL_URL } from "$lib/env.js";
-import { token, userInfo } from "$lib/auth.js";
+import { token, userInfo } from "$lib/auth";
 import { getDepartmentFromCityCode } from "$lib/utils";
 
 function _track(tag, props) {

@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<style class="postcss">
+<style lang="postcss">
   .warning {
     @apply bg-service-orange-darker text-white;
   }

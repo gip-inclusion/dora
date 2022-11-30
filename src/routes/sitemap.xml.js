@@ -1,14 +1,14 @@
 import { ENVIRONMENT, CANONICAL_URL } from "$lib/env.js";
 import { SERVICE_STATUSES } from "$lib/schemas/service";
 import { getPublishedServices } from "$lib/services";
-import { getStructures } from "$lib/structures";
+import { getActiveStructures } from "$lib/structures";
 
 function toISODate(apiDate) {
   const date = new Date(apiDate).toISOString();
   return date.slice(0, date.indexOf("T"));
 }
 
-async function getAllServices() {
+async function getServicesEntries() {
   const response = await getPublishedServices();
 
   return response
@@ -23,8 +23,8 @@ async function getAllServices() {
     .join("\n");
 }
 
-async function getAllStructures() {
-  const response = await getStructures();
+async function getStructuresEntries() {
+  const response = await getActiveStructures();
   return response
     .map((s) =>
       `<url>
@@ -37,8 +37,8 @@ async function getAllStructures() {
 }
 
 async function getContent() {
-  const services = await getAllServices();
-  const structures = await getAllStructures();
+  const services = await getServicesEntries();
+  const structures = await getStructuresEntries();
   const content = `
   <?xml version="1.0" encoding="UTF-8" ?>
     <urlset

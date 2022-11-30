@@ -160,6 +160,23 @@ export async function deleteService(serviceSlug) {
   return result;
 }
 
+export async function setBookmark(serviceSlug: string, wantedState: boolean) {
+  const url = `${getApiURL()}/services/${serviceSlug}/set-bookmark/`;
+  const method = "POST";
+  const response = await fetch(url, {
+    method,
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({ state: wantedState }),
+  });
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+}
+
 export async function publishDraft(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";
