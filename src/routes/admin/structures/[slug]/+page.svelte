@@ -132,7 +132,7 @@
       {#if data.structure.address1}{data.structure.address1} <br />{/if}
       {#if data.structure.address2}{data.structure.address2}<br />{/if}
       {#if data.structure.postalCode}{data.structure.postalCode}<br />{/if}
-      {#if data.structure.data.structure.city}{data.structure.city}<br />{/if}
+      {#if data.structure.city}{data.structure.city}<br />{/if}
     </InfoLine>
 
     <InfoLine condition={data.structure.ape}>
