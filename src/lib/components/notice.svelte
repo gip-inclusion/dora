@@ -48,7 +48,10 @@
 </script>
 
 {#if visible}
-  <div class="flex rounded-lg {types[type].bg} px-s8 py-s24">
+  <div
+    class="flex rounded-lg {types[type].bg} py-s24 pr-s24 pl-s24"
+    class:pl-s8={showIcon}
+  >
     {#if showIcon}
       <div class="hidden text-center sm:block sm:flex-[0_0_64px]">
         <div

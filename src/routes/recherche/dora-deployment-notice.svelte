@@ -2,7 +2,10 @@
   import Notice from "$lib/components/notice.svelte";
 </script>
 
-<Notice type="info" title="DORA n’est pas encore déployé sur votre région">
+<Notice
+  type="info"
+  title="Les acteurs de l’insertion de votre territoire débutent la mise en visibilité de leur offre de service."
+>
   <p class="text-f14">
     Il est possible que votre recherche aboutisse à peu de résultats. En
     attendant le déploiement sur votre région, vous pouvez toujours <a
