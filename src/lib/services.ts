@@ -1,10 +1,10 @@
-import { get } from "svelte/store";
-
-import { fetchData } from "$lib/utils.js";
-import { getApiURL } from "$lib/utils/api.js";
 import { token } from "$lib/auth";
+import { fetchData } from "$lib/utils";
+import { getApiURL } from "$lib/utils/api";
+import { get } from "svelte/store";
 import { logException } from "./logger";
 import { SERVICE_STATUSES } from "./schemas/service";
+import type { Model, Service, ServicesOptions } from "./types";
 
 function serviceToBack(service) {
   if (service.longitude && service.latitude) {
@@ -35,7 +35,7 @@ export async function getMyServices() {
   return (await fetchData(url)).data;
 }
 
-export async function getService(slug) {
+export async function getService(slug): Promise<Service> {
   const url = `${getApiURL()}/services/${slug}/`;
   const response = await fetchData(url);
 
@@ -45,12 +45,12 @@ export async function getService(slug) {
   return serviceToFront(response.data);
 }
 
-export async function getPublishedServices() {
+export async function getPublishedServices(): Promise<Service[]> {
   const url = `${getApiURL()}/services/?published=1`;
   return (await fetchData(url)).data;
 }
 
-export async function getModel(slug) {
+export async function getModel(slug): Promise<Model> {
   const url = `${getApiURL()}/models/${slug}/`;
   const response = await fetchData(url);
 
@@ -296,7 +296,9 @@ export async function getLastDraft() {
 }
 
 let servicesOptionsBase;
-export async function getServicesOptions({ model = null } = {}) {
+export async function getServicesOptions({
+  model = null,
+} = {}): Promise<ServicesOptions> {
   if (!servicesOptionsBase) {
     const url = `${getApiURL()}/services-options/`;
     try {

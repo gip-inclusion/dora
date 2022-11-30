@@ -1,9 +1,8 @@
-import { get } from "svelte/store";
-
 import { token } from "$lib/auth";
-import { fetchData } from "$lib/utils.js";
-import { getApiURL } from "$lib/utils/api.js";
-import type { ModerationStatus } from "$lib/enums";
+import type { ModerationStatus } from "$lib/types";
+import { fetchData } from "$lib/utils";
+import { getApiURL } from "$lib/utils/api";
+import { get } from "svelte/store";
 
 export async function getStructuresAdmin() {
   const url = `${getApiURL()}/structures-admin/`;

@@ -1,6 +1,6 @@
-<script>
-  import { onMount } from "svelte";
+<script lang="ts">
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+  import { onMount } from "svelte";
   import Button from "../button.svelte";
 
   export let title = "";

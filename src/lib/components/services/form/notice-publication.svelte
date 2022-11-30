@@ -1,8 +1,7 @@
-<script>
-  import { validate } from "$lib/validation.js";
-  import { serviceSchema } from "$lib/schemas/service.js";
-
+<script lang="ts">
   import Notice from "$lib/components/notice.svelte";
+  import { serviceSchema } from "$lib/schemas/service";
+  import { validate } from "$lib/validation";
 
   export let service, servicesOptions;
 

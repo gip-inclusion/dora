@@ -1,19 +1,17 @@
-<script>
-  import { onDestroy, onMount } from "svelte";
-  import { serviceSchema } from "$lib/schemas/service";
-  import debounce from "lodash.debounce";
-
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+<script lang="ts">
   import Button from "$lib/components/button.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import Notice from "$lib/components/notice.svelte";
-
-  import FieldsStructure from "./_fields-structure.svelte";
-  import FieldsCommon from "./_fields-common.svelte";
-  import FieldsInclusionNumerique from "./_fields-inclusion-numerique.svelte";
-  import FieldsService from "./_fields-service.svelte";
-  import ServiceNavButtons from "./_service-nav-buttons.svelte";
-  import Errors from "./_errors.svelte";
+  import { serviceSchema } from "$lib/schemas/service";
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
+  import debounce from "lodash.debounce";
+  import { onDestroy, onMount } from "svelte";
+  import Errors from "./errors.svelte";
+  import FieldsCommon from "./fields-common.svelte";
+  import FieldsInclusionNumerique from "./fields-inclusion-numerique.svelte";
+  import FieldsService from "./fields-service.svelte";
+  import FieldsStructure from "./fields-structure.svelte";
+  import ServiceNavButtons from "./service-nav-buttons.svelte";
 
   export let service, servicesOptions, structures, structure, model;
 

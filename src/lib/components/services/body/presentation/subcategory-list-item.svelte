@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { ServicesOptions } from "$lib/types";
   import {
+    getCategoryIcon,
     getCategoryLabel,
     getSubCategoryLabel,
-    getCategoryIcon,
   } from "$lib/utils/service";
 
   export let subCategorySlug: string;

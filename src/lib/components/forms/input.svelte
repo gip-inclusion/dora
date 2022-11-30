@@ -1,11 +1,10 @@
-<script>
-  import Select from "./select.svelte";
-
+<script lang="ts">
   import RichText from "$lib/components/rich-text/editor.svelte";
   import Toggle from "$lib/components/toggle.svelte";
   import Checkboxes from "./checkboxes.svelte";
-  import RadioButtons from "./radio-buttons.svelte";
   import PasswordInput from "./password-input.svelte";
+  import RadioButtons from "./radio-buttons.svelte";
+  import Select from "./select.svelte";
 
   export let value = undefined;
 

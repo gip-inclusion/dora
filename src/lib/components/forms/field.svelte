@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
+  import {
+    contextValidationKey,
+    type ValidationContext,
+  } from "$lib/validation";
   import { getContext } from "svelte";
-
-  import { contextValidationKey } from "$lib/validation";
-
-  import Input from "./input.svelte";
   import Alert from "./alert.svelte";
+  import Input from "./input.svelte";
 
   export let value = undefined;
   export let name = "";
@@ -39,7 +40,7 @@
     field.updateValue(v);
   }
 
-  const context = getContext(contextValidationKey);
+  const context = getContext<ValidationContext>(contextValidationKey);
 
   function handleBlur(evt) {
     if (context) context.onBlur(evt);

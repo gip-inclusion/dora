@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Button from "$lib/components/button.svelte";
   import { clickOutside } from "./use/click-outside";
 

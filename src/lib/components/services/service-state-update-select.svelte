@@ -1,9 +1,16 @@
 <script lang="ts">
   // Source pour l'accessibilité : https://www.w3.org/WAI/ARIA/apg/example-index/combobox/combobox-select-only.html
-
   import { goto } from "$app/navigation";
-  import { uid } from "uid";
-
+  import {
+    arrowDownSIcon,
+    arrowUpSIcon,
+    deleteBinIcon,
+    draftFillIcon,
+    earthFillIcon,
+    fileEditFillIcon,
+    folderFillIcon,
+  } from "$lib/icons";
+  import { serviceSchema } from "$lib/schemas/service";
   import {
     archiveService,
     convertSuggestionToDraft,
@@ -13,24 +20,14 @@
     unarchiveService,
     unPublishService,
   } from "$lib/services";
-
   import {
     SERVICE_STATUSES,
-    type DashboardService,
     type Service,
+    type ShortService,
   } from "$lib/types";
   import { getAvailableOptionsForStatus } from "$lib/utils/service";
   import { validate } from "$lib/validation";
-  import { serviceSchema } from "$lib/schemas/service.js";
-  import {
-    arrowDownSIcon,
-    arrowUpSIcon,
-    deleteBinIcon,
-    earthFillIcon,
-    fileEditFillIcon,
-    folderFillIcon,
-    draftFillIcon,
-  } from "$lib/icons";
+  import { uid } from "uid";
   import { clickOutside } from "../use/click-outside";
 
   type ServiceStatusPresentation = {
@@ -75,7 +72,7 @@
     },
   };
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let servicesOptions;
   export let onRefresh: () => void;
   export let hideLabel = true;

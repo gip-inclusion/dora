@@ -1,6 +1,5 @@
 <script lang="ts">
   import Bookmarkable from "$lib/components/bookmarkable.svelte";
-
   import Breadcrumb from "$lib/components/breadcrumb.svelte";
   import Favorite from "$lib/components/favorite-icon.svelte";
   import type { Service } from "$lib/types";

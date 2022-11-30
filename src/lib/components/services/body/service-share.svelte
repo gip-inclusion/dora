@@ -1,15 +1,13 @@
 <script lang="ts">
-  import { fly } from "svelte/transition";
-
   import LinkButton from "$lib/components/link-button.svelte";
   import { CANONICAL_URL, PDF_SERVICE_URL } from "$lib/env";
   import { checkIcon, downloadIcon, linkIcon } from "$lib/icons";
-
-  import type { DashboardService, Service } from "$lib/types";
+  import type { Service, ShortService } from "$lib/types";
   import { SERVICE_STATUSES } from "$lib/types";
   import { trackPDFDownload } from "$lib/utils/plausible";
+  import { fly } from "svelte/transition";
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let copied = false;
 
   const serviceLink = `${CANONICAL_URL}/services/${service.slug}`;

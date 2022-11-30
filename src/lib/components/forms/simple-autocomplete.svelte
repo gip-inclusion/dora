@@ -2,17 +2,16 @@
   Initialy forked from
   https://github.com/pstanoev/simple-svelte-autocomplete/blob/2de0d7618b37192ec1ca47bbe4ffd47477b38792/src/SimpleAutocomplete.svelte
 -->
-<script>
+<script lang="ts">
   // TODO: lint this file properly
   /* eslint-disable */
-
-  import { checkIcon, closeCircleIcon } from "$lib/icons.js";
+  import { checkIcon, closeCircleIcon } from "$lib/icons";
 
   // the list of items  the user can select from
   export let items = [];
 
   // function to use to get all items (alternative to providing items)
-  export let searchFunction = false;
+  export let searchFunction = null;
 
   // function which returns a postfix value to display in the list
   export let postfixValueFunction = undefined;
@@ -280,10 +279,8 @@
       const currentRequestId = lastRequestId;
       loading = true;
 
-      const AsyncGenerator = async function* () {}.constructor;
-
       // searchFunction is a generator
-      if (searchFunction instanceof AsyncGenerator) {
+      if (searchFunction.constructor.name === "AsyncGeneratorFunction") {
         for await (const chunk of searchFunction(textFiltered)) {
           // a chunk of an old response: throw it away
           if (currentRequestId < lastResponseId) {

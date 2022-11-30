@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import StructureCard from "$lib/components/structures/card.svelte";
   import Date from "../date.svelte";
 

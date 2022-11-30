@@ -1,10 +1,10 @@
 <script lang="ts">
-  import ServicePresentation from "./body/presentation/service-description.svelte";
-  import { addlinkToUrls } from "$lib/utils";
   import Tag from "$lib/components/tag.svelte";
-  import { formatFilePath, isNotFreeService } from "$lib/utils/service";
   import type { Service, ServicesOptions } from "$lib/types";
+  import { addlinkToUrls } from "$lib/utils";
   import { getLabelFromValue } from "$lib/utils/choice";
+  import { formatFilePath, isNotFreeService } from "$lib/utils/service";
+  import ServicePresentation from "./body/presentation/service-description.svelte";
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;

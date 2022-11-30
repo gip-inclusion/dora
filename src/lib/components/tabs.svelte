@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   export let onSelectedChange;
   export let items = [];
   export let itemId = undefined;

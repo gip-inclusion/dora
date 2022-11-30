@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { menuIcon } from "$lib/icons";
   import ButtonMenu from "./button-menu.svelte";
 </script>

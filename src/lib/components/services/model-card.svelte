@@ -1,9 +1,8 @@
-<script>
+<script lang="ts">
   import { userInfo } from "$lib/auth";
-
   import Date from "../date.svelte";
-
   import ModelMenu from "./model-button-menu.svelte";
+
   export let model;
   export let readOnly = true;
 </script>

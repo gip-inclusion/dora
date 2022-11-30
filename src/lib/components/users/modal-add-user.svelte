@@ -1,15 +1,13 @@
-<script>
-  import { get } from "svelte/store";
-
-  import { formErrors } from "$lib/validation.js";
-  import { addUserSchema } from "$lib/schemas/dashboard.js";
-  import { getApiURL } from "$lib/utils/api";
+<script lang="ts">
   import { token } from "$lib/auth";
-
   import Button from "$lib/components/button.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/modal.svelte";
+  import { addUserSchema } from "$lib/schemas/dashboard";
+  import { getApiURL } from "$lib/utils/api";
+  import { formErrors } from "$lib/validation";
+  import { get } from "svelte/store";
   import ConfirmationModal from "./modal-confirmation.svelte";
 
   const levelChoices = [
@@ -33,8 +31,6 @@
   let successEmailMsg;
   let confirmationModalIsOpen = false;
   let requesting = false;
-
-  function handleChange(_validatedData) {}
 
   function handleSubmit(validatedData) {
     const membersEmails = members.map((m) => m.user.email);
@@ -82,7 +78,6 @@
   <Form
     data={{ email, level }}
     schema={addUserSchema}
-    onChange={handleChange}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
     bind:requesting

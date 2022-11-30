@@ -1,8 +1,8 @@
-<script>
-  import { getApiURL } from "$lib/utils/api.js";
-  import Field from "$lib/components/forms/field.svelte";
+<script lang="ts">
   import CitySearch from "$lib/components/forms/city-search.svelte";
+  import Field from "$lib/components/forms/field.svelte";
   import Select from "$lib/components/forms/select.svelte";
+  import { getApiURL } from "$lib/utils/api";
 
   export let establishment;
 

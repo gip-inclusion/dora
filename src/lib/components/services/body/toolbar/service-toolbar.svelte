@@ -1,27 +1,24 @@
 <script lang="ts">
+  import cornerLeftBlueImg from "$lib/assets/corner-left-blue.png";
+  import cornerRightBlueImg from "$lib/assets/corner-right-blue.png";
+  import { token } from "$lib/auth";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
+  import SynchronizedIcon from "$lib/components/services/icons/synchronized.svelte";
+  import { copyIcon } from "$lib/icons";
   import {
     SERVICE_STATUSES,
     SERVICE_UPDATE_STATUS,
     type Service,
     type ServicesOptions,
   } from "$lib/types";
-  import { token } from "$lib/auth";
-  import LinkButton from "$lib/components/link-button.svelte";
-
-  import cornerLeftBlueImg from "$lib/assets/corner-left-blue.png";
-  import cornerRightBlueImg from "$lib/assets/corner-right-blue.png";
-
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import SynchronizedIcon from "$lib/components/services/icons/synchronized.svelte";
-
-  import ServiceUpdateStatusAsContributor from "./service-update-status-as-contributor.svelte";
-  import ServiceUpdateStatusAsReader from "./service-update-status-as-reader.svelte";
-  import ServiceStateUpdateSelect from "../../service-state-update-select.svelte";
   import {
     computeUpdateStatusData,
     computeUpdateStatusLabel,
   } from "$lib/utils/service";
-  import { copyIcon } from "$lib/icons";
+  import ServiceStateUpdateSelect from "../../service-state-update-select.svelte";
+  import ServiceUpdateStatusAsContributor from "./service-update-status-as-contributor.svelte";
+  import ServiceUpdateStatusAsReader from "./service-update-status-as-reader.svelte";
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;

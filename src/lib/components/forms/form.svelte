@@ -1,12 +1,12 @@
-<script>
-  import { setContext, onMount, onDestroy } from "svelte";
-
+<script lang="ts">
   import {
-    validate,
+    contextValidationKey,
     formErrors,
     injectAPIErrors,
-    contextValidationKey,
-  } from "$lib/validation.js";
+    validate,
+    type ValidationContext,
+  } from "$lib/validation";
+  import { onDestroy, onMount, setContext } from "svelte";
 
   export let data;
   export let schema;
@@ -42,7 +42,7 @@
     }
   }
 
-  setContext(contextValidationKey, {
+  setContext<ValidationContext>(contextValidationKey, {
     onBlur: handleEltChange,
     onChange: handleEltChange,
   });

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Label from "$lib/components/label.svelte";
   import { emotionHappyIcon, errorWarningIcon } from "$lib/icons";
 

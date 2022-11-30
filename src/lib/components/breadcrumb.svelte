@@ -1,7 +1,7 @@
 <script lang="ts">
   // Source pour l'accessibilité : https://www.w3.org/WAI/ARIA/apg/example-index/breadcrumb/index.html
-  import type { Structure, Service } from "$lib/types";
   import { page } from "$app/stores";
+  import type { Service, Structure } from "$lib/types";
 
   type BreadcrumbLocation =
     | "home"

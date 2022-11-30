@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import AutoComplete from "./simple-autocomplete.svelte";
 
   export let name = "";

@@ -2,16 +2,16 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import { checkboxCircleFillIcon, copyIcon, editIcon } from "$lib/icons";
   import {
-    type Service,
-    type DashboardService,
-    SERVICE_UPDATE_STATUS,
     SERVICE_STATUSES,
+    SERVICE_UPDATE_STATUS,
+    type Service,
     type ServicesOptions,
+    type ShortService,
   } from "$lib/types";
   import Button from "../button.svelte";
   import SetAsUpdatedModal from "./set-as-updated-modal.svelte";
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
   export let updateStatus: SERVICE_UPDATE_STATUS | undefined;
   export let onRefresh: () => void | undefined;

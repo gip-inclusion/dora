@@ -3,17 +3,16 @@
     addCircleIcon,
     errorWarningIcon,
     euroLineIcon,
-    timeLineIcon,
-    mapPinUserFillIcon,
     informationIcon,
+    mapPinUserFillIcon,
+    timeLineIcon,
   } from "$lib/icons";
-
-  import type { DashboardService, Service, ServicesOptions } from "$lib/types";
+  import type { Service, ServicesOptions, ShortService } from "$lib/types";
   import { shortenString } from "$lib/utils";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { isNotFreeService } from "$lib/utils/service";
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
   export let display: "sidebar" | "full" = "full";
 </script>
