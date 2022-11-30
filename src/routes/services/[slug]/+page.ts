@@ -1,6 +1,7 @@
 import { browser } from "$app/environment";
 import { token } from "$lib/auth";
 import { getModel, getService, getServicesOptions } from "$lib/services";
+import { getStructure } from "$lib/structures";
 import { error, redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 
@@ -29,6 +30,7 @@ export async function load({ url, params, parent }) {
 
   return {
     service,
+    structure: await getStructure(service.structure),
     servicesOptions: await getServicesOptions({ model }),
   };
 }

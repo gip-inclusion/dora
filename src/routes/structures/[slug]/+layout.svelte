@@ -6,6 +6,10 @@
   import { NPS_OFFEROR_FORM_ID } from "$lib/const";
   import Header from "./header.svelte";
   import { structure } from "./store";
+
+  $: publishedServices = $structure.services.filter(
+    (s) => s.status === "PUBLISHED"
+  );
 </script>
 
 <CenteredGrid bgColor="bg-magenta-brand" noPadding>
@@ -29,7 +33,7 @@
   <slot />
 </CenteredGrid>
 
-{#if $structure.isMember}
+{#if $structure.isMember && publishedServices.length}
   <TallyNpsPopup formId={NPS_OFFEROR_FORM_ID} timeout={30000} />
 {/if}
 

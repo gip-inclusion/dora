@@ -42,6 +42,9 @@
   }
 
   $: showContact = data.service?.isContactInfoPublic || $token;
+  $: structureHasPublishedServices = data.structure?.services.filter(
+    (s) => s.status === "PUBLISHED"
+  ).length;
 </script>
 
 <svelte:head>
@@ -101,7 +104,6 @@
       </div>
     </div>
   </CenteredGrid>
-
   {#if data.service.canWrite}
     {#if !hasAnsweredNpsForm(SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(data.service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !data.service.hasAlreadyBeenUnpublished}
       <TallyNpsPopup
@@ -112,7 +114,7 @@
           temps: $serviceSubmissionTimeMeter.duration,
         }}
       />
-    {:else}
+    {:else if structureHasPublishedServices}
       <TallyNpsPopup formId={NPS_OFFEROR_FORM_ID} timeout={30000} />
     {/if}
   {:else}
