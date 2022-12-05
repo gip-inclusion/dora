@@ -1,6 +1,6 @@
-<script>
-  import { mapPinIcon } from "$lib/icons";
+<script lang="ts">
   import Label from "$lib/components/label.svelte";
+  import { mapPinIcon } from "$lib/icons";
   import { capitalize } from "$lib/utils";
 
   export let structure;

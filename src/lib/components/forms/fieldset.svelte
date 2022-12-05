@@ -1,6 +1,6 @@
-<script>
-  import { onMount } from "svelte";
+<script lang="ts">
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+  import { onMount } from "svelte";
   import Button from "../button.svelte";
 
   export let title = "";
@@ -97,7 +97,7 @@
     {/if}
   {/if}
   <div
-    class="flex flex-col gap-s24 bg-white px-s32 pb-s32 pt-s24"
+    class="flex flex-col gap-s32 bg-white px-s32 pb-s32 pt-s24"
     class:rounded-b-md={title}
     class:rounded-md={!title}
     class:pt-s32={!title}

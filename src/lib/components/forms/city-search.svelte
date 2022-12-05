@@ -1,11 +1,13 @@
-<script>
-  import { getContext } from "svelte";
-
-  import { contextValidationKey } from "$lib/validation";
-  import { fetchData, getDepartmentFromCityCode } from "$lib/utils";
-  import { getApiURL } from "$lib/utils/api.js";
+<script lang="ts">
   import Select from "$lib/components/forms/select.svelte";
   import { pinDistanceIcon } from "$lib/icons";
+  import { fetchData, getDepartmentFromCityCode } from "$lib/utils";
+  import { getApiURL } from "$lib/utils/api";
+  import {
+    contextValidationKey,
+    type ValidationContext,
+  } from "$lib/validation";
+  import { getContext } from "svelte";
 
   export let onChange;
   export let placeholder;
@@ -30,7 +32,7 @@
     return results;
   }
 
-  const context = getContext(contextValidationKey);
+  const context = getContext<ValidationContext>(contextValidationKey);
 
   function handleBlur(evt) {
     if (context) context.onBlur(evt);

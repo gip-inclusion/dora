@@ -1,10 +1,11 @@
-<script>
-  import { getApiURL } from "$lib/utils/api.js";
-  import Field from "$lib/components/forms/field.svelte";
+<script lang="ts">
   import CitySearch from "$lib/components/forms/city-search.svelte";
+  import Field from "$lib/components/forms/field.svelte";
   import Select from "$lib/components/forms/select.svelte";
+  import { getApiURL } from "$lib/utils/api";
 
   export let establishment;
+  export let isOwnStructure = true;
 
   let city;
   export let onCityChange = null;
@@ -44,6 +45,10 @@
     });
     return results;
   }
+
+  const structureLabel = isOwnStructure
+    ? "Nom de votre structure"
+    : "Nom de la structure de votre partenaire";
 </script>
 
 <Field type="custom" label="Commune" required vertical>
@@ -54,7 +59,7 @@
     onChange={handleCityChange}
   />
 </Field>
-<Field type="custom" label="Nom de votre structure" required vertical>
+<Field type="custom" label={structureLabel} required vertical>
   <Select
     slot="custom-input"
     name="siret-select"

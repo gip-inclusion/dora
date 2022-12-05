@@ -1,5 +1,6 @@
-<script>
-  import { alertIcon } from "$lib/icons.js";
+<script lang="ts">
+  import { alertIcon } from "$lib/icons";
+
   export let id;
   export let label;
   export let isHTML = false;

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { emotionHappyIcon, closeCircleFillIcon } from "$lib/icons";
-  import type { DashboardService, Service } from "$lib/types";
+  import { closeCircleFillIcon, emotionHappyIcon } from "$lib/icons";
+  import type { Service, ShortService } from "$lib/types";
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let small = false;
   export let dark = false;
   export let bold = false;
@@ -49,7 +49,7 @@
   {/if}
 </div>
 
-<style>
+<style lang="postcss">
   .icon.small {
     @apply h-s20 w-s20;
   }

@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
+  import Button from "../button.svelte";
   import Field from "./field.svelte";
   import SchemaField from "./schema-field.svelte";
-  import Button from "../button.svelte";
 
   export let values;
   export let choices;
@@ -64,10 +64,9 @@
     choices={filteredChoices}
     {sortSelect}
     {description}
-  />
-  {#if canAdd}
-    <Field type="custom">
-      <div slot="custom-input" class="mt-s16 flex flex-col">
+  >
+    <div slot="custom-input" class="flex flex-col" class:mt-s12={canAdd}>
+      {#if canAdd}
         <div class:hidden={textInputVisible}>
           <Button
             label="Ajouter une autre option"
@@ -104,7 +103,7 @@
             </div>
           </div>
         </div>
-      </div>
-    </Field>
-  {/if}
+      {/if}
+    </div>
+  </SchemaField>
 </div>

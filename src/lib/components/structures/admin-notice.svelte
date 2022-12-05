@@ -1,6 +1,6 @@
-<script>
-  import Notice from "$lib/components/notice.svelte";
+<script lang="ts">
   import LinkButton from "$lib/components/link-button.svelte";
+  import Notice from "$lib/components/notice.svelte";
 
   export let structure;
 </script>

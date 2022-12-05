@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // https://tailwindcomponents.com/component/toggle-button-1
 
   export let checked = undefined;

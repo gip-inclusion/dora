@@ -1,18 +1,17 @@
 <script lang="ts">
-  import FieldWrapper from "../field-wrapper.svelte";
-  import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
-
-  import { uid } from "uid";
   import { clickOutside } from "$lib/components/use/click-outside";
+  import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
-  import SelectLabel from "./select-label.svelte";
   import {
+    getCategoryKeyFromSubcategoryChoice,
     getChoiceFromValue,
     getChoicesFromKey,
-    getCategoryKeyFromSubcategoryChoice,
   } from "$lib/utils/choice";
-  import SelectOptions from "./select-options.svelte";
   import { tick } from "svelte";
+  import { uid } from "uid";
+  import FieldWrapper from "../field-wrapper.svelte";
+  import SelectLabel from "./select-label.svelte";
+  import SelectOptions from "./select-options.svelte";
 
   export let label: string;
   export let name: string;

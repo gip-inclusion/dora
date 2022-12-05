@@ -1,10 +1,10 @@
-<script>
-  import { onDestroy, onMount } from "svelte";
-  import { browser } from "$app/env";
+<script lang="ts">
+  import { browser } from "$app/environment";
   import {
     getNpsAnswerLocalStorageKey,
     hasAnsweredNpsForm,
   } from "$lib/utils/nps";
+  import { onDestroy, onMount } from "svelte";
 
   export let formId;
   export let timeout = 45000;

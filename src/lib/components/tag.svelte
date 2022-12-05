@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   export let selfStart = false;
 
   export let bgColorClass = "bg-gray-text-alt";

@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { historyLineIcon } from "$lib/icons";
-  import { errorWarningLineIcon } from "$lib/icons";
-  import { alertLine } from "$lib/icons";
-
+  import { alertLine, errorWarningLineIcon, historyLineIcon } from "$lib/icons";
   import { SERVICE_UPDATE_STATUS } from "$lib/types";
 
   export let small = false;

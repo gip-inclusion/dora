@@ -1,7 +1,6 @@
-<script>
-  import { moreIcon } from "$lib/icons";
-
+<script lang="ts">
   import ButtonMenu from "$lib/components/button-menu.svelte";
+  import { moreIcon } from "$lib/icons";
   import ModelMenu from "./model-menu.svelte";
 
   export let model;

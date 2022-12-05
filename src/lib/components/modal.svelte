@@ -1,12 +1,10 @@
 <script lang="ts">
-  import "wicg-inert";
-
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
   import { closeLineIcon } from "$lib/icons";
-  import Button from "./button.svelte";
   import { createEventDispatcher } from "svelte";
-
   import Portal from "svelte-portal/src/Portal.svelte";
+  import "wicg-inert";
+  import Button from "./button.svelte";
 
   export let isOpen;
   export let overflow = false;

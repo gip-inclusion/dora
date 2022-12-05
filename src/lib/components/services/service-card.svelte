@@ -1,24 +1,22 @@
 <script lang="ts">
   import FavoriteIcon from "$lib/components/favorite-icon.svelte";
-
-  import ServiceButtonMenu from "./service-button-menu.svelte";
-  import ServiceStateUpdateSelect from "./service-state-update-select.svelte";
+  import SynchronizedIcon from "$lib/components/services/icons/synchronized.svelte";
+  import UpdateStatusIcon from "$lib/components/services/icons/update-status.svelte";
   import {
     SERVICE_STATUSES,
     SERVICE_UPDATE_STATUS,
-    type DashboardService,
     type ServicesOptions,
+    type ShortService,
   } from "$lib/types";
   import {
     computeUpdateStatusData,
     computeUpdateStatusLabel,
   } from "$lib/utils/service";
-
-  import UpdateStatusIcon from "$lib/components/services/icons/update-status.svelte";
-  import SynchronizedIcon from "$lib/components/services/icons/synchronized.svelte";
   import Bookmarkable from "../bookmarkable.svelte";
+  import ServiceButtonMenu from "./service-button-menu.svelte";
+  import ServiceStateUpdateSelect from "./service-state-update-select.svelte";
 
-  export let service: DashboardService;
+  export let service: ShortService;
   export let servicesOptions: ServicesOptions;
   export let readOnly = true;
   export let onRefresh: () => void;

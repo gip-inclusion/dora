@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   export let label = "";
   export let otherTab = false;
   export let disabled = false;

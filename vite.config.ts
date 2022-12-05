@@ -1,12 +1,14 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import type { UserConfig } from "vite";
+import { defineConfig } from "vite";
 
-const config: UserConfig = {
+export default defineConfig({
   plugins: [sveltekit()],
 
   build: {
     sourcemap: true,
   },
-};
 
-export default config;
+  test: {
+    include: ["src/**/*.{test,spec}.{js,ts}"],
+  },
+});

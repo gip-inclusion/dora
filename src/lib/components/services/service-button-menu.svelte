@@ -1,16 +1,15 @@
 <script lang="ts">
+  import ButtonMenu from "$lib/components/button-menu.svelte";
   import { moreIcon } from "$lib/icons";
   import type {
     Service,
-    DashboardService,
-    SERVICE_UPDATE_STATUS,
     ServicesOptions,
+    SERVICE_UPDATE_STATUS,
+    ShortService,
   } from "$lib/types";
-
-  import ButtonMenu from "$lib/components/button-menu.svelte";
   import ServiceMenu from "./service-menu.svelte";
 
-  export let service: Service | DashboardService;
+  export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
   export let updateStatus: SERVICE_UPDATE_STATUS | undefined;
   export let onRefresh: () => void | undefined;

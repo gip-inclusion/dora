@@ -18,6 +18,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
     "source.fixAll": true
   },
   "editor.formatOnSave": true,
@@ -27,11 +28,17 @@
   "eslint.probe": ["javascript", "svelte"],
   "eslint.validate": ["javascript", "svelte"],
   "files.exclude": {
+    ".husky": true,
     ".svelte-kit": true,
-    "build": true
+    "build": true,
+    ".cache_ggshield": true
   },
   "files.trimTrailingWhitespace": true,
   "svelte.plugin.css.globals": "src/app.postcss",
   "svelte.enable-ts-plugin": true,
+  "svelte.plugin.svelte.compilerWarnings": {
+    "security-anchor-rel-noreferrer": "ignore"
+  },
+  "svelte.plugin.svelte.defaultScriptLanguage": "ts",
   "tailwindCSS.validate": true
 }

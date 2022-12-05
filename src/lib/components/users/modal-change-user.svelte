@@ -1,16 +1,14 @@
-<script>
-  import { get } from "svelte/store";
-
-  import { formErrors } from "$lib/validation.js";
-  import { modifyUserSchema } from "$lib/schemas/dashboard.js";
-  import { getApiURL } from "$lib/utils/api";
+<script lang="ts">
   import { token } from "$lib/auth";
-
   import Button from "$lib/components/button.svelte";
   import Field from "$lib/components/forms/field.svelte";
   import Fieldset from "$lib/components/forms/fieldset.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/modal.svelte";
+  import { modifyUserSchema } from "$lib/schemas/dashboard";
+  import { getApiURL } from "$lib/utils/api";
+  import { formErrors } from "$lib/validation";
+  import { get } from "svelte/store";
 
   const levelChoices = [
     {
@@ -28,8 +26,6 @@
   export let onRefresh;
 
   let level = member.isAdmin ? "admin" : "user";
-
-  function handleChange(_validatedData) {}
 
   function handleSubmit(validatedData) {
     const url = `${getApiURL()}/structure-members/${member.id}/`;
@@ -56,7 +52,6 @@
   <Form
     data={{ level }}
     schema={modifyUserSchema}
-    onChange={handleChange}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
   >

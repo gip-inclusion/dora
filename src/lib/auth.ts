@@ -1,9 +1,9 @@
+import { browser } from "$app/environment";
+import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
 import { get, writable } from "svelte/store";
-import { browser } from "$app/env";
-import { defaultAcceptHeader, getApiURL } from "$lib/utils/api.js";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
-import type { Bookmark } from "./types";
+import type { Bookmark, ShortStructure } from "./types";
 
 const tokenKey = "token";
 
@@ -26,6 +26,8 @@ interface UserInfo {
   isStaff: boolean;
   isBizdev: boolean;
   bookmarks: Bookmark[];
+  structures: ShortStructure[];
+  pendingStructures: ShortStructure[];
 }
 
 export const userInfo = writable<UserInfo>(null);
@@ -69,9 +71,9 @@ export function deleteCookies() {
     return acc;
   }, []);
 
-  const cookieNames = Object.keys(tarteaucitron.services).reduce(
+  const cookieNames = Object.keys(window.tarteaucitron.services).reduce(
     (acc, name) => {
-      acc.push(...tarteaucitron.services[name].cookies);
+      acc.push(...window.tarteaucitron.services[name].cookies);
 
       return acc;
     },

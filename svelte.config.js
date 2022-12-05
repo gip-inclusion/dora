@@ -12,7 +12,26 @@ const config = {
   ],
 
   kit: {
-    adapter: adapter(),
+    adapter: adapter({ precompress: true }),
+  },
+  vitePlugin: {
+    experimental: {
+      inspector: {
+        showToggleButton: "always",
+        toggleButtonPos: "bottom-right",
+      },
+    },
+  },
+  onwarn(warning, defaultHandler) {
+    if (warning.code === "security-anchor-rel-noreferrer") return;
+
+    // Désactivation des avertissements d'accessibilité, le temps de finir la migration Sveltekit
+    // TODO: les corriger au lieu de les masquer
+    if (warning.code === "a11y-click-events-have-key-events") return;
+    if (warning.code === "a11y-label-has-associated-control") return;
+    if (warning.code === "a11y-role-has-required-aria-props") return;
+
+    defaultHandler(warning);
   },
 };
 

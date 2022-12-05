@@ -1,18 +1,15 @@
 <script lang="ts">
-  import { trackSuggestion } from "$lib/utils/plausible";
-
-  import {
-    type Service,
-    SERVICE_UPDATE_STATUS,
-    SERVICE_STATUSES,
-  } from "$lib/types";
   import Button from "$lib/components/button.svelte";
-  import SuggestionModal from "$lib/components/services/suggestion-modal.svelte";
-
-  import UpdateStatusIcon from "$lib/components/services/icons/update-status.svelte";
-
-  import { editIcon } from "$lib/icons";
   import Date from "$lib/components/date.svelte";
+  import UpdateStatusIcon from "$lib/components/services/icons/update-status.svelte";
+  import SuggestionModal from "$lib/components/services/suggestion-modal.svelte";
+  import { editIcon } from "$lib/icons";
+  import {
+    SERVICE_STATUSES,
+    SERVICE_UPDATE_STATUS,
+    type Service,
+  } from "$lib/types";
+  import { trackSuggestion } from "$lib/utils/plausible";
 
   export let service: Service;
 

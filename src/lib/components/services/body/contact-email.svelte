@@ -1,9 +1,8 @@
-<script>
-  import { trackMobilisationEmail } from "$lib/utils/plausible";
-
-  import { CANONICAL_URL } from "$lib/env.js";
+<script lang="ts">
   import { userInfo } from "$lib/auth";
+  import { CANONICAL_URL } from "$lib/env";
   import { mailLineIcon } from "$lib/icons";
+  import { trackMobilisationEmail } from "$lib/utils/plausible";
 
   export let service;
   export let preferred = false;

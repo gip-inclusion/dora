@@ -1,9 +1,8 @@
-<script>
+<script lang="ts">
   import Button from "$lib/components/button.svelte";
   import Label from "$lib/components/label.svelte";
-
   import { fileEditIcon, fileForbidIcon, userIcon } from "$lib/icons";
-  import { rejectMembershipRequest, acceptMember } from "$lib/structures";
+  import { acceptMember, rejectMembershipRequest } from "$lib/structures";
   import Member from "./member.svelte";
 
   export let member;

@@ -19,10 +19,10 @@
 >
   <label
     class:sr-only={hideLabel}
-    class="bold mb-s8 font-bold text-gray-dark first-letter:capitalize {display}"
+    class="mb-s8  text-gray-dark {display}"
     for={name}
   >
-    {label}
+    <h4 class="my-s4 first-letter:capitalize">{label}</h4>
     {#if required}
       <span class="text-error">*</span>
     {/if}
