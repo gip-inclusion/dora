@@ -4,6 +4,7 @@
   import logoDora from "$lib/assets/inclusion-connect/logo-dora.svg";
   import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
   import logoPEFill from "$lib/assets/logo-pole-emploi-fill.svg";
+  import logoRDVS from "$lib/assets/logo-rdv-solidarites.svg";
   import Button from "$lib/components/button.svelte";
   import FieldSet from "$lib/components/forms/fieldset.svelte";
   import PoleEmploiWarning from "$lib/components/structures/pole-emploi-warning.svelte";
@@ -102,19 +103,17 @@
 
         <hr class="my-s24 " />
 
-        <div class="flex h-s35 items-center justify-center gap-s48 ">
+        <div
+          class="flex flex-col items-center justify-between gap-s32 sm:flex-row sm:gap-s16"
+        >
+          <img width="126" height="36" src={logoRDVS} alt="RDV Solidarités" />
           <img
             width="126"
             height="36"
             src={logoC1}
-            alt="Les emplois de l'inclusion, la communauté de l'inclusion, DORA"
+            alt="Les emplois de l'inclusion"
           />
-          <img
-            width="126"
-            height="36"
-            src={logoDora}
-            alt="Les emplois de l'inclusion, la communauté de l'inclusion, DORA"
-          />
+          <img width="126" height="36" src={logoDora} alt="DORA" />
         </div>
         <div class="mt-s24 text-center">
           Avec <strong>Inclusion Connect</strong> vous pouvez accéder aux différents
