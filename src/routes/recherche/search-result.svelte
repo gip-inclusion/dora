@@ -23,7 +23,7 @@
         <div class="flex items-center gap-s8">
           {#if hasLocationTag}
             <div
-              class="rounded-xl bg-france-blue py-s4 px-s10 text-f14 font-bold text-white "
+              class="whitespace-nowrap rounded-xl bg-france-blue py-s4 px-s10 text-f14 font-bold text-white"
             >
               {#if result.distance}
                 à&nbsp;{result.distance}&nbsp;km
