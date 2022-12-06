@@ -3,9 +3,10 @@ import { userPreferences } from "$lib/preferences";
 import { getStructure } from "$lib/structures";
 import { trackStructure } from "$lib/utils/plausible";
 import { error } from "@sveltejs/kit";
+import type { LayoutLoad } from "./$types";
 import { structure } from "./store";
 
-export async function load({ params, parent }) {
+export const load: LayoutLoad = async ({ params, parent }) => {
   await parent();
 
   const s = await getStructure(params.slug);
@@ -52,4 +53,4 @@ export async function load({ params, parent }) {
   trackStructure(s);
 
   return {};
-}
+};

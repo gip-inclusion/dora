@@ -8,6 +8,7 @@ import {
 import { getApiURL } from "$lib/utils/api";
 import { trackSearch } from "$lib/utils/plausible";
 import { computeUpdateStatusData } from "$lib/utils/service";
+import type { PageLoad } from "./$types";
 
 // pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
 // à ce qu'elles soient indexées
@@ -48,7 +49,7 @@ async function getResults({
   return [];
 }
 
-export async function load({ url, parent }) {
+export const load: PageLoad = async ({ url, parent }) => {
   await parent();
 
   const query = url.searchParams;
@@ -67,6 +68,7 @@ export async function load({ url, parent }) {
     kindIds,
     feeConditions,
   });
+
   services.forEach((service) => {
     service.updateStatus = computeUpdateStatusData(service).updateStatus;
   });
@@ -96,4 +98,4 @@ export async function load({ url, parent }) {
     ),
     servicesOptions: await getServicesOptions(),
   };
-}
+};

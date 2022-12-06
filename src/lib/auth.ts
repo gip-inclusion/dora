@@ -7,15 +7,9 @@ import type { Bookmark, ShortStructure } from "./types";
 
 const tokenKey = "token";
 
-/**
- * @typedef { import("svelte/store").Writable } Writable
- */
+export const token = writable<string>(null);
 
-export const token = writable(null);
-/** @type {Writable<{firstName: string, lastName: string, fullName: string, shortName: string, email: string, phoneNumber: string, newsletter: boolean,
-            isStaff: boolean, isBizdev: boolean} | null>} */
-
-interface UserInfo {
+export interface UserInfo {
   firstName: string;
   lastName: string;
   fullName: string;
@@ -32,7 +26,7 @@ interface UserInfo {
 
 export const userInfo = writable<UserInfo>(null);
 
-export function setToken(t) {
+export function setToken(t: string) {
   token.set(t);
   localStorage.setItem(tokenKey, t);
 }
@@ -52,9 +46,9 @@ export async function refreshUserInfo() {
   try {
     const result = await getUserInfo(get(token));
     if (result.status === 200) {
-      const info = await result.json();
+      const info = (await result.json()) as UserInfo;
       userInfo.set(info);
-      userPreferencesSet([...info.structures, info.pendingStructures]);
+      userPreferencesSet([...info.structures, ...info.pendingStructures]);
     } else {
       log("Unexpected status code", { result });
     }

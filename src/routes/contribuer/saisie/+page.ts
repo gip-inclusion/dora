@@ -1,6 +1,8 @@
 import { getServicesOptions } from "$lib/services";
 
-export async function load({ url, parent }) {
+import type { PageLoad } from "./$types";
+
+export const load: PageLoad = async ({ url, parent }) => {
   await parent();
 
   const query = url.searchParams;
@@ -10,4 +12,4 @@ export async function load({ url, parent }) {
     servicesOptions: await getServicesOptions(),
     source,
   };
-}
+};

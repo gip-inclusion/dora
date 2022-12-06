@@ -28,15 +28,12 @@ export function htmlToMarkdown(html) {
   return "";
 }
 
-export async function fetchData(
-  url,
-  { acceptHeader = defaultAcceptHeader } = {}
-) {
-  const headers = { Accept: acceptHeader };
+export async function fetchData(url) {
+  const headers = { Accept: defaultAcceptHeader };
   const tk = get(token);
 
   if (tk) {
-    headers.Authorization = `Token ${tk}`;
+    headers["Authorization"] = `Token ${tk}`;
   }
 
   const response = await fetch(url, {

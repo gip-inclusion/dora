@@ -6,11 +6,12 @@ import {
 import { getService, getServicesOptions } from "$lib/services";
 import { getStructures } from "$lib/structures";
 import { get } from "svelte/store";
+import type { PageLoad } from "./$types";
 
 // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
 export const ssr = false;
 
-export async function load({ url, parent }) {
+export const load: PageLoad = async ({ url, parent }) => {
   await parent();
 
   const serviceSlug = url.searchParams.get("service");
@@ -54,4 +55,4 @@ export async function load({ url, parent }) {
     structure,
     serviceSlug,
   };
-}
+};

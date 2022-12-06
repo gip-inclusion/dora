@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { token } from "$lib/auth";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import ServicePresentation from "$lib/components/services/body/presentation/service-presentation.svelte";
@@ -104,21 +105,23 @@
       </div>
     </div>
   </CenteredGrid>
-  {#if data.service.canWrite}
-    {#if !hasAnsweredNpsForm(SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(data.service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !data.service.hasAlreadyBeenUnpublished}
-      <TallyNpsPopup
-        formId={SERVICE_CREATION_FORM_ID}
-        timeout={3000}
-        hiddenFields={{
-          service: $serviceSubmissionTimeMeter.id,
-          temps: $serviceSubmissionTimeMeter.duration,
-        }}
-      />
-    {:else if structureHasPublishedServices}
-      <TallyNpsPopup formId={NPS_OFFEROR_FORM_ID} timeout={30000} />
+  {#if browser}
+    {#if data.service.canWrite}
+      {#if !hasAnsweredNpsForm(SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(data.service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !data.service.hasAlreadyBeenUnpublished}
+        <TallyNpsPopup
+          formId={SERVICE_CREATION_FORM_ID}
+          timeout={3000}
+          hiddenFields={{
+            service: $serviceSubmissionTimeMeter.id,
+            temps: $serviceSubmissionTimeMeter.duration,
+          }}
+        />
+      {:else if structureHasPublishedServices}
+        <TallyNpsPopup formId={NPS_OFFEROR_FORM_ID} timeout={30000} />
+      {/if}
+    {:else}
+      <TallyNpsPopup formId={NPS_SEEKER_FORM_ID} />
     {/if}
-  {:else}
-    <TallyNpsPopup formId={NPS_SEEKER_FORM_ID} />
   {/if}
 {/if}
 

@@ -3,8 +3,9 @@ import { userInfo } from "$lib/auth";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import { structure } from "../store";
+import type { PageLoad } from "./$types";
 
-export async function load({ parent }) {
+export const load: PageLoad = async ({ parent }) => {
   await parent();
 
   // sur le serveur, info est toujours null,
@@ -23,4 +24,4 @@ export async function load({ parent }) {
   }
 
   return {};
-}
+};

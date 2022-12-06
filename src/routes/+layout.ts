@@ -3,11 +3,12 @@ import { userInfo, validateCredsAndFillUserInfo } from "$lib/auth";
 import { CRISP_ID, ENVIRONMENT } from "$lib/env";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
+import type { LayoutLoad } from "./$types";
 
 // No SSR for testing => we can't intercept request server side
 export const ssr = ENVIRONMENT === "testing" ? false : undefined;
 
-export async function load({ url }) {
+export const load: LayoutLoad = async ({ url }) => {
   let currentUserInfo = get(userInfo);
   if (!currentUserInfo) {
     await validateCredsAndFillUserInfo();
@@ -26,7 +27,7 @@ export async function load({ url }) {
     throw redirect(302, "/auth/rattachement");
   }
   return {};
-}
+};
 
 if (browser) {
   window.tarteaucitron.user.crispID = CRISP_ID;

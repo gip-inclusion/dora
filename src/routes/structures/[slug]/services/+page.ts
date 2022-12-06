@@ -1,7 +1,8 @@
 import { getServicesOptions } from "$lib/services";
 import type { SERVICE_STATUSES, SERVICE_UPDATE_STATUS } from "$lib/types";
+import type { PageLoad } from "./$types";
 
-export async function load({ url, parent }) {
+export const load: PageLoad = async ({ url, parent }) => {
   await parent();
 
   const query = url.searchParams;
@@ -16,4 +17,4 @@ export async function load({ url, parent }) {
     updateStatus,
     servicesOptions,
   };
-}
+};

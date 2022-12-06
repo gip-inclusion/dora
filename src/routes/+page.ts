@@ -1,7 +1,9 @@
 import { getServicesOptions } from "$lib/services";
+import type { PageLoad } from "./$types";
 
-export async function load() {
+export const load: PageLoad = async ({ parent }) => {
+  await parent();
   return {
     servicesOptions: await getServicesOptions(),
   };
-}
+};
