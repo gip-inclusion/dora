@@ -4,10 +4,8 @@ import { CRISP_ID } from "$lib/env";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 
-export const ssr = false;
-
 // No SSR for testing => we can't intercept request server side
-// export const ssr = ENVIRONMENT === "testing" ? false : undefined;
+export const ssr = ENVIRONMENT === "testing" ? false : undefined;
 
 export async function load({ url }) {
   let currentUserInfo = get(userInfo);
