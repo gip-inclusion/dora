@@ -11,15 +11,10 @@
   import ServiceShare from "$lib/components/services/body/service-share.svelte";
   import ServiceToolbar from "$lib/components/services/body/toolbar/service-toolbar.svelte";
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
-  import {
-    NPS_OFFEROR_FORM_ID,
-    NPS_SEEKER_FORM_ID,
-    SERVICE_CREATION_FORM_ID,
-  } from "$lib/const";
   import { getService } from "$lib/services";
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
   import { isAfter } from "$lib/utils/date";
-  import { hasAnsweredNpsForm } from "$lib/utils/nps";
+  import { canDisplayNpsForm, TallyFormId } from "$lib/utils/nps";
   import { trackService } from "$lib/utils/plausible";
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -107,9 +102,9 @@
   </CenteredGrid>
   {#if browser}
     {#if data.service.canWrite}
-      {#if !hasAnsweredNpsForm(SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(data.service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !data.service.hasAlreadyBeenUnpublished}
+      {#if canDisplayNpsForm(TallyFormId.SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(data.service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !data.service.hasAlreadyBeenUnpublished}
         <TallyNpsPopup
-          formId={SERVICE_CREATION_FORM_ID}
+          formId={TallyFormId.SERVICE_CREATION_FORM_ID}
           timeout={3000}
           hiddenFields={{
             service: $serviceSubmissionTimeMeter.id,
@@ -117,10 +112,13 @@
           }}
         />
       {:else if structureHasPublishedServices}
-        <TallyNpsPopup formId={NPS_OFFEROR_FORM_ID} timeout={30000} />
+        <TallyNpsPopup
+          formId={TallyFormId.NPS_OFFEROR_FORM_ID}
+          timeout={30000}
+        />
       {/if}
     {:else}
-      <TallyNpsPopup formId={NPS_SEEKER_FORM_ID} />
+      <TallyNpsPopup formId={TallyFormId.NPS_SEEKER_FORM_ID} />
     {/if}
   {/if}
 {/if}

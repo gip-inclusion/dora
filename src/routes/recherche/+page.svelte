@@ -6,9 +6,9 @@
   import Notice from "$lib/components/notice.svelte";
   import SearchForm from "$lib/components/search/search-form.svelte";
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
-  import { NPS_SEEKER_FORM_ID } from "$lib/const";
   import type { ServiceSearchResult } from "$lib/types";
   import { isInDeploymentDepartments } from "$lib/utils/city";
+  import { TallyFormId } from "$lib/utils/nps";
   import { tick } from "svelte";
   import type { PageData } from "./$types";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
@@ -180,4 +180,4 @@
 
 <NewletterNotice />
 
-<TallyNpsPopup formId={NPS_SEEKER_FORM_ID} />
+<TallyNpsPopup formId={TallyFormId.NPS_SEEKER_FORM_ID} />
