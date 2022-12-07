@@ -5,7 +5,7 @@ import { getApiURL } from "$lib/utils/api";
 import { validate } from "$lib/validation";
 import { get } from "svelte/store";
 import { logException } from "./logger";
-import type { ShortStructure, Structure } from "./types";
+import type { ShortStructure, Structure, StructuresOptions } from "./types";
 
 export async function siretWasAlreadyClaimed(siret) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;
@@ -35,19 +35,17 @@ export async function siretWasAlreadyClaimed(siret) {
 
 export async function getStructures(): Promise<ShortStructure[]> {
   const url = `${getApiURL()}/structures/`;
-  return (await fetchData(url)).data;
+  return (await fetchData<ShortStructure[]>(url)).data;
 }
 
 export async function getActiveStructures(): Promise<ShortStructure[]> {
   const url = `${getApiURL()}/structures/?active=1`;
-  return (await fetchData(url)).data;
+  return (await fetchData<ShortStructure[]>(url)).data;
 }
 
-export async function getStructure(slug): Promise<Structure> {
+export async function getStructure(slug: string): Promise<Structure> {
   const url = `${getApiURL()}/structures/${slug}/`;
-  const result = (await fetchData(url)).data;
-
-  return result;
+  return (await fetchData<Structure>(url)).data;
 }
 
 export async function createStructure(structure) {
@@ -113,10 +111,10 @@ export async function modifyStructure(structure) {
 
 let structuresOptions;
 
-export async function getStructuresOptions() {
+export async function getStructuresOptions(): Promise<StructuresOptions> {
   if (!structuresOptions) {
     const url = `${getApiURL()}/structures-options/`;
-    const res = await fetchData(url);
+    const res = await fetchData<StructuresOptions>(url);
     structuresOptions = res.data;
   }
   return structuresOptions;

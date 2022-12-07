@@ -1,5 +1,5 @@
-import { userInfo } from "$lib/auth";
-import { userPreferences } from "$lib/preferences";
+import { userInfo, type UserInfo } from "$lib/auth";
+import { userPreferences, type UserPreferences } from "$lib/preferences";
 import { getStructure } from "$lib/structures";
 import { trackStructure } from "$lib/utils/plausible";
 import { error } from "@sveltejs/kit";
@@ -10,18 +10,18 @@ export const load: LayoutLoad = async ({ params, parent }) => {
   await parent();
 
   const s = await getStructure(params.slug);
-  let preferences;
-  let info;
+  let preferences: UserPreferences;
+  let info: UserInfo;
 
   userPreferences.subscribe((p) => {
     preferences = p;
   });
 
-  userInfo.subscribe((u) => {
+  userInfo.subscribe((u: UserInfo) => {
     info = u;
   });
 
-  if (preferences) {
+  if (info && preferences) {
     const userStructuresSlugs = [
       ...info.pendingStructures,
       ...info.structures,

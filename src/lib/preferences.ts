@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 import type { ShortStructure } from "./types";
 
 export interface UserPreferences {
-  visitedStructures: ShortStructure[];
+  visitedStructures: string[];
 }
 
 export const userPreferences = writable<UserPreferences>({

@@ -4,7 +4,7 @@ import { getApiURL } from "$lib/utils/api";
 import { get } from "svelte/store";
 import { logException } from "./logger";
 import { SERVICE_STATUSES } from "./schemas/service";
-import type { Model, Service, ServicesOptions } from "./types";
+import type { Model, Service, ServicesOptions, ShortService } from "./types";
 
 function serviceToBack(service) {
   if (service.longitude && service.latitude) {
@@ -30,14 +30,14 @@ function serviceToFront(service) {
   return service;
 }
 
-export async function getMyServices() {
+export async function getMyServices(): Promise<ShortService[]> {
   const url = `${getApiURL()}/services/?mine=1`;
-  return (await fetchData(url)).data;
+  return (await fetchData<ShortService[]>(url)).data;
 }
 
 export async function getService(slug): Promise<Service> {
   const url = `${getApiURL()}/services/${slug}/`;
-  const response = await fetchData(url);
+  const response = await fetchData<Service>(url);
 
   if (!response.data) return null;
   // TODO: 404
@@ -45,14 +45,14 @@ export async function getService(slug): Promise<Service> {
   return serviceToFront(response.data);
 }
 
-export async function getPublishedServices(): Promise<Service[]> {
+export async function getPublishedServices(): Promise<ShortService[]> {
   const url = `${getApiURL()}/services/?published=1`;
-  return (await fetchData(url)).data;
+  return (await fetchData<ShortService[]>(url)).data;
 }
 
 export async function getModel(slug): Promise<Model> {
   const url = `${getApiURL()}/models/${slug}/`;
-  const response = await fetchData(url);
+  const response = await fetchData<Model>(url);
 
   if (!response.data) return null;
   // TODO: 404
@@ -287,10 +287,10 @@ export async function convertSuggestionToDraft(serviceSlug) {
   return await response.json();
 }
 
-export async function getLastDraft() {
+export async function getLastDraft(): Promise<Service> {
   if (token) {
     const url = `${getApiURL()}/services/last-draft/`;
-    return (await fetchData(url)).data;
+    return (await fetchData<Service>(url)).data;
   }
   return null;
 }
@@ -302,7 +302,7 @@ export async function getServicesOptions({
   if (!servicesOptionsBase) {
     const url = `${getApiURL()}/services-options/`;
     try {
-      servicesOptionsBase = (await fetchData(url)).data;
+      servicesOptionsBase = (await fetchData<ServicesOptions>(url)).data;
     } catch (err) {
       logException(err);
       return {};

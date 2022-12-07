@@ -24,8 +24,8 @@
   "editor.quickSuggestions": {
     "strings": true
   },
-  "eslint.probe": ["javascript", "svelte"],
-  "eslint.validate": ["javascript", "svelte"],
+  "eslint.probe": ["javascript", "svelte", "typescript"],
+  "eslint.validate": ["javascript", "svelte", "typescript"],
   "files.exclude": {
     ".husky": true,
     ".svelte-kit": true,

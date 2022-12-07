@@ -452,7 +452,8 @@ const schema = {
   },
 };
 
-export const suggestionSchema = {
+// TODO fix typing
+export const suggestionSchema: any = {
   fullName: {
     default: "",
     required: true,
@@ -472,25 +473,25 @@ export const suggestionSchema = {
   },
 };
 
-export const serviceSchema = v.formatSchema(
+export const serviceSchema: any = v.formatSchema(
   schema,
   fields.service,
   fieldsRequired.service
 );
 
-export const modelSchema = v.formatSchema(
+export const modelSchema: any = v.formatSchema(
   schema,
   fields.model,
   fieldsRequired.model
 );
 
-export const contribSchema = v.formatSchema(
+export const contribSchema: any = v.formatSchema(
   schema,
   fields.contrib,
   fieldsRequired.contrib
 );
 
-export const draftSchema = v.formatSchema(
+export const draftSchema: any = v.formatSchema(
   schema,
   fields.service,
   fieldsRequired.draft

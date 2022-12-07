@@ -191,7 +191,7 @@
 
   {#if service.locationKinds.includes("en-presentiel")}
     <Button
-      on:click={fillAdress(structure)}
+      on:click={fillAdress()}
       secondary
       small
       label="Utiliser l'adresse de la structure"

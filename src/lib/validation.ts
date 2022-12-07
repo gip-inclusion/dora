@@ -6,7 +6,8 @@ export type ValidationContext = {
   onChange: (evt: any) => Promise<void>;
 };
 export const contextValidationKey = {};
-export const formErrors = writable({});
+// TODO: type it properly
+export const formErrors: any = writable({});
 
 let currentErrors;
 formErrors.subscribe((value) => {
