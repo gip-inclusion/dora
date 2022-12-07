@@ -236,7 +236,7 @@
     aria-expanded={expanded}
     aria-haspopup="listbox"
     aria-labelledby={`button-label-${uuid}`}
-    class="combobox w-full rounded border border-gray-03 bg-white p-s12 font-sans disabled:bg-gray-bg disabled:text-gray-text-alt {display}"
+    class="combobox w-full self-start rounded border border-gray-03 bg-white p-s12 font-sans disabled:bg-gray-bg disabled:text-gray-text-alt {display}"
     class:filter-style={style === "filter"}
     class:filter-search={style === "search"}
     class:expanded
