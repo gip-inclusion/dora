@@ -32,6 +32,9 @@
     "build": true,
     ".cache_ggshield": true
   },
+  "search.exclude": {
+    "static/**": true
+  },
   "files.trimTrailingWhitespace": true,
   "svelte.plugin.css.globals": "src/app.postcss",
   "svelte.enable-ts-plugin": true,
