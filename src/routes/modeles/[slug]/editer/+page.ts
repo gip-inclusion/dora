@@ -29,6 +29,8 @@ export const load: PageLoad = async ({ params, parent }) => {
   }
 
   return {
+    title: `Éditer | ${model.name} | ${structure.name} | DORA`,
+    noIndex: true,
     model,
     servicesOptions,
     structures,

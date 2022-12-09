@@ -38,10 +38,6 @@
   }
 </script>
 
-<svelte:head>
-  <title>Admin | Structures | DORA</title>
-</svelte:head>
-
 <CenteredGrid bgColor="bg-gray-bg">
   <h2>Structures</h2>
 

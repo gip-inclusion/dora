@@ -9,8 +9,6 @@
 </script>
 
 <svelte:head>
-  <title>Statistiques | DORA</title>
-
   <script src="https://plausible.io/js/embed.host.js"></script>
 </svelte:head>
 

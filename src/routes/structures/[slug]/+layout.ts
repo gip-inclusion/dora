@@ -49,8 +49,11 @@ export const load: LayoutLoad = async ({ params, parent }) => {
     throw error(404, "Page Not Found");
   }
 
+  // TODO: can we get rid of this store, and just cascade the structure?
   structure.set(s);
   trackStructure(s);
 
-  return {};
+  return {
+    structure: s,
+  };
 };

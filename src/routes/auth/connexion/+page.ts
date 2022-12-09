@@ -14,5 +14,8 @@ export const load: PageLoad = async ({ url, parent }) => {
   if (get(token)) {
     throw redirect(302, nextPage);
   }
-  return {};
+  return {
+    title: "Connexion / Inscription | DORA",
+    noIndex: true,
+  };
 };

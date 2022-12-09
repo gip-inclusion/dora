@@ -49,6 +49,8 @@ export const load: PageLoad = async ({ url, parent }) => {
   }
 
   return {
+    title: "Création d’un modèle | DORA",
+    noIndex: true,
     model,
     servicesOptions: await getServicesOptions({ model }),
     structures,

@@ -76,14 +76,6 @@
   }
 </script>
 
-<svelte:head>
-  <title>
-    Services d’insertion {data.cityLabel ? `à ${data.cityLabel}` : ""} : {tags
-      .filter(Boolean)
-      .join(", ")} | Recherche | DORA
-  </title>
-</svelte:head>
-
 <CenteredGrid bgColor="bg-blue-light">
   <div>
     <h1 class="sr-only">

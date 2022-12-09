@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import { ENVIRONMENT } from "$lib/env";
   import "../app.postcss";
   import Footer from "./footer.svelte";
@@ -9,6 +10,24 @@
 <svelte:head>
   {#if ENVIRONMENT !== "production"}
     <meta name="robots" content="noindex" />
+    {#if $page.data.noIndex}
+      {console.log("page won't be indexed", $page.route.id)}
+    {/if}
+  {/if}
+  {#if $page.data.title}
+    <title>{$page.data.title}</title>
+  {:else}
+    <title>DORA : recensement et mise à jour de l’offre d’insertion</title>
+    {console.log("missing title for", $page.route.id)}
+  {/if}
+  {#if $page.data.description}
+    <meta name="description" content={$page.data.description} />
+  {:else if !$page.data.noIndex}
+    <meta
+      name="description"
+      content="Le service public numérique de recensement et mise à jour de l’offre d’insertion."
+    />
+    {console.log("missing description for", $page.route.id)}
   {/if}
 </svelte:head>
 

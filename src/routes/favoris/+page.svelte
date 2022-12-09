@@ -17,10 +17,6 @@
   });
 </script>
 
-<svelte:head>
-  <title>Mes favoris | DORA</title>
-</svelte:head>
-
 <EnsureLoggedIn>
   <CenteredGrid>
     <h1 class="mb-s64 text-center text-france-blue">Mes favoris</h1>

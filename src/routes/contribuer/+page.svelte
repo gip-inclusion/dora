@@ -10,14 +10,6 @@
   } from "$lib/icons";
 </script>
 
-<svelte:head>
-  <title>Contribuer | DORA</title>
-  <meta
-    name="description"
-    content="Aidez-nous à identifier et référencer l’ensemble de l’offre de l’insertion"
-  />
-</svelte:head>
-
 <CenteredGrid extraClass="bg-gradient-to-b from-magenta-10 to-magenta-10/0">
   <div class="flex gap-s40">
     <img

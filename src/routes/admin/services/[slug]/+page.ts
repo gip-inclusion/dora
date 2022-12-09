@@ -1,4 +1,5 @@
 import { getServiceAdmin } from "$lib/admin";
+import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ params, parent }) => {
@@ -10,6 +11,8 @@ export const load: PageLoad = async ({ params, parent }) => {
   }
 
   return {
+    title: `${service.name} | Administration | DORA`,
+    noIndex: true,
     service: service,
   };
 };

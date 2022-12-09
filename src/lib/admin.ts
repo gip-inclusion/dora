@@ -1,5 +1,5 @@
 import { token } from "$lib/auth";
-import type { ModerationStatus } from "$lib/types";
+import type { ModerationStatus, Service, Structure } from "$lib/types";
 import { fetchData } from "$lib/utils";
 import { getApiURL } from "$lib/utils/api";
 import { get } from "svelte/store";
@@ -11,7 +11,7 @@ export async function getStructuresAdmin() {
 
 export async function getStructureAdmin(slug) {
   const url = `${getApiURL()}/structures-admin/${slug}/`;
-  const result = (await fetchData(url)).data;
+  const result = (await fetchData<Structure>(url)).data;
 
   return result;
 }
@@ -28,7 +28,7 @@ export async function getServicesAdmin() {
 
 export async function getServiceAdmin(slug) {
   const url = `${getApiURL()}/services-admin/${slug}/`;
-  return (await fetchData(url)).data;
+  return (await fetchData<Service>(url)).data;
 }
 
 export async function getServicesToModerate() {

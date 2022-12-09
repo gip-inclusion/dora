@@ -79,10 +79,6 @@
   }
 </script>
 
-<svelte:head>
-  <title>Admin | Modération | DORA</title>
-</svelte:head>
-
 <CenteredGrid bgColor="bg-gray-bg">
   <h2>Moderation</h2>
 

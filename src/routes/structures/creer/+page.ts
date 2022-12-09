@@ -7,5 +7,9 @@ export const ssr = false;
 export const load: PageLoad = async ({ parent }) => {
   await parent();
 
-  return { structuresOptions: await getStructuresOptions() };
+  return {
+    title: "Créer une structure | DORA",
+    noIndex: true,
+    structuresOptions: await getStructuresOptions(),
+  };
 };

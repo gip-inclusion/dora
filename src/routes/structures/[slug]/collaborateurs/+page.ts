@@ -1,6 +1,7 @@
 import { browser } from "$app/environment";
 import { userInfo } from "$lib/auth";
 import { getMembers, getPutativeMembers } from "$lib/structures";
+import { capitalize } from "$lib/utils";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import { structure } from "../store";
@@ -29,6 +30,8 @@ export const load: PageLoad = async ({ parent }) => {
   const putativeMembers = await getPutativeMembers(struct.slug);
 
   return {
+    title: `Collaborateurs | ${capitalize(struct.name)} | DORA`,
+    description: struct.shortDesc,
     members,
     putativeMembers,
     canSeeMembers,

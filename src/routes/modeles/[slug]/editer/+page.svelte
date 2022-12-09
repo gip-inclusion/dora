@@ -8,10 +8,6 @@
   export let data: PageData;
 </script>
 
-<svelte:head>
-  <title>Éditer | {data.model?.name} | {data.structure?.name} | DORA</title>
-</svelte:head>
-
 <EnsureLoggedIn>
   <CenteredGrid>
     <h1>Modification du modèle</h1>

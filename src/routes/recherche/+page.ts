@@ -82,7 +82,10 @@ export const load: PageLoad = async ({ url, parent }) => {
     feeConditions,
     services.length
   );
+
   return {
+    title: `Services d’insertion à ${cityLabel} | Recherche | DORA`,
+    noIndex: true,
     categoryIds,
     subCategoryIds,
     cityCode,

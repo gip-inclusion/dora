@@ -16,10 +16,6 @@
   });
 </script>
 
-<svelte:head>
-  <title>Admin | Contributions | DORA</title>
-</svelte:head>
-
 <CenteredGrid bgColor="bg-gray-bg">
   <h2>Contributions</h2>
 

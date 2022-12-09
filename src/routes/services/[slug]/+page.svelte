@@ -43,13 +43,6 @@
   ).length;
 </script>
 
-<svelte:head>
-  <title
-    >{data.service?.name} | {data.service?.structureInfo?.name} | DORA</title
-  >
-  <meta name="description" content={data.service?.shortDesc} />
-</svelte:head>
-
 {#if data.service}
   <CenteredGrid bgColor="bg-france-blue">
     <ServiceHeader service={data.service} />

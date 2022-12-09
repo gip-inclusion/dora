@@ -30,6 +30,8 @@ export const load: PageLoad = async ({ url, params, parent }) => {
   const model = service.model ? await getModel(service.model) : null;
 
   return {
+    title: `${service.name} | ${service.structureInfo.name} | DORA`,
+    description: service.shortDesc,
     service,
     structure: await getStructure(service.structure),
     servicesOptions: await getServicesOptions({ model }),

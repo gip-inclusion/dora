@@ -18,6 +18,8 @@ export const load: PageLoad = async ({ params, parent }) => {
   }
 
   return {
+    title: `${model.name} | ${model.structureInfo.name} | DORA`,
+    description: "model.shortDesc",
     model,
     servicesOptions: await getServicesOptions(),
   };

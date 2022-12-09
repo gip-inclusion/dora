@@ -15,5 +15,10 @@ export const load: PageLoad = async ({ url, parent }) => {
     structureParent = await getStructure(structure.parent);
   }
 
-  return { structure, parent: structureParent };
+  return {
+    title: "Invitation | DORA",
+    noIndex: true,
+    structure,
+    parent: structureParent,
+  };
 };

@@ -34,10 +34,6 @@
   $: togglePEMessageLabel = showPEMessage ? "Réduire" : "Lire la suite";
 </script>
 
-<svelte:head>
-  <title>Connexion / Inscription | DORA</title>
-</svelte:head>
-
 <AuthLayout>
   <FieldSet headerBg="bg-magenta-brand" noHeaderBorder noTopPadding>
     <div class="flex-1">

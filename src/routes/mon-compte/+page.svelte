@@ -5,10 +5,6 @@
   import ImproveDoraNotif from "./notif-improve.svelte";
 </script>
 
-<svelte:head>
-  <title>Mon compte | DORA</title>
-</svelte:head>
-
 <EnsureLoggedIn>
   <div class="mb-s24 md:flex md:items-center md:justify-between">
     <h2 class="text-france-blue">Mon compte</h2>

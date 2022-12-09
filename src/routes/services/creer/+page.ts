@@ -50,6 +50,8 @@ export const load: PageLoad = async ({ url, parent }) => {
   }
 
   return {
+    noIndex: true,
+    title: "Création d'un service | DORA",
     lastDraft: await getLastDraft(),
     servicesOptions: await getServicesOptions({ model }),
     structures,
