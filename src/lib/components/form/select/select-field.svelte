@@ -8,7 +8,6 @@
     getChoicesFromKey,
   } from "$lib/utils/choice";
   import { tick } from "svelte";
-  import { uid } from "uid";
   import FieldWrapper from "../field-wrapper.svelte";
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";
@@ -54,7 +53,7 @@
   }
 
   // *** Accessibilité
-  const uuid: string = uid(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
+  const uuid: string = crypto.randomUUID(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
   let expanded = false;
 
   // Gestion de l'outline avec la navigation au clavier

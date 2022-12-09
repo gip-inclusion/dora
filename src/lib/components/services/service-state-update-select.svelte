@@ -27,7 +27,6 @@
   } from "$lib/types";
   import { getAvailableOptionsForStatus } from "$lib/utils/service";
   import { validate } from "$lib/validation";
-  import { uid } from "uid";
   import { clickOutside } from "../use/click-outside";
 
   type ServiceStatusPresentation = {
@@ -83,7 +82,7 @@
   $: availableOptions = getAvailableOptionsForStatus(service.status);
 
   // *** Accessibilité
-  const uuid: string = uid(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
+  const uuid: string = crypto.randomUUID(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
   let isDropdownOpen = false;
 
   // Gestion de l'outline avec la navigation au clavier
