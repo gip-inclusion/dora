@@ -1,7 +1,6 @@
 <script lang="ts">
   import { userInfo } from "$lib/auth";
   import { getStructure } from "$lib/structures";
-  import { capitalize } from "$lib/utils";
   import type { PageData } from "./$types";
   import BranchesList from "./antennes/list.svelte";
   import Informations from "./informations.svelte";
@@ -15,13 +14,6 @@
     $structure = await getStructure($structure.slug);
   }
 </script>
-
-<svelte:head>
-  <title>
-    {capitalize($structure.name)} | DORA
-  </title>
-  <meta name="description" content={$structure.shortDesc} />
-</svelte:head>
 
 <Informations
   structure={$structure}

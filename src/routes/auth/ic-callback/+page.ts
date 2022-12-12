@@ -2,9 +2,11 @@ import { setToken, validateCredsAndFillUserInfo } from "$lib/auth";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
 import { redirect } from "@sveltejs/kit";
 import { getNextPage } from "../utils";
+import type { PageLoad } from "./$types";
+
 export const ssr = false;
 
-export async function load({ url, fetch, parent }) {
+export const load: PageLoad = async ({ url, parent }) => {
   await parent();
 
   const nextPage = getNextPage(url);
@@ -43,4 +45,4 @@ export async function load({ url, fetch, parent }) {
     throw redirect(302, nextPage);
   }
   // TODO return error
-}
+};

@@ -58,10 +58,6 @@
     ?.includes(establishment?.siret);
 </script>
 
-<svelte:head>
-  <title>Rattachement à votre structure | DORA</title>
-</svelte:head>
-
 <EnsureLoggedIn>
   <AuthLayout>
     <StructureSearch {siret} bind:establishment bind:tabId blockPoleEmploi>

@@ -2,8 +2,9 @@ import { disconnect } from "$lib/auth";
 import { CANONICAL_URL } from "$lib/env";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
 import { redirect } from "@sveltejs/kit";
+import type { PageLoad } from "./$types";
 
-export async function load({ parent }) {
+export const load: PageLoad = async ({ parent }) => {
   await parent();
 
   const targetUrl = `${getApiURL()}/inclusion-connect-get-logout-info/`;
@@ -21,9 +22,8 @@ export async function load({ parent }) {
 
   if (result.ok) {
     jsonResult = await result.json();
-
     disconnect();
     throw redirect(302, jsonResult.url);
   }
   // TODO: surface error
-}
+};

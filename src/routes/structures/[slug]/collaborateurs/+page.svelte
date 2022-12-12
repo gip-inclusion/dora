@@ -30,10 +30,6 @@
   }
 </script>
 
-<svelte:head>
-  <title>{$structure?.name} | Collaborateurs | DORA</title>
-</svelte:head>
-
 <EnsureLoggedIn>
   {#if data.canEditMembers}
     <ModalAddUser

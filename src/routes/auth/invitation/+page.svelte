@@ -49,10 +49,6 @@
   }
 </script>
 
-<svelte:head>
-  <title>Invitation | DORA</title>
-</svelte:head>
-
 <EnsureLoggedIn>
   <AuthLayout>
     <Fieldset title="Invitation">

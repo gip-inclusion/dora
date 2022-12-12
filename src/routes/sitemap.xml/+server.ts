@@ -37,9 +37,19 @@ async function getStructuresEntries() {
     .join("\n");
 }
 
+function getStaticEntries() {
+  return ["contribuer"]
+    .map((s) =>
+      `<url>
+    <loc>${CANONICAL_URL}/${s}</loc>
+    <priority>1</priority>
+  </url>`.trim()
+    )
+    .join("\n");
+}
+
 async function getContent() {
-  const services = await getServicesEntries();
-  const structures = await getStructuresEntries();
+  console.log(getStaticEntries());
   const content = `
   <?xml version="1.0" encoding="UTF-8" ?>
     <urlset
@@ -48,8 +58,9 @@ async function getContent() {
         <loc>${CANONICAL_URL}/</loc>
         <priority>1</priority>
       </url>
-      ${structures}
-      ${services}
+      ${await getStructuresEntries()}
+      ${await getServicesEntries()}
+      ${getStaticEntries()}
     </urlset>`.trim();
 
   return content;

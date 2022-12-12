@@ -1,13 +1,10 @@
 import { getQuery } from "$lib/search";
 import { getServicesOptions } from "$lib/services";
-import {
-  SERVICE_UPDATE_STATUS,
-  type SearchQuery,
-  type ServiceSearchResult,
-} from "$lib/types";
+import type { SearchQuery, ServiceSearchResult } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
 import { trackSearch } from "$lib/utils/plausible";
 import { computeUpdateStatusData } from "$lib/utils/service";
+import type { PageLoad } from "./$types";
 
 // pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
 // à ce qu'elles soient indexées
@@ -48,7 +45,7 @@ async function getResults({
   return [];
 }
 
-export async function load({ url, parent }) {
+export const load: PageLoad = async ({ url, parent }) => {
   await parent();
 
   const query = url.searchParams;
@@ -67,6 +64,7 @@ export async function load({ url, parent }) {
     kindIds,
     feeConditions,
   });
+
   services.forEach((service) => {
     service.updateStatus = computeUpdateStatusData(service).updateStatus;
   });
@@ -80,20 +78,17 @@ export async function load({ url, parent }) {
     feeConditions,
     services.length
   );
+
   return {
+    title: `Services d’insertion à ${cityLabel} | Recherche | DORA`,
+    noIndex: true,
     categoryIds,
     subCategoryIds,
     cityCode,
     cityLabel,
     kindIds,
     feeConditions,
-    allServices: services,
-    servicesUpToDate: services.filter(
-      (service) => service.updateStatus !== SERVICE_UPDATE_STATUS.REQUIRED
-    ),
-    servicesToUpdate: services.filter(
-      (service) => service.updateStatus === SERVICE_UPDATE_STATUS.REQUIRED
-    ),
+    services,
     servicesOptions: await getServicesOptions(),
   };
-}
+};

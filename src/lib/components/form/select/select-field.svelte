@@ -8,7 +8,6 @@
     getChoicesFromKey,
   } from "$lib/utils/choice";
   import { tick } from "svelte";
-  import { uid } from "uid";
   import FieldWrapper from "../field-wrapper.svelte";
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";
@@ -54,7 +53,7 @@
   }
 
   // *** Accessibilité
-  const uuid: string = uid(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
+  const uuid: string = crypto.randomUUID(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
   let expanded = false;
 
   // Gestion de l'outline avec la navigation au clavier
@@ -236,7 +235,7 @@
     aria-expanded={expanded}
     aria-haspopup="listbox"
     aria-labelledby={`button-label-${uuid}`}
-    class="combobox w-full rounded border border-gray-03 bg-white p-s12 font-sans disabled:bg-gray-bg disabled:text-gray-text-alt {display}"
+    class="combobox w-full self-start rounded border border-gray-03 bg-white p-s12 font-sans disabled:bg-gray-bg disabled:text-gray-text-alt {display}"
     class:filter-style={style === "filter"}
     class:filter-search={style === "search"}
     class:expanded

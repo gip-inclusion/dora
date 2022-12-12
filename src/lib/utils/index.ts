@@ -19,7 +19,7 @@ export function markdownToHTML(md, titleLevel) {
   });
 }
 
-export function htmlToMarkdown(html) {
+export function htmlToMarkdown(html: string) {
   if (browser) {
     const converter = new showdown.Converter();
     return converter.makeMarkdown(html);
@@ -28,15 +28,12 @@ export function htmlToMarkdown(html) {
   return "";
 }
 
-export async function fetchData(
-  url,
-  { acceptHeader = defaultAcceptHeader } = {}
-) {
-  const headers = { Accept: acceptHeader };
+export async function fetchData<T>(url: string) {
+  const headers = { Accept: defaultAcceptHeader };
   const tk = get(token);
 
   if (tk) {
-    headers.Authorization = `Token ${tk}`;
+    headers["Authorization"] = `Token ${tk}`;
   }
 
   const response = await fetch(url, {
@@ -45,7 +42,7 @@ export async function fetchData(
 
   return {
     ok: response.ok,
-    data: response.ok ? await response.json() : null,
+    data: response.ok ? ((await response.json()) as Promise<T>) : null,
     error: response.ok ? null : response.statusText,
     status: response.status,
     statusText: response.statusText,

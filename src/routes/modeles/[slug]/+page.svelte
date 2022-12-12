@@ -20,11 +20,6 @@
   }
 </script>
 
-<svelte:head>
-  <title>{data.model?.name} | {data.model?.structureInfo.name} | DORA</title>
-  <meta name="description" content={data.model?.shortDesc} />
-</svelte:head>
-
 <CenteredGrid bgColor="bg-gray-bg">
   <ModelHeader model={data.model} />
 </CenteredGrid>

@@ -1,11 +1,12 @@
 import { token, userInfo } from "$lib/auth";
 import { error, redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
+import type { LayoutLoad } from "./$types";
 
 // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
 export const ssr = false;
 
-export async function load({ url, parent }) {
+export const load: LayoutLoad = async ({ url, parent }) => {
   await parent();
 
   const myToken = get(token);
@@ -23,4 +24,4 @@ export async function load({ url, parent }) {
   }
 
   return {};
-}
+};

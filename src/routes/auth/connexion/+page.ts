@@ -2,9 +2,11 @@ import { token } from "$lib/auth";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import { getNextPage } from "../utils";
+import type { PageLoad } from "./$types";
+
 export const ssr = false;
 
-export async function load({ url, parent }) {
+export const load: PageLoad = async ({ url, parent }) => {
   await parent();
 
   const nextPage = getNextPage(url);
@@ -12,5 +14,8 @@ export async function load({ url, parent }) {
   if (get(token)) {
     throw redirect(302, nextPage);
   }
-  return {};
-}
+  return {
+    title: "Connexion / Inscription | DORA",
+    noIndex: true,
+  };
+};

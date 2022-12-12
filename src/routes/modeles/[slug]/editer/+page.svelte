@@ -6,25 +6,18 @@
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  let multipleServices = 0;
-
-  $: multipleServices = data.model?.numServices > 1;
 </script>
-
-<svelte:head>
-  <title>Éditer | {data.model?.name} | {data.structure?.name} | DORA</title>
-</svelte:head>
 
 <EnsureLoggedIn>
   <CenteredGrid>
     <h1>Modification du modèle</h1>
 
     {#if data.model.numServices}
+      {@const hasMultipleServices = data.model.numServices > 1}
       <Notice
         title={`Ce modèle est utilisé par ${
-          multipleServices ? data.model.numServices : "un"
-        } service${multipleServices ? "s" : ""}`}
+          hasMultipleServices ? data.model.numServices : "un"
+        } service${hasMultipleServices ? "s" : ""}`}
         type="warning"
       >
         <p class="text-f14">

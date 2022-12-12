@@ -3,7 +3,7 @@
   import cornerRightVioletImg from "$lib/assets/corner-right-violet.png";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
-  import { NPS_OFFEROR_FORM_ID } from "$lib/const";
+  import { TallyFormId } from "$lib/utils/nps";
   import Header from "./header.svelte";
   import { structure } from "./store";
 
@@ -34,7 +34,7 @@
 </CenteredGrid>
 
 {#if $structure.isMember && publishedServices.length}
-  <TallyNpsPopup formId={NPS_OFFEROR_FORM_ID} timeout={30000} />
+  <TallyNpsPopup formId={TallyFormId.NPS_OFFEROR_FORM_ID} timeout={30000} />
 {/if}
 
 <style lang="postcss">

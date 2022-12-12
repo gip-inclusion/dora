@@ -4,10 +4,6 @@
   import Header from "./header.svelte";
 </script>
 
-<svelte:head>
-  <meta name="robots" content="noindex" />
-</svelte:head>
-
 <CenteredGrid bgColor="bg-gray-03">
   <Header name={$userInfo?.fullName} />
 </CenteredGrid>

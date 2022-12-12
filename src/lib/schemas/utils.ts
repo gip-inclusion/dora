@@ -17,28 +17,28 @@ export const siretRegexp = /^\d{14}$/u;
 
 // ----- Rules
 
-export function isString(msg) {
+export function isString(msg = "") {
   return (name, value, _data) => ({
     valid: typeof value === "string",
     msg: msg || `Ce champ doit être une chaine de caractères`, // TODO: this is not a valid enduser message
   });
 }
 
-export function isBool(msg) {
+export function isBool(msg = "") {
   return (name, value, _data) => ({
     valid: typeof value === "boolean",
     msg: msg || `Ce champ doit être un booléen`, // TODO: this is not a valid enduser message
   });
 }
 
-export function isInteger(msg) {
+export function isInteger(msg = "") {
   return (name, value, _data) => ({
     valid: Number.isInteger(value),
     msg: msg || `Ce champ doit être un nombre entier`,
   });
 }
 
-export function isDate(msg) {
+export function isDate(msg = "") {
   return (name, value, _data) => ({
     // TODO: that's probably not safe enough. Use Luxon?
     // https://stackoverflow.com/questions/7445328/check-if-a-string-is-a-date-value
@@ -49,7 +49,7 @@ export function isDate(msg) {
   });
 }
 
-export function isURL(msg) {
+export function isURL(msg = "") {
   return (name, value, _data) => ({
     valid:
       typeof value === "string" && (value === "" || !!value.match(urlRegexp)),
@@ -57,7 +57,7 @@ export function isURL(msg) {
   });
 }
 
-export function isEmail(msg) {
+export function isEmail(msg = "") {
   return (name, value, _data) => ({
     valid:
       typeof value === "string" && (value === "" || !!value.match(emailRegexp)),
@@ -67,7 +67,7 @@ export function isEmail(msg) {
   });
 }
 
-export function isPhone(msg) {
+export function isPhone(msg = "") {
   return (name, value, _data) => ({
     valid: typeof value === "string" && value.length <= 10,
     // Some numbers only have 4 digits (Pole Emploi or La CAF for example)
@@ -80,7 +80,7 @@ export function isPhone(msg) {
   });
 }
 
-export function isPostalCode(msg) {
+export function isPostalCode(msg = "") {
   return (name, value, _data) => ({
     valid:
       typeof value === "string" &&
@@ -89,7 +89,7 @@ export function isPostalCode(msg) {
   });
 }
 
-export function isSiret(msg) {
+export function isSiret(msg = "") {
   return (name, value, _data) => ({
     valid:
       value == null ||
@@ -98,7 +98,7 @@ export function isSiret(msg) {
     msg: msg || "Ce champ doit comporter 14 chiffres",
   });
 }
-export function isAccessLibreUrl(msg) {
+export function isAccessLibreUrl(msg = "") {
   return (name, value, _data) => ({
     valid:
       value == null ||
@@ -108,7 +108,7 @@ export function isAccessLibreUrl(msg) {
     msg: msg || "L'URL doit commencer par https://acceslibre.beta.gouv.fr/",
   });
 }
-export function isNotStringInvalid(msg) {
+export function isNotStringInvalid(msg = "") {
   return (name, value, _data) => ({
     valid:
       value == null ||
@@ -120,7 +120,7 @@ export function isNotStringInvalid(msg) {
   });
 }
 
-export function isCustomizablePK(msg) {
+export function isCustomizablePK(msg = "") {
   return (name, value, _data) => ({
     valid:
       (typeof value === "string" && value.length > 0) ||
@@ -129,7 +129,7 @@ export function isCustomizablePK(msg) {
   });
 }
 
-export function isArray(rules, msg) {
+export function isArray(rules, msg = "") {
   return (name, value, data) => {
     if (!Array.isArray(value)) {
       return {
@@ -154,28 +154,28 @@ export function isArray(rules, msg) {
   };
 }
 
-export function arrNotEmpty(msg) {
+export function arrNotEmpty(msg = "") {
   return (name, value, _data) => ({
     valid: value.length > 0,
     msg: msg || `Veuillez selectionner au moins une option`,
   });
 }
 
-export function minStrLength(max, msg) {
+export function minStrLength(max, msg = "") {
   return (name, value, _data) => ({
     valid: value.length >= max,
     msg: msg || `Ce champ doit avoir au moins ${max} caractères`,
   });
 }
 
-export function maxStrLength(max, msg) {
+export function maxStrLength(max, msg = "") {
   return (name, value, _data) => ({
     valid: value.length <= max,
     msg: msg || `Ce champ ne doit pas depasser ${max} caractères`,
   });
 }
 
-export function minNum(min, msg) {
+export function minNum(min, msg = "") {
   return (name, value, _data) => ({
     valid: value >= min,
     msg: msg || `Ce champ doit être une clé étrangère`, // TODO: this is not a valid enduser message

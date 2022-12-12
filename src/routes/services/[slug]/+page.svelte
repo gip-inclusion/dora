@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import { token } from "$lib/auth";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import ServicePresentation from "$lib/components/services/body/presentation/service-presentation.svelte";
@@ -10,15 +11,10 @@
   import ServiceShare from "$lib/components/services/body/service-share.svelte";
   import ServiceToolbar from "$lib/components/services/body/toolbar/service-toolbar.svelte";
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
-  import {
-    NPS_OFFEROR_FORM_ID,
-    NPS_SEEKER_FORM_ID,
-    SERVICE_CREATION_FORM_ID,
-  } from "$lib/const";
   import { getService } from "$lib/services";
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
   import { isAfter } from "$lib/utils/date";
-  import { hasAnsweredNpsForm } from "$lib/utils/nps";
+  import { canDisplayNpsForm, TallyFormId } from "$lib/utils/nps";
   import { trackService } from "$lib/utils/plausible";
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -46,13 +42,6 @@
     (s) => s.status === "PUBLISHED"
   ).length;
 </script>
-
-<svelte:head>
-  <title
-    >{data.service?.name} | {data.service?.structureInfo?.name} | DORA</title
-  >
-  <meta name="description" content={data.service?.shortDesc} />
-</svelte:head>
 
 {#if data.service}
   <CenteredGrid bgColor="bg-france-blue">
@@ -104,21 +93,26 @@
       </div>
     </div>
   </CenteredGrid>
-  {#if data.service.canWrite}
-    {#if !hasAnsweredNpsForm(SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(data.service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !data.service.hasAlreadyBeenUnpublished}
-      <TallyNpsPopup
-        formId={SERVICE_CREATION_FORM_ID}
-        timeout={3000}
-        hiddenFields={{
-          service: $serviceSubmissionTimeMeter.id,
-          temps: $serviceSubmissionTimeMeter.duration,
-        }}
-      />
-    {:else if structureHasPublishedServices}
-      <TallyNpsPopup formId={NPS_OFFEROR_FORM_ID} timeout={30000} />
+  {#if browser}
+    {#if data.service.canWrite}
+      {#if canDisplayNpsForm(TallyFormId.SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(data.service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !data.service.hasAlreadyBeenUnpublished}
+        <TallyNpsPopup
+          formId={TallyFormId.SERVICE_CREATION_FORM_ID}
+          timeout={3000}
+          hiddenFields={{
+            service: $serviceSubmissionTimeMeter.id,
+            temps: $serviceSubmissionTimeMeter.duration,
+          }}
+        />
+      {:else if structureHasPublishedServices}
+        <TallyNpsPopup
+          formId={TallyFormId.NPS_OFFEROR_FORM_ID}
+          timeout={30000}
+        />
+      {/if}
+    {:else}
+      <TallyNpsPopup formId={TallyFormId.NPS_SEEKER_FORM_ID} />
     {/if}
-  {:else}
-    <TallyNpsPopup formId={NPS_SEEKER_FORM_ID} />
   {/if}
 {/if}
 

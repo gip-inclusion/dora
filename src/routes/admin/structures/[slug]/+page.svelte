@@ -3,7 +3,7 @@
   import Date from "$lib/components/date.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import TextClamp from "$lib/components/text-clamp.svelte";
-  import { capitalize, markdownToHTML } from "$lib/utils";
+  import { markdownToHTML } from "$lib/utils";
   import History from "../../history.svelte";
   import InfoLine from "../../info-line.svelte";
   import ModerationButtonMenu from "../../moderation-button-menu.svelte";
@@ -21,10 +21,6 @@
     data.structure = await getStructureAdmin(data.structure.slug);
   }
 </script>
-
-<svelte:head>
-  <title>Admin | {capitalize(data.structure.name)} | DORA</title>
-</svelte:head>
 
 <CenteredGrid bgColor="bg-gray-bg">
   <div class="text-f12">

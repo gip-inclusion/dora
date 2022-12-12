@@ -1,8 +1,9 @@
 import { browser } from "$app/environment";
 import { getModel, getServicesOptions } from "$lib/services";
 import { error } from "@sveltejs/kit";
+import type { PageLoad } from "./$types";
 
-export async function load({ params, parent }) {
+export const load: PageLoad = async ({ params, parent }) => {
   await parent();
 
   const model = await getModel(params.slug);
@@ -17,7 +18,9 @@ export async function load({ params, parent }) {
   }
 
   return {
+    title: `${model.name} | ${model.structureInfo.name} | DORA`,
+    description: "model.shortDesc",
     model,
     servicesOptions: await getServicesOptions(),
   };
-}
+};

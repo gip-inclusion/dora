@@ -1,4 +1,6 @@
 <script lang="ts">
+  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
+  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
   import StructureSearch from "$lib/components/structures/search.svelte";
   import { alertIcon } from "$lib/icons";
@@ -52,39 +54,42 @@
   }
 </script>
 
-<svelte:head>
-  <title>Créer une structure | DORA</title>
-  <meta name="robots" content="noindex" />
-</svelte:head>
+<EnsureLoggedIn>
+  <CenteredGrid>
+    <h1 class="text-france-blue">Création d’une structure</h1>
+  </CenteredGrid>
 
-<StructureSearch
-  onEstablishmentChange={handleEstablishmentChange}
-  onCityChange={handleCityChange}
-/>
+  <CenteredGrid bgColor="bg-gray-bg">
+    <StructureSearch
+      onEstablishmentChange={handleEstablishmentChange}
+      onCityChange={handleCityChange}
+    />
 
-{#if alreadyClaimedEstablishment}
-  <div
-    class="mt-s16 flex flex-row items-center justify-center pt-s4 text-f18 text-error"
-  >
-    <div class="mr-s8 h-s24 w-s24 fill-current">
-      {@html alertIcon}
-    </div>
-    <p>
-      Cette structure a déjà été saisie dans DORA. Vous pouvez la
-      <a
-        class="underline"
-        href="/structures/{alreadyClaimedEstablishment?.slug}"
+    {#if alreadyClaimedEstablishment}
+      <div
+        class="mt-s16 flex flex-row items-center justify-center pt-s4 text-f18 text-error"
       >
-        visualiser
-      </a>.
-    </p>
-  </div>
-{/if}
+        <div class="mr-s8 h-s24 w-s24 fill-current">
+          {@html alertIcon}
+        </div>
+        <p>
+          Cette structure a déjà été saisie dans DORA. Vous pouvez la
+          <a
+            class="underline"
+            href="/structures/{alreadyClaimedEstablishment?.slug}"
+          >
+            visualiser
+          </a>.
+        </p>
+      </div>
+    {/if}
 
-{#if structure.siret}
-  <h2 class="mb-s40 border border-b-2 border-gray-02">Présentation</h2>
-  <StructureFormWrapper
-    {structure}
-    structuresOptions={data.structuresOptions}
-  />
-{/if}
+    {#if structure.siret}
+      <h2 class="mb-s40 border border-b-2 border-gray-02">Présentation</h2>
+      <StructureFormWrapper
+        {structure}
+        structuresOptions={data.structuresOptions}
+      />
+    {/if}
+  </CenteredGrid>
+</EnsureLoggedIn>

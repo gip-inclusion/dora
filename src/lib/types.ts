@@ -1,59 +1,137 @@
-export type ShortStructure = {
-  slug: string;
-  siret: string;
-  name: string;
-  department: string;
-  typologyDisplay: string;
-  modificationDate: string;
-  parent: ShortStructure;
-};
+export type DiffusionZoneType =
+  | "country"
+  | "region"
+  | "department"
+  | "epci"
+  | "city";
 
-// STRUCTURE
-export type Structure = {
-  name: string;
-  slug: string;
-  siret: string;
-  url: string | undefined;
-  email: string | undefined;
-  phone: string | undefined;
-  openingHours: string | undefined;
-  openingHoursDetails: string | undefined;
-  shortDesc: string;
-  fullDesc: string;
-  isAdmin: boolean;
+export type LocationKind = "a-distance" | "en-presentiel";
+
+export interface StructureService {
   address1: string;
   address2: string;
+  categoriesDisplay: string[];
+  category: string;
+  categoryDisplay: string;
+  city_code: string;
+  city: string;
+  contactEmail: string;
+  contactName: string;
+  contactPhone: string;
+  department: string;
+  diffusionZoneDetailsDisplay: string;
+  diffusionZoneType: DiffusionZoneType;
+  diffusionZoneTypeDisplay: string;
+  isAvailable: boolean;
+  isCumulative: boolean;
+  locationKinds: LocationKind;
+  locationKindsDisplay: string;
+  model: string;
+  modelChanged: boolean;
+  modificationDate: string;
+  name: string;
+  postalCode: string;
+  remoteUrl: string;
+  shortDesc: string;
+  slug: string;
+  status: SERVICE_STATUSES;
+  structure: string;
+  useInclusionNumeriqueScheme: boolean;
+}
+
+export interface StructureModel {
+  slug: string;
+  name: string;
+  department: string;
+  modificationDate: string;
+  categoriesDisplay: string[];
+  shortDesc: string;
+  structure: string;
+  numServices: boolean;
+}
+
+export interface Branches {
+  department: string;
+  modificationDate: string;
+  name: string;
+  numServices: number | undefined;
+  slug: string;
+  typologyDisplay: string;
+}
+
+export interface ShortStructure {
+  department: string;
+  modificationDate: string;
+  name: string;
+  parent: string;
+  siret: string;
+  slug: string;
+  typologyDisplay: string;
+}
+
+export interface Structure {
+  accesslibreUrl: string;
+  address1: string;
+  address2: string;
+  ape: string;
+  archivedServices: StructureService[];
+  branches: Branches[];
+  canWrite: boolean;
+  city: string;
+  cityCode: string;
+  codeSafirPe: string;
+  creationDate: string;
+  department: string;
+  email: string;
+  fullDesc: string;
+  hasAdmin: boolean;
+  hasBeenEdited: boolean;
+  isAdmin: boolean;
+  isMember: boolean;
+  isPendingMember: boolean;
   latitude: number;
   longitude: number;
-  postalCode: number;
-  cityCode: number;
-  city: string;
-  department: string;
-
-  nationalLabels: string[];
-  otherLabels: string;
-  ape: string;
-
-  typologyDisplay: string;
-  numServices: number;
-  accesslibreUrl: string | undefined;
+  models: StructureModel[];
   modificationDate: string;
-  source: StructureSource | undefined;
-  hasBeenEdited: boolean | undefined;
-
-  services?: ShortService[];
-  models: Model[];
-};
-
-export type StructuresOptions = {
-  nationalLabels: { value: string; label: string }[];
-  typologies: { value: string; label: string }[];
-};
-
-export type StructureSource = {
+  name: string;
+  nationalLabels: string[];
+  numModels: number;
+  numServices: number;
+  openingHours: string | null;
+  openingHoursDetails: string | null;
+  otherLabels: string;
+  parent: string;
+  phone: number;
+  postalCode: string;
+  services: StructureService[];
+  shortDesc: string;
+  siret: string | null;
+  slug: string;
+  source: StructureSource;
+  typologyDisplay: string;
+  typology: number;
+  url: string;
+}
+export interface NationalLabel {
   value: string;
   label: string;
-};
+}
+
+export interface Typology {
+  value: string;
+  label: string;
+}
+
+export interface StructuresOptions {
+  nationalLabels: NationalLabel[];
+  sources: StructureSource[];
+  typologies: Typology[];
+}
+
+export interface StructureSource {
+  value: string;
+  label: string;
+}
 
 // OSM hours format
 export type OsmPeriodDay = {
@@ -62,6 +140,7 @@ export type OsmPeriodDay = {
   openAt: string;
   closeAt: string;
 };
+
 export type OsmDay = {
   timeSlot1: OsmPeriodDay;
   timeSlot2: OsmPeriodDay;
@@ -78,6 +157,7 @@ export type OsmOpeningHours = {
 };
 
 // SERVICES
+// TODO:convert to type
 export enum SERVICE_STATUSES {
   DRAFT = "DRAFT",
   SUGGESTION = "SUGGESTION",
@@ -89,7 +169,27 @@ export enum SERVICE_UPDATE_STATUS {
   NOT_NEEDED = "NOT_NEEDED",
   NEEDED = "NEEDED",
   REQUIRED = "REQUIRED",
+  ALL = "ALL",
 }
+
+export type ServiceCategory =
+  | "acces-aux-droits"
+  | "acc-global-indiv"
+  | "apprendre-francais"
+  | "creation-activite	"
+  | "difficultes-financieres"
+  | "emploi-choisir-metier"
+  | "emploi-preparer-sa-candidature"
+  | "emploi-trouver-emploi"
+  | "equipement-alimentation"
+  | "famille	"
+  | "handicap"
+  | "illettrisme"
+  | "logement-hebergement"
+  | "mobilite"
+  | "numerique"
+  | "remobilisation"
+  | "sante";
 
 export type ModerationStatus =
   | "NEED_INITIAL_MODERATION"
@@ -117,16 +217,19 @@ export type FeeCondition =
   | "adhesion"
   | "pass-numerique";
 
-export type SearchQuery = {
+export type CoachOrientationModes = "EM" | "EP" | "FO" | "OT" | "PH";
+export type BeneficiaryAccessModes = "EM" | "OS" | "OT" | "PH";
+
+export interface SearchQuery {
   categoryIds: string[];
   subCategoryIds: string[];
   cityCode: string;
   cityLabel: string;
   kindIds: ServiceKind[];
   feeConditions: FeeCondition[];
-};
+}
 
-export type ServiceSearchResult = {
+export interface ServiceSearchResult {
   distance: number;
   location: string;
   diffusionZoneType: string;
@@ -147,84 +250,101 @@ export type ServiceSearchResult = {
     slug: string;
     url: string;
   };
-};
+}
+
+export interface FileInfo {
+  url: string;
+  name: string;
+}
+
+export type CustomizableFK = number | string;
+
+export interface ServiceStructure {
+  address1: string;
+  address2: string;
+  city: string;
+  department: string;
+  hasAdmin: boolean;
+  name: string;
+  numServices: number;
+  postalCode: string;
+  shortDesc: string;
+  siret: string;
+  slug: string;
+  url: string;
+}
+
+export interface Point {
+  type: "Point";
+  coordinates: [longitude: number, latitude: number];
+}
 
 export interface Service {
-  siret: string;
-  name: string;
-  slug: string;
-  contactName: string | undefined;
-  contactPhone: string | undefined;
-  contactEmail: string | undefined;
-
-  categoriesDisplay: string[];
-  requirements: string[];
-  concernedPublic: string[];
-  kinds: string[];
-  categories: string[];
-  latitude: number;
-  longitude: number;
-  cityCode: string;
-
-  subcategories: string[] | undefined;
-
-  beneficiariesAccessModesDisplay: string[] | undefined;
-  beneficiariesAccessModesOther: string | undefined;
-
-  coachOrientationModes: string[];
-  coachOrientationModesDisplay: string[] | undefined;
-  coachOrientationModesOther: string | undefined;
-
-  accessConditions: string[] | undefined;
-  accessConditionsDisplay: string[] | undefined;
-
-  credentialsDisplay: string[] | undefined;
-
-  concernedPublicDisplay: string[] | undefined;
-  requirementsDisplay: string[] | undefined;
-
-  locationKinds: string[] | undefined;
-  remoteUrl: string | undefined;
-  postalCode: string | undefined;
-  address1: string | undefined;
-  address2: string | undefined;
-  city: string | undefined;
-  department: string;
-  isContactInfoPublic: boolean;
-
-  isAvailable: boolean;
-  qpvOrZrr: boolean;
-  structureInfo: Structure;
+  accessConditions: CustomizableFK[];
+  accessConditionsDisplay: string[];
+  address1: string;
+  address2: string;
+  beneficiariesAccessModes: BeneficiaryAccessModes[];
+  beneficiariesAccessModesDisplay: string[];
+  beneficiariesAccessModesOther: string;
   canWrite: boolean;
-  structure: string;
-  status: SERVICE_STATUSES;
-  model: string | undefined;
-  modelChanged: boolean | undefined;
-  hasAlreadyBeenUnpublished: boolean;
-  isCumulative: boolean;
-  feeCondition: FeeCondition;
-  feeDetails: string | undefined;
-  recurrence: string | undefined;
+  categories: ServiceCategory[];
+  categoriesDisplay: string[];
+  category: ServiceCategory;
+  categoryDisplay: string;
+  city: string;
+  cityCode: string;
+  coachOrientationModes: CoachOrientationModes[];
+  coachOrientationModesDisplay: string[];
+  coachOrientationModesOther: string;
+  concernedPublic: CustomizableFK[]; // TODO: should be public
+  concernedPublicDisplay: string[];
+  contactEmail: string;
+  contactName: string;
+  contactPhone: string;
   creationDate: string;
-  modificationDate: string | undefined;
-  diffusionZoneDetailsDisplay: string | undefined;
-
-  onlineForm: string | undefined;
-
-  formsInfo: { url: string; name: string }[] | undefined;
-
-  kindsDisplay: string[] | undefined;
-
-  shortDesc: string | undefined;
-  fullDesc: string | undefined;
-
-  diffusionZoneType: string | undefined;
-  diffusionZoneDetails: string | undefined;
-
-  useInclusionNumeriqueScheme: boolean | undefined;
-
-  diffusionZoneTypeDisplay: string | undefined;
-  beneficiariesAccessModes: string[] | undefined;
+  credentials: CustomizableFK[];
+  credentialsDisplay: string[];
+  department: string;
+  diffusionZoneDetails: string;
+  diffusionZoneDetailsDisplay: string;
+  diffusionZoneType: DiffusionZoneType;
+  diffusionZoneTypeDisplay: string;
+  feeCondition: FeeCondition;
+  feeDetails: string;
+  fillingDuration: number;
+  forms: string[];
+  formsInfo: FileInfo[];
+  fullDesc: string;
+  geom: Point;
+  hasAlreadyBeenUnpublished: boolean;
+  isAvailable: boolean;
+  isContactInfoPublic: boolean;
+  isCumulative: boolean;
+  kinds: ServiceKind[];
+  kindsDisplay: string[];
+  locationKinds: LocationKind[];
+  locationKindsDisplay: string[];
+  model: string;
+  modelChanged: boolean;
+  modificationDate: string;
+  name: string;
+  onlineForm: string;
+  postalCode: string;
+  qpvOrZrr: boolean;
+  recurrence: string;
+  remoteUrl: string;
+  requirements: CustomizableFK[];
+  requirementsDisplay: string[];
+  shortDesc: string;
+  slug: string;
+  status: SERVICE_STATUSES;
+  structure: string;
+  structureInfo: ServiceStructure;
+  subcategories: string[];
+  subcategoriesDisplay: string[];
+  suspensionDate: string;
+  useInclusionNumeriqueScheme: boolean;
 }
 
 export interface Bookmark {
@@ -232,51 +352,94 @@ export interface Bookmark {
   creationDate: string;
 }
 
-export type ShortService = Pick<
-  Service,
-  | "name"
-  | "slug"
-  | "contactName"
-  | "contactPhone"
-  | "contactEmail"
-  | "postalCode"
-  | "city"
-  | "department"
-  | "status"
-  | "modificationDate"
-  | "shortDesc"
-  | "diffusionZoneDetailsDisplay"
-  | "modelChanged"
-  | "isAvailable"
-  | "isCumulative"
-  | "feeDetails"
-  | "recurrence"
-  | "locationKinds"
-  | "address1"
-  | "address2"
-  | "remoteUrl"
-  | "feeCondition"
-  | "model"
-  | "structure"
-  | "structureInfo"
-  | "qpvOrZrr"
->;
+export interface ShortService {
+  categoriesDisplay: string[];
+  category: string;
+  categoryDisplay: string[];
+  city: string;
+  department: string;
+  diffusionZoneDetailsDisplay: string;
+  diffusionZoneType: DiffusionZoneType;
+  diffusionZoneTypeDisplay: string;
+  model: string;
+  modelChanged: boolean;
+  modificationDate: string;
+  name: string;
+  postalCode: string;
+  shortDesc: string;
+  slug: string;
+  status: SERVICE_STATUSES;
+  structure: string;
+  structureInfo: ServiceStructure;
+  useInclusionNumeriqueScheme: boolean;
+}
+
+export interface CustomChoice {
+  value: number;
+  label: string;
+  structure: string | null;
+}
 
 export type ServicesOptions = {
-  beneficiariesAccessModes: Choice[];
+  accessConditions: CustomChoice[];
+  beneficiariesAccessModes: { value: BeneficiaryAccessModes; label: string }[];
+  categories: { value: ServiceCategory; label: string }[];
+  coachOrientationModes: { value: CoachOrientationModes; label: string }[];
+
+  concernedPublic: CustomChoice[];
+  credentials: CustomChoice[];
   deploymentDepartments: string[];
-  requirements: (Choice & { structure: string | null })[];
-  locationKinds: Choice[];
-  feeConditions: Choice[];
-  concernedPublic: (Choice & { structure: string | null })[];
-  kinds: Choice[];
-  accessConditions: (Choice & { structure: string | null })[];
-  categories: Choice[];
-  subcategories: Choice[];
+  diffusionZoneType: { value: DiffusionZoneType; label: string }; // TODO: should be plural
+  feeConditions: { value: FeeCondition; label: string }[];
+  kinds: { value: ServiceKind; label: string }[];
+  locationKinds: { value: LocationKind; label: string }[];
+  requirements: CustomChoice[];
+  subcategories: { value: string; label: string }[];
 };
 
 export type Model = {
-  // TODO
+  accessConditions: CustomizableFK[];
+  accessConditionsDisplay: string[];
+  beneficiariesAccessModes: BeneficiaryAccessModes[];
+  beneficiariesAccessModesDisplay: string[];
+  beneficiariesAccessModesOther: string;
+  canUpdateCategories: boolean;
+  canWrite: boolean;
+  categories: ServiceCategory[];
+  categoriesDisplay: string[];
+  coachOrientationModes: CoachOrientationModes[];
+  coachOrientationModesDisplay: string[];
+  coachOrientationModesOther: string;
+  concernedPublic: CustomizableFK[];
+  concernedPublicDisplay: string[];
+  creationDate: string;
+  credentials: CustomizableFK[];
+  credentialsDisplay: string[];
+  customizableChoicesSet: any; // TODO: a supprimer
+  department: string;
+  feeCondition: FeeCondition;
+  feeDetails: string;
+  forms: string[];
+  formsInfo: FileInfo[];
+  fullDesc: string;
+  isCumulative: boolean;
+  kinds: ServiceKind[];
+  kindsDisplay: string[];
+  modificationDate: string;
+  name: string;
+  numServices: number;
+  onlineForm: string;
+  qpvOrZrr: string;
+  recurrence: string;
+  requirements: CustomizableFK[];
+  requirementsDisplay: string[];
+  shortDesc: string;
+  slug: string;
+  structure: string;
+  structureInfo: ServiceStructure;
+  subcategories: string[];
+  subcategoriesDisplay: string[];
+  suspensionDate: string;
 };
 
 // FORM

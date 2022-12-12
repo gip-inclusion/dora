@@ -4,8 +4,9 @@ import { getModel, getService, getServicesOptions } from "$lib/services";
 import { getStructure } from "$lib/structures";
 import { error, redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
+import type { PageLoad } from "./$types";
 
-export async function load({ url, params, parent }) {
+export const load: PageLoad = async ({ url, params, parent }) => {
   await parent();
 
   const service = await getService(params.slug);
@@ -29,8 +30,10 @@ export async function load({ url, params, parent }) {
   const model = service.model ? await getModel(service.model) : null;
 
   return {
+    title: `${service.name} | ${service.structureInfo.name} | DORA`,
+    description: service.shortDesc,
     service,
     structure: await getStructure(service.structure),
     servicesOptions: await getServicesOptions({ model }),
   };
-}
+};

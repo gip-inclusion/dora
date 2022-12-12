@@ -1,7 +1,8 @@
 import { getStructure } from "$lib/structures";
 import { error } from "@sveltejs/kit";
+import type { PageLoad } from "./$types";
 
-export async function load({ url, parent }) {
+export const load: PageLoad = async ({ url, parent }) => {
   await parent();
 
   const structure = await getStructure(url.searchParams.get("structure"));
@@ -14,5 +15,10 @@ export async function load({ url, parent }) {
     structureParent = await getStructure(structure.parent);
   }
 
-  return { structure, parent: structureParent };
-}
+  return {
+    title: "Invitation | DORA",
+    noIndex: true,
+    structure,
+    parent: structureParent,
+  };
+};

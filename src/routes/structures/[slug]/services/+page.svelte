@@ -1,6 +1,5 @@
 <script lang="ts">
   import { getStructure } from "$lib/structures";
-  import { capitalize } from "$lib/utils";
   import { structure } from "../store";
   import type { PageData } from "./$types";
   import List from "./list.svelte";
@@ -10,11 +9,6 @@
     $structure = await getStructure($structure.slug);
   }
 </script>
-
-<svelte:head>
-  <title>Services | {capitalize($structure.name)} | DORA</title>
-  <meta name="description" content={$structure.shortDesc} />
-</svelte:head>
 
 <List
   servicesOptions={data.servicesOptions}

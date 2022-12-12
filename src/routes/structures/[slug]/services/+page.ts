@@ -1,8 +1,10 @@
 import { getServicesOptions } from "$lib/services";
 import type { SERVICE_STATUSES, SERVICE_UPDATE_STATUS } from "$lib/types";
+import { capitalize } from "$lib/utils";
+import type { PageLoad } from "./$types";
 
-export async function load({ url, parent }) {
-  await parent();
+export const load: PageLoad = async ({ url, parent }) => {
+  const { structure } = await parent();
 
   const query = url.searchParams;
   const serviceStatus: SERVICE_STATUSES | undefined =
@@ -12,8 +14,10 @@ export async function load({ url, parent }) {
   const servicesOptions = await getServicesOptions();
 
   return {
+    title: `Services | ${capitalize(structure.name)} | DORA`,
+    description: structure.shortDesc,
     serviceStatus,
     updateStatus,
     servicesOptions,
   };
-}
+};

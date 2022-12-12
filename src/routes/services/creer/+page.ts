@@ -3,11 +3,12 @@ import { getNewService } from "$lib/components/services/form/utils";
 import { getLastDraft, getModel, getServicesOptions } from "$lib/services";
 import { getStructures } from "$lib/structures";
 import { get } from "svelte/store";
+import type { PageLoad } from "./$types";
 
 // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
 export const ssr = false;
 
-export async function load({ url, parent }) {
+export const load: PageLoad = async ({ url, parent }) => {
   await parent();
 
   const query = url.searchParams;
@@ -49,6 +50,8 @@ export async function load({ url, parent }) {
   }
 
   return {
+    noIndex: true,
+    title: "Création d'un service | DORA",
     lastDraft: await getLastDraft(),
     servicesOptions: await getServicesOptions({ model }),
     structures,
@@ -56,4 +59,4 @@ export async function load({ url, parent }) {
     service,
     model,
   };
-}
+};

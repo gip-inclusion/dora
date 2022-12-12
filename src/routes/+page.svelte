@@ -18,14 +18,6 @@
   export let data: PageData;
 </script>
 
-<svelte:head>
-  <title>DORA : recensement et mise à jour de l’offre d’insertion</title>
-  <meta
-    name="description"
-    content="Le service public numérique de recensement et mise à jour de l’offre d’insertion."
-  />
-</svelte:head>
-
 <CenteredGrid
   bgColor="bg-magenta-10 mb-s32 rounded-bl-[64px] rounded-br-[64px]"
 >

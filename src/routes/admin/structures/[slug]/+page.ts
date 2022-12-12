@@ -1,7 +1,10 @@
 import { getStructureAdmin } from "$lib/admin";
+import { capitalize } from "$lib/utils";
 import { error } from "@sveltejs/kit";
 
-export async function load({ params, parent }) {
+import type { PageLoad } from "./$types";
+
+export const load: PageLoad = async ({ params, parent }) => {
   await parent();
 
   const structure = await getStructureAdmin(params.slug);
@@ -10,6 +13,8 @@ export async function load({ params, parent }) {
   }
 
   return {
+    title: `${capitalize(structure.name)} | Administration | DORA`,
+    noIndex: true,
     structure,
   };
-}
+};

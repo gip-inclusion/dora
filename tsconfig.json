@@ -11,5 +11,6 @@
     "strict": false,
     "strictNullChecks": false,
     "target": "ES2015"
-  }
+  },
+  "exclude": ["./tests/**", "./src/tests/**"]
 }

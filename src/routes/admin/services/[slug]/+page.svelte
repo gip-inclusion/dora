@@ -3,7 +3,7 @@
   import Date from "$lib/components/date.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import TextClamp from "$lib/components/text-clamp.svelte";
-  import { capitalize, markdownToHTML } from "$lib/utils";
+  import { markdownToHTML } from "$lib/utils";
   import { isNotFreeService } from "$lib/utils/service";
   import EmailLine from "../../email-line.svelte";
   import History from "../../history.svelte";
@@ -24,12 +24,6 @@
     data.service = await getServiceAdmin(data.service.slug);
   }
 </script>
-
-<svelte:head>
-  <title>
-    Admin | {capitalize(data.service.name)} | {capitalize(structure.name)} | DORA
-  </title>
-</svelte:head>
 
 <CenteredGrid bgColor="bg-gray-bg">
   <div class="text-f12">
