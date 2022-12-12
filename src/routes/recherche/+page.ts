@@ -1,10 +1,6 @@
 import { getQuery } from "$lib/search";
 import { getServicesOptions } from "$lib/services";
-import {
-  SERVICE_UPDATE_STATUS,
-  type SearchQuery,
-  type ServiceSearchResult,
-} from "$lib/types";
+import type { SearchQuery, ServiceSearchResult } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
 import { trackSearch } from "$lib/utils/plausible";
 import { computeUpdateStatusData } from "$lib/utils/service";
@@ -92,13 +88,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     cityLabel,
     kindIds,
     feeConditions,
-    allServices: services,
-    servicesUpToDate: services.filter(
-      (service) => service.updateStatus !== SERVICE_UPDATE_STATUS.REQUIRED
-    ),
-    servicesToUpdate: services.filter(
-      (service) => service.updateStatus === SERVICE_UPDATE_STATUS.REQUIRED
-    ),
+    services,
     servicesOptions: await getServicesOptions(),
   };
 };

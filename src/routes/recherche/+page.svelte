@@ -3,7 +3,6 @@
   import Button from "$lib/components/button.svelte";
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import NewletterNotice from "$lib/components/newsletter/newletter-notice.svelte";
-  import Notice from "$lib/components/notice.svelte";
   import SearchForm from "$lib/components/search/search-form.svelte";
   import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
   import type { ServiceSearchResult } from "$lib/types";
@@ -104,9 +103,9 @@
 
 <CenteredGrid extraClass="max-w-4xl m-auto">
   <div class="mt-s16 text-f21 font-bold text-gray-dark">
-    {#if data.allServices.length > 0}
-      {data.allServices.length}
-      {data.allServices.length > 1 ? "résultats" : "résultat"}
+    {#if data.services.length > 0}
+      {data.services.length}
+      {data.services.length > 1 ? "résultats" : "résultat"}
     {:else}
       Aucun résultat
     {/if}
@@ -118,38 +117,22 @@
     </div>
   {/if}
 
-  {#if hasOnlyNationalResults(data.allServices)}
+  {#if hasOnlyNationalResults(data.services)}
     <div class="mt-s24">
       <OnlyNationalResultsNotice />
     </div>
   {/if}
 
-  {#if data.allServices.length}
+  {#if data.services.length}
     <div class="mt-s32 flex flex-col gap-s16">
       <h2 class="sr-only">Résultats de votre recherche</h2>
-      {#each data.servicesUpToDate as service, index}
+      {#each data.services as service, index}
         {#if index < currentPageLength}
           <SearchResult id={getResultId(index)} result={service} />
         {/if}
       {/each}
 
-      {#if currentPageLength > data.servicesUpToDate.length && data.servicesToUpdate.length}
-        <Notice
-          type="warning"
-          title="Les services qui suivent n’ont pas été mis à jour depuis plus de 8
-        mois"
-        />
-        {#each data.servicesToUpdate as service, index}
-          {#if index + data.servicesUpToDate.length < currentPageLength}
-            <SearchResult
-              id={getResultId(index + data.servicesUpToDate.length)}
-              result={service}
-            />
-          {/if}
-        {/each}
-      {/if}
-
-      {#if data.allServices.length > currentPageLength}
+      {#if data.services.length > currentPageLength}
         <div class="text-center">
           <Button
             label="Charger plus de résultats"
