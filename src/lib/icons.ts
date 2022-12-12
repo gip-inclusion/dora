@@ -25,6 +25,7 @@ export { default as fileEditIcon } from "remixicon/icons/Document/file-edit-line
 export { default as fileForbidIcon } from "remixicon/icons/Document/file-forbid-line.svg?raw";
 export { default as fileInfoLineIcon } from "remixicon/icons/Document/file-info-line.svg?raw";
 export { default as fileTransferIcon } from "remixicon/icons/Document/file-transfer-line.svg?raw";
+export { default as fileWarningFillIcon } from "remixicon/icons/Document/file-warning-fill.svg?raw";
 export { default as folderFillIcon } from "remixicon/icons/Document/folder-5-fill.svg?raw";
 export { default as newspaperIcon } from "remixicon/icons/Document/newspaper-line.svg?raw";
 export { default as pageLineIcon } from "remixicon/icons/Document/pages-line.svg?raw";

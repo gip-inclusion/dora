@@ -169,6 +169,7 @@ export enum SERVICE_UPDATE_STATUS {
   NOT_NEEDED = "NOT_NEEDED",
   NEEDED = "NEEDED",
   REQUIRED = "REQUIRED",
+  ALL = "ALL",
 }
 
 export type ServiceCategory =

@@ -15,6 +15,7 @@
     earthFillIcon,
     errorWarningIcon,
     fileEditFillIcon,
+    fileWarningFillIcon,
     folderFillIcon,
   } from "$lib/icons";
   import {
@@ -103,6 +104,12 @@
       selectedLabel: "Actualisation : requise",
       icon: alertIcon,
     },
+    {
+      value: SERVICE_UPDATE_STATUS.ALL,
+      label: "À actualiser",
+      selectedLabel: "Actualisation : conseillée et requise",
+      icon: fileWarningFillIcon,
+    },
   ];
 
   // Service order
@@ -172,8 +179,11 @@
 
     // By update status
     if (updateStatus) {
-      services = services.filter(
-        (s) => computeUpdateStatusData(s).updateStatus === updateStatus
+      services = services.filter((s) =>
+        updateStatus === SERVICE_UPDATE_STATUS.ALL
+          ? computeUpdateStatusData(s).updateStatus !==
+            SERVICE_UPDATE_STATUS.NOT_NEEDED
+          : computeUpdateStatusData(s).updateStatus === updateStatus
       );
     }
 
