@@ -61,18 +61,20 @@
     goto(`recherche?${query}`);
   }
 
-  const categories = associateIconToCategory(
-    sortCategory(servicesOptions.categories)
-  );
+  const categories = servicesOptions.categories
+    ? associateIconToCategory(sortCategory(servicesOptions.categories))
+    : [];
 
-  const subCategories = sortByCategories(
-    servicesOptions.categories,
-    injectOptGroupAllOptionsInSubCategories(
-      categories,
-      injectOptGroupInSubCategories(servicesOptions.subcategories),
-      "Tous les besoins"
-    )
-  );
+  const subCategories = servicesOptions.categories
+    ? sortByCategories(
+        servicesOptions.categories,
+        injectOptGroupAllOptionsInSubCategories(
+          categories,
+          injectOptGroupInSubCategories(servicesOptions?.subcategories),
+          "Tous les besoins"
+        )
+      )
+    : [];
 </script>
 
 <div class="w-full rounded-md border border-gray-02 bg-white">
@@ -159,21 +161,20 @@
         />
       </div>
     </form>
+
+    {#if showDeploymentWarning && cityCode && !isInDeploymentDepartments(cityCode, servicesOptions)}
+      <div
+        class=" rounded-b-md border-t border-gray-02 bg-blue-light p-s16 text-center text-france-blue"
+      >
+        <span>
+          Sur votre territoire, le référencement des services débute – il se
+          peut que votre recherche aboutisse à peu de résultats.
+        </span>
+      </div>
+    {/if}
   {:else}
-    <p>Impossible de contacter le serveur</p>
+    <p class="p-s16 text-center">Impossible de contacter le serveur</p>
   {/if}
-
-  {#if showDeploymentWarning && cityCode && !isInDeploymentDepartments(cityCode, servicesOptions)}
-    <div
-      class=" rounded-b-md border-t border-gray-02 bg-blue-light p-s16 text-center text-france-blue"
-    >
-      <span>
-        Sur votre territoire, le référencement des services débute – il se peut
-        que votre recherche aboutisse à peu de résultats.
-      </span>
-    </div>
-  {/if}
-
   {#if useAdditionalFilters}
     <div
       class="flex flex-col rounded-b-md border-t border-gray-02 bg-white p-s16 text-f14 md:flex-row"
