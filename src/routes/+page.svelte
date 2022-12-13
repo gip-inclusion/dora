@@ -33,7 +33,11 @@
     </p>
   </div>
 
-  <SearchForm servicesOptions={data.servicesOptions} />
+  <SearchForm
+    servicesOptions={data.servicesOptions}
+    cityCode={data.cityCode}
+    cityLabel={data.cityLabel}
+  />
 
   <div class="mt-s32 mb-s16 text-center text-f16">
     <a

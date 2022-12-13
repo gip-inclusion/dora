@@ -1,4 +1,4 @@
-import { getQuery } from "$lib/search";
+import { getQuery, storeLastSearchCity } from "$lib/search";
 import { getServicesOptions } from "$lib/services";
 import type { SearchQuery, ServiceSearchResult } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
@@ -78,6 +78,10 @@ export const load: PageLoad = async ({ url, parent }) => {
     feeConditions,
     services.length
   );
+
+  if (cityCode && cityLabel) {
+    storeLastSearchCity(cityCode, cityLabel);
+  }
 
   return {
     title: `Services d’insertion à ${cityLabel} | Recherche | DORA`,
