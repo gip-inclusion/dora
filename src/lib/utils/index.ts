@@ -8,15 +8,12 @@ import { get } from "svelte/store";
 export function markdownToHTML(md, titleLevel) {
   const converter = new showdown.Converter({
     headerLevelStart: titleLevel ?? 2,
+    tables: true,
+    openLinksInNewWindow: true,
+    simplifiedAutoLink: true,
   });
 
-  return insane(converter.makeHtml(md), {
-    allowedAttributes: { a: ["class", "rel", "href"] },
-    filter: (token) => {
-      if (token.tag === "a") token.attrs["rel"] = "nofollow";
-      return token;
-    },
-  });
+  return insane(converter.makeHtml(md));
 }
 
 export function htmlToMarkdown(html: string) {

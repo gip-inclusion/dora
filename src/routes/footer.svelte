@@ -50,30 +50,16 @@
     <hr class="mb-s16" />
 
     <nav class="flex flex-wrap gap-s32">
-      <NavItem
-        href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/mentions-legales"
-        label="Mentions légales"
-        otherTab
-        nofollow
-      />
-      <NavItem
-        href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/conditions-generales-dutilisation"
-        label="CGU"
-        otherTab
-        nofollow
-      />
+      <NavItem href="/mentions-legales" label="Mentions légales" />
+      <NavItem href="/cgu" label="CGU" />
       <NavItem
         label="Données personnelles"
-        href="https://documentation.dora.fabrique.social.gouv.fr/informations-legales/politique-de-confidentialite"
-        otherTab
-        nofollow
+        href="/politique-de-confidentialite"
       />
       <NavItem
         href="#"
         on:click={handleOpenCookiesPanel}
         label="Gestion des cookies"
-        otherTab
-        nofollow
       />
       <NavItem label="Accessibilité : non conforme" href="/accessibilite" />
 
