@@ -5,7 +5,7 @@
   import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import SynchronizedIcon from "$lib/components/services/icons/synchronized.svelte";
-  import { copyIcon } from "$lib/icons";
+  import { copyIcon2 } from "$lib/icons";
   import {
     SERVICE_STATUSES,
     SERVICE_UPDATE_STATUS,
@@ -119,7 +119,7 @@
           {:else if !service.useInclusionNumeriqueScheme}
             <LinkButton
               label="Utiliser comme modèle"
-              icon={copyIcon}
+              icon={copyIcon2}
               iconOnRight
               noBackground
               hoverUnderline

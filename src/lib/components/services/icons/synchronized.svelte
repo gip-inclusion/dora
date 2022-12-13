@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { copyIcon } from "$lib/icons";
+  import { copyIcon2 } from "$lib/icons";
 
   export let warning = false;
   export let small = false;
@@ -11,7 +11,7 @@
   class:warning
 >
   <div class="h-s16 w-s16 fill-current ">
-    {@html copyIcon}
+    {@html copyIcon2}
   </div>
 </div>
 

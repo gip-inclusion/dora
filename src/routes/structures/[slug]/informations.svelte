@@ -6,7 +6,6 @@
   import TextClamp from "$lib/components/text-clamp.svelte";
   import {
     computerIcon,
-    editIcon,
     externalLinkIcon,
     mailLineIcon,
     phoneLineIcon,
@@ -55,8 +54,7 @@
           id="update-structure"
           label="Modifier les informations"
           to="/structures/{structure.slug}/editer"
-          icon={editIcon}
-          iconOnRight
+          secondary
         />
       </div>
     {/if}

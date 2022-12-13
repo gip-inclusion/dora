@@ -3,6 +3,8 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import StructureCard from "$lib/components/structures/card.svelte";
   import { API_URL, CANONICAL_URL } from "$lib/env";
+  import { home3Icon } from "$lib/icons";
+  import Count from "../count.svelte";
   // import Select from "$lib/components/forms/select.svelte";
   // import Input from "$lib/components/forms/input.svelte";
   export let structure, branches, total;
@@ -52,14 +54,17 @@
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
-  <h2 class="text-france-blue">Antennes</h2>
+  <div class="flex flex-row gap-s8">
+    <h2 class="mb-s0 text-france-blue">Antennes</h2>
+    {#if limit}<Count>{total}</Count>{/if}
+  </div>
   <div class="flex gap-s16">
     {#if !!branches.length && !hasOptions}
       <LinkButton
-        label={`Voir toutes les antennes (${total})`}
+        label="Voir toutes les antennes"
         to="/structures/{structure.slug}/antennes"
         small
-        secondary
+        noBackground
       />
     {/if}
     {#if $userInfo && (structure.isAdmin || $userInfo?.isStaff)}
@@ -70,7 +75,7 @@
         )}&lien_frontend=${encodeURIComponent(
           structureFrontEndLink
         )}&lien_backend=${encodeURIComponent(structureBackEndLink)}`}
-        small
+        icon={home3Icon}
         otherTab
         nofollow
       />

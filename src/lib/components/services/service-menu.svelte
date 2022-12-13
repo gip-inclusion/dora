@@ -1,6 +1,6 @@
 <script lang="ts">
   import LinkButton from "$lib/components/link-button.svelte";
-  import { checkboxCircleFillIcon, copyIcon, editIcon } from "$lib/icons";
+  import { checkboxCircleFillIcon, copyIcon2, editIcon } from "$lib/icons";
   import {
     SERVICE_STATUSES,
     SERVICE_UPDATE_STATUS,
@@ -53,7 +53,7 @@
     <LinkButton
       label="Voir le modèle"
       to="/modeles/{service.model}"
-      icon={copyIcon}
+      icon={copyIcon2}
       noBackground
       small
       {extraClass}
@@ -72,7 +72,7 @@
         label="Créer un modèle"
         to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
         small
-        icon={copyIcon}
+        icon={copyIcon2}
         noBackground
         {extraClass}
       />

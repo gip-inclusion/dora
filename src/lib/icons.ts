@@ -1,5 +1,6 @@
 export { default as bankIcon } from "remixicon/icons/Buildings/bank-line.svg?raw";
 export { default as homeIcon } from "remixicon/icons/Buildings/home-6-line.svg?raw";
+export { default as home3Icon } from "remixicon/icons/Buildings/home-3-line.svg?raw";
 export { default as homeSmile2Icon } from "remixicon/icons/Buildings/home-smile-2-line.svg?raw";
 export { default as homeSmileIcon } from "remixicon/icons/Buildings/home-smile-line.svg?raw";
 export { default as storeIcon } from "remixicon/icons/Buildings/store-2-line.svg?raw";
@@ -19,7 +20,8 @@ export { default as phoneLineIcon } from "remixicon/icons/Device/phone-line.svg?
 export { default as bookReadLineIcon } from "remixicon/icons/Document/book-read-line.svg?raw";
 export { default as draftFillIcon } from "remixicon/icons/Document/draft-fill.svg?raw";
 export { default as fileCloudIcon } from "remixicon/icons/Document/file-cloud-line.svg?raw";
-export { default as copyIcon } from "remixicon/icons/Document/file-copy-2-line.svg?raw";
+export { default as copyIcon2 } from "remixicon/icons/Document/file-copy-2-line.svg?raw";
+export { default as copyIcon } from "remixicon/icons/Document/file-copy-line.svg?raw";
 export { default as fileEditFillIcon } from "remixicon/icons/Document/file-edit-fill.svg?raw";
 export { default as fileEditIcon } from "remixicon/icons/Document/file-edit-line.svg?raw";
 export { default as fileForbidIcon } from "remixicon/icons/Document/file-forbid-line.svg?raw";
@@ -51,6 +53,7 @@ export { default as rocketIcon } from "remixicon/icons/Map/rocket-2-line.svg?raw
 export { default as lightBulbIcon } from "remixicon/icons/Others/lightbulb-flash-line.svg?raw";
 export { default as wheelChairIcon } from "remixicon/icons/Others/wheelchair-line.svg?raw";
 export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill.svg?raw";
+export { default as addIcon } from "remixicon/icons/System/add-fill.svg?raw";
 export { default as alertIcon } from "remixicon/icons/System/alert-fill.svg?raw";
 export { default as alertLine } from "remixicon/icons/System/alert-line.svg?raw";
 export { default as arrowDownLineIcon } from "remixicon/icons/System/arrow-down-line.svg?raw";
@@ -111,3 +114,4 @@ export { default as teamLineIcon } from "remixicon/icons/User/team-line.svg?raw"
 export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
 export { default as userFillIcon } from "remixicon/icons/User/user-3-fill.svg?raw";
 export { default as userSmileIcon } from "remixicon/icons/User/user-smile-fill.svg?raw";
+export { default as userAddIcon } from "remixicon/icons/User/user-add-line.svg?raw";

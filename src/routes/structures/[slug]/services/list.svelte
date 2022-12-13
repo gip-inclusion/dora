@@ -7,7 +7,7 @@
   import LinkButton from "$lib/components/link-button.svelte";
   import ServiceCard from "$lib/components/services/service-card.svelte";
   import {
-    addCircleIcon,
+    addIcon,
     alertIcon,
     arrowDownLineIcon,
     arrowUpLineIcon,
@@ -25,6 +25,7 @@
     type ShortService,
   } from "$lib/types";
   import { computeUpdateStatusData } from "$lib/utils/service";
+  import Count from "../count.svelte";
 
   export let structure, total, servicesOptions;
   export let hasOptions = true;
@@ -195,21 +196,23 @@
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
-  <h2 class="text-france-blue">Services</h2>
+  <div class="flex flex-row gap-s8">
+    <h2 class="mb-s0 text-france-blue">Services</h2>
+    {#if limit}<Count>{total}</Count>{/if}
+  </div>
   <div class="flex gap-s16">
     {#if !!servicesDisplayed.length && !hasOptions}
       <LinkButton
-        label={`Voir tous les services (${total})`}
+        label="Voir tous les services"
         to="/structures/{structure.slug}/services"
         small
-        secondary
+        noBackground
       />
     {/if}
     {#if canEdit}
       <LinkButton
         label="Ajouter un service"
-        iconOnRight
-        icon={addCircleIcon}
+        icon={addIcon}
         to="/services/creer?structure={structure.slug}"
       />
     {/if}

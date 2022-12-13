@@ -4,6 +4,8 @@
   // import Select from "$lib/components/forms/select.svelte";
   import LinkButton from "$lib/components/link-button.svelte";
   import ModelCard from "$lib/components/services/model-card.svelte";
+  import { copyIcon } from "$lib/icons";
+  import Count from "../count.svelte";
 
   export let structure, models, total;
   export let hasOptions = true;
@@ -48,21 +50,24 @@
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
-  <h2 class="text-france-blue">Modèles</h2>
+  <div class="flex flex-row gap-s8">
+    <h2 class="mb-s0 text-france-blue">Modèles</h2>
+    {#if limit}<Count>{total}</Count>{/if}
+  </div>
   <div class="flex gap-s16">
     {#if !!models.length && !hasOptions}
       <LinkButton
-        label={`Voir tous les modèles (${total})`}
+        label="Voir tous les modèles"
         to="/structures/{structure.slug}/modeles"
         small
-        secondary
+        noBackground
       />
     {/if}
     {#if canEdit}
       <LinkButton
         label="Ajouter un modèle"
+        icon={copyIcon}
         to="/modeles/creer?structure={structure.slug}"
-        small
       />
     {/if}
     <!-- {#if hasOptions}

@@ -1,11 +1,12 @@
 <script lang="ts">
   import { userInfo } from "$lib/auth";
-  import Button from "$lib/components/button.svelte";
   import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
+  import LinkButton from "$lib/components/link-button.svelte";
   import MemberInvited from "$lib/components/users/member-invited.svelte";
   import MemberStandard from "$lib/components/users/member-standard.svelte";
   import MemberToConfirm from "$lib/components/users/member-to-confirm.svelte";
   import ModalAddUser from "$lib/components/users/modal-add-user.svelte";
+  import { userAddIcon } from "$lib/icons";
   import { getMembers, getPutativeMembers } from "$lib/structures";
   import { structure } from "../store";
   import type { PageData } from "./$types";
@@ -43,9 +44,9 @@
   <div class="md:flex md:items-center md:justify-between">
     <h2 class="text-france-blue">Collaborateurs</h2>
     {#if data.canEditMembers}
-      <Button
-        label="Inviter un collaborateur"
-        small
+      <LinkButton
+        label="Ajouter un collaborateur"
+        icon={userAddIcon}
         on:click={() => (modalAddUserIsOpen = true)}
       />
     {/if}
