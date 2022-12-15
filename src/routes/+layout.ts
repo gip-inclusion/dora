@@ -7,7 +7,7 @@ import type { LayoutLoad } from "./$types";
 
 // No SSR for testing => we can't intercept request server side
 export const ssr = ENVIRONMENT === "testing" ? false : undefined;
-
+export const prerender = false;
 export const load: LayoutLoad = async ({ url }) => {
   let currentUserInfo = get(userInfo);
   if (!currentUserInfo) {
