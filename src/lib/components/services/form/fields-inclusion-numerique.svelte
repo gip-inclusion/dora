@@ -158,7 +158,7 @@
     );
   }
 
-  async function fillAdress() {
+  async function fillAddress() {
     showServiceAddress = false;
 
     if (structure) {
@@ -497,7 +497,7 @@
 
 <FieldSet title="Accueil">
   <Button
-    on:click={fillAdress(structure)}
+    on:click={fillAddress}
     secondary
     small
     label="Utiliser l'adresse de la structure"
