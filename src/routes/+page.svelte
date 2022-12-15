@@ -1,18 +1,18 @@
 <script lang="ts">
-  import logoDataInclusion from "$lib/assets/data-inclusion-logo.svg";
-  import illuAccompagner from "$lib/assets/illu-accompagner.svg";
-  import illuMobiliser from "$lib/assets/illu-mobiliser.svg";
-  import illuRecenser from "$lib/assets/illu-recenser.svg";
-  import logoAfpa from "$lib/assets/logo-afpa.svg";
-  import logoCaf from "$lib/assets/logo-caf.svg";
-  import logoDepartementArdennes from "$lib/assets/logo-departement-ardennes.svg";
-  import logoDepartementReunion from "$lib/assets/logo-departement-reunion.svg";
-  import logoMobIn from "$lib/assets/logo-mob-in.svg";
-  import logoPoleEmploi from "$lib/assets/logo-pole-emploi.svg";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import NewletterNotice from "$lib/components/newsletter/newletter-notice.svelte";
-  import SearchForm from "$lib/components/search/search-form.svelte";
+  import illuAccompagner from "$lib/assets/illustrations/illu-accompagner.svg";
+  import illuMobiliser from "$lib/assets/illustrations/illu-mobiliser.svg";
+  import illuRecenser from "$lib/assets/illustrations/illu-recenser.svg";
+  import logoAfpa from "$lib/assets/logos/logo-afpa.svg";
+  import logoCaf from "$lib/assets/logos/logo-caf.svg";
+  import logoDataInclusion from "$lib/assets/logos/logo-data-inclusion.svg";
+  import logoDepartementArdennes from "$lib/assets/logos/logo-departement-ardennes.svg";
+  import logoDepartementReunion from "$lib/assets/logos/logo-departement-reunion.svg";
+  import logoMobIn from "$lib/assets/logos/logo-mob-in.svg";
+  import logoPoleEmploi from "$lib/assets/logos/logo-pole-emploi.svg";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
+  import SearchForm from "$lib/components/specialized/service-search.svelte";
+  import NewletterNotice from "$lib/components/specialized/newletter-notice.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;

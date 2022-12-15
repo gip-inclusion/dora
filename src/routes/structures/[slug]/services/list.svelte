@@ -2,10 +2,9 @@
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { userInfo } from "$lib/auth";
-  import SelectField from "$lib/components/form/select/select-field.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import ServiceCard from "$lib/components/services/service-card.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
+  import SelectField from "$lib/components/inputs/select/select-field.svelte";
+  import ServiceCard from "./service-card.svelte";
   import {
     addIcon,
     alertIcon,
@@ -24,6 +23,7 @@
     type Choice,
     type ShortService,
   } from "$lib/types";
+  import { userInfo } from "$lib/utils/auth";
   import { computeUpdateStatusData } from "$lib/utils/service";
   import Count from "../count.svelte";
 

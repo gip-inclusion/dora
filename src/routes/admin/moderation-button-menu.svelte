@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ButtonMenu from "$lib/components/button-menu.svelte";
+  import ButtonMenu from "$lib/components/display/button-menu.svelte";
   import { arrowDownSIcon } from "$lib/icons";
   import ModerationLabel from "./moderation-label.svelte";
   import ModerationMenu from "./moderation-menu.svelte";

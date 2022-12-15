@@ -1,10 +1,8 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { userInfo } from "$lib/auth";
-  import Breadcrumb from "$lib/components/breadcrumb.svelte";
-  import Label from "$lib/components/label.svelte";
-  import AdminNotice from "$lib/components/structures/admin-notice.svelte";
-  import Tabs from "$lib/components/tabs-links.svelte";
+  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
+  import Label from "$lib/components/display/label.svelte";
+  import Tabs from "$lib/components/display/tabs-links.svelte";
   import {
     bookReadLineIcon,
     fileInfoLineIcon,
@@ -13,7 +11,9 @@
     pageLineIcon,
     teamLineIcon,
   } from "$lib/icons";
-  import { capitalize } from "$lib/utils";
+  import { userInfo } from "$lib/utils/auth";
+  import { capitalize } from "$lib/utils/misc";
+  import AdminNotice from "./admin-notice.svelte";
   import PendingNotice from "./pending-notice.svelte";
 
   export let structure;

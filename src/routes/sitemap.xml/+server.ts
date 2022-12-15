@@ -1,7 +1,7 @@
 import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
-import { SERVICE_STATUSES } from "$lib/schemas/service";
-import { getPublishedServices } from "$lib/services";
-import { getActiveStructures } from "$lib/structures";
+import { SERVICE_STATUSES } from "$lib/validation/schemas/service";
+import { getPublishedServices } from "$lib/requests/services";
+import { getActiveStructures } from "$lib/requests/structures";
 import { error } from "@sveltejs/kit";
 
 function toISODate(apiDate) {

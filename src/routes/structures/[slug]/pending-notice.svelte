@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Button from "$lib/components/button.svelte";
-  import Info from "$lib/components/info.svelte";
-  import Notice from "$lib/components/notice.svelte";
+  import Button from "$lib/components/display/button.svelte";
+  import Info from "$lib/components/display/info.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
   import { adminIcon } from "$lib/icons";
 
   const requestResent = false;

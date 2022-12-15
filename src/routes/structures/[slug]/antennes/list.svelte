@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { userInfo } from "$lib/auth";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import StructureCard from "$lib/components/structures/card.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
+  import StructureCard from "$lib/components/specialized/structure-card.svelte";
   import { API_URL, CANONICAL_URL } from "$lib/env";
   import { home3Icon } from "$lib/icons";
+  import { userInfo } from "$lib/utils/auth";
   import Count from "../count.svelte";
   // import Select from "$lib/components/forms/select.svelte";
   // import Input from "$lib/components/forms/input.svelte";

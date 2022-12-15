@@ -1,7 +1,6 @@
-import { getStructureAdmin } from "$lib/admin";
-import { capitalize } from "$lib/utils";
+import { getStructureAdmin } from "$lib/requests/admin";
+import { capitalize } from "$lib/utils/misc";
 import { error } from "@sveltejs/kit";
-
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ params, parent }) => {

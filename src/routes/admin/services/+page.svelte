@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { getServicesAdmin } from "$lib/admin";
-  import Label from "$lib/components/label.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import Label from "$lib/components/display/label.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
   import { eyeIcon, homeIcon } from "$lib/icons";
-  import { shortenString } from "$lib/utils";
+  import { getServicesAdmin } from "$lib/requests/admin";
+  import { shortenString } from "$lib/utils/misc";
   import { onMount } from "svelte";
 
   let services, filteredServices;

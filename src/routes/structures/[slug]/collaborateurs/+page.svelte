@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { userInfo } from "$lib/auth";
-  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import MemberInvited from "$lib/components/users/member-invited.svelte";
-  import MemberStandard from "$lib/components/users/member-standard.svelte";
-  import MemberToConfirm from "$lib/components/users/member-to-confirm.svelte";
-  import ModalAddUser from "$lib/components/users/modal-add-user.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
+  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import MemberInvited from "./member-invited.svelte";
+  import MemberStandard from "./member-standard.svelte";
+  import MemberToConfirm from "./member-to-confirm.svelte";
+  import ModalAddUser from "./modal-add-user.svelte";
   import { userAddIcon } from "$lib/icons";
-  import { getMembers, getPutativeMembers } from "$lib/structures";
+  import { getMembers, getPutativeMembers } from "$lib/requests/structures";
+  import { userInfo } from "$lib/utils/auth";
   import { structure } from "../store";
   import type { PageData } from "./$types";
 

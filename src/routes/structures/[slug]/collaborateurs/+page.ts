@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
-import { userInfo } from "$lib/auth";
-import { getMembers, getPutativeMembers } from "$lib/structures";
-import { capitalize } from "$lib/utils";
+import { getMembers, getPutativeMembers } from "$lib/requests/structures";
+import { userInfo } from "$lib/utils/auth";
+import { capitalize } from "$lib/utils/misc";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import { structure } from "../store";

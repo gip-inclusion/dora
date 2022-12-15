@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { userInfo } from "$lib/auth";
-  import { getStructure } from "$lib/structures";
+  import { getStructure } from "$lib/requests/structures";
+  import { userInfo } from "$lib/utils/auth";
   import type { PageData } from "./$types";
   import BranchesList from "./antennes/list.svelte";
   import Informations from "./informations.svelte";

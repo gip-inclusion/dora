@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { getModel, getServicesOptions } from "$lib/services";
+import { getModel, getServicesOptions } from "$lib/requests/services";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 

@@ -1,4 +1,4 @@
-import { getServiceAdmin } from "$lib/admin";
+import { getServiceAdmin } from "$lib/requests/admin";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 

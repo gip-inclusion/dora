@@ -1,4 +1,4 @@
-import { getStructuresOptions } from "$lib/structures";
+import { getStructuresOptions } from "$lib/requests/structures";
 import type { PageLoad } from "./$types";
 
 // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens

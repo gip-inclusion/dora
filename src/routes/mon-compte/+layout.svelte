@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { userInfo } from "$lib/auth";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import { userInfo } from "$lib/utils/auth";
   import Header from "./header.svelte";
 </script>
 

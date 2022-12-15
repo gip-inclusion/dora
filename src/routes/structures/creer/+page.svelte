@@ -1,11 +1,11 @@
 <script lang="ts">
-  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
-  import StructureSearch from "$lib/components/structures/search.svelte";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { alertIcon } from "$lib/icons";
-  import structureSchema from "$lib/schemas/structure";
-  import { siretWasAlreadyClaimed } from "$lib/structures";
+  import { siretWasAlreadyClaimed } from "$lib/requests/structures";
+  import structureSchema from "$lib/validation/schemas/structure";
+  import StructureFormWrapper from "../form-wrapper.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;

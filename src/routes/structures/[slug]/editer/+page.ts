@@ -1,5 +1,5 @@
-import { getStructuresOptions } from "$lib/structures";
-import { capitalize } from "$lib/utils";
+import { getStructuresOptions } from "$lib/requests/structures";
+import { capitalize } from "$lib/utils/misc";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ parent }) => {

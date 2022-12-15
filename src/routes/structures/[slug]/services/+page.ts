@@ -1,6 +1,6 @@
-import { getServicesOptions } from "$lib/services";
+import { getServicesOptions } from "$lib/requests/services";
 import type { SERVICE_STATUSES, SERVICE_UPDATE_STATUS } from "$lib/types";
-import { capitalize } from "$lib/utils";
+import { capitalize } from "$lib/utils/misc";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ url, parent }) => {

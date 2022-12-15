@@ -1,6 +1,6 @@
-import { token } from "$lib/auth";
 import { CANONICAL_URL } from "$lib/env";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+import { token } from "$lib/utils/auth";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import { getNextPage } from "../utils";

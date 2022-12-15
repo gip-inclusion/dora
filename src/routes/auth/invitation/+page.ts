@@ -1,4 +1,4 @@
-import { getStructure } from "$lib/structures";
+import { getStructure } from "$lib/requests/structures";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 

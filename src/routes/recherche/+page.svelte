@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Breadcrumb from "$lib/components/breadcrumb.svelte";
-  import Button from "$lib/components/button.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import NewletterNotice from "$lib/components/newsletter/newletter-notice.svelte";
-  import SearchForm from "$lib/components/search/search-form.svelte";
-  import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
+  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
+  import Button from "$lib/components/display/button.svelte";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import SearchForm from "$lib/components/specialized/service-search.svelte";
+  import NewletterNotice from "$lib/components/specialized/newletter-notice.svelte";
+  import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
   import type { ServiceSearchResult } from "$lib/types";
-  import { isInDeploymentDepartments } from "$lib/utils/city";
+  import { isInDeploymentDepartments } from "$lib/utils/misc";
   import { TallyFormId } from "$lib/utils/nps";
   import { tick } from "svelte";
   import type { PageData } from "./$types";

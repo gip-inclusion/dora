@@ -1,4 +1,4 @@
-import { token, userInfo } from "$lib/auth";
+import { token, userInfo } from "$lib/utils/auth";
 import { error, redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { LayoutLoad } from "./$types";

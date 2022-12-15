@@ -1,11 +1,15 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { token, userInfo, validateCredsAndFillUserInfo } from "$lib/auth";
-  import Button from "$lib/components/button.svelte";
-  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import StructureSearch from "$lib/components/structures/search.svelte";
+  import Button from "$lib/components/display/button.svelte";
+  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+  import {
+    token,
+    userInfo,
+    validateCredsAndFillUserInfo,
+  } from "$lib/utils/auth";
   import { trackJoinStructure } from "$lib/utils/plausible";
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";

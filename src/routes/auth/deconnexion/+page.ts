@@ -1,6 +1,6 @@
-import { disconnect } from "$lib/auth";
 import { CANONICAL_URL } from "$lib/env";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+import { disconnect } from "$lib/utils/auth";
 import { redirect } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 

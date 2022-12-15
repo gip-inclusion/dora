@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { getServiceAdmin } from "$lib/admin";
-  import Date from "$lib/components/date.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import TextClamp from "$lib/components/text-clamp.svelte";
-  import { markdownToHTML } from "$lib/utils";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import Date from "$lib/components/utilities/date.svelte";
+  import TextClamp from "$lib/components/utilities/text-clamp.svelte";
+  import { getServiceAdmin } from "$lib/requests/admin";
+  import { markdownToHTML } from "$lib/utils/misc";
   import { isNotFreeService } from "$lib/utils/service";
   import EmailLine from "../../email-line.svelte";
   import History from "../../history.svelte";

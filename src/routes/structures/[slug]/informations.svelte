@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { token, userInfo } from "$lib/auth";
-  import Date from "$lib/components/date.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import Notice from "$lib/components/notice.svelte";
-  import TextClamp from "$lib/components/text-clamp.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
+  import Date from "$lib/components/utilities/date.svelte";
+  import TextClamp from "$lib/components/utilities/text-clamp.svelte";
   import {
     computerIcon,
     externalLinkIcon,
@@ -12,11 +11,11 @@
     timeLineIcon,
     wheelChairIcon,
   } from "$lib/icons";
-  import { isStructureInformationsComplete } from "$lib/structures";
+  import { isStructureInformationsComplete } from "$lib/requests/structures";
   import type { Structure, StructuresOptions } from "$lib/types";
-  import { markdownToHTML } from "$lib/utils";
-  import { formatPhoneNumber } from "$lib/utils/phone";
-  import { formatOsmHours } from "$lib/utils/structures";
+  import { token, userInfo } from "$lib/utils/auth";
+  import { formatPhoneNumber, markdownToHTML } from "$lib/utils/misc";
+  import { formatOsmHours } from "$lib/utils/structure";
   import DataInclusionNotice from "./data-inclusion-notice.svelte";
 
   export let structure: Structure;

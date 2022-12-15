@@ -1,6 +1,6 @@
 <script lang="ts">
-  import orphanStructuresImg from "$lib/assets/illu-structures-orphelines.svg";
-  import LinkButton from "$lib/components/link-button.svelte";
+  import orphanStructuresImg from "$lib/assets/illustrations/illu-structures-orphelines.svg";
+  import LinkButton from "$lib/components/display/link-button.svelte";
   import type { Structure } from "$lib/types";
 
   export let structure: Structure;
