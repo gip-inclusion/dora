@@ -1,11 +1,13 @@
 <script lang="ts">
+  import type { InputType } from "$lib/types";
+  import type { Shape } from "$lib/validation/schemas/utils";
   import Field from "./field.svelte";
 
   export let value = undefined;
   export let name;
   export let label = undefined;
-  export let type;
-  export let schema;
+  export let type: InputType | "custom";
+  export let schema: Shape<any>;
   export let choices = [];
   export let sortSelect = undefined;
   export let vertical = false;
@@ -22,6 +24,7 @@
 
   export let hideLabel = false;
   export let autocomplete = undefined;
+  export let htmlDescription = false;
 
   let schemaField;
 
@@ -38,7 +41,6 @@
   {name}
   {errorMessages}
   required={schema?.required}
-  maxLength={schema?.maxLength}
   {label}
   {choices}
   {sortSelect}
@@ -53,6 +55,7 @@
   {readonly}
   {vertical}
   {autocomplete}
+  {htmlDescription}
 >
   <slot name="custom-input" slot="custom-input" />
 </Field>

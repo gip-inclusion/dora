@@ -1,20 +1,15 @@
 <script lang="ts">
+  import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
+  import FavoriteIcon from "$lib/components/specialized/favorite-icon.svelte";
+  import ServiceStateUpdateSelect from "$lib/components/specialized/services/service-state-update-select.svelte";
   import SynchronizedIcon from "$lib/components/specialized/services/synchronized-icon.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
-  import FavoriteIcon from "$lib/components/specialized/favorite-icon.svelte";
-  import {
-    SERVICE_STATUSES,
-    SERVICE_UPDATE_STATUS,
-    type ServicesOptions,
-    type ShortService,
-  } from "$lib/types";
+  import type { ServicesOptions, ShortService } from "$lib/types";
   import {
     computeUpdateStatusData,
     computeUpdateStatusLabel,
   } from "$lib/utils/service";
-  import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import ServiceButtonMenu from "./service-button-menu.svelte";
-  import ServiceStateUpdateSelect from "$lib/components/specialized/services/service-state-update-select.svelte";
 
   export let service: ShortService;
   export let servicesOptions: ServicesOptions;
@@ -40,7 +35,7 @@
             />
           </div>
 
-          {#if service.status !== SERVICE_STATUSES.SUGGESTION && service.status !== SERVICE_STATUSES.ARCHIVED}
+          {#if service.status !== "SUGGESTION" && service.status !== "ARCHIVED"}
             <div class="relative z-10">
               <ServiceButtonMenu
                 {service}
@@ -78,28 +73,19 @@
       class="flex min-h-[100px] flex-col justify-center gap-s10 border-t border-t-gray-03 py-s12 px-s20"
     >
       <div class="flex items-center text-f14 text-gray-text">
-        {#if service.status !== SERVICE_STATUSES.PUBLISHED || updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED}
+        {#if service.status !== "PUBLISHED" || updateStatusData.updateStatus === "NOT_NEEDED"}
           <span class="mr-s8">
-            <UpdateStatusIcon
-              updateStatus={SERVICE_UPDATE_STATUS.NOT_NEEDED}
-              small
-            />
+            <UpdateStatusIcon updateStatus="NOT_NEEDED" small />
           </span>
           {computeUpdateStatusLabel(updateStatusData)}
-        {:else if updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NEEDED}
+        {:else if updateStatusData.updateStatus === "NEEDED"}
           <span class="mr-s8">
-            <UpdateStatusIcon
-              updateStatus={SERVICE_UPDATE_STATUS.NEEDED}
-              small
-            />
+            <UpdateStatusIcon updateStatus="NEEDED" small />
           </span>
           <span class="font-bold">Actualisation conseillée</span>
-        {:else if updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.REQUIRED}
+        {:else if updateStatusData.updateStatus === "REQUIRED"}
           <span class="mr-s8">
-            <UpdateStatusIcon
-              updateStatus={SERVICE_UPDATE_STATUS.REQUIRED}
-              small
-            />
+            <UpdateStatusIcon updateStatus="REQUIRED" small />
           </span>
           <span class="font-bold">Actualisation requise</span>
         {/if}

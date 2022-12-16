@@ -1,18 +1,21 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
   import SetAsUpdatedModal from "$lib/components/specialized/services/set-as-updated-modal.svelte";
+  import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
   import Date from "$lib/components/utilities/date.svelte";
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
-  import type { Service, ServicesOptions } from "$lib/types";
-  import { SERVICE_STATUSES, SERVICE_UPDATE_STATUS } from "$lib/types";
+  import type {
+    Service,
+    ServicesOptions,
+    ServiceUpdateStatus,
+  } from "$lib/types";
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
 
   export let label: string;
-  export let updateStatus: SERVICE_UPDATE_STATUS;
+  export let updateStatus: ServiceUpdateStatus;
   export let onRefresh: () => void;
 
   let setAsUpdatedModalOpen = false;
@@ -22,8 +25,8 @@
   class="flex w-full flex-col place-content-between items-center gap-s24 text-gray-text sm:flex-row"
 >
   <div id="label-container" class="flex-[3]">
-    {#if service.status === SERVICE_STATUSES.PUBLISHED}
-      {#if updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED}
+    {#if service.status === "PUBLISHED"}
+      {#if updateStatus === "NOT_NEEDED"}
         <div class="flex items-center">
           <div class="mr-s16">
             <UpdateStatusIcon {updateStatus} />
@@ -34,7 +37,7 @@
           </span>
           <span class="print:hidden">{label}</span>
         </div>
-      {:else if updateStatus === SERVICE_UPDATE_STATUS.NEEDED}
+      {:else if updateStatus === "NEEDED"}
         <div class="flex items-center">
           <span class="mr-s16">
             <UpdateStatusIcon {updateStatus} />
@@ -55,7 +58,7 @@
       {:else}
         <div class="flex items-center">
           <span class="mr-s16">
-            <UpdateStatusIcon updateStatus={SERVICE_UPDATE_STATUS.REQUIRED} />
+            <UpdateStatusIcon updateStatus="REQUIRED" />
           </span>
           <div>
             <div class="text-f18">
@@ -77,7 +80,7 @@
     {/if}
   </div>
   <div class="flex w-full flex-[2] flex-col justify-end md:mt-s0 lg:flex-row">
-    {#if updateStatus !== SERVICE_UPDATE_STATUS.NOT_NEEDED && service.status === SERVICE_STATUSES.PUBLISHED}
+    {#if updateStatus !== "NOT_NEEDED" && service.status === "PUBLISHED"}
       <Button
         id="set-as-updated"
         extraClass="mb-s10 lg:mb-s0 lg:mr-s16 justify-center"

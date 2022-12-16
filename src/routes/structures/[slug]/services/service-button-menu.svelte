@@ -4,14 +4,14 @@
   import type {
     Service,
     ServicesOptions,
-    SERVICE_UPDATE_STATUS,
+    ServiceUpdateStatus,
     ShortService,
   } from "$lib/types";
   import ServiceMenu from "./service-menu.svelte";
 
   export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
-  export let updateStatus: SERVICE_UPDATE_STATUS | undefined;
+  export let updateStatus: ServiceUpdateStatus | undefined;
   export let onRefresh: () => void | undefined;
 </script>
 

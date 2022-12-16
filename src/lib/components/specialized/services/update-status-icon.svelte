@@ -1,22 +1,31 @@
 <script lang="ts">
   import { alertLine, errorWarningLineIcon, historyLineIcon } from "$lib/icons";
-  import { SERVICE_UPDATE_STATUS } from "$lib/types";
+  import type { ServiceUpdateStatus } from "$lib/types";
 
   export let small = false;
-  export let updateStatus: SERVICE_UPDATE_STATUS;
+  export let updateStatus: ServiceUpdateStatus;
 
-  const statusPresentation = {
-    [SERVICE_UPDATE_STATUS.NOT_NEEDED]: {
+  type ServiceStatusPresentation = {
+    iconBg: string;
+    icon: string;
+    textColor: string;
+  };
+
+  const statusPresentation: Record<
+    ServiceUpdateStatus,
+    ServiceStatusPresentation
+  > = {
+    NOT_NEEDED: {
       iconBg: "bg-service-blue",
       icon: historyLineIcon,
       textColor: "text-service-blue-dark",
     },
-    [SERVICE_UPDATE_STATUS.NEEDED]: {
+    NEEDED: {
       iconBg: "bg-wait-dark",
       icon: errorWarningLineIcon,
       textColor: "text-white",
     },
-    [SERVICE_UPDATE_STATUS.REQUIRED]: {
+    REQUIRED: {
       iconBg: "bg-service-red-dark",
       icon: alertLine,
       textColor: "text-white",

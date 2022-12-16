@@ -5,7 +5,7 @@
   import { alertIcon } from "$lib/icons";
   import { siretWasAlreadyClaimed } from "$lib/requests/structures";
   import structureSchema from "$lib/validation/schemas/structure";
-  import StructureFormWrapper from "../form-wrapper.svelte";
+  import StructureEditionForm from "../structure-edition-form.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -86,7 +86,7 @@
 
     {#if structure.siret}
       <h2 class="mb-s40 border border-b-2 border-gray-02">Présentation</h2>
-      <StructureFormWrapper
+      <StructureEditionForm
         {structure}
         structuresOptions={data.structuresOptions}
       />

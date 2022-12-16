@@ -15,32 +15,32 @@ import {
   textIcon,
   wheelChairIcon,
 } from "$lib/icons";
-import {
-  SERVICE_STATUSES,
-  SERVICE_UPDATE_STATUS,
-  type Choice,
-  type FeeCondition,
-  type Service,
-  type ServiceSearchResult,
-  type ServicesOptions,
-  type ShortService,
+import type {
+  Choice,
+  FeeCondition,
+  Service,
+  ServiceSearchResult,
+  ServicesOptions,
+  ServiceStatus,
+  ServiceUpdateStatus,
+  ShortService,
 } from "$lib/types";
 import dayjs from "dayjs";
 import { getChoicesFromKey } from "./choice";
 
 export function getAvailableOptionsForStatus(
-  status: SERVICE_STATUSES
-): (SERVICE_STATUSES | "DELETE")[] {
-  let result: (SERVICE_STATUSES | "DELETE")[] = [];
+  status: ServiceStatus
+): (ServiceStatus | "DELETE")[] {
+  let result: (ServiceStatus | "DELETE")[] = [];
 
-  if (status === SERVICE_STATUSES.SUGGESTION) {
-    result = [SERVICE_STATUSES.DRAFT, "DELETE"];
-  } else if (status === SERVICE_STATUSES.PUBLISHED) {
-    result = [SERVICE_STATUSES.DRAFT, SERVICE_STATUSES.ARCHIVED];
-  } else if (status === SERVICE_STATUSES.DRAFT) {
-    result = [SERVICE_STATUSES.PUBLISHED, SERVICE_STATUSES.ARCHIVED];
-  } else if (status === SERVICE_STATUSES.ARCHIVED) {
-    result = [SERVICE_STATUSES.DRAFT];
+  if (status === "SUGGESTION") {
+    result = ["DRAFT", "DELETE"];
+  } else if (status === "PUBLISHED") {
+    result = ["DRAFT", "ARCHIVED"];
+  } else if (status === "DRAFT") {
+    result = ["PUBLISHED", "ARCHIVED"];
+  } else if (status === "ARCHIVED") {
+    result = ["DRAFT"];
   } else {
     throw new Error(`Unknown status ${status}`);
   }
@@ -53,7 +53,7 @@ type ServiceUpdateStatusData = {
   weekDiff: number;
   monthDiff: number;
   yearDiff: number;
-  updateStatus: SERVICE_UPDATE_STATUS;
+  updateStatus: ServiceUpdateStatus;
 };
 export function computeUpdateStatusData(
   service: Service | ShortService | ServiceSearchResult
@@ -64,11 +64,10 @@ export function computeUpdateStatusData(
   const monthDiff = dayjs().diff(lastUpdateDay, "month");
   const yearDiff = dayjs().diff(lastUpdateDay, "year");
 
-  let updateStatus = SERVICE_UPDATE_STATUS.NOT_NEEDED;
-  if (service.status === SERVICE_STATUSES.PUBLISHED) {
-    if (monthDiff >= 6 && monthDiff < 8)
-      updateStatus = SERVICE_UPDATE_STATUS.NEEDED;
-    if (monthDiff >= 8) updateStatus = SERVICE_UPDATE_STATUS.REQUIRED;
+  let updateStatus: ServiceUpdateStatus = "NOT_NEEDED";
+  if (service.status === "PUBLISHED") {
+    if (monthDiff >= 6 && monthDiff < 8) updateStatus = "NEEDED";
+    if (monthDiff >= 8) updateStatus = "REQUIRED";
   }
 
   return {

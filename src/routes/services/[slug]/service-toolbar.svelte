@@ -3,20 +3,15 @@
   import cornerRightBlueImg from "$lib/assets/style/corner-right-blue.png";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
+  import ServiceStateUpdateSelect from "$lib/components/specialized/services/service-state-update-select.svelte";
   import SynchronizedIcon from "$lib/components/specialized/services/synchronized-icon.svelte";
   import { copyIcon2 } from "$lib/icons";
-  import {
-    SERVICE_STATUSES,
-    SERVICE_UPDATE_STATUS,
-    type Service,
-    type ServicesOptions,
-  } from "$lib/types";
+  import type { Service, ServicesOptions } from "$lib/types";
   import { token } from "$lib/utils/auth";
   import {
     computeUpdateStatusData,
     computeUpdateStatusLabel,
   } from "$lib/utils/service";
-  import ServiceStateUpdateSelect from "$lib/components/specialized/services/service-state-update-select.svelte";
   import ServiceUpdateStatusAsContributor from "./service-update-status-as-contributor.svelte";
   import ServiceUpdateStatusAsReader from "./service-update-status-as-reader.svelte";
 
@@ -34,14 +29,14 @@
       extraClass="
         py-s32 mb-s14 w-full
         {service.canWrite &&
-      service.status === SERVICE_STATUSES.PUBLISHED &&
-      updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NEEDED
+      service.status === 'PUBLISHED' &&
+      updateStatusData.updateStatus === 'NEEDED'
         ? 'bg-service-orange'
         : ''}
 
         {service.canWrite &&
-      service.status === SERVICE_STATUSES.PUBLISHED &&
-      updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.REQUIRED
+      service.status === 'PUBLISHED' &&
+      updateStatusData.updateStatus === 'REQUIRED'
         ? 'bg-service-red'
         : ''}
       "
@@ -67,13 +62,13 @@
     </CenteredGrid>
   </div>
 
-  {#if !service.canWrite || updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED || service.status !== SERVICE_STATUSES.PUBLISHED}
+  {#if !service.canWrite || updateStatusData.updateStatus === "NOT_NEEDED" || service.status !== "PUBLISHED"}
     <div
       class="m-auto max-w-6xl border border-t-0 border-r-0 border-l-0 border-gray-02"
     />
   {/if}
 
-  {#if updateStatusData.updateStatus === SERVICE_UPDATE_STATUS.NOT_NEEDED || !$token}
+  {#if updateStatusData.updateStatus === "NOT_NEEDED" || !$token}
     <img
       src={cornerLeftBlueImg}
       alt=""

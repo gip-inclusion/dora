@@ -92,14 +92,14 @@
         const { validatedData, valid } = validate(service, filteredSchema, {
           fullSchema: serviceSchema,
           noScroll: true,
-          extraData: servicesOptions,
+          servicesOptions: servicesOptions,
         });
 
         if (valid) {
           service = { ...service, ...validatedData };
         }
 
-        resolve();
+        resolve(true);
       }, 200);
     });
   }
@@ -125,6 +125,7 @@
       des Zones de Revitalisation Rurale.
     </p>
   </div>
+
   <SchemaField
     type="select"
     label={serviceSchema.diffusionZoneType.name}

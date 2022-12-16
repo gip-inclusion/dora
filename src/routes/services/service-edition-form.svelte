@@ -1,27 +1,48 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
-  import { serviceSchema } from "$lib/validation/schemas/service";
-  import debounce from "lodash.debounce";
-  import { onDestroy, onMount } from "svelte";
   import Errors from "$lib/components/specialized/services/errors.svelte";
   import FieldsCommon from "$lib/components/specialized/services/fields-common.svelte";
-  import FieldsInclusionNumerique from "./fields-inclusion-numerique.svelte";
-  import FieldsService from "./fields-service.svelte";
   import FieldsStructure from "$lib/components/specialized/services/fields-structure.svelte";
-  import ServiceNavButtons from "./service-nav-buttons.svelte";
+  import { createOrModifyService, publishDraft } from "$lib/requests/services";
+  import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
+  import type {
+    Model,
+    Service,
+    ServicesOptions,
+    ShortStructure,
+  } from "$lib/types";
+  import { logException } from "$lib/utils/logger";
+  import { draftSchema, serviceSchema } from "$lib/validation/schemas/service";
+  import { injectAPIErrors, validate } from "$lib/validation/validation";
+  import debounce from "lodash.debounce";
+  import { onDestroy, onMount } from "svelte";
+  import FieldsInclusionNumerique from "./inclusion-numerique-fields.svelte";
+  import FieldsService from "./standard-fields.svelte";
 
-  export let service, servicesOptions, structures, structure, model;
+  export let service: Service,
+    servicesOptions: ServicesOptions,
+    structures: ShortStructure[],
+    structure: ShortStructure,
+    model: Model;
 
+  let modelSlugTmp = null;
   let errorDiv;
+
+  // Counter for filling duration
+  let intervalId;
+  let lastUserActivity, userIsInactive;
+
+  // Note: we use debounce to limit update frequency
+  const updateLastUserActivity = debounce(() => {
+    lastUserActivity = Date.now();
+  }, 500);
 
   function onError() {
     errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
   }
-
-  let modelSlugTmp = null;
 
   async function unsync() {
     modelSlugTmp = service.model;
@@ -32,15 +53,6 @@
     service.model = modelSlugTmp;
     modelSlugTmp = null;
   }
-
-  // Counter for filling duration
-  let intervalId;
-  let lastUserActivity, userIsInactive;
-
-  // Note: we use debounce to limit update frequency
-  const updateLastUserActivity = debounce(() => {
-    lastUserActivity = Date.now();
-  }, 500);
 
   onMount(() => {
     lastUserActivity = Date.now();
@@ -57,6 +69,82 @@
   onDestroy(() => {
     clearInterval(intervalId);
   });
+
+  async function publish() {
+    service.status = "PUBLISHED";
+    service.markSynced = true;
+
+    // Validate the whole form
+    const { validatedData, valid } = validate(service, serviceSchema, {
+      servicesOptions: servicesOptions,
+    });
+
+    if (valid) {
+      try {
+        let result = await createOrModifyService({
+          ...validatedData,
+          durationToAdd: $serviceSubmissionTimeMeter.duration,
+        });
+        result = await publishDraft(result.data.slug);
+
+        // For feedback modal
+        serviceSubmissionTimeMeter.setId(result.slug);
+
+        goto(`/services/${result.slug}`);
+      } catch (error) {
+        logException(error);
+      }
+    }
+  }
+
+  async function saveDraft() {
+    service.status = "DRAFT";
+    service.markSynced = true;
+
+    // eslint-disable-next-line no-warning-comments
+    // HACK: Empty <Select> are casted to null for now
+    // but the server wants an empty string
+    // We should fix the <Select> instead
+    if (service.category == null) {
+      service.category = "";
+    }
+
+    const { validatedData, valid } = validate(service, draftSchema, {
+      servicesOptions: servicesOptions,
+    });
+
+    if (!valid) {
+      return;
+    }
+
+    // Validation OK, let's send it to the API endpoint
+    const result = await createOrModifyService({
+      ...validatedData,
+      durationToAdd: $serviceSubmissionTimeMeter.duration,
+    });
+
+    if (result.ok) {
+      serviceSubmissionTimeMeter.clear();
+
+      goto(`/services/${result.data.slug}`);
+    } else {
+      injectAPIErrors(
+        result.error || {
+          nonFieldErrors: [
+            {
+              code: "fetch-error",
+              message: "Erreur de connexion au serveur",
+            },
+          ],
+        },
+        {}
+      );
+
+      if (onError) {
+        onError();
+      }
+    }
+  }
 </script>
 
 <svelte:window
@@ -159,7 +247,14 @@
 
   <CenteredGrid>
     <div class="flex flex-row gap-s12">
-      <ServiceNavButtons {onError} {servicesOptions} bind:service />
+      <Button
+        on:click={saveDraft}
+        name="save"
+        label="Enregistrer en brouillon"
+        secondary
+      />
+
+      <Button on:click={publish} name="publish" label="Publier" />
     </div>
   </CenteredGrid>
 {/if}

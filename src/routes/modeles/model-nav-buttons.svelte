@@ -11,7 +11,7 @@
   async function save() {
     // Validate the whole form
     const { validatedData, valid } = validate(model, modelSchema, {
-      extraData: servicesOptions,
+      servicesOptions: servicesOptions,
     });
 
     if (valid) {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { InputType } from "$lib/types";
   import {
     contextValidationKey,
     type ValidationContext,
@@ -9,14 +10,13 @@
 
   export let value = undefined;
   export let name = "";
-  export let type;
+  export let type: InputType | "custom";
   export let errorMessages = [];
   export let allowHTMLError = false;
   export let autocomplete = undefined;
   export let vertical = false;
   export let label = "";
   export let required = false;
-  export let maxLength = undefined;
   export let rows = undefined;
   export let choices = [];
   export let sortSelect = undefined;
@@ -27,6 +27,7 @@
   export let placeholderMulti = undefined;
   export let initialValue = undefined;
   export let description = "";
+  export let htmlDescription = false;
   export let minValue = undefined;
 
   export let hideLabel = false;
@@ -55,7 +56,6 @@
   class="items-top flex flex-col gap-s8"
   class:lg:flex-row={!vertical}
   class:hidden={type === "hidden"}
-  isDOMLabel={type !== "checkboxes" && type !== "radios"}
 >
   <!-- #1# -->
   <div class="flex flex-col{vertical ? '' : ' lg:w-1/4'}">
@@ -66,7 +66,9 @@
       {#if required} <span class="ml-s6 text-error"> *</span>{/if}</label
     >
     {#if description}
-      <small>{description}</small>
+      <small
+        >{#if htmlDescription}{@html description}{:else}{description}{/if}</small
+      >
     {/if}
   </div>
   <div class="flex flex-col{vertical ? '' : ' lg:w-3/4'}">
@@ -83,7 +85,6 @@
         {name}
         {choices}
         {sortSelect}
-        {maxLength}
         {rows}
         {placeholder}
         {placeholderMulti}
@@ -98,7 +99,7 @@
       <slot name="custom-input" />
     {/if}
     {#each errorMessages || [] as msg}
-      <Alert label={msg} isHTML={allowHTMLError} />
+      <Alert id="{name}-error" label={msg} isHTML={allowHTMLError} />
     {/each}
   </div>
 </div>

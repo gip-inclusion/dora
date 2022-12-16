@@ -3,14 +3,13 @@
   import Alert from "$lib/components/display/alert.svelte";
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import OpeningHoursField from "$lib/components/specialized/openingHours/opening-hours-field.svelte";
   import SchemaField from "$lib/components/inputs/schema-field.svelte";
-  import SelectField from "$lib/components/inputs/select/select-field.svelte";
   import CitySearch from "$lib/components/specialized/city-search.svelte";
+  import OpeningHoursField from "$lib/components/specialized/openingHours/opening-hours-field.svelte";
   import AddressSearch from "$lib/components/specialized/street-search.svelte";
-  import TextField from "$lib/components/inputs/text-field.svelte";
   import { createStructure, modifyStructure } from "$lib/requests/structures";
   import type { Structure, StructuresOptions } from "$lib/types";
+  import { getDepartmentFromCityCode } from "$lib/utils/misc";
   import structureSchema from "$lib/validation/schemas/structure";
   import {
     contextValidationKey,
@@ -25,22 +24,22 @@
   export let structuresOptions: StructuresOptions;
 
   export let modify = false;
-  export let onRefresh;
+  export let onRefresh = undefined;
 
   let errorDiv;
 
   async function handleEltChange(evt) {
     // We want to listen to both DOM and component events
-    const fieldname = evt.target?.name || evt.detail;
+    const fieldName = evt.target?.name || evt.detail;
 
     // Sometimes (particularly with Select components), the event is received
     // before the field value is updated in  `structure`, although it's not
-    // supposed to happen. This setTimeout is a unsatisfying workaround to that.
+    // supposed to happen. This setTimeout is an unsatisfying workaround to that.
     await new Promise((resolve) => {
       setTimeout(() => {
         const filteredSchema =
-          fieldname && structureSchema[fieldname]
-            ? { [fieldname]: structureSchema[fieldname] }
+          fieldName && structureSchema[fieldName]
+            ? { [fieldName]: structureSchema[fieldName] }
             : {};
 
         const { validatedData, valid } = validate(structure, filteredSchema, {
@@ -117,56 +116,65 @@
     structure.longitude = long;
     structure.latitude = lat;
   }
+
+  function getAccessLibreUrl(structure) {
+    const department = getDepartmentFromCityCode(structure.cityCode);
+    const where = encodeURIComponent(`${structure.city} (${department})`);
+    const lat = encodeURIComponent(structure.latitude);
+    const long = encodeURIComponent(structure.longitude);
+    const code = encodeURIComponent(structure.cityCode);
+    return `https://acceslibre.beta.gouv.fr/recherche/?what=&where=${where}&lat=${lat}&lon=${long}&code=${code}`;
+  }
+
+  $: accesslibreUrl = getAccessLibreUrl(structure);
 </script>
 
 <form
   novalidate
   on:submit|preventDefault={handleSubmit}
-  class="flex flex-col gap-s32 rounded-t-md border border-gray-02 p-s32 lg:w-2/3"
+  class="flex flex-col gap-s32 rounded-md border border-gray-02 bg-white p-s32 lg:w-2/3"
 >
-  <div class="text-f14 text-gray-text">
-    <span class="text-error">*</span>
-    Champs obligatoires
-  </div>
-
   {#if $formErrors.nonFieldErrors && $formErrors.nonFieldErrors.length}
     <div bind:this={errorDiv}>
       {#each $formErrors.nonFieldErrors || [] as msg}
-        <Alert label={msg} />
+        <Alert id="global-errors" label={msg} />
       {/each}
     </div>
   {/if}
 
-  <TextField
-    name="siret"
+  <SchemaField
+    type="text"
     label="SIRET"
-    on:blur={handleEltChange}
-    bind:value={structure.siret}
+    schema={structureSchema.siret}
+    name="siret"
     errorMessages={$formErrors.siret}
-    maxlength={14}
-    required={structureSchema.siret.required}
     disabled
-    helper="Format attendu : 14 chiffres"
+    bind:value={structure.siret}
+    vertical
   />
 
-  <TextField
-    name="name"
+  <SchemaField
+    type="text"
     label="Nom de la structure"
-    bind:value={structure.name}
-    on:blur={handleEltChange}
+    placeholder="Plateforme de l’inclusion"
+    schema={structureSchema.name}
+    name="name"
     errorMessages={$formErrors.name}
-    maxlength={255}
-    required={structureSchema.name.required}
+    bind:value={structure.name}
+    vertical
   />
 
-  <SelectField
+  <SchemaField
+    type="select"
     label="Typologie"
+    placeholder="Choisissez…"
+    schema={structureSchema.typology}
+    sortSelect
     name="typology"
-    placeholder="Choississez..."
     errorMessages={$formErrors.typology}
     bind:value={structure.typology}
-    onChange={handleEltChange}
     choices={structuresOptions.typologies}
+    vertical
   />
 
   <SchemaField
@@ -180,7 +188,7 @@
     <CitySearch
       slot="custom-input"
       name="city"
-      placeholder="Saisissez et validez votre ville"
+      placeholder="Paris"
       initialValue={structure.city}
       onChange={handleCityChange}
     />
@@ -199,143 +207,156 @@
       name="address1"
       disabled={!structure.cityCode}
       cityCode={structure.cityCode}
-      placeholder="3 rue du parc"
+      placeholder="127 rue de Grenelle"
       initialValue={structure.address1}
       handleChange={handleAddressChange}
     />
   </SchemaField>
 
-  <TextField
-    name="address2"
+  <SchemaField
+    type="text"
     label="Complément d’adresse"
-    bind:value={structure.address2}
-    on:blur={handleEltChange}
+    placeholder="étage, bâtiment…"
+    schema={structureSchema.address2}
+    name="address2"
     errorMessages={$formErrors.address2}
-    maxlength={255}
+    bind:value={structure.address2}
+    vertical
   />
 
-  <TextField
-    name="accesslibreUrl"
-    label="Accessibilité"
-    helper="Afin de renseigner les informations d’accessibilité sur la structure, retrouvez-la via la plateforme <a href='https://acceslibre.beta.gouv.fr/' target='_blank' title='Ouverture dans une nouvelle fenêtre' rel='noopener'>accès libre</a> et copiez l’url dans le champs ci-dessous"
-    bind:value={structure.accesslibreUrl}
-    on:blur={handleEltChange}
-    placeholder="https://acceslibre.beta.gouv.fr/..."
-    errorMessages={$formErrors.accesslibreUrl}
-    maxlength={255}
-  />
-
-  <TextField
-    inputType="text"
+  <SchemaField
+    type="text"
     label="Code postal"
+    placeholder="75007"
+    schema={structureSchema.postalCode}
     name="postalCode"
-    helper="Exemple : 44000"
-    on:blur={handleEltChange}
-    required
     errorMessages={$formErrors.postalCode}
     bind:value={structure.postalCode}
+    vertical
   />
 
-  <TextField
-    label="cityCode"
+  <SchemaField
+    type="hidden"
+    schema={structureSchema.cityCode}
     name="cityCode"
-    inputType="hidden"
+    errorMessages={$formErrors.cityCode}
     bind:value={structure.cityCode}
   />
-  <TextField
-    label="longitude"
+
+  <SchemaField
+    type="hidden"
+    schema={structureSchema.longitude}
     name="longitude"
-    inputType="hidden"
+    errorMessages={$formErrors.longitude}
     bind:value={structure.longitude}
   />
-  <TextField
-    label="latitude"
+  <SchemaField
+    type="hidden"
+    schema={structureSchema.latitude}
     name="latitude"
-    inputType="hidden"
+    errorMessages={$formErrors.latitude}
     bind:value={structure.latitude}
+    vertical
   />
 
-  <TextField
-    inputType="tel"
+  <SchemaField
+    type="url"
+    label="Accessibilité"
+    description="Afin de renseigner les informations d’accessibilité sur la structure, retrouvez-la via la plateforme <a class='underline text-magenta-cta' href='{accesslibreUrl}' target='_blank' title='Ouverture dans une nouvelle fenêtre' rel='noopener'>accès libre</a> et copiez l’url dans le champs ci-dessous"
+    placeholder="https://acceslibre.beta.gouv.fr/…"
+    schema={structureSchema.accesslibreUrl}
+    name="accesslibreUrl"
+    errorMessages={$formErrors.accesslibreUrl}
+    bind:value={structure.accesslibreUrl}
+    vertical
+    htmlDescription
+  />
+
+  <SchemaField
+    type="tel"
     label="Téléphone"
+    schema={structureSchema.phone}
     name="phone"
-    on:blur={handleEltChange}
-    helper="Exemples: 06 00 00 00 00 ou 0600000000"
     errorMessages={$formErrors.phone}
     bind:value={structure.phone}
+    vertical
   />
 
-  <TextField
-    inputType="email"
+  <SchemaField
+    type="email"
     label="Courriel"
-    helper="Exemple: nom.prenom@organisation.fr"
+    placeholder="nom.prenom@organisation.fr"
+    schema={structureSchema.email}
     name="email"
-    on:blur={handleEltChange}
-    required={structureSchema.email.required}
     errorMessages={$formErrors.email}
     bind:value={structure.email}
+    vertical
   />
 
-  <TextField
-    inputType="url"
+  <SchemaField
+    type="url"
     label="Site web"
-    helper="Exemple: https://mastructure.fr"
     placeholder="https://mastructure.fr"
+    schema={structureSchema.url}
     name="url"
-    on:blur={handleEltChange}
     errorMessages={$formErrors.url}
     bind:value={structure.url}
+    vertical
   />
 
-  <TextField
-    inputType="textarea"
+  <SchemaField
+    type="textarea"
     label="Résumé"
-    helper="280 caractères maximum"
+    description="280 caractères maximum"
     placeholder="Décrivez brièvement votre structure"
+    schema={structureSchema.shortDesc}
     name="shortDesc"
-    maxlength={280}
-    on:blur={handleEltChange}
-    required={structureSchema.shortDesc.required}
     errorMessages={$formErrors.shortDesc}
     bind:value={structure.shortDesc}
+    vertical
   />
 
-  <TextField
-    inputType="richtext"
+  <SchemaField
+    type="richtext"
     label="Présentation"
+    placeholder="Présentation détaillée de la structure"
+    schema={structureSchema.fullDesc}
     name="fullDesc"
     errorMessages={$formErrors.fullDesc}
     bind:value={structure.fullDesc}
-    on:blur={handleEltChange}
-    placeholder="Présentation détaillée de la structure"
+    vertical
   />
 
-  <SelectField
+  <SchemaField
+    type="multiselect"
     label="Labels nationaux"
     name="nationalLabels"
-    helper="Indiquez si la structure fait partie d'un ou plusieurs réseaux nationaux"
-    placeholder="Choississez..."
+    description="Indiquez si la structure fait partie d'un ou plusieurs réseaux nationaux"
+    placeholder="Choisissez…"
+    placeholderMulti="Choisissez…"
+    schema={structureSchema.nationalLabels}
     errorMessages={$formErrors.nationalLabels}
     bind:value={structure.nationalLabels}
-    onChange={handleEltChange}
     choices={structuresOptions.nationalLabels}
-    isMultiple
+    vertical
   />
 
-  <TextField
+  <SchemaField
+    type="text"
     name="otherLabels"
     label="Autres labels"
-    helper="Indiquez si la structure fait partie d’autres labels (régionaux, locaux…)"
-    bind:value={structure.otherLabels}
-    on:blur={handleEltChange}
+    description="Indiquez si la structure fait partie d’autres labels (régionaux, locaux…)"
+    schema={structureSchema.otherLabels}
     errorMessages={$formErrors.otherLabels}
-    maxlength={255}
+    bind:value={structure.otherLabels}
+    vertical
   />
 
-  <TextField
-    label="ape"
-    inputType="hidden"
+  <SchemaField
+    type="hidden"
+    schema={structureSchema.ape}
     name="ape"
+    errorMessages={$formErrors.ape}
     bind:value={structure.ape}
   />
 
@@ -347,24 +368,25 @@
     bind:value={structure.openingHours}
   />
 
-  <TextField
-    name="openingHoursDetails"
+  <SchemaField
+    type="text"
     label="Détail horaires"
-    helper="Vous pouvez renseigner des informations spécifiques concernant les horaires dans ce champ"
-    bind:value={structure.openingHoursDetails}
-    on:blur={handleEltChange}
+    description="Vous pouvez renseigner des informations spécifiques concernant les horaires dans ce champ"
+    placeholder=""
+    schema={structureSchema.openingHoursDetails}
+    name="openingHoursDetails"
     errorMessages={$formErrors.openingHoursDetails}
-    maxlength={255}
+    bind:value={structure.openingHoursDetails}
+    vertical
   />
 
   <hr />
 
-  <div class="flex justify-end">
+  <div class="flex flex-col justify-end gap-s16 md:flex-row ">
     <LinkButton
       to="/structures/{structure.slug}"
       on:submit
       secondary
-      extraClass="mr-s16"
       label="Annuler les modifications"
     />
     <Button

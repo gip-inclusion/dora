@@ -45,6 +45,7 @@ export default {
     rules: [v.isPostalCode()],
   },
   city: {
+    default: "",
     required: true,
     name: "ville",
     rules: [v.isString(), v.maxStrLength(255)],
@@ -78,6 +79,7 @@ export default {
   },
   fullDesc: {
     default: "",
+    name: "description",
     rules: [v.isString()],
     post: [v.trim],
   },
@@ -104,5 +106,25 @@ export default {
     name: "openingHoursDetails",
     rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
+  },
+  cityCode: {
+    default: "",
+    name: "code INSEE",
+    rules: [],
+  },
+  longitude: {
+    default: null,
+    name: "longitude",
+    rules: [],
+  },
+  latitude: {
+    default: null,
+    name: "latitude",
+    rules: [],
+  },
+  ape: {
+    default: "",
+    name: "code APE",
+    rules: [],
   },
 };

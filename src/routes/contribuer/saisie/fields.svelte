@@ -4,7 +4,7 @@
   import Notice from "$lib/components/display/notice.svelte";
   import Field from "$lib/components/inputs/field.svelte";
   import SchemaField from "$lib/components/inputs/schema-field.svelte";
-  import SelectField from "$lib/components/inputs/select/select-field.svelte";
+  import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
   import CitySearch from "$lib/components/specialized/city-search.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import AddressSearch from "$lib/components/specialized/street-search.svelte";

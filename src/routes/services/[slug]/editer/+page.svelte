@@ -2,7 +2,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import NoticePublication from "./notice-publication.svelte";
-  import ServiceFields from "../../service-fields.svelte";
+  import ServiceFields from "../../service-edition-form.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;

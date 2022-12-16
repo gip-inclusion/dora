@@ -11,7 +11,7 @@
     validate(service, serviceSchema, {
       noScroll: true,
       showErrors: false,
-      extraData: servicesOptions,
+      servicesOptions,
     });
 
   let errors;

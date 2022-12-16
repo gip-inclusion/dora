@@ -8,7 +8,7 @@
     getChoicesFromKey,
   } from "$lib/utils/choice";
   import { tick } from "svelte";
-  import FieldWrapper from "../field-wrapper.svelte";
+  import FieldWrapper from "./field-wrapper.svelte";
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";
 

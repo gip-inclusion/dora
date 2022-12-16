@@ -1,13 +1,14 @@
 <script lang="ts">
   import RichText from "$lib/components/inputs/rich-text/editor.svelte";
   import Toggle from "$lib/components/inputs/toggle.svelte";
+  import type { InputType } from "$lib/types";
   import Checkboxes from "./checkboxes.svelte";
   import RadioButtons from "./radio-buttons.svelte";
   import Select from "./select/select.svelte";
 
   export let value = undefined;
 
-  export let type;
+  export let type: InputType;
   export let name;
   export let autocomplete;
   export let choices = [];
@@ -19,7 +20,6 @@
   export let placeholderMulti = "";
   export let initialValue = undefined;
   export let minValue = null;
-  export let maxLength = undefined;
   export let rows = 4;
 
   export let onSelectChange = undefined;
@@ -98,7 +98,6 @@
     bind:value
     on:blur
     type="text"
-    {maxLength}
     {placeholder}
     {disabled}
     {readonly}
@@ -107,6 +106,7 @@
   />
 {:else if type === "richtext"}
   <RichText
+    id={name}
     bind:this={input}
     {name}
     bind:htmlContent={value}

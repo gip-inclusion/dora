@@ -10,7 +10,6 @@
     fileEditFillIcon,
     folderFillIcon,
   } from "$lib/icons";
-  import { serviceSchema } from "$lib/validation/schemas/service";
   import {
     archiveService,
     convertSuggestionToDraft,
@@ -20,14 +19,11 @@
     unarchiveService,
     unPublishService,
   } from "$lib/requests/services";
-  import {
-    SERVICE_STATUSES,
-    type Service,
-    type ShortService,
-  } from "$lib/types";
+  import type { Service, ServiceStatus, ShortService } from "$lib/types";
+  import { clickOutside } from "$lib/utils/click-outside";
   import { getAvailableOptionsForStatus } from "$lib/utils/service";
+  import { serviceSchema } from "$lib/validation/schemas/service";
   import { validate } from "$lib/validation/validation";
-  import { clickOutside } from "../../../utils/click-outside";
 
   type ServiceStatusPresentation = {
     bgClass: string;
@@ -38,31 +34,31 @@
   };
 
   export const SERVICE_STATUS_PRESENTATION: Record<
-    SERVICE_STATUSES,
+    ServiceStatus,
     ServiceStatusPresentation
   > = {
-    [SERVICE_STATUSES.SUGGESTION]: {
+    SUGGESTION: {
       bgClass: "bg-service-violet",
       iconClass: "text-service-violet-darker",
       hoverBgClass: "bg-service-violet-dark",
       icon: fileEditFillIcon,
       label: "Suggestion",
     },
-    [SERVICE_STATUSES.DRAFT]: {
+    DRAFT: {
       bgClass: "bg-service-orange",
       iconClass: "text-service-orange-darker",
       hoverBgClass: "bg-service-orange-dark",
       icon: draftFillIcon,
       label: "Brouillon",
     },
-    [SERVICE_STATUSES.PUBLISHED]: {
+    PUBLISHED: {
       bgClass: "bg-service-green",
       iconClass: "text-service-green-darker",
       hoverBgClass: "bg-service-green-dark",
       icon: earthFillIcon,
       label: "Publié",
     },
-    [SERVICE_STATUSES.ARCHIVED]: {
+    ARCHIVED: {
       bgClass: "bg-service-gray",
       iconClass: "text-gray-darker",
       hoverBgClass: "bg-service-gray-dark",
@@ -87,7 +83,7 @@
 
   // Gestion de l'outline avec la navigation au clavier
   let selectedOptionIndex: number | null = null;
-  let selectedOption: SERVICE_STATUSES | "DELETE" | null = null;
+  let selectedOption: ServiceStatus | "DELETE" | null = null;
 
   function toggleCombobox(forceValue?: boolean) {
     isDropdownOpen = forceValue !== undefined ? forceValue : !isDropdownOpen;
@@ -133,7 +129,7 @@
   }
 
   function setAsSelected(
-    hoveredStatus: SERVICE_STATUSES | "DELETE",
+    hoveredStatus: ServiceStatus | "DELETE",
     index: number
   ) {
     selectedOptionIndex = index;
@@ -141,18 +137,18 @@
   }
 
   // Actions disponibles
-  async function updateServiceStatus(newStatus: SERVICE_STATUSES | "DELETE") {
-    if (newStatus === SERVICE_STATUSES.DRAFT) {
-      if (service.status === SERVICE_STATUSES.SUGGESTION) {
+  async function updateServiceStatus(newStatus: ServiceStatus | "DELETE") {
+    if (newStatus === "DRAFT") {
+      if (service.status === "SUGGESTION") {
         await convertSuggestionToDraft(service.slug);
-      } else if (service.status === SERVICE_STATUSES.PUBLISHED) {
+      } else if (service.status === "PUBLISHED") {
         await unPublishService(service.slug);
-      } else if (service.status === SERVICE_STATUSES.ARCHIVED) {
+      } else if (service.status === "ARCHIVED") {
         await unarchiveService(service.slug);
       }
-    } else if (newStatus === SERVICE_STATUSES.PUBLISHED) {
+    } else if (newStatus === "PUBLISHED") {
       await publish();
-    } else if (newStatus === SERVICE_STATUSES.ARCHIVED) {
+    } else if (newStatus === "ARCHIVED") {
       await archiveService(service.slug);
     } else if (newStatus === "DELETE") {
       // eslint-disable-next-line no-alert
@@ -178,7 +174,7 @@
     const isValid = validate(serviceFull, serviceSchema, {
       noScroll: true,
       showErrors: false,
-      extraData: servicesOptions,
+      servicesOptions: servicesOptions,
     }).valid;
 
     if (isValid) {

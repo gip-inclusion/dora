@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
-  export let group, choices, disabled, name, readonly, inline;
+  export let group, choices, disabled, name, readonly;
   const dispatch = createEventDispatcher();
 
   // We want the change event to come from this component, not from
@@ -11,12 +11,7 @@
   }
 </script>
 
-<div
-  class="flex"
-  class:flex-col={!inline}
-  class:gap-s8={!inline}
-  class:gap-s24={inline}
->
+<div class="flex flex-col gap-s8">
   {#each choices as choice}
     <label class="flex flex-row items-center focus-within:shadow-focus">
       <input

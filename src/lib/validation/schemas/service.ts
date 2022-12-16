@@ -1,15 +1,8 @@
+import type { ServicesOptions } from "$lib/types";
 import * as v from "./utils";
 
-// Deprecated : please use in SERVICE_STATUSES on "$lib/types"
-export const SERVICE_STATUSES = {
-  draft: "DRAFT",
-  suggestion: "SUGGESTION",
-  published: "PUBLISHED",
-  archived: "ARCHIVED",
-};
-
 export function allCategoriesHaveSubcategories() {
-  return (name, value, data, extraData, schema) => {
+  return (name, value, data, servicesOptions: ServicesOptions, schema) => {
     const subcatRoots = new Set(
       data.subcategories.map((value) => value.split("--")[0])
     );
@@ -22,7 +15,7 @@ export function allCategoriesHaveSubcategories() {
       };
     }
 
-    if (!extraData) {
+    if (!servicesOptions) {
       console.log("Missing servicesOptions in rules check");
       return {
         valid: true,
@@ -31,7 +24,8 @@ export function allCategoriesHaveSubcategories() {
     const catWithoutSubCat = data.categories
       .filter((value) => !subcatRoots.has(value))
       .map(
-        (value) => extraData.categories.find((cat) => cat.value === value).label
+        (value) =>
+          servicesOptions.categories.find((cat) => cat.value === value).label
       );
     return {
       valid: catWithoutSubCat.length === 0,

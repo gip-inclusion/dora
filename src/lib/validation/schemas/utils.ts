@@ -1,4 +1,5 @@
 /* eslint-disable */
+import type { ServicesOptions } from "$lib/types";
 import { INVALID_ERROR_MESSAGE } from "$lib/utils/structure";
 
 // From https://github.com/jquense/yup/blob/03584f6758ff43409113c41f58fd41e065aa18a3/src/string.ts
@@ -15,6 +16,28 @@ const postalCodeRegexp = /^\d[0-9abAB]\d{3}$/u;
 export const siretRegexp = /^\d{14}$/u;
 /* eslint-enable */
 
+export type Action<T> = (value: T) => T;
+
+export type Rule<T> = (
+  name: string,
+  value: T,
+  data: any,
+  servicesOptions?: ServicesOptions,
+  schema?: any
+) => {
+  valid: boolean;
+  msg: string;
+};
+
+export interface Shape<T> {
+  name: string;
+  rules: Rule<T>[];
+  default?: T;
+  required?: boolean;
+  dependents?: string[];
+  post?: Action<T>[];
+  pre?: Action<T>[];
+}
 // ----- Rules
 
 export function isString(msg = "") {
@@ -40,11 +63,9 @@ export function isInteger(msg = "") {
 
 export function isDate(msg = "") {
   return (name, value, _data) => ({
-    // TODO: that's probably not safe enough. Use Luxon?
-    // https://stackoverflow.com/questions/7445328/check-if-a-string-is-a-date-value
     valid:
       typeof value === "string" &&
-      (value === "" || new Date(value) !== "Invalid Date"),
+      (value === "" || !isNaN(new Date(value).getTime())),
     msg: msg || `Veuillez saisir une date valide`,
   });
 }
@@ -129,7 +150,7 @@ export function isCustomizablePK(msg = "") {
   });
 }
 
-export function isArray(rules, msg = "") {
+export function isArray<T>(rules: Rule<T>[], msg = "") {
   return (name, value, data) => {
     if (!Array.isArray(value)) {
       return {
@@ -150,6 +171,7 @@ export function isArray(rules, msg = "") {
     }
     return {
       valid: true,
+      msg,
     };
   };
 }
@@ -206,7 +228,7 @@ export function nullEmpty(value) {
 
 export function formatSchema(schema, fields, fieldsRequired) {
   const schemaFormatted = {};
-  Object.entries(schema).forEach(([key, value]) => {
+  Object.entries(schema).forEach(([key, value]: [string, Shape<any>]) => {
     if (fields.includes(key)) {
       schemaFormatted[key] = {
         name: value.name,

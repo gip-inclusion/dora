@@ -2,7 +2,7 @@
   import Button from "$lib/components/display/button.svelte";
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import SchemaField from "$lib/components/inputs/schema-field.svelte";
-  import SelectField from "$lib/components/inputs/select/select-field.svelte";
+  import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
   import AdminDivisionSearch from "$lib/components/specialized/admin-division-search.svelte";
   import CitySearch from "$lib/components/specialized/city-search.svelte";
   import AddressSearch from "$lib/components/specialized/street-search.svelte";
@@ -248,7 +248,7 @@
         const { validatedData, valid } = validate(service, filteredSchema, {
           fullSchema: serviceSchema,
           noScroll: true,
-          extraData: servicesOptions,
+          servicesOptions: servicesOptions,
         });
 
         if (valid) {

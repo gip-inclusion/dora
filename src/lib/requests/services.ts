@@ -2,9 +2,14 @@ import { getApiURL } from "$lib/utils/api";
 import { token } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
-import type { Model, Service, ServicesOptions, ShortService } from "../types";
+import type {
+  Model,
+  Service,
+  ServicesOptions,
+  ServiceStatus,
+  ShortService,
+} from "../types";
 import { logException } from "../utils/logger";
-import { SERVICE_STATUSES } from "../validation/schemas/service";
 
 function serviceToBack(service) {
   if (service.longitude && service.latitude) {
@@ -180,6 +185,8 @@ export async function setBookmark(serviceSlug: string, wantedState: boolean) {
 export async function publishDraft(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";
+  const status: ServiceStatus = "PUBLISHED";
+
   const response = await fetch(url, {
     method,
     headers: {
@@ -187,7 +194,7 @@ export async function publishDraft(serviceSlug) {
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify({ status: SERVICE_STATUSES.published }),
+    body: JSON.stringify({ status }),
   });
 
   if (!response.ok) {
@@ -200,6 +207,7 @@ export async function publishDraft(serviceSlug) {
 export async function unPublishService(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";
+  const status: ServiceStatus = "DRAFT";
   const response = await fetch(url, {
     method,
     headers: {
@@ -207,7 +215,7 @@ export async function unPublishService(serviceSlug) {
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify({ status: SERVICE_STATUSES.draft }),
+    body: JSON.stringify({ status }),
   });
   if (!response.ok) {
     throw Error(response.statusText);
@@ -218,6 +226,8 @@ export async function unPublishService(serviceSlug) {
 export async function archiveService(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";
+  const status: ServiceStatus = "ARCHIVED";
+
   const response = await fetch(url, {
     method,
     headers: {
@@ -225,7 +235,7 @@ export async function archiveService(serviceSlug) {
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify({ status: SERVICE_STATUSES.archived }),
+    body: JSON.stringify({ status }),
   });
   if (!response.ok) {
     throw Error(response.statusText);
@@ -236,6 +246,8 @@ export async function archiveService(serviceSlug) {
 export async function unarchiveService(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";
+  const status: ServiceStatus = "DRAFT";
+
   const response = await fetch(url, {
     method,
     headers: {
@@ -243,7 +255,7 @@ export async function unarchiveService(serviceSlug) {
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify({ status: SERVICE_STATUSES.draft }),
+    body: JSON.stringify({ status }),
   });
   if (!response.ok) {
     throw Error(response.statusText);
@@ -254,6 +266,8 @@ export async function unarchiveService(serviceSlug) {
 export async function publishService(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";
+  const status: ServiceStatus = "PUBLISHED";
+
   const response = await fetch(url, {
     method,
     headers: {
@@ -261,7 +275,7 @@ export async function publishService(serviceSlug) {
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify({ status: SERVICE_STATUSES.published }),
+    body: JSON.stringify({ status }),
   });
   if (!response.ok) {
     throw Error(response.statusText);
@@ -272,6 +286,8 @@ export async function publishService(serviceSlug) {
 export async function convertSuggestionToDraft(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";
+  const status: ServiceStatus = "DRAFT";
+
   const response = await fetch(url, {
     method,
     headers: {
@@ -279,7 +295,7 @@ export async function convertSuggestionToDraft(serviceSlug) {
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify({ status: SERVICE_STATUSES.draft }),
+    body: JSON.stringify({ status }),
   });
   if (!response.ok) {
     throw Error(response.statusText);

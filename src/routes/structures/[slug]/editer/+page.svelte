@@ -2,7 +2,7 @@
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { getStructure } from "$lib/requests/structures";
   import { refreshUserInfo } from "$lib/utils/auth";
-  import StructureFormWrapper from "../../form-wrapper.svelte";
+  import StructureEditionForm from "../../structure-edition-form.svelte";
   import { structure } from "../store";
   import type { PageData } from "./$types";
 
@@ -18,7 +18,7 @@
 <EnsureLoggedIn>
   <h2 class="mb-s40 border-b border-gray-02 pb-s40">Informations</h2>
 
-  <StructureFormWrapper
+  <StructureEditionForm
     structure={$structure}
     structuresOptions={data.structuresOptions}
     modify

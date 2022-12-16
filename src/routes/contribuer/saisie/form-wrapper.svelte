@@ -42,7 +42,7 @@
         const { validatedData, valid } = validate(service, filteredSchema, {
           fullSchema: contribSchema,
           noScroll: true,
-          extraData: servicesOptions,
+          servicesOptions: servicesOptions,
         });
         if (valid) {
           service = { ...service, ...validatedData };
@@ -71,7 +71,7 @@
   async function handlePublish() {
     // Validate the whole form
     const { valid } = validate(service, contribSchema, {
-      extraData: servicesOptions,
+      servicesOptions: servicesOptions,
     });
 
     if (valid) {

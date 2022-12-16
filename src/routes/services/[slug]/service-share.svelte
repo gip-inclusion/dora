@@ -3,7 +3,6 @@
   import { CANONICAL_URL, PDF_SERVICE_URL } from "$lib/env";
   import { checkIcon, downloadIcon, linkIcon } from "$lib/icons";
   import type { Service, ShortService } from "$lib/types";
-  import { SERVICE_STATUSES } from "$lib/types";
   import { trackPDFDownload } from "$lib/utils/plausible";
   import { fly } from "svelte/transition";
 
@@ -54,7 +53,7 @@
     </span>
   </button>
 
-  {#if service.status === SERVICE_STATUSES.PUBLISHED}
+  {#if service.status === "PUBLISHED"}
     <LinkButton
       secondary
       wFull

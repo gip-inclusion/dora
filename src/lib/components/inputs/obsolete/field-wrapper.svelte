@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Alert from "../display/alert.svelte";
+  import Alert from "../../display/alert.svelte";
 
   export let label: string;
   export let name: string;

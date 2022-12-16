@@ -7,7 +7,7 @@ import { get } from "svelte/store";
 import type { ShortStructure, Structure, StructuresOptions } from "../types";
 import { logException } from "../utils/logger";
 
-export async function siretWasAlreadyClaimed(siret) {
+export async function siretWasAlreadyClaimed(siret: string) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;
   const res = await fetch(url, {
     headers: {
@@ -18,6 +18,8 @@ export async function siretWasAlreadyClaimed(siret) {
   const result = {
     ok: res.ok,
     status: res.status,
+    result: undefined,
+    error: undefined,
   };
 
   if (res.ok) {

@@ -1,5 +1,4 @@
 import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
-import { SERVICE_STATUSES } from "$lib/validation/schemas/service";
 import { getPublishedServices } from "$lib/requests/services";
 import { getActiveStructures } from "$lib/requests/structures";
 import { error } from "@sveltejs/kit";
@@ -13,7 +12,7 @@ async function getServicesEntries() {
   const response = await getPublishedServices();
 
   return response
-    .filter((s) => (s.status = SERVICE_STATUSES.published)) // Pas indispensable, mais c'est une sécurité supplémentaire
+    .filter((s) => (s.status = "PUBLISHED")) // Pas indispensable, mais c'est une sécurité supplémentaire
     .map((s) =>
       `<url>
       <loc>${CANONICAL_URL}/services/${s.slug}</loc>
