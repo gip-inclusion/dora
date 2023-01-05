@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Button from "$lib/components/button.svelte";
-  import Modal from "$lib/components/modal.svelte";
-  import { markdownToHTML } from "$lib/utils";
+  import Button from "$lib/components/display/button.svelte";
+  import Modal from "$lib/components/display/modal.svelte";
+  import { markdownToHTML } from "$lib/utils/misc";
   import Line from "./line.svelte";
 
   export let suggestion;

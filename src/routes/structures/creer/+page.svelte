@@ -1,11 +1,11 @@
 <script lang="ts">
-  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import StructureFormWrapper from "$lib/components/structures/form-wrapper.svelte";
-  import StructureSearch from "$lib/components/structures/search.svelte";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { alertIcon } from "$lib/icons";
-  import structureSchema from "$lib/schemas/structure";
-  import { siretWasAlreadyClaimed } from "$lib/structures";
+  import { siretWasAlreadyClaimed } from "$lib/requests/structures";
+  import structureSchema from "$lib/validation/schemas/structure";
+  import StructureEditionForm from "../structure-edition-form.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -86,7 +86,7 @@
 
     {#if structure.siret}
       <h2 class="mb-s40 border border-b-2 border-gray-02">Présentation</h2>
-      <StructureFormWrapper
+      <StructureEditionForm
         {structure}
         structuresOptions={data.structuresOptions}
       />

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Date from "$lib/components/date.svelte";
+  import Date from "$lib/components/utilities/date.svelte";
 
   export let notes;
 </script>

@@ -1,3 +1,19 @@
+export type InputType =
+  | "text"
+  | "textarea"
+  | "url"
+  | "number"
+  | "email"
+  | "hidden"
+  | "richtext"
+  | "tel"
+  | "checkboxes"
+  | "radios"
+  | "select"
+  | "multiselect"
+  | "toggle"
+  | "date";
+
 export type DiffusionZoneType =
   | "country"
   | "region"
@@ -34,7 +50,7 @@ export interface StructureService {
   remoteUrl: string;
   shortDesc: string;
   slug: string;
-  status: SERVICE_STATUSES;
+  status: ServiceStatus;
   structure: string;
   useInclusionNumeriqueScheme: boolean;
 }
@@ -157,20 +173,9 @@ export type OsmOpeningHours = {
 };
 
 // SERVICES
-// TODO:convert to type
-export enum SERVICE_STATUSES {
-  DRAFT = "DRAFT",
-  SUGGESTION = "SUGGESTION",
-  PUBLISHED = "PUBLISHED",
-  ARCHIVED = "ARCHIVED",
-}
+export type ServiceStatus = "DRAFT" | "SUGGESTION" | "PUBLISHED" | "ARCHIVED";
 
-export enum SERVICE_UPDATE_STATUS {
-  NOT_NEEDED = "NOT_NEEDED",
-  NEEDED = "NEEDED",
-  REQUIRED = "REQUIRED",
-  ALL = "ALL",
-}
+export type ServiceUpdateStatus = "NOT_NEEDED" | "NEEDED" | "REQUIRED" | "ALL";
 
 export type ServiceCategory =
   | "acces-aux-droits"
@@ -238,7 +243,7 @@ export interface ServiceSearchResult {
   shortDesc: string;
   slug: string;
   structure: string;
-  status: SERVICE_STATUSES;
+  status: ServiceStatus;
   structureInfo: {
     address1: string;
     address2: string;
@@ -338,7 +343,7 @@ export interface Service {
   requirementsDisplay: string[];
   shortDesc: string;
   slug: string;
-  status: SERVICE_STATUSES;
+  status: ServiceStatus;
   structure: string;
   structureInfo: ServiceStructure;
   subcategories: string[];
@@ -368,7 +373,7 @@ export interface ShortService {
   postalCode: string;
   shortDesc: string;
   slug: string;
-  status: SERVICE_STATUSES;
+  status: ServiceStatus;
   structure: string;
   structureInfo: ServiceStructure;
   useInclusionNumeriqueScheme: boolean;
@@ -443,8 +448,8 @@ export type Model = {
 };
 
 // FORM
-export type Choice = {
-  value: string;
+export type Choice<T = string> = {
+  value: T;
   label: string;
   optGroupKey?: string;
   selectedLabel?: string;

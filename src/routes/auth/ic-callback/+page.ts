@@ -1,5 +1,5 @@
-import { setToken, validateCredsAndFillUserInfo } from "$lib/auth";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+import { setToken, validateCredsAndFillUserInfo } from "$lib/utils/auth";
 import { redirect } from "@sveltejs/kit";
 import { getNextPage } from "../utils";
 import type { PageLoad } from "./$types";

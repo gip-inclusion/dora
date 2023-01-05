@@ -2,12 +2,10 @@
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { userInfo } from "$lib/auth";
-  import SelectField from "$lib/components/form/select/select-field.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
-  import ServiceCard from "$lib/components/services/service-card.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
+  import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
   import {
-    addCircleIcon,
+    addIcon,
     alertIcon,
     arrowDownLineIcon,
     arrowUpLineIcon,
@@ -18,21 +16,24 @@
     fileWarningFillIcon,
     folderFillIcon,
   } from "$lib/icons";
-  import {
-    SERVICE_STATUSES,
-    SERVICE_UPDATE_STATUS,
-    type Choice,
-    type ShortService,
+  import type {
+    Choice,
+    ServiceStatus,
+    ServiceUpdateStatus,
+    ShortService,
   } from "$lib/types";
+  import { userInfo } from "$lib/utils/auth";
   import { computeUpdateStatusData } from "$lib/utils/service";
+  import Count from "../count.svelte";
+  import ServiceCard from "./service-card.svelte";
 
   export let structure, total, servicesOptions;
   export let hasOptions = true;
   export let onRefresh;
   export let limit: number | undefined = undefined;
 
-  export let serviceStatus: SERVICE_STATUSES | undefined;
-  export let updateStatus: SERVICE_UPDATE_STATUS | undefined;
+  export let serviceStatus: ServiceStatus | undefined;
+  export let updateStatus: ServiceUpdateStatus | undefined;
   export let servicesDisplayed: ShortService[] = [];
 
   let canEdit;
@@ -61,28 +62,28 @@
   }
 
   // Status options
-  const statusOptions: Choice[] = [
+  const statusOptions: Choice<ServiceStatus | "">[] = [
     { value: "", label: "Tout" },
     {
-      value: SERVICE_STATUSES.PUBLISHED,
+      value: "PUBLISHED",
       label: "Publié",
       icon: earthFillIcon,
       selectedLabel: "Status : Publié",
     },
     {
-      value: SERVICE_STATUSES.DRAFT,
+      value: "DRAFT",
       label: "Brouillon",
       icon: draftFillIcon,
       selectedLabel: "Status : Brouillon",
     },
     {
-      value: SERVICE_STATUSES.ARCHIVED,
+      value: "ARCHIVED",
       label: "Archivé",
       selectedLabel: "Status : Archivé",
       icon: folderFillIcon,
     },
     {
-      value: SERVICE_STATUSES.SUGGESTION,
+      value: "SUGGESTION",
       label: "Suggestion",
       selectedLabel: "Status : Suggestion",
       icon: fileEditFillIcon,
@@ -90,22 +91,22 @@
   ];
 
   // Update status
-  const updateStatusOptions: Choice[] = [
+  const updateStatusOptions: Choice<ServiceUpdateStatus | "">[] = [
     { value: "", label: "Tout" },
     {
-      value: SERVICE_UPDATE_STATUS.NEEDED,
+      value: "NEEDED",
       label: "Actualisation conseillée",
       selectedLabel: "Actualisation : conseillée",
       icon: errorWarningIcon,
     },
     {
-      value: SERVICE_UPDATE_STATUS.REQUIRED,
+      value: "REQUIRED",
       label: "Actualisation requise",
       selectedLabel: "Actualisation : requise",
       icon: alertIcon,
     },
     {
-      value: SERVICE_UPDATE_STATUS.ALL,
+      value: "ALL",
       label: "À actualiser",
       selectedLabel: "Actualisation : conseillée et requise",
       icon: fileWarningFillIcon,
@@ -170,8 +171,7 @@
   function filterAndSortServices(services) {
     if (serviceStatus) {
       // By status
-      if (serviceStatus === SERVICE_STATUSES.ARCHIVED)
-        services = structure.archivedServices;
+      if (serviceStatus === "ARCHIVED") services = structure.archivedServices;
       else {
         services = structure.services.filter((s) => s.status === serviceStatus);
       }
@@ -180,9 +180,8 @@
     // By update status
     if (updateStatus) {
       services = services.filter((s) =>
-        updateStatus === SERVICE_UPDATE_STATUS.ALL
-          ? computeUpdateStatusData(s).updateStatus !==
-            SERVICE_UPDATE_STATUS.NOT_NEEDED
+        updateStatus === "ALL"
+          ? computeUpdateStatusData(s).updateStatus !== "NOT_NEEDED"
           : computeUpdateStatusData(s).updateStatus === updateStatus
       );
     }
@@ -195,21 +194,23 @@
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
-  <h2 class="text-france-blue">Services</h2>
+  <div class="flex flex-row gap-s8">
+    <h2 class="mb-s0 text-france-blue">Services</h2>
+    {#if limit}<Count>{total}</Count>{/if}
+  </div>
   <div class="flex gap-s16">
     {#if !!servicesDisplayed.length && !hasOptions}
       <LinkButton
-        label={`Voir tous les services (${total})`}
+        label="Voir tous les services"
         to="/structures/{structure.slug}/services"
         small
-        secondary
+        noBackground
       />
     {/if}
     {#if canEdit}
       <LinkButton
         label="Ajouter un service"
-        iconOnRight
-        icon={addCircleIcon}
+        icon={addIcon}
         to="/services/creer?structure={structure.slug}"
       />
     {/if}

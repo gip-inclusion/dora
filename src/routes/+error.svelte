@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import { logException } from "$lib/logger";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import { logException } from "$lib/utils/logger";
   import { trackError } from "$lib/utils/plausible";
   import { onMount } from "svelte";
 

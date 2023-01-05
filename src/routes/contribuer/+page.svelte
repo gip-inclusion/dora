@@ -1,7 +1,7 @@
 <script lang="ts">
-  import ContributionPic from "$lib/assets/illu-contribution.svg";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
+  import ContributionPic from "$lib/assets/illustrations/illu-contribution.svg";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
   import {
     addCircleIcon,
     quillPenIcon,

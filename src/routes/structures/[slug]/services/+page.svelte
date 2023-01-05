@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getStructure } from "$lib/structures";
+  import { getStructure } from "$lib/requests/structures";
   import { structure } from "../store";
   import type { PageData } from "./$types";
   import List from "./list.svelte";

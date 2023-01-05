@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { getStructureAdmin } from "$lib/admin";
-  import Date from "$lib/components/date.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import TextClamp from "$lib/components/text-clamp.svelte";
-  import { markdownToHTML } from "$lib/utils";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import Date from "$lib/components/utilities/date.svelte";
+  import TextClamp from "$lib/components/utilities/text-clamp.svelte";
+  import { getStructureAdmin } from "$lib/requests/admin";
+  import { markdownToHTML } from "$lib/utils/misc";
   import History from "../../history.svelte";
   import InfoLine from "../../info-line.svelte";
   import ModerationButtonMenu from "../../moderation-button-menu.svelte";

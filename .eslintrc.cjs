@@ -34,7 +34,7 @@ module.exports = {
       },
     ],
     "no-alert": "warn",
-    "no-console": "warn",
+    "no-console": "off",
     "no-empty-function": "warn",
     "@typescript-eslint/no-empty-function": "warn",
     "no-return-assign": "error",
@@ -49,8 +49,9 @@ module.exports = {
         varsIgnorePattern: "^_",
       },
     ],
+    "@typescript-eslint/no-explicit-any": "off",
     "no-warning-comments": [
-      "warn",
+      "off",
       {
         location: "start",
         terms: ["todo", "hack", "xxx", "fixme"],

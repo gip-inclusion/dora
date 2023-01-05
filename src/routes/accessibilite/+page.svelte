@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
 </script>
 
 <CenteredGrid>

@@ -1,13 +1,13 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import logoC1 from "$lib/assets/inclusion-connect/logo-c1.svg";
-  import logoDora from "$lib/assets/inclusion-connect/logo-dora.svg";
+  import logoDora from "$lib/assets/inclusion-connect/logo-dora-ic.svg";
   import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
-  import logoPEFill from "$lib/assets/logo-pole-emploi-fill.svg";
-  import logoRDVS from "$lib/assets/logo-rdv-solidarites.svg";
-  import Button from "$lib/components/button.svelte";
-  import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import PoleEmploiWarning from "$lib/components/structures/pole-emploi-warning.svelte";
+  import logoRDVS from "$lib/assets/inclusion-connect/logo-rdv-solidarites.svg";
+  import logoPEFill from "$lib/assets/logos/logo-pole-emploi-fill.svg";
+  import Button from "$lib/components/display/button.svelte";
+  import FieldSet from "$lib/components/display/fieldset.svelte";
+  import PoleEmploiWarning from "$lib/components/specialized/pole-emploi-warning.svelte";
   import { informationLineIcon } from "$lib/icons";
   import AuthLayout from "../auth-layout.svelte";
   import { getNextPage } from "../utils";

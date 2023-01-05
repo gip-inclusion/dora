@@ -1,7 +1,11 @@
 import { browser } from "$app/environment";
-import { token } from "$lib/auth";
-import { getModel, getService, getServicesOptions } from "$lib/services";
-import { getStructure } from "$lib/structures";
+import {
+  getModel,
+  getService,
+  getServicesOptions,
+} from "$lib/requests/services";
+import { getStructure } from "$lib/requests/structures";
+import { token } from "$lib/utils/auth";
 import { error, redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { PageLoad } from "./$types";

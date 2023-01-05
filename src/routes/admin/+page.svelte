@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LinkButton from "$lib/components/link-button.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
 </script>
 
 <div class="flex w-1/3 flex-col gap-s8 lg:flex-row">

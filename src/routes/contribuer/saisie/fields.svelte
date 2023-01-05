@@ -1,18 +1,18 @@
 <script lang="ts">
-  import Button from "$lib/components/button.svelte";
-  import SelectField from "$lib/components/form/select/select-field.svelte";
-  import CitySearch from "$lib/components/forms/city-search.svelte";
-  import Field from "$lib/components/forms/field.svelte";
-  import FieldSet from "$lib/components/forms/fieldset.svelte";
-  import SchemaField from "$lib/components/forms/schema-field.svelte";
-  import AddressSearch from "$lib/components/forms/street-search.svelte";
-  import Notice from "$lib/components/notice.svelte";
-  import StructureSearch from "$lib/components/structures/search.svelte";
-  import { contribSchema } from "$lib/schemas/service";
+  import Button from "$lib/components/display/button.svelte";
+  import FieldSet from "$lib/components/display/fieldset.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
+  import Field from "$lib/components/inputs/field.svelte";
+  import SchemaField from "$lib/components/inputs/schema-field.svelte";
+  import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
+  import CitySearch from "$lib/components/specialized/city-search.svelte";
+  import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
+  import AddressSearch from "$lib/components/specialized/street-search.svelte";
   import type { Service, ServicesOptions } from "$lib/types";
-  import { moveToTheEnd, orderAndReformatSubcategories } from "$lib/utils";
+  import { moveToTheEnd, orderAndReformatSubcategories } from "$lib/utils/misc";
   import { isNotFreeService } from "$lib/utils/service";
-  import { formErrors } from "$lib/validation";
+  import { contribSchema } from "$lib/validation/schemas/service";
+  import { formErrors } from "$lib/validation/validation";
   import { tick } from "svelte";
 
   export let servicesOptions: ServicesOptions;

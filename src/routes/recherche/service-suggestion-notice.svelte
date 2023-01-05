@@ -1,7 +1,7 @@
 <script lang="ts">
-  import illuSuggerer from "$lib/assets/illu-suggerer.svg";
-  import EmailButton from "$lib/components/email-button.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
+  import illuSuggerer from "$lib/assets/illustrations/illu-suggerer.svg";
+  import LinkButton from "$lib/components/display/link-button.svelte";
+  import EmailButton from "$lib/components/specialized/email-button.svelte";
 </script>
 
 <div class="flex rounded-md border border-gray-01 bg-white shadow-md">

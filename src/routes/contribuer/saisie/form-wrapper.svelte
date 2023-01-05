@@ -1,17 +1,17 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import Alert from "$lib/components/forms/alert.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import { contribSchema } from "$lib/schemas/service";
-  import { publishServiceSuggestion } from "$lib/services";
+  import Alert from "$lib/components/display/alert.svelte";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import { publishServiceSuggestion } from "$lib/requests/services";
   import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
+  import { contribSchema } from "$lib/validation/schemas/service";
   import {
     contextValidationKey,
     formErrors,
     injectAPIErrors,
     validate,
     type ValidationContext,
-  } from "$lib/validation";
+  } from "$lib/validation/validation";
   import debounce from "lodash.debounce";
   import { onDestroy, onMount, setContext } from "svelte";
   import Fields from "./fields.svelte";
@@ -42,7 +42,7 @@
         const { validatedData, valid } = validate(service, filteredSchema, {
           fullSchema: contribSchema,
           noScroll: true,
-          extraData: servicesOptions,
+          servicesOptions: servicesOptions,
         });
         if (valid) {
           service = { ...service, ...validatedData };
@@ -71,7 +71,7 @@
   async function handlePublish() {
     // Validate the whole form
     const { valid } = validate(service, contribSchema, {
-      extraData: servicesOptions,
+      servicesOptions: servicesOptions,
     });
 
     if (valid) {

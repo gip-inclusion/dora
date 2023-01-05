@@ -1,4 +1,4 @@
-import { token } from "$lib/auth";
+import { token } from "$lib/utils/auth";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import { getNextPage } from "../utils";

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import cornerLeftVioletImg from "$lib/assets/corner-left-violet.png";
-  import cornerRightVioletImg from "$lib/assets/corner-right-violet.png";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import TallyNpsPopup from "$lib/components/tally-nps-popup.svelte";
+  import cornerLeftVioletImg from "$lib/assets/style/corner-left-violet.png";
+  import cornerRightVioletImg from "$lib/assets/style/corner-right-violet.png";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
   import { TallyFormId } from "$lib/utils/nps";
   import Header from "./header.svelte";
   import { structure } from "./store";

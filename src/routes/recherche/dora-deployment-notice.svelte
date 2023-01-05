@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Notice from "$lib/components/notice.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
 </script>
 
 <Notice

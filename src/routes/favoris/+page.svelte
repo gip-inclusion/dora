@@ -1,10 +1,10 @@
 <script lang="ts">
-  import illustration from "$lib/assets/ill-favs.svg";
-  import { userInfo } from "$lib/auth";
-  import EnsureLoggedIn from "$lib/components/ensure-logged-in.svelte";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
+  import illustration from "$lib/assets/illustrations/illu-favs.svg";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { starSmileLineIcon } from "$lib/icons";
   import type { Bookmark } from "$lib/types";
+  import { userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
   import BookmarkCard from "./bookmark-card.svelte";
 

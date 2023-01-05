@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { getStructuresToModerate } from "$lib/admin";
-  import CenteredGrid from "$lib/components/layout/centered-grid.svelte";
-  import LinkButton from "$lib/components/link-button.svelte";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
   import { eyeIcon } from "$lib/icons";
-  import { capitalize, shortenString } from "$lib/utils";
+  import { getStructuresToModerate } from "$lib/requests/admin";
+  import { capitalize, shortenString } from "$lib/utils/misc";
   import { onMount } from "svelte";
   import ModerationLabel from "../moderation-label.svelte";
 
