@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Date from "$lib/components/utilities/date.svelte";
+  import DateLabel from "$lib/components/utilities/date-label.svelte";
 
   export let notes;
 </script>
@@ -7,7 +7,7 @@
 <div class="max-h-s160 overflow-scroll">
   {#each notes as note}
     <div class="bg-gray-01">
-      <Date date={note.date} /> par {note.user.email}
+      <DateLabel date={note.date} /> par {note.user.email}
     </div>
     <div class="ml-s32">
       {#each note.message.split("\n") as msg}

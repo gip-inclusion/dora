@@ -121,7 +121,7 @@
 
 <style lang="postcss">
   .small-width {
-    @apply min-w-[560px];
+    @apply max-w-[560px];
   }
 
   #background {

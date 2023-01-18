@@ -1,7 +1,7 @@
 <script lang="ts">
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import Date from "$lib/components/utilities/date.svelte";
+  import DateLabel from "$lib/components/utilities/date-label.svelte";
   import TextClamp from "$lib/components/utilities/text-clamp.svelte";
   import {
     computerIcon,
@@ -61,7 +61,7 @@
   {#if structure.modificationDate}
     <p class="mt-s40 mb-s0 text-f12 text-gray-dark">
       Informations sur la structure mises à jour le
-      <Date date={structure.modificationDate} />
+      <DateLabel date={structure.modificationDate} />
     </p>
   {/if}
   {#if canManageStructure && sourceIsDataInclusion && !structure.hasBeenEdited}

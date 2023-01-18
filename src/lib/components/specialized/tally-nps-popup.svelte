@@ -9,7 +9,7 @@
   import { onDestroy, onMount } from "svelte";
 
   export let formId: TallyFormId;
-  export let timeout = 45000;
+  export let timeoutSeconds;
   export let hiddenFields = {};
 
   let timeoutFn: ReturnType<typeof setTimeout>;
@@ -32,7 +32,7 @@
             },
           });
         }
-      }, timeout);
+      }, timeoutSeconds * 1000);
     }
   });
 

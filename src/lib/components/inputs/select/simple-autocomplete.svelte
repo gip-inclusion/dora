@@ -75,19 +75,19 @@
   export let loadingText = "Chargement des résultats…";
 
   // the text displayed when no option is selected
-  export let placeholder = undefined;
+  export let placeholder = "";
 
   // the text displayed when at least one option is selected
-  export let placeholderMulti = undefined;
+  export let placeholderMulti = "";
 
   // apply a className to the control
-  export let className = undefined;
+  export let className = "";
 
   // HTML input UI properties
   // apply a className to the input control
-  export let inputClassName = undefined;
+  export let inputClassName = "";
   // apply a id to the input control
-  export let inputId = undefined;
+  export let inputId: string;
   // generate an HTML input with this name
   export let name = undefined;
   // generate a <select> tag that holds the value
@@ -97,11 +97,11 @@
   // add the title to the HTML input
   export let title = undefined;
   // enable the html5 autocompletion to the HTML input
-  export let html5autocomplete = undefined;
+  export let html5autocomplete = false;
   // make the input readonly
-  export let readonly = undefined;
+  export let readonly = false;
   // apply a className to the dropdown div
-  export let dropdownClassName = undefined;
+  export let dropdownClassName = "";
   // adds the disabled tag to the HTML input and tag deletion
   export let disabled = false;
 

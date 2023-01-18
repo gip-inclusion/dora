@@ -1,10 +1,12 @@
 <script lang="ts">
   import AutoComplete from "./simple-autocomplete.svelte";
 
-  export let name = "";
-  export let choices = undefined;
+  export let id: string;
+  export let choices: { value: string | number; label: string }[] | undefined =
+    undefined;
   export let sort = false;
-  export let value = undefined;
+  export let value: string | number | string[] | number[] | undefined =
+    undefined;
   export let disabled = false;
   export let readonly = false;
   export let placeholder = "";
@@ -15,7 +17,10 @@
   export let delay = undefined;
   export let localFiltering = undefined;
   export let minCharactersToSearch = undefined;
-  export let onChange = undefined;
+  export let onChange:
+    | ((newValue: string) => void)
+    | ((newValues: string[]) => void)
+    | undefined = undefined;
   export let initialValue = undefined;
   export let postfixValueFunction = undefined;
   export let showClear = true;
@@ -34,8 +39,8 @@
 </script>
 
 <AutoComplete
-  {name}
-  inputId={name}
+  name={id}
+  inputId={id}
   bind:value
   on:blur
   {localFiltering}
@@ -54,7 +59,6 @@
   className="rounded focus-within:shadow-focus"
   inputClassName="focus:outline-none border rounded border-gray-03"
   dropdownClassName="!top-[48px] rounded shadow-md"
-  html5autocomplete={false}
   showLoadingIndicator
   {hideArrow}
   {showClear}

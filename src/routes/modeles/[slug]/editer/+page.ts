@@ -14,7 +14,7 @@ export const load: PageLoad = async ({ params, parent }) => {
   const user = get(userInfo);
   const model = await getModel(params.slug);
 
-  const servicesOptions = await getServicesOptions({ model });
+  const servicesOptions = await getServicesOptions();
 
   if (!model) {
     throw error(404, "Page Not Found");

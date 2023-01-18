@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Field from "$lib/components/inputs/field.svelte";
+  import Field from "$lib/components/inputs/obsolete/field.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
-  import CitySearch from "$lib/components/specialized/city-search.svelte";
+  import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
   import { getApiURL } from "$lib/utils/api";
 
   export let establishment;
@@ -54,7 +54,7 @@
 <Field type="custom" label="Commune" required vertical>
   <CitySearch
     slot="custom-input"
-    name="city-select"
+    id="city-select"
     placeholder="Saisissez et sélectionnez le nom de la ville"
     onChange={handleCityChange}
   />
@@ -62,7 +62,7 @@
 <Field type="custom" label={structureLabel} required vertical>
   <Select
     slot="custom-input"
-    name="siret-select"
+    id="siret-select"
     onChange={handleEstablishmentChange}
     disabled={!city?.code}
     placeholder="Commencez à saisir et choisissez dans la liste"

@@ -2,18 +2,10 @@ import type { ServicesOptions } from "$lib/types";
 import * as v from "./utils";
 
 export function allCategoriesHaveSubcategories() {
-  return (name, value, data, servicesOptions: ServicesOptions, schema) => {
+  return (name, value, data, servicesOptions: ServicesOptions) => {
     const subcatRoots = new Set(
       data.subcategories.map((value) => value.split("--")[0])
     );
-
-    // Pas besoin de vérifier les sous-catégories si le champs est optionnel
-    const required = schema[name]?.required ?? false;
-    if (!required) {
-      return {
-        valid: true,
-      };
-    }
 
     if (!servicesOptions) {
       console.log("Missing servicesOptions in rules check");
@@ -36,208 +28,97 @@ export function allCategoriesHaveSubcategories() {
   };
 }
 
-const fields = {
-  contrib: [
-    "siret",
-    "categories",
-    "subcategories",
-    "kinds",
-    "name",
-    "shortDesc",
-    "fullDesc",
-    "accessConditions",
-    "concernedPublic",
-    "requirements",
-    "isCumulative",
-    "feeCondition",
-    "feeDetails",
-    "contactName",
-    "contactPhone",
-    "contactEmail",
-    "locationKinds",
-    "remoteUrl",
-    "city",
-    "address1",
-    "address2",
-    "postalCode",
-  ],
-  service: [
-    "structure",
-    "categories",
-    "subcategories",
-    "kinds",
-    "name",
-    "shortDesc",
-    "fullDesc",
-    "accessConditions",
-    "concernedPublic",
-    "requirements",
-    "isCumulative",
-    "feeCondition",
-    "feeDetails",
-    "beneficiariesAccessModes",
-    "beneficiariesAccessModesOther",
-    "coachOrientationModes",
-    "coachOrientationModesOther",
-    "credentials",
-    "forms",
-    "onlineForm",
-    "contactName",
-    "contactPhone",
-    "contactEmail",
-    "isContactInfoPublic",
-    "locationKinds",
-    "remoteUrl",
-    "city",
-    "address1",
-    "address2",
-    "postalCode",
-    "diffusionZoneType",
-    "diffusionZoneDetails",
-    "qpvOrZrr",
-    "startDate",
-    "endDate",
-    "recurrence",
-    "suspensionDate",
-    "useInclusionNumeriqueScheme",
-  ],
-  model: [
-    "structure",
-    "categories",
-    "subcategories",
-    "kinds",
-    "name",
-    "shortDesc",
-    "fullDesc",
-    "accessConditions",
-    "concernedPublic",
-    "requirements",
-    "isCumulative",
-    "feeCondition",
-    "feeDetails",
-    "beneficiariesAccessModes",
-    "beneficiariesAccessModesOther",
-    "coachOrientationModes",
-    "coachOrientationModesOther",
-    "credentials",
-    "forms",
-    "onlineForm",
-    "recurrence",
-    "suspensionDate",
-  ],
-};
-
-const fieldsRequired = {
-  contrib: [
-    "siret",
-    "categories",
-    "subcategories",
-    "kinds",
-    "name",
-    "shortDesc",
-  ],
-  service: [
-    "structure",
-    "categories",
-    "subcategories",
-    "kinds",
-    "name",
-    "shortDesc",
-    "coachOrientationModes",
-    "diffusionZoneType",
-    "locationKinds",
-    "contactEmail",
-  ],
-  draft: ["structure", "name"],
-  model: [
-    "structure",
-    "categories",
-    "name",
-    "shortDesc",
-    "coachOrientationModes",
-  ],
-};
-
-const schema = {
+export const serviceSchema: v.Schema = {
   siret: {
+    label: "SIRET",
     default: "",
     rules: [v.isSiret()],
+    maxLength: 14,
   },
   structure: {
-    name: "structure",
+    label: "Structure",
     default: "",
     rules: [v.isString(), v.maxStrLength(50)],
+    required: true,
   },
   categories: {
-    name: "thématiques",
+    label: "Thématiques",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
     dependents: ["subcategories"],
+    required: true,
   },
   subcategories: {
-    name: "besoins",
+    label: "Besoins",
     default: [],
     rules: [
       v.isArray([v.isString(), v.maxStrLength(255)]),
       allCategoriesHaveSubcategories(),
     ],
+    required: true,
   },
   kinds: {
-    name: "types",
+    label: "Types",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    required: true,
   },
   name: {
-    name: "titre",
+    label: "Titre",
     default: "",
     rules: [v.isString(), v.maxStrLength(140)],
     post: [v.trim],
+    required: true,
+    maxLength: 140,
   },
   shortDesc: {
-    name: "résumé",
+    label: "Résumé",
     default: "",
     rules: [v.isString(), v.maxStrLength(280)],
     post: [v.trim],
+    maxLength: 280,
+    required: true,
   },
   recurrence: {
-    name: "fréquence et horaires",
+    label: "Fréquence et horaires",
     default: "",
     rules: [v.isString(), v.maxStrLength(140)],
     post: [v.trim],
+    maxLength: 140,
   },
   fullDesc: {
-    name: "description",
+    label: "Description",
     default: "",
     rules: [v.isString()],
     post: [v.trim],
   },
   accessConditions: {
-    name: "critères",
+    label: "Critères",
     default: [],
     rules: [v.isArray([v.isCustomizablePK()])],
   },
   concernedPublic: {
-    name: "profils",
+    label: "Profils",
     default: [],
     rules: [v.isArray([v.isCustomizablePK()])],
   },
   requirements: {
-    name: "pré-requis ou compétences",
+    label: "Pré-requis ou compétences",
     default: [],
     rules: [v.isArray([v.isCustomizablePK()])],
   },
   isCumulative: {
-    name: "cumulable",
+    label: "Cumulable",
     default: true,
     rules: [v.isBool()],
   },
   feeCondition: {
+    label: "Frais à charge",
     default: "gratuit",
-    name: "frais à charge",
     rules: [v.isString()],
   },
   feeDetails: {
-    name: "frais à charge (détail)",
+    label: "Détails des frais à charge",
     default: "",
     post: [v.trim],
     rules: [
@@ -249,12 +130,12 @@ const schema = {
     ],
   },
   beneficiariesAccessModes: {
-    name: "pour les bénéficiaires",
+    label: "Pour les bénéficiaires",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
   },
   beneficiariesAccessModesOther: {
-    name: "pour les bénéficiaires (autre)",
+    label: "",
     default: "",
     rules: [
       v.isString(),
@@ -266,14 +147,16 @@ const schema = {
         msg: `Information requise`,
       }),
     ],
+    maxLength: 280,
   },
   coachOrientationModes: {
-    name: "pour les accompagnateurs",
+    label: "Pour les accompagnateurs",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    required: true,
   },
   coachOrientationModesOther: {
-    name: "pour les accompagnateurs (autre)",
+    label: "",
     default: "",
     rules: [
       v.isString(),
@@ -285,61 +168,68 @@ const schema = {
         msg: `Information requise`,
       }),
     ],
+    maxLength: 280,
   },
 
   credentials: {
-    name: "justificatifs à fournir",
+    label: "Justificatifs à fournir",
     default: [],
     rules: [v.isArray([v.isCustomizablePK()])],
   },
   forms: {
-    name: "documents à compléter",
+    label: "Documents à compléter",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
   },
   onlineForm: {
-    name: "lien",
+    label: "Lien",
     default: "",
     rules: [v.isURL(), v.maxStrLength(200)],
     post: [v.trim],
   },
   contactName: {
-    name: "prénom et nom",
+    label: "Prénom et nom",
     default: "",
     rules: [v.isString(), v.maxStrLength(140)],
     post: [v.trim],
+    maxLength: 140,
   },
   contactPhone: {
-    name: "téléphone",
+    label: "Téléphone",
     default: "",
     pre: [v.removeAllNonDigits],
     rules: [v.isPhone()],
+    maxLength: 10,
   },
   contactEmail: {
-    name: "email",
+    label: "Courriel",
     default: "",
     rules: [v.isEmail(), v.maxStrLength(255)],
     post: [v.lower, v.trim],
+    maxLength: 255,
+    required: true,
   },
   isContactInfoPublic: {
-    name: "rendre public",
+    label: "Rendre les informations de contact publiques",
     default: false,
     rules: [v.isBool()],
   },
 
   locationKinds: {
-    name: "mode d’accueil",
+    label: "Mode d’accueil",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    required: true,
   },
   remoteUrl: {
-    name: "lien visioconférence",
+    label: "Lien visioconférence",
     default: "",
     rules: [v.isURL(), v.maxStrLength(200)],
     post: [v.trim],
+    maxLength: 200,
   },
   city: {
-    name: "ville",
+    label: "Ville",
     default: "",
     rules: [
       v.isString(),
@@ -352,9 +242,10 @@ const schema = {
       }),
     ],
     post: [v.trim],
+    maxLength: 255,
   },
   address1: {
-    name: "adresse",
+    label: "Adresse",
     default: "",
     rules: [
       v.isString(),
@@ -368,15 +259,17 @@ const schema = {
     ],
     post: [v.trim],
     dependents: ["postalCode"],
+    maxLength: 255,
   },
   address2: {
-    name: "complément d'adresse",
+    label: "Complément d’adresse",
     default: "",
     rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
+    maxLength: 255,
   },
   postalCode: {
-    name: "code postal",
+    label: "Code postal",
     default: "",
     rules: [
       v.isPostalCode(),
@@ -387,15 +280,17 @@ const schema = {
         msg: `Information requise`,
       }),
     ],
+    maxLength: 5,
   },
   diffusionZoneType: {
-    name: "périmètre",
+    label: "Périmètre",
     default: "",
     rules: [v.isString(), v.maxStrLength(10)],
+    required: true,
   },
 
   diffusionZoneDetails: {
-    name: "territoire",
+    label: "Territoire",
     default: "",
     rules: [
       v.isString(),
@@ -408,85 +303,158 @@ const schema = {
         msg: `Information requise`,
       }),
     ],
+    maxLength: 9,
   },
   qpvOrZrr: {
-    name: "uniquement QPV ou ZRR",
+    label: "Uniquement QPV ou ZRR",
     default: false,
     rules: [v.isBool()],
   },
-  startDate: {
-    name: "date de début",
-    default: null,
-    rules: [v.isDate()],
-    dependents: ["endDate"],
-    post: [v.nullEmpty],
-  },
-  endDate: {
-    name: "date de fin",
-    default: null,
-    rules: [
-      v.isDate(),
-      (name, value, data) => ({
-        valid: !data.startDate || new Date(value) >= new Date(data.startDate),
-        msg: `La date de fin doit être postérieure à la date de début`,
-      }),
-    ],
-    post: [v.nullEmpty],
-  },
   suspensionDate: {
-    name: "date de fin",
+    label: "Date de fin",
     default: null,
     rules: [v.isDate()],
     post: [v.nullEmpty],
   },
   useInclusionNumeriqueScheme: {
-    name: "utilise le schéma Inclusion Numérique",
+    label: "",
     default: false,
     rules: [v.isBool()],
   },
 };
 
-// TODO fix typing
+export const inclusionNumeriqueSchema: v.Schema = {
+  structure: serviceSchema.structure,
+  categories: serviceSchema.categories,
+  subcategories: serviceSchema.subcategories,
+  kinds: serviceSchema.kinds,
+  concernedPublic: serviceSchema.concernedPublic,
+  feeCondition: serviceSchema.feeCondition,
+  feeDetails: serviceSchema.feeDetails,
+  beneficiariesAccessModes: {
+    ...serviceSchema.beneficiariesAccessModes,
+    required: true,
+  },
+  beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
+  contactName: serviceSchema.contactName,
+  contactPhone: serviceSchema.contactPhone,
+  contactEmail: serviceSchema.contactEmail,
+  isContactInfoPublic: serviceSchema.isContactInfoPublic,
+  city: serviceSchema.city,
+  address1: serviceSchema.address1,
+  address2: serviceSchema.address2,
+  postalCode: serviceSchema.postalCode,
+  diffusionZoneType: serviceSchema.diffusionZoneType,
+  diffusionZoneDetails: serviceSchema.diffusionZoneDetails,
+  useInclusionNumeriqueScheme: serviceSchema.useInclusionNumeriqueScheme,
+};
+
+export const draftSchema: v.Schema = {
+  structure: serviceSchema.structure,
+  categories: serviceSchema.categories,
+  subcategories: serviceSchema.subcategories,
+  kinds: serviceSchema.kinds,
+  name: serviceSchema.name,
+  shortDesc: serviceSchema.shortDesc,
+  fullDesc: serviceSchema.fullDesc,
+  accessConditions: serviceSchema.accessConditions,
+  concernedPublic: serviceSchema.concernedPublic,
+  requirements: serviceSchema.requirements,
+  isCumulative: serviceSchema.isCumulative,
+  feeCondition: serviceSchema.feeCondition,
+  feeDetails: serviceSchema.feeDetails,
+  beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
+  beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
+  coachOrientationModes: serviceSchema.coachOrientationModes,
+  coachOrientationModesOther: serviceSchema.coachOrientationModesOther,
+  credentials: serviceSchema.credentials,
+  forms: serviceSchema.forms,
+  onlineForm: serviceSchema.onlineForm,
+  contactName: serviceSchema.contactName,
+  contactPhone: serviceSchema.contactPhone,
+  contactEmail: serviceSchema.contactEmail,
+  isContactInfoPublic: serviceSchema.isContactInfoPublic,
+  locationKinds: serviceSchema.locationKinds,
+  remoteUrl: serviceSchema.remoteUrl,
+  city: serviceSchema.city,
+  address1: serviceSchema.address1,
+  address2: serviceSchema.address2,
+  postalCode: serviceSchema.postalCode,
+  diffusionZoneType: serviceSchema.diffusionZoneType,
+  diffusionZoneDetails: serviceSchema.diffusionZoneDetails,
+  qpvOrZrr: serviceSchema.qpvOrZrr,
+  recurrence: serviceSchema.recurrence,
+  suspensionDate: serviceSchema.suspensionDate,
+  useInclusionNumeriqueScheme: serviceSchema.useInclusionNumeriqueScheme,
+};
+
+export const contribSchema: v.Schema = {
+  siret: serviceSchema.siret,
+  categories: serviceSchema.categories,
+  subcategories: serviceSchema.subcategories,
+  kinds: serviceSchema.kinds,
+  name: serviceSchema.name,
+  shortDesc: serviceSchema.shortDesc,
+  fullDesc: serviceSchema.fullDesc,
+  accessConditions: serviceSchema.accessConditions,
+  concernedPublic: serviceSchema.concernedPublic,
+  requirements: serviceSchema.requirements,
+  isCumulative: serviceSchema.isCumulative,
+  feeCondition: serviceSchema.feeCondition,
+  feeDetails: serviceSchema.feeDetails,
+  contactName: serviceSchema.contactName,
+  contactPhone: serviceSchema.contactPhone,
+  contactEmail: { ...serviceSchema.contactEmail, required: false },
+  locationKinds: { ...serviceSchema.locationKinds, required: false },
+  remoteUrl: serviceSchema.remoteUrl,
+  city: serviceSchema.city,
+  address1: serviceSchema.address1,
+  address2: serviceSchema.address2,
+  postalCode: serviceSchema.postalCode,
+};
+
+export const modelSchema: v.Schema = {
+  structure: serviceSchema.structure,
+  categories: serviceSchema.categories,
+  subcategories: serviceSchema.subcategories,
+  kinds: serviceSchema.kinds,
+  name: serviceSchema.name,
+  shortDesc: serviceSchema.shortDesc,
+  fullDesc: serviceSchema.fullDesc,
+  accessConditions: serviceSchema.accessConditions,
+  concernedPublic: serviceSchema.concernedPublic,
+  requirements: serviceSchema.requirements,
+  isCumulative: serviceSchema.isCumulative,
+  feeCondition: serviceSchema.feeCondition,
+  feeDetails: serviceSchema.feeDetails,
+  beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
+  beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
+  coachOrientationModes: serviceSchema.coachOrientationModes,
+  coachOrientationModesOther: serviceSchema.coachOrientationModesOther,
+  credentials: serviceSchema.credentials,
+  forms: serviceSchema.forms,
+  onlineForm: serviceSchema.onlineForm,
+  recurrence: serviceSchema.recurrence,
+  suspensionDate: serviceSchema.suspensionDate,
+};
+
+// Déplacer ça ailleurs
 export const suggestionSchema: any = {
   fullName: {
     default: "",
-    required: true,
     rules: [v.isString(), v.maxStrLength(140)],
     post: [v.trim],
+    required: true,
   },
   email: {
     default: "",
-    required: true,
     rules: [v.isEmail(), v.maxStrLength(255)],
     post: [v.lower, v.trim],
+    required: true,
   },
   message: {
     default: "",
-    required: true,
     rules: [v.isString()],
+    required: true,
   },
 };
-
-export const serviceSchema: any = v.formatSchema(
-  schema,
-  fields.service,
-  fieldsRequired.service
-);
-
-export const modelSchema: any = v.formatSchema(
-  schema,
-  fields.model,
-  fieldsRequired.model
-);
-
-export const contribSchema: any = v.formatSchema(
-  schema,
-  fields.contrib,
-  fieldsRequired.contrib
-);
-
-export const draftSchema: any = v.formatSchema(
-  schema,
-  fields.service,
-  fieldsRequired.draft
-);

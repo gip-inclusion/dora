@@ -73,6 +73,7 @@ export { default as logoutBoxLineIcon } from "remixicon/icons/System/logout-box-
 export { default as menuIcon } from "remixicon/icons/System/menu-line.svg?raw";
 export { default as moreIcon } from "remixicon/icons/System/more-2-fill.svg?raw";
 export { default as questionFillIcon } from "remixicon/icons/System/question-fill.svg?raw";
+export { default as refreshIcon } from "remixicon/icons/System/refresh-line.svg?raw";
 export { default as searchIcon } from "remixicon/icons/System/search-line.svg?raw";
 export { default as timeLineIcon } from "remixicon/icons/System/time-line.svg?raw";
 export { default as timerFlashIcon } from "remixicon/icons/System/timer-flash-line.svg?raw";

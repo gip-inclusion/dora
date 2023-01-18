@@ -11,9 +11,10 @@
   export let isOpen = false;
   export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
-  export let onRefresh: () => void;
+  export let onRefresh: () => Promise<void>;
 
   async function setAsUpdated() {
+    // TODO: il serait sans doute mieux d'avoir un endpoint dédié.
     await createOrModifyService(service);
     isOpen = false;
     await onRefresh();

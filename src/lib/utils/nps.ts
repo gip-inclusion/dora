@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 
 // Un formulaire Tally ne sera pas réaffiché avant que
 // `MIN_DAYS_BETWEEN_DISPLAYS` ne soient passés
-const MIN_DAYS_BETWEEN_DISPLAYS = 30;
+const MIN_DAYS_BETWEEN_DISPLAYS = 14;
 
 export enum TallyFormId {
   NPS_SEEKER_FORM_ID = "3xXVJ5",

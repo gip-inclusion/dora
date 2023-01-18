@@ -6,8 +6,6 @@ import type {
   OsmPeriodDay,
 } from "$lib/types";
 
-export const INVALID_ERROR_MESSAGE = "Invalid";
-
 export function fromJsonToOsmString(data: OsmOpeningHours) {
   if (
     isDayValid(data.monday) &&
@@ -30,8 +28,8 @@ export function fromJsonToOsmString(data: OsmOpeningHours) {
       .filter(Boolean)
       .join(";");
   }
-
-  return INVALID_ERROR_MESSAGE;
+  // TODO: vérifier le meilleur moyen de propager l'erreur
+  return null;
 }
 
 function formatDay(lineday: OsmDay, prefix: DayPrefix): string | undefined {

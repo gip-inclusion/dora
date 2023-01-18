@@ -65,7 +65,7 @@ export async function getModel(slug): Promise<Model> {
   return serviceToFront(response.data);
 }
 
-export async function createOrModifyService(service) {
+export function createOrModifyService(service: Service) {
   let method, url;
   if (service.slug) {
     url = `${getApiURL()}/services/${service.slug}/`;
@@ -75,7 +75,7 @@ export async function createOrModifyService(service) {
     method = "POST";
   }
 
-  const response = await fetch(url, {
+  return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -84,25 +84,9 @@ export async function createOrModifyService(service) {
     },
     body: JSON.stringify(serviceToBack(service)),
   });
-
-  const result = {
-    ok: response.ok,
-    status: response.status,
-  };
-
-  if (response.ok) {
-    result.data = serviceToFront(await response.json());
-  } else {
-    try {
-      result.error = await response.json();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-  return result;
 }
 
-export async function createOrModifyModel(model) {
+export function createOrModifyModel(model) {
   let method, url;
   if (model.slug) {
     url = `${getApiURL()}/models/${model.slug}/`;
@@ -112,7 +96,7 @@ export async function createOrModifyModel(model) {
     method = "POST";
   }
 
-  const response = await fetch(url, {
+  return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -121,23 +105,6 @@ export async function createOrModifyModel(model) {
     },
     body: JSON.stringify(serviceToBack(model)),
   });
-
-  const result = {
-    ok: response.ok,
-    status: response.status,
-  };
-
-  if (response.ok) {
-    result.data = serviceToFront(await response.json());
-  } else {
-    try {
-      result.error = await response.json();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  return result;
 }
 
 export async function deleteService(serviceSlug) {
@@ -311,35 +278,9 @@ export async function getLastDraft(): Promise<Service> {
   return null;
 }
 
-let servicesOptionsBase;
-export async function getServicesOptions({
-  model = null,
-} = {}): Promise<ServicesOptions> {
-  if (!servicesOptionsBase) {
-    const url = `${getApiURL()}/services-options/`;
-    try {
-      servicesOptionsBase = (await fetchData<ServicesOptions>(url)).data;
-    } catch (err) {
-      logException(err);
-      return {};
-    }
-  }
-
-  const data = { ...servicesOptionsBase };
-  if (model?.customizableChoicesSet) {
-    for (const field of [
-      "accessConditions",
-      "concernedPublic",
-      "requirements",
-      "credentials",
-    ]) {
-      data[field] = data[field].filter((option) =>
-        model.customizableChoicesSet[field].includes(option.value)
-      );
-    }
-  }
-
-  return data;
+export async function getServicesOptions(): Promise<ServicesOptions | null> {
+  const url = `${getApiURL()}/services-options/`;
+  return (await fetchData<ServicesOptions>(url)).data;
 }
 
 export async function getServiceSuggestions() {
@@ -407,12 +348,12 @@ export async function acceptServiceSuggestion(suggestion) {
   return result;
 }
 
-export async function publishServiceSuggestion(suggestion, source) {
+export function publishServiceSuggestion(suggestion, source) {
   const url = `${getApiURL()}/services-suggestions/`;
   const method = "POST";
   const { siret, name, ...contents } = suggestion;
   const authToken = get(token);
-  const response = await fetch(url, {
+  return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -426,19 +367,4 @@ export async function publishServiceSuggestion(suggestion, source) {
       source,
     }),
   });
-
-  const result = {
-    ok: response.ok,
-    status: response.status,
-  };
-  if (response.ok) {
-    result.data = await response.json();
-  } else {
-    try {
-      result.error = await response.json();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-  return result;
 }

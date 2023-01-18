@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
-  import Date from "$lib/components/utilities/date.svelte";
+  import DateLabel from "$lib/components/utilities/date-label.svelte";
   import { editIcon } from "$lib/icons";
   import type { Service, ServiceUpdateStatus } from "$lib/types";
   import { trackSuggestion } from "$lib/utils/plausible";
@@ -34,7 +34,7 @@
           </span>
 
           <span class="hidden print:inline">
-            Mis à jour le <Date date={service.modificationDate} />
+            Mis à jour le <DateLabel date={service.modificationDate} />
           </span>
           <span class="print:hidden">{label}</span>
         </div>
@@ -47,7 +47,7 @@
             <div class="text-f18">
               <strong class="hidden print:inline">
                 Mis à jour le
-                <Date date={service.modificationDate} />
+                <DateLabel date={service.modificationDate} />
               </strong>
               <strong class="print:hidden">{label}</strong>
             </div>
@@ -69,7 +69,7 @@
             <div class="text-f14">
               <strong class="hidden print:inline">
                 Mis à jour le
-                <Date date={service.modificationDate} />
+                <DateLabel date={service.modificationDate} />
               </strong>
               <span class="print:hidden">
                 Les informations sur ce service n’ont plus été mises à jour

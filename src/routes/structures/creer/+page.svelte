@@ -4,7 +4,7 @@
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { alertIcon } from "$lib/icons";
   import { siretWasAlreadyClaimed } from "$lib/requests/structures";
-  import structureSchema from "$lib/validation/schemas/structure";
+  import { structureSchema } from "$lib/validation/schemas/structure";
   import StructureEditionForm from "../structure-edition-form.svelte";
   import type { PageData } from "./$types";
 

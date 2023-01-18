@@ -3,7 +3,7 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import SetAsUpdatedModal from "$lib/components/specialized/services/set-as-updated-modal.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
-  import Date from "$lib/components/utilities/date.svelte";
+  import DateLabel from "$lib/components/utilities/date-label.svelte";
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
   import type {
     Service,
@@ -33,7 +33,7 @@
           </div>
 
           <span class="hidden print:inline">
-            Mis à jour le <Date date={service.modificationDate} />
+            Mis à jour le <DateLabel date={service.modificationDate} />
           </span>
           <span class="print:hidden">{label}</span>
         </div>
@@ -45,7 +45,7 @@
           <div>
             <div class="text-f18">
               <strong class="hidden print:inline">
-                Mis à jour le <Date date={service.modificationDate} />
+                Mis à jour le <DateLabel date={service.modificationDate} />
               </strong>
               <strong class="print:hidden">{label}</strong>
             </div>
@@ -67,7 +67,7 @@
             <div class="text-f14">
               <strong class="hidden print:inline">
                 Mis à jour le
-                <Date date={service.modificationDate} />
+                <DateLabel date={service.modificationDate} />
               </strong>
               <span class="print:hidden">
                 Ce service est dépriorisé dans les résultats de recherche, il

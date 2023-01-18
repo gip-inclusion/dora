@@ -155,4 +155,4 @@
 
 <NewletterNotice />
 
-<TallyNpsPopup formId={TallyFormId.NPS_SEEKER_FORM_ID} />
+<TallyNpsPopup formId={TallyFormId.NPS_SEEKER_FORM_ID} timeoutSeconds={45} />

@@ -1,6 +1,6 @@
 <script lang="ts">
   import StructureCard from "$lib/components/specialized/structure-card.svelte";
-  import Date from "$lib/components/utilities/date.svelte";
+  import DateLabel from "$lib/components/utilities/date-label.svelte";
 
   export let model;
 </script>
@@ -15,7 +15,7 @@
       <p class="mb-s0 text-f14 font-bold text-gray-text">Modèle</p>
       <p class="mx-s12 mb-s0 text-f14 text-gray-03">|</p>
       <p class="mb-s0 text-f14 text-gray-text">
-        Mis à jour le <Date date={model.modificationDate} />
+        Mis à jour le <DateLabel date={model.modificationDate} />
       </p>
     </div>
     <h1 class="text-france-blue">{model.name}</h1>

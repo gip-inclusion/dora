@@ -222,8 +222,17 @@ export type FeeCondition =
   | "adhesion"
   | "pass-numerique";
 
-export type CoachOrientationModes = "EM" | "EP" | "FO" | "OT" | "PH";
-export type BeneficiaryAccessModes = "EM" | "OS" | "OT" | "PH";
+export type CoachOrientationModes =
+  | "envoyer-courriel"
+  | "envoyer-fiche-prescription"
+  | "envoyer-formulaire"
+  | "autre"
+  | "telephoner";
+export type BeneficiaryAccessModes =
+  | "envoyer-courriel"
+  | "se-presenter"
+  | "autre"
+  | "telephoner";
 
 export interface SearchQuery {
   categoryIds: string[];
@@ -302,7 +311,7 @@ export interface Service {
   coachOrientationModes: CoachOrientationModes[];
   coachOrientationModesDisplay: string[];
   coachOrientationModesOther: string;
-  concernedPublic: CustomizableFK[]; // TODO: should be public
+  concernedPublic: CustomizableFK[]; // TODO: should be plural
   concernedPublicDisplay: string[];
   contactEmail: string;
   contactName: string;
@@ -336,6 +345,7 @@ export interface Service {
   name: string;
   onlineForm: string;
   postalCode: string;
+  publicationDate: string;
   qpvOrZrr: boolean;
   recurrence: string;
   remoteUrl: string;
@@ -408,7 +418,6 @@ export type Model = {
   beneficiariesAccessModes: BeneficiaryAccessModes[];
   beneficiariesAccessModesDisplay: string[];
   beneficiariesAccessModesOther: string;
-  canUpdateCategories: boolean;
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
@@ -420,7 +429,6 @@ export type Model = {
   creationDate: string;
   credentials: CustomizableFK[];
   credentialsDisplay: string[];
-  customizableChoicesSet: any; // TODO: a supprimer
   department: string;
   feeCondition: FeeCondition;
   feeDetails: string;

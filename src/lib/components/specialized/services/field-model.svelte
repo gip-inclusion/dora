@@ -3,15 +3,15 @@
   import Tag from "$lib/components/display/tag.svelte";
   import { arraysCompare, markdownToHTML } from "$lib/utils/misc";
 
-  export let value;
-  export let useValue;
-  export let showUseValue = true;
+  export let value: any | undefined = undefined;
+  export let onUseValue: () => void;
+  export let showUseButton = true;
   export let showModel = false;
   export let type = "text";
-  export let options = undefined;
+  export let options: any | undefined = undefined;
 
   export let paddingTop = false;
-  export let serviceValue;
+  export let serviceValue: any | undefined = undefined;
 
   let haveSameValue = false;
 
@@ -20,7 +20,7 @@
       return arraysCompare(a, b);
     }
 
-    // tiptap insert des carctères en fin de chaine
+    // tiptap insère des caractères en fin de chaine.
     // on les supprime pour faire la comparaison
     if (type === "markdown") {
       const bb = b.replace(/\n\n$/u, "");
@@ -29,6 +29,10 @@
     }
 
     return a === b;
+  }
+
+  function handleUseValue(_evt: MouseEvent) {
+    onUseValue && onUseValue();
   }
 
   $: haveSameValue = showModel && compare(value, serviceValue);
@@ -80,9 +84,14 @@
 
       <div class="flex items-center">
         <h5 class="mb-s0 lg:hidden">Modèle</h5>
-        {#if !haveSameValue && showUseValue}
+        {#if !haveSameValue && showUseButton}
           <div class="ml-auto lg:ml-s0">
-            <Button label="Utiliser" small secondary on:click={useValue} />
+            <Button
+              label="Utiliser"
+              small
+              secondary
+              on:click={handleUseValue}
+            />
           </div>
         {/if}
       </div>

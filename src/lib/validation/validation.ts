@@ -1,6 +1,7 @@
 import { browser } from "$app/environment";
 import type { ServicesOptions } from "$lib/types";
 import type { Shape } from "$lib/validation/schemas/utils";
+import { tick } from "svelte";
 import { writable } from "svelte/store";
 
 export type ValidationContext = {
@@ -8,7 +9,7 @@ export type ValidationContext = {
   onChange: (evt: any) => Promise<void>;
 };
 export const contextValidationKey = {};
-// TODO: type it properly
+
 export const formErrors: any = writable({});
 
 let currentErrors;
@@ -36,13 +37,14 @@ function validateField(
   fieldName: string,
   shape: Shape<any>,
   data,
-  servicesOptions: ServicesOptions,
-  schema
+  servicesOptions: ServicesOptions | undefined,
+  schema,
+  checkRequired = true
 ) {
   const originalValue = data[fieldName];
 
   let value = originalValue;
-  if (!shape.required && value == null) {
+  if ((!checkRequired || !shape.required) && value == null) {
     // Ignore null values for fields that are not required
     return { value, valid: true };
   }
@@ -54,6 +56,7 @@ function validateField(
   }
 
   if (
+    checkRequired &&
     shape.required &&
     ((Array.isArray(value) && !value.length) ||
       (!Array.isArray(value) && (value == null || value === "")))
@@ -78,10 +81,14 @@ function validateField(
   return { value, valid: true };
 }
 
-function scrollToField(fieldName) {
+async function scrollToField(fieldName) {
+  await tick();
   if (browser) {
-    const elt = document.getElementsByName(fieldName);
-    elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const elt = document.getElementById(fieldName);
+    elt?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!elt) {
+      console.error("Impossible de scroller sur ", fieldName);
+    }
   }
 }
 
@@ -92,18 +99,20 @@ export function validate(
     noScroll = false,
     fullSchema = undefined,
     showErrors = true,
-    servicesOptions = null,
+    servicesOptions = undefined,
+    checkRequired = true,
   }: {
     noScroll?: boolean;
     fullSchema?: any;
     showErrors?: boolean;
     servicesOptions?: ServicesOptions;
+    checkRequired?: boolean;
   } = {}
 ) {
   let validatedData = {};
   let isValid = true;
   let doneOnce = false;
-  const errorFields = [];
+  const errorFields: string[] = [];
 
   if (showErrors) {
     Object.keys(schema).forEach((fieldName) => delete currentErrors[fieldName]);
@@ -116,14 +125,15 @@ export function validate(
       shape,
       data,
       servicesOptions,
-      schema
+      schema,
+      checkRequired
     );
 
     isValid &&= valid;
     validatedData[fieldName] = value;
 
     if (!valid) {
-      errorFields.push(shape.name);
+      errorFields.push(shape.label);
     }
 
     if (showErrors) {
@@ -151,7 +161,8 @@ export function validate(
           fullSchema[depName],
           data,
           servicesOptions,
-          schema
+          schema,
+          checkRequired
         );
 
         isValid &&= depValid;

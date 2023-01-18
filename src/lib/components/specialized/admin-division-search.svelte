@@ -8,12 +8,13 @@
   } from "$lib/validation/validation";
   import { getContext } from "svelte";
 
-  export let handleChange;
+  export let id: string;
+  export let onChange;
   export let placeholder = null;
   export let disabled = false;
-  export let name;
   export let value = undefined;
   export let initialValue = undefined;
+  export let readonly = false;
   export let choices = [];
   export let searchType;
 
@@ -43,13 +44,14 @@
 </script>
 
 <Select
+  {id}
   bind:choices
   bind:value
   on:blur={handleBlur}
-  {name}
-  onChange={handleChange}
+  {onChange}
   {initialValue}
   {placeholder}
+  {readonly}
   {disabled}
   hideArrow
   searchFunction={searchAdminDivision}

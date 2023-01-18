@@ -41,7 +41,7 @@ export const load: PageLoad = async ({ params, parent }) => {
     title: `Éditer | ${service.name} | ${structure.name} | DORA`,
     noIndex: true,
     service,
-    servicesOptions: await getServicesOptions({ model }),
+    servicesOptions: await getServicesOptions(),
     structures,
     structure,
     model,

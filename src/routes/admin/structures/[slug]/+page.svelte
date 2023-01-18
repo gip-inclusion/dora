@@ -1,6 +1,6 @@
 <script lang="ts">
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import Date from "$lib/components/utilities/date.svelte";
+  import DateLabel from "$lib/components/utilities/date-label.svelte";
   import TextClamp from "$lib/components/utilities/text-clamp.svelte";
   import { getStructureAdmin } from "$lib/requests/admin";
   import { markdownToHTML } from "$lib/utils/misc";
@@ -141,8 +141,8 @@
     </InfoLine>
 
     <InfoLine>
-      date de création: <Date date={data.structure.creationDate} /><br />
-      date de dernière modification: <Date
+      date de création: <DateLabel date={data.structure.creationDate} /><br />
+      date de dernière modification: <DateLabel
         date={data.structure.modificationDate}
       />
     </InfoLine>

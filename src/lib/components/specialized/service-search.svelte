@@ -3,7 +3,7 @@
   import Button from "$lib/components/display/button.svelte";
   import FieldWrapper from "$lib/components/inputs/obsolete/field-wrapper.svelte";
   import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
-  import CitySearch from "$lib/components/specialized/city-search.svelte";
+  import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
   import {
     arrowDownSIcon,
     deleteBackIcon,

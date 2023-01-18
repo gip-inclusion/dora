@@ -1,9 +1,9 @@
 <script lang="ts">
   import Alert from "$lib/components/display/alert.svelte";
   import Button from "$lib/components/display/button.svelte";
-  import Form from "$lib/components/display/form.svelte";
-  import Field from "$lib/components/inputs/field.svelte";
-  import Input from "$lib/components/inputs/input.svelte";
+  import Form from "$lib/components/hoc/form.svelte";
+  import Field from "$lib/components/inputs/obsolete/field.svelte";
+  import Input from "$lib/components/inputs/obsolete/input.svelte";
   import { getApiURL } from "$lib/utils/api";
   import {
     isSiret,

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Date from "$lib/components/utilities/date.svelte";
+  import DateLabel from "$lib/components/utilities/date-label.svelte";
   import EmailLine from "./email-line.svelte";
   import WebSearchLink from "./web-search-link.svelte";
 
@@ -26,6 +26,6 @@
     actif: {user.isActive ? "✅" : "❌"} valide: {user.isValid ? "✅" : "❌"} infolettre:
     {user.newsletter ? "✅" : "❌"} migré sur IC: {user.isOnIc ? "✅" : "❌"}
     <br />
-    inscription: <Date date={user.dateJoined} />
+    inscription: <DateLabel date={user.dateJoined} />
   </div>
 {/if}

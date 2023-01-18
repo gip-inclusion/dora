@@ -8,7 +8,7 @@
   } from "$lib/icons";
   import Button from "./button.svelte";
 
-  export let title;
+  export let title = "";
   export let type: "info" | "success" | "warning" | "error" = "info";
   export let hasCloseButton = false;
   export let showIcon = true;
@@ -95,7 +95,9 @@
       {/if}
       {#if $$slots?.default || $$slots.button}
         <div
-          class="mt-s16 flex flex-row flex-wrap items-start justify-between gap-s12"
+          class="flex flex-row flex-wrap items-start justify-between gap-s12"
+          class:mt-s16={!!title}
+          class:mt-s8={!title}
         >
           <slot />
 

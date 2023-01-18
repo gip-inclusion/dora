@@ -1,14 +1,16 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
-  import Form from "$lib/components/display/form.svelte";
+  import Form from "$lib/components/hoc/form.svelte";
   import Modal from "$lib/components/display/modal.svelte";
-  import Field from "$lib/components/inputs/field.svelte";
   import { getApiURL } from "$lib/utils/api";
   import { token } from "$lib/utils/auth";
   import { addUserSchema } from "$lib/validation/schemas/dashboard";
-  import { formErrors } from "$lib/validation/validation";
   import { get } from "svelte/store";
   import ConfirmationModal from "./modal-confirmation.svelte";
+  import FormErrors from "$lib/components/display/form-errors.svelte";
+  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
+  import Fieldset from "$lib/components/display/fieldset.svelte";
+  import SelectField from "$lib/components/inputs/select-field.svelte";
 
   const levelChoices = [
     {
@@ -26,8 +28,8 @@
   export let members;
   export let onRefresh;
 
-  let email;
-  let level = "user";
+  let email: string;
+  let level: "user" | "admin" = "user";
   let successEmailMsg;
   let confirmationModalIsOpen = false;
   let requesting = false;
@@ -68,13 +70,15 @@
     isOpen = false;
     successEmailMsg = email;
 
-    email = null;
+    email = "";
     level = "user";
     confirmationModalIsOpen = true;
   }
 </script>
 
 <Modal bind:isOpen title="Nouveau collaborateur">
+  <FormErrors />
+
   <Form
     data={{ email, level }}
     schema={addUserSchema}
@@ -82,29 +86,25 @@
     onSuccess={handleSuccess}
     bind:requesting
   >
-    <Field
-      name="email"
-      errorMessages={$formErrors.email}
-      label="Courriel"
-      vertical
-      type="email"
-      bind:value={email}
-      required
-      placeholder="nom@exemple.org"
-    />
+    <Fieldset noTopPadding>
+      <BasicInputField
+        type="email"
+        id="email"
+        bind:value={email}
+        schema={addUserSchema.email}
+        vertical
+        placeholder="nom@exemple.org"
+      />
 
-    <Field
-      name="level"
-      errorMessages={$formErrors.level}
-      label="Permissions"
-      vertical
-      type="select"
-      bind:value={level}
-      choices={levelChoices}
-      required
-      placeholder="Permissions"
-    />
-
+      <SelectField
+        id="level"
+        schema={addUserSchema.level}
+        vertical
+        bind:value={level}
+        choices={levelChoices}
+        placeholder="Permissions"
+      />
+    </Fieldset>
     <div class="mt-s32 flex flex-row justify-end gap-s16">
       <Button
         type="submit"

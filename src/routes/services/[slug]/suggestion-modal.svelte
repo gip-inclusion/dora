@@ -1,9 +1,9 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
-  import Form from "$lib/components/display/form.svelte";
+  import Form from "$lib/components/hoc/form.svelte";
   import Modal from "$lib/components/display/modal.svelte";
-  import Field from "$lib/components/inputs/field.svelte";
+  import Field from "$lib/components/inputs/obsolete/field.svelte";
   import { getApiURL } from "$lib/utils/api";
   import { userInfo } from "$lib/utils/auth";
   import { suggestionSchema } from "$lib/validation/schemas/service";

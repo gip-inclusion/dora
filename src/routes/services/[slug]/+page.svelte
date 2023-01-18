@@ -11,31 +11,28 @@
   import ServiceToolbar from "./service-toolbar.svelte";
   import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
   import { getService } from "$lib/requests/services";
-  import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
   import { token } from "$lib/utils/auth";
-  import { isAfter } from "$lib/utils/misc";
-  import { canDisplayNpsForm, TallyFormId } from "$lib/utils/nps";
+  import { TallyFormId } from "$lib/utils/nps";
   import { trackService } from "$lib/utils/plausible";
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
-
-  // Nous ne voulons pas afficher le formulaire sur les services avant cette date
-  // afin de ne pas avoir une durée de contribution fausse
-  const MIN_DATE_FOR_SERVICE_FEEDBACK_FROM = new Date("2022-07-21");
 
   onMount(() => {
     trackService(data.service);
   });
 
-  onDestroy(() => {
-    serviceSubmissionTimeMeter.clear();
-  });
-
   async function handleRefresh() {
     data.service = await getService(data.service.slug);
   }
+
+  const minutesSincePublication =
+    (new Date().getTime() - new Date(data.service.publicationDate).getTime()) /
+    1000 /
+    60;
+  const serviceWasJustPublished =
+    data.service.status === "PUBLISHED" && minutesSincePublication < 1;
 
   $: showContact = data.service?.isContactInfoPublic || $token;
   $: structureHasPublishedServices = data.structure?.services.filter(
@@ -95,23 +92,22 @@
   </CenteredGrid>
   {#if browser}
     {#if data.service.canWrite}
-      {#if canDisplayNpsForm(TallyFormId.SERVICE_CREATION_FORM_ID) && $serviceSubmissionTimeMeter.id && $serviceSubmissionTimeMeter.duration && isAfter(new Date(data.service.creationDate), MIN_DATE_FOR_SERVICE_FEEDBACK_FROM) && !data.service.hasAlreadyBeenUnpublished}
+      {#if serviceWasJustPublished && !data.service.hasAlreadyBeenUnpublished}
         <TallyNpsPopup
           formId={TallyFormId.SERVICE_CREATION_FORM_ID}
-          timeout={3000}
-          hiddenFields={{
-            service: $serviceSubmissionTimeMeter.id,
-            temps: $serviceSubmissionTimeMeter.duration,
-          }}
+          timeoutSeconds={3}
         />
       {:else if structureHasPublishedServices}
         <TallyNpsPopup
           formId={TallyFormId.NPS_OFFEROR_FORM_ID}
-          timeout={30000}
+          timeoutSeconds={30}
         />
       {/if}
     {:else}
-      <TallyNpsPopup formId={TallyFormId.NPS_SEEKER_FORM_ID} />
+      <TallyNpsPopup
+        formId={TallyFormId.NPS_SEEKER_FORM_ID}
+        timeoutSeconds={45}
+      />
     {/if}
   {/if}
 {/if}

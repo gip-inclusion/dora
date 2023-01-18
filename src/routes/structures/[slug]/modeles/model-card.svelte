@@ -1,6 +1,6 @@
 <script lang="ts">
   import { userInfo } from "$lib/utils/auth";
-  import Date from "$lib/components/utilities/date.svelte";
+  import DateLabel from "$lib/components/utilities/date-label.svelte";
   import ModelMenu from "./model-button-menu.svelte";
 
   export let model;
@@ -15,7 +15,7 @@
     <div>
       <div class="mb-s8 flex items-center">
         <p class="mb-s0 text-f14 text-gray-text">
-          Mis à jour le <Date date={model.modificationDate} />
+          Mis à jour le <DateLabel date={model.modificationDate} />
         </p>
       </div>
       <h4 class="mb-s8 text-france-blue">
