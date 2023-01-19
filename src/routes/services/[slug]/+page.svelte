@@ -16,6 +16,7 @@
   import { trackService } from "$lib/utils/plausible";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
+  import type { Service } from "$lib/types";
 
   export let data: PageData;
 
@@ -24,15 +25,21 @@
   });
 
   async function handleRefresh() {
-    data.service = await getService(data.service.slug);
+    if (data.service) data.service = await getService(data.service.slug);
   }
 
-  const minutesSincePublication =
-    (new Date().getTime() - new Date(data.service.publicationDate).getTime()) /
-    1000 /
-    60;
+  function getMinutesSincePublication(service: Service) {
+    return (
+      (new Date().getTime() - new Date(service.publicationDate).getTime()) /
+      60000
+    );
+  }
+
   const serviceWasJustPublished =
-    data.service.status === "PUBLISHED" && minutesSincePublication < 1;
+    data.service &&
+    data.service.publicationDate &&
+    data.service.status === "PUBLISHED" &&
+    getMinutesSincePublication(data.service) < 1;
 
   $: showContact = data.service?.isContactInfoPublic || $token;
   $: structureHasPublishedServices = data.structure?.services.filter(
