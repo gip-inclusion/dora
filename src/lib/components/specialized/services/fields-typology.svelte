@@ -1,12 +1,11 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
+  import BooleanRadioButtonsField from "$lib/components/inputs/boolean-radio-buttons-field.svelte";
   import CheckboxesField from "$lib/components/inputs/checkboxes-field.svelte";
   import MultiSelectField from "$lib/components/inputs/multi-select-field.svelte";
-  import ToggleField from "$lib/components/inputs/toggle-field.svelte";
   import type { Model } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import type { Schema } from "$lib/validation/schemas/utils";
-
   import FieldCategory from "./field-category.svelte";
   import FieldModel from "./field-model.svelte";
 
@@ -75,7 +74,7 @@
   </FieldModel>
 
   <FieldModel {...fieldModelProps["isCumulative"]} type="boolean">
-    <ToggleField
+    <BooleanRadioButtonsField
       id="isCumulative"
       schema={schema.isCumulative}
       bind:value={service.isCumulative}

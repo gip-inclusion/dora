@@ -1,34 +1,34 @@
 <script lang="ts">
   import type { Shape } from "$lib/validation/schemas/utils";
   import FieldWrapper from "./field-wrapper.svelte";
-  import Toggle from "./others/toggle.svelte";
+  import RadioButtons from "./others/radio-buttons.svelte";
 
   export let id: string;
-  export let schema: Shape<boolean>;
+  export let schema: Shape<string[]>;
 
   export let value;
   export let disabled = false;
   export let readonly = schema?.readonly;
 
   // Spécifiques
-  export let yesLabel: string | undefined = undefined;
-  export let noLabel: string | undefined = undefined;
+  export let yesLabel = "Oui";
+  export let noLabel = "Non";
+
+  const choices = [
+    { value: true, label: yesLabel },
+    { value: false, label: noLabel },
+  ];
 
   // Proxy vers le FieldWrapper
   export let description = "";
   export let hidden = false;
   export let hideLabel = false;
   export let vertical = false;
-
-  if (!schema) {
-    console.error("No schema for field", id);
-  }
 </script>
 
 {#if schema}
   <FieldWrapper
     let:onBlur
-    let:onChange
     {id}
     label={schema.label}
     {description}
@@ -39,14 +39,16 @@
     {disabled}
     {readonly}
   >
-    <Toggle
+    <RadioButtons
       {id}
-      bind:checked={value}
-      on:change={onChange}
-      {disabled}
-      {readonly}
+      name={id}
+      bind:group={value}
+      on:change
+      {choices}
       {yesLabel}
       {noLabel}
+      {disabled}
+      {readonly}
     />
   </FieldWrapper>
 {/if}

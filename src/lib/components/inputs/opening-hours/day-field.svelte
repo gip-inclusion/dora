@@ -2,7 +2,7 @@
   import { alertIcon } from "$lib/icons";
   import type { Day, DayPeriod } from "$lib/types";
   import { createEventDispatcher } from "svelte";
-  import Toggle from "../others/toggle.svelte";
+  import Toggle from "./toggle.svelte";
 
   export let label: string;
   export let isOpen: boolean;

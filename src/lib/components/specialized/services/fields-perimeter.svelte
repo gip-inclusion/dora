@@ -1,8 +1,8 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import AdminDivisionSearchField from "$lib/components/inputs/admin-division-search-field.svelte";
+  import BooleanRadioButtonsField from "$lib/components/inputs/boolean-radio-buttons-field.svelte";
   import SelectField from "$lib/components/inputs/select-field.svelte";
-  import ToggleField from "$lib/components/inputs/toggle-field.svelte";
   import type { Schema } from "$lib/validation/schemas/utils";
 
   export let schema: Schema;
@@ -59,7 +59,7 @@
     />
   {/if}
 
-  <ToggleField
+  <BooleanRadioButtonsField
     id="qpvOrZrr"
     schema={schema.qpvOrZrr}
     bind:value={service.qpvOrZrr}

@@ -1,7 +1,7 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
-  import ToggleField from "$lib/components/inputs/toggle-field.svelte";
+  import BooleanRadioButtonsField from "$lib/components/inputs/boolean-radio-buttons-field.svelte";
   import type { Service } from "$lib/types";
   import type { Schema } from "$lib/validation/schemas/utils";
 
@@ -43,11 +43,11 @@
     placeholder="nom@exemple.org"
     bind:value={service.contactEmail}
   />
-  <ToggleField
+  <BooleanRadioButtonsField
     id="isContactInfoPublic"
     schema={schema.isContactInfoPublic}
     bind:value={service.isContactInfoPublic}
-    yesLabel="OUI - visibles pour tout visiteur du site DORA"
-    noLabel="NON - visibles uniquement par les professionnels inscrits sur DORA "
+    yesLabel="OUI – visibles pour tout visiteur du site DORA"
+    noLabel="NON – visibles uniquement par les professionnels inscrits sur DORA "
   />
 </FieldSet>

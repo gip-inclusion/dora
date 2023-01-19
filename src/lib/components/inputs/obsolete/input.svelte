@@ -1,6 +1,5 @@
 <script lang="ts">
   import RichText from "$lib/components/inputs/rich-text/editor.svelte";
-  import Toggle from "$lib/components/inputs/others/toggle.svelte";
   import type { InputType } from "$lib/types";
   import Checkboxes from "../others/checkboxes.svelte";
   import RadioButtons from "../others/radio-buttons.svelte";
@@ -108,8 +107,6 @@
     {disabled}
     {readonly}
   />
-{:else if type === "toggle"}
-  <Toggle {name} bind:checked={value} on:change {disabled} {readonly} />
 {:else if type === "date"}
   <input
     {name}

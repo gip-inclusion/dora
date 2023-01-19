@@ -11,7 +11,6 @@ export type InputType =
   | "radios"
   | "select"
   | "multiselect"
-  | "toggle"
   | "date";
 
 export type DiffusionZoneType =
