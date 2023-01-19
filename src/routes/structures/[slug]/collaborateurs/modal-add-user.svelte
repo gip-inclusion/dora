@@ -28,7 +28,7 @@
   export let members;
   export let onRefresh;
 
-  let email: string;
+  let email = "";
   let level: "user" | "admin" = "user";
   let successEmailMsg;
   let confirmationModalIsOpen = false;
@@ -74,13 +74,15 @@
     level = "user";
     confirmationModalIsOpen = true;
   }
+
+  let formData = { email, level };
 </script>
 
 <Modal bind:isOpen title="Nouveau collaborateur">
   <FormErrors />
 
   <Form
-    data={{ email, level }}
+    bind:data={formData}
     schema={addUserSchema}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
@@ -91,14 +93,12 @@
         type="email"
         id="email"
         bind:value={email}
-        schema={addUserSchema.email}
         vertical
         placeholder="nom@exemple.org"
       />
 
       <SelectField
         id="level"
-        schema={addUserSchema.level}
         vertical
         bind:value={level}
         choices={levelChoices}

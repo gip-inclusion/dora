@@ -1,19 +1,22 @@
 <script lang="ts">
-  import type { Shape } from "$lib/validation/schemas/utils";
+  import {
+    currentFormData,
+    currentSchema,
+    isRequired,
+  } from "$lib/validation/validation";
   import FieldWrapper from "./field-wrapper.svelte";
 
   export let id: string;
-  export let schema: Shape<string>;
+  export let value: string;
 
-  export let value;
-  export let autocomplete = "";
+  export let autocomplete = undefined;
   export let disabled = false;
-  export let readonly = schema?.readonly;
+  export let readonly = $currentSchema?.[id]?.readonly;
   export let placeholder: string | undefined = undefined;
-  export let rows = 4;
 
   // Specifique
-  export let maxLength: number | undefined = schema?.maxLength;
+  export let maxLength: number | undefined = $currentSchema?.[id]?.maxLength;
+  export let rows = 4;
 
   // Proxy vers le FieldWrapper
   export let description = "";
@@ -22,19 +25,20 @@
   export let vertical = false;
 </script>
 
-{#if schema}
+{#if $currentSchema && id in $currentSchema}
   <FieldWrapper
-    let:onBlur
     {id}
-    label={schema.label}
+    let:onBlur
+    label={$currentSchema[id].label}
+    required={isRequired($currentSchema[id], $currentFormData)}
     {description}
     {hidden}
     {hideLabel}
-    required={schema.required}
     {vertical}
-    {readonly}
     {disabled}
-    ><div class="flex flex-col">
+    {readonly}
+  >
+    <div class="flex flex-col">
       <textarea
         bind:value
         on:blur={onBlur}

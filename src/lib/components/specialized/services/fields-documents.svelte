@@ -3,11 +3,11 @@
   import AddableMultiSelectField from "$lib/components/inputs/addable-multiselect-field.svelte";
   import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
   import UploadField from "$lib/components/inputs/upload-field.svelte";
-  import type { Model } from "$lib/types";
+  import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "./field-model.svelte";
 
-  export let servicesOptions, schema, service;
+  export let servicesOptions: ServicesOptions, service: Service;
   export let model: Model | undefined = undefined;
 
   $: showModel = !!service.model;
@@ -18,7 +18,6 @@
 
   $: fieldModelProps = model
     ? getModelInputProps({
-        schema: schema,
         service,
         servicesOptions,
         showModel,
@@ -40,7 +39,6 @@
   <FieldModel {...fieldModelProps["forms"]} type="files">
     <UploadField
       id="forms"
-      schema={schema.forms}
       structureSlug={service.structure}
       on:blur
       bind:fileKeys={service.forms}
@@ -51,7 +49,6 @@
     <FieldModel {...fieldModelProps["credentials"]} type="array">
       <AddableMultiSelectField
         id="credentials"
-        schema={schema.credentials}
         bind:values={service.credentials}
         structureSlug={service.structure}
         choices={servicesOptions.credentials}
@@ -66,7 +63,6 @@
   <FieldModel {...fieldModelProps["onlineForm"]}>
     <BasicInputField
       id="onlineForm"
-      schema={schema.onlineForm}
       placeholder="URL"
       type="url"
       bind:value={service.onlineForm}

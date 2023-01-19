@@ -1,14 +1,17 @@
 <script lang="ts">
-  import type { Shape } from "$lib/validation/schemas/utils";
+  import {
+    currentFormData,
+    currentSchema,
+    isRequired,
+  } from "$lib/validation/validation";
   import FieldWrapper from "./field-wrapper.svelte";
   import RadioButtons from "./others/radio-buttons.svelte";
 
   export let id: string;
-  export let schema: Shape<string[]>;
+  export let value: boolean;
 
-  export let value;
   export let disabled = false;
-  export let readonly = schema?.readonly;
+  export let readonly = $currentSchema?.[id]?.readonly;
 
   // Spécifiques
   export let yesLabel = "Oui";
@@ -26,15 +29,15 @@
   export let vertical = false;
 </script>
 
-{#if schema}
+{#if $currentSchema && id in $currentSchema}
   <FieldWrapper
-    let:onBlur
     {id}
-    label={schema.label}
+    let:onBlur
+    label={$currentSchema[id].label}
+    required={isRequired($currentSchema[id], $currentFormData)}
     {description}
     {hidden}
     {hideLabel}
-    required={schema.required}
     {vertical}
     {disabled}
     {readonly}
@@ -45,8 +48,6 @@
       bind:group={value}
       on:change
       {choices}
-      {yesLabel}
-      {noLabel}
       {disabled}
       {readonly}
     />

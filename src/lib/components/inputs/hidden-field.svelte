@@ -1,24 +1,13 @@
 <script lang="ts">
-  import type { Shape } from "$lib/validation/schemas/utils";
+  import { currentSchema } from "$lib/validation/validation";
   import FieldWrapper from "./field-wrapper.svelte";
 
   export let id: string;
-  export let schema: Shape<string>;
-
-  export let value: any | undefined = undefined;
+  export let value: string | number | undefined = undefined;
 </script>
 
-{#if schema}
-  <FieldWrapper
-    let:onBlur
-    {id}
-    label=""
-    hidden
-    description=""
-    hideLabel
-    required={false}
-    vertical={false}
-  >
+{#if $currentSchema && id in $currentSchema}
+  <FieldWrapper {id} let:onBlur hidden hideLabel>
     <input type="hidden" bind:value {id} />
   </FieldWrapper>
 {/if}

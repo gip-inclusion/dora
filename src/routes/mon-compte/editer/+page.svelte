@@ -38,6 +38,7 @@
 
   let requesting = false;
   let { firstName, lastName, email, phoneNumber } = $userInfo;
+  let formData = { firstName, lastName, email, phoneNumber };
 </script>
 
 <EnsureLoggedIn>
@@ -45,7 +46,7 @@
 
   <div class="lg:w-2/3">
     <Form
-      data={{ firstName, lastName, email, phoneNumber }}
+      bind:data={formData}
       schema={userProfileSchema}
       onChange={handleChange}
       onSubmit={handleSubmit}
@@ -55,7 +56,6 @@
       <Fieldset title="Informations" noTopPadding>
         <BasicInputField
           id="firstName"
-          schema={userProfileSchema.firstName}
           bind:value={firstName}
           placeholder="Aurélien"
           disabled
@@ -64,7 +64,6 @@
 
         <BasicInputField
           id="lastName"
-          schema={userProfileSchema.lastName}
           bind:value={lastName}
           placeholder="Durand"
           disabled
@@ -73,7 +72,6 @@
 
         <BasicInputField
           id="email"
-          schema={userProfileSchema.email}
           bind:value={email}
           placeholder="nom.prenom@organisation.fr"
           disabled
@@ -83,7 +81,6 @@
         <BasicInputField
           type="tel"
           id="phoneNumber"
-          schema={userProfileSchema.phoneNumber}
           bind:value={phoneNumber}
           placeholder="0X XX XX XX XX"
           vertical

@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
 import type { ServicesOptions } from "$lib/types";
-import type { Shape } from "$lib/validation/schemas/utils";
+import type { Schema, Shape } from "$lib/validation/schemas/utils";
 import { tick } from "svelte";
 import { writable } from "svelte/store";
 
@@ -16,6 +16,9 @@ let currentErrors;
 formErrors.subscribe((value) => {
   currentErrors = value;
 });
+
+export const currentSchema = writable<Schema | undefined>();
+export const currentFormData = writable<object | undefined>();
 
 function addError(fieldName, msg) {
   formErrors.update((previousErrors) => {
@@ -33,6 +36,12 @@ function clearError(fieldName) {
   });
 }
 
+export function isRequired<T>(shape: Shape<T>, data: any) {
+  if (shape.required == null) return false;
+  if (typeof shape.required === "boolean") return shape.required;
+  return shape.required(data);
+}
+
 function validateField(
   fieldName: string,
   shape: Shape<any>,
@@ -44,7 +53,7 @@ function validateField(
   const originalValue = data[fieldName];
 
   let value = originalValue;
-  if ((!checkRequired || !shape.required) && value == null) {
+  if ((!checkRequired || !isRequired(shape, data)) && value == null) {
     // Ignore null values for fields that are not required
     return { value, valid: true };
   }
@@ -57,7 +66,7 @@ function validateField(
 
   if (
     checkRequired &&
-    shape.required &&
+    isRequired(shape, data) &&
     ((Array.isArray(value) && !value.length) ||
       (!Array.isArray(value) && (value == null || value === "")))
   ) {

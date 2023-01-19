@@ -46,32 +46,27 @@
     await onRefresh();
     isOpen = false;
   }
+
+  let formData = { level };
 </script>
 
 <Modal bind:isOpen title="Utilisateur">
   <Form
-    data={{ level }}
+    bind:data={formData}
     schema={modifyUserSchema}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
   >
     <Fieldset noTopPadding>
-      <BasicInputField
-        id="name"
-        schema={modifyUserSchema.name}
-        vertical
-        value={member.user.fullName}
-      />
+      <BasicInputField id="name" vertical value={member.user.fullName} />
       <BasicInputField
         type="email"
         id="email"
-        schema={modifyUserSchema.email}
         vertical
         value={member.user.email}
       />
       <SelectField
         id="level"
-        schema={modifyUserSchema.level}
         vertical
         bind:value={level}
         choices={levelChoices}

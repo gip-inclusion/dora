@@ -1,13 +1,16 @@
 <script lang="ts">
-  import type { Shape } from "$lib/validation/schemas/utils";
+  import {
+    currentFormData,
+    currentSchema,
+    isRequired,
+  } from "$lib/validation/validation";
   import FieldWrapper from "./field-wrapper.svelte";
   import CitySearch from "./geo/city-search.svelte";
 
   export let id: string;
-  export let schema: Shape<string>;
 
   export let disabled = false;
-  export let readonly = schema?.readonly;
+  export let readonly = $currentSchema?.[id]?.readonly;
   export let placeholder = "";
   export let initialValue = "";
 
@@ -21,24 +24,24 @@
   export let vertical = false;
 </script>
 
-{#if schema}
+{#if $currentSchema && id in $currentSchema}
   <FieldWrapper
-    let:onBlur
     {id}
-    label={schema.label}
+    let:onBlur
+    label={$currentSchema[id].label}
+    required={isRequired($currentSchema[id], $currentFormData)}
     {description}
     {hidden}
     {hideLabel}
-    required={schema.required}
     {vertical}
     {disabled}
     {readonly}
   >
     <CitySearch
       on:blur={onBlur}
+      {id}
       {onChange}
       {initialValue}
-      {id}
       {disabled}
       {placeholder}
     />

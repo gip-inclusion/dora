@@ -55,7 +55,7 @@
 <FormErrors />
 
 <Form
-  data={service}
+  bind:data={service}
   schema={contribSchema}
   onChange={handleChange}
   onSubmit={handleSubmit}

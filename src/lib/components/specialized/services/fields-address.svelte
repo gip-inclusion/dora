@@ -6,11 +6,9 @@
   import HiddenField from "$lib/components/inputs/hidden-field.svelte";
   import { syncIcon } from "$lib/icons";
   import type { Service, Structure } from "$lib/types";
-  import type { Schema } from "$lib/validation/schemas/utils";
 
   export let entity: Service | Structure;
   export let parent: Structure | null = null;
-  export let schema: Schema;
 
   function handleAddressChange(address) {
     const props = address?.properties;
@@ -65,7 +63,6 @@
     {/if}
     <CitySearchField
       id="city"
-      schema={schema.city}
       initialValue={entity.city}
       onChange={handleCityChange}
       placeholder="Saisissez et validez votre ville"
@@ -73,7 +70,6 @@
   </div>
   <AddressSearchField
     id="address1"
-    schema={schema.address1}
     initialValue={entity.address1}
     onChange={handleAddressChange}
     cityCode={entity.cityCode}
@@ -83,33 +79,19 @@
 
   <BasicInputField
     id="address2"
-    schema={schema.address2}
     bind:value={entity.address2}
     placeholder="batiment, escalier, etc."
   />
 
   <BasicInputField
     id="postalCode"
-    schema={schema.postalCode}
     bind:value={entity.postalCode}
     placeholder="00000"
   />
 
-  <HiddenField
-    id="cityCode"
-    schema={schema.cityCode}
-    bind:value={entity.cityCode}
-  />
+  <HiddenField id="cityCode" bind:value={entity.cityCode} />
 
-  <HiddenField
-    id="longitude"
-    schema={schema.longitude}
-    bind:value={entity.longitude}
-  />
+  <HiddenField id="longitude" bind:value={entity.longitude} />
 
-  <HiddenField
-    id="latitude"
-    schema={schema.latitude}
-    bind:value={entity.latitude}
-  />
+  <HiddenField id="latitude" bind:value={entity.latitude} />
 {/key}

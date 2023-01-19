@@ -47,11 +47,17 @@
     message = null;
     confirmationModalIsOpen = true;
   }
+
+  let formData = {
+    fullName: suggesterFullName,
+    email: suggesterEmail,
+    message,
+  };
 </script>
 
 <Modal bind:isOpen title="Suggestion">
   <Form
-    data={{ fullName: suggesterFullName, email: suggesterEmail, message }}
+    bind:data={formData}
     schema={suggestionSchema}
     onChange={handleChange}
     onSubmit={handleSubmit}

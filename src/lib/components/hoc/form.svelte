@@ -1,7 +1,10 @@
 <script lang="ts">
   import type { ServicesOptions } from "$lib/types";
+  import type { Schema } from "$lib/validation/schemas/utils";
   import {
     contextValidationKey,
+    currentFormData,
+    currentSchema,
     formErrors,
     injectAPIErrors,
     validate,
@@ -10,7 +13,7 @@
   import { onDestroy, onMount, setContext } from "svelte";
 
   export let data;
-  export let schema;
+  export let schema: Schema;
   export let requesting = false;
   export let serverErrorsDict = {};
   export let onSubmit, onSuccess;
@@ -19,6 +22,9 @@
   export let onValidate:
     | ((data) => { validatedData; valid: boolean })
     | undefined = undefined;
+
+  $: $currentFormData = data;
+  $: $currentSchema = schema;
 
   onMount(() => {
     $formErrors = {};
@@ -45,6 +51,7 @@
           data,
           { [fieldName]: schema[fieldName] },
           {
+            fullSchema: schema,
             noScroll: true,
             servicesOptions,
           }
