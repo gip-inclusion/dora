@@ -2,7 +2,7 @@
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
   import CheckboxesField from "$lib/components/inputs/checkboxes-field.svelte";
-  import SelectField from "$lib/components/inputs/select-field.svelte";
+  import RadioButtonsField from "$lib/components/inputs/radio-buttons-field.svelte";
   import TextareaField from "$lib/components/inputs/textarea-field.svelte";
   import type { Model } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
@@ -90,16 +90,15 @@
     {/if}
   </div>
 
-  <div class="flex flex-col gap-s4">
+  <div class="flex flex-col gap-s24">
     <FieldModel
       {...fieldModelProps["feeCondition"]}
       serviceValue={service.feeCondition}
       type="text"
     >
-      <SelectField
+      <RadioButtonsField
         id="feeCondition"
         schema={schema.feeCondition}
-        placeholder="Choisissez…"
         bind:value={service.feeCondition}
         choices={servicesOptions.feeConditions.filter(
           (fee) => fee.value !== "pass-numerique"

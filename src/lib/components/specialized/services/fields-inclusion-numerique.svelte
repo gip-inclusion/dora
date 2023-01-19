@@ -3,7 +3,7 @@
   import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
   import CheckboxesField from "$lib/components/inputs/checkboxes-field.svelte";
   import MultiSelectField from "$lib/components/inputs/multi-select-field.svelte";
-  import SelectField from "$lib/components/inputs/select-field.svelte";
+  import RadioButtonsField from "$lib/components/inputs/radio-buttons-field.svelte";
   import TextareaField from "$lib/components/inputs/textarea-field.svelte";
   import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
@@ -258,10 +258,9 @@
     />
   {/if}
 
-  <SelectField
+  <RadioButtonsField
     id="feeCondition"
     schema={schema.feeCondition}
-    placeholder="Choisissez…"
     bind:value={service.feeCondition}
     choices={servicesOptions.feeConditions}
   />
