@@ -1,3 +1,5 @@
+// Icones de https://remixicon.com/
+
 export { default as bankIcon } from "remixicon/icons/Buildings/bank-line.svg?raw";
 export { default as home3Icon } from "remixicon/icons/Buildings/home-3-line.svg?raw";
 export { default as homeIcon } from "remixicon/icons/Buildings/home-6-line.svg?raw";
@@ -73,7 +75,6 @@ export { default as logoutBoxLineIcon } from "remixicon/icons/System/logout-box-
 export { default as menuIcon } from "remixicon/icons/System/menu-line.svg?raw";
 export { default as moreIcon } from "remixicon/icons/System/more-2-fill.svg?raw";
 export { default as questionFillIcon } from "remixicon/icons/System/question-fill.svg?raw";
-export { default as refreshIcon } from "remixicon/icons/System/refresh-line.svg?raw";
 export { default as searchIcon } from "remixicon/icons/System/search-line.svg?raw";
 export { default as timeLineIcon } from "remixicon/icons/System/time-line.svg?raw";
 export { default as timerFlashIcon } from "remixicon/icons/System/timer-flash-line.svg?raw";
@@ -87,3 +88,7 @@ export { default as starSmileLineIcon } from "remixicon/icons/User/star-smile-li
 export { default as teamLineIcon } from "remixicon/icons/User/team-line.svg?raw";
 export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
 export { default as userAddIcon } from "remixicon/icons/User/user-add-line.svg?raw";
+
+// Autres
+
+export { default as syncIcon } from "$lib/assets/icons/ico-sync.svg?raw";

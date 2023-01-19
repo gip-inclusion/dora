@@ -4,7 +4,7 @@
   import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
   import CitySearchField from "$lib/components/inputs/city-search-field.svelte";
   import HiddenField from "$lib/components/inputs/hidden-field.svelte";
-  import { refreshIcon } from "$lib/icons";
+  import { syncIcon } from "$lib/icons";
   import type { Service, Structure } from "$lib/types";
   import type { Schema } from "$lib/validation/schemas/utils";
 
@@ -56,7 +56,7 @@
       <div class="mb-s8 lg:w-3/4 lg:self-end">
         <Button
           on:click={fillAddress}
-          icon={refreshIcon}
+          icon={syncIcon}
           noBackground
           small
           label="Utiliser les coordonnées de la structure"
