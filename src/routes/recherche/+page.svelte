@@ -3,7 +3,6 @@
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import NewletterNotice from "$lib/components/specialized/newletter-notice.svelte";
   import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
   import type { ServiceSearchResult } from "$lib/types";
   import { isInDeploymentDepartments } from "$lib/utils/misc";
@@ -152,7 +151,5 @@
     <SearchPromo />
   {/if}
 </CenteredGrid>
-
-<NewletterNotice />
 
 <TallyNpsPopup formId={TallyFormId.NPS_SEEKER_FORM_ID} timeoutSeconds={45} />

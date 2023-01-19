@@ -62,7 +62,7 @@
   onSuccess={handleSuccess}
   bind:requesting
 >
-  <CenteredGrid bgColor="bg-gray-bg">
+  <CenteredGrid>
     <div class="lg:w-2/3">
       <Fields bind:service servicesOptions={data.servicesOptions} />
     </div>

@@ -16,7 +16,7 @@
   });
 </script>
 
-<CenteredGrid bgColor="bg-gray-bg">
+<CenteredGrid>
   <h2>Contributions</h2>
 
   {#if suggestions}

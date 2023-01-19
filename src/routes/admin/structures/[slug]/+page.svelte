@@ -22,7 +22,7 @@
   }
 </script>
 
-<CenteredGrid bgColor="bg-gray-bg">
+<CenteredGrid>
   <div class="text-f12">
     <div class="flex flex-row items-baseline justify-between">
       <h2>

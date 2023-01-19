@@ -59,7 +59,7 @@
     <h1 class="text-france-blue">Création d’une structure</h1>
   </CenteredGrid>
 
-  <CenteredGrid bgColor="bg-gray-bg">
+  <CenteredGrid>
     <StructureSearch
       onEstablishmentChange={handleEstablishmentChange}
       onCityChange={handleCityChange}

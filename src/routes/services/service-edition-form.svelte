@@ -115,7 +115,7 @@
   bind:requesting
 >
   <hr />
-  <CenteredGrid bgColor="bg-gray-bg">
+  <CenteredGrid>
     {#if structures.length}
       <div class="lg:w-2/3">
         <FieldsStructure
@@ -132,7 +132,7 @@
   {#if service?.structure}
     <hr />
 
-    <CenteredGrid bgColor="bg-gray-bg">
+    <CenteredGrid>
       {#if service.model}
         <div class="lg:flex lg:items-center lg:justify-between">
           <h3>Synchronisé avec un modèle</h3>

@@ -38,7 +38,7 @@
   }
 </script>
 
-<CenteredGrid bgColor="bg-gray-bg">
+<CenteredGrid>
   <h2>Structures</h2>
 
   <div class="flex flex-col gap-s12">

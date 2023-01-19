@@ -48,7 +48,7 @@
   bind:requesting
 >
   <hr />
-  <CenteredGrid bgColor="bg-gray-bg">
+  <CenteredGrid>
     {#if structures.length}
       <div class="lg:w-2/3">
         <FieldsStructure
@@ -64,7 +64,7 @@
 
   <hr />
 
-  <CenteredGrid bgColor="bg-gray-bg">
+  <CenteredGrid>
     <div class="lg:w-2/3">
       {#if model?.structure}
         <FieldsPresentation
@@ -86,8 +86,6 @@
       {/if}
     </div>
   </CenteredGrid>
-
-  <hr />
 
   {#if model?.structure}
     <StickyFormSubmissionRow>
