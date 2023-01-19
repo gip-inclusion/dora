@@ -5,6 +5,7 @@
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import FormErrors from "$lib/components/display/form-errors.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import StickyFormSubmissionRow from "$lib/components/display/sticky-form-submission-row.svelte";
   import Form from "$lib/components/hoc/form.svelte";
   import FieldCategory from "$lib/components/specialized/services/field-category.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
@@ -254,25 +255,21 @@
       {/if}
     </CenteredGrid>
 
-    <hr />
+    <StickyFormSubmissionRow>
+      <Button
+        id="draft"
+        type="submit"
+        label="Enregistrer en brouillon"
+        secondary
+        disabled={requesting}
+      />
 
-    <CenteredGrid>
-      <div class="flex flex-row gap-s12">
-        <Button
-          id="draft"
-          type="submit"
-          label="Enregistrer en brouillon"
-          secondary
-          disabled={requesting}
-        />
-
-        <Button
-          id="publish"
-          type="submit"
-          label="Publier"
-          disabled={requesting}
-        />
-      </div>
-    </CenteredGrid>
+      <Button
+        id="publish"
+        type="submit"
+        label="Publier"
+        disabled={requesting}
+      />
+    </StickyFormSubmissionRow>
   {/if}
 </Form>

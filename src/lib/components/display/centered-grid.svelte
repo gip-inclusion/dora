@@ -4,7 +4,7 @@
   export let bgColor = "bg-white";
 </script>
 
-<div class="{extraClass} wrapper {bgColor} print:bg-white">
+<div class="{extraClass}{bgColor} print:bg-white">
   <div class="px-s16 md:px-s40">
     <div
       class="mx-auto max-w-6xl"

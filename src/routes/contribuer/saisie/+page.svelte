@@ -3,6 +3,7 @@
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import FormErrors from "$lib/components/display/form-errors.svelte";
+  import StickyFormSubmissionRow from "$lib/components/display/sticky-form-submission-row.svelte";
   import Form from "$lib/components/hoc/form.svelte";
   import { publishServiceSuggestion } from "$lib/requests/services";
   import type { Service } from "$lib/types";
@@ -53,28 +54,27 @@
 
 <FormErrors />
 
-<CenteredGrid bgColor="bg-gray-bg">
-  <div class="lg:w-2/3">
-    <Form
-      data={service}
-      schema={contribSchema}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-      onSuccess={handleSuccess}
-      bind:requesting
-    >
+<Form
+  data={service}
+  schema={contribSchema}
+  onChange={handleChange}
+  onSubmit={handleSubmit}
+  onSuccess={handleSuccess}
+  bind:requesting
+>
+  <CenteredGrid bgColor="bg-gray-bg">
+    <div class="lg:w-2/3">
       <Fields bind:service servicesOptions={data.servicesOptions} />
-
-      {#if service.siret}
-        <div class="mt-s32 flex flex-col justify-end md:flex-row ">
-          <Button
-            name="validate"
-            type="submit"
-            label="Envoyer la contribution"
-            disabled={requesting}
-          />
-        </div>
-      {/if}
-    </Form>
-  </div>
-</CenteredGrid>
+    </div>
+  </CenteredGrid>
+  {#if service.siret}
+    <StickyFormSubmissionRow>
+      <Button
+        name="validate"
+        type="submit"
+        label="Envoyer la contribution"
+        disabled={requesting}
+      />
+    </StickyFormSubmissionRow>
+  {/if}
+</Form>

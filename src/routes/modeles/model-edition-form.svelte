@@ -3,6 +3,7 @@
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import FormErrors from "$lib/components/display/form-errors.svelte";
+  import StickyFormSubmissionRow from "$lib/components/display/sticky-form-submission-row.svelte";
   import Form from "$lib/components/hoc/form.svelte";
   import FieldsDocuments from "$lib/components/specialized/services/fields-documents.svelte";
   import FieldsModalities from "$lib/components/specialized/services/fields-modalities.svelte";
@@ -116,15 +117,13 @@
   <hr />
 
   {#if model?.structure}
-    <CenteredGrid>
-      <div class="flex flex-row gap-s12">
-        <Button
-          name="validate"
-          type="submit"
-          label="Enregistrer"
-          disabled={requesting}
-        />
-      </div></CenteredGrid
-    >
+    <StickyFormSubmissionRow>
+      <Button
+        name="validate"
+        type="submit"
+        label="Enregistrer"
+        disabled={requesting}
+      />
+    </StickyFormSubmissionRow>
   {/if}
 </Form>
