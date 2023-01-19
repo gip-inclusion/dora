@@ -103,8 +103,10 @@
 <FormErrors />
 
 <Form
-  data={service}
-  schema={serviceSchema}
+  bind:data={service}
+  schema={service.useInclusionNumeriqueScheme
+    ? inclusionNumeriqueSchema
+    : serviceSchema}
   {servicesOptions}
   onChange={handleChange}
   onSubmit={handleSubmit}
@@ -117,7 +119,6 @@
     {#if structures.length}
       <div class="lg:w-2/3">
         <FieldsStructure
-          schema={serviceSchema}
           bind:structure
           bind:service
           bind:servicesOptions
@@ -173,64 +174,24 @@
 
       {#if !service.useInclusionNumeriqueScheme}
         <div class={service.model ? "" : "lg:w-2/3"}>
-          <FieldsTypology
-            noTopPadding
-            bind:service
-            {servicesOptions}
-            {model}
-            schema={serviceSchema}
-          />
+          <FieldsTypology noTopPadding bind:service {servicesOptions} {model} />
 
-          <FieldsPresentation
-            bind:service
-            {servicesOptions}
-            {model}
-            schema={serviceSchema}
-          />
+          <FieldsPresentation bind:service {servicesOptions} {model} />
 
-          <FieldsPublics
-            bind:service
-            {servicesOptions}
-            {model}
-            schema={serviceSchema}
-          />
+          <FieldsPublics bind:service {servicesOptions} {model} />
 
-          <FieldsModalities
-            bind:service
-            {servicesOptions}
-            {model}
-            schema={serviceSchema}
-          />
+          <FieldsModalities bind:service {servicesOptions} {model} />
 
-          <FieldsDocuments
-            bind:service
-            {servicesOptions}
-            {model}
-            schema={serviceSchema}
-          />
+          <FieldsDocuments bind:service {servicesOptions} {model} />
 
-          <FieldsPeriodicity
-            bind:service
-            {servicesOptions}
-            {model}
-            schema={serviceSchema}
-          />
+          <FieldsPeriodicity bind:service {servicesOptions} {model} />
         </div>
         <div class="lg:w-2/3">
-          <FieldsPerimeter
-            bind:service
-            {servicesOptions}
-            schema={serviceSchema}
-          />
+          <FieldsPerimeter bind:service {servicesOptions} />
 
-          <FieldsPlace
-            bind:service
-            {structure}
-            {servicesOptions}
-            schema={serviceSchema}
-          />
+          <FieldsPlace bind:service {structure} {servicesOptions} />
 
-          <FieldsContact bind:service schema={serviceSchema} />
+          <FieldsContact bind:service />
         </div>
       {:else}
         <div class={service.model ? "" : "lg:w-2/3"}>
@@ -240,7 +201,6 @@
               bind:subcategories
               {servicesOptions}
               {model}
-              schema={inclusionNumeriqueSchema}
             />
           </Fieldset>
 
@@ -248,7 +208,6 @@
             bind:service
             bind:subcategories
             {servicesOptions}
-            schema={inclusionNumeriqueSchema}
             {structure}
           />
         </div>

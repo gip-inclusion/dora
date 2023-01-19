@@ -3,11 +3,11 @@
   import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
   import RichTextField from "$lib/components/inputs/rich-text-field.svelte";
   import TextareaField from "$lib/components/inputs/textarea-field.svelte";
-  import type { Model } from "$lib/types";
+  import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "./field-model.svelte";
 
-  export let servicesOptions, schema, service;
+  export let servicesOptions: ServicesOptions, service: Service;
   export let model: Model | undefined = undefined;
   export let noTopPadding = false;
 
@@ -22,7 +22,6 @@
 
   $: fieldModelProps = model
     ? getModelInputProps({
-        schema: schema,
         service,
         servicesOptions,
         showModel,
@@ -56,7 +55,6 @@
   <FieldModel {...fieldModelProps["name"]}>
     <BasicInputField
       id="name"
-      schema={schema.name}
       placeholder="Titre du service"
       bind:value={service.name}
     />
@@ -65,7 +63,6 @@
   <FieldModel {...fieldModelProps["shortDesc"]}>
     <TextareaField
       id="shortDesc"
-      schema={schema.shortDesc}
       placeholder="Compléter"
       bind:value={service.shortDesc}
     />
@@ -74,7 +71,6 @@
   <FieldModel {...fieldModelProps["fullDesc"]} paddingTop type="markdown">
     <RichTextField
       id="fullDesc"
-      schema={schema.fullDesc}
       bind:this={fullDesc}
       placeholder="Informations concernant le service et ses spécificités."
       vertical

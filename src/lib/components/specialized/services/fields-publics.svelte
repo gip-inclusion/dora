@@ -3,20 +3,10 @@
   import AddableMultiSelectField from "$lib/components/inputs/addable-multiselect-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
-  import type {
-    contribSchema,
-    modelSchema,
-    serviceSchema,
-  } from "$lib/validation/schemas/service";
-
   import FieldModel from "./field-model.svelte";
 
   export let servicesOptions: ServicesOptions;
   export let canAddChoices = true;
-  export let schema:
-    | typeof serviceSchema
-    | typeof modelSchema
-    | typeof contribSchema;
   export let service: Service;
   export let model: Model | undefined = undefined;
 
@@ -28,7 +18,6 @@
 
   $: fieldModelProps = model
     ? getModelInputProps({
-        schema: schema,
         service,
         servicesOptions,
         showModel,
@@ -52,7 +41,6 @@
     <FieldModel {...fieldModelProps["concernedPublic"]} type="array">
       <AddableMultiSelectField
         id="concernedPublic"
-        schema={schema.concernedPublic}
         bind:values={service.concernedPublic}
         structureSlug={service.structure}
         choices={servicesOptions.concernedPublic}
@@ -70,7 +58,6 @@
     <FieldModel {...fieldModelProps["accessConditions"]} type="array">
       <AddableMultiSelectField
         id="accessConditions"
-        schema={schema.accessConditions}
         bind:values={service.accessConditions}
         structureSlug={service.structure}
         choices={servicesOptions.accessConditions}
@@ -88,7 +75,6 @@
     <FieldModel {...fieldModelProps["requirements"]} type="array">
       <AddableMultiSelectField
         id="requirements"
-        schema={schema.requirements}
         bind:values={service.requirements}
         structureSlug={service.structure}
         choices={servicesOptions.requirements}

@@ -71,10 +71,12 @@
       requesting = false;
     }
   });
+
+  let formData = { siret };
 </script>
 
 <Form
-  data={{ siret }}
+  bind:data={formData}
   schema={siretSearchSchema}
   serverErrorsDict={serverErrors}
   onSubmit={handleSubmit}

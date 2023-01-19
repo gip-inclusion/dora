@@ -1,11 +1,11 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
-  import type { Model } from "$lib/types";
+  import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "./field-model.svelte";
 
-  export let servicesOptions, schema, service;
+  export let servicesOptions: ServicesOptions, service: Service;
   export let model: Model | undefined = undefined;
 
   $: showModel = !!service.model;
@@ -16,7 +16,6 @@
 
   $: fieldModelProps = model
     ? getModelInputProps({
-        schema: schema,
         service,
         servicesOptions,
         showModel,
@@ -36,7 +35,6 @@
   <FieldModel {...fieldModelProps["recurrence"]}>
     <BasicInputField
       id="recurrence"
-      schema={schema.recurrence}
       placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
       bind:value={service.recurrence}
     />
@@ -45,7 +43,6 @@
   <FieldModel {...fieldModelProps["suspensionDate"]}>
     <BasicInputField
       id="suspensionDate"
-      schema={schema.suspensionDate}
       type="date"
       bind:value={service.suspensionDate}
     />

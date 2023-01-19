@@ -2,12 +2,10 @@
   import MultiSelectField from "$lib/components/inputs/multi-select-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { orderAndReformatSubcategories } from "$lib/utils/misc";
-  import type { Schema } from "$lib/validation/schemas/utils";
   import InclusionNumSwitch from "./inclusion-num-switch.svelte";
 
   export let subcategories: string[] = [];
   export let servicesOptions: ServicesOptions, service: Service;
-  export let schema: Schema;
 
   export let model: Model | undefined = undefined;
   export let isModel = false;
@@ -50,7 +48,6 @@
 
 <MultiSelectField
   id="categories"
-  schema={schema.categories}
   bind:value={service.categories}
   choices={servicesOptions.categories}
   onChange={handleCategoriesChange}

@@ -28,13 +28,15 @@ export type Rule = (
   msg: string;
 };
 
+export type SchemaRequirement = ((data: any) => boolean) | boolean;
+
 export interface Shape<T> {
   rules: Rule[];
   default?: T;
   dependents?: string[];
   post?: Action<T>[];
   pre?: Action<T>[];
-  required?: boolean;
+  required?: SchemaRequirement;
   label?: string;
   maxLength?: number;
   readonly?: boolean;

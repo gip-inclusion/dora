@@ -1,25 +1,28 @@
 <script lang="ts">
-  import type { Shape } from "$lib/validation/schemas/utils";
+  import {
+    currentFormData,
+    currentSchema,
+    isRequired,
+  } from "$lib/validation/validation";
   import FieldWrapper from "./field-wrapper.svelte";
 
   export let id: string;
-  export let schema: Shape<string | number>;
+  export let value: any | undefined = undefined;
+
   export let type: "email" | "tel" | "text" | "url" | "date" | "number" =
     "text";
-  export let value: any | undefined = undefined;
   export let autocomplete = undefined;
   export let disabled = false;
-  export let readonly = schema?.readonly;
+  export let readonly = $currentSchema?.[id]?.readonly;
   export let placeholder: string | undefined = undefined;
 
   // Specifique
-  export let maxLength: number | undefined = schema?.maxLength;
+  export let maxLength: number | undefined = $currentSchema?.[id]?.maxLength;
 
   // Proxy vers le FieldWrapper
   export let description = "";
   export let hidden = false;
   export let hideLabel = false;
-
   export let vertical = false;
 
   $: props = {
@@ -32,16 +35,16 @@
   };
 </script>
 
-{#if schema}
+{#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
     let:onBlur
     let:onChange
-    label={schema.label}
+    label={$currentSchema[id].label}
+    required={isRequired($currentSchema[id], $currentFormData)}
     {description}
     {hidden}
     {hideLabel}
-    required={schema.required}
     {vertical}
     {readonly}
     {disabled}

@@ -3,13 +3,12 @@
   import BooleanRadioButtonsField from "$lib/components/inputs/boolean-radio-buttons-field.svelte";
   import CheckboxesField from "$lib/components/inputs/checkboxes-field.svelte";
   import MultiSelectField from "$lib/components/inputs/multi-select-field.svelte";
-  import type { Model } from "$lib/types";
+  import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
-  import type { Schema } from "$lib/validation/schemas/utils";
   import FieldCategory from "./field-category.svelte";
   import FieldModel from "./field-model.svelte";
 
-  export let servicesOptions, schema: Schema, service;
+  export let servicesOptions: ServicesOptions, service: Service;
   export let model: Model | undefined = undefined;
   export let noTopPadding = false;
   export let subcategories = [];
@@ -23,7 +22,6 @@
 
   $: fieldModelProps = model
     ? getModelInputProps({
-        schema: schema,
         service,
         servicesOptions,
         showModel,
@@ -35,13 +33,7 @@
 
 <FieldSet title="Typologie" {showModel} {noTopPadding}>
   <FieldModel {...fieldModelProps["categories"]} type="array">
-    <FieldCategory
-      bind:service
-      bind:subcategories
-      {servicesOptions}
-      {model}
-      {schema}
-    />
+    <FieldCategory bind:service bind:subcategories {servicesOptions} {model} />
   </FieldModel>
   <div slot="help">
     <p class="text-f14">
@@ -57,7 +49,6 @@
   >
     <MultiSelectField
       id="subcategories"
-      schema={schema.subcategories}
       bind:value={service.subcategories}
       choices={subcategories}
       placeholder="Sélectionner"
@@ -67,7 +58,6 @@
   <FieldModel {...fieldModelProps["kinds"]} type="array">
     <CheckboxesField
       id="kinds"
-      schema={schema.kinds}
       bind:value={service.kinds}
       choices={servicesOptions.kinds}
     />
@@ -76,7 +66,6 @@
   <FieldModel {...fieldModelProps["isCumulative"]} type="boolean">
     <BooleanRadioButtonsField
       id="isCumulative"
-      schema={schema.isCumulative}
       bind:value={service.isCumulative}
       description="Avec d’autres services."
     />

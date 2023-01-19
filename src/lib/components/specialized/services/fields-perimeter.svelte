@@ -3,9 +3,7 @@
   import AdminDivisionSearchField from "$lib/components/inputs/admin-division-search-field.svelte";
   import BooleanRadioButtonsField from "$lib/components/inputs/boolean-radio-buttons-field.svelte";
   import SelectField from "$lib/components/inputs/select-field.svelte";
-  import type { Schema } from "$lib/validation/schemas/utils";
 
-  export let schema: Schema;
   export let servicesOptions, service;
   let adminDivisionChoices = [];
 
@@ -41,7 +39,6 @@
 
   <SelectField
     id="diffusionZoneType"
-    schema={schema.diffusionZoneType}
     choices={servicesOptions.diffusionZoneType}
     onChange={handleDiffusionZoneTypeChange}
     initialValue={service.diffusionZoneTypeDisplay}
@@ -50,7 +47,6 @@
   {#if service.diffusionZoneType !== "country"}
     <AdminDivisionSearchField
       id="diffusionZoneDetails"
-      schema={schema.diffusionZoneDetails}
       description="Commencez à saisir le nom et choisissez dans la liste."
       searchType={service.diffusionZoneType}
       onChange={handlediffusionZoneDetailsChange}
@@ -59,9 +55,5 @@
     />
   {/if}
 
-  <BooleanRadioButtonsField
-    id="qpvOrZrr"
-    schema={schema.qpvOrZrr}
-    bind:value={service.qpvOrZrr}
-  />
+  <BooleanRadioButtonsField id="qpvOrZrr" bind:value={service.qpvOrZrr} />
 </FieldSet>

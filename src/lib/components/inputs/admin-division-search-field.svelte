@@ -1,14 +1,17 @@
 <script lang="ts">
+  import {
+    currentFormData,
+    currentSchema,
+    isRequired,
+  } from "$lib/validation/validation";
   import FieldWrapper from "./field-wrapper.svelte";
   import AdminDivisionSearch from "../specialized/admin-division-search.svelte";
-  import type { Shape } from "$lib/validation/schemas/utils";
 
   export let id: string;
-  export let schema: Shape<string>;
-
   export let value: string | undefined = undefined;
+
   export let disabled = false;
-  export let readonly = schema?.readonly;
+  export let readonly = $currentSchema?.[id]?.readonly;
   export let placeholder = "";
   export let initialValue = "";
 
@@ -24,15 +27,15 @@
   export let vertical = false;
 </script>
 
-{#if schema}
+{#if $currentSchema && id in $currentSchema}
   <FieldWrapper
-    let:onBlur
     {id}
-    label={schema.label}
+    let:onBlur
+    label={$currentSchema[id].label}
+    required={isRequired($currentSchema[id], $currentFormData)}
     {description}
     {hidden}
     {hideLabel}
-    required={schema.required}
     {vertical}
     {disabled}
     {readonly}

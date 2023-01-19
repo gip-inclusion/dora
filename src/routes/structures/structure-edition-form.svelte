@@ -44,7 +44,7 @@
 
 <div class="lg:w-2/3">
   <Form
-    data={structure}
+    bind:data={structure}
     serverErrorsDict={serverErrors}
     schema={structureSchema}
     onChange={handleChange}

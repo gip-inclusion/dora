@@ -11,10 +11,8 @@
   import type { Choice, Service, ServicesOptions, Structure } from "$lib/types";
   import { moveToTheEnd, orderAndReformatSubcategories } from "$lib/utils/misc";
   import { isNotFreeService } from "$lib/utils/service";
-  import type { Schema } from "$lib/validation/schemas/utils";
   import { onMount } from "svelte";
 
-  export let schema: Schema;
   export let servicesOptions: ServicesOptions;
   export let service: Service;
   export let structure: Structure;
@@ -229,7 +227,6 @@
 
   <MultiSelectField
     id="subcategories"
-    schema={schema.subcategories}
     bind:value={service.subcategories}
     choices={subcategories}
     placeholder="Sélectionner"
@@ -240,7 +237,6 @@
   {#if concernedPublicOptions.length}
     <MultiSelectField
       id="concernedPublic"
-      schema={schema.concernedPublic}
       bind:value={service.concernedPublic}
       choices={concernedPublicOptions}
       placeholder="Sélectionner"
@@ -251,16 +247,14 @@
   {#if kindsOptions.length}
     <CheckboxesField
       id="kinds"
-      schema={schema.kinds}
       bind:value={service.kinds}
       choices={kindsOptions}
-      _notrequired
+      _notrequired_TODO
     />
   {/if}
 
   <RadioButtonsField
     id="feeCondition"
-    schema={schema.feeCondition}
     bind:value={service.feeCondition}
     choices={servicesOptions.feeConditions}
   />
@@ -268,7 +262,6 @@
   {#if isNotFreeService(service.feeCondition)}
     <TextareaField
       id="feeDetails"
-      schema={schema.feeDetails}
       placeholder="Merci de détailler ici les frais à charge du bénéficiaire : adhésion, frais de location, frais de garde, etc., et les montants."
       bind:value={service.feeDetails}
     />
@@ -282,7 +275,6 @@
 
   <CheckboxesField
     id="beneficiariesAccessModes"
-    schema={schema.beneficiariesAccessModes}
     choices={moveToTheEnd(
       servicesOptions.beneficiariesAccessModes,
       "value",
@@ -294,7 +286,6 @@
   {#if service.beneficiariesAccessModes.includes("autre")}
     <BasicInputField
       id="beneficiariesAccessModesOther"
-      schema={schema.beneficiariesAccessModesOther}
       hideLabel
       placeholder="Merci de préciser la modalité"
       bind:value={service.beneficiariesAccessModesOther}
@@ -303,11 +294,11 @@
 </FieldSet>
 
 {#if !structure.latitude || !structure.longitude}
-  <FieldsPerimeter bind:service {servicesOptions} {schema} />
+  <FieldsPerimeter bind:service {servicesOptions} />
 {/if}
 
 <FieldSet title="Accueil">
-  <FieldsAddress bind:entity={service} parent={structure} {schema} />
+  <FieldsAddress bind:entity={service} parent={structure} />
 </FieldSet>
 
-<FieldsContact bind:service {schema} />
+<FieldsContact bind:service />

@@ -3,9 +3,7 @@
   import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
   import BooleanRadioButtonsField from "$lib/components/inputs/boolean-radio-buttons-field.svelte";
   import type { Service } from "$lib/types";
-  import type { Schema } from "$lib/validation/schemas/utils";
 
-  export let schema: Schema;
   export let service: Service;
 </script>
 
@@ -25,27 +23,23 @@
   </div>
   <BasicInputField
     id="contactName"
-    schema={schema.contactName}
     placeholder="Prénom et nom"
     bind:value={service.contactName}
   />
   <BasicInputField
     id="contactPhone"
     type="tel"
-    schema={schema.contactPhone}
     placeholder="00 00 00 00 00"
     bind:value={service.contactPhone}
   />
   <BasicInputField
     id="contactEmail"
     type="email"
-    schema={schema.contactEmail}
     placeholder="nom@exemple.org"
     bind:value={service.contactEmail}
   />
   <BooleanRadioButtonsField
     id="isContactInfoPublic"
-    schema={schema.isContactInfoPublic}
     bind:value={service.isContactInfoPublic}
     yesLabel="OUI – visibles pour tout visiteur du site DORA"
     noLabel="NON – visibles uniquement par les professionnels inscrits sur DORA "

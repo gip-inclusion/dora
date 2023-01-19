@@ -1,16 +1,20 @@
 <script lang="ts">
+  import {
+    currentFormData,
+    currentSchema,
+    isRequired,
+  } from "$lib/validation/validation";
+  import FieldWrapper from "./field-wrapper.svelte";
   import { addIcon } from "$lib/icons";
   import type { CustomChoice, CustomizableFK } from "$lib/types";
-  import type { Shape } from "$lib/validation/schemas/utils";
   import Button from "../display/button.svelte";
-  import BasicInputField from "./basic-input-field.svelte";
-  import FieldWrapper from "./field-wrapper.svelte";
   import Select from "./select/select.svelte";
 
   export let id: string;
-  export let schema: Shape<CustomizableFK[]>;
+  export let values: CustomizableFK[];
+
   export let disabled = false;
-  export let readonly = schema?.readonly;
+  export let readonly = $currentSchema?.[id]?.readonly;
   export let placeholder = "";
 
   // Spécifiques
@@ -20,17 +24,16 @@
   export let onChange: ((newValues: string[]) => void) | undefined = undefined;
   export let placeholderMulti = "";
   export let canAdd = true;
-  export let values: CustomizableFK[];
   export let structureSlug: string | undefined = undefined;
-
-  let textInputVisible = false;
-  let newValue: string;
 
   // Proxy vers le FieldWrapper
   export let description = "";
   export let hidden = false;
   export let hideLabel = false;
   export let vertical = false;
+
+  let textInputVisible = false;
+  let newValue: string;
 
   const maxLength = 140;
 
@@ -51,24 +54,24 @@
   }
 </script>
 
-{#if schema}
+{#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
     let:onBlur
-    label={schema.label}
+    label={$currentSchema[id].label}
+    required={isRequired($currentSchema[id], $currentFormData)}
     {description}
     {hidden}
     {hideLabel}
-    required={schema.required}
     {vertical}
     {disabled}
     {readonly}
   >
     <Select
       {id}
-      choices={filteredChoices}
       bind:value={values}
       on:blur={onBlur}
+      choices={filteredChoices}
       {onChange}
       {sort}
       {placeholder}
@@ -90,15 +93,20 @@
         </div>
         <div class="flex flex-row gap-s16 " class:hidden={!textInputVisible}>
           <div class="flex-grow">
-            <BasicInputField
-              id={`${id}-text-input`}
-              schema={{ label: "" }}
-              type="text"
-              bind:value={newValue}
-              hideLabel
-              vertical
-              {maxLength}
-            />
+            <div class="flex flex-col">
+              <input
+                id={`${id}-text-input`}
+                name={`${id}-text-input`}
+                type="text"
+                bind:value={newValue}
+              />
+              <div
+                class="mt-s4 self-end text-f12 text-gray-text-alt"
+                class:text-error={newValue?.length > maxLength}
+              >
+                {newValue?.length}/{maxLength} caractères
+              </div>
+            </div>
           </div>
           <div class="self-center">
             <div class="flex flex-col gap-s8 md:flex-row">
@@ -108,7 +116,6 @@
                 disabled={!newValue}
                 on:click={handleAddValue}
               />
-
               <Button
                 label="Annuler"
                 secondary
@@ -121,6 +128,5 @@
       </div>
     {/if}
   </FieldWrapper>
-
   <div />
 {/if}

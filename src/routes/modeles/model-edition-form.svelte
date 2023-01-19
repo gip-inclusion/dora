@@ -39,7 +39,7 @@
 <FormErrors />
 
 <Form
-  data={model}
+  bind:data={model}
   schema={modelSchema}
   {servicesOptions}
   onChange={handleChange}
@@ -52,7 +52,6 @@
     {#if structures.length}
       <div class="lg:w-2/3">
         <FieldsStructure
-          schema={modelSchema}
           bind:structure
           bind:service={model}
           bind:servicesOptions
@@ -73,43 +72,17 @@
           bind:service={model}
           {servicesOptions}
           {model}
-          schema={modelSchema}
         />
 
-        <FieldsTypology
-          bind:service={model}
-          {servicesOptions}
-          {model}
-          schema={modelSchema}
-        />
+        <FieldsTypology bind:service={model} {servicesOptions} {model} />
 
-        <FieldsPublics
-          bind:service={model}
-          {servicesOptions}
-          {model}
-          schema={modelSchema}
-        />
+        <FieldsPublics bind:service={model} {servicesOptions} {model} />
 
-        <FieldsModalities
-          bind:service={model}
-          {servicesOptions}
-          {model}
-          schema={modelSchema}
-        />
+        <FieldsModalities bind:service={model} {servicesOptions} {model} />
 
-        <FieldsDocuments
-          bind:service={model}
-          {servicesOptions}
-          {model}
-          schema={modelSchema}
-        />
+        <FieldsDocuments bind:service={model} {servicesOptions} {model} />
 
-        <FieldsPeriodicity
-          bind:service={model}
-          {servicesOptions}
-          {model}
-          schema={modelSchema}
-        />
+        <FieldsPeriodicity bind:service={model} {servicesOptions} {model} />
       {/if}
     </div>
   </CenteredGrid>

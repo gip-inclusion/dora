@@ -1,4 +1,4 @@
-import type { ServicesOptions } from "$lib/types";
+import type { FeeCondition, ServicesOptions } from "$lib/types";
 import * as v from "./utils";
 
 export function allCategoriesHaveSubcategories() {
@@ -116,6 +116,7 @@ export const serviceSchema: v.Schema = {
     label: "Frais à charge",
     default: "gratuit",
     rules: [v.isString()],
+    dependents: ["feeDetails"],
   },
   feeDetails: {
     label: "Détails des frais à charge",
@@ -128,6 +129,9 @@ export const serviceSchema: v.Schema = {
         msg: `Information requise`,
       }),
     ],
+    required: (data: { feeCondition: FeeCondition }) => {
+      return data.feeCondition !== "gratuit";
+    },
   },
   beneficiariesAccessModes: {
     label: "Pour les bénéficiaires",
