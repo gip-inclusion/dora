@@ -122,13 +122,7 @@ export const serviceSchema: v.Schema = {
     label: "Détails des frais à charge",
     default: "",
     post: [v.trim],
-    rules: [
-      v.isString(),
-      (name, value, data) => ({
-        valid: data.feeCondition === "gratuit" || value.length,
-        msg: `Information requise`,
-      }),
-    ],
+    rules: [v.isString()],
     required: (data: { feeCondition: FeeCondition }) => {
       return data.feeCondition !== "gratuit";
     },
