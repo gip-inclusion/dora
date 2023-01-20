@@ -65,10 +65,10 @@
 
 <style lang="postcss">
   .one-fourth {
-    @apply lg:w-1/4;
+    @apply lg:w-1/3;
   }
 
   .three-fourths {
-    @apply lg:w-3/4;
+    @apply lg:w-2/3;
   }
 </style>
