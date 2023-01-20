@@ -40,7 +40,7 @@
 <div>
   <a
     on:click={trackClick}
-    class="flex items-center text-f16"
+    class="flex items-center break-all text-f16"
     class:font-bold={preferred}
     href="mailto:{service.contactEmail}?subject={emailSubject}&body={emailBody}"
   >

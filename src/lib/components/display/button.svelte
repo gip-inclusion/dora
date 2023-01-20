@@ -67,7 +67,7 @@
   {id}
   {type}
   {name}
-  class="{px} {py} {ts} {border} {text} {extraClass} {background} whitespace-nowrap rounded leading-normal outline-none focus:shadow-focus"
+  class="{px} {py} {ts} {border} {text} {extraClass} {background}  break-words rounded leading-normal outline-none focus:shadow-focus"
   class:w-full={wFull}
   class:hover:underline={hoverUnderline}
   class:flex={icon}
