@@ -28,7 +28,7 @@ export const load: PageLoad = async ({ url, parent }) => {
       redirect_uri: `${CANONICAL_URL}/auth/ic-callback?next=${encodeURIComponent(
         nextPage
       )}`,
-      loginHint: url.searchParams.get("login_hint"),
+      loginHint: url.searchParams.get("login_hint") || undefined,
     }),
   });
 
