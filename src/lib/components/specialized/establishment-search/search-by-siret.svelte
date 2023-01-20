@@ -72,7 +72,7 @@
     }
   });
 
-  let formData = { siret };
+  $: formData = { siret };
 </script>
 
 <Form

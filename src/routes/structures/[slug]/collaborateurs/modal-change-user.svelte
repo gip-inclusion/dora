@@ -47,7 +47,7 @@
     isOpen = false;
   }
 
-  let formData = { level };
+  $: formData = { level };
 </script>
 
 <Modal bind:isOpen title="Utilisateur">

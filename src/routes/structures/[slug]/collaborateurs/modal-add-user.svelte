@@ -75,7 +75,7 @@
     confirmationModalIsOpen = true;
   }
 
-  let formData = { email, level };
+  $: formData = { email, level };
 </script>
 
 <Modal bind:isOpen title="Nouveau collaborateur">

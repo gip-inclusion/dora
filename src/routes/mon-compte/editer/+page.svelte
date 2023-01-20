@@ -38,7 +38,7 @@
 
   let requesting = false;
   let { firstName, lastName, email, phoneNumber } = $userInfo;
-  let formData = { firstName, lastName, email, phoneNumber };
+  $: formData = { firstName, lastName, email, phoneNumber };
 </script>
 
 <EnsureLoggedIn>

@@ -48,7 +48,7 @@
     confirmationModalIsOpen = true;
   }
 
-  let formData = {
+  $: formData = {
     fullName: suggesterFullName,
     email: suggesterEmail,
     message,
