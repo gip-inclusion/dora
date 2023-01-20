@@ -13,6 +13,6 @@
 
 <style lang="postcss">
   .top-shadow {
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 2px 12px rgba(0, 0, 0, 0.1);
   }
 </style>

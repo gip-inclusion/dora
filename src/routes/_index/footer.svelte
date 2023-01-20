@@ -11,7 +11,7 @@
   }
 </script>
 
-<hr />
+<hr class="border-t-gray-01" />
 
 <CenteredGrid noPadding>
   <div class="flex flex-col items-center justify-between py-s32 lg:flex-row">
