@@ -1,4 +1,9 @@
-import type { FeeCondition, ServicesOptions } from "$lib/types";
+import type {
+  BeneficiaryAccessModes,
+  CoachOrientationModes,
+  FeeCondition,
+  ServicesOptions,
+} from "$lib/types";
 import * as v from "./utils";
 
 export function allCategoriesHaveSubcategories() {
@@ -198,6 +203,17 @@ export const serviceSchema: v.Schema = {
     pre: [v.removeAllNonDigits],
     rules: [v.isPhone()],
     maxLength: 10,
+    required: (data: {
+      coachOrientationModes: CoachOrientationModes;
+      beneficiariesAccessModes: BeneficiaryAccessModes;
+    }) => {
+      console.log(data.coachOrientationModes, data.beneficiariesAccessModes);
+
+      return (
+        data.coachOrientationModes.includes("telephoner") ||
+        data.beneficiariesAccessModes.includes("telephoner")
+      );
+    },
   },
   contactEmail: {
     label: "Courriel",
