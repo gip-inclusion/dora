@@ -6,9 +6,9 @@ import insane from "insane";
 import showdown from "showdown";
 import { get } from "svelte/store";
 
-export function markdownToHTML(md, titleLevel) {
+export function markdownToHTML(md: string, titleLevel = 2) {
   const converter = new showdown.Converter({
-    headerLevelStart: titleLevel ?? 2,
+    headerLevelStart: titleLevel,
     tables: true,
     openLinksInNewWindow: true,
     simplifiedAutoLink: true,

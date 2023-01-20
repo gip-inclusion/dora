@@ -234,5 +234,8 @@ export async function rejectMembershipRequest(uuid) {
 }
 
 export function isStructureInformationsComplete(structure) {
-  return validate(structure, structureSchema, { noScroll: true }).valid;
+  return validate(structure, structureSchema, {
+    noScroll: true,
+    showErrors: false,
+  }).valid;
 }

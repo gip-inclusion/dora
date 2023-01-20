@@ -57,7 +57,6 @@ export function getModelInputProps({
         Object.keys(schema).map((fieldName) => [
           fieldName,
           {
-            service,
             showModel,
             value: model ? model[fieldName] : undefined,
             serviceValue: service[fieldName],
