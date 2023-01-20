@@ -1,6 +1,5 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
   import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
@@ -13,10 +12,11 @@
   import { trackJoinStructure } from "$lib/utils/plausible";
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";
+  import type { PageData } from "./$types";
 
-  let siret = $page.url.searchParams.get("siret");
+  export let data: PageData;
 
-  let establishment;
+  let { establishment } = data;
   let tabId;
 
   async function handleJoin() {
@@ -64,7 +64,7 @@
 
 <EnsureLoggedIn>
   <AuthLayout>
-    <StructureSearch {siret} bind:establishment bind:tabId blockPoleEmploi>
+    <StructureSearch bind:establishment bind:tabId blockPoleEmploi>
       <div slot="cta">
         {#if establishment?.siret}
           <div class="mt-s24">

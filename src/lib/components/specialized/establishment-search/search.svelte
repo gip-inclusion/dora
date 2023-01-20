@@ -1,15 +1,14 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import Tabs from "$lib/components/display/tabs.svelte";
-  import SearchByCommune from "$lib/components/specialized/establishment-search/search-by-commune.svelte";
-  import SearchBySiret from "$lib/components/specialized/establishment-search/search-by-siret.svelte";
+  import SearchByCommune from "./search-by-commune.svelte";
+  import SearchBySiret from "./search-by-siret.svelte";
   import PoleEmploiWarning from "../pole-emploi-warning.svelte";
 
   export let blockPoleEmploi = false;
   export let onCityChange = null;
   export let onEstablishmentChange = null;
   export let establishment = null;
-  export let siret = "";
   export let isOwnStructure = true;
 
   export let tabId = "nom";
@@ -41,8 +40,7 @@
   if (blockPoleEmploi) {
     tabs.push({ id: "pe", name: "Pôle emploi" });
   }
-
-  if (siret) {
+  if (establishment?.siret) {
     tabId = "siret";
   }
 </script>
@@ -69,7 +67,10 @@
   </div>
 
   {#if tabId === "siret"}
-    <SearchBySiret onEstablishmentChange={handleEstablishmentChange} {siret} />
+    <SearchBySiret
+      onEstablishmentChange={handleEstablishmentChange}
+      siret={establishment?.siret}
+    />
   {:else if tabId === "nom"}
     <SearchByCommune
       bind:establishment

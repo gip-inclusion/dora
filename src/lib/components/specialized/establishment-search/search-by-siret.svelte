@@ -12,7 +12,6 @@
     trim,
   } from "$lib/validation/schemas/utils";
   import { formErrors } from "$lib/validation/validation";
-  import { onMount } from "svelte";
 
   export let onEstablishmentChange = null;
   export let siret = "";
@@ -56,21 +55,6 @@
   function handleSuccess(establishment) {
     if (onEstablishmentChange) onEstablishmentChange(establishment);
   }
-
-  onMount(async () => {
-    if (siret) {
-      requesting = true;
-      const response = await siretSearch(siret);
-
-      if (response.status === 200) {
-        const establishment = await response.json();
-        handleSuccess(establishment);
-      } else {
-        siret = "";
-      }
-      requesting = false;
-    }
-  });
 
   $: formData = { siret };
 </script>
