@@ -207,8 +207,6 @@ export const serviceSchema: v.Schema = {
       coachOrientationModes: CoachOrientationModes;
       beneficiariesAccessModes: BeneficiaryAccessModes;
     }) => {
-      console.log(data.coachOrientationModes, data.beneficiariesAccessModes);
-
       return (
         data.coachOrientationModes.includes("telephoner") ||
         data.beneficiariesAccessModes.includes("telephoner")
