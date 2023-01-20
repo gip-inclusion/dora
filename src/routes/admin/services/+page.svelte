@@ -71,7 +71,7 @@
     {#if services}
       {#each filteredServices as service}
         <div
-          class="flex flex-row items-center gap-s16 rounded-md bg-white p-s16"
+          class="flex flex-row items-center gap-s16 rounded-md border border-gray-01 bg-white p-s16"
         >
           <div class="flex-auto basis-1/3">
             <a href="/admin/services/{service.slug}" target="_blank">

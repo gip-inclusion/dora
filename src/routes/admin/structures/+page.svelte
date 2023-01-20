@@ -59,7 +59,9 @@
 
     {#if structures}
       {#each filteredStructures as structure}
-        <div class="flex flex-row gap-s16 rounded-md bg-white p-s16">
+        <div
+          class="flex flex-row gap-s16 rounded-md border border-gray-01 p-s16"
+        >
           <div class="flex grow flex-row items-center">
             <a href="/admin/structures/{structure.slug}" target="_blank">
               <h5>

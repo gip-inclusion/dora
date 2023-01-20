@@ -58,7 +58,9 @@
 
 <div class="flex w-full flex-col gap-s12">
   {#each suggestions as suggestion}
-    <div class="flex flex-row items-center gap-s16 rounded-md bg-white p-s16">
+    <div
+      class="flex flex-row items-center gap-s16 rounded-md border border-gray-01 bg-white p-s16"
+    >
       <div class="flex-1 truncate italic">
         {suggestion.name}
       </div>
