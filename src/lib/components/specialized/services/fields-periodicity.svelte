@@ -32,7 +32,7 @@
       service dans les résultat de recherche.
     </p>
   </div>
-  <FieldModel {...fieldModelProps["recurrence"]}>
+  <FieldModel {...fieldModelProps["recurrence"] ?? {}}>
     <BasicInputField
       id="recurrence"
       placeholder="Ex. Tous les jours à 14h, une fois par mois, etc."
@@ -40,7 +40,7 @@
     />
   </FieldModel>
 
-  <FieldModel {...fieldModelProps["suspensionDate"]}>
+  <FieldModel {...fieldModelProps["suspensionDate"] ?? {}}>
     <BasicInputField
       id="suspensionDate"
       type="date"

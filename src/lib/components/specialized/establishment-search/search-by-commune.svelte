@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Field from "$lib/components/inputs/obsolete/field.svelte";
-  import Select from "$lib/components/inputs/select/select.svelte";
-  import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
   import { getApiURL } from "$lib/utils/api";
+  import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
+  import Select from "$lib/components/inputs/select/select.svelte";
+  import FieldWrapper from "$lib/components/inputs/field-wrapper.svelte";
 
   export let establishment;
   export let isOwnStructure = true;
@@ -51,17 +51,16 @@
     : "Nom de la structure de votre partenaire";
 </script>
 
-<Field type="custom" label="Commune" required vertical>
+<FieldWrapper id="city" label="Commune" required vertical>
   <CitySearch
-    slot="custom-input"
-    id="city-select"
-    placeholder="Saisissez et sélectionnez le nom de la ville"
+    id="city"
     onChange={handleCityChange}
+    placeholder="Saisissez et sélectionnez le nom de la ville"
   />
-</Field>
-<Field type="custom" label={structureLabel} required vertical>
+</FieldWrapper>
+
+<FieldWrapper id="siret-select" label={structureLabel} required vertical>
   <Select
-    slot="custom-input"
     id="siret-select"
     onChange={handleEstablishmentChange}
     disabled={!city?.code}
@@ -73,4 +72,4 @@
     postfixValueFunction={(item) => item.siret}
     minCharactersToSearch="3"
   />
-</Field>
+</FieldWrapper>

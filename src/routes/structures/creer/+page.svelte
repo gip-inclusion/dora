@@ -85,7 +85,6 @@
     {/if}
 
     {#if structure.siret}
-      <h2 class="mb-s40 border border-b-2 border-gray-02">Présentation</h2>
       <StructureEditionForm
         {structure}
         structuresOptions={data.structuresOptions}

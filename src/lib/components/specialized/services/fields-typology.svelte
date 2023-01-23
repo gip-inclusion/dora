@@ -32,7 +32,7 @@
 </script>
 
 <FieldSet title="Typologie" {showModel} {noTopPadding}>
-  <FieldModel {...fieldModelProps["categories"]} type="array">
+  <FieldModel {...fieldModelProps["categories"] ?? {}} type="array">
     <FieldCategory bind:service bind:subcategories {servicesOptions} {model} />
   </FieldModel>
   <div slot="help">
@@ -43,7 +43,7 @@
   </div>
 
   <FieldModel
-    {...fieldModelProps["subcategories"]}
+    {...fieldModelProps["subcategories"] ?? {}}
     showUseButton={showModelSubcategoriesUseButton}
     type="array"
   >
@@ -55,7 +55,7 @@
       placeholderMulti="Sélectionner"
     />
   </FieldModel>
-  <FieldModel {...fieldModelProps["kinds"]} type="array">
+  <FieldModel {...fieldModelProps["kinds"] ?? {}} type="array">
     <CheckboxesField
       id="kinds"
       bind:value={service.kinds}
@@ -63,7 +63,7 @@
     />
   </FieldModel>
 
-  <FieldModel {...fieldModelProps["isCumulative"]} type="boolean">
+  <FieldModel {...fieldModelProps["isCumulative"] ?? {}} type="boolean">
     <BooleanRadioButtonsField
       id="isCumulative"
       bind:value={service.isCumulative}

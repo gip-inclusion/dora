@@ -10,12 +10,12 @@
   import { contribSchema } from "$lib/validation/schemas/service";
 
   import type { PageData } from "./$types";
-  import Fields from "./fields.svelte";
+  import ContributionEditionFields from "./contribution-edition-fields.svelte";
 
   let requesting = false;
 
   // TODO: Ajouter le type Contribution
-  let service: Service = Object.fromEntries(
+  let contribution: Service = Object.fromEntries(
     Object.entries(contribSchema).map(([fieldName, props]) => [
       fieldName,
       props.default,
@@ -23,12 +23,10 @@
   );
 
   function handleChange(validatedData) {
-    console.log("change");
-    service = { ...service, ...validatedData };
+    contribution = { ...contribution, ...validatedData };
   }
 
   function handleSubmit(validatedData) {
-    console.log("submit", validatedData);
     return publishServiceSuggestion(validatedData, data.source);
   }
 
@@ -55,7 +53,7 @@
 <FormErrors />
 
 <Form
-  bind:data={service}
+  bind:data={contribution}
   schema={contribSchema}
   onChange={handleChange}
   onSubmit={handleSubmit}
@@ -64,10 +62,13 @@
 >
   <CenteredGrid>
     <div class="lg:w-2/3">
-      <Fields bind:service servicesOptions={data.servicesOptions} />
+      <ContributionEditionFields
+        bind:contribution
+        servicesOptions={data.servicesOptions}
+      />
     </div>
   </CenteredGrid>
-  {#if service.siret}
+  {#if contribution.siret}
     <StickyFormSubmissionRow>
       <Button
         name="validate"

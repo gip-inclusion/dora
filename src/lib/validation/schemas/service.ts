@@ -415,7 +415,7 @@ export const contribSchema: v.Schema = {
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
   contactName: serviceSchema.contactName,
-  contactPhone: serviceSchema.contactPhone,
+  contactPhone: { ...serviceSchema.contactPhone, required: false },
   contactEmail: { ...serviceSchema.contactEmail, required: false },
   locationKinds: { ...serviceSchema.locationKinds, required: false },
   remoteUrl: serviceSchema.remoteUrl,

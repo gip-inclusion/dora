@@ -36,7 +36,7 @@
     </p>
   </div>
 
-  <FieldModel {...fieldModelProps["forms"]} type="files">
+  <FieldModel {...fieldModelProps["forms"] ?? {}} type="files">
     <UploadField
       id="forms"
       structureSlug={service.structure}
@@ -46,7 +46,7 @@
   </FieldModel>
 
   {#if servicesOptions.credentials.length}
-    <FieldModel {...fieldModelProps["credentials"]} type="array">
+    <FieldModel {...fieldModelProps["credentials"] ?? {}} type="array">
       <AddableMultiSelectField
         id="credentials"
         bind:values={service.credentials}
@@ -60,7 +60,7 @@
     </FieldModel>
   {/if}
 
-  <FieldModel {...fieldModelProps["onlineForm"]}>
+  <FieldModel {...fieldModelProps["onlineForm"] ?? {}}>
     <BasicInputField
       id="onlineForm"
       placeholder="URL"

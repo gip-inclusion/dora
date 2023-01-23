@@ -26,18 +26,21 @@
     placeholder="Prénom et nom"
     bind:value={service.contactName}
   />
+
   <BasicInputField
     id="contactPhone"
     type="tel"
     placeholder="00 00 00 00 00"
     bind:value={service.contactPhone}
   />
+
   <BasicInputField
     id="contactEmail"
     type="email"
     placeholder="nom@exemple.org"
     bind:value={service.contactEmail}
   />
+
   <BooleanRadioButtonsField
     id="isContactInfoPublic"
     bind:value={service.isContactInfoPublic}

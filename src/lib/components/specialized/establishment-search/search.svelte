@@ -5,34 +5,46 @@
   import SearchBySiret from "./search-by-siret.svelte";
   import PoleEmploiWarning from "../pole-emploi-warning.svelte";
 
+  type City = {
+    code: string;
+    name: string;
+    similarity: number;
+  };
+
+  type Tab = "nom" | "siret" | "pe";
   export let blockPoleEmploi = false;
-  export let onCityChange = null;
-  export let onEstablishmentChange = null;
-  export let establishment = null;
+  export let onCityChange: ((city: City) => void) | undefined = undefined;
+  // TODO: define Establishment type
+  export let onEstablishmentChange: ((establishment: any) => void) | undefined =
+    undefined;
+  export let establishment: any = undefined;
   export let isOwnStructure = true;
 
   export let tabId = "nom";
 
-  function handleCityChange(newCity) {
+  function handleCityChange(newCity: City) {
     establishment = null;
-
-    if (onCityChange) onCityChange(newCity);
+    if (onCityChange) {
+      onCityChange(newCity);
+    }
   }
 
-  async function handleEstablishmentChange(newEstablishment) {
+  async function handleEstablishmentChange(newEstablishment: any) {
     establishment = newEstablishment;
-
-    if (onEstablishmentChange) onEstablishmentChange(newEstablishment);
+    if (onEstablishmentChange) {
+      onEstablishmentChange(newEstablishment);
+    }
   }
 
-  function handleTabChange(newTab) {
+  function handleTabChange(newTab: Tab) {
     establishment = null;
     tabId = newTab;
-
-    if (onEstablishmentChange) onEstablishmentChange(establishment);
+    if (onEstablishmentChange) {
+      onEstablishmentChange(establishment);
+    }
   }
 
-  const tabs = [
+  const tabs: { id: Tab; name: string }[] = [
     { id: "nom", name: "Nom" },
     { id: "siret", name: "Siret" },
   ];

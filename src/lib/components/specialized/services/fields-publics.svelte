@@ -38,7 +38,7 @@
   </div>
 
   {#if servicesOptions.concernedPublic.length}
-    <FieldModel {...fieldModelProps["concernedPublic"]} type="array">
+    <FieldModel {...fieldModelProps["concernedPublic"] ?? {}} type="array">
       <AddableMultiSelectField
         id="concernedPublic"
         bind:values={service.concernedPublic}
@@ -55,7 +55,7 @@
   {/if}
 
   {#if servicesOptions.accessConditions.length}
-    <FieldModel {...fieldModelProps["accessConditions"]} type="array">
+    <FieldModel {...fieldModelProps["accessConditions"] ?? {}} type="array">
       <AddableMultiSelectField
         id="accessConditions"
         bind:values={service.accessConditions}
@@ -72,7 +72,7 @@
   {/if}
 
   {#if servicesOptions.requirements.length}
-    <FieldModel {...fieldModelProps["requirements"]} type="array">
+    <FieldModel {...fieldModelProps["requirements"] ?? {}} type="array">
       <AddableMultiSelectField
         id="requirements"
         bind:values={service.requirements}

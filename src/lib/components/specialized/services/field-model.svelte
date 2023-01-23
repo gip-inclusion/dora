@@ -4,7 +4,7 @@
   import { arraysCompare, markdownToHTML } from "$lib/utils/misc";
 
   export let value: any | undefined = undefined;
-  export let onUseValue: () => void;
+  export let onUseValue: (() => void) | undefined = undefined;
   export let showUseButton = true;
   export let showModel = false;
   export let type = "text";
