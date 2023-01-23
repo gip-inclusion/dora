@@ -3,6 +3,15 @@
 </script>
 
 <LinkButton
+  label="Actualités"
+  to={`https://aide.dora.fabrique.social.gouv.fr/fr/category/quoi-de-neuf-es1img/`}
+  nofollow
+  otherTab
+  noBackground
+  small
+/>
+
+<LinkButton
   label="Aide et Assistance"
   to={`https://aide.dora.fabrique.social.gouv.fr/fr/`}
   nofollow
