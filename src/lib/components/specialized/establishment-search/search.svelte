@@ -12,6 +12,7 @@
   };
 
   type Tab = "nom" | "siret" | "pe";
+  export let title = "Structure";
   export let blockPoleEmploi = false;
   export let onCityChange: ((city: City) => void) | undefined = undefined;
   // TODO: define Establishment type
@@ -57,12 +58,7 @@
   }
 </script>
 
-<FieldSet
-  title="Structure"
-  headerBg="bg-magenta-brand"
-  noHeaderBorder
-  noTopPadding
->
+<FieldSet {title} headerBg="bg-magenta-brand" noHeaderBorder noTopPadding>
   <div slot="description">
     <p class="text-f14 text-white">
       Choisissez une méthode d'identification. En cas de doute,

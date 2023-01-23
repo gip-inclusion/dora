@@ -64,7 +64,12 @@
 
 <EnsureLoggedIn>
   <AuthLayout>
-    <StructureSearch bind:establishment bind:tabId blockPoleEmploi>
+    <StructureSearch
+      bind:establishment
+      bind:tabId
+      blockPoleEmploi
+      title="Identifiez votre structure"
+    >
       <div slot="cta">
         {#if establishment?.siret}
           <div class="mt-s24">
