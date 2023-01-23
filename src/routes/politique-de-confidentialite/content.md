@@ -19,7 +19,6 @@ La solution “DORA” est un service public numérique alimenté par les offreu
 **Les catégories de données à caractère personnel traitées sont les suivantes :**
 
 - **Données relatives au traitement de données : création de compte** (nom, prénom, nom d'utilisateur, adresse e-mail) ; **newsletter** (adresse e-mail) ; **chat** (champ libre)
-- **Données de connexion ;**
 - **Données relatives au compte du bénéficiaire Inclusion Connect**
 - **Cookies**
 
@@ -31,34 +30,17 @@ Spécifiquement, les données de connexion reposent sur une obligation légale �
 
 **Ces fondements sont précisés ci-dessous**
 
-#### a) Données relatives au traitement de données
+Données relatives au traitement de données
 
 Ce traitement est nécessaire à l’exécution d’une mission d’intérêt public ou relevant de l’exercice de l’autorité publique dont est investi le responsable de traitement au sens de l’article 6-e du règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 relatif à la protection des personnes physiques à l’égard du traitement des données à caractère personnel et à la libre circulation de ces données.
 
-#### b) Données d’hébergeur ou de connexion
-
-Ce traitement est nécessaire au respect d'une obligation légale à laquelle le responsable de traitement est soumis au sens de l'article 6-c du Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 relatif à la protection des personnes physiques à l'égard du traitement des données à caractère personnel et à la libre circulation de ces données.
-
-L'obligation légale est posée par la loi LCEN n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique et par l’article 1 du décret n°2021-1363 du 20 octobre 2021 portant injonction au regard de la menace grave et actuelle contre la sécurité nationale, de conservation pour une durée d’un an de certaines catégories de données de connexion.
-
-#### c) Cookies
-
-En application de l’article 5(3) de la directive 2002/58/CE modifiée concernant le traitement des données à caractère personnel et la protection de la vie privée dans le secteur des communications électroniques, transposée à l’article 82 de la loi n°78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, les traceurs ou cookies suivent deux régimes distincts.
-
-Les cookies strictement nécessaires au service ou ayant pour finalité exclusive de faciliter la communication par voie électronique sont dispensés de consentement préalable au titre de l’article 82 de la loi n°78-17 du 6 janvier 1978.
-
-Les cookies n’étant pas strictement nécessaires au service ou n’ayant pas pour finalité exclusive de faciliter la communication par voie électronique doivent être consenti par l’utilisateur.
-
-Ce consentement de la personne concernée pour une ou plusieurs finalités spécifiques constitue une base légale au sens du RGPD et doit être entendu au sens de l'article 6-a du Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 relatif à la protection des personnes physiques à l'égard du traitement des données à caractère personnel et à la libre circulation de ces données.
-
 ### Durée de conservation
 
-| **Types de données**                                          | **Durée de conservation**                                        |
-| ------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Données relatives au traitement de données                    | **12 mois à compter de la dernière utilisation du compte.**      |
-| Données d’hébergeur                                           | **1 an, conformément au décret n°2021-1363 du 20 octobre 2021.** |
-| Données relatives au compte du bénéficiaire Inclusion Connect | **12 mois à compter de la dernière utilisation du compte.**      |
-| Cookies                                                       | **13 mois conformément aux recommandations de la CNIL.**         |
+| **Types de données**                                          | **Durée de conservation**                                   |
+| ------------------------------------------------------------- | ----------------------------------------------------------- |
+| Données relatives au traitement de données                    | **12 mois à compter de la dernière utilisation du compte.** |
+| Données relatives au compte du bénéficiaire Inclusion Connect | **12 mois à compter de la dernière utilisation du compte.** |
+| Cookies                                                       | **13 mois conformément aux recommandations de la CNIL.**    |
 
 ### Droit des personnes concernées
 
@@ -66,6 +48,7 @@ Selon la loi n° 78-17 du 6 janvier 1978 relative à l'informatique aux fichiers
 
 - Droit d’information et droit d’accès aux données ;
 - Droit de rectification et le cas échéant de suppression des données ;
+- Droit d'opposition et droit à la limitation du traitement de données
 - Droit au retrait du consentement en matière de cookies uniquement pour les cookies nécessitant le consentement.
 
 Pour les exercer, faites-nous parvenir une demande en précisant la date et l’heure précise de la requête – ces éléments sont indispensables pour nous permettre de retrouver votre recherche – à l’adresse suivante :
@@ -90,7 +73,9 @@ Le responsable de traitement s’engage à répondre dans un délai raisonnable 
 
 ### Destinataires des données
 
-Le responsable de traitement s’engage à ce que les données soient traitées par les seules personnes autorisées.
+Le responsable de traitement s’engage à ce que les données soient traitées par les seules personnes autorisées :
+
+- l'équipe de Data-inclusion au sein du Groupement plateforme de l'inclusion.
 
 ### Sous-traitants
 
@@ -105,7 +90,13 @@ Certaines des données sont envoyées à des sous-traitants pour réaliser certa
 
 ### Cookies et mesure d'audience
 
-Un cookie est un fichier déposé sur votre terminal lors de la visite d’un site. Il a pour but de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette).
+En application de l’article 5(3) de la directive 2002/58/CE modifiée concernant le traitement des données à caractère personnel et la protection de la vie privée dans le secteur des communications électroniques, transposée à l’article 82 de la loi n°78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, les traceurs ou cookies suivent deux régimes distincts.
+
+Les cookies strictement nécessaires au service ou ayant pour finalité exclusive de faciliter la communication par voie électronique sont dispensés de consentement préalable au titre de l’article 82 de la loi n°78-17 du 6 janvier 1978.
+
+Les cookies n’étant pas strictement nécessaires au service ou n’ayant pas pour finalité exclusive de faciliter la communication par voie électronique doivent être consenti par l’utilisateur.
+
+Ce consentement de la personne concernée pour une ou plusieurs finalités spécifiques constitue une base légale au sens du RGPD et doit être entendu au sens de l'article 6-a du Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 relatif à la protection des personnes physiques à l'égard du traitement des données à caractère personnel et à la libre circulation de ces données.
 
 À tout moment, vous pouvez refuser l’utilisation des cookies et désactiver le dépôt sur votre ordinateur en cliquant sur le lien “Gestion des cookies” en bas de page de l‘application Dora, ou en utilisant la fonction dédiée de votre navigateur (fonction disponible notamment sur Microsoft Internet Explorer 11, Google Chrome, Mozilla Firefox, Apple Safari et Opera).
 
