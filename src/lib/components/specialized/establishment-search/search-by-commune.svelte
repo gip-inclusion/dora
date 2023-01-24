@@ -3,47 +3,53 @@
   import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import FieldWrapper from "$lib/components/inputs/field-wrapper.svelte";
+  import type { Establishment, GeoApiCity } from "$lib/types";
 
   export let establishment;
   export let isOwnStructure = true;
 
-  let city;
-  export let onCityChange = null;
-  export let onEstablishmentChange = null;
+  export let onCityChange: (newCity: GeoApiCity | null) => void;
+  export let onEstablishmentChange: (
+    establishment: Establishment | null
+  ) => void;
 
-  function handleCityChange(newCity) {
+  let city: GeoApiCity | null;
+
+  function handleCityChange(newCity: GeoApiCity | null) {
     city = newCity;
     establishment = null;
     if (onCityChange) onCityChange(newCity);
   }
 
-  async function handleEstablishmentChange(newEstablishment) {
+  async function handleEstablishmentChange(newEstablishment: Establishment) {
     establishment = newEstablishment;
     if (onEstablishmentChange) onEstablishmentChange(newEstablishment);
   }
 
   async function searchSirene(q) {
-    const url = `${getApiURL()}/search-sirene/${
-      city.code
-    }/?q=${encodeURIComponent(q)}`;
+    if (city) {
+      const url = `${getApiURL()}/search-sirene/${
+        city.code
+      }/?q=${encodeURIComponent(q)}`;
 
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json; version=1.0",
-      },
-    });
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json; version=1.0",
+        },
+      });
 
-    const jsonResponse = await response.json();
+      const jsonResponse = await response.json();
 
-    const results = jsonResponse.map((result) => {
-      result.label = `${result.name} (${result.address1})`;
-      return {
-        value: result,
-        label: result.label,
-      };
-    });
-    return results;
+      const results = jsonResponse.map((result) => {
+        result.label = `${result.name} (${result.address1})`;
+        return {
+          value: result,
+          label: result.label,
+        };
+      });
+      return results;
+    }
   }
 
   const structureLabel = isOwnStructure

@@ -17,7 +17,6 @@
   export let data: PageData;
 
   let { establishment } = data;
-  let tabId;
 
   async function handleJoin() {
     trackJoinStructure();
@@ -66,7 +65,6 @@
   <AuthLayout>
     <StructureSearch
       bind:establishment
-      bind:tabId
       blockPoleEmploi
       title="Identifiez votre structure"
     >

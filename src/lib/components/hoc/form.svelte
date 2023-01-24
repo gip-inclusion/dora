@@ -20,7 +20,10 @@
   export let servicesOptions: ServicesOptions | undefined = undefined;
   export let onChange: ((data) => void) | undefined = undefined;
   export let onValidate:
-    | ((data) => { validatedData; valid: boolean })
+    | ((
+        data,
+        submitterId: string | undefined
+      ) => { validatedData; valid: boolean })
     | undefined = undefined;
 
   $: $currentFormData = data;

@@ -78,8 +78,8 @@
             class="underline"
             href="/structures/{alreadyClaimedEstablishment?.slug}"
           >
-            visualiser
-          </a>.
+            visualiser</a
+          >.
         </p>
       </div>
     {/if}

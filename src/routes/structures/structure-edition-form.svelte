@@ -52,7 +52,7 @@
     onSuccess={handleSuccess}
     bind:requesting
   >
-    <Fieldset noTopPadding>
+    <Fieldset>
       <StructureEditionFields bind:structure {structuresOptions} />
     </Fieldset>
 

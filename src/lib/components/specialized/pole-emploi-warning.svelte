@@ -10,7 +10,7 @@
     <div>Dora &amp; Pôle emploi</div>
   </h4>
 
-  <div class="legend small mb-s8 font-bold font-bold italic">
+  <div class="legend small mb-s8 font-bold italic">
     Message partagé par la Direction Générale de Pôle emploi
   </div>
   <div class="legend mb-s16">

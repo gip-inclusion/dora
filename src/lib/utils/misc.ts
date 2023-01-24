@@ -40,7 +40,7 @@ export async function fetchData<T>(url: string) {
 
   return {
     ok: response.ok,
-    data: response.ok ? ((await response.json()) as Promise<T>) : null,
+    data: response.ok ? ((await response.json()) as T) : null,
     error: response.ok ? null : response.statusText,
     status: response.status,
     statusText: response.statusText,

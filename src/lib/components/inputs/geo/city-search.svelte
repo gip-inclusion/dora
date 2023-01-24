@@ -1,11 +1,11 @@
 <script lang="ts">
   import Select from "$lib/components/inputs/select/select.svelte";
   import { pinDistanceIcon } from "$lib/icons";
-  import type { Choice } from "$lib/types";
+  import type { Choice, GeoApiCity } from "$lib/types";
   import { getApiURL } from "$lib/utils/api";
   import { fetchData, getDepartmentFromCityCode } from "$lib/utils/misc";
 
-  export let onChange: (newValue: string) => void;
+  export let onChange: (newValue: GeoApiCity) => void;
 
   export let placeholder;
   export let disabled = false;
@@ -46,9 +46,9 @@
       longitude
     )}&lat=${encodeURIComponent(latitude)}`;
 
-    const response = await fetchData(url);
+    const response = await fetchData<GeoApiCity>(url);
     if (response.ok) {
-      const city: { name: string; code: string } = response.data;
+      const city = response.data;
 
       geolocLabel = geolocLabelInit;
 

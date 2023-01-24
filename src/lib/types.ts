@@ -20,6 +20,12 @@ export type DiffusionZoneType =
   | "epci"
   | "city";
 
+export type GeoApiCity = {
+  code: string;
+  name: string;
+  similarity: number;
+};
+
 export type LocationKind = "a-distance" | "en-presentiel";
 
 export interface StructureService {
@@ -127,6 +133,22 @@ export interface Structure {
   typology: number;
   url: string;
 }
+
+export interface Establishment {
+  address1: string;
+  address2: string;
+  ape: string;
+  city: string;
+  cityCode: string;
+  isSiege: boolean;
+  latitude: number;
+  longitude: number;
+  name: "string";
+  postalCode: "string";
+  siren: "string";
+  siret: "string";
+}
+
 export interface NationalLabel {
   value: string;
   label: string;

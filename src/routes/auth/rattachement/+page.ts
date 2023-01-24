@@ -1,3 +1,4 @@
+import type { Establishment } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
 import type { PageLoad } from "./$types";
 
@@ -14,11 +15,11 @@ async function siretSearch(s) {
 
 export const load: PageLoad = async ({ url }) => {
   const siret = url.searchParams.get("siret");
-  let establishment;
+  let establishment: Establishment | undefined;
   if (siret) {
     const response = await siretSearch(siret);
     if (response.status === 200) {
-      establishment = await response.json();
+      establishment = (await response.json()) as Establishment;
     }
   }
   return {

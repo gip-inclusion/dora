@@ -4,33 +4,34 @@
   import SearchByCommune from "./search-by-commune.svelte";
   import SearchBySiret from "./search-by-siret.svelte";
   import PoleEmploiWarning from "../pole-emploi-warning.svelte";
-
-  type City = {
-    code: string;
-    name: string;
-    similarity: number;
-  };
+  import type { Establishment, GeoApiCity } from "$lib/types";
 
   type Tab = "nom" | "siret" | "pe";
+
+  export let onCityChange: ((city: GeoApiCity | null) => void) | undefined =
+    undefined;
+
+  export let onEstablishmentChange:
+    | ((establishment: Establishment | null) => void)
+    | undefined = undefined;
+
+  export let establishment: Establishment | null = null;
+  export let isOwnStructure = true;
+  export let tabId: Tab = "nom";
   export let title = "Structure";
   export let blockPoleEmploi = false;
-  export let onCityChange: ((city: City) => void) | undefined = undefined;
-  // TODO: define Establishment type
-  export let onEstablishmentChange: ((establishment: any) => void) | undefined =
-    undefined;
-  export let establishment: any = undefined;
-  export let isOwnStructure = true;
 
-  export let tabId = "nom";
-
-  function handleCityChange(newCity: City) {
+  function handleCityChange(newCity: GeoApiCity | null) {
     establishment = null;
+
     if (onCityChange) {
       onCityChange(newCity);
     }
   }
 
-  async function handleEstablishmentChange(newEstablishment: any) {
+  async function handleEstablishmentChange(
+    newEstablishment: Establishment | null
+  ) {
     establishment = newEstablishment;
     if (onEstablishmentChange) {
       onEstablishmentChange(newEstablishment);
@@ -38,10 +39,12 @@
   }
 
   function handleTabChange(newTab: Tab) {
-    establishment = null;
-    tabId = newTab;
-    if (onEstablishmentChange) {
-      onEstablishmentChange(establishment);
+    if (newTab !== tabId) {
+      establishment = null;
+      tabId = newTab;
+      if (onEstablishmentChange) {
+        onEstablishmentChange(establishment);
+      }
     }
   }
 
@@ -53,6 +56,7 @@
   if (blockPoleEmploi) {
     tabs.push({ id: "pe", name: "Pôle emploi" });
   }
+
   if (establishment?.siret) {
     tabId = "siret";
   }
@@ -77,7 +81,7 @@
   {#if tabId === "siret"}
     <SearchBySiret
       onEstablishmentChange={handleEstablishmentChange}
-      siret={establishment?.siret}
+      {establishment}
     />
   {:else if tabId === "nom"}
     <SearchByCommune

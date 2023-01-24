@@ -1,33 +1,16 @@
 <script lang="ts">
   import Notice from "$lib/components/display/notice.svelte";
-  import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
   import FieldsPlace from "$lib/components/specialized/services/fields-place.svelte";
   import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
   import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
   import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
-  import type { Service, ServicesOptions } from "$lib/types";
+  import type { Establishment, Service, ServicesOptions } from "$lib/types";
 
   export let servicesOptions: ServicesOptions;
   export let contribution: Service;
-
-  let establishment = null;
-
-  function handleStructureCityChange() {
-    contribution.siret = "";
-  }
-
-  async function handleEstablishmentChange(newEstablishment) {
-    contribution.siret = newEstablishment?.siret;
-  }
+  export let establishment: Establishment;
 </script>
-
-<StructureSearch
-  onEstablishmentChange={handleEstablishmentChange}
-  onCityChange={handleStructureCityChange}
-  bind:establishment
-  isOwnStructure={false}
-/>
 
 {#if contribution.siret}
   <FieldsPresentation bind:service={contribution} {servicesOptions} />

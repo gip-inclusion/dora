@@ -6,12 +6,16 @@
   import StickyFormSubmissionRow from "$lib/components/display/sticky-form-submission-row.svelte";
   import Form from "$lib/components/hoc/form.svelte";
   import { publishServiceSuggestion } from "$lib/requests/services";
-  import type { Service } from "$lib/types";
+  import type { Establishment, Service } from "$lib/types";
   import { contribSchema } from "$lib/validation/schemas/service";
+  import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
 
   import type { PageData } from "./$types";
   import ContributionEditionFields from "./contribution-edition-fields.svelte";
 
+  export let data: PageData;
+
+  let establishment: Establishment = undefined;
   let requesting = false;
 
   // TODO: Ajouter le type Contribution
@@ -34,7 +38,13 @@
     goto(`/contribuer/merci`);
   }
 
-  export let data: PageData;
+  function handleStructureCityChange() {
+    contribution.siret = "";
+  }
+
+  async function handleEstablishmentChange(newEstablishment) {
+    contribution.siret = newEstablishment?.siret;
+  }
 </script>
 
 <CenteredGrid>
@@ -50,7 +60,18 @@
   </div>
 </CenteredGrid>
 
-<FormErrors />
+<CenteredGrid>
+  <div class="lg:w-2/3">
+    <StructureSearch
+      onEstablishmentChange={handleEstablishmentChange}
+      onCityChange={handleStructureCityChange}
+      bind:establishment
+      isOwnStructure={false}
+    />
+
+    <FormErrors />
+  </div>
+</CenteredGrid>
 
 <Form
   bind:data={contribution}
@@ -65,6 +86,7 @@
       <ContributionEditionFields
         bind:contribution
         servicesOptions={data.servicesOptions}
+        {establishment}
       />
     </div>
   </CenteredGrid>
