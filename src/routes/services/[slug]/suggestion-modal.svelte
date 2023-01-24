@@ -3,13 +3,13 @@
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import Form from "$lib/components/hoc/form.svelte";
   import Modal from "$lib/components/display/modal.svelte";
-  import Field from "$lib/components/inputs/obsolete/field.svelte";
   import { getApiURL } from "$lib/utils/api";
   import { userInfo } from "$lib/utils/auth";
-  import { suggestionSchema } from "$lib/validation/schemas/service";
-  import { formErrors } from "$lib/validation/validation";
   import { onMount } from "svelte";
   import SuggestionConfirmationModal from "./suggestion-confirmation-modal.svelte";
+  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
+  import TextareaField from "$lib/components/inputs/textarea-field.svelte";
+  import * as v from "$lib/validation/schemas/utils";
 
   export let isOpen = false;
   export let service;
@@ -17,6 +17,29 @@
   let message, suggesterFullName, suggesterEmail;
   let confirmationModalIsOpen = false;
   let requesting = false;
+
+  const suggestionSchema: v.Schema = {
+    fullName: {
+      label: "Nom",
+      default: "",
+      rules: [v.isString(), v.maxStrLength(140)],
+      post: [v.trim],
+      required: true,
+    },
+    email: {
+      label: "Courriel",
+      default: "",
+      rules: [v.isEmail(), v.maxStrLength(255)],
+      post: [v.lower, v.trim],
+      required: true,
+    },
+    message: {
+      label: "Message",
+      default: "",
+      rules: [v.isString()],
+      required: true,
+    },
+  };
 
   onMount(() => {
     if ($userInfo) {
@@ -66,40 +89,30 @@
   >
     <Fieldset>
       {#if !$userInfo}
-        <Field
-          name="fullName"
-          errorMessages={$formErrors.fullName}
-          label="Nom"
-          vertical
-          type="text"
-          placeholder="Aurélien Durand"
+        <BasicInputField
+          id="fullName"
           bind:value={suggesterFullName}
-          required
+          vertical
+          placeholder="Aurélien Durand"
           autocomplete="name"
         />
 
-        <Field
-          name="email"
-          errorMessages={$formErrors.email}
-          label="Courriel"
-          vertical
+        <BasicInputField
           type="email"
+          id="email"
           bind:value={suggesterEmail}
-          required
-          placeholder="nom@exemple.org"
+          placeholder="nom.prenom@organisation.fr"
           autocomplete="email"
+          vertical
         />
       {/if}
-      <Field
-        name="message"
-        errorMessages={$formErrors.message}
-        label="Message"
+
+      <TextareaField
+        id="message"
+        bind:value={message}
         description="Détaillez les éléments qui vous semblent erronés ou incomplets."
         vertical
-        type="textarea"
-        rows="6"
-        bind:value={message}
-        required
+        rows={6}
         placeholder="Renseigner ici les détails"
       />
     </Fieldset>

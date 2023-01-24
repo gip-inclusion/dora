@@ -11,7 +11,7 @@
 
   export let type: "email" | "tel" | "text" | "url" | "date" | "number" =
     "text";
-  export let autocomplete = undefined;
+  export let autocomplete: string | undefined = undefined;
   export let disabled = false;
   export let readonly = $currentSchema?.[id]?.readonly;
   export let placeholder: string | undefined = undefined;

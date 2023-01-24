@@ -449,24 +449,3 @@ export const modelSchema: v.Schema = {
   recurrence: serviceSchema.recurrence,
   suspensionDate: serviceSchema.suspensionDate,
 };
-
-// Déplacer ça ailleurs
-export const suggestionSchema: any = {
-  fullName: {
-    default: "",
-    rules: [v.isString(), v.maxStrLength(140)],
-    post: [v.trim],
-    required: true,
-  },
-  email: {
-    default: "",
-    rules: [v.isEmail(), v.maxStrLength(255)],
-    post: [v.lower, v.trim],
-    required: true,
-  },
-  message: {
-    default: "",
-    rules: [v.isString()],
-    required: true,
-  },
-};
