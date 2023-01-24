@@ -2,8 +2,8 @@
   import Button from "$lib/components/display/button.svelte";
   import { clickOutside } from "../../utils/click-outside";
 
-  export let icon = undefined;
-  export let label = undefined;
+  export let icon: string | undefined = undefined;
+  export let label: string | undefined = undefined;
   export let disabled = false;
   export let small = false;
   let isOpen = false;
