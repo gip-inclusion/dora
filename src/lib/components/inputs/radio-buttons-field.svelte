@@ -26,7 +26,6 @@
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    let:onBlur
     let:onChange
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}

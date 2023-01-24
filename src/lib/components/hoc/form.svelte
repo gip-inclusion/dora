@@ -43,30 +43,19 @@
     // We want to listen to both DOM and component events
     const fieldName = evt.target?.name || evt.detail;
 
-    // Sometimes (particularly with Select components), the event is received
-    // before the field value is updated in  `structure`, although it's not
-    // supposed to happen. This setTimeout is an unsatisfying workaround to that.
+    const { validatedData, valid } = validate(
+      data,
+      { [fieldName]: schema[fieldName] },
+      {
+        fullFormSchema: schema,
+        noScroll: true,
+        servicesOptions,
+      }
+    );
 
-    // TODO: try replacing that with an await tick()
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        const { validatedData, valid } = validate(
-          data,
-          { [fieldName]: schema[fieldName] },
-          {
-            fullSchema: schema,
-            noScroll: true,
-            servicesOptions,
-          }
-        );
-
-        if (valid && onChange) {
-          onChange(validatedData);
-        }
-
-        resolve(true);
-      }, 200);
-    });
+    if (valid && onChange) {
+      onChange(validatedData);
+    }
   }
 
   setContext<ValidationContext>(contextValidationKey, {

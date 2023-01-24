@@ -115,7 +115,7 @@
           </div>
 
           <CitySearch
-            name="city"
+            id="city"
             initialValue={cityLabel}
             bind:value={cityChoiceList}
             placeholder="Rechercher par lieu : ville"
