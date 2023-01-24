@@ -65,26 +65,27 @@ export function capitalize(text: string) {
   let result = text
     .toLowerCase()
     .replace(/^\w|[\s\-'’]\w/gu, (char: string) => char.toUpperCase());
+
   const stopWords = [
-    " De ",
-    " Des ",
-    " Du ",
-    " Et ",
-    " À ",
-    " A ",
-    " Au ",
-    " En ",
-    " La ",
-    " Le ",
-    " Les ",
-    " L'",
-    " D'",
-    " Sur ",
-    " Pour ",
+    "De",
+    "Des",
+    "Du",
+    "Et",
+    "À",
+    "A",
+    "Au",
+    "En",
+    "La",
+    "Le",
+    "Les",
+    "L",
+    "D",
+    "Sur",
+    "Pour",
   ];
   for (const stopWord of stopWords) {
-    const regex = new RegExp(`${stopWord}`, "g");
-    result = result.replace(regex, `${stopWord.toLowerCase()}`);
+    const regex = new RegExp(`([\\s\\-'’])${stopWord}([\\s\\-'’])`, "g");
+    result = result.replace(regex, `$1${stopWord.toLowerCase()}$2`);
   }
 
   return result;
