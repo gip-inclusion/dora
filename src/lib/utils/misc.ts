@@ -55,8 +55,39 @@ export function shortenString(str, length = 50) {
   return str;
 }
 
-export function capitalize(str) {
-  return str.toLowerCase().replace(/^\w|\s\w/gu, (c) => c.toUpperCase());
+export function capitalize(text: string) {
+  if (text.toUpperCase() !== text) {
+    // Si le texte n'est pas en capitales
+    // on considère qu'il a été édité par l'utilisateur et on l'affiche tel quel
+    return text;
+  }
+  // Sinon on essaye de faire le moins de dégats possible dans la capitalisation…
+  let result = text
+    .toLowerCase()
+    .replace(/^\w|[\s\-'’]\w/gu, (char: string) => char.toUpperCase());
+  const stopWords = [
+    " De ",
+    " Des ",
+    " Du ",
+    " Et ",
+    " À ",
+    " A ",
+    " Au ",
+    " En ",
+    " La ",
+    " Le ",
+    " Les ",
+    " L'",
+    " D'",
+    " Sur ",
+    " Pour ",
+  ];
+  for (const stopWord of stopWords) {
+    const regex = new RegExp(`${stopWord}`, "g");
+    result = result.replace(regex, `${stopWord.toLowerCase()}`);
+  }
+
+  return result;
 }
 
 export function getDepartmentFromCityCode(cityCode) {
