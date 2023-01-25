@@ -15,7 +15,9 @@
   let timeoutFn: ReturnType<typeof setTimeout>;
 
   onMount(() => {
-    if (window.Tally) window.Tally.closePopup(formId);
+    if (window.Tally) {
+      window.Tally.closePopup(formId);
+    }
 
     if (canDisplayNpsForm(formId)) {
       timeoutFn = setTimeout(() => {
@@ -37,7 +39,9 @@
   });
 
   onDestroy(() => {
-    if (browser && window.Tally) window.Tally.closePopup(formId);
+    if (browser && window.Tally) {
+      window.Tally.closePopup(formId);
+    }
 
     clearTimeout(timeoutFn);
   });

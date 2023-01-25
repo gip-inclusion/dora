@@ -42,7 +42,7 @@
     contribution.siret = "";
   }
 
-  async function handleEstablishmentChange(newEstablishment) {
+  function handleEstablishmentChange(newEstablishment) {
     contribution.siret = newEstablishment?.siret;
   }
 </script>

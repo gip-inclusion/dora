@@ -15,6 +15,7 @@ export const load: PageLoad = async ({ parent }) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      // eslint-disable-next-line camelcase
       redirect_uri: CANONICAL_URL,
     }),
   });

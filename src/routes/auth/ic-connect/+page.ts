@@ -25,6 +25,7 @@ export const load: PageLoad = async ({ url, parent }) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      // eslint-disable-next-line camelcase
       redirect_uri: `${CANONICAL_URL}/auth/ic-callback?next=${encodeURIComponent(
         nextPage
       )}`,

@@ -11,7 +11,9 @@
   const dispatch = createEventDispatcher();
 
   function handleClick(evt: MouseEvent) {
-    if (!disabled) dispatch("click", evt);
+    if (!disabled) {
+      dispatch("click", evt);
+    }
   }
 
   $: currentIcon = active ? starSmileFillIcon : starSmileLineIcon;

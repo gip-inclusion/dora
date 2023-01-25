@@ -9,14 +9,14 @@
 
   let isInclusionNumModalOpen = false;
 
-  let inclusionNumeriqueFormActiveNotice = {
+  const inclusionNumeriqueFormActiveNotice = {
     title: "Formulaire de l'inclusion numérique actif",
     description:
       "Si néanmoins vous souhaitez renseigner un atelier, une formation ou tout autre accompagnement, vous pouvez basculer vers le formulaire classique.",
     buttonLabel: "Basculer sur le formulaire classique",
   };
 
-  let inclusionNumeriqueFormAvailableNotice = {
+  const inclusionNumeriqueFormAvailableNotice = {
     title: "Formulaire de l'inclusion numérique disponible",
     description:
       "Pour compléter ce formulaire spécifique, seule la thématique numérique doit être sélectionnée.",

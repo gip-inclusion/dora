@@ -37,7 +37,7 @@
     $formErrors = {};
   });
 
-  async function handleEltChange(evt) {
+  function handleEltChange(evt) {
     $formErrors.nonFieldErrors = [];
 
     // We want to listen to both DOM and component events
@@ -74,7 +74,7 @@
   }
 
   async function handleSubmit(event: Event) {
-    let submitterId = (event as SubmitEvent).submitter?.id;
+    const submitterId = (event as SubmitEvent).submitter?.id;
     $formErrors = {};
     const { validatedData, valid } = onValidate
       ? onValidate(data, submitterId)

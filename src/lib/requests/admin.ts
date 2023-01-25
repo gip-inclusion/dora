@@ -52,5 +52,5 @@ export async function setModerationState(entity, status: ModerationStatus) {
   if (!response.ok) {
     throw Error(response.statusText);
   }
-  return await response.json();
+  return response.json();
 }

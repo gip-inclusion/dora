@@ -18,12 +18,16 @@
   function handleCityChange(newCity: GeoApiCity | null) {
     city = newCity;
     establishment = null;
-    if (onCityChange) onCityChange(newCity);
+    if (onCityChange) {
+      onCityChange(newCity);
+    }
   }
 
-  async function handleEstablishmentChange(newEstablishment: Establishment) {
+  function handleEstablishmentChange(newEstablishment: Establishment) {
     establishment = newEstablishment;
-    if (onEstablishmentChange) onEstablishmentChange(newEstablishment);
+    if (onEstablishmentChange) {
+      onEstablishmentChange(newEstablishment);
+    }
   }
 
   async function searchSirene(q) {

@@ -12,7 +12,6 @@
   export let model: Model | undefined = undefined;
   export let noTopPadding = false;
   export let subcategories = [];
-  let showModelSubcategoriesUseButton = true;
 
   $: showModel = !!service.model;
 
@@ -32,7 +31,7 @@
 </script>
 
 <FieldSet title="Typologie" {showModel} {noTopPadding}>
-  <FieldModel {...fieldModelProps["categories"] ?? {}} type="array">
+  <FieldModel {...fieldModelProps.categories ?? {}} type="array">
     <FieldCategory bind:service bind:subcategories {servicesOptions} {model} />
   </FieldModel>
   <div slot="help">
@@ -43,8 +42,8 @@
   </div>
 
   <FieldModel
-    {...fieldModelProps["subcategories"] ?? {}}
-    showUseButton={showModelSubcategoriesUseButton}
+    {...fieldModelProps.subcategories ?? {}}
+    showUseButton
     type="array"
   >
     <MultiSelectField
@@ -55,7 +54,7 @@
       placeholderMulti="Sélectionner"
     />
   </FieldModel>
-  <FieldModel {...fieldModelProps["kinds"] ?? {}} type="array">
+  <FieldModel {...fieldModelProps.kinds ?? {}} type="array">
     <CheckboxesField
       id="kinds"
       bind:value={service.kinds}
@@ -63,7 +62,7 @@
     />
   </FieldModel>
 
-  <FieldModel {...fieldModelProps["isCumulative"] ?? {}} type="boolean">
+  <FieldModel {...fieldModelProps.isCumulative ?? {}} type="boolean">
     <BooleanRadioButtonsField
       id="isCumulative"
       bind:value={service.isCumulative}

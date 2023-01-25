@@ -51,7 +51,7 @@
     </p>
   </div>
 
-  <FieldModel {...fieldModelProps["name"] ?? {}}>
+  <FieldModel {...fieldModelProps.name ?? {}}>
     <BasicInputField
       id="name"
       placeholder="Titre du service"
@@ -59,7 +59,7 @@
     />
   </FieldModel>
 
-  <FieldModel {...fieldModelProps["shortDesc"] ?? {}}>
+  <FieldModel {...fieldModelProps.shortDesc ?? {}}>
     <TextareaField
       id="shortDesc"
       placeholder="Compléter"
@@ -67,7 +67,7 @@
     />
   </FieldModel>
 
-  <FieldModel {...fieldModelProps["fullDesc"] ?? {}} paddingTop type="markdown">
+  <FieldModel {...fieldModelProps.fullDesc ?? {}} paddingTop type="markdown">
     <RichTextField
       id="fullDesc"
       bind:this={fullDesc}

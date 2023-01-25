@@ -65,7 +65,7 @@
     });
   }
 
-  async function handleSuccess(_jsonResult) {
+  function handleSuccess(_jsonResult) {
     isOpen = false;
     message = null;
     confirmationModalIsOpen = true;

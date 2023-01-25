@@ -41,7 +41,9 @@
         }
 
         // Retour du focus sur le bouton d'ouverture
-        if (activeElementSave) activeElementSave.focus();
+        if (activeElementSave) {
+          activeElementSave.focus();
+        }
       }
     }
   }
@@ -51,7 +53,9 @@
     dispatch("close");
   }
   function handleKeydown(event) {
-    if (event.key === "Escape") handleClose();
+    if (event.key === "Escape") {
+      handleClose();
+    }
   }
 </script>
 

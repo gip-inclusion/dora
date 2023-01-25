@@ -66,7 +66,7 @@
     }
   }
 
-  async function searchCityFromLocation() {
+  function searchCityFromLocation() {
     if (!navigator.geolocation) {
       geolocLabel = "La géolocalisation n'est pas supportée";
     } else {

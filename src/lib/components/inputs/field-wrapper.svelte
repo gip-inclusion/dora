@@ -20,11 +20,15 @@
   const context = getContext<ValidationContext>(contextValidationKey);
 
   function handleBlur(evt) {
-    if (context) context.onBlur(evt);
+    if (context) {
+      context.onBlur(evt);
+    }
   }
 
   function handleChange(evt) {
-    if (context) context.onChange(evt);
+    if (context) {
+      context.onChange(evt);
+    }
   }
 
   $: errorMessages = $formErrors[id];

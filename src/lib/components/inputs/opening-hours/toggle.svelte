@@ -12,7 +12,9 @@
       checked = !checked;
       event.preventDefault();
     }
-    if (event.code === "Escape") event.target.blur();
+    if (event.code === "Escape") {
+      event.target.blur();
+    }
   }
 </script>
 

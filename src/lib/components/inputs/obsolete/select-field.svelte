@@ -64,9 +64,13 @@
     if (["Escape", " ", "Enter", "ArrowDown", "ArrowUp"].includes(event.key)) {
       event.preventDefault();
     }
-    if (event.code === "Tab" || event.code === "Escape") toggleCombobox(false);
+    if (event.code === "Tab" || event.code === "Escape") {
+      toggleCombobox(false);
+    }
 
-    if (event.code === "Space") toggleCombobox();
+    if (event.code === "Space") {
+      toggleCombobox();
+    }
 
     if (event.code === "Enter") {
       if (!expanded) {
@@ -91,7 +95,9 @@
       selectedOptionIndex = selectedOptionIndex
         ? selectedOptionIndex - 1
         : choices.length - 1;
-      if (selectedOptionIndex < 0) selectedOptionIndex = choices.length - 1;
+      if (selectedOptionIndex < 0) {
+        selectedOptionIndex = choices.length - 1;
+      }
       selectedOption = choices[selectedOptionIndex];
 
       scrollToOption(selectedOption.value);
@@ -149,8 +155,12 @@
       // As string
       value = newValue;
     }
-    if (onChange) onChange({ detail: name, value });
-    if (!isMultiple) toggleCombobox(false);
+    if (onChange) {
+      onChange({ detail: name, value });
+    }
+    if (!isMultiple) {
+      toggleCombobox(false);
+    }
   }
 
   function toggleCombobox(forceValue?: boolean) {
@@ -176,7 +186,7 @@
     return choices.findIndex((c) => c.value === value);
   }
 
-  async function toggleGroup(optGroup: string) {
+  function toggleGroup(optGroup: string) {
     if (optGroupsOpen.includes(optGroup)) {
       optGroupsOpen = optGroupsOpen.filter((opt) => opt !== optGroup);
     } else {

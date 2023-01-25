@@ -25,7 +25,9 @@
   });
 
   async function handleRefresh() {
-    if (data.service) data.service = await getService(data.service.slug);
+    if (data.service) {
+      data.service = await getService(data.service.slug);
+    }
   }
 
   function getMinutesSincePublication(service: Service) {

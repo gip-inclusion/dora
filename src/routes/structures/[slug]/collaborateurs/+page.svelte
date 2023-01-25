@@ -22,8 +22,12 @@
 
   function sortedMembers(items) {
     return items.sort((a, b) => {
-      if (a.isAdmin && !b.isAdmin) return -1;
-      if (!a.isAdmin && b.isAdmin) return 1;
+      if (a.isAdmin && !b.isAdmin) {
+        return -1;
+      }
+      if (!a.isAdmin && b.isAdmin) {
+        return 1;
+      }
       const lA = a.user.lastName || a.user.email;
       const lB = b.user.lastName || b.user.email;
       return lA.localeCompare(lB, "fr");

@@ -115,7 +115,7 @@
     linkDialogIsOpen = false;
   }
 
-  async function linkDialogToggle() {
+  function linkDialogToggle() {
     if (linkDialogIsOpen) {
       linkDialogClose();
     } else {

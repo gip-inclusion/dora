@@ -22,7 +22,9 @@
   let tags = [];
 
   function hasOnlyNationalResults(services: ServiceSearchResult[]) {
-    if (services.length === 0) return false;
+    if (services.length === 0) {
+      return false;
+    }
     return services.every((s) => s.diffusionZoneType === "country");
   }
 

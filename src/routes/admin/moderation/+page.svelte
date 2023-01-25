@@ -28,7 +28,7 @@
   });
 
   function filterAndSortEntities(searchString) {
-    let result = (
+    const result = (
       searchString
         ? entities.filter((s) => {
             if (s.isStructure) {
@@ -55,18 +55,28 @@
         const val2 = s2.moderationStatus
           ? STATUS_VALUE[s2.moderationStatus]
           : 999;
-        if (val1 !== val2) return val1 - val2;
+        if (val1 !== val2) {
+          return val1 - val2;
+        }
         // Puis les structures en premier
-        if (s1.isStructure && !s2.isStructure) return -1;
-        if (s2.isStructure && !s1.isStructure) return 1;
+        if (s1.isStructure && !s2.isStructure) {
+          return -1;
+        }
+        if (s2.isStructure && !s1.isStructure) {
+          return 1;
+        }
         // Puis par dept de structure
         const sdept1 = s1.isStructure ? s1.department : s1.structureDept;
         const sdept2 = s1.isStructure ? s1.department : s1.structureDept;
-        if (sdept1 !== sdept2) return sdept1 > sdept2;
+        if (sdept1 !== sdept2) {
+          return sdept1 > sdept2;
+        }
         // Puis par nom de structure
         const sname1 = s1.isStructure ? s1.name : s1.structureName;
         const sname2 = s1.isStructure ? s1.name : s1.structureName;
-        if (sname1 !== sname2) return sname1 > sname2;
+        if (sname1 !== sname2) {
+          return sname1 > sname2;
+        }
         // Finalement par nom
         return s1.name > s2.name;
       });

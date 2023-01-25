@@ -31,7 +31,7 @@
     return createOrModifyModel(validatedData);
   }
 
-  async function handleSuccess(result) {
+  function handleSuccess(result) {
     goto(`/modeles/${result.slug}`);
   }
 </script>

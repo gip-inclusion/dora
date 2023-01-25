@@ -25,12 +25,13 @@ export async function siretWasAlreadyClaimed(siret: string) {
   if (res.ok) {
     result.result = await res.json();
   } else {
-    if (res.status !== 404)
+    if (res.status !== 404) {
       try {
         result.error = await res.json();
       } catch (err) {
         console.error(err);
       }
+    }
   }
   return result;
 }
@@ -96,7 +97,9 @@ export async function getMembers(slug) {
   const url = `${getApiURL()}/structure-members/?structure=${slug}`;
 
   const result = await fetchData(url);
-  if (result.ok) return result.data;
+  if (result.ok) {
+    return result.data;
+  }
   return null;
 }
 
@@ -104,7 +107,9 @@ export async function getPutativeMembers(slug) {
   const url = `${getApiURL()}/structure-putative-members/?structure=${slug}`;
 
   const result = await fetchData(url);
-  if (result.ok) return result.data;
+  if (result.ok) {
+    return result.data;
+  }
   return null;
 }
 

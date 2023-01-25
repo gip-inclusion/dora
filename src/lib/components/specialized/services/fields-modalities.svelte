@@ -36,10 +36,7 @@
   </div>
 
   <div class="flex flex-col lg:gap-s8">
-    <FieldModel
-      {...fieldModelProps["coachOrientationModes"] ?? {}}
-      type="array"
-    >
+    <FieldModel {...fieldModelProps.coachOrientationModes ?? {}} type="array">
       <CheckboxesField
         id="coachOrientationModes"
         choices={moveToTheEnd(
@@ -52,7 +49,7 @@
     </FieldModel>
 
     {#if service.coachOrientationModes.includes("autre")}
-      <FieldModel {...fieldModelProps["coachOrientationModesOther"] ?? {}}>
+      <FieldModel {...fieldModelProps.coachOrientationModesOther ?? {}}>
         <BasicInputField
           id="coachOrientationModesOther"
           hideLabel
@@ -65,7 +62,7 @@
 
   <div class="flex flex-col lg:gap-s8">
     <FieldModel
-      {...fieldModelProps["beneficiariesAccessModes"] ?? {}}
+      {...fieldModelProps.beneficiariesAccessModes ?? {}}
       type="array"
     >
       <CheckboxesField
@@ -80,7 +77,7 @@
     </FieldModel>
 
     {#if service.beneficiariesAccessModes.includes("autre")}
-      <FieldModel {...fieldModelProps["beneficiariesAccessModesOther"] ?? {}}>
+      <FieldModel {...fieldModelProps.beneficiariesAccessModesOther ?? {}}>
         <BasicInputField
           id="beneficiariesAccessModesOther"
           hideLabel
@@ -93,7 +90,7 @@
 
   <div class="flex flex-col gap-s24">
     <FieldModel
-      {...fieldModelProps["feeCondition"] ?? {}}
+      {...fieldModelProps.feeCondition ?? {}}
       serviceValue={service.feeCondition}
       type="text"
     >
@@ -107,7 +104,7 @@
     </FieldModel>
 
     {#if isNotFreeService(service.feeCondition)}
-      <FieldModel {...fieldModelProps["feeDetails"] ?? {}}>
+      <FieldModel {...fieldModelProps.feeDetails ?? {}}>
         <TextareaField
           id="feeDetails"
           placeholder="Merci de détailler ici les frais à charge du bénéficiaire : adhésion, frais de location, frais de garde, etc., et les montants."

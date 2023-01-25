@@ -66,8 +66,12 @@ export function computeUpdateStatusData(
 
   let updateStatus: ServiceUpdateStatus = "NOT_NEEDED";
   if (service.status === "PUBLISHED") {
-    if (monthDiff >= 6 && monthDiff < 8) updateStatus = "NEEDED";
-    if (monthDiff >= 8) updateStatus = "REQUIRED";
+    if (monthDiff >= 6 && monthDiff < 8) {
+      updateStatus = "NEEDED";
+    }
+    if (monthDiff >= 8) {
+      updateStatus = "REQUIRED";
+    }
   }
 
   return {
@@ -106,23 +110,57 @@ export function computeUpdateStatusLabel({
 }
 
 export function getCategoryIcon(slug: string) {
-  if ("creation-activite" === slug) return rocketIcon;
-  if ("numerique" === slug) return macLineIcon;
-  if ("equipement-alimentation" === slug) return storeIcon;
-  if ("famille" === slug) return parentIcon;
-  if ("difficultes-financieres" === slug) return euroLineIcon;
-  if ("apprendre-francais" === slug) return chatQuoteIcon;
-  if ("acc-global-indiv" === slug) return chatSmileIcon;
-  if ("handicap" === slug) return wheelChairIcon;
-  if ("sante" === slug) return stethoscopeIcon;
-  if ("logement-hebergement" === slug) return homeSmileIcon;
-  if ("illettrisme" === slug) return textIcon;
-  if ("mobilite" === slug) return compassDiscoverIcon;
-  if ("remobilisation" === slug) return mentalHealthIcon;
-  if ("acces-aux-droits" === slug) return bankIcon;
-  if ("emploi-choisir-metier" === slug) return serviceIcon;
-  if ("emploi-preparer-sa-candidature" === slug) return serviceIcon;
-  if ("emploi-trouver-emploi" === slug) return serviceIcon;
+  if ("creation-activite" === slug) {
+    return rocketIcon;
+  }
+  if ("numerique" === slug) {
+    return macLineIcon;
+  }
+  if ("equipement-alimentation" === slug) {
+    return storeIcon;
+  }
+  if ("famille" === slug) {
+    return parentIcon;
+  }
+  if ("difficultes-financieres" === slug) {
+    return euroLineIcon;
+  }
+  if ("apprendre-francais" === slug) {
+    return chatQuoteIcon;
+  }
+  if ("acc-global-indiv" === slug) {
+    return chatSmileIcon;
+  }
+  if ("handicap" === slug) {
+    return wheelChairIcon;
+  }
+  if ("sante" === slug) {
+    return stethoscopeIcon;
+  }
+  if ("logement-hebergement" === slug) {
+    return homeSmileIcon;
+  }
+  if ("illettrisme" === slug) {
+    return textIcon;
+  }
+  if ("mobilite" === slug) {
+    return compassDiscoverIcon;
+  }
+  if ("remobilisation" === slug) {
+    return mentalHealthIcon;
+  }
+  if ("acces-aux-droits" === slug) {
+    return bankIcon;
+  }
+  if ("emploi-choisir-metier" === slug) {
+    return serviceIcon;
+  }
+  if ("emploi-preparer-sa-candidature" === slug) {
+    return serviceIcon;
+  }
+  if ("emploi-trouver-emploi" === slug) {
+    return serviceIcon;
+  }
 }
 
 export function getCategoryLabel(
@@ -145,7 +183,9 @@ export function formatFilePath(filePath: string) {
   const file = filePath.split("/").pop();
 
   const dotPosition = file.lastIndexOf(".");
-  if (dotPosition === -1) return file;
+  if (dotPosition === -1) {
+    return file;
+  }
 
   const name = file.slice(0, dotPosition);
   const extension = file.slice(file.lastIndexOf("."), file.length);
@@ -172,11 +212,19 @@ export function sortCategory(categories: Choice[]) {
 
 function sortSubcategory(subcategories: Choice[]) {
   return subcategories.sort((a, b) => {
-    if (a.value.endsWith("--autre")) return 1;
-    if (b.value.endsWith("--autre")) return -1;
+    if (a.value.endsWith("--autre")) {
+      return 1;
+    }
+    if (b.value.endsWith("--autre")) {
+      return -1;
+    }
 
-    if (a.value.endsWith("--all")) return -1;
-    if (b.value.endsWith("--all")) return 1;
+    if (a.value.endsWith("--all")) {
+      return -1;
+    }
+    if (b.value.endsWith("--all")) {
+      return 1;
+    }
 
     return a.label.localeCompare(b.label, "fr", { numeric: true });
   });

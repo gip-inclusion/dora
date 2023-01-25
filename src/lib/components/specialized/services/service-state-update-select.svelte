@@ -100,9 +100,13 @@
     if (["Escape", " ", "Enter", "ArrowDown", "ArrowUp"].includes(event.key)) {
       event.preventDefault();
     }
-    if (event.code === "Tab" || event.code === "Escape") toggleCombobox(false);
+    if (event.code === "Tab" || event.code === "Escape") {
+      toggleCombobox(false);
+    }
 
-    if (event.code === "Space") toggleCombobox();
+    if (event.code === "Space") {
+      toggleCombobox();
+    }
 
     if (event.code === "Enter") {
       if (!isDropdownOpen) {
@@ -122,8 +126,9 @@
     }
     if (event.code === "ArrowUp") {
       selectedOptionIndex = (selectedOptionIndex || 0) - 1;
-      if (selectedOptionIndex < 0)
+      if (selectedOptionIndex < 0) {
         selectedOptionIndex = availableOptions.length - 1;
+      }
       selectedOption = availableOptions[selectedOptionIndex];
     }
   }
@@ -159,7 +164,9 @@
     }
 
     toggleCombobox(false);
-    if (onRefresh) await onRefresh();
+    if (onRefresh) {
+      await onRefresh();
+    }
   }
 
   async function publish() {

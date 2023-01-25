@@ -15,7 +15,7 @@
     fileKeys = fileKeys.filter((k) => k !== fileKey);
   }
 
-  async function handleSubmit() {
+  function handleSubmit() {
     function updateProgress(loaded, total) {
       progress = (loaded / total) * 100;
     }

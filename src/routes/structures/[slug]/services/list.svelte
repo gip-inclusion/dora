@@ -39,9 +39,11 @@
   let canEdit;
 
   function updateUrlQueryParams() {
-    if (!browser) return;
+    if (!browser) {
+      return;
+    }
 
-    let searchParams = $page.url.searchParams;
+    const searchParams = $page.url.searchParams;
 
     if (serviceStatus) {
       searchParams.set("service-status", encodeURIComponent(serviceStatus));
@@ -56,7 +58,9 @@
     }
 
     let newUrl = $page.url.pathname;
-    if (searchParams.toString()) newUrl += `?${searchParams.toString()}`;
+    if (searchParams.toString()) {
+      newUrl += `?${searchParams.toString()}`;
+    }
 
     goto(newUrl, { replaceState: true, keepFocus: true, noScroll: true });
   }
@@ -115,7 +119,7 @@
 
   // Service order
   let selectedOrder = "modificationDateDesc";
-  let serviceOrderOptions: Choice[] = [
+  const serviceOrderOptions: Choice[] = [
     {
       value: "modificationDateDesc",
       label: "Trier par ordre décroissant",
@@ -171,8 +175,9 @@
   function filterAndSortServices(services) {
     if (serviceStatus) {
       // By status
-      if (serviceStatus === "ARCHIVED") services = structure.archivedServices;
-      else {
+      if (serviceStatus === "ARCHIVED") {
+        services = structure.archivedServices;
+      } else {
         services = structure.services.filter((s) => s.status === serviceStatus);
       }
     }

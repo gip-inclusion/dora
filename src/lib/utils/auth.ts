@@ -31,8 +31,8 @@ export function setToken(t: string) {
   localStorage.setItem(tokenKey, t);
 }
 
-async function getUserInfo(authToken) {
-  return await fetch(`${getApiURL()}/auth/user-info/`, {
+function getUserInfo(authToken) {
+  return fetch(`${getApiURL()}/auth/user-info/`, {
     method: "POST",
     headers: {
       Accept: defaultAcceptHeader,

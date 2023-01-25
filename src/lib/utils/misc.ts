@@ -31,7 +31,7 @@ export async function fetchData<T>(url: string) {
   const tk = get(token);
 
   if (tk) {
-    headers["Authorization"] = `Token ${tk}`;
+    headers.Authorization = `Token ${tk}`;
   }
 
   const response = await fetch(url, {
@@ -163,9 +163,15 @@ export function orderAndReformatSubcategories(
 }
 
 export function arraysCompare(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length !== b.length) return false;
+  if (a === b) {
+    return true;
+  }
+  if (a == null || b == null) {
+    return false;
+  }
+  if (a.length !== b.length) {
+    return false;
+  }
 
   return a.every((val, i) => val === b[i]);
 }

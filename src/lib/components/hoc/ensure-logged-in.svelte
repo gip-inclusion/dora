@@ -6,7 +6,7 @@
 
   onMount(() => {
     if (!$token) {
-      let searchParams = $page.url.searchParams;
+      const searchParams = $page.url.searchParams;
       const loginHint = searchParams.get("login_hint");
       if (loginHint) {
         searchParams.delete("login_hint");

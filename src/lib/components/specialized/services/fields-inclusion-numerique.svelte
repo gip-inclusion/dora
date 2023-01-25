@@ -159,7 +159,9 @@
   }
 
   function setDiffusionZone() {
-    if (!structure.latitude || !structure.longitude) return;
+    if (!structure.latitude || !structure.longitude) {
+      return;
+    }
     service.diffusionZoneType = "department";
     service.diffusionZoneDetails = structure.department;
   }

@@ -35,13 +35,21 @@ export function fromJsonToOsmString(data: OsmOpeningHours) {
 function formatDay(lineday: OsmDay, prefix: DayPrefix): string | undefined {
   const { timeSlot1, timeSlot2 } = lineday;
 
-  if (!timeSlot1.isOpen && !timeSlot2.isOpen) return undefined;
+  if (!timeSlot1.isOpen && !timeSlot2.isOpen) {
+    return undefined;
+  }
 
   let str = `${prefix} `;
 
-  if (timeSlot1.isOpen) str += `${timeSlot1.openAt}-${timeSlot1.closeAt}`;
-  if (timeSlot1.isOpen && timeSlot2.isOpen) str += ",";
-  if (timeSlot2.isOpen) str += `${timeSlot2.openAt}-${timeSlot2.closeAt}`;
+  if (timeSlot1.isOpen) {
+    str += `${timeSlot1.openAt}-${timeSlot1.closeAt}`;
+  }
+  if (timeSlot1.isOpen && timeSlot2.isOpen) {
+    str += ",";
+  }
+  if (timeSlot2.isOpen) {
+    str += `${timeSlot2.openAt}-${timeSlot2.closeAt}`;
+  }
 
   return str;
 }
@@ -52,7 +60,9 @@ function isDayValid(lineday: OsmDay): boolean {
   );
 }
 function isPeriodDayValid(period: OsmPeriodDay): boolean {
-  if (!period.isOpen) return true;
+  if (!period.isOpen) {
+    return true;
+  }
   return !!period.closeAt && !!period.openAt;
 }
 
@@ -81,13 +91,27 @@ export function getHoursFromStr(value: string): OsmOpeningHours {
 
     // Jour concerné
     let dayKey: string;
-    if (dayPrefix === "Mo") dayKey = "monday";
-    if (dayPrefix === "Tu") dayKey = "tuesday";
-    if (dayPrefix === "We") dayKey = "wednesday";
-    if (dayPrefix === "Th") dayKey = "thursday";
-    if (dayPrefix === "Fr") dayKey = "friday";
-    if (dayPrefix === "Sa") dayKey = "saturday";
-    if (dayPrefix === "Su") dayKey = "sunday";
+    if (dayPrefix === "Mo") {
+      dayKey = "monday";
+    }
+    if (dayPrefix === "Tu") {
+      dayKey = "tuesday";
+    }
+    if (dayPrefix === "We") {
+      dayKey = "wednesday";
+    }
+    if (dayPrefix === "Th") {
+      dayKey = "thursday";
+    }
+    if (dayPrefix === "Fr") {
+      dayKey = "friday";
+    }
+    if (dayPrefix === "Sa") {
+      dayKey = "saturday";
+    }
+    if (dayPrefix === "Su") {
+      dayKey = "sunday";
+    }
 
     if (hours.includes(",")) {
       const [timeSlot1Hours, timeSlot2Hours] = hours.split(",");
@@ -175,13 +199,27 @@ export function formatOsmHours(value: string) {
   hoursByDay.forEach((hoursForDay) => {
     const [dayPrefix, hours] = hoursForDay.split(" ");
 
-    if (dayPrefix === "Mo") monday = formatHour(hours);
-    if (dayPrefix === "Tu") tuesday = formatHour(hours);
-    if (dayPrefix === "We") wednesday = formatHour(hours);
-    if (dayPrefix === "Th") thursday = formatHour(hours);
-    if (dayPrefix === "Fr") friday = formatHour(hours);
-    if (dayPrefix === "Sa") saturday = formatHour(hours);
-    if (dayPrefix === "Su") sunday = formatHour(hours);
+    if (dayPrefix === "Mo") {
+      monday = formatHour(hours);
+    }
+    if (dayPrefix === "Tu") {
+      tuesday = formatHour(hours);
+    }
+    if (dayPrefix === "We") {
+      wednesday = formatHour(hours);
+    }
+    if (dayPrefix === "Th") {
+      thursday = formatHour(hours);
+    }
+    if (dayPrefix === "Fr") {
+      friday = formatHour(hours);
+    }
+    if (dayPrefix === "Sa") {
+      saturday = formatHour(hours);
+    }
+    if (dayPrefix === "Su") {
+      sunday = formatHour(hours);
+    }
   });
 
   return [

@@ -78,21 +78,21 @@
   }
 
   function handleValidate(data, kind: "draft" | "publish") {
-    let schema = kind === "draft" ? draftSchema : serviceSchema;
+    const schema = kind === "draft" ? draftSchema : serviceSchema;
     return validate(data, schema, {
       servicesOptions,
-      checkRequired: kind === "draft" ? false : true,
+      checkRequired: kind !== "draft",
     });
   }
 
   let modelSlugTmp = null;
 
-  async function unsync() {
+  function unsync() {
     modelSlugTmp = service.model;
     service.model = null;
   }
 
-  async function sync() {
+  function sync() {
     service.model = modelSlugTmp;
     modelSlugTmp = null;
   }

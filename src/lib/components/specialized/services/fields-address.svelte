@@ -21,7 +21,7 @@
     entity.latitude = lat;
   }
 
-  async function fillAddress() {
+  function fillAddress() {
     if (parent) {
       const {
         city,

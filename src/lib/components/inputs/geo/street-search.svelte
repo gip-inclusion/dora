@@ -33,7 +33,9 @@
   const context = getContext<ValidationContext>(contextValidationKey);
 
   function handleBlur(evt) {
-    if (context) context.onBlur(evt);
+    if (context) {
+      context.onBlur(evt);
+    }
   }
 </script>
 

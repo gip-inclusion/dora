@@ -37,8 +37,12 @@ function clearError(fieldName) {
 }
 
 export function isRequired<T>(shape: Shape<T>, data: any) {
-  if (shape.required == null) return false;
-  if (typeof shape.required === "boolean") return shape.required;
+  if (shape.required == null) {
+    return false;
+  }
+  if (typeof shape.required === "boolean") {
+    return shape.required;
+  }
   return shape.required(data);
 }
 

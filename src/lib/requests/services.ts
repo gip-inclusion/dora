@@ -44,7 +44,9 @@ export async function getService(slug): Promise<Service> {
   const url = `${getApiURL()}/services/${slug}/`;
   const response = await fetchData<Service>(url);
 
-  if (!response.data) return null;
+  if (!response.data) {
+    return null;
+  }
   // TODO: 404
 
   return serviceToFront(response.data);
@@ -59,7 +61,9 @@ export async function getModel(slug): Promise<Model> {
   const url = `${getApiURL()}/models/${slug}/`;
   const response = await fetchData<Model>(url);
 
-  if (!response.data) return null;
+  if (!response.data) {
+    return null;
+  }
   // TODO: 404
 
   return serviceToFront(response.data);
@@ -168,7 +172,7 @@ export async function publishDraft(serviceSlug) {
     throw Error(response.statusText);
   }
 
-  return await response.json();
+  return response.json();
 }
 
 export async function unPublishService(serviceSlug) {
@@ -187,7 +191,7 @@ export async function unPublishService(serviceSlug) {
   if (!response.ok) {
     throw Error(response.statusText);
   }
-  return await response.json();
+  return response.json();
 }
 
 export async function archiveService(serviceSlug) {
@@ -207,7 +211,7 @@ export async function archiveService(serviceSlug) {
   if (!response.ok) {
     throw Error(response.statusText);
   }
-  return await response.json();
+  return response.json();
 }
 
 export async function unarchiveService(serviceSlug) {
@@ -227,7 +231,7 @@ export async function unarchiveService(serviceSlug) {
   if (!response.ok) {
     throw Error(response.statusText);
   }
-  return await response.json();
+  return response.json();
 }
 
 export async function publishService(serviceSlug) {
@@ -247,7 +251,7 @@ export async function publishService(serviceSlug) {
   if (!response.ok) {
     throw Error(response.statusText);
   }
-  return await response.json();
+  return response.json();
 }
 
 export async function convertSuggestionToDraft(serviceSlug) {
@@ -267,7 +271,7 @@ export async function convertSuggestionToDraft(serviceSlug) {
   if (!response.ok) {
     throw Error(response.statusText);
   }
-  return await response.json();
+  return response.json();
 }
 
 export async function getLastDraft(): Promise<Service> {
@@ -286,7 +290,9 @@ export async function getServicesOptions(): Promise<ServicesOptions | null> {
 export async function getServiceSuggestions() {
   const url = `${getApiURL()}/services-suggestions/`;
   const results = (await fetchData(url)).data;
-  if (!results) return [];
+  if (!results) {
+    return [];
+  }
 
   return results;
 }

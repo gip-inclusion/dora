@@ -59,7 +59,9 @@
   const ih = small ? "h-s24" : "h-s32";
 
   function handleMouseDown(evt) {
-    if (preventDefaultOnMouseDown) evt.preventDefault();
+    if (preventDefaultOnMouseDown) {
+      evt.preventDefault();
+    }
   }
 </script>
 

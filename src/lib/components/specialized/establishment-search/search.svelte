@@ -29,9 +29,7 @@
     }
   }
 
-  async function handleEstablishmentChange(
-    newEstablishment: Establishment | null
-  ) {
+  function handleEstablishmentChange(newEstablishment: Establishment | null) {
     establishment = newEstablishment;
     if (onEstablishmentChange) {
       onEstablishmentChange(newEstablishment);
