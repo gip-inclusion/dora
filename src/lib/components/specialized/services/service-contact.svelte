@@ -4,7 +4,7 @@
   import ContactPhone from "./contact-phone.svelte";
 
   export let service: Service | ShortService;
-  // TODO: crashed if we were passed a ShortService => do the full request in that case?
+
   const orientationMode = service.coachOrientationModes;
   const emailPreferred =
     service.contactEmail &&

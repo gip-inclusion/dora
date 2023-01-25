@@ -392,6 +392,10 @@ export interface ShortService {
   categoriesDisplay: string[];
   category: string;
   categoryDisplay: string[];
+  coachOrientationModes: CoachOrientationModes[];
+  contactEmail: string;
+  contactName: string;
+  contactPhone: string;
   city: string;
   department: string;
   diffusionZoneDetailsDisplay: string;
