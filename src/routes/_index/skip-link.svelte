@@ -1,19 +1,15 @@
 <script lang="ts">
   /*
-   * To know more about skip links:
+   * Lien d'évitement:
    *    https://www.a11y-101.com/development/skip-link
    */
 </script>
 
-<ul id="skip-link">
-  <li>
-    <a
-      target="_self"
-      rel="nofollow"
-      href="#main-content"
-      class="fixed -left-full top-s32 z-50 border border-magenta-cta bg-white py-s16 px-s48 focus:left-s96"
-    >
-      Aller au contenu principal
-    </a>
-  </li>
-</ul>
+<a
+  target="_self"
+  rel="nofollow"
+  href="#main-content"
+  class="bg:transparent sr-only top-s32 left-s32 z-20 rounded text-f16 font-bold text-magenta-cta outline-none hover:text-magenta-hover  focus:not-sr-only focus:absolute focus:p-s8 focus:shadow-focus"
+>
+  Aller au contenu principal
+</a>
