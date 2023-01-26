@@ -9,24 +9,21 @@
 
   let structures, filteredStructures;
 
-  onMount(async () => {
-    structures = await getStructuresAdmin();
-    filteredStructures = filterAndSortEntities("");
-  });
-
   function filterAndSortEntities(searchString) {
     return (
       searchString
         ? structures.filter(
-            (s) =>
-              s.name.toLowerCase().includes(searchString) ||
-              s.department === searchString
+            (struct) =>
+              struct.name.toLowerCase().includes(searchString) ||
+              struct.department === searchString
           )
         : structures
-    ).sort((s1, s2) =>
-      s1.department === s2.department
-        ? s1.name.toLowerCase().localeCompare(s2.name.toLowerCase(), "fr")
-        : s1.department.localeCompare(s2.department, "fr", {
+    ).sort((structure1, structure2) =>
+      structure1.department === structure2.department
+        ? structure1.name
+            .toLowerCase()
+            .localeCompare(structure2.name.toLowerCase(), "fr")
+        : structure1.department.localeCompare(structure2.department, "fr", {
             numeric: true,
           })
     );
@@ -36,6 +33,11 @@
     const searchString = event.target.value.toLowerCase().trim();
     filteredStructures = filterAndSortEntities(searchString);
   }
+
+  onMount(async () => {
+    structures = await getStructuresAdmin();
+    filteredStructures = filterAndSortEntities("");
+  });
 </script>
 
 <CenteredGrid>

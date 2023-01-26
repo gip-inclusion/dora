@@ -26,9 +26,9 @@ export interface UserInfo {
 
 export const userInfo = writable<UserInfo>(null);
 
-export function setToken(t: string) {
-  token.set(t);
-  localStorage.setItem(tokenKey, t);
+export function setToken(newToken: string) {
+  token.set(newToken);
+  localStorage.setItem(tokenKey, newToken);
 }
 
 function getUserInfo(authToken) {
@@ -59,7 +59,7 @@ export async function refreshUserInfo() {
 
 export function deleteCookies() {
   const cookies = document.cookie.split(";").reduce((acc, cookie) => {
-    const [name] = cookie.split("=").map((c) => c.trim());
+    const [name] = cookie.split("=").map((str) => str.trim());
     acc.push(name);
 
     return acc;
@@ -74,10 +74,10 @@ export function deleteCookies() {
     ["tarteaucitron"]
   );
 
-  cookieNames.forEach((n) => {
-    const name = cookies.find((c) => c.includes(n));
+  cookieNames.forEach((name) => {
+    const firstFoundName = cookies.find((cookie) => cookie.includes(name));
 
-    document.cookie = `${name}=; Max-Age=0; path=/; domain=${location.hostname}`;
+    document.cookie = `${firstFoundName}=; Max-Age=0; path=/; domain=${location.hostname}`;
   });
 }
 

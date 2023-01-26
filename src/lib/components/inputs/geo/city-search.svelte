@@ -14,9 +14,9 @@
   export let initialValue: string | undefined = undefined;
 
   let choices: Choice[] = [];
-  async function searchCity(q) {
+  async function searchCity(query) {
     const url = `${getApiURL()}/admin-division-search/?type=city&q=${encodeURIComponent(
-      q
+      query
     )}`;
 
     const response = await fetch(url);

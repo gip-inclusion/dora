@@ -28,7 +28,9 @@
 
   [Rappel des justificatifs à joindre:]
 
-  ${service.credentialsDisplay?.map((s) => `- ${s}`).join("\n")}
+  ${service.credentialsDisplay
+    ?.map((credential) => `- ${credential}`)
+    .join("\n")}
   `.trim()
   );
 

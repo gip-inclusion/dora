@@ -73,10 +73,6 @@
   export let hideLabel = true;
   export let fullWidth = false;
 
-  // *** Valeurs pour l'affichage
-  $: currentStatusPresentation = SERVICE_STATUS_PRESENTATION[service.status];
-  $: availableOptions = getAvailableOptionsForStatus(service.status);
-
   // *** Accessibilité
   const uuid: string = crypto.randomUUID(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
   let isDropdownOpen = false;
@@ -84,6 +80,29 @@
   // Gestion de l'outline avec la navigation au clavier
   let selectedOptionIndex: number | null = null;
   let selectedOption: ServiceStatus | "DELETE" | null = null;
+
+  // Actions disponibles
+  async function publish() {
+    let serviceFull = service;
+    // teste si on a le service complet
+    // ça n'est pas le cas sur les cards de la page structure par exemple
+
+    if (!Object.prototype.hasOwnProperty.call(service, "fullDesc")) {
+      serviceFull = await getService(service.slug);
+    }
+
+    const isValid = validate(serviceFull, serviceSchema, {
+      noScroll: true,
+      showErrors: false,
+      servicesOptions: servicesOptions,
+    }).valid;
+
+    if (isValid) {
+      await publishService(service.slug);
+    } else {
+      goto(`/services/${service.slug}/editer`);
+    }
+  }
 
   function toggleCombobox(forceValue?: boolean) {
     isDropdownOpen = forceValue !== undefined ? forceValue : !isDropdownOpen;
@@ -93,6 +112,33 @@
     } else {
       selectedOptionIndex = null;
       selectedOption = null;
+    }
+  }
+
+  async function updateServiceStatus(newStatus: ServiceStatus | "DELETE") {
+    if (newStatus === "DRAFT") {
+      if (service.status === "SUGGESTION") {
+        await convertSuggestionToDraft(service.slug);
+      } else if (service.status === "PUBLISHED") {
+        await unPublishService(service.slug);
+      } else if (service.status === "ARCHIVED") {
+        await unarchiveService(service.slug);
+      }
+    } else if (newStatus === "PUBLISHED") {
+      await publish();
+    } else if (newStatus === "ARCHIVED") {
+      await archiveService(service.slug);
+    } else if (newStatus === "DELETE") {
+      // eslint-disable-next-line no-alert
+      if (confirm(`Supprimer la suggestion ${service.name} ?`)) {
+        await deleteService(service.slug);
+        goto(`/structures/${service.structure}/`);
+      }
+    }
+
+    toggleCombobox(false);
+    if (onRefresh) {
+      await onRefresh();
     }
   }
 
@@ -141,55 +187,9 @@
     selectedOption = hoveredStatus;
   }
 
-  // Actions disponibles
-  async function updateServiceStatus(newStatus: ServiceStatus | "DELETE") {
-    if (newStatus === "DRAFT") {
-      if (service.status === "SUGGESTION") {
-        await convertSuggestionToDraft(service.slug);
-      } else if (service.status === "PUBLISHED") {
-        await unPublishService(service.slug);
-      } else if (service.status === "ARCHIVED") {
-        await unarchiveService(service.slug);
-      }
-    } else if (newStatus === "PUBLISHED") {
-      await publish();
-    } else if (newStatus === "ARCHIVED") {
-      await archiveService(service.slug);
-    } else if (newStatus === "DELETE") {
-      // eslint-disable-next-line no-alert
-      if (confirm(`Supprimer la suggestion ${service.name} ?`)) {
-        await deleteService(service.slug);
-        goto(`/structures/${service.structure}/`);
-      }
-    }
-
-    toggleCombobox(false);
-    if (onRefresh) {
-      await onRefresh();
-    }
-  }
-
-  async function publish() {
-    let serviceFull = service;
-    // teste si on a le service complet
-    // ça n'est pas le cas sur les cards de la page structure par exemple
-
-    if (!Object.prototype.hasOwnProperty.call(service, "fullDesc")) {
-      serviceFull = await getService(service.slug);
-    }
-
-    const isValid = validate(serviceFull, serviceSchema, {
-      noScroll: true,
-      showErrors: false,
-      servicesOptions: servicesOptions,
-    }).valid;
-
-    if (isValid) {
-      await publishService(service.slug);
-    } else {
-      goto(`/services/${service.slug}/editer`);
-    }
-  }
+  // *** Valeurs pour l'affichage
+  $: currentStatusPresentation = SERVICE_STATUS_PRESENTATION[service.status];
+  $: availableOptions = getAvailableOptionsForStatus(service.status);
 </script>
 
 <div

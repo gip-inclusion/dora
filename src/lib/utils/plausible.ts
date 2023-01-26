@@ -28,8 +28,9 @@ function _getServiceProps(service, withUserData = false) {
       ...props,
       loggedIn: !!get(token),
       owner: [
-        ...(get(userInfo)?.structures.map((s) => s.slug) ?? []),
-        ...(get(userInfo)?.pendingStructures.map((s) => s.slug) ?? []),
+        ...(get(userInfo)?.structures.map((struct) => struct.slug) ?? []),
+        ...(get(userInfo)?.pendingStructures.map((struct) => struct.slug) ??
+          []),
       ].includes(service.structureInfo.slug),
     };
   }
@@ -49,8 +50,9 @@ function _getStructureProps(structure, withUserData = false) {
       ...props,
       loggedIn: !!get(token),
       owner: [
-        ...(get(userInfo)?.structures.map((s) => s.slug) ?? []),
-        ...(get(userInfo)?.pendingStructures.map((s) => s.slug) ?? []),
+        ...(get(userInfo)?.structures.map((struct) => struct.slug) ?? []),
+        ...(get(userInfo)?.pendingStructures.map((struct) => struct.slug) ??
+          []),
       ].includes(structure.slug),
     };
   }

@@ -39,7 +39,7 @@
 
   let filteredChoices = choices;
   $: filteredChoices = choices.filter(
-    (c) => c.structure == null || c.structure === structureSlug
+    (choice) => choice.structure == null || choice.structure === structureSlug
   );
 
   function handleAddValue() {

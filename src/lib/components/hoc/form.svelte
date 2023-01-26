@@ -18,10 +18,10 @@
   export let serverErrorsDict = {};
   export let onSubmit, onSuccess;
   export let servicesOptions: ServicesOptions | undefined = undefined;
-  export let onChange: ((data) => void) | undefined = undefined;
+  export let onChange: ((validatedData) => void) | undefined = undefined;
   export let onValidate:
     | ((
-        data,
+        submittedData,
         submitterId: string | undefined
       ) => { validatedData; valid: boolean })
     | undefined = undefined;

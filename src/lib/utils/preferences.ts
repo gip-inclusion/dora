@@ -10,7 +10,7 @@ export const userPreferences = writable<UserPreferences>({
 });
 
 export function userPreferencesSet(userStructures: ShortStructure[]) {
-  const userStructuresSlugs = userStructures.map((s) => s.slug);
+  const userStructuresSlugs = userStructures.map((struct) => struct.slug);
   const visitedStructuresString = localStorage.getItem("visitedStructures");
   const visitedStructures = visitedStructuresString
     ? JSON.parse(visitedStructuresString).filter((slug) =>

@@ -15,13 +15,14 @@ export function getQuery({
     cats: categoryIds.join(","),
     subs: subCategoryIds.join(","),
     city: cityCode,
+    // eslint-disable-next-line id-length
     cl: cityLabel,
     kinds: kindIds.join(","),
     fees: feeConditions.join(","),
   };
   const query = Object.entries(parameters)
-    .filter(([_k, v]) => !!v)
-    .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+    .filter(([_key, value]) => !!value)
+    .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
     .join("&");
 
   return query;

@@ -18,9 +18,9 @@
   export let choices = [];
   export let searchType;
 
-  async function searchAdminDivision(q) {
+  async function searchAdminDivision(query) {
     const url = `${getApiURL()}/admin-division-search/?type=${searchType}&q=${encodeURIComponent(
-      q
+      query
     )}`;
     const response = await fetch(url);
     const jsonResponse = await response.json();

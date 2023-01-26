@@ -11,17 +11,19 @@
   import { refreshUserInfo, token, userInfo } from "$lib/utils/auth";
   import { userProfileSchema } from "$lib/validation/schemas/user-profile";
 
+  let requesting = false;
+  let { firstName, lastName, email, phoneNumber } = $userInfo;
+
   function handleChange(validatedData) {
     phoneNumber = validatedData.phoneNumber;
   }
 
   function handleSubmit(validatedData) {
     const url = `${getApiURL()}/profile/change/`;
-    const { phoneNumber } = validatedData;
     return fetch(url, {
       method: "POST",
       body: JSON.stringify({
-        phoneNumber,
+        phoneNumber: validatedData.phoneNumber,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -36,8 +38,6 @@
     goto("/mon-compte");
   }
 
-  let requesting = false;
-  let { firstName, lastName, email, phoneNumber } = $userInfo;
   $: formData = { firstName, lastName, email, phoneNumber };
 </script>
 

@@ -25,7 +25,7 @@
     if (services.length === 0) {
       return false;
     }
-    return services.every((s) => s.diffusionZoneType === "country");
+    return services.every((service) => service.diffusionZoneType === "country");
   }
 
   let currentPageLength = PAGE_LENGTH;
@@ -54,7 +54,7 @@
 
     if (data.categoryIds.length) {
       const categoryTags = data.categoryIds.map((id) => {
-        return data.servicesOptions.categories.find((c) => c.value === id)
+        return data.servicesOptions.categories.find((cat) => cat.value === id)
           .label;
       });
 
@@ -64,8 +64,9 @@
 
       if (data.subCategoryIds.length) {
         const subCategoryTags = data.subCategoryIds.map((id) => {
-          return data.servicesOptions.subcategories.find((c) => c.value === id)
-            .label;
+          return data.servicesOptions.subcategories.find(
+            (cat) => cat.value === id
+          ).label;
         });
 
         if (subCategoryTags) {
@@ -94,7 +95,7 @@
       feeConditions={data.feeConditions}
       subCategoryIds={[
         ...data.subCategoryIds,
-        ...data.categoryIds.map((c) => `${c}--all`),
+        ...data.categoryIds.map((id) => `${id}--all`),
       ]}
       showDeploymentWarning={false}
       useAdditionalFilters

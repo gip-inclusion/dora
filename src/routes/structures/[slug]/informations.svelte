@@ -27,7 +27,7 @@
   $: nationalLabelsDisplay = structure.nationalLabels
     .map((nationalLabel: string) => {
       return structuresOptions.nationalLabels.find(
-        (n) => n.value === nationalLabel
+        (label) => label.value === nationalLabel
       ).label;
     })
     .join(", ");

@@ -34,8 +34,9 @@
     propsWithSpecificFields.forEach((propName) => {
       // options de services qui appartiennent à la structure courante
       const structureServicesOptions = servicesOptions[propName].filter(
-        (o) =>
-          !o.structure || (structure?.slug && o.structure === structure.slug)
+        (option) =>
+          !option.structure ||
+          (structure?.slug && option.structure === structure.slug)
       );
 
       if (isModel) {
@@ -45,7 +46,7 @@
           // si le type est une string, c'est un champs spécifique
           if (typeof value === "string") {
             const option = structureServicesOptions.find(
-              (o) => o.label === value
+              (opt) => opt.label === value
             );
             service[propName][i] = option.value;
           }
@@ -55,7 +56,7 @@
           // si le type est une string, c'est un champs spécifique
           if (typeof value === "string") {
             const option = structureServicesOptions.find(
-              (o) => o.label === value
+              (opt) => opt.label === value
             );
 
             // si ce champs spécifique existe dans les options de service
@@ -113,7 +114,10 @@
   <SelectField
     id="structure"
     bind:value={service.structure}
-    choices={structures.map((s) => ({ value: s.slug, label: s.name }))}
+    choices={structures.map((struct) => ({
+      value: struct.slug,
+      label: struct.name,
+    }))}
     onChange={handleStructureChange}
     sort
     disabled={!showStructures}

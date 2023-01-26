@@ -26,6 +26,7 @@
     ServicesOptions,
     ShortStructure,
   } from "$lib/types";
+  import { log } from "$lib/utils/logger";
   import {
     draftSchema,
     serviceSchema,
@@ -69,7 +70,8 @@
         status: "DRAFT",
       });
     } else {
-      console.error(kind);
+      log(`Soumission de type ${kind} invalide`);
+      return null;
     }
   }
 

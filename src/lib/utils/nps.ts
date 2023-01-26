@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 // `MIN_DAYS_BETWEEN_DISPLAYS` ne soient passés
 const MIN_DAYS_BETWEEN_DISPLAYS = 14;
 
+// eslint-disable-next-line no-shadow
 export enum TallyFormId {
   NPS_SEEKER_FORM_ID = "3xXVJ5",
   NPS_OFFEROR_FORM_ID = "3NpeZN",
@@ -12,6 +13,10 @@ export enum TallyFormId {
 
 interface TallyFormLocalStorageItem {
   lastSubmitted: string;
+}
+
+function getNpsAnswerLocalStorageKey(formId: TallyFormId): string {
+  return `tallyForm-${formId}`;
 }
 
 export function handleSubmitNpsForm(formId: TallyFormId): void {
@@ -33,8 +38,4 @@ export function canDisplayNpsForm(formId: TallyFormId): boolean {
     }
   }
   return true;
-}
-
-function getNpsAnswerLocalStorageKey(formId: TallyFormId): string {
-  return `tallyForm-${formId}`;
 }

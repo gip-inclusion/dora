@@ -8,6 +8,8 @@
   export let big = false;
   export let small = false;
 
+  let title;
+
   const dispatch = createEventDispatcher();
 
   function handleClick(evt: MouseEvent) {
@@ -18,11 +20,15 @@
 
   $: currentIcon = active ? starSmileFillIcon : starSmileLineIcon;
   $: disabled = !$userInfo;
-  $: title = disabled
-    ? "Connectez-vous"
-    : active
-    ? "Supprimer des favoris"
-    : "Ajouter aux favoris";
+  $: {
+    if (disabled) {
+      title = "Connectez-vous";
+    } else if (active) {
+      title = "Supprimer des favoris";
+    } else {
+      title = "Ajouter aux favoris";
+    }
+  }
 </script>
 
 <button

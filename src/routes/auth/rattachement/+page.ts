@@ -2,8 +2,8 @@ import type { Establishment } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
 import type { PageLoad } from "./$types";
 
-function siretSearch(s) {
-  const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(s)}`;
+function siretSearch(siret: string) {
+  const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(siret)}`;
 
   return fetch(url, {
     headers: {

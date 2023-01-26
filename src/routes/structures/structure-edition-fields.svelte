@@ -13,12 +13,12 @@
   export let structure: Structure;
   export let structuresOptions: StructuresOptions;
 
-  function getAccessLibreUrl(structure: Structure) {
-    const department = getDepartmentFromCityCode(structure.cityCode);
-    const where = encodeURIComponent(`${structure.city} (${department})`);
-    const lat = encodeURIComponent(structure.latitude);
-    const long = encodeURIComponent(structure.longitude);
-    const code = encodeURIComponent(structure.cityCode);
+  function getAccessLibreUrl(struct: Structure) {
+    const department = getDepartmentFromCityCode(struct.cityCode);
+    const where = encodeURIComponent(`${struct.city} (${department})`);
+    const lat = encodeURIComponent(struct.latitude);
+    const long = encodeURIComponent(struct.longitude);
+    const code = encodeURIComponent(struct.cityCode);
     return `https://acceslibre.beta.gouv.fr/recherche/?what=&where=${where}&lat=${lat}&lon=${long}&code=${code}`;
   }
 

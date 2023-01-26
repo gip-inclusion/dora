@@ -6,7 +6,7 @@
     acceptServiceSuggestion,
     deleteServiceSuggestion,
   } from "$lib/requests/services";
-  import COntributionModal from "./contribution-modal.svelte";
+  import ContributionModal from "./contribution-modal.svelte";
 
   export let suggestions;
   export let onRefresh;
@@ -49,11 +49,11 @@
   }
 </script>
 
-<COntributionModal
+<ContributionModal
   bind:isOpen={suggestionModalIsOpen}
   suggestion={currentSuggestion}
-  onAccept={(s) => handleAccept(s)}
-  onReject={(s) => handleReject(s)}
+  onAccept={(suggestion) => handleAccept(suggestion)}
+  onReject={(suggestion) => handleReject(suggestion)}
 />
 
 <div class="flex w-full flex-col gap-s12">

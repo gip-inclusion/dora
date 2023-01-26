@@ -14,11 +14,11 @@
   let wrapper;
 
   onMount(() => {
-    const bp = window
+    const breakPoint = window
       .getComputedStyle(wrapper, ":before")
       .content.replace(/"/gu, "");
 
-    collapsed = bp === "xs" || bp === "md";
+    collapsed = breakPoint === "xs" || breakPoint === "md";
   });
 
   function toggleFold() {

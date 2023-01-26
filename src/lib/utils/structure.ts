@@ -6,32 +6,6 @@ import type {
   OsmPeriodDay,
 } from "$lib/types";
 
-export function fromJsonToOsmString(data: OsmOpeningHours) {
-  if (
-    isDayValid(data.monday) &&
-    isDayValid(data.tuesday) &&
-    isDayValid(data.wednesday) &&
-    isDayValid(data.thursday) &&
-    isDayValid(data.friday) &&
-    isDayValid(data.saturday) &&
-    isDayValid(data.sunday)
-  ) {
-    return [
-      formatDay(data.monday, "Mo"),
-      formatDay(data.tuesday, "Tu"),
-      formatDay(data.wednesday, "We"),
-      formatDay(data.thursday, "Th"),
-      formatDay(data.friday, "Fr"),
-      formatDay(data.saturday, "Sa"),
-      formatDay(data.sunday, "Su"),
-    ]
-      .filter(Boolean)
-      .join(";");
-  }
-  // TODO: vérifier le meilleur moyen de propager l'erreur
-  return null;
-}
-
 function formatDay(lineday: OsmDay, prefix: DayPrefix): string | undefined {
   const { timeSlot1, timeSlot2 } = lineday;
 
@@ -54,16 +28,57 @@ function formatDay(lineday: OsmDay, prefix: DayPrefix): string | undefined {
   return str;
 }
 
-function isDayValid(lineday: OsmDay): boolean {
-  return (
-    isPeriodDayValid(lineday.timeSlot1) && isPeriodDayValid(lineday.timeSlot2)
-  );
-}
 function isPeriodDayValid(period: OsmPeriodDay): boolean {
   if (!period.isOpen) {
     return true;
   }
   return !!period.closeAt && !!period.openAt;
+}
+
+function isDayValid(lineday: OsmDay): boolean {
+  return (
+    isPeriodDayValid(lineday.timeSlot1) && isPeriodDayValid(lineday.timeSlot2)
+  );
+}
+
+// On se base sur l'heure pour déterminer s'il s'agit d'une horaire d'après-midi ou non
+// Note : une méthode plus fiable est-elle possible ?
+function isAfternoonHour(hour: string): boolean {
+  const hourStart = hour.substring(0, 2);
+  return Number.parseInt(hourStart) > 12;
+}
+
+export function returnEmptyHoursData(): OsmOpeningHours {
+  return {
+    monday: {
+      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+    },
+    tuesday: {
+      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+    },
+    wednesday: {
+      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+    },
+    thursday: {
+      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+    },
+    friday: {
+      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+    },
+    saturday: {
+      timeSlot1: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+    },
+    sunday: {
+      timeSlot1: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+    },
+  };
 }
 
 export function getHoursFromStr(value: string): OsmOpeningHours {
@@ -145,44 +160,12 @@ export function getHoursFromStr(value: string): OsmOpeningHours {
   return baseObject;
 }
 
-export function returnEmptyHoursData(): OsmOpeningHours {
-  return {
-    monday: {
-      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-    },
-    tuesday: {
-      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-    },
-    wednesday: {
-      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-    },
-    thursday: {
-      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-    },
-    friday: {
-      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-    },
-    saturday: {
-      timeSlot1: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-    },
-    sunday: {
-      timeSlot1: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-    },
-  };
-}
-
-// On se base sur l'heure pour déterminer s'il s'agit d'une horaire d'après-midi ou non
-// Note : une méthode plus fiable est-elle possible ?
-function isAfternoonHour(hour: string): boolean {
-  const hourStart = hour.substring(0, 2);
-  return Number.parseInt(hourStart) > 12;
+// 09:00-12:00,14:00-18:30 => 09h00 - 12:00 / 14h00 - 18h30
+function formatHour(hour: string) {
+  hour = hour.replace(/-/g, " - ");
+  hour = hour.replace(/:/g, "h");
+  hour = hour.replace(/,/g, " / ");
+  return hour;
 }
 
 export function formatOsmHours(value: string) {
@@ -233,10 +216,28 @@ export function formatOsmHours(value: string) {
   ].filter(Boolean);
 }
 
-// 09:00-12:00,14:00-18:30 => 09h00 - 12:00 / 14h00 - 18h30
-function formatHour(hour: string) {
-  hour = hour.replace(/-/g, " - ");
-  hour = hour.replace(/:/g, "h");
-  hour = hour.replace(/,/g, " / ");
-  return hour;
+export function fromJsonToOsmString(data: OsmOpeningHours) {
+  if (
+    isDayValid(data.monday) &&
+    isDayValid(data.tuesday) &&
+    isDayValid(data.wednesday) &&
+    isDayValid(data.thursday) &&
+    isDayValid(data.friday) &&
+    isDayValid(data.saturday) &&
+    isDayValid(data.sunday)
+  ) {
+    return [
+      formatDay(data.monday, "Mo"),
+      formatDay(data.tuesday, "Tu"),
+      formatDay(data.wednesday, "We"),
+      formatDay(data.thursday, "Th"),
+      formatDay(data.friday, "Fr"),
+      formatDay(data.saturday, "Sa"),
+      formatDay(data.sunday, "Su"),
+    ]
+      .filter(Boolean)
+      .join(";");
+  }
+  // TODO: vérifier le meilleur moyen de propager l'erreur
+  return null;
 }

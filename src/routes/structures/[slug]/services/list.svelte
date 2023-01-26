@@ -136,8 +136,8 @@
     },
   ];
 
-  function sortService(se) {
-    let sse = se.sort((a, b) => {
+  function sortService(services) {
+    let sortedServices = services.sort((a, b) => {
       let diff =
         new Date(b.modificationDate).getTime() -
         new Date(a.modificationDate).getTime();
@@ -155,10 +155,33 @@
     });
 
     if (limit) {
-      sse = sse.slice(0, limit);
+      sortedServices = sortedServices.slice(0, limit);
+    }
+    return sortedServices;
+  }
+
+  function filterAndSortServices(services) {
+    if (serviceStatus) {
+      // By status
+      if (serviceStatus === "ARCHIVED") {
+        services = structure.archivedServices;
+      } else {
+        services = structure.services.filter(
+          (service) => service.status === serviceStatus
+        );
+      }
     }
 
-    return sse;
+    // By update status
+    if (updateStatus) {
+      services = services.filter((service) =>
+        updateStatus === "ALL"
+          ? computeUpdateStatusData(service).updateStatus !== "NOT_NEEDED"
+          : computeUpdateStatusData(service).updateStatus === updateStatus
+      );
+    }
+
+    return sortService(services);
   }
 
   function handleEltChange(event) {
@@ -170,28 +193,6 @@
     }
     servicesDisplayed = filterAndSortServices(structure.services);
     updateUrlQueryParams();
-  }
-
-  function filterAndSortServices(services) {
-    if (serviceStatus) {
-      // By status
-      if (serviceStatus === "ARCHIVED") {
-        services = structure.archivedServices;
-      } else {
-        services = structure.services.filter((s) => s.status === serviceStatus);
-      }
-    }
-
-    // By update status
-    if (updateStatus) {
-      services = services.filter((s) =>
-        updateStatus === "ALL"
-          ? computeUpdateStatusData(s).updateStatus !== "NOT_NEEDED"
-          : computeUpdateStatusData(s).updateStatus === updateStatus
-      );
-    }
-
-    return sortService(services);
   }
 
   $: servicesDisplayed = filterAndSortServices(structure.services);

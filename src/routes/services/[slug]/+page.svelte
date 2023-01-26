@@ -45,7 +45,7 @@
 
   $: showContact = data.service?.isContactInfoPublic || $token;
   $: structureHasPublishedServices = data.structure?.services.filter(
-    (s) => s.status === "PUBLISHED"
+    (service) => service.status === "PUBLISHED"
   ).length;
 </script>
 

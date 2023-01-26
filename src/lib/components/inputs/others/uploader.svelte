@@ -12,7 +12,7 @@
   let uploadInput: HTMLInputElement;
 
   function handleRemove(fileKey) {
-    fileKeys = fileKeys.filter((k) => k !== fileKey);
+    fileKeys = fileKeys.filter((key) => key !== fileKey);
   }
 
   function handleSubmit() {
@@ -42,9 +42,9 @@
       request.setRequestHeader("Accept", "application/json; version=1.0");
 
       // upload progress event
-      request.upload.addEventListener("progress", (e) => {
+      request.upload.addEventListener("progress", (event) => {
         // upload progress as percentage
-        updateProgress(e.loaded, e.total);
+        updateProgress(event.loaded, event.total);
       });
 
       // request finished event

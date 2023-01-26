@@ -15,22 +15,22 @@
   export let wFull = false;
   export let preventDefaultOnMouseDown = false;
 
-  let px: string, py: string, ts: string;
+  let paddingX: string, paddingY: string, textSize: string;
 
   if (small) {
-    py = "py-s6";
-    ts = "text-f14";
+    paddingY = "py-s6";
+    textSize = "text-f14";
   } else {
-    py = "py-s12";
-    ts = "text-f16";
+    paddingY = "py-s12";
+    textSize = "text-f16";
   }
 
   if (noPadding) {
-    px = "";
+    paddingX = "";
   } else if (small) {
-    px = label ? "px-s12" : "px-s8";
+    paddingX = label ? "px-s12" : "px-s8";
   } else {
-    px = "px-s20";
+    paddingX = "px-s20";
   }
 
   let border: string, text: string, background: string;
@@ -55,8 +55,8 @@
     }
   }
 
-  const iw = small ? "w-s24" : "w-s32";
-  const ih = small ? "h-s24" : "h-s32";
+  const iconWidth = small ? "w-s24" : "w-s32";
+  const iconHeight = small ? "h-s24" : "h-s32";
 
   function handleMouseDown(evt) {
     if (preventDefaultOnMouseDown) {
@@ -69,7 +69,7 @@
   {id}
   {type}
   {name}
-  class="{px} {py} {ts} {border} {text} {extraClass} {background}  break-words rounded leading-normal outline-none focus:shadow-focus"
+  class="{paddingX} {paddingY} {textSize} {border} {text} {extraClass} {background}  break-words rounded leading-normal outline-none focus:shadow-focus"
   class:w-full={wFull}
   class:hover:underline={hoverUnderline}
   class:flex={icon}
@@ -81,7 +81,7 @@
 >
   {#if icon && !iconOnRight}
     <span
-      class="{iw} {ih} fill-current"
+      class="{iconWidth} {iconHeight} fill-current"
       class:mr-s8={!!label}
       class:-my-s2={small}
     >
@@ -92,7 +92,10 @@
   {label}
 
   {#if iconOnRight}
-    <span class="{iw} {ih} ml-s8 justify-end fill-current" class:-my-s2={small}>
+    <span
+      class="{iconWidth} {iconHeight} ml-s8 justify-end fill-current"
+      class:-my-s2={small}
+    >
       {@html icon}
     </span>
   {/if}

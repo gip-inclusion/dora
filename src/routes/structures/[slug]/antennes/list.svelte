@@ -17,21 +17,23 @@
   let filters;
   let branchesFiltered = [];
 
-  function branchesFilter(br) {
-    let bb = br.filter(
+  function branchesFilter(allBranches) {
+    let filteredBranches = allBranches.filter(
       (b) =>
         (departement === "tous" || b.department === departement) &&
         (!filters ||
           filters
             .split(" ")
-            .every((f) => b.name.toLowerCase().includes(f.toLowerCase())))
+            .every((filter) =>
+              b.name.toLowerCase().includes(filter.toLowerCase())
+            ))
     );
 
     if (limit) {
-      bb = bb.slice(0, limit);
+      filteredBranches = filteredBranches.slice(0, limit);
     }
 
-    return bb;
+    return filteredBranches;
   }
 
   $: structureFrontEndLink = `${CANONICAL_URL}/structures/${encodeURIComponent(
@@ -41,12 +43,12 @@
     structure.slug
   )}`;
   $: departements = branches.reduce(
-    (acc, b) => {
-      if (!acc.map((d) => d.value).includes(b.department)) {
-        acc.push({ value: b.department, label: b.department });
+    (depts, branch) => {
+      if (!depts.map((dept) => dept.value).includes(branch.department)) {
+        depts.push({ value: branch.department, label: branch.department });
       }
 
-      return acc;
+      return depts;
     },
     [{ value: "tous", label: "Tous" }]
   );

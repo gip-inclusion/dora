@@ -37,19 +37,14 @@
 
   let cityChoiceList;
 
-  function handleSearchIfNotDisabled() {
-    if (cityCode && subCategoryIds.length) {
-      handleSearch();
-    }
-  }
   function handleSearch() {
     const categoryIds = subCategoryIds
-      .filter((v) => v.endsWith("--all"))
-      .map((v) => v.replace("--all", ""));
+      .filter((value) => value.endsWith("--all"))
+      .map((value) => value.replace("--all", ""));
 
     // Remove sub-categories ending with --all
     const finalSubCategoryIds = subCategoryIds.filter(
-      (v) => !v.endsWith("--all")
+      (value) => !value.endsWith("--all")
     );
 
     const query = getQuery({
@@ -61,6 +56,12 @@
       feeConditions,
     });
     goto(`recherche?${query}`);
+  }
+
+  function handleSearchIfNotDisabled() {
+    if (cityCode && subCategoryIds.length) {
+      handleSearch();
+    }
   }
 
   const categories = servicesOptions.categories

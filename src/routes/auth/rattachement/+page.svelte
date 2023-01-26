@@ -17,6 +17,7 @@
   export let data: PageData;
 
   let { establishment } = data;
+  let ctaLabel = "";
 
   async function handleJoin() {
     trackJoinStructure();
@@ -54,11 +55,21 @@
   }
 
   $: alreadyMember = $userInfo?.structures
-    ?.map((s) => s.siret)
+    ?.map((struct) => struct.siret)
     ?.includes(establishment?.siret);
   $: alreadyRequested = $userInfo?.pendingStructures
-    ?.map((s) => s.siret)
+    ?.map((struct) => struct.siret)
     ?.includes(establishment?.siret);
+
+  $: {
+    if (alreadyRequested) {
+      ctaLabel = "Relancer l’administrateur";
+    } else if (alreadyMember) {
+      ctaLabel = "Accéder à la structure";
+    } else {
+      ctaLabel = "Adhérer à la structure";
+    }
+  }
 </script>
 
 <EnsureLoggedIn>
@@ -87,11 +98,7 @@
             {/if}
             <div class="mt-s24 flex justify-end">
               <Button
-                label={alreadyRequested
-                  ? "Relancer l’administrateur"
-                  : alreadyMember
-                  ? "Accéder à la structure"
-                  : "Adhérer à la structure"}
+                label={ctaLabel}
                 on:click={handleJoin}
                 preventDefaultOnMouseDown
               />

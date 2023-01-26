@@ -12,11 +12,11 @@ async function getServicesEntries() {
   const response = await getPublishedServices();
 
   return response
-    .filter((s) => (s.status = "PUBLISHED")) // Pas indispensable, mais c'est une sécurité supplémentaire
-    .map((s) =>
+    .filter((service) => (service.status = "PUBLISHED")) // Pas indispensable, mais c'est une sécurité supplémentaire
+    .map((service) =>
       `<url>
-      <loc>${CANONICAL_URL}/services/${s.slug}</loc>
-      <lastmod>${toISODate(s.modificationDate)}</lastmod>
+      <loc>${CANONICAL_URL}/services/${service.slug}</loc>
+      <lastmod>${toISODate(service.modificationDate)}</lastmod>
       <priority>0.5</priority>
     </url>`.trim()
     )
@@ -26,10 +26,10 @@ async function getServicesEntries() {
 async function getStructuresEntries() {
   const response = await getActiveStructures();
   return response
-    .map((s) =>
+    .map((structure) =>
       `<url>
-      <loc>${CANONICAL_URL}/structures/${s.slug}</loc>
-      <lastmod>${toISODate(s.modificationDate)}</lastmod>
+      <loc>${CANONICAL_URL}/structures/${structure.slug}</loc>
+      <lastmod>${toISODate(structure.modificationDate)}</lastmod>
       <priority>0.7</priority>
     </url>`.trim()
     )
@@ -38,9 +38,9 @@ async function getStructuresEntries() {
 
 function getStaticEntries() {
   return ["contribuer"]
-    .map((s) =>
+    .map((entry) =>
       `<url>
-    <loc>${CANONICAL_URL}/${s}</loc>
+    <loc>${CANONICAL_URL}/${entry}</loc>
     <priority>1</priority>
   </url>`.trim()
     )
@@ -48,7 +48,6 @@ function getStaticEntries() {
 }
 
 async function getContent() {
-  console.log(getStaticEntries());
   const content = `
   <?xml version="1.0" encoding="UTF-8" ?>
     <urlset

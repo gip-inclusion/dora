@@ -8,7 +8,7 @@
   import { structure } from "./store";
 
   $: publishedServices = $structure.services.filter(
-    (s) => s.status === "PUBLISHED"
+    (service) => service.status === "PUBLISHED"
   );
 </script>
 

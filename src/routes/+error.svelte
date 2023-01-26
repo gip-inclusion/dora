@@ -5,6 +5,9 @@
   import { trackError } from "$lib/utils/plausible";
   import { onMount } from "svelte";
 
+  const notFound = $page.status === 404;
+  const forbidden = $page.status === 403;
+
   onMount(() => {
     trackError(`${$page.status}`, document.location.pathname);
 
@@ -12,9 +15,6 @@
       logException($page.error);
     }
   });
-
-  const notFound = $page.status === 404;
-  const forbidden = $page.status === 403;
 </script>
 
 <svelte:head>

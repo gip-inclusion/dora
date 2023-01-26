@@ -9,9 +9,7 @@
   export let isOwnStructure = true;
 
   export let onCityChange: (newCity: GeoApiCity | null) => void;
-  export let onEstablishmentChange: (
-    establishment: Establishment | null
-  ) => void;
+  export let onEstablishmentChange: (estab: Establishment | null) => void;
 
   let city: GeoApiCity | null;
 
@@ -30,11 +28,11 @@
     }
   }
 
-  async function searchSirene(q) {
+  async function searchSirene(query) {
     if (city) {
       const url = `${getApiURL()}/search-sirene/${
         city.code
-      }/?q=${encodeURIComponent(q)}`;
+      }/?q=${encodeURIComponent(query)}`;
 
       const response = await fetch(url, {
         headers: {
@@ -54,6 +52,7 @@
       });
       return results;
     }
+    return [];
   }
 
   const structureLabel = isOwnStructure

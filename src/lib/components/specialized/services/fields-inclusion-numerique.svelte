@@ -122,14 +122,13 @@
     },
   ].filter(existInServicesOptionsKinds);
 
-  function updateServicePresentation(subcategories) {
+  function updateServicePresentation(subcats) {
     service.name = "Médiation numérique";
     service.shortDesc = `${
       structure.name
-    } propose des services : ${subcategories.slice(
-      0,
-      253 - structure.name.length
-    )}${subcategories.length > 253 - structure.name.length ? "…" : ""}`;
+    } propose des services : ${subcats.slice(0, 253 - structure.name.length)}${
+      subcats.length > 253 - structure.name.length ? "…" : ""
+    }`;
   }
 
   function setCategories(categories = ["numerique"]) {
@@ -199,10 +198,10 @@
     setLocationKinds();
   });
 
-  function handleSubcategoriesChange(subcategories) {
+  function handleSubcategoriesChange(subcats) {
     updateServicePresentation(
       servicesOptions.subcategories
-        .filter((subcategory) => subcategories.includes(subcategory.value))
+        .filter((subcategory) => subcats.includes(subcategory.value))
         .map((subcategory) => subcategory.label)
         .join(", ")
     );

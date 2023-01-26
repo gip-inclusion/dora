@@ -9,32 +9,34 @@ import { structure } from "./store";
 export const load: LayoutLoad = async ({ params, parent }) => {
   await parent();
 
-  const s = await getStructure(params.slug);
+  const currentStructure = await getStructure(params.slug);
   let preferences: UserPreferences;
   let info: UserInfo;
 
-  userPreferences.subscribe((p) => {
-    preferences = p;
+  userPreferences.subscribe((pref) => {
+    preferences = pref;
   });
 
-  userInfo.subscribe((u: UserInfo) => {
-    info = u;
+  userInfo.subscribe((newUserInfo: UserInfo) => {
+    info = newUserInfo;
   });
 
   if (info && preferences) {
     const userStructuresSlugs = [
       ...info.pendingStructures,
       ...info.structures,
-    ].map((us) => us.slug);
+    ].map((struct) => struct.slug);
 
-    if (userStructuresSlugs.includes(s.slug)) {
-      const slugIndex = preferences.visitedStructures.indexOf(s.slug);
+    if (userStructuresSlugs.includes(currentStructure.slug)) {
+      const slugIndex = preferences.visitedStructures.indexOf(
+        currentStructure.slug
+      );
 
       if (slugIndex > 0) {
         preferences.visitedStructures.splice(slugIndex, 1);
       }
 
-      preferences.visitedStructures.unshift(s.slug);
+      preferences.visitedStructures.unshift(currentStructure.slug);
 
       localStorage.setItem(
         "visitedStructures",
@@ -45,15 +47,15 @@ export const load: LayoutLoad = async ({ params, parent }) => {
     }
   }
 
-  if (!s) {
+  if (!currentStructure) {
     throw error(404, "Page Not Found");
   }
 
   // TODO: can we get rid of this store, and just cascade the structure?
-  structure.set(s);
-  trackStructure(s);
+  structure.set(currentStructure);
+  trackStructure(currentStructure);
 
   return {
-    structure: s,
+    structure: currentStructure,
   };
 };

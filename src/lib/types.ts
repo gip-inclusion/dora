@@ -28,6 +28,8 @@ export type GeoApiCity = {
 
 export type LocationKind = "a-distance" | "en-presentiel";
 
+export type ServiceStatus = "DRAFT" | "SUGGESTION" | "PUBLISHED" | "ARCHIVED";
+
 export interface StructureService {
   address1: string;
   address2: string;
@@ -88,6 +90,11 @@ export interface ShortStructure {
   siret: string;
   slug: string;
   typologyDisplay: string;
+}
+
+export interface StructureSource {
+  value: string;
+  label: string;
 }
 
 export interface Structure {
@@ -165,11 +172,6 @@ export interface StructuresOptions {
   typologies: Typology[];
 }
 
-export interface StructureSource {
-  value: string;
-  label: string;
-}
-
 // OSM hours format
 export type OsmPeriodDay = {
   isOpen: boolean;
@@ -194,7 +196,6 @@ export type OsmOpeningHours = {
 };
 
 // SERVICES
-export type ServiceStatus = "DRAFT" | "SUGGESTION" | "PUBLISHED" | "ARCHIVED";
 
 export type ServiceUpdateStatus = "NOT_NEEDED" | "NEEDED" | "REQUIRED" | "ALL";
 
@@ -383,11 +384,6 @@ export interface Service {
   useInclusionNumeriqueScheme: boolean;
 }
 
-export interface Bookmark {
-  service: ShortService;
-  creationDate: string;
-}
-
 export interface ShortService {
   categoriesDisplay: string[];
   category: string;
@@ -412,6 +408,11 @@ export interface ShortService {
   structure: string;
   structureInfo: ServiceStructure;
   useInclusionNumeriqueScheme: boolean;
+}
+
+export interface Bookmark {
+  service: ShortService;
+  creationDate: string;
 }
 
 export interface CustomChoice {

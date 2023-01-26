@@ -15,20 +15,20 @@
 
   let haveSameValue = false;
 
-  function compare(a, b) {
+  function compare(val1, val2) {
     if (type === "array" || type === "files") {
-      return arraysCompare(a, b);
+      return arraysCompare(val1, val2);
     }
 
     // tiptap insère des caractères en fin de chaine.
     // on les supprime pour faire la comparaison
     if (type === "markdown") {
-      const bb = b.replace(/\n\n$/u, "");
+      const trimmedVal2 = val2.replace(/\n\n$/u, "");
 
-      return a === bb;
+      return val1 === trimmedVal2;
     }
 
-    return a === b;
+    return val1 === val2;
   }
 
   function handleUseValue(_evt: MouseEvent) {
@@ -63,7 +63,10 @@
           {:else if type === "array"}
             <div class="flex flex-wrap gap-s8">
               {#each value as v}
-                <Tag>{options.find((o) => o.value === v)?.label || v}</Tag>
+                <Tag
+                  >{options.find((option) => option.value === v)?.label ||
+                    v}</Tag
+                >
               {/each}
             </div>
           {:else if type === "files"}

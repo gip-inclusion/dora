@@ -6,7 +6,7 @@ import insane from "insane";
 import showdown from "showdown";
 import { get } from "svelte/store";
 
-export function markdownToHTML(md: string, titleLevel = 2) {
+export function markdownToHTML(markdownContent: string, titleLevel = 2) {
   const converter = new showdown.Converter({
     headerLevelStart: titleLevel,
     tables: true,
@@ -14,7 +14,7 @@ export function markdownToHTML(md: string, titleLevel = 2) {
     simplifiedAutoLink: true,
   });
 
-  return insane(converter.makeHtml(md));
+  return insane(converter.makeHtml(markdownContent));
 }
 
 export function htmlToMarkdown(html: string) {
@@ -28,10 +28,10 @@ export function htmlToMarkdown(html: string) {
 
 export async function fetchData<T>(url: string) {
   const headers = { Accept: defaultAcceptHeader };
-  const tk = get(token);
+  const currentToken = get(token);
 
-  if (tk) {
-    headers.Authorization = `Token ${tk}`;
+  if (currentToken) {
+    headers.Authorization = `Token ${currentToken}`;
   }
 
   const response = await fetch(url, {
@@ -110,6 +110,7 @@ export function addlinkToUrls(text) {
       (url) =>
         `<a href="${url}" class="underline" rel="noopener nofollow">${url}</a>`
     ),
+    // eslint-disable-next-line id-length
     { allowedTags: ["a"], allowedAttributes: { a: ["class", "rel", "href"] } }
   );
 }
@@ -120,13 +121,13 @@ export function moveToTheEnd(
   value,
   { sortBeginning = false, sortKey = "label" } = {}
 ) {
-  const elementsToMove = array.filter((e) => e[key] === value);
+  const elementsToMove = array.filter((elt) => elt[key] === value);
 
   if (!elementsToMove.length) {
     return array;
   }
 
-  let beginning = array.filter((e) => e[key] !== value);
+  let beginning = array.filter((elt) => elt[key] !== value);
   if (sortBeginning) {
     beginning = beginning.sort((a, b) =>
       a[sortKey].localeCompare(b[sortKey], "fr", { numeric: true })
@@ -141,8 +142,8 @@ export function orderAndReformatSubcategories(
   categoriesValues,
   servicesOptions
 ) {
-  const selectedCategories = servicesOptions.categories.filter((so) =>
-    categoriesValues.includes(so.value)
+  const selectedCategories = servicesOptions.categories.filter((option) =>
+    categoriesValues.includes(option.value)
   );
 
   return moveToTheEnd(subcategoriesValues, "label", "Autre", {

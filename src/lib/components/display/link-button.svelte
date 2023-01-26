@@ -16,20 +16,20 @@
 
   export let wFull = false;
 
-  let px: string, py: string, ts: string;
+  let paddingX: string, paddingY: string, textSize: string;
 
   if (small) {
-    py = "py-s6";
-    ts = "text-f14";
+    paddingY = "py-s6";
+    textSize = "text-f14";
   } else {
-    py = "py-s12";
-    ts = "text-f16";
+    paddingY = "py-s12";
+    textSize = "text-f16";
   }
 
   if (small) {
-    px = label ? "px-s12" : "px-s8";
+    paddingX = label ? "px-s12" : "px-s8";
   } else {
-    px = "px-s20";
+    paddingX = "px-s20";
   }
 
   let border: string, text: string, background: string;
@@ -56,8 +56,8 @@
     }
   }
 
-  const iw = "w-s24";
-  const ih = "h-s24";
+  const iconWidth = "w-s24";
+  const iconHeight = "h-s24";
 </script>
 
 <a
@@ -67,14 +67,14 @@
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
   on:click
-  class="{px} {py} {ts} {border} {text} {background} {extraClass} inline-flex items-center justify-center whitespace-nowrap rounded leading-normal focus:shadow-focus"
+  class="{paddingX} {paddingY} {textSize} {border} {text} {background} {extraClass} inline-flex items-center justify-center whitespace-nowrap rounded leading-normal focus:shadow-focus"
   class:w-full={wFull}
   class:hover:underline={hoverUnderline}
   aria-label={ariaLabel}
 >
   {#if icon && !iconOnRight}
     <i
-      class="{iw} {ih} shrink-0 fill-current"
+      class="{iconWidth} {iconHeight} shrink-0 fill-current"
       class:mr-s8={!!label}
       class:-my-s2={small}
     >
@@ -85,7 +85,10 @@
   {label}
 
   {#if iconOnRight}
-    <i class="{iw} {ih} ml-s8 shrink-0 fill-current" class:-my-s2={small}>
+    <i
+      class="{iconWidth} {iconHeight} ml-s8 shrink-0 fill-current"
+      class:-my-s2={small}
+    >
       {@html icon}
     </i>
   {/if}

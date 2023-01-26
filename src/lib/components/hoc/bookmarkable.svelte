@@ -10,7 +10,7 @@
   }
 
   $: isBookmarked = $userInfo?.bookmarks
-    .map((b) => b.service.slug)
+    .map((bookmark) => bookmark.service.slug)
     .includes(slug);
 </script>
 

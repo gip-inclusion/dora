@@ -27,6 +27,7 @@ import type {
 } from "$lib/types";
 import dayjs from "dayjs";
 import { getChoicesFromKey } from "./choice";
+import { log } from "./logger";
 
 export function getAvailableOptionsForStatus(
   status: ServiceStatus
@@ -161,22 +162,26 @@ export function getCategoryIcon(slug: string) {
   if ("emploi-trouver-emploi" === slug) {
     return serviceIcon;
   }
+  log(`Pas d'icone définie pour la thématique ${slug}`);
+  return null;
 }
 
 export function getCategoryLabel(
   slug: string,
   servicesOptions: ServicesOptions
 ) {
-  const cat = servicesOptions.categories.find((s) => s.value === slug);
-  return cat.label ?? "";
+  const category = servicesOptions.categories.find((cat) => cat.value === slug);
+  return category.label ?? "";
 }
 
 export function getSubCategoryLabel(
   slug: string,
   servicesOptions: ServicesOptions
 ) {
-  const subCat = servicesOptions.subcategories.find((s) => s.value === slug);
-  return subCat.label ?? "";
+  const subCategory = servicesOptions.subcategories.find(
+    (subCat) => subCat.value === slug
+  );
+  return subCategory.label ?? "";
 }
 
 export function formatFilePath(filePath: string) {

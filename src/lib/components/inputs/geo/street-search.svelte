@@ -17,9 +17,9 @@
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
 
-  async function searchAddress(q) {
+  async function searchAddress(query) {
     const url = `${banAPIUrl}?q=${encodeURIComponent(
-      q
+      query
     )}&limit=10&citycode=${cityCode}&type=street&type=housenumber`;
     const response = await fetch(url);
     const jsonResponse = await response.json();

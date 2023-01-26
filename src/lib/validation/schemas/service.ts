@@ -9,7 +9,7 @@ import * as v from "./utils";
 export function allCategoriesHaveSubcategories() {
   return (name, value, data, servicesOptions: ServicesOptions) => {
     const subcatRoots = new Set(
-      data.subcategories.map((value) => value.split("--")[0])
+      data.subcategories.map((val) => val.split("--")[0])
     );
 
     if (!servicesOptions) {
@@ -19,10 +19,10 @@ export function allCategoriesHaveSubcategories() {
       };
     }
     const catWithoutSubCat = data.categories
-      .filter((value) => !subcatRoots.has(value))
+      .filter((val) => !subcatRoots.has(val))
       .map(
-        (value) =>
-          servicesOptions.categories.find((cat) => cat.value === value).label
+        (val) =>
+          servicesOptions.categories.find((cat) => cat.value === val).label
       );
     return {
       valid: catWithoutSubCat.length === 0,

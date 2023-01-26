@@ -15,25 +15,25 @@
 
   const types = {
     info: {
-      bg: "bg-info-light",
+      background: "bg-info-light",
       text: "text-info",
       title: "text-france-blue",
       icon: informationIcon,
     },
     success: {
-      bg: "bg-success-light",
+      background: "bg-success-light",
       text: "text-success",
       title: "text-success",
       icon: checkboxCircleFillIcon,
     },
     warning: {
-      bg: "bg-warning-light",
+      background: "bg-warning-light",
       text: "text-warning",
       title: "text-warning",
       icon: alertIcon,
     },
     error: {
-      bg: "bg-error-light",
+      background: "bg-error-light",
       text: "text-error",
       title: "text-error",
       icon: closeCircleIcon,
@@ -49,7 +49,7 @@
 
 {#if visible}
   <div
-    class="flex rounded-lg {types[type].bg} py-s24 pr-s24 pl-s24"
+    class="flex rounded-lg {types[type].background} py-s24 pr-s24 pl-s24"
     class:pl-s8={showIcon}
   >
     {#if showIcon}

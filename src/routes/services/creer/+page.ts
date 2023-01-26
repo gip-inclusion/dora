@@ -49,7 +49,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     structure = structures[0];
   } else if (structureSlug) {
     // si la structure est renseignée dans l'URL, force celle-là
-    structure = structures.find((s) => s.slug === structureSlug);
+    structure = structures.find((struct) => struct.slug === structureSlug);
     service.structure = structureSlug;
   }
 

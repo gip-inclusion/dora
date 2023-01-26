@@ -35,7 +35,7 @@
   let requesting = false;
 
   function handleSubmit(validatedData) {
-    const membersEmails = members.map((m) => m.user.email);
+    const membersEmails = members.map((member) => member.user.email);
     if (membersEmails.includes(validatedData.email)) {
       return {
         ok: false,

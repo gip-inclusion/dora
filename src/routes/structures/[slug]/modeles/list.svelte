@@ -21,8 +21,8 @@
   let modelsOrdered;
   let filters;
 
-  function modelsOrder(se) {
-    let ss = se
+  function modelsOrder(allModels) {
+    let sortedModels = allModels
       .sort((a, b) => {
         if (order === "alpha") {
           return a.name.localeCompare(b.name, "fr", { numeric: true });
@@ -31,18 +31,20 @@
         return new Date(b.modificationDate) - new Date(a.modificationDate);
       })
       .filter(
-        (s) =>
+        (model) =>
           !filters ||
           filters
             .split(" ")
-            .every((f) => s.name.toLowerCase().includes(f.toLowerCase()))
+            .every((filter) =>
+              model.name.toLowerCase().includes(filter.toLowerCase())
+            )
       );
 
     if (limit) {
-      ss = ss.slice(0, limit);
+      sortedModels = sortedModels.slice(0, limit);
     }
 
-    return ss;
+    return sortedModels;
   }
 
   $: canEdit = structure.isMember || $userInfo?.isStaff;
