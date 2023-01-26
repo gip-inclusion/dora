@@ -6,7 +6,7 @@
   import { getApiURL } from "$lib/utils/api";
   import { userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
-  import SuggestionConfirmationModal from "./suggestion-confirmation-modal.svelte";
+  import FeedbackConfirmationModal from "./feedback-confirmation-modal.svelte";
   import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
   import TextareaField from "$lib/components/inputs/textarea-field.svelte";
   import * as v from "$lib/validation/schemas/utils";
@@ -18,7 +18,7 @@
   let confirmationModalIsOpen = false;
   let requesting = false;
 
-  const suggestionSchema: v.Schema = {
+  const feedbackSchema: v.Schema = {
     fullName: {
       label: "Nom",
       default: "",
@@ -81,7 +81,7 @@
 <Modal bind:isOpen title="Suggestion">
   <Form
     bind:data={formData}
-    schema={suggestionSchema}
+    schema={feedbackSchema}
     onChange={handleChange}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
@@ -136,4 +136,4 @@
     </div>
   </Form>
 </Modal>
-<SuggestionConfirmationModal bind:isOpen={confirmationModalIsOpen} />
+<FeedbackConfirmationModal bind:isOpen={confirmationModalIsOpen} />

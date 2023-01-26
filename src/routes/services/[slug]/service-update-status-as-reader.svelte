@@ -4,8 +4,8 @@
   import DateLabel from "$lib/components/utilities/date-label.svelte";
   import { editIcon } from "$lib/icons";
   import type { Service, ServiceUpdateStatus } from "$lib/types";
-  import { trackSuggestion } from "$lib/utils/plausible";
-  import SuggestionModal from "./suggestion-modal.svelte";
+  import { trackFeedback } from "$lib/utils/plausible";
+  import FeedbackModal from "./feedback-modal.svelte";
 
   export let service: Service;
 
@@ -13,12 +13,11 @@
   export let monthDiff: number;
   export let updateStatus: ServiceUpdateStatus;
 
-  // Suggestion modal
-  let suggestionModalIsOpen = false;
+  let feedbackModalIsOpen = false;
 
-  function handleSuggestion() {
-    suggestionModalIsOpen = true;
-    trackSuggestion(service);
+  function handleFeedback() {
+    feedbackModalIsOpen = true;
+    trackFeedback(service);
   }
 </script>
 
@@ -84,15 +83,15 @@
   </div>
 
   <div class="print:hidden">
-    <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
+    <FeedbackModal {service} bind:isOpen={feedbackModalIsOpen} />
     <Button
-      id="suggest-update"
+      id="feedback-update"
       label="Suggérer une modification"
       icon={editIcon}
       secondary
       small
       extraClass="py-s9"
-      on:click={handleSuggestion}
+      on:click={handleFeedback}
     />
   </div>
 </div>

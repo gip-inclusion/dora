@@ -6,7 +6,7 @@
     acceptServiceSuggestion,
     deleteServiceSuggestion,
   } from "$lib/requests/services";
-  import ContributionModal from "./contribution-modal.svelte";
+  import SuggestionModal from "./suggestion-modal.svelte";
 
   export let suggestions;
   export let onRefresh;
@@ -49,7 +49,7 @@
   }
 </script>
 
-<ContributionModal
+<SuggestionModal
   bind:isOpen={suggestionModalIsOpen}
   suggestion={currentSuggestion}
   onAccept={(suggestion) => handleAccept(suggestion)}

@@ -75,7 +75,7 @@ export function trackMobilisationLogin(service) {
   _track("mobilisation-login", _getServiceProps(service, false));
 }
 
-export function trackSuggestion(service) {
+export function trackFeedback(service) {
   _track("suggestion", _getServiceProps(service, true));
 }
 
