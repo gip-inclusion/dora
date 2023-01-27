@@ -274,14 +274,6 @@ export async function convertSuggestionToDraft(serviceSlug) {
   return response.json();
 }
 
-export async function getLastDraft(): Promise<Service> {
-  if (token) {
-    const url = `${getApiURL()}/services/last-draft/`;
-    return (await fetchData<Service>(url)).data;
-  }
-  return null;
-}
-
 export async function getServicesOptions(): Promise<ServicesOptions | null> {
   const url = `${getApiURL()}/services-options/`;
   return (await fetchData<ServicesOptions>(url)).data;

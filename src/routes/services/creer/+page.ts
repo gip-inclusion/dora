@@ -1,9 +1,5 @@
 import { getNewService } from "$lib/utils/forms";
-import {
-  getLastDraft,
-  getModel,
-  getServicesOptions,
-} from "$lib/requests/services";
+import { getModel, getServicesOptions } from "$lib/requests/services";
 import { getStructures } from "$lib/requests/structures";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
@@ -56,7 +52,6 @@ export const load: PageLoad = async ({ url, parent }) => {
   return {
     noIndex: true,
     title: "Création d'un service | DORA",
-    lastDraft: await getLastDraft(),
     servicesOptions: await getServicesOptions(),
     structures,
     structure,
