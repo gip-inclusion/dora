@@ -48,26 +48,16 @@
 
   function handleSubmit(validatedData, kind) {
     if (kind === "publish") {
-      service.status = "PUBLISHED";
-      service.markSynced = true;
-
       return createOrModifyService({
         ...validatedData,
         status: "PUBLISHED",
+        markSynced: true,
       });
     } else if (kind === "draft") {
-      service.status = "DRAFT";
-      service.markSynced = true;
-      // eslint-disable-next-line no-warning-comments
-      // HACK: Empty <Select> are casted to null for now
-      // but the server wants an empty string
-      // We should fix the <Select> instead
-      if (service.category == null) {
-        service.category = "";
-      }
       return createOrModifyService({
         ...validatedData,
         status: "DRAFT",
+        markSynced: true,
       });
     } else {
       log(`Soumission de type ${kind} invalide`);
