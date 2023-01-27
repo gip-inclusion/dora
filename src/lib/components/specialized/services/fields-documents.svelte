@@ -1,8 +1,8 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import AddableMultiSelectField from "$lib/components/inputs/addable-multiselect-field.svelte";
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
-  import UploadField from "$lib/components/inputs/upload-field.svelte";
+  import AddableMultiSelectField from "$lib/components/forms/fields/addable-multiselect-field.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import UploadField from "$lib/components/forms/fields/upload-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "./field-model.svelte";

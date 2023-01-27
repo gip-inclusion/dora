@@ -1,4 +1,4 @@
-import * as v from "./utils";
+import * as v from "../schema-utils";
 
 export const structureSchema: v.Schema = {
   siret: {

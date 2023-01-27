@@ -1,18 +1,3 @@
-export type InputType =
-  | "text"
-  | "textarea"
-  | "url"
-  | "number"
-  | "email"
-  | "hidden"
-  | "richtext"
-  | "tel"
-  | "checkboxes"
-  | "radios"
-  | "select"
-  | "multiselect"
-  | "date";
-
 export type DiffusionZoneType =
   | "country"
   | "region"

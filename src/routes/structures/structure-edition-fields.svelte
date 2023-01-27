@@ -1,11 +1,11 @@
 <script lang="ts">
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
-  import HiddenField from "$lib/components/inputs/hidden-field.svelte";
-  import MultiSelectField from "$lib/components/inputs/multi-select-field.svelte";
-  import OpeningHoursField from "$lib/components/inputs/opening-hours-field.svelte";
-  import RichTextField from "$lib/components/inputs/rich-text-field.svelte";
-  import SelectField from "$lib/components/inputs/select-field.svelte";
-  import TextareaField from "$lib/components/inputs/textarea-field.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import HiddenField from "$lib/components/forms/fields/hidden-field.svelte";
+  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
+  import OpeningHoursField from "$lib/components/forms/fields/opening-hours-field.svelte";
+  import RichTextField from "$lib/components/forms/fields/rich-text-field.svelte";
+  import SelectField from "$lib/components/forms/fields/select-field.svelte";
+  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
   import type { Structure, StructuresOptions } from "$lib/types";
   import { getDepartmentFromCityCode } from "$lib/utils/misc";

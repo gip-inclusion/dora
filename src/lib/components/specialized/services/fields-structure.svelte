@@ -1,6 +1,6 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import SelectField from "$lib/components/inputs/select-field.svelte";
+  import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import { getModel, getServicesOptions } from "$lib/requests/services";
   import { getStructure } from "$lib/requests/structures";
   import type {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import DateLabel from "$lib/components/utilities/date-label.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
 
   export let notes;
 </script>

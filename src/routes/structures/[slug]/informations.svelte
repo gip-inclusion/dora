@@ -1,8 +1,8 @@
 <script lang="ts">
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import DateLabel from "$lib/components/utilities/date-label.svelte";
-  import TextClamp from "$lib/components/utilities/text-clamp.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
+  import TextClamp from "$lib/components/display/text-clamp.svelte";
   import {
     computerIcon,
     externalLinkIcon,
@@ -15,7 +15,7 @@
   import type { Structure, StructuresOptions } from "$lib/types";
   import { token, userInfo } from "$lib/utils/auth";
   import { formatPhoneNumber, markdownToHTML } from "$lib/utils/misc";
-  import { formatOsmHours } from "$lib/utils/structure";
+  import { formatOsmHours } from "$lib/utils/opening-hours";
   import DataInclusionNotice from "./data-inclusion-notice.svelte";
 
   export let structure: Structure;

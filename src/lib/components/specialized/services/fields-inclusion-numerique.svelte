@@ -1,10 +1,10 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
-  import CheckboxesField from "$lib/components/inputs/checkboxes-field.svelte";
-  import MultiSelectField from "$lib/components/inputs/multi-select-field.svelte";
-  import RadioButtonsField from "$lib/components/inputs/radio-buttons-field.svelte";
-  import TextareaField from "$lib/components/inputs/textarea-field.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
+  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
+  import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
+  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
   import FieldsPerimeter from "$lib/components/specialized/services/fields-perimeter.svelte";

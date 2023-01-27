@@ -1,10 +1,10 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
-  import FieldWrapper from "$lib/components/inputs/field-wrapper.svelte";
+  import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment } from "$lib/types";
 
   import { getApiURL } from "$lib/utils/api";
-  import { siretRegexp } from "$lib/validation/schemas/utils";
+  import { siretRegexp } from "$lib/validation/schema-utils";
 
   export let onEstablishmentChange: (
     establishment: Establishment | null

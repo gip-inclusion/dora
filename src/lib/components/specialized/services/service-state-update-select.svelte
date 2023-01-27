@@ -20,7 +20,7 @@
     unPublishService,
   } from "$lib/requests/services";
   import type { Service, ServiceStatus, ShortService } from "$lib/types";
-  import { clickOutside } from "$lib/utils/click-outside";
+  import { clickOutside } from "$lib/utils/misc";
   import { getAvailableOptionsForStatus } from "$lib/utils/service";
   import { serviceSchema } from "$lib/validation/schemas/service";
   import { validate } from "$lib/validation/validation";

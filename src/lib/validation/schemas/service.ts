@@ -4,7 +4,7 @@ import type {
   FeeCondition,
   ServicesOptions,
 } from "$lib/types";
-import * as v from "./utils";
+import * as v from "../schema-utils";
 
 export function allCategoriesHaveSubcategories() {
   return (name, value, data, servicesOptions: ServicesOptions) => {

@@ -2,9 +2,9 @@
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
-  import FormErrors from "$lib/components/display/form-errors.svelte";
+  import FormErrors from "$lib/components/forms/form-errors.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import Form from "$lib/components/hoc/form.svelte";
+  import Form from "$lib/components/forms/form.svelte";
   import { createStructure, modifyStructure } from "$lib/requests/structures";
   import type { Structure, StructuresOptions } from "$lib/types";
   import { structureSchema } from "$lib/validation/schemas/structure";

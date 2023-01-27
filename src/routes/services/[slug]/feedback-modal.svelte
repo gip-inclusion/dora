@@ -1,15 +1,15 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
-  import Form from "$lib/components/hoc/form.svelte";
-  import Modal from "$lib/components/display/modal.svelte";
+  import Form from "$lib/components/forms/form.svelte";
+  import Modal from "$lib/components/hoc/modal.svelte";
   import { getApiURL } from "$lib/utils/api";
   import { userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
   import FeedbackConfirmationModal from "./feedback-confirmation-modal.svelte";
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
-  import TextareaField from "$lib/components/inputs/textarea-field.svelte";
-  import * as v from "$lib/validation/schemas/utils";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
+  import * as v from "$lib/validation/schema-utils";
 
   export let isOpen = false;
   export let service;

@@ -2,10 +2,10 @@
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
-  import FormErrors from "$lib/components/display/form-errors.svelte";
+  import FormErrors from "$lib/components/forms/form-errors.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import Form from "$lib/components/hoc/form.svelte";
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
+  import Form from "$lib/components/forms/form.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import { arrowRightSIcon } from "$lib/icons";
   import { getApiURL } from "$lib/utils/api";
   import { refreshUserInfo, token, userInfo } from "$lib/utils/auth";

@@ -1,7 +1,7 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
-  import CheckboxesField from "$lib/components/inputs/checkboxes-field.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
   import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
   import type { Service, ServicesOptions, Structure } from "$lib/types";
   import { moveToTheEnd } from "$lib/utils/misc";

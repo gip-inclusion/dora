@@ -1,7 +1,7 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
-  import BooleanRadioButtonsField from "$lib/components/inputs/boolean-radio-buttons-field.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import BooleanRadioButtonsField from "$lib/components/forms/fields/boolean-radio-buttons-field.svelte";
   import type { Service } from "$lib/types";
 
   export let service: Service;

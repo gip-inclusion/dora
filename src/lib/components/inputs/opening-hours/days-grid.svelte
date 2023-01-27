@@ -4,7 +4,7 @@
     fromJsonToOsmString,
     getHoursFromStr,
     returnEmptyHoursData,
-  } from "$lib/utils/structure";
+  } from "$lib/utils/opening-hours";
   import { createEventDispatcher } from "svelte";
   import DayField from "./day-field.svelte";
 

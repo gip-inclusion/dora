@@ -3,10 +3,10 @@
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
-  import FormErrors from "$lib/components/display/form-errors.svelte";
+  import FormErrors from "$lib/components/forms/form-errors.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import StickyFormSubmissionRow from "$lib/components/display/sticky-form-submission-row.svelte";
-  import Form from "$lib/components/hoc/form.svelte";
+  import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
+  import Form from "$lib/components/forms/form.svelte";
   import FieldCategory from "$lib/components/specialized/services/field-category.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
   import FieldsDocuments from "$lib/components/specialized/services/fields-documents.svelte";

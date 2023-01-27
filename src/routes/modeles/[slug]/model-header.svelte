@@ -1,6 +1,6 @@
 <script lang="ts">
   import StructureCard from "$lib/components/specialized/structure-card.svelte";
-  import DateLabel from "$lib/components/utilities/date-label.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
 
   export let model;
 </script>

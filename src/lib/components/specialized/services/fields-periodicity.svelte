@@ -1,6 +1,6 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "./field-model.svelte";

@@ -2,7 +2,7 @@
   import { getApiURL } from "$lib/utils/api";
   import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
-  import FieldWrapper from "$lib/components/inputs/field-wrapper.svelte";
+  import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment, GeoApiCity } from "$lib/types";
 
   export let establishment;

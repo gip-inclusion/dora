@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MultiSelectField from "$lib/components/inputs/multi-select-field.svelte";
+  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { orderAndReformatSubcategories } from "$lib/utils/misc";
   import InclusionNumSwitch from "./inclusion-num-switch.svelte";

@@ -1,6 +1,6 @@
 <script lang="ts">
   import Label from "$lib/components/display/label.svelte";
-  import DateLabel from "$lib/components/utilities/date-label.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
   import type { ModerationStatus } from "$lib/types";
 
   export let status: ModerationStatus;

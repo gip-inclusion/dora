@@ -3,7 +3,7 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import SetAsUpdatedModal from "$lib/components/specialized/services/set-as-updated-modal.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
-  import DateLabel from "$lib/components/utilities/date-label.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
   import type {
     Service,

@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import Modal from "$lib/components/display/modal.svelte";
+  import Modal from "$lib/components/hoc/modal.svelte";
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
   import { createOrModifyService } from "$lib/requests/services";
   import type { Service, ServicesOptions, ShortService } from "$lib/types";

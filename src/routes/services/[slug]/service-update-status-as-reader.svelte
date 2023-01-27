@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
-  import DateLabel from "$lib/components/utilities/date-label.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
   import { editIcon } from "$lib/icons";
   import type { Service, ServiceUpdateStatus } from "$lib/types";
   import { trackFeedback } from "$lib/utils/plausible";

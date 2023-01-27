@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { clickOutside } from "$lib/utils/click-outside";
   import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
   import {
@@ -7,6 +6,7 @@
     getChoiceFromValue,
     getChoicesFromKey,
   } from "$lib/utils/choice";
+  import { clickOutside } from "$lib/utils/misc";
   import { tick } from "svelte";
   import FieldWrapper from "./field-wrapper.svelte";
   import SelectLabel from "./select-label.svelte";

@@ -1,16 +1,16 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
-  import Form from "$lib/components/hoc/form.svelte";
-  import Modal from "$lib/components/display/modal.svelte";
+  import Form from "$lib/components/forms/form.svelte";
+  import Modal from "$lib/components/hoc/modal.svelte";
   import { getApiURL } from "$lib/utils/api";
   import { token } from "$lib/utils/auth";
   import { addUserSchema } from "$lib/validation/schemas/dashboard";
   import { get } from "svelte/store";
   import ConfirmationModal from "./modal-confirmation.svelte";
-  import FormErrors from "$lib/components/display/form-errors.svelte";
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
+  import FormErrors from "$lib/components/forms/form-errors.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
-  import SelectField from "$lib/components/inputs/select-field.svelte";
+  import SelectField from "$lib/components/forms/fields/select-field.svelte";
 
   const levelChoices = [
     {

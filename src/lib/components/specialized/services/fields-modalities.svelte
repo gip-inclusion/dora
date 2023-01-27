@@ -1,9 +1,9 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
-  import CheckboxesField from "$lib/components/inputs/checkboxes-field.svelte";
-  import RadioButtonsField from "$lib/components/inputs/radio-buttons-field.svelte";
-  import TextareaField from "$lib/components/inputs/textarea-field.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
+  import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
+  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import { moveToTheEnd } from "$lib/utils/misc";

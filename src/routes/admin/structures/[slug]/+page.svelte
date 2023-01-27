@@ -1,7 +1,7 @@
 <script lang="ts">
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import DateLabel from "$lib/components/utilities/date-label.svelte";
-  import TextClamp from "$lib/components/utilities/text-clamp.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
+  import TextClamp from "$lib/components/display/text-clamp.svelte";
   import { getStructureAdmin } from "$lib/requests/admin";
   import { markdownToHTML } from "$lib/utils/misc";
   import History from "../../history.svelte";

@@ -1,9 +1,9 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
-  import AddressSearchField from "$lib/components/inputs/address-search-field.svelte";
-  import BasicInputField from "$lib/components/inputs/basic-input-field.svelte";
-  import CitySearchField from "$lib/components/inputs/city-search-field.svelte";
-  import HiddenField from "$lib/components/inputs/hidden-field.svelte";
+  import AddressSearchField from "$lib/components/forms/fields/address-search-field.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import CitySearchField from "$lib/components/forms/fields/city-search-field.svelte";
+  import HiddenField from "$lib/components/forms/fields/hidden-field.svelte";
   import { syncIcon } from "$lib/icons";
   import type { Service, Structure } from "$lib/types";
 

@@ -1,11 +1,11 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
-  import Modal from "$lib/components/display/modal.svelte";
+  import Modal from "$lib/components/hoc/modal.svelte";
   import { arrowRightSIcon, closeCircleIcon } from "$lib/icons";
   import {
     acceptServiceSuggestion,
     deleteServiceSuggestion,
-  } from "$lib/requests/services";
+  } from "$lib/requests/admin";
   import SuggestionModal from "./suggestion-modal.svelte";
 
   export let suggestions;

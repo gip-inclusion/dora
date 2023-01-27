@@ -2,10 +2,10 @@
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import FormErrors from "$lib/components/display/form-errors.svelte";
-  import StickyFormSubmissionRow from "$lib/components/display/sticky-form-submission-row.svelte";
-  import Form from "$lib/components/hoc/form.svelte";
-  import { publishServiceSuggestion } from "$lib/requests/services";
+  import FormErrors from "$lib/components/forms/form-errors.svelte";
+  import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
+  import Form from "$lib/components/forms/form.svelte";
+  import { publishServiceSuggestion } from "$lib/requests/admin";
   import type { Establishment, Service } from "$lib/types";
   import { contribSchema } from "$lib/validation/schemas/service";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
