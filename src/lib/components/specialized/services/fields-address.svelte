@@ -51,12 +51,13 @@
 {#key entity}
   <div class="flex flex-col">
     {#if parent}
-      <div class="mb-s8 lg:w-3/4 lg:self-end">
+      <div class="mb-s8 lg:w-2/3 lg:self-end">
         <Button
           on:click={fillAddress}
           icon={syncIcon}
           noBackground
           small
+          noPadding
           label="Utiliser les coordonnées de la structure"
         />
       </div>
