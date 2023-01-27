@@ -225,8 +225,8 @@ export const serviceSchema: v.Schema = {
     label: "Rendre les informations de contact publiques",
     default: false,
     rules: [v.isBool()],
+    required: true,
   },
-
   locationKinds: {
     label: "Mode d’accueil",
     default: [],
