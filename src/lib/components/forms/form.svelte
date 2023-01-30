@@ -37,25 +37,33 @@
     $formErrors = {};
   });
 
-  function handleEltChange(evt) {
+  async function handleEltChange(evt) {
     $formErrors.nonFieldErrors = [];
 
     // We want to listen to both DOM and component events
     const fieldName = evt.target?.name || evt.detail;
 
-    const { validatedData, valid } = validate(
-      data,
-      { [fieldName]: schema[fieldName] },
-      {
-        fullFormSchema: schema,
-        noScroll: true,
-        servicesOptions,
-      }
-    );
+    // Sometimes (particularly with Select components), the event is received
+    // before the field value is updated, although it's not
+    // supposed to happen. This setTimeout is an unsatisfying workaround to that.
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        const { validatedData, valid } = validate(
+          data,
+          { [fieldName]: schema[fieldName] },
+          {
+            fullFormSchema: schema,
+            noScroll: true,
+            servicesOptions,
+          }
+        );
+        if (valid && onChange) {
+          onChange(validatedData);
+        }
 
-    if (valid && onChange) {
-      onChange(validatedData);
-    }
+        resolve(true);
+      }, 200);
+    });
   }
 
   setContext<ValidationContext>(contextValidationKey, {
