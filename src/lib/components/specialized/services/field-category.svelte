@@ -51,6 +51,7 @@
   bind:value={service.categories}
   choices={servicesOptions.categories}
   onChange={handleCategoriesChange}
+  placeholder="Sélectionner"
   placeholderMulti="Sélectionner"
   sort
 />
