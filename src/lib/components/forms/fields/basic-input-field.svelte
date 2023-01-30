@@ -62,7 +62,7 @@
         />
       {:else if type === "date"}
         <input
-          type="text"
+          type="date"
           bind:value
           on:blur={onBlur}
           on:change={onChange}
@@ -95,14 +95,6 @@
       {:else if type === "url"}
         <input
           type="url"
-          bind:value
-          on:blur={onBlur}
-          on:change={onChange}
-          {...props}
-        />
-      {:else if type === "date"}
-        <input
-          type="date"
           bind:value
           on:blur={onBlur}
           on:change={onChange}
