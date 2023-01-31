@@ -33,6 +33,7 @@
     inclusionNumeriqueSchema,
   } from "$lib/validation/schemas/service";
   import { validate } from "$lib/validation/validation";
+  import type { Schema } from "$lib/validation/schema-utils";
 
   export let service: Service,
     servicesOptions: ServicesOptions,
@@ -41,6 +42,7 @@
     model: Model;
 
   let requesting = false;
+  let currentSchema: Schema;
 
   function handleChange(validatedData) {
     service = { ...service, ...validatedData };
@@ -70,7 +72,7 @@
   }
 
   function handleValidate(data, kind: "draft" | "publish") {
-    const schema = kind === "draft" ? draftSchema : serviceSchema;
+    const schema = kind === "draft" ? draftSchema : currentSchema;
     return validate(data, schema, {
       servicesOptions,
       checkRequired: kind !== "draft",
@@ -90,15 +92,17 @@
   }
 
   let subcategories = [];
+
+  $: currentSchema = service.useInclusionNumeriqueScheme
+    ? inclusionNumeriqueSchema
+    : serviceSchema;
 </script>
 
 <FormErrors />
 
 <Form
   bind:data={service}
-  schema={service.useInclusionNumeriqueScheme
-    ? inclusionNumeriqueSchema
-    : serviceSchema}
+  schema={currentSchema}
   {servicesOptions}
   onChange={handleChange}
   onSubmit={handleSubmit}
