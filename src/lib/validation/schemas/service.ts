@@ -1,7 +1,9 @@
 import type {
   BeneficiaryAccessModes,
   CoachOrientationModes,
+  DiffusionZoneType,
   FeeCondition,
+  LocationKind,
   ServicesOptions,
 } from "$lib/types";
 import * as v from "../schema-utils";
@@ -140,17 +142,11 @@ export const serviceSchema: v.Schema = {
   beneficiariesAccessModesOther: {
     label: "",
     default: "",
-    rules: [
-      v.isString(),
-      v.maxStrLength(280),
-      (name, value, data) => ({
-        valid: data.beneficiariesAccessModes.includes("autre")
-          ? !!value.length
-          : true,
-        msg: `Information requise`,
-      }),
-    ],
+    rules: [v.isString(), v.maxStrLength(280)],
     maxLength: 280,
+    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
+      return data.beneficiariesAccessModes.includes("autre");
+    },
   },
   coachOrientationModes: {
     label: "Pour les accompagnateurs",
@@ -161,16 +157,10 @@ export const serviceSchema: v.Schema = {
   coachOrientationModesOther: {
     label: "",
     default: "",
-    rules: [
-      v.isString(),
-      v.maxStrLength(280),
-      (name, value, data) => ({
-        valid: data.coachOrientationModes.includes("autre")
-          ? !!value.length
-          : true,
-        msg: `Information requise`,
-      }),
-    ],
+    rules: [v.isString(), v.maxStrLength(280)],
+    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
+      return data.coachOrientationModes.includes("autre");
+    },
     maxLength: 280,
   },
 
@@ -243,35 +233,23 @@ export const serviceSchema: v.Schema = {
   city: {
     label: "Ville",
     default: "",
-    rules: [
-      v.isString(),
-      v.maxStrLength(255),
-      (name, value, data) => ({
-        valid: data.locationKinds.includes("en-presentiel")
-          ? !!value.length
-          : true,
-        msg: `Information requise`,
-      }),
-    ],
+    rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
     maxLength: 255,
+    required: (data: { locationKinds: LocationKind[] }) => {
+      return data.locationKinds.includes("en-presentiel");
+    },
   },
   address1: {
     label: "Adresse",
     default: "",
-    rules: [
-      v.isString(),
-      v.maxStrLength(255),
-      (name, value, data) => ({
-        valid: data.locationKinds.includes("en-presentiel")
-          ? !!value.length
-          : true,
-        msg: `Information requise`,
-      }),
-    ],
+    rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
     dependents: ["postalCode"],
     maxLength: 255,
+    required: (data: { locationKinds: LocationKind[] }) => {
+      return data.locationKinds.includes("en-presentiel");
+    },
   },
   address2: {
     label: "Complément d’adresse",
@@ -283,16 +261,11 @@ export const serviceSchema: v.Schema = {
   postalCode: {
     label: "Code postal",
     default: "",
-    rules: [
-      v.isPostalCode(),
-      (name, value, data) => ({
-        valid: data.locationKinds.includes("en-presentiel")
-          ? !!value.length
-          : true,
-        msg: `Information requise`,
-      }),
-    ],
+    rules: [v.isPostalCode()],
     maxLength: 5,
+    required: (data: { locationKinds: LocationKind[] }) => {
+      return data.locationKinds.includes("en-presentiel");
+    },
   },
   diffusionZoneType: {
     label: "Périmètre",
@@ -304,18 +277,11 @@ export const serviceSchema: v.Schema = {
   diffusionZoneDetails: {
     label: "Territoire",
     default: "",
-    rules: [
-      v.isString(),
-      v.maxStrLength(9),
-      (name, value, data) => ({
-        valid:
-          data.diffusionZoneType && data.diffusionZoneType !== "country"
-            ? !!value.length
-            : true,
-        msg: `Information requise`,
-      }),
-    ],
+    rules: [v.isString(), v.maxStrLength(9)],
     maxLength: 9,
+    required: (data: { diffusionZoneType: DiffusionZoneType }) => {
+      return data.diffusionZoneType !== "country";
+    },
   },
   qpvOrZrr: {
     label: "Uniquement QPV ou ZRR",
