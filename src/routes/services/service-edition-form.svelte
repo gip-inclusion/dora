@@ -35,7 +35,6 @@
   import { validate } from "$lib/validation/validation";
   import type { Schema } from "$lib/validation/schema-utils";
   import { shortenString } from "$lib/utils/misc";
-  import NoticePublication from "./[slug]/editer/notice-publication.svelte";
 
   export let service: Service,
     servicesOptions: ServicesOptions,
@@ -121,8 +120,6 @@
     : serviceSchema;
 </script>
 
-<NoticePublication {service} {servicesOptions} schema={currentSchema} />
-
 <FormErrors />
 
 <Form
@@ -135,6 +132,8 @@
   onValidate={handleValidate}
   bind:requesting
 >
+  <hr />
+
   <CenteredGrid>
     {#if structures.length}
       <div class="lg:w-2/3">
