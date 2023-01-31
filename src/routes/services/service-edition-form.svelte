@@ -34,6 +34,8 @@
   } from "$lib/validation/schemas/service";
   import { validate } from "$lib/validation/validation";
   import type { Schema } from "$lib/validation/schema-utils";
+  import { shortenString } from "$lib/utils/misc";
+  import NoticePublication from "./[slug]/editer/notice-publication.svelte";
 
   export let service: Service,
     servicesOptions: ServicesOptions,
@@ -48,7 +50,30 @@
     service = { ...service, ...validatedData };
   }
 
+  function preSaveInclusionNumeriqueService(data) {
+    data.coachOrientationModes = ["autre"];
+    data.coachOrientationModesOther =
+      "Mêmes modalités que pour les bénéficiaires";
+    if (structure.department) {
+      data.diffusionZoneType = "department";
+      data.diffusionZoneDetails = structure.department;
+    }
+    data.locationKinds = ["en-presentiel"];
+    data.name = "Médiation numérique";
+
+    const proposedServices = servicesOptions.subcategories
+      .filter((subcategory) => data.subcategories.includes(subcategory.value))
+      .map((subcategory) => subcategory.label.toLowerCase())
+      .join(", ");
+    data.shortDesc = shortenString(
+      `${structure.name} propose des services : ${proposedServices}`,
+      280
+    );
+  }
   function handleSubmit(validatedData, kind) {
+    if (service.useInclusionNumeriqueScheme) {
+      preSaveInclusionNumeriqueService(validatedData);
+    }
     if (kind === "publish") {
       return createOrModifyService({
         ...validatedData,
@@ -91,12 +116,12 @@
     modelSlugTmp = null;
   }
 
-  let subcategories = [];
-
   $: currentSchema = service.useInclusionNumeriqueScheme
     ? inclusionNumeriqueSchema
     : serviceSchema;
 </script>
+
+<NoticePublication {service} {servicesOptions} schema={currentSchema} />
 
 <FormErrors />
 
@@ -110,7 +135,6 @@
   onValidate={handleValidate}
   bind:requesting
 >
-  <hr />
   <CenteredGrid>
     {#if structures.length}
       <div class="lg:w-2/3">
@@ -192,17 +216,11 @@
       {:else}
         <div class={service.model ? "" : "lg:w-2/3"}>
           <Fieldset noTopPadding>
-            <FieldCategory
-              bind:service
-              bind:subcategories
-              {servicesOptions}
-              {model}
-            />
+            <FieldCategory bind:service {servicesOptions} {model} />
           </Fieldset>
 
           <FieldsInclusionNumerique
             bind:service
-            bind:subcategories
             {servicesOptions}
             {structure}
           />

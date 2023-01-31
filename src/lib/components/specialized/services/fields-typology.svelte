@@ -2,16 +2,15 @@
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import BooleanRadioButtonsField from "$lib/components/forms/fields/boolean-radio-buttons-field.svelte";
   import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
-  import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldCategory from "./field-category.svelte";
   import FieldModel from "./field-model.svelte";
+  import FieldSubcategory from "./field-subcategory.svelte";
 
   export let servicesOptions: ServicesOptions, service: Service;
   export let model: Model | undefined = undefined;
   export let noTopPadding = false;
-  export let subcategories = [];
 
   $: showModel = !!service.model;
 
@@ -32,7 +31,7 @@
 
 <FieldSet title="Typologie" {showModel} {noTopPadding}>
   <FieldModel {...fieldModelProps.categories ?? {}} type="array">
-    <FieldCategory bind:service bind:subcategories {servicesOptions} {model} />
+    <FieldCategory bind:service {servicesOptions} {model} />
   </FieldModel>
   <div slot="help">
     <p class="text-f14">
@@ -46,13 +45,7 @@
     showUseButton
     type="array"
   >
-    <MultiSelectField
-      id="subcategories"
-      bind:value={service.subcategories}
-      choices={subcategories}
-      placeholder="Sélectionner"
-      placeholderMulti="Sélectionner"
-    />
+    <FieldSubcategory bind:service {servicesOptions} />
   </FieldModel>
   <FieldModel {...fieldModelProps.kinds ?? {}} type="array">
     <CheckboxesField

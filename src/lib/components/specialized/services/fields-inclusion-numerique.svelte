@@ -8,16 +8,20 @@
   import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
   import FieldsPerimeter from "$lib/components/specialized/services/fields-perimeter.svelte";
-  import type { Choice, Service, ServicesOptions, Structure } from "$lib/types";
-  import { moveToTheEnd, orderAndReformatSubcategories } from "$lib/utils/misc";
+  import type {
+    Choice,
+    Service,
+    ServicesOptions,
+    ShortStructure,
+    Structure,
+  } from "$lib/types";
+  import { moveToTheEnd } from "$lib/utils/misc";
   import { isNotFreeService } from "$lib/utils/service";
-  import { onMount } from "svelte";
+  import FieldSubcategory from "./field-subcategory.svelte";
 
   export let servicesOptions: ServicesOptions;
   export let service: Service;
-  export let structure: Structure;
-
-  let subcategories = [];
+  export let structure: Structure | ShortStructure;
 
   function existInServicesOptionsConcernedPublic(concernedPublicOption) {
     return servicesOptions.concernedPublic
@@ -122,54 +126,9 @@
     },
   ].filter(existInServicesOptionsKinds);
 
-  function updateServicePresentation(subcats) {
-    service.name = "Médiation numérique";
-    service.shortDesc = `${
-      structure.name
-    } propose des services : ${subcats.slice(0, 253 - structure.name.length)}${
-      subcats.length > 253 - structure.name.length ? "…" : ""
-    }`;
-  }
-
-  function setCategories(categories = ["numerique"]) {
-    subcategories = servicesOptions.subcategories.filter(({ value }) =>
-      categories.some(
-        (cat) => value.startsWith(cat) && value !== "numerique--autre"
-      )
-    );
-
-    subcategories = orderAndReformatSubcategories(
-      subcategories,
-      categories,
-      servicesOptions
-    );
-
-    service.subcategories = service.subcategories.filter((scat) =>
-      categories.some((cat) => scat.startsWith(cat))
-    );
-  }
-
   service.locationKinds = [];
 
-  function setModalites() {
-    service.coachOrientationModes = ["autre"];
-    service.coachOrientationModesOther =
-      "Mêmes modalités que pour les bénéficiaires";
-  }
-
-  function setDiffusionZone() {
-    if (!structure.latitude || !structure.longitude) {
-      return;
-    }
-    service.diffusionZoneType = "department";
-    service.diffusionZoneDetails = structure.department;
-  }
-
-  function setLocationKinds() {
-    service.locationKinds = ["en-presentiel"];
-  }
-
-  function setContact() {
+  function presetContact() {
     if (structure.phone && !service.contactPhone) {
       service.contactPhone = structure.phone;
     }
@@ -179,7 +138,7 @@
     }
   }
 
-  function setConcernedPublic() {
+  function presetConcernedPublic() {
     service.concernedPublic = service.concernedPublic.filter(
       (concernedPublicValue: string): boolean =>
         concernedPublicOptions
@@ -188,24 +147,8 @@
     );
   }
 
-  setCategories();
-  setConcernedPublic();
-  setContact();
-
-  onMount(() => {
-    setModalites();
-    setDiffusionZone();
-    setLocationKinds();
-  });
-
-  function handleSubcategoriesChange(subcats) {
-    updateServicePresentation(
-      servicesOptions.subcategories
-        .filter((subcategory) => subcats.includes(subcategory.value))
-        .map((subcategory) => subcategory.label)
-        .join(", ")
-    );
-  }
+  presetConcernedPublic();
+  presetContact();
 </script>
 
 <FieldSet title="Service de l'inclusion numérique">
@@ -226,14 +169,7 @@
     </p>
   </div>
 
-  <MultiSelectField
-    id="subcategories"
-    bind:value={service.subcategories}
-    choices={subcategories}
-    placeholder="Sélectionner"
-    placeholderMulti="Sélectionner"
-    onChange={handleSubcategoriesChange}
-  />
+  <FieldSubcategory bind:service {servicesOptions} />
 
   {#if concernedPublicOptions.length}
     <MultiSelectField
@@ -250,7 +186,6 @@
       id="kinds"
       bind:value={service.kinds}
       choices={kindsOptions}
-      _notrequired_TODO
     />
   {/if}
 
