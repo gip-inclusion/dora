@@ -11,6 +11,7 @@
   import type {
     Choice,
     Service,
+    ServiceKind,
     ServicesOptions,
     ShortStructure,
     Structure,
@@ -126,9 +127,7 @@
     },
   ].filter(existInServicesOptionsKinds);
 
-  service.locationKinds = [];
-
-  function presetContact() {
+  function preSetContact() {
     if (structure.phone && !service.contactPhone) {
       service.contactPhone = structure.phone;
     }
@@ -138,7 +137,7 @@
     }
   }
 
-  function presetConcernedPublic() {
+  function filterConcernedPublics() {
     service.concernedPublic = service.concernedPublic.filter(
       (concernedPublicValue: string): boolean =>
         concernedPublicOptions
@@ -147,8 +146,16 @@
     );
   }
 
-  presetConcernedPublic();
-  presetContact();
+  function filterKinds() {
+    service.kinds = service.kinds.filter((kind: ServiceKind) =>
+      kindsOptions.map((option) => option.value).includes(kind)
+    );
+  }
+
+  service.locationKinds = [];
+  filterConcernedPublics();
+  preSetContact();
+  filterKinds();
 </script>
 
 <FieldSet title="Service de l'inclusion numérique">
