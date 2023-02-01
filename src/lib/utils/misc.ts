@@ -49,7 +49,7 @@ export async function fetchData<T>(url: string) {
 
 export function shortenString(str, length = 50) {
   if (str && str.length > length) {
-    return `${str.slice(0, length)}…`;
+    return `${str.slice(0, length - 1)}…`;
   }
 
   return str;
