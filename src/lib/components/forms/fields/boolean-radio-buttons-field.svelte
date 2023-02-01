@@ -8,7 +8,9 @@
   import RadioButtons from "../../inputs/radio-buttons.svelte";
 
   export let id: string;
-  export let value: boolean;
+  // Laisser la valeur par défault ici. Si la valeur entrante est undefined ou null
+  // on veut la considérer comme false;
+  export let value = false;
 
   export let disabled = false;
   export let readonly = $currentSchema?.[id]?.readonly;
