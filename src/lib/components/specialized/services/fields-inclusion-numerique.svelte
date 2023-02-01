@@ -137,6 +137,13 @@
     }
   }
 
+  function preSetDiffusionZone() {
+    if (structure.department) {
+      service.diffusionZoneType = "department";
+      service.diffusionZoneDetails = structure.department;
+    }
+  }
+
   function filterConcernedPublics() {
     service.concernedPublic = service.concernedPublic.filter(
       (concernedPublicValue: string): boolean =>
@@ -155,6 +162,7 @@
   service.locationKinds = [];
   filterConcernedPublics();
   preSetContact();
+  preSetDiffusionZone();
   filterKinds();
 </script>
 
@@ -236,7 +244,7 @@
   {/if}
 </FieldSet>
 
-{#if !structure.latitude || !structure.longitude}
+{#if !structure.department}
   <FieldsPerimeter bind:service {servicesOptions} />
 {/if}
 

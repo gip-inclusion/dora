@@ -53,10 +53,7 @@
     data.coachOrientationModes = ["autre"];
     data.coachOrientationModesOther =
       "Mêmes modalités que pour les bénéficiaires";
-    if (structure.department) {
-      data.diffusionZoneType = "department";
-      data.diffusionZoneDetails = structure.department;
-    }
+
     data.locationKinds = ["en-presentiel"];
     data.name = "Médiation numérique";
 
