@@ -3,10 +3,9 @@
   import Tabs from "$lib/components/display/tabs.svelte";
   import SearchByCommune from "./search-by-commune.svelte";
   import SearchBySiret from "./search-by-siret.svelte";
-  import PoleEmploiWarning from "../pole-emploi-warning.svelte";
   import type { Establishment, GeoApiCity } from "$lib/types";
 
-  type Tab = "nom" | "siret" | "pe";
+  type Tab = "nom" | "siret";
 
   export let onCityChange: ((city: GeoApiCity | null) => void) | undefined =
     undefined;
@@ -19,7 +18,6 @@
   export let isOwnStructure = true;
   export let tabId: Tab = "nom";
   export let title = "Structure";
-  export let blockPoleEmploi = false;
 
   function handleCityChange(newCity: GeoApiCity | null) {
     establishment = null;
@@ -50,10 +48,6 @@
     { id: "nom", name: "Nom" },
     { id: "siret", name: "Siret" },
   ];
-
-  if (blockPoleEmploi) {
-    tabs.push({ id: "pe", name: "Pôle emploi" });
-  }
 
   if (establishment?.siret) {
     tabId = "siret";
@@ -88,25 +82,19 @@
       onCityChange={handleCityChange}
       {isOwnStructure}
     />
-  {:else if tabId === "pe"}
-    <PoleEmploiWarning />
   {/if}
 
-  {#if blockPoleEmploi && tabId !== "pe" && establishment?.siret?.startsWith("130005481")}
-    <PoleEmploiWarning />
-  {:else}
-    {#if establishment?.siret}
-      <div class="border border-gray-01 p-s24">
-        <h4 class="text-gray-text">{establishment.name}</h4>
-        <div class="legend">{establishment.siret}</div>
-        <div class="legend">{establishment.address1}</div>
-        <div class="legend">{establishment.address2}</div>
-        <div class="legend">
-          {establishment.postalCode}
-          {establishment.city}
-        </div>
+  {#if establishment?.siret}
+    <div class="border border-gray-01 p-s24">
+      <h4 class="text-gray-text">{establishment.name}</h4>
+      <div class="legend">{establishment.siret}</div>
+      <div class="legend">{establishment.address1}</div>
+      <div class="legend">{establishment.address2}</div>
+      <div class="legend">
+        {establishment.postalCode}
+        {establishment.city}
       </div>
-    {/if}
-    <slot name="cta" />
+    </div>
   {/if}
+  <slot name="cta" />
 </FieldSet>

@@ -4,10 +4,7 @@
   import logoDora from "$lib/assets/inclusion-connect/logo-dora-ic.svg";
   import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
   import logoRDVS from "$lib/assets/inclusion-connect/logo-rdv-solidarites.svg";
-  import logoPEFill from "$lib/assets/logos/logo-pole-emploi-fill.svg";
-  import Button from "$lib/components/display/button.svelte";
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import PoleEmploiWarning from "$lib/components/specialized/pole-emploi-warning.svelte";
   import { informationLineIcon } from "$lib/icons";
   import AuthLayout from "../auth-layout.svelte";
   import { getNextPage } from "../utils";
@@ -24,14 +21,6 @@
 
   const loginHint = getLoginHint();
   const nextPage = getNextPage($page.url);
-
-  let showPEMessage = false;
-
-  function togglePEMessage() {
-    showPEMessage = !showPEMessage;
-  }
-
-  $: togglePEMessageLabel = showPEMessage ? "Réduire" : "Lire la suite";
 </script>
 
 <AuthLayout>
@@ -51,25 +40,6 @@
           Inclusion Connect avec la même adresse e-mail afin de retrouver les
           mêmes droits et données.
         </div>
-      </div>
-
-      <div class="mt-s16  rounded-ml bg-info-light p-s16">
-        <div class="legend mb-s16 flex gap-s16 text-f14 text-gray-text">
-          <img src={logoPEFill} alt="" width="46" height="46" />
-          Agents Pôle emploi, vous n’avez pas besoin de créer de compte.
-        </div>
-        {#if showPEMessage}
-          <PoleEmploiWarning />
-        {/if}
-
-        <Button
-          label={togglePEMessageLabel}
-          on:click={togglePEMessage}
-          noBackground
-          small
-          noPadding
-          hoverUnderline
-        />
       </div>
 
       <p class="mt-s24 mb-s24" />
