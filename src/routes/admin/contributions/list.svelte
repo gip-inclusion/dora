@@ -1,11 +1,11 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
-  import Modal from "$lib/components/display/modal.svelte";
+  import Modal from "$lib/components/hoc/modal.svelte";
   import { arrowRightSIcon, closeCircleIcon } from "$lib/icons";
   import {
     acceptServiceSuggestion,
     deleteServiceSuggestion,
-  } from "$lib/requests/services";
+  } from "$lib/requests/admin";
   import SuggestionModal from "./suggestion-modal.svelte";
 
   export let suggestions;
@@ -52,13 +52,15 @@
 <SuggestionModal
   bind:isOpen={suggestionModalIsOpen}
   suggestion={currentSuggestion}
-  onAccept={(s) => handleAccept(s)}
-  onReject={(s) => handleReject(s)}
+  onAccept={(suggestion) => handleAccept(suggestion)}
+  onReject={(suggestion) => handleReject(suggestion)}
 />
 
 <div class="flex w-full flex-col gap-s12">
   {#each suggestions as suggestion}
-    <div class="flex flex-row items-center gap-s16 rounded-md bg-white p-s16">
+    <div
+      class="flex flex-row items-center gap-s16 rounded-md border border-gray-01 bg-white p-s16"
+    >
       <div class="flex-1 truncate italic">
         {suggestion.name}
       </div>

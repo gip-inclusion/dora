@@ -1,15 +1,17 @@
-import * as v from "./utils";
+import * as v from "../schema-utils";
 
 export const addUserSchema = {
   email: {
+    label: "Courriel",
     default: "",
-    required: true,
     rules: [v.isEmail(), v.maxStrLength(255)],
     post: [v.lower, v.trim],
+    maxLength: 255,
+    required: true,
   },
   level: {
+    label: "Permissions",
     default: "",
-    required: true,
     rules: [
       v.isString(),
       (name, value, _data) => ({
@@ -17,13 +19,32 @@ export const addUserSchema = {
         msg: `Choix incorrect`,
       }),
     ],
+    required: true,
   },
 };
 
 export const modifyUserSchema = {
-  level: {
+  name: {
+    label: "Nom",
     default: "",
+    rules: [v.isString(), v.maxStrLength(255)],
+    post: [v.trim],
+    maxLength: 255,
     required: true,
+    readonly: true,
+  },
+  email: {
+    label: "Courriel",
+    default: "",
+    rules: [v.isEmail(), v.maxStrLength(255)],
+    post: [v.lower, v.trim],
+    maxLength: 255,
+    required: true,
+    readonly: true,
+  },
+  level: {
+    label: "Permissions",
+    default: "",
     rules: [
       v.isString(),
       (name, value, _data) => ({
@@ -31,5 +52,6 @@ export const modifyUserSchema = {
         msg: `Choix incorrect`,
       }),
     ],
+    required: true,
   },
 };

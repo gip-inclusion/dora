@@ -1,7 +1,7 @@
 <script lang="ts">
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import Date from "$lib/components/utilities/date.svelte";
-  import TextClamp from "$lib/components/utilities/text-clamp.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
+  import TextClamp from "$lib/components/display/text-clamp.svelte";
   import { getServiceAdmin } from "$lib/requests/admin";
   import { markdownToHTML } from "$lib/utils/misc";
   import { isNotFreeService } from "$lib/utils/service";
@@ -25,7 +25,7 @@
   }
 </script>
 
-<CenteredGrid bgColor="bg-gray-bg">
+<CenteredGrid>
   <div class="text-f12">
     <div class="flex flex-row items-baseline justify-between">
       <h2>
@@ -124,10 +124,10 @@
     </InfoLine>
 
     <InfoLine>
-      Date de création: <Date date={data.service.creationDate} />
+      Date de création: <DateLabel date={data.service.creationDate} />
     </InfoLine>
     <InfoLine>
-      Date de dernière modification: <Date
+      Date de dernière modification: <DateLabel
         date={data.service.modificationDate}
       />
     </InfoLine>

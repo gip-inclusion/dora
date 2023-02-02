@@ -1,6 +1,6 @@
 <script lang="ts">
   import Label from "$lib/components/display/label.svelte";
-  import Date from "$lib/components/utilities/date.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
   import type { ModerationStatus } from "$lib/types";
 
   export let status: ModerationStatus;
@@ -14,7 +14,7 @@
 {:else if status === "IN_PROGRESS"}
   <Label bold wait>
     En cours depuis le
-    <Date {date} />
+    <DateLabel {date} />
   </Label>
 {:else if status === "VALIDATED"}
   <Label label="Validé" bold success />

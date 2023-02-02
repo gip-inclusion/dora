@@ -1,24 +1,22 @@
 <script lang="ts">
-  import CG from "$lib/components/display/centered-grid.svelte";
+  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import { METABASE_EMBED_URL, PLAUSIBLE_EMBED_URL } from "$lib/env";
   import { iframeResize } from "iframe-resizer";
 
-  function hR(id) {
+  function handleResize(id: string) {
     iframeResize({}, id);
   }
 </script>
 
-<svelte:head>
-  <script src="https://plausible.io/js/embed.host.js"></script>
-</svelte:head>
+<svelte:head />
 
-<CG>
+<CenteredGrid>
   <div class="text-center">
     <h1 class="text-france-blue">Statistiques</h1>
   </div>
-</CG>
+</CenteredGrid>
 
-<CG>
+<CenteredGrid>
   <h2>Statistiques d’usage</h2>
 
   <iframe
@@ -26,7 +24,7 @@
     src={PLAUSIBLE_EMBED_URL}
     frameborder="0"
     allowtransparency
-    on:load={hR("#plausibleIframe")}
+    on:load={() => handleResize("#plausibleIframe")}
     id="plausibleIframe"
   />
 
@@ -37,10 +35,10 @@
     src={METABASE_EMBED_URL}
     frameborder="0"
     allowtransparency
-    on:load={hR("#metabaseIframe")}
+    on:load={() => handleResize("#metabaseIframe")}
     id="metabaseIframe"
   />
-</CG>
+</CenteredGrid>
 
 <style lang="postcss">
   iframe {

@@ -41,7 +41,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     model.structure = structures[0].slug;
     structure = structures[0];
   } else if (structureSlug) {
-    structure = structures.find((s) => s.slug === structureSlug);
+    structure = structures.find((struct) => struct.slug === structureSlug);
     model.structure = structureSlug;
   }
 
@@ -49,7 +49,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     title: "Création d’un modèle | DORA",
     noIndex: true,
     model,
-    servicesOptions: await getServicesOptions({ model }),
+    servicesOptions: await getServicesOptions(),
     structures,
     structure,
     serviceSlug,

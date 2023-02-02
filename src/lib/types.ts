@@ -1,19 +1,3 @@
-export type InputType =
-  | "text"
-  | "textarea"
-  | "url"
-  | "number"
-  | "email"
-  | "hidden"
-  | "richtext"
-  | "tel"
-  | "checkboxes"
-  | "radios"
-  | "select"
-  | "multiselect"
-  | "toggle"
-  | "date";
-
 export type DiffusionZoneType =
   | "country"
   | "region"
@@ -21,7 +5,15 @@ export type DiffusionZoneType =
   | "epci"
   | "city";
 
+export type GeoApiCity = {
+  code: string;
+  name: string;
+  similarity: number;
+};
+
 export type LocationKind = "a-distance" | "en-presentiel";
+
+export type ServiceStatus = "DRAFT" | "SUGGESTION" | "PUBLISHED" | "ARCHIVED";
 
 export interface StructureService {
   address1: string;
@@ -85,6 +77,11 @@ export interface ShortStructure {
   typologyDisplay: string;
 }
 
+export interface StructureSource {
+  value: string;
+  label: string;
+}
+
 export interface Structure {
   accesslibreUrl: string;
   address1: string;
@@ -128,6 +125,22 @@ export interface Structure {
   typology: number;
   url: string;
 }
+
+export interface Establishment {
+  address1: string;
+  address2: string;
+  ape: string;
+  city: string;
+  cityCode: string;
+  isSiege: boolean;
+  latitude: number;
+  longitude: number;
+  name: "string";
+  postalCode: "string";
+  siren: "string";
+  siret: "string";
+}
+
 export interface NationalLabel {
   value: string;
   label: string;
@@ -142,11 +155,6 @@ export interface StructuresOptions {
   nationalLabels: NationalLabel[];
   sources: StructureSource[];
   typologies: Typology[];
-}
-
-export interface StructureSource {
-  value: string;
-  label: string;
 }
 
 // OSM hours format
@@ -173,7 +181,6 @@ export type OsmOpeningHours = {
 };
 
 // SERVICES
-export type ServiceStatus = "DRAFT" | "SUGGESTION" | "PUBLISHED" | "ARCHIVED";
 
 export type ServiceUpdateStatus = "NOT_NEEDED" | "NEEDED" | "REQUIRED" | "ALL";
 
@@ -222,8 +229,17 @@ export type FeeCondition =
   | "adhesion"
   | "pass-numerique";
 
-export type CoachOrientationModes = "EM" | "EP" | "FO" | "OT" | "PH";
-export type BeneficiaryAccessModes = "EM" | "OS" | "OT" | "PH";
+export type CoachOrientationModes =
+  | "envoyer-courriel"
+  | "envoyer-fiche-prescription"
+  | "envoyer-formulaire"
+  | "autre"
+  | "telephoner";
+export type BeneficiaryAccessModes =
+  | "envoyer-courriel"
+  | "se-presenter"
+  | "autre"
+  | "telephoner";
 
 export interface SearchQuery {
   categoryIds: string[];
@@ -302,7 +318,7 @@ export interface Service {
   coachOrientationModes: CoachOrientationModes[];
   coachOrientationModesDisplay: string[];
   coachOrientationModesOther: string;
-  concernedPublic: CustomizableFK[]; // TODO: should be public
+  concernedPublic: CustomizableFK[]; // TODO: should be plural
   concernedPublicDisplay: string[];
   contactEmail: string;
   contactName: string;
@@ -336,6 +352,7 @@ export interface Service {
   name: string;
   onlineForm: string;
   postalCode: string;
+  publicationDate: string;
   qpvOrZrr: boolean;
   recurrence: string;
   remoteUrl: string;
@@ -352,15 +369,14 @@ export interface Service {
   useInclusionNumeriqueScheme: boolean;
 }
 
-export interface Bookmark {
-  service: ShortService;
-  creationDate: string;
-}
-
 export interface ShortService {
   categoriesDisplay: string[];
   category: string;
   categoryDisplay: string[];
+  coachOrientationModes: CoachOrientationModes[];
+  contactEmail: string;
+  contactName: string;
+  contactPhone: string;
   city: string;
   department: string;
   diffusionZoneDetailsDisplay: string;
@@ -377,6 +393,11 @@ export interface ShortService {
   structure: string;
   structureInfo: ServiceStructure;
   useInclusionNumeriqueScheme: boolean;
+}
+
+export interface Bookmark {
+  service: ShortService;
+  creationDate: string;
 }
 
 export interface CustomChoice {
@@ -408,7 +429,6 @@ export type Model = {
   beneficiariesAccessModes: BeneficiaryAccessModes[];
   beneficiariesAccessModesDisplay: string[];
   beneficiariesAccessModesOther: string;
-  canUpdateCategories: boolean;
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
@@ -420,7 +440,6 @@ export type Model = {
   creationDate: string;
   credentials: CustomizableFK[];
   credentialsDisplay: string[];
-  customizableChoicesSet: any; // TODO: a supprimer
   department: string;
   feeCondition: FeeCondition;
   feeDetails: string;

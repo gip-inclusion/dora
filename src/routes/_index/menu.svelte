@@ -72,7 +72,7 @@
 
   <MenuAide />
 
-  <div slot="lg" class="flex gap-s12">
+  <div slot="lg" class="flex items-center gap-s12">
     <ButtonMenu icon={questionFillIcon}>
       <MenuAide />
     </ButtonMenu>

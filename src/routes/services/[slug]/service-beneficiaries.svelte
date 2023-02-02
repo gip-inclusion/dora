@@ -28,7 +28,7 @@
         {/if}
       {/each}
       {#if service.qpvOrZrr}
-        <li>uniquement QPV + ZRR</li>
+        <li>uniquement QPV ou ZRR</li>
       {/if}
     </ul>
   </div>

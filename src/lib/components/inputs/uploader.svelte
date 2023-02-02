@@ -3,19 +3,19 @@
   import { getApiURL } from "$lib/utils/api";
   import { shortenString } from "$lib/utils/misc";
 
-  export let structureSlug;
-  export let fileKeys = [];
+  export let id: string;
+  export let structureSlug: string;
+  export let fileKeys: string[] = [];
   export let disabled = false;
-  export let name;
 
-  let progress = null;
-  let uploadInput;
+  let progress: number | null = null;
+  let uploadInput: HTMLInputElement;
 
   function handleRemove(fileKey) {
-    fileKeys = fileKeys.filter((k) => k !== fileKey);
+    fileKeys = fileKeys.filter((key) => key !== fileKey);
   }
 
-  async function handleSubmit() {
+  function handleSubmit() {
     function updateProgress(loaded, total) {
       progress = (loaded / total) * 100;
     }
@@ -42,9 +42,9 @@
       request.setRequestHeader("Accept", "application/json; version=1.0");
 
       // upload progress event
-      request.upload.addEventListener("progress", (e) => {
+      request.upload.addEventListener("progress", (event) => {
         // upload progress as percentage
-        updateProgress(e.loaded, e.total);
+        updateProgress(event.loaded, event.total);
       });
 
       // request finished event
@@ -67,7 +67,8 @@
 <form on:submit|preventDefault={handleSubmit} class="mb-s8 cursor-pointer">
   <label>
     <input
-      {name}
+      name={id}
+      {id}
       bind:this={uploadInput}
       on:blur
       on:change={handleSubmit}

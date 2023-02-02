@@ -4,7 +4,7 @@
   import UserInfo from "./user-info.svelte";
 
   export let structure;
-  const administrators = structure.members.filter((m) => m.isAdmin);
+  const administrators = structure.members.filter((member) => member.isAdmin);
 </script>
 
 <InfoLine condition={structure.phone || structure.email}>

@@ -17,25 +17,23 @@
   export let service: Service | undefined = undefined;
   export let currentLocation: BreadcrumbLocation;
 
-  $: structureData = getStructureData(currentLocation);
-
-  function getStructureData(currentLocation) {
-    if (currentLocation === "structure-collaborateurs") {
+  function getStructureData(location) {
+    if (location === "structure-collaborateurs") {
       return {
         url: "collaborateurs",
         name: "Collaborateurs",
       };
-    } else if (currentLocation === "structure-services") {
+    } else if (location === "structure-services") {
       return {
         url: "services",
         name: "Services",
       };
-    } else if (currentLocation === "structure-modeles") {
+    } else if (location === "structure-modeles") {
       return {
         url: "modeles",
         name: "Modèles",
       };
-    } else if (currentLocation === "structure-antennes") {
+    } else if (location === "structure-antennes") {
       return {
         url: "antennes",
         name: "Antennes",
@@ -47,6 +45,8 @@
       name: "",
     };
   }
+
+  $: structureData = getStructureData(currentLocation);
 </script>
 
 <nav

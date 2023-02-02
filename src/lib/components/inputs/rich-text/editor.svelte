@@ -93,8 +93,8 @@
     }
   }
 
-  export function updateValue(v) {
-    editor.commands.setContent(markdownToHTML(v));
+  export function updateValue(value) {
+    editor.commands.setContent(markdownToHTML(value));
   }
 
   async function linkDialogOpen() {
@@ -115,7 +115,7 @@
     linkDialogIsOpen = false;
   }
 
-  async function linkDialogToggle() {
+  function linkDialogToggle() {
     if (linkDialogIsOpen) {
       linkDialogClose();
     } else {

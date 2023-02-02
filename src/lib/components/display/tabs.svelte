@@ -1,7 +1,7 @@
 <script lang="ts">
   export let onSelectedChange;
-  export let items = [];
-  export let itemId = undefined;
+  export let items: { id: string; name: string }[] = [];
+  export let itemId: string | undefined = undefined;
 </script>
 
 <ul class="flex flex-wrap gap-s8 pt-s16">

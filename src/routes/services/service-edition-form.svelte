@@ -2,25 +2,39 @@
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import Fieldset from "$lib/components/display/fieldset.svelte";
+  import FormErrors from "$lib/components/forms/form-errors.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import Errors from "$lib/components/specialized/services/errors.svelte";
-  import FieldsCommon from "$lib/components/specialized/services/fields-common.svelte";
+  import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
+  import Form from "$lib/components/forms/form.svelte";
+  import FieldCategory from "$lib/components/specialized/services/field-category.svelte";
+  import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
+  import FieldsDocuments from "$lib/components/specialized/services/fields-documents.svelte";
+  import FieldsInclusionNumerique from "$lib/components/specialized/services/fields-inclusion-numerique.svelte";
+  import FieldsModalities from "$lib/components/specialized/services/fields-modalities.svelte";
+  import FieldsPerimeter from "$lib/components/specialized/services/fields-perimeter.svelte";
+  import FieldsPeriodicity from "$lib/components/specialized/services/fields-periodicity.svelte";
+  import FieldsPlace from "$lib/components/specialized/services/fields-place.svelte";
+  import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
+  import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
   import FieldsStructure from "$lib/components/specialized/services/fields-structure.svelte";
-  import { createOrModifyService, publishDraft } from "$lib/requests/services";
-  import { serviceSubmissionTimeMeter } from "$lib/stores/service-submission-time-meter";
+  import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
+  import { createOrModifyService } from "$lib/requests/services";
   import type {
     Model,
     Service,
     ServicesOptions,
     ShortStructure,
   } from "$lib/types";
-  import { logException } from "$lib/utils/logger";
-  import { draftSchema, serviceSchema } from "$lib/validation/schemas/service";
-  import { injectAPIErrors, validate } from "$lib/validation/validation";
-  import debounce from "lodash.debounce";
-  import { onDestroy, onMount } from "svelte";
-  import FieldsInclusionNumerique from "./inclusion-numerique-fields.svelte";
-  import FieldsService from "./standard-fields.svelte";
+  import { log } from "$lib/utils/logger";
+  import {
+    draftSchema,
+    serviceSchema,
+    inclusionNumeriqueSchema,
+  } from "$lib/validation/schemas/service";
+  import { validate } from "$lib/validation/validation";
+  import type { Schema } from "$lib/validation/schema-utils";
+  import { shortenString } from "$lib/utils/misc";
 
   export let service: Service,
     servicesOptions: ServicesOptions,
@@ -28,233 +42,203 @@
     structure: ShortStructure,
     model: Model;
 
-  let modelSlugTmp = null;
-  let errorDiv;
+  let requesting = false;
+  let currentSchema: Schema;
 
-  // Counter for filling duration
-  let intervalId;
-  let lastUserActivity, userIsInactive;
-
-  // Note: we use debounce to limit update frequency
-  const updateLastUserActivity = debounce(() => {
-    lastUserActivity = Date.now();
-  }, 500);
-
-  function onError() {
-    errorDiv.scrollIntoView({ behavior: "smooth", block: "start" });
+  function handleChange(validatedData) {
+    service = { ...service, ...validatedData };
   }
 
-  async function unsync() {
+  function preSaveInclusionNumeriqueService(data) {
+    data.coachOrientationModes = ["autre"];
+    data.coachOrientationModesOther =
+      "Mêmes modalités que pour les bénéficiaires";
+
+    data.locationKinds = ["en-presentiel"];
+    data.name = "Médiation numérique";
+
+    const proposedServices = servicesOptions.subcategories
+      .filter((subcategory) => data.subcategories.includes(subcategory.value))
+      .map((subcategory) => subcategory.label.toLowerCase())
+      .join(", ");
+    data.shortDesc = shortenString(
+      `${structure.name} propose des services : ${proposedServices}`,
+      280
+    );
+  }
+  function handleSubmit(validatedData, kind) {
+    if (service.useInclusionNumeriqueScheme) {
+      preSaveInclusionNumeriqueService(validatedData);
+    }
+    if (kind === "publish") {
+      return createOrModifyService({
+        ...validatedData,
+        status: "PUBLISHED",
+        markSynced: true,
+      });
+    } else if (kind === "draft") {
+      return createOrModifyService({
+        ...validatedData,
+        status: "DRAFT",
+        markSynced: true,
+      });
+    } else {
+      log(`Soumission de type ${kind} invalide`);
+      return null;
+    }
+  }
+
+  function handleSuccess(result) {
+    goto(`/services/${result.slug}`);
+  }
+
+  function handleValidate(data, kind: "draft" | "publish") {
+    const schema = kind === "draft" ? draftSchema : currentSchema;
+    return validate(data, schema, {
+      servicesOptions,
+      checkRequired: kind !== "draft",
+    });
+  }
+
+  let modelSlugTmp = null;
+
+  function unsync() {
     modelSlugTmp = service.model;
     service.model = null;
   }
 
-  async function sync() {
+  function sync() {
     service.model = modelSlugTmp;
     modelSlugTmp = null;
   }
 
-  onMount(() => {
-    lastUserActivity = Date.now();
-    serviceSubmissionTimeMeter.clear(); // reset tracking values
-
-    intervalId = setInterval(() => {
-      userIsInactive = (Date.now() - lastUserActivity) / 1000 > 120; // 2 minutes
-      if (document.hasFocus() && !userIsInactive) {
-        serviceSubmissionTimeMeter.incrementDuration();
-      }
-    }, 1000);
-  });
-
-  onDestroy(() => {
-    clearInterval(intervalId);
-  });
-
-  async function publish() {
-    service.status = "PUBLISHED";
-    service.markSynced = true;
-
-    // Validate the whole form
-    const { validatedData, valid } = validate(service, serviceSchema, {
-      servicesOptions: servicesOptions,
-    });
-
-    if (valid) {
-      try {
-        let result = await createOrModifyService({
-          ...validatedData,
-          durationToAdd: $serviceSubmissionTimeMeter.duration,
-        });
-        result = await publishDraft(result.data.slug);
-
-        // For feedback modal
-        serviceSubmissionTimeMeter.setId(result.slug);
-
-        goto(`/services/${result.slug}`);
-      } catch (error) {
-        logException(error);
-      }
-    }
-  }
-
-  async function saveDraft() {
-    service.status = "DRAFT";
-    service.markSynced = true;
-
-    // eslint-disable-next-line no-warning-comments
-    // HACK: Empty <Select> are casted to null for now
-    // but the server wants an empty string
-    // We should fix the <Select> instead
-    if (service.category == null) {
-      service.category = "";
-    }
-
-    const { validatedData, valid } = validate(service, draftSchema, {
-      servicesOptions: servicesOptions,
-    });
-
-    if (!valid) {
-      return;
-    }
-
-    // Validation OK, let's send it to the API endpoint
-    const result = await createOrModifyService({
-      ...validatedData,
-      durationToAdd: $serviceSubmissionTimeMeter.duration,
-    });
-
-    if (result.ok) {
-      serviceSubmissionTimeMeter.clear();
-
-      goto(`/services/${result.data.slug}`);
-    } else {
-      injectAPIErrors(
-        result.error || {
-          nonFieldErrors: [
-            {
-              code: "fetch-error",
-              message: "Erreur de connexion au serveur",
-            },
-          ],
-        },
-        {}
-      );
-
-      if (onError) {
-        onError();
-      }
-    }
-  }
+  $: currentSchema = service.useInclusionNumeriqueScheme
+    ? inclusionNumeriqueSchema
+    : serviceSchema;
 </script>
 
-<svelte:window
-  on:keydown={updateLastUserActivity}
-  on:mousemove={updateLastUserActivity}
-  on:touchmove={updateLastUserActivity}
-/>
+<FormErrors />
 
-<hr />
-<CenteredGrid bgColor="bg-gray-bg">
-  <div bind:this={errorDiv} />
-  <Errors />
-
-  {#if structures.length}
-    <div class="lg:w-2/3">
-      <FieldsStructure
-        bind:structure
-        bind:service
-        bind:servicesOptions
-        bind:model
-        {structures}
-        {serviceSchema}
-      />
-    </div>
-  {/if}
-</CenteredGrid>
-
-{#if service?.structure}
-  <hr />
-
-  <CenteredGrid bgColor={service.model ? "bg-info-light" : "bg-gray-bg"}>
-    {#if service.model}
-      <div class="lg:flex lg:items-center lg:justify-between">
-        <h3>Synchronisé avec un modèle</h3>
-        <Button label="Détacher du modèle" secondary small on:click={unsync} />
-      </div>
-    {/if}
-
-    {#if modelSlugTmp}
-      <div class="mb-s24">
-        <Notice title="Le service est détaché du modèle" type="warning">
-          <p class="text-f14">
-            Après enregistrement, cette action sera définitive.
-          </p>
-          <div slot="button">
-            <Button
-              label="Re-synchroniser avec le modèle"
-              secondary
-              small
-              on:click={sync}
-            />
-          </div>
-        </Notice>
-      </div>
-    {:else if service.modelChanged}
-      <div class="my-s24">
-        <Notice title="Le modèle a été mis à jour" type="warning">
-          <p class="text-f14">
-            Vous pouvez voir ici les modifications et les utiliser sur le
-            service.
-          </p>
-        </Notice>
-      </div>
-    {/if}
-
-    <div class={service.model ? "" : "lg:w-2/3"}>
-      <FieldsCommon
-        bind:service
-        {servicesOptions}
-        {model}
-        {serviceSchema}
-        canAddChoices={!model?.customizableChoicesSet}
-        typologyFieldDisabled={model && model.canUpdateCategories === false}
-      />
-    </div>
-  </CenteredGrid>
-
-  <hr />
-
-  <CenteredGrid bgColor="bg-gray-bg">
-    <div class="lg:w-2/3">
-      {#if service.useInclusionNumeriqueScheme}
-        <FieldsInclusionNumerique
-          bind:service
-          {servicesOptions}
-          {serviceSchema}
-          {structure}
-        />
-      {:else}
-        <FieldsService
-          bind:service
-          {servicesOptions}
-          {serviceSchema}
-          {structure}
-        />
-      {/if}
-    </div>
-  </CenteredGrid>
+<Form
+  bind:data={service}
+  schema={currentSchema}
+  {servicesOptions}
+  onChange={handleChange}
+  onSubmit={handleSubmit}
+  onSuccess={handleSuccess}
+  onValidate={handleValidate}
+  bind:requesting
+>
   <hr />
 
   <CenteredGrid>
-    <div class="flex flex-row gap-s12">
+    {#if structures.length}
+      <div class="lg:w-2/3">
+        <FieldsStructure
+          bind:structure
+          bind:service
+          bind:servicesOptions
+          bind:model
+          {structures}
+        />
+      </div>
+    {/if}
+  </CenteredGrid>
+
+  {#if service?.structure}
+    <hr />
+
+    <CenteredGrid>
+      {#if service.model}
+        <div class="lg:flex lg:items-center lg:justify-between">
+          <h3>Synchronisé avec un modèle</h3>
+          <Button
+            label="Détacher du modèle"
+            secondary
+            small
+            on:click={unsync}
+          />
+        </div>
+      {/if}
+
+      {#if modelSlugTmp}
+        <div class="mb-s24">
+          <Notice title="Le service est détaché du modèle" type="warning">
+            <p class="text-f14">
+              Après enregistrement, cette action sera définitive.
+            </p>
+            <div slot="button">
+              <Button
+                label="Re-synchroniser avec le modèle"
+                secondary
+                small
+                on:click={sync}
+              />
+            </div>
+          </Notice>
+        </div>
+      {:else if service.modelChanged}
+        <div class="my-s24">
+          <Notice title="Le modèle a été mis à jour" type="warning">
+            <p class="text-f14">
+              Vous pouvez voir ici les modifications et les utiliser sur le
+              service.
+            </p>
+          </Notice>
+        </div>
+      {/if}
+
+      {#if !service.useInclusionNumeriqueScheme}
+        <div class={service.model ? "" : "lg:w-2/3"}>
+          <FieldsTypology noTopPadding bind:service {servicesOptions} {model} />
+
+          <FieldsPresentation bind:service {servicesOptions} {model} />
+
+          <FieldsPublics bind:service {servicesOptions} {model} />
+
+          <FieldsModalities bind:service {servicesOptions} {model} />
+
+          <FieldsDocuments bind:service {servicesOptions} {model} />
+
+          <FieldsPeriodicity bind:service {servicesOptions} {model} />
+        </div>
+        <div class="lg:w-2/3">
+          <FieldsPerimeter bind:service {servicesOptions} />
+
+          <FieldsPlace bind:service {structure} {servicesOptions} />
+
+          <FieldsContact bind:service />
+        </div>
+      {:else}
+        <div class={service.model ? "" : "lg:w-2/3"}>
+          <Fieldset noTopPadding>
+            <FieldCategory bind:service {servicesOptions} {model} />
+          </Fieldset>
+
+          <FieldsInclusionNumerique
+            bind:service
+            {servicesOptions}
+            {structure}
+          />
+        </div>
+      {/if}
+    </CenteredGrid>
+
+    <StickyFormSubmissionRow>
       <Button
-        on:click={saveDraft}
-        name="save"
+        id="draft"
+        type="submit"
         label="Enregistrer en brouillon"
         secondary
+        disabled={requesting}
       />
 
-      <Button on:click={publish} name="publish" label="Publier" />
-    </div>
-  </CenteredGrid>
-{/if}
+      <Button
+        id="publish"
+        type="submit"
+        label="Publier"
+        disabled={requesting}
+      />
+    </StickyFormSubmissionRow>
+  {/if}
+</Form>

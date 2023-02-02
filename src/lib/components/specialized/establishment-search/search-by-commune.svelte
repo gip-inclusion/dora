@@ -1,49 +1,58 @@
 <script lang="ts">
-  import Field from "$lib/components/inputs/field.svelte";
-  import Select from "$lib/components/inputs/select/select.svelte";
-  import CitySearch from "$lib/components/specialized/city-search.svelte";
   import { getApiURL } from "$lib/utils/api";
+  import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
+  import Select from "$lib/components/inputs/select/select.svelte";
+  import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
+  import type { Establishment, GeoApiCity } from "$lib/types";
 
   export let establishment;
   export let isOwnStructure = true;
 
-  let city;
-  export let onCityChange = null;
-  export let onEstablishmentChange = null;
+  export let onCityChange: (newCity: GeoApiCity | null) => void;
+  export let onEstablishmentChange: (estab: Establishment | null) => void;
 
-  function handleCityChange(newCity) {
+  let city: GeoApiCity | null;
+
+  function handleCityChange(newCity: GeoApiCity | null) {
     city = newCity;
     establishment = null;
-    if (onCityChange) onCityChange(newCity);
+    if (onCityChange) {
+      onCityChange(newCity);
+    }
   }
 
-  async function handleEstablishmentChange(newEstablishment) {
+  function handleEstablishmentChange(newEstablishment: Establishment) {
     establishment = newEstablishment;
-    if (onEstablishmentChange) onEstablishmentChange(newEstablishment);
+    if (onEstablishmentChange) {
+      onEstablishmentChange(newEstablishment);
+    }
   }
 
-  async function searchSirene(q) {
-    const url = `${getApiURL()}/search-sirene/${
-      city.code
-    }/?q=${encodeURIComponent(q)}`;
+  async function searchSirene(query) {
+    if (city) {
+      const url = `${getApiURL()}/search-sirene/${
+        city.code
+      }/?q=${encodeURIComponent(query)}`;
 
-    const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json; version=1.0",
-      },
-    });
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json; version=1.0",
+        },
+      });
 
-    const jsonResponse = await response.json();
+      const jsonResponse = await response.json();
 
-    const results = jsonResponse.map((result) => {
-      result.label = `${result.name} (${result.address1})`;
-      return {
-        value: result,
-        label: result.label,
-      };
-    });
-    return results;
+      const results = jsonResponse.map((result) => {
+        result.label = `${result.name} (${result.address1})`;
+        return {
+          value: result,
+          label: result.label,
+        };
+      });
+      return results;
+    }
+    return [];
   }
 
   const structureLabel = isOwnStructure
@@ -51,18 +60,17 @@
     : "Nom de la structure de votre partenaire";
 </script>
 
-<Field type="custom" label="Commune" required vertical>
+<FieldWrapper id="city" label="Commune" required vertical>
   <CitySearch
-    slot="custom-input"
-    name="city-select"
-    placeholder="Saisissez et sélectionnez le nom de la ville"
+    id="city"
     onChange={handleCityChange}
+    placeholder="Saisissez et sélectionnez le nom de la ville"
   />
-</Field>
-<Field type="custom" label={structureLabel} required vertical>
+</FieldWrapper>
+
+<FieldWrapper id="siret-select" label={structureLabel} required vertical>
   <Select
-    slot="custom-input"
-    name="siret-select"
+    id="siret-select"
     onChange={handleEstablishmentChange}
     disabled={!city?.code}
     placeholder="Commencez à saisir et choisissez dans la liste"
@@ -73,4 +81,4 @@
     postfixValueFunction={(item) => item.siret}
     minCharactersToSearch="3"
   />
-</Field>
+</FieldWrapper>

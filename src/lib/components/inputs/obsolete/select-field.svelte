@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { clickOutside } from "$lib/utils/click-outside";
   import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
   import {
@@ -7,6 +6,7 @@
     getChoiceFromValue,
     getChoicesFromKey,
   } from "$lib/utils/choice";
+  import { clickOutside } from "$lib/utils/misc";
   import { tick } from "svelte";
   import FieldWrapper from "./field-wrapper.svelte";
   import SelectLabel from "./select-label.svelte";
@@ -38,19 +38,10 @@
   const originalOptGroups: Choice[] = [...optGroups];
 
   let optGroupsOpen: string[] = [];
-
-  function optGroupHasSubValuesSelected(optGroup) {
-    return value.filter((v) => v.split("--")[0] === optGroup.value).length > 0;
-  }
+  let filterText = "";
 
   // AriaDescribedBy => TODO: move to wrapper
   let ariaDescribedBy = "";
-  $: {
-    ariaDescribedBy = helper ? `${name}-helper` : "";
-    if ((errorMessages || []).length) {
-      ariaDescribedBy = `${ariaDescribedBy} ${name}-error`;
-    }
-  }
 
   // *** Accessibilité
   const uuid: string = crypto.randomUUID(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
@@ -60,13 +51,92 @@
   let selectedOptionIndex: number | null = null;
   let selectedOption: Choice | undefined;
 
+  function toggleCombobox(forceValue?: boolean) {
+    expanded = forceValue !== undefined ? forceValue : !expanded;
+    if (!expanded) {
+      selectedOptionIndex = null;
+      selectedOption = null;
+    }
+  }
+
+  function findChoiceIndex(allChoices: Choice[], val: string) {
+    return allChoices.findIndex((choice) => choice.value === val);
+  }
+
+  function toggleGroup(optGroup: string) {
+    if (optGroupsOpen.includes(optGroup)) {
+      optGroupsOpen = optGroupsOpen.filter((opt) => opt !== optGroup);
+    } else {
+      optGroupsOpen = [...optGroupsOpen, optGroup];
+    }
+  }
+
+  async function scrollToOption(id: string) {
+    // Open if needed
+    if (optGroups.length) {
+      const key = getCategoryKeyFromSubcategoryChoice(selectedOption);
+      if (!optGroupsOpen.includes(key)) {
+        optGroupsOpen = [...optGroupsOpen, key];
+      }
+    }
+
+    await tick();
+
+    const scrollTop = document.getElementById(id).offsetTop;
+    document.getElementById(`listbox-values-${uuid}`).scrollTop =
+      scrollTop - 60;
+  }
+
+  function optGroupHasSubValuesSelected(optGroup) {
+    return (
+      value.filter((val) => val.split("--")[0] === optGroup.value).length > 0
+    );
+  }
+
+  function updateValue(newValue: string, optGroup: string | undefined) {
+    filterText = "";
+
+    // As array
+    if (isMultiple) {
+      if (value.includes(newValue)) {
+        value = (value as string[]).filter((val) => val !== newValue);
+      } else {
+        // Gestion du bouton "Tous"
+        if (optGroups) {
+          if (newValue.endsWith("--all")) {
+            // Si on décoche toutes les options si on sélectionne "Tous"
+            value = value.filter((val) => !val.startsWith(`${optGroup}--`));
+          } else {
+            // Si on décoche "Tous" si on sélectionne une option précise
+            value = value.filter((val) => val !== `${optGroup}--all`);
+          }
+        }
+
+        value = [...value, newValue];
+      }
+    } else {
+      // As string
+      value = newValue;
+    }
+    if (onChange) {
+      onChange({ detail: name, value });
+    }
+    if (!isMultiple) {
+      toggleCombobox(false);
+    }
+  }
+
   function handleKeydown(event: KeyboardEvent) {
     if (["Escape", " ", "Enter", "ArrowDown", "ArrowUp"].includes(event.key)) {
       event.preventDefault();
     }
-    if (event.code === "Tab" || event.code === "Escape") toggleCombobox(false);
+    if (event.code === "Tab" || event.code === "Escape") {
+      toggleCombobox(false);
+    }
 
-    if (event.code === "Space") toggleCombobox();
+    if (event.code === "Space") {
+      toggleCombobox();
+    }
 
     if (event.code === "Enter") {
       if (!expanded) {
@@ -91,27 +161,13 @@
       selectedOptionIndex = selectedOptionIndex
         ? selectedOptionIndex - 1
         : choices.length - 1;
-      if (selectedOptionIndex < 0) selectedOptionIndex = choices.length - 1;
+      if (selectedOptionIndex < 0) {
+        selectedOptionIndex = choices.length - 1;
+      }
       selectedOption = choices[selectedOptionIndex];
 
       scrollToOption(selectedOption.value);
     }
-  }
-
-  async function scrollToOption(id: string) {
-    // Open if needed
-    if (optGroups.length) {
-      const key = getCategoryKeyFromSubcategoryChoice(selectedOption);
-      if (!optGroupsOpen.includes(key)) {
-        optGroupsOpen = [...optGroupsOpen, key];
-      }
-    }
-
-    await tick();
-
-    const scrollTop = document.getElementById(id).offsetTop;
-    document.getElementById(`listbox-values-${uuid}`).scrollTop =
-      scrollTop - 60;
   }
 
   function clearAll() {
@@ -124,67 +180,17 @@
     }
   }
 
-  function updateValue(newValue: string, optGroup: string | undefined) {
-    filterText = "";
-
-    // As array
-    if (isMultiple) {
-      if (value.includes(newValue)) {
-        value = (value as string[]).filter((v) => v !== newValue);
-      } else {
-        // Gestion du bouton "Tous"
-        if (optGroups) {
-          if (newValue.endsWith("--all")) {
-            // Si on décoche toutes les options si on sélectionne "Tous"
-            value = value.filter((v) => !v.startsWith(`${optGroup}--`));
-          } else {
-            // Si on décoche "Tous" si on sélectionne une option précise
-            value = value.filter((v) => v !== `${optGroup}--all`);
-          }
-        }
-
-        value = [...value, newValue];
-      }
-    } else {
-      // As string
-      value = newValue;
-    }
-    if (onChange) onChange({ detail: name, value });
-    if (!isMultiple) toggleCombobox(false);
-  }
-
-  function toggleCombobox(forceValue?: boolean) {
-    expanded = forceValue !== undefined ? forceValue : !expanded;
-    if (!expanded) {
-      selectedOptionIndex = null;
-      selectedOption = null;
-    }
-  }
-
-  function setAsSelected(value: string | null) {
-    if (!value) {
+  function setAsSelected(val: string | null) {
+    if (!val) {
       selectedOptionIndex = null;
       selectedOption = null;
       return;
     }
 
-    selectedOptionIndex = findChoiceIndex(choices, value);
+    selectedOptionIndex = findChoiceIndex(choices, val);
     selectedOption = choices[selectedOptionIndex];
   }
 
-  function findChoiceIndex(choices: Choice[], value: string) {
-    return choices.findIndex((c) => c.value === value);
-  }
-
-  async function toggleGroup(optGroup: string) {
-    if (optGroupsOpen.includes(optGroup)) {
-      optGroupsOpen = optGroupsOpen.filter((opt) => opt !== optGroup);
-    } else {
-      optGroupsOpen = [...optGroupsOpen, optGroup];
-    }
-  }
-
-  let filterText = "";
   $: {
     if (!filterText) {
       choices = [...originalChoices];
@@ -192,12 +198,12 @@
       optGroupsOpen = [];
     } else {
       // On filtre les choix et les optGroups
-      choices = originalChoices.filter((c) => {
+      choices = originalChoices.filter((choice) => {
         const optGroupLabel = originalOptGroups.find(
-          (g) => g.value === c.optGroupKey
+          (group) => group.value === choice.optGroupKey
         )?.label;
         return (
-          c.label.toLowerCase().includes(filterText.toLocaleLowerCase()) ||
+          choice.label.toLowerCase().includes(filterText.toLocaleLowerCase()) ||
           optGroupLabel.toLowerCase().includes(filterText.toLocaleLowerCase())
         );
       });
@@ -211,11 +217,20 @@
       // On filtre et ouvre les optgroup ayant des options
       if (optGroups) {
         const optGroupKeys = new Set<string>();
-        choices.forEach((c) => optGroupKeys.add(c.optGroupKey));
+        choices.forEach((choice) => optGroupKeys.add(choice.optGroupKey));
 
         optGroupsOpen = Array.from(optGroupKeys.values());
-        optGroups = originalOptGroups.filter((o) => optGroupKeys.has(o.value));
+        optGroups = originalOptGroups.filter((optGroup) =>
+          optGroupKeys.has(optGroup.value)
+        );
       }
+    }
+  }
+
+  $: {
+    ariaDescribedBy = helper ? `${name}-helper` : "";
+    if ((errorMessages || []).length) {
+      ariaDescribedBy = `${ariaDescribedBy} ${name}-error`;
     }
   }
 </script>
@@ -252,9 +267,11 @@
       <div class="w-[90%] overflow-hidden text-ellipsis whitespace-nowrap">
         {#if isMultiple && value.length > 0}
           {value
-            .map((v) => {
-              const choice = choices.find((c) => c.value === v);
-              return choice.selectedLabel ?? choice.label;
+            .map((val) => {
+              const selectedChoice = choices.find(
+                (choice) => choice.value === val
+              );
+              return selectedChoice.selectedLabel ?? selectedChoice.label;
             })
             .join(", ")}
         {:else if !isMultiple && value}

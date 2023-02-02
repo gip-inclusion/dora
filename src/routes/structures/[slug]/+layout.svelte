@@ -8,7 +8,7 @@
   import { structure } from "./store";
 
   $: publishedServices = $structure.services.filter(
-    (s) => s.status === "PUBLISHED"
+    (service) => service.status === "PUBLISHED"
   );
 </script>
 
@@ -34,7 +34,7 @@
 </CenteredGrid>
 
 {#if $structure.isMember && publishedServices.length}
-  <TallyNpsPopup formId={TallyFormId.NPS_OFFEROR_FORM_ID} timeout={30000} />
+  <TallyNpsPopup formId={TallyFormId.NPS_OFFEROR_FORM_ID} timeoutSeconds={30} />
 {/if}
 
 <style lang="postcss">

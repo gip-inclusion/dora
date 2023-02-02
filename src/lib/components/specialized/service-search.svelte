@@ -3,7 +3,7 @@
   import Button from "$lib/components/display/button.svelte";
   import FieldWrapper from "$lib/components/inputs/obsolete/field-wrapper.svelte";
   import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
-  import CitySearch from "$lib/components/specialized/city-search.svelte";
+  import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
   import {
     arrowDownSIcon,
     deleteBackIcon,
@@ -37,19 +37,14 @@
 
   let cityChoiceList;
 
-  function handleSearchIfNotDisabled() {
-    if (cityCode && subCategoryIds.length) {
-      handleSearch();
-    }
-  }
   function handleSearch() {
     const categoryIds = subCategoryIds
-      .filter((v) => v.endsWith("--all"))
-      .map((v) => v.replace("--all", ""));
+      .filter((value) => value.endsWith("--all"))
+      .map((value) => value.replace("--all", ""));
 
     // Remove sub-categories ending with --all
     const finalSubCategoryIds = subCategoryIds.filter(
-      (v) => !v.endsWith("--all")
+      (value) => !value.endsWith("--all")
     );
 
     const query = getQuery({
@@ -61,6 +56,12 @@
       feeConditions,
     });
     goto(`recherche?${query}`);
+  }
+
+  function handleSearchIfNotDisabled() {
+    if (cityCode && subCategoryIds.length) {
+      handleSearch();
+    }
   }
 
   const categories = servicesOptions.categories
@@ -115,7 +116,7 @@
           </div>
 
           <CitySearch
-            name="city"
+            id="city"
             initialValue={cityLabel}
             bind:value={cityChoiceList}
             placeholder="Rechercher par lieu : ville"

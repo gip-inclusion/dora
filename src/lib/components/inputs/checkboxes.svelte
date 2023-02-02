@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
-  export let group, choices, disabled, name, readonly;
+  export let id, group, choices, disabled, name, readonly;
 
   const dispatch = createEventDispatcher();
 
@@ -12,10 +12,11 @@
   }
 </script>
 
-<div class="flex flex-col gap-s8">
-  {#each choices as choice}
+<div {id} class="flex flex-col gap-s8">
+  {#each choices as choice, i}
     <label class="flex flex-row items-center">
       <input
+        id={`${id}-${i}`}
         bind:group
         on:change={handleChange}
         value={choice.value}

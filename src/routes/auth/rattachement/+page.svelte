@@ -1,6 +1,5 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
   import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
@@ -13,11 +12,12 @@
   import { trackJoinStructure } from "$lib/utils/plausible";
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";
+  import type { PageData } from "./$types";
 
-  let siret = $page.url.searchParams.get("siret");
+  export let data: PageData;
 
-  let establishment;
-  let tabId;
+  let { establishment } = data;
+  let ctaLabel = "";
 
   async function handleJoin() {
     trackJoinStructure();
@@ -55,16 +55,30 @@
   }
 
   $: alreadyMember = $userInfo?.structures
-    ?.map((s) => s.siret)
+    ?.map((struct) => struct.siret)
     ?.includes(establishment?.siret);
   $: alreadyRequested = $userInfo?.pendingStructures
-    ?.map((s) => s.siret)
+    ?.map((struct) => struct.siret)
     ?.includes(establishment?.siret);
+
+  $: {
+    if (alreadyRequested) {
+      ctaLabel = "Relancer l’administrateur";
+    } else if (alreadyMember) {
+      ctaLabel = "Accéder à la structure";
+    } else {
+      ctaLabel = "Adhérer à la structure";
+    }
+  }
 </script>
 
 <EnsureLoggedIn>
   <AuthLayout>
-    <StructureSearch {siret} bind:establishment bind:tabId blockPoleEmploi>
+    <StructureSearch
+      bind:establishment
+      blockPoleEmploi
+      title="Identifiez votre structure"
+    >
       <div slot="cta">
         {#if establishment?.siret}
           <div class="mt-s24">
@@ -84,11 +98,7 @@
             {/if}
             <div class="mt-s24 flex justify-end">
               <Button
-                label={alreadyRequested
-                  ? "Relancer l’administrateur"
-                  : alreadyMember
-                  ? "Accéder à la structure"
-                  : "Adhérer à la structure"}
+                label={ctaLabel}
                 on:click={handleJoin}
                 preventDefaultOnMouseDown
               />

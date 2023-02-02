@@ -1,14 +1,22 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import SchemaField from "$lib/components/inputs/schema-field.svelte";
+  import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import { getModel, getServicesOptions } from "$lib/requests/services";
   import { getStructure } from "$lib/requests/structures";
-  import { formErrors } from "$lib/validation/validation";
+  import type {
+    Model,
+    Service,
+    ServicesOptions,
+    ShortStructure,
+  } from "$lib/types";
   import { onMount } from "svelte";
 
-  export let servicesOptions, serviceSchema, service, structures, structure;
+  export let servicesOptions: ServicesOptions,
+    service: Service,
+    structures: ShortStructure[],
+    structure: ShortStructure;
   export let isModel = false;
-  export let model = null;
+  export let model: Model | undefined = undefined;
 
   const propsWithSpecificFields = [
     "accessConditions",
@@ -18,7 +26,7 @@
   ];
 
   // met à jour les options de service et le modèle en fonction des champs spécifiques
-  // cette fonction est comliqué car sur les champs spécifiques,
+  // cette fonction est compliquée car sur les champs spécifiques,
   // la `value` peut ĕtre soit une id numérique
   // soit une string sur les modèles.
   // on devrait pourvoir simplifier ici si l'API devient plus cohérente
@@ -26,8 +34,9 @@
     propsWithSpecificFields.forEach((propName) => {
       // options de services qui appartiennent à la structure courante
       const structureServicesOptions = servicesOptions[propName].filter(
-        (o) =>
-          !o.structure || (structure?.slug && o.structure === structure.slug)
+        (option) =>
+          !option.structure ||
+          (structure?.slug && option.structure === structure.slug)
       );
 
       if (isModel) {
@@ -37,7 +46,7 @@
           // si le type est une string, c'est un champs spécifique
           if (typeof value === "string") {
             const option = structureServicesOptions.find(
-              (o) => o.label === value
+              (opt) => opt.label === value
             );
             service[propName][i] = option.value;
           }
@@ -47,7 +56,7 @@
           // si le type est une string, c'est un champs spécifique
           if (typeof value === "string") {
             const option = structureServicesOptions.find(
-              (o) => o.label === value
+              (opt) => opt.label === value
             );
 
             // si ce champs spécifique existe dans les options de service
@@ -84,9 +93,8 @@
       if (!isModel && service.model) {
         model = await getModel(model.slug);
       }
-      servicesOptions = isModel
-        ? await getServicesOptions({ model: service })
-        : await getServicesOptions({ model });
+
+      servicesOptions = await getServicesOptions();
 
       updateServiceOptions();
     }
@@ -103,17 +111,16 @@
 </script>
 
 <FieldSet noTopPadding>
-  <SchemaField
-    type="select"
-    schema={serviceSchema.structure}
-    label={serviceSchema.structure.name}
-    choices={structures.map((s) => ({ value: s.slug, label: s.name }))}
-    name="structure"
-    errorMessages={$formErrors.structure}
+  <SelectField
+    id="structure"
     bind:value={service.structure}
-    onSelectChange={handleStructureChange}
-    sortSelect
-    placeholder="Sélectionner"
+    choices={structures.map((struct) => ({
+      value: struct.slug,
+      label: struct.name,
+    }))}
+    onChange={handleStructureChange}
+    sort
     disabled={!showStructures}
+    placeholder="Sélectionnez la structure…"
   />
 </FieldSet>

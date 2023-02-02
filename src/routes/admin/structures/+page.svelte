@@ -9,24 +9,21 @@
 
   let structures, filteredStructures;
 
-  onMount(async () => {
-    structures = await getStructuresAdmin();
-    filteredStructures = filterAndSortEntities("");
-  });
-
   function filterAndSortEntities(searchString) {
     return (
       searchString
         ? structures.filter(
-            (s) =>
-              s.name.toLowerCase().includes(searchString) ||
-              s.department === searchString
+            (struct) =>
+              struct.name.toLowerCase().includes(searchString) ||
+              struct.department === searchString
           )
         : structures
-    ).sort((s1, s2) =>
-      s1.department === s2.department
-        ? s1.name.toLowerCase().localeCompare(s2.name.toLowerCase(), "fr")
-        : s1.department.localeCompare(s2.department, "fr", {
+    ).sort((structure1, structure2) =>
+      structure1.department === structure2.department
+        ? structure1.name
+            .toLowerCase()
+            .localeCompare(structure2.name.toLowerCase(), "fr")
+        : structure1.department.localeCompare(structure2.department, "fr", {
             numeric: true,
           })
     );
@@ -36,9 +33,14 @@
     const searchString = event.target.value.toLowerCase().trim();
     filteredStructures = filterAndSortEntities(searchString);
   }
+
+  onMount(async () => {
+    structures = await getStructuresAdmin();
+    filteredStructures = filterAndSortEntities("");
+  });
 </script>
 
-<CenteredGrid bgColor="bg-gray-bg">
+<CenteredGrid>
   <h2>Structures</h2>
 
   <div class="flex flex-col gap-s12">
@@ -59,7 +61,9 @@
 
     {#if structures}
       {#each filteredStructures as structure}
-        <div class="flex flex-row gap-s16 rounded-md bg-white p-s16">
+        <div
+          class="flex flex-row gap-s16 rounded-md border border-gray-01 p-s16"
+        >
           <div class="flex grow flex-row items-center">
             <a href="/admin/structures/{structure.slug}" target="_blank">
               <h5>

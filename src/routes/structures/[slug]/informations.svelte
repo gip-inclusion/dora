@@ -1,8 +1,8 @@
 <script lang="ts">
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import Date from "$lib/components/utilities/date.svelte";
-  import TextClamp from "$lib/components/utilities/text-clamp.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
+  import TextClamp from "$lib/components/display/text-clamp.svelte";
   import {
     computerIcon,
     externalLinkIcon,
@@ -15,7 +15,7 @@
   import type { Structure, StructuresOptions } from "$lib/types";
   import { token, userInfo } from "$lib/utils/auth";
   import { formatPhoneNumber, markdownToHTML } from "$lib/utils/misc";
-  import { formatOsmHours } from "$lib/utils/structure";
+  import { formatOsmHours } from "$lib/utils/opening-hours";
   import DataInclusionNotice from "./data-inclusion-notice.svelte";
 
   export let structure: Structure;
@@ -27,7 +27,7 @@
   $: nationalLabelsDisplay = structure.nationalLabels
     .map((nationalLabel: string) => {
       return structuresOptions.nationalLabels.find(
-        (n) => n.value === nationalLabel
+        (label) => label.value === nationalLabel
       ).label;
     })
     .join(", ");
@@ -61,7 +61,7 @@
   {#if structure.modificationDate}
     <p class="mt-s40 mb-s0 text-f12 text-gray-dark">
       Informations sur la structure mises à jour le
-      <Date date={structure.modificationDate} />
+      <DateLabel date={structure.modificationDate} />
     </p>
   {/if}
   {#if canManageStructure && sourceIsDataInclusion && !structure.hasBeenEdited}

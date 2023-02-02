@@ -1,114 +1,94 @@
 <script lang="ts">
-  import Alert from "$lib/components/display/alert.svelte";
   import Button from "$lib/components/display/button.svelte";
-  import Form from "$lib/components/display/form.svelte";
-  import Field from "$lib/components/inputs/field.svelte";
-  import Input from "$lib/components/inputs/input.svelte";
+  import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
+  import type { Establishment } from "$lib/types";
+
   import { getApiURL } from "$lib/utils/api";
-  import {
-    isSiret,
-    isString,
-    siretRegexp,
-    trim,
-  } from "$lib/validation/schemas/utils";
-  import { formErrors } from "$lib/validation/validation";
-  import { onMount } from "svelte";
+  import { siretRegexp } from "$lib/validation/schema-utils";
 
-  export let onEstablishmentChange = null;
-  export let siret = "";
+  export let onEstablishmentChange: (
+    establishment: Establishment | null
+  ) => void;
 
-  let requesting = false;
+  export let establishment: Establishment | null;
+  let siretInput = establishment?.siret;
   let siretIsValid = false;
+  let serverErrorMsg = "";
 
-  $: siretIsValid = !!siret?.match(siretRegexp);
+  $: siretIsValid = !!siretInput?.match(siretRegexp);
 
-  const siretSearchSchema = {
-    siret: {
-      default: "",
-      required: true,
-      rules: [isString(), isSiret()],
-      post: [trim],
-    },
-  };
+  async function handleValidateSiret() {
+    const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(
+      siretInput
+    )}`;
 
-  const serverErrors = {
-    // eslint-disable-next-line
-    nonFieldErrors: { not_found: "Numéro Siret non reconnu." },
-  };
-
-  async function siretSearch(s) {
-    const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(s)}`;
-
-    return fetch(url, {
+    const response = await fetch(url, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json; version=1.0",
       },
     });
-  }
 
-  async function handleSubmit(validatedData) {
-    if (onEstablishmentChange) onEstablishmentChange({});
-
-    return siretSearch(validatedData.siret);
-  }
-
-  function handleSuccess(establishment) {
-    if (onEstablishmentChange) onEstablishmentChange(establishment);
-  }
-
-  onMount(async () => {
-    if (siret) {
-      requesting = true;
-      const response = await siretSearch(siret);
-
-      if (response.status === 200) {
-        const establishment = await response.json();
-        handleSuccess(establishment);
-      } else {
-        siret = "";
-      }
-      requesting = false;
+    if (response.ok) {
+      establishment = await response.json();
+    } else if (response.status === 404) {
+      serverErrorMsg = "SIRET inconnu";
+      establishment = null;
     }
-  });
+
+    onEstablishmentChange(establishment);
+  }
+
+  function handleKeydown(event: KeyboardEvent) {
+    if (event.code === "Enter") {
+      event.preventDefault();
+      if (siretIsValid) {
+        handleValidateSiret();
+      }
+    }
+  }
 </script>
 
-<Form
-  data={{ siret }}
-  schema={siretSearchSchema}
-  serverErrorsDict={serverErrors}
-  onSubmit={handleSubmit}
-  onSuccess={handleSuccess}
-  bind:requesting
+<FieldWrapper
+  id="siret-select"
+  label="Numéro SIRET"
+  required
+  description="Sur 14 chiffres"
+  vertical
 >
-  {#if $formErrors.nonFieldErrors?.length}
-    <div>
-      {#each $formErrors.nonFieldErrors || [] as msg}
-        <Alert label={msg} />
-      {/each}
+  <slot slot="description" name="description" />
+
+  <div class="flex flex-col">
+    <div class="flex flex-row gap-s12">
+      <input
+        class="h-s48  grow rounded border border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt outline-none focus:shadow-focus"
+        id="siret-select"
+        type="text"
+        on:input={() => (serverErrorMsg = "")}
+        on:keydown={handleKeydown}
+        bind:value={siretInput}
+        placeholder="1234567891234"
+        maxlength="14"
+      />
+
+      <Button
+        label="Rechercher"
+        disabled={!siretIsValid}
+        on:click={handleValidateSiret}
+        small
+      />
     </div>
-  {/if}
-  <Field
-    type="custom"
-    label="Numéro Siret"
-    required
-    vertical
-    description="Sur 14 chiffres"
-  >
-    <div slot="custom-input" class="flex gap-s12">
-      <div class="flex grow">
-        <Input
-          type="text"
-          name="siret-select"
-          placeholder="1234567891234"
-          bind:value={siret}
-        />
-      </div>
-      {#if requesting}
-        <p class="py-s12 px-s8 lg:px-s20">Chargement…</p>
-      {:else}
-        <Button label="Rechercher" disabled={!siretIsValid} type="submit" />
+    <div>
+      {#if serverErrorMsg || (siretInput && !siretInput.match(siretRegexp))}
+        <div class="mt-s4  text-f12 text-error">
+          {#if serverErrorMsg}
+            {serverErrorMsg}
+          {:else}
+            Ce champ doit comporter 14 chiffres ({siretInput.length}/14
+            caractères)
+          {/if}
+        </div>
       {/if}
     </div>
-  </Field>
-</Form>
+  </div>
+</FieldWrapper>

@@ -4,7 +4,7 @@
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { alertIcon } from "$lib/icons";
   import { siretWasAlreadyClaimed } from "$lib/requests/structures";
-  import structureSchema from "$lib/validation/schemas/structure";
+  import { structureSchema } from "$lib/validation/schemas/structure";
   import StructureEditionForm from "../structure-edition-form.svelte";
   import type { PageData } from "./$types";
 
@@ -59,7 +59,7 @@
     <h1 class="text-france-blue">Création d’une structure</h1>
   </CenteredGrid>
 
-  <CenteredGrid bgColor="bg-gray-bg">
+  <CenteredGrid>
     <StructureSearch
       onEstablishmentChange={handleEstablishmentChange}
       onCityChange={handleCityChange}
@@ -78,14 +78,13 @@
             class="underline"
             href="/structures/{alreadyClaimedEstablishment?.slug}"
           >
-            visualiser
-          </a>.
+            visualiser</a
+          >.
         </p>
       </div>
     {/if}
 
     {#if structure.siret}
-      <h2 class="mb-s40 border border-b-2 border-gray-02">Présentation</h2>
       <StructureEditionForm
         {structure}
         structuresOptions={data.structuresOptions}

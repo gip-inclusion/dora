@@ -1,3 +1,5 @@
+// Icones de https://remixicon.com/
+
 export { default as bankIcon } from "remixicon/icons/Buildings/bank-line.svg?raw";
 export { default as home3Icon } from "remixicon/icons/Buildings/home-3-line.svg?raw";
 export { default as homeIcon } from "remixicon/icons/Buildings/home-6-line.svg?raw";
@@ -86,3 +88,7 @@ export { default as starSmileLineIcon } from "remixicon/icons/User/star-smile-li
 export { default as teamLineIcon } from "remixicon/icons/User/team-line.svg?raw";
 export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
 export { default as userAddIcon } from "remixicon/icons/User/user-add-line.svg?raw";
+
+// Autres
+
+export { default as syncIcon } from "$lib/assets/icons/ico-sync.svg?raw";

@@ -1,14 +1,14 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
-  import Form from "$lib/components/display/form.svelte";
-  import Modal from "$lib/components/display/modal.svelte";
-  import Field from "$lib/components/inputs/field.svelte";
+  import Form from "$lib/components/forms/form.svelte";
+  import Modal from "$lib/components/hoc/modal.svelte";
   import { getApiURL } from "$lib/utils/api";
   import { token } from "$lib/utils/auth";
   import { modifyUserSchema } from "$lib/validation/schemas/dashboard";
-  import { formErrors } from "$lib/validation/validation";
   import { get } from "svelte/store";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import SelectField from "$lib/components/forms/fields/select-field.svelte";
 
   const levelChoices = [
     {
@@ -46,41 +46,30 @@
     await onRefresh();
     isOpen = false;
   }
+
+  $: formData = { level };
 </script>
 
 <Modal bind:isOpen title="Utilisateur">
   <Form
-    data={{ level }}
+    bind:data={formData}
     schema={modifyUserSchema}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
   >
-    <Fieldset>
-      <Field
-        name="name"
-        label="Nom"
-        vertical
-        type="text"
-        value={member.user.fullName}
-        disabled
-      />
-      <Field
-        name="email"
-        label="Courriel"
-        vertical
+    <Fieldset noTopPadding>
+      <BasicInputField id="name" vertical value={member.user.fullName} />
+      <BasicInputField
         type="email"
-        value={member.user.email}
-        disabled
-      />
-      <Field
-        name="level"
-        errorMessages={$formErrors.level}
-        label="Permissions"
+        id="email"
         vertical
-        type="select"
+        value={member.user.email}
+      />
+      <SelectField
+        id="level"
+        vertical
         bind:value={level}
         choices={levelChoices}
-        required
       />
     </Fieldset>
 

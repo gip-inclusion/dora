@@ -22,11 +22,15 @@
 
   function sortedMembers(items) {
     return items.sort((a, b) => {
-      if (a.isAdmin && !b.isAdmin) return -1;
-      if (!a.isAdmin && b.isAdmin) return 1;
-      const lA = a.user.lastName || a.user.email;
-      const lB = b.user.lastName || b.user.email;
-      return lA.localeCompare(lB, "fr");
+      if (a.isAdmin && !b.isAdmin) {
+        return -1;
+      }
+      if (!a.isAdmin && b.isAdmin) {
+        return 1;
+      }
+      const nameA = a.user.lastName || a.user.email;
+      const nameB = b.user.lastName || b.user.email;
+      return nameA.localeCompare(nameB, "fr");
     });
   }
 </script>
@@ -77,7 +81,7 @@
           onRefresh={handleRefreshMemberList}
           isMyself={member.user.email === $userInfo.email}
           isOnlyAdmin={member.user.email === $userInfo.email &&
-            data.members.filter((m) => m.isAdmin).length === 1}
+            data.members.filter((memb) => memb.isAdmin).length === 1}
           readOnly={!data.canEditMembers}
         />
       {/each}

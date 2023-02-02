@@ -50,7 +50,7 @@
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
         {@html informationIcon}
       </span>
-      Uniquement QPV + ZRR
+      Uniquement QPV ou ZRR
     </div>
   {/if}
 

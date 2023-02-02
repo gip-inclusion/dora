@@ -1,6 +1,7 @@
 import { browser } from "$app/environment";
 import type { ServicesOptions } from "$lib/types";
-import type { Shape } from "$lib/validation/schemas/utils";
+import type { Schema, Shape } from "$lib/validation/schema-utils";
+import { tick } from "svelte";
 import { writable } from "svelte/store";
 
 export type ValidationContext = {
@@ -8,13 +9,16 @@ export type ValidationContext = {
   onChange: (evt: any) => Promise<void>;
 };
 export const contextValidationKey = {};
-// TODO: type it properly
+
 export const formErrors: any = writable({});
 
 let currentErrors;
 formErrors.subscribe((value) => {
   currentErrors = value;
 });
+
+export const currentSchema = writable<Schema | undefined>();
+export const currentFormData = writable<object | undefined>();
 
 function addError(fieldName, msg) {
   formErrors.update((previousErrors) => {
@@ -32,17 +36,28 @@ function clearError(fieldName) {
   });
 }
 
+export function isRequired<T>(shape: Shape<T>, data: any) {
+  if (shape.required == null) {
+    return false;
+  }
+  if (typeof shape.required === "boolean") {
+    return shape.required;
+  }
+  return shape.required(data);
+}
+
 function validateField(
   fieldName: string,
   shape: Shape<any>,
   data,
-  servicesOptions: ServicesOptions,
-  schema
+  servicesOptions: ServicesOptions | undefined,
+  schema,
+  checkRequired = true
 ) {
   const originalValue = data[fieldName];
 
   let value = originalValue;
-  if (!shape.required && value == null) {
+  if ((!checkRequired || !isRequired(shape, data)) && value == null) {
     // Ignore null values for fields that are not required
     return { value, valid: true };
   }
@@ -54,7 +69,8 @@ function validateField(
   }
 
   if (
-    shape.required &&
+    checkRequired &&
+    isRequired(shape, data) &&
     ((Array.isArray(value) && !value.length) ||
       (!Array.isArray(value) && (value == null || value === "")))
   ) {
@@ -78,10 +94,14 @@ function validateField(
   return { value, valid: true };
 }
 
-function scrollToField(fieldName) {
+async function scrollToField(fieldName) {
+  await tick();
   if (browser) {
-    const elt = document.getElementsByName(fieldName);
-    elt?.[0]?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const elt = document.getElementById(fieldName);
+    elt?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!elt) {
+      console.error("Impossible de scroller sur ", fieldName);
+    }
   }
 }
 
@@ -90,20 +110,25 @@ export function validate(
   schema,
   {
     noScroll = false,
-    fullSchema = undefined,
+    // lors de la saisie du formulaire, la validation est faite champ par champ
+    // mais dans certains cas on veut pouvoir valider un champ dépendant du premier
+    // en même temps. Pour cela on peut donc passer ici le schema complet du formulaire.
+    fullFormSchema = undefined,
     showErrors = true,
-    servicesOptions = null,
+    servicesOptions = undefined,
+    checkRequired = true,
   }: {
     noScroll?: boolean;
-    fullSchema?: any;
+    fullFormSchema?: any;
     showErrors?: boolean;
     servicesOptions?: ServicesOptions;
+    checkRequired?: boolean;
   } = {}
 ) {
   let validatedData = {};
   let isValid = true;
   let doneOnce = false;
-  const errorFields = [];
+  const errorFields: string[] = [];
 
   if (showErrors) {
     Object.keys(schema).forEach((fieldName) => delete currentErrors[fieldName]);
@@ -116,14 +141,15 @@ export function validate(
       shape,
       data,
       servicesOptions,
-      schema
+      schema,
+      checkRequired
     );
 
     isValid &&= valid;
     validatedData[fieldName] = value;
 
     if (!valid) {
-      errorFields.push(shape.name);
+      errorFields.push(shape.label);
     }
 
     if (showErrors) {
@@ -140,7 +166,7 @@ export function validate(
     }
 
     // Vérification des dépendances
-    if (shape.dependents?.length && fullSchema) {
+    if (shape.dependents?.length && fullFormSchema) {
       shape.dependents.forEach((depName) => {
         const {
           value: depValue,
@@ -148,16 +174,17 @@ export function validate(
           msg: depMsg,
         } = validateField(
           depName,
-          fullSchema[depName],
+          fullFormSchema[depName],
           data,
           servicesOptions,
-          schema
+          schema,
+          checkRequired
         );
 
         isValid &&= depValid;
         validatedData[depName] = depValue;
         if (!depValid) {
-          errorFields.push(fullSchema[depName].name);
+          errorFields.push(fullFormSchema[depName].name);
         }
 
         if (showErrors) {

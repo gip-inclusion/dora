@@ -11,4 +11,5 @@ export async function getCityLabel(inseeCode): Promise<string> {
   log(
     `Impossible de trouver la ville correspondant au code INSEE ${inseeCode}`
   );
+  return "";
 }

@@ -20,7 +20,7 @@
     unPublishService,
   } from "$lib/requests/services";
   import type { Service, ServiceStatus, ShortService } from "$lib/types";
-  import { clickOutside } from "$lib/utils/click-outside";
+  import { clickOutside } from "$lib/utils/misc";
   import { getAvailableOptionsForStatus } from "$lib/utils/service";
   import { serviceSchema } from "$lib/validation/schemas/service";
   import { validate } from "$lib/validation/validation";
@@ -73,10 +73,6 @@
   export let hideLabel = true;
   export let fullWidth = false;
 
-  // *** Valeurs pour l'affichage
-  $: currentStatusPresentation = SERVICE_STATUS_PRESENTATION[service.status];
-  $: availableOptions = getAvailableOptionsForStatus(service.status);
-
   // *** Accessibilité
   const uuid: string = crypto.randomUUID(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
   let isDropdownOpen = false;
@@ -84,6 +80,29 @@
   // Gestion de l'outline avec la navigation au clavier
   let selectedOptionIndex: number | null = null;
   let selectedOption: ServiceStatus | "DELETE" | null = null;
+
+  // Actions disponibles
+  async function publish() {
+    let serviceFull = service;
+    // teste si on a le service complet
+    // ça n'est pas le cas sur les cards de la page structure par exemple
+
+    if (!Object.prototype.hasOwnProperty.call(service, "fullDesc")) {
+      serviceFull = await getService(service.slug);
+    }
+
+    const isValid = validate(serviceFull, serviceSchema, {
+      noScroll: true,
+      showErrors: false,
+      servicesOptions: servicesOptions,
+    }).valid;
+
+    if (isValid) {
+      await publishService(service.slug);
+    } else {
+      goto(`/services/${service.slug}/editer`);
+    }
+  }
 
   function toggleCombobox(forceValue?: boolean) {
     isDropdownOpen = forceValue !== undefined ? forceValue : !isDropdownOpen;
@@ -96,47 +115,6 @@
     }
   }
 
-  function handleKeydown(event: KeyboardEvent) {
-    if (["Escape", " ", "Enter", "ArrowDown", "ArrowUp"].includes(event.key)) {
-      event.preventDefault();
-    }
-    if (event.code === "Tab" || event.code === "Escape") toggleCombobox(false);
-
-    if (event.code === "Space") toggleCombobox();
-
-    if (event.code === "Enter") {
-      if (!isDropdownOpen) {
-        toggleCombobox(true);
-      } else {
-        if (selectedOption) {
-          updateServiceStatus(selectedOption);
-        }
-      }
-    }
-
-    if (event.code === "ArrowDown") {
-      selectedOptionIndex = (selectedOptionIndex || 0) + 1;
-      selectedOptionIndex = selectedOptionIndex % availableOptions.length;
-
-      selectedOption = availableOptions[selectedOptionIndex];
-    }
-    if (event.code === "ArrowUp") {
-      selectedOptionIndex = (selectedOptionIndex || 0) - 1;
-      if (selectedOptionIndex < 0)
-        selectedOptionIndex = availableOptions.length - 1;
-      selectedOption = availableOptions[selectedOptionIndex];
-    }
-  }
-
-  function setAsSelected(
-    hoveredStatus: ServiceStatus | "DELETE",
-    index: number
-  ) {
-    selectedOptionIndex = index;
-    selectedOption = hoveredStatus;
-  }
-
-  // Actions disponibles
   async function updateServiceStatus(newStatus: ServiceStatus | "DELETE") {
     if (newStatus === "DRAFT") {
       if (service.status === "SUGGESTION") {
@@ -159,30 +137,59 @@
     }
 
     toggleCombobox(false);
-    if (onRefresh) await onRefresh();
-  }
-
-  async function publish() {
-    let serviceFull = service;
-    // teste si on a le service complet
-    // ça n'est pas le cas sur les cards de la page structure par exemple
-
-    if (!Object.prototype.hasOwnProperty.call(service, "fullDesc")) {
-      serviceFull = await getService(service.slug);
-    }
-
-    const isValid = validate(serviceFull, serviceSchema, {
-      noScroll: true,
-      showErrors: false,
-      servicesOptions: servicesOptions,
-    }).valid;
-
-    if (isValid) {
-      await publishService(service.slug);
-    } else {
-      goto(`/services/${service.slug}/editer`);
+    if (onRefresh) {
+      await onRefresh();
     }
   }
+
+  function handleKeydown(event: KeyboardEvent) {
+    if (["Escape", " ", "Enter", "ArrowDown", "ArrowUp"].includes(event.key)) {
+      event.preventDefault();
+    }
+    if (event.code === "Tab" || event.code === "Escape") {
+      toggleCombobox(false);
+    }
+
+    if (event.code === "Space") {
+      toggleCombobox();
+    }
+
+    if (event.code === "Enter") {
+      if (!isDropdownOpen) {
+        toggleCombobox(true);
+      } else {
+        if (selectedOption) {
+          updateServiceStatus(selectedOption);
+        }
+      }
+    }
+
+    if (event.code === "ArrowDown") {
+      selectedOptionIndex = (selectedOptionIndex || 0) + 1;
+      selectedOptionIndex = selectedOptionIndex % availableOptions.length;
+
+      selectedOption = availableOptions[selectedOptionIndex];
+    }
+    if (event.code === "ArrowUp") {
+      selectedOptionIndex = (selectedOptionIndex || 0) - 1;
+      if (selectedOptionIndex < 0) {
+        selectedOptionIndex = availableOptions.length - 1;
+      }
+      selectedOption = availableOptions[selectedOptionIndex];
+    }
+  }
+
+  function setAsSelected(
+    hoveredStatus: ServiceStatus | "DELETE",
+    index: number
+  ) {
+    selectedOptionIndex = index;
+    selectedOption = hoveredStatus;
+  }
+
+  // *** Valeurs pour l'affichage
+  $: currentStatusPresentation = SERVICE_STATUS_PRESENTATION[service.status];
+  $: availableOptions = getAvailableOptionsForStatus(service.status);
 </script>
 
 <div

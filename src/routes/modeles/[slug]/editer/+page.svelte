@@ -2,7 +2,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import ModelFields from "../../model-fields.svelte";
+  import ModelEditionForm from "../../model-edition-form.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -28,10 +28,10 @@
     {/if}
   </CenteredGrid>
 
-  <ModelFields
+  <ModelEditionForm
+    model={data.model}
     servicesOptions={data.servicesOptions}
     structures={data.structures}
-    model={data.model}
     structure={data.structure}
   />
 </EnsureLoggedIn>

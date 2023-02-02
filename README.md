@@ -42,3 +42,29 @@ npm run prepare
 Lorsque je clique sur `Référencer un service`, la page est blanche et j'ai l'erreur `TypeError: error loading dynamically imported module` dans la console
 
 > Cela est peut-être dû à une extension de navigateur qui bloque des contenus nécessaires au bon fonctionnement : https://github.com/sveltejs/kit/issues/3308#issuecomment-1149942109
+
+## Organisation des fichiers
+
+### routes
+
+Chaque répertoire correspond à une route, selon la norme Svelkit, mais on a regroupé les fichiers statiques (documents légaux, etc.) dans le repertoire `(static)`, et les differents endpoints (fichiers robots.txt, sitemap.xml, etc.) dans le repertoire `(endpoints)`.
+
+D'autres regroupements pourraient être envisagés, par exemple `services` et `modeles`, pour faciliter la réutilisation de code localement.
+
+### lib
+
+- `assets`: toutes les ressources (fontes, icones, images…)
+- `components`
+  - `display`: tous les composants génériques d'affichage (boutons, labels, etc.)
+  - `forms`: composants dédiés à l'affichage et à la validation des formulaire
+  - `hoc`: composants de hauts niveau
+  - `inputs`: composants d'entrée (hors validation -- ils sont encapsulés dans le repertoire `/form/fields` si nécessaire)
+    - `obsolete`: composants qui font doublon avec un autre. À nettoyer, et à ne pas utiliser!!
+  - `specialized`: composants spécialisés, qui seraient plus à leur place directement dans `/routes`, mais utilisés par plusieurs routes.
+- `requests`: s'occupent de l'interaction avec l'API. À terme toutes les requetes à l'API devraient être faites ici plutôt qu'inline.
+- `utils`: utilitaires variés. Éviter des mettre des fonctions qui ne servent qu'à un seul endroit.
+- `validation`: gestion de la validation des formulaires
+  - `schema`: les schemas déterminent les règles de validation des differents formulaire, ainsi que certaines valeurs d'affichage par defaut.
+- `env.ts`: gestion des variables d'environnement
+- `icons.ts`: chargement des icones
+- `types.ts`: liste des types typescript partagés.

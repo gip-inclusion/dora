@@ -1,11 +1,11 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
-  import Date from "$lib/components/utilities/date.svelte";
+  import DateLabel from "$lib/components/display/date-label.svelte";
   import { editIcon } from "$lib/icons";
   import type { Service, ServiceUpdateStatus } from "$lib/types";
-  import { trackSuggestion } from "$lib/utils/plausible";
-  import SuggestionModal from "./suggestion-modal.svelte";
+  import { trackFeedback } from "$lib/utils/plausible";
+  import FeedbackModal from "./feedback-modal.svelte";
 
   export let service: Service;
 
@@ -13,12 +13,11 @@
   export let monthDiff: number;
   export let updateStatus: ServiceUpdateStatus;
 
-  // Suggestion modal
-  let suggestionModalIsOpen = false;
+  let feedbackModalIsOpen = false;
 
-  function handleSuggestion() {
-    suggestionModalIsOpen = true;
-    trackSuggestion(service);
+  function handleFeedback() {
+    feedbackModalIsOpen = true;
+    trackFeedback(service);
   }
 </script>
 
@@ -34,7 +33,7 @@
           </span>
 
           <span class="hidden print:inline">
-            Mis à jour le <Date date={service.modificationDate} />
+            Mis à jour le <DateLabel date={service.modificationDate} />
           </span>
           <span class="print:hidden">{label}</span>
         </div>
@@ -47,7 +46,7 @@
             <div class="text-f18">
               <strong class="hidden print:inline">
                 Mis à jour le
-                <Date date={service.modificationDate} />
+                <DateLabel date={service.modificationDate} />
               </strong>
               <strong class="print:hidden">{label}</strong>
             </div>
@@ -69,7 +68,7 @@
             <div class="text-f14">
               <strong class="hidden print:inline">
                 Mis à jour le
-                <Date date={service.modificationDate} />
+                <DateLabel date={service.modificationDate} />
               </strong>
               <span class="print:hidden">
                 Les informations sur ce service n’ont plus été mises à jour
@@ -84,15 +83,15 @@
   </div>
 
   <div class="print:hidden">
-    <SuggestionModal {service} bind:isOpen={suggestionModalIsOpen} />
+    <FeedbackModal {service} bind:isOpen={feedbackModalIsOpen} />
     <Button
-      id="suggest-update"
+      id="feedback-update"
       label="Suggérer une modification"
       icon={editIcon}
       secondary
       small
       extraClass="py-s9"
-      on:click={handleSuggestion}
+      on:click={handleFeedback}
     />
   </div>
 </div>

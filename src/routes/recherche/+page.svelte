@@ -3,7 +3,6 @@
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import NewletterNotice from "$lib/components/specialized/newletter-notice.svelte";
   import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
   import type { ServiceSearchResult } from "$lib/types";
   import { isInDeploymentDepartments } from "$lib/utils/misc";
@@ -23,8 +22,10 @@
   let tags = [];
 
   function hasOnlyNationalResults(services: ServiceSearchResult[]) {
-    if (services.length === 0) return false;
-    return services.every((s) => s.diffusionZoneType === "country");
+    if (services.length === 0) {
+      return false;
+    }
+    return services.every((service) => service.diffusionZoneType === "country");
   }
 
   let currentPageLength = PAGE_LENGTH;
@@ -53,7 +54,7 @@
 
     if (data.categoryIds.length) {
       const categoryTags = data.categoryIds.map((id) => {
-        return data.servicesOptions.categories.find((c) => c.value === id)
+        return data.servicesOptions.categories.find((cat) => cat.value === id)
           .label;
       });
 
@@ -63,8 +64,9 @@
 
       if (data.subCategoryIds.length) {
         const subCategoryTags = data.subCategoryIds.map((id) => {
-          return data.servicesOptions.subcategories.find((c) => c.value === id)
-            .label;
+          return data.servicesOptions.subcategories.find(
+            (cat) => cat.value === id
+          ).label;
         });
 
         if (subCategoryTags) {
@@ -93,7 +95,7 @@
       feeConditions={data.feeConditions}
       subCategoryIds={[
         ...data.subCategoryIds,
-        ...data.categoryIds.map((c) => `${c}--all`),
+        ...data.categoryIds.map((id) => `${id}--all`),
       ]}
       showDeploymentWarning={false}
       useAdditionalFilters
@@ -153,6 +155,4 @@
   {/if}
 </CenteredGrid>
 
-<NewletterNotice />
-
-<TallyNpsPopup formId={TallyFormId.NPS_SEEKER_FORM_ID} />
+<TallyNpsPopup formId={TallyFormId.NPS_SEEKER_FORM_ID} timeoutSeconds={45} />

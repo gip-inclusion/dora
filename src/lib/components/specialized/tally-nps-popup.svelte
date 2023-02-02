@@ -9,13 +9,15 @@
   import { onDestroy, onMount } from "svelte";
 
   export let formId: TallyFormId;
-  export let timeout = 45000;
+  export let timeoutSeconds;
   export let hiddenFields = {};
 
   let timeoutFn: ReturnType<typeof setTimeout>;
 
   onMount(() => {
-    if (window.Tally) window.Tally.closePopup(formId);
+    if (window.Tally) {
+      window.Tally.closePopup(formId);
+    }
 
     if (canDisplayNpsForm(formId)) {
       timeoutFn = setTimeout(() => {
@@ -32,12 +34,14 @@
             },
           });
         }
-      }, timeout);
+      }, timeoutSeconds * 1000);
     }
   });
 
   onDestroy(() => {
-    if (browser && window.Tally) window.Tally.closePopup(formId);
+    if (browser && window.Tally) {
+      window.Tally.closePopup(formId);
+    }
 
     clearTimeout(timeoutFn);
   });

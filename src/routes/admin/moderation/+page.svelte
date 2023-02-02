@@ -17,58 +17,67 @@
     IN_PROGRESS: 3,
     VALIDATED: 4,
   };
-  onMount(async () => {
-    structures = await getStructuresToModerate();
-    structures.forEach((s) => (s.isStructure = true));
-    // On désactive la modération des services pour l'instant
-    // services = await getServicesToModerate();
-    // entities = [...structures, ...services];
-    entities = [...structures];
-    filteredEntities = filterAndSortEntities("");
-  });
 
   function filterAndSortEntities(searchString) {
-    let result = (
+    const result = (
       searchString
-        ? entities.filter((s) => {
-            if (s.isStructure) {
+        ? entities.filter((entity) => {
+            if (entity.isStructure) {
               return (
-                s.name.toLowerCase().includes(searchString) ||
-                s.department === searchString
+                entity.name.toLowerCase().includes(searchString) ||
+                entity.department === searchString
               );
             } else {
               return (
-                s.name.toLowerCase().includes(searchString) ||
-                s.structureName.toLowerCase().includes(searchString) ||
-                s.structureDept === searchString
+                entity.name.toLowerCase().includes(searchString) ||
+                entity.structureName.toLowerCase().includes(searchString) ||
+                entity.structureDept === searchString
               );
             }
           })
         : entities
     )
-      .filter((s) => !s.parent)
-      .sort((s1, s2) => {
+      .filter((entity) => !entity.parent)
+      .sort((entity1, entity2) => {
         // On tri d'abord par statut de modération
-        const val1 = s1.moderationStatus
-          ? STATUS_VALUE[s1.moderationStatus]
+        const val1 = entity1.moderationStatus
+          ? STATUS_VALUE[entity1.moderationStatus]
           : 999;
-        const val2 = s2.moderationStatus
-          ? STATUS_VALUE[s2.moderationStatus]
+        const val2 = entity2.moderationStatus
+          ? STATUS_VALUE[entity2.moderationStatus]
           : 999;
-        if (val1 !== val2) return val1 - val2;
+        if (val1 !== val2) {
+          return val1 - val2;
+        }
         // Puis les structures en premier
-        if (s1.isStructure && !s2.isStructure) return -1;
-        if (s2.isStructure && !s1.isStructure) return 1;
+        if (entity1.isStructure && !entity2.isStructure) {
+          return -1;
+        }
+        if (entity2.isStructure && !entity1.isStructure) {
+          return 1;
+        }
         // Puis par dept de structure
-        const sdept1 = s1.isStructure ? s1.department : s1.structureDept;
-        const sdept2 = s1.isStructure ? s1.department : s1.structureDept;
-        if (sdept1 !== sdept2) return sdept1 > sdept2;
+        const sdept1 = entity1.isStructure
+          ? entity1.department
+          : entity1.structureDept;
+        const sdept2 = entity1.isStructure
+          ? entity1.department
+          : entity1.structureDept;
+        if (sdept1 !== sdept2) {
+          return sdept1 > sdept2;
+        }
         // Puis par nom de structure
-        const sname1 = s1.isStructure ? s1.name : s1.structureName;
-        const sname2 = s1.isStructure ? s1.name : s1.structureName;
-        if (sname1 !== sname2) return sname1 > sname2;
+        const sname1 = entity1.isStructure
+          ? entity1.name
+          : entity1.structureName;
+        const sname2 = entity1.isStructure
+          ? entity1.name
+          : entity1.structureName;
+        if (sname1 !== sname2) {
+          return sname1 > sname2;
+        }
         // Finalement par nom
-        return s1.name > s2.name;
+        return entity1.name > entity2.name;
       });
     return result;
   }
@@ -77,9 +86,19 @@
     const searchString = event.target.value.toLowerCase().trim();
     filteredEntities = filterAndSortEntities(searchString);
   }
+
+  onMount(async () => {
+    structures = await getStructuresToModerate();
+    structures.forEach((struct) => (struct.isStructure = true));
+    // On désactive la modération des services pour l'instant
+    // services = await getServicesToModerate();
+    // entities = [...structures, ...services];
+    entities = [...structures];
+    filteredEntities = filterAndSortEntities("");
+  });
 </script>
 
-<CenteredGrid bgColor="bg-gray-bg">
+<CenteredGrid>
   <h2>Moderation</h2>
 
   <div class="flex flex-col gap-s12">
@@ -105,7 +124,7 @@
       {:else}
         {#each filteredEntities as entity}
           <div
-            class="flex flex-row items-center gap-s16 rounded-md bg-white p-s16"
+            class="flex flex-row items-center gap-s16 rounded-md border border-gray-01 bg-white p-s16"
           >
             {#if entity.isStructure}
               <div class="grow">

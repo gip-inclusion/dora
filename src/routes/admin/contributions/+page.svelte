@@ -1,6 +1,6 @@
 <script lang="ts">
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import { getServiceSuggestions } from "$lib/requests/services";
+  import { getServiceSuggestions } from "$lib/requests/admin";
   import { onMount } from "svelte";
   import List from "./list.svelte";
 
@@ -16,7 +16,7 @@
   });
 </script>
 
-<CenteredGrid bgColor="bg-gray-bg">
+<CenteredGrid>
   <h2>Contributions</h2>
 
   {#if suggestions}

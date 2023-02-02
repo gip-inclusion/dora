@@ -9,37 +9,41 @@
 
   let services, filteredServices;
 
-  onMount(async () => {
-    services = await getServicesAdmin();
-    filteredServices = filterAndSortEntities("");
-  });
-
   function filterAndSortEntities(searchString) {
     return (
       searchString
         ? services.filter(
-            (s) =>
-              s.name.toLowerCase().includes(searchString) ||
-              s.structureName.toLowerCase().includes(searchString) ||
-              s.structureDept === searchString
+            (entity) =>
+              entity.name.toLowerCase().includes(searchString) ||
+              entity.structureName.toLowerCase().includes(searchString) ||
+              entity.structureDept === searchString
           )
         : services
     )
-      .filter((s) => !s.parent)
-      .sort((s1, s2) => {
-        if (s1.structureDept !== s2.structureDept) {
-          return s1.structureDept.localeCompare(s2.structureDept, "fr", {
-            numeric: true,
-          });
+      .filter((entity) => !entity.parent)
+      .sort((entity1, entity2) => {
+        if (entity1.structureDept !== entity2.structureDept) {
+          return entity1.structureDept.localeCompare(
+            entity2.structureDept,
+            "fr",
+            {
+              numeric: true,
+            }
+          );
         }
 
-        if (s1.structureName.toLowerCase() !== s2.structureName.toLowerCase()) {
-          return s1.structureName
+        if (
+          entity1.structureName.toLowerCase() !==
+          entity2.structureName.toLowerCase()
+        ) {
+          return entity1.structureName
             .toLowerCase()
-            .localeCompare(s2.structureName.toLowerCase(), "fr");
+            .localeCompare(entity2.structureName.toLowerCase(), "fr");
         }
 
-        return s1.name.toLowerCase().localeCompare(s2.name.toLowerCase(), "fr");
+        return entity1.name
+          .toLowerCase()
+          .localeCompare(entity2.name.toLowerCase(), "fr");
       });
   }
 
@@ -47,9 +51,14 @@
     const searchString = event.target.value.toLowerCase().trim();
     filteredServices = filterAndSortEntities(searchString);
   }
+
+  onMount(async () => {
+    services = await getServicesAdmin();
+    filteredServices = filterAndSortEntities("");
+  });
 </script>
 
-<CenteredGrid bgColor="bg-gray-bg">
+<CenteredGrid>
   <h2>Services</h2>
 
   <div class="flex flex-col gap-s12">
@@ -71,7 +80,7 @@
     {#if services}
       {#each filteredServices as service}
         <div
-          class="flex flex-row items-center gap-s16 rounded-md bg-white p-s16"
+          class="flex flex-row items-center gap-s16 rounded-md border border-gray-01 bg-white p-s16"
         >
           <div class="flex-auto basis-1/3">
             <a href="/admin/services/{service.slug}" target="_blank">

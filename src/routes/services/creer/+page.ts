@@ -1,9 +1,5 @@
 import { getNewService } from "$lib/utils/forms";
-import {
-  getLastDraft,
-  getModel,
-  getServicesOptions,
-} from "$lib/requests/services";
+import { getModel, getServicesOptions } from "$lib/requests/services";
 import { getStructures } from "$lib/requests/structures";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
@@ -49,15 +45,14 @@ export const load: PageLoad = async ({ url, parent }) => {
     structure = structures[0];
   } else if (structureSlug) {
     // si la structure est renseignée dans l'URL, force celle-là
-    structure = structures.find((s) => s.slug === structureSlug);
+    structure = structures.find((struct) => struct.slug === structureSlug);
     service.structure = structureSlug;
   }
 
   return {
     noIndex: true,
     title: "Création d'un service | DORA",
-    lastDraft: await getLastDraft(),
-    servicesOptions: await getServicesOptions({ model }),
+    servicesOptions: await getServicesOptions(),
     structures,
     structure,
     service,

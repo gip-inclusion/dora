@@ -6,15 +6,15 @@ import insane from "insane";
 import showdown from "showdown";
 import { get } from "svelte/store";
 
-export function markdownToHTML(md, titleLevel) {
+export function markdownToHTML(markdownContent: string, titleLevel = 2) {
   const converter = new showdown.Converter({
-    headerLevelStart: titleLevel ?? 2,
+    headerLevelStart: titleLevel,
     tables: true,
     openLinksInNewWindow: true,
     simplifiedAutoLink: true,
   });
 
-  return insane(converter.makeHtml(md));
+  return insane(converter.makeHtml(markdownContent));
 }
 
 export function htmlToMarkdown(html: string) {
@@ -28,10 +28,10 @@ export function htmlToMarkdown(html: string) {
 
 export async function fetchData<T>(url: string) {
   const headers = { Accept: defaultAcceptHeader };
-  const tk = get(token);
+  const currentToken = get(token);
 
-  if (tk) {
-    headers["Authorization"] = `Token ${tk}`;
+  if (currentToken) {
+    headers.Authorization = `Token ${currentToken}`;
   }
 
   const response = await fetch(url, {
@@ -40,7 +40,7 @@ export async function fetchData<T>(url: string) {
 
   return {
     ok: response.ok,
-    data: response.ok ? ((await response.json()) as Promise<T>) : null,
+    data: response.ok ? ((await response.json()) as T) : null,
     error: response.ok ? null : response.statusText,
     status: response.status,
     statusText: response.statusText,
@@ -49,14 +49,46 @@ export async function fetchData<T>(url: string) {
 
 export function shortenString(str, length = 50) {
   if (str && str.length > length) {
-    return `${str.slice(0, length)}…`;
+    return `${str.slice(0, length - 1)}…`;
   }
 
   return str;
 }
 
-export function capitalize(str) {
-  return str.toLowerCase().replace(/^\w|\s\w/gu, (c) => c.toUpperCase());
+export function capitalize(text: string) {
+  if (text.toUpperCase() !== text) {
+    // Si le texte n'est pas en capitales
+    // on considère qu'il a été édité par l'utilisateur et on l'affiche tel quel
+    return text;
+  }
+  // Sinon on essaye de faire le moins de dégats possible dans la capitalisation…
+  let result = text
+    .toLowerCase()
+    .replace(/^\w|[\s\-'’]\w/gu, (char: string) => char.toUpperCase());
+
+  const stopWords = [
+    "De",
+    "Des",
+    "Du",
+    "Et",
+    "À",
+    "A",
+    "Au",
+    "En",
+    "La",
+    "Le",
+    "Les",
+    "L",
+    "D",
+    "Sur",
+    "Pour",
+  ];
+  for (const stopWord of stopWords) {
+    const regex = new RegExp(`([\\s\\-'’])${stopWord}([\\s\\-'’])`, "g");
+    result = result.replace(regex, `$1${stopWord.toLowerCase()}$2`);
+  }
+
+  return result;
 }
 
 export function getDepartmentFromCityCode(cityCode) {
@@ -78,6 +110,7 @@ export function addlinkToUrls(text) {
       (url) =>
         `<a href="${url}" class="underline" rel="noopener nofollow">${url}</a>`
     ),
+    // eslint-disable-next-line id-length
     { allowedTags: ["a"], allowedAttributes: { a: ["class", "rel", "href"] } }
   );
 }
@@ -88,13 +121,13 @@ export function moveToTheEnd(
   value,
   { sortBeginning = false, sortKey = "label" } = {}
 ) {
-  const elementsToMove = array.filter((e) => e[key] === value);
+  const elementsToMove = array.filter((elt) => elt[key] === value);
 
   if (!elementsToMove.length) {
     return array;
   }
 
-  let beginning = array.filter((e) => e[key] !== value);
+  let beginning = array.filter((elt) => elt[key] !== value);
   if (sortBeginning) {
     beginning = beginning.sort((a, b) =>
       a[sortKey].localeCompare(b[sortKey], "fr", { numeric: true })
@@ -109,8 +142,8 @@ export function orderAndReformatSubcategories(
   categoriesValues,
   servicesOptions
 ) {
-  const selectedCategories = servicesOptions.categories.filter((so) =>
-    categoriesValues.includes(so.value)
+  const selectedCategories = servicesOptions.categories.filter((option) =>
+    categoriesValues.includes(option.value)
   );
 
   return moveToTheEnd(subcategoriesValues, "label", "Autre", {
@@ -131,9 +164,15 @@ export function orderAndReformatSubcategories(
 }
 
 export function arraysCompare(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length !== b.length) return false;
+  if (a === b) {
+    return true;
+  }
+  if (a == null || b == null) {
+    return false;
+  }
+  if (a.length !== b.length) {
+    return false;
+  }
 
   return a.every((val, i) => val === b[i]);
 }
@@ -148,10 +187,6 @@ export function formatPhoneNumber(phoneNumber: string): string {
   }
 }
 
-export function isAfter(date1: Date, date2: Date) {
-  return date1 > date2;
-}
-
 export function isInDeploymentDepartments(
   cityCode: string,
   servicesOptions: ServicesOptions
@@ -161,4 +196,24 @@ export function isInDeploymentDepartments(
       cityCode.startsWith(department)
     ).length > 0
   );
+}
+
+export function clickOutside(node: HTMLElement) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore erreurs de typage inextricables...
+  const handleClick = (event) => {
+    if (node && !node.contains(event.target) && !event.defaultPrevented) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore erreurs de typage inextricables...
+      node.dispatchEvent(new CustomEvent("click_outside", node));
+    }
+  };
+
+  document.addEventListener("click", handleClick, true);
+
+  return {
+    destroy() {
+      document.removeEventListener("click", handleClick, true);
+    },
+  };
 }

@@ -33,7 +33,7 @@ async function getResults({
   });
 
   if (res.ok) {
-    return await res.json();
+    return res.json();
   }
 
   // TODO: log errors

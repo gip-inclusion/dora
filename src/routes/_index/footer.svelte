@@ -1,7 +1,9 @@
 <script lang="ts">
   import LogoRF from "$lib/assets/logos/logo-rf.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
   import NavItem from "$lib/components/display/nav-item.svelte";
+  import { newspaperIcon } from "$lib/icons";
 
   function handleOpenCookiesPanel(evt) {
     evt.preventDefault();
@@ -9,6 +11,28 @@
   }
 </script>
 
+<hr class="border-t-gray-01" />
+
+<CenteredGrid noPadding>
+  <div class="flex flex-col items-center justify-between py-s32 lg:flex-row">
+    <div class="text-f14 text-gray-dark">
+      <strong>Infolettre &nbsp;•&nbsp;</strong>
+      Une fois par mois, recevez un courriel pour être informé des évolutions de
+      DORA.
+    </div>
+
+    <LinkButton
+      label="S’abonner à l’infolettre"
+      icon={newspaperIcon}
+      iconOnRight
+      noBackground
+      small
+      to="https://d4c653e7.sibforms.com/serve/MUIEAEkY4naptXBIq5NdRg5UPxP1wmwbGCinne5c1gynY-wfrZ0Dz0QP_NqkXtfyYqhdaq3AO8VFZJ9giRi9ZT0eah7Ut2U0LeKSTVIHQb_5nhvTLUMWXo9ZMeIYCHVlzmjkXGQ66S5ewcYpSADUgV--2RVZ_mrnsRJQoCNwZ8y-sWzfQsEzfKuTA7SLbZ_dWeqaigudym3EaiHT"
+      otherTab
+      nofollow
+    />
+  </div>
+</CenteredGrid>
 <footer class="border-t-2 border-france-blue print:hidden">
   <CenteredGrid>
     <div class="flex gap-s24 lg:flex-row">
