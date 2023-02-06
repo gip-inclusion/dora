@@ -1,4 +1,4 @@
-import { markdownToHTML } from "$lib/utils/index";
+import { markdownToHTML } from "$lib/utils/misc";
 import { describe, expect, test } from "vitest";
 
 describe("markdownToHTML", () => {
@@ -6,18 +6,19 @@ describe("markdownToHTML", () => {
     expect(markdownToHTML("**bb**")).toBe("<p><strong>bb</strong></p>");
   });
 
-  test("ajout des `rel='nofollow'`", () => {
+  test("ajout des `rel='noopener noreferrer'`", () => {
     const text = `[https://perdu.com/](Perdu) - [https://www.google.fr/](Google)`;
 
     expect(markdownToHTML(text)).toBe(
-      '<p><a href="Perdu" rel="nofollow">https://perdu.com/</a> - <a href="Google" rel="nofollow">https://www.google.fr/</a></p>'
+      '<p><a href="Perdu" rel="noopener noreferrer" target="_blank">https://perdu.com/</a> - <a href="Google" rel="noopener noreferrer" target="_blank">https://www.google.fr/</a></p>'
     );
   });
 
   test("pas d'ajout des `rel='nofollow'` si le href n'est pas précédé d'un espace", () => {
     const text = `to_href="#"`;
     expect(markdownToHTML(text)).toBe(`<p>${text}</p>`);
-    expect(markdownToHTML(text)).not.contains("nofollow");
+    expect(markdownToHTML(text)).not.contains("noopener");
+    expect(markdownToHTML(text)).not.contains("noreferrer");
   });
 
   test("bon niveau de titre", () => {
