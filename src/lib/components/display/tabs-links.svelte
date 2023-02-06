@@ -3,7 +3,7 @@
   export let itemId = undefined;
 </script>
 
-<ul class="flex flex-wrap gap-s8 pt-s16 font-bold">
+<ul class="flex gap-s8 overflow-x-auto pt-s16 font-bold">
   {#each items as item}
     <li>
       {#if itemId === item.id}
