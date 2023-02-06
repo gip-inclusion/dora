@@ -12,12 +12,9 @@
   "scripts": {
     "dev": "vite dev --port 3000 --strictPort",
     "build": "vite build",
-    "build:test": "vite build --mode test",
     "start": "node build",
     "preview": "vite preview --port 3000 --strictPort",
-    "test": "playwright test",
-    "test:debug": "playwright test --debug",
-    "test:unit": "vitest",
+    "test": "vitest",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --output human-verbose --threshold error --use-new-transformation true",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
@@ -27,7 +24,6 @@
     "security-scan": "ggshield secret scan path -r . -y"
   },
   "devDependencies": {
-    "@playwright/test": "^1.28.1",
     "@sentry/svelte": "^7.26.0",
     "@sentry/tracing": "^7.26.0",
     "@sveltejs/adapter-node": "^1.0.0",
