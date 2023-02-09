@@ -2,9 +2,11 @@ import { browser } from "$app/environment";
 import type { ServicesOptions } from "$lib/types";
 import { defaultAcceptHeader } from "$lib/utils/api";
 import { token } from "$lib/utils/auth";
-import insane, { defaults } from "insane";
+import insane from "insane";
 import showdown from "showdown";
 import { get } from "svelte/store";
+
+const { defaults } = insane;
 
 const INSANE_CONFIGURATION = {
   ...defaults,
