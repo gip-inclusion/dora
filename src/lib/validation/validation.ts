@@ -188,6 +188,7 @@ export function validate(
         }
 
         if (showErrors) {
+          clearError(depName);
           if (!depValid) {
             clearError(depName);
             addError(depName, depMsg);
