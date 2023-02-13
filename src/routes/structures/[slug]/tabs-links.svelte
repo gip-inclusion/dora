@@ -1,6 +1,8 @@
 <script lang="ts">
-  export let items = [];
-  export let itemId = undefined;
+  import type { TabItem } from "./header.svelte";
+
+  export let items: TabItem[] = [];
+  export let itemId: string;
 </script>
 
 <ul class="flex gap-s8 overflow-x-auto pt-s16 font-bold">
@@ -8,7 +10,7 @@
     <li>
       {#if itemId === item.id}
         <span
-          class="block flex items-center rounded-t-md bg-white p-s16 text-france-blue"
+          class="flex items-center rounded-t-md bg-white p-s16 text-france-blue"
         >
           <span class="mr-s8 h-s24 w-s24 fill-current">
             {@html item.icon}
@@ -18,7 +20,8 @@
       {:else}
         <a
           href={item.href}
-          class="block flex items-center rounded-t-md bg-magenta-dark p-s16 text-white"
+          class="flex items-center rounded-t-md bg-magenta-dark p-s16 text-white"
+          data-sveltekit-noscroll
         >
           <span class="mr-s8 h-s24 w-s24 fill-current">
             {@html item.icon}

@@ -1,8 +1,17 @@
+<script lang="ts" context="module">
+  export type TabItem = {
+    id: string;
+    name: string;
+    icon: string;
+    href: string;
+  };
+</script>
+
 <script lang="ts">
   import { page } from "$app/stores";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Label from "$lib/components/display/label.svelte";
-  import Tabs from "$lib/components/display/tabs-links.svelte";
+  import TabsLink from "./tabs-links.svelte";
   import {
     bookReadLineIcon,
     fileInfoLineIcon,
@@ -19,7 +28,7 @@
   export let structure;
   export let tabId = "informations";
 
-  let tabs = [];
+  let tabs: TabItem[] = [];
 
   $: {
     tabs = [
@@ -112,6 +121,6 @@
   {/if}
 
   <div class="mt-s40 print:hidden">
-    <Tabs items={tabs} itemId={tabId} />
+    <TabsLink items={tabs} itemId={tabId} />
   </div>
 </div>
