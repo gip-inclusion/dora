@@ -6,6 +6,7 @@
   } from "$lib/validation/validation";
   import FieldWrapper from "../field-wrapper.svelte";
   import AdminDivisionSearch from "../../inputs/geo/admin-division-search.svelte";
+  import type { GeoApiValue } from "$lib/types";
 
   export let id: string;
   export let value: string | undefined = undefined;
@@ -17,7 +18,7 @@
 
   // Spécifiques:
   export let searchType: string;
-  export let onChange: (newValue: string) => void;
+  export let onChange: (adminDetails: GeoApiValue) => void;
   export let choices;
 
   // Proxy vers le FieldWrapper

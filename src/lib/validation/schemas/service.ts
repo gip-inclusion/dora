@@ -1,7 +1,7 @@
 import type {
   BeneficiaryAccessModes,
   CoachOrientationModes,
-  DiffusionZoneType,
+  AdminDivisionType,
   FeeCondition,
   LocationKind,
   ServicesOptions,
@@ -296,7 +296,7 @@ export const serviceSchema: v.Schema = {
     default: "",
     rules: [v.isString(), v.maxStrLength(9)],
     maxLength: 9,
-    required: (data: { diffusionZoneType: DiffusionZoneType }) => {
+    required: (data: { diffusionZoneType: AdminDivisionType }) => {
       return data.diffusionZoneType !== "country";
     },
   },

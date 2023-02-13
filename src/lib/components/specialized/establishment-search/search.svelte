@@ -3,11 +3,11 @@
   import Tabs from "$lib/components/display/tabs.svelte";
   import SearchByCommune from "./search-by-commune.svelte";
   import SearchBySiret from "./search-by-siret.svelte";
-  import type { Establishment, GeoApiCity } from "$lib/types";
+  import type { Establishment, GeoApiValue } from "$lib/types";
 
   type Tab = "nom" | "siret";
 
-  export let onCityChange: ((city: GeoApiCity | null) => void) | undefined =
+  export let onCityChange: ((city: GeoApiValue | null) => void) | undefined =
     undefined;
 
   export let onEstablishmentChange:
@@ -19,7 +19,7 @@
   export let tabId: Tab = "nom";
   export let title = "Structure";
 
-  function handleCityChange(newCity: GeoApiCity | null) {
+  function handleCityChange(newCity: GeoApiValue | null) {
     establishment = null;
 
     if (onCityChange) {

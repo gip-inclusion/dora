@@ -3,17 +3,17 @@
   import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
-  import type { Establishment, GeoApiCity } from "$lib/types";
+  import type { Establishment, GeoApiValue } from "$lib/types";
 
   export let establishment;
   export let isOwnStructure = true;
 
-  export let onCityChange: (newCity: GeoApiCity | null) => void;
+  export let onCityChange: (newCity: GeoApiValue | null) => void;
   export let onEstablishmentChange: (estab: Establishment | null) => void;
 
-  let city: GeoApiCity | null;
+  let city: GeoApiValue | null;
 
-  function handleCityChange(newCity: GeoApiCity | null) {
+  function handleCityChange(newCity: GeoApiValue | null) {
     city = newCity;
     establishment = null;
     if (onCityChange) {

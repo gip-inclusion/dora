@@ -1,5 +1,6 @@
 <script lang="ts">
   import Select from "$lib/components/inputs/select/select.svelte";
+  import type { AdminDivisionType, GeoApiValue } from "$lib/types";
   import { getApiURL } from "$lib/utils/api";
   import { getDepartmentFromCityCode } from "$lib/utils/misc";
   import {
@@ -9,23 +10,24 @@
   import { getContext } from "svelte";
 
   export let id: string;
-  export let onChange;
-  export let placeholder = null;
+  export let onChange: (adminDetails: GeoApiValue) => void;
+  export let placeholder = "";
   export let disabled = false;
-  export let value = undefined;
+  export let value: GeoApiValue | undefined = undefined;
   export let initialValue = undefined;
   export let readonly = false;
   export let choices = [];
-  export let searchType;
+  export let searchType: AdminDivisionType;
+  export let withGeom = false;
 
   async function searchAdminDivision(query) {
     const url = `${getApiURL()}/admin-division-search/?type=${searchType}&q=${encodeURIComponent(
       query
-    )}`;
+    )}&${withGeom ? "with_geom=1" : ""}`;
     const response = await fetch(url);
     const jsonResponse = await response.json();
     const results = jsonResponse.map((result) => ({
-      value: result.code,
+      value: result,
       label: `${result.name} (${
         searchType === "city"
           ? getDepartmentFromCityCode(result.code)

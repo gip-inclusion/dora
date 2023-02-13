@@ -1,95 +1,96 @@
 <script lang="ts">
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import Label from "$lib/components/display/label.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import { eyeIcon, homeIcon } from "$lib/icons";
+  import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
   import { getStructuresAdmin } from "$lib/requests/admin";
-  import { capitalize, shortenString } from "$lib/utils/misc";
-  import { onMount } from "svelte";
+  import type { AdminShortStructure, GeoApiValue } from "$lib/types";
+  import type { PageData } from "./$types";
+  import Filters from "./filters.svelte";
+  import StructuresMap from "./structures-map.svelte";
+  import StructuresTable from "./structures-table.svelte";
 
-  let structures, filteredStructures;
+  export let data: PageData;
+  let structures: AdminShortStructure[] = [];
+  let filteredStructures: AdminShortStructure[] = [];
+  let department: GeoApiValue;
+  let selectedStructureSlug: string | null = null;
 
-  function filterAndSortEntities(searchString) {
-    return (
-      searchString
-        ? structures.filter(
-            (struct) =>
-              struct.name.toLowerCase().includes(searchString) ||
-              struct.department === searchString
-          )
-        : structures
-    ).sort((structure1, structure2) =>
-      structure1.department === structure2.department
-        ? structure1.name
-            .toLowerCase()
-            .localeCompare(structure2.name.toLowerCase(), "fr")
-        : structure1.department.localeCompare(structure2.department, "fr", {
-            numeric: true,
-          })
-    );
+  async function handleDepartmentChange(dept: GeoApiValue) {
+    department = dept;
+    if (department.code) {
+      structures = await getStructuresAdmin(department.code);
+    } else {
+      structures = [];
+    }
   }
-
-  function handleFilterChange(event) {
-    const searchString = event.target.value.toLowerCase().trim();
-    filteredStructures = filterAndSortEntities(searchString);
-  }
-
-  onMount(async () => {
-    structures = await getStructuresAdmin();
-    filteredStructures = filterAndSortEntities("");
-  });
 </script>
 
 <CenteredGrid>
   <h2>Structures</h2>
 
-  <div class="flex flex-col gap-s12">
-    <div class="mb-s12 flex w-full flex-row items-center gap-s12">
-      <div class="grow">
-        <input
-          on:input={handleFilterChange}
-          class="w-full border border-gray-02 p-s8"
-          placeholder="rechercher (nom de la structure ou numéro du département)…"
-        />
-      </div>
-      {#if structures?.length !== filteredStructures?.length}
-        <div class="text-gray-text">
-          ({filteredStructures.length} / {structures.length})
+  <div class="mb-s16 flex flex-col">
+    <label for="department" class="font-bold">Département</label>
+    <AdminDivisionSearch
+      id="department"
+      searchType="department"
+      onChange={handleDepartmentChange}
+      placeholder="numéro ou nom"
+      withGeom
+    />
+  </div>
+
+  {#if department}
+    <div class="my-s32 flex flex-row justify-evenly gap-s24">
+      <div
+        class="flex max-w-fit flex-col rounded border border-gray-01 p-s16 text-center"
+      >
+        <div class="text-bold text-f24 text-france-blue">
+          Nb de structures orphelines
         </div>
+        <div class="text-bold text-f38 text-france-blue">XXX</div>
+      </div>
+
+      <div
+        class="flex max-w-fit flex-col rounded border border-gray-01 p-s16 text-center"
+      >
+        <div class="text-bold text-f24 text-france-blue">
+          Nombre de services publiés
+        </div>
+        <div class="text-bold text-f38 text-france-blue">XXX</div>
+      </div>
+    </div>
+    <Filters
+      {structures}
+      bind:filteredStructures
+      servicesOptions={data.servicesOptions}
+      structuresOptions={data.structuresOptions}
+    />
+    {#if structures?.length !== filteredStructures?.length}
+      <div class="text-gray-text">
+        ({filteredStructures.length} / {structures.length})
+      </div>
+    {/if}
+
+    <div class="flex flex-col gap-s12">
+      {#if structures}
+        <div class="flex flex-col gap-s16 lg:flex-row">
+          <div class="relative h-s512 w-full shrink-0 lg:h-[800px] lg:w-s512">
+            <StructuresMap
+              {filteredStructures}
+              bind:selectedStructureSlug
+              {department}
+            />
+          </div>
+          <div>
+            <StructuresTable
+              {filteredStructures}
+              servicesOptions={data.servicesOptions}
+              bind:selectedStructureSlug
+            />
+          </div>
+        </div>
+      {:else}
+        Chargement…
       {/if}
     </div>
-
-    {#if structures}
-      {#each filteredStructures as structure}
-        <div
-          class="flex flex-row gap-s16 rounded-md border border-gray-01 p-s16"
-        >
-          <div class="flex grow flex-row items-center">
-            <a href="/admin/structures/{structure.slug}" target="_blank">
-              <h5>
-                {shortenString(capitalize(structure.name))}
-                {#if structure.typologyDisplay}({structure.typologyDisplay}){/if}
-              </h5>
-            </a>
-          </div>
-          {#if structure.department}
-            <Label
-              label={structure.department || " "}
-              smallIcon
-              icon={homeIcon}
-            />
-          {/if}
-
-          <LinkButton
-            to="/structures/{structure.slug}"
-            icon={eyeIcon}
-            noBackground
-            otherTab
-          />
-        </div>
-      {/each}
-    {:else}
-      Chargement…
-    {/if}
-  </div>
+  {/if}
 </CenteredGrid>
