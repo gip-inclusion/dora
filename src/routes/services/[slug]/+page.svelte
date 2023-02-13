@@ -108,14 +108,16 @@
         />
       {:else if structureHasPublishedServices}
         <TallyNpsPopup
-          formId={TallyFormId.NPS_OFFEROR_FORM_ID}
+          formId={TallyFormId.NPS_FORM_ID}
           timeoutSeconds={30}
+          hiddenFields={{ user: "offreur" }}
         />
       {/if}
     {:else}
       <TallyNpsPopup
-        formId={TallyFormId.NPS_SEEKER_FORM_ID}
+        formId={TallyFormId.NPS_FORM_ID}
         timeoutSeconds={45}
+        hiddenFields={{ user: "chercheur" }}
       />
     {/if}
   {/if}

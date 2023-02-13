@@ -3,14 +3,15 @@
   import { browser } from "$app/environment";
   import {
     canDisplayNpsForm,
-    handleSubmitNpsForm,
+    saveNpsFormDateClosed,
+    type HiddenFields,
     type TallyFormId,
   } from "$lib/utils/nps";
   import { onDestroy, onMount } from "svelte";
 
   export let formId: TallyFormId;
   export let timeoutSeconds;
-  export let hiddenFields = {};
+  export let hiddenFields: Partial<HiddenFields> = {};
 
   let timeoutFn: ReturnType<typeof setTimeout>;
 
@@ -26,11 +27,12 @@
             layout: "default",
             width: 420,
             hideTitle: true,
-            autoClose: 0,
             hiddenFields,
-
+            onClose: () => {
+              saveNpsFormDateClosed(formId);
+            },
             onSubmit: () => {
-              handleSubmitNpsForm(formId);
+              saveNpsFormDateClosed(formId);
             },
           });
         }

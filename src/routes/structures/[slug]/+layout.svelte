@@ -34,7 +34,11 @@
 </CenteredGrid>
 
 {#if $structure.isMember && publishedServices.length}
-  <TallyNpsPopup formId={TallyFormId.NPS_OFFEROR_FORM_ID} timeoutSeconds={30} />
+  <TallyNpsPopup
+    formId={TallyFormId.NPS_FORM_ID}
+    timeoutSeconds={30}
+    hiddenFields={{ user: "offreur" }}
+  />
 {/if}
 
 <style lang="postcss">
