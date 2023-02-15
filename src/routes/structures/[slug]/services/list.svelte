@@ -204,7 +204,7 @@
     <h2 class="mb-s0 text-france-blue">Services</h2>
     {#if limit}<Count>{total}</Count>{/if}
   </div>
-  <div class="flex gap-s16">
+  <div class="flex flex-wrap gap-s16">
     {#if !!servicesDisplayed.length && !hasOptions}
       <LinkButton
         label="Voir tous les services"
