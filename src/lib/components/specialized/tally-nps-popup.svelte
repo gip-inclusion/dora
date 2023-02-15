@@ -3,34 +3,43 @@
   import { browser } from "$app/environment";
   import {
     canDisplayNpsForm,
-    handleSubmitNpsForm,
+    saveNpsFormDateClosed,
+    type HiddenFields,
     type TallyFormId,
   } from "$lib/utils/nps";
   import { onDestroy, onMount } from "svelte";
 
   export let formId: TallyFormId;
+  export let keySuffix = "";
   export let timeoutSeconds;
-  export let hiddenFields = {};
+  export let hiddenFields: Partial<HiddenFields> = {};
 
   let timeoutFn: ReturnType<typeof setTimeout>;
 
+  // Pour différencier un formulaire fermé par l'utilisateur vs un changement de page
+  let tallyFormClosedByNavigation = false;
+
   onMount(() => {
     if (window.Tally) {
-      window.Tally.closePopup(formId);
+      window.Tally.closePopup(formId, keySuffix);
     }
 
-    if (canDisplayNpsForm(formId)) {
+    if (canDisplayNpsForm(formId, keySuffix)) {
       timeoutFn = setTimeout(() => {
         if (window.Tally) {
           window.Tally.openPopup(formId, {
             layout: "default",
             width: 420,
             hideTitle: true,
-            autoClose: 0,
             hiddenFields,
-
+            onClose: () => {
+              if (!tallyFormClosedByNavigation) {
+                saveNpsFormDateClosed(formId, keySuffix);
+              }
+              tallyFormClosedByNavigation = false;
+            },
             onSubmit: () => {
-              handleSubmitNpsForm(formId);
+              saveNpsFormDateClosed(formId, keySuffix);
             },
           });
         }
@@ -40,6 +49,7 @@
 
   onDestroy(() => {
     if (browser && window.Tally) {
+      tallyFormClosedByNavigation = true;
       window.Tally.closePopup(formId);
     }
 

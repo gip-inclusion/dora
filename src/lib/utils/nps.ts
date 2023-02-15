@@ -6,29 +6,46 @@ const MIN_DAYS_BETWEEN_DISPLAYS = 14;
 
 // eslint-disable-next-line no-shadow
 export enum TallyFormId {
-  NPS_SEEKER_FORM_ID = "3xXVJ5",
-  NPS_OFFEROR_FORM_ID = "3NpeZN",
+  NPS_FORM_ID = "nrDeXN",
   SERVICE_CREATION_FORM_ID = "mRGdpK",
 }
+
+export type HiddenFields = {
+  user: "offreur" | "chercheur";
+};
 
 interface TallyFormLocalStorageItem {
   lastSubmitted: string;
 }
 
-function getNpsAnswerLocalStorageKey(formId: TallyFormId): string {
-  return `tallyForm-${formId}`;
+function getNpsAnswerLocalStorageKey(
+  formId: TallyFormId,
+  keySuffix: string
+): string {
+  let key = `tallyForm-${formId}`;
+  if (keySuffix) {
+    key = `${key}-${keySuffix}`;
+  }
+
+  return key;
 }
 
-export function handleSubmitNpsForm(formId: TallyFormId): void {
-  const key = getNpsAnswerLocalStorageKey(formId);
+export function saveNpsFormDateClosed(
+  formId: TallyFormId,
+  keySuffix: string
+): void {
+  const key = getNpsAnswerLocalStorageKey(formId, keySuffix);
   const item: TallyFormLocalStorageItem = {
     lastSubmitted: dayjs().toString(),
   };
   localStorage.setItem(key, JSON.stringify(item));
 }
 
-export function canDisplayNpsForm(formId: TallyFormId): boolean {
-  const key = getNpsAnswerLocalStorageKey(formId);
+export function canDisplayNpsForm(
+  formId: TallyFormId,
+  keySuffix: string
+): boolean {
+  const key = getNpsAnswerLocalStorageKey(formId, keySuffix);
   const item = JSON.parse(localStorage.getItem(key));
   if (item && "lastSubmitted" in item) {
     const lastSubmitted = dayjs(item.lastSubmitted);

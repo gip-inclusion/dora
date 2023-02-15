@@ -100,12 +100,14 @@
                 type="text"
                 bind:value={newValue}
               />
-              <div
-                class="mt-s4 self-end text-f12 text-gray-text-alt"
-                class:text-error={newValue?.length > maxLength}
-              >
-                {newValue?.length}/{maxLength} caractères
-              </div>
+              {#if newValue && maxLength != null}
+                <div
+                  class="mt-s4 self-end text-f12 text-gray-text-alt"
+                  class:text-error={newValue?.length > maxLength}
+                >
+                  {newValue.length}/{maxLength} caractères
+                </div>
+              {/if}
             </div>
           </div>
           <div class="self-center">

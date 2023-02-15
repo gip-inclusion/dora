@@ -1,11 +1,11 @@
 <script lang="ts">
-  import Accordeon from "$lib/components/display/accordion.svelte";
+  import Accordion from "$lib/components/display/accordion.svelte";
   import type { Service } from "$lib/types";
 
   export let service: Service;
 </script>
 
-<Accordeon title="Qui peut bénéficier de ce service ?">
+<Accordion title="Qui peut bénéficier de ce service ?">
   <div class="mb-s32">
     <h3>Le public concerné</h3>
     <ul>
@@ -43,7 +43,7 @@
       {/each}
     </ul>
   </div>
-</Accordeon>
+</Accordion>
 
 <style lang="postcss">
   ul {

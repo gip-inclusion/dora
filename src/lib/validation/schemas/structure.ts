@@ -72,7 +72,6 @@ export const structureSchema: v.Schema = {
     default: "",
     rules: [v.isEmail(), v.maxStrLength(255)],
     post: [v.lower, v.trim],
-    required: true,
     maxLength: 255,
   },
   url: {

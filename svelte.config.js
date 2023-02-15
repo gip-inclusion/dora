@@ -22,6 +22,8 @@ const config = {
           "https://sentry.incubateur.net",
           "https://storage.crisp.chat/users/upload/",
           "wss://client.relay.crisp.chat/",
+          "https://openmaptiles.geo.data.gouv.fr/",
+          "https://openmaptiles.github.io/osm-bright-gl-style/",
         ].filter((source) => !!source),
         "script-src": [
           "self",
@@ -32,6 +34,7 @@ const config = {
           "https://plausible.io/js/",
           "https://tally.so/widgets/embed.js",
         ],
+        "worker-src": ["self", "blob:"],
         "child-src": [
           "https://aide.dora.fabrique.social.gouv.fr/",
           "https://metabase.dora.fabrique.social.gouv.fr",
@@ -47,6 +50,9 @@ const config = {
           "unsafe-inline",
         ],
       },
+    },
+    env: {
+      publicPrefix: "VITE_PUBLIC_",
     },
   },
   vitePlugin: {

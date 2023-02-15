@@ -1,12 +1,10 @@
 import { browser } from "$app/environment";
-import { CRISP_ID, ENVIRONMENT } from "$lib/env";
+import { CRISP_ID } from "$lib/env";
 import { userInfo, validateCredsAndFillUserInfo } from "$lib/utils/auth";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { LayoutLoad } from "./$types";
 
-// No SSR for testing => we can't intercept request server side
-export const ssr = ENVIRONMENT === "testing" ? false : undefined;
 export const prerender = false;
 export const load: LayoutLoad = async ({ url }) => {
   let currentUserInfo = get(userInfo);

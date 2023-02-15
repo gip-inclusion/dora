@@ -9,7 +9,7 @@
 </script>
 
 <div
-  class="flex items-center gap-s16 rounded-md border border-gray-01 py-s16 px-s24"
+  class="flex flex-wrap items-center gap-s16 rounded-md border border-gray-01 py-s16 px-s24"
   class:bg-gray-01={isMyself}
 >
   <div class="flex flex-col">

@@ -1,4 +1,4 @@
-import { CANONICAL_URL, ENVIRONMENT, SENTRY_DSN } from "$lib/env";
+import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 import * as Sentry from "@sentry/svelte";
 import type { Handle, HandleServerError } from "@sveltejs/kit";
 
@@ -28,12 +28,5 @@ export const handle: Handle = async ({ event, resolve }) => {
   response.headers.set("X-XSS-Protection", "1; mode=block");
   response.headers.set("X-Content-Type-Options", "nosniff");
 
-  if (response.headers.get("content-type")?.startsWith("text/html")) {
-    const body = await response.text();
-    return new Response(
-      body.replace("%plausible-domain%", CANONICAL_URL.split("//")[1]),
-      response
-    );
-  }
   return response;
 };

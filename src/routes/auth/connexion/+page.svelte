@@ -2,12 +2,10 @@
   import { page } from "$app/stores";
   import logoC1 from "$lib/assets/inclusion-connect/logo-c1.svg";
   import logoDora from "$lib/assets/inclusion-connect/logo-dora-ic.svg";
+  import logoCommunauteInclusion from "$lib/assets/inclusion-connect/logo-communaute-inclusion.svg";
   import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
   import logoRDVS from "$lib/assets/inclusion-connect/logo-rdv-solidarites.svg";
-  import logoPEFill from "$lib/assets/logos/logo-pole-emploi-fill.svg";
-  import Button from "$lib/components/display/button.svelte";
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import PoleEmploiWarning from "$lib/components/specialized/pole-emploi-warning.svelte";
   import { informationLineIcon } from "$lib/icons";
   import AuthLayout from "../auth-layout.svelte";
   import { getNextPage } from "../utils";
@@ -24,14 +22,6 @@
 
   const loginHint = getLoginHint();
   const nextPage = getNextPage($page.url);
-
-  let showPEMessage = false;
-
-  function togglePEMessage() {
-    showPEMessage = !showPEMessage;
-  }
-
-  $: togglePEMessageLabel = showPEMessage ? "Réduire" : "Lire la suite";
 </script>
 
 <AuthLayout>
@@ -53,35 +43,23 @@
         </div>
       </div>
 
-      <div class="mt-s16  rounded-ml bg-info-light p-s16">
-        <div class="legend mb-s16 flex gap-s16 text-f14 text-gray-text">
-          <img src={logoPEFill} alt="" width="46" height="46" />
-          Agents Pôle emploi, vous n’avez pas besoin de créer de compte.
-        </div>
-        {#if showPEMessage}
-          <PoleEmploiWarning />
-        {/if}
-
-        <Button
-          label={togglePEMessageLabel}
-          on:click={togglePEMessage}
-          noBackground
-          small
-          noPadding
-          hoverUnderline
-        />
-      </div>
-
       <p class="mt-s24 mb-s24" />
-      <div class="mb-s40">
+      <div class="mb-s40 text-center">
         <a
+          class="inline-block"
           href="/auth/ic-connect?next={encodeURIComponent(nextPage)}{loginHint}"
         >
           <div
-            class="mx-auto flex items-center justify-center rounded bg-[#000638] px-s12 py-s12 text-f16 font-bold text-white "
+            class="mx-auto flex items-center justify-center rounded-full bg-france-blue p-s6 pr-s24 text-f16 text-white "
           >
-            <img src={logoIC} alt="" width="32" height="35" />
-            <div class="ml-s10">S’identifier avec Inclusion Connect</div>
+            <span class="h-[62px] w-[62px] rounded-full bg-white p-s6">
+              <img src={logoIC} alt="" class="max-w-none" />
+            </span>
+            <div class="ml-s16 text-left">
+              Se connecter avec <strong class="whitespace-nowrap">
+                Inclusion Connect
+              </strong>
+            </div>
           </div>
         </a>
 
@@ -100,7 +78,7 @@
         <hr class="my-s24 " />
 
         <div
-          class="flex flex-col items-center justify-between gap-s32 sm:flex-row sm:gap-s16"
+          class="flex flex-col flex-wrap content-center items-center justify-center gap-s32 sm:flex-row"
         >
           <img width="126" height="36" src={logoRDVS} alt="RDV Solidarités" />
           <img
@@ -108,6 +86,12 @@
             height="36"
             src={logoC1}
             alt="Les emplois de l'inclusion"
+          />
+          <img
+            width="126"
+            height="36"
+            src={logoCommunauteInclusion}
+            alt="La communauté de l'inclusion"
           />
           <img width="126" height="36" src={logoDora} alt="DORA" />
         </div>

@@ -1,7 +1,7 @@
 import type {
   BeneficiaryAccessModes,
   CoachOrientationModes,
-  DiffusionZoneType,
+  AdminDivisionType,
   FeeCondition,
   LocationKind,
   ServicesOptions,
@@ -138,6 +138,11 @@ export const serviceSchema: v.Schema = {
     label: "Pour les bénéficiaires",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    dependents: [
+      "contactEmail",
+      "contactPhone",
+      "beneficiariesAccessModesOther",
+    ],
   },
   beneficiariesAccessModesOther: {
     label: "",
@@ -152,6 +157,7 @@ export const serviceSchema: v.Schema = {
     label: "Pour les accompagnateurs",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    dependents: ["contactEmail", "contactPhone", "coachOrientationModesOther"],
     required: true,
   },
   coachOrientationModesOther: {
@@ -209,7 +215,16 @@ export const serviceSchema: v.Schema = {
     rules: [v.isEmail(), v.maxStrLength(255)],
     post: [v.lower, v.trim],
     maxLength: 255,
-    required: true,
+    required: (data: {
+      coachOrientationModes: CoachOrientationModes;
+      beneficiariesAccessModes: BeneficiaryAccessModes;
+    }) => {
+      return (
+        data.coachOrientationModes.includes("envoyer-courriel") ||
+        data.coachOrientationModes.includes("envoyer-fiche-prescription") ||
+        data.beneficiariesAccessModes.includes("envoyer-courriel")
+      );
+    },
   },
   isContactInfoPublic: {
     label: "Rendre les informations de contact publiques",
@@ -221,6 +236,7 @@ export const serviceSchema: v.Schema = {
     label: "Mode d’accueil",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    dependents: ["city", "address1", "postalCode"],
     required: true,
   },
   remoteUrl: {
@@ -271,6 +287,7 @@ export const serviceSchema: v.Schema = {
     label: "Périmètre",
     default: "",
     rules: [v.isString(), v.maxStrLength(10)],
+    dependents: ["diffusionZoneDetails"],
     required: true,
   },
 
@@ -279,7 +296,7 @@ export const serviceSchema: v.Schema = {
     default: "",
     rules: [v.isString(), v.maxStrLength(9)],
     maxLength: 9,
-    required: (data: { diffusionZoneType: DiffusionZoneType }) => {
+    required: (data: { diffusionZoneType: AdminDivisionType }) => {
       return data.diffusionZoneType !== "country";
     },
   },

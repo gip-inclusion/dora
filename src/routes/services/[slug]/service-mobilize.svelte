@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Accordeon from "$lib/components/display/accordion.svelte";
+  import Accordion from "$lib/components/display/accordion.svelte";
   import type { Service } from "$lib/types";
   import { addlinkToUrls } from "$lib/utils/misc";
   import { formatFilePath } from "$lib/utils/service";
@@ -8,7 +8,7 @@
 </script>
 
 <div id="orientation-modes">
-  <Accordeon title="Comment mobiliser ce service ?">
+  <Accordion title="Comment mobiliser ce service ?">
     <div class="mb-s32">
       <h3>Les démarches à réaliser</h3>
 
@@ -89,7 +89,7 @@
         {/each}
       </ul>
     </div>
-  </Accordeon>
+  </Accordion>
 </div>
 
 <style lang="postcss">

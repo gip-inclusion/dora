@@ -6,6 +6,16 @@ import insane from "insane";
 import showdown from "showdown";
 import { get } from "svelte/store";
 
+const { defaults } = insane;
+
+const INSANE_CONFIGURATION = {
+  ...defaults,
+  allowedAttributes: {
+    ...defaults.allowedAttributes,
+    a: [...defaults.allowedAttributes.a, "rel", "class"],
+  },
+};
+
 export function markdownToHTML(markdownContent: string, titleLevel = 2) {
   const converter = new showdown.Converter({
     headerLevelStart: titleLevel,
@@ -14,7 +24,7 @@ export function markdownToHTML(markdownContent: string, titleLevel = 2) {
     simplifiedAutoLink: true,
   });
 
-  return insane(converter.makeHtml(markdownContent));
+  return insane(converter.makeHtml(markdownContent), INSANE_CONFIGURATION);
 }
 
 export function htmlToMarkdown(html: string) {
@@ -49,7 +59,7 @@ export async function fetchData<T>(url: string) {
 
 export function shortenString(str, length = 50) {
   if (str && str.length > length) {
-    return `${str.slice(0, length - 1)}…`;
+    return `${str.slice(0, length)}…`;
   }
 
   return str;
@@ -108,10 +118,9 @@ export function addlinkToUrls(text) {
     text.replace(
       urlRegex,
       (url) =>
-        `<a href="${url}" class="underline" rel="noopener nofollow">${url}</a>`
+        `<a href="${url}" class="underline" target="_blank" rel="noopener nofollow">${url}</a>`
     ),
-    // eslint-disable-next-line id-length
-    { allowedTags: ["a"], allowedAttributes: { a: ["class", "rel", "href"] } }
+    INSANE_CONFIGURATION
   );
 }
 

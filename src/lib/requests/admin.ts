@@ -1,20 +1,29 @@
-import type { ModerationStatus, Service, Structure } from "$lib/types";
+import type {
+  AdminShortStructure,
+  ModerationStatus,
+  Service,
+  Structure,
+} from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
 import { token } from "$lib/utils/auth";
 import { logException } from "$lib/utils/logger";
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
 
-export async function getStructuresAdmin() {
-  const url = `${getApiURL()}/structures-admin/`;
-  return (await fetchData(url)).data;
+export async function getStructuresAdmin(
+  departmentCode
+): Promise<AdminShortStructure[]> {
+  let url = `${getApiURL()}/structures-admin/`;
+
+  if (departmentCode) {
+    url += `?department=${departmentCode}`;
+  }
+  return (await fetchData<AdminShortStructure[]>(url)).data;
 }
 
-export async function getStructureAdmin(slug) {
+export async function getStructureAdmin(slug): Promise<AdminShortStructure> {
   const url = `${getApiURL()}/structures-admin/${slug}/`;
-  const result = (await fetchData<Structure>(url)).data;
-
-  return result;
+  return (await fetchData<Structure>(url)).data;
 }
 
 export async function getStructuresToModerate() {
