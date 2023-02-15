@@ -37,6 +37,7 @@
   <TallyNpsPopup
     formId={TallyFormId.NPS_FORM_ID}
     timeoutSeconds={30}
+    keySuffix="offreur"
     hiddenFields={{ user: "offreur" }}
   />
 {/if}

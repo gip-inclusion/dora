@@ -18,20 +18,34 @@ interface TallyFormLocalStorageItem {
   lastSubmitted: string;
 }
 
-function getNpsAnswerLocalStorageKey(formId: TallyFormId): string {
-  return `tallyForm-${formId}`;
+function getNpsAnswerLocalStorageKey(
+  formId: TallyFormId,
+  keySuffix: string
+): string {
+  let key = `tallyForm-${formId}`;
+  if (keySuffix) {
+    key = `${key}-${keySuffix}`;
+  }
+
+  return key;
 }
 
-export function saveNpsFormDateClosed(formId: TallyFormId): void {
-  const key = getNpsAnswerLocalStorageKey(formId);
+export function saveNpsFormDateClosed(
+  formId: TallyFormId,
+  keySuffix: string
+): void {
+  const key = getNpsAnswerLocalStorageKey(formId, keySuffix);
   const item: TallyFormLocalStorageItem = {
     lastSubmitted: dayjs().toString(),
   };
   localStorage.setItem(key, JSON.stringify(item));
 }
 
-export function canDisplayNpsForm(formId: TallyFormId): boolean {
-  const key = getNpsAnswerLocalStorageKey(formId);
+export function canDisplayNpsForm(
+  formId: TallyFormId,
+  keySuffix: string
+): boolean {
+  const key = getNpsAnswerLocalStorageKey(formId, keySuffix);
   const item = JSON.parse(localStorage.getItem(key));
   if (item && "lastSubmitted" in item) {
     const lastSubmitted = dayjs(item.lastSubmitted);

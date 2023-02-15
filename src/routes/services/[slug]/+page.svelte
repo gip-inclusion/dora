@@ -109,6 +109,7 @@
       {:else if structureHasPublishedServices}
         <TallyNpsPopup
           formId={TallyFormId.NPS_FORM_ID}
+          keySuffix="offreur"
           timeoutSeconds={30}
           hiddenFields={{ user: "offreur" }}
         />
@@ -116,6 +117,7 @@
     {:else}
       <TallyNpsPopup
         formId={TallyFormId.NPS_FORM_ID}
+        keySuffix="chercheur"
         timeoutSeconds={45}
         hiddenFields={{ user: "chercheur" }}
       />
