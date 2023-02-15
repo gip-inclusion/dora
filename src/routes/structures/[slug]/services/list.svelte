@@ -224,10 +224,12 @@
 </div>
 {#if hasOptions && canEdit}
   <div
-    class="mb-s40 flex h-s80 w-full items-center justify-between rounded-md bg-white px-s24 text-f14 shadow-md"
+    class="mb-s40 flex w-full flex-wrap items-center rounded-md bg-white px-s24 py-s24 text-f14 shadow-md md:h-s80 md:py-s0"
   >
-    <div class="flex items-center gap-s16">
-      <div class="text-f16 font-bold">Filtrer par&nbsp;:</div>
+    <div class="flex w-full flex-wrap items-center gap-s16">
+      <div class="flex w-full items-center text-f16 font-bold md:w-auto">
+        Filtrer par&nbsp;:
+      </div>
 
       <div>
         <SelectField
@@ -255,24 +257,24 @@
           onChange={handleEltChange}
         />
       </div>
-    </div>
 
-    <div>
-      <button
-        class:!text-magenta-cta={serviceStatus || updateStatus}
-        class="text-gray-text-alt"
-        on:click={() => {
-          serviceStatus = undefined;
-          updateStatus = undefined;
-        }}
-      >
-        Tout effacer
-      </button>
+      <div class="text-right sm:flex-1">
+        <button
+          class:!text-magenta-cta={serviceStatus || updateStatus}
+          class="text-gray-text-alt"
+          on:click={() => {
+            serviceStatus = undefined;
+            updateStatus = undefined;
+          }}
+        >
+          Tout effacer
+        </button>
+      </div>
     </div>
   </div>
 
-  <div class="mb-s40 flex justify-between gap-s16">
-    <span>
+  <div class="mb-s40 flex flex-col justify-between gap-s16 sm:flex-row">
+    <div>
       <strong>
         {servicesDisplayed.length} service{servicesDisplayed.length > 1
           ? "s"
@@ -281,7 +283,7 @@
       <span class:hidden={!serviceStatus && !updateStatus}>
         correspond{servicesDisplayed.length > 1 ? "ent" : ""} à votre recherche
       </span>
-    </span>
+    </div>
 
     <div class="inline-block min-w-[280px] text-f14">
       <SelectField
