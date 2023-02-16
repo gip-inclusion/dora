@@ -6,6 +6,7 @@
   } from "$lib/validation/validation";
   import FieldWrapper from "../field-wrapper.svelte";
   import CitySearch from "../../inputs/geo/city-search.svelte";
+  import type { GeoApiValue } from "$lib/types";
 
   export let id: string;
 
@@ -15,7 +16,7 @@
   export let initialValue = "";
 
   // Spécifique
-  export let onChange: (newValue: string) => void;
+  export let onChange: (newValue: GeoApiValue) => void;
 
   // Proxy vers le FieldWrapper
   export let description = "";

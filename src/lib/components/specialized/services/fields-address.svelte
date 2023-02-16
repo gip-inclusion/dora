@@ -5,7 +5,7 @@
   import CitySearchField from "$lib/components/forms/fields/city-search-field.svelte";
   import HiddenField from "$lib/components/forms/fields/hidden-field.svelte";
   import { syncIcon } from "$lib/icons";
-  import type { Service, Structure } from "$lib/types";
+  import type { GeoApiValue, Service, Structure } from "$lib/types";
 
   export let entity: Service | Structure;
   export let parent: Structure | null = null;
@@ -42,13 +42,13 @@
     }
   }
 
-  function handleCityChange(city) {
+  function handleCityChange(city: GeoApiValue) {
     entity.city = city?.name;
     entity.cityCode = city?.code;
   }
 </script>
 
-{#key entity}
+{#key entity.slug}
   <div class="flex flex-col">
     {#if parent}
       <div class="mb-s8 lg:w-2/3 lg:self-end">
@@ -90,9 +90,9 @@
     placeholder="00000"
   />
 
-  <HiddenField id="cityCode" bind:value={entity.cityCode} />
+  <HiddenField id="cityCode" value={entity.cityCode} />
 
-  <HiddenField id="longitude" bind:value={entity.longitude} />
+  <HiddenField id="longitude" value={entity.longitude} />
 
-  <HiddenField id="latitude" bind:value={entity.latitude} />
+  <HiddenField id="latitude" value={entity.latitude} />
 {/key}

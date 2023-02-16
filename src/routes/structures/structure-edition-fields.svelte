@@ -130,4 +130,4 @@
   vertical
 />
 
-<HiddenField id="ape" bind:value={structure.ape} />
+<HiddenField id="ape" value={structure.ape} />

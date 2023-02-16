@@ -58,10 +58,16 @@
     onSuccess={handleSuccess}
   >
     <Fieldset noTopPadding>
-      <BasicInputField id="name" vertical value={member.user.fullName} />
+      <BasicInputField
+        id="name"
+        disabled
+        vertical
+        value={member.user.fullName}
+      />
       <BasicInputField
         type="email"
         id="email"
+        disabled
         vertical
         value={member.user.email}
       />
