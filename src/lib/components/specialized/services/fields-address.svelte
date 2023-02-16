@@ -10,6 +10,8 @@
   export let entity: Service | Structure;
   export let parent: Structure | null = null;
 
+  let key = crypto.randomUUID();
+
   function handleAddressChange(address) {
     const props = address?.properties;
     const coords = address?.geometry.coordinates;
@@ -39,6 +41,9 @@
       entity.cityCode = cityCode;
       entity.latitude = latitude;
       entity.longitude = longitude;
+
+      // force la mise à jour du bloc adresse
+      key = crypto.randomUUID();
     }
   }
 
@@ -48,7 +53,7 @@
   }
 </script>
 
-{#key entity.slug}
+{#key key}
   <div class="flex flex-col">
     {#if parent}
       <div class="mb-s8 lg:w-2/3 lg:self-end">
