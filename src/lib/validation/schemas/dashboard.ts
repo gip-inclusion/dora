@@ -30,7 +30,7 @@ export const modifyUserSchema = {
     rules: [v.isString(), v.maxStrLength(255)],
     post: [v.trim],
     maxLength: 255,
-    required: true,
+    required: false,
     readonly: true,
   },
   email: {
@@ -39,7 +39,7 @@ export const modifyUserSchema = {
     rules: [v.isEmail(), v.maxStrLength(255)],
     post: [v.lower, v.trim],
     maxLength: 255,
-    required: true,
+    required: false,
     readonly: true,
   },
   level: {
