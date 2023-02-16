@@ -7,7 +7,6 @@ export const userProfileSchema: v.Schema = {
     rules: [v.isString(), v.maxStrLength(140)],
     post: [v.trim],
     maxLength: 140,
-    required: true,
     readonly: true,
   },
   lastName: {
@@ -16,7 +15,6 @@ export const userProfileSchema: v.Schema = {
     rules: [v.isString(), v.maxStrLength(140)],
     post: [v.trim],
     maxLength: 140,
-    required: true,
     readonly: true,
   },
   email: {
@@ -25,7 +23,6 @@ export const userProfileSchema: v.Schema = {
     rules: [v.isEmail(), v.maxStrLength(255)],
     post: [v.lower, v.trim],
     maxLength: 255,
-    required: true,
     readonly: true,
   },
   phoneNumber: {
