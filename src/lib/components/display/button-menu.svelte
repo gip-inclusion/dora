@@ -4,9 +4,12 @@
 
   export let icon: string | undefined = undefined;
   export let label: string | undefined = undefined;
+  export let hideLabel = false;
   export let disabled = false;
   export let small = false;
+
   let isOpen = false;
+  const id = `button-menu-${crypto.randomUUID()}`;
 
   function handleClickOutside(_event) {
     isOpen = false;
@@ -19,11 +22,16 @@
       {icon}
       {label}
       noBackground
+      {hideLabel}
+      ariaAttributes={{
+        "aria-expanded": isOpen,
+        "aria-controls": id,
+      }}
       {disabled}
       {small}
       on:click={() => (isOpen = !isOpen)}
     />
-    <div class="children top-[113%]" class:open={isOpen}>
+    <div {id} class="children top-[113%]" class:open={isOpen}>
       <slot onClose={() => (isOpen = false)} />
     </div>
   </div>

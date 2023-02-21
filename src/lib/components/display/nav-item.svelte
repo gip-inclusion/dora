@@ -7,7 +7,7 @@
 </script>
 
 <a
-  class="text-f14 text-gray-text-alt2"
+  class="text-f14 text-gray-text"
   on:click
   {href}
   target={otherTab ? "_blank" : ""}

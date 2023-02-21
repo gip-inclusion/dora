@@ -6,6 +6,7 @@
   export let icon: string | undefined = undefined;
   export let extraClass = "";
   export let iconOnRight = false;
+  export let hideLabel = false;
   export let disabled = false;
   export let small = false;
   export let secondary = false;
@@ -14,6 +15,10 @@
   export let hoverUnderline = false;
   export let wFull = false;
   export let preventDefaultOnMouseDown = false;
+  export let ariaAttributes: Partial<{
+    "aria-expanded": boolean;
+    "aria-controls": string;
+  }> = {};
 
   let paddingX: string, paddingY: string, textSize: string;
 
@@ -75,6 +80,7 @@
   class:flex={icon}
   class:flex-row={icon}
   class:items-center={icon}
+  {...ariaAttributes}
   on:click
   on:mousedown={handleMouseDown}
   {disabled}
@@ -82,14 +88,14 @@
   {#if icon && !iconOnRight}
     <span
       class="{iconWidth} {iconHeight} fill-current"
-      class:mr-s8={!!label}
+      class:mr-s8={!!label && !hideLabel}
       class:-my-s2={small}
     >
       {@html icon}
     </span>
   {/if}
 
-  {label}
+  <span class:sr-only={hideLabel}>{label}</span>
 
   {#if iconOnRight}
     <span

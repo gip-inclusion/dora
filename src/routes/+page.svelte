@@ -11,6 +11,7 @@
   import logoPoleEmploi from "$lib/assets/logos/logo-pole-emploi.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
+  import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
   import type { PageData } from "./$types";
 
@@ -42,7 +43,7 @@
     <a
       target="_blank"
       class="text-magenta-cta underline"
-      rel="no-follow"
+      rel="no-follow noreferrer"
       href="https://app.livestorm.co/dora-1"
     >
       Découvrez DORA en participant à un de nos webinaires d’appropriation.
@@ -61,8 +62,9 @@
         à l'Open Data.
       </p>
     </div>
-    <div class="flex justify-center">
+    <div class="flex flex-wrap justify-center gap-s16">
       <LinkButton label="Référencer un service" to={`/services/creer`} />
+      <InviteStructureLink />
     </div>
 
     <div class="mt-s16">

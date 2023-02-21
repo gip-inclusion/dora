@@ -73,7 +73,7 @@
   <MenuAide />
 
   <div slot="lg" class="flex items-center gap-s12">
-    <ButtonMenu icon={questionFillIcon}>
+    <ButtonMenu label="Menu d’aide" hideLabel icon={questionFillIcon}>
       <MenuAide />
     </ButtonMenu>
     {#if $userInfo}

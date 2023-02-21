@@ -1,7 +1,7 @@
 <script lang="ts">
   import illuSuggerer from "$lib/assets/illustrations/illu-suggerer.svg";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import EmailButton from "$lib/components/specialized/email-button.svelte";
+  import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
 </script>
 
 <div class="flex rounded-md border border-gray-01 bg-white shadow-md">
@@ -22,7 +22,7 @@
     </p>
     <div class="flex flex-col gap-s16">
       <LinkButton label="Suggérer un service" wFull to="/contribuer" />
-      <EmailButton wFull />
+      <InviteStructureLink wFull />
     </div>
   </div>
 </div>

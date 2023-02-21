@@ -31,7 +31,7 @@
 <SkipLink />
 <Header />
 
-<main id="main-content">
+<main id="main-content" role="main">
   <slot />
 </main>
 

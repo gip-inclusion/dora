@@ -2,7 +2,6 @@
   import ContributionPic from "$lib/assets/illustrations/illu-contribution.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import EmailButton from "$lib/components/specialized/email-button.svelte";
   import { addCircleIcon } from "$lib/icons";
 </script>
 
@@ -26,8 +25,6 @@
           icon={addCircleIcon}
           iconOnRight
         />
-
-        <EmailButton />
       </div>
 
       <iframe

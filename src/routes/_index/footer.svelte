@@ -33,7 +33,7 @@
     />
   </div>
 </CenteredGrid>
-<footer class="border-t-2 border-france-blue print:hidden">
+<footer class="border-t-2 border-france-blue print:hidden" role="contentinfo">
   <CenteredGrid>
     <div class="flex gap-s24 lg:flex-row">
       <div class="mb-s24 lg:w-1/2">
@@ -75,7 +75,7 @@
 
     <nav class="flex flex-wrap gap-s32">
       <NavItem href="/mentions-legales" label="Mentions légales" />
-      <NavItem href="/cgu" label="CGU" />
+      <NavItem href="/cgu" label="Conditions générales d’utilisation" />
       <NavItem
         label="Données personnelles"
         href="/politique-de-confidentialite"

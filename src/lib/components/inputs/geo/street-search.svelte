@@ -20,13 +20,15 @@
   async function searchAddress(query) {
     const url = `${banAPIUrl}?q=${encodeURIComponent(
       query
-    )}&limit=10&citycode=${cityCode}&type=street&type=housenumber`;
+    )}&limit=10&citycode=${cityCode}`;
     const response = await fetch(url);
     const jsonResponse = await response.json();
-    const results = jsonResponse.features.map((feature) => ({
-      value: feature,
-      label: feature.properties.name,
-    }));
+    const results = jsonResponse.features
+      .filter((feature) => feature.properties.type !== "municipality")
+      .map((feature) => ({
+        value: feature,
+        label: feature.properties.name,
+      }));
     return results;
   }
 

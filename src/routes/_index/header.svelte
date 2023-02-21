@@ -10,6 +10,7 @@
 <header
   class="relative shadow-md"
   class:dev-banner={ENVIRONMENT !== "production"}
+  role="banner"
 >
   <CenteredGrid noPadding>
     <div class="flex flex-row items-center py-s12">
