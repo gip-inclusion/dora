@@ -22,6 +22,7 @@ const config = {
           "https://sentry.incubateur.net",
           "https://storage.crisp.chat/users/upload/",
           "wss://client.relay.crisp.chat/",
+          "https://matomo.inclusion.beta.gouv.fr/",
           "https://openmaptiles.geo.data.gouv.fr/",
           "https://openmaptiles.github.io/osm-bright-gl-style/",
         ].filter((source) => !!source),

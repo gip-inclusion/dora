@@ -29,19 +29,29 @@
 
     <script
       type="text/javascript"
-      src="/tarteaucitron-1.9.4/tarteaucitron.js"
+      src="/tarteaucitron.js-1.10.0/tarteaucitron.js"
       nonce="%sveltekit.nonce%"
     ></script>
+
     <script
       type="text/javascript"
       src="/tarteaucitron.init.js"
       nonce="%sveltekit.nonce%"
     ></script>
+
     <script
       type="text/javascript"
       src="https://tally.so/widgets/embed.js"
       nonce="%sveltekit.nonce%"
     ></script>
+
+    <script type="text/javascript" nonce="%sveltekit.nonce%">
+      tarteaucitron.user.crispID = "%sveltekit.env.VITE_PUBLIC_CRISP_ID%";
+      (tarteaucitron.job = tarteaucitron.job || []).push("crisp");
+      tarteaucitron.user.matomoId = "%sveltekit.env.VITE_PUBLIC_MATOMO_ID%";
+      tarteaucitron.user.matomoHost = "%sveltekit.env.VITE_PUBLIC_MATOMO_URL%";
+      (tarteaucitron.job = tarteaucitron.job || []).push("matomo");
+    </script>
 
     <style nonce="%sveltekit.nonce%">
       .main-content {
@@ -52,8 +62,5 @@
 
   <body>
     <div class="main-content">%sveltekit.body%</div>
-    <script type="text/javascript" nonce="%sveltekit.nonce%">
-      (tarteaucitron.job = tarteaucitron.job || []).push("crisp");
-    </script>
   </body>
 </html>
