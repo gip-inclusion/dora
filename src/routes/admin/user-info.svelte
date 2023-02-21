@@ -1,31 +1,41 @@
 <script lang="ts">
   import DateLabel from "$lib/components/display/date-label.svelte";
   import EmailLine from "./email-line.svelte";
-  import WebSearchLink from "./web-search-link.svelte";
+  import GoogleSearchLink from "./google-search-link.svelte";
+  import LinkedinSearchLink from "./linkedin-search-link.svelte";
 
   export let user, structure;
 </script>
 
 {#if user}
-  <div>
-    <strong>
-      {user.firstName}
-      {user.lastName}
-    </strong>
+  {#if user.email === "dora-bot@dora.beta.gouv.fr"}
+    <strong>L’équipe DORA</strong>
+  {:else}
+    <div>
+      <strong>
+        {user.firstName}
+        {user.lastName}
+      </strong>
 
-    <WebSearchLink
-      searchString="{user.firstName} {user.lastName} {structure.name}"
-    />
+      <GoogleSearchLink
+        searchString="{user.firstName} {user.lastName} {user.email} {structure.name}"
+      />
+      <LinkedinSearchLink
+        searchString="{user.firstName} {user.lastName}"
+        kind={"people"}
+      />
 
-    <EmailLine email={user.email} />
+      <EmailLine email={user.email} />
 
-    {#if user.phoneNumber}
-      📞 {user.phoneNumber}
+      {#if user.phoneNumber}
+        📞 {user.phoneNumber}
+        <br />
+      {/if}
+      valide: {user.isValid ? "✅" : "❌"}<br />sur Inclusion Connect: {user.isOnIc
+        ? "✅"
+        : "❌"}
       <br />
-    {/if}
-    actif: {user.isActive ? "✅" : "❌"} valide: {user.isValid ? "✅" : "❌"} infolettre:
-    {user.newsletter ? "✅" : "❌"} migré sur IC: {user.isOnIc ? "✅" : "❌"}
-    <br />
-    inscription: <DateLabel date={user.dateJoined} />
-  </div>
+      inscription: <DateLabel date={user.dateJoined} />
+    </div>
+  {/if}
 {/if}

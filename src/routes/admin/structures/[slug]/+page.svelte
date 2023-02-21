@@ -10,7 +10,7 @@
   import SmallLink from "../../small-link.svelte";
   import StructureContacts from "../../structure-contacts.svelte";
   import UserInfo from "../../user-info.svelte";
-  import WebSearchLink from "../../web-search-link.svelte";
+  import GoogleSearchLink from "../../google-search-link.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -49,7 +49,7 @@
     <h3>
       {data.structure.name}
       <SmallLink link="/structures/{data.structure.slug}" label="front" />
-      <WebSearchLink searchString={data.structure.name} />
+      <GoogleSearchLink searchString={data.structure.name} />
     </h3>
 
     {#if data.structure.parent.slug}
@@ -99,7 +99,7 @@
           .structure.siret}"
         label="annuaire entreprise"
       />
-      <WebSearchLink searchString={data.structure.siret} />
+      <GoogleSearchLink searchString={data.structure.siret} />
     </InfoLine>
 
     <InfoLine condition={data.structure.typologyDisplay}>

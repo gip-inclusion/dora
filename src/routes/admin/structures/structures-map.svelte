@@ -88,6 +88,11 @@
       selectedStructureSlug = null;
       popup.remove();
     });
+
+    map.on("click", "structuresLayer", function (evt) {
+      const feature = evt.features[0];
+      window.open(`/structures/${feature.properties.slug}`, "_blank").focus();
+    });
   }
 
   function zoomToStructures(features) {

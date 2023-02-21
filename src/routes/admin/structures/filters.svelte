@@ -30,8 +30,8 @@
 
   const FRESHNESS_CHOICES = [
     { value: "all", label: "Toutes" },
-    { value: "uptodate", label: "À jour" },
-    { value: "toupdate", label: "Avec des services à mettre à jour" },
+    { value: "uptodate", label: "Tous les services sont actualisés" },
+    { value: "toupdate", label: "Certains services doivent être actualisés" },
   ] as const;
   let freshnessChoice: (typeof FRESHNESS_CHOICES)[number]["value"] = "all";
 
@@ -64,7 +64,12 @@
     modChoices = []
   ) {
     return structs
-      .filter((struct) => !query || struct.name.toLowerCase().includes(query))
+      .filter(
+        (struct) =>
+          !query ||
+          struct.name.toLowerCase().includes(query) ||
+          struct.siret.startsWith(query.replace(/\s/g, ""))
+      )
       .filter((struct) => {
         return (
           !categories.length ||
@@ -249,7 +254,7 @@
           />
         </div>
         <div class="flex grow flex-col">
-          <label for="freshness">Fraicheur</label>
+          <label for="freshness">Fraicheur des données</label>
           <Select
             id="freshness"
             bind:value={freshnessChoice}
@@ -283,7 +288,11 @@
     <div class="flex flex-col gap-s12">
       <div class="mb-s12 flex w-full flex-row items-center gap-s12">
         <div class="grow">
+          <label for="filter-by-name-siret"
+            >Recherche par nom ou par SIRET</label
+          >
           <input
+            id="filter-by-name-siret"
             bind:value={searchString}
             on:input={handleFilterChange}
             class="w-full border border-gray-02 p-s8"

@@ -13,7 +13,7 @@
 </InfoLine>
 
 <InfoLine>
-  créée par: <UserInfo user={structure.creator} {structure} />
+  structure créée par: <UserInfo user={structure.creator} {structure} />
 </InfoLine>
 
 <InfoLine condition={structure.creator?.email !== structure.lastEditor?.email}>
