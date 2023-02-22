@@ -31,10 +31,23 @@
   <div slot="help">
     <p class="text-f14">
       Publics auxquels le service s’adresse. Vous pouvez ajouter vos propres
-      valeurs avec le bouton « Ajouter une autre option ». Si votre service est
+      valeurs avec le bouton «&nbsp;Ajouter un…&nbsp;». Si votre service est
       ouvert à tous, sans critères ou prérequis, laissez les champs avec les
       options par défaut.
     </p>
+    <ul class="text-f14 font-bold">
+      <li>
+        <a
+          href="https://aide.dora.fabrique.social.gouv.fr/fr/article/definir-les-publics-et-criteres-dacces-a-votre-service-tos25n/"
+          class="text-magenta-cta"
+          target="_blank"
+          title="Ouverture dans une nouvelle fenêtre"
+          rel="noreferrer"
+        >
+          Quelle thématique choisir pour votre service ?
+        </a>
+      </li>
+    </ul>
   </div>
 
   {#if servicesOptions.concernedPublic.length}

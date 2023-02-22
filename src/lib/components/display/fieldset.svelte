@@ -91,7 +91,7 @@
     </div>
 
     {#if $$slots.help && showHelp}
-      <div class="border-l-8 border-info bg-info-light  pl-s24 pr-s32  pt-s16">
+      <div class="border-l-8 border-info bg-info-light py-s16 pl-s24 pr-s32">
         <slot name="help" />
       </div>
     {/if}
