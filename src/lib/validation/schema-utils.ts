@@ -189,6 +189,12 @@ export function arrNotEmpty(msg = "") {
     msg: msg || `Veuillez selectionner au moins une option`,
   });
 }
+export function arrMaxLength(max, msg = "") {
+  return (name, value, _data) => ({
+    valid: value.length <= max,
+    msg: msg || `Vous ne pouvez pas sélectionner plus de ${max} options`,
+  });
+}
 
 export function minStrLength(max, msg = "") {
   return (name, value, _data) => ({

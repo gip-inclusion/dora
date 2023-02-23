@@ -7,6 +7,7 @@
 
   export let model: Model | undefined = undefined;
   export let isModel = false;
+  export let description = "";
   const useModel = model != null;
 
   let isPristine = service.subcategories.length === 0;
@@ -40,6 +41,7 @@
   placeholder="Sélectionner"
   placeholderMulti="Sélectionner"
   sort
+  {description}
 />
 
 {#if service.categories.includes("numerique") && !(isModel || useModel)}

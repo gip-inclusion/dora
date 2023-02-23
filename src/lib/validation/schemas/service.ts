@@ -51,7 +51,10 @@ export const serviceSchema: v.Schema = {
   categories: {
     label: "Thématiques",
     default: [],
-    rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
+    rules: [
+      v.isArray([v.isString(), v.maxStrLength(255)]),
+      v.arrMaxLength(3, "Vous avez choisi plus de 3 thématiques"),
+    ],
     dependents: ["subcategories"],
     required: true,
   },

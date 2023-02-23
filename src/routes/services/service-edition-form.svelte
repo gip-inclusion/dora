@@ -45,6 +45,9 @@
   let requesting = false;
   let currentSchema: Schema;
 
+  // Affichage d'un message aux anciennes structures suite à l'ajout d'une limitation du nombre de typologies
+  const showMaxCategoriesNotice = (service.categories.length || 0) > 3;
+
   function handleChange(validatedData) {
     service = { ...service, ...validatedData };
   }
@@ -132,6 +135,27 @@
   <hr />
 
   <CenteredGrid>
+    {#if showMaxCategoriesNotice}
+      <div class="mb-s40">
+        <Notice
+          type="warning"
+          title="Votre service comporte plus de 3 thématiques"
+        >
+          <p class="mb-s0 text-f14">
+            Les thématiques permettent de qualifier un service sur Dora et ont
+            pour objectif d’identifier les freins spécifiques (et principaux)
+            que vous aidez à lever dans le cadre de votre accompagnement.
+          </p>
+          <p class="mb-s0 text-f14">
+            Plus vous êtes précis dans le référencement de votre offre, plus
+            vous aidez les personnes accompagnant les publics à identifier le
+            bon service ciblé sur leur besoin et plus les demandes d’orientation
+            que vous recevez seront qualifiées.
+          </p>
+        </Notice>
+      </div>
+    {/if}
+
     {#if structures.length}
       <div class="lg:w-2/3">
         <FieldsStructure

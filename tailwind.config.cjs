@@ -51,7 +51,7 @@ const config = {
       },
       info: { DEFAULT: "hsl(212,93%,46%)", light: "hsl(212,93%,97%)" },
       success: { DEFAULT: "hsl(148,100%,27%)", light: "hsl(148,100%,97%)" },
-      warning: { DEFAULT: "hsl(32,100%,46%)", light: "hsl(32,100%,97%)" },
+      warning: { DEFAULT: "hsl(32,100%,46%)", light: "#FFE9C9" },
       error: { DEFAULT: "#e00700", light: "hsl(2,100%,97%)" },
       available: { DEFAULT: "#008941", dark: "#1cda76" },
       na: { DEFAULT: "#e10600", dark: "#ff504c" },
