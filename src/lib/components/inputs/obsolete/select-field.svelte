@@ -18,6 +18,7 @@
   export let value: string | string[];
   export let placeholder = "";
   export let helper = "";
+  export let inputMode: "none" | undefined = undefined;
   export let required = false;
   export let isMultiple = false;
   export let withAutoComplete = false;
@@ -283,6 +284,7 @@
         {:else if withAutoComplete}
           <input
             type="text"
+            inputmode={inputMode}
             class="absolute top-s0 right-s0 h-full w-full bg-transparent pl-s12"
             bind:value={filterText}
             {placeholder}
