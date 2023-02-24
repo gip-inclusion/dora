@@ -31,8 +31,7 @@
   <div slot="help">
     <p class="text-f14">
       Publics auxquels le service s’adresse. Si votre service est ouvert à tous,
-      sans critères ou prérequis, laissez les champs avec les options par
-      défaut.
+      sans critère ou prérequis, laissez les champs avec les options par défaut.
     </p>
     <ul class="text-f14 font-bold">
       <li>
