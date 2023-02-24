@@ -42,7 +42,7 @@
   </FieldModel>
   <div slot="help">
     <p class="mb-s10 text-f14">
-      Classez le service par thématiques et besoins pour faciliter votre
+      Classez le service par thématique et besoin pour faciliter votre
       référencement et la lisibilité de votre offre auprès de vos partenaires.
     </p>
     <ul class="text-f14 font-bold">

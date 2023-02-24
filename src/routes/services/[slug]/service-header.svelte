@@ -20,8 +20,8 @@
         currentLocation="service"
       />
     </div>
-    <div class="flex items-baseline justify-between">
-      <h1 class="mb-s0 leading-[3rem] text-white print:text-france-blue">
+    <div class="flex flex-wrap items-baseline justify-between">
+      <h1 class="mb-s0 mr-s12 leading-[3rem] text-white print:text-france-blue">
         {service.name}
       </h1>
       <Favorite big on:click={onBookmark} active={isBookmarked} inverted />

@@ -30,10 +30,9 @@
 <FieldSet title="Publics" {showModel}>
   <div slot="help">
     <p class="text-f14">
-      Publics auxquels le service s’adresse. Vous pouvez ajouter vos propres
-      valeurs avec le bouton «&nbsp;Ajouter un…&nbsp;». Si votre service est
-      ouvert à tous, sans critères ou prérequis, laissez les champs avec les
-      options par défaut.
+      Publics auxquels le service s’adresse. Si votre service est ouvert à tous,
+      sans critères ou prérequis, laissez les champs avec les options par
+      défaut.
     </p>
     <ul class="text-f14 font-bold">
       <li>
@@ -44,7 +43,7 @@
           title="Ouverture dans une nouvelle fenêtre"
           rel="noreferrer"
         >
-          Quelle thématique choisir pour votre service ?
+          Définir les publics et critères d'accès à votre service
         </a>
       </li>
     </ul>
