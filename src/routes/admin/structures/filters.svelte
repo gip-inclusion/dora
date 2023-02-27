@@ -156,7 +156,7 @@
       })
       .filter((struct) => {
         if (!params.showPoleEmploi) {
-          return struct.siret.slice(0, 9) !== "130005481" || struct.hasAdmin;
+          return struct.siret?.slice(0, 9) !== "130005481" || struct.hasAdmin;
         }
         return true;
       })
