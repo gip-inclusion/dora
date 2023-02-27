@@ -13,6 +13,7 @@ const config = {
         "base-uri": ["self"],
         "default-src": ["none"],
         "connect-src": [
+          "self",
           process.env?.VITE_API_URL,
           process.env?.VITE_ENVIRONMENT === "local" ? "ws:" : null,
           "https://*.sentry.incubateur.net",
