@@ -4,6 +4,7 @@
   import FieldWrapper from "$lib/components/inputs/obsolete/field-wrapper.svelte";
   import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
   import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
+
   import {
     arrowDownSIcon,
     deleteBackIcon,
@@ -35,6 +36,8 @@
   export let kindIds: ServiceKind[] = [];
   export let feeConditions: FeeCondition[] = [];
 
+  let innerWidth;
+  const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
   let cityChoiceList;
 
   function handleSearch() {
@@ -79,6 +82,8 @@
       )
     : [];
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div class="w-full rounded-md border border-gray-02 bg-white">
   {#if servicesOptions.categories}
@@ -140,6 +145,7 @@
         </div>
 
         <SelectField
+          inputMode={innerWidth < MOBILE_BREAKPOINT ? "none" : undefined}
           hideLabel
           isMultiple
           withAutoComplete

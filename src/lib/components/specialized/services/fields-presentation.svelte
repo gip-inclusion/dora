@@ -56,6 +56,7 @@
       id="name"
       placeholder="Titre du service"
       bind:value={service.name}
+      description="140 caractères maximum"
     />
   </FieldModel>
 
@@ -64,6 +65,7 @@
       id="shortDesc"
       placeholder="Compléter"
       bind:value={service.shortDesc}
+      description="280 caractères maximum"
     />
   </FieldModel>
 

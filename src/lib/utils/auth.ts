@@ -18,6 +18,8 @@ export interface UserInfo {
   phoneNumber: string;
   newsletter: boolean;
   isStaff: boolean;
+  isLocalCoordinator: boolean;
+  department: string;
   isBizdev: boolean;
   bookmarks: Bookmark[];
   structures: ShortStructure[];

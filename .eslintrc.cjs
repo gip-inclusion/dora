@@ -11,6 +11,20 @@ module.exports = {
   overrides: [{ files: ["*.svelte"], processor: "svelte3/svelte3" }],
   settings: {
     "svelte3/typescript": () => require("typescript"),
+    "svelte3/ignore-warnings": (warning) => {
+      if (warning.code === "a11y-no-redundant-roles") {
+        if (
+          warning.message.includes("Redundant role 'main'") ||
+          warning.message.includes("Redundant role 'banner'") ||
+          warning.message.includes("Redundant role 'contentinfo'")
+        ) {
+          return true;
+        }
+      }
+      if (warning.code === "security-anchor-rel-noreferrer") {
+        return true;
+      }
+    },
   },
   parserOptions: {
     sourceType: "module",

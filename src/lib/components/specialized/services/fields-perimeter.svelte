@@ -56,5 +56,9 @@
     />
   {/if}
 
-  <BooleanRadioButtonsField id="qpvOrZrr" bind:value={service.qpvOrZrr} />
+  <BooleanRadioButtonsField
+    id="qpvOrZrr"
+    bind:value={service.qpvOrZrr}
+    description="Quartier prioritaire de la politique de la ville ou Zone de revitalisation rurale"
+  />
 </FieldSet>

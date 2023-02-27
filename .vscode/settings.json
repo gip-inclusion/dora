@@ -43,5 +43,6 @@
     "security-anchor-rel-noreferrer": "ignore"
   },
   "svelte.plugin.svelte.defaultScriptLanguage": "ts",
-  "tailwindCSS.validate": true
+  "tailwindCSS.validate": true,
+  "githubPullRequests.ignoredPullRequestBranches": ["main"]
 }

@@ -75,7 +75,7 @@
   }
 
   .tooltip .tooltiptext {
-    @apply invisible absolute top-s28 left-1/2 z-10 w-max -translate-x-1/2 rounded bg-magenta-dark px-s8 py-s2 text-center text-f12 font-bold text-white opacity-0 transition-opacity;
+    @apply invisible absolute top-[-1000px] left-[-1000px] z-10 w-max -translate-x-1/2 rounded bg-magenta-dark px-s8 py-s2 text-center text-f12 font-bold text-white;
   }
 
   .tooltip.big .tooltiptext {
@@ -88,6 +88,6 @@
   }
 
   .tooltip:hover .tooltiptext {
-    @apply visible opacity-100;
+    @apply visible top-s28 left-1/2 opacity-100;
   }
 </style>

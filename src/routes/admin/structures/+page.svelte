@@ -9,6 +9,7 @@
   import StructuresTable from "./structures-table.svelte";
 
   export let data: PageData;
+
   let structures: AdminShortStructure[] = [];
   let filteredStructures: AdminShortStructure[] = [];
   let department: GeoApiValue;
@@ -22,21 +23,29 @@
       structures = [];
     }
   }
+
+  if (data.isLocalCoordinator) {
+    handleDepartmentChange(data.department);
+  }
 </script>
 
 <CenteredGrid>
-  <h2>Structures</h2>
-
-  <div class="mb-s16 flex flex-col">
-    <label for="department" class="font-bold">Département</label>
-    <AdminDivisionSearch
-      id="department"
-      searchType="department"
-      onChange={handleDepartmentChange}
-      placeholder="numéro ou nom"
-      withGeom
-    />
-  </div>
+  {#if !data.isLocalCoordinator}
+    <div class="mb-s16 flex flex-col">
+      <label for="department" class="font-bold">Département</label>
+      <AdminDivisionSearch
+        id="department"
+        searchType="department"
+        onChange={handleDepartmentChange}
+        placeholder="numéro ou nom"
+        withGeom
+      />
+    </div>
+  {:else}
+    <h1>
+      {department.name}({department.code})
+    </h1>
+  {/if}
 
   {#if department}
     <div class="my-s32 flex flex-row justify-evenly gap-s24">

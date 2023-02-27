@@ -30,14 +30,16 @@
   <BasicInputField
     id="contactPhone"
     type="tel"
-    placeholder="00 00 00 00 00"
+    placeholder="01 23 45 67 89"
+    description="Format attendu : 01 23 45 67 89"
     bind:value={service.contactPhone}
   />
 
   <BasicInputField
     id="contactEmail"
     type="email"
-    placeholder="nom@exemple.org"
+    placeholder="nom@domaine.fr"
+    description="Format attendu : nom@domaine.fr"
     bind:value={service.contactEmail}
   />
 

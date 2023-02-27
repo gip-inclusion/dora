@@ -2,7 +2,7 @@
 
 tarteaucitronForceLanguage = "fr";
 tarteaucitron.init({
-  privacyUrl: "https://documentation.dora.fabrique.social.gouv.fr/informations-legales/politique-de-confidentialite" /* Privacy policy url */,
+  privacyUrl: "/politique-de-confidentialite" /* Privacy policy url */,
   cookieName: "tarteaucitron" /* Cookie name */,
 
   orientation: "bottom" /* Banner position (top - bottom) */,

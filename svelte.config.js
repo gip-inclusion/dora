@@ -22,6 +22,7 @@ const config = {
           "https://sentry.incubateur.net",
           "https://storage.crisp.chat/users/upload/",
           "wss://client.relay.crisp.chat/",
+          "https://matomo.inclusion.beta.gouv.fr/",
           "https://openmaptiles.geo.data.gouv.fr/",
           "https://openmaptiles.github.io/osm-bright-gl-style/",
         ].filter((source) => !!source),
@@ -78,6 +79,18 @@ const config = {
     }
     if (warning.code === "a11y-role-has-required-aria-props") {
       return;
+    }
+
+    // Le RGAA impose l'utilisation de ces `role`
+    // et ces avertissements n'ont donc pas lieu d'être
+    if (warning.code === "a11y-no-redundant-roles") {
+      if (
+        warning.message.includes("Redundant role 'main'") ||
+        warning.message.includes("Redundant role 'banner'") ||
+        warning.message.includes("Redundant role 'contentinfo'")
+      ) {
+        return;
+      }
     }
 
     defaultHandler(warning);

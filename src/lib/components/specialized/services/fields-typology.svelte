@@ -31,13 +31,69 @@
 
 <FieldSet title="Typologie" {showModel} {noTopPadding}>
   <FieldModel {...fieldModelProps.categories ?? {}} type="array">
-    <FieldCategory bind:service {servicesOptions} {model} />
+    <FieldCategory
+      bind:service
+      {servicesOptions}
+      {model}
+      description={!service.useInclusionNumeriqueScheme
+        ? "Cochez jusqu’à 3 thématiques principales."
+        : ""}
+    />
   </FieldModel>
   <div slot="help">
-    <p class="text-f14">
-      Classez le service par thématiques et besoins pour faciliter son
-      référencement.
+    <p class="mb-s10 text-f14">
+      Classez le service par thématique et besoin pour faciliter votre
+      référencement et la lisibilité de votre offre auprès de vos partenaires.
     </p>
+    <ul class="text-f14 font-bold">
+      <li class="mb-s10">
+        <a
+          href="https://aide.dora.fabrique.social.gouv.fr/fr/article/quelle-thematique-choisir-pour-votre-service-cywvsk/"
+          class="text-magenta-cta hover:underline"
+          target="_blank"
+          title="Ouverture dans une nouvelle fenêtre"
+          rel="noreferrer"
+        >
+          Quelle thématique choisir pour votre service ?
+        </a>
+      </li>
+      <li class="mb-s10">
+        <a
+          href="https://aide.dora.fabrique.social.gouv.fr/fr/article/siae-votre-offre-de-service-sur-dora-jb4405/"
+          class="text-magenta-cta hover:underline"
+          target="_blank"
+          title="Ouverture dans une nouvelle fenêtre"
+          rel="noreferrer"
+        >
+          <abbr title="Structures d’insertion par l’activité économique">
+            SIAE
+          </abbr>&nbsp;:&nbsp;votre offre de service sur Dora
+        </a>
+      </li>
+      <li class="mb-s10">
+        <a
+          href="https://aide.dora.fabrique.social.gouv.fr/fr/article/referencer-un-service-dinclusion-numerique-sur-dora-et62ua/"
+          class="text-magenta-cta hover:underline"
+          target="_blank"
+          title="Ouverture dans une nouvelle fenêtre"
+          rel="noreferrer"
+        >
+          Référencer un service d’inclusion numérique sur Dora
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://aide.dora.fabrique.social.gouv.fr/fr/article/referencer-votre-offre-de-formation-professionnalisante-ou-qualifiante-sur-dora-1bzkn1k/"
+          class="text-magenta-cta hover:underline"
+          target="_blank"
+          title="Ouverture dans une nouvelle fenêtre"
+          rel="noreferrer"
+        >
+          Référencer votre offre de formation professionnalisante ou qualifiante
+          sur Dora
+        </a>
+      </li>
+    </ul>
   </div>
 
   <FieldModel

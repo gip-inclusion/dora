@@ -8,6 +8,7 @@
     ModerationStatus,
     ServicesOptions,
   } from "$lib/types";
+  import { userInfo } from "$lib/utils/auth";
   import { capitalize, shortenString } from "$lib/utils/misc";
   import StructureModale from "./structure-modale.svelte";
 
@@ -54,7 +55,7 @@
           <div>
             <strong
               ><a
-                href="/admin/structures/{structure.slug}"
+                href="/structures/{structure.slug}"
                 target="_blank"
                 rel="noreferrer"
               >
@@ -103,15 +104,16 @@
         </div>
       </div>
 
-      <LinkButton
-        to="/structures/{structure.slug}"
-        icon={eyeIcon}
-        noBackground
-        otherTab
-      />
+      {#if $userInfo.isStaff}
+        <LinkButton
+          to="/admin/structures/{structure.slug}"
+          icon={eyeIcon}
+          noBackground
+          otherTab
+        />
+      {/if}
       <Button
         on:click={() => {
-          console.log(structure);
           currentStructure = structure;
           isStructureModalOpen = true;
         }}
