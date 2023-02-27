@@ -1,4 +1,4 @@
-import type { PageLoad } from "../../../../.svelte-kit/types/src/routes";
+import type { PageLoad } from "./$types";
 import content from "./content.md?raw";
 
 export const load: PageLoad = () => {
