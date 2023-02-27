@@ -1,7 +1,12 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
-  export let id, group, choices, disabled, name, readonly;
+  export let id: string,
+    group,
+    choices,
+    disabled = false,
+    name: string,
+    readonly = false;
 
   const dispatch = createEventDispatcher();
 

@@ -120,6 +120,7 @@ export interface AdminShortStructure {
   moderationStatus: ModerationStatus;
   numPublishedServices: number;
   numOutdatedServices: number;
+  numServices: number;
   shortDesc: string;
 }
 

@@ -99,7 +99,7 @@ export function isEmail(msg = "") {
 export function isPhone(msg = "") {
   return (name, value, _data) => ({
     valid: typeof value === "string" && value.length <= 10,
-    // Some numbers only have 4 digits (Pole Emploi or La CAF for example)
+    // Some numbers only have 4 digits (Pôle emploi or La CAF for example)
     // And we might have stranger cases, like extension numbers.
     // So for now, just ensure we get a string!
     // typeof value === "string" && (value === "" || !!value.match(phoneRegexp)),

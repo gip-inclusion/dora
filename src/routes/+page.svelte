@@ -74,7 +74,7 @@
       </p>
       <div class="flex flex-col justify-center gap-s24 md:flex-row">
         <div class="flex justify-center gap-s24">
-          <img src={logoPoleEmploi} alt="logo Pole Emploi" />
+          <img src={logoPoleEmploi} alt="logo Pôle emploi" />
 
           <img src={logoMobIn} alt="logo Mob'In" />
 

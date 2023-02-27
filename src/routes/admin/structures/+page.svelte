@@ -24,6 +24,10 @@
     }
   }
 
+  async function handleStructuresRefresh() {
+    structures = await getStructuresAdmin(department.code);
+  }
+
   if (data.isLocalCoordinator) {
     handleDepartmentChange(data.department);
   }
@@ -48,23 +52,41 @@
   {/if}
 
   {#if department}
-    <div class="my-s32 flex flex-row justify-evenly gap-s24">
+    <div class="my-s32 flex flex-row flex-wrap justify-between gap-s24">
       <div
-        class="flex max-w-fit flex-col rounded border border-gray-01 p-s16 text-center"
+        class="flex  flex-1 flex-col  justify-between rounded border border-gray-01 p-s16 text-center"
       >
-        <div class="text-bold text-f24 text-france-blue">
-          Nb de structures orphelines
+        <div class="text-bold text-f16 text-france-blue">
+          Nb de structures actives
         </div>
-        <div class="text-bold text-f38 text-france-blue">XXX</div>
+        <div class="text-bold text-f24 text-france-blue">XXX</div>
       </div>
 
       <div
-        class="flex max-w-fit flex-col rounded border border-gray-01 p-s16 text-center"
+        class="flex  flex-1  flex-col justify-between rounded border  border-gray-01 p-s16 text-center"
       >
-        <div class="text-bold text-f24 text-france-blue">
+        <div class="text-bold text-f16 text-france-blue">
+          Nb de structures orphelines
+        </div>
+        <div class="text-bold text-f24 text-france-blue">XXX</div>
+      </div>
+
+      <div
+        class="flex  flex-1  flex-col justify-between rounded border border-gray-01 p-s16 text-center"
+      >
+        <div class="text-bold text-f16 text-france-blue">
           Nombre de services publiés
         </div>
-        <div class="text-bold text-f38 text-france-blue">XXX</div>
+        <div class="text-bold text-f24 text-france-blue">XXX</div>
+      </div>
+
+      <div
+        class="flex  flex-1  flex-col justify-between rounded border border-gray-01 p-s16 text-center"
+      >
+        <div class="text-bold text-f16 text-france-blue">
+          Nombre d’utilisateurs
+        </div>
+        <div class="text-bold text-f24 text-france-blue">XXX</div>
       </div>
     </div>
     <Filters
@@ -92,8 +114,8 @@
           <div>
             <StructuresTable
               {filteredStructures}
-              servicesOptions={data.servicesOptions}
               bind:selectedStructureSlug
+              onRefresh={handleStructuresRefresh}
             />
           </div>
         </div>

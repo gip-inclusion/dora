@@ -1,5 +1,4 @@
 <script lang="ts">
-  import DateLabel from "$lib/components/display/date-label.svelte";
   import EmailLine from "./email-line.svelte";
   import GoogleSearchLink from "./google-search-link.svelte";
   import LinkedinSearchLink from "./linkedin-search-link.svelte";
@@ -28,14 +27,9 @@
       <EmailLine email={user.email} />
 
       {#if user.phoneNumber}
-        📞 {user.phoneNumber}
+        📞 <a href="tel:{user.phoneNumber}">{user.phoneNumber}</a>
         <br />
       {/if}
-      valide: {user.isValid ? "✅" : "❌"}<br />sur Inclusion Connect: {user.isOnIc
-        ? "✅"
-        : "❌"}
-      <br />
-      inscription: <DateLabel date={user.dateJoined} />
     </div>
   {/if}
 {/if}
