@@ -488,6 +488,11 @@ export type Model = {
   suspensionDate: string;
 };
 
+export type Partner = {
+  name: string;
+  img: string;
+};
+
 // FORM
 export type Choice<T = string> = {
   value: T;

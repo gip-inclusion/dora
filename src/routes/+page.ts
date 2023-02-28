@@ -4,7 +4,7 @@ import { getServicesOptions } from "$lib/requests/services";
 import { getLastSearchCity } from "$lib/utils/service-search";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ parent, url }) => {
+export const load: PageLoad = async ({ parent, url, data }) => {
   await parent();
   const query = url.searchParams;
 
@@ -24,5 +24,6 @@ export const load: PageLoad = async ({ parent, url }) => {
     servicesOptions: await getServicesOptions(),
     cityCode,
     cityLabel,
+    ...data,
   };
 };
