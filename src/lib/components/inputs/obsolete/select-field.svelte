@@ -1,4 +1,5 @@
 <script lang="ts">
+  import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
   import {
@@ -8,16 +9,14 @@
   } from "$lib/utils/choice";
   import { clickOutside } from "$lib/utils/misc";
   import { tick } from "svelte";
-  import FieldWrapper from "./field-wrapper.svelte";
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";
 
   export let label: string;
   export let name: string;
   export let minDropdownWidth = "min-w-full";
-  export let value: string | string[];
+  export let value: string | string[] | undefined;
   export let placeholder = "";
-  export let helper = "";
   export let inputMode: "none" | undefined = undefined;
   export let required = false;
   export let isMultiple = false;
@@ -29,7 +28,6 @@
   export let optGroups: Choice[] = [];
   export let display: "horizontal" | "vertical" = "horizontal";
   export let style: "common" | "filter" | "search" = "common";
-  export let errorMessages: string[] | undefined = undefined;
   export let onChange: (event: {
     detail: string;
     value: string | string[];
@@ -40,9 +38,6 @@
 
   let optGroupsOpen: string[] = [];
   let filterText = "";
-
-  // AriaDescribedBy => TODO: move to wrapper
-  let ariaDescribedBy = "";
 
   // *** Accessibilité
   const uuid: string = crypto.randomUUID(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
@@ -227,24 +222,9 @@
       }
     }
   }
-
-  $: {
-    ariaDescribedBy = helper ? `${name}-helper` : "";
-    if ((errorMessages || []).length) {
-      ariaDescribedBy = `${ariaDescribedBy} ${name}-error`;
-    }
-  }
 </script>
 
-<FieldWrapper
-  {label}
-  {name}
-  {helper}
-  {required}
-  {errorMessages}
-  {display}
-  {hideLabel}
->
+<FieldWrapper {label} id={name} {required} vertical {hideLabel}>
   <div
     id={name}
     aria-controls={`listbox-values-${uuid}`}
@@ -258,7 +238,6 @@
     class:has-value={isMultiple ? value.length : value}
     role="combobox"
     tabindex="0"
-    aria-describedby={ariaDescribedBy}
     on:click={() => toggleCombobox()}
     on:keydown={handleKeydown}
     use:clickOutside

@@ -35,14 +35,14 @@
 </script>
 
 <div
-  class="items-top flex flex-col items-stretch gap-s8 lg:items-start"
+  class="field-wrapper items-top flex flex-col items-stretch gap-s8 lg:items-start"
   class:lg:flex-row={!vertical}
   class:lg:items-stretch={vertical}
   class:hidden
 >
-  <div class="flex flex-col" class:one-fourth={!vertical}>
-    <label for={id} class="mt-s8">
-      <span class=" text-f17 font-bold text-gray-dark" class:hidden={hideLabel}>
+  <div class="label-container flex flex-col" class:one-fourth={!vertical}>
+    <label for={id} class="mt-s8" class:sr-only={hideLabel}>
+      <span class=" text-f17 font-bold text-gray-dark">
         {label}{#if required && !readonly && !disabled}<span
             class="ml-s6 text-error">&nbsp;*</span
           >{/if}
