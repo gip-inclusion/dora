@@ -28,5 +28,5 @@ tarteaucitron.init({
 
   readmoreLink: "" /* Change the default readmore link */,
 
-  mandatory: false /* Show a message about mandatory cookies */,
+  mandatory: true /* Show a message about mandatory cookies */,
 });
