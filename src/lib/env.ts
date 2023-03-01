@@ -7,3 +7,4 @@ export const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN;
 export const CANONICAL_URL = import.meta.env.VITE_CANONICAL_URL;
 export const METABASE_EMBED_URL = import.meta.env.VITE_METABASE_EMBED_URL;
 export const PLAUSIBLE_EMBED_URL = import.meta.env.VITE_PLAUSIBLE_EMBED_URL;
+export const FLAG_STRIKING = import.meta.env.VITE_FLAG_STRIKING === "true";
