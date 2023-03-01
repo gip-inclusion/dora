@@ -8,3 +8,4 @@ export const CANONICAL_URL = import.meta.env.VITE_CANONICAL_URL;
 export const CRISP_ID = import.meta.env.VITE_CRISP_ID;
 export const METABASE_EMBED_URL = import.meta.env.VITE_METABASE_EMBED_URL;
 export const PLAUSIBLE_EMBED_URL = import.meta.env.VITE_PLAUSIBLE_EMBED_URL;
+export const FLAG_STRIKING = import.meta.env.VITE_FLAG_STRIKING === "true";
