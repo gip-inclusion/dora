@@ -27,7 +27,7 @@ export const load: PageLoad = async ({ params, parent }) => {
 
   const structure = await getStructure(service.structure);
   let structures;
-  if (user.isStaff) {
+  if (user?.isStaff) {
     structures = await getStructures();
   } else if (user) {
     structures = user.structures;

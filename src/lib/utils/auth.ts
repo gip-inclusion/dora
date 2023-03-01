@@ -24,6 +24,7 @@ export interface UserInfo {
   bookmarks: Bookmark[];
   structures: ShortStructure[];
   pendingStructures: ShortStructure[];
+  tokenExpiration: string;
 }
 
 export const userInfo = writable<UserInfo>(null);
