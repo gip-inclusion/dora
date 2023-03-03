@@ -13,7 +13,6 @@
   } from "$lib/icons";
   import { isStructureInformationsComplete } from "$lib/requests/structures";
   import type { Structure, StructuresOptions } from "$lib/types";
-  import { token, userInfo } from "$lib/utils/auth";
   import { formatPhoneNumber, markdownToHTML } from "$lib/utils/misc";
   import { formatOsmHours } from "$lib/utils/opening-hours";
   import DataInclusionNotice from "./data-inclusion-notice.svelte";
@@ -31,7 +30,6 @@
       ).label;
     })
     .join(", ");
-  $: canManageStructure = $token && (structure.isAdmin || $userInfo?.isStaff);
   $: sourceIsDataInclusion = structure.source?.value.startsWith("di-");
   $: structureHasInfo =
     structure.phone ||
@@ -47,7 +45,7 @@
     class="flex flex-col justify-between border-b border-gray-03 pb-s40 sm:flex-row"
   >
     <h2 class="text-france-blue">Informations</h2>
-    {#if canManageStructure}
+    {#if structure.canWrite}
       <div class="text-right">
         <LinkButton
           id="update-structure"
@@ -64,7 +62,7 @@
       <DateLabel date={structure.modificationDate} />
     </p>
   {/if}
-  {#if canManageStructure && sourceIsDataInclusion && !structure.hasBeenEdited}
+  {#if structure.canWrite && sourceIsDataInclusion && !structure.hasBeenEdited}
     <div>
       <DataInclusionNotice {structure} />
     </div>
@@ -73,7 +71,7 @@
 
 <div class="structure-body">
   <div class="notice">
-    {#if canManageStructure}
+    {#if structure.canWrite}
       {#if !isStructureInformationsComplete(structure) && !(sourceIsDataInclusion && !structure.hasBeenEdited)}
         <Notice
           title="Les informations de votre structure ne sont pas complètes"
