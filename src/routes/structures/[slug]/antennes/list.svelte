@@ -102,7 +102,7 @@
   </div>
 </div>
 
-<div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
+<div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-3">
   {#each branchesFiltered as branch}
     <StructureCard structure={branch} />
   {/each}

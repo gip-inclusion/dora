@@ -7,6 +7,8 @@
   export let readOnly;
 </script>
 
-<ButtonMenu icon={moreIcon} small>
-  <ModelMenu {model} {readOnly} />
-</ButtonMenu>
+<div class="rounded border border-magenta-cta py-s4">
+  <ButtonMenu icon={moreIcon} small>
+    <ModelMenu {model} {readOnly} />
+  </ButtonMenu>
+</div>

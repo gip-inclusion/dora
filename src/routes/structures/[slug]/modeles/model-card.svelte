@@ -1,42 +1,45 @@
 <script lang="ts">
-  import { userInfo } from "$lib/utils/auth";
   import DateLabel from "$lib/components/display/date-label.svelte";
+  import { copyIcon2, historyLineIcon } from "$lib/icons";
   import ModelMenu from "./model-button-menu.svelte";
 
   export let model;
   export let readOnly = true;
 </script>
 
-<div class="flex flex-col justify-between rounded-md bg-white shadow-md">
-  <div
-    class="flex grow flex-col justify-between rounded-t-md bg-gray-00 px-s20 py-s12"
-    class:rounded-b-md={readOnly}
-  >
-    <div>
-      <div class="mb-s8 flex items-center">
-        <p class="mb-s0 text-f14 text-gray-text">
-          Mis à jour le <DateLabel date={model.modificationDate} />
-        </p>
+<div class="flex flex-col justify-between rounded-ml bg-white shadow-md ">
+  <div class="p-s24">
+    <div class="flex items-center justify-between text-f14">
+      <div class="flex items-center text-gray-dark">
+        <div
+          class="mr-s8 flex h-s28 w-s28 items-center justify-center rounded-full bg-service-blue text-service-blue-dark"
+        >
+          <span class="inline-block h-s16 w-s16 fill-current">
+            {@html copyIcon2}
+          </span>
+        </div>
+        {model.numServices}
+        {model.numServices > 1 ? "services associés" : "service associé"}
       </div>
-      <h4 class="mb-s8 text-france-blue">
-        <a href="/modeles/{model.slug}">{model.name}</a>
-      </h4>
+
+      <ModelMenu {model} {readOnly} />
     </div>
 
-    <p class="mb-s0 text-f14">
-      {model.numServices} service{model.numServices > 1 ? "s" : ""} synchronisé{model.numServices >
-      1
-        ? "s"
-        : ""}
-    </p>
+    <h3 class="m-s0 mt-s12 text-f19 font-bold text-france-blue">
+      <a href="/modeles/{model.slug}">{model.name}</a>
+    </h3>
   </div>
-  {#if $userInfo}
-    <div
-      class="flex items-center justify-between border-t border-t-gray-03 p-s20"
-    >
-      <div class="ml-auto self-end">
-        <ModelMenu {model} {readOnly} />
+
+  <div class="border-t border-t-gray-03 p-s24">
+    <div class="flex items-center text-f14  text-gray-dark">
+      <div
+        class="mr-s8 flex h-s28 w-s28 items-center justify-center rounded-full bg-service-blue text-service-blue-dark"
+      >
+        <span class="inline-block h-s16 w-s16 fill-current">
+          {@html historyLineIcon}
+        </span>
       </div>
+      Mis à jour le <DateLabel date={model.modificationDate} />
     </div>
-  {/if}
+  </div>
 </div>

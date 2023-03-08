@@ -91,7 +91,7 @@
   </div>
 </div>
 
-<div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-4">
+<div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-3">
   {#each modelsOrdered as model}
     <ModelCard {model} readOnly={!canEdit} />
   {/each}

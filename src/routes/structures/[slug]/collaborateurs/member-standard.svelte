@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import Label from "$lib/components/display/label.svelte";
-  import { fileEditIcon, fileForbidIcon, userIcon } from "$lib/icons";
+  import { userIcon, user2Icon, settingsIcon, forbidIcon } from "$lib/icons";
   import { deleteMember } from "$lib/requests/structures";
   import Member from "./member.svelte";
   import ModalChangeUser from "./modal-change-user.svelte";
@@ -13,6 +13,8 @@
 
   let modalChangeUserIsOpen = false;
   $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
+  $: userLevelIcon = member.isAdmin ? user2Icon : userIcon;
+
   async function handleDelete() {
     if (confirm(`Supprimer l’utilisateur ${member.user.fullName} ?`)) {
       await deleteMember(member.id);
@@ -24,7 +26,7 @@
 <ModalChangeUser bind:isOpen={modalChangeUserIsOpen} bind:member {onRefresh} />
 <Member {isOnlyAdmin} {member} {isMyself} {readOnly}>
   <div slot="label">
-    <Label label={userLevel} smallIcon icon={userIcon} />
+    <Label label={userLevel} smallIcon icon={userLevelIcon} />
   </div>
 
   <div slot="actions" let:onCloseParent>
@@ -35,23 +37,27 @@
           modalChangeUserIsOpen = true;
           onCloseParent();
         }}
-        icon={fileEditIcon}
+        icon={settingsIcon}
         iconOnRight
         small
+        wFull
+        extraClass="justify-end"
         noBackground
       />
     </div>
     {#if !isMyself}
       <div>
         <Button
-          label="Supprimer"
+          label="Quitter la structure"
           on:click={() => {
             handleDelete();
             onCloseParent();
           }}
-          icon={fileForbidIcon}
+          icon={forbidIcon}
           iconOnRight
           small
+          wFull
+          extraClass="justify-end w-[190px]"
           noBackground
         />
       </div>
