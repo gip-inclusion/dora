@@ -24,6 +24,8 @@
 
   let requesting = false;
 
+  const showMaxCategoriesNotice = (model.categories.length || 0) > 3;
+
   function handleChange(validatedData) {
     structure = { ...model, ...validatedData };
   }
@@ -50,7 +52,7 @@
 >
   <hr />
   <CenteredGrid>
-    {#if model.slug}
+    {#if model.slug && showMaxCategoriesNotice}
       <div class="mb-s40">
         <Notice
           type="warning"
