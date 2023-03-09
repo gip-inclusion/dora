@@ -7,10 +7,10 @@ export type AdminDivisionType =
 
 export type ServiceCategory =
   | "acces-aux-droits"
-  | "acc-global-indiv"
+  | "accompagnement-social-et-professionnel-personnalise"
   | "apprendre-francais"
   | "creation-activite	"
-  | "difficultes-financieres"
+  | "gestion-financiere"
   | "emploi-choisir-metier"
   | "emploi-preparer-sa-candidature"
   | "emploi-trouver-emploi"

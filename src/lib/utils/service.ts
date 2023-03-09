@@ -123,13 +123,13 @@ export function getCategoryIcon(slug: string) {
   if ("famille" === slug) {
     return parentIcon;
   }
-  if ("difficultes-financieres" === slug) {
+  if ("gestion-financiere" === slug) {
     return euroLineIcon;
   }
   if ("apprendre-francais" === slug) {
     return chatQuoteIcon;
   }
-  if ("acc-global-indiv" === slug) {
+  if ("accompagnement-social-et-professionnel-personnalise" === slug) {
     return chatSmileIcon;
   }
   if ("handicap" === slug) {
