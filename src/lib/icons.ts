@@ -47,6 +47,7 @@ export { default as pinDistanceIcon } from "remixicon/icons/Map/pin-distance-fil
 export { default as rocketIcon } from "remixicon/icons/Map/rocket-2-line.svg?raw";
 export { default as lightBulbIcon } from "remixicon/icons/Others/lightbulb-flash-line.svg?raw";
 export { default as wheelChairIcon } from "remixicon/icons/Others/wheelchair-line.svg?raw";
+export { default as repeatIcon } from "remixicon/icons/Media/repeat-line.svg?raw";
 export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill.svg?raw";
 export { default as addIcon } from "remixicon/icons/System/add-fill.svg?raw";
 export { default as alertIcon } from "remixicon/icons/System/alert-fill.svg?raw";
@@ -58,6 +59,7 @@ export { default as arrowUpLineIcon } from "remixicon/icons/System/arrow-up-line
 export { default as arrowUpSIcon } from "remixicon/icons/System/arrow-up-s-line.svg?raw";
 export { default as checkIcon } from "remixicon/icons/System/check-line.svg?raw";
 export { default as checkboxCircleFillIcon } from "remixicon/icons/System/checkbox-circle-fill.svg?raw";
+export { default as checkboxCircleIcon } from "remixicon/icons/System/checkbox-circle-line.svg?raw";
 export { default as closeCircleIcon } from "remixicon/icons/System/close-circle-fill.svg?raw";
 export { default as closeIcon } from "remixicon/icons/System/close-fill.svg?raw";
 export { default as closeLineIcon } from "remixicon/icons/System/close-line.svg?raw";
@@ -79,6 +81,8 @@ export { default as searchIcon } from "remixicon/icons/System/search-line.svg?ra
 export { default as timeLineIcon } from "remixicon/icons/System/time-line.svg?raw";
 export { default as timerFlashIcon } from "remixicon/icons/System/timer-flash-line.svg?raw";
 export { default as uploadCloudIcon } from "remixicon/icons/System/upload-cloud-2-line.svg?raw";
+export { default as forbidIcon } from "remixicon/icons/System/forbid-2-line.svg?raw";
+export { default as settingsIcon } from "remixicon/icons/System/settings-4-line.svg?raw";
 export { default as accountCircleLineIcon } from "remixicon/icons/User/account-circle-line.svg?raw";
 export { default as adminIcon } from "remixicon/icons/User/admin-fill.svg?raw";
 export { default as emotionHappyIcon } from "remixicon/icons/User/emotion-happy-fill.svg?raw";
@@ -86,7 +90,8 @@ export { default as parentIcon } from "remixicon/icons/User/parent-line.svg?raw"
 export { default as starSmileFillIcon } from "remixicon/icons/User/star-smile-fill.svg?raw";
 export { default as starSmileLineIcon } from "remixicon/icons/User/star-smile-line.svg?raw";
 export { default as teamLineIcon } from "remixicon/icons/User/team-line.svg?raw";
-export { default as userIcon } from "remixicon/icons/User/user-2-line.svg?raw";
+export { default as userIcon } from "remixicon/icons/User/user-line.svg?raw";
+export { default as user2Icon } from "remixicon/icons/User/user-2-line.svg?raw";
 export { default as userAddIcon } from "remixicon/icons/User/user-add-line.svg?raw";
 
 // Autres

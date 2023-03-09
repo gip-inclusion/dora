@@ -7,29 +7,43 @@
   const administrators = structure.members.filter((member) => member.isAdmin);
 </script>
 
-<InfoLine condition={structure.phone || structure.email}>
-  {#if structure.phone}📞 {structure.phone}{/if}
-  {#if structure.email}<EmailLine email={structure.email} />{/if}
-</InfoLine>
+{#if structure.phone || structure.email}
+  <h1>Informations de contact géneriques</h1>
+  <InfoLine condition={structure.phone || structure.email}>
+    {#if structure.phone}📞 {structure.phone}{/if}
+    {#if structure.email}<EmailLine email={structure.email} />{/if}
+  </InfoLine>
+{/if}
 
-<InfoLine>
-  structure créée par: <UserInfo user={structure.creator} {structure} />
-</InfoLine>
-
-<InfoLine condition={structure.creator?.email !== structure.lastEditor?.email}>
-  dernière modification par: <UserInfo
-    user={structure.lastEditor}
-    {structure}
-  />
-</InfoLine>
-
-<div class="ml-s16">
-  {#if administrators.length}
-    <h6>administrateurs•trices</h6>
-    {#each administrators as administrator}
-      <InfoLine>
-        <UserInfo user={administrator.user} {structure} />
-      </InfoLine>
-    {/each}
+{#if structure.creator || structure.lastEditor}
+  <h1>Historique</h1>
+  {#if structure.creator}
+    <InfoLine>
+      structure créée par :
+      <UserInfo user={structure.creator} {structure} />
+    </InfoLine>
   {/if}
-</div>
+  {#if structure.lastEditor && structure.creator?.email !== structure.lastEditor?.email}
+    <InfoLine>
+      dernière modification par : <UserInfo
+        user={structure.lastEditor}
+        {structure}
+      />
+    </InfoLine>
+  {/if}
+{/if}
+
+{#if administrators.length}
+  <h1>administrateurs•trices</h1>
+  {#each administrators as administrator}
+    <InfoLine>
+      <UserInfo user={administrator.user} {structure} />
+    </InfoLine>
+  {/each}
+{/if}
+
+<style lang="postcss">
+  h1 {
+    @apply my-s0 text-f16 font-bold;
+  }
+</style>

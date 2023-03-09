@@ -1,7 +1,12 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import Label from "$lib/components/display/label.svelte";
-  import { fileEditIcon, fileForbidIcon, userIcon } from "$lib/icons";
+  import {
+    userIcon,
+    user2Icon,
+    forbidIcon,
+    checkboxCircleIcon,
+  } from "$lib/icons";
   import {
     acceptMember,
     rejectMembershipRequest,
@@ -13,6 +18,7 @@
   export let readOnly = false;
 
   $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
+  $: userLevelIcon = member.isAdmin ? user2Icon : userIcon;
 
   async function handleAcceptRequest() {
     await acceptMember(member.id);
@@ -29,12 +35,14 @@
 
 <Member {member} {readOnly}>
   <div slot="label">
-    <Label
-      label={`${userLevel} – Adhésion en attente`}
-      smallIcon
-      icon={userIcon}
-      wait
-    />
+    <Label label={userLevel} smallIcon icon={userLevelIcon} />
+  </div>
+  <div slot="status">
+    <span
+      class="inline-block rounded-md bg-service-orange py-s6 px-s12 text-center"
+    >
+      Adhésion en attente
+    </span>
   </div>
 
   <div slot="actions" let:onCloseParent>
@@ -45,9 +53,11 @@
           handleAcceptRequest();
           onCloseParent();
         }}
-        icon={fileEditIcon}
+        icon={checkboxCircleIcon}
         iconOnRight
         small
+        wFull
+        extraClass="justify-end"
         noBackground
       />
     </div>
@@ -58,9 +68,11 @@
           handleCancelRequest();
           onCloseParent();
         }}
-        icon={fileForbidIcon}
+        icon={forbidIcon}
         iconOnRight
         small
+        wFull
+        extraClass="justify-end"
         noBackground
       />
     </div>

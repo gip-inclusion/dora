@@ -7,21 +7,41 @@
   import Filters from "./filters.svelte";
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
+  import { fetchData } from "$lib/utils/misc";
+  import { getApiURL } from "$lib/utils/api";
 
   export let data: PageData;
 
+  interface AdminStats {
+    nbActiveStructs: number;
+    nbOrphanStructs: number;
+    nbPublishedServices: number;
+    nbUsers: number;
+  }
+
   let structures: AdminShortStructure[] = [];
+  let stats: AdminStats | null;
   let filteredStructures: AdminShortStructure[] = [];
   let department: GeoApiValue;
   let selectedStructureSlug: string | null = null;
+
+  async function getStats(dept: string) {
+    const url = `${getApiURL()}/admin-stats/?department=${dept}`;
+    return (await fetchData<AdminStats>(url)).data;
+  }
 
   async function handleDepartmentChange(dept: GeoApiValue) {
     department = dept;
     if (department.code) {
       structures = await getStructuresAdmin(department.code);
+      stats = await getStats(department.code);
     } else {
       structures = [];
     }
+  }
+
+  async function handleStructuresRefresh() {
+    structures = await getStructuresAdmin(department.code);
   }
 
   if (data.isLocalCoordinator) {
@@ -48,23 +68,49 @@
   {/if}
 
   {#if department}
-    <div class="my-s32 flex flex-row justify-evenly gap-s24">
+    <div class="my-s32 flex flex-row flex-wrap justify-between gap-s24">
       <div
-        class="flex max-w-fit flex-col rounded border border-gray-01 p-s16 text-center"
+        class="flex  flex-1 flex-col  justify-between rounded border border-gray-01 p-s16 text-center"
       >
-        <div class="text-bold text-f24 text-france-blue">
-          Nb de structures orphelines
+        <div class="text-bold text-f16 text-france-blue">
+          Nb de structures actives
         </div>
-        <div class="text-bold text-f38 text-france-blue">XXX</div>
+        <div class="text-bold text-f24 text-france-blue">
+          {stats?.nbActiveStructs || "–"}
+        </div>
       </div>
 
       <div
-        class="flex max-w-fit flex-col rounded border border-gray-01 p-s16 text-center"
+        class="flex  flex-1  flex-col justify-between rounded border  border-gray-01 p-s16 text-center"
       >
+        <div class="text-bold text-f16 text-france-blue">
+          Nb de structures orphelines
+        </div>
         <div class="text-bold text-f24 text-france-blue">
+          {stats?.nbOrphanStructs || "–"}
+        </div>
+      </div>
+
+      <div
+        class="flex  flex-1  flex-col justify-between rounded border border-gray-01 p-s16 text-center"
+      >
+        <div class="text-bold text-f16 text-france-blue">
           Nombre de services publiés
         </div>
-        <div class="text-bold text-f38 text-france-blue">XXX</div>
+        <div class="text-bold text-f24 text-france-blue">
+          {stats?.nbPublishedServices || "–"}
+        </div>
+      </div>
+
+      <div
+        class="flex  flex-1  flex-col justify-between rounded border border-gray-01 p-s16 text-center"
+      >
+        <div class="text-bold text-f16 text-france-blue">
+          Nombre d’utilisateurs
+        </div>
+        <div class="text-bold text-f24 text-france-blue">
+          {stats?.nbUsers || "–"}
+        </div>
       </div>
     </div>
     <Filters
@@ -92,8 +138,8 @@
           <div>
             <StructuresTable
               {filteredStructures}
-              servicesOptions={data.servicesOptions}
               bind:selectedStructureSlug
+              onRefresh={handleStructuresRefresh}
             />
           </div>
         </div>

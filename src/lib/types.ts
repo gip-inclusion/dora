@@ -7,10 +7,10 @@ export type AdminDivisionType =
 
 export type ServiceCategory =
   | "acces-aux-droits"
-  | "acc-global-indiv"
+  | "accompagnement-social-et-professionnel-personnalise"
   | "apprendre-francais"
   | "creation-activite	"
-  | "difficultes-financieres"
+  | "gestion-financiere"
   | "emploi-choisir-metier"
   | "emploi-preparer-sa-candidature"
   | "emploi-trouver-emploi"
@@ -120,6 +120,7 @@ export interface AdminShortStructure {
   moderationStatus: ModerationStatus;
   numPublishedServices: number;
   numOutdatedServices: number;
+  numServices: number;
   shortDesc: string;
 }
 
@@ -413,6 +414,7 @@ export interface ShortService {
   status: ServiceStatus;
   structure: string;
   structureInfo: ServiceStructure;
+  locationKinds: LocationKind;
   useInclusionNumeriqueScheme: boolean;
 }
 
@@ -485,6 +487,11 @@ export type Model = {
   subcategories: string[];
   subcategoriesDisplay: string[];
   suspensionDate: string;
+};
+
+export type Partner = {
+  name: string;
+  img: string;
 };
 
 // FORM

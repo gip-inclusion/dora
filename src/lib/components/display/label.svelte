@@ -7,7 +7,7 @@
   export let error = false;
   export let wait = false;
   export let light = false;
-  export let icon = null;
+  export let icon: string | null = null;
   export let darkBg = false;
   export let smallIcon = false;
   export let truncate = false;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import Label from "$lib/components/display/label.svelte";
-  import { fileEditIcon, fileForbidIcon, userIcon } from "$lib/icons";
+  import { userIcon, user2Icon, forbidIcon, repeatIcon } from "$lib/icons";
   import { cancelInvite, resendInvite } from "$lib/requests/structures";
   import Member from "./member.svelte";
 
@@ -10,6 +10,7 @@
   export let readOnly = false;
 
   $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
+  $: userLevelIcon = member.isAdmin ? user2Icon : userIcon;
 
   async function handleCancelInvite() {
     if (
@@ -29,12 +30,14 @@
 
 <Member {member} {readOnly}>
   <div slot="label">
-    <Label
-      label={`${userLevel} – Invitation envoyée`}
-      smallIcon
-      icon={userIcon}
-      light
-    />
+    <Label label={userLevel} smallIcon icon={userLevelIcon} />
+  </div>
+  <div slot="status">
+    <span
+      class="inline-block rounded-md bg-blue-light py-s6 px-s12 text-center"
+    >
+      Invitation envoyée
+    </span>
   </div>
 
   <div slot="actions" let:onCloseParent>
@@ -45,9 +48,11 @@
           handleResendInvite();
           onCloseParent();
         }}
-        icon={fileEditIcon}
+        icon={repeatIcon}
         iconOnRight
         small
+        wFull
+        extraClass="justify-end"
         noBackground
       />
     </div>
@@ -58,9 +63,11 @@
           handleCancelInvite();
           onCloseParent();
         }}
-        icon={fileForbidIcon}
+        icon={forbidIcon}
         iconOnRight
         small
+        wFull
+        extraClass="justify-end"
         noBackground
       />
     </div>

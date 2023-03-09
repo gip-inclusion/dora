@@ -19,7 +19,9 @@ async function searchAdminDivision(query) {
   return results;
 }
 
-export const load: PageLoad = async () => {
+export const load: PageLoad = async ({ parent }) => {
+  await parent();
+
   const [servicesOptions, structuresOptions] = await Promise.all([
     getServicesOptions(),
     getStructuresOptions(),
