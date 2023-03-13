@@ -50,7 +50,7 @@
           href="/auth/ic-connect?next={encodeURIComponent(nextPage)}{loginHint}"
         >
           <div
-            class="mx-auto flex items-center justify-center rounded-full bg-france-blue p-s6 pr-s24 text-f16 text-white "
+            class="mx-auto flex items-center justify-center rounded-full bg-france-blue p-s6 pr-s24 text-f16 text-white transition-colors hover:bg-[#2323FF]"
           >
             <span class="h-[62px] w-[62px] rounded-full bg-white p-s6">
               <img src={logoIC} alt="" class="max-w-none" />
