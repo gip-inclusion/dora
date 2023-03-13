@@ -8,8 +8,8 @@ import type {
   ServicesOptions,
   ServiceStatus,
   ShortService,
-} from "../types";
-import { logException } from "../utils/logger";
+} from "$lib/types";
+import { logException } from "$lib/utils/logger";
 
 function serviceToBack(service) {
   if (service.longitude && service.latitude) {

@@ -1,5 +1,4 @@
 import { browser } from "$app/environment";
-import { getMembers, getPutativeMembers } from "$lib/requests/structures";
 import { userInfo } from "$lib/utils/auth";
 import { capitalize } from "$lib/utils/misc";
 import { error } from "@sveltejs/kit";
@@ -8,7 +7,7 @@ import { structure } from "../store";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ parent }) => {
-  await parent();
+  const { members, putativeMembers } = await parent();
 
   // sur le serveur, info est toujours null,
   // on retourne une 404 uniquement sur le client
@@ -25,9 +24,6 @@ export const load: PageLoad = async ({ parent }) => {
   if (!info || !struct || !canSeeMembers) {
     throw error(404, "Page Not Found");
   }
-
-  const members = await getMembers(struct.slug);
-  const putativeMembers = await getPutativeMembers(struct.slug);
 
   return {
     title: `Collaborateurs | ${capitalize(struct.name)} | DORA`,

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import LinkButton from "$lib/components/display/link-button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import MemberInvited from "./member-invited.svelte";
   import MemberStandard from "./member-standard.svelte";
@@ -10,14 +9,31 @@
   import { userInfo } from "$lib/utils/auth";
   import { structure } from "../store";
   import type { PageData } from "./$types";
+  import NoMemberNotice from "./no-member-notice.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
+  import { hasAtLeastTwoMembers, hasInvitedMembers } from "../quick-start";
 
   export let data: PageData;
 
   let modalAddUserIsOpen = false;
 
+  function hasAtLeastTwoMembersOrInvitedMembers(members, putativeMembers) {
+    return hasAtLeastTwoMembers(members) || hasInvitedMembers(putativeMembers);
+  }
+
+  let showNoMemberNotice = !hasAtLeastTwoMembersOrInvitedMembers(
+    data.members,
+    data.putativeMembers
+  );
+
   async function handleRefreshMemberList() {
     data.members = await getMembers($structure.slug);
     data.putativeMembers = await getPutativeMembers($structure.slug);
+
+    showNoMemberNotice = !hasAtLeastTwoMembersOrInvitedMembers(
+      data.members,
+      data.putativeMembers
+    );
   }
 
   function sortedMembers(items) {
@@ -45,7 +61,7 @@
     />
   {/if}
 
-  <div class="md:flex md:items-center md:justify-between">
+  <div class="mb-s24 md:flex md:items-center md:justify-between">
     <h2 class="text-france-blue">Collaborateurs</h2>
     {#if data.canEditMembers}
       <LinkButton
@@ -57,6 +73,12 @@
   </div>
 
   {#if data.canSeeMembers}
+    {#if data.canEditMembers && showNoMemberNotice}
+      <div class="mb-s24 flex flex-col gap-s8">
+        <NoMemberNotice />
+      </div>
+    {/if}
+
     <div class="mt-s32 mb-s32 flex flex-col gap-s8">
       {#if data.canEditMembers && data.putativeMembers}
         {#each sortedMembers(data.putativeMembers) as member}

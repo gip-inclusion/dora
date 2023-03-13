@@ -3,10 +3,12 @@ import { capitalize } from "$lib/utils/misc";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ parent }) => {
-  const { structure } = await parent();
+  const { structure, members } = await parent();
+
   return {
     title: `${capitalize(structure.name)} | DORA`,
     description: structure.shortDesc,
     structuresOptions: await getStructuresOptions(),
+    members,
   };
 };

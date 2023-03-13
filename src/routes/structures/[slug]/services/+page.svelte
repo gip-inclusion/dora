@@ -17,4 +17,5 @@
   structure={$structure}
   total={$structure.services.length}
   onRefresh={handleRefresh}
+  withEmptyNotice
 />

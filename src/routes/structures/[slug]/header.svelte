@@ -38,10 +38,16 @@
         icon: fileInfoLineIcon,
         href: `/structures/${structure.slug}`,
       },
+      {
+        id: "services",
+        name: "Services",
+        icon: pageLineIcon,
+        href: `/structures/${structure.slug}/services`,
+      },
     ];
 
     if (!structure.parent && structure.branches?.length) {
-      tabs.splice(1, 0, {
+      tabs.push({
         id: "antennes",
         name: "Antennes",
         icon: homeSmile2Icon,
@@ -49,11 +55,8 @@
       });
     }
 
-    if (
-      structure.models?.length &&
-      (structure.isMember || $userInfo?.isStaff)
-    ) {
-      tabs.splice(1, 0, {
+    if (structure.isMember || $userInfo?.isStaff) {
+      tabs.push({
         id: "modeles",
         name: "Modèles",
         icon: bookReadLineIcon,
@@ -61,16 +64,8 @@
       });
     }
 
-    if (structure.services?.length || structure.archivedServices?.length) {
-      tabs.splice(1, 0, {
-        id: "services",
-        name: "Services",
-        icon: pageLineIcon,
-        href: `/structures/${structure.slug}/services`,
-      });
-    }
     if (structure.isMember || $userInfo?.isStaff || $userInfo?.isBizdev) {
-      tabs.splice(1, 0, {
+      tabs.push({
         id: "collaborateurs",
         name: "Collaborateurs",
         icon: teamLineIcon,

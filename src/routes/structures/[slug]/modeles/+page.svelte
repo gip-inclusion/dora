@@ -9,5 +9,6 @@
     models={$structure.models || []}
     structure={$structure}
     total={$structure.models.length}
+    withEmptyNotice
   />
 </EnsureLoggedIn>

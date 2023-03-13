@@ -58,6 +58,7 @@ export { default as arrowRightSIcon } from "remixicon/icons/System/arrow-right-s
 export { default as arrowUpLineIcon } from "remixicon/icons/System/arrow-up-line.svg?raw";
 export { default as arrowUpSIcon } from "remixicon/icons/System/arrow-up-s-line.svg?raw";
 export { default as checkIcon } from "remixicon/icons/System/check-line.svg?raw";
+export { default as checkboxBlankCircle } from "remixicon/icons/System/checkbox-blank-circle-line.svg?raw";
 export { default as checkboxCircleFillIcon } from "remixicon/icons/System/checkbox-circle-fill.svg?raw";
 export { default as checkboxCircleIcon } from "remixicon/icons/System/checkbox-circle-line.svg?raw";
 export { default as closeCircleIcon } from "remixicon/icons/System/close-circle-fill.svg?raw";
