@@ -1,5 +1,6 @@
 /* eslint-disable */
 import type { ServicesOptions } from "$lib/types";
+import { INVALID_OPENING_HOURS_MARKER } from "$lib/utils/opening-hours";
 
 // From https://github.com/jquense/yup/blob/03584f6758ff43409113c41f58fd41e065aa18a3/src/string.ts
 const urlRegexp =
@@ -137,16 +138,6 @@ export function isAccessLibreUrl(msg = "") {
     msg: msg || "L'URL doit commencer par https://acceslibre.beta.gouv.fr/",
   });
 }
-export function isNotStringInvalid(msg = "") {
-  return (name, value, _data) => ({
-    valid:
-      value == null ||
-      (typeof value === "string" && (value === "" || value !== null)),
-    msg:
-      msg ||
-      "Horaires incomplètes. Veuillez finaliser la saisie de vos horaires, corriger les champs manquants ou incorrects.",
-  });
-}
 
 export function isCustomizablePK(msg = "") {
   return (name, value, _data) => ({
@@ -214,6 +205,15 @@ export function minNum(min, msg = "") {
   return (name, value, _data) => ({
     valid: value >= min,
     msg: msg || `Ce champ doit être une clé étrangère`, // TODO: this is not a valid enduser message
+  });
+}
+
+export function osmHoursNotContainsInvalid(msg = "") {
+  return (name, value, _data) => ({
+    valid: !value.toLowerCase().includes(INVALID_OPENING_HOURS_MARKER),
+    msg:
+      msg ||
+      "Horaires incomplets. Veuillez finaliser la saisie de vos horaires, corriger les champs manquants ou incorrects.",
   });
 }
 

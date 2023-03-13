@@ -207,7 +207,6 @@ export interface StructuresOptions {
 // OSM hours format
 export type OsmPeriodDay = {
   isOpen: boolean;
-  touched: boolean;
   openAt: string;
   closeAt: string;
 };

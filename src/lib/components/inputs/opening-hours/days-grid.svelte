@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Day, DayPeriod } from "$lib/types";
+  import type { Day } from "$lib/types";
   import {
     fromJsonToOsmString,
     getHoursFromStr,
@@ -15,8 +15,7 @@
 
   const data = value ? getHoursFromStr(value) : returnEmptyHoursData();
 
-  function handleHourChange(day: Day, time: DayPeriod) {
-    data[day][time].touched = true;
+  function handleHourChange() {
     value = fromJsonToOsmString(data);
     dispatch("change", id);
   }
@@ -50,13 +49,12 @@
       <div class="mr-s0 md:mr-s8">
         <DayField
           bind:isOpen={data[day].timeSlot1.isOpen}
-          bind:touched={data[day].timeSlot1.touched}
           bind:openAt={data[day].timeSlot1.openAt}
           bind:closeAt={data[day].timeSlot1.closeAt}
           label="{label.toLowerCase()} matin ou toute la journée"
           {day}
           dayPeriod="timeSlot1"
-          on:change={() => handleHourChange(day, "timeSlot1")}
+          on:change={() => handleHourChange()}
         />
       </div>
       <div>
@@ -66,12 +64,11 @@
         <DayField
           bind:isOpen={data[day].timeSlot2.isOpen}
           bind:openAt={data[day].timeSlot2.openAt}
-          bind:touched={data[day].timeSlot2.touched}
           bind:closeAt={data[day].timeSlot2.closeAt}
           label="{label.toLowerCase()} après-midi"
           {day}
           dayPeriod="timeSlot2"
-          on:change={() => handleHourChange(day, "timeSlot2")}
+          on:change={() => handleHourChange()}
         />
       </div>
     </div>

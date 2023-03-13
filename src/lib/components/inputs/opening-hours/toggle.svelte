@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   // https://tailwindcomponents.com/component/toggle-button-1
   export let id: string;
   export let checked: boolean | undefined = undefined;
@@ -6,6 +8,8 @@
   export let readonly = false;
   export let yesLabel = "Oui";
   export let noLabel = "Non";
+
+  const dispatcher = createEventDispatcher();
 
   function handleKeyDown(event) {
     if (event.code === "Space" || event.code === "Enter") {
@@ -20,7 +24,10 @@
 
 <div
   class="relative mt-s8 flex  flex-row items-center self-start"
-  on:click={() => (checked = !checked)}
+  on:click={() => {
+    checked = !checked;
+    dispatcher("change");
+  }}
   on:keydown={handleKeyDown}
   tabindex="0"
   role="radio"

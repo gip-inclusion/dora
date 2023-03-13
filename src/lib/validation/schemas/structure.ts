@@ -110,7 +110,7 @@ export const structureSchema: v.Schema = {
   openingHours: {
     label: "Horaires de la structure",
     default: "",
-    rules: [v.isString(), v.isNotStringInvalid(), v.maxStrLength(255)],
+    rules: [v.isString(), v.osmHoursNotContainsInvalid(), v.maxStrLength(255)],
     post: [v.trim],
     maxLength: 255,
   },
