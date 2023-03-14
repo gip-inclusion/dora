@@ -35,11 +35,6 @@ function serviceToFront(service) {
   return service;
 }
 
-export async function getMyServices(): Promise<ShortService[]> {
-  const url = `${getApiURL()}/services/?mine=1`;
-  return (await fetchData<ShortService[]>(url)).data;
-}
-
 export async function getService(slug): Promise<Service> {
   const url = `${getApiURL()}/services/${slug}/`;
   const response = await fetchData<Service>(url);

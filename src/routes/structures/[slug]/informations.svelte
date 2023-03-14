@@ -49,7 +49,7 @@
     class="flex flex-col justify-between border-b border-gray-03 pb-s40 sm:flex-row"
   >
     <h2 class="text-france-blue">Informations</h2>
-    {#if structure.canWrite}
+    {#if structure.canEditInformations}
       <div class="text-right">
         <LinkButton
           id="update-structure"
@@ -66,7 +66,7 @@
       <DateLabel date={structure.modificationDate} />
     </p>
   {/if}
-  {#if structure.canWrite && sourceIsDataInclusion && !structure.hasBeenEdited}
+  {#if structure.canEditInformations && sourceIsDataInclusion && !structure.hasBeenEdited}
     <div>
       <DataInclusionNotice {structure} />
     </div>
@@ -75,7 +75,7 @@
 
 <div class="structure-body">
   <div class="notice">
-    {#if structure.canWrite}
+    {#if structure.isMember && structure.canEditInformations}
       <QuickStart {structure} {members} />
     {/if}
   </div>

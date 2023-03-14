@@ -44,13 +44,13 @@
     structures = await getStructuresAdmin(department.code);
   }
 
-  if (data.isLocalCoordinator) {
+  if (data.isManager) {
     handleDepartmentChange(data.department);
   }
 </script>
 
 <CenteredGrid>
-  {#if !data.isLocalCoordinator}
+  {#if !data.isManager}
     <div class="mb-s16 flex flex-col">
       <label for="department" class="font-bold">Département</label>
       <AdminDivisionSearch

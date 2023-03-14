@@ -69,7 +69,7 @@
         noBackground
       />
     {/if}
-    {#if $userInfo && (structure.isAdmin || $userInfo?.isStaff)}
+    {#if structure.canEditInformations}
       <LinkButton
         label="Ajouter une antenne"
         to={`https://itou.typeform.com/to/IXADRw7j#courriel_demandeur=${encodeURIComponent(

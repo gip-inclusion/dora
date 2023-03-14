@@ -12,7 +12,7 @@
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
 
-  const levelChoices = [
+  const USER_LEVEL_CHOICES = [
     {
       value: "user",
       label: "Utilisateur (saisie d’offres, modification profil)",
@@ -22,14 +22,18 @@
       label:
         "Administrateur (saisie d’offres, modification profil, édition de la structure, gestion des utilisateurs)",
     },
-  ];
+  ] as const;
+  type userLevelKind = (typeof USER_LEVEL_CHOICES)[number]["value"];
+
   export let isOpen = false;
   export let structure;
   export let members;
   export let onRefresh;
+  export let forceAdmin = false;
 
   let email = "";
-  let level: "user" | "admin" = "user";
+  let level: userLevelKind = "user";
+
   let successEmailMsg;
   let confirmationModalIsOpen = false;
   let requesting = false;
@@ -71,11 +75,12 @@
     successEmailMsg = email;
 
     email = "";
-    level = "user";
+
     confirmationModalIsOpen = true;
   }
 
   $: formData = { email, level };
+  $: level = forceAdmin ? "admin" : level;
 </script>
 
 <Modal bind:isOpen title="Nouveau collaborateur">
@@ -101,8 +106,9 @@
         id="level"
         vertical
         bind:value={level}
-        choices={levelChoices}
+        choices={USER_LEVEL_CHOICES}
         placeholder="Permissions"
+        disabled={forceAdmin}
       />
     </Fieldset>
     <div class="mt-s32 flex flex-row justify-end gap-s16">

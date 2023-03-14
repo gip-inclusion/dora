@@ -135,7 +135,11 @@ export interface Structure {
   ape: string;
   archivedServices: StructureService[];
   branches: Branches[];
-  canWrite: boolean;
+  canEditInformations: boolean;
+  canEditMembers: boolean;
+  canEditServices: boolean;
+  canInviteFirstAdmin: boolean;
+  canViewMembers: boolean;
   city: string;
   cityCode: string;
   codeSafirPe: string;

@@ -10,8 +10,8 @@
   import { structure } from "../store";
   import type { PageData } from "./$types";
   import NoMemberNotice from "./no-member-notice.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
   import { hasAtLeastTwoMembers, hasInvitedMembers } from "../quick-start";
+  import Button from "$lib/components/display/button.svelte";
 
   export let data: PageData;
 
@@ -49,22 +49,27 @@
       return nameA.localeCompare(nameB, "fr");
     });
   }
+
+  $: canAdd =
+    $structure.canEditMembers ||
+    (!$structure.hasAdmin && $structure.canInviteFirstAdmin);
 </script>
 
 <EnsureLoggedIn>
-  {#if data.canEditMembers}
+  {#if canAdd}
     <ModalAddUser
       bind:isOpen={modalAddUserIsOpen}
       structure={$structure}
       members={data.members}
       onRefresh={handleRefreshMemberList}
+      forceAdmin={!$structure.canEditMembers}
     />
   {/if}
 
   <div class="mb-s24 md:flex md:items-center md:justify-between">
     <h2 class="text-france-blue">Collaborateurs</h2>
-    {#if data.canEditMembers}
-      <LinkButton
+    {#if canAdd}
+      <Button
         label="Ajouter un collaborateur"
         icon={userAddIcon}
         on:click={() => (modalAddUserIsOpen = true)}
@@ -72,27 +77,27 @@
     {/if}
   </div>
 
-  {#if data.canSeeMembers}
-    {#if data.canEditMembers && showNoMemberNotice}
+  {#if $structure.canViewMembers}
+    {#if $structure.isMember && $structure.canEditMembers && showNoMemberNotice}
       <div class="mb-s24 flex flex-col gap-s8">
         <NoMemberNotice />
       </div>
     {/if}
 
     <div class="mt-s32 mb-s32 flex flex-col gap-s8">
-      {#if data.canEditMembers && data.putativeMembers}
+      {#if canAdd && data.putativeMembers}
         {#each sortedMembers(data.putativeMembers) as member}
           {#if member.invitedByAdmin}
             <MemberInvited
               {member}
               onRefresh={handleRefreshMemberList}
-              readOnly={!data.canEditMembers}
+              readOnly={!($structure.canEditMembers || canAdd)}
             />
           {:else}
             <MemberToConfirm
               {member}
               onRefresh={handleRefreshMemberList}
-              readOnly={!data.canEditMembers}
+              readOnly={!$structure.canEditMembers}
             />
           {/if}
         {/each}
@@ -104,7 +109,7 @@
           isMyself={member.user.email === $userInfo.email}
           isOnlyAdmin={member.user.email === $userInfo.email &&
             data.members.filter((memb) => memb.isAdmin).length === 1}
-          readOnly={!data.canEditMembers}
+          readOnly={!$structure.canEditMembers}
         />
       {/each}
     </div>

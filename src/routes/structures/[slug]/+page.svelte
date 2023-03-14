@@ -1,6 +1,5 @@
 <script lang="ts">
   import { getStructure } from "$lib/requests/structures";
-  import { userInfo } from "$lib/utils/auth";
   import type { PageData } from "./$types";
   import BranchesList from "./antennes/list.svelte";
   import Informations from "./informations.svelte";
@@ -22,7 +21,7 @@
 />
 <div class="mb-s64" />
 
-{#if !!$structure.services?.length || $structure.isMember || $userInfo?.isStaff}
+{#if !!$structure.services?.length || $structure.canEditServices}
   <hr class="mb-s24" />
   <ServicesList
     structure={$structure}
@@ -33,7 +32,7 @@
   />
 {/if}
 
-{#if $structure.isMember || $userInfo?.isStaff}
+{#if $structure.canEditServices}
   <hr class="mb-s24" />
   <ModelesList
     structure={$structure}

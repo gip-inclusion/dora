@@ -1,5 +1,4 @@
 import { browser } from "$app/environment";
-import { userInfo } from "$lib/utils/auth";
 import { capitalize } from "$lib/utils/misc";
 import { error } from "@sveltejs/kit";
 import { get } from "svelte/store";
@@ -15,12 +14,9 @@ export const load: PageLoad = async ({ parent }) => {
     return {};
   }
 
-  const info = get(userInfo);
   const struct = get(structure);
 
-  const isMember = struct.isMember || info?.isBizdev || info?.isStaff;
-
-  if (!info || !struct || !isMember) {
+  if (!struct || !struct.canEditServices) {
     throw error(404, "Page Not Found");
   }
 

@@ -18,10 +18,7 @@ export const load: PageLoad = async ({ parent }) => {
   const info = get(userInfo);
   const struct = get(structure);
 
-  const canSeeMembers = struct.isMember || info?.isBizdev || info?.isStaff;
-  const canEditMembers = struct.isAdmin || info?.isBizdev || info?.isStaff;
-
-  if (!info || !struct || !canSeeMembers) {
+  if (!info || !struct || !struct.canViewMembers) {
     throw error(404, "Page Not Found");
   }
 
@@ -30,7 +27,5 @@ export const load: PageLoad = async ({ parent }) => {
     description: struct.shortDesc,
     members,
     putativeMembers,
-    canSeeMembers,
-    canEditMembers,
   };
 };

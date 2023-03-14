@@ -22,7 +22,6 @@
     ServiceUpdateStatus,
     ShortService,
   } from "$lib/types";
-  import { userInfo } from "$lib/utils/auth";
   import { computeUpdateStatusData } from "$lib/utils/service";
   import Count from "../count.svelte";
   import NoServiceNotice from "./no-service-notice.svelte";
@@ -37,8 +36,6 @@
   export let serviceStatus: ServiceStatus | undefined;
   export let updateStatus: ServiceUpdateStatus | undefined;
   export let servicesDisplayed: ShortService[] = [];
-
-  let canEdit;
 
   function updateUrlQueryParams() {
     if (!browser) {
@@ -198,7 +195,6 @@
   }
 
   $: servicesDisplayed = filterAndSortServices(structure.services);
-  $: canEdit = structure.isMember || $userInfo?.isStaff;
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
@@ -215,7 +211,7 @@
         noBackground
       />
     {/if}
-    {#if canEdit}
+    {#if structure.canEditServices}
       <LinkButton
         label="Ajouter un service"
         icon={addIcon}
@@ -225,9 +221,9 @@
   </div>
 </div>
 
-{#if structure.services.length === 0 && canEdit && withEmptyNotice}
+{#if structure.services.length === 0 && structure.isMember && structure.canEditServices && withEmptyNotice}
   <NoServiceNotice />
-{:else if hasOptions && canEdit}
+{:else if hasOptions && structure.canEditServices}
   <div
     class="mb-s40 flex w-full flex-wrap items-center rounded-md bg-white px-s24 py-s24 text-f14 shadow-md md:h-s80 md:py-s0"
   >
@@ -307,6 +303,11 @@
 
 <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-3">
   {#each servicesDisplayed as service}
-    <ServiceCard {service} {servicesOptions} readOnly={!canEdit} {onRefresh} />
+    <ServiceCard
+      {service}
+      {servicesOptions}
+      readOnly={!structure.canEditServices}
+      {onRefresh}
+    />
   {/each}
 </div>

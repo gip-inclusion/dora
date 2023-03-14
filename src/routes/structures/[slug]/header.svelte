@@ -20,7 +20,6 @@
     pageLineIcon,
     teamLineIcon,
   } from "$lib/icons";
-  import { userInfo } from "$lib/utils/auth";
   import { capitalize } from "$lib/utils/misc";
   import AdminNotice from "./admin-notice.svelte";
   import PendingNotice from "./pending-notice.svelte";
@@ -55,7 +54,7 @@
       });
     }
 
-    if (structure.isMember || $userInfo?.isStaff) {
+    if (structure.canEditServices) {
       tabs.push({
         id: "modeles",
         name: "Modèles",
@@ -64,7 +63,7 @@
       });
     }
 
-    if (structure.isMember || $userInfo?.isStaff || $userInfo?.isBizdev) {
+    if (structure.canViewMembers) {
       tabs.push({
         id: "collaborateurs",
         name: "Collaborateurs",

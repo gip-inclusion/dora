@@ -1,9 +1,11 @@
 import { getNewService } from "$lib/utils/forms";
 import { getModel, getServicesOptions } from "$lib/requests/services";
-import { getStructures } from "$lib/requests/structures";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
+import { getStructure, getStructures } from "$lib/requests/structures";
 import type { PageLoad } from "./$types";
+import type { Model, Service, ShortStructure } from "$lib/types";
+import { error } from "@sveltejs/kit";
 
 // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
 export const ssr = false;
@@ -16,16 +18,10 @@ export const load: PageLoad = async ({ url, parent }) => {
   const modelSlug = query.get("modele");
 
   const user = get(userInfo);
-  let structures = [];
-
-  if (user?.isStaff) {
-    structures = await getStructures();
-  } else if (user) {
-    structures = user.structures;
-  }
-
-  let service;
-  let model;
+  let structures: ShortStructure[] = user.structures;
+  let service: Service;
+  let model: Model | undefined = undefined;
+  let structure: ShortStructure | undefined;
 
   if (modelSlug) {
     model = await getModel(modelSlug);
@@ -38,16 +34,28 @@ export const load: PageLoad = async ({ url, parent }) => {
     service = getNewService();
   }
 
-  let structure;
-
-  if (structures.length === 1) {
-    service.structure = structures[0].slug;
-    structure = structures[0];
-  } else if (structureSlug) {
-    // si la structure est renseignée dans l'URL, force celle-là
+  if (structureSlug) {
     structure = structures.find((struct) => struct.slug === structureSlug);
-    service.structure = structureSlug;
+    if (!structure && (user.isStaff || user.isManager)) {
+      structure = await getStructure(structureSlug);
+    }
+    if (structure) {
+      structures = [structure];
+    } else {
+      throw error(404, "Page Not Found");
+    }
+  } else {
+    if (user.isStaff || user.isManager) {
+      structures = await getStructures();
+    } else {
+      structures = user.structures;
+    }
+    if (structures.length === 1) {
+      structure = structures[0];
+    }
   }
+
+  service.structure = structure ? structure.slug : null;
 
   return {
     noIndex: true,
