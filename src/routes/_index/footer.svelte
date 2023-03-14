@@ -14,7 +14,9 @@
 <hr class="border-t-gray-01" />
 
 <CenteredGrid noPadding>
-  <div class="flex flex-col items-center justify-between py-s32 lg:flex-row">
+  <div
+    class="flex flex-col items-center justify-between py-s32 print:hidden lg:flex-row"
+  >
     <div class="text-f14 text-gray-dark">
       <strong>Infolettre &nbsp;•&nbsp;</strong>
       Une fois par mois, recevez un courriel pour être informé des évolutions de
