@@ -32,6 +32,12 @@
   import logoKonexio from "$lib/assets/logos/partners/logo_konexio.png";
   import logoNqt from "$lib/assets/logos/partners/logo_nqt.png";
   import logoSNC from "$lib/assets/logos/partners/logo_snc.png";
+  import logoActionLogement from "$lib/assets/logos/partners/logo_actionlogement.png";
+  import logoArdennes from "$lib/assets/logos/partners/logo_ardennes.png";
+  import logoCAF from "$lib/assets/logos/partners/logo_caf.png";
+  import logoLaReunion from "$lib/assets/logos/partners/logo_lareunion.png";
+  import logoPoleEmploi from "$lib/assets/logos/partners/logo_poleemploi.png";
+
   import type { Partner } from "$lib/types";
 
   export const PARTNERS: Record<string, Partner> = {
@@ -83,6 +89,26 @@
     financesPedagogie: {
       name: "Finances et pédagogie (Caisse d’épargne)",
       img: logoFinancesPedagogie,
+    },
+    actionLogement: {
+      name: "Action Logement",
+      img: logoActionLogement,
+    },
+    ardennes: {
+      name: "Conseil Départemental des Ardennes",
+      img: logoArdennes,
+    },
+    caf: {
+      name: "Caisse d‘allocations familiales",
+      img: logoCAF,
+    },
+    laReunion: {
+      name: "Département de la Réunion",
+      img: logoLaReunion,
+    },
+    poleEmploi: {
+      name: "Pôle emploi",
+      img: logoPoleEmploi,
     },
   };
 
