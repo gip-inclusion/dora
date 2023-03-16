@@ -145,7 +145,11 @@ export const serviceSchema: v.Schema = {
       "contactEmail",
       "contactPhone",
       "beneficiariesAccessModesOther",
+      "coachOrientationModes",
     ],
+    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
+      return !data.coachOrientationModes.length;
+    },
   },
   beneficiariesAccessModesOther: {
     label: "",
@@ -160,8 +164,15 @@ export const serviceSchema: v.Schema = {
     label: "Pour les accompagnateurs",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
-    dependents: ["contactEmail", "contactPhone", "coachOrientationModesOther"],
-    required: true,
+    dependents: [
+      "contactEmail",
+      "contactPhone",
+      "coachOrientationModesOther",
+      "beneficiariesAccessModes",
+    ],
+    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
+      return !data.beneficiariesAccessModes.length;
+    },
   },
   coachOrientationModesOther: {
     label: "",
