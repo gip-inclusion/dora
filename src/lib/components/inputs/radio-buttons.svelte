@@ -37,9 +37,9 @@
           class="toggle-circle hidden h-s12 w-s12 self-center rounded-full bg-magenta-cta"
         />
       </div>
-      <span class="ml-s16 inline-block text-f14 text-gray-text">
-        {@html choice.label}
-      </span>
+      <span class="ml-s16 inline-block text-f14 text-gray-text"
+        >{choice.label}</span
+      >
     </label>
   {/each}
 </div>
