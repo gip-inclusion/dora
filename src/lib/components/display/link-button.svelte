@@ -2,7 +2,6 @@
   export let to: string;
   export let otherTab = false;
   export let nofollow = false;
-  export let noreferrer = false;
   export let label = "";
   export let extraClass = "";
   export let ariaLabel: string | undefined = undefined;
@@ -64,7 +63,7 @@
   {id}
   target={otherTab ? "_blank" : ""}
   title={otherTab ? "Ouverture dans une nouvelle fenêtre" : ""}
-  rel="noopener {nofollow ? 'nofollow' : ''} {noreferrer ? 'noreferrer' : ''}"
+  rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
   on:click
   class="{paddingX} {paddingY} {textSize} {border} {text} {background} {extraClass} inline-flex items-center justify-center whitespace-nowrap rounded leading-normal focus:shadow-focus"
