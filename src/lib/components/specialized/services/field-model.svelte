@@ -23,9 +23,7 @@
     // tiptap insère des caractères en fin de chaine.
     // on les supprime pour faire la comparaison
     if (type === "markdown") {
-      const trimmedVal2 = val2.replace(/\n\n$/u, "");
-
-      return val1 === trimmedVal2;
+      return val1.trim() === val2.trim();
     }
 
     return val1 === val2;
@@ -76,7 +74,7 @@
               {/each}
             </div>
           {:else if type === "markdown"}
-            {@html markdownToHTML(value)}
+            {@html markdownToHTML(value, 2)}
           {:else if type === "boolean"}
             <p class="mb-s0 text-f14">{value === true ? "Oui" : "Non"}</p>
           {:else if type === "text"}
