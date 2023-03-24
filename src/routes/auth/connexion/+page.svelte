@@ -68,7 +68,7 @@
             class="text-magenta-cta underline"
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
-            rel="noopener nofollow noreferrer"
+            rel="noopener"
             href="https://aide.dora.fabrique.social.gouv.fr/fr/category/inscription-et-gestion-du-compte-ha8m5b/"
           >
             Besoin d’aide&nbsp;? Contactez-nous
@@ -103,7 +103,7 @@
           <a
             class="text-magenta-cta underline"
             target="_blank"
-            rel="noopener nofollow noreferrer"
+            rel="noopener"
             href="https://aide.dora.fabrique.social.gouv.fr/fr/article/inclusion-connect-quesaco-y13f84/"
           >
             En savoir plus

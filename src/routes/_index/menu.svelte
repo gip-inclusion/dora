@@ -60,7 +60,6 @@
   {:else if $page.url.pathname !== "/auth/connexion"}
     <LinkButton
       label="Se connecter"
-      nofollow
       noBackground
       small
       to={`/auth/connexion?next=${encodeURIComponent(
@@ -95,7 +94,6 @@
     {:else if $page.url.pathname !== "/auth/connexion"}
       <LinkButton
         label="Se connecter"
-        nofollow
         secondary
         to={`/auth/connexion?next=${encodeURIComponent(
           $page.url.pathname + $page.url.search

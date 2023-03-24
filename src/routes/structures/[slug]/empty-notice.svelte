@@ -30,7 +30,7 @@
                 class="flex items-center"
                 title="Ouverture dans une nouvelle fenêtre"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener"
               >
                 {label}
                 <span class="ml-s8 block h-s20 w-s20 fill-current" aria-hidden>

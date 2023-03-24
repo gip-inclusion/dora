@@ -118,7 +118,7 @@ export function addlinkToUrls(text) {
     text.replace(
       urlRegex,
       (url) =>
-        `<a href="${url}" class="underline" target="_blank" rel="noopener nofollow">${url}</a>`
+        `<a href="${url}" class="underline" target="_blank" rel="noopener ugc">${url}</a>`
     ),
     INSANE_CONFIGURATION
   );

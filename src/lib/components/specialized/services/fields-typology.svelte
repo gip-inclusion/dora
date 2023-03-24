@@ -52,7 +52,7 @@
           class="text-magenta-cta hover:underline"
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"
-          rel="noreferrer"
+          rel="noopener"
         >
           Quelle thématique choisir pour votre service ?
         </a>
@@ -63,7 +63,7 @@
           class="text-magenta-cta hover:underline"
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"
-          rel="noreferrer"
+          rel="noopener"
         >
           <abbr title="Structures d’insertion par l’activité économique">
             SIAE
@@ -76,7 +76,7 @@
           class="text-magenta-cta hover:underline"
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"
-          rel="noreferrer"
+          rel="noopener"
         >
           Référencer un service d’inclusion numérique sur Dora
         </a>
@@ -87,7 +87,7 @@
           class="text-magenta-cta hover:underline"
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"
-          rel="noreferrer"
+          rel="noopener"
         >
           Référencer votre offre de formation professionnalisante ou qualifiante
           sur Dora

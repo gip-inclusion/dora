@@ -79,7 +79,7 @@
         )}&lien_backend=${encodeURIComponent(structureBackEndLink)}`}
         icon={home3Icon}
         otherTab
-        nofollow
+        noreferrer
       />
     {/if}
 

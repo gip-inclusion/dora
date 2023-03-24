@@ -160,7 +160,7 @@
             <a
               target="_blank"
               title="Ouverture dans une nouvelle fenêtre"
-              rel="noopener nofollow"
+              rel="noopener ugc"
               class="break-all text-gray-text  underline"
               href={structure.url}
             >
@@ -207,7 +207,7 @@
             <a
               target="_blank"
               title="Ouverture dans une nouvelle fenêtre"
-              rel="noopener nofollow"
+              rel="noopener ugc"
               class="items-center break-words text-gray-text underline"
               href={structure.accesslibreUrl}
             >

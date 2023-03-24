@@ -152,7 +152,7 @@
               <span class="break-word">
                 <a
                   target="_blank"
-                  rel="noopener nofollow"
+                  rel="noopener ugc"
                   href={form.url}
                   title="Ouverture dans une nouvelle fenêtre"
                   >{formatFilePath(form.name)}</a
@@ -165,7 +165,7 @@
               <span class="break-word">
                 <a
                   target="_blank"
-                  rel="noopener nofollow"
+                  rel="noopener ugc"
                   title="Ouverture dans une nouvelle fenêtre"
                   href={service.onlineForm}>{service.onlineForm}</a
                 >

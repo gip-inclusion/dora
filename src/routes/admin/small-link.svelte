@@ -7,7 +7,7 @@
   class="text-f10 text-gray-text-alt underline"
   href={link}
   target="_blank"
-  rel="noopener nofollow noreferrer"
+  rel="noopener"
 >
   {label}
 </a>

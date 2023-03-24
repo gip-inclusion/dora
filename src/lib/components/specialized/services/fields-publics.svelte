@@ -40,7 +40,7 @@
           class="text-magenta-cta"
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"
-          rel="noreferrer"
+          rel="noopener"
         >
           Définir les publics et critères d'accès à votre service
         </a>

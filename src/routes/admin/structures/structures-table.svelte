@@ -51,11 +51,7 @@
         <div>
           <div>
             <strong
-              ><a
-                href="/structures/{structure.slug}"
-                target="_blank"
-                rel="noreferrer"
-              >
+              ><a href="/structures/{structure.slug}" target="_blank">
                 {shortenString(capitalize(structure.name))}
               </a>
             </strong>

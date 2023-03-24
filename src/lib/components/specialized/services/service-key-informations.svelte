@@ -110,7 +110,7 @@
               <strong>&nbsp;•&nbsp;</strong>
               <a
                 target="_blank"
-                rel="noopener nofollow"
+                rel="noopener ugc"
                 href={service.remoteUrl}
                 class="underline"
                 title="Ouverture dans une nouvelle fenêtre"

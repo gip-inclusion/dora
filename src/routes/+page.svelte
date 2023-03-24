@@ -39,7 +39,7 @@
     <a
       target="_blank"
       class="text-magenta-cta underline"
-      rel="no-follow noreferrer"
+      rel="noopener"
       href="https://app.livestorm.co/dora-1"
     >
       Découvrez DORA en participant à un de nos webinaires d’appropriation.

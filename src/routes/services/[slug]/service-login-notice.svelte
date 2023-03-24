@@ -24,7 +24,6 @@
       on:click={trackClick}
       small
       label="Se connecter"
-      nofollow
       to={`/auth/connexion?next=${encodeURIComponent($page.url.pathname)}`}
     />
   </div>

@@ -84,7 +84,7 @@
         href={data.structure.url}
         class="underline"
         target="_blank"
-        rel="noopener nofollow">{data.structure.url}</a
+        rel="noopener ugc">{data.structure.url}</a
       >
     </InfoLine>
 
