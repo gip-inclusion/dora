@@ -6,16 +6,16 @@ export type AdminDivisionType =
   | "city";
 
 export type ServiceCategory =
-  | "acces-aux-droits"
+  | "acces-aux-droits-et-citoyennete"
   | "accompagnement-social-et-professionnel-personnalise"
   | "apprendre-francais"
-  | "creation-activite	"
+  | "creation-activite"
   | "gestion-financiere"
-  | "emploi-choisir-metier"
-  | "emploi-preparer-sa-candidature"
-  | "emploi-trouver-emploi"
-  | "equipement-alimentation"
-  | "famille	"
+  | "choisir-un-metier"
+  | "preparer-sa-candidature"
+  | "trouver-un-emploi"
+  | "equipement-et-alimentation"
+  | "famille"
   | "handicap"
   | "illettrisme"
   | "logement-hebergement"
