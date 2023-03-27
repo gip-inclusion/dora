@@ -14,6 +14,7 @@
     StructureMember,
     Structure,
     StructuresOptions,
+    PutativeStructureMember,
   } from "$lib/types";
   import { formatPhoneNumber, markdownToHTML } from "$lib/utils/misc";
   import { formatOsmHours } from "$lib/utils/opening-hours";
@@ -22,6 +23,7 @@
 
   export let structure: Structure;
   export let members: StructureMember[];
+  export let putativeMembers: PutativeStructureMember[];
   export let structuresOptions: StructuresOptions;
 
   let fullDesc;
@@ -76,7 +78,7 @@
 <div class="structure-body">
   <div class="notice">
     {#if structure.isMember && structure.canEditInformations}
-      <QuickStart {structure} {members} />
+      <QuickStart {structure} {members} {putativeMembers} />
     {/if}
   </div>
 

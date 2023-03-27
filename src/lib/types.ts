@@ -166,6 +166,7 @@ export interface Structure {
   parent: string;
   phone: number;
   postalCode: string;
+  quickStartDone: boolean;
   services: StructureService[];
   shortDesc: string;
   siret: string | null;
@@ -441,10 +442,6 @@ export interface ShortService {
 export interface Bookmark {
   service: ShortService;
   creationDate: string;
-}
-
-export interface UserOnboardingActionsAccomplished {
-  hasDoneASearch: boolean;
 }
 
 export interface CustomChoice {

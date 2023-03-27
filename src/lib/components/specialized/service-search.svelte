@@ -25,8 +25,6 @@
     sortCategory,
   } from "$lib/utils/service";
   import { getQuery } from "$lib/utils/service-search";
-  import { userInfo } from "$lib/utils/auth";
-  import { setUserHasDoneASearch } from "$lib/requests/user";
 
   export let servicesOptions: ServicesOptions;
   export let cityCode;
@@ -50,11 +48,6 @@
     const finalSubCategoryIds = subCategoryIds.filter(
       (value) => !value.endsWith("--all")
     );
-
-    // On sauvegarde le fait que l'utilisateur a fait une recherche si besoin
-    if ($userInfo && !$userInfo.onboardingActionsAccomplished.hasDoneASearch) {
-      setUserHasDoneASearch();
-    }
 
     const query = getQuery({
       categoryIds,

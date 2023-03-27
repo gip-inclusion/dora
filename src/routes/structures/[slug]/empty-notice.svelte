@@ -27,13 +27,15 @@
             <li class="flex justify-center">
               <a
                 href={url}
-                class="flex items-center"
                 title="Ouverture dans une nouvelle fenêtre"
                 target="_blank"
                 rel="noopener"
               >
                 {label}
-                <span class="ml-s8 block h-s20 w-s20 fill-current" aria-hidden>
+                <span
+                  class="inline-block h-s20 w-s20 fill-current pt-s4"
+                  aria-hidden
+                >
                   {@html externalLinkIcon}
                 </span>
               </a>

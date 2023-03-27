@@ -17,11 +17,12 @@
 <Informations
   structure={$structure}
   members={data.members}
+  putativeMembers={data.putativeMembers}
   structuresOptions={data.structuresOptions}
 />
 <div class="mb-s64" />
 
-{#if !!$structure.services?.length || $structure.canEditServices}
+{#if !!$structure.services?.length}
   <hr class="mb-s24" />
   <ServicesList
     structure={$structure}
@@ -32,7 +33,7 @@
   />
 {/if}
 
-{#if $structure.canEditServices}
+{#if !!$structure.models?.length && $structure.canEditServices}
   <hr class="mb-s24" />
   <ModelesList
     structure={$structure}

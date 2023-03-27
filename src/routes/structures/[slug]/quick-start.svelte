@@ -6,24 +6,24 @@
     closeIcon,
   } from "$lib/icons";
   import {
-    canShowQuickStart,
     isStructureInformationsComplete,
-    isFirstSearchDone,
-    hasOneService,
-    hasAtLeastTwoMembers,
-    saveQuickStartDone,
+    hasAtLeastOneServiceNotArchived,
+    hasAtLeastTwoMembersOrInvitedMembers,
   } from "./quick-start";
-  import type { Structure, StructureMember } from "$lib/types";
-  import { userInfo } from "$lib/utils/auth";
+  import type {
+    Structure,
+    StructureMember,
+    PutativeStructureMember,
+  } from "$lib/types";
+  import { modifyStructure } from "$lib/requests/structures";
 
   export let structure: Structure;
   export let members: StructureMember[];
+  export let putativeMembers: PutativeStructureMember[];
 
-  let showQuickStart = canShowQuickStart(structure);
-
-  function hideQuickStart() {
-    saveQuickStartDone(structure.slug);
-    showQuickStart = false;
+  async function hideQuickStart() {
+    await modifyStructure({ quickStartDone: true });
+    structure.quickStartDone = true;
   }
 
   $: steps = [
@@ -34,28 +34,25 @@
     },
     {
       label: "Inviter vos collaborateurs",
-      complete: hasAtLeastTwoMembers(members),
+      complete: hasAtLeastTwoMembersOrInvitedMembers(members, putativeMembers),
       url: `/structures/${structure.slug}/collaborateurs`,
     },
     {
-      label: "Référencer un de vos services",
-      complete: hasOneService(structure),
+      label: "Référencer un premier service",
+      complete: hasAtLeastOneServiceNotArchived(structure),
       url: `/services/creer?structure=${structure.slug}`,
-    },
-    {
-      label: "Faire votre première recherche",
-      complete: isFirstSearchDone($userInfo),
-      url: "/",
     },
   ];
 
-  $: canCloseQuickStart = steps.filter(({ complete }) => complete).length >= 2;
-  $: if (steps.filter(({ complete }) => complete).length === steps.length) {
+  $: if (
+    steps.filter(({ complete }) => complete).length === steps.length &&
+    !structure.quickStartDone
+  ) {
     hideQuickStart();
   }
 </script>
 
-{#if showQuickStart}
+{#if structure.quickStartDone}
   <div class="rounded-md border border-gray-03">
     <div
       class="relative flex items-center justify-between gap-s16 border-b border-gray-01 px-s16 pb-s24 pt-s24 sm:flex-row sm:px-s35"
@@ -65,14 +62,12 @@
         <p class="m-s0 text-f14">Vos premiers pas sur DORA</p>
       </div>
 
-      {#if canCloseQuickStart}
-        <button class="flex" on:click={hideQuickStart}>
-          <span class="h-s24 w-s24 fill-magenta-cta">
-            {@html closeIcon}
-          </span>
-          <span class="sr-only">Masquer le guide</span>
-        </button>
-      {/if}
+      <button class="flex" on:click={hideQuickStart}>
+        <span class="h-s24 w-s24 fill-magenta-cta">
+          {@html closeIcon}
+        </span>
+        <span class="sr-only">Masquer le guide</span>
+      </button>
     </div>
 
     <div class="px-s16 font-bold sm:px-s35">

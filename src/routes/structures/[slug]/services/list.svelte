@@ -24,6 +24,10 @@
   } from "$lib/types";
   import { computeUpdateStatusData } from "$lib/utils/service";
   import Count from "../count.svelte";
+  import {
+    hasArchivedServices,
+    hasAtLeastOneServiceNotArchived,
+  } from "../quick-start";
   import NoServiceNotice from "./no-service-notice.svelte";
   import ServiceCard from "./service-card.svelte";
 
@@ -221,9 +225,13 @@
   </div>
 </div>
 
-{#if structure.services.length === 0 && structure.isMember && structure.canEditServices && withEmptyNotice}
-  <NoServiceNotice />
-{:else if hasOptions && structure.canEditServices}
+{#if !hasAtLeastOneServiceNotArchived(structure) && structure.isMember && structure.canEditServices && withEmptyNotice}
+  <div class="mb-s24">
+    <NoServiceNotice />
+  </div>
+{/if}
+
+{#if (hasAtLeastOneServiceNotArchived(structure) || hasArchivedServices(structure)) && hasOptions && structure.canEditServices}
   <div
     class="mb-s40 flex w-full flex-wrap items-center rounded-md bg-white px-s24 py-s24 text-f14 shadow-md md:h-s80 md:py-s0"
   >
