@@ -33,10 +33,16 @@ import logoSimplon from "$lib/assets/logos/partners/logo_simplon.png";
 import logoKonexio from "$lib/assets/logos/partners/logo_konexio.png";
 import logoNqt from "$lib/assets/logos/partners/logo_nqt.png";
 import logoSNC from "$lib/assets/logos/partners/logo_snc.png";
+import logoActionLogement from "$lib/assets/logos/partners/logo_actionlogement.png";
+import logoArdennes from "$lib/assets/logos/partners/logo_ardennes.png";
+import logoCAF from "$lib/assets/logos/partners/logo_caf.png";
+import logoLaReunion from "$lib/assets/logos/partners/logo_lareunion.png";
+import logoPoleEmploi from "$lib/assets/logos/partners/logo_poleemploi.png";
+
 import type { Partner } from "$lib/types";
 
 export const PARTNERS: Partner[] = [
-  // "Action logement",
+  { name: "AFPA", img: logoAfpa },
   { name: "Crésus", img: logoCresus },
   { name: "Cheops", img: logoCheops },
   { name: "E2C", img: logoEc2 },
@@ -62,10 +68,8 @@ export const PARTNERS: Partner[] = [
     name: "Apprentis d’Auteuil",
     img: logoApprentisAuteuils,
   },
-  { name: "AFPA", img: logoAfpa },
   { name: "La MedNum", img: logoMedNum },
   { name: "Renault", img: logoRenault },
-
   { name: "UNIOPSS", img: logoUniopss },
   { name: "Orange", img: logoOrange },
   { name: "ANLCI", img: logoAnlci },
@@ -86,6 +90,11 @@ export const PARTNERS: Partner[] = [
     name: "Finances et pédagogie (Caisse d’épargne)",
     img: logoFinancesPedagogie,
   },
+  { name: "Action Logement", img: logoActionLogement },
+  { name: "Conseil Départemental des Ardennes", img: logoArdennes },
+  { name: "Caisse d‘allocations familiales", img: logoCAF },
+  { name: "Département de la Réunion", img: logoLaReunion },
+  { name: "Pôle emploi", img: logoPoleEmploi },
 ];
 
 export function getPartners(limit?: number): Partner[] {
