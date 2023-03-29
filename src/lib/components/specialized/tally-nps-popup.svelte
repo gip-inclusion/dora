@@ -20,7 +20,13 @@
   let tallyFormClosedByNavigation = false;
 
   onMount(() => {
-    if (window.Tally) {
+    if (!window.Tally) {
+      // Chargement dynamique de Tally
+      const tallyScript = window.document.createElement("script");
+      tallyScript.setAttribute("src", "https://tally.so/widgets/embed.js");
+      document.head.appendChild(tallyScript);
+    } else {
+      // On ferme une éventuelle popup en cours d'affichage
       window.Tally.closePopup(formId, keySuffix);
     }
 
