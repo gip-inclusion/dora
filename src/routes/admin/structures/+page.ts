@@ -30,7 +30,7 @@ export const load: PageLoad = async ({ parent }) => {
   const user = get(userInfo);
   let department;
   let title = "Structures | Administration | DORA";
-  if (user.isLocalCoordinator) {
+  if (user.isManager) {
     department = (await searchAdminDivision(user.department))[0].value;
     title = `Tableau de bord ${user.department} | DORA`;
   }
@@ -39,7 +39,7 @@ export const load: PageLoad = async ({ parent }) => {
     noIndex: true,
     servicesOptions,
     structuresOptions,
-    isLocalCoordinator: user.isLocalCoordinator && department,
+    isManager: user.isManager && department,
     department,
   };
 };

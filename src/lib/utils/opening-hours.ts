@@ -1,44 +1,55 @@
-import type {
-  DayPeriod,
-  DayPrefix,
-  OsmDay,
-  OsmOpeningHours,
-  OsmPeriodDay,
-} from "$lib/types";
+import type { DayPeriod, DayPrefix, OsmDay, OsmOpeningHours } from "$lib/types";
+
+export const INVALID_OPENING_HOURS_MARKER = "##INVALID##";
 
 function formatDay(lineday: OsmDay, prefix: DayPrefix): string | undefined {
   const { timeSlot1, timeSlot2 } = lineday;
 
-  if (!timeSlot1.isOpen && !timeSlot2.isOpen) {
+  const timeSlot1HasValues: boolean = !!timeSlot1.openAt || !!timeSlot1.closeAt;
+  const timeSlot2HasValues: boolean = !!timeSlot2.openAt || !!timeSlot2.closeAt;
+
+  // Les jours mais sans valeurs sont ignorés - même s'ils sont ouverts dans le formulaire
+  if (!timeSlot1HasValues && !timeSlot2HasValues) {
     return undefined;
   }
 
-  let str = `${prefix} `;
+  const timeSlot1Valid: boolean =
+    !!timeSlot1.openAt &&
+    !!timeSlot1.closeAt &&
+    timeSlot1.openAt < timeSlot1.closeAt;
 
-  if (timeSlot1.isOpen) {
-    str += `${timeSlot1.openAt}-${timeSlot1.closeAt}`;
+  const timeSlot2Valid: boolean =
+    !!timeSlot2.openAt &&
+    !!timeSlot2.closeAt &&
+    timeSlot2.openAt < timeSlot2.closeAt;
+
+  let str = `${prefix} `;
+  if (timeSlot1.isOpen && timeSlot1HasValues) {
+    if (timeSlot1Valid) {
+      str += `${timeSlot1.openAt}-${timeSlot1.closeAt}`;
+    } else {
+      str += INVALID_OPENING_HOURS_MARKER;
+    }
   }
-  if (timeSlot1.isOpen && timeSlot2.isOpen) {
+
+  if (
+    timeSlot1.isOpen &&
+    timeSlot1HasValues &&
+    timeSlot2.isOpen &&
+    timeSlot2HasValues
+  ) {
     str += ",";
   }
-  if (timeSlot2.isOpen) {
-    str += `${timeSlot2.openAt}-${timeSlot2.closeAt}`;
+
+  if (timeSlot2.isOpen && timeSlot2HasValues) {
+    if (timeSlot2Valid) {
+      str += `${timeSlot2.openAt}-${timeSlot2.closeAt}`;
+    } else {
+      str += INVALID_OPENING_HOURS_MARKER;
+    }
   }
 
   return str;
-}
-
-function isPeriodDayValid(period: OsmPeriodDay): boolean {
-  if (!period.isOpen) {
-    return true;
-  }
-  return !!period.closeAt && !!period.openAt;
-}
-
-function isDayValid(lineday: OsmDay): boolean {
-  return (
-    isPeriodDayValid(lineday.timeSlot1) && isPeriodDayValid(lineday.timeSlot2)
-  );
 }
 
 // On se base sur l'heure pour déterminer s'il s'agit d'une horaire d'après-midi ou non
@@ -51,32 +62,32 @@ function isAfternoonHour(hour: string): boolean {
 export function returnEmptyHoursData(): OsmOpeningHours {
   return {
     monday: {
-      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
     },
     tuesday: {
-      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
     },
     wednesday: {
-      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
     },
     thursday: {
-      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
     },
     friday: {
-      timeSlot1: { isOpen: true, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
     },
     saturday: {
-      timeSlot1: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
     },
     sunday: {
-      timeSlot1: { isOpen: false, touched: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, touched: false, openAt: "", closeAt: "" },
+      timeSlot1: { isOpen: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
     },
   };
 }
@@ -105,7 +116,7 @@ export function getHoursFromStr(value: string): OsmOpeningHours {
     const [dayPrefix, hours] = hoursForDay.split(" ");
 
     // Jour concerné
-    let dayKey: string;
+    let dayKey = "";
     if (dayPrefix === "Mo") {
       dayKey = "monday";
     }
@@ -174,8 +185,8 @@ export function formatOsmHours(value: string) {
   let wednesday = "Fermé";
   let thursday = "Fermé";
   let friday = "Fermé";
-  let saturday = undefined;
-  let sunday = undefined;
+  let saturday = "";
+  let sunday = "";
 
   const hoursByDay = value.split(";");
 
@@ -217,27 +228,21 @@ export function formatOsmHours(value: string) {
 }
 
 export function fromJsonToOsmString(data: OsmOpeningHours) {
-  if (
-    isDayValid(data.monday) &&
-    isDayValid(data.tuesday) &&
-    isDayValid(data.wednesday) &&
-    isDayValid(data.thursday) &&
-    isDayValid(data.friday) &&
-    isDayValid(data.saturday) &&
-    isDayValid(data.sunday)
-  ) {
-    return [
-      formatDay(data.monday, "Mo"),
-      formatDay(data.tuesday, "Tu"),
-      formatDay(data.wednesday, "We"),
-      formatDay(data.thursday, "Th"),
-      formatDay(data.friday, "Fr"),
-      formatDay(data.saturday, "Sa"),
-      formatDay(data.sunday, "Su"),
-    ]
-      .filter(Boolean)
-      .join(";");
+  let days: string[] = [];
+
+  days.push(formatDay(data.monday, "Mo") || "");
+  days.push(formatDay(data.tuesday, "Tu") || "");
+  days.push(formatDay(data.wednesday, "We") || "");
+  days.push(formatDay(data.thursday, "Th") || "");
+  days.push(formatDay(data.friday, "Fr") || "");
+  days.push(formatDay(data.saturday, "Sa") || "");
+  days.push(formatDay(data.sunday, "Su") || "");
+
+  days = days.filter(Boolean);
+  if (days.length) {
+    return days.join(";");
   }
+
   // TODO: vérifier le meilleur moyen de propager l'erreur
   return null;
 }

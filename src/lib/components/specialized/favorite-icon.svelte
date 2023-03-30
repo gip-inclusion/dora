@@ -71,7 +71,7 @@
   }
 
   .tooltip {
-    @apply relative inline-block;
+    @apply relative inline-block print:hidden;
   }
 
   .tooltip .tooltiptext {

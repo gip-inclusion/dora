@@ -1,5 +1,6 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
@@ -34,6 +35,11 @@
   <div slot="help">
     <p class="text-f14">Modalités pour mobiliser le service.</p>
   </div>
+  <Notice type="warning" title="Modalités d’orientation" showIcon={false}>
+    Afin que le service puisse être mobilisable, merci de choisir au moins une
+    méthode d’orientation – soit pour l’accompagnateur, soit pour le
+    bénéficiaire.
+  </Notice>
 
   <div class="flex flex-col lg:gap-s8">
     <FieldModel {...fieldModelProps.coachOrientationModes ?? {}} type="array">

@@ -174,7 +174,7 @@
       <a
         href="https://lamednum.coop/schema-de-donnees-des-lieux-de-mediation-numerique-2/"
         target="_blank"
-        rel="noreferrer"
+        rel="noopener"
         class="underline">schéma de données des lieux de médiation numérique</a
       >.
       <br />

@@ -2,7 +2,6 @@
   export let to: string;
   export let otherTab = false;
   export let nofollow = false;
-
   export let label = "";
   export let extraClass = "";
   export let ariaLabel: string | undefined = undefined;

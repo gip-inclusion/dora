@@ -18,7 +18,7 @@
   export let data: PageData;
 
   const structure = data.service.structure;
-  const description = markdownToHTML(data.service.fullDesc);
+  const description = markdownToHTML(data.service.fullDesc, 2);
 
   async function handleRefresh() {
     data.service = await getServiceAdmin(data.service.slug);

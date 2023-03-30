@@ -81,12 +81,11 @@ Le responsable de traitement s’engage à ce que les données soient traitées 
 
 Certaines des données sont envoyées à des sous-traitants pour réaliser certaines missions. Le responsable de traitement s'est assuré de la mise en œuvre par ses sous-traitants de garanties adéquates et du respect de conditions strictes de confidentialité, d’usage et de protection des données.
 
-| **Partenaire** | **Pays destinataire** | **Traitement réalisé**                   | **Garanties**                                                            |
-| -------------- | --------------------- | ---------------------------------------- | ------------------------------------------------------------------------ |
-| **Scalingo**   | France                | Hébergement                              | ​https://scalingo.com/fr/data-processing-agreement​                      |
-| **TypeForm**   | Espagne, Etats-Unis   | Outil de création de formulaire          | ​https://admin.typeform.com/to/dwk6gt/?typeform-source=www.typeform.com​ |
-| **Crisp**      | Union européenne      | Outil de chat                            | ​https://crisp.chat/en/privacy/​                                         |
-| **Tipimail**   | France                | Outil de transfert et d'échange de mails | ​https://fr.tipimail.com/rgpd​                                           |
+| **Partenaire** | **Pays destinataire** | **Traitement réalisé**                   | **Garanties**                                       |
+| -------------- | --------------------- | ---------------------------------------- | --------------------------------------------------- |
+| **Scalingo**   | France                | Hébergement                              | ​https://scalingo.com/fr/data-processing-agreement​ |
+| **Crisp**      | Union européenne      | Outil de chat                            | ​https://crisp.chat/en/privacy/​                    |
+| **Tipimail**   | France                | Outil de transfert et d'échange de mails | ​https://fr.tipimail.com/rgpd​                      |
 
 ### Cookies et mesure d'audience
 

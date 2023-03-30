@@ -13,7 +13,6 @@
     to="https://tally.so/r/mVLr7J?source=tdbuser"
     label="Participer"
     otherTab
-    nofollow
     small
     secondary
     slot="button"

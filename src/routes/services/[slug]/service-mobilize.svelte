@@ -53,7 +53,7 @@
             <span class="break-word">
               <a
                 target="_blank"
-                rel="noopener nofollow"
+                rel="noopener ugc"
                 href={form.url}
                 class="hover:underline"
                 title="Ouverture dans une nouvelle fenêtre"
@@ -68,7 +68,7 @@
               <a
                 target="_blank"
                 class="hover:underline"
-                rel="noopener nofollow"
+                rel="noopener ugc"
                 title="Ouverture dans une nouvelle fenêtre"
                 href={service.onlineForm}>{service.onlineForm}</a
               >

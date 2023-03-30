@@ -10,7 +10,7 @@
     <li>
       {#if itemId === item.id}
         <span
-          class="flex items-center rounded-t-md bg-white p-s16 text-france-blue"
+          class="flex items-center rounded-t bg-white px-s24 py-s12 text-france-blue"
         >
           <span class="mr-s8 h-s24 w-s24 fill-current">
             {@html item.icon}
@@ -20,7 +20,7 @@
       {:else}
         <a
           href={item.href}
-          class="flex items-center rounded-t-md bg-magenta-dark p-s16 text-white"
+          class="flex items-center rounded-t bg-magenta-dark px-s24 py-s12 text-white"
           data-sveltekit-noscroll
         >
           <span class="mr-s8 h-s24 w-s24 fill-current">

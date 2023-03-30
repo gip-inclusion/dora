@@ -54,6 +54,7 @@
   </button>
 
   {#if service.status === "PUBLISHED"}
+    <!-- Le `nofollow` est important ici, on ne veut pas que les robots provoquent la génération des PDFs -->
     <LinkButton
       secondary
       wFull

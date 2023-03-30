@@ -6,7 +6,6 @@
 
   export let label: string;
   export let isOpen: boolean;
-  export let touched: boolean;
   export let openAt: string;
   export let closeAt: string;
   export let day: Day;
@@ -18,7 +17,8 @@
   let ariaDescribedBy: string | undefined = undefined;
 
   $: {
-    if (isOpen && touched) {
+    // Un jour ouvert mais sans valeur est ignoré
+    if (isOpen && (closeAt || openAt)) {
       inError = !closeAt || !openAt || openAt >= closeAt;
       if (inError) {
         ariaDescribedBy = `error-${day}—${dayPeriod}`;
@@ -33,7 +33,6 @@
     if (!isOpen) {
       openAt = "";
       closeAt = "";
-      touched = false;
     }
     dispatch("change");
   }

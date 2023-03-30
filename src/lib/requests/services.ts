@@ -8,8 +8,8 @@ import type {
   ServicesOptions,
   ServiceStatus,
   ShortService,
-} from "../types";
-import { logException } from "../utils/logger";
+} from "$lib/types";
+import { logException } from "$lib/utils/logger";
 
 function serviceToBack(service) {
   if (service.longitude && service.latitude) {
@@ -33,11 +33,6 @@ function serviceToFront(service) {
   service.latitude = lat;
 
   return service;
-}
-
-export async function getMyServices(): Promise<ShortService[]> {
-  const url = `${getApiURL()}/services/?mine=1`;
-  return (await fetchData<ShortService[]>(url)).data;
 }
 
 export async function getService(slug): Promise<Service> {

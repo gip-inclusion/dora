@@ -50,7 +50,7 @@
           href="/auth/ic-connect?next={encodeURIComponent(nextPage)}{loginHint}"
         >
           <div
-            class="mx-auto flex items-center justify-center rounded-full bg-france-blue p-s6 pr-s24 text-f16 text-white "
+            class="mx-auto flex items-center justify-center rounded-full bg-france-blue p-s6 pr-s24 text-f16 text-white transition-colors hover:bg-[#2323FF]"
           >
             <span class="h-[62px] w-[62px] rounded-full bg-white p-s6">
               <img src={logoIC} alt="" class="max-w-none" />
@@ -68,7 +68,7 @@
             class="text-magenta-cta underline"
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
-            rel="noopener nofollow noreferrer"
+            rel="noopener"
             href="https://aide.dora.fabrique.social.gouv.fr/fr/category/inscription-et-gestion-du-compte-ha8m5b/"
           >
             Besoin d’aide&nbsp;? Contactez-nous
@@ -103,7 +103,7 @@
           <a
             class="text-magenta-cta underline"
             target="_blank"
-            rel="noopener nofollow noreferrer"
+            rel="noopener"
             href="https://aide.dora.fabrique.social.gouv.fr/fr/article/inclusion-connect-quesaco-y13f84/"
           >
             En savoir plus

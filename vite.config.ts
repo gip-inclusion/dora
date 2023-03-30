@@ -12,7 +12,6 @@ export default defineConfig(({ mode }) => {
     },
 
     test: {
-      deps: { inline: ["@sveltejs/kit"] },
       include: ["src/**/*.{test,spec}.{js,ts}"],
     },
   };

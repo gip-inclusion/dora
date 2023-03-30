@@ -62,7 +62,7 @@
         class="underline"
         target="_blank"
         title="Ouverture dans une nouvelle fenêtre"
-        rel="noopener nofollow"
+        rel="noopener"
         href="https://aide.dora.fabrique.social.gouv.fr/fr/">contactez-nous</a
       >.
     </p>

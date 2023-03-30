@@ -14,7 +14,9 @@
 <hr class="border-t-gray-01" />
 
 <CenteredGrid noPadding>
-  <div class="flex flex-col items-center justify-between py-s32 lg:flex-row">
+  <div
+    class="flex flex-col items-center justify-between py-s32 print:hidden lg:flex-row"
+  >
     <div class="text-f14 text-gray-dark">
       <strong>Infolettre &nbsp;•&nbsp;</strong>
       Une fois par mois, recevez un courriel pour être informé des évolutions de
@@ -29,7 +31,6 @@
       small
       to="https://d4c653e7.sibforms.com/serve/MUIEAEkY4naptXBIq5NdRg5UPxP1wmwbGCinne5c1gynY-wfrZ0Dz0QP_NqkXtfyYqhdaq3AO8VFZJ9giRi9ZT0eah7Ut2U0LeKSTVIHQb_5nhvTLUMWXo9ZMeIYCHVlzmjkXGQ66S5ewcYpSADUgV--2RVZ_mrnsRJQoCNwZ8y-sWzfQsEzfKuTA7SLbZ_dWeqaigudym3EaiHT"
       otherTab
-      nofollow
     />
   </div>
 </CenteredGrid>

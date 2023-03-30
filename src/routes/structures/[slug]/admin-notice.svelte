@@ -11,7 +11,6 @@
       label="Demander l’accès"
       to="/auth/rattachement?siret={structure.siret}"
       otherTab
-      nofollow
       secondary
       small
     />

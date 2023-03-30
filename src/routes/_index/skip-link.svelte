@@ -6,8 +6,6 @@
 </script>
 
 <a
-  target="_self"
-  rel="nofollow"
   href="#main-content"
   class="sr-only top-s32 left-s32 z-20 rounded bg-white text-f16 font-bold text-magenta-cta outline-none hover:text-magenta-hover  focus:not-sr-only focus:absolute focus:p-s8 focus:shadow-focus"
 >

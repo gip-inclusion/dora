@@ -4,16 +4,13 @@ import {
   getService,
   getServicesOptions,
 } from "$lib/requests/services";
-import { getStructure, getStructures } from "$lib/requests/structures";
-import { userInfo } from "$lib/utils/auth";
+import { getStructure } from "$lib/requests/structures";
 import { error } from "@sveltejs/kit";
-import { get } from "svelte/store";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ params, parent }) => {
   await parent();
 
-  const user = get(userInfo);
   const service = await getService(params.slug);
 
   // on ne retourne une 404 que sur le client
@@ -26,23 +23,15 @@ export const load: PageLoad = async ({ params, parent }) => {
   }
 
   const structure = await getStructure(service.structure);
-  let structures;
-  if (user?.isStaff) {
-    structures = await getStructures();
-  } else if (user) {
-    structures = user.structures;
-  }
-  let model = null;
-  if (service.model) {
-    model = await getModel(service.model);
-  }
+
+  const model = service.model ? await getModel(service.model) : null;
 
   return {
     title: `Éditer | ${service.name} | ${structure.name} | DORA`,
     noIndex: true,
     service,
     servicesOptions: await getServicesOptions(),
-    structures,
+    structures: [structure],
     structure,
     model,
   };

@@ -117,7 +117,7 @@ export function getCategoryIcon(slug: string) {
   if ("numerique" === slug) {
     return macLineIcon;
   }
-  if ("equipement-alimentation" === slug) {
+  if ("equipement-et-alimentation" === slug) {
     return storeIcon;
   }
   if ("famille" === slug) {
@@ -150,16 +150,16 @@ export function getCategoryIcon(slug: string) {
   if ("remobilisation" === slug) {
     return mentalHealthIcon;
   }
-  if ("acces-aux-droits" === slug) {
+  if ("acces-aux-droits-et-citoyennete" === slug) {
     return bankIcon;
   }
-  if ("emploi-choisir-metier" === slug) {
+  if ("choisir-un-metier" === slug) {
     return serviceIcon;
   }
-  if ("emploi-preparer-sa-candidature" === slug) {
+  if ("preparer-sa-candidature" === slug) {
     return serviceIcon;
   }
-  if ("emploi-trouver-emploi" === slug) {
+  if ("trouver-un-emploi" === slug) {
     return serviceIcon;
   }
   log(`Pas d'icone définie pour la thématique ${slug}`);

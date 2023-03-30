@@ -15,7 +15,7 @@
 
   export let data: PageData;
 
-  const description = markdownToHTML(data.structure.fullDesc);
+  const description = markdownToHTML(data.structure.fullDesc, 2);
 
   async function handleRefresh() {
     data.structure = await getStructureAdmin(data.structure.slug);
@@ -84,7 +84,7 @@
         href={data.structure.url}
         class="underline"
         target="_blank"
-        rel="noopener nofollow">{data.structure.url}</a
+        rel="noopener ugc">{data.structure.url}</a
       >
     </InfoLine>
 

@@ -22,21 +22,24 @@
     ServiceUpdateStatus,
     ShortService,
   } from "$lib/types";
-  import { userInfo } from "$lib/utils/auth";
   import { computeUpdateStatusData } from "$lib/utils/service";
   import Count from "../count.svelte";
+  import {
+    hasArchivedServices,
+    hasAtLeastOneServiceNotArchived,
+  } from "../quick-start";
+  import NoServiceNotice from "./no-service-notice.svelte";
   import ServiceCard from "./service-card.svelte";
 
   export let structure, total, servicesOptions;
   export let hasOptions = true;
   export let onRefresh;
   export let limit: number | undefined = undefined;
+  export let withEmptyNotice = false;
 
   export let serviceStatus: ServiceStatus | undefined;
   export let updateStatus: ServiceUpdateStatus | undefined;
   export let servicesDisplayed: ShortService[] = [];
-
-  let canEdit;
 
   function updateUrlQueryParams() {
     if (!browser) {
@@ -196,7 +199,6 @@
   }
 
   $: servicesDisplayed = filterAndSortServices(structure.services);
-  $: canEdit = structure.isMember || $userInfo?.isStaff;
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
@@ -213,7 +215,7 @@
         noBackground
       />
     {/if}
-    {#if canEdit}
+    {#if structure.canEditServices}
       <LinkButton
         label="Ajouter un service"
         icon={addIcon}
@@ -222,7 +224,14 @@
     {/if}
   </div>
 </div>
-{#if hasOptions && canEdit}
+
+{#if !hasAtLeastOneServiceNotArchived(structure) && structure.isMember && structure.canEditServices && withEmptyNotice}
+  <div class="mb-s24">
+    <NoServiceNotice />
+  </div>
+{/if}
+
+{#if (hasAtLeastOneServiceNotArchived(structure) || hasArchivedServices(structure)) && hasOptions && structure.canEditServices}
   <div
     class="mb-s40 flex w-full flex-wrap items-center rounded-md bg-white px-s24 py-s24 text-f14 shadow-md md:h-s80 md:py-s0"
   >
@@ -302,6 +311,11 @@
 
 <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-3">
   {#each servicesDisplayed as service}
-    <ServiceCard {service} {servicesOptions} readOnly={!canEdit} {onRefresh} />
+    <ServiceCard
+      {service}
+      {servicesOptions}
+      readOnly={!structure.canEditServices}
+      {onRefresh}
+    />
   {/each}
 </div>

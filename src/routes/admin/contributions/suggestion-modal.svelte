@@ -38,11 +38,11 @@
 
         <Line
           label="Descriptif complet du service"
-          data={markdownToHTML(suggestion.serviceInfo.fullDesc)}
+          data={markdownToHTML(suggestion.serviceInfo.fullDesc, 2)}
           verticalLayout
         >
           <div class="m-s16 border-l-8 border-gray-02 pl-s16">
-            {@html markdownToHTML(suggestion.serviceInfo.fullDesc)}
+            {@html markdownToHTML(suggestion.serviceInfo.fullDesc, 2)}
           </div>
         </Line>
 

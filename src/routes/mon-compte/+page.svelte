@@ -23,7 +23,7 @@
     <div class="flex flex-1 flex-col gap-s24">
       <ImproveDoraNotif />
 
-      {#if $userInfo.isStaff || $userInfo.isBizdev}
+      {#if $userInfo.isStaff}
         <div class="mb-s24 rounded-md  border border-gray-03 p-s24">
           <h4>Raccourcis</h4>
           <p class="text-f14">Pour l’équipe DORA.</p>
@@ -38,7 +38,7 @@
             <LinkButton label="Administration" to="/admin" secondary small />
           </div>
         </div>
-      {:else if $userInfo.isLocalCoordinator}
+      {:else if $userInfo.isManager}
         <div class="mb-s24 rounded-md  border border-gray-03 p-s24">
           <h4>Raccourcis</h4>
           <div class="flex flex-col gap-s8 lg:flex-row">
