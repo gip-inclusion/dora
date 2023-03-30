@@ -50,7 +50,7 @@
   <div
     class="flex flex-col justify-between border-b border-gray-03 pb-s40 sm:flex-row"
   >
-    <h2 class="text-france-blue">Informations</h2>
+    <h2 class="text-france-blue">Présentation de la structure</h2>
     {#if structure.canEditInformations}
       <div class="text-right">
         <LinkButton
@@ -83,7 +83,7 @@
   </div>
 
   <div class="data">
-    <p class="bold mb-s32 text-f21">{structure.shortDesc}</p>
+    <p class="mb-s32 text-f21 font-bold">{structure.shortDesc}</p>
 
     <div class="flex flex-col gap-s32 md:flex-row">
       {#if nationalLabelsDisplay}
@@ -107,9 +107,6 @@
     <hr class="separator" />
 
     <div class="presentation">
-      <h3 class="text-f32 leading-32 text-france-blue md:mt-s32">
-        Présentation de la structure
-      </h3>
       <TextClamp text={fullDesc} />
     </div>
   {/if}

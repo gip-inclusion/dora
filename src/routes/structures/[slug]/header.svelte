@@ -37,22 +37,22 @@
         icon: fileInfoLineIcon,
         href: `/structures/${structure.slug}`,
       },
-      {
-        id: "services",
-        name: "Services",
-        icon: pageLineIcon,
-        href: `/structures/${structure.slug}/services`,
-      },
     ];
 
-    if (!structure.parent && structure.branches?.length) {
+    if (structure.canViewMembers) {
       tabs.push({
-        id: "antennes",
-        name: "Antennes",
-        icon: homeSmile2Icon,
-        href: `/structures/${structure.slug}/antennes`,
+        id: "collaborateurs",
+        name: "Collaborateurs",
+        icon: teamLineIcon,
+        href: `/structures/${structure.slug}/collaborateurs`,
       });
     }
+    tabs.push({
+      id: "services",
+      name: "Services",
+      icon: pageLineIcon,
+      href: `/structures/${structure.slug}/services`,
+    });
 
     if (structure.canEditServices) {
       tabs.push({
@@ -63,12 +63,12 @@
       });
     }
 
-    if (structure.canViewMembers) {
+    if (!structure.parent && structure.branches?.length) {
       tabs.push({
-        id: "collaborateurs",
-        name: "Collaborateurs",
-        icon: teamLineIcon,
-        href: `/structures/${structure.slug}/collaborateurs`,
+        id: "antennes",
+        name: "Antennes",
+        icon: homeSmile2Icon,
+        href: `/structures/${structure.slug}/antennes`,
       });
     }
   }

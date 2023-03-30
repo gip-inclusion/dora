@@ -22,7 +22,7 @@
   export let putativeMembers: PutativeStructureMember[];
 
   async function hideQuickStart() {
-    await modifyStructure({ quickStartDone: true });
+    await modifyStructure({ slug: structure.slug, quickStartDone: true });
     structure.quickStartDone = true;
   }
 
@@ -52,7 +52,7 @@
   }
 </script>
 
-{#if structure.quickStartDone}
+{#if !structure.quickStartDone}
   <div class="rounded-md border border-gray-03">
     <div
       class="relative flex items-center justify-between gap-s16 border-b border-gray-01 px-s16 pb-s24 pt-s24 sm:flex-row sm:px-s35"
