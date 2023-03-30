@@ -56,6 +56,7 @@
     schema={modifyUserSchema}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
+    disableExitWarning
   >
     <Fieldset noTopPadding>
       <BasicInputField

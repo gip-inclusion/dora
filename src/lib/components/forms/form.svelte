@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { beforeNavigate } from "$app/navigation";
   import type { ServicesOptions } from "$lib/types";
   import type { Schema } from "$lib/validation/schema-utils";
   import {
@@ -19,6 +20,9 @@
   export let onSubmit, onSuccess;
   export let servicesOptions: ServicesOptions | undefined = undefined;
   export let onChange: ((validatedData) => void) | undefined = undefined;
+  export let disableExitWarning = false;
+
+  let hasUnsavedChange = false;
   export let onValidate:
     | ((
         submittedData,
@@ -31,6 +35,20 @@
 
   onMount(() => {
     $formErrors = {};
+  });
+
+  beforeNavigate((navigation) => {
+    if (
+      hasUnsavedChange &&
+      !disableExitWarning &&
+      // eslint-disable-next-line
+      !window.confirm(
+        "Cette page demande de confirmer sa fermeture; des données saisies pourraient ne pas être enregistrées."
+      )
+    ) {
+      return navigation.cancel();
+    }
+    return null;
   });
 
   onDestroy(() => {
@@ -61,6 +79,7 @@
           onChange(validatedData);
         }
 
+        hasUnsavedChange = true;
         resolve(true);
       }, 200);
     });
@@ -84,6 +103,7 @@
   async function handleSubmit(event: Event) {
     const submitterId = (event as SubmitEvent).submitter?.id;
     $formErrors = {};
+
     const { validatedData, valid } = onValidate
       ? onValidate(data, submitterId)
       : validate(data, schema, {
@@ -92,9 +112,11 @@
     if (valid) {
       try {
         requesting = true;
+
         const result = await onSubmit(validatedData, submitterId);
         if (result.ok) {
           await onSuccess(await getJsonResult(result), submitterId);
+          hasUnsavedChange = false;
         } else {
           injectAPIErrors(await getJsonResult(result), serverErrorsDict);
         }
