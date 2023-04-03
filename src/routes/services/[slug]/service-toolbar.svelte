@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import cornerLeftBlueImg from "$lib/assets/style/corner-left-blue.png";
   import cornerRightBlueImg from "$lib/assets/style/corner-right-blue.png";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
@@ -20,36 +21,39 @@
 </script>
 
 <div id="service-update-status" class="relative">
-  <div class={updateStatus}>
-    <CenteredGrid
-      extraClass="
-        py-s32 mb-s14 w-full
-        {service.canWrite &&
-      service.status === 'PUBLISHED' &&
-      updateStatus === 'NEEDED'
-        ? 'bg-service-orange'
-        : ''}
+  {#if browser}
+    <div>
+      <CenteredGrid
+        bgColor=""
+        extraClass="
+          py-s32 mb-s14 w-full
+          {service.canWrite &&
+        service.status === 'PUBLISHED' &&
+        updateStatus === 'NEEDED'
+          ? 'bg-service-orange'
+          : ''}
 
-        {service.canWrite &&
-      service.status === 'PUBLISHED' &&
-      updateStatus === 'REQUIRED'
-        ? 'bg-service-red'
-        : ''}
-      "
-      noPadding
-    >
-      {#if service.canWrite}
-        <ServiceUpdateStatusAsContributor
-          {onRefresh}
-          {updateStatus}
-          {service}
-          {servicesOptions}
-        />
-      {:else}
-        <ServiceUpdateStatusAsReader {updateStatus} {service} />
-      {/if}
-    </CenteredGrid>
-  </div>
+          {service.canWrite &&
+        service.status === 'PUBLISHED' &&
+        updateStatus === 'REQUIRED'
+          ? 'bg-service-red'
+          : ''}
+        "
+        noPadding
+      >
+        {#if service.canWrite}
+          <ServiceUpdateStatusAsContributor
+            {onRefresh}
+            {updateStatus}
+            {service}
+            {servicesOptions}
+          />
+        {:else}
+          <ServiceUpdateStatusAsReader {updateStatus} {service} />
+        {/if}
+      </CenteredGrid>
+    </div>
+  {/if}
 
   {#if !service.canWrite || updateStatus === "NOT_NEEDED" || service.status !== "PUBLISHED"}
     <div
@@ -115,17 +119,3 @@
     </CenteredGrid>
   {/if}
 </div>
-
-<style lang="postcss">
-  .NOT_NEEDED {
-    @apply mx-auto flex items-center;
-  }
-
-  .NEEDED {
-    @apply bg-service-orange;
-  }
-
-  .REQUIRED {
-    @apply bg-service-red;
-  }
-</style>
