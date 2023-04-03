@@ -3,18 +3,17 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import SetAsUpdatedModal from "$lib/components/specialized/services/set-as-updated-modal.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
-  import DateLabel from "$lib/components/display/date-label.svelte";
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
   import type {
     Service,
     ServicesOptions,
     ServiceUpdateStatus,
   } from "$lib/types";
+  import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
 
-  export let label: string;
   export let updateStatus: ServiceUpdateStatus;
   export let onRefresh: () => void;
 
@@ -32,10 +31,10 @@
             <UpdateStatusIcon {updateStatus} />
           </div>
 
-          <span class="hidden print:inline">
-            Mis à jour le <DateLabel date={service.modificationDate} />
-          </span>
-          <span class="print:hidden">{label}</span>
+          <RelativeDateLabel
+            date={service.modificationDate}
+            prefix="Actualisé"
+          />
         </div>
       {:else if updateStatus === "NEEDED"}
         <div class="flex items-center">
@@ -44,10 +43,11 @@
           </span>
           <div>
             <div class="text-f18">
-              <strong class="hidden print:inline">
-                Mis à jour le <DateLabel date={service.modificationDate} />
-              </strong>
-              <strong class="print:hidden">{label}</strong>
+              <RelativeDateLabel
+                date={service.modificationDate}
+                prefix="Actualisé"
+                bold
+              />
             </div>
             <div class="text-f14">
               Vérifiez et/ou actualisez les informations de ce service dès
@@ -65,10 +65,11 @@
               <strong>Actualisation requise</strong>
             </div>
             <div class="text-f14">
-              <strong class="hidden print:inline">
-                Mis à jour le
-                <DateLabel date={service.modificationDate} />
-              </strong>
+              <RelativeDateLabel
+                date={service.modificationDate}
+                prefix="Actualisé"
+                bold
+              />
               <span class="print:hidden">
                 Ce service est dépriorisé dans les résultats de recherche, il
                 doit être actualisé pour gagner à nouveau en visibilité

@@ -1,14 +1,12 @@
 <script lang="ts">
+  import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import FavoriteIcon from "$lib/components/specialized/favorite-icon.svelte";
   import ServiceStateUpdateSelect from "$lib/components/specialized/services/service-state-update-select.svelte";
   import SynchronizedIcon from "$lib/components/specialized/services/synchronized-icon.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
   import type { ServicesOptions, ShortService } from "$lib/types";
-  import {
-    computeUpdateStatusData,
-    computeUpdateStatusLabel,
-  } from "$lib/utils/service";
+  import { computeUpdateStatus } from "$lib/utils/service";
   import ServiceButtonMenu from "./service-button-menu.svelte";
 
   export let service: ShortService;
@@ -16,7 +14,7 @@
   export let readOnly = true;
   export let onRefresh: () => void;
 
-  $: updateStatusData = computeUpdateStatusData(service);
+  $: updateStatus = computeUpdateStatus(service);
 </script>
 
 <Bookmarkable slug={service.slug} let:onBookmark let:isBookmarked>
@@ -41,7 +39,7 @@
                 {service}
                 {servicesOptions}
                 {onRefresh}
-                updateStatus={updateStatusData.updateStatus}
+                {updateStatus}
               />
             </div>
           {/if}
@@ -78,17 +76,20 @@
       class="flex min-h-[100px] flex-col justify-center gap-s10 border-t border-t-gray-03 py-s12 px-s20"
     >
       <div class="flex items-center text-f14 text-gray-text">
-        {#if service.status !== "PUBLISHED" || updateStatusData.updateStatus === "NOT_NEEDED"}
+        {#if service.status !== "PUBLISHED" || updateStatus === "NOT_NEEDED"}
           <span class="mr-s8">
             <UpdateStatusIcon updateStatus="NOT_NEEDED" small />
           </span>
-          {computeUpdateStatusLabel(updateStatusData)}
-        {:else if updateStatusData.updateStatus === "NEEDED"}
+          <RelativeDateLabel
+            date={service.modificationDate}
+            prefix="Actualisé"
+          />
+        {:else if updateStatus === "NEEDED"}
           <span class="mr-s8">
             <UpdateStatusIcon updateStatus="NEEDED" small />
           </span>
           <span class="font-bold">Actualisation conseillée</span>
-        {:else if updateStatusData.updateStatus === "REQUIRED"}
+        {:else if updateStatus === "REQUIRED"}
           <span class="mr-s8">
             <UpdateStatusIcon updateStatus="REQUIRED" small />
           </span>

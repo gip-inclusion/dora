@@ -2,7 +2,7 @@ import { getServicesOptions } from "$lib/requests/services";
 import type { SearchQuery, ServiceSearchResult } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
 import { trackSearch } from "$lib/utils/plausible";
-import { computeUpdateStatusData } from "$lib/utils/service";
+import { computeUpdateStatus } from "$lib/utils/service";
 import { getQuery, storeLastSearchCity } from "$lib/utils/service-search";
 import type { PageLoad } from "./$types";
 
@@ -66,7 +66,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   });
 
   services.forEach((service) => {
-    service.updateStatus = computeUpdateStatusData(service).updateStatus;
+    service.updateStatus = computeUpdateStatus(service);
   });
 
   trackSearch(

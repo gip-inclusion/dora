@@ -49,21 +49,11 @@ export function getAvailableOptionsForStatus(
   return result;
 }
 
-type ServiceUpdateStatusData = {
-  dayDiff: number;
-  weekDiff: number;
-  monthDiff: number;
-  yearDiff: number;
-  updateStatus: ServiceUpdateStatus;
-};
-export function computeUpdateStatusData(
+export function computeUpdateStatus(
   service: Service | ShortService | ServiceSearchResult
-): ServiceUpdateStatusData {
+): ServiceUpdateStatus {
   const lastUpdateDay = dayjs(service.modificationDate);
-  const dayDiff = dayjs().diff(lastUpdateDay, "day");
-  const weekDiff = dayjs().diff(lastUpdateDay, "week");
   const monthDiff = dayjs().diff(lastUpdateDay, "month");
-  const yearDiff = dayjs().diff(lastUpdateDay, "year");
 
   let updateStatus: ServiceUpdateStatus = "NOT_NEEDED";
   if (service.status === "PUBLISHED") {
@@ -75,39 +65,7 @@ export function computeUpdateStatusData(
     }
   }
 
-  return {
-    dayDiff,
-    weekDiff,
-    monthDiff,
-    yearDiff,
-    updateStatus,
-  };
-}
-
-export function computeUpdateStatusLabel({
-  dayDiff,
-  weekDiff,
-  monthDiff,
-  yearDiff,
-}: {
-  dayDiff: number;
-  weekDiff: number;
-  monthDiff: number;
-  yearDiff: number;
-}) {
-  let label = "";
-  if (dayDiff < 1) {
-    label = "Actualisé aujourd'hui";
-  } else if (dayDiff < 7) {
-    label = `Actualisé il y a ${dayDiff} jour${dayDiff > 1 ? "s" : ""}`;
-  } else if (weekDiff <= 5) {
-    label = `Actualisé il y a ${weekDiff} semaine${weekDiff > 1 ? "s" : ""}`;
-  } else if (monthDiff < 12) {
-    label = `Actualisé il y a ${monthDiff} mois`;
-  } else {
-    label = `Actualisé il y a plus de ${yearDiff} an${yearDiff > 1 ? "s" : ""}`;
-  }
-  return label;
+  return updateStatus;
 }
 
 export function getCategoryIcon(slug: string) {
