@@ -1,7 +1,11 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import Tag from "$lib/components/display/tag.svelte";
-  import { arraysCompare, markdownToHTML } from "$lib/utils/misc";
+  import {
+    arraysCompare,
+    markdownToHTML,
+    htmlToMarkdown,
+  } from "$lib/utils/misc";
 
   export let value: any | undefined = undefined;
   export let onUseValue: (() => void) | undefined = undefined;
@@ -23,7 +27,10 @@
     // tiptap insère des caractères en fin de chaine.
     // on les supprime pour faire la comparaison
     if (type === "markdown") {
-      return val1.trim() === val2.trim();
+      // la description du service est passée par l'éditeur, ce qui réécrit les liens.
+      // on le simule ainsi:
+      const rewrittenVal1 = htmlToMarkdown(markdownToHTML(val1));
+      return rewrittenVal1.trim() === val2.trim();
     }
 
     return val1 === val2;
