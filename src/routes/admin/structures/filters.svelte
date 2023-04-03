@@ -102,7 +102,7 @@
         (struct) =>
           !query ||
           normalizeString(struct.name).includes(query) ||
-          struct.siret.startsWith(query.replace(/\s/g, ""))
+          struct.siret?.startsWith(query.replace(/\s/g, ""))
       )
       .filter((struct) => {
         return (
