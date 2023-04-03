@@ -43,6 +43,7 @@
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-svelte3": "^4.0.0",
+    "hexoid": "^1.0.0",
     "husky": "^8.0.3",
     "iframe-resizer": "^4.3.6",
     "insane": "^2.6.2",

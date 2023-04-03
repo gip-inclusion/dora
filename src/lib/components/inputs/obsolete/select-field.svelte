@@ -8,6 +8,7 @@
     getChoicesFromKey,
   } from "$lib/utils/choice";
   import { clickOutside } from "$lib/utils/misc";
+  import { randomId } from "$lib/utils/random";
   import { tick } from "svelte";
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";
@@ -40,7 +41,7 @@
   let filterText = "";
 
   // *** Accessibilité
-  const uuid: string = crypto.randomUUID(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
+  const uuid: string = randomId(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
   let expanded = false;
 
   // Gestion de l'outline avec la navigation au clavier

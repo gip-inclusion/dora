@@ -6,11 +6,12 @@
   import HiddenField from "$lib/components/forms/fields/hidden-field.svelte";
   import { syncIcon } from "$lib/icons";
   import type { GeoApiValue, Service, Structure } from "$lib/types";
+  import { randomId } from "$lib/utils/random";
 
   export let entity: Service | Structure;
   export let parent: Structure | null = null;
 
-  let key = crypto.randomUUID();
+  let key = randomId();
 
   function handleAddressChange(address) {
     const props = address?.properties;
@@ -43,7 +44,7 @@
       entity.longitude = longitude;
 
       // force la mise à jour du bloc adresse
-      key = crypto.randomUUID();
+      key = randomId();
     }
   }
 

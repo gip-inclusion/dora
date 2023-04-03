@@ -21,6 +21,7 @@
   } from "$lib/requests/services";
   import type { Service, ServiceStatus, ShortService } from "$lib/types";
   import { clickOutside } from "$lib/utils/misc";
+  import { randomId } from "$lib/utils/random";
   import { getAvailableOptionsForStatus } from "$lib/utils/service";
   import { serviceSchema } from "$lib/validation/schemas/service";
   import { validate } from "$lib/validation/validation";
@@ -74,7 +75,7 @@
   export let fullWidth = false;
 
   // *** Accessibilité
-  const uuid: string = crypto.randomUUID(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
+  const uuid: string = randomId(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
   let isDropdownOpen = false;
 
   // Gestion de l'outline avec la navigation au clavier

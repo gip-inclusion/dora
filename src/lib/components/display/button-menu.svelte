@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import { clickOutside } from "$lib/utils/misc";
+  import { randomId } from "$lib/utils/random";
 
   export let icon: string | undefined = undefined;
   export let label: string | undefined = undefined;
@@ -9,7 +10,7 @@
   export let small = false;
 
   let isOpen = false;
-  const id = `button-menu-${crypto.randomUUID()}`;
+  const id = `button-menu-${randomId()}`;
 
   function handleClickOutside(_event) {
     isOpen = false;
