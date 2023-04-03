@@ -54,6 +54,10 @@
     @apply text-gray-01 hover:text-white;
   }
 
+  .inverted.disabled {
+    @apply text-gray-01;
+  }
+
   .inverted.active {
     @apply text-white;
   }
@@ -69,7 +73,6 @@
   .disabled {
     @apply text-gray-text-alt;
   }
-
   .tooltip {
     @apply relative inline-block print:hidden;
   }
