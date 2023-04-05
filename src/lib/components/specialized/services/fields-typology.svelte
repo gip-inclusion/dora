@@ -48,7 +48,7 @@
     <ul class="text-f14 font-bold">
       <li class="mb-s10">
         <a
-          href="https://aide.dora.fabrique.social.gouv.fr/fr/article/quelle-thematique-choisir-pour-votre-service-cywvsk/"
+          href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/quelle-thematique-choisir-pour-votre-service-cywvsk/"
           class="text-magenta-cta hover:underline"
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"
@@ -59,7 +59,7 @@
       </li>
       <li class="mb-s10">
         <a
-          href="https://aide.dora.fabrique.social.gouv.fr/fr/article/siae-votre-offre-de-service-sur-dora-jb4405/"
+          href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/siae-votre-offre-de-service-sur-dora-jb4405/"
           class="text-magenta-cta hover:underline"
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"
@@ -72,7 +72,7 @@
       </li>
       <li class="mb-s10">
         <a
-          href="https://aide.dora.fabrique.social.gouv.fr/fr/article/referencer-un-service-dinclusion-numerique-sur-dora-et62ua/"
+          href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/referencer-un-service-dinclusion-numerique-sur-dora-et62ua/"
           class="text-magenta-cta hover:underline"
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"
@@ -83,7 +83,7 @@
       </li>
       <li>
         <a
-          href="https://aide.dora.fabrique.social.gouv.fr/fr/article/referencer-votre-offre-de-formation-professionnalisante-ou-qualifiante-sur-dora-1bzkn1k/"
+          href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/referencer-votre-offre-de-formation-professionnalisante-ou-qualifiante-sur-dora-1bzkn1k/"
           class="text-magenta-cta hover:underline"
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"

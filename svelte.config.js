@@ -37,7 +37,7 @@ const config = {
         ],
         "worker-src": ["self", "blob:"],
         "child-src": [
-          "https://aide.dora.fabrique.social.gouv.fr/",
+          "https://aide.dora.inclusion.beta.gouv.fr/",
           "https://metabase.dora.inclusion.beta.gouv.fr",
           "https://plausible.io",
           "https://tally.so",

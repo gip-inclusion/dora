@@ -10,7 +10,7 @@
   title="Vous n’avez pas encore créé votre premier modèle"
   links={[
     {
-      url: "https://aide.dora.fabrique.social.gouv.fr/fr/article/creer-des-modeles-et-dupliquer-ses-services-1ts5cd7/",
+      url: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/creer-des-modeles-et-dupliquer-ses-services-1ts5cd7/",
       label: "Découvrez comment créer un modèle et l’utiliser",
     },
   ]}

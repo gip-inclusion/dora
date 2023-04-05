@@ -70,7 +70,7 @@
     {#if structure.canEditInformations}
       <LinkButton
         label="Ajouter une antenne"
-        to="https://aide.dora.fabrique.social.gouv.fr/fr/article/creer-une-ou-plusieurs-antennes-1xggiaw/"
+        to="https://aide.dora.inclusion.beta.gouv.fr/fr/article/creer-une-ou-plusieurs-antennes-1xggiaw/"
         icon={home3Icon}
         otherTab
       />
