@@ -6,6 +6,11 @@
   type BreadcrumbLocation =
     | "home"
     | "search"
+    | "legal"
+    | "cgu"
+    | "accessibility"
+    | "privacy"
+    | "partners"
     | "structure-informations"
     | "structure-collaborateurs"
     | "structure-services"
@@ -16,6 +21,16 @@
   export let structure: Structure | undefined = undefined;
   export let service: Service | undefined = undefined;
   export let currentLocation: BreadcrumbLocation;
+  export let dark = false;
+
+  const locationToText: Record<string, string> = {
+    search: "Recherche",
+    legal: "Mentions légales",
+    cgu: "Conditions générales d’utilisation",
+    accessibility: "Accessibilité",
+    privacy: "Données personnelles",
+    partners: "Nos partenaires",
+  };
 
   function getStructureData(location) {
     if (location === "structure-collaborateurs") {
@@ -49,11 +64,7 @@
   $: structureData = getStructureData(currentLocation);
 </script>
 
-<nav
-  aria-label="Fil d'ariane"
-  class="print:hidden"
-  class:search-style={currentLocation === "search"}
->
+<nav aria-label="Fil d'ariane" class="print:hidden" class:dark>
   <ol class="text-f14">
     <li class="inline">
       <a
@@ -80,10 +91,10 @@
       </li>
     {/if}
 
-    {#if currentLocation === "search"}
+    {#if Object.keys(locationToText).includes(currentLocation)}
       <li class="inline before:content-['/']">
         <a href={$page.url.href} aria-current="page" class="current">
-          Recherche
+          {locationToText[currentLocation]}
         </a>
       </li>
     {/if}
@@ -125,11 +136,11 @@
     @apply ml-s8 mr-s8 inline text-magenta-40 print:text-france-blue;
   }
 
-  .search-style a {
-    @apply text-gray-text-alt2;
+  .dark a {
+    @apply text-gray-text;
   }
-  .search-style li::before,
-  .search-style .current {
+  .dark li::before,
+  .dark .current {
     @apply text-gray-text;
   }
 </style>
