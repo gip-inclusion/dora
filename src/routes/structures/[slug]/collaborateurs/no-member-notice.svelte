@@ -10,7 +10,7 @@
   title="Vous n’avez pas encore invité vos collaborateurs"
   links={[
     {
-      url: "https://aide.dora.fabrique.social.gouv.fr/fr/article/inviter-un-collaborateur-1e3lyy2/",
+      url: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/inviter-un-collaborateur-1e3lyy2/",
       label: "Découvrez comment gérer les collaborateurs",
     },
   ]}

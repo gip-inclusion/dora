@@ -10,11 +10,11 @@
   title="Vous n’avez pas encore renseigné vos services sur DORA"
   links={[
     {
-      url: "https://aide.dora.fabrique.social.gouv.fr/fr/article/referencer-son-offre-de-service-xpivaw/",
+      url: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/referencer-son-offre-de-service-xpivaw/",
       label: "Découvrez comment référencer son premier service",
     },
     {
-      url: "https://aide.dora.fabrique.social.gouv.fr/fr/category/conseils-1vz0ity/",
+      url: "https://aide.dora.inclusion.beta.gouv.fr/fr/category/conseils-1vz0ity/",
       label:
         "Découvrez quelques conseils sur la présentation de votre offre de service",
     },

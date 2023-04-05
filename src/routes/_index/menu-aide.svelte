@@ -4,7 +4,7 @@
 
 <LinkButton
   label="Nouveautés"
-  to={`https://aide.dora.fabrique.social.gouv.fr/fr/category/quoi-de-neuf-es1img/`}
+  to={`https://aide.dora.inclusion.beta.gouv.fr/fr/category/quoi-de-neuf-es1img/`}
   otherTab
   noBackground
   small
@@ -12,7 +12,7 @@
 
 <LinkButton
   label="Aide et Assistance"
-  to={`https://aide.dora.fabrique.social.gouv.fr/fr/`}
+  to={`https://aide.dora.inclusion.beta.gouv.fr/fr/`}
   otherTab
   noBackground
   small
@@ -36,7 +36,7 @@
 
 <LinkButton
   label="Contact"
-  to={`https://aide.dora.fabrique.social.gouv.fr/fr/`}
+  to={`https://aide.dora.inclusion.beta.gouv.fr/fr/`}
   otherTab
   noBackground
   small

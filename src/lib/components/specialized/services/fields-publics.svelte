@@ -36,7 +36,7 @@
     <ul class="text-f14 font-bold">
       <li>
         <a
-          href="https://aide.dora.fabrique.social.gouv.fr/fr/article/definir-les-publics-et-criteres-dacces-a-votre-service-tos25n/"
+          href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/definir-les-publics-et-criteres-dacces-a-votre-service-tos25n/"
           class="text-magenta-cta"
           target="_blank"
           title="Ouverture dans une nouvelle fenêtre"
