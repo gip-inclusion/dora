@@ -18,6 +18,10 @@ export const load: PageLoad = async ({ url, parent }) => {
   const modelSlug = query.get("modele");
 
   const user = get(userInfo);
+  if (!user) {
+    return {};
+  }
+
   let structures: ShortStructure[] = user.structures;
   let service: Service;
   let model: Model | undefined = undefined;
