@@ -8,6 +8,7 @@
     | "search"
     | "legal"
     | "cgu"
+    | "login"
     | "accessibility"
     | "privacy"
     | "partners"
@@ -25,6 +26,7 @@
 
   const locationToText: Record<string, string> = {
     search: "Recherche",
+    login: "Accéder à DORA",
     legal: "Mentions légales",
     cgu: "Conditions générales d’utilisation",
     accessibility: "Accessibilité",
