@@ -7,6 +7,7 @@
     | "search"
     | "legal"
     | "cgu"
+    | "account"
     | "login"
     | "accessibility"
     | "privacy"
@@ -31,6 +32,7 @@
     accessibility: "Accessibilité",
     privacy: "Données personnelles",
     partners: "Nos partenaires",
+    account: "Mes informations",
   };
 
   function getStructureData(location) {
@@ -71,7 +73,7 @@
       {#if currentLocation === "home"}
         <a aria-current="page" class="current">Accueil</a>
       {:else}
-        <a href={"/"} title="Retour à l'accueil du site">Accueil</a>
+        <a href="/" title="Retour à l'accueil du site">Accueil</a>
       {/if}
     </li>
 
