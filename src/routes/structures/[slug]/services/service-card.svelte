@@ -6,15 +6,12 @@
   import SynchronizedIcon from "$lib/components/specialized/services/synchronized-icon.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
   import type { ServicesOptions, ShortService } from "$lib/types";
-  import { computeUpdateStatus } from "$lib/utils/service";
   import ServiceButtonMenu from "./service-button-menu.svelte";
 
   export let service: ShortService;
   export let servicesOptions: ServicesOptions;
   export let readOnly = true;
   export let onRefresh: () => void;
-
-  $: updateStatus = computeUpdateStatus(service);
 </script>
 
 <Bookmarkable slug={service.slug} let:onBookmark let:isBookmarked>
@@ -35,12 +32,7 @@
 
           {#if service.status !== "SUGGESTION" && service.status !== "ARCHIVED"}
             <div class="relative z-10">
-              <ServiceButtonMenu
-                {service}
-                {servicesOptions}
-                {onRefresh}
-                {updateStatus}
-              />
+              <ServiceButtonMenu {service} {servicesOptions} {onRefresh} />
             </div>
           {/if}
         </div>
@@ -76,7 +68,7 @@
       class="flex min-h-[100px] flex-col justify-center gap-s10 border-t border-t-gray-03 py-s12 px-s20"
     >
       <div class="flex items-center text-f14 text-gray-text">
-        {#if service.status !== "PUBLISHED" || updateStatus === "NOT_NEEDED"}
+        {#if service.status !== "PUBLISHED" || service.updateStatus === "NOT_NEEDED"}
           <span class="mr-s8">
             <UpdateStatusIcon updateStatus="NOT_NEEDED" small />
           </span>
@@ -84,12 +76,12 @@
             date={service.modificationDate}
             prefix="Actualisé"
           />
-        {:else if updateStatus === "NEEDED"}
+        {:else if service.updateStatus === "NEEDED"}
           <span class="mr-s8">
             <UpdateStatusIcon updateStatus="NEEDED" small />
           </span>
           <span class="font-bold">Actualisation conseillée</span>
-        {:else if updateStatus === "REQUIRED"}
+        {:else if service.updateStatus === "REQUIRED"}
           <span class="mr-s8">
             <UpdateStatusIcon updateStatus="REQUIRED" small />
           </span>

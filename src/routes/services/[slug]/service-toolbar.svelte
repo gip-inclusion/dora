@@ -9,15 +9,12 @@
   import { copyIcon2 } from "$lib/icons";
   import type { Service, ServicesOptions } from "$lib/types";
   import { token } from "$lib/utils/auth";
-  import { computeUpdateStatus } from "$lib/utils/service";
   import ServiceUpdateStatusAsContributor from "./service-update-status-as-contributor.svelte";
   import ServiceUpdateStatusAsReader from "./service-update-status-as-reader.svelte";
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
   export let onRefresh: () => void;
-
-  $: updateStatus = computeUpdateStatus(service);
 </script>
 
 <div id="service-update-status" class="relative">
@@ -29,13 +26,13 @@
           py-s32 mb-s14 w-full
           {service.canWrite &&
         service.status === 'PUBLISHED' &&
-        updateStatus === 'NEEDED'
+        service.updateStatus === 'NEEDED'
           ? 'bg-service-orange'
           : ''}
 
           {service.canWrite &&
         service.status === 'PUBLISHED' &&
-        updateStatus === 'REQUIRED'
+        service.updateStatus === 'REQUIRED'
           ? 'bg-service-red'
           : ''}
         "
@@ -44,24 +41,23 @@
         {#if service.canWrite}
           <ServiceUpdateStatusAsContributor
             {onRefresh}
-            {updateStatus}
             {service}
             {servicesOptions}
           />
         {:else}
-          <ServiceUpdateStatusAsReader {updateStatus} {service} />
+          <ServiceUpdateStatusAsReader {service} />
         {/if}
       </CenteredGrid>
     </div>
   {/if}
 
-  {#if !service.canWrite || updateStatus === "NOT_NEEDED" || service.status !== "PUBLISHED"}
+  {#if !service.canWrite || service.updateStatus === "NOT_NEEDED" || service.status !== "PUBLISHED"}
     <div
       class="m-auto max-w-6xl border border-t-0 border-r-0 border-l-0 border-gray-02"
     />
   {/if}
 
-  {#if updateStatus === "NOT_NEEDED" || !$token}
+  {#if service.updateStatus === "NOT_NEEDED" || !$token}
     <img
       src={cornerLeftBlueImg}
       alt=""

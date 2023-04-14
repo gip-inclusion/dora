@@ -4,17 +4,12 @@
   import SetAsUpdatedModal from "$lib/components/specialized/services/set-as-updated-modal.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
-  import type {
-    Service,
-    ServicesOptions,
-    ServiceUpdateStatus,
-  } from "$lib/types";
+  import type { Service, ServicesOptions } from "$lib/types";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
 
-  export let updateStatus: ServiceUpdateStatus;
   export let onRefresh: () => void;
 
   let setAsUpdatedModalOpen = false;
@@ -25,10 +20,10 @@
 >
   <div id="label-container" class="flex-[3]">
     {#if service.status === "PUBLISHED"}
-      {#if updateStatus === "NOT_NEEDED"}
+      {#if service.updateStatus === "NOT_NEEDED"}
         <div class="flex items-center">
           <div class="mr-s16">
-            <UpdateStatusIcon {updateStatus} />
+            <UpdateStatusIcon updateStatus={service.updateStatus} />
           </div>
 
           <RelativeDateLabel
@@ -36,10 +31,10 @@
             prefix="Actualisé"
           />
         </div>
-      {:else if updateStatus === "NEEDED"}
+      {:else if service.updateStatus === "NEEDED"}
         <div class="flex items-center">
           <span class="mr-s16">
-            <UpdateStatusIcon {updateStatus} />
+            <UpdateStatusIcon updateStatus={service.updateStatus} />
           </span>
           <div>
             <div class="text-f18">
@@ -81,7 +76,7 @@
     {/if}
   </div>
   <div class="flex w-full flex-[2] flex-col justify-end md:mt-s0 lg:flex-row">
-    {#if updateStatus !== "NOT_NEEDED" && service.status === "PUBLISHED"}
+    {#if service.updateStatus !== "NOT_NEEDED" && service.status === "PUBLISHED"}
       <Button
         id="set-as-updated"
         extraClass="mb-s10 lg:mb-s0 lg:mr-s16 justify-center"

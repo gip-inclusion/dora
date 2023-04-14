@@ -3,16 +3,10 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import SetAsUpdatedModal from "$lib/components/specialized/services/set-as-updated-modal.svelte";
   import { checkboxCircleFillIcon, copyIcon2, editIcon } from "$lib/icons";
-  import type {
-    Service,
-    ServicesOptions,
-    ServiceUpdateStatus,
-    ShortService,
-  } from "$lib/types";
+  import type { Service, ServicesOptions, ShortService } from "$lib/types";
 
   export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
-  export let updateStatus: ServiceUpdateStatus | undefined;
   export let onRefresh: () => void | undefined;
 
   let setAsUpdatedModalOpen = false;
@@ -21,7 +15,7 @@
 </script>
 
 <div class="flex flex-col">
-  {#if updateStatus && service.status === "PUBLISHED" && updateStatus !== "NOT_NEEDED"}
+  {#if service.updateStatus && service.status === "PUBLISHED" && service.updateStatus !== "NOT_NEEDED"}
     <Button
       label="Marquer comme à jour"
       icon={checkboxCircleFillIcon}

@@ -22,7 +22,6 @@
     ServiceUpdateStatus,
     ShortService,
   } from "$lib/types";
-  import { computeUpdateStatus } from "$lib/utils/service";
   import Count from "../count.svelte";
   import {
     hasArchivedServices,
@@ -179,8 +178,8 @@
     if (updateStatus) {
       services = services.filter((service) =>
         updateStatus === "ALL"
-          ? computeUpdateStatus(service) !== "NOT_NEEDED"
-          : computeUpdateStatus(service) === updateStatus
+          ? service.updateStatus !== "NOT_NEEDED"
+          : service.updateStatus === updateStatus
       );
     }
 

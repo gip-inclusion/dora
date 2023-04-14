@@ -18,14 +18,9 @@ import {
 import type {
   Choice,
   FeeCondition,
-  Service,
-  ServiceSearchResult,
   ServicesOptions,
   ServiceStatus,
-  ServiceUpdateStatus,
-  ShortService,
 } from "$lib/types";
-import dayjs from "dayjs";
 import { getChoicesFromKey } from "./choice";
 import { log } from "./logger";
 
@@ -47,25 +42,6 @@ export function getAvailableOptionsForStatus(
   }
 
   return result;
-}
-
-export function computeUpdateStatus(
-  service: Service | ShortService | ServiceSearchResult
-): ServiceUpdateStatus {
-  const lastUpdateDay = dayjs(service.modificationDate);
-  const monthDiff = dayjs().diff(lastUpdateDay, "month");
-
-  let updateStatus: ServiceUpdateStatus = "NOT_NEEDED";
-  if (service.status === "PUBLISHED") {
-    if (monthDiff >= 6 && monthDiff < 8) {
-      updateStatus = "NEEDED";
-    }
-    if (monthDiff >= 8) {
-      updateStatus = "REQUIRED";
-    }
-  }
-
-  return updateStatus;
 }
 
 export function getCategoryIcon(slug: string) {

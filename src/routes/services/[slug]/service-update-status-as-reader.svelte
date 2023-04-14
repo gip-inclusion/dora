@@ -3,15 +3,13 @@
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
   import DateLabel from "$lib/components/display/date-label.svelte";
   import { editIcon } from "$lib/icons";
-  import type { Service, ServiceUpdateStatus } from "$lib/types";
+  import type { Service } from "$lib/types";
   import { trackFeedback } from "$lib/utils/plausible";
   import FeedbackModal from "./feedback-modal.svelte";
   import dayjs from "dayjs";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
 
   export let service: Service;
-
-  export let updateStatus: ServiceUpdateStatus;
 
   let feedbackModalIsOpen = false;
   const monthDiff = dayjs().diff(service.modificationDate, "month");
@@ -27,10 +25,10 @@
 >
   <div id="label-container">
     {#if service.status === "PUBLISHED"}
-      {#if updateStatus === "NOT_NEEDED"}
+      {#if service.updateStatus === "NOT_NEEDED"}
         <div class="flex items-center">
           <span class="mr-s16">
-            <UpdateStatusIcon {updateStatus} />
+            <UpdateStatusIcon updateStatus={service.updateStatus} />
           </span>
 
           <RelativeDateLabel
@@ -38,10 +36,10 @@
             prefix="Actualisé"
           />
         </div>
-      {:else if updateStatus === "NEEDED"}
+      {:else if service.updateStatus === "NEEDED"}
         <div class="flex items-center">
           <span class="mr-s16">
-            <UpdateStatusIcon {updateStatus} />
+            <UpdateStatusIcon updateStatus={service.updateStatus} />
           </span>
           <div>
             <div class="text-f18">
