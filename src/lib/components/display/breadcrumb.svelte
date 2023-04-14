@@ -1,6 +1,5 @@
 <script lang="ts">
-  // Source pour l'accessibilité : https://www.w3.org/WAI/ARIA/apg/example-index/breadcrumb/index.html
-  import { page } from "$app/stores";
+  // Source pour l'accessibilité : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/fil-d-ariane
   import type { Service, Structure } from "$lib/types";
 
   type BreadcrumbLocation =
@@ -66,28 +65,29 @@
   $: structureData = getStructureData(currentLocation);
 </script>
 
-<nav aria-label="Fil d'ariane" class="print:hidden" class:dark>
+<nav aria-label="vous êtes ici :" class="print:hidden" class:dark>
   <ol class="text-f14">
     <li class="inline">
-      <a
-        href={"/"}
-        aria-current={currentLocation === "home" ? "page" : null}
-        class:current={currentLocation === "home"}
-        title="Retour à l'accueil du site">Accueil</a
-      >
+      {#if currentLocation === "home"}
+        <a aria-current="page" class="current">Accueil</a>
+      {:else}
+        <a href={"/"} title="Retour à l'accueil du site">Accueil</a>
+      {/if}
     </li>
 
     {#if structure}
       <li class="inline before:content-['/']">
         <a
-          href="/structures/{structure.slug}"
+          href={currentLocation === "structure-informations"
+            ? null
+            : `/structures/${structure.slug}`}
           class:current={currentLocation === "structure-informations"}
           aria-current={currentLocation === "structure-informations"
             ? "page"
             : null}
         >
-          <span class="hidden lg:inline"
-            >Structure&nbsp;•&nbsp;
+          <span class="hidden lg:inline">
+            Structure&nbsp;•&nbsp;
           </span>{structure.name}
         </a>
       </li>
@@ -95,7 +95,7 @@
 
     {#if Object.keys(locationToText).includes(currentLocation)}
       <li class="inline before:content-['/']">
-        <a href={$page.url.href} aria-current="page" class="current">
+        <a aria-current="page" class="current">
           {locationToText[currentLocation]}
         </a>
       </li>
@@ -104,21 +104,20 @@
     {#if service}
       <li class="inline before:content-['/']">
         <a
-          href="/services/{service.slug}"
+          href={currentLocation === "service"
+            ? null
+            : `/services/${service.slug}`}
           class:current={currentLocation === "service"}
           aria-current={currentLocation === "service" ? "page" : null}
-          ><span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
-          >{service.name}</a
         >
+          <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span>
+          {service.name}
+        </a>
       </li>
     {:else if currentLocation.startsWith("structure-") && currentLocation !== "structure-informations"}
       <li class="inline before:content-['/']">
-        <a
-          href="/structures/{structure.slug}/{structureData.url}"
-          class="current"
-          aria-current="page"
-        >
-          <span>{structureData.name}</span>
+        <a class="current" aria-current="page">
+          {structureData.name}
         </a>
       </li>
     {/if}
