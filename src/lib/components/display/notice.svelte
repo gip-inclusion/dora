@@ -12,6 +12,7 @@
   export let type: "info" | "success" | "warning" | "error" = "info";
   export let hasCloseButton = false;
   export let showIcon = true;
+  export let titleLevel: "h2" | "h3" | "h4" = "h4";
 
   const types = {
     info: {
@@ -58,7 +59,11 @@
         {/if}
 
         {#if title}
-          <h4 class="mb-s0 {types[type].title} flex leading-32">
+          <svelte:element
+            this={titleLevel}
+            class="mb-s0 flex text-f18 leading-32 text-gray-dark {types[type]
+              .title}"
+          >
             {#if showIcon}
               <div class="mr-s8 inline-block text-center sm:hidden">
                 <div
@@ -71,7 +76,7 @@
             {/if}
 
             {title}
-          </h4>
+          </svelte:element>
         {/if}
         {#if hasCloseButton}
           <div>

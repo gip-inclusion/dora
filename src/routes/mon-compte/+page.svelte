@@ -14,13 +14,14 @@
   </div>
 
   <div class="flex flex-col gap-s24 md:flex-row">
+    <h1 class="sr-only">Mon compte</h1>
     <div class="flex-[2] rounded-md border border-gray-02 md:relative">
       <div
         class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s35"
       >
-        <h1 class="m-s0 text-f23 leading-20 text-france-blue">
+        <h2 class="m-s0 text-f23 leading-20 text-france-blue">
           Mes informations
-        </h1>
+        </h2>
 
         <LinkButton
           label="Modifier vos informations"
@@ -34,15 +35,15 @@
 
       <div class="grid gap-s35 p-s16 md:grid-cols-2 md:p-s35">
         <div>
-          <h2 class="mb-s8 text-f20 leading-20 text-gray-dark">Prénom</h2>
+          <h3 class="mb-s8 text-f18 leading-20">Prénom</h3>
           <div class="text-gray-text">{$userInfo.firstName}</div>
         </div>
         <div>
-          <h2 class="mb-s8 text-f20 leading-20 text-gray-dark">Nom</h2>
+          <h3 class="mb-s8 text-f18 leading-20">Nom</h3>
           <div class="text-gray-text">{$userInfo.lastName}</div>
         </div>
         <div>
-          <h2 class="mb-s8 text-f20 leading-20 text-gray-dark">Courriel</h2>
+          <h3 class="mb-s8 text-f18 leading-20">Courriel</h3>
           <div class="text-gray-text">{$userInfo.email}</div>
         </div>
       </div>
@@ -60,36 +61,44 @@
     </div>
 
     <div class="flex flex-1 flex-col gap-s24">
-      <ImproveDoraNotif />
-
       {#if $userInfo.isStaff}
         <div class="mb-s24 rounded-md  border border-gray-03 p-s24">
-          <h4>Raccourcis</h4>
-          <p class="text-f14">Pour l’équipe DORA.</p>
-          <div class="flex flex-col gap-s8 lg:flex-row">
-            <LinkButton
-              label="Créer une structure"
-              to="/structures/creer"
-              secondary
-              small
-            />
+          <h2 class="mb-s20 text-f18 leading-20 text-gray-dark">Raccourcis</h2>
 
-            <LinkButton label="Administration" to="/admin" secondary small />
-          </div>
+          <ul class="flex flex-col gap-s10">
+            <li>
+              <a
+                class="text-f14 font-bold text-magenta-cta hover:underline"
+                href="/structures/creer"
+              >
+                Créer une structure
+              </a>
+            </li>
+            <li>
+              <a
+                class="text-f14 font-bold text-magenta-cta hover:underline"
+                href="/admin"
+              >
+                Administration
+              </a>
+            </li>
+          </ul>
         </div>
       {:else if $userInfo.isManager}
         <div class="mb-s24 rounded-md  border border-gray-03 p-s24">
-          <h4>Raccourcis</h4>
+          <h2 class="mb-s20 text-f18 leading-20 text-gray-dark">Raccourcis</h2>
           <div class="flex flex-col gap-s8 lg:flex-row">
-            <LinkButton
-              label="Tableau de bord département"
-              to="/admin/structures"
-              secondary
-              small
-            />
+            <a
+              class="text-f14 font-bold text-magenta-cta hover:underline"
+              href="/admin/structures"
+            >
+              Tableau de bord département
+            </a>
           </div>
         </div>
       {/if}
+
+      <ImproveDoraNotif />
     </div>
   </div>
 </EnsureLoggedIn>
