@@ -15,7 +15,6 @@ export interface UserInfo {
   fullName: string;
   shortName: string;
   email: string;
-  phoneNumber: string;
   newsletter: boolean;
   isStaff: boolean;
   isManager: boolean;
