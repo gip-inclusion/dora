@@ -33,18 +33,20 @@
         />
       </div>
 
-      <div class="grid gap-s35 p-s16 md:grid-cols-2 md:p-s35">
-        <div>
-          <h3 class="mb-s8 text-f18 leading-20">Prénom</h3>
-          <div class="text-gray-text">{$userInfo.firstName}</div>
-        </div>
-        <div>
-          <h3 class="mb-s8 text-f18 leading-20">Nom</h3>
-          <div class="text-gray-text">{$userInfo.lastName}</div>
+      <div class="flex flex-col  gap-s35 p-s16 md:mb-s56 md:p-s35">
+        <div class="flex w-full flex-col flex-wrap gap-s35 md:flex-row">
+          <div class="flex-1">
+            <h3 class="mb-s8 text-f18 leading-20">Prénom</h3>
+            <div class="text-gray-text">{$userInfo.firstName}</div>
+          </div>
+          <div class="flex-1">
+            <h3 class="mb-s8 text-f18 leading-20">Nom</h3>
+            <div class="text-gray-text">{$userInfo.lastName}</div>
+          </div>
         </div>
         <div>
           <h3 class="mb-s8 text-f18 leading-20">Courriel</h3>
-          <div class="text-gray-text">{$userInfo.email}</div>
+          <div class="break-all text-gray-text">{$userInfo.email}</div>
         </div>
       </div>
 
