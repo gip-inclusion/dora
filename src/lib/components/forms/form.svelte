@@ -115,8 +115,11 @@
 
         const result = await onSubmit(validatedData, submitterId);
         if (result.ok) {
-          await onSuccess(await getJsonResult(result), submitterId);
+          // `onSuccess` pouvant faire une redirection et activer la fenêtre d'avertissement,
+          // `hasUnsavedChange` doit être modifié avant `onSuccess`
           hasUnsavedChange = false;
+
+          await onSuccess(await getJsonResult(result), submitterId);
         } else {
           injectAPIErrors(await getJsonResult(result), serverErrorsDict);
         }
