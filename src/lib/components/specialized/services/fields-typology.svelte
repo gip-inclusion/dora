@@ -5,7 +5,7 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldCategory from "./field-category.svelte";
-  import FieldModel from "./field-model.svelte";
+  import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import FieldSubcategory from "./field-subcategory.svelte";
 
   export let servicesOptions: ServicesOptions, service: Service;

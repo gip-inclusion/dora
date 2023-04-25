@@ -5,13 +5,13 @@
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form from "$lib/components/forms/form.svelte";
-  import FieldsDocuments from "$lib/components/specialized/services/fields-documents.svelte";
-  import FieldsModalities from "$lib/components/specialized/services/fields-modalities.svelte";
-  import FieldsPeriodicity from "$lib/components/specialized/services/fields-periodicity.svelte";
   import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
   import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
-  import FieldsStructure from "$lib/components/specialized/services/fields-structure.svelte";
   import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
+  import FieldsDocuments from "../_common/fields-documents.svelte";
+  import FieldsModalities from "../_common/fields-modalities.svelte";
+  import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
+  import FieldsStructure from "../_common/fields-structure.svelte";
   import { createOrModifyModel } from "$lib/requests/services";
   import type { Model, ServicesOptions, ShortStructure } from "$lib/types";
   import { modelSchema } from "$lib/validation/schemas/service";

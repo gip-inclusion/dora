@@ -4,7 +4,7 @@
   import ServiceHeader from "./service-header.svelte";
   import ServiceToolbar from "./service-toolbar.svelte";
   import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
-  import ServiceBody from "$lib/components/specialized/services/display/service-body.svelte";
+  import ServiceBody from "../../_common/display/service-body.svelte";
   import { getService } from "$lib/requests/services";
   import { token } from "$lib/utils/auth";
   import { TallyFormId } from "$lib/utils/nps";

@@ -7,7 +7,7 @@
   import ServiceMobilize from "./service-mobilize.svelte";
   import ServiceShare from "./service-share.svelte";
   import ServicePresentation from "./service-presentation.svelte";
-  import ServiceKeyInformations from "../service-key-informations.svelte";
+  import ServiceKeyInformations from "$lib/components/specialized/services/service-key-informations.svelte";
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;

@@ -7,17 +7,17 @@
   import Notice from "$lib/components/display/notice.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form from "$lib/components/forms/form.svelte";
-  import FieldCategory from "$lib/components/specialized/services/field-category.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
-  import FieldsDocuments from "$lib/components/specialized/services/fields-documents.svelte";
-  import FieldsInclusionNumerique from "$lib/components/specialized/services/fields-inclusion-numerique.svelte";
-  import FieldsModalities from "$lib/components/specialized/services/fields-modalities.svelte";
-  import FieldsPerimeter from "$lib/components/specialized/services/fields-perimeter.svelte";
-  import FieldsPeriodicity from "$lib/components/specialized/services/fields-periodicity.svelte";
-  import FieldsPlace from "$lib/components/specialized/services/fields-place.svelte";
+  import FieldCategory from "$lib/components/specialized/services/field-category.svelte";
   import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
+  import FieldsDocuments from "../_common/fields-documents.svelte";
+  import FieldsInclusionNumerique from "../_common/fields-inclusion-numerique.svelte";
+  import FieldsModalities from "../_common/fields-modalities.svelte";
+  import FieldsPerimeter from "../_common/fields-perimeter.svelte";
+  import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
+  import FieldsPlace from "$lib/components/specialized/services/fields-place.svelte";
   import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
-  import FieldsStructure from "$lib/components/specialized/services/fields-structure.svelte";
+  import FieldsStructure from "../_common/fields-structure.svelte";
   import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
   import { createOrModifyService } from "$lib/requests/services";
   import type {

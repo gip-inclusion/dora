@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Service, ServicesOptions } from "$lib/types";
-  import ServiceDescription from "$lib/components/specialized/services/service-description.svelte";
+  import ServiceDescription from "../service-description.svelte";
   import SubcategoryList from "./subcategory-list.svelte";
 
   export let service: Service;

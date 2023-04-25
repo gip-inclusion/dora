@@ -9,7 +9,7 @@
   import { getModelInputProps } from "$lib/utils/forms";
   import { moveToTheEnd } from "$lib/utils/misc";
   import { isNotFreeService } from "$lib/utils/service";
-  import FieldModel from "./field-model.svelte";
+  import FieldModel from "$lib/components/specialized/services/field-model.svelte";
 
   export let servicesOptions: ServicesOptions, service: Service;
   export let model: Model | undefined = undefined;

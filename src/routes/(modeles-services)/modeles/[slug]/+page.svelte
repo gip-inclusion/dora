@@ -10,7 +10,7 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { userInfo } from "$lib/utils/auth";
   import { addCircleIcon, editIcon } from "$lib/icons";
-  import ServiceBody from "$lib/components/specialized/services/display/service-body.svelte";
+  import ServiceBody from "../../_common/display/service-body.svelte";
 
   export let data: PageData;
 

@@ -5,9 +5,9 @@
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
-  import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
-  import FieldsPerimeter from "$lib/components/specialized/services/fields-perimeter.svelte";
+  import FieldsAddress from "$lib/components/specialized/services/fields-address.svelte";
+  import FieldsPerimeter from "../_common/fields-perimeter.svelte";
   import type {
     Choice,
     Service,
@@ -18,7 +18,7 @@
   } from "$lib/types";
   import { moveToTheEnd } from "$lib/utils/misc";
   import { isNotFreeService } from "$lib/utils/service";
-  import FieldSubcategory from "./field-subcategory.svelte";
+  import FieldSubcategory from "$lib/components/specialized/services/field-subcategory.svelte";
 
   export let servicesOptions: ServicesOptions;
   export let service: Service;
