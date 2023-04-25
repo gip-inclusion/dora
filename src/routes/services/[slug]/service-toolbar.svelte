@@ -1,7 +1,5 @@
 <script lang="ts">
   import { browser } from "$app/environment";
-  import cornerLeftBlueImg from "$lib/assets/style/corner-left-blue.png";
-  import cornerRightBlueImg from "$lib/assets/style/corner-right-blue.png";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import ServiceStateUpdateSelect from "$lib/components/specialized/services/service-state-update-select.svelte";
@@ -15,13 +13,19 @@
   export let service: Service;
   export let servicesOptions: ServicesOptions;
   export let onRefresh: () => void;
+
+  $: bgColor =
+    service.updateStatus === "NOT_NEEDED" || !$token ? "bg-white" : "";
+  $: roundedColor =
+    service.updateStatus === "NOT_NEEDED" || !$token ? "bg-france-blue" : "";
 </script>
 
 <div id="service-update-status" class="relative">
   {#if browser}
     <div>
       <CenteredGrid
-        bgColor=""
+        {bgColor}
+        {roundedColor}
         extraClass="
           py-s32 mb-s14 w-full
           {service.canWrite &&
@@ -54,19 +58,6 @@
   {#if !service.canWrite || service.updateStatus === "NOT_NEEDED" || service.status !== "PUBLISHED"}
     <div
       class="m-auto max-w-6xl border border-t-0 border-r-0 border-l-0 border-gray-02"
-    />
-  {/if}
-
-  {#if service.updateStatus === "NOT_NEEDED" || !$token}
-    <img
-      src={cornerLeftBlueImg}
-      alt=""
-      class="absolute -top-[1px] left-s0 print:hidden"
-    />
-    <img
-      src={cornerRightBlueImg}
-      alt=""
-      class="absolute -top-[1px] right-s0 print:hidden"
     />
   {/if}
 

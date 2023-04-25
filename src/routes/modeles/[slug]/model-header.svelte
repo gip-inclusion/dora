@@ -1,30 +1,40 @@
 <script lang="ts">
-  import StructureCard from "$lib/components/specialized/structure-card.svelte";
-  import DateLabel from "$lib/components/display/date-label.svelte";
+  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
+  import { copyIcon2Fill } from "$lib/icons";
+  import { capitalize } from "$lib/utils/misc";
 
   export let model;
 </script>
 
-<div class="flex flex-col gap-s16 lg:flex-row-reverse lg:justify-between">
-  <div class="lg:w-1/3 lg:self-end">
-    <StructureCard structure={model.structureInfo} showAddress={false} />
+<div
+  id="service-header"
+  class="relative gap-s16 lg:flex-row-reverse lg:justify-between"
+>
+  <div class="mb-s48 print:mb-s0">
+    <Breadcrumb
+      {model}
+      structure={model.structureInfo}
+      currentLocation="model"
+      dark
+    />
   </div>
 
-  <div class="lg:w-2/3">
-    <div class="flex items-center">
-      <p class="mb-s0 text-f14 font-bold text-gray-text">Modèle</p>
-      <p class="mx-s12 mb-s0 text-f14 text-gray-03">|</p>
-      <p class="mb-s0 text-f14 text-gray-text">
-        Mis à jour le <DateLabel date={model.modificationDate} />
-      </p>
-    </div>
-    <h1 class="text-france-blue">{model.name}</h1>
+  <div
+    class="mb-s28 inline-flex items-center rounded-md bg-france-blue px-s12 py-s8 text-f14 text-white"
+  >
+    <span class="mr-s8 inline-block h-s16 w-s16 fill-current text-white">
+      {@html copyIcon2Fill}
+    </span>
+    Modèle&nbsp;•&nbsp;{model.numServices}
+    {model.numServices > 1 ? "services synchronisés" : "service synchronisé"}
+  </div>
 
-    <p class="mb-s0 text-f14">
-      {model.numServices} service{model.numServices > 1 ? "s" : ""} synchronisé{model.numServices >
-      1
-        ? "s"
-        : ""}
+  <div>
+    <h1 class="mb-s12 mr-s12 text-france-blue">
+      {model.name}
+    </h1>
+    <p class="text-f23 font-bold text-france-blue">
+      {capitalize(model.structureInfo.name)}
     </p>
   </div>
 </div>

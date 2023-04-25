@@ -1,12 +1,13 @@
 <script lang="ts">
   // Source pour l'accessibilité : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/fil-d-ariane
-  import type { Service, Structure } from "$lib/types";
+  import type { Model, Service, Structure } from "$lib/types";
 
   type BreadcrumbLocation =
     | "home"
     | "search"
     | "legal"
     | "cgu"
+    | "model"
     | "account"
     | "login"
     | "accessibility"
@@ -21,6 +22,7 @@
 
   export let structure: Structure | undefined = undefined;
   export let service: Service | undefined = undefined;
+  export let model: Model | undefined = undefined;
   export let currentLocation: BreadcrumbLocation;
   export let dark = false;
 
@@ -121,6 +123,18 @@
         <a class="current" aria-current="page">
           {structureData.name}
         </a>
+      </li>
+    {/if}
+
+    {#if model}
+      <li class="inline before:content-['/']">
+        <a
+          href={currentLocation === "model" ? null : `/modeles/${model.slug}`}
+          class:current={currentLocation === "model"}
+          aria-current={currentLocation === "model" ? "page" : null}
+          ><span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
+          >{model.name}</a
+        >
       </li>
     {/if}
   </ol>

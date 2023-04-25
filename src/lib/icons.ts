@@ -19,6 +19,7 @@ export { default as phoneLineIcon } from "remixicon/icons/Device/phone-line.svg?
 export { default as bookReadLineIcon } from "remixicon/icons/Document/book-read-line.svg?raw";
 export { default as draftFillIcon } from "remixicon/icons/Document/draft-fill.svg?raw";
 export { default as copyIcon2 } from "remixicon/icons/Document/file-copy-2-line.svg?raw";
+export { default as copyIcon2Fill } from "remixicon/icons/Document/file-copy-2-fill.svg?raw";
 export { default as copyIcon } from "remixicon/icons/Document/file-copy-line.svg?raw";
 export { default as fileEditFillIcon } from "remixicon/icons/Document/file-edit-fill.svg?raw";
 export { default as fileEditIcon } from "remixicon/icons/Document/file-edit-line.svg?raw";
