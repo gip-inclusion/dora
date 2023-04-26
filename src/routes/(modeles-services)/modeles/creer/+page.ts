@@ -2,7 +2,7 @@ import { createModelFromService, getNewModel } from "$lib/utils/forms";
 import { getService, getServicesOptions } from "$lib/requests/services";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
-import { getStructure, getStructures } from "$lib/requests/structures";
+import { getStructure, getManagedStructures } from "$lib/requests/structures";
 import type { PageLoad } from "./$types";
 import type { Model, ShortStructure } from "$lib/types";
 import { error } from "@sveltejs/kit";
@@ -43,7 +43,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     }
   } else {
     if (user.isStaff || user.isManager) {
-      structures = await getStructures();
+      structures = await getManagedStructures();
     } else {
       structures = user.structures;
     }

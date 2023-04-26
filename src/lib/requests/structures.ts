@@ -40,8 +40,8 @@ export async function siretWasAlreadyClaimed(siret: string) {
   return result;
 }
 
-export async function getStructures(): Promise<ShortStructure[]> {
-  const url = `${getApiURL()}/structures/`;
+export async function getManagedStructures(): Promise<ShortStructure[]> {
+  const url = `${getApiURL()}/structures/?managed=1`;
   return (await fetchData<ShortStructure[]>(url)).data;
 }
 
