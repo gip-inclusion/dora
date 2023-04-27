@@ -13,8 +13,10 @@ if (ENVIRONMENT !== "local") {
 export const handleError: HandleServerError = ({ error, event }) => {
   Sentry.captureException(error, { event });
 
+  const message = ENVIRONMENT === "local" ? error.message : "Erreur inattendue";
+
   return {
-    message: "Erreur inattendue",
+    message,
   };
 };
 

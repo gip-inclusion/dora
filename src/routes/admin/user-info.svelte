@@ -25,11 +25,6 @@
       />
 
       <EmailLine email={user.email} />
-
-      {#if user.phoneNumber}
-        📞 <a href="tel:{user.phoneNumber}">{user.phoneNumber}</a>
-        <br />
-      {/if}
     </div>
   {/if}
 {/if}

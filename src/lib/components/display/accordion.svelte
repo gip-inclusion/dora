@@ -1,10 +1,11 @@
 <script lang="ts">
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+  import { randomId } from "$lib/utils/random";
 
   export let title: string;
   export let expanded = true;
 
-  const id = crypto.randomUUID();
+  const id = randomId();
 </script>
 
 <h2 class="mb-s40">

@@ -85,7 +85,7 @@
     </div>
   {/if}
 
-  {#if service.locationKinds.length}
+  {#if service.locationKinds?.length}
     <div>
       <h3>
         <span class="mr-s8 h-s24 w-s24 fill-current">

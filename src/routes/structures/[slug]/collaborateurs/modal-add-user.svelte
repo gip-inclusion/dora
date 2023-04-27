@@ -91,6 +91,7 @@
     schema={addUserSchema}
     onSubmit={handleSubmit}
     onSuccess={handleSuccess}
+    disableExitWarning
     bind:requesting
   >
     <Fieldset noTopPadding>

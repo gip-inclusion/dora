@@ -3,7 +3,7 @@
   import AddableMultiSelectField from "$lib/components/forms/fields/addable-multiselect-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
-  import FieldModel from "./field-model.svelte";
+  import FieldModel from "$lib/components/specialized/services/field-model.svelte";
 
   export let servicesOptions: ServicesOptions;
   export let canAddChoices = true;

@@ -1,9 +1,14 @@
 <script lang="ts">
+  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
 </script>
 
 <CenteredGrid>
   <div class="max-w-3xl">
+    <div class="mb-s48">
+      <Breadcrumb currentLocation="accessibility" dark />
+    </div>
+
     <h1>Déclaration d’accessibilité</h1>
     <p>Établie le <span>7 décembre 2022</span>.</p>
     <p>
@@ -97,6 +102,10 @@
 </CenteredGrid>
 
 <style>
+  h1 {
+    @apply text-france-blue;
+  }
+
   a {
     @apply underline;
   }

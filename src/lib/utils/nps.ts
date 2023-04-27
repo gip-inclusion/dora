@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 
 // Un formulaire Tally ne sera pas réaffiché avant que
 // `MIN_DAYS_BETWEEN_DISPLAYS` ne soient passés
-const MIN_DAYS_BETWEEN_DISPLAYS = 14;
+const MIN_DAYS_BETWEEN_DISPLAYS = 30;
 
 // eslint-disable-next-line no-shadow
 export enum TallyFormId {

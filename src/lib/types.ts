@@ -303,6 +303,7 @@ export interface ServiceSearchResult {
   slug: string;
   structure: string;
   status: ServiceStatus;
+  updateStatus: ServiceUpdateStatus;
   structureInfo: {
     address1: string;
     address2: string;
@@ -410,6 +411,7 @@ export interface Service {
   subcategoriesDisplay: string[];
   suspensionDate: string;
   useInclusionNumeriqueScheme: boolean;
+  updateStatus: ServiceUpdateStatus;
 }
 
 export interface ShortService {
@@ -437,6 +439,7 @@ export interface ShortService {
   structureInfo: ServiceStructure;
   locationKinds: LocationKind;
   useInclusionNumeriqueScheme: boolean;
+  updateStatus: ServiceUpdateStatus;
 }
 
 export interface Bookmark {

@@ -1,11 +1,18 @@
 <script lang="ts">
-  // Source pour l'accessibilité : https://www.w3.org/WAI/ARIA/apg/example-index/breadcrumb/index.html
-  import { page } from "$app/stores";
-  import type { Service, Structure } from "$lib/types";
+  // Source pour l'accessibilité : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/fil-d-ariane
+  import type { Model, Service, Structure } from "$lib/types";
 
   type BreadcrumbLocation =
     | "home"
     | "search"
+    | "legal"
+    | "cgu"
+    | "model"
+    | "account"
+    | "login"
+    | "accessibility"
+    | "privacy"
+    | "partners"
     | "structure-informations"
     | "structure-collaborateurs"
     | "structure-services"
@@ -15,7 +22,20 @@
 
   export let structure: Structure | undefined = undefined;
   export let service: Service | undefined = undefined;
+  export let model: Model | undefined = undefined;
   export let currentLocation: BreadcrumbLocation;
+  export let dark = false;
+
+  const locationToText: Record<string, string> = {
+    search: "Recherche",
+    login: "Accéder à DORA",
+    legal: "Mentions légales",
+    cgu: "Conditions générales d’utilisation",
+    accessibility: "Accessibilité",
+    privacy: "Données personnelles",
+    partners: "Nos partenaires",
+    account: "Mes informations",
+  };
 
   function getStructureData(location) {
     if (location === "structure-collaborateurs") {
@@ -49,41 +69,38 @@
   $: structureData = getStructureData(currentLocation);
 </script>
 
-<nav
-  aria-label="Fil d'ariane"
-  class="print:hidden"
-  class:search-style={currentLocation === "search"}
->
+<nav aria-label="vous êtes ici :" class="print:hidden" class:dark>
   <ol class="text-f14">
     <li class="inline">
-      <a
-        href={"/"}
-        aria-current={currentLocation === "home" ? "page" : null}
-        class:current={currentLocation === "home"}
-        title="Retour à l'accueil du site">Accueil</a
-      >
+      {#if currentLocation === "home"}
+        <a aria-current="page" class="current">Accueil</a>
+      {:else}
+        <a href="/" title="Retour à l'accueil du site">Accueil</a>
+      {/if}
     </li>
 
     {#if structure}
       <li class="inline before:content-['/']">
         <a
-          href="/structures/{structure.slug}"
+          href={currentLocation === "structure-informations"
+            ? null
+            : `/structures/${structure.slug}`}
           class:current={currentLocation === "structure-informations"}
           aria-current={currentLocation === "structure-informations"
             ? "page"
             : null}
         >
-          <span class="hidden lg:inline"
-            >Structure&nbsp;•&nbsp;
+          <span class="hidden lg:inline">
+            Structure&nbsp;•&nbsp;
           </span>{structure.name}
         </a>
       </li>
     {/if}
 
-    {#if currentLocation === "search"}
+    {#if Object.keys(locationToText).includes(currentLocation)}
       <li class="inline before:content-['/']">
-        <a href={$page.url.href} aria-current="page" class="current">
-          Recherche
+        <a aria-current="page" class="current">
+          {locationToText[currentLocation]}
         </a>
       </li>
     {/if}
@@ -91,22 +108,33 @@
     {#if service}
       <li class="inline before:content-['/']">
         <a
-          href="/services/{service.slug}"
+          href={currentLocation === "service"
+            ? null
+            : `/services/${service.slug}`}
           class:current={currentLocation === "service"}
           aria-current={currentLocation === "service" ? "page" : null}
-          ><span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
-          >{service.name}</a
         >
+          <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span>
+          {service.name}
+        </a>
       </li>
     {:else if currentLocation.startsWith("structure-") && currentLocation !== "structure-informations"}
       <li class="inline before:content-['/']">
-        <a
-          href="/structures/{structure.slug}/{structureData.url}"
-          class="current"
-          aria-current="page"
-        >
-          <span>{structureData.name}</span>
+        <a class="current" aria-current="page">
+          {structureData.name}
         </a>
+      </li>
+    {/if}
+
+    {#if model}
+      <li class="inline before:content-['/']">
+        <a
+          href={currentLocation === "model" ? null : `/modeles/${model.slug}`}
+          class:current={currentLocation === "model"}
+          aria-current={currentLocation === "model" ? "page" : null}
+          ><span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
+          >{model.name}</a
+        >
       </li>
     {/if}
   </ol>
@@ -125,11 +153,11 @@
     @apply ml-s8 mr-s8 inline text-magenta-40 print:text-france-blue;
   }
 
-  .search-style a {
-    @apply text-gray-text-alt2;
+  .dark a {
+    @apply text-gray-text;
   }
-  .search-style li::before,
-  .search-style .current {
+  .dark li::before,
+  .dark .current {
     @apply text-gray-text;
   }
 </style>

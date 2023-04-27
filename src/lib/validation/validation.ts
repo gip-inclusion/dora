@@ -145,7 +145,7 @@ export function validate(
       checkRequired
     );
 
-    isValid &&= valid;
+    isValid = isValid && valid;
     validatedData[fieldName] = value;
 
     if (!valid) {
@@ -181,7 +181,7 @@ export function validate(
           checkRequired
         );
 
-        isValid &&= depValid;
+        isValid = isValid && depValid;
         validatedData[depName] = depValue;
         if (!depValid) {
           errorFields.push(fullFormSchema[depName].name);

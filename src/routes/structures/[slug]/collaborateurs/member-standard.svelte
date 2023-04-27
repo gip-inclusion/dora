@@ -48,7 +48,7 @@
     {#if !isMyself}
       <div>
         <Button
-          label="Quitter la structure"
+          label="Révoquer"
           on:click={() => {
             handleDelete();
             onCloseParent();
@@ -56,8 +56,7 @@
           icon={forbidIcon}
           iconOnRight
           small
-          wFull
-          extraClass="justify-end w-[190px]"
+          extraClass="justify-end"
           noBackground
         />
       </div>

@@ -25,6 +25,7 @@ const config = {
       },
       blue: {
         light: "#F0F8FF",
+        information: "#E6EFFA",
       },
       gray: {
         bg: "#F8F8F8",
