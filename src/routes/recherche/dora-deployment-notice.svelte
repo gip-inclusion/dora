@@ -4,6 +4,7 @@
 
 <Notice
   type="info"
+  titleLevel="h2"
   title="Les acteurs de l’insertion de votre territoire débutent la mise en visibilité de leur offre de service."
 >
   <p class="text-f14">

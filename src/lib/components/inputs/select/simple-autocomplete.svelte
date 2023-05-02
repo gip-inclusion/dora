@@ -482,9 +482,13 @@
   }
 
   function onKeyPress(e) {
-    if (e.key === "Enter" && opened) {
+    if (e.key === "Enter") {
       e.preventDefault();
-      onEnter();
+      if (opened) {
+        onEnter();
+      } else {
+        open();
+      }
     }
   }
 
@@ -524,9 +528,9 @@
   }
 
   function onEsc(e) {
-    if (text) return clear();
-    e.stopPropagation();
     if (opened) {
+      e.stopPropagation();
+
       input.focus();
       close();
     }
@@ -549,10 +553,7 @@
     // must be loaded when the input is focused.
     if (!listItems.length && value && searchFunction) {
       search();
-      closeIfNoList();
     }
-
-    open();
 
     // find selected item
     if (value) {
@@ -593,12 +594,6 @@
 
     if (!text && selectFirstIfEmpty) {
       selectItem();
-    }
-  }
-
-  function closeIfNoList() {
-    if (!hasPrependSlot && !showList) {
-      close();
     }
   }
 
@@ -761,7 +756,9 @@
       on:keypress={onKeyPress}
     />
     {#if clearable && text?.length}
-      <span on:click={clear} class="autocomplete-clear-button">&#10006;</span>
+      <button on:click={clear} class="autocomplete-clear-button"
+        >&#10006;</button
+      >
     {/if}
   </div>
 
@@ -778,8 +775,9 @@
         {#each filteredListItems as listItem, i}
           {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
             {#if listItem}
-              <div
-                class="autocomplete-list-item {i === highlightIndex
+              <button
+                class="autocomplete-list-item block w-full text-left {i ===
+                highlightIndex
                   ? 'selected'
                   : ''}"
                 class:confirmed={isConfirmed(listItem.value)}
@@ -819,7 +817,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </button>
             {/if}
           {/if}
         {/each}
@@ -850,12 +848,12 @@
         {getLabelForValue(tagItem)}
 
         {#if !disabled && !readonly}
-          <span
+          <button
             class="tag-delete"
             on:click|preventDefault={unselectItem(tagItem)}
           >
             {@html closeCircleIcon}
-          </span>
+          </button>
         {/if}
       </div>
     {/each}

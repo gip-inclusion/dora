@@ -100,6 +100,19 @@
             <span class="text-error">*</span>
           </label>
 
+          <CitySearch
+            id="city"
+            initialValue={cityLabel}
+            bind:value={cityChoiceList}
+            placeholder="Rechercher par lieu : ville"
+            onChange={(city) => {
+              cityCode = city?.code;
+              cityLabel = `${city?.name} (${getDepartmentFromCityCode(
+                city?.code
+              )})`;
+            }}
+          />
+
           <div
             class="absolute top-s12 right-s12 z-10 h-s24 w-s24 text-gray-dark"
           >
@@ -115,6 +128,7 @@
                 <span class="h-s24 w-s24 fill-current text-gray-text-alt">
                   {@html deleteBackIcon}
                 </span>
+                <span class="sr-only">Supprimer la ville sélectionnée</span>
               </button>
             {:else}
               <span class="h-s24 w-s24 fill-current">
@@ -122,19 +136,6 @@
               </span>
             {/if}
           </div>
-
-          <CitySearch
-            id="city"
-            initialValue={cityLabel}
-            bind:value={cityChoiceList}
-            placeholder="Rechercher par lieu : ville"
-            onChange={(city) => {
-              cityCode = city?.code;
-              cityLabel = `${city?.name} (${getDepartmentFromCityCode(
-                city?.code
-              )})`;
-            }}
-          />
         </div>
       </div>
 
@@ -198,7 +199,7 @@
           style="filter"
           label="Type de service"
           minDropdownWidth="min-w-[200px]"
-          name="subcategories"
+          name="kinds"
           placeholder="Type de service"
           bind:value={kindIds}
           choices={servicesOptions.kinds}
