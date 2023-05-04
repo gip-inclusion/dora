@@ -140,7 +140,7 @@
       </div>
 
       <div
-        class="subcategories-search flex border-b border-gray-02 p-s16 text-f14 lg:border-r lg:border-b-0"
+        class="subcategories-search flex border-b border-gray-02 py-s24 px-s16 text-f14 lg:border-r lg:border-b-0"
       >
         <div
           class="mr-s8 h-s24 w-s24 self-center fill-current text-magenta-cta"
@@ -242,7 +242,7 @@
   }
 
   .subcategories-search :global(.field-wrapper) {
-    @apply relative w-[90%];
+    @apply relative w-[100%];
   }
   .subcategories-search :global(.label-container) {
     @apply sr-only;
