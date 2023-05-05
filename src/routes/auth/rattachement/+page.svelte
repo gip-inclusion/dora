@@ -4,11 +4,7 @@
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-  import {
-    token,
-    userInfo,
-    validateCredsAndFillUserInfo,
-  } from "$lib/utils/auth";
+  import { token, userInfo, refreshUserInfo } from "$lib/utils/auth";
   import { trackJoinStructure } from "$lib/utils/plausible";
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";
@@ -42,7 +38,8 @@
 
     if (response.ok) {
       result.data = await response.json();
-      await validateCredsAndFillUserInfo();
+
+      await refreshUserInfo();
       await goto(`/structures/${result.data.slug}`);
     } else {
       try {
@@ -94,6 +91,7 @@
             {/if}
             <div class="mt-s24 flex justify-end">
               <Button
+                type="submit"
                 label={ctaLabel}
                 on:click={handleJoin}
                 preventDefaultOnMouseDown
