@@ -554,6 +554,7 @@
     if (!listItems.length && value && searchFunction) {
       search();
     }
+    open();
 
     // find selected item
     if (value) {
@@ -781,7 +782,7 @@
                   ? 'selected'
                   : ''}"
                 class:confirmed={isConfirmed(listItem.value)}
-                on:click={() => onListItemClick(listItem)}
+                on:click|preventDefault={() => onListItemClick(listItem)}
                 on:pointerenter={() => {
                   highlightIndex = i;
                 }}
