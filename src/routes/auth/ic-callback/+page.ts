@@ -13,7 +13,6 @@ export const load: PageLoad = async ({ url, parent }) => {
 
   const query = url.searchParams;
 
-  // TODO: error if any of those are empty
   const code = query.get("code");
   const state = query.get("state");
 
@@ -36,13 +35,10 @@ export const load: PageLoad = async ({ url, parent }) => {
   });
 
   let jsonResult = {};
-
   if (result.ok) {
     jsonResult = await result.json();
     setToken(jsonResult.token);
     await validateCredsAndFillUserInfo();
-
-    throw redirect(302, nextPage);
   }
-  // TODO return error
+  throw redirect(302, nextPage);
 };
