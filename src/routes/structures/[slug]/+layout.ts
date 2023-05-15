@@ -35,13 +35,9 @@ export const load: LayoutLoad = async ({ params, parent }) => {
     ].map((struct) => struct.slug);
 
     if (userStructuresSlugs.includes(currentStructure.slug)) {
-      const slugIndex = preferences.visitedStructures.indexOf(
-        currentStructure.slug
+      preferences.visitedStructures = preferences.visitedStructures.filter(
+        (slug) => slug !== currentStructure.slug
       );
-
-      if (slugIndex > 0) {
-        preferences.visitedStructures.splice(slugIndex, 1);
-      }
 
       preferences.visitedStructures.unshift(currentStructure.slug);
 
