@@ -12,6 +12,7 @@
 
   export let data: PageData;
 
+  let cguAccepted = false;
   let { establishment } = data;
   let ctaLabel = "";
 
@@ -82,11 +83,27 @@
               par l’administrateur de la structure.
             {:else}
               <div class="legend">
-                En cliquant sur <span class="italic"
-                  >Adhérer à la structure</span
-                >, je déclare faire partie de la structure mentionnée ci-dessus
-                et j’atteste connaître les risques encourus en cas de faux et
-                d’usage de faux.
+                <label class="flex flex-row items-start">
+                  <input
+                    bind:checked={cguAccepted}
+                    type="checkbox"
+                    class="hidden "
+                  />
+                  <div
+                    class="flex h-s24 w-s24 shrink-0 justify-center rounded border border-gray-03"
+                  >
+                    <div
+                      class=" h-s12 w-s12 self-center bg-magenta-cta"
+                      class:hidden={!cguAccepted}
+                    />
+                  </div>
+                  <span class="ml-s16 inline-block  text-f14 text-gray-text">
+                    Je déclare avoir lu les
+                    <a href="/cgu" class="underline"
+                      >Conditions générales d’utilisation</a
+                    > et faire partie de la structure mentionnée ci-dessus.</span
+                  >
+                </label>
               </div>
             {/if}
             <div class="mt-s24 flex justify-end">
@@ -95,6 +112,7 @@
                 label={ctaLabel}
                 on:click={handleJoin}
                 preventDefaultOnMouseDown
+                disabled={!cguAccepted}
               />
             </div>
           </div>

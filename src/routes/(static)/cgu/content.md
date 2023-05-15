@@ -95,7 +95,7 @@ Il est rappelé que toute personne procédant à une fausse déclaration pour el
 
 Toute information transmise par le Gestionnaire de Territoire est de sa seule responsabilité. Il appartient au Gestionnaire de Territoire de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l'ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
 
-Tout partage de données ou d'information non autorisée hors de la plateforme est de la responsabilité du gestionnaire de territoire.
+Tout partage de données ou d'information non autorisée hors de la plateforme est de la responsabilité du Gestionnaire de Territoire.
 
 Le Gestionnaire de Territoire s’engage à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et règlementaires en vigueur. En particulier, il s’engage à ne pas publier, à quelque endroit que ce soit, de messages racistes, sexistes, injurieux, insultants ou contraires à l’ordre public.
 
