@@ -39,10 +39,12 @@
       {/if}
 
       <div class="mb-s24 flex justify-between gap-s10">
-        <a
-          class="full-card-link text-f19 font-bold text-france-blue hover:underline"
-          href="/services/{service.slug}">{service.name}</a
-        >
+        <h3 class="mb-s0 leading-28">
+          <a
+            class="full-card-link text-f19 font-bold text-france-blue hover:underline"
+            href="/services/{service.slug}">{service.name}</a
+          >
+        </h3>
         {#if readOnly}
           <div class="relative top-s6 flex">
             <FavoriteIcon on:click={onBookmark} active={isBookmarked} small />
@@ -85,7 +87,7 @@
           <span class="mr-s8">
             <UpdateStatusIcon updateStatus="REQUIRED" small />
           </span>
-          <span class="font-bold">Actualisation requise</span>
+          <strong>Actualisation requise</strong>
         {/if}
       </div>
 

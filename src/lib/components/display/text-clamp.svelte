@@ -1,7 +1,10 @@
 <script lang="ts">
+  import { randomId } from "$lib/utils/random";
   import Button from "./button.svelte";
 
   export let text = "";
+
+  const id = `text-clamp-${randomId()}`;
 
   let showAll = false;
   let label;
@@ -21,13 +24,17 @@
   <div class="prose mb-s24">{@html text}</div>
 </div>
 <div class="print:hidden">
-  <div class:h-s160={!showAll} class="relative mb-s24 overflow-hidden">
+  <div {id} class:h-s160={!showAll} class="relative mb-s24 overflow-hidden">
     <div class="prose mb-s24" bind:clientHeight={height}>{@html text}</div>
     <div class:gradient={!showAll && textIsTooLong} />
   </div>
 
   {#if textIsTooLong}
     <Button
+      ariaAttributes={{
+        "aria-expanded": showAll,
+        "aria-controls": id,
+      }}
       {label}
       on:click={toggle}
       noBackground
