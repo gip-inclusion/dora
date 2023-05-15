@@ -70,7 +70,7 @@ Les accès aux données sont strictement encadrés et juridiquement justifiés. 
 
 ## Quelles mesures de sécurité mettons-nous en place ?
 
-Nous mettons en place plusieurs mesures pour sécuriser les données : (liste à modifier selon les mesures de sécurité mises en place)
+Nous mettons en place plusieurs mesures pour sécuriser les données :
 
 - Anonymisation ;
 - Stockage des données en base de données ;
@@ -92,9 +92,9 @@ Certaines des données sont envoyées à d'autres acteurs, appelés "sous-traita
 | **Tipimail**         | France                | Outil de transfert et d'échange de mails              | ​[https://fr.tipimail.com/rgpd​](https://fr.tipimail.com/rgpd)                                                                                                                                                 |
 | **Data Inclusion**   | France                | API/Open Data                                         | [https://www.data.inclusion.beta.gouv.fr/juridique-et-rgpd/politique-de-confidentialite-data-inclusion](https://www.data.inclusion.beta.gouv.fr/juridique-et-rgpd/politique-de-confidentialite-data-inclusion) |
 | **Tally**            | Belgique              | Outil de sondage                                      | ​ https://tally.so/help/privacy-policy                                                                                                                                                                         |
-| **France Transfert** | France                | Outil de transfert de documents                       | ​[https://francetransfert.numerique.gouv.fr/cgu](https://)                                                                                                                                                     |
-| **Zapier**           | Etats-Unis            | Outil d'automatisation de la gestion des applications | ​[https://zapier.com/legal/data-processing-addendum](https://)                                                                                                                                                 |
-| **Livestorm**        | Ireland et Etats-Unis | Outil de visioconférence et webinar                   | ​[https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf](https://)                                                                                                                                 |
+| **France Transfert** | France                | Outil de transfert de documents                       | ​[https://francetransfert.numerique.gouv.fr/cgu](https://francetransfert.numerique.gouv.fr/cgu)                                                                                                                |
+| **Zapier**           | Etats-Unis            | Outil d'automatisation de la gestion des applications | ​[https://zapier.com/legal/data-processing-addendum](https://zapier.com/legal/data-processing-addendum)                                                                                                        |
+| **Livestorm**        | Ireland et Etats-Unis | Outil de visioconférence et webinar                   | ​[https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf](https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf)                                                                        |
 
 ## Cookies
 
