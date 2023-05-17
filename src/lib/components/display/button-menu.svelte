@@ -18,7 +18,7 @@
 </script>
 
 <div use:clickOutside on:click_outside={handleClickOutside}>
-  <div class="wrapper">
+  <div class="wrapper relative">
     <Button
       {icon}
       {label}
@@ -32,31 +32,12 @@
       {small}
       on:click={() => (isOpen = !isOpen)}
     />
-    <div {id} class="children top-[113%]" class:open={isOpen}>
+    <div
+      {id}
+      class="right-0 absolute top-[113%] z-[1000] hidden flex-col justify-end rounded-md bg-white shadow-sm"
+      class:flex={isOpen}
+    >
       <slot onClose={() => (isOpen = false)} />
     </div>
   </div>
 </div>
-
-<style lang="postcss">
-  .wrapper {
-    position: relative;
-  }
-
-  .children {
-    position: absolute;
-    z-index: 1000;
-    right: 0;
-    display: none;
-    flex-direction: column;
-    align-items: flex-end;
-    padding: var(--s8);
-    background-color: var(--col-white);
-    border-radius: var(--s8);
-    box-shadow: var(--shadow-md);
-  }
-
-  .open {
-    display: flex;
-  }
-</style>

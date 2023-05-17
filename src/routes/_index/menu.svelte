@@ -1,17 +1,15 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import ButtonMenu from "$lib/components/display/button-menu.svelte";
-  import HamburgerMenu from "$lib/components/display/hamburger.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { questionFillIcon } from "$lib/icons";
+  import type { ShortStructure } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
-  import { shortenString } from "$lib/utils/misc";
   import { userPreferences } from "$lib/utils/preferences";
-  import MenuAide from "./menu-aide.svelte";
   import MenuMonCompte from "./menu-mon-compte.svelte";
-  import MenuStructures from "./menu-structures.svelte";
+  import HamburgerMenu from "$lib/components/display/hamburger.svelte";
+  import SubMenu from "./sub-menu.svelte";
+  import MenuMesStructures from "./menu-mes-structures.svelte";
 
-  let structures = [];
+  let structures: ShortStructure[] = [];
 
   $: structures = $userInfo
     ? [...$userInfo.structures, ...$userInfo.pendingStructures].sort((a, b) => {
@@ -49,56 +47,40 @@
 </script>
 
 <HamburgerMenu>
-  {#if $userInfo}
-    <MenuMonCompte />
-
-    {#if !!structures?.length}
-      <hr class="my-s8 self-stretch" />
-      <MenuStructures {structures} />
-    {/if}
-    <hr class="my-s8 self-stretch" />
-  {:else if $page.url.pathname !== "/auth/connexion"}
-    <LinkButton
-      label="Se connecter"
-      noBackground
-      small
-      to={`/auth/connexion?next=${encodeURIComponent(
-        $page.url.pathname + $page.url.search
-      )}`}
-    />
-    <hr class="my-s8 self-stretch" />
-  {/if}
-
-  <MenuAide />
-
-  <div slot="lg" class="flex items-center gap-s12">
-    <ButtonMenu label="Menu d’aide" hideLabel icon={questionFillIcon}>
-      <MenuAide />
-    </ButtonMenu>
-    {#if $userInfo}
-      <ButtonMenu label={$userInfo.shortName}>
-        <MenuMonCompte />
-      </ButtonMenu>
-
-      {#if structures.length === 1}
-        <LinkButton
-          label={`${shortenString(structures[0].name, 16)}`}
-          to={`/structures/${structures[0].slug}`}
-          noBackground
-        />
-      {:else if !!structures?.length}
-        <ButtonMenu label="Structures">
-          <MenuStructures {structures} />
-        </ButtonMenu>
-      {/if}
-    {:else if $page.url.pathname !== "/auth/connexion"}
+  <div class="flex flex-col print:hidden lg:flex-row">
+    <div class="my-s20 text-center lg:my-s0 lg:text-left">
       <LinkButton
-        label="Se connecter"
-        secondary
-        to={`/auth/connexion?next=${encodeURIComponent(
-          $page.url.pathname + $page.url.search
-        )}`}
+        to="https://aide.dora.inclusion.beta.gouv.fr/fr/"
+        noBackground
+        otherTab
+        extraClass="mr-s8"
+        label="Besoin d'aide ?"
       />
+    </div>
+
+    {#if !$userInfo}
+      {#if $page.url.pathname !== "/auth/connexion"}
+        <LinkButton
+          label="Se connecter"
+          to={`/auth/connexion?next=${encodeURIComponent(
+            $page.url.pathname + $page.url.search
+          )}`}
+        />
+      {/if}
+    {:else}
+      <div class="hidden lg:flex">
+        <MenuMesStructures {structures} />
+        <MenuMonCompte />
+      </div>
     {/if}
+
+    <div class="flex flex-col lg:hidden">
+      {#if $userInfo}
+        <MenuMesStructures {structures} mobileDesign />
+        <MenuMonCompte mobileDesign />
+      {/if}
+      <hr class="-mx-s32 mt-s64 mb-s16" />
+      <SubMenu mobileDesign />
+    </div>
   </div>
 </HamburgerMenu>
