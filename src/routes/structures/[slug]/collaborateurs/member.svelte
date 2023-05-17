@@ -27,7 +27,7 @@
     </div>
     <div class="flex-1">
       {#if !readOnly}
-        <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
+        <ButtonMenu small icon={moreIcon} let:onClose={onCloseParent}>
           <slot name="actions" {onCloseParent} />
         </ButtonMenu>
       {/if}

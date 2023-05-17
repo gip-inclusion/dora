@@ -34,8 +34,9 @@
     />
     <div
       {id}
-      class="right-0 absolute top-[113%] z-[1000] hidden flex-col justify-end rounded-md bg-white shadow-sm"
+      class="right-0 absolute top-[113%] z-[1000] flex-col justify-end rounded-md border border-gray-01 bg-white py-s10 px-s10 shadow-sm"
       class:flex={isOpen}
+      class:hidden={!isOpen}
     >
       <slot onClose={() => (isOpen = false)} />
     </div>
