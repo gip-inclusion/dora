@@ -27,7 +27,7 @@
   on:click_outside={handleClickOutside}
   class="w-full lg:w-auto"
 >
-  <div class="relative flex w-full lg:w-auto">
+  <div class="relative flex w-full text-f14 lg:w-auto">
     <button
       aria-expanded={isOpen}
       aria-controls={id}
@@ -37,12 +37,12 @@
       on:click={() => (isOpen = !isOpen)}
     >
       {#if $$slots.label}
-        <div class="px-s20">
+        <div class="px-s12">
           <slot name="label" />
         </div>
       {/if}
 
-      <span class="flex items-center" class:pl-s20={!$$slots.label}>
+      <span class="flex items-center" class:pl-s12={!$$slots.label}>
         {#if icon}
           <span class="mr-s10 h-s24 w-s24 fill-current text-magenta-cta">
             {@html icon}
@@ -59,10 +59,7 @@
         {/if}
       </span>
 
-      <span
-        class="flex border-gray-03 px-s16 py-s12"
-        class:border-l={$$slots.label}
-      >
+      <span class="flex border-gray-03 p-s12" class:border-l={$$slots.label}>
         <span class="h-s24 w-s24 fill-current text-magenta-cta">
           {#if isOpen}
             {@html arrowUpSIcon}
@@ -76,7 +73,7 @@
     <div
       {id}
       class="
-        right-0 absolute top-[100%] z-[1000] hidden flex-col justify-end rounded-md bg-white shadow-sm
+        right-0 absolute top-[100%] z-[1000] hidden flex-col justify-end rounded-md border border-gray-00 bg-white shadow-md
         {minWidth ? `min-w-[${minWidth}]` : ''}
         "
       class:left-0={mobileDesign}

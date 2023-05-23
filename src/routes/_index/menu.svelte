@@ -10,40 +10,17 @@
   import MenuMesStructures from "./menu-mes-structures.svelte";
 
   let structures: ShortStructure[] = [];
+  let lastVisitedStructure: ShortStructure | undefined = undefined;
 
   $: structures = $userInfo
-    ? [...$userInfo.structures, ...$userInfo.pendingStructures].sort((a, b) => {
-        // si l'utilisateur a visité la page de la structure
-        // elle est remontée en tête de liste
-        if (
-          $userPreferences.visitedStructures.includes(a.slug) &&
-          !$userPreferences.visitedStructures.includes(b.slug)
-        ) {
-          return -1;
-        }
-
-        if (
-          !$userPreferences.visitedStructures.includes(a.slug) &&
-          $userPreferences.visitedStructures.includes(b.slug)
-        ) {
-          return 1;
-        }
-
-        if (
-          $userPreferences.visitedStructures.includes(a.slug) &&
-          $userPreferences.visitedStructures.includes(b.slug)
-        ) {
-          return $userPreferences.visitedStructures.indexOf(a.slug) <
-            $userPreferences.visitedStructures.indexOf(b.slug)
-            ? -1
-            : 1;
-        }
-
-        // les structures dont l'utilisateur n'a pas visité la page
-        // restent en fin de liste par ordre alphabétique
-        return a.name.localeCompare(b.name, "fr", { numeric: true });
-      })
+    ? [...$userInfo.structures, ...$userInfo.pendingStructures]
     : [];
+
+  $: lastVisitedStructure = $userPreferences.visitedStructures.length
+    ? structures.find(
+        ({ slug }) => slug === $userPreferences.visitedStructures[0]
+      )
+    : structures[0];
 </script>
 
 <HamburgerMenu>
@@ -53,7 +30,7 @@
         to="https://aide.dora.inclusion.beta.gouv.fr/fr/"
         noBackground
         otherTab
-        extraClass="mr-s8"
+        extraClass="mr-s8 !text-f14"
         label="Besoin d'aide ?"
       />
     </div>
@@ -69,14 +46,14 @@
       {/if}
     {:else}
       <div class="hidden lg:flex">
-        <MenuMesStructures {structures} />
+        <MenuMesStructures {structures} {lastVisitedStructure} />
         <MenuMonCompte />
       </div>
     {/if}
 
     <div class="flex flex-col lg:hidden">
       {#if $userInfo}
-        <MenuMesStructures {structures} mobileDesign />
+        <MenuMesStructures {structures} {lastVisitedStructure} mobileDesign />
         <MenuMonCompte mobileDesign />
       {/if}
       <hr class="-mx-s32 mt-s64 mb-s16" />

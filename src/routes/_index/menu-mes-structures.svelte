@@ -10,6 +10,7 @@
   } from "$lib/icons";
 
   export let structures: ShortStructure[] = [];
+  export let lastVisitedStructure: ShortStructure | undefined = undefined;
   export let mobileDesign = false;
 
   let filterText = "";
@@ -30,13 +31,17 @@
           >
             {@html homeSmile2Icon}
           </span>
-          <a
-            class="block w-[150px] overflow-hidden text-ellipsis whitespace-nowrap text-gray-text"
-            on:click={(evt) => evt.stopPropagation()}
-            href={`/structures/${structures[0].slug}`}
-          >
-            {structures[0].name}
-          </a>
+          {#if lastVisitedStructure}
+            <a
+              class="block w-[150px] overflow-hidden text-ellipsis whitespace-nowrap text-gray-text"
+              on:click={(evt) => evt.stopPropagation()}
+              href={`/structures/${lastVisitedStructure.slug}`}
+            >
+              {lastVisitedStructure.name}
+            </a>
+          {:else}
+            <span class="text-gray-text">Vos structures</span>
+          {/if}
         </div>
 
         {#if structures.length > 10}
@@ -59,7 +64,7 @@
         <div class:mt-s56={structures.length > 10}>
           <ul class="max-h-[300px] overflow-y-auto">
             {#each structuresToDisplay as structure}
-              {@const selected = structures[0].slug === structure.slug}
+              {@const selected = structure.slug === lastVisitedStructure?.slug}
               <li>
                 <a
                   href={`/structures/${structure.slug}`}

@@ -13,7 +13,7 @@
     "flex w-full lg:min-w-[200px] items-center p-s12 text-gray-text hover:bg-magenta-10 rounded";
 </script>
 
-<DropdownMenu icon={accountCircleLineIcon} label="Mon compte" {mobileDesign}>
+<DropdownMenu label="Mon compte" {mobileDesign}>
   <a href="/mon-compte" class={aClass}>
     <span
       class="mr-s10 inline-block h-s24 w-s24 fill-current"

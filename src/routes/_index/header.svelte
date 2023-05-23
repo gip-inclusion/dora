@@ -12,14 +12,14 @@
 <header class:dev-banner={ENVIRONMENT !== "production"} role="banner">
   <CenteredGrid noPadding extraClass="border-b border-gray-01">
     <div class="flex justify-between lg:items-center">
-      <div class="flex flex-row items-center py-s12">
+      <div class="flex flex-row items-center py-s16">
         <div>
           <img
             class="mr-s40 inline-block"
             src={LogoRepublique}
             alt="République française - Liberté, Égalité, Fraternité"
-            width="114"
-            height="92"
+            width="73"
+            height="65"
           />
         </div>
         <a href="/" class="flex items-center">
