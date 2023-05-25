@@ -62,7 +62,7 @@
           </div>
         {/if}
         <div class:mt-s56={structures.length > 10}>
-          <ul class="max-h-[300px] overflow-y-auto">
+          <ul class="max-h-[300px] overflow-y-auto p-s2">
             {#each structuresToDisplay as structure}
               {@const selected = structure.slug === lastVisitedStructure?.slug}
               <li>

@@ -15,11 +15,18 @@
   export let label: string;
   export let links: { href: string; label: string }[] = [];
   let isOpen = false;
-
+  let dropdownButton;
   const id = `sub-dropdown-menu-${randomId()}`;
 
   function handleClickOutside(_event) {
     isOpen = false;
+  }
+
+  function onKeyDown(event) {
+    if (event.key === "Escape") {
+      isOpen = false;
+      dropdownButton.focus();
+    }
   }
 
   afterNavigate(() => {
@@ -31,8 +38,10 @@
   class="relative {mobileDesign ? 'border-b border-gray-03' : ''}"
   use:clickOutside
   on:click_outside={handleClickOutside}
+  on:keydown={onKeyDown}
 >
   <button
+    bind:this={dropdownButton}
     aria-expanded={isOpen}
     aria-controls={id}
     class:bg-magenta-10={isOpen}
@@ -60,10 +69,10 @@
   >
     {#each links as link, index}
       {@const currentPage = $page.url.pathname === link.href}
-      <li class="whitespace-nowrap pl-s16 text-f14  hover:bg-magenta-10">
+      <li class="whitespace-nowrap text-f14 hover:bg-magenta-10">
         <a
           href={link.href}
-          class="inline-block w-full py-s16 pr-s32
+          class="inline-block w-full py-s16 pl-s16 pr-s32
           {currentPage
             ? 'border-magenta-cta text-magenta-cta'
             : 'border-gray-03 text-gray-text'}

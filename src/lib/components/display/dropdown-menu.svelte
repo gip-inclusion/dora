@@ -11,10 +11,17 @@
   export let minWidth: string | undefined = undefined;
 
   let isOpen = false;
+  let dropdownButton;
   const id = `dropdown-menu-${randomId()}`;
 
   function handleClickOutside(_event) {
     isOpen = false;
+  }
+  function onKeyDown(event) {
+    if (event.key === "Escape") {
+      isOpen = false;
+      dropdownButton.focus();
+    }
   }
 
   afterNavigate(() => {
@@ -25,10 +32,12 @@
 <div
   use:clickOutside
   on:click_outside={handleClickOutside}
+  on:keydown={onKeyDown}
   class="w-full lg:w-auto"
 >
   <div class="relative flex w-full text-f14 lg:w-auto">
     <button
+      bind:this={dropdownButton}
       aria-expanded={isOpen}
       aria-controls={id}
       class:bg-magenta-10={isOpen}
