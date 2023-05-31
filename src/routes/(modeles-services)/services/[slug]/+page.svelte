@@ -6,7 +6,6 @@
   import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
   import ServiceBody from "../../_common/display/service-body.svelte";
   import { getService } from "$lib/requests/services";
-  import { token } from "$lib/utils/auth";
   import { TallyFormId } from "$lib/utils/nps";
   import { trackService } from "$lib/utils/plausible";
   import { onMount } from "svelte";
@@ -38,7 +37,6 @@
     data.service.status === "PUBLISHED" &&
     getMinutesSincePublication(data.service) < 1;
 
-  $: showContact = data.service?.isContactInfoPublic || $token;
   $: structureHasPublishedServices = data.structure?.services.filter(
     (service) => service.status === "PUBLISHED"
   ).length;
@@ -57,11 +55,7 @@
     />
   </div>
 
-  <ServiceBody
-    service={data.service}
-    servicesOptions={data.servicesOptions}
-    {showContact}
-  />
+  <ServiceBody service={data.service} servicesOptions={data.servicesOptions} />
 
   {#if browser}
     {#if data.service.canWrite}

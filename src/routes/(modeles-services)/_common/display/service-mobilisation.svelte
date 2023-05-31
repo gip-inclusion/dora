@@ -3,8 +3,9 @@
   import ServiceContact from "$lib/components/specialized/services/service-contact.svelte";
   import ServiceLoginNotice from "./service-login-notice.svelte";
   import { trackMobilisation } from "$lib/utils/plausible";
+  import { token } from "$lib/utils/auth";
 
-  export let service, showContact;
+  export let service;
   let contactOpen = false;
 
   function trackClick() {
@@ -15,7 +16,7 @@
 
 <h2 class="text-f23">Mobiliser le service</h2>
 
-{#if showContact}
+{#if $token}
   <div class="w-full sm:w-auto">
     <div class="hidden print:inline">
       <ServiceContact {service} />

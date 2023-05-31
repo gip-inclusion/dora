@@ -63,6 +63,5 @@
 <ServiceBody
   service={data.model}
   servicesOptions={data.servicesOptions}
-  showContact
   isModel
 />
