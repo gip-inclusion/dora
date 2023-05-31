@@ -112,7 +112,6 @@ Cookies recensés sur DORA :
 
 | **Editeur**   | **Nom du cookie** | **Durée de vie du cookie** | **Finalités**       |
 | ------------- | ----------------- | -------------------------- | ------------------- |
-| Crisp Chat    | crisp-client/\*   | Session                    | Outil de Chatbot    |
 | tarteaucitron | tarteaucitron     | 1 an                       | Gestion des cookies |
 | Matomo        | \_pk_id           | 13 mois                    | Gestion des cookies |
 | Matomo        | \_pk_ses          | 30 minutes                 | Gestion des cookies |
