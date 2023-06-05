@@ -54,8 +54,12 @@
             label: "Webinaires",
           },
           {
-            href: "https://aide.dora.inclusion.beta.gouv.fr/fr/category/deploiement-communication-1d0yrk8/",
+            href: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/deployer-la-plateforme-dora-sur-votre-territoire-qb9ner/",
             label: "Kit de déploiement",
+          },
+          {
+            href: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/kit-de-communication-1x9t4kj/",
+            label: "Kit de communication",
           },
         ]}
       />
