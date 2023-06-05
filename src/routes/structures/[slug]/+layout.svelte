@@ -10,7 +10,7 @@
   );
 </script>
 
-<CenteredGrid bgColor="bg-magenta-brand" noPadding>
+<CenteredGrid bgColor="bg-magenta-brand print:bg-white" noPadding>
   <Header structure={$structure} />
 </CenteredGrid>
 

@@ -33,7 +33,7 @@
 </script>
 
 <span class="hidden print:inline" class:font-bold={bold}>
-  {prefix ? `${prefix}} ` : ""}<DateLabel {date} />
+  {prefix ? `${prefix} ` : ""}<DateLabel {date} />
 </span>
 <span class="print:hidden" class:font-bold={bold}>
   {prefix ? `${prefix} ` : ""}{computeRelativeDateLabel(date)}

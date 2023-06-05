@@ -88,7 +88,7 @@
   }
 </script>
 
-<div class="relative mx-auto max-w-6xl pt-s40">
+<div class="relative mx-auto max-w-6xl pt-s40 print:py-s40">
   <Breadcrumb {structure} currentLocation="structure-{tabId}" />
 
   <h1 class="pt-s40 text-white print:text-magenta-brand">

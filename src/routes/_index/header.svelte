@@ -37,7 +37,7 @@
         </a>
       </div>
 
-      <div class="align-top">
+      <div class="align-top print:hidden">
         {#if browser}
           <HeaderActions />
         {/if}
@@ -45,7 +45,7 @@
     </div>
   </CenteredGrid>
 
-  <CenteredGrid noPadding extraClass="border-b border-gray-01">
+  <CenteredGrid noPadding extraClass="border-b border-gray-01 print:hidden">
     <SubMenu />
   </CenteredGrid>
 

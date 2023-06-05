@@ -43,7 +43,7 @@
 </script>
 
 {#if data.service}
-  <CenteredGrid bgColor="bg-france-blue">
+  <CenteredGrid bgColor="bg-france-blue print:bg-white">
     <ServiceHeader service={data.service} />
   </CenteredGrid>
 
