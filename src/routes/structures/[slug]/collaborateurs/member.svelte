@@ -4,7 +4,6 @@
 
   export let member;
   export let isMyself = false;
-  export let isOnlyAdmin = false;
   export let readOnly = false;
 </script>
 
@@ -27,8 +26,8 @@
       <slot name="label" />
     </div>
     <div class="flex-1">
-      {#if !readOnly && !isOnlyAdmin}
-        <ButtonMenu icon={moreIcon} let:onClose={onCloseParent}>
+      {#if !readOnly}
+        <ButtonMenu small icon={moreIcon} let:onClose={onCloseParent}>
           <slot name="actions" {onCloseParent} />
         </ButtonMenu>
       {/if}

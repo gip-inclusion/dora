@@ -1,113 +1,129 @@
-# Politique de Confidentialité
+# Politique de confidentialité de DORA
 
-Politique de confidentialité de DORA
+## Qui est responsable de DORA ?
 
-## Traitement des données à caractère personnel
+DORA est développé au sein du GIP Plateforme de l'inclusion. DORA est une plateforme numérique alimentée par les offreurs de solution d'insertion locales, nationales et numériques.
 
-La présente plateforme DORA est à l’initiative du Ministère du Travail, de l'Emploi et de l'Insertion, qui est responsable de traitement des données à caractère personnel collectées par la plateforme.
+Le responsable de l'utilisation des données est le GIP Plateforme de l'inclusion, représenté par Arnaud DENOIX, Directeur du GIP Plateforme de l'inclusion.
 
-### Finalités
+## Pourquoi manipulons-nous ces données ?
 
-La solution “DORA” est un service public numérique alimenté par les offreurs de solutions d’insertion locales, Nationales et numériques. Cette base de données centralisée permet aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent via :
+DORA manipule des données à caractère personnel pour :
 
-- une recherche simple et personnalisée,
-- des résultats qualifiés
-- et des fiches solutions claires et actionnables.
+- Permettre aux accompagnateurs de l'insertion de mobiliser rapidement l'offre d'insertion adaptée aux besoins des bénéficiaires qu'ils accompagnent via une recherche simple et personnalisée, des résultats qualifiées et des fiches solutions claires et actionnables ;
+- Avoir une visibilité au niveau territorial sur le déploiement de la plateforme DORA.
 
-### Données à caractère personnel traitées
+## Quelles sont les données à caractère personnel que nous manipulons ?
 
-**Les catégories de données à caractère personnel traitées sont les suivantes :**
+DORA manipule les données personnelles suivantes relatives aux utilisateurs de la plateforme:
 
-- **Données relatives au traitement de données : création de compte** (nom, prénom, nom d'utilisateur, adresse e-mail) ; **newsletter** (adresse e-mail) ; **chat** (champ libre)
-- **Données relatives au compte du bénéficiaire Inclusion Connect**
-- **Cookies**
+- Prénom ;
+- Nom ;
+- Adresse e-mail ;
+- Numéro de téléphone
 
-### Base juridique des traitements de données
+## Qu'est-ce qui nous autorise à manipuler ces données ?
 
-Les données traitées à l’occasion du traitement reposent sur l’exécution d’une mission d’intérêt public ou relevant de l’exercice de l’autorité publique dont est investi le responsable de traitement au sens de l’article 6-e du RPGD ;
+DORA manipule des données personnelles en se basant sur :
 
-Spécifiquement, les données de connexion reposent sur une obligation légale à laquelle le responsable de traitement est soumis au sens de l'article 6-c du RGPD.
+- L'exécution d'une mission d'intérêt public ou relevant de l'exercice de l'autorité publique dont est investi le responsable de traitement au sens de l'article 6-1 e) du RPGD.
 
-**Ces fondements sont précisés ci-dessous**
+## Pendant combien de temps conservons-nous ces données ?
 
-Données relatives au traitement de données
+| **Type de données**                                                    | **Durée de la conservation**                                                 |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Données de contact : prénom, nom, adresse e-mail, numéro de téléphone. | 2 ans à compter du dernier contact avec l'utilisateur de la plateforme DORA. |
 
-Ce traitement est nécessaire à l’exécution d’une mission d’intérêt public ou relevant de l’exercice de l’autorité publique dont est investi le responsable de traitement au sens de l’article 6-e du règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 relatif à la protection des personnes physiques à l’égard du traitement des données à caractère personnel et à la libre circulation de ces données.
+## Quels droits avez-vous ?
 
-### Durée de conservation
+Vous disposez :
 
-| **Types de données**                                          | **Durée de conservation**                                   |
-| ------------------------------------------------------------- | ----------------------------------------------------------- |
-| Données relatives au traitement de données                    | **12 mois à compter de la dernière utilisation du compte.** |
-| Données relatives au compte du bénéficiaire Inclusion Connect | **12 mois à compter de la dernière utilisation du compte.** |
-| Cookies                                                       | **13 mois conformément aux recommandations de la CNIL.**    |
+- D'un droit d'information et d'un droit d'accès à vos données ;
+- D'un droit de rectification, et le cas échéant de suppression des données ;
+- D'un droit d'opposition ;
+- D'un droit à la portabilité de vos données.
 
-### Droit des personnes concernées
-
-Selon la loi n° 78-17 du 6 janvier 1978 relative à l'informatique aux fichiers et aux libertés, vous disposez des droits suivants concernant vos données à caractère personnel :
-
-- Droit d’information et droit d’accès aux données ;
-- Droit de rectification et le cas échéant de suppression des données ;
-- Droit d'opposition et droit à la limitation du traitement de données
-- Droit au retrait du consentement en matière de cookies uniquement pour les cookies nécessitant le consentement.
-
-Pour les exercer, faites-nous parvenir une demande en précisant la date et l’heure précise de la requête – ces éléments sont indispensables pour nous permettre de retrouver votre recherche – à l’adresse suivante :
-
-Par voie numérique : [dora@beta.gouv.fr](mailto:dora@beta.gouv.fr)​
+Pour les exercer, contactez-nous à : [contact@dora.inclusion.beta.gouv.fr](mailto:contact@dora.inclusion.beta.gouv.fr)
 
 Par voie postale :
 
-Ministère du Travail, de l'Emploi et de l'Insertion,  
-127, rue de Grenelle  
-75007 PARIS 07
+GIP Plateforme de l'inclusion
 
-En raison de l'obligation de sécurité et de confidentialité dans le traitement des données à caractère personnel qui incombe au responsable de traitement, les demandes des personnes concernées ne seront traitées que si nous sommes en mesure de vous identifier de façon certaine.
+127, Rue de Grenelle
 
-En cas de doute sérieux sur votre identité, nous pouvons être amenés à vous demander la communication d’une preuve d’identité
+75007 Paris 07
 
-Pour vous aider dans votre démarche, vous trouverez [ici](https://www.cnil.fr/fr/modele/courrier/exercer-son-droit-dacces) un modèle de courrier élaboré par la Cnil.
+Puisque ce sont des droits personnels, nous ne traiterons votre demande que si nous sommes en mesure de vous identifier. Dans le cas où nous ne parvenons pas à vous identifier, nous pouvons être amenés à vous demander une preuve de votre identité.
 
-Vous avez la possibilité de vous opposer à le traitement de vos données personnelles dans le cadre de la newsletter. Pour vous aider dans votre démarche, vous trouverez [ici](https://www.cnil.fr/fr/modele/courrier/rectifier-des-donnees-inexactes-obsoletes-ou-perimees) un modèle de courrier élaboré par la Cnil.
+Pour vous aider dans votre démarche, vous trouverez un modèle de courrier élaboré par la CNIL ici : [https://www.cnil.fr/fr/modele/courrier/exercer-son-droit-dacces](https://www.cnil.fr/fr/modele/courrier/exercer-son-droit-dacces)
 
-Le responsable de traitement s’engage à répondre dans un délai raisonnable qui ne saurait dépasser 1 mois à compter de la réception de votre demande.
+Nous nous engageons à vous répondre dans un délai raisonnable qui ne saurait dépasser 1 mois à compter de la réception de votre demande.
 
-### Destinataires des données
+## Qui va avoir accès à ces données ?
 
-Le responsable de traitement s’engage à ce que les données soient traitées par les seules personnes autorisées :
+Les accès aux données sont strictement encadrés et juridiquement justifiés. Les personnes suivantes vont avoir accès aux données :
 
-- l'équipe de Data-inclusion au sein du Groupement plateforme de l'inclusion.
+- Les membres de l'équipe DORA qui ont besoin des données dans leurs missions ou qui y ont accès de fait (développeur, etc.) ;
+- Agent ou toute personne désigné comme des gestionnaires de territoire et ambassadeurs dans les territoires pour Dora
+- Les données de contact sont transmises à Data Inclusion : 1) publiquement et diffusées en open data et via l'API de Data Inclusion lorsque ces données ont été validées comme pouvant être visible publiquement et 2) et non diffusées en open data lorsque ces données ont été validées comme devant rester privée aux utilisateurs connectés de DORA. Elles sont disponibles via l'API de Data Inclusion et conventionnée (1 token est envoyé à chaque utilisateur signataire des CGU de data·inclusion.
+- Les données peuvent être transmises à France Transfert.
 
-### Sous-traitants
+## Quelles mesures de sécurité mettons-nous en place ?
 
-Certaines des données sont envoyées à des sous-traitants pour réaliser certaines missions. Le responsable de traitement s'est assuré de la mise en œuvre par ses sous-traitants de garanties adéquates et du respect de conditions strictes de confidentialité, d’usage et de protection des données.
+Nous mettons en place plusieurs mesures pour sécuriser les données :
 
-| **Partenaire** | **Pays destinataire** | **Traitement réalisé**                   | **Garanties**                                       |
-| -------------- | --------------------- | ---------------------------------------- | --------------------------------------------------- |
-| **Scalingo**   | France                | Hébergement                              | ​https://scalingo.com/fr/data-processing-agreement​ |
-| **Crisp**      | Union européenne      | Outil de chat                            | ​https://crisp.chat/en/privacy/​                    |
-| **Tipimail**   | France                | Outil de transfert et d'échange de mails | ​https://fr.tipimail.com/rgpd​                      |
+- Anonymisation ;
+- Stockage des données en base de données ;
+- Cloisonnement des données ;
+- Mesures de traçabilité ;
+- Surveillance ;
+- Protection des réseaux ;
+- Sauvegarde ;
+- Mesures restrictives limitant l'accès physiques aux données à caractère personnel.
 
-### Cookies et mesure d'audience
+## Qui nous aide à manipuler les données ?
 
-En application de l’article 5(3) de la directive 2002/58/CE modifiée concernant le traitement des données à caractère personnel et la protection de la vie privée dans le secteur des communications électroniques, transposée à l’article 82 de la loi n°78-17 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés, les traceurs ou cookies suivent deux régimes distincts.
+Certaines des données sont envoyées à d'autres acteurs, appelés "sous-traitants de données", pour qu'ils nous aident à les manipuler. Nous nous assurons qu'ils respectent strictement le RGPD et qu'ils apportent des garanties suffisantes en matière de sécurité.
 
-Les cookies strictement nécessaires au service ou ayant pour finalité exclusive de faciliter la communication par voie électronique sont dispensés de consentement préalable au titre de l’article 82 de la loi n°78-17 du 6 janvier 1978.
+| **Partenaire**       | **Pays destinataire** | **Traitement réalisé**                                | **Garanties**                                                                                                                                                                                                  |
+| -------------------- | --------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Scalingo**         | France                | Hébergement                                           | ​[https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles](https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles)                                                          |
+| **Crisp**            | Union européenne      | Outil de chat                                         | ​[https://crisp.chat/en/privacy/​](https://crisp.chat/en/privacy/)                                                                                                                                             |
+| **Tipimail**         | France                | Outil de transfert et d'échange de mails              | ​[https://fr.tipimail.com/rgpd​](https://fr.tipimail.com/rgpd)                                                                                                                                                 |
+| **Data Inclusion**   | France                | API/Open Data                                         | [https://www.data.inclusion.beta.gouv.fr/juridique-et-rgpd/politique-de-confidentialite-data-inclusion](https://www.data.inclusion.beta.gouv.fr/juridique-et-rgpd/politique-de-confidentialite-data-inclusion) |
+| **Tally**            | Belgique              | Outil de sondage                                      | ​ https://tally.so/help/privacy-policy                                                                                                                                                                         |
+| **France Transfert** | France                | Outil de transfert de documents                       | ​[https://francetransfert.numerique.gouv.fr/cgu](https://francetransfert.numerique.gouv.fr/cgu)                                                                                                                |
+| **Zapier**           | Etats-Unis            | Outil d'automatisation de la gestion des applications | ​[https://zapier.com/legal/data-processing-addendum](https://zapier.com/legal/data-processing-addendum)                                                                                                        |
+| **Livestorm**        | Ireland et Etats-Unis | Outil de visioconférence et webinar                   | ​[https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf](https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf)                                                                        |
 
-Les cookies n’étant pas strictement nécessaires au service ou n’ayant pas pour finalité exclusive de faciliter la communication par voie électronique doivent être consenti par l’utilisateur.
+## Cookies
+
+En application de l'article 5(3) de la directive 2002/58/CE modifiée concernant le traitement des données à caractère personnel et la protection de la vie privée dans le secteur des communications électroniques, transposée à l'article 82 de la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés, les traceurs ou cookies suivent deux régimes distincts.
+
+Les cookies n'étant pas strictement nécessaires au service ou n'ayant pas pour finalité exclusive de faciliter la communication par voie électronique doivent être consentis par l'utilisateur.
 
 Ce consentement de la personne concernée pour une ou plusieurs finalités spécifiques constitue une base légale au sens du RGPD et doit être entendu au sens de l'article 6-a du Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016 relatif à la protection des personnes physiques à l'égard du traitement des données à caractère personnel et à la libre circulation de ces données.
 
-À tout moment, vous pouvez refuser l’utilisation des cookies et désactiver le dépôt sur votre ordinateur en cliquant sur le lien “Gestion des cookies” en bas de page de l‘application Dora, ou en utilisant la fonction dédiée de votre navigateur (fonction disponible notamment sur Microsoft Internet Explorer 11, Google Chrome, Mozilla Firefox, Apple Safari et Opera).
+Un cookie est un fichier déposé sur votre terminal lors de la visite d'un site. Il a pour but de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette).
 
-| **Editeur**   | **Nom du cookie**                                            | **Durée de vie du cookie** | **Finalités**       |
-| ------------- | ------------------------------------------------------------ | -------------------------- | ------------------- |
-| Crisp Chat    | crisp-client%2Fsocket%2Ff2839d07-9b42-477f-8bce-cf4adbda113e | Session                    | Outil de Chatbot    |
-| tarteaucitron | tarteaucitron                                                | 1 an                       | Gestion des cookies |
-| ​             | ​                                                            | ​                          | ​                   |
+Certains cookies sont strictement nécessaires au service ou ayant pour finalité exclusive de faciliter la communication par voie électronique et sont dispensés de consentement préalable au titre de l'article 82 de la loi n°78-17 du 6 janvier 1978.
 
-Pour aller plus loin, vous pouvez consulter les fiches proposées par la Commission Nationale de l'Informatique et des Libertés (CNIL) :
+Cookies recensés sur DORA :
 
-- ​[Cookies & traceurs : que dit la loi ?](https://www.cnil.fr/fr/cookies-traceurs-que-dit-la-loi)​
-- ​[Cookies : les outils pour les maîtriser](https://www.cnil.fr/fr/cookies-les-outils-pour-les-maitriser)​
+| **Editeur**   | **Nom du cookie** | **Durée de vie du cookie** | **Finalités**       |
+| ------------- | ----------------- | -------------------------- | ------------------- |
+| tarteaucitron | tarteaucitron     | 1 an                       | Gestion des cookies |
+| Matomo        | \_pk_id           | 13 mois                    | Gestion des cookies |
+| Matomo        | \_pk_ses          | 30 minutes                 | Gestion des cookies |
+| Matomo        | \_pk_ref          | 6 mois                     | Gestion des cookies |
 
-En outre, nous utilisons l'outil Plausible, qui permet de suivre, sans déposer de cookies, les tendances d’utilisation générales du site. Plausible ne traite aucune données à caractère personnel, ne dépose aucun cookie et ne permet pas de traquer la tendance individuelle de comportement de chaque personne.
+Des cookies relatifs aux statistiques publiques et anonymes sont également déposés.
+
+Par ailleurs, nous utilisons l'outil Plausible, qui permet de suivre, sans déposer de cookies, les tendances d'utilisation générales du site. Plausible ne traite aucune donnée à caractère personnel, ne dépose aucun cookie et ne permet pas de traquer la tendance individuelle de comportement de chaque personne.
+
+À tout moment, vous pouvez refuser l'utilisation des cookies et désactiver le dépôt sur votre ordinateur en utilisant la fonction dédiée de votre navigateur (fonction disponible notamment sur Microsoft Internet Explorer 11, Google Chrome, Mozilla Firefox, Apple Safari et Opera).
+
+Pour aller plus loin, vous pouvez consulter les ﬁches proposées par la Commission Nationale de l'Informatique et des Libertés (CNIL) :
+
+- [Cookies & traceurs : que dit la loi ?](https://www.cnil.fr/fr/cookies-traceurs-que-dit-la-loi)
+- [Cookies : les outils pour les maîtriser](https://www.cnil.fr/fr/cookies-les-outils-pour-les-maitriser)

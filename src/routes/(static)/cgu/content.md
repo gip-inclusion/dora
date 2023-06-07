@@ -1,98 +1,79 @@
-# Conditions Générales d’Utilisation
+# Conditions générales d’utilisation de DORA au 15/05/2023
 
-Les présentes conditions générales d’utilisation (dites « CGU ») fixent le cadre juridique du site DORA et définissent les conditions d’accès et d’Utilisation des services par l’Utilisateur.
+Les présentes conditions générales d’utilisation (dites « CGU ») fixent le cadre juridique du site DORA et définissent les conditions d’accès et d’Utilisation des services par l’Utilisateur.
 
-## Champ d’application
+## Article 1 — Champ d’application
 
 La plateforme DORA est accessible gratuitement pour l’Utilisateur inscrit à savoir pour les offreurs de solutions, les accompagnateurs de l’insertion sur le territoire, et les bénéficiaires des solutions d’insertion.
 
-La simple visite du site suppose l’acceptation par tout Utilisateur des présentes CGU.
+## Article 2 — Objet
 
-## Objet
+La plateforme DORA développée au sein du GIP Plateforme de l’inclusion est un service public numérique alimenté par les offreurs de solutions d’insertion locales, nationales et numériques.
 
-Le site DORA créé à l’initiative du Ministère du Travail, de l'Emploi et de l'Insertion est un service public numérique alimenté par les offreurs de solutions d’insertions locales, nationales et numériques. La plateforme centralise des données et permet aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent par le bais d’une recherche simple et personnalisée, des résultats qualifiés et des fiches de solutions claires.
+La plateforme centralise des données et permet aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent par le biais d’une recherche simple et personnalisée, des résultats qualifiés et des fiches de solutions claires.
 
-## Définitions
+## Article 3 — Définitions
 
-L’Utilisateur est :
+« L’Utilisateur » est :
 
-- Tout offreur de solutions (acteurs locaux associatifs, institutionnels, et nationaux).
+Tout offreur de solutions (acteurs locaux associatifs, institutionnels, et nationaux).
 
-- Tout accompagnateur cherchant une solution, à savoir tous les acteurs de l’insertion sur le territoire qui le souhaitent (Spe, Social, et Socioprofessionnel).
+Tout accompagnateur cherchant une solution, à savoir tous les acteurs de l’insertion sur le territoire qui le souhaitent (SPE, Social, et Socioprofessionnel).
 
-- Tout bénéficiaire désirant réussir son insertion professionnelle par l’emploi et engagé dans un parcours d’insertion.
+Tout bénéficiaire désirant réussir son insertion professionnelle par l’emploi et engagé dans un parcours d’insertion.
 
-Les services sont l’ensemble des services proposés sur la plateforme DORA qui facilitent l’accompagnement dans la réussite de l’insertion professionnelle par l’emploi.
+« Le Gestionnaire de Territoire » est toute personne considérée comme correspondante locale ou ambassadrice ayant pour mission d'animer les structures d'un périmètre donné (géographique, thématique ou ciblé sur un réseau particulier) et d'aider au référencement des informations et au maintien des bonnes pratiques de mise à jour de la plateforme DORA.
 
-## Fonctionnalités
+« Les services » sont l’ensemble des fonctionnalités proposées sur la plateforme DORA qui facilitent l’accompagnement dans la réussite de l’insertion professionnelle, sociale et socio-professionnel par et vers l'emploi.
 
-###Inscription sur le site internet et fonctionnalités liées aux comptes
+## Article 4 — Fonctionnalités
 
-####Création de l’espace de la structure via Inclusion Connect
+### 4.1. Fonctionnalités du compte Utilisateur
 
-Tout accompagnateur qui le souhaite peut créer un espace personnel en cliquant sur "Se connecter" en s'identifiant via Inclusion Connect puis sur "Créer un compte". Il communique les informations relatives à sa structure.
+**Inscription sur DORA via Inclusion Connect**
+
+Tout Utilisateur peut créer un compte sur DORA grâce à Inclusion Connect en fournissant les informations suivantes :
+
+- Nom ;
+- Prénom ;
+- Adresse e-mail ;
+- Mot de passe ;
+- Confirmation du mot de passe.
+
+Lorsque l’Utilisateur fournit ces informations, il reçoit un mail pour vérifier son adresse électronique et activer son compte Inclusion Connect.
 
 En s’inscrivant aux services proposés par le site, l’Utilisateur s’engage à fournir des informations sincères et exactes permettant de créer son compte Inclusion Connect.
 
-Les comptes créés peuvent être :
+### 4.2 Identification de la structure
 
-- administrateur, qui sont ouverts aux seuls administrateurs de structure.
+Lorsque l’Utilisateur se connecte (via son adresse e-mail et son mot de passe Inclusion Connect), il doit identifier sa structure soit en renseignant sa commune et le nom de sa structure soit en renseignant un numéro SIRET ou le numéro RNA.
 
-Les comptes administrateurs peuvent valider l'inscription d'un collaborateur de leur structure et créer des comptes utilisateurs. La validation du compte administrateur est réalisée par l'envoi d'un mail contenant le nom et l'adresse e-mail professionnelle du collaborateur.
+### 4.3 Fonctionnalités uniquement ouvertes au compte Gestionnaire de Territoire
 
-- collaborateur.
+Le Gestionnaire de Territoire dispose d'un compte dédié à partir duquel il peut :
 
-Les comptes utilisateurs sont créés par les administrateurs qui renseignent les informations de contact (nom, rôle dans la structure, adresse e-mail, téléphone).
+- visualiser sur le territoire concerné les offreurs de solution et les accompagnateurs cherchant une solution ayant un compte Utilisateur;
+- accéder aux informations suivantes sur lesdits Utilisateurs : noms et prénoms, adresse e-mail et numéro de téléphone et à l'ensemble des données des structures ;
+- modifier les informations de la structure et des services. Il peut notamment inviter un administrateur ou un collaborateur ;
+- imprimer les données de contact.
 
-#### Gestion de l'espace de la structure
+Le Gestionnaire de territoire dispose également des mêmes fonctionnalités que les Utilisateurs.
 
-L'administrateur peut gérer les comptes relatifs à sa structure en créant des comptes collaborateurs. Il peut également modifier la fiche relative à sa structure lorsque des informations sont éronnées ou imprécises via son tableau de bord.
+## Article 5 — Suspension ou Suppression de l’espace de la structure
 
-#### Suspension ou Suppression de l’espace de la structure
+Tout Utilisateur membre régulièrement inscrit pourra solliciter sa désinscription en contactant [contact@dora.inclusion.beta.gouv.fr](mailto:contact@dora.inclusion.beta.gouv.fr)
 
-Tout Utilisateur membre régulièrement inscrit pourra solliciter sa désinscription en contactant [dora@beta.gouv.fr](mailto:dora@beta.gouv.fr). Celle-ci sera effective dans un délai raisonnable.
+## Article 6 — Abonnements
 
-### Accompagnement dans l’insertion professionnelle par l’emploi
+Tout offreur de solution ou accompagnateur qui le souhaite peut s’abonner à la newsletter de Dora et se maintenir informer de manière hebdomadaire sur les offres d’insertion proposées sur son territoire : en cliquant sur le lien « s’abonner à l’infolettre » depuis la page d’accueil du site.
 
-La plateforme DORA facilite l’accès à des fiches de solutions d’insertion proposées par les offreurs de solution auxquelles les accompagnateurs chercheurs de solution peuvent accéder dans le but de les proposer à des bénéficiaires.
+## Article 7 — Responsabilités
 
-**L’offreur de solution**, après avoir rempli sa fiche structure (initialisation d’une base de données de zéro ou sur la base de données existantes renseignées par l’équipe de DORA), peut :
-
-- compléter des fiches solutions dont il tient à jour les informations.
-
-**L’accompagnateur chercheur de solution** en accédant à la plateforme DORA peut :
-
-- Rechercher sur son territoire uniquement des solutions d’insertion en lien avec les problématiques concernées ;
-
-- Suggérer une modification d'une fiche de solution d'insertion ;
-
-- Communiquer avec d'autres chercheurs de solution au sein de la plateforme pour améliorer les réponses apportées aux bénéficiaires et conserver un ensemble de solutions à jour ;
-
-- accéder à des fiches solutions de base et aussi personnaliser sa recherche en répondant à des questions spécifiques pour accéder à des fiches solutions spécifiques.
-
-Il peut également indiquer qu’il n’a pas trouvé de solution et/ou en proposer une dont il a connaissance. Dans ce cas, il va pouvoir créer une fiche intermédiaire comportant les informations relatives à la structure et au contact. Cette fiche intermédiaire est envoyée par l'équipe Dora, et doit être validée par les propriétaires de la structure qui peut compléter ces informations et les publier comme des fiches accessibles.
-
-Enfin, **le bénéficiaire**, peut prendre connaissance des fiches de solutions éditées par l’accompagnateur chercheur de solution.
-
-En outre, toute personne navigant sur le site Dora peut effectuer une recherche de services d'insertion relativement à un territoire, selon trois critères :
-
-- la thématique du service d'insertion ;
-
-- le besoin de la personne ;
-
-- le lieu du service d'insertion (par département).
-
-### Abonnement aux actualités
-
-Tout offreur de solution ou accompagnateur qui le souhaite peut s'abonner à la newsletter de Dora et se maintenir informer de manière hebdomadaire sur les offres d'insertions proposées sur son territoire : en cochant la case s'abonner accessible depuis la page d'accueil du site.
-
-### Responsabilités
-
-#### L'éditeur : DORA
+### 7.1 Responsabilités de l’éditeur DORA
 
 Les sources des informations diffusées sur le site sont réputées fiables mais le site ne garantit pas qu’il soit exempt de défauts, d’erreurs ou d’omissions.
 
-Tout évènement dû à un cas de force majeur ayant pour conséquence un dysfonctionnement de la Plateforme et sous réserve de tout interruption ou modification en cas de maintenance, n’engage pas la responsabilité de DORA.
+Tout évènement dû à un cas de force majeur ayant pour conséquence un dysfonctionnement de la Plateforme et sous réserve de toute interruption ou modification en cas de maintenance, n’engage pas la responsabilité de DORA.
 
 L’éditeur s’engage à la sécurisation de la Plateforme, notamment en prenant toutes les mesures nécessaires permettant de garantir la sécurité et la confidentialité des informations fournies.
 
@@ -100,14 +81,30 @@ L’éditeur fournit les moyens nécessaires et raisonnables pour assurer un acc
 
 Ce site peut mettre à disposition des liens pouvant orienter l’utilisateur vers des sites réalisés par des tiers extérieurs. Ces tiers sont les seuls responsables du contenu publié par leur soin. L’équipe de DORA n’a aucun contrôle sur le contenu de ces sites, ces contenus ne sauraient engager la responsabilité de l’administration.
 
-#### L’Utilisateur
+### 7.2 Responsabilités de l’Utilisateur
 
-Toute information transmise par l’Utilisateur est de sa seule responsabilité. Il a appartient à l’Utilisateur de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction du message dans le formulaire de contact. Cette obligation concerne également les informations qu'il fournit concernant une autre structure.
+Toute information transmise par l’Utilisateur est de sa seule responsabilité. Il appartient à l’Utilisateur de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l'ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
 
-L’Utilisateur s’engage à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et règlementaires en vigueur. En particulier, il s’engage à ne pas publier, à quelque endroit que ce soit, de message racistes, sexistes, injurieux, insultants ou contraires à l’ordre public.
+Tout partage de données ou d'information non autorisée hors de la plateforme est de la responsabilité de l’Utilisateur.
+
+L’Utilisateur s’engage à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et règlementaires en vigueur. En particulier, il s’engage à ne pas publier, à quelque endroit que ce soit, de messages racistes, sexistes, injurieux, insultants ou contraires à l’ordre public.
 
 Il est rappelé que toute personne procédant à une fausse déclaration pour elle-même ou pour autrui s’expose, notamment, aux sanctions prévues à l’article 441-1 du code pénal, prévoyant des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amendes.
 
-### Mise à jour des conditions d’utilisation
+### 7.3. Responsabilités du Gestionnaire de Territoire
 
-Les termes des présentes conditions d’utilisation peuvent être amendés à tout moment, sans préavis, en fonction des modifications apportées à la plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire.
+Toute information transmise par le Gestionnaire de Territoire est de sa seule responsabilité. Il appartient au Gestionnaire de Territoire de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l'ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
+
+Tout partage de données ou d'information non autorisée hors de la plateforme est de la responsabilité du Gestionnaire de Territoire.
+
+Le Gestionnaire de Territoire s’engage à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et règlementaires en vigueur. En particulier, il s’engage à ne pas publier, à quelque endroit que ce soit, de messages racistes, sexistes, injurieux, insultants ou contraires à l’ordre public.
+
+Il est rappelé que toute personne procédant à une fausse déclaration pour elle-même ou pour autrui s’expose, notamment, aux sanctions prévues à l’article 441-1 du code pénal, prévoyant des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amendes.
+
+## Article 8 — Mise à jour des conditions d’utilisation
+
+Les termes des présentes conditions d’utilisation peuvent être amendés à tout moment, en fonction des modifications apportées à la plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire. Chaque modification donne lieu à une nouvelle version qui est acceptée par les parties.
+
+Vous pouvez avoir accès à l’historique des différentes versions des conditions générales d’utilisation ici :
+
+- [Version du 13/12/2022](/cgu/cgu-20221213)

@@ -232,14 +232,6 @@
   />
 
   <Button
-    disabled
-    on:click={() => {
-      resetSearchParams();
-    }}
-    label="suggestions à valider"
-    secondary
-  />
-  <Button
     on:click={() => {
       resetSearchParams();
       searchParams.administrationKind = "withoutAdmin";

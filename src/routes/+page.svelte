@@ -55,7 +55,7 @@
       </h2>
       <p class="mb-s0">
         Publiez, mettez à jour et rendez vos services disponibles partout grâce
-        à l'Open Data.
+        à l'<span lang="en">Open Data</span>.
       </p>
     </div>
     <div class="flex flex-wrap justify-center gap-s16">
@@ -92,7 +92,7 @@
       <p class="text-f16">
         Vous proposez des services d'insertion ? Rendez les visibles sur votre
         territoire et sur tous les sites partenaires grâce à notre démarche
-        collective d'open data.
+        collective d'<span lang="en">open data</span>.
       </p>
     </div>
     <div class="md:flex-1">
@@ -117,17 +117,21 @@
   <div class="flex flex-col gap-s24 rounded-md bg-magenta-10 p-s24 md:flex-row">
     <div class="w-1/3 self-center text-center">
       <a href="https://www.data.inclusion.beta.gouv.fr/">
-        <img src={logoDataInclusion} alt="logo data inclusion" class="inline" />
+        <img
+          src={logoDataInclusion}
+          alt="Data inclusion - Contributeur officiel"
+          class="inline"
+        />
       </a>
     </div>
     <div class="md:w-2/3">
-      <h4>Dites-le-nous une fois</h4>
+      <h2 class="text-f17 leading-24 text-gray-dark">Dites-le-nous une fois</h2>
       <p class="text-f16">
-        Nous sommes engagés dans une démarche d’Open Data et rendons disponibles
-        nos données à travers un référentiel commun — partagé par toutes les
-        plateformes et sites web partenaires. Grâce à cette dynamique
-        collective, vous référencez votre offre une seule fois tout en la
-        rendant disponible partout.
+        Nous sommes engagés dans une démarche d’<span lang="en">Open Data</span>
+        et rendons disponibles nos données à travers un référentiel commun — partagé
+        par toutes les plateformes et sites web partenaires. Grâce à cette dynamique
+        collective, vous référencez votre offre une seule fois tout en la rendant
+        disponible partout.
       </p>
     </div>
   </div>

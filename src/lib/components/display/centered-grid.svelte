@@ -5,7 +5,7 @@
   export let roundedColor = "";
 </script>
 
-<div class={roundedColor}>
+<div class={roundedColor} class:bg-white={roundedColor}>
   <div
     class="{extraClass} {bgColor} {roundedColor
       ? 'md:rounded-t-[30px] lg:rounded-t-[45px] xl:rounded-t-[60px]'

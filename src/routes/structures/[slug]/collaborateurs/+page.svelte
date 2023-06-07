@@ -106,10 +106,9 @@
       {#each sortedMembers(data.members) as member}
         <MemberStandard
           {member}
+          structureSlug={data.structure.slug}
           onRefresh={handleRefreshMemberList}
           isMyself={member.user.email === $userInfo.email}
-          isOnlyAdmin={member.user.email === $userInfo.email &&
-            data.members.filter((memb) => memb.isAdmin).length === 1}
           readOnly={!$structure.canEditMembers}
         />
       {/each}

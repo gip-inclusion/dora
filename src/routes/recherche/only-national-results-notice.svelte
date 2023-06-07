@@ -4,6 +4,7 @@
 
 <Notice
   type="info"
+  titleLevel="h2"
   title="Il n’existe que des services nationaux ou à distance qui correspondent à vos critères de recherche."
 >
   <p class="text-f14">

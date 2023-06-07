@@ -46,7 +46,7 @@
     </div>
 
     <div
-      class="mb-s32 flex flex-col text-f18  text-white print:text-france-blue md:flex-row md:items-center"
+      class="mb-s32 flex flex-col text-f18 text-white print:text-france-blue md:flex-row md:items-center"
     >
       <div>
         Périmètre : <strong>{service.diffusionZoneDetailsDisplay}</strong>

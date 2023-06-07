@@ -26,7 +26,7 @@
 <div>
   <h2 class="mb-s32 text-f23">Partager ce service</h2>
   <button
-    title="Copier le lien"
+    title="Copier le lien de ce service"
     class="relative mb-s12 flex w-full items-center overflow-hidden rounded border border-gray-02 p-s24 pl-s8 text-magenta-cta"
     on:click={doCopy}
   >

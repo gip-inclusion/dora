@@ -22,7 +22,7 @@
   $: disabled = !$userInfo;
   $: {
     if (disabled) {
-      title = "Connectez-vous";
+      title = "Connectez-vous pour ajouter<br/> ce service à vos favoris";
     } else if (active) {
       title = "Supprimer des favoris";
     } else {
@@ -42,7 +42,7 @@
   on:click={handleClick}
 >
   {@html currentIcon}
-  <div class="tooltiptext" aria-hidden="true">{title}</div>
+  <div class="tooltiptext">{@html title}</div>
 </button>
 
 <style lang="postcss">
@@ -90,7 +90,8 @@
     @apply absolute bottom-full left-1/2 -ml-s4 border-4 border-solid border-transparent border-b-magenta-dark;
   }
 
-  .tooltip:hover .tooltiptext {
+  .tooltip:hover .tooltiptext,
+  .tooltip:focus .tooltiptext {
     @apply visible top-s28 left-1/2 opacity-100;
   }
 </style>

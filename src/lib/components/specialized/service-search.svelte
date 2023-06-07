@@ -100,6 +100,19 @@
             <span class="text-error">*</span>
           </label>
 
+          <CitySearch
+            id="city"
+            initialValue={cityLabel}
+            bind:value={cityChoiceList}
+            placeholder="Rechercher par lieu : ville"
+            onChange={(city) => {
+              cityCode = city?.code;
+              cityLabel = `${city?.name} (${getDepartmentFromCityCode(
+                city?.code
+              )})`;
+            }}
+          />
+
           <div
             class="absolute top-s12 right-s12 z-10 h-s24 w-s24 text-gray-dark"
           >
@@ -115,6 +128,7 @@
                 <span class="h-s24 w-s24 fill-current text-gray-text-alt">
                   {@html deleteBackIcon}
                 </span>
+                <span class="sr-only">Supprimer la ville sélectionnée</span>
               </button>
             {:else}
               <span class="h-s24 w-s24 fill-current">
@@ -122,24 +136,11 @@
               </span>
             {/if}
           </div>
-
-          <CitySearch
-            id="city"
-            initialValue={cityLabel}
-            bind:value={cityChoiceList}
-            placeholder="Rechercher par lieu : ville"
-            onChange={(city) => {
-              cityCode = city?.code;
-              cityLabel = `${city?.name} (${getDepartmentFromCityCode(
-                city?.code
-              )})`;
-            }}
-          />
         </div>
       </div>
 
       <div
-        class="subcategories-search flex border-b border-gray-02 p-s16 text-f14 lg:border-r lg:border-b-0"
+        class="subcategories-search flex border-b border-gray-02 py-s24 px-s16 text-f14 lg:border-r lg:border-b-0 lg:py-s16"
       >
         <div
           class="mr-s8 h-s24 w-s24 self-center fill-current text-magenta-cta"
@@ -198,7 +199,7 @@
           style="filter"
           label="Type de service"
           minDropdownWidth="min-w-[200px]"
-          name="subcategories"
+          name="kinds"
           placeholder="Type de service"
           bind:value={kindIds}
           choices={servicesOptions.kinds}
@@ -241,7 +242,7 @@
   }
 
   .subcategories-search :global(.field-wrapper) {
-    @apply relative w-[90%];
+    @apply relative w-[100%];
   }
   .subcategories-search :global(.label-container) {
     @apply sr-only;

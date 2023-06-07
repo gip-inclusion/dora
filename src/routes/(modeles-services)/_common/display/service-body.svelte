@@ -11,7 +11,6 @@
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
-  export let showContact = false;
   export let isModel = false;
 </script>
 
@@ -32,10 +31,9 @@
     <div class="sidebar flex flex-col gap-y-s24">
       {#if !isModel}
         <div
-          class="block rounded-lg border border-gray-02 p-s24 px-s32"
-          class:print:hidden={!showContact}
+          class="block rounded-lg border border-gray-02 p-s24 px-s32 print:hidden"
         >
-          <ServiceMobilisation {service} {showContact} />
+          <ServiceMobilisation {service} />
         </div>
       {/if}
 
