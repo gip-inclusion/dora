@@ -49,7 +49,9 @@
     </p>
     <ul class="basic-information feedback h-card">
       <li>
-        E-mail&nbsp;: <a href="mailto:dora@beta.gouv.fr">dora@beta.gouv.fr</a>
+        E-mail&nbsp;: <a href="mailto:contact@dora.inclusion.beta.gouv.fr"
+          >contact@dora.inclusion.beta.gouv.fr</a
+        >
       </li>
 
       <li>

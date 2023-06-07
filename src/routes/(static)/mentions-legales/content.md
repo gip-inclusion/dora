@@ -31,7 +31,7 @@ Si vous n’obtenez pas de réponse rapide de notre part, vous êtes en droit de
 
 ### Signaler un dysfonctionnement
 
-Si vous rencontrez un défaut d’accessibilité vous empêchant d’accéder à un contenu ou une fonctionnalité du site, merci de nous en faire part à l’adresse [dora@beta.gouv.fr](mailto:dora@beta.gouv.fr)​
+Si vous rencontrez un défaut d’accessibilité vous empêchant d’accéder à un contenu ou une fonctionnalité du site, merci de nous en faire part à l’adresse [contact@dora.inclusion.beta.gouv.fr](mailto:contact@dora.inclusion.beta.gouv.fr)​
 
 Si vous n’obtenez pas de réponse rapide de notre part, vous êtes en droit de faire parvenir vos doléances ou une demande de saisine au Défenseur des droits.
 

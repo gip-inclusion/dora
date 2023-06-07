@@ -61,7 +61,7 @@ Le Gestionnaire de territoire dispose également des mêmes fonctionnalités que
 
 ## Article 5 — Suspension ou Suppression de l’espace de la structure
 
-Tout Utilisateur membre régulièrement inscrit pourra solliciter sa désinscription en contactant [dora@beta.gouv.fr](mailto:dora@beta.gouv.fr)
+Tout Utilisateur membre régulièrement inscrit pourra solliciter sa désinscription en contactant [contact@dora.inclusion.beta.gouv.fr](mailto:contact@dora.inclusion.beta.gouv.fr)
 
 ## Article 6 — Abonnements
 

@@ -43,7 +43,7 @@ Vous disposez :
 - D'un droit d'opposition ;
 - D'un droit à la portabilité de vos données.
 
-Pour les exercer, contactez-nous à : [dora@beta.gouv.fr](mailto:dora@beta.gouv.fr)
+Pour les exercer, contactez-nous à : [contact@dora.inclusion.beta.gouv.fr](mailto:contact@dora.inclusion.beta.gouv.fr)
 
 Par voie postale :
 
