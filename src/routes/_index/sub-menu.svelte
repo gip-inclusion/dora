@@ -88,7 +88,7 @@
         target="_blank"
         title="Ouverture dans une nouvelle fenêtre"
         rel="noopener"
-        href="https://inclusion.beta.gouv.fr/"
+        href="https://communaute.inclusion.beta.gouv.fr/"
         class="inline-block h-full {aClass}"
       >
         Communauté de l’inclusion
