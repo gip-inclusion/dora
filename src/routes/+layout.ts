@@ -11,6 +11,19 @@ import type { LayoutLoad } from "./$types";
 
 export const prerender = false;
 
+// Un utilisateur connecté mais rattaché à aucune structure peut quand même acceder aux
+// urls suivantes
+const SAFE_URLS = [
+  "/auth/rattachement",
+  "/auth/invitation",
+  "/auth/deconnexion",
+  "/accessibilite",
+  "/cgu",
+  "/mentions-legales",
+  "/nos-partenaires",
+  "/politique-de-confidentialite",
+];
+
 function tokenWillExpireSoon(tokenExpirationString: string): boolean {
   const tokenExpirationDate = dayjs(tokenExpirationString);
   if (!tokenExpirationDate.isValid()) {
@@ -59,9 +72,7 @@ export const load: LayoutLoad = async ({ url }) => {
         currentUserInfo.structures.length ||
         currentUserInfo.pendingStructures.length
       ) &&
-      !currentPathName.startsWith("/auth/rattachement") &&
-      !currentPathName.startsWith("/auth/invitation") &&
-      !currentPathName.startsWith("/auth/deconnexion")
+      !SAFE_URLS.some((urlPrefix) => currentPathName.startsWith(urlPrefix))
     ) {
       throw redirect(302, "/auth/rattachement");
     }

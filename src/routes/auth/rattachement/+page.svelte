@@ -99,8 +99,11 @@
                   </div>
                   <span class="ml-s16 inline-block  text-f14 text-gray-text">
                     Je déclare avoir lu les
-                    <a href="/cgu" class="underline"
-                      >Conditions générales d’utilisation</a
+                    <a
+                      href="/cgu"
+                      class="underline"
+                      target="_blank"
+                      rel="noopener">Conditions générales d’utilisation</a
                     > et faire partie de la structure mentionnée ci-dessus.</span
                   >
                 </label>
