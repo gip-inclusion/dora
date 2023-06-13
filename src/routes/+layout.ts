@@ -1,11 +1,6 @@
 import { browser } from "$app/environment";
-import {
-  disconnect,
-  userInfo,
-  validateCredsAndFillUserInfo,
-} from "$lib/utils/auth";
+import { userInfo, validateCredsAndFillUserInfo } from "$lib/utils/auth";
 import { redirect } from "@sveltejs/kit";
-import dayjs from "dayjs";
 import { get } from "svelte/store";
 import type { LayoutLoad } from "./$types";
 
@@ -23,17 +18,6 @@ const SAFE_URLS = [
   "/nos-partenaires",
   "/politique-de-confidentialite",
 ];
-
-function tokenWillExpireSoon(tokenExpirationString: string): boolean {
-  const tokenExpirationDate = dayjs(tokenExpirationString);
-  if (!tokenExpirationDate.isValid()) {
-    // Impossible de parser la date d'expiration -- on considère que
-    // le token est invalide
-    return true;
-  }
-  const minimalValidityDate = dayjs().add(1, "days");
-  return tokenExpirationDate.isBefore(minimalValidityDate);
-}
 
 export const load: LayoutLoad = async ({ url }) => {
   if (!browser) {
@@ -55,15 +39,6 @@ export const load: LayoutLoad = async ({ url }) => {
     // Or on veut vérifier le token à chaque changement de page, quand l'utilisateur est
     // connecté.
     const currentPathName = url.pathname;
-
-    // Si l'utilisateur est connecté, mais que son token expire dans moins de 24h,
-    // on force une deconnexion, afin qu'il récupère un token frais dès qu'il en aura besoin.
-    if (tokenWillExpireSoon(currentUserInfo.tokenExpiration)) {
-      // logout and reload page
-      disconnect();
-      window.location.reload();
-      return {};
-    }
 
     // Si l'utilisateur est connecté mais n'est rattaché à aucune structure,
     // on le force à se rattacher
