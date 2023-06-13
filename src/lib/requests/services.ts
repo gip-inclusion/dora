@@ -8,6 +8,7 @@ import type {
   ServicesOptions,
   ServiceStatus,
   ShortService,
+  StructureService,
 } from "$lib/types";
 import { logException } from "$lib/utils/logger";
 
@@ -85,7 +86,7 @@ export function createOrModifyService(service: Service) {
   });
 }
 
-export function createOrModifyModel(model) {
+export async function createOrModifyModel(model, updateAllServices = false) {
   let method, url;
   if (model.slug) {
     url = `${getApiURL()}/models/${model.slug}/`;
@@ -95,15 +96,22 @@ export function createOrModifyModel(model) {
     method = "POST";
   }
 
-  return fetch(url, {
+  let data = { ...serviceToBack(model) };
+  if (updateAllServices) {
+    data = { ...data, updateAllServices };
+  }
+
+  const result = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify(serviceToBack(model)),
+    body: JSON.stringify(data),
   });
+
+  return result;
 }
 
 export async function deleteService(serviceSlug) {
@@ -272,4 +280,41 @@ export async function convertSuggestionToDraft(serviceSlug) {
 export async function getServicesOptions(): Promise<ServicesOptions | null> {
   const url = `${getApiURL()}/services-options/`;
   return (await fetchData<ServicesOptions>(url)).data;
+}
+
+export function updateServicesFromModel(
+  services: Service[] | StructureService[]
+) {
+  return fetch(`${getApiURL()}/services/update-from-model/`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({
+      services: services.map((serv) => serv.slug),
+    }),
+  });
+}
+
+type ModelToService = {
+  modelSlug: string;
+  serviceSlug: string;
+};
+
+export function addIgnoredServicesToUpdate(
+  modelToServiceSlugs: ModelToService[]
+) {
+  return fetch(`${getApiURL()}/services/reject-update-from-model/`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({
+      data: modelToServiceSlugs,
+    }),
+  });
 }

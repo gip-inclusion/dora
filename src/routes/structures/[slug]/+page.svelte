@@ -26,7 +26,7 @@
   <hr class="mb-s24" />
   <ServicesList
     structure={$structure}
-    hasOptions={false}
+    tabDisplay={false}
     onRefresh={handleRefresh}
     total={$structure.services.length}
     limit={3}
@@ -38,7 +38,7 @@
   <ModelesList
     structure={$structure}
     models={$structure.models}
-    hasOptions={false}
+    tabDisplay={false}
     total={$structure.models.length}
     limit={4}
   />
@@ -49,7 +49,7 @@
   <BranchesList
     structure={$structure}
     branches={$structure.branches || []}
-    hasOptions={false}
+    tabDisplay={false}
     total={$structure.branches.length}
     limit={4}
   />
