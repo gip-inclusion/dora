@@ -23,7 +23,7 @@ function structureToBack(structure: Structure) {
   return result;
 }
 
-function structureToFront(structure): Structure {
+function structureToFront(structure: Structure): Structure {
   const result = { ...structure };
   if (structure.otherLabels.length) {
     result.otherLabels = structure.otherLabels.join(", ");
@@ -70,9 +70,10 @@ export async function getActiveStructures(): Promise<ShortStructure[]> {
   return (await fetchData<ShortStructure[]>(url)).data;
 }
 
-export async function getStructure(slug: string): Promise<Structure> {
+export async function getStructure(slug: string): Promise<Structure | null> {
   const url = `${getApiURL()}/structures/${slug}/`;
-  return structureToFront((await fetchData<Structure>(url)).data);
+  const structure = (await fetchData<Structure>(url)).data;
+  return structure ? structureToFront(structure) : null;
 }
 
 export function createStructure(structure) {
