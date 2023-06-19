@@ -35,9 +35,6 @@ module.exports = {
     es2022: true,
     node: true,
   },
-  globals: {
-    tarteaucitron: "readonly",
-  },
   rules: {
     "array-callback-return": "error",
     "block-scoped-var": "error",

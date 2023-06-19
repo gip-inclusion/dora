@@ -2,5 +2,4 @@
 
 declare interface Window {
   Tally?: any;
-  tarteaucitron?: any;
 }

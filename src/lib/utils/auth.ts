@@ -57,35 +57,10 @@ export async function refreshUserInfo() {
   }
 }
 
-export function deleteCookies() {
-  const cookies = document.cookie.split(";").reduce((acc, cookie) => {
-    const [name] = cookie.split("=").map((str) => str.trim());
-    acc.push(name);
-
-    return acc;
-  }, []);
-
-  const cookieNames = Object.keys(window.tarteaucitron.services).reduce(
-    (acc, name) => {
-      acc.push(...window.tarteaucitron.services[name].cookies);
-
-      return acc;
-    },
-    ["tarteaucitron"]
-  );
-
-  cookieNames.forEach((name) => {
-    const firstFoundName = cookies.find((cookie) => cookie.includes(name));
-
-    document.cookie = `${firstFoundName}=; Max-Age=0; path=/; domain=${location.hostname}`;
-  });
-}
-
 export function disconnect() {
   token.set(null);
   userInfo.set(null);
   localStorage.clear();
-  deleteCookies();
 }
 
 export async function validateCredsAndFillUserInfo() {

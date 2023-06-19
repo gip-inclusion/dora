@@ -4,11 +4,6 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import NavItem from "$lib/components/display/nav-item.svelte";
   import { newspaperIcon } from "$lib/icons";
-
-  function handleOpenCookiesPanel(evt) {
-    evt.preventDefault();
-    window.tarteaucitron.userInterface.openPanel();
-  }
 </script>
 
 <hr class="border-t-gray-01" />
@@ -80,11 +75,6 @@
       <NavItem
         label="Données personnelles"
         href="/politique-de-confidentialite"
-      />
-      <NavItem
-        href="#"
-        on:click={handleOpenCookiesPanel}
-        label="Gestion des cookies"
       />
       <NavItem label="Accessibilité : non conforme" href="/accessibilite" />
 

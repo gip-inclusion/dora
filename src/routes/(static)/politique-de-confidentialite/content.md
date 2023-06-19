@@ -106,15 +106,6 @@ Un cookie est un fichier déposé sur votre terminal lors de la visite d'un site
 
 Certains cookies sont strictement nécessaires au service ou ayant pour finalité exclusive de faciliter la communication par voie électronique et sont dispensés de consentement préalable au titre de l'article 82 de la loi n°78-17 du 6 janvier 1978.
 
-Cookies recensés sur DORA :
-
-| **Editeur**   | **Nom du cookie** | **Durée de vie du cookie** | **Finalités**       |
-| ------------- | ----------------- | -------------------------- | ------------------- |
-| tarteaucitron | tarteaucitron     | 1 an                       | Gestion des cookies |
-| Matomo        | \_pk_id           | 13 mois                    | Gestion des cookies |
-| Matomo        | \_pk_ses          | 30 minutes                 | Gestion des cookies |
-| Matomo        | \_pk_ref          | 6 mois                     | Gestion des cookies |
-
 Des cookies relatifs aux statistiques publiques et anonymes sont également déposés.
 
 Par ailleurs, nous utilisons l'outil Plausible, qui permet de suivre, sans déposer de cookies, les tendances d'utilisation générales du site. Plausible ne traite aucune donnée à caractère personnel, ne dépose aucun cookie et ne permet pas de traquer la tendance individuelle de comportement de chaque personne.

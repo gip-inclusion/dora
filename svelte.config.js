@@ -20,7 +20,6 @@ const config = {
           "https://api-adresse.data.gouv.fr/",
           "https://plausible.io/api/event",
           "https://sentry.incubateur.net",
-          "https://matomo.inclusion.beta.gouv.fr/",
           "https://openmaptiles.geo.data.gouv.fr/",
           "https://openmaptiles.github.io/osm-bright-gl-style/",
         ].filter((source) => !!source),
