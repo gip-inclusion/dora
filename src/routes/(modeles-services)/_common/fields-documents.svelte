@@ -63,7 +63,7 @@
   <FieldModel {...fieldModelProps.onlineForm ?? {}}>
     <BasicInputField
       id="onlineForm"
-      placeholder="URL"
+      placeholder="https://exemple.com"
       type="url"
       bind:value={service.onlineForm}
     />

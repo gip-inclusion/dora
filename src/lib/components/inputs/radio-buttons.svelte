@@ -8,6 +8,7 @@
     name: string,
     readonly = false;
 
+  let focusValue = undefined;
   const dispatch = createEventDispatcher();
 
   // We want the change event to come from this component, not from
@@ -19,14 +20,20 @@
 
 <div class="flex flex-col gap-s8">
   {#each choices as choice, i}
-    <label class="flex flex-row items-center focus-within:shadow-focus">
+    <label
+      class="flex flex-row items-center focus-within:shadow-focus"
+      class:outline={choice.value === focusValue}
+    >
       <input
         id={`${id}-${i}`}
         bind:group
         on:change={handleChange}
+        on:focus={() => (focusValue = choice.value)}
+        on:blur={() => (focusValue = undefined)}
         value={choice.value}
+        name={choice.value}
         type="radio"
-        class="hidden"
+        class="sr-only"
         {disabled}
         {readonly}
       />
@@ -47,5 +54,9 @@
 <style lang="postcss">
   input[type="radio"]:checked + div div {
     @apply block;
+  }
+  label {
+    @apply rounded p-s2;
+    outline: none;
   }
 </style>

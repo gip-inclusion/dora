@@ -231,7 +231,6 @@
     aria-controls={`listbox-values-${uuid}`}
     aria-expanded={expanded}
     aria-haspopup="listbox"
-    aria-labelledby={`button-label-${uuid}`}
     class="combobox w-full self-start rounded border border-gray-03 bg-white p-s12 font-sans disabled:bg-gray-bg disabled:text-gray-text-alt {display}"
     class:filter-style={style === "filter"}
     class:filter-search={style === "search"}
@@ -239,6 +238,7 @@
     class:has-value={isMultiple ? value.length : value}
     role="combobox"
     tabindex="0"
+    aria-label={placeholder}
     on:click={() => toggleCombobox()}
     on:keydown={handleKeydown}
     use:clickOutside
@@ -267,10 +267,13 @@
             inputmode={inputMode}
             class="absolute top-s0 right-s0 h-full w-full bg-transparent pl-s12"
             bind:value={filterText}
+            aria-label={placeholder}
             {placeholder}
           />
         {:else}
-          <span class="placeholder text-gray-text-alt">{placeholder}</span>
+          <span class="placeholder text-gray-text-alt">
+            {placeholder}
+          </span>
         {/if}
       </div>
 
@@ -296,7 +299,6 @@
       class="absolute top-[52px] left-s0 z-20 flex max-h-s512 flex-col gap-s10 overflow-y-auto rounded border border-gray-00 bg-white p-s12 shadow-md {minDropdownWidth}"
       role="listbox"
       id={`listbox-values-${uuid}`}
-      aria-labelledby={`button-label-${uuid}`}
       tabindex="-1"
     >
       {#each optGroups as optGroup (optGroup.value)}

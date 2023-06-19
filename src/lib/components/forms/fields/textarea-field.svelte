@@ -52,7 +52,7 @@
       />
       {#if value && maxLength != null && !readonly && !disabled}
         <div
-          class="mt-s4 self-end text-f12 text-gray-text-alt"
+          class="mt-s4 self-end text-f12 text-gray-text"
           class:text-error={value.length > maxLength}
         >
           {value.length}/{maxLength} caractères

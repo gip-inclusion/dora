@@ -1,9 +1,16 @@
 <script lang="ts">
-  export let icon;
-  export let active;
+  export let icon: string;
+  export let active: boolean;
+  export let label: string;
 </script>
 
-<button type="button" on:click class:active class="tb-button">
+<button
+  type="button"
+  on:click
+  class:active
+  class="tb-button"
+  aria-label={label}
+>
   {@html icon}
 </button>
 

@@ -102,7 +102,7 @@
               />
               {#if newValue && maxLength != null}
                 <div
-                  class="mt-s4 self-end text-f12 text-gray-text-alt"
+                  class="mt-s4 self-end text-f12 text-gray-text"
                   class:text-error={newValue?.length > maxLength}
                 >
                   {newValue.length}/{maxLength} caractères

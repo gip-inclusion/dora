@@ -936,7 +936,7 @@
 
   .autocomplete-list-item {
     padding: 6px 15px;
-    color: var(--col-text-alt);
+    color: var(--col-text);
     cursor: pointer;
     line-height: 1.25;
   }
