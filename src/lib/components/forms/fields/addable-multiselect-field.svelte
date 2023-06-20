@@ -58,6 +58,7 @@
   <FieldWrapper
     {id}
     let:onBlur
+    let:errorMessages
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -78,6 +79,7 @@
       {placeholderMulti}
       {disabled}
       {readonly}
+      {errorMessages}
       multiple
     />
     {#if canAdd}

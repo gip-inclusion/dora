@@ -66,7 +66,7 @@
   </div>
   <div class="flex flex-col " class:three-fourths={!vertical}>
     <!-- Slot principal -->
-    <slot onBlur={handleBlur} onChange={handleChange} />
+    <slot onBlur={handleBlur} onChange={handleChange} {errorMessages} />
     <!--  -->
     {#each errorMessages || [] as msg, i}
       <Alert id="{id}-error-{i}" label={msg} />

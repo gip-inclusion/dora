@@ -2,6 +2,7 @@
   import {
     currentFormData,
     currentSchema,
+    formatErrors,
     isRequired,
   } from "$lib/validation/validation";
   import FieldWrapper from "../field-wrapper.svelte";
@@ -25,7 +26,7 @@
   export let hideLabel = false;
   export let vertical = false;
 
-  $: props = {
+  $: commonProps = {
     id,
     name: id,
     autocomplete,
@@ -40,6 +41,7 @@
     {id}
     let:onBlur
     let:onChange
+    let:errorMessages
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -50,6 +52,11 @@
     {disabled}
   >
     <slot slot="description" name="description" />
+
+    {@const props = {
+      ...commonProps,
+      "aria-describedby": formatErrors(id, errorMessages),
+    }}
 
     <div class="flex flex-col">
       {#if type === "text"}
@@ -103,7 +110,7 @@
       {/if}
       {#if value && maxLength != null && !readonly && !disabled}
         <div
-          class="mt-s4 self-end text-f12 text-gray-text"
+          class="mt-s4 self-end text-f12 text-gray-text-alt"
           class:text-error={value.length > maxLength}
         >
           {value.length}/{maxLength} caractères

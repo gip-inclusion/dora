@@ -2,6 +2,7 @@
   import {
     currentFormData,
     currentSchema,
+    formatErrors,
     isRequired,
   } from "$lib/validation/validation";
   import FieldWrapper from "../field-wrapper.svelte";
@@ -29,6 +30,7 @@
   <FieldWrapper
     {id}
     let:onBlur
+    let:errorMessages
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -49,6 +51,7 @@
         {readonly}
         {placeholder}
         {rows}
+        aria-describedby={formatErrors(id, errorMessages)}
       />
       {#if value && maxLength != null && !readonly && !disabled}
         <div
