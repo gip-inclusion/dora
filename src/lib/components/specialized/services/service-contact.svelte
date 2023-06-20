@@ -4,6 +4,7 @@
   import ContactPhone from "./contact-phone.svelte";
 
   export let service: Service | ShortService;
+  export let useWhiteText = false;
 
   const orientationMode = service.coachOrientationModes;
   const emailPreferred =
@@ -17,16 +18,16 @@
 </script>
 
 <div>
-  <div class="flex flex-col gap-s4 text-f14">
+  <div class="flex flex-col gap-s4 text-f14" class:text-white={useWhiteText}>
     {#if service.contactName}
-      <p class="mb-s6 mr-s24 text-gray-dark">
+      <p class="mb-s6 mr-s24 text-gray-dark" class:text-white={useWhiteText}>
         <strong>{service.contactName}</strong>
       </p>
     {/if}
     {#if emailPreferred}
       <ContactEmail {service} preferred />
       {#if !phonePreferred}
-        <p class="text-f12 text-gray-text">
+        <p class="text-f12 text-gray-text" class:text-white={useWhiteText}>
           Cette structure privilégie l’e-mail comme moyen pour mobiliser ce
           service.
         </p>
@@ -52,7 +53,7 @@
     </div>
 
     {#if !allPreferred}
-      <p class="mb-s6 mr-s24 text-gray-dark">
+      <p class="mb-s6 mr-s24 text-gray-dark" class:text-white={useWhiteText}>
         {#if nonePreferred}
           <strong>Coordonnées</strong>
         {:else}

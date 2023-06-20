@@ -13,6 +13,7 @@ export { default as chatQuoteIcon } from "remixicon/icons/Communication/chat-quo
 export { default as chatSmileIcon } from "remixicon/icons/Communication/chat-smile-3-line.svg?raw";
 export { default as editIcon } from "remixicon/icons/Design/edit-2-line.svg?raw";
 export { default as quillPenIcon } from "remixicon/icons/Design/quill-pen-line.svg?raw";
+export { default as markPenIcon } from "remixicon/icons/Design/mark-pen-line.svg?raw";
 export { default as computerIcon } from "remixicon/icons/Device/computer-line.svg?raw";
 export { default as macLineIcon } from "remixicon/icons/Device/mac-line.svg?raw";
 export { default as phoneLineIcon } from "remixicon/icons/Device/phone-line.svg?raw";
@@ -37,7 +38,9 @@ export { default as linkIcon } from "remixicon/icons/Editor/link.svg?raw";
 export { default as liIcon } from "remixicon/icons/Editor/list-unordered.svg?raw";
 export { default as paraIcon } from "remixicon/icons/Editor/paragraph.svg?raw";
 export { default as textIcon } from "remixicon/icons/Editor/text.svg?raw";
+export { default as listCheckIcon } from "remixicon/icons/Editor/list-check-2.svg?raw";
 export { default as euroLineIcon } from "remixicon/icons/Finance/money-euro-circle-line.svg?raw";
+export { default as priceTagIcon } from "remixicon/icons/Finance/price-tag-3-line.svg?raw";
 export { default as mentalHealthIcon } from "remixicon/icons/Health/mental-health-line.svg?raw";
 export { default as stethoscopeIcon } from "remixicon/icons/Health/stethoscope-line.svg?raw";
 export { default as compassDiscoverIcon } from "remixicon/icons/Map/compass-discover-line.svg?raw";
@@ -52,6 +55,7 @@ export { default as repeatIcon } from "remixicon/icons/Media/repeat-line.svg?raw
 export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill.svg?raw";
 export { default as addCircleLineIcon } from "remixicon/icons/System/add-circle-line.svg?raw";
 export { default as addIcon } from "remixicon/icons/System/add-fill.svg?raw";
+export { default as substractIcon } from "remixicon/icons/System/subtract-line.svg?raw";
 export { default as alertIcon } from "remixicon/icons/System/alert-fill.svg?raw";
 export { default as alertLine } from "remixicon/icons/System/alert-line.svg?raw";
 export { default as arrowDownLineIcon } from "remixicon/icons/System/arrow-down-line.svg?raw";
