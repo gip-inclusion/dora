@@ -80,7 +80,7 @@
         </span>
       {/if}
 
-      <span class="ml-s32">Partager ce service</span>
+      <span class="ml-s32">Copier le lien du service</span>
     </button>
   </div>
 {/if}

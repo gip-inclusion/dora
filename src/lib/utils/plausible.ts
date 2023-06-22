@@ -143,7 +143,13 @@ export function trackModel(model) {
 }
 
 export function trackService(service) {
-  _track("service", _getServiceProps(service, true));
+  const props = {
+    ..._getServiceProps(service, false),
+    abTestingGroup: getAbTestingUserGroup("mobilisation"),
+  };
+
+  _track("service", props);
+  _track("service-abTesting", props);
 }
 
 export function trackStructure(structure) {

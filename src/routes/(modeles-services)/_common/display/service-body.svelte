@@ -36,36 +36,53 @@
     {#if browser}
       <div class="sidebar flex flex-col gap-y-s24">
         {#if !isModel}
-          <AbTestingSection
-            abTestingName="mobilisation"
-            showIfGroups={["mobilisation--fond-bleu"]}
-          >
-            <div
-              class="block rounded-lg border border-gray-02 bg-france-blue p-s24 px-s32 text-white print:hidden"
+          <div class="sticky top-s32">
+            <AbTestingSection
+              abTestingName="mobilisation"
+              showIfGroups={["mobilisation--fond-bleu"]}
             >
-              <ServiceMobilisation {service} backgroundColor="blue" />
-            </div>
-          </AbTestingSection>
+              <div
+                class="block rounded-lg border border-gray-02 bg-france-blue p-s24 px-s32 text-white print:hidden"
+              >
+                <ServiceMobilisation {service} backgroundColor="blue" />
+              </div>
+            </AbTestingSection>
 
-          <AbTestingSection
-            abTestingName="mobilisation"
-            showIfGroups={[
-              "mobilisation--fond-blanc",
-              "mobilisation--ancien-design",
-            ]}
-          >
-            <div
-              class="block rounded-lg border border-gray-02 p-s24 px-s32 print:hidden"
+            <AbTestingSection
+              abTestingName="mobilisation"
+              showIfGroups={["mobilisation--fond-blanc"]}
             >
-              <ServiceMobilisation {service} />
-            </div>
-          </AbTestingSection>
+              <div class="block rounded-lg p-s24 px-s32 shadow-md print:hidden">
+                <ServiceMobilisation {service} />
+              </div>
+            </AbTestingSection>
+
+            <AbTestingSection
+              abTestingName="mobilisation"
+              showIfGroups={[
+                "mobilisation--fond-bleu",
+                "mobilisation--fond-blanc",
+              ]}
+            >
+              {#if !isModel}
+                <div class="mt-s24 flex flex-col gap-y-s24">
+                  <SmallServiceShare {service} />
+                </div>
+              {/if}
+            </AbTestingSection>
+          </div>
         {/if}
 
         <AbTestingSection
           abTestingName="mobilisation"
           showIfGroups={["mobilisation--ancien-design"]}
         >
+          <div
+            class="block rounded-lg border border-gray-02 p-s24 px-s32 print:hidden"
+          >
+            <ServiceMobilisation {service} />
+          </div>
+
           <div class="rounded-lg border border-gray-02 p-s32 pb-s48">
             <ServiceKeyInformations
               {service}
@@ -80,15 +97,6 @@
             >
               <ServiceShare {service} />
             </div>
-          {/if}
-        </AbTestingSection>
-
-        <AbTestingSection
-          abTestingName="mobilisation"
-          showIfGroups={["mobilisation--fond-bleu", "mobilisation--fond-blanc"]}
-        >
-          {#if !isModel}
-            <SmallServiceShare {service} />
           {/if}
         </AbTestingSection>
       </div>
