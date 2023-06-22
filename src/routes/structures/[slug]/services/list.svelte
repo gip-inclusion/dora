@@ -308,7 +308,7 @@
     </div>
   </div>
 {/if}
-{#if tabDisplay}
+{#if tabDisplay && structure.canEditServices}
   <div class="mb-s24">
     <ServicesToUpdateViaModelNotice
       structureSlug={structure.slug}

@@ -55,11 +55,14 @@
   >
     <div class="w-full">
       <p class="block text-f14">
-        Suite à la mise à jour de {Array.from(updatedModels)
+        Suite à la mise à jour
+        {updatedModels.size > 1 ? " des modèles " : " du modèle "}
+        {Array.from(updatedModels)
           .map((name) => `"${name}"`)
-          .join(", ")}, {servicesToUpdate.length}
-        {servicesToUpdate.length > 1 ? "services" : "service"} peuvent être mis à
-        jour :
+          .join(", ")}, une mise à jour peut être réalisée sur
+        {servicesToUpdate.length > 1
+          ? "les services suivants"
+          : "le service suivant"} :
       </p>
       <ul class="ml-s16 block list-disc">
         {#each servicesToUpdate as service, index}
