@@ -11,6 +11,7 @@
 
   import ServiceKeyInformations from "$lib/components/specialized/services/display/old/service-key-informations.svelte";
   import ServiceShare from "$lib/components/specialized/services/display/old/service-share.svelte";
+  import { browser } from "$app/environment";
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
@@ -32,64 +33,66 @@
       <ServiceMobilize {service} />
     </div>
 
-    <div class="sidebar flex flex-col gap-y-s24">
-      {#if !isModel}
+    {#if browser}
+      <div class="sidebar flex flex-col gap-y-s24">
+        {#if !isModel}
+          <AbTestingSection
+            abTestingName="mobilisation"
+            showIfGroups={["mobilisation--fond-bleu"]}
+          >
+            <div
+              class="block rounded-lg border border-gray-02 bg-france-blue p-s24 px-s32 text-white print:hidden"
+            >
+              <ServiceMobilisation {service} backgroundColor="blue" />
+            </div>
+          </AbTestingSection>
+
+          <AbTestingSection
+            abTestingName="mobilisation"
+            showIfGroups={[
+              "mobilisation--fond-blanc",
+              "mobilisation--ancien-design",
+            ]}
+          >
+            <div
+              class="block rounded-lg border border-gray-02 p-s24 px-s32 print:hidden"
+            >
+              <ServiceMobilisation {service} />
+            </div>
+          </AbTestingSection>
+        {/if}
+
         <AbTestingSection
           abTestingName="mobilisation"
-          showIfGroups={["mobilisation--fond-bleu"]}
+          showIfGroups={["mobilisation--ancien-design"]}
         >
-          <div
-            class="block rounded-lg border border-gray-02 bg-france-blue p-s24 px-s32 text-white print:hidden"
-          >
-            <ServiceMobilisation {service} backgroundColor="blue" />
+          <div class="rounded-lg border border-gray-02 p-s32 pb-s48">
+            <ServiceKeyInformations
+              {service}
+              {servicesOptions}
+              display="sidebar"
+            />
           </div>
+
+          {#if !isModel}
+            <div
+              class="rounded-lg border border-gray-02 p-s32 pb-s48 print:hidden"
+            >
+              <ServiceShare {service} />
+            </div>
+          {/if}
         </AbTestingSection>
 
         <AbTestingSection
           abTestingName="mobilisation"
-          showIfGroups={[
-            "mobilisation--fond-blanc",
-            "mobilisation--ancien-design",
-          ]}
+          showIfGroups={["mobilisation--fond-bleu", "mobilisation--fond-blanc"]}
         >
-          <div
-            class="block rounded-lg border border-gray-02 p-s24 px-s32 print:hidden"
-          >
-            <ServiceMobilisation {service} />
-          </div>
+          {#if !isModel}
+            <SmallServiceShare {service} />
+          {/if}
         </AbTestingSection>
-      {/if}
-
-      <AbTestingSection
-        abTestingName="mobilisation"
-        showIfGroups={["mobilisation--ancien-design"]}
-      >
-        <div class="rounded-lg border border-gray-02 p-s32 pb-s48">
-          <ServiceKeyInformations
-            {service}
-            {servicesOptions}
-            display="sidebar"
-          />
-        </div>
-
-        {#if !isModel}
-          <div
-            class="rounded-lg border border-gray-02 p-s32 pb-s48 print:hidden"
-          >
-            <ServiceShare {service} />
-          </div>
-        {/if}
-      </AbTestingSection>
-
-      <AbTestingSection
-        abTestingName="mobilisation"
-        showIfGroups={["mobilisation--fond-bleu", "mobilisation--fond-blanc"]}
-      >
-        {#if !isModel}
-          <SmallServiceShare {service} />
-        {/if}
-      </AbTestingSection>
-    </div>
+      </div>
+    {/if}
   </div>
 </CenteredGrid>
 
