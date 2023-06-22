@@ -92,7 +92,7 @@
       on:click={onBookmark}
     >
       <FavoriteIcon active={isBookmarked} />
-      <span class="ml-s10 text-f16">
+      <span class="ml-s10 text-f16" class:text-france-blue={isBookmarked}>
         {#if isBookmarked}
           Retirer des favoris
         {:else}
