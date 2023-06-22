@@ -164,15 +164,17 @@
     <StickyFormSubmissionRow>
       <div class="flex w-full justify-between">
         <div class="flex items-center">
-          <label class="flex text-f14 text-gray-text">
-            <input
-              type="checkbox"
-              bind:checked={shouldUpdateAllServices}
-              class="mr-s8"
-            />
-            Cochez cette case pour mettre à jour automatiquement tous les services
-            utilisant ce modèle.
-          </label>
+          {#if model.slug}
+            <label class="flex text-f14 text-gray-text">
+              <input
+                type="checkbox"
+                bind:checked={shouldUpdateAllServices}
+                class="mr-s8"
+              />
+              Cochez cette case pour mettre à jour automatiquement tous les services
+              utilisant ce modèle.
+            </label>
+          {/if}
         </div>
 
         {#if shouldUpdateAllServices}
