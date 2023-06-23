@@ -13,7 +13,7 @@
     href="tel:{service.contactPhone}"
   >
     <span
-      class="mr-s8 h-s24 w-s24 text-gray-text"
+      class="mr-s8 h-s24 w-s24 fill-current"
       aria-label="Numéro de téléphone"
     >
       {@html phoneLineIcon}

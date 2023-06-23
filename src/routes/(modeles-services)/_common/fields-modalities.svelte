@@ -35,7 +35,12 @@
   <div slot="help">
     <p class="text-f14">Modalités pour mobiliser le service.</p>
   </div>
-  <Notice type="warning" title="Modalités d’orientation" showIcon={false}>
+  <Notice
+    type="warning"
+    title="Modalités d’orientation"
+    showIcon={false}
+    titleLevel="h3"
+  >
     Afin que le service puisse être mobilisable, merci de choisir au moins une
     méthode d’orientation – soit pour l’accompagnateur, soit pour le
     bénéficiaire.

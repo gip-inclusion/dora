@@ -1,45 +1,35 @@
-# Mentions Légales
+# Mentions légales
 
-## Éditeur du site
+## Éditeur de la plateforme
 
-La plateforme DORA est éditée par le :
+La plateforme « DORA » est éditée par :
 
-Ministère du Travail, de l'Emploi et de l'Insertion,  
-127, rue de Grenelle  
-75007 PARIS 07
+Le Groupement d’Intérêt Public « Plateforme de l’inclusion » situé :
+
+127 Rue de Grenelle  
+75007 Paris  
+France
 
 ## Directeur de la publication
 
-Monsieur Bruno Lucas, Délégué général.
+Le Directeur de la publication est Monsieur Arnaud Denoix, Directeur du GIP Plateforme de l’inclusion.
 
 ## Hébergement de la plateforme
 
-Ce site est hébergé par :
-Scalingo SAS  
-15 avenue du Rhin  
-67100 Strasbourg  
-France  
-SIRET: 80866548300018
+Cette plateforme est hébergée par :
+
+Scalingo  
+13 rue Jacques Peirotes  
+67000 Strasbourg  
+France
 
 ## Accessibilité
 
-La conformité aux normes d’accessibilité numérique est un objectif ultérieur mais nous tâchons de rendre ce site accessible à toutes et à tous. Pour en savoir plus sur la politique d’accessibilité numérique de l’État : [http://references.modernisation.gouv.fr/accessibilite-numerique](http://references.modernisation.gouv.fr/accessibilite-numerique)​
-
-Si vous rencontrez un défaut d’accessibilité vous empêchant d’accéder à un contenu ou une fonctionnalité du site, merci de nous en faire part.
-
-Si vous n’obtenez pas de réponse rapide de notre part, vous êtes en droit de faire parvenir vos doléances ou une demande de saisine au Défenseur des droits.
+La conformité aux normes d’accessibilité numérique est un objectif ultérieur mais nous tâchons de rendre ce site accessible à toutes et à tous.
 
 ### Signaler un dysfonctionnement
 
 Si vous rencontrez un défaut d’accessibilité vous empêchant d’accéder à un contenu ou une fonctionnalité du site, merci de nous en faire part à l’adresse [contact@dora.inclusion.beta.gouv.fr](mailto:contact@dora.inclusion.beta.gouv.fr)​
-
-Si vous n’obtenez pas de réponse rapide de notre part, vous êtes en droit de faire parvenir vos doléances ou une demande de saisine au Défenseur des droits.
-
-### En savoir plus
-
-Pour en savoir plus sur la politique d’accessibilité numérique de l’État :
-
-​[http://references.modernisation.gouv.fr/accessibilite-numerique](http://references.modernisation.gouv.fr/accessibilite-numerique)​
 
 ## Sécurité
 

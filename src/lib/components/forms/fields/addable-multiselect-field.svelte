@@ -58,6 +58,7 @@
   <FieldWrapper
     {id}
     let:onBlur
+    let:errorMessages
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -78,6 +79,7 @@
       {placeholderMulti}
       {disabled}
       {readonly}
+      {errorMessages}
       multiple
     />
     {#if canAdd}
@@ -102,7 +104,7 @@
               />
               {#if newValue && maxLength != null}
                 <div
-                  class="mt-s4 self-end text-f12 text-gray-text-alt"
+                  class="mt-s4 self-end text-f12 text-gray-text"
                   class:text-error={newValue?.length > maxLength}
                 >
                   {newValue.length}/{maxLength} caractères

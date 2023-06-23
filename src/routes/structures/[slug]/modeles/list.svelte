@@ -6,7 +6,7 @@
   import NoModelNotice from "./no-model-notice.svelte";
 
   export let structure, models, total;
-  export let hasOptions = true;
+  export let tabDisplay = true;
   export let withEmptyNotice = false;
   export let limit;
 
@@ -54,7 +54,7 @@
     {#if limit}<Count>{total}</Count>{/if}
   </div>
   <div class="flex flex-wrap gap-s16">
-    {#if !!models.length && !hasOptions}
+    {#if !!models.length && !tabDisplay}
       <LinkButton
         label="Voir tous les modèles"
         to="/structures/{structure.slug}/modeles"

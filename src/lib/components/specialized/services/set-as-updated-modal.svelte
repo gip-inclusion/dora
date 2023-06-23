@@ -6,7 +6,7 @@
   import { createOrModifyService } from "$lib/requests/services";
   import type { Service, ServicesOptions, ShortService } from "$lib/types";
   import ServiceContact from "./service-contact.svelte";
-  import ServiceKeyInformations from "./service-key-informations.svelte";
+  import ServiceKeyInformations from "./display/old/service-key-informations.svelte";
 
   export let isOpen = false;
   export let service: Service | ShortService;

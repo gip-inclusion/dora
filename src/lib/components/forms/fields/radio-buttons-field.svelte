@@ -27,6 +27,7 @@
   <FieldWrapper
     {id}
     let:onChange
+    let:errorMessages
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -44,6 +45,7 @@
       {choices}
       {disabled}
       {readonly}
+      {errorMessages}
     />
   </FieldWrapper>
 {/if}

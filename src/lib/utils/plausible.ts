@@ -4,6 +4,7 @@ import { CANONICAL_URL } from "$lib/env";
 import { token, userInfo } from "$lib/utils/auth";
 import { getDepartmentFromCityCode } from "$lib/utils/misc";
 import { get } from "svelte/store";
+import { getAbTestingUserGroup } from "$lib/utils/ab-testing";
 
 function _track(tag, props) {
   if (browser) {
@@ -64,15 +65,32 @@ export function trackError(errorStatusCode, path) {
 }
 
 export function trackMobilisation(service) {
-  _track("mobilisation", _getServiceProps(service, true));
+  const props = {
+    ..._getServiceProps(service, true),
+    abTestingGroup: getAbTestingUserGroup("mobilisation"),
+  };
+  _track("mobilisation", props);
+  _track("mobilisation-abTesting", props);
 }
 
 export function trackMobilisationEmail(service) {
-  _track("mobilisation-contact", _getServiceProps(service, true));
+  const props = {
+    ..._getServiceProps(service, true),
+    abTestingGroup: getAbTestingUserGroup("mobilisation"),
+  };
+
+  _track("mobilisation-contact", props);
+  _track("mobilisation-contact-abTesting", props);
 }
 
 export function trackMobilisationLogin(service) {
-  _track("mobilisation-login", _getServiceProps(service, false));
+  const props = {
+    ..._getServiceProps(service, false),
+    abTestingGroup: getAbTestingUserGroup("mobilisation"),
+  };
+
+  _track("mobilisation-login", props);
+  _track("mobilisation-login-abTesting", props);
 }
 
 export function trackFeedback(service) {
@@ -125,7 +143,13 @@ export function trackModel(model) {
 }
 
 export function trackService(service) {
-  _track("service", _getServiceProps(service, true));
+  const props = {
+    ..._getServiceProps(service, false),
+    abTestingGroup: getAbTestingUserGroup("mobilisation"),
+  };
+
+  _track("service", props);
+  _track("service-abTesting", props);
 }
 
 export function trackStructure(structure) {

@@ -8,13 +8,17 @@
   export let service;
   let contactOpen = false;
 
+  export let backgroundColor: "blue" | "white" = "white";
+
   function trackClick() {
     contactOpen = true;
     trackMobilisation(service);
   }
 </script>
 
-<h2 class="text-f23">Mobiliser le service</h2>
+<h2 class="text-f23" class:text-white={backgroundColor === "blue"}>
+  Mobiliser le service
+</h2>
 
 {#if $token}
   <div class="w-full sm:w-auto">
@@ -23,15 +27,18 @@
     </div>
     <div class="print:hidden">
       {#if !contactOpen}
-        <div class="mb-s16">
+        <div class="mb-s16" class:text-white={backgroundColor === "blue"}>
           <Button
             on:click={trackClick}
+            extraClass={backgroundColor === "blue"
+              ? "bg-white !text-france-blue hover:!text-white"
+              : ""}
             label="Voir les informations de contact"
             wFull
           />
         </div>
       {:else}
-        <ServiceContact {service} />
+        <ServiceContact {service} useWhiteText={backgroundColor === "blue"} />
       {/if}
     </div>
   </div>

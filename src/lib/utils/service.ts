@@ -105,7 +105,7 @@ export function getCategoryLabel(
   servicesOptions: ServicesOptions
 ) {
   const category = servicesOptions.categories.find((cat) => cat.value === slug);
-  return category.label ?? "";
+  return category?.label ?? "";
 }
 
 export function getSubCategoryLabel(
@@ -115,7 +115,7 @@ export function getSubCategoryLabel(
   const subCategory = servicesOptions.subcategories.find(
     (subCat) => subCat.value === slug
   );
-  return subCategory.label ?? "";
+  return subCategory?.label ?? "";
 }
 
 export function formatFilePath(filePath: string) {

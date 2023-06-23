@@ -47,10 +47,8 @@ Pour les exercer, contactez-nous à : [contact@dora.inclusion.beta.gouv.fr](mail
 
 Par voie postale :
 
-GIP Plateforme de l'inclusion
-
-127, Rue de Grenelle
-
+GIP Plateforme de l'inclusion  
+127, Rue de Grenelle  
 75007 Paris 07
 
 Puisque ce sont des droits personnels, nous ne traiterons votre demande que si nous sommes en mesure de vous identifier. Dans le cas où nous ne parvenons pas à vous identifier, nous pouvons être amenés à vous demander une preuve de votre identité.
@@ -72,7 +70,6 @@ Les accès aux données sont strictement encadrés et juridiquement justifiés. 
 
 Nous mettons en place plusieurs mesures pour sécuriser les données :
 
-- Anonymisation ;
 - Stockage des données en base de données ;
 - Cloisonnement des données ;
 - Mesures de traçabilité ;
@@ -95,6 +92,7 @@ Certaines des données sont envoyées à d'autres acteurs, appelés "sous-traita
 | **France Transfert** | France                | Outil de transfert de documents                       | ​[https://francetransfert.numerique.gouv.fr/cgu](https://francetransfert.numerique.gouv.fr/cgu)                                                                                                                |
 | **Zapier**           | Etats-Unis            | Outil d'automatisation de la gestion des applications | ​[https://zapier.com/legal/data-processing-addendum](https://zapier.com/legal/data-processing-addendum)                                                                                                        |
 | **Livestorm**        | Ireland et Etats-Unis | Outil de visioconférence et webinar                   | ​[https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf](https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf)                                                                        |
+| **Brevo**            | UE et non-UE          | Outil de messagerie electronique                      | [https://www.brevo.com/fr/legal/privacypolicy/](https://www.brevo.com/fr/legal/privacypolicy/)                                                                                                                 |
 
 ## Cookies
 
@@ -107,15 +105,6 @@ Ce consentement de la personne concernée pour une ou plusieurs finalités spéc
 Un cookie est un fichier déposé sur votre terminal lors de la visite d'un site. Il a pour but de collecter des informations relatives à votre navigation et de vous adresser des services adaptés à votre terminal (ordinateur, mobile ou tablette).
 
 Certains cookies sont strictement nécessaires au service ou ayant pour finalité exclusive de faciliter la communication par voie électronique et sont dispensés de consentement préalable au titre de l'article 82 de la loi n°78-17 du 6 janvier 1978.
-
-Cookies recensés sur DORA :
-
-| **Editeur**   | **Nom du cookie** | **Durée de vie du cookie** | **Finalités**       |
-| ------------- | ----------------- | -------------------------- | ------------------- |
-| tarteaucitron | tarteaucitron     | 1 an                       | Gestion des cookies |
-| Matomo        | \_pk_id           | 13 mois                    | Gestion des cookies |
-| Matomo        | \_pk_ses          | 30 minutes                 | Gestion des cookies |
-| Matomo        | \_pk_ref          | 6 mois                     | Gestion des cookies |
 
 Des cookies relatifs aux statistiques publiques et anonymes sont également déposés.
 

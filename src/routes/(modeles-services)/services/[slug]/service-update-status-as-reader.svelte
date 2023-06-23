@@ -5,9 +5,10 @@
   import { editIcon } from "$lib/icons";
   import type { Service } from "$lib/types";
   import { trackFeedback } from "$lib/utils/plausible";
-  import FeedbackModal from "./feedback-modal.svelte";
+  import FeedbackModal from "$lib/components/specialized/services/feedback/feedback-modal.svelte";
   import dayjs from "dayjs";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
+  import AbTestingSection from "$lib/components/specialized/ab-testing-section.svelte";
 
   export let service: Service;
 
@@ -81,16 +82,22 @@
     {/if}
   </div>
 
-  <div class="print:hidden">
-    <FeedbackModal {service} bind:isOpen={feedbackModalIsOpen} />
-    <Button
-      id="feedback-update"
-      label="Suggérer une modification"
-      icon={editIcon}
-      secondary
-      small
-      extraClass="py-s9"
-      on:click={handleFeedback}
-    />
-  </div>
+  <AbTestingSection
+    abTestingName="mobilisation"
+    showIfGroups={["mobilisation--ancien-design"]}
+  >
+    <div class="print:hidden">
+      <FeedbackModal {service} bind:isOpen={feedbackModalIsOpen} />
+
+      <Button
+        id="feedback-update"
+        label="Suggérer une modification"
+        icon={editIcon}
+        secondary
+        small
+        extraClass="py-s9"
+        on:click={handleFeedback}
+      />
+    </div>
+  </AbTestingSection>
 </div>

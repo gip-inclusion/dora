@@ -62,6 +62,7 @@ export interface StructureService {
   locationKindsDisplay: string;
   model: string;
   modelChanged: boolean;
+  modelName: boolean;
   modificationDate: string;
   name: string;
   postalCode: string;
@@ -345,6 +346,7 @@ export interface Point {
 }
 
 export interface Service {
+  markSynced?: boolean;
   accessConditions: CustomizableFK[];
   accessConditionsDisplay: string[];
   address1: string;

@@ -2,6 +2,7 @@
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
   import { onMount } from "svelte";
   import Button from "./button.svelte";
+  import { randomId } from "$lib/utils/random";
 
   export let title = "";
   export let description = "";
@@ -26,13 +27,14 @@
   }
 
   let showHelp = false;
+  const helpId = randomId();
 
   function toggleHelp() {
     showHelp = !showHelp;
   }
 </script>
 
-<div
+<fieldset
   class="breakpoint-hack flex flex-col rounded-md shadow-md"
   class:mt-s48={!noTopPadding}
   bind:this={wrapper}
@@ -50,14 +52,21 @@
             ? 'lg:w-2/3'
             : ''}"
         >
-          <h3
-            class={headerBg !== "bg-white" ? "text-white" : "text-france-blue"}
+          <h2
+            class={`
+            text-f21 leading-32
+            ${headerBg !== "bg-white" ? "text-white" : "text-france-blue"}
+            `}
           >
             {title}
-          </h3>
+          </h2>
           <div class="flex">
             {#if $$slots.help}
               <Button
+                ariaAttributes={{
+                  "aria-expanded": showHelp,
+                  "aria-controls": helpId,
+                }}
                 label="Aide"
                 on:click={toggleHelp}
                 icon={!showHelp ? arrowDownSIcon : arrowUpSIcon}
@@ -91,7 +100,10 @@
     </div>
 
     {#if $$slots.help && showHelp}
-      <div class="border-l-8 border-info bg-info-light py-s16 pl-s24 pr-s32">
+      <div
+        id={helpId}
+        class="border-l-8 border-info bg-info-light py-s16 pl-s24 pr-s32"
+      >
         <slot name="help" />
       </div>
     {/if}
@@ -105,4 +117,4 @@
   >
     <slot />
   </div>
-</div>
+</fieldset>

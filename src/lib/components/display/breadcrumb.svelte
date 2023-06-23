@@ -73,7 +73,7 @@
   <ol class="text-f14">
     <li class="inline">
       {#if currentLocation === "home"}
-        <a aria-current="page" class="current">Accueil</a>
+        <span aria-current="page" class="current">Accueil</span>
       {:else}
         <a href="/" title="Retour à l'accueil du site">Accueil</a>
       {/if}
@@ -81,60 +81,65 @@
 
     {#if structure}
       <li class="inline before:content-['/']">
-        <a
-          href={currentLocation === "structure-informations"
-            ? null
-            : `/structures/${structure.slug}`}
-          class:current={currentLocation === "structure-informations"}
-          aria-current={currentLocation === "structure-informations"
-            ? "page"
-            : null}
-        >
-          <span class="hidden lg:inline">
-            Structure&nbsp;•&nbsp;
-          </span>{structure.name}
-        </a>
+        {#if currentLocation === "structure-informations"}
+          <span class="current" aria-current="page">
+            <span class="hidden lg:inline">
+              Structure&nbsp;•&nbsp;</span
+            >{structure.name}
+          </span>
+        {:else}
+          <a href="/structures/{structure.slug}">
+            <span class="hidden lg:inline">
+              Structure&nbsp;•&nbsp;</span
+            >{structure.name}
+          </a>
+        {/if}
       </li>
     {/if}
 
     {#if Object.keys(locationToText).includes(currentLocation)}
       <li class="inline before:content-['/']">
-        <a aria-current="page" class="current">
+        <span aria-current="page" class="current">
           {locationToText[currentLocation]}
-        </a>
+        </span>
       </li>
     {/if}
 
     {#if service}
       <li class="inline before:content-['/']">
-        <a
-          href={currentLocation === "service"
-            ? null
-            : `/services/${service.slug}`}
-          class:current={currentLocation === "service"}
-          aria-current={currentLocation === "service" ? "page" : null}
-        >
-          <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span>
-          {service.name}
-        </a>
+        {#if currentLocation === "service"}
+          <span class="current" aria-current="page">
+            <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
+            >{service.name}
+          </span>
+        {:else}
+          <a href="/services/{service.slug}">
+            <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
+            >{service.name}
+          </a>
+        {/if}
       </li>
     {:else if currentLocation.startsWith("structure-") && currentLocation !== "structure-informations"}
       <li class="inline before:content-['/']">
-        <a class="current" aria-current="page">
+        <span class="current" aria-current="page">
           {structureData.name}
-        </a>
+        </span>
       </li>
     {/if}
 
     {#if model}
       <li class="inline before:content-['/']">
-        <a
-          href={currentLocation === "model" ? null : `/modeles/${model.slug}`}
-          class:current={currentLocation === "model"}
-          aria-current={currentLocation === "model" ? "page" : null}
-          ><span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
-          >{model.name}</a
-        >
+        {#if currentLocation === "model"}
+          <span class="current" aria-current="page">
+            <span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
+            >{model.name}
+          </span>
+        {:else}
+          <a href="/modeles/{model.slug}">
+            <span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
+            >{model.name}
+          </a>
+        {/if}
       </li>
     {/if}
   </ol>

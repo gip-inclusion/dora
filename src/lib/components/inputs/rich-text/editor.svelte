@@ -158,12 +158,14 @@
         on:click={() => editor.chain().focus().toggleBold().run()}
         active={editor.isActive("bold")}
         icon={boldIcon}
+        label="Gras"
       />
 
       <Button
         on:click={() => editor.chain().focus().toggleItalic().run()}
         active={editor.isActive("italic")}
         icon={italicIcon}
+        label="Italique"
       />
 
       <Separator />
@@ -172,6 +174,7 @@
         on:click={() => editor.chain().focus().setParagraph().run()}
         active={editor.isActive("paragraph")}
         icon={paraIcon}
+        label="Paragraphe"
       />
 
       <Button
@@ -179,6 +182,7 @@
           editor.chain().focus().toggleHeading({ level: 1 }).run()}
         active={editor.isActive("heading", { level: 1 })}
         icon={h1Icon}
+        label="Titre de niveau 1"
       />
 
       <Button
@@ -186,6 +190,7 @@
           editor.chain().focus().toggleHeading({ level: 2 }).run()}
         active={editor.isActive("heading", { level: 2 })}
         icon={h2Icon}
+        label="Titre de niveau 2"
       />
 
       <Separator />
@@ -194,6 +199,7 @@
         on:click={() => editor.chain().focus().toggleBulletList().run()}
         active={editor.isActive("bulletList")}
         icon={liIcon}
+        label="Liste à puces"
       />
 
       <Separator />
@@ -202,6 +208,7 @@
         on:click={linkDialogToggle}
         active={editor.isActive("link")}
         icon={linkIcon}
+        label="Lien"
       />
     </div>
   {/if}
@@ -245,6 +252,6 @@
   :global(.ProseMirror p.is-editor-empty:first-child::before) {
     content: attr(data-placeholder);
 
-    @apply pointer-events-none float-left h-s0 text-gray-text-alt;
+    @apply pointer-events-none float-left h-s0 text-gray-text-alt2;
   }
 </style>

@@ -6,6 +6,7 @@
   } from "$lib/validation/validation";
   import { getContext } from "svelte";
   import Alert from "../display/alert.svelte";
+  import { randomId } from "$lib/utils/random";
 
   export let id: string;
   export let label = "";
@@ -32,6 +33,7 @@
   }
 
   $: errorMessages = $formErrors[id];
+  const descriptionId = description ? randomId() : null;
 </script>
 
 <div
@@ -41,7 +43,12 @@
   class:hidden
 >
   <div class="label-container flex flex-col" class:one-fourth={!vertical}>
-    <label for={id} class="mt-s8" class:sr-only={hideLabel}>
+    <label
+      for={id}
+      class="mt-s8"
+      class:sr-only={hideLabel}
+      aria-describedby={descriptionId}
+    >
       <span class=" text-f17 font-bold text-gray-dark">
         {label}{#if required && !readonly && !disabled}<span
             class="ml-s6 text-error">&nbsp;*</span
@@ -49,7 +56,7 @@
       </span>
     </label>
     {#if description}
-      <small>{description}</small>
+      <small id={descriptionId}>{description}</small>
     {/if}
     {#if $$slots.description}
       <div class="mb-s4">
@@ -59,7 +66,7 @@
   </div>
   <div class="flex flex-col " class:three-fourths={!vertical}>
     <!-- Slot principal -->
-    <slot onBlur={handleBlur} onChange={handleChange} />
+    <slot onBlur={handleBlur} onChange={handleChange} {errorMessages} />
     <!--  -->
     {#each errorMessages || [] as msg, i}
       <Alert id="{id}-error-{i}" label={msg} />

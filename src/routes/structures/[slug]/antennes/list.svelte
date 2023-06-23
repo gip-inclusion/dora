@@ -6,7 +6,7 @@
   import Count from "../count.svelte";
 
   export let structure, branches, total;
-  export let hasOptions = true;
+  export let tabDisplay = true;
   export let limit;
 
   let departements = [];
@@ -59,7 +59,7 @@
     {#if limit}<Count>{total}</Count>{/if}
   </div>
   <div class="flex gap-s16">
-    {#if !!branches.length && !hasOptions}
+    {#if !!branches.length && !tabDisplay}
       <LinkButton
         label="Voir toutes les antennes"
         to="/structures/{structure.slug}/antennes"
