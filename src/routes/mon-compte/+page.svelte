@@ -33,7 +33,7 @@
         />
       </div>
 
-      <div class="flex flex-col  gap-s35 p-s16 md:mb-s56 md:p-s35">
+      <div class="flex flex-col gap-s35 p-s16 md:mb-s56 md:p-s35">
         <div class="flex w-full flex-col flex-wrap gap-s35 md:flex-row">
           <div class="flex-1">
             <h3 class="mb-s8 text-f18 leading-20">Prénom</h3>
@@ -52,7 +52,7 @@
 
       <div class="bottom-s0 w-full pt-s12 md:absolute">
         <hr class="mx-s12 md:mx-s35" />
-        <p class="m-s0 py-s12 px-s16 text-f14 text-gray-text md:px-s35">
+        <p class="m-s0 px-s16 py-s12 text-f14 text-gray-text md:px-s35">
           Vous utilisez <a
             class="underline"
             href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/inclusion-connect-quesaco-y13f84/"
@@ -64,7 +64,7 @@
 
     <div class="flex flex-1 flex-col gap-s24">
       {#if $userInfo.isStaff}
-        <div class="mb-s24 rounded-md  border border-gray-03 p-s24">
+        <div class="mb-s24 rounded-md border border-gray-03 p-s24">
           <h2 class="mb-s20 text-f18 leading-20 text-gray-dark">Raccourcis</h2>
 
           <ul class="flex flex-col gap-s10">
@@ -87,7 +87,7 @@
           </ul>
         </div>
       {:else if $userInfo.isManager}
-        <div class="mb-s24 rounded-md  border border-gray-03 p-s24">
+        <div class="mb-s24 rounded-md border border-gray-03 p-s24">
           <h2 class="mb-s20 text-f18 leading-20 text-gray-dark">Raccourcis</h2>
           <div class="flex flex-col gap-s8 lg:flex-row">
             <a

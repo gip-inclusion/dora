@@ -65,6 +65,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   });
 
   trackSearch(
+    url,
     categoryIds,
     subCategoryIds,
     cityCode,

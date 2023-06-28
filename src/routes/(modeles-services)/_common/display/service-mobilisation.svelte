@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import Button from "$lib/components/display/button.svelte";
   import ServiceContact from "$lib/components/specialized/services/service-contact.svelte";
   import ServiceLoginNotice from "./service-login-notice.svelte";
@@ -12,7 +13,7 @@
 
   function trackClick() {
     contactOpen = true;
-    trackMobilisation(service);
+    trackMobilisation(service, $page.url);
   }
 </script>
 

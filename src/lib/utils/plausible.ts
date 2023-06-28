@@ -4,6 +4,7 @@ import { CANONICAL_URL } from "$lib/env";
 import { token, userInfo } from "$lib/utils/auth";
 import { getDepartmentFromCityCode } from "$lib/utils/misc";
 import { get } from "svelte/store";
+import { logAnalyticsEvent } from "$lib/utils/stats";
 import { getAbTestingUserGroup } from "$lib/utils/ab-testing";
 
 function _track(tag, props) {
@@ -28,6 +29,7 @@ function _getServiceProps(service, withUserData = false) {
     props = {
       ...props,
       loggedIn: !!get(token),
+      profile: get(userInfo)?.mainActivity,
       owner: [
         ...(get(userInfo)?.structures.map((struct) => struct.slug) ?? []),
         ...(get(userInfo)?.pendingStructures.map((struct) => struct.slug) ??
@@ -50,6 +52,7 @@ function _getStructureProps(structure, withUserData = false) {
     props = {
       ...props,
       loggedIn: !!get(token),
+      profile: get(userInfo)?.mainActivity,
       owner: [
         ...(get(userInfo)?.structures.map((struct) => struct.slug) ?? []),
         ...(get(userInfo)?.pendingStructures.map((struct) => struct.slug) ??
@@ -64,7 +67,14 @@ export function trackError(errorStatusCode, path) {
   _track(errorStatusCode, { path });
 }
 
-export function trackMobilisation(service) {
+export function trackMobilisation(service, url) {
+  if (browser) {
+    logAnalyticsEvent("mobilisation", url.pathname, {
+      service: service.slug,
+      abTestingGroup: getAbTestingUserGroup("mobilisation"),
+    });
+  }
+
   const props = {
     ..._getServiceProps(service, true),
     abTestingGroup: getAbTestingUserGroup("mobilisation"),
@@ -102,6 +112,7 @@ export function trackPDFDownload(service) {
 }
 
 export function trackSearch(
+  url,
   categoryIds,
   subCategoryIds,
   cityCode,
@@ -110,6 +121,15 @@ export function trackSearch(
   feeConditions,
   numResults
 ) {
+  if (browser) {
+    logAnalyticsEvent("search", url.pathname, {
+      searchCityCode: cityCode,
+      searchNumResults: numResults,
+      categoryIds: categoryIds,
+      subCategoryIds: subCategoryIds,
+    });
+  }
+
   let numResultsCat;
   if (numResults === 0) {
     numResultsCat = "0";
@@ -126,6 +146,7 @@ export function trackSearch(
     serviceKinds: kindIds.join(","),
     feeConditions: feeConditions.join(","),
     loggedIn: !!get(token),
+    profile: get(userInfo)?.mainActivity,
     numResults: numResultsCat,
     department: getDepartmentFromCityCode(cityCode),
   });
@@ -142,7 +163,13 @@ export function trackModel(model) {
   _track("modele", props);
 }
 
-export function trackService(service) {
+export function trackService(service, url) {
+  if (browser) {
+    logAnalyticsEvent("service", url.pathname, {
+      service: service.slug,
+    });
+  }
+
   const props = {
     ..._getServiceProps(service, false),
     abTestingGroup: getAbTestingUserGroup("mobilisation"),
@@ -152,6 +179,11 @@ export function trackService(service) {
   _track("service-abTesting", props);
 }
 
-export function trackStructure(structure) {
+export function trackStructure(structure, url) {
+  if (browser) {
+    logAnalyticsEvent("structure", url.pathname, {
+      structure: structure.slug,
+    });
+  }
   _track("structure", _getStructureProps(structure, true));
 }

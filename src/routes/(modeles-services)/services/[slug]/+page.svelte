@@ -1,5 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import { page } from "$app/stores";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import ServiceHeader from "./service-header.svelte";
   import ServiceToolbar from "./service-toolbar.svelte";
@@ -15,7 +16,7 @@
   export let data: PageData;
 
   onMount(() => {
-    trackService(data.service);
+    trackService(data.service, $page.url);
   });
 
   async function handleRefresh() {

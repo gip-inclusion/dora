@@ -28,12 +28,13 @@
   informations sur le service sont exactes."
   on:close={() => (isOpen = false)}
   smallWidth
+  overflow
 >
   <div class="pt-s16 text-f18 text-france-blue">
     Périmètre : <strong>{service.diffusionZoneDetailsDisplay}</strong>
   </div>
 
-  <hr class="my-s24 " />
+  <hr class="my-s24" />
   <ServiceContact {service} />
   <hr class="my-s24" />
   <ServiceKeyInformations {service} {servicesOptions} />
