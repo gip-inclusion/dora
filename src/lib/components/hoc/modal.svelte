@@ -1,7 +1,7 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { closeLineIcon } from "$lib/icons";
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onDestroy } from "svelte";
   import Portal from "svelte-portal/src/Portal.svelte";
   import "wicg-inert";
   import Button from "../display/button.svelte";
@@ -12,6 +12,7 @@
   export let subtitle: string | undefined = undefined;
   export let smallWidth = false;
   export let targetId: string | undefined = undefined;
+  export let canClose = true;
 
   const target = (
     targetId ? document.getElementById(targetId) : document.body
@@ -23,6 +24,19 @@
 
   let activeElementSave;
   let modalEl;
+
+  function closeActions() {
+    document.body.style.overflow = "inherit";
+    if (modalEl) {
+      document.querySelector(appSelector)?.removeAttribute("inert");
+    }
+    // Retour du focus sur le bouton d'ouverture
+    if (activeElementSave) {
+      activeElementSave.focus();
+    }
+  }
+
+  onDestroy(() => closeActions());
 
   $: {
     // Prevent scrolling the background while the modal is open
@@ -41,21 +55,16 @@
           }
         }, 10);
       } else {
-        document.body.style.overflow = "inherit";
-
-        if (modalEl) {
-          document.querySelector(appSelector)?.removeAttribute("inert");
-        }
-
-        // Retour du focus sur le bouton d'ouverture
-        if (activeElementSave) {
-          activeElementSave.focus();
-        }
+        closeActions();
       }
     }
   }
 
   function handleClose() {
+    if (!canClose) {
+      return;
+    }
+
     isOpen = false;
     dispatch("close");
   }
@@ -98,22 +107,24 @@
               </h1>
             {/if}
 
-            <div class="ml-auto">
-              <Button
-                icon={closeLineIcon}
-                on:click={handleClose}
-                noBackground
-                noPadding
-                extraClass="-mt-s10"
-              />
-            </div>
+            {#if canClose}
+              <div class="ml-auto">
+                <Button
+                  icon={closeLineIcon}
+                  on:click={handleClose}
+                  noBackground
+                  noPadding
+                  extraClass="-mt-s10"
+                />
+              </div>
+            {/if}
           </div>
           {#if subtitle}
             <div>
               <p class="text-f14 text-gray-text">{subtitle}</p>
             </div>
           {/if}
-          <hr class="my-s24 -mx-s24" />
+          <hr class="-mx-s24 my-s24" />
         </div>
 
         <div class="body max-h-s512 overflow-auto">
@@ -122,7 +133,7 @@
 
         {#if $$slots.footer}
           <div class="footer">
-            <hr class="my-s24 -mx-s24 mt-s32" />
+            <hr class="-mx-s24 my-s24 mt-s32" />
             <slot name="footer" />
           </div>
         {/if}

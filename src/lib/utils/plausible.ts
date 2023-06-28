@@ -29,6 +29,7 @@ function _getServiceProps(service, withUserData = false) {
     props = {
       ...props,
       loggedIn: !!get(token),
+      profile: get(userInfo)?.mainActivity,
       owner: [
         ...(get(userInfo)?.structures.map((struct) => struct.slug) ?? []),
         ...(get(userInfo)?.pendingStructures.map((struct) => struct.slug) ??
@@ -51,6 +52,7 @@ function _getStructureProps(structure, withUserData = false) {
     props = {
       ...props,
       loggedIn: !!get(token),
+      profile: get(userInfo)?.mainActivity,
       owner: [
         ...(get(userInfo)?.structures.map((struct) => struct.slug) ?? []),
         ...(get(userInfo)?.pendingStructures.map((struct) => struct.slug) ??
@@ -144,6 +146,7 @@ export function trackSearch(
     serviceKinds: kindIds.join(","),
     feeConditions: feeConditions.join(","),
     loggedIn: !!get(token),
+    profile: get(userInfo)?.mainActivity,
     numResults: numResultsCat,
     department: getDepartmentFromCityCode(cityCode),
   });
