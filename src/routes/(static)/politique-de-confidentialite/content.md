@@ -15,35 +15,37 @@ DORA manipule des données à caractère personnel pour :
 
 ## Quelles sont les données à caractère personnel que nous manipulons ?
 
-DORA manipule les données personnelles suivantes relatives aux utilisateurs de la plateforme:
+DORA manipule les données à caractère personnel suivantes relatives aux utilisateurs de la plateforme:
 
-- Prénom ;
-- Nom ;
-- Adresse e-mail ;
-- Numéro de téléphone
+- **Données relatives aux utilisateurs de la plateforme** (nom, prénom, adresse e-mail, numéro de téléphone)
+  ;
+- **Données relatives aux personnes suivies par les agents accompagnateurs** (nom, prénom, adresse e-mail des personnes suivies, pièces jointes relatives au dossier proposé par l’agent accompagnateur)
 
 ## Qu'est-ce qui nous autorise à manipuler ces données ?
 
-DORA manipule des données personnelles en se basant sur :
+DORA manipule des données à caractère personnel en se basant sur :
 
 - L'exécution d'une mission d'intérêt public ou relevant de l'exercice de l'autorité publique dont est investi le responsable de traitement au sens de l'article 6-1 e) du RPGD.
+
+Cette mission d'intérêt public est précisée dans l'arrêté du 19 avril 2022 portant approbation de la convention constitutive du "Groupement d'intérêt public plateforme de l'inclusion" qui prévoit notamment que le responsable de traitement peut "**participer au développement de démarches numériques innovantes d'intérêt général, en particulier dans le domaine de l'insertion professionnelle**."
 
 ## Pendant combien de temps conservons-nous ces données ?
 
 | **Type de données**                                                    | **Durée de la conservation**                                                 |
 | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Données de contact : prénom, nom, adresse e-mail, numéro de téléphone. | 2 ans à compter du dernier contact avec l'utilisateur de la plateforme DORA. |
+| Données relatives aux utilisateurs de la plateforme                    | 2 ans à compter du dernier contact avec l'utilisateur de la plateforme DORA. |
+| Données relatives aux personnes suivies par les agents accompagnateurs | Les données sont supprimées immédiatement après l’envoi aux accompagnateurs. |
 
 ## Quels droits avez-vous ?
 
 Vous disposez :
 
 - D'un droit d'information et d'un droit d'accès à vos données ;
-- D'un droit de rectification, et le cas échéant de suppression des données ;
-- D'un droit d'opposition ;
-- D'un droit à la portabilité de vos données.
+- D'un droit à la limitation du traitement de données ;
+- D'un droit de rectification ;
+- D'un droit d'opposition.
 
-Pour les exercer, contactez-nous à : [contact@dora.inclusion.beta.gouv.fr](mailto:contact@dora.inclusion.beta.gouv.fr)
+Pour les exercer, contactez-nous à : [dpo@numericite.eu](mailto:dpo@numericite.eu)
 
 Par voie postale :
 
@@ -62,9 +64,10 @@ Nous nous engageons à vous répondre dans un délai raisonnable qui ne saurait 
 Les accès aux données sont strictement encadrés et juridiquement justifiés. Les personnes suivantes vont avoir accès aux données :
 
 - Les membres de l'équipe DORA qui ont besoin des données dans leurs missions ou qui y ont accès de fait (développeur, etc.) ;
-- Agent ou toute personne désigné comme des gestionnaires de territoire et ambassadeurs dans les territoires pour Dora
-- Les données de contact sont transmises à Data Inclusion : 1) publiquement et diffusées en open data et via l'API de Data Inclusion lorsque ces données ont été validées comme pouvant être visible publiquement et 2) et non diffusées en open data lorsque ces données ont été validées comme devant rester privée aux utilisateurs connectés de DORA. Elles sont disponibles via l'API de Data Inclusion et conventionnée (1 token est envoyé à chaque utilisateur signataire des CGU de data·inclusion.
-- Les données peuvent être transmises à France Transfert.
+- Agent ou toute personne désigné comme des gestionnaires de territoire et ambassadeurs dans les territoires pour Dora ;
+- Agent ou toute personne désigné comme "accompagnateur" recevant les dossiers ou demande d'insertion ;
+- Les données de contact sont transmises à Data Inclusion : 1) publiquement et diffusées en open data et via l'API de Data Inclusion lorsque ces données ont été validées comme pouvant être visible publiquement et 2) et non diffusées en open data lorsque ces données ont été validées comme devant rester privée aux utilisateurs connectés de DORA. Elles sont disponibles via l'API de Data Inclusion et conventionnée (1 token est envoyé à chaque utilisateur signataire des CGU de data·inclusion).
+- Les données peuvent être transmises via France Transfert.
 
 ## Quelles mesures de sécurité mettons-nous en place ?
 
@@ -84,14 +87,14 @@ Certaines des données sont envoyées à d'autres acteurs, appelés "sous-traita
 
 | **Partenaire**       | **Pays destinataire** | **Traitement réalisé**                                | **Garanties**                                                                                                                                                                                                  |
 | -------------------- | --------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Scalingo**         | France                | Hébergement                                           | ​[https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles](https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles)                                                          |
-| **Crisp**            | Union européenne      | Outil de chat                                         | ​[https://crisp.chat/en/privacy/​](https://crisp.chat/en/privacy/)                                                                                                                                             |
-| **Tipimail**         | France                | Outil de transfert et d'échange de mails              | ​[https://fr.tipimail.com/rgpd​](https://fr.tipimail.com/rgpd)                                                                                                                                                 |
+| **Scalingo**         | France                | Hébergement                                           | [https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles](https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles)                                                           |
+| **Crisp**            | Union européenne      | Outil de chat                                         | [https://crisp.chat/en/privacy/​](https://crisp.chat/en/privacy/)                                                                                                                                              |
+| **Tipimail**         | France                | Outil de transfert et d'échange de mails              | [https://fr.tipimail.com/rgpd​](https://fr.tipimail.com/rgpd)                                                                                                                                                  |
 | **Data Inclusion**   | France                | API/Open Data                                         | [https://www.data.inclusion.beta.gouv.fr/juridique-et-rgpd/politique-de-confidentialite-data-inclusion](https://www.data.inclusion.beta.gouv.fr/juridique-et-rgpd/politique-de-confidentialite-data-inclusion) |
-| **Tally**            | Belgique              | Outil de sondage                                      | ​ https://tally.so/help/privacy-policy                                                                                                                                                                         |
-| **France Transfert** | France                | Outil de transfert de documents                       | ​[https://francetransfert.numerique.gouv.fr/cgu](https://francetransfert.numerique.gouv.fr/cgu)                                                                                                                |
-| **Zapier**           | Etats-Unis            | Outil d'automatisation de la gestion des applications | ​[https://zapier.com/legal/data-processing-addendum](https://zapier.com/legal/data-processing-addendum)                                                                                                        |
-| **Livestorm**        | Ireland et Etats-Unis | Outil de visioconférence et webinar                   | ​[https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf](https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf)                                                                        |
+| **Tally**            | Belgique              | Outil de sondage                                      | https://tally.so/help/privacy-policy                                                                                                                                                                           |
+| **France Transfert** | France                | Outil de transfert de documents                       | [https://francetransfert.numerique.gouv.fr/cgu](https://francetransfert.numerique.gouv.fr/cgu)                                                                                                                 |
+| **Zapier**           | Etats-Unis            | Outil d'automatisation de la gestion des applications | [https://zapier.com/legal/data-processing-addendum](https://zapier.com/legal/data-processing-addendum)                                                                                                         |
+| **Livestorm**        | Ireland et Etats-Unis | Outil de visioconférence et webinar                   | [https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf](https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf)                                                                         |
 | **Brevo**            | UE et non-UE          | Outil de messagerie electronique                      | [https://www.brevo.com/fr/legal/privacypolicy/](https://www.brevo.com/fr/legal/privacypolicy/)                                                                                                                 |
 
 ## Cookies
