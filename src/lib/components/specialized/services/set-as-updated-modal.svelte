@@ -15,7 +15,7 @@
 
   async function setAsUpdated() {
     // TODO: il serait sans doute mieux d'avoir un endpoint dédié.
-    await createOrModifyService(service);
+    await createOrModifyService({ ...service, markSynced: true });
     isOpen = false;
     await onRefresh();
   }
