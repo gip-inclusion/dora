@@ -23,6 +23,7 @@
   export let description = "";
   export let hidden = false;
   export let hideLabel = false;
+  export let label = $currentSchema[id].label;
   export let vertical = false;
 </script>
 
@@ -31,7 +32,7 @@
     {id}
     let:onBlur
     let:errorMessages
-    label={$currentSchema[id].label}
+    {label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
     {hidden}

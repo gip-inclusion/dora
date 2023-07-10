@@ -4,9 +4,9 @@ export const addUserSchema = {
   email: {
     label: "Courriel",
     default: "",
-    rules: [v.isEmail(), v.maxStrLength(255)],
+    rules: [v.isEmail(), v.maxStrLength(254)],
     post: [v.lower, v.trim],
-    maxLength: 255,
+    maxLength: 254,
     required: true,
   },
   level: {
@@ -35,9 +35,9 @@ export const modifyUserSchema = {
   email: {
     label: "Courriel",
     default: "",
-    rules: [v.isEmail(), v.maxStrLength(255)],
+    rules: [v.isEmail(), v.maxStrLength(254)],
     post: [v.lower, v.trim],
-    maxLength: 255,
+    maxLength: 254,
     readonly: true,
   },
   level: {

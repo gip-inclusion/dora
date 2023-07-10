@@ -15,6 +15,7 @@
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
+
   export let isModel = false;
 </script>
 

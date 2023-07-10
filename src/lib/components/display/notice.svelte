@@ -18,6 +18,7 @@
     info: {
       background: "bg-info-light",
       text: "text-info",
+      title: "text-info",
       icon: informationLineIcon,
     },
     success: {
@@ -29,6 +30,7 @@
     warning: {
       background: "bg-warning-light",
       text: "text-warning",
+      title: "text-warning",
       icon: alertLine,
     },
     error: {
@@ -47,7 +49,7 @@
 </script>
 
 {#if visible}
-  <div class="rounded-lg {types[type].background} py-s24 pr-s24 pl-s24">
+  <div class="rounded-lg {types[type].background} py-s24 pl-s24 pr-s24">
     {#if title || hasCloseButton}
       <div class="flex items-center">
         {#if showIcon}
@@ -61,8 +63,7 @@
         {#if title}
           <svelte:element
             this={titleLevel}
-            class="mb-s0 flex text-f18 leading-32 text-gray-dark {types[type]
-              .title}"
+            class="mb-s0 flex text-f18 leading-32 {types[type].title}"
           >
             {#if showIcon}
               <div class="mr-s8 inline-block text-center sm:hidden">

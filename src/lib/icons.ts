@@ -50,6 +50,7 @@ export { default as mapPinUserFillIcon } from "remixicon/icons/Map/map-pin-user-
 export { default as pinDistanceIcon } from "remixicon/icons/Map/pin-distance-fill.svg?raw";
 export { default as rocketIcon } from "remixicon/icons/Map/rocket-2-line.svg?raw";
 export { default as lightBulbIcon } from "remixicon/icons/Others/lightbulb-flash-line.svg?raw";
+export { default as flashLightIcon } from "remixicon/icons/Weather/flashlight-line.svg?raw";
 export { default as wheelChairIcon } from "remixicon/icons/Others/wheelchair-line.svg?raw";
 export { default as repeatIcon } from "remixicon/icons/Media/repeat-line.svg?raw";
 export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill.svg?raw";
@@ -59,6 +60,7 @@ export { default as substractIcon } from "remixicon/icons/System/subtract-line.s
 export { default as alertIcon } from "remixicon/icons/System/alert-fill.svg?raw";
 export { default as alertLine } from "remixicon/icons/System/alert-line.svg?raw";
 export { default as arrowDownLineIcon } from "remixicon/icons/System/arrow-down-line.svg?raw";
+export { default as arrowLeftLineIcon } from "remixicon/icons/System/arrow-left-s-line.svg?raw";
 export { default as arrowDownSIcon } from "remixicon/icons/System/arrow-down-s-line.svg?raw";
 export { default as arrowRightSIcon } from "remixicon/icons/System/arrow-right-s-line.svg?raw";
 export { default as arrowUpLineIcon } from "remixicon/icons/System/arrow-up-line.svg?raw";

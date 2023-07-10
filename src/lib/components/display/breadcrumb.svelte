@@ -18,12 +18,15 @@
     | "structure-services"
     | "structure-modeles"
     | "structure-antennes"
+    | "service-orientation-step1"
+    | "service-orientation-step2"
+    | "service-orientation-confirmation"
     | "service";
 
   export let structure: Structure | undefined = undefined;
   export let service: Service | undefined = undefined;
   export let model: Model | undefined = undefined;
-  export let currentLocation: BreadcrumbLocation;
+  export let currentLocation: BreadcrumbLocation | string;
   export let dark = false;
 
   const locationToText: Record<string, string> = {
@@ -35,6 +38,9 @@
     privacy: "Données personnelles",
     partners: "Nos partenaires",
     account: "Mes informations",
+    "service-orientation-step1": "Orienter • Étape 1/2",
+    "service-orientation-step2": "Orienter • Étape 2/2",
+    "service-orientation-confirmation": "Orienter • Confirmation",
   };
 
   function getStructureData(location) {
@@ -97,14 +103,6 @@
       </li>
     {/if}
 
-    {#if Object.keys(locationToText).includes(currentLocation)}
-      <li class="inline before:content-['/']">
-        <span aria-current="page" class="current">
-          {locationToText[currentLocation]}
-        </span>
-      </li>
-    {/if}
-
     {#if service}
       <li class="inline before:content-['/']">
         {#if currentLocation === "service"}
@@ -123,6 +121,14 @@
       <li class="inline before:content-['/']">
         <span class="current" aria-current="page">
           {structureData.name}
+        </span>
+      </li>
+    {/if}
+
+    {#if Object.keys(locationToText).includes(currentLocation)}
+      <li class="inline before:content-['/']">
+        <span aria-current="page" class="current">
+          {locationToText[currentLocation]}
         </span>
       </li>
     {/if}
