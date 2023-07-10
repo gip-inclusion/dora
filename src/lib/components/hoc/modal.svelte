@@ -10,7 +10,7 @@
   export let overflow = false;
   export let title: string | undefined = undefined;
   export let subtitle: string | undefined = undefined;
-  export let smallWidth = false;
+  export let width: "small" | "medium" | undefined = undefined;
   export let targetId: string | undefined = undefined;
   export let canClose = true;
 
@@ -92,8 +92,9 @@
         tabindex="-1"
         bind:this={modalEl}
         class="max-h-screen rounded-md bg-white p-s24 shadow-md"
-        class:small-width={smallWidth}
-        class:min-w-[80vw]={!smallWidth}
+        class:small-width={width === "small"}
+        class:medium-width={width === "medium"}
+        class:min-w-[80vw]={!width}
         class:overflow-y-auto={overflow}
         on:click|stopPropagation
       >
@@ -145,6 +146,9 @@
 <style lang="postcss">
   .small-width {
     @apply max-w-[560px];
+  }
+  .medium-width {
+    @apply max-w-[820px];
   }
 
   #background {

@@ -62,7 +62,7 @@
 <Modal
   bind:isOpen={isInclusionNumModalOpen}
   title="Attention !"
-  smallWidth
+  width="small"
   overflow
 >
   Le passage du formulaire classique vers le formulaire de l'inclusion numérique

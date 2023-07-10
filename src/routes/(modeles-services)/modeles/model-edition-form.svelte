@@ -123,7 +123,7 @@
         bind:isOpen={showUpdateAllServicesModal}
         title="Mise à jour automatiquement"
         on:close={() => (showUpdateAllServicesModal = false)}
-        smallWidth
+        width="small"
       >
         <div class="pt-s16 text-f14 text-gray-text">
           Vous avez choisi de mettre à jour automatiquement tous les services

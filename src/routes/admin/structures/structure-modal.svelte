@@ -28,7 +28,7 @@
   on:close={() => (structureSlug = null)}
   bind:isOpen
   title={structure?.name}
-  smallWidth
+  width="small"
   overflow
 >
   {#if structure}

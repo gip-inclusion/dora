@@ -27,7 +27,7 @@
   subtitle=" Avant de marquer votre service comme à jour, veuillez vérifier que ces
   informations sur le service sont exactes."
   on:close={() => (isOpen = false)}
-  smallWidth
+  width="small"
   overflow
 >
   <div class="pt-s16 text-f18 text-france-blue">
