@@ -6,7 +6,7 @@
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import UploadField from "$lib/components/forms/fields/upload-field.svelte";
   import { formatFilePath } from "$lib/utils/service";
-  import { OTHER_LABEL, orientation } from "../store";
+  import { orientation } from "../store";
   import { userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
   import Accordion from "$lib/components/display/accordion.svelte";
@@ -169,7 +169,7 @@
               </h4>
               <ul class="ml-s20 list-disc">
                 {#each $orientation.situation as label}
-                  {#if label === OTHER_LABEL}
+                  {#if label === "Autre"}
                     <li class="text-gray-text">
                       {label}&nbsp;: {$orientation.situationOther}
                     </li>
@@ -250,36 +250,39 @@
     />
   </Fieldset>
 
-  <Fieldset title="Documents et justificatifs requis">
-    {#each service.formsInfo as form}
-      {#if $orientation.attachments[form.name]}
-        <UploadField
-          dynamicId
-          label="Document à compléter"
-          vertical
-          id={form.name}
-          description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: jpg, png, doc, pdf"
-          bind:fileKeys={$orientation.attachments[form.name]}
-        >
-          <p slot="description">
-            <a href={form.url} class="font-bold underline">
-              {formatFilePath(form.name)}
-            </a>
-          </p>
-        </UploadField>
-      {/if}
-    {/each}
+  {#if service.formsInfo.length}
+    <Fieldset title="Documents et justificatifs requis">
+      {#each service.formsInfo as form}
+        {#if $orientation.attachments[form.name]}
+          <UploadField
+            dynamicId
+            label="Document à compléter"
+            vertical
+            id={form.name}
+            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: jpg, png, doc, pdf"
+            bind:fileKeys={$orientation.attachments[form.name]}
+          >
+            <p slot="description">
+              <a href={form.url} class="font-bold underline">
+                {formatFilePath(form.name)}
+              </a>
+            </p>
+          </UploadField>
+        {/if}
+      {/each}
 
-    {#each credentials as cred}
-      {#if $orientation.attachments[cred.label]}
-        <UploadField
-          dynamicId
-          label={cred.label}
-          vertical
-          id={cred.label}
-          description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: jpg, png, doc, pdf"
-          bind:fileKeys={$orientation.attachments[cred.label]}
-        />{/if}
-    {/each}
-  </Fieldset>
+      {#each credentials as cred}
+        {#if $orientation.attachments[cred.label]}
+          <UploadField
+            dynamicId
+            label={cred.label}
+            vertical
+            id={cred.label}
+            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: jpg, png, doc, pdf"
+            bind:fileKeys={$orientation.attachments[cred.label]}
+          />
+        {/if}
+      {/each}
+    </Fieldset>
+  {/if}
 </div>

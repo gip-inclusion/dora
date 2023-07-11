@@ -15,7 +15,7 @@ export const orientationStep1Schema: v.Schema = {
     rules: [v.isString(), v.maxStrLength(480)],
     maxLength: 480,
     required: (data) => {
-      return data?.situation?.includes("other");
+      return data?.situation?.includes("Autre");
     },
   },
 

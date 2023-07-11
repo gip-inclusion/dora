@@ -97,6 +97,11 @@
       secondary
     />
 
-    <Button id="publish" type="submit" label="Envoyer l‘orientation" />
+    <Button
+      id="publish"
+      type="submit"
+      disabled={requesting}
+      label="Envoyer l‘orientation"
+    />
   </StickyFormSubmissionRow>
 </Form>

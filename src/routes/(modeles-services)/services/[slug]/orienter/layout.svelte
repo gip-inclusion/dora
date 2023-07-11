@@ -29,7 +29,7 @@
       />
     </div>
     <h1 class="text-white print:text-france-blue">
-      Orienter un•e bénéficiaire vers le service&nbsp;:
+      Orienter un ou une bénéficiaire vers le service&nbsp;:
     </h1>
     <h2 class="text-white print:text-france-blue">
       {service.name}

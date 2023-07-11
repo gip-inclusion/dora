@@ -14,7 +14,8 @@
   const concernedPublicChoices = [
     ...servicesOptions.concernedPublic
       .filter((elt) => service.concernedPublic.includes(elt.value))
-      .map((choice) => ({ value: choice.label, label: choice.label })),
+      .map((choice) => ({ value: choice.label, label: choice.label }))
+      .filter((elt) => elt.value !== "Autre"),
     { value: "Autre", label: "Autre (à préciser)" },
   ];
 
@@ -26,11 +27,18 @@
         ...servicesOptions.accessConditions.filter((elt) =>
           service.accessConditions.includes(elt.value)
         ),
-      ].map((choice) => ({ value: choice.label, label: choice.label }))
+      ]
+        .map((choice) => ({ value: choice.label, label: choice.label }))
+        .filter(
+          (elt) => elt.value !== "Aucun" && elt.value !== "Sans condition"
+        )
     : [];
 
-  $: if (requirementChoices.length === 0) {
+  if (requirementChoices.length === 0) {
     orientationStep1Schema.requirements.required = false;
+  }
+  if (concernedPublicChoices.length === 0) {
+    orientationStep1Schema.situation.required = false;
   }
 
   $: if (!$orientation.situation?.includes("Autre")) {
@@ -40,9 +48,11 @@
 
 <div>
   {#if service.feeCondition && isNotFreeService(service.feeCondition)}
-    <Notice type="info" title="Frais à charge du bénéficiaire">
-      {service.feeDetails}
-    </Notice>
+    <div class="mb-s12">
+      <Notice type="info" title="Frais à charge du bénéficiaire">
+        {service.feeDetails}
+      </Notice>
+    </div>
   {/if}
 
   <Fieldset title="Publics concernés par ce service" noTopPadding>
@@ -67,9 +77,9 @@
     </div>
   </Fieldset>
 
-  {#if requirementChoices.length !== 0}
-    <Fieldset title="Critères et conditions d‘accès">
-      <div class="flex flex-col lg:gap-s8">
+  <Fieldset title="Critères et conditions d‘accès">
+    <div class="flex flex-col lg:gap-s8">
+      {#if requirementChoices.length !== 0}
         <CheckboxesField
           id="requirements"
           choices={requirementChoices}
@@ -77,86 +87,92 @@
           bind:value={$orientation.requirements}
           vertical
         />
-      </div>
-    </Fieldset>
-  {/if}
+      {:else}
+        <p class="mb-s0 italic">
+          Ce service n’a aucun critère ou conditions d’accès
+        </p>
+      {/if}
+    </div>
+  </Fieldset>
 
-  <Fieldset title="Documents et justificatifs requis">
-    <Notice
-      type="info"
-      titleLevel="h3"
-      title="Pensez à récupérer et compléter les documents ou justificatifs requis"
-    >
-      <p class="text-f14 text-gray-text-alt2">
-        Une demande incomplète génère en moyenne un retard de traitement de 2
-        semaines.
-      </p>
-    </Notice>
+  {#if service.onlineForm || service.formsInfo.length || service.credentialsDisplay.length}
+    <Fieldset title="Documents et justificatifs requis">
+      <Notice
+        type="info"
+        titleLevel="h3"
+        title="Pensez à récupérer et compléter les documents ou justificatifs requis"
+      >
+        <p class="text-f14 text-gray-text-alt2">
+          Une demande incomplète génère en moyenne un retard de traitement de 2
+          semaines.
+        </p>
+      </Notice>
 
-    <div class="flex flex-row gap-s48">
-      {#if service.onlineForm || service.formsInfo.length}
-        <div>
-          {#if service.formsInfo.length}
-            <h4 class="mb-s4">Documents à compléter</h4>
-            <p class="text-f12 text-gray-text-alt2">
-              Téléchargez et complétez les documents requis
-            </p>
-            <ul class="mb-s16 list-inside list-disc">
-              {#each service.formsInfo as form}
+      <div class="flex flex-row gap-s48">
+        {#if service.onlineForm || service.formsInfo.length}
+          <div>
+            {#if service.formsInfo.length}
+              <h4 class="mb-s4">Documents à compléter</h4>
+              <p class="text-f12 text-gray-text-alt2">
+                Téléchargez et complétez les documents requis
+              </p>
+              <ul class="mb-s16 list-inside list-disc">
+                {#each service.formsInfo as form}
+                  <li>
+                    <span class="break-word">
+                      <a
+                        href={form.url}
+                        class="text-f16 text-gray-text underline"
+                        download
+                      >
+                        {formatFilePath(form.name)}
+                      </a>
+                    </span>
+                  </li>
+                {/each}
+              </ul>
+            {/if}
+            {#if service.onlineForm}
+              <h4 class="mb-s4">Liens</h4>
+              <p class="text-f12 text-gray-text">
+                Informations complémentaires ou formulaires à compléter
+              </p>
+
+              <ul class="list-disc pl-s20">
                 <li>
                   <span class="break-word">
                     <a
-                      href={form.url}
+                      rel="noopener"
+                      target="_blank"
+                      href={service.onlineForm}
                       class="text-f16 text-gray-text underline"
-                      download
+                      title="Ouverture dans une nouvelle fenêtre"
                     >
-                      {formatFilePath(form.name)}
+                      {service.onlineForm}
                     </a>
                   </span>
                 </li>
-              {/each}
-            </ul>
-          {/if}
-          {#if service.onlineForm}
-            <h4 class="mb-s4">Liens</h4>
-            <p class="text-f12 text-gray-text">
-              Informations complémentaires ou formulaires à compléter
-            </p>
+              </ul>
+            {/if}
+          </div>
+        {/if}
+        <div>
+          <h4 class="mb-s4">Justificatifs à fournir</h4>
+          <p class="text-f12 text-gray-text-alt2">
+            Liste des documents à récupérer auprès du ou de la bénéficiaire
+          </p>
 
-            <ul class="list-disc pl-s20">
-              <li>
-                <span class="break-word">
-                  <a
-                    rel="noopener"
-                    target="_blank"
-                    href={service.onlineForm}
-                    class="text-f16 text-gray-text underline"
-                    title="Ouverture dans une nouvelle fenêtre"
-                  >
-                    {service.onlineForm}
-                  </a>
-                </span>
+          <ul class="list-inside list-disc">
+            {#each service.credentialsDisplay as creds}
+              <li class="text-f16 text-gray-text">{creds}</li>
+            {:else}
+              <li class="text-f16 text-gray-text">
+                <span>Aucun</span>
               </li>
-            </ul>
-          {/if}
+            {/each}
+          </ul>
         </div>
-      {/if}
-      <div>
-        <h4 class="mb-s4">Justificatifs à fournir</h4>
-        <p class="text-f12 text-gray-text-alt2">
-          Liste des documents à récupérer auprès du ou de la bénéficiaire
-        </p>
-
-        <ul class="list-inside list-disc">
-          {#each service.credentialsDisplay as creds}
-            <li class="text-f16 text-gray-text">{creds}</li>
-          {:else}
-            <li class="text-f16 text-gray-text">
-              <span>Aucun</span>
-            </li>
-          {/each}
-        </ul>
       </div>
-    </div>
-  </Fieldset>
+    </Fieldset>
+  {/if}
 </div>
