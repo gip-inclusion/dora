@@ -3,6 +3,8 @@ import { getOrientation } from "$lib/utils/orientation";
 import { error } from "@sveltejs/kit";
 import type { Orientation } from "$lib/types";
 
+export const ssr = false;
+
 export const load: PageLoad = async ({ params }) => {
   const orientation = await getOrientation(params.id);
 
