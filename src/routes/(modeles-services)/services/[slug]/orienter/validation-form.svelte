@@ -19,6 +19,10 @@
     { value: "Autre", label: "Autre (à préciser)" },
   ];
 
+  const credentialsDisplay = service.credentialsDisplay.filter(
+    (elt) => !elt.toLowerCase().includes("vitale")
+  );
+
   const requirementChoices = servicesOptions
     ? [
         ...servicesOptions.requirements.filter((elt) =>
@@ -37,7 +41,10 @@
   if (requirementChoices.length === 0) {
     orientationStep1Schema.requirements.required = false;
   }
-  if (concernedPublicChoices.length === 0) {
+
+  if (
+    concernedPublicChoices.filter((elt) => elt.value !== "Autre").length === 0
+  ) {
     orientationStep1Schema.situation.required = false;
   }
 
@@ -95,7 +102,7 @@
     </div>
   </Fieldset>
 
-  {#if service.onlineForm || service.formsInfo.length || service.credentialsDisplay.length}
+  {#if service.onlineForm || service.formsInfo.length || credentialsDisplay.length}
     <Fieldset title="Documents et justificatifs requis">
       <Notice
         type="info"
@@ -163,7 +170,7 @@
           </p>
 
           <ul class="list-inside list-disc">
-            {#each service.credentialsDisplay as creds}
+            {#each credentialsDisplay as creds}
               <li class="text-f16 text-gray-text">{creds}</li>
             {:else}
               <li class="text-f16 text-gray-text">

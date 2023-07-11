@@ -41,8 +41,10 @@
     $orientation.referentFirstName = $userInfo.firstName;
     $orientation.referentEmail = $userInfo.email;
 
-    credentials = servicesOptions.credentials.filter((elt) =>
-      service.credentials.includes(elt.value)
+    credentials = servicesOptions.credentials.filter(
+      (elt) =>
+        service.credentials.includes(elt.value) &&
+        !elt.label.toLowerCase().includes("vitale")
     );
     credentials.forEach((cred) => {
       $orientation.attachments[cred.label] = [];
@@ -243,15 +245,9 @@
       bind:value={$orientation.orientationReasons}
       vertical
     />
-
-    <Notice
-      type="info"
-      title="L’accompagnateur s’engage à informer la personne concernée de ce
-    traitement de données."
-    />
   </Fieldset>
 
-  {#if service.formsInfo.length}
+  {#if service.formsInfo.length || credentials.length}
     <Fieldset title="Documents et justificatifs requis">
       {#each service.formsInfo as form}
         {#if $orientation.attachments[form.name]}
@@ -286,4 +282,11 @@
       {/each}
     </Fieldset>
   {/if}
+
+  <div class="mt-s32">
+    <Notice
+      type="info"
+      title="L’accompagnateur s’engage à informer la personne concernée de ce traitement de données."
+    />
+  </div>
 </div>
