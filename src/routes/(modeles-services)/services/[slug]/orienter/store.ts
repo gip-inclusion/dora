@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import type { Orientation } from "./types";
+import type { Orientation } from "$lib/types";
 
 export const orientation = writable<Orientation>({
   /*
@@ -7,7 +7,7 @@ export const orientation = writable<Orientation>({
     situation: ["Public femme en difficulté"],
     situationOther: "autre...",
     requirements: ["prerequis-1"],
-    prescriberStructure: "nenettes-co-le-resea",
+    prescriberStructureSlug: "nenettes-co-le-resea",
 
     referentLastName: "RefName",
     referentFirstName: "RefFirstname",
@@ -27,7 +27,7 @@ export const orientation = writable<Orientation>({
   situation: [],
   situationOther: "",
   requirements: [],
-  prescriberStructure: "",
+  prescriberStructureSlug: "",
 
   referentLastName: "",
   referentFirstName: "",

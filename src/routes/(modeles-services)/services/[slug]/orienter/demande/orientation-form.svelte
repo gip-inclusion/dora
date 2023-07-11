@@ -20,9 +20,10 @@
   let credentials = [];
 
   if ($userInfo.structures?.length === 1) {
-    $orientation.prescriberStructure = $userInfo.structures[0].slug;
+    $orientation.prescriberStructureSlug = $userInfo.structures[0].slug;
   } else {
-    $orientation.prescriberStructure = $userPreferences.visitedStructures.length
+    $orientation.prescriberStructureSlug = $userPreferences.visitedStructures
+      .length
       ? $userInfo.structures.find(
           ({ slug }) => slug === $userPreferences.visitedStructures[0]
         )?.slug
@@ -56,10 +57,10 @@
   {#if $userInfo.structures.length > 1}
     <div class="mb-s32">
       <SelectField
-        id="prescriberStructure"
+        id="prescriberStructureSlug"
         placeholder="Structure concernée"
         description="Vous faites partie de plusieurs structures, veuillez choisir celle qui sera mentionnée dans les e-mails envoyés aux partenaires."
-        bind:value={$orientation.prescriberStructure}
+        bind:value={$orientation.prescriberStructureSlug}
         vertical
         choices={$userInfo.structures.map((struct) => ({
           value: struct.slug,

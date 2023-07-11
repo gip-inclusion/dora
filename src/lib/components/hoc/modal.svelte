@@ -125,6 +125,11 @@
               <p class="text-f14 text-gray-text">{subtitle}</p>
             </div>
           {/if}
+          {#if $$slots.subtitle}
+            <div class="text-f14 text-gray-text">
+              <slot name="subtitle" />
+            </div>
+          {/if}
           <hr class="-mx-s24 my-s24" />
         </div>
 

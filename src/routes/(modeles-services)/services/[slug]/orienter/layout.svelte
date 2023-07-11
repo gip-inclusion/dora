@@ -11,11 +11,11 @@
 
   const { service } = data;
 
-  let currentLocation = "serviceOrientationStep1";
+  let currentLocation = "service-orientation-step1";
   if ($page.url.pathname.endsWith("/orienter/demande")) {
-    currentLocation = "serviceOrientationStep2";
+    currentLocation = "service-orientation-step2";
   } else if ($page.url.pathname.endsWith("/orienter/merci")) {
-    currentLocation = "serviceOrientationConfirmation";
+    currentLocation = "service-orientation-confirmation";
   }
 </script>
 

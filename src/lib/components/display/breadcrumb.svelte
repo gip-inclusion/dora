@@ -21,6 +21,7 @@
     | "service-orientation-step1"
     | "service-orientation-step2"
     | "service-orientation-confirmation"
+    | "orientation"
     | "service";
 
   export let structure: Structure | undefined = undefined;
@@ -41,6 +42,7 @@
     "service-orientation-step1": "Orienter • Étape 1/2",
     "service-orientation-step2": "Orienter • Étape 2/2",
     "service-orientation-confirmation": "Orienter • Confirmation",
+    orientation: "Demande d’orientation",
   };
 
   function getStructureData(location) {
@@ -81,7 +83,7 @@
       {#if currentLocation === "home"}
         <span aria-current="page" class="current">Accueil</span>
       {:else}
-        <a href="/" title="Retour à l'accueil du site">Accueil</a>
+        <a href="/" title="Retour à l’accueil du site">Accueil</a>
       {/if}
     </li>
 

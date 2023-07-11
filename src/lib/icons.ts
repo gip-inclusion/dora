@@ -8,9 +8,13 @@ export { default as homeSmileIcon } from "remixicon/icons/Buildings/home-smile-l
 export { default as storeIcon } from "remixicon/icons/Buildings/store-2-line.svg?raw";
 export { default as mailIcon } from "remixicon/icons/Business/mail-send-fill.svg?raw";
 export { default as mailLineIcon } from "remixicon/icons/Business/mail-send-line.svg?raw";
+export { default as mailAddLineIcon } from "remixicon/icons/Business/mail-add-line.svg?raw";
 export { default as serviceIcon } from "remixicon/icons/Business/service-line.svg?raw";
+export { default as inboxLineIcon } from "remixicon/icons/Business/inbox-line.svg?raw";
+export { default as calendarEventLineIcon } from "remixicon/icons/Business/calendar-event-line.svg?raw";
 export { default as chatQuoteIcon } from "remixicon/icons/Communication/chat-quote-line.svg?raw";
 export { default as chatSmileIcon } from "remixicon/icons/Communication/chat-smile-3-line.svg?raw";
+export { default as messageLineIcon } from "remixicon/icons/Communication/message-line.svg?raw";
 export { default as editIcon } from "remixicon/icons/Design/edit-2-line.svg?raw";
 export { default as quillPenIcon } from "remixicon/icons/Design/quill-pen-line.svg?raw";
 export { default as markPenIcon } from "remixicon/icons/Design/mark-pen-line.svg?raw";
@@ -39,11 +43,13 @@ export { default as liIcon } from "remixicon/icons/Editor/list-unordered.svg?raw
 export { default as paraIcon } from "remixicon/icons/Editor/paragraph.svg?raw";
 export { default as textIcon } from "remixicon/icons/Editor/text.svg?raw";
 export { default as listCheckIcon } from "remixicon/icons/Editor/list-check-2.svg?raw";
+export { default as attachmentIcon } from "remixicon/icons/Editor/attachment-2.svg?raw";
 export { default as euroLineIcon } from "remixicon/icons/Finance/money-euro-circle-line.svg?raw";
 export { default as priceTagIcon } from "remixicon/icons/Finance/price-tag-3-line.svg?raw";
 export { default as mentalHealthIcon } from "remixicon/icons/Health/mental-health-line.svg?raw";
 export { default as stethoscopeIcon } from "remixicon/icons/Health/stethoscope-line.svg?raw";
 export { default as compassDiscoverIcon } from "remixicon/icons/Map/compass-discover-line.svg?raw";
+export { default as compass3Icon } from "remixicon/icons/Map/compass-3-line.svg?raw";
 export { default as earthFillIcon } from "remixicon/icons/Map/earth-fill.svg?raw";
 export { default as mapPinIcon } from "remixicon/icons/Map/map-pin-2-line.svg?raw";
 export { default as mapPinUserFillIcon } from "remixicon/icons/Map/map-pin-user-fill.svg?raw";
@@ -101,7 +107,10 @@ export { default as starSmileLineIcon } from "remixicon/icons/User/star-smile-li
 export { default as teamLineIcon } from "remixicon/icons/User/team-line.svg?raw";
 export { default as userIcon } from "remixicon/icons/User/user-line.svg?raw";
 export { default as user2Icon } from "remixicon/icons/User/user-2-line.svg?raw";
+export { default as user3Icon } from "remixicon/icons/User/user-3-line.svg?raw";
+export { default as user6Icon } from "remixicon/icons/User/user-6-line.svg?raw";
 export { default as userAddIcon } from "remixicon/icons/User/user-add-line.svg?raw";
+export { default as userSharedLineIcon } from "remixicon/icons/User/user-shared-2-line.svg?raw";
 
 // Autres
 

@@ -28,7 +28,7 @@ export const orientationStep1Schema: v.Schema = {
 };
 
 export const orientationStep2Schema: v.Schema = {
-  prescriberStructure: {
+  prescriberStructureSlug: {
     label: "Confirmez votre structure",
     rules: [v.isString(), v.maxStrLength(50)],
     required: true,
