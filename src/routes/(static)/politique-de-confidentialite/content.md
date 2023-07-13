@@ -34,7 +34,7 @@ Cette mission d'intérêt public est précisée dans l'arrêté du 19 avril 2022
 | **Type de données**                                                    | **Durée de la conservation**                                                 |
 | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | Données relatives aux utilisateurs de la plateforme                    | 2 ans à compter du dernier contact avec l'utilisateur de la plateforme DORA. |
-| Données relatives aux personnes suivies par les agents accompagnateurs | Les données sont supprimées immédiatement après l’envoi aux accompagnateurs. |
+| Données relatives aux personnes suivies par les agents accompagnateurs | 6 mois après traitement de la demande, ou 2 ans en l'absence de traitement   |
 
 ## Quels droits avez-vous ?
 
