@@ -2,7 +2,7 @@
   import Accordion from "$lib/components/display/accordion.svelte";
   import type { Service } from "$lib/types";
   import { addlinkToUrls } from "$lib/utils/misc";
-  import { formatFilePath } from "$lib/utils/service";
+  import { formatFilePath } from "$lib/utils/file";
 
   export let service: Service;
 </script>

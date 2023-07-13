@@ -16,12 +16,53 @@
   import Form from "$lib/components/forms/form.svelte";
   import { goto } from "$app/navigation";
   import { arrowLeftLineIcon } from "$lib/icons";
+  import { validate } from "$lib/validation/validation";
 
   export let data: PageData;
 
   const { service, servicesOptions } = data;
 
   let requesting = false;
+
+  // Fichiers à uploader
+  let credentials = [];
+  let atLeastOneAttachmentError = false;
+
+  credentials = servicesOptions.credentials.filter(
+    (elt) =>
+      service.credentials.includes(elt.value) &&
+      !elt.label.toLowerCase().includes("vitale") &&
+      elt.label !== "Aucun"
+  );
+  credentials.forEach((cred) => {
+    $orientation.attachments[cred.label] = [];
+  });
+  service.formsInfo.forEach((form) => {
+    $orientation.attachments[form.name] = [];
+  });
+
+  function handleValidate(formData) {
+    const result = validate(formData, orientationStep2Schema);
+
+    if (credentials.length || service.formsInfo.length) {
+      atLeastOneAttachmentError =
+        Object.values(formData.attachments).flat().length === 0;
+
+      if (atLeastOneAttachmentError) {
+        result.errorFields.push("attachments");
+        result.valid = false;
+
+        // Focus sur l'erreur si c'est la dernière
+        if (result.errorFields.length === 1) {
+          document
+            .getElementById("attachments")
+            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    }
+
+    return result;
+  }
 
   function handleChange(validatedData) {
     $orientation = { ...validatedData };
@@ -65,6 +106,7 @@
   onChange={handleChange}
   onSubmit={handleSubmit}
   onSuccess={handleSuccess}
+  onValidate={handleValidate}
   bind:requesting
 >
   <Layout {data}>
@@ -74,7 +116,7 @@
     <hr class="my-s40" />
     <p class="mb-s40 max-w-2xl text-f18">
       Ce formulaire collecte les informations nécessaires pour la demande
-      d‘orientation. Veuillez fournir tous les éléments demandés.
+      d’orientation. Veuillez fournir tous les éléments demandés.
     </p>
     <p>
       Vous recevrez une copie de cette demande, tout comme le ou la
@@ -82,7 +124,7 @@
     </p>
 
     <div class="mt-s40 flex flex-row justify-between gap-x-s24">
-      <OrientationForm {service} {servicesOptions} />
+      <OrientationForm {atLeastOneAttachmentError} {credentials} {service} />
       <div class="mb-s32 w-full shrink-0 md:w-[384px]">
         <ContactBox {service} />
       </div>
@@ -101,7 +143,7 @@
       id="publish"
       type="submit"
       disabled={requesting}
-      label="Envoyer l‘orientation"
+      label="Envoyer l’orientation"
     />
   </StickyFormSubmissionRow>
 </Form>

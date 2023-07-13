@@ -45,11 +45,11 @@
     },
     {
       value: "beneficiary-working",
-      label: "Bénéficiaire indisponible&nbsp;: en emploi",
+      label: "Bénéficiaire indisponible : en emploi",
     },
     {
       value: "beneficiary-in-formation",
-      label: "Bénéficiaire indisponible&nbsp;: en formation",
+      label: "Bénéficiaire indisponible : en formation",
     },
     {
       value: "beneficiary-not-eligible",
@@ -100,11 +100,18 @@
   $: denyOrientationSchema.otherDetails.required = reasons.includes("other");
 </script>
 
-<Modal bind:isOpen on:close title="Refuser la demande" overflow width="medium">
+<Modal
+  bind:isOpen
+  on:close
+  title="Refuser la demande"
+  overflow
+  width="medium"
+  hideTitle={showConfirmation}
+>
   <div slot="subtitle">
     Vous êtes sur le point de refuser une demande de prescription de service qui
-    vous a été adressée par {orientation.referentFirstName}
-    {orientation.referentLastName} de la structure {orientation
+    vous a été adressée par {orientation.beneficiaryFirstName}
+    {orientation.beneficiaryLastName} de la structure {orientation
       .prescriberStructure?.name}
     pour le service «&nbsp;<a
       class="text-magenta-cta"

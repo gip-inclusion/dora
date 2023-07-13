@@ -3,11 +3,14 @@
   import { arrowLeftLineIcon, flashLightIcon } from "$lib/icons";
   import Layout from "../layout.svelte";
   import type { PageData } from "./$types";
-  import { orientation } from "../store";
+  import { initEmptyOrientation, orientation } from "../store";
   import illustration from "$lib/assets/illustrations/illu-favs.svg";
   import Notice from "$lib/components/display/notice.svelte";
 
   export let data: PageData;
+
+  const showContactBeneficiary = !!$orientation.beneficiaryEmail;
+  $orientation = initEmptyOrientation();
 </script>
 
 <Layout {data}>
@@ -30,12 +33,12 @@
         {/if}
       </p>
 
-      {#if $orientation.beneficiaryContactPreferences?.length === 1 && ($orientation.beneficiaryContactPreferences[0] === "AUTRE" || $orientation.beneficiaryContactPreferences[0] === "TELEPHONE")}
+      {#if showContactBeneficiary}
         <div class="mb-s28">
           <Notice type="info" title="Pensez à informer le ou la bénéficiaire">
             <p class="text-left text-f14 text-gray-text">
               Conformément aux préférences de contact du ou de la bénéficiaire,
-              veuillez prendre contact avec lui ou elle pour l‘informer qu‘une
+              veuillez prendre contact avec lui ou elle pour l’informer qu’une
               prescription a été réalisée en son nom.
             </p>
           </Notice>

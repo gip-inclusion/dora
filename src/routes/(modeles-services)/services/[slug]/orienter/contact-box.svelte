@@ -17,7 +17,10 @@
         <strong>{service.contactName}</strong>
       </p>
     {/if}
-    <ContactPhone {service} />
+
+    {#if service.contactPhone}
+      <ContactPhone {service} />
+    {/if}
     <ContactEmail {service} />
   </div>
 </div>

@@ -10,6 +10,7 @@
   export let overflow = false;
   export let title: string | undefined = undefined;
   export let subtitle: string | undefined = undefined;
+  export let hideTitle = false;
   export let width: "small" | "medium" | undefined = undefined;
   export let targetId: string | undefined = undefined;
   export let canClose = true;
@@ -98,9 +99,9 @@
         class:overflow-y-auto={overflow}
         on:click|stopPropagation
       >
-        <div class="mb-s24">
+        <div class:mb-s24={!hideTitle} class:float-right={hideTitle}>
           <div class="flex justify-between">
-            {#if title}
+            {#if title && !hideTitle}
               <h1
                 class="text-f22 leading-32 text-france-blue md:text-f24 lg:text-f28 lg:leading-40 xl:text-f32"
               >
@@ -120,17 +121,19 @@
               </div>
             {/if}
           </div>
-          {#if subtitle}
+          {#if subtitle && !hideTitle}
             <div>
               <p class="text-f14 text-gray-text">{subtitle}</p>
             </div>
           {/if}
-          {#if $$slots.subtitle}
+          {#if $$slots.subtitle && !hideTitle}
             <div class="text-f14 text-gray-text">
               <slot name="subtitle" />
             </div>
           {/if}
-          <hr class="-mx-s24 my-s24" />
+          {#if !hideTitle}
+            <hr class="-mx-s24 my-s24" />
+          {/if}
         </div>
 
         <div class="body max-h-s512 overflow-auto">

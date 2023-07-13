@@ -21,7 +21,7 @@
 
   const contactServiceSchema: v.Schema = {
     extraRecipients: {
-      label: "Ajouter d‘autres destinataires",
+      label: "Ajouter d’autres destinataires",
       default: [],
       rules: [],
     },
@@ -64,6 +64,7 @@
   bind:isOpen
   on:close
   overflow
+  hideTitle={showConfirmation}
   width="medium"
   title="Contacter le prescripteur ou la prescriptrice"
 >

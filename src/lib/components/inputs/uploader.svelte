@@ -75,7 +75,7 @@
       on:change={handleSubmit}
       {disabled}
       type="file"
-      accept=".doc, .docx, .pdf, .png, .jpeg, .jpg, .odt"
+      accept=".doc, .docx, .pdf, .png, .jpeg, .jpg, .odt, .xls, .xlsx, .ods"
       multiple
       class="font-bold file:rounded file:border file:border-magenta-cta file:bg-white file:px-s8 file:py-s6 file:text-f14 file:leading-normal file:text-magenta-cta file:hover:border-magenta-hover file:hover:bg-magenta-hover file:hover:!text-white file:active:border-france-blue file:active:text-france-blue file:disabled:border-gray-01 file:disabled:disabled:text-gray-text-alt2 file:lg:px-s10"
     />{progress != null ? `${Math.round(progress)} %` : ""}

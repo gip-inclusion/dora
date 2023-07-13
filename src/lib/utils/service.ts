@@ -118,20 +118,6 @@ export function getSubCategoryLabel(
   return subCategory?.label ?? "";
 }
 
-export function formatFilePath(filePath: string) {
-  const file = filePath.split("/").pop();
-
-  const dotPosition = file.lastIndexOf(".");
-  if (dotPosition === -1) {
-    return file;
-  }
-
-  const name = file.slice(0, dotPosition);
-  const extension = file.slice(file.lastIndexOf("."), file.length);
-
-  return `${name} (${extension})`;
-}
-
 export function isNotFreeService(feeConditionValue: FeeCondition): boolean {
   return feeConditionValue !== "gratuit";
 }

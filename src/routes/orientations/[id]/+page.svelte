@@ -25,6 +25,7 @@
   import { formatNumericDate } from "$lib/utils/date";
   import type { Orientation } from "$lib/types";
   import { formatLongDate } from "$lib/utils/date";
+  import { formatFilePath } from "$lib/utils/file";
 
   export let data: PageData;
   let { orientation } = data;
@@ -103,7 +104,6 @@
                     <ContactListItem
                       icon={mailAddLineIcon}
                       text={orientation.beneficiaryEmail}
-                      link={`mailto:${orientation.beneficiaryEmail}`}
                       isPreference={orientation.beneficiaryContactPreferences.includes(
                         "EMAIL"
                       )}
@@ -114,7 +114,6 @@
                     <ContactListItem
                       icon={phoneLineIcon}
                       text={formatPhoneNumber(orientation.beneficiaryPhone)}
-                      link={`tel:${orientation.beneficiaryPhone}`}
                       isPreference={orientation.beneficiaryContactPreferences.includes(
                         "TELEPHONE"
                       )}
@@ -201,8 +200,10 @@
                 <div class="ml-s64 text-gray-text">
                   <ul class="mb-s24">
                     {#each orientation.beneficiaryAttachments as file}
-                      <li class="ml-s16 list-disc text-f16 text-gray-text">
-                        {file}
+                      <li
+                        class="break-word ml-s16 list-disc text-f16 text-gray-text"
+                      >
+                        {formatFilePath(file)}
                       </li>
                     {/each}
                   </ul>
@@ -214,14 +215,14 @@
                       {formatNumericDate(orientation.creationDate)}
                     </strong>. Sujet de l’e-mail&nbsp;: «<strong
                       >Nouvelle demande d'orientation reçue</strong
-                    >nbsp;».
+                    >&nbsp;».
                   </div>
 
                   <hr class="mt-s24 w-s32" />
                   <p class="mt-s12 text-f12 italic text-gray-text">
                     Pour des raisons de confidentialité et de sécurité, DORA ne
                     peut pas stocker de données sensibles sur sa plateforme. Si
-                    vous ne parvenez pas à retrouver l‘e-mail contenant les
+                    vous ne parvenez pas à retrouver l’e-mail contenant les
                     pièces jointes, veuillez vérifier le dossier
                     Indésirables/Spam de votre boîte e-mail et contacter la
                     personne qui a réalisé la prescription.
@@ -243,7 +244,7 @@
             <div class="flex flex-col gap-s32 p-s35">
               <div>
                 <SubTitle
-                  label="Prescripteur ou prescriptice"
+                  label="Prescripteur ou prescriptrice"
                   icon={userSharedLineIcon}
                 />
                 <div class="ml-s64 text-f16 text-gray-text">
@@ -259,7 +260,6 @@
                       <ContactListItem
                         icon={mailAddLineIcon}
                         text={orientation.prescriber?.email}
-                        link={`mailto:${orientation.prescriber?.email}`}
                       />
                     {/if}
 
@@ -291,7 +291,6 @@
                         <ContactListItem
                           icon={mailAddLineIcon}
                           text={orientation.referentEmail}
-                          link={`mailto:${orientation.referentEmail}`}
                         />
                       {/if}
 
@@ -299,7 +298,6 @@
                         <ContactListItem
                           icon={phoneLineIcon}
                           text={formatPhoneNumber(orientation.referentPhone)}
-                          link={`tel:${orientation.referentPhone}`}
                         />
                       {/if}
                     </ul>

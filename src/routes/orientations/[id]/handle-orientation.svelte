@@ -90,12 +90,16 @@
         extraClass="!border-error !text-error hover:!text-white hover:border-error hover:!bg-error"
         on:click={() => (modalOpened = "deny")}
       />
-      <Button
-        secondary
-        extraClass="!border-gray-dark !text-gray-text hover:!text-white hover:border-gray-dark hover:!bg-gray-dark"
-        label="Contacter le ou la bénéficiaire"
-        on:click={() => (modalOpened = "contact-beneficiary")}
-      />
+
+      {#if orientation.beneficiaryEmail}
+        <Button
+          secondary
+          extraClass="!border-gray-dark !text-gray-text hover:!text-white hover:border-gray-dark hover:!bg-gray-dark"
+          label="Contacter le ou la bénéficiaire"
+          on:click={() => (modalOpened = "contact-beneficiary")}
+        />
+      {/if}
+
       <Button
         secondary
         extraClass="!border-gray-dark !text-gray-text hover:!text-white hover:border-gray-dark hover:!bg-gray-dark"

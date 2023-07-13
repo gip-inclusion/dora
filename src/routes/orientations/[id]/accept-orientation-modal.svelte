@@ -81,7 +81,14 @@
   }
 </script>
 
-<Modal bind:isOpen on:close title="Valider la demande" overflow width="medium">
+<Modal
+  bind:isOpen
+  on:close
+  title="Valider la demande"
+  hideTitle={showConfirmation}
+  overflow
+  width="medium"
+>
   <div slot="subtitle">
     Vous êtes sur le point de valider une demande d’orientation qui vous a été
     adressée par {orientation.referentFirstName}
@@ -110,7 +117,7 @@
       >
         <TextareaField
           id="response"
-          description="Commentaire privé à destination du prescripteur ou de la prescriptrice, ainsi que du conseiller ou de la conseillère référente s‘il ne s‘agit pas de la même personne. Ce message n‘est pas envoyé au bénéficiaire."
+          description="Commentaire privé à destination du prescripteur ou de la prescriptrice, ainsi que du conseiller ou de la conseillère référente s’il ne s’agit pas de la même personne. Ce message n’est pas envoyé au bénéficiaire."
           bind:value={formData.response}
           vertical
         />

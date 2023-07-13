@@ -5,19 +5,20 @@
   import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import UploadField from "$lib/components/forms/fields/upload-field.svelte";
-  import { formatFilePath } from "$lib/utils/service";
+  import { formatFilePath } from "$lib/utils/file";
   import { orientation } from "../store";
   import { userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
   import Accordion from "$lib/components/display/accordion.svelte";
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import { userPreferences } from "$lib/utils/preferences";
+  import { alertIcon } from "$lib/icons";
 
   export let service;
-  export let servicesOptions;
+  export let credentials;
+  export let atLeastOneAttachmentError;
 
   let contactPrefOptions = [];
-  let credentials = [];
 
   if ($userInfo.structures?.length === 1) {
     $orientation.prescriberStructureSlug = $userInfo.structures[0].slug;
@@ -40,18 +41,6 @@
     $orientation.referentLastName = $userInfo.lastName;
     $orientation.referentFirstName = $userInfo.firstName;
     $orientation.referentEmail = $userInfo.email;
-
-    credentials = servicesOptions.credentials.filter(
-      (elt) =>
-        service.credentials.includes(elt.value) &&
-        !elt.label.toLowerCase().includes("vitale")
-    );
-    credentials.forEach((cred) => {
-      $orientation.attachments[cred.label] = [];
-    });
-    service.formsInfo.forEach((form) => {
-      $orientation.attachments[form.name] = [];
-    });
   });
 </script>
 
@@ -75,8 +64,8 @@
   <Fieldset title="Conseiller ou conseillère référente" noTopPadding>
     <Notice type="info" title="Conseiller ou conseillère référente">
       <p class="mb-s0 text-f14 text-gray-text">
-        Personne en charge de l‘accompagnement et du suivi professionnel de la
-        situation du bénéficiaire. Si ce n‘est pas vous, veuillez modifier les
+        Personne en charge de l’accompagnement et du suivi professionnel de la
+        situation du bénéficiaire. Si ce n’est pas vous, veuillez modifier les
         informations ci-dessous.
       </p>
     </Notice>
@@ -226,12 +215,15 @@
         />
       </div>
     </div>
-    <TextareaField
-      id="beneficiaryOtherContactMethod"
-      description="Préciser quelle autre méthode de contact est possible"
-      bind:value={$orientation.beneficiaryOtherContactMethod}
-      vertical
-    />
+
+    {#if $orientation.beneficiaryContactPreferences.includes("AUTRE")}
+      <TextareaField
+        id="beneficiaryOtherContactMethod"
+        description="Préciser quelle autre méthode de contact est possible"
+        bind:value={$orientation.beneficiaryOtherContactMethod}
+        vertical
+      />
+    {/if}
 
     <TextareaField
       id="orientationReasons"
@@ -249,6 +241,27 @@
 
   {#if service.formsInfo.length || credentials.length}
     <Fieldset title="Documents et justificatifs requis">
+      <div class="p-s24">
+        <h3 class="mb-s0 text-f17 text-orange">Mention d’information</h3>
+        <p class="m-s0 text-f14 text-gray-text">
+          Attention à ne télécharger que les pièces strictement nécessaires à la
+          demande.
+          <strong>
+            Pour des raisons de confidentialité, l’envoi de la carte vitale
+            n’est pas autorisée.
+          </strong>
+        </p>
+      </div>
+
+      {#if atLeastOneAttachmentError}
+        <div id="attachments" class="flex text-f12 text-error">
+          <div class="mr-s8 h-s16 w-s16 fill-current">
+            {@html alertIcon}
+          </div>
+          Merci de téléverser au moins un justificatif
+        </div>
+      {/if}
+
       {#each service.formsInfo as form}
         {#if $orientation.attachments[form.name]}
           <UploadField
@@ -256,7 +269,7 @@
             label="Document à compléter"
             vertical
             id={form.name}
-            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: jpg, png, doc, pdf"
+            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
             bind:fileKeys={$orientation.attachments[form.name]}
           >
             <p slot="description">
@@ -275,7 +288,7 @@
             label={cred.label}
             vertical
             id={cred.label}
-            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: jpg, png, doc, pdf"
+            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
             bind:fileKeys={$orientation.attachments[cred.label]}
           />
         {/if}
