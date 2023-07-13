@@ -579,7 +579,7 @@ export interface Orientation {
   };
   processingDate?: string;
   status?: "OUVERTE" | "VALIDÉE" | "REFUSÉE";
-  beneficiaryAttachments?: string[];
+  beneficiaryAttachmentsDetails?: string[];
   service?: {
     name: string;
     slug: string;

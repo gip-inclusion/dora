@@ -68,12 +68,12 @@
     $orientation = { ...validatedData };
   }
 
-  async function handleSubmit(validatedData) {
+  function handleSubmit(validatedData) {
     const beneficiaryAttachments = Object.values(
       validatedData.attachments
     ).flat();
 
-    const result = await fetch(`${getApiURL()}/orientations/`, {
+    return fetch(`${getApiURL()}/orientations/`, {
       method: "POST",
       headers: {
         Accept: "application/json; version=1.0",
@@ -86,10 +86,6 @@
         beneficiaryAttachments,
       }),
     });
-    const jsonResult = await result.json();
-    console.log(jsonResult);
-
-    return result;
   }
 
   function handleSuccess(_result) {

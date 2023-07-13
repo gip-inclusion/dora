@@ -22,7 +22,6 @@
   import { formatPhoneNumber } from "$lib/utils/misc";
   import { getOrientation } from "$lib/utils/orientation";
   import type { PageData } from "./$types";
-  import { formatNumericDate } from "$lib/utils/date";
   import type { Orientation } from "$lib/types";
   import { formatLongDate } from "$lib/utils/date";
   import { formatFilePath } from "$lib/utils/file";
@@ -194,39 +193,24 @@
               </div>
             {/if}
 
-            {#if orientation.beneficiaryAttachments?.length}
+            {#if orientation.beneficiaryAttachmentsDetails?.length}
               <div>
                 <SubTitle label="Pièces jointes" icon={attachmentIcon} />
                 <div class="ml-s64 text-gray-text">
                   <ul class="mb-s24">
-                    {#each orientation.beneficiaryAttachments as file}
+                    {#each orientation.beneficiaryAttachmentsDetails as attachment}
                       <li
                         class="break-word ml-s16 list-disc text-f16 text-gray-text"
                       >
-                        {formatFilePath(file)}
+                        <a
+                          href={attachment.url}
+                          target="_blank"
+                          rel="noopener ugc"
+                          class="underline">{formatFilePath(attachment.name)}</a
+                        >
                       </li>
                     {/each}
                   </ul>
-
-                  <div>
-                    Toutes les pièces jointes vous ont été transmises par e-mail
-                    le
-                    <strong>
-                      {formatNumericDate(orientation.creationDate)}
-                    </strong>. Sujet de l’e-mail&nbsp;: «<strong
-                      >Nouvelle demande d'orientation reçue</strong
-                    >&nbsp;».
-                  </div>
-
-                  <hr class="mt-s24 w-s32" />
-                  <p class="mt-s12 text-f12 italic text-gray-text">
-                    Pour des raisons de confidentialité et de sécurité, DORA ne
-                    peut pas stocker de données sensibles sur sa plateforme. Si
-                    vous ne parvenez pas à retrouver l’e-mail contenant les
-                    pièces jointes, veuillez vérifier le dossier
-                    Indésirables/Spam de votre boîte e-mail et contacter la
-                    personne qui a réalisé la prescription.
-                  </p>
                 </div>
               </div>
             {/if}
