@@ -20,20 +20,18 @@
 
   export let data: PageData;
 
-  const { service, servicesOptions } = data;
+  const { service } = data;
 
   let requesting = false;
 
   // Fichiers à uploader
-  let credentials = [];
+  const credentials = service.credentialsDisplay
+    .filter(
+      (elt) => !elt.toLowerCase().includes("vitale") && elt.label !== "Aucun"
+    )
+    .map((value) => ({ value: value, label: value }));
   let atLeastOneAttachmentError = false;
 
-  credentials = servicesOptions.credentials.filter(
-    (elt) =>
-      service.credentials.includes(elt.value) &&
-      !elt.label.toLowerCase().includes("vitale") &&
-      elt.label !== "Aucun"
-  );
   credentials.forEach((cred) => {
     $orientation.attachments[cred.label] = [];
   });
