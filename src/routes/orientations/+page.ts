@@ -5,9 +5,13 @@ import type { Orientation } from "$lib/types";
 
 export const ssr = false;
 
-export const load: PageLoad = async ({ params }) => {
-  const orientation = await getOrientation(params.id);
+export const load: PageLoad = async ({ url }) => {
+  const token = url.searchParams.get("token");
+  if (!token) {
+    throw error(401, "Accès refusé");
+  }
 
+  const orientation = await getOrientation(token);
   if (!orientation) {
     throw error(404, "Page Not Found");
   }
