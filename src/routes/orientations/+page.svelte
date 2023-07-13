@@ -205,7 +205,7 @@
                         <a
                           href={attachment.url}
                           target="_blank"
-                          rel="noopener ugc"
+                          rel="nofollow noopener ugc"
                           class="underline">{formatFilePath(attachment.name)}</a
                         >
                       </li>

@@ -5,7 +5,7 @@
   import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
   import Button from "$lib/components/display/button.svelte";
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
-  import { contactService } from "$lib/utils/orientation";
+  import { contactPrescriber } from "$lib/utils/orientation";
   import type { Orientation } from "$lib/types";
   import ConfirmationBloc from "./confirmation-bloc.svelte";
 
@@ -16,14 +16,15 @@
   let showConfirmation = false;
 
   let message = "";
-  let extraRecipients = [];
+  let extraRecipients: string[] = [];
   let requesting = false;
 
-  const contactServiceSchema: v.Schema = {
+  const contactPrescriberSchema: v.Schema = {
     extraRecipients: {
-      label: "Ajouter d’autres destinataires",
+      label: `Ajouter des destinataires supplémentaires`,
       default: [],
-      rules: [],
+      required: false,
+      rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
     },
     message: {
       label: "Votre message",
@@ -33,21 +34,23 @@
       maxLength: 1000,
     },
   };
+
   const extraRecipientsChoices = [
     {
-      value: "add-beneficiary",
+      value: "cc-beneficiary",
       label: `Ajouter le ou la bénéficiaire en copie (${orientation.beneficiaryFirstName} ${orientation.beneficiaryLastName})`,
     },
     {
-      value: "add-referent-contact",
+      value: "cc-referent",
       label: `Ajouter le conseiller ou la conseillère référente en copie (${orientation.referentFirstName} ${orientation.referentLastName})`,
     },
   ];
 
   function handleSubmit(validatedData) {
-    return contactService(
+    return contactPrescriber(
       orientation.queryId,
-      validatedData.extraRecipients,
+      validatedData.extraRecipients.includes("cc-beneficiary"),
+      validatedData.extraRecipients.includes("cc-referent"),
       validatedData.message
     );
   }
@@ -84,7 +87,7 @@
     <div class="pr-s16">
       <Form
         bind:data={formData}
-        schema={contactServiceSchema}
+        schema={contactPrescriberSchema}
         onSubmit={handleSubmit}
         onSuccess={handleSuccess}
         bind:requesting
@@ -92,8 +95,8 @@
         <div class="mx-s4 mb-s20">
           <CheckboxesField
             id="extraRecipients"
-            choices={extraRecipientsChoices}
             bind:value={extraRecipients}
+            choices={extraRecipientsChoices}
             hideLabel
             vertical
           />

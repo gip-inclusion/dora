@@ -19,7 +19,7 @@
     ...servicesOptions.concernedPublic
       .filter((elt) => service.concernedPublic.includes(elt.value))
       .map((choice) => ({ value: choice.label, label: choice.label }))
-      .filter((elt) => excludedConcernedPublicLabels.includes(elt.value)),
+      .filter((elt) => !excludedConcernedPublicLabels.includes(elt.value)),
     { value: "Autre", label: "Autre (à préciser)" },
   ];
 

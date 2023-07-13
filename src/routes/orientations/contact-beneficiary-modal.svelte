@@ -16,14 +16,15 @@
   let showConfirmation = false;
 
   let message = "";
-  let extraRecipients = [];
+  let extraRecipients: string[] = [];
   let requesting = false;
 
   const contactBeneficiarySchema: v.Schema = {
     extraRecipients: {
-      label: "Ajouter d’autres destinataires",
+      label: `Ajouter des destinataires supplémentaires`,
       default: [],
-      rules: [],
+      required: false,
+      rules: [v.isArray([v.isString(), v.maxStrLength(255)])],
     },
     message: {
       label: "Votre message",
@@ -35,19 +36,23 @@
   };
   const extraRecipientsChoices = [
     {
-      value: "add-service-contact",
+      value: "cc-prescriber",
       label: "Ajouter en copie le prescripteur ou la prescriptrice",
     },
-    {
-      value: "add-referent-contact",
-      label: "Ajouter en copie le conseiller ou la conseillère référente",
-    },
   ];
+
+  if (orientation.referentEmail !== orientation.prescriber?.email) {
+    extraRecipientsChoices.push({
+      value: "cc-referent",
+      label: "Ajouter en copie le conseiller ou la conseillère référente",
+    });
+  }
 
   function handleSubmit(validatedData) {
     return contactBeneficiary(
       orientation.queryId,
-      validatedData.extraRecipients,
+      validatedData.extraRecipients.includes("cc-prescriber"),
+      validatedData.extraRecipients.includes("cc-referent"),
       validatedData.message
     );
   }
@@ -99,6 +104,7 @@
             vertical
           />
         </div>
+
         <div class="mx-s4">
           <TextareaField id="message" bind:value={message} vertical />
         </div>

@@ -9,7 +9,7 @@
 
   export let data: PageData;
 
-  const showContactBeneficiary = !!$orientation.beneficiaryEmail;
+  const showContactBeneficiary = !$orientation.beneficiaryEmail;
   $orientation = initEmptyOrientation();
 </script>
 

@@ -119,7 +119,7 @@
       bénéficiaire.
     </p>
 
-    <div class="mt-s40 flex flex-row justify-between gap-x-s24">
+    <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
       <OrientationForm {atLeastOneAttachmentError} {credentials} {service} />
       <div class="mb-s32 w-full shrink-0 md:w-[384px]">
         <ContactBox {service} />

@@ -241,8 +241,7 @@
 
   {#if service.formsInfo.length || credentials.length}
     <Fieldset title="Documents et justificatifs requis">
-      <div class="p-s24">
-        <h3 class="mb-s0 text-f17 text-orange">Mention d’information</h3>
+      <Notice title="Mention d’information" titleLevel="h3" type="warning">
         <p class="m-s0 text-f14 text-gray-text">
           Attention à ne télécharger que les pièces strictement nécessaires à la
           demande.
@@ -251,7 +250,7 @@
             n’est pas autorisée.
           </strong>
         </p>
-      </div>
+      </Notice>
 
       {#if atLeastOneAttachmentError}
         <div id="attachments" class="flex text-f12 text-error">
@@ -273,7 +272,12 @@
             bind:fileKeys={$orientation.attachments[form.name]}
           >
             <p slot="description">
-              <a href={form.url} class="font-bold underline">
+              <a
+                href={form.url}
+                class="font-bold underline"
+                target="_blank"
+                rel="noopener nofollow ugc"
+              >
                 {formatFilePath(form.name)}
               </a>
             </p>
@@ -296,7 +300,7 @@
     </Fieldset>
   {/if}
 
-  <div class="mt-s32">
+  <div class="my-s32">
     <Notice
       type="info"
       title="L’accompagnateur s’engage à informer la personne concernée de ce traitement de données."

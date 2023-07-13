@@ -3,7 +3,7 @@
   import DenyOrientationModal from "./deny-orientation-modal.svelte";
   import AcceptOrientationModal from "./accept-orientation-modal.svelte";
   import ContactBeneficiaryModal from "./contact-beneficiary-modal.svelte";
-  import ContactServiceModal from "./contact-service-modal.svelte";
+  import ContactPrescriberModal from "./contact-prescriber-modal.svelte";
   import { browser } from "$app/environment";
   import type { Orientation } from "$lib/types";
   import Notice from "$lib/components/display/notice.svelte";
@@ -58,7 +58,7 @@
     {onRefresh}
     {orientation}
   />
-  <ContactServiceModal
+  <ContactPrescriberModal
     isOpen={modalOpened === "contact-service"}
     on:close={closeModal}
     {orientation}
