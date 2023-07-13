@@ -56,8 +56,7 @@ export function contactPrescriber(
 
 export function denyOrientation(
   queryId: string,
-  reason: string,
-  otherDetails?: string
+  { reasons, otherDetails }: { reasons: string; otherDetails?: string }
 ) {
   const url = `${getApiURL()}/orientations/${queryId}/reject/`;
   const method = "POST";
@@ -68,7 +67,7 @@ export function denyOrientation(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      reason,
+      reasons,
       otherDetails,
     }),
   });

@@ -36,58 +36,54 @@
   };
   const reasonChoices = [
     {
-      value: "beneficiary-not-answering",
+      value: "bénéficiaire-non-joignable",
       label: "Bénéficiaire non joignable",
     },
     {
-      value: "beneficiary-not-showing-up",
+      value: "bénéficiaire-absent",
       label: "Bénéficiaire ne s’étant pas présenté à l’entretien",
     },
     {
-      value: "beneficiary-working",
+      value: "bénéficiaire-en-emploi",
       label: "Bénéficiaire indisponible : en emploi",
     },
     {
-      value: "beneficiary-in-formation",
+      value: "bénéficiaire-en-formation",
       label: "Bénéficiaire indisponible : en formation",
     },
     {
-      value: "beneficiary-not-eligible",
+      value: "bénéficiaire-non-éligible",
       label: "Bénéficiaire non éligible (ne répond pas aux pré-requis)",
     },
     {
-      value: "beneficiary-not-movable",
+      value: "bénéficiaire-non-mobile",
       label: "Bénéficiaire non mobile",
     },
     {
-      value: "beneficiary-not-interested",
+      value: "bénéficiaire-non-intéressé",
       label: "Bénéficiaire non intéressé",
     },
     {
-      value: "beneficiary-cant-continue",
+      value: "freins-périphériques",
       label:
         "Un ou plusieurs freins périphériques empêchent le bénéficiaire de poursuivre",
     },
     {
-      value: "session-full",
+      value: "session-complète",
       label: "Session complète",
     },
     {
-      value: "orientation-duplicate",
+      value: "orientation-en-doublon",
       label: "Orientation en doublon",
     },
     {
-      value: "other",
+      value: "autre",
       label: "Autre (détails dans le message ci-dessous)",
     },
   ];
 
   function handleSubmit(validatedData) {
-    return denyOrientation(
-      orientation.queryId,
-      validatedData.reason,
-      validatedData.otherDetails
-    );
+    return denyOrientation(orientation.queryId, validatedData);
   }
 
   async function handleSuccess(_jsonResult) {
@@ -97,7 +93,7 @@
   }
 
   $: formData = { reasons, otherDetails };
-  $: denyOrientationSchema.otherDetails.required = reasons.includes("other");
+  $: denyOrientationSchema.otherDetails.required = reasons.includes("autre");
 </script>
 
 <Modal
@@ -149,7 +145,7 @@
             vertical
           />
         </div>
-        {#if reasons.includes("other")}
+        {#if reasons.includes("autre")}
           <div class="mx-s4">
             <TextareaField
               id="otherDetails"
