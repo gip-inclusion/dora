@@ -7,6 +7,10 @@
   import { acceptOrientation } from "$lib/utils/orientation";
   import type { Orientation } from "$lib/types";
   import ConfirmationBloc from "./confirmation-bloc.svelte";
+  import {
+    renderBeneficiaryAcceptMessage,
+    renderPrescripterAcceptMessage,
+  } from "$lib/utils/orientation-templates";
 
   export let isOpen = false;
   export let onRefresh;
@@ -42,10 +46,30 @@
     showConfirmation = true;
   }
 
-  $: formData = {
-    message: "",
-    beneficiaryMessage: "",
-  };
+  const message = renderPrescripterAcceptMessage({
+    beneficiaryFirstName: orientation.beneficiaryFirstName,
+    beneficiaryLastName: orientation.beneficiaryLastName,
+    prescriberStructureName: orientation.prescriberStructure?.name,
+    referentFirstName: orientation.referentFirstName,
+    referentLastName: orientation.referentLastName,
+    referentEmail: orientation.referentEmail,
+    referentPhone: orientation.referentPhone,
+    prescriberName: orientation.prescriber?.name,
+  });
+
+  const beneficiaryMessage = renderBeneficiaryAcceptMessage({
+    prescriberStructureName: orientation.prescriberStructure?.name,
+    referentFirstName: orientation.referentFirstName,
+    referentLastName: orientation.referentLastName,
+    serviceName: orientation.service?.name,
+    prescriberStructurePhone:
+      orientation.referentEmail === orientation.prescriber?.email
+        ? orientation.referentPhone
+        : undefined,
+    prescriberName: orientation.prescriber?.name,
+  });
+
+  $: formData = { message, beneficiaryMessage };
 </script>
 
 <Modal
@@ -58,8 +82,7 @@
 >
   <div slot="subtitle">
     Vous êtes sur le point de valider une demande d’orientation qui vous a été
-    adressée par {orientation.referentFirstName}
-    {orientation.referentLastName} pour le service «&nbsp;<a
+    adressée par {orientation.prescriber?.name} pour le service «&nbsp;<a
       class="text-magenta-cta"
       href="/services/{orientation.service?.slug}"
     >
@@ -93,6 +116,7 @@
           <div class="mt-s20">
             <TextareaField
               id="beneficiaryMessage"
+              description="Commentaire privé à destination du ou de la bénéficiaire."
               bind:value={formData.beneficiaryMessage}
               vertical
             />

@@ -19,7 +19,8 @@
   export let serverErrorsDict = {};
   export let onSubmit, onSuccess;
   export let servicesOptions: ServicesOptions | undefined = undefined;
-  export let onChange: ((validatedData) => void) | undefined = undefined;
+  export let onChange: ((validatedData, fieldName?) => void) | undefined =
+    undefined;
   export let disableExitWarning = false;
 
   let hasUnsavedChange = false;
@@ -76,7 +77,7 @@
           }
         );
         if (valid && onChange) {
-          onChange(validatedData);
+          onChange(validatedData, fieldName);
         }
 
         hasUnsavedChange = true;

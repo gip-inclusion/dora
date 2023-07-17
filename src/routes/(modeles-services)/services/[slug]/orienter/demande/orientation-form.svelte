@@ -246,8 +246,9 @@
           Attention à ne télécharger que les pièces strictement nécessaires à la
           demande.
           <strong>
-            Pour des raisons de confidentialité, l’envoi de la carte vitale
-            n’est pas autorisée.
+            Pour des raisons de confidentialité, l’envoi de la carte vitale, des
+            attestations de droits santé/CPAM ou de tout autre document
+            contenant le NIR (numéro de sécurité sociale) n’est pas autorisé.
           </strong>
         </p>
       </Notice>

@@ -69,65 +69,71 @@
 <div class="rounded-md border border-gray-02 p-s32">
   <h2>Traiter la demande</h2>
 
-  <div class="mb-s24">
-    <strong class="text-gray-text">Statut de la demande:<br /></strong>
-    {#if statusMessage.label}
-      <span class={statusMessage.cssClass}>
-        {statusMessage.label}
-      </span>
-    {/if}
-  </div>
+  {#if !orientation.service?.slug}
+    <Notice type="error" title="Traitement impossible">
+      Le service « {orientation.service?.name} » n’existe plus.
+    </Notice>
+  {:else}
+    <div class="mb-s24">
+      <strong class="text-gray-text">Statut de la demande:<br /></strong>
+      {#if statusMessage.label}
+        <span class={statusMessage.cssClass}>
+          {statusMessage.label}
+        </span>
+      {/if}
+    </div>
 
-  {#if orientation.status === "OUVERTE"}
-    <div class="flex flex-col gap-s12">
-      <Button
-        label="Valider la demande"
-        on:click={() => (modalOpened = "accept")}
-      />
-      <Button
-        secondary
-        label="Refuser la demande"
-        extraClass="!border-error !text-error hover:!text-white hover:border-error hover:!bg-error"
-        on:click={() => (modalOpened = "deny")}
-      />
+    {#if orientation.status === "OUVERTE"}
+      <div class="flex flex-col gap-s12">
+        <Button
+          label="Valider la demande"
+          on:click={() => (modalOpened = "accept")}
+        />
+        <Button
+          secondary
+          label="Refuser la demande"
+          extraClass="!border-error !text-error hover:!text-white hover:border-error hover:!bg-error"
+          on:click={() => (modalOpened = "deny")}
+        />
 
-      {#if orientation.beneficiaryEmail}
+        {#if orientation.beneficiaryEmail}
+          <Button
+            secondary
+            extraClass="!border-gray-dark !text-gray-text hover:!text-white hover:border-gray-dark hover:!bg-gray-dark"
+            label="Contacter le ou la bénéficiaire"
+            on:click={() => (modalOpened = "contact-beneficiary")}
+          />
+        {/if}
+
         <Button
           secondary
           extraClass="!border-gray-dark !text-gray-text hover:!text-white hover:border-gray-dark hover:!bg-gray-dark"
-          label="Contacter le ou la bénéficiaire"
-          on:click={() => (modalOpened = "contact-beneficiary")}
+          label="Contacter le ou la prescripteur·rice"
+          on:click={() => (modalOpened = "contact-service")}
         />
-      {/if}
-
-      <Button
-        secondary
-        extraClass="!border-gray-dark !text-gray-text hover:!text-white hover:border-gray-dark hover:!bg-gray-dark"
-        label="Contacter le ou la prescripteur·rice"
-        on:click={() => (modalOpened = "contact-service")}
-      />
-    </div>
-  {:else if orientation.status === "VALIDÉE"}
-    <Notice
-      type="info"
-      title="Vous avez validé cette demande le {formatNumericDate(
-        orientation.processingDate
-      )}"
-    >
-      <p class="text-left text-f14 text-gray-text">
-        Vous ne pouvez plus revenir sur une décision qui a déjà été actée.
-      </p>
-    </Notice>
-  {:else if orientation.status === "REFUSÉE"}
-    <Notice
-      type="error"
-      title="Vous avez refusé cette demande le {formatNumericDate(
-        orientation.processingDate
-      )}"
-    >
-      <p class="text-left text-f14 text-gray-text">
-        Vous ne pouvez plus revenir sur une décision qui a déjà été actée.
-      </p>
-    </Notice>
+      </div>
+    {:else if orientation.status === "VALIDÉE"}
+      <Notice
+        type="info"
+        title="Vous avez validé cette demande le {formatNumericDate(
+          orientation.processingDate
+        )}"
+      >
+        <p class="text-left text-f14 text-gray-text">
+          Vous ne pouvez plus revenir sur une décision qui a déjà été actée.
+        </p>
+      </Notice>
+    {:else if orientation.status === "REFUSÉE"}
+      <Notice
+        type="error"
+        title="Vous avez refusé cette demande le {formatNumericDate(
+          orientation.processingDate
+        )}"
+      >
+        <p class="text-left text-f14 text-gray-text">
+          Vous ne pouvez plus revenir sur une décision qui a déjà été actée.
+        </p>
+      </Notice>
+    {/if}
   {/if}
 </div>

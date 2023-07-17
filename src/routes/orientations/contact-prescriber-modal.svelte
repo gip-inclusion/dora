@@ -37,14 +37,16 @@
 
   const extraRecipientsChoices = [
     {
-      value: "cc-beneficiary",
-      label: `Ajouter le ou la bénéficiaire en copie (${orientation.beneficiaryFirstName} ${orientation.beneficiaryLastName})`,
-    },
-    {
       value: "cc-referent",
       label: `Ajouter le conseiller ou la conseillère référente en copie (${orientation.referentFirstName} ${orientation.referentLastName})`,
     },
   ];
+  if (orientation.beneficiaryEmail) {
+    extraRecipientsChoices.push({
+      value: "cc-beneficiary",
+      label: `Ajouter le ou la bénéficiaire en copie (${orientation.beneficiaryFirstName} ${orientation.beneficiaryLastName})`,
+    });
+  }
 
   function handleSubmit(validatedData) {
     return contactPrescriber(

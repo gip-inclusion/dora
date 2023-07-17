@@ -70,7 +70,7 @@
         <p class="mb-s0 text-f14 italic text-gray-text">
           Merci de fournir uniquement des informations relatives au profil de la
           personne et d’éviter les données sensibles. Le motif de l’orientation
-          sera détaillé ultérieurement.
+          sera détaillé lors de la deuxième étape de ce formulaire.
         </p>
 
         <TextareaField
