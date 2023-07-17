@@ -15,7 +15,7 @@
 
   export let data;
 
-  const { service, servicesOptions } = data;
+  const { service } = data;
 
   let requesting = false;
 
@@ -61,7 +61,7 @@
     </p>
 
     <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
-      <ValidationForm {service} {servicesOptions} />
+      <ValidationForm {service} />
       <div class="mt-s32 w-full shrink-0 md:mt-s0 md:w-[384px]">
         <ContactBox {service} />
       </div>

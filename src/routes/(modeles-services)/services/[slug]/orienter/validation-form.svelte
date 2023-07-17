@@ -10,7 +10,6 @@
   import { orientation } from "./store";
 
   export let service;
-  export let servicesOptions;
 
   const excludedConcernedPublicLabels = ["Autre", "Tous public"];
   const excludedRequirementLabels = ["Aucun", "Sans condition"];
