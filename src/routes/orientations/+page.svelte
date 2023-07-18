@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import { page } from "$app/stores";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
 
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
@@ -16,6 +18,7 @@
     user6Icon,
     userSharedLineIcon,
   } from "$lib/icons";
+  import { trackOrientation } from "$lib/utils/plausible";
   import HandleOrientation from "./handle-orientation.svelte";
   import SubTitle from "./sub-title.svelte";
   import ContactListItem from "./contact-list-item.svelte";
@@ -32,6 +35,10 @@
   async function onRefresh() {
     orientation = (await getOrientation(orientation.queryId)) as Orientation;
   }
+
+  onMount(() => {
+    trackOrientation(orientation, $page.url);
+  });
 </script>
 
 <CenteredGrid noPadding>
