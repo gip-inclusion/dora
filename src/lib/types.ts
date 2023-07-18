@@ -583,6 +583,10 @@ export interface Orientation {
   service?: {
     name: string;
     slug: string;
+    contactName: string;
+    contactPhone: string;
+    contactEmail: string;
+    structureName: string;
   };
   prescriber?: {
     name: string;

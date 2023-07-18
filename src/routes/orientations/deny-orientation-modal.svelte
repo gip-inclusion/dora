@@ -9,6 +9,7 @@
   import type { Orientation } from "$lib/types";
   import ConfirmationBloc from "./confirmation-bloc.svelte";
   import { renderRejectMessage } from "$lib/utils/orientation-templates";
+  import { formatPhoneNumber } from "$lib/utils/misc";
 
   export let isOpen = false;
   export let onRefresh;
@@ -94,8 +95,12 @@
         beneficiaryFirstName: orientation.beneficiaryFirstName,
         beneficiaryLastName: orientation.beneficiaryLastName,
         serviceName: orientation.service?.name,
-        prescriberName: orientation.prescriber?.name,
-        prescriberStructureName: orientation.prescriberStructure?.name,
+        serviceStructureName: orientation.service?.structureName,
+        serviceContactName: orientation.service?.contactName,
+        serviceContactPhone: orientation.service?.contactPhone
+          ? formatPhoneNumber(orientation.service?.contactPhone)
+          : undefined,
+        serviceContactEmail: orientation.service?.contactEmail,
       });
     }
   }
@@ -126,8 +131,7 @@
 >
   <div slot="subtitle">
     Vous êtes sur le point de refuser une demande de prescription de service qui
-    vous a été adressée par {orientation.beneficiaryFirstName}
-    {orientation.beneficiaryLastName} de la structure {orientation
+    vous a été adressée par {orientation.prescriber?.name} de la structure {orientation
       .prescriberStructure?.name}
     pour le service «&nbsp;<a
       class="text-magenta-cta"

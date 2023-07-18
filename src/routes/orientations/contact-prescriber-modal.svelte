@@ -35,12 +35,15 @@
     },
   };
 
-  const extraRecipientsChoices = [
-    {
+  const extraRecipientsChoices: { value: string; label: string }[] = [];
+
+  if (orientation.referentEmail !== orientation.prescriber?.email) {
+    extraRecipientsChoices.push({
       value: "cc-referent",
       label: `Ajouter le conseiller ou la conseillère référente en copie (${orientation.referentFirstName} ${orientation.referentLastName})`,
-    },
-  ];
+    });
+  }
+
   if (orientation.beneficiaryEmail) {
     extraRecipientsChoices.push({
       value: "cc-beneficiary",

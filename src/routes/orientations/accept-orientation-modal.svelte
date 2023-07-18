@@ -9,8 +9,9 @@
   import ConfirmationBloc from "./confirmation-bloc.svelte";
   import {
     renderBeneficiaryAcceptMessage,
-    renderPrescripterAcceptMessage,
+    renderPrescriberAcceptMessage,
   } from "$lib/utils/orientation-templates";
+  import { formatPhoneNumber } from "$lib/utils/misc";
 
   export let isOpen = false;
   export let onRefresh;
@@ -46,27 +47,28 @@
     showConfirmation = true;
   }
 
-  const message = renderPrescripterAcceptMessage({
+  const message = renderPrescriberAcceptMessage({
     beneficiaryFirstName: orientation.beneficiaryFirstName,
     beneficiaryLastName: orientation.beneficiaryLastName,
-    prescriberStructureName: orientation.prescriberStructure?.name,
-    referentFirstName: orientation.referentFirstName,
-    referentLastName: orientation.referentLastName,
-    referentEmail: orientation.referentEmail,
-    referentPhone: orientation.referentPhone,
-    prescriberName: orientation.prescriber?.name,
+    serviceStructureName: orientation.service?.structureName,
+    serviceContactName: orientation.service?.contactName,
+    serviceContactPhone: orientation.service?.contactPhone
+      ? formatPhoneNumber(orientation.service?.contactPhone)
+      : undefined,
+    serviceContactEmail: orientation.service?.contactEmail,
   });
 
   const beneficiaryMessage = renderBeneficiaryAcceptMessage({
-    prescriberStructureName: orientation.prescriberStructure?.name,
     referentFirstName: orientation.referentFirstName,
     referentLastName: orientation.referentLastName,
     serviceName: orientation.service?.name,
-    prescriberStructurePhone:
-      orientation.referentEmail === orientation.prescriber?.email
-        ? orientation.referentPhone
-        : undefined,
-    prescriberName: orientation.prescriber?.name,
+    structurePhone: orientation.service?.contactPhone,
+    serviceStructureName: orientation.service?.structureName,
+    serviceContactName: orientation.service?.contactName,
+    serviceContactPhone: orientation.service?.contactPhone
+      ? formatPhoneNumber(orientation.service?.contactPhone)
+      : undefined,
+    serviceContactEmail: orientation.service?.contactEmail,
   });
 
   $: formData = { message, beneficiaryMessage };
