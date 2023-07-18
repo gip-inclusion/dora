@@ -65,10 +65,6 @@
     structurePhone: orientation.service?.contactPhone,
     serviceStructureName: orientation.service?.structureName,
     serviceContactName: orientation.service?.contactName,
-    serviceContactPhone: orientation.service?.contactPhone
-      ? formatPhoneNumber(orientation.service?.contactPhone)
-      : undefined,
-    serviceContactEmail: orientation.service?.contactEmail,
   });
 
   $: formData = { message, beneficiaryMessage };

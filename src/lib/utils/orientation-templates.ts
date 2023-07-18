@@ -43,12 +43,6 @@ Bien à vous,`;
   if(data.serviceContactName) {
     result += `\n${data.serviceContactName}`;
   }
-  if(data.serviceContactEmail) {
-    result += `\n${data.serviceContactEmail}`;
-  }
-  if(data.serviceContactPhone) {
-    result += `\n${data.serviceContactPhone}`;
-  }
   if(data.serviceStructureName) {
     result += `\n${data.serviceStructureName}`;
   }

@@ -11,7 +11,7 @@
 
   export let service;
 
-  const excludedConcernedPublicLabels = ["Autre", "Tous public"];
+  const excludedConcernedPublicLabels = ["Autre", "Tous publics"];
   const excludedRequirementLabels = ["Aucun", "Sans condition"];
 
   const concernedPublicChoices = [
@@ -20,6 +20,9 @@
       .filter((elt) => !excludedConcernedPublicLabels.includes(elt.value)),
     { value: "Autre", label: "Autre (à préciser)" },
   ];
+
+  // Que l'option "Autre"
+  const serviceAcceptsAllPublic = concernedPublicChoices.length === 1;
 
   const credentialsDisplay = service.credentialsDisplay.filter(
     (elt) => !elt.toLowerCase().includes("vitale")
@@ -58,10 +61,18 @@
 
   <Fieldset title="Publics concernés par ce service" noTopPadding>
     <div class="flex flex-col lg:gap-s8">
+      {#if serviceAcceptsAllPublic}
+        <p class="mb-s0 text-f14 italic text-gray-text">
+          Ce service concerne tous les publics
+        </p>
+      {/if}
+
       <CheckboxesField
         id="situation"
         choices={concernedPublicChoices}
-        description="Merci de cocher au moins un profil ou situation"
+        description={!serviceAcceptsAllPublic
+          ? "Merci de cocher au moins un profil ou situation"
+          : ""}
         bind:value={$orientation.situation}
         vertical
       />
