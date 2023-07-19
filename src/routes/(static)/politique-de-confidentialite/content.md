@@ -96,6 +96,7 @@ Certaines des données sont envoyées à d'autres acteurs, appelés "sous-traita
 | **Zapier**           | Etats-Unis            | Outil d'automatisation de la gestion des applications | [https://zapier.com/legal/data-processing-addendum](https://zapier.com/legal/data-processing-addendum)                                                                                                         |
 | **Livestorm**        | Ireland et Etats-Unis | Outil de visioconférence et webinar                   | [https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf](https://livestorm.imgix.net/1127/1675174056-privacy-policy-fr.pdf)                                                                         |
 | **Brevo**            | UE et non-UE          | Outil de messagerie electronique                      | [https://www.brevo.com/fr/legal/privacypolicy/](https://www.brevo.com/fr/legal/privacypolicy/)                                                                                                                 |
+| **Clever Cloud SAS** | France                | Stockage de fichiers                                  | [https://www.clever-cloud.com/general-terms-and-conditions/clever-cloud-data-processing-agreement/](https://www.clever-cloud.com/general-terms-and-conditions/clever-cloud-data-processing-agreement/)         |
 
 ## Cookies
 
