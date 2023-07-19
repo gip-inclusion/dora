@@ -1,4 +1,6 @@
-# Conditions générales d’utilisation de DORA au 20/07/2023
+# Conditions générales d’utilisation de DORA au 15/05/2023
+
+**remplacées par [les nouvelles Conditions générales d’utilisation](/cgu).**
 
 Les présentes conditions générales d’utilisation (dites « CGU ») fixent le cadre juridique du site DORA et définissent les conditions d’accès et d’Utilisation des services par l’Utilisateur.
 
@@ -48,20 +50,14 @@ En s’inscrivant aux services proposés par le site, l’Utilisateur s’engage
 
 Lorsque l’Utilisateur se connecte (via son adresse e-mail et son mot de passe Inclusion Connect), il doit identifier sa structure soit en renseignant sa commune et le nom de sa structure soit en renseignant un numéro SIRET ou le numéro RNA.
 
-### 4.3 Fonctionnalités uniquement ouvertes au compte Accompagnateur
-
-L’accompagnateur dispose d’un compte dédié à partir duquel il peut avoir accès aux informations relatives aux structures et aux points de contacts.
-
-L’accompagnateur pourra également remplir un formulaire de demande de prise en charge ou d’orientation par une structure accueillante. Ce formulaire comprendra des pièces jointes nécessaires à la compréhension du dossier d’un bénéficiaire (nom, prénom, e-mail et documents demandés). L’accompagnateur s’engage à informer la personne concernée de ce traitement de données.
-
-### 4.4 Fonctionnalités uniquement ouvertes au compte Gestionnaire de Territoire
+### 4.3 Fonctionnalités uniquement ouvertes au compte Gestionnaire de Territoire
 
 Le Gestionnaire de Territoire dispose d'un compte dédié à partir duquel il peut :
 
 - visualiser sur le territoire concerné les offreurs de solution et les accompagnateurs cherchant une solution ayant un compte Utilisateur;
 - accéder aux informations suivantes sur lesdits Utilisateurs : noms et prénoms, adresse e-mail et numéro de téléphone et à l'ensemble des données des structures ;
 - modifier les informations de la structure et des services. Il peut notamment inviter un administrateur ou un collaborateur ;
-- imprimer et extraire les données de contact.
+- imprimer les données de contact.
 
 Le Gestionnaire de territoire dispose également des mêmes fonctionnalités que les Utilisateurs.
 
@@ -71,7 +67,7 @@ Tout Utilisateur membre régulièrement inscrit pourra solliciter sa désinscrip
 
 ## Article 6 — Abonnements
 
-Tout offreur de solution ou accompagnateur qui le souhaite peut s’abonner à la newsletter de Dora et se maintenir informé de manière hebdomadaire sur les offres d’insertion proposées sur son territoire : en cliquant sur le lien « s’abonner à l’infolettre » depuis la page d’accueil du site.
+Tout offreur de solution ou accompagnateur qui le souhaite peut s’abonner à la newsletter de Dora et se maintenir informer de manière hebdomadaire sur les offres d’insertion proposées sur son territoire : en cliquant sur le lien « s’abonner à l’infolettre » depuis la page d’accueil du site.
 
 ## Article 7 — Responsabilités
 
@@ -87,11 +83,11 @@ L’éditeur fournit les moyens nécessaires et raisonnables pour assurer un acc
 
 Ce site peut mettre à disposition des liens pouvant orienter l’utilisateur vers des sites réalisés par des tiers extérieurs. Ces tiers sont les seuls responsables du contenu publié par leur soin. L’équipe de DORA n’a aucun contrôle sur le contenu de ces sites, ces contenus ne sauraient engager la responsabilité de l’administration.
 
-### 7.2 Responsabilités de l’Utilisateur - accompagnateur
+### 7.2 Responsabilités de l’Utilisateur
 
 Toute information transmise par l’Utilisateur est de sa seule responsabilité. Il appartient à l’Utilisateur de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l'ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
 
-Tout partage de données ou d'information non autorisée hors de la plateforme est de la responsabilité de l’Utilisateur. L’Utilisateur s’engage lors de toute demande de prise en charge, à ne communiquer que les informations strictement nécessaires. Particulièrement, lorsqu’il reçoit une demande, il s’engage en cas d’opposition au traitement, à supprimer de ses bases de données les informations communiquées ou obtenues dans le cadre de la demande de l’accompagnateur demandeur.
+Tout partage de données ou d'information non autorisée hors de la plateforme est de la responsabilité de l’Utilisateur.
 
 L’Utilisateur s’engage à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et règlementaires en vigueur. En particulier, il s’engage à ne pas publier, à quelque endroit que ce soit, de messages racistes, sexistes, injurieux, insultants ou contraires à l’ordre public.
 
@@ -113,5 +109,4 @@ Les termes des présentes conditions d’utilisation peuvent être amendés à t
 
 Vous pouvez avoir accès à l’historique des différentes versions des conditions générales d’utilisation ici :
 
-- [Version du 15/05/2023](/cgu/cgu-20230515)
 - [Version du 13/12/2022](/cgu/cgu-20221213)
