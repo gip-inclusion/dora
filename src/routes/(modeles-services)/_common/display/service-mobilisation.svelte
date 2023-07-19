@@ -39,7 +39,7 @@
           <Button
             on:click={handleShowContactClick}
             extraClass={backgroundColor === "blue"
-              ? "!bg-france-blue text-white !border !border-white hover:!bg-magenta-cta"
+              ? "!bg-france-blue text-white !border !border-white hover:!bg-magenta-cta hover:!border-france-blue"
               : ""}
             secondary={backgroundColor === "white"}
             label="Voir les informations de contact"
