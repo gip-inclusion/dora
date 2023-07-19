@@ -35,7 +35,7 @@
     </div>
     <div class="print:hidden">
       {#if !contactOpen}
-        <div class="mb-s16" class:text-white={backgroundColor === "blue"}>
+        <div class:text-white={backgroundColor === "blue"}>
           <Button
             on:click={handleShowContactClick}
             extraClass={backgroundColor === "blue"
@@ -51,7 +51,7 @@
       {/if}
 
       {#if showMobilisation}
-        <div class="mb-s16">
+        <div class="mt-s16 mb-s16">
           <LinkButton
             nofollow
             to="/services/{service.slug}/orienter"

@@ -15,6 +15,8 @@
       </p>
     {/if}
     <ContactEmail {service} preferred />
-    <ContactPhone {service} preferred />
+    {#if service.contactPhone}
+      <ContactPhone {service} preferred />
+    {/if}
   </div>
 </div>
