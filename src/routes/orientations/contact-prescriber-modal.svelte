@@ -8,10 +8,12 @@
   import { contactPrescriber } from "$lib/utils/orientation";
   import type { Orientation } from "$lib/types";
   import ConfirmationBloc from "./confirmation-bloc.svelte";
+  import { createEventDispatcher } from "svelte";
 
   export let isOpen = false;
   export let onRefresh;
   export let orientation: Orientation;
+  const dispatch = createEventDispatcher();
 
   let showConfirmation = false;
 
@@ -51,6 +53,15 @@
     });
   }
 
+  function handleClose() {
+    if (showConfirmation) {
+      showConfirmation = false;
+      extraRecipients = [];
+      message = "";
+    }
+    dispatch("close");
+  }
+
   function handleSubmit(validatedData) {
     return contactPrescriber(
       orientation.queryId,
@@ -70,7 +81,7 @@
 
 <Modal
   bind:isOpen
-  on:close
+  on:close={handleClose}
   overflow
   hideTitle={showConfirmation}
   width="medium"

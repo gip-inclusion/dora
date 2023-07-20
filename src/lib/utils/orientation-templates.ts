@@ -60,7 +60,7 @@ export function renderRejectMessage(
     return "";
   }
 
-  const textStart = `Bonjour ${data.referentFirstName} ${data.referentLastName},`;
+  const textStart = `Bonjour,`;
   let textEnd = `Bien à vous,`;
 
   if(data.serviceContactName) {
