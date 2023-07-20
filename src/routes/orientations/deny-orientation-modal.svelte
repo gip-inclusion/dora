@@ -90,8 +90,6 @@
       messageTouched = message !== "";
     } else if (fieldName === "reasons" && !messageTouched) {
       message = renderRejectMessage(reasons, reasonChoices, {
-        referentFirstName: orientation.referentFirstName,
-        referentLastName: orientation.referentLastName,
         beneficiaryFirstName: orientation.beneficiaryFirstName,
         beneficiaryLastName: orientation.beneficiaryLastName,
         serviceName: orientation.service?.name,
