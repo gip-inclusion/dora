@@ -10,24 +10,26 @@
   export let id: string;
   export let disabled = false;
   export let readonly = $currentSchema?.[id]?.readonly;
+  export let label = $currentSchema?.[id]?.label;
 
-  // Spécifique du select
+  // Spécifique
   export let fileKeys: string[];
-  export let structureSlug;
+  export let structureSlug: string | undefined = undefined;
 
   // Proxy vers le FieldWrapper
   export let description = "";
   export let hidden = false;
   export let hideLabel = false;
   export let vertical = false;
+  export let dynamicId = false;
 </script>
 
-{#if $currentSchema && id in $currentSchema}
+{#if $currentSchema && (id in $currentSchema || dynamicId)}
   <FieldWrapper
     {id}
     let:onBlur
-    label={$currentSchema[id].label}
-    required={isRequired($currentSchema[id], $currentFormData)}
+    {label}
+    required={isRequired($currentSchema?.[id], $currentFormData)}
     {description}
     {hidden}
     {hideLabel}
@@ -35,6 +37,8 @@
     {disabled}
     {readonly}
   >
+    <slot slot="description" name="description" />
+
     <Uploader {id} {structureSlug} on:blur={onBlur} bind:fileKeys {disabled} />
   </FieldWrapper>
 {/if}

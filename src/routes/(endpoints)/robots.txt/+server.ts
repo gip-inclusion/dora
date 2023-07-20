@@ -4,6 +4,7 @@ const productionContent = `
 User-agent: *
 Disallow: /mon-compte/
 Disallow: /auth/
+Disallow: /orientations/
 Sitemap: ${CANONICAL_URL}/sitemap.xml
 `.trim();
 

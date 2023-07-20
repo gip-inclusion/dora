@@ -226,9 +226,9 @@ export const serviceSchema: v.Schema = {
   contactEmail: {
     label: "Courriel",
     default: "",
-    rules: [v.isEmail(), v.maxStrLength(255)],
+    rules: [v.isEmail(), v.maxStrLength(254)],
     post: [v.lower, v.trim],
-    maxLength: 255,
+    maxLength: 254,
     required: (data: {
       coachOrientationModes: CoachOrientationModes;
       beneficiariesAccessModes: BeneficiaryAccessModes;

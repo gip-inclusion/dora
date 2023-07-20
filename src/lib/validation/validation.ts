@@ -38,6 +38,9 @@ function clearError(fieldName) {
 }
 
 export function isRequired<T>(shape: Shape<T>, data: any) {
+  if (!shape) {
+    return false;
+  }
   if (shape.required == null) {
     return false;
   }
@@ -146,6 +149,7 @@ export function validate(
       checkRequired
     );
 
+    if (!shape) {return;}
     isValid = isValid && valid;
     validatedData[fieldName] = value;
 

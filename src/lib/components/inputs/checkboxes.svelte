@@ -8,6 +8,7 @@
     disabled,
     name,
     readonly,
+    horizontalCheckboxes = false,
     errorMessages: string[] = [];
 
   const dispatch = createEventDispatcher();
@@ -21,11 +22,12 @@
   }
 </script>
 
-<div {id} class="flex flex-col gap-s8">
+<div {id} class="flex gap-s8" class:flex-col={!horizontalCheckboxes}>
   {#each choices as choice, i}
     <label
       class:outline={choice.value === focusValue}
       class="flex flex-row items-center"
+      class:mr-s24={horizontalCheckboxes}
     >
       <input
         id={`${id}-${i}`}

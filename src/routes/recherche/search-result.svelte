@@ -26,7 +26,7 @@
               class="whitespace-nowrap rounded-xl bg-france-blue py-s4 px-s10 text-f14 font-bold text-white"
             >
               {#if result.distance}
-                à&nbsp;{result.distance}&nbsp;km
+                à&nbsp;{Math.round(result.distance)}&nbsp;km
               {/if}
               {#if result.location === "À distance"}
                 À distance

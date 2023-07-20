@@ -29,7 +29,7 @@
     email: {
       label: "Courriel",
       default: "",
-      rules: [v.isEmail(), v.maxStrLength(255)],
+      rules: [v.isEmail(), v.maxStrLength(254)],
       post: [v.lower, v.trim],
       required: true,
     },

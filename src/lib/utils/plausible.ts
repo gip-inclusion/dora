@@ -83,6 +83,14 @@ export function trackMobilisation(service, url) {
   _track("mobilisation-abTesting", props);
 }
 
+export function trackOrientation(orientation, url) {
+  if (browser) {
+    logAnalyticsEvent("orientation", url.pathname, {
+      orientation: orientation.id,
+    });
+  }
+}
+
 export function trackMobilisationEmail(service) {
   const props = {
     ..._getServiceProps(service, true),

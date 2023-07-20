@@ -25,7 +25,7 @@ function structureToBack(structure: Structure) {
 
 function structureToFront(structure: Structure): Structure {
   const result = { ...structure };
-  if (structure.otherLabels.length) {
+  if (Array.isArray(structure.otherLabels)) {
     result.otherLabels = structure.otherLabels.join(", ");
   }
   return result;

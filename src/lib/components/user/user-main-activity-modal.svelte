@@ -9,6 +9,11 @@
   }
 </script>
 
-<Modal bind:isOpen title="Dites-nous plus sur vous !" canClose={false}>
+<Modal
+  bind:isOpen
+  title="Dites-nous en plus sur vous !"
+  width="medium"
+  canClose={false}
+>
   <UserMainActivityForm {onSuccess} />
 </Modal>

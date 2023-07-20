@@ -21,6 +21,7 @@
   export let hidden = false;
   export let hideLabel = false;
   export let vertical = false;
+  export let horizontalCheckboxes = false;
 </script>
 
 {#if $currentSchema && id in $currentSchema}
@@ -45,6 +46,7 @@
       {choices}
       {disabled}
       {readonly}
+      {horizontalCheckboxes}
       {errorMessages}
     />
   </FieldWrapper>

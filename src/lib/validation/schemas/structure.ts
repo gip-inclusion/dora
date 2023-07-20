@@ -70,9 +70,9 @@ export const structureSchema: v.Schema = {
   email: {
     label: "Courriel",
     default: "",
-    rules: [v.isEmail(), v.maxStrLength(255)],
+    rules: [v.isEmail(), v.maxStrLength(254)],
     post: [v.lower, v.trim],
-    maxLength: 255,
+    maxLength: 254,
   },
   url: {
     label: "Site web",
