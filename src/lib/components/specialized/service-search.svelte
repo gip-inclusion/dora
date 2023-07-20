@@ -24,7 +24,7 @@
     sortByCategories,
     sortCategory,
   } from "$lib/utils/service";
-  import { getQuery } from "$lib/utils/service-search";
+  import { getQueryString } from "$lib/utils/service-search";
 
   export let servicesOptions: ServicesOptions;
   export let cityCode;
@@ -49,7 +49,7 @@
       (value) => !value.endsWith("--all")
     );
 
-    const query = getQuery({
+    const query = getQueryString({
       categoryIds,
       subCategoryIds: finalSubCategoryIds,
       cityCode,

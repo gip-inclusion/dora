@@ -72,6 +72,9 @@
         {#if !phonePreferred && service.contactPhone}
           <ContactPhone {service} />
         {/if}
+        {#if !service.contactEmail && !service.contactPhone}
+          Informations de contact non renseignées
+        {/if}
       {/if}
     </div>
   </div>

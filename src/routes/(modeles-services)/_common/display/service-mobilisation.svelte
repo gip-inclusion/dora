@@ -3,25 +3,32 @@
   import Button from "$lib/components/display/button.svelte";
   import ServiceContact from "$lib/components/specialized/services/service-contact.svelte";
   import ServiceLoginNotice from "./service-login-notice.svelte";
-  import { trackMobilisation } from "$lib/utils/plausible";
+  import { trackDiMobilisation, trackMobilisation } from "$lib/utils/plausible";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { token } from "$lib/utils/auth";
 
   export let service;
+  export let isDI = false;
+
   let contactOpen = false;
 
   export let backgroundColor: "blue" | "white" = "white";
 
   function handleShowContactClick() {
     contactOpen = true;
-    trackMobilisation(service, $page.url);
+    if (isDI) {
+      trackDiMobilisation(service, $page.url);
+    } else {
+      trackMobilisation(service, $page.url);
+    }
   }
 
   const showMobilisation =
+    !isDI &&
     service.contactEmail &&
-    (service.coachOrientationModes.includes("envoyer-courriel") ||
-      service.coachOrientationModes.includes("envoyer-fiche-prescription") ||
-      service.beneficiariesAccessModes.includes("envoyer-courriel"));
+    (service.coachOrientationModes?.includes("envoyer-courriel") ||
+      service.coachOrientationModes?.includes("envoyer-fiche-prescription") ||
+      service.beneficiariesAccessModes?.includes("envoyer-courriel"));
 </script>
 
 <h2 class="text-f23" class:text-white={backgroundColor === "blue"}>

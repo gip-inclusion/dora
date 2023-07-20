@@ -48,6 +48,18 @@ export async function getService(slug): Promise<Service> {
   return serviceToFront(response.data);
 }
 
+export async function getServiceDI(diId): Promise<Service> {
+  const url = `${getApiURL()}/service-di/${diId}/`;
+  const response = await fetchData<Service>(url);
+
+  if (!response.data) {
+    return null;
+  }
+  // TODO: 404
+
+  return serviceToFront(response.data);
+}
+
 export async function getPublishedServices(): Promise<ShortService[]> {
   const url = `${getApiURL()}/services/?published=1`;
   return (await fetchData<ShortService[]>(url)).data;

@@ -11,18 +11,22 @@
 
   $: subcategories = expanded
     ? service.subcategories
-    : service.subcategories.slice(0, numberOfSubcategories);
+    : service.subcategories?.slice(0, numberOfSubcategories);
 </script>
 
 <ul>
-  {#each subcategories as subCategory, i (subCategory)}
-    <li class="mb-s8">
-      <SubcategoryListItem subCategorySlug={subCategory} {servicesOptions} />
-    </li>
-  {/each}
+  {#if Array.isArray(service.subcategories)}
+    {#each subcategories as subCategory, i (subCategory)}
+      <li class="mb-s8">
+        <SubcategoryListItem subCategorySlug={subCategory} {servicesOptions} />
+      </li>
+    {/each}
+  {:else}
+    <li class="text-f18 text-gray-text">Non renseigné</li>
+  {/if}
 </ul>
 
-{#if !expanded && service.subcategories.length > numberOfSubcategories}
+{#if !expanded && service.subcategories?.length > numberOfSubcategories}
   <Button
     label="Voir tous les besoins"
     on:click={() => (expanded = true)}

@@ -11,6 +11,7 @@
   import { userInfo } from "$lib/utils/auth";
 
   export let service: Service;
+  export let isDI = false;
 
   // PDF
   export let pdfUrl = `${PDF_SERVICE_URL}/print/?page=${encodeURIComponent(
@@ -28,14 +29,16 @@
   // Partager ce service
   export let copied = false;
   function doCopy() {
-    navigator.clipboard.writeText(`${CANONICAL_URL}/services/${service.slug}`);
+    navigator.clipboard.writeText(
+      `${CANONICAL_URL}/services/${isDI ? `di/` : ``}${service.slug}`
+    );
 
     copied = true;
     setTimeout(() => (copied = false), 2000);
   }
 </script>
 
-{#if !service.canWrite && browser}
+{#if !service.canWrite && browser && !isDI}
   <div class="ml-s24 text-f16 text-gray-text print:hidden">
     <FeedbackModal {service} bind:isOpen={feedbackModalIsOpen} />
     <button class="flex hover:text-magenta-cta" on:click={handleFeedback}>
@@ -48,21 +51,22 @@
 {/if}
 
 {#if service.status === "PUBLISHED"}
-  <div class="ml-s24 text-f16 text-gray-text print:hidden">
-    <!-- Le `nofollow` est important ici, on ne veut pas que les robots provoquent la génération des PDFs -->
-    <a
-      href={pdfUrl}
-      class="flex hover:text-magenta-cta"
-      on:click={() => trackPDFDownload(service)}
-      rel="nofollow"
-    >
-      <span class="mr-s10 h-s24 w-s24 fill-current">
-        {@html downloadIcon}
-      </span>
-      Télécharger la fiche au format PDF
-    </a>
-  </div>
-
+  {#if !isDI}
+    <div class="ml-s24 text-f16 text-gray-text print:hidden">
+      <!-- Le `nofollow` est important ici, on ne veut pas que les robots provoquent la génération des PDFs -->
+      <a
+        href={pdfUrl}
+        class="flex hover:text-magenta-cta"
+        on:click={() => trackPDFDownload(service)}
+        rel="nofollow"
+      >
+        <span class="mr-s10 h-s24 w-s24 fill-current">
+          {@html downloadIcon}
+        </span>
+        Télécharger la fiche au format PDF
+      </a>
+    </div>
+  {/if}
   <div class="ml-s24 text-f16 text-gray-text print:hidden">
     <button
       class="flex hover:text-magenta-cta"
@@ -90,7 +94,7 @@
   </div>
 {/if}
 
-{#if browser && $userInfo}
+{#if browser && $userInfo && !isDI}
   <Bookmarkable slug={service.slug} let:onBookmark let:isBookmarked>
     <button
       class="ml-s24 flex text-f16 text-gray-text print:hidden {isBookmarked

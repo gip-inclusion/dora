@@ -3,13 +3,14 @@ import { logException } from "./logger";
 
 const LAST_SEARCH_CITY_KEY = "lastSearch";
 
-export function getQuery({
+export function getQueryString({
   categoryIds,
   subCategoryIds,
   cityCode,
   cityLabel,
   feeConditions,
   kindIds,
+  useDI,
 }: SearchQuery) {
   const parameters = {
     cats: categoryIds.join(","),
@@ -19,6 +20,8 @@ export function getQuery({
     cl: cityLabel,
     kinds: kindIds.join(","),
     fees: feeConditions.join(","),
+    // eslint-disable-next-line id-length
+    di: useDI || undefined,
   };
   const query = Object.entries(parameters)
     .filter(([_key, value]) => !!value)

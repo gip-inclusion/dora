@@ -7,6 +7,7 @@
   import { capitalize } from "$lib/utils/misc";
 
   export let service: Service;
+  export let isDI: false;
 </script>
 
 <Bookmarkable slug={service.slug} let:onBookmark let:isBookmarked>
@@ -19,6 +20,7 @@
         {service}
         structure={service.structureInfo}
         currentLocation="service"
+        {isDI}
       />
     </div>
     <div class="flex items-baseline justify-between">
@@ -26,37 +28,43 @@
         {service.name}
       </h1>
 
-      <AbTestingSection
-        abTestingName="mobilisation"
-        showIfGroups={["mobilisation--ancien-design"]}
-      >
-        <Favorite big on:click={onBookmark} active={isBookmarked} inverted />
-      </AbTestingSection>
+      {#if !isDI}
+        <AbTestingSection
+          abTestingName="mobilisation"
+          showIfGroups={["mobilisation--ancien-design"]}
+        >
+          <Favorite big on:click={onBookmark} active={isBookmarked} inverted />
+        </AbTestingSection>
+      {/if}
     </div>
     <div
       class="mb-s48 mt-s16 flex flex-col text-f18 text-white print:text-france-blue md:flex-row md:items-center"
     >
       <div><strong>{capitalize(service.structureInfo.name)}</strong></div>
-      <div
-        class="mx-s8 hidden font-bold print:hidden md:block print:md:hidden"
-        aria-hidden="true"
-      >
-        •
-      </div>
-      <div class="print:hidden">
-        <a
-          class="underline"
-          href="/structures/{service.structureInfo.slug}/services"
-          >Voir les autres services ({service.structureInfo.numServices})</a
+      {#if !isDI}
+        <div
+          class="mx-s8 hidden font-bold print:hidden md:block print:md:hidden"
+          aria-hidden="true"
         >
-      </div>
+          •
+        </div>
+        <div class="print:hidden">
+          <a
+            class="underline"
+            href="/structures/{service.structureInfo.slug}/services"
+            >Voir les autres services ({service.structureInfo.numServices})</a
+          >
+        </div>
+      {/if}
     </div>
 
     <div
       class="mb-s32 flex flex-col text-f18 text-white print:text-france-blue md:flex-row md:items-center"
     >
       <div>
-        Périmètre : <strong>{service.diffusionZoneDetailsDisplay}</strong>
+        Périmètre : <strong
+          >{service.diffusionZoneDetailsDisplay || "Non renseigné"}</strong
+        >
       </div>
     </div>
   </div>

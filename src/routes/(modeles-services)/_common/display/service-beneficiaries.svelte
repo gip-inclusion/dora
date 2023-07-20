@@ -8,25 +8,35 @@
 <Accordion title="Qui peut bénéficier de ce service ?">
   <div class="mb-s32">
     <h3>Le public concerné</h3>
+
     <ul>
-      {#each service.concernedPublicDisplay as pub (pub)}
-        <li>{pub}</li>
+      {#if Array.isArray(service.concernedPublicDisplay)}
+        {#each service.concernedPublicDisplay as pub (pub)}
+          <li>{pub}</li>
+        {:else}
+          <li>Tout le monde</li>
+        {/each}
       {:else}
-        <li>Tout le monde</li>
-      {/each}
+        <li>Non renseigné</li>
+      {/if}
     </ul>
   </div>
 
   <div class="mb-s32">
     <h3>Les critères d’admission</h3>
+
     <ul>
-      {#each service.accessConditionsDisplay as condition (condition)}
-        <li>{condition}</li>
+      {#if Array.isArray(service.accessConditionsDisplay)}
+        {#each service.accessConditionsDisplay as condition (condition)}
+          <li>{condition}</li>
+        {:else}
+          {#if !service.qpvOrZrr}
+            <li>Aucun</li>
+          {/if}
+        {/each}
       {:else}
-        {#if !service.qpvOrZrr}
-          <li>Aucun</li>
-        {/if}
-      {/each}
+        <li>Non renseigné</li>
+      {/if}
       {#if service.qpvOrZrr}
         <li>uniquement QPV ou ZRR</li>
       {/if}
@@ -36,11 +46,15 @@
   <div class="mb-s32">
     <h3>Les pré-requis, compétences</h3>
     <ul>
-      {#each service.requirementsDisplay as reqs}
-        <li>{reqs}</li>
+      {#if Array.isArray(service.requirementsDisplay)}
+        {#each service.requirementsDisplay as reqs}
+          <li>{reqs}</li>
+        {:else}
+          <li>Aucun</li>
+        {/each}
       {:else}
-        <li>Aucun</li>
-      {/each}
+        <li>Non renseigné</li>
+      {/if}
     </ul>
   </div>
 </Accordion>

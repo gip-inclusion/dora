@@ -14,9 +14,14 @@
         <strong>{service.contactName}</strong>
       </p>
     {/if}
-    <ContactEmail {service} preferred />
+    {#if service.contactEmail}
+      <ContactEmail {service} preferred />
+    {/if}
     {#if service.contactPhone}
       <ContactPhone {service} preferred />
+    {/if}
+    {#if !service.contactEmail && !service.contactPhone}
+      Informations de contact non renseignées
     {/if}
   </div>
 </div>
