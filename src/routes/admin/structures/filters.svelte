@@ -26,6 +26,13 @@
   ] as const;
   type AdministrationKind = (typeof ADMINISTRATION_CHOICES)[number]["value"];
 
+  const PENDING_ADMIN_CHOICES = [
+    { value: "all", label: "Toutes" },
+    { value: "pending", label: "Invitation en attente" },
+    { value: "none", label: "Pas d'invitation en attente" },
+  ];
+  type PendingAdminChoice = (typeof PENDING_ADMIN_CHOICES)[number]["value"];
+
   const FRESHNESS_CHOICES = [
     { value: "all", label: "Toutes" },
     { value: "uptodate", label: "Tous les services sont actualisés" },
@@ -64,6 +71,7 @@
 
   interface SearchParams {
     administrationKind: AdministrationKind;
+    pendingAdminInvite: PendingAdminChoice;
     freshnessChoice: FreshnessChoice;
     moderationStatusChoices: ModerationStatus[];
     numServicesChoice: NumServicesChoice;
@@ -134,6 +142,15 @@
         return true;
       })
       .filter((struct) => {
+        if (params.pendingAdminInvite === "pending") {
+          return struct.adminsToRemind.length > 0;
+        }
+        if (params.pendingAdminInvite === "none") {
+          return struct.adminsToRemind.length === 0;
+        }
+        return true;
+      })
+      .filter((struct) => {
         if (params.freshnessChoice === "uptodate") {
           return struct.numOutdatedServices === 0;
         }
@@ -191,6 +208,7 @@
       administrationKind: "all",
       freshnessChoice: "all",
       moderationStatusChoices: [],
+      pendingAdminInvite: "all",
       numServicesChoice: "all",
       searchString: "",
       selectedCategories: [],
@@ -210,7 +228,26 @@
   <Button
     on:click={() => {
       resetSearchParams();
+      searchParams.administrationKind = "withoutAdmin";
+    }}
+    label="orphelines"
+    secondary
+  />
 
+  <Button
+    on:click={() => {
+      resetSearchParams();
+      searchParams.administrationKind = "withoutAdmin";
+      searchParams.pendingAdminInvite = "pending";
+    }}
+    label="en attente"
+    secondary
+  />
+
+  <Button
+    on:click={() => {
+      resetSearchParams();
+      searchParams.administrationKind = "withAdmin";
       searchParams.moderationStatusChoices = [
         "NEED_INITIAL_MODERATION",
         "NEED_NEW_MODERATION",
@@ -224,19 +261,20 @@
   <Button
     on:click={() => {
       resetSearchParams();
-      searchParams.freshnessChoice = "toupdate";
-      searchParams.sortChoice = "numOutdatedServices";
+      searchParams.administrationKind = "withAdmin";
+      searchParams.numServicesChoice = "withoutPublishedServices";
     }}
-    label="à actualiser"
+    label="à activer "
     secondary
   />
 
   <Button
     on:click={() => {
       resetSearchParams();
-      searchParams.administrationKind = "withoutAdmin";
+      searchParams.freshnessChoice = "toupdate";
+      searchParams.sortChoice = "numOutdatedServices";
     }}
-    label="orphelines"
+    label="à actualiser"
     secondary
   />
 </div>
@@ -313,6 +351,18 @@
             choices={ADMINISTRATION_CHOICES}
           />
         </div>
+        <div class="flex grow flex-col">
+          <label for="administration"
+            >Invitation d'administrateur en attente</label
+          >
+          <Select
+            id="administration"
+            bind:value={searchParams.pendingAdminInvite}
+            choices={PENDING_ADMIN_CHOICES}
+          />
+        </div>
+      </div>
+      <div class="flex justify-between gap-s16">
         <div class="flex grow flex-col">
           <label for="freshness">Fraicheur des données</label>
           <Select

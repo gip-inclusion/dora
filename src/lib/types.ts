@@ -105,24 +105,34 @@ export interface ShortStructure {
 }
 
 export interface AdminShortStructure {
+  categories: ServiceCategory[];
+  city: string;
   department: string;
-  modificationDate: string;
-  name: string;
-  parent: string;
-  siret: string;
-  slug: string;
+  email: string;
+  hasAdmin: boolean;
   latitude: number;
   longitude: number;
-  typology: string;
-  typologyDisplay: string;
-  categories: ServiceCategory[];
-  hasAdmin: boolean;
   moderationDate: string;
   moderationStatus: ModerationStatus;
-  numPublishedServices: number;
+  modificationDate: string;
+  name: string;
+  numDraftServices: number;
   numOutdatedServices: number;
+  numPublishedServices: number;
   numServices: number;
+  parent: string;
+  phone: string;
   shortDesc: string;
+  siret: string;
+  slug: string;
+  typology: string;
+  typologyDisplay: string;
+  admins: string[];
+  editors: string[];
+  adminsToModerate: string[];
+  adminsToRemind: string[];
+  numPotentialMembersToValidate: number;
+  numPotentialMembersToRemind: number;
 }
 
 export interface StructureSource {
