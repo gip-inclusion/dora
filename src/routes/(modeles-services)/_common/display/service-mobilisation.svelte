@@ -25,6 +25,7 @@
 
   const showMobilisation =
     !isDI &&
+    service.structureInfo.canShowOrientationForm &&
     service.contactEmail &&
     (service.coachOrientationModes?.includes("envoyer-courriel") ||
       service.coachOrientationModes?.includes("envoyer-fiche-prescription") ||
