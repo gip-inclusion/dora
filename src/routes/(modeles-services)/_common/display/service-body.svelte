@@ -17,12 +17,13 @@
   export let servicesOptions: ServicesOptions;
 
   export let isModel = false;
+  export let isDI = false;
 </script>
 
 <CenteredGrid>
   <div class="service-body">
     <div class="presentation">
-      <ServicePresentation {service} {servicesOptions} />
+      <ServicePresentation {service} {servicesOptions} {isDI} />
     </div>
 
     <hr class="separator-1" />
@@ -45,7 +46,7 @@
               <div
                 class="block rounded-lg border border-gray-02 bg-france-blue p-s24 px-s32 text-white print:hidden"
               >
-                <ServiceMobilisation {service} backgroundColor="blue" />
+                <ServiceMobilisation {service} backgroundColor="blue" {isDI} />
               </div>
             </AbTestingSection>
 
@@ -54,7 +55,7 @@
               showIfGroups={["mobilisation--fond-blanc"]}
             >
               <div class="block rounded-lg p-s24 px-s32 shadow-md print:hidden">
-                <ServiceMobilisation {service} />
+                <ServiceMobilisation {service} {isDI} />
               </div>
             </AbTestingSection>
 
@@ -67,7 +68,7 @@
             >
               {#if !isModel}
                 <div class="mt-s24 flex flex-col gap-y-s24">
-                  <SmallServiceShare {service} />
+                  <SmallServiceShare {service} {isDI} />
                 </div>
               {/if}
             </AbTestingSection>
@@ -81,7 +82,7 @@
           <div
             class="block rounded-lg border border-gray-02 p-s24 px-s32 print:hidden"
           >
-            <ServiceMobilisation {service} />
+            <ServiceMobilisation {service} {isDI} />
           </div>
 
           <div class="rounded-lg border border-gray-02 p-s32 pb-s48">
@@ -96,7 +97,7 @@
             <div
               class="rounded-lg border border-gray-02 p-s32 pb-s48 print:hidden"
             >
-              <ServiceShare {service} />
+              <ServiceShare {service} {isDI} />
             </div>
           {/if}
         </AbTestingSection>

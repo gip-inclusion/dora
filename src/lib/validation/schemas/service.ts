@@ -148,7 +148,7 @@ export const serviceSchema: v.Schema = {
       "coachOrientationModes",
     ],
     required: (data: { coachOrientationModes: CoachOrientationModes }) => {
-      return !data.coachOrientationModes.length;
+      return !data.coachOrientationModes?.length;
     },
   },
   beneficiariesAccessModesOther: {

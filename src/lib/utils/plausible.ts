@@ -83,6 +83,21 @@ export function trackMobilisation(service, url) {
   _track("mobilisation-abTesting", props);
 }
 
+export function trackDiMobilisation(service, url) {
+  if (browser) {
+    logAnalyticsEvent("di_mobilisation", url.pathname, {
+      diStructureId: service.structure,
+      diStructureName: service.structureInfo.name,
+      diStructureDepartment: service.structureInfo.department,
+      diServiceId: service.slug.split("--")[1],
+      diServiceName: service.name,
+      diSource: service.source,
+      diCategories: service.categories || [],
+      diSubcategories: service.subcategories || [],
+      abTestingGroup: getAbTestingUserGroup("mobilisation"),
+    });
+  }
+}
 export function trackOrientation(orientation, url) {
   if (browser) {
     logAnalyticsEvent("orientation", url.pathname, {
@@ -127,14 +142,24 @@ export function trackSearch(
   cityLabel,
   kindIds,
   feeConditions,
-  numResults
+  results
 ) {
+  const numResults = results.length;
+
   if (browser) {
+    const numDiResults = results.filter(
+      (service) => service.type === "di"
+    ).length;
+    const numDiResultsTop10 = results
+      .slice(0, 10)
+      .filter((service) => service.type === "di").length;
     logAnalyticsEvent("search", url.pathname, {
       searchCityCode: cityCode,
-      searchNumResults: numResults,
+      searchNumResults: results.length,
       categoryIds: categoryIds,
       subCategoryIds: subCategoryIds,
+      numDiResults,
+      numDiResultsTop10,
     });
   }
 
@@ -185,6 +210,21 @@ export function trackService(service, url) {
 
   _track("service", props);
   _track("service-abTesting", props);
+}
+
+export function trackDIService(service, url) {
+  if (browser) {
+    logAnalyticsEvent("di_service", url.pathname, {
+      diStructureId: service.structure,
+      diStructureName: service.structureInfo.name,
+      diStructureDepartment: service.structureInfo.department,
+      diServiceId: service.slug.split("--")[1],
+      diServiceName: service.name,
+      diSource: service.source,
+      diCategories: service.categories || [],
+      diSubcategories: service.subcategories || [],
+    });
+  }
 }
 
 export function trackStructure(structure, url) {

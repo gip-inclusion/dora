@@ -14,32 +14,40 @@
 
       <h4>Pour les accompagnateurs</h4>
       <ul>
-        {#each service.coachOrientationModesDisplay as mode (mode)}
-          <li>
-            {#if mode === "Autre (préciser)"}
-              {@html addlinkToUrls(service.coachOrientationModesOther)}
-            {:else}
-              {mode}
-            {/if}
-          </li>
+        {#if Array.isArray(service.coachOrientationModesDisplay)}
+          {#each service.coachOrientationModesDisplay as mode (mode)}
+            <li>
+              {#if mode === "Autre (préciser)"}
+                {@html addlinkToUrls(service.coachOrientationModesOther)}
+              {:else}
+                {mode}
+              {/if}
+            </li>
+          {:else}
+            <li>Non renseigné</li>
+          {/each}
         {:else}
           <li>Non renseigné</li>
-        {/each}
+        {/if}
       </ul>
 
       <h4>Pour les bénéficiaires</h4>
       <ul>
-        {#each service.beneficiariesAccessModesDisplay as mode (mode)}
-          <li>
-            {#if mode === "Autre (préciser)"}
-              {@html addlinkToUrls(service.beneficiariesAccessModesOther)}
-            {:else}
-              {mode}
-            {/if}
-          </li>
+        {#if Array.isArray(service.beneficiariesAccessModesDisplay)}
+          {#each service.beneficiariesAccessModesDisplay as mode (mode)}
+            <li>
+              {#if mode === "Autre (préciser)"}
+                {@html addlinkToUrls(service.beneficiariesAccessModesOther)}
+              {:else}
+                {mode}
+              {/if}
+            </li>
+          {:else}
+            <li>Non renseigné</li>
+          {/each}
         {:else}
           <li>Non renseigné</li>
-        {/each}
+        {/if}
       </ul>
     </div>
 
@@ -48,20 +56,22 @@
 
       <h4>Documents à compléter</h4>
       <ul>
-        {#each service.formsInfo as form}
-          <li>
-            <span class="break-word">
-              <a
-                target="_blank"
-                rel="noopener ugc"
-                href={form.url}
-                class="hover:underline"
-                title="Ouverture dans une nouvelle fenêtre"
-                >{formatFilePath(form.name)}</a
-              >
-            </span>
-          </li>
-        {/each}
+        {#if Array.isArray(service.formsInfo)}
+          {#each service.formsInfo as form}
+            <li>
+              <span class="break-word">
+                <a
+                  target="_blank"
+                  rel="noopener ugc"
+                  href={form.url}
+                  class="hover:underline"
+                  title="Ouverture dans une nouvelle fenêtre"
+                  >{formatFilePath(form.name)}</a
+                >
+              </span>
+            </li>
+          {/each}
+        {/if}
         {#if service.onlineForm}
           <li>
             <span class="break-word">
@@ -75,18 +85,26 @@
             </span>
           </li>
         {/if}
-        {#if service.formsInfo.length === 0 && !service.onlineForm}
-          <li>Aucun</li>
+        {#if Array.isArray(service.formsInfo)}
+          {#if service.formsInfo.length === 0 && !service.onlineForm}
+            <li>Aucun</li>
+          {/if}
+        {:else if !service.onlineForm}
+          <li>Non renseigné</li>
         {/if}
       </ul>
 
       <h4>Justificatifs à fournir</h4>
       <ul>
-        {#each service.credentialsDisplay as creds}
-          <li><span>{creds}</span></li>
+        {#if Array.isArray(service.credentialsDisplay)}
+          {#each service.credentialsDisplay as creds}
+            <li><span>{creds}</span></li>
+          {:else}
+            <li><span>Aucun</span></li>
+          {/each}
         {:else}
-          <li><span>Aucun</span></li>
-        {/each}
+          <li>Non renseigné</li>
+        {/if}
       </ul>
     </div>
   </Accordion>

@@ -1,45 +1,23 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
-  import RadioButtons from "$lib/components/inputs/radio-buttons.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
   import type {
     AdminShortStructure,
-    ModerationStatus,
     ServiceCategory,
     ServicesOptions,
     StructuresOptions,
     Typology,
   } from "$lib/types";
+  import type { StatusFilter } from "./types";
 
+  export let searchStatus: StatusFilter;
   export let servicesOptions: ServicesOptions;
   export let structuresOptions: StructuresOptions;
   export let structures: AdminShortStructure[] = [];
   export let filteredStructures: AdminShortStructure[];
 
   let showAdvancedFilters = false;
-
-  const ADMINISTRATION_CHOICES = [
-    { value: "all", label: "Toutes" },
-    { value: "withAdmin", label: "Administrées" },
-    { value: "withoutAdmin", label: "Orphelines" },
-  ] as const;
-  type AdministrationKind = (typeof ADMINISTRATION_CHOICES)[number]["value"];
-
-  const FRESHNESS_CHOICES = [
-    { value: "all", label: "Toutes" },
-    { value: "uptodate", label: "Tous les services sont actualisés" },
-    { value: "toupdate", label: "Certains services doivent être actualisés" },
-  ] as const;
-  type FreshnessChoice = (typeof FRESHNESS_CHOICES)[number]["value"];
-
-  const NUM_SERVICES_CHOICES = [
-    { value: "all", label: "Toutes" },
-    { value: "withServices", label: "Avec des services publiés" },
-    { value: "withoutPublishedServices", label: "Sans services publiés" },
-    { value: "withoutServices", label: "Sans services" },
-  ] as const;
-  type NumServicesChoice = (typeof NUM_SERVICES_CHOICES)[number]["value"];
 
   const SORTING_CHOICES = [
     { value: "name", label: "Nom" },
@@ -52,30 +30,21 @@
   ] as const;
   type SortingChoice = (typeof SORTING_CHOICES)[number]["value"];
 
-  const MODERATION_FILTER_CHOICES = [
-    {
-      value: "NEED_INITIAL_MODERATION",
-      label: "Première modération nécessaire",
-    },
-    { value: "NEED_NEW_MODERATION", label: "Nouvelle modération nécessaire" },
-    { value: "IN_PROGRESS", label: "En cours" },
-    { value: "VALIDATED", label: "Validé" },
-  ];
-
   interface SearchParams {
-    administrationKind: AdministrationKind;
-    freshnessChoice: FreshnessChoice;
-    moderationStatusChoices: ModerationStatus[];
-    numServicesChoice: NumServicesChoice;
     searchString: string;
     selectedCategories: ServiceCategory[];
     selectedTypologies: Typology[][number]["value"][];
-    showPoleEmploi: boolean;
     sortChoice: SortingChoice;
   }
 
-  // Valeurs des filtres
-  let searchParams: SearchParams;
+  const emptySearchParams: SearchParams = {
+    searchString: "",
+    selectedCategories: [],
+    selectedTypologies: [],
+    sortChoice: "name",
+  };
+
+  let searchParams: SearchParams = emptySearchParams;
 
   function normalizeString(str: string): string {
     return (
@@ -90,6 +59,25 @@
         // mais dans le cas présent, on enlève tous les caractères non ascii
         .replace(/([^0-9a-zA-Z])/g, "")
     );
+  }
+
+  function isOrphan(struct) {
+    return !struct.hasAdmin && !struct.adminsToRemind.length;
+  }
+  function waiting(struct) {
+    return struct.adminsToRemind.length;
+  }
+
+  function toModerate(struct) {
+    return struct.moderationStatus !== "VALIDATED";
+  }
+
+  function toActivate(struct) {
+    return !struct.numPublishedServices;
+  }
+
+  function toUpdate(struct) {
+    return struct.numOutdatedServices;
   }
 
   function filterAndSortEntities(
@@ -114,51 +102,37 @@
       })
       .filter((struct) => {
         return (
-          !params.moderationStatusChoices.length ||
-          params.moderationStatusChoices.includes(struct.moderationStatus)
-        );
-      })
-      .filter((struct) => {
-        return (
           !params.selectedTypologies.length ||
           params.selectedTypologies.includes(struct.typology)
         );
       })
       .filter((struct) => {
-        if (params.administrationKind === "withAdmin") {
-          return struct.hasAdmin;
+        if (searchStatus === "orphelines") {
+          return isOrphan(struct);
+        } else if (searchStatus === "en_attente") {
+          return !isOrphan(struct) && waiting(struct);
+        } else if (searchStatus === "à_modérer") {
+          return !isOrphan(struct) && !waiting(struct) && toModerate(struct);
+        } else if (searchStatus === "à_activer") {
+          return (
+            !isOrphan(struct) &&
+            !waiting(struct) &&
+            !toModerate(struct) &&
+            toActivate(struct)
+          );
+        } else if (searchStatus === "à_actualiser") {
+          return (
+            !isOrphan(struct) &&
+            !waiting(struct) &&
+            !toModerate(struct) &&
+            !toActivate(struct) &&
+            toUpdate(struct)
+          );
+        } else if (searchStatus === "toutes") {
+          return true;
         }
-        if (params.administrationKind === "withoutAdmin") {
-          return !struct.hasAdmin;
-        }
-        return true;
-      })
-      .filter((struct) => {
-        if (params.freshnessChoice === "uptodate") {
-          return struct.numOutdatedServices === 0;
-        }
-        if (params.freshnessChoice === "toupdate") {
-          return struct.numOutdatedServices > 0;
-        }
-        return true;
-      })
-      .filter((struct) => {
-        if (params.numServicesChoice === "withServices") {
-          return struct.numPublishedServices > 0;
-        }
-        if (params.numServicesChoice === "withoutServices") {
-          return struct.numServices === 0;
-        }
-        if (params.numServicesChoice === "withoutPublishedServices") {
-          return struct.numPublishedServices === 0;
-        }
-        return true;
-      })
-      .filter((struct) => {
-        if (!params.showPoleEmploi) {
-          return struct.siret?.slice(0, 9) !== "130005481" || struct.hasAdmin;
-        }
-        return true;
+        console.error("Statut de recherche inconnu");
+        return false;
       })
       .sort((structure1, structure2) => {
         // Fait un premier tri par nom
@@ -187,63 +161,66 @@
   }
 
   function resetSearchParams() {
-    searchParams = {
-      administrationKind: "all",
-      freshnessChoice: "all",
-      moderationStatusChoices: [],
-      numServicesChoice: "all",
-      searchString: "",
-      selectedCategories: [],
-      selectedTypologies: [],
-      showPoleEmploi: false,
-      sortChoice: "name",
-    };
+    searchParams = emptySearchParams;
+    searchStatus = "toutes";
   }
-
-  resetSearchParams();
 
   $: filteredStructures = filterAndSortEntities(structures, searchParams);
 </script>
 
 <div class="mb-s8 font-bold">Actions en attente :</div>
+
 <div class="mb-s8 flex gap-s8">
   <Button
     on:click={() => {
       resetSearchParams();
-
-      searchParams.moderationStatusChoices = [
-        "NEED_INITIAL_MODERATION",
-        "NEED_NEW_MODERATION",
-        "IN_PROGRESS",
-      ];
-    }}
-    label="à modérer"
-    secondary
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchParams.freshnessChoice = "toupdate";
-      searchParams.sortChoice = "numOutdatedServices";
-    }}
-    label="à actualiser"
-    secondary
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchParams.administrationKind = "withoutAdmin";
+      searchStatus = "orphelines";
     }}
     label="orphelines"
-    secondary
+    secondary={searchStatus !== "orphelines"}
+  />
+
+  <Button
+    on:click={() => {
+      resetSearchParams();
+      searchStatus = "en_attente";
+    }}
+    label="en attente"
+    secondary={searchStatus !== "en_attente"}
+  />
+
+  <Button
+    on:click={() => {
+      resetSearchParams();
+      searchStatus = "à_modérer";
+    }}
+    label="à modérer"
+    secondary={searchStatus !== "à_modérer"}
+  />
+
+  <Button
+    on:click={() => {
+      resetSearchParams();
+      searchStatus = "à_activer";
+    }}
+    label="à activer "
+    secondary={searchStatus !== "à_activer"}
+  />
+
+  <Button
+    on:click={() => {
+      resetSearchParams();
+      searchStatus = "à_actualiser";
+    }}
+    label="à actualiser"
+    secondary={searchStatus !== "à_actualiser"}
   />
 </div>
 
 <Button
   on:click={() => {
     resetSearchParams();
+    searchStatus = "toutes";
   }}
   label="Afficher toutes les structures"
   noBackground
@@ -304,44 +281,8 @@
           />
         </div>
       </div>
+
       <div class="flex justify-between gap-s16">
-        <div class="flex grow flex-col">
-          <label for="administration">Administration</label>
-          <Select
-            id="administration"
-            bind:value={searchParams.administrationKind}
-            choices={ADMINISTRATION_CHOICES}
-          />
-        </div>
-        <div class="flex grow flex-col">
-          <label for="freshness">Fraicheur des données</label>
-          <Select
-            id="freshness"
-            bind:value={searchParams.freshnessChoice}
-            choices={FRESHNESS_CHOICES}
-          />
-        </div>
-        <div class="flex grow flex-col">
-          <label for="num-services">Services</label>
-          <Select
-            id="num-services"
-            bind:value={searchParams.numServicesChoice}
-            choices={NUM_SERVICES_CHOICES}
-          />
-        </div>
-      </div>
-      <div class="flex justify-between gap-s16">
-        <div class="flex grow flex-col">
-          <label for="moderation">État de modération</label>
-          <Select
-            id="moderation"
-            bind:value={searchParams.moderationStatusChoices}
-            choices={MODERATION_FILTER_CHOICES}
-            placeholder="choisir un ou des états…"
-            placeholderMulti="choisir un ou des états…"
-            multiple
-          />
-        </div>
         <div class="flex grow flex-col">
           <label for="moderation">Trier par…</label>
           <Select
@@ -351,21 +292,7 @@
           />
         </div>
       </div>
-      <div class="flex justify-between gap-s16">
-        <div class="flex grow flex-row gap-s16">
-          <label for="moderation">Voir les agences Pôle emploi orphelines</label
-          >
-          <RadioButtons
-            id="show-pole-emploi"
-            name="show-pole-emploi"
-            bind:group={searchParams.showPoleEmploi}
-            choices={[
-              { value: true, label: "oui" },
-              { value: false, label: "non" },
-            ]}
-          />
-        </div>
-      </div>
+      <div class="flex justify-between gap-s16" />
     </div>
   </div>
 </div>
