@@ -11,35 +11,50 @@
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
   import * as XLSX from "xlsx";
+  import type { StatusFilter } from "./types";
 
   export let data: PageData;
+
+  let searchStatus: StatusFilter = "toutes";
 
   let structures: AdminShortStructure[] = [];
   let filteredStructures: AdminShortStructure[] = [];
   let department: GeoApiValue;
   let selectedStructureSlug: string | null = null;
 
+  function filterOrphanPoleEmploiStructures(structs) {
+    return structs.filter(
+      (struct) =>
+        struct.siret?.slice(0, 9) !== "130005481" ||
+        struct.hasAdmin ||
+        struct.adminsToRemind.length
+    );
+  }
   async function handleDepartmentChange(dept: GeoApiValue) {
     department = dept;
     if (department.code) {
-      structures = await getStructuresAdmin(department.code);
+      structures = filterOrphanPoleEmploiStructures(
+        await getStructuresAdmin(department.code)
+      );
     } else {
       structures = [];
     }
   }
 
   async function handleStructuresRefresh() {
-    structures = await getStructuresAdmin(department.code);
+    structures = filterOrphanPoleEmploiStructures(
+      await getStructuresAdmin(department.code)
+    );
   }
 
   function handleClick() {
     const sheetData = filteredStructures.map((structure) => {
       let status = "";
-      if (structure.adminsToRemind.length) {
-        status = "en attente";
-      } else if (!structure.hasAdmin) {
+      if (!structure.hasAdmin && !structure.adminsToRemind.length) {
         status = "orpheline";
-      } else if (structure.adminsToModerate.length) {
+      } else if (structure.adminsToRemind.length) {
+        status = "en attente";
+      } else if (structure.moderationStatus !== "VALIDATED") {
         status = "à modérer";
       } else if (!structure.numPublishedServices) {
         status = "à activer";
@@ -59,9 +74,9 @@
         "Lien DORA": `${CANONICAL_URL}/structures/${structure.slug}`,
         "Administrateurs": structure.admins.join(","),
         "Éditeurs": structure.editors.join(","),
-        "Premier administrateurs à relancer":
+        "Administrateurs à relancer":
           structure.adminsToRemind.join(","),
-        "Premier administrateurs à modérer":
+        "Administrateurs à modérer":
           structure.adminsToModerate.join(","),
         "Collaborateurs à relancer": structure.numPotentialMembersToRemind,
         "Collaborateurs en attente": structure.numPotentialMembersToValidate,
@@ -79,7 +94,7 @@
     const date = dayjs().format("YYYY-MM-DD");
     XLSX.writeFile(
       workbook,
-      `structures-dora-${department.code}-${date}.xlsx`,
+      `structures-dora-${department.code}-${searchStatus}-${date}.xlsx`,
       { compression: true }
     );
   }
@@ -121,15 +136,17 @@
     <Filters
       {structures}
       bind:filteredStructures
+      bind:searchStatus
       servicesOptions={data.servicesOptions}
       structuresOptions={data.structuresOptions}
     />
-    {#if structures?.length !== filteredStructures?.length}
-      <div class="text-gray-text">
-        ({filteredStructures.length} / {structures.length})
-      </div>
-    {/if}
-
+    <div class="mb-s8 text-gray-text">
+      {#if structures?.length !== filteredStructures?.length}
+        {filteredStructures.length} structures affichées / {structures.length}
+      {:else}
+        {structures.length} structures
+      {/if}
+    </div>
     <div class="flex flex-col gap-s12">
       {#if structures}
         <div class="flex flex-col gap-s16 lg:flex-row">
@@ -140,7 +157,7 @@
               {department}
             />
           </div>
-          <div class="flex flex-col gap-s24">
+          <div class="flex w-full flex-col gap-s24">
             <Button
               on:click={handleClick}
               label="Télécharger"

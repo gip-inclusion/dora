@@ -40,26 +40,27 @@
 
   let border: string, text: string, background: string;
 
-  if (secondary) {
-    border =
-      "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue";
-    text =
-      "font-bold text-magenta-cta hover:text-white disabled:text-gray-text-alt2 active:text-france-blue";
-    background = "bg-white hover:bg-magenta-hover disabled:bg-white";
-  } else {
-    border = "border-0";
-
-    if (noBackground) {
+  $: {
+    if (secondary) {
+      border =
+        "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue";
       text =
-        "font-bold text-magenta-cta hover:text-magenta-hover disabled:text-gray-text active:text-france-blue";
-      background = "bg-transparent";
+        "font-bold text-magenta-cta hover:text-white disabled:text-gray-text-alt2 active:text-france-blue";
+      background = "bg-white hover:bg-magenta-hover disabled:bg-white";
     } else {
-      text = "font-bold text-white disabled:text-gray-text";
-      background =
-        "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
+      border = "border-0";
+
+      if (noBackground) {
+        text =
+          "font-bold text-magenta-cta hover:text-magenta-hover disabled:text-gray-text active:text-france-blue";
+        background = "bg-transparent";
+      } else {
+        text = "font-bold text-white disabled:text-gray-text";
+        background =
+          "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
+      }
     }
   }
-
   const iconWidth = small ? "w-s24" : "w-s32";
   const iconHeight = small ? "h-s24" : "h-s32";
 
