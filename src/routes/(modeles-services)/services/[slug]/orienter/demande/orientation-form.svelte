@@ -12,11 +12,9 @@
   import Accordion from "$lib/components/display/accordion.svelte";
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import { userPreferences } from "$lib/utils/preferences";
-  import { alertIcon } from "$lib/icons";
 
   export let service;
   export let credentials;
-  export let atLeastOneAttachmentError;
 
   let contactPrefOptions = [];
 
@@ -252,15 +250,6 @@
           </strong>
         </p>
       </Notice>
-
-      {#if atLeastOneAttachmentError}
-        <div id="attachments" class="flex text-f12 text-error">
-          <div class="mr-s8 h-s16 w-s16 fill-current">
-            {@html alertIcon}
-          </div>
-          Merci de téléverser au moins un justificatif
-        </div>
-      {/if}
 
       {#each service.formsInfo as form}
         {#if $orientation.attachments[form.name]}
