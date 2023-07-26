@@ -31,6 +31,7 @@
   type SortingChoice = (typeof SORTING_CHOICES)[number]["value"];
 
   interface SearchParams {
+    nationalLabels: string[];
     searchString: string;
     selectedCategories: ServiceCategory[];
     selectedTypologies: Typology[][number]["value"][];
@@ -39,6 +40,7 @@
 
   const emptySearchParams: SearchParams = {
     searchString: "",
+    nationalLabels: [],
     selectedCategories: [],
     selectedTypologies: [],
     sortChoice: "name",
@@ -97,6 +99,14 @@
           !params.selectedCategories.length ||
           struct.categories.some((structureCat: ServiceCategory) =>
             params.selectedCategories.includes(structureCat)
+          )
+        );
+      })
+      .filter((struct) => {
+        return (
+          !params.nationalLabels.length ||
+          struct.nationalLabels.some((label: string) =>
+            params.nationalLabels.includes(label)
           )
         );
       })
@@ -280,6 +290,16 @@
             sort
           />
         </div>
+      </div>
+
+      <div class="flex grow flex-col">
+        <label for="moderation">Labels nationaux…</label>
+        <Select
+          id="sort"
+          multiple
+          bind:value={searchParams.nationalLabels}
+          choices={structuresOptions.nationalLabels}
+        />
       </div>
 
       <div class="flex justify-between gap-s16">

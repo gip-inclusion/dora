@@ -116,6 +116,7 @@ export interface AdminShortStructure {
   moderationStatus: ModerationStatus;
   modificationDate: string;
   name: string;
+  nationalLabels: string[];
   numDraftServices: number;
   numOutdatedServices: number;
   numPublishedServices: number;
