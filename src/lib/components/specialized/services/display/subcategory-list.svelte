@@ -6,10 +6,12 @@
   export let servicesOptions: ServicesOptions;
 
   let categoriesRecord: Record<string, string[]> = {};
+  $: hasCategoriesInfos =
+    service.subcategories != null && service.categories != null;
   $: {
     categoriesRecord = {};
 
-    service.subcategories.forEach((subCategorySlug) => {
+    service.subcategories?.forEach((subCategorySlug) => {
       const category = subCategorySlug.split("--")[0];
 
       if (!categoriesRecord[category]) {
@@ -21,13 +23,17 @@
 </script>
 
 <div>
-  {#each Object.entries(categoriesRecord) as [categorySlug, subCategorySlugs]}
-    <div class="mb-s12">
-      <SubcategoryListItem
-        {categorySlug}
-        {subCategorySlugs}
-        {servicesOptions}
-      />
-    </div>
-  {/each}
+  {#if !hasCategoriesInfos}
+    <ul class="text-f16 text-gray-text"><li>Non renseigné</li></ul>
+  {:else}
+    {#each Object.entries(categoriesRecord) as [categorySlug, subCategorySlugs]}
+      <div class="mb-s12">
+        <SubcategoryListItem
+          {categorySlug}
+          {subCategorySlugs}
+          {servicesOptions}
+        />
+      </div>
+    {/each}
+  {/if}
 </div>

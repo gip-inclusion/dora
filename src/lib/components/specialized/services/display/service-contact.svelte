@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Service, ShortService } from "$lib/types";
-  import ContactEmail from "../../contact-email.svelte";
-  import ContactPhone from "../../contact-phone.svelte";
+  import ContactEmail from "../contact-email.svelte";
+  import ContactPhone from "../contact-phone.svelte";
 
   export let service: Service | ShortService;
   export let useWhiteText = false;

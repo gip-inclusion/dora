@@ -1,8 +1,6 @@
 <script lang="ts">
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
-  import AbTestingSection from "$lib/components/specialized/ab-testing-section.svelte";
-  import Favorite from "$lib/components/specialized/favorite-icon.svelte";
   import type { Service } from "$lib/types";
   import { capitalize } from "$lib/utils/misc";
 
@@ -27,15 +25,6 @@
       <h1 class="mb-s0 mr-s12 leading-[3rem] text-white print:text-france-blue">
         {service.name}
       </h1>
-
-      {#if !isDI}
-        <AbTestingSection
-          abTestingName="mobilisation"
-          showIfGroups={["mobilisation--ancien-design"]}
-        >
-          <Favorite big on:click={onBookmark} active={isBookmarked} inverted />
-        </AbTestingSection>
-      {/if}
     </div>
     <div
       class="mb-s48 mt-s16 flex flex-col text-f18 text-white print:text-france-blue md:flex-row md:items-center"
