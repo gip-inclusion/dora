@@ -125,7 +125,7 @@
   {#if department}
     <div class="my-s24 text-center text-f18 font-bold">
       <a
-        href="https://metabase.dora.fabrique.social.gouv.fr/public/dashboard/860a9da9-9300-4289-878c-7bf8ec74f9b7?lieu={department.code}"
+        href="https://metabase.dora.fabrique.social.gouv.fr/public/dashboard/860a9da9-9300-4289-878c-7bf8ec74f9b7?d%25C3%25A9partement={department.code}"
         target="_blank"
         rel="noopener nofollow"
         class="underline"
