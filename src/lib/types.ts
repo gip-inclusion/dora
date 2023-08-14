@@ -303,7 +303,6 @@ export interface SearchQuery {
   cityLabel: string;
   kindIds: ServiceKind[];
   feeConditions: FeeCondition[];
-  useDI: boolean;
 }
 
 export interface ServiceSearchResult {

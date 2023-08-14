@@ -10,7 +10,6 @@ export function getQueryString({
   cityLabel,
   feeConditions,
   kindIds,
-  useDI,
 }: SearchQuery) {
   const parameters = {
     cats: categoryIds.join(","),
@@ -20,8 +19,6 @@ export function getQueryString({
     cl: cityLabel,
     kinds: kindIds.join(","),
     fees: feeConditions.join(","),
-    // eslint-disable-next-line id-length
-    di: useDI || undefined,
   };
   const query = Object.entries(parameters)
     .filter(([_key, value]) => !!value)
