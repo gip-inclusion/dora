@@ -5,49 +5,35 @@
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
 
   import { formatFilePath } from "$lib/utils/file";
+  import {
+    computeConcernedPublicChoices,
+    computeRequirementsChoices,
+  } from "$lib/utils/orientation";
   import { isNotFreeService } from "$lib/utils/service";
   import { orientationStep1Schema } from "./schema";
   import { orientation } from "./store";
 
   export let service;
 
-  const excludedConcernedPublicLabels = ["Autre", "Tous publics"];
-  const excludedRequirementLabels = ["Aucun", "Sans condition"];
+  // Publics concernés par ce service
+  const { concernedPublicChoices, concernedPublicRequired } =
+    computeConcernedPublicChoices(service);
+  orientationStep1Schema.situation.required = concernedPublicRequired;
+  const serviceAcceptsAllPublic = concernedPublicChoices.length === 1; // Que l'option "Autre"
 
-  const concernedPublicChoices = [
-    ...service.concernedPublicDisplay
-      .map((value) => ({ value: value, label: value }))
-      .filter((elt) => !excludedConcernedPublicLabels.includes(elt.value)),
-    { value: "Autre", label: "Autre (à préciser)" },
-  ];
-
-  // Que l'option "Autre"
-  const serviceAcceptsAllPublic = concernedPublicChoices.length === 1;
-
-  const credentialsDisplay = service.credentialsDisplay.filter(
-    (elt) => !elt.toLowerCase().includes("vitale")
-  );
-
-  const requirementChoices = [
-    ...service.requirementsDisplay,
-    ...service.accessConditionsDisplay,
-  ]
-    .map((value) => ({ value: value, label: value }))
-    .filter((elt) => !excludedRequirementLabels.includes(elt.value));
-
-  if (requirementChoices.length === 0) {
-    orientationStep1Schema.requirements.required = false;
-  }
-
-  if (
-    concernedPublicChoices.filter((elt) => elt.value !== "Autre").length === 0
-  ) {
-    orientationStep1Schema.situation.required = false;
-  }
+  // Critères et conditions d’accès
+  const { requirementChoices, requirementRequired } =
+    computeRequirementsChoices(service);
+  orientationStep1Schema.requirements.required = requirementRequired;
 
   $: if (!$orientation.situation?.includes("Autre")) {
     $orientation.situationOther = "";
   }
+
+  // Justificatifs à fournir
+  const credentialsDisplay = service.credentialsDisplay.filter(
+    (elt) => !elt.toLowerCase().includes("vitale")
+  );
 </script>
 
 <div>
