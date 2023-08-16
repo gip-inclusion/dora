@@ -2,17 +2,25 @@
   import { deleteBinIcon } from "$lib/icons";
   import { getApiURL } from "$lib/utils/api";
   import { shortenString } from "$lib/utils/misc";
+  import Alert from "../display/alert.svelte";
 
   export let id: string;
   export let structureSlug: string | undefined;
   export let fileKeys: string[] = [];
   export let disabled = false;
 
+  let errorMessage = "";
   let progress: number | null = null;
   let uploadInput: HTMLInputElement;
 
   function handleRemove(fileKey) {
     fileKeys = fileKeys.filter((key) => key !== fileKey);
+  }
+
+  function clearInput() {
+    uploadInput.value = null;
+    uploadInput.disabled = false;
+    progress = null;
   }
 
   function handleSubmit() {
@@ -23,10 +31,8 @@
     function handleUploadDone(request) {
       const jsonResponse = JSON.parse(request.response);
       fileKeys = [jsonResponse.key, ...fileKeys];
-      // Clear input
-      uploadInput.value = null;
-      uploadInput.disabled = false;
-      progress = null;
+      clearInput();
+      errorMessage = "";
     }
 
     uploadInput.disabled = true;
@@ -49,9 +55,43 @@
         updateProgress(event.loaded, event.total);
       });
 
+      // upload progress event
+      request.upload.addEventListener("error", () => {
+        errorMessage = `Erreur lors de l'envoi du fichier ${file.name}`;
+        clearInput();
+      });
+
+      request.upload.addEventListener("abort", () => {
+        errorMessage = `Erreur lors de l'envoi du fichier ${file.name}`;
+        clearInput();
+      });
+
+      request.upload.addEventListener("timeout", () => {
+        errorMessage = `Erreur lors de l'envoi du fichier ${file.name}`;
+        clearInput();
+      });
+
       // request finished event
-      request.addEventListener("load", () => {
-        handleUploadDone(request);
+      request.addEventListener("load", (event) => {
+        if (event.target.status !== 201) {
+          let message = "";
+          clearInput();
+          try {
+            message = JSON.parse(event.target.response)[0].message;
+
+            if (message === "INVALID_EXTENSION") {
+              errorMessage = `Le fichier "${file.name}" n'est pas au bon format`;
+            } else if (message === "FILE_TOO_BIG") {
+              errorMessage = `Le fichier "${file.name}" est trop volumineux`;
+            } else {
+              errorMessage = `Erreur lors de l'envoi du fichier "${file.name}"`;
+            }
+          } catch {
+            errorMessage = `Erreur lors de l'envoi du fichier "${file.name}"`;
+          }
+        } else {
+          handleUploadDone(request);
+        }
       });
 
       // send POST request to server
@@ -80,6 +120,10 @@
       class="font-bold file:rounded file:border file:border-magenta-cta file:bg-white file:px-s8 file:py-s6 file:text-f14 file:leading-normal file:text-magenta-cta file:hover:border-magenta-hover file:hover:bg-magenta-hover file:hover:!text-white file:active:border-france-blue file:active:text-france-blue file:disabled:border-gray-01 file:disabled:disabled:text-gray-text-alt2 file:lg:px-s10"
     />{progress != null ? `${Math.round(progress)} %` : ""}
   </label>
+
+  {#if errorMessage}
+    <Alert id="{id}-error" label={errorMessage} />
+  {/if}
 </form>
 <ul>
   {#each fileKeys as uploaded}
