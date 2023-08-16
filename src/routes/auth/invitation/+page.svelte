@@ -9,8 +9,10 @@
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
+  import { CGU_VERSION } from "../../(static)/cgu/version";
 
   export let data: PageData;
+  let cguAccepted = false;
 
   async function handleJoin() {
     trackJoinStructure();
@@ -26,6 +28,7 @@
       },
       body: JSON.stringify({
         structureSlug: data.structure.slug,
+        cguVersion: CGU_VERSION,
       }),
     });
 
@@ -89,10 +92,23 @@
       </div>
       <div class="mt-s24">
         <div class="legend">
-          En cliquant sur
-          <span class="italic">Adhérer à la structure</span>, je déclare faire
-          partie de la structure mentionnée ci-dessus et j’atteste connaître les
-          risques encourus en cas de faux et d’usage de faux.
+          <label class="flex flex-row items-start">
+            <input bind:checked={cguAccepted} type="checkbox" class="hidden " />
+            <div
+              class="flex h-s24 w-s24 shrink-0 justify-center rounded border border-gray-03"
+            >
+              <div
+                class=" h-s12 w-s12 self-center bg-magenta-cta"
+                class:hidden={!cguAccepted}
+              />
+            </div>
+            <span class="ml-s16 inline-block  text-f14 text-gray-text">
+              Je déclare avoir lu les
+              <a href="/cgu" class="underline" target="_blank" rel="noopener"
+                >Conditions générales d’utilisation</a
+              > et faire partie de la structure mentionnée ci-dessus.</span
+            >
+          </label>
         </div>
 
         <div class="mt-s24 flex justify-end">
@@ -100,6 +116,7 @@
             label="Adhérer à la structure"
             on:click={handleJoin}
             preventDefaultOnMouseDown
+            disabled={!cguAccepted}
           />
         </div>
       </div>

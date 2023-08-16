@@ -12,8 +12,6 @@
 
   let contactOpen = false;
 
-  export let backgroundColor: "blue" | "white" = "white";
-
   function handleShowContactClick() {
     contactOpen = true;
     if (isDI) {
@@ -32,9 +30,7 @@
       service.beneficiariesAccessModes?.includes("envoyer-courriel"));
 </script>
 
-<h2 class="text-f23" class:text-white={backgroundColor === "blue"}>
-  Mobiliser le service
-</h2>
+<h2 class="text-f23 text-white">Mobiliser le service</h2>
 
 {#if $token}
   <div class="w-full sm:w-auto">
@@ -43,19 +39,16 @@
     </div>
     <div class="print:hidden">
       {#if !contactOpen}
-        <div class:text-white={backgroundColor === "blue"}>
+        <div class="text-white">
           <Button
             on:click={handleShowContactClick}
-            extraClass={backgroundColor === "blue"
-              ? "!bg-france-blue text-white !border !border-white hover:!bg-magenta-cta hover:!border-france-blue"
-              : ""}
-            secondary={backgroundColor === "white"}
+            extraClass="!bg-france-blue text-white !border !border-white hover:!bg-magenta-cta hover:!border-france-blue"
             label="Voir les informations de contact"
             wFull
           />
         </div>
       {:else}
-        <ServiceContact {service} useWhiteText={backgroundColor === "blue"} />
+        <ServiceContact {service} />
       {/if}
 
       {#if showMobilisation}
@@ -63,9 +56,7 @@
           <LinkButton
             nofollow
             to="/services/{service.slug}/orienter"
-            extraClass={backgroundColor === "blue"
-              ? "bg-white !text-france-blue hover:!text-white text-center !whitespace-normal text-center"
-              : "!whitespace-normal text-center"}
+            extraClass="bg-white !text-france-blue hover:!text-white text-center !whitespace-normal text-center"
             label="Orienter un ou une bénéficiaire"
             wFull
           />

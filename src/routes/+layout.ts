@@ -3,6 +3,7 @@ import { userInfo, validateCredsAndFillUserInfo } from "$lib/utils/auth";
 import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { LayoutLoad } from "./$types";
+import { needToAcceptCgu } from "$lib/utils/cgu";
 
 export const prerender = false;
 
@@ -40,16 +41,39 @@ export const load: LayoutLoad = async ({ url }) => {
     // connecté.
     const currentPathName = url.pathname;
 
+    if (SAFE_URLS.some((urlPrefix) => currentPathName.startsWith(urlPrefix))) {
+      return {};
+    }
+
     // Si l'utilisateur est connecté mais n'est rattaché à aucune structure,
     // on le force à se rattacher
     if (
       !(
         currentUserInfo.structures.length ||
         currentUserInfo.pendingStructures.length
-      ) &&
-      !SAFE_URLS.some((urlPrefix) => currentPathName.startsWith(urlPrefix))
+      )
     ) {
       throw redirect(302, "/auth/rattachement");
+    }
+
+    // Si l'utilisateur a besoin de valider les CGU en cours de validité
+    const userNeedsToAcceptCgu = needToAcceptCgu(currentUserInfo);
+
+    if (
+      currentPathName.startsWith("/cgu/validation") &&
+      !userNeedsToAcceptCgu
+    ) {
+      throw redirect(302, "/");
+    }
+
+    if (
+      userNeedsToAcceptCgu &&
+      !currentPathName.startsWith("/cgu/validation")
+    ) {
+      throw redirect(
+        302,
+        `/cgu/validation?next=${encodeURIComponent(url.pathname + url.search)}`
+      );
     }
   }
 

@@ -5,7 +5,6 @@ import { token, userInfo } from "$lib/utils/auth";
 import { getDepartmentFromCityCode } from "$lib/utils/misc";
 import { get } from "svelte/store";
 import { logAnalyticsEvent } from "$lib/utils/stats";
-import { getAbTestingUserGroup } from "$lib/utils/ab-testing";
 
 function _track(tag, props) {
   if (browser) {
@@ -71,16 +70,9 @@ export function trackMobilisation(service, url) {
   if (browser) {
     logAnalyticsEvent("mobilisation", url.pathname, {
       service: service.slug,
-      abTestingGroup: getAbTestingUserGroup("mobilisation"),
     });
   }
-
-  const props = {
-    ..._getServiceProps(service, true),
-    abTestingGroup: getAbTestingUserGroup("mobilisation"),
-  };
-  _track("mobilisation", props);
-  _track("mobilisation-abTesting", props);
+  _track("mobilisation", _getServiceProps(service, true));
 }
 
 export function trackDiMobilisation(service, url) {
@@ -94,7 +86,6 @@ export function trackDiMobilisation(service, url) {
       diSource: service.source,
       diCategories: service.categories || [],
       diSubcategories: service.subcategories || [],
-      abTestingGroup: getAbTestingUserGroup("mobilisation"),
     });
   }
 }
@@ -107,23 +98,11 @@ export function trackOrientation(orientation, url) {
 }
 
 export function trackMobilisationEmail(service) {
-  const props = {
-    ..._getServiceProps(service, true),
-    abTestingGroup: getAbTestingUserGroup("mobilisation"),
-  };
-
-  _track("mobilisation-contact", props);
-  _track("mobilisation-contact-abTesting", props);
+  _track("mobilisation-contact", _getServiceProps(service, true));
 }
 
 export function trackMobilisationLogin(service) {
-  const props = {
-    ..._getServiceProps(service, false),
-    abTestingGroup: getAbTestingUserGroup("mobilisation"),
-  };
-
-  _track("mobilisation-login", props);
-  _track("mobilisation-login-abTesting", props);
+  _track("mobilisation-login", _getServiceProps(service, false));
 }
 
 export function trackFeedback(service) {
@@ -202,14 +181,7 @@ export function trackService(service, url) {
       service: service.slug,
     });
   }
-
-  const props = {
-    ..._getServiceProps(service, false),
-    abTestingGroup: getAbTestingUserGroup("mobilisation"),
-  };
-
-  _track("service", props);
-  _track("service-abTesting", props);
+  _track("service", _getServiceProps(service, false));
 }
 
 export function trackDIService(service, url) {

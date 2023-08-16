@@ -16,7 +16,6 @@ async function getResults({
   cityLabel,
   kindIds,
   feeConditions,
-  useDI,
 }: SearchQuery): Promise<ServiceSearchResult[]> {
   const querystring = getQueryString({
     categoryIds,
@@ -25,7 +24,6 @@ async function getResults({
     cityLabel,
     kindIds,
     feeConditions,
-    useDI,
   });
   const url = `${getApiURL()}/search/?${querystring}`;
 
@@ -56,14 +54,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   const cityLabel = query.get("cl");
   const kindIds = query.get("kinds") ? query.get("kinds").split(",") : [];
   const feeConditions = query.get("fees") ? query.get("fees").split(",") : [];
-  const diQueryVar = query.get("di");
 
-  if (diQueryVar === "1") {
-    localStorage.setItem("useDI", "true");
-  } else if (diQueryVar === "0") {
-    localStorage.removeItem("useDI");
-  }
-  const useDI = !!localStorage.getItem("useDI");
   const services = await getResults({
     categoryIds,
     subCategoryIds,
@@ -71,7 +62,6 @@ export const load: PageLoad = async ({ url, parent }) => {
     cityLabel,
     kindIds,
     feeConditions,
-    useDI,
   });
 
   trackSearch(

@@ -24,6 +24,7 @@ export interface UserInfo {
   newsletter: boolean;
   isStaff: boolean;
   isManager: boolean;
+  cguVersionsAccepted: Record<string, string>;
   department: string;
   bookmarks: Bookmark[];
   structures: ShortStructure[];

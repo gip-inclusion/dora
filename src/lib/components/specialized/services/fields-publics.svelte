@@ -59,7 +59,7 @@
         placeholderMulti="Sélectionner"
         sort
         description="Plusieurs choix possibles"
-        canAdd={canAddChoices}
+        canAdd={false}
         addButtonLabel="Ajouter un profil personnalisé"
       />
     </FieldModel>
@@ -76,7 +76,7 @@
         placeholderMulti="Choisir un autre critères d’admission"
         sort
         description="Plusieurs choix possibles"
-        canAdd={canAddChoices}
+        canAdd={false}
         addButtonLabel="Ajouter un critère personnalisé"
       />
     </FieldModel>

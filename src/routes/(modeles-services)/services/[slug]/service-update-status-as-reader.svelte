@@ -1,24 +1,13 @@
 <script lang="ts">
-  import Button from "$lib/components/display/button.svelte";
   import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
   import DateLabel from "$lib/components/display/date-label.svelte";
-  import { editIcon } from "$lib/icons";
   import type { Service } from "$lib/types";
-  import { trackFeedback } from "$lib/utils/plausible";
-  import FeedbackModal from "$lib/components/specialized/services/feedback/feedback-modal.svelte";
   import dayjs from "dayjs";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
-  import AbTestingSection from "$lib/components/specialized/ab-testing-section.svelte";
 
   export let service: Service;
 
-  let feedbackModalIsOpen = false;
   const monthDiff = dayjs().diff(service.modificationDate, "month");
-
-  function handleFeedback() {
-    feedbackModalIsOpen = true;
-    trackFeedback(service);
-  }
 </script>
 
 <div
@@ -81,23 +70,4 @@
       {/if}
     {/if}
   </div>
-
-  <AbTestingSection
-    abTestingName="mobilisation"
-    showIfGroups={["mobilisation--ancien-design"]}
-  >
-    <div class="print:hidden">
-      <FeedbackModal {service} bind:isOpen={feedbackModalIsOpen} />
-
-      <Button
-        id="feedback-update"
-        label="Suggérer une modification"
-        icon={editIcon}
-        secondary
-        small
-        extraClass="py-s9"
-        on:click={handleFeedback}
-      />
-    </div>
-  </AbTestingSection>
 </div>
