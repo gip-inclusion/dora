@@ -33,7 +33,7 @@
         on:focus={() => (focusValue = choice.value)}
         on:blur={() => (focusValue = undefined)}
         value={choice.value}
-        name={choice.value}
+        name={id}
         type="radio"
         class="sr-only"
         {disabled}
