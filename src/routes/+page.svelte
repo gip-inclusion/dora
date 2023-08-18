@@ -25,7 +25,7 @@
   <div class="mb-s32">
     <p class="text-center text-f16 text-gray-text">
       DORA vous aide dans la levée des freins périphériques bloquant le retour à
-      l'emploi des bénéficiaires.
+      l’emploi des bénéficiaires.
     </p>
   </div>
 
@@ -55,7 +55,7 @@
       </h2>
       <p class="mb-s0">
         Publiez, mettez à jour et rendez vos services disponibles partout grâce
-        à l'<span lang="en">Open Data</span>.
+        à l’<span lang="en">Open Data</span>.
       </p>
     </div>
     <div class="flex flex-wrap justify-center gap-s16">
@@ -90,9 +90,9 @@
       <img src={illuRecenser} alt="" class="mb-s16 w-full" />
       <h3>Recensement de l’offre d’insertion</h3>
       <p class="text-f16">
-        Vous proposez des services d'insertion ? Rendez les visibles sur votre
+        Vous proposez des services d’insertion ? Rendez les visibles sur votre
         territoire et sur tous les sites partenaires grâce à notre démarche
-        collective d'<span lang="en">open data</span>.
+        collective d’<span lang="en">open data</span>.
       </p>
     </div>
     <div class="md:flex-1">

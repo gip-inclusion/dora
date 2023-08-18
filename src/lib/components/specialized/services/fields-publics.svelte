@@ -42,7 +42,7 @@
           title="Ouverture dans une nouvelle fenêtre"
           rel="noopener"
         >
-          Définir les publics et critères d'accès à votre service
+          Définir les publics et critères d’accès à votre service
         </a>
       </li>
     </ul>

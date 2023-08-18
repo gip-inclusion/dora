@@ -12,7 +12,7 @@ La simple visite du site suppose l’acceptation par tout Utilisateur des prése
 
 ## Objet
 
-Le site DORA créé à l’initiative du Ministère du Travail, de l'Emploi et de l'Insertion est un service public numérique alimenté par les offreurs de solutions d’insertions locales, nationales et numériques. La plateforme centralise des données et permet aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent par le bais d’une recherche simple et personnalisée, des résultats qualifiés et des fiches de solutions claires.
+Le site DORA créé à l’initiative du Ministère du Travail, de l’Emploi et de l’Insertion est un service public numérique alimenté par les offreurs de solutions d’insertions locales, nationales et numériques. La plateforme centralise des données et permet aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent par le bais d’une recherche simple et personnalisée, des résultats qualifiés et des fiches de solutions claires.
 
 ## Définitions
 
@@ -32,7 +32,7 @@ Les services sont l’ensemble des services proposés sur la plateforme DORA qui
 
 ####Création de l’espace de la structure via Inclusion Connect
 
-Tout accompagnateur qui le souhaite peut créer un espace personnel en cliquant sur "Se connecter" en s'identifiant via Inclusion Connect puis sur "Créer un compte". Il communique les informations relatives à sa structure.
+Tout accompagnateur qui le souhaite peut créer un espace personnel en cliquant sur "Se connecter" en s’identifiant via Inclusion Connect puis sur "Créer un compte". Il communique les informations relatives à sa structure.
 
 En s’inscrivant aux services proposés par le site, l’Utilisateur s’engage à fournir des informations sincères et exactes permettant de créer son compte Inclusion Connect.
 
@@ -40,15 +40,15 @@ Les comptes créés peuvent être :
 
 - administrateur, qui sont ouverts aux seuls administrateurs de structure.
 
-Les comptes administrateurs peuvent valider l'inscription d'un collaborateur de leur structure et créer des comptes utilisateurs. La validation du compte administrateur est réalisée par l'envoi d'un mail contenant le nom et l'adresse e-mail professionnelle du collaborateur.
+Les comptes administrateurs peuvent valider l’inscription d’un collaborateur de leur structure et créer des comptes utilisateurs. La validation du compte administrateur est réalisée par l’envoi d’un mail contenant le nom et l’adresse e-mail professionnelle du collaborateur.
 
 - collaborateur.
 
 Les comptes utilisateurs sont créés par les administrateurs qui renseignent les informations de contact (nom, rôle dans la structure, adresse e-mail, téléphone).
 
-#### Gestion de l'espace de la structure
+#### Gestion de l’espace de la structure
 
-L'administrateur peut gérer les comptes relatifs à sa structure en créant des comptes collaborateurs. Il peut également modifier la fiche relative à sa structure lorsque des informations sont éronnées ou imprécises via son tableau de bord.
+L’administrateur peut gérer les comptes relatifs à sa structure en créant des comptes collaborateurs. Il peut également modifier la fiche relative à sa structure lorsque des informations sont éronnées ou imprécises via son tableau de bord.
 
 #### Suspension ou Suppression de l’espace de la structure
 
@@ -66,31 +66,31 @@ La plateforme DORA facilite l’accès à des fiches de solutions d’insertion 
 
 - Rechercher sur son territoire uniquement des solutions d’insertion en lien avec les problématiques concernées ;
 
-- Suggérer une modification d'une fiche de solution d'insertion ;
+- Suggérer une modification d’une fiche de solution d’insertion ;
 
-- Communiquer avec d'autres chercheurs de solution au sein de la plateforme pour améliorer les réponses apportées aux bénéficiaires et conserver un ensemble de solutions à jour ;
+- Communiquer avec d’autres chercheurs de solution au sein de la plateforme pour améliorer les réponses apportées aux bénéficiaires et conserver un ensemble de solutions à jour ;
 
 - accéder à des fiches solutions de base et aussi personnaliser sa recherche en répondant à des questions spécifiques pour accéder à des fiches solutions spécifiques.
 
-Il peut également indiquer qu’il n’a pas trouvé de solution et/ou en proposer une dont il a connaissance. Dans ce cas, il va pouvoir créer une fiche intermédiaire comportant les informations relatives à la structure et au contact. Cette fiche intermédiaire est envoyée par l'équipe Dora, et doit être validée par les propriétaires de la structure qui peut compléter ces informations et les publier comme des fiches accessibles.
+Il peut également indiquer qu’il n’a pas trouvé de solution et/ou en proposer une dont il a connaissance. Dans ce cas, il va pouvoir créer une fiche intermédiaire comportant les informations relatives à la structure et au contact. Cette fiche intermédiaire est envoyée par l’équipe Dora, et doit être validée par les propriétaires de la structure qui peut compléter ces informations et les publier comme des fiches accessibles.
 
 Enfin, **le bénéficiaire**, peut prendre connaissance des fiches de solutions éditées par l’accompagnateur chercheur de solution.
 
-En outre, toute personne navigant sur le site Dora peut effectuer une recherche de services d'insertion relativement à un territoire, selon trois critères :
+En outre, toute personne navigant sur le site Dora peut effectuer une recherche de services d’insertion relativement à un territoire, selon trois critères :
 
-- la thématique du service d'insertion ;
+- la thématique du service d’insertion ;
 
 - le besoin de la personne ;
 
-- le lieu du service d'insertion (par département).
+- le lieu du service d’insertion (par département).
 
 ### Abonnement aux actualités
 
-Tout offreur de solution ou accompagnateur qui le souhaite peut s'abonner à la newsletter de Dora et se maintenir informer de manière hebdomadaire sur les offres d'insertions proposées sur son territoire : en cochant la case s'abonner accessible depuis la page d'accueil du site.
+Tout offreur de solution ou accompagnateur qui le souhaite peut s’abonner à la newsletter de Dora et se maintenir informer de manière hebdomadaire sur les offres d’insertions proposées sur son territoire : en cochant la case s’abonner accessible depuis la page d’accueil du site.
 
 ### Responsabilités
 
-#### L'éditeur : DORA
+#### L’éditeur : DORA
 
 Les sources des informations diffusées sur le site sont réputées fiables mais le site ne garantit pas qu’il soit exempt de défauts, d’erreurs ou d’omissions.
 
@@ -104,7 +104,7 @@ Ce site peut mettre à disposition des liens pouvant orienter l’utilisateur ve
 
 #### L’Utilisateur
 
-Toute information transmise par l’Utilisateur est de sa seule responsabilité. Il a appartient à l’Utilisateur de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction du message dans le formulaire de contact. Cette obligation concerne également les informations qu'il fournit concernant une autre structure.
+Toute information transmise par l’Utilisateur est de sa seule responsabilité. Il a appartient à l’Utilisateur de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction du message dans le formulaire de contact. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
 
 L’Utilisateur s’engage à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et règlementaires en vigueur. En particulier, il s’engage à ne pas publier, à quelque endroit que ce soit, de message racistes, sexistes, injurieux, insultants ou contraires à l’ordre public.
 

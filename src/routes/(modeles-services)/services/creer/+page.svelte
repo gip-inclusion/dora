@@ -10,7 +10,7 @@
 
 <EnsureLoggedIn>
   <CenteredGrid>
-    <h1>Création d'un service</h1>
+    <h1>Création d’un service</h1>
 
     {#if !data.structures.length}
       <Notice title="Impossible de créer un nouveau service" type="error">

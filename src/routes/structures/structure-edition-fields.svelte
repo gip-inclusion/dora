@@ -104,7 +104,7 @@
   id="nationalLabels"
   bind:value={structure.nationalLabels}
   choices={structuresOptions.nationalLabels}
-  description="Indiquez si la structure fait partie d'un ou plusieurs réseaux nationaux"
+  description="Indiquez si la structure fait partie d’un ou plusieurs réseaux nationaux"
   placeholder="Choisissez…"
   placeholderMulti="Choisissez…"
   vertical

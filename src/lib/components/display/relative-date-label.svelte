@@ -10,7 +10,7 @@
 
     let label = "";
     if (dayDiff < 1) {
-      label = `aujourd'hui`;
+      label = `aujourd’hui`;
     } else if (dayDiff < 7) {
       label = `il y a ${dayDiff} jour${dayDiff > 1 ? "s" : ""}`;
     } else if (weekDiff <= 5) {

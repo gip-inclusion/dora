@@ -38,7 +38,7 @@
       Ce service est automatiquement récupéré depuis le référentiel commun
       data·inclusion, auquel participe DORA. Les informations peuvent être
       partielles et certaines fonctionnalités peuvent être indisponibles. Il
-      s'agit d’une expérimentation en cours, n'hésitez pas à <a
+      s’agit d’une expérimentation en cours, n’hésitez pas à <a
         class="underline"
         href="https://tally.so/r/nrBNqv ">nous faire part de vos retours</a
       >.

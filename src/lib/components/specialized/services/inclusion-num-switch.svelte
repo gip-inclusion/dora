@@ -10,14 +10,14 @@
   let isInclusionNumModalOpen = false;
 
   const inclusionNumeriqueFormActiveNotice = {
-    title: "Formulaire de l'inclusion numérique actif",
+    title: "Formulaire de l’inclusion numérique actif",
     description:
       "Si néanmoins vous souhaitez renseigner un atelier, une formation ou tout autre accompagnement, vous pouvez basculer vers le formulaire classique.",
     buttonLabel: "Basculer sur le formulaire classique",
   };
 
   const inclusionNumeriqueFormAvailableNotice = {
-    title: "Formulaire de l'inclusion numérique disponible",
+    title: "Formulaire de l’inclusion numérique disponible",
     description:
       "Pour compléter ce formulaire spécifique, seule la thématique numérique doit être sélectionnée.",
     buttonLabel: "Basculer sur le formulaire inclusion numérique",
@@ -65,7 +65,7 @@
   width="small"
   overflow
 >
-  Le passage du formulaire classique vers le formulaire de l'inclusion numérique
+  Le passage du formulaire classique vers le formulaire de l’inclusion numérique
   peut entraîner la perte de données déjà enregistrées dans ce service.
   <div class="mt-s32 flex flex-row justify-end gap-s16">
     <Button
@@ -74,7 +74,7 @@
       on:click={handleRejectSwitchToInclusionNumForm}
     />
     <Button
-      label="Passer au formulaire de l'inclusion numérique"
+      label="Passer au formulaire de l’inclusion numérique"
       on:click={handleSwitchToInclusionNumForm}
     />
   </div>
@@ -84,7 +84,7 @@
   <div class="mt-s16">
     <Notice title={selectedInclusionNumeriqueFormNotice.title} type="info">
       <p class="text-f14">
-        Les services d'inclusion numérique répondent à un formulaire spécifique
+        Les services d’inclusion numérique répondent à un formulaire spécifique
         permettant une harmonie entre tous les acteurs du secteur.
         <br />
         {selectedInclusionNumeriqueFormNotice.description}

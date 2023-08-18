@@ -48,7 +48,7 @@
         <span class="text-f19 text-gray-text-alt">/</span>
       {:else}
         <label class:error={inError}>
-          <span class="sr-only">Horaire d'ouverture pour le {label}</span>
+          <span class="sr-only">Horaire d’ouverture pour le {label}</span>
           <input
             on:change
             bind:value={openAt}

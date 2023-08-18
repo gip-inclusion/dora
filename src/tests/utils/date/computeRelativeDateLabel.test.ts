@@ -17,8 +17,8 @@ describe("computeUpdateStatus et computeRelativeDateLabel", () => {
     const date = new Date(2022, 1, 1, 14);
     vi.setSystemTime(date);
 
-    // ALORS la réponse est "aujourd'hui"
-    expect(computeRelativeDateLabel(startDate)).toStrictEqual("aujourd'hui");
+    // ALORS la réponse est "aujourd’hui"
+    expect(computeRelativeDateLabel(startDate)).toStrictEqual("aujourd’hui");
   });
 
   test("moins d'une semaine", () => {
