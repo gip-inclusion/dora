@@ -33,7 +33,7 @@
         <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
           {@html errorWarningIcon}
         </span>
-        Ce service n'est pas cumulable avec d’autres dispositifs
+        Ce service n’est pas cumulable avec d’autres dispositifs
       </div>
     {/if}
   {/if}

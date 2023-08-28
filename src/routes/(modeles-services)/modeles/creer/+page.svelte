@@ -10,7 +10,7 @@
 
 <EnsureLoggedIn>
   <CenteredGrid>
-    <h1>Création d'un modèle</h1>
+    <h1>Création d’un modèle</h1>
 
     {#if !data.structures.length}
       <Notice title="Impossible de créer un nouveau modèle" type="error">

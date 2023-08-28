@@ -79,7 +79,7 @@ export const PARTNERS: Partner[] = [
   { name: "EPIDE", img: logoEpide },
   { name: "Wimoov", img: logoWiMoov },
   {
-    name: "Les emplois de l'inclusion",
+    name: "Les emplois de l’inclusion",
     img: logoLesEmplois,
   },
   { name: "JeVeuxAider", img: logoJeVeuxAider },

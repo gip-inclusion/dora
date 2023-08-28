@@ -12,7 +12,7 @@
     <h1>Déclaration d’accessibilité</h1>
     <p>Établie le <span>7 décembre 2022</span>.</p>
     <p>
-      <span>Le GIP Plateforme de l'inclusion</span> s’engage à rendre son service
+      <span>Le GIP Plateforme de l’inclusion</span> s’engage à rendre son service
       accessible, conformément à l’article 47 de la loi n° 2005-102 du 11 février
       2005.
     </p>

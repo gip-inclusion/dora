@@ -31,7 +31,7 @@
         noBackground
         otherTab
         extraClass="mr-s8 !text-f14"
-        label="Besoin d'aide ?"
+        label="Besoin d’aide ?"
       />
     </div>
 

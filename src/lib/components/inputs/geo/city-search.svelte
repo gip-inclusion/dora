@@ -68,7 +68,7 @@
 
   function searchCityFromLocation() {
     if (!navigator.geolocation) {
-      geolocLabel = "La géolocalisation n'est pas supportée";
+      geolocLabel = "La géolocalisation n’est pas supportée";
     } else {
       geolocLabel = "Recherche";
       navigator.geolocation.getCurrentPosition(

@@ -31,6 +31,7 @@
     >
       <input
         id={`${id}-${i}`}
+        name={id}
         bind:group
         on:change={handleChange}
         on:focus={() => (focusValue = choice.value)}

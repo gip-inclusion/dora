@@ -36,7 +36,7 @@
 
   const userMainActivitySchema: v.Schema = {
     userMainActivity: {
-      label: "Quels sont vos objectifs lors de l'utilisation de DORA ?",
+      label: "Quels sont vos objectifs lors de l’utilisation de DORA ?",
       default: "",
       rules: [v.isString(), v.maxStrLength(255)],
       required: true,

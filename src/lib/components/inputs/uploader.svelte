@@ -57,17 +57,17 @@
 
       // upload progress event
       request.upload.addEventListener("error", () => {
-        errorMessage = `Erreur lors de l'envoi du fichier ${file.name}`;
+        errorMessage = `Erreur lors de l’envoi du fichier ${file.name}`;
         clearInput();
       });
 
       request.upload.addEventListener("abort", () => {
-        errorMessage = `Erreur lors de l'envoi du fichier ${file.name}`;
+        errorMessage = `Erreur lors de l’envoi du fichier ${file.name}`;
         clearInput();
       });
 
       request.upload.addEventListener("timeout", () => {
-        errorMessage = `Erreur lors de l'envoi du fichier ${file.name}`;
+        errorMessage = `Erreur lors de l’envoi du fichier ${file.name}`;
         clearInput();
       });
 
@@ -80,14 +80,14 @@
             message = JSON.parse(event.target.response)[0].message;
 
             if (message === "INVALID_EXTENSION") {
-              errorMessage = `Le fichier "${file.name}" n'est pas au bon format`;
+              errorMessage = `Le fichier "${file.name}" n’est pas au bon format`;
             } else if (message === "FILE_TOO_BIG") {
               errorMessage = `Le fichier "${file.name}" est trop volumineux`;
             } else {
-              errorMessage = `Erreur lors de l'envoi du fichier "${file.name}"`;
+              errorMessage = `Erreur lors de l’envoi du fichier "${file.name}"`;
             }
           } catch {
-            errorMessage = `Erreur lors de l'envoi du fichier "${file.name}"`;
+            errorMessage = `Erreur lors de l’envoi du fichier "${file.name}"`;
           }
         } else {
           handleUploadDone(request);

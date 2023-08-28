@@ -22,9 +22,9 @@ Tout accompagnateur cherchant une solution, à savoir tous les acteurs de l’in
 
 Tout bénéficiaire désirant réussir son insertion professionnelle par l’emploi et engagé dans un parcours d’insertion.
 
-« Le Gestionnaire de Territoire » est toute personne considérée comme correspondante locale ou ambassadrice ayant pour mission d'animer les structures d'un périmètre donné (géographique, thématique ou ciblé sur un réseau particulier) et d'aider au référencement des informations et au maintien des bonnes pratiques de mise à jour de la plateforme DORA.
+« Le Gestionnaire de Territoire » est toute personne considérée comme correspondante locale ou ambassadrice ayant pour mission d’animer les structures d’un périmètre donné (géographique, thématique ou ciblé sur un réseau particulier) et d’aider au référencement des informations et au maintien des bonnes pratiques de mise à jour de la plateforme DORA.
 
-« Les services » sont l’ensemble des fonctionnalités proposées sur la plateforme DORA qui facilitent l’accompagnement dans la réussite de l’insertion professionnelle, sociale et socio-professionnel par et vers l'emploi.
+« Les services » sont l’ensemble des fonctionnalités proposées sur la plateforme DORA qui facilitent l’accompagnement dans la réussite de l’insertion professionnelle, sociale et socio-professionnel par et vers l’emploi.
 
 ## Article 4 — Fonctionnalités
 
@@ -56,10 +56,10 @@ L’accompagnateur pourra également remplir un formulaire de demande de prise e
 
 ### 4.4 Fonctionnalités uniquement ouvertes au compte Gestionnaire de Territoire
 
-Le Gestionnaire de Territoire dispose d'un compte dédié à partir duquel il peut :
+Le Gestionnaire de Territoire dispose d’un compte dédié à partir duquel il peut :
 
 - visualiser sur le territoire concerné les offreurs de solution et les accompagnateurs cherchant une solution ayant un compte Utilisateur;
-- accéder aux informations suivantes sur lesdits Utilisateurs : noms et prénoms, adresse e-mail et numéro de téléphone et à l'ensemble des données des structures ;
+- accéder aux informations suivantes sur lesdits Utilisateurs : noms et prénoms, adresse e-mail et numéro de téléphone et à l’ensemble des données des structures ;
 - modifier les informations de la structure et des services. Il peut notamment inviter un administrateur ou un collaborateur ;
 - imprimer et extraire les données de contact.
 
@@ -89,9 +89,9 @@ Ce site peut mettre à disposition des liens pouvant orienter l’utilisateur ve
 
 ### 7.2 Responsabilités de l’Utilisateur - accompagnateur
 
-Toute information transmise par l’Utilisateur est de sa seule responsabilité. Il appartient à l’Utilisateur de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l'ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
+Toute information transmise par l’Utilisateur est de sa seule responsabilité. Il appartient à l’Utilisateur de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l’ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
 
-Tout partage de données ou d'information non autorisée hors de la plateforme est de la responsabilité de l’Utilisateur. L’Utilisateur s’engage lors de toute demande de prise en charge, à ne communiquer que les informations strictement nécessaires. Particulièrement, lorsqu’il reçoit une demande, il s’engage en cas d’opposition au traitement, à supprimer de ses bases de données les informations communiquées ou obtenues dans le cadre de la demande de l’accompagnateur demandeur.
+Tout partage de données ou d’information non autorisée hors de la plateforme est de la responsabilité de l’Utilisateur. L’Utilisateur s’engage lors de toute demande de prise en charge, à ne communiquer que les informations strictement nécessaires. Particulièrement, lorsqu’il reçoit une demande, il s’engage en cas d’opposition au traitement, à supprimer de ses bases de données les informations communiquées ou obtenues dans le cadre de la demande de l’accompagnateur demandeur.
 
 L’Utilisateur s’engage à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et règlementaires en vigueur. En particulier, il s’engage à ne pas publier, à quelque endroit que ce soit, de messages racistes, sexistes, injurieux, insultants ou contraires à l’ordre public.
 
@@ -99,9 +99,9 @@ Il est rappelé que toute personne procédant à une fausse déclaration pour el
 
 ### 7.3. Responsabilités du Gestionnaire de Territoire
 
-Toute information transmise par le Gestionnaire de Territoire est de sa seule responsabilité. Il appartient au Gestionnaire de Territoire de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l'ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
+Toute information transmise par le Gestionnaire de Territoire est de sa seule responsabilité. Il appartient au Gestionnaire de Territoire de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l’ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
 
-Tout partage de données ou d'information non autorisée hors de la plateforme est de la responsabilité du Gestionnaire de Territoire.
+Tout partage de données ou d’information non autorisée hors de la plateforme est de la responsabilité du Gestionnaire de Territoire.
 
 Le Gestionnaire de Territoire s’engage à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et règlementaires en vigueur. En particulier, il s’engage à ne pas publier, à quelque endroit que ce soit, de messages racistes, sexistes, injurieux, insultants ou contraires à l’ordre public.
 
