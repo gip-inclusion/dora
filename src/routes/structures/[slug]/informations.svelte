@@ -17,9 +17,9 @@
     PutativeStructureMember,
   } from "$lib/types";
   import { formatPhoneNumber, markdownToHTML } from "$lib/utils/misc";
-  import { formatOsmHours } from "$lib/utils/opening-hours";
   import DataInclusionNotice from "./data-inclusion-notice.svelte";
   import QuickStart from "./quick-start.svelte";
+  import OsmHours from "$lib/components/specialized/osm-hours.svelte";
 
   export let structure: Structure;
   export let members: StructureMember[];
@@ -177,14 +177,7 @@
               Horaires
             </h4>
 
-            <ul class="text-f16">
-              {#each formatOsmHours(structure.openingHours) as [prefix, hourStr]}
-                <li class="mb-s8 flex items-center text-gray-text">
-                  <span class="mr-s16 w-s35">{prefix}</span>
-                  <span>{hourStr}</span>
-                </li>
-              {/each}
-            </ul>
+            <OsmHours osmHours={structure.openingHours} />
 
             {#if structure.openingHoursDetails}
               <p class="mt-s16 mb-s0 italic text-gray-text">

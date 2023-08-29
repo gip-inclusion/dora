@@ -49,6 +49,7 @@
     "insane": "^2.6.2",
     "lint-staged": "^13.2.0",
     "maplibre-gl": "^2.4.0",
+    "opening_hours": "^3.8.0",
     "postcss": "^8.4.21",
     "postcss-load-config": "^4.0.1",
     "prettier": "^2.8.4",
