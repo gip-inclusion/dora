@@ -3,7 +3,7 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
-  import { createOrModifyService } from "$lib/requests/services";
+  import { markServiceAsSynced } from "$lib/requests/services";
   import type { Service, ServicesOptions, ShortService } from "$lib/types";
   import ServiceContact from "./service-contact.svelte";
   import ExtendedServiceKeyInformations from "./display/extended-service-key-informations.svelte";
@@ -14,8 +14,7 @@
   export let onRefresh: () => Promise<void>;
 
   async function setAsUpdated() {
-    // TODO: il serait sans doute mieux d'avoir un endpoint dédié.
-    await createOrModifyService({ ...service, markSynced: true });
+    await markServiceAsSynced(service);
     isOpen = false;
     await onRefresh();
   }

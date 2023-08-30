@@ -18,8 +18,6 @@ function serviceToBack(service) {
       type: "Point",
       coordinates: [service.longitude, service.latitude],
     };
-  } else {
-    service.geom = null;
   }
 
   return service;
@@ -95,6 +93,18 @@ export function createOrModifyService(service: Service) {
       Authorization: `Token ${get(token)}`,
     },
     body: JSON.stringify(serviceToBack(service)),
+  });
+}
+
+export function markServiceAsSynced(service: Service | ShortService) {
+  return fetch(`${getApiURL()}/services/${service.slug}/`, {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({ markSynced: true }),
   });
 }
 
