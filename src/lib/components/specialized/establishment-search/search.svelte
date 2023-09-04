@@ -18,6 +18,7 @@
   export let isOwnStructure = true;
   export let tabId: Tab = "nom";
   export let title = "Structure";
+  export let description: string | undefined = undefined;
 
   function handleCityChange(newCity: GeoApiValue | null) {
     establishment = null;
@@ -57,14 +58,18 @@
 <FieldSet {title} headerBg="bg-magenta-brand" noHeaderBorder noTopPadding>
   <div slot="description">
     <p class="text-f14 text-white">
-      Choisissez une méthode d’identification. En cas de doute,
-      <a
-        class="underline"
-        target="_blank"
-        title="Ouverture dans une nouvelle fenêtre"
-        rel="noopener"
-        href="https://aide.dora.inclusion.beta.gouv.fr/fr/">contactez-nous</a
-      >.
+      {#if description}
+        {description}
+      {:else}
+        Choisissez une méthode d’identification. En cas de doute,
+        <a
+          class="underline"
+          target="_blank"
+          title="Ouverture dans une nouvelle fenêtre"
+          rel="noopener"
+          href="https://aide.dora.inclusion.beta.gouv.fr/fr/">contactez-nous</a
+        >.
+      {/if}
     </p>
 
     <Tabs items={tabs} onSelectedChange={handleTabChange} itemId={tabId} />

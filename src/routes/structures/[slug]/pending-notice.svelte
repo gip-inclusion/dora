@@ -6,14 +6,27 @@
 
   const requestResent = false;
 
+  export let shortAdminNames = [];
   const resendRequestFlag = false;
 </script>
 
-<Notice title="Votre adhésion est en attente de validation" type="warning">
+<Notice
+  title="Votre accès à cette structure est en attente de validation"
+  type="warning"
+>
   <p class="text-f14">
-    Les responsables de cette structure ont été notifiés. Si au bout de quelques
-    jours vous n’avez pas de réponse, vous pouvez les relancer.
+    Si au bout de quelques jours vous n’avez pas de réponse, vous pouvez
+    {#if shortAdminNames.length}
+      relancer {shortAdminNames.join(", ")}.
+    {:else}
+      les relancer.
+    {/if}
+    En cas de difficultés, n’hésitez pas à
+    <a class="underline" href="mailto:contact@dora.inclusion.beta.gouv.fr"
+      >nous contacter</a
+    >.
   </p>
+
   {#if resendRequestFlag}
     {#if requestResent}
       <Info
