@@ -400,6 +400,7 @@ export interface Service {
   isAvailable: boolean;
   isContactInfoPublic: boolean;
   isCumulative: boolean;
+  isOrientable: boolean;
   kinds: ServiceKind[];
   kindsDisplay: string[];
   locationKinds: LocationKind[];

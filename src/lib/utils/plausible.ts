@@ -23,6 +23,7 @@ function _getServiceProps(service, withUserData = false) {
     department: service.department || service.structureInfo.department,
     perimeter: service.diffusionZoneType,
     url: `${CANONICAL_URL}/services/${service.slug}`,
+    orientable: service.isOrientable,
   };
   if (withUserData) {
     props = {
@@ -180,7 +181,12 @@ export function trackService(service, url) {
     logAnalyticsEvent("service", url.pathname, {
       service: service.slug,
     });
+
+    if (get(token) && service.isOrientable) {
+      _track("service-orientable", _getServiceProps(service, true));
+    }
   }
+
   _track("service", _getServiceProps(service, false));
 }
 
