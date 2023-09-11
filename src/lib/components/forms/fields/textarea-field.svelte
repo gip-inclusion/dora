@@ -23,7 +23,7 @@
   export let description = "";
   export let hidden = false;
   export let hideLabel = false;
-  export let label = $currentSchema[id].label;
+  export let label = $currentSchema?.[id]?.label;
   export let vertical = false;
 </script>
 

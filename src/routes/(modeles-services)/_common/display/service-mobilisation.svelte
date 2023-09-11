@@ -20,14 +20,6 @@
       trackMobilisation(service, $page.url);
     }
   }
-
-  const showMobilisation =
-    !isDI &&
-    service.structureInfo.canShowOrientationForm &&
-    service.contactEmail &&
-    (service.coachOrientationModes?.includes("envoyer-courriel") ||
-      service.coachOrientationModes?.includes("envoyer-fiche-prescription") ||
-      service.beneficiariesAccessModes?.includes("envoyer-courriel"));
 </script>
 
 <h2 class="text-f23 text-white">Mobiliser le service</h2>
@@ -51,8 +43,8 @@
         <ServiceContact {service} />
       {/if}
 
-      {#if showMobilisation}
-        <div class="mt-s16 mb-s16">
+      {#if service.isOrientable}
+        <div class="mb-s16 mt-s16">
           <LinkButton
             nofollow
             to="/services/{service.slug}/orienter"

@@ -1,11 +1,12 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig, loadEnv } from "vite";
+import { sentrySvelteKit } from "@sentry/sveltekit";
 
 export default defineConfig(({ mode }) => {
   // Charge les variables d'environnement des fichiers .env
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   return {
-    plugins: [sveltekit()],
+    plugins: [sentrySvelteKit(), sveltekit()],
 
     build: {
       sourcemap: true,

@@ -180,6 +180,7 @@ export interface Structure {
   postalCode: string;
   quickStartDone: boolean;
   services: StructureService[];
+  shortAdminNames: string[];
   shortDesc: string;
   siret: string | null;
   slug: string;
@@ -399,6 +400,7 @@ export interface Service {
   isAvailable: boolean;
   isContactInfoPublic: boolean;
   isCumulative: boolean;
+  isOrientable: boolean;
   kinds: ServiceKind[];
   kindsDisplay: string[];
   locationKinds: LocationKind[];

@@ -10,7 +10,9 @@
   import type { Service, ServicesOptions, ShortService } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
+  import { isValidformatOsmHours } from "$lib/utils/opening-hours";
   import { isNotFreeService } from "$lib/utils/service";
+  import OsmHours from "../../osm-hours.svelte";
 
   export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
@@ -83,7 +85,13 @@
         </span>
         Fréquence et horaires
       </h3>
-      <p>{service.recurrence}</p>
+      <p>
+        {#if isValidformatOsmHours(service.recurrence)}
+          <OsmHours osmHours={service.recurrence} />
+        {:else}
+          {service.recurrence}
+        {/if}
+      </p>
     </div>
   {/if}
 
@@ -99,7 +107,7 @@
         {#if service.locationKinds.includes("en-presentiel")}
           <p class="mb-s6">
             <strong>En présentiel&nbsp;•&nbsp;</strong>
-            {service.address1}{#if service.address2}{service.address2}{/if},
+            {service.address1}{#if service.address2}, {service.address2}{/if},
             {service.postalCode}&nbsp;{service.city}
           </p>
         {/if}

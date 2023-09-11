@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/svelte";
+import * as Sentry from "@sentry/sveltekit";
 
 export function logException(exc, ...args) {
   Sentry.captureException(exc, { extra: { ...args } });

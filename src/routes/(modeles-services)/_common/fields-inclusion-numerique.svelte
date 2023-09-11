@@ -159,7 +159,6 @@
     );
   }
 
-  service.locationKinds = [];
   filterConcernedPublics();
   preSetContact();
   preSetDiffusionZone();
