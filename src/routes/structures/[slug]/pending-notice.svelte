@@ -15,7 +15,8 @@
   type="warning"
 >
   <p class="text-f14">
-    Si au bout de quelques jours vous n’avez pas de réponse, vous pouvez
+    Les administrateurs de cette structure ont été notifiés. Si au bout de
+    quelques jours vous n’avez pas de réponse, vous pouvez
     {#if shortAdminNames.length}
       relancer {shortAdminNames.join(", ")}.
     {:else}
