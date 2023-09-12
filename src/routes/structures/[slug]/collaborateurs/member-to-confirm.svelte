@@ -46,7 +46,7 @@
   </div>
 
   <div slot="actions" let:onCloseParent>
-    <div>
+    <div class="flex flex-col items-end">
       <Button
         label="Accepter"
         on:click={() => {
@@ -56,12 +56,9 @@
         icon={checkboxCircleIcon}
         iconOnRight
         small
-        wFull
-        extraClass="justify-end"
         noBackground
       />
-    </div>
-    <div>
+
       <Button
         label="Révoquer"
         on:click={() => {
@@ -71,8 +68,6 @@
         icon={forbidIcon}
         iconOnRight
         small
-        wFull
-        extraClass="justify-end"
         noBackground
       />
     </div>

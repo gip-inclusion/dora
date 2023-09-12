@@ -31,18 +31,30 @@
   $: moderationStatus = entity.moderationStatus;
 </script>
 
-{#if moderationStatus === "NEED_INITIAL_MODERATION"}
-  <Button label="En progrès" on:click={handleInProgress} small noBackground />
-  <Button label="Validé" on:click={handleValidate} small noBackground />
-{:else if moderationStatus === "NEED_NEW_MODERATION"}
-  <Button label="En progrès" on:click={handleInProgress} small noBackground />
-  <Button label="Validé" on:click={handleValidate} small noBackground />
-{:else if moderationStatus === "IN_PROGRESS"}
-  <Button label="Validé" on:click={handleValidate} small noBackground />
-{:else if moderationStatus === "VALIDATED"}
-  <Button label="À remodérer" on:click={handleRemoderate} small noBackground />
-{:else}
-  <Button label="À remodérer" on:click={handleRemoderate} small noBackground />
-  <Button label="En progrès" on:click={handleInProgress} small noBackground />
-  <Button label="Validé" on:click={handleValidate} small noBackground />
-{/if}
+<div class="flex flex-col items-end">
+  {#if moderationStatus === "NEED_INITIAL_MODERATION"}
+    <Button label="En progrès" on:click={handleInProgress} small noBackground />
+    <Button label="Validé" on:click={handleValidate} small noBackground />
+  {:else if moderationStatus === "NEED_NEW_MODERATION"}
+    <Button label="En progrès" on:click={handleInProgress} small noBackground />
+    <Button label="Validé" on:click={handleValidate} small noBackground />
+  {:else if moderationStatus === "IN_PROGRESS"}
+    <Button label="Validé" on:click={handleValidate} small noBackground />
+  {:else if moderationStatus === "VALIDATED"}
+    <Button
+      label="À remodérer"
+      on:click={handleRemoderate}
+      small
+      noBackground
+    />
+  {:else}
+    <Button
+      label="À remodérer"
+      on:click={handleRemoderate}
+      small
+      noBackground
+    />
+    <Button label="En progrès" on:click={handleInProgress} small noBackground />
+    <Button label="Validé" on:click={handleValidate} small noBackground />
+  {/if}
+</div>

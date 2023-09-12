@@ -43,7 +43,7 @@
   </div>
 
   <div slot="actions" let:onCloseParent>
-    <div>
+    <div class="flex flex-col items-end">
       <Button
         label="Modifier"
         on:click={() => {
@@ -53,14 +53,11 @@
         icon={settingsIcon}
         iconOnRight
         small
-        wFull
-        extraClass="justify-end"
         noBackground
       />
-    </div>
-    <div>
+
       <Button
-        label={isMyself ? "Quitter la structure" : "Révoquer"}
+        label={isMyself ? "Quitter la structure" : "Révoquer"}
         on:click={() => {
           handleDelete();
           onCloseParent();
@@ -68,9 +65,8 @@
         icon={forbidIcon}
         iconOnRight
         small
-        extraClass="justify-end whitespace-nowrap"
         noBackground
       />
     </div>
-  </div>
-</Member>
+  </div></Member
+>

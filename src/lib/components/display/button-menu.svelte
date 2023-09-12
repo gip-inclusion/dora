@@ -9,6 +9,8 @@
   export let disabled = false;
   export let small = false;
 
+  export let alignRight = true;
+
   let isOpen = false;
   const id = `button-menu-${randomId()}`;
 
@@ -34,7 +36,8 @@
     />
     <div
       {id}
-      class="right-0 absolute top-[113%] z-[1000] flex-col justify-end rounded-md border border-gray-01 bg-white py-s10 px-s10 shadow-sm"
+      class="absolute top-[113%] z-[1000] flex-col justify-end rounded-md border border-gray-01 bg-white py-s10 px-s10 shadow-sm"
+      class:right-s0={alignRight}
       class:flex={isOpen}
       class:hidden={!isOpen}
     >

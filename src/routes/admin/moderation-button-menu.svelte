@@ -8,7 +8,7 @@
 </script>
 
 <div class="flex flex-row items-center gap-s4 font-bold">
-  Modération :
+  Modération :
   <div class="flex items-center rounded border border-gray-01">
     <div class="px-s12 py-s6">
       <ModerationLabel
@@ -18,13 +18,15 @@
     </div>
     <div class="text-gray-02">|</div>
     <ButtonMenu icon={arrowDownSIcon} let:onClose={onCloseParent} small>
-      <ModerationMenu
-        {entity}
-        onRefresh={async () => {
-          await onCloseParent();
-          await onRefresh();
-        }}
-      />
+      <div class="w-max">
+        <ModerationMenu
+          {entity}
+          onRefresh={async () => {
+            await onCloseParent();
+            await onRefresh();
+          }}
+        />
+      </div>
     </ButtonMenu>
   </div>
 </div>

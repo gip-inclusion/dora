@@ -124,9 +124,11 @@
 
   function updateHoveredFeature(structureSlug: string | null) {
     if (map) {
-      map.removeFeatureState({
-        source: "structuresSource",
-      });
+      if (map.getSource("structuresSource")) {
+        map.removeFeatureState({
+          source: "structuresSource",
+        });
+      }
       if (structureSlug) {
         map.setFeatureState(
           {
