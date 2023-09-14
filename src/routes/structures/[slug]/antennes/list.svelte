@@ -1,13 +1,17 @@
 <script lang="ts">
   import LinkButton from "$lib/components/display/link-button.svelte";
+  import Button from "$lib/components/display/button.svelte";
   import StructureCard from "$lib/components/specialized/structure-card.svelte";
   import { API_URL, CANONICAL_URL } from "$lib/env";
   import { home3Icon } from "$lib/icons";
   import Count from "../count.svelte";
+  import NewBranchModal from "./new-branch-modal.svelte";
 
   export let structure, branches, total;
   export let tabDisplay = true;
   export let limit;
+
+  let newBranchModalOpen = false;
 
   let departements = [];
   // let departement = "tous";
@@ -68,11 +72,10 @@
       />
     {/if}
     {#if structure.canEditInformations}
-      <LinkButton
+      <Button
         label="Ajouter une antenne"
-        to="https://aide.dora.inclusion.beta.gouv.fr/fr/article/creer-une-ou-plusieurs-antennes-1xggiaw/"
+        on:click={() => (newBranchModalOpen = true)}
         icon={home3Icon}
-        otherTab
       />
     {/if}
 
@@ -100,3 +103,8 @@
     <StructureCard structure={branch} />
   {/each}
 </div>
+
+<NewBranchModal
+  bind:isOpen={newBranchModalOpen}
+  on:close={() => (newBranchModalOpen = false)}
+/>
