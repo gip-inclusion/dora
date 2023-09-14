@@ -3,37 +3,28 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   extends: [
     "eslint:recommended",
+    "plugin:svelte/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier",
+    "prettier"
   ],
-  plugins: ["svelte3", "@typescript-eslint"],
+  plugins: ["@typescript-eslint"],
   ignorePatterns: ["*.cjs"],
-  overrides: [{ files: ["*.svelte"], processor: "svelte3/svelte3" }],
-  settings: {
-    "svelte3/typescript": () => require("typescript"),
-    "svelte3/ignore-warnings": (warning) => {
-      if (warning.code === "a11y-no-redundant-roles") {
-        if (
-          warning.message.includes("Redundant role 'main'") ||
-          warning.message.includes("Redundant role 'banner'") ||
-          warning.message.includes("Redundant role 'contentinfo'")
-        ) {
-          return true;
-        }
-      }
-      if (warning.code === "security-anchor-rel-noreferrer") {
-        return true;
-      }
-    },
-  },
+  overrides: [{
+    files: ["*.svelte"],
+    parser: "svelte-eslint-parser",
+    parserOptions: {
+      parser: "@typescript-eslint/parser"
+    }
+  }],
   parserOptions: {
     sourceType: "module",
     ecmaVersion: 2020,
+    extraFileExtensions: [".svelte"]
   },
   env: {
     browser: true,
     es2022: true,
-    node: true,
+    node: true
   },
   rules: {
     "array-callback-return": "error",
@@ -49,14 +40,14 @@ module.exports = {
     eqeqeq: ["error", "smart"],
     "id-length": [
       "error",
-      { min: 3, exceptions: ["i", "a", "b", "x", "y", "id", "ok", "to"] },
+      { min: 3, exceptions: ["i", "a", "b", "x", "y", "id", "ok", "to"] }
     ],
     "func-style": [
       "error",
       "declaration",
       {
-        allowArrowFunctions: true,
-      },
+        allowArrowFunctions: true
+      }
     ],
     "guard-for-in": "error",
     "no-alert": "warn",
@@ -68,6 +59,7 @@ module.exports = {
     "no-extra-boolean-cast": ["error", { enforceForLogicalOperands: true }],
     "no-implicit-coercion": [2, { allow: ["!!"] }],
     "no-implied-eval": "error",
+    "no-irregular-whitespace": "off",
     "no-mixed-operators": "error",
     "no-nested-ternary": "error",
     "no-return-assign": "error",
@@ -80,19 +72,21 @@ module.exports = {
       "warn",
       {
         location: "start",
-        terms: ["todo", "hack", "xxx", "fixme"],
-      },
+        terms: ["todo", "hack", "xxx", "fixme"]
+      }
     ],
     "prefer-const": "error",
     "require-await": "error",
+    "svelte/no-at-html-tags": "warn",
+    "svelte/valid-compile": "warn",
     "@typescript-eslint/no-empty-function": "warn",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
         argsIgnorePattern: "^_",
-        varsIgnorePattern: "^_",
-      },
+        varsIgnorePattern: "^_"
+      }
     ],
-    "@typescript-eslint/no-explicit-any": "off",
-  },
+    "@typescript-eslint/no-explicit-any": "off"
+  }
 };

@@ -2,11 +2,8 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
   import { TallyFormId } from "$lib/utils/nps";
-  import type { PageData } from "./$types";
   import Header from "./header.svelte";
   import { structure } from "./store";
-
-  export let data: PageData;
 
   $: publishedServices = $structure.services.filter(
     (service) => service.status === "PUBLISHED"

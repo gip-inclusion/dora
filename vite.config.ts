@@ -6,7 +6,14 @@ export default defineConfig(({ mode }) => {
   // Charge les variables d'environnement des fichiers .env
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   return {
-    plugins: [sentrySvelteKit(), sveltekit()],
+    plugins: [
+      sentrySvelteKit({
+        sourceMapsUploadOptions: {
+          telemetry: false,
+        },
+      }),
+      sveltekit(),
+    ],
 
     build: {
       sourcemap: true,

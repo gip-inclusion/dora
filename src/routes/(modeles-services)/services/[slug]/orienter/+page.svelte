@@ -4,7 +4,7 @@
   import Form from "$lib/components/forms/form.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import ContactBox from "./contact-box.svelte";
-  import Layout from "./layout.svelte";
+  import Layout from "./orientation-layout.svelte";
   import ValidationForm from "./validation-form.svelte";
   import { orientation } from "./store";
   import FormErrors from "$lib/components/forms/form-errors.svelte";

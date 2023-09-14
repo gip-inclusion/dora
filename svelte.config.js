@@ -53,11 +53,9 @@ const config = {
     },
   },
   vitePlugin: {
-    experimental: {
-      inspector: {
-        showToggleButton: "always",
-        toggleButtonPos: "bottom-right",
-      },
+    inspector: {
+      showToggleButton: "always",
+      toggleButtonPos: "bottom-right",
     },
   },
   onwarn(warning, defaultHandler) {
@@ -67,13 +65,15 @@ const config = {
 
     // Désactivation des avertissements d'accessibilité, le temps de finir la migration Sveltekit
     // TODO: les corriger au lieu de les masquer
-    if (warning.code === "a11y-click-events-have-key-events") {
-      return;
-    }
-    if (warning.code === "a11y-label-has-associated-control") {
-      return;
-    }
-    if (warning.code === "a11y-role-has-required-aria-props") {
+    const ignoredA11yWarnings = [
+      "a11y-interactive-supports-focus",
+      "a11y-click-events-have-key-events",
+      "a11y-label-has-associated-control",
+      "a11y-role-has-required-aria-props",
+      "a11y-no-static-element-interactions",
+      "a11y-no-noninteractive-element-interactions",
+    ];
+    if (ignoredA11yWarnings.includes(warning.code)) {
       return;
     }
 
