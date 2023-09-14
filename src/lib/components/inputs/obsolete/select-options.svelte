@@ -11,7 +11,7 @@
   export let extraClass = "";
 
   export let setAsSelected: (i: string | null) => void;
-  export let updateValue: (i: string, j: string | undefined) => void;
+  export let updateValue: (i: string) => void;
 </script>
 
 {#each choices as option (option.value)}
@@ -25,8 +25,7 @@
     id={option.value}
     class:hover={option.value === selectedOption?.value}
     class:selected
-    on:click|stopPropagation={() =>
-      updateValue(option.value, option.optGroupKey)}
+    on:click|stopPropagation={() => updateValue(option.value)}
     on:mouseenter={() => setAsSelected(option.value)}
     on:mouseleave={() => setAsSelected(null)}
   >

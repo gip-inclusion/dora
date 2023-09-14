@@ -93,10 +93,8 @@
       cityLabel={data.cityLabel}
       kindIds={data.kindIds}
       feeConditions={data.feeConditions}
-      subCategoryIds={[
-        ...data.subCategoryIds,
-        ...data.categoryIds.map((id) => `${id}--all`),
-      ]}
+      categoryId={data.categoryIds[0]}
+      subCategoryIds={[...data.subCategoryIds]}
       showDeploymentWarning={false}
       useAdditionalFilters
     />
