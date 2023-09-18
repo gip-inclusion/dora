@@ -187,7 +187,7 @@ export function trackService(service, url) {
     }
   }
 
-  _track("service", _getServiceProps(service, false));
+  _track("service", _getServiceProps(service, true));
 }
 
 export function trackDIService(service, url) {
