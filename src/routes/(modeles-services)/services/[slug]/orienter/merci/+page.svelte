@@ -1,7 +1,7 @@
 <script lang="ts">
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { arrowLeftLineIcon, flashLightIcon } from "$lib/icons";
-  import Layout from "../layout.svelte";
+  import Layout from "../orientation-layout.svelte";
   import type { PageData } from "./$types";
   import { initEmptyOrientation, orientation } from "../store";
   import illustration from "$lib/assets/illustrations/illu-favs.svg";

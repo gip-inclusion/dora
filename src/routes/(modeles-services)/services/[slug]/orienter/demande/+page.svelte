@@ -6,7 +6,7 @@
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import { getApiURL } from "$lib/utils/api";
   import { token } from "$lib/utils/auth";
-  import Layout from "../layout.svelte";
+  import Layout from "../orientation-layout.svelte";
   import type { PageData } from "./$types";
   import { orientation } from "../store";
   import OrientationForm from "./orientation-form.svelte";

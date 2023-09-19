@@ -2,14 +2,9 @@
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
-  import {
-    getCategoryKeyFromSubcategoryChoice,
-    getChoiceFromValue,
-    getChoicesFromKey,
-  } from "$lib/utils/choice";
+  import { getChoiceFromValue } from "$lib/utils/choice";
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
-  import { tick } from "svelte";
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";
 
@@ -26,7 +21,6 @@
   export let hideLabel = false;
   export let showIconForSelectedOption = false;
   export let choices: Choice[];
-  export let optGroups: Choice[] = [];
   export let display: "horizontal" | "vertical" = "horizontal";
   export let style: "common" | "filter" | "search" = "common";
   export let onChange: (event: {
@@ -35,9 +29,6 @@
   }) => void | undefined = undefined;
 
   const originalChoices: Choice[] = [...choices];
-  const originalOptGroups: Choice[] = [...optGroups];
-
-  let optGroupsOpen: string[] = [];
   let filterText = "";
 
   // *** Accessibilité
@@ -60,37 +51,13 @@
     return allChoices.findIndex((choice) => choice.value === val);
   }
 
-  function toggleGroup(optGroup: string) {
-    if (optGroupsOpen.includes(optGroup)) {
-      optGroupsOpen = optGroupsOpen.filter((opt) => opt !== optGroup);
-    } else {
-      optGroupsOpen = [...optGroupsOpen, optGroup];
-    }
-  }
-
-  async function scrollToOption(id: string) {
-    // Open if needed
-    if (optGroups.length) {
-      const key = getCategoryKeyFromSubcategoryChoice(selectedOption);
-      if (!optGroupsOpen.includes(key)) {
-        optGroupsOpen = [...optGroupsOpen, key];
-      }
-    }
-
-    await tick();
-
+  function scrollToOption(id: string) {
     const scrollTop = document.getElementById(id).offsetTop;
     document.getElementById(`listbox-values-${uuid}`).scrollTop =
       scrollTop - 60;
   }
 
-  function optGroupHasSubValuesSelected(optGroup) {
-    return (
-      value.filter((val) => val.split("--")[0] === optGroup.value).length > 0
-    );
-  }
-
-  function updateValue(newValue: string, optGroup: string | undefined) {
+  function updateValue(newValue: string) {
     filterText = "";
 
     // As array
@@ -99,14 +66,12 @@
         value = (value as string[]).filter((val) => val !== newValue);
       } else {
         // Gestion du bouton "Tous"
-        if (optGroups) {
-          if (newValue.endsWith("--all")) {
-            // Si on décoche toutes les options si on sélectionne "Tous"
-            value = value.filter((val) => !val.startsWith(`${optGroup}--`));
-          } else {
-            // Si on décoche "Tous" si on sélectionne une option précise
-            value = value.filter((val) => val !== `${optGroup}--all`);
-          }
+        if (newValue.endsWith("--all")) {
+          // Si on décoche toutes les options si on sélectionne "Tous"
+          value = value.filter((val) => val.endsWith("--all"));
+        } else {
+          // Si on décoche "Tous" si on sélectionne une option précise
+          value = value.filter((val) => !val.endsWith("--all"));
         }
 
         value = [...value, newValue];
@@ -140,7 +105,7 @@
         toggleCombobox(true);
       } else {
         if (selectedOption) {
-          updateValue(selectedOption.value, selectedOption.optGroupKey);
+          updateValue(selectedOption.value);
         }
       }
     }
@@ -170,11 +135,9 @@
   function clearAll() {
     value = isMultiple ? [] : undefined;
     choices = [...originalChoices];
-    optGroups = [...originalOptGroups];
     filterText = "";
-    if (optGroups) {
-      optGroupsOpen = [];
-    }
+
+    onChange({ detail: name, value: "" });
   }
 
   function setAsSelected(val: string | null) {
@@ -191,36 +154,9 @@
   $: {
     if (!filterText) {
       choices = [...originalChoices];
-      optGroups = [...originalOptGroups];
-      optGroupsOpen = [];
     } else {
-      // On filtre les choix et les optGroups
-      choices = originalChoices.filter((choice) => {
-        const optGroupLabel = originalOptGroups.find(
-          (group) => group.value === choice.optGroupKey
-        )?.label;
-        return (
-          choice.label.toLowerCase().includes(filterText.toLocaleLowerCase()) ||
-          optGroupLabel.toLowerCase().includes(filterText.toLocaleLowerCase())
-        );
-      });
-
-      // On réinitialise la sélection pour le clavier
-      setAsSelected(null);
-
-      // On ouvre la livre des résultats
-      toggleCombobox(true);
-
-      // On filtre et ouvre les optgroup ayant des options
-      if (optGroups) {
-        const optGroupKeys = new Set<string>();
-        choices.forEach((choice) => optGroupKeys.add(choice.optGroupKey));
-
-        optGroupsOpen = Array.from(optGroupKeys.values());
-        optGroups = originalOptGroups.filter((optGroup) =>
-          optGroupKeys.has(optGroup.value)
-        );
-      }
+      setAsSelected(null); // On réinitialise la sélection pour le clavier
+      toggleCombobox(true); // On ouvre la liste des résultats
     }
   }
 </script>
@@ -246,7 +182,7 @@
   >
     <div class="current-value flex cursor-pointer items-center justify-between">
       <div class="w-[90%] overflow-hidden text-ellipsis whitespace-nowrap">
-        {#if isMultiple && value.length > 0}
+        {#if isMultiple && value.length > 0 && choices?.length}
           {value
             .map((val) => {
               const selectedChoice = choices.find(
@@ -301,57 +237,14 @@
       id={`listbox-values-${uuid}`}
       tabindex="-1"
     >
-      {#each optGroups as optGroup (optGroup.value)}
-        {@const hasSubValuesSelected = optGroupHasSubValuesSelected(optGroup)}
-        {@const open =
-          optGroupsOpen.includes(optGroup.value) || hasSubValuesSelected}
-        <div class="w-full">
-          <button
-            class="optgroup flex w-full justify-between p-s12 text-gray-text"
-            class:has-sub-value-selected={hasSubValuesSelected}
-            on:click|preventDefault|stopPropagation={() =>
-              toggleGroup(optGroup.value)}
-          >
-            <span class="flex text-left">
-              {#if optGroup.icon}
-                <span class="mr-s8 h-s24 w-s24 fill-current">
-                  {@html optGroup.icon}
-                </span>
-              {/if}
-              {optGroup.label}
-            </span>
-
-            <span class="h-s24 w-s24 text-gray-text">
-              {#if open}
-                {@html arrowUpSIcon}
-              {:else}
-                {@html arrowDownSIcon}
-              {/if}
-            </span>
-          </button>
-          <div class:hidden={!open}>
-            <SelectOptions
-              {value}
-              extraClass="pl-s24 py-s12 pr-s8"
-              {isMultiple}
-              {selectedOption}
-              choices={getChoicesFromKey(optGroup.value, choices)}
-              {setAsSelected}
-              {updateValue}
-            />
-            <hr class="mt-s12 text-gray-02" />
-          </div>
-        </div>
-      {:else}
-        <SelectOptions
-          {value}
-          {isMultiple}
-          {selectedOption}
-          {choices}
-          {setAsSelected}
-          {updateValue}
-        />
-      {/each}
+      <SelectOptions
+        {value}
+        {isMultiple}
+        {selectedOption}
+        {choices}
+        {setAsSelected}
+        {updateValue}
+      />
     </div>
   </div>
 </FieldWrapper>
@@ -387,8 +280,8 @@
   .filter-search .placeholder {
     @apply !text-gray-text;
   }
-  .filter-search .has-sub-value-selected {
-    @apply text-magenta-cta;
+  .filter-search :global(.option) {
+    @apply !min-h-min p-s8;
   }
   .filter-search .optgroup:hover,
   .filter-search .option:hover,

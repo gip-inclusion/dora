@@ -149,7 +149,9 @@ export function validate(
       checkRequired
     );
 
-    if (!shape) {return;}
+    if (!shape) {
+      return;
+    }
     isValid = isValid && valid;
     validatedData[fieldName] = value;
 

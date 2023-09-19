@@ -3,19 +3,17 @@
   import { userInfo } from "$lib/utils/auth";
 
   export let model;
-  export let secondary = false;
-  export let inline = false;
+
   export let readOnly = true;
 </script>
 
-<div class:flex={inline} class:gap-s8={inline} class:items-start={inline}>
+<div class="flex flex-col items-end">
   {#if !readOnly}
     <LinkButton
       label="Modifier"
       to="/modeles/{model.slug}/editer"
       small
-      noBackground={!secondary}
-      {secondary}
+      noBackground
     />
   {/if}
 
@@ -24,8 +22,7 @@
       label="Créer un service"
       small
       to={`/services/creer?modele=${model.slug}`}
-      noBackground={!secondary}
-      {secondary}
+      noBackground
     />
   {/if}
 </div>

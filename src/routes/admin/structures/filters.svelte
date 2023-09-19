@@ -84,7 +84,8 @@
 
   function filterAndSortEntities(
     structs: AdminShortStructure[],
-    params: SearchParams
+    params: SearchParams,
+    status: StatusFilter
   ) {
     const query = normalizeString(params.searchString);
     return structs
@@ -117,20 +118,20 @@
         );
       })
       .filter((struct) => {
-        if (searchStatus === "orphelines") {
+        if (status === "orphelines") {
           return isOrphan(struct);
-        } else if (searchStatus === "en_attente") {
+        } else if (status === "en_attente") {
           return !isOrphan(struct) && waiting(struct);
-        } else if (searchStatus === "à_modérer") {
+        } else if (status === "à_modérer") {
           return !isOrphan(struct) && !waiting(struct) && toModerate(struct);
-        } else if (searchStatus === "à_activer") {
+        } else if (status === "à_activer") {
           return (
             !isOrphan(struct) &&
             !waiting(struct) &&
             !toModerate(struct) &&
             toActivate(struct)
           );
-        } else if (searchStatus === "à_actualiser") {
+        } else if (status === "à_actualiser") {
           return (
             !isOrphan(struct) &&
             !waiting(struct) &&
@@ -138,7 +139,7 @@
             !toActivate(struct) &&
             toUpdate(struct)
           );
-        } else if (searchStatus === "toutes") {
+        } else if (status === "toutes") {
           return true;
         }
         console.error("Statut de recherche inconnu");
@@ -175,7 +176,11 @@
     searchStatus = "toutes";
   }
 
-  $: filteredStructures = filterAndSortEntities(structures, searchParams);
+  $: filteredStructures = filterAndSortEntities(
+    structures,
+    searchParams,
+    searchStatus
+  );
 </script>
 
 <div class="mb-s8 font-bold">Actions en attente :</div>
@@ -186,7 +191,11 @@
       resetSearchParams();
       searchStatus = "orphelines";
     }}
-    label="orphelines"
+    label="orphelines ({filterAndSortEntities(
+      structures,
+      searchParams,
+      'orphelines'
+    ).length})"
     secondary={searchStatus !== "orphelines"}
   />
 
@@ -195,7 +204,11 @@
       resetSearchParams();
       searchStatus = "en_attente";
     }}
-    label="en attente"
+    label="en attente ({filterAndSortEntities(
+      structures,
+      searchParams,
+      'en_attente'
+    ).length})"
     secondary={searchStatus !== "en_attente"}
   />
 
@@ -204,7 +217,11 @@
       resetSearchParams();
       searchStatus = "à_modérer";
     }}
-    label="à modérer"
+    label="à modérer ({filterAndSortEntities(
+      structures,
+      searchParams,
+      'à_modérer'
+    ).length})"
     secondary={searchStatus !== "à_modérer"}
   />
 
@@ -213,7 +230,11 @@
       resetSearchParams();
       searchStatus = "à_activer";
     }}
-    label="à activer "
+    label="à activer ({filterAndSortEntities(
+      structures,
+      searchParams,
+      'à_activer'
+    ).length})"
     secondary={searchStatus !== "à_activer"}
   />
 
@@ -222,7 +243,11 @@
       resetSearchParams();
       searchStatus = "à_actualiser";
     }}
-    label="à actualiser"
+    label="à actualiser ({filterAndSortEntities(
+      structures,
+      searchParams,
+      'à_actualiser'
+    ).length})"
     secondary={searchStatus !== "à_actualiser"}
   />
 </div>
