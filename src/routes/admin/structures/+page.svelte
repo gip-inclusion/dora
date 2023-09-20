@@ -61,23 +61,29 @@
       } else if (structure.numOutdatedServices) {
         status = "à actualiser";
       }
-      // prettier-ignore
 
+      // prettier-ignore
       return {
         "Nom": structure.name,
         "SIRET": structure.siret,
         "Département": structure.department,
         "Ville": structure.city,
         "Description": structure.shortDesc,
+        "Thématiques": structure.categories
+          .map(
+            (val) =>
+              data.servicesOptions?.categories.find((cat) => cat.value === val)
+                ?.label
+          )
+          .filter(value => !!value)
+          .join(", "),
         "Téléphone": structure.phone,
         "Courriel": structure.email,
         "Lien DORA": `${CANONICAL_URL}/structures/${structure.slug}`,
         "Administrateurs": structure.admins.join(","),
         "Éditeurs": structure.editors.join(","),
-        "Administrateurs à relancer":
-          structure.adminsToRemind.join(","),
-        "Administrateurs à modérer":
-          structure.adminsToModerate.join(","),
+        "Administrateurs à relancer": structure.adminsToRemind.join(","),
+        "Administrateurs à modérer": structure.adminsToModerate.join(","),
         "Collaborateurs à relancer": structure.numPotentialMembersToRemind,
         "Collaborateurs en attente": structure.numPotentialMembersToValidate,
         "Nb services publiés": structure.numPublishedServices,
