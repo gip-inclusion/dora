@@ -33,7 +33,7 @@
       label: "Message pour le ou la bénéficiaire",
       default: "",
       rules: [v.maxStrLength(1000)],
-      required: false,
+      required: true,
       maxLength: 1000,
     },
   };
