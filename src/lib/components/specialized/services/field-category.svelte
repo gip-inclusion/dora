@@ -10,22 +10,18 @@
   export let description = "";
   const useModel = model != null;
 
-  let isPristine = service.subcategories.length === 0;
-
-  let previousCategories = [];
-
   function handleCategoriesChange(categories) {
     if (
-      isPristine &&
+      service.categories.length === 0 &&
       categories.length === 1 &&
       categories[0] === "numerique"
     ) {
       service.useInclusionNumeriqueScheme = true;
-      isPristine = false;
-    } else if (categories.length !== 1) {
+    }
+    if (categories.length !== 1) {
       service.useInclusionNumeriqueScheme = false;
     }
-    previousCategories = categories;
+    service.categories = categories;
 
     service.subcategories = service.subcategories.filter((scat) =>
       categories.some((cat) => scat.startsWith(cat))
@@ -35,7 +31,7 @@
 
 <MultiSelectField
   id="categories"
-  bind:value={service.categories}
+  value={service.categories}
   choices={servicesOptions.categories}
   onChange={handleCategoriesChange}
   placeholder="Sélectionner"
