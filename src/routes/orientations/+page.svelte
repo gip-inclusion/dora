@@ -261,6 +261,13 @@
                         link={`/structures/${orientation.prescriberStructure?.slug}`}
                       />
                     {/if}
+
+                    {#if orientation.referentPhone && orientation.referentEmail === orientation.prescriber.email}
+                      <ContactListItem
+                        icon={phoneLineIcon}
+                        text={formatPhoneNumber(orientation.referentPhone)}
+                      />
+                    {/if}
                   </ul>
                 </div>
               </div>
