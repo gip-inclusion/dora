@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { userInfo } from "$lib/utils/auth";
-  import Notice from "$lib/components/display/notice.svelte";
 
   import Button from "$lib/components/display/button.svelte";
   import ServiceContact from "$lib/components/specialized/services/service-contact.svelte";
@@ -29,13 +28,13 @@
 
 {#if $token}
   {#if !$userInfo.structures.length}
-    <Notice type="warning-dark"
-      >{#if $userInfo.pendingStructures.length === 1}
+    <div class="mb-s8 italic">
+      {#if $userInfo.pendingStructures.length === 1}
         Le temps que votre adhésion à la structure “{$userInfo
           .pendingStructures[0].name}” soit validée, vous ne pouvez pas
         visualiser ces informations.{:else}Le temps que vos demandes d’adhésion
         soient validées, vous ne pouvez pas visualiser ces informations.{/if}
-    </Notice>
+    </div>
   {:else}
     <div class="w-full sm:w-auto">
       <div class="hidden print:inline">
