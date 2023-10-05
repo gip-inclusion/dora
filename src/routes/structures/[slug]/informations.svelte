@@ -141,7 +141,7 @@
               E-mail
             </h4>
             <a
-              class="break-all text-gray-text  underline"
+              class="break-all text-gray-text underline"
               href="mailto:{structure.email}">{structure.email}</a
             >
           </div>
@@ -160,7 +160,7 @@
               target="_blank"
               title="Ouverture dans une nouvelle fenêtre"
               rel="noopener ugc"
-              class="break-all text-gray-text  underline"
+              class="break-all text-gray-text underline"
               href={structure.url}
             >
               {structure.url}

@@ -55,6 +55,7 @@ export { default as rocketIcon } from "remixicon/icons/Map/rocket-2-line.svg?raw
 export { default as flashLightIcon } from "remixicon/icons/Weather/flashlight-line.svg?raw";
 export { default as wheelChairIcon } from "remixicon/icons/Others/wheelchair-line.svg?raw";
 export { default as repeatIcon } from "remixicon/icons/Media/repeat-line.svg?raw";
+export { default as notificationIcon } from "remixicon/icons/Media/notification-3-line.svg?raw";
 export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill.svg?raw";
 export { default as addCircleLineIcon } from "remixicon/icons/System/add-circle-line.svg?raw";
 export { default as addIcon } from "remixicon/icons/System/add-fill.svg?raw";

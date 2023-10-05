@@ -104,7 +104,7 @@
                       class:hidden={!cguAccepted}
                     />
                   </div>
-                  <span class="ml-s16 inline-block  text-f14 text-gray-text">
+                  <span class="ml-s16 inline-block text-f14 text-gray-text">
                     Je déclare avoir lu les
                     <a
                       href="/cgu"
