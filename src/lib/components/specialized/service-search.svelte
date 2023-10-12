@@ -189,7 +189,7 @@
             placeholder="Recherche par thématiques"
             bind:value={categoryId}
             choices={categories}
-            onChange={() => handleCategoryChange()}
+            onChange={() => handleCategoryChange(true)}
           />
         </div>
 
