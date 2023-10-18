@@ -24,6 +24,7 @@ const config = {
           "https://plausible.io/api/event",
           "https://openmaptiles.geo.data.gouv.fr/",
           "https://openmaptiles.github.io/osm-bright-gl-style/",
+          "https://matomo.inclusion.beta.gouv.fr",
         ].filter((source) => !!source),
         "script-src": [
           "self",
