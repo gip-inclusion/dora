@@ -178,28 +178,6 @@ export async function setBookmark(serviceSlug: string, wantedState: boolean) {
   }
 }
 
-export async function publishDraft(serviceSlug) {
-  const url = `${getApiURL()}/services/${serviceSlug}/`;
-  const method = "PATCH";
-  const status: ServiceStatus = "PUBLISHED";
-
-  const response = await fetch(url, {
-    method,
-    headers: {
-      Accept: "application/json; version=1.0",
-      "Content-Type": "application/json",
-      Authorization: `Token ${get(token)}`,
-    },
-    body: JSON.stringify({ status }),
-  });
-
-  if (!response.ok) {
-    throw Error(response.statusText);
-  }
-
-  return response.json();
-}
-
 export async function unPublishService(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";

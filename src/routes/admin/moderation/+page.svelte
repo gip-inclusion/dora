@@ -90,9 +90,6 @@
   onMount(async () => {
     structures = await getStructuresToModerate();
     structures.forEach((struct) => (struct.isStructure = true));
-    // On désactive la modération des services pour l'instant
-    // services = await getServicesToModerate();
-    // entities = [...structures, ...services];
     entities = [...structures];
     filteredEntities = filterAndSortEntities("");
   });
@@ -147,7 +144,7 @@
                 otherTab
               />
             {:else}
-              <div class="grow ">
+              <div class="grow">
                 <a href="/admin/services/{entity.slug}" target="_blank">
                   <span class="mb-s0 font-bold">
                     {shortenString(entity.name)}
