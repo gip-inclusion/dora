@@ -92,6 +92,7 @@
 
   <BasicInputField
     id="postalCode"
+    description="Format attendu : 75000"
     bind:value={entity.postalCode}
     placeholder="00000"
   />

@@ -1,5 +1,6 @@
 <script lang="ts">
   import illustration from "$lib/assets/illustrations/illu-favoris.svg";
+  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { starSmileLineIcon } from "$lib/icons";
@@ -11,7 +12,12 @@
 
 <EnsureLoggedIn>
   <CenteredGrid>
-    <h1 class="mb-s64 text-center text-france-blue">Mes alertes</h1>
+    <h1 class="text-center text-france-blue">Mes alertes</h1>
+
+    <div class="mb-s32">
+      <Breadcrumb currentLocation="saved-searchs" dark />
+    </div>
+
     {#if savedSearchs.length}
       <p class="mb-s40 text-f21 font-bold text-gray-dark">
         {$userInfo.savedSearchs.length} alerte{$userInfo.savedSearchs.length > 1

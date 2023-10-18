@@ -8,6 +8,8 @@
     | "legal"
     | "cgu"
     | "model"
+    | "saved-searchs"
+    | "bookmarks"
     | "account"
     | "login"
     | "accessibility"
@@ -43,6 +45,8 @@
     "service-orientation-step2": "Orienter • Étape 2/2",
     "service-orientation-confirmation": "Orienter • Confirmation",
     orientation: "Demande d’orientation",
+    "saved-searchs": "Mes alertes",
+    bookmarks: "Mes favoris",
   };
 
   function getStructureData(location) {
@@ -110,7 +114,7 @@
           >
             Structure&nbsp;•&nbsp;
           </span><span
-            class=" text-white  print:text-france-blue lg:inline"
+            class=" text-white print:text-france-blue lg:inline"
             class:text-gray-text={dark}>{structure.name}</span
           >
         {/if}

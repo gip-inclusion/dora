@@ -8,7 +8,12 @@
 </script>
 
 <div class="rounded border border-magenta-cta py-s4">
-  <ButtonMenu icon={moreIcon} small>
+  <ButtonMenu
+    icon={moreIcon}
+    small
+    hideLabel
+    label="Actions disponibles sur le modèle"
+  >
     <ModelMenu {model} {readOnly} />
   </ButtonMenu>
 </div>

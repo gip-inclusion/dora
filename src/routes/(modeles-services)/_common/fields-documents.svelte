@@ -41,6 +41,7 @@
       id="forms"
       structureSlug={service.structure}
       on:blur
+      description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
       bind:fileKeys={service.forms}
     />
   </FieldModel>
@@ -63,8 +64,9 @@
   <FieldModel {...fieldModelProps.onlineForm ?? {}}>
     <BasicInputField
       id="onlineForm"
-      placeholder="https://exemple.com"
+      placeholder="https://exemple.fr"
       type="url"
+      description="Format attendu : https://example.fr"
       bind:value={service.onlineForm}
     />
   </FieldModel>
