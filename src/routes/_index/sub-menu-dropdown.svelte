@@ -37,6 +37,7 @@
 <div
   class="relative {mobileDesign ? 'border-b border-gray-03' : ''}"
   use:clickOutside
+  role="presentation"
   on:click_outside={handleClickOutside}
   on:keydown={onKeyDown}
 >

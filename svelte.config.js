@@ -65,14 +65,7 @@ const config = {
 
     // Désactivation des avertissements d'accessibilité, le temps de finir la migration Sveltekit
     // TODO: les corriger au lieu de les masquer
-    const ignoredA11yWarnings = [
-      "a11y-interactive-supports-focus",
-      "a11y-click-events-have-key-events",
-      "a11y-label-has-associated-control",
-      "a11y-role-has-required-aria-props",
-      "a11y-no-static-element-interactions",
-      "a11y-no-noninteractive-element-interactions",
-    ];
+    const ignoredA11yWarnings = ["a11y-no-noninteractive-element-interactions"];
     if (ignoredA11yWarnings.includes(warning.code)) {
       return;
     }
