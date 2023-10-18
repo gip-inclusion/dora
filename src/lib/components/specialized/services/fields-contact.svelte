@@ -30,8 +30,8 @@
   <BasicInputField
     id="contactPhone"
     type="tel"
-    placeholder="01 23 45 67 89"
-    description="Format attendu&nbsp;: 01 23 45 67 89"
+    placeholder="0123456789"
+    description="Format attendu&nbsp;: 0123456789"
     bind:value={service.contactPhone}
   />
 

@@ -52,6 +52,7 @@
         {readonly}
         {placeholder}
         {rows}
+        maxlength={maxLength}
         aria-describedby={formatErrors(id, errorMessages)}
       />
       {#if value && maxLength != null && !readonly && !disabled}

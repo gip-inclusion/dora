@@ -93,7 +93,7 @@
             on:click={() => (textInputVisible = true)}
           />
         </div>
-        <div class="flex flex-row gap-s16 " class:hidden={!textInputVisible}>
+        <div class="flex flex-row gap-s16" class:hidden={!textInputVisible}>
           <div class="flex-grow">
             <div class="flex flex-col">
               <input
@@ -101,6 +101,7 @@
                 name={`${id}-text-input`}
                 type="text"
                 bind:value={newValue}
+                maxlength={maxLength}
               />
               {#if newValue && maxLength != null}
                 <div
