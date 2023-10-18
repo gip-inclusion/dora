@@ -48,7 +48,7 @@
     "lint-staged": "14.0.1",
     "maplibre-gl": "3.3.1",
     "opening_hours": "3.8.0",
-    "postcss": "8.4.29",
+    "postcss": "8.4.31",
     "postcss-load-config": "4.0.1",
     "prettier": "3.0.3",
     "prettier-plugin-svelte": "3.0.3",
