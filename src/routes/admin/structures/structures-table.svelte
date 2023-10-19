@@ -2,6 +2,7 @@
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { eyeIcon, phoneLineIcon } from "$lib/icons";
+  import { modifyStructure } from "$lib/requests/structures";
   import type { AdminShortStructure } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
   import { capitalize, shortenString } from "$lib/utils/misc";
@@ -13,6 +14,15 @@
 
   let isStructureModalOpen = false;
   let currentStructure: AdminShortStructure | null = null;
+
+  async function updateStructureObsolete(
+    structure: AdminShortStructure,
+    isObsolete: boolean
+  ) {
+    structure.isObsolete = isObsolete;
+    await modifyStructure({ slug: structure.slug, isObsolete });
+    onRefresh();
+  }
 </script>
 
 {#if currentStructure}
@@ -60,6 +70,23 @@
         icon={phoneLineIcon}
         noBackground
       />
+      {#if !structure.isObsolete}
+        <Button
+          small
+          extraClass="font-normal !text-f12 w-[75px]"
+          on:click={() => updateStructureObsolete(structure, true)}
+          label="Rendre obsolète"
+          secondary
+        />
+      {:else}
+        <Button
+          small
+          extraClass="font-normal !text-f12 w-[75px]"
+          on:click={() => updateStructureObsolete(structure, false)}
+          label="Ré-activer"
+          secondary
+        />
+      {/if}
     </div>
   {/each}
 </div>

@@ -50,7 +50,9 @@
   function handleClick() {
     const sheetData = filteredStructures.map((structure) => {
       let status = "";
-      if (!structure.hasAdmin && !structure.adminsToRemind.length) {
+      if (structure.isObsolete) {
+        status = "obsolète";
+      } else if (!structure.hasAdmin && !structure.adminsToRemind.length) {
         status = "orpheline";
       } else if (structure.adminsToRemind.length) {
         status = "en attente";

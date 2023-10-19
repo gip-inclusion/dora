@@ -110,6 +110,7 @@ export interface AdminShortStructure {
   department: string;
   email: string;
   hasAdmin: boolean;
+  isObsolete: boolean;
   latitude: number;
   longitude: number;
   moderationDate: string;

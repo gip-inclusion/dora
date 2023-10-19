@@ -4,4 +4,5 @@ export type StatusFilter =
   | "à_modérer"
   | "à_activer"
   | "à_actualiser"
+  | "obsolète"
   | "toutes";
