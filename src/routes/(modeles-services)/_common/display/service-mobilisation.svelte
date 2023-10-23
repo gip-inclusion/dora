@@ -41,6 +41,18 @@
         <ServiceContact {service} />
       </div>
       <div class="print:hidden">
+        {#if service.isOrientable}
+          <div class="mb-s16 mt-s16">
+            <LinkButton
+              nofollow
+              to="/services/{service.slug}/orienter"
+              extraClass="bg-white !text-france-blue hover:!text-white text-center !whitespace-normal text-center"
+              label="Orienter un ou une bénéficiaire"
+              wFull
+            />
+          </div>
+        {/if}
+
         {#if !contactOpen}
           <div class="text-white">
             <Button
@@ -52,18 +64,6 @@
           </div>
         {:else}
           <ServiceContact {service} />
-        {/if}
-
-        {#if service.isOrientable}
-          <div class="mb-s16 mt-s16">
-            <LinkButton
-              nofollow
-              to="/services/{service.slug}/orienter"
-              extraClass="bg-white !text-france-blue hover:!text-white text-center !whitespace-normal text-center"
-              label="Orienter un ou une bénéficiaire"
-              wFull
-            />
-          </div>
         {/if}
       </div>
     </div>
