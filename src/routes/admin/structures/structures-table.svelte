@@ -1,7 +1,8 @@
 <script lang="ts">
+  import ButtonMenu from "$lib/components/display/button-menu.svelte";
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { eyeIcon, phoneLineIcon } from "$lib/icons";
+  import { eyeIcon, moreIcon, phoneLineIcon } from "$lib/icons";
   import { modifyStructure } from "$lib/requests/structures";
   import type { AdminShortStructure } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
@@ -36,7 +37,7 @@
 <div class="flex flex-col gap-s8">
   {#each filteredStructures as structure}
     <div
-      class="flex flex-row gap-s16 rounded-md border border-gray-01 p-s16 shadow-xs"
+      class="flex flex-row items-center gap-s16 rounded-md border border-gray-01 p-s16 shadow-xs"
       class:highlight={selectedStructureSlug === structure.slug}
       role="presentation"
       on:mouseenter={() => (selectedStructureSlug = structure.slug)}
@@ -70,23 +71,36 @@
         icon={phoneLineIcon}
         noBackground
       />
-      {#if !structure.isObsolete}
-        <Button
-          small
-          extraClass="font-normal !text-f12 w-[75px]"
-          on:click={() => updateStructureObsolete(structure, true)}
-          label="Rendre obsolète"
-          secondary
-        />
-      {:else}
-        <Button
-          small
-          extraClass="font-normal !text-f12 w-[75px]"
-          on:click={() => updateStructureObsolete(structure, false)}
-          label="Ré-activer"
-          secondary
-        />
-      {/if}
+
+      <ButtonMenu
+        icon={moreIcon}
+        small
+        hideLabel
+        label="Actions disponibles sur la structure"
+        let:onClose={onCloseParent}
+      >
+        {#if !structure.isObsolete}
+          <Button
+            on:click={() => {
+              updateStructureObsolete(structure, true);
+              onCloseParent();
+            }}
+            label="Rendre&nbsp;obsolète"
+            small
+            noBackground
+          />
+        {:else}
+          <Button
+            on:click={() => {
+              updateStructureObsolete(structure, false);
+              onCloseParent();
+            }}
+            label="Ré&#8209;activer"
+            small
+            noBackground
+          />
+        {/if}
+      </ButtonMenu>
     </div>
   {/each}
 </div>
