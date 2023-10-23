@@ -124,13 +124,19 @@
         if (status === "obsolète") {
           return isObsolete(struct);
         } else if (status === "orphelines") {
-          return isOrphan(struct);
+          return !isObsolete(struct) && isOrphan(struct);
         } else if (status === "en_attente") {
-          return !isOrphan(struct) && waiting(struct);
+          return !isObsolete(struct) && !isOrphan(struct) && waiting(struct);
         } else if (status === "à_modérer") {
-          return !isOrphan(struct) && !waiting(struct) && toModerate(struct);
+          return (
+            !isObsolete(struct) &&
+            !isOrphan(struct) &&
+            !waiting(struct) &&
+            toModerate(struct)
+          );
         } else if (status === "à_activer") {
           return (
+            !isObsolete(struct) &&
             !isOrphan(struct) &&
             !waiting(struct) &&
             !toModerate(struct) &&
@@ -138,6 +144,7 @@
           );
         } else if (status === "à_actualiser") {
           return (
+            !isObsolete(struct) &&
             !isOrphan(struct) &&
             !waiting(struct) &&
             !toModerate(struct) &&
