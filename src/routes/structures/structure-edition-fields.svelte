@@ -70,14 +70,16 @@
   type="tel"
   id="phone"
   bind:value={structure.phone}
-  placeholder="0X XX XX XX XX"
+  placeholder="0123456789"
+  description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
 />
 
 <BasicInputField
   type="email"
   id="email"
   bind:value={structure.email}
-  placeholder="nom.prenom@organisation.fr"
+  placeholder="nom@domaine.fr"
+  description="Format attendu&nbsp;: mail@domaine.fr"
 />
 
 <BasicInputField

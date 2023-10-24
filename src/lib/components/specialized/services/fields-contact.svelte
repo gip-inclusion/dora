@@ -31,7 +31,7 @@
     id="contactPhone"
     type="tel"
     placeholder="0123456789"
-    description="Format attendu&nbsp;: 0123456789"
+    description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
     bind:value={service.contactPhone}
   />
 

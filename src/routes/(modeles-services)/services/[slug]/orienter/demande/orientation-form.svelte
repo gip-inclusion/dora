@@ -91,7 +91,8 @@
         <BasicInputField
           id="referentPhone"
           type="tel"
-          description="Format attendu&nbsp;: 0123456789"
+          placeholder="0123456789"
+          description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
           bind:value={$orientation.referentPhone}
           vertical
         />
@@ -100,7 +101,8 @@
         <BasicInputField
           id="referentEmail"
           type="email"
-          description="Format attendu&nbsp;: nom@domaine.fr"
+          placeholder="nom@domaine.fr"
+          description="Saisissez votre adresse professionnelle. Format attendu&nbsp;: mail@domaine.fr"
           bind:value={$orientation.referentEmail}
           vertical
         />
@@ -198,7 +200,8 @@
         <BasicInputField
           id="beneficiaryPhone"
           type="tel"
-          description="Format attendu&nbsp;: 0123456789"
+          placeholder="0123456789"
+          description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
           bind:value={$orientation.beneficiaryPhone}
           vertical
         />
@@ -207,6 +210,7 @@
         <BasicInputField
           id="beneficiaryEmail"
           type="email"
+          placeholder="nom@domaine.fr"
           description="Format attendu&nbsp;: nom@domaine.fr"
           bind:value={$orientation.beneficiaryEmail}
           vertical
