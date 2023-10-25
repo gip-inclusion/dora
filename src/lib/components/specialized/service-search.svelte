@@ -45,6 +45,7 @@
   export let feeConditions: FeeCondition[] = [];
 
   let innerWidth;
+  let requestingSave = false;
   let refreshDisabled = true;
   const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
   let cityChoiceList;
@@ -69,6 +70,7 @@
   }
 
   async function doSaveSearch() {
+    requestingSave = true;
     await saveSearch({
       category: categoryId,
       subcategories: subCategoryIds.filter((value) => !value.endsWith("--all")),
@@ -78,6 +80,7 @@
       fees: feeConditions,
     });
     await refreshUserInfo();
+    requestingSave = false;
   }
 
   function enableRefreshButton() {
@@ -306,7 +309,7 @@
           extraClass="h-s48"
           secondary
           label="Créer une alerte"
-          disabled={!cityCode}
+          disabled={!cityCode || requestingSave}
           on:click={doSaveSearch}
           preventDefaultOnMouseDown
         />
