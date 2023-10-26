@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { formatPhoneNumber } from "$lib/utils/misc";
   import {
     currentFormData,
     currentSchema,
@@ -26,6 +27,18 @@
   export let hideLabel = false;
   export let vertical = false;
 
+  let phoneValue = value;
+  function handlePhoneChange() {
+    phoneValue = phoneValue.replace(/[^0-9]/g, "");
+    value = phoneValue;
+  }
+  function handlePhoneBlur() {
+    phoneValue = formatPhoneNumber(phoneValue);
+  }
+  function handlePhoneFocus() {
+    phoneValue = phoneValue.replace(/[^0-9]/g, "");
+  }
+
   $: commonProps = {
     id,
     name: id,
@@ -33,6 +46,7 @@
     disabled,
     readonly,
     placeholder,
+    maxLength,
   };
 </script>
 
@@ -94,10 +108,15 @@
       {:else if type === "tel"}
         <input
           type="tel"
-          bind:value
-          on:blur={onBlur}
-          on:change={onChange}
+          bind:value={phoneValue}
+          on:blur={(evt) => {
+            handlePhoneBlur();
+            onBlur(evt);
+          }}
+          on:focus={handlePhoneFocus}
+          on:input={handlePhoneChange}
           {...props}
+          maxlength={null}
         />
       {:else if type === "url"}
         <input

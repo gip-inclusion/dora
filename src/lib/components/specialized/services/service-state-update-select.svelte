@@ -74,6 +74,8 @@
   export let hideLabel = true;
   export let fullWidth = false;
 
+  $: availableOptions = getAvailableOptionsForStatus(service.status);
+
   // *** Accessibilité
   const uuid: string = randomId(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
   let isDropdownOpen = false;
@@ -190,7 +192,6 @@
 
   // *** Valeurs pour l'affichage
   $: currentStatusPresentation = SERVICE_STATUS_PRESENTATION[service.status];
-  $: availableOptions = getAvailableOptionsForStatus(service.status);
 </script>
 
 <div
@@ -236,7 +237,7 @@
   <div
     class:hidden={!isDropdownOpen}
     class:w-full={fullWidth}
-    class="absolute top-s48 right-s0 z-20 min-w-[150px] rounded border border-gray-00 bg-white py-s12 px-s12 shadow-md"
+    class="absolute right-s0 top-s48 z-20 min-w-[150px] rounded border border-gray-00 bg-white px-s12 py-s12 shadow-md"
     role="listbox"
     id={`listbox-values-${uuid}`}
     aria-labelledby={`button-label-${uuid}`}
@@ -249,6 +250,13 @@
           class:bg-service-red={selectedOption === option}
           on:mouseenter={() => setAsSelected(option, index)}
           role="option"
+          tabindex="0"
+          aria-selected="false"
+          on:keypress={(event) => {
+            if (event.code === "Enter") {
+              updateServiceStatus(option);
+            }
+          }}
           on:click={() => updateServiceStatus(option)}
         >
           <span class="mr-s8 h-s24 w-s24 fill-current text-service-red-dark">
@@ -265,6 +273,13 @@
             : 'bg-transparent'}"
           role="option"
           id={option}
+          aria-selected="false"
+          tabindex="0"
+          on:keypress={(event) => {
+            if (event.code === "Enter") {
+              updateServiceStatus(option);
+            }
+          }}
           on:mouseenter={() => setAsSelected(option, index)}
           on:click={() => updateServiceStatus(option)}
         >

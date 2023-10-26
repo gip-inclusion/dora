@@ -105,8 +105,7 @@ export function isPhone(msg = "") {
     // So for now, just ensure we get a string!
     // typeof value === "string" && (value === "" || !!value.match(phoneRegexp)),
     msg:
-      msg ||
-      `Veuillez saisir un numéro de téléphone valide (ex: 06 00 00 00 00 ou  0600000000`,
+      msg || `Veuillez saisir un numéro de téléphone valide (ex: 0600000000)`,
   });
 }
 

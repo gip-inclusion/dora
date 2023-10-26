@@ -31,6 +31,7 @@
 
 <div
   use:clickOutside
+  role="presentation"
   on:click_outside={handleClickOutside}
   on:keydown={onKeyDown}
   class="w-full lg:w-auto"

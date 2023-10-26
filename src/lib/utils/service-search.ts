@@ -13,7 +13,7 @@ export function getQueryString({
 }: SearchQuery) {
   const parameters = {
     cats: categoryIds.join(","),
-    subs: subCategoryIds.join(","),
+    subs: subCategoryIds.sort().join(","),
     city: cityCode,
     // eslint-disable-next-line id-length
     cl: cityLabel,

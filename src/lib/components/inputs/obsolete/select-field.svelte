@@ -201,7 +201,7 @@
           <input
             type="text"
             inputmode={inputMode}
-            class="absolute top-s0 right-s0 h-full w-full bg-transparent pl-s12"
+            class="absolute right-s0 top-s0 h-full w-full bg-transparent pl-s12"
             bind:value={filterText}
             aria-label={placeholder}
             {placeholder}
@@ -215,7 +215,7 @@
 
       <div class="h-s24 w-s24 text-gray-text-alt">
         {#if (isMultiple ? value.length > 0 : !!value) && withClearButton}
-          <button class="h-s24 w-s24 fill-current " on:click={clearAll}>
+          <button class="h-s24 w-s24 fill-current" on:click={clearAll}>
             {@html deleteBackIcon}
           </button>
         {:else}
@@ -232,7 +232,7 @@
 
     <div
       class:hidden={!expanded}
-      class="absolute top-[52px] left-s0 z-20 flex max-h-s512 flex-col gap-s10 overflow-y-auto rounded border border-gray-00 bg-white p-s12 shadow-md {minDropdownWidth}"
+      class="absolute left-s0 top-[52px] z-20 flex max-h-s512 flex-col gap-s10 overflow-y-auto rounded border border-gray-00 bg-white p-s12 shadow-md {minDropdownWidth}"
       role="listbox"
       id={`listbox-values-${uuid}`}
       tabindex="-1"
@@ -253,6 +253,9 @@
   .selected {
     @apply text-magenta-cta;
   }
+  :global(.hover) {
+    @apply !bg-magenta-10 !text-magenta-cta;
+  }
   .combobox {
     @apply relative;
   }
@@ -265,7 +268,7 @@
 
   /* As search */
   .filter-search {
-    @apply absolute border-0 bg-transparent py-s0 px-s12;
+    @apply absolute border-0 bg-transparent px-s12 py-s0;
   }
 
   @screen lg {
@@ -337,6 +340,10 @@
   }
   .filter-style:hover .chevron {
     @apply text-magenta-hover;
+  }
+  .filter-style .option:hover,
+  .filter-style :global(.hover) {
+    @apply !bg-magenta-10 !text-magenta-cta;
   }
 
   .filter-style.expanded {

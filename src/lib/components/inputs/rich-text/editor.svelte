@@ -220,26 +220,26 @@
             bind:this={linkDialogTextInput}
             type="text"
             placeholder="lien"
-            class="flex-1 py-s4 px-s8"
+            class="flex-1 px-s8 py-s4"
             bind:value={linkDialogText}
           />
         {/if}
         <input
           bind:this={linkDialogUrlInput}
           type="text"
-          placeholder="http://example.com"
-          class="flex-1 py-s4 px-s8"
+          placeholder="https://example.com"
+          class="flex-1 px-s8 py-s4"
           bind:value={linkDialogHref}
         />
         <button
-          class="text-grayborder-gray-text rounded-md border border-gray-text py-s4 px-s8 text-f12 font-bold hover:bg-gray-text hover:text-white disabled:border-gray-03 disabled:bg-gray-01 disabled:text-gray-03"
+          class="text-grayborder-gray-text rounded-md border border-gray-text px-s8 py-s4 text-f12 font-bold hover:bg-gray-text hover:text-white disabled:border-gray-03 disabled:bg-gray-01 disabled:text-gray-03"
           on:click={setLink}
           disabled={!linkDialogButtonIsActive}
         >
           {linkDialogButtontext}
         </button>
         <button
-          class="text-grayborder-gray-text rounded-md border border-gray-text py-s4 px-s8 text-f12 font-bold hover:bg-gray-text hover:text-white"
+          class="text-grayborder-gray-text rounded-md border border-gray-text px-s8 py-s4 text-f12 font-bold hover:bg-gray-text hover:text-white"
           on:click={linkDialogClose}>Annuler</button
         >
       </div>

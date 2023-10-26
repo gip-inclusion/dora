@@ -28,11 +28,16 @@
   } from "$lib/utils/service";
   import { getQueryString } from "$lib/utils/service-search";
   import { onMount } from "svelte";
+  import { refreshUserInfo, userInfo } from "$lib/utils/auth";
+  import {
+    isCurrentSearchInUserSavedSearchs,
+    saveSearch,
+  } from "$lib/requests/saved-search";
 
   export let servicesOptions: ServicesOptions;
   export let cityCode;
   export let cityLabel;
-  export let categoryId = "";
+  export let categoryId: string | undefined = undefined;
   export let subCategoryIds: string[] = [];
   export let showDeploymentWarning = true;
   export let useAdditionalFilters = false;
@@ -40,32 +45,42 @@
   export let feeConditions: FeeCondition[] = [];
 
   let innerWidth;
+  let requestingSave = false;
   let refreshDisabled = true;
   const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
   let cityChoiceList;
   let subCategories: Choice[] = [];
+
+  $: query = getQueryString({
+    categoryIds: [categoryId ? categoryId : ""],
+    subCategoryIds: subCategoryIds.filter((value) => !value.endsWith("--all")),
+    cityCode,
+    cityLabel,
+    kindIds,
+    feeConditions,
+  });
 
   const categories = servicesOptions.categories
     ? associateIconToCategory(sortCategory(servicesOptions.categories))
     : [];
 
   function handleSearch() {
-    // Remove sub-categories ending with --all
-    const finalSubCategoryIds = subCategoryIds.filter(
-      (value) => !value.endsWith("--all")
-    );
+    refreshDisabled = true;
+    goto(`recherche?${query}`, { noScroll: true });
+  }
 
-    const query = getQueryString({
-      // La priorité est donnée aux sous-catégories
-      categoryIds: finalSubCategoryIds.length ? [] : [categoryId],
-      subCategoryIds: finalSubCategoryIds,
+  async function doSaveSearch() {
+    requestingSave = true;
+    await saveSearch({
+      category: categoryId,
+      subcategories: subCategoryIds.filter((value) => !value.endsWith("--all")),
       cityCode,
       cityLabel,
-      kindIds,
-      feeConditions,
+      kinds: kindIds,
+      fees: feeConditions,
     });
-    refreshDisabled = true;
-    goto(`recherche?${query}`);
+    await refreshUserInfo();
+    requestingSave = false;
   }
 
   function enableRefreshButton() {
@@ -105,7 +120,7 @@
     {#if servicesOptions.categories}
       <div class="grid" class:with-subcategories={useAdditionalFilters}>
         <div
-          class="city flex items-center border-b border-gray-02 p-s16 text-f14 lg:border-r lg:border-b-0"
+          class="city flex items-center border-b border-gray-02 p-s16 text-f14 lg:border-b-0 lg:border-r"
           class:has-value={!!cityCode}
         >
           <div class="mr-s8 h-s24 w-s24 fill-current text-magenta-cta">
@@ -133,7 +148,7 @@
             />
 
             <div
-              class="absolute top-s12 right-s12 z-10 h-s24 w-s24 text-gray-dark"
+              class="absolute right-s12 top-s12 z-10 h-s24 w-s24 text-gray-dark"
             >
               {#if cityCode}
                 <button
@@ -159,7 +174,7 @@
         </div>
 
         <div
-          class="subcategories-search flex border-b border-gray-02 py-s24 px-s16 text-f14 lg:border-r lg:border-b-0 lg:py-s16"
+          class="subcategories-search flex border-b border-gray-02 px-s16 py-s24 text-f14 lg:border-b-0 lg:border-r lg:py-s16"
         >
           <div
             class="mr-s8 h-s24 w-s24 self-center fill-current text-magenta-cta"
@@ -183,7 +198,7 @@
 
         {#if useAdditionalFilters}
           <div
-            class="subcategories-search flex border-b border-gray-02 py-s24 px-s16 text-f14 lg:border-r lg:border-b-0 lg:py-s16"
+            class="subcategories-search flex border-b border-gray-02 px-s16 py-s24 text-f14 lg:border-b-0 lg:border-r lg:py-s16"
           >
             <div
               class="mr-s8 h-s24 w-s24 self-center fill-current text-magenta-cta"
@@ -237,7 +252,7 @@
       <div
         class="flex flex-col rounded-b-md border-t border-gray-02 bg-white p-s16 text-f14 md:flex-row"
       >
-        <div class="mr-s12 mb-s12 md:mb-s0">
+        <div class="mb-s12 mr-s12 md:mb-s0">
           <SelectField
             hideLabel
             isMultiple
@@ -270,7 +285,7 @@
   </div>
 
   {#if useAdditionalFilters}
-    <div class="mt-s24 text-center lg:p-s16">
+    <div class="mt-s24 flex justify-center gap-s16 lg:p-s16">
       <Button
         extraClass="h-s48"
         type="submit"
@@ -279,6 +294,26 @@
         on:click={handleSearch}
         preventDefaultOnMouseDown
       />
+
+      {#if isCurrentSearchInUserSavedSearchs($userInfo, query)}
+        <Button
+          extraClass="h-s48"
+          secondary
+          label="Alerte déjà créée"
+          disabled
+          on:click={doSaveSearch}
+          preventDefaultOnMouseDown
+        />
+      {:else}
+        <Button
+          extraClass="h-s48"
+          secondary
+          label="Créer une alerte"
+          disabled={!cityCode || requestingSave}
+          on:click={doSaveSearch}
+          preventDefaultOnMouseDown
+        />
+      {/if}
     </div>
   {/if}
 </form>

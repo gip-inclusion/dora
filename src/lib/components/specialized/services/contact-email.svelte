@@ -46,7 +46,11 @@
     class:font-bold={preferred}
     href="mailto:{service.contactEmail}?subject={emailSubject}&body={emailBody}"
   >
-    <span class="mr-s8 h-s24 w-s24 fill-current" aria-label="E-mail">
+    <span
+      class="mr-s8 h-s24 w-s24 fill-current"
+      role="img"
+      aria-label="Courriel"
+    >
       {@html mailLineIcon}
     </span>
     {service.contactEmail}

@@ -22,9 +22,16 @@
   <div
     class="option flex min-h-[36px] w-full cursor-pointer items-center justify-between p-s6 text-gray-dark {extraClass}"
     role="option"
+    aria-selected={selected}
     id={option.value}
     class:hover={option.value === selectedOption?.value}
     class:selected
+    tabindex="0"
+    on:keypress={(event) => {
+      if (event.code === "Enter") {
+        updateValue(option.value);
+      }
+    }}
     on:click|stopPropagation={() => updateValue(option.value)}
     on:mouseenter={() => setAsSelected(option.value)}
     on:mouseleave={() => setAsSelected(null)}
@@ -38,3 +45,9 @@
     </span>
   </div>
 {/each}
+
+<style lang="postcss">
+  .hover {
+    @apply bg-magenta-10 text-magenta-cta;
+  }
+</style>

@@ -26,14 +26,19 @@
     )}&${withGeom ? "with_geom=1" : ""}`;
     const response = await fetch(url);
     const jsonResponse = await response.json();
-    const results = jsonResponse.map((result) => ({
-      value: result,
-      label: `${result.name} (${
-        searchType === "city"
-          ? getDepartmentFromCityCode(result.code)
-          : result.code
-      })`,
-    }));
+    const results = jsonResponse.map((result) => {
+      let label = result.name;
+      if (searchType === "city") {
+        label += ` (${getDepartmentFromCityCode(result.code)})`;
+      } else if (searchType !== "region") {
+        label += ` (${result.code})`;
+      }
+
+      return {
+        value: result,
+        label,
+      };
+    });
 
     return results;
   }

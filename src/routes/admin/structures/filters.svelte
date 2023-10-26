@@ -66,6 +66,9 @@
   function isOrphan(struct) {
     return !struct.hasAdmin && !struct.adminsToRemind.length;
   }
+  function isObsolete(struct) {
+    return struct.isObsolete;
+  }
   function waiting(struct) {
     return struct.adminsToRemind.length;
   }
@@ -118,14 +121,22 @@
         );
       })
       .filter((struct) => {
-        if (status === "orphelines") {
-          return isOrphan(struct);
+        if (status === "obsolète") {
+          return isObsolete(struct);
+        } else if (status === "orphelines") {
+          return !isObsolete(struct) && isOrphan(struct);
         } else if (status === "en_attente") {
-          return !isOrphan(struct) && waiting(struct);
+          return !isObsolete(struct) && !isOrphan(struct) && waiting(struct);
         } else if (status === "à_modérer") {
-          return !isOrphan(struct) && !waiting(struct) && toModerate(struct);
+          return (
+            !isObsolete(struct) &&
+            !isOrphan(struct) &&
+            !waiting(struct) &&
+            toModerate(struct)
+          );
         } else if (status === "à_activer") {
           return (
+            !isObsolete(struct) &&
             !isOrphan(struct) &&
             !waiting(struct) &&
             !toModerate(struct) &&
@@ -133,6 +144,7 @@
           );
         } else if (status === "à_actualiser") {
           return (
+            !isObsolete(struct) &&
             !isOrphan(struct) &&
             !waiting(struct) &&
             !toModerate(struct) &&
@@ -183,7 +195,7 @@
   );
 </script>
 
-<div class="mb-s8 font-bold">Actions en attente :</div>
+<div class="mb-s8 font-bold">Actions en attente :</div>
 
 <div class="mb-s8 flex gap-s8">
   <Button
@@ -250,6 +262,19 @@
     ).length})"
     secondary={searchStatus !== "à_actualiser"}
   />
+
+  <Button
+    on:click={() => {
+      resetSearchParams();
+      searchStatus = "obsolète";
+    }}
+    label="obsolètes ({filterAndSortEntities(
+      structures,
+      searchParams,
+      'obsolète'
+    ).length})"
+    secondary={searchStatus !== "obsolète"}
+  />
 </div>
 
 <Button
@@ -287,7 +312,7 @@
   />
   <div
     class:hidden={!showAdvancedFilters}
-    class="mx-s8  rounded border border-gray-01 p-s16"
+    class="mx-s8 rounded border border-gray-01 p-s16"
   >
     <div class="mb-s16 flex flex-col gap-s24">
       <div class="flex justify-between gap-s16">

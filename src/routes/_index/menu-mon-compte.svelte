@@ -4,6 +4,7 @@
   import {
     accountCircleLineIcon,
     logoutBoxLineIcon,
+    notificationIcon,
     starSmileLineIcon,
   } from "$lib/icons";
 
@@ -34,6 +35,16 @@
       {@html starSmileLineIcon}
     </span>
     Mes favoris
+  </a>
+
+  <a href="/mes-alertes" class={aClass}>
+    <span
+      class="mr-s10 inline-block h-s24 w-s24 fill-current"
+      class:text-magenta-cta={$page.url.pathname === "/mes-alertes"}
+      aria-hidden
+    >
+      {@html notificationIcon}
+    </span>Mes alertes
   </a>
 
   <a href="/auth/deconnexion" class={aClass}>

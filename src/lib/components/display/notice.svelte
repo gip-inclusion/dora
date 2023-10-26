@@ -33,6 +33,12 @@
       title: "text-warning",
       icon: alertLine,
     },
+    "warning-dark": {
+      background: "bg-warning-dark",
+      text: "text-warning",
+      title: "text-warning",
+      icon: alertLine,
+    },
     error: {
       background: "bg-error-light",
       text: "text-error",

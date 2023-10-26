@@ -8,7 +8,7 @@
 </script>
 
 <div
-  class="flex flex-col justify-between gap-s16 rounded-md border border-gray-01 py-s16 px-s24 md:flex-row md:items-center"
+  class="flex flex-col justify-between gap-s16 rounded-md border border-gray-01 px-s24 py-s16 md:flex-row md:items-center"
 >
   <div class="flex flex-1 flex-col">
     <h4>{member.user.fullName}</h4>
@@ -18,7 +18,7 @@
   <div class="flex flex-1 flex-wrap items-center gap-x-s32 text-f14">
     <div class="flex-[3] text-center md:text-right">
       {#if isMyself}
-        <span class="rounded-md bg-magenta-10 py-s6 px-s12">Vous</span>
+        <span class="rounded-md bg-magenta-10 px-s12 py-s6">Vous</span>
       {/if}
       <slot name="status" />
     </div>
@@ -27,7 +27,13 @@
     </div>
     <div class="flex-1">
       {#if !readOnly}
-        <ButtonMenu small icon={moreIcon} let:onClose={onCloseParent}>
+        <ButtonMenu
+          small
+          icon={moreIcon}
+          let:onClose={onCloseParent}
+          hideLabel
+          label="Actions disponibles pour l'utilisateur"
+        >
           <slot name="actions" {onCloseParent} />
         </ButtonMenu>
       {/if}

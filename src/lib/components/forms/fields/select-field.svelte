@@ -14,7 +14,7 @@
   export let disabled = false;
   export let readonly = $currentSchema?.[id]?.readonly;
   export let placeholder = "";
-  export let initialValue = undefined;
+  export let initialValue: string | undefined = undefined;
 
   // Spécifique du select
   export let choices: Choice[];

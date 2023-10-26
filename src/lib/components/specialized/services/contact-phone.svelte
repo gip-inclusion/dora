@@ -14,6 +14,7 @@
   >
     <span
       class="mr-s8 h-s24 w-s24 fill-current"
+      role="img"
       aria-label="Numéro de téléphone"
     >
       {@html phoneLineIcon}
