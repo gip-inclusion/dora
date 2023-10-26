@@ -16,7 +16,8 @@
   export let data: PageData;
 
   onMount(() => {
-    trackService(data.service, $page.url);
+    const searchId = $page.url.searchParams.get("searchId");
+    trackService(data.service, $page.url, searchId);
   });
 
   async function handleRefresh() {

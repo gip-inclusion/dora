@@ -16,10 +16,11 @@
 
   function handleShowContactClick() {
     contactOpen = true;
+    const searchId = $page.url.searchParams.get("searchId");
     if (isDI) {
-      trackDiMobilisation(service, $page.url);
+      trackDiMobilisation(service, $page.url, searchId);
     } else {
-      trackMobilisation(service, $page.url);
+      trackMobilisation(service, $page.url, searchId);
     }
   }
 </script>

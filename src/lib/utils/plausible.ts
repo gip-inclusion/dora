@@ -67,16 +67,17 @@ export function trackError(errorStatusCode, path) {
   _track(errorStatusCode, { path });
 }
 
-export function trackMobilisation(service, url) {
+export function trackMobilisation(service, url, searchId) {
   if (browser) {
     logAnalyticsEvent("mobilisation", url.pathname, {
       service: service.slug,
+      searchId,
     });
   }
   _track("mobilisation", _getServiceProps(service, true));
 }
 
-export function trackDiMobilisation(service, url) {
+export function trackDiMobilisation(service, url, searchId) {
   if (browser) {
     logAnalyticsEvent("di_mobilisation", url.pathname, {
       diStructureId: service.structure,
@@ -87,6 +88,7 @@ export function trackDiMobilisation(service, url) {
       diSource: service.source,
       diCategories: service.categories || [],
       diSubcategories: service.subcategories || [],
+      searchId,
     });
   }
 }
@@ -114,7 +116,7 @@ export function trackPDFDownload(service) {
   _track("pdf-download", _getServiceProps(service, true));
 }
 
-export function trackSearch(
+export async function trackSearch(
   url,
   categoryIds,
   subCategoryIds,
@@ -125,7 +127,7 @@ export function trackSearch(
   results
 ) {
   const numResults = results.length;
-
+  let searchId = null;
   if (browser) {
     const numDiResults = results.filter(
       (service) => service.type === "di"
@@ -133,7 +135,7 @@ export function trackSearch(
     const numDiResultsTop10 = results
       .slice(0, 10)
       .filter((service) => service.type === "di").length;
-    logAnalyticsEvent("search", url.pathname, {
+    searchId = await logAnalyticsEvent("search", url.pathname, {
       searchCityCode: cityCode,
       searchNumResults: results.length,
       categoryIds: categoryIds,
@@ -163,6 +165,7 @@ export function trackSearch(
     numResults: numResultsCat,
     department: getDepartmentFromCityCode(cityCode),
   });
+  return searchId;
 }
 
 export function trackJoinStructure() {
@@ -176,10 +179,11 @@ export function trackModel(model) {
   _track("modele", props);
 }
 
-export function trackService(service, url) {
+export function trackService(service, url, searchId) {
   if (browser) {
     logAnalyticsEvent("service", url.pathname, {
       service: service.slug,
+      searchId,
     });
 
     if (get(token) && service.isOrientable) {
@@ -190,7 +194,7 @@ export function trackService(service, url) {
   _track("service", _getServiceProps(service, true));
 }
 
-export function trackDIService(service, url) {
+export function trackDIService(service, url, searchId) {
   if (browser) {
     logAnalyticsEvent("di_service", url.pathname, {
       diStructureId: service.structure,
@@ -201,6 +205,7 @@ export function trackDIService(service, url) {
       diSource: service.source,
       diCategories: service.categories || [],
       diSubcategories: service.subcategories || [],
+      searchId,
     });
   }
 }

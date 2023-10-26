@@ -66,7 +66,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     feeConditions,
   });
 
-  trackSearch(
+  const searchId = trackSearch(
     url,
     // La priorité est donnée aux sous-catégories
     subCategoryIds.length ? [] : categoryIds,
@@ -97,5 +97,6 @@ export const load: PageLoad = async ({ url, parent }) => {
     feeConditions,
     services,
     servicesOptions: await getServicesOptions(),
+    searchId,
   };
 };

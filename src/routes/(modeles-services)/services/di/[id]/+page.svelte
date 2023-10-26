@@ -10,7 +10,8 @@
   export let data: PageData;
 
   onMount(() => {
-    trackDIService(data.service, $page.url);
+    const searchId = $page.url.searchParams.get("searchId");
+    trackDIService(data.service, $page.url, searchId);
   });
 </script>
 
