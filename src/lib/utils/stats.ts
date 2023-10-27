@@ -13,7 +13,7 @@ function getAnalyticsId() {
   return analyticsId;
 }
 
-export function logAnalyticsEvent(tag, path, params = {}) {
+export async function logAnalyticsEvent(tag, path, params = {}) {
   const data = {
     tag,
     path,
@@ -22,7 +22,7 @@ export function logAnalyticsEvent(tag, path, params = {}) {
   };
   const currentToken = get(token);
 
-  return fetch(`${getApiURL()}/stats/event/`, {
+  const res = await fetch(`${getApiURL()}/stats/event/`, {
     method: "POST",
     headers: {
       Accept: "application/json; version=1.0",
@@ -31,4 +31,15 @@ export function logAnalyticsEvent(tag, path, params = {}) {
     },
     body: JSON.stringify(data),
   });
+
+  if (res.ok) {
+    return res.json();
+  } else {
+    try {
+      console.error(await res.json());
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  return null;
 }
