@@ -34,7 +34,6 @@ export type SchemaRequirement = ((data: any) => boolean) | boolean;
 export interface Shape<T> {
   rules: Rule[];
   default?: T;
-  dependents?: string[];
   post?: Action<T>[];
   pre?: Action<T>[];
   required?: SchemaRequirement;

@@ -71,7 +71,6 @@
           data,
           { [fieldName]: schema[fieldName] },
           {
-            fullFormSchema: schema,
             noScroll: true,
             servicesOptions,
           }

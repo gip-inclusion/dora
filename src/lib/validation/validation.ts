@@ -117,13 +117,11 @@ export function validate(
     // lors de la saisie du formulaire, la validation est faite champ par champ
     // mais dans certains cas on veut pouvoir valider un champ dépendant du premier
     // en même temps. Pour cela on peut donc passer ici le schema complet du formulaire.
-    fullFormSchema = undefined,
     showErrors = true,
     servicesOptions = undefined,
     checkRequired = true,
   }: {
     noScroll?: boolean;
-    fullFormSchema?: any;
     showErrors?: boolean;
     servicesOptions?: ServicesOptions;
     checkRequired?: boolean;
@@ -170,42 +168,6 @@ export function validate(
         scrollToField(fieldName);
         doneOnce = true;
       }
-    }
-
-    // Vérification des dépendances
-    if (shape.dependents?.length && fullFormSchema) {
-      shape.dependents.forEach((depName) => {
-        const {
-          value: depValue,
-          valid: depValid,
-          msg: depMsg,
-        } = validateField(
-          depName,
-          fullFormSchema[depName],
-          data,
-          servicesOptions,
-          schema,
-          checkRequired
-        );
-
-        isValid = isValid && depValid;
-        validatedData[depName] = depValue;
-        if (!depValid) {
-          errorFields.push(fullFormSchema[depName].name);
-        }
-
-        if (showErrors) {
-          clearError(depName);
-          if (!depValid) {
-            clearError(depName);
-            addError(depName, depMsg);
-          }
-          if (!noScroll && !doneOnce && !depValid) {
-            scrollToField(depName);
-            doneOnce = true;
-          }
-        }
-      });
     }
   });
 
