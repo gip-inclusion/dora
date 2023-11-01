@@ -3,19 +3,14 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { starSmileLineIcon } from "$lib/icons";
-  import type { Bookmark } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
-  import { onMount } from "svelte";
+  import type { PageData } from "./$types";
   import BookmarkCard from "./bookmark-card.svelte";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
 
-  let bookmarks: Bookmark[] = [];
+  export let data: PageData;
 
-  onMount(() => {
-    // On ne veut pas être réactifs ici, afin que la liste ne soit pas rafraichie tant qu'on reste sur la page
-    // sans quoi les favoris disparaitraient au clic, et on ne pourrait pas les reselectionner
-    bookmarks = $userInfo?.bookmarks;
-  });
+  const bookmarks = data.bookmarks || [];
 </script>
 
 <EnsureLoggedIn>

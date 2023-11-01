@@ -94,8 +94,8 @@
   </div>
 {/if}
 
-{#if browser && $userInfo && !isDI}
-  <Bookmarkable slug={service.slug} let:onBookmark let:isBookmarked>
+{#if browser && $userInfo && service.status !== "ARCHIVED"}
+  <Bookmarkable slug={service.slug} {isDI} let:onBookmark let:isBookmarked>
     <button
       class="ml-s24 flex text-f16 text-gray-text print:hidden {isBookmarked
         ? 'text-magenta-cta hover:text-gray-text'

@@ -94,7 +94,7 @@
                   <input
                     bind:checked={cguAccepted}
                     type="checkbox"
-                    class="hidden "
+                    class="hidden"
                   />
                   <div
                     class="flex h-s24 w-s24 shrink-0 justify-center rounded border border-gray-03"

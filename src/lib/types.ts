@@ -463,9 +463,27 @@ export interface ShortService {
   updateStatus: ServiceUpdateStatus;
 }
 
-export interface Bookmark {
-  service: ShortService;
+export interface ShortBookmark {
+  id: number;
+  slug: string;
   creationDate: string;
+  isDI: boolean;
+}
+
+export interface Bookmark {
+  id: number;
+  slug: string;
+  creationDate: string;
+  isDi: boolean;
+  service: {
+    name: string;
+    structureName: string;
+    structureSlug: string;
+    postalCode: string;
+    city: string;
+    shortDesc: string;
+    source: string;
+  };
 }
 
 export interface SavedSearch {
