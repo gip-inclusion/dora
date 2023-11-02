@@ -22,18 +22,35 @@
   let department: GeoApiValue;
   let selectedStructureSlug: string | null = null;
 
-  function filterOrphanPoleEmploiStructures(structs) {
+  function filterIgnoredStructures(structs) {
+    function isOrphan(struct) {
+      return !struct.hasAdmin && !struct.adminsToRemind.length;
+    }
+
+    function toActivate(struct) {
+      return !struct.numPublishedServices;
+    }
+
+    function isOrphanPoleEmploiStruct(struct) {
+      return struct.siret?.slice(0, 9) === "130005481" && isOrphan(struct);
+    }
+
+    function isOrphanOrToActivateSIAE(struct) {
+      return (
+        ["ETTI", "ACI", "AI", "EI"].includes(struct.typology) &&
+        (isOrphan(struct) || toActivate(struct))
+      );
+    }
+
     return structs.filter(
       (struct) =>
-        struct.siret?.slice(0, 9) !== "130005481" ||
-        struct.hasAdmin ||
-        struct.adminsToRemind.length
+        !isOrphanPoleEmploiStruct(struct) && !isOrphanOrToActivateSIAE(struct)
     );
   }
   async function handleDepartmentChange(dept: GeoApiValue) {
     department = dept;
     if (department.code) {
-      structures = filterOrphanPoleEmploiStructures(
+      structures = filterIgnoredStructures(
         await getStructuresAdmin(department.code)
       );
     } else {
@@ -42,7 +59,7 @@
   }
 
   async function handleStructuresRefresh() {
-    structures = filterOrphanPoleEmploiStructures(
+    structures = filterIgnoredStructures(
       await getStructuresAdmin(department.code)
     );
   }
