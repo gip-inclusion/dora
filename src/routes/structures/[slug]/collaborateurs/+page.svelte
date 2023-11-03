@@ -46,12 +46,7 @@
     });
   }
 
-  $: canAdd =
-    $structure.canEditMembers ||
-    (!$structure.hasAdmin && $structure.canInviteFirstAdmin);
-
-  $: canOnlyAddFirstAdmin =
-    !$structure.canEditMembers && $structure.canInviteFirstAdmin;
+  $: canAdd = $structure.canEditMembers;
 </script>
 
 <EnsureLoggedIn>
@@ -61,7 +56,7 @@
       structure={$structure}
       members={data.members}
       onRefresh={handleRefreshMemberList}
-      forceAdmin={!$structure.canEditMembers}
+      suggestAdmin={!$structure.hasAdmin}
     />
   {/if}
 
@@ -69,9 +64,7 @@
     <h2 class="text-france-blue">Collaborateurs</h2>
     {#if canAdd}
       <Button
-        label={canOnlyAddFirstAdmin
-          ? "Ajouter un administrateur"
-          : "Ajouter un collaborateur"}
+        label="Ajouter un collaborateur"
         icon={userAddIcon}
         on:click={() => (modalAddUserIsOpen = true)}
       />
@@ -85,7 +78,7 @@
       </div>
     {/if}
 
-    <div class="mt-s32 mb-s32 flex flex-col gap-s8">
+    <div class="mb-s32 mt-s32 flex flex-col gap-s8">
       {#if canAdd && data.putativeMembers}
         {#each sortedMembers(data.putativeMembers) as member}
           {#if member.invitedByAdmin}

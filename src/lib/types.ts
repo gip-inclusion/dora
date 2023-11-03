@@ -151,7 +151,6 @@ export interface Structure {
   canEditInformations: boolean;
   canEditMembers: boolean;
   canEditServices: boolean;
-  canInviteFirstAdmin: boolean;
   canViewMembers: boolean;
   city: string;
   cityCode: string;
