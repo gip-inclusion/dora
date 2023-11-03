@@ -10,6 +10,7 @@
   import Filters from "./filters.svelte";
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
+  import { isOrphan, toActivate } from "./structures-filters";
   import * as XLSX from "xlsx";
   import type { StatusFilter } from "./types";
 
@@ -23,14 +24,6 @@
   let selectedStructureSlug: string | null = null;
 
   function filterIgnoredStructures(structs) {
-    function isOrphan(struct) {
-      return !struct.hasAdmin && !struct.adminsToRemind.length;
-    }
-
-    function toActivate(struct) {
-      return !struct.numPublishedServices;
-    }
-
     function isOrphanPoleEmploiStruct(struct) {
       return struct.siret?.slice(0, 9) === "130005481" && isOrphan(struct);
     }
