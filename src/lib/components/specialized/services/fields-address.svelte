@@ -72,7 +72,6 @@
       id="city"
       initialValue={entity.city}
       onChange={handleCityChange}
-      placeholder="Saisissez et validez votre ville"
     />
   </div>
   <AddressSearchField
@@ -80,21 +79,15 @@
     initialValue={entity.address1}
     onChange={handleAddressChange}
     cityCode={entity.cityCode}
-    placeholder="3 rue du parc"
     disabled={!entity.cityCode}
   />
 
-  <BasicInputField
-    id="address2"
-    bind:value={entity.address2}
-    placeholder="batiment, escalier, etc."
-  />
+  <BasicInputField id="address2" bind:value={entity.address2} />
 
   <BasicInputField
     id="postalCode"
     description="Format attendu : 75000"
     bind:value={entity.postalCode}
-    placeholder="00000"
   />
 
   <HiddenField id="cityCode" value={entity.cityCode} />
