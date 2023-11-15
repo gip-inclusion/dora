@@ -117,8 +117,6 @@ Des cookies relatifs aux statistiques publiques et anonymes sont également dép
 
 Par ailleurs, nous utilisons l’outil [Plausible](https://plausible.io/), qui permet de suivre, sans déposer de cookies, les tendances d’utilisation générales du site. Plausible ne traite aucune donnée à caractère personnel, ne dépose aucun cookie et ne permet pas de traquer la tendance individuelle de comportement de chaque personne.
 
-Nous utilisons également [Matomo](https://matomo.org/), un outil de suivi d’audience, paramétré pour être en conformité avec la [recommandation «&nbsp;Cookies&nbsp;»](https://www.cnil.fr/fr/solutions-pour-la-mesure-daudience) de la CNIL. Cela signifie que votre adresse IP, par exemple, est anonymisée avant d’être enregistrée. Il est donc impossible d’associer vos visites sur ce site à votre personne.
-
 À tout moment, vous pouvez refuser l’utilisation des cookies et désactiver le dépôt sur votre ordinateur en utilisant la fonction dédiée de votre navigateur (fonction disponible notamment sur Microsoft Internet Explorer 11, Google Chrome, Mozilla Firefox, Apple Safari et Opera).
 
 Pour aller plus loin, vous pouvez consulter les ﬁches proposées par la Commission Nationale de l’Informatique et des Libertés (CNIL) :

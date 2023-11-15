@@ -1,17 +1,23 @@
 <script lang="ts">
-  import { setBookmark } from "$lib/requests/services";
+  import { clearBookmark, setBookmark } from "$lib/requests/services";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
 
   export let slug: string;
+  export let isDI = false;
+
+  $: bookmarkId = $userInfo?.bookmarks?.find(
+    (bookmark) => bookmark.slug === slug
+  )?.id;
 
   async function handleFavClick() {
-    await setBookmark(slug, !isBookmarked);
+    if (bookmarkId) {
+      await clearBookmark(bookmarkId);
+    } else {
+      await setBookmark(slug, isDI);
+    }
+
     await refreshUserInfo();
   }
-
-  $: isBookmarked = $userInfo?.bookmarks
-    .map((bookmark) => bookmark.service.slug)
-    .includes(slug);
 </script>
 
-<slot onBookmark={handleFavClick} {isBookmarked} />
+<slot onBookmark={handleFavClick} isBookmarked={!!bookmarkId} />

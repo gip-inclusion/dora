@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
 import { get, writable } from "svelte/store";
-import type { SavedSearch, Bookmark, ShortStructure } from "../types";
+import type { SavedSearch, ShortBookmark, ShortStructure } from "../types";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
 
@@ -26,7 +26,7 @@ export interface UserInfo {
   isManager: boolean;
   cguVersionsAccepted: Record<string, string>;
   department: string;
-  bookmarks: Bookmark[];
+  bookmarks: ShortBookmark[];
   savedSearchs: SavedSearch[];
   structures: ShortStructure[];
   pendingStructures: ShortStructure[];

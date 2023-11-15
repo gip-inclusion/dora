@@ -135,6 +135,9 @@ export async function trackSearch(
     const numDiResultsTop10 = results
       .slice(0, 10)
       .filter((service) => service.type === "di").length;
+    const resultsSlugsTop10 = results
+      .slice(0, 10)
+      .map((service) => service.slug);
     searchId = await logAnalyticsEvent("search", url.pathname, {
       searchCityCode: cityCode,
       searchNumResults: results.length,
@@ -142,6 +145,7 @@ export async function trackSearch(
       subCategoryIds: subCategoryIds,
       numDiResults,
       numDiResultsTop10,
+      resultsSlugsTop10,
     });
   }
 

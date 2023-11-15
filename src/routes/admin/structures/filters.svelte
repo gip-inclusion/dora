@@ -2,6 +2,14 @@
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+  import {
+    isOrphan,
+    isObsolete,
+    toActivate,
+    toModerate,
+    toUpdate,
+    waiting,
+  } from "./structures-filters";
   import type {
     AdminShortStructure,
     ServiceCategory,
@@ -61,28 +69,6 @@
         // mais dans le cas présent, on enlève tous les caractères non ascii
         .replace(/([^0-9a-zA-Z])/g, "")
     );
-  }
-
-  function isOrphan(struct) {
-    return !struct.hasAdmin && !struct.adminsToRemind.length;
-  }
-  function isObsolete(struct) {
-    return struct.isObsolete;
-  }
-  function waiting(struct) {
-    return struct.adminsToRemind.length;
-  }
-
-  function toModerate(struct) {
-    return struct.moderationStatus !== "VALIDATED";
-  }
-
-  function toActivate(struct) {
-    return !struct.numPublishedServices;
-  }
-
-  function toUpdate(struct) {
-    return struct.numOutdatedServices;
   }
 
   function filterAndSortEntities(

@@ -10,7 +10,7 @@
   $: isDI = result.type === "di";
 </script>
 
-<Bookmarkable slug={result.slug} let:onBookmark let:isBookmarked>
+<Bookmarkable slug={result.slug} {isDI} let:onBookmark let:isBookmarked>
   <div {id} class="rounded-ml border border-gray-02 shadow-sm" tabindex="-1">
     <div class="relative p-s32 lg:pr-s64">
       <div class="mb-s24 flex items-center justify-between">
@@ -34,9 +34,7 @@
               {/if}
             </div>
           {/if}
-          {#if !isDI}
-            <FavoriteIcon on:click={onBookmark} active={isBookmarked} small />
-          {/if}
+          <FavoriteIcon on:click={onBookmark} active={isBookmarked} small />
         </div>
       </div>
 

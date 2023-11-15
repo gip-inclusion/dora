@@ -63,7 +63,7 @@
     {/if}
   </div>
   {#if structure.modificationDate}
-    <p class="mt-s40 mb-s0 text-f12 text-gray-dark">
+    <p class="mb-s0 mt-s40 text-f12 text-gray-dark">
       Informations sur la structure mises à jour le
       <DateLabel date={structure.modificationDate} />
     </p>
@@ -113,7 +113,7 @@
   {#if structureHasInfo}
     <div class="sidebar">
       <div
-        class="flex flex-col gap-s24 rounded-lg border border-gray-02 py-s24 px-s32"
+        class="flex flex-col gap-s24 rounded-lg border border-gray-02 px-s32 py-s24"
       >
         <h3 class="mb-s8 text-france-blue">Informations pratiques</h3>
 
@@ -180,7 +180,7 @@
             <OsmHours osmHours={structure.openingHours} />
 
             {#if structure.openingHoursDetails}
-              <p class="mt-s16 mb-s0 italic text-gray-text">
+              <p class="mb-s0 mt-s16 italic text-gray-text">
                 <up>*</up>
                 {structure.openingHoursDetails}
               </p>
@@ -204,7 +204,7 @@
               href={structure.accesslibreUrl}
             >
               Retrouvez toutes les infos via ce lien<span
-                class="ml-s8 mb-s2 inline-block h-s16 w-s16 justify-end fill-current align-sub"
+                class="mb-s2 ml-s8 inline-block h-s16 w-s16 justify-end fill-current align-sub"
               >
                 {@html externalLinkIcon}
               </span>
