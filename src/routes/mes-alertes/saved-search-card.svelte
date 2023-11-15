@@ -5,10 +5,12 @@
   import {
     updateSavedSearchFrequency,
     deleteSavedSearch,
-    getSavedSearchQueryString,
   } from "$lib/requests/saved-search";
   import { refreshUserInfo } from "$lib/utils/auth";
   import Button from "$lib/components/display/button.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
+  import SavedSearchDescription from "./description.svelte";
+  import SavedSearchTitle from "./title.svelte";
 
   export let search: SavedSearch;
 
@@ -41,15 +43,7 @@
   class="relative rounded-ml border border-gray-02 p-s32 pr-s56 shadow-sm"
   tabindex="-1"
 >
-  <h2 class="text-f20">
-    <a href={`recherche?${getSavedSearchQueryString(search)}`}>
-      Services d’insertion à proximité de {search.cityLabel}
-
-      {#if search.category}
-        pour la thématique {search.categoryDisplay}
-      {/if}
-    </a>
-  </h2>
+  <SavedSearchTitle {search} />
 
   <button
     class="absolute right-s32 top-s40 text-magenta-cta"
@@ -64,23 +58,7 @@
     </span>
   </button>
 
-  {#if search.subcategories.length || search.kinds.length || search.fees.length}
-    <p class="text-f16">
-      {#if search.subcategories.length}
-        Besoins sélectionnés : {search.subcategoriesDisplay.join(", ")}.
-      {:else}
-        Aucun besoin sélectionné.
-      {/if}
-
-      {#if search.kinds.length}
-        Type de services : {search.kindsDisplay.join(", ")}.
-      {/if}
-
-      {#if search.fees.length}
-        Frais à charge : {search.feesDisplay.join(", ")}.
-      {/if}
-    </p>
-  {/if}
+  <SavedSearchDescription {search} />
 
   <p class="text-f16">
     <span class="mr-s8 inline-block h-s16 w-s16 fill-current">
@@ -88,33 +66,39 @@
     </span>
     Le <DateLabel date={search.creationDate} />
   </p>
+  <div class="flex gap-s8">
+    <div class="form-container">
+      <form on:submit|preventDefault={handleSubmit} class="flex gap-s16">
+        <div class="flex items-center rounded border border-gray-02 p-s12">
+          <span class="mr-s8 inline-block h-s24 w-s24 fill-current">
+            {@html mailLineIcon}
+          </span>
 
-  <div class="form-container">
-    <form on:submit|preventDefault={handleSubmit} class="flex gap-s16">
-      <div class="flex items-center rounded border border-gray-02 p-s12">
-        <span class="mr-s8 inline-block h-s24 w-s24 fill-current">
-          {@html mailLineIcon}
-        </span>
+          <select
+            id="frequency"
+            bind:value={frequencyValue}
+            class="border-0 pr-s10"
+          >
+            <option value="NEVER">Pas de notification</option>
+            <option value="TWO_WEEKS">Une alerte toutes les 2 semaines</option>
+            <option value="MONTHLY">Une alerte tous les mois</option>
+          </select>
+        </div>
 
-        <select
-          id="frequency"
-          bind:value={frequencyValue}
-          class="border-0 pr-s10"
-        >
-          <option value="NEVER">Pas de notification</option>
-          <option value="TWO_WEEKS">Une alerte toutes les 2 semaines</option>
-          <option value="MONTHLY">Une alerte tous les mois</option>
-        </select>
-      </div>
-
-      {#if frequencyValue !== search.frequency}
-        <Button
-          name="validate"
-          type="submit"
-          label="Valider"
-          disabled={requesting}
-        />
-      {/if}
-    </form>
+        {#if frequencyValue !== search.frequency}
+          <Button
+            name="validate"
+            type="submit"
+            label="Valider"
+            disabled={requesting}
+          />
+        {/if}
+      </form>
+    </div>
+    <LinkButton
+      label="Voir les nouveaux services"
+      to="/mes-alertes/{search.id}"
+      secondary
+    />
   </div>
 </div>

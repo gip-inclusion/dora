@@ -1,3 +1,4 @@
+import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
 import { token } from "../utils/auth";
 import { getApiURL } from "../utils/api";
@@ -62,6 +63,16 @@ export async function deleteSavedSearch(savedSearchId: string) {
   if (!response.ok) {
     throw Error(response.statusText);
   }
+}
+
+export async function getRecentSearchResults(savedSearchId: number) {
+  const url = `${getApiURL()}/saved-searchs/${savedSearchId}/recent/`;
+
+  const response = await fetchData<SavedSearch[]>(url);
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return response.data;
 }
 
 export function getSavedSearchQueryString(savedSearch: SavedSearch) {

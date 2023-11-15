@@ -9,6 +9,7 @@
     | "cgu"
     | "model"
     | "saved-searchs"
+    | "saved-search"
     | "bookmarks"
     | "account"
     | "login"
@@ -46,6 +47,7 @@
     "service-orientation-confirmation": "Orienter • Confirmation",
     orientation: "Demande d’orientation",
     "saved-searchs": "Mes alertes",
+    "saved-search": "Mon alerte",
     bookmarks: "Mes favoris",
   };
 
@@ -142,7 +144,13 @@
         </span>
       </li>
     {/if}
-
+    {#if currentLocation === "saved-search"}
+      <li class="inline before:content-['/']">
+        <a href="/mes-alertes">
+          <span class="hidden lg:inline">Mes alertes</span>
+        </a>
+      </li>
+    {/if}
     {#if Object.keys(locationToText).includes(currentLocation)}
       <li class="inline before:content-['/']">
         <span aria-current="page" class="current">

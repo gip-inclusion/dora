@@ -486,7 +486,7 @@ export interface Bookmark {
 }
 
 export interface SavedSearch {
-  id: string;
+  id: number;
   creationDate: string;
   cityCode: string;
   cityLabel: string;
