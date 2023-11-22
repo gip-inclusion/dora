@@ -53,7 +53,7 @@ export const load: LayoutLoad = async ({ url }) => {
         currentUserInfo.pendingStructures.length
       )
     ) {
-      throw redirect(302, "/auth/rattachement");
+      throw redirect(302, `/auth/rattachement${url.search}`);
     }
 
     // Si l'utilisateur a besoin de valider les CGU en cours de validité

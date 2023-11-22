@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import { token, validateCredsAndFillUserInfo } from "$lib/utils/auth";
@@ -13,6 +14,7 @@
 
   export let data: PageData;
   let cguAccepted = false;
+  let joinError = "";
 
   async function handleJoin() {
     trackJoinStructure();
@@ -43,7 +45,7 @@
       await goto(`/structures/${result.data.slug}`);
     } else {
       try {
-        result.error = await response.json();
+        joinError = (await response.json()).detail.message;
       } catch (err) {
         console.error(err);
       }
@@ -93,7 +95,7 @@
       <div class="mt-s24">
         <div class="legend">
           <label class="flex flex-row items-start">
-            <input bind:checked={cguAccepted} type="checkbox" class="hidden " />
+            <input bind:checked={cguAccepted} type="checkbox" class="hidden" />
             <div
               class="flex h-s24 w-s24 shrink-0 justify-center rounded border border-gray-03"
             >
@@ -102,7 +104,7 @@
                 class:hidden={!cguAccepted}
               />
             </div>
-            <span class="ml-s16 inline-block  text-f14 text-gray-text">
+            <span class="ml-s16 inline-block text-f14 text-gray-text">
               Je déclare avoir lu les
               <a href="/cgu" class="underline" target="_blank" rel="noopener"
                 >Conditions générales d’utilisation</a
@@ -110,7 +112,11 @@
             >
           </label>
         </div>
-
+        <div class="mt-s24">
+          {#if joinError}
+            <Notice title={joinError} type="error" />
+          {/if}
+        </div>
         <div class="mt-s24 flex justify-end">
           <Button
             label="Adhérer à la structure"

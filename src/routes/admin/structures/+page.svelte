@@ -2,6 +2,7 @@
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
+  import { SIREN_POLE_EMPLOI } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminShortStructure, GeoApiValue } from "$lib/types";
@@ -25,7 +26,9 @@
 
   function filterIgnoredStructures(structs) {
     function isOrphanPoleEmploiStruct(struct) {
-      return struct.siret?.slice(0, 9) === "130005481" && isOrphan(struct);
+      return (
+        struct.siret?.slice(0, 9) === SIREN_POLE_EMPLOI && isOrphan(struct)
+      );
     }
 
     function isOrphanOrToActivateSIAE(struct) {
