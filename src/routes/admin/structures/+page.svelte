@@ -11,7 +11,14 @@
   import Filters from "./filters.svelte";
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
-  import { isOrphan, toActivate } from "./structures-filters";
+  import {
+    isOrphan,
+    toActivate,
+    waiting,
+    isObsolete,
+    toUpdate,
+    toModerate,
+  } from "./structures-filters";
   import * as XLSX from "xlsx";
   import type { StatusFilter } from "./types";
 
@@ -31,16 +38,19 @@
       );
     }
 
-    function isOrphanOrToActivateSIAE(struct) {
+    function isOrphanOrWaitingOrToActivateSIAE(struct) {
       return (
         ["ETTI", "ACI", "AI", "EI"].includes(struct.typology) &&
-        (isOrphan(struct) || toActivate(struct))
+        (isOrphan(struct) || waiting(struct) || toActivate(struct))
       );
     }
 
     return structs.filter(
       (struct) =>
-        !isOrphanPoleEmploiStruct(struct) && !isOrphanOrToActivateSIAE(struct)
+        isObsolete(struct) ||
+        toModerate(struct) ||
+        (!isOrphanPoleEmploiStruct(struct) &&
+          !isOrphanOrWaitingOrToActivateSIAE(struct))
     );
   }
   async function handleDepartmentChange(dept: GeoApiValue) {
@@ -63,17 +73,17 @@
   function handleClick() {
     const sheetData = filteredStructures.map((structure) => {
       let status = "";
-      if (structure.isObsolete) {
+      if (isObsolete(structure)) {
         status = "obsolète";
-      } else if (!structure.hasAdmin && !structure.adminsToRemind.length) {
+      } else if (isOrphan(structure)) {
         status = "orpheline";
-      } else if (structure.adminsToRemind.length) {
+      } else if (waiting(structure)) {
         status = "en attente";
-      } else if (structure.moderationStatus !== "VALIDATED") {
+      } else if (toModerate(structure)) {
         status = "à modérer";
-      } else if (!structure.numPublishedServices) {
+      } else if (toActivate(structure)) {
         status = "à activer";
-      } else if (structure.numOutdatedServices) {
+      } else if (toUpdate(structure)) {
         status = "à actualiser";
       }
 
