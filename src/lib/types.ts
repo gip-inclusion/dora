@@ -499,6 +499,7 @@ export interface SavedSearch {
   fees: FeeCondition[];
   feesDisplay: string[];
   frequency: SavedSearchNotificationFrequency;
+  newServicesCount?: number;
 }
 
 export interface CustomChoice {

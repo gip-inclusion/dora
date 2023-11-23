@@ -7,7 +7,8 @@
   import { userInfo } from "$lib/utils/auth";
   import SavedSearchCard from "./saved-search-card.svelte";
 
-  $: savedSearchs = $userInfo?.savedSearchs;
+  export let data;
+  const { savedSearches } = data;
 </script>
 
 <EnsureLoggedIn>
@@ -15,17 +16,18 @@
     <h1 class="text-center text-france-blue">Mes alertes</h1>
 
     <div class="mb-s32">
-      <Breadcrumb currentLocation="saved-searchs" dark />
+      <Breadcrumb currentLocation="saved-searches" dark />
     </div>
 
-    {#if savedSearchs.length}
+    {#if savedSearches.length}
       <p class="mb-s40 text-f21 font-bold text-gray-dark">
-        {$userInfo.savedSearchs.length} alerte{$userInfo.savedSearchs.length > 1
+        {$userInfo.savedSearches.length} alerte{$userInfo.savedSearches.length >
+        1
           ? "s"
           : ""}
       </p>
       <div class="flex flex-col gap-s16">
-        {#each savedSearchs as search}
+        {#each savedSearches as search}
           <SavedSearchCard {search} />
         {/each}
       </div>

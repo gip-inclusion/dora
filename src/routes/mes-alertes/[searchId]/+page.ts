@@ -15,7 +15,7 @@ export const load: PageLoad = async ({ url, params, parent }) => {
     );
   }
 
-  const savedSearch = get(userInfo)?.savedSearchs.find(
+  const savedSearch = get(userInfo)?.savedSearches.find(
     (search) => search.id === Number(params.searchId)
   );
   if (!savedSearch) {

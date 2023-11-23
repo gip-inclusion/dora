@@ -13,7 +13,6 @@
   import SavedSearchTitle from "./title.svelte";
 
   export let search: SavedSearch;
-
   let requesting = false;
 
   async function doDeleteAlert() {
@@ -95,10 +94,11 @@
         {/if}
       </form>
     </div>
-    <LinkButton
-      label="Voir les nouveaux services"
-      to="/mes-alertes/{search.id}"
-      secondary
-    />
+    {#if search.newServicesCount}
+      <LinkButton
+        label="Voir les {search.newServicesCount} nouveaux services"
+        to="/mes-alertes/{search.id}"
+        secondary
+      />{/if}
   </div>
 </div>

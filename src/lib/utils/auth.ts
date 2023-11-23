@@ -27,7 +27,7 @@ export interface UserInfo {
   cguVersionsAccepted: Record<string, string>;
   department: string;
   bookmarks: ShortBookmark[];
-  savedSearchs: SavedSearch[];
+  savedSearches: SavedSearch[];
   structures: ShortStructure[];
   pendingStructures: ShortStructure[];
   mainActivity: UserMainActivity;

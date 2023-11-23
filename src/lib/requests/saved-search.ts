@@ -11,7 +11,7 @@ export async function saveSearch(
     "cityCode" | "cityLabel" | "category" | "subcategories" | "kinds" | "fees"
   >
 ) {
-  const url = `${getApiURL()}/saved-searchs/`;
+  const url = `${getApiURL()}/saved-searches/`;
   const method = "POST";
   const response = await fetch(url, {
     method,
@@ -31,7 +31,7 @@ export async function updateSavedSearchFrequency(
   savedSearchId: string,
   frequency: SavedSearchNotificationFrequency
 ) {
-  const url = `${getApiURL()}/saved-searchs/${savedSearchId}/`;
+  const url = `${getApiURL()}/saved-searches/${savedSearchId}/`;
   const method = "PATCH";
 
   const response = await fetch(url, {
@@ -49,7 +49,7 @@ export async function updateSavedSearchFrequency(
 }
 
 export async function deleteSavedSearch(savedSearchId: string) {
-  const url = `${getApiURL()}/saved-searchs/${savedSearchId}/`;
+  const url = `${getApiURL()}/saved-searches/${savedSearchId}/`;
   const method = "DELETE";
 
   const response = await fetch(url, {
@@ -66,7 +66,7 @@ export async function deleteSavedSearch(savedSearchId: string) {
 }
 
 export async function getRecentSearchResults(savedSearchId: number) {
-  const url = `${getApiURL()}/saved-searchs/${savedSearchId}/recent/`;
+  const url = `${getApiURL()}/saved-searches/${savedSearchId}/recent/`;
 
   const response = await fetchData<SavedSearch[]>(url);
   if (!response.ok) {
@@ -86,13 +86,13 @@ export function getSavedSearchQueryString(savedSearch: SavedSearch) {
   });
 }
 
-export function isCurrentSearchInUserSavedSearchs(
+export function isCurrentSearchInUserSavedSearches(
   userInfo,
   currentQuery
 ): boolean {
-  const userSavedSearchs = userInfo?.savedSearchs || [];
+  const userSavedSearches = userInfo?.savedSearches || [];
 
-  return userSavedSearchs.some(
+  return userSavedSearches.some(
     (search) => getSavedSearchQueryString(search) === currentQuery
   );
 }

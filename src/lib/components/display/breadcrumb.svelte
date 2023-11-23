@@ -8,7 +8,7 @@
     | "legal"
     | "cgu"
     | "model"
-    | "saved-searchs"
+    | "saved-searches"
     | "saved-search"
     | "bookmarks"
     | "account"
@@ -46,7 +46,7 @@
     "service-orientation-step2": "Orienter • Étape 2/2",
     "service-orientation-confirmation": "Orienter • Confirmation",
     orientation: "Demande d’orientation",
-    "saved-searchs": "Mes alertes",
+    "saved-searches": "Mes alertes",
     "saved-search": "Mon alerte",
     bookmarks: "Mes favoris",
   };
