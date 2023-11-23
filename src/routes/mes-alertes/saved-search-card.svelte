@@ -96,7 +96,9 @@
     </div>
     {#if search.newServicesCount}
       <LinkButton
-        label="Voir les {search.newServicesCount} nouveaux services"
+        label={search.newServicesCount > 1
+          ? `Voir les ${search.newServicesCount} nouveaux services`
+          : "Voir le nouveau service"}
         to="/mes-alertes/{search.id}"
         secondary
       />{/if}
