@@ -52,8 +52,10 @@ export { default as mapPinIcon } from "remixicon/icons/Map/map-pin-2-line.svg?ra
 export { default as mapPinUserFillIcon } from "remixicon/icons/Map/map-pin-user-fill.svg?raw";
 export { default as pinDistanceIcon } from "remixicon/icons/Map/pin-distance-fill.svg?raw";
 export { default as rocketIcon } from "remixicon/icons/Map/rocket-2-line.svg?raw";
+export { default as walkIcon } from "remixicon/icons/Map/walk-line.svg?raw";
 export { default as flashLightIcon } from "remixicon/icons/Weather/flashlight-line.svg?raw";
 export { default as wheelChairIcon } from "remixicon/icons/Others/wheelchair-line.svg?raw";
+export { default as graduationCapIcon } from "remixicon/icons/Others/graduation-cap-line.svg?raw";
 export { default as repeatIcon } from "remixicon/icons/Media/repeat-line.svg?raw";
 export { default as notificationIcon } from "remixicon/icons/Media/notification-3-line.svg?raw";
 export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill.svg?raw";

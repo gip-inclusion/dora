@@ -4,10 +4,12 @@ import {
   chatSmileIcon,
   compassDiscoverIcon,
   euroLineIcon,
+  graduationCapIcon,
   homeSmileIcon,
   macLineIcon,
   mentalHealthIcon,
   parentIcon,
+  walkIcon,
   rocketIcon,
   serviceIcon,
   stethoscopeIcon,
@@ -94,6 +96,12 @@ export function getCategoryIcon(slug: string) {
   }
   if ("trouver-un-emploi" === slug) {
     return serviceIcon;
+  }
+  if ("se-former" === slug) {
+    return graduationCapIcon;
+  }
+  if ("souvrir-a-linternational" === slug) {
+    return walkIcon;
   }
   log(`Pas d'icone définie pour la thématique ${slug}`);
   return null;
