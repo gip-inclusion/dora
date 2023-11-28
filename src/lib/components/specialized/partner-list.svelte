@@ -11,7 +11,7 @@
       class="m-s0 inline"
       class:max-w-[200px]={imgHeight === "medium"}
       class:max-w-[150px]={imgHeight === "small"}
-      _src={partner.img}
+      src={partner.img}
       alt={partner.name}
     />
   </li>
