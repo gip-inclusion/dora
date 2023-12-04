@@ -43,7 +43,7 @@
           class="full-result-link hover:underline"
           href="/services/{isDI
             ? `di/`
-            : ``}{result.slug}?searchId={searchId.event}"
+            : ``}{result.slug}?searchId={searchId?.event}"
         >
           {result.name}
         </a>
@@ -53,7 +53,7 @@
         <a
           href="/services/{isDI
             ? `di/`
-            : ``}{result.slug}?searchId={searchId.event}">{result.shortDesc}</a
+            : ``}{result.slug}?searchId={searchId?.event}">{result.shortDesc}</a
         >
       </p>
       {#if isDI}

@@ -486,7 +486,7 @@ export interface Bookmark {
 }
 
 export interface SavedSearch {
-  id: string;
+  id: number;
   creationDate: string;
   cityCode: string;
   cityLabel: string;
@@ -499,6 +499,7 @@ export interface SavedSearch {
   fees: FeeCondition[];
   feesDisplay: string[];
   frequency: SavedSearchNotificationFrequency;
+  newServicesCount?: number;
 }
 
 export interface CustomChoice {

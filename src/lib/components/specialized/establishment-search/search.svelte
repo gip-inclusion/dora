@@ -2,13 +2,13 @@
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import Tabs from "$lib/components/display/tabs.svelte";
   import SearchByCommune from "./search-by-commune.svelte";
+  import SearchBySafir from "./search-by-safir.svelte";
   import SearchBySiret from "./search-by-siret.svelte";
   import type { Establishment, GeoApiValue } from "$lib/types";
 
-  type Tab = "nom" | "siret";
-
   export let onCityChange: ((city: GeoApiValue | null) => void) | undefined =
     undefined;
+  type Tab = "nom" | "siret" | "safir";
 
   export let onEstablishmentChange:
     | ((establishment: Establishment | null) => void)
@@ -16,9 +16,17 @@
 
   export let establishment: Establishment | null = null;
   export let isOwnStructure = true;
-  export let tabId: Tab = "nom";
+  export let showSafir: boolean = false;
+  export let tabId: Tab = showSafir ? "safir" : "nom";
+
   export let title = "Structure";
   export let description: string | undefined = undefined;
+  export let proposedSafir: string;
+  export let proposedSiret: string;
+
+  if (!showSafir) {
+    proposedSafir = "";
+  }
 
   function handleCityChange(newCity: GeoApiValue | null) {
     establishment = null;
@@ -44,13 +52,19 @@
       }
     }
   }
+  const tabs: { id: string; name: string }[] = [];
+  if (showSafir) {
+    tabs.push({ id: "safir", name: "Agences Pôle emploi" });
+  }
 
-  const tabs: { id: Tab; name: string }[] = [
-    { id: "nom", name: "Nom" },
-    { id: "siret", name: "Siret" },
-  ];
+  tabs.push(
+    ...[
+      { id: "nom", name: "Par nom" },
+      { id: "siret", name: "Par siret" },
+    ]
+  );
 
-  if (establishment?.siret) {
+  if (proposedSiret) {
     tabId = "siret";
   }
 </script>
@@ -79,6 +93,7 @@
     <SearchBySiret
       onEstablishmentChange={handleEstablishmentChange}
       {establishment}
+      {proposedSiret}
     />
   {:else if tabId === "nom"}
     <SearchByCommune
@@ -86,6 +101,12 @@
       onEstablishmentChange={handleEstablishmentChange}
       onCityChange={handleCityChange}
       {isOwnStructure}
+    />
+  {:else if tabId === "safir"}
+    <SearchBySafir
+      {establishment}
+      onEstablishmentChange={handleEstablishmentChange}
+      {proposedSafir}
     />
   {/if}
 

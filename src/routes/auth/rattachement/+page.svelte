@@ -11,12 +11,15 @@
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";
   import loopImg from "$lib/assets/icons/loop.svg";
+  import Notice from "$lib/components/display/notice.svelte";
 
   export let data: PageData;
 
   let cguAccepted = false;
   let { establishment } = data;
+  const { proposedSiret, proposedSafir, userIsPe } = data;
   let ctaLabel = "";
+  let joinError = "";
 
   async function handleJoin() {
     trackJoinStructure();
@@ -39,20 +42,17 @@
       ok: response.ok,
       status: response.status,
     };
-
     if (response.ok) {
       result.data = await response.json();
-
       await refreshUserInfo();
       await goto(`/structures/${result.data.slug}`);
     } else {
       try {
-        result.error = await response.json();
+        joinError = (await response.json()).detail.message;
       } catch (err) {
         console.error(err);
       }
     }
-    return result;
   }
 
   $: alreadyMember = $userInfo?.structures
@@ -71,6 +71,7 @@
       ctaLabel = "Rejoindre la structure";
     }
   }
+  $: establishment, (joinError = "");
 </script>
 
 <EnsureLoggedIn>
@@ -79,6 +80,9 @@
       bind:establishment
       title="Retrouvez votre structure"
       description="Pour accéder à toutes les fonctionnalités, merci de nous indiquer la structure dans laquelle vous travaillez :"
+      {proposedSafir}
+      {proposedSiret}
+      showSafir={userIsPe}
     >
       <div slot="cta">
         {#if establishment?.siret}
@@ -116,6 +120,11 @@
                 </label>
               </div>
             {/if}
+            <div class="mt-s24">
+              {#if joinError}
+                <Notice title={joinError} type="error" />
+              {/if}
+            </div>
             <div class="mt-s24 flex justify-end">
               <Button
                 type="submit"

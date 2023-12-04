@@ -1,10 +1,20 @@
 import * as v from "../schema-utils";
+import { SIREN_POLE_EMPLOI } from "$lib/consts";
+
+function checkPoleEmploiRestrictions(msg = "") {
+  return (_name, value, data) => ({
+    valid: data.siret.startsWith(SIREN_POLE_EMPLOI)
+      ? !!(value.endsWith("@pole-emploi.fr") || value.endsWith("beta.gouv.fr"))
+      : true,
+    msg: msg || `Veuillez saisir une adresse en @pole-emploi.fr`,
+  });
+}
 
 export const addUserSchema = {
   email: {
     label: "Courriel",
     default: "",
-    rules: [v.isEmail(), v.maxStrLength(254)],
+    rules: [v.isEmail(), checkPoleEmploiRestrictions(), v.maxStrLength(254)],
     post: [v.lower, v.trim],
     maxLength: 254,
     required: true,

@@ -4,23 +4,23 @@
   import type { Establishment } from "$lib/types";
 
   import { getApiURL } from "$lib/utils/api";
-  import { siretRegexp } from "$lib/validation/schema-utils";
+
+  const safirRegexp = /^\d{5}$/u;
 
   export let onEstablishmentChange: (
     establishment: Establishment | null
   ) => void;
-
+  export let proposedSafir;
   export let establishment: Establishment | null;
-  export let proposedSiret: string;
-  let siretInput = proposedSiret;
-  let siretIsValid = false;
+  let safirInput = proposedSafir;
+  let safirIsValid = false;
   let serverErrorMsg = "";
 
-  $: siretIsValid = !!siretInput?.match(siretRegexp);
+  $: safirIsValid = !!safirInput?.match(safirRegexp);
 
-  async function handleValidateSiret() {
-    const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(
-      siretInput
+  async function handleValidateSafir() {
+    const url = `${getApiURL()}/search-safir/?safir=${encodeURIComponent(
+      safirInput
     )}`;
 
     const response = await fetch(url, {
@@ -33,7 +33,7 @@
     if (response.ok) {
       establishment = await response.json();
     } else if (response.status === 404) {
-      serverErrorMsg = "SIRET inconnu";
+      serverErrorMsg = "Code Safir inconnu";
       establishment = null;
     }
 
@@ -43,18 +43,18 @@
   function handleKeydown(event: KeyboardEvent) {
     if (event.code === "Enter") {
       event.preventDefault();
-      if (siretIsValid) {
-        handleValidateSiret();
+      if (safirIsValid) {
+        handleValidateSafir();
       }
     }
   }
 </script>
 
 <FieldWrapper
-  id="siret-select"
-  label="Numéro SIRET"
+  id="safir-select"
+  label="Code Safir de votre agence"
   required
-  description="Sur 14 chiffres"
+  description="Sur 5 chiffres"
   vertical
 >
   <slot slot="description" name="description" />
@@ -63,29 +63,29 @@
     <div class="flex flex-row gap-s12">
       <input
         class="h-s48 grow rounded border border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt outline-none focus:shadow-focus"
-        id="siret-select"
+        id="safir-select"
         type="text"
         on:input={() => (serverErrorMsg = "")}
         on:keydown={handleKeydown}
-        bind:value={siretInput}
-        placeholder="1234567891234"
-        maxlength="14"
+        bind:value={safirInput}
+        placeholder="12345"
+        maxlength="5"
       />
 
       <Button
         label="Rechercher"
-        disabled={!siretIsValid}
-        on:click={handleValidateSiret}
+        disabled={!safirIsValid}
+        on:click={handleValidateSafir}
         small
       />
     </div>
     <div>
-      {#if serverErrorMsg || (siretInput && !siretInput.match(siretRegexp))}
+      {#if serverErrorMsg || (safirInput && !safirInput.match(safirRegexp))}
         <div class="mt-s4 text-f12 text-error">
           {#if serverErrorMsg}
             {serverErrorMsg}
           {:else}
-            Ce champ doit comporter 14 chiffres ({siretInput.length}/14
+            Ce champ doit comporter 5 chiffres ({safirInput.length}/5
             caractères)
           {/if}
         </div>

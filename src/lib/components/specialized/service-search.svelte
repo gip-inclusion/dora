@@ -30,7 +30,7 @@
   import { onMount } from "svelte";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
   import {
-    isCurrentSearchInUserSavedSearchs,
+    isCurrentSearchInUserSavedSearches,
     saveSearch,
   } from "$lib/requests/saved-search";
 
@@ -295,7 +295,7 @@
         preventDefaultOnMouseDown
       />
 
-      {#if isCurrentSearchInUserSavedSearchs($userInfo, query)}
+      {#if isCurrentSearchInUserSavedSearches($userInfo, query)}
         <Button
           extraClass="h-s48"
           secondary

@@ -79,7 +79,7 @@
     confirmationModalIsOpen = true;
   }
 
-  $: formData = { email, level };
+  $: formData = { email, level, siret: structure.siret };
 </script>
 
 <Modal bind:isOpen title="Nouveau collaborateur">
