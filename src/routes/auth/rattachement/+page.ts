@@ -28,10 +28,10 @@ function safirSearch(safir: string) {
 
 export const load: PageLoad = async ({ url, parent }) => {
   await parent();
-  const userEmail = get(userInfo).email;
+  const userEmail = get(userInfo)?.email;
   const userIsPe =
-    userEmail.endsWith("@pole-emploi.fr") ||
-    userEmail.endsWith("@beta.gouv.fr");
+    userEmail?.endsWith("@pole-emploi.fr") ||
+    userEmail?.endsWith("@beta.gouv.fr");
 
   let establishment: Establishment | undefined;
 
