@@ -6,7 +6,7 @@
   export let id: string;
   export let result: ServiceSearchResult;
   export let searchId: string;
-  $: hasLocationTag = result.distance || result.location === "À distance";
+
   $: isDI = result.type === "di";
 </script>
 
@@ -16,24 +16,29 @@
       <div class="mb-s24 flex items-center justify-between">
         <div class="text-f14">
           {result.structureInfo.name}
-          {#if result.location && result.location !== "À distance"}<span
-              class="legend ml-s8 font-bold text-gray-dark"
-              >{result.location}</span
-            >{/if}
+          {#if result.location}
+            <span class="legend ml-s8 font-bold text-gray-dark">
+              {result.location}
+            </span>
+          {/if}
         </div>
         <div class="flex items-center gap-s8">
-          {#if hasLocationTag}
+          {#if result.distance != null && result.distance >= 1 && result.distance <= 100}
             <div
               class="whitespace-nowrap rounded-xl bg-france-blue px-s10 py-s4 text-f14 font-bold text-white"
             >
-              {#if result.distance}
-                à&nbsp;{Math.round(result.distance)}&nbsp;km
-              {/if}
-              {#if result.location === "À distance"}
-                À distance
-              {/if}
+              à&nbsp;{Math.round(result.distance)}&nbsp;km
             </div>
           {/if}
+
+          {#if result.locationKinds.includes("a-distance") && (result.distance == null || result.distance > 100)}
+            <div
+              class="whitespace-nowrap rounded-xl bg-france-blue px-s10 py-s4 text-f14 font-bold text-white"
+            >
+              À distance
+            </div>
+          {/if}
+
           <FavoriteIcon on:click={onBookmark} active={isBookmarked} small />
         </div>
       </div>
