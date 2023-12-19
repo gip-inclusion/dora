@@ -2,7 +2,7 @@
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { getStructure } from "$lib/requests/structures";
   import { refreshUserInfo } from "$lib/utils/auth";
-  import StructureEditionForm from "../../structure-edition-form.svelte";
+  import StructureEditionForm from "./structure-edition-form.svelte";
   import { structure } from "../store";
   import type { PageData } from "./$types";
 

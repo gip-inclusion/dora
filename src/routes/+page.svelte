@@ -21,7 +21,6 @@
     Identifiez rapidement les services d’insertion adaptés aux besoins de vos
     bénéficiaires
   </h1>
-
   <div class="mb-s32">
     <p class="text-center text-f16 text-gray-text">
       DORA vous aide dans la levée des freins périphériques bloquant le retour à
@@ -35,7 +34,7 @@
     cityLabel={data.cityLabel}
   />
 
-  <div class="mt-s32 mb-s16 text-center text-f16">
+  <div class="mb-s16 mt-s32 text-center text-f16">
     <a
       target="_blank"
       class="text-magenta-cta underline"

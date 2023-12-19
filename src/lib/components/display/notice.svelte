@@ -57,9 +57,9 @@
 {#if visible}
   <div class="rounded-lg {types[type].background} py-s24 pl-s24 pr-s24">
     {#if title || hasCloseButton}
-      <div class="flex items-center">
+      <div class="items-top flex">
         {#if showIcon}
-          <div class="hidden text-center sm:block sm:flex-[0_0_48px]">
+          <div class="hidden flex-[0_0_48px] text-center sm:block">
             <div class="{types[type].text} h-s32 w-s32 shrink-0 fill-current">
               {@html types[type].icon}
             </div>
@@ -101,7 +101,7 @@
         <slot />
 
         {#if $$slots.button}
-          <div class="mb-s24 self-end">
+          <div class="mb-s0 self-end">
             <slot name="button" />
           </div>
         {/if}

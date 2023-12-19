@@ -25,7 +25,8 @@
     | "service-orientation-step2"
     | "service-orientation-confirmation"
     | "orientation"
-    | "service";
+    | "service"
+    | "manager-dashboard";
 
   export let structure: Structure | undefined = undefined;
   export let service: Service | undefined = undefined;
@@ -49,6 +50,7 @@
     "saved-searches": "Mes alertes",
     "saved-search": "Mon alerte",
     bookmarks: "Mes favoris",
+    "manager-dashboard": "Gestion du territoire",
   };
 
   function getStructureData(location) {

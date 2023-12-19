@@ -126,7 +126,7 @@
   let loading = false;
 
   let highlightIndex = -1;
-  let text;
+  export let text = "";
 
   let filteredTextLength = 0;
 

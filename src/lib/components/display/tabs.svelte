@@ -8,9 +8,9 @@
   {#each items as item}
     <li>
       <button
-        class="rounded-t-md p-s16 {itemId === item.id
-          ? 'bg-white text-france-blue '
-          : 'bg-magenta-dark text-white '}"
+        class="rounded-t px-s20 py-s12 font-bold {itemId === item.id
+          ? 'bg-white text-france-blue'
+          : 'bg-magenta-dark text-white'}"
         on:click={() => {
           onSelectedChange(item.id);
         }}>{item.name}</button

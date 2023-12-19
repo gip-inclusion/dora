@@ -1,9 +1,12 @@
 <script lang="ts">
+  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Button from "$lib/components/display/button.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
   import { SIREN_POLE_EMPLOI } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
+  import { addIcon } from "$lib/icons";
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminShortStructure, GeoApiValue } from "$lib/types";
   import dayjs from "dayjs";
@@ -135,8 +138,8 @@
   }
 </script>
 
-<CenteredGrid>
-  {#if !data.isManager}
+{#if !data.isManager && !department}
+  <CenteredGrid>
     <div class="mb-s16 flex flex-col">
       <label for="department" class="font-bold">Département</label>
       <AdminDivisionSearch
@@ -147,23 +150,48 @@
         withGeom
       />
     </div>
-  {:else}
-    <h1>
-      {department.name}({department.code})
-    </h1>
-  {/if}
+  </CenteredGrid>
+{/if}
 
-  {#if department}
-    <div class="my-s24 text-center text-f18 font-bold">
-      <a
-        href="https://metabase.dora.fabrique.social.gouv.fr/public/dashboard/860a9da9-9300-4289-878c-7bf8ec74f9b7?d%25C3%25A9partement={department.code}"
-        target="_blank"
-        rel="noopener nofollow"
-        class="underline"
-      >
-        Voir les statistiques
-      </a>
+{#if department}
+  <CenteredGrid bgColor="bg-service-green">
+    <div class="relative gap-s16 lg:flex-row-reverse lg:justify-between">
+      <div class="mb-s48 print:mb-s0">
+        <Breadcrumb currentLocation="manager-dashboard" dark />
+      </div>
+
+      <div>
+        <h1 class="mb-s12 mr-s12 text-france-blue">Tableau de bord</h1>
+        <div class="flex flex-col justify-between gap-s16 md:flex-row">
+          <div
+            class=" flex flex-col items-baseline justify-between gap-s8 text-france-blue md:flex-row"
+          >
+            <span class="text-f23 font-bold"
+              >{department.name}({department.code})
+            </span>
+            <span class="hidden text-f23 font-bold md:block">•</span>
+            <a
+              href="https://metabase.dora.inclusion.beta.gouv.fr/public/dashboard/860a9da9-9300-4289-878c-7bf8ec74f9b7?d%25C3%25A9partement={department.code}"
+              target="_blank"
+              rel="noopener nofollow"
+              class="text-f18 underline"
+            >
+              Voir les statistiques
+            </a>
+          </div>
+
+          <div>
+            <LinkButton
+              label="Ajouter une structure"
+              to="/admin/structures/creer"
+              icon={addIcon}
+            />
+          </div>
+        </div>
+      </div>
     </div>
+  </CenteredGrid>
+  <CenteredGrid>
     <Filters
       {structures}
       bind:filteredStructures
@@ -206,5 +234,5 @@
         Chargement…
       {/if}
     </div>
-  {/if}
-</CenteredGrid>
+  </CenteredGrid>
+{/if}
