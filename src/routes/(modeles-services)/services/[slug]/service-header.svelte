@@ -9,7 +9,7 @@
 
 <div
   id="service-header"
-  class="relative gap-s16 lg:flex-row-reverse lg:justify-between"
+  class="relative gap-s16 print:gap-s0 lg:flex-row-reverse lg:justify-between"
 >
   <div class="mb-s48 print:mb-s0">
     <Breadcrumb
@@ -19,13 +19,11 @@
       {isDI}
     />
   </div>
-  <div class="flex items-baseline justify-between">
-    <h1 class="mb-s0 mr-s12 leading-[3rem] text-white print:text-france-blue">
-      {service.name}
-    </h1>
-  </div>
+  <h1 class="mb-s0 mr-s12 leading-[3rem] text-white print:text-france-blue">
+    {service.name}
+  </h1>
   <div
-    class="mb-s48 mt-s16 flex flex-col text-f18 text-white print:text-france-blue md:flex-row md:items-center"
+    class="mb-s32 mt-s16 flex flex-col text-f18 text-white print:mb-s8 print:text-france-blue md:flex-row md:items-center"
   >
     <div><strong>{capitalize(service.structureInfo.name)}</strong></div>
     {#if !isDI}
@@ -46,12 +44,10 @@
   </div>
 
   <div
-    class="mb-s32 flex flex-col text-f18 text-white print:text-france-blue md:flex-row md:items-center"
+    class="text-f18 text-white print:text-france-blue md:flex-row md:items-center"
   >
-    <div>
-      Périmètre : <strong
-        >{service.diffusionZoneDetailsDisplay || "Non renseigné"}</strong
-      >
-    </div>
+    Périmètre : <strong
+      >{service.diffusionZoneDetailsDisplay || "Non renseigné"}</strong
+    >
   </div>
 </div>

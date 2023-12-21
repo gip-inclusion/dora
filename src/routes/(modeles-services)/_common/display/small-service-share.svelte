@@ -1,10 +1,10 @@
 <script lang="ts">
   import { fly } from "svelte/transition";
   import { starSmileFillIcon, starSmileLineIcon } from "$lib/icons";
-  import { PDF_SERVICE_URL, CANONICAL_URL } from "$lib/env";
+  import { CANONICAL_URL } from "$lib/env";
   import { markPenIcon, checkIcon, downloadIcon, linkIcon } from "$lib/icons";
   import type { Service } from "$lib/types";
-  import { trackFeedback, trackPDFDownload } from "$lib/utils/plausible";
+  import { trackFeedback, trackPrintService } from "$lib/utils/plausible";
   import FeedbackModal from "$lib/components/specialized/services/feedback/feedback-modal.svelte";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import { browser } from "$app/environment";
@@ -12,11 +12,6 @@
 
   export let service: Service;
   export let isDI = false;
-
-  // PDF
-  export let pdfUrl = `${PDF_SERVICE_URL}/print/?page=${encodeURIComponent(
-    `/services/${service.slug}`
-  )}&name=${service.slug}.pdf`;
 
   // Suggérer une modification
   let feedbackModalIsOpen = false;
@@ -50,23 +45,21 @@
   </div>
 {/if}
 
+<div class="ml-s24 text-f16 text-gray-text print:hidden">
+  <button
+    class="flex text-left hover:text-magenta-cta"
+    on:click={() => {
+      trackPrintService(service);
+      print();
+    }}
+  >
+    <span class="mr-s10 h-s24 w-s24 fill-current">
+      {@html downloadIcon}
+    </span>
+    Imprimer ou télécharger en PDF</button
+  >
+</div>
 {#if service.status === "PUBLISHED"}
-  {#if !isDI}
-    <div class="ml-s24 text-f16 text-gray-text print:hidden">
-      <!-- Le `nofollow` est important ici, on ne veut pas que les robots provoquent la génération des PDFs -->
-      <a
-        href={pdfUrl}
-        class="flex hover:text-magenta-cta"
-        on:click={() => trackPDFDownload(service)}
-        rel="nofollow"
-      >
-        <span class="mr-s10 h-s24 w-s24 fill-current">
-          {@html downloadIcon}
-        </span>
-        Télécharger la fiche au format PDF
-      </a>
-    </div>
-  {/if}
   <div class="ml-s24 text-f16 text-gray-text print:hidden">
     <button
       class="flex hover:text-magenta-cta"

@@ -12,7 +12,7 @@
   export let noBackground = false;
   export let secondary = false;
   export let hoverUnderline = false;
-
+  export let canWrap = false;
   export let wFull = false;
 
   let paddingX: string, paddingY: string, textSize: string;
@@ -70,6 +70,7 @@
   class:w-full={wFull}
   class:hover:underline={hoverUnderline}
   aria-label={ariaLabel}
+  class:whitespace-nowrap={!canWrap}
 >
   {#if icon && !iconOnRight}
     <i
