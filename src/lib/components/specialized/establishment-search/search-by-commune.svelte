@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { externalLinkIcon } from "$lib/icons";
   import { getApiURL } from "$lib/utils/api";
   import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
@@ -6,10 +7,11 @@
   import type { Establishment, GeoApiValue } from "$lib/types";
 
   export let establishment;
-  export let isOwnStructure = true;
 
   export let onCityChange: (newCity: GeoApiValue | null) => void;
   export let onEstablishmentChange: (estab: Establishment | null) => void;
+
+  let queryText: string | undefined;
 
   let city: GeoApiValue | null;
 
@@ -55,25 +57,43 @@
     return [];
   }
 
-  const structureLabel = isOwnStructure
-    ? "Nom de votre structure"
-    : "Nom de la structure de votre partenaire";
+  let annuaireEntreprisePath: string;
+  $: {
+    annuaireEntreprisePath = "";
+    if (city?.code && queryText) {
+      const code = city.code;
+      const dept = code.slice(0, 2);
+      if (["75", "69", "13"].includes(dept)) {
+        annuaireEntreprisePath = `/rechercher?terme=${queryText}&cp_dep_type=dep&cp_dep=${dept}`;
+      } else {
+        annuaireEntreprisePath = `/rechercher?terme=${queryText}&cp_dep_type=insee&cp_dep=${code}`;
+      }
+    }
+  }
 </script>
 
-<FieldWrapper id="city" label="Commune" required vertical>
-  <CitySearch
-    id="city"
-    onChange={handleCityChange}
-    placeholder="Saisissez et sélectionnez le nom de la ville"
-  />
+<FieldWrapper
+  id="city"
+  label="Commune"
+  required
+  vertical
+  description="Ville où la structure mène ses activités ou où elle est officiellement immatriculée. Veuillez commencer à saisir le nom de la ville et choisir parmi les options qui apparaissent."
+>
+  <CitySearch id="city" onChange={handleCityChange} />
 </FieldWrapper>
 
-<FieldWrapper id="siret-select" label={structureLabel} required vertical>
+<FieldWrapper
+  id="siret-select"
+  label="Dénomination"
+  required
+  vertical
+  description="Veuillez commencer à saisir le nom de la structure et choisir parmi les options qui apparaissent."
+>
   <Select
     id="siret-select"
+    bind:searchText={queryText}
     onChange={handleEstablishmentChange}
     disabled={!city?.code}
-    placeholder="Commencez à saisir et choisissez dans la liste"
     hideArrow
     searchFunction={searchSirene}
     delay="200"
@@ -81,4 +101,22 @@
     postfixValueFunction={(item) => item.siret}
     minCharactersToSearch="3"
   />
+
+  <p class="pt-s4 text-f14">
+    Si vous avez du mal à la retrouver, consultez l’<a
+      target="_blank"
+      title="Ouverture dans une nouvelle fenêtre"
+      rel="noopener"
+      href={"https://annuaire-entreprises.data.gouv.fr" +
+        annuaireEntreprisePath}
+      class="inline-block h-full text-magenta-cta underline"
+      >Annuaire des entreprises
+      <span
+        class="inline-block h-s20 w-s20 fill-current pl-s4 pt-s6"
+        aria-hidden
+      >
+        {@html externalLinkIcon}
+      </span>
+    </a>
+  </p>
 </FieldWrapper>

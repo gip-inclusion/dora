@@ -66,7 +66,7 @@
                 bold
               />
               <span class="print:hidden">
-                Ce service est dépriorisé dans les résultats de recherche, il
+                ; ce service est dépriorisé dans les résultats de recherche, il
                 doit être actualisé pour gagner à nouveau en visibilité
               </span>
             </div>

@@ -133,17 +133,16 @@
     @apply border-t-gray-03;
   }
 
+  ::placeholder {
+    @apply !text-gray-text;
+  }
+
   .legend {
     @apply text-f14 leading-24 text-gray-text-alt2;
   }
 
   .break-word {
     word-break: break-word;
-  }
-
-  @page {
-    size: A4 portrait;
-    margin: 1cm;
   }
 
   .breakpoint-hack::before {
@@ -170,7 +169,7 @@
     }
   }
 
-  ::placeholder {
-    @apply !text-gray-text;
+  @page {
+    size: 26.25cm 37.125cm; /* A4 * 1.25, afin de réduire la taille de l'impression */
   }
 }

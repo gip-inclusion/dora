@@ -63,40 +63,38 @@
     </div>
 
     <div class="flex flex-1 flex-col gap-s24">
-      {#if $userInfo.isStaff}
+      {#if $userInfo.isStaff || $userInfo.isManager}
         <div class="mb-s24 rounded-md border border-gray-03 p-s24">
           <h2 class="mb-s20 text-f18 leading-20 text-gray-dark">Raccourcis</h2>
-
           <ul class="flex flex-col gap-s10">
-            <li>
-              <a
-                class="text-f14 font-bold text-magenta-cta hover:underline"
-                href="/structures/creer"
-              >
-                Créer une structure
-              </a>
-            </li>
-            <li>
-              <a
-                class="text-f14 font-bold text-magenta-cta hover:underline"
-                href="/admin"
-              >
-                Administration
-              </a>
-            </li>
+            {#if $userInfo.isStaff}
+              <li>
+                <a
+                  class="text-f14 font-bold text-magenta-cta hover:underline"
+                  href="/admin"
+                >
+                  Administration
+                </a>
+              </li>
+              <li>
+                <a
+                  class="text-f14 font-bold text-magenta-cta hover:underline"
+                  href="/admin/structures/creer"
+                >
+                  Créer une structure
+                </a>
+              </li>
+            {:else if $userInfo.isManager}
+              <li>
+                <a
+                  class="text-f14 font-bold text-magenta-cta hover:underline"
+                  href="/admin/structures"
+                >
+                  Tableau de bord département
+                </a>
+              </li>
+            {/if}
           </ul>
-        </div>
-      {:else if $userInfo.isManager}
-        <div class="mb-s24 rounded-md border border-gray-03 p-s24">
-          <h2 class="mb-s20 text-f18 leading-20 text-gray-dark">Raccourcis</h2>
-          <div class="flex flex-col gap-s8 lg:flex-row">
-            <a
-              class="text-f14 font-bold text-magenta-cta hover:underline"
-              href="/admin/structures"
-            >
-              Tableau de bord département
-            </a>
-          </div>
         </div>
       {/if}
 

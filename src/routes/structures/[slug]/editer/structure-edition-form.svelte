@@ -56,7 +56,7 @@
       <StructureEditionFields bind:structure {structuresOptions} />
     </Fieldset>
 
-    <div class="mt-s32 flex flex-col justify-end gap-s16 md:flex-row ">
+    <div class="mt-s32 flex flex-col justify-end gap-s16 md:flex-row">
       <LinkButton
         to="/structures/{structure.slug}"
         secondary

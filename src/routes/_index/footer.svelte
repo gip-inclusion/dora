@@ -6,7 +6,7 @@
   import { newspaperIcon } from "$lib/icons";
 </script>
 
-<hr class="border-t-gray-01" />
+<hr class="border-t-gray-01 print:hidden" />
 
 <CenteredGrid noPadding>
   <div

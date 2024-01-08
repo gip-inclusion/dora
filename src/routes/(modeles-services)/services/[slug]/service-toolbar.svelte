@@ -2,6 +2,7 @@
   import { browser } from "$app/environment";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
+  import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
   import ServiceStateUpdateSelect from "$lib/components/specialized/services/service-state-update-select.svelte";
   import SynchronizedIcon from "$lib/components/specialized/services/synchronized-icon.svelte";
   import { copyIcon2 } from "$lib/icons";
@@ -20,7 +21,12 @@
     service.updateStatus === "NOT_NEEDED" || !$token ? "bg-france-blue" : "";
 </script>
 
-<div id="service-update-status" class="relative">
+<div class="hidden print:block">
+  <CenteredGrid noPadding>
+    <RelativeDateLabel date={service.modificationDate} prefix="Actualisé le" />
+  </CenteredGrid>
+</div>
+<div id="service-update-status" class="relative print:hidden">
   {#if browser}
     <div>
       <CenteredGrid
@@ -57,7 +63,7 @@
 
   {#if !service.canWrite || service.updateStatus === "NOT_NEEDED" || service.status !== "PUBLISHED"}
     <div
-      class="m-auto max-w-6xl border border-t-0 border-r-0 border-l-0 border-gray-02"
+      class="m-auto max-w-6xl border border-l-0 border-r-0 border-t-0 border-gray-02"
     />
   {/if}
 

@@ -96,11 +96,11 @@
 >
   <div slot="prepend" class="px-s8 pt-s8" let:results>
     <button
-      class="flex w-full border-gray-02 py-s12 px-s8 text-f14 text-gray-text"
+      class="flex w-full border-gray-02 px-s8 py-s12 text-f14 text-gray-text"
       on:click|preventDefault|stopPropagation={searchCityFromLocation}
       class:border-b={results?.length}
     >
-      <span class="mr-s8 h-s24 w-s24 fill-current ">
+      <span class="mr-s8 h-s24 w-s24 fill-current">
         {@html pinDistanceIcon}
       </span>
 

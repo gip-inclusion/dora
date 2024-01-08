@@ -7,6 +7,7 @@
   export let sort = false;
   export let value: string | number | string[] | number[] | undefined =
     undefined;
+  export let searchText: string | undefined;
   export let disabled = false;
   export let readonly = false;
   export let placeholder = "";
@@ -43,6 +44,7 @@
   name={id}
   inputId={id}
   bind:value
+  bind:text={searchText}
   on:blur
   {localFiltering}
   {minCharactersToSearch}

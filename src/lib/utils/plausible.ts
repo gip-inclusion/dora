@@ -112,7 +112,7 @@ export function trackFeedback(service) {
   _track("suggestion", _getServiceProps(service, true));
 }
 
-export function trackPDFDownload(service) {
+export function trackPrintService(service) {
   _track("pdf-download", _getServiceProps(service, true));
 }
 

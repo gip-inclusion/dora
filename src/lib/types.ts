@@ -160,6 +160,7 @@ export interface Structure {
   email: string;
   fullDesc: string;
   hasAdmin: boolean;
+  numAdmins: number;
   hasBeenEdited: boolean;
   isAdmin: boolean;
   isMember: boolean;

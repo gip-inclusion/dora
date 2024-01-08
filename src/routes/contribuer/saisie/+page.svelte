@@ -66,7 +66,6 @@
       onEstablishmentChange={handleEstablishmentChange}
       onCityChange={handleStructureCityChange}
       bind:establishment
-      isOwnStructure={false}
     />
 
     <FormErrors />

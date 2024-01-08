@@ -62,3 +62,9 @@
     clearTimeout(timeoutFn);
   });
 </script>
+
+<style lang="postcss">
+  :global(.tally-popup) {
+    @apply print:!hidden;
+  }
+</style>
