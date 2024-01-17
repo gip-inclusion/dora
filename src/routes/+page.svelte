@@ -48,7 +48,7 @@
 </CenteredGrid>
 
 <CenteredGrid>
-  <Notice title="L’inclusion aujourd'hui, les défis de demain" type="success">
+  <Notice title="L’inclusion aujourd’hui, les défis de demain" type="success">
     <p class="text-f14">
       Le jeudi 01 février 2024, les professionnels de l’inclusion ont
       rendez-vous de 09h à 17h<br />pour un événement en ligne incontournable.
