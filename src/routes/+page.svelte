@@ -3,12 +3,13 @@
   import illuMobiliser from "$lib/assets/illustrations/illu-mobiliser.svg";
   import illuRecenser from "$lib/assets/illustrations/illu-recenser.svg";
   import logoDataInclusion from "$lib/assets/logos/logo-data-inclusion.svg";
-
+  import Notice from "$lib/components/display/notice.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
   import PartnerList from "$lib/components/specialized/partner-list.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
+  import { externalLinkIcon } from "$lib/icons";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -47,6 +48,23 @@
 </CenteredGrid>
 
 <CenteredGrid>
+  <Notice title="L’inclusion aujourd'hui, les défis de demain" type="success">
+    <p class="text-f14">
+      Le jeudi 01 février 2024, les professionnels de l’inclusion ont
+      rendez-vous de 09h à 17h<br />pour un événement en ligne incontournable.
+    </p>
+    <div slot="button">
+      <LinkButton
+        to="https://www.inclusion-demain.fr/"
+        label="Je m’inscris"
+        icon={externalLinkIcon}
+        iconOnRight
+        small
+        otherTab
+      />
+    </div>
+  </Notice>
+  <div class="mt-s40"></div>
   <div class="flex flex-col gap-s24">
     <div class="text-center">
       <h2 class="text-france-blue">
