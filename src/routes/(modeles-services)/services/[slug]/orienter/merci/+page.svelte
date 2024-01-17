@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { arrowLeftLineIcon, flashLightIcon } from "$lib/icons";
   import Layout from "../orientation-layout.svelte";
@@ -11,6 +12,10 @@
 
   const showContactBeneficiary = !$orientation.beneficiaryEmail;
   $orientation = initEmptyOrientation();
+  onMount(() => {
+    window._mtm = window._mtm || [];
+    window._mtm.push({ event: "orienter/merci" });
+  });
 </script>
 
 <Layout {data}>
