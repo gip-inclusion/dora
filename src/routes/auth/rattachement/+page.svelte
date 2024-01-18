@@ -33,7 +33,8 @@
         Authorization: `Token ${get(token)}`,
       },
       body: JSON.stringify({
-        siret: establishment.siret,
+        siret: establishment.slug ? undefined : establishment.siret,
+        structureSlug: establishment.slug,
         cguVersion: CGU_VERSION,
       }),
     });
