@@ -23,11 +23,11 @@
           {/if}
         </div>
         <div class="flex items-center gap-s8">
-          {#if result.distance != null && result.distance >= 1 && result.distance <= 100}
+          {#if result.distance != null && result.distance && result.distance <= 100}
             <div
               class="whitespace-nowrap rounded-xl bg-france-blue px-s10 py-s4 text-f14 font-bold text-white"
             >
-              à&nbsp;{Math.round(result.distance)}&nbsp;km
+              à&nbsp;{Math.round(result.distance * 10) / 10}&nbsp;km
             </div>
           {/if}
 

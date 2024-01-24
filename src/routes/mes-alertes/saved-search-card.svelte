@@ -6,20 +6,22 @@
     updateSavedSearchFrequency,
     deleteSavedSearch,
   } from "$lib/requests/saved-search";
-  import { refreshUserInfo } from "$lib/utils/auth";
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import SavedSearchDescription from "./description.svelte";
   import SavedSearchTitle from "./title.svelte";
 
   export let search: SavedSearch;
+  export let onDelete: (searchId: number) => void;
   let requesting = false;
 
-  async function doDeleteAlert() {
+  async function doDelete() {
     requesting = true;
 
     await deleteSavedSearch(search.id);
-    await refreshUserInfo();
+    if (onDelete) {
+      onDelete(search.id);
+    }
 
     requesting = false;
   }
@@ -31,7 +33,7 @@
     requesting = true;
     try {
       await updateSavedSearchFrequency(search.id, frequencyValue);
-      await refreshUserInfo();
+      search.frequency = frequencyValue;
     } finally {
       requesting = false;
     }
@@ -47,7 +49,7 @@
   <button
     class="absolute right-s32 top-s40 text-magenta-cta"
     disabled={requesting}
-    on:click={doDeleteAlert}
+    on:click={doDelete}
   >
     <span
       class="mx-auto mb-s12 block h-s24 w-s24 fill-current"

@@ -2,7 +2,7 @@
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
-  import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
+  import Select from "$lib/components/inputs/select/select.svelte";
 
   import {
     arrowDownSIcon,
@@ -29,14 +29,18 @@
   import { getQueryString } from "$lib/utils/service-search";
   import { onMount } from "svelte";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
+  import LinkButton from "../display/link-button.svelte";
   import {
-    isCurrentSearchInUserSavedSearches,
+    getSavedSearchQueryString,
     saveSearch,
   } from "$lib/requests/saved-search";
 
   export let servicesOptions: ServicesOptions;
-  export let cityCode;
-  export let cityLabel;
+  export let cityCode: string | undefined = undefined;
+  export let cityLabel: string | undefined = undefined;
+  export let label: string | undefined = undefined;
+  export let lon: number | undefined = undefined;
+  export let lat: number | undefined = undefined;
   export let categoryId: string | undefined = undefined;
   export let subCategoryIds: string[] = [];
   export let showDeploymentWarning = true;
@@ -48,7 +52,6 @@
   let requestingSave = false;
   let refreshDisabled = true;
   const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
-  let cityChoiceList;
   let subCategories: Choice[] = [];
 
   $: query = getQueryString({
@@ -56,13 +59,58 @@
     subCategoryIds: subCategoryIds.filter((value) => !value.endsWith("--all")),
     cityCode,
     cityLabel,
+    label,
     kindIds,
     feeConditions,
+    lon,
+    lat,
   });
 
   const categories = servicesOptions.categories
     ? associateIconToCategory(sortCategory(servicesOptions.categories))
     : [];
+
+  function getCityLabel(address) {
+    return `${address.properties.city} (${getDepartmentFromCityCode(
+      address.properties.citycode
+    )})`;
+  }
+
+  function getAddressLabel(address) {
+    return address.properties.type === "municipality"
+      ? getCityLabel(address)
+      : address.properties.label;
+  }
+
+  const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
+
+  async function searchAddress(addrQuery) {
+    const url = `${banAPIUrl}?q=${encodeURIComponent(addrQuery)}&limit=10`;
+    const response = await fetch(url);
+    const jsonResponse = await response.json();
+    const results = jsonResponse.features.map((feature) => ({
+      value: feature,
+      label: getAddressLabel(feature),
+    }));
+    return results;
+  }
+
+  function enableRefreshButton() {
+    refreshDisabled = false;
+  }
+
+  function handleAddressChange(address) {
+    if (address) {
+      const props = address.properties;
+      cityCode = props.citycode;
+      cityLabel = getCityLabel(address);
+      label = getAddressLabel(address);
+      [lon, lat] = address.geometry.coordinates;
+      enableRefreshButton();
+    } else {
+      cityCode = cityLabel = label = lon = lat = undefined;
+    }
+  }
 
   function handleSearch() {
     refreshDisabled = true;
@@ -81,10 +129,6 @@
     });
     await refreshUserInfo();
     requestingSave = false;
-  }
-
-  function enableRefreshButton() {
-    refreshDisabled = false;
   }
 
   function handleCategoryChange(clearSubCategories = false) {
@@ -111,6 +155,27 @@
   onMount(() => {
     handleCategoryChange();
   });
+
+  let currentSearchWasAlreadySaved;
+  $: {
+    // Saved searches don't store the street address neither lat/lon
+    const currentShortQueryString = getQueryString({
+      categoryIds: [categoryId ? categoryId : ""],
+      subCategoryIds: subCategoryIds.filter(
+        (value) => !value.endsWith("--all")
+      ),
+      cityCode,
+      cityLabel,
+      label: undefined,
+      kindIds,
+      feeConditions,
+    });
+    const userSavedSearches = $userInfo?.savedSearches || [];
+    const result = userSavedSearches.some(
+      (search) => getSavedSearchQueryString(search) === currentShortQueryString
+    );
+    currentSearchWasAlreadySaved = result;
+  }
 </script>
 
 <svelte:window bind:innerWidth />
@@ -131,22 +196,17 @@
               Lieu
               <span class="text-error">*</span>
             </label>
-
-            <CitySearch
-              id="city"
-              initialValue={cityLabel}
-              bind:value={cityChoiceList}
-              placeholder="Rechercher par lieu : ville"
-              onChange={(city) => {
-                cityCode = city?.code;
-                cityLabel = `${city?.name} (${getDepartmentFromCityCode(
-                  city?.code
-                )})`;
-
-                enableRefreshButton();
-              }}
+            <Select
+              id="address"
+              bind:searchText={label}
+              onChange={handleAddressChange}
+              hideArrow
+              searchFunction={searchAddress}
+              delay="200"
+              localFiltering={false}
+              minCharactersToSearch="3"
+              placeholder="Lieu de recherche : adresse ou ville"
             />
-
             <div
               class="absolute right-s12 top-s12 z-10 h-s24 w-s24 text-gray-dark"
             >
@@ -154,9 +214,7 @@
                 <button
                   class="inline-block h-s24 w-s24"
                   on:click={() => {
-                    cityCode = "";
-                    cityLabel = "";
-                    cityChoiceList = {};
+                    handleAddressChange(null);
                   }}
                 >
                   <span class="h-s24 w-s24 fill-current text-gray-text-alt">
@@ -292,17 +350,14 @@
         label="Actualiser la recherche"
         disabled={!cityCode || refreshDisabled}
         on:click={handleSearch}
-        preventDefaultOnMouseDown
       />
 
-      {#if isCurrentSearchInUserSavedSearches($userInfo, query)}
-        <Button
+      {#if currentSearchWasAlreadySaved}
+        <LinkButton
+          to="/mes-alertes"
           extraClass="h-s48"
           secondary
-          label="Alerte déjà créée"
-          disabled
-          on:click={doSaveSearch}
-          preventDefaultOnMouseDown
+          label="Voir mes alertes"
         />
       {:else}
         <Button
@@ -311,7 +366,6 @@
           label="Créer une alerte"
           disabled={!cityCode || requestingSave}
           on:click={doSaveSearch}
-          preventDefaultOnMouseDown
         />
       {/if}
     </div>

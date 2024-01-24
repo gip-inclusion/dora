@@ -33,6 +33,7 @@
     servicesOptions={data.servicesOptions}
     cityCode={data.cityCode}
     cityLabel={data.cityLabel}
+    label={data.cityLabel}
   />
 
   <div class="mb-s16 mt-s32 text-center text-f16">

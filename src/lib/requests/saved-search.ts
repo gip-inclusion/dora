@@ -28,7 +28,7 @@ export async function saveSearch(
 }
 
 export async function updateSavedSearchFrequency(
-  savedSearchId: string,
+  savedSearchId: number,
   frequency: SavedSearchNotificationFrequency
 ) {
   const url = `${getApiURL()}/saved-searches/${savedSearchId}/`;
@@ -48,7 +48,7 @@ export async function updateSavedSearchFrequency(
   }
 }
 
-export async function deleteSavedSearch(savedSearchId: string) {
+export async function deleteSavedSearch(savedSearchId: number) {
   const url = `${getApiURL()}/saved-searches/${savedSearchId}/`;
   const method = "DELETE";
 
@@ -81,18 +81,8 @@ export function getSavedSearchQueryString(savedSearch: SavedSearch) {
     subCategoryIds: savedSearch.subcategories,
     cityCode: savedSearch.cityCode,
     cityLabel: savedSearch.cityLabel,
+    label: savedSearch.label,
     kindIds: savedSearch.kinds,
     feeConditions: savedSearch.fees,
   });
-}
-
-export function isCurrentSearchInUserSavedSearches(
-  userInfo,
-  currentQuery
-): boolean {
-  const userSavedSearches = userInfo?.savedSearches || [];
-
-  return userSavedSearches.some(
-    (search) => getSavedSearchQueryString(search) === currentQuery
-  );
 }

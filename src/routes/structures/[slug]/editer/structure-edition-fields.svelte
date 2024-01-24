@@ -17,9 +17,9 @@
     const department = getDepartmentFromCityCode(struct.cityCode);
     const where = encodeURIComponent(`${struct.city} (${department})`);
     const lat = encodeURIComponent(struct.latitude);
-    const long = encodeURIComponent(struct.longitude);
+    const lon = encodeURIComponent(struct.longitude);
     const code = encodeURIComponent(struct.cityCode);
-    return `https://acceslibre.beta.gouv.fr/recherche/?what=&where=${where}&lat=${lat}&lon=${long}&code=${code}`;
+    return `https://acceslibre.beta.gouv.fr/recherche/?what=&where=${where}&lat=${lat}&lon=${lon}&code=${code}`;
   }
 
   $: accesslibreUrl = getAccessLibreUrl(structure);

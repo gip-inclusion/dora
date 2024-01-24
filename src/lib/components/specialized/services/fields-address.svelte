@@ -17,10 +17,10 @@
     const props = address?.properties;
     const coords = address?.geometry.coordinates;
     const lat = coords?.[1];
-    const long = coords?.[0];
+    const lon = coords?.[0];
     entity.address1 = props?.name;
     entity.postalCode = props?.postcode;
-    entity.longitude = long;
+    entity.longitude = lon;
     entity.latitude = lat;
   }
 

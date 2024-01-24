@@ -308,8 +308,11 @@ export interface SearchQuery {
   subCategoryIds: string[];
   cityCode: string;
   cityLabel: string;
+  label?: string;
   kindIds: ServiceKind[];
   feeConditions: FeeCondition[];
+  lat?: number;
+  lon?: number;
 }
 
 export interface ServiceSearchResult {
@@ -491,6 +494,7 @@ export interface SavedSearch {
   creationDate: string;
   cityCode: string;
   cityLabel: string;
+  label: string;
   category: string;
   categoryDisplay: string;
   subcategories: string[];

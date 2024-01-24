@@ -63,6 +63,9 @@
       servicesOptions={data.servicesOptions}
       cityCode={data.cityCode}
       cityLabel={data.cityLabel}
+      label={data.label}
+      lat={data.lat}
+      lon={data.lon}
       kindIds={data.kindIds}
       feeConditions={data.feeConditions}
       categoryId={data.categoryIds[0]}

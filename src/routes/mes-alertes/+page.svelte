@@ -4,11 +4,31 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { externalLinkIcon, starSmileLineIcon } from "$lib/icons";
+  import type { SavedSearch } from "$lib/types";
+  import { getApiURL } from "$lib/utils/api";
   import { userInfo } from "$lib/utils/auth";
+  import { fetchData } from "$lib/utils/misc";
+  import { onMount } from "svelte";
   import SavedSearchCard from "./saved-search-card.svelte";
 
-  export let data;
-  const { savedSearches } = data;
+  let savedSearches: SavedSearch[] | undefined = undefined;
+
+  async function getSavedSearches() {
+    const url = `${getApiURL()}/saved-searches/`;
+    const result = await fetchData(url);
+    if (result.ok) {
+      return result.data as Array<SavedSearch>;
+    }
+    return [];
+  }
+
+  function handleDelete(searchId: number) {
+    savedSearches = savedSearches?.filter((search) => search.id !== searchId);
+  }
+
+  onMount(async () => {
+    savedSearches = await getSavedSearches();
+  });
 </script>
 
 <EnsureLoggedIn>
@@ -18,8 +38,9 @@
     <div class="mb-s32">
       <Breadcrumb currentLocation="saved-searches" dark />
     </div>
-
-    {#if savedSearches.length}
+    {#if savedSearches == null}
+      <p class="mb-s40 text-f16 text-gray-dark">Chargement…</p>
+    {:else if savedSearches.length}
       <p class="mb-s40 text-f21 font-bold text-gray-dark">
         {$userInfo.savedSearches.length} alerte{$userInfo.savedSearches.length >
         1
@@ -28,7 +49,7 @@
       </p>
       <div class="flex flex-col gap-s16">
         {#each savedSearches as search}
-          <SavedSearchCard {search} />
+          <SavedSearchCard {search} onDelete={handleDelete} />
         {/each}
       </div>
     {:else}
