@@ -205,7 +205,7 @@
               delay="200"
               localFiltering={false}
               minCharactersToSearch="3"
-              placeholder="Lieu de recherche : adresse ou ville"
+              placeholder="1 rue de l'Espoir, 33000 Bordeaux"
             />
             <div
               class="absolute right-s12 top-s12 z-10 h-s24 w-s24 text-gray-dark"
