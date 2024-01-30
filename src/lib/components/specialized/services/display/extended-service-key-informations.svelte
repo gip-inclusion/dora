@@ -59,7 +59,7 @@
   {/if}
 
   {#if display === "sidebar"}
-    <hr class="mt-s20 mb-s10" />
+    <hr class="mb-s10 mt-s20" />
   {/if}
 
   {#if service.feeCondition && isNotFreeService(service.feeCondition)}
@@ -73,7 +73,9 @@
       <p class="block">
         {getLabelFromValue(service.feeCondition, servicesOptions.feeConditions)}
       </p>
-      <p class="block">{service.feeDetails}</p>
+      <p class="block">
+        {service.feeDetails != null ? service.feeDetails : "Non renseigné"}
+      </p>
     </div>
   {/if}
 
@@ -138,7 +140,7 @@
 
 <style lang="postcss">
   h3 {
-    @apply mt-s10 mb-s2 flex items-center text-f17;
+    @apply mb-s2 mt-s10 flex items-center text-f17;
   }
   p {
     @apply m-s0 text-f16 text-gray-text;
