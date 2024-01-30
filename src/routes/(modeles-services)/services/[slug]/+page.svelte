@@ -46,7 +46,7 @@
 
 {#if data.service}
   <CenteredGrid bgColor="bg-france-blue print:bg-white">
-    <ServiceHeader service={data.service} />
+    <ServiceHeader service={data.service} isDI={data.isDI} />
   </CenteredGrid>
 
   <div>
@@ -57,7 +57,11 @@
     />
   </div>
 
-  <ServiceBody service={data.service} servicesOptions={data.servicesOptions} />
+  <ServiceBody
+    service={data.service}
+    servicesOptions={data.servicesOptions}
+    isDI={data.isDI}
+  />
 
   {#if browser}
     {#if data.service.canWrite}

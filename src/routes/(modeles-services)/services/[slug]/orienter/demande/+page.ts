@@ -10,11 +10,11 @@ import { validate } from "$lib/validation/validation";
 
 export const load = async ({ parent }) => {
   const data = await parent();
-  const { service, servicesOptions } = data;
+  const { service, servicesOptions, isDI } = data;
 
   const orientation = get(orientationStore);
   if (!orientation.firstStepDone) {
-    goto(`/services/${service.slug}/orienter`);
+    goto(`/services/${isDI ? "di--" : ""}${service.slug}/orienter`);
     return {};
   }
 
@@ -33,7 +33,7 @@ export const load = async ({ parent }) => {
   }).valid;
 
   if (!isValid) {
-    goto(`/services/${service.slug}/orienter`);
+    goto(`/services/${isDI ? "di--" : ""}${service.slug}/orienter`);
     return {};
   }
 

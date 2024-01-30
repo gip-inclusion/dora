@@ -31,7 +31,7 @@
   }
 
   // Justificatifs à fournir
-  const credentialsDisplay = service.credentialsDisplay.filter(
+  const credentialsDisplay = (service.credentialsDisplay || []).filter(
     (elt) => !elt.toLowerCase().includes("vitale")
   );
 </script>
@@ -99,7 +99,7 @@
     </div>
   </Fieldset>
 
-  {#if service.onlineForm || service.formsInfo.length || credentialsDisplay.length}
+  {#if service.onlineForm || service.formsInfo?.length || credentialsDisplay?.length}
     <Fieldset title="Documents et justificatifs requis">
       <Notice
         type="info"

@@ -33,7 +33,9 @@
   }
 
   function handleSuccess(_result) {
-    goto(`/services/${service.slug}/orienter/demande`);
+    goto(
+      `/services/${data.isDI ? "di--" : ""}${service.slug}/orienter/demande`
+    );
   }
 </script>
 
@@ -71,7 +73,7 @@
   <StickyFormSubmissionRow justifyBetween>
     <LinkButton
       icon={arrowLeftLineIcon}
-      to="/services/{service.slug}"
+      to="/services/{data.isDI ? 'di--' : ''}{service.slug}"
       label="Retour à la fiche"
       secondary
     />

@@ -103,9 +103,8 @@ export function computeConcernedPublicChoices(service: Service): {
   concernedPublicRequired: boolean;
 } {
   const excludedConcernedPublicLabels = ["Autre", "Tous publics"];
-
   const concernedPublicChoices = [
-    ...service.concernedPublicDisplay
+    ...(service.concernedPublicDisplay || [])
       .map((value) => ({ value: value, label: value }))
       .filter((elt) => !excludedConcernedPublicLabels.includes(elt.value)),
     { value: "Autre", label: "Autre (à préciser)" },
@@ -125,8 +124,8 @@ export function computeRequirementsChoices(service: Service): {
   const excludedRequirementLabels = ["Aucun", "Sans condition"];
 
   const requirementChoices = [
-    ...service.requirementsDisplay,
-    ...service.accessConditionsDisplay,
+    ...(service.requirementsDisplay || []),
+    ...(service.accessConditionsDisplay || []),
   ]
     .map((value) => ({ value: value, label: value }))
     .filter((elt) => !excludedRequirementLabels.includes(elt.value));
