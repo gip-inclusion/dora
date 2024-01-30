@@ -40,7 +40,9 @@
   {#if service.feeCondition && isNotFreeService(service.feeCondition)}
     <div class="mb-s12">
       <Notice type="info" title="Frais à charge du bénéficiaire">
-        {service.feeDetails != null ? service.feeDetails : "Non renseigné"}
+        {service.feeDetails != null
+          ? service.feeDetails
+          : "La structure n’a pas précisé le montant des frais"}
       </Notice>
     </div>
   {/if}

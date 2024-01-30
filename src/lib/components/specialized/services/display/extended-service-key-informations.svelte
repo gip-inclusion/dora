@@ -74,7 +74,9 @@
         {getLabelFromValue(service.feeCondition, servicesOptions.feeConditions)}
       </p>
       <p class="block">
-        {service.feeDetails != null ? service.feeDetails : "Non renseigné"}
+        {service.feeDetails != null
+          ? service.feeDetails
+          : "La structure n’a pas précisé le montant des frais"}
       </p>
     </div>
   {/if}
