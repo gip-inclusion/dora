@@ -205,7 +205,7 @@
               delay="200"
               localFiltering={false}
               minCharactersToSearch="3"
-              placeholder="1 rue de l'Espoir, 33000 Bordeaux"
+              placeholder="Lieu ; exemple : 1 rue de l’Espoir 33000 Bordeaux"
             />
             <div
               class="absolute right-s12 top-s12 z-10 h-s24 w-s24 text-gray-dark"
@@ -222,10 +222,6 @@
                   </span>
                   <span class="sr-only">Supprimer la ville sélectionnée</span>
                 </button>
-              {:else}
-                <span class="h-s24 w-s24 fill-current">
-                  {@html arrowDownSIcon}
-                </span>
               {/if}
             </div>
           </div>
@@ -247,7 +243,7 @@
             style="search"
             label="Thématiques"
             name="categories"
-            placeholder="Recherche par thématiques"
+            placeholder="Sélectionnez une thématique"
             bind:value={categoryId}
             choices={categories}
             onChange={() => handleCategoryChange(true)}
