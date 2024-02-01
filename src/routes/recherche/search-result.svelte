@@ -11,7 +11,7 @@
 
   $: onSite =
     result.locationKinds.includes("en-presentiel") &&
-    result.distance &&
+    result.distance != null &&
     result.distance <= 50;
   $: remote = result.locationKinds.includes("a-distance");
 </script>
@@ -45,11 +45,13 @@
             {result.address1}{#if result.address2}, {result.address2}{/if},
             {result.postalCode}&nbsp;{result.city}
           </div>
-          <div class="tag">
-            à&nbsp;{result.distance < 10
-              ? Math.round(result.distance * 10) / 10
-              : Math.round(result.distance)}&nbsp;km
-          </div>
+          {#if result.distance > 0}
+            <div class="tag">
+              à&nbsp;{result.distance < 10
+                ? Math.round(result.distance * 10) / 10
+                : Math.round(result.distance)}&nbsp;km
+            </div>
+          {/if}
         {/if}
         {#if remote}
           <div class="tag">
