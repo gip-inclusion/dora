@@ -96,6 +96,9 @@ export function trackOrientation(orientation, url) {
   if (browser) {
     logAnalyticsEvent("orientation", url.pathname, {
       orientation: orientation.id,
+      diStructureName: orientation.diStructureName,
+      diServiceId: orientation.diServiceId,
+      diServiceName: orientation.diServiceName,
     });
   }
 }
