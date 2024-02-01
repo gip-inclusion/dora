@@ -37,7 +37,7 @@ import logoActionLogement from "$lib/assets/logos/partners/logo_actionlogement.p
 import logoArdennes from "$lib/assets/logos/partners/logo_ardennes.png";
 import logoCAF from "$lib/assets/logos/partners/logo_caf.png";
 import logoLaReunion from "$lib/assets/logos/partners/logo_lareunion.png";
-import logoPoleEmploi from "$lib/assets/logos/partners/logo_poleemploi.png";
+import logoFranceTravail from "$lib/assets/logos/partners/logo_francetravail.png";
 
 import type { Partner } from "$lib/types";
 
@@ -92,9 +92,9 @@ export const PARTNERS: Partner[] = [
   },
   { name: "Action Logement", img: logoActionLogement },
   { name: "Conseil Départemental des Ardennes", img: logoArdennes },
-  { name: "Caisse d‘allocations familiales", img: logoCAF },
+  { name: "Caisse d’allocations familiales", img: logoCAF },
   { name: "Département de la Réunion", img: logoLaReunion },
-  { name: "Pôle emploi", img: logoPoleEmploi },
+  { name: "France Travail", img: logoFranceTravail },
 ];
 
 export function getPartners(limit?: number): Partner[] {
