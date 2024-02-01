@@ -4,7 +4,6 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
-  import { SIREN_POLE_EMPLOI } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
   import { addIcon } from "$lib/icons";
   import { getStructuresAdmin } from "$lib/requests/admin";
@@ -35,12 +34,6 @@
   let selectedStructureSlug: string | null = null;
 
   function filterIgnoredStructures(structs) {
-    function isOrphanPoleEmploiStruct(struct) {
-      return (
-        struct.siret?.slice(0, 9) === SIREN_POLE_EMPLOI && isOrphan(struct)
-      );
-    }
-
     function isOrphanOrWaitingOrToActivateSIAE(struct) {
       return (
         ["ETTI", "ACI", "AI", "EI"].includes(struct.typology) &&
@@ -52,8 +45,7 @@
       (struct) =>
         isObsolete(struct) ||
         toModerate(struct) ||
-        (!isOrphanPoleEmploiStruct(struct) &&
-          !isOrphanOrWaitingOrToActivateSIAE(struct))
+        !isOrphanOrWaitingOrToActivateSIAE(struct)
     );
   }
   async function handleDepartmentChange(dept: GeoApiValue) {
