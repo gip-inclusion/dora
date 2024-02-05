@@ -24,7 +24,7 @@
   let requesting = false;
 
   // Fichiers à uploader
-  const credentials = service.credentialsDisplay
+  const credentials = (service.credentialsDisplay || [])
     .filter(
       (elt) => !elt.toLowerCase().includes("vitale") && elt.label !== "Aucun"
     )
@@ -33,7 +33,7 @@
   credentials.forEach((cred) => {
     $orientation.attachments[cred.label] = [];
   });
-  service.formsInfo.forEach((form) => {
+  (service.formsInfo || []).forEach((form) => {
     $orientation.attachments[form.name] = [];
   });
 
@@ -55,14 +55,20 @@
       },
       body: JSON.stringify({
         ...validatedData,
-        serviceSlug: service.slug,
+        serviceSlug: data.isDI ? null : service.slug,
+        diServiceId: data.isDI ? service.slug : "",
+        diServiceName: data.isDI ? service.name || "" : "",
+        diContactEmail: data.isDI ? service.contactEmail || "" : "",
+        diContactName: data.isDI ? service.contactName || "" : "",
+        diContactPhone: data.isDI ? service.contactPhone || "" : "",
+        diStructureName: data.isDI ? service.structureInfo.name || "" : "",
         beneficiaryAttachments,
       }),
     });
   }
 
   function handleSuccess(_result) {
-    goto(`/services/${service.slug}/orienter/merci`);
+    goto(`/services/${data.isDI ? "di--" : ""}${service.slug}/orienter/merci`);
   }
 </script>
 

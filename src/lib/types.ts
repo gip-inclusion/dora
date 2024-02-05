@@ -58,8 +58,8 @@ export interface StructureService {
   diffusionZoneTypeDisplay: string;
   isAvailable: boolean;
   isCumulative: boolean;
-  locationKinds: LocationKind;
-  locationKindsDisplay: string;
+  locationKinds: LocationKind[];
+  locationKindsDisplay: string[];
   model: string;
   modelChanged: boolean;
   modelName: boolean;
@@ -308,13 +308,19 @@ export interface SearchQuery {
   subCategoryIds: string[];
   cityCode: string;
   cityLabel: string;
+  label?: string;
   kindIds: ServiceKind[];
   feeConditions: FeeCondition[];
+  lat?: number;
+  lon?: number;
 }
 
 export interface ServiceSearchResult {
   distance: number;
-  location: string;
+  address1: string;
+  address2: string;
+  postalCode: string;
+  city: string;
   diffusionZoneType: string;
   modificationDate: string;
   name: string;
@@ -323,6 +329,7 @@ export interface ServiceSearchResult {
   structure: string;
   status: ServiceStatus;
   updateStatus: ServiceUpdateStatus;
+  locationKinds: LocationKind[];
   structureInfo: {
     address1: string;
     address2: string;
@@ -334,6 +341,7 @@ export interface ServiceSearchResult {
     slug: string;
     url: string;
   };
+  type: "di" | undefined;
 }
 
 export interface FileInfo {
@@ -458,7 +466,7 @@ export interface ShortService {
   status: ServiceStatus;
   structure: string;
   structureInfo: ServiceStructure;
-  locationKinds: LocationKind;
+  locationKinds: LocationKind[];
   useInclusionNumeriqueScheme: boolean;
   updateStatus: ServiceUpdateStatus;
 }
@@ -491,6 +499,7 @@ export interface SavedSearch {
   creationDate: string;
   cityCode: string;
   cityLabel: string;
+  label: string;
   category: string;
   categoryDisplay: string;
   subcategories: string[];

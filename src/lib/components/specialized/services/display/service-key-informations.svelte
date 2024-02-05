@@ -59,7 +59,7 @@
     </div>
   {/if}
 
-  <hr class="mt-s20 mb-s10" />
+  <hr class="mb-s10 mt-s20" />
 
   <div>
     <h3 class="!mb-s10 text-f17">
@@ -71,7 +71,7 @@
     <SubcategoryList {service} {servicesOptions} />
   </div>
 
-  <hr class="mt-s20 mb-s10" />
+  <hr class="mb-s10 mt-s20" />
 
   <div class="flex">
     <div class="flex-1">
@@ -107,12 +107,16 @@
             servicesOptions.feeConditions
           )}
         </p>
-        <p class="block">{service.feeDetails}</p>
+        <p class="block">
+          {service.feeDetails != null
+            ? service.feeDetails
+            : "La structure n’a pas précisé le montant des frais"}
+        </p>
       </div>
     {/if}
   </div>
 
-  <hr class="mt-s20 mb-s10" />
+  <hr class="mb-s10 mt-s20" />
 
   <div class="flex w-full gap-s32">
     <div class="flex-1">
@@ -177,7 +181,7 @@
 
 <style lang="postcss">
   h3 {
-    @apply mt-s10 mb-s2 flex items-center text-f17;
+    @apply mb-s2 mt-s10 flex items-center text-f17;
   }
   p {
     @apply m-s0 text-f16 text-gray-text;

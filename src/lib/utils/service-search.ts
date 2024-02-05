@@ -8,8 +8,11 @@ export function getQueryString({
   subCategoryIds,
   cityCode,
   cityLabel,
+  label,
   feeConditions,
   kindIds,
+  lon,
+  lat,
 }: SearchQuery) {
   const parameters = {
     cats: categoryIds.join(","),
@@ -17,14 +20,17 @@ export function getQueryString({
     city: cityCode,
     // eslint-disable-next-line id-length
     cl: cityLabel,
+    // eslint-disable-next-line id-length
+    l: label,
     kinds: kindIds.join(","),
     fees: feeConditions.join(","),
+    lat: lat,
+    lon: lon,
   };
   const query = Object.entries(parameters)
     .filter(([_key, value]) => !!value)
     .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
     .join("&");
-
   return query;
 }
 

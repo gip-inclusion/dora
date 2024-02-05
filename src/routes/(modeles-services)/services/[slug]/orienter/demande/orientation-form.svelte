@@ -241,7 +241,7 @@
     />
   </Fieldset>
 
-  {#if service.formsInfo.length || credentials.length}
+  {#if service.formsInfo?.length || credentials.length}
     <Fieldset title="Documents et justificatifs requis">
       <Notice title="Mention d’information" titleLevel="h3" type="warning">
         <p class="m-s0 text-f14 text-gray-text">

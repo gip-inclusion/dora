@@ -31,7 +31,7 @@
   }
 
   // Justificatifs à fournir
-  const credentialsDisplay = service.credentialsDisplay.filter(
+  const credentialsDisplay = (service.credentialsDisplay || []).filter(
     (elt) => !elt.toLowerCase().includes("vitale")
   );
 </script>
@@ -40,7 +40,9 @@
   {#if service.feeCondition && isNotFreeService(service.feeCondition)}
     <div class="mb-s12">
       <Notice type="info" title="Frais à charge du bénéficiaire">
-        {service.feeDetails}
+        {service.feeDetails != null
+          ? service.feeDetails
+          : "La structure n’a pas précisé le montant des frais"}
       </Notice>
     </div>
   {/if}
@@ -99,7 +101,7 @@
     </div>
   </Fieldset>
 
-  {#if service.onlineForm || service.formsInfo.length || credentialsDisplay.length}
+  {#if service.onlineForm || service.formsInfo?.length || credentialsDisplay?.length}
     <Fieldset title="Documents et justificatifs requis">
       <Notice
         type="info"

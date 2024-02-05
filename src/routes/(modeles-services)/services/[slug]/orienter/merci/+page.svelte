@@ -53,7 +53,7 @@
       <LinkButton
         icon={arrowLeftLineIcon}
         label="Retour à la fiche"
-        to="/services/{data.service.slug}"
+        to="/services/{data.isDI ? 'di--' : ''}{data.service.slug}"
         noBackground
       />
     </div>
