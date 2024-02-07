@@ -17,7 +17,7 @@
 
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");
-    trackService(data.service, $page.url, searchId);
+    trackService(data.service, $page.url, searchId, data.isDI);
   });
 
   async function handleRefresh() {
