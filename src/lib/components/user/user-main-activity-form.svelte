@@ -17,16 +17,16 @@
     {
       value: "accompagnateur",
       label:
-        "Je consulte les offres d‘insertion de mon territoire dans le but de rester informé•e des opportunités existantes et accompagner/orienter mes bénéficiaires",
+        "Je consulte les offres d’insertion de mon territoire dans le but de rester informé•e des opportunités existantes et accompagner/orienter mes bénéficiaires",
     },
     {
       value: "offreur",
-      label: "Je référence l‘offre de service de ma ou mes structures sur DORA",
+      label: "Je référence l’offre de service de ma ou mes structures sur DORA",
     },
     {
       value: "accompagnateur_offreur",
       label:
-        "Les deux : je consulte les offres de mon territoire et je référence l‘offre de service de ma ou mes structures",
+        "Les deux : je consulte les offres de mon territoire et je référence l’offre de service de ma ou mes structures",
     },
     {
       value: "autre",

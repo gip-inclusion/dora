@@ -65,10 +65,10 @@
           </h2>
           <p class="legend">
             Pour mettre en place votre première alerte, il vous suffit
-            d‘effectuer une recherche pour un lieu spécifique, ou pour un lieu
+            d’effectuer une recherche pour un lieu spécifique, ou pour un lieu
             et une thématique combinés. Une fois que vous êtes sur la page des
             résultats, il vous faudra simplement cliquer sur le bouton
-            "Sauvegarder la recherche". Dès qu‘un nouveau service répondant à
+            "Sauvegarder la recherche". Dès qu’un nouveau service répondant à
             ces critères est ajouté sur DORA, vous recevrez une notification par
             e-mail.
           </p>
