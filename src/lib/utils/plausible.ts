@@ -186,22 +186,7 @@ export function trackModel(model) {
   _track("modele", props);
 }
 
-export function trackService(service, url, searchId) {
-  if (browser) {
-    logAnalyticsEvent("service", url.pathname, {
-      service: service.slug,
-      searchId,
-    });
-
-    if (get(token) && service.isOrientable) {
-      _track("service-orientable", _getServiceProps(service, true));
-    }
-  }
-
-  _track("service", _getServiceProps(service, true));
-}
-
-export function trackDIService(service, url, searchId) {
+function trackDIService(service, url, searchId) {
   if (browser) {
     logAnalyticsEvent("di_service", url.pathname, {
       diStructureId: service.structure,
@@ -214,6 +199,25 @@ export function trackDIService(service, url, searchId) {
       diSubcategories: service.subcategories || [],
       searchId,
     });
+  }
+}
+
+export function trackService(service, url, searchId, isDI) {
+  if (isDI) {
+    trackDIService(service, url, searchId);
+  } else {
+    if (browser) {
+      logAnalyticsEvent("service", url.pathname, {
+        service: service.slug,
+        searchId,
+      });
+
+      if (get(token) && service.isOrientable) {
+        _track("service-orientable", _getServiceProps(service, true));
+      }
+    }
+
+    _track("service", _getServiceProps(service, true));
   }
 }
 
