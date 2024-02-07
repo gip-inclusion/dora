@@ -14,13 +14,9 @@
   import * as v from "$lib/validation/schema-utils";
   import { structureSchema } from "$lib/validation/schemas/structure";
   import { formErrors } from "$lib/validation/validation";
-  import type { PageData } from "./$types";
   import { token } from "$lib/utils/auth";
   import { get } from "svelte/store";
-  import type { Establishment, Structure, StructuresOptions } from "$lib/types";
-
-  export let data: PageData;
-  export let structuresOptions: StructuresOptions;
+  import type { Establishment, Structure } from "$lib/types";
 
   const schema = {
     email: {
