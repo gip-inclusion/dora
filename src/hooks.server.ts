@@ -24,7 +24,7 @@ export const handleError: HandleServerError = Sentry.handleErrorWithSentry(
 );
 
 export const handle: Handle = sequence(
-  Sentry.sentryHandle(),
+  Sentry.sentryHandle({ injectFetchProxyScript: false }),
   async ({ event, resolve }) => {
     const response = await resolve(event);
 
