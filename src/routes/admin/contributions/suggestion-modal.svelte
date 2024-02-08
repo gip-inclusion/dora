@@ -76,7 +76,7 @@
         />
 
         <Line
-          label="Pré-requis"
+          label="Prérequis"
           data={suggestion.serviceInfo.requirementsDisplay}
           isList
         />

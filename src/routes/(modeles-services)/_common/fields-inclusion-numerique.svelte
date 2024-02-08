@@ -183,15 +183,18 @@
     </p>
   </div>
 
-  <FieldSubcategory bind:service {servicesOptions} />
+  <FieldSubcategory
+    bind:service
+    {servicesOptions}
+    description="Sélectionnez au moins un besoin."
+  />
 
   {#if concernedPublicOptions.length}
     <MultiSelectField
       id="concernedPublic"
       bind:value={service.concernedPublic}
       choices={concernedPublicOptions}
-      placeholder="Sélectionner"
-      placeholderMulti="Sélectionner"
+      description="Si le service n’est pas ouvert à tous les publics, sélectionnez le profil concerné. Plusieurs choix possibles."
     />
   {/if}
 
@@ -200,6 +203,7 @@
       id="kinds"
       bind:value={service.kinds}
       choices={kindsOptions}
+      description="Sélectionnez au moins une typologie de service. Plusieurs choix possibles."
     />
   {/if}
 
@@ -207,12 +211,13 @@
     id="feeCondition"
     bind:value={service.feeCondition}
     choices={servicesOptions.feeConditions}
+    description="Précisez si le service est gratuit ou payant pour les bénéficiaires."
   />
 
   {#if isNotFreeService(service.feeCondition)}
     <TextareaField
       id="feeDetails"
-      placeholder="Merci de détailler ici les frais à charge du bénéficiaire : adhésion, frais de location, frais de garde, etc., et les montants."
+      description="Détaillez les frais à la charge des bénéficiaires, y compris leurs montants."
       bind:value={service.feeDetails}
     />
   {/if}
@@ -231,13 +236,14 @@
       "autre"
     )}
     bind:value={service.beneficiariesAccessModes}
+    description="Plusieurs choix possibles."
   />
 
   {#if service.beneficiariesAccessModes.includes("autre")}
     <BasicInputField
       id="beneficiariesAccessModesOther"
       hideLabel
-      placeholder="Merci de préciser la modalité"
+      description="Merci de préciser la modalité"
       bind:value={service.beneficiariesAccessModesOther}
     />
   {/if}

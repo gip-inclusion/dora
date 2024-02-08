@@ -43,6 +43,7 @@
     choices={servicesOptions.diffusionZoneType}
     onChange={handleDiffusionZoneTypeChange}
     initialValue={service.diffusionZoneTypeDisplay}
+    description="Térritoire déterminant l’éligibilité des bénéficiaires."
   />
 
   {#if service.diffusionZoneType !== "country"}
@@ -59,6 +60,6 @@
   <BooleanRadioButtonsField
     id="qpvOrZrr"
     bind:value={service.qpvOrZrr}
-    description="Quartier prioritaire de la politique de la ville ou Zone de revitalisation rurale"
+    description="Le service est destiné aux Quartiers prioritaire de la politique de la ville ou aux Zones de revitalisation rurale."
   />
 </FieldSet>

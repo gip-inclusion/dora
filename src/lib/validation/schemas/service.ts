@@ -112,7 +112,7 @@ export const serviceSchema: v.Schema = {
     rules: [v.isArray([v.isCustomizablePK()])],
   },
   requirements: {
-    label: "Pré-requis ou compétences",
+    label: "Prérequis ou compétences",
     default: [],
     rules: [v.isArray([v.isCustomizablePK()])],
   },

@@ -5,6 +5,7 @@
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
+  export let description = "";
 
   let availableSubcategories = [];
 
@@ -23,6 +24,5 @@
   id="subcategories"
   bind:value={service.subcategories}
   choices={availableSubcategories}
-  placeholder="Sélectionner"
-  placeholderMulti="Sélectionner"
+  {description}
 />

@@ -15,14 +15,14 @@
     id="locationKinds"
     bind:value={service.locationKinds}
     choices={moveToTheEnd(servicesOptions.locationKinds, "value", "a-distance")}
+    description="Lieu de déroulement du service."
   />
 
   {#if service.locationKinds.includes("a-distance")}
     <BasicInputField
       type="url"
       id="remoteUrl"
-      placeholder="https://"
-      description="Format attendu : https://example.fr"
+      description="Visioconférence, URL du formulaire, etc. Format attendu : https://example.fr."
       bind:value={service.remoteUrl}
     />
   {/if}

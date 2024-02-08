@@ -64,7 +64,7 @@
       </div>
     {/if}
   </div>
-  <div class="flex flex-col " class:three-fourths={!vertical}>
+  <div class="flex flex-col" class:three-fourths={!vertical}>
     <!-- Slot principal -->
     <slot onBlur={handleBlur} onChange={handleChange} {errorMessages} />
     <!--  -->

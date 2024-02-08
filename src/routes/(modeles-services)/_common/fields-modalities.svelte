@@ -56,6 +56,7 @@
           "autre"
         )}
         bind:value={service.coachOrientationModes}
+        description="Plusieurs choix possibles."
       />
     </FieldModel>
 
@@ -64,7 +65,7 @@
         <BasicInputField
           id="coachOrientationModesOther"
           hideLabel
-          placeholder="Compléter"
+          description="Merci de préciser la modalité"
           bind:value={service.coachOrientationModesOther}
         />
       </FieldModel>
@@ -84,6 +85,7 @@
           "autre"
         )}
         bind:value={service.beneficiariesAccessModes}
+        description="Plusieurs choix possibles."
       />
     </FieldModel>
 
@@ -92,7 +94,7 @@
         <BasicInputField
           id="beneficiariesAccessModesOther"
           hideLabel
-          placeholder="Merci de préciser la modalité"
+          description="Merci de préciser la modalité"
           bind:value={service.beneficiariesAccessModesOther}
         />
       </FieldModel>
@@ -111,6 +113,7 @@
         choices={servicesOptions.feeConditions.filter(
           (fee) => fee.value !== "pass-numerique"
         )}
+        description="Précisez si le service est gratuit ou payant pour les bénéficiaires."
       />
     </FieldModel>
 
@@ -118,7 +121,7 @@
       <FieldModel {...fieldModelProps.feeDetails ?? {}}>
         <TextareaField
           id="feeDetails"
-          placeholder="Merci de détailler ici les frais à charge du bénéficiaire : adhésion, frais de location, frais de garde, etc., et les montants."
+          description="Détaillez les frais à la charge des bénéficiaires, y compris leurs montants."
           bind:value={service.feeDetails}
         />
       </FieldModel>

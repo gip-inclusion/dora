@@ -53,10 +53,10 @@
         bind:values={service.credentials}
         structureSlug={service.structure}
         choices={servicesOptions.credentials}
-        placeholder="Aucun"
         placeholderMulti="Choisir un autre justificatif"
         sort
         addButtonLabel="Ajouter un autre justificatif"
+        description="Sélectionnez uniquement les documents nécessaires au traitement d’une demande d'orientation."
       />
     </FieldModel>
   {/if}
@@ -64,10 +64,14 @@
   <FieldModel {...fieldModelProps.onlineForm ?? {}}>
     <BasicInputField
       id="onlineForm"
-      placeholder="https://exemple.fr"
       type="url"
-      description="Format attendu : https://example.fr"
+      description=""
       bind:value={service.onlineForm}
-    />
+    >
+      <small slot="description">
+        Lien vers un document à récupérer, un formulaire à compléter, etc.<br />
+        Format attendu : https://example.fr</small
+      >
+    </BasicInputField>
   </FieldModel>
 </FieldSet>

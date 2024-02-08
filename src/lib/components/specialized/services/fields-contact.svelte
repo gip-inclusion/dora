@@ -23,22 +23,20 @@
   </div>
   <BasicInputField
     id="contactName"
-    placeholder="Prénom et nom"
     bind:value={service.contactName}
+    description="Personne (prénom et nom) ou département/service interne (nom) en charge de la réception et du traitement des orientations, pour ce service."
   />
 
   <BasicInputField
     id="contactPhone"
     type="tel"
-    placeholder="0123456789"
-    description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
+    description="Format attendu : 4 à 10 caractères alphanumériques (sans l'indicatif pays). Par exemple : 0123456789."
     bind:value={service.contactPhone}
   />
 
   <BasicInputField
     id="contactEmail"
     type="email"
-    placeholder="nom@domaine.fr"
     description="Format attendu&nbsp;: nom@domaine.fr"
     bind:value={service.contactEmail}
   />

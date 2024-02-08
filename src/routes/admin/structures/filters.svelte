@@ -309,8 +309,6 @@
             multiple
             bind:value={searchParams.selectedTypologies}
             choices={structuresOptions.typologies}
-            placeholder="Choisir…"
-            placeholderMulti="Choisir…"
             sort
           />
         </div>

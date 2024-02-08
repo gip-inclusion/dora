@@ -54,7 +54,6 @@
   <FieldModel {...fieldModelProps.name ?? {}}>
     <BasicInputField
       id="name"
-      placeholder="Titre du service"
       bind:value={service.name}
       description="140 caractères maximum"
     />
@@ -63,9 +62,8 @@
   <FieldModel {...fieldModelProps.shortDesc ?? {}}>
     <TextareaField
       id="shortDesc"
-      placeholder="Compléter"
       bind:value={service.shortDesc}
-      description="280 caractères maximum"
+      description="Courte description affichée dans les résultats de recherche. 280 caractères maximum."
     />
   </FieldModel>
 
@@ -73,9 +71,10 @@
     <RichTextField
       id="fullDesc"
       bind:this={fullDesc}
-      placeholder="Informations concernant le service et ses spécificités."
+      placeholder="Cette description sera affichée sur la fiche du service et permettra aux professionnels de mieux comprendre les spécificités et la valeur du service proposé. N’hésitez pas à inclure des liens, des documents à télécharger ou des vidéos explicatives. "
       vertical
       bind:value={service.fullDesc}
+      description="Décrivez de manière exhaustive le service."
     />
   </FieldModel>
 </FieldSet>

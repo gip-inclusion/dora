@@ -54,10 +54,8 @@
         bind:values={service.concernedPublic}
         structureSlug={service.structure}
         choices={servicesOptions.concernedPublic}
-        placeholder="Tous publics"
-        placeholderMulti="Sélectionner"
         sort
-        description="Plusieurs choix possibles"
+        description="Si le service n’est pas ouvert à tous les publics, sélectionnez le profil concerné. Plusieurs choix possibles."
         canAdd={false}
       />
     </FieldModel>
@@ -70,10 +68,8 @@
         bind:values={service.accessConditions}
         structureSlug={service.structure}
         choices={servicesOptions.accessConditions}
-        placeholder="Aucun"
-        placeholderMulti="Choisir un autre critères d’admission"
         sort
-        description="Plusieurs choix possibles"
+        description="Critères auxquels les bénéficiaires potentiels doivent correspondre. Plusieurs choix possibles."
         canAdd={false}
       />
     </FieldModel>
@@ -86,10 +82,8 @@
         bind:values={service.requirements}
         structureSlug={service.structure}
         choices={servicesOptions.requirements}
-        placeholder="Aucun"
-        placeholderMulti="Choisir un autre pré-requis"
         sort
-        description="Plusieurs choix possibles"
+        description="Prérequis ou compétences auxquels les bénéficiaires potentiels doivent correspondre. Plusieurs choix possibles."
         canAdd={false}
       />
     </FieldModel>
