@@ -6,7 +6,6 @@
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
 
   export let servicesOptions: ServicesOptions;
-  export let canAddChoices = true;
   export let service: Service;
   export let model: Model | undefined = undefined;
 
@@ -60,7 +59,6 @@
         sort
         description="Plusieurs choix possibles"
         canAdd={false}
-        addButtonLabel="Ajouter un profil personnalisé"
       />
     </FieldModel>
   {/if}
@@ -77,7 +75,6 @@
         sort
         description="Plusieurs choix possibles"
         canAdd={false}
-        addButtonLabel="Ajouter un critère personnalisé"
       />
     </FieldModel>
   {/if}
@@ -93,8 +90,7 @@
         placeholderMulti="Choisir un autre pré-requis"
         sort
         description="Plusieurs choix possibles"
-        canAdd={canAddChoices}
-        addButtonLabel="Ajouter un pré-requis personnalisé"
+        canAdd={false}
       />
     </FieldModel>
   {/if}

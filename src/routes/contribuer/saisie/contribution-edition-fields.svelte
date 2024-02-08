@@ -37,11 +37,7 @@
     </Notice>
   </div>
 
-  <FieldsPublics
-    bind:service={contribution}
-    {servicesOptions}
-    canAddChoices={false}
-  />
+  <FieldsPublics bind:service={contribution} {servicesOptions} />
 
   <FieldsPlace
     bind:service={contribution}
