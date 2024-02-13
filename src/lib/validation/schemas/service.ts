@@ -117,7 +117,7 @@ export const serviceSchema: v.Schema = {
     rules: [v.isArray([v.isCustomizablePK()])],
   },
   isCumulative: {
-    label: "Cumulable",
+    label: "Service cumulable",
     default: true,
     rules: [v.isBool()],
   },
