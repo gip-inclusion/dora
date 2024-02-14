@@ -98,14 +98,14 @@
   <CenteredGrid>
     <div class="lg:w-2/3">
       {#if model?.structure}
-        <FieldsTypology bind:service={model} {servicesOptions} {model} />
-
-        <FieldsPresentation
+        <FieldsTypology
           noTopPadding
           bind:service={model}
           {servicesOptions}
           {model}
         />
+
+        <FieldsPresentation bind:service={model} {servicesOptions} {model} />
 
         <FieldsPublics bind:service={model} {servicesOptions} {model} />
 
