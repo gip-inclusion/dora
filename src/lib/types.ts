@@ -45,8 +45,6 @@ export interface StructureService {
   address1: string;
   address2: string;
   categoriesDisplay: string[];
-  category: string;
-  categoryDisplay: string;
   city_code: string;
   city: string;
   contactEmail: string;
@@ -383,8 +381,6 @@ export interface Service {
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
-  category: ServiceCategory;
-  categoryDisplay: string;
   city: string;
   cityCode: string;
   coachOrientationModes: CoachOrientationModes[];
@@ -445,8 +441,6 @@ export interface Service {
 
 export interface ShortService {
   categoriesDisplay: string[];
-  category: string;
-  categoryDisplay: string[];
   coachOrientationModes: CoachOrientationModes[];
   contactEmail: string;
   contactName: string;
