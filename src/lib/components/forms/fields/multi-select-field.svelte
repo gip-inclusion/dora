@@ -13,14 +13,14 @@
 
   export let disabled = false;
   export let readonly = $currentSchema?.[id]?.readonly;
-  export let placeholder = "";
+  export let placeholder = "Choisir";
   export let initialValue = undefined;
 
   // Spécifique du select
   export let choices: Choice[];
   export let sort = false;
   export let onChange: ((newValues: string[]) => void) | undefined = undefined;
-  export let placeholderMulti = "";
+  export let placeholderMulti = "Choisir";
 
   // Proxy vers le FieldWrapper
   export let description = "";

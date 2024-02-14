@@ -15,14 +15,14 @@
 
   export let disabled = false;
   export let readonly = $currentSchema?.[id]?.readonly;
-  export let placeholder = "";
+  export let placeholder = "Choisir";
 
   // Spécifiques
   export let addButtonLabel: string | undefined = undefined;
   export let choices: CustomChoice[];
   export let sort = false;
   export let onChange: ((newValues: string[]) => void) | undefined = undefined;
-  export let placeholderMulti = "";
+  export let placeholderMulti = "Choisir";
   export let canAdd = true;
   export let structureSlug: string | undefined = undefined;
 

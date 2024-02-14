@@ -6,6 +6,9 @@
   import logoCommunauteInclusion from "$lib/assets/inclusion-connect/logo-communaute-inclusion.svg";
   import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
   import logoRDVS from "$lib/assets/inclusion-connect/logo-rdv-solidarites.svg";
+  import logoCNFS from "$lib/assets/inclusion-connect/logo-cnfs.svg";
+  import logoIF from "$lib/assets/inclusion-connect/logo-if.svg";
+  import logoMSS from "$lib/assets/inclusion-connect/logo-mss.svg";
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import { informationLineIcon } from "$lib/icons";
   import { getNextPage } from "../utils";
@@ -37,7 +40,7 @@
     <div class="flex-1">
       <FieldSet headerBg="bg-magenta-brand" noHeaderBorder noTopPadding>
         <div>
-          <h2 class="mb-s32 text-france-blue">Se connecter ou s‘inscrire</h2>
+          <h2 class="mb-s32 text-france-blue">Se connecter ou s’inscrire</h2>
           <hr class="mb-s32" />
 
           <div class="mb-s24 rounded-ml bg-info-light p-s16">
@@ -54,7 +57,7 @@
             </p>
             <p class="legend mb-s16 text-gray-text">
               <strong>Si vous avez déjà un compte Inclusion Connect,</strong> vous
-              pouvez l‘utiliser pour accéder plus facilement à DORA.
+              pouvez l’utiliser pour accéder plus facilement à DORA.
             </p>
           </div>
 
@@ -72,7 +75,7 @@
                   <img src={logoIC} alt="" class="max-w-none" />
                 </span>
                 <div class="ml-s16 text-left">
-                  S‘identifier avec <strong class="whitespace-nowrap">
+                  S’identifier avec <strong class="whitespace-nowrap">
                     Inclusion Connect
                   </strong>
                 </div>
@@ -117,35 +120,49 @@
 
         <hr class="my-s32" />
         <div
-          class="mb-s32 flex flex-wrap content-center items-center justify-around gap-s8 sm:flex-row"
+          class="around mb-s32 flex flex-wrap content-center items-center justify-center gap-x-s12 gap-y-s24 sm:flex-row"
         >
           <img
-            class="inline-block"
+            class="inline-block grow-0"
             width="100"
-            height="36"
             src={logoRDVS}
             alt="RDV Solidarités"
           />
           <img
-            class="inline-block"
+            class="inline-block grow-0"
             width="100"
-            height="36"
             src={logoC1}
-            alt="Les emplois de l‘inclusion"
+            alt="Les emplois de l’inclusion"
           />
           <img
-            class="inline-block"
+            class="inline-block flex-none"
             width="100"
-            height="36"
             src={logoCommunauteInclusion}
-            alt="La communauté de l‘inclusion"
+            alt="La communauté de l’inclusion"
           />
           <img
-            class="inline-block"
-            width="80"
-            height="36"
+            class="inline-block flex-none"
+            width="100"
             src={logoDora}
             alt="DORA"
+          />
+          <img
+            class="inline-block flex-none"
+            width="100"
+            src={logoIF}
+            alt="immmersion facilitée"
+          />
+          <img
+            class="inline-block flex-none"
+            width="80"
+            src={logoCNFS}
+            alt="Conseiller numérique"
+          />
+          <img
+            class="inline-block flex-none"
+            width="100"
+            src={logoMSS}
+            alt="mon suivi social"
           />
         </div>
 

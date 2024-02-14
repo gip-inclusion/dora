@@ -69,7 +69,7 @@
 
 <style lang="postcss">
   textarea {
-    @apply min-h-[3rem] rounded border border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt outline-none focus:shadow-focus;
+    @apply min-h-[3rem] rounded border border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt outline-none focus:shadow-focus;
     @apply grow read-only:text-gray-03 disabled:bg-gray-00;
   }
 </style>

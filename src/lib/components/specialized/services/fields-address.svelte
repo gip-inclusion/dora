@@ -82,11 +82,15 @@
     disabled={!entity.cityCode}
   />
 
-  <BasicInputField id="address2" bind:value={entity.address2} />
+  <BasicInputField
+    id="address2"
+    bind:value={entity.address2}
+    description="Indication : bâtiment, immeuble, étage, numéro d’appartement, etc."
+  />
 
   <BasicInputField
     id="postalCode"
-    description="Format attendu : 75000"
+    description="Format attendu : 5 chiffres. Par exemple : 75000."
     bind:value={entity.postalCode}
   />
 

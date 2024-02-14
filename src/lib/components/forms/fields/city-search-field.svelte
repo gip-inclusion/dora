@@ -19,7 +19,8 @@
   export let onChange: (newValue: GeoApiValue) => void;
 
   // Proxy vers le FieldWrapper
-  export let description = "";
+  export let description =
+    "Commencez à saisir le nom et choisissez dans la liste.";
   export let hidden = false;
   export let hideLabel = false;
   export let vertical = false;

@@ -36,7 +36,7 @@
       {servicesOptions}
       {model}
       description={!service.useInclusionNumeriqueScheme
-        ? "Cochez jusqu’à 3 thématiques principales."
+        ? "Sélectionnez jusqu’à 3 thématiques auxquelles le service correspond."
         : ""}
     />
   </FieldModel>
@@ -101,13 +101,21 @@
     showUseButton
     type="array"
   >
-    <FieldSubcategory bind:service {servicesOptions} />
+    <FieldSubcategory
+      bind:service
+      {servicesOptions}
+      description={!service.useInclusionNumeriqueScheme
+        ? "Sélectionnez au moins un besoin, pour chaque thématique choisie."
+        : "Sélectionnez au moins un besoin."}
+    />
   </FieldModel>
+
   <FieldModel {...fieldModelProps.kinds ?? {}} type="array">
     <CheckboxesField
       id="kinds"
       bind:value={service.kinds}
       choices={servicesOptions.kinds}
+      description="Sélectionnez au moins une typologie de service. Plusieurs choix possibles."
     />
   </FieldModel>
 
@@ -115,7 +123,7 @@
     <BooleanRadioButtonsField
       id="isCumulative"
       bind:value={service.isCumulative}
-      description="Avec d’autres services."
+      description="Cochez « Non » si le service n’est pas cumulable avec d’autres dispositifs."
     />
   </FieldModel>
 </FieldSet>

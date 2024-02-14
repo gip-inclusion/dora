@@ -41,13 +41,13 @@
         aria-describedby={formatErrors(id, errorMessages)}
       />
       <div
-        class="toggle-path flex h-s24 w-s24 shrink-0 justify-center rounded-full border border-gray-03 bg-white "
+        class="toggle-path flex h-s24 w-s24 shrink-0 justify-center rounded-full border border-gray-03 bg-white"
       >
         <div
           class="toggle-circle hidden h-s12 w-s12 self-center rounded-full bg-magenta-cta"
         />
       </div>
-      <span class="ml-s16 inline-block text-f14 text-gray-text">
+      <span class="ml-s16 inline-block text-f16 text-gray-text">
         {choice.label}
       </span>
     </label>

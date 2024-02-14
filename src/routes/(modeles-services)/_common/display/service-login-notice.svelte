@@ -19,7 +19,7 @@
   <LinkButton
     on:click={trackClick}
     extraClass="bg-white !text-france-blue hover:!text-white tracking-tight"
-    label="S‘identifier avec Inclusion Connect"
+    label="S’identifier avec Inclusion Connect"
     to={`/auth/connexion?next=${encodeURIComponent($page.url.pathname)}`}
     canWrap
   />

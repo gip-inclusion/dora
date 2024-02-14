@@ -13,9 +13,9 @@
 </script>
 
 {#if contribution.siret}
-  <FieldsPresentation bind:service={contribution} {servicesOptions} />
-
   <FieldsTypology bind:service={contribution} {servicesOptions} />
+
+  <FieldsPresentation bind:service={contribution} {servicesOptions} />
 
   <div class="mt-s48">
     <Notice type="warning">
@@ -37,11 +37,7 @@
     </Notice>
   </div>
 
-  <FieldsPublics
-    bind:service={contribution}
-    {servicesOptions}
-    canAddChoices={false}
-  />
+  <FieldsPublics bind:service={contribution} {servicesOptions} />
 
   <FieldsPlace
     bind:service={contribution}
