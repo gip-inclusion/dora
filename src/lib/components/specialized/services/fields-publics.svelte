@@ -56,6 +56,7 @@
         choices={servicesOptions.concernedPublic}
         sort
         description="Si le service n’est pas ouvert à tous les publics, sélectionnez le profil concerné. Plusieurs choix possibles."
+        placeholder="Tous publics"
         canAdd={false}
       />
     </FieldModel>
@@ -70,6 +71,7 @@
         choices={servicesOptions.accessConditions}
         sort
         description="Critères auxquels les bénéficiaires potentiels doivent correspondre. Plusieurs choix possibles."
+        placeholder="Aucun"
         canAdd={false}
       />
     </FieldModel>
@@ -84,6 +86,7 @@
         choices={servicesOptions.requirements}
         sort
         description="Prérequis ou compétences auxquels les bénéficiaires potentiels doivent correspondre. Plusieurs choix possibles."
+        placeholder="Aucun"
         canAdd={false}
       />
     </FieldModel>
