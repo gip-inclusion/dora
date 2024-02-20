@@ -99,8 +99,8 @@
         tabindex="-1"
         bind:this={modalEl}
         class="max-h-screen rounded-md bg-white p-s24 shadow-md"
-        class:small-width={width === "small"}
-        class:medium-width={width === "medium"}
+        class:w-[560px]={width === "small"}
+        class:w-[820px]={width === "medium"}
         class:min-w-[80vw]={!width}
         class:overflow-y-auto={overflow}
         on:click|stopPropagation
@@ -159,13 +159,6 @@
 {/if}
 
 <style lang="postcss">
-  .small-width {
-    @apply max-w-[560px];
-  }
-  .medium-width {
-    @apply max-w-[820px];
-  }
-
   #background {
     position: fixed;
     z-index: 5000;
