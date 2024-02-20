@@ -1,7 +1,7 @@
 import { getServicesOptions } from "$lib/requests/services";
 import type { SearchQuery, ServiceSearchResult } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
-import { trackSearch } from "$lib/utils/plausible";
+import { trackSearch } from "$lib/utils/stats";
 import { getQueryString, storeLastSearchCity } from "$lib/utils/service-search";
 import type { PageLoad } from "./$types";
 

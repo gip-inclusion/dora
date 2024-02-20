@@ -5,7 +5,7 @@
   import Button from "$lib/components/display/button.svelte";
   import ServiceContact from "$lib/components/specialized/services/service-contact.svelte";
   import ServiceLoginNotice from "./service-login-notice.svelte";
-  import { trackDiMobilisation, trackMobilisation } from "$lib/utils/plausible";
+  import { trackDiMobilisation, trackMobilisation } from "$lib/utils/stats";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { token } from "$lib/utils/auth";
 

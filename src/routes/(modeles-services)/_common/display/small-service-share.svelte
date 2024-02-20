@@ -4,7 +4,6 @@
   import { CANONICAL_URL } from "$lib/env";
   import { markPenIcon, checkIcon, downloadIcon, linkIcon } from "$lib/icons";
   import type { Service } from "$lib/types";
-  import { trackFeedback, trackPrintService } from "$lib/utils/plausible";
   import FeedbackModal from "$lib/components/specialized/services/feedback/feedback-modal.svelte";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import { browser } from "$app/environment";
@@ -18,7 +17,6 @@
 
   function handleFeedback() {
     feedbackModalIsOpen = true;
-    trackFeedback(service);
   }
 
   // Partager ce service
@@ -49,7 +47,6 @@
   <button
     class="flex text-left hover:text-magenta-cta"
     on:click={() => {
-      trackPrintService(service);
       print();
     }}
   >

@@ -2,7 +2,6 @@
   import { CANONICAL_URL } from "$lib/env";
   import { mailLineIcon } from "$lib/icons";
   import { userInfo } from "$lib/utils/auth";
-  import { trackMobilisationEmail } from "$lib/utils/plausible";
 
   export let service;
   export let preferred = false;
@@ -33,15 +32,10 @@
     .join("\n")}
   `.trim()
   );
-
-  function trackClick() {
-    trackMobilisationEmail(service);
-  }
 </script>
 
 <div>
   <a
-    on:click={trackClick}
     class="flex items-center break-all text-f16"
     class:font-bold={preferred}
     href="mailto:{service.contactEmail}?subject={emailSubject}&body={emailBody}"

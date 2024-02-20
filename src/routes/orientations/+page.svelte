@@ -18,7 +18,7 @@
     user6Icon,
     userSharedLineIcon,
   } from "$lib/icons";
-  import { trackOrientation } from "$lib/utils/plausible";
+  import { trackOrientation } from "$lib/utils/stats";
   import HandleOrientation from "./handle-orientation.svelte";
   import SubTitle from "./sub-title.svelte";
   import ContactListItem from "./contact-list-item.svelte";

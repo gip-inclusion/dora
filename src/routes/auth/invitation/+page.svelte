@@ -6,7 +6,6 @@
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import { token, validateCredsAndFillUserInfo } from "$lib/utils/auth";
-  import { trackJoinStructure } from "$lib/utils/plausible";
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
@@ -17,8 +16,6 @@
   let joinError = "";
 
   async function handleJoin() {
-    trackJoinStructure();
-
     const targetUrl = `${getApiURL()}/auth/join-structure/`;
 
     const response = await fetch(targetUrl, {
