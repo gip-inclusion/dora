@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import ServiceKeyInformations from "$lib/components/specialized/services/display/service-key-informations.svelte";
   import type { Service, ServicesOptions } from "$lib/types";
   import Notice from "$lib/components/display/notice.svelte";
@@ -36,12 +37,12 @@
   >
     <p class="text-f14">
       Ce service est automatiquement récupéré depuis le référentiel commun
-      data·inclusion, auquel participe DORA. Les informations peuvent être
-      partielles et certaines fonctionnalités peuvent être indisponibles. Il
-      s’agit d’une expérimentation en cours, n’hésitez pas à <a
+      data·inclusion, auquel participe DORA. N’hésitez pas à <a
         class="underline"
-        href="https://tally.so/r/nrBNqv ">nous faire part de vos retours</a
-      >.
+        href="https://tally.so/r/nrBNqv?url={encodeURIComponent(
+          $page.url.origin + $page.url.pathname
+        )}">nous faire part de vos retours</a
+      > si vous remarquez des erreurs.
     </p>
   </Notice>
 {/if}

@@ -14,7 +14,7 @@
         {#each service.concernedPublicDisplay as pub (pub)}
           <li>{pub}</li>
         {:else}
-          <li>Tout le monde</li>
+          <li>Tous publics</li>
         {/each}
       {:else}
         <li>Non renseigné</li>
