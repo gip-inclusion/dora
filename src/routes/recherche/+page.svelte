@@ -68,6 +68,7 @@
       lon={data.lon}
       kindIds={data.kindIds}
       feeConditions={data.feeConditions}
+      locationKinds={data.locationKinds}
       categoryId={data.categoryIds[0]}
       subCategoryIds={[...data.subCategoryIds]}
       showDeploymentWarning={false}

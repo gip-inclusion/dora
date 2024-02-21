@@ -17,6 +17,7 @@ async function getResults({
   label,
   kindIds,
   feeConditions,
+  locationKinds,
   lat,
   lon,
 }: SearchQuery): Promise<ServiceSearchResult[]> {
@@ -28,6 +29,7 @@ async function getResults({
     label,
     kindIds,
     feeConditions,
+    locationKinds,
     lat,
     lon,
   });
@@ -62,6 +64,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   const label = query.get("l") || cityLabel;
   const kindIds = query.get("kinds") ? query.get("kinds").split(",") : [];
   const feeConditions = query.get("fees") ? query.get("fees").split(",") : [];
+  const locationKinds = query.get("locs") ? query.get("locs").split(",") : [];
   const lon = query.get("lon");
   const lat = query.get("lat");
 
@@ -74,11 +77,12 @@ export const load: PageLoad = async ({ url, parent }) => {
     label,
     kindIds,
     feeConditions,
+    locationKinds,
     lon,
     lat,
   });
 
-  const searchId = trackSearch(
+  const searchId = await trackSearch(
     url,
     // La priorité est donnée aux sous-catégories
     subCategoryIds.length ? [] : categoryIds,
@@ -87,6 +91,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     cityLabel,
     kindIds,
     feeConditions,
+    locationKinds,
     services
   );
 
@@ -111,6 +116,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     lon,
     kindIds,
     feeConditions,
+    locationKinds,
     services,
     servicesOptions: await getServicesOptions(),
     searchId,

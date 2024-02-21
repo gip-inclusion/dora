@@ -99,13 +99,13 @@ export async function trackSearch(
   subCategoryIds,
   cityCode,
   cityLabel,
-  kindIds,
+  kinds,
   feeConditions,
+  locationKinds,
   results
 ) {
   if (browser) {
     const numResults = results.length;
-
     const numDiResults = results.filter(
       (service) => service.type === "di"
     ).length;
@@ -115,17 +115,22 @@ export async function trackSearch(
     const resultsSlugsTop10 = results
       .slice(0, 10)
       .map((service) => service.slug);
+
     const searchId = await logAnalyticsEvent("search", url.pathname, {
       searchCityCode: cityCode,
-      searchNumResults: results.length,
+      searchNumResults: numResults,
       categoryIds: categoryIds,
       subCategoryIds: subCategoryIds,
       numDiResults,
       numDiResultsTop10,
       resultsSlugsTop10,
+      kinds,
+      feeConditions,
+      locationKinds,
     });
     return searchId;
   }
+  return null;
 }
 
 export function trackService(service, url, searchId, isDI) {

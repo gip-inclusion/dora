@@ -5,7 +5,6 @@
   import Select from "$lib/components/inputs/select/select.svelte";
 
   import {
-    arrowDownSIcon,
     deleteBackIcon,
     listCheckIcon,
     mapPinIcon,
@@ -14,6 +13,7 @@
   import type {
     Choice,
     FeeCondition,
+    LocationKind,
     ServiceKind,
     ServicesOptions,
   } from "$lib/types";
@@ -47,6 +47,7 @@
   export let useAdditionalFilters = false;
   export let kindIds: ServiceKind[] = [];
   export let feeConditions: FeeCondition[] = [];
+  export let locationKinds: LocationKind[] = [];
 
   let innerWidth;
   let requestingSave = false;
@@ -62,6 +63,7 @@
     label,
     kindIds,
     feeConditions,
+    locationKinds,
     lon,
     lat,
   });
@@ -126,6 +128,7 @@
       cityLabel,
       kinds: kindIds,
       fees: feeConditions,
+      locationKinds,
     });
     await refreshUserInfo();
     requestingSave = false;
@@ -169,8 +172,11 @@
       label: undefined,
       kindIds,
       feeConditions,
+      locationKinds,
     });
+
     const userSavedSearches = $userInfo?.savedSearches || [];
+
     const result = userSavedSearches.some(
       (search) => getSavedSearchQueryString(search) === currentShortQueryString
     );
@@ -331,6 +337,20 @@
             placeholder="Frais à charge"
             bind:value={feeConditions}
             choices={servicesOptions.feeConditions}
+            onChange={enableRefreshButton}
+          />
+        </div>
+        <div>
+          <SelectField
+            hideLabel
+            isMultiple
+            minDropdownWidth="min-w-[240px]"
+            style="filter"
+            label="Lieu d’accueil"
+            name="locs"
+            placeholder="Lieu d’accueil"
+            bind:value={locationKinds}
+            choices={servicesOptions.locationKinds}
             onChange={enableRefreshButton}
           />
         </div>

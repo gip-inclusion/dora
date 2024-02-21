@@ -6,7 +6,7 @@
   import { externalLinkIcon, starSmileLineIcon } from "$lib/icons";
   import type { SavedSearch } from "$lib/types";
   import { getApiURL } from "$lib/utils/api";
-  import { userInfo } from "$lib/utils/auth";
+  import { refreshUserInfo, userInfo } from "$lib/utils/auth";
   import { fetchData } from "$lib/utils/misc";
   import { onMount } from "svelte";
   import SavedSearchCard from "./saved-search-card.svelte";
@@ -24,6 +24,7 @@
 
   function handleDelete(searchId: number) {
     savedSearches = savedSearches?.filter((search) => search.id !== searchId);
+    refreshUserInfo();
   }
 
   onMount(async () => {

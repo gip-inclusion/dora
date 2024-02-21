@@ -309,6 +309,7 @@ export interface SearchQuery {
   label?: string;
   kindIds: ServiceKind[];
   feeConditions: FeeCondition[];
+  locationKinds: LocationKind[];
   lat?: number;
   lon?: number;
 }
@@ -502,6 +503,8 @@ export interface SavedSearch {
   kindsDisplay: string[];
   fees: FeeCondition[];
   feesDisplay: string[];
+  locationKinds: LocationKind[];
+  locationKindsDisplay: string[];
   frequency: SavedSearchNotificationFrequency;
   newServicesCount?: number;
 }

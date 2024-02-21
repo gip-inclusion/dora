@@ -8,7 +8,13 @@ import { getQueryString } from "../utils/service-search";
 export async function saveSearch(
   savedSearch: Pick<
     SavedSearch,
-    "cityCode" | "cityLabel" | "category" | "subcategories" | "kinds" | "fees"
+    | "cityCode"
+    | "cityLabel"
+    | "category"
+    | "subcategories"
+    | "kinds"
+    | "fees"
+    | "locationKinds"
   >
 ) {
   const url = `${getApiURL()}/saved-searches/`;
@@ -82,7 +88,8 @@ export function getSavedSearchQueryString(savedSearch: SavedSearch) {
     cityCode: savedSearch.cityCode,
     cityLabel: savedSearch.cityLabel,
     label: savedSearch.label,
-    kindIds: savedSearch.kinds,
-    feeConditions: savedSearch.fees,
+    kindIds: savedSearch.kinds.sort(),
+    feeConditions: savedSearch.fees.sort(),
+    locationKinds: savedSearch.locationKinds.sort(),
   });
 }
