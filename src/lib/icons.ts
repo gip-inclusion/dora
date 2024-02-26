@@ -58,6 +58,7 @@ export { default as wheelChairIcon } from "remixicon/icons/Others/wheelchair-lin
 export { default as graduationCapIcon } from "remixicon/icons/Others/graduation-cap-line.svg?raw";
 export { default as repeatIcon } from "remixicon/icons/Media/repeat-line.svg?raw";
 export { default as notificationIcon } from "remixicon/icons/Media/notification-3-line.svg?raw";
+export { default as videoIcon } from "remixicon/icons/Media/video-fill.svg?raw";
 export { default as addCircleIcon } from "remixicon/icons/System/add-circle-fill.svg?raw";
 export { default as addCircleLineIcon } from "remixicon/icons/System/add-circle-line.svg?raw";
 export { default as addIcon } from "remixicon/icons/System/add-fill.svg?raw";

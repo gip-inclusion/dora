@@ -10,6 +10,7 @@ export function getQueryString({
   cityLabel,
   label,
   feeConditions,
+  locationKinds,
   kindIds,
   lon,
   lat,
@@ -24,6 +25,7 @@ export function getQueryString({
     l: label,
     kinds: kindIds.join(","),
     fees: feeConditions.join(","),
+    locs: locationKinds.join(","),
     lat: lat,
     lon: lon,
   };

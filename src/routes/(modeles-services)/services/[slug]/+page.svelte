@@ -8,7 +8,7 @@
   import ServiceBody from "../../_common/display/service-body.svelte";
   import { getService } from "$lib/requests/services";
   import { TallyFormId } from "$lib/utils/nps";
-  import { trackService } from "$lib/utils/plausible";
+  import { trackService } from "$lib/utils/stats";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
   import type { Service } from "$lib/types";

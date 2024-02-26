@@ -5,7 +5,6 @@
   import Select from "$lib/components/inputs/select/select.svelte";
 
   import {
-    arrowDownSIcon,
     deleteBackIcon,
     listCheckIcon,
     mapPinIcon,
@@ -14,6 +13,7 @@
   import type {
     Choice,
     FeeCondition,
+    LocationKind,
     ServiceKind,
     ServicesOptions,
   } from "$lib/types";
@@ -47,6 +47,7 @@
   export let useAdditionalFilters = false;
   export let kindIds: ServiceKind[] = [];
   export let feeConditions: FeeCondition[] = [];
+  export let locationKinds: LocationKind[] = [];
 
   let innerWidth;
   let requestingSave = false;
@@ -62,6 +63,7 @@
     label,
     kindIds,
     feeConditions,
+    locationKinds,
     lon,
     lat,
   });
@@ -126,6 +128,7 @@
       cityLabel,
       kinds: kindIds,
       fees: feeConditions,
+      locationKinds,
     });
     await refreshUserInfo();
     requestingSave = false;
@@ -169,8 +172,11 @@
       label: undefined,
       kindIds,
       feeConditions,
+      locationKinds,
     });
+
     const userSavedSearches = $userInfo?.savedSearches || [];
+
     const result = userSavedSearches.some(
       (search) => getSavedSearchQueryString(search) === currentShortQueryString
     );
@@ -306,7 +312,7 @@
       <div
         class="flex flex-col rounded-b-md border-t border-gray-02 bg-white p-s16 text-f14 md:flex-row"
       >
-        <div class="mb-s12 mr-s12 md:mb-s0">
+        <div class=" mr-s12 md:mb-s0">
           <SelectField
             hideLabel
             isMultiple
@@ -320,17 +326,31 @@
             onChange={enableRefreshButton}
           />
         </div>
-        <div>
+        <div class=" mr-s12 md:mb-s0">
           <SelectField
             hideLabel
             isMultiple
-            minDropdownWidth="min-w-[240px]"
+            minDropdownWidth="min-w-[260px]"
             style="filter"
             label="Frais à charge"
             name="fee"
             placeholder="Frais à charge"
             bind:value={feeConditions}
             choices={servicesOptions.feeConditions}
+            onChange={enableRefreshButton}
+          />
+        </div>
+        <div>
+          <SelectField
+            hideLabel
+            isMultiple
+            minDropdownWidth="min-w-[160px]"
+            style="filter"
+            label="Lieu d’accueil"
+            name="locs"
+            placeholder="Lieu d’accueil"
+            bind:value={locationKinds}
+            choices={servicesOptions.locationKinds}
             onChange={enableRefreshButton}
           />
         </div>

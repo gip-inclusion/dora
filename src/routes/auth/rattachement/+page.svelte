@@ -5,7 +5,6 @@
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import { token, userInfo, refreshUserInfo } from "$lib/utils/auth";
-  import { trackJoinStructure } from "$lib/utils/plausible";
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
@@ -22,8 +21,6 @@
   let joinError = "";
 
   async function handleJoin() {
-    trackJoinStructure();
-
     const targetUrl = `${getApiURL()}/auth/join-structure/`;
     const response = await fetch(targetUrl, {
       method: "POST",

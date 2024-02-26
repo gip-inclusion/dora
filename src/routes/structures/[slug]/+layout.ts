@@ -4,7 +4,7 @@ import {
   getStructure,
 } from "$lib/requests/structures";
 import { userInfo, type UserInfo } from "$lib/utils/auth";
-import { trackStructure } from "$lib/utils/plausible";
+import { trackStructure } from "$lib/utils/stats";
 import { userPreferences, type UserPreferences } from "$lib/utils/preferences";
 import { error } from "@sveltejs/kit";
 import type { LayoutLoad } from "./$types";
