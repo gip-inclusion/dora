@@ -312,7 +312,7 @@
       <div
         class="flex flex-col rounded-b-md border-t border-gray-02 bg-white p-s16 text-f14 md:flex-row"
       >
-        <div class="mb-s12 mr-s12 md:mb-s0">
+        <div class=" mr-s12 md:mb-s0">
           <SelectField
             hideLabel
             isMultiple
@@ -326,11 +326,11 @@
             onChange={enableRefreshButton}
           />
         </div>
-        <div>
+        <div class=" mr-s12 md:mb-s0">
           <SelectField
             hideLabel
             isMultiple
-            minDropdownWidth="min-w-[240px]"
+            minDropdownWidth="min-w-[260px]"
             style="filter"
             label="Frais à charge"
             name="fee"
@@ -344,7 +344,7 @@
           <SelectField
             hideLabel
             isMultiple
-            minDropdownWidth="min-w-[240px]"
+            minDropdownWidth="min-w-[160px]"
             style="filter"
             label="Lieu d’accueil"
             name="locs"
