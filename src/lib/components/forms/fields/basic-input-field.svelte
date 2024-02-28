@@ -9,7 +9,7 @@
   import FieldWrapper from "../field-wrapper.svelte";
 
   export let id: string;
-  export let value: any | undefined = undefined;
+  export let value: string | undefined = undefined;
 
   export let type: "email" | "tel" | "text" | "url" | "date" | "number" =
     "text";
@@ -29,14 +29,20 @@
 
   let phoneValue = value;
   function handlePhoneChange() {
-    phoneValue = phoneValue.replace(/[^0-9]/g, "");
+    if (phoneValue) {
+      phoneValue = phoneValue.replace(/[^0-9]/g, "");
+    }
     value = phoneValue;
   }
   function handlePhoneBlur() {
-    phoneValue = formatPhoneNumber(phoneValue);
+    if (phoneValue) {
+      phoneValue = formatPhoneNumber(phoneValue);
+    }
   }
   function handlePhoneFocus() {
-    phoneValue = phoneValue.replace(/[^0-9]/g, "");
+    if (phoneValue) {
+      phoneValue = phoneValue.replace(/[^0-9]/g, "");
+    }
   }
 
   $: commonProps = {
