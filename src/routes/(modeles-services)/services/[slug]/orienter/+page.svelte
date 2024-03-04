@@ -12,7 +12,10 @@
   import { goto } from "$app/navigation";
   import { arrowLeftLineIcon } from "$lib/icons";
   import { onMount } from "svelte";
-
+  import { token } from "$lib/utils/auth";
+  import Teaser from "./teaser.svelte";
+  import { trackMobilisation } from "$lib/utils/stats";
+  import { page } from "$app/stores";
   export let data;
 
   const { service } = data;
@@ -37,47 +40,64 @@
       `/services/${data.isDI ? "di--" : ""}${service.slug}/orienter/demande`
     );
   }
+
+  onMount(async () => {
+    const shouldTrack = $page.url.searchParams.get("newlogin");
+    if ($token && shouldTrack) {
+      await trackMobilisation(service, $page.url, !!data.isDI);
+      $page.url.searchParams.delete("newlogin");
+      history.replaceState(null, "", $page.url.pathname + $page.url.search);
+    }
+  });
 </script>
 
-<FormErrors />
+{#if $token}
+  <FormErrors />
 
-<Form
-  bind:data={$orientation}
-  schema={orientationStep1Schema}
-  disableExitWarning
-  onChange={handleChange}
-  onSubmit={handleSubmit}
-  onSuccess={handleSuccess}
-  bind:requesting
->
-  <Layout {data}>
-    <p class="legend">Étape 1 sur 2</p>
-    <h2 class="mb-s0">Valider la conformité</h2>
-    <p class="legend">
-      <strong>Étape suivante</strong>&nbsp;: Compléter la demande
-    </p>
-    <hr class="my-s40" />
-    <p class="mb-s40 max-w-2xl text-f18">
-      Avant de commencer la procédure, vérifiez l’éligibilité du ou de la
-      bénéficiaire et consultez la liste des documents requis.
-    </p>
+  <Form
+    bind:data={$orientation}
+    schema={orientationStep1Schema}
+    disableExitWarning
+    onChange={handleChange}
+    onSubmit={handleSubmit}
+    onSuccess={handleSuccess}
+    bind:requesting
+  >
+    <Layout {data}>
+      <p class="legend">Étape 1 sur 2</p>
+      <h2 class="mb-s0">Valider la conformité</h2>
+      <p class="legend">
+        <strong>Étape suivante</strong>&nbsp;: Compléter la demande
+      </p>
+      <hr class="my-s40" />
+      <p class="mb-s40 max-w-2xl text-f18">
+        Avant de commencer la procédure, vérifiez l’éligibilité du ou de la
+        bénéficiaire et consultez la liste des documents requis.
+      </p>
 
-    <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
-      <ValidationForm {service} />
-      <div class="mt-s32 w-full shrink-0 md:mt-s0 md:w-[384px]">
-        <ContactBox {service} />
+      <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
+        <ValidationForm {service} />
+        <div class="mt-s32 w-full shrink-0 md:mt-s0 md:w-[384px]">
+          <ContactBox
+            {service}
+            bind:contactBoxOpen={$orientation.contactBoxOpen}
+          />
+        </div>
       </div>
-    </div>
+    </Layout>
+    <StickyFormSubmissionRow justifyBetween>
+      <LinkButton
+        icon={arrowLeftLineIcon}
+        to="/services/{data.isDI ? 'di--' : ''}{service.slug}"
+        label="Retour à la fiche"
+        secondary
+      />
+
+      <Button id="publish" type="submit" label="Étape suivante" />
+    </StickyFormSubmissionRow>
+  </Form>
+{:else}
+  <Layout {data}>
+    <Teaser></Teaser>
   </Layout>
-
-  <StickyFormSubmissionRow justifyBetween>
-    <LinkButton
-      icon={arrowLeftLineIcon}
-      to="/services/{data.isDI ? 'di--' : ''}{service.slug}"
-      label="Retour à la fiche"
-      secondary
-    />
-
-    <Button id="publish" type="submit" label="Étape suivante" />
-  </StickyFormSubmissionRow>
-</Form>
+{/if}

@@ -16,6 +16,7 @@
   import Form from "$lib/components/forms/form.svelte";
   import { goto } from "$app/navigation";
   import { arrowLeftLineIcon } from "$lib/icons";
+  import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
 
   export let data: PageData;
 
@@ -72,52 +73,57 @@
   }
 </script>
 
-<FormErrors />
+<EnsureLoggedIn>
+  <FormErrors />
 
-<Form
-  bind:data={$orientation}
-  schema={orientationStep2Schema}
-  disableExitWarning
-  onChange={handleChange}
-  onSubmit={handleSubmit}
-  onSuccess={handleSuccess}
-  bind:requesting
->
-  <Layout {data}>
-    <p class="legend">Étape 2 sur 2</p>
+  <Form
+    bind:data={$orientation}
+    schema={orientationStep2Schema}
+    disableExitWarning
+    onChange={handleChange}
+    onSubmit={handleSubmit}
+    onSuccess={handleSuccess}
+    bind:requesting
+  >
+    <Layout {data}>
+      <p class="legend">Étape 2 sur 2</p>
 
-    <h2>Compléter la demande</h2>
-    <hr class="my-s40" />
-    <p class="mb-s40 max-w-2xl text-f18">
-      Ce formulaire collecte les informations nécessaires pour la demande
-      d’orientation. Veuillez fournir tous les éléments demandés.
-    </p>
-    <p>
-      Vous recevrez une copie de cette demande, tout comme le ou la
-      bénéficiaire.
-    </p>
+      <h2>Compléter la demande</h2>
+      <hr class="my-s40" />
+      <p class="mb-s40 max-w-2xl text-f18">
+        Ce formulaire collecte les informations nécessaires pour la demande
+        d’orientation. Veuillez fournir tous les éléments demandés.
+      </p>
+      <p>
+        Vous recevrez une copie de cette demande, tout comme le ou la
+        bénéficiaire.
+      </p>
 
-    <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
-      <OrientationForm {credentials} {service} />
-      <div class="mb-s32 w-full shrink-0 md:w-[384px]">
-        <ContactBox {service} />
+      <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
+        <OrientationForm {credentials} {service} />
+        <div class="mb-s32 w-full shrink-0 md:w-[384px]">
+          <ContactBox
+            {service}
+            bind:contactBoxOpen={$orientation.contactBoxOpen}
+          />
+        </div>
       </div>
-    </div>
-  </Layout>
+    </Layout>
 
-  <StickyFormSubmissionRow justifyBetween>
-    <LinkButton
-      icon={arrowLeftLineIcon}
-      to="/services/{data.service.slug}/orienter"
-      label="Revenir à l’étape précédente"
-      secondary
-    />
+    <StickyFormSubmissionRow justifyBetween>
+      <LinkButton
+        icon={arrowLeftLineIcon}
+        to="/services/{data.service.slug}/orienter"
+        label="Revenir à l’étape précédente"
+        secondary
+      />
 
-    <Button
-      id="publish"
-      type="submit"
-      disabled={requesting}
-      label="Envoyer l’orientation"
-    />
-  </StickyFormSubmissionRow>
-</Form>
+      <Button
+        id="publish"
+        type="submit"
+        disabled={requesting}
+        label="Envoyer l’orientation"
+      />
+    </StickyFormSubmissionRow>
+  </Form>
+</EnsureLoggedIn>

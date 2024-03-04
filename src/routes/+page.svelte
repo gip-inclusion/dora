@@ -9,37 +9,17 @@
   import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
   import PartnerList from "$lib/components/specialized/partner-list.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import Modal from "$lib/components/hoc/modal.svelte";
 
   import type { PageData } from "./$types";
-  import { browser } from "$app/environment";
   import { videoIcon } from "$lib/icons";
+  import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
 
   export let data: PageData;
 
   let isVideoModalOpen = false;
 </script>
 
-{#if browser}
-  <Modal
-    bind:isOpen={isVideoModalOpen}
-    title="Le formulaire d’orientation"
-    width="medium"
-  >
-    <div style="position: relative; padding-top: 50%;">
-      <iframe
-        title="DORA - Orienter un bénéficiaire"
-        width="100%"
-        height="100%"
-        src="https://tube.numerique.gouv.fr/videos/embed/c620b3c6-d9c8-46aa-8ab6-42b14b3f45a0?subtitle=fr&amp;warningTitle=0&amp;peertubeLink=0&amp;p2p=0"
-        frameborder="0"
-        allowfullscreen
-        sandbox="allow-same-origin allow-scripts allow-popups"
-        style="position: absolute; inset: 0px;"
-      ></iframe>
-    </div>
-  </Modal>
-{/if}
+<OrientationVideo bind:isVideoModalOpen></OrientationVideo>
 
 <CenteredGrid bgColor="bg-magenta-10 mb-s32">
   <h1 class="m-auto mb-s16 text-balance text-center text-france-blue">

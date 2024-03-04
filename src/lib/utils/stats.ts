@@ -3,6 +3,7 @@ import { token } from "$lib/utils/auth";
 import { get } from "svelte/store";
 import { getApiURL } from "$lib/utils/api";
 import hexoid from "hexoid";
+import type { Service } from "$lib/types";
 
 const analyticsIdKey = "userHash";
 
@@ -58,30 +59,34 @@ export function trackPageView(pathname, title) {
   }
 }
 
-export function trackMobilisation(service, url, searchId) {
+export async function trackMobilisation(
+  service: Service,
+  url: URL,
+  isDI: boolean
+) {
   if (browser) {
-    logAnalyticsEvent("mobilisation", url.pathname, {
-      service: service.slug,
-      searchId,
-    });
+    const searchId = url.searchParams.get("searchId");
+    if (isDI) {
+      await logAnalyticsEvent("di_mobilisation", url.pathname, {
+        diStructureId: service.structure,
+        diStructureName: service.structureInfo.name,
+        diStructureDepartment: service.structureInfo.department,
+        diServiceId: service.slug.split("--")[1],
+        diServiceName: service.name,
+        diSource: service.source,
+        diCategories: service.categories || [],
+        diSubcategories: service.subcategories || [],
+        searchId,
+      });
+    } else {
+      await logAnalyticsEvent("mobilisation", url.pathname, {
+        service: service.slug,
+        searchId,
+      });
+    }
   }
 }
 
-export function trackDiMobilisation(service, url, searchId) {
-  if (browser) {
-    logAnalyticsEvent("di_mobilisation", url.pathname, {
-      diStructureId: service.structure,
-      diStructureName: service.structureInfo.name,
-      diStructureDepartment: service.structureInfo.department,
-      diServiceId: service.slug.split("--")[1],
-      diServiceName: service.name,
-      diSource: service.source,
-      diCategories: service.categories || [],
-      diSubcategories: service.subcategories || [],
-      searchId,
-    });
-  }
-}
 export function trackOrientation(orientation, url) {
   if (browser) {
     logAnalyticsEvent("orientation", url.pathname, {
