@@ -1,8 +1,9 @@
 <script lang="ts">
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
-  import { TallyFormId } from "$lib/utils/nps";
+  import TallyPopup from "$lib/components/specialized/tally-popup.svelte";
   import Header from "./header.svelte";
+
+  import { TallyFormId } from "$lib/consts";
   import { structure } from "./store";
 
   $: publishedServices = $structure.services.filter(
@@ -19,7 +20,7 @@
 </CenteredGrid>
 
 {#if $structure.isMember && publishedServices.length}
-  <TallyNpsPopup
+  <TallyPopup
     formId={TallyFormId.NPS_FORM_ID}
     timeoutSeconds={30}
     keySuffix="offreur"

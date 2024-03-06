@@ -3,10 +3,11 @@
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
+  import TallyPopup from "$lib/components/specialized/tally-popup.svelte";
   import type { ServiceSearchResult } from "$lib/types";
   import { isInDeploymentDepartments } from "$lib/utils/misc";
-  import { TallyFormId } from "$lib/utils/nps";
+  import { TallyFormId } from "$lib/consts";
+
   import { tick } from "svelte";
   import type { PageData } from "./$types";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
@@ -133,7 +134,7 @@
   {/if}
 </CenteredGrid>
 
-<TallyNpsPopup
+<TallyPopup
   formId={TallyFormId.NPS_FORM_ID}
   keySuffix="chercheur"
   timeoutSeconds={45}

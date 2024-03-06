@@ -4,10 +4,11 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import ServiceHeader from "./service-header.svelte";
   import ServiceToolbar from "./service-toolbar.svelte";
-  import TallyNpsPopup from "$lib/components/specialized/tally-nps-popup.svelte";
+  import TallyPopup from "$lib/components/specialized/tally-popup.svelte";
   import ServiceBody from "../../_common/display/service-body.svelte";
   import { getService } from "$lib/requests/services";
-  import { TallyFormId } from "$lib/utils/nps";
+  import { TallyFormId } from "$lib/consts";
+
   import { trackService } from "$lib/utils/stats";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -66,12 +67,12 @@
   {#if browser}
     {#if data.service.canWrite}
       {#if serviceWasJustPublished && !data.service.hasAlreadyBeenUnpublished}
-        <TallyNpsPopup
+        <TallyPopup
           formId={TallyFormId.SERVICE_CREATION_FORM_ID}
           timeoutSeconds={3}
         />
       {:else if structureHasPublishedServices}
-        <TallyNpsPopup
+        <TallyPopup
           formId={TallyFormId.NPS_FORM_ID}
           keySuffix="offreur"
           timeoutSeconds={30}
@@ -79,7 +80,7 @@
         />
       {/if}
     {:else}
-      <TallyNpsPopup
+      <TallyPopup
         formId={TallyFormId.NPS_FORM_ID}
         keySuffix="chercheur"
         timeoutSeconds={45}
