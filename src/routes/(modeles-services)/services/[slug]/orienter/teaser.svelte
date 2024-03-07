@@ -19,7 +19,7 @@
     <ul class="line text-f18 leading-40">
       <li>
         <span class="checkbox">{@html checkboxCircleFillIcon}</span>Orientez
-        vers la solution identifié en moins de 5 minutes
+        vers la solution identifiée en moins de 5 minutes
       </li>
       <li>
         <span class="checkbox">{@html checkboxCircleFillIcon}</span>Incluez le
