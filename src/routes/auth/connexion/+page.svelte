@@ -4,7 +4,6 @@
   import logoDora from "$lib/assets/inclusion-connect/logo-dora-ic.svg";
   import logoInclusionConnect from "$lib/assets/illustrations/inclusion-connect.png";
   import logoCommunauteInclusion from "$lib/assets/inclusion-connect/logo-communaute-inclusion.svg";
-  import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
   import logoRDVS from "$lib/assets/inclusion-connect/logo-rdv-solidarites.svg";
   import logoCNFS from "$lib/assets/inclusion-connect/logo-cnfs.svg";
   import logoIF from "$lib/assets/inclusion-connect/logo-if.svg";
@@ -14,6 +13,7 @@
   import { getNextPage } from "../utils";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
+  import IcButton from "$lib/components/specialized/ic-button.svelte";
 
   function getLoginHint() {
     const loginHint = $page.url.searchParams.get("login_hint");
@@ -61,39 +61,7 @@
             </p>
           </div>
 
-          <div class="text-center">
-            <a
-              class="mb-s24 inline-block"
-              href="/auth/ic-connect?next={encodeURIComponent(
-                nextPage
-              )}{loginHint}"
-            >
-              <div
-                class="mx-auto mt-s24 flex items-center justify-center rounded-full bg-france-blue p-s6 pr-s24 text-f16 text-white transition-colors hover:bg-[#2323FF]"
-              >
-                <span class="h-[62px] w-[62px] rounded-full bg-white p-s6">
-                  <img src={logoIC} alt="" class="max-w-none" />
-                </span>
-                <div class="ml-s16 text-left">
-                  S’identifier avec <strong class="whitespace-nowrap">
-                    Inclusion Connect
-                  </strong>
-                </div>
-              </div>
-            </a>
-
-            <div class="text-center">
-              <a
-                class="text-magenta-cta underline"
-                target="_blank"
-                title="Ouverture dans une nouvelle fenêtre"
-                rel="noopener"
-                href="https://aide.dora.inclusion.beta.gouv.fr/fr/category/inscription-et-gestion-du-compte-ha8m5b/"
-              >
-                Besoin d’aide&nbsp;? Contactez-nous
-              </a>
-            </div>
-          </div>
+          <IcButton {nextPage} {loginHint}></IcButton>
         </div>
       </FieldSet>
     </div>

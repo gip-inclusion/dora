@@ -116,7 +116,7 @@
 
   function handleSearch() {
     refreshDisabled = true;
-    goto(`recherche?${query}`, { noScroll: true });
+    goto(`/recherche?${query}`, { noScroll: true });
   }
 
   async function doSaveSearch() {

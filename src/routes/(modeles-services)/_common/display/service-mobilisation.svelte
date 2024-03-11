@@ -1,74 +1,74 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import { userInfo } from "$lib/utils/auth";
+  import { token } from "$lib/utils/auth";
 
   import Button from "$lib/components/display/button.svelte";
   import ServiceContact from "$lib/components/specialized/services/service-contact.svelte";
-  import ServiceLoginNotice from "./service-login-notice.svelte";
-  import { trackDiMobilisation, trackMobilisation } from "$lib/utils/stats";
-  import LinkButton from "$lib/components/display/link-button.svelte";
-  import { token } from "$lib/utils/auth";
+  import { trackMobilisation } from "$lib/utils/stats";
+  import type { Service } from "$lib/types";
 
-  export let service;
+  export let service: Service;
+  export let contactBoxOpen = false;
   export let isDI = false;
 
-  let contactOpen = false;
+  function showContact() {
+    if (!$token) {
+      goto(
+        `/auth/connexion?next=${encodeURIComponent(
+          $page.url.pathname + $page.url.search
+        )}`
+      );
+      return;
+    }
+    contactBoxOpen = true;
+    trackMobilisation(service, $page.url, isDI);
+  }
 
-  function handleShowContactClick() {
-    contactOpen = true;
-    const searchId = $page.url.searchParams.get("searchId");
-    if (isDI) {
-      trackDiMobilisation(service, $page.url, searchId);
+  function handleOrientationClick() {
+    if (!service.isOrientable) {
+      showContact();
     } else {
-      trackMobilisation(service, $page.url, searchId);
+      if ($token) {
+        trackMobilisation(service, $page.url, isDI);
+      }
+      const searchId = $page.url.searchParams.get("searchId");
+      const searchFragment = searchId ? `?searchId=${searchId}` : "";
+      goto(
+        `/services/${isDI ? "di--" : ""}${
+          service.slug
+        }/orienter${searchFragment}`
+      );
     }
   }
+
+  // function handleShareClick() {}
 </script>
 
-<h2 class="text-f23 text-white">Mobiliser le service</h2>
+<h2 class="text-f23 text-white">Mobiliser ce service</h2>
 
-{#if $token}
-  {#if !$userInfo.structures.length}
-    <div class="mb-s8 italic">
-      {#if $userInfo.pendingStructures.length === 1}
-        Le temps que votre adhésion à la structure “{$userInfo
-          .pendingStructures[0].name}” soit validée, vous ne pouvez pas
-        visualiser ces informations.{:else}Le temps que vos demandes d’adhésion
-        soient validées, vous ne pouvez pas visualiser ces informations.{/if}
-    </div>
-  {:else}
-    <div class="w-full sm:w-auto">
-      <div class="hidden print:inline">
+<div class="w-full sm:w-auto">
+  <div class="print:hidden">
+    <div class="mb-s16 mt-s16">
+      {#if contactBoxOpen}
         <ServiceContact {service} />
-      </div>
-      <div class="print:hidden">
-        {#if service.isOrientable}
-          <div class="mb-s16 mt-s16">
-            <LinkButton
-              nofollow
-              to="/services/{isDI ? `di--` : ''}{service.slug}/orienter"
-              extraClass="bg-white !text-france-blue hover:!text-white text-center !whitespace-normal text-center"
-              label="Orienter un ou une bénéficiaire"
-              wFull
-            />
-          </div>
-        {/if}
-
-        {#if !contactOpen}
-          <div class="text-white">
-            <Button
-              on:click={handleShowContactClick}
-              extraClass="!bg-france-blue text-white !border !border-white hover:!bg-magenta-cta hover:!border-france-blue"
-              label="Voir les informations de contact"
-              wFull
-            />
-          </div>
-        {:else}
-          <ServiceContact {service} />
-        {/if}
-      </div>
+      {:else}
+        <Button
+          on:click={handleOrientationClick}
+          extraClass="bg-white !text-france-blue hover:!text-white text-center !whitespace-normal text-center"
+          label="Orienter votre bénéficiaire"
+          wFull
+        />
+      {/if}
     </div>
-  {/if}
-{:else}
-  <ServiceLoginNotice {service} />
-{/if}
+
+    <!-- <div class="text-white">
+      <Button
+        on:click={handleShareClick}
+        extraClass="!bg-france-blue text-white !border !border-white hover:!bg-magenta-cta hover:!border-france-blue"
+        label="Partager cette fiche"
+        wFull
+      />
+    </div> -->
+  </div>
+</div>

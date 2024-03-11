@@ -606,6 +606,7 @@ export interface Orientation {
   // Tous les champs de l'étape 1 pouvant être optionnels
   // on est contraint de se baser sur un booléen pour s'assurer que l'étape 1 a bien été visionnée
   firstStepDone: boolean;
+  contactBoxOpen: boolean;
 
   situation: string[];
   situationOther: string;

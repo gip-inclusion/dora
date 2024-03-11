@@ -4,6 +4,7 @@ import type { Orientation } from "$lib/types";
 export function initEmptyOrientation(): Orientation {
   return {
     firstStepDone: false,
+    contactBoxOpen: false,
 
     situation: [],
     situationOther: "",

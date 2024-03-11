@@ -21,6 +21,7 @@
     | "structure-services"
     | "structure-modeles"
     | "structure-antennes"
+    | "service-orientation"
     | "service-orientation-step1"
     | "service-orientation-step2"
     | "service-orientation-confirmation"
@@ -43,6 +44,7 @@
     privacy: "Données personnelles",
     partners: "Nos partenaires",
     account: "Mes informations",
+    "service-orientation": "Orienter",
     "service-orientation-step1": "Orienter • Étape 1/2",
     "service-orientation-step2": "Orienter • Étape 2/2",
     "service-orientation-confirmation": "Orienter • Confirmation",
@@ -113,12 +115,12 @@
           {/if}
         {:else}
           <span
-            class="hidden text-white print:text-france-blue lg:inline"
+            class="hidden text-white lg:inline print:text-france-blue"
             class:text-gray-text={dark}
           >
             Structure&nbsp;•&nbsp;
           </span><span
-            class=" text-white print:text-france-blue lg:inline"
+            class=" text-white lg:inline print:text-france-blue"
             class:text-gray-text={dark}>{structure.name}</span
           >
         {/if}
