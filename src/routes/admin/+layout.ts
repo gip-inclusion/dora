@@ -19,7 +19,7 @@ export const load: LayoutLoad = async ({ url, parent }) => {
 
   const user = get(userInfo);
 
-  if (!user?.isStaff && !(user?.isManager && user?.department)) {
+  if (!user?.isStaff && !(user?.isManager && user?.departments?.length)) {
     throw error(403, "Accès réservé");
   }
 

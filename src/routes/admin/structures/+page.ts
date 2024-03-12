@@ -4,18 +4,19 @@ import type { PageLoad } from "./$types";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
 import { getApiURL } from "$lib/utils/api";
+import type { GeoApiValue } from "$lib/types";
+import { error } from "@sveltejs/kit";
 
-async function searchAdminDivision(query) {
-  const url = `${getApiURL()}/admin-division-search/?type=department&q=${encodeURIComponent(
-    query
-  )}&with_geom=1`;
+async function getDepartments(departmentCodes) {
+  const url = `${getApiURL()}/admin-division-departments/?dept_codes=${encodeURIComponent(
+    departmentCodes.join(",")
+  )}`;
   const response = await fetch(url);
   const jsonResponse = await response.json();
   const results = jsonResponse.map((result) => ({
     value: result,
     label: `${result.name} (${result.code})`,
   }));
-
   return results;
 }
 
@@ -28,12 +29,20 @@ export const load: PageLoad = async ({ parent }) => {
   ]);
 
   const user = get(userInfo);
+
   let department;
+  let departments: GeoApiValue[] = [];
   let title = "Structures | Administration | DORA";
   if (user.isManager) {
-    department = (await searchAdminDivision(user.department))[0].value;
-    title = `Tableau de bord ${user.department} | DORA`;
+    departments = await getDepartments(user.departments);
+    [department] = departments;
+    if (!department) {
+      throw error(403, "Accès réservé");
+    }
+    department = department.value;
+    title = `Tableau de bord ${user.departments} | DORA`;
   }
+
   return {
     title,
     noIndex: true,
@@ -41,5 +50,6 @@ export const load: PageLoad = async ({ parent }) => {
     structuresOptions,
     isManager: user.isManager && department,
     department,
+    departments,
   };
 };

@@ -13,6 +13,7 @@
   import Filters from "./filters.svelte";
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
+  import DepartmentList from "./department-list.svelte";
   import {
     isOrphan,
     toActivate,
@@ -26,12 +27,12 @@
 
   export let data: PageData;
 
+  let selectedDepartment = data.department;
   let searchStatus: StatusFilter = "toutes";
-
   let structures: AdminShortStructure[] = [];
   let filteredStructures: AdminShortStructure[] = [];
-  let department: GeoApiValue;
   let selectedStructureSlug: string | null = null;
+  let loading = false;
 
   function filterIgnoredStructures(structs) {
     function isOrphanOrWaitingOrToActivateSIAE(struct) {
@@ -48,20 +49,24 @@
         !isOrphanOrWaitingOrToActivateSIAE(struct)
     );
   }
+
   async function handleDepartmentChange(dept: GeoApiValue) {
-    department = dept;
-    if (department.code) {
+    structures = [];
+    loading = true;
+    selectedDepartment = dept;
+    if (selectedDepartment.code) {
       structures = filterIgnoredStructures(
-        await getStructuresAdmin(department.code)
+        await getStructuresAdmin(selectedDepartment.code)
       );
     } else {
       structures = [];
     }
+    loading = false;
   }
 
   async function handleStructuresRefresh() {
     structures = filterIgnoredStructures(
-      await getStructuresAdmin(department.code)
+      await getStructuresAdmin(selectedDepartment.code)
     );
   }
 
@@ -120,7 +125,7 @@
     const date = dayjs().format("YYYY-MM-DD");
     XLSX.writeFile(
       workbook,
-      `structures-dora-${department.code}-${searchStatus}-${date}.xlsx`,
+      `structures-dora-${selectedDepartment.code}-${searchStatus}-${date}.xlsx`,
       { compression: true }
     );
   }
@@ -130,7 +135,7 @@
   }
 </script>
 
-{#if !data.isManager && !department}
+{#if !data.isManager && !selectedDepartment}
   <CenteredGrid>
     <div class="mb-s16 flex flex-col">
       <label for="department" class="font-bold">Département</label>
@@ -145,7 +150,7 @@
   </CenteredGrid>
 {/if}
 
-{#if department}
+{#if selectedDepartment}
   <CenteredGrid bgColor="bg-service-green">
     <div class="relative gap-s16 lg:flex-row-reverse lg:justify-between">
       <div class="mb-s48 print:mb-s0">
@@ -156,14 +161,23 @@
         <h1 class="mb-s12 mr-s12 text-france-blue">Tableau de bord</h1>
         <div class="flex flex-col justify-between gap-s16 md:flex-row">
           <div
-            class=" flex flex-col items-baseline justify-between gap-s8 text-france-blue md:flex-row"
+            class=" flex flex-col items-baseline justify-between gap-s24 text-france-blue md:flex-row"
           >
-            <span class="text-f23 font-bold"
-              >{department.name}({department.code})
-            </span>
-            <span class="hidden text-f23 font-bold md:block">•</span>
+            {#if data.departments?.length > 1}
+              <DepartmentList
+                departments={data.departments}
+                {selectedDepartment}
+                onRefresh={handleDepartmentChange}
+              />
+            {:else}
+              <span class="text-f23 font-bold">
+                {selectedDepartment.name}({selectedDepartment.code})
+              </span>
+              <span class="hidden text-f23 font-bold md:block">•</span>
+            {/if}
+
             <a
-              href="https://metabase.dora.inclusion.beta.gouv.fr/public/dashboard/860a9da9-9300-4289-878c-7bf8ec74f9b7?d%25C3%25A9partement={department.code}"
+              href="https://metabase.dora.inclusion.beta.gouv.fr/public/dashboard/860a9da9-9300-4289-878c-7bf8ec74f9b7?d%25C3%25A9partement={selectedDepartment.code}"
               target="_blank"
               rel="noopener nofollow"
               class="text-f18 underline"
@@ -191,8 +205,11 @@
       servicesOptions={data.servicesOptions}
       structuresOptions={data.structuresOptions}
     />
+
     <div class="mb-s8 text-gray-text">
-      {#if structures?.length !== filteredStructures?.length}
+      {#if loading}
+        <strong>Chargement en cours…</strong>
+      {:else if structures?.length !== filteredStructures?.length}
         {filteredStructures.length} structures affichées / {structures.length}
       {:else}
         {structures.length} structures
@@ -205,7 +222,7 @@
             <StructuresMap
               {filteredStructures}
               bind:selectedStructureSlug
-              {department}
+              department={selectedDepartment}
             />
           </div>
           <div class="flex w-full flex-col gap-s24">

@@ -14,25 +14,24 @@
   let dropdownButton;
   const id = `dropdown-menu-${randomId()}`;
 
-  function handleClickOutside(_event) {
+  export function closeDropdown() {
     isOpen = false;
   }
+
   function onKeyDown(event) {
     if (event.key === "Escape") {
-      isOpen = false;
+      closeDropdown();
       dropdownButton.focus();
     }
   }
 
-  afterNavigate(() => {
-    isOpen = false;
-  });
+  afterNavigate(closeDropdown);
 </script>
 
 <div
   use:clickOutside
   role="presentation"
-  on:click_outside={handleClickOutside}
+  on:click_outside={closeDropdown}
   on:keydown={onKeyDown}
   class="w-full lg:w-auto"
 >
@@ -90,7 +89,7 @@
       class:!flex={isOpen}
     >
       <div class="w-full p-s12">
-        <slot />
+        <slot {closeDropdown} />
       </div>
 
       {#if $$slots.bottom}

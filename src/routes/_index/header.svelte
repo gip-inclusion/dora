@@ -9,7 +9,7 @@
   import SubMenu from "./sub-menu.svelte";
 </script>
 
-<header class:dev-banner={ENVIRONMENT !== "production"} role="banner">
+<header class:dev-banner={ENVIRONMENT !== "production"}>
   <CenteredGrid noPadding extraClass="border-b border-gray-01">
     <div class="flex justify-between lg:items-center">
       <div class="flex flex-row items-center py-s16">
@@ -51,7 +51,7 @@
 
   {#if FLAG_STRIKING}
     <div
-      class="absolute top-s80 left-s0 right-s0 mx-auto hidden max-w-2xl border-spacing-s0 rounded border border-gray-03 bg-white bg-opacity-90 p-s8 text-center font-bold lg:block"
+      class="absolute left-s0 right-s0 top-s80 mx-auto hidden max-w-2xl border-spacing-s0 rounded border border-gray-03 bg-white bg-opacity-90 p-s8 text-center font-bold lg:block"
     >
       Une partie de l’équipe est en grève pour marquer son opposition à la
       réforme des retraites. Le site reste fonctionnel, mais le support n’est

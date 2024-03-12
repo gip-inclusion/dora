@@ -9,11 +9,13 @@
   export let hideLabel = false;
   export let disabled = false;
   export let small = false;
+  export let big = false;
   export let secondary = false;
   export let noBackground = false;
   export let noPadding = false;
   export let hoverUnderline = false;
   export let wFull = false;
+  export let noWrap = false;
   export let preventDefaultOnMouseDown = false;
   export let ariaAttributes: Partial<{
     "aria-expanded": boolean;
@@ -25,6 +27,9 @@
   if (small) {
     paddingY = "py-s6";
     textSize = "text-f14";
+  } else if (big) {
+    paddingY = "py-s12";
+    textSize = "text-f23";
   } else {
     paddingY = "py-s12";
     textSize = "text-f16";
@@ -77,6 +82,7 @@
   {name}
   class="{paddingX} {paddingY} {textSize} {border} {text} {extraClass} {background}  break-words rounded leading-normal outline-none focus:shadow-focus"
   class:w-full={wFull}
+  class:whitespace-nowrap={noWrap}
   class:hover:underline={hoverUnderline}
   class:flex={icon}
   class:flex-row={icon}

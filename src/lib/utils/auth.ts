@@ -25,7 +25,7 @@ export interface UserInfo {
   isStaff: boolean;
   isManager: boolean;
   cguVersionsAccepted: Record<string, string>;
-  department: string;
+  departments: string[];
   bookmarks: ShortBookmark[];
   savedSearches: SavedSearch[];
   structures: ShortStructure[];
