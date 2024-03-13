@@ -12,7 +12,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   const nextPage = getNextPage(url);
   // Si on a déjà un token, on redirige directement sur la destination
   if (get(token)) {
-    throw redirect(302, nextPage);
+    redirect(302, nextPage);
   }
   return {
     title: "Connexion / Inscription | DORA",

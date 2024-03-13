@@ -19,7 +19,7 @@ export const load: PageLoad = async ({ parent }) => {
   const struct = get(structure);
 
   if (!info || !struct || !struct.canViewMembers) {
-    throw error(404, "Page Not Found");
+    error(404, "Page Not Found");
   }
 
   return {

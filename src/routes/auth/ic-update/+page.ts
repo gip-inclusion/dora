@@ -31,6 +31,6 @@ export const load: PageLoad = async () => {
 
   if (result.ok) {
     const { url: icUrl } = await result.json();
-    throw redirect(302, icUrl);
+    redirect(302, icUrl);
   }
 };

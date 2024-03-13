@@ -2,7 +2,7 @@
   import { browser } from "$app/environment";
   import { closeLineIcon } from "$lib/icons";
   import { createEventDispatcher, onDestroy } from "svelte";
-  import Portal from "svelte-portal/src/Portal.svelte";
+  import Portal from "svelte-portal";
   import "wicg-inert";
   import Button from "../display/button.svelte";
 

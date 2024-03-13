@@ -19,7 +19,7 @@ export const load: PageLoad = async ({ params, parent }) => {
   }
 
   if (!service) {
-    throw error(404, "Page Not Found");
+    error(404, "Page Not Found");
   }
 
   const structure = await getStructure(service.structure);

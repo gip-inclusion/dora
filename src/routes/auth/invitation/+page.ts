@@ -8,7 +8,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   const structure = await getStructure(url.searchParams.get("structure"));
   let structureParent = null;
   if (!structure) {
-    throw error(404, "Page Not Found");
+    error(404, "Page Not Found");
   }
 
   if (structure.parent) {

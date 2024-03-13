@@ -14,7 +14,7 @@ export const load: PageLoad = async ({ params, parent }) => {
   }
 
   if (!model) {
-    throw error(404, "Page Not Found");
+    error(404, "Page Not Found");
   }
 
   return {

@@ -73,6 +73,6 @@ export async function GET() {
       },
     });
   } else {
-    throw error(404, "Page Not Found");
+    error(404, "Page Not Found");
   }
 }

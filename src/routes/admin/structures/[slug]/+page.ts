@@ -8,7 +8,7 @@ export const load: PageLoad = async ({ params, parent }) => {
 
   const structure = await getStructureAdmin(params.slug);
   if (!structure) {
-    throw error(404, "Page Not Found");
+    error(404, "Page Not Found");
   }
 
   return {

@@ -16,7 +16,7 @@ export const load = async ({ params, parent }) => {
   if (params.slug.startsWith("di--")) {
     const service = (await getServiceDI(params.slug.slice(4))) as Service;
     if (!service) {
-      throw error(404, "Page Not Found");
+      error(404, "Page Not Found");
     }
 
     return {
@@ -36,7 +36,7 @@ export const load = async ({ params, parent }) => {
   }
 
   if (!service) {
-    throw error(404, "Page Not Found");
+    error(404, "Page Not Found");
   }
 
   const structure = await getStructure(service.structure);

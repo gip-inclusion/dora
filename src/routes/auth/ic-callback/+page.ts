@@ -54,5 +54,5 @@ export const load: PageLoad = async ({ url, parent }) => {
     setToken(jsonResult.token);
     await validateCredsAndFillUserInfo();
   }
-  throw redirect(302, nextPage);
+  redirect(302, nextPage);
 };

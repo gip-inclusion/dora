@@ -17,7 +17,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   const nextPage = getNextPage(url);
   // Si on a déjà un token et qu'on ne force pas le login, on redirige directement sur la destination
   if (get(token) && !forceLogin) {
-    throw redirect(302, nextPage);
+    redirect(302, nextPage);
   }
 
   const targetUrl = `${getApiURL()}/inclusion-connect-get-login-info/`;
@@ -40,6 +40,6 @@ export const load: PageLoad = async ({ url, parent }) => {
     const { url: icUrl, state } = await result.json();
     window.localStorage.setItem("oidcState", state);
 
-    throw redirect(302, icUrl);
+    redirect(302, icUrl);
   }
 };

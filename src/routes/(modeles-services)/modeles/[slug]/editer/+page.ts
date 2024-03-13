@@ -13,7 +13,7 @@ export const load: PageLoad = async ({ params, parent }) => {
   const servicesOptions = await getServicesOptions();
 
   if (!model) {
-    throw error(404, "Page Not Found");
+    error(404, "Page Not Found");
   }
 
   const structure = await getStructure(model.structure);

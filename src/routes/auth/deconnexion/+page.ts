@@ -24,7 +24,7 @@ export const load: PageLoad = async ({ parent }) => {
   if (result.ok) {
     jsonResult = await result.json();
     disconnect();
-    throw redirect(302, jsonResult.url);
+    redirect(302, jsonResult.url);
   }
   // TODO: surface error
 };

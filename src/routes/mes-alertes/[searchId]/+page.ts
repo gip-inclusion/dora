@@ -9,7 +9,7 @@ export const ssr = false;
 export const load: PageLoad = async ({ url, params, parent }) => {
   await parent();
   if (!get(token)) {
-    throw redirect(
+    redirect(
       302,
       `/auth/connexion?next=${encodeURIComponent(url.pathname + url.search)}`
     );
@@ -19,7 +19,7 @@ export const load: PageLoad = async ({ url, params, parent }) => {
     (search) => search.id === Number(params.searchId)
   );
   if (!savedSearch) {
-    throw error(404);
+    error(404);
   }
 
   const recentResults = await getRecentSearchResults(savedSearch.id);

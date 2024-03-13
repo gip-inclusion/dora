@@ -37,7 +37,7 @@ export const load: PageLoad = async ({ parent }) => {
     departments = await getDepartments(user.departments);
     [department] = departments;
     if (!department) {
-      throw error(403, "Accès réservé");
+      error(403, "Accès réservé");
     }
     department = department.value;
     title = `Tableau de bord ${user.departments} | DORA`;

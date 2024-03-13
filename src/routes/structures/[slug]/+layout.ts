@@ -51,7 +51,7 @@ export const load: LayoutLoad = async ({ params, parent, url }) => {
   }
 
   if (!currentStructure) {
-    throw error(404, "Page Not Found");
+    error(404, "Page Not Found");
   }
 
   // Récupération des membres

@@ -53,7 +53,7 @@ export const load: LayoutLoad = async ({ url }) => {
         currentUserInfo.pendingStructures.length
       )
     ) {
-      throw redirect(302, `/auth/rattachement${url.search}`);
+      redirect(302, `/auth/rattachement${url.search}`);
     }
 
     // Si l'utilisateur a besoin de valider les CGU en cours de validité
@@ -63,14 +63,14 @@ export const load: LayoutLoad = async ({ url }) => {
       currentPathName.startsWith("/cgu/validation") &&
       !userNeedsToAcceptCgu
     ) {
-      throw redirect(302, "/");
+      redirect(302, "/");
     }
 
     if (
       userNeedsToAcceptCgu &&
       !currentPathName.startsWith("/cgu/validation")
     ) {
-      throw redirect(
+      redirect(
         302,
         `/cgu/validation?next=${encodeURIComponent(url.pathname + url.search)}`
       );

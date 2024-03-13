@@ -17,7 +17,7 @@ export const load: PageLoad = async ({ parent }) => {
   const struct = get(structure);
 
   if (!struct || !struct.canEditServices) {
-    throw error(404, "Page Not Found");
+    error(404, "Page Not Found");
   }
 
   return {
