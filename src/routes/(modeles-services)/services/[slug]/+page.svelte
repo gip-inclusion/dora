@@ -39,10 +39,6 @@
     data.service.publicationDate &&
     data.service.status === "PUBLISHED" &&
     getMinutesSincePublication(data.service) < 1;
-
-  $: structureHasPublishedServices = data.structure?.services.filter(
-    (service) => service.status === "PUBLISHED"
-  ).length;
 </script>
 
 {#if data.service}
@@ -64,28 +60,10 @@
     isDI={data.isDI}
   />
 
-  {#if browser}
-    {#if data.service.canWrite}
-      {#if serviceWasJustPublished && !data.service.hasAlreadyBeenUnpublished}
-        <TallyPopup
-          formId={TallyFormId.SERVICE_CREATION_FORM_ID}
-          timeoutSeconds={3}
-        />
-      {:else if structureHasPublishedServices}
-        <TallyPopup
-          formId={TallyFormId.NPS_FORM_ID}
-          keySuffix="offreur"
-          timeoutSeconds={30}
-          hiddenFields={{ user: "offreur" }}
-        />
-      {/if}
-    {:else}
-      <TallyPopup
-        formId={TallyFormId.NPS_FORM_ID}
-        keySuffix="chercheur"
-        timeoutSeconds={45}
-        hiddenFields={{ user: "chercheur" }}
-      />
-    {/if}
+  {#if browser && data.service.canWrite && serviceWasJustPublished && !data.service.hasAlreadyBeenUnpublished}
+    <TallyPopup
+      formId={TallyFormId.SERVICE_CREATION_FORM_ID}
+      timeoutSeconds={3}
+    />
   {/if}
 {/if}

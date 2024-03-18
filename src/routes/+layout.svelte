@@ -8,8 +8,6 @@
   import UserMainActivityModal from "$lib/components/user/user-main-activity-modal.svelte";
   import { userInfo } from "$lib/utils/auth";
   import { trackPageView } from "$lib/utils/stats";
-  import TallyPopup from "$lib/components/specialized/tally-popup.svelte";
-  import { TallyFormId } from "$lib/consts";
 
   $: trackPageView($page.url.pathname, $page.data.title);
 </script>
@@ -39,15 +37,7 @@
 <Header />
 
 <main id="main-content" role="main">
-  {#if !$userInfo}
-    <TallyPopup
-      formId={TallyFormId.ANONYMOUS_USERS_FORM_ID}
-      timeoutSeconds={50}
-      autoCloseSeconds={5000}
-      hideTitle={false}
-      minDaysBetweenDisplays={null}
-    />
-  {:else if !$userInfo.mainActivity}
+  {#if $userInfo && !$userInfo.mainActivity}
     <UserMainActivityModal />
   {/if}
 
