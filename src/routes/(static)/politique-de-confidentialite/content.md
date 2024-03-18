@@ -33,7 +33,7 @@ Cette mission constitue des motifs d’intérêts publics importants au sens de 
 
 ## Pendant combien de temps conservons-nous ces données ?
 
-| **Type de données**                                                       | **Durée de la conservation**                                                 |
+| **Type de données**                                                       | **Durée de conservation**                                                    |
 | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | Données relatives aux utilisateurs de la plateforme                       | 2 ans à compter du dernier contact avec l’utilisateur de la plateforme DORA. |
 | Données relatives aux personnes suivies par les agents accompagnateurs    | 6 mois après traitement de la demande, ou 2 ans en l’absence de traitement   |
