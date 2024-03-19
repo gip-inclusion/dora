@@ -4,7 +4,6 @@ import {
   getServiceDI,
   getServicesOptions,
 } from "$lib/requests/services";
-import { getStructure } from "$lib/requests/structures";
 import type { Service } from "$lib/types";
 import { token } from "$lib/utils/auth";
 import { error, redirect } from "@sveltejs/kit";
@@ -51,7 +50,6 @@ export const load: PageLoad = async ({ url, params, parent }) => {
     title: `${service.name} | ${service.structureInfo.name} | DORA`,
     description: service.shortDesc,
     service,
-    structure: await getStructure(service.structure),
     servicesOptions: await getServicesOptions(),
   };
 };
