@@ -123,7 +123,7 @@
       </p>
     </div>
     <div class="flex flex-wrap justify-center gap-s16">
-      <LinkButton label="Référencer vos service" to={`/services/creer`} />
+      <LinkButton label="Référencer vos services" to={`/services/creer`} />
       <InviteStructureLink />
     </div>
 
