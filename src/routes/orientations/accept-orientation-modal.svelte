@@ -75,7 +75,6 @@
   on:close
   title="Valider la demande"
   hideTitle={showConfirmation}
-  overflow
   width="medium"
 >
   <div slot="subtitle">

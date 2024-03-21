@@ -161,6 +161,39 @@ export function trackService(service, url, searchId, isDI) {
   }
 }
 
+export function trackServiceShare(
+  service: Service,
+  recipientEmail: string,
+  recipientKind: string,
+  url: URL,
+  searchId: string,
+  isDI: boolean
+) {
+  if (browser) {
+    if (isDI) {
+      logAnalyticsEvent("share", url.pathname, {
+        diStructureName: service.structureInfo.name,
+        diStructureDepartment: service.structureInfo.department,
+        diServiceId: service.slug.split("--")[1],
+        diServiceName: service.name,
+        diSource: service.source,
+        diCategories: service.categories || [],
+        diSubcategories: service.subcategories || [],
+        searchId,
+        recipientEmail,
+        recipientKind,
+      });
+    } else {
+      logAnalyticsEvent("share", url.pathname, {
+        service: service.slug,
+        searchId,
+        recipientEmail,
+        recipientKind,
+      });
+    }
+  }
+}
+
 export function trackStructure(structure, url) {
   if (browser) {
     logAnalyticsEvent("structure", url.pathname, {

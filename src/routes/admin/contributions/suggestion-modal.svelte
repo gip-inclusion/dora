@@ -10,7 +10,7 @@
 </script>
 
 {#if suggestion}
-  <Modal bind:isOpen title="Suggestion" overflow>
+  <Modal bind:isOpen title="Suggestion">
     <div class="flex flex-col gap-s8">
       <Line label="Nom de la structure" data={suggestion.structureInfo.name}>
         {suggestion.structureInfo.name}

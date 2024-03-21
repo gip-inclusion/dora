@@ -47,7 +47,7 @@ export async function getService(slug): Promise<Service> {
 }
 
 export async function getServiceDI(diId): Promise<Service> {
-  const url = `${getApiURL()}/service-di/${diId}/`;
+  const url = `${getApiURL()}/services-di/${diId}/`;
   const response = await fetchData<Service>(url);
 
   if (!response.data) {

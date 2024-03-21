@@ -79,7 +79,6 @@
 <Modal
   bind:isOpen
   on:close={handleClose}
-  overflow
   hideTitle={showConfirmation}
   title="Contacter le ou la bénéficiaire"
   width="medium"

@@ -43,12 +43,7 @@
     : inclusionNumFormAvailableNotice;
 </script>
 
-<Modal
-  bind:isOpen={isSwitchModalOpen}
-  title="Attention !"
-  width="small"
-  overflow
->
+<Modal bind:isOpen={isSwitchModalOpen} title="Attention !" width="small">
   Le passage du formulaire classique vers le formulaire de l’inclusion numérique
   peut entraîner la perte de données déjà enregistrées dans ce service.
   <div class="mt-s32 flex flex-row justify-end gap-s16">

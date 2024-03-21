@@ -113,7 +113,6 @@
   bind:isOpen={confirmationModalIsOpen}
   on:close={onConfirmationClose}
   title="Création du service réussie"
-  overflow
 >
   {#if emailsContacted}
     {#if emailsContacted.length === 0}

@@ -4,7 +4,7 @@
   import { CANONICAL_URL } from "$lib/env";
   import { markPenIcon, checkIcon, downloadIcon, linkIcon } from "$lib/icons";
   import type { Service } from "$lib/types";
-  import FeedbackModal from "$lib/components/specialized/services/feedback/feedback-modal.svelte";
+  import FeedbackModal from "./modals/feedback-modal.svelte";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import { browser } from "$app/environment";
   import { userInfo } from "$lib/utils/auth";

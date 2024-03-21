@@ -27,7 +27,6 @@
   informations sur le service sont exactes."
   on:close={() => (isOpen = false)}
   width="small"
-  overflow
 >
   <div class="pt-s16 text-f18 text-france-blue">
     Périmètre : <strong>{service.diffusionZoneDetailsDisplay}</strong>

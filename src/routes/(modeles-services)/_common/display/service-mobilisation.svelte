@@ -7,11 +7,13 @@
   import ServiceContact from "$lib/components/specialized/services/service-contact.svelte";
   import { trackMobilisation } from "$lib/utils/stats";
   import type { Service } from "$lib/types";
+  import SharingModal from "./modals/sharing-modal.svelte";
 
   export let service: Service;
   export let contactBoxOpen = false;
   export let isDI = false;
 
+  let sharingModalIsOpen = false;
   function showContact() {
     if (!$token) {
       goto(
@@ -42,8 +44,12 @@
     }
   }
 
-  // function handleShareClick() {}
+  function handleShareClick() {
+    sharingModalIsOpen = true;
+  }
 </script>
+
+<SharingModal bind:isOpen={sharingModalIsOpen} {service} {isDI} />
 
 <h2 class="text-f23 text-white">Mobiliser ce service</h2>
 
@@ -62,13 +68,13 @@
       {/if}
     </div>
 
-    <!-- <div class="text-white">
+    <div class="text-white">
       <Button
         on:click={handleShareClick}
         extraClass="!bg-france-blue text-white !border !border-white hover:!bg-magenta-cta hover:!border-france-blue"
         label="Partager cette fiche"
         wFull
       />
-    </div> -->
+    </div>
   </div>
 </div>

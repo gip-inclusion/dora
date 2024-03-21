@@ -8,7 +8,6 @@
   <Modal
     bind:isOpen
     on:close
-    overflow
     title="Créer une ou plusieurs antennes"
     width="medium"
   >

@@ -123,7 +123,6 @@
   bind:isOpen
   on:close
   title="Refuser la demande"
-  overflow
   width="medium"
   hideTitle={showConfirmation}
 >

@@ -29,7 +29,6 @@
   bind:isOpen
   title={structure?.name}
   width="medium"
-  overflow
 >
   <div class="m-s16">
     {#if structure}
