@@ -17,7 +17,7 @@
     <h1 class="sr-only">Mon compte</h1>
     <div class="flex-[2] rounded-md border border-gray-02 md:relative">
       <div
-        class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s35"
+        class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
       >
         <h2 class="m-s0 text-f23 leading-20 text-france-blue">
           Mes informations
@@ -33,8 +33,8 @@
         />
       </div>
 
-      <div class="flex flex-col gap-s35 p-s16 md:mb-s56 md:p-s35">
-        <div class="flex w-full flex-col flex-wrap gap-s35 md:flex-row">
+      <div class="flex flex-col gap-s36 p-s16 md:mb-s56 md:p-s36">
+        <div class="flex w-full flex-col flex-wrap gap-s36 md:flex-row">
           <div class="flex-1">
             <h3 class="mb-s8 text-f18 leading-20">Prénom</h3>
             <div class="text-gray-text">{$userInfo.firstName}</div>
@@ -51,8 +51,8 @@
       </div>
 
       <div class="bottom-s0 w-full pt-s12 md:absolute">
-        <hr class="mx-s12 md:mx-s35" />
-        <p class="m-s0 px-s16 py-s12 text-f14 text-gray-text md:px-s35">
+        <hr class="mx-s12 md:mx-s36" />
+        <p class="m-s0 px-s16 py-s12 text-f14 text-gray-text md:px-s36">
           Vous utilisez <a
             class="underline"
             href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/inclusion-connect-quesaco-y13f84/"

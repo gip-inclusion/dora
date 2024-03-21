@@ -55,7 +55,7 @@
 {#if !structure.quickStartDone}
   <div class="rounded-md border border-gray-03">
     <div
-      class="relative flex items-center justify-between gap-s16 border-b border-gray-01 px-s16 pb-s24 pt-s24 sm:flex-row sm:px-s35"
+      class="relative flex items-center justify-between gap-s16 border-b border-gray-01 px-s16 pb-s24 pt-s24 sm:flex-row sm:px-s36"
     >
       <div>
         <h2 class="mb-s0 text-f23">Guide de démarrage rapide</h2>
@@ -70,12 +70,12 @@
       </button>
     </div>
 
-    <div class="px-s16 font-bold sm:px-s35">
+    <div class="px-s16 font-bold sm:px-s36">
       <ul>
         {#each steps as { label, complete, url }}
           <li
             class:line-through={complete}
-            class="flex items-center border-b border-gray-01 py-s16 sm:py-s35"
+            class="flex items-center border-b border-gray-01 py-s16 sm:py-s36"
           >
             <a
               class="flex hover:underline"
@@ -90,7 +90,7 @@
           </li>
         {/each}
 
-        <li class="py-s35 text-right">
+        <li class="py-s36 text-right">
           <Button
             label="Masquer le guide"
             secondary

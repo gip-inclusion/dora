@@ -4,10 +4,8 @@
   import { createEventDispatcher } from "svelte";
 
   export let active = false;
-  export let inverted = false;
-  export let big = false;
-  export let small = false;
 
+  let disabled;
   let title;
 
   const dispatch = createEventDispatcher();
@@ -32,11 +30,8 @@
 </script>
 
 <button
-  class="tooltip icon inline-block h-s24 w-s24 shrink-0 fill-current text-gray-text-alt2 hover:text-magenta-cta print:hidden"
+  class="tooltip icon inline-block h-s20 w-s20 shrink-0 fill-current text-gray-text-alt2 hover:text-magenta-cta print:hidden"
   class:active
-  class:inverted
-  class:big
-  class:small
   class:disabled
   aria-label={title}
   on:click={handleClick}
@@ -50,26 +45,6 @@
     @apply text-magenta-cta;
   }
 
-  .inverted {
-    @apply text-gray-01 hover:text-white;
-  }
-
-  .inverted.disabled {
-    @apply text-gray-01;
-  }
-
-  .inverted.active {
-    @apply text-white;
-  }
-
-  .big {
-    @apply h-s24 w-s24 md:h-s32 md:w-s32;
-  }
-
-  .small {
-    @apply h-s20 w-s20;
-  }
-
   .disabled {
     @apply text-gray-text-alt;
   }
@@ -78,11 +53,7 @@
   }
 
   .tooltip .tooltiptext {
-    @apply invisible absolute top-[-1000px] left-[-1000px] z-10 w-max -translate-x-1/2 rounded bg-magenta-dark px-s8 py-s2 text-center text-f12 font-bold text-white;
-  }
-
-  .tooltip.big .tooltiptext {
-    @apply top-s35;
+    @apply invisible absolute left-[-1000px] top-[-1000px] z-10 w-max -translate-x-1/2 rounded bg-magenta-dark px-s8 py-s2 text-center text-f12 font-bold text-white;
   }
 
   .tooltip .tooltiptext::after {
@@ -92,6 +63,6 @@
 
   .tooltip:hover .tooltiptext,
   .tooltip:focus .tooltiptext {
-    @apply visible top-s28 left-1/2 opacity-100;
+    @apply visible left-1/2 top-s28 opacity-100;
   }
 </style>

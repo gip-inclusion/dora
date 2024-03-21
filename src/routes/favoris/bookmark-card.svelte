@@ -39,7 +39,7 @@
           </a>
         {/if}
         <div class="flex items-center gap-s8">
-          <FavoriteIcon on:click={onBookmark} active={isBookmarked} small />
+          <FavoriteIcon on:click={onBookmark} active={isBookmarked} />
         </div>
       </div>
 

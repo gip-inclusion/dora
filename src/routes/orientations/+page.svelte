@@ -91,12 +91,12 @@
 
         <div class="flex-[2] rounded-md border border-gray-02 md:relative">
           <div
-            class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s35"
+            class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
           >
             <h2 class="m-s0 text-f23 text-france-blue">La demande</h2>
           </div>
 
-          <div class="flex flex-col gap-s32 p-s35">
+          <div class="flex flex-col gap-s32 p-s36">
             <div>
               <SubTitle label="Bénéficiaire" icon={compass3Icon} />
               <div class="ml-s64">
@@ -227,12 +227,12 @@
         {#if orientation.prescriber?.name || orientation.prescriber?.email || orientation.prescriberStructure?.name}
           <div class="flex-[2] rounded-md border border-gray-02 md:relative">
             <div
-              class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s35"
+              class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
             >
               <h2 class="m-s0 text-f23 text-france-blue">Les contacts</h2>
             </div>
 
-            <div class="flex flex-col gap-s32 p-s35">
+            <div class="flex flex-col gap-s32 p-s36">
               <div>
                 <SubTitle
                   label="Prescripteur ou prescriptrice"

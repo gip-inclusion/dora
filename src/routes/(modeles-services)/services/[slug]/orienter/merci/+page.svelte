@@ -59,7 +59,7 @@
           noBackground
         />
       </div>
-      <div class="mt-s35 flex-shrink-0">
+      <div class="mt-s36 flex-shrink-0">
         <img
           src={illustration}
           alt="Personne avec un sac à dos feuilletant des notes"
