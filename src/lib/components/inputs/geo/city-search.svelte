@@ -7,7 +7,6 @@
 
   export let onChange: (newValue: GeoApiValue) => void;
 
-  export let placeholder;
   export let disabled = false;
   export let id;
   export let value = undefined;
@@ -40,8 +39,6 @@
     const longitude = position.coords.longitude;
     const latitude = position.coords.latitude;
 
-    // pour tester l'API, décommenter:
-    // const q = `lon=2.37&lat=48.357`;
     const url = `${getApiURL()}/admin-division-reverse-search/?type=city&lon=${encodeURIComponent(
       longitude
     )}&lat=${encodeURIComponent(latitude)}`;
@@ -85,7 +82,6 @@
   {id}
   {onChange}
   {initialValue}
-  {placeholder}
   {disabled}
   {choices}
   hideArrow

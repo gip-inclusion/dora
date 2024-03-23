@@ -46,7 +46,7 @@
       const jsonResponse = await response.json();
 
       const results = jsonResponse.map((result) => {
-        result.label = `${result.name} (${result.address1})`;
+        result.label = `${result.name}`;
         return {
           value: result,
           label: result.label,
@@ -98,9 +98,29 @@
     searchFunction={searchSirene}
     delay="200"
     localFiltering={false}
-    postfixValueFunction={(item) => item.siret}
     minCharactersToSearch="3"
-  />
+  >
+    <div
+      slot="itemContent"
+      class="flex grow flex-row items-baseline justify-between gap-s4 px-s8 pt-s8"
+      let:item
+    >
+      <div class="grow">
+        {item.label}<br />
+        <span class="text-f12 text-gray-text-alt">{item.value.address1}</span>
+      </div>
+      {#if item.value.isSiege}
+        <div
+          class="shrink-0 rounded bg-gray-01 px-s6 py-s4 text-f12 font-bold text-gray-text"
+        >
+          Siège
+        </div>
+      {/if}
+      <div class="ml-s8 w-s88 text-f12 text-gray-text-alt">
+        {item.value.siret}
+      </div>
+    </div>
+  </Select>
 
   <p class="pt-s4 text-f14">
     Si vous avez du mal à la retrouver, consultez l’<a

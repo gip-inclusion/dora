@@ -14,9 +14,6 @@
   // function to use to get all items (alternative to providing items)
   export let searchFunction = null;
 
-  // function which returns a postfix value to display in the list
-  export let postfixValueFunction = undefined;
-
   export let textCleanFunction = function (userEnteredText) {
     return userEnteredText;
   };
@@ -32,7 +29,9 @@
   export let maxItemsToShowInList = 0;
   export let multiple = false;
 
+  // Workaround for https://github.com/sveltejs/svelte/issues/5604
   export let hasPrependSlot = false;
+  export let hasCustomContentSlot = false;
 
   // ignores the accents when matching items
   export let ignoreAccents = true;
@@ -210,7 +209,6 @@
       keywords: safeKeywordsFunction(item),
       // item label
       label: item.label,
-      tags: item.tags || [],
       // store reference to the origial item
       item,
     };
@@ -775,7 +773,7 @@
           {#if listItem && (maxItemsToShowInList <= 0 || i < maxItemsToShowInList)}
             {#if listItem}
               <button
-                class="autocomplete-list-item block w-full text-left {i ===
+                class="autocomplete-list-item flex w-full flex-row items-baseline justify-between text-left {i ===
                 highlightIndex
                   ? 'selected'
                   : ''}"
@@ -785,35 +783,18 @@
                   highlightIndex = i;
                 }}
               >
-                <div class="flex flex-row">
-                  <div class="flex grow justify-between">
-                    <div>
-                      {@html listItem.highlighted
-                        ? listItem.highlighted.label
-                        : listItem.label}
-                    </div>
-                    <div class="flex shrink-0 items-baseline">
-                      {#each listItem.tags as tag}
-                        <div
-                          class="break-word shrink-0 rounded bg-gray-01 px-s6 py-s2 text-f12 font-bold text-gray-text"
-                        >
-                          {tag}
-                        </div>
-                      {/each}
-                      {#if postfixValueFunction}
-                        <div
-                          class="ml-s8 inline-block text-f12 text-gray-text-alt"
-                        >
-                          {postfixValueFunction(listItem.value)}
-                        </div>
-                      {/if}
-
-                      <div class="checkmark hidden grow-0">
-                        <div class="ml-s8 h-s16 w-s24 fill-current">
-                          {@html checkIcon}
-                        </div>
-                      </div>
-                    </div>
+                {#if hasCustomContentSlot}
+                  <slot name="itemContent" item={listItem} />
+                {:else}
+                  <div>
+                    {@html listItem.highlighted
+                      ? listItem.highlighted.label
+                      : listItem.label}
+                  </div>
+                {/if}
+                <div class="checkmark invisible grow-0">
+                  <div class="ml-s8 h-s16 w-s24 fill-current">
+                    {@html checkIcon}
                   </div>
                 </div>
               </button>
@@ -945,7 +926,7 @@
   }
 
   .autocomplete-list-item.confirmed .checkmark {
-    display: block;
+    visibility: visible;
   }
 
   .autocomplete-list-item.selected {
