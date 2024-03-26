@@ -187,7 +187,7 @@ export function trackServiceShare(
       logAnalyticsEvent("share", url.pathname, {
         service: service.slug,
         searchId,
-        recipientEmail,
+        recipientEmail: "", // On evite de conserver cette information
         recipientKind,
       });
     }
