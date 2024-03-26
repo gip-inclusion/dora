@@ -4,12 +4,17 @@
 
 - Node.js
 - npm
+- GitGuardian
 
 ## Installation
 
-- Renommer le fichier `.env-example` en `.env`
-- Renseigner la variable `VITE_API_URL` dans le fichier `.env`.
-  - La valeur `"https://api.dora.incubateur.net"` permet de connecter le font sur la preprod et ainsi éviter une mise en place locale du back
+###
+
+- [Installer GitGuardian](https://docs.gitguardian.com/internal-repositories-monitoring/gg_shield/getting_started#step-2-install-ggshield-gitguardian-cli) ;
+- Copier le fichier `.env-example` en `.env` ;
+- Renseigner la variable `VITE_API_URL` dans le fichier `.env` ;
+  - La valeur `"https://api.dora.incubateur.net"` permet de connecter le front sur la preprod et ainsi éviter une mise en place locale du back ;
+- Renseigner la variable `GITGUARDIAN_API_KEY` avec une clé d'API générée sur GitGuardian.com.
 
 ```bash
 # Installer les dépendances
@@ -33,9 +38,6 @@ Merci de vous reporter au README : [./e2e/README.md](./e2e/README.md).
 # Installer les hooks de pre-commit
 npm run prepare
 ```
-
-- [Installer GitGuardian](https://docs.gitguardian.com/internal-repositories-monitoring/gg_shield/getting_started#step-2-install-ggshield-gitguardian-cli).
-- Ajouter la clé d'API dans une variable d'environnement du shell `export GITGUARDIAN_API_KEY='**********'`.
 
 ## Dépannage
 
