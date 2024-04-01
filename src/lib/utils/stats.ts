@@ -180,14 +180,14 @@ export function trackServiceShare(
         diCategories: service.categories || [],
         diSubcategories: service.subcategories || [],
         searchId,
-        recipientEmail,
+        recipientEmail: "", // On evite de conserver cette information
         recipientKind,
       });
     } else {
       logAnalyticsEvent("share", url.pathname, {
         service: service.slug,
         searchId,
-        recipientEmail,
+        recipientEmail: "", // On evite de conserver cette information
         recipientKind,
       });
     }
