@@ -54,7 +54,7 @@
   }
   const tabs: { id: string; name: string }[] = [];
   if (showSafir) {
-    tabs.push({ id: "safir", name: "Agences Pôle emploi" });
+    tabs.push({ id: "safir", name: "Agences France Travail" });
   }
 
   tabs.push(
