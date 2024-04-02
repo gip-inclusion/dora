@@ -1,12 +1,18 @@
 import * as v from "../schema-utils";
 import { SIREN_FRANCE_TRAVAIL } from "$lib/consts";
 
-function checkPoleEmploiRestrictions(msg = "") {
+function checkFranceTravailRestrictions(msg = "") {
   return (_name, value, data) => ({
     valid: data.siret.startsWith(SIREN_FRANCE_TRAVAIL)
-      ? !!(value.endsWith("@pole-emploi.fr") || value.endsWith("beta.gouv.fr"))
+      ? !!(
+          value.endsWith("@pole-emploi.fr") ||
+          value.endsWith("@francetravail.fr") ||
+          value.endsWith("beta.gouv.fr")
+        )
       : true,
-    msg: msg || `Veuillez saisir une adresse en @pole-emploi.fr`,
+    msg:
+      msg ||
+      `Veuillez saisir une adresse en @francetravail.fr ou @pole-emploi.fr`,
   });
 }
 
@@ -14,7 +20,7 @@ export const addUserSchema = {
   email: {
     label: "Courriel",
     default: "",
-    rules: [v.isEmail(), checkPoleEmploiRestrictions(), v.maxStrLength(254)],
+    rules: [v.isEmail(), checkFranceTravailRestrictions(), v.maxStrLength(254)],
     post: [v.lower, v.trim],
     maxLength: 254,
     required: true,

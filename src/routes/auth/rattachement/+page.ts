@@ -29,14 +29,17 @@ function safirSearch(safir: string) {
 export const load: PageLoad = async ({ url, parent }) => {
   await parent();
   const userEmail = get(userInfo)?.email;
-  const userIsPe =
+  const userIsFranceTravail =
     userEmail?.endsWith("@pole-emploi.fr") ||
+    userEmail?.endsWith("@francetravail.fr") ||
     userEmail?.endsWith("@beta.gouv.fr");
 
   let establishment: Establishment | undefined;
 
   const proposedSiret = url.searchParams.get("siret");
-  const proposedSafir = userIsPe ? url.searchParams.get("safir") : "";
+  const proposedSafir = userIsFranceTravail
+    ? url.searchParams.get("safir")
+    : "";
 
   if (proposedSiret) {
     const response = await siretSearch(proposedSiret);
@@ -55,6 +58,6 @@ export const load: PageLoad = async ({ url, parent }) => {
     establishment,
     proposedSiret,
     proposedSafir,
-    userIsPe,
+    userIsFranceTravail,
   };
 };
