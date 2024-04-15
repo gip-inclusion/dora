@@ -16,7 +16,7 @@
 
   let cguAccepted = false;
   let { establishment } = data;
-  const { proposedSiret, proposedSafir, userIsPe } = data;
+  const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
   let ctaLabel = "";
   let joinError = "";
 
@@ -80,7 +80,7 @@
       description="Pour accéder à toutes les fonctionnalités, merci de nous indiquer la structure dans laquelle vous travaillez :"
       {proposedSafir}
       {proposedSiret}
-      showSafir={userIsPe}
+      showSafir={userIsFranceTravail}
     >
       <div slot="cta">
         {#if establishment?.siret}
