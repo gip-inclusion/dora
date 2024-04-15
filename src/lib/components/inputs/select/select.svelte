@@ -23,13 +23,12 @@
     | ((newValues: string[]) => void)
     | undefined = undefined;
   export let initialValue = undefined;
-  export let postfixValueFunction = undefined;
   export let showClear = true;
   export let errorMessages: string[] = [];
 
-  // on pourra supprimer cette ligne lorsque cette issue sera résolue
   // https://github.com/sveltejs/svelte/issues/5604
   const hasPrependSlot = $$slots.prepend;
+  const hasCustomContentSlot = $$slots.itemContent;
 
   $: {
     if (sort) {
@@ -57,7 +56,6 @@
   {placeholderMulti}
   {multiple}
   {searchFunction}
-  {postfixValueFunction}
   {delay}
   className="rounded focus-within:shadow-focus"
   inputClassName="focus:outline-none border rounded border-gray-03"
@@ -66,9 +64,12 @@
   {hideArrow}
   {showClear}
   {hasPrependSlot}
+  {hasCustomContentSlot}
   {errorMessages}
 >
-  <!-- {#if $$slots.prepend} -->
   <slot name="prepend" slot="prepend" />
-  <!-- {/if} -->
+
+  <svelte:fragment slot="itemContent" let:item>
+    <slot name="itemContent" {item} />
+  </svelte:fragment>
 </AutoComplete>

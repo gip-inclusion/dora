@@ -12,7 +12,6 @@
 
   export let disabled = false;
   export let readonly = $currentSchema?.[id]?.readonly;
-  export let placeholder = "";
   export let initialValue = "";
 
   // Spécifique
@@ -39,13 +38,6 @@
     {disabled}
     {readonly}
   >
-    <CitySearch
-      on:blur={onBlur}
-      {id}
-      {onChange}
-      {initialValue}
-      {disabled}
-      {placeholder}
-    />
+    <CitySearch on:blur={onBlur} {id} {onChange} {initialValue} {disabled} />
   </FieldWrapper>
 {/if}
