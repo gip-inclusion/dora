@@ -76,7 +76,7 @@
   <div class="flex">
     <div class="flex-1">
       <h3>
-        <span class="mr-s8 h-s24 w-s24 fill-current">
+        <span class="mr-s8 h-s24 w-s24 shrink-0 self-baseline fill-current">
           {@html priceTagIcon}
         </span>
         Type de service
@@ -96,7 +96,7 @@
     {#if service.feeCondition && isNotFreeService(service.feeCondition)}
       <div class="flex-1">
         <h3>
-          <span class="mr-s8 h-s24 w-s24 fill-current">
+          <span class="mr-s8 h-s24 w-s24 shrink-0 self-baseline fill-current">
             {@html euroLineIcon}
           </span>
           Frais à charge
@@ -118,10 +118,10 @@
 
   <hr class="mb-s10 mt-s20" />
 
-  <div class="flex w-full gap-s32">
+  <div class="flex">
     <div class="flex-1">
       <h3>
-        <span class="mr-s8 h-s24 w-s24 fill-current">
+        <span class="mr-s8 h-s24 w-s24 shrink-0 self-baseline fill-current">
           {@html mapPinUserFillIcon}
         </span>
         Lieu d’accueil
@@ -162,7 +162,7 @@
     {#if service.recurrence}
       <div class="flex-1">
         <h3>
-          <span class="mr-s8 h-s24 w-s24 fill-current">
+          <span class="mr-s8 h-s24 w-s24 shrink-0 self-baseline fill-current">
             {@html timeLineIcon}
           </span>
           Fréquence et horaires

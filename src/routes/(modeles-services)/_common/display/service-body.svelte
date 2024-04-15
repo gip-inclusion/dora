@@ -22,7 +22,18 @@
       <div>
         <ServicePresentation {service} {servicesOptions} {isDI} />
       </div>
+      <div class="main-content">
+        <div>
+          <hr class="my-s24" />
+          <ServiceBeneficiaries {service} />
+        </div>
+        <hr class="my-s24" />
+        <div class="mobilize">
+          <ServiceMobilize {service} />
+        </div>
+      </div>
     </div>
+
     {#if browser}
       <div class="flex flex-none flex-col gap-y-s24 md:w-[320px] lg:w-[375px]">
         {#if !isModel}
@@ -42,17 +53,5 @@
         {/if}
       </div>
     {/if}
-  </div>
-  <div class="flex flex-col">
-    <div class="main-content">
-      <div>
-        <hr class="my-s24" />
-        <ServiceBeneficiaries {service} />
-      </div>
-      <hr class="my-s24" />
-      <div class="mobilize">
-        <ServiceMobilize {service} />
-      </div>
-    </div>
   </div>
 </CenteredGrid>
