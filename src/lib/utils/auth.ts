@@ -15,6 +15,13 @@ export type UserMainActivity =
   | "accompagnateur_offreur"
   | "autre";
 
+export type DiscoveryMethod =
+  | "bouche-a-oreille"
+  | "moteurs-de-recherche"
+  | "reseaux-sociaux"
+  | "evenements-dora"
+  | "autre";
+
 export interface UserInfo {
   firstName: string;
   lastName: string;
@@ -31,6 +38,8 @@ export interface UserInfo {
   structures: ShortStructure[];
   pendingStructures: ShortStructure[];
   mainActivity: UserMainActivity;
+  discoveryMethod: DiscoveryMethod;
+  discoveryMethodOther: string;
 }
 
 export const userInfo = writable<UserInfo>(null);

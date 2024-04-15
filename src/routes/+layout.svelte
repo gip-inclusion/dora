@@ -5,7 +5,7 @@
   import Footer from "./_index/footer.svelte";
   import Header from "./_index/header.svelte";
   import SkipLink from "./_index/skip-link.svelte";
-  import UserMainActivityModal from "$lib/components/user/user-main-activity-modal.svelte";
+  import UserOnboardingModal from "$lib/components/user/user-onboarding-modal.svelte";
   import { userInfo } from "$lib/utils/auth";
   import { trackPageView } from "$lib/utils/stats";
 
@@ -38,7 +38,7 @@
 
 <main id="main-content" role="main">
   {#if $userInfo && !$userInfo.mainActivity}
-    <UserMainActivityModal />
+    <UserOnboardingModal />
   {/if}
 
   <slot />

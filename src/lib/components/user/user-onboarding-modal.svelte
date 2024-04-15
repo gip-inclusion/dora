@@ -1,5 +1,5 @@
 <script lang="ts">
-  import UserMainActivityForm from "./user-main-activity-form.svelte";
+  import UserOnboardingForm from "./user-onboarding-form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
 
   let isOpen = true;
@@ -12,8 +12,9 @@
 <Modal
   bind:isOpen
   title="Dites-nous en plus sur vous !"
+  subtitle="Pour nous permettre de mieux vous connaître et de répondre précisément à vos besoins."
   width="medium"
   canClose={false}
 >
-  <UserMainActivityForm {onSuccess} />
+  <UserOnboardingForm {onSuccess} />
 </Modal>

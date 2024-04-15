@@ -1,11 +1,17 @@
 import { get } from "svelte/store";
 import { getApiURL } from "./api";
-import { token, type UserMainActivity } from "./auth";
+import { token, type DiscoveryMethod, type UserMainActivity } from "./auth";
 
-export function updateUserMainActivity(userMainActivity: UserMainActivity) {
-  return fetch(`${getApiURL()}/profile/main-activity/`, {
-    method: "POST",
-    body: JSON.stringify({ mainActivity: userMainActivity }),
+export interface UpdateUserProfileInput {
+  mainActivity?: UserMainActivity;
+  discoveryMethod?: DiscoveryMethod;
+  discoveryMethodOther?: string;
+}
+
+export function updateUserProfile(userProfileData: UpdateUserProfileInput) {
+  return fetch(`${getApiURL()}/profile/`, {
+    method: "PATCH",
+    body: JSON.stringify(userProfileData),
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json; version=1.0",
