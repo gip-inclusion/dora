@@ -272,54 +272,6 @@
     {:else}
       <p class="p-s16 text-center">Impossible de contacter le serveur</p>
     {/if}
-    {#if useAdditionalFilters}
-      <div
-        class="flex flex-col rounded-b-md border-t border-gray-02 bg-white p-s16 text-f14 md:flex-row"
-      >
-        <div class=" mr-s12 md:mb-s0">
-          <SelectField
-            hideLabel
-            isMultiple
-            style="filter"
-            label="Type de service"
-            minDropdownWidth="min-w-[200px]"
-            name="kinds"
-            placeholder="Type de service"
-            bind:value={kindIds}
-            choices={servicesOptions.kinds}
-            onChange={enableRefreshButton}
-          />
-        </div>
-        <div class=" mr-s12 md:mb-s0">
-          <SelectField
-            hideLabel
-            isMultiple
-            minDropdownWidth="min-w-[260px]"
-            style="filter"
-            label="Frais à charge"
-            name="fee"
-            placeholder="Frais à charge"
-            bind:value={feeConditions}
-            choices={servicesOptions.feeConditions}
-            onChange={enableRefreshButton}
-          />
-        </div>
-        <div>
-          <SelectField
-            hideLabel
-            isMultiple
-            minDropdownWidth="min-w-[160px]"
-            style="filter"
-            label="Lieu d’accueil"
-            name="locs"
-            placeholder="Lieu d’accueil"
-            bind:value={locationKinds}
-            choices={servicesOptions.locationKinds}
-            onChange={enableRefreshButton}
-          />
-        </div>
-      </div>
-    {/if}
   </div>
 </form>
 

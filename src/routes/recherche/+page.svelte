@@ -1,4 +1,8 @@
 <script lang="ts">
+  import { tick } from "svelte";
+
+  import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
@@ -13,21 +17,66 @@
   import { isInDeploymentDepartments } from "$lib/utils/misc";
   import { getQueryString } from "$lib/utils/service-search";
 
-  import { tick } from "svelte";
   import type { PageData } from "./$types";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
   import OnlyNationalResultsNotice from "./only-national-results-notice.svelte";
   import SearchPromo from "./search-promo.svelte";
   import SearchResult from "./search-result.svelte";
   import ServiceSuggestionNotice from "./service-suggestion-notice.svelte";
+  import ResultFilters, { type Filters } from "./result-filters.svelte";
 
   export let data: PageData;
 
   const PAGE_LENGTH = 10;
 
+  const FILTER_KEY_TO_QUERY_PARAM = {
+    kinds: "kinds",
+    feeConditions: "fees",
+    locationKinds: "locs",
+  };
+
   let currentPageLength = PAGE_LENGTH;
 
   let creatingAlert = false;
+
+  let filters = Object.entries(FILTER_KEY_TO_QUERY_PARAM).reduce<Filters>(
+    (acc, [filterKey, queryParam]) => ({
+      ...acc,
+      [filterKey]: $page.url.searchParams.get(queryParam)?.split(",") || [],
+    }),
+    {} as Filters
+  );
+
+  // Filtre les services en fonctions des filtres sélectionnés
+  $: filteredServices = data.services.filter((service) => {
+    const kindsMatch =
+      filters.kinds.length === 0 ||
+      (service.kinds &&
+        filters.kinds.some((value) => service.kinds!.includes(value)));
+    const feeConditionMatch =
+      filters.feeConditions.length === 0 ||
+      (service.feeCondition &&
+        filters.feeConditions.includes(service.feeCondition));
+    const locationKindsMatch =
+      filters.locationKinds.length === 0 ||
+      filters.locationKinds.some((value) =>
+        service.locationKinds.includes(value)
+      );
+    return kindsMatch && feeConditionMatch && locationKindsMatch;
+  });
+
+  // Met à jour les paramètres d'URL en fonction des filtres sélectionnés
+  $: {
+    Object.keys(filters).forEach((filterKey) => {
+      const queryParam = FILTER_KEY_TO_QUERY_PARAM[filterKey];
+      if (filters[filterKey].length > 0) {
+        $page.url.searchParams.set(queryParam, filters[filterKey]);
+      } else {
+        $page.url.searchParams.delete(queryParam);
+      }
+    });
+    goto(`?${$page.url.searchParams.toString()}`);
+  }
 
   function hasOnlyNationalResults(services: ServiceSearchResult[]) {
     if (services.length === 0) {
@@ -126,67 +175,78 @@
   </div>
 </CenteredGrid>
 
-<CenteredGrid extraClass="max-w-4xl m-auto">
-  <div class="mt-s16 text-f21">
-    {data.services.length > 0 ? data.services.length : "Aucun"}
-    {data.services.length > 1 ? "services" : "service"}
-    à proximité de <b>{data.cityLabel}</b>
-  </div>
-
-  {#if showDeploymentNotice}
-    <div class="mt-s24">
-      <DoraDeploymentNotice />
+<CenteredGrid extraClass="m-auto">
+  <div class="lg:flex lg:flex-row lg:items-start lg:gap-s24">
+    <div class="rounded-ml border border-gray-02 p-s32 shadow-sm lg:basis-1/3">
+      <ResultFilters servicesOptions={data.servicesOptions} bind:filters />
     </div>
-  {/if}
-
-  {#if hasOnlyNationalResults(data.services)}
-    <div class="mt-s24">
-      <OnlyNationalResultsNotice />
-    </div>
-  {/if}
-
-  {#if data.services.length}
-    <div class="mt-s32 flex flex-col gap-s16">
-      <h2 class="sr-only">Résultats de votre recherche</h2>
-      {#each data.services as service, index}
-        {#if index < currentPageLength}
-          <SearchResult
-            id={getResultId(index)}
-            result={service}
-            searchId={data.searchId}
-          />
-        {/if}
-      {/each}
-
-      <div class="sticky bottom-s16 z-10 m-auto flex justify-center">
-        {#if currentSearchWasAlreadySaved}
-          <LinkButton to="/mes-alertes" secondary label="Voir mes alertes" />
-        {:else}
-          <Button
-            label="Créer une alerte"
-            disabled={!data.cityCode || creatingAlert}
-            on:click={handleCreateAlertClick}
-          />
-        {/if}
+    <div class="lg:basis-2/3">
+      <div class="mt-s16 text-f21">
+        {filteredServices.length > 0 ? filteredServices.length : "Aucun"}
+        {filteredServices.length > 1 ? "services" : "service"}
+        à proximité de <b>{data.cityLabel}</b>
       </div>
 
-      {#if data.services.length > currentPageLength}
-        <div class="text-center">
-          <Button
-            label="Charger plus de résultats"
-            on:click={loadMoreResult}
-            noBackground
-          />
+      {#if showDeploymentNotice}
+        <div class="mt-s24">
+          <DoraDeploymentNotice />
         </div>
       {/if}
+
+      {#if hasOnlyNationalResults(filteredServices)}
+        <div class="mt-s24">
+          <OnlyNationalResultsNotice />
+        </div>
+      {/if}
+
+      {#if filteredServices.length}
+        <div class="mt-s32 flex flex-col gap-s16">
+          <h2 class="sr-only">Résultats de votre recherche</h2>
+          {#each filteredServices as service, index}
+            {#if index < currentPageLength}
+              <SearchResult
+                id={getResultId(index)}
+                result={service}
+                searchId={data.searchId}
+              />
+            {/if}
+          {/each}
+
+          <div class="sticky bottom-s16 z-10 m-auto flex justify-center">
+            {#if currentSearchWasAlreadySaved}
+              <LinkButton
+                to="/mes-alertes"
+                secondary
+                label="Voir mes alertes"
+              />
+            {:else}
+              <Button
+                label="Créer une alerte"
+                disabled={!data.cityCode || creatingAlert}
+                on:click={handleCreateAlertClick}
+              />
+            {/if}
+          </div>
+
+          {#if filteredServices.length > currentPageLength}
+            <div class="text-center">
+              <Button
+                label="Charger plus de résultats"
+                on:click={loadMoreResult}
+                noBackground
+              />
+            </div>
+          {/if}
+        </div>
+      {/if}
+
+      <div class="mb-s24 mt-s48 lg:flex lg:gap-s24">
+        <ServiceSuggestionNotice />
+      </div>
+
+      {#if data.subCategoryIds.includes("famille--garde-enfants") || data.subCategoryIds.includes("famille--accompagnement-parents")}
+        <SearchPromo />
+      {/if}
     </div>
-  {/if}
-
-  <div class="mb-s24 mt-s48 lg:flex lg:gap-s24">
-    <ServiceSuggestionNotice />
   </div>
-
-  {#if data.subCategoryIds.includes("famille--garde-enfants") || data.subCategoryIds.includes("famille--accompagnement-parents")}
-    <SearchPromo />
-  {/if}
 </CenteredGrid>

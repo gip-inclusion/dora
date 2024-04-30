@@ -315,6 +315,9 @@ export interface SearchQuery {
 }
 
 export interface ServiceSearchResult {
+  // Une valeur nulle (null) signifie que l'information n'est pas renseignée tandis
+  // qu'une valeur vide ("" ou []) signifie que l'information est renseignée mais vide.
+  // Ces valeurs ayant un sens différent, leur traitement peut lui aussi différer.
   distance: number;
   address1: string;
   address2: string;
@@ -328,6 +331,8 @@ export interface ServiceSearchResult {
   structure: string;
   status: ServiceStatus;
   updateStatus: ServiceUpdateStatus;
+  kinds: ServiceKind[] | null;
+  feeCondition: FeeCondition | null;
   locationKinds: LocationKind[];
   structureInfo: {
     address1: string;

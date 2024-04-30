@@ -25,9 +25,11 @@
   export let initialValue = undefined;
   export let showClear = true;
   export let errorMessages: string[] = [];
+  export let extraClass = "";
 
   // https://github.com/sveltejs/svelte/issues/5604
   const hasPrependSlot = $$slots.prepend;
+  const hasAppendSlot = $$slots.append;
   const hasCustomContentSlot = $$slots.itemContent;
 
   $: {
@@ -57,13 +59,14 @@
   {multiple}
   {searchFunction}
   {delay}
-  className="rounded focus-within:shadow-focus"
+  className="rounded focus-within:shadow-focus {extraClass}"
   inputClassName="focus:outline-none border rounded border-gray-03"
   dropdownClassName="!top-[48px] rounded shadow-md"
   showLoadingIndicator
   {hideArrow}
   {showClear}
   {hasPrependSlot}
+  {hasAppendSlot}
   {hasCustomContentSlot}
   {errorMessages}
 >
@@ -72,4 +75,6 @@
   <svelte:fragment slot="itemContent" let:item>
     <slot name="itemContent" {item} />
   </svelte:fragment>
+
+  <slot name="append" slot="append" />
 </AutoComplete>

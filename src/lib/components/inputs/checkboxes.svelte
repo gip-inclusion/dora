@@ -5,14 +5,14 @@
 
   import CheckboxMark from "../display/checkbox-mark.svelte";
 
-  export let id,
-    group,
-    choices,
-    disabled,
-    name,
-    readonly,
-    horizontalCheckboxes = false,
-    errorMessages: string[] = [];
+  export let id;
+  export let name;
+  export let group;
+  export let choices;
+  export let disabled = false;
+  export let readonly = false;
+  export let horizontalCheckboxes = false;
+  export let errorMessages: string[] = [];
 
   const dispatch = createEventDispatcher();
 

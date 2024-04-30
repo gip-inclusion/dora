@@ -75,9 +75,10 @@ export const load: PageLoad = async ({ url, parent }) => {
     cityCode,
     cityLabel,
     label,
-    kindIds,
-    feeConditions,
-    locationKinds,
+    // Le filtrage sur kindIds, feeConditions et locationKinds se fait côté frontend
+    kindIds: [],
+    feeConditions: [],
+    locationKinds: [],
     lon,
     lat,
   });
