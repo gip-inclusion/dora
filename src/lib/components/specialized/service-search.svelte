@@ -28,12 +28,6 @@
   } from "$lib/utils/service";
   import { getQueryString } from "$lib/utils/service-search";
   import { onMount } from "svelte";
-  import { refreshUserInfo, userInfo } from "$lib/utils/auth";
-  import LinkButton from "../display/link-button.svelte";
-  import {
-    getSavedSearchQueryString,
-    saveSearch,
-  } from "$lib/requests/saved-search";
 
   export let servicesOptions: ServicesOptions;
   export let cityCode: string | undefined = undefined;
@@ -48,10 +42,11 @@
   export let kindIds: ServiceKind[] = [];
   export let feeConditions: FeeCondition[] = [];
   export let locationKinds: LocationKind[] = [];
+  export let initialSearch = false;
 
   let innerWidth;
-  let requestingSave = false;
-  let refreshDisabled = true;
+  let submitDisabled = !initialSearch;
+  let refreshMode = false;
   const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
   let subCategories: Choice[] = [];
 
@@ -98,7 +93,10 @@
   }
 
   function enableRefreshButton() {
-    refreshDisabled = false;
+    if (!initialSearch) {
+      refreshMode = true;
+      submitDisabled = false;
+    }
   }
 
   function handleAddressChange(address) {
@@ -115,73 +113,38 @@
   }
 
   function handleSearch() {
-    refreshDisabled = true;
+    submitDisabled = true;
+    refreshMode = false;
     goto(`/recherche?${query}`, { noScroll: true });
   }
 
-  async function doSaveSearch() {
-    requestingSave = true;
-    await saveSearch({
-      category: categoryId,
-      subcategories: subCategoryIds.filter((value) => !value.endsWith("--all")),
-      cityCode,
-      cityLabel,
-      kinds: kindIds,
-      fees: feeConditions,
-      locationKinds,
-    });
-    await refreshUserInfo();
-    requestingSave = false;
-  }
-
-  function handleCategoryChange(clearSubCategories = false) {
-    enableRefreshButton();
-
-    if (clearSubCategories) {
-      subCategoryIds = [];
-    }
+  function loadSubCategories() {
     if (categoryId) {
+      const allSubCategoriesValue = `${categoryId}--all`;
       subCategories = sortSubcategory([
         {
-          value: `${categoryId}--all`,
+          value: allSubCategoriesValue,
           label: "Tous les besoins",
         },
         ...servicesOptions.subcategories.filter((sub) =>
           sub.value.startsWith(categoryId)
         ),
       ]);
+      subCategoryIds = [allSubCategoriesValue];
     } else {
       subCategories = [];
     }
   }
 
-  onMount(() => {
-    handleCategoryChange();
-  });
-
-  let currentSearchWasAlreadySaved;
-  $: {
-    // Saved searches don't store the street address neither lat/lon
-    const currentShortQueryString = getQueryString({
-      categoryIds: [categoryId ? categoryId : ""],
-      subCategoryIds: subCategoryIds.filter(
-        (value) => !value.endsWith("--all")
-      ),
-      cityCode,
-      cityLabel,
-      label: undefined,
-      kindIds,
-      feeConditions,
-      locationKinds,
-    });
-
-    const userSavedSearches = $userInfo?.savedSearches || [];
-
-    const result = userSavedSearches.some(
-      (search) => getSavedSearchQueryString(search) === currentShortQueryString
-    );
-    currentSearchWasAlreadySaved = result;
+  function handleCategoryChange() {
+    enableRefreshButton();
+    subCategoryIds = [];
+    loadSubCategories();
   }
+
+  onMount(() => {
+    loadSubCategories();
+  });
 </script>
 
 <svelte:window bind:innerWidth />
@@ -252,7 +215,7 @@
             placeholder="Sélectionnez une thématique"
             bind:value={categoryId}
             choices={categories}
-            onChange={() => handleCategoryChange(true)}
+            onChange={handleCategoryChange}
           />
         </div>
 
@@ -282,17 +245,18 @@
               />
             {/key}
           </div>
-        {:else}
-          <div class="p-s12 text-center lg:p-s16">
-            <Button
-              extraClass="h-s48"
-              type="submit"
-              label="Rechercher"
-              disabled={!cityCode}
-              preventDefaultOnMouseDown
-            />
-          </div>
         {/if}
+        <div class="p-s12 text-center lg:p-s16">
+          <Button
+            extraClass="h-s48"
+            type="submit"
+            label={refreshMode ? "Actualiser" : "Rechercher"}
+            title={submitDisabled
+              ? "Modifiez un des critères avant d’actualiser la recherche"
+              : undefined}
+            disabled={!cityCode || submitDisabled}
+          />
+        </div>
       </div>
 
       {#if showDeploymentWarning && cityCode && !isInDeploymentDepartments(cityCode, servicesOptions)}
@@ -357,35 +321,6 @@
       </div>
     {/if}
   </div>
-
-  {#if useAdditionalFilters}
-    <div class="mt-s24 flex justify-center gap-s16 lg:p-s16">
-      <Button
-        extraClass="h-s48"
-        type="submit"
-        label="Actualiser la recherche"
-        disabled={!cityCode || refreshDisabled}
-        on:click={handleSearch}
-      />
-
-      {#if currentSearchWasAlreadySaved}
-        <LinkButton
-          to="/mes-alertes"
-          extraClass="h-s48"
-          secondary
-          label="Voir mes alertes"
-        />
-      {:else}
-        <Button
-          extraClass="h-s48"
-          secondary
-          label="Créer une alerte"
-          disabled={!cityCode || requestingSave}
-          on:click={doSaveSearch}
-        />
-      {/if}
-    </div>
-  {/if}
 </form>
 
 <style lang="postcss">
@@ -404,7 +339,7 @@
       grid-template-columns: 3fr 3fr 1fr;
     }
     .with-subcategories {
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 2fr 2fr 2fr 1fr;
     }
   }
 

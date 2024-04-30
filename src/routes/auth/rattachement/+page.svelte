@@ -11,6 +11,7 @@
   import { CGU_VERSION } from "../../(static)/cgu/version";
   import loopImg from "$lib/assets/icons/loop.svg";
   import Notice from "$lib/components/display/notice.svelte";
+  import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
 
   export let data: PageData;
 
@@ -98,14 +99,7 @@
                     type="checkbox"
                     class="hidden"
                   />
-                  <div
-                    class="flex h-s24 w-s24 shrink-0 justify-center rounded border border-gray-03"
-                  >
-                    <div
-                      class=" h-s12 w-s12 self-center bg-magenta-cta"
-                      class:hidden={!cguAccepted}
-                    />
-                  </div>
+                  <CheckboxMark />
                   <span class="ml-s16 inline-block text-f14 text-gray-text">
                     Je déclare avoir lu les
                     <a

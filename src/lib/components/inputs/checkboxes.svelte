@@ -1,6 +1,9 @@
 <script lang="ts">
-  import { formatErrors } from "$lib/validation/validation";
   import { createEventDispatcher } from "svelte";
+
+  import { formatErrors } from "$lib/validation/validation";
+
+  import CheckboxMark from "../display/checkbox-mark.svelte";
 
   export let id,
     group,
@@ -43,11 +46,7 @@
         {readonly}
         aria-describedby={formatErrors(id, errorMessages)}
       />
-      <div
-        class="flex h-s24 w-s24 shrink-0 justify-center rounded border border-gray-03"
-      >
-        <div class="hidden h-s12 w-s12 self-center bg-magenta-cta" />
-      </div>
+      <CheckboxMark />
       <span class="ml-s16 inline-block text-f16 text-gray-text"
         >{choice.label}</span
       >
@@ -56,9 +55,6 @@
 </div>
 
 <style lang="postcss">
-  input[type="checkbox"]:checked + div div {
-    @apply block;
-  }
   label {
     @apply rounded p-s2;
   }

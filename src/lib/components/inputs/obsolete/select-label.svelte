@@ -21,7 +21,7 @@
   class:justify-between={icon && showIcon && iconOnRight}
 >
   {#if icon && showIcon && !iconOnRight}
-    <span class="mr-s4 h-s24 w-s24 fill-current">
+    <span class="mr-s4 h-s24 w-s24 shrink-0 fill-current">
       {@html icon}
     </span>
   {/if}
@@ -29,7 +29,7 @@
   {label}
 
   {#if icon && showIcon && iconOnRight}
-    <span class="mr-s4 h-s24 w-s24 fill-current">
+    <span class="mr-s4 h-s24 w-s24 shrink-0 fill-current">
       {@html icon}
     </span>
   {/if}

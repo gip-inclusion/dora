@@ -3,6 +3,7 @@
   import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import { token, validateCredsAndFillUserInfo } from "$lib/utils/auth";
@@ -93,14 +94,7 @@
         <div class="legend">
           <label class="flex flex-row items-start">
             <input bind:checked={cguAccepted} type="checkbox" class="hidden" />
-            <div
-              class="flex h-s24 w-s24 shrink-0 justify-center rounded border border-gray-03"
-            >
-              <div
-                class=" h-s12 w-s12 self-center bg-magenta-cta"
-                class:hidden={!cguAccepted}
-              />
-            </div>
+            <CheckboxMark />
             <span class="ml-s16 inline-block text-f14 text-gray-text">
               Je déclare avoir lu les
               <a href="/cgu" class="underline" target="_blank" rel="noopener"

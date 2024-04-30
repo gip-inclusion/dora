@@ -37,6 +37,7 @@
     cityCode={data.cityCode}
     cityLabel={data.cityLabel}
     label={data.cityLabel}
+    initialSearch
   />
 </CenteredGrid>
 

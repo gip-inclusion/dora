@@ -4,6 +4,7 @@
   export let id: string | undefined = undefined;
   export let name: string | undefined = undefined;
   export let icon: string | undefined = undefined;
+  export let title: string | undefined = undefined;
   export let extraClass = "";
   export let iconOnRight = false;
   export let hideLabel = false;
@@ -80,6 +81,7 @@
   {id}
   {type}
   {name}
+  {title}
   class="{paddingX} {paddingY} {textSize} {border} {text} {extraClass} {background}  break-words rounded leading-normal outline-none focus:shadow-focus"
   class:w-full={wFull}
   class:whitespace-nowrap={noWrap}
