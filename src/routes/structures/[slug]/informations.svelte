@@ -48,7 +48,7 @@
     structure.openingHoursDetails ||
     structure.accesslibreUrl;
 
-  $: displayInformations = false;
+  let displayInformations = false;
 
   async function showInformations() {
     displayInformations = true;
@@ -141,7 +141,7 @@
               </h4>
 
               <a class="text-gray-text underline" href="tel:{structure.phone}">
-                {formatPhoneNumber(String(structure.phone))}
+                {formatPhoneNumber(structure.phone)}
               </a>
             </div>
           {/if}
