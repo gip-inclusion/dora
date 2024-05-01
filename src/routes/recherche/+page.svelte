@@ -75,7 +75,10 @@
         $page.url.searchParams.delete(queryParam);
       }
     });
-    goto(`?${$page.url.searchParams.toString()}`);
+    goto(`?${$page.url.searchParams.toString()}`, {
+      noScroll: true,
+      keepFocus: true,
+    });
   }
 
   function hasOnlyNationalResults(services: ServiceSearchResult[]) {
