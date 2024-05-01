@@ -115,9 +115,9 @@
       </Notice>
 
       <div class="flex flex-row gap-s48">
-        {#if service.onlineForm || service.formsInfo.length}
+        {#if service.onlineForm || service.formsInfo?.length}
           <div>
-            {#if service.formsInfo.length}
+            {#if service.formsInfo?.length}
               <h4 class="mb-s4">Documents à compléter</h4>
               <p class="text-f12 text-gray-text-alt2">
                 Téléchargez et complétez les documents requis
