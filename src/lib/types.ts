@@ -175,7 +175,7 @@ export interface Structure {
   openingHoursDetails: string | null;
   otherLabels: string;
   parent: string;
-  phone: number;
+  phone: string;
   postalCode: string;
   quickStartDone: boolean;
   services: StructureService[];
