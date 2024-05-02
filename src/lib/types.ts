@@ -324,6 +324,10 @@ export interface ServiceSearchResult {
   postalCode: string;
   city: string;
   diffusionZoneType: string;
+  isOrientable?: boolean;
+  isOrientablePartialCompute?: boolean;
+  coachOrientationModes?: string[];
+  beneficiariesAccessModes?: string[];
   modificationDate: string;
   name: string;
   shortDesc: string;
@@ -435,6 +439,7 @@ export interface Service {
   requirementsDisplay: string[];
   shortDesc: string;
   slug: string;
+  source?: string;
   status: ServiceStatus;
   structure: string;
   structureInfo: ServiceStructure;

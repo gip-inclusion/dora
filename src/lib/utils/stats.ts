@@ -40,7 +40,7 @@ async function logAnalyticsEvent(tag, path, params = {}) {
   });
 
   if (res.ok) {
-    return res.json();
+    return res.json() as Promise<{ tag: string; event: number }>;
   } else {
     try {
       console.error(await res.json());
@@ -59,29 +59,44 @@ export function trackPageView(pathname, title) {
   }
 }
 
-export async function trackMobilisation(
-  service: Service,
+type ServiceType<T extends boolean> = T extends true
+  ? Pick<
+      Service,
+      | "structure"
+      | "structureInfo"
+      | "slug"
+      | "name"
+      | "source"
+      | "categories"
+      | "subcategories"
+    >
+  : Pick<Service, "slug">;
+
+export async function trackMobilisation<T extends boolean>(
+  service: ServiceType<T>,
   url: URL,
-  isDI: boolean
+  isDI: T,
+  searchId?: number
 ) {
   if (browser) {
-    const searchId = url.searchParams.get("searchId");
     if (isDI) {
+      const diService = service as ServiceType<true>;
       await logAnalyticsEvent("di_mobilisation", url.pathname, {
-        diStructureId: service.structure,
-        diStructureName: service.structureInfo.name,
-        diStructureDepartment: service.structureInfo.department,
-        diServiceId: service.slug.split("--")[1],
-        diServiceName: service.name,
-        diSource: service.source,
-        diCategories: service.categories || [],
-        diSubcategories: service.subcategories || [],
-        searchId,
+        diStructureId: diService.structure,
+        diStructureName: diService.structureInfo.name,
+        diStructureDepartment: diService.structureInfo.department,
+        diServiceId: diService.slug.split("--")[1],
+        diServiceName: diService.name,
+        diSource: diService.source,
+        diCategories: diService.categories || [],
+        diSubcategories: diService.subcategories || [],
+        searchId: searchId || url.searchParams.get("searchId"),
       });
     } else {
+      const doraService = service as ServiceType<false>;
       await logAnalyticsEvent("mobilisation", url.pathname, {
-        service: service.slug,
-        searchId,
+        service: doraService.slug,
+        searchId: searchId || url.searchParams.get("searchId"),
       });
     }
   }
@@ -121,7 +136,7 @@ export async function trackSearch(
       .slice(0, 10)
       .map((service) => service.slug);
 
-    const searchId = await logAnalyticsEvent("search", url.pathname, {
+    const event = await logAnalyticsEvent("search", url.pathname, {
       searchCityCode: cityCode,
       searchNumResults: numResults,
       categoryIds: categoryIds,
@@ -133,6 +148,7 @@ export async function trackSearch(
       feeConditions,
       locationKinds,
     });
+    const searchId = event && event.event;
     return searchId;
   }
   return null;

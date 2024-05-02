@@ -211,6 +211,8 @@
                 id={getResultId(index)}
                 result={service}
                 searchId={data.searchId}
+                categoryId={data.categoryIds[0]}
+                subCategoryIds={[...data.subCategoryIds]}
               />
             {/if}
           {/each}

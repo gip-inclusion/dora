@@ -1,11 +1,20 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
+
+  import Button from "$lib/components/display/button.svelte";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import FavoriteIcon from "$lib/components/specialized/favorite-icon.svelte";
+  import { mailLineIcon } from "$lib/icons";
   import type { ServiceSearchResult } from "$lib/types";
+  import { token } from "$lib/utils/auth";
+  import { trackMobilisation } from "$lib/utils/stats";
 
   export let id: string;
   export let result: ServiceSearchResult;
-  export let searchId: string | null;
+  export let searchId: number | null;
+  export let categoryId: string;
+  export let subCategoryIds: string[];
 
   $: isDI = result.type === "di";
 
@@ -14,6 +23,49 @@
     result.distance != null &&
     result.distance <= 50;
   $: remote = result.locationKinds.includes("a-distance");
+
+  $: servicePagePath = `/services/${
+    isDI ? "di--" : ""
+  }${result.slug}?searchId=${searchId}`;
+
+  function isOrientable() {
+    if (result.isOrientable !== undefined) {
+      // isOrientable est fourni (service DI) : on peut l'utiliser directement
+      return result.isOrientable;
+    }
+    // isOrientable n'est pas fourni (service Dora) : on calcule sa valeur à partir de
+    // isOrientablePartialCompute, coachOrientationModes et beneficiariesAccessModes
+    return (
+      result.isOrientablePartialCompute &&
+      (result.coachOrientationModes?.some((coachOrientationMode) =>
+        ["envoyer-courriel", "envoyer-fiche-prescription"].includes(
+          coachOrientationMode
+        )
+      ) ||
+        result.beneficiariesAccessModes?.some(
+          (beneficiariesAccessMode) =>
+            beneficiariesAccessMode === "envoyer-courriel"
+        ))
+    );
+  }
+
+  function handleOrientationClick() {
+    if ($token) {
+      const service = isDI
+        ? {
+            ...result,
+            categories: [categoryId],
+            subcategories: subCategoryIds,
+          }
+        : result;
+      trackMobilisation(service, $page.url, isDI, searchId || undefined);
+    }
+    const slug = `${isDI ? "di--" : ""}${result.slug}`;
+    const queryString = searchId
+      ? new URLSearchParams({ searchId: searchId.toString() }).toString()
+      : "";
+    goto(`/services/${slug}/orienter?${queryString}`);
+  }
 </script>
 
 <Bookmarkable slug={result.slug} {isDI} let:onBookmark let:isBookmarked>
@@ -29,12 +81,7 @@
       </div>
 
       <h3 class="mb-s12 text-france-blue">
-        <a
-          class="full-result-link hover:underline"
-          href="/services/{isDI
-            ? `di--`
-            : ``}{result.slug}?searchId={searchId?.event}"
-        >
+        <a class="full-result-link hover:underline" href={servicePagePath}>
           {result.name}
         </a>
       </h3>
@@ -65,19 +112,31 @@
       </div>
 
       <p class="relative z-10 mt-s16 hidden text-f16 text-gray-text md:block">
-        <a
-          href="/services/{isDI
-            ? `di--`
-            : ``}{result.slug}?searchId={searchId?.event}">{result.shortDesc}</a
+        <a href={servicePagePath}>{result.shortDesc}</a>
+        <a href={servicePagePath} class="text-magenta-cta underline"
+          >Voir plus…</a
         >
       </p>
-      {#if isDI}
-        <div
-          class="inline rounded border border-gray-02 px-s8 py-s2 text-f12 text-gray-text"
-        >
-          Source&nbsp;: {result.diSourceDisplay}, via data·inclusion
-        </div>
-      {/if}
+      <div
+        class={`flex items-center ${isDI ? "justify-between" : "justify-end"}`}
+      >
+        {#if isDI}
+          <div
+            class="inline rounded border border-gray-02 px-s8 py-s2 text-f12 text-gray-text"
+          >
+            Source&nbsp;: {result.diSourceDisplay}, via data·inclusion
+          </div>
+        {/if}
+        {#if isOrientable()}
+          <Button
+            on:click={handleOrientationClick}
+            label="Orienter votre bénéficiaire"
+            icon={mailLineIcon}
+            secondary
+            small
+          />
+        {/if}
+      </div>
     </div>
   </div>
 </Bookmarkable>
