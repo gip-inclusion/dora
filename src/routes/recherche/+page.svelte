@@ -39,6 +39,8 @@
 
   let creatingAlert = false;
 
+  let filtersInitialized = false;
+
   let filters = Object.entries(FILTER_KEY_TO_QUERY_PARAM).reduce<Filters>(
     (acc, [filterKey, queryParam]) => ({
       ...acc,
@@ -46,6 +48,22 @@
     }),
     {} as Filters
   );
+
+  function resetFilters() {
+    filters = { kinds: [], feeConditions: [], locationKinds: [] };
+  }
+
+  // Réinitialise les filtres quand la recherche est actualisée.
+  // On observe l'objet data car celui-ci change à chaque fois que la recherche est actualisée.
+  // Il n'est pas utile d'observer les champs de l'objet data vu que tout l'objet change.
+  $: {
+    data;
+    if (filtersInitialized) {
+      resetFilters();
+    } else {
+      filtersInitialized = true;
+    }
+  }
 
   // Filtre les services en fonctions des filtres sélectionnés
   $: filteredServices = data.services.filter((service) => {
