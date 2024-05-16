@@ -5,7 +5,6 @@
   import Button from "$lib/components/display/button.svelte";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import FavoriteIcon from "$lib/components/specialized/favorite-icon.svelte";
-  import { mailLineIcon } from "$lib/icons";
   import type { ServiceSearchResult } from "$lib/types";
   import { token } from "$lib/utils/auth";
   import { trackMobilisation } from "$lib/utils/stats";
@@ -132,7 +131,6 @@
             <Button
               on:click={handleOrientationClick}
               label="Orienter votre bénéficiaire"
-              icon={mailLineIcon}
               secondary
               small
             />
