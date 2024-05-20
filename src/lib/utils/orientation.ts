@@ -2,12 +2,18 @@ import { getApiURL } from "./api";
 import { fetchData } from "./misc";
 import type { Choice, Orientation, Service } from "$lib/types";
 
-export async function getOrientation(
-  queryId: string
-): Promise<Orientation | null> {
-  const url = `${getApiURL()}/orientations/${queryId}/`;
+export function getOrientation(queryId: string, queryHash: string) {
+  return fetchData<Orientation>(
+    `${getApiURL()}/orientations/${queryId}/?h=${queryHash}`
+  );
+}
 
-  return (await fetchData<Orientation>(url)).data;
+export async function refreshOrientationLink(queryId: string) {
+  const url = `${getApiURL()}/orientations/${queryId}/refresh/`;
+  const method = "PATCH";
+  await fetch(url, {
+    method,
+  });
 }
 
 export function contactBeneficiary(
