@@ -10,7 +10,7 @@
   import SharingModal from "./modals/sharing-modal.svelte";
 
   export let service: Service;
-  export let contactBoxOpen = false;
+  export let contactBoxOpen = !(service.contactEmail || service.contactPhone);
   export let isDI = false;
 
   let sharingModalIsOpen = false;
