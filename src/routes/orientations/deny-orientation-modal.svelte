@@ -14,6 +14,7 @@
   export let isOpen = false;
   export let onRefresh;
   export let orientation: Orientation;
+  export let queryHash: string;
 
   let showConfirmation = false;
 
@@ -104,7 +105,7 @@
   }
 
   function handleSubmit(validatedData) {
-    return denyOrientation(orientation.queryId, {
+    return denyOrientation(orientation.queryId, queryHash, {
       ...validatedData,
       message: validatedData.message,
     });

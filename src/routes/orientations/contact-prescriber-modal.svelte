@@ -13,6 +13,8 @@
   export let isOpen = false;
   export let onRefresh;
   export let orientation: Orientation;
+  export let queryHash: string;
+
   const dispatch = createEventDispatcher();
 
   let showConfirmation = false;
@@ -65,6 +67,7 @@
   function handleSubmit(validatedData) {
     return contactPrescriber(
       orientation.queryId,
+      queryHash,
       validatedData.extraRecipients.includes("cc-beneficiary"),
       validatedData.extraRecipients.includes("cc-referent"),
       validatedData.message

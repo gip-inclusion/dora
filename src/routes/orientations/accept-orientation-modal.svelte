@@ -16,6 +16,7 @@
   export let isOpen = false;
   export let onRefresh;
   export let orientation: Orientation;
+  export let queryHash: string;
 
   let showConfirmation = false;
 
@@ -39,7 +40,7 @@
   };
 
   function handleSubmit(validatedData) {
-    return acceptOrientation(orientation.queryId, validatedData);
+    return acceptOrientation(orientation.queryId, queryHash, validatedData);
   }
 
   async function handleSuccess(_jsonResult) {

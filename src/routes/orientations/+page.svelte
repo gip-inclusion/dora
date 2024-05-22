@@ -322,7 +322,7 @@
         </div>
 
         <div class="mb-s32 w-full shrink-0 md:w-[384px]">
-          <HandleOrientation {orientation} {onRefresh} />
+          <HandleOrientation {orientation} {queryHash} {onRefresh} />
         </div>
       </div>
     </div>

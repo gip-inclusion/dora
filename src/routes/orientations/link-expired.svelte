@@ -4,11 +4,12 @@
   import { refreshOrientationLink } from "$lib/utils/orientation";
 
   export let queryId: string;
+  export let queryHash: string;
 
   $: emailSent = false;
 
   function sendNewLink() {
-    refreshOrientationLink(queryId);
+    refreshOrientationLink(queryId, queryHash);
     emailSent = true;
   }
 </script>
