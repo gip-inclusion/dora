@@ -10,6 +10,7 @@
   import SharingModal from "./modals/sharing-modal.svelte";
 
   export let service: Service;
+  // Si il n'y a pas d'information de contact, on n'affiche pas le bouton
   export let contactBoxOpen = !(service.contactEmail || service.contactPhone);
   export let isDI = false;
 
