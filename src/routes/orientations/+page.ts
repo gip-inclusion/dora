@@ -14,6 +14,9 @@ export const load: PageLoad = async ({ parent, url }) => {
   }
 
   return getOrientation(queryId, queryHash).then((response) => {
+    if (response.status === 404) {
+      error(404, "Non trouvé");
+    }
     const orientation = response.ok ? (response.data as Orientation) : null;
     return {
       title: orientation
