@@ -68,7 +68,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   const lon = query.get("lon");
   const lat = query.get("lat");
 
-  const services = await getResults({
+  const results = await getResults({
     // La priorité est donnée aux sous-catégories
     categoryIds: subCategoryIds.length ? [] : categoryIds,
     subCategoryIds,
@@ -82,6 +82,11 @@ export const load: PageLoad = async ({ url, parent }) => {
     lon,
     lat,
   });
+
+  // Transition vers nouvelle structure de réponse
+  const services = results.hasOwnProperty("services")
+    ? results.services
+    : results;
 
   const searchId = await trackSearch(
     url,
