@@ -6,7 +6,7 @@
   export let queryId: string;
   export let queryHash: string;
 
-  $: emailSent = false;
+  let emailSent = false;
 
   function sendNewLink() {
     refreshOrientationLink(queryId, queryHash);
