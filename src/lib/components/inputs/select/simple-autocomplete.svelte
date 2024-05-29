@@ -7,6 +7,7 @@
   /* eslint-disable */
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import { checkIcon, closeCircleIcon } from "$lib/icons";
+  import { clickOutside } from "$lib/utils/misc";
   import { formatErrors } from "$lib/validation/validation";
 
   // the list of items  the user can select from
@@ -458,8 +459,6 @@
     if (e.target.closest(`.${uniqueId}`)) {
       // resetListToAllItemsAndOpen();
       highlight();
-    } else {
-      close();
     }
   }
 
@@ -710,6 +709,8 @@
   {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
   class:is-loading={showLoadingIndicator && loading}
+  use:clickOutside
+  on:click_outside={close}
 >
   <select name={selectName} id={selectId}>
     {#if !multiple && value}

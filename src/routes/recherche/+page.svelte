@@ -1,43 +1,29 @@
 <script lang="ts">
-  import { tick } from "svelte";
-
   import { page } from "$app/stores";
 
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import {
-    getSavedSearchQueryString,
-    saveSearch,
-  } from "$lib/requests/saved-search";
   import type { ServiceSearchResult } from "$lib/types";
-  import { refreshUserInfo, userInfo } from "$lib/utils/auth";
   import { isInDeploymentDepartments } from "$lib/utils/misc";
-  import { getQueryString } from "$lib/utils/service-search";
 
   import type { PageData } from "./$types";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
   import OnlyNationalResultsNotice from "./only-national-results-notice.svelte";
   import SearchPromo from "./search-promo.svelte";
-  import SearchResult from "./search-result.svelte";
   import ServiceSuggestionNotice from "./service-suggestion-notice.svelte";
   import ResultFilters, { type Filters } from "./result-filters.svelte";
+  import MapViewButton from "./map-view-button.svelte";
+  import ResultCount from "./result-count.svelte";
+  import SearchResults from "./search-results.svelte";
 
   export let data: PageData;
-
-  const PAGE_LENGTH = 10;
 
   const FILTER_KEY_TO_QUERY_PARAM = {
     kinds: "kinds",
     feeConditions: "fees",
     locationKinds: "locs",
   };
-
-  let currentPageLength = PAGE_LENGTH;
-
-  let creatingAlert = false;
 
   let filtersInitialized = false;
 
@@ -116,63 +102,6 @@
     return services.every((service) => service.diffusionZoneType === "country");
   }
 
-  function getResultId(index: number) {
-    return `#result-${index}`;
-  }
-
-  async function loadMoreResult() {
-    const oldPageLength = currentPageLength;
-    currentPageLength += PAGE_LENGTH;
-    await tick();
-
-    // A11y : focus on the first new result
-    const firstNewResult = document.getElementById(
-      getResultId(oldPageLength)
-    ) as HTMLElement;
-    firstNewResult.focus();
-  }
-
-  async function handleCreateAlertClick() {
-    creatingAlert = true;
-    await saveSearch({
-      category: data.categoryIds[0],
-      subcategories: data.subCategoryIds.filter(
-        (value) => !value.endsWith("--all")
-      ),
-      cityCode: data.cityCode,
-      cityLabel: data.cityLabel,
-      kinds: filters.kinds.sort(),
-      fees: filters.feeConditions.sort(),
-      locationKinds: filters.locationKinds.sort(),
-    });
-    await refreshUserInfo();
-    creatingAlert = false;
-  }
-
-  let currentSearchWasAlreadySaved;
-  $: {
-    // Saved searches don't store the street address neither lat/lon
-    const currentShortQueryString = getQueryString({
-      categoryIds: [data.categoryIds[0] ? data.categoryIds[0] : ""],
-      subCategoryIds: data.subCategoryIds.filter(
-        (value) => !value.endsWith("--all")
-      ),
-      cityCode: data.cityCode,
-      cityLabel: data.cityLabel,
-      label: undefined,
-      kindIds: filters.kinds.sort(),
-      feeConditions: filters.feeConditions.sort(),
-      locationKinds: filters.locationKinds.sort(),
-    });
-
-    const userSavedSearches = $userInfo?.savedSearches || [];
-
-    const result = userSavedSearches.some(
-      (search) => getSavedSearchQueryString(search) === currentShortQueryString
-    );
-    currentSearchWasAlreadySaved = result;
-  }
-
   $: showDeploymentNotice =
     data.cityCode &&
     !isInDeploymentDepartments(data.cityCode, data.servicesOptions);
@@ -208,14 +137,18 @@
 
 <CenteredGrid extraClass="m-auto">
   <div class="lg:flex lg:flex-row lg:items-start lg:gap-s24">
-    <div class="rounded-ml border border-gray-02 p-s32 shadow-sm lg:basis-1/3">
+    <div
+      class="hidden flex-col gap-s32 rounded-ml border border-gray-02 p-s32 shadow-sm lg:flex lg:basis-1/3"
+    >
+      <MapViewButton {data} bind:filters {filteredServices} />
       <ResultFilters servicesOptions={data.servicesOptions} bind:filters />
     </div>
     <div class="lg:basis-2/3">
       <div class="mt-s16 text-f21">
-        {filteredServices.length > 0 ? filteredServices.length : "Aucun"}
-        {filteredServices.length > 1 ? "services" : "service"}
-        à proximité de <b>{data.cityLabel}</b>
+        <ResultCount
+          resultCount={filteredServices.length}
+          cityLabel={data.cityLabel}
+        />
       </div>
 
       {#if showDeploymentNotice}
@@ -231,45 +164,8 @@
       {/if}
 
       {#if filteredServices.length}
-        <div class="mt-s32 flex flex-col gap-s16">
-          <h2 class="sr-only">Résultats de votre recherche</h2>
-          {#each filteredServices as service, index}
-            {#if index < currentPageLength}
-              <SearchResult
-                id={getResultId(index)}
-                result={service}
-                searchId={data.searchId}
-                categoryId={data.categoryIds[0]}
-                subCategoryIds={[...data.subCategoryIds]}
-              />
-            {/if}
-          {/each}
-
-          <div class="sticky bottom-s16 z-10 m-auto flex justify-center">
-            {#if currentSearchWasAlreadySaved}
-              <LinkButton
-                to="/mes-alertes"
-                secondary
-                label="Voir mes alertes"
-              />
-            {:else}
-              <Button
-                label="Créer une alerte"
-                disabled={!data.cityCode || creatingAlert}
-                on:click={handleCreateAlertClick}
-              />
-            {/if}
-          </div>
-
-          {#if filteredServices.length > currentPageLength}
-            <div class="text-center">
-              <Button
-                label="Charger plus de résultats"
-                on:click={loadMoreResult}
-                noBackground
-              />
-            </div>
-          {/if}
+        <div class="mt-s32">
+          <SearchResults {data} {filters} {filteredServices} />
         </div>
       {/if}
 

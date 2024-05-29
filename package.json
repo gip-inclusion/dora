@@ -25,6 +25,7 @@
     "security-scan": "ggshield secret scan path -r . -y"
   },
   "devDependencies": {
+    "@nazka/map-gl-js-spiderfy": "^1.2.1",
     "@sveltejs/adapter-node": "5.0.1",
     "@sveltejs/kit": "2.5.3",
     "@sveltejs/vite-plugin-svelte": "3.0.2",
@@ -47,7 +48,7 @@
     "iframe-resizer": "4.3.9",
     "insane": "2.6.2",
     "lint-staged": "15.2.2",
-    "maplibre-gl": "4.1.0",
+    "maplibre-gl": "4.3.0",
     "opening_hours": "3.8.0",
     "postcss": "8.4.35",
     "postcss-load-config": "5.0.3",

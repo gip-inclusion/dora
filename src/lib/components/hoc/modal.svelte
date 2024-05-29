@@ -11,8 +11,10 @@
   export let subtitle: string | undefined = undefined;
   export let hideTitle = false;
   export let width: "small" | "medium" | undefined = undefined;
+  export let noPadding = false;
   export let targetId: string | undefined = undefined;
   export let canClose = true;
+  export let hideCloseButton = false;
 
   const target = (
     targetId ? document.getElementById(targetId) : document.body
@@ -97,7 +99,9 @@
         aria-modal="true"
         tabindex="-1"
         bind:this={modalEl}
-        class="m-s24 max-h-[90vh] overflow-auto rounded-md bg-white px-s36 py-s24 shadow-md"
+        class="m-s24 max-h-[90vh] overflow-auto rounded-md bg-white shadow-md"
+        class:px-s36={!noPadding}
+        class:py-s24={!noPadding}
         class:w-[560px]={width === "small"}
         class:w-[820px]={width === "medium"}
         class:min-w-[80vw]={!width}
@@ -114,7 +118,7 @@
               </h1>
             {/if}
 
-            {#if canClose}
+            {#if canClose && !hideCloseButton}
               <div class="ml-auto">
                 <Button
                   icon={closeLineIcon}

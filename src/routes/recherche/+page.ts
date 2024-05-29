@@ -20,7 +20,10 @@ async function getResults({
   locationKinds,
   lat,
   lon,
-}: SearchQuery): Promise<ServiceSearchResult[]> {
+}: SearchQuery): Promise<{
+  cityBounds: [number, number, number, number];
+  services: ServiceSearchResult[];
+}> {
   const querystring = getQueryString({
     categoryIds,
     subCategoryIds,
@@ -68,7 +71,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   const lon = query.get("lon");
   const lat = query.get("lat");
 
-  const results = await getResults({
+  const { cityBounds, services } = await getResults({
     // La priorité est donnée aux sous-catégories
     categoryIds: subCategoryIds.length ? [] : categoryIds,
     subCategoryIds,
@@ -82,11 +85,6 @@ export const load: PageLoad = async ({ url, parent }) => {
     lon,
     lat,
   });
-
-  // Transition vers nouvelle structure de réponse
-  const services = results.hasOwnProperty("services")
-    ? results.services
-    : results;
 
   const searchId = await trackSearch(
     url,
@@ -115,6 +113,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     noIndex: true,
     categoryIds,
     subCategoryIds,
+    cityBounds,
     cityCode,
     cityLabel,
     label,

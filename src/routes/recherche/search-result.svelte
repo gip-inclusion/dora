@@ -14,6 +14,10 @@
   export let searchId: number | null;
   export let categoryId: string;
   export let subCategoryIds: string[];
+  export let selected = false;
+  export let summarized = false;
+
+  let element: HTMLDivElement;
 
   $: isDI = result.type === "di";
 
@@ -26,6 +30,16 @@
   $: servicePagePath = `/services/${
     isDI ? "di--" : ""
   }${result.slug}?searchId=${searchId}`;
+
+  $: {
+    if (selected) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+      });
+    }
+  }
 
   function isOrientable() {
     if (result.isOrientable !== undefined) {
@@ -68,7 +82,14 @@
 </script>
 
 <Bookmarkable slug={result.slug} {isDI} let:onBookmark let:isBookmarked>
-  <div {id} class="rounded-ml border border-gray-02 shadow-sm" tabindex="-1">
+  <div
+    bind:this={element}
+    {id}
+    class="rounded-ml border shadow-sm"
+    class:border-gray-02={!selected}
+    class:border-magenta-cta={selected}
+    tabindex="-1"
+  >
     <div class="relative p-s32 lg:pr-s64">
       <div class="mb-s4 flex items-center justify-between">
         <div class="text-f14">
@@ -80,7 +101,11 @@
       </div>
 
       <h3 class="mb-s12 text-france-blue">
-        <a class="full-result-link hover:underline" href={servicePagePath}>
+        <a
+          class="full-result-link hover:underline"
+          href={servicePagePath}
+          target="_blank"
+        >
           {result.name}
         </a>
       </h3>
@@ -110,33 +135,37 @@
         {/if}
       </div>
 
-      <p class="relative z-10 mt-s16 hidden text-f16 text-gray-text md:block">
-        <a href={servicePagePath}>{result.shortDesc}</a>
-      </p>
-      <div
-        class={`mt-s24 flex flex-col items-center gap-s24 md:flex-row ${isDI ? "justify-between" : "justify-end"}`}
-      >
-        {#if isDI}
-          <div
-            class="inline rounded border border-gray-02 px-s8 py-s2 text-f12 text-gray-text"
-          >
-            Source&nbsp;: {result.diSourceDisplay}, via data·inclusion
-          </div>
-        {/if}
-        <div class="flex shrink-0 flex-col items-center gap-s24 md:flex-row">
-          <a href={servicePagePath} class="text-magenta-cta underline"
-            >Voir la fiche détaillée</a
-          >
-          {#if isOrientable()}
-            <Button
-              on:click={handleOrientationClick}
-              label="Orienter votre bénéficiaire"
-              secondary
-              small
-            />
+      {#if !summarized}
+        <p class="relative z-10 mt-s16 hidden text-f16 text-gray-text md:block">
+          <a href={servicePagePath} target="_blank">{result.shortDesc}</a>
+        </p>
+        <div
+          class={`mt-s24 flex flex-col items-center gap-s24 md:flex-row ${isDI ? "justify-between" : "justify-end"}`}
+        >
+          {#if isDI}
+            <div
+              class="inline rounded border border-gray-02 px-s8 py-s2 text-f12 text-gray-text"
+            >
+              Source&nbsp;: {result.diSourceDisplay}, via data·inclusion
+            </div>
           {/if}
+          <div class="flex shrink-0 flex-col items-center gap-s24 md:flex-row">
+            <a
+              href={servicePagePath}
+              target="_blank"
+              class="text-magenta-cta underline">Voir la fiche détaillée</a
+            >
+            {#if isOrientable()}
+              <Button
+                on:click={handleOrientationClick}
+                label="Orienter votre bénéficiaire"
+                secondary
+                small
+              />
+            {/if}
+          </div>
         </div>
-      </div>
+      {/if}
     </div>
   </div>
 </Bookmarkable>

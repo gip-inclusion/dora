@@ -314,6 +314,8 @@ export interface SearchQuery {
   lon?: number;
 }
 
+export type Coordinates = [longitude: number, latitude: number];
+
 export interface ServiceSearchResult {
   // Une valeur nulle (null) signifie que l'information n'est pas renseignée tandis
   // qu'une valeur vide ("" ou []) signifie que l'information est renseignée mais vide.
@@ -323,6 +325,7 @@ export interface ServiceSearchResult {
   address2: string;
   postalCode: string;
   city: string;
+  coordinates: Coordinates | null;
   diffusionZoneType: string;
   isOrientable?: boolean;
   isOrientablePartialCompute?: boolean;
@@ -376,7 +379,7 @@ export interface ServiceStructure {
 
 export interface Point {
   type: "Point";
-  coordinates: [longitude: number, latitude: number];
+  coordinates: Coordinates;
 }
 
 export interface Service {

@@ -1,8 +1,7 @@
 <script lang="ts">
   import type { AdminShortStructure, GeoApiValue } from "$lib/types";
   import * as mlgl from "maplibre-gl";
-  import "maplibre-gl/dist/maplibre-gl.css";
-  import Map from "./map.svelte";
+  import Map from "$lib/components/display/map.svelte";
   import insane from "insane";
 
   export let filteredStructures: AdminShortStructure[] = [];
@@ -17,23 +16,47 @@
       `<strong>${feature.properties.name}</strong><br>${feature.properties.shortDesc}`
     );
   }
-  function updateMapContent(structs: AdminShortStructure[]) {
+
+  function zoomToStructures(features) {
     if (!map) {
       return;
     }
-    if (map.getLayer("structuresLayer")) {
-      map.removeLayer("structuresLayer");
-    }
-    if (map.getSource("structuresSource")) {
-      map.removeSource("structuresSource");
-    }
+    if (features.length) {
+      const firstCoordinates = [features[0].longitude, features[0].latitude];
+      const bounds = features.reduce(
+        function (acc, feature) {
+          return acc.extend([feature.longitude, feature.latitude]);
+        },
+        new mlgl.LngLatBounds(firstCoordinates, firstCoordinates)
+      );
 
+      if (bounds) {
+        map.fitBounds(bounds, {
+          padding: 60,
+        });
+      }
+    } else if (department) {
+      const coordinates = department.geom.coordinates[0];
+      const bounds = coordinates.reduce(
+        function (acc, coord) {
+          return acc.extend(coord);
+        },
+        new mlgl.LngLatBounds(coordinates[0], coordinates[0])
+      );
+
+      map.fitBounds(bounds, {
+        padding: 20,
+      });
+    }
+  }
+
+  function handleMapLoaded() {
     map.addSource("structuresSource", {
       type: "geojson",
       promoteId: "slug",
       data: {
         type: "FeatureCollection",
-        features: structs.map((struct) => ({
+        features: filteredStructures.map((struct) => ({
           type: "Feature",
           properties: {
             ...struct,
@@ -93,39 +116,38 @@
       const feature = evt.features[0];
       window.open(`/structures/${feature.properties.slug}`, "_blank").focus();
     });
+
+    zoomToStructures(filteredStructures);
   }
 
-  function zoomToStructures(features) {
+  function updateMapContent() {
     if (!map) {
       return;
     }
-    if (features.length) {
-      const firstCoordinates = [features[0].longitude, features[0].latitude];
-      const bounds = features.reduce(
-        function (acc, feature) {
-          return acc.extend([feature.longitude, feature.latitude]);
-        },
-        new mlgl.LngLatBounds(firstCoordinates, firstCoordinates)
-      );
 
-      if (bounds) {
-        map.fitBounds(bounds, {
-          padding: 60,
-        });
-      }
-    } else if (department) {
-      const coordinates = department.geom.coordinates[0];
-      const bounds = coordinates.reduce(
-        function (acc, coord) {
-          return acc.extend(coord);
-        },
-        new mlgl.LngLatBounds(coordinates[0], coordinates[0])
-      );
+    const structuresSource = map.getSource("structuresSource") as
+      | mlgl.GeoJSONSource
+      | undefined;
 
-      map.fitBounds(bounds, {
-        padding: 20,
-      });
+    if (!structuresSource) {
+      return;
     }
+
+    structuresSource.setData({
+      type: "FeatureCollection",
+      features: filteredStructures.map((struct) => ({
+        type: "Feature",
+        properties: {
+          ...struct,
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [struct.longitude, struct.latitude],
+        },
+      })),
+    });
+
+    zoomToStructures(filteredStructures);
   }
 
   function updateHoveredFeature(structureSlug: string | null) {
@@ -148,8 +170,7 @@
   }
 
   $: updateHoveredFeature(selectedStructureSlug);
-  $: updateMapContent(filteredStructures);
-  $: zoomToStructures(filteredStructures);
+  $: filteredStructures, updateMapContent();
 </script>
 
-<Map bind:map />
+<Map bind:map on:load={handleMapLoaded} />
