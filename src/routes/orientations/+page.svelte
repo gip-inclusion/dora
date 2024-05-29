@@ -25,7 +25,6 @@
   import { formatPhoneNumber } from "$lib/utils/misc";
   import { getOrientation } from "$lib/utils/orientation";
   import type { PageData } from "./$types";
-  import type { Orientation } from "$lib/types";
   import { formatLongDate } from "$lib/utils/date";
   import { formatFilePath } from "$lib/utils/file";
   import LinkExpired from "./link-expired.svelte";
@@ -35,9 +34,10 @@
   let { orientation } = data;
 
   async function onRefresh() {
-    await getOrientation(queryId, queryHash).then((response) => {
-      orientation = response.data as Orientation;
-    });
+    const response = await getOrientation(queryId, queryHash);
+    if (response.ok) {
+      orientation = response.data!;
+    }
   }
 
   onMount(() => {
