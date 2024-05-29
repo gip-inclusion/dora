@@ -644,8 +644,8 @@ export interface Orientation {
 
   // Champs après la création de l'orientation
   id?: number;
-  queryId?: string;
-  creationDate?: string;
+  queryId: string;
+  creationDate: string;
   prescriberStructure?: {
     name: string;
     slug: string;

@@ -10,6 +10,7 @@
   import { formatNumericDate } from "$lib/utils/date";
 
   export let orientation: Orientation;
+  export let queryHash: string;
   export let onRefresh;
 
   let modalOpened:
@@ -43,25 +44,28 @@
     isOpen={modalOpened === "deny"}
     on:close={closeModal}
     {orientation}
+    {queryHash}
     {onRefresh}
   />
   <AcceptOrientationModal
     isOpen={modalOpened === "accept"}
     on:close={closeModal}
     {orientation}
+    {queryHash}
     {onRefresh}
   />
-
   <ContactBeneficiaryModal
     isOpen={modalOpened === "contact-beneficiary"}
     on:close={closeModal}
     {onRefresh}
     {orientation}
+    {queryHash}
   />
   <ContactPrescriberModal
     isOpen={modalOpened === "contact-service"}
     on:close={closeModal}
     {orientation}
+    {queryHash}
     {onRefresh}
   />
 {/if}

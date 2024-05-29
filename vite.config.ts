@@ -18,6 +18,9 @@ export default defineConfig(({ mode }) => {
     build: {
       sourcemap: true,
     },
+    server: {
+      host: true,
+    },
 
     test: {
       include: ["src/**/*.{test,spec}.{js,ts}"],
