@@ -102,141 +102,143 @@
             </div>
           </div>
 
-          <div class="flex-[2] rounded-md border border-gray-02 md:relative">
-            <div
-              class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
-            >
-              <h2 class="m-s0 text-f23 text-france-blue">La demande</h2>
-            </div>
-
-            <div class="flex flex-col gap-s32 p-s36">
-              <div>
-                <SubTitle label="Bénéficiaire" icon={compass3Icon} />
-                <div class="ml-s64">
-                  <ul class="flex flex-col gap-s12">
-                    <ContactListItem
-                      icon={user6Icon}
-                      text={`${orientation.beneficiaryFirstName} ${orientation.beneficiaryLastName}`}
-                    />
-
-                    {#if orientation.beneficiaryEmail}
-                      <ContactListItem
-                        icon={mailAddLineIcon}
-                        text={orientation.beneficiaryEmail}
-                        isPreference={orientation.beneficiaryContactPreferences.includes(
-                          "EMAIL"
-                        )}
-                      />
-                    {/if}
-
-                    {#if orientation.beneficiaryPhone}
-                      <ContactListItem
-                        icon={phoneLineIcon}
-                        text={formatPhoneNumber(orientation.beneficiaryPhone)}
-                        isPreference={orientation.beneficiaryContactPreferences.includes(
-                          "TELEPHONE"
-                        )}
-                      />
-                    {/if}
-
-                    {#if orientation.beneficiaryOtherContactMethod}
-                      <ContactListItem
-                        icon={inboxLineIcon}
-                        text={`Autre méthode de contact : ${orientation.beneficiaryOtherContactMethod}`}
-                        isPreference={orientation.beneficiaryContactPreferences.includes(
-                          "AUTRE"
-                        )}
-                      />
-                    {/if}
-
-                    {#if orientation.beneficiaryAvailability}
-                      <ContactListItem
-                        icon={calendarEventLineIcon}
-                        text={`Disponible à partir de ${formatLongDate(
-                          orientation.beneficiaryAvailability
-                        )}`}
-                      />
-                    {/if}
-                  </ul>
-                </div>
+          {#if orientation.status !== "REFUSÉE"}
+            <div class="flex-[2] rounded-md border border-gray-02 md:relative">
+              <div
+                class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
+              >
+                <h2 class="m-s0 text-f23 text-france-blue">La demande</h2>
               </div>
-              <hr class="border border-gray-02" />
 
-              {#if orientation.situation.length}
+              <div class="flex flex-col gap-s32 p-s36">
                 <div>
-                  <SubTitle label="Situation" icon={listCheckIcon} />
+                  <SubTitle label="Bénéficiaire" icon={compass3Icon} />
                   <div class="ml-s64">
-                    <ul>
-                      {#each orientation.situation as beneficiarySituation}
-                        <li class="ml-s16 list-disc text-f16 text-gray-text">
-                          {#if beneficiarySituation === "Autre"}
-                            {beneficiarySituation}&nbsp;: {orientation.situationOther}
-                          {:else}
-                            {beneficiarySituation}
-                          {/if}
-                        </li>
-                      {/each}
+                    <ul class="flex flex-col gap-s12">
+                      <ContactListItem
+                        icon={user6Icon}
+                        text={`${orientation.beneficiaryFirstName} ${orientation.beneficiaryLastName}`}
+                      />
+
+                      {#if orientation.beneficiaryEmail}
+                        <ContactListItem
+                          icon={mailAddLineIcon}
+                          text={orientation.beneficiaryEmail}
+                          isPreference={orientation.beneficiaryContactPreferences.includes(
+                            "EMAIL"
+                          )}
+                        />
+                      {/if}
+
+                      {#if orientation.beneficiaryPhone}
+                        <ContactListItem
+                          icon={phoneLineIcon}
+                          text={formatPhoneNumber(orientation.beneficiaryPhone)}
+                          isPreference={orientation.beneficiaryContactPreferences.includes(
+                            "TELEPHONE"
+                          )}
+                        />
+                      {/if}
+
+                      {#if orientation.beneficiaryOtherContactMethod}
+                        <ContactListItem
+                          icon={inboxLineIcon}
+                          text={`Autre méthode de contact : ${orientation.beneficiaryOtherContactMethod}`}
+                          isPreference={orientation.beneficiaryContactPreferences.includes(
+                            "AUTRE"
+                          )}
+                        />
+                      {/if}
+
+                      {#if orientation.beneficiaryAvailability}
+                        <ContactListItem
+                          icon={calendarEventLineIcon}
+                          text={`Disponible à partir de ${formatLongDate(
+                            orientation.beneficiaryAvailability
+                          )}`}
+                        />
+                      {/if}
                     </ul>
                   </div>
                 </div>
-                <hr class="border border-gray-02" />
-              {/if}
 
-              {#if orientation.requirements.length}
-                <div>
-                  <SubTitle
-                    label="Critères auxquels le ou la bénéficiaire répond"
-                    icon={listCheckIcon}
-                  />
-                  <div class="ml-s64">
-                    <ul>
-                      {#each orientation.requirements as requirement}
-                        <li class="ml-s16 list-disc text-f16 text-gray-text">
-                          {requirement}
-                        </li>
-                      {/each}
-                    </ul>
+                {#if orientation.situation.length}
+                  <hr class="border border-gray-02" />
+                  <div>
+                    <SubTitle label="Situation" icon={listCheckIcon} />
+                    <div class="ml-s64">
+                      <ul>
+                        {#each orientation.situation as beneficiarySituation}
+                          <li class="ml-s16 list-disc text-f16 text-gray-text">
+                            {#if beneficiarySituation === "Autre"}
+                              {beneficiarySituation}&nbsp;: {orientation.situationOther}
+                            {:else}
+                              {beneficiarySituation}
+                            {/if}
+                          </li>
+                        {/each}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-                <hr class="border border-gray-02" />
-              {/if}
+                  <hr class="border border-gray-02" />
+                {/if}
 
-              {#if orientation.orientationReasons}
-                <div>
-                  <SubTitle
-                    label="Motifs de l’orientation"
-                    icon={messageLineIcon}
-                  />
-                  <div class="ml-s64 text-f16 italic text-gray-text">
-                    {orientation.orientationReasons}
+                {#if orientation.requirements.length}
+                  <div>
+                    <SubTitle
+                      label="Critères auxquels le ou la bénéficiaire répond"
+                      icon={listCheckIcon}
+                    />
+                    <div class="ml-s64">
+                      <ul>
+                        {#each orientation.requirements as requirement}
+                          <li class="ml-s16 list-disc text-f16 text-gray-text">
+                            {requirement}
+                          </li>
+                        {/each}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              {/if}
+                  <hr class="border border-gray-02" />
+                {/if}
 
-              {#if orientation.beneficiaryAttachmentsDetails?.length}
-                <div>
-                  <SubTitle label="Pièces jointes" icon={attachmentIcon} />
-                  <div class="ml-s64 text-gray-text">
-                    <ul class="mb-s24">
-                      {#each orientation.beneficiaryAttachmentsDetails as attachment}
-                        <li
-                          class="break-word ml-s16 list-disc text-f16 text-gray-text"
-                        >
-                          <a
-                            href={attachment.url}
-                            target="_blank"
-                            rel="nofollow noopener ugc"
-                            class="underline"
-                            >{formatFilePath(attachment.name)}</a
+                {#if orientation.orientationReasons}
+                  <div>
+                    <SubTitle
+                      label="Motifs de l’orientation"
+                      icon={messageLineIcon}
+                    />
+                    <div class="ml-s64 text-f16 italic text-gray-text">
+                      {orientation.orientationReasons}
+                    </div>
+                  </div>
+                {/if}
+
+                {#if orientation.beneficiaryAttachmentsDetails?.length}
+                  <div>
+                    <SubTitle label="Pièces jointes" icon={attachmentIcon} />
+                    <div class="ml-s64 text-gray-text">
+                      <ul class="mb-s24">
+                        {#each orientation.beneficiaryAttachmentsDetails as attachment}
+                          <li
+                            class="break-word ml-s16 list-disc text-f16 text-gray-text"
                           >
-                        </li>
-                      {/each}
-                    </ul>
+                            <a
+                              href={attachment.url}
+                              target="_blank"
+                              rel="nofollow noopener ugc"
+                              class="underline"
+                              >{formatFilePath(attachment.name)}</a
+                            >
+                          </li>
+                        {/each}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              {/if}
+                {/if}
+              </div>
             </div>
-          </div>
+          {/if}
 
           {#if orientation.prescriber?.name || orientation.prescriber?.email || orientation.prescriberStructure?.name}
             <div class="flex-[2] rounded-md border border-gray-02 md:relative">
