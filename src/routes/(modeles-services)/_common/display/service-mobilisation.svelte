@@ -16,7 +16,7 @@
 
   let sharingModalIsOpen = false;
   function showContact() {
-    if (!$token) {
+    if (!$token && !service.isContactInfoPublic) {
       goto(
         `/auth/connexion?next=${encodeURIComponent(
           $page.url.pathname + $page.url.search
@@ -25,6 +25,7 @@
       return;
     }
     contactBoxOpen = true;
+    // on tracke comme une MER si les contacts du service sont publics
     trackMobilisation(service, $page.url, isDI);
   }
 
