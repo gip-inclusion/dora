@@ -651,7 +651,7 @@ export interface Orientation {
     slug: string;
   };
   processingDate?: string;
-  status?: "OUVERTE" | "VALIDÉE" | "REFUSÉE";
+  status: "OUVERTE" | "VALIDÉE" | "REFUSÉE";
   beneficiaryAttachmentsDetails?: string[];
   service?: {
     name: string;

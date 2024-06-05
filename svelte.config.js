@@ -25,6 +25,7 @@ const config = {
           "https://openmaptiles.geo.data.gouv.fr/",
           "https://openmaptiles.github.io/osm-bright-gl-style/",
           "https://matomo.inclusion.beta.gouv.fr",
+          "https://api.collectivite.fr",
         ].filter((source) => !!source),
         "script-src": [
           "self",
