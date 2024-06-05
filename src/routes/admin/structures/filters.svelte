@@ -138,7 +138,8 @@
             toUpdate(struct)
           );
         } else if (status === "toutes") {
-          return true;
+          // exclusion des structures obsolètes de l'affichage complet
+          return !isObsolete(struct);
         }
         console.error("Statut de recherche inconnu");
         return false;
