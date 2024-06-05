@@ -77,10 +77,7 @@
       <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
         <ValidationForm {service} />
         <div class="mt-s32 w-full shrink-0 md:mt-s0 md:w-[384px]">
-          <ContactBox
-            {service}
-            bind:contactBoxOpen={$orientation.contactBoxOpen}
-          />
+          <ContactBox {service} {isDI} />
         </div>
       </div>
     </Layout>

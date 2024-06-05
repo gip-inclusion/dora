@@ -7,8 +7,9 @@
   import { page } from "$app/stores";
 
   export let service: Service;
-  export let contactBoxOpen = false;
   export let isDI: boolean;
+
+  let contactBoxOpen = false;
 
   function handleShowContactClick() {
     contactBoxOpen = true;
@@ -26,7 +27,6 @@
         <strong>{service.contactName}</strong>
       </p>
     {/if}
-
     {#if service.contactPhone}
       <ContactPhone {service} />
     {/if}
