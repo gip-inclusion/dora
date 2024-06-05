@@ -10,7 +10,6 @@
   import type { PageData } from "./$types";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
   import OnlyNationalResultsNotice from "./only-national-results-notice.svelte";
-  import SearchPromo from "./search-promo.svelte";
   import ServiceSuggestionNotice from "./service-suggestion-notice.svelte";
   import ResultFilters, { type Filters } from "./result-filters.svelte";
   import MapViewButton from "./map-view-button.svelte";
@@ -172,10 +171,6 @@
       <div class="mb-s24 mt-s48 lg:flex lg:gap-s24">
         <ServiceSuggestionNotice />
       </div>
-
-      {#if data.subCategoryIds.includes("famille--garde-enfants") || data.subCategoryIds.includes("famille--accompagnement-parents")}
-        <SearchPromo />
-      {/if}
     </div>
   </div>
 </CenteredGrid>

@@ -12,6 +12,7 @@
   import { getQueryString } from "$lib/utils/service-search";
 
   import type { PageData } from "./$types";
+  import CollectivityDirectoryBanner from "./collectivity-directory-banner.svelte";
   import type { Filters } from "./result-filters.svelte";
   import SearchResult from "./search-result.svelte";
 
@@ -100,6 +101,9 @@
           selected={service.slug === selectedServiceSlug}
           {summarized}
         />
+      {/if}
+      {#if index === 4}
+        <CollectivityDirectoryBanner cityLabel={data.cityLabel} />
       {/if}
     {/each}
   </div>
