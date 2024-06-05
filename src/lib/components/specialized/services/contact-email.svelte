@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Service } from "$lib/types";
+  import type { Service, ShortService } from "$lib/types";
   import { CANONICAL_URL } from "$lib/env";
   import { mailLineIcon } from "$lib/icons";
   import { userInfo } from "$lib/utils/auth";
 
-  export let service: Service;
+  export let service: Service | ShortService;
   export let preferred = false;
   const emailSubject = encodeURIComponent(
     `Candidature ${service.name} / Demande d’orientation`
