@@ -19,6 +19,18 @@
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
+
+  // trier les types dans l'ordre d'affichage du formulaire
+  function sortServiceTypes(st1: string, st2: string) {
+    const order = ["En autonomie", "Accompagnement", "Atelier", "Délégation"];
+    // pas de ternaires imbriqués : c'est pourtant plus lisible et plus court
+    // eslint-disable-next-line no-nested-ternary
+    return order.indexOf(st1) > order.indexOf(st2)
+      ? 1
+      : order.indexOf(st1) < order.indexOf(st2)
+        ? -1
+        : 0;
+  }
 </script>
 
 <h2 class="text-f23">Informations clés</h2>
@@ -84,7 +96,7 @@
 
       <ul class="inline-flex flex-wrap text-f16 text-gray-text">
         {#if Array.isArray(service.kindsDisplay)}
-          {#each service.kindsDisplay as kind, index (kind)}
+          {#each service.kindsDisplay.sort(sortServiceTypes) as kind, index (kind)}
             <li class:separator={index > 0}>{kind}</li>
           {/each}
         {:else}
