@@ -4,7 +4,7 @@
   import { token } from "$lib/utils/auth";
 
   import Button from "$lib/components/display/button.svelte";
-  import ServiceContact from "$lib/components/specialized/services/service-contact.svelte";
+  import ServiceContact from "$lib/components/specialized/services/display/service-contact.svelte";
   import { trackMobilisation } from "$lib/utils/stats";
   import type { Service } from "$lib/types";
   import SharingModal from "./modals/sharing-modal.svelte";
@@ -16,7 +16,7 @@
 
   let sharingModalIsOpen = false;
   function showContact() {
-    if (!$token) {
+    if (!$token && !service.isContactInfoPublic) {
       goto(
         `/auth/connexion?next=${encodeURIComponent(
           $page.url.pathname + $page.url.search
@@ -25,6 +25,7 @@
       return;
     }
     contactBoxOpen = true;
+    // on tracke comme une MER si les contacts du service sont publics
     trackMobilisation(service, $page.url, isDI);
   }
 

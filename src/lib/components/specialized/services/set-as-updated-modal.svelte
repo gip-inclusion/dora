@@ -5,7 +5,7 @@
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
   import { markServiceAsSynced } from "$lib/requests/services";
   import type { Service, ServicesOptions, ShortService } from "$lib/types";
-  import ServiceContact from "./service-contact.svelte";
+  import ServiceContact from "./display/service-contact.svelte";
   import ExtendedServiceKeyInformations from "./display/extended-service-key-informations.svelte";
 
   export let isOpen = false;

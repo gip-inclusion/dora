@@ -21,6 +21,7 @@
   export let data: PageData;
 
   const { service } = data;
+  const isDI = !!data.isDI;
 
   let requesting = false;
 
@@ -56,20 +57,20 @@
       },
       body: JSON.stringify({
         ...validatedData,
-        serviceSlug: data.isDI ? null : service.slug,
-        diServiceId: data.isDI ? service.slug : "",
-        diServiceName: data.isDI ? service.name || "" : "",
-        diContactEmail: data.isDI ? service.contactEmail || "" : "",
-        diContactName: data.isDI ? service.contactName || "" : "",
-        diContactPhone: data.isDI ? service.contactPhone || "" : "",
-        diStructureName: data.isDI ? service.structureInfo.name || "" : "",
+        serviceSlug: isDI ? null : service.slug,
+        diServiceId: isDI ? service.slug : "",
+        diServiceName: isDI ? service.name || "" : "",
+        diContactEmail: isDI ? service.contactEmail || "" : "",
+        diContactName: isDI ? service.contactName || "" : "",
+        diContactPhone: isDI ? service.contactPhone || "" : "",
+        diStructureName: isDI ? service.structureInfo.name || "" : "",
         beneficiaryAttachments,
       }),
     });
   }
 
   function handleSuccess(_result) {
-    goto(`/services/${data.isDI ? "di--" : ""}${service.slug}/orienter/merci`);
+    goto(`/services/${isDI ? "di--" : ""}${service.slug}/orienter/merci`);
   }
 </script>
 
@@ -102,10 +103,7 @@
       <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
         <OrientationForm {credentials} {service} />
         <div class="mb-s32 w-full shrink-0 md:w-[384px]">
-          <ContactBox
-            {service}
-            bind:contactBoxOpen={$orientation.contactBoxOpen}
-          />
+          <ContactBox {service} {isDI} />
         </div>
       </div>
     </Layout>

@@ -1,7 +1,12 @@
 <script lang="ts">
+  import type { Service } from "$lib/types";
   import { checkboxCircleFillIcon } from "$lib/icons";
   import { page } from "$app/stores";
   import IcButton from "$lib/components/specialized/ic-button.svelte";
+  import ContactInfo from "./contact-info.svelte";
+
+  export let service: Service;
+  export let isDI: boolean;
 
   const nextURL = new URL($page.url);
   nextURL.searchParams.set("newlogin", "1");
@@ -67,13 +72,27 @@
       <hr class="mb-s32 border-t-gray-01" />
       <p class="text-f16">
         Il est nécessaire d'être connecté pour utiliser le formulaire
-        d’orientation ou afficher les coordonnées de contact.
+        d’orientation
+        {#if !service.isContactInfoPublic}
+          ou afficher les coordonnées de contact
+        {/if}.
       </p>
 
       <IcButton
         nextPage={encodeURIComponent(nextURL.pathname + nextURL.search)}
       />
     </div>
+
+    {#if service.isContactInfoPublic}
+      <div class="mt-s32 flex flex-col rounded-ml border border-gray-01 p-s32">
+        <h3 class="mb-s32 text-france-blue">Contact du service</h3>
+        <hr class="mb-s32 border-t-gray-01" />
+        <div class="mb-s32">
+          Les informations de contact de ce service sont publiques.
+        </div>
+        <ContactInfo {service} {isDI} />
+      </div>
+    {/if}
   </div>
 </div>
 

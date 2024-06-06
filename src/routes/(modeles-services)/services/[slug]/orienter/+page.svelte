@@ -19,6 +19,7 @@
   export let data;
 
   const { service } = data;
+  const isDI = !!data.isDI;
 
   let requesting = false;
 
@@ -36,15 +37,13 @@
   }
 
   function handleSuccess(_result) {
-    goto(
-      `/services/${data.isDI ? "di--" : ""}${service.slug}/orienter/demande`
-    );
+    goto(`/services/${isDI ? "di--" : ""}${service.slug}/orienter/demande`);
   }
 
   onMount(async () => {
     const shouldTrack = $page.url.searchParams.get("newlogin");
     if ($token && shouldTrack) {
-      await trackMobilisation(service, $page.url, !!data.isDI);
+      await trackMobilisation(service, $page.url, isDI);
       $page.url.searchParams.delete("newlogin");
       history.replaceState(null, "", $page.url.pathname + $page.url.search);
     }
@@ -78,17 +77,14 @@
       <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
         <ValidationForm {service} />
         <div class="mt-s32 w-full shrink-0 md:mt-s0 md:w-[384px]">
-          <ContactBox
-            {service}
-            bind:contactBoxOpen={$orientation.contactBoxOpen}
-          />
+          <ContactBox {service} {isDI} />
         </div>
       </div>
     </Layout>
     <StickyFormSubmissionRow justifyBetween>
       <LinkButton
         icon={arrowLeftLineIcon}
-        to="/services/{data.isDI ? 'di--' : ''}{service.slug}"
+        to="/services/{isDI ? 'di--' : ''}{service.slug}"
         label="Retour à la fiche"
         secondary
       />
@@ -98,6 +94,6 @@
   </Form>
 {:else}
   <Layout {data}>
-    <Teaser></Teaser>
+    <Teaser {service} {isDI}></Teaser>
   </Layout>
 {/if}
