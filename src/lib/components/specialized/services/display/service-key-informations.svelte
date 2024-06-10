@@ -31,6 +31,7 @@
         ? -1
         : 0;
   }
+  $: sortedServiceKindsDisplay = service.kindsDisplay.sort(sortServiceTypes);
 </script>
 
 <h2 class="text-f23">Informations clés</h2>
@@ -96,7 +97,7 @@
 
       <ul class="inline-flex flex-wrap text-f16 text-gray-text">
         {#if Array.isArray(service.kindsDisplay)}
-          {#each service.kindsDisplay.sort(sortServiceTypes) as kind, index (kind)}
+          {#each sortedServiceKindsDisplay as kind, index (kind)}
             <li class:separator={index > 0}>{kind}</li>
           {/each}
         {:else}
