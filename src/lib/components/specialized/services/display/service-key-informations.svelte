@@ -19,6 +19,11 @@
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
+
+  // trier les types dans l'ordre d'affichage du formulaire
+  $: sortedServiceKindsDisplay = service.kindsDisplay.sort((a, b) =>
+    a.localeCompare(b)
+  );
 </script>
 
 <h2 class="text-f23">Informations clés</h2>
@@ -84,7 +89,7 @@
 
       <ul class="inline-flex flex-wrap text-f16 text-gray-text">
         {#if Array.isArray(service.kindsDisplay)}
-          {#each service.kindsDisplay as kind, index (kind)}
+          {#each sortedServiceKindsDisplay as kind, index (kind)}
             <li class:separator={index > 0}>{kind}</li>
           {/each}
         {:else}
