@@ -21,17 +21,9 @@
   export let servicesOptions: ServicesOptions;
 
   // trier les types dans l'ordre d'affichage du formulaire
-  function sortServiceTypes(st1: string, st2: string) {
-    const order = ["En autonomie", "Accompagnement", "Atelier", "Délégation"];
-    // pas de ternaires imbriqués : c'est pourtant plus lisible et plus court
-    // eslint-disable-next-line no-nested-ternary
-    return order.indexOf(st1) > order.indexOf(st2)
-      ? 1
-      : order.indexOf(st1) < order.indexOf(st2)
-        ? -1
-        : 0;
-  }
-  $: sortedServiceKindsDisplay = service.kindsDisplay.sort(sortServiceTypes);
+  $: sortedServiceKindsDisplay = service.kindsDisplay.sort((a, b) =>
+    a.localeCompare(b)
+  );
 </script>
 
 <h2 class="text-f23">Informations clés</h2>
