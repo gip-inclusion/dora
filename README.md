@@ -6,5 +6,3 @@
   https://github.com/gip-inclusion/dora-back
 - dépôt du frontend :
   https://github.com/gip-inclusion/dora-front
-- dépôt du service PDF :
-  https://github.com/gip-inclusion/dora-pdf
