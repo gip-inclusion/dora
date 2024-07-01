@@ -25,6 +25,7 @@ export const load: PageLoad = async ({ url, params, parent }) => {
       service,
       servicesOptions: await getServicesOptions(),
       isDI: true,
+      noIndex: true,
     };
   }
 
