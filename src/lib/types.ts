@@ -401,6 +401,7 @@ export interface Service {
   coachOrientationModesOther: string;
   concernedPublic: CustomizableFK[]; // TODO: should be plural
   concernedPublicDisplay: string[];
+  contactInfoFilled: boolean;
   contactEmail: string;
   contactName: string;
   contactPhone: string;

@@ -1,10 +1,10 @@
 <script lang="ts">
   import Accordion from "$lib/components/display/accordion.svelte";
-  import type { Service } from "$lib/types";
+  import type { Model, Service } from "$lib/types";
   import { addlinkToUrls } from "$lib/utils/misc";
   import { formatFilePath } from "$lib/utils/file";
 
-  export let service: Service;
+  export let service: Service | Model;
 </script>
 
 <div id="orientation-modes">

@@ -1,8 +1,8 @@
 <script lang="ts">
   import Accordion from "$lib/components/display/accordion.svelte";
-  import type { Service } from "$lib/types";
+  import type { Model, Service } from "$lib/types";
 
-  export let service: Service;
+  export let service: Service | Model;
 </script>
 
 <Accordion title="Qui peut bénéficier de ce service ?">

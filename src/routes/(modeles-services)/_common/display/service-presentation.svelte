@@ -1,12 +1,12 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import ServiceKeyInformations from "$lib/components/specialized/services/display/service-key-informations.svelte";
-  import type { Service, ServicesOptions } from "$lib/types";
+  import type { Model, Service, ServicesOptions } from "$lib/types";
   import Notice from "$lib/components/display/notice.svelte";
 
   import ServiceDescription from "../service-description.svelte";
 
-  export let service: Service;
+  export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
   export let isDI = false;
 </script>
