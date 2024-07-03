@@ -198,6 +198,13 @@
     updateUrlQueryParams();
   }
 
+  function handleResetFilters() {
+    serviceStatus = undefined;
+    updateStatus = undefined;
+    servicesDisplayed = filterAndSortServices(structure.services);
+    updateUrlQueryParams();
+  }
+
   $: servicesDisplayed = filterAndSortServices(structure.services);
 </script>
 
@@ -271,10 +278,7 @@
         <button
           class:!text-magenta-cta={serviceStatus || updateStatus}
           class="text-gray-text-alt"
-          on:click={() => {
-            serviceStatus = undefined;
-            updateStatus = undefined;
-          }}
+          on:click={handleResetFilters}
         >
           Tout effacer
         </button>
