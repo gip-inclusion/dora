@@ -11,7 +11,7 @@
   import { orientationStep1Schema } from "./schema";
   import { goto } from "$app/navigation";
   import { arrowLeftLineIcon } from "$lib/icons";
-  import { onMount } from "svelte";
+  import { onMount, setContext } from "svelte";
   import { token } from "$lib/utils/auth";
   import Teaser from "./teaser.svelte";
   import { trackMobilisation } from "$lib/utils/stats";
@@ -22,6 +22,19 @@
   const isDI = !!data.isDI;
 
   let requesting = false;
+
+  // tracking activé sur la page courante :
+  const shouldTrack = Boolean($page.url.searchParams.get("newlogin"));
+
+  // On ne doit pas tracker la mobilisation sur affichage de contacts
+  // (ou toute autre action)
+  // si on se trouve sur la page du formulaire d'orientation :
+  // la mobilisation est déjà comptabilisé à l'ouverture du formulaire.
+  // On doit transmettre cette information de manière générique
+  // au composant enfant 'ContactInfo'.
+
+  // Raccourci : on ne peut accéder à cette page que si connecté.
+  setContext("shouldTrack", !$token);
 
   onMount(() => {
     $orientation.firstStepDone = true;
@@ -41,7 +54,6 @@
   }
 
   onMount(async () => {
-    const shouldTrack = $page.url.searchParams.get("newlogin");
     if ($token && shouldTrack) {
       await trackMobilisation(service, $page.url, isDI);
       $page.url.searchParams.delete("newlogin");
