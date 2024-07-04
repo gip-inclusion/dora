@@ -21,7 +21,7 @@
   export let servicesOptions: ServicesOptions;
 
   // trier les types dans l'ordre d'affichage du formulaire
-  $: sortedServiceKindsDisplay = service.kindsDisplay.sort((a, b) =>
+  $: sortedServiceKindsDisplay = service.kindsDisplay?.sort((a, b) =>
     a.localeCompare(b)
   );
 </script>
