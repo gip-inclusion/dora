@@ -5,16 +5,21 @@
   import ContactEmail from "$lib/components/specialized/services/contact-email.svelte";
   import ContactPhone from "$lib/components/specialized/services/contact-phone.svelte";
   import { page } from "$app/stores";
+  import { getContext } from "svelte";
 
   export let service: Service;
   export let isDI: boolean;
+
+  const shouldTrack = Boolean(getContext("shouldTrack"));
 
   let contactBoxOpen = false;
 
   function handleShowContactClick() {
     contactBoxOpen = true;
-    if (service.isContactInfoPublic) {
-      // tracking comme MER uniquement pour les services avec infos de contact publiques
+    // tracking comme MER uniquement :
+    // - pour les services avec infos de contact publiques
+    // - ET si on ne se trouve pas déjà dans le parcours du formulaire d'orientation (shouldTrack=true)
+    if (service.isContactInfoPublic && shouldTrack) {
       trackMobilisation(service, $page.url, isDI);
     }
   }

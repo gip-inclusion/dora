@@ -26,9 +26,6 @@
       {#if service.contactPhone}
         <ContactPhone {service} preferred />
       {/if}
-      {#if !service.contactEmail && !service.contactPhone}
-        Informations de contact non renseignées
-      {/if}
     {/if}
   </div>
 </div>
