@@ -7,7 +7,7 @@
   export let readOnly = true;
 </script>
 
-<div class="flex flex-col justify-between rounded-ml bg-white shadow-md ">
+<div class="flex flex-col justify-between rounded-ml bg-white shadow-md">
   <div class="p-s24">
     <div class="flex items-center justify-between text-f14">
       <div class="flex items-center text-gray-dark">
@@ -31,7 +31,7 @@
   </div>
 
   <div class="border-t border-t-gray-03 p-s24">
-    <div class="flex items-center text-f14  text-gray-dark">
+    <div class="flex items-center text-f14 text-gray-dark">
       <div
         class="mr-s8 flex h-s28 w-s28 items-center justify-center rounded-full bg-service-blue text-service-blue-dark"
       >

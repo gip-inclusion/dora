@@ -23,7 +23,7 @@
 </script>
 
 <div
-  class="relative mt-s8 flex  flex-row items-center self-start"
+  class="relative mt-s8 flex flex-row items-center self-start"
   on:click={() => {
     checked = !checked;
     dispatcher("change");

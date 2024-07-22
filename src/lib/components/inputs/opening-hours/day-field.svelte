@@ -63,7 +63,7 @@
       {#if !isOpen}
         <span class="text-f19 text-gray-text-alt">/</span>
       {:else}
-        <label class="flex-1 py-s10 ">
+        <label class="flex-1 py-s10">
           <span class="sr-only">Horaire de fermeture pour le {label}</span>
 
           <input
@@ -80,7 +80,7 @@
   </div>
 
   <div
-    class="flex flex-row justify-center rounded-bl rounded-br border-r border-l border-b border-gray-03 py-s10 text-center text-gray-text"
+    class="flex flex-row justify-center rounded-bl rounded-br border-b border-l border-r border-gray-03 py-s10 text-center text-gray-text"
     class:error={inError}
   >
     <label for="{day}-{dayPeriod}-is-open" class="flex justify-center">

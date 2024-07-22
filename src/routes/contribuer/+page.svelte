@@ -24,7 +24,7 @@
         Participez à notre démarche collective en identifiant vos partenaires
       </h1>
 
-      <p class="mt-s24 mb-s24">
+      <p class="mb-s24 mt-s24">
         Vous pouvez des à présent contribuer à la construction de la première
         base de données publique de l’offre d’insertion nationale.
       </p>
@@ -36,7 +36,7 @@
         iconOnRight
       />
 
-      <div class="mt-s48 mb-s48 flex flex-col gap-s20">
+      <div class="mb-s48 mt-s48 flex flex-col gap-s20">
         <div class="flex">
           <div class="icon">
             {@html timerFlashIcon}

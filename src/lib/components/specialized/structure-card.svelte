@@ -17,7 +17,7 @@
       <Label label={`${structure.city} (${structure.postalCode})`} darkBg />
     {/if}
   </div>
-  <div class="py-s16 px-s20">
+  <div class="px-s20 py-s16">
     <div class="mb-s0 flex items-center text-f14 text-gray-dark">
       <div
         class="mr-s8 flex h-s28 w-s28 items-center justify-center rounded-full bg-service-blue text-service-blue-dark"

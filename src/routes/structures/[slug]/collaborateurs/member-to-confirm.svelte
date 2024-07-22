@@ -39,7 +39,7 @@
   </div>
   <div slot="status">
     <span
-      class="inline-block rounded-md bg-service-orange py-s6 px-s12 text-center"
+      class="inline-block rounded-md bg-service-orange px-s12 py-s6 text-center"
     >
       Adhésion en attente
     </span>

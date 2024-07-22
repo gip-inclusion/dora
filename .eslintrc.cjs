@@ -5,26 +5,28 @@ module.exports = {
     "eslint:recommended",
     "plugin:svelte/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "prettier",
   ],
   plugins: ["@typescript-eslint"],
   ignorePatterns: ["*.cjs"],
-  overrides: [{
-    files: ["*.svelte"],
-    parser: "svelte-eslint-parser",
-    parserOptions: {
-      parser: "@typescript-eslint/parser"
-    }
-  }],
+  overrides: [
+    {
+      files: ["*.svelte"],
+      parser: "svelte-eslint-parser",
+      parserOptions: {
+        parser: "@typescript-eslint/parser",
+      },
+    },
+  ],
   parserOptions: {
     sourceType: "module",
     ecmaVersion: 2020,
-    extraFileExtensions: [".svelte"]
+    extraFileExtensions: [".svelte"],
   },
   env: {
     browser: true,
     es2022: true,
-    node: true
+    node: true,
   },
   rules: {
     "array-callback-return": "error",
@@ -40,14 +42,14 @@ module.exports = {
     eqeqeq: ["error", "smart"],
     "id-length": [
       "error",
-      { min: 3, exceptions: ["i", "a", "b", "x", "y", "id", "ok", "to"] }
+      { min: 3, exceptions: ["i", "a", "b", "x", "y", "id", "ok", "to"] },
     ],
     "func-style": [
       "error",
       "declaration",
       {
-        allowArrowFunctions: true
-      }
+        allowArrowFunctions: true,
+      },
     ],
     "guard-for-in": "error",
     "no-alert": "warn",
@@ -72,8 +74,8 @@ module.exports = {
       "warn",
       {
         location: "start",
-        terms: ["todo", "hack", "xxx", "fixme"]
-      }
+        terms: ["todo", "hack", "xxx", "fixme"],
+      },
     ],
     "prefer-const": "error",
     "require-await": "error",
@@ -84,9 +86,9 @@ module.exports = {
       "error",
       {
         argsIgnorePattern: "^_",
-        varsIgnorePattern: "^_"
-      }
+        varsIgnorePattern: "^_",
+      },
     ],
-    "@typescript-eslint/no-explicit-any": "off"
-  }
+    "@typescript-eslint/no-explicit-any": "off",
+  },
 };

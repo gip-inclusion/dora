@@ -34,7 +34,7 @@
   </div>
   <div slot="status">
     <span
-      class="inline-block rounded-md bg-blue-light py-s6 px-s12 text-center"
+      class="inline-block rounded-md bg-blue-light px-s12 py-s6 text-center"
     >
       Invitation envoyée
     </span>

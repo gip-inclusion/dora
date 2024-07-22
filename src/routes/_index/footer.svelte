@@ -10,7 +10,7 @@
 
 <CenteredGrid noPadding>
   <div
-    class="flex flex-col items-center justify-between py-s32 print:hidden lg:flex-row"
+    class="flex flex-col items-center justify-between py-s32 lg:flex-row print:hidden"
   >
     <div class="text-f14 text-gray-dark">
       <strong>Infolettre &nbsp;•&nbsp;</strong>

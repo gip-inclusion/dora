@@ -20,6 +20,7 @@
     }
   }
 
+  $: showModel = !!service.model;
   $: fieldModelProps = model
     ? getModelInputProps({
         service,
@@ -29,7 +30,6 @@
         model,
       })
     : {};
-  $: showModel = !!service.model;
 </script>
 
 <FieldSet title="Présentation" {showModel} {noTopPadding}>

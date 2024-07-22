@@ -18,8 +18,10 @@
     "test:watch": "vitest",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --output human-verbose --threshold error",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "prettier --check . && eslint .",
-    "format": "prettier --write . && eslint --fix . && svgo --pretty -f src/lib/assets",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write . && svgo --pretty -f src/lib/assets",
+    "format:check": "prettier --check .",
     "svg-optimize": "svgo --pretty -r -f ./src/lib/assets",
     "prepare": "husky install",
     "security-scan": "ggshield secret scan path -r . -y"

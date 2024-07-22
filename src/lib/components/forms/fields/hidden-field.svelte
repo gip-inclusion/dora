@@ -7,7 +7,7 @@
 </script>
 
 {#if $currentSchema && id in $currentSchema}
-  <FieldWrapper {id} let:onBlur hidden hideLabel>
+  <FieldWrapper {id} hidden hideLabel>
     <input type="hidden" bind:value {id} />
   </FieldWrapper>
 {/if}

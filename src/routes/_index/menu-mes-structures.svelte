@@ -52,7 +52,7 @@
               type="text"
               placeholder="Rechercher"
               bind:value={filterText}
-              class="absolute right-s0 left-s0 border border-gray-03 p-s10"
+              class="absolute left-s0 right-s0 border border-gray-03 p-s10"
             />
             <span
               class="absolute right-s8 top-[11px] z-40 inline-block h-s24 w-s24 fill-current text-gray-03"

@@ -62,7 +62,7 @@
       {#if haveSameValue}
         <small class="lg:pt-s8">Pas de différence</small>
       {:else}
-        <div class="rounded bg-info-light py-s8 px-s12">
+        <div class="rounded bg-info-light px-s12 py-s8">
           {#if value === "" || value === undefined || value === null || (Array.isArray(value) && !value.length)}
             <small class="mb-s8 lg:pt-s8">Champs vide</small>
           {:else if type === "array"}

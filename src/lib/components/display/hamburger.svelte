@@ -25,7 +25,7 @@
     {#if isOpen}
       <div
         id="hamburger-content"
-        class="fixed top-s0 right-s0 left-s0 z-20 h-[100%] overflow-y-auto bg-white p-s20"
+        class="fixed left-s0 right-s0 top-s0 z-20 h-[100%] overflow-y-auto bg-white p-s20"
       >
         <div class="flex justify-end">
           <button

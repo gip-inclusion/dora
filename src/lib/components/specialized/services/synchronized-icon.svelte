@@ -10,7 +10,7 @@
   class:small
   class:warning
 >
-  <div class="h-s16 w-s16 fill-current ">
+  <div class="h-s16 w-s16 fill-current">
     {@html copyIcon2}
   </div>
 </div>

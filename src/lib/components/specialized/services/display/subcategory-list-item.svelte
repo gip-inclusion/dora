@@ -16,7 +16,7 @@
 
 <div class="text-f14 text-france-blue">
   <div
-    class={`mr-s4 inline-flex items-center self-start rounded-md  py-s8 px-s16
+    class={`mr-s4 inline-flex items-center self-start rounded-md  px-s16 py-s8
       ${
         expanded
           ? "rounded-bl-none rounded-br-none bg-france-blue text-white"
@@ -44,7 +44,7 @@
     </button>
   </div>
 
-  <div class:hidden={!expanded} class="w-full print:!block md:w-auto">
+  <div class:hidden={!expanded} class="w-full md:w-auto print:!block">
     <ul
       class="relative z-10 mt-[-1px] inline-flex w-full flex-col gap-s12 rounded-md rounded-tl-none bg-service-blue-light p-s16 pr-s32 md:w-auto"
     >

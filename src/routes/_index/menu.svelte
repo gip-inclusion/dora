@@ -24,7 +24,7 @@
 </script>
 
 <HamburgerMenu>
-  <div class="flex flex-col print:hidden lg:flex-row">
+  <div class="flex flex-col lg:flex-row print:hidden">
     <div class="my-s20 text-center lg:my-s0 lg:text-left">
       <LinkButton
         to="https://aide.dora.inclusion.beta.gouv.fr/fr/"
@@ -56,7 +56,7 @@
         <MenuMesStructures {structures} {lastVisitedStructure} mobileDesign />
         <MenuMonCompte mobileDesign />
       {/if}
-      <hr class="-mx-s32 mt-s64 mb-s16" />
+      <hr class="-mx-s32 mb-s16 mt-s64" />
       <SubMenu mobileDesign />
     </div>
   </div>
