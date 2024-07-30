@@ -17,6 +17,20 @@
   export let paddingTop = false;
   export let serviceValue: any | undefined = undefined;
 
+  export let subFields:
+    | Record<
+        string,
+        Array<{
+          label?: string;
+          showModel: boolean;
+          value: any;
+          serviceValue: any;
+          options: any;
+          onUseValue: (() => void) | undefined;
+        }>
+      >
+    | undefined = undefined;
+
   let haveSameValue = false;
 
   function compare(val1, val2) {
@@ -38,9 +52,20 @@
 
   function handleUseValue(_evt: MouseEvent) {
     onUseValue && onUseValue();
+    if (subFields) {
+      Object.values(subFields).forEach((fields) =>
+        fields.forEach((field) => field.onUseValue && field.onUseValue())
+      );
+    }
   }
 
-  $: haveSameValue = showModel && compare(value, serviceValue);
+  $: subFieldsHaveSameValue = subFields
+    ? Object.values(subFields).every((fields) =>
+        fields.every((field) => field.value === field.serviceValue)
+      )
+    : true;
+  $: haveSameValue =
+    showModel && compare(value, serviceValue) && subFieldsHaveSameValue;
 </script>
 
 <div
@@ -67,12 +92,24 @@
             <small class="mb-s8 lg:pt-s8">Champs vide</small>
           {:else if type === "array"}
             <div class="flex flex-wrap gap-s8">
-              {#each value as v}
-                <Tag
-                  >{options.find((option) => option.value === v)?.label ||
-                    v}</Tag
-                >
-              {/each}
+              <ul class="ml-s20 list-disc font-semibold text-gray-text-alt2">
+                {#each value as v}
+                  <li>
+                    {options.find((option) => option.value === v)?.label || v}
+                    {#if subFields && v in subFields}
+                      <ul class="ml-s20 list-disc font-normal">
+                        {#each subFields[v] as subField}
+                          <li>
+                            {subField.label
+                              ? `${subField.label}: `
+                              : ""}{subField.value}
+                          </li>
+                        {/each}
+                      </ul>
+                    {/if}
+                  </li>
+                {/each}
+              </ul>
             </div>
           {:else if type === "files"}
             <div class="flex flex-wrap gap-s8">

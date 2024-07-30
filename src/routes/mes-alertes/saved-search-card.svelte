@@ -1,6 +1,10 @@
 <script lang="ts">
   import DateLabel from "$lib/components/display/date-label.svelte";
-  import { closeCircleIcon, historyLineIcon, mailLineIcon } from "$lib/icons";
+  import {
+    closeCircleIcon,
+    historyLineIcon,
+    mailSendLineIcon,
+  } from "$lib/icons";
   import type { SavedSearch } from "$lib/types";
   import {
     updateSavedSearchFrequency,
@@ -72,7 +76,7 @@
       <form on:submit|preventDefault={handleSubmit} class="flex gap-s16">
         <div class="flex items-center rounded border border-gray-02 p-s12">
           <span class="mr-s8 inline-block h-s24 w-s24 fill-current">
-            {@html mailLineIcon}
+            {@html mailSendLineIcon}
           </span>
 
           <select

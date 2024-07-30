@@ -6,7 +6,7 @@
   import {
     computerIcon,
     externalLinkIcon,
-    mailLineIcon,
+    mailSendLineIcon,
     phoneLineIcon,
     timeLineIcon,
     wheelChairIcon,
@@ -150,7 +150,7 @@
             <div>
               <h4 class="mb-s8 flex items-center">
                 <span class="mr-s8 h-s24 w-s24 fill-current">
-                  {@html mailLineIcon}
+                  {@html mailSendLineIcon}
                 </span>
                 E-mail
               </h4>

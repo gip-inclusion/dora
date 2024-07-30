@@ -1,6 +1,5 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
@@ -16,9 +15,10 @@
     ShortStructure,
     Structure,
   } from "$lib/types";
-  import { moveToTheEnd } from "$lib/utils/misc";
   import { isNotFreeService } from "$lib/utils/service";
   import FieldSubcategory from "$lib/components/specialized/services/field-subcategory.svelte";
+
+  import FieldsModalitiesBeneficiary from "./fields-modalities-beneficiary.svelte";
 
   export let servicesOptions: ServicesOptions;
   export let service: Service;
@@ -228,25 +228,11 @@
     <p class="text-f14">Modalités pour mobiliser le service.</p>
   </div>
 
-  <CheckboxesField
+  <FieldsModalitiesBeneficiary
     id="beneficiariesAccessModes"
-    choices={moveToTheEnd(
-      servicesOptions.beneficiariesAccessModes,
-      "value",
-      "autre"
-    )}
-    bind:value={service.beneficiariesAccessModes}
-    description="Plusieurs choix possibles."
+    {service}
+    {servicesOptions}
   />
-
-  {#if service.beneficiariesAccessModes.includes("autre")}
-    <BasicInputField
-      id="beneficiariesAccessModesOther"
-      hideLabel
-      description="Merci de préciser la modalité"
-      bind:value={service.beneficiariesAccessModesOther}
-    />
-  {/if}
 </FieldSet>
 
 {#if !structure.department}

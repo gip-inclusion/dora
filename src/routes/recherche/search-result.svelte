@@ -41,27 +41,6 @@
     }
   }
 
-  function isOrientable() {
-    if (result.isOrientable !== undefined) {
-      // isOrientable est fourni (service DI) : on peut l'utiliser directement
-      return result.isOrientable;
-    }
-    // isOrientable n'est pas fourni (service Dora) : on calcule sa valeur à partir de
-    // isOrientablePartialCompute, coachOrientationModes et beneficiariesAccessModes
-    return (
-      result.isOrientablePartialCompute &&
-      (result.coachOrientationModes?.some((coachOrientationMode) =>
-        ["envoyer-courriel", "envoyer-fiche-prescription"].includes(
-          coachOrientationMode
-        )
-      ) ||
-        result.beneficiariesAccessModes?.some(
-          (beneficiariesAccessMode) =>
-            beneficiariesAccessMode === "envoyer-courriel"
-        ))
-    );
-  }
-
   function handleOrientationClick() {
     if ($token) {
       const service = isDI
@@ -161,7 +140,7 @@
               target="_blank"
               class="text-magenta-cta underline">Voir la fiche détaillée</a
             >
-            {#if isOrientable()}
+            {#if result.isOrientable && result.coachOrientationModes?.includes("formulaire-dora")}
               <Button
                 on:click={handleOrientationClick}
                 label="Orienter votre bénéficiaire"

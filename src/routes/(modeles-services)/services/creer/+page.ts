@@ -60,6 +60,8 @@ export const load: PageLoad = async ({ url, parent }) => {
   }
 
   service.structure = structure ? structure.slug : null;
+  service.coachOrientationModes =
+    structure && structure.noDoraForm ? [] : ["formulaire-dora"];
 
   return {
     noIndex: true,

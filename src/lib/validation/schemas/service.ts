@@ -143,6 +143,28 @@ export const serviceSchema: v.Schema = {
       return !data.coachOrientationModes?.length;
     },
   },
+  beneficiariesAccessModesExternalFormLinkText: {
+    label: "L’intitulé du lien",
+    default: "Faire une demande",
+    rules: [v.isString(), v.maxStrLength(27)],
+    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
+      return data.beneficiariesAccessModes.includes(
+        "completer-le-formulaire-dadhesion"
+      );
+    },
+    maxLength: 27,
+  },
+  beneficiariesAccessModesExternalFormLink: {
+    label: "Lien",
+    default: "",
+    rules: [v.isString(), v.maxStrLength(280)],
+    required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
+      return data.beneficiariesAccessModes.includes(
+        "completer-le-formulaire-dadhesion"
+      );
+    },
+    maxLength: 280,
+  },
   beneficiariesAccessModesOther: {
     label: "",
     default: "",
@@ -159,6 +181,28 @@ export const serviceSchema: v.Schema = {
     required: (data: { beneficiariesAccessModes: BeneficiaryAccessModes }) => {
       return !data.beneficiariesAccessModes.length;
     },
+  },
+  coachOrientationModesExternalFormLinkText: {
+    label: "L’intitulé du lien",
+    default: "Orienter votre bénéficiaire",
+    rules: [v.isString(), v.maxStrLength(27)],
+    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
+      return data.coachOrientationModes.includes(
+        "completer-le-formulaire-dadhesion"
+      );
+    },
+    maxLength: 27,
+  },
+  coachOrientationModesExternalFormLink: {
+    label: "Lien",
+    default: "",
+    rules: [v.isString(), v.maxStrLength(280)],
+    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
+      return data.coachOrientationModes.includes(
+        "completer-le-formulaire-dadhesion"
+      );
+    },
+    maxLength: 280,
   },
   coachOrientationModesOther: {
     label: "",
@@ -179,6 +223,11 @@ export const serviceSchema: v.Schema = {
     label: "Documents à compléter",
     default: [],
     rules: [v.isArray([v.isString(), v.maxStrLength(1024)])],
+    required: (data: { coachOrientationModes: CoachOrientationModes }) => {
+      return data.coachOrientationModes.includes(
+        "envoyer-un-mail-avec-une-fiche-de-prescription"
+      );
+    },
   },
   onlineForm: {
     label: "Lien",
@@ -220,9 +269,12 @@ export const serviceSchema: v.Schema = {
       beneficiariesAccessModes: BeneficiaryAccessModes;
     }) => {
       return (
-        data.coachOrientationModes.includes("envoyer-courriel") ||
-        data.coachOrientationModes.includes("envoyer-fiche-prescription") ||
-        data.beneficiariesAccessModes.includes("envoyer-courriel")
+        data.coachOrientationModes.includes("formulaire-dora") ||
+        data.coachOrientationModes.includes("envoyer-un-mail") ||
+        data.coachOrientationModes.includes(
+          "envoyer-un-mail-avec-une-fiche-de-prescription"
+        ) ||
+        data.beneficiariesAccessModes.includes("envoyer-un-mail")
       );
     },
   },
@@ -327,6 +379,10 @@ export const inclusionNumeriqueSchema: v.Schema = {
     ...serviceSchema.beneficiariesAccessModes,
     required: true,
   },
+  beneficiariesAccessModesExternalFormLinkText:
+    serviceSchema.beneficiariesAccessModesExternalFormLinkText,
+  beneficiariesAccessModesExternalFormLink:
+    serviceSchema.beneficiariesAccessModesExternalFormLink,
   beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
   contactName: serviceSchema.contactName,
   contactPhone: serviceSchema.contactPhone,
@@ -356,8 +412,16 @@ export const draftSchema: v.Schema = {
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
   beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
+  beneficiariesAccessModesExternalFormLinkText:
+    serviceSchema.beneficiariesAccessModesExternalFormLinkText,
+  beneficiariesAccessModesExternalFormLink:
+    serviceSchema.beneficiariesAccessModesExternalFormLink,
   beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
   coachOrientationModes: serviceSchema.coachOrientationModes,
+  coachOrientationModesExternalFormLinkText:
+    serviceSchema.coachOrientationModesExternalFormLinkText,
+  coachOrientationModesExternalFormLink:
+    serviceSchema.coachOrientationModesExternalFormLink,
   coachOrientationModesOther: serviceSchema.coachOrientationModesOther,
   credentials: serviceSchema.credentials,
   forms: serviceSchema.forms,
@@ -420,8 +484,16 @@ export const modelSchema: v.Schema = {
   feeCondition: serviceSchema.feeCondition,
   feeDetails: serviceSchema.feeDetails,
   beneficiariesAccessModes: serviceSchema.beneficiariesAccessModes,
+  beneficiariesAccessModesExternalFormLinkText:
+    serviceSchema.beneficiariesAccessModesExternalFormLinkText,
+  beneficiariesAccessModesExternalFormLink:
+    serviceSchema.beneficiariesAccessModesExternalFormLink,
   beneficiariesAccessModesOther: serviceSchema.beneficiariesAccessModesOther,
   coachOrientationModes: serviceSchema.coachOrientationModes,
+  coachOrientationModesExternalFormLinkText:
+    serviceSchema.coachOrientationModesExternalFormLinkText,
+  coachOrientationModesExternalFormLink:
+    serviceSchema.coachOrientationModesExternalFormLink,
   coachOrientationModesOther: serviceSchema.coachOrientationModesOther,
   credentials: serviceSchema.credentials,
   forms: serviceSchema.forms,

@@ -116,6 +116,7 @@ const config = {
       s32: "2rem",
       s36: "2.25rem",
       s40: "2.5rem",
+      s42: "2.625rem",
       s48: "3rem",
       s56: "3.5rem",
       s64: "4rem",

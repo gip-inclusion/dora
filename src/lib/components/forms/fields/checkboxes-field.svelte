@@ -41,7 +41,6 @@
     <Checkboxes
       bind:group={value}
       on:change={onChange}
-      {id}
       name={id}
       {choices}
       {disabled}

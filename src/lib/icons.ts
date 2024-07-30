@@ -6,7 +6,8 @@ export { default as homeIcon } from "remixicon/icons/Buildings/home-6-line.svg?r
 export { default as homeSmile2Icon } from "remixicon/icons/Buildings/home-smile-2-line.svg?raw";
 export { default as homeSmileIcon } from "remixicon/icons/Buildings/home-smile-line.svg?raw";
 export { default as storeIcon } from "remixicon/icons/Buildings/store-2-line.svg?raw";
-export { default as mailLineIcon } from "remixicon/icons/Business/mail-send-line.svg?raw";
+export { default as mailLineIcon } from "remixicon/icons/Business/mail-line.svg?raw";
+export { default as mailSendLineIcon } from "remixicon/icons/Business/mail-send-line.svg?raw";
 export { default as mailAddLineIcon } from "remixicon/icons/Business/mail-add-line.svg?raw";
 export { default as serviceIcon } from "remixicon/icons/Business/service-line.svg?raw";
 export { default as inboxLineIcon } from "remixicon/icons/Business/inbox-line.svg?raw";
@@ -19,6 +20,7 @@ export { default as quillPenIcon } from "remixicon/icons/Design/quill-pen-line.s
 export { default as markPenIcon } from "remixicon/icons/Design/mark-pen-line.svg?raw";
 export { default as computerIcon } from "remixicon/icons/Device/computer-line.svg?raw";
 export { default as macLineIcon } from "remixicon/icons/Device/mac-line.svg?raw";
+export { default as phoneFillIcon } from "remixicon/icons/Device/phone-fill.svg?raw";
 export { default as phoneLineIcon } from "remixicon/icons/Device/phone-line.svg?raw";
 export { default as bookReadLineIcon } from "remixicon/icons/Document/book-read-line.svg?raw";
 export { default as draftFillIcon } from "remixicon/icons/Document/draft-fill.svg?raw";
@@ -48,6 +50,7 @@ export { default as stethoscopeIcon } from "remixicon/icons/Health & Medical/ste
 export { default as compassDiscoverIcon } from "remixicon/icons/Map/compass-discover-line.svg?raw";
 export { default as compass3Icon } from "remixicon/icons/Map/compass-3-line.svg?raw";
 export { default as earthFillIcon } from "remixicon/icons/Map/earth-fill.svg?raw";
+export { default as mapPinFillIcon } from "remixicon/icons/Map/map-pin-2-fill.svg?raw";
 export { default as mapPinIcon } from "remixicon/icons/Map/map-pin-2-line.svg?raw";
 export { default as mapPinUserFillIcon } from "remixicon/icons/Map/map-pin-user-fill.svg?raw";
 export { default as pinDistanceIcon } from "remixicon/icons/Map/pin-distance-fill.svg?raw";

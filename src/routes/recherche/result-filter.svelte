@@ -53,7 +53,7 @@
         />
       </Select>
     {:else}
-      <Checkboxes {id} name={id} {choices} bind:group />
+      <Checkboxes name={id} {choices} bind:group />
     {/if}
   </div>
 </div>

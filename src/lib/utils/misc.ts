@@ -114,19 +114,6 @@ export function getDepartmentFromCityCode(cityCode) {
     : cityCode.slice(0, 2);
 }
 
-export function addlinkToUrls(text) {
-  const urlRegex = /((https?|mailto):\/\/[^\s]+\.[^\s]+)/gu;
-
-  return insane(
-    text.replace(
-      urlRegex,
-      (url) =>
-        `<a href="${url}" class="underline" target="_blank" rel="noopener ugc">${url}</a>`
-    ),
-    INSANE_CONFIGURATION
-  );
-}
-
 export function moveToTheEnd(
   array,
   key,

@@ -96,6 +96,7 @@ export interface ShortStructure {
   department: string;
   modificationDate: string;
   name: string;
+  noDoraForm: boolean;
   parent: string;
   siret: string;
   slug: string;
@@ -169,6 +170,7 @@ export interface Structure {
   modificationDate: string;
   name: string;
   nationalLabels: string[];
+  noDoraForm: boolean;
   numModels: number;
   numServices: number;
   openingHours: string | null;
@@ -290,16 +292,19 @@ export type SavedSearchNotificationFrequency =
   | "MONTHLY";
 
 export type CoachOrientationModes =
-  | "envoyer-courriel"
-  | "envoyer-fiche-prescription"
-  | "envoyer-formulaire"
-  | "autre"
-  | "telephoner";
+  | "formulaire-dora"
+  | "completer-le-formulaire-dadhesion"
+  | "envoyer-un-mail-avec-une-fiche-de-prescription"
+  | "envoyer-un-mail"
+  | "telephoner"
+  | "autre";
 export type BeneficiaryAccessModes =
-  | "envoyer-courriel"
+  | "professionnel"
   | "se-presenter"
-  | "autre"
-  | "telephoner";
+  | "completer-le-formulaire-dadhesion"
+  | "envoyer-un-mail"
+  | "telephoner"
+  | "autre";
 
 export interface SearchQuery {
   categoryIds: string[];
@@ -328,7 +333,6 @@ export interface ServiceSearchResult {
   coordinates: Coordinates | null;
   diffusionZoneType: string;
   isOrientable?: boolean;
-  isOrientablePartialCompute?: boolean;
   coachOrientationModes?: string[];
   beneficiariesAccessModes?: string[];
   modificationDate: string;
@@ -367,9 +371,11 @@ export interface ServiceStructure {
   address2: string;
   city: string;
   department: string;
+  email: string;
   hasAdmin: boolean;
   name: string;
   numServices: number;
+  phone: string;
   postalCode: string;
   shortDesc: string;
   siret: string;
@@ -390,6 +396,8 @@ export interface Service {
   address2: string;
   beneficiariesAccessModes: BeneficiaryAccessModes[];
   beneficiariesAccessModesDisplay: string[];
+  beneficiariesAccessModesExternalFormLinkText: string;
+  beneficiariesAccessModesExternalFormLink: string;
   beneficiariesAccessModesOther: string;
   canWrite: boolean;
   categories: ServiceCategory[];
@@ -398,6 +406,8 @@ export interface Service {
   cityCode: string;
   coachOrientationModes: CoachOrientationModes[];
   coachOrientationModesDisplay: string[];
+  coachOrientationModesExternalFormLinkText: string;
+  coachOrientationModesExternalFormLink: string;
   coachOrientationModesOther: string;
   concernedPublic: CustomizableFK[]; // TODO: should be plural
   concernedPublicDisplay: string[];
@@ -551,12 +561,16 @@ export type Model = {
   accessConditionsDisplay: string[];
   beneficiariesAccessModes: BeneficiaryAccessModes[];
   beneficiariesAccessModesDisplay: string[];
+  beneficiariesAccessModesExternalFormLinkText: string;
+  beneficiariesAccessModesExternalFormLink: string;
   beneficiariesAccessModesOther: string;
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
   coachOrientationModes: CoachOrientationModes[];
   coachOrientationModesDisplay: string[];
+  coachOrientationModesExternalFormLinkText: string;
+  coachOrientationModesExternalFormLink: string;
   coachOrientationModesOther: string;
   concernedPublic: CustomizableFK[];
   concernedPublicDisplay: string[];
@@ -564,6 +578,8 @@ export type Model = {
   credentials: CustomizableFK[];
   credentialsDisplay: string[];
   department: string;
+  externalFormLink: string;
+  externalFormLinkText: string;
   feeCondition: FeeCondition;
   feeDetails: string;
   forms: string[];

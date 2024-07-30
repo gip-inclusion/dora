@@ -1,19 +1,32 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
+  import { page } from "$app/stores";
+
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
+  import { trackMobilisation } from "$lib/utils/stats";
 
   import ServiceBeneficiaries from "./service-beneficiaries.svelte";
   import ServiceMobilisation from "./service-mobilisation.svelte";
   import ServiceMobilize from "./service-mobilize.svelte";
   import SmallServiceShare from "./small-service-share.svelte";
   import ServicePresentation from "./service-presentation.svelte";
-  import { browser } from "$app/environment";
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
 
   export let isModel = false;
   export let isDI = false;
+
+  // Utilisé pour prévenir le tracking multiple
+  let mobilisationTracked = false;
+
+  function handleTrackMobilisation() {
+    if (!mobilisationTracked) {
+      trackMobilisation(service, $page.url, isDI);
+      mobilisationTracked = true;
+    }
+  }
 </script>
 
 <CenteredGrid>
@@ -29,7 +42,11 @@
         </div>
         <hr class="my-s24" />
         <div class="mobilize">
-          <ServiceMobilize {service} />
+          <ServiceMobilize
+            on:trackMobilisation={handleTrackMobilisation}
+            {service}
+            {isDI}
+          />
         </div>
       </div>
     </div>
@@ -41,7 +58,11 @@
             <div
               class="block rounded-lg border border-gray-02 bg-france-blue p-s24 px-s32 text-white print:hidden"
             >
-              <ServiceMobilisation {service} {isDI} />
+              <ServiceMobilisation
+                on:trackMobilisation={handleTrackMobilisation}
+                {service}
+                {isDI}
+              />
             </div>
 
             {#if !isModel}

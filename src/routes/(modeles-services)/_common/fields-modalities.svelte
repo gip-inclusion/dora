@@ -1,24 +1,29 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
-  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
-  import { moveToTheEnd } from "$lib/utils/misc";
   import { isNotFreeService } from "$lib/utils/service";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
+  import { currentSchema } from "$lib/validation/validation";
+
+  import FieldsModalitiesBeneficiary from "./fields-modalities-beneficiary.svelte";
+  import FieldsModalitiesCoach from "./fields-modalities-coach.svelte";
+  import {
+    orderedBeneficiariesAccessModeValues,
+    orderedCoachOrientationModeValues,
+  } from "./modalities-order";
 
   export let servicesOptions: ServicesOptions, service: Service;
   export let model: Model | undefined = undefined;
 
-  $: showModel = !!service.model;
-
   function handleUseModelValue(fieldName) {
     service[fieldName] = model ? model[fieldName] : undefined;
   }
+
+  $: showModel = !!service.model;
 
   $: fieldModelProps = model
     ? getModelInputProps({
@@ -29,6 +34,31 @@
         model,
       })
     : {};
+
+  $: fieldModelProps.coachOrientationModes?.value.sort((a, b) => {
+    return (
+      orderedCoachOrientationModeValues[a] -
+      orderedCoachOrientationModeValues[b]
+    );
+  });
+  $: fieldModelProps.coachOrientationModes?.serviceValue.sort((a, b) => {
+    return (
+      orderedCoachOrientationModeValues[a] -
+      orderedCoachOrientationModeValues[b]
+    );
+  });
+  $: fieldModelProps.beneficiariesAccessModes?.value.sort((a, b) => {
+    return (
+      orderedBeneficiariesAccessModeValues[a] -
+      orderedBeneficiariesAccessModeValues[b]
+    );
+  });
+  $: fieldModelProps.beneficiariesAccessModes?.serviceValue.sort((a, b) => {
+    return (
+      orderedBeneficiariesAccessModeValues[a] -
+      orderedBeneficiariesAccessModeValues[b]
+    );
+  });
 </script>
 
 <FieldSet title="Modalités" {showModel}>
@@ -47,55 +77,67 @@
   </Notice>
 
   <div class="flex flex-col lg:gap-s8">
-    <FieldModel {...fieldModelProps.coachOrientationModes ?? {}} type="array">
-      <CheckboxesField
-        id="coachOrientationModes"
-        choices={moveToTheEnd(
-          servicesOptions.coachOrientationModes,
-          "value",
-          "autre"
-        )}
-        bind:value={service.coachOrientationModes}
-        description="Plusieurs choix possibles."
-      />
-    </FieldModel>
-
-    {#if service.coachOrientationModes.includes("autre")}
-      <FieldModel {...fieldModelProps.coachOrientationModesOther ?? {}}>
-        <BasicInputField
-          id="coachOrientationModesOther"
-          hideLabel
-          description="Merci de préciser la modalité"
-          bind:value={service.coachOrientationModesOther}
+    {#if $currentSchema && "coachOrientationModes" in $currentSchema && "coachOrientationModesExternalFormLink" in $currentSchema && "coachOrientationModesExternalFormLinkText" in $currentSchema && "coachOrientationModesOther" in $currentSchema}
+      <FieldModel
+        {...fieldModelProps.coachOrientationModes ?? {}}
+        subFields={fieldModelProps.coachOrientationModes
+          ? {
+              "completer-le-formulaire-dadhesion": [
+                {
+                  label:
+                    $currentSchema.coachOrientationModesExternalFormLink.label,
+                  ...fieldModelProps.coachOrientationModesExternalFormLink,
+                },
+                {
+                  label:
+                    $currentSchema.coachOrientationModesExternalFormLinkText
+                      .label,
+                  ...fieldModelProps.coachOrientationModesExternalFormLinkText,
+                },
+              ],
+              autre: [fieldModelProps.coachOrientationModesOther],
+            }
+          : undefined}
+        type="array"
+      >
+        <FieldsModalitiesCoach
+          id="coachOrientationModes"
+          {service}
+          {servicesOptions}
         />
       </FieldModel>
     {/if}
   </div>
 
   <div class="flex flex-col lg:gap-s8">
-    <FieldModel
-      {...fieldModelProps.beneficiariesAccessModes ?? {}}
-      type="array"
-    >
-      <CheckboxesField
-        id="beneficiariesAccessModes"
-        choices={moveToTheEnd(
-          servicesOptions.beneficiariesAccessModes,
-          "value",
-          "autre"
-        )}
-        bind:value={service.beneficiariesAccessModes}
-        description="Plusieurs choix possibles."
-      />
-    </FieldModel>
-
-    {#if service.beneficiariesAccessModes.includes("autre")}
-      <FieldModel {...fieldModelProps.beneficiariesAccessModesOther ?? {}}>
-        <BasicInputField
-          id="beneficiariesAccessModesOther"
-          hideLabel
-          description="Merci de préciser la modalité"
-          bind:value={service.beneficiariesAccessModesOther}
+    {#if $currentSchema && "beneficiariesAccessModes" in $currentSchema && "beneficiariesAccessModesExternalFormLink" in $currentSchema && "beneficiariesAccessModesExternalFormLinkText" in $currentSchema && "beneficiariesAccessModesOther" in $currentSchema}
+      <FieldModel
+        {...fieldModelProps.beneficiariesAccessModes ?? {}}
+        subFields={fieldModelProps.beneficiariesAccessModes
+          ? {
+              "completer-le-formulaire-dadhesion": [
+                {
+                  label:
+                    $currentSchema.beneficiariesAccessModesExternalFormLink
+                      .label,
+                  ...fieldModelProps.beneficiariesAccessModesExternalFormLink,
+                },
+                {
+                  label:
+                    $currentSchema.beneficiariesAccessModesExternalFormLinkText
+                      .label,
+                  ...fieldModelProps.beneficiariesAccessModesExternalFormLinkText,
+                },
+              ],
+              autre: [fieldModelProps.beneficiariesAccessModesOther],
+            }
+          : undefined}
+        type="array"
+      >
+        <FieldsModalitiesBeneficiary
+          id="beneficiariesAccessModes"
+          {service}
+          {servicesOptions}
         />
       </FieldModel>
     {/if}

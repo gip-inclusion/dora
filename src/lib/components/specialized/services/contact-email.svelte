@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Service, ShortService } from "$lib/types";
   import { CANONICAL_URL } from "$lib/env";
-  import { mailLineIcon } from "$lib/icons";
+  import { mailSendLineIcon } from "$lib/icons";
   import { userInfo } from "$lib/utils/auth";
 
   export let service: Service | ShortService;
@@ -46,7 +46,7 @@
       role="img"
       aria-label="Courriel"
     >
-      {@html mailLineIcon}
+      {@html mailSendLineIcon}
     </span>
     {service.contactEmail}
   </a>
