@@ -157,6 +157,6 @@
 
 <style lang="postcss">
   .tag {
-    @apply whitespace-nowrap rounded-xl bg-blue-information px-s8 py-s0 text-f14  text-france-blue;
+    @apply whitespace-nowrap rounded-xl bg-blue-information px-s8 py-s0 text-f14 text-france-blue;
   }
 </style>

@@ -53,10 +53,7 @@
             : ''}"
         >
           <h2
-            class={`
-            text-f21 leading-32
-            ${headerBg !== "bg-white" ? "text-white" : "text-france-blue"}
-            `}
+            class={`text-f21 leading-32 ${headerBg !== "bg-white" ? "text-white" : "text-france-blue"}`}
           >
             {title}
           </h2>

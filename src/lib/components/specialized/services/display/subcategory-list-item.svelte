@@ -16,13 +16,7 @@
 
 <div class="text-f14 text-france-blue">
   <div
-    class={`mr-s4 inline-flex items-center self-start rounded-md  px-s16 py-s8
-      ${
-        expanded
-          ? "rounded-bl-none rounded-br-none bg-france-blue text-white"
-          : "bg-service-blue-light"
-      }
-      `}
+    class={`mr-s4 inline-flex items-center self-start rounded-md px-s16 py-s8 ${expanded ? "rounded-bl-none rounded-br-none bg-france-blue text-white" : "bg-service-blue-light"}`}
   >
     <span class="mr-s8 inline-block h-s24 w-s24 fill-current">
       {@html getCategoryIcon(categorySlug)}
