@@ -3,10 +3,12 @@
   import { page } from "$app/stores";
 
   import Button from "$lib/components/display/button.svelte";
+  import LinkButton from "$lib/components/display/link-button.svelte";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import FavoriteIcon from "$lib/components/specialized/favorite-icon.svelte";
   import type { ServiceSearchResult } from "$lib/types";
   import { token } from "$lib/utils/auth";
+  import { registerMatomoExperiment } from "$lib/utils/matomo";
   import { trackMobilisation } from "$lib/utils/stats";
 
   export let id: string;
@@ -41,6 +43,8 @@
     }
   }
 
+  let redirectToOrientationForm = true;
+
   function handleOrientationClick() {
     if ($token) {
       const service = isDI
@@ -58,6 +62,22 @@
       : "";
     goto(`/services/${slug}/orienter?${queryString}`);
   }
+
+  registerMatomoExperiment({
+    name: "CTA-Orienter",
+    includedTargets: [
+      { attribute: "url", inverted: "0", type: "any", value: "" },
+    ],
+    excludedTargets: [],
+    variations: [
+      {
+        name: "Fiche-service",
+        activate: function () {
+          redirectToOrientationForm = false;
+        },
+      },
+    ],
+  });
 </script>
 
 <Bookmarkable slug={result.slug} {isDI} let:onBookmark let:isBookmarked>
@@ -141,12 +161,21 @@
               class="text-magenta-cta underline">Voir la fiche détaillée</a
             >
             {#if result.isOrientable && result.coachOrientationModes?.includes("formulaire-dora")}
-              <Button
-                on:click={handleOrientationClick}
-                label="Orienter votre bénéficiaire"
-                secondary
-                small
-              />
+              {#if redirectToOrientationForm}
+                <Button
+                  on:click={handleOrientationClick}
+                  label="Orienter votre bénéficiaire"
+                  secondary
+                  small
+                />
+              {:else}
+                <LinkButton
+                  to={servicePagePath}
+                  label="Orienter votre bénéficiaire"
+                  secondary
+                  small
+                />
+              {/if}
             {/if}
           </div>
         </div>
