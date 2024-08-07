@@ -7,7 +7,7 @@
   import MembershipPendingWarning from "$lib/components/specialized/membership-pending-warning.svelte";
 
   export let service: Service | ShortService;
-  export let useWhiteText = false;
+  export let useWhiteText = true;
 </script>
 
 <div>
@@ -16,7 +16,11 @@
       <MembershipPendingWarning />
     {:else}
       {#if service.contactName}
-        <p class="mb-s6 mr-s24 text-gray-dark" class:text-white={useWhiteText}>
+        <p
+          class="mb-s6 mr-s24"
+          class:text-gray-dark={!useWhiteText}
+          class:text-white={useWhiteText}
+        >
           <strong>{service.contactName}</strong>
         </p>
       {/if}
