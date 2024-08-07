@@ -17,18 +17,23 @@
   export let servicesOptions: ServicesOptions;
 
   let beneficiariesAccessModesFocusValue: string | undefined = undefined;
+  let preventUpdateExternalFormFields = true;
 
-  $: {
-    // Suppression du lien vers le formulaire externe et de son intitulé
-    // lorsque la case du formulaire externe est décochée.
-    if (
-      !service.beneficiariesAccessModes.includes(
-        "completer-le-formulaire-dadhesion"
-      )
-    ) {
-      service.beneficiariesAccessModesExternalFormLink = "";
-      service.beneficiariesAccessModesExternalFormLinkText = "";
+  function updateExternalFormFields(text: string) {
+    if (preventUpdateExternalFormFields) {
+      // Pas de réinitialisation des champs au premier chargement
+      preventUpdateExternalFormFields = false;
+      return;
     }
+    service.beneficiariesAccessModesExternalFormLink = "";
+    service.beneficiariesAccessModesExternalFormLinkText = text;
+  }
+
+  $: externalFormToggle = service.beneficiariesAccessModes.includes(
+    "completer-le-formulaire-dadhesion"
+  );
+  $: {
+    updateExternalFormFields(externalFormToggle ? "Faire une demande" : "");
   }
 
   $: servicesOptions.beneficiariesAccessModes.sort(
@@ -66,7 +71,6 @@
             <BasicInputField
               id="beneficiariesAccessModesExternalFormLinkText"
               description="Par exemple : Faire une demande, Faire une simulation, Prendre rendez-vous, etc."
-              placeholder="Faire une demande"
               vertical
               bind:value={service.beneficiariesAccessModesExternalFormLinkText}
             />

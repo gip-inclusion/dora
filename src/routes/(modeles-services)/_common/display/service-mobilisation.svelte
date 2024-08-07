@@ -23,7 +23,9 @@
     "completer-le-formulaire-dadhesion"
   );
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    trackMobilisation: { externalUrl?: string };
+  }>();
 
   let sharingModalIsOpen = false;
   let contactBoxOpen = false;
@@ -39,7 +41,7 @@
     }
     contactBoxOpen = true;
     // on tracke comme une MER si les contacts du service sont publics
-    dispatch("trackMobilisation");
+    dispatch("trackMobilisation", {});
   }
 
   function handleOrientationClick() {
@@ -47,7 +49,7 @@
       showContact();
     } else {
       if ($token) {
-        dispatch("trackMobilisation");
+        dispatch("trackMobilisation", {});
       }
       const searchId = $page.url.searchParams.get("searchId");
       const searchFragment = searchId ? `?searchId=${searchId}` : "";
@@ -59,8 +61,8 @@
     }
   }
 
-  function handleExternalFormClick() {
-    dispatch("trackMobilisation");
+  function handleExternalFormClick(externalUrl: string) {
+    dispatch("trackMobilisation", { externalUrl });
   }
 
   function handleShareClick() {
@@ -92,7 +94,8 @@
 
   {#if hasExternalForm}
     <LinkButton
-      on:click={handleExternalFormClick}
+      on:click={() =>
+        handleExternalFormClick(service.coachOrientationModesExternalFormLink)}
       to={service.coachOrientationModesExternalFormLink}
       extraClass="bg-white !text-france-blue hover:!text-white text-center !whitespace-normal text-center"
       label={service.coachOrientationModesExternalFormLinkText ||

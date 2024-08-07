@@ -17,18 +17,25 @@
   export let servicesOptions: ServicesOptions;
 
   let coachOrientationModesFocusValue: string | undefined = undefined;
+  let preventUpdateExternalFormFields = true;
 
-  $: {
-    // Suppression du lien vers le formulaire externe et de son intitulé
-    // lorsque la case du formulaire externe est décochée.
-    if (
-      !service.coachOrientationModes.includes(
-        "completer-le-formulaire-dadhesion"
-      )
-    ) {
-      service.coachOrientationModesExternalFormLink = "";
-      service.coachOrientationModesExternalFormLinkText = "";
+  function updateExternalFormFields(text: string) {
+    if (preventUpdateExternalFormFields) {
+      // Pas de réinitialisation des champs au premier chargement
+      preventUpdateExternalFormFields = false;
+      return;
     }
+    service.coachOrientationModesExternalFormLink = "";
+    service.coachOrientationModesExternalFormLinkText = text;
+  }
+
+  $: externalFormToggle = service.coachOrientationModes.includes(
+    "completer-le-formulaire-dadhesion"
+  );
+  $: {
+    updateExternalFormFields(
+      externalFormToggle ? "Orienter votre bénéficiaire" : ""
+    );
   }
 
   $: servicesOptions.coachOrientationModes.sort(
@@ -66,7 +73,6 @@
             <BasicInputField
               id="coachOrientationModesExternalFormLinkText"
               description="Par exemple : Orienter votre bénéficiaire, Faire une simulation, Prendre rendez-vous, etc."
-              placeholder="Orienter votre bénéficiaire"
               vertical
               bind:value={service.coachOrientationModesExternalFormLinkText}
             />

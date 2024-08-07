@@ -21,9 +21,19 @@
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;
 
-  function handleTrackMobilisation() {
+  function handleTrackMobilisation(
+    event: CustomEvent<{ externalUrl?: string }>
+  ) {
     if (!mobilisationTracked) {
-      trackMobilisation(service, $page.url, isDI);
+      const searchIdStr = $page.url.searchParams.get("searchId");
+      const searchId = searchIdStr ? parseInt(searchIdStr) : undefined;
+      trackMobilisation(
+        service,
+        $page.url,
+        isDI,
+        searchId,
+        event.detail.externalUrl
+      );
       mobilisationTracked = true;
     }
   }

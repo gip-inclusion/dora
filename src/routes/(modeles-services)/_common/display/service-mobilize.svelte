@@ -54,19 +54,21 @@
   const searchFragment = searchId ? `?searchId=${searchId}` : "";
   const orientationFormUrl = `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`;
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    trackMobilisation: { externalUrl?: string };
+  }>();
 
   let isContactInfoForProfessionalShown = false;
   let isContactInfoForIndividualShown = false;
 
   function trackMobilisationIfSignedIn() {
     if ($token) {
-      dispatch("trackMobilisation");
+      dispatch("trackMobilisation", {});
     }
   }
 
-  function trackMobilisationUnconditionally() {
-    dispatch("trackMobilisation");
+  function trackMobilisationUnconditionally(externalUrl: string) {
+    dispatch("trackMobilisation", { externalUrl });
   }
 
   function showContactInfoForProfessional() {
@@ -78,15 +80,20 @@
       );
       return;
     }
-    dispatch("trackMobilisation");
+    dispatch("trackMobilisation", {});
     isContactInfoForProfessionalShown = true;
   }
 
   function showContactInfoForIndividual() {
-    dispatch("trackMobilisation");
+    dispatch("trackMobilisation", {});
     isContactInfoForIndividualShown = true;
   }
 
+  $: contactInfoForIndividual =
+    service.isContactInfoPublic &&
+    service.beneficiariesAccessModes.some((mode) =>
+      ["envoyer-un-mail", "telephoner"].includes(mode)
+    );
   $: contactInfoForIndividualAddress = [
     service.structureInfo.address1,
     service.structureInfo.address2,
@@ -151,7 +158,10 @@
               <a
                 href={service.coachOrientationModesExternalFormLink}
                 target="_blank"
-                on:click={trackMobilisationUnconditionally}
+                on:click={() =>
+                  trackMobilisationUnconditionally(
+                    service.coachOrientationModesExternalFormLink
+                  )}
                 class="text-magenta-cta underline"
                 >{service.coachOrientationModesExternalFormLinkText ||
                   "Orienter votre bénéficiaire"}
@@ -162,10 +172,8 @@
             {:else if modeValue === "autre"}
               <Linkify
                 text={service.coachOrientationModesOther}
-                trackMobilisationOnLinkClick={{
-                  service,
-                  isDI,
-                }}
+                on:linkClick={(event) =>
+                  trackMobilisationUnconditionally(event.detail.url)}
               />
             {:else}
               {modeDisplay}
@@ -211,7 +219,10 @@
               <a
                 href={service.beneficiariesAccessModesExternalFormLink}
                 target="_blank"
-                on:click={trackMobilisationUnconditionally}
+                on:click={() =>
+                  trackMobilisationUnconditionally(
+                    service.beneficiariesAccessModesExternalFormLink
+                  )}
                 class="text-magenta-cta underline"
                 >{service.beneficiariesAccessModesExternalFormLinkText ||
                   "Faire une demande"}
@@ -224,10 +235,8 @@
             {:else if modeValue === "autre"}
               <Linkify
                 text={service.beneficiariesAccessModesOther}
-                trackMobilisationOnLinkClick={{
-                  service,
-                  isDI,
-                }}
+                on:linkClick={(event) =>
+                  trackMobilisationUnconditionally(event.detail.url)}
               />
             {:else}
               {modeDisplay}
@@ -237,7 +246,7 @@
           <li>Non renseigné</li>
         {/each}
       </ul>
-      {#if contactInfoForIndividualPhone || contactInfoForIndividualEmail}
+      {#if contactInfoForIndividual}
         <div class="rounded-ml border border-gray-02 p-s24 shadow-sm">
           {#if isContactInfoForIndividualShown}
             <h5>{service.structureInfo.name}</h5>

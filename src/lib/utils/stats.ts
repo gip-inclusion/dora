@@ -76,7 +76,8 @@ export async function trackMobilisation<T extends boolean>(
   service: ServiceType<T>,
   url: URL,
   isDI: T,
-  searchId?: number
+  searchId?: number,
+  externalLink?: string
 ) {
   if (browser) {
     if (isDI) {
@@ -91,12 +92,14 @@ export async function trackMobilisation<T extends boolean>(
         diCategories: diService.categories || [],
         diSubcategories: diService.subcategories || [],
         searchId: searchId || url.searchParams.get("searchId"),
+        externalLink,
       });
     } else {
       const doraService = service as ServiceType<false>;
       await logAnalyticsEvent("mobilisation", url.pathname, {
         service: doraService.slug,
         searchId: searchId || url.searchParams.get("searchId"),
+        externalLink,
       });
     }
   }

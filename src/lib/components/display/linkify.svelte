@@ -1,18 +1,16 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   import { externalLinkIcon } from "$lib/icons";
-  import type { Model, Service } from "$lib/types";
-  import { trackMobilisation } from "$lib/utils/stats";
-  import { page } from "$app/stores";
 
   export let text: string;
-  export let trackMobilisationOnLinkClick:
-    | { service: Service | Model; isDI: boolean }
-    | undefined = undefined;
 
   type Parts = Array<
     | { type: "link"; value: string; display: string; key: number }
     | { type: "text"; value: string; key: number }
   >;
+
+  const dispatch = createEventDispatcher<{ linkClick: { url: string } }>();
 
   function linkify(string: string) {
     const urlRegex = /(https?:\/\/[^\s]+|mailto:[^\s]+|tel:[^\s]+)/g;
@@ -35,11 +33,8 @@
     }) as Parts;
   }
 
-  function handleLinkClick() {
-    if (trackMobilisationOnLinkClick) {
-      const { service, isDI } = trackMobilisationOnLinkClick;
-      trackMobilisation(service, $page.url, isDI);
-    }
+  function handleLinkClick(url: string) {
+    dispatch("linkClick", { url });
   }
 
   $: parts = linkify(text);
@@ -49,7 +44,7 @@
   {#if part.type === "link"}
     <a
       href={part.value}
-      on:click={handleLinkClick}
+      on:click={() => handleLinkClick(part.value)}
       target="_blank"
       rel="noopener ugc"
       class="text-magenta-cta underline"
