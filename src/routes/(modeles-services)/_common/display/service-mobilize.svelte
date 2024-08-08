@@ -90,7 +90,7 @@
   }
 
   $: contactInfoForIndividual =
-    service.isContactInfoPublic &&
+    service.isContactInfoPublic ||
     service.beneficiariesAccessModes.some((mode) =>
       ["envoyer-un-mail", "telephoner"].includes(mode)
     );
