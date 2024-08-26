@@ -5,6 +5,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
   import type { ServiceSearchResult } from "$lib/types";
+  import { userInfo } from "$lib/utils/auth";
   import { isInDeploymentDepartments } from "$lib/utils/misc";
 
   import type { PageData } from "./$types";
@@ -15,6 +16,7 @@
   import MapViewButton from "./map-view-button.svelte";
   import ResultCount from "./result-count.svelte";
   import SearchResults from "./search-results.svelte";
+  import MesAidesDialog from "./mes-aides-dialog.svelte";
 
   export let data: PageData;
 
@@ -104,6 +106,8 @@
   $: showDeploymentNotice =
     data.cityCode &&
     !isInDeploymentDepartments(data.cityCode, data.servicesOptions);
+
+  $: showMesAidesDialog = !$userInfo && data.categoryIds.includes("mobilite");
 </script>
 
 <CenteredGrid bgColor="bg-blue-light">
@@ -174,3 +178,7 @@
     </div>
   </div>
 </CenteredGrid>
+
+{#if showMesAidesDialog}
+  <MesAidesDialog />
+{/if}
