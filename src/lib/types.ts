@@ -437,6 +437,7 @@ export interface Service {
   isOrientable: boolean;
   kinds: ServiceKind[];
   kindsDisplay: string[];
+  lienSource?: string;
   locationKinds: LocationKind[];
   locationKindsDisplay: string[];
   model: string;
