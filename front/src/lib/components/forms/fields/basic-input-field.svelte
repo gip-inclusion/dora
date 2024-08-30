@@ -9,7 +9,7 @@
   import FieldWrapper from "../field-wrapper.svelte";
 
   export let id: string;
-  export let value: string | undefined = undefined;
+  export let value: string | number | undefined = undefined;
 
   export let type: "email" | "tel" | "text" | "url" | "date" | "number" =
     "text";
@@ -30,18 +30,34 @@
   let phoneValue = value;
   function handlePhoneChange() {
     if (phoneValue) {
-      phoneValue = phoneValue.replace(/[^0-9]/g, "");
+      phoneValue = phoneValue.toString().replace(/[^0-9]/g, "");
     }
     value = phoneValue;
   }
   function handlePhoneBlur() {
     if (phoneValue) {
-      phoneValue = formatPhoneNumber(phoneValue);
+      phoneValue = formatPhoneNumber(phoneValue.toString());
     }
   }
   function handlePhoneFocus() {
     if (phoneValue) {
-      phoneValue = phoneValue.replace(/[^0-9]/g, "");
+      phoneValue = phoneValue.toString().replace(/[^0-9]/g, "");
+    }
+  }
+
+  function handleNumberInput(event) {
+    if (event.target.value && event.target.value.length > 0) {
+      value = event.target.value.replace(/[^0-9]/g, "");
+    } else {
+      value = undefined
+    }
+  }
+  function handleNumberBlur() {
+    value = Number(value)
+  }
+  function handleNumberFocus() {
+    if (value) {
+      value = Number(value)
     }
   }
 
@@ -99,8 +115,10 @@
         <input
           type="number"
           bind:value
-          on:blur={onBlur}
-          on:change={onChange}
+          inputmode="numeric"
+          on:input={handleNumberInput}
+          on:blur={handleNumberBlur}
+          on:focus={handleNumberFocus}
           {...props}
         />
       {:else if type === "email"}
@@ -136,9 +154,9 @@
       {#if value && maxLength != null && !readonly && !disabled}
         <div
           class="mt-s4 self-end text-f12 text-gray-text-alt"
-          class:text-error={value.length > maxLength}
+          class:text-error={value.toString().length > maxLength}
         >
-          {value.length}/{maxLength} caractères
+          {value.toString().length}/{maxLength} caractères
         </div>
       {/if}
     </div>

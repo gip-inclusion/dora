@@ -64,7 +64,7 @@ export function isBool(msg = "") {
 
 export function isInteger(msg = "") {
   return (name, value, _data) => ({
-    valid: Number.isInteger(value),
+    valid: !value || value === "" || Number.isInteger(value),
     msg: msg || `Ce champ doit être un nombre entier`,
   });
 }
