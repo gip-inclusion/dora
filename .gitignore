@@ -9,3 +9,4 @@
 .cache_ggshield
 .envrc
 *.logs
+.history
