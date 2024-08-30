@@ -49,15 +49,16 @@
     if (event.target.value && event.target.value.length > 0) {
       value = event.target.value.replace(/[^0-9]/g, "");
     } else {
-      value = undefined
+      value = undefined;
     }
   }
   function handleNumberBlur() {
-    value = Number(value)
+    const numericValue = Number(value);
+    value = isNaN(numericValue) ? undefined : numericValue;
   }
   function handleNumberFocus() {
     if (value) {
-      value = Number(value)
+      value = Number(value);
     }
   }
 
@@ -176,4 +177,6 @@
       @apply grow read-only:text-gray-03 disabled:bg-gray-00;
     }
   </style>
+{:else}
+  currentSchema is not defined
 {/if}
