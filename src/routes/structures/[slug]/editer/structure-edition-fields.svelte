@@ -24,10 +24,6 @@
         (restricted: NationalLabel) => elt.value === restricted.value
       )
   );
-  const filteredStructuresOptions = {
-    ...structuresOptions,
-    nationalLabels: filteredNationalLabels,
-  };
 
   function getAccessLibreUrl(struct: Structure) {
     const department = getDepartmentFromCityCode(struct.cityCode);
@@ -52,7 +48,7 @@
 <SelectField
   id="typology"
   bind:value={structure.typology}
-  choices={filteredStructuresOptions.typologies}
+  choices={structuresOptions.typologies}
   placeholder="Choisissez…"
   sort
 />
@@ -121,7 +117,7 @@
 <MultiSelectField
   id="nationalLabels"
   bind:value={structure.nationalLabels}
-  choices={filteredStructuresOptions.nationalLabels}
+  choices={filteredNationalLabels}
   description="Indiquez si la structure fait partie d’un ou plusieurs réseaux nationaux"
   placeholder="Choisissez…"
   placeholderMulti="Choisissez…"
