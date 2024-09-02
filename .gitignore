@@ -1,0 +1,11 @@
+.DS_Store
+.cache_ggshield
+.idea
+.vscode
+.history
+.env
+.envrc
+*.log
+*.logs
+*.tmp
+*.temp
