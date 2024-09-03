@@ -118,6 +118,15 @@
   $: currentSchema = service.useInclusionNumeriqueScheme
     ? inclusionNumeriqueSchema
     : serviceSchema;
+
+  $: {
+    if (structure.noDoraForm) {
+      servicesOptions.coachOrientationModes =
+        servicesOptions.coachOrientationModes.filter(
+          (mode) => mode.value !== "formulaire-dora"
+        );
+    }
+  }
 </script>
 
 <FormErrors />
