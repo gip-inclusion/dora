@@ -36,6 +36,9 @@ Nous nous attendons à simplifier l’architecture / infrastructure ainsi que la
 
 ## Mise en œuvre
 
+Une copie basique des répertoires `dora-back` et `dora-front` engendrerait la perte de l'historique Git, ce qui est toujours dommage, surtout quand un soin et des efforts véritables y ont été consacré. Il est tout à fait possible d'internaliser des repositories tout en conserant l'historique (ex : [cet article](https://medium.com/@chris_72272/keeping-git-history-when-converting-multiple-repos-into-a-monorepo-97641744d928)). Il faudra bien en tenir compte en amont et pendant l'opération de migration.
+
+
 **Avant**
 
 - [ ]  [GitHub] Fermer (intégrer ou archiver) toutes les PR actives pour les 2 repositories
