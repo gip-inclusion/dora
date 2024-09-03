@@ -283,8 +283,7 @@ export type FeeCondition =
   | "gratuit"
   | "gratuit-sous-conditions"
   | "payant"
-  | "adhesion"
-  | "pass-numerique";
+  | "adhesion";
 
 export type SavedSearchNotificationFrequency =
   | "NEVER"
