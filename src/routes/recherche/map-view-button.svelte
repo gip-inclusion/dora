@@ -6,13 +6,14 @@
   import Modal from "$lib/components/hoc/modal.svelte";
 
   import type { PageData } from "./$types";
-  import type { Filters } from "./result-filters.svelte";
+  import type { Filters, FundedByOptions } from "./result-filters.svelte";
   import ResultCount from "./result-count.svelte";
   import ResultFilters from "./result-filters.svelte";
   import SearchResults from "./search-results.svelte";
   import ResultMap from "./result-map.svelte";
 
   export let data: PageData;
+  export let fundedByOptions: FundedByOptions;
   export let filters: Filters;
   export let filteredServices: ServiceSearchResult[];
 
@@ -56,6 +57,7 @@
           >
             <ResultFilters
               servicesOptions={data.servicesOptions}
+              {fundedByOptions}
               bind:filters
             />
           </Modal>
