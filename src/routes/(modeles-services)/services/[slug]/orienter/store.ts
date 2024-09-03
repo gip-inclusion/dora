@@ -7,7 +7,6 @@ export function initEmptyOrientation(): Orientation {
     contactBoxOpen: false,
 
     situation: [],
-    situationOther: "",
     requirements: [],
     prescriberStructureSlug: "",
 

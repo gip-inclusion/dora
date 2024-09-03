@@ -2,7 +2,6 @@
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
-  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
 
   import { formatFilePath } from "$lib/utils/file";
   import {
@@ -19,16 +18,12 @@
   const { concernedPublicChoices, concernedPublicRequired } =
     computeConcernedPublicChoices(service);
   orientationStep1Schema.situation.required = concernedPublicRequired;
-  const serviceAcceptsAllPublic = concernedPublicChoices.length === 1; // Que l'option "Autre"
+  const serviceAcceptsAllPublic = concernedPublicChoices.length === 0;
 
   // Critères et conditions d’accès
   const { requirementChoices, requirementRequired } =
     computeRequirementsChoices(service);
   orientationStep1Schema.requirements.required = requirementRequired;
-
-  $: if (!$orientation.situation?.includes("Autre")) {
-    $orientation.situationOther = "";
-  }
 
   // Justificatifs à fournir
   const credentialsDisplay = (service.credentialsDisplay || []).filter(
@@ -53,30 +48,14 @@
         <p class="mb-s0 text-f14 italic text-gray-text">
           Ce service concerne tous les publics
         </p>
-      {/if}
-
-      <CheckboxesField
-        id="situation"
-        choices={concernedPublicChoices}
-        description={!serviceAcceptsAllPublic
-          ? "Merci de cocher au moins un profil ou situation"
-          : ""}
-        bind:value={$orientation.situation}
-        vertical
-      />
-
-      {#if $orientation.situation?.includes("Autre")}
-        <p class="mb-s0 text-f14 italic text-gray-text">
-          Merci de fournir uniquement des informations relatives au profil de la
-          personne et d’éviter les données sensibles. Le motif de l’orientation
-          sera détaillé lors de la deuxième étape de ce formulaire.
-        </p>
-
-        <TextareaField
-          id="situationOther"
-          placeholder=""
-          bind:value={$orientation.situationOther}
-          hideLabel
+      {:else}
+        <CheckboxesField
+          id="situation"
+          choices={concernedPublicChoices}
+          description={!serviceAcceptsAllPublic
+            ? "Merci de cocher au moins un profil ou situation"
+            : ""}
+          bind:value={$orientation.situation}
           vertical
         />
       {/if}

@@ -9,16 +9,6 @@ export const orientationStep1Schema: v.Schema = {
     required: true,
   },
 
-  situationOther: {
-    default: "",
-    post: [v.trim],
-    rules: [v.isString(), v.maxStrLength(480)],
-    maxLength: 480,
-    required: (data) => {
-      return data?.situation?.includes("Autre");
-    },
-  },
-
   requirements: {
     label: "Cochez les critères auxquels le ou la bénéficiaire répond",
     default: [],
