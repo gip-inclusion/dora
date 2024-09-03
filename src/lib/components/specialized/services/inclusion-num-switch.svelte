@@ -15,9 +15,6 @@
 
   function activateClassicForm() {
     service.useInclusionNumeriqueScheme = false;
-    if (service.feeCondition === "pass-numerique") {
-      service.feeCondition = "gratuit";
-    }
   }
 
   const inclusionNumFormActiveNotice = {

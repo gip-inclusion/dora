@@ -152,9 +152,7 @@
       <RadioButtonsField
         id="feeCondition"
         bind:value={service.feeCondition}
-        choices={servicesOptions.feeConditions.filter(
-          (fee) => fee.value !== "pass-numerique"
-        )}
+        choices={servicesOptions.feeConditions}
         description="Précisez si le service est gratuit ou payant pour les bénéficiaires."
       />
     </FieldModel>

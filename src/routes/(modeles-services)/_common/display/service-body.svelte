@@ -4,6 +4,7 @@
 
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
+  import { userInfo } from "$lib/utils/auth";
   import { trackMobilisation } from "$lib/utils/stats";
 
   import ServiceBeneficiaries from "./service-beneficiaries.svelte";
@@ -11,6 +12,7 @@
   import ServiceMobilize from "./service-mobilize.svelte";
   import SmallServiceShare from "./small-service-share.svelte";
   import ServicePresentation from "./service-presentation.svelte";
+  import ServiceIndividual from "./service-individual.svelte";
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
@@ -74,6 +76,12 @@
                 {isDI}
               />
             </div>
+
+            {#if !$userInfo && service.source === "mes-aides" && service.lienSource}
+              <div class="mb-s8 mt-s16">
+                <ServiceIndividual url={service.lienSource} />
+              </div>
+            {/if}
 
             {#if !isModel}
               <div class="mt-s24 flex flex-col gap-y-s24">
