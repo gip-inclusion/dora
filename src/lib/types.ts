@@ -238,6 +238,7 @@ export interface StructuresOptions {
   nationalLabels: NationalLabel[];
   sources: StructureSource[];
   typologies: Typology[];
+  restrictedNationalLabels: NationalLabel[];
 }
 
 // OSM hours format
