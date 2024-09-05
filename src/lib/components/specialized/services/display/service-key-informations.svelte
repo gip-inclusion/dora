@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { FUNDED_SERVICES } from "$lib/consts";
   import {
     addCircleIcon,
     errorWarningIcon,
+    euroFillIcon,
     euroLineIcon,
     informationIcon,
     mapPinUserFillIcon,
@@ -20,6 +22,11 @@
   export let service: Service;
   export let servicesOptions: ServicesOptions;
 
+  $: fundedServices = FUNDED_SERVICES[service.department];
+  $: serviceIsFunded =
+    fundedServices && fundedServices.slugs.includes(service.slug);
+  $: fundingLabel = serviceIsFunded ? fundedServices.label : null;
+
   // trier les types dans l'ordre d'affichage du formulaire
   $: sortedServiceKindsDisplay = service.kindsDisplay?.sort((a, b) =>
     a.localeCompare(b)
@@ -29,6 +36,14 @@
 <h2 class="text-f23">Informations clés</h2>
 
 <div class="flex flex-col gap-s12">
+  {#if fundingLabel}
+    <div class="bold flex items-center font-bold text-info">
+      <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
+        {@html euroFillIcon}
+      </span>
+      {fundingLabel}
+    </div>
+  {/if}
   {#if service.isCumulative != null}
     {#if service.isCumulative}
       <div class="bold flex items-center font-bold text-available">

@@ -43,6 +43,7 @@ export { default as paraIcon } from "remixicon/icons/Editor/paragraph.svg?raw";
 export { default as textIcon } from "remixicon/icons/Editor/text.svg?raw";
 export { default as listCheckIcon } from "remixicon/icons/Editor/list-check-2.svg?raw";
 export { default as attachmentIcon } from "remixicon/icons/Editor/attachment-2.svg?raw";
+export { default as euroFillIcon } from "remixicon/icons/Finance/money-euro-circle-fill.svg?raw";
 export { default as euroLineIcon } from "remixicon/icons/Finance/money-euro-circle-line.svg?raw";
 export { default as priceTagIcon } from "remixicon/icons/Finance/price-tag-3-line.svg?raw";
 export { default as mentalHealthIcon } from "remixicon/icons/Health & Medical/mental-health-line.svg?raw";
