@@ -45,9 +45,7 @@
   <Fieldset title="Publics concernés par ce service" noTopPadding>
     <div class="flex flex-col lg:gap-s8">
       {#if serviceAcceptsAllPublic}
-        <p class="mb-s0 text-f14 italic text-gray-text">
-          Ce service concerne tous les publics
-        </p>
+        <p class="mb-s0 italic">Ce service concerne tous les publics</p>
       {:else}
         <CheckboxesField
           id="situation"
