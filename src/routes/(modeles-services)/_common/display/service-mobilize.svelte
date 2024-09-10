@@ -91,7 +91,7 @@
 
   $: contactInfoForIndividual =
     service.isContactInfoPublic ||
-    service.beneficiariesAccessModes.some((mode) =>
+    (service.beneficiariesAccessModes ?? []).some((mode) =>
       ["envoyer-un-mail", "telephoner"].includes(mode)
     );
   $: contactInfoForIndividualAddress = [
@@ -107,7 +107,9 @@
   $: contactInfoForIndividualEmail =
     service.contactEmail || service.structureInfo.email;
 
-  $: coachOrientationModesValueAndDisplay = service.coachOrientationModes
+  $: coachOrientationModesValueAndDisplay = (
+    service.coachOrientationModes ?? []
+  )
     .map((val, index) => [val, service.coachOrientationModesDisplay[index]])
     .sort(
       (a, b) =>
@@ -115,7 +117,9 @@
         orderedCoachOrientationModeValues[b[0]]
     );
 
-  $: beneficiariesAccessModesValueAndDisplay = service.beneficiariesAccessModes
+  $: beneficiariesAccessModesValueAndDisplay = (
+    service.beneficiariesAccessModes ?? []
+  )
     .map((val, index) => [val, service.beneficiariesAccessModesDisplay[index]])
     .sort(
       (a, b) =>
