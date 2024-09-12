@@ -4,6 +4,7 @@
   export let id: string;
   export let choices: { value: string | number; label: string }[] | undefined =
     undefined;
+  export let fixedItemsValues: string[] = [];
   export let sort = false;
   export let value: string | number | string[] | number[] | undefined =
     undefined;
@@ -51,6 +52,7 @@
   {minCharactersToSearch}
   {onChange}
   bind:items={choices}
+  {fixedItemsValues}
   {initialValue}
   {disabled}
   {readonly}

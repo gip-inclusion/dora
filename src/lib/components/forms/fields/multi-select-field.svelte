@@ -21,6 +21,7 @@
   export let sort = false;
   export let onChange: ((newValues: string[]) => void) | undefined = undefined;
   export let placeholderMulti = "Choisir";
+  export let fixedItemsValues: string[] = [];
 
   // Proxy vers le FieldWrapper
   export let description = "";
@@ -48,6 +49,7 @@
       on:blur={onBlur}
       {id}
       {choices}
+      {fixedItemsValues}
       {onChange}
       {sort}
       {placeholder}

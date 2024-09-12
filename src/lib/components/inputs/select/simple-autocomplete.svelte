@@ -10,8 +10,11 @@
   import { clickOutside } from "$lib/utils/misc";
   import { formatErrors } from "$lib/validation/validation";
 
-  // the list of items  the user can select from
+  // the list of items the user can select from
   export let items = [];
+
+  // a list of items values that the user can not remove (ex: structure national labels)
+  export let fixedItemsValues: string[] = [];
 
   // function to use to get all items (alternative to providing items)
   export let searchFunction = null;
@@ -151,6 +154,13 @@
     return item?.label;
   }
 
+  function isFixedItem(val) {
+    const fixedItemValue = fixedItemsValues.find(
+      (fixedValue) => fixedValue === val
+    );
+    return !!fixedItemValue;
+  }
+
   function onValueChanged() {
     if (value !== undefined) {
       if (multiple) {
@@ -190,19 +200,28 @@
   }
 
   function prepareListItems() {
-    if (!Array.isArray(items)) {
+    if (!Array.isArray(items) || items.length === 0) {
       items = [];
+      listItems = [];
+      return;
     }
 
-    const length = items ? items.length : 0;
-    listItems = new Array(length);
-
-    if (length > 0) {
-      items.forEach((item, i) => {
-        const listItem = getListItem(item);
-        listItems[i] = listItem;
-      });
+    let selectableItems;
+    if (fixedItemsValues && fixedItemsValues.length > 0) {
+      selectableItems = items.filter(
+        (item) =>
+          !fixedItemsValues.find((fixedValue) => fixedValue === item.value)
+      );
+    } else {
+      selectableItems = items;
     }
+
+    listItems = new Array(selectableItems.length);
+
+    selectableItems.forEach((item, i) => {
+      const listItem = getListItem(item);
+      listItems[i] = listItem;
+    });
   }
 
   function getListItem(item) {
@@ -839,7 +858,7 @@
       >
         {getLabelForValue(tagItem)}
 
-        {#if !disabled && !readonly}
+        {#if !disabled && !readonly && !isFixedItem(tagItem)}
           <button
             class="tag-delete"
             on:click|preventDefault={unselectItem(tagItem)}
