@@ -10,7 +10,7 @@ GIT_FRONT_END_URL=git@github.com:gip-inclusion/dora-front.git
 
 TEMP_DIR=$(mktemp -d)
 echo "Création d'un répertoire temporaire pour le travail : $TEMP_DIR"
-cd $TEMP_DIR
+cd "$TEMP_DIR"
 
 echo "Clonage du dépôt dora-back..."
 git clone $GIT_BACK_END_URL
@@ -49,5 +49,5 @@ echo "Poussée des changements vers le dépôt distant pour dora-front..."
 git push
 
 echo "Nettoyage : retour au répertoire initial et suppression du répertoire temporaire."
-cd $CURRENT_DIR
-rm -rf $TEMP_DIR
+cd "$CURRENT_DIR"
+rm -rf "$TEMP_DIR"
