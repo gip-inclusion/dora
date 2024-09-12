@@ -14,16 +14,10 @@
   export let structure: Structure;
   export let structuresOptions: StructuresOptions;
 
-  // StructureOptions contient un champ `restrictedNationalsLabel` permettant
-  // de ne pas afficher certains labels qui ne sont pas modifiable par l'utilisateur.
-  const filteredNationalLabels = structuresOptions.nationalLabels.filter(
-    // J'avais rajouté un type pour permettre de filtrer sans avoir à faire ça :(
-    // preneur d'une solution plus propre / concise.
-    (elt) =>
-      !structuresOptions.restrictedNationalLabels.find(
-        (restricted: NationalLabel) => elt.value === restricted.value
-      )
-  );
+  const fixedNationalLabelValues: string[] =
+    structuresOptions.restrictedNationalLabels.map(
+      (restricted: NationalLabel) => restricted.value
+    );
 
   function getAccessLibreUrl(struct: Structure) {
     const department = getDepartmentFromCityCode(struct.cityCode);
@@ -117,7 +111,8 @@
 <MultiSelectField
   id="nationalLabels"
   bind:value={structure.nationalLabels}
-  choices={filteredNationalLabels}
+  choices={structuresOptions.nationalLabels}
+  fixedItemsValues={fixedNationalLabelValues}
   description="Indiquez si la structure fait partie d’un ou plusieurs réseaux nationaux"
   placeholder="Choisissez…"
   placeholderMulti="Choisissez…"
