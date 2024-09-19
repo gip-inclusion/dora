@@ -19,7 +19,7 @@
   $: isOrientasbleWithDoraForm =
     service.isOrientable &&
     service.coachOrientationModes?.includes("formulaire-dora");
-  $: hasExternalForm = service.coachOrientationModes.includes(
+  $: hasExternalForm = service.coachOrientationModes?.includes(
     "completer-le-formulaire-dadhesion"
   );
 
