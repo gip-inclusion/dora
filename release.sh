@@ -21,7 +21,16 @@ NC='\033[0m' # No Color (reset)
 if [ "$#" -ne 1 ]; then
   echo ""
   echo -e "${RED}❌ Argument manquant${NC}"
-  echo "Usage: $0 {back|front|all}"
+  echo "Usage: $0 {back|front}"
+  echo ""
+  exit 1
+fi
+
+# Vérifier que l'argument vaut "back" ou "front"
+if [ "$1" != "back" ] && [ "$1" != "front" ]; then
+  echo ""
+  echo -e "${RED}❌ Argument invalide : $1${NC}"
+  echo "Usage: $0 {back|front}"
   echo ""
   exit 1
 fi
@@ -88,13 +97,9 @@ case "$1" in
   front)
     deploy_repo "$GIT_FRONT_END_URL" "dora-front"
     ;;
-  all)
-    deploy_repo "$GIT_BACK_END_URL" "dora-back"
-    deploy_repo "$GIT_FRONT_END_URL" "dora-front"
-    ;;
   *)
     echo "Argument invalide : $1"
-    echo "Usage: $0 {back|front|both}"
+    echo "Usage: $0 {back|front}"
     exit 1
     ;;
 esac
