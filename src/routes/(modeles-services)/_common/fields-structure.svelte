@@ -11,12 +11,12 @@
   } from "$lib/types";
   import { onMount } from "svelte";
 
-  export let servicesOptions: ServicesOptions,
-    service: Service,
-    structures: ShortStructure[],
-    structure: ShortStructure;
+  export let servicesOptions: ServicesOptions;
+  export let service: Service;
+  export let structures: ShortStructure[];
+  export let structure: ShortStructure | undefined;
   export let isModel = false;
-  export let model: Model | undefined = undefined;
+  export let model: Model | undefined | null = undefined;
 
   const propsWithSpecificFields = [
     "accessConditions",
