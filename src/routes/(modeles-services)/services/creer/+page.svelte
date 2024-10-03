@@ -12,7 +12,7 @@
   <CenteredGrid>
     <h1>Création d’un service</h1>
 
-    {#if !data.structures.length}
+    {#if !data.managedStructureSearchMode && !data.structures.length}
       <Notice title="Impossible de créer un nouveau service" type="error">
         <p class="text-f14">Vous n’êtes rattaché à aucune structure.</p>
       </Notice>
@@ -22,6 +22,7 @@
   <ServiceEditionForm
     service={data.service}
     servicesOptions={data.servicesOptions}
+    managedStructureSearchMode={data.managedStructureSearchMode}
     structures={data.structures}
     structure={data.structure}
     model={data.model}
