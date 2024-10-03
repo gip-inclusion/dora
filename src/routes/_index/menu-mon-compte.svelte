@@ -51,6 +51,15 @@
     <span class="mr-s10 inline-block h-s24 w-s24 fill-current" aria-hidden>
       {@html logoutBoxLineIcon}
     </span>
-    Déconnexion
+    Déconnexion (IC)
+  </a>
+
+  <hr />
+
+  <a href="/auth/pc-logout" class={aClass}>
+    <span class="mr-s10 inline-block h-s24 w-s24 fill-current" aria-hidden>
+      {@html logoutBoxLineIcon}
+    </span>
+    Déconnexion (PC)
   </a>
 </DropdownMenu>
