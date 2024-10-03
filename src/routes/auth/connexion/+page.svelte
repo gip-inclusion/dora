@@ -14,6 +14,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import IcButton from "$lib/components/specialized/ic-button.svelte";
+  import PcButton from "$lib/components/specialized/pc-button.svelte";
 
   function getLoginHint() {
     const loginHint = $page.url.searchParams.get("login_hint");
@@ -62,6 +63,7 @@
           </div>
 
           <IcButton {nextPage} {loginHint}></IcButton>
+          <PcButton {nextPage} {loginHint}></PcButton>
         </div>
       </FieldSet>
     </div>
