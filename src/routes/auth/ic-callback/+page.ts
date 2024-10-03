@@ -30,6 +30,8 @@ export const load: PageLoad = async ({ url, parent }) => {
   window.localStorage.removeItem("oidcState");
 
   const targetUrl = `${getApiURL()}/inclusion-connect-authenticate/`;
+  // ce call retourne une structure avec le token DRF initialisé coté backend
+
   const result = await fetch(targetUrl, {
     method: "POST",
     headers: {
