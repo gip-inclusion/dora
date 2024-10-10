@@ -141,5 +141,8 @@
       : undefined}
     disabled={!showStructures}
     placeholder="Sélectionnez la structure…"
+    description={managedStructureSearchMode
+      ? "Tapez au moins 3 lettres pour lancer la recherche."
+      : ""}
   />
 </FieldSet>
