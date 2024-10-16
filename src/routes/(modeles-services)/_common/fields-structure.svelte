@@ -104,7 +104,6 @@
   }
 
   async function searchFunction(searchText: string): Promise<Choice[]> {
-    console.log("searchFunction", { searchText });
     if (searchText.length < 3) {
       return [];
     }
