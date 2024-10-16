@@ -16,6 +16,7 @@ import logoLesEmplois from "$lib/assets/logos/partners/logo_lesemplois.png";
 import logoOrange from "$lib/assets/logos/partners/logo_orange.png";
 import logoSocialBuilder from "$lib/assets/logos/partners/logo_socialbuilder.png";
 import logoFinancesPedagogie from "$lib/assets/logos/partners/logo_financespedagogie.png";
+import logoFinistere from "$lib/assets/logos/partners/logo_finistere.png";
 import logoLigueEnseignement from "$lib/assets/logos/partners/logo_ligueenseignement.png";
 import logoPositivePlanet from "$lib/assets/logos/partners/logo_posplanet.png";
 import logoUniopss from "$lib/assets/logos/partners/logo_uniopss.png";
@@ -95,6 +96,7 @@ export const PARTNERS: Partner[] = [
   { name: "Caisse d’allocations familiales", img: logoCAF },
   { name: "Département de la Réunion", img: logoLaReunion },
   { name: "France Travail", img: logoFranceTravail },
+  { name: "Département du Finistère", img: logoFinistere },
 ];
 
 export function getPartners(limit?: number): Partner[] {
