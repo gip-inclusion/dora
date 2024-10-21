@@ -15,6 +15,7 @@
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import IcButton from "$lib/components/specialized/ic-button.svelte";
   import PcButton from "$lib/components/specialized/pc-button.svelte";
+  import { OIDC_AUTH_BACKEND } from "$lib/env";
 
   function getLoginHint() {
     const loginHint = $page.url.searchParams.get("login_hint");
@@ -62,8 +63,11 @@
             </p>
           </div>
 
-          <IcButton {nextPage} {loginHint}></IcButton>
-          <PcButton {nextPage} {loginHint}></PcButton>
+          {#if OIDC_AUTH_BACKEND === "proconnect"}
+            <PcButton {nextPage}></PcButton>
+          {:else}
+            <IcButton {nextPage} {loginHint}></IcButton>
+          {/if}
         </div>
       </FieldSet>
     </div>

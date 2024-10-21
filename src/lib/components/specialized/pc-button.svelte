@@ -22,7 +22,7 @@
       rel="noopener"
       href="https://aide.dora.inclusion.beta.gouv.fr"
     >
-      Besoin d’aide&nbsp;? Contactez-nous (mais pas tout de suite)
+      Besoin d’aide&nbsp;? Contactez-nous
     </a>
   </div>
 </div>
