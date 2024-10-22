@@ -6,8 +6,7 @@ set -o pipefail
 # Variables globales
 CURRENT_DIR=$(pwd)
 MERGE_COMMIT_MESSAGE="MEP $(date +'%d.%m.%Y') : Merge branch 'main' into release"
-GIT_BACK_END_URL=git@github.com:gip-inclusion/dora-back.git
-GIT_FRONT_END_URL=git@github.com:gip-inclusion/dora-front.git
+DORA_REPOSITORY=git@github.com:gip-inclusion/dora.git
 
 # Couleurs ANSI
 RED='\033[0;31m'
@@ -16,24 +15,6 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color (reset)
-
-# Vérifier qu'un argument est passé
-if [ "$#" -ne 1 ]; then
-  echo ""
-  echo -e "${RED}❌ Argument manquant${NC}"
-  echo "Usage: $0 {back|front}"
-  echo ""
-  exit 1
-fi
-
-# Vérifier que l'argument vaut "back" ou "front"
-if [ "$1" != "back" ] && [ "$1" != "front" ]; then
-  echo ""
-  echo -e "${RED}❌ Argument invalide : $1${NC}"
-  echo "Usage: $0 {back|front}"
-  echo ""
-  exit 1
-fi
 
 # Fonction pour gérer le processus de déploiement
 deploy_repo() {
@@ -89,20 +70,8 @@ echo "✨ Création d'un répertoire temporaire pour le travail : $TEMP_DIR"
 cd "$TEMP_DIR"
 echo ""
 
-# Gestion des arguments
-case "$1" in
-  back)
-    deploy_repo "$GIT_BACK_END_URL" "dora-back"
-    ;;
-  front)
-    deploy_repo "$GIT_FRONT_END_URL" "dora-front"
-    ;;
-  *)
-    echo "Argument invalide : $1"
-    echo "Usage: $0 {back|front}"
-    exit 1
-    ;;
-esac
+# Déploiement
+deploy_repo "$DORA_REPOSITORY" "dora"
 
 # Nettoyage
 echo "🧹 Nettoyage : retour au répertoire initial et suppression du répertoire temporaire."
