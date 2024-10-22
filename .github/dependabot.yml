@@ -6,7 +6,15 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "pip"
-    directory: "/"
+    directory: "/back"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "requirement"
+      prefix-development: "dev requirement"
+
+  - package-ecosystem: "npm"
+    directory: "/front"
     schedule:
       interval: "weekly"
     commit-message:
