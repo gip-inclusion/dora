@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.v2.ico" sizes="any" />
+    <link
+      rel="icon"
+      href="%sveltekit.assets%/favicon.v2.svg"
+      type="image/svg+xml"
+    />
+    <link rel="apple-touch-icon" href="%sveltekit.assets%/favicon.v2.png" />
+
+    <script
+      type="text/javascript"
+      nonce="%sveltekit.nonce%"
+      data-container="%sveltekit.env.VITE_PUBLIC_MATOMO_CONTAINER_URL%"
+    >
+      (function (containerUrl) {
+        if (!containerUrl) return;
+        var _mtm = (window._mtm = window._mtm || []);
+        _mtm.push(["enableDebugMode"]);
+        _mtm.push(["HeatmapSessionRecording::disable"]);
+        _mtm.push({
+          "mtm.startTime": new Date().getTime(),
+          event: "mtm.Start",
+        });
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = containerUrl;
+        s.parentNode.insertBefore(g, s);
+      })(document.currentScript.dataset.container);
+    </script>
+
+    %sveltekit.head%
+
+    <style nonce="%sveltekit.nonce%">
+      .main-content {
+        display: contents;
+      }
+    </style>
+
+    <!-- Open Graph Tags -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="%sveltekit.env.VITE_PUBLIC_CANONICAL_URL%"
+    />
+    <meta
+      property="og:title"
+      content="DORA, le service public pour identifier et mobiliser facilement l'offre d'insertion de votre territoire"
+    />
+    <meta
+      property="og:description"
+      content="DORA vous aide dans la levée des freins périphériques bloquant le retour à l'emploi des bénéficiaires. Identifiez rapidement les services d'insertion adaptés aux besoins des personnes que vous accompagnez."
+    />
+    <meta
+      name="image"
+      property="og:image"
+      content="%sveltekit.env.VITE_PUBLIC_CANONICAL_URL%/og-banner-v1.png"
+    />
+  </head>
+
+  <body>
+    <div class="main-content">%sveltekit.body%</div>
+  </body>
+</html>

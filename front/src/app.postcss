@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /***********************/
+    /*       colors        */
+    /***********************/
+
+    /* Grays  */
+    --col-gray-bg: #f8f8f8;
+    --col-gray-dark: #2e2e2e;
+
+    /* Text */
+    --col-text: #555555;
+    --col-text-alt: #999999;
+
+    /* DSFR */
+    --col-france-blue: #000091;
+    --col-white: #ffffff;
+
+    /* DORA */
+    --col-magenta-brand: #9c6ff4;
+    --col-magenta-cta: #5b12eb;
+
+    /* Functional Colors */
+    --col-success: #008941;
+    --col-error: #e10600;
+
+    --col-info: #0762c8;
+    --col-info-bg: #dbf0ff;
+    --col-info-light: #f0f8ff;
+
+    --col-wait: #f29023;
+    --col-wait-dark: #fe9800;
+
+    --s2: 0.125rem;
+    --s4: 0.25rem;
+    --s8: 0.5rem;
+    --s16: 1rem;
+    --s24: 1.5rem;
+
+    --shadow-sm: 0 0 1px 0 rgba(0, 0, 0, 0.05), 0 2px 1px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 10px 0 rgba(0, 0, 0, 0.1), 0 0 2px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: normal;
+    font-weight: normal;
+    src:
+      url("$lib/assets/fonts/marianne/Marianne-Regular.woff2") format("woff2"),
+      url("$lib/assets/fonts/marianne/Marianne-Regular.woff") format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: normal;
+    font-weight: bold;
+    src:
+      url("$lib/assets/fonts/marianne/Marianne-Bold.woff2") format("woff2"),
+      url("$lib/assets/fonts/marianne/Marianne-Bold.woff") format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: italic;
+    font-weight: normal;
+    src:
+      url("$lib/assets/fonts/marianne/Marianne-Regular_Italic.woff2")
+        format("woff2"),
+      url("$lib/assets/fonts/marianne/Marianne-Regular_Italic.woff")
+        format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: italic;
+    font-weight: bold;
+    src:
+      url("$lib/assets/fonts/marianne/Marianne-Bold_Italic.woff2")
+        format("woff2"),
+      url("$lib/assets/fonts/marianne/Marianne-Bold_Italic.woff") format("woff");
+  }
+
+  body {
+    @apply bg-white font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply mb-s16 font-bold text-gray-dark;
+  }
+
+  h1 {
+    @apply text-f26 leading-32 md:text-f30 md:leading-40 lg:text-f38 lg:leading-48 xl:text-f45 xl:leading-56;
+  }
+
+  h2 {
+    @apply text-f22 leading-32 md:text-f24 lg:text-f28 lg:leading-40 xl:text-f32;
+    color: var(--col-france-blue);
+  }
+
+  h3 {
+    @apply text-f19 leading-24 md:text-f20 md:leading-32 lg:text-f21 xl:text-f23;
+  }
+
+  h4 {
+    @apply text-f17 leading-24;
+  }
+
+  h5 {
+    @apply text-f14 leading-24;
+  }
+
+  p {
+    @apply mb-s16 text-f18 leading-normal text-gray-text;
+  }
+
+  small {
+    @apply text-f14 italic text-gray-text-alt2;
+  }
+
+  hr {
+    @apply border-t-gray-03;
+  }
+
+  ::placeholder {
+    @apply !text-gray-text;
+  }
+
+  .legend {
+    @apply text-f14 leading-24 text-gray-text-alt2;
+  }
+
+  .break-word {
+    word-break: break-word;
+  }
+
+  .breakpoint-hack::before {
+    display: none;
+    content: "xs";
+    visibility: hidden;
+  }
+
+  @screen md {
+    .breakpoint-hack::before {
+      content: "md";
+    }
+  }
+
+  @screen lg {
+    .breakpoint-hack::before {
+      content: "lg";
+    }
+  }
+
+  @screen xl {
+    .breakpoint-hack::before {
+      content: "xl";
+    }
+  }
+
+  @page {
+    size: 26.25cm 37.125cm; /* A4 * 1.25, afin de réduire la taille de l'impression */
+  }
+}
