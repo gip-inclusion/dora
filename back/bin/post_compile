@@ -1,7 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-export PYTHONPATH=/build/${REQUEST_ID}/.apt/usr/lib/python3/dist-packages/:{PYTHONPATH}
-export LD_LIBRARY_PATH=/build/${REQUEST_ID}/.apt/usr/lib/x86_64-linux-gnu/blas/:/build/${REQUEST_ID}/.apt/usr/lib/x86_64-linux-gnu/lapack/:${LD_LIBRARY_PATH}
-export PROJ_LIB=/build/${REQUEST_ID}/.apt/usr/share/proj
+set -euo pipefail
+
+export PYTHONPATH=/build/${REQUEST_ID}/${PROJECT_DIR}/.apt/usr/lib/python3/dist-packages/:${PYTHONPATH}
+export LD_LIBRARY_PATH=/build/${REQUEST_ID}/${PROJECT_DIR}/.apt/usr/lib/x86_64-linux-gnu/blas/:/build/${REQUEST_ID}/${PROJECT_DIR}/.apt/usr/lib/x86_64-linux-gnu/lapack/:${LD_LIBRARY_PATH}
+export PROJ_LIB=/build/${REQUEST_ID}/${PROJECT_DIR}/.apt/usr/share/proj
 
 python manage.py collectstatic --noinput
