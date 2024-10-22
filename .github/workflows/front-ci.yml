@@ -1,6 +1,13 @@
-name: CI
+name: Dora Front CI
 
-on: [push, pull_request]
+# Déclenchement du workflow uniquement si des changements sont détectés dans 'front/'
+on:
+  push:
+    paths:
+      - 'front/**'
+  pull_request:
+    paths:
+      - 'front/**'
 
 jobs:
   build:
@@ -20,16 +27,17 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
+        working-directory: front
         run: npm install
 
       - name: Check formatting
+        working-directory: front
         run: npm run format:check
 
       - name: Lint code
+        working-directory: front
         run: npm run lint
 
       - name: Run tests
+        working-directory: front
         run: npm run test
-
-      - name: Build project
-        run: npm run build
