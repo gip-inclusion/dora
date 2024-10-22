@@ -1,0 +1,20 @@
+{% extends "orientation-email-base.mjml" %}
+
+{% block preview %}
+  {{ data.get_structure_name }} vient de vous envoyer un message
+{% endblock %}
+
+{% block title %}
+  La structure {{ data.get_structure_name }} vient de vous envoyer un message.
+{% endblock %}
+
+{% block content %}
+  <p>
+    Le message concerne la demande d’orientation réalisée pour {{ data.get_beneficiary_full_name }} vers le service
+    {% include "partials/service-link.html" %}
+  </p>
+
+  {{ message|linebreaks }}
+{% endblock %}
+
+{% block signature %}{% endblock %}

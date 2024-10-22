@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgis/postgis:14-3.4-alpine
+    env_file:
+      - envs/dev.env
+      - envs/secrets.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - pgconf:/etc/postgresql
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - envs/secrets.env
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "8888:80"
+  s3:
+    image: bitnami/minio:latest
+    volumes:
+      - miniodata:/bitnami/minio/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+volumes:
+  pgdata:
+  pgconf:
+  miniodata:

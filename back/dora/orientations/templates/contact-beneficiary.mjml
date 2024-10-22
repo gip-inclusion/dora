@@ -1,0 +1,28 @@
+{% extends "orientation-email-base.mjml" %}
+
+{% block preview %}
+  {{ data.get_structure_name }} vient de vous envoyer un message
+{% endblock %}
+
+{% block title %}
+  La structure {{ data.get_structure_name }} vient de vous envoyer un message.
+{% endblock %}
+
+{% block content %}
+  <p>
+    Le message concerne la demande d’orientation réalisée en votre nom vers le service
+    {% include "partials/service-link.html" %}
+    de la structure
+    {% include "partials/structure-link.html" %}.
+  </p>
+  {{ message|linebreaks }}
+{% endblock %}
+
+{% block signature %}{% endblock %}
+
+{% block support %}
+  En cas de difficulté, n’hésitez pas à
+  <a style="color: #555" href="mailto:{{ support_email }}">contacter le support</a>
+  de la plateforme DORA pour obtenir de
+  l’aide.
+{% endblock %}

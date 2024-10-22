@@ -1,0 +1,157 @@
+{% extends "email_base.html" %}
+
+{% block extra-style %}
+  h1, h2 {
+  color: #000091;
+  font-size: 32px;
+  text-align: left;
+  font-weight: 700;
+  line-height: 40px;
+  }
+
+  strong {
+  color: #5B12EB;
+  }
+
+  li, li a {
+  color: #5B12EB;
+  text-align: left;
+  font-size: 18px;
+  }
+
+  p, p a {
+  font-size: 18px;
+  line-height: 32px;
+  text-align: left;
+  }
+
+  a {
+  color: #5B12EB;
+  }
+
+  hr {
+  border: 0;
+  border-top: 1px solid #E0E0E0;
+  }
+
+  .box {
+  background: #F5F5F5;
+  border-radius: 12px;
+  padding: 16px 24px;
+  }
+{% endblock %}
+
+{% block preheader %}
+  Chaque mois, DORA vous aide dans la mise en visibilité
+  de vos services en vous signalant les services à actualiser et les
+  services restés en brouillon.
+{% endblock %}
+
+
+{% block content %}
+  <h2>Une mise à jour de vos services sur DORA est nécessaire</h2>
+  <div>
+    <img
+      src="{% frontend_url %}/emails/illu-maj.png"
+      alt=""
+      width="618"
+      height="336"
+      alt=""
+      style="
+             border: none;
+             max-width: 100%;
+             height: auto;
+             -ms-interpolation-mode: bicubic;
+            "
+    />
+
+    <p>Bonjour{% if recipient_name %} {% endif %}{{ recipient_name }},</p>
+    <p>
+      {% if structures_to_update and structures_with_drafts %}
+        Chaque mois, <strong>DORA</strong> vous aide dans la mise en visibilité
+        de vos services en vous signalant les services à actualiser et les
+        services restés en brouillon.
+      {% elif structures_to_update %}
+        Chaque mois, <strong>DORA</strong> vous aide dans la mise en visibilité
+        de vos services en vous signalant les services à actualiser.
+      {% else %}
+        Chaque mois, <strong>DORA</strong> vous aide dans la mise en visibilité
+        de vos services en vous signalant les services restés en brouillon.
+      {% endif %}
+    </p>
+
+    {% if structures_to_update %}
+      <h2>Vos services à actualiser</h2>
+      <p>Tous les 6 mois, afin de garder une visibilité pérenne auprès de vos partenaires, nous vous demandons de
+        confirmer les informations renseignées sur vos services.</p>
+      <p>Visualisez directement les services à actualiser sur
+        {% with num_struct=structures_to_update|length %}
+          v{{ num_struct|pluralize:"otre,os" }} structure{{ num_struct|pluralize }}&nbsp;:
+        {% endwith %}
+      </p>
+
+      <ul>
+        {% for structure in structures_to_update %}
+          <li><a href="{{ structure.link }}">
+            {{ structure.name }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <p style="margin-top:24px"><strong style="color: #555555;">👉 Pourquoi actualiser ses
+        informations&nbsp;?</strong><br>
+        La fraicheur des informations de vos services permet aux accompagnateurs de mieux orienter leurs
+        bénéficiaires
+        et vous permet en même temps de recevoir des candidatures plus qualifiées&nbsp;!</p>
+      <p class="box">💡
+        <a href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/actualiser-ses-services-1u0a101/">Comment
+          actualiser vos services&nbsp;?</a></p>
+      <p class="box">💡
+        <a href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/actualiser-ses-services-1u0a101/">Mieux
+          comprendre les différents&nbsp;statuts d’actualisation</a></p>
+    {% endif %}
+
+    {% if structures_to_update and structures_with_drafts %}
+      <hr style="margin-top: 48px">
+    {% endif %}
+
+    {% if structures_with_drafts %}
+      <h2>Vos services en brouillon</h2>
+      <p>Des services en brouillon attendent d’être visibles par vos partenaires&nbsp;!</p>
+      <p>
+        Identifiez directement les services&nbsp;en brouillon de
+        {% with num_struct=structures_with_drafts|length %}
+          v{{ num_struct|pluralize:"otre,os" }} structure{{ num_struct|pluralize }}&nbsp;:
+        {% endwith %}
+      </p>
+      <ul>
+        {% for structure in structures_with_drafts %}
+          <li>
+            <a href="{{ structure.link }}">
+              {{ structure.name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <p style="margin-top:24px">
+        <strong style="color: #555555;">👉 Pourquoi « nettoyer » vos brouillons&nbsp;?</strong><br>
+        Pour s’assurer que l’un de vos services n’a pas été oublié en brouillon
+        ou pour archiver ceux qui ne sont plus utiles. Cela vous permettra d’avoir un tableau de bord plus
+        lisible
+        et de mieux visualiser vos services publiés en un clin d’œil&nbsp;!
+
+      </p>
+    {% endif %}
+    <p style="margin-top: 32px">
+      Vous avez des questions ou des besoins sur de nombreux services à actualiser&nbsp;?
+      <a href="{% support_link %}">
+        Contactez-nous via le chat.
+      </a>
+    </p>
+    <p>
+      Passez une agréable journée,<br>
+      <strong>L’équipe DORA</strong>
+    </p>
+  </div>
+{% endblock %}

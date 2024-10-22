@@ -1,0 +1,30 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}
+   Votre direction territoriale France Travail et l’équipe DORA vous ont invité à rejoindre la structure «&nbsp;{{ structure.name }}&nbsp;» sur DORA
+{% endblock %}
+
+{% block title %}
+  Rejoignez la structure «&nbsp;{{ structure.name }}&nbsp;» sur DORA.
+{% endblock %}
+
+{% block illustration %}
+  <mj-image src="{% frontend_url %}/emails/illu-saisir.png" alt=""/>
+{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+  <p>
+    Votre direction territoriale France Travail et l’équipe DORA vous ont invité à rejoindre la structure «&nbsp;<a href="{{ structure.get_frontend_url }}">{{ structure.name }}</a>&nbsp;» sur la plate-forme <a href="{% frontend_url %}">DORA</a>. Cliquez sur le bouton ci-dessous pour créer votre
+    compte et accéder à votre espace&nbsp;:
+  </p>
+{% endblock %}`
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ cta_link }}">
+    Accepter l’invitation
+  </mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}

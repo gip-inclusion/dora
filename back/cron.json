@@ -1,0 +1,24 @@
+{
+  "jobs": [
+    {
+      "command": "0 6,13 * * * tools/update-metabase-db.sh",
+      "size": "S"
+    },
+    {
+      "command": "15 7 1-7 * * [ $(date +%u) = 2 ] && tools/send-services-reminders-emails.sh",
+      "size": "S"
+    },
+    {
+      "command": "8 7 * * * tools/send-orientations-reminders-emails.sh",
+      "size": "S"
+    },
+    {
+      "command": "30 7 * * * tools/send-saved-searches-notifications.sh",
+      "size": "S"
+    },
+    {
+      "command": "0 0-6 * * * tools/run-notification-tasks.sh",
+      "size": "S"
+    }
+  ]
+}

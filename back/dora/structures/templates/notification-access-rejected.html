@@ -1,0 +1,12 @@
+{% extends "email_notif.html" %}
+
+{% block notification %}
+  <p>
+    Votre adhésion à la structure : <br>
+    <strong>{{ structure_name }}</strong><br>
+    a été refusée par un administrateur de la structure.
+  </p>
+
+  <p>Si vous considérez qu’il s’agit d’une erreur, vous pouvez contacter directement votre représentant hiérarchique ou notre <a href="https://itou.typeform.com/doracontactsupp">service assistance</a>.</p>
+
+{% endblock %}

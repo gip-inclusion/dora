@@ -1,0 +1,34 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}N'oubliez pas d'identifier et de rejoindre votre structure{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour {{ user.last_name }},</strong>
+  </p>
+
+  <p>Pour tirer le meilleur parti de notre plateforme, il est temps d’identifier et rejoindre votre structure dès maintenant, pour bénéficier de toutes les fonctionnalités de DORA&nbsp;:</p>
+{% endblock %}
+
+
+{% block post_cta %}
+  <mj-text>
+    <p>
+      N'oubliez pas que l'identification de votre structure est essentielle pour :
+      <ul>
+        <li>mettre en avant les informations concernant votre structure</li>
+        <li>inviter vos collaborateurs</li>
+        <li>référencer son offre de services</li>
+        <li>accéder aux coordonner de tous vos partenaires</li>
+        <li>envoyer vos demandes d’orientation via DORA à vos partenaires</li>
+      </ul>
+    </p>
+
+    <p>Ne manquez pas cette opportunité de bénéficier pleinement de DORA !</p>
+  </mj-text>
+{% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ cta_link }}">Identifiez et rejoignez votre structure</mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}

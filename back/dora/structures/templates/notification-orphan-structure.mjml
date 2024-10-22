@@ -1,0 +1,32 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}Recevez des orientations mieux qualifiées avec DORA{% endblock %}
+
+{% block title %}Recevez des orientations mieux qualifiées avec DORA{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+
+  <p>DORA est un service public numérique national qui référence l’offre d’insertion sociale et professionnelle.</p>
+
+  <p>Dans le cadre de notre démarche collective d’identification et activation de l’offre d’insertion nationale, nous avons identifié votre structure comme ayant vocation à figurer sur DORA afin de&nbsp;:</p>
+  <ul style="text-align:left;">
+    <li>gagner en visibilité auprès des acteurs de votre territoire</li>
+    <li>réduire le temps passé à traiter vos demandes d’orientation</li>
+    <li>obtenir plus facilement les justificatifs d’éligilité à vos services et diminuer le nombre d’orientation inadaptées</li>
+    <li>rendre vos services disponibles sur nos sites partenaires via notre démarche d’Open Data</li>
+  </ul>
+
+  <p>Nous vous invitons ainsi à rejoindre la structure <strong>{{ structure.name }}</strong> sur la plateforme afin de publier vos services en cliquant sur le bouton ci-dessous.</p>
+
+  <p>Pour en savoir plus, vous pouvez visiter notre site et notre <a href="{{ dora_doc_link }}">documentation</a> ou bien vous inscrire à <a href="{{ webinar_link }}">un webinaire de présentation</a>.</p>
+
+  <p>Nous restons à votre disposition pour toute question.</p>
+{% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ cta_link }}">Rejoindre cette structure</mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}

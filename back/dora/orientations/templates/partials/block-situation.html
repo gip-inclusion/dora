@@ -1,0 +1,16 @@
+{% if data.situation or data.situation_other %}
+  <h2>{% if is_beneficiary %}Votre situation{% else %}Situation{% endif %}&nbsp;:</h2>
+
+  <ul>
+    {% for item in data.situation %}
+      {% if item != "Autre" %}
+        <li>{{ item }}</li>
+      {% endif %}
+    {% endfor %}
+    {% if data.situation_other %}
+      <li>
+        {{ data.situation_other }}
+      </li>
+    {% endif %}
+  </ul>
+{% endif %}

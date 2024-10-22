@@ -1,0 +1,154 @@
+<mjml lang="fr">
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, Helvetica, sans-serif" color="#555" font-size="15px" line-height="24px"
+              padding="0"/>
+      <mj-class name="cta" font-size="15px" line-height="24px" background-color="#5B12EB" color="white"
+                border-radius="4px" width="100%"
+      />
+
+    </mj-attributes>
+
+    <mj-style inline="inline">
+      h1, h2, h3 {
+      font-family: Arial, Helvetica, sans-serif;
+      color: #555;
+      font-size: 15px;
+      line-height: 24px;
+      padding: 0;
+      }
+
+      h1 {
+      color: #000091;
+      font-size: 24px;
+      font-weight: bold;
+      }
+
+      h2 {
+      font-weight: bold;
+      margin-bottom: 0
+      }
+
+      ul, p {
+      margin-top: 0
+      }
+
+      a, a:visited {
+      color: #5B12EB;
+      text-decoration-line: underline;
+      }
+    </mj-style>
+
+    <mj-preview>
+      {% block preview %}{% endblock %}
+    </mj-preview>
+  </mj-head>
+
+  <mj-body background-color="#F5F5F5" width="600px">
+    <!-- Logo -->
+    <mj-section>
+      <mj-column padding="32px 40px">
+        <mj-image src="{% frontend_url %}/emails/logo-dora-email-new.png"
+                  height="60px" width="238px"
+                  align="left" alt=""/>
+      </mj-column>
+    </mj-section>
+
+    <!-- Contenu -->
+    <mj-section padding-bottom="40px">
+      <mj-column padding="24px 40px 40px" border-radius="24px" background-color="white">
+        <!-- Titre -->
+        <mj-text>
+          <h1>{% block title %}{% endblock %}</h1>
+        </mj-text>
+        <mj-spacer height="24px"/>
+
+        <!-- Illustration -->
+        {% block illustration %}{% endblock %}
+        <mj-spacer height="24px"/>
+
+        <!-- Texte -->
+        <mj-text>
+          {% block content %} {% endblock %}
+        </mj-text>
+        <mj-spacer height="24px"/>
+
+        <!-- CTA -->
+        {% block cta %}
+        {% endblock %}
+
+        <!-- Post-CTA -->
+        {% block post_cta %}
+        {% endblock %}
+
+        <!-- Salutations -->
+        {% block signature %}
+          <mj-text>
+            À très bientôt,
+            <br/>
+            <strong>L’équipe DORA</strong>
+          </mj-text>
+        {% endblock %}
+
+        <!-- Footer -->
+        {% block footer %}{% endblock %}
+
+        <mj-spacer height="24px"/>
+
+        <mj-text>
+          <div style="color: #555555; background-color: #F0F8FF; border-radius: 12px;
+                      padding: 16px 24px">
+            {% block support %}
+              En cas de difficulté, n’hésitez pas à
+              <a style="color: #555" href="{% support_link %}">contacter le support</a>
+              de la plateforme DORA pour obtenir de l’aide.
+            {% endblock %}
+          </div>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Infos DORA -->
+    {% if with_dora_info %}
+      <mj-section>
+        <mj-column padding="32px 40px" border-radius="24px" background-color="#000091">
+          <mj-image src="{% frontend_url %}/emails/logo-dora-mini.png"
+                    height="28px" width="84px"
+                    align="left" alt=""/>
+          <mj-spacer height="16px"/>
+          <mj-text>
+            <div style="color: white; font-size: 13px; line-height: 20px">
+              DORA est un service public numérique qui facilite pour les structures d'insertion le référencement et la
+              mise à jour en temps réel de leurs services. Grâce à un moteur de recherche facile à utiliser, les
+              professionnels de l'insertion peuvent rapidement trouver et prescrire les services correspondant aux
+              besoins
+              des bénéficiaires qu’ils accompagnent.
+            </div>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    {% endif %}
+
+    <!-- Infos légales -->
+    {% if with_legal_info %}
+      <mj-section>
+        <mj-column padding="32px 40px">
+          <mj-text>
+            {% block legal %}
+              <p style="font-size: 13px; color: #777777; line-height: 21px">
+                Nous avons accès à vos données à caractère personnel conformément aux missions d’intérêt public du GIP
+                de l’inclusion et des acteurs publics de l’insertion professionnelle. Conformément à l’article L. 35-4
+                du Code des postes et communications électroniques, vous bénéficiez d’un droit d’opposition que vous
+                pouvez utiliser à tout moment via cette adresse : contact@dora.inclusion.beta.gouv.fr.<br>
+                Votre adresse e-mail sera, dès lors supprimée de notre base de données et vous ne serez plus contactés.
+                Si vous estimez que vos droits ne sont pas respectés, vous pouvez à tout moment introduire une
+                réclamation auprès de la CNIL.
+              </p>
+            {% endblock %}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    {% endif %}
+
+  </mj-body>
+</mjml>

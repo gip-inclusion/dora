@@ -1,0 +1,13 @@
+{% extends "email_cta.html" %}
+
+{% block cta_description %}
+  <p>
+    À la suite de votre demande, nous avons créé l’antenne<br><strong>{{ branch_name }}</strong><br>de votre structure <strong>{{ structure_name }}</strong>.
+  </p>
+  <p>
+    Vous pouvez dès à présent vous rendre sur la page de votre nouvelle antenne en cliquant sur le lien ci-dessous, pour compléter ses informations et gérer vos collaborateurs.
+  </p>
+
+{% endblock %}
+
+{% block cta_text %}Gérez votre antenne{% endblock %}

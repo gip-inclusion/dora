@@ -1,0 +1,35 @@
+{% extends "email_base.html" %}
+
+{% block content %}
+  <h1
+    style="
+           color: #000091;
+           font-family: sans-serif;
+           line-height: 1.4;
+           margin: 0;
+           margin-bottom: 30px;
+           font-size: 24px;
+           font-weight: 700;
+           text-align: center;
+          "
+  >
+
+    {% block salutations %}Bonjour {{recipient_name}}&nbsp!{% endblock %}
+
+  </h1>
+  <div
+    style="
+           font-family: sans-serif;
+           font-size: 15px;
+           font-weight: normal;
+           margin: 0;
+           margin-bottom: 15px;
+           text-align: left;
+          "
+  >
+
+    {% block notification %} {% endblock %}
+
+  </div>
+
+{% endblock %}

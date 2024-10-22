@@ -1,0 +1,56 @@
+[tool.pytest.ini_options]
+# Les variables d'environnement ont priorité sur la configuration du fichier de config.
+# Pour sélectionner une configuration de settings Django depuis ce fichier:
+addopts="--ds=config.settings.test"
+python_files = ["test.py", "tests*.py", "test_*.py"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+ignore = ["E501", "E203"]
+# Compatibilité minimale avec flake8, à faire évoluer si nécessaire
+# voir les règles de lint : https://docs.astral.sh/ruff/rules/
+select = [
+    "Q",  # flake8 : quotes
+    "F",  # pyflakes
+    "E",  # pycodestyle : erreurs
+    "W",  # pycodestyle : avertissements
+    "I",  # isort
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["dora"]
+
+# Note : la plupart des éléments de configuration de sqlfluff
+# sont basés sur les recommandantions et usages de Data-Inclusion
+[tool.sqlfluff.core]
+dialect = "postgres"
+sql_file_exts = ".sql"
+
+[tool.sqlfluff.layout.type.alias_expression]
+# Alignement vertical pour les aliases
+# https://docs.sqlfluff.com/en/stable/layout.html#aligned-elements
+spacing_before = "align"
+# Aliases alignés dans la clause SELECT
+align_within = "select_clause"
+# Alignement des éléments entre parenthèses : 
+align_scope = "bracketed"
+
+# Pour les règles de sqlfluff, voir :  
+# - https://docs.sqlfluff.com/en/stable/rules.html
+# Pour les directives de configuration dans les fichiers : 
+# - https://docs.sqlfluff.com/en/stable/configuration.html#in-file-configuration-directives
+[tool.sqlfluff.rules.capitalisation.keywords]
+capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.functions]
+extended_capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.literals]
+capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.references.special_chars]
+# Utiles pour les aliases de champs Metabase
+additional_allowed_characters = "àéè '-"

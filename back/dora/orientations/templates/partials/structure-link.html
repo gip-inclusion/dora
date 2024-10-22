@@ -1,0 +1,5 @@
+{% if data.get_structure_frontend_url %}
+  <a href="{{ data.get_structure_frontend_url }}">{{ data.get_structure_name }}</a>
+{% else %}
+  {{ data.get_structure_name }}
+{% endif %}

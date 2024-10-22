@@ -1,0 +1,13 @@
+{% extends "email_cta.html" %}
+
+{% block cta_description %}
+  <p>
+    Une nouvelle personne souhaite adhérer à votre structure “{{ structure_name }}”&nbsp;:<br>
+    <strong>{{ new_member_full_name }} — {{ new_member_email }}</strong>
+  </p>
+  <p>
+    Connectez-vous à votre espace pour valider ou refuser l’inscription de cette nouvelle personne. Pour accéder à l’espace collaborateurs, il vous suffit de cliquer sur le lien ci-dessous, ou de le recopier dans votre navigateur.
+  </p>
+{% endblock %}
+
+{% block cta_text %}Accédez à votre tableau de bord{% endblock %}

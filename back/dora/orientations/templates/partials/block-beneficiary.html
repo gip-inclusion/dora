@@ -1,0 +1,38 @@
+{% load orientation_extras %}
+
+<h2>Bénéficiaire&nbsp;:</h2>
+
+<ul>
+  <li>{% if is_beneficiary %}Vous, {% endif %}{{ data.get_beneficiary_full_name }}</li>
+  <li>Moyens de contact privilégiés&nbsp;:
+    <ul>
+      {% if ContactPreference.EMAIL in data.beneficiary_contact_preferences %}
+        <li>{{ data.beneficiary_email }}</li>
+      {% endif %}
+      {% if ContactPreference.PHONE in data.beneficiary_contact_preferences %}
+        <li>{{ data.beneficiary_phone|format_phone }}</li>
+      {% endif %}
+      {% if ContactPreference.OTHER in data.beneficiary_contact_preferences %}
+        <li>{{ data.beneficiary_other_contact_method }}</li>
+      {% endif %}
+    </ul>
+  </li>
+  {% if beneficiaries_has_alternate_contact_methods %}
+    <li>Autres moyens de contact&nbsp;:
+      <ul>
+        {% if not ContactPreference.EMAIL in data.beneficiary_contact_preferences and data.beneficiary_email %}
+          <li>{{ data.beneficiary_email }}</li>
+        {% endif %}
+        {% if not ContactPreference.PHONE in data.beneficiary_contact_preferences and data.beneficiary_phone %}
+          <li>{{ data.beneficiary_phone|format_phone }}</li>
+        {% endif %}
+        {% if not ContactPreference.OTHER in data.beneficiary_contact_preferences and data.beneficiary_other_contact_method %}
+          <li>{{ data.beneficiary_other_contact_method }}</li>
+        {% endif %}
+      </ul>
+    </li>
+  {% endif %}
+  {% if data.beneficiary_availability %}
+    <li>{% if not is_beneficiary %}est {% endif %}disponible à partir du {{ data.beneficiary_availability }}</li>
+  {% endif %}
+</ul>

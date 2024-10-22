@@ -1,0 +1,21 @@
+{% load orientation_extras %}
+
+<h2>Prescripteur ou prescriptrice&nbsp;:</h2>
+
+{% if data.prescriber.email !=  data.referent_email %}
+  <ul>
+    <li>{{ data.prescriber.get_full_name }}</li>
+    <li>{{ data.prescriber.email }}</li>
+  </ul>
+
+  <h2>Conseiller ou conseillère référente&nbsp;:</h2>
+
+{% endif %}
+
+<ul>
+  <li>{{ data.get_referent_full_name }}</li>
+  <li>{{ data.referent_email }}
+    {% if not is_beneficiary and data.referent_phone %} –
+      {{ data.referent_phone|format_phone }}
+    {% endif %}</li>
+</ul>

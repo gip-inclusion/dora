@@ -1,0 +1,13 @@
+{% extends "email-base.mjml" %}
+
+{% block illustration %}
+  <mj-image src="{% frontend_url %}/emails/illu-orientation.png"
+            alt="Une personne souriante tape sur une machine à écrire tandis que des bulles de dialogue flottent au-dessus, représentant l’échange d’informations. Cela illustre comment une personne guide un bénéficiaire vers un service approprié."/>
+{% endblock %}
+
+{% block support %}
+  En cas de difficulté, n’hésitez pas à
+  <a style="color: #555"
+     href="{{ orientation_support_link }}">contacter le
+    support</a>  de la plateforme DORA pour obtenir de l’aide.
+{% endblock %}

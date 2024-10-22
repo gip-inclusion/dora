@@ -1,0 +1,23 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}
+  Votre collaborateur ou collaboratrice n'a toujours pas accepté l'invitation sur DORA
+{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour {{ admin.first_name }},</strong>
+  </p>
+  <p>
+    Nous vous informons que l'invitation qui a été envoyée à <strong>{{ user.email }}</strong> pour rejoindre la structure <strong>{{ structure.name }}</strong> sur DORA n'a pas encore été acceptée.
+  </p>
+  <p>
+    Nous vous encourageons à relancer cette personne - depuis le tableau de bord de votre structure afin qu’il puisse bénéficier de toutes les fonctionnalités de DORA.
+  </p>
+  <p>
+    Si vous avez des difficultés ou des questions, notre équipe est là pour vous aider. N’hésitez pas à <a href="{{ contact_link }}">nous contacter</a> ou à <a href="{{ help_link }}">consulter notre section d'aide</a>.
+  </p>
+  <p>
+    Merci de votre engagement sur DORA.
+  </p>
+{% endblock %}

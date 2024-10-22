@@ -1,0 +1,26 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}Connectez-vous pour préserver votre compte{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+  <p>
+    Nous constatons que votre compte DORA n'a pas été utilisé depuis un certain temps.
+  </p>
+  <p>
+  Conformément à notre politique de gestion des comptes inactifs, votre compte sera désactivé le <strong>{{ limit_date }}</strong>.
+  </p>
+  <p>
+    Après cette désactivation, vous serez dans l’obligation de créer un nouveau compte si vous souhaitez utiliser la plateforme DORA.
+  </p>
+  <p>
+    Si vous souhaitez conserver votre compte et bénéficier de nos services, nous vous invitons à vous connecter en utilisant le bouton ci-dessous&nbsp;:
+  </p>
+{% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ cta_link }}">Se connecter sur DORA</mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}

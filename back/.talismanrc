@@ -1,0 +1,4 @@
+fileignoreconfig:
+  - filename: dora/services/migrations/0110_remove_service_fee_pass_numerique.py
+    checksum: 8d45217f8fc80d3ffb37ca6040b04a9aa99a37c1eb82f4ae0939b91f6989850d
+version: ""
