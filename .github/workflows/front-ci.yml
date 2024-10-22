@@ -1,13 +1,14 @@
 name: Dora Front CI
 
-# Déclenchement du workflow uniquement si des changements sont détectés dans 'front/'
 on:
   push:
     paths:
       - 'front/**'
+      - '.github/workflows/**'
   pull_request:
     paths:
       - 'front/**'
+      - '.github/workflows/**'
 
 jobs:
   build:

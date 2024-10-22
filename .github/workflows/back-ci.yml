@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'back/**'
+      - '.github/workflows/**'
   pull_request:
     paths:
       - 'back/**'
+      - '.github/workflows/**'
 
 jobs:
   build:
