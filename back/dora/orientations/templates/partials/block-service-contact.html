@@ -1,0 +1,18 @@
+{% load orientation_extras %}
+
+<h2>Contact du ou de la responsable du service « {{ data.get_service_name }} »</h2>
+
+<ul>
+  {% if  data.get_contact_name %}
+    <li>{{ data.get_contact_name }}</li>
+  {% endif %}
+  <li>
+    {% if  data.get_contact_email %}{{ data.get_contact_email }}&nbsp;– {% endif %}
+    {% if  data.get_contact_phone %}{{ data.get_contact_phone|format_phone }}{% endif %}
+  </li>
+</ul>
+{% if not no_reply_msg %}
+  <p>
+    Si vous souhaitez contacter la structure, répondez directement à ce mail.
+  </p>
+{% endif %}

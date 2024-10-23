@@ -1,0 +1,13 @@
+/staticfiles
+__pycache__
+.DS_Store
+/envs/*
+.cache_ggshield
+.idea
+.vscode
+*.rdb
+docker-compose.yml
+talisman_report
+.env
+.envrc
+

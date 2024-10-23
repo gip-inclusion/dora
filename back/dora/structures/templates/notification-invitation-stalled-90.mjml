@@ -1,0 +1,23 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}
+  Urgent : Votre collaborateur ou collaboratrice n'a toujours pas accepté l'invitation sur DORA.
+{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour {{ admin.first_name }},</strong>
+  </p>
+  <p>
+    Nous vous informons que l'invitation qui a été envoyée à <strong>{{ user.email }}</strong> pour rejoindre la structure <strong>{{ structure.name }}</strong> sur DORA n'a pas encore été acceptée.
+  </p>
+  <p>
+    Nous vous rappelons que toute invitation non acceptée sera automatiquement supprimée dans 1 mois.
+  </p>
+  <p>
+    Nous vous encourageons à relancer la personne pour finaliser cette invitation.
+  </p>
+  <p>
+    Merci de votre implication sur DORA.
+  </p>
+{% endblock %}

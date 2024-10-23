@@ -1,0 +1,45 @@
+{% extends "email_cta.html" %}
+
+{% block salutations %}Bonjour,{% endblock %}
+
+{% block cta_description %}
+  <p>
+    <a href="{% frontend_url %}">DORA</a> est un service public numérique national
+    qui référence l’offre d’insertion sociale et professionnelle.
+  </p>
+
+  <p>
+    Dans le cadre de notre démarche collective d’identification et activation de
+    l’offre d’insertion nationale, des contributeurs ont fait des suggestions de
+    services pour votre structure. Nous vous invitons ainsi à rejoindre la
+    structure <strong>{{ structure.name }}</strong> sur la plate-forme afin de visualiser les suggestions reçues,
+    compléter les informations et publier vos services pour les rendre visibles
+    des acteurs de votre territoire.
+  </p>
+
+  <p>
+    Pour accepter l’invitation, il vous suffit de cliquer sur le bouton
+    ci-dessous, ou de recopier le lien dans votre navigateur.
+  </p>
+{% endblock %}
+
+{% block cta_text %}Rejoindre cette structure{% endblock %}
+
+{% block after_cta_content %}
+  <p>
+    Étant engagés dans une démarche Open Data, nous rendons disponibles nos
+    données à travers un référentiel commun — partagé par toutes les plateformes
+    et sites web partenaires. Grâce à cette dynamique collective, vous référencez
+    votre offre une seule fois tout en la rendant disponible partout.
+  </p>
+
+  <p>
+    Pour en savoir plus, vous pouvez visiter
+    <a href="{% frontend_url %}">notre site</a> ou bien
+    <a href="{% support_link %}">notre documentation</a
+      >. Nous restons à votre disposition pour toute question.
+    </p>
+
+    <p>À très bientôt,</p>
+    <p>L’équipe DORA</p>
+{% endblock %}

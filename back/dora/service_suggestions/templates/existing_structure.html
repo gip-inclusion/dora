@@ -1,0 +1,40 @@
+{% extends "email_cta.html" %}
+
+{% block salutations %}Bonjour,{% endblock %}
+
+
+{%block cta_description %}
+  <p>
+    Un contributeur vient de proposer une suggestion de service pour votre
+    structure.
+  </p>
+
+  <p>
+    Disponible dès à présent sur
+    <a href="{{ structure.get_frontend_url }}">votre tableau de bord</a>, vous
+    pouvez y accéder, la compléter et la publier.
+  </p>
+{% endblock %}
+
+
+{% block cta_text %}Voir la suggestion{% endblock %}
+
+{%block after_cta_content %}
+
+  {%if contact_email is not None %}
+    Pour cette suggestion, un contact a été identifié comme personne en charge de ce service : {{ contact_email }}. N’hésitez pas à lui en faire part et à l’inviter sur DORA si ce n’est pas déjà le cas !
+  {% endif %}
+
+  <p>
+    Les contributions font partie de notre démarche collective d’identification et
+    activation de l’offre d’insertion nationale. Si vous souhaitez y participer,
+    vous retrouverez
+    <a
+      href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/contribuer-et-referencer-loffre-dinsertion-dun-partenaire-1knhpso/"
+      title="Documentation Dora - Contribuer et référencer l'offre d'insertion d'un partenaire"
+    >plus de détails ici</a>.
+  </p>
+
+  <p>À très bientôt,</p>
+  <p>L’équipe DORA</p>
+{% endblock %}

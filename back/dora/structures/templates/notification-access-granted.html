@@ -1,0 +1,15 @@
+{% extends "email_cta.html" %}
+
+{% block cta_description %}
+  <p>
+    Votre adhésion à la structure : <br>
+    <strong>{{ structure_name }}</strong><br>
+    a été validée par un administrateur de la structure.
+  </p>
+  <p>
+    Pour accéder à votre espace, il vous suffit de cliquer sur le lien ci-dessous, ou de le recopier dans votre navigateur.
+  </p>
+
+{% endblock %}
+
+{% block cta_text %}Accédez à votre tableau de bord{% endblock %}

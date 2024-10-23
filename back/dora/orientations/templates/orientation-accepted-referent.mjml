@@ -1,0 +1,15 @@
+{% extends "orientation-email-base.mjml" %}
+
+{% block preview %}
+  La demande pour {{ data.get_beneficiary_full_name }} a été acceptée&nbsp;!
+{% endblock %}
+
+{% block title %}
+  La demande d’orientation pour {{ data.get_beneficiary_full_name }} a été acceptée&nbsp;! 🎉
+{% endblock %}
+
+{% block content %}
+  {{ prescriber_message|linebreaks }}
+{% endblock %}
+
+{% block signature %}{% endblock %}

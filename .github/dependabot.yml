@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pip"
+    directory: "/back"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "requirement"
+      prefix-development: "dev requirement"
+
+  - package-ecosystem: "npm"
+    directory: "/front"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "requirement"
+      prefix-development: "dev requirement"

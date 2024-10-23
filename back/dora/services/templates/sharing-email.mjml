@@ -1,0 +1,94 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}
+  Découvrez le service « {{ service.name }} » recommandé par {{ sender_name }}.
+{% endblock %}
+
+{% block illustration %}
+  <mj-image src="{% frontend_url %}/emails/illu-orientation.png" alt=""/>
+{% endblock %}
+
+{% block title %}
+  {% if for_beneficiary %}
+    On vous a recommandé une solution
+  {% else %}
+    On vous a recommandé un service
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+
+  <p>{{ sender_name }} vous a recommandé le service
+    suivant :
+  </p>
+  <div style="color: #555555; background-color: #F0F8FF; border-radius: 12px;
+              padding: 16px 24px; margin: 24px 0">
+    <div style="color: #555555, font-size: 14px; line-height: 24px; margin-bottom: 2px">{{ service.structure_info.name }}</div>
+    <div>
+      <a href="{{ cta_link }}"
+         style="color: #000091; font-size: 23px; font-weight: 700; text-decoration-line: none; line-height: 26px">
+        {{ service.name }}
+      </a>
+    </div>
+    <div style="color: #555555, font-size: 13px; line-height: 24px; margin-top: 6px">
+      {% if service.address1 %}
+        {{service.address1}}{% if service.address2 %}, {{ service.address2}}{% endif %},
+        {{ service.postal_code }} {{ service.city }}
+      {% endif %}&nbsp;
+    </div>
+  </div>
+
+
+  <h2 style="margin-bottom: 8px">
+    Le public concerné :
+  </h2>
+
+  <ul>
+    {% for item in publics %}
+      <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2 style="margin-bottom: 8px">
+    Les critères et compétences :
+  </h2>
+
+  <ul>
+    {% for item in requirements %}
+      <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+
+
+  {% if not modes %}
+    {% if for_beneficiary %}
+      <h2 style="margin-bottom: 8px">
+        Comment mobiliser ce service :
+      </h2>
+
+      <p style="color: #ED7D00; font-style: italic;">Demandez de l’aide à votre conseiller ou à un professionnel qui travaille
+        dans l’insertion pour savoir comment accéder à ce service.</p>
+    {% endif %}
+
+  {% else %}
+    <h2 style="margin-bottom: 8px">
+      Comment mobiliser ce service :
+    </h2>
+
+    <ul>
+      {% for item in modes %}
+        <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ cta_link }}">
+    Consulter le service
+  </mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}

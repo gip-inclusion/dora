@@ -1,0 +1,32 @@
+{% extends "orientation-email-base.mjml" %}
+
+{% block preview %}
+  Un bénéficiaire a été orienté vers votre service {{ data.get_service_name }}
+{% endblock %}
+
+{% block title %}
+  Vous avez reçu une demande d’orientation pour le service «&nbsp;{{ data.get_service_name }}&nbsp;»
+{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+  <p>
+    {{ data.prescriber.get_full_name }} de la structure
+    <a href="{{ data.prescriber_structure.get_frontend_url }}">{{ data.prescriber_structure.name }}
+    </a>
+    vous a adressé un bénéficiaire pour le service {% include "partials/service-link.html" %}.
+  </p>
+{% endblock %}
+
+{% block cta %}
+  <mj-text>
+    Afin de visualiser les détails de la demande et de contacter la personne orientée ou la personne prescriptrice, cliquez sur le bouton suivant&nbsp;:
+  </mj-text>
+  <mj-spacer height="24px"/>
+  <mj-button mj-class="cta" href="{{ data.get_magic_link }}">
+    Visualiser et traiter la demande
+  </mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}

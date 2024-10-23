@@ -1,0 +1,13 @@
+{% if data.requirements %}
+  <h2>
+    {% if is_beneficiary %}Les critères auxquels vous répondez
+    {% else %}Critères auxquels le/la bénéficiaire répond
+    {% endif %}&nbsp;:
+  </h2>
+
+  <ul>
+    {% for item in data.requirements %}
+      <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

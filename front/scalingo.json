@@ -1,0 +1,7 @@
+{
+  "env": {
+    "VITE_PUBLIC_CANONICAL_URL": {
+      "generator": "url"
+    }
+  }
+}

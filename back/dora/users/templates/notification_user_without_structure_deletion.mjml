@@ -1,0 +1,28 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}Activez votre compte DORA avant qu'il ne soit supprimé{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour {{ user.last_name }},</strong>
+  </p>
+
+  <p>Nous avons remarqué que vous n'avez toujours pas identifié et rejoint votre structure sur DORA.</p>
+
+  <p>Veuillez noter que sans action de votre part, votre compte sera supprimé dans <strong>4 mois</strong>.</p>
+
+  <p>Pour éviter cela, activez votre compte dès maintenant&nbsp;:</p>
+{% endblock %}
+
+{% block post_cta %}
+  <mj-text>
+    <p>
+      Nous vous remercions pour votre intérêt pour DORA et espérons vous voir bientôt parmi nos utilisateurs actifs.
+    </p>
+  </mj-text>
+{% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ cta_link }}">Identifiez et rejoignez votre structure</mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}

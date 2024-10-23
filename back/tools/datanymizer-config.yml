@@ -1,0 +1,94 @@
+tables:
+  - name: users_user
+    rules:
+      email:
+        template:
+          # Preserve beta.gouv addresses
+          format:
+            "{%if prev.email is ending_with('beta.gouv.fr') %}{{_0}}{% else
+            %}{{_1}}{% endif %}"
+          rules:
+            - email:
+                kind: Safe
+                suffix: 5
+                uniq: true
+      first_name:
+        template:
+          # Preserve beta.gouv addresses
+          format:
+            "{%if prev.email is ending_with('beta.gouv.fr') %}{{_0}}{% else
+            %}{{_1}}{% endif %}"
+          rules:
+            - first_name: {}
+      last_name:
+        template:
+          # Preserve beta.gouv addresses
+          format:
+            "{%if prev.email is ending_with('beta.gouv.fr') %}{{_0}}{% else
+            %}{{_1}}{% endif %}"
+          rules:
+            - last_name: {}
+      password:
+        template:
+          format: "!disabled"
+
+  - name: services_service
+    rules:
+      contact_name:
+        person_name: {}
+      contact_email:
+        email:
+          safe: true
+      contact_phone:
+        phone:
+          format: "9^########"
+
+  - name: service_suggestions_servicesuggestion
+    rules:
+      contents:
+        template:
+          format: "{% raw %}{}{% endraw %}"
+
+  - name: django_admin_log
+    rules: {}
+    query:
+      dump_condition: "FALSE"
+
+  - name: django_session
+    rules: {}
+    query:
+      dump_condition: "FALSE"
+
+  - name: authtoken_token
+    rules: {}
+    query:
+      dump_condition: "FALSE"
+
+  - name: orientations_orientation
+    rules: {}
+    query:
+      dump_condition: "FALSE"
+
+  - name: orientations_orientation_rejection_reasons
+    rules: {}
+    query:
+      dump_condition: "FALSE"
+
+  - name: orientations_sentcontactemail
+    rules: {}
+    query:
+      dump_condition: "FALSE"
+
+  - name: stats_orientationview
+    rules: {}
+    query:
+      dump_condition: "FALSE"
+
+  - name: stats_servicesshare
+    rules: {}
+    query:
+      dump_condition: "FALSE"
+
+filter:
+  except:
+    - public.spatial_ref_sys

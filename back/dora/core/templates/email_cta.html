@@ -1,0 +1,141 @@
+{% extends "email_base.html" %}
+
+{% block content %}
+  <h1
+    style="
+           color: #000091;
+           font-family: sans-serif;
+           line-height: 1.4;
+           margin: 0;
+           margin-bottom: 30px;
+           font-size: 24px;
+           font-weight: 700;
+           text-align: center;
+          "
+  >
+    {% block salutations %}Bonjour {{recipient_name}} !{% endblock %}
+  </h1>
+  <div
+    style="
+           font-family: sans-serif;
+           font-size: 15px;
+           font-weight: normal;
+           margin: 0;
+           margin-bottom: 15px;
+          "
+  >
+    {% block cta_description %} {% endblock %}
+  </div>
+
+  <table
+    role="presentation"
+    border="0"
+    cellpadding="0"
+    cellspacing="0"
+    class="btn btn-primary"
+    style="
+           border-collapse: separate;
+           mso-table-lspace: 0pt;
+           mso-table-rspace: 0pt;
+           box-sizing: border-box;
+           min-width: 100%;
+           width: 100%;
+          "
+    width="100%"
+  >
+    <tbody>
+      <tr>
+        <td
+          align="center"
+          style="
+                 font-family: sans-serif;
+                 font-size: 14px;
+                 vertical-align: top;
+                 padding-bottom: 15px;
+                "
+          valign="top"
+        >
+          <table
+            role="presentation"
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+                   border-collapse: separate;
+                   mso-table-lspace: 0pt;
+                   mso-table-rspace: 0pt;
+                   min-width: auto;
+                   width: auto;
+                  "
+          >
+            <tbody>
+              <tr>
+                <td
+                  style="
+                         font-family: sans-serif;
+                         font-size: 14px;
+                         vertical-align: top;
+                         border-radius: 5px;
+                         text-align: center;
+                         background-color: #5b12eb;
+                        "
+                  valign="top"
+                  align="center"
+                  bgcolor="#5B12EB"
+                >
+                  <a
+                    href="{{ cta_link }}"
+                    target="_blank"
+                    style="
+                           border: solid 1px #5b12eb;
+                           border-radius: 5px;
+                           box-sizing: border-box;
+                           cursor: pointer;
+                           display: inline-block;
+                           font-size: 14px;
+                           font-weight: bold;
+                           margin: 0;
+                           padding: 12px 25px;
+                           text-decoration: none;
+                           background-color: #5b12eb;
+                           border-color: #5b12eb;
+                           color: #ffffff;
+                          "
+                  >
+                    {% block cta_text %}{% endblock %}
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p
+    style="
+           font-family: sans-serif;
+           font-size: 15px;
+           font-weight: normal;
+           margin: 0;
+           margin-bottom: 15px;
+          "
+  >
+    <a href="{{ cta_link }}" style="color: #5b12eb; text-decoration: underline"
+    >{{ cta_link }}</a
+      >
+    </p>
+
+    <div
+      style="
+             font-family: sans-serif;
+             font-size: 15px;
+             font-weight: normal;
+             margin: 0;
+             margin-bottom: 15px;
+            "
+    >
+      {% block after_cta_content %} {% endblock %}
+    </div>
+
+{% endblock %}

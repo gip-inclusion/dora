@@ -1,0 +1,20 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}Vous avez été invité(e) à rejoindre la structure {{ structure.name }}{% endblock %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+  <p>
+    Vous avez reçu une invitation pour rejoindre la structure <strong>{{ structure.name }}</strong> sur DORA. Ne laissez pas cette opportunité passer !
+  </p>
+  <p>Cliquez sur le bouton ci-dessous pour créer votre compte et accéder à votre espace sur DORA :</p>
+{% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ cta_link }}">Accepter l'invitation</mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}
