@@ -6,3 +6,6 @@
 .vscode
 .idea
 .env
+.cache_ggshield
+.envrc
+*.logs
