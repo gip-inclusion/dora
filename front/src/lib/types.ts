@@ -456,6 +456,8 @@ export interface Service {
   slug: string;
   source?: string;
   status: ServiceStatus;
+  spendingTimeTotalHours?: number;
+  spendingTimePrecision: string;
   structure: string;
   structureInfo: ServiceStructure;
   subcategories: string[];

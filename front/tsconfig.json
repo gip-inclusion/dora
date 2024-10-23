@@ -11,7 +11,8 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ES2017"
+    "target": "ES2017",
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
-  "exclude": ["./src/tests/**"]
+  "exclude": ["node_modules/*", "dist/*", "build/*"]
 }
