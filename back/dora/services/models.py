@@ -387,6 +387,19 @@ class Service(ModerationMixin, models.Model):
         verbose_name="Lien de prise de rendez-vous", blank=True
     )
 
+    # Spending time (Loi Travail 2025)
+
+    spending_time_total_hours = models.PositiveIntegerField(
+        verbose_name="Temps passé (total des heures passées par le bénéficiaire)",
+        blank=True,
+        null=True
+    )
+    spending_time_precision = models.CharField(
+        verbose_name="Précision sur la répartition du temps passé",
+        max_length=60,
+        blank=True,
+    )
+
     ##########
     # Metadata
 
