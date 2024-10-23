@@ -151,6 +151,7 @@ def _get_di_results(
             lat=lat,
             lon=lon,
         )
+        print(set([r["service"]["source"] for r in raw_di_results if r]))
     except requests.ConnectionError:
         return []
 

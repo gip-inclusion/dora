@@ -1,4 +1,8 @@
 fileignoreconfig:
-  - filename: dora/services/migrations/0110_remove_service_fee_pass_numerique.py
-    checksum: 8d45217f8fc80d3ffb37ca6040b04a9aa99a37c1eb82f4ae0939b91f6989850d
+- filename: dora/services/migrations/0110_remove_service_fee_pass_numerique.py
+  checksum: 8d45217f8fc80d3ffb37ca6040b04a9aa99a37c1eb82f4ae0939b91f6989850d
+- filename: dora/services/migrations/0111_fundinglabel.py
+  checksum: b04db85f9727ef213d715ce04cc4bf7f093e8e76ed3c6435a9d214d68b1f7226
+- filename: dora/services/migrations/0112_service_funding_label.py
+  checksum: 1cb43c3e900ef7cc49bf25dec3b419d5b99e5581dea214eff89480cabfa8ee09
 version: ""

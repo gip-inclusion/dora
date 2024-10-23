@@ -1,5 +1,6 @@
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
+from django.db.models import Count
 
 from dora.core.admin import EnumAdmin
 
@@ -10,6 +11,7 @@ from .models import (
     CoachOrientationMode,
     ConcernedPublic,
     Credential,
+    FundingLabel,
     LocationKind,
     Requirement,
     SavedSearch,
@@ -146,6 +148,27 @@ class ServiceModelAdmin(admin.ModelAdmin):
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
 
 
+class FundingLabelAdmin(admin.ModelAdmin):
+    list_display = [
+        "department",
+        "label",
+        "service_count"
+    ]
+    search_fields = (
+        "department",
+        "label",
+    )
+    ordering = ["department"]
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.annotate(service_count=Count("service"))
+        return queryset
+
+    def service_count(self, obj):
+        return obj.service_count
+
+
 class CustomizableChoiceAdmin(admin.ModelAdmin):
     list_display = ("name", "structure")
     list_filter = [
@@ -192,6 +215,7 @@ class SavedSearchAdmin(admin.ModelAdmin):
 
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServiceModel, ServiceModelAdmin)
+admin.site.register(FundingLabel, FundingLabelAdmin)
 admin.site.register(AccessCondition, CustomizableChoiceAdmin)
 admin.site.register(ConcernedPublic, CustomizableChoiceAdmin)
 admin.site.register(Requirement, CustomizableChoiceAdmin)
