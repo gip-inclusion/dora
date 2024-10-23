@@ -1,11 +1,11 @@
 
 # 001 – Migrer tout le code DORA vers une mono-repository
 
-Date : 2024-09-02
+Date : 2024-10-23
 
 ## État
 
-Proposé
+Validé
 
 ## Contexte
 
@@ -41,18 +41,18 @@ Une copie basique des répertoires `dora-back` et `dora-front` engendrerait la p
 
 **Avant**
 
-- [ ]  [GitHub] Fermer (intégrer ou archiver) toutes les PR actives pour les 2 repositories
-- [ ]  [Doc] Ajouter un fichier [INSTALL.md](http://INSTALL.md) ou modifier le README du repo dora
+- [X]  [GitHub] Fermer (intégrer ou archiver) toutes les PR actives pour les 2 repositories
+- [X]  [Doc] Ajouter un fichier [INSTALL.md](http://INSTALL.md) ou modifier le README du repo dora
 - [ ]  [Code] Prévoir des fichiers .*ignore intelligemment mutualisés
-- [ ]  [Organisation] Prévoir la date d’exécution
+- [X]  [Organisation] Prévoir la date d’exécution
 
 **Pendant**
 
-- [ ]  [GitHub] Copier chacun des 2 repo (”front” et “back”) dans le repo central “dora”
-- [ ]  [GitHub Actions] Retravailler la CI pour faire 2 jobs (front et back)
-- [ ]  [Scalingo] Modifier le link des apps (front + back ; prod + staging)
-- [ ]  [Scalingo] ajouter pour chacun la bonne variable `PROJECT_DIR` qui va bien
+- [X]  [GitHub] Copier chacun des 2 repo (”front” et “back”) dans le repo central “dora”
+- [X]  [GitHub Actions] Retravailler la CI pour faire 2 jobs (front et back)
+- [X]  [Scalingo] Modifier le link des apps (front + back ; prod + staging)
+- [X]  [Scalingo] ajouter pour chacun la bonne variable `PROJECT_DIR` qui va bien
 
 **Après**
-- [ ] [Ops] S'assurer que la plateforme (front et back) est OK
+- [X] [Ops] S'assurer que la plateforme (front et back) est OK
 - [ ] [Doc] Mettre à jour la documentation pour déployer en production
