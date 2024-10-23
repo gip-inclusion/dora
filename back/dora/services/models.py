@@ -145,6 +145,17 @@ class ServiceSource(EnumModel):
         verbose_name = "Source"
 
 
+class FundingLabel(models.Model):
+    class Meta:
+        verbose_name = "label de financement"
+        verbose_name_plural = "labels de financement"
+
+    department = models.CharField(
+        max_length=3, db_index=True, verbose_name="département"
+    )
+    label = models.CharField(verbose_name="label")
+
+
 class ServiceManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_model=False)
@@ -441,6 +452,14 @@ class Service(ModerationMixin, models.Model):
     )
     data_inclusion_id = models.TextField(blank=True, db_index=True)
     data_inclusion_source = models.TextField(blank=True, db_index=True)
+
+    # Label financement
+    funding_label = models.ForeignKey(
+        FundingLabel,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
 
     objects = ServiceManager()
 
