@@ -35,7 +35,7 @@
     "@tailwindcss/typography": "^0.5.13",
     "@tiptap/core": "^2.5.8",
     "@tiptap/extension-link": "^2.5.8",
-    "@tiptap/extension-placeholder": "^2.5.8",
+    "@tiptap/extension-placeholder": "^2.9.1",
     "@tiptap/starter-kit": "^2.5.8",
     "@types/iframe-resizer": "^3.5.13",
     "@types/showdown": "^2.0.6",
