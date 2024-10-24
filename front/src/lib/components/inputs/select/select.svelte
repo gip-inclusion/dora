@@ -1,9 +1,10 @@
 <script lang="ts">
   import AutoComplete from "./simple-autocomplete.svelte";
 
+  type Choice = { value: string | number; label: string };
+
   export let id: string;
-  export let choices: { value: string | number; label: string }[] | undefined =
-    undefined;
+  export let choices: Choice[] | undefined = undefined;
   export let fixedItemsValues: string[] = [];
   export let sort = false;
   export let value: string | number | string[] | number[] | undefined =
@@ -15,7 +16,9 @@
   export let placeholderMulti = "";
   export let multiple = false;
   export let hideArrow = false;
-  export let searchFunction = undefined;
+  export let searchFunction:
+    | ((searchTxt: string) => Promise<Choice[]>)
+    | undefined = undefined;
   export let delay = undefined;
   export let localFiltering = undefined;
   export let minCharactersToSearch = undefined;

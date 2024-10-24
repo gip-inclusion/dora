@@ -2,17 +2,20 @@
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import { getModel, getServicesOptions } from "$lib/requests/services";
-  import { getStructure } from "$lib/requests/structures";
+  import { getManagedStructures, getStructure } from "$lib/requests/structures";
   import type {
+    Choice,
     Model,
     Service,
     ServicesOptions,
     ShortStructure,
   } from "$lib/types";
+  import { debounce } from "$lib/utils/misc";
   import { onMount } from "svelte";
 
   export let servicesOptions: ServicesOptions;
   export let service: Service;
+  export let managedStructureSearchMode = false;
   export let structures: ShortStructure[];
   export let structure: ShortStructure | undefined;
   export let isModel = false;
@@ -100,8 +103,20 @@
     }
   }
 
+  async function searchFunction(searchText: string): Promise<Choice[]> {
+    if (searchText.length < 3) {
+      return [];
+    }
+    return (await getManagedStructures(searchText)).map((struct) => ({
+      value: struct.slug,
+      label: struct.name,
+    }));
+  }
+
   // Il s'agit d'une édition de service existant
-  const showStructures = service.structure ? false : structures.length > 1;
+  const showStructures = service.structure
+    ? false
+    : structures.length > 1 || managedStructureSearchMode;
 
   onMount(() => {
     if (structure && service.structure) {
@@ -120,7 +135,13 @@
     }))}
     onChange={handleStructureChange}
     sort
+    searchFunction={managedStructureSearchMode
+      ? debounce(searchFunction)
+      : undefined}
     disabled={!showStructures}
     placeholder="Sélectionnez la structure…"
+    description={managedStructureSearchMode
+      ? "Tapez au moins 3 lettres pour lancer la recherche."
+      : ""}
   />
 </FieldSet>

@@ -18,6 +18,9 @@
 
   // Spécifique du select
   export let choices: Choice[];
+  export let searchFunction:
+    | ((searchText: string) => Promise<Choice[]>)
+    | undefined = undefined;
   export let sort = false;
   export let onChange = undefined;
   export let placeholderMulti = "Choisir";
@@ -47,6 +50,7 @@
       {id}
       {choices}
       {sort}
+      {searchFunction}
       bind:value
       on:blur={onBlur}
       {onChange}
