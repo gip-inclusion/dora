@@ -84,14 +84,20 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
     def update_user(self, user, claims):
         # L'utilisateur peut déjà étre inscrit à IC, dans ce cas on réutilise la plupart
         # des informations déjà connues
+        sub = claims.get("sub")
+
+        if not sub:
+            raise SuspiciousOperation(
+                "Le sujet (`sub`) n'est pas inclu dans les `claims`"
+            )
+
+        if user.sub_pc and str(user.sub_pc) != sub:
+            raise SuspiciousOperation(
+                "Le sub enregistré est différent de celui fourni par ProConnect"
+            )
 
         if not user.sub_pc:
             # utilisateur existant, mais non-enregistré sur ProConnect
-            sub = claims.get("sub")
-            if not sub:
-                raise SuspiciousOperation(
-                    "Le sujet (`sub`) n'est pas inclu dans les `claims`"
-                )
             user.sub_pc = sub
             user.save()
 
