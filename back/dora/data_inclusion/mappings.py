@@ -288,6 +288,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "short_desc": service_data["presentation_resume"] or "",
         "slug": f"{service_data['source']}--{service_data['id']}",
         "source": service_data["source"],
+        "spending_time_total_hours": None,
+        "spending_time_precision": None,
         "status": ServiceStatus.PUBLISHED.value,
         "structure": service_data["structure_id"],
         "structure_info": {

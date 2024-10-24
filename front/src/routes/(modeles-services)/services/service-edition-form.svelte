@@ -13,6 +13,7 @@
   import FieldsDocuments from "../_common/fields-documents.svelte";
   import FieldsInclusionNumerique from "../_common/fields-inclusion-numerique.svelte";
   import FieldsModalities from "../_common/fields-modalities.svelte";
+  import FieldsParticipation from "$lib/components/specialized/services/fields-participation.svelte";
   import FieldsPerimeter from "../_common/fields-perimeter.svelte";
   import FieldsPeriodicity from "../_common/fields-periodicity.svelte";
   import FieldsPlace from "$lib/components/specialized/services/fields-place.svelte";
@@ -239,6 +240,8 @@
           <FieldsPerimeter bind:service {servicesOptions} />
 
           <FieldsPlace bind:service {structure} {servicesOptions} />
+
+          <FieldsParticipation bind:service />
 
           <FieldsContact bind:service />
         </div>

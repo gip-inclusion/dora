@@ -15,6 +15,7 @@
     "start": "node build",
     "preview": "vite preview --port 3000 --strictPort",
     "test": "vitest run",
+    "test:ui": "vitest --ui",
     "test:watch": "vitest",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --output human-verbose --threshold error",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -31,8 +32,10 @@
     "@nazka/map-gl-js-spiderfy": "^1.2.3",
     "@sveltejs/adapter-node": "^5.2.0",
     "@sveltejs/kit": "^2.5.18",
-    "@sveltejs/vite-plugin-svelte": "^3.1.1",
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@tailwindcss/typography": "^0.5.13",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/svelte": "^5.2.1",
     "@tiptap/core": "^2.5.8",
     "@tiptap/extension-link": "^2.5.8",
     "@tiptap/extension-placeholder": "^2.5.8",
@@ -41,6 +44,7 @@
     "@types/showdown": "^2.0.6",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
+    "@vitest/ui": "^2.0.5",
     "autoprefixer": "^10.4.19",
     "dayjs": "^1.11.12",
     "eslint": "^8.57.0",
@@ -49,6 +53,7 @@
     "hexoid": "^1.0.0",
     "husky": "^9.1.4",
     "insane": "^2.6.2",
+    "jsdom": "^25.0.0",
     "lint-staged": "^15.2.7",
     "maplibre-gl": "^4.5.0",
     "opening_hours": "^3.8.0",
@@ -67,7 +72,7 @@
     "tslib": "^2.6.3",
     "typescript": "^5.5.4",
     "vite": "^5.4.8",
-    "vitest": "^2.0.4",
+    "vitest": "^2.0.5",
     "wicg-inert": "^3.1.2",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
@@ -86,5 +91,8 @@
   },
   "dependencies": {
     "@sentry/sveltekit": "^7.119.1"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.21.2"
   }
 }

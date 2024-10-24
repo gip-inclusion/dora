@@ -365,6 +365,18 @@ export const serviceSchema: v.Schema = {
     default: false,
     rules: [v.isBool()],
   },
+  spendingTimeTotalHours: {
+    label: "Temps passé",
+    default: false,
+    rules: [v.isInteger()],
+  },
+  spendingTimePrecision: {
+    label: "Précision sur le temps passé",
+    default: "",
+    maxLength: 60,
+    post: [v.trim],
+    rules: [v.isString(), v.maxStrLength(60)],
+  },
 };
 
 export const inclusionNumeriqueSchema: v.Schema = {
@@ -442,6 +454,8 @@ export const draftSchema: v.Schema = {
   recurrence: serviceSchema.recurrence,
   suspensionDate: serviceSchema.suspensionDate,
   useInclusionNumeriqueScheme: serviceSchema.useInclusionNumeriqueScheme,
+  spendingTimeTotalHours: serviceSchema.spendingTimeTotalHours,
+  spendingTimePrecision: serviceSchema.spendingTimePrecision,
 };
 
 export const contribSchema: v.Schema = {
@@ -500,4 +514,6 @@ export const modelSchema: v.Schema = {
   onlineForm: serviceSchema.onlineForm,
   recurrence: serviceSchema.recurrence,
   suspensionDate: serviceSchema.suspensionDate,
+  spendingTimeTotalHours: serviceSchema.spendingTimeTotalHours,
+  spendingTimePrecision: serviceSchema.spendingTimePrecision,
 };

@@ -395,6 +395,8 @@ class ServiceAdminSerializer(ServiceSerializer):
             "short_desc",
             "slug",
             "structure",
+            "spending_time_total_hours",
+            "spending_time_precision",
             "subcategories_display",
         ]
         read_only_fields = [
@@ -422,6 +424,8 @@ class ServiceAdminSerializer(ServiceSerializer):
             "short_desc",
             "slug",
             "structure",
+            "spending_time_total_hours",
+            "spending_time_precision",
             "subcategories_display",
         ]
         lookup_field = "slug"
