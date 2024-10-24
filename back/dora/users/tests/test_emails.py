@@ -4,10 +4,12 @@ from django.core import mail
 from django.templatetags.l10n import localize
 from django.utils import timezone
 
+from dora.core.models import ModerationStatus
 from dora.core.test_utils import make_structure, make_user
 from dora.users.emails import (
     send_account_deletion_notification,
     send_invitation_reminder,
+    send_structure_awaiting_moderation,
     send_user_without_structure_notification,
 )
 
@@ -71,3 +73,23 @@ def test_send_user_without_structure_notification(deletion, subject):
     assert "MailsTransactionnels" in mail.outbox[0].body
     assert "InscritSansStructure" in mail.outbox[0].body
     assert "Nous avons accès à vos données à caractère personnel" in mail.outbox[0].body
+
+
+@pytest.mark.parametrize(
+    "moderation_status",
+    (ModerationStatus.NEED_NEW_MODERATION, ModerationStatus.NEED_INITIAL_MODERATION),
+)
+def test_send_structure_awaiting_moderation(moderation_status):
+    manager = make_user(is_manager=True, departments=["37"])
+    structure = make_structure(department="37", moderation_status=moderation_status)
+
+    send_structure_awaiting_moderation(manager)
+
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].to == [manager.email]
+    assert (
+        mail.outbox[0].subject
+        == "DORA - Vous avez des structures à modérer cette semaine"
+    )
+    assert structure.name in mail.outbox[0].body
+    assert "/admin/structures" in mail.outbox[0].body

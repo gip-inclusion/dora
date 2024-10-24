@@ -60,6 +60,9 @@ class UserManager(BaseUserManager):
             .prefetch_related("putative_membership")
         )
 
+    def managers(self):
+        return self.filter(is_manager=True)
+
 
 class User(AbstractBaseUser):
     ic_id = models.UUIDField(

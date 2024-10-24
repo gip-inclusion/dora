@@ -5,8 +5,10 @@ from django.utils import timezone
 
 from dora.notifications.enums import TaskType
 from dora.notifications.models import Notification
+from dora.structures.models import Structure
 from dora.users.emails import (
     send_account_deletion_notification,
+    send_structure_awaiting_moderation,
     send_user_without_structure_notification,
 )
 from dora.users.models import User
@@ -155,5 +157,45 @@ class UserAccountDeletionTask(Task):
             # à ce point, la notification est détruite en cascade
 
 
+class ManagerStructureModerationTask(Task):
+    """
+    Rappel des structures à modérer pour les gestionnaires de territoire.
+    Envoi d'un e-mail redirigeant vers leur espace de gestion avec le récapitulatif
+    des structures à modérer.
+    Déclenchée tous les mercredis matin.
+    """
+
+    @classmethod
+    def task_type(cls):
+        return TaskType.MANAGER_STRUCTURE_MODERATION
+
+    @classmethod
+    def candidates(cls):
+        # Les gestionnaires de territoire avec une ou plusieurs structures en attente de modération.
+        return User.objects.managers().filter(
+            # un ou plusieurs des départements du gestionnaire
+            # contiennent des structures en attente de modération (overlap = PgSQL `&&`)
+            departments__overlap=Structure.objects.awaiting_moderation()
+            .distinct("department")
+            .values_list("department", flat=True)
+        )
+
+    @classmethod
+    def should_trigger(cls, notification: Notification) -> bool:
+        now = timezone.now()
+
+        # tous les mercredi (et d'une semaine à l'autre pour ne pas la lancer plusieurs fois)
+        return now.isoweekday() == 3 and notification.updated_at.date() < now.date()
+
+    @classmethod
+    def process(cls, notification: Notification):
+        # Envoi d'un e-mail au gestionnaire avec le récapitulatif
+        # des structures en attente de modération.
+        # Ici pas de compteur de notification, la notification se répète tous les mercredis
+        # tant que le gestionnaire est défini comme candidat à la notification.
+        send_structure_awaiting_moderation(notification.owner_user)
+
+
 Task.register(UsersWithoutStructureTask)
 Task.register(UserAccountDeletionTask)
+Task.register(ManagerStructureModerationTask)

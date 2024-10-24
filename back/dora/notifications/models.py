@@ -57,7 +57,7 @@ class Notification(NotificationMixin):
         null=True, blank=True, verbose_name="date d'expiration"
     )
 
-    # propriétaires potentiels :
+    # Propriétaires potentiels :
     # chaque type de propriétaire de notification doit avoir :
     # - une définition de FK associée au modèle de notification
     # - nommée `owner_nom_du_modele_cible` (important)
@@ -93,7 +93,7 @@ class Notification(NotificationMixin):
         return f"ID:{self.pk}, TASK_TYPE:{self.task_type}, STATUS:{self.status}"
 
     class Meta:
-        # ajouter des contraintes pour chaque type de propriètaire possible
+        # ajouter des contraintes pour chaque type de propriétaire possible
         constraints = [
             models.CheckConstraint(
                 name="check_owner",
