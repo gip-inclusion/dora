@@ -112,7 +112,10 @@ di_api_patterns = [
 urlpatterns = [
     *private_api_patterns,
     *di_api_patterns,
+    # anciennes routes Inclusion-Connect (en attente de suppression)
     *oidc_patterns,
+    # nouvelles routes OIDC pour ProConnect
+    path("oidc/", include("mozilla_django_oidc.urls")),
 ]
 
 if settings.PROFILE:

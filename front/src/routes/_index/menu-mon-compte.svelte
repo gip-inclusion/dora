@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
+  import { OIDC_AUTH_BACKEND } from "$lib/env";
   import {
     accountCircleLineIcon,
     logoutBoxLineIcon,
@@ -47,10 +48,21 @@
     </span>Mes alertes
   </a>
 
-  <a href="/auth/deconnexion" class={aClass}>
-    <span class="mr-s10 inline-block h-s24 w-s24 fill-current" aria-hidden>
-      {@html logoutBoxLineIcon}
-    </span>
-    Déconnexion
-  </a>
+  <hr />
+
+  {#if OIDC_AUTH_BACKEND === "proconnect"}
+    <a href="/auth/pc-logout" class={aClass}>
+      <span class="mr-s10 inline-block h-s24 w-s24 fill-current" aria-hidden>
+        {@html logoutBoxLineIcon}
+      </span>
+      Déconnexion
+    </a>
+  {:else}
+    <a href="/auth/deconnexion" class={aClass}>
+      <span class="mr-s10 inline-block h-s24 w-s24 fill-current" aria-hidden>
+        {@html logoutBoxLineIcon}
+      </span>
+      Déconnexion
+    </a>
+  {/if}
 </DropdownMenu>
