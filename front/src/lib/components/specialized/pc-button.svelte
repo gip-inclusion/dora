@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getApiURL } from "$lib/utils/api";
+  import logoPC from "$lib/assets/proconnect/bouton_proconnect.svg";
 
   export let nextPage: string;
 
@@ -9,20 +10,28 @@
 
 <div class="text-center">
   <a class="mb-s24 inline-block" href={loginUrl}>
-    <div
-      class="proconnect-button mx-auto mt-s24 flex items-center justify-center rounded-full bg-france-blue p-s6 pr-s24 text-f16 text-white transition-colors hover:bg-[#2323FF]"
-    ></div>
+    <img src={logoPC} alt="" class="max-w-none" />
   </a>
 
   <div class="text-center">
     <a
       class="text-magenta-cta underline"
       target="_blank"
-      title="Ouverture dans une nouvelle fenêtre"
-      rel="noopener"
-      href="https://aide.dora.inclusion.beta.gouv.fr"
+      title="Aide DORA - ouverture dans une nouvelle fenêtre"
+      rel="noopener noreferrer"
+      href="https://aide.dora.inclusion.beta.gouv.fr/fr/category/inscription-et-gestion-du-compte-ha8m5b/"
     >
       Besoin d’aide&nbsp;? Contactez-nous
+    </a>
+    &nbsp;
+    <a
+      class="text-magenta-cta underline"
+      target="_blank"
+      title="Qu’est-ce que ProConnect ? nouvelle fenêtre"
+      rel="noopener noreferrer"
+      href="https://www.proconnect.gouv.fr/"
+    >
+      Qu'est que ProConnect&nbsp;?
     </a>
   </div>
 </div>
