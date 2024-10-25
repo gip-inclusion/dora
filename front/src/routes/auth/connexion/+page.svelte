@@ -64,7 +64,7 @@
                 <div class="mr-s8 inline-block h-s24 w-s24 fill-current">
                   {@html informationLineIcon}
                 </div>
-                <div>DORA passe à Inclusion Connect&nbsp!</div>
+                <div>DORA passe à Inclusion Connect&#8239;!</div>
               </h3>
               <p class="legend mb-s16 text-gray-text">
                 <strong>Si vous aviez un ancien compte DORA,</strong> vous pouvez
@@ -92,7 +92,7 @@
         {#if OIDC_AUTH_BACKEND === "proconnect"}
           <h3 class="text-center text-france-blue">
             <img src={logoProConnect} alt="ProConnect" class="mx-auto mb-s8" />
-            Pourquoi ProConnect&nbsp;?
+            Pourquoi ProConnect&#8239;?
           </h3>
           <div class="mt-s24 text-center">
             <p class="text-f14 font-bold">
