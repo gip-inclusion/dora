@@ -208,8 +208,8 @@ def oidc_logged_in(request):
     redirect_uri = f"{settings.FRONTEND_URL}/auth/pc-callback/{token}/"
 
     # gestion du next :
-    if next := request.GET.get("next"):
-        redirect_uri += f"?next={next}"
+    if request.GET.get("next"):
+        redirect_uri += "?" + request.GET.urlencode()
 
     # on redirige (pour l'instant) vers le front en faisant passer le token DRF
     return HttpResponseRedirect(redirect_to=redirect_uri)

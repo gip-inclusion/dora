@@ -7,6 +7,10 @@ export const load = ({ params, url }) => {
   const token = params.token;
   setToken(token);
 
-  // home pour l'instant
-  redirect(302, CANONICAL_URL + getNextPage(url));
+  const nextPage = getNextPage(url);
+  url.searchParams.delete("next");
+  const qsParams = url.searchParams.toString();
+  const uri = nextPage + (qsParams !== "" ? "&" + qsParams : "");
+
+  redirect(302, CANONICAL_URL + uri);
 };
