@@ -4,8 +4,7 @@
 
   export let nextPage: string;
 
-  const loginUrl =
-    getApiURL() + "/oidc/login/?next=" + encodeURIComponent(nextPage);
+  const loginUrl = `${getApiURL()}/oidc/login/?next=${encodeURIComponent(nextPage)}`;
 </script>
 
 <div class="text-center">
@@ -21,17 +20,17 @@
       rel="noopener noreferrer"
       href="https://aide.dora.inclusion.beta.gouv.fr/fr/category/inscription-et-gestion-du-compte-ha8m5b/"
     >
-      Besoin d’aide&nbsp;? Contactez-nous
+      Besoin d’aide&#8239;? Contactez-nous
     </a>
     &nbsp;
     <a
       class="text-magenta-cta underline"
       target="_blank"
-      title="Qu’est-ce que ProConnect ? nouvelle fenêtre"
+      title="Qu’est-ce que ProConnect&#8239;? nouvelle fenêtre"
       rel="noopener noreferrer"
       href="https://www.proconnect.gouv.fr/"
     >
-      Qu'est que ProConnect&nbsp;?
+      Qu'est que ProConnect&#8239;?
     </a>
   </div>
 </div>
