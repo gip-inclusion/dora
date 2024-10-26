@@ -6,6 +6,7 @@
   import { getApiURL } from "$lib/utils/api";
   import { userInfo } from "$lib/utils/auth";
   import ImproveDoraNotif from "./notif-improve.svelte";
+  import { OIDC_AUTH_BACKEND } from "$lib/env";
 </script>
 
 <EnsureLoggedIn>
@@ -23,14 +24,16 @@
           Mes informations
         </h2>
 
-        <LinkButton
-          label="Modifier vos informations"
-          to={`/auth/ic-update?next=${encodeURIComponent(
-            `${getApiURL()}/mon-compte`
-          )}`}
-          icon={externalLinkIcon}
-          iconOnRight
-        />
+        {#if OIDC_AUTH_BACKEND !== "proconnect"}
+          <LinkButton
+            label="Modifier vos informations"
+            to={`/auth/ic-update?next=${encodeURIComponent(
+              `${getApiURL()}/mon-compte`
+            )}`}
+            icon={externalLinkIcon}
+            iconOnRight
+          />
+        {/if}
       </div>
 
       <div class="flex flex-col gap-s36 p-s16 md:mb-s56 md:p-s36">
@@ -52,12 +55,23 @@
 
       <div class="bottom-s0 w-full pt-s12 md:absolute">
         <hr class="mx-s12 md:mx-s36" />
+
         <p class="m-s0 px-s16 py-s12 text-f14 text-gray-text md:px-s36">
-          Vous utilisez <a
-            class="underline"
-            href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/inclusion-connect-quesaco-y13f84/"
-            >Inclusion Connect</a
-          > pour vous connecter à DORA.
+          {#if OIDC_AUTH_BACKEND === "proconnect"}
+            Vous utilisez <a
+              class="underline"
+              href="https://agentconnect.crisp.help/fr/"
+              rel="noopener noreferrer"
+              target="_blank">ProConnect</a
+            > pour vous connecter à DORA.
+          {:else}
+            Vous utilisez <a
+              class="underline"
+              href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/inclusion-connect-quesaco-y13f84/"
+              rel="noopener noreferrer"
+              target="_blank">Inclusion Connect</a
+            > pour vous connecter à DORA.
+          {/if}
         </p>
       </div>
     </div>

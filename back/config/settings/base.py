@@ -26,6 +26,8 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 INSTALLED_APPS = [
     "django.contrib.gis",
     "django.contrib.auth",
+    # OIDC / ProConnect : doit être chargé après `django.contrib.auth`
+    "mozilla_django_oidc",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
@@ -64,7 +66,20 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "csp.middleware.CSPMiddleware",
+    # Rafraichissement du token ProConnect
+    "mozilla_django_oidc.middleware.SessionRefresh",
 ]
+
+# OIDC / ProConnect
+AUTHENTICATION_BACKENDS = [
+    # auth par défaut pour la partie admin :
+    "django.contrib.auth.backends.ModelBackend",
+    "dora.oidc.OIDCAuthenticationBackend",
+]
+
+# Permet de garder le comportement d'identification "standard" (e-mail/password)
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 
 ROOT_URLCONF = "config.urls"
 
@@ -287,7 +302,7 @@ NUM_DAYS_BEFORE_MANDATORY_SERVICE_UPDATE = 30 * 8
 # Modération :
 MATTERMOST_HOOK_KEY = os.getenv("MATTERMOST_HOOK_KEY")
 
-# INCLUSION-CONNECT / PRO-CONNECT
+# INCLUSION-CONNECT
 IC_ISSUER_ID = os.getenv("IC_ISSUER_ID")
 IC_AUTH_URL = os.getenv("IC_AUTH_URL")
 IC_TOKEN_URL = os.getenv("IC_TOKEN_URL")
@@ -296,7 +311,59 @@ IC_ACCOUNT_URL = os.getenv("IC_ACCOUNT_URL")
 IC_CLIENT_ID = os.getenv("IC_CLIENT_ID")
 IC_CLIENT_SECRET = os.getenv("IC_CLIENT_SECRET")
 
-# Recherches sauvagardées :
+# OIDC / PROCONNECT
+PC_CLIENT_ID = os.getenv("PC_CLIENT_ID")
+PC_CLIENT_SECRET = os.getenv("PC_CLIENT_SECRET")
+PC_DOMAIN = os.getenv("PC_DOMAIN", "fca.integ01.dev-agentconnect.fr")
+PC_ISSUER = os.getenv("PC_ISSUER", f"{PC_DOMAIN}/api/v2")
+PC_AUTHORIZE_PATH = os.getenv("PC_AUTHORIZE_PATH", "authorize")
+PC_TOKEN_PATH = os.getenv("PC_TOKEN_PATH", "token")
+PC_USERINFO_PATH = os.getenv("PC_USERINFO_PATH", "userinfo")
+
+# ProConnect à besoin de ce setting pour le logout
+FRONTEND_URL = os.getenv("FRONTEND_URL")
+
+# mozilla_django_oidc:
+OIDC_RP_CLIENT_ID = os.getenv("PC_CLIENT_ID")
+OIDC_RP_CLIENT_SECRET = os.getenv("PC_CLIENT_SECRET")
+OIDC_RP_SCOPES = "openid given_name usual_name email siret custom uid"
+
+# `mozilla_django_oidc` n'utilise pas de discovery / .well-known
+# on définit donc chaque endpoint
+OIDC_RP_SIGN_ALGO = "RS256"
+OIDC_OP_JWKS_ENDPOINT = f"https://{PC_ISSUER}/jwks"
+OIDC_OP_AUTHORIZATION_ENDPOINT = f"https://{PC_ISSUER}/authorize"
+OIDC_OP_TOKEN_ENDPOINT = f"https://{PC_ISSUER}/token"
+OIDC_OP_USER_ENDPOINT = f"https://{PC_ISSUER}/userinfo"
+OIDC_OP_LOGOUT_ENDPOINT = f"https://{PC_ISSUER}/session/end"
+
+# Les paramètres suivants servent à adapter la configuration OIDC
+# de `mozilla-django_oidc` pour pouvoir fonctionner dans le contexte
+# spécifique à DORA et ProConnect.
+
+# OIDC : intervalle de rafraichissement du token (4h)
+OIDC_RENEW_ID_TOKEN_EXPIRY_SECONDS = 4 * 60 * 60
+
+# OIDC : nécessaire pour la gestion de la fin de session coté ProConnect
+OIDC_STORE_ID_TOKEN = True
+ALLOW_LOGOUT_GET_METHOD = True
+
+# obligatoire pour ProConnect: à passer en paramètre de requête supplémentaire
+# lors de la première phase du flow OIDC
+OIDC_AUTH_REQUEST_EXTRA_PARAMS = {"acr_values": "eidas1"}
+
+# OIDC : redirection vers le front DORA en cas de succès de l'identification
+# necessaire pour la gestion de "l'URL suivant" (`next_url`)
+LOGIN_REDIRECT_URL = "/oidc/logged_in/"
+
+# OIDC : redirection vers l'acceuil du front DORA pour la déconnexion
+LOGOUT_REDIRECT_URL = FRONTEND_URL
+
+# OIDC : permet de préciser quelle est la class/vue en charge du callback dans le flow OIDC
+# (essentiellement pour la gestion du `next_url`).
+OIDC_CALLBACK_CLASS = "dora.oidc.views.CustomAuthorizationCallbackView"
+
+# Recherches sauvegardées :
 INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS = (
     os.getenv("INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS") == "true"
 )
@@ -353,7 +420,6 @@ EMAIL_SUBJECT_PREFIX = os.getenv("EMAIL_SUBJECT_PREFIX")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_USE_TLS = True
 EMAIL_DOMAIN = os.getenv("EMAIL_DOMAIN")
-FRONTEND_URL = os.getenv("FRONTEND_URL")
 SUPPORT_EMAIL = os.getenv("SUPPORT_EMAIL")
 
 SUPPORT_LINK = "https://aide.dora.inclusion.beta.gouv.fr"
