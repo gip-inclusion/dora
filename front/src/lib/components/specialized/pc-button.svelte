@@ -13,15 +13,17 @@
   </a>
 
   <div class="text-center">
-    <a
-      class="text-magenta-cta underline"
-      target="_blank"
-      title="Aide DORA - ouverture dans une nouvelle fenêtre"
-      rel="noopener noreferrer"
-      href="https://aide.dora.inclusion.beta.gouv.fr/fr/category/inscription-et-gestion-du-compte-ha8m5b/"
-    >
-      Besoin d’aide&#8239;? Contactez-nous
-    </a>
+    <slot name="pc-help-link">
+      <a
+        class="text-magenta-cta underline"
+        target="_blank"
+        title="Aide DORA - ouverture dans une nouvelle fenêtre"
+        rel="noopener noreferrer"
+        href="https://aide.dora.inclusion.beta.gouv.fr/fr/category/inscription-et-gestion-du-compte-ha8m5b/"
+      >
+        Besoin d’aide&#8239;? Contactez-nous
+      </a>
+    </slot>
     &nbsp;
     <a
       class="text-magenta-cta underline"
