@@ -17,6 +17,7 @@
   import IcButton from "$lib/components/specialized/ic-button.svelte";
   import PcButton from "$lib/components/specialized/pc-button.svelte";
   import { OIDC_AUTH_BACKEND } from "$lib/env";
+  import SendMagicLink from "./send-magic-link.svelte";
 
   function getLoginHint() {
     const loginHint = $page.url.searchParams.get("login_hint");
@@ -30,6 +31,8 @@
 
   const loginHint = getLoginHint();
   const nextPage = getNextPage($page.url);
+
+  let displayModal = false;
 </script>
 
 <CenteredGrid>
@@ -79,7 +82,20 @@
           </div>
 
           {#if OIDC_AUTH_BACKEND === "proconnect"}
-            <PcButton {nextPage}></PcButton>
+            <PcButton {nextPage}>
+                <a slot="pc-help-link"
+                  class="text-magenta-cta underline"
+                  target="_blank"
+                  title="Aide DORA - ouverture dans une nouvelle fenêtre"
+                  rel="noopener noreferrer"
+                  href="#"
+		  on:click|preventDefault={() => {
+			  displayModal = true;
+		  }}
+                >
+                  Besoin d’aide&#8239;? Contactez-nous
+                </a>
+            </PcButton>
           {:else}
             <IcButton {nextPage} {loginHint}></IcButton>
           {/if}
@@ -206,4 +222,7 @@
       </div>
     </div>
   </div>
+
+  <SendMagicLink bind:displayModal={displayModal} />
+
 </CenteredGrid>
