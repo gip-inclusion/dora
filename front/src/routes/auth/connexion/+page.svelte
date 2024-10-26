@@ -96,7 +96,7 @@
           </h3>
           <div class="mt-s24 text-center">
             <p class="text-f14 font-bold">
-              🧑🏻‍💻 Un compte unique pour tous vos services numériques !
+              🧑🏻‍💻 Un compte unique pour tous vos services numériques&#8239;!
             </p>
             <p class="text-f14">
               🔐 Accédez aux différents services partenaires avec le même
@@ -131,7 +131,7 @@
           </h2>
           <div class="mt-s24 text-center">
             <p class="text-f14 font-bold">
-              🧑🏻‍💻 Un compte unique pour tous vos services numériques !
+              🧑🏻‍💻 Un compte unique pour tous vos services numériques&#8239;!
             </p>
             <p class="text-f14">
               🔐 Accédez aux différents services partenaires avec le même

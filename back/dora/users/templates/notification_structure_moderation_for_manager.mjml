@@ -1,0 +1,26 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}Connectez-cous à votre tableau de bord gestionnaire{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+  <p>
+    {{ structures|length }} structure(s) sont à modérer sur votre tableau de bord gestionnaire.
+  </p>
+  <p>Pour rappel, la modération permet de s’assurer de la bonne qualité de l’offre d’insertion référencée sur votre territoire.</p>
+  <p>Merci de vérifier que ces structures ont bien leur place sur Dora et que les administrateurs auto-déclarés en sont bien membres (le format du mail étant un bon indicateur).</p>
+  <p>Les structures en attente de modération :
+    <ul>
+      {% for structure in structures %}
+        <li>{{ structure }}</li>
+      {% endfor %}
+    </ul>
+  </p>
+{% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ cta_link }}">MODÉRER les structures</mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}
