@@ -184,7 +184,8 @@ def _get_di_results(
     raw_di_results = [
         result
         for result in raw_di_results
-        if not any(
+        if result["service"]["thematiques"] is None
+        or not any(
             thematique in result["service"]["thematiques"]
             for thematique in EXCLUDED_DI_SERVICES_THEMATIQUES
         )
