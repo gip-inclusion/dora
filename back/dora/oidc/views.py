@@ -234,7 +234,14 @@ def oidc_pre_logout(request):
         logout_url = furl(settings.OIDC_OP_LOGOUT_ENDPOINT, args=params)
         return HttpResponseRedirect(redirect_to=logout_url.url)
 
-    raise SuspiciousOperation("Tentative de déconnexion avec un token incorrect")
+    # si il n'y a pas de token présent en session,
+    # il est aussi possible que la session soit active suite à une connexion
+    # via "magic link"
+    if request.session.get(settings.SESAME_SESSION_NAME):
+        return HttpResponseRedirect(redirect_to=reverse("oidc_logout"))
+
+    # Sinon
+    raise SuspiciousOperation("Tentative de déconnexion sans token ou lien magique")
 
 
 class CustomAuthorizationCallbackView(OIDCAuthenticationCallbackView):
@@ -283,7 +290,7 @@ class CustomLogoutView(OIDCLogoutView):
         if logout_state := request.session.pop("logout_state", None):
             if request.GET.get("state") != logout_state:
                 raise SuspiciousOperation("La vérification de la déconnexion a échoué")
-        else:
+        elif not request.session.get(settings.SESAME_SESSION_NAME):
             raise SuspiciousOperation("Vérification de la déconnexion impossible")
 
         return super().post(request)
