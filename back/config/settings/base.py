@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "dora.stats",
     "dora.notifications",
     "dora.logs",
+    "dora.auth_links",
 ]
 
 MIDDLEWARE = [
@@ -70,11 +71,14 @@ MIDDLEWARE = [
     "mozilla_django_oidc.middleware.SessionRefresh",
 ]
 
-# OIDC / ProConnect
+# OIDC / ProConnect / Sesame
 AUTHENTICATION_BACKENDS = [
     # auth par défaut pour la partie admin :
     "django.contrib.auth.backends.ModelBackend",
+    # OIDC / ProConnect
     "dora.oidc.OIDCAuthenticationBackend",
+    # connexion par "lien magique"
+    "sesame.backends.ModelBackend",
 ]
 
 # Permet de garder le comportement d'identification "standard" (e-mail/password)
@@ -549,3 +553,13 @@ ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
 # Profiling (Silk) :
 # Doit être explicitement activé (via env var)
 PROFILE = False
+
+# Sesame (liens magiques) :
+# Nom du token
+SESAME_TOKEN_NAME = "dora_link"
+# Durée de validité des tokens (secondes)
+SESAME_MAX_AGE = 5 * 60
+# Les liens ne sont valides qu'une fois
+SESAME_ONE_TIME = True
+# Nom de la variable de session indiquant une connexion via sesame
+SESAME_SESSION_NAME = "sesame_magic_link"
