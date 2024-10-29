@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
   import { page } from "$app/stores";
 
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
@@ -40,6 +42,17 @@
     }),
     {} as Filters
   );
+
+  onMount(() => {
+    // Vérifie si aucun filtre n'est sélectionné
+    const noFilterSelected = Object.values(filters).every(
+      (filter) => filter.length === 0
+    );
+    // Si aucun filtre n'est sélectionné, on présélectionne le filtre de lieu d'accueil « En présentiel »
+    if (noFilterSelected) {
+      filters.locationKinds.push("en-presentiel");
+    }
+  });
 
   function resetFilters() {
     filters = { kinds: [], fundedBy: [], feeConditions: [], locationKinds: [] };
