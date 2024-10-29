@@ -1,6 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
-  import { ENVIRONMENT, FLAG_STRIKING } from "$lib/env";
+  import { ENVIRONMENT, WARNING_BANNER_ENABLED } from "$lib/env";
   import LogoDORA from "$lib/assets/logos/logo-dora.svg";
   import LogoRepublique from "$lib/assets/logos/logo-rf.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
@@ -49,13 +49,10 @@
     <SubMenu />
   </CenteredGrid>
 
-  {#if FLAG_STRIKING}
-    <div
-      class="absolute left-s0 right-s0 top-s80 mx-auto hidden max-w-2xl border-spacing-s0 rounded border border-gray-03 bg-white bg-opacity-90 p-s8 text-center font-bold lg:block"
-    >
-      Une partie de l’équipe est en grève pour marquer son opposition à la
-      réforme des retraites. Le site reste fonctionnel, mais le support n’est
-      pas assuré aujourd’hui.
+  {#if WARNING_BANNER_ENABLED}
+    <div class="bg-service-orange p-s8 text-center font-bold">
+      Nous sommes actuellement en cours de migration vers ProConnect. Pendant ce
+      temps, la création de compte n’est pas disponible.
     </div>
   {/if}
 </header>
