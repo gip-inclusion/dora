@@ -17,7 +17,9 @@
   export let fixedItemsValues: string[] = [];
 
   // function to use to get all items (alternative to providing items)
-  export let searchFunction = null;
+  export let searchFunction:
+    | ((searchText: string) => Promise<any[]>)
+    | undefined = undefined;
 
   export let textCleanFunction = function (userEnteredText) {
     return userEnteredText;

@@ -38,6 +38,7 @@
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
+  export let managedStructureSearchMode = false;
   export let structures: ShortStructure[];
   export let structure: ShortStructure | undefined;
   export let model: Model | undefined;
@@ -165,13 +166,14 @@
       </div>
     {/if}
 
-    {#if structures.length}
+    {#if managedStructureSearchMode || structures.length}
       <div class="lg:w-2/3">
         <FieldsStructure
           bind:structure
           bind:service
           bind:servicesOptions
           bind:model
+          {managedStructureSearchMode}
           {structures}
         />
       </div>
