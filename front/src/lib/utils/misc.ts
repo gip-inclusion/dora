@@ -217,3 +217,25 @@ export function clickOutside(node: HTMLElement) {
     },
   };
 }
+
+// Helper type pour aplatir les promesses
+type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+
+export function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  delay = 300
+): (...args: Parameters<T>) => Promise<Awaited<ReturnType<T>>> {
+  let timeoutId: ReturnType<typeof setTimeout>;
+
+  return (...args: Parameters<T>) => {
+    return new Promise<Awaited<ReturnType<T>>>((resolve) => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      } // Réinitialiser le timeout s'il existe déjà
+      timeoutId = setTimeout(() => {
+        const result = func(...args);
+        resolve(result); // Résout avec le résultat, qui peut être une promesse ou une valeur simple
+      }, delay);
+    });
+  };
+}
