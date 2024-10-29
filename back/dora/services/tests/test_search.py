@@ -128,3 +128,52 @@ def test_search_services_excludes_some_action_logement_results(api_client):
         assert (
             len(response.data["services"]) == 1
         ), "un seul service devrait être retourné"
+
+
+def test_search_services_includes_thematiques_empty_list(api_client):
+    # Un service service DI ayant le champ thematiques avec une liste vide doit être retourné
+
+    # le paramètre `city` est nécessaire a minima
+    city = baker.make("City")
+
+    with mock.patch("dora.data_inclusion.di_client_factory") as mock_di_client_factory:
+        di_client = FakeDataInclusionClient()
+        service = make_di_service_data(
+            thematiques=[]
+        )
+        di_client.services.append(service)
+
+        mock_di_client_factory.return_value = di_client
+
+        response = api_client.get(f"/search/?city={city.code}")
+
+        assert response.status_code == 200
+
+        assert (
+            len(response.data["services"]) == 1
+        ), "un service devrait être retourné"
+
+
+
+def test_search_services_includes_thematiques_null(api_client):
+    # Un service service DI ayant le champ thematiques à null doit être retourné
+
+    # le paramètre `city` est nécessaire a minima
+    city = baker.make("City")
+
+    with mock.patch("dora.data_inclusion.di_client_factory") as mock_di_client_factory:
+        di_client = FakeDataInclusionClient()
+        service = make_di_service_data(
+            thematiques=None
+        )
+        di_client.services.append(service)
+
+        mock_di_client_factory.return_value = di_client
+
+        response = api_client.get(f"/search/?city={city.code}")
+
+        assert response.status_code == 200
+
+        assert (
+            len(response.data["services"]) == 1
+        ), "un service devrait être retourné"
