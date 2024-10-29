@@ -179,6 +179,16 @@ class StructureManager(models.Manager):
         # pas de membres enregistrés, ni en attente d'enregistrement
         return self.filter(membership=None, putative_membership=None)
 
+    def awaiting_moderation(self):
+        # structures ayant besoin de modération :
+        # essentiellement pour les gestionnaires
+        return self.filter(
+            moderation_status__in=[
+                ModerationStatus.NEED_NEW_MODERATION,
+                ModerationStatus.NEED_INITIAL_MODERATION,
+            ]
+        )
+
 
 class Structure(ModerationMixin, models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

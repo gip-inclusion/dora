@@ -1,0 +1,24 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}Vous avez demandé un lien de connexion sur DORA{% endblock %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+  <p>
+    Vous avez demandé un lien de connexion automatique pour DORA.
+  </p>
+  <p>
+    Ce lien vous permet de vous connecter directement à DORA si vous possédiez un compte sur Inclusion Connect.
+  </p>
+  <p>Il est valide pendant <strong>5 minutes</strong> et <strong>à usage unique</strong>.</p>
+  <p>Cliquez sur le bouton ci-dessous pour vous connecter à DORA :</p>
+{% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ magic_link }}">Connexion à mon espace sur DORA</mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}
