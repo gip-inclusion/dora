@@ -334,7 +334,7 @@ OIDC_RP_SCOPES = "openid given_name usual_name email siret custom uid"
 
 # `mozilla_django_oidc` n'utilise pas de discovery / .well-known
 # on définit donc chaque endpoint
-OIDC_RP_SIGN_ALGO = "RS256"
+OIDC_RP_SIGN_ALGO = os.getenv("OIDC_RP_SIGN_ALGO", "RS256")
 OIDC_OP_JWKS_ENDPOINT = f"https://{PC_ISSUER}/jwks"
 OIDC_OP_AUTHORIZATION_ENDPOINT = f"https://{PC_ISSUER}/authorize"
 OIDC_OP_TOKEN_ENDPOINT = f"https://{PC_ISSUER}/token"
