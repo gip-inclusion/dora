@@ -52,6 +52,14 @@ pip install -r requirements/dev.txt
 ./manage.py migrate
 ```
 
+Pour que l’application soit utilisable, il faut _a minima_ importer les données géographiques :
+
+```bash
+./manage.py import_admin_express
+```
+
+Mais pour avoir un jeu de données complet, il est plus simple d’importer la base de _staging_ entière.
+
 ## Problèmes avec GeoDjango
 
 GeoDjango a besoin des _packages_ `GEOS` et `GDAL` pour fonctionner.
