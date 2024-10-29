@@ -1,6 +1,6 @@
 <script lang="ts">
   import { browser } from "$app/environment";
-  import { ENVIRONMENT, WARNING_BANNER_ENABLED } from "$lib/env";
+  import { ENVIRONMENT, WARNING_BANNER } from "$lib/env";
   import LogoDORA from "$lib/assets/logos/logo-dora.svg";
   import LogoRepublique from "$lib/assets/logos/logo-rf.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
@@ -49,10 +49,9 @@
     <SubMenu />
   </CenteredGrid>
 
-  {#if WARNING_BANNER_ENABLED}
+  {#if WARNING_BANNER}
     <div class="bg-service-orange p-s8 text-center font-bold">
-      Nous sommes actuellement en cours de migration vers ProConnect. Pendant ce
-      temps, la création de compte n’est pas disponible.
+      {WARNING_BANNER}
     </div>
   {/if}
 </header>
