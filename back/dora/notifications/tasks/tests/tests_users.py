@@ -337,9 +337,9 @@ def test_simpler_manager_structure_moderation_task_should_trigger(
         )
         n.save()
 
-    assert not manager_structure_moderation_task.should_trigger(
-        n
-    ), "Il n'y pas de structure à modérer : pas de déclenchement attendu"
+        assert not manager_structure_moderation_task.should_trigger(
+            n
+        ), "Il n'y pas de structure à modérer : pas de déclenchement attendu"
 
     # création d'une structure à modérer
     make_structure(department="37", moderation_status=moderation_status)
