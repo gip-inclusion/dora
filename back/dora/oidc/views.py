@@ -234,14 +234,17 @@ def oidc_pre_logout(request):
         logout_url = furl(settings.OIDC_OP_LOGOUT_ENDPOINT, args=params)
         return HttpResponseRedirect(redirect_to=logout_url.url)
 
-    # si il n'y a pas de token présent en session,
+    # Si il n'y a pas de token OIDC présent en session,
     # il est aussi possible que la session soit active suite à une connexion
-    # via "magic link"
-    if request.session.get(settings.SESAME_SESSION_NAME):
-        return HttpResponseRedirect(redirect_to=reverse("oidc_logout"))
+    # via "magic link", auquel cas un autre token est présent.
+    if not request.session.get(settings.SESAME_SESSION_NAME):
+        # Si il ne s'agit pas d'une connexion 'sesame', il s'agit d'une déconnexion
+        # d'un utilisateur connecté via Inclusion Connect.
+        # Ce cas disparaitra progressivement.
+        logging.warning("Tentative de déconnexion sans token ou lien magique (IC?)")
 
-    # Sinon
-    raise SuspiciousOperation("Tentative de déconnexion sans token ou lien magique")
+    # Dans tous les cas, effacement de la session Django :
+    return HttpResponseRedirect(redirect_to=reverse("oidc_logout"))
 
 
 class CustomAuthorizationCallbackView(OIDCAuthenticationCallbackView):
