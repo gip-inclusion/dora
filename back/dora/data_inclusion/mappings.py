@@ -257,6 +257,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "forms": None,
         "forms_info": None,
         "full_desc": service_data["presentation_detail"] or "",
+        "funding_labels": [],
+        "funding_labels_display": [],
         "geom": None,
         "has_already_been_unpublished": None,
         "is_available": True,
