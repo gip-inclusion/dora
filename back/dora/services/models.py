@@ -122,6 +122,12 @@ class ServiceKind(EnumModel):
         verbose_name_plural = "Types de service"
 
 
+class FundingLabel(EnumModel):
+    class Meta:
+        verbose_name = "Label de financement"
+        verbose_name_plural = "Labels de financement"
+
+
 class BeneficiaryAccessMode(EnumModel):
     class Meta:
         verbose_name = "Mode d'orientation bénéficiaire"
