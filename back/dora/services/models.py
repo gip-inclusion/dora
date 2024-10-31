@@ -252,6 +252,12 @@ class Service(ModerationMixin, models.Model):
         blank=True,
     )
 
+    funding_labels = models.ManyToManyField(
+        FundingLabel,
+        verbose_name="Labels de financement",
+        blank=True,
+    )
+
     ############
     # Conditions
 
