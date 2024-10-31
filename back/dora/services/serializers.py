@@ -22,6 +22,7 @@ from .models import (
     CoachOrientationMode,
     ConcernedPublic,
     Credential,
+    FundingLabel,
     LocationKind,
     Requirement,
     SavedSearch,
@@ -166,6 +167,15 @@ class ServiceSerializer(serializers.ModelSerializer):
     subcategories_display = serializers.SlugRelatedField(
         source="subcategories", slug_field="label", many=True, read_only=True
     )
+    funding_labels = serializers.SlugRelatedField(
+        slug_field="value",
+        queryset=FundingLabel.objects.all(),
+        many=True,
+        required=False,
+    )
+    funding_labels_display = serializers.SlugRelatedField(
+        source="funding_labels", slug_field="label", many=True, read_only=True
+    )
     access_conditions = CreatablePrimaryKeyRelatedField(
         many=True,
         queryset=AccessCondition.objects.all(),
@@ -290,6 +300,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             "forms",
             "forms_info",
             "full_desc",
+            "funding_labels",
+            "funding_labels_display",
             "geom",
             "has_already_been_unpublished",
             "is_available",
