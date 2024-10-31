@@ -182,3 +182,40 @@ class User(AbstractBaseUser):
         if self.first_name and self.last_name:
             return f"{self.first_name[0]}. {self.last_name}"
         return self.email.split("@")[0]
+
+    def should_join_structure(
+        self, siret: str | None = None, safir: str | None = None
+    ) -> dict:
+        # Pour ProConnect :
+        # on cherche à savoir si l'utilisateur est déjà rattaché à l'agence FT ou à la structure donnée.
+        # Si on ne trouve aucune invitation ou rattachement, on lui proposera un rattachement lors de
+        # la redirection en fin d'identification OIDC.
+
+        if not (safir or siret):
+            raise Exception("Aucun SIRET ou SAFIR fourni")
+
+        # Dans le cas d'un SAFIR (prioritaire) :
+        if safir:
+            # on vérifie si l'utilisateur est membre ou en attente d'invitation sur l'agence FT
+            test_safir = (
+                self.putative_membership.filter(structure__code_safir_pe=safir)
+                .select_related("structure")
+                .exists()
+                or self.membership.filter(structure__code_safir_pe=safir)
+                .select_related("structure")
+                .exists()
+            )
+            return {} if test_safir else {"safir": safir}
+
+        # Dans le cas d'un SIRET :
+        if siret:
+            # on vérifie si l'utilisateur est membre ou en attente d'invitation sur la structure
+            test_siret = (
+                self.putative_membership.filter(structure__siret=siret)
+                .select_related("structure")
+                .exists()
+                or self.membership.filter(structure__siret=siret)
+                .select_related("structure")
+                .exists()
+            )
+            return {} if test_siret else {"siret": siret}
