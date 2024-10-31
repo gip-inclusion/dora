@@ -17,6 +17,13 @@ class OIDCError(Exception):
 
 
 class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # On stocke ces informations pendant la vérification des claims
+        self.user_safir: str | None = None
+        self.user_siret: str | None = None
+
     def get_userinfo(self, access_token, id_token, payload):
         # Surcharge de la récupération des informations utilisateur:
         # le décodage JSON du contenu JWT pose problème avec ProConnect
@@ -42,6 +49,27 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
 
     # Pas nécessaire de surcharger `get_or_create_user` puisque sur DORA,
     # les utilisateurs ont un e-mail unique qui leur sert de `username`.
+
+    def authenticate(self, request, **kwargs):
+        result = super().authenticate(request, **kwargs)
+        # à ce point, il est encore possible d'accéder à la session
+        # et d'y stocker des informations complémentaires concernant l'utilisateur
+        # ici : SIRET et/ou SAFIR
+        if self.request and (self.user_safir or self.user_siret):
+            self.request.session["_siret_safir"] = {
+                "siret": self.user_siret,
+                "safir": self.user_safir,
+            }
+        return result
+
+    def verify_claims(self, claims):
+        # Vérification des claims pour extraire et stocker SIRET et SAFIR
+        if "custom" in claims:
+            self.user_safir = claims["custom"].get("structureTravail")
+
+        self.user_siret = claims.get("siret")
+
+        return super().verify_claims(claims)
 
     def create_user(self, claims):
         # on peut à la rigueur se passer de certains élements contenus dans les claims,
@@ -104,6 +132,8 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
         return user
 
     def get_user(self, user_id):
+        # simplement surchargé pour ajout du token DRF
+        # note: DRF devrait être déprécié pour utiliser un autre type d'identification entre front et back.
         if user := super().get_user(user_id):
             self.get_or_create_drf_token(user)
             return user
@@ -111,13 +141,13 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
 
     def get_or_create_drf_token(self, user_email):
         # Pour être temporairement compatible, on crée un token d'identification DRF lié au nouvel utilisateur.
+        # note: DRF devrait être déprécié pour utiliser un autre type d'identification entre front et back.
         if not user_email:
             raise SuspiciousOperation(
                 "Utilisateur non renseigné pour la création du token DRF"
             )
 
         user = User.objects.get(email=user_email)
-
         token, created = Token.objects.get_or_create(user=user)
 
         if created:
