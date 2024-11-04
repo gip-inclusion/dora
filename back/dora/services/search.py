@@ -313,7 +313,9 @@ def _get_dora_results(
         with_onsite,
     )
 
-    return SearchResultSerializer(results, many=True, context={"request": request}).data
+    return SearchResultSerializer(
+        results, many=True, context={"request": request}
+    ).data, {}
 
 
 def search_services(
@@ -328,7 +330,7 @@ def search_services(
     di_client: Optional[data_inclusion.DataInclusionClient] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
-) -> list[dict]:
+) -> (list[dict], dict):
     """Search services from all available repositories.
 
     It always includes results from dora own databases.
@@ -339,7 +341,8 @@ def search_services(
     Note : this is the only point where di_client is "injected"
 
     Returns:
-        A list of search results by SearchResultSerializer.
+        - A list of search results by SearchResultSerializer.
+        - A metadata dictionary
     """
     di_results = (
         _get_di_results(
@@ -357,7 +360,7 @@ def search_services(
         else []
     )
 
-    dora_results = _get_dora_results(
+    dora_results, metadata = _get_dora_results(
         request=request,
         categories=categories,
         subcategories=subcategories,
@@ -371,4 +374,4 @@ def search_services(
     )
 
     all_results = [*dora_results, *di_results]
-    return _sort_services(all_results)
+    return _sort_services(all_results), metadata

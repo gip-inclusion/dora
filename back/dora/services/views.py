@@ -790,7 +790,7 @@ def search(request):
 
     di_client = data_inclusion.di_client_factory()
 
-    sorted_services = search_services(
+    sorted_services, metadata = search_services(
         request=request,
         di_client=di_client,
         city_code=city_code,
