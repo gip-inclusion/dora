@@ -800,6 +800,7 @@ class SearchResultSerializer(ServiceListSerializer):
             "diffusion_zone_type",
             "distance",
             "fee_condition",
+            "funding_labels",
             "is_orientable",
             "kinds",
             "location_kinds",
