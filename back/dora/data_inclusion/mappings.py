@@ -78,6 +78,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         "location_kinds": location_kinds,
         "kinds": kinds,
         "fee_condition": service_data["frais"][0] if service_data["frais"] else None,
+        "funding_labels": [],
         "modification_date": service_data["date_maj"],
         "name": service_data["nom"],
         "short_desc": service_data["presentation_resume"] or "",
