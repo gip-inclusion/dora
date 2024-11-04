@@ -13,6 +13,7 @@
   import type {
     Choice,
     FeeCondition,
+    FundingLabel,
     LocationKind,
     ServiceKind,
     ServicesOptions,
@@ -42,6 +43,7 @@
   export let kindIds: ServiceKind[] = [];
   export let feeConditions: FeeCondition[] = [];
   export let locationKinds: LocationKind[] = [];
+  export let fundingLabels: Array<FundingLabel["value"]> = [];
   export let initialSearch = false;
 
   let innerWidth;
@@ -59,6 +61,7 @@
     kindIds,
     feeConditions,
     locationKinds,
+    fundingLabels,
     lon,
     lat,
   });

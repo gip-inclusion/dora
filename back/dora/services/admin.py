@@ -10,6 +10,7 @@ from .models import (
     CoachOrientationMode,
     ConcernedPublic,
     Credential,
+    FundingLabel,
     LocationKind,
     Requirement,
     SavedSearch,
@@ -208,3 +209,4 @@ admin.site.register(ServiceCategory, EnumAdmin)
 admin.site.register(ServiceKind, EnumAdmin)
 admin.site.register(ServiceSubCategory, EnumAdmin)
 admin.site.register(ServiceSource, EnumAdmin)
+admin.site.register(FundingLabel, EnumAdmin)

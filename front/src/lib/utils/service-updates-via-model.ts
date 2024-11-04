@@ -13,7 +13,7 @@ function getModelNotices(): StructureModelNotice[] {
 
   try {
     return JSON.parse(data);
-  } catch (_err) {
+  } catch {
     return [];
   }
 }

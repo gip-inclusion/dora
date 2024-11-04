@@ -19,7 +19,8 @@ from dora.data_inclusion.constants import THEMATIQUES_MAPPING_DORA_TO_DI
 from dora.structures.models import Structure
 
 from .constants import EXCLUDED_DI_SERVICES_THEMATIQUES
-from .serializers import SearchResultSerializer
+from .models import FundingLabel
+from .serializers import FundingLabelSerializer, SearchResultSerializer
 from .utils import filter_services_by_city_code
 
 MAX_DISTANCE = 50
@@ -238,6 +239,7 @@ def _get_dora_results(
     kinds: Optional[list[str]] = None,
     fees: Optional[list[str]] = None,
     location_kinds: Optional[list[str]] = None,
+    funding_labels: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
 ):
@@ -252,6 +254,7 @@ def _get_dora_results(
             "location_kinds",
             "categories",
             "subcategories",
+            "funding_labels",
             "coach_orientation_modes",
             "beneficiaries_access_modes",
         )
@@ -273,6 +276,9 @@ def _get_dora_results(
 
     if location_kinds:
         services = services.filter(location_kinds__value__in=location_kinds)
+
+    if funding_labels:
+        services = services.filter(funding_labels__value__in=funding_labels)
 
     with_remote = not location_kinds or "a-distance" in location_kinds
     with_onsite = not location_kinds or "en-presentiel" in location_kinds
@@ -313,7 +319,13 @@ def _get_dora_results(
         with_onsite,
     )
 
-    return SearchResultSerializer(results, many=True, context={"request": request}).data
+    funding_labels_found = FundingLabel.objects.filter(service__in=results).distinct()
+
+    return SearchResultSerializer(
+        results, many=True, context={"request": request}
+    ).data, {
+        "funding_labels": FundingLabelSerializer(funding_labels_found, many=True).data
+    }
 
 
 def search_services(
@@ -325,10 +337,11 @@ def search_services(
     kinds: Optional[list[str]] = None,
     fees: Optional[list[str]] = None,
     location_kinds: Optional[list[str]] = None,
+    funding_labels: Optional[list[str]] = None,
     di_client: Optional[data_inclusion.DataInclusionClient] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
-) -> list[dict]:
+) -> (list[dict], dict):
     """Search services from all available repositories.
 
     It always includes results from dora own databases.
@@ -339,7 +352,8 @@ def search_services(
     Note : this is the only point where di_client is "injected"
 
     Returns:
-        A list of search results by SearchResultSerializer.
+        - A list of search results by SearchResultSerializer.
+        - A metadata dictionary
     """
     di_results = (
         _get_di_results(
@@ -357,7 +371,7 @@ def search_services(
         else []
     )
 
-    dora_results = _get_dora_results(
+    dora_results, metadata = _get_dora_results(
         request=request,
         categories=categories,
         subcategories=subcategories,
@@ -366,9 +380,10 @@ def search_services(
         kinds=kinds,
         fees=fees,
         location_kinds=location_kinds,
+        funding_labels=funding_labels,
         lat=lat,
         lon=lon,
     )
 
     all_results = [*dora_results, *di_results]
-    return _sort_services(all_results)
+    return _sort_services(all_results), metadata

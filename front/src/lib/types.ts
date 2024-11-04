@@ -1,3 +1,5 @@
+import type { FundingLabel } from "../routes/recherche/result-filters.svelte";
+
 export type AdminDivisionType =
   | "country"
   | "region"
@@ -306,6 +308,11 @@ export type BeneficiaryAccessModes =
   | "telephoner"
   | "autre";
 
+export interface FundingLabel {
+  value: string;
+  label: string;
+}
+
 export interface SearchQuery {
   categoryIds: string[];
   subCategoryIds: string[];
@@ -315,6 +322,7 @@ export interface SearchQuery {
   kindIds: ServiceKind[];
   feeConditions: FeeCondition[];
   locationKinds: LocationKind[];
+  fundingLabels: Array<FundingLabel["value"]>;
   lat?: number;
   lon?: number;
 }
@@ -335,6 +343,7 @@ export interface ServiceSearchResult {
   isOrientable?: boolean;
   coachOrientationModes?: string[];
   beneficiariesAccessModes?: string[];
+  fundingLabels: Array<FundingLabel>;
   modificationDate: string;
   name: string;
   shortDesc: string;
@@ -429,6 +438,8 @@ export interface Service {
   forms: string[];
   formsInfo: FileInfo[];
   fullDesc: string;
+  fundingLabels: Array<FundingLabel["value"]>;
+  fundingLabelsDisplay: Array<FundingLabel["label"]>;
   geom: Point;
   hasAlreadyBeenUnpublished: boolean;
   isAvailable: boolean;
@@ -530,6 +541,8 @@ export interface SavedSearch {
   feesDisplay: string[];
   locationKinds: LocationKind[];
   locationKindsDisplay: string[];
+  fundingLabels: FundingLabel["value"];
+  fundingLabelsDisplay: FundingLabel["label"];
   frequency: SavedSearchNotificationFrequency;
   newServicesCount?: number;
 }

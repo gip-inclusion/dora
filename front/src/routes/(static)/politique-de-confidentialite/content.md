@@ -48,13 +48,13 @@ Vous disposez :
 - D’un droit de rectification ;
 - D’un droit d’opposition.
 
-Pour les exercer, contactez-nous à : [dpo@numericite.eu](mailto:dpo@numericite.eu)
+Pour les exercer, contactez-nous à : [rgpd@inclusion.gouv.fr](mailto:rgpd@inclusion.gouv.fr)
 
 Par voie postale :
 
 GIP Plateforme de l’inclusion  
-127, Rue de Grenelle  
-75007 Paris 07
+6 Boulevard Saint-Denis
+75010 Paris
 
 Puisque ce sont des droits personnels, nous ne traiterons votre demande que si nous sommes en mesure de vous identifier. Dans le cas où nous ne parvenons pas à vous identifier, nous pouvons être amenés à vous demander une preuve de votre identité.
 

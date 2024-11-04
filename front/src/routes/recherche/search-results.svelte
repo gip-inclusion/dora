@@ -43,6 +43,7 @@
       kindIds: filters.kinds.sort(),
       feeConditions: filters.feeConditions.sort(),
       locationKinds: filters.locationKinds.sort(),
+      fundingLabels: filters.fundingLabels.sort(),
     });
 
     const userSavedSearches = $userInfo?.savedSearches || [];
@@ -81,6 +82,7 @@
       kinds: filters.kinds.sort(),
       fees: filters.feeConditions.sort(),
       locationKinds: filters.locationKinds.sort(),
+      fundingLabels: filters.fundingLabels.sort(),
     });
     await refreshUserInfo();
     creatingAlert = false;

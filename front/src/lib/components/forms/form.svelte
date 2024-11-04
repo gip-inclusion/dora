@@ -94,7 +94,7 @@
     let jsonResult;
     try {
       jsonResult = await result.json();
-    } catch (err) {
+    } catch {
       jsonResult = null;
     }
     return jsonResult;

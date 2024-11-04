@@ -2,7 +2,7 @@ import { browser } from "$app/environment";
 import { token } from "$lib/utils/auth";
 import { get } from "svelte/store";
 import { getApiURL } from "$lib/utils/api";
-import hexoid from "hexoid";
+import { hexoid } from "hexoid";
 import type { Service, Structure } from "$lib/types";
 
 const analyticsIdKey = "userHash";
@@ -125,6 +125,7 @@ export async function trackSearch(
   kinds,
   feeConditions,
   locationKinds,
+  fundingLabels,
   results
 ) {
   if (browser) {
@@ -150,6 +151,7 @@ export async function trackSearch(
       kinds,
       feeConditions,
       locationKinds,
+      fundingLabels,
     });
     const searchId = event && event.event;
     return searchId;

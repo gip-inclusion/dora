@@ -15,6 +15,7 @@ export async function saveSearch(
     | "kinds"
     | "fees"
     | "locationKinds"
+    | "fundingLabels"
   >
 ) {
   const url = `${getApiURL()}/saved-searches/`;
@@ -91,5 +92,6 @@ export function getSavedSearchQueryString(savedSearch: SavedSearch) {
     kindIds: savedSearch.kinds.sort(),
     feeConditions: savedSearch.fees.sort(),
     locationKinds: savedSearch.locationKinds.sort(),
+    fundingLabels: savedSearch.fundingLabels.sort(),
   });
 }

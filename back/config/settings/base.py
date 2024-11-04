@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "dora.stats",
     "dora.notifications",
     "dora.logs",
+    "dora.oidc",
     "dora.auth_links",
 ]
 
@@ -80,6 +81,12 @@ AUTHENTICATION_BACKENDS = [
     # connexion par "lien magique"
     "sesame.backends.ModelBackend",
 ]
+
+# Sessions :
+# https://docs.djangoproject.com/fr/4.2/topics/http/sessions/
+# La durée de vie de la session est de 12 heures par défaut
+# (identique à ProConnect)
+SESSION_COOKIE_AGE = 60 * 60 * 12  # 12 heures
 
 # Permet de garder le comportement d'identification "standard" (e-mail/password)
 ACCOUNT_EMAIL_REQUIRED = True

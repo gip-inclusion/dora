@@ -122,6 +122,12 @@ class ServiceKind(EnumModel):
         verbose_name_plural = "Types de service"
 
 
+class FundingLabel(EnumModel):
+    class Meta:
+        verbose_name = "Label de financement"
+        verbose_name_plural = "Labels de financement"
+
+
 class BeneficiaryAccessMode(EnumModel):
     class Meta:
         verbose_name = "Mode d'orientation bénéficiaire"
@@ -243,6 +249,12 @@ class Service(ModerationMixin, models.Model):
     subcategories = models.ManyToManyField(
         ServiceSubCategory,
         verbose_name="Sous-catégorie",
+        blank=True,
+    )
+
+    funding_labels = models.ManyToManyField(
+        FundingLabel,
+        verbose_name="Labels de financement",
         blank=True,
     )
 
@@ -665,6 +677,11 @@ class SavedSearch(models.Model):
         verbose_name="Lieu de déroulement",
         blank=True,
     )
+    funding_labels = models.ManyToManyField(
+        FundingLabel,
+        verbose_name="Labels de financement",
+        blank=True,
+    )
     frequency = models.CharField(
         max_length=10,
         choices=SavedSearchFrequency.choices,
@@ -706,13 +723,17 @@ class SavedSearch(models.Model):
         if self.location_kinds.exists():
             location_kinds = self.location_kinds.values_list("value", flat=True)
 
+        funding_labels = None
+        if self.funding_labels.exists():
+            funding_labels = self.funding_labels.values_list("value", flat=True)
+
         # Récupération des résultats de la recherche
         from .search import search_services
 
         city_code = arrdt_to_main_insee_code(self.city_code)
         city = get_object_or_404(City, pk=city_code)
 
-        results = search_services(
+        results, metadata = search_services(
             None,
             self.city_code,
             city,
@@ -721,6 +742,7 @@ class SavedSearch(models.Model):
             kinds,
             fees,
             location_kinds,
+            funding_labels,
             di_client,
         )
 

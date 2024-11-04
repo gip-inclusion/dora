@@ -22,6 +22,7 @@ from .models import (
     CoachOrientationMode,
     ConcernedPublic,
     Credential,
+    FundingLabel,
     LocationKind,
     Requirement,
     SavedSearch,
@@ -166,6 +167,15 @@ class ServiceSerializer(serializers.ModelSerializer):
     subcategories_display = serializers.SlugRelatedField(
         source="subcategories", slug_field="label", many=True, read_only=True
     )
+    funding_labels = serializers.SlugRelatedField(
+        slug_field="value",
+        queryset=FundingLabel.objects.all(),
+        many=True,
+        required=False,
+    )
+    funding_labels_display = serializers.SlugRelatedField(
+        source="funding_labels", slug_field="label", many=True, read_only=True
+    )
     access_conditions = CreatablePrimaryKeyRelatedField(
         many=True,
         queryset=AccessCondition.objects.all(),
@@ -290,6 +300,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             "forms",
             "forms_info",
             "full_desc",
+            "funding_labels",
+            "funding_labels_display",
             "geom",
             "has_already_been_unpublished",
             "is_available",
@@ -468,6 +480,15 @@ class ServiceModelSerializer(ServiceSerializer):
         max_length=140,
         required=False,
     )
+    funding_labels = serializers.SlugRelatedField(
+        slug_field="value",
+        queryset=FundingLabel.objects.all(),
+        many=True,
+        required=False,
+    )
+    funding_labels_display = serializers.SlugRelatedField(
+        source="funding_labels", slug_field="label", many=True, read_only=True
+    )
 
     class Meta:
         model = ServiceModel
@@ -498,6 +519,8 @@ class ServiceModelSerializer(ServiceSerializer):
             "fee_details",
             "forms",
             "forms_info",
+            "funding_labels",
+            "funding_labels_display",
             "full_desc",
             "is_cumulative",
             "kinds",
@@ -668,6 +691,15 @@ class SavedSearchSerializer(serializers.ModelSerializer):
     location_kinds_display = serializers.SlugRelatedField(
         source="location_kinds", slug_field="label", many=True, read_only=True
     )
+    funding_labels = serializers.SlugRelatedField(
+        slug_field="value",
+        queryset=FundingLabel.objects.all(),
+        many=True,
+        required=False,
+    )
+    funding_labels_display = serializers.SlugRelatedField(
+        source="funding_labels", slug_field="label", many=True, read_only=True
+    )
 
     new_services_count = serializers.SerializerMethodField()
 
@@ -689,6 +721,8 @@ class SavedSearchSerializer(serializers.ModelSerializer):
             "kinds_display",
             "location_kinds",
             "location_kinds_display",
+            "funding_labels",
+            "funding_labels_display",
             "new_services_count",
         ]
 
@@ -781,13 +815,17 @@ class SearchResultSerializer(ServiceListSerializer):
         fields = [
             "address1",
             "address2",
+            "beneficiaries_access_modes",
             "city",
+            "coach_orientation_modes",
             "coordinates",
             "diffusion_zone_type",
             "distance",
+            "fee_condition",
+            "funding_labels",
+            "is_orientable",
             "kinds",
             "location_kinds",
-            "fee_condition",
             "modification_date",
             "name",
             "postal_code",
@@ -795,11 +833,8 @@ class SearchResultSerializer(ServiceListSerializer):
             "short_desc",
             "slug",
             "status",
-            "structure_info",
             "structure",
-            "is_orientable",
-            "coach_orientation_modes",
-            "beneficiaries_access_modes",
+            "structure_info",
         ]
 
     def get_distance(self, obj):
@@ -808,3 +843,12 @@ class SearchResultSerializer(ServiceListSerializer):
     def get_coordinates(self, obj):
         if obj.geom:
             return (obj.geom.x, obj.geom.y)
+
+
+class FundingLabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FundingLabel
+        fields = [
+            "value",
+            "label",
+        ]
