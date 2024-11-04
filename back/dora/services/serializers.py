@@ -820,3 +820,12 @@ class SearchResultSerializer(ServiceListSerializer):
     def get_coordinates(self, obj):
         if obj.geom:
             return (obj.geom.x, obj.geom.y)
+
+
+class FundingLabelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FundingLabel
+        fields = [
+            "value",
+            "label",
+        ]
