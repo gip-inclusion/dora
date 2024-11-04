@@ -793,13 +793,16 @@ class SearchResultSerializer(ServiceListSerializer):
         fields = [
             "address1",
             "address2",
+            "beneficiaries_access_modes",
             "city",
+            "coach_orientation_modes",
             "coordinates",
             "diffusion_zone_type",
             "distance",
+            "fee_condition",
+            "is_orientable",
             "kinds",
             "location_kinds",
-            "fee_condition",
             "modification_date",
             "name",
             "postal_code",
@@ -807,11 +810,8 @@ class SearchResultSerializer(ServiceListSerializer):
             "short_desc",
             "slug",
             "status",
-            "structure_info",
             "structure",
-            "is_orientable",
-            "coach_orientation_modes",
-            "beneficiaries_access_modes",
+            "structure_info",
         ]
 
     def get_distance(self, obj):
