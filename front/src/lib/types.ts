@@ -1,3 +1,5 @@
+import type { FundingLabel } from "../routes/recherche/result-filters.svelte";
+
 export type AdminDivisionType =
   | "country"
   | "region"
@@ -435,6 +437,8 @@ export interface Service {
   forms: string[];
   formsInfo: FileInfo[];
   fullDesc: string;
+  fundingLabels: Array<FundingLabel["value"]>;
+  fundingLabelsDisplay: Array<FundingLabel["label"]>;
   geom: Point;
   hasAlreadyBeenUnpublished: boolean;
   isAvailable: boolean;
