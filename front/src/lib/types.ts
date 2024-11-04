@@ -306,6 +306,11 @@ export type BeneficiaryAccessModes =
   | "telephoner"
   | "autre";
 
+export interface FundingLabel {
+  value: string;
+  label: string;
+}
+
 export interface SearchQuery {
   categoryIds: string[];
   subCategoryIds: string[];
@@ -335,6 +340,7 @@ export interface ServiceSearchResult {
   isOrientable?: boolean;
   coachOrientationModes?: string[];
   beneficiariesAccessModes?: string[];
+  fundingLabels: Array<FundingLabel>;
   modificationDate: string;
   name: string;
   shortDesc: string;

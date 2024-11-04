@@ -22,6 +22,7 @@ async function getResults({
   lon,
 }: SearchQuery): Promise<{
   cityBounds: [number, number, number, number];
+  fundingLabels: Array<{value: string, label: string}>;
   services: ServiceSearchResult[];
 }> {
   const querystring = getQueryString({
@@ -71,7 +72,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   const lon = query.get("lon");
   const lat = query.get("lat");
 
-  const { cityBounds, services } = await getResults({
+  const { cityBounds, fundingLabels, services } = await getResults({
     // La priorité est donnée aux sous-catégories
     categoryIds: subCategoryIds.length ? [] : categoryIds,
     subCategoryIds,
@@ -116,6 +117,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     cityBounds,
     cityCode,
     cityLabel,
+    fundingLabels,
     label,
     lat,
     lon,
