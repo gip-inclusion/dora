@@ -253,6 +253,7 @@ def _get_dora_results(
             "location_kinds",
             "categories",
             "subcategories",
+            "funding_labels",
             "coach_orientation_modes",
             "beneficiaries_access_modes",
         )
