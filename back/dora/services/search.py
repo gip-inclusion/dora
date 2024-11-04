@@ -19,7 +19,8 @@ from dora.data_inclusion.constants import THEMATIQUES_MAPPING_DORA_TO_DI
 from dora.structures.models import Structure
 
 from .constants import EXCLUDED_DI_SERVICES_THEMATIQUES
-from .serializers import SearchResultSerializer
+from .models import FundingLabel
+from .serializers import FundingLabelSerializer, SearchResultSerializer
 from .utils import filter_services_by_city_code
 
 MAX_DISTANCE = 50
@@ -313,9 +314,11 @@ def _get_dora_results(
         with_onsite,
     )
 
+    funding_labels = FundingLabel.objects.filter(service__in=results).distinct()
+
     return SearchResultSerializer(
         results, many=True, context={"request": request}
-    ).data, {}
+    ).data, {"funding_labels": FundingLabelSerializer(funding_labels, many=True).data}
 
 
 def search_services(
