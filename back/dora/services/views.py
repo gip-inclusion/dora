@@ -804,7 +804,13 @@ def search(request):
         lon=lon,
     )
 
-    return Response({"city_bounds": city.geom.extent, "services": sorted_services})
+    return Response(
+        {
+            "city_bounds": city.geom.extent,
+            "funding_labels": metadata["funding_labels"],
+            "services": sorted_services,
+        }
+    )
 
 
 def share_service(request, service, is_di):
