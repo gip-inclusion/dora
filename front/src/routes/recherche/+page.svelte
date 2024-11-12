@@ -24,7 +24,7 @@
 
   const FILTER_KEY_TO_QUERY_PARAM = {
     kinds: "kinds",
-    fundingLabels: "fundingLabels",
+    fundingLabels: "funding",
     feeConditions: "fees",
     locationKinds: "locs",
   };
@@ -167,9 +167,9 @@
 </CenteredGrid>
 
 <CenteredGrid extraClass="m-auto">
-  <div class="lg:flex lg:flex-row lg:items-start lg:gap-s24">
+  <div class="lg:gap-s24 lg:flex lg:flex-row lg:items-start">
     <div
-      class="hidden flex-col gap-s32 rounded-ml border border-gray-02 p-s32 shadow-sm lg:flex lg:basis-1/3"
+      class="gap-s32 rounded-ml border-gray-02 p-s32 hidden flex-col border shadow-sm lg:flex lg:basis-1/3"
     >
       <MapViewButton
         {data}
@@ -209,7 +209,7 @@
         </div>
       {/if}
 
-      <div class="mb-s24 mt-s48 lg:flex lg:gap-s24">
+      <div class="mb-s24 mt-s48 lg:gap-s24 lg:flex">
         <ServiceSuggestionNotice />
       </div>
     </div>
