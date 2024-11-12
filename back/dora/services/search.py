@@ -239,6 +239,7 @@ def _get_dora_results(
     kinds: Optional[list[str]] = None,
     fees: Optional[list[str]] = None,
     location_kinds: Optional[list[str]] = None,
+    funding_labels: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
 ):
@@ -275,6 +276,9 @@ def _get_dora_results(
 
     if location_kinds:
         services = services.filter(location_kinds__value__in=location_kinds)
+
+    if funding_labels:
+        services = services.filter(funding_labels__value__in=funding_labels)
 
     with_remote = not location_kinds or "a-distance" in location_kinds
     with_onsite = not location_kinds or "en-presentiel" in location_kinds
@@ -315,11 +319,13 @@ def _get_dora_results(
         with_onsite,
     )
 
-    funding_labels = FundingLabel.objects.filter(service__in=results).distinct()
+    funding_labels_found = FundingLabel.objects.filter(service__in=results).distinct()
 
     return SearchResultSerializer(
         results, many=True, context={"request": request}
-    ).data, {"funding_labels": FundingLabelSerializer(funding_labels, many=True).data}
+    ).data, {
+        "funding_labels": FundingLabelSerializer(funding_labels_found, many=True).data
+    }
 
 
 def search_services(
@@ -331,6 +337,7 @@ def search_services(
     kinds: Optional[list[str]] = None,
     fees: Optional[list[str]] = None,
     location_kinds: Optional[list[str]] = None,
+    funding_labels: Optional[list[str]] = None,
     di_client: Optional[data_inclusion.DataInclusionClient] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
@@ -373,6 +380,7 @@ def search_services(
         kinds=kinds,
         fees=fees,
         location_kinds=location_kinds,
+        funding_labels=funding_labels,
         lat=lat,
         lon=lon,
     )
