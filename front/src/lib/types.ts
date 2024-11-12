@@ -540,6 +540,8 @@ export interface SavedSearch {
   feesDisplay: string[];
   locationKinds: LocationKind[];
   locationKindsDisplay: string[];
+  fundingLabels: FundingLabel["value"];
+  fundingLabelsDisplay: FundingLabel["label"];
   frequency: SavedSearchNotificationFrequency;
   newServicesCount?: number;
 }
