@@ -680,6 +680,15 @@ class SavedSearchSerializer(serializers.ModelSerializer):
     location_kinds_display = serializers.SlugRelatedField(
         source="location_kinds", slug_field="label", many=True, read_only=True
     )
+    funding_labels = serializers.SlugRelatedField(
+        slug_field="value",
+        queryset=FundingLabel.objects.all(),
+        many=True,
+        required=False,
+    )
+    funding_labels_display = serializers.SlugRelatedField(
+        source="funding_labels", slug_field="label", many=True, read_only=True
+    )
 
     new_services_count = serializers.SerializerMethodField()
 
