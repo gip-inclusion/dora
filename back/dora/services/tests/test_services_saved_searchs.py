@@ -26,7 +26,7 @@ SAVE_SEARCH_ARGS = {
     "city_label": "Poil (58)",
     "kinds": ["aide-financiere", "aide-materielle"],
     "fees": ["gratuit-sous-conditions", "payant"],
-    "prout": ["haha"],
+    "funding_labels": ["funding-label-1", "funding-label-2"],
 }
 
 
@@ -56,6 +56,16 @@ class ServiceSavedSearchTestCase(APITestCase):
             value=SAVE_SEARCH_ARGS.get("subcategories")[1],
             label="cat1--sub2",
         )
+        baker.make(
+            "FundingLabel",
+            value=SAVE_SEARCH_ARGS.get("funding_labels")[0],
+            label=SAVE_SEARCH_ARGS.get("funding_labels")[0],
+        )
+        baker.make(
+            "FundingLabel",
+            value=SAVE_SEARCH_ARGS.get("funding_labels")[1],
+            label=SAVE_SEARCH_ARGS.get("funding_labels")[1],
+        )
 
         self.assertEqual(SavedSearch.objects.all().count(), 0)
 
@@ -69,6 +79,10 @@ class ServiceSavedSearchTestCase(APITestCase):
         self.assertEqual(
             sorted(list(saved_search.subcategories.values_list("value", flat=True))),
             sorted(SAVE_SEARCH_ARGS.get("subcategories")),
+        )
+        self.assertEqual(
+            sorted(list(saved_search.funding_labels.values_list("value", flat=True))),
+            sorted(SAVE_SEARCH_ARGS.get("funding_labels")),
         )
 
     def test_delete_search(self):
