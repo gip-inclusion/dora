@@ -26,6 +26,7 @@ SAVE_SEARCH_ARGS = {
     "city_label": "Poil (58)",
     "kinds": ["aide-financiere", "aide-materielle"],
     "fees": ["gratuit-sous-conditions", "payant"],
+    "prout": ["haha"],
 }
 
 
@@ -63,6 +64,12 @@ class ServiceSavedSearchTestCase(APITestCase):
         response = self.client.post("/saved-searches/", SAVE_SEARCH_ARGS)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(SavedSearch.objects.all().count(), 1)
+
+        saved_search = SavedSearch.objects.first()
+        self.assertEqual(
+            sorted(list(saved_search.subcategories.values_list("value", flat=True))),
+            sorted(SAVE_SEARCH_ARGS.get("subcategories")),
+        )
 
     def test_delete_search(self):
         user = baker.make("users.User", is_valid=True)
