@@ -723,13 +723,17 @@ class SavedSearch(models.Model):
         if self.location_kinds.exists():
             location_kinds = self.location_kinds.values_list("value", flat=True)
 
+        funding_labels = None
+        if self.funding_labels.exists():
+            funding_labels = self.funding_labels.values_list("value", flat=True)
+
         # Récupération des résultats de la recherche
         from .search import search_services
 
         city_code = arrdt_to_main_insee_code(self.city_code)
         city = get_object_or_404(City, pk=city_code)
 
-        results = search_services(
+        results, metadata = search_services(
             None,
             self.city_code,
             city,
@@ -738,6 +742,7 @@ class SavedSearch(models.Model):
             kinds,
             fees,
             location_kinds,
+            funding_labels,
             di_client,
         )
 
