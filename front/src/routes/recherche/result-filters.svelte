@@ -1,6 +1,10 @@
 <script lang="ts" context="module">
-  import type { FeeCondition, FundingLabel, LocationKind, ServiceKind } from "$lib/types";
-
+  import type {
+    FeeCondition,
+    FundingLabel,
+    LocationKind,
+    ServiceKind,
+  } from "$lib/types";
 
   export interface Filters {
     kinds: Array<ServiceKind>;

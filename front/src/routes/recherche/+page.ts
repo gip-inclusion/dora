@@ -22,7 +22,7 @@ async function getResults({
   lon,
 }: SearchQuery): Promise<{
   cityBounds: [number, number, number, number];
-  fundingLabels: Array<{value: string, label: string}>;
+  fundingLabels: Array<{ value: string; label: string }>;
   services: ServiceSearchResult[];
 }> {
   const querystring = getQueryString({

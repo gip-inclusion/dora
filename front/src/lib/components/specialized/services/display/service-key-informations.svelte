@@ -35,7 +35,7 @@
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
         {@html euroFillIcon}
       </span>
-      Financé par&#8239;: {service.fundingLabelsDisplay.join(', ')}
+      Financé par&#8239;: {service.fundingLabelsDisplay.join(", ")}
     </div>
   {/if}
   {#if service.isCumulative != null}
