@@ -7,5 +7,5 @@ freezegun==1.5.1
 ruff==0.7.3
 pytest==8.3.3
 pytest-django==4.9.0
-sqlfluff==3.1.1
+sqlfluff==3.2.5
 requests-mock==1.12.1
