@@ -710,6 +710,8 @@ class SavedSearchSerializer(serializers.ModelSerializer):
             "kinds_display",
             "location_kinds",
             "location_kinds_display",
+            "funding_labels",
+            "funding_labels_display",
             "new_services_count",
         ]
 
