@@ -20,7 +20,7 @@
   import ResultFilter from "./result-filter.svelte";
 
   export let servicesOptions: ServicesOptions;
-  export let fundingLabels: Array<FundingLabel>;
+  export let foundFundingLabels: Array<FundingLabel>;
   export let filters: Filters;
 </script>
 
@@ -31,12 +31,12 @@
     choices={servicesOptions.kinds}
     bind:group={filters.kinds}
   />
-  {#key fundingLabels}
-    {#if fundingLabels.length > 0}
+  {#key foundFundingLabels}
+    {#if foundFundingLabels.length > 0}
       <ResultFilter
         id="fundingLabels"
         label="Financé par"
-        choices={fundingLabels}
+        choices={foundFundingLabels}
         bind:group={filters.fundingLabels}
       />
     {/if}

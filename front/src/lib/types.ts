@@ -322,6 +322,7 @@ export interface SearchQuery {
   kindIds: ServiceKind[];
   feeConditions: FeeCondition[];
   locationKinds: LocationKind[];
+  fundingLabels: Array<FundingLabel["value"]>;
   lat?: number;
   lon?: number;
 }

@@ -92,5 +92,6 @@ export function getSavedSearchQueryString(savedSearch: SavedSearch) {
     kindIds: savedSearch.kinds.sort(),
     feeConditions: savedSearch.fees.sort(),
     locationKinds: savedSearch.locationKinds.sort(),
+    fundingLabels: savedSearch.fundingLabels.sort(),
   });
 }
