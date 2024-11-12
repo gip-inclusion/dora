@@ -15,6 +15,7 @@ export async function saveSearch(
     | "kinds"
     | "fees"
     | "locationKinds"
+    | "fundingLabels"
   >
 ) {
   const url = `${getApiURL()}/saved-searches/`;
