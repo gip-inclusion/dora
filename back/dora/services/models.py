@@ -677,6 +677,11 @@ class SavedSearch(models.Model):
         verbose_name="Lieu de déroulement",
         blank=True,
     )
+    funding_labels = models.ManyToManyField(
+        FundingLabel,
+        verbose_name="Labels de financement",
+        blank=True,
+    )
     frequency = models.CharField(
         max_length=10,
         choices=SavedSearchFrequency.choices,
