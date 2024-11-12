@@ -37,6 +37,7 @@ from ..models import (
     AccessCondition,
     BeneficiaryAccessMode,
     CoachOrientationMode,
+    FundingLabel,
     LocationKind,
     Service,
     ServiceCategory,
@@ -253,6 +254,15 @@ class ServiceTestCase(APITestCase):
         response = self.client.patch(
             f"/services/{slug}/",
             {"fee_condition": fee_condition},
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_cant_update_funding_labels(self):
+        slug = self.my_service.slug
+        funding_labels = "cd-drome"
+        response = self.client.patch(
+            f"/services/{slug}/",
+            {"funding_labels": funding_labels},
         )
         self.assertEqual(response.status_code, 400)
 
@@ -1749,6 +1759,10 @@ class ServiceSearchTestCase(APITestCase):
         baker.make("ServiceSubCategory", value="cat2--autre", label="cat2--autre")
         baker.make("ServiceCategory", value="cat3", label="cat3")
 
+        baker.make("FundingLabel", value="funding-label-1", label="funding-label-1")
+        baker.make("FundingLabel", value="funding-label-2", label="funding-label-2")
+        baker.make("FundingLabel", value="funding-label-3", label="funding-label-3")
+
     def test_needs_city_code(self):
         make_service(
             status=ServiceStatus.PUBLISHED,
@@ -2061,6 +2075,94 @@ class ServiceSearchTestCase(APITestCase):
         )
         response = self.client.get(
             f"/search/?city={self.city1.code}&kinds={allowed_kinds[3].value}"
+        )
+        assert response.status_code == 200
+        assert len(response.data) == 3
+        assert len(response.data["services"]) == 0
+
+    def test_filter_without_funding(self):
+        allowed_funding_labels = FundingLabel.objects.all()
+        make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.COUNTRY,
+        )
+        make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.COUNTRY,
+            funding_labels=[allowed_funding_labels[0]],
+        )
+        make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.COUNTRY,
+            funding_labels=[allowed_funding_labels[1], allowed_funding_labels[2]],
+        )
+        response = self.client.get(f"/search/?city={self.city1.code}")
+        assert response.status_code == 200
+        assert len(response.data) == 3
+        assert len(response.data["services"]) == 3
+
+    def test_funding_one(self):
+        allowed_funding_labels = FundingLabel.objects.all()
+        service1 = make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.COUNTRY,
+            funding_labels=[allowed_funding_labels[0], allowed_funding_labels[1]],
+        )
+        make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.COUNTRY,
+            funding_labels=[allowed_funding_labels[2]],
+        )
+        response = self.client.get(
+            f"/search/?city={self.city1.code}&funding={allowed_funding_labels[0].value}"
+        )
+        assert response.status_code == 200
+        assert len(response.data) == 3
+        assert len(response.data["services"]) == 1
+        assert response.data["services"][0]["slug"] == service1.slug
+
+    def test_funding_several(self):
+        allowed_funding_labels = FundingLabel.objects.all()
+        service1 = make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.COUNTRY,
+            funding_labels=[allowed_funding_labels[0], allowed_funding_labels[1]],
+        )
+        service2 = make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.COUNTRY,
+            funding_labels=[allowed_funding_labels[1], allowed_funding_labels[2]],
+        )
+        make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.COUNTRY,
+            funding_labels=[allowed_funding_labels[3]],
+        )
+        response = self.client.get(
+            f"/search/?city={self.city1.code}&funding={allowed_funding_labels[1].value},{allowed_funding_labels[2].value}"
+        )
+        assert response.status_code == 200
+        assert len(response.data) == 3
+        assert len(response.data["services"]) == 2
+
+        response_slugs = [r["slug"] for r in response.data["services"]]
+        assert service1.slug in response_slugs
+        assert service2.slug in response_slugs
+
+    def test_funding_nomatch(self):
+        allowed_funding_labels = FundingLabel.objects.all()
+        make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.COUNTRY,
+            funding_labels=[allowed_funding_labels[0], allowed_funding_labels[1]],
+        )
+        make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.COUNTRY,
+            funding_labels=[allowed_funding_labels[1], allowed_funding_labels[2]],
+        )
+        response = self.client.get(
+            f"/search/?city={self.city1.code}&funding={allowed_funding_labels[3].value}"
         )
         assert response.status_code == 200
         assert len(response.data) == 3
