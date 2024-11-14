@@ -1,126 +1,29 @@
-from logging import getLogger
+# Hack :
+# `dora.oidc` n'était pas censé devenir une app à part entière,
+# mais pour ajouter des management command, une app Django correctement configurée est nécessaire.
+# Placer le backend d'identification dans l'`__init__.py` empêche l'initialisation de Django (cycle dans les apps),
+# il faut donc le renommer et le placer par exemple dans un module `backends`.
+# Mais ...
+# `mozilla-django-oidc` à la *très* mauvaise idée de stocker dans la session le nom de la classe de backend :
+# si on change l'emplacement de cette dernière, toutes les sessions actives auront en session un mauvais nom de classe,
+# et à chaque interaction avec OIDC, l'app plante lamentablement.
+# D'ou ce hack un peu crade qui permet de faire dynamiquement pointer `dora.oidc.OIDCAuthenticationBackend`
+# vers `dora.oidc.backends.OIDCAuthenticationBackend` (swizzle).
+# D'habitude on fait ça avec une variable `__all__`, mais le comportement n'est pas dynamique.
 
-import requests
-from django.core.exceptions import SuspiciousOperation
-from mozilla_django_oidc.auth import (
-    OIDCAuthenticationBackend as MozillaOIDCAuthenticationBackend,
-)
-from rest_framework.authtoken.models import Token
-
-from dora.users.models import User
-
-logger = getLogger(__name__)
+# FIXME:
+# une solution possible une fois que les connexions OIDC à ProConnect seront "battle-tested",
+# sera (en weekend par ex.):
+# - de virer ce hack,
+# - de le passer en prod,
+# - de virer toutes les sessions utilisateurs.
+# Les sessions seront recréés au fil de l'eau avec la bonne classe en session.
 
 
-class OIDCError(Exception):
-    """Exception générique pour les erreurs OIDC"""
+def __getattr__(name):
+    if name == "OIDCAuthenticationBackend":
+        from .backends import OIDCAuthenticationBackend  # noqa
 
+        return OIDCAuthenticationBackend
 
-class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
-    def get_userinfo(self, access_token, id_token, payload):
-        # Surcharge de la récupération des informations utilisateur:
-        # le décodage JSON du contenu JWT pose problème avec ProConnect
-        # qui le retourne en format binaire (content-type: application/jwt)
-        # d'où ce petit hack.
-        # Inspiré de : https://github.com/numerique-gouv/people/blob/b637774179d94cecb0ef2454d4762750a6a5e8c0/src/backend/core/authentication/backends.py#L47C1-L47C57
-        user_response = requests.get(
-            self.OIDC_OP_USER_ENDPOINT,
-            headers={"Authorization": "Bearer {0}".format(access_token)},
-            verify=self.get_settings("OIDC_VERIFY_SSL", True),
-            timeout=self.get_settings("OIDC_TIMEOUT", None),
-            proxies=self.get_settings("OIDC_PROXY", None),
-        )
-        user_response.raise_for_status()
-
-        try:
-            # cas où le type du token JWT est `application/json`
-            return user_response.json()
-        except requests.exceptions.JSONDecodeError:
-            # sinon, on présume qu'il s'agit d'un token JWT au format `application/jwt` (+...)
-            # comme c'est le cas pour ProConnect.
-            return self.verify_token(user_response.text)
-
-    # Pas nécessaire de surcharger `get_or_create_user` puisque sur DORA,
-    # les utilisateurs ont un e-mail unique qui leur sert de `username`.
-
-    def create_user(self, claims):
-        # on peut à la rigueur se passer de certains élements contenus dans les claims,
-        # mais pas de ceux-là :
-        email, sub = claims.get("email"), claims.get("sub")
-        if not email:
-            raise SuspiciousOperation(
-                "L'adresse e-mail n'est pas incluse dans les `claims`"
-            )
-
-        if not sub:
-            raise SuspiciousOperation(
-                "Le sujet (`sub`) n'est pas inclus dans les `claims`"
-            )
-
-        # L'utilisateur est créé sans mot de passe (aucune connexion à l'admin),
-        # et comme venant de ProConnect, on considère l'e-mail vérifié.
-        new_user = self.UserModel.objects.create_user(
-            email,
-            sub_pc=sub,
-            first_name=claims.get("given_name", "N/D"),
-            last_name=claims.get("usual_name", "N/D"),
-            is_valid=True,
-        )
-
-        # recupération du code SAFIR :
-        # même pour l'instant inutilisé, on pourra par la suite le passer au frontend
-        # pour rattachement direct à une agence France Travail
-        if custom := claims.get("custom"):
-            code_safir = custom.get("structureTravail")  # noqa F481
-            # TODO: une fois le code SAFIR récupéré, voir quoi en faire (redirection vers un rattachement)
-
-        # compatibilité :
-        # durant la phase de migration vers ProConnect on ne replace *que* le fournisseur d'identité,
-        # et on ne touche pas aux mécanismes d'identification entre back et front.
-        self.get_or_create_drf_token(new_user)
-
-        return new_user
-
-    def update_user(self, user, claims):
-        # L'utilisateur peut déjà étre inscrit à IC, dans ce cas on réutilise la plupart
-        # des informations déjà connues
-        sub = claims.get("sub")
-
-        if not sub:
-            raise SuspiciousOperation(
-                "Le sujet (`sub`) n'est pas inclu dans les `claims`"
-            )
-
-        if user.sub_pc and str(user.sub_pc) != sub:
-            raise SuspiciousOperation(
-                "Le sub enregistré est différent de celui fourni par ProConnect"
-            )
-
-        if not user.sub_pc:
-            # utilisateur existant, mais non-enregistré sur ProConnect
-            user.sub_pc = sub
-            user.save()
-
-        return user
-
-    def get_user(self, user_id):
-        if user := super().get_user(user_id):
-            self.get_or_create_drf_token(user)
-            return user
-        return None
-
-    def get_or_create_drf_token(self, user_email):
-        # Pour être temporairement compatible, on crée un token d'identification DRF lié au nouvel utilisateur.
-        if not user_email:
-            raise SuspiciousOperation(
-                "Utilisateur non renseigné pour la création du token DRF"
-            )
-
-        user = User.objects.get(email=user_email)
-
-        token, created = Token.objects.get_or_create(user=user)
-
-        if created:
-            logger.info("Initialisation du token DRF pour l'utilisateur %s", user_email)
-
-        return token
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")

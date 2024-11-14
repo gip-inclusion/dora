@@ -46,7 +46,7 @@
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.46.0",
-    "hexoid": "^1.0.0",
+    "hexoid": "^2.0.0",
     "husky": "^9.1.6",
     "insane": "^2.6.2",
     "lint-staged": "^15.2.10",
