@@ -136,4 +136,8 @@ export default [{
             parser: "@typescript-eslint/parser",
         },
     },
+
+    rules: {
+        "@typescript-eslint/no-unused-expressions": "off"
+    }
 }];
