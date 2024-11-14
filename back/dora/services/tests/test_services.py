@@ -2579,7 +2579,12 @@ class ServiceSyncTestCase(APITestCase):
             initial_checksum = model.sync_checksum
             if isinstance(getattr(model, field), bool):
                 new_val = not getattr(model, field)
-            elif field in ("online_form", "remote_url"):
+            elif field in (
+                "online_form",
+                "remote_url",
+                "beneficiaries_access_modes_external_form_link",
+                "coach_orientation_modes_external_form_link",
+            ):
                 new_val = "https://example.com"
             elif field == "forms":
                 new_val = ["https://example.com"]

@@ -67,7 +67,9 @@
       <div class="flex flex-wrap items-baseline gap-s6">
         {#if onSite}
           <div class="text-f16 text-france-blue">
-            {result.address1}{#if result.address2}, {result.address2}{/if},
+            {#if result.address1}
+              {result.address1}{#if result.address2}, {result.address2}{/if},
+            {/if}
             {result.postalCode}&nbsp;{result.city}
           </div>
           <!-- On n'affiche pas la distance lorsqu'elle n'est pas fournie ou

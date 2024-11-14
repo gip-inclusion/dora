@@ -5,6 +5,7 @@ import jwt
 import pytest
 from django.conf import settings
 from django.core.cache import cache
+from django.core.exceptions import SuspiciousOperation
 from django.db.utils import IntegrityError
 from requests_mock import Mocker
 
@@ -12,7 +13,6 @@ from dora.core.test_utils import make_structure, make_user
 from dora.structures.models import StructurePutativeMember
 from dora.users.models import User
 
-from . import OIDCError
 from .utils import updated_ic_user
 
 
@@ -75,7 +75,7 @@ def test_updated_user_member_of_structure(client_with_cache, settings):
     ic_user = make_user(ic_id=uuid.uuid4())
 
     # doit retourner une erreur si on essaye de modifier un utilisateur membre d'une structure
-    with pytest.raises(OIDCError):
+    with pytest.raises(SuspiciousOperation):
         _, _ = updated_ic_user(ic_user, member_user.email)
 
 

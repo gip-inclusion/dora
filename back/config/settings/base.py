@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "dora.stats",
     "dora.notifications",
     "dora.logs",
+    "dora.oidc",
     "dora.auth_links",
 ]
 
