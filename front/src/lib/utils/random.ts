@@ -1,4 +1,4 @@
-import hexoid from "hexoid";
+import { hexoid } from "hexoid";
 
 const generateId = hexoid();
 
