@@ -1,9 +1,8 @@
+from django.core.exceptions import SuspiciousOperation
 from django.db import transaction
 
 from dora.structures.models import StructureMember, StructurePutativeMember
 from dora.users.models import User
-
-from . import OIDCError
 
 # utilitaires divers et corrections métiers en relation avec Inclusion-Connect / OIDC
 
@@ -19,7 +18,7 @@ def updated_ic_user(user: User, ic_token_email: str) -> tuple[User, bool]:
         # => on vérifie si l'utilisateur est membre d'une structure
         # c'est un cas marginal, on se contente de "crasher" proprement
         if StructureMember.objects.filter(user__email=ic_token_email):
-            raise OIDCError(
+            raise SuspiciousOperation(
                 f"L'utilisateur '{ic_token_email}' est membre d'une ou plusieurs structures et ne peut être supprimé"
             )
 
