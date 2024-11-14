@@ -72,7 +72,7 @@ export default [{
 
         "id-length": ["error", {
             min: 3,
-            exceptions: ["i", "a", "b", "x", "y", "id", "ok", "to"],
+            exceptions: ["i", "a", "b", "v", "x", "y", "id", "ok", "to"],
         }],
 
         "func-style": ["error", "declaration", {
