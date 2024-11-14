@@ -2,7 +2,7 @@ import { browser } from "$app/environment";
 import { token } from "$lib/utils/auth";
 import { get } from "svelte/store";
 import { getApiURL } from "$lib/utils/api";
-import hexoid from "hexoid";
+import { hexoid } from "hexoid";
 import type { Service, Structure } from "$lib/types";
 
 const analyticsIdKey = "userHash";
