@@ -2,7 +2,7 @@ import random
 
 from django.db import connection, transaction
 
-from .models import Establishment
+from dora.sirene.models import Establishment
 
 """
 Backup lors de l'import SIRENE:
@@ -55,7 +55,7 @@ def create_table(table_name: str):
 
 def create_indexes(table_name: str):
     create_indexes_ddl = f"""
-    CREATE INDEX {table_name}_full_text_trgm_idx ON public.{table_name} USING gin (full_search_text gin_trgm_ops);
+    CREATE INDEX {table_name}_full_text_trgm_{_suffix()}idx ON public.{table_name} USING gin (full_search_text gin_trgm_ops);
     CREATE INDEX {table_name}_code_commune_{_suffix()} ON public.{table_name} USING btree (city_code);
     CREATE INDEX {table_name}_code_commune_{_suffix()}_like ON public.{table_name} USING btree (city_code varchar_pattern_ops);
     CREATE INDEX {table_name}_is_siege_{_suffix()} ON public.{table_name} USING btree (is_siege);

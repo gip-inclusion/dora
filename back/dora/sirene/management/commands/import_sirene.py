@@ -183,6 +183,9 @@ class Command(BaseCommand):
 
             # on sauvegarde la base de production
             self.stdout.write(self.style.NOTICE(" > sauvegarde de la table actuelle"))
+            # suppression d'un backup existant
+            clean_tmp_tables(BACKUP_TABLE)
+            # backup de la table actuelle
             rename_table(SIRENE_TABLE, BACKUP_TABLE)
 
             # on renomme la table de travail
