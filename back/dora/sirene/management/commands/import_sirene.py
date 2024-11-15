@@ -9,7 +9,9 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.db.utils import DataError
 
-from dora.sirene.backup import (
+from dora.sirene.models import Establishment
+
+from ._backup import (
     bulk_add_establishments,
     clean_tmp_tables,
     create_indexes,
@@ -17,7 +19,6 @@ from dora.sirene.backup import (
     rename_table,
     vacuum_analyze,
 )
-from dora.sirene.models import Establishment
 
 # Documentation des variables SIRENE : https://www.sirene.fr/static-resources/htm/v_sommaire.htm
 USE_TEMP_DIR = not settings.DEBUG

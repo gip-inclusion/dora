@@ -24,6 +24,10 @@ Backup lors de l'import SIRENE:
 """
 
 
+def _suffix():
+    return f"{random.getrandbits(16*8):8x}"
+
+
 def create_table(table_name: str):
     create_table_ddl = f"""
     DROP TABLE IF EXISTS public.{table_name};
@@ -42,7 +46,7 @@ def create_table(table_name: str):
         city varchar(255) NOT NULL,
         name varchar(255) NOT NULL,
         parent_name varchar(255) NOT NULL,
-        CONSTRAINT {table_name}_pkey PRIMARY KEY (siret)
+        CONSTRAINT {table_name}_{_suffix()}_pkey PRIMARY KEY (siret)
     );
     """
     with connection.cursor() as c:
@@ -50,10 +54,6 @@ def create_table(table_name: str):
 
 
 def create_indexes(table_name: str):
-    def _suffix():
-        # pas de risque ici : cette table n'est pas utilisée par l'ORM Django
-        return f"{random.getrandbits(16*8):8x}"
-
     create_indexes_ddl = f"""
     CREATE INDEX {table_name}_full_text_trgm_idx ON public.{table_name} USING gin (full_search_text gin_trgm_ops);
     CREATE INDEX {table_name}_code_commune_{_suffix()} ON public.{table_name} USING btree (city_code);
