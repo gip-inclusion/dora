@@ -95,6 +95,8 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
         if not user.sub_pc:
             # utilisateur existant, mais non-enregistré sur ProConnect
             user.sub_pc = sub
+            # on considère que si l'utilisateur s'est connecté via ProConnect, son e-mail est valide
+            user.is_valid = True
             user.save()
 
         return user
