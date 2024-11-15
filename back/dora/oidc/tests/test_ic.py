@@ -13,7 +13,7 @@ from dora.core.test_utils import make_structure, make_user
 from dora.structures.models import StructurePutativeMember
 from dora.users.models import User
 
-from .utils import updated_ic_user
+from ..utils import updated_ic_user
 
 
 @pytest.fixture
