@@ -9,7 +9,9 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.db.utils import DataError
 
-from dora.sirene.backup import (
+from dora.sirene.models import Establishment
+
+from ._backup import (
     bulk_add_establishments,
     clean_tmp_tables,
     create_indexes,
@@ -17,7 +19,6 @@ from dora.sirene.backup import (
     rename_table,
     vacuum_analyze,
 )
-from dora.sirene.models import Establishment
 
 # Documentation des variables SIRENE : https://www.sirene.fr/static-resources/htm/v_sommaire.htm
 USE_TEMP_DIR = not settings.DEBUG
@@ -182,6 +183,9 @@ class Command(BaseCommand):
 
             # on sauvegarde la base de production
             self.stdout.write(self.style.NOTICE(" > sauvegarde de la table actuelle"))
+            # suppression d'un backup existant
+            clean_tmp_tables(BACKUP_TABLE)
+            # backup de la table actuelle
             rename_table(SIRENE_TABLE, BACKUP_TABLE)
 
             # on renomme la table de travail
