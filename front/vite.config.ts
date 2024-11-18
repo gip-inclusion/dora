@@ -9,6 +9,9 @@ export default defineConfig(({ mode }) => {
     plugins: [
       sentrySvelteKit({
         sourceMapsUploadOptions: {
+          sourcemaps: {
+            assets: ["./build/*/**/*"],
+          },
           telemetry: false,
         },
       }),
