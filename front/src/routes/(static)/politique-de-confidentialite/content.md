@@ -54,7 +54,7 @@ Par voie postale :
 
 GIP Plateforme de l’inclusion  
 6 Boulevard Saint-Denis
-75010 Paris 
+75010 Paris
 
 Puisque ce sont des droits personnels, nous ne traiterons votre demande que si nous sommes en mesure de vous identifier. Dans le cas où nous ne parvenons pas à vous identifier, nous pouvons être amenés à vous demander une preuve de votre identité.
 
