@@ -1,7 +1,7 @@
 data-inclusion-schema==0.19.0
 dj-database-url==2.3.0
 Django==4.2.16
-django-cors-headers==4.5.0
+django-cors-headers==4.6.0
 django-csp==3.8
 django-filter==24.3
 django-storages[boto3]==1.14.4
@@ -18,7 +18,7 @@ model-bakery==1.20.0
 osm_opening_hours==0.1.1
 psycopg==3.2.3
 PyJWT==2.9.0 # conflit avec ggshield sur versions supérieures
-redis==5.1.1
+redis==5.2.0
 requests==2.32.3
 sentry-sdk==2.18.0
 sib-api-v3-sdk==7.6.0
