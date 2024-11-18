@@ -39,7 +39,7 @@
     "@tiptap/starter-kit": "^2.9.1",
     "@types/iframe-resizer": "^3.5.13",
     "@types/showdown": "^2.0.6",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/eslint-plugin": "^8.14.0",
     "@typescript-eslint/parser": "^7.18.0",
     "autoprefixer": "^10.4.20",
     "dayjs": "^1.11.13",
