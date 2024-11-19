@@ -1759,9 +1759,9 @@ class ServiceSearchTestCase(APITestCase):
         baker.make("ServiceSubCategory", value="cat2--autre", label="cat2--autre")
         baker.make("ServiceCategory", value="cat3", label="cat3")
 
-        baker.make("FundingLabel", value="funding-label-1", label="funding-label-1")
-        baker.make("FundingLabel", value="funding-label-2", label="funding-label-2")
-        baker.make("FundingLabel", value="funding-label-3", label="funding-label-3")
+        baker.make("FundingLabel", value="funding-label-1", label="Funding label 1")
+        baker.make("FundingLabel", value="funding-label-2", label="Funding label 2")
+        baker.make("FundingLabel", value="funding-label-3", label="Funding label 3")
 
     def test_needs_city_code(self):
         make_service(
