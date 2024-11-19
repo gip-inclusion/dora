@@ -13,7 +13,7 @@
   import ResultMap from "./result-map.svelte";
 
   export let data: PageData;
-  export let foundFundingLabels: Array<FundingLabel>;
+  export let availableFundingLabels: Array<FundingLabel>;
   export let filters: Filters;
   export let filteredServices: ServiceSearchResult[];
 
@@ -57,7 +57,7 @@
           >
             <ResultFilters
               servicesOptions={data.servicesOptions}
-              {foundFundingLabels}
+              {availableFundingLabels}
               bind:filters
             />
           </Modal>

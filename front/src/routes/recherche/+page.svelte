@@ -174,13 +174,13 @@
     >
       <MapViewButton
         {data}
-        foundFundingLabels={data.foundFundingLabels}
+        availableFundingLabels={data.availableFundingLabels}
         bind:filters
         {filteredServices}
       />
       <ResultFilters
         servicesOptions={data.servicesOptions}
-        foundFundingLabels={data.foundFundingLabels}
+        availableFundingLabels={data.availableFundingLabels}
         bind:filters
       />
     </div>

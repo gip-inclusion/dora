@@ -79,7 +79,7 @@ export const load: PageLoad = async ({ url, parent }) => {
 
   const {
     cityBounds,
-    fundingLabels: foundFundingLabels,
+    fundingLabels: availableFundingLabels,
     services,
   } = await getResults({
     // La priorité est donnée aux sous-catégories
@@ -135,7 +135,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     feeConditions,
     locationKinds,
     fundingLabels,
-    foundFundingLabels,
+    availableFundingLabels,
     services,
     servicesOptions: await getServicesOptions(),
     searchId,
