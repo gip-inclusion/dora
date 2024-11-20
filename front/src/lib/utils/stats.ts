@@ -125,6 +125,7 @@ export async function trackSearch(
   kinds,
   feeConditions,
   locationKinds,
+  fundingLabels,
   results
 ) {
   if (browser) {
@@ -150,6 +151,7 @@ export async function trackSearch(
       kinds,
       feeConditions,
       locationKinds,
+      fundingLabels,
     });
     const searchId = event && event.event;
     return searchId;

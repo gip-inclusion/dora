@@ -773,6 +773,7 @@ def search(request):
     kinds = request.GET.get("kinds")
     fees = request.GET.get("fees")
     locs = request.GET.get("locs")
+    funding = request.GET.get("funding")
     lat = request.GET.get("lat")
     lon = request.GET.get("lon")
 
@@ -781,6 +782,7 @@ def search(request):
     kinds_list = kinds.split(",") if kinds is not None else None
     fees_list = fees.split(",") if fees is not None else None
     locs_list = locs.split(",") if locs is not None else None
+    funding_labels_list = funding.split(",") if funding is not None else None
     lat = float(lat) if lat else None
     lon = float(lon) if lon else None
     from .search import search_services
@@ -790,7 +792,7 @@ def search(request):
 
     di_client = data_inclusion.di_client_factory()
 
-    sorted_services = search_services(
+    sorted_services, metadata = search_services(
         request=request,
         di_client=di_client,
         city_code=city_code,
@@ -800,11 +802,18 @@ def search(request):
         kinds=kinds_list,
         fees=fees_list,
         location_kinds=locs_list,
+        funding_labels=funding_labels_list,
         lat=lat,
         lon=lon,
     )
 
-    return Response({"city_bounds": city.geom.extent, "services": sorted_services})
+    return Response(
+        {
+            "city_bounds": city.geom.extent,
+            "funding_labels": metadata["funding_labels"],
+            "services": sorted_services,
+        }
+    )
 
 
 def share_service(request, service, is_di):

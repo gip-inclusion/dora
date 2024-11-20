@@ -6,7 +6,6 @@
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import { FUNDED_SERVICES } from "$lib/consts";
   import type { ServiceSearchResult } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
   import { isInDeploymentDepartments } from "$lib/utils/misc";
@@ -15,10 +14,7 @@
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
   import OnlyNationalResultsNotice from "./only-national-results-notice.svelte";
   import ServiceSuggestionNotice from "./service-suggestion-notice.svelte";
-  import ResultFilters, {
-    type Filters,
-    type FundedByDepartment,
-  } from "./result-filters.svelte";
+  import ResultFilters, { type Filters } from "./result-filters.svelte";
   import MapViewButton from "./map-view-button.svelte";
   import ResultCount from "./result-count.svelte";
   import SearchResults from "./search-results.svelte";
@@ -28,7 +24,7 @@
 
   const FILTER_KEY_TO_QUERY_PARAM = {
     kinds: "kinds",
-    fundedBy: "fundedBy",
+    fundingLabels: "funding",
     feeConditions: "fees",
     locationKinds: "locs",
   };
@@ -55,7 +51,12 @@
   });
 
   function resetFilters() {
-    filters = { kinds: [], fundedBy: [], feeConditions: [], locationKinds: [] };
+    filters = {
+      kinds: [],
+      fundingLabels: [],
+      feeConditions: [],
+      locationKinds: [],
+    };
   }
 
   // Réinitialise les filtres quand la recherche est actualisée.
@@ -76,10 +77,10 @@
       filters.kinds.length === 0 ||
       (service.kinds &&
         filters.kinds.some((value) => service.kinds!.includes(value)));
-    const fundedByMatch =
-      filters.fundedBy.length === 0 ||
-      filters.fundedBy.some((department) =>
-        FUNDED_SERVICES[department].slugs.includes(service.slug)
+    const fundingLabelsMatch =
+      filters.fundingLabels.length === 0 ||
+      filters.fundingLabels.some((value) =>
+        service.fundingLabels.includes(value)
       );
     const feeConditionMatch =
       filters.feeConditions.length === 0 ||
@@ -98,7 +99,7 @@
     );
     return (
       kindsMatch &&
-      fundedByMatch &&
+      fundingLabelsMatch &&
       feeConditionMatch &&
       locationKindsMatch &&
       onSiteAndNearby
@@ -134,20 +135,6 @@
     data.cityCode &&
     !isInDeploymentDepartments(data.cityCode, data.servicesOptions);
 
-  $: fundedByDepartment =
-    data.cityCode &&
-    (Object.keys(FUNDED_SERVICES).find((department) =>
-      data.cityCode?.startsWith(department)
-    ) as FundedByDepartment | undefined);
-  $: fundedByOptions = fundedByDepartment
-    ? [
-        {
-          value: fundedByDepartment,
-          label: FUNDED_SERVICES[fundedByDepartment].organism,
-        },
-      ]
-    : [];
-
   $: showMesAidesDialog = !$userInfo && data.categoryIds.includes("mobilite");
 </script>
 
@@ -171,6 +158,7 @@
       kindIds={data.kindIds}
       feeConditions={data.feeConditions}
       locationKinds={data.locationKinds}
+      fundingLabels={data.fundingLabels}
       categoryId={data.categoryIds[0]}
       subCategoryIds={[...data.subCategoryIds]}
       showDeploymentWarning={false}
@@ -184,10 +172,15 @@
     <div
       class="hidden flex-col gap-s32 rounded-ml border border-gray-02 p-s32 shadow-sm lg:flex lg:basis-1/3"
     >
-      <MapViewButton {data} {fundedByOptions} bind:filters {filteredServices} />
+      <MapViewButton
+        {data}
+        availableFundingLabels={data.availableFundingLabels}
+        bind:filters
+        {filteredServices}
+      />
       <ResultFilters
         servicesOptions={data.servicesOptions}
-        {fundedByOptions}
+        availableFundingLabels={data.availableFundingLabels}
         bind:filters
       />
     </div>
