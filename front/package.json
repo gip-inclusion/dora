@@ -3,7 +3,7 @@
   "version": "0.0.20",
   "engines": {
     "npm": ">=8",
-    "node": ">=18"
+    "node": ">=18.18"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,8 @@
     "security-scan": "ggshield secret scan path -r . -y"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.14.0",
     "@iframe-resizer/parent": "^5.3.2",
     "@nazka/map-gl-js-spiderfy": "^1.2.5",
     "@sveltejs/adapter-node": "^5.2.9",
@@ -39,13 +41,14 @@
     "@tiptap/starter-kit": "^2.9.1",
     "@types/iframe-resizer": "^3.5.13",
     "@types/showdown": "^2.0.6",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
+    "@typescript-eslint/eslint-plugin": "^8.14.0",
+    "@typescript-eslint/parser": "^8.14.0",
     "autoprefixer": "^10.4.20",
     "dayjs": "^1.11.13",
-    "eslint": "^8.57.1",
+    "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.46.0",
+    "globals": "^15.12.0",
     "hexoid": "^2.0.0",
     "husky": "^9.1.6",
     "insane": "^2.6.2",

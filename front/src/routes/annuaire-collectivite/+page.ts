@@ -55,7 +55,7 @@ export const load: PageLoad = async ({ url }) => {
   try {
     // Recherche du slug correspondant à la ville et au département
     citySlug = await searchCitySlug(cityName, departmentCode);
-  } catch (err) {
+  } catch {
     citySlug = "";
   }
 
