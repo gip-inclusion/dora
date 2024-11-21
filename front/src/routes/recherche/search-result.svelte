@@ -55,11 +55,7 @@
       </div>
 
       <h3 class="mb-s12 text-france-blue">
-        <a
-          class="full-result-link hover:underline"
-          href={servicePagePath}
-          target="_blank"
-        >
+        <a class="full-result-link hover:underline" href={servicePagePath}>
           {result.name}
         </a>
       </h3>
@@ -99,7 +95,7 @@
 
       {#if !summarized}
         <p class="relative z-10 mt-s16 hidden text-f16 text-gray-text md:block">
-          <a href={servicePagePath} target="_blank">{result.shortDesc}</a>
+          <a href={servicePagePath}>{result.shortDesc}</a>
         </p>
         <div
           class={`mt-s24 flex flex-col items-center gap-s24 md:flex-row ${isDI ? "justify-between" : "justify-end"}`}
