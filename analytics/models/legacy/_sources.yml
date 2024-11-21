@@ -1,0 +1,85 @@
+sources:
+  - name: dora
+    schema: public
+    tables:
+      # orientations_*
+      # stats_*
+      # structures_*
+      # services_servicesource
+      # services_bookmark
+      # services_servicefee
+      # services_accesscondition
+      # services_beneficiaryaccessmode
+      # services_coachorientationmode
+      # services_concernedpublic
+      # services_credential
+      # services_locationkind
+      # services_requirement
+      # services_service_access_conditions
+      # services_service_beneficiaries_access_modes
+      # services_service_categories
+      # services_service_coach_orientation_modes
+      # services_service_concerned_public
+      # services_service_credentials
+      # services_service_kinds
+      # services_service_location_kinds
+      # services_service_requirements
+      # services_service_subcategories
+      # services_servicecategory
+      # services_servicekind
+      # services_servicemodificationhistoryitem
+      # services_servicestatushistoryitem
+      # services_servicesubcategory
+      # services_savedsearch
+      # services_savedsearch_fees
+      # services_savedsearch_kinds
+      # services_savedsearch_subcategories
+      # services_fundinglabel
+      # services_service_funding_labels
+      - name: users
+        identifier: users_user
+      - name: services
+        identifier: services_service
+      - name: structures
+        identifier: structures_structure
+      - name: service_suggestions
+        identifier: service_suggestions_servicesuggestion
+      - name: mobilisation_events
+        identifier: stats_mobilisationevent
+      - name: di_mobilisation_events
+        identifier: stats_dimobilisationevent
+      - name: mobilisation_event_categories
+        identifier: stats_mobilisationevent_categories
+      - name: di_mobilisation_event_categories
+        identifier: stats_dimobilisationevent_categories
+      - name: service_categories
+        identifier: services_servicecategory
+      - name: service_category_link
+        identifier: services_service_categories
+      - name: searchview_categories
+        identifier: stats_searchview_categories
+      - name: serviceview_categories
+        identifier: stats_serviceview_categories
+      - name: di_serviceview_categories
+        identifier: stats_diserviceview_categories
+      - name: service_views
+        identifier: stats_serviceview
+      - name: search_views
+        identifier: stats_searchview
+      - name: structure_views
+        identifier: stats_structureview
+      - name: structure_labels
+        identifier: structures_structure_national_labels
+        comment: "Relie quels labels nationaux sont associés à une structure"
+      - name: national_labels
+        identifier: structures_structurenationallabel
+        comment: "Labels nationaux, textuels, existants dans la base"
+      - name: di_service_views
+        identifier: stats_diserviceview
+      - name: putative_members
+        identifier: structures_structureputativemember
+      - name: members
+        identifier: structures_structuremember
+      - name: action_logs
+        identifier: logs_actionlog
+
