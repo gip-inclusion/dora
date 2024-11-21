@@ -1,14 +1,13 @@
 dora:
   outputs:
-
     dev:
       type: postgres
       threads: 1
       host: "{{ env_var('POSTGRES_HOST', 'localhost') }}"
-      port: "{{ env_var('POSTGRES_PORT', '5455') | int }}"
-      user: "{{ env_var('POSTGRES_USER', 'data-inclusion') }}"
-      password: "{{ env_var('POSTGRES_PASSWORD', 'data-inclusion') }}"
-      dbname: "{{ env_var('POSTGRES_DB', 'data-inclusion') }}"
+      port: "{{ env_var('POSTGRES_PORT', '5432') | int }}"
+      user: "{{ env_var('POSTGRES_USER', 'dora') }}"
+      password: "{{ env_var('POSTGRES_PASSWORD', 'dora') }}"
+      dbname: "{{ env_var('POSTGRES_DB', 'dora') }}"
       schema: public
 
   target: dev
