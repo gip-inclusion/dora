@@ -1,17 +1,19 @@
-from types import SimpleNamespace
 import csv
 import sys
+from types import SimpleNamespace
+
 from django.db import transaction
+
+from dora.core.validators import ValidationError, validate_siret
+from dora.sirene.models import Establishment
+from dora.structures.emails import send_invitation_email
 from dora.structures.models import (
     Structure,
     StructureMember,
     StructurePutativeMember,
     StructureSource,
 )
-from dora.structures.emails import send_invitation_email
-from dora.sirene.models import Establishment
 from dora.users.models import User
-from dora.core.validators import validate_siret, ValidationError
 
 # 💡 Mettre à True pour activer les écritures en base de données
 dry_run = True
@@ -24,7 +26,7 @@ error_count = 0
 
 bot_user = User.objects.get_dora_bot()
 source, _ = StructureSource.objects.get_or_create(
-    value=f"fichier-cresus",
+    value="fichier-cresus",
     defaults={"label": "Fichier CSV des structures de la fondation Cresus"},
 )
 
@@ -111,7 +113,7 @@ try:
                 # Vérification que le SIRET est renseigné
                 if not data.siret:
                     print(
-                        f"\tSIRET manquant ou vide. Ligne ignorée.",
+                        "\tSIRET manquant ou vide. Ligne ignorée.",
                         file=sys.stderr,
                     )
                     error_count += 1
@@ -152,9 +154,12 @@ try:
                     structure = Structure(name=data.name, siret=data.siret)
 
                 _edit_and_save_structure(structure, data)
-                _invite_structure_admin(structure, data.admin_email)
+
+                if not dry_run:
+                    _invite_structure_admin(structure, data.admin_email)
+
                 created_count += 1
-                print(f"\tStructure créée.")
+                print("\tStructure créée.")
 
             except Exception as e:
                 print(f"\tErreur inattendue - {e}", file=sys.stderr)
@@ -163,7 +168,9 @@ try:
 
         # Forcer un rollback si dry_run est activé
         if dry_run:
-            raise Exception("Mode dry-run activé. Toutes les modifications sont annulées.")
+            raise Exception(
+                "Mode dry-run activé. Toutes les modifications sont annulées."
+            )
 
 except Exception as e:
     if str(e) != "Mode dry-run activé. Toutes les modifications sont annulées.":
