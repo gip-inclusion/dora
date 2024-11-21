@@ -1,6 +1,5 @@
 dora:
   outputs:
-
     dev:
       type: postgres
       threads: 1
@@ -8,7 +7,7 @@ dora:
       port: "{{ env_var('POSTGRES_PORT', '5455') | int }}"
       user: "{{ env_var('POSTGRES_USER', 'data-inclusion') }}"
       password: "{{ env_var('POSTGRES_PASSWORD', 'data-inclusion') }}"
-      dbname: "{{ env_var('POSTGRES_DB', 'data-inclusion') }}"
+      dbname: "{{ env_var('POSTGRES_DB', 'dora') }}"
       schema: public
 
   target: dev
