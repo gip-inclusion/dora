@@ -363,4 +363,3 @@ def test_simpler_manager_structure_moderation_task_should_trigger(
         assert not manager_structure_moderation_task.should_trigger(
             n
         ), "Double déclenchement à cette date"
-

@@ -1,10 +1,12 @@
-from types import SimpleNamespace
 import csv
 import sys
+from types import SimpleNamespace
+
 from django.db import transaction
-from dora.structures.models import Structure
+
 from dora.services.models import ServiceModel, ServiceSource
 from dora.services.utils import instantiate_model
+from dora.structures.models import Structure
 from dora.users.models import User
 
 csv_file_path = "./cresus_services.csv"
@@ -17,7 +19,7 @@ error_count = 0
 
 bot_user = User.objects.get_dora_bot()
 source, _ = ServiceSource.objects.get_or_create(
-    value=f"fichier-cresus",
+    value="fichier-cresus",
     defaults={"label": "Fichier CSV des services de la fondation Cresus"},
 )
 
@@ -75,7 +77,7 @@ try:
 
                 # Vérification que le SIRET de la structure est bien renseigné
                 if not data.structure_siret:
-                    print(f"\tSIRET manquant. Ligne ignorée.", file=sys.stderr)
+                    print("\tSIRET manquant. Ligne ignorée.", file=sys.stderr)
                     error_count += 1
                     continue
 
@@ -102,11 +104,13 @@ try:
                     continue
 
                 # Création du service
-                print(f"\tCréation d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'.")
+                print(
+                    f"\tCréation d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'."
+                )
                 new_service = instantiate_model(model, structure, bot_user)
                 _edit_and_save_service(new_service, data)
                 created_count += 1
-                print(f"\tService créé.")
+                print("\tService créé.")
 
             except Exception as e:
                 print(f"\tErreur lors du traitement - {e}", file=sys.stderr)
@@ -115,7 +119,9 @@ try:
 
         # Forcer un rollback si dry_run est activé
         if dry_run:
-            raise Exception("Mode dry-run activé. Toutes les modifications sont annulées.")
+            raise Exception(
+                "Mode dry-run activé. Toutes les modifications sont annulées."
+            )
 
 except Exception as e:
     if str(e) != "Mode dry-run activé. Toutes les modifications sont annulées.":
