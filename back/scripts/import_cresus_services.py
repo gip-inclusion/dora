@@ -8,6 +8,7 @@ from dora.services.models import ServiceModel, ServiceSource
 from dora.services.utils import instantiate_model
 from dora.structures.models import Structure
 from dora.users.models import User
+from dora.services.utils import update_geom
 
 csv_file_path = "./cresus_services.csv"
 
@@ -52,7 +53,12 @@ def _edit_and_save_service(service, data):
     service.contact_phone = data.contact_phone
     service.address1 = data.location_address
     service.address2 = data.location_complement
+    service.city = data.location_city
     service.postal_code = data.location_postal_code
+
+    if not dry_run:
+        update_geom(service)
+
     service.save()
 
 
