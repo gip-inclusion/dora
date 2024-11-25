@@ -16,7 +16,7 @@ from dora.structures.models import (
 from dora.users.models import User
 
 # 💡 Mettre à True pour activer les écritures en base de données
-dry_run = True
+wet_run = True
 
 csv_file_path = "./cresus_structures.csv"
 
@@ -67,14 +67,14 @@ def _invite_structure_admin(structure, email):
 
     try:
         member = StructurePutativeMember.objects.get(user=user, structure=structure)
-        print(f"{email} a déjà été invité·e")
+        print(f"\t{email} a déjà été invité·e")
         if not member.is_admin:
             member.is_admin = True
             member.save()
     except StructurePutativeMember.DoesNotExist:
         try:
             member = StructureMember.objects.get(user=user, structure=structure)
-            print(f"{email} est déjà membre de la structure")
+            print(f"\t{email} est déjà membre de la structure")
 
             if not member.is_admin:
                 member.is_admin = True
@@ -87,14 +87,14 @@ def _invite_structure_admin(structure, email):
                 is_admin=True,
             )
 
-            print(f"{email} invité·e comme administrateur·rice")
+            print(f"\t{email} invité·e comme administrateur·rice")
             send_invitation_email(member, "L’équipe DORA")
 
 
-if dry_run:
-    print("🧘 DRY RUN 🧘")
-else:
+if wet_run:
     print("⚠️ PRODUCTION RUN ⚠️")
+else:
+    print("🧘 DRY RUN 🧘")
 
 with open(csv_file_path, "r") as f:
     rdr = csv.reader(f)
@@ -113,7 +113,7 @@ try:
                 # Vérification que le SIRET est renseigné
                 if not data.siret:
                     print(
-                        "\tSIRET manquant ou vide. Ligne ignorée.",
+                        "\tErreur : SIRET manquant ou vide. Ligne ignorée.",
                         file=sys.stderr,
                     )
                     error_count += 1
@@ -124,7 +124,16 @@ try:
                     validate_siret(data.siret)
                 except ValidationError as e:
                     print(
-                        f"\tSIRET invalide ({data.siret}) - {e}. Ligne ignorée.",
+                        f"\tErreur : SIRET invalide ({data.siret}) - {e}. Ligne ignorée.",
+                        file=sys.stderr,
+                    )
+                    error_count += 1
+                    continue
+
+                # Vérification de l'email de l'admin
+                if not data.admin_email:
+                    print(
+                        "\tErreur : Email de l'administrateur·ice manquant ou vide. Ligne ignorée.",
                         file=sys.stderr,
                     )
                     error_count += 1
@@ -155,7 +164,7 @@ try:
 
                 _edit_and_save_structure(structure, data)
 
-                if not dry_run:
+                if wet_run:
                     _invite_structure_admin(structure, data.admin_email)
 
                 created_count += 1
@@ -167,7 +176,7 @@ try:
                 continue
 
         # Forcer un rollback si dry_run est activé
-        if dry_run:
+        if not wet_run:
             raise Exception(
                 "Mode dry-run activé. Toutes les modifications sont annulées."
             )
