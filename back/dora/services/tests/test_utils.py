@@ -5,17 +5,16 @@ from django.contrib.gis.geos import Point
 
 from dora.core.constants import WGS84
 from dora.core.test_utils import make_service
-from dora.services.utils import update_geom
+from dora.services.utils import update_geom_fields
 
 
-class TestUpdateServiceGeom:
+class TestUpdateServiceGeomFields:
     @patch("dora.services.utils.requests.get")
-    def test_update_geom_should_add_service_geom_when_location_found(self, mock_get):
+    def test_update_geom_fields_should_add_geom_when_location_found(self, mock_get):
         # Given
         service = make_service()
         service.geom = None
         service.address1 = "24 Rue du Commandant Guilbaud"
-        service.address2 = ""
         service.postal_code = "75016"
         service.city = "Paris"
 
@@ -42,7 +41,7 @@ class TestUpdateServiceGeom:
         mock_get.return_value = mock_response
 
         # When
-        update_geom(service)
+        update_geom_fields(service)
 
         # Then
         assert service.geom is not None
@@ -51,7 +50,46 @@ class TestUpdateServiceGeom:
         assert service.geom.srid == WGS84
 
     @patch("dora.services.utils.requests.get")
-    def test_update_geom_should_change_service_geom_even_when_it_is_already_defined(
+    def test_update_geom_fields_should_set_postcode_and_citycode_when_location_found(
+        self, mock_get
+    ):
+        # Given
+        service = make_service()
+        service.geom = None
+        service.address1 = "24 Rue du Commandant Guilbaud"
+        service.city = "Paris"
+
+        mock_response = Mock()
+        mock_response.status_code = 200
+        mock_response.content = json.dumps(
+            {
+                "features": [
+                    {
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [2.251558, 48.84186],
+                        },
+                        "properties": {
+                            "score": 0.9706190909090909,
+                            "postcode": "75016",
+                            "citycode": "75116",
+                            "city": "Paris",
+                        },
+                    }
+                ],
+            }
+        ).encode("utf-8")
+        mock_get.return_value = mock_response
+
+        # When
+        update_geom_fields(service)
+
+        # Then
+        assert service.postal_code == "75016"
+        assert service.city_code == "75116"
+
+    @patch("dora.services.utils.requests.get")
+    def test_update_geom_fields_should_change_service_geom_even_when_it_is_already_defined(
         self, mock_get
     ):
         # Given
@@ -86,7 +124,7 @@ class TestUpdateServiceGeom:
         mock_get.return_value = mock_response
 
         # When
-        update_geom(service)
+        update_geom_fields(service)
 
         # Then
         assert service.geom.x == 1.434047
@@ -97,7 +135,7 @@ class TestUpdateServiceGeom:
         service.postal_code = "75016"
 
     @patch("dora.services.utils.requests.get")
-    def test_update_geom_should_keep_service_geom_to_None_when_location_not_found(
+    def test_update_geom_fields_should_keep_service_geom_to_None_when_location_not_found(
         self, mock_get
     ):
         # Given
@@ -118,13 +156,13 @@ class TestUpdateServiceGeom:
         mock_get.return_value = mock_response
 
         # When
-        update_geom(service)
+        update_geom_fields(service)
 
         # Then
         assert service.geom is None
 
     @patch("dora.services.utils.requests.get")
-    def test_update_geom_should_keep_service_geom_to_None_when_score_is_low(
+    def test_update_geom_fields_should_keep_service_geom_to_None_when_score_is_low(
         self, mock_get
     ):
         # Given
@@ -147,13 +185,13 @@ class TestUpdateServiceGeom:
         mock_get.return_value = mock_response
 
         # When
-        update_geom(service)
+        update_geom_fields(service)
 
         # Then
         assert service.geom is None
 
     @patch("dora.services.utils.requests.get")
-    def test_update_geom_should_keep_service_geom_to_None_when_api_error(
+    def test_update_geom_fields_should_keep_service_geom_to_None_when_api_error(
         self, mock_get
     ):
         # Given
@@ -169,7 +207,7 @@ class TestUpdateServiceGeom:
         mock_get.return_value = mock_response
 
         # When
-        update_geom(service)
+        update_geom_fields(service)
 
         # Then
         assert service.geom is None

@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from dora.services.models import Service
-from dora.services.utils import update_geom
+from dora.core.utils import get_geo_data
 
 
 class Command(BaseCommand):
@@ -21,4 +21,7 @@ class Command(BaseCommand):
 
     def fix_geo(self, s):
         assert s.geom is None
-        update_geom(s)
+        geo_data = get_geo_data(s.address1, city_code=s.city_code)
+        if geo_data:
+            s.geom = geo_data.geom
+            s.save(update_fields=["geom"])

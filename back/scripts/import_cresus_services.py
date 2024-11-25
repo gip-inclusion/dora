@@ -4,16 +4,16 @@ from types import SimpleNamespace
 
 from django.db import transaction
 
-from dora.services.models import ServiceModel, ServiceSource
+from dora.services.models import ServiceModel, ServiceSource, ServiceStatus
 from dora.services.utils import instantiate_model
 from dora.structures.models import Structure
 from dora.users.models import User
-from dora.services.utils import update_geom
+from dora.core.utils import GeoData, get_geo_data
 
 csv_file_path = "./cresus_services.csv"
 
 # 💡 Mettre à True pour activer les écritures en base de données
-dry_run = True
+wet_run = True
 
 created_count = 0
 error_count = 0
@@ -55,17 +55,23 @@ def _edit_and_save_service(service, data):
     service.address2 = data.location_complement
     service.city = data.location_city
     service.postal_code = data.location_postal_code
+    service.status = ServiceStatus.PUBLISHED
 
-    if not dry_run:
-        update_geom(service)
+    if wet_run:
+        geo_data = get_geo_data(
+            service.address1, city=service.city, postal_code=service.postal_code
+        )
+        if geo_data:
+            service.city_code = geo_data.city_code
+            service.geom = geo_data.geom
 
     service.save()
 
 
-if dry_run:
-    print("🧘 DRY RUN 🧘")
-else:
+if wet_run:
     print("⚠️ PRODUCTION RUN ⚠️")
+else:
+    print("🧘 DRY RUN 🧘")
 
 with open(csv_file_path, "r") as f:
     rdr = csv.reader(f)
@@ -123,8 +129,7 @@ try:
                 error_count += 1
                 continue
 
-        # Forcer un rollback si dry_run est activé
-        if dry_run:
+        if not wet_run:
             raise Exception(
                 "Mode dry-run activé. Toutes les modifications sont annulées."
             )
