@@ -16,7 +16,7 @@ from dora.structures.models import (
 from dora.users.models import User
 
 # 💡 Mettre à True pour activer les écritures en base de données
-wet_run = True
+wet_run = False
 
 csv_file_path = "./cresus_structures.csv"
 
