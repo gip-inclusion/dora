@@ -1,9 +1,13 @@
 import hashlib
+import json
+import logging
 
+import requests
 from django.contrib.gis.geos import Point
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from furl import furl
 
 from dora.admin_express.models import EPCI, AdminDivisionType, City, Department, Region
 from dora.admin_express.utils import arrdt_to_main_insee_code
@@ -47,6 +51,8 @@ SYNC_CUSTOM_M2M_FIELDS = [
     "requirements",
     "credentials",
 ]
+
+logger = logging.getLogger(__name__)
 
 
 def _duplicate_customizable_choices(field, choices, structure):
@@ -220,3 +226,37 @@ def filter_services_by_region(services, region_code):
             & Q(diffusion_zone_details=region.code)
         )
     )
+
+
+def update_geom(service):
+    url = furl("https://api-adresse.data.gouv.fr").add(
+        path="/search/",
+        args={
+            "q": service.address1,
+            "citycode": service.city_code,
+            "autocomplete": 0,
+            "limit": 1,
+        },
+    )
+    response = requests.get(
+        url,
+        params={},
+        headers={
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+    )
+
+    if response.status_code != 200:
+        logger.error(f"Erreur dans la récupération des données: {response.content}")
+        return
+
+    result = json.loads(response.content)
+    if result["features"]:
+        feat = result["features"][0]
+        if feat["properties"]["score"] > 0.5:
+            coords = feat["geometry"]["coordinates"]
+            service.geom = Point(coords[0], coords[1], srid=WGS84)
+            service.save(update_fields=["geom"])
+        else:
+            logger.error("Résultat incertain")
