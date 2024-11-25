@@ -14,7 +14,7 @@ def patch_di_client():
         yield
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=False)
 def _use_db(db):
     # Active automatiquement la gestion de la db
     # (ce qui n'est pas fait par défaut avec pytest).
