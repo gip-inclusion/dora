@@ -13,7 +13,7 @@ from dora.users.models import User
 csv_file_path = "./cresus_services.csv"
 
 # 💡 Mettre à True pour activer les écritures en base de données
-wet_run = True
+wet_run = False
 
 created_count = 0
 error_count = 0
