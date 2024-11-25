@@ -42,6 +42,11 @@ SECURE_REFERRER_POLICY = "same-origin"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_SSL_REDIRECT = True
 
+# Certains formulaires d'admin (par ex. structures)
+# peuvent contenir un grand nombre de champs associés (par ex. membres)
+# et déclencher une erreur de type : `TooManyFieldsSent` lors de la modification
+# et de la validation des enregistrements.
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2_000
 
 # Sentry :
 # uniquement sur les environnememts de production / staging
