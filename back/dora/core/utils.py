@@ -1,17 +1,17 @@
-from dataclasses import dataclass
-from furl import furl
-import logging
 import json
+import logging
 import re
-import requests
+from dataclasses import dataclass
 from typing import Tuple
 
+import requests
+from django.contrib.gis.geos import Point
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.text import Truncator
-from django.contrib.gis.geos import Point
+from furl import furl
+
 from dora.core.constants import WGS84
-from django.contrib.gis.geos import Point
 
 logger = logging.getLogger(__name__)
 

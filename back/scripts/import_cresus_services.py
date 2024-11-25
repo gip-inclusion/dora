@@ -4,11 +4,11 @@ from types import SimpleNamespace
 
 from django.db import transaction
 
+from dora.core.utils import get_geo_data
 from dora.services.models import ServiceModel, ServiceSource, ServiceStatus
 from dora.services.utils import instantiate_model
 from dora.structures.models import Structure
 from dora.users.models import User
-from dora.core.utils import GeoData, get_geo_data
 
 csv_file_path = "./cresus_services.csv"
 

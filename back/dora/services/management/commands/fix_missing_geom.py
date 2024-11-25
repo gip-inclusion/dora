@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
-from dora.services.models import Service
 from dora.core.utils import get_geo_data
+from dora.services.models import Service
 
 
 class Command(BaseCommand):

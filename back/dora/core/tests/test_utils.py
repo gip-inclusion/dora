@@ -1,6 +1,7 @@
 import json
 from unittest import TestCase
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
+
 from django.contrib.gis.geos import Point
 
 from dora.core import utils
