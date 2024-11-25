@@ -1,5 +1,4 @@
 import hashlib
-import logging
 
 from django.contrib.gis.geos import Point
 from django.db.models import Q
@@ -48,8 +47,6 @@ SYNC_CUSTOM_M2M_FIELDS = [
     "requirements",
     "credentials",
 ]
-
-logger = logging.getLogger(__name__)
 
 
 def _duplicate_customizable_choices(field, choices, structure):
