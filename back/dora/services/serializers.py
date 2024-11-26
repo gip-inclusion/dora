@@ -480,6 +480,15 @@ class ServiceModelSerializer(ServiceSerializer):
         max_length=140,
         required=False,
     )
+    funding_labels = serializers.SlugRelatedField(
+        slug_field="value",
+        queryset=FundingLabel.objects.all(),
+        many=True,
+        required=False,
+    )
+    funding_labels_display = serializers.SlugRelatedField(
+        source="funding_labels", slug_field="label", many=True, read_only=True
+    )
 
     class Meta:
         model = ServiceModel
@@ -510,6 +519,8 @@ class ServiceModelSerializer(ServiceSerializer):
             "fee_details",
             "forms",
             "forms_info",
+            "funding_labels",
+            "funding_labels_display",
             "full_desc",
             "is_cumulative",
             "kinds",
