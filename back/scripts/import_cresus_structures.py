@@ -3,7 +3,9 @@ import sys
 from types import SimpleNamespace
 
 from django.db import transaction
+from django.utils import timezone
 
+from dora.core.models import ModerationStatus
 from dora.core.utils import get_geo_data
 from dora.core.validators import ValidationError, validate_siret
 from dora.sirene.models import Establishment
@@ -11,6 +13,7 @@ from dora.structures.emails import send_invitation_email
 from dora.structures.models import (
     Structure,
     StructureMember,
+    StructureNationalLabel,
     StructurePutativeMember,
     StructureSource,
 )
@@ -32,6 +35,30 @@ source, _ = StructureSource.objects.get_or_create(
 )
 
 
+def _extract_national_labels_from_line(line):
+    national_labels_raw = line.get("national_labels", "")
+    print(f"national_labels_raw = {national_labels_raw}")
+    if not national_labels_raw:
+        return []
+
+    national_labels_entities = {
+        kind.label.lower(): kind for kind in StructureNationalLabel.objects.all()
+    }
+
+    national_labels = []
+    for entry in national_labels_raw.split(","):
+        cleaned_entry = entry.strip().lower()
+        if cleaned_entry in national_labels_entities:
+            national_labels.append(national_labels_entities[cleaned_entry])
+        else:
+            print(
+                f"Label national avec la valeur '{entry.strip()}' introuvable. Valeur ignorée.",
+                file=sys.stderr,
+            )
+
+    return national_labels
+
+
 def _extract_data_from_line(line):
     data = SimpleNamespace(
         name=line.get("name").strip(),
@@ -39,8 +66,8 @@ def _extract_data_from_line(line):
         admin_email=line.get("admin_email").strip(),
         structure_email=line.get("structure_email").strip(),
         phone_number=line.get("phone_number").replace(" ", "").strip(),
-        label=line.get("label").strip(),
         website=line.get("website").strip(),
+        national_labels=_extract_national_labels_from_line(line),
         location_city=line.get("location_city").strip(),
         location_address=line.get("location_address").strip(),
         location_complement=line.get("location_complement").strip(),
@@ -61,6 +88,9 @@ def _edit_and_save_structure(structure, data):
     structure.address2 = data.location_complement
     structure.city = data.location_city
     structure.postal_code = data.location_postal_code
+    structure.moderation_status = ModerationStatus.VALIDATED
+    structure.moderation_date = timezone.now()
+    structure.national_labels.set(data.national_labels)
 
     if wet_run:
         geo_data = get_geo_data(
@@ -70,6 +100,7 @@ def _edit_and_save_structure(structure, data):
             structure.city_code = geo_data.city_code
             structure.latitude = geo_data.lat
             structure.longitude = geo_data.lon
+            structure.geocoding_score = geo_data.score
 
         structure.save()
 
@@ -82,14 +113,14 @@ def _invite_structure_admin(structure, email):
 
     try:
         member = StructurePutativeMember.objects.get(user=user, structure=structure)
-        print(f"\t{email} a déjà été invité·e")
+        print(f"{email} a déjà été invité·e")
         if not member.is_admin:
             member.is_admin = True
             member.save()
     except StructurePutativeMember.DoesNotExist:
         try:
             member = StructureMember.objects.get(user=user, structure=structure)
-            print(f"\t{email} est déjà membre de la structure")
+            print(f"{email} est déjà membre de la structure")
 
             if not member.is_admin:
                 member.is_admin = True
@@ -102,7 +133,7 @@ def _invite_structure_admin(structure, email):
                 is_admin=True,
             )
 
-            print(f"\t{email} invité·e comme administrateur·rice")
+            print(f"{email} invité·e comme administrateur·rice")
             send_invitation_email(member, "L’équipe DORA")
 
 
@@ -135,7 +166,7 @@ try:
                 # Vérification que le SIRET est renseigné
                 if not data.siret:
                     print(
-                        "\t❌ Erreur : SIRET manquant ou vide. Ligne ignorée.",
+                        "❌ Erreur : SIRET manquant ou vide. Ligne ignorée.",
                         file=sys.stderr,
                     )
                     error_count += 1
@@ -146,7 +177,7 @@ try:
                     validate_siret(data.siret)
                 except ValidationError as e:
                     print(
-                        f"\t❌ Erreur : SIRET invalide ({data.siret}) - {e}. Ligne ignorée.",
+                        f"❌ Erreur : SIRET invalide ({data.siret}) - {e}. Ligne ignorée.",
                         file=sys.stderr,
                     )
                     error_count += 1
@@ -155,14 +186,14 @@ try:
                 # Vérification de l'email de l'admin
                 if not data.admin_email:
                     print(
-                        "\tAvertissement : Email de l'administrateur·ice manquant ou vide.",
+                        "Avertissement : Email de l'administrateur·ice manquant ou vide.",
                         file=sys.stderr,
                     )
 
                 # Vérification que la structure n'existe pas déjà
                 structure = Structure.objects.filter(siret=data.siret).first()
                 if structure:
-                    print(f"\t☑️ Structure existante : '{structure.name}'. Ligne ignorée.")
+                    print(f"☑️ Structure existante : '{structure.name}'. Ligne ignorée.")
                     ignored_count += 1
                     continue
 
@@ -170,18 +201,18 @@ try:
                 # LOAD
                 ####################
 
-                print(f"\tCréation d'une nouvelle structure pour le SIRET {data.siret}")
+                print(f"Création d'une nouvelle structure pour le SIRET {data.siret}")
                 try:
                     establishment = Establishment.objects.get(siret=data.siret)
                     print(
-                        f"\tÉtablissement trouvé pour le SIRET {data.siret}. Création à partir de celui-ci."
+                        f"Établissement trouvé pour le SIRET {data.siret}. Création à partir de celui-ci."
                     )
                     structure = Structure.objects.create_from_establishment(
                         establishment, data.name
                     )
                 except Establishment.DoesNotExist:
                     print(
-                        f"\tAucun établissement trouvé pour le SIRET {data.siret}. Création à partir des données CSV."
+                        f"Aucun établissement trouvé pour le SIRET {data.siret}. Création à partir des données CSV."
                     )
                     structure = Structure(name=data.name, siret=data.siret)
 
@@ -192,10 +223,10 @@ try:
                         _invite_structure_admin(structure, data.admin_email)
 
                 created_count += 1
-                print("\t✅ Structure créée.")
+                print("✅ Structure créée.")
 
             except Exception as e:
-                print(f"\t❌ Erreur inattendue - {e}", file=sys.stderr)
+                print(f"❌ Erreur inattendue - {e}", file=sys.stderr)
                 error_count += 1
                 continue
 

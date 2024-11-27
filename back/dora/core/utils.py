@@ -68,6 +68,7 @@ class GeoData:
     geom: Point
     lat: str
     lon: str
+    score: float
 
     def __str__(self):
         return f"GeoData({self.address}, {self.postal_code} {self.city} (INSEE : {self.city_code}))"
@@ -108,8 +109,9 @@ def get_geo_data(address, city=None, postal_code=None, city_code=None):
                 postal_code=feat["properties"]["postcode"],
                 city_code=feat["properties"]["citycode"],
                 geom=Point(coords[0], coords[1], srid=WGS84),
-                lat=coords[0],
-                lon=coords[1],
+                lon=coords[0],
+                lat=coords[1],
+                score=feat["properties"]["score"]
             )
         else:
             logger.error("Résultat incertain")
