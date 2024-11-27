@@ -4,6 +4,7 @@ from types import SimpleNamespace
 
 from django.db import transaction
 
+from dora.core.utils import get_geo_data
 from dora.core.validators import ValidationError, validate_siret
 from dora.sirene.models import Establishment
 from dora.structures.emails import send_invitation_email
@@ -56,7 +57,21 @@ def _edit_and_save_structure(structure, data):
     structure.email = data.structure_email
     structure.phone = data.phone_number
     structure.url = data.website
-    structure.save()
+    structure.address1 = data.location_address
+    structure.address2 = data.location_complement
+    structure.city = data.location_city
+    structure.postal_code = data.location_postal_code
+
+    if wet_run:
+        geo_data = get_geo_data(
+            structure.address1, city=structure.city, postal_code=structure.postal_code
+        )
+        if geo_data:
+            structure.city_code = geo_data.city_code
+            structure.latitude = geo_data.lat
+            structure.longitude = geo_data.lon
+
+        structure.save()
 
 
 def _invite_structure_admin(structure, email):
@@ -107,13 +122,20 @@ try:
             try:
                 print(f"\nTraitement de la ligne {idx + 1} :")
 
-                # Récupération des données
+                ####################
+                # EXTRACT
+                ####################
+
                 data = _extract_data_from_line(line)
+
+                ####################
+                # TRANSFORM
+                ####################
 
                 # Vérification que le SIRET est renseigné
                 if not data.siret:
                     print(
-                        "\tErreur : SIRET manquant ou vide. Ligne ignorée.",
+                        "\t❌ Erreur : SIRET manquant ou vide. Ligne ignorée.",
                         file=sys.stderr,
                     )
                     error_count += 1
@@ -124,7 +146,7 @@ try:
                     validate_siret(data.siret)
                 except ValidationError as e:
                     print(
-                        f"\tErreur : SIRET invalide ({data.siret}) - {e}. Ligne ignorée.",
+                        f"\t❌ Erreur : SIRET invalide ({data.siret}) - {e}. Ligne ignorée.",
                         file=sys.stderr,
                     )
                     error_count += 1
@@ -133,20 +155,21 @@ try:
                 # Vérification de l'email de l'admin
                 if not data.admin_email:
                     print(
-                        "\tErreur : Email de l'administrateur·ice manquant ou vide. Ligne ignorée.",
+                        "\tAvertissement : Email de l'administrateur·ice manquant ou vide.",
                         file=sys.stderr,
                     )
-                    error_count += 1
-                    continue
 
                 # Vérification que la structure n'existe pas déjà
                 structure = Structure.objects.filter(siret=data.siret).first()
                 if structure:
-                    print(f"\tStructure existante : '{structure.name}'. Ligne ignorée.")
+                    print(f"\t☑️ Structure existante : '{structure.name}'. Ligne ignorée.")
                     ignored_count += 1
                     continue
 
-                # Création de la structure
+                ####################
+                # LOAD
+                ####################
+
                 print(f"\tCréation d'une nouvelle structure pour le SIRET {data.siret}")
                 try:
                     establishment = Establishment.objects.get(siret=data.siret)
@@ -165,13 +188,14 @@ try:
                 _edit_and_save_structure(structure, data)
 
                 if wet_run:
-                    _invite_structure_admin(structure, data.admin_email)
+                    if data.admin_email:
+                        _invite_structure_admin(structure, data.admin_email)
 
                 created_count += 1
-                print("\tStructure créée.")
+                print("\t✅ Structure créée.")
 
             except Exception as e:
-                print(f"\tErreur inattendue - {e}", file=sys.stderr)
+                print(f"\t❌ Erreur inattendue - {e}", file=sys.stderr)
                 error_count += 1
                 continue
 

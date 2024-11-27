@@ -4,13 +4,19 @@ from types import SimpleNamespace
 
 from django.db import transaction
 
+from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import get_geo_data
-from dora.services.models import ServiceModel, ServiceSource, ServiceStatus
+from dora.services.models import (
+    LocationKind,
+    ServiceModel,
+    ServiceSource,
+    ServiceStatus,
+)
 from dora.services.utils import instantiate_model
 from dora.structures.models import Structure
 from dora.users.models import User
 
-csv_file_path = "./cresus_services.csv"
+csv_file_path = "./cresus_services_light.csv"
 
 # 💡 Mettre à True pour activer les écritures en base de données
 wet_run = False
@@ -25,6 +31,43 @@ source, _ = ServiceSource.objects.get_or_create(
 )
 
 
+def _extract_location_kinds_from_line(line):
+    location_kinds_raw = line.get("location_kinds", "").strip()
+    if not location_kinds_raw:
+        return []
+
+    location_kinds_entities = {
+        kind.label.lower(): kind for kind in LocationKind.objects.all()
+    }
+
+    location_kinds = []
+    for entry in location_kinds_raw.split(","):
+        cleaned_entry = entry.strip().lower()
+        if cleaned_entry in location_kinds_entities:
+            location_kinds.append(location_kinds_entities[cleaned_entry])
+        else:
+            print(
+                f"\tType d'accueil avec la valeur '{entry.strip()}' introuvable. Valeur ignorée.",
+                file=sys.stderr,
+            )
+
+    return location_kinds
+
+
+def _extract_diffusion_zone_type_from_line(line):
+    diffusion_zone_type_raw = line.get("diffusion_zone_type", "").strip()
+    if not diffusion_zone_type_raw:
+        return None
+
+    for choice in AdminDivisionType:
+        if diffusion_zone_type_raw == choice.label:
+            return choice
+
+    raise ValueError(
+        f"\tType de zone de diffusion avec la valeur '{diffusion_zone_type_raw}' introuvable. Valeur ignorée.",
+    )
+
+
 def _extract_data_from_line(line):
     data = SimpleNamespace(
         modele_slug=line.get("modele_slug").strip(),
@@ -33,12 +76,12 @@ def _extract_data_from_line(line):
         contact_name=line.get("contact_name").strip(),
         contact_email=line.get("contact_email").strip(),
         contact_phone=line.get("contact_phone").replace(" ", "").strip(),
-        location_kind=line.get("location_kind").strip(),
+        location_kinds=_extract_location_kinds_from_line(line),
         location_city=line.get("location_city").strip(),
         location_address=line.get("location_address").strip(),
         location_complement=line.get("location_complement").strip(),
         location_postal_code=line.get("location_postal_code").replace(" ", "").strip(),
-        diffusion_zone_type=line.get("diffusion_zone_type").strip(),
+        diffusion_zone_type=_extract_diffusion_zone_type_from_line(line),
         diffusion_zone_city=line.get("diffusion_zone_city").strip(),
     )
     return data
@@ -56,6 +99,8 @@ def _edit_and_save_service(service, data):
     service.city = data.location_city
     service.postal_code = data.location_postal_code
     service.status = ServiceStatus.PUBLISHED
+    service.location_kinds.set(data.location_kinds)
+    service.diffusion_zone_type = data.diffusion_zone_type
 
     if wet_run:
         geo_data = get_geo_data(
@@ -65,7 +110,7 @@ def _edit_and_save_service(service, data):
             service.city_code = geo_data.city_code
             service.geom = geo_data.geom
 
-    service.save()
+        service.save()
 
 
 if wet_run:
@@ -84,12 +129,21 @@ try:
             try:
                 print(f"\nTraitement de la ligne {idx} :")
 
-                # Récupération des données
+                ####################
+                # EXTRACT
+                ####################
+
                 data = _extract_data_from_line(line)
+
+                ####################
+                # TRANSFORM
+                ####################
 
                 # Vérification que le SIRET de la structure est bien renseigné
                 if not data.structure_siret:
-                    print("\tSIRET manquant. Ligne ignorée.", file=sys.stderr)
+                    print(
+                        "\t❌ Erreur : SIRET manquant. Ligne ignorée.", file=sys.stderr
+                    )
                     error_count += 1
                     continue
 
@@ -98,7 +152,7 @@ try:
                     structure = Structure.objects.get(siret=data.structure_siret)
                 except Structure.DoesNotExist:
                     print(
-                        f"\tStructure avec le SIRET {data.structure_siret} introuvable. Ligne ignorée.",
+                        f"\t❌ Erreur : Structure avec le SIRET {data.structure_siret} introuvable. Ligne ignorée.",
                         file=sys.stderr,
                     )
                     error_count += 1
@@ -109,23 +163,35 @@ try:
                     model = ServiceModel.objects.get(slug=data.modele_slug)
                 except ServiceModel.DoesNotExist:
                     print(
-                        f"\tModèle de service avec le slug {data.modele_slug} introuvable. Ligne ignorée.",
+                        f"\t❌ Erreur : Modèle de service avec le slug {data.modele_slug} introuvable. Ligne ignorée.",
                         file=sys.stderr,
                     )
                     error_count += 1
                     continue
 
-                # Création du service
+                # Vérification du type de zone de diffusion (contrainte d'intégrité sur la table Services)
+                if not data.diffusion_zone_type:
+                    print(
+                        "\t❌ Erreur : Type de zone de diffusion manquant. Ligne ignorée.",
+                        file=sys.stderr,
+                    )
+                    error_count += 1
+                    continue
+
+                ####################
+                # LOAD
+                ####################
+
                 print(
                     f"\tCréation d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'."
                 )
                 new_service = instantiate_model(model, structure, bot_user)
                 _edit_and_save_service(new_service, data)
                 created_count += 1
-                print("\tService créé.")
+                print("\t✅ Service créé.")
 
             except Exception as e:
-                print(f"\tErreur lors du traitement - {e}", file=sys.stderr)
+                print(f"\t❌ Erreur lors du traitement - {e}", file=sys.stderr)
                 error_count += 1
                 continue
 
