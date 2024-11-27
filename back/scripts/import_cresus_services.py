@@ -23,6 +23,7 @@ wet_run = False
 
 created_count = 0
 error_count = 0
+geo_data_missing_lines = []
 
 bot_user = User.objects.get_dora_bot()
 source, _ = ServiceSource.objects.get_or_create(
@@ -85,7 +86,7 @@ def _extract_data_from_line(line):
     return data
 
 
-def _edit_and_save_service(service, data):
+def _edit_and_save_service(service, data, idx):
     service.creator = bot_user
     service.last_editor = bot_user
     service.source = source
@@ -100,15 +101,21 @@ def _edit_and_save_service(service, data):
     service.location_kinds.set(data.location_kinds)
     service.diffusion_zone_type = data.diffusion_zone_type
 
+    geo_data = get_geo_data(
+        service.address1, city=service.city, postal_code=service.postal_code
+    )
+    if geo_data:
+        service.city_code = geo_data.city_code
+        service.geom = geo_data.geom
+        service.diffusion_zone_details = geo_data.city_code
+    else:
+        geo_data_missing_lines.append({
+            "idx": idx,
+            "address": service.address1,
+            "city": service.city,
+            "postal_code": service.postal_code
+        })
     if wet_run:
-        geo_data = get_geo_data(
-            service.address1, city=service.city, postal_code=service.postal_code
-        )
-        if geo_data:
-            service.city_code = geo_data.city_code
-            service.geom = geo_data.geom
-            service.diffusion_zone_details = geo_data.city_code
-
         service.save()
 
 
@@ -185,7 +192,7 @@ try:
                     f"Création d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'."
                 )
                 new_service = instantiate_model(model, structure, bot_user)
-                _edit_and_save_service(new_service, data)
+                _edit_and_save_service(new_service, data, idx)
                 created_count += 1
                 print("✅ Service créé.")
 
@@ -206,4 +213,10 @@ except Exception as e:
 print("\n--------------------------------------------------")
 print("Traitement du fichier CSV terminé.")
 print(f"Résumé : {created_count} services créés, {error_count} erreurs.")
+print(f"Lignes sans données géographiques ({len(geo_data_missing_lines)}) :")
+for entry in geo_data_missing_lines:
+    print(
+        f"Ligne {entry['idx']}: Adresse={entry['address']}, Ville={entry['city']}, "
+        f"Code postal={entry['postal_code']}"
+    )
 print("--------------------------------------------------\n")

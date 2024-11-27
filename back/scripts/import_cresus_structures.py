@@ -28,6 +28,8 @@ created_count = 0
 ignored_count = 0
 error_count = 0
 
+geo_data_missing_lines = []
+
 bot_user = User.objects.get_dora_bot()
 source, _ = StructureSource.objects.get_or_create(
     value="fichier-cresus",
@@ -92,16 +94,24 @@ def _edit_and_save_structure(structure, data):
     structure.moderation_date = timezone.now()
     structure.national_labels.set(data.national_labels)
 
-    if wet_run:
-        geo_data = get_geo_data(
-            structure.address1, city=structure.city, postal_code=structure.postal_code
-        )
-        if geo_data:
-            structure.city_code = geo_data.city_code
-            structure.latitude = geo_data.lat
-            structure.longitude = geo_data.lon
-            structure.geocoding_score = geo_data.score
+    geo_data = get_geo_data(
+        structure.address1, city=structure.city, postal_code=structure.postal_code
+    )
+    if geo_data:
+        structure.city_code = geo_data.city_code
+        structure.latitude = geo_data.lat
+        structure.longitude = geo_data.lon
+        structure.geocoding_score = geo_data.score
+    else:
+        geo_data_missing_lines.append({
+            "idx": idx,
+            "siret": data.siret,
+            "address": structure.address1,
+            "city": structure.city,
+            "postal_code": structure.postal_code
+        })
 
+    if wet_run:
         structure.save()
 
 
@@ -245,4 +255,10 @@ print("Traitement du fichier CSV terminé.")
 print(
     f"Résumé : {created_count} structures créées, {ignored_count} structures ignorées, {error_count} erreurs."
 )
+print(f"Lignes sans données géographiques ({len(geo_data_missing_lines)}) :")
+for entry in geo_data_missing_lines:
+    print(
+        f"Ligne {entry['idx']}: SIRET={entry['siret']}, Adresse={entry['address']}, "
+        f"Ville={entry['city']}, Code postal={entry['postal_code']}"
+    )
 print("--------------------------------------------------\n")
