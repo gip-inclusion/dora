@@ -57,7 +57,7 @@ class Command(BaseCommand):
         msg = (
             "Mode 'wet-run' : les modifications seront effectuées"
             if wet_run
-            else "Mode 'dry-run' : les modifications seront pas effectuées"
+            else "Mode 'dry-run' : les modifications ne seront pas effectuées"
         )
 
         self.stdout.write(self.style.NOTICE(msg))
@@ -98,7 +98,9 @@ class Command(BaseCommand):
             self.stdout.write(f"> suppression de l'utilisateur {src.email}")
             if wet_run:
                 src.delete()
-            else:
+        else:
+            self.stdout.write(f"> désactivation de l'utilisateur {src.email}")
+            if wet_run:
                 src.is_active = False
                 src.save()
 
@@ -123,10 +125,9 @@ class Command(BaseCommand):
                         is_admin=src_membership.is_admin,
                     )
                     new_membership.save()
-                    dest.membership.add(new_membership)
             except IntegrityError:
                 self.stdout.write(
-                    f"  > {src.email} est déjà membre de : {src_membership.structure}"
+                    f"  > {dest.email} est déjà membre de : {src_membership.structure}"
                 )
 
         if delete:
@@ -161,9 +162,9 @@ class Command(BaseCommand):
                         user=dest,
                         structure_id=src_invitation.structure_id,
                         is_admin=src_invitation.is_admin,
+                        invited_by_admin=src_invitation.invited_by_admin,
                     )
                     new_invitation.save()
-                    dest.putative_membership.add(new_invitation)
             except IntegrityError:
                 self.stdout.write(
                     f"  > {src.email} est déjà invité à : {src_invitation.structure}"
