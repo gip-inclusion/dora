@@ -183,7 +183,7 @@ class User(AbstractBaseUser):
             return f"{self.first_name[0]}. {self.last_name}"
         return self.email.split("@")[0]
 
-    def should_join_structure(
+    def structure_to_join(
         self, siret: str | None = None, safir: str | None = None
     ) -> dict:
         # Pour ProConnect :

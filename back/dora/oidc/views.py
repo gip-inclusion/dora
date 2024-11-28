@@ -215,7 +215,7 @@ def oidc_logged_in(request):
     # Passage au front des informations complémentaires de l'utilisateur
     # ici : SAFIR et / ou SIRET
     if siret_safir := request.session.pop("_siret_safir", None):
-        url_params = token.user.should_join_structure(
+        url_params = token.user.structure_to_join(
             siret=siret_safir["siret"], safir=siret_safir["safir"]
         )
         redirect_uri += "&" + urlencode(url_params)
