@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -9,6 +11,8 @@ from sesame.utils import get_token, get_user
 
 from dora.auth_links.emails import send_authentication_link
 from dora.users.models import User
+
+logger = logging.getLogger("dora.logs.core")
 
 
 @csrf_exempt
@@ -30,12 +34,29 @@ def send_link(request):
 
     send_authentication_link(user.email, url)
 
+    logger.info(
+        "Demande de connexion par lien direct",
+        {
+            "legal": True,
+            "userId": user.pk,
+            "userEmail": user.email,
+        },
+    )
+
     return HttpResponse(status=204)
 
 
 def authenticate_with_link(request, sesame):
     if sesame:
         if user := get_user(sesame):
+            logger.info(
+                "Connexion par lien direct",
+                {
+                    "legal": True,
+                    "userId": user.pk,
+                    "userEmail": user.email,
+                },
+            )
             token, _ = Token.objects.get_or_create(user=user)
 
             # on garde une trace de la connexion par lien magique
@@ -44,6 +65,11 @@ def authenticate_with_link(request, sesame):
 
             redirect_uri = f"{settings.FRONTEND_URL}/auth/pc-callback/{token}/"
             return HttpResponseRedirect(redirect_uri)
+
+    logger.warning(
+        "Lien direct expiré",
+        {"sesameLink": f"...{sesame[:-5]}"},
+    )
 
     # le lien est invalide ou expiré :
     # redirection vers l'accueil (à défaut d'une page d'erreur)
