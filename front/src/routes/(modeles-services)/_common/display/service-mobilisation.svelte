@@ -16,6 +16,7 @@
   export let service: Service;
   export let isDI = false;
   export let orientationFormUrl: string;
+  export let handleOrientationFormClickEvent: (event: any) => void;
 
   $: isOrientableWithDoraForm =
     service.isOrientable &&
@@ -30,12 +31,6 @@
 
   let sharingModalIsOpen = false;
   let contactBoxOpen = false;
-
-  function handleOrientationClick() {
-    if ($token) {
-      dispatch("trackMobilisation", {});
-    }
-  }
 
   function handleShowContactClick() {
     if (!$token && !service.isContactInfoPublic) {
@@ -71,7 +66,7 @@
         label="Orienter votre bénéficiaire"
         to={orientationFormUrl}
         extraClass="bg-white !text-france-blue hover:!text-white"
-        on:click={handleOrientationClick}
+        on:click={handleOrientationFormClickEvent}
       />
     {:else if service.contactInfoFilled}
       {#if !contactBoxOpen}

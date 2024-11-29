@@ -3,9 +3,12 @@
   import { page } from "$app/stores";
 
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
-  import { userInfo } from "$lib/utils/auth";
+  import { token, userInfo } from "$lib/utils/auth";
   import { trackMobilisation } from "$lib/utils/stats";
+
+  import PreventFakeOrientationModal from "./modals/prevent-fake-orientation-modal.svelte";
 
   import ServiceBeneficiaries from "./service-beneficiaries.svelte";
   import ServiceMobilisation from "./service-mobilisation.svelte";
@@ -24,29 +27,49 @@
   const searchFragment = searchId ? `?searchId=${searchId}` : "";
   const orientationFormUrl = `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`;
 
+  $: isServiceFromOwnStructure = $userInfo
+    ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
+        (structure) => structure.slug === service.structure
+      )
+    : false;
+
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;
 
-  function handleTrackMobilisation(
-    event: CustomEvent<{ externalUrl?: string }>
-  ) {
+  let isPreventFakeOrientationModalOpen = false;
+  let isVideoModalOpen = false;
+
+  function handleShowVideoModal() {
+    isPreventFakeOrientationModalOpen = false;
+    isVideoModalOpen = true;
+  }
+
+  function handleTrackMobilisation(externalUrl?: string) {
     if (!mobilisationTracked) {
       const searchIdStr = $page.url.searchParams.get("searchId");
       const searchId = searchIdStr ? parseInt(searchIdStr) : undefined;
-      trackMobilisation(
-        service,
-        $page.url,
-        isDI,
-        searchId,
-        event.detail.externalUrl
-      );
+      trackMobilisation(service, $page.url, isDI, searchId, externalUrl);
       mobilisationTracked = true;
+    }
+  }
+  function handleTrackMobilisationEvent(
+    event: CustomEvent<{ externalUrl?: string }>
+  ) {
+    handleTrackMobilisation(event.detail.externalUrl);
+  }
+
+  function handleOrientationFormClickEvent(event) {
+    if (isServiceFromOwnStructure) {
+      event.preventDefault();
+      isPreventFakeOrientationModalOpen = true;
+    } else if ($token) {
+      handleTrackMobilisation();
     }
   }
 </script>
 
 <CenteredGrid>
-  <div class="mb-s48 flex flex-col justify-between gap-x-s48 md:flex-row">
+  <div class="mb-s48 gap-x-s48 flex flex-col justify-between md:flex-row">
     <div class="flex-auto basis-2/3">
       <div>
         <ServicePresentation {service} {servicesOptions} {isDI} />
@@ -59,27 +82,29 @@
         <hr class="my-s24" />
         <div class="mobilize">
           <ServiceMobilize
-            on:trackMobilisation={handleTrackMobilisation}
+            on:trackMobilisation={handleTrackMobilisationEvent}
             {service}
             {isDI}
             {orientationFormUrl}
+            {handleOrientationFormClickEvent}
           />
         </div>
       </div>
     </div>
 
     {#if browser}
-      <div class="flex flex-none flex-col gap-y-s24 md:w-[320px] lg:w-[375px]">
+      <div class="gap-y-s24 flex flex-none flex-col md:w-[320px] lg:w-[375px]">
         {#if !isModel}
-          <div class="sticky top-s32">
+          <div class="top-s32 sticky">
             <div
-              class="block rounded-lg border border-gray-02 bg-france-blue p-s24 px-s32 text-white print:hidden"
+              class="border-gray-02 bg-france-blue p-s24 px-s32 block rounded-lg border text-white print:hidden"
             >
               <ServiceMobilisation
-                on:trackMobilisation={handleTrackMobilisation}
+                on:trackMobilisation={handleTrackMobilisationEvent}
                 {service}
                 {isDI}
                 {orientationFormUrl}
+                {handleOrientationFormClickEvent}
               />
             </div>
 
@@ -90,7 +115,7 @@
             {/if}
 
             {#if !isModel}
-              <div class="mt-s24 flex flex-col gap-y-s24">
+              <div class="mt-s24 gap-y-s24 flex flex-col">
                 <SmallServiceShare {service} {isDI} />
               </div>
             {/if}
@@ -100,3 +125,11 @@
     {/if}
   </div>
 </CenteredGrid>
+
+<PreventFakeOrientationModal
+  bind:isOpen={isPreventFakeOrientationModalOpen}
+  on:video={handleShowVideoModal}
+  on:trackMobilisation={handleTrackMobilisationEvent}
+  {orientationFormUrl}
+/>
+<OrientationVideo bind:isVideoModalOpen />
