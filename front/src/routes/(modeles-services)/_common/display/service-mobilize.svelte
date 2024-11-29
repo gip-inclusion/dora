@@ -25,6 +25,7 @@
 
   export let service: Service | Model;
   export let isDI = false;
+  export let orientationFormUrl: string;
 
   const orderedCoachOrientationModeValues: Record<
     CoachOrientationModes,
@@ -49,10 +50,6 @@
     professionnel: 4,
     autre: 5,
   };
-
-  const searchId = $page.url.searchParams.get("searchId");
-  const searchFragment = searchId ? `?searchId=${searchId}` : "";
-  const orientationFormUrl = `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`;
 
   const dispatch = createEventDispatcher<{
     trackMobilisation: { externalUrl?: string };

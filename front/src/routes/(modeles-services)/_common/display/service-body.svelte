@@ -20,6 +20,10 @@
   export let isModel = false;
   export let isDI = false;
 
+  const searchId = $page.url.searchParams.get("searchId");
+  const searchFragment = searchId ? `?searchId=${searchId}` : "";
+  const orientationFormUrl = `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`;
+
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;
 
@@ -58,6 +62,7 @@
             on:trackMobilisation={handleTrackMobilisation}
             {service}
             {isDI}
+            {orientationFormUrl}
           />
         </div>
       </div>
@@ -74,6 +79,7 @@
                 on:trackMobilisation={handleTrackMobilisation}
                 {service}
                 {isDI}
+                {orientationFormUrl}
               />
             </div>
 
