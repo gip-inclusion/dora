@@ -1,5 +1,6 @@
 import logging
 import time
+from urllib.parse import urlencode
 
 import jwt
 import requests
@@ -198,18 +199,26 @@ def oidc_login(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def oidc_logged_in(request):
-    # étape indispensable pour le passage du token au frontend_state :
-    # malheuresement, cette étape est "zappée" si un paramètre `next` est passé lors de l'identification
-    # mozilla-django-oidc ne le prends pas en compte, il faut pour modifier la vue de callback et le redirect final
+    # Étape indispensable pour le passage du token au frontend_state :
+    # malheureusement, cette étape est "zappée" si un paramètre `next` est passé lors de l'identification
+    # `mozilla-django-oidc` ne le prends pas en compte, il faut pour modifier la vue de callback et le redirect final
 
-    # attention : l'utilisateur est toujours anonyme (a ce point il n'existe qu'un token DRF)
+    # attention : l'utilisateur est toujours anonyme (à ce point il n'existe qu'un token DRF)
     token = Token.objects.get(user_id=request.session["_auth_user_id"])
 
     redirect_uri = f"{settings.FRONTEND_URL}/auth/pc-callback/{token}/"
 
-    # gestion du next :
+    # gestion du `next` :
     if request.GET.get("next"):
         redirect_uri += "?" + request.GET.urlencode()
+
+    # Passage au front des informations complémentaires de l'utilisateur
+    # ici : SAFIR et / ou SIRET
+    if siret_safir := request.session.pop("_siret_safir", None):
+        url_params = token.user.structure_to_join(
+            siret=siret_safir["siret"], safir=siret_safir["safir"]
+        )
+        redirect_uri += "&" + urlencode(url_params)
 
     # on redirige (pour l'instant) vers le front en faisant passer le token DRF
     return HttpResponseRedirect(redirect_to=redirect_uri)
