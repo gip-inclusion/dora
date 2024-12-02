@@ -54,7 +54,7 @@
 
   const dispatch = createEventDispatcher<{
     trackMobilisation: { externalUrl?: string };
-    showPreventFakeOrientationModal: {};
+    showPreventFakeOrientationModal: object;
   }>();
 
   let isContactInfoForProfessionalShown = false;
