@@ -400,6 +400,23 @@ class Service(ModerationMixin, models.Model):
     )
 
     ##########
+    # Duration
+
+    duration_weekly_hours = models.PositiveIntegerField(
+        verbose_name="Temps hebdomadaire",
+        help_text="Nombre d'heures par semaine pour effectuer ce service.",
+        blank=True,
+        null=True,
+    )
+
+    duration_weeks = models.PositiveIntegerField(
+        verbose_name="Durée",
+        help_text="Nombre de semaines que durent le service (par défaut, 1)",
+        blank=True,
+        null=True,
+    )
+
+    ##########
     # Metadata
 
     structure = models.ForeignKey(
