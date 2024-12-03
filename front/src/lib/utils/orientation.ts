@@ -1,5 +1,6 @@
 import { getApiURL } from "./api";
 import { fetchData } from "./misc";
+import { TEST_WORDS } from "$lib/consts";
 import type { Choice, Orientation, Service } from "$lib/types";
 
 export function getOrientation(queryId: string, queryHash: string) {
@@ -141,4 +142,26 @@ export function computeRequirementsChoices(service: Service): {
     requirementChoices,
     requirementRequired: requirementChoices.length > 0,
   };
+}
+
+export function orientationContainsTestWords(
+  orientation: Orientation
+): string | false {
+  const testWordsRegexp = `\\b(${TEST_WORDS.join("|")})\\b`;
+  const fieldsToTest = [
+    orientation.referentFirstName,
+    orientation.referentLastName,
+    orientation.referentEmail,
+    orientation.beneficiaryFirstName,
+    orientation.beneficiaryLastName,
+    orientation.beneficiaryEmail,
+    orientation.orientationReasons,
+  ];
+  for (const field of fieldsToTest) {
+    const testWordMatched = field.match(testWordsRegexp);
+    if (testWordMatched) {
+      return testWordMatched[0];
+    }
+  }
+  return false;
 }
