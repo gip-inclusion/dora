@@ -1,0 +1,44 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools", "wheel"]
+
+[tool.sqlfluff.core]
+dialect = "postgres"
+exclude_rules = [
+    "layout.long_lines",
+    "structure.column_order",
+]
+templater = "dbt"
+
+[tool.sqlfluff.layout.type.alias_expression]
+# https://docs.sqlfluff.com/en/stable/layout.html#aligned-elements
+# We want non-default spacing _before_ the alias expressions.
+spacing_before = "align"
+# We want to align them within the next outer select clause.
+# This means for example that alias expressions within the FROM
+# or JOIN clause would _not_ be aligned with them.
+align_within = "select_clause"
+# The point at which to stop searching outward for siblings, which
+# in this example would likely be the boundary of a CTE. Stopping
+# when we hit brackets is usually a good rule of thumb for this
+# configuration.
+align_scope = "bracketed"
+
+
+[tool.sqlfluff.rules.capitalisation.keywords]
+capitalisation_policy = "upper"
+
+[tool.sqlfluff.rules.capitalisation.functions]
+extended_capitalisation_policy = "upper"
+
+[tool.sqlfluff.rules.capitalisation.literals]
+# Null & Boolean Literals
+capitalisation_policy = "upper"
+
+[tool.sqlfluff.rules.convention.casting_style]
+# SQL type casting
+preferred_type_casting_style = "cast"
+
+[tool.sqlfluff.templater.dbt]
+project_dir = "./analytics"
+profiles_dir = "./analytics"
