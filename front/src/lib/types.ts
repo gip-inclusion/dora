@@ -1,5 +1,3 @@
-import type { FundingLabel } from "../routes/recherche/result-filters.svelte";
-
 export type AdminDivisionType =
   | "country"
   | "region"
