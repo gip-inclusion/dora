@@ -1,3 +1,4 @@
+import type { Orientation } from "$lib/types";
 import * as v from "$lib/validation/schema-utils";
 
 export const orientationStep1Schema: v.Schema = {
@@ -85,7 +86,16 @@ export const orientationStep2Schema: v.Schema = {
   beneficiaryEmail: {
     label: "E-mail",
     default: "",
-    rules: [v.isEmail(), v.maxStrLength(254)],
+    rules: [
+      v.isEmail(),
+      v.maxStrLength(254),
+      (_fieldName, value, data: Orientation) => {
+        return {
+          valid: value !== data.referentEmail,
+          msg: "L’adresse e-mail du bénéficiaire doit être différente de celle du prescripteur.",
+        };
+      },
+    ],
     post: [v.lower, v.trim],
     maxLength: 254,
     required: (data) => {
