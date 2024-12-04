@@ -48,6 +48,13 @@
       validatedData.attachments
     ).flat();
 
+    // Remplace REFERENT par EMAIL en s'assurant que chaque élément n'apparaisse qu'une fois
+    let beneficiaryContactPreferences =
+      validatedData.beneficiaryContactPreferences.map((item) =>
+        item === "REFERENT" ? "EMAIL" : item
+      );
+    beneficiaryContactPreferences = [...new Set(beneficiaryContactPreferences)];
+
     return fetch(`${getApiURL()}/orientations/`, {
       method: "POST",
       headers: {
@@ -57,6 +64,7 @@
       },
       body: JSON.stringify({
         ...validatedData,
+        beneficiaryContactPreferences,
         serviceSlug: isDI ? null : service.slug,
         diServiceId: isDI ? service.slug : "",
         diServiceName: isDI ? service.name || "" : "",
