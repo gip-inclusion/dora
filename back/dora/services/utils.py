@@ -29,6 +29,8 @@ SYNC_FIELDS = [
     "qpv_or_zrr",
     "recurrence",
     "suspension_date",
+    "duration_weekly_hours",
+    "duration_weeks",
 ]
 
 # Many to many fields
