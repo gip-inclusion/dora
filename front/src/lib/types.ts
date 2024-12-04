@@ -430,6 +430,8 @@ export interface Service {
   diffusionZoneDetailsDisplay: string;
   diffusionZoneType: AdminDivisionType;
   diffusionZoneTypeDisplay: string;
+  durationWeeklyHours: number;
+  durationWeeks: number;
   feeCondition: FeeCondition;
   feeDetails: string;
   fillingDuration: number;
