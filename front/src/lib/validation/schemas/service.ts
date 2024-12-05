@@ -365,6 +365,16 @@ export const serviceSchema: v.Schema = {
     default: false,
     rules: [v.isBool()],
   },
+  durationWeeklyHours: {
+    label: "Temps hebdomadaire",
+    default: null,
+    rules: [v.isPositiveInteger()],
+  },
+  durationWeeks: {
+    label: "Durée",
+    default: null,
+    rules: [v.isPositiveInteger()],
+  },
 };
 
 export const inclusionNumeriqueSchema: v.Schema = {
