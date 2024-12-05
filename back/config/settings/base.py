@@ -367,8 +367,11 @@ OIDC_AUTH_REQUEST_EXTRA_PARAMS = {"acr_values": "eidas1"}
 # necessaire pour la gestion de "l'URL suivant" (`next_url`)
 LOGIN_REDIRECT_URL = "/oidc/logged_in/"
 
-# OIDC : redirection vers l'acceuil du front DORA pour la déconnexion
+# OIDC : redirection vers l'accueil du front DORA pour la déconnexion
 LOGOUT_REDIRECT_URL = FRONTEND_URL
+
+# OIDC: également en cas d'erreur d'identification (loggée)
+LOGIN_REDIRECT_URL_FAILURE = FRONTEND_URL
 
 # OIDC : permet de préciser quelle est la class/vue en charge du callback dans le flow OIDC
 # (essentiellement pour la gestion du `next_url`).
