@@ -208,6 +208,8 @@ class ServiceSerializer(serializers.ModelSerializer):
     modes_orientation_accompagnateur_autres = serializers.SerializerMethodField()
     modes_orientation_beneficiaire = serializers.SerializerMethodField()
     modes_orientation_beneficiaire_autres = serializers.SerializerMethodField()
+    temps_passe_duree_hebdomadaire = serializers.SerializerMethodField()
+    temps_passe_semaines = serializers.SerializerMethodField()
 
     class Meta:
         model = Service
@@ -253,6 +255,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             "modes_orientation_accompagnateur_autres",
             "modes_orientation_beneficiaire",
             "modes_orientation_beneficiaire_autres",
+            "temps_passe_duree_hebdomadaire",
+            "temps_passe_semaines",
         ]
 
     def get_id(self, obj):
@@ -409,3 +413,9 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_modes_orientation_beneficiaire_autres(self, obj):
         return obj.beneficiaries_access_modes_other
+
+    def get_temps_passe_duree_hebdomadaire(self, obj):
+        return obj.duration_weekly_hours
+
+    def get_temps_passe_semaines(self, obj):
+        return obj.duration_weeks
