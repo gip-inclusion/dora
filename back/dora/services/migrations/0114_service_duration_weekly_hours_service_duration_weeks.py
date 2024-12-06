@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("services", "0113_savedsearch_funding_labels"),
     ]
@@ -13,11 +12,21 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="service",
             name="duration_weekly_hours",
-            field=models.PositiveIntegerField(blank=True, help_text="Nombre d'heures par semaine pour effectuer ce service.", null=True, verbose_name="Temps hebdomadaire"),
+            field=models.PositiveIntegerField(
+                blank=True,
+                help_text="Nombre d'heures par semaine pour effectuer ce service.",
+                null=True,
+                verbose_name="Temps hebdomadaire",
+            ),
         ),
         migrations.AddField(
             model_name="service",
             name="duration_weeks",
-            field=models.PositiveIntegerField(blank=True, help_text="Nombre de semaines que durent le service (par défaut, 1)", null=True, verbose_name="Durée"),
+            field=models.PositiveIntegerField(
+                blank=True,
+                help_text="Nombre de semaines que durent le service (par défaut, 1)",
+                null=True,
+                verbose_name="Durée",
+            ),
         ),
     ]

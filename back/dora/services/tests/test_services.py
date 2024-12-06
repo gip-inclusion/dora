@@ -2692,6 +2692,8 @@ class ServiceSyncTestCase(APITestCase):
                 "coach_orientation_modes_external_form_link",
             ):
                 new_val = "https://example.com"
+            elif field in ("duration_weekly_hours", "duration_weeks"):
+                new_val = 4
             elif field == "forms":
                 new_val = ["https://example.com"]
             elif field == "contact_email":
