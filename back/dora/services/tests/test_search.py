@@ -138,9 +138,7 @@ def test_search_services_includes_thematiques_empty_list(api_client):
 
     with mock.patch("dora.data_inclusion.di_client_factory") as mock_di_client_factory:
         di_client = FakeDataInclusionClient()
-        service = make_di_service_data(
-            thematiques=[]
-        )
+        service = make_di_service_data(thematiques=[])
         di_client.services.append(service)
 
         mock_di_client_factory.return_value = di_client
@@ -149,10 +147,7 @@ def test_search_services_includes_thematiques_empty_list(api_client):
 
         assert response.status_code == 200
 
-        assert (
-            len(response.data["services"]) == 1
-        ), "un service devrait être retourné"
-
+        assert len(response.data["services"]) == 1, "un service devrait être retourné"
 
 
 def test_search_services_includes_thematiques_null(api_client):
@@ -163,9 +158,7 @@ def test_search_services_includes_thematiques_null(api_client):
 
     with mock.patch("dora.data_inclusion.di_client_factory") as mock_di_client_factory:
         di_client = FakeDataInclusionClient()
-        service = make_di_service_data(
-            thematiques=None
-        )
+        service = make_di_service_data(thematiques=None)
         di_client.services.append(service)
 
         mock_di_client_factory.return_value = di_client
@@ -174,6 +167,4 @@ def test_search_services_includes_thematiques_null(api_client):
 
         assert response.status_code == 200
 
-        assert (
-            len(response.data["services"]) == 1
-        ), "un service devrait être retourné"
+        assert len(response.data["services"]) == 1, "un service devrait être retourné"
