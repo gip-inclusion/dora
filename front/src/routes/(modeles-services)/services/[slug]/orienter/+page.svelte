@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import ContactBox from "./contact-box.svelte";
@@ -87,7 +88,21 @@
       </p>
 
       <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
-        <ValidationForm {service} />
+        <div class="flex flex-col gap-s32">
+          <Notice type="warning" title="Rappel"
+            ><p>
+              Les orientations non valides (test/fictives) nécessitent une
+              vérification manuelle, ce qui augmente la charge de travail de nos
+              équipes. Pour comprendre le fonctionnement du formulaire, nous
+              vous invitons à consulter <a
+                href="https://aide.dora.inclusion.beta.gouv.fr/fr/category/orienter-vos-beneficiaires-c25cna/"
+                target="_blank"
+                class="underline">notre documentation</a
+              >.
+            </p></Notice
+          >
+          <ValidationForm {service} />
+        </div>
         <div class="mt-s32 w-full shrink-0 md:mt-s0 md:w-[384px]">
           <ContactBox {service} {isDI} />
         </div>
