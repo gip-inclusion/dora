@@ -5,6 +5,7 @@
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
   import Form from "$lib/components/forms/form.svelte";
+  import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
   import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
   import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
@@ -106,6 +107,8 @@
         />
 
         <FieldsPresentation bind:service={model} {servicesOptions} {model} />
+
+        <FieldsDuration bind:service={model} {servicesOptions} {model} />
 
         <FieldsPublics bind:service={model} {servicesOptions} {model} />
 

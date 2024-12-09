@@ -365,6 +365,16 @@ export const serviceSchema: v.Schema = {
     default: false,
     rules: [v.isBool()],
   },
+  durationWeeklyHours: {
+    label: "Temps hebdomadaire",
+    default: null,
+    rules: [v.isPositiveInteger()],
+  },
+  durationWeeks: {
+    label: "Durée",
+    default: null,
+    rules: [v.isPositiveInteger()],
+  },
 };
 
 export const inclusionNumeriqueSchema: v.Schema = {
@@ -424,6 +434,8 @@ export const draftSchema: v.Schema = {
     serviceSchema.coachOrientationModesExternalFormLink,
   coachOrientationModesOther: serviceSchema.coachOrientationModesOther,
   credentials: serviceSchema.credentials,
+  durationWeeklyHours: serviceSchema.durationWeeklyHours,
+  durationWeeks: serviceSchema.durationWeeks,
   forms: serviceSchema.forms,
   onlineForm: serviceSchema.onlineForm,
   contactName: serviceSchema.contactName,
@@ -496,6 +508,8 @@ export const modelSchema: v.Schema = {
     serviceSchema.coachOrientationModesExternalFormLink,
   coachOrientationModesOther: serviceSchema.coachOrientationModesOther,
   credentials: serviceSchema.credentials,
+  durationWeeklyHours: serviceSchema.durationWeeklyHours,
+  durationWeeks: serviceSchema.durationWeeks,
   forms: serviceSchema.forms,
   onlineForm: serviceSchema.onlineForm,
   recurrence: serviceSchema.recurrence,
