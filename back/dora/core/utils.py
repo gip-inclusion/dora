@@ -1,10 +1,17 @@
+import json
 import logging
 import re
+from dataclasses import dataclass
 from typing import Tuple
 
+import requests
+from django.contrib.gis.geos import Point
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.text import Truncator
+from furl import furl
+
+from dora.core.constants import WGS84
 
 logger = logging.getLogger(__name__)
 
@@ -49,4 +56,66 @@ def get_object_or_none(klass, *args, **kwargs):
     try:
         return get_object_or_404(klass, *args, **kwargs)
     except Http404:
+        return None
+
+
+@dataclass
+class GeoData:
+    address: str
+    city: str
+    postal_code: str
+    city_code: str
+    geom: Point
+    lat: str
+    lon: str
+    score: float
+
+    def __str__(self):
+        return f"GeoData({self.address}, {self.postal_code} {self.city} (INSEE : {self.city_code}))"
+
+
+def get_geo_data(address, city=None, postal_code=None, city_code=None):
+    url = furl("https://api-adresse.data.gouv.fr").add(
+        path="/search/",
+        args={
+            "q": " ".join(filter(None, [address, city])),
+            "postcode": postal_code,
+            "citycode": city_code,
+            "autocomplete": 0,
+            "limit": 1,
+        },
+    )
+    response = requests.get(
+        url,
+        params={},
+        headers={
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+    )
+
+    if response.status_code != 200:
+        logger.error(f"Erreur dans la récupération des données: {response.content}")
+        return None
+
+    result = json.loads(response.content)
+    if result["features"]:
+        feat = result["features"][0]
+        if feat["properties"]["score"] > 0.5:
+            coords = feat["geometry"]["coordinates"]
+            return GeoData(
+                address=feat["properties"]["name"],
+                city=feat["properties"]["city"],
+                postal_code=feat["properties"]["postcode"],
+                city_code=feat["properties"]["citycode"],
+                geom=Point(coords[0], coords[1], srid=WGS84),
+                lon=coords[0],
+                lat=coords[1],
+                score=feat["properties"]["score"]
+            )
+        else:
+            logger.error("Résultat incertain")
+            return None
+    else:
+        logger.error("Aucun résultat trouvé")
         return None
