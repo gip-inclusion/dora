@@ -24,6 +24,8 @@ class ContactPreference(models.TextChoices):
 
 
 class OrientationStatus(models.TextChoices):
+    MODERATION_PENDING = "MODERATION_PENDING", "En cours de modération"
+    MODERATION_REJECTED = "MODERATION_REJECTED", "Rejetée par la modération"
     PENDING = "OUVERTE", "Ouverte / En cours de traitement"
     ACCEPTED = "VALIDÉE", "Validée"
     REJECTED = "REFUSÉE", "Refusée"
@@ -165,7 +167,7 @@ class Orientation(models.Model):
         blank=True, null=True, verbose_name="date de traitement"
     )
     status = models.CharField(
-        max_length=10,
+        max_length=20,
         choices=OrientationStatus.choices,
         default=OrientationStatus.PENDING,
         verbose_name="statut",
