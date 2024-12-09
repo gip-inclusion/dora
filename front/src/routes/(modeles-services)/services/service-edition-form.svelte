@@ -230,6 +230,8 @@
 
           <FieldsPresentation bind:service {servicesOptions} {model} />
 
+          <FieldsDuration bind:service {servicesOptions} {model} />
+
           <FieldsPublics bind:service {servicesOptions} {model} />
 
           <FieldsModalities bind:service {servicesOptions} {model} />
@@ -242,8 +244,6 @@
           <FieldsPerimeter bind:service {servicesOptions} />
 
           <FieldsPlace bind:service {structure} {servicesOptions} />
-
-          <FieldsDuration bind:service {model} />
 
           <FieldsContact bind:service />
         </div>

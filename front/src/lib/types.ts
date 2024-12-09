@@ -300,7 +300,8 @@ export type CoachOrientationModes =
   | "envoyer-un-mail"
   | "telephoner"
   | "autre";
-export type BeneficiaryAccessModes =
+
+  export type BeneficiaryAccessModes =
   | "professionnel"
   | "se-presenter"
   | "completer-le-formulaire-dadhesion"
@@ -594,6 +595,8 @@ export type Model = {
   credentials: CustomizableFK[];
   credentialsDisplay: string[];
   department: string;
+  durationWeeklyHours: number;
+  durationWeeks: number;
   externalFormLink: string;
   externalFormLinkText: string;
   feeCondition: FeeCondition;
