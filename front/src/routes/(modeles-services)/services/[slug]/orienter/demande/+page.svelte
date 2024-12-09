@@ -48,7 +48,11 @@
       validatedData.attachments
     ).flat();
 
-    // Remplace REFERENT par EMAIL en s'assurant que chaque élément n'apparaisse qu'une fois
+    // Remplace REFERENT par EMAIL en s'assurant que chaque élément n'apparaisse qu'une fois.
+    // Explication : le mode REFERENT existe uniquement côté front-end et sert à spécifier
+    // l'adresse e-mail du référent comme celle du destinataire via une case à cocher supplémentaire.
+    // Côté back-end, ce mode n'existe pas. On utilise le mode EMAIL à la place. L'adresse e-mail du
+    // référent a été spécifiée dans le champ beneficiaryEmail.
     let beneficiaryContactPreferences =
       validatedData.beneficiaryContactPreferences.map((item) =>
         item === "REFERENT" ? "EMAIL" : item
