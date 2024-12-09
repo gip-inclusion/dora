@@ -3,6 +3,7 @@ from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.forms.models import BaseInlineFormSet
 
 from dora.core.admin import EnumAdmin
+from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 
 from .models import (
@@ -142,6 +143,42 @@ class ServiceInline(admin.TabularInline):
     extra = 0
 
 
+class OrientationModerationPendingInline(admin.TabularInline):
+    model = Orientation
+    verbose_name = "Orientation en cours de modération"
+    verbose_name_plural = "Orientations en cours de modération"
+    show_change_link = True
+    can_delete = False
+    extra = 0
+    fields = [
+        "beneficiary_first_name",
+        "beneficiary_last_name",
+        "beneficiary_email",
+        "referent_first_name",
+        "referent_last_name",
+        "referent_email",
+        "service",
+        "orientation_reasons",
+    ]
+    readonly_fields = [
+        "beneficiary_first_name",
+        "beneficiary_last_name",
+        "beneficiary_email",
+        "referent_first_name",
+        "referent_last_name",
+        "referent_email",
+        "service",
+        "orientation_reasons",
+    ]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.filter(status=OrientationStatus.MODERATION_PENDING)
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
 class StructureAdmin(admin.ModelAdmin):
     list_display = [
         "name",
@@ -181,6 +218,7 @@ class StructureAdmin(admin.ModelAdmin):
         StructurePutativeMemberInline,
         BranchInline,
         ServiceInline,
+        OrientationModerationPendingInline,
     ]
     readonly_fields = (
         "creation_date",
