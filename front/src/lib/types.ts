@@ -299,7 +299,7 @@ export type CoachOrientationModes =
   | "telephoner"
   | "autre";
 
-  export type BeneficiaryAccessModes =
+export type BeneficiaryAccessModes =
   | "professionnel"
   | "se-presenter"
   | "completer-le-formulaire-dadhesion"
