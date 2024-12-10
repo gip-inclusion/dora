@@ -1,0 +1,30 @@
+{% extends "admin/change_form.html" %}
+
+{% block content_title %}
+  {{ block.super }}
+  {% if moderation_pending %}
+    <fieldset class="module">
+      <h2 style="background-color: #ef972c; color: black; font-weight: bold; text-transform: uppercase;">Modération du rattachement</h2>
+      <div class="submit-row" style="flex-direction: column;">
+        <p>Vérifier la légitimité du rattachement à partir de l’identité des utilisateurs rattachés et du détail des demandes d’orientation émises (en bas de la page).</p>
+        <p>En fonction du résultat de ces vérifications, <b>approuver</b> ou <b>rejeter</b> le rattachement en cliquant sur l’un des boutons ci-dessous.</p>
+        <div style="display: flex; justify-content: space-between;">
+          <form method="post" action="{% url 'admin:moderation_approve' original.pk %}">
+            {% csrf_token %}
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <input type="submit" value="Approuver" onclick="return confirm('Êtes-vous sûr de vouloir approuver ce rattachement ?');" style="--button-bg: #34b27c; --button-hover-bg: #73ebb1; font-weight: bold;" />
+              <div>
+                <p>Effets de l’action <i>Approuver</i> :</p>
+                <ul>
+                  <li>la structure passe au statut de modération <i>Validé</i> ;</li>
+                  <li>toutes les demandes d’orientation ayant le statut <i>En cours de modération</i> passent au statut <i>Ouverte / En cours de traitement</i> ;</li>
+                  <li>envoi des e-mails pour toutes ces demandes d’orientation.</li>
+                </ul>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </fieldset>
+  {% endif %}
+{% endblock %}
