@@ -8,6 +8,70 @@ from dora.orientations.models import OrientationStatus
 
 
 @pytest.mark.django_db
+def test_moderation_template(admin_client):
+    # Création de la structure
+    structure = make_structure(
+        moderation_status=ModerationStatus.NEED_INITIAL_MODERATION
+    )
+
+    # Création d'orientations avec le statut tous les statuts possibles
+    orientation_moderation_pending = make_orientation(
+        prescriber_structure=structure, status=OrientationStatus.MODERATION_PENDING
+    )
+    orientation_moderation_rejected = make_orientation(
+        prescriber_structure=structure, status=OrientationStatus.MODERATION_REJECTED
+    )
+    orientation_pending = make_orientation(
+        prescriber_structure=structure, status=OrientationStatus.PENDING
+    )
+    orientation_accepted = make_orientation(
+        prescriber_structure=structure, status=OrientationStatus.ACCEPTED
+    )
+    orientation_rejected = make_orientation(
+        prescriber_structure=structure, status=OrientationStatus.REJECTED
+    )
+
+    # Construction de l'URL de la page de modification de structure
+    url = reverse("admin:structures_structure_change", args=[structure.pk])
+
+    # Appel de la page via le client admin
+    response = admin_client.get(url)
+
+    # Vérification du succès de la requête
+    assert response.status_code == 200
+
+    # Vérification que la page contient bien la section de modération
+    assert "Modération du rattachement".encode("utf-8") in response.content
+
+    # Suppression de l'orientation ayant le statut MODERATION_PENDING
+    orientation_moderation_pending.delete()
+
+    # Appel de la page via le client admin
+    response = admin_client.get(url)
+
+    # Vérification du succès de la requête
+    assert response.status_code == 200
+
+    # Vérification que la page ne contient pas la section de modération
+    assert "Modération du rattachement".encode("utf-8") not in response.content
+
+    # Suppression de toutes les autres orientations
+    orientation_moderation_rejected.delete()
+    orientation_pending.delete()
+    orientation_accepted.delete()
+    orientation_rejected.delete()
+
+    # Appel de la page via le client admin
+    response = admin_client.get(url)
+
+    # Vérification du succès de la requête
+    assert response.status_code == 200
+
+    # Vérification que la page ne contient pas la section de modération
+    assert "Modération du rattachement".encode("utf-8") not in response.content
+
+
+@pytest.mark.django_db
 def test_moderation_approve(admin_client):
     # Création de la structure
     structure = make_structure(
