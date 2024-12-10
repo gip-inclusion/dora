@@ -132,7 +132,7 @@ class Orientation(models.Model):
         Structure,
         verbose_name="Structure",
         on_delete=models.SET_NULL,
-        related_name="+",
+        related_name="orientations",
         null=True,
     )
     service = models.ForeignKey(
