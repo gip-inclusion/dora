@@ -64,15 +64,24 @@ export function isBool(msg = "") {
 
 export function isInteger(msg = "") {
   return (name, value, _data) => ({
-    valid: !value || value === "" || Number.isInteger(value),
+    valid: value === undefined || value === null || value === "" || Number.isInteger(value),
     msg: msg || `Ce champ doit être un nombre entier`,
   });
 }
 
 export function isPositiveInteger(msg = "") {
+  return (name, value, _data) => {
+    return {
+      valid: value === undefined || value === null || value === "" || (!isNaN(value) && value >= 0),
+      msg: msg || `Ce champ doit être un nombre entier positif`,
+    }
+  };
+}
+
+export function minNum(min, msg = "") {
   return (name, value, _data) => ({
-    valid: !value || value === "" || (Number.isInteger(value) && value > 0),
-    msg: msg || `Ce champ doit être un nombre entier positif`,
+    valid: value === undefined || value === "" || (!isNaN(value) && value >= min),
+    msg: msg || `Ce champ doit être supérieur ou égal à ${min}`,
   });
 }
 
@@ -206,13 +215,6 @@ export function maxStrLength(max, msg = "") {
   });
 }
 
-export function minNum(min, msg = "") {
-  return (name, value, _data) => ({
-    valid: value >= min,
-    msg: msg || `Ce champ doit être une clé étrangère`, // TODO: this is not a valid enduser message
-  });
-}
-
 export function osmHoursNotContainsInvalid(msg = "") {
   return (name, value, _data) => ({
     valid: !value.toLowerCase().includes(INVALID_OPENING_HOURS_MARKER),
@@ -229,6 +231,16 @@ export function removeAllSpaces(value) {
 
 export function removeAllNonDigits(value) {
   return value.replace(/\D/gu, "");
+}
+
+export function toNumber(value) {
+  if (value === undefined || isNaN(value)) { 
+    return undefined;
+  }
+  if (value === "") {
+    return null;
+  }
+  return Number(value);
 }
 
 // ----- Postprocessing
