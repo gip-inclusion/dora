@@ -1,8 +1,13 @@
 from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.forms.models import BaseInlineFormSet
+from django.http import HttpResponseRedirect
+from django.urls import path, reverse
 
 from dora.core.admin import EnumAdmin
+from dora.core.models import ModerationStatus
+from dora.orientations.emails import send_orientation_created_emails
+from dora.orientations.models import OrientationStatus
 from dora.services.models import Service
 
 from .models import (
@@ -118,6 +123,20 @@ class BranchInline(admin.TabularInline):
         formset.save()
 
 
+class ModerationPendingListFilter(admin.SimpleListFilter):
+    title = "statut de modération"
+    parameter_name = "pending_moderation"
+
+    def lookups(self, request, model_admin):
+        return (("pending_moderation", "À modérer"),)
+
+    def queryset(self, request, queryset):
+        if self.value() == "pending_moderation":
+            return queryset.filter(
+                orientations__status=OrientationStatus.MODERATION_PENDING
+            ).distinct()
+
+
 class IsBranchListFilter(admin.SimpleListFilter):
     title = "antenne"
     parameter_name = "is_branch"
@@ -156,6 +175,7 @@ class StructureAdmin(admin.ModelAdmin):
         "last_editor",
     ]
     list_filter = [
+        ModerationPendingListFilter,
         IsBranchListFilter,
         "is_obsolete",
         "moderation_status",
@@ -189,6 +209,55 @@ class StructureAdmin(admin.ModelAdmin):
         "data_inclusion_source",
     )
     raw_id_fields = ("parent", "creator", "last_editor")
+
+    # Ajout du contexte moderation_pending qui définit si oui ou non le bloc modération est affiché.
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        structure = self.get_object(request, object_id)
+        extra_context = extra_context or {}
+        extra_context["moderation_pending"] = structure.orientations.filter(
+            status=OrientationStatus.MODERATION_PENDING
+        ).exists()
+        return super().change_view(
+            request, object_id, form_url, extra_context=extra_context
+        )
+
+    # Définition de l'URL pour l'action de modération Approuver
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "<path:object_id>/moderation_approve/",
+                self.admin_site.admin_view(self.moderation_approve),
+                name="moderation_approve",
+            ),
+        ]
+        return custom_urls + urls
+
+    # Action de modération Approuver
+    def moderation_approve(self, request, object_id):
+        structure = self.get_object(request, object_id)
+
+        # Passage de la structure au statut de modération Validé
+        structure.moderation_status = ModerationStatus.VALIDATED
+        structure.save()
+
+        # Passage des demandes d'orientation en attente au statut Ouverte / En cours de traitement et envoi des e-mails
+        moderation_pending_orientations = structure.orientations.filter(
+            status=OrientationStatus.MODERATION_PENDING
+        )
+        for orientation in moderation_pending_orientations:
+            orientation.status = OrientationStatus.PENDING
+            orientation.save()
+            send_orientation_created_emails(orientation)
+
+        # Message de confirmation
+        self.message_user(
+            request,
+            f"Le rattachement à la structure « {structure} » a été approuvé. Les demandes d’orientation en attente ont été transmises.",
+        )
+        return HttpResponseRedirect(
+            reverse("admin:structures_structure_change", args=[object_id])
+        )
 
 
 admin.site.register(Structure, StructureAdmin)
