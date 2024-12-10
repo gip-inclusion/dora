@@ -106,7 +106,11 @@ def make_model(**kwargs):
 
 
 def make_orientation(**kwargs):
-    prescriber_structure = make_structure()
+    prescriber_structure = (
+        kwargs.pop("prescriber_structure")
+        if "prescriber_structure" in kwargs
+        else make_structure()
+    )
     prescriber = (
         kwargs.pop("prescriber")
         if "prescriber" in kwargs
@@ -122,6 +126,7 @@ def make_orientation(**kwargs):
     orientation = baker.make(
         "Orientation",
         prescriber=prescriber,
+        prescriber_structure=prescriber_structure,
         service=service,
         **kwargs,
     )
