@@ -119,6 +119,20 @@ class BranchInline(admin.TabularInline):
         formset.save()
 
 
+class ModerationPendingListFilter(admin.SimpleListFilter):
+    title = "statut de modération"
+    parameter_name = "pending_moderation"
+
+    def lookups(self, request, model_admin):
+        return (("pending_moderation", "À modérer"),)
+
+    def queryset(self, request, queryset):
+        if self.value() == "pending_moderation":
+            return queryset.filter(
+                orientations__status=OrientationStatus.MODERATION_PENDING
+            ).distinct()
+
+
 class IsBranchListFilter(admin.SimpleListFilter):
     title = "antenne"
     parameter_name = "is_branch"
@@ -193,6 +207,7 @@ class StructureAdmin(admin.ModelAdmin):
         "last_editor",
     ]
     list_filter = [
+        ModerationPendingListFilter,
         IsBranchListFilter,
         "is_obsolete",
         "moderation_status",
