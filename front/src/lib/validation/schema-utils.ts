@@ -64,7 +64,11 @@ export function isBool(msg = "") {
 
 export function isInteger(msg = "") {
   return (name, value, _data) => ({
-    valid: value === undefined || value === null || value === "" || Number.isInteger(value),
+    valid:
+      value === undefined ||
+      value === null ||
+      value === "" ||
+      Number.isInteger(value),
     msg: msg || `Ce champ doit être un nombre entier`,
   });
 }
@@ -72,15 +76,20 @@ export function isInteger(msg = "") {
 export function isPositiveInteger(msg = "") {
   return (name, value, _data) => {
     return {
-      valid: value === undefined || value === null || value === "" || (!isNaN(value) && value >= 0),
+      valid:
+        value === undefined ||
+        value === null ||
+        value === "" ||
+        (!isNaN(value) && value >= 0),
       msg: msg || `Ce champ doit être un nombre entier positif`,
-    }
+    };
   };
 }
 
 export function minNum(min, msg = "") {
   return (name, value, _data) => ({
-    valid: value === undefined || value === "" || (!isNaN(value) && value >= min),
+    valid:
+      value === undefined || value === "" || (!isNaN(value) && value >= min),
     msg: msg || `Ce champ doit être supérieur ou égal à ${min}`,
   });
 }
@@ -234,7 +243,7 @@ export function removeAllNonDigits(value) {
 }
 
 export function toNumber(value) {
-  if (value === undefined || isNaN(value)) { 
+  if (value === undefined || isNaN(value)) {
     return undefined;
   }
   if (value === "") {
