@@ -25,10 +25,26 @@
     : {};
 
   $: totalHours =
-    (service.durationWeeklyHours || 0) * (service.durationWeeks || 0);
+    isNaN(service.durationWeeklyHours) || isNaN(service.durationWeeks)
+      ? 0
+      : (service.durationWeeklyHours || 0) * (service.durationWeeks || 0);
 </script>
 
 <FieldSet title="Durée de la prestation">
+  <Notice titleLevel="h3" type="warning">
+    <div>
+      Ceci correspond à la durée pendant laquelle les bénéficiaires vont être
+      mobilisés sur le service.
+    </div>
+    <div>
+      <strong>Exemples&nbsp;:</strong> Pour un atelier ponctuel de 3 h : temps hebdomadaire
+      = 3 heures, durée = 1 semaine (même si la durée réelle est inférieure, elle
+      sera arrondie à une semaine pour le calcul). Pour un accompagnement total de
+      30 h réparties sur 3 semaines : temps hebdomadaire moyen = 10 h, durée = 3
+      semaines.
+    </div>
+  </Notice>
+
   <FieldModel {...fieldModelProps.durationWeeklyHours ?? {}}>
     <BasicInputField
       type="number"
@@ -47,12 +63,14 @@
     />
   </FieldModel>
 
-  <Notice type="warning" showIcon={false} titleLevel="h3">
-    <div>
-      Ce qui correspond à un volume horaire total de <strong
-        >{totalHours}</strong
-      >
-      heures, réparti sur <strong>{service.durationWeeks || 0}</strong> semaines.
-    </div>
-  </Notice>
+  <div class="hint-total-duration">
+    Ce qui correspond à un volume horaire total de {totalHours} heure(s), répartie(s)
+    sur {service.durationWeeks || 0} semaine(s).
+  </div>
 </FieldSet>
+
+<style lang="postcss">
+  .hint-total-duration {
+    @apply font-bold;
+  }
+</style>

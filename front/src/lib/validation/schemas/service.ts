@@ -219,6 +219,18 @@ export const serviceSchema: v.Schema = {
     default: [],
     rules: [v.isArray([v.isCustomizablePK()])],
   },
+  durationWeeklyHours: {
+    label: "Temps hebdomadaire",
+    default: null,
+    post: [v.toNumber],
+    rules: [v.isPositiveInteger(), v.minNum(1)],
+  },
+  durationWeeks: {
+    label: "Durée",
+    default: null,
+    post: [v.toNumber],
+    rules: [v.isPositiveInteger(), v.minNum(1)],
+  },
   forms: {
     label: "Documents à compléter",
     default: [],
@@ -364,16 +376,6 @@ export const serviceSchema: v.Schema = {
     label: "",
     default: false,
     rules: [v.isBool()],
-  },
-  durationWeeklyHours: {
-    label: "Temps hebdomadaire",
-    default: null,
-    rules: [v.isPositiveInteger()],
-  },
-  durationWeeks: {
-    label: "Durée",
-    default: null,
-    rules: [v.isPositiveInteger()],
   },
 };
 

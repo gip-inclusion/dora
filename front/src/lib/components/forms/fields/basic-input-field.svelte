@@ -9,7 +9,7 @@
   import FieldWrapper from "../field-wrapper.svelte";
 
   export let id: string;
-  export let value: string | number | undefined = undefined;
+  export let value: string | undefined = undefined;
 
   export let type: "email" | "tel" | "text" | "url" | "date" | "number" =
     "text";
@@ -42,29 +42,6 @@
   function handlePhoneFocus() {
     if (phoneValue) {
       phoneValue = phoneValue.toString().replace(/[^0-9]/g, "");
-    }
-  }
-
-  function handleNumberInput(event) {
-    const inputValue = event.target.value;
-    if (inputValue && inputValue.length > 0) {
-      const numericValue = Number(inputValue);
-      if (!isNaN(numericValue) && numericValue < 0) {
-        value = 0;
-      } else {
-        value = inputValue.replace(/[^0-9]/g, "");
-      }
-    } else {
-      value = undefined;
-    }
-  }
-  function handleNumberBlur() {
-    const numericValue = Number(value);
-    value = isNaN(numericValue) ? undefined : numericValue;
-  }
-  function handleNumberFocus() {
-    if (value) {
-      value = Number(value);
     }
   }
 
@@ -120,12 +97,9 @@
         />
       {:else if type === "number"}
         <input
-          type="number"
+          type="text"
           bind:value
           inputmode="numeric"
-          on:input={handleNumberInput}
-          on:blur={handleNumberBlur}
-          on:focus={handleNumberFocus}
           {...props}
         />
       {:else if type === "email"}
@@ -160,7 +134,7 @@
       {/if}
       {#if value && maxLength != null && !readonly && !disabled}
         <div
-          class="mt-s4 self-end text-f12 text-gray-text-alt"
+          class="mt-s4 text-f12 text-gray-text-alt self-end"
           class:text-error={value.toString().length > maxLength}
         >
           {value.toString().length}/{maxLength} caractères
@@ -176,11 +150,11 @@
     input[type="email"],
     input[type="tel"],
     input[type="date"] {
-      @apply h-s48 rounded border border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt outline-none focus:shadow-focus;
+      @apply h-s48 border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus rounded border outline-none;
     }
 
     input {
-      @apply grow read-only:text-gray-03 disabled:bg-gray-00;
+      @apply read-only:text-gray-03 disabled:bg-gray-00 grow;
     }
   </style>
 {/if}
