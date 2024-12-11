@@ -31,7 +31,7 @@
 </script>
 
 <FieldSet title="Durée de la prestation">
-  <Notice titleLevel="h3" type="warning">
+  <Notice titleLevel="h3" type="info">
     <div>
       Ceci correspond à la durée pendant laquelle les bénéficiaires vont être
       mobilisés sur le service.
