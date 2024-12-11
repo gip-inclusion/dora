@@ -4,6 +4,24 @@ from .constants import THEMATIQUES_MAPPING_DI_TO_DORA
 from .mappings import map_service
 from .test_utils import FakeDataInclusionClient, make_di_service_data
 
+ALL_DI_COACH_ORIENTATION_MODES = [
+    "autre",
+    "completer-le-formulaire-dadhesion",
+    "envoyer-un-mail",
+    "envoyer-un-mail-avec-une-fiche-de-prescription",
+    "telephoner",
+    "prendre-rdv",
+]
+
+ALL_DORA_COACH_ORIENTATION_MODES = [
+    "autre",
+    "completer-le-formulaire-dadhesion",
+    "envoyer-un-mail",
+    "envoyer-un-mail-avec-une-fiche-de-prescription",
+    "formulaire-dora",
+    "telephoner",
+]
+
 
 def test_map_service_thematiques_mapping():
     input_thematiques = [
@@ -50,3 +68,41 @@ def test_di_client_search_thematiques_mapping(thematiques_dora, thematiques_di):
     results = di_client.search_services(thematiques=thematiques_dora)
 
     assert len(results) == 1
+
+
+def test_map_service_coach_orientation_modes_mapping_with_dora_form():
+    di_service_data = make_di_service_data(
+        modes_orientation_accompagnateur=ALL_DI_COACH_ORIENTATION_MODES,
+        formulaire_en_ligne=None,
+    )
+    service = map_service(di_service_data, False)
+
+    expected_dora_coach_orientation_modes = list(
+        filter(
+            lambda m: m != "completer-le-formulaire-dadhesion",
+            ALL_DORA_COACH_ORIENTATION_MODES,
+        )
+    )
+
+    assert sorted(service["coach_orientation_modes"]) == sorted(
+        expected_dora_coach_orientation_modes
+    )
+
+
+def test_map_service_coach_orientation_modes_mapping_without_dora_form():
+    di_service_data = make_di_service_data(
+        modes_orientation_accompagnateur=ALL_DI_COACH_ORIENTATION_MODES,
+        formulaire_en_ligne="https://example.com",
+    )
+    service = map_service(di_service_data, False)
+
+    expected_dora_coach_orientation_modes = list(
+        filter(
+            lambda m: m != "formulaire-dora",
+            ALL_DORA_COACH_ORIENTATION_MODES,
+        )
+    )
+
+    assert sorted(service["coach_orientation_modes"]) == sorted(
+        expected_dora_coach_orientation_modes
+    )
