@@ -91,9 +91,7 @@ export const orientationStep2Schema: v.Schema = {
       v.maxStrLength(254),
       (_fieldName, value, data: Orientation) => {
         return {
-          valid:
-            data.beneficiaryContactPreferences.includes("REFERENT") ||
-            value !== data.referentEmail,
+          valid: !value || value !== data.referentEmail,
           msg: "L’adresse e-mail du bénéficiaire doit être différente de celle du référent.",
         };
       },
