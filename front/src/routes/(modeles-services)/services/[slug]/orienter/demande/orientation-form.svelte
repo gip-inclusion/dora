@@ -13,27 +13,11 @@
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import { userPreferences } from "$lib/utils/preferences";
   import type { Choice } from "$lib/types";
-  import { formErrors } from "$lib/validation/validation";
 
   export let service;
   export let credentials;
 
   let contactPrefOptions: Choice[] = [];
-  let previousUseReferentEmail = false;
-
-  function useReferentEmailForBeneficiary(useReferentEmail: boolean) {
-    if (useReferentEmail === previousUseReferentEmail) {
-      return;
-    }
-    $orientation.beneficiaryEmail = useReferentEmail
-      ? $orientation.referentEmail
-      : "";
-    previousUseReferentEmail = useReferentEmail;
-    $formErrors.beneficiaryEmail = [];
-  }
-  $: useReferentEmail =
-    $orientation.beneficiaryContactPreferences.includes("REFERENT");
-  $: useReferentEmailForBeneficiary(useReferentEmail);
 
   if ($userInfo.structures?.length === 1) {
     $orientation.prescriberStructureSlug = $userInfo.structures[0].slug;
@@ -231,7 +215,6 @@
           placeholder="nom@domaine.fr"
           description="Format attendu&nbsp;: nom@domaine.fr"
           bind:value={$orientation.beneficiaryEmail}
-          disabled={useReferentEmail}
           vertical
         />
       </div>
