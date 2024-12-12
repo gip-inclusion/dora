@@ -825,8 +825,6 @@ class SearchResultSerializer(ServiceListSerializer):
             "coordinates",
             "diffusion_zone_type",
             "distance",
-            "duration_weekly_hours",
-            "duration_weeks",
             "fee_condition",
             "funding_labels",
             "is_orientable",

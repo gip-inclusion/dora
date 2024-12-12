@@ -111,7 +111,7 @@ def get_geo_data(address, city=None, postal_code=None, city_code=None):
                 geom=Point(coords[0], coords[1], srid=WGS84),
                 lon=coords[0],
                 lat=coords[1],
-                score=feat["properties"]["score"]
+                score=feat["properties"]["score"],
             )
         else:
             logger.error("Résultat incertain")

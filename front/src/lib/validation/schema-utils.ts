@@ -243,7 +243,7 @@ export function removeAllNonDigits(value) {
 }
 
 export function toNumber(value) {
-  if (value === undefined || isNaN(value)) {
+  if (isNaN(value)) {
     return undefined;
   }
   if (value === "") {

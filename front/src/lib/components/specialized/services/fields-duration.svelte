@@ -63,14 +63,8 @@
     />
   </FieldModel>
 
-  <div class="hint-total-duration">
+  <div class="font-bold">
     Ce qui correspond à un volume horaire total de {totalHours} heure(s), répartie(s)
     sur {service.durationWeeks || 0} semaine(s).
   </div>
 </FieldSet>
-
-<style lang="postcss">
-  .hint-total-duration {
-    @apply font-bold;
-  }
-</style>

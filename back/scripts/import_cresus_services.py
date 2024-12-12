@@ -31,6 +31,7 @@ source, _ = ServiceSource.objects.get_or_create(
     defaults={"label": "Fichier CSV des services de la fondation Cresus"},
 )
 
+
 def _extract_location_kinds_from_line(line):
     location_kinds_raw = line.get("location_kinds", "").strip()
     if not location_kinds_raw:
@@ -109,12 +110,14 @@ def _edit_and_save_service(service, data, idx):
         service.geom = geo_data.geom
         service.diffusion_zone_details = geo_data.city_code
     else:
-        geo_data_missing_lines.append({
-            "idx": idx,
-            "address": service.address1,
-            "city": service.city,
-            "postal_code": service.postal_code
-        })
+        geo_data_missing_lines.append(
+            {
+                "idx": idx,
+                "address": service.address1,
+                "city": service.city,
+                "postal_code": service.postal_code,
+            }
+        )
     if wet_run:
         service.save()
 
@@ -147,9 +150,7 @@ try:
 
                 # Vérification que le SIRET de la structure est bien renseigné
                 if not data.structure_siret:
-                    print(
-                        "❌ Erreur : SIRET manquant. Ligne ignorée.", file=sys.stderr
-                    )
+                    print("❌ Erreur : SIRET manquant. Ligne ignorée.", file=sys.stderr)
                     error_count += 1
                     continue
 
