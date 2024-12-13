@@ -1,38 +1,38 @@
-# Conditions générales d’utilisation de DORA au 12/12/2024
+# Conditions générales d’utilisation de DORA au 06/05/2024
 
-Les présentes conditions générales d’utilisation (ci-après « CGU ») fixent le cadre juridique de DORA et définissent les conditions d’accès et d’utilisation des Services par l’Utilisateur.
+Les présentes conditions générales d’utilisation (dites « CGU ») fixent le cadre juridique du site DORA et définissent les conditions d’accès et d’Utilisation des services par l’Utilisateur.
 
 ## Article 1 — Champ d’application
 
-La Plateforme est accessible gratuitement pour l’Utilisateur inscrit à savoir pour les offreurs de solutions, les accompagnateurs de l’insertion sur le territoire, et les bénéficiaires des solutions d’insertion.
+La plateforme DORA est accessible gratuitement pour l’Utilisateur inscrit à savoir pour les offreurs de solutions, les accompagnateurs de l’insertion sur le territoire, et les bénéficiaires des solutions d’insertion.
 
 ## Article 2 — Objet
 
-La Plateforme développée au sein du GIP Plateforme de l’inclusion est un service public numérique alimenté par les offreurs de solutions d’insertion locales, nationales et numériques.
+La plateforme DORA développée au sein du GIP Plateforme de l’inclusion est un service public numérique alimenté par les offreurs de solutions d’insertion locales, nationales et numériques.
 
-Elle centralise des données et permet aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent par le biais d’une recherche simple et personnalisée, des résultats qualifiés et des fiches de solutions claires.
+La plateforme centralise des données et permet aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent par le biais d’une recherche simple et personnalisée, des résultats qualifiés et des fiches de solutions claires.
 
 ## Article 3 — Définitions
 
 « L’Utilisateur » est :
 
-Tout Offreur de solutions (acteurs locaux associatifs, institutionnels, et nationaux).
+Tout offreur de solutions (acteurs locaux associatifs, institutionnels, et nationaux).
 
-Tout Accompagnateur cherchant une solution, à savoir tous les acteurs de l’insertion sur le territoire qui le souhaitent (SPE, Social, et Socioprofessionnel).
+Tout accompagnateur cherchant une solution, à savoir tous les acteurs de l’insertion sur le territoire qui le souhaitent (SPE, Social, et Socioprofessionnel).
 
-Tout Bénéficiaire désirant réussir son insertion professionnelle par l’emploi et engagé dans un parcours d’insertion.
+Tout bénéficiaire désirant réussir son insertion professionnelle par l’emploi et engagé dans un parcours d’insertion.
 
-« Le Gestionnaire de Territoire » est toute personne considérée comme correspondante locale ou ambassadrice ayant pour mission d’animer les structures d’un périmètre donné (géographique, thématique ou ciblé sur un réseau particulier) et d’aider au référencement des informations et au maintien des bonnes pratiques de mise à jour de la Plateforme.
+« Le Gestionnaire de Territoire » est toute personne considérée comme correspondante locale ou ambassadrice ayant pour mission d’animer les structures d’un périmètre donné (géographique, thématique ou ciblé sur un réseau particulier) et d’aider au référencement des informations et au maintien des bonnes pratiques de mise à jour de la plateforme DORA.
 
-« Les Services » sont l’ensemble des fonctionnalités proposées sur la Plateforme qui facilitent l’accompagnement dans la réussite de l’insertion professionnelle, sociale et socio-professionnel par et vers l’emploi.
+« Les services » sont l’ensemble des fonctionnalités proposées sur la plateforme DORA qui facilitent l’accompagnement dans la réussite de l’insertion professionnelle, sociale et socio-professionnel par et vers l’emploi.
 
 ## Article 4 — Fonctionnalités
 
 ### 4.1. Fonctionnalités du compte Utilisateur
 
-**Inscription sur DORA via ProConnect**
+**Inscription sur DORA via Inclusion Connect**
 
-Tout Utilisateur peut créer un compte sur DORA grâce à la solution ProConnect en fournissant les informations suivantes :
+Tout Utilisateur peut créer un compte sur DORA grâce à Inclusion Connect en fournissant les informations suivantes :
 
 - Nom ;
 - Prénom ;
@@ -40,17 +40,19 @@ Tout Utilisateur peut créer un compte sur DORA grâce à la solution ProConnect
 - Mot de passe ;
 - Confirmation du mot de passe.
 
-Lorsque l’Utilisateur fournit ces informations, il reçoit un mail pour vérifier son adresse électronique et activer son compte ProConnect.
+Lorsque l’Utilisateur fournit ces informations, il reçoit un mail pour vérifier son adresse électronique et activer son compte Inclusion Connect.
+
+En s’inscrivant aux services proposés par le site, l’Utilisateur s’engage à fournir des informations sincères et exactes permettant de créer son compte Inclusion Connect.
 
 ### 4.2 Identification de la structure
 
-Lorsque l’Utilisateur se connecte (via son adresse e-mail et son mot de passe ProConnect), il doit identifier sa structure soit en renseignant sa commune et le nom de sa structure soit en renseignant un numéro SIRET ou le numéro RNA.
+Lorsque l’Utilisateur se connecte (via son adresse e-mail et son mot de passe Inclusion Connect), il doit identifier sa structure soit en renseignant sa commune et le nom de sa structure soit en renseignant un numéro SIRET ou le numéro RNA.
 
 ### 4.3 Fonctionnalités uniquement ouvertes au compte Accompagnateur
 
-L’Accompagnateur dispose d’un compte dédié à partir duquel il peut avoir accès aux informations relatives aux structures et aux points de contacts.
+L’accompagnateur dispose d’un compte dédié à partir duquel il peut avoir accès aux informations relatives aux structures et aux points de contacts.
 
-L’Accompagnateur pourra également remplir un formulaire de demande de prise en charge ou d’orientation par une structure accueillante. Ce formulaire comprendra des pièces jointes nécessaires à la compréhension du dossier d’un bénéficiaire (nom, prénom, e-mail et documents demandés). L’Accompagnateur s’engage à informer la personne concernée de ce traitement de données.
+L’accompagnateur pourra également remplir un formulaire de demande de prise en charge ou d’orientation par une structure accueillante. Ce formulaire comprendra des pièces jointes nécessaires à la compréhension du dossier d’un bénéficiaire (nom, prénom, e-mail et documents demandés). L’accompagnateur s’engage à informer la personne concernée de ce traitement de données.
 
 ### 4.4 Fonctionnalités uniquement ouvertes au compte Gestionnaire de Territoire
 
@@ -67,31 +69,41 @@ Le Gestionnaire de territoire dispose également des mêmes fonctionnalités que
 
 Tout Utilisateur membre régulièrement inscrit pourra solliciter sa désinscription en contactant [contact@dora.inclusion.beta.gouv.fr](mailto:contact@dora.inclusion.beta.gouv.fr)
 
-## Article 6 — Abonnement à la lettre d’information
+## Article 6 — Abonnements
 
-Tout Offreur de solution ou Accompagnateur qui le souhaite peut s’abonner à la lettre d’information de Dora et se maintenir informé de manière hebdomadaire sur les offres d’insertion proposées sur son territoire, en cliquant sur le lien « s’abonner à l’infolettre » depuis la page de la Plateforme.
+Tout offreur de solution ou accompagnateur qui le souhaite peut s’abonner à la newsletter de Dora et se maintenir informé de manière hebdomadaire sur les offres d’insertion proposées sur son territoire : en cliquant sur le lien « s’abonner à l’infolettre » depuis la page d’accueil du site.
 
 ## Article 7 — Responsabilités
 
-### 7.1 L’Éditeur de la Plateforme
+### 7.1 Responsabilités de l’éditeur DORA
 
-Les sources des informations diffusées sur la Plateforme sont réputées fiables mais ne garantit pas être exempte de défauts, d’erreurs ou d’omissions.
+Les sources des informations diffusées sur le site sont réputées fiables mais le site ne garantit pas qu’il soit exempt de défauts, d’erreurs ou d’omissions.
 
-L’Éditeur s’engage à la sécurisation de la Plateforme, notamment en prenant toutes les mesures nécessaires permettant de garantir la sécurité et la confidentialité des informations fournies.
+Tout évènement dû à un cas de force majeur ayant pour conséquence un dysfonctionnement de la Plateforme et sous réserve de toute interruption ou modification en cas de maintenance, n’engage pas la responsabilité de DORA.
 
-L’Éditeur fournit les moyens nécessaires et raisonnables pour assurer un accès continu, sans contrepartie financière, au site. Il se réserve la liberté de faire évoluer, de modifier ou de suspendre, sans préavis, la plateforme pour des raisons de maintenance ou pour tout autre motif jugé nécessaire.
+L’éditeur s’engage à la sécurisation de la Plateforme, notamment en prenant toutes les mesures nécessaires permettant de garantir la sécurité et la confidentialité des informations fournies.
 
-La Plateforme peut mettre à disposition des liens pouvant orienter l’utilisateur vers des services numériques tiers. Ces tiers sont les seuls responsables des contenus publiés sur leurs services numériques. L’Éditeur n’a aucun contrôle sur le contenu de ces services numériques, leurs contenus ne sauraient engager la responsabilité de l’Éditeur.
+L’éditeur fournit les moyens nécessaires et raisonnables pour assurer un accès continu, sans contrepartie financière, au site. Il se réserve la liberté de faire évoluer, de modifier ou de suspendre, sans préavis, la plateforme pour des raisons de maintenance ou pour tout autre motif jugé nécessaire.
 
-En cas de manquement à une ou plusieurs des stipulations des présentes CGU, l’Éditeur se réserve le droit de suspendre ou de supprimer les contenus et le compte de l’Utilisateur responsable.
+Ce site peut mettre à disposition des liens pouvant orienter l’utilisateur vers des sites réalisés par des tiers extérieurs. Ces tiers sont les seuls responsables du contenu publié par leur soin. L’équipe de DORA n’a aucun contrôle sur le contenu de ces sites, ces contenus ne sauraient engager la responsabilité de l’administration.
 
-### 7.2 Responsabilités de l’Utilisateur
+### 7.2 Responsabilités de l’Utilisateur - accompagnateur
 
 Toute information transmise par l’Utilisateur est de sa seule responsabilité. Il appartient à l’Utilisateur de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l’ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
 
-Tout partage de données ou d’information non autorisées hors de la Plateforme est de la responsabilité de l’Utilisateur. L’Utilisateur s’engage lors de toute demande de prise en charge, à ne communiquer que les informations strictement nécessaires. Particulièrement, lorsqu’il reçoit une demande, il s’engage en cas d’opposition au traitement, à supprimer de ses bases de données les informations communiquées ou obtenues dans le cadre de la demande de l’accompagnateur demandeur.
+Tout partage de données ou d’information non autorisée hors de la plateforme est de la responsabilité de l’Utilisateur. L’Utilisateur s’engage lors de toute demande de prise en charge, à ne communiquer que les informations strictement nécessaires. Particulièrement, lorsqu’il reçoit une demande, il s’engage en cas d’opposition au traitement, à supprimer de ses bases de données les informations communiquées ou obtenues dans le cadre de la demande de l’accompagnateur demandeur.
 
 L’Utilisateur s’engage à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et règlementaires en vigueur. En particulier, il s’engage à ne pas publier, à quelque endroit que ce soit, de messages racistes, sexistes, injurieux, insultants ou contraires à l’ordre public.
+
+Il est rappelé que toute personne procédant à une fausse déclaration pour elle-même ou pour autrui s’expose, notamment, aux sanctions prévues à l’article 441-1 du code pénal, prévoyant des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amendes.
+
+### 7.3. Responsabilités du Gestionnaire de Territoire
+
+Toute information transmise par le Gestionnaire de Territoire est de sa seule responsabilité. Il appartient au Gestionnaire de Territoire de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l’ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
+
+Tout partage de données ou d’information non autorisée hors de la plateforme est de la responsabilité du Gestionnaire de Territoire.
+
+Le Gestionnaire de Territoire s’engage à ne pas mettre en ligne de contenus ou informations contraires aux dispositions légales et règlementaires en vigueur. En particulier, il s’engage à ne pas publier, à quelque endroit que ce soit, de messages racistes, sexistes, injurieux, insultants ou contraires à l’ordre public.
 
 Il est rappelé que toute personne procédant à une fausse déclaration pour elle-même ou pour autrui s’expose, notamment, aux sanctions prévues à l’article 441-1 du code pénal, prévoyant des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amendes.
 
@@ -126,7 +138,7 @@ Ils peuvent s’exercer par voie postale ou par voie électronique.
 La demande d’exercice des droits est exercée auprès du Groupement d’intérêt Public « Plateforme de l’inclusion » à l’adresse suivante :
 
 - Le Groupement d’intérêt public :
-- par courrier électronique à rgpd@inclusion.gouv.fr
+- par courrier électronique à dpo@numericite.eu
 
 Ces obligations ne sont pas opposables aux personnes concernées par le traitement de données à caractère personnel.
 
@@ -146,7 +158,7 @@ Chaque responsable conjoint met en place les mesures organisationnelles nécessa
 
 ### 8.7 Négligence grave des utilisateurs
 
-La mise en œuvre des mesures de sécurité et techniques relève de la responsabilité du Groupement d’intérêt public "Plateforme de l’inclusion" sous réserve de l’absence de négligence grave des utilisateurs de Dora. Particulièrement, la sécurité des mots de passe est de la responsabilité de partenaire responsable conjoint. Celui-ci sensibilise toute personne traitant des données "pour son compte" ou habilitée par lui à traiter les données, à respecter les mesures de sécurité et à ne pas commettre de négligence grave, notamment eu égard aux mots de passe et à leur confidentialité.
+La mise en œuvre des mesures de sécurité et techniques relève de la responsabilité du Groupement d’intérêt public "Plateforme de l’inclsuion" sous réserve de l’absence de négligence grave des utilisateurs de Dora. Particulièrement, la sécurité des mots de passe est de la responsabilité de partenaire responsable conjoint. Celui-ci sensibilise toute personne traitant des données "pour son compte" ou habilitée par lui à traiter les données, à respecter les mesures de sécurité et à ne pas commettre de négligence grave, notamment eu égard aux mots de passe et à leur confidentialité.
 
 ### 8.8 Notification en cas de violation de données
 
@@ -162,13 +174,12 @@ Le Groupement d’intérêt public « Plateforme de l’inclusion » s’ass
 
 En cas de transfert de données, le Groupement d’intérêt public « Plateforme de l’inclusion » s’assure de la légalité du transfert dont la responsabilité lui revient.
 
-## Article 9 — Mise à jour des conditions générales d’utilisation
+## Article 9 — Mise à jour des conditions d’utilisation
 
-Les termes des présentes CGU peuvent être amendés à tout moment, en fonction des modifications apportées à la plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire. Chaque modification donne lieu à une nouvelle version qui est acceptée par les parties.
+Les termes des présentes conditions d’utilisation peuvent être amendés à tout moment, en fonction des modifications apportées à la plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire. Chaque modification donne lieu à une nouvelle version qui est acceptée par les parties.
 
 Vous pouvez avoir accès à l’historique des différentes versions des conditions générales d’utilisation ici :
 
-- [Version du 06/05/2024](/cgu/cgu-20240506)
 - [Version du 20/07/2023](/cgu/cgu-20230720)
 - [Version du 15/05/2023](/cgu/cgu-20230515)
 - [Version du 13/12/2022](/cgu/cgu-20221213)
