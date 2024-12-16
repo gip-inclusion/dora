@@ -11,7 +11,6 @@
   export let orientationFormUrl: string;
 
   const dispatch = createEventDispatcher<{
-    poursuivre: object;
     video: object;
     trackMobilisation: object;
   }>();
