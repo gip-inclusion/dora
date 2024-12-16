@@ -3,12 +3,14 @@ from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpResponseRedirect
 from django.urls import path, reverse
+from django.utils import timezone
 
 from dora.core.admin import EnumAdmin
 from dora.core.models import ModerationStatus
 from dora.orientations.emails import send_orientation_created_emails
 from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
+from dora.structures.emails import send_moderation_rejected_notification
 
 from .models import (
     Structure,
@@ -267,6 +269,11 @@ class StructureAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.moderation_approve),
                 name="moderation_approve",
             ),
+            path(
+                "<path:object_id>/moderation_reject/",
+                self.admin_site.admin_view(self.moderation_reject),
+                name="moderation_reject",
+            ),
         ]
         return custom_urls + urls
 
@@ -291,6 +298,40 @@ class StructureAdmin(admin.ModelAdmin):
         self.message_user(
             request,
             f"Le rattachement à la structure « {structure} » a été approuvé. Les demandes d’orientation en attente ont été transmises.",
+        )
+        return HttpResponseRedirect(
+            reverse("admin:structures_structure_change", args=[object_id])
+        )
+
+    # Action de modération Rejeter
+    def moderation_reject(self, request, object_id):
+        structure = self.get_object(request, object_id)
+
+        # Envoi d'un e-mail explicatif à tous les membres et membres potentiels
+        send_moderation_rejected_notification(structure, request.POST.get("reason"))
+
+        # Désactivation de tous les membres et membres potentiels de la structure
+        structure.members.update(is_active=False)
+        structure.putative_members.update(is_active=False)
+
+        # Détachement de tous les membres et membres potentiels de la structure
+        structure.members.clear()
+        structure.putative_members.clear()
+
+        # Passage de la structure au statut de modération Nouvelle modération nécessaire
+        structure.moderation_status = ModerationStatus.NEED_NEW_MODERATION
+        structure.moderation_date = timezone.now()
+        structure.save()
+
+        # Passage des demandes d'orientation en cours de modération au statut Supprimée par la modération
+        structure.orientations.filter(
+            status=OrientationStatus.MODERATION_PENDING
+        ).update(status=OrientationStatus.MODERATION_REJECTED)
+
+        # Message de confirmation
+        self.message_user(
+            request,
+            f"Le rattachement à la structure « {structure} » a été rejeté. Les demandes d’orientation en attente ont été supprimées.",
         )
         return HttpResponseRedirect(
             reverse("admin:structures_structure_change", args=[object_id])
