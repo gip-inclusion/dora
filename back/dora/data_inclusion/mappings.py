@@ -173,8 +173,15 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
 
     coach_orientation_modes = None
     if service_data["modes_orientation_accompagnateur"] is not None:
+        coach_orientation_mode_values = map(
+            lambda mode: "formulaire-dora"
+            if mode == "completer-le-formulaire-dadhesion"
+            and service_data["formulaire_en_ligne"] is None
+            else mode,
+            service_data["modes_orientation_accompagnateur"],
+        )
         coach_orientation_modes = CoachOrientationMode.objects.filter(
-            value__in=service_data["modes_orientation_accompagnateur"]
+            value__in=coach_orientation_mode_values
         )
 
     profils = None

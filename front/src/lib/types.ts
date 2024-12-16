@@ -1,5 +1,3 @@
-import type { FundingLabel } from "../routes/recherche/result-filters.svelte";
-
 export type AdminDivisionType =
   | "country"
   | "region"
@@ -644,7 +642,7 @@ export type Day =
 export type DayPrefix = "Mo" | "Tu" | "We" | "Th" | "Fr" | "Sa" | "Su";
 export type DayPeriod = "timeSlot1" | "timeSlot2";
 
-type ContactPreferences = "TELEPHONE" | "EMAIL" | "AUTRE";
+type ContactPreferences = "TELEPHONE" | "EMAIL" | "REFERENT" | "AUTRE";
 
 export interface Orientation {
   // Tous les champs de l'étape 1 pouvant être optionnels

@@ -12,6 +12,9 @@
       {% if ContactPreference.PHONE in data.beneficiary_contact_preferences %}
         <li>{{ data.beneficiary_phone|format_phone }}</li>
       {% endif %}
+      {% if ContactPreference.REFERENT in data.beneficiary_contact_preferences %}
+        <li>contacter le conseiller référent.</li>
+      {% endif %}
       {% if ContactPreference.OTHER in data.beneficiary_contact_preferences %}
         <li>{{ data.beneficiary_other_contact_method }}</li>
       {% endif %}

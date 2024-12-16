@@ -750,5 +750,6 @@ class SavedSearch(models.Model):
         return [
             r
             for r in results
-            if datetime.fromisoformat(r["publication_date"]).date() > cutoff_date
+            if r["publication_date"] is not None
+            and datetime.fromisoformat(r["publication_date"]).date() > cutoff_date
         ]

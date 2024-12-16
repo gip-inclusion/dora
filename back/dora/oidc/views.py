@@ -28,6 +28,8 @@ from dora.users.models import User
 
 from .utils import updated_ic_user
 
+logger = logging.getLogger(__name__)
+
 
 @api_view(["POST"])
 @permission_classes([permissions.AllowAny])
@@ -279,11 +281,17 @@ class CustomAuthorizationCallbackView(OIDCAuthenticationCallbackView):
         next_url = self.request.session.get("oidc_login_next", None)
         next_fieldname = self.get_settings("OIDC_REDIRECT_FIELD_NAME", "next")
 
-        success_url = resolve_url(self.get_settings("LOGIN_REDIRECT_URL", "/"))
+        success_url = resolve_url(self.get_settings("LOGIN_REDIRECT_URL"))
         success_url += f"?{next_fieldname}={next_url}" if next_url else ""
 
         # redirection vers le front via `oidc/logged_in`
         return success_url
+
+    @property
+    def failure_url(self):
+        logger.error("Erreur d'identification, redirection vers la page d'accueil")
+
+        return self.get_settings("LOGIN_REDIRECT_URL_FAILURE")
 
 
 class CustomLogoutView(OIDCLogoutView):
@@ -303,6 +311,7 @@ class CustomLogoutView(OIDCLogoutView):
             if request.GET.get("state") != logout_state:
                 raise SuspiciousOperation("La vérification de la déconnexion a échoué")
         elif not request.session.get(settings.SESAME_SESSION_NAME):
-            raise SuspiciousOperation("Vérification de la déconnexion impossible")
+            # jeter une erreur ici est un peu violent, on se contentera d'un warning
+            logger.warning("Vérification de la déconnexion impossible (lien direct)")
 
         return super().post(request)

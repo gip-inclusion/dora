@@ -46,7 +46,7 @@ SECURE_SSL_REDIRECT = True
 # peuvent contenir un grand nombre de champs associés (par ex. membres)
 # et déclencher une erreur de type : `TooManyFieldsSent` lors de la modification
 # et de la validation des enregistrements.
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 2_000
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 4_000
 
 # Sentry :
 # uniquement sur les environnememts de production / staging

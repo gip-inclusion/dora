@@ -193,6 +193,11 @@ STORAGES = {
     },
 }
 
+# Limitations de Django pour la taille des formulaires :
+# Nombre de champs max. du formulaire (x2)
+# augmentation de la valeur par défaut pour tous les environnements
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2_000
+
 # Stockage S3 CleverCloud :
 AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -367,8 +372,11 @@ OIDC_AUTH_REQUEST_EXTRA_PARAMS = {"acr_values": "eidas1"}
 # necessaire pour la gestion de "l'URL suivant" (`next_url`)
 LOGIN_REDIRECT_URL = "/oidc/logged_in/"
 
-# OIDC : redirection vers l'acceuil du front DORA pour la déconnexion
+# OIDC : redirection vers l'accueil du front DORA pour la déconnexion
 LOGOUT_REDIRECT_URL = FRONTEND_URL
+
+# OIDC: également en cas d'erreur d'identification (loggée)
+LOGIN_REDIRECT_URL_FAILURE = FRONTEND_URL
 
 # OIDC : permet de préciser quelle est la class/vue en charge du callback dans le flow OIDC
 # (essentiellement pour la gestion du `next_url`).

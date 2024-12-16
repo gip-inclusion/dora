@@ -11,12 +11,14 @@
   import { onMount } from "svelte";
   import Accordion from "$lib/components/display/accordion.svelte";
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
+  import { orientationContainsTestWords } from "$lib/utils/orientation";
   import { userPreferences } from "$lib/utils/preferences";
+  import type { Choice } from "$lib/types";
 
   export let service;
   export let credentials;
 
-  let contactPrefOptions = [];
+  let contactPrefOptions: Choice[] = [];
 
   if ($userInfo.structures?.length === 1) {
     $orientation.prescriberStructureSlug = $userInfo.structures[0].slug;
@@ -33,6 +35,7 @@
     contactPrefOptions = [
       { value: "TELEPHONE", label: "Téléphone" },
       { value: "EMAIL", label: "E-mail" },
+      { value: "REFERENT", label: "Via le conseiller référent" },
       { value: "AUTRE", label: "Autre" },
     ];
 
@@ -40,6 +43,8 @@
     $orientation.referentFirstName = $userInfo.firstName;
     $orientation.referentEmail = $userInfo.email;
   });
+
+  $: testWordDetected = orientationContainsTestWords($orientation);
 </script>
 
 <div>
@@ -294,7 +299,22 @@
     </Fieldset>
   {/if}
 
-  <div class="my-s32">
+  <div class="my-s32 flex flex-col gap-s32">
+    {#if testWordDetected}
+      <Notice
+        type="error"
+        title="Le mot «&#8239;{testWordDetected}&#8239;» a été détecté dans les champs…"
+        ><p>
+          Les orientations fictives/test nécessitent une vérification manuelle,
+          augmentant la charge de travail de nos équipes. Pour découvrir le
+          fonctionnement du formulaire, consultez plutôt <a
+            href="https://aide.dora.inclusion.beta.gouv.fr/fr/category/orienter-vos-beneficiaires-c25cna/"
+            target="_blank"
+            class="underline">notre documentation</a
+          >.
+        </p></Notice
+      >
+    {/if}
     <Notice
       type="info"
       title="L’accompagnateur s’engage à informer la personne concernée de ce traitement de données."

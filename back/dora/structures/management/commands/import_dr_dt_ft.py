@@ -33,7 +33,9 @@ class Command(BaseCommand):
         try:
             structure.save()
         except Exception as ex:
-            print(f"Erreur à la création de la structure SIRET:{structure.siret} / SAFIR: {safir} ({ex})")
+            print(
+                f"Erreur à la création de la structure SIRET:{structure.siret} / SAFIR: {safir} ({ex})"
+            )
         else:
             structure.national_labels.add(LABEL)
             send_moderation_notification(
@@ -41,7 +43,7 @@ class Command(BaseCommand):
                 BOT_USER,
                 "Structure créée à partir de l’import DR/DT France Travail",
                 ModerationStatus.VALIDATED,
-        )
+            )
 
     def create_structure(self, siret, name, safir):
         try:

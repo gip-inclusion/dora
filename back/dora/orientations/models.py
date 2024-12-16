@@ -20,6 +20,7 @@ logger = logging.getLogger("dora.logs.core")
 class ContactPreference(models.TextChoices):
     PHONE = "TELEPHONE", "Téléphone"
     EMAIL = "EMAIL", "E-mail"
+    REFERENT = "REFERENT", "Via le conseiller référent"
     OTHER = "AUTRE", "Autre"
 
 

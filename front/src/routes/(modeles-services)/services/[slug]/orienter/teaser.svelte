@@ -2,8 +2,8 @@
   import type { Service } from "$lib/types";
   import { checkboxCircleFillIcon } from "$lib/icons";
   import { page } from "$app/stores";
-  import IcButton from "$lib/components/specialized/ic-button.svelte";
   import ContactInfo from "./contact-info.svelte";
+  import PcButton from "$lib/components/specialized/pc-button.svelte";
 
   export let service: Service;
   export let isDI: boolean;
@@ -78,7 +78,7 @@
         {/if}.
       </p>
 
-      <IcButton
+      <PcButton
         nextPage={encodeURIComponent(nextURL.pathname + nextURL.search)}
       />
     </div>
