@@ -550,6 +550,10 @@ class Service(ModerationMixin, models.Model):
         # en mode anonyme / non-connecté (voir AnonymousServiceSerializer).
         return bool(self.contact_email or self.contact_phone)
 
+    def address_line(self):
+        address = " ".join([self.address1, self.address2])
+        return f"{address} - {self.postal_code} {self.city}"
+
 
 class ServiceModelManager(models.Manager):
     def get_queryset(self):
