@@ -1,0 +1,36 @@
+{% extends "email-base.mjml" %}
+
+{% block title %}
+  Important : votre compte a été désactivé car votre structure ou activité sur DORA semble non conforme à nos CGU.
+{% endblock %}
+
+{% block preview %}
+  Important : votre compte a été désactivé car votre structure ou activité sur DORA semble non conforme à nos CGU.
+{% endblock %}
+
+{% block content %}
+  <p><strong>Bonjour {{ user.first_name }},</strong></p>
+
+  <p>Après vérification par nos équipes, certains aspects concernant la présence de votre structure <strong>{{ structure.name }}</strong> ou l’activité de l’un de vos collaborateurs sur DORA semblent ne pas être conformes à nos conditions générales d’utilisation (CGU).</p>
+
+  <p>Motif : <q>{{ reason }}</q></p>
+
+  <p>En conséquence, les mesures suivantes ont été prises :</p>
+  <ul style="text-align:left;">
+    <li><strong>désactivation de votre compte et de ceux des autres collaborateurs de votre structure</strong> ;</li>
+    <li><strong>mise en brouillon des services publiés</strong> : tous les services de la structure seront temporairement indisponibles ;</li>
+    <li><strong>annulation des demandes d’orientation en attente</strong> : ces demandes seront automatiquement annulées.</li>
+  </ul>
+
+  <p>Si vous estimez qu’il s’agit d’une erreur, vous pouvez répondre à cet e-mail en fournissant des éléments permettant de clarifier la situation. Nous étudierons attentivement votre retour afin de trouver une solution.</p>
+{% endblock %}
+
+{% block signature %}
+  <mj-text>
+    Cordialement,
+    <br/>
+    <strong>L’équipe DORA</strong>
+  </mj-text>
+{% endblock %}
+
+{% block support %}{% endblock %}
