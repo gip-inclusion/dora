@@ -2,6 +2,7 @@ from datetime import timedelta
 from unittest import mock
 
 import requests
+from django.conf import settings
 from django.contrib.gis.geos import MultiPolygon, Point
 from django.core.exceptions import ValidationError
 from django.test import override_settings
@@ -1025,6 +1026,72 @@ class ServiceTestCase(APITestCase):
         # ALORS il est considéré comme ayant déjà été dépublié
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["has_already_been_unpublished"], True)
+
+    def test_service_no_dora_form_enforce_post(self):
+        input_coach_orientation_modes = [
+            "autre",
+            "envoyer-un-mail",
+            "telephoner",
+            "formulaire-dora",
+        ]
+        kept_coach_orientation_modes = [
+            mode for mode in input_coach_orientation_modes if mode != "formulaire-dora"
+        ]
+        user = baker.make("users.User", is_valid=True)
+        blacklisted_siret = f"{settings.ORIENTATION_SIRENE_BLACKLIST[0]}12345"
+        structure = make_structure(user, siret=blacklisted_siret)
+        self.client.force_authenticate(user=user)
+        response = self.client.post(
+            "/services/",
+            {
+                "name": "dummy",
+                "structure": structure.slug,
+                "coachOrientationModes": input_coach_orientation_modes,
+            },
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(
+            sorted(response.data["coach_orientation_modes"]),
+            sorted(kept_coach_orientation_modes),
+        )
+        service = Service.objects.get(slug=response.data["slug"])
+        self.assertEqual(
+            sorted(
+                list(service.coach_orientation_modes.values_list("value", flat=True))
+            ),
+            sorted(kept_coach_orientation_modes),
+        )
+
+    def test_service_no_dora_form_enforce_patch(self):
+        input_coach_orientation_modes = [
+            "autre",
+            "envoyer-un-mail",
+            "telephoner",
+            "formulaire-dora",
+        ]
+        kept_coach_orientation_modes = [
+            mode for mode in input_coach_orientation_modes if mode != "formulaire-dora"
+        ]
+        user = baker.make("users.User", is_valid=True)
+        blacklisted_siret = f"{settings.ORIENTATION_SIRENE_BLACKLIST[0]}12345"
+        structure = make_structure(user, siret=blacklisted_siret)
+        service = make_service(status=ServiceStatus.PUBLISHED, structure=structure)
+        self.client.force_authenticate(user=user)
+        response = self.client.patch(
+            f"/services/{service.slug}/",
+            {"coachOrientationModes": input_coach_orientation_modes},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            sorted(response.data["coach_orientation_modes"]),
+            sorted(kept_coach_orientation_modes),
+        )
+        self.assertEqual(
+            sorted(
+                list(service.coach_orientation_modes.values_list("value", flat=True))
+            ),
+            sorted(kept_coach_orientation_modes),
+        )
 
 
 class DataInclusionSearchTestCase(APITestCase):
