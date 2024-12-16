@@ -57,6 +57,7 @@
       ? formatPhoneNumber(orientation.service?.contactPhone)
       : undefined,
     serviceContactEmail: orientation.service?.contactEmail,
+    serviceName: orientation.service?.name,
   });
 
   const beneficiaryMessage = renderBeneficiaryAcceptMessage({
