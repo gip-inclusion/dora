@@ -24,7 +24,6 @@
   import { formatFilePath } from "$lib/utils/file";
 
   export let service: Service | Model;
-  export let isDI = false;
   export let orientationFormUrl: string;
   export let handleOrientationFormClickEvent: (event: any) => void;
 
