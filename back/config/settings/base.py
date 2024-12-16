@@ -193,6 +193,11 @@ STORAGES = {
     },
 }
 
+# Limitations de Django pour la taille des formulaires :
+# Nombre de champs max. du formulaire (x2)
+# augmentation de la valeur par défaut pour tous les environnements
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 2_000
+
 # Stockage S3 CleverCloud :
 AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
