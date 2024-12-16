@@ -35,6 +35,7 @@ def _orientation_created_ctx(orientation) -> dict:
         "beneficiaries_has_alternate_contact_methods": beneficiaries_has_alternate_contact_methods(
             orientation
         ),
+        "service_address": orientation.service.address_line(),
         "attachments": [
             {"name": a, "url": default_storage.url(a)}
             for a in orientation.beneficiary_attachments
@@ -134,6 +135,26 @@ def send_orientation_created_emails(orientation, cc=None):
 def send_orientation_accepted_emails(
     orientation, prescriber_message, beneficiary_message
 ):
+    # FIXME: le gabarit des e-mails envoyés par cette partie est construit en deux phases.
+    # Tout d'abord coté frontend, avec des données de formulaires transmises au backend (!).
+    # Ensuite intégré ici, sous forme de bloc de texte (prescriber_message|beneficiary_message)
+    # à intégrer au gabarit.
+    # Problème : certaines données ne sont présente que coté backend et doivent être intégrées
+    # dans la partie du template générée côté frontend.
+    # Bien entendu, le tout devrait être centralisé ici, mais c'est en dehors du scope et de
+    # la charge de la carte initiale.
+
+    # HACK:
+    # beneficiary_message & prescriber_message contiennent un placeholder #SERVICE_ADDRESS#,
+    # à remplacer par ... l'adresse du service (inconnue coté frontend).
+    placeholder = "#SERVICE_ADDRESS#"
+    prescriber_message = prescriber_message.replace(
+        placeholder, orientation.service.address_line()
+    )
+    beneficiary_message = beneficiary_message.replace(
+        placeholder, orientation.service.address_line()
+    )
+
     context = {
         "data": orientation,
         "support_email": settings.SUPPORT_EMAIL,

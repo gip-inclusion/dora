@@ -20,7 +20,7 @@
     </a>
     a orienté
     {{ data.get_beneficiary_full_name }} vers le
-    service {% include "partials/service-link.html" %}.
+    service {% include "partials/service-link.html" %} ayant lieu à&nbsp: {{ service_address }}.
   </p>
 
   <p><strong>Pour toute question concernant le traitement de la demande, veuillez contacter le référent du service&nbsp;:</strong></p>
