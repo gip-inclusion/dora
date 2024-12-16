@@ -11,7 +11,7 @@
   export let orientationFormUrl: string;
 
   const dispatch = createEventDispatcher<{
-    video: object;
+    showVideo: object;
     trackMobilisation: object;
   }>();
 </script>
@@ -40,7 +40,7 @@
       />
       <Button
         label="Regarder la vidéo"
-        on:click={() => dispatch("video", {})}
+        on:click={() => dispatch("showVideo", {})}
       />
     </div>
   </Modal>
