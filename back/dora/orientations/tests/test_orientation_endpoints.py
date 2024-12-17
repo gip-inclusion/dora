@@ -1,3 +1,4 @@
+import pytest
 from django.core import mail
 
 from ..models import OrientationStatus
@@ -114,3 +115,60 @@ def test_contact_prescriber(api_client, orientation):
     # (vérifier le contenu n'est pas pertinent dans cette série de tests)
     assert len(mail.outbox) == 1
     assert mail.outbox[0].to == [orientation.prescriber.email]
+
+
+@pytest.mark.parametrize(
+    "orientation_status",
+    (OrientationStatus.MODERATION_PENDING, OrientationStatus.MODERATION_REJECTED),
+)
+@pytest.mark.parametrize(
+    "path,method,data",
+    [
+        ("/refresh/", "patch", {}),
+        ("/", "get", {}),
+        (
+            "/validate/",
+            "post",
+            {
+                "message": "test_message",
+                "beneficiary_message": "test_beneficiary_message",
+            },
+        ),
+        (
+            "/reject/",
+            "post",
+            {
+                "message": "test_message",
+                "reasons": [],
+            },
+        ),
+        (
+            "/contact/beneficiary/",
+            "post",
+            {
+                "message": "test_message",
+            },
+        ),
+        (
+            "/contact/prescriber/",
+            "post",
+            {
+                "message": "test_message",
+            },
+        ),
+    ],
+)
+def test_moderation_error(
+    api_client, orientation, orientation_status, path, method, data
+):
+    orientation.status = orientation_status
+    orientation.save()
+
+    url = f"/orientations/{orientation.query_id}{path}"
+
+    if path != "/refresh/":
+        url += f"?h={orientation.get_query_id_hash()}"
+
+    response = getattr(api_client, method)(url, data=data, follow=True)
+
+    assert response.status_code == 401
