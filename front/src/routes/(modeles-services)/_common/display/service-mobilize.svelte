@@ -24,7 +24,8 @@
   import { formatFilePath } from "$lib/utils/file";
 
   export let service: Service | Model;
-  export let isDI = false;
+  export let orientationFormUrl: string;
+  export let handleOrientationFormClickEvent: (event: any) => void;
 
   const orderedCoachOrientationModeValues: Record<
     CoachOrientationModes,
@@ -50,22 +51,13 @@
     autre: 5,
   };
 
-  const searchId = $page.url.searchParams.get("searchId");
-  const searchFragment = searchId ? `?searchId=${searchId}` : "";
-  const orientationFormUrl = `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`;
-
   const dispatch = createEventDispatcher<{
     trackMobilisation: { externalUrl?: string };
+    showPreventFakeOrientationModal: object;
   }>();
 
   let isContactInfoForProfessionalShown = false;
   let isContactInfoForIndividualShown = false;
-
-  function trackMobilisationIfSignedIn() {
-    if ($token) {
-      dispatch("trackMobilisation", {});
-    }
-  }
 
   function trackMobilisationUnconditionally(externalUrl: string) {
     dispatch("trackMobilisation", { externalUrl });
@@ -141,7 +133,7 @@
               Orienter votre bénéficiaire via le formulaire DORA
               <a
                 href={orientationFormUrl}
-                on:click={trackMobilisationIfSignedIn}
+                on:click={handleOrientationFormClickEvent}
                 class="text-magenta-cta underline">Commencer</a
               >
             {:else if modeValue === "envoyer-un-mail-avec-une-fiche-de-prescription" && "contactEmail" in service}

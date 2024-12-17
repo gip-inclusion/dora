@@ -3,9 +3,12 @@
   import { page } from "$app/stores";
 
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
-  import { userInfo } from "$lib/utils/auth";
+  import { token, userInfo } from "$lib/utils/auth";
   import { trackMobilisation } from "$lib/utils/stats";
+
+  import PreventFakeOrientationModal from "./modals/prevent-fake-orientation-modal.svelte";
 
   import ServiceBeneficiaries from "./service-beneficiaries.svelte";
   import ServiceMobilisation from "./service-mobilisation.svelte";
@@ -20,23 +23,46 @@
   export let isModel = false;
   export let isDI = false;
 
+  $: searchIdStr = $page.url.searchParams.get("searchId");
+  $: searchIdNumber = searchIdStr ? parseInt(searchIdStr) : undefined;
+  $: searchFragment = searchIdStr ? `?searchId=${searchIdStr}` : "";
+  $: orientationFormUrl = `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`;
+
+  $: isServiceFromOwnStructure = $userInfo
+    ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
+        (structure) => structure.slug === service.structure
+      )
+    : false;
+
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;
 
-  function handleTrackMobilisation(
+  let isPreventFakeOrientationModalOpen = false;
+  let isVideoModalOpen = false;
+
+  function handleShowVideoModal() {
+    isPreventFakeOrientationModalOpen = false;
+    isVideoModalOpen = true;
+  }
+
+  function handleTrackMobilisation(externalUrl?: string) {
+    if (!mobilisationTracked) {
+      trackMobilisation(service, $page.url, isDI, searchIdNumber, externalUrl);
+      mobilisationTracked = true;
+    }
+  }
+  function handleTrackMobilisationEvent(
     event: CustomEvent<{ externalUrl?: string }>
   ) {
-    if (!mobilisationTracked) {
-      const searchIdStr = $page.url.searchParams.get("searchId");
-      const searchId = searchIdStr ? parseInt(searchIdStr) : undefined;
-      trackMobilisation(
-        service,
-        $page.url,
-        isDI,
-        searchId,
-        event.detail.externalUrl
-      );
-      mobilisationTracked = true;
+    handleTrackMobilisation(event.detail.externalUrl);
+  }
+
+  function handleOrientationFormClickEvent(event) {
+    if (isServiceFromOwnStructure) {
+      event.preventDefault();
+      isPreventFakeOrientationModalOpen = true;
+    } else if ($token) {
+      handleTrackMobilisation();
     }
   }
 </script>
@@ -55,9 +81,10 @@
         <hr class="my-s24" />
         <div class="mobilize">
           <ServiceMobilize
-            on:trackMobilisation={handleTrackMobilisation}
+            on:trackMobilisation={handleTrackMobilisationEvent}
             {service}
-            {isDI}
+            {orientationFormUrl}
+            {handleOrientationFormClickEvent}
           />
         </div>
       </div>
@@ -71,9 +98,11 @@
               class="block rounded-lg border border-gray-02 bg-france-blue p-s24 px-s32 text-white print:hidden"
             >
               <ServiceMobilisation
-                on:trackMobilisation={handleTrackMobilisation}
+                on:trackMobilisation={handleTrackMobilisationEvent}
                 {service}
                 {isDI}
+                {orientationFormUrl}
+                {handleOrientationFormClickEvent}
               />
             </div>
 
@@ -94,3 +123,11 @@
     {/if}
   </div>
 </CenteredGrid>
+
+<PreventFakeOrientationModal
+  bind:isOpen={isPreventFakeOrientationModalOpen}
+  on:showVideo={handleShowVideoModal}
+  on:trackMobilisation={handleTrackMobilisationEvent}
+  {orientationFormUrl}
+/>
+<OrientationVideo bind:isVideoModalOpen />

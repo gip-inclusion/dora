@@ -15,8 +15,10 @@
 
   export let service: Service;
   export let isDI = false;
+  export let orientationFormUrl: string;
+  export let handleOrientationFormClickEvent: (event: any) => void;
 
-  $: isOrientasbleWithDoraForm =
+  $: isOrientableWithDoraForm =
     service.isOrientable &&
     service.coachOrientationModes?.includes("formulaire-dora");
   $: hasExternalForm = service.coachOrientationModes?.includes(
@@ -30,7 +32,7 @@
   let sharingModalIsOpen = false;
   let contactBoxOpen = false;
 
-  function showContact() {
+  function handleShowContactClick() {
     if (!$token && !service.isContactInfoPublic) {
       goto(
         `/auth/connexion?next=${encodeURIComponent(
@@ -42,23 +44,6 @@
     contactBoxOpen = true;
     // on tracke comme une MER si les contacts du service sont publics
     dispatch("trackMobilisation", {});
-  }
-
-  function handleOrientationClick() {
-    if (!isOrientasbleWithDoraForm) {
-      showContact();
-    } else {
-      if ($token) {
-        dispatch("trackMobilisation", {});
-      }
-      const searchId = $page.url.searchParams.get("searchId");
-      const searchFragment = searchId ? `?searchId=${searchId}` : "";
-      goto(
-        `/services/${isDI ? "di--" : ""}${
-          service.slug
-        }/orienter${searchFragment}`
-      );
-    }
   }
 
   function handleExternalFormClick(externalUrl: string) {
@@ -76,10 +61,17 @@
 
 <div class="mt-s16 flex w-full flex-col gap-s16 sm:w-auto print:hidden">
   {#if !(isDI && hasExternalForm)}
-    {#if isOrientasbleWithDoraForm || service.contactInfoFilled}
+    {#if isOrientableWithDoraForm}
+      <LinkButton
+        label="Orienter votre bénéficiaire"
+        to={orientationFormUrl}
+        extraClass="bg-white !text-france-blue hover:!text-white"
+        on:click={handleOrientationFormClickEvent}
+      />
+    {:else if service.contactInfoFilled}
       {#if !contactBoxOpen}
         <Button
-          on:click={handleOrientationClick}
+          on:click={handleShowContactClick}
           extraClass="mt-s16 bg-white !text-france-blue hover:!text-white text-center !whitespace-normal text-center"
           label="Orienter votre bénéficiaire"
           wFull
