@@ -400,6 +400,13 @@ class ServiceSerializer(serializers.ModelSerializer):
         user = self.context.get("request").user
         structure = data.get("structure") or self.instance.structure
 
+        if structure.no_dora_form() and "coach_orientation_modes" in data:
+            data["coach_orientation_modes"] = [
+                mode
+                for mode in data["coach_orientation_modes"]
+                if mode.value != "formulaire-dora"
+            ]
+
         user_structures = StructureMember.objects.filter(user_id=user.id).values_list(
             "structure_id", flat=True
         )
