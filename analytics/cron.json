@@ -1,0 +1,8 @@
+{
+  "jobs": [
+    {
+      "command": "0 4 * * * ./sync-analytics.sh",
+      "size": "2XL"
+    }
+  ]
+}
