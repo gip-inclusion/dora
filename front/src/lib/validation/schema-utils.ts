@@ -39,6 +39,7 @@ export interface Shape<T> {
   required?: SchemaRequirement;
   label?: string;
   maxLength?: number;
+  minNumber?: number;
   readonly?: boolean;
 }
 

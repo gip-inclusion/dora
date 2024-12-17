@@ -224,12 +224,14 @@ export const serviceSchema: v.Schema = {
     default: null,
     post: [v.toNumber],
     rules: [v.isPositiveInteger(), v.minNum(1)],
+    minNumber: 1,
   },
   durationWeeks: {
     label: "Durée",
     default: null,
     post: [v.toNumber],
     rules: [v.isPositiveInteger(), v.minNum(1)],
+    minNumber: 1,
   },
   forms: {
     label: "Documents à compléter",

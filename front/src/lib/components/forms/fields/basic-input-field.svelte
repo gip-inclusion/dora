@@ -96,7 +96,10 @@
           {...props}
         />
       {:else if type === "number"}
-        <input type="text" bind:value inputmode="numeric" {...props} />
+        <input type="text" 
+          bind:value 
+          on:blur={onBlur}
+          inputmode="numeric" {...props} />
       {:else if type === "email"}
         <input
           type="email"
