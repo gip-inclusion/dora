@@ -1,5 +1,5 @@
 WITH src AS (
-    SELECT * FROM {{ source('dora', 'users') }}
+    SELECT * FROM {{ source('dora', 'users_user') }}
     WHERE is_active IS TRUE
 ),
 

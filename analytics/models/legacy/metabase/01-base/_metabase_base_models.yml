@@ -20,28 +20,6 @@ models:
           - unique
           - not_null
 
-  - name: mb_all_service
-    config:
-      indexes:
-        - columns: [id]
-          unique: true
-    columns:
-      - name: id
-        data_tests:
-          - unique
-          - not_null
-
-  - name: mb_service_suggestion
-    config:
-      indexes:
-        - columns: [id]
-          unique: true
-    columns:
-      - name: id
-        data_tests:
-          - unique
-          - not_null
-
 # ceux-ci sont systématiquement l'union de deux tables très similaires...
   - name: mb_mobilisationevent_all
     config:
@@ -54,8 +32,6 @@ models:
           - unique
           - not_null
   - name: mb_mobilisationevent_categories_all
-  - name: mb_serviceview_categories_all
-
   - name: mb_serviceview_all
     config:
       indexes:
@@ -69,17 +45,6 @@ models:
         data_tests:
           - unique
           - not_null
-
-  # NOTE(vperron) : Liste des membres en attente de rattachement
-  # Les colonnes avec des noms "faciles à lire" est une très mauvaise pratique
-  - name: mb_putative_members
-    config:
-      indexes:
-        - columns: ["Date de création"]
-        - columns: ["Département"]
-        - columns: ["E-mail validé"]
-
-
   # ceux-ci dépendent de mb_all_service
   # il n'avait pas de PK, on la met ? On la généralise ?
   - name: mb_service
@@ -87,51 +52,6 @@ models:
       indexes:
         - columns: [id]
           unique: true
-    columns:
-      - name: id
-        data_tests:
-          - unique
-          - not_null
-
-  - name: mb_model
-    config:
-      indexes:
-        - columns: [id]
-          unique: true
-    columns:
-      - name: id
-        data_tests:
-          - unique
-          - not_null
-
-  - name: mb_notification_logs
-    config:
-      indexes:
-        - columns: [date_creation]
-        - columns: [tache]
-
-  - name: mb_searchview
-    config:
-      indexes:
-        - columns: [id]
-          unique: true
-        - columns: ["is_staff", "is_manager", "is_logged"]
-        - columns: ["user_id"]
-    columns:
-      - name: id
-        data_tests:
-          - unique
-          - not_null
-
-
-  - name: mb_structureview
-    config:
-      indexes:
-        - columns: [id]
-          unique: true
-        - columns: ["date"]
-        - columns: ["is_structure_member", "is_structure_admin", "is_staff"]
-        - columns: ["user_id"]
     columns:
       - name: id
         data_tests:

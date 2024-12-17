@@ -1,9 +1,9 @@
 WITH src AS (
-    SELECT * FROM {{ source('dora', 'service_views') }}
+    SELECT * FROM {{ source('dora', 'stats_serviceview') }}
 ),
 
 src_di AS (
-    SELECT * FROM {{ source('dora', 'di_service_views') }}
+    SELECT * FROM {{ source('dora', 'stats_diserviceview') }}
 ),
 
 service_view AS (
@@ -31,8 +31,8 @@ service_view AS (
         structure.name                 AS structure_name
     FROM
         src
-    LEFT JOIN {{ source('dora', 'services') }} AS service ON src.service_id = service.id
-    LEFT JOIN {{ source('dora', 'structures') }} AS structure ON src.structure_id = structure.id
+    LEFT JOIN {{ source('dora', 'services_service') }} AS service ON src.service_id = service.id
+    LEFT JOIN {{ source('dora', 'structures_structure') }} AS structure ON src.structure_id = structure.id
 ),
 
 di_service_view AS (

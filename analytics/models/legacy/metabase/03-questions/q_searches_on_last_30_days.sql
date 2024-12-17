@@ -1,5 +1,5 @@
 WITH search AS (
-    SELECT * FROM {{ source('dora', 'search_views') }}
+    SELECT * FROM {{ source('dora', 'stats_searchview') }}
     WHERE
         date >= NOW() - INTERVAL '30 days'
         AND is_staff IS FALSE
@@ -15,22 +15,24 @@ final AS (
         search.department,
         ss.label
     FROM search
+    -- toutes ces q_xxx requetes devraient s'appuyer sur une requete racine
     LEFT JOIN
-        {{ source('dora', 'searchview_categories') }} AS svc
+        {{ source('dora', 'stats_searchview_categories') }} AS svc
         ON search.id = svc.searchview_id
     LEFT JOIN
-        {{ source('dora', 'service_categories') }} AS category
+        {{ source('dora', 'services_servicecategory') }} AS category
         ON svc.servicecategory_id = category.id
     LEFT JOIN
-        {{ source('dora', 'members') }} AS member
+        {{ source('dora', 'structures_structuremember') }} AS member
         ON search.user_id = member.user_id
+    -- les 2 JOINs suivants devraient etre directement dans mb_structure
     LEFT JOIN {{ ref('mb_structure') }} AS structure
         ON member.structure_id = structure.id
     LEFT JOIN
-        {{ source('dora', 'structure_labels') }} AS ssnl
+        {{ source('dora', 'structures_structure_national_labels') }} AS ssnl
         ON structure.id = ssnl.structure_id
     LEFT JOIN
-        {{ source('dora', 'national_labels') }} AS ss
+        {{ source('dora', 'structures_structurenationallabel') }} AS ss
         ON ssnl.structurenationallabel_id = ss.id
 )
 

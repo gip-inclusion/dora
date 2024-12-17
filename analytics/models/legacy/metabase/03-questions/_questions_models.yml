@@ -1,28 +1,7 @@
 models:
-  - name: q_members_invited
-    comment: Liste des membres invités en attente de rattachement
-
-  # Clairement une duplication de la question précédente avec un WHERE en plus
-  - name: q_members_invited_valid
-    comment: 'Liste des membres invités en attente de rattachement : e-mail validé'
-
-  - name: q_members_invited_invalid
-    comment: 'Liste des membres invités en attente de rattachement : e-mail non-validé'
-
-  - name: q_orphan_users
-    comment: Liste des utilisateurs non rattachés à une structure et sans invitation
-    indexes:
-      - columns: ["E-mail validé"]
-      - columns: ["Date de création"]
-
-  - name: q_users_before_ic
-    comment: 'Utilisateurs avec e-mail non validé, créés avant IC; avait un jour de retard auparavant'
-    indexes:
-      - columns: ["ID utilisateur"]
-        unique: true
-      - columns: ["Date de création"]
-
-  - name: q_searches_by_monthyear_department_label
   - name: q_searches_by_category_department_label
+  - name: q_searches_by_monthyear_department_label
   - name: q_searches_on_last_30_days
+  - name: q_searches_with_few_results
   - name: q_mobilisations_by_category_department
+

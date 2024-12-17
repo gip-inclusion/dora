@@ -1,5 +1,5 @@
 WITH src AS (
-    SELECT * FROM {{ source('dora', 'structures') }}
+    SELECT * FROM {{ source('dora', 'structures_structure') }}
 ),
 
 final AS (
