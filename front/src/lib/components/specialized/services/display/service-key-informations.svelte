@@ -9,6 +9,7 @@
     priceTagIcon,
     timeLineIcon,
     listCheckIcon,
+    timerFlashIcon,
   } from "$lib/icons";
   import type { Service, ServicesOptions } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
@@ -16,6 +17,7 @@
   import { isValidformatOsmHours } from "$lib/utils/opening-hours";
   import { isNotFreeService } from "$lib/utils/service";
   import OsmHours from "../../osm-hours.svelte";
+  import ServiceDuration from "./service-duration.svelte";
   import SubcategoryList from "./subcategory-list.svelte";
 
   export let service: Service;
@@ -86,6 +88,19 @@
   </div>
 
   <hr class="mb-s10 mt-s20" />
+
+  {#if service.durationWeeklyHours && service.durationWeeks}
+    <div>
+      <h3 class="!mb-s10 text-f17">
+        <span class="mr-s8 h-s24 w-s24 fill-current">
+          {@html timerFlashIcon}
+        </span>
+        Durée de la prestation
+      </h3>
+      <ServiceDuration {service} />
+    </div>
+    <hr class="mb-s10 mt-s20" />
+  {/if}
 
   <div class="flex">
     <div class="flex-1">

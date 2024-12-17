@@ -298,6 +298,7 @@ export type CoachOrientationModes =
   | "envoyer-un-mail"
   | "telephoner"
   | "autre";
+
 export type BeneficiaryAccessModes =
   | "professionnel"
   | "se-presenter"
@@ -430,6 +431,8 @@ export interface Service {
   diffusionZoneDetailsDisplay: string;
   diffusionZoneType: AdminDivisionType;
   diffusionZoneTypeDisplay: string;
+  durationWeeklyHours: number;
+  durationWeeks: number;
   feeCondition: FeeCondition;
   feeDetails: string;
   fillingDuration: number;
@@ -590,6 +593,8 @@ export type Model = {
   credentials: CustomizableFK[];
   credentialsDisplay: string[];
   department: string;
+  durationWeeklyHours: number;
+  durationWeeks: number;
   externalFormLink: string;
   externalFormLinkText: string;
   feeCondition: FeeCondition;

@@ -9,6 +9,7 @@
   import Form from "$lib/components/forms/form.svelte";
   import FieldsContact from "$lib/components/specialized/services/fields-contact.svelte";
   import FieldCategory from "$lib/components/specialized/services/field-category.svelte";
+  import FieldsDuration from "$lib/components/specialized/services/fields-duration.svelte";
   import FieldsPresentation from "$lib/components/specialized/services/fields-presentation.svelte";
   import FieldsDocuments from "../_common/fields-documents.svelte";
   import FieldsInclusionNumerique from "../_common/fields-inclusion-numerique.svelte";
@@ -228,6 +229,8 @@
           <FieldsTypology noTopPadding bind:service {servicesOptions} {model} />
 
           <FieldsPresentation bind:service {servicesOptions} {model} />
+
+          <FieldsDuration bind:service {servicesOptions} {model} />
 
           <FieldsPublics bind:service {servicesOptions} {model} />
 

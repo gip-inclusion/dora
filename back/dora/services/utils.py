@@ -24,6 +24,8 @@ SYNC_FIELDS = [
     "coach_orientation_modes_external_form_link",
     "coach_orientation_modes_external_form_link_text",
     "coach_orientation_modes_other",
+    "duration_weekly_hours",
+    "duration_weeks",
     "forms",
     "online_form",
     "qpv_or_zrr",

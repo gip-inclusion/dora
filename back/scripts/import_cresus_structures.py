@@ -103,13 +103,15 @@ def _edit_and_save_structure(structure, data):
         structure.longitude = geo_data.lon
         structure.geocoding_score = geo_data.score
     else:
-        geo_data_missing_lines.append({
-            "idx": idx,
-            "siret": data.siret,
-            "address": structure.address1,
-            "city": structure.city,
-            "postal_code": structure.postal_code
-        })
+        geo_data_missing_lines.append(
+            {
+                "idx": idx,
+                "siret": data.siret,
+                "address": structure.address1,
+                "city": structure.city,
+                "postal_code": structure.postal_code,
+            }
+        )
 
     if wet_run:
         structure.save()

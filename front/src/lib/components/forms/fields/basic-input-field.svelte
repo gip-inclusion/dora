@@ -30,18 +30,18 @@
   let phoneValue = value;
   function handlePhoneChange() {
     if (phoneValue) {
-      phoneValue = phoneValue.replace(/[^0-9]/g, "");
+      phoneValue = phoneValue.toString().replace(/[^0-9]/g, "");
     }
     value = phoneValue;
   }
   function handlePhoneBlur() {
     if (phoneValue) {
-      phoneValue = formatPhoneNumber(phoneValue);
+      phoneValue = formatPhoneNumber(phoneValue.toString());
     }
   }
   function handlePhoneFocus() {
     if (phoneValue) {
-      phoneValue = phoneValue.replace(/[^0-9]/g, "");
+      phoneValue = phoneValue.toString().replace(/[^0-9]/g, "");
     }
   }
 
@@ -97,10 +97,11 @@
         />
       {:else if type === "number"}
         <input
-          type="number"
+          type="text"
           bind:value
           on:blur={onBlur}
           on:change={onChange}
+          inputmode="numeric"
           {...props}
         />
       {:else if type === "email"}
@@ -136,9 +137,9 @@
       {#if value && maxLength != null && !readonly && !disabled}
         <div
           class="mt-s4 self-end text-f12 text-gray-text-alt"
-          class:text-error={value.length > maxLength}
+          class:text-error={value.toString().length > maxLength}
         >
-          {value.length}/{maxLength} caractères
+          {value.toString().length}/{maxLength} caractères
         </div>
       {/if}
     </div>
