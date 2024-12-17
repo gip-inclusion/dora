@@ -23,6 +23,14 @@ from .models import (
 from .serializers import OrientationSerializer
 
 
+class ModeratedOrientationPermission(permissions.BasePermission):
+    def has_object_permission(self, request, view, orientation):
+        return orientation.status not in [
+            OrientationStatus.MODERATION_PENDING,
+            OrientationStatus.MODERATION_REJECTED,
+        ]
+
+
 class OrientationPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         match request.method:
@@ -49,7 +57,7 @@ class OrientationViewSet(
     viewsets.GenericViewSet,
 ):
     serializer_class = OrientationSerializer
-    permission_classes = [OrientationPermission]
+    permission_classes = [ModeratedOrientationPermission, OrientationPermission]
     lookup_field = "query_id"
 
     def get_queryset(self):
@@ -170,7 +178,7 @@ class OrientationViewSet(
         detail=True,
         methods=["patch"],
         url_path="refresh",
-        permission_classes=[permissions.AllowAny],
+        permission_classes=[ModeratedOrientationPermission],
     )
     def refresh(self, request, query_id=None):
         # la régénération du hash est le seul point d'entrée "ouvert",
