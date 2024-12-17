@@ -96,10 +96,14 @@
           {...props}
         />
       {:else if type === "number"}
-        <input type="text" 
-          bind:value 
+        <input
+          type="text"
+          bind:value
           on:blur={onBlur}
-          inputmode="numeric" {...props} />
+          on:change={onChange}
+          inputmode="numeric"
+          {...props}
+        />
       {:else if type === "email"}
         <input
           type="email"
@@ -132,7 +136,7 @@
       {/if}
       {#if value && maxLength != null && !readonly && !disabled}
         <div
-          class="mt-s4 self-end text-f12 text-gray-text-alt"
+          class="mt-s4 text-f12 text-gray-text-alt self-end"
           class:text-error={value.toString().length > maxLength}
         >
           {value.toString().length}/{maxLength} caractères
@@ -148,11 +152,11 @@
     input[type="email"],
     input[type="tel"],
     input[type="date"] {
-      @apply h-s48 rounded border border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt outline-none focus:shadow-focus;
+      @apply h-s48 border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus rounded border outline-none;
     }
 
     input {
-      @apply grow read-only:text-gray-03 disabled:bg-gray-00;
+      @apply read-only:text-gray-03 disabled:bg-gray-00 grow;
     }
   </style>
 {/if}

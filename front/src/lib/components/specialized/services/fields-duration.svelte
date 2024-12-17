@@ -49,7 +49,7 @@
     <BasicInputField
       type="number"
       id="durationWeeklyHours"
-      description="En nombre d'heures"
+      description="Si moins d’une semaine, laisser 1."
       bind:value={service.durationWeeklyHours}
     />
   </FieldModel>
@@ -58,7 +58,7 @@
     <BasicInputField
       type="number"
       id="durationWeeks"
-      description="En nombre de semaines. Si moins d’une semaine, laisser 1."
+      description="Si moins d’une semaine, laisser 1."
       bind:value={service.durationWeeks}
     />
   </FieldModel>

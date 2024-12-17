@@ -220,14 +220,14 @@ export const serviceSchema: v.Schema = {
     rules: [v.isArray([v.isCustomizablePK()])],
   },
   durationWeeklyHours: {
-    label: "Temps hebdomadaire",
+    label: "Nombre d'heures par semaine",
     default: null,
     post: [v.toNumber],
     rules: [v.isPositiveInteger(), v.minNum(1)],
     minNumber: 1,
   },
   durationWeeks: {
-    label: "Durée",
+    label: "Nombre de semaines",
     default: null,
     post: [v.toNumber],
     rules: [v.isPositiveInteger(), v.minNum(1)],
