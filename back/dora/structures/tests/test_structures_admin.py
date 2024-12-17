@@ -1,10 +1,12 @@
 import pytest
 from django.contrib.messages import get_messages
+from django.core import mail
 from django.urls import reverse
 
 from dora.core.models import ModerationStatus
-from dora.core.test_utils import make_orientation, make_structure
+from dora.core.test_utils import make_orientation, make_structure, make_user
 from dora.orientations.models import OrientationStatus
+from dora.structures.models import StructurePutativeMember
 
 
 @pytest.mark.django_db
@@ -134,6 +136,134 @@ def test_moderation_approve(admin_client):
     messages = list(get_messages(response.wsgi_request))
     assert any(
         "a été approuvé. Les demandes d’orientation en attente ont été transmises"
+        in message.message
+        for message in messages
+    )
+
+    # Vérification de la redirection vers la page de modification de la structure
+    assert response.status_code == 200
+    assert response.redirect_chain[-1][0] == reverse(
+        "admin:structures_structure_change", args=[structure.pk]
+    )
+
+
+@pytest.mark.django_db
+def test_moderation_reject(admin_client):
+    # Création de la structure
+    structure = make_structure(
+        moderation_status=ModerationStatus.NEED_INITIAL_MODERATION
+    )
+
+    # Création des utilisateurs membres
+    members = []
+    for is_admin in (True, False):
+        for is_active in (True, False):
+            user = make_user(
+                structure=structure, is_admin=is_admin, is_active=is_active
+            )
+            members.append(user)
+
+    # Création des utilisateurs membres potentiels
+    putative_members = []
+    for is_active in (True, False):
+        for invited_by_admin in (True, False):
+            for is_admin in (True, False):
+                user = make_user(is_active=is_active)
+                StructurePutativeMember.objects.create(
+                    user=user,
+                    structure=structure,
+                    invited_by_admin=invited_by_admin,
+                    is_admin=is_admin,
+                )
+                putative_members.append(user)
+
+    # Création de deux orientations avec le statut MODERATION_PENDING
+    orientation_moderation_pending_1 = make_orientation(
+        prescriber_structure=structure,
+        prescriber=members[0],
+        status=OrientationStatus.MODERATION_PENDING,
+    )
+    orientation_moderation_pending_2 = make_orientation(
+        prescriber_structure=structure,
+        prescriber=members[0],
+        status=OrientationStatus.MODERATION_PENDING,
+    )
+
+    # Création d'autres orientations avec les autres statuts
+    orientation_moderation_rejected = make_orientation(
+        prescriber_structure=structure,
+        prescriber=members[0],
+        status=OrientationStatus.MODERATION_REJECTED,
+    )
+    orientation_pending = make_orientation(
+        prescriber_structure=structure,
+        prescriber=members[0],
+        status=OrientationStatus.PENDING,
+    )
+    orientation_accepted = make_orientation(
+        prescriber_structure=structure,
+        prescriber=members[0],
+        status=OrientationStatus.ACCEPTED,
+    )
+    orientation_rejected = make_orientation(
+        prescriber_structure=structure,
+        prescriber=members[0],
+        status=OrientationStatus.REJECTED,
+    )
+
+    # Construction de l'URL de l'action de modération Rejeter
+    url = reverse("admin:moderation_reject", args=[structure.pk])
+
+    # Appel de l'action via le client admin
+    response = admin_client.post(url, follow=True)
+
+    # Rechargement de la structure, des utilisateurs et des orientations depuis la base de données
+    structure.refresh_from_db()
+    for member in members:
+        member.refresh_from_db()
+    for putative_member in putative_members:
+        putative_member.refresh_from_db()
+    orientation_moderation_pending_1.refresh_from_db()
+    orientation_moderation_pending_2.refresh_from_db()
+    orientation_moderation_rejected.refresh_from_db()
+    orientation_pending.refresh_from_db()
+    orientation_accepted.refresh_from_db()
+    orientation_rejected.refresh_from_db()
+
+    # Vérification que les e-mails ont été envoyés à tous les membres et membres potentiels de la structure
+    assert len(mail.outbox) == len(members) + len(putative_members)
+
+    # Vérification que tous les membres et membres potentiels de la structure ont été détachés
+    assert structure.members.count() == 0
+    assert structure.putative_members.count() == 0
+
+    # Vérification que tous les membres et membres potentiels de la structure ont été désactivés
+    assert all([not member.is_active for member in members])
+    assert all([not putative_member.is_active for putative_member in putative_members])
+
+    # Vérification que la structure est passée au statut de modération Nouvelle modération nécessaire
+    assert structure.moderation_status == ModerationStatus.NEED_NEW_MODERATION
+
+    # Vérification que les deux orientations avec le statut MODERATION_PENDING sont passées au statut MODERATION_REJECTED
+    assert (
+        orientation_moderation_pending_1.status == OrientationStatus.MODERATION_REJECTED
+    )
+    assert (
+        orientation_moderation_pending_2.status == OrientationStatus.MODERATION_REJECTED
+    )
+
+    # Vérification que les autres orientations n'ont pas vu leur statut changer
+    assert (
+        orientation_moderation_rejected.status == OrientationStatus.MODERATION_REJECTED
+    )
+    assert orientation_pending.status == OrientationStatus.PENDING
+    assert orientation_accepted.status == OrientationStatus.ACCEPTED
+    assert orientation_rejected.status == OrientationStatus.REJECTED
+
+    # Vérification du message de succès
+    messages = list(get_messages(response.wsgi_request))
+    assert any(
+        "a été rejeté. Les demandes d’orientation en attente ont été supprimées"
         in message.message
         for message in messages
     )
