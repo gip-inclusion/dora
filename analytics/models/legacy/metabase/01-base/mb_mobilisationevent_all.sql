@@ -1,9 +1,11 @@
+-- très utilisé
+
 WITH src_events AS (
-    SELECT * FROM {{ source('dora', 'mobilisation_events') }}
+    SELECT * FROM {{ source('dora', 'stats_mobilisationevent') }}
 ),
 
 src_di_events AS (
-    SELECT * FROM {{ source('dora', 'di_mobilisation_events') }}
+    SELECT * FROM {{ source('dora', 'stats_dimobilisationevent') }}
 ),
 
 events AS (

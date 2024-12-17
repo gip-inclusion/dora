@@ -3,12 +3,15 @@
 -- tables are similar to the point they can be JOINED but one has an 'id' and the other a 'di_id',
 -- meaning they could probably be in the same table...
 
+
+-- utilisé une seule fois
+
 WITH src_event_categories AS (
-    SELECT * FROM {{ source('dora', 'mobilisation_event_categories') }}
+    SELECT * FROM {{ source('dora', 'stats_mobilisationevent_categories') }}
 ),
 
 src_di_event_categories AS (
-    SELECT * FROM {{ source('dora', 'di_mobilisation_event_categories') }}
+    SELECT * FROM {{ source('dora', 'stats_dimobilisationevent_categories') }}
 ),
 
 event_categories AS (
