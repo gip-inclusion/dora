@@ -1,83 +1,85 @@
 import { formatPhoneNumber } from "./misc";
 
+const serviceAddressMarker = "#SERVICE_ADDRESS#";
+//
 // prettier-ignore
 export function renderPrescriberAcceptMessage(data: Record<string, string | undefined>) {
-  let result = `Bonjour,
+	let result = `Bonjour,
 
 Nous avons le plaisir de vous informer que votre demande d’orientation a été acceptée ! 🎉
 
-Votre demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} à été validée par la structure « ${data.serviceStructureName} ».
+Votre demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} à été validée par la structure « ${data.serviceStructureName} » pour le service ${data.serviceName} ayant lieu à ${serviceAddressMarker}.
 
 Si vous avez des questions supplémentaires ou si vous souhaitez obtenir plus d’informations, n’hésitez pas à nous contacter.
 
 Cordialement,`;
 
-  if(data.serviceContactName) {
-    result += `\n${data.serviceContactName}`;
-  }
-  if(data.serviceContactEmail) {
-    result += `\n${data.serviceContactEmail}`;
-  }
-  if(data.serviceContactPhone) {
-    result += `\n${data.serviceContactPhone}`;
-  }
-  if(data.serviceStructureName) {
-    result += `\n${data.serviceStructureName}`;
-  }
+	if (data.serviceContactName) {
+		result += `\n${data.serviceContactName}`;
+	}
+	if (data.serviceContactEmail) {
+		result += `\n${data.serviceContactEmail}`;
+	}
+	if (data.serviceContactPhone) {
+		result += `\n${data.serviceContactPhone}`;
+	}
+	if (data.serviceStructureName) {
+		result += `\n${data.serviceStructureName}`;
+	}
 
-  return result;
+	return result;
 }
 
 // prettier-ignore
 export function renderBeneficiaryAcceptMessage(data: Record<string, string | undefined>) {
-let result = `Bonjour,
+	let result = `Bonjour,
 
-Nous avons le plaisir de vous informer que la structure « ${data.serviceStructureName} » a validé la demande réalisée par ${data.referentFirstName} ${data.referentLastName} concernant votre positionnement sur « ${data.serviceName} ».
+Nous avons le plaisir de vous informer que la structure « ${data.serviceStructureName} » a validé la demande réalisée par ${data.referentFirstName} ${data.referentLastName} concernant votre positionnement sur « ${data.serviceName} » ayant lieu à ${serviceAddressMarker}.
 
-Pour toute information supplémentaire, n’hésitez pas à contacter votre référent${ data.structurePhone ? ` ou la structure directement au ${formatPhoneNumber(data.structurePhone)}`: ""}.
+Pour toute information supplémentaire, n’hésitez pas à contacter votre référent${data.structurePhone ? ` ou la structure directement au ${formatPhoneNumber(data.structurePhone)}` : ""}.
 
 Nous vous souhaitons une bonne continuation.
 
 Bien à vous,`;
 
-  if(data.serviceContactName) {
-    result += `\n${data.serviceContactName}`;
-  }
-  if(data.serviceStructureName) {
-    result += `\n${data.serviceStructureName}`;
-  }
+	if (data.serviceContactName) {
+		result += `\n${data.serviceContactName}`;
+	}
+	if (data.serviceStructureName) {
+		result += `\n${data.serviceStructureName}`;
+	}
 
-  return result;
+	return result;
 }
 
 // prettier-ignore
 export function renderRejectMessage(
-  reasons: string[],
-  reasonsChoices: { value: string; label: string }[],
-  data: Record<string, string | undefined>
+	reasons: string[],
+	reasonsChoices: { value: string; label: string }[],
+	data: Record<string, string | undefined>
 ): string {
-  if (reasons.length === 0) {
-    return "";
-  }
+	if (reasons.length === 0) {
+		return "";
+	}
 
-  const textStart = `Bonjour,`;
-  let textEnd = `Bien à vous,`;
+	const textStart = `Bonjour,`;
+	let textEnd = `Bien à vous,`;
 
-  if(data.serviceContactName) {
-    textEnd += `\n${data.serviceContactName}`;
-  }
-  if(data.serviceContactEmail) {
-    textEnd += `\n${data.serviceContactEmail}`;
-  }
-  if(data.serviceContactPhone) {
-    textEnd += `\n${data.serviceContactPhone}`;
-  }
-  if(data.serviceStructureName) {
-    textEnd += `\n${data.serviceStructureName}`;
-  }
+	if (data.serviceContactName) {
+		textEnd += `\n${data.serviceContactName}`;
+	}
+	if (data.serviceContactEmail) {
+		textEnd += `\n${data.serviceContactEmail}`;
+	}
+	if (data.serviceContactPhone) {
+		textEnd += `\n${data.serviceContactPhone}`;
+	}
+	if (data.serviceStructureName) {
+		textEnd += `\n${data.serviceStructureName}`;
+	}
 
-  if (reasons.length > 1) {
-    return textStart + `
+	if (reasons.length > 1) {
+		return textStart + `
 
 Nous vous remercions d’avoir soumis la demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} pour le service « ${data.serviceName} ». Après avoir examiné attentivement la situation, nous regrettons de vous informer que nous ne pouvons pas donner suite à cette demande pour le moment. Plusieurs raisons spécifiques ont été identifiées, notamment :
 
@@ -88,10 +90,10 @@ Ces facteurs combinés ont conduit à notre décision de ne pas donner suite à 
 Si vous avez des questions supplémentaires ou si vous souhaitez discuter plus en détail des raisons du refus, n’hésitez pas à nous contacter.
 
 `+ textEnd;
-  }
+	}
 
-  if (reasons[0] === "bénéficiaire-non-joignable") {
-    return textStart + `
+	if (reasons[0] === "bénéficiaire-non-joignable") {
+		return textStart + `
 
 Après avoir effectué plusieurs tentatives pour contacter ${data.beneficiaryFirstName} ${data.beneficiaryLastName}, nous n’avons pas réussi à le ou la joindre. Malgré nos efforts répétés, nous n’avons pas pu recueillir les informations nécessaires pour donner une réponse positive à la demande.
 
@@ -100,8 +102,8 @@ Nous tenions à vous remercier pour avoir positionné ${data.beneficiaryFirstNam
 Si vous avez des questions supplémentaires, n’hésitez pas à nous contacter.
 
 `+ textEnd;
-  } else if (reasons[0] === "bénéficiaire-absent") {
-    return textStart + `
+	} else if (reasons[0] === "bénéficiaire-absent") {
+		return textStart + `
 
 Nous vous contactons aujourd’hui pour vous informer qu’à la suite de notre entretien prévu avec ${data.beneficiaryFirstName} ${data.beneficiaryLastName}, celui-ci/celle-ci n’a malheureusement pas honoré le rendez-vous convenu.
 
@@ -113,8 +115,8 @@ Si vous avez des questions supplémentaires, n’hésitez pas à nous contacter.
 
 `+ textEnd;
 
-  } else if (reasons[0] === "bénéficiaire-en-emploi") {
-    return textStart + `
+	} else if (reasons[0] === "bénéficiaire-en-emploi") {
+		return textStart + `
 
 Nous tenons à vous informer que nous avons examiné attentivement la demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} pour le service « ${data.serviceName} ». Malheureusement, nous ne sommes pas en mesure de donner une suite favorable à cette demande pour le moment.
 
@@ -124,8 +126,8 @@ Si vous avez des questions supplémentaires, n’hésitez pas à nous contacter.
 
 `+ textEnd;
 
-  } else if (reasons[0] === "bénéficiaire-en-formation") {
-    return textStart + `
+	} else if (reasons[0] === "bénéficiaire-en-formation") {
+		return textStart + `
 
 Nous tenons à vous informer que nous avons examiné attentivement la demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} pour le service « ${data.serviceName} ». Malheureusement, nous ne sommes pas en mesure de donner une suite favorable à cette demande pour le moment.
 
@@ -135,8 +137,8 @@ Si vous avez des questions supplémentaires, n’hésitez pas à nous contacter.
 
 `+ textEnd;
 
-  } else if (reasons[0] === "bénéficiaire-non-éligible") {
-    return textStart + `
+	} else if (reasons[0] === "bénéficiaire-non-éligible") {
+		return textStart + `
 
 Nous vous remercions d’avoir soumis la demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} pour le service « ${data.serviceName} ». Après l’avoir étudiée attentivement, nous regrettons de vous informer que nous ne pouvons pas donner suite à cette demande pour le moment.
 
@@ -146,8 +148,8 @@ Si vous avez des questions supplémentaires, n’hésitez pas à nous contacter.
 
 `+ textEnd;
 
-  } else if (reasons[0] === "bénéficiaire-non-mobile") {
-    return textStart + `
+	} else if (reasons[0] === "bénéficiaire-non-mobile") {
+		return textStart + `
 
 Nous tenons à vous informer que nous avons examiné attentivement la demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} pour le service « ${data.serviceName} ». Malheureusement, nous ne sommes pas en mesure de donner une suite favorable à cette demande pour le moment.
 
@@ -157,8 +159,8 @@ Si vous avez des questions supplémentaires, n’hésitez pas à nous contacter.
 
 `+ textEnd;
 
-  } else if (reasons[0] === "bénéficiaire-non-intéressé") {
-    return textStart + `
+	} else if (reasons[0] === "bénéficiaire-non-intéressé") {
+		return textStart + `
 
 Nous tenons à vous informer que nous avons examiné attentivement la demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} pour le service « ${data.serviceName} ». Malheureusement, nous ne sommes pas en mesure de donner une suite favorable à cette demande pour le moment.
 
@@ -170,8 +172,8 @@ Si vous avez des questions supplémentaires, n’hésitez pas à nous contacter.
 
 `+ textEnd;
 
-  } else if (reasons[0] === "freins-périphériques") {
-    return textStart + `
+	} else if (reasons[0] === "freins-périphériques") {
+		return textStart + `
 
 Nous tenons à vous informer que nous avons examiné attentivement la demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} pour le service « ${data.serviceName} ». Malheureusement, nous ne sommes pas en mesure de donner une suite favorable à cette demande pour le moment.
 
@@ -183,8 +185,8 @@ Si vous avez des questions supplémentaires, n’hésitez pas à nous contacter.
 
 `+ textEnd;
 
-  } else if (reasons[0] === "session-complète") {
-    return textStart + `
+	} else if (reasons[0] === "session-complète") {
+		return textStart + `
 
 Nous tenons à vous informer que nous avons examiné attentivement la demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} pour le service « ${data.serviceName} ». Malheureusement, nous ne sommes pas en mesure de donner une suite favorable à cette demande pour le moment.
 
@@ -196,8 +198,8 @@ Si vous avez des questions supplémentaires, n’hésitez pas à nous contacter.
 
 `+ textEnd;
 
-  } else if (reasons[0] === "orientation-en-doublon") {
-    return textStart + `
+	} else if (reasons[0] === "orientation-en-doublon") {
+		return textStart + `
 
 Nous vous remercions d’avoir soumis une nouvelle demande pour ${data.beneficiaryFirstName} ${data.beneficiaryLastName} pour le service « ${data.serviceName} ».
 
@@ -210,8 +212,8 @@ N’hésitez pas à nous contacter si vous avez des questions supplémentaires o
 `+ textEnd;
 
 
-  } else if (reasons[0] === "autre") {
-    return textStart + `
+	} else if (reasons[0] === "autre") {
+		return textStart + `
 
 Nous tenons à vous informer que nous avons examiné attentivement la demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} pour le service « ${data.serviceName} ». Malheureusement, nous ne sommes pas en mesure de donner une suite favorable à cette demande pour le moment.
 
@@ -220,7 +222,7 @@ Nous tenons à vous informer que nous avons examiné attentivement la demande co
 Si vous avez des questions supplémentaires, n’hésitez pas à nous contacter.
 
 `+ textEnd;
-  }
+	}
 
-  return "";
+	return "";
 }
