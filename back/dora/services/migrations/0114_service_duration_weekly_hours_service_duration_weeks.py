@@ -14,9 +14,9 @@ class Migration(migrations.Migration):
             name="duration_weekly_hours",
             field=models.PositiveIntegerField(
                 blank=True,
-                help_text="Nombre d'heures par semaine pour effectuer ce service.",
+                help_text="Nombre d'heures par semaine pour effectuer ce service. (par défaut, 1)",
                 null=True,
-                verbose_name="Temps hebdomadaire",
+                verbose_name="Nombre d'heures par semaine",
             ),
         ),
         migrations.AddField(
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 blank=True,
                 help_text="Nombre de semaines que durent le service (par défaut, 1)",
                 null=True,
-                verbose_name="Durée",
+                verbose_name="Nombre de semaines",
             ),
         ),
     ]
