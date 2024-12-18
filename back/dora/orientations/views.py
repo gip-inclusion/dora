@@ -3,6 +3,7 @@ from rest_framework import mixins, permissions, serializers, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from dora.core.models import ModerationStatus
 from dora.core.utils import TRUTHY_VALUES
 
 from .emails import (
@@ -66,7 +67,14 @@ class OrientationViewSet(
     def perform_create(self, serializer):
         serializer.is_valid()
         orientation = serializer.save(prescriber=self.request.user)
-        send_orientation_created_emails(orientation)
+        if (
+            orientation.prescriber_structure.moderation_status
+            == ModerationStatus.VALIDATED
+        ):
+            send_orientation_created_emails(orientation)
+        else:
+            orientation.status = OrientationStatus.MODERATION_PENDING
+            orientation.save()
 
     @action(
         detail=True,
