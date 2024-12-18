@@ -173,15 +173,27 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
 
     coach_orientation_modes = None
     if service_data["modes_orientation_accompagnateur"] is not None:
-        coach_orientation_mode_values = map(
-            lambda mode: "formulaire-dora"
-            if mode == "completer-le-formulaire-dadhesion"
-            and service_data["formulaire_en_ligne"] is None
-            else mode,
-            service_data["modes_orientation_accompagnateur"],
-        )
+        coach_orientation_mode_values = service_data[
+            "modes_orientation_accompagnateur"
+        ].copy()
+        # Suppression du mode completer-le-formulaire-dadhesion si le formulaire en ligne n'est pas spécifié
+        if (
+            "completer-le-formulaire-dadhesion" in coach_orientation_mode_values
+            and not service_data["formulaire_en_ligne"]
+        ):
+            coach_orientation_mode_values.remove("completer-le-formulaire-dadhesion")
+        # Ajout du mode formulaire-dora si pas de mode completer-le-formulaire-dadhesion et si un e-mail de contact existe
+        if (
+            "completer-le-formulaire-dadhesion" not in coach_orientation_mode_values
+            and service_data["courriel"]
+        ):
+            coach_orientation_mode_values.append("formulaire-dora")
         coach_orientation_modes = CoachOrientationMode.objects.filter(
             value__in=coach_orientation_mode_values
+        )
+    elif service_data["courriel"]:
+        coach_orientation_modes = CoachOrientationMode.objects.filter(
+            value="formulaire-dora"
         )
 
     profils = None
