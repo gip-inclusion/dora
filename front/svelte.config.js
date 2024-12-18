@@ -29,9 +29,9 @@ const config = {
         ].filter((source) => !!source),
         "script-src": [
           "self",
-          "strict-dynamic",
           "unsafe-inline",
           "https://tally.so/widgets/embed.js",
+          "https://matomo.inclusion.beta.gouv.fr",
         ],
         "worker-src": ["self", "blob:"],
         "child-src": [
