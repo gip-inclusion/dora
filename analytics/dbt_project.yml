@@ -16,5 +16,9 @@ clean-targets:
 
 models:
   dora:
-    legacy:
-      +schema: analytics
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +schema: intermediate
+      +materialized: table

@@ -28,8 +28,6 @@ sources:
       - name: structures_structure_national_labels
       - name: structures_structureputativemember
       - name: structures_structuretypology
-      - name: upload_stats_insertion
-        description: "Table insérée manuellement par DORA ? Faire un seed ?"
       - name: users_user
 
 

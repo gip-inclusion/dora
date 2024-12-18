@@ -1,5 +1,5 @@
 models:
-  - name: mb_user
+  - name: stg_user
     config:
       indexes:
         - columns: [id]
@@ -9,7 +9,7 @@ models:
         data_tests:
           - unique
           - not_null
-  - name: mb_structure
+  - name: stg_structure
     config:
       indexes:
         - columns: [id]
@@ -20,8 +20,7 @@ models:
           - unique
           - not_null
 
-# ceux-ci sont systématiquement l'union de deux tables très similaires...
-  - name: mb_mobilisationevent_all
+  - name: stg_pageview
     config:
       indexes:
         - columns: [id]
@@ -31,8 +30,39 @@ models:
         data_tests:
           - unique
           - not_null
-  - name: mb_mobilisationevent_categories_all
-  - name: mb_serviceview_all
+  - name: stg_seachview
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_orientation
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_mobilisationevent
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+  - name: stg_serviceview
     config:
       indexes:
         - columns: [id]
@@ -45,9 +75,8 @@ models:
         data_tests:
           - unique
           - not_null
-  # ceux-ci dépendent de mb_all_service
-  # il n'avait pas de PK, on la met ? On la généralise ?
-  - name: mb_service
+
+  - name: stg_service
     config:
       indexes:
         - columns: [id]

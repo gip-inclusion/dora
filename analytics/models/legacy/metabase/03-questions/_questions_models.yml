@@ -1,7 +1,0 @@
-models:
-  - name: q_searches_by_category_department_label
-  - name: q_searches_by_monthyear_department_label
-  - name: q_searches_on_last_30_days
-  - name: q_searches_with_few_results
-  - name: q_mobilisations_by_category_department
-
