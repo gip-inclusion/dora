@@ -9,7 +9,7 @@ if command -v dbclient-fetcher &> /dev/null; then
 fi
 
 # Generate the list of tables to be exported
-cat models/legacy/_sources.yml | grep '      - name' | cut -d':' -f2 > tables.txt
+cat models/_sources.yml | grep '      - name' | cut -d':' -f2 > tables.txt
 xargs -I {} echo -n "-t {} " < tables.txt > args.txt
 
 time pg_dump $DORA_DATABASE_URL --jobs=8 --format=directory --compress=1 --clean --if-exists --no-owner --no-privileges --verbose $(cat args.txt) --file=/tmp/out.dump

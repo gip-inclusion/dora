@@ -9,7 +9,7 @@ src_di AS (
 service_view AS (
 
     SELECT
-        'dora-' || src.id              AS id,
+        'dora-' || src.id            AS id,
         src.path,
         src.date,
         src.anonymous_user_hash,
@@ -22,17 +22,12 @@ service_view AS (
         src.user_kind,
         src.structure_department,
         src.user_id,
-        src.service_source             AS source,
+        CAST(src.service_id AS TEXT) AS service_id,
+        src.service_source           AS source,
         src.is_orientable,
-        FALSE                          AS is_di,
-        CAST(src.service_id AS text)   AS service_id,
-        CAST(src.structure_id AS text) AS structure_id,
-        service.name                   AS service_name,
-        structure.name                 AS structure_name
+        FALSE                        AS is_di
     FROM
         src
-    LEFT JOIN {{ source('dora', 'services_service') }} AS service ON src.service_id = service.id
-    LEFT JOIN {{ source('dora', 'structures_structure') }} AS structure ON src.structure_id = structure.id
 ),
 
 di_service_view AS (
@@ -51,13 +46,10 @@ di_service_view AS (
         src.user_kind,
         src.structure_department,
         src.user_id,
+        CAST(src.service_id AS TEXT) AS service_id,
         src.source,
         FALSE                        AS is_orientable,
-        TRUE                         AS is_di,
-        CAST(src.service_id AS text) AS service_id,
-        src.structure_id,
-        src.service_name,
-        src.structure_name
+        TRUE                         AS is_di
     FROM
         src_di AS src
 ),
@@ -66,6 +58,9 @@ final AS (
     SELECT * FROM service_view
     UNION
     SELECT * FROM di_service_view
+    WHERE
+        CAST(date AS DATE) >= '2024-07-01'
+        AND is_staff IS FALSE
 )
 
 SELECT * FROM final
