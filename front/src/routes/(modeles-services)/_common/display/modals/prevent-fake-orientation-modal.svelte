@@ -6,6 +6,7 @@
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
+  import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
 
   export let isOpen = false;
   export let orientationFormUrl: string;
@@ -25,7 +26,7 @@
     </p>
     <p>
       Nous vous invitons à consulter notre <a
-        href="https://aide.dora.inclusion.beta.gouv.fr/fr/category/orienter-vos-beneficiaires-c25cna/"
+        href={URL_DOCUMENTATION_ORIENTATION}
         target="_blank"
         class="text-magenta-cta underline">documentation</a
       > ou voir la vidéo de présentation pour comprendre l’utilisation du formulaire
