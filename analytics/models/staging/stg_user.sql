@@ -1,6 +1,9 @@
 WITH src AS (
     SELECT * FROM {{ source('dora', 'users_user') }}
-    WHERE is_active IS TRUE
+    WHERE
+        is_active IS TRUE
+        AND is_valid IS TRUE
+        AND is_staff IS FALSE
 ),
 
 final AS (

@@ -39,10 +39,6 @@ capitalisation_policy = "upper"
 # SQL type casting
 preferred_type_casting_style = "cast"
 
-[tool.sqlfluff.templater.dbt]
-project_dir = "./analytics"
-profiles_dir = "./analytics"
-
 [tool.sqlfluff.rules.references.special_chars]
 # FIXME(vperron) : A retirer une fois vérifié que pas d'impact métier
 # Ceci est une mauvaise pratique, les champs internes ne devraient pas

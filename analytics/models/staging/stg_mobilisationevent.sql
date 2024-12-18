@@ -1,5 +1,3 @@
--- très utilisé
-
 WITH src_events AS (
     SELECT * FROM {{ source('dora', 'stats_mobilisationevent') }}
 ),
@@ -56,6 +54,7 @@ final AS (
     UNION
     SELECT *
     FROM di_events
+    WHERE date >= '2024-07-01'
 )
 
 SELECT * FROM final
