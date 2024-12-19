@@ -1437,14 +1437,17 @@ class DataInclusionSearchTestCase(APITestCase):
         courriel_mode_instance = CoachOrientationMode.objects.get(
             value="envoyer-un-mail"
         )
+        dora_form_mode_instance = CoachOrientationMode.objects.get(
+            value="formulaire-dora"
+        )
 
         cases = [
-            (None, None, None),
-            ([], [], []),
+            (None, [dora_form_mode_instance.value], [dora_form_mode_instance.label]),
+            ([], [dora_form_mode_instance.value], [dora_form_mode_instance.label]),
             (
                 ["envoyer-un-mail"],
-                [courriel_mode_instance.value],
-                [courriel_mode_instance.label],
+                [courriel_mode_instance.value, dora_form_mode_instance.value],
+                [courriel_mode_instance.label, dora_form_mode_instance.label],
             ),
         ]
         for (
@@ -1463,11 +1466,12 @@ class DataInclusionSearchTestCase(APITestCase):
                 response = self.service_di(request, di_id=di_id)
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(
-                    response.data["coach_orientation_modes"], coach_orientation_modes
+                    sorted(response.data["coach_orientation_modes"]),
+                    sorted(coach_orientation_modes),
                 )
                 self.assertEqual(
-                    response.data["coach_orientation_modes_display"],
-                    coach_orientation_modes_display,
+                    sorted(response.data["coach_orientation_modes_display"]),
+                    sorted(coach_orientation_modes_display),
                 )
 
     def test_service_di_coach_orientation_modes_other(self):
