@@ -19,8 +19,8 @@
     <p>Données non renseignées</p>
   {:else}
     <p>
-      Volume horaire total de {service.durationWeeklyHours} heure(s) sur {service.durationWeeks}
-      semaine(s), soit {totalHours} heure(s) au total.
+      {service.durationWeeklyHours} heure(s) sur {service.durationWeeks} semaine(s),
+      soit {totalHours} heure(s) au total.
     </p>
   {/if}
 </div>
