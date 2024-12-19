@@ -1,0 +1,14 @@
+name: "Backup to clever"
+
+on:
+    pull_request:
+      branches: [ci/backup-clever]
+
+jobs:
+    poc:
+        runs-on: ubuntu-latest
+        steps:
+            - run: scalingo login --api-token ${{ secrets.SCALINGO_API_TOKEN }}
+            - run: scalingo --region ${{ secrets.SCALINGO_REGION }} --app ${{ secrets.SCALINGO_APP }} --addon postgresql backups-download
+            - run: ls
+            - run: rm ./*.tar.gz
