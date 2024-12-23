@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.forms.models import BaseInlineFormSet
@@ -19,6 +21,8 @@ from .models import (
     StructurePutativeMember,
     StructureSource,
 )
+
+logger = logging.getLogger("dora.logs.core")
 
 
 class StructurePutativeMemberAdmin(admin.ModelAdmin):
@@ -300,14 +304,29 @@ class StructureAdmin(admin.ModelAdmin):
                 self.get_moderation_pending_structure_list_url()
             )
 
+        moderation_pending_orientations = structure.orientations.filter(
+            status=OrientationStatus.MODERATION_PENDING
+        )
+
+        logger.info(
+            "Modération de structure : approbation",
+            {
+                "legal": False,
+                "userId": str(request.user.pk),
+                "userEmail": request.user.email,
+                "structureId": str(structure.pk),
+                "orientationIds": [
+                    str(orientation.pk)
+                    for orientation in moderation_pending_orientations
+                ],
+            },
+        )
+
         # Passage de la structure au statut de modération Validé
         structure.moderation_status = ModerationStatus.VALIDATED
         structure.save()
 
         # Passage des demandes d'orientation en attente au statut Ouverte / En cours de traitement et envoi des e-mails
-        moderation_pending_orientations = structure.orientations.filter(
-            status=OrientationStatus.MODERATION_PENDING
-        )
         for orientation in moderation_pending_orientations:
             orientation.status = OrientationStatus.PENDING
             orientation.save()
@@ -336,8 +355,34 @@ class StructureAdmin(admin.ModelAdmin):
                 self.get_moderation_pending_structure_list_url()
             )
 
+        reason = request.POST.get("reason")
+
+        moderation_pending_orientations = structure.orientations.filter(
+            status=OrientationStatus.MODERATION_PENDING
+        )
+
+        logger.info(
+            "Modération de structure : rejet",
+            {
+                "legal": False,
+                "userId": str(request.user.pk),
+                "userEmail": request.user.email,
+                "structureId": str(structure.pk),
+                "orientationIds": [
+                    str(orientation.pk)
+                    for orientation in moderation_pending_orientations
+                ],
+                "memberIds": [str(member.pk) for member in structure.members.all()],
+                "putativeMemberIds": [
+                    str(putative_member.pk)
+                    for putative_member in structure.putative_members.all()
+                ],
+                "reason": reason,
+            },
+        )
+
         # Envoi d'un e-mail explicatif à tous les membres et membres potentiels
-        send_moderation_rejected_notification(structure, request.POST.get("reason"))
+        send_moderation_rejected_notification(structure, reason)
 
         # Désactivation de tous les membres et membres potentiels de la structure
         structure.members.update(is_active=False)
@@ -353,9 +398,9 @@ class StructureAdmin(admin.ModelAdmin):
         structure.save()
 
         # Passage des demandes d'orientation en cours de modération au statut Supprimée par la modération
-        structure.orientations.filter(
-            status=OrientationStatus.MODERATION_PENDING
-        ).update(status=OrientationStatus.MODERATION_REJECTED)
+        moderation_pending_orientations.update(
+            status=OrientationStatus.MODERATION_REJECTED
+        )
 
         # Message de confirmation
         self.message_user(
