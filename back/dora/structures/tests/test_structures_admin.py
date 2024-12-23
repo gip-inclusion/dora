@@ -140,11 +140,13 @@ def test_moderation_approve(admin_client):
         for message in messages
     )
 
-    # Vérification de la redirection vers la page de modification de la structure
+    # Vérification de la redirection vers la page listant les structures en attente de modération
     assert response.status_code == 200
-    assert response.redirect_chain[-1][0] == reverse(
-        "admin:structures_structure_change", args=[structure.pk]
+    structure_list_url = reverse("admin:structures_structure_changelist")
+    pending_moderation_structure_list_url = (
+        f"{structure_list_url}?pending_moderation=pending_moderation"
     )
+    assert response.redirect_chain[-1][0] == pending_moderation_structure_list_url
 
     # Simulation d'une deuxième approbation à la suite
 
@@ -289,11 +291,13 @@ def test_moderation_reject(admin_client):
         for message in messages
     )
 
-    # Vérification de la redirection vers la page de modification de la structure
+    # Vérification de la redirection vers la page listant les structures en attente de modération
     assert response.status_code == 200
-    assert response.redirect_chain[-1][0] == reverse(
-        "admin:structures_structure_change", args=[structure.pk]
+    structure_list_url = reverse("admin:structures_structure_changelist")
+    pending_moderation_structure_list_url = (
+        f"{structure_list_url}?pending_moderation=pending_moderation"
     )
+    assert response.redirect_chain[-1][0] == pending_moderation_structure_list_url
 
     # Simulation d'un deuxième rejet à la suite
 

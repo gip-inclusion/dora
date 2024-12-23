@@ -318,9 +318,9 @@ class StructureAdmin(admin.ModelAdmin):
             request,
             f"Le rattachement à la structure « {structure} » a été approuvé. Les demandes d’orientation en attente ont été transmises.",
         )
-        return HttpResponseRedirect(
-            reverse("admin:structures_structure_change", args=[object_id])
-        )
+
+        # Redirection vers la liste des structures en attente de modération
+        return HttpResponseRedirect(self.get_moderation_pending_structure_list_url())
 
     # Action de modération Rejeter
     def moderation_reject(self, request, object_id):
@@ -362,9 +362,9 @@ class StructureAdmin(admin.ModelAdmin):
             request,
             f"Le rattachement à la structure « {structure} » a été rejeté. Les demandes d’orientation en attente ont été supprimées.",
         )
-        return HttpResponseRedirect(
-            reverse("admin:structures_structure_change", args=[object_id])
-        )
+
+        # Redirection vers la liste des structures en attente de modération
+        return HttpResponseRedirect(self.get_moderation_pending_structure_list_url())
 
 
 admin.site.register(Structure, StructureAdmin)
