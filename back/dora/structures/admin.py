@@ -277,9 +277,28 @@ class StructureAdmin(admin.ModelAdmin):
         ]
         return custom_urls + urls
 
+    def is_moderation_pending(self, structure):
+        return structure.orientations.filter(
+            status=OrientationStatus.MODERATION_PENDING
+        ).exists()
+
+    def get_moderation_pending_structure_list_url(self):
+        structure_list_url = reverse("admin:structures_structure_changelist")
+        return f"{structure_list_url}?pending_moderation=pending_moderation"
+
     # Action de modération Approuver
     def moderation_approve(self, request, object_id):
         structure = self.get_object(request, object_id)
+
+        # Si la structure n'est plus en attente de modération, on redirige vers la liste des structures en attente de modération
+        if not self.is_moderation_pending(structure):
+            self.message_user(
+                request,
+                f"Le rattachement à la structure « {structure} » n’est pas (ou plus) en attente de modération. Votre action a été ignorée.",
+            )
+            return HttpResponseRedirect(
+                self.get_moderation_pending_structure_list_url()
+            )
 
         # Passage de la structure au statut de modération Validé
         structure.moderation_status = ModerationStatus.VALIDATED
@@ -306,6 +325,16 @@ class StructureAdmin(admin.ModelAdmin):
     # Action de modération Rejeter
     def moderation_reject(self, request, object_id):
         structure = self.get_object(request, object_id)
+
+        # Si la structure n'est plus en attente de modération, on redirige vers la liste des structures en attente de modération
+        if not self.is_moderation_pending(structure):
+            self.message_user(
+                request,
+                f"Le rattachement à la structure « {structure} » n’est pas (ou plus) en attente de modération. Votre action a été ignorée.",
+            )
+            return HttpResponseRedirect(
+                self.get_moderation_pending_structure_list_url()
+            )
 
         # Envoi d'un e-mail explicatif à tous les membres et membres potentiels
         send_moderation_rejected_notification(structure, request.POST.get("reason"))

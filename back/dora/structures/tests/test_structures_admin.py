@@ -146,6 +146,27 @@ def test_moderation_approve(admin_client):
         "admin:structures_structure_change", args=[structure.pk]
     )
 
+    # Simulation d'une deuxième approbation à la suite
+
+    # Appel de l'action via le client admin
+    response = admin_client.post(url, follow=True)
+
+    # Vérification du message indiquant que la structure a déjà été modérée
+    messages = list(get_messages(response.wsgi_request))
+    assert any(
+        "n’est pas (ou plus) en attente de modération. Votre action a été ignorée."
+        in message.message
+        for message in messages
+    )
+
+    # Vérification de la redirection vers la page listant les structures en attente de modération
+    assert response.status_code == 200
+    structure_list_url = reverse("admin:structures_structure_changelist")
+    pending_moderation_structure_list_url = (
+        f"{structure_list_url}?pending_moderation=pending_moderation"
+    )
+    assert response.redirect_chain[-1][0] == pending_moderation_structure_list_url
+
 
 @pytest.mark.django_db
 def test_moderation_reject(admin_client):
@@ -273,3 +294,24 @@ def test_moderation_reject(admin_client):
     assert response.redirect_chain[-1][0] == reverse(
         "admin:structures_structure_change", args=[structure.pk]
     )
+
+    # Simulation d'un deuxième rejet à la suite
+
+    # Appel de l'action via le client admin
+    response = admin_client.post(url, follow=True)
+
+    # Vérification du message indiquant que la structure a déjà été modérée
+    messages = list(get_messages(response.wsgi_request))
+    assert any(
+        "n’est pas (ou plus) en attente de modération. Votre action a été ignorée."
+        in message.message
+        for message in messages
+    )
+
+    # Vérification de la redirection vers la page listant les structures en attente de modération
+    assert response.status_code == 200
+    structure_list_url = reverse("admin:structures_structure_changelist")
+    pending_moderation_structure_list_url = (
+        f"{structure_list_url}?pending_moderation=pending_moderation"
+    )
+    assert response.redirect_chain[-1][0] == pending_moderation_structure_list_url
