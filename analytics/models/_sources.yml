@@ -1,0 +1,33 @@
+sources:
+  - name: dora
+    schema: public
+    tables:
+      - name: orientations_orientation
+      - name: services_fundinglabel
+      - name: services_savedsearch
+      - name: services_service
+      - name: services_service_categories
+      - name: services_servicecategory
+      - name: services_service_coach_orientation_modes
+      - name: services_service_funding_labels
+      - name: stats_deploymentstate
+      - name: stats_dimobilisationevent
+      - name: stats_dimobilisationevent_categories
+      - name: stats_diserviceview
+      - name: stats_mobilisationevent
+      - name: stats_mobilisationevent_categories
+      - name: stats_pageview
+      - name: stats_searchview
+      - name: stats_searchview_categories
+      - name: stats_serviceview
+      - name: stats_structureinfosview
+      - name: stats_structureview
+      - name: structures_structure
+      - name: structures_structuremember
+      - name: structures_structurenationallabel
+      - name: structures_structure_national_labels
+      - name: structures_structureputativemember
+      - name: structures_structuretypology
+      - name: users_user
+
+
