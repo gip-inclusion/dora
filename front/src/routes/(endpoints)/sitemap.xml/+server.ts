@@ -2,17 +2,17 @@ import { error } from "@sveltejs/kit";
 
 import { SITEMAP_PAGE_SIZE } from "$lib/consts";
 import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
-import { getPublishedServiceCount } from "$lib/requests/services";
+import { getPublishedServices } from "$lib/requests/services";
 import { getActiveStructures } from "$lib/requests/structures";
 
 async function getServiceSitemaps() {
-  const serviceCount = await getPublishedServiceCount();
+  const services = await getPublishedServices({ page: 1, pageSize: 1 });
 
-  if (serviceCount === null) {
+  if (!services) {
     return "";
   }
 
-  const pageCount = Math.ceil(serviceCount / SITEMAP_PAGE_SIZE);
+  const pageCount = Math.ceil(services.count / SITEMAP_PAGE_SIZE);
 
   return Array.from({ length: pageCount })
     .map(
