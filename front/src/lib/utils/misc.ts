@@ -177,14 +177,13 @@ export function arraysCompare(a, b) {
 }
 
 export function formatPhoneNumber(phoneNumber: string): string {
-  let result = "";
-  phoneNumber.split("").forEach((char, i) => {
-    if (i !== 0 && i % 2 === 0) {
-      result += " ";
-    }
-    result += char;
-  });
-  return result;
+  // Supprime tous les espaces
+  const cleanedNumber = phoneNumber.replace(/\s+/g, "");
+
+  // Découpe en groupes de 2 chiffres
+  const formattedNumber = cleanedNumber.match(/\d{1,2}/g)?.join(" ") || "";
+
+  return formattedNumber;
 }
 
 export function isInDeploymentDepartments(
