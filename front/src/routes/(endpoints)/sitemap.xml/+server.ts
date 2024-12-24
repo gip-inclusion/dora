@@ -1,40 +1,44 @@
-import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
 import { error } from "@sveltejs/kit";
 
-function getStaticEntries() {
-  return ["contribuer"]
-    .map((entry) =>
-      `<url>
-    <loc>${CANONICAL_URL}/${entry}</loc>
-    <priority>1</priority>
-  </url>`.trim()
+import { SITEMAP_PAGE_SIZE } from "$lib/consts";
+import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
+import { getActiveStructureCount } from "$lib/requests/structures";
+
+async function getStructureSitemaps() {
+  const structureCount = await getActiveStructureCount();
+
+  if (structureCount === null) {
+    return "";
+  }
+
+  const pageCount = Math.ceil(structureCount / SITEMAP_PAGE_SIZE);
+
+  return Array.from({ length: pageCount })
+    .map(
+      (_item, index) =>
+        `<sitemap>
+           <loc>${CANONICAL_URL}/sitemap-structures-${index + 1}.xml</loc>
+         </sitemap>`
     )
     .join("\n");
 }
 
-function getContent() {
-  const content = `
+async function getSitemapIndex() {
+  return `
   <?xml version="1.0" encoding="UTF-8" ?>
-    <urlset
-    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      <url>
-        <loc>${CANONICAL_URL}/</loc>
-        <priority>1</priority>
-      </url>
-      ${getStaticEntries()}
-    </urlset>`.trim();
-
-  return content;
+  <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    ${await getStructureSitemaps()}
+  </sitemapindex>`.trim();
 }
 
-export function GET() {
-  const content = getContent();
+export async function GET() {
+  const sitemapIndex = await getSitemapIndex();
   if (
     ENVIRONMENT === "production" ||
     ENVIRONMENT === "local" ||
     ENVIRONMENT === "dev"
   ) {
-    return new Response(content, {
+    return new Response(sitemapIndex, {
       headers: {
         "Content-Type": "application/xml",
       },
