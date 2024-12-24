@@ -12,3 +12,8 @@ export function formatLongDate(dateString: string) {
     year: "numeric",
   });
 }
+
+export function toISODate(apiDate: string) {
+  const date = new Date(apiDate).toISOString();
+  return date.slice(0, date.indexOf("T"));
+}
