@@ -12,16 +12,16 @@ function toISODate(apiDate) {
 }
 
 async function getUrlEntries(page: number) {
-  const publishedServices = await getPublishedServices({
+  const services = await getPublishedServices({
     pageSize: SITEMAP_PAGE_SIZE,
     page: page,
   });
 
-  if (!publishedServices) {
+  if (!services) {
     return "";
   }
 
-  return publishedServices
+  return services.results
     .map(
       (service) =>
         `<url>
