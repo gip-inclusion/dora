@@ -254,7 +254,7 @@ class OrientationView(AbstractServiceEvent):
         null=True,
     )
     orientation_status = models.CharField(
-        max_length=10,
+        max_length=20,
         choices=OrientationStatus.choices,
         default="",
         blank=True,

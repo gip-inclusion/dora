@@ -301,3 +301,21 @@ def send_structure_activation_notification(structure):
             from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
             tags=["notification"],
         )
+
+
+def send_moderation_rejected_notification(structure, reason: str):
+    for user in structure.members.all().union(structure.putative_members.all()):
+        context = {
+            "structure": structure,
+            "user": user,
+            "reason": reason,
+        }
+        send_mail(
+            "[DORA] Décision de modération concernant votre compte",
+            user.email,
+            mjml2html(
+                render_to_string("notification-moderation-rejected.mjml", context)
+            ),
+            from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
+            tags=["notification"],
+        )
