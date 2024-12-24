@@ -12,16 +12,16 @@ function toISODate(apiDate) {
 }
 
 async function getUrlEntries(page: number) {
-  const activeStructures = await getActiveStructures({
+  const structures = await getActiveStructures({
     pageSize: SITEMAP_PAGE_SIZE,
     page: page,
   });
 
-  if (!activeStructures) {
+  if (!structures) {
     return "";
   }
 
-  return activeStructures
+  return structures.results
     .map(
       (structure) =>
         `<url>
