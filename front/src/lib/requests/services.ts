@@ -69,9 +69,23 @@ export async function getPublishedServiceCount(): Promise<number | null> {
   return data?.count || null;
 }
 
-export async function getPublishedServices(): Promise<ShortService[]> {
-  const url = `${getApiURL()}/services/?published=1`;
-  return (await fetchData<ShortService[]>(url)).data;
+export async function getPublishedServices({
+  pageSize,
+  page,
+}: {
+  pageSize: number;
+  page: number;
+}): Promise<ShortService[] | null> {
+  const url = new URL("/services/", getApiURL());
+
+  url.searchParams.append("published", "1");
+  url.searchParams.append("page_size", pageSize.toString());
+  url.searchParams.append("page", page.toString());
+
+  const data = (await fetchData<{ results: ShortService[] }>(url.toString()))
+    .data;
+
+  return data?.results || null;
 }
 
 export async function getModel(slug): Promise<Model> {
