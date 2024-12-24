@@ -3,13 +3,9 @@ import { error } from "@sveltejs/kit";
 import { SITEMAP_PAGE_SIZE } from "$lib/consts";
 import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
 import { getActiveStructures } from "$lib/requests/structures";
+import { toISODate } from "$lib/utils/date";
 
 import type { RequestHandler } from "./$types";
-
-function toISODate(apiDate) {
-  const date = new Date(apiDate).toISOString();
-  return date.slice(0, date.indexOf("T"));
-}
 
 async function getUrlEntries(page: number) {
   const structures = await getActiveStructures({
