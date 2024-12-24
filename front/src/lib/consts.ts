@@ -6,3 +6,5 @@ export const enum TallyFormId {
 }
 
 export const TEST_WORDS = ["test", "truc", "bidule"];
+
+export const SITEMAP_PAGE_SIZE = 1000;
