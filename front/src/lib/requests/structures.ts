@@ -68,6 +68,17 @@ export async function getManagedStructures(
   return (await fetchData<ShortStructure[]>(url)).data;
 }
 
+export async function getActiveStructureCount(): Promise<number | null> {
+  const url = new URL("/structures/", getApiURL());
+
+  url.searchParams.append("active", "1");
+  url.searchParams.append("page_size", "1");
+
+  const data = (await fetchData<{ count: number }>(url.toString())).data;
+
+  return data?.count || null;
+}
+
 export async function getActiveStructures(): Promise<ShortStructure[]> {
   const url = `${getApiURL()}/structures/?active=1`;
   return (await fetchData<ShortStructure[]>(url)).data;
