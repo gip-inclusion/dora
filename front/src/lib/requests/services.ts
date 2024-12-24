@@ -58,6 +58,17 @@ export async function getServiceDI(diId): Promise<Service> {
   return serviceToFront(response.data);
 }
 
+export async function getPublishedServiceCount(): Promise<number | null> {
+  const url = new URL("/services/", getApiURL());
+
+  url.searchParams.append("published", "1");
+  url.searchParams.append("page_size", "1");
+
+  const data = (await fetchData<{ count: number }>(url.toString())).data;
+
+  return data?.count || null;
+}
+
 export async function getPublishedServices(): Promise<ShortService[]> {
   const url = `${getApiURL()}/services/?published=1`;
   return (await fetchData<ShortService[]>(url)).data;
