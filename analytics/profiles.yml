@@ -1,0 +1,15 @@
+dora:
+  outputs:
+    dev:
+      type: postgres
+      # runs on a 2XL machine
+      threads: 8
+      host: "{{ env_var('PGHOST', 'localhost') }}"
+      port: "{{ env_var('PGPORT', '5432') | int }}"
+      user: "{{ env_var('PGUSER', 'dora') }}"
+      password: "{{ env_var('PGPASSWORD', 'dora') }}"
+      dbname: "{{ env_var('PGDATABASE', 'dora') }}"
+      schema: public
+
+  target: dev
+
