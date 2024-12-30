@@ -14,6 +14,7 @@
   import { orientationContainsTestWords } from "$lib/utils/orientation";
   import { userPreferences } from "$lib/utils/preferences";
   import type { Choice } from "$lib/types";
+  import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
 
   export let service;
   export let credentials;
@@ -308,7 +309,7 @@
           Les orientations fictives/test nécessitent une vérification manuelle,
           augmentant la charge de travail de nos équipes. Pour découvrir le
           fonctionnement du formulaire, consultez plutôt <a
-            href="https://aide.dora.inclusion.beta.gouv.fr/fr/category/orienter-vos-beneficiaires-c25cna/"
+            href={URL_DOCUMENTATION_ORIENTATION}
             target="_blank"
             class="underline">notre documentation</a
           >.

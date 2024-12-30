@@ -3,6 +3,7 @@ from rest_framework import mixins, permissions, serializers, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from dora.core.models import ModerationStatus
 from dora.core.utils import TRUTHY_VALUES
 
 from .emails import (
@@ -21,6 +22,14 @@ from .models import (
     SentContactEmail,
 )
 from .serializers import OrientationSerializer
+
+
+class ModeratedOrientationPermission(permissions.BasePermission):
+    def has_object_permission(self, request, view, orientation):
+        return orientation.status not in [
+            OrientationStatus.MODERATION_PENDING,
+            OrientationStatus.MODERATION_REJECTED,
+        ]
 
 
 class OrientationPermission(permissions.BasePermission):
@@ -49,7 +58,7 @@ class OrientationViewSet(
     viewsets.GenericViewSet,
 ):
     serializer_class = OrientationSerializer
-    permission_classes = [OrientationPermission]
+    permission_classes = [ModeratedOrientationPermission, OrientationPermission]
     lookup_field = "query_id"
 
     def get_queryset(self):
@@ -58,7 +67,14 @@ class OrientationViewSet(
     def perform_create(self, serializer):
         serializer.is_valid()
         orientation = serializer.save(prescriber=self.request.user)
-        send_orientation_created_emails(orientation)
+        if (
+            orientation.prescriber_structure.moderation_status
+            == ModerationStatus.VALIDATED
+        ):
+            send_orientation_created_emails(orientation)
+        else:
+            orientation.status = OrientationStatus.MODERATION_PENDING
+            orientation.save()
 
     @action(
         detail=True,
@@ -170,7 +186,7 @@ class OrientationViewSet(
         detail=True,
         methods=["patch"],
         url_path="refresh",
-        permission_classes=[permissions.AllowAny],
+        permission_classes=[ModeratedOrientationPermission],
     )
     def refresh(self, request, query_id=None):
         # la régénération du hash est le seul point d'entrée "ouvert",
