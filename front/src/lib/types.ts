@@ -569,6 +569,7 @@ export type ServicesOptions = {
   locationKinds: { value: LocationKind; label: string }[];
   requirements: CustomChoice[];
   subcategories: { value: string; label: string }[];
+  updateFrequencies: { value: string; label: string }[];
 };
 
 export type Model = {
