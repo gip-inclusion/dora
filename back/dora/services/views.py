@@ -49,6 +49,7 @@ from dora.services.models import (
     ServiceModificationHistoryItem,
     ServiceStatusHistoryItem,
     ServiceSubCategory,
+    UpdateFrequency,
 )
 from dora.services.utils import synchronize_service_from_model
 from dora.stats.models import DeploymentLevel, DeploymentState
@@ -702,6 +703,9 @@ def options(request):
         ).data,
         "diffusion_zone_type": [
             {"value": c[0], "label": c[1]} for c in AdminDivisionType.choices
+        ],
+        "update_frequencies": [
+            {"value": c[0], "label": c[1]} for c in UpdateFrequency.choices
         ],
         "deployment_departments": [
             s["department_code"]
