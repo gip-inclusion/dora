@@ -329,4 +329,5 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "suspension_date": service_data["date_suspension"],
         "update_status": update_status,
         "use_inclusion_numerique_scheme": False,
+        "update_frequency": None,
     }
