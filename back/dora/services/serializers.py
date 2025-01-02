@@ -32,6 +32,7 @@ from .models import (
     ServiceKind,
     ServiceModel,
     ServiceSubCategory,
+    UpdateFrequency,
 )
 
 logger = logging.getLogger(__name__)
@@ -131,6 +132,10 @@ def _get_diffusion_zone_type_display(obj):
         if obj.diffusion_zone_type
         else ""
     )
+
+
+def _get_update_frequency_display(obj):
+    return UpdateFrequency(obj.update_frequency).label if obj.update_frequency else ""
 
 
 class ServiceSerializer(serializers.ModelSerializer):
@@ -256,6 +261,8 @@ class ServiceSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
 
+    update_frequency_display = serializers.SerializerMethodField()
+
     update_status = serializers.SerializerMethodField()
 
     class Meta:
@@ -336,6 +343,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             "subcategories",
             "subcategories_display",
             "suspension_date",
+            "update_frequency",
+            "update_frequency_display",
             "update_status",
             "use_inclusion_numerique_scheme",
         ]
@@ -458,6 +467,9 @@ class ServiceSerializer(serializers.ModelSerializer):
             return object.model.name
         return None
 
+    def get_update_frequency_display(self, obj):
+        return _get_update_frequency_display(obj)
+
     def get_update_status(self, object):
         return object.get_update_status()
 
@@ -551,6 +563,7 @@ class ServiceModelSerializer(ServiceSerializer):
             "subcategories",
             "subcategories_display",
             "suspension_date",
+            "update_frequency",
         ]
         lookup_field = "slug"
 

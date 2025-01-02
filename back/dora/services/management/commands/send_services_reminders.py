@@ -50,9 +50,7 @@ class Command(BaseCommand):
         )
         self.stdout.write(f"{expired_drafts.count()} brouillons concernés")
 
-        self.stdout.write(
-            f"Vérification des services mis à jour depuis plus de  {settings.NUM_DAYS_BEFORE_ADVISED_SERVICE_UPDATE} jours…"
-        )
+        self.stdout.write("Vérification des services devant être mis à jour…")
         obsolete_services = Service.objects.update_advised()
 
         self.stdout.write(f"{obsolete_services.count()} services concernés")
