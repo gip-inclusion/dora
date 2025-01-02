@@ -563,6 +563,7 @@ class ServiceModelSerializer(ServiceSerializer):
             "subcategories",
             "subcategories_display",
             "suspension_date",
+            "update_frequency",
         ]
         lookup_field = "slug"
 
