@@ -2,6 +2,7 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
@@ -177,9 +178,25 @@ class ServiceManager(models.Manager):
 
     def update_advised(self):
         return self.filter(
-            status=ServiceStatus.PUBLISHED,
-            modification_date__lte=timezone.now()
-            - timedelta(days=settings.NUM_DAYS_BEFORE_ADVISED_SERVICE_UPDATE),
+            Q(status=ServiceStatus.PUBLISHED)
+            & (
+                Q(
+                    update_frequency=UpdateFrequency.EVERY_MONTH,
+                    modification_date__lte=timezone.now() - relativedelta(months=1),
+                )
+                | Q(
+                    update_frequency=UpdateFrequency.EVERY_3_MONTHS,
+                    modification_date__lte=timezone.now() - relativedelta(months=3),
+                )
+                | Q(
+                    update_frequency=UpdateFrequency.EVERY_6_MONTHS,
+                    modification_date__lte=timezone.now() - relativedelta(months=6),
+                )
+                | Q(
+                    update_frequency=UpdateFrequency.EVERY_12_MONTHS,
+                    modification_date__lte=timezone.now() - relativedelta(months=12),
+                )
+            )
         )
 
     def draft(self):
