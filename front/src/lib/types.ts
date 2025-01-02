@@ -482,6 +482,7 @@ export interface Service {
   suspensionDate: string;
   useInclusionNumeriqueScheme: boolean;
   updateFrequency: UpdateFrequency | null;
+  updateFrequencyDisplay: string | null;
   updateStatus: ServiceUpdateStatus;
 }
 
