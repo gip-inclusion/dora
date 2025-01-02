@@ -330,4 +330,5 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "update_status": update_status,
         "use_inclusion_numerique_scheme": False,
         "update_frequency": None,
+        "update_frequency_display": None,
     }
