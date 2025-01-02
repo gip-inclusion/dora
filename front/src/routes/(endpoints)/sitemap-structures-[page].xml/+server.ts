@@ -1,7 +1,5 @@
-import { error } from "@sveltejs/kit";
-
 import { SITEMAP_PAGE_SIZE } from "$lib/consts";
-import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
+import { CANONICAL_URL } from "$lib/env";
 import { getActiveStructures } from "$lib/requests/structures";
 import { toISODate } from "$lib/utils/date";
 
@@ -38,10 +36,6 @@ async function getUrlSet(page: number) {
 }
 
 export const GET: RequestHandler = async ({ params }) => {
-  if (!["production", "local", "dev"].includes(ENVIRONMENT)) {
-    error(404, "Page Not Found");
-  }
-
   const urlSet = await getUrlSet(Number(params.page));
 
   return new Response(urlSet, {

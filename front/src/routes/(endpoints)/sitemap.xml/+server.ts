@@ -1,7 +1,5 @@
-import { error } from "@sveltejs/kit";
-
 import { SITEMAP_PAGE_SIZE } from "$lib/consts";
-import { CANONICAL_URL, ENVIRONMENT } from "$lib/env";
+import { CANONICAL_URL } from "$lib/env";
 import { getPublishedServices } from "$lib/requests/services";
 import { getActiveStructures } from "$lib/requests/structures";
 
@@ -54,17 +52,10 @@ async function getSitemapIndex() {
 
 export async function GET() {
   const sitemapIndex = await getSitemapIndex();
-  if (
-    ENVIRONMENT === "production" ||
-    ENVIRONMENT === "local" ||
-    ENVIRONMENT === "dev"
-  ) {
-    return new Response(sitemapIndex, {
-      headers: {
-        "Content-Type": "application/xml",
-      },
-    });
-  } else {
-    error(404, "Page Not Found");
-  }
+
+  return new Response(sitemapIndex, {
+    headers: {
+      "Content-Type": "application/xml",
+    },
+  });
 }
