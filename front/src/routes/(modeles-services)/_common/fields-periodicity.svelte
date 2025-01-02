@@ -1,6 +1,7 @@
 <script lang="ts">
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
@@ -46,6 +47,19 @@
       type="date"
       bind:value={service.suspensionDate}
       description="Date à partir de laquelle le service ne sera plus visible dans la recherche."
+    />
+  </FieldModel>
+
+  <FieldModel
+    {...fieldModelProps.updateFrequency ?? {}}
+    serviceValue={service.updateFrequency}
+    type="text"
+  >
+    <RadioButtonsField
+      id="updateFrequency"
+      bind:value={service.updateFrequency}
+      choices={servicesOptions.updateFrequencies}
+      description="À quelle fréquence les informations de votre service changent-elles (description, critères, public, contact) ? Choisissez la période pour être alerté."
     />
   </FieldModel>
 </FieldSet>
