@@ -58,9 +58,22 @@ export async function getServiceDI(diId): Promise<Service> {
   return serviceToFront(response.data);
 }
 
-export async function getPublishedServices(): Promise<ShortService[]> {
-  const url = `${getApiURL()}/services/?published=1`;
-  return (await fetchData<ShortService[]>(url)).data;
+export async function getPublishedServices({
+  pageSize,
+  page,
+}: {
+  pageSize: number;
+  page: number;
+}) {
+  const url = new URL("/services/", getApiURL());
+
+  url.searchParams.append("published", "1");
+  url.searchParams.append("page_size", pageSize.toString());
+  url.searchParams.append("page", page.toString());
+
+  return (
+    await fetchData<{ count: number; results: ShortService[] }>(url.toString())
+  ).data;
 }
 
 export async function getModel(slug): Promise<Model> {
