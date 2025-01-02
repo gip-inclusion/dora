@@ -1,6 +1,8 @@
 from datetime import timedelta
 from io import StringIO
 
+import pytest
+from dateutil.relativedelta import relativedelta
 from django.core import mail
 from django.core.management import call_command
 from django.utils import timezone
@@ -9,6 +11,7 @@ from rest_framework.test import APITestCase
 
 from dora.core.test_utils import make_service, make_structure, make_user
 from dora.services.enums import ServiceStatus
+from dora.services.models import UpdateFrequency
 
 
 class ServicesNotificationsTestCase(APITestCase):
@@ -190,34 +193,60 @@ class ServicesNotificationsTestCase(APITestCase):
             self.assertEqual(len(mail.outbox), 1)
             self.assertIn(user.email, mail.outbox[0].to)
 
-    ##########################
-    # Services à mettre à jour
-    ##########################
 
-    def test_service_more_than_6_months_notified(self):
-        with freeze_time(timezone.now() - timedelta(days=7 * 30)):
-            service = make_service(
-                structure=self.structure,
-                status=ServiceStatus.PUBLISHED,
-                creator=make_user(self.structure),
-            )
-        self.call_command()
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertIn(
-            "Des mises à jour de votre offre de service sur DORA sont nécessaires",
-            mail.outbox[0].subject,
+##########################
+# Services à mettre à jour
+##########################
+
+
+@pytest.mark.parametrize(
+    "update_frequency,months",
+    [
+        (UpdateFrequency.EVERY_MONTH, 1),
+        (UpdateFrequency.EVERY_3_MONTHS, 3),
+        (UpdateFrequency.EVERY_6_MONTHS, 6),
+        (UpdateFrequency.EVERY_12_MONTHS, 12),
+    ],
+)
+def test_service_to_be_updated_notified(update_frequency, months):
+    with freeze_time(timezone.now() - relativedelta(months=months, minutes=1)):
+        structure = make_structure()
+        service = make_service(
+            structure=structure,
+            status=ServiceStatus.PUBLISHED,
+            creator=make_user(structure),
+            update_frequency=update_frequency,
         )
-        self.assertIn(service.structure.slug, mail.outbox[0].body)
-        self.assertIn("/auth/connexion?next", mail.outbox[0].body)
-        self.assertIn("services%3Fupdate-status%3DALL", mail.outbox[0].body)
-        self.assertIn(service.creator.email, mail.outbox[0].to)
+    call_command("send_services_reminders", stdout=StringIO())
+    assert len(mail.outbox) == 1
+    assert (
+        mail.outbox[0].subject
+        == "Des mises à jour de votre offre de service sur DORA sont nécessaires"
+    )
+    assert service.structure.slug in mail.outbox[0].body
+    assert "/auth/connexion?next" in mail.outbox[0].body
+    assert "services%3Fupdate-status%3DALL" in mail.outbox[0].body
+    assert service.creator.email in mail.outbox[0].to
 
-    def test_service_less_than_6_months__not_notified(self):
-        with freeze_time(timezone.now() - timedelta(days=5 * 30)):
-            make_service(
-                structure=self.structure,
-                status=ServiceStatus.PUBLISHED,
-                creator=make_user(self.structure),
-            )
-        self.call_command()
-        self.assertEqual(len(mail.outbox), 0)
+
+@pytest.mark.parametrize(
+    "update_frequency,months",
+    [
+        (UpdateFrequency.EVERY_MONTH, 1),
+        (UpdateFrequency.EVERY_3_MONTHS, 3),
+        (UpdateFrequency.EVERY_6_MONTHS, 6),
+        (UpdateFrequency.EVERY_12_MONTHS, 12),
+        (UpdateFrequency.NEVER, 24),
+    ],
+)
+def test_service_to_be_updated_not_notified(update_frequency, months):
+    with freeze_time(timezone.now() - relativedelta(months=months, minutes=-1)):
+        structure = make_structure()
+        make_service(
+            structure=structure,
+            status=ServiceStatus.PUBLISHED,
+            creator=make_user(structure),
+            update_frequency=update_frequency,
+        )
+    call_command("send_services_reminders", stdout=StringIO())
+    assert len(mail.outbox) == 0
