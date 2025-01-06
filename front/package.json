@@ -52,7 +52,7 @@
     "hexoid": "^2.0.0",
     "husky": "^9.1.7",
     "insane": "^2.6.2",
-    "lint-staged": "^15.2.11",
+    "lint-staged": "^15.3.0",
     "maplibre-gl": "^4.7.1",
     "opening_hours": "^3.8.0",
     "postcss": "^8.4.49",
