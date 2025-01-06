@@ -14,7 +14,7 @@
     <strong>Bonjour {{ data.prescriber.get_short_name }},</strong>
   </p>
   <p>
-    Votre demande d’orientation pour le service {% include "partials/service-link.html" %} ayant lieu à&nbsp: {{ service_address }} porté par la structure
+    Votre demande d’orientation pour le service {% include "partials/service-link.html" %} ayant lieu au&#8239;: {{ service_address }}, porté par la structure
     {% include "partials/structure-link.html" %}
     à été transmise&nbsp;!
   </p>

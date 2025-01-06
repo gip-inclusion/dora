@@ -18,7 +18,7 @@
     <a
       href="{{ data.prescriber_structure.get_frontend_url }}">{{ data.prescriber_structure.name }}
     </a>
-    a réalisé une prescription en votre nom, pour le service {% include "partials/service-link.html" %} ayant lieu à&nbsp: {{ service_address }}.
+    a réalisé une prescription en votre nom, pour le service {% include "partials/service-link.html" %}, ayant lieu au&#8239;: {{ service_address }}.
   </p>
 
   <p><strong>Pour des questions concernant cette demande, veuillez contacter le prescripteur ou la prescriptrice&nbsp;:</strong></p>

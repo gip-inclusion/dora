@@ -8,7 +8,7 @@ export function renderPrescriberAcceptMessage(data: Record<string, string | unde
 
 Nous avons le plaisir de vous informer que votre demande d’orientation a été acceptée ! 🎉
 
-Votre demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} à été validée par la structure « ${data.serviceStructureName} » pour le service ${data.serviceName} ayant lieu à ${serviceAddressMarker}.
+Votre demande concernant ${data.beneficiaryFirstName} ${data.beneficiaryLastName} à été validée par la structure « ${data.serviceStructureName} » pour le service ${data.serviceName} ayant lieu au ${serviceAddressMarker}.
 
 Si vous avez des questions supplémentaires ou si vous souhaitez obtenir plus d’informations, n’hésitez pas à nous contacter.
 
@@ -34,7 +34,7 @@ Cordialement,`;
 export function renderBeneficiaryAcceptMessage(data: Record<string, string | undefined>) {
 	let result = `Bonjour,
 
-Nous avons le plaisir de vous informer que la structure « ${data.serviceStructureName} » a validé la demande réalisée par ${data.referentFirstName} ${data.referentLastName} concernant votre positionnement sur « ${data.serviceName} » ayant lieu à ${serviceAddressMarker}.
+Nous avons le plaisir de vous informer que la structure « ${data.serviceStructureName} » a validé la demande réalisée par ${data.referentFirstName} ${data.referentLastName} concernant votre positionnement sur « ${data.serviceName} » ayant lieu au ${serviceAddressMarker}.
 
 Pour toute information supplémentaire, n’hésitez pas à contacter votre référent${data.structurePhone ? ` ou la structure directement au ${formatPhoneNumber(data.structurePhone)}` : ""}.
 
