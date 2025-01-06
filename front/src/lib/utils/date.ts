@@ -14,6 +14,10 @@ export function formatLongDate(dateString: string) {
 }
 
 export function toISODate(apiDate: string) {
-  const date = new Date(apiDate).toISOString();
-  return date.slice(0, date.indexOf("T"));
+  const date = new Date(apiDate);
+  if (isNaN(date.getTime())) {
+    return "";
+  }
+  const isoDateString = date.toISOString();
+  return isoDateString.slice(0, isoDateString.indexOf("T"));
 }
