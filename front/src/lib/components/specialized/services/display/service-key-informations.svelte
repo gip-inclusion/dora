@@ -78,7 +78,7 @@
   <hr class="mb-s10 mt-s20" />
 
   <div>
-    <h3 class="!mb-s10 text-f17">
+    <h3 class="!mb-s10">
       <span class="mr-s8 h-s24 w-s24 fill-current">
         {@html listCheckIcon}
       </span>
@@ -90,9 +90,9 @@
   <hr class="mb-s10 mt-s20" />
 
   {#if service.durationWeeklyHours && service.durationWeeks}
-    <div>
-      <h3 class="!mb-s10 text-f17">
-        <span class="mr-s8 h-s24 w-s24 fill-current">
+    <div class="flex-1">
+      <h3>
+        <span class="mr-s8 h-s24 w-s24 shrink-0 self-baseline fill-current">
           {@html timerFlashIcon}
         </span>
         Durée de la prestation
