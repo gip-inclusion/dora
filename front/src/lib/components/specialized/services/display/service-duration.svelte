@@ -18,7 +18,7 @@
   {#if !isValid}
     <p>Données non renseignées</p>
   {:else}
-    <p class="">
+    <p>
       {service.durationWeeklyHours} heure(s) sur {service.durationWeeks} semaine(s),
       soit {totalHours} heure(s) au total.
     </p>
