@@ -19,7 +19,7 @@
         "Découvrez quelques conseils sur la présentation de votre offre de service",
     },
     {
-      url: "https://app.livestorm.co/dora-1",
+      url: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/participer-a-un-webinaire-dora-h3n747/",
       label: "Participez à un webinaire",
     },
     {
