@@ -24,3 +24,9 @@
     </p>
   {/if}
 </div>
+
+<style lang="postcss">
+  p {
+    @apply m-s0 text-f16 text-gray-text;
+  }
+</style>

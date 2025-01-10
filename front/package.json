@@ -35,14 +35,14 @@
     "@sveltejs/kit": "2.12.1",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@tailwindcss/typography": "^0.5.15",
-    "@tiptap/core": "^2.10.3",
-    "@tiptap/extension-link": "^2.10.3",
+    "@tiptap/core": "^2.10.4",
+    "@tiptap/extension-link": "^2.10.4",
     "@tiptap/extension-placeholder": "^2.10.3",
-    "@tiptap/starter-kit": "^2.10.3",
+    "@tiptap/starter-kit": "^2.10.4",
     "@types/iframe-resizer": "^3.5.13",
     "@types/showdown": "^2.0.6",
     "@typescript-eslint/eslint-plugin": "^8.18.1",
-    "@typescript-eslint/parser": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.2",
     "autoprefixer": "^10.4.20",
     "dayjs": "^1.11.13",
     "eslint": "^9.17.0",
@@ -88,6 +88,6 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^8.46.0"
+    "@sentry/sveltekit": "^8.47.0"
   }
 }
