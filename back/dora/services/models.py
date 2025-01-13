@@ -209,6 +209,24 @@ class ServiceManager(models.Manager):
     def archived(self):
         return self.filter(status=ServiceStatus.ARCHIVED)
 
+    def update_advised(self):
+        return self.published().filter(
+            modification_date__lte=timezone.now()
+            - timedelta(days=settings.NUM_DAYS_BEFORE_ADVISED_SERVICE_UPDATE),
+        )
+
+    def update_mandatory(self):
+        return self.published().filter(
+            modification_date__lte=timezone.now()
+            - timedelta(days=settings.NUM_DAYS_BEFORE_MANDATORY_SERVICE_UPDATE),
+        )
+
+    def expired_drafts(self):
+        return self.draft().filter(
+            creation_date__lte=timezone.now()
+            - timedelta(days=settings.NUM_DAYS_BEFORE_DRAFT_SERVICE_NOTIFICATION),
+        )
+
 
 def get_diffusion_zone_details_display(
     diffusion_zone_type: AdminDivisionType,
