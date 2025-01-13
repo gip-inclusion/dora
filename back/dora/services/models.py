@@ -2,6 +2,7 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
@@ -151,6 +152,23 @@ class ServiceSource(EnumModel):
         verbose_name = "Source"
 
 
+class UpdateFrequency(models.TextChoices):
+    EVERY_MONTH = "tous-les-mois", "Souvent, je veux recevoir une alerte tous les mois"
+    EVERY_3_MONTHS = (
+        "tous-les-3-mois",
+        "Régulièrement, je veux recevoir une alerte tous les 3 mois",
+    )
+    EVERY_6_MONTHS = (
+        "tous-les-6-mois",
+        "Occasionnellement, je veux recevoir une alerte tous les 6 mois",
+    )
+    EVERY_12_MONTHS = (
+        "tous-les-12-mois",
+        "Rarement, je veux recevoir une alerte tous les 12 mois",
+    )
+    NEVER = "jamais", "Jamais, les informations n’évoluent jamais"
+
+
 class ServiceManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_model=False)
@@ -160,16 +178,25 @@ class ServiceManager(models.Manager):
 
     def update_advised(self):
         return self.filter(
-            status=ServiceStatus.PUBLISHED,
-            modification_date__lte=timezone.now()
-            - timedelta(days=settings.NUM_DAYS_BEFORE_ADVISED_SERVICE_UPDATE),
-        )
-
-    def update_mandatory(self):
-        return self.filter(
-            status=ServiceStatus.PUBLISHED,
-            modification_date__lte=timezone.now()
-            - timedelta(days=settings.NUM_DAYS_BEFORE_MANDATORY_SERVICE_UPDATE),
+            Q(status=ServiceStatus.PUBLISHED)
+            & (
+                Q(
+                    update_frequency=UpdateFrequency.EVERY_MONTH,
+                    modification_date__lte=timezone.now() - relativedelta(months=1),
+                )
+                | Q(
+                    update_frequency=UpdateFrequency.EVERY_3_MONTHS,
+                    modification_date__lte=timezone.now() - relativedelta(months=3),
+                )
+                | Q(
+                    update_frequency=UpdateFrequency.EVERY_6_MONTHS,
+                    modification_date__lte=timezone.now() - relativedelta(months=6),
+                )
+                | Q(
+                    update_frequency=UpdateFrequency.EVERY_12_MONTHS,
+                    modification_date__lte=timezone.now() - relativedelta(months=12),
+                )
+            )
         )
 
     def draft(self):
@@ -470,6 +497,16 @@ class Service(ModerationMixin, models.Model):
     )
     data_inclusion_id = models.TextField(blank=True, db_index=True)
     data_inclusion_source = models.TextField(blank=True, db_index=True)
+
+    update_frequency = models.CharField(
+        max_length=16,
+        choices=UpdateFrequency.choices,
+        default=UpdateFrequency.EVERY_6_MONTHS,
+        verbose_name="Fréquence de mise à jour",
+        db_index=True,
+        blank=False,
+        null=False,
+    )
 
     objects = ServiceManager()
 
