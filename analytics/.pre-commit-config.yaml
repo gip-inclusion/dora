@@ -1,0 +1,20 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.1
+    hooks:
+      - id: ruff-format
+        args: [--config=analytics/pyproject.toml]
+        files: ^analytics
+        types_or: [python]
+
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 3.2.5
+    hooks:
+      - id: sqlfluff-fix
+        files: ^analytics
+        types: [sql]
+        additional_dependencies:
+          - sqlfluff-templater-dbt==3.2.5
+          - dbt-postgres==1.8.2
+        args:
+          - --config=./analytics/pyproject.toml
