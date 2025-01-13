@@ -172,6 +172,13 @@ class ServiceManager(models.Manager):
             - timedelta(days=settings.NUM_DAYS_BEFORE_MANDATORY_SERVICE_UPDATE),
         )
 
+    def expired_drafts(self):
+        return self.filter(
+            status=ServiceStatus.DRAFT,
+            creation_date__lte=timezone.now()
+            - timedelta(days=settings.NUM_DAYS_BEFORE_DRAFT_SERVICE_NOTIFICATION),
+        )
+
     def draft(self):
         return self.filter(status=ServiceStatus.DRAFT)
 

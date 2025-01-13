@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
+from dora.services.models import Service
 from dora.structures.models import Structure, StructurePutativeMember
 from dora.users.models import User
 
@@ -85,6 +86,14 @@ class Notification(NotificationMixin):
         verbose_name="invitation propriétaire",
         related_name="notifications",
     )
+    owner_service = models.ForeignKey(
+        Service,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        verbose_name="service propriétaire",
+        related_name="notifications",
+    )
     ...
 
     objects = NotificationQueryset.as_manager()
@@ -99,7 +108,8 @@ class Notification(NotificationMixin):
                 name="check_owner",
                 check=~models.Q(owner_structure=None)
                 | ~models.Q(owner_user=None)
-                | ~models.Q(owner_structureputativemember=None),
+                | ~models.Q(owner_structureputativemember=None)
+                | ~models.Q(owner_service=None),
                 # | ~models.Q(owner_other_model=None) ...
                 # ajouter une contrainte pour chaque type de propriétaire
             ),
@@ -115,6 +125,10 @@ class Notification(NotificationMixin):
             models.UniqueConstraint(
                 name="unique_task_for_invitation",
                 fields=["task_type", "owner_structureputativemember"],
+            ),
+            models.UniqueConstraint(
+                name="unique_task_for_service",
+                fields=["task_type", "owner_service"],
             ),
         ]
         indexes = [
