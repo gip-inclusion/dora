@@ -69,8 +69,10 @@
     });
   }
 
-  function handleSuccess(_result) {
-    goto(`/services/${isDI ? "di--" : ""}${service.slug}/orienter/merci`);
+  function handleSuccess(resultOrientation) {
+    goto(
+      `/services/${isDI ? "di--" : ""}${service.slug}/orienter/${resultOrientation.status === "MODERATION_PENDING" ? "moderation" : "merci"}`
+    );
   }
 </script>
 
