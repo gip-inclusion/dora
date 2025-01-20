@@ -40,7 +40,7 @@
           Pas d’inquiétude, nos équipes vérifieront cela rapidement et vous
           tiendront informé·e. Si l’orientation est validée, vous recevrez une
           confirmation et elle sera transmise à la structure porteuse du service
-          “XXX”.
+          « {data.service.name} ».
         </p>
         <p class="legend">
           Sinon, une réponse vous sera envoyée pour justifier le choix.
