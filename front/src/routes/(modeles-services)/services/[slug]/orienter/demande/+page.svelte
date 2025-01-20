@@ -71,7 +71,7 @@
 
   function handleSuccess(resultOrientation) {
     goto(
-      `/services/${isDI ? "di--" : ""}${service.slug}/orienter/${resultOrientation.status === "MODERATION_PENDING" ? "moderation" : "merci"}`
+      `/services/${isDI ? "di--" : ""}${service.slug}/orienter/${resultOrientation.status === "MODÉRATION_EN_COURS" ? "moderation" : "merci"}`
     );
   }
 </script>

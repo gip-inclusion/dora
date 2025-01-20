@@ -228,7 +228,7 @@ def test_query_create_triggers_moderation(api_client, moderation_status):
     response = api_client.post("/orientations/", data=data, follow=True)
 
     assert response.status_code == 201
-    assert response.data["status"] == "MODERATION_PENDING"
+    assert response.data["status"] == "MODÉRATION_EN_COURS"
 
     assert structure.orientations.count() == 1
 
