@@ -12,3 +12,12 @@ export function formatLongDate(dateString: string) {
     year: "numeric",
   });
 }
+
+export function toISODate(apiDate: string) {
+  const date = new Date(apiDate);
+  if (isNaN(date.getTime())) {
+    return "";
+  }
+  const isoDateString = date.toISOString();
+  return isoDateString.slice(0, isoDateString.indexOf("T"));
+}

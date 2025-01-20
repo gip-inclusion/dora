@@ -10,6 +10,7 @@ from rest_framework.authtoken.models import Token
 from sesame.utils import get_token, get_user
 
 from dora.auth_links.emails import send_authentication_link
+from dora.auth_links.enums import AuthLinkAction
 from dora.users.models import User
 
 logger = logging.getLogger("dora.logs.core")
@@ -38,6 +39,7 @@ def send_link(request):
         "Demande de connexion par lien direct",
         {
             "legal": True,
+            "action": AuthLinkAction.SENT_AUTH_LINK,
             "userId": user.pk,
             "userEmail": user.email,
         },
@@ -53,6 +55,7 @@ def authenticate_with_link(request, sesame):
                 "Connexion par lien direct",
                 {
                     "legal": True,
+                    "action": AuthLinkAction.DID_AUTHENTICATE_WITH_AUTH_LINK,
                     "userId": user.pk,
                     "userEmail": user.email,
                 },
@@ -68,7 +71,10 @@ def authenticate_with_link(request, sesame):
 
     logger.warning(
         "Lien direct invalide ou expiré",
-        {"sesameLink": f"...{sesame[:-5]}"},
+        {
+            "action": AuthLinkAction.USED_EXPIRED_AUTH_LINK,
+            "sesameLink": f"...{sesame[:-5]}",
+        },
     )
 
     # le lien est invalide ou expiré :

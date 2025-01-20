@@ -102,7 +102,7 @@
     </p>
 
     <LinkButton
-      to="https://app.livestorm.co/dora-1"
+      to="https://aide.dora.inclusion.beta.gouv.fr/fr/article/participer-a-un-webinaire-dora-h3n747/"
       otherTab
       nofollow
       noBackground
