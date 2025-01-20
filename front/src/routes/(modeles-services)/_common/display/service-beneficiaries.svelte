@@ -11,7 +11,7 @@
 
     <ul>
       {#if Array.isArray(service.concernedPublicDisplay)}
-        {#each service.concernedPublicDisplay as pub (pub)}
+        {#each service.concernedPublicDisplay as pub}
           <li>{pub}</li>
         {:else}
           <li>Tous publics</li>
