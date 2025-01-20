@@ -182,6 +182,7 @@ class OrientationModerationPendingInline(admin.TabularInline):
         "referent_last_name",
         "referent_email",
         "service",
+        "di_service_id",
         "orientation_reasons",
     ]
     readonly_fields = [
@@ -192,6 +193,7 @@ class OrientationModerationPendingInline(admin.TabularInline):
         "referent_last_name",
         "referent_email",
         "service",
+        "di_service_id",
         "orientation_reasons",
     ]
 
