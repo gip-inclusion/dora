@@ -17,6 +17,7 @@
   import Teaser from "./teaser.svelte";
   import { trackMobilisation } from "$lib/utils/stats";
   import { page } from "$app/stores";
+  import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
   export let data;
 
   const { service } = data;
@@ -95,7 +96,7 @@
               vérification manuelle, ce qui augmente la charge de travail de nos
               équipes. Pour comprendre le fonctionnement du formulaire, nous
               vous invitons à consulter <a
-                href="https://aide.dora.inclusion.beta.gouv.fr/fr/category/orienter-vos-beneficiaires-c25cna/"
+                href={URL_DOCUMENTATION_ORIENTATION}
                 target="_blank"
                 class="underline">notre documentation</a
               >.

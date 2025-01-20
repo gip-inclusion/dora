@@ -22,6 +22,7 @@ const config = {
           "https://sentry.gip-inclusion.org",
           "https://sentry.gip-inclusion.cloud-ed.fr",
           "https://api-adresse.data.gouv.fr/",
+          "https://openmaptiles.data.gouv.fr",
           "https://openmaptiles.geo.data.gouv.fr/",
           "https://openmaptiles.github.io/osm-bright-gl-style/",
           "https://matomo.inclusion.beta.gouv.fr",
