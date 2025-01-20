@@ -10,7 +10,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "requirement"
+      prefix: "build"
       prefix-development: "dev requirement"
 
   - package-ecosystem: "npm"
@@ -18,5 +18,5 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "requirement"
+      prefix: "build"
       prefix-development: "dev requirement"
