@@ -11,7 +11,7 @@
 {% block content %}
   <p><strong>Bonjour {{ user.first_name }},</strong></p>
 
-  <p>Après vérification par nos équipes, certains aspects concernant la présence de votre structure <strong>{{ structure.name }}</strong> ou l’activité de l’un de vos collaborateurs sur DORA semblent ne pas être conformes à nos conditions générales d’utilisation (CGU).</p>
+  <p>Après vérification par nos équipes, certains aspects concernant la présence de votre structure <strong>{{ structure.name }}</strong> ou l’activité de l’un de vos collaborateurs sur DORA semblent ne pas être conformes à nos <a href="{{ eula_link }}">conditions générales d’utilisation (CGU)</a>.</p>
 
   <p>Motif : <q>{{ reason }}</q></p>
 

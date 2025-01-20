@@ -183,7 +183,7 @@ def send_orphan_structure_notification(structure):
     }
 
     send_mail(
-        f"Votre structure n’a pas encore de membre actif sur DORA ({ structure.name})",
+        f"Votre structure n’a pas encore de membre actif sur DORA ({structure.name})",
         structure.email,
         mjml2html(render_to_string("notification-orphan-structure.mjml", context)),
         from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
@@ -293,7 +293,7 @@ def send_structure_activation_notification(structure):
         )
         context |= {"cta_link": cta_link}
         send_mail(
-            f"Votre structure n’a pas encore publié de service sur DORA ({ structure.name})",
+            f"Votre structure n’a pas encore publié de service sur DORA ({structure.name})",
             admin.email,
             mjml2html(
                 render_to_string("notification-service-activation.mjml", context),
@@ -304,11 +304,13 @@ def send_structure_activation_notification(structure):
 
 
 def send_moderation_rejected_notification(structure, reason: str):
+    eula_link = furl(settings.FRONTEND_URL) / "cgu"
     for user in structure.members.all().union(structure.putative_members.all()):
         context = {
             "structure": structure,
             "user": user,
             "reason": reason,
+            "eula_link": eula_link,
         }
         send_mail(
             "[DORA] Décision de modération concernant votre compte",
