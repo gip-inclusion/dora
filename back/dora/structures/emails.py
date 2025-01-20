@@ -178,7 +178,7 @@ def send_orphan_structure_notification(structure):
     context = {
         "structure": structure,
         "dora_doc_link": "https://aide.dora.inclusion.beta.gouv.fr/fr/",
-        "webinar_link": "https://app.livestorm.co/dora-1/presentation-dora",
+        "webinar_link": "https://app.livestorm.co/itou/dora-presentation-et-prise-en-main-de-loutil",
         "cta_link": cta_link.url,
     }
 
@@ -274,7 +274,7 @@ def send_structure_activation_notification(structure):
     context = {
         "structure": structure,
         "dora_doc_link": "https://aide.dora.inclusion.beta.gouv.fr/fr/article/referencer-son-offre-de-service-xpivaw/",
-        "webinar_link": "https://app.livestorm.co/dora-1/presentation-dora",
+        "webinar_link": "https://app.livestorm.co/itou/dora-presentation-et-prise-en-main-de-loutil",
     }
 
     # aux admins inscrits depuis plus d'un mois
