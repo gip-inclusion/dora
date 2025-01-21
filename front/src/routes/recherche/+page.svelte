@@ -55,7 +55,7 @@
       kinds: [],
       fundingLabels: [],
       feeConditions: [],
-      locationKinds: [],
+      locationKinds: ["en-presentiel"],
     };
   }
 
