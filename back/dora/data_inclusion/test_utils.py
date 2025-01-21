@@ -47,6 +47,7 @@ def make_di_service_data(**kwargs) -> dict:
             "modes_orientation_accompagnateur_autres": "Mêmes modalités que pour les bénéficiaires",
             "modes_orientation_beneficiaire": ["telephoner", "autre"],
             "modes_orientation_beneficiaire_autres": "Contacter conseiller(e) Pôle Emploi",
+            "score_qualite": 0.5,
             "zone_diffusion_type": None,
             "zone_diffusion_code": None,
             "zone_diffusion_nom": "foo",
