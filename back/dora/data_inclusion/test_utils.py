@@ -88,6 +88,7 @@ class FakeDataInclusionClient:
     def search_services(
         self,
         sources: Optional[str] = None,
+        score_qualite_minimum: Optional[float] = None,
         code_insee: Optional[str] = None,
         thematiques: Optional[list[str]] = None,
         types: Optional[list[str]] = None,
@@ -99,6 +100,11 @@ class FakeDataInclusionClient:
 
         if sources is not None:
             services = [r for r in services if r["source"] in sources]
+
+        if score_qualite_minimum is not None:
+            services = [
+                r for r in services if r["score_qualite"] >= score_qualite_minimum
+            ]
 
         if thematiques is not None:
             enriched_thematiques = []
