@@ -145,6 +145,7 @@ def _get_di_results(
     try:
         raw_di_results = di_client.search_services(
             sources=settings.DATA_INCLUSION_STREAM_SOURCES,
+            score_qualite_minimum=settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM,
             code_insee=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
             types=kinds,
