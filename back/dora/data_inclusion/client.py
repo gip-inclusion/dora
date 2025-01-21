@@ -105,6 +105,7 @@ class DataInclusionClient:
     def search_services(
         self,
         sources: Optional[list[str]] = None,
+        score_qualite_minimum: Optional[float] = None,
         code_insee: Optional[str] = None,
         thematiques: Optional[list[str]] = None,
         types: Optional[list[str]] = None,
@@ -117,6 +118,9 @@ class DataInclusionClient:
 
         if sources is not None:
             url.args["sources"] = sources
+
+        if score_qualite_minimum is not None:
+            url.args["score_qualite_minimum"] = score_qualite_minimum
 
         if code_insee is not None:
             url.args["code_insee"] = code_insee
