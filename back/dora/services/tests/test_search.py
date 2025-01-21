@@ -1,7 +1,6 @@
 from unittest import mock
 
 import pytest
-from django.test import override_settings
 from model_bakery import baker
 
 from dora.admin_express.models import AdminDivisionType
@@ -95,7 +94,6 @@ def test_search_services_with_orphan_structure(
     assert found["slug"] == orphan_service.slug
 
 
-@override_settings(DATA_INCLUSION_SCORE_QUALITE_MINIMUM=None)
 def test_search_services_excludes_some_action_logement_results(api_client):
     # Le service ayant la thématique logement-hebergement--aides-financieres-investissement-locatif
     # ne doit pas être retourné
@@ -132,7 +130,6 @@ def test_search_services_excludes_some_action_logement_results(api_client):
         )
 
 
-@override_settings(DATA_INCLUSION_SCORE_QUALITE_MINIMUM=None)
 def test_search_services_includes_thematiques_empty_list(api_client):
     # Un service service DI ayant le champ thematiques avec une liste vide doit être retourné
 
@@ -153,7 +150,6 @@ def test_search_services_includes_thematiques_empty_list(api_client):
         assert len(response.data["services"]) == 1, "un service devrait être retourné"
 
 
-@override_settings(DATA_INCLUSION_SCORE_QUALITE_MINIMUM=None)
 def test_search_services_includes_thematiques_null(api_client):
     # Un service service DI ayant le champ thematiques à null doit être retourné
 

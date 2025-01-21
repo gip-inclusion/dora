@@ -1094,7 +1094,6 @@ class ServiceTestCase(APITestCase):
         )
 
 
-@override_settings(DATA_INCLUSION_SCORE_QUALITE_MINIMUM=None)
 class DataInclusionSearchTestCase(APITestCase):
     def setUp(self):
         self.region = baker.make("Region", code="99")
