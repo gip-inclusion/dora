@@ -1803,6 +1803,18 @@ class DataInclusionSearchTestCase(APITestCase):
         self.assertEqual(response.data["status"], "PUBLISHED")
         self.assertEqual(response.data["use_inclusion_numerique_scheme"], False)
 
+    @override_settings(DATA_INCLUSION_SCORE_QUALITE_MINIMUM=0.7)
+    def test_service_quality_score(self):
+        self.make_di_service(code_insee=self.city1.code, score_qualite=0.6)
+        self.make_di_service(code_insee=self.city1.code, score_qualite=0.7)
+        self.make_di_service(code_insee=self.city1.code, score_qualite=0.8)
+
+        request = self.factory.get("/search/", {"city": self.city1.code})
+        response = self.search(request)
+
+        assert response.status_code == 200
+        assert len(response.data["services"]) == 2
+
 
 class ServiceSearchTestCase(APITestCase):
     def setUp(self):

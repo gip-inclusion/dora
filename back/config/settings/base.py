@@ -302,6 +302,14 @@ DATA_INCLUSION_STREAM_SOURCES = (lambda s: s.split(",") if s else None)(
     os.getenv("DATA_INCLUSION_STREAM_SOURCES")
 )
 DATA_INCLUSION_TIMEOUT_SECONDS = os.getenv("DATA_INCLUSION_TIMEOUT_SECONDS")
+
+try:
+    DATA_INCLUSION_SCORE_QUALITE_MINIMUM = float(
+        os.getenv("DATA_INCLUSION_SCORE_QUALITE_MINIMUM")
+    )
+except (TypeError, ValueError):
+    DATA_INCLUSION_SCORE_QUALITE_MINIMUM = None
+
 SKIP_DI_INTEGRATION_TESTS = True
 
 # Send In Blue :

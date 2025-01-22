@@ -44,9 +44,9 @@ def test_search_services_with_obsolete_structure(api_client):
     response = api_client.get(f"/search/?city={city.code}")
 
     assert response.status_code == 200
-    assert response.data[
-        "services"
-    ], "un service devrait être retourné (structure non obsolète)"
+    assert response.data["services"], (
+        "un service devrait être retourné (structure non obsolète)"
+    )
 
     [found] = response.data["services"]
 
@@ -59,9 +59,9 @@ def test_search_services_with_obsolete_structure(api_client):
     response = api_client.get(f"/search/?city={city.code}")
 
     assert response.status_code == 200
-    assert not response.data[
-        "services"
-    ], "aucun service ne devrait être retourné (structure obsolète)"
+    assert not response.data["services"], (
+        "aucun service ne devrait être retourné (structure obsolète)"
+    )
 
 
 def test_search_services_with_orphan_structure(
@@ -75,9 +75,9 @@ def test_search_services_with_orphan_structure(
     response = api_client.get(f"/search/?city={city.code}")
 
     assert response.status_code == 200
-    assert not response.data[
-        "services"
-    ], "aucun service ne devrait être retourné (structure orpheline)"
+    assert not response.data["services"], (
+        "aucun service ne devrait être retourné (structure orpheline)"
+    )
 
     # on ajoute une structure avec un utilisateur au service
     orphan_service.structure = structure_with_user
@@ -85,9 +85,9 @@ def test_search_services_with_orphan_structure(
     response = api_client.get(f"/search/?city={city.code}")
 
     assert response.status_code == 200
-    assert response.data[
-        "services"
-    ], "un service devrait être retourné (structure avec utilisateur)"
+    assert response.data["services"], (
+        "un service devrait être retourné (structure avec utilisateur)"
+    )
 
     [found] = response.data["services"]
 
@@ -125,9 +125,9 @@ def test_search_services_excludes_some_action_logement_results(api_client):
 
         assert response.status_code == 200
 
-        assert (
-            len(response.data["services"]) == 1
-        ), "un seul service devrait être retourné"
+        assert len(response.data["services"]) == 1, (
+            "un seul service devrait être retourné"
+        )
 
 
 def test_search_services_includes_thematiques_empty_list(api_client):
