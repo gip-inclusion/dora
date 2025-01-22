@@ -327,6 +327,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         if subcategories is not None
         else None,
         "suspension_date": service_data["date_suspension"],
+        "update_frequency": None,
+        "update_frequency_display": None,
         "update_status": update_status,
         "use_inclusion_numerique_scheme": False,
     }

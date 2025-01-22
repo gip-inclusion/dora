@@ -379,6 +379,12 @@ export const serviceSchema: v.Schema = {
     default: false,
     rules: [v.isBool()],
   },
+  updateFrequency: {
+    label: "Périodicité de mise à jour",
+    default: "tous-les-6-mois",
+    rules: [v.isString()],
+    required: true,
+  },
 };
 
 export const inclusionNumeriqueSchema: v.Schema = {
@@ -409,6 +415,7 @@ export const inclusionNumeriqueSchema: v.Schema = {
   diffusionZoneType: serviceSchema.diffusionZoneType,
   diffusionZoneDetails: serviceSchema.diffusionZoneDetails,
   useInclusionNumeriqueScheme: serviceSchema.useInclusionNumeriqueScheme,
+  updateFrequency: serviceSchema.updateFrequency,
 };
 
 export const draftSchema: v.Schema = {
@@ -458,6 +465,7 @@ export const draftSchema: v.Schema = {
   recurrence: serviceSchema.recurrence,
   suspensionDate: serviceSchema.suspensionDate,
   useInclusionNumeriqueScheme: serviceSchema.useInclusionNumeriqueScheme,
+  updateFrequency: serviceSchema.updateFrequency,
 };
 
 export const contribSchema: v.Schema = {
@@ -518,4 +526,5 @@ export const modelSchema: v.Schema = {
   onlineForm: serviceSchema.onlineForm,
   recurrence: serviceSchema.recurrence,
   suspensionDate: serviceSchema.suspensionDate,
+  updateFrequency: serviceSchema.updateFrequency,
 };

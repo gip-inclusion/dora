@@ -307,6 +307,13 @@ export type BeneficiaryAccessModes =
   | "telephoner"
   | "autre";
 
+export type UpdateFrequency =
+  | "tous-les-mois"
+  | "tous-les-3-mois"
+  | "tous-les-6-mois"
+  | "tous-les-12-mois"
+  | "jamais";
+
 export interface FundingLabel {
   value: string;
   label: string;
@@ -474,6 +481,8 @@ export interface Service {
   subcategoriesDisplay: string[];
   suspensionDate: string;
   useInclusionNumeriqueScheme: boolean;
+  updateFrequency: UpdateFrequency | null;
+  updateFrequencyDisplay: string | null;
   updateStatus: ServiceUpdateStatus;
 }
 
@@ -569,6 +578,7 @@ export type ServicesOptions = {
   locationKinds: { value: LocationKind; label: string }[];
   requirements: CustomChoice[];
   subcategories: { value: string; label: string }[];
+  updateFrequencies: { value: string; label: string }[];
 };
 
 export type Model = {
