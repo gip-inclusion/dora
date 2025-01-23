@@ -45,6 +45,7 @@ class OrientationSerializer(serializers.ModelSerializer):
             "creation_date",
             "di_service_id",
             "di_service_name",
+            "di_service_address_line",
             "di_contact_email",
             "di_contact_name",
             "di_contact_phone",
