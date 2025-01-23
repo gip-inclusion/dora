@@ -42,6 +42,21 @@ def code_insee_to_code_dept(code_insee):
     return code_insee[:3] if code_insee.startswith("97") else code_insee[:2]
 
 
+def filter_empty_items(items: list) -> list:
+    return [item for item in items if item]
+
+
+def address_to_one_line(
+    address1: str | None,
+    address2: str | None,
+    postal_code: str | None,
+    city: str | None,
+) -> str:
+    address = " ".join(filter_empty_items([address1, address2]))
+    postal_code_and_city = " ".join(filter_empty_items([postal_code, city]))
+    return " - ".join(filter_empty_items([address, postal_code_and_city]))
+
+
 def get_object_or_none(klass, *args, **kwargs):
     """
     Use get() to return an object, or return None if the object
