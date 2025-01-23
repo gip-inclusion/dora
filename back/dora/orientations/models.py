@@ -141,6 +141,7 @@ class Orientation(models.Model):
         verbose_name="Service",
         on_delete=models.SET_NULL,
         related_name="+",
+        blank=True,
         null=True,
     )
 
