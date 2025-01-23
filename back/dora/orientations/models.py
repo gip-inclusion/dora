@@ -147,6 +147,7 @@ class Orientation(models.Model):
 
     di_service_id = models.TextField(blank=True, default="")
     di_service_name = models.TextField(blank=True, default="")
+    di_service_address_line = models.TextField(blank=True, default="")
     di_contact_email = models.TextField(blank=True, default="")
     di_contact_name = models.TextField(blank=True, default="")
     di_contact_phone = models.TextField(blank=True, default="")
