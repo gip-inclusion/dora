@@ -243,6 +243,15 @@ class Orientation(models.Model):
             else self.original_service_name
         )
 
+    def get_service_address_line(self):
+        return (
+            self.service.address_line()
+            if self.service
+            else self.di_service_address_line
+            if self.di_service_id
+            else ""
+        )
+
     def get_contact_email(self):
         return (
             self.service.contact_email
