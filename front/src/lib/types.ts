@@ -409,6 +409,7 @@ export interface Service {
   accessConditionsDisplay: string[];
   address1: string;
   address2: string;
+  addressLine: string;
   beneficiariesAccessModes: BeneficiaryAccessModes[];
   beneficiariesAccessModesDisplay: string[];
   beneficiariesAccessModesExternalFormLinkText: string;
