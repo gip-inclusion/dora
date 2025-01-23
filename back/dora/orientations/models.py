@@ -122,6 +122,20 @@ class Orientation(models.Model):
     )
     referent_email = models.EmailField(verbose_name="Courriel référent")
 
+    # Durée du service
+    duration_weekly_hours = models.PositiveIntegerField(
+        verbose_name="Nombre d'heures par semaine",
+        help_text="Nombre d'heures par semaine pour effectuer ce service",
+        blank=True,
+        null=True,
+    )
+    duration_weeks = models.PositiveIntegerField(
+        verbose_name="Nombre de semaines",
+        help_text="Nombre de semaines que durent le service",
+        blank=True,
+        null=True,
+    )
+
     # Meta
     prescriber = models.ForeignKey(
         settings.AUTH_USER_MODEL,
