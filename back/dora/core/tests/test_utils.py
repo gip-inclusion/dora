@@ -2,10 +2,12 @@ import json
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
+import pytest
 from django.contrib.gis.geos import Point
 
 from dora.core import utils
 from dora.core.constants import WGS84
+from dora.core.utils import address_to_one_line
 
 
 class UtilsTestCase(TestCase):
@@ -155,3 +157,68 @@ class UtilsTestCase(TestCase):
         # When / Then
         with self.assertRaises(json.JSONDecodeError):
             utils.get_geo_data(address="24 Rue du Commandant Guilbaud")
+
+
+@pytest.mark.parametrize(
+    "address1,address2,postal_code,city,expected",
+    [
+        (
+            "6 Boulevard St Denis",
+            "Plateforme de l'inclusion",
+            "75010",
+            "Paris",
+            "6 Boulevard St Denis Plateforme de l'inclusion - 75010 Paris",
+        ),
+        (
+            "6 Boulevard St Denis",
+            None,
+            "75010",
+            "Paris",
+            "6 Boulevard St Denis - 75010 Paris",
+        ),
+        (
+            "6 Boulevard St Denis",
+            "",
+            "75010",
+            "Paris",
+            "6 Boulevard St Denis - 75010 Paris",
+        ),
+        (
+            None,
+            "Plateforme de l'inclusion",
+            "75010",
+            "",
+            "Plateforme de l'inclusion - 75010",
+        ),
+        (
+            "",
+            "Plateforme de l'inclusion",
+            "75010",
+            None,
+            "Plateforme de l'inclusion - 75010",
+        ),
+        (
+            "6 Boulevard St Denis",
+            "Plateforme de l'inclusion",
+            None,
+            "",
+            "6 Boulevard St Denis Plateforme de l'inclusion",
+        ),
+        (
+            "",
+            "",
+            "75010",
+            "Paris",
+            "75010 Paris",
+        ),
+        (
+            "",
+            "",
+            "",
+            "",
+            "",
+        ),
+    ],
+)
+def test_address_to_one_line(address1, address2, postal_code, city, expected):
+    assert address_to_one_line(address1, address2, postal_code, city) == expected
