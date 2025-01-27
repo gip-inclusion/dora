@@ -17,6 +17,7 @@ from dora.admin_express.models import EPCI, AdminDivisionType, City, Department,
 from dora.admin_express.utils import arrdt_to_main_insee_code, get_clean_city_name
 from dora.core.constants import WGS84
 from dora.core.models import EnumModel, LogItem, ModerationMixin
+from dora.core.utils import address_to_one_line
 from dora.structures.models import Structure
 
 from .enums import ServiceStatus, ServiceUpdateStatus
@@ -62,7 +63,7 @@ class CustomizableChoice(models.Model):
         cachekey = self._get_cache_key("__str__")
         cached_value = cache.get(cachekey)
         if not cached_value:
-            cached_value = f'{self.name} ({"global" if not self.structure else self.structure.name})'
+            cached_value = f"{self.name} ({'global' if not self.structure else self.structure.name})"
             cache.set(cachekey, cached_value)
         return cached_value
 
@@ -605,8 +606,9 @@ class Service(ModerationMixin, models.Model):
         return bool(self.contact_email or self.contact_phone)
 
     def address_line(self):
-        address = " ".join([self.address1, self.address2])
-        return f"{address} - {self.postal_code} {self.city}"
+        return address_to_one_line(
+            self.address1, self.address2, self.postal_code, self.city
+        )
 
 
 class ServiceModelManager(models.Manager):

@@ -177,3 +177,18 @@ def test_map_service_coach_orientation_modes_mapping_without_form_mode_without_e
     assert sorted(service["coach_orientation_modes"]) == sorted(
         expected_dora_coach_orientation_modes
     )
+
+
+def test_map_service_address_line():
+    di_service_data = make_di_service_data(
+        adresse="6 Boulevard St Denis",
+        complement_adresse="Plateforme de l'inclusion",
+        code_postal="75010",
+        commune="Paris",
+    )
+    service = map_service(di_service_data, False)
+
+    assert (
+        service["address_line"]
+        == "6 Boulevard St Denis Plateforme de l'inclusion - 75010 Paris"
+    )

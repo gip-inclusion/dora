@@ -60,6 +60,7 @@
         serviceSlug: isDI ? null : service.slug,
         diServiceId: isDI ? service.slug : "",
         diServiceName: isDI ? service.name || "" : "",
+        diServiceAddressLine: isDI ? service.addressLine : "",
         diContactEmail: isDI ? service.contactEmail || "" : "",
         diContactName: isDI ? service.contactName || "" : "",
         diContactPhone: isDI ? service.contactPhone || "" : "",

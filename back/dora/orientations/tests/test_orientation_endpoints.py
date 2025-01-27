@@ -177,7 +177,7 @@ def test_moderation_error(
     assert response.status_code == 401
 
 
-def get_new_orientation_data(user, structure, service):
+def get_new_dora_service_orientation_data(user, structure, service):
     return {
         "attachments": {},
         "beneficiaryAttachments": [],
@@ -194,6 +194,7 @@ def get_new_orientation_data(user, structure, service):
         "diContactPhone": "",
         "diServiceId": "",
         "diServiceName": "",
+        "diServiceAddressLine": "",
         "diStructureName": "",
         "firstStepDone": True,
         "orientationReasons": "",
@@ -208,6 +209,42 @@ def get_new_orientation_data(user, structure, service):
     }
 
 
+def get_new_di_service_orientation_data(user, structure, service):
+    return {
+        "attachments": {},
+        "beneficiaryAttachments": [],
+        "beneficiaryAvailability": "2024-12-17",
+        "beneficiaryContactPreferences": ["EMAIL"],
+        "beneficiaryEmail": "beneficiary@example.com",
+        "beneficiaryFirstName": "Beneficiary First Name",
+        "beneficiaryLastName": "Beneficiary Last Name",
+        "beneficiaryOtherContactMethod": "",
+        "beneficiaryPhone": "",
+        "contactBoxOpen": False,
+        "diContactEmail": "di.contact@example.com",
+        "diContactName": "DI Contact",
+        "diContactPhone": "0987654321",
+        "diServiceId": "di--soliguide--630fa36e5c4d35d05bd267ab",
+        "diServiceName": "DI Service Name",
+        "diServiceAddressLine": "DI Address Line",
+        "diStructureName": "DI Structure Name",
+        "firstStepDone": True,
+        "orientationReasons": "",
+        "prescriberStructureSlug": structure.slug,
+        "referentEmail": "referent@example.com",
+        "referentFirstName": "Referent First Name",
+        "referentLastName": "Referent Last Name",
+        "referentPhone": "0123456789",
+        "requirements": [],
+        "serviceSlug": None,
+        "situation": [],
+    }
+
+
+@pytest.mark.parametrize(
+    "get_new_orientation_data",
+    (get_new_dora_service_orientation_data, get_new_di_service_orientation_data),
+)
 @pytest.mark.parametrize(
     "moderation_status",
     (
@@ -216,7 +253,9 @@ def get_new_orientation_data(user, structure, service):
         ModerationStatus.IN_PROGRESS,
     ),
 )
-def test_query_create_triggers_moderation(api_client, moderation_status):
+def test_query_create_triggers_moderation(
+    api_client, get_new_orientation_data, moderation_status
+):
     user = make_user()
     structure = make_structure(user, moderation_status=moderation_status)
     service = make_service(contact_email="contact.service@example.com")
@@ -239,7 +278,11 @@ def test_query_create_triggers_moderation(api_client, moderation_status):
     assert len(mail.outbox) == 0
 
 
-def test_query_create_does_not_trigger_moderation(api_client):
+@pytest.mark.parametrize(
+    "get_new_orientation_data",
+    (get_new_dora_service_orientation_data, get_new_di_service_orientation_data),
+)
+def test_query_create_does_not_trigger_moderation(api_client, get_new_orientation_data):
     user = make_user()
     structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
     service = make_service(contact_email="contact.service@example.com")

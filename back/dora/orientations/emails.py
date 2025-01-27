@@ -35,9 +35,7 @@ def _orientation_created_ctx(orientation) -> dict:
         "beneficiaries_has_alternate_contact_methods": beneficiaries_has_alternate_contact_methods(
             orientation
         ),
-        "service_address": orientation.service.address_line()
-        if orientation.service
-        else "",
+        "service_address": orientation.get_service_address_line(),
         "attachments": [
             {"name": a, "url": default_storage.url(a)}
             for a in orientation.beneficiary_attachments
@@ -151,10 +149,10 @@ def send_orientation_accepted_emails(
     # à remplacer par ... l'adresse du service (inconnue coté frontend).
     placeholder = "#SERVICE_ADDRESS#"
     prescriber_message = prescriber_message.replace(
-        placeholder, orientation.service.address_line() if orientation.service else ""
+        placeholder, orientation.get_service_address_line()
     )
     beneficiary_message = beneficiary_message.replace(
-        placeholder, orientation.service.address_line() if orientation.service else ""
+        placeholder, orientation.get_service_address_line()
     )
 
     context = {

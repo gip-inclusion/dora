@@ -141,11 +141,13 @@ class Orientation(models.Model):
         verbose_name="Service",
         on_delete=models.SET_NULL,
         related_name="+",
+        blank=True,
         null=True,
     )
 
     di_service_id = models.TextField(blank=True, default="")
     di_service_name = models.TextField(blank=True, default="")
+    di_service_address_line = models.TextField(blank=True, default="")
     di_contact_email = models.TextField(blank=True, default="")
     di_contact_name = models.TextField(blank=True, default="")
     di_contact_phone = models.TextField(blank=True, default="")
@@ -239,6 +241,15 @@ class Orientation(models.Model):
             else self.di_service_name
             if self.di_service_id
             else self.original_service_name
+        )
+
+    def get_service_address_line(self):
+        return (
+            self.service.address_line()
+            if self.service
+            else self.di_service_address_line
+            if self.di_service_id
+            else ""
         )
 
     def get_contact_email(self):

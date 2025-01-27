@@ -3,7 +3,7 @@ from django.conf import settings
 from django.utils import dateparse, timezone
 
 from dora.admin_express.models import AdminDivisionType
-from dora.core.utils import code_insee_to_code_dept
+from dora.core.utils import address_to_one_line, code_insee_to_code_dept
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     BeneficiaryAccessMode,
@@ -207,6 +207,12 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "access_conditions_display": None,
         "address1": service_data["adresse"],
         "address2": service_data["complement_adresse"],
+        "address_line": address_to_one_line(
+            service_data["adresse"],
+            service_data["complement_adresse"],
+            service_data["code_postal"],
+            service_data["commune"],
+        ),
         "beneficiaries_access_modes": [m.value for m in beneficiaries_access_modes]
         if beneficiaries_access_modes is not None
         else None,
