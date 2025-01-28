@@ -168,6 +168,11 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.email
 
+    def save(self, *args, **kwargs):
+        if self.email:
+            self.email = self.__class__.objects.normalize_email(self.email)
+        super().save(*args, **kwargs)
+
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
