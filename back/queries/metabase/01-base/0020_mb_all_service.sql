@@ -24,6 +24,8 @@ select
     services_service.city,
     services_service.recurrence,
     services_service.suspension_date,
+    services_service.duration_weekly_hours,
+    services_service.duration_weeks,
     services_service.creation_date,
     services_service.modification_date,
     services_service.creator_id,
