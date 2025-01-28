@@ -159,7 +159,7 @@ def inclusion_connect_authenticate(request):
                 try:
                     # On essaye de faire la correspondance avec un utilisateur existant
                     # via son email, puis on le migre
-                    user = User.objects.get(email=user_dict["email"])
+                    user = User.objects.get_by_email(user_dict["email"])
                     if user.ic_id is not None:
                         logging.error("Conflit avec Keycloak")
                         return APIException("Conflit avec le fournisseur d'identité")

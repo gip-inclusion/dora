@@ -145,7 +145,7 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
                 "Utilisateur non renseigné pour la création du token DRF"
             )
 
-        user = User.objects.get(email=user_email)
+        user = User.objects.get_by_email(user_email)
 
         token, created = Token.objects.get_or_create(user=user)
 

@@ -20,3 +20,7 @@ def test_get_by_email():
 def test_create_user():
     user = User.objects.create_user(UNNORMALIZED_EMAIL_ADDRESS)
     assert user.email == NORMALIZED_EMAIL_ADDREESS
+
+
+def test_get_dora_bot():
+    User.objects.get_dora_bot()

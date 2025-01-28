@@ -52,7 +52,7 @@ class UserManager(BaseUserManager):
         return self.get(email=normalized_email)
 
     def get_dora_bot(self):
-        return self.get(email=settings.DORA_BOT_USER)
+        return self.get_by_email(settings.DORA_BOT_USER)
 
     def orphans(self):
         # utilisateurs sans structure et sans invitation
