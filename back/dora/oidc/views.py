@@ -133,7 +133,7 @@ def inclusion_connect_authenticate(request):
 
         user_dict = {
             "ic_id": decoded_id_token["sub"],
-            "email": decoded_id_token["email"],
+            "email": User.objects.normalize_email(decoded_id_token["email"]),
             "first_name": decoded_id_token["given_name"],
             "last_name": decoded_id_token["family_name"],
             "is_valid": True,
@@ -142,7 +142,8 @@ def inclusion_connect_authenticate(request):
             try:
                 # On essaye de récupérer un utilisateur déjà migré
                 user, should_save = updated_ic_user(
-                    User.objects.get(ic_id=user_dict["ic_id"]), user_dict["email"]
+                    User.objects.get(ic_id=user_dict["ic_id"]),
+                    user_dict["email"],
                 )
                 if user.first_name != user_dict["first_name"]:
                     user.first_name = user_dict["first_name"]
@@ -194,7 +195,7 @@ def oidc_login(request):
     # Simple redirection vers la page d'identification ProConnect (si pas identifié)
     return HttpResponseRedirect(
         redirect_to=reverse("oidc_authentication_init")
-        + f"?{request.META.get("QUERY_STRING")}"
+        + f"?{request.META.get('QUERY_STRING')}"
     )
 
 
