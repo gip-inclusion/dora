@@ -19,6 +19,7 @@ services AS (
                 THEN 'NEEDED'
             ELSE 'NOT_NEEDED'
         END                              AS update_status
+        -- TODO(jbuget) : A documenter !
     FROM src
 ),
 
