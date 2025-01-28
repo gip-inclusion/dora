@@ -47,6 +47,10 @@ class UserManager(BaseUserManager):
         """
         return super().normalize_email(email).lower()
 
+    def get_by_email(self, email):
+        normalized_email = self.normalize_email(email)
+        return self.get(email=normalized_email)
+
     def get_dora_bot(self):
         return self.get(email=settings.DORA_BOT_USER)
 
