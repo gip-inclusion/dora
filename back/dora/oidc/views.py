@@ -169,7 +169,7 @@ def inclusion_connect_authenticate(request):
                     user.is_valid = user_dict["is_valid"]
                     user.save()
                 except User.DoesNotExist:
-                    user = User.objects.create(**user_dict)
+                    user = User.objects.create_user(**user_dict)
 
         update_last_login(user)
         try:

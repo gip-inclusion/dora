@@ -489,8 +489,7 @@ class StructurePutativeMemberSerializer(serializers.ModelSerializer):
         try:
             user = User.objects.get_by_email(user_data["email"])
         except User.DoesNotExist:
-            # TODO: use create_user instead
-            user = User.objects.create(**user_data)
+            user = User.objects.create_user(**user_data)
             user.set_unusable_password()
             user.save()
         try:
