@@ -15,7 +15,8 @@ services AS (
                 THEN 'REQUIRED'
             WHEN
                 src.modification_date + '180 days' <= NOW()
-                AND src.status = 'PUBLISHED'
+
+                  AND src.status = 'PUBLISHED'
                 THEN 'NEEDED'
             ELSE 'NOT_NEEDED'
         END                              AS update_status

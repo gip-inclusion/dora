@@ -19,3 +19,53 @@ jobs:
       - uses: amannn/action-semantic-pull-request@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      CI: 1
+      PYTHONPATH: .
+      PGPASSWORD: password
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPORT: 5432
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Bootstrap PostgreSQL
+        run: |
+          psql <<SQL
+            ALTER SYSTEM SET fsync=off;
+            ALTER SYSTEM SET synchronous_commit=off;
+            ALTER SYSTEM SET full_page_writes=off;
+            CREATE DATABASE dora-analytics
+          SQL
+          docker kill --signal=SIGHUP ${{ job.services.postgres.id }}
+
+      - name: Install Python dependencies
+        working-directory: ./analytics
+        run: pip install -r requirements.txt
+
+      - name: Run linting
+        working-directory: ./analytics
+        run: sqlfluff lint models
