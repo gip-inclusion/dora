@@ -37,6 +37,16 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
+    def normalize_email(self, email):
+        """
+        Normalise une adresse e-mail en la convertissant en minuscules.
+
+        BaseUserManager.normalize_email() ne convertit que la partie nom
+        de domaine de l'adresse. Nous voulons qu'elle soit entièrement
+        convertie en minuscules comme le fait la majorité des applications.
+        """
+        return super().normalize_email(email).lower()
+
     def get_dora_bot(self):
         return self.get(email=settings.DORA_BOT_USER)
 
