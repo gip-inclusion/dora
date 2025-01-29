@@ -17,5 +17,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(normalize_emails),
+        migrations.RunPython(normalize_emails, reverse_code=migrations.RunPython.noop)
     ]
