@@ -1,5 +1,4 @@
 import type { DayPeriod, DayPrefix, OsmDay, OsmOpeningHours } from "$lib/types";
-import openingHours from "opening_hours";
 
 export const INVALID_OPENING_HOURS_MARKER = "##INVALID##";
 
@@ -178,15 +177,6 @@ function formatHour(hour: string) {
   hour = hour.replace(/:/g, "h");
   hour = hour.replace(/,/g, " / ");
   return hour;
-}
-
-export function isValidformatOsmHours(value: string) {
-  try {
-    new openingHours(value, null, { locale: "fr" });
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 export function formatOsmHours(value: string) {
