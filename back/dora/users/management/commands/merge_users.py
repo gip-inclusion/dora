@@ -72,7 +72,7 @@ class Command(BaseCommand):
             )
 
         try:
-            src_user = User.objects.get(email=src_email)
+            src_user = User.objects.get_by_email(src_email)
         except User.DoesNotExist:
             self.stdout.write(
                 self.style.ERROR(f"Utilisateur '{src_email}' introuvable")
@@ -80,7 +80,7 @@ class Command(BaseCommand):
             return
 
         try:
-            dest_user = User.objects.get(email=dest_email)
+            dest_user = User.objects.get_by_email(dest_email)
         except User.DoesNotExist:
             self.stdout.write(
                 self.style.ERROR(f"Utilisateur '{dest_email}' introuvable")

@@ -239,7 +239,7 @@ def invite_first_admin(request):
         raise ValidationError("Cette structure a déjà un administrateur")
     else:
         try:
-            invitee = User.objects.get(email=invitee_email)
+            invitee = User.objects.get_by_email(invitee_email)
         except User.DoesNotExist:
             invitee = User.objects.create_user(
                 invitee_email,

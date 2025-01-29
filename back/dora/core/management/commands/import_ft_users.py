@@ -64,7 +64,7 @@ def invite_user(structure, email, admin=True) -> str:
         return ""
 
     try:
-        user = User.objects.get(email=email)
+        user = User.objects.get_by_email(email)
     except User.DoesNotExist:
         user = User.objects.create_user(
             email,

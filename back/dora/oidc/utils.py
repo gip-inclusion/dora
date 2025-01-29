@@ -32,7 +32,7 @@ def updated_ic_user(user: User, ic_token_email: str) -> tuple[User, bool]:
                 obsolete_invitations.update(user=user)
 
                 # on supprime l'utilisateur actuel après migration
-                User.objects.get(email=ic_token_email).delete()
+                User.objects.get_by_email(ic_token_email).delete()
 
                 # on fini par mettre à jour l'ancien e-mail par le nouveau
                 user.email = ic_token_email

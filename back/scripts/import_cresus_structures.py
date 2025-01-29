@@ -119,7 +119,7 @@ def _edit_and_save_structure(structure, data):
 
 def _invite_structure_admin(structure, email):
     try:
-        user = User.objects.get(email=email)
+        user = User.objects.get_by_email(email)
     except User.DoesNotExist:
         user = User.objects.create_user(email)
 

@@ -751,7 +751,7 @@ class StructureMemberTestCase(APITestCase):
         self.assertEqual(response.data["is_admin"], False)
         self.assertEqual(response.data["user"]["first_name"], "FIZZ")
         self.assertEqual(response.data["user"]["last_name"], "FOO")
-        self.assertEqual(response.data["user"]["email"], "FOO@BAR.BUZ")
+        self.assertEqual(response.data["user"]["email"], "foo@bar.buz")
 
     def test_manager_can_invite_new_user_in_its_depts(self):
         self.client.force_authenticate(user=self.manager)
@@ -772,7 +772,7 @@ class StructureMemberTestCase(APITestCase):
         self.assertEqual(response.data["is_admin"], True)
         self.assertEqual(response.data["user"]["first_name"], "FIZZ")
         self.assertEqual(response.data["user"]["last_name"], "FOO")
-        self.assertEqual(response.data["user"]["email"], "FOO@BAR.BUZ")
+        self.assertEqual(response.data["user"]["email"], "foo@bar.buz")
 
     def test_manager_can_invite_non_admin_in_its_depts(self):
         self.client.force_authenticate(user=self.manager)
@@ -793,7 +793,7 @@ class StructureMemberTestCase(APITestCase):
         self.assertEqual(response.data["is_admin"], False)
         self.assertEqual(response.data["user"]["first_name"], "FIZZ")
         self.assertEqual(response.data["user"]["last_name"], "FOO")
-        self.assertEqual(response.data["user"]["email"], "FOO@BAR.BUZ")
+        self.assertEqual(response.data["user"]["email"], "foo@bar.buz")
 
     def test_manager_can_invite_once_theres_an_admin(self):
         self.client.force_authenticate(user=self.manager)
@@ -1213,12 +1213,12 @@ def test_restricted_national_labels(api_client):
     response = api_client.get("/structures-options", follow=True)
     data = response.json()
 
-    assert (
-        "restrictedNationalLabels" in data.keys()
-    ), "Les labels restreints ne sont pas dans les options"
+    assert "restrictedNationalLabels" in data.keys(), (
+        "Les labels restreints ne sont pas dans les options"
+    )
 
     values = [lbl.get("value") for lbl in data["restrictedNationalLabels"]]
 
-    assert (
-        tuple(values) == RESTRICTED_NATIONAL_LABELS
-    ), "la liste des labels restreints est incorrecte"
+    assert tuple(values) == RESTRICTED_NATIONAL_LABELS, (
+        "la liste des labels restreints est incorrecte"
+    )
