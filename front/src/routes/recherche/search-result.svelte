@@ -107,14 +107,12 @@
               Source&nbsp;: {result.diSourceDisplay}, via data·inclusion
             </div>
           {/if}
-          {#if result.isOrientable && result.coachOrientationModes?.includes("formulaire-dora")}
-            <LinkButton
-              to={servicePagePath}
-              label="Orienter votre bénéficiaire"
-              secondary
-              small
-            />
-          {/if}
+          <LinkButton
+            to={servicePagePath}
+            label="Voir la fiche détaillée"
+            secondary
+            small
+          />
         </div>
       {/if}
     </div>
