@@ -1,0 +1,88 @@
+models:
+  - name: stg_user
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+  - name: stg_structure
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_pageview
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+  - name: stg_searchview
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_orientation
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_mobilisationevent
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+  - name: stg_serviceview
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+        - columns: [structure_id]
+        - columns: [user_id]
+        - columns: [is_staff, is_manager]
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_service
+    config:
+      indexes:
+        - columns: [id]
+          unique: true
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
