@@ -7,8 +7,6 @@ from mozilla_django_oidc.auth import (
 )
 from rest_framework.authtoken.models import Token
 
-from dora.users.models import User
-
 logger = getLogger(__name__)
 
 
@@ -137,19 +135,17 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
             return user
         return None
 
-    def get_or_create_drf_token(self, user_email):
+    def get_or_create_drf_token(self, user):
         # Pour être temporairement compatible, on crée un token d'identification DRF lié au nouvel utilisateur.
         # note: DRF devrait être déprécié pour utiliser un autre type d'identification entre front et back.
-        if not user_email:
+        if not user:
             raise SuspiciousOperation(
                 "Utilisateur non renseigné pour la création du token DRF"
             )
 
-        user = User.objects.get_by_email(user_email)
-
         token, created = Token.objects.get_or_create(user=user)
 
         if created:
-            logger.info("Initialisation du token DRF pour l'utilisateur %s", user_email)
+            logger.info("Initialisation du token DRF pour l'utilisateur %s", user)
 
         return token
