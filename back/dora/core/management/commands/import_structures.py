@@ -212,7 +212,7 @@ class Command(BaseCommand):
     def invite_users(self, structure, emails):
         for email in emails:
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.get_by_email(email)
             except User.DoesNotExist:
                 user = User.objects.create_user(
                     email,

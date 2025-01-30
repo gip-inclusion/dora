@@ -95,10 +95,6 @@ jobs:
           ./manage.py check 
           ./manage.py makemigrations --check --dry-run --noinput
 
-      - name: Vérification des fichiers SQL
-        working-directory: back
-        run: sqlfluff lint queries
-
       - name: Vérification des fichier HTML et templates
         working-directory: back
         run: djhtml -t 2 -c dora
