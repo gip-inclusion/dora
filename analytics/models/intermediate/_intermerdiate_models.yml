@@ -1,0 +1,45 @@
+models:
+  - name: int_mobilisationevent_user
+    description: 
+      Événements de mobilisation des utilisateurs.
+
+  - name: int_orientation_user_service
+    description: 
+      Orientations des utilisateurs vers des services.
+
+  - name: int_pageview_user
+    description: 
+      Vues de pages par les utilisateurs.
+
+  - name: int_searchview_user
+    description: 
+      Recherches par les utilisateurs.
+
+  - name: int_service_categories
+    description: 
+      Catégories de services.
+
+  - name: int_service_fundinglabels
+    description: 
+      Labels de financement des services.
+
+  - name: int_service_structure
+    description: 
+      Structures de services.
+
+  - name: int_service_structure_labels
+    description: 
+      Labels des structures de services.
+
+  - name: int_serviceview_user_service
+    description: 
+      Vues de services par les utilisateurs.
+
+  - name: int_structure_labels
+    description: 
+      Labels nationaux associés aux structures.  
+      `structure_id` n'est pas une clé d'unicité étant donné qu'une structure peut avoir de 0 à n labels.
+
+  - name: int_structure_member
+    description: 
+      Membres des structures.
