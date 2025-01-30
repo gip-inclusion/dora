@@ -7,13 +7,16 @@ from django.utils import timezone
 from freezegun import freeze_time
 
 from dora.core.models import ModerationStatus
-from dora.core.test_utils import make_structure, make_user
+from dora.core.test_utils import make_service, make_structure, make_user
 from dora.notifications.models import Notification
+from dora.services.enums import ServiceStatus
+from dora.services.models import UpdateFrequency
 from dora.users.models import User
 
 from ..core import Task
 from ..users import (
     ManagerStructureModerationTask,
+    ServiceEditorsTask,
     UserAccountDeletionTask,
     UsersWithoutStructureTask,
 )
@@ -361,5 +364,56 @@ def test_simpler_manager_structure_moderation_task_should_trigger(
     # on relance la vérification le même jour : pas de déclenchement attendu
     with freeze_time("2024-10-16"):
         assert not manager_structure_moderation_task.should_trigger(
+            n
+        ), "Double déclenchement à cette date"
+
+
+@pytest.mark.parametrize(
+    "service_status",
+    [ServiceStatus.PUBLISHED, ServiceStatus.DRAFT],
+)
+def test_ServiceEditorTask_should_trigger(service_status):
+    structure = make_structure()
+    user = make_user(structure=structure)
+    with freeze_time("2024-01-10") as d:
+        make_service(
+            status=service_status,
+            update_frequency=UpdateFrequency.EVERY_MONTH,
+            creation_date=d,
+            modification_date=d,
+            contact_email=user.email,
+        )
+
+    with freeze_time("2024-10-14"):
+        n = Notification(
+            task_type=ServiceEditorsTask.task_type(),
+            owner_user=user,
+        )
+        n.save()
+
+        assert not ServiceEditorsTask.should_trigger(n), "Pas de déclenchement attendu"
+
+    with freeze_time("2024-10-14"):
+        assert not ServiceEditorsTask.should_trigger(
+            n
+        ), "Pas de déclenchement attendu hors mercredis"
+
+    with freeze_time("2024-10-16"):
+        assert not ServiceEditorsTask.should_trigger(
+            n
+        ), "Déclenchement seulement attendu le premier mercredi du mois"
+
+        # Le déclenchement se base en partie sur la date de Maj
+        n.save()
+
+    with freeze_time("2024-10-02"):
+        n.updated_at = timezone.now() - relativedelta(days=1)
+        assert ServiceEditorsTask.should_trigger(
+            n
+        ), "Devrait se déclencer le 1er mercredi du mois"
+
+    with freeze_time("2024-10-02"):
+        n.updated_at = timezone.now()
+        assert not ServiceEditorsTask.should_trigger(
             n
         ), "Double déclenchement à cette date"

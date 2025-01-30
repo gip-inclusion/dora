@@ -6,6 +6,7 @@ from furl import furl
 from mjml import mjml2html
 
 from dora.core.emails import send_mail
+from dora.services.models import Service
 
 
 def send_service_feedback_email(service, full_name, email, message):
@@ -149,4 +150,28 @@ def send_service_reminder_email(
         body,
         from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
         tags=["services_check"],
+    )
+
+
+def send_service_notification(service_editor):
+    drafts = (
+        Service.objects.expired_drafts()
+        .filter(contact_email=service_editor.email)
+        .limit(5)
+    )
+    to_update = (
+        Service.objects.update_advised()
+        .filter(history_item__user=service_editor)
+        .limit(5)
+    )
+    context = {
+        "user": service_editor,
+        "drafts": drafts,
+        "to_update": to_update,
+    }
+    send_mail(
+        "",
+        service_editor.email,
+        mjml2html(render_to_string("notification-services.mjml", context)),
+        tags=["service-notification"],
     )
