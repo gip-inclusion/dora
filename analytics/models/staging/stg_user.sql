@@ -1,5 +1,6 @@
 WITH src AS (
-    SELECT * FROM {{ source('dora', 'users_user') }}
+    SELECT *
+    FROM {{ source('dora', 'users_user') }}
     WHERE
         is_active IS TRUE
         AND is_valid IS TRUE
@@ -13,8 +14,6 @@ final AS (
         email,
         last_name,
         first_name,
-        is_valid,
-        is_staff,
         is_manager,
         departments,
         date_joined,
@@ -27,4 +26,5 @@ final AS (
     FROM src
 )
 
-SELECT * FROM final
+SELECT *
+FROM final
