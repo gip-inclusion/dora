@@ -209,12 +209,6 @@ class ServiceManager(models.Manager):
     def archived(self):
         return self.filter(status=ServiceStatus.ARCHIVED)
 
-    def update_advised(self):
-        return self.published().filter(
-            modification_date__lte=timezone.now()
-            - timedelta(days=settings.NUM_DAYS_BEFORE_ADVISED_SERVICE_UPDATE),
-        )
-
     def update_mandatory(self):
         return self.published().filter(
             modification_date__lte=timezone.now()
