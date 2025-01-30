@@ -11,7 +11,7 @@ final AS (
         {{ dbt_utils.star(relation_alias='services', from=ref("stg_service"), prefix='service_', except=['id']) }},
         {{ dbt_utils.star(relation_alias='structure', from=ref("int_structure_labels"), prefix='structure_', except=['id']) }}
     FROM services
-    INNER JOIN structure ON services.structure_id = structure.id
+    INNER JOIN structure ON services.structure_id = structure.structure_id
 )
 
 SELECT * FROM final
