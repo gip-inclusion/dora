@@ -1,4 +1,9 @@
 models:
+  - name: int_accompagnateurs
+    description:
+      Accompagnateurs avec le label national de leur structure.  
+      `user_id` n'est pas une clé d'unicité étant donné qu'un utilisateur peut avoir de 0 à n labels.
+
   - name: int_mobilisationevent_user
     description: 
       Événements de mobilisation des utilisateurs.
