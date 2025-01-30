@@ -1,6 +1,6 @@
 data-inclusion-schema==0.20.0
 dj-database-url==2.3.0
-Django==4.2.18
+Django==5.1.5
 django-cors-headers==4.6.0
 django-csp==3.8
 django-filter==24.3
