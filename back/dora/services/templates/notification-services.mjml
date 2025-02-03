@@ -1,0 +1,86 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}
+  Optimisez la visibilité de vos services.
+{% endblock %}
+
+{% block content %}
+  <mj-text font-weight="bold">Bonjour {{ user.first_name }},</mj-text>
+
+  <mj-spacer height="20px" />
+
+  <mj-text>Chaque mois, DORA vous accompagne pour optimiser la visibilité de vos services en vous signalant ceux nécessitant une mise à jour ou restant en brouillon.</mj-text>
+
+  <mj-spacer height="20px" />
+
+  {% if services_to_update %}
+    <mj-text font-weight="bold">📋 Vos services à actualiser</mj-text>
+
+    <mj-text>Afin de maintenir une visibilité pérenne auprès de vos partenaires, nous vous demandons de confirmer les informations de vos services tous les 6 mois.</mj-text>
+
+    <mj-spacer height="20px" />
+
+    <mj-text>🔍 Accédez directement à vos services à actualiser :</mj-text>
+
+    <mj-raw>
+      <ul>
+        {% for service in services_to_update %}
+          <li>{{ service.name }}</li>
+        {% endfor %}
+      </ul>
+    </mj-raw>
+
+    <mj-button mj-class="cta" href="{{ cta_services_to_update_link }}">
+      Actualiser mes services
+    </mj-button>
+    <mj-spacer height="24px"/>
+
+    <mj-text font-weight="bold">Pourquoi actualiser vos informations ?</mj-text>
+    <mj-text>Des informations actualisées permettent aux accompagnateurs d’orienter efficacement les bénéficiaires. Cela améliore également la qualité des candidatures que vous recevez.</mj-text>
+
+    <mj-spacer height="20px" />
+
+    <p background-color="#e0e0e0" border-radius="8px">
+      <mj-text font-weight="bold">💡 Boîte à outils :</mj-text>
+      <mj-raw>
+        <ul>
+          <li><a href="{{ help_update_services_url }}">Comment actualiser vos services ?</a></li>
+          <li><a href="{{ help_statuses_url }}">Comprendre les statuts d’actualisation</a></li>
+        </ul>
+      </mj-raw>
+    </p>
+
+    <mj-spacer height="20px" />
+  {% endif%}
+
+  {% if draft_services %}
+    <mj-text font-weight="bold">📝 Vos services en brouillon</mj-text>
+
+    <mj-text>Certains services en brouillon pourraient être oubliés et méritent votre attention !</mj-text>
+
+    <mj-text>🔍 Accédez directement à vos services en brouillon :</mj-text>
+
+    <mj-raw>
+      <ul>
+        {% for draft_service in draft_services %}
+          <li>{{ draft_service.name }}</li>
+        {% endfor %}
+      </ul>
+    </mj-raw>
+
+    <mj-button mj-class="cta" href="{{ cta_draft_services_link }}">
+      Actualiser mes services
+    </mj-button>
+    <mj-spacer height="24px"/>
+
+    <mj-text font-weight="bold">Pourquoi nettoyer vos brouillons ?</mj-text>
+    <mj-text>Pour s’assurer que des services n’ont pas été oubliés en brouillon ou archiver ceux qui ne sont plus nécessaires. Cela vous permettra d’avoir un tableau de bord plus lisible et mieux visualisés vos services publiés en un clin d’oeil !</mj-text>
+
+    <mj-spacer height="20px" />
+  {% endif %}
+
+  <mj-text font-weight="bold">Besoin d’aide ?</mj-text>
+
+  <mj-text>Pour toute question ou si vous avez plusieurs services à actualiser, <a href="{% support_link %}">contactez-nous via le chat</a>.</mj-text>
+
+{% endblock %}
