@@ -1,7 +1,12 @@
 import pytest
 from django.core import mail
 
-from dora.core.test_utils import make_service, make_structure, make_user
+from dora.core.test_utils import (
+    make_orientation,
+    make_service,
+    make_structure,
+    make_user,
+)
 from dora.structures.models import ModerationStatus
 
 from ..models import OrientationStatus
@@ -307,3 +312,19 @@ def test_query_create_does_not_trigger_moderation(api_client, get_new_orientatio
     assert mail.outbox[1].to == [orientation.prescriber.email]
     assert mail.outbox[2].to == [orientation.referent_email]
     assert mail.outbox[3].to == [orientation.beneficiary_email]
+
+
+def test_query_validate_service_duration_copy_on_orientation(api_client):
+    service = make_service(duration_weekly_hours=6, duration_weeks=4)
+    orientation = make_orientation(service=service)
+
+    url = f"/orientations/{orientation.query_id}/validate/?h={orientation.get_query_id_hash()}"
+    data = {
+        "message": "test_message",
+        "beneficiary_message": "test_beneficiary_message",
+    }
+    api_client.post(url, data=data, follow=True)
+    orientation.refresh_from_db()
+
+    assert orientation.duration_weekly_hours == 6
+    assert orientation.duration_weeks == 4
