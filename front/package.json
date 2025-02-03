@@ -41,7 +41,7 @@
     "@tiptap/starter-kit": "^2.11.2",
     "@types/iframe-resizer": "^3.5.13",
     "@types/showdown": "^2.0.6",
-    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/eslint-plugin": "^8.22.0",
     "@typescript-eslint/parser": "^8.20.0",
     "autoprefixer": "^10.4.20",
     "dayjs": "^1.11.13",
