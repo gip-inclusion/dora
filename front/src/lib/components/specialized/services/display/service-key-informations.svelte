@@ -158,7 +158,9 @@
           {#if service.locationKinds.includes("en-presentiel")}
             <p class="mb-s6">
               Présentiel,<br />
-              {service.address1}{#if service.address2}, {service.address2}{/if},
+              {#if service.address1}
+                {service.address1}{#if service.address2}, {service.address2}{/if},
+              {/if}
               {service.postalCode}&nbsp;{service.city}
             </p>
           {/if}
