@@ -162,6 +162,8 @@
 {/if}
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   #background {
     position: fixed;
     z-index: 5000;

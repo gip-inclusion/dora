@@ -68,6 +68,8 @@
 {/if}
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   textarea {
     @apply min-h-[3rem] rounded border border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt outline-hidden focus:shadow-focus;
     @apply grow read-only:text-gray-03 disabled:bg-gray-00;

@@ -875,6 +875,8 @@
 <svelte:window on:click={onDocumentClick} />
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   input {
     @apply read-only:text-gray-03 disabled:bg-gray-00;
   }

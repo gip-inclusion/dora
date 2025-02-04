@@ -232,6 +232,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   .notice {
     grid-area: notice;
   }

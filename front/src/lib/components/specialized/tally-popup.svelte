@@ -115,6 +115,8 @@
 </script>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   :global(.tally-popup) {
     @apply print:!hidden;
   }

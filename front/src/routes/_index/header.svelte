@@ -57,6 +57,8 @@
 </header>
 
 <style lang="postcss">
+  @reference "../../app.css";
+
   .dev-banner {
     border-top: 8px solid orange;
   }

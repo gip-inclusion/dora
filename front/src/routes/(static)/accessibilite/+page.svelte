@@ -103,7 +103,9 @@
   </div>
 </CenteredGrid>
 
-<style>
+<style lang="postcss">
+  @reference "../../../app.css";
+
   h1 {
     @apply text-france-blue;
   }

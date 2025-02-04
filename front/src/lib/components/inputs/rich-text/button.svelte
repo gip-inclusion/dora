@@ -15,6 +15,8 @@
 </button>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .tb-button {
     @apply h-s24 w-s24;
   }

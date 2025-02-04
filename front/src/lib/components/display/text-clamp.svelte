@@ -46,6 +46,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   .gradient {
     position: absolute;
     bottom: 0px;

@@ -57,7 +57,9 @@
   </CenteredGrid>
 </EnsureLoggedIn>
 
-<style type="postcss">
+<style lang="postcss">
+  @reference "../../../../app.css";
+
   :global(.cgu h1) {
     @apply text-f32;
   }

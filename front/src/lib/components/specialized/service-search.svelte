@@ -282,6 +282,8 @@
 </form>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   .grid {
     grid-template-columns: 1fr;
     display: grid;

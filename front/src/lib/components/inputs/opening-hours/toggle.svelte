@@ -61,6 +61,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .toggle-path {
     transition: all 0.15s ease-in-out;
   }

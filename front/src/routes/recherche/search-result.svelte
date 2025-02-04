@@ -120,6 +120,8 @@
 </Bookmarkable>
 
 <style lang="postcss">
+  @reference "../../app.css";
+
   .tag {
     @apply whitespace-nowrap rounded-xl bg-blue-information px-s8 py-s0 text-f14 text-france-blue;
   }

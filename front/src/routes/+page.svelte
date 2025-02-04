@@ -175,6 +175,8 @@
 </CenteredGrid>
 
 <style lang="postcss">
+  @reference "../app.css";
+
   h3 {
     @apply text-france-blue;
   }

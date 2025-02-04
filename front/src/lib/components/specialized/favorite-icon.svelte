@@ -41,6 +41,8 @@
 </button>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   .active {
     @apply text-magenta-cta;
   }

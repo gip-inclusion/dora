@@ -11,7 +11,9 @@
   />
 </div>
 
-<style>
+<style lang="postcss">
+  @reference "../../../app.css";
+
   /* Ce symbole de case à cocher peut être coché de deux façons différente :
    * - En mettant la prop checked à true ;
    * - En plaçant le composant directement à la suite d'un <input type="checkbox" />.

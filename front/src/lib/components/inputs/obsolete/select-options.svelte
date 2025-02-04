@@ -56,6 +56,8 @@
 {/each}
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .hover {
     @apply bg-magenta-10 text-magenta-cta;
   }

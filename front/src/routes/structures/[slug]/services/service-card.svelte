@@ -112,18 +112,3 @@
     </div>
   </div>
 </Bookmarkable>
-
-<style lang="postcss">
-  /*
-  * Link is on <h2> but we want all the card clickable (in an accessible way)
-  * Source: http://inclusive-components.design/cards/
-  */
-  /* .full-card-link::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-  } */
-</style>

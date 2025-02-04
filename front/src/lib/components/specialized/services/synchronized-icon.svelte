@@ -16,6 +16,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .warning {
     @apply bg-service-orange-darker text-white;
   }

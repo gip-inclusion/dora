@@ -41,6 +41,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .container.small {
     @apply p-s6;
   }

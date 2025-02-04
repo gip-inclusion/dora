@@ -353,6 +353,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   label {
     @apply font-bold;
   }

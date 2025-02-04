@@ -249,6 +249,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   :global(.ProseMirror p.is-editor-empty:first-child::before) {
     content: attr(data-placeholder);
 

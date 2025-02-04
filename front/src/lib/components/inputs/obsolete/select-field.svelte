@@ -269,6 +269,8 @@
 </FieldWrapper>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .selected {
     @apply text-magenta-cta;
   }

@@ -374,6 +374,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .typographic-list {
     @apply mb-s24 list-disc break-all pl-s20 text-f18 leading-32 text-gray-text;
   }

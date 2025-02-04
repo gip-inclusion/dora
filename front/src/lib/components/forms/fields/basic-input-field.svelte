@@ -146,6 +146,8 @@
   </FieldWrapper>
 
   <style lang="postcss">
+    @reference "../../../../app.css";
+
     input[type="text"],
     input[type="number"],
     input[type="url"],

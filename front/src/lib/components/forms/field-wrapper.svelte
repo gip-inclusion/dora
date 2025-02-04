@@ -75,6 +75,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   .one-fourth {
     @apply lg:w-1/3;
   }

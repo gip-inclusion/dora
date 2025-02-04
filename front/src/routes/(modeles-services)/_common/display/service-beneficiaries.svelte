@@ -60,6 +60,8 @@
 </Accordion>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   ul {
     @apply mb-s24 list-disc break-all pl-s20 text-f18 leading-32 text-gray-text;
   }

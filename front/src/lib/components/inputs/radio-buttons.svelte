@@ -55,6 +55,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   input[type="radio"]:checked + div div {
     @apply block;
   }

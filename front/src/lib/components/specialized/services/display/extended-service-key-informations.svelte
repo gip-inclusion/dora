@@ -143,6 +143,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../../app.css";
+
   h3 {
     @apply mb-s2 mt-s10 flex items-center text-f17;
   }

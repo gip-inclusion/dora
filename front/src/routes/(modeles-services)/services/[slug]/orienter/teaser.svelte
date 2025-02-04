@@ -97,6 +97,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../../app.css";
+
   .checkbox {
     @apply mr-s8 inline-block h-s24 w-s24 fill-current align-text-bottom text-success;
   }

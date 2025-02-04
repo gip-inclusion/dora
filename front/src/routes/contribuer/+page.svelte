@@ -74,6 +74,8 @@
 </CenteredGrid>
 
 <style lang="postcss">
+  @reference "../../app.css";
+
   .icon {
     @apply mr-s12 w-s32 flex-none self-center fill-current text-france-blue;
   }

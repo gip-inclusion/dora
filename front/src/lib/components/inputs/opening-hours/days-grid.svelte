@@ -76,6 +76,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .day-grid.day > div:first-child {
     grid-column-start: 1;
     grid-column-end: 5;

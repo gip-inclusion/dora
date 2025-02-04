@@ -36,6 +36,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   .info {
     color: var(--col-info);
   }

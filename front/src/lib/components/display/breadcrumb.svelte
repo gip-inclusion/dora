@@ -182,6 +182,8 @@
 </nav>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   a {
     @apply text-magenta-40 print:text-france-blue;
   }
