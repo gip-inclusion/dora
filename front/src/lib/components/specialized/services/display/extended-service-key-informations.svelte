@@ -17,6 +17,8 @@
   export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
   export let display: "sidebar" | "full" = "full";
+
+  $: isDI = "source" in service;
 </script>
 
 <h2 class:text-f23={display === "sidebar"}>Informations clés</h2>
@@ -90,7 +92,7 @@
         Fréquence et horaires
       </h3>
       <p>
-        {#if isValidformatOsmHours(service.recurrence)}
+        {#if isDI && isValidformatOsmHours(service.recurrence)}
           <OsmHours osmHours={service.recurrence} />
         {:else}
           {service.recurrence}

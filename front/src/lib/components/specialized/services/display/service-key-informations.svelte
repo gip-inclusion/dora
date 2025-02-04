@@ -23,6 +23,8 @@
   export let service: Service;
   export let servicesOptions: ServicesOptions;
 
+  $: isDI = "source" in service;
+
   // trier les types dans l'ordre d'affichage du formulaire
   $: sortedServiceKindsDisplay = service.kindsDisplay?.sort((a, b) =>
     a.localeCompare(b)
@@ -199,7 +201,7 @@
           Fréquence et horaires
         </h3>
         <p>
-          {#if isValidformatOsmHours(service.recurrence)}
+          {#if isDI && isValidformatOsmHours(service.recurrence)}
             <OsmHours osmHours={service.recurrence} />
           {:else}
             {service.recurrence}
