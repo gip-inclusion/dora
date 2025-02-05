@@ -14,12 +14,16 @@
   import type { Service, ServicesOptions } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
+  import { isValidformatOsmHours } from "$lib/utils/opening-hours";
   import { isNotFreeService } from "$lib/utils/service";
+  import OsmHours from "../../osm-hours.svelte";
   import ServiceDuration from "./service-duration.svelte";
   import SubcategoryList from "./subcategory-list.svelte";
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
+
+  $: isDI = "source" in service;
 
   // trier les types dans l'ordre d'affichage du formulaire
   $: sortedServiceKindsDisplay = service.kindsDisplay?.sort((a, b) =>
@@ -197,7 +201,11 @@
           Fréquence et horaires
         </h3>
         <p>
-          {service.recurrence}
+          {#if isDI && isValidformatOsmHours(service.recurrence)}
+            <OsmHours osmHours={service.recurrence} />
+          {:else}
+            {service.recurrence}
+          {/if}
         </p>
       </div>
     {/if}

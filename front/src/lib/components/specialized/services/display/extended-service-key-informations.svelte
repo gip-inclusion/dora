@@ -10,11 +10,15 @@
   import type { Service, ServicesOptions, ShortService } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
+  import { isValidformatOsmHours } from "$lib/utils/opening-hours";
   import { isNotFreeService } from "$lib/utils/service";
+  import OsmHours from "../../osm-hours.svelte";
 
   export let service: Service | ShortService;
   export let servicesOptions: ServicesOptions;
   export let display: "sidebar" | "full" = "full";
+
+  $: isDI = "source" in service;
 </script>
 
 <h2 class:text-f23={display === "sidebar"}>Informations clés</h2>
@@ -88,7 +92,11 @@
         Fréquence et horaires
       </h3>
       <p>
-        {service.recurrence}
+        {#if isDI && isValidformatOsmHours(service.recurrence)}
+          <OsmHours osmHours={service.recurrence} />
+        {:else}
+          {service.recurrence}
+        {/if}
       </p>
     </div>
   {/if}
