@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { ENVIRONMENT } from "$lib/env";
-  import "../app.postcss";
+  import "../app.css";
   import Footer from "./_index/footer.svelte";
   import Header from "./_index/header.svelte";
   import SkipLink from "./_index/skip-link.svelte";
