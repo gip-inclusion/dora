@@ -34,10 +34,10 @@
   />
 {/if}
 
-<div class="flex flex-col gap-s8">
+<div class="gap-s8 flex flex-col">
   {#each filteredStructures as structure}
     <div
-      class="flex flex-row items-center gap-s16 rounded-md border border-gray-01 p-s16 shadow-xs"
+      class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-md border shadow-xs"
       class:highlight={selectedStructureSlug === structure.slug}
       role="presentation"
       on:mouseenter={() => (selectedStructureSlug = structure.slug)}

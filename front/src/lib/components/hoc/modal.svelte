@@ -112,7 +112,7 @@
           <div class="flex justify-between">
             {#if title && !hideTitle}
               <h1
-                class="text-f22 leading-32 text-france-blue md:text-f24 lg:text-f28 lg:leading-40 xl:text-f32"
+                class="text-f22 text-france-blue md:text-f24 lg:text-f28 xl:text-f32 leading-32 lg:leading-40"
               >
                 {title}
               </h1>

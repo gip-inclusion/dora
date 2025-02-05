@@ -4,12 +4,12 @@
   export let itemId: string | undefined = undefined;
 </script>
 
-<ul class="flex flex-wrap gap-s8 pt-s16">
+<ul class="gap-s8 pt-s16 flex flex-wrap">
   {#each items as item}
     <li>
       <button
-        class="rounded-t px-s20 py-s12 font-bold {itemId === item.id
-          ? 'bg-white text-france-blue'
+        class="px-s20 py-s12 rounded-t font-bold {itemId === item.id
+          ? 'text-france-blue bg-white'
           : 'bg-magenta-dark text-white'}"
         on:click={() => {
           onSelectedChange(item.id);

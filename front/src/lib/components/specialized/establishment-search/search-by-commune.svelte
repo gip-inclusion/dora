@@ -102,7 +102,7 @@
   >
     <div
       slot="itemContent"
-      class="flex grow flex-row items-baseline justify-between gap-s4 px-s8 pt-s8"
+      class="gap-s4 px-s8 pt-s8 flex grow flex-row items-baseline justify-between"
       let:item
     >
       <div class="grow">
@@ -111,7 +111,7 @@
       </div>
       {#if item.value.isSiege}
         <div
-          class="shrink-0 rounded bg-gray-01 px-s6 py-s4 text-f12 font-bold text-gray-text"
+          class="bg-gray-01 px-s6 py-s4 text-f12 text-gray-text shrink-0 rounded font-bold"
         >
           Siège
         </div>
@@ -129,10 +129,10 @@
       rel="noopener"
       href={"https://annuaire-entreprises.data.gouv.fr" +
         annuaireEntreprisePath}
-      class="inline-block h-full text-magenta-cta underline"
+      class="text-magenta-cta inline-block h-full underline"
       >Annuaire des entreprises
       <span
-        class="inline-block h-s20 w-s20 fill-current pl-s4 pt-s6"
+        class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current"
         aria-hidden
       >
         {@html externalLinkIcon}

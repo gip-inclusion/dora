@@ -6,7 +6,7 @@
 </script>
 
 <div
-  class="rounded-full bg-service-blue p-s8 text-service-blue-dark"
+  class="bg-service-blue p-s8 text-service-blue-dark rounded-full"
   class:small
   class:warning
 >

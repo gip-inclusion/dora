@@ -59,7 +59,7 @@
 
 <h2 class="text-f23 text-white">Mobiliser ce service</h2>
 
-<div class="mt-s16 flex w-full flex-col gap-s16 sm:w-auto print:hidden">
+<div class="mt-s16 gap-s16 flex w-full flex-col sm:w-auto print:hidden">
   {#if !(isDI && hasExternalForm)}
     {#if isOrientableWithDoraForm}
       <LinkButton

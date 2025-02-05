@@ -49,7 +49,7 @@
       rel="noopener ugc"
       class="text-magenta-cta underline"
       >{part.display}{#if part.value.startsWith("http")}
-        <span class="inline-block h-s20 w-s20 fill-current pl-s4 pt-s6"
+        <span class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current"
           >{@html externalLinkIcon}</span
         >{/if}</a
     >

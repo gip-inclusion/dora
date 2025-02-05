@@ -11,7 +11,7 @@
 </script>
 
 <CenteredGrid extraClass="bg-linear-to-b from-magenta-10 to-magenta-10/0">
-  <div class="flex flex-wrap gap-s40">
+  <div class="gap-s40 flex flex-wrap">
     <img
       class="flex-none"
       src={ContributionPic}
@@ -36,7 +36,7 @@
         iconOnRight
       />
 
-      <div class="mb-s48 mt-s48 flex flex-col gap-s20">
+      <div class="mb-s48 mt-s48 gap-s20 flex flex-col">
         <div class="flex">
           <div class="icon">
             {@html timerFlashIcon}
@@ -77,6 +77,6 @@
   @reference "../../app.css";
 
   .icon {
-    @apply mr-s12 w-s32 flex-none self-center fill-current text-france-blue;
+    @apply mr-s12 w-s32 text-france-blue flex-none self-center fill-current;
   }
 </style>

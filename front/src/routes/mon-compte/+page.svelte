@@ -14,13 +14,13 @@
     <Breadcrumb currentLocation="account" dark />
   </div>
 
-  <div class="flex flex-col gap-s24 md:flex-row">
+  <div class="gap-s24 flex flex-col md:flex-row">
     <h1 class="sr-only">Mon compte</h1>
-    <div class="flex-2 rounded-md border border-gray-02 md:relative">
+    <div class="border-gray-02 flex-2 rounded-md border md:relative">
       <div
-        class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
+        class="gap-s12 border-gray-02 px-s16 py-s20 md:px-s36 flex flex-wrap items-center justify-between border-b"
       >
-        <h2 class="m-s0 text-f23 leading-20 text-france-blue">
+        <h2 class="m-s0 text-f23 text-france-blue leading-20">
           Mes informations
         </h2>
 
@@ -36,8 +36,8 @@
         {/if}
       </div>
 
-      <div class="flex flex-col gap-s36 p-s16 md:mb-s56 md:p-s36">
-        <div class="flex w-full flex-col flex-wrap gap-s36 md:flex-row">
+      <div class="gap-s36 p-s16 md:mb-s56 md:p-s36 flex flex-col">
+        <div class="gap-s36 flex w-full flex-col flex-wrap md:flex-row">
           <div class="flex-1">
             <h3 class="mb-s8 text-f18 leading-20">Prénom</h3>
             <div class="text-gray-text">{$userInfo.firstName}</div>
@@ -49,11 +49,11 @@
         </div>
         <div>
           <h3 class="mb-s8 text-f18 leading-20">Courriel</h3>
-          <div class="break-all text-gray-text">{$userInfo.email}</div>
+          <div class="text-gray-text break-all">{$userInfo.email}</div>
         </div>
       </div>
 
-      <div class="bottom-s0 w-full pt-s12 md:absolute">
+      <div class="bottom-s0 pt-s12 w-full md:absolute">
         <hr class="mx-s12 md:mx-s36" />
 
         <p class="m-s0 px-s16 py-s12 text-f14 text-gray-text md:px-s36">
@@ -76,15 +76,15 @@
       </div>
     </div>
 
-    <div class="flex flex-1 flex-col gap-s24">
+    <div class="gap-s24 flex flex-1 flex-col">
       {#if $userInfo.isStaff || $userInfo.isManager}
-        <div class="mb-s24 rounded-md border border-gray-03 p-s24">
-          <h2 class="mb-s20 text-f18 leading-20 text-gray-dark">Raccourcis</h2>
-          <ul class="flex flex-col gap-s10">
+        <div class="mb-s24 border-gray-03 p-s24 rounded-md border">
+          <h2 class="mb-s20 text-f18 text-gray-dark leading-20">Raccourcis</h2>
+          <ul class="gap-s10 flex flex-col">
             {#if $userInfo.isStaff}
               <li>
                 <a
-                  class="text-f14 font-bold text-magenta-cta hover:underline"
+                  class="text-f14 text-magenta-cta font-bold hover:underline"
                   href="/admin"
                 >
                   Administration
@@ -92,7 +92,7 @@
               </li>
               <li>
                 <a
-                  class="text-f14 font-bold text-magenta-cta hover:underline"
+                  class="text-f14 text-magenta-cta font-bold hover:underline"
                   href="/admin/structures/creer"
                 >
                   Créer une structure
@@ -101,7 +101,7 @@
             {:else if $userInfo.isManager}
               <li>
                 <a
-                  class="text-f14 font-bold text-magenta-cta hover:underline"
+                  class="text-f14 text-magenta-cta font-bold hover:underline"
                   href="/admin/structures"
                 >
                   Tableau de bord département

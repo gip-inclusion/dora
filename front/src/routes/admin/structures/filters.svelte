@@ -184,7 +184,7 @@
 
 <div class="mb-s8 font-bold">Actions en attente :</div>
 
-<div class="mb-s8 flex gap-s8">
+<div class="mb-s8 gap-s8 flex">
   <Button
     on:click={() => {
       resetSearchParams();
@@ -274,14 +274,14 @@
   small
 />
 
-<div class="mt-s16 flex flex-col gap-s12">
-  <div class="mb-s12 flex w-full flex-row items-center gap-s12">
+<div class="mt-s16 gap-s12 flex flex-col">
+  <div class="mb-s12 gap-s12 flex w-full flex-row items-center">
     <div class="grow">
       <label for="filter-by-name-siret">Recherche par nom ou par SIRET</label>
       <input
         id="filter-by-name-siret"
         bind:value={searchParams.searchString}
-        class="w-full border border-gray-02 p-s8"
+        class="border-gray-02 p-s8 w-full border"
         placeholder="Rechercher par nom…"
       />
     </div>
@@ -299,10 +299,10 @@
   />
   <div
     class:hidden={!showAdvancedFilters}
-    class="mx-s8 rounded border border-gray-01 p-s16"
+    class="mx-s8 border-gray-01 p-s16 rounded border"
   >
-    <div class="mb-s16 flex flex-col gap-s24">
-      <div class="flex justify-between gap-s16">
+    <div class="mb-s16 gap-s24 flex flex-col">
+      <div class="gap-s16 flex justify-between">
         <div class="flex grow flex-col">
           <label for="typologies">Typologies</label>
           <Select
@@ -337,7 +337,7 @@
         />
       </div>
 
-      <div class="flex justify-between gap-s16">
+      <div class="gap-s16 flex justify-between">
         <div class="flex grow flex-col">
           <label for="moderation">Trier par…</label>
           <Select
@@ -347,7 +347,7 @@
           />
         </div>
       </div>
-      <div class="flex justify-between gap-s16" />
+      <div class="gap-s16 flex justify-between" />
     </div>
   </div>
 </div>

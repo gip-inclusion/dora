@@ -13,7 +13,7 @@
 </script>
 
 <div class="{mobileDesign ? 'hidden' : 'block'} py-s10 md:hidden">
-  <div class="text-f20 font-bold text-gray-dark">DORA</div>
+  <div class="text-f20 text-gray-dark font-bold">DORA</div>
   <div class="text-f14 text-gray-text">Plateforme de l’inclusion</div>
 </div>
 
@@ -75,7 +75,7 @@
       >
         Nouveautés
         <span
-          class="inline-block h-s20 w-s20 fill-current pl-s4 pt-s6 {externalIconColor}"
+          class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current {externalIconColor}"
           aria-hidden
         >
           {@html externalLinkIcon}
@@ -93,7 +93,7 @@
       >
         Communauté de l’inclusion
         <span
-          class="inline-block h-s20 w-s20 fill-current pl-s4 pt-s6 {externalIconColor}"
+          class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current {externalIconColor}"
           aria-hidden
         >
           {@html externalLinkIcon}

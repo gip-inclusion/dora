@@ -21,8 +21,8 @@
     : option.value === value}
 
   <div
-    class="option flex min-h-[36px] w-full cursor-pointer p-s6 text-gray-dark {isMultiple
-      ? 'items-start gap-s8'
+    class="option p-s6 text-gray-dark flex min-h-[36px] w-full cursor-pointer {isMultiple
+      ? 'gap-s8 items-start'
       : 'items-center justify-between'} {extraClass}"
     role="option"
     aria-selected={selected}
@@ -46,7 +46,7 @@
     <SelectLabel choice={getChoiceFromValue(option.value, choices)} />
 
     {#if !isMultiple}
-      <span class="h-s24 w-s24 fill-current text-magenta-cta" class:selected>
+      <span class="h-s24 w-s24 text-magenta-cta fill-current" class:selected>
         {#if selected}
           {@html checkIcon}
         {/if}

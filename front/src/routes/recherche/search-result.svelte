@@ -44,12 +44,12 @@
     class:border-magenta-cta={selected}
     tabindex="-1"
   >
-    <div class="relative p-s32 lg:pr-s64">
+    <div class="p-s32 lg:pr-s64 relative">
       <div class="mb-s4 flex items-center justify-between">
         <div class="text-f14">
           {result.structureInfo.name}
         </div>
-        <div class="flex items-center gap-s8">
+        <div class="gap-s8 flex items-center">
           <FavoriteIcon on:click={onBookmark} active={isBookmarked} />
         </div>
       </div>
@@ -60,7 +60,7 @@
         </a>
       </h3>
 
-      <div class="flex flex-wrap items-baseline gap-s6">
+      <div class="gap-s6 flex flex-wrap items-baseline">
         {#if onSite}
           <div class="text-f16 text-france-blue">
             {#if result.address1}
@@ -94,15 +94,15 @@
       </div>
 
       {#if !summarized}
-        <p class="relative z-10 mt-s16 hidden text-f16 text-gray-text md:block">
+        <p class="mt-s16 text-f16 text-gray-text relative z-10 hidden md:block">
           <a href={servicePagePath}>{result.shortDesc}</a>
         </p>
         <div
-          class={`mt-s24 flex flex-col items-center gap-s24 md:flex-row ${isDI ? "justify-between" : "justify-end"}`}
+          class={`mt-s24 gap-s24 flex flex-col items-center md:flex-row ${isDI ? "justify-between" : "justify-end"}`}
         >
           {#if isDI}
             <div
-              class="inline rounded border border-gray-02 px-s8 py-s2 text-f12 text-gray-text"
+              class="border-gray-02 px-s8 py-s2 text-f12 text-gray-text inline rounded border"
             >
               Source&nbsp;: {result.diSourceDisplay}, via data·inclusion
             </div>
@@ -123,6 +123,6 @@
   @reference "../../app.css";
 
   .tag {
-    @apply whitespace-nowrap rounded-xl bg-blue-information px-s8 py-s0 text-f14 text-france-blue;
+    @apply bg-blue-information px-s8 py-s0 text-f14 text-france-blue rounded-xl whitespace-nowrap;
   }
 </style>

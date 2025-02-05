@@ -11,13 +11,13 @@
 
 {#if suggestion}
   <Modal bind:isOpen title="Suggestion">
-    <div class="flex flex-col gap-s8">
+    <div class="gap-s8 flex flex-col">
       <Line label="Nom de la structure" data={suggestion.structureInfo.name}>
         {suggestion.structureInfo.name}
         ({suggestion.structureInfo.department})
         {#if suggestion.structureInfo.new}
           <div
-            class="ml-s8 inline-block rounded bg-info px-s8 py-s2 text-f12 leading-20 text-white"
+            class="ml-s8 bg-info px-s8 py-s2 text-f12 inline-block rounded leading-20 text-white"
           >
             Nouv.
           </div>
@@ -41,7 +41,7 @@
           data={markdownToHTML(suggestion.serviceInfo.fullDesc, 2)}
           verticalLayout
         >
-          <div class="m-s16 border-l-8 border-gray-02 pl-s16">
+          <div class="m-s16 border-gray-02 pl-s16 border-l-8">
             {@html markdownToHTML(suggestion.serviceInfo.fullDesc, 2)}
           </div>
         </Line>
@@ -97,7 +97,7 @@
           verticalLayout
           data={suggestion.serviceInfo.feeDetails}
         >
-          <div class="m-s16 border-l-8 border-gray-02 pl-s16">
+          <div class="m-s16 border-gray-02 pl-s16 border-l-8">
             {suggestion.serviceInfo.feeDetails}
           </div>
         </Line>
@@ -140,7 +140,7 @@
       {/if}
     </div>
 
-    <div class="mt-s32 flex flex-row justify-end gap-s16">
+    <div class="mt-s32 gap-s16 flex flex-row justify-end">
       <Button label="Rejeter" secondary on:click={() => onReject(suggestion)} />
       <Button label="Valider" on:click={() => onAccept(suggestion)} />
     </div>

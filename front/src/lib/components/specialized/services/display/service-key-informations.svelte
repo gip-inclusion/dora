@@ -33,9 +33,9 @@
 
 <h2 class="text-f23">Informations clés</h2>
 
-<div class="flex flex-col gap-s12">
+<div class="gap-s12 flex flex-col">
   {#if service.fundingLabelsDisplay.length > 0}
-    <div class="bold flex items-center font-bold text-info">
+    <div class="bold text-info flex items-center font-bold">
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
         {@html euroFillIcon}
       </span>
@@ -44,14 +44,14 @@
   {/if}
   {#if service.isCumulative != null}
     {#if service.isCumulative}
-      <div class="bold flex items-center font-bold text-available">
+      <div class="bold text-available flex items-center font-bold">
         <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
           {@html addCircleIcon}
         </span>
         Ce service est cumulable avec d’autres dispositifs
       </div>
     {:else}
-      <div class="bold flex items-center font-bold text-warning">
+      <div class="bold text-warning flex items-center font-bold">
         <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
           {@html errorWarningIcon}
         </span>
@@ -60,7 +60,7 @@
     {/if}
   {/if}
   {#if service.feeCondition && isNotFreeService(service.feeCondition)}
-    <div class="bold flex items-center font-bold text-warning">
+    <div class="bold text-warning flex items-center font-bold">
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
         {@html errorWarningIcon}
       </span>
@@ -69,7 +69,7 @@
   {/if}
 
   {#if service.qpvOrZrr}
-    <div class="bold flex items-center font-bold text-info">
+    <div class="bold text-info flex items-center font-bold">
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
         {@html informationIcon}
       </span>
@@ -113,7 +113,7 @@
         Type de service
       </h3>
 
-      <ul class="inline-flex flex-wrap text-f16 text-gray-text">
+      <ul class="text-f16 text-gray-text inline-flex flex-wrap">
         {#if Array.isArray(service.kindsDisplay)}
           {#each sortedServiceKindsDisplay as kind, index (kind)}
             <li class:separator={index > 0}>{kind}</li>
@@ -132,7 +132,7 @@
           </span>
           Frais à charge
         </h3>
-        <p class="block pb-s10">
+        <p class="pb-s10 block">
           {getLabelFromValue(
             service.feeCondition,
             servicesOptions.feeConditions
@@ -158,7 +158,7 @@
         Lieu d’accueil
       </h3>
       {#if service.locationKinds?.length}
-        <div class="flex flex-col gap-s6">
+        <div class="gap-s6 flex flex-col">
           {#if service.locationKinds.includes("en-presentiel")}
             <p class="mb-s6">
               Présentiel,<br />
@@ -216,7 +216,7 @@
   @reference "../../../../../app.css";
 
   h3 {
-    @apply mb-s2 mt-s10 flex items-center text-f17;
+    @apply mb-s2 mt-s10 text-f17 flex items-center;
   }
   p {
     @apply m-s0 text-f16 text-gray-text;

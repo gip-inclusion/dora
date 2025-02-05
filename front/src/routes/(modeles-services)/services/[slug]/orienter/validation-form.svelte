@@ -43,7 +43,7 @@
   {/if}
 
   <Fieldset title="Publics concernés par ce service" noTopPadding>
-    <div class="flex flex-col lg:gap-s8">
+    <div class="lg:gap-s8 flex flex-col">
       {#if serviceAcceptsAllPublic}
         <p class="mb-s0 italic">Ce service concerne tous les publics</p>
       {:else}
@@ -61,7 +61,7 @@
   </Fieldset>
 
   <Fieldset title="Critères et conditions d’accès">
-    <div class="flex flex-col lg:gap-s8">
+    <div class="lg:gap-s8 flex flex-col">
       {#if requirementChoices.length !== 0}
         <CheckboxesField
           id="requirements"
@@ -91,7 +91,7 @@
         </p>
       </Notice>
 
-      <div class="flex flex-row gap-s48">
+      <div class="gap-s48 flex flex-row">
         {#if service.onlineForm || service.formsInfo?.length}
           <div>
             {#if service.formsInfo?.length}
@@ -121,7 +121,7 @@
                 Informations complémentaires ou formulaires à compléter
               </p>
 
-              <ul class="list-disc pl-s20">
+              <ul class="pl-s20 list-disc">
                 <li>
                   <span class="break-word">
                     <a

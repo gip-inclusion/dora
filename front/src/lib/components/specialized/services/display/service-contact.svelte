@@ -11,7 +11,7 @@
 </script>
 
 <div>
-  <div class="flex flex-col gap-s4 text-f14" class:text-white={useWhiteText}>
+  <div class="gap-s4 text-f14 flex flex-col" class:text-white={useWhiteText}>
     {#if $userInfo && !$userInfo.structures.length}
       <MembershipPendingWarning />
     {:else}

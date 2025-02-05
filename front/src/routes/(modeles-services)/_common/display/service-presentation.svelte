@@ -17,7 +17,7 @@
   {service.shortDesc || ""}
 </p>
 
-<div class=" rounded-lg border border-gray-02 p-s32 pb-s48">
+<div class=" border-gray-02 p-s32 pb-s48 rounded-lg border">
   <ServiceKeyInformations {service} {servicesOptions} />
 </div>
 

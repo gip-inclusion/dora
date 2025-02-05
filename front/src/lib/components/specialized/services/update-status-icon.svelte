@@ -34,7 +34,7 @@
   const { textColor, icon, iconBg } = statusPresentation[updateStatus];
 </script>
 
-<div class="container rounded-full p-s12 {iconBg}" class:small>
+<div class="p-s12 container rounded-full {iconBg}" class:small>
   <div class="icon h-s24 w-s24 fill-current {textColor}" class:small>
     {@html icon}
   </div>

@@ -40,10 +40,10 @@
 
 <div class:disabled-bg={!isOpen}>
   <div
-    class="flex w-full justify-around rounded-tl rounded-tr border border-gray-03 text-center text-gray-text"
+    class="border-gray-03 text-gray-text flex w-full justify-around rounded-tl rounded-tr border text-center"
     class:error={inError}
   >
-    <span class="flex-1 border-r border-gray-03 py-s10 text-f18">
+    <span class="border-gray-03 py-s10 text-f18 flex-1 border-r">
       {#if !isOpen}
         <span class="text-f19 text-gray-text-alt">/</span>
       {:else}
@@ -59,11 +59,11 @@
       {/if}
     </span>
 
-    <span class="flex-1 border-gray-03 py-s10 text-f18">
+    <span class="border-gray-03 py-s10 text-f18 flex-1">
       {#if !isOpen}
         <span class="text-f19 text-gray-text-alt">/</span>
       {:else}
-        <label class="flex-1 py-s10">
+        <label class="py-s10 flex-1">
           <span class="sr-only">Horaire de fermeture pour le {label}</span>
 
           <input
@@ -80,7 +80,7 @@
   </div>
 
   <div
-    class="flex flex-row justify-center rounded-bl rounded-br border-b border-l border-r border-gray-03 py-s10 text-center text-gray-text"
+    class="border-gray-03 py-s10 text-gray-text flex flex-row justify-center rounded-br rounded-bl border-r border-b border-l text-center"
     class:error={inError}
   >
     <label for="{day}-{dayPeriod}-is-open" class="flex justify-center">
@@ -103,7 +103,7 @@
 {#if inError}
   <div
     id="error-{day}—{dayPeriod}"
-    class="mt-s4 flex items-center text-f12 text-error"
+    class="mt-s4 text-f12 text-error flex items-center"
   >
     <span class="mr-s4 h-s16 w-s16 fill-current">
       {@html alertIcon}

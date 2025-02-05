@@ -14,9 +14,9 @@
 
 <h2>Accédez au formulaire d’orientation</h2>
 
-<div class="mt-s40 flex flex-col-reverse gap-s24 lg:flex-row">
+<div class="mt-s40 gap-s24 flex flex-col-reverse lg:flex-row">
   <div
-    class="flex basis-2/3 flex-col gap-s40 rounded-ml border border-gray-01 p-s32"
+    class="gap-s40 rounded-ml border-gray-01 p-s32 flex basis-2/3 flex-col border"
   >
     <h3 class="mb-s0 text-france-blue">
       Pourquoi utiliser le formulaire d’orientation DORA
@@ -38,7 +38,7 @@
         <span class="checkbox">{@html checkboxCircleFillIcon}</span>Suivez
         toutes vos demandes grâce au tableau de bord
         <span
-          class="ml-s4 inline-block h-s24 rounded bg-magenta-brand px-s8 py-s2 align-baseline text-f12 leading-20 text-white"
+          class="ml-s4 h-s24 bg-magenta-brand px-s8 py-s2 text-f12 inline-block rounded align-baseline leading-20 text-white"
         >
           BIENTÔT
         </span>
@@ -67,7 +67,7 @@
     </div>
   </div>
   <div class="basis-1/3">
-    <div class="flex flex-col rounded-ml border border-gray-01 p-s32">
+    <div class="rounded-ml border-gray-01 p-s32 flex flex-col border">
       <h3 class="mb-s32 text-france-blue">Se connecter ou s’inscrire</h3>
       <hr class="mb-s32 border-t-gray-01" />
       <p class="text-f16">
@@ -84,7 +84,7 @@
     </div>
 
     {#if service.isContactInfoPublic}
-      <div class="mt-s32 flex flex-col rounded-ml border border-gray-01 p-s32">
+      <div class="mt-s32 rounded-ml border-gray-01 p-s32 flex flex-col border">
         <h3 class="mb-s32 text-france-blue">Contact du service</h3>
         <hr class="mb-s32 border-t-gray-01" />
         <div class="mb-s32">
@@ -100,6 +100,6 @@
   @reference "../../../../../app.css";
 
   .checkbox {
-    @apply mr-s8 inline-block h-s24 w-s24 fill-current align-text-bottom text-success;
+    @apply mr-s8 h-s24 w-s24 text-success inline-block fill-current align-text-bottom;
   }
 </style>

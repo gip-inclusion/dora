@@ -34,7 +34,7 @@
 
 <EnsureLoggedIn>
   <CenteredGrid>
-    <h1 class="text-center text-france-blue">Mes alertes</h1>
+    <h1 class="text-france-blue text-center">Mes alertes</h1>
 
     <div class="mb-s32">
       <Breadcrumb currentLocation="saved-searches" dark />
@@ -42,26 +42,26 @@
     {#if savedSearches == null}
       <p class="mb-s40 text-f16 text-gray-dark">Chargement…</p>
     {:else if savedSearches.length}
-      <p class="mb-s40 text-f21 font-bold text-gray-dark">
+      <p class="mb-s40 text-f21 text-gray-dark font-bold">
         {$userInfo.savedSearches.length} alerte{$userInfo.savedSearches.length >
         1
           ? "s"
           : ""}
       </p>
-      <div class="flex flex-col gap-s16">
+      <div class="gap-s16 flex flex-col">
         {#each savedSearches as search}
           <SavedSearchCard {search} onDelete={handleDelete} />
         {/each}
       </div>
     {:else}
       <div
-        class="flex flex-col-reverse items-center justify-center gap-s40 rounded-md border border-gray-03 px-s20 py-s32 lg:flex-row"
+        class="gap-s40 border-gray-03 px-s20 py-s32 flex flex-col-reverse items-center justify-center rounded-md border lg:flex-row"
       >
         <div class="max-w-lg basis-1/2 text-center">
-          <div class="mx-auto mb-s12 h-s24 w-s24">
+          <div class="mb-s12 h-s24 w-s24 mx-auto">
             {@html starSmileLineIcon}
           </div>
-          <h2 class="legend text-f32 font-bold leading-40 text-gray-text">
+          <h2 class="legend text-f32 text-gray-text leading-40 font-bold">
             Vous n’avez pas encore créé d’alerte
           </h2>
           <p class="legend">
@@ -79,11 +79,11 @@
             title="Ouverture dans une nouvelle fenêtre"
             rel="noopener"
             href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/alertes-comment-enregistrer-des-recherches-1xpnlc9/?bust=1698336652095"
-            class="inline-block h-full text-magenta-cta"
+            class="text-magenta-cta inline-block h-full"
           >
             Découvrez comment créer une alerte
             <span
-              class="inline-block h-s20 w-s20 fill-current pl-s4 pt-s6"
+              class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current"
               aria-hidden
             >
               {@html externalLinkIcon}

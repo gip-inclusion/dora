@@ -196,7 +196,7 @@
 
 <div
   id="service-state-update"
-  class="relative flex cursor-pointer items-center rounded-md font-bold text-gray-dark {currentStatusPresentation.bgClass} hover:{currentStatusPresentation.hoverBgClass}"
+  class="text-gray-dark relative flex cursor-pointer items-center rounded-md font-bold {currentStatusPresentation.bgClass} hover:{currentStatusPresentation.hoverBgClass}"
   use:clickOutside
   on:click_outside={() => toggleCombobox(false)}
 >
@@ -210,7 +210,7 @@
     aria-haspopup="listbox"
     aria-labelledby={`button-label-${uuid}`}
     id={`update-listbox-${uuid}`}
-    class="cursor:pointer flex items-center px-s20 py-s10"
+    class="cursor:pointer px-s20 py-s10 flex items-center"
     role="combobox"
     tabindex="0"
     on:click={() => toggleCombobox()}
@@ -225,7 +225,7 @@
     </span>
 
     <span>{currentStatusPresentation.label}</span>
-    <span class="ml-s10 h-s24 w-s24 fill-current text-magenta-cta">
+    <span class="ml-s10 h-s24 w-s24 text-magenta-cta fill-current">
       {#if isDropdownOpen}
         {@html arrowUpSIcon}
       {:else}
@@ -237,7 +237,7 @@
   <div
     class:hidden={!isDropdownOpen}
     class:w-full={fullWidth}
-    class="absolute right-s0 top-s48 z-20 min-w-[150px] rounded border border-gray-00 bg-white px-s12 py-s12 shadow-md"
+    class="right-s0 top-s48 border-gray-00 px-s12 py-s12 absolute z-20 min-w-[150px] rounded border bg-white shadow-md"
     role="listbox"
     id={`listbox-values-${uuid}`}
     aria-labelledby={`button-label-${uuid}`}
@@ -246,7 +246,7 @@
     {#each availableOptions as option, index (option)}
       {#if option === "DELETE"}
         <div
-          class="mb-s10 flex items-center rounded bg-transparent p-s10"
+          class="mb-s10 p-s10 flex items-center rounded bg-transparent"
           class:bg-service-red={selectedOption === option}
           on:mouseenter={() => setAsSelected(option, index)}
           role="option"
@@ -259,7 +259,7 @@
           }}
           on:click={() => updateServiceStatus(option)}
         >
-          <span class="mr-s8 h-s24 w-s24 fill-current text-service-red-dark">
+          <span class="mr-s8 h-s24 w-s24 text-service-red-dark fill-current">
             {@html deleteBinIcon}
           </span>
           <span>Supprimer</span>
@@ -267,7 +267,7 @@
       {:else}
         {@const data = SERVICE_STATUS_PRESENTATION[option]}
         <div
-          class="mb-s10 flex items-center rounded p-s10 {selectedOption ===
+          class="mb-s10 p-s10 flex items-center rounded {selectedOption ===
           option
             ? data.hoverBgClass
             : 'bg-transparent'}"

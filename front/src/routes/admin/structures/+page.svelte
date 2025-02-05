@@ -152,16 +152,16 @@
 
 {#if selectedDepartment}
   <CenteredGrid bgColor="bg-service-green">
-    <div class="relative gap-s16 lg:flex-row-reverse lg:justify-between">
+    <div class="gap-s16 relative lg:flex-row-reverse lg:justify-between">
       <div class="mb-s48 print:mb-s0">
         <Breadcrumb currentLocation="manager-dashboard" dark />
       </div>
 
       <div>
         <h1 class="mb-s12 mr-s12 text-france-blue">Tableau de bord</h1>
-        <div class="flex flex-col justify-between gap-s16 md:flex-row">
+        <div class="gap-s16 flex flex-col justify-between md:flex-row">
           <div
-            class=" flex flex-col items-baseline justify-between gap-s24 text-france-blue md:flex-row"
+            class=" gap-s24 text-france-blue flex flex-col items-baseline justify-between md:flex-row"
           >
             {#if data.departments?.length > 1}
               <DepartmentList
@@ -173,7 +173,7 @@
               <span class="text-f23 font-bold">
                 {selectedDepartment.name}({selectedDepartment.code})
               </span>
-              <span class="hidden text-f23 font-bold md:block">•</span>
+              <span class="text-f23 hidden font-bold md:block">•</span>
             {/if}
 
             <a
@@ -215,17 +215,17 @@
         {structures.length} structures
       {/if}
     </div>
-    <div class="flex flex-col gap-s12">
+    <div class="gap-s12 flex flex-col">
       {#if structures}
-        <div class="flex flex-col gap-s16 lg:flex-row">
-          <div class="relative h-s512 w-full shrink-0 lg:h-[800px] lg:w-s512">
+        <div class="gap-s16 flex flex-col lg:flex-row">
+          <div class="h-s512 lg:w-s512 relative w-full shrink-0 lg:h-[800px]">
             <StructuresMap
               {filteredStructures}
               bind:selectedStructureSlug
               department={selectedDepartment}
             />
           </div>
-          <div class="flex w-full flex-col gap-s24">
+          <div class="gap-s24 flex w-full flex-col">
             <Button
               on:click={handleClick}
               label="Télécharger"

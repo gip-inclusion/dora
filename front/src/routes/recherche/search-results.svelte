@@ -89,9 +89,9 @@
   }
 </script>
 
-<div class="flex flex-col gap-s16">
+<div class="gap-s16 flex flex-col">
   <h2 class="sr-only">Résultats de votre recherche</h2>
-  <div class="flex flex-col gap-s16">
+  <div class="gap-s16 flex flex-col">
     {#each filteredServices as service, index}
       {#if noPagination || index < currentPageLength}
         <SearchResult

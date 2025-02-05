@@ -12,7 +12,7 @@
 
 <EnsureLoggedIn>
   <CenteredGrid>
-    <h1 class="text-center text-france-blue">Mon alerte</h1>
+    <h1 class="text-france-blue text-center">Mon alerte</h1>
 
     <div class="mb-s32">
       <Breadcrumb currentLocation="saved-search" dark />
@@ -21,7 +21,7 @@
     <SavedSearchTitle search={data.savedSearch} />
     <SavedSearchDescription search={data.savedSearch} />
 
-    <div class="mt-s16 mt-s32 text-f21 font-bold text-gray-dark">
+    <div class="mt-s16 mt-s32 text-f21 text-gray-dark font-bold">
       {#if data.recentResults.length > 0}
         {data.recentResults.length}
         {data.recentResults.length > 1
@@ -33,7 +33,7 @@
     </div>
 
     {#if data.recentResults.length}
-      <div class="mt-s32 flex flex-col gap-s16">
+      <div class="mt-s32 gap-s16 flex flex-col">
         <h2 class="sr-only">Résultats de votre recherche</h2>
         {#each data.recentResults as result}
           <SearchResult id={`#result-${result.id}`} {result} />

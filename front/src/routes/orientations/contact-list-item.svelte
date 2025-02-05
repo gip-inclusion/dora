@@ -7,15 +7,15 @@
   export let isPreference = false;
 </script>
 
-<li class="flex items-center text-gray-text">
-  <span class="mr-s8 inline-block h-s24 w-s24 fill-current">
+<li class="text-gray-text flex items-center">
+  <span class="mr-s8 h-s24 w-s24 inline-block fill-current">
     {@html icon}
   </span>
 
   {#if link}
     <a href={link} class="text-magenta-cta hover:underline" target="_blank">
       {text}
-      <span class="inline-block h-s20 w-s20 fill-current pl-s4 pt-s6">
+      <span class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current">
         {@html externalLinkIcon}
       </span>
     </a>
@@ -25,7 +25,7 @@
 
   {#if isPreference}
     <span
-      class="ml-s12 inline-block rounded bg-magenta-20 px-s10 py-s6 text-f12 text-magenta-cta"
+      class="ml-s12 bg-magenta-20 px-s10 py-s6 text-f12 text-magenta-cta inline-block rounded"
     >
       À privilégier
     </span>

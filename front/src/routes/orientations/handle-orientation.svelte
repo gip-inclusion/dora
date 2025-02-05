@@ -70,7 +70,7 @@
   />
 {/if}
 
-<div class="rounded-md border border-gray-02 p-s32">
+<div class="border-gray-02 p-s32 rounded-md border">
   <h2>Traiter la demande</h2>
 
   {#if !orientation.service?.slug}
@@ -88,7 +88,7 @@
     </div>
 
     {#if orientation.status === "OUVERTE"}
-      <div class="flex flex-col gap-s12">
+      <div class="gap-s12 flex flex-col">
         <Button
           label="Valider la demande"
           on:click={() => (modalOpened = "accept")}
@@ -123,7 +123,7 @@
           orientation.processingDate
         )}"
       >
-        <p class="text-left text-f14 text-gray-text">
+        <p class="text-f14 text-gray-text text-left">
           Vous ne pouvez plus revenir sur une décision qui a déjà été actée.
         </p>
       </Notice>
@@ -134,7 +134,7 @@
           orientation.processingDate
         )}"
       >
-        <p class="text-left text-f14 text-gray-text">
+        <p class="text-f14 text-gray-text text-left">
           Vous ne pouvez plus revenir sur une décision qui a déjà été actée.
         </p>
       </Notice>

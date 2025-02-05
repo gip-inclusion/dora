@@ -30,7 +30,7 @@
 </script>
 
 <button
-  class="tooltip icon inline-block h-s20 w-s20 shrink-0 fill-current text-gray-text-alt2 hover:text-magenta-cta print:hidden"
+  class="tooltip icon h-s20 w-s20 text-gray-text-alt2 hover:text-magenta-cta inline-block shrink-0 fill-current print:hidden"
   class:active
   class:disabled
   aria-label={title}
@@ -55,16 +55,16 @@
   }
 
   .tooltip .tooltiptext {
-    @apply invisible absolute left-[-1000px] top-[-1000px] z-10 w-max -translate-x-1/2 rounded bg-magenta-dark px-s8 py-s2 text-center text-f12 font-bold text-white;
+    @apply bg-magenta-dark px-s8 py-s2 text-f12 invisible absolute top-[-1000px] left-[-1000px] z-10 w-max -translate-x-1/2 rounded text-center font-bold text-white;
   }
 
   .tooltip .tooltiptext::after {
     content: "";
-    @apply absolute bottom-full left-1/2 -ml-s4 border-4 border-solid border-transparent border-b-magenta-dark;
+    @apply -ml-s4 border-b-magenta-dark absolute bottom-full left-1/2 border-4 border-solid border-transparent;
   }
 
   .tooltip:hover .tooltiptext,
   .tooltip:focus .tooltiptext {
-    @apply visible left-1/2 top-s28 opacity-100;
+    @apply top-s28 visible left-1/2 opacity-100;
   }
 </style>

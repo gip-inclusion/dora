@@ -10,7 +10,7 @@
 
 <CenteredGrid noPadding>
   <div
-    class="flex flex-col items-center justify-between py-s32 lg:flex-row print:hidden"
+    class="py-s32 flex flex-col items-center justify-between lg:flex-row print:hidden"
   >
     <div class="text-f14 text-gray-dark">
       <strong>Infolettre &nbsp;•&nbsp;</strong>
@@ -29,9 +29,9 @@
     />
   </div>
 </CenteredGrid>
-<footer class="border-t-2 border-france-blue print:hidden" role="contentinfo">
+<footer class="border-france-blue border-t-2 print:hidden" role="contentinfo">
   <CenteredGrid>
-    <div class="flex gap-s24 lg:flex-row">
+    <div class="gap-s24 flex lg:flex-row">
       <div class="mb-s24 lg:w-1/2">
         <img
           class="inline"
@@ -41,10 +41,10 @@
           height="110"
         />
       </div>
-      <div class="text-f14 leading-normal text-gray-text lg:w-1/2">
+      <div class="text-f14 text-gray-text leading-normal lg:w-1/2">
         Dora, le service public numérique de recensement et mise à jour de
         l’offre d’insertion.
-        <div class="mt-s16 flex flex-wrap gap-x-s24 gap-y-s8 font-bold">
+        <div class="mt-s16 gap-x-s24 gap-y-s8 flex flex-wrap font-bold">
           <a
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
@@ -69,7 +69,7 @@
 
     <hr class="mb-s16" />
 
-    <nav class="flex flex-wrap gap-s32">
+    <nav class="gap-s32 flex flex-wrap">
       <NavItem href="/mentions-legales" label="Mentions légales" />
       <NavItem href="/cgu" label="Conditions générales d’utilisation" />
       <NavItem

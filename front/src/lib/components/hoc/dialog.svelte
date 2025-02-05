@@ -14,10 +14,10 @@
 {#if isOpen}
   <Portal target={document.body}>
     <div
-      class="fixed bottom-s8 right-s8 z-10 w-[384px] rounded-ml border border-gray-02 bg-white p-s24 shadow-sm"
+      class="bottom-s8 right-s8 rounded-ml border-gray-02 p-s24 fixed z-10 w-[384px] border bg-white shadow-sm"
     >
       <div class="relative">
-        <div class="absolute right-s0 top-s0">
+        <div class="right-s0 top-s0 absolute">
           <Button
             icon={closeLineIcon}
             on:click={handleClose}

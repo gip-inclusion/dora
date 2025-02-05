@@ -35,7 +35,7 @@
 </script>
 
 <div
-  class="relative {mobileDesign ? 'border-b border-gray-03' : ''}"
+  class="relative {mobileDesign ? 'border-gray-03 border-b' : ''}"
   use:clickOutside
   role="presentation"
   on:click_outside={handleClickOutside}
@@ -46,12 +46,12 @@
     aria-expanded={isOpen}
     aria-controls={id}
     class:bg-magenta-10={isOpen}
-    class="flex h-full items-center hover:bg-magenta-10 {buttonClass}"
+    class="hover:bg-magenta-10 flex h-full items-center {buttonClass}"
     on:click={() => (isOpen = !isOpen)}
   >
     <span>{label}</span>
     <span
-      class="ml-s8 inline-block h-s24 w-s24 fill-current {isOpen
+      class="ml-s8 h-s24 w-s24 inline-block fill-current {isOpen
         ? 'text-magenta-cta'
         : 'text-gray-text'}"
     >
@@ -65,15 +65,15 @@
 
   <ul
     {id}
-    class="{mobileDesign ? '' : 'top-[100%)] absolute'} z-10 bg-white"
+    class="{mobileDesign ? '' : 'absolute top-[100%)]'} z-10 bg-white"
     class:hidden={!isOpen}
   >
     {#each links as link, index}
       {@const currentPage = $page.url.pathname === link.href}
-      <li class="whitespace-nowrap text-f14 hover:bg-magenta-10">
+      <li class="text-f14 hover:bg-magenta-10 whitespace-nowrap">
         <a
           href={link.href}
-          class="inline-block w-full py-s16 pl-s16 pr-s32
+          class="py-s16 pl-s16 pr-s32 inline-block w-full
           {currentPage
             ? 'border-magenta-cta text-magenta-cta'
             : 'border-gray-03 text-gray-text'}

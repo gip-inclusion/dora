@@ -7,14 +7,14 @@
   export let readOnly = true;
 </script>
 
-<div class="flex flex-col justify-between rounded-ml bg-white shadow-md">
+<div class="rounded-ml flex flex-col justify-between bg-white shadow-md">
   <div class="p-s24">
-    <div class="flex items-center justify-between text-f14">
-      <div class="flex items-center text-gray-dark">
+    <div class="text-f14 flex items-center justify-between">
+      <div class="text-gray-dark flex items-center">
         <div
-          class="mr-s8 flex h-s28 w-s28 items-center justify-center rounded-full bg-service-blue text-service-blue-dark"
+          class="mr-s8 h-s28 w-s28 bg-service-blue text-service-blue-dark flex items-center justify-center rounded-full"
         >
-          <span class="inline-block h-s16 w-s16 fill-current">
+          <span class="h-s16 w-s16 inline-block fill-current">
             {@html copyIcon2}
           </span>
         </div>
@@ -25,17 +25,17 @@
       <ModelMenu {model} {readOnly} />
     </div>
 
-    <h3 class="m-s0 mt-s12 min-h-[100px] text-f19 font-bold text-france-blue">
+    <h3 class="m-s0 mt-s12 text-f19 text-france-blue min-h-[100px] font-bold">
       <a href="/modeles/{model.slug}">{model.name}</a>
     </h3>
   </div>
 
-  <div class="border-t border-t-gray-03 p-s24">
-    <div class="flex items-center text-f14 text-gray-dark">
+  <div class="border-t-gray-03 p-s24 border-t">
+    <div class="text-f14 text-gray-dark flex items-center">
       <div
-        class="mr-s8 flex h-s28 w-s28 items-center justify-center rounded-full bg-service-blue text-service-blue-dark"
+        class="mr-s8 h-s28 w-s28 bg-service-blue text-service-blue-dark flex items-center justify-center rounded-full"
       >
-        <span class="inline-block h-s16 w-s16 fill-current">
+        <span class="h-s16 w-s16 inline-block fill-current">
           {@html historyLineIcon}
         </span>
       </div>

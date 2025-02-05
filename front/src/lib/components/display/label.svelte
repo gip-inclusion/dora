@@ -14,7 +14,7 @@
 </script>
 
 <div
-  class="flex flex-row items-center text-f14"
+  class="text-f14 flex flex-row items-center"
   class:bold
   class:italic
   class:success
@@ -67,7 +67,7 @@
   }
 
   .dark-bg {
-    @apply text-white print:text-gray-text;
+    @apply print:text-gray-text text-white;
   }
 
   .icon {

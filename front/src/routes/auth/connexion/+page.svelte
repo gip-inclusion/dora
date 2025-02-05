@@ -42,7 +42,7 @@
 
   <h1 class="mb-s24 text-france-blue">Accéder à DORA</h1>
 
-  <div class="flex flex-col gap-s6 md:flex-row">
+  <div class="gap-s6 flex flex-col md:flex-row">
     <div class="flex-1">
       <FieldSet headerBg="bg-magenta-brand" noHeaderBorder noTopPadding>
         <div>
@@ -51,8 +51,8 @@
 
           <div class="mb-s24 rounded-ml bg-info-light p-s16">
             {#if OIDC_AUTH_BACKEND === "proconnect"}
-              <h3 class="flex text-f17 leading-24 text-info">
-                <div class="mr-s8 inline-block h-s24 w-s24 fill-current">
+              <h3 class="text-f17 text-info flex leading-24">
+                <div class="mr-s8 h-s24 w-s24 inline-block fill-current">
                   {@html informationLineIcon}
                 </div>
                 <div>DORA utilise ProConnect</div>
@@ -63,8 +63,8 @@
                 à DORA.
               </p>
             {:else}
-              <h3 class="flex text-f17 leading-24 text-info">
-                <div class="mr-s8 inline-block h-s24 w-s24 fill-current">
+              <h3 class="text-f17 text-info flex leading-24">
+                <div class="mr-s8 h-s24 w-s24 inline-block fill-current">
                   {@html informationLineIcon}
                 </div>
                 <div>DORA passe à Inclusion Connect&#8239;!</div>
@@ -107,8 +107,8 @@
     <div class="flex-1">
       <div class="px-s64 py-s32">
         {#if OIDC_AUTH_BACKEND === "proconnect"}
-          <h3 class="text-center text-france-blue">
-            <img src={logoProConnect} alt="ProConnect" class="mx-auto mb-s8" />
+          <h3 class="text-france-blue text-center">
+            <img src={logoProConnect} alt="ProConnect" class="mb-s8 mx-auto" />
             Pourquoi ProConnect&#8239;?
           </h3>
           <div class="mt-s24 text-center">
@@ -126,7 +126,7 @@
 
           <hr class="my-s32" />
 
-          <div class="text-center text-f14">
+          <div class="text-f14 text-center">
             Pour en savoir plus sur <strong>ProConnect</strong>,
             <a
               class="text-magenta-cta underline"
@@ -143,7 +143,7 @@
             <img
               src={logoInclusionConnect}
               alt="Inclusion Connect"
-              class="mx-auto mb-s32"
+              class="mb-s32 mx-auto"
             />
           </h2>
           <div class="mt-s24 text-center">
@@ -161,7 +161,7 @@
 
           <hr class="my-s32" />
           <div
-            class="around mb-s32 flex flex-wrap content-center items-center justify-center gap-x-s12 gap-y-s24 sm:flex-row"
+            class="around mb-s32 gap-x-s12 gap-y-s24 flex flex-wrap content-center items-center justify-center sm:flex-row"
           >
             <img
               class="inline-block grow-0"
@@ -207,7 +207,7 @@
             />
           </div>
 
-          <div class="text-center text-f14">
+          <div class="text-f14 text-center">
             Pour en savoir plus sur <strong>Inclusion Connect</strong>,
             <a
               class="text-magenta-cta underline"

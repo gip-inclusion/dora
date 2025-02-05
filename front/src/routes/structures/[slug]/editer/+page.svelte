@@ -16,7 +16,7 @@
 </script>
 
 <EnsureLoggedIn>
-  <h2 class="mb-s40 border-b border-gray-02 pb-s40">Informations</h2>
+  <h2 class="mb-s40 border-gray-02 pb-s40 border-b">Informations</h2>
 
   <StructureEditionForm
     structure={$structure}

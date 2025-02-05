@@ -73,12 +73,12 @@
 
   {#if $structure.canViewMembers}
     {#if $structure.isMember && $structure.canEditMembers && showNoMemberNotice}
-      <div class="mb-s24 flex flex-col gap-s8">
+      <div class="mb-s24 gap-s8 flex flex-col">
         <NoMemberNotice />
       </div>
     {/if}
 
-    <div class="mb-s32 mt-s32 flex flex-col gap-s8">
+    <div class="mb-s32 mt-s32 gap-s8 flex flex-col">
       {#if canAdd && data.putativeMembers}
         {#each sortedMembers(data.putativeMembers) as member}
           {#if member.invitedByAdmin}

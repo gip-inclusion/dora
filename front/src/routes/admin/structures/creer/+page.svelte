@@ -119,7 +119,7 @@
 
 <EnsureLoggedIn>
   <CenteredGrid extraClass="max-w-4xl m-auto">
-    <h1 class="mb-s64 text-center text-france-blue">Ajouter une structure</h1>
+    <h1 class="mb-s64 text-france-blue text-center">Ajouter une structure</h1>
     <div class="mt-s24"></div>
     {#if structureAdded && structure}
       <Notice
@@ -132,7 +132,7 @@
         </p>
       </Notice>
 
-      <div class="mt-s24 flex flex-row justify-center gap-s24">
+      <div class="mt-s24 gap-s24 flex flex-row justify-center">
         <LinkButton
           to="/structures/{structure.slug}"
           label="Voir la structure"
@@ -200,7 +200,7 @@
             />
           </Fieldset>
 
-          <div class="mt-s32 flex flex-col justify-end gap-s16 md:flex-row">
+          <div class="mt-s32 gap-s16 flex flex-col justify-end md:flex-row">
             <Button
               name="validate"
               type="submit"

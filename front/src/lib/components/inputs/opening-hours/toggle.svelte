@@ -23,7 +23,7 @@
 </script>
 
 <div
-  class="relative mt-s8 flex flex-row items-center self-start"
+  class="mt-s8 relative flex flex-row items-center self-start"
   on:click={() => {
     checked = !checked;
     dispatcher("change");
@@ -45,11 +45,11 @@
   />
   <!-- path -->
   <span
-    class="toggle-path inline-block h-s24 w-s40 shrink-0 rounded-full border border-gray-03 bg-white"
+    class="toggle-path h-s24 w-s40 border-gray-03 inline-block shrink-0 rounded-full border bg-white"
   />
   <!-- circle -->
   <span
-    class="toggle-circle absolute inset-y-s0 left-s0 inline-block h-s16 w-s16 shrink-0 rounded-full bg-gray-text-alt"
+    class="toggle-circle inset-y-s0 left-s0 h-s16 w-s16 bg-gray-text-alt absolute inline-block shrink-0 rounded-full"
   />
   <span class="ml-s8 pb-s2 text-f14 text-gray-text">
     {#if checked}

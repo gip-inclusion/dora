@@ -3,10 +3,10 @@
 </script>
 
 <div
-  class="checkbox flex h-s24 w-s24 shrink-0 justify-center rounded border border-gray-03"
+  class="checkbox h-s24 w-s24 border-gray-03 flex shrink-0 justify-center rounded border"
 >
   <div
-    class="checkbox-mark h-s12 w-s12 self-center bg-magenta-cta"
+    class="checkbox-mark h-s12 w-s12 bg-magenta-cta self-center"
     class:invisible={!checked}
   />
 </div>

@@ -7,7 +7,7 @@
 
 <a
   href="#main-content"
-  class="sr-only left-s32 top-s32 z-20 rounded bg-white text-f16 font-bold text-magenta-cta outline-hidden hover:text-magenta-hover focus:not-sr-only focus:absolute focus:p-s8 focus:shadow-focus"
+  class="left-s32 top-s32 text-f16 text-magenta-cta hover:text-magenta-hover focus:p-s8 focus:shadow-focus sr-only z-20 rounded bg-white font-bold outline-hidden focus:not-sr-only focus:absolute"
 >
   Aller au contenu principal
 </a>

@@ -55,7 +55,7 @@
     description="Plusieurs choix possibles."
     readonly={$currentSchema?.[id]?.readonly}
   >
-    <div class="flex flex-col gap-s8">
+    <div class="gap-s8 flex flex-col">
       {#each servicesOptions.coachOrientationModes as choice}
         {#if choice.value === "completer-le-formulaire-dadhesion" && service.coachOrientationModes.includes("completer-le-formulaire-dadhesion")}
           <Checkbox

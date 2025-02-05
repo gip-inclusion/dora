@@ -32,7 +32,7 @@
       > ou voir la vidéo de présentation pour comprendre l’utilisation du formulaire
       d’orientation.
     </p>
-    <div slot="footer" class="flex justify-end gap-s12">
+    <div slot="footer" class="gap-s12 flex justify-end">
       <LinkButton
         label="Poursuivre l’orientation"
         secondary

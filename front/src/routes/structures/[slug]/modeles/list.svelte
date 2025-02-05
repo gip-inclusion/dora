@@ -49,11 +49,11 @@
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
-  <div class="flex flex-row gap-s8">
+  <div class="gap-s8 flex flex-row">
     <h2 class="mb-s0 text-france-blue">Modèles</h2>
     {#if limit}<Count>{total}</Count>{/if}
   </div>
-  <div class="flex flex-wrap gap-s16">
+  <div class="gap-s16 flex flex-wrap">
     {#if !!models.length && !tabDisplay}
       <LinkButton
         label="Voir tous les modèles"
@@ -91,7 +91,7 @@
 {#if structure.isMember && modelsOrdered.length === 0 && withEmptyNotice}
   <NoModelNotice />
 {:else}
-  <div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-3">
+  <div class="mb-s48 gap-s16 grid md:grid-cols-2 lg:grid-cols-3">
     {#each modelsOrdered as model}
       <ModelCard {model} readOnly={!structure.canEditServices} />
     {/each}

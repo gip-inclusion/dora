@@ -76,7 +76,7 @@
     bénéficiaire.
   </Notice>
 
-  <div class="flex flex-col lg:gap-s8">
+  <div class="lg:gap-s8 flex flex-col">
     {#if $currentSchema && "coachOrientationModes" in $currentSchema && "coachOrientationModesExternalFormLink" in $currentSchema && "coachOrientationModesExternalFormLinkText" in $currentSchema && "coachOrientationModesOther" in $currentSchema}
       <FieldModel
         {...fieldModelProps.coachOrientationModes ?? {}}
@@ -109,7 +109,7 @@
     {/if}
   </div>
 
-  <div class="flex flex-col lg:gap-s8">
+  <div class="lg:gap-s8 flex flex-col">
     {#if $currentSchema && "beneficiariesAccessModes" in $currentSchema && "beneficiariesAccessModesExternalFormLink" in $currentSchema && "beneficiariesAccessModesExternalFormLinkText" in $currentSchema && "beneficiariesAccessModesOther" in $currentSchema}
       <FieldModel
         {...fieldModelProps.beneficiariesAccessModes ?? {}}
@@ -143,7 +143,7 @@
     {/if}
   </div>
 
-  <div class="flex flex-col gap-s24">
+  <div class="gap-s24 flex flex-col">
     <FieldModel
       {...fieldModelProps.feeCondition ?? {}}
       serviceValue={service.feeCondition}

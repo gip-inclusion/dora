@@ -25,7 +25,7 @@
 
 <HamburgerMenu>
   <div class="flex flex-col lg:flex-row print:hidden">
-    <div class="my-s20 text-center lg:my-s0 lg:text-left">
+    <div class="my-s20 lg:my-s0 text-center lg:text-left">
       <LinkButton
         to="https://aide.dora.inclusion.beta.gouv.fr/fr/"
         noBackground

@@ -37,7 +37,7 @@
 
 <div>
   <a
-    class="flex items-center break-all text-f16"
+    class="text-f16 flex items-center break-all"
     class:font-bold={preferred}
     href="mailto:{service.contactEmail}?subject={emailSubject}&body={emailBody}"
   >

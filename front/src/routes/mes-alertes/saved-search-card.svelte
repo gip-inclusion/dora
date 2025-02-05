@@ -45,18 +45,18 @@
 </script>
 
 <div
-  class="relative rounded-ml border border-gray-02 p-s32 pr-s56 shadow-sm"
+  class="rounded-ml border-gray-02 p-s32 pr-s56 relative border shadow-sm"
   tabindex="-1"
 >
   <SavedSearchTitle {search} />
 
   <button
-    class="absolute right-s32 top-s40 text-magenta-cta"
+    class="right-s32 top-s40 text-magenta-cta absolute"
     disabled={requesting}
     on:click={doDelete}
   >
     <span
-      class="mx-auto mb-s12 block h-s24 w-s24 fill-current"
+      class="mb-s12 h-s24 w-s24 mx-auto block fill-current"
       aria-label="Supprimer cette alerte"
     >
       {@html closeCircleIcon}
@@ -66,23 +66,23 @@
   <SavedSearchDescription {search} />
 
   <p class="text-f16">
-    <span class="mr-s8 inline-block h-s16 w-s16 fill-current">
+    <span class="mr-s8 h-s16 w-s16 inline-block fill-current">
       {@html historyLineIcon}
     </span>
     Le <DateLabel date={search.creationDate} />
   </p>
-  <div class="flex gap-s8">
+  <div class="gap-s8 flex">
     <div class="form-container">
-      <form on:submit|preventDefault={handleSubmit} class="flex gap-s16">
-        <div class="flex items-center rounded border border-gray-02 p-s12">
-          <span class="mr-s8 inline-block h-s24 w-s24 fill-current">
+      <form on:submit|preventDefault={handleSubmit} class="gap-s16 flex">
+        <div class="border-gray-02 p-s12 flex items-center rounded border">
+          <span class="mr-s8 h-s24 w-s24 inline-block fill-current">
             {@html mailSendLineIcon}
           </span>
 
           <select
             id="frequency"
             bind:value={frequencyValue}
-            class="border-0 pr-s10"
+            class="pr-s10 border-0"
           >
             <option value="NEVER">Pas de notification</option>
             <option value="TWO_WEEKS">Une alerte toutes les 2 semaines</option>

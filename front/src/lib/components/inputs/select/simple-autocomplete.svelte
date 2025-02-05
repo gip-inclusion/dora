@@ -794,7 +794,7 @@
                   ? value.includes(listItem.value)
                   : listItem.value === value)}
               <button
-                class="autocomplete-list-item flex w-full flex-row items-baseline px-s20 py-s6 text-left {i ===
+                class="autocomplete-list-item px-s20 py-s6 flex w-full flex-row items-baseline text-left {i ===
                 highlightIndex
                   ? 'selected'
                   : ''} {multiple ? 'gap-s10' : 'justify-between'}"
@@ -856,7 +856,7 @@
   <div class="tags-container">
     {#each value as tagItem}
       <div
-        class="tags break-all bg-magenta-brand text-f14 font-bold text-white"
+        class="tags bg-magenta-brand text-f14 font-bold break-all text-white"
       >
         {getLabelForValue(tagItem)}
 
@@ -1011,7 +1011,7 @@
   }
 
   .tags-container {
-    @apply mt-s12 flex flex-row flex-wrap gap-s8;
+    @apply mt-s12 gap-s8 flex flex-row flex-wrap;
   }
 
   .tags {

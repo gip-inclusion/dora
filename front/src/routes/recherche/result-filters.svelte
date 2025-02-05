@@ -24,7 +24,7 @@
   export let filters: Filters;
 </script>
 
-<div class="flex flex-col gap-s32">
+<div class="gap-s32 flex flex-col">
   <ResultFilter
     id="kinds"
     label="Type de service"

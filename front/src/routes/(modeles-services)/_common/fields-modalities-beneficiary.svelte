@@ -53,7 +53,7 @@
     description="Plusieurs choix possibles."
     readonly={$currentSchema?.[id]?.readonly}
   >
-    <div class="flex flex-col gap-s8">
+    <div class="gap-s8 flex flex-col">
       {#each servicesOptions.beneficiariesAccessModes as choice}
         {#if choice.value === "completer-le-formulaire-dadhesion" && service.beneficiariesAccessModes.includes("completer-le-formulaire-dadhesion")}
           <Checkbox

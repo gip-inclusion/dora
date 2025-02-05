@@ -112,7 +112,7 @@
   {/if}
 
   {#if establishment?.siret}
-    <div class="border border-gray-01 p-s24">
+    <div class="border-gray-01 p-s24 border">
       <h4 class="text-f16">{establishment.name}</h4>
       <div class="legend">{establishment.siret}</div>
       <div class="legend">{establishment.address1}</div>

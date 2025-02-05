@@ -25,7 +25,7 @@
 </script>
 
 <label
-  class={`flex flex-row items-center rounded p-s2 ${focused ? "solid 2px #0a76f6" : ""}`}
+  class={`p-s2 flex flex-row items-center rounded ${focused ? "solid 2px #0a76f6" : ""}`}
   class:mr-s24={horizontal}
 >
   <input
@@ -42,7 +42,7 @@
     on:blur
   />
   <CheckboxMark />
-  <span class="ml-s16 inline-block text-f16 text-gray-text">{label}</span>
+  <span class="ml-s16 text-f16 text-gray-text inline-block">{label}</span>
 </label>
 
 {#if $$slots.default}

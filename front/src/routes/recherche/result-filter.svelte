@@ -16,9 +16,9 @@
   }
 </script>
 
-<div class="flex flex-col gap-s16">
+<div class="gap-s16 flex flex-col">
   <div
-    class="flex items-center justify-between border-b border-b-gray-02 pb-s8"
+    class="border-b-gray-02 pb-s8 flex items-center justify-between border-b"
   >
     <label for={id} class="text-f14 font-bold">{label}</label>
     <Button

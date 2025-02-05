@@ -17,7 +17,7 @@
       aria-expanded={isOpen}
       aria-controls="hamburger-content"
     >
-      <span class="mt-s16 inline-block h-s24 w-s24 self-end text-gray-dark">
+      <span class="mt-s16 h-s24 w-s24 text-gray-dark inline-block self-end">
         {@html menuIcon}
       </span>
     </button>
@@ -25,15 +25,15 @@
     {#if isOpen}
       <div
         id="hamburger-content"
-        class="fixed left-s0 right-s0 top-s0 z-20 h-[100%] overflow-y-auto bg-white p-s20"
+        class="left-s0 right-s0 top-s0 p-s20 fixed z-20 h-[100%] overflow-y-auto bg-white"
       >
         <div class="flex justify-end">
           <button
-            class="flex items-center pb-s20 text-magenta-cta"
+            class="pb-s20 text-magenta-cta flex items-center"
             on:click={() => (isOpen = false)}
           >
             Fermer
-            <span class="inline-block h-s24 w-s24 fill-current">
+            <span class="h-s24 w-s24 inline-block fill-current">
               {@html closeIcon}
             </span>
           </button>

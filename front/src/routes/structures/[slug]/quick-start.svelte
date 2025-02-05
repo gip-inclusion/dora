@@ -53,9 +53,9 @@
 </script>
 
 {#if !structure.quickStartDone}
-  <div class="rounded-md border border-gray-03">
+  <div class="border-gray-03 rounded-md border">
     <div
-      class="relative flex items-center justify-between gap-s16 border-b border-gray-01 px-s16 pb-s24 pt-s24 sm:flex-row sm:px-s36"
+      class="gap-s16 border-gray-01 px-s16 pb-s24 pt-s24 sm:px-s36 relative flex items-center justify-between border-b sm:flex-row"
     >
       <div>
         <h2 class="mb-s0 text-f23">Guide de démarrage rapide</h2>
@@ -70,12 +70,12 @@
       </button>
     </div>
 
-    <div class="px-s16 font-bold sm:px-s36">
+    <div class="px-s16 sm:px-s36 font-bold">
       <ul>
         {#each steps as { label, complete, url }}
           <li
             class:line-through={complete}
-            class="flex items-center border-b border-gray-01 py-s16 sm:py-s36"
+            class="border-gray-01 py-s16 sm:py-s36 flex items-center border-b"
           >
             <a
               class="flex hover:underline"

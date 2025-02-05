@@ -54,7 +54,7 @@
     type="info"
   >
     <div class="w-full">
-      <p class="block text-f14">
+      <p class="text-f14 block">
         Suite à la mise à jour
         {updatedModels.size > 1 ? " des modèles " : " du modèle "}
         {Array.from(updatedModels)

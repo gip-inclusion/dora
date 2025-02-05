@@ -17,7 +17,7 @@
 </script>
 
 <span
-  class="flex w-full items-center gap-s4"
+  class="gap-s4 flex w-full items-center"
   class:justify-between={icon && showIcon && iconOnRight}
 >
   {#if icon && showIcon && !iconOnRight}

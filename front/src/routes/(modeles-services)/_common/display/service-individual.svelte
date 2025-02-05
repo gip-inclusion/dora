@@ -17,7 +17,7 @@
   $: urlWithTrackingParams = addTrackingParamsToUrl(url);
 </script>
 
-<div class="rounded-ml border border-gray-02 p-s32 shadow-sm">
+<div class="rounded-ml border-gray-02 p-s32 border shadow-sm">
   <h2 class="text-f23 text-france-blue">Vous êtes un particulier ?</h2>
   <LinkButton
     id="mtm-bloc-mes-aides-page-service"

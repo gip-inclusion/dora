@@ -41,9 +41,9 @@
 >
   {#if title}
     <div
-      class="rounded-t-md px-s32 pt-s32 {headerBg} {noHeaderBorder
+      class="px-s32 pt-s32 rounded-t-md {headerBg} {noHeaderBorder
         ? ''
-        : 'border-b border-gray-03 pb-s24'}"
+        : 'border-gray-03 pb-s24 border-b'}"
       class:rounded-b-md={collapsed}
     >
       <div class="flex items-center" class:lg:gap-s32={showModel}>
@@ -99,14 +99,14 @@
     {#if $$slots.help && showHelp}
       <div
         id={helpId}
-        class="border-l-8 border-info bg-info-light py-s16 pl-s24 pr-s32"
+        class="border-info bg-info-light py-s16 pl-s24 pr-s32 border-l-8"
       >
         <slot name="help" />
       </div>
     {/if}
   {/if}
   <div
-    class="flex flex-col gap-s32 bg-white px-s32 pb-s32 pt-s24"
+    class="gap-s32 px-s32 pb-s32 pt-s24 flex flex-col bg-white"
     class:rounded-b-md={title}
     class:rounded-md={!title}
     class:pt-s32={!title}

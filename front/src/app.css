@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   --color-*: initial;
@@ -290,20 +290,20 @@
   h3,
   h4,
   h5 {
-    @apply mb-s16 font-bold text-gray-dark;
+    @apply mb-s16 text-gray-dark font-bold;
   }
 
   h1 {
-    @apply text-f26 leading-32 md:text-f30 md:leading-40 lg:text-f38 lg:leading-48 xl:text-f45 xl:leading-56;
+    @apply text-f26 md:text-f30 lg:text-f38 xl:text-f45 leading-32 md:leading-40 lg:leading-48 xl:leading-56;
   }
 
   h2 {
-    @apply text-f22 leading-32 md:text-f24 lg:text-f28 lg:leading-40 xl:text-f32;
+    @apply text-f22 md:text-f24 lg:text-f28 xl:text-f32 leading-32 lg:leading-40;
     color: var(--col-france-blue);
   }
 
   h3 {
-    @apply text-f19 leading-24 md:text-f20 md:leading-32 lg:text-f21 xl:text-f23;
+    @apply text-f19 md:text-f20 lg:text-f21 xl:text-f23 leading-24 md:leading-32;
   }
 
   h4 {
@@ -315,11 +315,11 @@
   }
 
   p {
-    @apply mb-s16 text-f18 leading-normal text-gray-text;
+    @apply mb-s16 text-f18 text-gray-text leading-normal;
   }
 
   small {
-    @apply text-f14 italic text-gray-text-alt2;
+    @apply text-f14 text-gray-text-alt2 italic;
   }
 
   hr {
@@ -331,7 +331,7 @@
   }
 
   .legend {
-    @apply text-f14 leading-24 text-gray-text-alt2;
+    @apply text-f14 text-gray-text-alt2 leading-24;
   }
 
   .break-word {

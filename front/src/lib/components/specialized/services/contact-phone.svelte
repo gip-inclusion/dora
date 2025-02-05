@@ -9,7 +9,7 @@
 
 <div class="mb-s6 mr-s24">
   <a
-    class="flex items-center text-f16"
+    class="text-f16 flex items-center"
     class:font-bold={preferred}
     href="tel:{service.contactPhone}"
   >

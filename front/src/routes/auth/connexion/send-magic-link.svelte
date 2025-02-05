@@ -72,7 +72,7 @@
           temporaire sur cette même adresse dans quelques instants.
         </p>
       </Notice>
-      <div class="mt-s32 flex flex-col justify-end gap-s16 md:flex-row">
+      <div class="mt-s32 gap-s16 flex flex-col justify-end md:flex-row">
         <Button
           name="validate"
           type="button"
@@ -98,7 +98,7 @@
             vertical
           />
         </Fieldset>
-        <div class="mt-s32 flex flex-col justify-end gap-s16 md:flex-row">
+        <div class="mt-s32 gap-s16 flex flex-col justify-end md:flex-row">
           <Button
             name="validate"
             type="submit"

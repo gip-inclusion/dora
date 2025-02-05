@@ -60,7 +60,7 @@
         suivante&nbsp;:
       </p>
       <div>
-        <div class="mb-s0 border border-gray-01 p-s24">
+        <div class="mb-s0 border-gray-01 p-s24 border">
           <h3 class="text-gray-text">{data.structure.name}</h3>
           {#if data.structure.siret}
             <div class="legend">{data.structure.siret}</div>
@@ -73,7 +73,7 @@
           </div>
         </div>
         {#if data.parent}
-          <div class="mt-s0 border border-t-0 border-gray-01 bg-gray-bg p-s24">
+          <div class="mt-s0 border-gray-01 bg-gray-bg p-s24 border border-t-0">
             <p class="legend mb-s8">
               Cette structure est une antenne de&nbsp;:
             </p>
@@ -95,7 +95,7 @@
           <label class="flex flex-row items-start">
             <input bind:checked={cguAccepted} type="checkbox" class="hidden" />
             <CheckboxMark />
-            <span class="ml-s16 inline-block text-f14 text-gray-text">
+            <span class="ml-s16 text-f14 text-gray-text inline-block">
               Je déclare avoir lu les
               <a href="/cgu" class="underline" target="_blank" rel="noopener"
                 >Conditions générales d’utilisation</a

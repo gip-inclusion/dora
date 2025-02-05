@@ -8,7 +8,7 @@
 
 <div
   id="service-header"
-  class="relative gap-s16 lg:flex-row-reverse lg:justify-between"
+  class="gap-s16 relative lg:flex-row-reverse lg:justify-between"
 >
   <div class="mb-s48 print:mb-s0">
     <Breadcrumb
@@ -20,9 +20,9 @@
   </div>
 
   <div
-    class="mb-s28 inline-flex items-center rounded-md bg-france-blue px-s12 py-s8 text-f14 text-white"
+    class="mb-s28 bg-france-blue px-s12 py-s8 text-f14 inline-flex items-center rounded-md text-white"
   >
-    <span class="mr-s8 inline-block h-s16 w-s16 fill-current text-white">
+    <span class="mr-s8 h-s16 w-s16 inline-block fill-current text-white">
       {@html copyIcon2Fill}
     </span>
     Modèle&nbsp;•&nbsp;{model.numServices}
@@ -33,7 +33,7 @@
     <h1 class="mb-s12 mr-s12 text-france-blue">
       {model.name}
     </h1>
-    <p class="text-f23 font-bold text-france-blue">
+    <p class="text-f23 text-france-blue font-bold">
       {capitalize(model.structureInfo.name)}
     </p>
   </div>

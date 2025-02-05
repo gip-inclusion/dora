@@ -143,7 +143,7 @@
 
         <div slot="footer">
           <div
-            class="mt-s24 flex flex-col-reverse justify-end gap-s24 md:flex-row"
+            class="mt-s24 gap-s24 flex flex-col-reverse justify-end md:flex-row"
           >
             <Button
               label="Annuler"
@@ -168,7 +168,7 @@
       <div class="flex w-full justify-between">
         <div class="flex items-center">
           {#if model.slug}
-            <label class="flex text-f14 text-gray-text">
+            <label class="text-f14 text-gray-text flex">
               <input
                 type="checkbox"
                 bind:checked={shouldUpdateAllServices}

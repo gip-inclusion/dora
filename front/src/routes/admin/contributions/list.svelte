@@ -56,26 +56,26 @@
   onReject={(suggestion) => handleReject(suggestion)}
 />
 
-<div class="flex w-full flex-col gap-s12">
+<div class="gap-s12 flex w-full flex-col">
   {#each suggestions as suggestion}
     <div
-      class="flex flex-row items-center gap-s16 rounded-md border border-gray-01 bg-white p-s16"
+      class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-md border bg-white"
     >
       <div class="flex-1 truncate italic">
         {suggestion.name}
       </div>
-      <div class="flex-1 text-ellipsis font-bold">
+      <div class="flex-1 font-bold text-ellipsis">
         {suggestion.structureInfo.name} ({suggestion.structureInfo.department})
         {#if suggestion.structureInfo.new}
           <div
-            class="inline-block rounded bg-info px-s8 py-s2 text-f12 leading-20 text-white"
+            class="bg-info px-s8 py-s2 text-f12 inline-block rounded leading-20 text-white"
           >
             Nouv.
           </div>
         {/if}
       </div>
 
-      <div class="flex flex-1 flex-col truncate text-gray-text-alt">
+      <div class="text-gray-text-alt flex flex-1 flex-col truncate">
         {#if suggestion.creator}
           <div class="truncate">{suggestion.creator.getFullName}</div>
           <div class="truncate">{suggestion.creator.email}</div>
@@ -125,7 +125,7 @@
         La ou les personnes suivantes ont reçu un courriel les invitant à
         prendre connaissance de ce nouveau service&nbsp;:
       </p>
-      <ul class="list-disc pl-s32">
+      <ul class="pl-s32 list-disc">
         {#each emailsContacted as mail}
           <li>{mail}</li>
         {/each}

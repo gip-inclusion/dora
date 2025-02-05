@@ -4,11 +4,11 @@
   export let justifyBetween = false;
 </script>
 
-<div class="sticky bottom-s0 z-20">
-  <div class="top-shadow sticky bottom-s0 -z-10 h-s24 bg-white" />
+<div class="bottom-s0 sticky z-20">
+  <div class="top-shadow bottom-s0 h-s24 sticky -z-10 bg-white" />
   <CenteredGrid noPadding>
     <div
-      class="z-50 flex flex-row gap-s12 bg-white pb-s24"
+      class="gap-s12 pb-s24 z-50 flex flex-row bg-white"
       class:justify-end={!justifyBetween}
       class:justify-between={justifyBetween}
     >

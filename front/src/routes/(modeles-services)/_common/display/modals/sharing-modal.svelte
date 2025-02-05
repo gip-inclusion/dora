@@ -128,7 +128,7 @@
       onSuccess={handleSuccess}
       bind:requesting
     >
-      <fieldset class="mb-s24 flex flex-col gap-s24">
+      <fieldset class="mb-s24 gap-s24 flex flex-col">
         {#if !$token}
           <BasicInputField
             type="email"
