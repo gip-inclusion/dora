@@ -291,7 +291,7 @@
   ::global(#subcategories) {
     position: relative;
   }
-  @screen lg {
+  @media (width >= 64rem) {
     ::global(#subcategories) {
       position: absolute;
     }

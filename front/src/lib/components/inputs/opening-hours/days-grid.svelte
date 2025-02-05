@@ -86,7 +86,7 @@
     @apply mb-s24;
   }
 
-  @screen md {
+  @media (width >= 48rem) {
     .day-grid {
       display: grid;
       grid-template-columns: 1fr 2fr 2fr;

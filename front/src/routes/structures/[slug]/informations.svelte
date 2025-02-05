@@ -267,7 +267,7 @@
       "presentation";
   }
 
-  @screen md {
+  @media (width >= 48rem) {
     .structure-body {
       grid-template-columns: 1fr 300px;
       column-gap: 4rem;
@@ -279,7 +279,7 @@
         "presentation sidebar";
     }
   }
-  @screen lg {
+  @media (width >= 64rem) {
     .structure-body {
       grid-template-columns: 1fr 375px;
     }

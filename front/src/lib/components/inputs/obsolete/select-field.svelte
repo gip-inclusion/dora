@@ -281,9 +281,9 @@
     @apply relative;
   }
 
-  @screen lg {
+  @media (width >= 64rem) {
     .vertical {
-      @apply lg:w-3/4;
+      @apply w-3/4;
     }
   }
 
@@ -292,7 +292,7 @@
     @apply px-s12 py-s0 absolute border-0 bg-transparent;
   }
 
-  @screen lg {
+  @media (width >= 64rem) {
     .filter-search {
       @apply p-s12;
     }
