@@ -96,14 +96,14 @@
         <Button
           secondary
           label="Refuser la demande"
-          extraClass="!border-error !text-error hover:!text-white hover:border-error hover:!bg-error"
+          extraClass="border-error! text-error! hover:text-white! hover:border-error hover:bg-error!"
           on:click={() => (modalOpened = "deny")}
         />
 
         {#if orientation.beneficiaryEmail}
           <Button
             secondary
-            extraClass="!border-gray-dark !text-gray-text hover:!text-white hover:border-gray-dark hover:!bg-gray-dark"
+            extraClass="border-gray-dark! text-gray-text! hover:text-white! hover:border-gray-dark hover:bg-gray-dark!"
             label="Contacter le ou la bénéficiaire"
             on:click={() => (modalOpened = "contact-beneficiary")}
           />
@@ -111,7 +111,7 @@
 
         <Button
           secondary
-          extraClass="!border-gray-dark !text-gray-text hover:!text-white hover:border-gray-dark hover:!bg-gray-dark"
+          extraClass="border-gray-dark! text-gray-text! hover:text-white! hover:border-gray-dark hover:bg-gray-dark!"
           label="Contacter le ou la prescripteur·rice"
           on:click={() => (modalOpened = "contact-service")}
         />

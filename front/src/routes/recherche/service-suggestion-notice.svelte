@@ -6,12 +6,12 @@
 
 <div class="flex rounded-md border border-gray-01 bg-white shadow-md">
   <div
-    class="hidden flex-[1] items-center justify-center bg-service-violet md:flex"
+    class="hidden flex-1 items-center justify-center bg-service-violet md:flex"
   >
     <img src={illuSuggerer} alt="" />
   </div>
 
-  <div class="flex-[1] p-s32">
+  <div class="flex-1 p-s32">
     <h2 class="text-f17 font-bold leading-28 text-gray-text">
       Demain vos partenaires locaux seront ici… aidez-nous à les identifier 😊
     </h2>

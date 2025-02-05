@@ -72,7 +72,7 @@
           noBackground
         />
       </div>
-      <div class="mt-s36 flex-shrink-0 fill-orange">
+      <div class="mt-s36 shrink-0 fill-orange">
         <img
           src={illustration}
           alt="Personne avec un sac à dos feuilletant des notes"

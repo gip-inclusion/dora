@@ -66,7 +66,7 @@
           name,
           disabled: toString(disabled),
           readonly: toString(readonly),
-          class: `prose bg-white p-s16 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none min-h-[160px]`,
+          class: `prose bg-white p-s16 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-hidden min-h-[160px]`,
         },
       },
     });

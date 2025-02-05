@@ -38,7 +38,7 @@
     </button>
   </div>
 
-  <div class:hidden={!expanded} class="w-full md:w-auto print:!block">
+  <div class:hidden={!expanded} class="w-full md:w-auto print:block!">
     <ul
       class="relative z-10 mt-[-1px] inline-flex w-full flex-col gap-s12 rounded-md rounded-tl-none bg-service-blue-light p-s16 pr-s32 md:w-auto"
     >

@@ -90,7 +90,7 @@
             </span>
           </a>
         </div>
-        <div class="flex-shrink-0">
+        <div class="shrink-0">
           <img src={illustration} alt="" />
         </div>
       </div>

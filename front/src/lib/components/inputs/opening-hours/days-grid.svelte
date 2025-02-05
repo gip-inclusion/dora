@@ -42,7 +42,7 @@
   {#each weekDays as { label, day }}
     <div class="day-grid day">
       <div class="self-center font-bold text-gray-dark">{label}</div>
-      <div class="!mb-s10 block text-center font-bold md:hidden">
+      <div class="mb-s10! block text-center font-bold md:hidden">
         Plage horaire 1
       </div>
 

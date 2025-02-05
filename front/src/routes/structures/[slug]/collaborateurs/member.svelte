@@ -16,13 +16,13 @@
   </div>
 
   <div class="flex flex-1 flex-wrap items-center gap-x-s32 text-f14">
-    <div class="flex-[3] text-center md:text-right">
+    <div class="flex-3 text-center md:text-right">
       {#if isMyself}
         <span class="rounded-md bg-magenta-10 px-s12 py-s6">Vous</span>
       {/if}
       <slot name="status" />
     </div>
-    <div class="flex-[2]">
+    <div class="flex-2">
       <slot name="label" />
     </div>
     <div class="flex-1">

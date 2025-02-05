@@ -16,7 +16,7 @@
 
   <div class="flex flex-col gap-s24 md:flex-row">
     <h1 class="sr-only">Mon compte</h1>
-    <div class="flex-[2] rounded-md border border-gray-02 md:relative">
+    <div class="flex-2 rounded-md border border-gray-02 md:relative">
       <div
         class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
       >

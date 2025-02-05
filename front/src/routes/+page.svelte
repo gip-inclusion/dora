@@ -78,7 +78,7 @@
     </div>
     <div class="md:flex-1">
       <img src={illuMobiliser} alt="" class="mb-s16 w-full" />
-      <div class="tag bg-blue-information !text-gray-text">Très bientôt !</div>
+      <div class="tag bg-blue-information text-gray-text!">Très bientôt !</div>
       <h3>Suivre vos demandes</h3>
       <p class="text-f16">
         La structure partenaire répondra rapidement à votre demande. Vous

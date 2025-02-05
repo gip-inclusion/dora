@@ -10,7 +10,7 @@
   } from "$lib/icons";
 </script>
 
-<CenteredGrid extraClass="bg-gradient-to-b from-magenta-10 to-magenta-10/0">
+<CenteredGrid extraClass="bg-linear-to-b from-magenta-10 to-magenta-10/0">
   <div class="flex flex-wrap gap-s40">
     <img
       class="flex-none"

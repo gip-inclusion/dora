@@ -45,7 +45,7 @@
         label="Refuser et me déconnecter"
         secondary
         to="/auth/deconnexion"
-        extraClass="!border-error !text-error hover:!text-white hover:border-error hover:!bg-error"
+        extraClass="border-error! text-error! hover:text-white! hover:border-error hover:bg-error!"
       />
       <Button
         type="submit"

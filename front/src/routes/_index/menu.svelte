@@ -30,7 +30,7 @@
         to="https://aide.dora.inclusion.beta.gouv.fr/fr/"
         noBackground
         otherTab
-        extraClass="mr-s8 !text-f14"
+        extraClass="mr-s8 text-f14!"
         label="Besoin d’aide ?"
       />
     </div>

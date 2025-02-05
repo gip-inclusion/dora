@@ -1027,6 +1027,6 @@
     fill: currentColor;
     width: var(--s16);
     height: var(--s16);
-    flex-shrink: 0;
+    shrink: 0;
   }
 </style>

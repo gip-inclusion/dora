@@ -152,7 +152,7 @@
     input[type="email"],
     input[type="tel"],
     input[type="date"] {
-      @apply h-s48 rounded border border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt outline-none focus:shadow-focus;
+      @apply h-s48 rounded border border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt outline-hidden focus:shadow-focus;
     }
 
     input {

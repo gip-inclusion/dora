@@ -82,7 +82,7 @@
   {type}
   {name}
   {title}
-  class="{paddingX} {paddingY} {textSize} {border} {text} {extraClass} {background}  break-words rounded leading-normal outline-none focus:shadow-focus"
+  class="{paddingX} {paddingY} {textSize} {border} {text} {extraClass} {background}  break-words rounded leading-normal outline-hidden focus:shadow-focus"
   class:w-full={wFull}
   class:whitespace-nowrap={noWrap}
   class:hover:underline={hoverUnderline}

@@ -94,7 +94,7 @@
           />
         </div>
         <div class="flex flex-row gap-s16" class:hidden={!textInputVisible}>
-          <div class="flex-grow">
+          <div class="grow">
             <div class="flex flex-col">
               <input
                 id={`${id}-text-input`}

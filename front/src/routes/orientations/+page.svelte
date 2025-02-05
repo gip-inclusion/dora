@@ -103,7 +103,7 @@
           </div>
 
           {#if orientation.status !== "REFUSÉE"}
-            <div class="flex-[2] rounded-md border border-gray-02 md:relative">
+            <div class="flex-2 rounded-md border border-gray-02 md:relative">
               <div
                 class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
               >
@@ -241,7 +241,7 @@
           {/if}
 
           {#if orientation.prescriber?.name || orientation.prescriber?.email || orientation.prescriberStructure?.name}
-            <div class="flex-[2] rounded-md border border-gray-02 md:relative">
+            <div class="flex-2 rounded-md border border-gray-02 md:relative">
               <div
                 class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
               >

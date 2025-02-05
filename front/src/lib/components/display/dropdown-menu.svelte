@@ -82,7 +82,7 @@
     <div
       {id}
       class="
-        right-0 absolute top-[100%] z-[1000] hidden flex-col justify-end rounded-md border border-gray-00 bg-white shadow-md
+        right-0 absolute top-[100%] z-1000 hidden flex-col justify-end rounded-md border border-gray-00 bg-white shadow-md
         {minWidth ? `min-w-[${minWidth}]` : ''}
         "
       class:left-0={mobileDesign}

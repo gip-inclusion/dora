@@ -18,7 +18,7 @@
 <div
   class="flex w-full flex-col place-content-between items-center gap-s24 text-gray-text sm:flex-row"
 >
-  <div id="label-container" class="flex-[3]">
+  <div id="label-container" class="flex-3">
     {#if service.status === "PUBLISHED"}
       {#if service.updateStatus === "NOT_NEEDED"}
         <div class="flex items-center">
@@ -75,7 +75,7 @@
       {/if}
     {/if}
   </div>
-  <div class="flex w-full flex-[2] flex-col justify-end md:mt-s0 lg:flex-row">
+  <div class="flex w-full flex-2 flex-col justify-end md:mt-s0 lg:flex-row">
     {#if service.updateStatus !== "NOT_NEEDED" && service.status === "PUBLISHED"}
       <Button
         id="set-as-updated"

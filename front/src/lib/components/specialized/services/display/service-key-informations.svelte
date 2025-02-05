@@ -80,7 +80,7 @@
   <hr class="mb-s10 mt-s20" />
 
   <div>
-    <h3 class="!mb-s10">
+    <h3 class="mb-s10!">
       <span class="mr-s8 h-s24 w-s24 fill-current">
         {@html listCheckIcon}
       </span>

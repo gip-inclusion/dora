@@ -49,7 +49,7 @@
             vous en aurez besoin, dans votre liste de favoris&nbsp;!
           </p>
         </div>
-        <div class="flex-shrink-0">
+        <div class="shrink-0">
           <img
             src={illustration}
             alt="Personne avec un sac à dos feuilletant des notes"

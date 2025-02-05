@@ -8,7 +8,7 @@
 </script>
 
 <div class="flex flex-col rounded-md border border-gray-03 p-s40 md:flex-row">
-  <div class="flex flex-[4] flex-col">
+  <div class="flex flex-4 flex-col">
     <div class="mb-s14 text-center">
       <span
         class="ml-s10 inline-block h-s24 w-s24 fill-current text-gray-text-alt2"
@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  <div class="flex flex-[3] items-center justify-center">
+  <div class="flex flex-3 items-center justify-center">
     <img alt="" src={illustration} />
   </div>
 </div>
