@@ -15,4 +15,4 @@ RESTRICTED_STRUCTURE_TYPOLOGIES = (Typologie.FT,)
 # Note / TODO :
 # ce sont des `EnumModel`, donc pas de typage.
 # Il serait intéressant de les avoir sous forme de fixture.
-RESTRICTED_NATIONAL_LABELS = ("adie", "cap-emploi-reseau-cheops", "france-travail")
+RESTRICTED_NATIONAL_LABELS = ("adie", "cap-emploi-reseau-cheops", "conseil-departemental", "france-travail")
