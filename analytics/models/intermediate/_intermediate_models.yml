@@ -1,0 +1,5 @@
+models:
+  - name: int_services_models
+    description:
+      Services créés à partir de modèles.
+      Une ligne par service, il faut donc bien penser à passer par un distinct(id_model) pour obtenir le modèles sans doublons.
