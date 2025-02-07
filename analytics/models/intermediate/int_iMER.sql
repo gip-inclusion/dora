@@ -18,5 +18,5 @@ SELECT
     event_is_di               as di_service,
     CASE
         WHEN user_main_activity = 'accompagnateur' or user_main_activity = 'accompagnateur_offreur' THEN TRUE ELSE FALSE
-    END                       as is_accompagnateur
+    END                       as is_prescriber
 FROM {{ ref('int_mobilisationevent_user') }}
