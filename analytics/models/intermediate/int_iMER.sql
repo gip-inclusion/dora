@@ -8,7 +8,7 @@ SELECT
     END                       as di_service,
     CASE
         WHEN user_main_activity = 'accompagnateur' or user_main_activity = 'accompagnateur_offreur' THEN TRUE ELSE FALSE
-    END                       as is_accompagnateur
+    END                       as is_prescriber
 FROM {{ ref('int_orientation_user_service') }}
 UNION ALL
 SELECT
