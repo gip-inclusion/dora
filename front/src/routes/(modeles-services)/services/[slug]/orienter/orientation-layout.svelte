@@ -25,13 +25,13 @@
   <div class="mb-s48 print:mb-s0">
     <Breadcrumb {service} structure={service.structureInfo} {currentLocation} />
   </div>
-  <h1 class="text-white print:text-france-blue">
+  <h1 class="print:text-france-blue text-white">
     Orienter un ou une bénéficiaire vers le service&nbsp;:
   </h1>
-  <h2 class="text-white print:text-france-blue">
+  <h2 class="print:text-france-blue text-white">
     {service.name}
   </h2>
-  <h3 class=" text-white print:text-france-blue">
+  <h3 class=" print:text-france-blue text-white">
     <div><strong>{capitalize(service.structureInfo.name)}</strong></div>
   </h3>
 </CenteredGrid>

@@ -7,7 +7,7 @@
   export let readOnly;
 </script>
 
-<div class="rounded border border-magenta-cta py-s4">
+<div class="border-magenta-cta py-s4 rounded-sm border">
   <ButtonMenu
     icon={moreIcon}
     small

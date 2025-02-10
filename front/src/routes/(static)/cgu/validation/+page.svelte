@@ -31,7 +31,7 @@
     </h1>
 
     <div
-      class="cgu mb-s48 max-h-s512 overflow-auto rounded-md bg-blue-light p-s32"
+      class="cgu mb-s48 max-h-s512 bg-blue-light p-s32 overflow-auto rounded-lg"
       on:scroll={(evt) => {
         const { scrollTop, scrollHeight, clientHeight } = evt.target;
         cguCanBeValidated = scrollTop + clientHeight >= scrollHeight - 100;
@@ -45,7 +45,7 @@
         label="Refuser et me déconnecter"
         secondary
         to="/auth/deconnexion"
-        extraClass="!border-error !text-error hover:!text-white hover:border-error hover:!bg-error"
+        extraClass="border-error! text-error! hover:text-white! hover:border-error hover:bg-error!"
       />
       <Button
         type="submit"
@@ -57,7 +57,9 @@
   </CenteredGrid>
 </EnsureLoggedIn>
 
-<style type="postcss">
+<style lang="postcss">
+  @reference "../../../../app.css";
+
   :global(.cgu h1) {
     @apply text-f32;
   }

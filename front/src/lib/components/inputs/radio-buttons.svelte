@@ -20,10 +20,10 @@
   }
 </script>
 
-<div class="flex flex-col gap-s8">
+<div class="gap-s8 flex flex-col">
   {#each choices as choice, i}
     <label
-      class="flex flex-row items-center focus-within:shadow-focus"
+      class="focus-within:shadow-focus flex flex-row items-center"
       class:outline={choice.value === focusValue}
     >
       <input
@@ -41,13 +41,13 @@
         aria-describedby={formatErrors(id, errorMessages)}
       />
       <div
-        class="toggle-path flex h-s24 w-s24 shrink-0 justify-center rounded-full border border-gray-03 bg-white"
+        class="toggle-path h-s24 w-s24 border-gray-03 flex shrink-0 justify-center rounded-full border bg-white"
       >
         <div
-          class="toggle-circle hidden h-s12 w-s12 self-center rounded-full bg-magenta-cta"
+          class="toggle-circle h-s12 w-s12 bg-magenta-cta hidden self-center rounded-full"
         />
       </div>
-      <span class="ml-s16 inline-block text-f16 text-gray-text">
+      <span class="ml-s16 text-f16 text-gray-text inline-block">
         {choice.label}
       </span>
     </label>
@@ -55,11 +55,13 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   input[type="radio"]:checked + div div {
     @apply block;
   }
   label {
-    @apply rounded p-s2;
+    @apply p-s2 rounded;
     outline: none;
   }
 </style>

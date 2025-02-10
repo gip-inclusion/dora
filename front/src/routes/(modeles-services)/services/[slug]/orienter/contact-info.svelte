@@ -26,7 +26,7 @@
 </script>
 
 {#if contactBoxOpen}
-  <div class="flex flex-col gap-s4">
+  <div class="gap-s4 flex flex-col">
     {#if service.contactName}
       <p class="mb-s6 mr-s24 text-f17 text-gray-dark">
         <strong>{service.contactName}</strong>

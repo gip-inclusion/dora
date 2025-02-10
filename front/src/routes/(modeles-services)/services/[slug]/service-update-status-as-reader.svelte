@@ -11,7 +11,7 @@
 </script>
 
 <div
-  class="flex w-full flex-col place-content-between items-center gap-s24 text-gray-text md:flex-row"
+  class="gap-s24 text-gray-text flex w-full flex-col place-content-between items-center md:flex-row"
 >
   <div id="label-container">
     {#if service.status === "PUBLISHED"}

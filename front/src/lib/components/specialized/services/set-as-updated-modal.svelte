@@ -38,7 +38,7 @@
   <ExtendedServiceKeyInformations {service} {servicesOptions} />
 
   <div slot="footer">
-    <div class="mt-s24 flex flex-col-reverse justify-end gap-s24 md:flex-row">
+    <div class="mt-s24 gap-s24 flex flex-col-reverse justify-end md:flex-row">
       <LinkButton
         id="modal-update"
         label="Modifier"

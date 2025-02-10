@@ -34,14 +34,14 @@
 
 <div
   style={`background-image: url('${mapViewImage}'); height: 116px`}
-  class="flex items-center justify-center rounded-ml bg-cover"
+  class="flex items-center justify-center rounded-2xl bg-cover"
 >
   <Button label="Voir sur la carte" on:click={() => (isMapViewOpen = true)} />
   <Modal bind:isOpen={isMapViewOpen} hideTitle hideCloseButton noPadding>
     <div class="flex h-[90vh]">
-      <div class="flex w-[448px] flex-col overflow-y-auto pb-s16">
+      <div class="pb-s16 flex w-[448px] flex-col overflow-y-auto">
         <div
-          class="sticky top-s0 z-10 flex flex-col gap-s8 bg-white px-s32 pt-s32"
+          class="top-s0 gap-s8 px-s32 pt-s32 sticky z-10 flex flex-col bg-white"
         >
           <Button label="Fermer la carte" on:click={handleCloseModal} />
           <Button
@@ -68,7 +68,7 @@
             />
           </div>
         </div>
-        <div class="flex flex-col gap-s24 px-s32">
+        <div class="gap-s24 px-s32 flex flex-col">
           {#if filteredServices.length}
             <SearchResults
               {data}

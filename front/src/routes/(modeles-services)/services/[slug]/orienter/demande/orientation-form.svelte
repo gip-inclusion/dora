@@ -74,7 +74,7 @@
       </p>
     </Notice>
 
-    <div class="flex flex-row justify-items-stretch gap-s24">
+    <div class="gap-s24 flex flex-row justify-items-stretch">
       <div class="flex-1">
         <BasicInputField
           id="referentLastName"
@@ -92,7 +92,7 @@
         />
       </div>
     </div>
-    <div class="flex flex-row justify-items-stretch gap-s24">
+    <div class="gap-s24 flex flex-row justify-items-stretch">
       <div class="flex-1">
         <BasicInputField
           id="referentPhone"
@@ -117,7 +117,7 @@
   </Fieldset>
 
   <Fieldset title="Le ou la bénéficiaire">
-    <div class="flex flex-row justify-items-stretch gap-s24">
+    <div class="gap-s24 flex flex-row justify-items-stretch">
       <div class="flex-1">
         <BasicInputField
           id="beneficiaryLastName"
@@ -151,7 +151,7 @@
     </BasicInputField>
 
     {#if $orientation.requirements.length || $orientation.situation.length}
-      <div class="rounded-md bg-info-light px-s20 py-s20">
+      <div class="bg-info-light px-s20 py-s20 rounded-lg">
         <Accordion
           title="Profil et critères du ou de la bénéficiaire"
           subTitle="Récapitulatif des critères que vous avez confirmé à l’étape précédente."
@@ -201,7 +201,7 @@
       horizontalCheckboxes
     />
 
-    <div class="flex flex-row justify-items-stretch gap-s24">
+    <div class="gap-s24 flex flex-row justify-items-stretch">
       <div class="flex-1">
         <BasicInputField
           id="beneficiaryPhone"
@@ -300,7 +300,7 @@
     </Fieldset>
   {/if}
 
-  <div class="my-s32 flex flex-col gap-s32">
+  <div class="my-s32 gap-s32 flex flex-col">
     {#if testWordDetected}
       <Notice
         type="error"

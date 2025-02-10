@@ -60,9 +60,9 @@
   <slot slot="description" name="description" />
 
   <div class="flex flex-col">
-    <div class="flex flex-row gap-s12">
+    <div class="gap-s12 flex flex-row">
       <input
-        class="h-s48 grow rounded border border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt outline-none focus:shadow-focus"
+        class="h-s48 border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt focus:shadow-focus grow rounded-sm border outline-hidden"
         id="siret-select"
         type="text"
         on:input={() => (serverErrorMsg = "")}

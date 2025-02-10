@@ -37,7 +37,7 @@
 </script>
 
 <div
-  class="field-wrapper items-top flex flex-col items-stretch gap-s8 lg:items-start"
+  class="field-wrapper items-top gap-s8 flex flex-col items-stretch lg:items-start"
   class:lg:flex-row={!vertical}
   class:lg:items-stretch={vertical}
   class:hidden
@@ -49,7 +49,7 @@
       class:sr-only={hideLabel}
       aria-describedby={descriptionId}
     >
-      <span class=" text-f17 font-bold text-gray-dark">
+      <span class=" text-f17 text-gray-dark font-bold">
         {label}{#if required && !readonly && !disabled}<span
             class="ml-s6 text-error">&nbsp;*</span
           >{/if}
@@ -75,6 +75,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   .one-fourth {
     @apply lg:w-1/3;
   }

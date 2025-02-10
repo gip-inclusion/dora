@@ -25,13 +25,13 @@
     <span>
       {title}
       {#if subTitle}
-        <span class="-mt-s4 block text-f14 font-normal text-gray-text-alt2">
+        <span class="-mt-s4 text-f14 text-gray-text-alt2 block font-normal">
           {subTitle}
         </span>
       {/if}
     </span>
 
-    <span class="ml-s10 h-s24 w-s24 fill-current text-magenta-cta print:hidden">
+    <span class="ml-s10 h-s24 w-s24 text-magenta-cta fill-current print:hidden">
       {#if expanded}
         {@html arrowUpSIcon}
       {:else}

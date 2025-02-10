@@ -58,7 +58,7 @@
 
 <div class="mb-s40">
   <div
-    class="flex flex-col justify-between border-b border-gray-03 pb-s40 sm:flex-row"
+    class="border-gray-03 pb-s40 flex flex-col justify-between border-b sm:flex-row"
   >
     <h2 class="text-france-blue">Présentation de la structure</h2>
     {#if structure.canEditInformations}
@@ -95,7 +95,7 @@
   <div class="data">
     <p class="mb-s32 text-f21 font-bold">{structure.shortDesc}</p>
 
-    <div class="flex flex-col gap-s32 md:flex-row">
+    <div class="gap-s32 flex flex-col md:flex-row">
       {#if nationalLabelsDisplay}
         <div class="flex-1">
           <h3 class="mb-s10 text-f17 text-france-blue">Labels nationaux</h3>
@@ -107,7 +107,7 @@
       {#if structure.otherLabels}
         <div class="flex-1">
           <h3 class="mb-s10 text-f17 text-france-blue">Autres labels</h3>
-          <p class="m-s0 break-all text-f14">{structure.otherLabels}</p>
+          <p class="m-s0 text-f14 break-all">{structure.otherLabels}</p>
         </div>
       {/if}
     </div>
@@ -124,7 +124,7 @@
   {#if structureHasInfo}
     <div class="sidebar">
       <div
-        class="flex flex-col gap-s24 rounded-lg border border-gray-02 px-s32 py-s24"
+        class="gap-s24 border-gray-02 px-s32 py-s24 flex flex-col rounded-3xl border"
       >
         <h3 class="mb-s8 text-france-blue">Informations pratiques</h3>
 
@@ -155,7 +155,7 @@
                 E-mail
               </h4>
               <a
-                class="break-all text-gray-text underline"
+                class="text-gray-text break-all underline"
                 href="mailto:{structure.email}">{structure.email}</a
               >
             </div>
@@ -174,7 +174,7 @@
                 target="_blank"
                 title="Ouverture dans une nouvelle fenêtre"
                 rel="noopener ugc"
-                class="break-all text-gray-text underline"
+                class="text-gray-text break-all underline"
                 href={structure.url}
               >
                 {structure.url}
@@ -194,7 +194,7 @@
               <OsmHours osmHours={structure.openingHours} />
 
               {#if structure.openingHoursDetails}
-                <p class="mb-s0 mt-s16 italic text-gray-text">
+                <p class="mb-s0 mt-s16 text-gray-text italic">
                   <up>*</up>
                   {structure.openingHoursDetails}
                 </p>
@@ -214,11 +214,11 @@
                 target="_blank"
                 title="Ouverture dans une nouvelle fenêtre"
                 rel="noopener ugc"
-                class="items-center break-words text-gray-text underline"
+                class="text-gray-text items-center break-words underline"
                 href={structure.accesslibreUrl}
               >
                 Retrouvez toutes les infos via ce lien<span
-                  class="mb-s2 ml-s8 inline-block h-s16 w-s16 justify-end fill-current align-sub"
+                  class="mb-s2 ml-s8 h-s16 w-s16 inline-block justify-end fill-current align-sub"
                 >
                   {@html externalLinkIcon}
                 </span>
@@ -232,6 +232,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   .notice {
     grid-area: notice;
   }
@@ -265,7 +267,7 @@
       "presentation";
   }
 
-  @screen md {
+  @media (width >= 48rem) {
     .structure-body {
       grid-template-columns: 1fr 300px;
       column-gap: 4rem;
@@ -277,7 +279,7 @@
         "presentation sidebar";
     }
   }
-  @screen lg {
+  @media (width >= 64rem) {
     .structure-body {
       grid-template-columns: 1fr 375px;
     }

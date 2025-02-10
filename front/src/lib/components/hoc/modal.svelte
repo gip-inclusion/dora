@@ -99,7 +99,7 @@
         aria-modal="true"
         tabindex="-1"
         bind:this={modalEl}
-        class="m-s24 max-h-[90vh] overflow-auto rounded-md bg-white shadow-md"
+        class="m-s24 max-h-[90vh] overflow-auto rounded-lg bg-white shadow-md"
         class:px-s36={!noPadding}
         class:py-s24={!noPadding}
         class:w-[560px]={width === "small"}
@@ -112,7 +112,7 @@
           <div class="flex justify-between">
             {#if title && !hideTitle}
               <h1
-                class="text-f22 leading-32 text-france-blue md:text-f24 lg:text-f28 lg:leading-40 xl:text-f32"
+                class="text-f22 text-france-blue md:text-f24 lg:text-f28 xl:text-f32 leading-32 lg:leading-40"
               >
                 {title}
               </h1>
@@ -162,6 +162,8 @@
 {/if}
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   #background {
     position: fixed;
     z-index: 5000;

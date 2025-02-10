@@ -209,11 +209,11 @@
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
-  <div class="flex flex-row gap-s8">
+  <div class="gap-s8 flex flex-row">
     <h2 class="mb-s0 text-france-blue">Services</h2>
     {#if limit}<Count>{total}</Count>{/if}
   </div>
-  <div class="flex flex-wrap gap-s16">
+  <div class="gap-s16 flex flex-wrap">
     {#if !!servicesDisplayed.length && !tabDisplay}
       <LinkButton
         label="Voir tous les services"
@@ -240,10 +240,10 @@
 
 {#if (hasAtLeastOneServiceNotArchived(structure) || hasArchivedServices(structure)) && tabDisplay && structure.canEditServices}
   <div
-    class="mb-s40 flex w-full flex-wrap items-center rounded-md bg-white px-s24 py-s24 text-f14 shadow-md md:h-s80 md:py-s0"
+    class="mb-s40 px-s24 py-s24 text-f14 md:h-s80 md:py-s0 flex w-full flex-wrap items-center rounded-lg bg-white shadow-md"
   >
-    <div class="flex w-full flex-wrap items-center gap-s16">
-      <div class="flex w-full items-center text-f16 font-bold md:w-auto">
+    <div class="gap-s16 flex w-full flex-wrap items-center">
+      <div class="text-f16 flex w-full items-center font-bold md:w-auto">
         Filtrer par&nbsp;:
       </div>
 
@@ -286,7 +286,7 @@
     </div>
   </div>
 
-  <div class="mb-s40 flex flex-col justify-between gap-s16 sm:flex-row">
+  <div class="mb-s40 gap-s16 flex flex-col justify-between sm:flex-row">
     <div>
       <strong>
         {servicesDisplayed.length} service{servicesDisplayed.length > 1
@@ -298,7 +298,7 @@
       </span>
     </div>
 
-    <div class="inline-block min-w-[280px] text-f14">
+    <div class="text-f14 inline-block min-w-[280px]">
       <SelectField
         label="Tri"
         name="services-order"
@@ -322,7 +322,7 @@
   </div>
 {/if}
 
-<div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-3">
+<div class="mb-s48 gap-s16 grid md:grid-cols-2 lg:grid-cols-3">
   {#each servicesDisplayed as service}
     <ServiceCard
       {service}

@@ -80,19 +80,19 @@
   </div>
   {#if showModel}
     <div
-      class="flex flex-col-reverse gap-s12 lg:w-1/3 lg:flex-col"
+      class="gap-s12 flex flex-col-reverse lg:w-1/3 lg:flex-col"
       class:lg:pt-s40={paddingTop}
       class:lg:gap-s0={haveSameValue}
     >
       {#if haveSameValue}
         <small class="lg:pt-s8">Pas de différence</small>
       {:else}
-        <div class="rounded bg-info-light px-s12 py-s8">
+        <div class="bg-info-light px-s12 py-s8 rounded-sm">
           {#if value === "" || value === undefined || value === null || (Array.isArray(value) && !value.length)}
             <small class="mb-s8 lg:pt-s8">Champs vide</small>
           {:else if type === "array"}
-            <div class="flex flex-wrap gap-s8">
-              <ul class="ml-s20 list-disc font-semibold text-gray-text-alt2">
+            <div class="gap-s8 flex flex-wrap">
+              <ul class="ml-s20 text-gray-text-alt2 list-disc font-semibold">
                 {#each value as v}
                   <li>
                     {options.find((option) => option.value === v)?.label || v}
@@ -112,7 +112,7 @@
               </ul>
             </div>
           {:else if type === "files"}
-            <div class="flex flex-wrap gap-s8">
+            <div class="gap-s8 flex flex-wrap">
               {#each value as v}
                 <Tag>{v}</Tag>
               {/each}
@@ -130,7 +130,7 @@
       <div class="flex items-center">
         <h5 class="mb-s0 lg:hidden">Modèle</h5>
         {#if !haveSameValue && showUseButton}
-          <div class="ml-auto lg:ml-s0">
+          <div class="lg:ml-s0 ml-auto">
             <Button
               label="Utiliser"
               small

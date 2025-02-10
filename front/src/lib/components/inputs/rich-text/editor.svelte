@@ -66,7 +66,7 @@
           name,
           disabled: toString(disabled),
           readonly: toString(readonly),
-          class: `prose bg-white p-s16 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-none min-h-[160px]`,
+          class: `prose bg-white p-s16 whitespace-pre-wrap w-full max-w-none overflow-auto focus:outline-hidden min-h-[160px]`,
         },
       },
     });
@@ -151,9 +151,9 @@
   }
 </script>
 
-<div class="flex w-full flex-col border border-gray-03">
+<div class="border-gray-03 flex w-full flex-col border">
   {#if editor}
-    <div class="flex flex-row items-center gap-s8 bg-gray-03 p-s12">
+    <div class="gap-s8 bg-gray-03 p-s12 flex flex-row items-center">
       <Button
         on:click={() => editor.chain().focus().toggleBold().run()}
         active={editor.isActive("bold")}
@@ -214,13 +214,13 @@
   {/if}
   <div class="relative">
     {#if linkDialogIsOpen}
-      <div class="absolute inset-x-s0 flex gap-s12 bg-gray-01 p-s12">
+      <div class="inset-x-s0 gap-s12 bg-gray-01 p-s12 absolute flex">
         {#if !linkDialogHasSelection}
           <input
             bind:this={linkDialogTextInput}
             type="text"
             placeholder="lien"
-            class="flex-1 px-s8 py-s4"
+            class="px-s8 py-s4 flex-1"
             bind:value={linkDialogText}
           />
         {/if}
@@ -228,18 +228,18 @@
           bind:this={linkDialogUrlInput}
           type="text"
           placeholder="https://example.com"
-          class="flex-1 px-s8 py-s4"
+          class="px-s8 py-s4 flex-1"
           bind:value={linkDialogHref}
         />
         <button
-          class="rounded-md border border-gray-text px-s8 py-s4 text-f12 font-bold hover:bg-gray-text hover:text-white disabled:border-gray-03 disabled:bg-gray-01 disabled:text-gray-03"
+          class="border-gray-text px-s8 py-s4 text-f12 hover:bg-gray-text disabled:border-gray-03 disabled:bg-gray-01 disabled:text-gray-03 rounded-lg border font-bold hover:text-white"
           on:click={setLink}
           disabled={!linkDialogButtonIsActive}
         >
           {linkDialogButtontext}
         </button>
         <button
-          class="rounded-md border border-gray-text px-s8 py-s4 text-f12 font-bold hover:bg-gray-text hover:text-white"
+          class="border-gray-text px-s8 py-s4 text-f12 hover:bg-gray-text rounded-lg border font-bold hover:text-white"
           on:click={linkDialogClose}>Annuler</button
         >
       </div>
@@ -249,9 +249,11 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   :global(.ProseMirror p.is-editor-empty:first-child::before) {
     content: attr(data-placeholder);
 
-    @apply pointer-events-none float-left h-s0 text-gray-text-alt2;
+    @apply h-s0 text-gray-text-alt2 pointer-events-none float-left;
   }
 </style>

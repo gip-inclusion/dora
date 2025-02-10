@@ -43,7 +43,7 @@
 <Modal bind:isOpen={isSwitchModalOpen} title="Attention !" width="small">
   Le passage du formulaire classique vers le formulaire de l’inclusion numérique
   peut entraîner la perte de données déjà enregistrées dans ce service.
-  <div class="mt-s32 flex flex-row justify-end gap-s16">
+  <div class="mt-s32 gap-s16 flex flex-row justify-end">
     <Button
       label="Rester sur le formulaire classique"
       secondary

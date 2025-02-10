@@ -115,12 +115,12 @@
           {/if}
         {:else}
           <span
-            class="hidden text-white lg:inline print:text-france-blue"
+            class="print:text-france-blue hidden text-white lg:inline"
             class:text-gray-text={dark}
           >
             Structure&nbsp;•&nbsp;
           </span><span
-            class=" text-white lg:inline print:text-france-blue"
+            class=" print:text-france-blue text-white lg:inline"
             class:text-gray-text={dark}>{structure.name}</span
           >
         {/if}
@@ -182,16 +182,18 @@
 </nav>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   a {
     @apply text-magenta-40 print:text-france-blue;
   }
 
   .current {
-    @apply font-bold text-white print:text-france-blue;
+    @apply print:text-france-blue font-bold text-white;
   }
 
   nav li + li::before {
-    @apply ml-s8 mr-s8 inline text-magenta-40 print:text-france-blue;
+    @apply ml-s8 mr-s8 text-magenta-40 print:text-france-blue inline;
   }
 
   .dark a {

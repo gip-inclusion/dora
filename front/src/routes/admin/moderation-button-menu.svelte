@@ -7,9 +7,9 @@
   export let entity, onRefresh;
 </script>
 
-<div class="flex flex-row items-center gap-s4 font-bold">
+<div class="gap-s4 flex flex-row items-center font-bold">
   Modération :
-  <div class="flex items-center rounded border border-gray-01">
+  <div class="border-gray-01 flex items-center rounded-sm border">
     <div class="px-s12 py-s6">
       <ModerationLabel
         status={entity.moderationStatus}

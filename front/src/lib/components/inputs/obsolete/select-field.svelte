@@ -185,7 +185,7 @@
     aria-controls={`listbox-values-${uuid}`}
     aria-expanded={expanded}
     aria-haspopup="listbox"
-    class="combobox w-full self-start rounded border border-gray-03 bg-white p-s12 font-sans disabled:bg-gray-bg disabled:text-gray-text-alt {display}"
+    class="combobox border-gray-03 p-s12 disabled:bg-gray-bg disabled:text-gray-text-alt w-full self-start rounded-sm border bg-white font-sans {display}"
     class:filter-style={style === "filter"}
     class:filter-search={style === "search"}
     class:expanded
@@ -219,7 +219,7 @@
           <input
             type="text"
             inputmode={inputMode}
-            class="absolute right-s0 top-s0 h-full w-full bg-transparent pl-s12"
+            class="right-s0 top-s0 pl-s12 absolute h-full w-full bg-transparent"
             bind:value={filterText}
             aria-label={placeholder}
             {placeholder}
@@ -250,7 +250,7 @@
 
     <div
       class:hidden={!expanded}
-      class="absolute left-s0 top-[52px] z-20 flex max-h-s512 flex-col overflow-y-auto rounded border border-gray-00 bg-white p-s12 shadow-md {minDropdownWidth}"
+      class="left-s0 max-h-s512 border-gray-00 p-s12 absolute top-[52px] z-20 flex flex-col overflow-y-auto rounded-sm border bg-white shadow-md {minDropdownWidth}"
       class:gap-s10={!isMultiple}
       role="listbox"
       id={`listbox-values-${uuid}`}
@@ -269,6 +269,8 @@
 </FieldWrapper>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .selected {
     @apply text-magenta-cta;
   }
@@ -279,18 +281,18 @@
     @apply relative;
   }
 
-  @screen lg {
+  @media (width >= 64rem) {
     .vertical {
-      @apply lg:w-3/4;
+      @apply w-3/4;
     }
   }
 
   /* As search */
   .filter-search {
-    @apply absolute border-0 bg-transparent px-s12 py-s0;
+    @apply px-s12 py-s0 absolute border-0 bg-transparent;
   }
 
-  @screen lg {
+  @media (width >= 64rem) {
     .filter-search {
       @apply p-s12;
     }
@@ -303,7 +305,7 @@
     @apply !text-gray-text;
   }
   .filter-search :global(.option) {
-    @apply !min-h-min p-s8;
+    @apply p-s8 !min-h-min;
   }
   .filter-search .optgroup:hover,
   .filter-search .option:hover,
@@ -325,10 +327,10 @@
 
   /* As filter */
   .filter-style {
-    @apply rounded-xl px-s16 py-s12;
+    @apply px-s16 py-s12 rounded-3xl;
   }
   .filter-style {
-    @apply rounded-xl px-s16 py-s12;
+    @apply px-s16 py-s12 rounded-3xl;
   }
   .filter-style .current-value > div:first-child {
     @apply w-auto;
@@ -341,7 +343,7 @@
   }
   .filter-style .placeholder,
   .filter-style .current-value {
-    @apply font-bold text-gray-text;
+    @apply text-gray-text font-bold;
   }
 
   .filter-style.has-value .chevron,

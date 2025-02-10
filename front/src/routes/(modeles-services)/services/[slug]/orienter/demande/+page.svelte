@@ -94,7 +94,7 @@
 
       <h2>Compléter la demande</h2>
       <hr class="my-s40" />
-      <p class="mb-s40 max-w-2xl text-f18">
+      <p class="mb-s40 text-f18 max-w-2xl">
         Ce formulaire collecte les informations nécessaires pour la demande
         d’orientation. Veuillez fournir tous les éléments demandés.
       </p>
@@ -103,7 +103,7 @@
         bénéficiaire.
       </p>
 
-      <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
+      <div class="gap-x-s24 flex flex-col justify-between md:flex-row">
         <OrientationForm {credentials} {service} />
         <div class="mb-s32 w-full shrink-0 md:w-[384px]">
           <ContactBox {service} {isDI} />

@@ -8,12 +8,12 @@
 </script>
 
 <div
-  class="relative rounded-ml border border-gray-02 p-s32 shadow-sm lg:pr-s64"
+  class="border-gray-02 p-s32 lg:pr-s64 relative rounded-2xl border shadow-sm"
 >
   <h3 class="mb-s12 text-france-blue">
     <a class="full-result-link hover:underline" href={url} target="_blank">
       Annuaire des Collectivités<span
-        class="inline-block h-s28 w-s28 fill-current pl-s6 pt-s8"
+        class="h-s28 w-s28 pl-s6 pt-s8 inline-block fill-current"
         >{@html externalLinkIcon}</span
       >
     </a>

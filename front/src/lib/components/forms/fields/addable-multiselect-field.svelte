@@ -93,8 +93,8 @@
             on:click={() => (textInputVisible = true)}
           />
         </div>
-        <div class="flex flex-row gap-s16" class:hidden={!textInputVisible}>
-          <div class="flex-grow">
+        <div class="gap-s16 flex flex-row" class:hidden={!textInputVisible}>
+          <div class="grow">
             <div class="flex flex-col">
               <input
                 id={`${id}-text-input`}
@@ -105,7 +105,7 @@
               />
               {#if newValue && maxLength != null}
                 <div
-                  class="mt-s4 self-end text-f12 text-gray-text"
+                  class="mt-s4 text-f12 text-gray-text self-end"
                   class:text-error={newValue?.length > maxLength}
                 >
                   {newValue.length}/{maxLength} caractères
@@ -114,7 +114,7 @@
             </div>
           </div>
           <div class="self-center">
-            <div class="flex flex-col gap-s8 md:flex-row">
+            <div class="gap-s8 flex flex-col md:flex-row">
               <Button
                 label="Ajouter"
                 small

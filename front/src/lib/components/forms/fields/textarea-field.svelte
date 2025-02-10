@@ -57,7 +57,7 @@
       />
       {#if value && maxLength != null && !readonly && !disabled}
         <div
-          class="mt-s4 self-end text-f12 text-gray-text"
+          class="mt-s4 text-f12 text-gray-text self-end"
           class:text-error={value.length > maxLength}
         >
           {value.length}/{maxLength} caractères
@@ -68,8 +68,10 @@
 {/if}
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   textarea {
-    @apply min-h-[3rem] rounded border border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt outline-none focus:shadow-focus;
-    @apply grow read-only:text-gray-03 disabled:bg-gray-00;
+    @apply border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus min-h-[3rem] rounded-sm border outline-hidden;
+    @apply read-only:text-gray-03 disabled:bg-gray-00 grow;
   }
 </style>

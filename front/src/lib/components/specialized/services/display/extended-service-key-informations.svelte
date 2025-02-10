@@ -23,17 +23,17 @@
 
 <h2 class:text-f23={display === "sidebar"}>Informations clés</h2>
 
-<div class="flex flex-col gap-s12">
+<div class="gap-s12 flex flex-col">
   {#if service.isCumulative != null}
     {#if service.isCumulative}
-      <div class="bold flex items-center font-bold text-available">
+      <div class="bold text-available flex items-center font-bold">
         <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
           {@html addCircleIcon}
         </span>
         Ce service est cumulable avec d’autres dispositifs
       </div>
     {:else}
-      <div class="bold flex items-center font-bold text-error">
+      <div class="bold text-error flex items-center font-bold">
         <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
           {@html errorWarningIcon}
         </span>
@@ -43,7 +43,7 @@
   {/if}
 
   {#if service.feeCondition && isNotFreeService(service.feeCondition)}
-    <div class="bold flex items-center font-bold text-error">
+    <div class="bold text-error flex items-center font-bold">
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
         {@html errorWarningIcon}
       </span>
@@ -52,7 +52,7 @@
   {/if}
 
   {#if service.qpvOrZrr}
-    <div class="bold flex items-center font-bold text-info">
+    <div class="bold text-info flex items-center font-bold">
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
         {@html informationIcon}
       </span>
@@ -109,7 +109,7 @@
       Accueil
     </h3>
     {#if service.locationKinds?.length}
-      <div class="flex flex-col gap-s6">
+      <div class="gap-s6 flex flex-col">
         {#if service.locationKinds.includes("en-presentiel")}
           <p class="mb-s6">
             <strong>En présentiel&nbsp;•&nbsp;</strong>
@@ -143,8 +143,10 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../../app.css";
+
   h3 {
-    @apply mb-s2 mt-s10 flex items-center text-f17;
+    @apply mb-s2 mt-s10 text-f17 flex items-center;
   }
   p {
     @apply m-s0 text-f16 text-gray-text;

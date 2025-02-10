@@ -24,7 +24,7 @@
   }
 </script>
 
-<div class="flex gap-s8" class:flex-col={!horizontalCheckboxes}>
+<div class="gap-s8 flex" class:flex-col={!horizontalCheckboxes}>
   {#each choices as choice}
     <Checkbox
       {name}

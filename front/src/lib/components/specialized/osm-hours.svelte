@@ -6,7 +6,7 @@
 
 <ul>
   {#each formatOsmHours(osmHours) as [prefix, hourStr]}
-    <li class="mb-s8 flex items-center text-gray-text">
+    <li class="mb-s8 text-gray-text flex items-center">
       <span class="mr-s16 w-s36">{prefix}</span>
       <span>{hourStr}</span>
     </li>

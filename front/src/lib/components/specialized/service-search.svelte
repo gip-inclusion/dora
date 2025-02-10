@@ -156,14 +156,14 @@
 <svelte:window bind:innerWidth />
 
 <form on:submit|preventDefault={handleSearch}>
-  <div class="w-full rounded-md border border-gray-02 bg-white">
+  <div class="border-gray-02 w-full rounded-lg border bg-white">
     {#if servicesOptions.categories}
       <div class="grid" class:with-subcategories={useAdditionalFilters}>
         <div
-          class="city flex items-center border-b border-gray-02 p-s16 text-f14 lg:border-b-0 lg:border-r"
+          class="city border-gray-02 p-s16 text-f14 flex items-center border-b lg:border-r lg:border-b-0"
           class:has-value={!!cityCode}
         >
-          <div class="mr-s8 h-s24 w-s24 fill-current text-magenta-cta">
+          <div class="mr-s8 h-s24 w-s24 text-magenta-cta fill-current">
             {@html mapPinIcon}
           </div>
           <div class="relative w-full">
@@ -183,16 +183,16 @@
               placeholder="Lieu ; exemple : 1 rue de l’Espoir 33000 Bordeaux"
             />
             <div
-              class="absolute right-s12 top-s12 z-10 h-s24 w-s24 text-gray-dark"
+              class="right-s12 top-s12 h-s24 w-s24 text-gray-dark absolute z-10"
             >
               {#if cityCode}
                 <button
-                  class="inline-block h-s24 w-s24"
+                  class="h-s24 w-s24 inline-block"
                   on:click={() => {
                     handleAddressChange(null);
                   }}
                 >
-                  <span class="h-s24 w-s24 fill-current text-gray-text-alt">
+                  <span class="h-s24 w-s24 text-gray-text-alt fill-current">
                     {@html deleteBackIcon}
                   </span>
                   <span class="sr-only">Supprimer la ville sélectionnée</span>
@@ -203,10 +203,10 @@
         </div>
 
         <div
-          class="subcategories-search flex border-b border-gray-02 px-s16 py-s24 text-f14 lg:border-b-0 lg:border-r lg:py-s16"
+          class="subcategories-search border-gray-02 px-s16 py-s24 text-f14 lg:py-s16 flex border-b lg:border-r lg:border-b-0"
         >
           <div
-            class="mr-s8 h-s24 w-s24 self-center fill-current text-magenta-cta"
+            class="mr-s8 h-s24 w-s24 text-magenta-cta self-center fill-current"
           >
             {@html searchIcon}
           </div>
@@ -227,10 +227,10 @@
 
         {#if useAdditionalFilters}
           <div
-            class="subcategories-search flex border-b border-gray-02 px-s16 py-s24 text-f14 lg:border-b-0 lg:border-r lg:py-s16"
+            class="subcategories-search border-gray-02 px-s16 py-s24 text-f14 lg:py-s16 flex border-b lg:border-r lg:border-b-0"
           >
             <div
-              class="mr-s8 h-s24 w-s24 self-center fill-current text-magenta-cta"
+              class="mr-s8 h-s24 w-s24 text-magenta-cta self-center fill-current"
             >
               {@html listCheckIcon}
             </div>
@@ -252,7 +252,7 @@
             {/key}
           </div>
         {/if}
-        <div class="p-s12 text-center lg:p-s16">
+        <div class="p-s12 lg:p-s16 text-center">
           <Button
             extraClass="h-s48"
             type="submit"
@@ -267,7 +267,7 @@
 
       {#if showDeploymentWarning && cityCode && !isInDeploymentDepartments(cityCode, servicesOptions)}
         <div
-          class=" rounded-b-md border-t border-gray-02 bg-blue-light p-s16 text-center text-france-blue"
+          class=" border-gray-02 bg-blue-light p-s16 text-france-blue rounded-b-md border-t text-center"
         >
           <span>
             Sur votre territoire, le référencement des services débute – il se
@@ -282,6 +282,8 @@
 </form>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   .grid {
     grid-template-columns: 1fr;
     display: grid;
@@ -289,7 +291,7 @@
   ::global(#subcategories) {
     position: relative;
   }
-  @screen lg {
+  @media (width >= 64rem) {
     ::global(#subcategories) {
       position: absolute;
     }

@@ -5,12 +5,12 @@
   export let itemId: string;
 </script>
 
-<ul class="flex gap-s8 overflow-x-auto pt-s16 font-bold">
+<ul class="gap-s8 pt-s16 flex overflow-x-auto font-bold">
   {#each items as item}
     <li>
       {#if itemId === item.id}
         <span
-          class="flex items-center rounded-t bg-white px-s24 py-s12 text-france-blue"
+          class="px-s24 py-s12 text-france-blue flex items-center rounded-t bg-white"
         >
           <span class="mr-s8 h-s24 w-s24 fill-current">
             {@html item.icon}
@@ -20,7 +20,7 @@
       {:else}
         <a
           href={item.href}
-          class="flex items-center rounded-t bg-magenta-dark px-s24 py-s12 text-white"
+          class="bg-magenta-dark px-s24 py-s12 flex items-center rounded-t text-white"
           data-sveltekit-noscroll
         >
           <span class="mr-s8 h-s24 w-s24 fill-current">

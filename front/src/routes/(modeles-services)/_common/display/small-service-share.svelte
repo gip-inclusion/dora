@@ -34,7 +34,7 @@
 {#if !service.canWrite && browser && !isDI}
   <div class="ml-s24 text-f16 text-gray-text print:hidden">
     <FeedbackModal {service} bind:isOpen={feedbackModalIsOpen} />
-    <button class="flex hover:text-magenta-cta" on:click={handleFeedback}>
+    <button class="hover:text-magenta-cta flex" on:click={handleFeedback}>
       <span class="mr-s10 h-s24 w-s24 fill-current">
         {@html markPenIcon}
       </span>
@@ -45,7 +45,7 @@
 
 <div class="ml-s24 text-f16 text-gray-text print:hidden">
   <button
-    class="flex text-left hover:text-magenta-cta"
+    class="hover:text-magenta-cta flex text-left"
     on:click={() => {
       print();
     }}
@@ -59,20 +59,20 @@
 {#if service.status === "PUBLISHED"}
   <div class="ml-s24 text-f16 text-gray-text print:hidden">
     <button
-      class="flex hover:text-magenta-cta"
+      class="hover:text-magenta-cta flex"
       title="Copier le lien de ce service"
       on:click={doCopy}
     >
       {#if copied}
         <span
-          class="absolute h-s24 w-s24 fill-current"
+          class="h-s24 w-s24 absolute fill-current"
           transition:fly={{ y: 50, duration: 500 }}
         >
           {@html checkIcon}
         </span>
       {:else}
         <span
-          class="absolute h-s24 w-s24 fill-current"
+          class="h-s24 w-s24 absolute fill-current"
           transition:fly={{ y: 50, duration: 500 }}
         >
           {@html linkIcon}
@@ -87,7 +87,7 @@
 {#if browser && $userInfo && service.status !== "ARCHIVED"}
   <Bookmarkable slug={service.slug} {isDI} let:onBookmark let:isBookmarked>
     <button
-      class="ml-s24 flex text-f16 text-gray-text print:hidden {isBookmarked
+      class="ml-s24 text-f16 text-gray-text flex print:hidden {isBookmarked
         ? 'text-magenta-cta hover:text-gray-text'
         : 'hover:text-magenta-cta'}"
       on:click={onBookmark}

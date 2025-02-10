@@ -22,11 +22,11 @@
 <OrientationVideo bind:isVideoModalOpen></OrientationVideo>
 
 <CenteredGrid bgColor="bg-magenta-10 mb-s32">
-  <h1 class="m-auto mb-s16 text-balance text-center text-france-blue">
+  <h1 class="mb-s16 text-france-blue m-auto text-center text-balance">
     Orientez vos bénéficiaires vers des solutions adaptées à leurs besoins
   </h1>
   <div class="mb-s32">
-    <p class="m-auto text-balance text-center text-f16 text-gray-text">
+    <p class="text-f16 text-gray-text m-auto text-center text-balance">
       DORA est un outil d’aide à la prescription qui vous accompagne dans la
       levée des freins périphériques.
     </p>
@@ -42,10 +42,10 @@
 </CenteredGrid>
 
 <CenteredGrid>
-  <h2 class="mb-s32 text-center text-france-blue">
+  <h2 class="mb-s32 text-france-blue text-center">
     Comment DORA peut vous aider
   </h2>
-  <div class="mb-s24 flex flex-col gap-s24 md:flex-row">
+  <div class="mb-s24 gap-s24 flex flex-col md:flex-row">
     <div class="md:flex-1">
       <img src={illuRecenser} alt="" class="mb-s16 w-full" />
       <div class="tag bg-[#003895]">Recherche simplifiée</div>
@@ -78,7 +78,7 @@
     </div>
     <div class="md:flex-1">
       <img src={illuMobiliser} alt="" class="mb-s16 w-full" />
-      <div class="tag bg-blue-information !text-gray-text">Très bientôt !</div>
+      <div class="tag bg-blue-information text-gray-text!">Très bientôt !</div>
       <h3>Suivre vos demandes</h3>
       <p class="text-f16">
         La structure partenaire répondra rapidement à votre demande. Vous
@@ -89,11 +89,11 @@
   </div>
 
   <div
-    class=" flex flex-col items-center justify-between rounded-ml border border-gray-01 p-s16 text-center md:flex-row md:items-baseline md:gap-s32"
+    class=" border-gray-01 p-s16 md:gap-s32 flex flex-col items-center justify-between rounded-2xl border text-center md:flex-row md:items-baseline"
   >
     <p class="m-s0 p-s0">
       <span
-        class="inline-block h-s24 w-s24 flex-none fill-current align-bottom text-france-blue"
+        class="h-s24 w-s24 text-france-blue inline-block flex-none fill-current align-bottom"
       >
         {@html videoIcon}
       </span>
@@ -112,24 +112,24 @@
 </CenteredGrid>
 
 <CenteredGrid>
-  <div class="flex flex-col gap-s24">
+  <div class="gap-s24 flex flex-col">
     <div class="text-center">
       <h2 class="text-france-blue">
         Donnez de la visibilité à votre offre de services
       </h2>
-      <p class="m-auto mb-s0 w-3/4">
+      <p class="mb-s0 m-auto w-3/4">
         Saisissez ou importez vos services et mettez-les à jour, en un seul
         endroit ! DORA se charge de présenter vos données là où elles sont
         utiles, en les diffusant automatiquement sur plusieurs sites.
       </p>
     </div>
-    <div class="flex flex-wrap justify-center gap-s16">
+    <div class="gap-s16 flex flex-wrap justify-center">
       <LinkButton label="Référencer vos services" to={`/services/creer`} />
       <InviteStructureLink />
     </div>
 
     <div class="mt-s16">
-      <p class="text-center text-f12">
+      <p class="text-f12 text-center">
         Plus de 5 000 structures ont déjà commencé à référencer leurs services
         sur DORA
       </p>
@@ -141,7 +141,7 @@
       <div class="mt-s10 text-center">
         <a
           href="/nos-partenaires"
-          class="text-center text-f18 text-magenta-cta underline"
+          class="text-f18 text-magenta-cta text-center underline"
         >
           Découvrez tous nos partenaires
         </a>
@@ -150,7 +150,7 @@
   </div>
 
   <div
-    class="mt-s64 flex flex-col gap-s24 rounded-md bg-gray-bg p-s24 md:flex-row"
+    class="mt-s64 gap-s24 bg-gray-bg p-s24 flex flex-col rounded-lg md:flex-row"
   >
     <div class="w-1/3 self-center text-center">
       <a href="https://www.data.inclusion.beta.gouv.fr/">
@@ -162,7 +162,7 @@
       </a>
     </div>
     <div class="md:w-2/3">
-      <h2 class="text-f17 leading-24 text-gray-dark">Dites-le-nous une fois</h2>
+      <h2 class="text-f17 text-gray-dark leading-24">Dites-le-nous une fois</h2>
       <p class="text-f16">
         Nous sommes engagés dans une démarche d’<span lang="en">Open Data</span>
         et rendons disponibles nos données à travers un référentiel commun — partagé
@@ -175,11 +175,13 @@
 </CenteredGrid>
 
 <style lang="postcss">
+  @reference "../app.css";
+
   h3 {
     @apply text-france-blue;
   }
 
   .tag {
-    @apply w-fit rounded px-s8 py-s2 text-f12 font-bold uppercase text-white;
+    @apply px-s8 py-s2 text-f12 w-fit rounded-sm font-bold text-white uppercase;
   }
 </style>

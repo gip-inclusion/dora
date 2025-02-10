@@ -4,7 +4,7 @@
 </script>
 
 <CenteredGrid bgColor="bg-magenta-10">
-  <div class="flex flex-col gap-s24 lg:flex-row">
+  <div class="gap-s24 flex flex-col lg:flex-row">
     <div class="mt-s48 hidden justify-center lg:flex lg:w-1/2">
       <img src={connexionPic} alt="" class="max-h-[460px]" />
     </div>

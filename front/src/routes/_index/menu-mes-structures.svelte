@@ -27,13 +27,13 @@
       <DropdownMenu label="Mes structures" hideLabel {mobileDesign}>
         <div slot="label" class="flex w-full items-center">
           <span
-            class="mr-s8 inline-block h-s24 w-s24 fill-current text-magenta-cta"
+            class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
           >
             {@html homeSmile2Icon}
           </span>
           {#if lastVisitedStructure}
             <a
-              class="block w-[150px] overflow-hidden text-ellipsis whitespace-nowrap text-gray-text"
+              class="text-gray-text block w-[150px] overflow-hidden text-ellipsis whitespace-nowrap"
               on:click={(evt) => evt.stopPropagation()}
               href={`/structures/${lastVisitedStructure.slug}`}
             >
@@ -45,37 +45,37 @@
         </div>
 
         {#if structures.length > 10}
-          <div class="relative mt-s10 w-full">
+          <div class="mt-s10 relative w-full">
             <label for="structure-filter" class="sr-only">Rechercher</label>
             <input
               id="structure-filter"
               type="text"
               placeholder="Rechercher"
               bind:value={filterText}
-              class="absolute left-s0 right-s0 border border-gray-03 p-s10"
+              class="left-s0 right-s0 border-gray-03 p-s10 absolute border"
             />
             <span
-              class="absolute right-s8 top-[11px] z-40 inline-block h-s24 w-s24 fill-current text-gray-03"
+              class="right-s8 h-s24 w-s24 text-gray-03 absolute top-[11px] z-40 inline-block fill-current"
             >
               {@html searchIcon}
             </span>
           </div>
         {/if}
         <div class:mt-s56={structures.length > 10}>
-          <ul class="max-h-[300px] overflow-y-auto p-s2">
+          <ul class="p-s2 max-h-[300px] overflow-y-auto">
             {#each structuresToDisplay as structure}
               {@const selected = structure.slug === lastVisitedStructure?.slug}
               <li>
                 <a
                   href={`/structures/${structure.slug}`}
-                  class="flex items-center justify-between whitespace-nowrap p-s12 text-gray-text hover:bg-magenta-10"
+                  class="p-s12 text-gray-text hover:bg-magenta-10 flex items-center justify-between whitespace-nowrap"
                   class:text-magenta-cta={selected}
                 >
                   {structure.name}
 
                   {#if selected}
                     <span
-                      class="mr-s8 inline-block h-s24 w-s24 fill-current text-magenta-cta"
+                      class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
                     >
                       {@html checkIcon}
                     </span>
@@ -88,7 +88,7 @@
 
         <div slot="bottom">
           <a
-            class="flex whitespace-nowrap text-gray-text"
+            class="text-gray-text flex whitespace-nowrap"
             href="/auth/rattachement"
           >
             <span class="mr-s10 h-s24 w-s24 fill-current">

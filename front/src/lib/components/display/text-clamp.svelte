@@ -24,7 +24,7 @@
   <div class="prose mb-s24">{@html text}</div>
 </div>
 <div class="print:hidden">
-  <div {id} class:h-s160={!showAll} class="relative mb-s24 overflow-hidden">
+  <div {id} class:h-s160={!showAll} class="mb-s24 relative overflow-hidden">
     <div class="prose mb-s24" bind:clientHeight={height}>{@html text}</div>
     <div class:gradient={!showAll && textIsTooLong} />
   </div>
@@ -46,6 +46,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   .gradient {
     position: absolute;
     bottom: 0px;

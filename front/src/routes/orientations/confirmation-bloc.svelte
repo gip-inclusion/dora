@@ -7,9 +7,9 @@
   export let withThunder = false;
 </script>
 
-<div class="mb-s24 flex flex-col items-center gap-s24">
+<div class="mb-s24 gap-s24 flex flex-col items-center">
   {#if withThunder}
-    <div class="mx-auto mt-s10 h-s24 w-s24">
+    <div class="mt-s10 h-s24 w-s24 mx-auto">
       {@html flashLightIcon}
     </div>
   {/if}

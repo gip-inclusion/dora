@@ -92,7 +92,7 @@
 >
   <div slot="prepend" class="px-s8 pt-s8" let:results>
     <button
-      class="flex w-full border-gray-02 px-s8 py-s12 text-f14 text-gray-text"
+      class="border-gray-02 px-s8 py-s12 text-f14 text-gray-text flex w-full"
       on:click|preventDefault|stopPropagation={searchCityFromLocation}
       class:border-b={results?.length}
     >

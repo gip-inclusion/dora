@@ -1,0 +1,364 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-service-green: #e6f3ec;
+  --color-service-green-dark: #b3dcc6;
+  --color-service-green-darker: #008941;
+
+  --color-service-orange: #ffe9c9;
+  --color-service-orange-dark: #ffd79d;
+  --color-service-orange-darker: #f29023;
+
+  --color-service-red: #fce6e6;
+  --color-service-red-dark: #e10600;
+
+  --color-service-gray: #f5f5f5;
+  --color-service-gray-dark: #d5d5d5;
+  --color-service-gray-darker: #2e2e2e;
+
+  --color-service-violet: #f5f0fd;
+  --color-service-violet-dark: #ebe3fb;
+  --color-service-violet-darker: #5b12eb;
+
+  --color-service-blue: #dbf0ff;
+  --color-service-blue-dark: #000091;
+  --color-service-blue-light: #f0f8ff;
+  --color-service-blue-info: #0762c8;
+
+  --color-service-available: #86f3a2;
+  --color-service-available-dark: #005b17;
+
+  --color-service-unavailable: #ff9a6c;
+  --color-service-unavailable-dark: #af0000;
+
+  --color-blue-light: #f0f8ff;
+
+  --color-blue-information: #e6effa;
+  --color-blue-information-dark: #0762c8;
+
+  --color-orange: #ed7d00;
+
+  --color-gray-bg: #f8f8f8;
+  --color-gray-00: #f5f5f5;
+  --color-gray-01: #e0e0e0;
+  --color-gray-02: #d5d5d5;
+  --color-gray-03: #cccccc;
+  --color-gray-dark: #2e2e2e;
+
+  --color-gray-text: #555555;
+  --color-gray-text-alt: #999999;
+  --color-gray-text-alt2: #777777;
+
+  --color-france-blue: #000091;
+  --color-white: #ffffff;
+  --color-marianne-red: #e1000f;
+
+  --color-magenta-10: #f5f0fd;
+  --color-magenta-20: #ebe3fb;
+  --color-magenta-40: #d7c6f9;
+  --color-magenta-60: #c3aaf6;
+  --color-magenta-80: #af8ef3;
+  --color-magenta-brand: #9c6ff4;
+  --color-magenta-hover: #7b40f0;
+  --color-magenta-cta: #5b12eb;
+  --color-magenta-dark: #19004a;
+
+  --color-info: hsl(212, 93%, 46%);
+  --color-info-light: hsl(212, 93%, 97%);
+
+  --color-success: hsl(148, 100%, 27%);
+  --color-success-light: hsl(148, 100%, 97%);
+
+  --color-warning: hsl(32, 100%, 46%);
+  --color-warning-light: #ffe9c9;
+
+  --color-error: #e00700;
+  --color-error-light: hsl(2, 100%, 97%);
+
+  --color-available: #008941;
+  --color-available-dark: #1cda76;
+
+  --color-na: #e10600;
+  --color-na-dark: #ff504c;
+
+  --color-wait: #f29023;
+  --color-wait-dark: #fe9800;
+
+  --font-*: initial;
+  --font-sans: Marianne;
+
+  --text-*: initial;
+  --text-f10: 0.625rem;
+  --text-f12: 0.75rem;
+  --text-f14: 0.875rem;
+  --text-f16: 1rem;
+  --text-f17: 1.0625rem;
+  --text-f18: 1.125rem;
+  --text-f19: 1.1875rem;
+  --text-f20: 1.25rem;
+  --text-f21: 1.3125rem;
+  --text-f22: 1.375rem;
+  --text-f23: 1.4375rem;
+  --text-f24: 1.5rem;
+  --text-f26: 1.625rem;
+  --text-f28: 1.75rem;
+  --text-f30: 1.875rem;
+  --text-f32: 2rem;
+  --text-f38: 2.375rem;
+  --text-f45: 2.8125rem;
+
+  --leading-*: initial;
+  --leading-12: 0.75rem;
+  --leading-16: 1rem;
+  --leading-20: 1.25rem;
+  --leading-24: 1.5rem;
+  --leading-28: 1.75rem;
+  --leading-32: 2rem;
+  --leading-36: 2.25rem;
+  --leading-40: 2.5rem;
+  --leading-48: 3rem;
+  --leading-56: 3.5rem;
+  --leading-none: 1;
+  --leading-tight: 1.2;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+  --leading-loose: 2;
+
+  --spacing-*: initial;
+  --spacing-s0: 0;
+  --spacing-s2: 0.125rem;
+  --spacing-s4: 0.25rem;
+  --spacing-s6: 0.375rem;
+  --spacing-s8: 0.5rem;
+  --spacing-s9: 0.5625rem;
+  --spacing-s10: 0.625rem;
+  --spacing-s12: 0.75rem;
+  --spacing-s16: 1rem;
+  --spacing-s20: 1.25rem;
+  --spacing-s24: 1.5rem;
+  --spacing-s28: 1.75rem;
+  --spacing-s32: 2rem;
+  --spacing-s36: 2.25rem;
+  --spacing-s40: 2.5rem;
+  --spacing-s42: 2.625rem;
+  --spacing-s48: 3rem;
+  --spacing-s56: 3.5rem;
+  --spacing-s64: 4rem;
+  --spacing-s72: 4.5rem;
+  --spacing-s80: 5rem;
+  --spacing-s88: 5.5rem;
+  --spacing-s96: 6rem;
+  --spacing-s112: 7rem;
+  --spacing-s160: 10rem;
+  --spacing-s512: 32rem;
+
+  --shadow-*: initial;
+  --shadow-none: none;
+  --shadow-xs: 0 1px 0 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 0 1px 0 rgba(0, 0, 0, 0.05), 0 2px 1px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 10px 0 rgba(0, 0, 0, 0.1), 0 0 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-l: 0 4px 20px 0 rgba(0, 0, 0, 0.15), 0 0 3px 0 rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 0 4px rgba(0, 0, 0, 0.1), 0px 8px 40px rgba(0, 0, 0, 0.2);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+  --shadow-focus: 0px 0px 0px 2px #ffffff, 0px 0px 0px 4px #0a76f6;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@layer base {
+  :root {
+    /***********************/
+    /*       colors        */
+    /***********************/
+
+    /* Grays  */
+    --col-gray-bg: #f8f8f8;
+    --col-gray-dark: #2e2e2e;
+
+    /* Text */
+    --col-text: #555555;
+    --col-text-alt: #999999;
+
+    /* DSFR */
+    --col-france-blue: #000091;
+    --col-white: #ffffff;
+
+    /* DORA */
+    --col-magenta-brand: #9c6ff4;
+    --col-magenta-cta: #5b12eb;
+
+    /* Functional Colors */
+    --col-success: #008941;
+    --col-error: #e10600;
+
+    --col-info: #0762c8;
+    --col-info-bg: #dbf0ff;
+    --col-info-light: #f0f8ff;
+
+    --col-wait: #f29023;
+    --col-wait-dark: #fe9800;
+
+    --s2: 0.125rem;
+    --s4: 0.25rem;
+    --s8: 0.5rem;
+    --s16: 1rem;
+    --s24: 1.5rem;
+
+    --shadow-sm: 0 0 1px 0 rgba(0, 0, 0, 0.05), 0 2px 1px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 10px 0 rgba(0, 0, 0, 0.1), 0 0 2px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: normal;
+    font-weight: normal;
+    src:
+      url("$lib/assets/fonts/marianne/Marianne-Regular.woff2") format("woff2"),
+      url("$lib/assets/fonts/marianne/Marianne-Regular.woff") format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: normal;
+    font-weight: bold;
+    src:
+      url("$lib/assets/fonts/marianne/Marianne-Bold.woff2") format("woff2"),
+      url("$lib/assets/fonts/marianne/Marianne-Bold.woff") format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: italic;
+    font-weight: normal;
+    src:
+      url("$lib/assets/fonts/marianne/Marianne-Regular_Italic.woff2")
+        format("woff2"),
+      url("$lib/assets/fonts/marianne/Marianne-Regular_Italic.woff")
+        format("woff");
+  }
+
+  @font-face {
+    font-display: swap;
+    font-family: "Marianne";
+    font-style: italic;
+    font-weight: bold;
+    src:
+      url("$lib/assets/fonts/marianne/Marianne-Bold_Italic.woff2")
+        format("woff2"),
+      url("$lib/assets/fonts/marianne/Marianne-Bold_Italic.woff") format("woff");
+  }
+
+  body {
+    @apply bg-white font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply mb-s16 text-gray-dark font-bold;
+  }
+
+  h1 {
+    @apply text-f26 md:text-f30 lg:text-f38 xl:text-f45 leading-32 md:leading-40 lg:leading-48 xl:leading-56;
+  }
+
+  h2 {
+    @apply text-f22 md:text-f24 lg:text-f28 xl:text-f32 leading-32 lg:leading-40;
+    color: var(--col-france-blue);
+  }
+
+  h3 {
+    @apply text-f19 md:text-f20 lg:text-f21 xl:text-f23 leading-24 md:leading-32;
+  }
+
+  h4 {
+    @apply text-f17 leading-24;
+  }
+
+  h5 {
+    @apply text-f14 leading-24;
+  }
+
+  p {
+    @apply mb-s16 text-f18 text-gray-text leading-normal;
+  }
+
+  small {
+    @apply text-f14 text-gray-text-alt2 italic;
+  }
+
+  hr {
+    @apply border-t-gray-03;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  ::placeholder {
+    @apply text-gray-text!;
+  }
+
+  .legend {
+    @apply text-f14 text-gray-text-alt2 leading-24;
+  }
+
+  .break-word {
+    word-break: break-word;
+  }
+
+  .breakpoint-hack::before {
+    display: none;
+    content: "xs";
+    visibility: hidden;
+  }
+
+  @media (width >= theme(--breakpoint-md)) {
+    .breakpoint-hack::before {
+      content: "md";
+    }
+  }
+
+  @media (width >= theme(--breakpoint-lg)) {
+    .breakpoint-hack::before {
+      content: "lg";
+    }
+  }
+
+  @media (width >= theme(--breakpoint-xl)) {
+    .breakpoint-hack::before {
+      content: "xl";
+    }
+  }
+
+  @page {
+    size: 26.25cm 37.125cm; /* A4 * 1.25, afin de réduire la taille de l'impression */
+  }
+}

@@ -5,8 +5,8 @@
   import { addCircleIcon } from "$lib/icons";
 </script>
 
-<CenteredGrid extraClass="bg-gradient-to-b from-magenta-10 to-magenta-10/0">
-  <div class="lg:flex lg:gap-s32">
+<CenteredGrid extraClass="bg-linear-to-b from-magenta-10 to-magenta-10/0">
+  <div class="lg:gap-s32 lg:flex">
     <div class="lg:flex-1">
       <img class="hidden flex-none lg:block" src={ContributionPic} alt="" />
     </div>
@@ -18,7 +18,7 @@
         sera visible sur DORA.
       </p>
 
-      <div class="mb-s24 flex flex-col items-start gap-s16">
+      <div class="mb-s24 gap-s16 flex flex-col items-start">
         <LinkButton
           label="Proposer un nouveau service"
           to={"/contribuer/saisie"}

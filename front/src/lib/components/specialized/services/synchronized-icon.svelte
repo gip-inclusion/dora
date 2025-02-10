@@ -6,7 +6,7 @@
 </script>
 
 <div
-  class="rounded-full bg-service-blue p-s8 text-service-blue-dark"
+  class="bg-service-blue p-s8 text-service-blue-dark rounded-full"
   class:small
   class:warning
 >
@@ -16,6 +16,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .warning {
     @apply bg-service-orange-darker text-white;
   }

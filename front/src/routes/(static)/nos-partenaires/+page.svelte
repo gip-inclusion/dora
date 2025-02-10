@@ -19,7 +19,7 @@
       DORA
     </p>
 
-    <ul class="mt-s24 flex w-full flex-wrap justify-center gap-s24">
+    <ul class="mt-s24 gap-s24 flex w-full flex-wrap justify-center">
       <PartnerList imgHeight="medium" partnersToShow={data.partnersToShow} />
     </ul>
   </div>

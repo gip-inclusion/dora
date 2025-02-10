@@ -161,7 +161,7 @@
                 class="text-magenta-cta underline"
                 >{service.coachOrientationModesExternalFormLinkText ||
                   "Orienter votre bénéficiaire"}
-                <span class="inline-block h-s20 w-s20 fill-current pl-s4 pt-s6"
+                <span class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current"
                   >{@html externalLinkIcon}</span
                 ></a
               >
@@ -222,7 +222,7 @@
                 class="text-magenta-cta underline"
                 >{service.beneficiariesAccessModesExternalFormLinkText ||
                   "Faire une demande"}
-                <span class="inline-block h-s20 w-s20 fill-current pl-s4 pt-s6"
+                <span class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current"
                   >{@html externalLinkIcon}</span
                 ></a
               >
@@ -243,14 +243,14 @@
         {/each}
       </ul>
       {#if contactInfoForIndividual}
-        <div class="rounded-ml border border-gray-02 p-s24 shadow-sm">
+        <div class="border-gray-02 p-s24 rounded-2xl border shadow-sm">
           {#if isContactInfoForIndividualShown}
             <h5>{service.structureInfo.name}</h5>
             <ul class="space-y-s8 text-gray-text">
               {#if contactInfoForIndividualAddress}
-                <li class="flex items-center gap-s16">
+                <li class="gap-s16 flex items-center">
                   <span
-                    class="inline-block h-s28 w-s28 rounded-full bg-service-blue p-s6 text-france-blue"
+                    class="h-s28 w-s28 bg-service-blue p-s6 text-france-blue inline-block rounded-full"
                     role="img"
                     aria-label="Adresse">{@html mapPinFillIcon}</span
                   >
@@ -258,13 +258,13 @@
                 </li>
               {/if}
               {#if contactInfoForIndividualPhone}
-                <li class="flex items-center gap-s16">
+                <li class="gap-s16 flex items-center">
                   <span
-                    class="inline-block h-s28 w-s28 rounded-full bg-service-blue p-s6 text-france-blue"
+                    class="h-s28 w-s28 bg-service-blue p-s6 text-france-blue inline-block rounded-full"
                     role="img"
                     aria-label="Téléphone">{@html phoneFillIcon}</span
                   >
-                  <span class="flex items-center gap-s6"
+                  <span class="gap-s6 flex items-center"
                     >{contactInfoForIndividualPhone}<Button
                       on:click={() =>
                         navigator.clipboard.writeText(
@@ -281,13 +281,13 @@
                 </li>
               {/if}
               {#if contactInfoForIndividualEmail}
-                <li class="flex items-center gap-s16">
+                <li class="gap-s16 flex items-center">
                   <span
-                    class="inline-block h-s28 w-s28 rounded-full bg-service-blue p-s6 text-france-blue"
+                    class="h-s28 w-s28 bg-service-blue p-s6 text-france-blue inline-block rounded-full"
                     role="img"
                     aria-label="Email">{@html mailLineIcon}</span
                   >
-                  <span class="flex items-center gap-s6"
+                  <span class="gap-s6 flex items-center"
                     >{contactInfoForIndividualEmail}<Button
                       on:click={() =>
                         navigator.clipboard.writeText(
@@ -374,7 +374,9 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .typographic-list {
-    @apply mb-s24 list-disc break-all pl-s20 text-f18 leading-32 text-gray-text;
+    @apply mb-s24 pl-s20 text-f18 text-gray-text list-disc leading-32 break-all;
   }
 </style>

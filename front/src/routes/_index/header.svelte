@@ -12,7 +12,7 @@
 <header class:dev-banner={ENVIRONMENT !== "production"}>
   <CenteredGrid noPadding extraClass="border-b border-gray-01">
     <div class="flex justify-between lg:items-center">
-      <div class="flex flex-row items-center py-s16">
+      <div class="py-s16 flex flex-row items-center">
         <div>
           <img
             class="mr-s40 inline-block"
@@ -31,7 +31,7 @@
             height="55"
           />
           <div class="hidden md:block">
-            <div class="text-f20 font-bold text-gray-dark">DORA</div>
+            <div class="text-f20 text-gray-dark font-bold">DORA</div>
             <div class="text-f14 text-gray-text">Plateforme de l’inclusion</div>
           </div>
         </a>
@@ -57,6 +57,8 @@
 </header>
 
 <style lang="postcss">
+  @reference "../../app.css";
+
   .dev-banner {
     border-top: 8px solid orange;
   }

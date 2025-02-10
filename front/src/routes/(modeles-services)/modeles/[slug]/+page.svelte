@@ -19,7 +19,7 @@
 
 <CenteredGrid roundedColor="bg-blue-information" extraClass="mb-s14 w-full">
   {#if browser}
-    <div class="flex items-center justify-between text-gray-text">
+    <div class="text-gray-text flex items-center justify-between">
       <div class="flex items-center">
         <span class="mr-s16">
           <UpdateStatusIcon updateStatus="NOT_NEEDED" />
@@ -31,7 +31,7 @@
         />
       </div>
 
-      <div class="flex gap-s24">
+      <div class="gap-s24 flex">
         {#if data.model.canWrite}
           <LinkButton
             label="Modifier"

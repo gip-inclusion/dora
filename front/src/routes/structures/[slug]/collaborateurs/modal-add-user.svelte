@@ -114,7 +114,7 @@
         placeholder="Permissions"
       />
     </Fieldset>
-    <div class="mt-s32 flex flex-row justify-end gap-s16">
+    <div class="mt-s32 gap-s16 flex flex-row justify-end">
       <Button
         type="submit"
         label="Envoyer l’invitation"

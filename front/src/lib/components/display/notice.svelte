@@ -55,7 +55,7 @@
 </script>
 
 {#if visible}
-  <div class="rounded-lg {types[type].background} py-s24 pl-s24 pr-s24">
+  <div class="rounded-3xl {types[type].background} py-s24 pl-s24 pr-s24">
     {#if title || hasCloseButton}
       <div class="items-top flex">
         {#if showIcon}
@@ -69,13 +69,13 @@
         {#if title}
           <svelte:element
             this={titleLevel}
-            class="mb-s0 flex text-f18 leading-32 {types[type].title}"
+            class="mb-s0 text-f18 flex leading-32 {types[type].title}"
           >
             {#if showIcon}
               <div class="mr-s8 inline-block text-center sm:hidden">
                 <div
                   class="{types[type]
-                    .text} m-auto h-s32 w-s32 shrink-0 fill-current"
+                    .text} h-s32 w-s32 m-auto shrink-0 fill-current"
                 >
                   {@html types[type].icon}
                 </div>
@@ -94,7 +94,7 @@
     {/if}
     {#if $$slots?.default || $$slots.button}
       <div
-        class="flex flex-row flex-wrap items-start justify-between gap-s12"
+        class="gap-s12 flex flex-row flex-wrap items-start justify-between"
         class:mt-s16={!!title}
         class:mt-s8={!title}
       >

@@ -54,7 +54,7 @@
     type="info"
   >
     <div class="w-full">
-      <p class="block text-f14">
+      <p class="text-f14 block">
         Suite à la mise à jour
         {updatedModels.size > 1 ? " des modèles " : " du modèle "}
         {Array.from(updatedModels)
@@ -75,7 +75,7 @@
                 {service.name}
               </a>
               <Button
-                extraClass="ml-s16 text-magenta-cta !text-f14 !p-s0"
+                extraClass="ml-s16 text-magenta-cta text-f14! p-s0!"
                 noBackground
                 noPadding
                 disabled={requesting}
@@ -83,7 +83,7 @@
                 on:click={() => doUpdate([service])}
               />
               <Button
-                extraClass="ml-s10 text-marianne-red !text-f14 !p-s0"
+                extraClass="ml-s10 text-marianne-red text-f14! p-s0!"
                 noBackground
                 noPadding
                 disabled={requesting}
@@ -97,7 +97,7 @@
       {#if servicesToUpdate.length > LIST_LENGTH}
         <div>
           <Button
-            extraClass="ml-s16 text-magenta-cta !text-f14 !p-s0"
+            extraClass="ml-s16 text-magenta-cta text-f14! p-s0!"
             noBackground
             noPadding
             label={showAll ? "Réduire la liste" : "Voir toute la liste"}
@@ -112,18 +112,18 @@
     <div class="mt-s16 w-full">
       <Button
         label="Tout mettre à jour"
-        extraClass="py-s8 !text-f14 !px-s12"
+        extraClass="py-s8 text-f14! px-s12!"
         on:click={() => doUpdate(servicesToUpdate)}
       />
       <Button
         secondary
-        extraClass="py-s8 !text-f14 !px-s12"
+        extraClass="py-s8 text-f14! px-s12!"
         label="Tout refuser"
         on:click={rejectAll}
       />
       <Button
         secondary
-        extraClass="py-s8 !text-f14 !px-s12"
+        extraClass="py-s8 text-f14! px-s12!"
         label="Cacher cette fenêtre"
         on:click={() => {
           hideModelNotice(structureSlug);

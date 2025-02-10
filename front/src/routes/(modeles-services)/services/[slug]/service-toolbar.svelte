@@ -63,14 +63,14 @@
 
   {#if !service.canWrite || service.updateStatus === "NOT_NEEDED" || service.status !== "PUBLISHED"}
     <div
-      class="m-auto max-w-6xl border border-l-0 border-r-0 border-t-0 border-gray-02"
+      class="border-gray-02 m-auto max-w-6xl border border-t-0 border-r-0 border-l-0"
     />
   {/if}
 
   {#if service.canWrite}
     <CenteredGrid extraClass="w-full" noPadding>
       <div
-        class="flex w-full flex-col place-content-between items-center gap-s24 py-s32 sm:flex-row"
+        class="gap-s24 py-s32 flex w-full flex-col place-content-between items-center sm:flex-row"
       >
         <div>
           <ServiceStateUpdateSelect
@@ -80,17 +80,17 @@
             hideLabel={false}
           />
         </div>
-        <div class="flex h-s48 items-center md:self-end">
+        <div class="h-s48 flex items-center md:self-end">
           {#if service.model}
             {#if service.modelChanged}
-              <div class="flex items-center text-f14 font-bold text-gray-text">
+              <div class="text-f14 text-gray-text flex items-center font-bold">
                 <span class="mr-s10"><SynchronizedIcon warning /></span>
                 <a href="/services/{service.slug}/editer" class="underline">
                   Mise à jour du modèle disponible
                 </a>
               </div>
             {:else}
-              <div class="flex items-center text-f14 italic text-gray-text">
+              <div class="text-f14 text-gray-text flex items-center italic">
                 <span class="mr-s10"><SynchronizedIcon /></span>
                 <a href="/modeles/{service.model}" class="underline">
                   Synchronisé avec un modèle

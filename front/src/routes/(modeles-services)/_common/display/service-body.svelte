@@ -68,7 +68,7 @@
 </script>
 
 <CenteredGrid>
-  <div class="mb-s48 flex flex-col justify-between gap-x-s48 md:flex-row">
+  <div class="mb-s48 gap-x-s48 flex flex-col justify-between md:flex-row">
     <div class="flex-auto basis-2/3">
       <div>
         <ServicePresentation {service} {servicesOptions} {isDI} />
@@ -91,11 +91,11 @@
     </div>
 
     {#if browser}
-      <div class="flex flex-none flex-col gap-y-s24 md:w-[320px] lg:w-[375px]">
+      <div class="gap-y-s24 flex flex-none flex-col md:w-[320px] lg:w-[375px]">
         {#if !isModel}
-          <div class="sticky top-s32">
+          <div class="top-s32 sticky">
             <div
-              class="block rounded-lg border border-gray-02 bg-france-blue p-s24 px-s32 text-white print:hidden"
+              class="border-gray-02 bg-france-blue p-s24 px-s32 block rounded-3xl border text-white print:hidden"
             >
               <ServiceMobilisation
                 on:trackMobilisation={handleTrackMobilisationEvent}
@@ -113,7 +113,7 @@
             {/if}
 
             {#if !isModel}
-              <div class="mt-s24 flex flex-col gap-y-s24">
+              <div class="mt-s24 gap-y-s24 flex flex-col">
                 <SmallServiceShare {service} {isDI} />
               </div>
             {/if}

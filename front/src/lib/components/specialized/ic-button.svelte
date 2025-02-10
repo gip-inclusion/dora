@@ -11,9 +11,9 @@
     href="/auth/ic-connect?next={encodeURIComponent(nextPage)}{loginHint}"
   >
     <div
-      class="mx-auto mt-s24 flex items-center justify-center rounded-full bg-france-blue p-s6 pr-s24 text-f16 text-white transition-colors hover:bg-[#2323FF]"
+      class="mt-s24 bg-france-blue p-s6 pr-s24 text-f16 mx-auto flex items-center justify-center rounded-full text-white transition-colors hover:bg-[#2323FF]"
     >
-      <span class="h-[62px] w-[62px] rounded-full bg-white p-s6">
+      <span class="p-s6 h-[62px] w-[62px] rounded-full bg-white">
         <img src={logoIC} alt="" class="max-w-none" />
       </span>
       <div class="ml-s16 text-left">

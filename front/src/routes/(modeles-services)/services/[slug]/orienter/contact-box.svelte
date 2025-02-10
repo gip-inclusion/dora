@@ -14,9 +14,9 @@
 
 <OrientationVideo bind:isVideoModalOpen></OrientationVideo>
 
-<div class="flex flex-col gap-s24">
+<div class="gap-s24 flex flex-col">
   {#if displayContact}
-    <div class="block rounded-ml border border-gray-02 p-s24 px-s32">
+    <div class="border-gray-02 p-s24 px-s32 block rounded-2xl border">
       <h3 class="text-france-blue">Contact</h3>
       <p class="text-f16">
         En cas de doute, vous pouvez contacter la personne responsable du

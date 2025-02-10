@@ -69,14 +69,14 @@
       </p>
 
       <div
-        class="mt-s40 flex flex-col-reverse justify-between gap-x-s24 md:flex-row"
+        class="mt-s40 gap-x-s24 flex flex-col-reverse justify-between md:flex-row"
       >
-        <div class="flex flex-1 flex-col gap-s32">
+        <div class="gap-s32 flex flex-1 flex-col">
           <div
-            class="flex w-full items-center rounded-md border border-blue-information bg-blue-light p-s24"
+            class="border-blue-information bg-blue-light p-s24 flex w-full items-center rounded-lg border"
           >
             <div
-              class="mr-s16 inline-block rounded-xl bg-blue-information-dark p-s12"
+              class="mr-s16 bg-blue-information-dark p-s12 inline-block rounded-3xl"
             >
               <div class="h-s24 w-s24 fill-current text-white">
                 {@html compass3Icon}
@@ -86,7 +86,7 @@
             <div>
               <p class="m-s0 text-f14 text-gray-text">
                 Service concerné&nbsp;:<br />
-                <span class="text-f23 font-bold text-france-blue">
+                <span class="text-f23 text-france-blue font-bold">
                   {#if orientation.service?.slug}
                     <a
                       href="/services/{orientation.service.slug}"
@@ -103,18 +103,18 @@
           </div>
 
           {#if orientation.status !== "REFUSÉE"}
-            <div class="flex-[2] rounded-md border border-gray-02 md:relative">
+            <div class="border-gray-02 flex-2 rounded-lg border md:relative">
               <div
-                class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
+                class="gap-s12 border-gray-02 px-s16 py-s20 md:px-s36 flex flex-wrap items-center justify-between border-b"
               >
                 <h2 class="m-s0 text-f23 text-france-blue">La demande</h2>
               </div>
 
-              <div class="flex flex-col gap-s32 p-s36">
+              <div class="gap-s32 p-s36 flex flex-col">
                 <div>
                   <SubTitle label="Bénéficiaire" icon={compass3Icon} />
                   <div class="ml-s64">
-                    <ul class="flex flex-col gap-s12">
+                    <ul class="gap-s12 flex flex-col">
                       <ContactListItem
                         icon={user6Icon}
                         text={`${orientation.beneficiaryFirstName} ${orientation.beneficiaryLastName}`}
@@ -163,13 +163,13 @@
                 </div>
 
                 {#if orientation.situation.length}
-                  <hr class="border border-gray-02" />
+                  <hr class="border-gray-02 border" />
                   <div>
                     <SubTitle label="Situation" icon={listCheckIcon} />
                     <div class="ml-s64">
                       <ul>
                         {#each orientation.situation as beneficiarySituation}
-                          <li class="ml-s16 list-disc text-f16 text-gray-text">
+                          <li class="ml-s16 text-f16 text-gray-text list-disc">
                             {#if beneficiarySituation === "Autre"}
                               {beneficiarySituation}&nbsp;: {orientation.situationOther}
                             {:else}
@@ -180,7 +180,7 @@
                       </ul>
                     </div>
                   </div>
-                  <hr class="border border-gray-02" />
+                  <hr class="border-gray-02 border" />
                 {/if}
 
                 {#if orientation.requirements.length}
@@ -192,14 +192,14 @@
                     <div class="ml-s64">
                       <ul>
                         {#each orientation.requirements as requirement}
-                          <li class="ml-s16 list-disc text-f16 text-gray-text">
+                          <li class="ml-s16 text-f16 text-gray-text list-disc">
                             {requirement}
                           </li>
                         {/each}
                       </ul>
                     </div>
                   </div>
-                  <hr class="border border-gray-02" />
+                  <hr class="border-gray-02 border" />
                 {/if}
 
                 {#if orientation.orientationReasons}
@@ -208,7 +208,7 @@
                       label="Motifs de l’orientation"
                       icon={messageLineIcon}
                     />
-                    <div class="ml-s64 text-f16 italic text-gray-text">
+                    <div class="ml-s64 text-f16 text-gray-text italic">
                       {orientation.orientationReasons}
                     </div>
                   </div>
@@ -221,7 +221,7 @@
                       <ul class="mb-s24">
                         {#each orientation.beneficiaryAttachmentsDetails as attachment}
                           <li
-                            class="break-word ml-s16 list-disc text-f16 text-gray-text"
+                            class="break-word ml-s16 text-f16 text-gray-text list-disc"
                           >
                             <a
                               href={attachment.url}
@@ -241,21 +241,21 @@
           {/if}
 
           {#if orientation.prescriber?.name || orientation.prescriber?.email || orientation.prescriberStructure?.name}
-            <div class="flex-[2] rounded-md border border-gray-02 md:relative">
+            <div class="border-gray-02 flex-2 rounded-lg border md:relative">
               <div
-                class="flex flex-wrap items-center justify-between gap-s12 border-b border-gray-02 px-s16 py-s20 md:px-s36"
+                class="gap-s12 border-gray-02 px-s16 py-s20 md:px-s36 flex flex-wrap items-center justify-between border-b"
               >
                 <h2 class="m-s0 text-f23 text-france-blue">Les contacts</h2>
               </div>
 
-              <div class="flex flex-col gap-s32 p-s36">
+              <div class="gap-s32 p-s36 flex flex-col">
                 <div>
                   <SubTitle
                     label="Prescripteur ou prescriptrice"
                     icon={userSharedLineIcon}
                   />
                   <div class="ml-s64 text-f16 text-gray-text">
-                    <ul class="flex flex-col gap-s12">
+                    <ul class="gap-s12 flex flex-col">
                       {#if orientation.prescriber?.name}
                         <ContactListItem
                           icon={user6Icon}
@@ -289,14 +289,14 @@
                 </div>
 
                 {#if orientation.referentEmail !== orientation.prescriber.email}
-                  <hr class="border border-gray-02" />
+                  <hr class="border-gray-02 border" />
                   <div>
                     <SubTitle
                       label="Conseiller ou conseillère référente"
                       icon={serviceIcon}
                     />
                     <div class="ml-s64 text-f16 text-gray-text">
-                      <ul class="flex flex-col gap-s12">
+                      <ul class="gap-s12 flex flex-col">
                         <ContactListItem
                           icon={user6Icon}
                           text={`${orientation.referentFirstName} ${orientation.referentLastName}`}

@@ -15,11 +15,11 @@
   iconOnRight
   big
   noPadding
-  extraClass="!text-france-blue"
+  extraClass="text-france-blue!"
   alignRight={false}
   let:onClose={onCloseParent}
 >
-  <div class="flex flex-col items-start gap-s12 px-s12 py-s12 !text-gray-dark">
+  <div class="gap-s12 px-s12 py-s12 text-gray-dark! flex flex-col items-start">
     {#each departments as dpt}
       <Button
         on:click={() => {
@@ -30,7 +30,7 @@
         small
         noWrap
         noBackground
-        extraClass="!text-gray-dark !font-normal"
+        extraClass="text-gray-dark! font-normal!"
       />
     {/each}
   </div>

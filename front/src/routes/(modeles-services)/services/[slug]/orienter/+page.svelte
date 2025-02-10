@@ -83,13 +83,13 @@
         <strong>Étape suivante</strong>&nbsp;: Compléter la demande
       </p>
       <hr class="my-s40" />
-      <p class="mb-s40 max-w-2xl text-f18">
+      <p class="mb-s40 text-f18 max-w-2xl">
         Avant de commencer la procédure, vérifiez l’éligibilité du ou de la
         bénéficiaire et consultez la liste des documents requis.
       </p>
 
-      <div class="flex flex-col justify-between gap-x-s24 md:flex-row">
-        <div class="flex flex-col gap-s32">
+      <div class="gap-x-s24 flex flex-col justify-between md:flex-row">
+        <div class="gap-s32 flex flex-col">
           <Notice type="warning" title="Rappel"
             ><p>
               Les orientations non valides (test/fictives) nécessitent une
@@ -104,7 +104,7 @@
           >
           <ValidationForm {service} />
         </div>
-        <div class="mt-s32 w-full shrink-0 md:mt-s0 md:w-[384px]">
+        <div class="mt-s32 md:mt-s0 w-full shrink-0 md:w-[384px]">
           <ContactBox {service} {isDI} />
         </div>
       </div>

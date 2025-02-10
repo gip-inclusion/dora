@@ -3,15 +3,17 @@
 </script>
 
 <div
-  class="checkbox flex h-s24 w-s24 shrink-0 justify-center rounded border border-gray-03"
+  class="checkbox h-s24 w-s24 border-gray-03 flex shrink-0 justify-center rounded-sm border"
 >
   <div
-    class="checkbox-mark h-s12 w-s12 self-center bg-magenta-cta"
+    class="checkbox-mark h-s12 w-s12 bg-magenta-cta self-center"
     class:invisible={!checked}
   />
 </div>
 
-<style>
+<style lang="postcss">
+  @reference "../../../app.css";
+
   /* Ce symbole de case à cocher peut être coché de deux façons différente :
    * - En mettant la prop checked à true ;
    * - En plaçant le composant directement à la suite d'un <input type="checkbox" />.

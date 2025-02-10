@@ -11,7 +11,7 @@
 
   let setAsUpdatedModalOpen = false;
 
-  const extraClass = "hover:bg-magenta-cta hover:!text-white !justify-start";
+  const extraClass = "hover:bg-magenta-cta hover:text-white! justify-start!";
 </script>
 
 <div class="flex flex-col items-end">

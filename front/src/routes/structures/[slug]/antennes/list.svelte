@@ -39,11 +39,11 @@
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
-  <div class="flex flex-row gap-s8">
+  <div class="gap-s8 flex flex-row">
     <h2 class="mb-s0 text-france-blue">Antennes</h2>
     {#if limit}<Count>{total}</Count>{/if}
   </div>
-  <div class="flex gap-s16">
+  <div class="gap-s16 flex">
     {#if !!branches.length && !tabDisplay}
       <LinkButton
         label="Voir toutes les antennes"
@@ -62,7 +62,7 @@
   </div>
 </div>
 
-<div class="mb-s48 grid gap-s16 md:grid-cols-2 lg:grid-cols-3">
+<div class="mb-s48 gap-s16 grid md:grid-cols-2 lg:grid-cols-3">
   {#each branchesFiltered as branch}
     <StructureCard structure={branch} />
   {/each}

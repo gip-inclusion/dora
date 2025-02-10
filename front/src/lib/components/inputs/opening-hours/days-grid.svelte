@@ -41,8 +41,8 @@
   <!-- Lundi -->
   {#each weekDays as { label, day }}
     <div class="day-grid day">
-      <div class="self-center font-bold text-gray-dark">{label}</div>
-      <div class="!mb-s10 block text-center font-bold md:hidden">
+      <div class="text-gray-dark self-center font-bold">{label}</div>
+      <div class="mb-s10! block text-center font-bold md:hidden">
         Plage horaire 1
       </div>
 
@@ -76,6 +76,8 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../../../app.css";
+
   .day-grid.day > div:first-child {
     grid-column-start: 1;
     grid-column-end: 5;
@@ -84,7 +86,7 @@
     @apply mb-s24;
   }
 
-  @screen md {
+  @media (width >= 48rem) {
     .day-grid {
       display: grid;
       grid-template-columns: 1fr 2fr 2fr;

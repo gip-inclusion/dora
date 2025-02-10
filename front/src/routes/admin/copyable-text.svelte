@@ -3,7 +3,7 @@
 </script>
 
 <span
-  class="cursor-pointer text-f10 text-gray-text-alt underline"
+  class="text-f10 text-gray-text-alt cursor-pointer underline"
   tabindex="0"
   role="button"
   on:keypress={(event) => {

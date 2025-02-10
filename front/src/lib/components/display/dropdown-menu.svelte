@@ -35,13 +35,13 @@
   on:keydown={onKeyDown}
   class="w-full lg:w-auto"
 >
-  <div class="relative flex w-full text-f14 lg:w-auto">
+  <div class="text-f14 relative flex w-full lg:w-auto">
     <button
       bind:this={dropdownButton}
       aria-expanded={isOpen}
       aria-controls={id}
       class:bg-magenta-10={isOpen}
-      class="flex w-full items-center justify-between rounded border border-gray-03 text-left lg:w-auto"
+      class="border-gray-03 flex w-full items-center justify-between rounded-sm border text-left lg:w-auto"
       class:border-magenta-cta={isOpen}
       on:click={() => (isOpen = !isOpen)}
     >
@@ -53,7 +53,7 @@
 
       <span class="flex items-center" class:pl-s12={!$$slots.label}>
         {#if icon}
-          <span class="mr-s10 h-s24 w-s24 fill-current text-magenta-cta">
+          <span class="mr-s10 h-s24 w-s24 text-magenta-cta fill-current">
             {@html icon}
           </span>
         {/if}
@@ -61,15 +61,15 @@
         {#if !$$slots.label}
           <span
             class:sr-only={hideLabel}
-            class="whitespace-nowrap text-left text-gray-text"
+            class="text-gray-text text-left whitespace-nowrap"
           >
             {label}
           </span>
         {/if}
       </span>
 
-      <span class="flex border-gray-03 p-s12" class:border-l={$$slots.label}>
-        <span class="h-s24 w-s24 fill-current text-magenta-cta">
+      <span class="border-gray-03 p-s12 flex" class:border-l={$$slots.label}>
+        <span class="h-s24 w-s24 text-magenta-cta fill-current">
           {#if isOpen}
             {@html arrowUpSIcon}
           {:else}
@@ -82,18 +82,18 @@
     <div
       {id}
       class="
-        right-0 absolute top-[100%] z-[1000] hidden flex-col justify-end rounded-md border border-gray-00 bg-white shadow-md
+        border-gray-00 absolute top-[100%] right-0 z-1000 hidden flex-col justify-end rounded-lg border bg-white shadow-md
         {minWidth ? `min-w-[${minWidth}]` : ''}
         "
       class:left-0={mobileDesign}
       class:!flex={isOpen}
     >
-      <div class="w-full p-s12">
+      <div class="p-s12 w-full">
         <slot {closeDropdown} />
       </div>
 
       {#if $$slots.bottom}
-        <div class="w-full border-t border-gray-03 px-s24 py-s20">
+        <div class="border-gray-03 px-s24 py-s20 w-full border-t">
           <slot name="bottom" />
         </div>
       {/if}

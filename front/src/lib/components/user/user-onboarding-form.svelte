@@ -120,7 +120,7 @@
   onSuccess={handleSuccess}
   bind:requesting
 >
-  <div class="mx-s4 flex flex-col gap-s24">
+  <div class="mx-s4 gap-s24 flex flex-col">
     <RadioButtonsField
       id="mainActivity"
       choices={mainActivityOptions}

@@ -61,12 +61,12 @@
 <CenteredGrid>
   <h2>Services</h2>
 
-  <div class="flex flex-col gap-s12">
-    <div class="mb-s12 flex w-full flex-row items-center gap-s12">
+  <div class="gap-s12 flex flex-col">
+    <div class="mb-s12 gap-s12 flex w-full flex-row items-center">
       <div class="grow">
         <input
           on:input={handleFilterChange}
-          class="w-full border border-gray-02 p-s8"
+          class="border-gray-02 p-s8 w-full border"
           placeholder="rechercher (nom du service, de sa structure, numéro du département)…"
         />
       </div>
@@ -80,7 +80,7 @@
     {#if services}
       {#each filteredServices as service}
         <div
-          class="flex flex-row items-center gap-s16 rounded-md border border-gray-01 bg-white p-s16"
+          class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-lg border bg-white"
         >
           <div class="flex-auto basis-1/3">
             <a href="/admin/services/{service.slug}" target="_blank">
@@ -100,7 +100,7 @@
             <Label label={service.diffusionZoneDetailsDisplay} bold />
           </div>
 
-          <div class="flex-none basis-s32">
+          <div class="basis-s32 flex-none">
             <LinkButton
               to="/services/{service.slug}"
               icon={eyeIcon}

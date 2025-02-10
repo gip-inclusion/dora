@@ -64,9 +64,9 @@
   {multiple}
   {searchFunction}
   {delay}
-  className="rounded focus-within:shadow-focus {extraClass}"
-  inputClassName="focus:outline-none border rounded border-gray-03"
-  dropdownClassName="!top-[48px] rounded shadow-md"
+  className="rounded-sm focus-within:shadow-focus {extraClass}"
+  inputClassName="focus:outline-hidden border rounded-sm border-gray-03"
+  dropdownClassName="top-[48px]! rounded-sm shadow-md"
   showLoadingIndicator
   {hideArrow}
   {showClear}

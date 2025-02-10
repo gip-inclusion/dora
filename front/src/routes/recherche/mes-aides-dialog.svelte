@@ -9,7 +9,7 @@
     id="mtm-bloc-mes-aides"
   >
     <div class="py-s12">
-      <span class="rounded-lg bg-magenta-20 px-s8 text-france-blue"
+      <span class="bg-magenta-20 px-s8 text-france-blue rounded-3xl"
         >Vous êtes un particulier ?</span
       >
       <h3 class="my-s9 text-france-blue">

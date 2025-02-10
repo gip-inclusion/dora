@@ -59,20 +59,20 @@
 
 <h2 class="text-f23 text-white">Mobiliser ce service</h2>
 
-<div class="mt-s16 flex w-full flex-col gap-s16 sm:w-auto print:hidden">
+<div class="mt-s16 gap-s16 flex w-full flex-col sm:w-auto print:hidden">
   {#if !(isDI && hasExternalForm)}
     {#if isOrientableWithDoraForm}
       <LinkButton
         label="Orienter votre bénéficiaire"
         to={orientationFormUrl}
-        extraClass="bg-white !text-france-blue hover:!text-white"
+        extraClass="bg-white text-france-blue! hover:text-white!"
         on:click={handleOrientationFormClickEvent}
       />
     {:else if service.contactInfoFilled}
       {#if !contactBoxOpen}
         <Button
           on:click={handleShowContactClick}
-          extraClass="mt-s16 bg-white !text-france-blue hover:!text-white text-center !whitespace-normal text-center"
+          extraClass="mt-s16 bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
           label="Orienter votre bénéficiaire"
           wFull
         />
@@ -89,7 +89,7 @@
       on:click={() =>
         handleExternalFormClick(service.coachOrientationModesExternalFormLink)}
       to={service.coachOrientationModesExternalFormLink}
-      extraClass="bg-white !text-france-blue hover:!text-white text-center !whitespace-normal text-center"
+      extraClass="bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
       label={service.coachOrientationModesExternalFormLinkText ||
         "Orienter votre bénéficiaire"}
       icon={externalLinkIcon}
@@ -101,7 +101,7 @@
 
   <Button
     on:click={handleShareClick}
-    extraClass="!bg-france-blue text-white !border !border-white hover:!bg-magenta-cta hover:!border-france-blue"
+    extraClass="bg-france-blue! text-white border! border-white! hover:bg-magenta-cta! hover:border-france-blue!"
     label="Partager cette fiche"
     wFull
   />
