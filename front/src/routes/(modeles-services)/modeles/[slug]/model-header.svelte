@@ -20,7 +20,7 @@
   </div>
 
   <div
-    class="mb-s28 bg-france-blue px-s12 py-s8 text-f14 inline-flex items-center rounded-md text-white"
+    class="mb-s28 bg-france-blue px-s12 py-s8 text-f14 inline-flex items-center rounded-lg text-white"
   >
     <span class="mr-s8 h-s16 w-s16 inline-block fill-current text-white">
       {@html copyIcon2Fill}

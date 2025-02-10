@@ -62,7 +62,7 @@
   <div class="flex flex-col">
     <div class="gap-s12 flex flex-row">
       <input
-        class="h-s48 border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt focus:shadow-focus grow rounded border outline-hidden"
+        class="h-s48 border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt focus:shadow-focus grow rounded-sm border outline-hidden"
         id="safir-select"
         type="text"
         on:input={() => (serverErrorMsg = "")}

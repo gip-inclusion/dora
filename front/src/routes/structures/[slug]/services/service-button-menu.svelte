@@ -9,7 +9,7 @@
   export let onRefresh: () => void | undefined;
 </script>
 
-<div class="border-magenta-cta py-s4 rounded border">
+<div class="border-magenta-cta py-s4 rounded-sm border">
   <ButtonMenu
     icon={moreIcon}
     small

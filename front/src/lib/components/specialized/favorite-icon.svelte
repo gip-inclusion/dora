@@ -55,7 +55,7 @@
   }
 
   .tooltip .tooltiptext {
-    @apply bg-magenta-dark px-s8 py-s2 text-f12 invisible absolute top-[-1000px] left-[-1000px] z-10 w-max -translate-x-1/2 rounded text-center font-bold text-white;
+    @apply bg-magenta-dark px-s8 py-s2 text-f12 invisible absolute top-[-1000px] left-[-1000px] z-10 w-max -translate-x-1/2 rounded-sm text-center font-bold text-white;
   }
 
   .tooltip .tooltiptext::after {

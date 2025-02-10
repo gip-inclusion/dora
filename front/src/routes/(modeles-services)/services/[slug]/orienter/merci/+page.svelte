@@ -22,7 +22,7 @@
 <EnsureLoggedIn>
   <Layout {data}>
     <div
-      class="gap-s46 px-s14 mt-s56 border-gray-03 py-s32 flex flex-col-reverse items-start justify-around rounded-md border lg:flex-row"
+      class="gap-s46 px-s14 mt-s56 border-gray-03 py-s32 flex flex-col-reverse items-start justify-around rounded-lg border lg:flex-row"
     >
       <div class="max-w-lg basis-1/2 text-center">
         <div class="mb-s12 h-s24 w-s24 text-gray-text mx-auto fill-current">

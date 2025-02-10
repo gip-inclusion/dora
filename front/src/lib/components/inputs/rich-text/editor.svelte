@@ -232,14 +232,14 @@
           bind:value={linkDialogHref}
         />
         <button
-          class="border-gray-text px-s8 py-s4 text-f12 hover:bg-gray-text disabled:border-gray-03 disabled:bg-gray-01 disabled:text-gray-03 rounded-md border font-bold hover:text-white"
+          class="border-gray-text px-s8 py-s4 text-f12 hover:bg-gray-text disabled:border-gray-03 disabled:bg-gray-01 disabled:text-gray-03 rounded-lg border font-bold hover:text-white"
           on:click={setLink}
           disabled={!linkDialogButtonIsActive}
         >
           {linkDialogButtontext}
         </button>
         <button
-          class="border-gray-text px-s8 py-s4 text-f12 hover:bg-gray-text rounded-md border font-bold hover:text-white"
+          class="border-gray-text px-s8 py-s4 text-f12 hover:bg-gray-text rounded-lg border font-bold hover:text-white"
           on:click={linkDialogClose}>Annuler</button
         >
       </div>

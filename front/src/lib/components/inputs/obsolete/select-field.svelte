@@ -185,7 +185,7 @@
     aria-controls={`listbox-values-${uuid}`}
     aria-expanded={expanded}
     aria-haspopup="listbox"
-    class="combobox border-gray-03 p-s12 disabled:bg-gray-bg disabled:text-gray-text-alt w-full self-start rounded border bg-white font-sans {display}"
+    class="combobox border-gray-03 p-s12 disabled:bg-gray-bg disabled:text-gray-text-alt w-full self-start rounded-sm border bg-white font-sans {display}"
     class:filter-style={style === "filter"}
     class:filter-search={style === "search"}
     class:expanded
@@ -250,7 +250,7 @@
 
     <div
       class:hidden={!expanded}
-      class="left-s0 max-h-s512 border-gray-00 p-s12 absolute top-[52px] z-20 flex flex-col overflow-y-auto rounded border bg-white shadow-md {minDropdownWidth}"
+      class="left-s0 max-h-s512 border-gray-00 p-s12 absolute top-[52px] z-20 flex flex-col overflow-y-auto rounded-sm border bg-white shadow-md {minDropdownWidth}"
       class:gap-s10={!isMultiple}
       role="listbox"
       id={`listbox-values-${uuid}`}
@@ -327,10 +327,10 @@
 
   /* As filter */
   .filter-style {
-    @apply px-s16 py-s12 rounded-xl;
+    @apply px-s16 py-s12 rounded-3xl;
   }
   .filter-style {
-    @apply px-s16 py-s12 rounded-xl;
+    @apply px-s16 py-s12 rounded-3xl;
   }
   .filter-style .current-value > div:first-child {
     @apply w-auto;

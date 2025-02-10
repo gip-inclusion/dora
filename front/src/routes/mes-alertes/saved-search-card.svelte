@@ -45,7 +45,7 @@
 </script>
 
 <div
-  class="rounded-ml border-gray-02 p-s32 pr-s56 relative border shadow-sm"
+  class="border-gray-02 p-s32 pr-s56 relative rounded-2xl border shadow-sm"
   tabindex="-1"
 >
   <SavedSearchTitle {search} />
@@ -74,7 +74,7 @@
   <div class="gap-s8 flex">
     <div class="form-container">
       <form on:submit|preventDefault={handleSubmit} class="gap-s16 flex">
-        <div class="border-gray-02 p-s12 flex items-center rounded border">
+        <div class="border-gray-02 p-s12 flex items-center rounded-sm border">
           <span class="mr-s8 h-s24 w-s24 inline-block fill-current">
             {@html mailSendLineIcon}
           </span>

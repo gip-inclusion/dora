@@ -59,7 +59,7 @@
 <div class="gap-s12 flex w-full flex-col">
   {#each suggestions as suggestion}
     <div
-      class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-md border bg-white"
+      class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-lg border bg-white"
     >
       <div class="flex-1 truncate italic">
         {suggestion.name}
@@ -68,7 +68,7 @@
         {suggestion.structureInfo.name} ({suggestion.structureInfo.department})
         {#if suggestion.structureInfo.new}
           <div
-            class="bg-info px-s8 py-s2 text-f12 inline-block rounded leading-20 text-white"
+            class="bg-info px-s8 py-s2 text-f12 inline-block rounded-sm leading-20 text-white"
           >
             Nouv.
           </div>

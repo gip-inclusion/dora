@@ -196,7 +196,7 @@
 
 <div
   id="service-state-update"
-  class="text-gray-dark relative flex cursor-pointer items-center rounded-md font-bold {currentStatusPresentation.bgClass} hover:{currentStatusPresentation.hoverBgClass}"
+  class="text-gray-dark relative flex cursor-pointer items-center rounded-lg font-bold {currentStatusPresentation.bgClass} hover:{currentStatusPresentation.hoverBgClass}"
   use:clickOutside
   on:click_outside={() => toggleCombobox(false)}
 >
@@ -237,7 +237,7 @@
   <div
     class:hidden={!isDropdownOpen}
     class:w-full={fullWidth}
-    class="right-s0 top-s48 border-gray-00 px-s12 py-s12 absolute z-20 min-w-[150px] rounded border bg-white shadow-md"
+    class="right-s0 top-s48 border-gray-00 px-s12 py-s12 absolute z-20 min-w-[150px] rounded-sm border bg-white shadow-md"
     role="listbox"
     id={`listbox-values-${uuid}`}
     aria-labelledby={`button-label-${uuid}`}
@@ -246,7 +246,7 @@
     {#each availableOptions as option, index (option)}
       {#if option === "DELETE"}
         <div
-          class="mb-s10 p-s10 flex items-center rounded bg-transparent"
+          class="mb-s10 p-s10 flex items-center rounded-sm bg-transparent"
           class:bg-service-red={selectedOption === option}
           on:mouseenter={() => setAsSelected(option, index)}
           role="option"
@@ -267,7 +267,7 @@
       {:else}
         {@const data = SERVICE_STATUS_PRESENTATION[option]}
         <div
-          class="mb-s10 p-s10 flex items-center rounded {selectedOption ===
+          class="mb-s10 p-s10 flex items-center rounded-sm {selectedOption ===
           option
             ? data.hoverBgClass
             : 'bg-transparent'}"

@@ -103,7 +103,7 @@
 
     <InfoLine condition={data.service.fullDesc}>
       Description longue:
-      <div class="prose-sm border-gray-02 p-s16 rounded-md border-2">
+      <div class="prose-sm border-gray-02 p-s16 rounded-lg border-2">
         <TextClamp text={description} />
       </div>
     </InfoLine>

@@ -34,7 +34,7 @@
 
 <div
   style={`background-image: url('${mapViewImage}'); height: 116px`}
-  class="rounded-ml flex items-center justify-center bg-cover"
+  class="flex items-center justify-center rounded-2xl bg-cover"
 >
   <Button label="Voir sur la carte" on:click={() => (isMapViewOpen = true)} />
   <Modal bind:isOpen={isMapViewOpen} hideTitle hideCloseButton noPadding>

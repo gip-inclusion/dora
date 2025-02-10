@@ -25,7 +25,7 @@
 </script>
 
 <label
-  class={`p-s2 flex flex-row items-center rounded ${focused ? "solid 2px #0a76f6" : ""}`}
+  class={`p-s2 flex flex-row items-center rounded-sm ${focused ? "solid 2px #0a76f6" : ""}`}
   class:mr-s24={horizontal}
 >
   <input

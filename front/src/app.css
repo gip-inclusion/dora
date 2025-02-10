@@ -158,15 +158,6 @@
   --spacing-s160: 10rem;
   --spacing-s512: 32rem;
 
-  --radius-*: initial;
-  --radius-none: 0;
-  --radius: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-ml: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 2.5rem;
-  --radius-full: 9999px;
-
   --shadow-*: initial;
   --shadow-none: none;
   --shadow-xs: 0 1px 0 0 rgba(0, 0, 0, 0.05);

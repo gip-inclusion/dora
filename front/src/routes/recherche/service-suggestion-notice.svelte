@@ -4,7 +4,7 @@
   import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
 </script>
 
-<div class="border-gray-01 flex rounded-md border bg-white shadow-md">
+<div class="border-gray-01 flex rounded-lg border bg-white shadow-md">
   <div
     class="bg-service-violet hidden flex-1 items-center justify-center md:flex"
   >

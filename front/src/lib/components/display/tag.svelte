@@ -6,7 +6,7 @@
 </script>
 
 <span
-  class="break-word px-s8 py-s2 text-f14 rounded font-bold {textColorClass} {bgColorClass}"
+  class="break-word px-s8 py-s2 text-f14 rounded-sm font-bold {textColorClass} {bgColorClass}"
   class:self-start={selfStart}
 >
   <slot />

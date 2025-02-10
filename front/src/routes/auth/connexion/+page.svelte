@@ -49,7 +49,7 @@
           <h2 class="mb-s32 text-france-blue">Se connecter ou s’inscrire</h2>
           <hr class="mb-s32" />
 
-          <div class="mb-s24 rounded-ml bg-info-light p-s16">
+          <div class="mb-s24 bg-info-light p-s16 rounded-2xl">
             {#if OIDC_AUTH_BACKEND === "proconnect"}
               <h3 class="text-f17 text-info flex leading-24">
                 <div class="mr-s8 h-s24 w-s24 inline-block fill-current">

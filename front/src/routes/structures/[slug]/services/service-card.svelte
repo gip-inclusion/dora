@@ -16,7 +16,7 @@
 
 <Bookmarkable slug={service.slug} let:onBookmark let:isBookmarked>
   <div
-    class="relative flex flex-col justify-between rounded-md bg-white shadow-md"
+    class="relative flex flex-col justify-between rounded-lg bg-white shadow-md"
   >
     <div class="g row mb-s32 p-s24 rounded-t-md">
       {#if !readOnly}

@@ -89,7 +89,7 @@
   </div>
 
   <div
-    class=" rounded-ml border-gray-01 p-s16 md:gap-s32 flex flex-col items-center justify-between border text-center md:flex-row md:items-baseline"
+    class=" border-gray-01 p-s16 md:gap-s32 flex flex-col items-center justify-between rounded-2xl border text-center md:flex-row md:items-baseline"
   >
     <p class="m-s0 p-s0">
       <span
@@ -150,7 +150,7 @@
   </div>
 
   <div
-    class="mt-s64 gap-s24 bg-gray-bg p-s24 flex flex-col rounded-md md:flex-row"
+    class="mt-s64 gap-s24 bg-gray-bg p-s24 flex flex-col rounded-lg md:flex-row"
   >
     <div class="w-1/3 self-center text-center">
       <a href="https://www.data.inclusion.beta.gouv.fr/">
@@ -182,6 +182,6 @@
   }
 
   .tag {
-    @apply px-s8 py-s2 text-f12 w-fit rounded font-bold text-white uppercase;
+    @apply px-s8 py-s2 text-f12 w-fit rounded-sm font-bold text-white uppercase;
   }
 </style>

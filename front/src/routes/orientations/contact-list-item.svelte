@@ -25,7 +25,7 @@
 
   {#if isPreference}
     <span
-      class="ml-s12 bg-magenta-20 px-s10 py-s6 text-f12 text-magenta-cta inline-block rounded"
+      class="ml-s12 bg-magenta-20 px-s10 py-s6 text-f12 text-magenta-cta inline-block rounded-sm"
     >
       À privilégier
     </span>

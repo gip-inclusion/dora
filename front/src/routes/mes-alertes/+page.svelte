@@ -55,7 +55,7 @@
       </div>
     {:else}
       <div
-        class="gap-s40 border-gray-03 px-s20 py-s32 flex flex-col-reverse items-center justify-center rounded-md border lg:flex-row"
+        class="gap-s40 border-gray-03 px-s20 py-s32 flex flex-col-reverse items-center justify-center rounded-lg border lg:flex-row"
       >
         <div class="max-w-lg basis-1/2 text-center">
           <div class="mb-s12 h-s24 w-s24 mx-auto">

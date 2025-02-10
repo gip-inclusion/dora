@@ -53,7 +53,7 @@
 </script>
 
 {#if !structure.quickStartDone}
-  <div class="border-gray-03 rounded-md border">
+  <div class="border-gray-03 rounded-lg border">
     <div
       class="gap-s16 border-gray-01 px-s16 pb-s24 pt-s24 sm:px-s36 relative flex items-center justify-between border-b sm:flex-row"
     >

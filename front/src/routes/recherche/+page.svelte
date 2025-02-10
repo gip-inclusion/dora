@@ -170,7 +170,7 @@
 <CenteredGrid extraClass="m-auto">
   <div class="lg:gap-s24 lg:flex lg:flex-row lg:items-start">
     <div
-      class="gap-s32 rounded-ml border-gray-02 p-s32 hidden flex-col border shadow-sm lg:flex lg:basis-1/3"
+      class="gap-s32 border-gray-02 p-s32 hidden flex-col rounded-2xl border shadow-sm lg:flex lg:basis-1/3"
     >
       <MapViewButton
         {data}

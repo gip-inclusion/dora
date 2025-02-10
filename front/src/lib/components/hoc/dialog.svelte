@@ -14,7 +14,7 @@
 {#if isOpen}
   <Portal target={document.body}>
     <div
-      class="bottom-s8 right-s8 rounded-ml border-gray-02 p-s24 fixed z-10 w-[384px] border bg-white shadow-sm"
+      class="bottom-s8 right-s8 border-gray-02 p-s24 fixed z-10 w-[384px] rounded-2xl border bg-white shadow-sm"
     >
       <div class="relative">
         <div class="right-s0 top-s0 absolute">

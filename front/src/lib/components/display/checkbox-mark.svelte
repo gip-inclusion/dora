@@ -3,7 +3,7 @@
 </script>
 
 <div
-  class="checkbox h-s24 w-s24 border-gray-03 flex shrink-0 justify-center rounded border"
+  class="checkbox h-s24 w-s24 border-gray-03 flex shrink-0 justify-center rounded-sm border"
 >
   <div
     class="checkbox-mark h-s12 w-s12 bg-magenta-cta self-center"

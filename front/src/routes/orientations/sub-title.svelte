@@ -4,7 +4,7 @@
 </script>
 
 <div class="gap-s16 flex items-center">
-  <div class="bg-blue-light p-s12 inline-block rounded-xl">
+  <div class="bg-blue-light p-s12 inline-block rounded-3xl">
     <div class="h-s24 w-s24 text-france-blue fill-current">
       {@html icon}
     </div>

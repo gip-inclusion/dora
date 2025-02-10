@@ -70,7 +70,7 @@
   />
 {/if}
 
-<div class="border-gray-02 p-s32 rounded-md border">
+<div class="border-gray-02 p-s32 rounded-lg border">
   <h2>Traiter la demande</h2>
 
   {#if !orientation.service?.slug}

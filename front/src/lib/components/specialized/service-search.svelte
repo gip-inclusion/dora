@@ -156,7 +156,7 @@
 <svelte:window bind:innerWidth />
 
 <form on:submit|preventDefault={handleSearch}>
-  <div class="border-gray-02 w-full rounded-md border bg-white">
+  <div class="border-gray-02 w-full rounded-lg border bg-white">
     {#if servicesOptions.categories}
       <div class="grid" class:with-subcategories={useAdditionalFilters}>
         <div

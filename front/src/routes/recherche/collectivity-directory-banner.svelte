@@ -8,7 +8,7 @@
 </script>
 
 <div
-  class="rounded-ml border-gray-02 p-s32 lg:pr-s64 relative border shadow-sm"
+  class="border-gray-02 p-s32 lg:pr-s64 relative rounded-2xl border shadow-sm"
 >
   <h3 class="mb-s12 text-france-blue">
     <a class="full-result-link hover:underline" href={url} target="_blank">

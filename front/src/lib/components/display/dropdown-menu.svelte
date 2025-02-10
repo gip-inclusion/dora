@@ -41,7 +41,7 @@
       aria-expanded={isOpen}
       aria-controls={id}
       class:bg-magenta-10={isOpen}
-      class="border-gray-03 flex w-full items-center justify-between rounded border text-left lg:w-auto"
+      class="border-gray-03 flex w-full items-center justify-between rounded-sm border text-left lg:w-auto"
       class:border-magenta-cta={isOpen}
       on:click={() => (isOpen = !isOpen)}
     >
@@ -82,7 +82,7 @@
     <div
       {id}
       class="
-        border-gray-00 absolute top-[100%] right-0 z-1000 hidden flex-col justify-end rounded-md border bg-white shadow-md
+        border-gray-00 absolute top-[100%] right-0 z-1000 hidden flex-col justify-end rounded-lg border bg-white shadow-md
         {minWidth ? `min-w-[${minWidth}]` : ''}
         "
       class:left-0={mobileDesign}

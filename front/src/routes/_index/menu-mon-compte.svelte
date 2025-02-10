@@ -12,7 +12,7 @@
   export let mobileDesign = false;
 
   const aClass =
-    "flex w-full lg:min-w-[200px] items-center p-s12 text-gray-text hover:bg-magenta-10 rounded";
+    "flex w-full lg:min-w-[200px] items-center p-s12 text-gray-text hover:bg-magenta-10 rounded-sm";
 </script>
 
 <DropdownMenu label="Mon compte" {mobileDesign}>

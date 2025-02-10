@@ -151,7 +151,7 @@
     </BasicInputField>
 
     {#if $orientation.requirements.length || $orientation.situation.length}
-      <div class="bg-info-light px-s20 py-s20 rounded-md">
+      <div class="bg-info-light px-s20 py-s20 rounded-lg">
         <Accordion
           title="Profil et critères du ou de la bénéficiaire"
           subTitle="Récapitulatif des critères que vous avez confirmé à l’étape précédente."

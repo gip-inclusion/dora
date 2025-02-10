@@ -117,7 +117,7 @@
       type="file"
       accept=".doc, .docx, .pdf, .png, .jpeg, .jpg, .odt, .xls, .xlsx, .ods"
       multiple
-      class="file:border-magenta-cta file:px-s8 file:py-s6 file:text-f14 file:text-magenta-cta read-only:text-gray-text file:hover:border-magenta-hover file:hover:bg-magenta-hover file:active:border-france-blue file:active:text-france-blue file:disabled:border-gray-01 file:disabled:text-gray-text-alt2 lg:file:px-s10 file:rounded file:border file:bg-white file:leading-normal file:hover:text-white!"
+      class="file:border-magenta-cta file:px-s8 file:py-s6 file:text-f14 file:text-magenta-cta read-only:text-gray-text file:hover:border-magenta-hover file:hover:bg-magenta-hover file:active:border-france-blue file:active:text-france-blue file:disabled:border-gray-01 file:disabled:text-gray-text-alt2 lg:file:px-s10 file:rounded-sm file:border file:bg-white file:leading-normal file:hover:text-white!"
     />{progress != null ? `${Math.round(progress)} %` : ""}
   </label>
 

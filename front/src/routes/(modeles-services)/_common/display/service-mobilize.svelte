@@ -243,7 +243,7 @@
         {/each}
       </ul>
       {#if contactInfoForIndividual}
-        <div class="rounded-ml border-gray-02 p-s24 border shadow-sm">
+        <div class="border-gray-02 p-s24 rounded-2xl border shadow-sm">
           {#if isContactInfoForIndividualShown}
             <h5>{service.structureInfo.name}</h5>
             <ul class="space-y-s8 text-gray-text">

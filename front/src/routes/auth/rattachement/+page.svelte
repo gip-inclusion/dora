@@ -131,7 +131,7 @@
       </div>
     </StructureSearch>
 
-    <div class="mt-s24 border-gray-02 px-s32 py-s24 rounded-md border bg-white">
+    <div class="mt-s24 border-gray-02 px-s32 py-s24 rounded-lg border bg-white">
       <a
         href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/comment-sinscrire-sur-dora-14d64n0/#3-03-adherer-a-votre-structure"
         target="_blank"

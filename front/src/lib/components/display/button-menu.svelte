@@ -43,7 +43,7 @@
     />
     <div
       {id}
-      class="border-gray-01 px-s10 py-s10 absolute top-[113%] z-1000 flex-col justify-end rounded-md border bg-white shadow-sm"
+      class="border-gray-01 px-s10 py-s10 absolute top-[113%] z-1000 flex-col justify-end rounded-lg border bg-white shadow-sm"
       class:right-s0={alignRight}
       class:flex={isOpen}
       class:hidden={!isOpen}

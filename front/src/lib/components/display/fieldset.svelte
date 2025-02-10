@@ -35,7 +35,7 @@
 </script>
 
 <fieldset
-  class="breakpoint-hack flex flex-col rounded-md shadow-md"
+  class="breakpoint-hack flex flex-col rounded-lg shadow-md"
   class:mt-s48={!noTopPadding}
   bind:this={wrapper}
 >
@@ -108,7 +108,7 @@
   <div
     class="gap-s32 px-s32 pb-s32 pt-s24 flex flex-col bg-white"
     class:rounded-b-md={title}
-    class:rounded-md={!title}
+    class:rounded-lg={!title}
     class:pt-s32={!title}
     class:hidden={collapsable && collapsed}
   >

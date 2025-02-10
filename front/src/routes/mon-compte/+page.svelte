@@ -16,7 +16,7 @@
 
   <div class="gap-s24 flex flex-col md:flex-row">
     <h1 class="sr-only">Mon compte</h1>
-    <div class="border-gray-02 flex-2 rounded-md border md:relative">
+    <div class="border-gray-02 flex-2 rounded-lg border md:relative">
       <div
         class="gap-s12 border-gray-02 px-s16 py-s20 md:px-s36 flex flex-wrap items-center justify-between border-b"
       >
@@ -78,7 +78,7 @@
 
     <div class="gap-s24 flex flex-1 flex-col">
       {#if $userInfo.isStaff || $userInfo.isManager}
-        <div class="mb-s24 border-gray-03 p-s24 rounded-md border">
+        <div class="mb-s24 border-gray-03 p-s24 rounded-lg border">
           <h2 class="mb-s20 text-f18 text-gray-dark leading-20">Raccourcis</h2>
           <ul class="gap-s10 flex flex-col">
             {#if $userInfo.isStaff}

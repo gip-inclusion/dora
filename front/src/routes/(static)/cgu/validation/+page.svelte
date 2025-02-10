@@ -31,7 +31,7 @@
     </h1>
 
     <div
-      class="cgu mb-s48 max-h-s512 bg-blue-light p-s32 overflow-auto rounded-md"
+      class="cgu mb-s48 max-h-s512 bg-blue-light p-s32 overflow-auto rounded-lg"
       on:scroll={(evt) => {
         const { scrollTop, scrollHeight, clientHeight } = evt.target;
         cguCanBeValidated = scrollTop + clientHeight >= scrollHeight - 100;

@@ -124,7 +124,7 @@
   {#if structureHasInfo}
     <div class="sidebar">
       <div
-        class="gap-s24 border-gray-02 px-s32 py-s24 flex flex-col rounded-lg border"
+        class="gap-s24 border-gray-02 px-s32 py-s24 flex flex-col rounded-3xl border"
       >
         <h3 class="mb-s8 text-france-blue">Informations pratiques</h3>
 

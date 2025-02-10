@@ -14,7 +14,7 @@
 >
   {@const service = bookmark.service}
 
-  <div class="rounded-ml border-gray-02 border shadow-sm" tabindex="-1">
+  <div class="border-gray-02 rounded-2xl border shadow-sm" tabindex="-1">
     <div class="p-s32 lg:pr-s64">
       <div class="mb-s24 flex items-center justify-between">
         {#if !service?.name}
@@ -60,7 +60,7 @@
         </p>
         {#if bookmark.isDi}
           <div
-            class="border-gray-02 px-s8 py-s2 text-f12 text-gray-text inline rounded border"
+            class="border-gray-02 px-s8 py-s2 text-f12 text-gray-text inline rounded-sm border"
           >
             Source&nbsp;: <span class="capitalize">{service?.source}</span>, via
             data·inclusion

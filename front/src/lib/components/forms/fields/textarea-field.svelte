@@ -71,7 +71,7 @@
   @reference "../../../../app.css";
 
   textarea {
-    @apply border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus min-h-[3rem] rounded border outline-hidden;
+    @apply border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus min-h-[3rem] rounded-sm border outline-hidden;
     @apply read-only:text-gray-03 disabled:bg-gray-00 grow;
   }
 </style>

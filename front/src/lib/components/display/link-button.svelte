@@ -66,7 +66,7 @@
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
   on:click
-  class="{paddingX} {paddingY} {textSize} {border} {text} {background} {extraClass} focus:shadow-focus inline-flex items-center justify-center rounded leading-normal whitespace-nowrap"
+  class="{paddingX} {paddingY} {textSize} {border} {text} {background} {extraClass} focus:shadow-focus inline-flex items-center justify-center rounded-sm leading-normal whitespace-nowrap"
   class:w-full={wFull}
   class:hover:underline={hoverUnderline}
   aria-label={ariaLabel}

@@ -39,7 +39,7 @@
   <div
     bind:this={element}
     {id}
-    class="rounded-ml border shadow-sm"
+    class="rounded-2xl border shadow-sm"
     class:border-gray-02={!selected}
     class:border-magenta-cta={selected}
     tabindex="-1"
@@ -102,7 +102,7 @@
         >
           {#if isDI}
             <div
-              class="border-gray-02 px-s8 py-s2 text-f12 text-gray-text inline rounded border"
+              class="border-gray-02 px-s8 py-s2 text-f12 text-gray-text inline rounded-sm border"
             >
               Source&nbsp;: {result.diSourceDisplay}, via data·inclusion
             </div>
@@ -123,6 +123,6 @@
   @reference "../../app.css";
 
   .tag {
-    @apply bg-blue-information px-s8 py-s0 text-f14 text-france-blue rounded-xl whitespace-nowrap;
+    @apply bg-blue-information px-s8 py-s0 text-f14 text-france-blue rounded-3xl whitespace-nowrap;
   }
 </style>

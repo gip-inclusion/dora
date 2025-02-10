@@ -121,7 +121,7 @@
       {:else}
         {#each filteredEntities as entity}
           <div
-            class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-md border bg-white"
+            class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-lg border bg-white"
           >
             {#if entity.isStructure}
               <div class="grow">

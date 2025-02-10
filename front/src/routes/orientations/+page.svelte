@@ -73,10 +73,10 @@
       >
         <div class="gap-s32 flex flex-1 flex-col">
           <div
-            class="border-blue-information bg-blue-light p-s24 flex w-full items-center rounded-md border"
+            class="border-blue-information bg-blue-light p-s24 flex w-full items-center rounded-lg border"
           >
             <div
-              class="mr-s16 bg-blue-information-dark p-s12 inline-block rounded-xl"
+              class="mr-s16 bg-blue-information-dark p-s12 inline-block rounded-3xl"
             >
               <div class="h-s24 w-s24 fill-current text-white">
                 {@html compass3Icon}
@@ -103,7 +103,7 @@
           </div>
 
           {#if orientation.status !== "REFUSÉE"}
-            <div class="border-gray-02 flex-2 rounded-md border md:relative">
+            <div class="border-gray-02 flex-2 rounded-lg border md:relative">
               <div
                 class="gap-s12 border-gray-02 px-s16 py-s20 md:px-s36 flex flex-wrap items-center justify-between border-b"
               >
@@ -241,7 +241,7 @@
           {/if}
 
           {#if orientation.prescriber?.name || orientation.prescriber?.email || orientation.prescriberStructure?.name}
-            <div class="border-gray-02 flex-2 rounded-md border md:relative">
+            <div class="border-gray-02 flex-2 rounded-lg border md:relative">
               <div
                 class="gap-s12 border-gray-02 px-s16 py-s20 md:px-s36 flex flex-wrap items-center justify-between border-b"
               >

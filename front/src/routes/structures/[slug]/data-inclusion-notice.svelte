@@ -9,7 +9,7 @@
 </script>
 
 <div
-  class="mt-s40 gap-s16 bg-info-light px-s24 py-s40 md:gap-s112 md:px-s112 flex flex-col rounded-lg md:flex-row"
+  class="mt-s40 gap-s16 bg-info-light px-s24 py-s40 md:gap-s112 md:px-s112 flex flex-col rounded-3xl md:flex-row"
 >
   <div class="grow self-center md:shrink-0">
     <img

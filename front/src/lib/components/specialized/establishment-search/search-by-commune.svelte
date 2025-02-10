@@ -111,7 +111,7 @@
       </div>
       {#if item.value.isSiege}
         <div
-          class="bg-gray-01 px-s6 py-s4 text-f12 text-gray-text shrink-0 rounded font-bold"
+          class="bg-gray-01 px-s6 py-s4 text-f12 text-gray-text shrink-0 rounded-sm font-bold"
         >
           Siège
         </div>

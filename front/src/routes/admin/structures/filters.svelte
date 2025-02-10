@@ -299,7 +299,7 @@
   />
   <div
     class:hidden={!showAdvancedFilters}
-    class="mx-s8 border-gray-01 p-s16 rounded border"
+    class="mx-s8 border-gray-01 p-s16 rounded-sm border"
   >
     <div class="mb-s16 gap-s24 flex flex-col">
       <div class="gap-s16 flex justify-between">

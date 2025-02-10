@@ -7,7 +7,7 @@
   export let readOnly = true;
 </script>
 
-<div class="rounded-ml flex flex-col justify-between bg-white shadow-md">
+<div class="flex flex-col justify-between rounded-2xl bg-white shadow-md">
   <div class="p-s24">
     <div class="text-f14 flex items-center justify-between">
       <div class="text-gray-dark flex items-center">

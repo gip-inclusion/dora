@@ -7,7 +7,7 @@
   export let links: { label: string; url: string }[] = [];
 </script>
 
-<div class="border-gray-03 p-s40 flex flex-col rounded-md border md:flex-row">
+<div class="border-gray-03 p-s40 flex flex-col rounded-lg border md:flex-row">
   <div class="flex flex-4 flex-col">
     <div class="mb-s14 text-center">
       <span

@@ -99,7 +99,7 @@
         aria-modal="true"
         tabindex="-1"
         bind:this={modalEl}
-        class="m-s24 max-h-[90vh] overflow-auto rounded-md bg-white shadow-md"
+        class="m-s24 max-h-[90vh] overflow-auto rounded-lg bg-white shadow-md"
         class:px-s36={!noPadding}
         class:py-s24={!noPadding}
         class:w-[560px]={width === "small"}

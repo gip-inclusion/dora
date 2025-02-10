@@ -55,7 +55,7 @@
 </script>
 
 {#if visible}
-  <div class="rounded-lg {types[type].background} py-s24 pl-s24 pr-s24">
+  <div class="rounded-3xl {types[type].background} py-s24 pl-s24 pr-s24">
     {#if title || hasCloseButton}
       <div class="items-top flex">
         {#if showIcon}

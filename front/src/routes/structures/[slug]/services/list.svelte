@@ -240,7 +240,7 @@
 
 {#if (hasAtLeastOneServiceNotArchived(structure) || hasArchivedServices(structure)) && tabDisplay && structure.canEditServices}
   <div
-    class="mb-s40 px-s24 py-s24 text-f14 md:h-s80 md:py-s0 flex w-full flex-wrap items-center rounded-md bg-white shadow-md"
+    class="mb-s40 px-s24 py-s24 text-f14 md:h-s80 md:py-s0 flex w-full flex-wrap items-center rounded-lg bg-white shadow-md"
   >
     <div class="gap-s16 flex w-full flex-wrap items-center">
       <div class="text-f16 flex w-full items-center font-bold md:w-auto">
