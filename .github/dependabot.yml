@@ -12,6 +12,12 @@ updates:
     commit-message:
       prefix: "build"
       prefix-development: "build(dev)"
+    groups:
+      minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - "patch"
+          - "minor"
 
   - package-ecosystem: "npm"
     directory: "/front"
@@ -20,3 +26,10 @@ updates:
     commit-message:
       prefix: "build"
       prefix-development: "build(dev)"
+    groups:
+      minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - "patch"
+          - "minor"
+
