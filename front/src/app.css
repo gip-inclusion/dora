@@ -318,6 +318,10 @@
     @apply border-t-gray-03;
   }
 
+  button {
+    cursor: pointer;
+  }
+
   ::placeholder {
     @apply text-gray-text!;
   }
