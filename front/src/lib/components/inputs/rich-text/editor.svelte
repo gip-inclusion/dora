@@ -253,7 +253,5 @@
 
   :global(.ProseMirror p.is-editor-empty:first-child::before) {
     content: attr(data-placeholder);
-
-    @apply h-s0 text-gray-text-alt2 pointer-events-none float-left;
   }
 </style>

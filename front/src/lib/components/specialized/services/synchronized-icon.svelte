@@ -19,9 +19,7 @@
   @reference "../../../../app.css";
 
   .warning {
-    @apply bg-service-orange-darker text-white;
   }
   .small {
-    @apply p-s6;
   }
 </style>

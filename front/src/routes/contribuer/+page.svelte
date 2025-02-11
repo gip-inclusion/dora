@@ -77,6 +77,5 @@
   @reference "../../app.css";
 
   .icon {
-    @apply mr-s12 w-s32 text-france-blue flex-none self-center fill-current;
   }
 </style>

@@ -230,51 +230,10 @@
     --shadow-md: 0 2px 10px 0 rgba(0, 0, 0, 0.1), 0 0 2px 0 rgba(0, 0, 0, 0.2);
   }
 
-  @font-face {
-    font-display: swap;
-    font-family: "Marianne";
-    font-style: normal;
-    font-weight: normal;
-    src:
-      url("$lib/assets/fonts/marianne/Marianne-Regular.woff2") format("woff2"),
-      url("$lib/assets/fonts/marianne/Marianne-Regular.woff") format("woff");
-  }
 
-  @font-face {
-    font-display: swap;
-    font-family: "Marianne";
-    font-style: normal;
-    font-weight: bold;
-    src:
-      url("$lib/assets/fonts/marianne/Marianne-Bold.woff2") format("woff2"),
-      url("$lib/assets/fonts/marianne/Marianne-Bold.woff") format("woff");
-  }
-
-  @font-face {
-    font-display: swap;
-    font-family: "Marianne";
-    font-style: italic;
-    font-weight: normal;
-    src:
-      url("$lib/assets/fonts/marianne/Marianne-Regular_Italic.woff2")
-        format("woff2"),
-      url("$lib/assets/fonts/marianne/Marianne-Regular_Italic.woff")
-        format("woff");
-  }
-
-  @font-face {
-    font-display: swap;
-    font-family: "Marianne";
-    font-style: italic;
-    font-weight: bold;
-    src:
-      url("$lib/assets/fonts/marianne/Marianne-Bold_Italic.woff2")
-        format("woff2"),
-      url("$lib/assets/fonts/marianne/Marianne-Bold_Italic.woff") format("woff");
-  }
 
   body {
-    @apply bg-white font-sans;
+    
   }
 
   h1,
@@ -282,52 +241,48 @@
   h3,
   h4,
   h5 {
-    @apply mb-s16 text-gray-dark font-bold;
+    
   }
 
   h1 {
-    @apply text-f26 md:text-f30 lg:text-f38 xl:text-f45 leading-32 md:leading-40 lg:leading-48 xl:leading-56;
+    
   }
 
   h2 {
-    @apply text-f22 md:text-f24 lg:text-f28 xl:text-f32 leading-32 lg:leading-40;
+    
     color: var(--col-france-blue);
   }
 
   h3 {
-    @apply text-f19 md:text-f20 lg:text-f21 xl:text-f23 leading-24 md:leading-32;
+    
   }
 
   h4 {
-    @apply text-f17 leading-24;
+    
   }
 
   h5 {
-    @apply text-f14 leading-24;
+    
   }
 
   p {
-    @apply mb-s16 text-f18 text-gray-text leading-normal;
+    
   }
 
   small {
-    @apply text-f14 text-gray-text-alt2 italic;
+    
   }
 
   hr {
-    @apply border-t-gray-03;
+    
   }
 
   button {
     cursor: pointer;
   }
 
-  ::placeholder {
-    @apply text-gray-text!;
-  }
-
   .legend {
-    @apply text-f14 text-gray-text-alt2 leading-24;
+    
   }
 
   .break-word {

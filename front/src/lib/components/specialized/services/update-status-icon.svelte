@@ -44,9 +44,7 @@
   @reference "../../../../app.css";
 
   .container.small {
-    @apply p-s6;
   }
   .icon.small {
-    @apply h-s16 w-s16;
   }
 </style>

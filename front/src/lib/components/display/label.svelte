@@ -67,7 +67,6 @@
   }
 
   .dark-bg {
-    @apply print:text-gray-text text-white;
   }
 
   .icon {

@@ -154,11 +154,9 @@
     input[type="email"],
     input[type="tel"],
     input[type="date"] {
-      @apply h-s48 border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus rounded-sm border outline-hidden;
     }
 
     input {
-      @apply read-only:text-gray-03 disabled:bg-gray-00 grow;
     }
   </style>
 {/if}

@@ -178,10 +178,8 @@
   @reference "../app.css";
 
   h3 {
-    @apply text-france-blue;
   }
 
   .tag {
-    @apply px-s8 py-s2 text-f12 w-fit rounded-sm font-bold text-white uppercase;
   }
 </style>

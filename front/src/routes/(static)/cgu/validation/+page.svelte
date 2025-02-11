@@ -61,15 +61,11 @@
   @reference "../../../../app.css";
 
   :global(.cgu h1) {
-    @apply text-f32;
   }
   :global(.cgu h2) {
-    @apply text-f16;
   }
   :global(.cgu p, .cgu li, .cgu a) {
-    @apply text-f14;
   }
   :global(.cgu .prose) {
-    @apply max-w-none;
   }
 </style>

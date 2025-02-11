@@ -75,11 +75,8 @@
 
   input:checked ~ .toggle-circle {
     transform: translateX(100%);
-
-    @apply bg-magenta-cta;
   }
 
   input:checked ~ .toggle-path {
-    @apply border-magenta-hover bg-magenta-20;
   }
 </style>

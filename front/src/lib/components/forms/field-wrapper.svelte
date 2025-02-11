@@ -78,10 +78,8 @@
   @reference "../../../app.css";
 
   .one-fourth {
-    @apply lg:w-1/3;
   }
 
   .three-fourths {
-    @apply lg:w-2/3;
   }
 </style>

@@ -272,110 +272,83 @@
   @reference "../../../../app.css";
 
   .selected {
-    @apply text-magenta-cta;
   }
   :global(.hover) {
-    @apply !bg-magenta-10 !text-magenta-cta;
   }
   .combobox {
-    @apply relative;
   }
 
   @media (width >= 64rem) {
     .vertical {
-      @apply w-3/4;
     }
   }
 
   /* As search */
   .filter-search {
-    @apply px-s12 py-s0 absolute border-0 bg-transparent;
   }
 
   @media (width >= 64rem) {
     .filter-search {
-      @apply p-s12;
     }
   }
 
   .filter-search .chevron {
-    @apply !text-gray-dark;
   }
   .filter-search .placeholder {
-    @apply !text-gray-text;
   }
   .filter-search :global(.option) {
-    @apply p-s8 !min-h-min;
   }
   .filter-search .optgroup:hover,
   .filter-search .option:hover,
   .filter-search :global(.hover) {
-    @apply !bg-magenta-10 !text-magenta-cta;
   }
   .filter-search.has-value .chevron,
   .filter-search.has-value .placeholder,
   .filter-search.has-value .current-value {
-    @apply text-magenta-dark;
   }
   .filter-search :global(.option span.selected) {
-    @apply text-magenta-cta;
   }
 
   .filter-search.has-value .chevron {
-    @apply bg-magenta-10 text-magenta-cta;
   }
 
   /* As filter */
   .filter-style {
-    @apply px-s16 py-s12 rounded-3xl;
   }
   .filter-style {
-    @apply px-s16 py-s12 rounded-3xl;
   }
   .filter-style .current-value > div:first-child {
-    @apply w-auto;
   }
   .filter-style.combobox {
-    @apply relative w-fit;
   }
   .filter-style .chevron {
-    @apply text-gray-text;
   }
   .filter-style .placeholder,
   .filter-style .current-value {
-    @apply text-gray-text font-bold;
   }
 
   .filter-style.has-value .chevron,
   .filter-style.has-value .placeholder,
   .filter-style.has-value .current-value {
-    @apply text-magenta-dark;
   }
 
   .filter-style:hover {
-    @apply bg-magenta-10;
   }
   .filter-style:hover .placeholder,
   .filter-style:hover .current-value {
-    @apply text-magenta-hover;
   }
   .filter-style:hover .chevron {
-    @apply text-magenta-hover;
   }
   .filter-style .option:hover,
   .filter-style :global(.hover) {
-    @apply !bg-magenta-10 !text-magenta-cta;
   }
 
   .filter-style.expanded {
-    @apply bg-magenta-cta;
   }
   .filter-style.expanded.has-value {
-    @apply bg-magenta-dark;
   }
   .filter-style.expanded .placeholder,
   .filter-style.expanded .current-value,
   .filter-style.expanded .chevron {
-    @apply text-white;
   }
 </style>

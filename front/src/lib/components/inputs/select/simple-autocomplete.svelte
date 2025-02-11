@@ -878,7 +878,6 @@
   @reference "../../../../app.css";
 
   input {
-    @apply read-only:text-gray-03 disabled:bg-gray-00;
   }
 
   .autocomplete {
@@ -1011,7 +1010,6 @@
   }
 
   .tags-container {
-    @apply mt-s12 gap-s8 flex flex-row flex-wrap;
   }
 
   .tags {

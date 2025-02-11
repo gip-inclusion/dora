@@ -11,6 +11,5 @@
   @reference "../../../app.css";
 
   :global(.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6) {
-    @apply text-france-blue;
   }
 </style>

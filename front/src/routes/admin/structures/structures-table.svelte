@@ -109,6 +109,5 @@
   @reference "../../../app.css";
 
   .highlight {
-    @apply bg-gray-01 shadow-sm;
   }
 </style>

@@ -44,27 +44,21 @@
   @reference "../../../app.css";
 
   .active {
-    @apply text-magenta-cta;
   }
 
   .disabled {
-    @apply text-gray-text-alt;
   }
   .tooltip {
-    @apply relative inline-block print:hidden;
   }
 
   .tooltip .tooltiptext {
-    @apply bg-magenta-dark px-s8 py-s2 text-f12 invisible absolute top-[-1000px] left-[-1000px] z-10 w-max -translate-x-1/2 rounded-sm text-center font-bold text-white;
   }
 
   .tooltip .tooltiptext::after {
     content: "";
-    @apply -ml-s4 border-b-magenta-dark absolute bottom-full left-1/2 border-4 border-solid border-transparent;
   }
 
   .tooltip:hover .tooltiptext,
   .tooltip:focus .tooltiptext {
-    @apply top-s28 visible left-1/2 opacity-100;
   }
 </style>

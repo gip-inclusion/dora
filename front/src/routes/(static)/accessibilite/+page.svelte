@@ -107,22 +107,17 @@
   @reference "../../../app.css";
 
   h1 {
-    @apply text-france-blue;
   }
 
   a {
-    @apply underline;
   }
 
   h2 {
-    @apply mb-s24 mt-s48;
   }
 
   li {
-    @apply list-inside list-disc;
   }
 
   hr {
-    @apply my-s32;
   }
 </style>

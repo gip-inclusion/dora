@@ -100,6 +100,5 @@
   @reference "../../../../../app.css";
 
   .checkbox {
-    @apply mr-s8 h-s24 w-s24 text-success inline-block fill-current align-text-bottom;
   }
 </style>

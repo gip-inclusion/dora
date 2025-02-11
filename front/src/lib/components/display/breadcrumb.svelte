@@ -185,22 +185,17 @@
   @reference "../../../app.css";
 
   a {
-    @apply text-magenta-40 print:text-france-blue;
   }
 
   .current {
-    @apply print:text-france-blue font-bold text-white;
   }
 
   nav li + li::before {
-    @apply ml-s8 mr-s8 text-magenta-40 print:text-france-blue inline;
   }
 
   .dark a {
-    @apply text-gray-text;
   }
   .dark li::before,
   .dark .current {
-    @apply text-gray-text;
   }
 </style>

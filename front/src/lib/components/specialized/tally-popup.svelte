@@ -118,6 +118,5 @@
   @reference "../../../app.css";
 
   :global(.tally-popup) {
-    @apply print:!hidden;
   }
 </style>

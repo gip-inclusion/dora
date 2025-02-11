@@ -123,6 +123,5 @@
   @reference "../../app.css";
 
   .tag {
-    @apply bg-blue-information px-s8 py-s0 text-f14 text-france-blue rounded-3xl whitespace-nowrap;
   }
 </style>

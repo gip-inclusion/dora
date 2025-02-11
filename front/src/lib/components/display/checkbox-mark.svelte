@@ -24,6 +24,5 @@
    * Il n'est pas nécessaire d'utiliser la prop checked avec la deuxième façon.
    */
   :global(input[type="checkbox"]:checked + .checkbox .checkbox-mark) {
-    @apply visible;
   }
 </style>

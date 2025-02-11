@@ -356,6 +356,5 @@
   @reference "../../../app.css";
 
   label {
-    @apply font-bold;
   }
 </style>

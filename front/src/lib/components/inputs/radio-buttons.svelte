@@ -58,10 +58,8 @@
   @reference "../../../app.css";
 
   input[type="radio"]:checked + div div {
-    @apply block;
   }
   label {
-    @apply p-s2 rounded;
     outline: none;
   }
 </style>

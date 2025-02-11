@@ -377,6 +377,5 @@
   @reference "../../../../app.css";
 
   .typographic-list {
-    @apply mb-s24 pl-s20 text-f18 text-gray-text list-disc leading-32 break-all;
   }
 </style>

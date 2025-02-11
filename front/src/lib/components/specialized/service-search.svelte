@@ -304,25 +304,18 @@
   }
 
   .subcategories-search :global(.field-wrapper) {
-    @apply relative w-[100%];
   }
   .subcategories-search :global(.label-container) {
-    @apply sr-only;
   }
 
   .grid :global(.autocomplete-input) {
-    @apply border-0;
   }
   .grid :global(.city) {
-    @apply text-magenta-dark;
   }
   .grid :global(.city .autocomplete) {
-    @apply block;
   }
   .grid :global(.input-container input) {
-    @apply bg-transparent;
   }
   .grid :global(input::placeholder) {
-    @apply text-gray-text;
   }
 </style>

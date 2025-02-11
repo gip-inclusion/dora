@@ -119,6 +119,5 @@
     border-color: red;
   }
   .disabled-bg {
-    @apply bg-gray-bg;
   }
 </style>

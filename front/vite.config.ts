@@ -1,6 +1,7 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig, loadEnv } from "vite";
 import { sentrySvelteKit } from "@sentry/sveltekit";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig(({ mode }) => {
   // Charge les variables d'environnement des fichiers .env
@@ -13,6 +14,7 @@ export default defineConfig(({ mode }) => {
         },
       }),
       sveltekit(),
+      tailwindcss(),
     ],
 
     build: {

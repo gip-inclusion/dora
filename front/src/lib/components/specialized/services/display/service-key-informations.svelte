@@ -216,13 +216,10 @@
   @reference "../../../../../app.css";
 
   h3 {
-    @apply mb-s2 mt-s10 text-f17 flex items-center;
   }
   p {
-    @apply m-s0 text-f16 text-gray-text;
   }
   li.separator::before {
     content: "•";
-    @apply mx-s6;
   }
 </style>

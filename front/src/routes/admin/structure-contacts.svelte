@@ -46,6 +46,5 @@
   @reference "../../app.css";
 
   h1 {
-    @apply my-s0 text-f16 font-bold;
   }
 </style>
