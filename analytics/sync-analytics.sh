@@ -4,14 +4,11 @@
 # you only have to provide the correct DATABASE_URL and DORA_DATABASE_URL
 # with an enabled proxy to the DORA database.
 
-# Vérification de l'existence du fichier .env
-if [ ! -f .env ]; then
-    echo "Erreur : fichier .env non trouvé (copier .env.example en .env et adapter les variables d'environnement)"
-    exit 1
+# Chargement des variables d'environnement à partir du fichier .env s'il existe
+if [ -f .env ]; then
+    echo "Chargement des variables d'environnement à partir du fichier .env"
+    source .env
 fi
-
-# Chargement des variables d'environnement
-source .env
 
 # Vérification si les variables d'environnement requises sont définies
 required_vars=("DORA_DATABASE_URL" "DATABASE_URL")
