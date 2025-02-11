@@ -4,6 +4,33 @@
 # you only have to provide the correct DATABASE_URL and DORA_DATABASE_URL
 # with an enabled proxy to the DORA database.
 
+# Vérification de l'existence du fichier .env
+if [ ! -f .env ]; then
+    echo "Erreur : fichier .env non trouvé (copier .env.example en .env et adapter les variables d'environnement)"
+    exit 1
+fi
+
+# Chargement des variables d'environnement
+source .env
+
+# Vérification si les variables d'environnement requises sont définies
+required_vars=("DORA_DATABASE_URL" "DATABASE_URL")
+missing_vars=()
+
+for var in "${required_vars[@]}"; do
+    if [ -z "${!var}" ]; then
+        missing_vars+=("$var")
+    fi
+done
+
+if [ ${#missing_vars[@]} -ne 0 ]; then
+    echo "Erreur : variables d'environnement requises manquantes :"
+    for var in "${missing_vars[@]}"; do
+        echo "- $var"
+    done
+    exit 1
+fi
+
 if command -v dbclient-fetcher &> /dev/null; then
     dbclient-fetcher pgsql 15
 fi
