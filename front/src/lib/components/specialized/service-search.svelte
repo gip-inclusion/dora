@@ -304,7 +304,8 @@
   }
 
   .subcategories-search :global(.field-wrapper) {
-    @apply relative w-[100%];
+    position: relative;
+    width: 100%;
   }
   .subcategories-search :global(.label-container) {
     @apply sr-only;
