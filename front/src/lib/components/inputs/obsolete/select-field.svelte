@@ -275,7 +275,8 @@
     @apply text-magenta-cta;
   }
   :global(.hover) {
-    @apply !bg-magenta-10 !text-magenta-cta;
+    background-color: var(--color-magenta-10) !important;
+    color: var(--color-magenta-cta) !important;
   }
   .combobox {
     @apply relative;
@@ -283,7 +284,7 @@
 
   @media (width >= 64rem) {
     .vertical {
-      @apply w-3/4;
+      width: 75%;
     }
   }
 
@@ -294,23 +295,25 @@
 
   @media (width >= 64rem) {
     .filter-search {
-      @apply p-s12;
+      padding: var(--spacing-s12);
     }
   }
 
   .filter-search .chevron {
-    @apply !text-gray-dark;
+    color: var(--color-gray-dark) !important;
   }
   .filter-search .placeholder {
-    @apply !text-gray-text;
+    color: var(--color-gray-text) !important;
   }
   .filter-search :global(.option) {
-    @apply p-s8 !min-h-min;
+    padding: var(--spacing-s8) !important;
+    min-height: min-content !important;
   }
   .filter-search .optgroup:hover,
   .filter-search .option:hover,
   .filter-search :global(.hover) {
-    @apply !bg-magenta-10 !text-magenta-cta;
+    background-color: var(--color-magenta-10) !important;
+    color: var(--color-magenta-cta) !important;
   }
   .filter-search.has-value .chevron,
   .filter-search.has-value .placeholder,
@@ -364,7 +367,8 @@
   }
   .filter-style .option:hover,
   .filter-style :global(.hover) {
-    @apply !bg-magenta-10 !text-magenta-cta;
+    background-color: var(--color-magenta-10) !important;
+    color: var(--color-magenta-cta) !important;
   }
 
   .filter-style.expanded {
