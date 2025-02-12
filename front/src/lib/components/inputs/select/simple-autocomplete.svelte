@@ -748,7 +748,8 @@
   <div class="input-container">
     <input
       type="text"
-      class="{inputClassName || ''} input autocomplete-input"
+      class="{inputClassName ||
+        ''} input autocomplete-input read-only:text-gray-03 disabled:bg-gray-00"
       id={inputId}
       autocomplete={html5autocomplete ? "on" : "off"}
       placeholder={multiple && value.length ? placeholderMulti : placeholder}
@@ -876,10 +877,6 @@
 
 <style lang="postcss">
   @reference "../../../../app.css";
-
-  input {
-    @apply read-only:text-gray-03 disabled:bg-gray-00;
-  }
 
   .autocomplete {
     position: relative;
