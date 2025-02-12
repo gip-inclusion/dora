@@ -8,7 +8,6 @@
   export let label: string | undefined = undefined;
   export let hideLabel = false;
   export let mobileDesign = false;
-  export let minWidth: string | undefined = undefined;
 
   let isOpen = false;
   let dropdownButton;
@@ -81,10 +80,7 @@
 
     <div
       {id}
-      class="
-        border-gray-00 absolute top-[100%] right-0 z-1000 hidden flex-col justify-end rounded-lg border bg-white shadow-md
-        {minWidth ? `min-w-[${minWidth}]` : ''}
-        "
+      class="border-gray-00 absolute top-[100%] right-0 z-1000 hidden flex-col justify-end rounded-lg border bg-white shadow-md"
       class:left-0={mobileDesign}
       class:!flex={isOpen}
     >
