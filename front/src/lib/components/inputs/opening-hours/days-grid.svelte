@@ -83,14 +83,14 @@
     grid-column-end: 5;
   }
   .day-grid.day > div {
-    @apply mb-s24;
+    margin-bottom: var(--s24);
   }
 
   @media (width >= 48rem) {
     .day-grid {
       display: grid;
       grid-template-columns: 1fr 2fr 2fr;
-      @apply mb-s24;
+      margin-bottom: var(--s24);
     }
     .day-grid.day > div:first-child {
       grid-column-start: auto;
