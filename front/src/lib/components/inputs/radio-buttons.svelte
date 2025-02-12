@@ -23,7 +23,7 @@
 <div class="gap-s8 flex flex-col">
   {#each choices as choice, i}
     <label
-      class="focus-within:shadow-focus flex flex-row items-center"
+      class="focus-within:shadow-focus p-s2 flex flex-row items-center rounded outline-0"
       class:outline={choice.value === focusValue}
     >
       <input
@@ -59,9 +59,5 @@
 
   input[type="radio"]:checked + div div {
     @apply block;
-  }
-  label {
-    @apply p-s2 rounded;
-    outline: none;
   }
 </style>
