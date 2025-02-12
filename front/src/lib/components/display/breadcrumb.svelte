@@ -85,15 +85,20 @@
   }
 
   $: structureData = getStructureData(currentLocation);
+
+  $: linkClasses = `${dark ? "text-gray-text" : "text-magenta-40"} print:text-france-blue`;
+  $: currentClasses = `font-bold ${dark ? "text-gray-text" : "text-white"} print:text-france-blue`;
 </script>
 
 <nav aria-label="vous êtes ici :" class="print:hidden" class:dark>
   <ol class="text-f14">
     <li class="inline">
       {#if currentLocation === "home"}
-        <span aria-current="page" class="current">Accueil</span>
+        <span aria-current="page" class={currentClasses}>Accueil</span>
       {:else}
-        <a href="/" title="Retour à l’accueil du site">Accueil</a>
+        <a href="/" class={linkClasses} title="Retour à l’accueil du site"
+          >Accueil</a
+        >
       {/if}
     </li>
 
@@ -101,13 +106,13 @@
       <li class="inline before:content-['/']">
         {#if structure.slug}
           {#if currentLocation === "structure-informations"}
-            <span class="current" aria-current="page">
+            <span class={currentClasses} aria-current="page">
               <span class="hidden lg:inline">
                 Structure&nbsp;•&nbsp;</span
               >{structure.name}
             </span>
           {:else}
-            <a href="/structures/{structure.slug}">
+            <a href="/structures/{structure.slug}" class={linkClasses}>
               <span class="hidden lg:inline">
                 Structure&nbsp;•&nbsp;</span
               >{structure.name}
@@ -130,12 +135,12 @@
     {#if service}
       <li class="inline before:content-['/']">
         {#if currentLocation === "service"}
-          <span class="current" aria-current="page">
+          <span class={currentClasses} aria-current="page">
             <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
             >{service.name}
           </span>
         {:else}
-          <a href="/services/{service.slug}">
+          <a href="/services/{service.slug}" class={linkClasses}>
             <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
             >{service.name}
           </a>
@@ -143,21 +148,21 @@
       </li>
     {:else if currentLocation.startsWith("structure-") && currentLocation !== "structure-informations"}
       <li class="inline before:content-['/']">
-        <span class="current" aria-current="page">
+        <span class={currentClasses} aria-current="page">
           {structureData.name}
         </span>
       </li>
     {/if}
     {#if currentLocation === "saved-search"}
       <li class="inline before:content-['/']">
-        <a href="/mes-alertes">
+        <a href="/mes-alertes" class={linkClasses}>
           <span class="hidden lg:inline">Mes alertes</span>
         </a>
       </li>
     {/if}
     {#if Object.keys(locationToText).includes(currentLocation)}
       <li class="inline before:content-['/']">
-        <span aria-current="page" class="current">
+        <span aria-current="page" class={currentClasses}>
           {locationToText[currentLocation]}
         </span>
       </li>
@@ -166,12 +171,12 @@
     {#if model}
       <li class="inline before:content-['/']">
         {#if currentLocation === "model"}
-          <span class="current" aria-current="page">
+          <span class={currentClasses} aria-current="page">
             <span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
             >{model.name}
           </span>
         {:else}
-          <a href="/modeles/{model.slug}">
+          <a href="/modeles/{model.slug}" class={linkClasses}>
             <span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
             >{model.name}
           </a>
@@ -184,23 +189,11 @@
 <style lang="postcss">
   @reference "../../../app.css";
 
-  a {
-    @apply text-magenta-40 print:text-france-blue;
-  }
-
-  .current {
-    @apply print:text-france-blue font-bold text-white;
-  }
-
   nav li + li::before {
-    @apply ml-s8 mr-s8 text-magenta-40 print:text-france-blue inline;
+    @apply ml-s8 mr-s8 text-magenta-40 inline;
   }
 
-  .dark a {
-    @apply text-gray-text;
-  }
-  .dark li::before,
-  .dark .current {
+  .dark li::before {
     @apply text-gray-text;
   }
 </style>
