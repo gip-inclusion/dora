@@ -30,14 +30,18 @@
 </script>
 
 <button
-  class="tooltip icon h-s20 w-s20 text-gray-text-alt2 hover:text-magenta-cta inline-block shrink-0 fill-current print:hidden"
+  class="tooltip icon h-s20 w-s20 text-gray-text-alt2 hover:text-magenta-cta relative inline-block shrink-0 fill-current print:hidden"
   class:active
   class:disabled
   aria-label={title}
   on:click={handleClick}
 >
   {@html currentIcon}
-  <div class="tooltiptext">{@html title}</div>
+  <div
+    class="tooltiptext bg-magenta-dark px-s8 py-s2 text-f12 invisible absolute top-[-1000px] left-[-1000px] z-10 w-max -translate-x-1/2 rounded-sm text-center font-bold text-white"
+  >
+    {@html title}
+  </div>
 </button>
 
 <style lang="postcss">
@@ -49,13 +53,6 @@
 
   .disabled {
     @apply text-gray-text-alt;
-  }
-  .tooltip {
-    @apply relative inline-block print:hidden;
-  }
-
-  .tooltip .tooltiptext {
-    @apply bg-magenta-dark px-s8 py-s2 text-f12 invisible absolute top-[-1000px] left-[-1000px] z-10 w-max -translate-x-1/2 rounded-sm text-center font-bold text-white;
   }
 
   .tooltip .tooltiptext::after {
