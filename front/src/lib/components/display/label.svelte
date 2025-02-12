@@ -68,14 +68,14 @@
   }
 
   .icon {
-    width: var(--s24);
-    height: var(--s24);
+    width: var(--spacing-s24);
+    height: var(--spacing-s24);
     fill: currentColor;
   }
 
   .small-icon {
-    width: var(--s16);
-    height: var(--s16);
+    width: var(--spacing-s16);
+    height: var(--spacing-s16);
     fill: currentColor;
   }
 </style>

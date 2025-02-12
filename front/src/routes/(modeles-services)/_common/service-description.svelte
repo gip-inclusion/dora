@@ -13,7 +13,7 @@
   @reference "../../../app.css";
 
   .markdown-wrapper {
-    margin-top: var(--s16);
+    margin-top: var(--spacing-s16);
   }
 
   .markdown-wrapper :global(h1),
