@@ -7,6 +7,7 @@ from django.contrib.gis.geos import MultiPolygon, Point
 from django.core.exceptions import ValidationError
 from django.test import override_settings
 from django.utils import timezone
+from freezegun import freeze_time
 from model_bakery import baker
 from rest_framework.test import APIRequestFactory, APITestCase
 
@@ -1092,6 +1093,33 @@ class ServiceTestCase(APITestCase):
             ),
             sorted(kept_coach_orientation_modes),
         )
+
+    def test_mark_services_as_up_to_date(self):
+        user = baker.make("users.User", is_valid=True)
+        structure = make_structure(user)
+        services = [
+            make_service(
+                structure=structure,
+                last_editor=None,
+                modification_date=timezone.now() - timedelta(days=300),
+            )
+            for _ in range(3)
+        ]
+        self.client.force_authenticate(user=user)
+
+        now = timezone.now()
+        with freeze_time(now):
+            response = self.client.post(
+                "/services/mark-as-up-to-date/",
+                {"services": [service.slug for service in services]},
+            )
+
+            self.assertEqual(response.status_code, 204)
+
+            for service in services:
+                service.refresh_from_db()
+                self.assertEqual(service.last_editor, user)
+                self.assertEqual(service.modification_date, now)
 
 
 class DataInclusionSearchTestCase(APITestCase):
