@@ -41,6 +41,8 @@ export type LocationKind = "a-distance" | "en-presentiel";
 
 export type ServiceStatus = "DRAFT" | "SUGGESTION" | "PUBLISHED" | "ARCHIVED";
 
+export type ServiceUpdateStatus = "NOT_NEEDED" | "NEEDED" | "REQUIRED" | "ALL";
+
 export interface StructureService {
   address1: string;
   address2: string;
