@@ -7,3 +7,4 @@ export const METABASE_EMBED_URL = import.meta.env.VITE_METABASE_EMBED_URL;
 export const WARNING_BANNER = import.meta.env.VITE_WARNING_BANNER;
 export const OIDC_AUTH_BACKEND =
   import.meta.env.VITE_OIDC_AUTH_BACKEND || "proconnect";
+export const GOOGLE_CSE_ID = import.meta.env.VITE_GOOGLE_CSE_ID;
