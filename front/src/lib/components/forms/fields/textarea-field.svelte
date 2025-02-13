@@ -54,6 +54,7 @@
         {rows}
         maxlength={maxLength}
         aria-describedby={formatErrors(id, errorMessages)}
+        class="border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus read-only:text-gray-03 disabled:bg-gray-00 min-h-[3rem] grow rounded-sm border outline-hidden"
       />
       {#if value && maxLength != null && !readonly && !disabled}
         <div
@@ -66,12 +67,3 @@
     </div>
   </FieldWrapper>
 {/if}
-
-<style lang="postcss">
-  @reference "../../../../app.css";
-
-  textarea {
-    @apply border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus min-h-[3rem] rounded-sm border outline-hidden;
-    @apply read-only:text-gray-03 disabled:bg-gray-00 grow;
-  }
-</style>

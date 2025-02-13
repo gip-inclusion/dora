@@ -14,7 +14,9 @@
 </script>
 
 <div
-  class="text-f14 flex flex-row items-center"
+  class="text-f14 flex flex-row items-center {darkBg
+    ? 'print:text-gray-text text-white'
+    : ''}"
   class:bold
   class:italic
   class:success
@@ -22,7 +24,6 @@
   class:info
   class:wait
   class:light
-  class:dark-bg={darkBg}
 >
   {#if icon}
     <i class="icon flex-none" class:small-icon={smallIcon} class:mr-s8={label}>
@@ -66,19 +67,15 @@
     font-style: italic;
   }
 
-  .dark-bg {
-    @apply print:text-gray-text text-white;
-  }
-
   .icon {
-    width: var(--s24);
-    height: var(--s24);
+    width: var(--spacing-s24);
+    height: var(--spacing-s24);
     fill: currentColor;
   }
 
   .small-icon {
-    width: var(--s16);
-    height: var(--s16);
+    width: var(--spacing-s16);
+    height: var(--spacing-s16);
     fill: currentColor;
   }
 </style>

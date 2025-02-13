@@ -34,8 +34,8 @@
     "@sveltejs/adapter-node": "^5.2.12",
     "@sveltejs/kit": "2.17.1",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
-    "@tailwindcss/postcss": "^4.0.6",
     "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.0.6",
     "@tiptap/core": "^2.11.5",
     "@tiptap/extension-link": "^2.11.5",
     "@tiptap/extension-placeholder": "^2.11.5",
@@ -55,8 +55,6 @@
     "lint-staged": "^15.4.3",
     "maplibre-gl": "^5.1.0",
     "opening_hours": "^3.8.0",
-    "postcss": "^8.5.2",
-    "postcss-load-config": "^6.0.1",
     "prettier": "^3.5.0",
     "prettier-plugin-svelte": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
@@ -80,7 +78,7 @@
       "prettier --write",
       "eslint --fix"
     ],
-    "*.{json,css,postcss,html,md}": [
+    "*.{json,css,html,md}": [
       "prettier --write"
     ],
     "*": [

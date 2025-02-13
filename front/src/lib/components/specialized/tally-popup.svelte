@@ -118,6 +118,8 @@
   @reference "../../../app.css";
 
   :global(.tally-popup) {
-    @apply print:!hidden;
+    @media print {
+      display: none !important;
+    }
   }
 </style>

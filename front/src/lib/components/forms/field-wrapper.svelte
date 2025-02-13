@@ -42,7 +42,7 @@
   class:lg:items-stretch={vertical}
   class:hidden
 >
-  <div class="label-container flex flex-col" class:one-fourth={!vertical}>
+  <div class="label-container flex flex-col {!vertical ? 'lg:w-1/3' : ''}">
     <label
       for={id}
       class="mt-s8"
@@ -64,7 +64,7 @@
       </div>
     {/if}
   </div>
-  <div class="flex flex-col" class:three-fourths={!vertical}>
+  <div class="flex flex-col {!vertical ? 'lg:w-2/3' : ''}">
     <!-- Slot principal -->
     <slot onBlur={handleBlur} onChange={handleChange} {errorMessages} />
     <!--  -->
@@ -73,15 +73,3 @@
     {/each}
   </div>
 </div>
-
-<style lang="postcss">
-  @reference "../../../app.css";
-
-  .one-fourth {
-    @apply lg:w-1/3;
-  }
-
-  .three-fourths {
-    @apply lg:w-2/3;
-  }
-</style>
