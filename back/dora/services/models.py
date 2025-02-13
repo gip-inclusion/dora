@@ -154,7 +154,10 @@ class ServiceSource(EnumModel):
 
 
 class UpdateFrequency(models.TextChoices):
-    EVERY_MONTH = "tous-les-mois", "Souvent, je veux recevoir une alerte tous les mois"
+    EVERY_MONTH = (
+        "tous-les-mois",
+        "Très souvent, je veux recevoir une alerte tous les mois",
+    )
     EVERY_3_MONTHS = (
         "tous-les-3-mois",
         "Régulièrement, je veux recevoir une alerte tous les 3 mois",
@@ -165,7 +168,11 @@ class UpdateFrequency(models.TextChoices):
     )
     EVERY_12_MONTHS = (
         "tous-les-12-mois",
-        "Rarement, je veux recevoir une alerte tous les 12 mois",
+        "Très rarement, je veux recevoir une alerte tous les 12 mois",
+    )
+    EVERY_16_MONTHS = (
+        "tous-les-16-mois",
+        "Presque jamais, je veux recevoir une alerte tous les 16 mois",
     )
     NEVER = "jamais", "Jamais, les informations n’évoluent jamais"
 
@@ -196,6 +203,10 @@ class ServiceManager(models.Manager):
                 | Q(
                     update_frequency=UpdateFrequency.EVERY_12_MONTHS,
                     modification_date__lte=timezone.now() - relativedelta(months=12),
+                )
+                | Q(
+                    update_frequency=UpdateFrequency.EVERY_16_MONTHS,
+                    modification_date__lte=timezone.now() - relativedelta(months=16),
                 )
             )
         )
