@@ -185,15 +185,29 @@
   @reference "../../../app.css";
 
   a {
-    @apply text-magenta-40 print:text-france-blue;
+    @apply text-magenta-40;
   }
 
   .current {
-    @apply print:text-france-blue font-bold text-white;
+    @apply font-bold text-white;
   }
 
   nav li + li::before {
-    @apply ml-s8 mr-s8 text-magenta-40 print:text-france-blue inline;
+    @apply ml-s8 mr-s8 text-magenta-40 inline;
+  }
+
+  @media print {
+    a {
+      color: var(--color-france-blue);
+    }
+
+    .current {
+      color: var(--color-france-blue);
+    }
+
+    nav li + li::before {
+      color: var(--color-france-blue);
+    }
   }
 
   .dark a {
