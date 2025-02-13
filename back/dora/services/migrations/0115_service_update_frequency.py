@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
                 choices=[
                     (
                         "tous-les-mois",
-                        "Souvent, je veux recevoir une alerte tous les mois",
+                        "Très souvent, je veux recevoir une alerte tous les mois",
                     ),
                     (
                         "tous-les-3-mois",
@@ -28,7 +28,11 @@ class Migration(migrations.Migration):
                     ),
                     (
                         "tous-les-12-mois",
-                        "Rarement, je veux recevoir une alerte tous les 12 mois",
+                        "Très rarement, je veux recevoir une alerte tous les 12 mois",
+                    ),
+                    (
+                        "tous-les-16-mois",
+                        "Presque jamais, je veux recevoir une alerte tous les 16 mois",
                     ),
                     ("jamais", "Jamais, les informations n’évoluent jamais"),
                 ],
