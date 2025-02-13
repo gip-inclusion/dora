@@ -30,6 +30,7 @@
   import NoServiceNotice from "./no-service-notice.svelte";
   import ServiceCard from "./service-card.svelte";
   import ServicesToSyncWithModelNotice from "./services-to-sync-with-model-notice.svelte";
+  import ServicesToUpdateNotice from "./services-to-update-notice.svelte";
 
   export let structure, total, servicesOptions;
   export let tabDisplay = true;
@@ -313,7 +314,12 @@
   </div>
 {/if}
 {#if tabDisplay && structure.canEditServices}
-  <div class="mb-s24">
+  <div class="mb-s24 gap-s24 flex flex-col">
+    <ServicesToUpdateNotice
+      structureSlug={structure.slug}
+      services={structure.services}
+      {onRefresh}
+    />
     <ServicesToSyncWithModelNotice
       structureSlug={structure.slug}
       services={structure.services}
