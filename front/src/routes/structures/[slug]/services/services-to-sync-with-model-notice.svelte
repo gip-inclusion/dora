@@ -7,9 +7,9 @@
   } from "$lib/requests/services";
   import type { StructureService } from "$lib/types";
   import {
-    hideModelNotice,
-    isModelNoticeHidden,
-  } from "$lib/utils/service-updates-via-model";
+    hideNotice,
+    isNoticeHidden,
+  } from "$lib/utils/service-update-notices";
 
   export let structureSlug: string;
   export let services: StructureService[] = [];
@@ -21,7 +21,7 @@
   $: servicesToUpdate = services.filter(({ modelChanged }) => modelChanged);
 
   $: showNotice =
-    servicesToUpdate.length && !isModelNoticeHidden(structureSlug);
+    servicesToUpdate.length && !isNoticeHidden("modelSync", structureSlug);
   $: updatedModels = new Set(
     servicesToUpdate.map(({ modelName }) => modelName)
   );
@@ -126,7 +126,7 @@
         extraClass="py-s8 text-f14! px-s12!"
         label="Cacher cette fenêtre"
         on:click={() => {
-          hideModelNotice(structureSlug);
+          hideNotice("modelSync", structureSlug);
           showNotice = false;
         }}
       />
