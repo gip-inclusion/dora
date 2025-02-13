@@ -72,6 +72,7 @@ export interface StructureService {
   status: ServiceStatus;
   structure: string;
   useInclusionNumeriqueScheme: boolean;
+  updateStatus: ServiceUpdateStatus;
 }
 
 export interface StructureModel {
@@ -266,8 +267,6 @@ export type OsmOpeningHours = {
 };
 
 // SERVICES
-
-export type ServiceUpdateStatus = "NOT_NEEDED" | "NEEDED" | "REQUIRED" | "ALL";
 
 export type ServiceKind =
   | "accompagnement"
