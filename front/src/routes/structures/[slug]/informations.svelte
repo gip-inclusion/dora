@@ -50,6 +50,10 @@
     structure.openingHoursDetails ||
     structure.accesslibreUrl;
 
+  $: servicesToUpdate = structure.services.filter(
+    (service) => service.updateNeeded
+  );
+
   let displayInformations = false;
 
   async function showInformations() {
@@ -84,7 +88,7 @@
     <div class="mt-s40">
       <ServicesToUpdateNotice
         structureSlug={structure.slug}
-        services={structure.services}
+        {servicesToUpdate}
         {onRefresh}
       />
     </div>

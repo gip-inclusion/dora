@@ -193,6 +193,10 @@
   }
 
   $: servicesDisplayed = filterAndSortServices(structure.services);
+
+  $: servicesToUpdate = structure.services.filter(
+    (service) => service.updateNeeded
+  );
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
@@ -303,7 +307,7 @@
   <div class="mb-s24 gap-s24 flex flex-col">
     <ServicesToUpdateNotice
       structureSlug={structure.slug}
-      services={structure.services}
+      {servicesToUpdate}
       {onRefresh}
     />
     <ServicesToSyncWithModelNotice
