@@ -9,6 +9,7 @@
   import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
   import PartnerList from "$lib/components/specialized/partner-list.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
+  import { GOOGLE_CSE_ID } from "$lib/env";
 
   import type { PageData } from "./$types";
   import { videoIcon } from "$lib/icons";
@@ -39,6 +40,16 @@
     label={data.cityLabel}
     initialSearch
   />
+
+  {#if GOOGLE_CSE_ID}
+    <div class="mt-s32 mb-s32 flex items-center justify-center">
+      <div class="mr-s16">ou</div>
+      <LinkButton
+        label="Faire une recherche par mots-clés"
+        to={`/recherche-textuelle`}
+      />
+    </div>
+  {/if}
 </CenteredGrid>
 
 <CenteredGrid>
