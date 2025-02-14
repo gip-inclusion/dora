@@ -32,6 +32,7 @@ from dora.services.migration_utils import (
     update_category_value_and_label,
     update_subcategory_value_and_label,
 )
+from dora.services.models import UpdateFrequency
 from dora.services.serializers import ServiceSerializer
 from dora.structures.models import Structure
 
@@ -1800,19 +1801,19 @@ class DataInclusionSearchTestCase(APITestCase):
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["is_cumulative"], cumulable)
 
-    def test_service_di_update_status(self):
+    def test_service_di_update_needed(self):
         cases = [
-            (str(timezone.now().date() - timedelta(days=365)), "REQUIRED"),
-            (str(timezone.now().date()), "NOT_NEEDED"),
+            (str(timezone.now().date() - timedelta(days=365)), False),
+            (str(timezone.now().date()), False),
         ]
-        for date_maj, update_status in cases:
-            with self.subTest(update_status=update_status):
+        for date_maj, update_needed in cases:
+            with self.subTest(update_needed=update_needed):
                 service_data = self.make_di_service(date_maj=date_maj)
                 di_id = self.get_di_id(service_data)
                 request = self.factory.get(f"/services-di/{di_id}/")
                 response = self.service_di(request, di_id=di_id)
                 self.assertEqual(response.status_code, 200)
-                self.assertEqual(response.data["update_status"], update_status)
+                self.assertEqual(response.data["update_needed"], update_needed)
 
     def test_service_di_misc(self):
         service_data = self.make_di_service()
@@ -3075,12 +3076,13 @@ class ServiceStatusChangeTestCase(APITestCase):
 
 
 class ServiceUpdateStatusTestCase(APITestCase):
-    def test_draft_service_update_status_as_not_needed(self):
-        # ÉTANT DONNÉ un service en brouillon, modifié il y a un an
+    def test_draft_service_update_not_needed(self):
+        # ÉTANT DONNÉ un service en brouillon, avec une fréquence d'actualisation mensuelle, modifié il y a un an
         user = baker.make("users.User", is_valid=True)
         structure = make_structure(user)
         service = make_service(
             status=ServiceStatus.DRAFT,
+            update_frequency=UpdateFrequency.EVERY_MONTH,
             modification_date=timezone.now() - timedelta(days=12 * 30),
             structure=structure,
         )
@@ -3089,16 +3091,17 @@ class ServiceUpdateStatusTestCase(APITestCase):
         # QUAND je récupère ce service
         response = self.client.get(f"/services/{service.slug}/")
 
-        # ALORS son statut d'actualisation est "NOT_NEEDED"
+        # ALORS il n'a pas besoin d'être actualisé
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["update_status"], "NOT_NEEDED")
+        self.assertFalse(response.data["update_needed"])
 
-    def test_archived_service_update_status(self):
-        # ÉTANT DONNÉ un service en archivé, modifié il y a un an
+    def test_archived_service_update_needed(self):
+        # ÉTANT DONNÉ un service en archivé, avec une fréquence d'actualisation mensuelle, modifié il y a un an
         user = baker.make("users.User", is_valid=True)
         structure = make_structure(user)
         service = make_service(
             status=ServiceStatus.ARCHIVED,
+            update_frequency=UpdateFrequency.EVERY_MONTH,
             modification_date=timezone.now() - timedelta(days=12 * 30),
             structure=structure,
         )
@@ -3107,16 +3110,17 @@ class ServiceUpdateStatusTestCase(APITestCase):
         # QUAND je récupère ce service
         response = self.client.get(f"/services/{service.slug}/")
 
-        # ALORS son statut d'actualisation est "NOT_NEEDED"
+        # ALORS il n'a pas besoin d'être actualisé
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["update_status"], "NOT_NEEDED")
+        self.assertFalse(response.data["update_needed"])
 
-    def test_suggestion_service_update_status(self):
-        # ÉTANT DONNÉ un service suggéré, modifié il y a un an
+    def test_suggestion_service_update_needed(self):
+        # ÉTANT DONNÉ un service suggéré, avec une fréquence d'actualisation mensuelle, modifié il y a un an
         user = baker.make("users.User", is_valid=True)
         structure = make_structure(user)
         service = make_service(
             status=ServiceStatus.SUGGESTION,
+            update_frequency=UpdateFrequency.EVERY_MONTH,
             modification_date=timezone.now() - timedelta(days=12 * 30),
             structure=structure,
         )
@@ -3125,51 +3129,39 @@ class ServiceUpdateStatusTestCase(APITestCase):
         # QUAND je récupère ce service
         response = self.client.get(f"/services/{service.slug}/")
 
-        # ALORS son statut d'actualisation est "NOT_NEEDED"
+        # ALORS il n'a pas besoin d'être actualisé
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["update_status"], "NOT_NEEDED")
+        self.assertFalse(response.data["update_needed"])
 
-    def test_published_service_update_status_required(self):
-        # ÉTANT DONNÉ un service suggéré, modifié il y a 9 mois
+    def test_published_service_update_needed_required(self):
+        # ÉTANT DONNÉ un service publié, avec une fréquence d'actualisation mensuelle, modifié il y a 9 mois
         service = make_service(
             status=ServiceStatus.PUBLISHED,
+            update_frequency=UpdateFrequency.EVERY_MONTH,
             modification_date=timezone.now() - timedelta(days=9 * 30),
         )
 
         # QUAND je récupère ce service
         response = self.client.get(f"/services/{service.slug}/")
 
-        # ALORS son statut d'actualisation est "REQUIRED"
+        # ALORS il doit être actualisé
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["update_status"], "REQUIRED")
+        self.assertTrue(response.data["update_needed"])
 
-    def test_published_service_update_status_needed(self):
-        # ÉTANT DONNÉ un service suggéré, modifié il y a 7 mois
+    def test_published_service_update_not_needed(self):
+        # ÉTANT DONNÉ un service publié, avec une fréquence d'actualisation de tous les 3 mois, modifié il y a 1 mois
         service = make_service(
             status=ServiceStatus.PUBLISHED,
-            modification_date=timezone.now() - timedelta(days=7 * 30),
-        )
-
-        # QUAND je récupère ce service
-        response = self.client.get(f"/services/{service.slug}/")
-
-        # ALORS son statut d'actualisation est "NEEDED"
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["update_status"], "NEEDED")
-
-    def test_published_service_update_status_not_needed(self):
-        # ÉTANT DONNÉ un service suggéré, modifié il y a 9 mois
-        service = make_service(
-            status=ServiceStatus.PUBLISHED,
+            update_frequency=UpdateFrequency.EVERY_3_MONTHS,
             modification_date=timezone.now() - timedelta(days=1 * 30),
         )
 
         # QUAND je récupère ce service
         response = self.client.get(f"/services/{service.slug}/")
 
-        # ALORS son statut d'actualisation est "NOT_NEEDED"
+        # ALORS il n'a pas besoin d'être actualisé
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["update_status"], "NOT_NEEDED")
+        self.assertFalse(response.data["update_needed"])
 
 
 class ServiceMigrationUtilsTestCase(APITestCase):

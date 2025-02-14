@@ -206,7 +206,7 @@ class StructureSerializer(serializers.ModelSerializer):
                     "status",
                     "structure",
                     "use_inclusion_numerique_scheme",
-                    "update_status",
+                    "update_needed",
                 ]
 
         user = self.context.get("request").user
@@ -251,7 +251,7 @@ class StructureSerializer(serializers.ModelSerializer):
                     "status",
                     "structure",
                     "use_inclusion_numerique_scheme",
-                    "update_status",
+                    "update_needed",
                 ]
 
         user = self.context.get("request").user

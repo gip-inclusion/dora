@@ -9,17 +9,19 @@ services AS (
         ST_Y(CAST(src.geom AS geometry)) AS latitude,
         ST_X(CAST(src.geom AS geometry)) AS longitude,
         CASE
-            WHEN
-                src.modification_date + '240 days' <= NOW()
-                AND src.status = 'PUBLISHED'
-                THEN 'REQUIRED'
-            WHEN
-                src.modification_date + '180 days' <= NOW()
-                AND src.status = 'PUBLISHED'
-                THEN 'NEEDED'
-            ELSE 'NOT_NEEDED'
-        END                              AS update_status
-        -- TODO(jbuget) : A documenter !
+            WHEN status != 'PUBLISHED' THEN FALSE
+            WHEN update_frequency = 'tous-les-mois' 
+                AND modification_date + INTERVAL '1 month' <= NOW() THEN TRUE
+            WHEN update_frequency = 'tous-les-3-mois'
+                AND modification_date + INTERVAL '3 months' <= NOW() THEN TRUE
+            WHEN update_frequency = 'tous-les-6-mois'
+                AND modification_date + INTERVAL '6 months' <= NOW() THEN TRUE
+            WHEN update_frequency = 'tous-les-12-mois'
+                AND modification_date + INTERVAL '12 months' <= NOW() THEN TRUE
+            WHEN update_frequency = 'tous-les-16-mois'
+                AND modification_date + INTERVAL '16 months' <= NOW() THEN TRUE
+            ELSE FALSE
+        END AS update_needed
     FROM src
 ),
 
