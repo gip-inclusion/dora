@@ -263,7 +263,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     update_frequency_display = serializers.SerializerMethodField()
 
-    update_status = serializers.SerializerMethodField()
+    update_needed = serializers.SerializerMethodField()
 
     class Meta:
         model = Service
@@ -345,7 +345,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "suspension_date",
             "update_frequency",
             "update_frequency_display",
-            "update_status",
+            "update_needed",
             "use_inclusion_numerique_scheme",
         ]
         read_only_fields = [
@@ -470,8 +470,8 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_update_frequency_display(self, obj):
         return _get_update_frequency_display(obj)
 
-    def get_update_status(self, object):
-        return object.get_update_status()
+    def get_update_needed(self, object):
+        return object.get_update_needed()
 
 
 class ServiceModelSerializer(ServiceSerializer):
