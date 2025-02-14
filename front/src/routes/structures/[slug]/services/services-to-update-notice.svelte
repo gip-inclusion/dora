@@ -18,8 +18,7 @@
   let showAll = false;
 
   $: servicesToMarkAsUpToDate = services.filter(
-    ({ updateStatus }) =>
-      updateStatus === "NEEDED" || updateStatus === "REQUIRED"
+    (service) => service.updateNeeded
   );
 
   $: showNotice =
