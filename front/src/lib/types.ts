@@ -102,6 +102,8 @@ export interface ShortStructure {
   siret: string;
   slug: string;
   typologyDisplay: string;
+  canEditInformations: boolean;
+  servicesToUpdate: { name: string; slug: string }[];
 }
 
 export interface AdminShortStructure {
