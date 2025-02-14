@@ -16,7 +16,7 @@ from dora.services.utils import instantiate_model
 from dora.structures.models import Structure
 from dora.users.models import User
 
-csv_file_path = "./cresus_services.csv"
+csv_file_path = "/tmp/uploads/services_xxx.csv"
 
 # 💡 Mettre à True pour activer les écritures en base de données
 wet_run = False
@@ -27,8 +27,8 @@ geo_data_missing_lines = []
 
 bot_user = User.objects.get_dora_bot()
 source, _ = ServiceSource.objects.get_or_create(
-    value="fichier-cresus",
-    defaults={"label": "Fichier CSV des services de la fondation Cresus"},
+    value="fichier-xxx",
+    defaults={"label": "Fichier CSV des services de XXX", },
 )
 
 
@@ -72,7 +72,6 @@ def _extract_diffusion_zone_type_from_line(line):
 def _extract_data_from_line(line):
     data = SimpleNamespace(
         modele_slug=line.get("modele_slug").strip(),
-        structure_name=line.get("structure_name").strip(),
         structure_siret=line.get("structure_siret").replace(" ", "").strip(),
         contact_name=line.get("contact_name").strip(),
         contact_email=line.get("contact_email").strip(),
@@ -102,22 +101,24 @@ def _edit_and_save_service(service, data, idx):
     service.location_kinds.set(data.location_kinds)
     service.diffusion_zone_type = data.diffusion_zone_type
 
-    geo_data = get_geo_data(
-        service.address1, city=service.city, postal_code=service.postal_code
-    )
-    if geo_data:
-        service.city_code = geo_data.city_code
-        service.geom = geo_data.geom
-        service.diffusion_zone_details = geo_data.city_code
-    else:
-        geo_data_missing_lines.append(
-            {
-                "idx": idx,
-                "address": service.address1,
-                "city": service.city,
-                "postal_code": service.postal_code,
-            }
+    if (service.address1 and service.city and service.postal_code):
+        geo_data = get_geo_data(
+            service.address1, city=service.city, postal_code=service.postal_code
         )
+        if geo_data:
+            service.city_code = geo_data.city_code
+            service.geom = geo_data.geom
+            service.diffusion_zone_details = geo_data.city_code
+        else:
+            geo_data_missing_lines.append(
+                {
+                    "idx": idx,
+                    "address": service.address1,
+                    "city": service.city,
+                    "postal_code": service.postal_code,
+                }
+            )
+
     if wet_run:
         service.save()
 
