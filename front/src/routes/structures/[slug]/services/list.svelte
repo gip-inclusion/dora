@@ -13,15 +13,9 @@
     earthFillIcon,
     errorWarningIcon,
     fileEditFillIcon,
-    fileWarningFillIcon,
     folderFillIcon,
   } from "$lib/icons";
-  import type {
-    Choice,
-    ServiceStatus,
-    ServiceUpdateStatus,
-    ShortService,
-  } from "$lib/types";
+  import type { Choice, ServiceStatus, ShortService } from "$lib/types";
   import Count from "../count.svelte";
   import {
     hasArchivedServices,
@@ -38,8 +32,8 @@
   export let limit: number | undefined = undefined;
   export let withEmptyNotice = false;
 
-  export let serviceStatus: ServiceStatus | undefined;
-  export let updateStatus: ServiceUpdateStatus | undefined;
+  export let serviceStatus: ServiceStatus | null;
+  export let updateNeeded: "true" | "false" | null;
   export let servicesDisplayed: ShortService[] = [];
 
   function updateUrlQueryParams() {
@@ -55,10 +49,10 @@
       searchParams.delete("service-status");
     }
 
-    if (updateStatus) {
-      searchParams.set("update-status", encodeURIComponent(updateStatus));
+    if (updateNeeded) {
+      searchParams.set("update-needed", updateNeeded);
     } else {
-      searchParams.delete("update-status");
+      searchParams.delete("update-needed");
     }
 
     let newUrl = $page.url.pathname;
@@ -99,25 +93,19 @@
   ];
 
   // Update status
-  const updateStatusOptions: Choice<ServiceUpdateStatus | "">[] = [
+  const updateNeededOptions: Choice<"true" | "false" | "">[] = [
     { value: "", label: "Tout" },
     {
-      value: "NEEDED",
-      label: "Actualisation conseillée",
-      selectedLabel: "Actualisation : conseillée",
+      value: "true",
+      label: "Actualisation nécessaire",
+      selectedLabel: "Actualisation : nécessaire",
       icon: errorWarningIcon,
     },
     {
-      value: "REQUIRED",
-      label: "Actualisation requise",
-      selectedLabel: "Actualisation : requise",
+      value: "false",
+      label: "Actualisation non nécessaire",
+      selectedLabel: "Actualisation : non nécessaire",
       icon: alertIcon,
-    },
-    {
-      value: "ALL",
-      label: "À actualiser",
-      selectedLabel: "Actualisation : conseillée et requise",
-      icon: fileWarningFillIcon,
     },
   ];
 
@@ -177,11 +165,9 @@
     }
 
     // By update status
-    if (updateStatus) {
+    if (updateNeeded) {
       services = services.filter((service) =>
-        updateStatus === "ALL"
-          ? service.updateStatus !== "NOT_NEEDED"
-          : service.updateStatus === updateStatus
+        updateNeeded === "true" ? service.updateNeeded : !service.updateNeeded
       );
     }
 
@@ -189,8 +175,8 @@
   }
 
   function handleEltChange(event) {
-    if (event.detail === "update-status") {
-      updateStatus = event.value;
+    if (event.detail === "update-needed") {
+      updateNeeded = event.value;
     }
     if (event.detail === "status") {
       serviceStatus = event.value;
@@ -201,7 +187,7 @@
 
   function handleResetFilters() {
     serviceStatus = undefined;
-    updateStatus = undefined;
+    updateNeeded = undefined;
     servicesDisplayed = filterAndSortServices(structure.services);
     updateUrlQueryParams();
   }
@@ -264,10 +250,10 @@
       <div>
         <SelectField
           label="Actualisation"
-          name="update-status"
+          name="update-needed"
           placeholder="Actualisation"
-          value={updateStatus}
-          choices={updateStatusOptions}
+          value={updateNeeded}
+          choices={updateNeededOptions}
           hideLabel
           style="filter"
           minDropdownWidth="min-w-[265px]"
@@ -277,7 +263,7 @@
 
       <div class="text-right sm:flex-1">
         <button
-          class:!text-magenta-cta={serviceStatus || updateStatus}
+          class:!text-magenta-cta={serviceStatus || updateNeeded}
           class="text-gray-text-alt"
           on:click={handleResetFilters}
         >
@@ -294,7 +280,7 @@
           ? "s"
           : ""}
       </strong>
-      <span class:hidden={!serviceStatus && !updateStatus}>
+      <span class:hidden={!serviceStatus && !updateNeeded}>
         correspond{servicesDisplayed.length > 1 ? "ent" : ""} à votre recherche
       </span>
     </div>

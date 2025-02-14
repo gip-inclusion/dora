@@ -4,7 +4,7 @@
   import type { PageData } from "./$types";
   import ModelHeader from "./model-header.svelte";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
-  import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
+  import UpdateNeededIcon from "$lib/components/specialized/services/update-needed-icon.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { userInfo } from "$lib/utils/auth";
   import { addCircleIcon, editIcon } from "$lib/icons";
@@ -22,7 +22,7 @@
     <div class="text-gray-text flex items-center justify-between">
       <div class="flex items-center">
         <span class="mr-s16">
-          <UpdateStatusIcon updateStatus="NOT_NEEDED" />
+          <UpdateNeededIcon updateNeeded={false} />
         </span>
 
         <RelativeDateLabel
