@@ -3,6 +3,9 @@
   https://github.com/pstanoev/simple-svelte-autocomplete/blob/2de0d7618b37192ec1ca47bbe4ffd47477b38792/src/SimpleAutocomplete.svelte
 -->
 <script lang="ts">
+  import { run, createBubbler, preventDefault } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   // TODO: lint this file properly
   /* eslint-disable */
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
@@ -10,135 +13,222 @@
   import { clickOutside } from "$lib/utils/misc";
   import { formatErrors } from "$lib/validation/validation";
 
-  // the list of items the user can select from
-  export let items = [];
+  
 
-  // a list of items values that the user can not remove (ex: structure national labels)
-  export let fixedItemsValues: string[] = [];
+  
 
-  // function to use to get all items (alternative to providing items)
-  export let searchFunction:
-    | ((searchText: string) => Promise<any[]>)
-    | undefined = undefined;
+  
 
-  export let textCleanFunction = function (userEnteredText) {
-    return userEnteredText;
-  };
 
-  // events
+  
 
-  export let onChange = function (_newValue) {};
-  export let onFocus = function () {};
 
-  // Behaviour properties
-  export let selectFirstIfEmpty = false;
-  export let minCharactersToSearch = 1;
-  export let maxItemsToShowInList = 0;
-  export let multiple = false;
+  
 
-  // Workaround for https://github.com/sveltejs/svelte/issues/5604
-  export let hasPrependSlot = false;
-  export let hasAppendSlot = false;
-  export let hasCustomContentSlot = false;
+  
 
-  // ignores the accents when matching items
-  export let ignoreAccents = true;
+  
 
-  // all the input keywords should be matched in the item keywords
-  export let matchAllKeywords = true;
+  
 
-  // sorts the items by the number of matching keywords
-  export let sortByMatchedKeywords = false;
+  
 
-  // allow users to use a custom item filter function
-  export let itemFilterFunction = undefined;
+  
 
-  // allow users to use a custom item sort function
-  export let itemSortFunction = undefined;
+  
 
-  // do not allow re-selection after initial selection
-  export let lock = false;
+  
 
-  // delay to wait after a keypress to search for new items
-  export let delay = 0;
+  
 
-  // true to perform local filtering of items, even if searchFunction is provided
-  export let localFiltering = true;
+  
 
   // UI properties
 
-  // option to hide the dropdown arrow
-  export let hideArrow = false;
+  
 
-  // option to show clear selection button
-  export let showClear = true;
+  
 
-  // option to show loading indicator when the async function is executed
-  export let showLoadingIndicator = false;
+  
 
-  // text displayed when no items match the input text
-  export let noResultsText = "Aucun résultat";
+  
 
-  // text displayed when async data is being loaded
-  export let loadingText = "Chargement des résultats…";
+  
 
-  // the text displayed when no option is selected
-  export let placeholder = "";
+  
 
-  // the text displayed when at least one option is selected
-  export let placeholderMulti = "";
+  
 
-  // apply a className to the control
-  export let className = "";
+  
 
   // HTML input UI properties
-  // apply a className to the input control
-  export let inputClassName = "";
-  // apply a id to the input control
-  export let inputId: string;
-  // generate an HTML input with this name
-  export let name = undefined;
-  // generate a <select> tag that holds the value
-  export let selectName = undefined;
-  // apply a id to the <select>
-  export let selectId = undefined;
-  // add the title to the HTML input
-  export let title = undefined;
-  // enable the html5 autocompletion to the HTML input
-  export let html5autocomplete = false;
-  // make the input readonly
-  export let readonly = false;
-  // apply a className to the dropdown div
-  export let dropdownClassName = "";
-  // adds the disabled tag to the HTML input and tag deletion
-  export let disabled = false;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
-  export let errorMessages: string[] = [];
 
   // --- Public State ----
 
-  // selected item state
-  export let value = undefined;
-  export let initialValue = undefined;
+  
 
   // --- Internal State ----
   const uniqueId = `sautocomplete-${Math.floor(Math.random() * 1000)}`;
 
   // HTML elements
-  let input;
-  let list;
+  let input = $state();
+  let list = $state();
 
   // UI state
-  let opened = false;
-  let loading = false;
+  let opened = $state(false);
+  let loading = $state(false);
 
-  let highlightIndex = -1;
-  export let text = "";
+  let highlightIndex = $state(-1);
+  interface Props {
+    // the list of items the user can select from
+    items?: any;
+    // a list of items values that the user can not remove (ex: structure national labels)
+    fixedItemsValues?: string[];
+    // function to use to get all items (alternative to providing items)
+    searchFunction?: 
+    | ((searchText: string) => Promise<any[]>)
+    | undefined;
+    textCleanFunction?: any;
+    // events
+    onChange?: any;
+    onFocus?: any;
+    // Behaviour properties
+    selectFirstIfEmpty?: boolean;
+    minCharactersToSearch?: number;
+    maxItemsToShowInList?: number;
+    multiple?: boolean;
+    // Workaround for https://github.com/sveltejs/svelte/issues/5604
+    hasPrependSlot?: boolean;
+    hasAppendSlot?: boolean;
+    hasCustomContentSlot?: boolean;
+    // ignores the accents when matching items
+    ignoreAccents?: boolean;
+    // all the input keywords should be matched in the item keywords
+    matchAllKeywords?: boolean;
+    // sorts the items by the number of matching keywords
+    sortByMatchedKeywords?: boolean;
+    // allow users to use a custom item filter function
+    itemFilterFunction?: any;
+    // allow users to use a custom item sort function
+    itemSortFunction?: any;
+    // do not allow re-selection after initial selection
+    lock?: boolean;
+    // delay to wait after a keypress to search for new items
+    delay?: number;
+    // true to perform local filtering of items, even if searchFunction is provided
+    localFiltering?: boolean;
+    // option to hide the dropdown arrow
+    hideArrow?: boolean;
+    // option to show clear selection button
+    showClear?: boolean;
+    // option to show loading indicator when the async function is executed
+    showLoadingIndicator?: boolean;
+    // text displayed when no items match the input text
+    noResultsText?: string;
+    // text displayed when async data is being loaded
+    loadingText?: string;
+    // the text displayed when no option is selected
+    placeholder?: string;
+    // the text displayed when at least one option is selected
+    placeholderMulti?: string;
+    // apply a className to the control
+    className?: string;
+    // apply a className to the input control
+    inputClassName?: string;
+    // apply a id to the input control
+    inputId: string;
+    // generate an HTML input with this name
+    name?: any;
+    // generate a <select> tag that holds the value
+    selectName?: any;
+    // apply a id to the <select>
+    selectId?: any;
+    // add the title to the HTML input
+    title?: any;
+    // enable the html5 autocompletion to the HTML input
+    html5autocomplete?: boolean;
+    // make the input readonly
+    readonly?: boolean;
+    // apply a className to the dropdown div
+    dropdownClassName?: string;
+    // adds the disabled tag to the HTML input and tag deletion
+    disabled?: boolean;
+    errorMessages?: string[];
+    // selected item state
+    value?: any;
+    initialValue?: any;
+    text?: string;
+    prepend?: import('svelte').Snippet;
+    itemContent?: import('svelte').Snippet<[any]>;
+    append?: import('svelte').Snippet;
+  }
+
+  let {
+    items = $bindable([]),
+    fixedItemsValues = [],
+    searchFunction = undefined,
+    textCleanFunction = function (userEnteredText) {
+    return userEnteredText;
+  },
+    onChange = function (_newValue) {},
+    onFocus = function () {},
+    selectFirstIfEmpty = false,
+    minCharactersToSearch = 1,
+    maxItemsToShowInList = 0,
+    multiple = false,
+    hasPrependSlot = false,
+    hasAppendSlot = false,
+    hasCustomContentSlot = false,
+    ignoreAccents = true,
+    matchAllKeywords = true,
+    sortByMatchedKeywords = false,
+    itemFilterFunction = undefined,
+    itemSortFunction = undefined,
+    lock = false,
+    delay = 0,
+    localFiltering = true,
+    hideArrow = false,
+    showClear = true,
+    showLoadingIndicator = false,
+    noResultsText = "Aucun résultat",
+    loadingText = "Chargement des résultats…",
+    placeholder = "",
+    placeholderMulti = "",
+    className = "",
+    inputClassName = "",
+    inputId,
+    name = undefined,
+    selectName = undefined,
+    selectId = undefined,
+    title = undefined,
+    html5autocomplete = false,
+    readonly = false,
+    dropdownClassName = "",
+    disabled = false,
+    errorMessages = [],
+    value = $bindable(undefined),
+    initialValue = undefined,
+    text = $bindable(""),
+    prepend,
+    itemContent,
+    append
+  }: Props = $props();
 
   let filteredTextLength = 0;
 
   // view model
-  let filteredListItems;
+  let filteredListItems = $state();
   let listItems = [];
 
   // requests/responses counters
@@ -147,7 +237,7 @@
 
   // other state
   let inputDelayTimeout;
-  let showList = false;
+  let showList = $state(false);
 
   // -- Reactivity --
 
@@ -185,9 +275,13 @@
     }
   }
 
-  $: value, onValueChanged();
-  $: text, onTextChanged();
-  $: clearable = showClear && (lock || multiple) && value;
+  run(() => {
+    value, onValueChanged();
+  });
+  run(() => {
+    text, onTextChanged();
+  });
+  let clearable = $derived(showClear && (lock || multiple) && value);
 
   // --- Functions ---
 
@@ -238,7 +332,9 @@
     };
   }
 
-  $: items, prepareListItems();
+  run(() => {
+    items, prepareListItems();
+  });
 
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
@@ -731,7 +827,7 @@
   class:show-clear={clearable}
   class:is-loading={showLoadingIndicator && loading}
   use:clickOutside
-  on:click_outside={close}
+  onclick_outside={close}
 >
   <select name={selectName} id={selectId}>
     {#if !multiple && value}
@@ -759,16 +855,16 @@
       readonly={readonly || (lock && value)}
       bind:this={input}
       bind:value={text}
-      on:input={onInput}
-      on:focus={onFocusInternal}
-      on:blur
-      on:keydown={onKeyDown}
-      on:click={onInputClick}
-      on:keypress={onKeyPress}
+      oninput={onInput}
+      onfocus={onFocusInternal}
+      onblur={bubble('blur')}
+      onkeydown={onKeyDown}
+      onclick={onInputClick}
+      onkeypress={onKeyPress}
       aria-describedby={formatErrors(name, errorMessages)}
     />
     {#if clearable && text?.length}
-      <button on:click={clear} class="autocomplete-clear-button"
+      <button onclick={clear} class="autocomplete-clear-button"
         >&#10006;</button
       >
     {/if}
@@ -780,7 +876,7 @@
     bind:this={list}
   >
     {#if hasPrependSlot}
-      <slot name="prepend" />
+      {@render prepend?.()}
       <hr class:hidden={!showList} class="mx-s20" />
     {/if}
 
@@ -800,8 +896,8 @@
                   ? 'selected'
                   : ''} {multiple ? 'gap-s10' : 'justify-between'}"
                 class:confirmed
-                on:click|preventDefault={() => onListItemClick(listItem)}
-                on:pointerenter={() => {
+                onclick={preventDefault(() => onListItemClick(listItem))}
+                onpointerenter={() => {
                   highlightIndex = i;
                 }}
               >
@@ -810,7 +906,7 @@
                 {/if}
 
                 {#if hasCustomContentSlot}
-                  <slot name="itemContent" item={listItem} />
+                  {@render itemContent?.({ item: listItem, })}
                 {:else}
                   <div>
                     {@html listItem.highlighted
@@ -849,7 +945,7 @@
 
     {#if hasAppendSlot}
       <hr class:hidden={!showList} class="mx-s20" />
-      <slot name="append" />
+      {@render append?.()}
     {/if}
   </div>
 </div>
@@ -864,7 +960,7 @@
         {#if !disabled && !readonly && !isFixedItem(tagItem)}
           <button
             class="tag-delete"
-            on:click|preventDefault={unselectItem(tagItem)}
+            onclick={preventDefault(unselectItem(tagItem))}
           >
             {@html closeCircleIcon}
           </button>
@@ -873,7 +969,7 @@
     {/each}
   </div>
 {/if}
-<svelte:window on:click={onDocumentClick} />
+<svelte:window onclick={onDocumentClick} />
 
 <style lang="postcss">
   @reference "../../../../app.css";

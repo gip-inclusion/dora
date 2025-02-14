@@ -3,9 +3,8 @@
   import { setModerationState } from "$lib/requests/admin";
   import type { ModerationStatus } from "$lib/types";
 
-  export let entity; // either a Service or a Structure
-  export let onRefresh;
-  let moderationStatus: ModerationStatus;
+  let { entity, onRefresh } = $props();
+  let moderationStatus: ModerationStatus = $derived(entity.moderationStatus);
 
   async function handleInProgress() {
     await setModerationState(entity, "IN_PROGRESS");
@@ -28,7 +27,7 @@
     }
   }
 
-  $: moderationStatus = entity.moderationStatus;
+  
 </script>
 
 <div class="flex flex-col items-end">

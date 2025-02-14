@@ -9,18 +9,23 @@
   import { browser } from "$app/environment";
   import { userInfo } from "$lib/utils/auth";
 
-  export let service: Service;
-  export let isDI = false;
 
   // Suggérer une modification
-  let feedbackModalIsOpen = false;
+  let feedbackModalIsOpen = $state(false);
 
   function handleFeedback() {
     feedbackModalIsOpen = true;
   }
 
-  // Partager ce service
-  export let copied = false;
+  
+  interface Props {
+    service: Service;
+    isDI?: boolean;
+    // Partager ce service
+    copied?: boolean;
+  }
+
+  let { service, isDI = false, copied = $bindable(false) }: Props = $props();
   function doCopy() {
     navigator.clipboard.writeText(
       `${CANONICAL_URL}/services/${isDI ? `di/` : ``}${service.slug}`
@@ -34,7 +39,7 @@
 {#if !service.canWrite && browser && !isDI}
   <div class="ml-s24 text-f16 text-gray-text print:hidden">
     <FeedbackModal {service} bind:isOpen={feedbackModalIsOpen} />
-    <button class="hover:text-magenta-cta flex" on:click={handleFeedback}>
+    <button class="hover:text-magenta-cta flex" onclick={handleFeedback}>
       <span class="mr-s10 h-s24 w-s24 fill-current">
         {@html markPenIcon}
       </span>
@@ -46,7 +51,7 @@
 <div class="ml-s24 text-f16 text-gray-text print:hidden">
   <button
     class="hover:text-magenta-cta flex text-left"
-    on:click={() => {
+    onclick={() => {
       print();
     }}
   >
@@ -61,7 +66,7 @@
     <button
       class="hover:text-magenta-cta flex"
       title="Copier le lien de ce service"
-      on:click={doCopy}
+      onclick={doCopy}
     >
       {#if copied}
         <span
@@ -85,23 +90,25 @@
 {/if}
 
 {#if browser && $userInfo && service.status !== "ARCHIVED"}
-  <Bookmarkable slug={service.slug} {isDI} let:onBookmark let:isBookmarked>
-    <button
-      class="ml-s24 text-f16 text-gray-text flex print:hidden {isBookmarked
-        ? 'text-magenta-cta hover:text-gray-text'
-        : 'hover:text-magenta-cta'}"
-      on:click={onBookmark}
-    >
-      <span class="h-s24 w-s24 fill-current">
-        {@html isBookmarked ? starSmileFillIcon : starSmileLineIcon}
-      </span>
-      <span class="ml-s10 text-f16">
-        {#if isBookmarked}
-          Retirer des favoris
-        {:else}
-          Ajouter aux favoris
-        {/if}
-      </span>
-    </button>
-  </Bookmarkable>
+  <Bookmarkable slug={service.slug} {isDI}  >
+    {#snippet children({ onBookmark, isBookmarked })}
+        <button
+        class="ml-s24 text-f16 text-gray-text flex print:hidden {isBookmarked
+          ? 'text-magenta-cta hover:text-gray-text'
+          : 'hover:text-magenta-cta'}"
+        onclick={onBookmark}
+      >
+        <span class="h-s24 w-s24 fill-current">
+          {@html isBookmarked ? starSmileFillIcon : starSmileLineIcon}
+        </span>
+        <span class="ml-s10 text-f16">
+          {#if isBookmarked}
+            Retirer des favoris
+          {:else}
+            Ajouter aux favoris
+          {/if}
+        </span>
+      </button>
+          {/snippet}
+    </Bookmarkable>
 {/if}

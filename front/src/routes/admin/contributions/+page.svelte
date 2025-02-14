@@ -4,7 +4,7 @@
   import { onMount } from "svelte";
   import List from "./list.svelte";
 
-  export let suggestions;
+  let { suggestions = $bindable() } = $props();
 
   async function handleRefresh() {
     suggestions = null;

@@ -3,9 +3,13 @@
   import Notice from "$lib/components/display/notice.svelte";
   import { refreshOrientationLink } from "$lib/utils/orientation";
 
-  export let queryId: string;
+  interface Props {
+    queryId: string;
+  }
 
-  let emailSent = false;
+  let { queryId }: Props = $props();
+
+  let emailSent = $state(false);
 
   function sendNewLink() {
     refreshOrientationLink(queryId);

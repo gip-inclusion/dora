@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import dayjs from "dayjs";
 
   export function computeRelativeDateLabel(dateString: string) {
@@ -27,9 +27,13 @@
 <script lang="ts">
   import DateLabel from "./date-label.svelte";
 
-  export let date;
-  export let bold = false;
-  export let prefix = "";
+  interface Props {
+    date: any;
+    bold?: boolean;
+    prefix?: string;
+  }
+
+  let { date, bold = false, prefix = "" }: Props = $props();
 </script>
 
 <span class="hidden print:inline" class:font-bold={bold}>

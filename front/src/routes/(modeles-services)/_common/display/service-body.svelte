@@ -17,28 +17,37 @@
   import ServicePresentation from "./service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
 
-  export let service: Service | Model;
-  export let servicesOptions: ServicesOptions;
 
-  export let isModel = false;
-  export let isDI = false;
+  interface Props {
+    service: Service | Model;
+    servicesOptions: ServicesOptions;
+    isModel?: boolean;
+    isDI?: boolean;
+  }
 
-  $: searchIdStr = $page.url.searchParams.get("searchId");
-  $: searchIdNumber = searchIdStr ? parseInt(searchIdStr) : undefined;
-  $: searchFragment = searchIdStr ? `?searchId=${searchIdStr}` : "";
-  $: orientationFormUrl = `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`;
+  let {
+    service,
+    servicesOptions,
+    isModel = false,
+    isDI = false
+  }: Props = $props();
 
-  $: isServiceFromOwnStructure = $userInfo
+  let searchIdStr = $derived($page.url.searchParams.get("searchId"));
+  let searchIdNumber = $derived(searchIdStr ? parseInt(searchIdStr) : undefined);
+  let searchFragment = $derived(searchIdStr ? `?searchId=${searchIdStr}` : "");
+  let orientationFormUrl = $derived(`/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`);
+
+  let isServiceFromOwnStructure = $derived($userInfo
     ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
         (structure) => structure.slug === service.structure
       )
-    : false;
+    : false);
 
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;
 
-  let isPreventFakeOrientationModalOpen = false;
-  let isVideoModalOpen = false;
+  let isPreventFakeOrientationModalOpen = $state(false);
+  let isVideoModalOpen = $state(false);
 
   function handleShowVideoModal() {
     isPreventFakeOrientationModalOpen = false;

@@ -7,11 +7,15 @@
     getSubCategoryLabel,
   } from "$lib/utils/service";
 
-  export let categorySlug: string;
-  export let subCategorySlugs: string[];
-  export let servicesOptions: ServicesOptions;
+  interface Props {
+    categorySlug: string;
+    subCategorySlugs: string[];
+    servicesOptions: ServicesOptions;
+  }
 
-  let expanded = false;
+  let { categorySlug, subCategorySlugs, servicesOptions }: Props = $props();
+
+  let expanded = $state(false);
 </script>
 
 <div class="text-f14 text-france-blue">
@@ -28,7 +32,7 @@
 
     <button
       class="ml-s10 h-s24 w-s24 fill-current print:hidden"
-      on:click={() => (expanded = !expanded)}
+      onclick={() => (expanded = !expanded)}
     >
       {#if !expanded}
         {@html addIcon}

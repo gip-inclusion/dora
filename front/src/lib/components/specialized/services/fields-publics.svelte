@@ -5,17 +5,21 @@
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
 
-  export let servicesOptions: ServicesOptions;
-  export let service: Service;
-  export let model: Model | undefined = undefined;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    model?: Model | undefined;
+  }
 
-  $: showModel = !!service.model;
+  let { servicesOptions, service = $bindable(), model = undefined }: Props = $props();
+
+  let showModel = $derived(!!service.model);
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  $: fieldModelProps = model
+  let fieldModelProps = $derived(model
     ? getModelInputProps({
         service,
         servicesOptions,
@@ -23,29 +27,31 @@
         onUseModelValue: handleUseModelValue,
         model,
       })
-    : {};
+    : {});
 </script>
 
 <FieldSet title="Publics" {showModel}>
-  <div slot="help">
-    <p class="text-f14">
-      Publics auxquels le service s’adresse. Si votre service est ouvert à tous,
-      sans critère ou prérequis, laissez les champs avec les options par défaut.
-    </p>
-    <ul class="text-f14 font-bold">
-      <li>
-        <a
-          href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/definir-les-publics-et-criteres-dacces-a-votre-service-tos25n/"
-          class="text-magenta-cta"
-          target="_blank"
-          title="Ouverture dans une nouvelle fenêtre"
-          rel="noopener"
-        >
-          Définir les publics et critères d’accès à votre service
-        </a>
-      </li>
-    </ul>
-  </div>
+  {#snippet help()}
+    <div >
+      <p class="text-f14">
+        Publics auxquels le service s’adresse. Si votre service est ouvert à tous,
+        sans critère ou prérequis, laissez les champs avec les options par défaut.
+      </p>
+      <ul class="text-f14 font-bold">
+        <li>
+          <a
+            href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/definir-les-publics-et-criteres-dacces-a-votre-service-tos25n/"
+            class="text-magenta-cta"
+            target="_blank"
+            title="Ouverture dans une nouvelle fenêtre"
+            rel="noopener"
+          >
+            Définir les publics et critères d’accès à votre service
+          </a>
+        </li>
+      </ul>
+    </div>
+  {/snippet}
 
   {#if servicesOptions.concernedPublic.length}
     <FieldModel {...fieldModelProps.concernedPublic ?? {}} type="array">

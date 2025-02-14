@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
@@ -30,29 +32,49 @@
   import { getQueryString } from "$lib/utils/service-search";
   import { onMount } from "svelte";
 
-  export let servicesOptions: ServicesOptions;
-  export let cityCode: string | undefined = undefined;
-  export let cityLabel: string | undefined = undefined;
-  export let label: string | undefined = undefined;
-  export let lon: number | undefined = undefined;
-  export let lat: number | undefined = undefined;
-  export let categoryId: string | undefined = undefined;
-  export let subCategoryIds: string[] = [];
-  export let showDeploymentWarning = true;
-  export let useAdditionalFilters = false;
-  export let kindIds: ServiceKind[] = [];
-  export let feeConditions: FeeCondition[] = [];
-  export let locationKinds: LocationKind[] = [];
-  export let fundingLabels: Array<FundingLabel["value"]> = [];
-  export let initialSearch = false;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    cityCode?: string | undefined;
+    cityLabel?: string | undefined;
+    label?: string | undefined;
+    lon?: number | undefined;
+    lat?: number | undefined;
+    categoryId?: string | undefined;
+    subCategoryIds?: string[];
+    showDeploymentWarning?: boolean;
+    useAdditionalFilters?: boolean;
+    kindIds?: ServiceKind[];
+    feeConditions?: FeeCondition[];
+    locationKinds?: LocationKind[];
+    fundingLabels?: Array<FundingLabel["value"]>;
+    initialSearch?: boolean;
+  }
 
-  let innerWidth;
-  let submitDisabled = !initialSearch;
-  let refreshMode = false;
+  let {
+    servicesOptions,
+    cityCode = $bindable(undefined),
+    cityLabel = $bindable(undefined),
+    label = $bindable(undefined),
+    lon = $bindable(undefined),
+    lat = $bindable(undefined),
+    categoryId = $bindable(undefined),
+    subCategoryIds = $bindable([]),
+    showDeploymentWarning = true,
+    useAdditionalFilters = false,
+    kindIds = [],
+    feeConditions = [],
+    locationKinds = [],
+    fundingLabels = [],
+    initialSearch = false
+  }: Props = $props();
+
+  let innerWidth = $state();
+  let submitDisabled = $state(!initialSearch);
+  let refreshMode = $state(false);
   const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
-  let subCategories: Choice[] = [];
+  let subCategories: Choice[] = $state([]);
 
-  $: query = getQueryString({
+  let query = $derived(getQueryString({
     categoryIds: [categoryId ? categoryId : ""],
     subCategoryIds: subCategoryIds.filter((value) => !value.endsWith("--all")),
     cityCode,
@@ -64,7 +86,7 @@
     fundingLabels,
     lon,
     lat,
-  });
+  }));
 
   const categories = servicesOptions.categories
     ? associateIconToCategory(sortCategory(servicesOptions.categories))
@@ -155,7 +177,7 @@
 
 <svelte:window bind:innerWidth />
 
-<form on:submit|preventDefault={handleSearch}>
+<form onsubmit={preventDefault(handleSearch)}>
   <div class="border-gray-02 w-full rounded-lg border bg-white">
     {#if servicesOptions.categories}
       <div class="grid" class:with-subcategories={useAdditionalFilters}>
@@ -188,7 +210,7 @@
               {#if cityCode}
                 <button
                   class="h-s24 w-s24 inline-block"
-                  on:click={() => {
+                  onclick={() => {
                     handleAddressChange(null);
                   }}
                 >

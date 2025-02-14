@@ -2,7 +2,7 @@
   import TextClamp from "$lib/components/display/text-clamp.svelte";
   import { markdownToHTML } from "$lib/utils/misc";
 
-  export let service;
+  let { service } = $props();
 </script>
 
 <div class="markdown-wrapper prose mb-s24 w-full">

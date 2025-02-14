@@ -1,17 +1,21 @@
 <script lang="ts">
   import type { Service } from "$lib/types";
 
-  export let service: Service;
+  interface Props {
+    service: Service;
+  }
 
-  $: isValid =
-    isFinite(service.durationWeeklyHours) &&
+  let { service }: Props = $props();
+
+  let isValid =
+    $derived(isFinite(service.durationWeeklyHours) &&
     service.durationWeeklyHours > 0 &&
     isFinite(service.durationWeeks) &&
-    service.durationWeeks > 0;
+    service.durationWeeks > 0);
 
-  $: totalHours = isValid
+  let totalHours = $derived(isValid
     ? service.durationWeeklyHours * service.durationWeeks
-    : 0;
+    : 0);
 </script>
 
 <div>

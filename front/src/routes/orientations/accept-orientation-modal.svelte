@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Modal from "$lib/components/hoc/modal.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import * as v from "$lib/validation/schema-utils";
@@ -13,14 +15,23 @@
   } from "$lib/utils/orientation-templates";
   import { formatPhoneNumber } from "$lib/utils/misc";
 
-  export let isOpen = false;
-  export let onRefresh;
-  export let orientation: Orientation;
-  export let queryHash: string;
+  interface Props {
+    isOpen?: boolean;
+    onRefresh: any;
+    orientation: Orientation;
+    queryHash: string;
+  }
 
-  let showConfirmation = false;
+  let {
+    isOpen = $bindable(false),
+    onRefresh,
+    orientation,
+    queryHash
+  }: Props = $props();
 
-  let requesting = false;
+  let showConfirmation = $state(false);
+
+  let requesting = $state(false);
 
   const acceptOrientationSchema: v.Schema = {
     message: {
@@ -69,7 +80,10 @@
     serviceContactName: orientation.service?.contactName,
   });
 
-  $: formData = { message, beneficiaryMessage };
+  let formData;
+  run(() => {
+    formData = { message, beneficiaryMessage };
+  });
 </script>
 
 <Modal
@@ -79,15 +93,17 @@
   hideTitle={showConfirmation}
   width="medium"
 >
-  <div slot="subtitle">
-    Vous êtes sur le point de valider une demande d’orientation qui vous a été
-    adressée par {orientation.prescriber?.name} pour le service «&nbsp;<a
-      class="text-magenta-cta"
-      href="/services/{orientation.service?.slug}"
-    >
-      {orientation.service?.name}
-    </a>&nbsp;»
-  </div>
+  {#snippet subtitle()}
+    <div >
+      Vous êtes sur le point de valider une demande d’orientation qui vous a été
+      adressée par {orientation.prescriber?.name} pour le service «&nbsp;<a
+        class="text-magenta-cta"
+        href="/services/{orientation.service?.slug}"
+      >
+        {orientation.service?.name}
+      </a>&nbsp;»
+    </div>
+  {/snippet}
 
   {#if showConfirmation}
     <ConfirmationBloc

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Modal from "$lib/components/hoc/modal.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import * as v from "$lib/validation/schema-utils";
@@ -10,18 +12,27 @@
   import ConfirmationBloc from "./confirmation-bloc.svelte";
   import { createEventDispatcher } from "svelte";
 
-  export let isOpen = false;
-  export let onRefresh;
-  export let orientation: Orientation;
-  export let queryHash: string;
+  interface Props {
+    isOpen?: boolean;
+    onRefresh: any;
+    orientation: Orientation;
+    queryHash: string;
+  }
+
+  let {
+    isOpen = $bindable(false),
+    onRefresh,
+    orientation,
+    queryHash
+  }: Props = $props();
 
   const dispatch = createEventDispatcher();
 
-  let showConfirmation = false;
+  let showConfirmation = $state(false);
 
-  let message = "";
-  let extraRecipients: string[] = [];
-  let requesting = false;
+  let message = $state("");
+  let extraRecipients: string[] = $state([]);
+  let requesting = $state(false);
 
   const contactPrescriberSchema: v.Schema = {
     extraRecipients: {
@@ -79,7 +90,10 @@
     showConfirmation = true;
   }
 
-  $: formData = { extraRecipients, message };
+  let formData;
+  run(() => {
+    formData = { extraRecipients, message };
+  });
 </script>
 
 <Modal
@@ -89,15 +103,17 @@
   width="medium"
   title="Contacter le prescripteur ou la prescriptrice"
 >
-  <div slot="subtitle">
-    Contacter {orientation.prescriber?.name} - concernant l’orientation qui vous
-    a été adressé pour le service «&nbsp;<a
-      class="text-magenta-cta"
-      href="/services/{orientation.service?.slug}"
-    >
-      {orientation.service?.name}
-    </a>&nbsp;».
-  </div>
+  {#snippet subtitle()}
+    <div >
+      Contacter {orientation.prescriber?.name} - concernant l’orientation qui vous
+      a été adressé pour le service «&nbsp;<a
+        class="text-magenta-cta"
+        href="/services/{orientation.service?.slug}"
+      >
+        {orientation.service?.name}
+      </a>&nbsp;».
+    </div>
+  {/snippet}
 
   {#if showConfirmation}
     <ConfirmationBloc title="Votre message a été transmis" />

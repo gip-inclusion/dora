@@ -1,14 +1,20 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import type { Service, ServicesOptions } from "$lib/types";
   import SubcategoryListItem from "./subcategory-list-item.svelte";
 
-  export let service: Service;
-  export let servicesOptions: ServicesOptions;
+  interface Props {
+    service: Service;
+    servicesOptions: ServicesOptions;
+  }
 
-  let categoriesRecord: Record<string, string[]> = {};
-  $: hasCategoriesInfos =
-    service.subcategories != null && service.categories != null;
-  $: {
+  let { service, servicesOptions }: Props = $props();
+
+  let categoriesRecord: Record<string, string[]> = $state({});
+  let hasCategoriesInfos =
+    $derived(service.subcategories != null && service.categories != null);
+  run(() => {
     categoriesRecord = {};
 
     service.subcategories?.forEach((subCategorySlug) => {
@@ -19,7 +25,7 @@
       }
       categoriesRecord[category].push(subCategorySlug);
     });
-  }
+  });
 </script>
 
 <div>

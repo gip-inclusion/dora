@@ -1,8 +1,12 @@
 <script lang="ts">
   import { copyIcon2 } from "$lib/icons";
 
-  export let warning = false;
-  export let small = false;
+  interface Props {
+    warning?: boolean;
+    small?: boolean;
+  }
+
+  let { warning = false, small = false }: Props = $props();
 </script>
 
 <div

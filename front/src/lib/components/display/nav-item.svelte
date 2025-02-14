@@ -1,13 +1,25 @@
 <script lang="ts">
-  export let label = "";
-  export let otherTab = false;
-  export let disabled = false;
-  export let href;
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
+  interface Props {
+    label?: string;
+    otherTab?: boolean;
+    disabled?: boolean;
+    href: any;
+  }
+
+  let {
+    label = "",
+    otherTab = false,
+    disabled = false,
+    href
+  }: Props = $props();
 </script>
 
 <a
   class="text-f14 text-gray-text"
-  on:click
+  onclick={bubble('click')}
   {href}
   target={otherTab ? "_blank" : ""}
   rel="noopener"

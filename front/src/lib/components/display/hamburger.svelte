@@ -1,8 +1,13 @@
 <script lang="ts">
   import { afterNavigate } from "$app/navigation";
   import { closeIcon, menuIcon } from "$lib/icons";
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
 
-  let isOpen = false;
+  let { children }: Props = $props();
+
+  let isOpen = $state(false);
 
   afterNavigate(() => {
     isOpen = false;
@@ -12,7 +17,7 @@
 <div class="flex lg:hidden">
   <div>
     <button
-      on:click={() => (isOpen = true)}
+      onclick={() => (isOpen = true)}
       class="text-gray-text"
       aria-expanded={isOpen}
       aria-controls="hamburger-content"
@@ -30,7 +35,7 @@
         <div class="flex justify-end">
           <button
             class="pb-s20 text-magenta-cta flex items-center"
-            on:click={() => (isOpen = false)}
+            onclick={() => (isOpen = false)}
           >
             Fermer
             <span class="h-s24 w-s24 inline-block fill-current">
@@ -40,7 +45,7 @@
         </div>
 
         <div>
-          <slot />
+          {@render children?.()}
         </div>
       </div>
     {/if}
@@ -48,5 +53,5 @@
 </div>
 
 <div class="hidden lg:flex">
-  <slot />
+  {@render children?.()}
 </div>

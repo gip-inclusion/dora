@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import {
     boldIcon,
     h1Icon,
@@ -17,26 +19,39 @@
   import Button from "./button.svelte";
   import Separator from "./separator.svelte";
 
-  export let id: string;
-  export let name: string;
-  export let htmlContent = "";
-  export let initialContent = "";
-  export let placeholder = "";
-  export let disabled = false;
-  export let readonly = false;
-  export let ariaDescribedBy = "";
+  interface Props {
+    id: string;
+    name: string;
+    htmlContent?: string;
+    initialContent?: string;
+    placeholder?: string;
+    disabled?: boolean;
+    readonly?: boolean;
+    ariaDescribedBy?: string;
+  }
 
-  let element;
-  let editor;
-  let linkDialogIsOpen = false;
-  let linkDialogHref;
-  let linkDialogHrefPrev;
-  let linkDialogButtontext;
-  let linkDialogButtonIsActive = false;
-  let linkDialogText;
-  let linkDialogHasSelection;
-  let linkDialogTextInput;
-  let linkDialogUrlInput;
+  let {
+    id,
+    name,
+    htmlContent = $bindable(""),
+    initialContent = "",
+    placeholder = "",
+    disabled = false,
+    readonly = false,
+    ariaDescribedBy = ""
+  }: Props = $props();
+
+  let element = $state();
+  let editor = $state();
+  let linkDialogIsOpen = $state(false);
+  let linkDialogHref = $state();
+  let linkDialogHrefPrev = $state();
+  let linkDialogButtontext = $state();
+  let linkDialogButtonIsActive = $state(false);
+  let linkDialogText = $state();
+  let linkDialogHasSelection = $state();
+  let linkDialogTextInput = $state();
+  let linkDialogUrlInput = $state();
 
   function toString(bool: boolean) {
     return bool ? "true" : "false";
@@ -78,12 +93,14 @@
     }
   });
 
-  $: linkDialogButtonIsActive =
-    linkDialogHref !== linkDialogHrefPrev &&
-    !(linkDialogHref === "" && linkDialogHrefPrev === undefined) &&
-    (linkDialogHasSelection || linkDialogText);
+  run(() => {
+    linkDialogButtonIsActive =
+      linkDialogHref !== linkDialogHrefPrev &&
+      !(linkDialogHref === "" && linkDialogHrefPrev === undefined) &&
+      (linkDialogHasSelection || linkDialogText);
+  });
 
-  $: {
+  run(() => {
     if (!linkDialogHrefPrev) {
       linkDialogButtontext = "Ajouter le lien";
     } else if (!linkDialogHref) {
@@ -91,7 +108,7 @@
     } else {
       linkDialogButtontext = "Modifier le lien";
     }
-  }
+  });
 
   export function updateValue(value) {
     editor.commands.setContent(markdownToHTML(value));
@@ -233,18 +250,18 @@
         />
         <button
           class="border-gray-text px-s8 py-s4 text-f12 hover:bg-gray-text disabled:border-gray-03 disabled:bg-gray-01 disabled:text-gray-03 rounded-lg border font-bold hover:text-white"
-          on:click={setLink}
+          onclick={setLink}
           disabled={!linkDialogButtonIsActive}
         >
           {linkDialogButtontext}
         </button>
         <button
           class="border-gray-text px-s8 py-s4 text-f12 hover:bg-gray-text rounded-lg border font-bold hover:text-white"
-          on:click={linkDialogClose}>Annuler</button
+          onclick={linkDialogClose}>Annuler</button
         >
       </div>
     {/if}
-    <div {id} aria-describedby={ariaDescribedBy} bind:this={element} />
+    <div {id} aria-describedby={ariaDescribedBy} bind:this={element}></div>
   </div>
 </div>
 

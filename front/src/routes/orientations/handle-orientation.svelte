@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Button from "$lib/components/display/button.svelte";
   import DenyOrientationModal from "./deny-orientation-modal.svelte";
   import AcceptOrientationModal from "./accept-orientation-modal.svelte";
@@ -9,23 +11,27 @@
   import Notice from "$lib/components/display/notice.svelte";
   import { formatNumericDate } from "$lib/utils/date";
 
-  export let orientation: Orientation;
-  export let queryHash: string;
-  export let onRefresh;
+  interface Props {
+    orientation: Orientation;
+    queryHash: string;
+    onRefresh: any;
+  }
+
+  let { orientation, queryHash, onRefresh }: Props = $props();
 
   let modalOpened:
     | "accept"
     | "deny"
     | "contact-beneficiary"
     | "contact-service"
-    | undefined = undefined;
+    | undefined = $state(undefined);
 
   function closeModal() {
     modalOpened = undefined;
   }
 
-  let statusMessage: { label?: string; cssClass?: string } = {};
-  $: {
+  let statusMessage: { label?: string; cssClass?: string } = $state({});
+  run(() => {
     if (orientation.status === "VALIDÉE") {
       statusMessage = { label: "Validé", cssClass: "text-success" };
     } else if (orientation.status === "OUVERTE") {
@@ -36,7 +42,7 @@
     } else if (orientation.status === "REFUSÉE") {
       statusMessage = { label: "Refusé", cssClass: "text-error" };
     }
-  }
+  });
 </script>
 
 {#if browser}

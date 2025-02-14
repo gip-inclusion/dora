@@ -13,14 +13,18 @@
   import { hasAtLeastTwoMembersOrInvitedMembers } from "../quick-start";
   import Button from "$lib/components/display/button.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let modalAddUserIsOpen = false;
+  let { data = $bindable() }: Props = $props();
 
-  let showNoMemberNotice = !hasAtLeastTwoMembersOrInvitedMembers(
+  let modalAddUserIsOpen = $state(false);
+
+  let showNoMemberNotice = $state(!hasAtLeastTwoMembersOrInvitedMembers(
     data.members,
     data.putativeMembers
-  );
+  ));
 
   async function handleRefreshMemberList() {
     data.members = await getMembers($structure.slug);
@@ -46,7 +50,7 @@
     });
   }
 
-  $: canAdd = $structure.canEditMembers;
+  let canAdd = $derived($structure.canEditMembers);
 </script>
 
 <EnsureLoggedIn>

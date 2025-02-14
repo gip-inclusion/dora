@@ -1,10 +1,21 @@
 <script lang="ts">
   import { externalLinkIcon } from "$lib/icons";
 
-  export let textTopIcon = "";
-  export let title = "";
-  export let illustration = "";
-  export let links: { label: string; url: string }[] = [];
+  interface Props {
+    textTopIcon?: string;
+    title?: string;
+    illustration?: string;
+    links?: { label: string; url: string }[];
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    textTopIcon = "",
+    title = "",
+    illustration = "",
+    links = [],
+    children
+  }: Props = $props();
 </script>
 
 <div class="border-gray-03 p-s40 flex flex-col rounded-lg border md:flex-row">
@@ -19,7 +30,7 @@
     <h3 class="text-f30 text-gray-text text-center leading-40">{title}</h3>
 
     <div class="text-gray-text">
-      <slot />
+      {@render children?.()}
 
       <div class="mt-s20 text-center">
         <ul class="gap-s20 text-magenta-cta flex flex-col">

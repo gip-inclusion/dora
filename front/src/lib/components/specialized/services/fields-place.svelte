@@ -6,8 +6,13 @@
   import type { Service, ServicesOptions, Structure } from "$lib/types";
   import { moveToTheEnd } from "$lib/utils/misc";
 
-  export let servicesOptions: ServicesOptions, service: Service;
-  export let structure: Structure | undefined = undefined;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    structure?: Structure | undefined;
+  }
+
+  let { servicesOptions, service = $bindable(), structure = undefined }: Props = $props();
 </script>
 
 <FieldSet title="Accueil">

@@ -15,9 +15,13 @@
   import { videoIcon } from "$lib/icons";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let isVideoModalOpen = false;
+  let { data }: Props = $props();
+
+  let isVideoModalOpen = $state(false);
 </script>
 
 <OrientationVideo bind:isVideoModalOpen></OrientationVideo>

@@ -6,9 +6,13 @@
 
   import ServiceDescription from "../service-description.svelte";
 
-  export let service: Service | Model;
-  export let servicesOptions: ServicesOptions;
-  export let isDI = false;
+  interface Props {
+    service: Service | Model;
+    servicesOptions: ServicesOptions;
+    isDI?: boolean;
+  }
+
+  let { service, servicesOptions, isDI = false }: Props = $props();
 </script>
 
 <h2 class="mb-s40">Présentation du service</h2>
@@ -21,7 +25,7 @@
   <ServiceKeyInformations {service} {servicesOptions} />
 </div>
 
-<div class="mb-s40 print:mb-s24" />
+<div class="mb-s40 print:mb-s24"></div>
 
 {#if service.fullDesc}
   <div>

@@ -4,7 +4,11 @@
   import type { PageData } from "./$types";
   import List from "./list.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
   async function handleRefresh() {
     $structure = await getStructure($structure.slug);
   }

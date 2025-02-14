@@ -14,7 +14,11 @@
   import type { PageData } from "./$types";
   import type { Service } from "$lib/types";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data = $bindable() }: Props = $props();
 
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");

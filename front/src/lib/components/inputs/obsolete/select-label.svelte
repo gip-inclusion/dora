@@ -1,19 +1,25 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import type { Choice } from "$lib/types";
 
-  export let choice: Choice;
-  export let showIcon = true;
-  export let useSelectedLabel = false;
+  interface Props {
+    choice: Choice;
+    showIcon?: boolean;
+    useSelectedLabel?: boolean;
+  }
 
-  let icon, iconOnRight, label;
-  $: {
+  let { choice, showIcon = true, useSelectedLabel = false }: Props = $props();
+
+  let icon = $state(), iconOnRight = $state(), label = $state();
+  run(() => {
     icon = choice.icon;
     iconOnRight = choice.iconOnRight;
     label =
       useSelectedLabel && choice.selectedLabel
         ? choice.selectedLabel
         : choice.label;
-  }
+  });
 </script>
 
 <span

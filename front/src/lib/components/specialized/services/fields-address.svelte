@@ -8,10 +8,14 @@
   import type { GeoApiValue, Service, Structure } from "$lib/types";
   import { randomId } from "$lib/utils/random";
 
-  export let entity: Service | Structure;
-  export let parent: Structure | null = null;
+  interface Props {
+    entity: Service | Structure;
+    parent?: Structure | null;
+  }
 
-  let key = randomId();
+  let { entity = $bindable(), parent = null }: Props = $props();
+
+  let key = $state(randomId());
 
   function handleAddressChange(address) {
     const props = address?.properties;

@@ -68,21 +68,31 @@
     },
   };
 
-  export let service: Service | ShortService;
-  export let servicesOptions;
-  export let onRefresh: () => void;
-  export let hideLabel = true;
-  export let fullWidth = false;
+  interface Props {
+    service: Service | ShortService;
+    servicesOptions: any;
+    onRefresh: () => void;
+    hideLabel?: boolean;
+    fullWidth?: boolean;
+  }
 
-  $: availableOptions = getAvailableOptionsForStatus(service.status);
+  let {
+    service,
+    servicesOptions,
+    onRefresh,
+    hideLabel = true,
+    fullWidth = false
+  }: Props = $props();
+
+  let availableOptions = $derived(getAvailableOptionsForStatus(service.status));
 
   // *** Accessibilité
   const uuid: string = randomId(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
-  let isDropdownOpen = false;
+  let isDropdownOpen = $state(false);
 
   // Gestion de l'outline avec la navigation au clavier
   let selectedOptionIndex: number | null = null;
-  let selectedOption: ServiceStatus | "DELETE" | null = null;
+  let selectedOption: ServiceStatus | "DELETE" | null = $state(null);
 
   // Actions disponibles
   async function publish() {
@@ -191,14 +201,14 @@
   }
 
   // *** Valeurs pour l'affichage
-  $: currentStatusPresentation = SERVICE_STATUS_PRESENTATION[service.status];
+  let currentStatusPresentation = $derived(SERVICE_STATUS_PRESENTATION[service.status]);
 </script>
 
 <div
   id="service-state-update"
   class="text-gray-dark relative flex cursor-pointer items-center rounded-lg font-bold {currentStatusPresentation.bgClass} hover:{currentStatusPresentation.hoverBgClass}"
   use:clickOutside
-  on:click_outside={() => toggleCombobox(false)}
+  onclick_outside={() => toggleCombobox(false)}
 >
   <span id={`button-label-${uuid}`} class="sr-only">
     Modifier le status du service
@@ -213,8 +223,8 @@
     class="cursor:pointer px-s20 py-s10 flex items-center"
     role="combobox"
     tabindex="0"
-    on:click={() => toggleCombobox()}
-    on:keydown={handleKeydown}
+    onclick={() => toggleCombobox()}
+    onkeydown={handleKeydown}
   >
     <span class:hidden={hideLabel} class="mr-s10">Statut du service :</span>
 
@@ -248,16 +258,16 @@
         <div
           class="mb-s10 p-s10 flex items-center rounded-sm bg-transparent"
           class:bg-service-red={selectedOption === option}
-          on:mouseenter={() => setAsSelected(option, index)}
+          onmouseenter={() => setAsSelected(option, index)}
           role="option"
           tabindex="0"
           aria-selected="false"
-          on:keypress={(event) => {
+          onkeypress={(event) => {
             if (event.code === "Enter") {
               updateServiceStatus(option);
             }
           }}
-          on:click={() => updateServiceStatus(option)}
+          onclick={() => updateServiceStatus(option)}
         >
           <span class="mr-s8 h-s24 w-s24 text-service-red-dark fill-current">
             {@html deleteBinIcon}
@@ -275,13 +285,13 @@
           id={option}
           aria-selected="false"
           tabindex="0"
-          on:keypress={(event) => {
+          onkeypress={(event) => {
             if (event.code === "Enter") {
               updateServiceStatus(option);
             }
           }}
-          on:mouseenter={() => setAsSelected(option, index)}
-          on:click={() => updateServiceStatus(option)}
+          onmouseenter={() => setAsSelected(option, index)}
+          onclick={() => updateServiceStatus(option)}
         >
           <span class="{data.iconClass} mr-s8 h-s24 w-s24 fill-current">
             {@html data.icon}

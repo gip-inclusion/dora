@@ -2,22 +2,26 @@
   import { randomId } from "$lib/utils/random";
   import Button from "./button.svelte";
 
-  export let text = "";
+  interface Props {
+    text?: string;
+  }
+
+  let { text = "" }: Props = $props();
 
   const id = `text-clamp-${randomId()}`;
 
-  let showAll = false;
-  let label;
+  let showAll = $state(false);
+  let label = $derived(showAll ? "Réduire" : "Lire la suite");
 
   function toggle() {
     showAll = !showAll;
   }
 
-  let textIsTooLong, height;
+  let textIsTooLong = $derived(height + 100 > defaultHeight), height = $state();
   const defaultHeight = 240;
 
-  $: textIsTooLong = height + 100 > defaultHeight;
-  $: label = showAll ? "Réduire" : "Lire la suite";
+  
+  
 </script>
 
 <div class="hidden print:inline">
@@ -26,7 +30,7 @@
 <div class="print:hidden">
   <div {id} class:h-s160={!showAll} class="mb-s24 relative overflow-hidden">
     <div class="prose mb-s24" bind:clientHeight={height}>{@html text}</div>
-    <div class:gradient={!showAll && textIsTooLong} />
+    <div class:gradient={!showAll && textIsTooLong}></div>
   </div>
 
   {#if textIsTooLong}

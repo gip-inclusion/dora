@@ -3,7 +3,7 @@
   import { copyIcon2Fill } from "$lib/icons";
   import { capitalize } from "$lib/utils/misc";
 
-  export let model;
+  let { model } = $props();
 </script>
 
 <div

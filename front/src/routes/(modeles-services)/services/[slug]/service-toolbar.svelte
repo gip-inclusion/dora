@@ -11,14 +11,18 @@
   import ServiceUpdateStatusAsContributor from "./service-update-status-as-contributor.svelte";
   import ServiceUpdateStatusAsReader from "./service-update-status-as-reader.svelte";
 
-  export let service: Service;
-  export let servicesOptions: ServicesOptions;
-  export let onRefresh: () => void;
+  interface Props {
+    service: Service;
+    servicesOptions: ServicesOptions;
+    onRefresh: () => void;
+  }
 
-  $: bgColor =
-    service.updateStatus === "NOT_NEEDED" || !$token ? "bg-white" : "";
-  $: roundedColor =
-    service.updateStatus === "NOT_NEEDED" || !$token ? "bg-france-blue" : "";
+  let { service, servicesOptions, onRefresh }: Props = $props();
+
+  let bgColor =
+    $derived(service.updateStatus === "NOT_NEEDED" || !$token ? "bg-white" : "");
+  let roundedColor =
+    $derived(service.updateStatus === "NOT_NEEDED" || !$token ? "bg-france-blue" : "");
 </script>
 
 <div class="hidden print:block">
@@ -64,7 +68,7 @@
   {#if !service.canWrite || service.updateStatus === "NOT_NEEDED" || service.status !== "PUBLISHED"}
     <div
       class="border-gray-02 m-auto max-w-6xl border border-t-0 border-r-0 border-l-0"
-    />
+></div>
   {/if}
 
   {#if service.canWrite}

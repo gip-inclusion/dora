@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let search;
+  let { search } = $props();
 </script>
 
 {#if search.subcategories.length || search.kinds.length || search.fees.length || search.fundingLabels.length}

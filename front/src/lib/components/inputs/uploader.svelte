@@ -1,17 +1,29 @@
 <script lang="ts">
+  import { preventDefault, createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import { deleteBinIcon } from "$lib/icons";
   import { getApiURL } from "$lib/utils/api";
   import { shortenString } from "$lib/utils/misc";
   import Alert from "../display/alert.svelte";
 
-  export let id: string;
-  export let structureSlug: string | undefined;
-  export let fileKeys: string[] = [];
-  export let disabled = false;
+  interface Props {
+    id: string;
+    structureSlug: string | undefined;
+    fileKeys?: string[];
+    disabled?: boolean;
+  }
 
-  let errorMessage = "";
-  let progress: number | null = null;
-  let uploadInput: HTMLInputElement;
+  let {
+    id,
+    structureSlug,
+    fileKeys = $bindable([]),
+    disabled = false
+  }: Props = $props();
+
+  let errorMessage = $state("");
+  let progress: number | null = $state(null);
+  let uploadInput: HTMLInputElement = $state();
 
   function handleRemove(fileKey) {
     fileKeys = fileKeys.filter((key) => key !== fileKey);
@@ -105,14 +117,14 @@
   }
 </script>
 
-<form on:submit|preventDefault={handleSubmit} class="mb-s8 cursor-pointer">
+<form onsubmit={preventDefault(handleSubmit)} class="mb-s8 cursor-pointer">
   <label>
     <input
       name={id}
       {id}
       bind:this={uploadInput}
-      on:blur
-      on:change={handleSubmit}
+      onblur={bubble('blur')}
+      onchange={handleSubmit}
       {disabled}
       type="file"
       accept=".doc, .docx, .pdf, .png, .jpeg, .jpg, .odt, .xls, .xlsx, .ods"
@@ -131,7 +143,7 @@
       <div class="text-f14">{shortenString(urlStringPathRemove(uploaded))}</div>
       <div class="h-s24 w-s24">
         <button
-          on:click={handleRemove(uploaded)}
+          onclick={handleRemove(uploaded)}
           class="ml-s16 h-s24 w-s24 fill-error"
         >
           {@html deleteBinIcon}

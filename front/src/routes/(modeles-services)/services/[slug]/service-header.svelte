@@ -3,8 +3,12 @@
   import type { Service } from "$lib/types";
   import { capitalize } from "$lib/utils/misc";
 
-  export let service: Service;
-  export let isDI: false;
+  interface Props {
+    service: Service;
+    isDI: false;
+  }
+
+  let { service, isDI }: Props = $props();
 </script>
 
 <div

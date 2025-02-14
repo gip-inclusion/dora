@@ -5,7 +5,11 @@
   import MatomoOptOut from "./matomo-opt-out.svelte";
   import type { PageData } from "./$types";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 </script>
 
 <CenteredGrid>

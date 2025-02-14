@@ -2,7 +2,7 @@
   import UserOnboardingForm from "./user-onboarding-form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
 
-  let isOpen = true;
+  let isOpen = $state(true);
 
   function onSuccess() {
     isOpen = false;

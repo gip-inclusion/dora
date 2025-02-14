@@ -1,6 +1,10 @@
 <script lang="ts">
-  export let resultCount: number;
-  export let cityLabel: string;
+  interface Props {
+    resultCount: number;
+    cityLabel: string;
+  }
+
+  let { resultCount, cityLabel }: Props = $props();
 </script>
 
 <span

@@ -8,11 +8,25 @@
   } from "$lib/icons";
   import Button from "./button.svelte";
 
-  export let title = "";
-  export let type: "info" | "success" | "warning" | "error" = "info";
-  export let hasCloseButton = false;
-  export let showIcon = true;
-  export let titleLevel: "h2" | "h3" | "h4" = "h4";
+  interface Props {
+    title?: string;
+    type?: "info" | "success" | "warning" | "error";
+    hasCloseButton?: boolean;
+    showIcon?: boolean;
+    titleLevel?: "h2" | "h3" | "h4";
+    children?: import('svelte').Snippet;
+    button?: import('svelte').Snippet;
+  }
+
+  let {
+    title = "",
+    type = "info",
+    hasCloseButton = false,
+    showIcon = true,
+    titleLevel = "h4",
+    children,
+    button
+  }: Props = $props();
 
   const types = {
     info: {
@@ -47,7 +61,7 @@
     },
   };
 
-  let visible = true;
+  let visible = $state(true);
 
   function handleHide() {
     visible = !visible;
@@ -92,17 +106,17 @@
         {/if}
       </div>
     {/if}
-    {#if $$slots?.default || $$slots.button}
+    {#if children || button}
       <div
         class="gap-s12 flex flex-row flex-wrap items-start justify-between"
         class:mt-s16={!!title}
         class:mt-s8={!title}
       >
-        <slot />
+        {@render children?.()}
 
-        {#if $$slots.button}
+        {#if button}
           <div class="mb-s0 self-end">
-            <slot name="button" />
+            {@render button?.()}
           </div>
         {/if}
       </div>

@@ -1,12 +1,18 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { starSmileFillIcon, starSmileLineIcon } from "$lib/icons";
   import { userInfo } from "$lib/utils/auth";
   import { createEventDispatcher } from "svelte";
 
-  export let active = false;
+  interface Props {
+    active?: boolean;
+  }
 
-  let disabled;
-  let title;
+  let { active = false }: Props = $props();
+
+  let disabled = $state();
+  let title = $state();
 
   const dispatch = createEventDispatcher();
 
@@ -16,9 +22,11 @@
     }
   }
 
-  $: currentIcon = active ? starSmileFillIcon : starSmileLineIcon;
-  $: disabled = !$userInfo;
-  $: {
+  let currentIcon = $derived(active ? starSmileFillIcon : starSmileLineIcon);
+  run(() => {
+    disabled = !$userInfo;
+  });
+  run(() => {
     if (disabled) {
       title = "Connectez-vous pour ajouter<br/> ce service à vos favoris";
     } else if (active) {
@@ -26,7 +34,7 @@
     } else {
       title = "Ajouter aux favoris";
     }
-  }
+  });
 </script>
 
 <button
@@ -34,7 +42,7 @@
   class:active
   class:disabled
   aria-label={title}
-  on:click={handleClick}
+  onclick={handleClick}
 >
   {@html currentIcon}
   <div

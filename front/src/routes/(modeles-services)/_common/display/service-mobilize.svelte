@@ -23,9 +23,13 @@
   import { token } from "$lib/utils/auth";
   import { formatFilePath } from "$lib/utils/file";
 
-  export let service: Service | Model;
-  export let orientationFormUrl: string;
-  export let handleOrientationFormClickEvent: (event: any) => void;
+  interface Props {
+    service: Service | Model;
+    orientationFormUrl: string;
+    handleOrientationFormClickEvent: (event: any) => void;
+  }
+
+  let { service, orientationFormUrl, handleOrientationFormClickEvent }: Props = $props();
 
   const orderedCoachOrientationModeValues: Record<
     CoachOrientationModes,
@@ -56,8 +60,8 @@
     showPreventFakeOrientationModal: object;
   }>();
 
-  let isContactInfoForProfessionalShown = false;
-  let isContactInfoForIndividualShown = false;
+  let isContactInfoForProfessionalShown = $state(false);
+  let isContactInfoForIndividualShown = $state(false);
 
   function trackMobilisationUnconditionally(externalUrl: string) {
     dispatch("trackMobilisation", { externalUrl });
@@ -81,25 +85,25 @@
     isContactInfoForIndividualShown = true;
   }
 
-  $: contactInfoForIndividual =
-    service.isContactInfoPublic ||
+  let contactInfoForIndividual =
+    $derived(service.isContactInfoPublic ||
     (service.beneficiariesAccessModes ?? []).some((mode) =>
       ["envoyer-un-mail", "telephoner"].includes(mode)
-    );
-  $: contactInfoForIndividualAddress = [
+    ));
+  let contactInfoForIndividualAddress = $derived([
     service.structureInfo.address1,
     service.structureInfo.address2,
     service.structureInfo.postalCode,
     service.structureInfo.city,
   ]
     .filter(Boolean)
-    .join(", ");
-  $: contactInfoForIndividualPhone =
-    service.contactPhone || service.structureInfo.phone;
-  $: contactInfoForIndividualEmail =
-    service.contactEmail || service.structureInfo.email;
+    .join(", "));
+  let contactInfoForIndividualPhone =
+    $derived(service.contactPhone || service.structureInfo.phone);
+  let contactInfoForIndividualEmail =
+    $derived(service.contactEmail || service.structureInfo.email);
 
-  $: coachOrientationModesValueAndDisplay = (
+  let coachOrientationModesValueAndDisplay = $derived((
     service.coachOrientationModes ?? []
   )
     .map((val, index) => [val, service.coachOrientationModesDisplay[index]])
@@ -107,9 +111,9 @@
       (a, b) =>
         orderedCoachOrientationModeValues[a[0]] -
         orderedCoachOrientationModeValues[b[0]]
-    );
+    ));
 
-  $: beneficiariesAccessModesValueAndDisplay = (
+  let beneficiariesAccessModesValueAndDisplay = $derived((
     service.beneficiariesAccessModes ?? []
   )
     .map((val, index) => [val, service.beneficiariesAccessModesDisplay[index]])
@@ -117,7 +121,7 @@
       (a, b) =>
         orderedBeneficiariesAccessModeValues[a[0]] -
         orderedBeneficiariesAccessModeValues[b[0]]
-    );
+    ));
 </script>
 
 <div id="orientation-modes">
@@ -133,7 +137,7 @@
               Orienter votre bénéficiaire via le formulaire DORA
               <a
                 href={orientationFormUrl}
-                on:click={handleOrientationFormClickEvent}
+                onclick={handleOrientationFormClickEvent}
                 class="text-magenta-cta underline">Commencer</a
               >
             {:else if modeValue === "envoyer-un-mail-avec-une-fiche-de-prescription" && "contactEmail" in service}
@@ -145,7 +149,7 @@
                 >
               {:else}
                 <button
-                  on:click={showContactInfoForProfessional}
+                  onclick={showContactInfoForProfessional}
                   class="text-magenta-cta underline"
                   >Voir l’adresse email</button
                 >
@@ -154,7 +158,7 @@
               <a
                 href={service.coachOrientationModesExternalFormLink}
                 target="_blank"
-                on:click={() =>
+                onclick={() =>
                   trackMobilisationUnconditionally(
                     service.coachOrientationModesExternalFormLink
                   )}
@@ -182,7 +186,7 @@
                 >
               {:else}
                 <button
-                  on:click={showContactInfoForProfessional}
+                  onclick={showContactInfoForProfessional}
                   class="text-magenta-cta underline"
                   >Voir l’adresse email</button
                 >
@@ -195,7 +199,7 @@
                 >
               {:else}
                 <button
-                  on:click={showContactInfoForProfessional}
+                  onclick={showContactInfoForProfessional}
                   class="text-magenta-cta underline"
                   >Voir le numéro de téléphone</button
                 >
@@ -215,7 +219,7 @@
               <a
                 href={service.beneficiariesAccessModesExternalFormLink}
                 target="_blank"
-                on:click={() =>
+                onclick={() =>
                   trackMobilisationUnconditionally(
                     service.beneficiariesAccessModesExternalFormLink
                   )}

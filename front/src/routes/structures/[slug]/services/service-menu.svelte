@@ -5,11 +5,15 @@
   import { checkboxCircleFillIcon, copyIcon2, editIcon } from "$lib/icons";
   import type { Service, ServicesOptions, ShortService } from "$lib/types";
 
-  export let service: Service | ShortService;
-  export let servicesOptions: ServicesOptions;
-  export let onRefresh: () => void | undefined;
+  interface Props {
+    service: Service | ShortService;
+    servicesOptions: ServicesOptions;
+    onRefresh: () => void | undefined;
+  }
 
-  let setAsUpdatedModalOpen = false;
+  let { service, servicesOptions, onRefresh }: Props = $props();
+
+  let setAsUpdatedModalOpen = $state(false);
 
   const extraClass = "hover:bg-magenta-cta hover:text-white! justify-start!";
 </script>
