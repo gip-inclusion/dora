@@ -2,7 +2,7 @@
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import SetAsUpdatedModal from "$lib/components/specialized/services/set-as-updated-modal.svelte";
-  import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
+  import UpdateNeededIcon from "$lib/components/specialized/services/update-needed-icon.svelte";
   import { checkboxCircleFillIcon, editIcon } from "$lib/icons";
   import type { Service, ServicesOptions } from "$lib/types";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
@@ -20,21 +20,10 @@
 >
   <div id="label-container" class="flex-3">
     {#if service.status === "PUBLISHED"}
-      {#if service.updateStatus === "NOT_NEEDED"}
-        <div class="flex items-center">
-          <div class="mr-s16">
-            <UpdateStatusIcon updateStatus={service.updateStatus} />
-          </div>
-
-          <RelativeDateLabel
-            date={service.modificationDate}
-            prefix="Actualisé"
-          />
-        </div>
-      {:else if service.updateStatus === "NEEDED"}
+      {#if service.updateNeeded}
         <div class="flex items-center">
           <span class="mr-s16">
-            <UpdateStatusIcon updateStatus={service.updateStatus} />
+            <UpdateNeededIcon updateNeeded={service.updateNeeded} />
           </span>
           <div>
             <div class="text-f18">
@@ -52,31 +41,20 @@
         </div>
       {:else}
         <div class="flex items-center">
-          <span class="mr-s16">
-            <UpdateStatusIcon updateStatus="REQUIRED" />
-          </span>
-          <div>
-            <div class="text-f18">
-              <strong>Actualisation requise</strong>
-            </div>
-            <div class="text-f14">
-              <RelativeDateLabel
-                date={service.modificationDate}
-                prefix="Actualisé"
-                bold
-              />
-              <span class="print:hidden">
-                ; ce service est dépriorisé dans les résultats de recherche, il
-                doit être actualisé pour gagner à nouveau en visibilité
-              </span>
-            </div>
+          <div class="mr-s16">
+            <UpdateNeededIcon updateNeeded={service.updateNeeded} />
           </div>
+
+          <RelativeDateLabel
+            date={service.modificationDate}
+            prefix="Actualisé"
+          />
         </div>
       {/if}
     {/if}
   </div>
   <div class="md:mt-s0 flex w-full flex-2 flex-col justify-end lg:flex-row">
-    {#if service.updateStatus !== "NOT_NEEDED" && service.status === "PUBLISHED"}
+    {#if service.updateNeeded && service.status === "PUBLISHED"}
       <Button
         id="set-as-updated"
         extraClass="mb-s10 lg:mb-s0 lg:mr-s16 justify-center"

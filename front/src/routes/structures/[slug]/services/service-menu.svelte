@@ -15,7 +15,7 @@
 </script>
 
 <div class="flex flex-col items-end">
-  {#if service.updateStatus && service.status === "PUBLISHED" && service.updateStatus !== "NOT_NEEDED"}
+  {#if service.status === "PUBLISHED" && service.updateNeeded}
     <Button
       label="Marquer comme à jour"
       icon={checkboxCircleFillIcon}
