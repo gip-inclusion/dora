@@ -14,10 +14,21 @@
   import type { PageData } from "./$types";
   import { videoIcon } from "$lib/icons";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
-
+  import { refreshUserInfo } from "$lib/utils/auth";
+  import { userInfo } from "$lib/utils/auth";
+  import { userPreferences } from "$lib/utils/preferences";
+  import ServicesToUpdateNotice from "./structures/[slug]/services/services-to-update-notice.svelte";
   export let data: PageData;
 
   let isVideoModalOpen = false;
+
+  $: structures = $userInfo ? $userInfo.structures : [];
+
+  $: lastVisitedStructure = $userPreferences.visitedStructures.length
+    ? structures.find(
+        ({ slug }) => slug === $userPreferences.visitedStructures[0]
+      )
+    : structures[0];
 </script>
 
 <OrientationVideo bind:isVideoModalOpen></OrientationVideo>
@@ -53,6 +64,15 @@
 </CenteredGrid>
 
 <CenteredGrid>
+  {#if lastVisitedStructure?.canEditInformations}
+    <div class="mb-s44">
+      <ServicesToUpdateNotice
+        structureSlug={lastVisitedStructure.slug}
+        servicesToUpdate={lastVisitedStructure.servicesToUpdate}
+        onRefresh={refreshUserInfo}
+      />
+    </div>
+  {/if}
   <h2 class="mb-s32 text-france-blue text-center">
     Comment DORA peut vous aider
   </h2>
