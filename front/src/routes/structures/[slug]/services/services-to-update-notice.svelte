@@ -2,14 +2,15 @@
   import Button from "$lib/components/display/button.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import { markServicesAsUpToDate } from "$lib/requests/services";
-  import type { StructureService } from "$lib/types";
   import {
     hideNotice,
     isNoticeHidden,
   } from "$lib/utils/service-update-notices";
 
+  type ServiceToUpdate = { name: string; slug: string };
+
   export let structureSlug: string;
-  export let services: StructureService[] = [];
+  export let servicesToUpdate: ServiceToUpdate[] = [];
   export let requesting = false;
   export let onRefresh: () => void;
 
@@ -17,15 +18,11 @@
 
   let showAll = false;
 
-  $: servicesToMarkAsUpToDate = services.filter(
-    (service) => service.updateNeeded
-  );
-
   $: showNotice =
-    servicesToMarkAsUpToDate.length && !isNoticeHidden("update", structureSlug);
+    servicesToUpdate.length && !isNoticeHidden("update", structureSlug);
 
   async function handleMarkServicesAsUpToDate(
-    selectedServices: StructureService[]
+    selectedServices: ServiceToUpdate[]
   ) {
     requesting = true;
     await markServicesAsUpToDate(selectedServices);
@@ -45,7 +42,7 @@
         votre réseau.
       </p>
       <ul class="ml-s16 block list-disc">
-        {#each servicesToMarkAsUpToDate as service, index}
+        {#each servicesToUpdate as service, index}
           {#if index < LIST_LENGTH || showAll}
             <li class="mb-s12 text-f14 font-bold">
               <a
@@ -70,7 +67,7 @@
           {/if}
         {/each}
       </ul>
-      {#if servicesToMarkAsUpToDate.length > LIST_LENGTH}
+      {#if servicesToUpdate.length > LIST_LENGTH}
         <div>
           <Button
             extraClass="ml-s16 text-magenta-cta text-f14! p-s0!"
@@ -89,7 +86,7 @@
       <Button
         label="Accepter pour tous les services"
         extraClass="py-s8 text-f14! px-s12!"
-        on:click={() => handleMarkServicesAsUpToDate(servicesToMarkAsUpToDate)}
+        on:click={() => handleMarkServicesAsUpToDate(servicesToUpdate)}
       />
       <Button
         secondary
