@@ -41,8 +41,6 @@ export type LocationKind = "a-distance" | "en-presentiel";
 
 export type ServiceStatus = "DRAFT" | "SUGGESTION" | "PUBLISHED" | "ARCHIVED";
 
-export type ServiceUpdateStatus = "NOT_NEEDED" | "NEEDED" | "REQUIRED" | "ALL";
-
 export interface StructureService {
   address1: string;
   address2: string;
@@ -72,7 +70,7 @@ export interface StructureService {
   status: ServiceStatus;
   structure: string;
   useInclusionNumeriqueScheme: boolean;
-  updateStatus: ServiceUpdateStatus;
+  updateNeeded: boolean;
 }
 
 export interface StructureModel {
@@ -357,7 +355,7 @@ export interface ServiceSearchResult {
   slug: string;
   structure: string;
   status: ServiceStatus;
-  updateStatus: ServiceUpdateStatus;
+  updateNeeded: boolean;
   kinds: ServiceKind[] | null;
   feeCondition: FeeCondition | null;
   locationKinds: LocationKind[];
@@ -485,7 +483,7 @@ export interface Service {
   useInclusionNumeriqueScheme: boolean;
   updateFrequency: UpdateFrequency | null;
   updateFrequencyDisplay: string | null;
-  updateStatus: ServiceUpdateStatus;
+  updateNeeded: boolean;
   isOrientableFtService: boolean;
 }
 
@@ -512,7 +510,7 @@ export interface ShortService {
   structureInfo: ServiceStructure;
   locationKinds: LocationKind[];
   useInclusionNumeriqueScheme: boolean;
-  updateStatus: ServiceUpdateStatus;
+  updateNeeded: boolean;
 }
 
 export interface ShortBookmark {
