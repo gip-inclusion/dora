@@ -353,9 +353,7 @@ export function addIgnoredServicesToUpdate(
   });
 }
 
-export function markServicesAsUpToDate(
-  services: Service[] | StructureService[]
-) {
+export function markServicesAsUpToDate(services: { slug: string }[]) {
   return fetch(`${getApiURL()}/services/mark-as-up-to-date/`, {
     method: "POST",
     headers: {
