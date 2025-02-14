@@ -387,6 +387,9 @@ class StructureSerializer(serializers.ModelSerializer):
 
 
 class StructureListSerializer(StructureSerializer):
+    can_edit_informations = serializers.SerializerMethodField()
+    services_to_update = serializers.SerializerMethodField()
+
     class Meta:
         model = Structure
         fields = [
@@ -398,8 +401,19 @@ class StructureListSerializer(StructureSerializer):
             "siret",
             "slug",
             "typology_display",
+            "can_edit_informations",
+            "services_to_update",
         ]
         lookup_field = "slug"
+
+    def get_can_edit_informations(self, obj: Structure):
+        user = self.context.get("user")
+        request = self.context.get("request")
+        return obj.can_edit_informations(user or request.user)
+
+    def get_services_to_update(self, obj):
+        services = obj.services.update_advised()
+        return [{"name": service.name, "slug": service.slug} for service in services]
 
 
 class UserSerializer(serializers.ModelSerializer):
