@@ -34,7 +34,7 @@
                 {label}
                 <span
                   class="h-s20 w-s20 pt-s4 inline-block fill-current"
-                  aria-hidden
+                  aria-hidden="true"
                 >
                   {@html externalLinkIcon}
                 </span>
