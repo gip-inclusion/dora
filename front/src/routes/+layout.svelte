@@ -36,7 +36,7 @@
 <SkipLink />
 <Header />
 
-<main id="main-content" role="main">
+<main id="main-content">
   {#if $userInfo && !$userInfo.mainActivity}
     <UserOnboardingModal />
   {/if}
