@@ -52,14 +52,20 @@
 
   {#if OIDC_AUTH_BACKEND === "proconnect"}
     <a href="/auth/pc-logout" class={aClass}>
-      <span class="mr-s10 h-s24 w-s24 inline-block fill-current" aria-hidden="true">
+      <span
+        class="mr-s10 h-s24 w-s24 inline-block fill-current"
+        aria-hidden="true"
+      >
         {@html logoutBoxLineIcon}
       </span>
       Déconnexion
     </a>
   {:else}
     <a href="/auth/deconnexion" class={aClass}>
-      <span class="mr-s10 h-s24 w-s24 inline-block fill-current" aria-hidden="true">
+      <span
+        class="mr-s10 h-s24 w-s24 inline-block fill-current"
+        aria-hidden="true"
+      >
         {@html logoutBoxLineIcon}
       </span>
       Déconnexion
