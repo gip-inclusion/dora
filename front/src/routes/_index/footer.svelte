@@ -29,7 +29,7 @@
     />
   </div>
 </CenteredGrid>
-<footer class="border-france-blue border-t-2 print:hidden" role="contentinfo">
+<footer class="border-france-blue border-t-2 print:hidden">
   <CenteredGrid>
     <div class="gap-s24 flex lg:flex-row">
       <div class="mb-s24 lg:w-1/2">

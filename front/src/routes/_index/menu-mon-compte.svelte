@@ -20,7 +20,7 @@
     <span
       class="mr-s10 h-s24 w-s24 inline-block fill-current"
       class:text-magenta-cta={$page.url.pathname === "/mon-compte"}
-      aria-hidden
+      aria-hidden="true"
     >
       {@html accountCircleLineIcon}
     </span>
@@ -31,7 +31,7 @@
     <span
       class="mr-s10 h-s24 w-s24 inline-block fill-current"
       class:text-magenta-cta={$page.url.pathname === "/favoris"}
-      aria-hidden
+      aria-hidden="true"
     >
       {@html starSmileLineIcon}
     </span>
@@ -42,7 +42,7 @@
     <span
       class="mr-s10 h-s24 w-s24 inline-block fill-current"
       class:text-magenta-cta={$page.url.pathname === "/mes-alertes"}
-      aria-hidden
+      aria-hidden="true"
     >
       {@html notificationIcon}
     </span>Mes alertes
@@ -52,14 +52,20 @@
 
   {#if OIDC_AUTH_BACKEND === "proconnect"}
     <a href="/auth/pc-logout" class={aClass}>
-      <span class="mr-s10 h-s24 w-s24 inline-block fill-current" aria-hidden>
+      <span
+        class="mr-s10 h-s24 w-s24 inline-block fill-current"
+        aria-hidden="true"
+      >
         {@html logoutBoxLineIcon}
       </span>
       Déconnexion
     </a>
   {:else}
     <a href="/auth/deconnexion" class={aClass}>
-      <span class="mr-s10 h-s24 w-s24 inline-block fill-current" aria-hidden>
+      <span
+        class="mr-s10 h-s24 w-s24 inline-block fill-current"
+        aria-hidden="true"
+      >
         {@html logoutBoxLineIcon}
       </span>
       Déconnexion
