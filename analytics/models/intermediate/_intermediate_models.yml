@@ -1,4 +1,10 @@
 models:
+
+  - name: int_iMER
+    description:
+      Intentions de mise en relation.
+      Combinaison des tables orientation et mobilisation.
+
   - name: int_services_models
     description:
       Services créés à partir de modèles.
