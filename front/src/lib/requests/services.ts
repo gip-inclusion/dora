@@ -352,3 +352,17 @@ export function addIgnoredServicesToUpdate(
     }),
   });
 }
+
+export function markServicesAsUpToDate(services: { slug: string }[]) {
+  return fetch(`${getApiURL()}/services/mark-as-up-to-date/`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({
+      services: services.map((serv) => serv.slug),
+    }),
+  });
+}
