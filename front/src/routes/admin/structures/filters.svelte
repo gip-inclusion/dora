@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
@@ -19,13 +21,23 @@
   } from "$lib/types";
   import type { StatusFilter } from "./types";
 
-  export let searchStatus: StatusFilter;
-  export let servicesOptions: ServicesOptions;
-  export let structuresOptions: StructuresOptions;
-  export let structures: AdminShortStructure[] = [];
-  export let filteredStructures: AdminShortStructure[];
+  interface Props {
+    searchStatus: StatusFilter;
+    servicesOptions: ServicesOptions;
+    structuresOptions: StructuresOptions;
+    structures?: AdminShortStructure[];
+    filteredStructures: AdminShortStructure[];
+  }
 
-  let showAdvancedFilters = false;
+  let {
+    searchStatus = $bindable(),
+    servicesOptions,
+    structuresOptions,
+    structures = [],
+    filteredStructures = $bindable()
+  }: Props = $props();
+
+  let showAdvancedFilters = $state(false);
 
   const SORTING_CHOICES = [
     { value: "name", label: "Nom" },
@@ -54,7 +66,7 @@
     sortChoice: "name",
   };
 
-  let searchParams: SearchParams = emptySearchParams;
+  let searchParams: SearchParams = $state(emptySearchParams);
 
   function normalizeString(str: string): string {
     return (
@@ -175,11 +187,13 @@
     searchStatus = "toutes";
   }
 
-  $: filteredStructures = filterAndSortEntities(
-    structures,
-    searchParams,
-    searchStatus
-  );
+  run(() => {
+    filteredStructures = filterAndSortEntities(
+      structures,
+      searchParams,
+      searchStatus
+    );
+  });
 </script>
 
 <div class="mb-s8 font-bold">Actions en attente :</div>
@@ -347,7 +361,7 @@
           />
         </div>
       </div>
-      <div class="gap-s16 flex justify-between" />
+      <div class="gap-s16 flex justify-between"></div>
     </div>
   </div>
 </div>

@@ -3,11 +3,22 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import InclusionNumSwitch from "./inclusion-num-switch.svelte";
 
-  export let servicesOptions: ServicesOptions, service: Service;
 
-  export let model: Model | undefined = undefined;
-  export let isModel = false;
-  export let description = "";
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    model?: Model | undefined;
+    isModel?: boolean;
+    description?: string;
+  }
+
+  let {
+    servicesOptions,
+    service = $bindable(),
+    model = undefined,
+    isModel = false,
+    description = ""
+  }: Props = $props();
   const useModel = model != null;
 
   function handleCategoriesChange(categories) {

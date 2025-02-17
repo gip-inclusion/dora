@@ -7,12 +7,16 @@
   import { page } from "$app/stores";
   import { getContext } from "svelte";
 
-  export let service: Service;
-  export let isDI: boolean;
+  interface Props {
+    service: Service;
+    isDI: boolean;
+  }
+
+  let { service, isDI }: Props = $props();
 
   const shouldTrack = Boolean(getContext("shouldTrack"));
 
-  let contactBoxOpen = false;
+  let contactBoxOpen = $state(false);
 
   function handleShowContactClick() {
     contactBoxOpen = true;

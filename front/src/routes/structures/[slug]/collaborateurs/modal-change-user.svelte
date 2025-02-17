@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import Form from "$lib/components/forms/form.svelte";
@@ -21,11 +23,15 @@
         "Administrateur (saisie d’offres, modification profil, édition de la structure, gestion des utilisateurs)",
     },
   ];
-  export let isOpen = false;
-  export let member;
-  export let onRefresh;
+  interface Props {
+    isOpen?: boolean;
+    member: any;
+    onRefresh: any;
+  }
 
-  let level = member.isAdmin ? "admin" : "user";
+  let { isOpen = $bindable(false), member, onRefresh }: Props = $props();
+
+  let level = $state(member.isAdmin ? "admin" : "user");
 
   function handleSubmit(validatedData) {
     const url = `${getApiURL()}/structure-members/${member.id}/`;
@@ -47,7 +53,10 @@
     isOpen = false;
   }
 
-  $: formData = { level };
+  let formData;
+  run(() => {
+    formData = { level };
+  });
 </script>
 
 <Modal bind:isOpen title="Utilisateur">

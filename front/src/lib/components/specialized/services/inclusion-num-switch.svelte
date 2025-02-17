@@ -4,9 +4,13 @@
   import Notice from "$lib/components/display/notice.svelte";
   import type { Service } from "$lib/types";
 
-  export let service: Service;
+  interface Props {
+    service: Service;
+  }
 
-  let isSwitchModalOpen = false;
+  let { service = $bindable() }: Props = $props();
+
+  let isSwitchModalOpen = $state(false);
 
   function activateInclusionNumForm() {
     service.useInclusionNumeriqueScheme = true;
@@ -35,9 +39,9 @@
     },
   };
 
-  $: currentNotice = service.useInclusionNumeriqueScheme
+  let currentNotice = $derived(service.useInclusionNumeriqueScheme
     ? inclusionNumFormActiveNotice
-    : inclusionNumFormAvailableNotice;
+    : inclusionNumFormAvailableNotice);
 </script>
 
 <Modal bind:isOpen={isSwitchModalOpen} title="Attention !" width="small">

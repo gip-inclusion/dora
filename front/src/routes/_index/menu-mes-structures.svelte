@@ -9,23 +9,28 @@
     searchIcon,
   } from "$lib/icons";
 
-  export let structures: ShortStructure[] = [];
-  export let lastVisitedStructure: ShortStructure | undefined = undefined;
-  export let mobileDesign = false;
+  interface Props {
+    structures?: ShortStructure[];
+    lastVisitedStructure?: ShortStructure | undefined;
+    mobileDesign?: boolean;
+  }
 
-  let filterText = "";
-  $: structuresToDisplay = filterText
+  let { structures = [], lastVisitedStructure = undefined, mobileDesign = false }: Props = $props();
+
+  let filterText = $state("");
+  let structuresToDisplay = $derived(filterText
     ? structures.filter((struct) =>
         struct.name.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())
       )
-    : structures;
+    : structures);
 </script>
 
 <div class="mb-s16 lg:mb-s0 lg:mr-s10">
   {#if structures.length !== 0}
     <div class="flex w-full items-center lg:w-auto">
       <DropdownMenu label="Mes structures" hideLabel {mobileDesign}>
-        <div slot="label" class="flex w-full items-center">
+        <!-- @migration-task: migrate this slot by hand, `label` would shadow a prop on the parent component -->
+  <div slot="label" class="flex w-full items-center">
           <span
             class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
           >
@@ -34,7 +39,7 @@
           {#if lastVisitedStructure}
             <a
               class="text-gray-text block w-[150px] overflow-hidden text-ellipsis whitespace-nowrap"
-              on:click={(evt) => evt.stopPropagation()}
+              onclick={(evt) => evt.stopPropagation()}
               href={`/structures/${lastVisitedStructure.slug}`}
             >
               {lastVisitedStructure.name}
@@ -86,17 +91,19 @@
           </ul>
         </div>
 
-        <div slot="bottom">
-          <a
-            class="text-gray-text flex whitespace-nowrap"
-            href="/auth/rattachement"
-          >
-            <span class="mr-s10 h-s24 w-s24 fill-current">
-              {@html addCircleLineIcon}
-            </span>
-            <span>Adhérer à une autre structure </span>
-          </a>
-        </div>
+        {#snippet bottom()}
+                <div >
+            <a
+              class="text-gray-text flex whitespace-nowrap"
+              href="/auth/rattachement"
+            >
+              <span class="mr-s10 h-s24 w-s24 fill-current">
+                {@html addCircleLineIcon}
+              </span>
+              <span>Adhérer à une autre structure </span>
+            </a>
+          </div>
+              {/snippet}
       </DropdownMenu>
     </div>
   {/if}

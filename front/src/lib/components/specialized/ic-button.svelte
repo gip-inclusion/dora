@@ -1,8 +1,12 @@
 <script lang="ts">
   import logoIC from "$lib/assets/inclusion-connect/logo-inclusion-connect.svg";
 
-  export let nextPage: string;
-  export let loginHint: string = "";
+  interface Props {
+    nextPage: string;
+    loginHint?: string;
+  }
+
+  let { nextPage, loginHint = "" }: Props = $props();
 </script>
 
 <div class="text-center">

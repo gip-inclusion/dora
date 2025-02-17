@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Button from "$lib/components/display/button.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment } from "$lib/types";
@@ -7,16 +9,28 @@
 
   const safirRegexp = /^\d{5}$/u;
 
-  export let onEstablishmentChange: (
+  interface Props {
+    onEstablishmentChange: (
     establishment: Establishment | null
   ) => void;
-  export let proposedSafir;
-  export let establishment: Establishment | null;
-  let safirInput = proposedSafir;
-  let safirIsValid = false;
-  let serverErrorMsg = "";
+    proposedSafir: any;
+    establishment: Establishment | null;
+    description?: import('svelte').Snippet;
+  }
 
-  $: safirIsValid = !!safirInput?.match(safirRegexp);
+  let {
+    onEstablishmentChange,
+    proposedSafir,
+    establishment = $bindable(),
+    description
+  }: Props = $props();
+  let safirInput = $state(proposedSafir);
+  let safirIsValid = $state(false);
+  let serverErrorMsg = $state("");
+
+  run(() => {
+    safirIsValid = !!safirInput?.match(safirRegexp);
+  });
 
   async function handleValidateSafir() {
     const url = `${getApiURL()}/search-safir/?safir=${encodeURIComponent(
@@ -48,6 +62,8 @@
       }
     }
   }
+
+  const description_render = $derived(description);
 </script>
 
 <FieldWrapper
@@ -57,7 +73,8 @@
   description="Sur 5 chiffres"
   vertical
 >
-  <slot slot="description" name="description" />
+  <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
+  {@render description_render?.()}
 
   <div class="flex flex-col">
     <div class="gap-s12 flex flex-row">
@@ -65,8 +82,8 @@
         class="h-s48 border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt focus:shadow-focus grow rounded-sm border outline-hidden"
         id="safir-select"
         type="text"
-        on:input={() => (serverErrorMsg = "")}
-        on:keydown={handleKeydown}
+        oninput={() => (serverErrorMsg = "")}
+        onkeydown={handleKeydown}
         bind:value={safirInput}
         placeholder="12345"
         maxlength="5"

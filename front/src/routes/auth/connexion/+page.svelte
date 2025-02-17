@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import { page } from "$app/stores";
   import logoC1 from "$lib/assets/inclusion-connect/logo-c1.svg";
   import logoDora from "$lib/assets/inclusion-connect/logo-dora-ic.svg";
@@ -32,7 +34,7 @@
   const loginHint = getLoginHint();
   const nextPage = getNextPage($page.url);
 
-  let displayModal = false;
+  let displayModal = $state(false);
 </script>
 
 <CenteredGrid>
@@ -83,16 +85,17 @@
 
           {#if OIDC_AUTH_BACKEND === "proconnect"}
             <PcButton {nextPage}>
-              <a
+              <!-- @migration-task: migrate this slot by hand, `pc-help-link` is an invalid identifier -->
+  <a
                 slot="pc-help-link"
                 class="text-magenta-cta underline"
                 target="_blank"
                 title="Obtention d'un lien de connexion - ouverture dans une fenêtre modale"
                 rel="noopener noreferrer"
                 href="#"
-                on:click|preventDefault={() => {
+                onclick={preventDefault(() => {
                   displayModal = true;
-                }}
+                })}
               >
                 Des difficultés à vous connecter&#8239;?
               </a>

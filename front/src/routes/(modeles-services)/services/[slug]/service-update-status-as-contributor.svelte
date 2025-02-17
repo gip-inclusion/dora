@@ -7,12 +7,16 @@
   import type { Service, ServicesOptions } from "$lib/types";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
 
-  export let service: Service;
-  export let servicesOptions: ServicesOptions;
 
-  export let onRefresh: () => void;
+  interface Props {
+    service: Service;
+    servicesOptions: ServicesOptions;
+    onRefresh: () => void;
+  }
 
-  let setAsUpdatedModalOpen = false;
+  let { service, servicesOptions, onRefresh }: Props = $props();
+
+  let setAsUpdatedModalOpen = $state(false);
 </script>
 
 <div

@@ -1,18 +1,30 @@
 <script lang="ts">
+  import { preventDefault, stopPropagation } from 'svelte/legacy';
+
   import Select from "$lib/components/inputs/select/select.svelte";
   import { pinDistanceIcon } from "$lib/icons";
   import type { Choice, GeoApiValue } from "$lib/types";
   import { getApiURL } from "$lib/utils/api";
   import { fetchData, getDepartmentFromCityCode } from "$lib/utils/misc";
 
-  export let onChange: (newValue: GeoApiValue) => void;
 
-  export let disabled = false;
-  export let id;
-  export let value = undefined;
-  export let initialValue: string | undefined = undefined;
+  interface Props {
+    onChange: (newValue: GeoApiValue) => void;
+    disabled?: boolean;
+    id: any;
+    value?: any;
+    initialValue?: string | undefined;
+  }
 
-  let choices: Choice[] = [];
+  let {
+    onChange,
+    disabled = false,
+    id,
+    value = $bindable(undefined),
+    initialValue = undefined
+  }: Props = $props();
+
+  let choices: Choice[] = $state([]);
   async function searchCity(query) {
     const url = `${getApiURL()}/admin-division-search/?type=city&q=${encodeURIComponent(
       query
@@ -29,7 +41,7 @@
   }
 
   const geolocLabelInit = "Autour de moi";
-  let geolocLabel = geolocLabelInit;
+  let geolocLabel = $state(geolocLabelInit);
 
   function searchCityFromLocationError() {
     geolocLabel = "Position introuvable";
@@ -90,17 +102,19 @@
   localFiltering={false}
   minCharactersToSearch="3"
 >
-  <div slot="prepend" class="px-s8 pt-s8" let:results>
-    <button
-      class="border-gray-02 px-s8 py-s12 text-f14 text-gray-text flex w-full"
-      on:click|preventDefault|stopPropagation={searchCityFromLocation}
-      class:border-b={results?.length}
-    >
-      <span class="mr-s8 h-s24 w-s24 fill-current">
-        {@html pinDistanceIcon}
-      </span>
+  {#snippet prepend({ results })}
+    <div  class="px-s8 pt-s8" >
+      <button
+        class="border-gray-02 px-s8 py-s12 text-f14 text-gray-text flex w-full"
+        onclick={stopPropagation(preventDefault(searchCityFromLocation))}
+        class:border-b={results?.length}
+      >
+        <span class="mr-s8 h-s24 w-s24 fill-current">
+          {@html pinDistanceIcon}
+        </span>
 
-      {geolocLabel}
-    </button>
-  </div>
+        {geolocLabel}
+      </button>
+    </div>
+  {/snippet}
 </Select>

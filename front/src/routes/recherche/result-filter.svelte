@@ -4,10 +4,19 @@
   import Select from "$lib/components/inputs/select/select.svelte";
   import type { Choice } from "$lib/types";
 
-  export let id: string;
-  export let label: string;
-  export let choices: Array<Choice>;
-  export let group: Array<Choice["value"]>;
+  interface Props {
+    id: string;
+    label: string;
+    choices: Array<Choice>;
+    group: Array<Choice["value"]>;
+  }
+
+  let {
+    id,
+    label,
+    choices,
+    group = $bindable()
+  }: Props = $props();
 
   const searchText = "";
 
@@ -42,15 +51,17 @@
         placeholder="Choisir"
         placeholderMulti="Choisir"
       >
-        <Button
-          on:click={clearSelection}
-          extraClass={`mx-s20 my-s6 ${group.length > 0 ? "" : "hidden"}`}
-          label="Effacer la sélection"
-          noBackground
-          noPadding
-          small
-          slot="append"
-        />
+        {#snippet append()}
+                <Button
+            on:click={clearSelection}
+            extraClass={`mx-s20 my-s6 ${group.length > 0 ? "" : "hidden"}`}
+            label="Effacer la sélection"
+            noBackground
+            noPadding
+            small
+            
+          />
+              {/snippet}
       </Select>
     {:else}
       <Checkboxes name={id} {choices} bind:group />

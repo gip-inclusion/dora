@@ -1,6 +1,10 @@
 <script lang="ts">
-  export let label: string;
-  export let icon: string;
+  interface Props {
+    label: string;
+    icon: string;
+  }
+
+  let { label, icon }: Props = $props();
 </script>
 
 <div class="gap-s16 flex items-center">

@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import type {
     FeeCondition,
     FundingLabel,
@@ -19,9 +19,13 @@
 
   import ResultFilter from "./result-filter.svelte";
 
-  export let servicesOptions: ServicesOptions;
-  export let availableFundingLabels: Array<FundingLabel>;
-  export let filters: Filters;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    availableFundingLabels: Array<FundingLabel>;
+    filters: Filters;
+  }
+
+  let { servicesOptions, availableFundingLabels, filters = $bindable() }: Props = $props();
 </script>
 
 <div class="gap-s32 flex flex-col">

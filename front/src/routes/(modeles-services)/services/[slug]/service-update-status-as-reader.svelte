@@ -5,7 +5,11 @@
   import dayjs from "dayjs";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
 
-  export let service: Service;
+  interface Props {
+    service: Service;
+  }
+
+  let { service }: Props = $props();
 
   const monthDiff = dayjs().diff(service.modificationDate, "month");
 </script>

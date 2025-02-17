@@ -2,9 +2,13 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { userInfo } from "$lib/utils/auth";
 
-  export let model;
 
-  export let readOnly = true;
+  interface Props {
+    model: any;
+    readOnly?: boolean;
+  }
+
+  let { model, readOnly = true }: Props = $props();
 </script>
 
 <div class="flex flex-col items-end">

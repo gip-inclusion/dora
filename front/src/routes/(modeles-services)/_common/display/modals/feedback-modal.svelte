@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import Form from "$lib/components/forms/form.svelte";
@@ -11,12 +13,16 @@
   import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import * as v from "$lib/validation/schema-utils";
 
-  export let isOpen = false;
-  export let service;
+  interface Props {
+    isOpen?: boolean;
+    service: any;
+  }
 
-  let message, suggesterFullName, suggesterEmail;
-  let confirmationModalIsOpen = false;
-  let requesting = false;
+  let { isOpen = $bindable(false), service }: Props = $props();
+
+  let message = $state(), suggesterFullName = $state(), suggesterEmail = $state();
+  let confirmationModalIsOpen = $state(false);
+  let requesting = $state(false);
 
   const feedbackSchema: v.Schema = {
     fullName: {
@@ -71,11 +77,14 @@
     confirmationModalIsOpen = true;
   }
 
-  $: formData = {
-    fullName: suggesterFullName,
-    email: suggesterEmail,
-    message,
-  };
+  let formData;
+  run(() => {
+    formData = {
+      fullName: suggesterFullName,
+      email: suggesterEmail,
+      message,
+    };
+  });
 </script>
 
 <Modal bind:isOpen title="Suggestion">

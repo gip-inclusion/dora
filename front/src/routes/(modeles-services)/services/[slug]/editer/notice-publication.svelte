@@ -3,10 +3,10 @@
   import { currentSchema, validate } from "$lib/validation/validation";
   import { onMount } from "svelte";
 
-  export let service, servicesOptions;
+  let { service, servicesOptions } = $props();
 
-  let invalidFields: string[] = [];
-  let numErrors;
+  let invalidFields: string[] = $state([]);
+  let numErrors = $state();
 
   onMount(() => {
     const validation = validate(service, $currentSchema, {

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { tick } from "svelte";
 
   import type { ServiceSearchResult } from "$lib/types";
@@ -16,21 +18,33 @@
   import type { Filters } from "./result-filters.svelte";
   import SearchResult from "./search-result.svelte";
 
-  export let data: PageData;
-  export let filters: Filters;
-  export let filteredServices: ServiceSearchResult[];
-  export let selectedServiceSlug: string | undefined = undefined;
-  export let noAlertButtonBottomGap = false;
-  export let summarized = false;
-  export let noPagination = false;
+  interface Props {
+    data: PageData;
+    filters: Filters;
+    filteredServices: ServiceSearchResult[];
+    selectedServiceSlug?: string | undefined;
+    noAlertButtonBottomGap?: boolean;
+    summarized?: boolean;
+    noPagination?: boolean;
+  }
+
+  let {
+    data,
+    filters,
+    filteredServices,
+    selectedServiceSlug = undefined,
+    noAlertButtonBottomGap = false,
+    summarized = false,
+    noPagination = false
+  }: Props = $props();
 
   const PAGE_LENGTH = 10;
 
-  let currentPageLength = PAGE_LENGTH;
-  let creatingAlert = false;
+  let currentPageLength = $state(PAGE_LENGTH);
+  let creatingAlert = $state(false);
 
-  let currentSearchWasAlreadySaved;
-  $: {
+  let currentSearchWasAlreadySaved = $state();
+  run(() => {
     // Saved searches don't store the street address neither lat/lon
     const currentShortQueryString = getQueryString({
       categoryIds: [data.categoryIds[0] ? data.categoryIds[0] : ""],
@@ -52,7 +66,7 @@
       (search) => getSavedSearchQueryString(search) === currentShortQueryString
     );
     currentSearchWasAlreadySaved = result;
-  }
+  });
 
   function getResultId(index: number) {
     return `#result-${index}`;

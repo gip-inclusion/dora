@@ -12,9 +12,13 @@
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";
 
-  export let data: PageData;
-  let cguAccepted = false;
-  let joinError = "";
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
+  let cguAccepted = $state(false);
+  let joinError = $state("");
 
   async function handleJoin() {
     const targetUrl = `${getApiURL()}/auth/join-structure/`;

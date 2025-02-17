@@ -3,7 +3,11 @@
 
   import { externalLinkIcon } from "$lib/icons";
 
-  export let text: string;
+  interface Props {
+    text: string;
+  }
+
+  let { text }: Props = $props();
 
   type Parts = Array<
     | { type: "link"; value: string; display: string; key: number }
@@ -37,14 +41,14 @@
     dispatch("linkClick", { url });
   }
 
-  $: parts = linkify(text);
+  let parts = $derived(linkify(text));
 </script>
 
 {#each parts as part}
   {#if part.type === "link"}
     <a
       href={part.value}
-      on:click={() => handleLinkClick(part.value)}
+      onclick={() => handleLinkClick(part.value)}
       target="_blank"
       rel="noopener ugc"
       class="text-magenta-cta underline"

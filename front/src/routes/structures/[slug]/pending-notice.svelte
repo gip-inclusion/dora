@@ -6,7 +6,7 @@
 
   const requestResent = false;
 
-  export let shortAdminNames = [];
+  let { shortAdminNames = [] } = $props();
   const resendRequestFlag = false;
 </script>
 

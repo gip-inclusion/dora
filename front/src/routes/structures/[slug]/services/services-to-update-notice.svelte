@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Button from "$lib/components/display/button.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import {
@@ -11,20 +13,32 @@
     isModelNoticeHidden,
   } from "$lib/utils/service-updates-via-model";
 
-  export let structureSlug: string;
-  export let services: StructureService[] = [];
-  export let requesting = false;
-  export let onRefresh: () => void;
+  interface Props {
+    structureSlug: string;
+    services?: StructureService[];
+    requesting?: boolean;
+    onRefresh: () => void;
+  }
+
+  let {
+    structureSlug,
+    services = [],
+    requesting = $bindable(false),
+    onRefresh
+  }: Props = $props();
 
   const LIST_LENGTH = 3;
-  let showAll = false;
-  $: servicesToUpdate = services.filter(({ modelChanged }) => modelChanged);
+  let showAll = $state(false);
+  let servicesToUpdate = $derived(services.filter(({ modelChanged }) => modelChanged));
 
-  $: showNotice =
-    servicesToUpdate.length && !isModelNoticeHidden(structureSlug);
-  $: updatedModels = new Set(
+  let showNotice;
+  run(() => {
+    showNotice =
+      servicesToUpdate.length && !isModelNoticeHidden(structureSlug);
+  });
+  let updatedModels = $derived(new Set(
     servicesToUpdate.map(({ modelName }) => modelName)
-  );
+  ));
 
   async function doUpdate(selectedServices: StructureService[]) {
     requesting = true;

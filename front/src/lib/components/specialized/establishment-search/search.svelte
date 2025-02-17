@@ -6,23 +6,38 @@
   import SearchBySiret from "./search-by-siret.svelte";
   import type { Establishment, GeoApiValue } from "$lib/types";
 
-  export let onCityChange: ((city: GeoApiValue | null) => void) | undefined =
-    undefined;
 
   type Tab = "nom" | "siret" | "safir";
 
-  export let onEstablishmentChange:
+
+
+  interface Props {
+    onCityChange?: ((city: GeoApiValue | null) => void) | undefined;
+    onEstablishmentChange?: 
     | ((establishment: Establishment | null) => void)
-    | undefined = undefined;
+    | undefined;
+    establishment?: Establishment | null;
+    showSafir?: boolean;
+    tabId?: Tab;
+    title?: string;
+    description?: string | undefined;
+    proposedSafir?: string;
+    proposedSiret?: string;
+    cta?: import('svelte').Snippet;
+  }
 
-  export let establishment: Establishment | null = null;
-  export let showSafir: boolean = false;
-  export let tabId: Tab = showSafir ? "safir" : "nom";
-
-  export let title = "Structure";
-  export let description: string | undefined = undefined;
-  export let proposedSafir: string = "";
-  export let proposedSiret: string = "";
+  let {
+    onCityChange = undefined,
+    onEstablishmentChange = undefined,
+    establishment = $bindable(null),
+    showSafir = false,
+    tabId = $bindable(showSafir ? "safir" : "nom"),
+    title = "Structure",
+    description = undefined,
+    proposedSafir = $bindable(""),
+    proposedSiret = "",
+    cta
+  }: Props = $props();
 
   if (!showSafir) {
     proposedSafir = "";
@@ -70,26 +85,28 @@
 </script>
 
 <FieldSet {title} headerBg="bg-magenta-brand" noHeaderBorder noTopPadding>
-  <div slot="description">
-    <p class="m-s0 text-f14 text-white">
-      {#if description}
-        {description}
-      {:else}
-        Veuillez choisir une méthode d’identification parmi les options
-        disponibles. Si vous rencontrez des difficultés ou avez besoin
-        d’assistance, n’hésitez pas à
-        <a
-          class="underline"
-          target="_blank"
-          title="Ouverture dans une nouvelle fenêtre"
-          rel="noopener"
-          href="https://aide.dora.inclusion.beta.gouv.fr/fr/">nous contacter</a
-        >.
-      {/if}
-    </p>
+  {#snippet description()}
+    <div >
+      <p class="m-s0 text-f14 text-white">
+        {#if description}
+          {description}
+        {:else}
+          Veuillez choisir une méthode d’identification parmi les options
+          disponibles. Si vous rencontrez des difficultés ou avez besoin
+          d’assistance, n’hésitez pas à
+          <a
+            class="underline"
+            target="_blank"
+            title="Ouverture dans une nouvelle fenêtre"
+            rel="noopener"
+            href="https://aide.dora.inclusion.beta.gouv.fr/fr/">nous contacter</a
+          >.
+        {/if}
+      </p>
 
-    <Tabs items={tabs} onSelectedChange={handleTabChange} itemId={tabId} />
-  </div>
+      <Tabs items={tabs} onSelectedChange={handleTabChange} itemId={tabId} />
+    </div>
+  {/snippet}
 
   {#if tabId === "siret"}
     <SearchBySiret
@@ -123,5 +140,5 @@
       </div>
     </div>
   {/if}
-  <slot name="cta" />
+  {@render cta?.()}
 </FieldSet>

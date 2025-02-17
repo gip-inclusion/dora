@@ -7,11 +7,21 @@
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
 
-  export let servicesOptions: ServicesOptions, service: Service;
-  export let model: Model | undefined = undefined;
-  export let noTopPadding = false;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    model?: Model | undefined;
+    noTopPadding?: boolean;
+  }
 
-  let fullDesc;
+  let {
+    servicesOptions,
+    service = $bindable(),
+    model = undefined,
+    noTopPadding = false
+  }: Props = $props();
+
+  let fullDesc = $state();
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
@@ -20,8 +30,8 @@
     }
   }
 
-  $: showModel = !!service.model;
-  $: fieldModelProps = model
+  let showModel = $derived(!!service.model);
+  let fieldModelProps = $derived(model
     ? getModelInputProps({
         service,
         servicesOptions,
@@ -29,27 +39,29 @@
         onUseModelValue: handleUseModelValue,
         model,
       })
-    : {};
+    : {});
 </script>
 
 <FieldSet title="Présentation" {showModel} {noTopPadding}>
-  <div slot="help">
-    <p class="text-f14">
-      Le <b>Résumé</b> présente le service en une phrase courte. Il apparait dans
-      les résultats de recherche.
-    </p>
-    <p class="text-f14">
-      <strong>Exemple</strong> :
-      <i>
-        Faciliter vos déplacements en cas de reprise d’emploi ou de formation
-        (entretien d’embauche, concours public…)
-      </i>
-    </p>
-    <p class="text-f14">
-      Si besoin, détaillez dans la partie
-      <b>Description</b>.
-    </p>
-  </div>
+  {#snippet help()}
+    <div >
+      <p class="text-f14">
+        Le <b>Résumé</b> présente le service en une phrase courte. Il apparait dans
+        les résultats de recherche.
+      </p>
+      <p class="text-f14">
+        <strong>Exemple</strong> :
+        <i>
+          Faciliter vos déplacements en cas de reprise d’emploi ou de formation
+          (entretien d’embauche, concours public…)
+        </i>
+      </p>
+      <p class="text-f14">
+        Si besoin, détaillez dans la partie
+        <b>Description</b>.
+      </p>
+    </div>
+  {/snippet}
 
   <FieldModel {...fieldModelProps.name ?? {}}>
     <BasicInputField

@@ -1,10 +1,14 @@
-<script>
+<script lang="ts">
   import illustration from "$lib/assets/illustrations/illu-favs.svg";
   import { flashLightIcon } from "$lib/icons";
 
-  export let title;
-  export let subtitle = "";
-  export let withThunder = false;
+  interface Props {
+    title: any;
+    subtitle?: string;
+    withThunder?: boolean;
+  }
+
+  let { title, subtitle = "", withThunder = false }: Props = $props();
 </script>
 
 <div class="mb-s24 gap-s24 flex flex-col items-center">

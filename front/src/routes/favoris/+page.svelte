@@ -8,7 +8,11 @@
   import BookmarkCard from "./bookmark-card.svelte";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   const bookmarks = data.bookmarks || [];
 </script>
