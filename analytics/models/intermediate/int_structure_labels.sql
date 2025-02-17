@@ -12,7 +12,7 @@ national_labels AS (
 
 final AS (
     SELECT
-        structures.*,
+        {{ dbt_utils.star(relation_alias='structures', from=ref('stg_structure'), prefix='structure_') }},
         national_labels.label AS national_label_name,
         national_labels.value AS national_label_code
     FROM structures
