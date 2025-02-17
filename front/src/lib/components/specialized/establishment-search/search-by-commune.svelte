@@ -133,7 +133,7 @@
       >Annuaire des entreprises
       <span
         class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current"
-        aria-hidden
+        aria-hidden="true"
       >
         {@html externalLinkIcon}
       </span>
