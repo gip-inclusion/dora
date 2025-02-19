@@ -11,3 +11,4 @@ final AS (
 )
 
 SELECT * FROM final
+WHERE NOT is_obsolete
