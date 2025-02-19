@@ -1,5 +1,5 @@
 models:
-  - name: int_accompagnateurs
+  - name: int_prescribers
     description:
       Accompagnateurs avec le label national de leur structure.  
       `user_id` n'est pas une clé d'unicité étant donné qu'un utilisateur peut avoir de 0 à n labels.
@@ -12,11 +12,11 @@ models:
     description: 
       Orientations des utilisateurs vers des services.
 
-  - name: int_pageview_user
+  - name: int_user_page_views
     description: 
       Vues de pages par les utilisateurs.
 
-  - name: int_searchview_user
+  - name: int_user_search_views
     description: 
       Recherches par les utilisateurs.
 
@@ -24,7 +24,7 @@ models:
     description: 
       Catégories de services.
 
-  - name: int_service_fundinglabels
+  - name: int_service_funding_labels
     description: 
       Labels de financement des services.
 
@@ -40,11 +40,11 @@ models:
     description: 
       Vues de services par les utilisateurs.
 
-  - name: int_structure_labels
+  - name: int_structure_national_labels
     description: 
       Labels nationaux associés aux structures.  
       `structure_id` n'est pas une clé d'unicité étant donné qu'une structure peut avoir de 0 à n labels.
 
-  - name: int_structure_member
+  - name: int_structure_members
     description: 
       Membres des structures.
