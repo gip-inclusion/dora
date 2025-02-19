@@ -21,14 +21,25 @@ Pour rappel, l'installation des dépendances de `dev` se fait via `pip` :
 pip install -r requirements/dev.txt
 ```
 
+#### 💡 Cas particulier pour macOS X
+
+Sur Apple / macOS X, il faut définir les variables d'environnement suivantes : `CFLAGS`, `LDFLAGS` et `PKG_CONFIG_PATH`.
+
+Exemple, pour une installation via Homebrew :
+
+```
+export CFLAGS="-I$(brew --prefix graphviz)/include"
+export LDFLAGS="-L$(brew --prefix graphviz)/lib"
+export PKG_CONFIG_PATH="$(brew --prefix graphviz)/lib/pkgconfig"
+```
+
 ## Génération
 
 Depuis le répertoire de l'application `back`, exporté avec `django-extensions` via :
 
 
 ```bash
-./manage.py graph_models -a -o ../docs/models/dora_model.png`
-
+./manage.py graph_models -a -o ../docs/models/dora_model.png
 ```
 
 ## Références 
