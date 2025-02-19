@@ -15,5 +15,5 @@ LEFT JOIN {{ ref('int_orientation_user_service') }} AS o
     AND o.orientation_creation_date BETWEEN m.event_date AND m.event_date + INTERVAL '1 hour'
     AND SPLIT_PART(m.event_path, '/', 3) = o.service_slug
 -- keep only orientations that follow mobilisations
-WHERE (o.orientation_creation_date - m.event_date)::INTERVAL > INTERVAL '0 seconds'
+WHERE o.orientation_creation_date > m.event_date
 ORDER BY o.user_id

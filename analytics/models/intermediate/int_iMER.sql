@@ -13,7 +13,7 @@ SELECT
     m.user_id,
     event_is_di                                                                         AS is_di_service,
     COALESCE(user_main_activity IN ('accompagnateur', 'accompagnateur_offreur'), FALSE) AS is_prescriber,
-    COALESCE(o_m.delay IS NOT NULL, FALSE)                                              AS generates_orientation
+    o_m.delay IS NOT NULL                                                               AS generates_orientation
 FROM {{ ref('int_mobilisationevent_user') }} as m
 LEFT JOIN {{ ref('int_orientations_following_mobilisation') }} as o_m
     ON o_m.mobilisation_id = m.event_id
