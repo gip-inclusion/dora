@@ -2,7 +2,11 @@
   import { browser } from "$app/environment";
   import Modal from "$lib/components/hoc/modal.svelte";
 
-  export let isVideoModalOpen = false;
+  interface Props {
+    isVideoModalOpen?: boolean;
+  }
+
+  let { isVideoModalOpen = $bindable(false) }: Props = $props();
 </script>
 
 {#if browser}

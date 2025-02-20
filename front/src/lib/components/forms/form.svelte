@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run, preventDefault } from 'svelte/legacy';
+
   import { beforeNavigate } from "$app/navigation";
   import type { ServicesOptions } from "$lib/types";
   import type { Schema } from "$lib/validation/schema-utils";
@@ -13,26 +15,47 @@
   } from "$lib/validation/validation";
   import { onDestroy, onMount, setContext } from "svelte";
 
-  export let data;
-  export let schema: Schema;
-  export let requesting = false;
-  export let serverErrorsDict = {};
-  export let onSubmit, onSuccess;
-  export let servicesOptions: ServicesOptions | undefined = undefined;
-  export let onChange: ((validatedData, fieldName?) => void) | undefined =
-    undefined;
-  export let disableExitWarning = false;
 
   let hasUnsavedChange = false;
-  export let onValidate:
+  interface Props {
+    data: any;
+    schema: Schema;
+    requesting?: boolean;
+    serverErrorsDict?: any;
+    onSubmit: any;
+    onSuccess: any;
+    servicesOptions?: ServicesOptions | undefined;
+    onChange?: ((validatedData, fieldName?) => void) | undefined;
+    disableExitWarning?: boolean;
+    onValidate?: 
     | ((
         submittedData,
         submitterId: string | undefined
       ) => { validatedData; valid: boolean })
-    | undefined = undefined;
+    | undefined;
+    children?: import('svelte').Snippet;
+  }
 
-  $: $currentFormData = data;
-  $: $currentSchema = schema;
+  let {
+    data,
+    schema,
+    requesting = $bindable(false),
+    serverErrorsDict = {},
+    onSubmit,
+    onSuccess,
+    servicesOptions = undefined,
+    onChange = undefined,
+    disableExitWarning = false,
+    onValidate = undefined,
+    children
+  }: Props = $props();
+
+  run(() => {
+    $currentFormData = data;
+  });
+  run(() => {
+    $currentSchema = schema;
+  });
 
   onMount(() => {
     $formErrors = {};
@@ -140,6 +163,6 @@
   }
 </script>
 
-<form on:submit|preventDefault={handleSubmit} novalidate>
-  <slot />
+<form onsubmit={preventDefault(handleSubmit)} novalidate>
+  {@render children?.()}
 </form>

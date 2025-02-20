@@ -13,24 +13,33 @@
 
   import SharingModal from "./modals/sharing-modal.svelte";
 
-  export let service: Service;
-  export let isDI = false;
-  export let orientationFormUrl: string;
-  export let handleOrientationFormClickEvent: (event: any) => void;
+  interface Props {
+    service: Service;
+    isDI?: boolean;
+    orientationFormUrl: string;
+    handleOrientationFormClickEvent: (event: any) => void;
+  }
 
-  $: isOrientableWithDoraForm =
-    service.isOrientable &&
-    service.coachOrientationModes?.includes("formulaire-dora");
-  $: hasExternalForm = service.coachOrientationModes?.includes(
+  let {
+    service,
+    isDI = false,
+    orientationFormUrl,
+    handleOrientationFormClickEvent
+  }: Props = $props();
+
+  let isOrientableWithDoraForm =
+    $derived(service.isOrientable &&
+    service.coachOrientationModes?.includes("formulaire-dora"));
+  let hasExternalForm = $derived(service.coachOrientationModes?.includes(
     "completer-le-formulaire-dadhesion"
-  );
+  ));
 
   const dispatch = createEventDispatcher<{
     trackMobilisation: { externalUrl?: string };
   }>();
 
-  let sharingModalIsOpen = false;
-  let contactBoxOpen = false;
+  let sharingModalIsOpen = $state(false);
+  let contactBoxOpen = $state(false);
 
   function handleShowContactClick() {
     if (!$token && !service.isContactInfoPublic) {

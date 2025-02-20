@@ -1,48 +1,85 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import AutoComplete from "./simple-autocomplete.svelte";
 
   type Choice = { value: string | number; label: string };
 
-  export let id: string;
-  export let choices: Choice[] | undefined = undefined;
-  export let fixedItemsValues: string[] = [];
-  export let sort = false;
-  export let value: string | number | string[] | number[] | undefined =
-    undefined;
-  export let searchText: string | undefined;
-  export let disabled = false;
-  export let readonly = false;
-  export let placeholder = "";
-  export let placeholderMulti = "";
-  export let multiple = false;
-  export let hideArrow = false;
-  export let searchFunction:
+  interface Props {
+    id: string;
+    choices?: Choice[] | undefined;
+    fixedItemsValues?: string[];
+    sort?: boolean;
+    value?: string | number | string[] | number[] | undefined;
+    searchText: string | undefined;
+    disabled?: boolean;
+    readonly?: boolean;
+    placeholder?: string;
+    placeholderMulti?: string;
+    multiple?: boolean;
+    hideArrow?: boolean;
+    searchFunction?: 
     | ((searchTxt: string) => Promise<Choice[]>)
-    | undefined = undefined;
-  export let delay = undefined;
-  export let localFiltering = undefined;
-  export let minCharactersToSearch = undefined;
-  export let onChange:
+    | undefined;
+    delay?: any;
+    localFiltering?: any;
+    minCharactersToSearch?: any;
+    onChange?: 
     | ((newValue: string) => void)
     | ((newValues: string[]) => void)
-    | undefined = undefined;
-  export let initialValue = undefined;
-  export let showClear = true;
-  export let errorMessages: string[] = [];
-  export let extraClass = "";
+    | undefined;
+    initialValue?: any;
+    showClear?: boolean;
+    errorMessages?: string[];
+    extraClass?: string;
+    prepend?: import('svelte').Snippet;
+    append?: import('svelte').Snippet;
+    itemContent?: import('svelte').Snippet<[any]>;
+  }
+
+  let {
+    id,
+    choices = $bindable(undefined),
+    fixedItemsValues = [],
+    sort = false,
+    value = $bindable(undefined),
+    searchText = $bindable(),
+    disabled = false,
+    readonly = false,
+    placeholder = "",
+    placeholderMulti = "",
+    multiple = false,
+    hideArrow = false,
+    searchFunction = undefined,
+    delay = undefined,
+    localFiltering = undefined,
+    minCharactersToSearch = undefined,
+    onChange = undefined,
+    initialValue = undefined,
+    showClear = true,
+    errorMessages = [],
+    extraClass = "",
+    prepend,
+    append,
+    itemContent
+  }: Props = $props();
 
   // https://github.com/sveltejs/svelte/issues/5604
-  const hasPrependSlot = $$slots.prepend;
-  const hasAppendSlot = $$slots.append;
-  const hasCustomContentSlot = $$slots.itemContent;
+  const hasPrependSlot = prepend;
+  const hasAppendSlot = append;
+  const hasCustomContentSlot = itemContent;
 
-  $: {
+  run(() => {
     if (sort) {
       choices = choices.sort((a, b) =>
         a.label.localeCompare(b.label, "fr", { numeric: true })
       );
     }
-  }
+  });
+
+  const prepend_render = $derived(prepend);
+  const itemContent_render = $derived(itemContent);
+  const append_render = $derived(append);
 </script>
 
 <AutoComplete
@@ -75,11 +112,17 @@
   {hasCustomContentSlot}
   {errorMessages}
 >
-  <slot name="prepend" slot="prepend" />
+  {#snippet prepend()}
+    {@render prepend_render?.()}
+  {/snippet}
 
-  <svelte:fragment slot="itemContent" let:item>
-    <slot name="itemContent" {item} />
-  </svelte:fragment>
+  {#snippet itemContent({ item })}
+  
+      {@render itemContent_render?.({ item, })}
+    
+  {/snippet}
 
-  <slot name="append" slot="append" />
+  {#snippet append()}
+    {@render append_render?.()}
+  {/snippet}
 </AutoComplete>

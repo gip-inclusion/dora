@@ -2,8 +2,12 @@
   import { alertLine, errorWarningLineIcon, historyLineIcon } from "$lib/icons";
   import type { ServiceUpdateStatus } from "$lib/types";
 
-  export let small = false;
-  export let updateStatus: ServiceUpdateStatus;
+  interface Props {
+    small?: boolean;
+    updateStatus: ServiceUpdateStatus;
+  }
+
+  let { small = false, updateStatus }: Props = $props();
 
   type ServiceStatusPresentation = {
     iconBg: string;

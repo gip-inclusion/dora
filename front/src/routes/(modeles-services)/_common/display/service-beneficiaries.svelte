@@ -2,7 +2,11 @@
   import Accordion from "$lib/components/display/accordion.svelte";
   import type { Model, Service } from "$lib/types";
 
-  export let service: Service | Model;
+  interface Props {
+    service: Service | Model;
+  }
+
+  let { service }: Props = $props();
 </script>
 
 <Accordion title="Qui peut bénéficier de ce service ?">

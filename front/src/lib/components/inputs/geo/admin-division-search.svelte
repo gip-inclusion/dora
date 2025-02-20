@@ -9,16 +9,31 @@
   } from "$lib/validation/validation";
   import { getContext } from "svelte";
 
-  export let id: string;
-  export let onChange: (adminDetails: GeoApiValue) => void;
-  export let placeholder = "";
-  export let disabled = false;
-  export let value: GeoApiValue | undefined = undefined;
-  export let initialValue = undefined;
-  export let readonly = false;
-  export let choices = [];
-  export let searchType: AdminDivisionType;
-  export let withGeom = false;
+  interface Props {
+    id: string;
+    onChange: (adminDetails: GeoApiValue) => void;
+    placeholder?: string;
+    disabled?: boolean;
+    value?: GeoApiValue | undefined;
+    initialValue?: any;
+    readonly?: boolean;
+    choices?: any;
+    searchType: AdminDivisionType;
+    withGeom?: boolean;
+  }
+
+  let {
+    id,
+    onChange,
+    placeholder = "",
+    disabled = false,
+    value = $bindable(undefined),
+    initialValue = undefined,
+    readonly = false,
+    choices = $bindable([]),
+    searchType,
+    withGeom = false
+  }: Props = $props();
 
   async function searchAdminDivision(query) {
     const url = `${getApiURL()}/admin-division-search/?type=${searchType}&q=${encodeURIComponent(

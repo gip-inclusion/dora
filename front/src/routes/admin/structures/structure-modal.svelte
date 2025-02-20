@@ -1,15 +1,21 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Modal from "$lib/components/hoc/modal.svelte";
   import { getStructureAdmin } from "$lib/requests/admin";
   import type { AdminShortStructure } from "$lib/types";
   import ModerationButtonMenu from "../moderation-button-menu.svelte";
   import StructureContacts from "../structure-contacts.svelte";
 
-  export let isOpen = false;
-  export let structureSlug: string | null;
-  export let onRefresh;
+  interface Props {
+    isOpen?: boolean;
+    structureSlug: string | null;
+    onRefresh: any;
+  }
 
-  let structure: AdminShortStructure | null = null;
+  let { isOpen = $bindable(false), structureSlug = $bindable(), onRefresh }: Props = $props();
+
+  let structure: AdminShortStructure | null = $state(null);
 
   async function handleRefresh() {
     structure = structureSlug ? await getStructureAdmin(structureSlug) : null;
@@ -18,10 +24,12 @@
     }
   }
 
-  $: (async () =>
-    (structure = structureSlug
-      ? await getStructureAdmin(structureSlug)
-      : null))();
+  run(() => {
+    (async () =>
+      (structure = structureSlug
+        ? await getStructureAdmin(structureSlug)
+        : null))();
+  });
 </script>
 
 <Modal

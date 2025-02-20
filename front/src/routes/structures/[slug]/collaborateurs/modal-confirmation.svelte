@@ -2,8 +2,12 @@
   import Info from "$lib/components/display/info.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
 
-  export let email;
-  export let isOpen = false;
+  interface Props {
+    email: any;
+    isOpen?: boolean;
+  }
+
+  let { email, isOpen = $bindable(false) }: Props = $props();
 </script>
 
 <Modal bind:isOpen title="Demande envoyée">

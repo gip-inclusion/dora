@@ -11,7 +11,7 @@
   import { onMount } from "svelte";
   import SavedSearchCard from "./saved-search-card.svelte";
 
-  let savedSearches: SavedSearch[] | undefined = undefined;
+  let savedSearches: SavedSearch[] | undefined = $state(undefined);
 
   async function getSavedSearches() {
     const url = `${getApiURL()}/saved-searches/`;

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import * as mlgl from "maplibre-gl";
   import Spiderfy from "@nazka/map-gl-js-spiderfy";
 
@@ -14,22 +16,26 @@
     coordinates: [number, number];
   }
 
-  export let data: PageData;
-  export let filteredServices: ServiceSearchResult[];
-  export let onServiceClick: ((slug: string) => void) | undefined = undefined;
+  interface Props {
+    data: PageData;
+    filteredServices: ServiceSearchResult[];
+    onServiceClick?: ((slug: string) => void) | undefined;
+  }
 
-  let map: mlgl.Map;
+  let { data, filteredServices, onServiceClick = undefined }: Props = $props();
+
+  let map: mlgl.Map = $state();
   let popup: mlgl.Popup;
   let spiderfy: Spiderfy;
 
-  $: onSiteServicesWithCoords = filteredServices.filter(
+  let onSiteServicesWithCoords = $derived(filteredServices.filter(
     (service) =>
       service.locationKinds.includes("en-presentiel") &&
       service.distance <= 50 &&
       !!service.coordinates
-  ) as ServiceWithCoords[];
+  ) as ServiceWithCoords[]);
 
-  $: zoomToAddress = Boolean(data.lat && data.lon);
+  let zoomToAddress = $derived(Boolean(data.lat && data.lon));
 
   function getPopupContent(feature): string {
     return insane(
@@ -219,7 +225,9 @@
     });
   }
 
-  $: onSiteServicesWithCoords, updateMapContent();
+  run(() => {
+    onSiteServicesWithCoords, updateMapContent();
+  });
 </script>
 
 <Map bind:map on:load={handleMapLoaded} />

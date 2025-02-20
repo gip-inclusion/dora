@@ -1,29 +1,57 @@
 <script lang="ts">
-  export let label = "";
-  export let type: "button" | "submit" = "button";
-  export let id: string | undefined = undefined;
-  export let name: string | undefined = undefined;
-  export let icon: string | undefined = undefined;
-  export let title: string | undefined = undefined;
-  export let extraClass = "";
-  export let iconOnRight = false;
-  export let hideLabel = false;
-  export let disabled = false;
-  export let small = false;
-  export let big = false;
-  export let secondary = false;
-  export let noBackground = false;
-  export let noPadding = false;
-  export let hoverUnderline = false;
-  export let wFull = false;
-  export let noWrap = false;
-  export let preventDefaultOnMouseDown = false;
-  export let ariaAttributes: Partial<{
+  import { run, createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
+  interface Props {
+    label?: string;
+    type?: "button" | "submit";
+    id?: string | undefined;
+    name?: string | undefined;
+    icon?: string | undefined;
+    title?: string | undefined;
+    extraClass?: string;
+    iconOnRight?: boolean;
+    hideLabel?: boolean;
+    disabled?: boolean;
+    small?: boolean;
+    big?: boolean;
+    secondary?: boolean;
+    noBackground?: boolean;
+    noPadding?: boolean;
+    hoverUnderline?: boolean;
+    wFull?: boolean;
+    noWrap?: boolean;
+    preventDefaultOnMouseDown?: boolean;
+    ariaAttributes?: Partial<{
     "aria-expanded": boolean;
     "aria-controls": string;
-  }> = {};
+  }>;
+  }
 
-  let paddingX: string, paddingY: string, textSize: string;
+  let {
+    label = "",
+    type = "button",
+    id = undefined,
+    name = undefined,
+    icon = undefined,
+    title = undefined,
+    extraClass = "",
+    iconOnRight = false,
+    hideLabel = false,
+    disabled = false,
+    small = false,
+    big = false,
+    secondary = false,
+    noBackground = false,
+    noPadding = false,
+    hoverUnderline = false,
+    wFull = false,
+    noWrap = false,
+    preventDefaultOnMouseDown = false,
+    ariaAttributes = {}
+  }: Props = $props();
+
+  let paddingX: string = $state(), paddingY: string = $state(), textSize: string = $state();
 
   if (small) {
     paddingY = "py-s6";
@@ -44,9 +72,9 @@
     paddingX = "px-s20";
   }
 
-  let border: string, text: string, background: string;
+  let border: string = $state(), text: string = $state(), background: string = $state();
 
-  $: {
+  run(() => {
     if (secondary) {
       border =
         "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue";
@@ -66,7 +94,7 @@
           "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
       }
     }
-  }
+  });
   const iconWidth = small ? "w-s24" : "w-s32";
   const iconHeight = small ? "h-s24" : "h-s32";
 
@@ -90,8 +118,8 @@
   class:flex-row={icon}
   class:items-center={icon}
   {...ariaAttributes}
-  on:click
-  on:mousedown={handleMouseDown}
+  onclick={bubble('click')}
+  onmousedown={handleMouseDown}
   {disabled}
 >
   {#if icon && !iconOnRight}

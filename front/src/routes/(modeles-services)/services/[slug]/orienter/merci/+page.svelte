@@ -9,7 +9,11 @@
   import Notice from "$lib/components/display/notice.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   const showContactBeneficiary = !$orientation.beneficiaryEmail;
   $orientation = initEmptyOrientation();

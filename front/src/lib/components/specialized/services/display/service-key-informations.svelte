@@ -20,15 +20,19 @@
   import ServiceDuration from "./service-duration.svelte";
   import SubcategoryList from "./subcategory-list.svelte";
 
-  export let service: Service;
-  export let servicesOptions: ServicesOptions;
+  interface Props {
+    service: Service;
+    servicesOptions: ServicesOptions;
+  }
 
-  $: isDI = "source" in service;
+  let { service, servicesOptions }: Props = $props();
+
+  let isDI = $derived("source" in service);
 
   // trier les types dans l'ordre d'affichage du formulaire
-  $: sortedServiceKindsDisplay = service.kindsDisplay?.sort((a, b) =>
+  let sortedServiceKindsDisplay = $derived(service.kindsDisplay?.sort((a, b) =>
     a.localeCompare(b)
-  );
+  ));
 </script>
 
 <h2 class="text-f23">Informations clés</h2>

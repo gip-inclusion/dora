@@ -25,14 +25,18 @@
   import * as XLSX from "xlsx";
   import type { StatusFilter } from "./types";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let selectedDepartment = data.department;
-  let searchStatus: StatusFilter = "toutes";
-  let structures: AdminShortStructure[] = [];
-  let filteredStructures: AdminShortStructure[] = [];
-  let selectedStructureSlug: string | null = null;
-  let loading = false;
+  let { data }: Props = $props();
+
+  let selectedDepartment = $state(data.department);
+  let searchStatus: StatusFilter = $state("toutes");
+  let structures: AdminShortStructure[] = $state([]);
+  let filteredStructures: AdminShortStructure[] = $state([]);
+  let selectedStructureSlug: string | null = $state(null);
+  let loading = $state(false);
 
   function filterIgnoredStructures(structs) {
     function isOrphanOrWaitingOrToActivateSIAE(struct) {

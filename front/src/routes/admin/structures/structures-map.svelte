@@ -1,14 +1,20 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import type { AdminShortStructure, GeoApiValue } from "$lib/types";
   import * as mlgl from "maplibre-gl";
   import Map from "$lib/components/display/map.svelte";
   import insane from "insane";
 
-  export let filteredStructures: AdminShortStructure[] = [];
-  export let selectedStructureSlug: string | null;
-  export let department: GeoApiValue;
+  interface Props {
+    filteredStructures?: AdminShortStructure[];
+    selectedStructureSlug: string | null;
+    department: GeoApiValue;
+  }
 
-  let map: mlgl.Map;
+  let { filteredStructures = [], selectedStructureSlug = $bindable(), department }: Props = $props();
+
+  let map: mlgl.Map = $state();
   let popup: mlgl.Popup;
 
   function getPopupContent(feature): string {
@@ -169,8 +175,12 @@
     }
   }
 
-  $: updateHoveredFeature(selectedStructureSlug);
-  $: filteredStructures, updateMapContent();
+  run(() => {
+    updateHoveredFeature(selectedStructureSlug);
+  });
+  run(() => {
+    filteredStructures, updateMapContent();
+  });
 </script>
 
 <Map bind:map on:load={handleMapLoaded} />

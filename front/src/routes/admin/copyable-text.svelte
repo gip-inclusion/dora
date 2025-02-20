@@ -1,17 +1,17 @@
 <script lang="ts">
-  export let text;
+  let { text } = $props();
 </script>
 
 <span
   class="text-f10 text-gray-text-alt cursor-pointer underline"
   tabindex="0"
   role="button"
-  on:keypress={(event) => {
+  onkeypress={(event) => {
     if (event.code === "Enter") {
       navigator.clipboard.writeText(text);
     }
   }}
-  on:click={() => {
+  onclick={() => {
     navigator.clipboard.writeText(text);
   }}>copier</span
 >
