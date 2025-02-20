@@ -245,24 +245,24 @@ def test_manager_structure_moderation_candidates(
 ):
     # gestionnaire sans structure à modérer en attente
     manager = make_user(is_manager=True, departments=["37", "81"])
-    assert (
-        manager not in manager_structure_moderation_task.candidates()
-    ), "Ce gestionnaire ne doit pas être candidat à une notification"
+    assert manager not in manager_structure_moderation_task.candidates(), (
+        "Ce gestionnaire ne doit pas être candidat à une notification"
+    )
 
     # création d'une structure en attente de validation (hors-scope du gestionnaire)
     structure = make_structure(department="11", moderation_status=moderation_status)
 
-    assert (
-        manager not in manager_structure_moderation_task.candidates()
-    ), "Ce gestionnaire ne doit pas être candidat à une notification"
+    assert manager not in manager_structure_moderation_task.candidates(), (
+        "Ce gestionnaire ne doit pas être candidat à une notification"
+    )
 
     # la structure est en attente de modération et dans le territoire du gestionnaire
     structure.department = "37"
     structure.save()
 
-    assert (
-        manager in manager_structure_moderation_task.candidates()
-    ), "Ce gestionnaire doit être candidat à une notification"
+    assert manager in manager_structure_moderation_task.candidates(), (
+        "Ce gestionnaire doit être candidat à une notification"
+    )
 
 
 @pytest.mark.parametrize(
@@ -290,9 +290,9 @@ def test_manager_structure_moderation_task_should_trigger(
         # cette étape, la notification est créée mais pas déclenchée
 
     notification = Notification.objects.first()
-    assert (
-        notification.is_pending
-    ), "Il doit y avoir une notification en attente pour ce gestionnaire"
+    assert notification.is_pending, (
+        "Il doit y avoir une notification en attente pour ce gestionnaire"
+    )
 
     for d in range(6):
         with freeze_time(monday + relativedelta(days=d)):
@@ -300,9 +300,9 @@ def test_manager_structure_moderation_task_should_trigger(
             notification.refresh_from_db()
 
             # ok, uniquement les mercredis
-            assert ok == (
-                d == 2
-            ), "Cette notification ne doit s'exécuter que les mercredis"
+            assert ok == (d == 2), (
+                "Cette notification ne doit s'exécuter que les mercredis"
+            )
 
     # le mercredi suivant
     with freeze_time(monday + relativedelta(days=9)):
@@ -340,32 +340,32 @@ def test_simpler_manager_structure_moderation_task_should_trigger(
         )
         n.save()
 
-        assert not manager_structure_moderation_task.should_trigger(
-            n
-        ), "Il n'y pas de structure à modérer : pas de déclenchement attendu"
+        assert not manager_structure_moderation_task.should_trigger(n), (
+            "Il n'y pas de structure à modérer : pas de déclenchement attendu"
+        )
 
     # création d'une structure à modérer
     make_structure(department="37", moderation_status=moderation_status)
 
     # la notificaction ne peut être déclenchée que les mercredis
     with freeze_time("2024-10-14"):
-        assert not manager_structure_moderation_task.should_trigger(
-            n
-        ), "Pas de déclenchement attendu hors mercredis"
+        assert not manager_structure_moderation_task.should_trigger(n), (
+            "Pas de déclenchement attendu hors mercredis"
+        )
 
     with freeze_time("2024-10-16"):
-        assert manager_structure_moderation_task.should_trigger(
-            n
-        ), "Déclenchement attendu les mercredis"
+        assert manager_structure_moderation_task.should_trigger(n), (
+            "Déclenchement attendu les mercredis"
+        )
 
         # le déclenchement se base en partie sur la date de Maj
         n.save()
 
     # on relance la vérification le même jour : pas de déclenchement attendu
     with freeze_time("2024-10-16"):
-        assert not manager_structure_moderation_task.should_trigger(
-            n
-        ), "Double déclenchement à cette date"
+        assert not manager_structure_moderation_task.should_trigger(n), (
+            "Double déclenchement à cette date"
+        )
 
 
 @pytest.mark.parametrize(
@@ -375,14 +375,14 @@ def test_simpler_manager_structure_moderation_task_should_trigger(
 def test_ServiceEditorTask_should_trigger(service_status):
     structure = make_structure()
     user = make_user(structure=structure)
-    with freeze_time("2024-01-10") as d:
-        make_service(
-            status=service_status,
-            update_frequency=UpdateFrequency.EVERY_MONTH,
-            creation_date=d,
-            modification_date=d,
-            contact_email=user.email,
-        )
+    old_date = timezone.datetime.strptime("2024-10-14", "%Y-%m-%d")
+    make_service(
+        status=service_status,
+        update_frequency=UpdateFrequency.EVERY_MONTH,
+        creation_date=old_date,
+        modification_date=old_date,
+        contact_email=user.email,
+    )
 
     with freeze_time("2024-10-14"):
         n = Notification(
@@ -394,26 +394,26 @@ def test_ServiceEditorTask_should_trigger(service_status):
         assert not ServiceEditorsTask.should_trigger(n), "Pas de déclenchement attendu"
 
     with freeze_time("2024-10-14"):
-        assert not ServiceEditorsTask.should_trigger(
-            n
-        ), "Pas de déclenchement attendu hors mercredis"
+        assert not ServiceEditorsTask.should_trigger(n), (
+            "Pas de déclenchement attendu hors mercredis"
+        )
 
     with freeze_time("2024-10-16"):
-        assert not ServiceEditorsTask.should_trigger(
-            n
-        ), "Déclenchement seulement attendu le premier mercredi du mois"
+        assert not ServiceEditorsTask.should_trigger(n), (
+            "Déclenchement seulement attendu le premier mercredi du mois"
+        )
 
         # Le déclenchement se base en partie sur la date de Maj
         n.save()
 
     with freeze_time("2024-10-02"):
         n.updated_at = timezone.now() - relativedelta(days=1)
-        assert ServiceEditorsTask.should_trigger(
-            n
-        ), "Devrait se déclencer le 1er mercredi du mois"
+        assert ServiceEditorsTask.should_trigger(n), (
+            "Devrait se déclencer le 1er mercredi du mois"
+        )
 
     with freeze_time("2024-10-02"):
         n.updated_at = timezone.now()
-        assert not ServiceEditorsTask.should_trigger(
-            n
-        ), "Double déclenchement à cette date"
+        assert not ServiceEditorsTask.should_trigger(n), (
+            "Double déclenchement à cette date"
+        )
