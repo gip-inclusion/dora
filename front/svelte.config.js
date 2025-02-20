@@ -50,6 +50,7 @@ const config = {
         "font-src": ["self"],
         "frame-src": [
           "self",
+          "https://metabase.dora.inclusion.beta.gouv.fr",
           "https://cse.google.com",
           "https://syndicatedsearch.goog",
         ],

@@ -3,3 +3,6 @@
 django-extensions==3.2.3
 django-silk==5.3.2
 pre-commit==4.1.0
+
+# Génération du schéma de données
+pygraphviz==1.14
