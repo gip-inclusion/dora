@@ -15,6 +15,7 @@ class TaskType(models.TextChoices):
     USERS_WITHOUT_STRUCTURE = "users_without_structure"
     USER_ACCOUNT_DELETION = "user_account_deletion"
     MANAGER_STRUCTURE_MODERATION = "manager_structure_moderation"
+    SERVICE_EDITORS = "service_editors"
 
     ...
 

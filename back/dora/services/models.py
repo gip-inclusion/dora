@@ -154,7 +154,10 @@ class ServiceSource(EnumModel):
 
 
 class UpdateFrequency(models.TextChoices):
-    EVERY_MONTH = "tous-les-mois", "Souvent, je veux recevoir une alerte tous les mois"
+    EVERY_MONTH = (
+        "tous-les-mois",
+        "Très souvent, je veux recevoir une alerte tous les mois",
+    )
     EVERY_3_MONTHS = (
         "tous-les-3-mois",
         "Régulièrement, je veux recevoir une alerte tous les 3 mois",
@@ -165,7 +168,11 @@ class UpdateFrequency(models.TextChoices):
     )
     EVERY_12_MONTHS = (
         "tous-les-12-mois",
-        "Rarement, je veux recevoir une alerte tous les 12 mois",
+        "Très rarement, je veux recevoir une alerte tous les 12 mois",
+    )
+    EVERY_16_MONTHS = (
+        "tous-les-16-mois",
+        "Presque jamais, je veux recevoir une alerte tous les 16 mois",
     )
     NEVER = "jamais", "Jamais, les informations n’évoluent jamais"
 
@@ -197,6 +204,10 @@ class ServiceManager(models.Manager):
                     update_frequency=UpdateFrequency.EVERY_12_MONTHS,
                     modification_date__lte=timezone.now() - relativedelta(months=12),
                 )
+                | Q(
+                    update_frequency=UpdateFrequency.EVERY_16_MONTHS,
+                    modification_date__lte=timezone.now() - relativedelta(months=16),
+                )
             )
         )
 
@@ -208,6 +219,18 @@ class ServiceManager(models.Manager):
 
     def archived(self):
         return self.filter(status=ServiceStatus.ARCHIVED)
+
+    def update_mandatory(self):
+        return self.published().filter(
+            modification_date__lte=timezone.now()
+            - timedelta(days=settings.NUM_DAYS_BEFORE_MANDATORY_SERVICE_UPDATE),
+        )
+
+    def expired_drafts(self):
+        return self.draft().filter(
+            creation_date__lte=timezone.now()
+            - timedelta(days=settings.NUM_DAYS_BEFORE_DRAFT_SERVICE_NOTIFICATION),
+        )
 
 
 def get_diffusion_zone_details_display(

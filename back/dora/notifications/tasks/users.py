@@ -5,6 +5,8 @@ from django.utils import timezone
 
 from dora.notifications.enums import TaskType
 from dora.notifications.models import Notification
+from dora.services.emails import send_service_notification
+from dora.services.models import Service, ServiceModificationHistoryItem
 from dora.structures.models import Structure
 from dora.users.emails import (
     send_account_deletion_notification,
@@ -196,6 +198,58 @@ class ManagerStructureModerationTask(Task):
         send_structure_awaiting_moderation(notification.owner_user)
 
 
+class ServiceEditorsTask(Task):
+    """
+    Recensement des utilisateurs étant :
+        - référents ou éditeurs de services
+        - pour les services en attente de modération ou encore sous forme de brouillons
+    pour permettre des rappels concernant le domaine des services.
+    Malgré le nom, on recherche bien des utilisateurs pour utiliser leur e-mail.
+    """
+
+    @classmethod
+    def task_type(cls):
+        return TaskType.SERVICE_EDITORS
+
+    @classmethod
+    def candidates(cls):
+        # Liste de tous les services impactés
+        services = (
+            Service.objects.expired_drafts() | Service.objects.update_advised()
+        ).distinct()
+        # Extraction de tous les e-mails reliés à ces services :
+        # - e-mails des contacts référents
+        services_with_referent = services.exclude(contact_email="").values_list(
+            "contact_email"
+        )
+        referents_emails = User.objects.filter(
+            email__in=services_with_referent
+        ).values_list("email", flat=True)
+        # - e-mails des utilisateurs éditeurs des services
+        editors_emails = ServiceModificationHistoryItem.objects.filter(
+            service__in=services
+        ).values_list("user__email", flat=True)
+        # - déduplication des 2 listes, fusion et récupération des e-mails = personnes à notifier
+        return User.objects.filter(
+            email__in=(list(editors_emails) + list(referents_emails))
+        ).distinct()
+
+    @classmethod
+    def should_trigger(cls, notification: Notification) -> bool:
+        now = timezone.now()
+        # tous les premiers mercredis du mois
+        return (
+            now.isoweekday() == 3
+            and now.day <= 7
+            and notification.updated_at.date() < now.date()
+        )
+
+    @classmethod
+    def process(cls, notification: Notification):
+        send_service_notification(notification.owner_user)
+
+
 Task.register(UsersWithoutStructureTask)
 Task.register(UserAccountDeletionTask)
 Task.register(ManagerStructureModerationTask)
+Task.register(ServiceEditorsTask)
