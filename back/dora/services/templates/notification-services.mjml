@@ -40,18 +40,17 @@
 
     <mj-spacer height="20px" />
 
-    <p background-color="#e0e0e0" border-radius="8px">
-      <mj-text font-weight="bold">💡 Boîte à outils :</mj-text>
-      <mj-raw>
-        <ul>
-          <li><a href="{{ help_update_services_url }}">Comment actualiser vos services ?</a></li>
-          <li><a href="{{ help_statuses_url }}">Comprendre les statuts d’actualisation</a></li>
-        </ul>
-      </mj-raw>
-    </p>
-
-    <mj-spacer height="20px" />
   {% endif%}
+
+  <p background-color="#e0e0e0" border-radius="8px">
+    <mj-text font-weight="bold">💡 Boîte à outils :</mj-text>
+    <mj-raw>
+      <ul>
+        <li><a href="{{ help_update_services_url }}">Comment actualiser vos services ?</a></li>
+      </ul>
+    </mj-raw>
+  </p>
+  <mj-spacer height="20px" />
 
   {% if draft_services %}
     <mj-text font-weight="bold">📝 Vos services en brouillon</mj-text>
