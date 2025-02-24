@@ -113,13 +113,3 @@
     clearTimeout(timeoutFn);
   });
 </script>
-
-<style lang="postcss">
-  @reference "../../../app.css";
-
-  :global(.tally-popup) {
-    @media print {
-      display: none !important;
-    }
-  }
-</style>
