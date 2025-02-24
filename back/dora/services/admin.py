@@ -10,6 +10,7 @@ from .models import (
     CoachOrientationMode,
     ConcernedPublic,
     Credential,
+    FranceTravailOrientableService,
     FundingLabel,
     LocationKind,
     Requirement,
@@ -191,6 +192,13 @@ class SavedSearchAdmin(admin.ModelAdmin):
     ordering = ["-creation_date"]
 
 
+class FranceTravailOrientableServiceAdmin(admin.ModelAdmin):
+    list_display = ("created_at", "structure", "service")
+    search_fields = ("structure__name", "service__name")
+    list_filter = ("created_at", "structure")
+    raw_id_fields = ["structure", "service"]
+
+
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServiceModel, ServiceModelAdmin)
 admin.site.register(AccessCondition, CustomizableChoiceAdmin)
@@ -210,3 +218,5 @@ admin.site.register(ServiceKind, EnumAdmin)
 admin.site.register(ServiceSubCategory, EnumAdmin)
 admin.site.register(ServiceSource, EnumAdmin)
 admin.site.register(FundingLabel, EnumAdmin)
+
+admin.site.register(FranceTravailOrientableService, FranceTravailOrientableServiceAdmin)
