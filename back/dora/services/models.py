@@ -2,11 +2,13 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
+from data_inclusion.schema import Typologie
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.core.cache import cache
+from django.core.exceptions import ValidationError
 from django.db.models import CharField, Q, URLField
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -836,3 +838,32 @@ class SavedSearch(models.Model):
             if r["publication_date"] is not None
             and datetime.fromisoformat(r["publication_date"]).date() > cutoff_date
         ]
+
+
+class FranceTravailOrientableService(models.Model):
+    """
+    Certaines agences FT vont pouvoir orienter certains services,
+    contenus dans une "white list" qui sera gérée par l'équipe DORA.
+    C'est un cas marginal : il est préférable d'externaliser cette donnée
+    plutôt que de la reporter sur le modèle `Service`.
+    """
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    structure = models.ForeignKey(
+        Structure,
+        on_delete=models.CASCADE,
+        related_name="ft_agencies_can_use_orientation",
+    )
+    service = models.ForeignKey(
+        Service, on_delete=models.CASCADE, related_name="orientable_by_ft"
+    )
+
+    def clean(self):
+        if self.structure.typology != Typologie.FT:
+            raise ValidationError(
+                f"La structure {self.structure} n'est pas une agence France Travail"
+            )
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
