@@ -14,6 +14,7 @@
   import type { PageData } from "./$types";
   import { videoIcon } from "$lib/icons";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
+  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
 
   export let data: PageData;
 
@@ -184,6 +185,8 @@
     </div>
   </div>
 </CenteredGrid>
+
+<MonRecapPopup />
 
 <style lang="postcss">
   @reference "../app.css";
