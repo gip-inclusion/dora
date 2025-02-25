@@ -53,6 +53,8 @@ const config = {
           "https://metabase.dora.inclusion.beta.gouv.fr",
           "https://cse.google.com",
           "https://syndicatedsearch.goog",
+          "https://tally.so",
+          "https://tube.numerique.gouv.fr",
         ],
         "img-src": [
           "self",
