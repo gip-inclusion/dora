@@ -21,7 +21,7 @@
 {#if browser && shouldDisplayMonRecapForm}
   <TallyPopup
     formId={TallyFormId.NOTEBOOK_ORDER_FORM_ID}
-    timeoutSeconds={3}
+    timeoutSeconds={30}
     minDaysBetweenDisplays={1}
     on:submit={() => {
       localStorage.setItem(monRecapTallyFormCompletedKey, dayjs().toString());
