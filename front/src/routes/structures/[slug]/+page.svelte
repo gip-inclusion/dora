@@ -19,6 +19,7 @@
   members={data.members}
   putativeMembers={data.putativeMembers}
   structuresOptions={data.structuresOptions}
+  onRefresh={handleRefresh}
 />
 <div class="mb-s64" />
 
