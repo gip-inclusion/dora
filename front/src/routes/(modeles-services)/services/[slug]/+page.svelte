@@ -13,6 +13,7 @@
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
   import type { Service } from "$lib/types";
+  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
 
   export let data: PageData;
 
@@ -65,5 +66,9 @@
       formId={TallyFormId.SERVICE_CREATION_FORM_ID}
       timeoutSeconds={3}
     />
+  {/if}
+
+  {#if browser && !data.service.canWrite}
+    <MonRecapPopup />
   {/if}
 {/if}

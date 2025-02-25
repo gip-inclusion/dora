@@ -18,6 +18,8 @@
   import { userInfo } from "$lib/utils/auth";
   import { userPreferences } from "$lib/utils/preferences";
   import ServicesToUpdateNotice from "./structures/[slug]/services/services-to-update-notice.svelte";
+  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
+
   export let data: PageData;
 
   let isVideoModalOpen = false;
@@ -204,6 +206,8 @@
     </div>
   </div>
 </CenteredGrid>
+
+<MonRecapPopup />
 
 <style lang="postcss">
   @reference "../app.css";
