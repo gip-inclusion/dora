@@ -19,6 +19,7 @@
   import ResultCount from "./result-count.svelte";
   import SearchResults from "./search-results.svelte";
   import MesAidesDialog from "./mes-aides-dialog.svelte";
+  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
 
   export let data: PageData;
 
@@ -220,3 +221,5 @@
 {#if showMesAidesDialog}
   <MesAidesDialog />
 {/if}
+
+<MonRecapPopup />

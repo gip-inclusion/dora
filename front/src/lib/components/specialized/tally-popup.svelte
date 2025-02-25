@@ -58,7 +58,7 @@
           const daysElapsed = dayjs().diff(lastSubmitted, "day");
           return minDaysBetweenDisplays == null
             ? false
-            : daysElapsed > MIN_DAYS_BETWEEN_DISPLAYS;
+            : daysElapsed > minDaysBetweenDisplays;
         }
       }
     }
@@ -113,13 +113,3 @@
     clearTimeout(timeoutFn);
   });
 </script>
-
-<style lang="postcss">
-  @reference "../../../app.css";
-
-  :global(.tally-popup) {
-    @media print {
-      display: none !important;
-    }
-  }
-</style>
