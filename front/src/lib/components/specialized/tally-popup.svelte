@@ -58,7 +58,7 @@
           const daysElapsed = dayjs().diff(lastSubmitted, "day");
           return minDaysBetweenDisplays == null
             ? false
-            : daysElapsed > MIN_DAYS_BETWEEN_DISPLAYS;
+            : daysElapsed > minDaysBetweenDisplays;
         }
       }
     }
