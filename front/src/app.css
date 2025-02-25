@@ -360,6 +360,6 @@
   .tally-popup {
     @media print {
       display: none !important;
-    }  
+    }
   }
 }
