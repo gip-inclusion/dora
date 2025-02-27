@@ -265,6 +265,8 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     update_status = serializers.SerializerMethodField()
 
+    is_orientable_ft_service = serializers.SerializerMethodField()
+
     class Meta:
         model = Service
 
@@ -347,6 +349,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "update_frequency_display",
             "update_status",
             "use_inclusion_numerique_scheme",
+            "is_orientable_ft_service",
         ]
         read_only_fields = [
             "city",
@@ -472,6 +475,9 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_update_status(self, object):
         return object.get_update_status()
+
+    def get_is_orientable_ft_service(self, obj):
+        return obj.is_orientable_ft_service()
 
 
 class ServiceModelSerializer(ServiceSerializer):

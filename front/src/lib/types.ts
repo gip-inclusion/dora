@@ -485,6 +485,7 @@ export interface Service {
   updateFrequency: UpdateFrequency | null;
   updateFrequencyDisplay: string | null;
   updateStatus: ServiceUpdateStatus;
+  isOrientableFtService:boolean;
 }
 
 export interface ShortService {

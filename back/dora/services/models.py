@@ -2,11 +2,13 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
+from data_inclusion.schema import Typologie
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.core.cache import cache
+from django.core.exceptions import ValidationError
 from django.db.models import CharField, Q, URLField
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -633,6 +635,11 @@ class Service(ModerationMixin, models.Model):
             self.address1, self.address2, self.postal_code, self.city
         )
 
+    def is_orientable_ft_service(self) -> bool:
+        # indique si le service est inclus dans la "white-list" des services FT orientables
+        # voir FranceTravailOrientableService
+        return bool(self.orientable_ft_services.count())
+
 
 class ServiceModelManager(models.Manager):
     def get_queryset(self):
@@ -836,3 +843,38 @@ class SavedSearch(models.Model):
             if r["publication_date"] is not None
             and datetime.fromisoformat(r["publication_date"]).date() > cutoff_date
         ]
+
+
+class FranceTravailOrientableService(models.Model):
+    """
+    Certaines agences FT vont pouvoir rendre orientables certains de leurs services,
+    contenus dans une "white list" qui sera gérée par l'équipe DORA.
+    C'est une fonctionnalité (encore) marginale et dédiée à FT :
+    il est préférable d'externaliser cette donnée plutôt que de la reporter sur le modèle `Service`.
+    """
+
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name="date de création"
+    )
+    structure = models.ForeignKey(
+        Structure,
+        on_delete=models.CASCADE,
+        related_name="orientable_ft_services_agencies",
+    )
+    service = models.ForeignKey(
+        Service, on_delete=models.CASCADE, related_name="orientable_ft_services"
+    )
+
+    class Meta:
+        verbose_name = "service France Travail orientable"
+        verbose_name_plural = "services France Travail orientables"
+
+    def clean(self):
+        if self.structure.typology != Typologie.FT:
+            raise ValidationError(
+                f"La structure {self.structure} n'est pas une agence France Travail"
+            )
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)

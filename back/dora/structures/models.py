@@ -194,7 +194,7 @@ class Structure(ModerationMixin, models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Les antennes peuvent avoir un Siret null
     siret = models.CharField(
-        verbose_name="Siret",
+        verbose_name="SIRET",
         max_length=14,
         validators=[validate_siret],
         blank=True,
@@ -206,7 +206,7 @@ class Structure(ModerationMixin, models.Model):
     )
 
     code_safir_pe = models.CharField(
-        verbose_name="Code Safir Pole Emploi",
+        verbose_name="code SAFIR France Travail",
         max_length=5,
         validators=[validate_safir],
         unique=True,
