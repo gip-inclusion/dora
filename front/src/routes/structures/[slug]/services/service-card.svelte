@@ -4,7 +4,7 @@
   import FavoriteIcon from "$lib/components/specialized/favorite-icon.svelte";
   import ServiceStateUpdateSelect from "$lib/components/specialized/services/service-state-update-select.svelte";
   import SynchronizedIcon from "$lib/components/specialized/services/synchronized-icon.svelte";
-  import UpdateStatusIcon from "$lib/components/specialized/services/update-status-icon.svelte";
+  import UpdateNeededIcon from "$lib/components/specialized/services/update-needed-icon.svelte";
   import type { ServicesOptions, ShortService } from "$lib/types";
   import ServiceButtonMenu from "./service-button-menu.svelte";
 
@@ -70,24 +70,16 @@
       class="gap-s10 border-t-gray-03 px-s20 py-s12 flex min-h-[100px] flex-col justify-center border-t"
     >
       <div class="text-f14 text-gray-text flex items-center">
-        {#if service.status !== "PUBLISHED" || service.updateStatus === "NOT_NEEDED"}
-          <span class="mr-s8">
-            <UpdateStatusIcon updateStatus="NOT_NEEDED" small />
-          </span>
+        <span class="mr-s8">
+          <UpdateNeededIcon updateNeeded={service.updateNeeded} small />
+        </span>
+        {#if service.status !== "PUBLISHED" || service.updateNeeded}
           <RelativeDateLabel
             date={service.modificationDate}
             prefix="Actualisé"
           />
-        {:else if service.updateStatus === "NEEDED"}
-          <span class="mr-s8">
-            <UpdateStatusIcon updateStatus="NEEDED" small />
-          </span>
+        {:else}
           <span class="font-bold">Actualisation conseillée</span>
-        {:else if service.updateStatus === "REQUIRED"}
-          <span class="mr-s8">
-            <UpdateStatusIcon updateStatus="REQUIRED" small />
-          </span>
-          <strong>Actualisation requise</strong>
         {/if}
       </div>
 
