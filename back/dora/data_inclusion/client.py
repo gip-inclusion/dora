@@ -92,9 +92,9 @@ class DataInclusionClient:
     def retrieve_service(self, source: str, id: str) -> Optional[dict]:
         url = self.base_url.copy()
         url = url / "services" / source / id
-        response = self._get(url)
 
         try:
+            response = self._get(url)
             return response.json()
         except requests.HTTPError:
             return None
