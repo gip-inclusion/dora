@@ -20,6 +20,7 @@ events AS (
         src.is_structure_member,
         src.user_kind,
         src.structure_department,
+        CAST(src.structure_id AS text),
         src.user_id,
         FALSE             AS is_di
 
@@ -43,6 +44,7 @@ di_events AS (
         AS is_structure_member,
         src.user_kind,
         src.structure_department,
+        CAST(src.structure_id AS text),
         src.user_id,
         TRUE            AS is_di
     FROM src_di_events AS src
