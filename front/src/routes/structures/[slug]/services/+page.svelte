@@ -13,7 +13,7 @@
 <List
   servicesOptions={data.servicesOptions}
   serviceStatus={data.serviceStatus}
-  updateStatus={data.updateStatus}
+  updateNeeded={data.updateNeeded}
   structure={$structure}
   total={$structure.services.length}
   onRefresh={handleRefresh}

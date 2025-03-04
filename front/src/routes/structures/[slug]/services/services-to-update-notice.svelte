@@ -1,68 +1,45 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import { markServicesAsUpToDate } from "$lib/requests/services";
   import {
-    addIgnoredServicesToUpdate,
-    updateServicesFromModel,
-  } from "$lib/requests/services";
-  import type { StructureService } from "$lib/types";
-  import {
-    hideModelNotice,
-    isModelNoticeHidden,
-  } from "$lib/utils/service-updates-via-model";
+    hideNotice,
+    isNoticeHidden,
+  } from "$lib/utils/service-update-notices";
+
+  type ServiceToUpdate = { name: string; slug: string };
 
   export let structureSlug: string;
-  export let services: StructureService[] = [];
+  export let servicesToUpdate: ServiceToUpdate[] = [];
   export let requesting = false;
   export let onRefresh: () => void;
 
   const LIST_LENGTH = 3;
+
   let showAll = false;
-  $: servicesToUpdate = services.filter(({ modelChanged }) => modelChanged);
 
   $: showNotice =
-    servicesToUpdate.length && !isModelNoticeHidden(structureSlug);
-  $: updatedModels = new Set(
-    servicesToUpdate.map(({ modelName }) => modelName)
-  );
+    servicesToUpdate.length && !isNoticeHidden("update", structureSlug);
 
-  async function doUpdate(selectedServices: StructureService[]) {
+  async function handleMarkServicesAsUpToDate(
+    selectedServices: ServiceToUpdate[]
+  ) {
     requesting = true;
-    await updateServicesFromModel(selectedServices);
+    await markServicesAsUpToDate(selectedServices);
     await onRefresh();
     requesting = false;
-  }
-
-  async function reject(modelSlug: string, serviceSlug: string) {
-    await addIgnoredServicesToUpdate([{ modelSlug, serviceSlug }]);
-    await onRefresh();
-  }
-  async function rejectAll() {
-    await addIgnoredServicesToUpdate(
-      servicesToUpdate.map((serv) => ({
-        modelSlug: serv.model,
-        serviceSlug: serv.slug,
-      }))
-    );
-    await onRefresh();
   }
 </script>
 
 {#if showNotice}
   <Notice
-    title="Il existe des mises à jour pour {servicesToUpdate.length} de vos services"
-    type="info"
+    title="Un ou plusieurs services n’ont pas été mis à jour récemment"
+    type="warning"
   >
     <div class="w-full">
       <p class="text-f14 block">
-        Suite à la mise à jour
-        {updatedModels.size > 1 ? " des modèles " : " du modèle "}
-        {Array.from(updatedModels)
-          .map((name) => `"${name}"`)
-          .join(", ")}, une mise à jour peut être réalisée sur
-        {servicesToUpdate.length > 1
-          ? "les services suivants"
-          : "le service suivant"} :
+        Actualisez-les pour que vos services restent visibles et accessibles à
+        votre réseau.
       </p>
       <ul class="ml-s16 block list-disc">
         {#each servicesToUpdate as service, index}
@@ -79,17 +56,13 @@
                 noBackground
                 noPadding
                 disabled={requesting}
-                label="Mettre à jour"
-                on:click={() => doUpdate([service])}
+                label="Marquer comme à jour"
+                on:click={() => handleMarkServicesAsUpToDate([service])}
               />
-              <Button
-                extraClass="ml-s10 text-marianne-red text-f14! p-s0!"
-                noBackground
-                noPadding
-                disabled={requesting}
-                label="Refuser"
-                on:click={() => reject(service.model, service.slug)}
-              />
+              <a
+                href="/services/{service.slug}/editer"
+                class="text-france-blue ml-s10">Modifier</a
+              >
             </li>
           {/if}
         {/each}
@@ -111,22 +84,16 @@
 
     <div class="mt-s16 w-full">
       <Button
-        label="Tout mettre à jour"
+        label="Accepter pour tous les services"
         extraClass="py-s8 text-f14! px-s12!"
-        on:click={() => doUpdate(servicesToUpdate)}
-      />
-      <Button
-        secondary
-        extraClass="py-s8 text-f14! px-s12!"
-        label="Tout refuser"
-        on:click={rejectAll}
+        on:click={() => handleMarkServicesAsUpToDate(servicesToUpdate)}
       />
       <Button
         secondary
         extraClass="py-s8 text-f14! px-s12!"
         label="Cacher cette fenêtre"
         on:click={() => {
-          hideModelNotice(structureSlug);
+          hideNotice("update", structureSlug);
           showNotice = false;
         }}
       />

@@ -364,6 +364,30 @@ class ServiceViewSet(
 
         return Response(status=204)
 
+    @action(
+        detail=False,
+        methods=["POST"],
+        url_path="mark-as-up-to-date",
+        permission_classes=[permissions.IsAuthenticated],
+    )
+    def mark_services_as_up_to_date(self, request):
+        service_slugs = self.request.data.get("services")
+
+        user = self.request.user
+        services = Service.objects.filter(slug__in=service_slugs)
+
+        # Vérification des permissions
+        for service in services:
+            if not service.can_write(user):
+                raise PermissionDenied
+
+        for service in services:
+            service.last_editor = self.request.user
+            service.modification_date = timezone.now()
+            service.save()
+
+        return Response(status=204)
+
 
 class BookmarkViewSet(
     viewsets.GenericViewSet,
