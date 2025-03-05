@@ -29,7 +29,7 @@ if [ ${#missing_vars[@]} -ne 0 ]; then
 fi
 
 if command -v dbclient-fetcher &> /dev/null; then
-    dbclient-fetcher pgsql 15
+    dbclient-fetcher pgsql
 fi
 
 # Generate the list of tables to be exported
