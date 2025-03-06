@@ -2,7 +2,7 @@ import json
 from io import StringIO
 
 import requests
-from data_inclusion.schema import Typologie
+from data_inclusion.schema import TypologieStructure
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
@@ -158,7 +158,7 @@ class Command(BaseCommand):
                     mod |= self.maybe_update(
                         structure,
                         "typology",
-                        Typologie.FT.value,
+                        TypologieStructure.FT.value,
                         existing,
                     )
                     mod |= self.maybe_update(
@@ -242,7 +242,7 @@ class Command(BaseCommand):
                 except KeyError as err:
                     self.stdout.write(
                         self.style.ERROR(
-                            f'Missing field {err} for {agency.get("code")} - {agency.get("libelleEtendu")}'
+                            f"Missing field {err} for {agency.get('code')} - {agency.get('libelleEtendu')}"
                         )
                     )
                     print(agency)
@@ -250,7 +250,7 @@ class Command(BaseCommand):
                 except Exception as err:
                     self.stdout.write(
                         self.style.ERROR(
-                            f'Exception for {agency.get("code")} - {agency.get("libelleEtendu")}'
+                            f"Exception for {agency.get('code')} - {agency.get('libelleEtendu')}"
                         )
                     )
                     print(err)
@@ -260,8 +260,8 @@ class Command(BaseCommand):
                 output = self.tmpout.getvalue()
                 if len(output):
                     self.stdout.write(
-                        f'{chalk.bold(agency.get("libelleEtendu"))} (siret : {agency.get("siret")}, '
-                        f'safir : {agency.get("codeSafir")})'
+                        f"{chalk.bold(agency.get('libelleEtendu'))} (siret : {agency.get('siret')}, "
+                        f"safir : {agency.get('codeSafir')})"
                     )
                     self.stdout.write(output)
 

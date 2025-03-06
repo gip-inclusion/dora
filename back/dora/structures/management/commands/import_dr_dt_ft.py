@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 
-from data_inclusion.schema import Typologie
+from data_inclusion.schema import TypologieStructure
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
@@ -29,7 +29,7 @@ class Command(BaseCommand):
         structure.source = SOURCE
         structure.creator = BOT_USER
         structure.last_editor = BOT_USER
-        structure.typology = Typologie.FT.value
+        structure.typology = TypologieStructure.FT.value
         try:
             structure.save()
         except Exception as ex:
