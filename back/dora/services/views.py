@@ -1,5 +1,6 @@
 from datetime import timedelta
 from operator import itemgetter
+from urllib.parse import unquote
 
 import requests
 from django.conf import settings
@@ -726,7 +727,7 @@ def service_di(request, di_id: str):
 
     The output format matches the ServiceSerializer.
     """
-
+    di_id = unquote(di_id)
     source_di, di_service_id = di_id.split("--")
 
     di_client = data_inclusion.di_client_factory()
