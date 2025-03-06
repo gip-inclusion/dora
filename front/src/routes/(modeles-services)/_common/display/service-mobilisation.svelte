@@ -19,8 +19,9 @@
   export let handleOrientationFormClickEvent: (event: any) => void;
 
   $: isOrientableWithDoraForm =
-    service.isOrientable &&
-    service.coachOrientationModes?.includes("formulaire-dora");
+    (service.isOrientable &&
+      service.coachOrientationModes?.includes("formulaire-dora")) ||
+    service.isOrientableFtService;
   $: hasExternalForm = service.coachOrientationModes?.includes(
     "completer-le-formulaire-dadhesion"
   );
