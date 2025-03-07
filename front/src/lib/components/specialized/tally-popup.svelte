@@ -10,6 +10,7 @@
     lastSubmitted: string;
   }
   type HiddenFields = {
+    source?: string;
     user: "offreur" | "chercheur";
   };
 

@@ -16,13 +16,16 @@
       MON_RECAP_DEPARTMENTS.includes(struct.department)
     ) &&
     !localStorage.getItem(monRecapTallyFormCompletedKey);
+
+  const hiddenFields = { source: "dora" };
 </script>
 
 {#if browser && shouldDisplayMonRecapForm}
   <TallyPopup
     formId={TallyFormId.NOTEBOOK_ORDER_FORM_ID}
-    timeoutSeconds={30}
+    timeoutSeconds={12}
     minDaysBetweenDisplays={1}
+    {hiddenFields}
     on:submit={() => {
       localStorage.setItem(monRecapTallyFormCompletedKey, dayjs().toString());
       shouldDisplayMonRecapForm = false;
