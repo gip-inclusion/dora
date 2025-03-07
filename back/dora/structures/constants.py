@@ -1,4 +1,4 @@
-from data_inclusion.schema import Typologie
+from data_inclusion.schema import TypologieStructure
 
 """
 Valeurs métiers communes à l'app 'dora.structure'.
@@ -8,11 +8,16 @@ autant que possible les énumérations du schéma D·I.
 
 
 # On indique ici les typologies qui ne doivent pas être modifiables par l'utilisateur.
-RESTRICTED_STRUCTURE_TYPOLOGIES = (Typologie.FT,)
+RESTRICTED_STRUCTURE_TYPOLOGIES = (TypologieStructure.FT,)
 
 # On indique ici les labels nationaux faisant l'objet d'une curation
 # et de restrictions particulières (FT, CapEmploi, partenaires régionaux).
 # Note / TODO :
 # ce sont des `EnumModel`, donc pas de typage.
 # Il serait intéressant de les avoir sous forme de fixture.
-RESTRICTED_NATIONAL_LABELS = ("adie", "cap-emploi-reseau-cheops", "conseil-departemental", "france-travail")
+RESTRICTED_NATIONAL_LABELS = (
+    "adie",
+    "cap-emploi-reseau-cheops",
+    "conseil-departemental",
+    "france-travail",
+)

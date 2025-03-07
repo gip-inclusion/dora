@@ -2,7 +2,7 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
-from data_inclusion.schema import Typologie
+from data_inclusion.schema import TypologieStructure
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -870,7 +870,7 @@ class FranceTravailOrientableService(models.Model):
         verbose_name_plural = "services France Travail orientables"
 
     def clean(self):
-        if self.structure.typology != Typologie.FT:
+        if self.structure.typology != TypologieStructure.FT:
             raise ValidationError(
                 f"La structure {self.structure} n'est pas une agence France Travail"
             )

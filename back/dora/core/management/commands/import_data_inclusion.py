@@ -2,7 +2,7 @@ import json
 import logging
 
 import requests
-from data_inclusion.schema import Typologie
+from data_inclusion.schema import TypologieStructure
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.management.base import BaseCommand
@@ -180,7 +180,7 @@ class Command(BaseCommand):
                 structure.short_desc = clean_field(s["presentation_resume"], 280, "")
                 typo_di = s["typologie"]
                 try:
-                    typologie = Typologie[typo_di]
+                    typologie = TypologieStructure[typo_di]
                     structure.typology = typologie.value
                 except KeyError:
                     logger.warning(

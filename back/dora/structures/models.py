@@ -1,7 +1,7 @@
 import uuid
 from typing import Optional
 
-from data_inclusion.schema import Typologie
+from data_inclusion.schema import TypologieStructure
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
@@ -218,7 +218,9 @@ class Structure(ModerationMixin, models.Model):
     name = models.CharField(verbose_name="Nom", max_length=255, db_index=True)
 
     typology = models.CharField(
-        choices=zip([t.value for t in Typologie], [t.label for t in Typologie]),
+        choices=zip(
+            [t.value for t in TypologieStructure], [t.label for t in TypologieStructure]
+        ),
         max_length=100,
         default="",
     )

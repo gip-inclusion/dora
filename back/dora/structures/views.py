@@ -1,4 +1,4 @@
-from data_inclusion.schema import Typologie
+from data_inclusion.schema import TypologieStructure
 from django.db import transaction
 from django.db.models.query_utils import Q
 from django.shortcuts import get_object_or_404
@@ -362,7 +362,7 @@ def siret_was_claimed(request, siret):
 def options(request):
     labels = StructureNationalLabel.objects.all().order_by("label")
     result = {
-        "typologies": Typologie.as_dict_list(),
+        "typologies": TypologieStructure.as_dict_list(),
         "national_labels": [{"value": c.value, "label": c.label} for c in labels],
         "sources": [
             {"value": c.value, "label": c.label}

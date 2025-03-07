@@ -1,5 +1,5 @@
 import pytest
-from data_inclusion.schema import Typologie
+from data_inclusion.schema import TypologieStructure
 from django.contrib.gis.geos import Point
 from model_bakery import baker
 
@@ -59,7 +59,7 @@ def test_structures_serialization_exemple(
 ):
     # Example adapté de la doc data·inclusion :
     # https://www.data.inclusion.beta.gouv.fr/schemas-de-donnees-de-loffre/schema-des-structures-et-services-dinsertion
-    typology = Typologie.ASSO
+    typology = TypologieStructure.ASSO
     source = StructureSource.objects.get(value="solidagregateur")
     parent = make_structure()
 
