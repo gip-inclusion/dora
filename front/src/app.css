@@ -355,4 +355,10 @@
   @page {
     size: 26.25cm 37.125cm; /* A4 * 1.25, afin de réduire la taille de l'impression */
   }
+
+  .tally-popup {
+    @media print {
+      display: none !important;
+    }
+  }
 }
