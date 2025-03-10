@@ -8,6 +8,7 @@ class ServiceStatus(models.TextChoices):
     ARCHIVED = "ARCHIVED", "Archived"
 
 
+# TODO: supprimer ce champ
 class ServiceUpdateStatus(models.TextChoices):
     NEEDED = "NEEDED", "Actualisation conseillée"
     NOT_NEEDED = "NOT_NEEDED", "Service à jour"

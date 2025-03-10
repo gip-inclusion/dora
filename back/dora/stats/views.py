@@ -109,7 +109,7 @@ def log_event(request):
 
     service_data = {
         "service": service,
-        "update_status": service.get_update_status() if service else "",
+        "update_needed": service.get_update_needed() if service else "",
         "status": service.status if service else "",
         "service_source": service.source.value if service and service.source else "",
         "search_view": search_view,
