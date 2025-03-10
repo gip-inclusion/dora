@@ -313,6 +313,7 @@ export type UpdateFrequency =
   | "tous-les-3-mois"
   | "tous-les-6-mois"
   | "tous-les-12-mois"
+  | "tous-les-16-mois"
   | "jamais";
 
 export interface FundingLabel {
