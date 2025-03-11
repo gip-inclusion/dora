@@ -11,7 +11,7 @@
   id="service-header"
   class="gap-s16 print:gap-s0 relative lg:flex-row-reverse lg:justify-between"
 >
-  <div class="mb-s48 print:mb-s0">
+  <div class="mb-s24 print:mb-s0">
     <Breadcrumb
       {service}
       structure={service.structureInfo}
