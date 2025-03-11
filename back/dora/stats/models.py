@@ -125,11 +125,16 @@ class AbstractServiceEvent(AbstractAnalyticsEvent):
         blank=True,
         null=True,
     )
+    # TODO: supprimer ce champ
     update_status = models.CharField(
         max_length=10,
         choices=ServiceUpdateStatus.choices,
         verbose_name="Statut d'actualisation",
         blank=True,
+    )
+    update_needed = models.BooleanField(
+        verbose_name="Mise à jour nécessaire",
+        default=False,
     )
     status = models.CharField(
         max_length=20,

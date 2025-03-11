@@ -40,8 +40,10 @@ class UserInfoSerializer(serializers.ModelSerializer):
         if not user or not user.is_authenticated:
             qs = Structure.objects.none()
         else:
-            qs = Structure.objects.filter(membership__user=user)
-        return StructureListSerializer(qs, many=True).data
+            qs = Structure.objects.filter(membership__user=user).prefetch_related(
+                "services"
+            )
+        return StructureListSerializer(qs, many=True, context={"user": user}).data
 
     def get_pending_structures(self, user):
         if not user or not user.is_authenticated:
@@ -51,7 +53,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
                 putative_membership__user=user,
                 putative_membership__invited_by_admin=False,
             )
-        return StructureListSerializer(qs, many=True).data
+        return StructureListSerializer(qs, many=True, context={"user": user}).data
 
     def get_bookmarks(self, user):
         if not user or not user.is_authenticated:

@@ -8,17 +8,15 @@
   import { copyIcon2 } from "$lib/icons";
   import type { Service, ServicesOptions } from "$lib/types";
   import { token } from "$lib/utils/auth";
-  import ServiceUpdateStatusAsContributor from "./service-update-status-as-contributor.svelte";
-  import ServiceUpdateStatusAsReader from "./service-update-status-as-reader.svelte";
+  import ServiceUpdateNeededAsContributor from "./service-update-needed-as-contributor.svelte";
+  import ServiceUpdateNeededAsReader from "./service-update-needed-as-reader.svelte";
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
   export let onRefresh: () => void;
 
-  $: bgColor =
-    service.updateStatus === "NOT_NEEDED" || !$token ? "bg-white" : "";
-  $: roundedColor =
-    service.updateStatus === "NOT_NEEDED" || !$token ? "bg-france-blue" : "";
+  $: bgColor = !service.updateNeeded || !$token ? "bg-white" : "";
+  $: roundedColor = !service.updateNeeded || !$token ? "bg-france-blue" : "";
 </script>
 
 <div class="hidden print:block">
@@ -36,32 +34,26 @@
           py-s32 mb-s14 w-full
           {service.canWrite &&
         service.status === 'PUBLISHED' &&
-        service.updateStatus === 'NEEDED'
+        service.updateNeeded
           ? 'bg-service-orange'
-          : ''}
-
-          {service.canWrite &&
-        service.status === 'PUBLISHED' &&
-        service.updateStatus === 'REQUIRED'
-          ? 'bg-service-red'
           : ''}
         "
         noPadding
       >
         {#if service.canWrite}
-          <ServiceUpdateStatusAsContributor
+          <ServiceUpdateNeededAsContributor
             {onRefresh}
             {service}
             {servicesOptions}
           />
         {:else}
-          <ServiceUpdateStatusAsReader {service} />
+          <ServiceUpdateNeededAsReader {service} />
         {/if}
       </CenteredGrid>
     </div>
   {/if}
 
-  {#if !service.canWrite || service.updateStatus === "NOT_NEEDED" || service.status !== "PUBLISHED"}
+  {#if !service.canWrite || !service.updateNeeded || service.status !== "PUBLISHED"}
     <div
       class="border-gray-02 m-auto max-w-6xl border border-t-0 border-r-0 border-l-0"
     />

@@ -52,16 +52,19 @@ select
     (select st_y((services_service.geom)::geometry) as st_y) as latitude,
     (select st_x((services_service.geom)::geometry) as st_x) as longitude,
     case
-        when
-            services_service.modification_date + '240 days' <= now()
-            and services_service.status = 'PUBLISHED'
-            then 'REQUIRED'
-        when
-            services_service.modification_date + '180 days' <= now()
-            and services_service.status = 'PUBLISHED'
-            then 'NEEDED'
-        else 'NOT_NEEDED'
-    end                                                      as update_status
+        when status != 'PUBLISHED' then false
+        when update_frequency = 'tous-les-mois' 
+            and modification_date + interval '1 month' <= now() then true
+        when update_frequency = 'tous-les-3-mois'
+            and modification_date + interval '3 months' <= now() then true
+        when update_frequency = 'tous-les-6-mois'
+            and modification_date + interval '6 months' <= now() then true
+        when update_frequency = 'tous-les-12-mois'
+            and modification_date + interval '12 months' <= now() then true
+        when update_frequency = 'tous-les-16-mois'
+            and modification_date + interval '16 months' <= now() then true
+        else false
+    end as update_needed
 from services_service;
 
 alter table mb_all_service add primary key (id);

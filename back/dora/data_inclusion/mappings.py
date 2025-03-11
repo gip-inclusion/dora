@@ -12,8 +12,9 @@ from dora.services.models import (
     ServiceCategory,
     ServiceKind,
     ServiceSubCategory,
+    UpdateFrequency,
     get_diffusion_zone_details_display,
-    get_update_status,
+    get_update_needed,
 )
 
 from .constants import THEMATIQUES_MAPPING_DI_TO_DORA
@@ -142,14 +143,15 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
     if service_data["code_insee"] is not None:
         department = code_insee_to_code_dept(service_data["code_insee"])
 
-    update_status = None
+    update_needed = None
     if service_data["date_maj"] is not None:
-        update_status = get_update_status(
+        update_needed = get_update_needed(
             status=ServiceStatus.PUBLISHED,
+            update_frequency=UpdateFrequency.NEVER,  # Un service DI de ne peut pas être mise à jour sur DORA
             modification_date=timezone.make_aware(
                 dateparse.parse_datetime(service_data["date_maj"])
             ),
-        ).value
+        )
 
     fee_condition = None
     if service_data["frais"] is not None:
@@ -335,7 +337,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "suspension_date": service_data["date_suspension"],
         "update_frequency": None,
         "update_frequency_display": None,
-        "update_status": update_status,
+        "update_needed": update_needed,
         "use_inclusion_numerique_scheme": False,
         "is_orientable_ft_service": False,
     }

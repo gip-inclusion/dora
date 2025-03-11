@@ -23,11 +23,13 @@
   import OsmHours from "$lib/components/specialized/osm-hours.svelte";
   import { page } from "$app/stores";
   import { trackStructureInfos } from "$lib/utils/stats";
+  import ServicesToUpdateNotice from "./services/services-to-update-notice.svelte";
 
   export let structure: Structure;
   export let members: StructureMember[];
   export let putativeMembers: PutativeStructureMember[];
   export let structuresOptions: StructuresOptions;
+  export let onRefresh: () => void;
 
   let fullDesc: string;
 
@@ -47,6 +49,10 @@
     structure.openingHours ||
     structure.openingHoursDetails ||
     structure.accesslibreUrl;
+
+  $: servicesToUpdate = structure.services.filter(
+    (service) => service.updateNeeded
+  );
 
   let displayInformations = false;
 
@@ -77,6 +83,15 @@
       Informations sur la structure mises à jour le
       <DateLabel date={structure.modificationDate} />
     </p>
+  {/if}
+  {#if structure.canEditInformations}
+    <div class="mt-s40">
+      <ServicesToUpdateNotice
+        structureSlug={structure.slug}
+        {servicesToUpdate}
+        {onRefresh}
+      />
+    </div>
   {/if}
   {#if structure.canEditInformations && sourceIsDataInclusion && !structure.hasBeenEdited}
     <div>

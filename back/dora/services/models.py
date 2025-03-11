@@ -22,7 +22,7 @@ from dora.core.models import EnumModel, LogItem, ModerationMixin
 from dora.core.utils import address_to_one_line
 from dora.structures.models import Structure
 
-from .enums import ServiceStatus, ServiceUpdateStatus
+from .enums import ServiceStatus
 
 logger = logging.getLogger(__name__)
 
@@ -259,17 +259,30 @@ def get_diffusion_zone_details_display(
     return item.name if item else ""
 
 
-def get_update_status(status: ServiceStatus, modification_date: datetime):
+def get_update_needed(
+    status: ServiceStatus,
+    update_frequency: UpdateFrequency,
+    modification_date: datetime,
+) -> bool:
     if status != ServiceStatus.PUBLISHED:
-        return ServiceUpdateStatus.NOT_NEEDED
+        return False
 
-    diff = timezone.now() - modification_date
-    if diff >= timedelta(days=240):
-        return ServiceUpdateStatus.REQUIRED
-    elif diff >= timedelta(days=180):
-        return ServiceUpdateStatus.NEEDED
+    if update_frequency == UpdateFrequency.EVERY_MONTH:
+        needed_threshold = relativedelta(months=1)
+    elif update_frequency == UpdateFrequency.EVERY_3_MONTHS:
+        needed_threshold = relativedelta(months=3)
+    elif update_frequency == UpdateFrequency.EVERY_6_MONTHS:
+        needed_threshold = relativedelta(months=6)
+    elif update_frequency == UpdateFrequency.EVERY_12_MONTHS:
+        needed_threshold = relativedelta(months=12)
+    elif update_frequency == UpdateFrequency.EVERY_16_MONTHS:
+        needed_threshold = relativedelta(months=16)
+    else:
+        return False
 
-    return ServiceUpdateStatus.NOT_NEEDED
+    threshold_date = modification_date + needed_threshold
+
+    return timezone.now() >= threshold_date
 
 
 class Service(ModerationMixin, models.Model):
@@ -608,9 +621,11 @@ class Service(ModerationMixin, models.Model):
             self.diffusion_zone_details,
         )
 
-    def get_update_status(self):
-        return get_update_status(
-            status=self.status, modification_date=self.modification_date
+    def get_update_needed(self):
+        return get_update_needed(
+            status=self.status,
+            update_frequency=self.update_frequency,
+            modification_date=self.modification_date,
         )
 
     def is_orientable(self):

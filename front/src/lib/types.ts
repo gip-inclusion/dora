@@ -70,6 +70,7 @@ export interface StructureService {
   status: ServiceStatus;
   structure: string;
   useInclusionNumeriqueScheme: boolean;
+  updateNeeded: boolean;
 }
 
 export interface StructureModel {
@@ -101,6 +102,8 @@ export interface ShortStructure {
   siret: string;
   slug: string;
   typologyDisplay: string;
+  canEditInformations: boolean;
+  servicesToUpdate: { name: string; slug: string }[];
 }
 
 export interface AdminShortStructure {
@@ -265,8 +268,6 @@ export type OsmOpeningHours = {
 
 // SERVICES
 
-export type ServiceUpdateStatus = "NOT_NEEDED" | "NEEDED" | "REQUIRED" | "ALL";
-
 export type ServiceKind =
   | "accompagnement"
   | "accueil"
@@ -312,6 +313,7 @@ export type UpdateFrequency =
   | "tous-les-3-mois"
   | "tous-les-6-mois"
   | "tous-les-12-mois"
+  | "tous-les-16-mois"
   | "jamais";
 
 export interface FundingLabel {
@@ -356,7 +358,7 @@ export interface ServiceSearchResult {
   slug: string;
   structure: string;
   status: ServiceStatus;
-  updateStatus: ServiceUpdateStatus;
+  updateNeeded: boolean;
   kinds: ServiceKind[] | null;
   feeCondition: FeeCondition | null;
   locationKinds: LocationKind[];
@@ -484,7 +486,7 @@ export interface Service {
   useInclusionNumeriqueScheme: boolean;
   updateFrequency: UpdateFrequency | null;
   updateFrequencyDisplay: string | null;
-  updateStatus: ServiceUpdateStatus;
+  updateNeeded: boolean;
   isOrientableFtService: boolean;
 }
 
@@ -511,7 +513,7 @@ export interface ShortService {
   structureInfo: ServiceStructure;
   locationKinds: LocationKind[];
   useInclusionNumeriqueScheme: boolean;
-  updateStatus: ServiceUpdateStatus;
+  updateNeeded: boolean;
 }
 
 export interface ShortBookmark {
