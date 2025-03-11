@@ -25,22 +25,18 @@
   <div
     class="mb-s32 mt-s16 text-f14 print:mb-s8 print:text-france-blue text-gray-text flex flex-col md:flex-row md:items-center"
   >
-    <div><strong>{capitalize(service.structureInfo.name)}</strong></div>
-    {#if !isDI}
-      <div
-        class="mx-s8 hidden font-bold md:block print:hidden print:md:hidden"
-        aria-hidden="true"
-      >
-        •
-      </div>
-      <div class="print:hidden">
-        <a
-          class="underline"
-          href="/structures/{service.structureInfo.slug}/services"
-          >Voir les autres services ({service.structureInfo.numServices})</a
-        >
-      </div>
-    {/if}
+    <div>
+      <strong
+        >{#if !isDI}
+          <a href="/structures/{service.structureInfo.slug}" class="underline"
+            >{capitalize(service.structureInfo.name)}</a
+          >
+        {:else}
+          {capitalize(service.structureInfo.name)}
+        {/if}
+      </strong>
+      à {service.structureInfo.city} ({service.structureInfo.department})
+    </div>
   </div>
 
   <div
