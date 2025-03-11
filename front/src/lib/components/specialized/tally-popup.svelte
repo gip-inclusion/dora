@@ -4,7 +4,7 @@
 
   import { browser } from "$app/environment";
   import type { TallyFormId } from "$lib/consts";
-  import { onDestroy, onMount } from "svelte";
+  import { createEventDispatcher, onDestroy, onMount } from "svelte";
 
   interface TallyFormLocalStorageItem {
     lastSubmitted: string;
@@ -30,6 +30,8 @@
 
   // Pour différencier un formulaire fermé par l'utilisateur vs un changement de page
   let tallyFormClosedByNavigation = false;
+
+  const dispatch = createEventDispatcher();
 
   function getTallyAnswerLocalStorageKey(): string {
     let key = `tallyForm-${formId}`;
@@ -59,7 +61,7 @@
           const daysElapsed = dayjs().diff(lastSubmitted, "day");
           return minDaysBetweenDisplays == null
             ? false
-            : daysElapsed > MIN_DAYS_BETWEEN_DISPLAYS;
+            : daysElapsed >= minDaysBetweenDisplays;
         }
       }
     }
@@ -98,6 +100,7 @@
             },
             onSubmit: () => {
               saveClosureDate();
+              dispatch("submit");
             },
           });
         }
