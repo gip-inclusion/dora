@@ -87,10 +87,11 @@
   }
 
   $: structureData = getStructureData(currentLocation);
+  $: console.log({ dark });
 </script>
 
 <nav aria-label="vous êtes ici :" class="print:hidden" class:dark>
-  <ol class="text-f14">
+  <ol class="text-f14 {dark ? 'text-gray-text-alt2' : 'text-white'}">
     <li class="inline">
       {#if currentLocation === "home"}
         <span aria-current="page" class="current">Accueil</span>
@@ -103,7 +104,10 @@
       <li class="inline before:content-['/']">
         {#if structure.slug}
           {#if currentLocation === "structure-informations"}
-            <span class="current" aria-current="page">
+            <span
+              class="{dark ? 'text-gray-text' : 'text-white'} font-bold"
+              aria-current="page"
+            >
               <span class="hidden lg:inline">
                 Structure&nbsp;•&nbsp;</span
               >{structure.name}
@@ -117,12 +121,12 @@
           {/if}
         {:else}
           <span
-            class="print:text-france-blue hidden text-white lg:inline"
+            class="print:text-france-blue hidden lg:inline"
             class:text-gray-text={dark}
           >
             Structure&nbsp;•&nbsp;
           </span><span
-            class=" print:text-france-blue text-white lg:inline"
+            class=" print:text-france-blue lg:inline"
             class:text-gray-text={dark}>{structure.name}</span
           >
         {/if}
@@ -132,7 +136,7 @@
     {#if service}
       <li class="inline before:content-['/']">
         {#if currentLocation === "service"}
-          <span class="current" aria-current="page">
+          <span class="text-gray-text font-bold" aria-current="page">
             <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
             >{service.name}
           </span>
@@ -145,7 +149,7 @@
       </li>
     {:else if currentLocation.startsWith("structure-") && currentLocation !== "structure-informations"}
       <li class="inline before:content-['/']">
-        <span class="current" aria-current="page">
+        <span class="text-gray-text font-bold" aria-current="page">
           {structureData.name}
         </span>
       </li>
@@ -159,7 +163,10 @@
     {/if}
     {#if Object.keys(locationToText).includes(currentLocation)}
       <li class="inline before:content-['/']">
-        <span aria-current="page" class="current">
+        <span
+          aria-current="page"
+          class="{dark ? 'text-gray-text-alt2' : 'text-white'} font-bold"
+        >
           {locationToText[currentLocation]}
         </span>
       </li>
@@ -168,7 +175,7 @@
     {#if model}
       <li class="inline before:content-['/']">
         {#if currentLocation === "model"}
-          <span class="current" aria-current="page">
+          <span class="text-gray-text font-bold" aria-current="page">
             <span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
             >{model.name}
           </span>
@@ -185,14 +192,6 @@
 
 <style lang="postcss">
   @reference "../../../app.css";
-
-  a {
-    @apply text-magenta-40;
-  }
-
-  .current {
-    @apply font-bold text-white;
-  }
 
   nav li + li::before {
     @apply ml-s8 mr-s8 text-magenta-40 inline;
