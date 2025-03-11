@@ -4,7 +4,7 @@
   export let bgColor = "bg-white";
   export let roundedColor = "";
 
-  const padding = noPadding ? "" : "pt-s40 pb-s40";
+  const padding = noPadding ? "" : "pt-s32 pb-s32";
 </script>
 
 <div class={roundedColor} class:bg-white={roundedColor}>
