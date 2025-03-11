@@ -37,12 +37,6 @@
         service.updateNeeded
           ? 'bg-service-orange'
           : ''}
-
-          {service.canWrite &&
-        service.status === 'PUBLISHED' &&
-        service.updateNeeded
-          ? 'bg-service-red'
-          : ''}
         "
         noPadding
       >
