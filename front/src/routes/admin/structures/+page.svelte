@@ -154,7 +154,7 @@
   <CenteredGrid bgColor="bg-service-green">
     <div class="gap-s16 relative lg:flex-row-reverse lg:justify-between">
       <div class="mb-s48 print:mb-s0">
-        <Breadcrumb currentLocation="manager-dashboard" dark />
+        <Breadcrumb currentLocation="manager-dashboard" />
       </div>
 
       <div>

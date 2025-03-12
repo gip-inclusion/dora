@@ -5,10 +5,10 @@
   import { structure } from "./store";
 </script>
 
-<CenteredGrid bgColor="bg-magenta-brand print:bg-white" noPadding>
+<CenteredGrid bgColor="bg-magenta-20 print:bg-white" noPadding>
   <Header structure={$structure} />
 </CenteredGrid>
 
-<CenteredGrid roundedColor="bg-magenta-brand">
+<CenteredGrid roundedColor="bg-magenta-20">
   <slot />
 </CenteredGrid>

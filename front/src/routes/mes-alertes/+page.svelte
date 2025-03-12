@@ -37,7 +37,7 @@
     <h1 class="text-france-blue text-center">Mes alertes</h1>
 
     <div class="mb-s32">
-      <Breadcrumb currentLocation="saved-searches" dark />
+      <Breadcrumb currentLocation="saved-searches" />
     </div>
     {#if savedSearches == null}
       <p class="mb-s40 text-f16 text-gray-dark">Chargement…</p>

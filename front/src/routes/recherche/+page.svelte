@@ -146,7 +146,7 @@
     </h1>
 
     <div class="mb-s24">
-      <Breadcrumb currentLocation="search" dark />
+      <Breadcrumb currentLocation="search" />
     </div>
 
     <SearchForm

@@ -56,7 +56,7 @@
 {:else}
   <CenteredGrid noPadding>
     <div class="mt-s24 print:mb-s0">
-      <Breadcrumb currentLocation="orientation" dark />
+      <Breadcrumb currentLocation="orientation" />
     </div>
   </CenteredGrid>
 

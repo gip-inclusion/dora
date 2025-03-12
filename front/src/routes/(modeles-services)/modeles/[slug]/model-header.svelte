@@ -15,7 +15,6 @@
       {model}
       structure={model.structureInfo}
       currentLocation="model"
-      dark
     />
   </div>
 
