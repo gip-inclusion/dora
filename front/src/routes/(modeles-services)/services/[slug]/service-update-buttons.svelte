@@ -13,7 +13,7 @@
   let setAsUpdatedModalOpen = false;
 </script>
 
-<div class="gap-s16 flex">
+<div class="gap-s16 flex flex-col sm:flex-row">
   {#if service.updateNeeded && service.status === "PUBLISHED"}
     <Button
       secondary

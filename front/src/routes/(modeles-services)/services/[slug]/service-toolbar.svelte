@@ -17,7 +17,7 @@
   <RelativeDateLabel date={service.modificationDate} prefix="Actualisé le" />
 </div>
 <div class="relative print:hidden">
-  <div class="flex items-center justify-between">
+  <div class="gap-s24 flex flex-col items-center justify-between sm:flex-row">
     <ServiceUpdateDate {service} />
     {#if service.canWrite}
       <ServiceUpdateButtons {service} {servicesOptions} {onRefresh} />
@@ -26,11 +26,9 @@
     {/if}
   </div>
 
-  {#if !service.canWrite || !service.updateNeeded || service.status !== "PUBLISHED"}
-    <div
-      class="border-gray-02 m-auto max-w-6xl border border-t-0 border-r-0 border-l-0"
-    />
-  {/if}
+  <div
+    class="border-gray-02 mt-s40 m-auto max-w-6xl border border-t-0 border-r-0 border-l-0"
+  />
 
   {#if service.canWrite}
     <div
