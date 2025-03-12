@@ -12,4 +12,4 @@ export const URL_DOCUMENTATION_ORIENTATION =
 
 export const SITEMAP_PAGE_SIZE = 1000;
 
-export const MON_RECAP_DEPARTMENTS = ["59", "69", "93"];
+export const MON_RECAP_DEPARTMENTS = ["59", "69", "93", "75"];

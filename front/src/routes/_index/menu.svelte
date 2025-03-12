@@ -3,11 +3,12 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import type { ShortStructure } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
-  import { userPreferences } from "$lib/utils/preferences";
+  import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
   import MenuMonCompte from "./menu-mon-compte.svelte";
   import HamburgerMenu from "$lib/components/display/hamburger.svelte";
   import SubMenu from "./sub-menu.svelte";
   import MenuMesStructures from "./menu-mes-structures.svelte";
+  import { userPreferences } from "$lib/utils/preferences";
 
   let structures: ShortStructure[] = [];
   let lastVisitedStructure: ShortStructure | undefined = undefined;
@@ -16,11 +17,10 @@
     ? [...$userInfo.structures, ...$userInfo.pendingStructures]
     : [];
 
-  $: lastVisitedStructure = $userPreferences.visitedStructures.length
-    ? structures.find(
-        ({ slug }) => slug === $userPreferences.visitedStructures[0]
-      )
-    : structures[0];
+  $: lastVisitedStructure = getCurrentlySelectedStructure(
+    $userInfo,
+    $userPreferences
+  );
 </script>
 
 <HamburgerMenu>
