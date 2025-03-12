@@ -1756,6 +1756,8 @@ class DataInclusionSearchTestCase(APITestCase):
             date_suspension="2030-01-01",
             structure={
                 "nom": "Rouge Empire",
+                "commune": "Sainte Jacquelineboeuf",
+                "code_insee": "59999",
                 "telephone": "1234",
                 "courriel": "contact@example.com",
             },
@@ -1778,6 +1780,8 @@ class DataInclusionSearchTestCase(APITestCase):
             structure_id="rouge-empire",
             structure={
                 "nom": "Rouge Empire",
+                "commune": "Sainte Jacquelineboeuf",
+                "code_insee": "59999",
                 "telephone": "1234",
                 "courriel": "contact@example.com",
             },
