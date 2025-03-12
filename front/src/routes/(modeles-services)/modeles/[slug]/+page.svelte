@@ -17,9 +17,11 @@
   <ModelHeader model={data.model} />
 </CenteredGrid>
 
-<CenteredGrid roundedColor="bg-blue-information" extraClass="mb-s14 w-full">
+<CenteredGrid roundedColor="bg-blue-information">
   {#if browser}
-    <div class="text-gray-text flex items-center justify-between">
+    <div
+      class="text-gray-text gap-s24 flex flex-col items-center justify-between sm:flex-row"
+    >
       <div class="flex items-center">
         <span class="mr-s16">
           <UpdateNeededIcon updateNeeded={false} />
@@ -31,7 +33,7 @@
         />
       </div>
 
-      <div class="gap-s24 flex">
+      <div class="gap-s24 flex flex-col sm:flex-row">
         {#if data.model.canWrite}
           <LinkButton
             label="Modifier"
