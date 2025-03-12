@@ -68,7 +68,5 @@
     />
   {/if}
 
-  {#if browser && !data.service.canWrite}
-    <MonRecapPopup />
-  {/if}
+  <MonRecapPopup />
 {/if}
