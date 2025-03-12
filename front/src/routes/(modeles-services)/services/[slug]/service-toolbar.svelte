@@ -1,5 +1,4 @@
 <script lang="ts">
-  import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
   import ServiceStateUpdateSelect from "$lib/components/specialized/services/service-state-update-select.svelte";
@@ -15,21 +14,17 @@
 </script>
 
 <div class="hidden print:block">
-  <CenteredGrid noPadding>
-    <RelativeDateLabel date={service.modificationDate} prefix="Actualisé le" />
-  </CenteredGrid>
+  <RelativeDateLabel date={service.modificationDate} prefix="Actualisé le" />
 </div>
 <div class="relative print:hidden">
-  <CenteredGrid>
-    <div class="flex items-center justify-between">
-      <ServiceUpdateDate {service} />
-      {#if service.canWrite}
-        <ServiceUpdateButtons {service} {servicesOptions} {onRefresh} />
-      {:else}
-        <ServiceActionButtons {service} />
-      {/if}
-    </div>
-  </CenteredGrid>
+  <div class="flex items-center justify-between">
+    <ServiceUpdateDate {service} />
+    {#if service.canWrite}
+      <ServiceUpdateButtons {service} {servicesOptions} {onRefresh} />
+    {:else}
+      <ServiceActionButtons {service} />
+    {/if}
+  </div>
 
   {#if !service.canWrite || !service.updateNeeded || service.status !== "PUBLISHED"}
     <div
@@ -38,47 +33,45 @@
   {/if}
 
   {#if service.canWrite}
-    <CenteredGrid extraClass="w-full" noPadding>
-      <div
-        class="gap-s24 py-s32 flex w-full flex-col place-content-between items-center sm:flex-row"
-      >
-        <div>
-          <ServiceStateUpdateSelect
-            {service}
-            {servicesOptions}
-            {onRefresh}
-            hideLabel={false}
-          />
-        </div>
-        <div class="h-s48 flex items-center md:self-end">
-          {#if service.model}
-            {#if service.modelChanged}
-              <div class="text-f14 text-gray-text flex items-center font-bold">
-                <span class="mr-s10"><SynchronizedIcon warning /></span>
-                <a href="/services/{service.slug}/editer" class="underline">
-                  Mise à jour du modèle disponible
-                </a>
-              </div>
-            {:else}
-              <div class="text-f14 text-gray-text flex items-center italic">
-                <span class="mr-s10"><SynchronizedIcon /></span>
-                <a href="/modeles/{service.model}" class="underline">
-                  Synchronisé avec un modèle
-                </a>
-              </div>
-            {/if}
-          {:else if !service.useInclusionNumeriqueScheme}
-            <LinkButton
-              label="Utiliser comme modèle"
-              icon={copyIcon2}
-              iconOnRight
-              noBackground
-              hoverUnderline
-              to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
-            />
-          {/if}
-        </div>
+    <div
+      class="gap-s24 py-s32 flex w-full flex-col place-content-between items-center sm:flex-row"
+    >
+      <div>
+        <ServiceStateUpdateSelect
+          {service}
+          {servicesOptions}
+          {onRefresh}
+          hideLabel={false}
+        />
       </div>
-    </CenteredGrid>
+      <div class="h-s48 flex items-center md:self-end">
+        {#if service.model}
+          {#if service.modelChanged}
+            <div class="text-f14 text-gray-text flex items-center font-bold">
+              <span class="mr-s10"><SynchronizedIcon warning /></span>
+              <a href="/services/{service.slug}/editer" class="underline">
+                Mise à jour du modèle disponible
+              </a>
+            </div>
+          {:else}
+            <div class="text-f14 text-gray-text flex items-center italic">
+              <span class="mr-s10"><SynchronizedIcon /></span>
+              <a href="/modeles/{service.model}" class="underline">
+                Synchronisé avec un modèle
+              </a>
+            </div>
+          {/if}
+        {:else if !service.useInclusionNumeriqueScheme}
+          <LinkButton
+            label="Utiliser comme modèle"
+            icon={copyIcon2}
+            iconOnRight
+            noBackground
+            hoverUnderline
+            to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
+          />
+        {/if}
+      </div>
+    </div>
   {/if}
 </div>
