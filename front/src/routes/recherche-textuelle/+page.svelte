@@ -35,7 +35,7 @@
       Résultats de votre recherche de services d’insertion
     </h1>
 
-    <Breadcrumb currentLocation="text-search" dark></Breadcrumb>
+    <Breadcrumb currentLocation="text-search"></Breadcrumb>
 
     <div>
       <p class="text-f12 text-gray-text-alt2 italic">

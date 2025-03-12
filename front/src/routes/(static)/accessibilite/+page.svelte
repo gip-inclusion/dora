@@ -6,7 +6,7 @@
 <CenteredGrid>
   <div class="max-w-3xl">
     <div class="mb-s48">
-      <Breadcrumb currentLocation="accessibility" dark />
+      <Breadcrumb currentLocation="accessibility" />
     </div>
 
     <h1>Déclaration d’accessibilité</h1>

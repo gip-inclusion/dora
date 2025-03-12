@@ -9,7 +9,7 @@
 
 <CenteredGrid>
   <div class="mb-s24">
-    <Breadcrumb currentLocation="partners" dark />
+    <Breadcrumb currentLocation="partners" />
   </div>
 
   <div>

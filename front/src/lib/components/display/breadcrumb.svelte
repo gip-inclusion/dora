@@ -34,7 +34,6 @@
   export let service: Service | undefined = undefined;
   export let model: Model | undefined = undefined;
   export let currentLocation: BreadcrumbLocation | string;
-  export let dark = false;
 
   const locationToText: Record<string, string> = {
     search: "Recherche",
@@ -87,11 +86,10 @@
   }
 
   $: structureData = getStructureData(currentLocation);
-  $: console.log({ dark });
 </script>
 
-<nav aria-label="vous êtes ici :" class="print:hidden" class:dark>
-  <ol class="text-f14 {dark ? 'text-gray-text-alt2' : 'text-white'}">
+<nav aria-label="vous êtes ici :" class="print:hidden">
+  <ol class="text-f14 text-gray-text-alt2">
     <li class="inline">
       {#if currentLocation === "home"}
         <span aria-current="page" class="current">Accueil</span>
@@ -104,10 +102,7 @@
       <li class="inline before:content-['/']">
         {#if structure.slug}
           {#if currentLocation === "structure-informations"}
-            <span
-              class="{dark ? 'text-gray-text' : 'text-white'} font-bold"
-              aria-current="page"
-            >
+            <span class="text-gray-text font-bold" aria-current="page">
               <span class="hidden lg:inline">
                 Structure&nbsp;•&nbsp;</span
               >{structure.name}
@@ -120,14 +115,10 @@
             </a>
           {/if}
         {:else}
-          <span
-            class="print:text-france-blue hidden lg:inline"
-            class:text-gray-text={dark}
-          >
+          <span class="text-gray-text print:text-france-blue hidden lg:inline">
             Structure&nbsp;•&nbsp;
-          </span><span
-            class=" print:text-france-blue lg:inline"
-            class:text-gray-text={dark}>{structure.name}</span
+          </span><span class=" text-gray-text print:text-france-blue lg:inline"
+            >{structure.name}</span
           >
         {/if}
       </li>
@@ -163,10 +154,7 @@
     {/if}
     {#if Object.keys(locationToText).includes(currentLocation)}
       <li class="inline before:content-['/']">
-        <span
-          aria-current="page"
-          class="{dark ? 'text-gray-text-alt2' : 'text-white'} font-bold"
-        >
+        <span aria-current="page" class="text-gray-text-alt2 font-bold">
           {locationToText[currentLocation]}
         </span>
       </li>
@@ -209,13 +197,5 @@
     nav li + li::before {
       color: var(--color-france-blue);
     }
-  }
-
-  .dark a {
-    @apply text-gray-text;
-  }
-  .dark li::before,
-  .dark .current {
-    @apply text-gray-text;
   }
 </style>

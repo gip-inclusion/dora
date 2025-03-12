@@ -18,7 +18,7 @@
     <h1 class="text-france-blue text-center">Mes favoris</h1>
 
     <div class="mb-s32">
-      <Breadcrumb currentLocation="bookmarks" dark />
+      <Breadcrumb currentLocation="bookmarks" />
     </div>
 
     {#if bookmarks.length}

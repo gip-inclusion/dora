@@ -16,10 +16,9 @@
       {service}
       structure={service.structureInfo}
       currentLocation="service"
-      dark
     />
   </div>
-  <h1 class="mb-s0 mr-s12 text-france-blue text-f38 leading-[3rem]">
+  <h1 class="mb-s0 mr-s12 text-magenta-dark text-f38 leading-[3rem]">
     {service.name}
   </h1>
   <div
