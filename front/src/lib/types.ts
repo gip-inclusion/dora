@@ -180,6 +180,9 @@ export interface Structure {
   openingHoursDetails: string | null;
   otherLabels: string;
   parent: string;
+  parentName: string;
+  parentSiret: string;
+  parentSlug: string;
   phone: string;
   postalCode: string;
   quickStartDone: boolean;
