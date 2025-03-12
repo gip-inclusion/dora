@@ -8,6 +8,7 @@
 </script>
 
 <script lang="ts">
+  import HomeSmileLineBuildings from "svelte-remix/HomeSmileLineBuildings.svelte";
   import { page } from "$app/stores";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Label from "$lib/components/display/label.svelte";
@@ -92,17 +93,31 @@
 <div class="text-gray-text pt-s32">
   <Breadcrumb {structure} currentLocation="structure-{tabId}" />
 
-  <h1 class="mt-s48 mb-s12 text-magenta-dark text-f38 leading-s48">
-    {capitalize(structure.name)}
-  </h1>
+  <div class="mt-s48 gap-s12 flex flex-col">
+    {#if structure.parent}
+      <div class="gap-s6 text-f14 flex items-center">
+        <HomeSmileLineBuildings size="16" />
+        <strong>
+          Structure parente&#8239;:
+          <a href="/structures/{structure.parentSlug}" class="underline"
+            >{capitalize(structure.parentName)}</a
+          >
+        </strong>
+      </div>
+    {/if}
 
-  <Label
-    label={`${structure.address1}${
-      structure.address2 ? `, ${structure.address2}` : ""
-    }, ${structure.postalCode} ${structure.city}`}
-    icon={mapPinIcon}
-    smallIcon
-  />
+    <h1 class="text-magenta-dark text-f38 leading-s48 m-s0">
+      {capitalize(structure.name)}
+    </h1>
+
+    <Label
+      label={`${structure.address1}${
+        structure.address2 ? `, ${structure.address2}` : ""
+      }, ${structure.postalCode} ${structure.city}`}
+      icon={mapPinIcon}
+      smallIcon
+    />
+  </div>
 
   {#if structure.isPendingMember}
     <div class="mt-s24">
