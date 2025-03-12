@@ -89,8 +89,10 @@
 </script>
 
 <nav aria-label="vous êtes ici :" class="print:hidden">
-  <ol class="text-f14 text-gray-text-alt2">
-    <li class="inline">
+  <ol
+    class="text-f14 text-gray-text [&>li+li]:before:mx-s6 [&>li]:inline [&>li+li]:before:inline [&>li+li]:before:content-['/']"
+  >
+    <li>
       {#if currentLocation === "home"}
         <span aria-current="page" class="current">Accueil</span>
       {:else}
@@ -99,10 +101,10 @@
     </li>
 
     {#if structure}
-      <li class="inline before:content-['/']">
+      <li>
         {#if structure.slug}
           {#if currentLocation === "structure-informations"}
-            <span class="text-gray-text font-bold" aria-current="page">
+            <span class=" font-bold" aria-current="page">
               <span class="hidden lg:inline">
                 Structure&nbsp;•&nbsp;</span
               >{structure.name}
@@ -115,9 +117,9 @@
             </a>
           {/if}
         {:else}
-          <span class="text-gray-text print:text-france-blue hidden lg:inline">
+          <span class=" print:text-france-blue hidden lg:inline">
             Structure&nbsp;•&nbsp;
-          </span><span class=" text-gray-text print:text-france-blue lg:inline"
+          </span><span class="  print:text-france-blue lg:inline"
             >{structure.name}</span
           >
         {/if}
@@ -125,9 +127,9 @@
     {/if}
 
     {#if service}
-      <li class="inline before:content-['/']">
+      <li>
         {#if currentLocation === "service"}
-          <span class="text-gray-text font-bold" aria-current="page">
+          <span class=" font-bold" aria-current="page">
             <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
             >{service.name}
           </span>
@@ -139,31 +141,31 @@
         {/if}
       </li>
     {:else if currentLocation.startsWith("structure-") && currentLocation !== "structure-informations"}
-      <li class="inline before:content-['/']">
-        <span class="text-gray-text font-bold" aria-current="page">
+      <li>
+        <span class=" font-bold" aria-current="page">
           {structureData.name}
         </span>
       </li>
     {/if}
     {#if currentLocation === "saved-search"}
-      <li class="inline before:content-['/']">
+      <li>
         <a href="/mes-alertes">
           <span class="hidden lg:inline">Mes alertes</span>
         </a>
       </li>
     {/if}
     {#if Object.keys(locationToText).includes(currentLocation)}
-      <li class="inline before:content-['/']">
-        <span aria-current="page" class="text-gray-text-alt2 font-bold">
+      <li>
+        <span aria-current="page" class=" font-bold">
           {locationToText[currentLocation]}
         </span>
       </li>
     {/if}
 
     {#if model}
-      <li class="inline before:content-['/']">
+      <li>
         {#if currentLocation === "model"}
-          <span class="text-gray-text font-bold" aria-current="page">
+          <span class=" font-bold" aria-current="page">
             <span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
             >{model.name}
           </span>
@@ -177,25 +179,3 @@
     {/if}
   </ol>
 </nav>
-
-<style lang="postcss">
-  @reference "../../../app.css";
-
-  nav li + li::before {
-    @apply ml-s8 mr-s8 text-magenta-40 inline;
-  }
-
-  @media print {
-    a {
-      color: var(--color-france-blue);
-    }
-
-    .current {
-      color: var(--color-france-blue);
-    }
-
-    nav li + li::before {
-      color: var(--color-france-blue);
-    }
-  }
-</style>
