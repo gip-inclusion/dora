@@ -47,13 +47,13 @@
     <ServiceHeader service={data.service} isDI={data.isDI} />
   </CenteredGrid>
 
-  <div>
+  <CenteredGrid roundedColor="bg-blue-information">
     <ServiceToolbar
       service={data.service}
       servicesOptions={data.servicesOptions}
       onRefresh={handleRefresh}
     />
-  </div>
+  </CenteredGrid>
 
   <ServiceBody
     service={data.service}
