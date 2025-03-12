@@ -89,10 +89,10 @@
   }
 </script>
 
-<div class="pt-s40 print:py-s40 relative mx-auto max-w-6xl">
+<div class="text-gray-text pt-s32">
   <Breadcrumb {structure} currentLocation="structure-{tabId}" />
 
-  <h1 class="pt-s40 text-magenta-dark">
+  <h1 class="mt-s48 mb-s12 text-magenta-dark text-f38 leading-s48">
     {capitalize(structure.name)}
   </h1>
 
@@ -114,7 +114,7 @@
     </div>
   {/if}
 
-  <div class="mt-s40 print:hidden">
+  <div class="mt-s48 print:hidden">
     <TabsLink items={tabs} itemId={tabId} />
   </div>
 </div>
