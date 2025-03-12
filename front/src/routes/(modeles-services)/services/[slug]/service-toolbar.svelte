@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
@@ -7,16 +6,12 @@
   import SynchronizedIcon from "$lib/components/specialized/services/synchronized-icon.svelte";
   import { copyIcon2 } from "$lib/icons";
   import type { Service, ServicesOptions } from "$lib/types";
-  import { token } from "$lib/utils/auth";
   import ServiceActionButtons from "./service-action-buttons.svelte";
-  import ServiceUpdateNeededAsContributor from "./service-update-needed-as-contributor.svelte";
-  import ServiceUpdateNeededAsReader from "./service-update-needed-as-reader.svelte";
+  import ServiceUpdateDate from "./service-update-date.svelte";
+  import ServiceUpdateButtons from "./service-update-buttons.svelte";
   export let service: Service;
   export let servicesOptions: ServicesOptions;
   export let onRefresh: () => void;
-
-  $: bgColor = !service.updateNeeded || !$token ? "bg-white" : "";
-  $: roundedColor = !service.updateNeeded || !$token ? "bg-france-blue" : "";
 </script>
 
 <div class="hidden print:block">
@@ -24,37 +19,17 @@
     <RelativeDateLabel date={service.modificationDate} prefix="Actualisé le" />
   </CenteredGrid>
 </div>
-<div id="service-update-status" class="relative print:hidden">
-  {#if browser}
-    <div>
-      <CenteredGrid
-        {bgColor}
-        {roundedColor}
-        extraClass="
-          py-s32 mb-s14 w-full
-          {service.canWrite &&
-        service.status === 'PUBLISHED' &&
-        service.updateNeeded
-          ? 'bg-service-orange'
-          : ''}
-        "
-        noPadding
-      >
-        {#if service.canWrite}
-          <ServiceUpdateNeededAsContributor
-            {onRefresh}
-            {service}
-            {servicesOptions}
-          />
-        {:else}
-          <div class="flex items-center justify-between">
-            <ServiceUpdateNeededAsReader {service} />
-            <ServiceActionButtons {service} />
-          </div>
-        {/if}
-      </CenteredGrid>
+<div class="relative print:hidden">
+  <CenteredGrid>
+    <div class="flex items-center justify-between">
+      <ServiceUpdateDate {service} />
+      {#if service.canWrite}
+        <ServiceUpdateButtons {service} {servicesOptions} {onRefresh} />
+      {:else}
+        <ServiceActionButtons {service} />
+      {/if}
     </div>
-  {/if}
+  </CenteredGrid>
 
   {#if !service.canWrite || !service.updateNeeded || service.status !== "PUBLISHED"}
     <div
