@@ -8,9 +8,9 @@
   import { copyIcon2 } from "$lib/icons";
   import type { Service, ServicesOptions } from "$lib/types";
   import { token } from "$lib/utils/auth";
+  import ServiceActionButtons from "./service-action-buttons.svelte";
   import ServiceUpdateNeededAsContributor from "./service-update-needed-as-contributor.svelte";
   import ServiceUpdateNeededAsReader from "./service-update-needed-as-reader.svelte";
-
   export let service: Service;
   export let servicesOptions: ServicesOptions;
   export let onRefresh: () => void;
@@ -47,7 +47,10 @@
             {servicesOptions}
           />
         {:else}
-          <ServiceUpdateNeededAsReader {service} />
+          <div class="flex items-center justify-between">
+            <ServiceUpdateNeededAsReader {service} />
+            <ServiceActionButtons {service} />
+          </div>
         {/if}
       </CenteredGrid>
     </div>
