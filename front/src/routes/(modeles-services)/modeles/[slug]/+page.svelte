@@ -13,11 +13,11 @@
   export let data: PageData;
 </script>
 
-<CenteredGrid bgColor="bg-blue-information">
+<CenteredGrid bgColor="bg-blue-light">
   <ModelHeader model={data.model} />
 </CenteredGrid>
 
-<CenteredGrid roundedColor="bg-blue-information">
+<CenteredGrid roundedColor="bg-blue-light">
   {#if browser}
     <div
       class="text-gray-text gap-s24 flex flex-col items-center justify-between sm:flex-row"
