@@ -43,11 +43,11 @@
 </script>
 
 {#if data.service}
-  <CenteredGrid bgColor="bg-service-blue-light">
-    <ServiceHeader service={data.service} isDI={data.isDI} />
+  <CenteredGrid bgColor="bg-blue-light">
+    <ServiceHeader service={data.service} />
   </CenteredGrid>
 
-  <CenteredGrid roundedColor="bg-service-blue-light">
+  <CenteredGrid roundedColor="bg-blue-light">
     <ServiceToolbar
       service={data.service}
       servicesOptions={data.servicesOptions}
