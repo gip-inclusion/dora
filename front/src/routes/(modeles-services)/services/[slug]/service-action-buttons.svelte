@@ -47,21 +47,20 @@
 </script>
 
 <div class="gap-s16 flex">
-  <ServiceActionButton ariaLabel="Copier le lien" on:click={handleCopy}>
+  <ServiceActionButton ariaLabel="Copier" on:click={handleCopy}>
     <FileCopyLineDocument />
   </ServiceActionButton>
-  <ServiceActionButton
-    ariaLabel="Imprimer/Exporter en PDF"
-    on:click={handlePrint}
-  >
+  <ServiceActionButton ariaLabel="Imprimer" on:click={handlePrint}>
     <PrinterLineBusiness />
   </ServiceActionButton>
-  <ServiceActionButton ariaLabel="Envoyer par e-mail" on:click={handleShare}>
+  <ServiceActionButton ariaLabel="Partager par e-mail" on:click={handleShare}>
     <MailLineBusiness />
   </ServiceActionButton>
   <Bookmarkable slug={service.slug} {isDI} let:onBookmark let:isBookmarked>
     <ServiceActionButton
-      ariaLabel={isBookmarked ? "Retirer des favoris" : "Ajouter aux favoris"}
+      ariaLabel={isBookmarked
+        ? "Retirer de vos favoris"
+        : "Ajouter à vos favoris"}
       on:click={() => handleBookmark(onBookmark)}
     >
       {#if isBookmarked}
