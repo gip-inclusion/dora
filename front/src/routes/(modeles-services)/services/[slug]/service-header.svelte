@@ -1,11 +1,9 @@
 <script lang="ts">
-  import HomeSmileLineBuildings from "svelte-remix/HomeSmileLineBuildings.svelte";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import type { Service } from "$lib/types";
-  import { capitalize } from "$lib/utils/misc";
+  import ServiceStructureLabel from "../../_common/service-structure-label.svelte";
 
   export let service: Service;
-  export let isDI: false;
 
   $: diffusionZoneDetails = service.diffusionZoneDetails
     ? `(${service.diffusionZoneDetails})`
@@ -27,18 +25,7 @@
   </div>
 
   <div class="gap-s16 flex flex-col">
-    <div class="gap-s6 text-f14 flex items-center">
-      <HomeSmileLineBuildings size="16" />
-      <strong>
-        {#if !isDI}
-          <a href="/structures/{service.structureInfo.slug}" class="underline"
-            >{capitalize(service.structureInfo.name)}</a
-          >
-        {:else}
-          {capitalize(service.structureInfo.name)}
-        {/if}
-      </strong>
-    </div>
+    <ServiceStructureLabel {service} />
     <h1 class="mb-s0 mr-s12 text-magenta-dark text-f38 leading-s48">
       {service.name}
     </h1>
