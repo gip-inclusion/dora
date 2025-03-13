@@ -275,6 +275,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "access_conditions_display",
             "address1",
             "address2",
+            "address_line",
             "beneficiaries_access_modes",
             "beneficiaries_access_modes_display",
             "beneficiaries_access_modes_external_form_link",
