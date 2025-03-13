@@ -1,15 +1,19 @@
 <script lang="ts">
-  import type { Service } from "$lib/types";
-  import FileCopyLineDocument from "svelte-remix/FileCopyLineDocument.svelte";
-  import PrinterLineBusiness from "svelte-remix/PrinterLineBusiness.svelte";
-  import MailLineBusiness from "svelte-remix/MailLineBusiness.svelte";
   import BookmarkFillBusiness from "svelte-remix/BookmarkFillBusiness.svelte";
   import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
-  import ServiceActionButton from "./service-action-button.svelte";
-  import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
+  import FileCopyLineDocument from "svelte-remix/FileCopyLineDocument.svelte";
+  import MailLineBusiness from "svelte-remix/MailLineBusiness.svelte";
+  import PrinterLineBusiness from "svelte-remix/PrinterLineBusiness.svelte";
+
   import { browser } from "$app/environment";
-  import { userInfo } from "$lib/utils/auth";
+  import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
+  import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
+  import type { Service } from "$lib/types";
+  import { token } from "$lib/utils/auth";
+
   import SharingModal from "../../_common/display/modals/sharing-modal.svelte";
+  import ServiceActionButton from "./service-action-button.svelte";
 
   export let service: Service;
 
@@ -25,6 +29,18 @@
 
   function handleShare() {
     sharingModalIsOpen = true;
+  }
+
+  function handleBookmark(onBookmark: () => void) {
+    if (!$token) {
+      goto(
+        `/auth/connexion?next=${encodeURIComponent(
+          $page.url.pathname + $page.url.search
+        )}`
+      );
+      return;
+    }
+    onBookmark();
   }
 
   $: isDI = "source" in service;
@@ -43,20 +59,20 @@
   <ServiceActionButton ariaLabel="Envoyer par e-mail" on:click={handleShare}>
     <MailLineBusiness />
   </ServiceActionButton>
-  {#if browser && $userInfo && service.status !== "ARCHIVED"}
-    <Bookmarkable slug={service.slug} {isDI} let:onBookmark let:isBookmarked>
-      <ServiceActionButton
-        ariaLabel={isBookmarked ? "Retirer des favoris" : "Ajouter aux favoris"}
-        on:click={onBookmark}
-      >
-        {#if isBookmarked}
-          <BookmarkFillBusiness class="text-magenta-cta" />
-        {:else}
-          <BookmarkLineBusiness />
-        {/if}
-      </ServiceActionButton>
-    </Bookmarkable>
-  {/if}
+  <Bookmarkable slug={service.slug} {isDI} let:onBookmark let:isBookmarked>
+    <ServiceActionButton
+      ariaLabel={isBookmarked ? "Retirer des favoris" : "Ajouter aux favoris"}
+      on:click={() => handleBookmark(onBookmark)}
+    >
+      {#if isBookmarked}
+        <BookmarkFillBusiness class="text-magenta-cta" />
+      {:else}
+        <BookmarkLineBusiness />
+      {/if}
+    </ServiceActionButton>
+  </Bookmarkable>
 </div>
 
-<SharingModal bind:isOpen={sharingModalIsOpen} {service} {isDI} />
+{#if browser}
+  <SharingModal bind:isOpen={sharingModalIsOpen} {service} {isDI} />
+{/if}
