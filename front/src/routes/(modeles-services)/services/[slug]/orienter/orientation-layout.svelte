@@ -1,4 +1,5 @@
 <script lang="ts">
+  import HomeSmileLineBuildings from "svelte-remix/HomeSmileLineBuildings.svelte";
   import { page } from "$app/stores";
   import { token, userInfo } from "$lib/utils/auth";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
@@ -11,6 +12,8 @@
 
   const { service } = data;
 
+  $: isDI = "source" in service;
+
   let currentLocation = $token
     ? "service-orientation-step1"
     : "service-orientation";
@@ -21,22 +24,27 @@
   }
 </script>
 
-<CenteredGrid bgColor="bg-france-blue">
-  <div class="mb-s48 print:mb-s0">
-    <Breadcrumb {service} structure={service.structureInfo} {currentLocation} />
+<CenteredGrid bgColor="bg-service-blue-light">
+  <Breadcrumb {service} structure={service.structureInfo} {currentLocation} />
+  <div class="gap-s6 text-f14 mt-s24 mb-s16 text-gray-text flex items-center">
+    <HomeSmileLineBuildings size="16" />
+    <strong>
+      {#if !isDI}
+        <a href="/structures/{service.structureInfo.slug}" class="underline"
+          >{capitalize(service.structureInfo.name)}</a
+        >
+      {:else}
+        {capitalize(service.structureInfo.name)}
+      {/if}
+    </strong>
   </div>
-  <h1 class="print:text-france-blue text-white">
-    Orienter un ou une bénéficiaire vers le service&nbsp;:
+  <h1 class="mb-s0 mr-s12 text-magenta-dark">
+    <span class="text-f38 leading-s48">Formulaire d’orientation&#8239;:</span>
+    <span class="mt-s2 text-f28 leading-s40 block">{service.name}</span>
   </h1>
-  <h2 class="print:text-france-blue text-white">
-    {service.name}
-  </h2>
-  <h3 class=" print:text-france-blue text-white">
-    <div><strong>{capitalize(service.structureInfo.name)}</strong></div>
-  </h3>
 </CenteredGrid>
 
-<CenteredGrid bgColor="bg-white" roundedColor="bg-france-blue">
+<CenteredGrid bgColor="bg-white" roundedColor="bg-service-blue-light">
   {#if $userInfo && !$userInfo.structures.length}
     <div class="m-auto max-w-xl">
       <Notice type="warning">
