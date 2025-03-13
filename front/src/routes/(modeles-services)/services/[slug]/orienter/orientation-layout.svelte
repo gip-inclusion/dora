@@ -23,7 +23,7 @@
 
 <CenteredGrid bgColor="bg-blue-light">
   <Breadcrumb {service} structure={service.structureInfo} {currentLocation} />
-  <div class="mt-s24 mb-s16"><ServiceStructureLabel {service} /></div>
+  <div class="mt-s48 mb-s16"><ServiceStructureLabel {service} /></div>
   <h1 class="mb-s0 mr-s12 text-magenta-dark">
     <span class="text-f38 leading-s48">Formulaire d’orientation&#8239;:</span>
     <span class="mt-s2 text-f28 leading-s40 block">{service.name}</span>

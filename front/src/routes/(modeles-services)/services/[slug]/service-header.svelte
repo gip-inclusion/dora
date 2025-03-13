@@ -15,7 +15,7 @@
     : "Non renseigné";
 </script>
 
-<div class="gap-s24 text-gray-text flex flex-col">
+<div class="gap-s48 text-gray-text flex flex-col">
   <div>
     <Breadcrumb
       {service}

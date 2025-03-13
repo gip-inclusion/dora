@@ -129,7 +129,7 @@
     </div>
   {/if}
 
-  <div class="mt-s48 print:hidden">
+  <div class="mt-s20 print:hidden">
     <TabsLink items={tabs} itemId={tabId} />
   </div>
 </div>
