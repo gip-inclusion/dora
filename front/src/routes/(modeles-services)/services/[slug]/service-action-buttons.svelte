@@ -9,7 +9,11 @@
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import { browser } from "$app/environment";
   import { userInfo } from "$lib/utils/auth";
+  import SharingModal from "../../_common/display/modals/sharing-modal.svelte";
+
   export let service: Service;
+
+  let sharingModalIsOpen = false;
 
   function handleCopy() {
     navigator.clipboard.writeText(window.location.href);
@@ -17,6 +21,10 @@
 
   function handlePrint() {
     window.print();
+  }
+
+  function handleShare() {
+    sharingModalIsOpen = true;
   }
 
   $: isDI = "source" in service;
@@ -32,7 +40,7 @@
   >
     <PrinterLineBusiness />
   </ServiceActionButton>
-  <ServiceActionButton ariaLabel="Envoyer par e-mail">
+  <ServiceActionButton ariaLabel="Envoyer par e-mail" on:click={handleShare}>
     <MailLineBusiness />
   </ServiceActionButton>
   {#if browser && $userInfo && service.status !== "ARCHIVED"}
@@ -50,3 +58,5 @@
     </Bookmarkable>
   {/if}
 </div>
+
+<SharingModal bind:isOpen={sharingModalIsOpen} {service} {isDI} />
