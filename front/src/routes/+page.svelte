@@ -18,17 +18,17 @@
   import { userInfo } from "$lib/utils/auth";
   import { userPreferences } from "$lib/utils/preferences";
   import ServicesToUpdateNotice from "./structures/[slug]/services/services-to-update-notice.svelte";
+  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
+  import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
+
   export let data: PageData;
 
   let isVideoModalOpen = false;
 
-  $: structures = $userInfo ? $userInfo.structures : [];
-
-  $: lastVisitedStructure = $userPreferences.visitedStructures.length
-    ? structures.find(
-        ({ slug }) => slug === $userPreferences.visitedStructures[0]
-      )
-    : structures[0];
+  $: lastVisitedStructure = getCurrentlySelectedStructure(
+    $userInfo,
+    $userPreferences
+  );
 </script>
 
 <OrientationVideo bind:isVideoModalOpen></OrientationVideo>
@@ -204,6 +204,8 @@
     </div>
   </div>
 </CenteredGrid>
+
+<MonRecapPopup />
 
 <style lang="postcss">
   @reference "../app.css";

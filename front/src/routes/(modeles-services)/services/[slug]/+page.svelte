@@ -13,6 +13,7 @@
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
   import type { Service } from "$lib/types";
+  import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
 
   export let data: PageData;
 
@@ -66,4 +67,6 @@
       timeoutSeconds={3}
     />
   {/if}
+
+  <MonRecapPopup />
 {/if}
