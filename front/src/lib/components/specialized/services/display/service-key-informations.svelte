@@ -1,228 +1,222 @@
 <script lang="ts">
-  import {
-    addCircleIcon,
-    errorWarningIcon,
-    euroFillIcon,
-    euroLineIcon,
-    informationIcon,
-    mapPinUserFillIcon,
-    priceTagIcon,
-    timeLineIcon,
-    listCheckIcon,
-    timerFlashIcon,
-  } from "$lib/icons";
+  import AddCircleFillSystem from "svelte-remix/AddCircleFillSystem.svelte";
+  import CalendarTodoFillBusiness from "svelte-remix/CalendarTodoFillBusiness.svelte";
+  import CheckboxCircleFillSystem from "svelte-remix/CheckboxCircleFillSystem.svelte";
+  import Compass3FillMap from "svelte-remix/Compass3FillMap.svelte";
+  import ErrorWarningFillSystem from "svelte-remix/ErrorWarningFillSystem.svelte";
+  import GroupFillUserFaces from "svelte-remix/GroupFillUserFaces.svelte";
+  import InformationFillSystem from "svelte-remix/InformationFillSystem.svelte";
+  import MapPin2FillMap from "svelte-remix/MapPin2FillMap.svelte";
+  import MoneyEuroCircleFillFinance from "svelte-remix/MoneyEuroCircleFillFinance.svelte";
+  import TimeFillSystem from "svelte-remix/TimeFillSystem.svelte";
+
   import type { Service, ServicesOptions } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
   import { isValidformatOsmHours } from "$lib/utils/opening-hours";
   import { isNotFreeService } from "$lib/utils/service";
+
   import OsmHours from "../../osm-hours.svelte";
   import ServiceDuration from "./service-duration.svelte";
-  import SubcategoryList from "./subcategory-list.svelte";
+  import ServiceKeyInformationLabel from "./service-key-information-label.svelte";
+  import ServiceKeyInformationSection from "./service-key-information-section.svelte";
 
   export let service: Service;
   export let servicesOptions: ServicesOptions;
 
   $: isDI = "source" in service;
-
-  // trier les types dans l'ordre d'affichage du formulaire
-  $: sortedServiceKindsDisplay = service.kindsDisplay?.sort((a, b) =>
-    a.localeCompare(b)
-  );
 </script>
 
-<h2 class="text-f23">Informations clés</h2>
+<section>
+  <h2 class="sr-only">Informations clés</h2>
 
-<div class="gap-s12 flex flex-col">
-  {#if service.fundingLabelsDisplay.length > 0}
-    <div class="bold text-info flex items-center font-bold">
-      <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
-        {@html euroFillIcon}
-      </span>
-      Financé par&#8239;: {service.fundingLabelsDisplay.join(", ")}
+  <div
+    class="border-gray-02 p-s32 gap-s32 divide-gray-01 text-f16 text-gray-text flex flex-col divide-y rounded-2xl border leading-24"
+  >
+    <div class="pb-s32">
+      <ServiceKeyInformationSection
+        icon={GroupFillUserFaces}
+        title="Le public concerné"
+      >
+        {#if Array.isArray(service.concernedPublicDisplay)}
+          <ul
+            class="[&>li+li]:before:mx-s6 [&>li]:inline [&>li+li]:before:inline [&>li+li]:before:content-['·']"
+          >
+            {#each service.concernedPublicDisplay as pub}
+              <li>{pub}</li>
+            {:else}
+              <li>Tous publics</li>
+            {/each}
+          </ul>
+        {:else}
+          Non renseigné
+        {/if}
+      </ServiceKeyInformationSection>
     </div>
-  {/if}
-  {#if service.isCumulative != null}
-    {#if service.isCumulative}
-      <div class="bold text-available flex items-center font-bold">
-        <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
-          {@html addCircleIcon}
-        </span>
-        Ce service est cumulable avec d’autres dispositifs
-      </div>
-    {:else}
-      <div class="bold text-warning flex items-center font-bold">
-        <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
-          {@html errorWarningIcon}
-        </span>
-        Ce service n’est pas cumulable avec d’autres dispositifs
-      </div>
-    {/if}
-  {/if}
-  {#if service.feeCondition && isNotFreeService(service.feeCondition)}
-    <div class="bold text-warning flex items-center font-bold">
-      <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
-        {@html errorWarningIcon}
-      </span>
-      Frais à charge du bénéficiaire
-    </div>
-  {/if}
-
-  {#if service.qpvOrZrr}
-    <div class="bold text-info flex items-center font-bold">
-      <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
-        {@html informationIcon}
-      </span>
-      Uniquement QPV ou ZRR
-    </div>
-  {/if}
-
-  <hr class="mb-s10 mt-s20" />
-
-  <div>
-    <h3 class="mb-s10!">
-      <span class="mr-s8 h-s24 w-s24 fill-current">
-        {@html listCheckIcon}
-      </span>
-      Les catégories de besoins
-    </h3>
-    <SubcategoryList {service} {servicesOptions} />
-  </div>
-
-  <hr class="mb-s10 mt-s20" />
-
-  {#if service.durationWeeklyHours && service.durationWeeks}
-    <div class="flex-1">
-      <h3>
-        <span class="mr-s8 h-s24 w-s24 shrink-0 self-baseline fill-current">
-          {@html timerFlashIcon}
-        </span>
-        Durée de la prestation
-      </h3>
-      <ServiceDuration {service} />
-    </div>
-    <hr class="mb-s10 mt-s20" />
-  {/if}
-
-  <div class="flex">
-    <div class="flex-1">
-      <h3>
-        <span class="mr-s8 h-s24 w-s24 shrink-0 self-baseline fill-current">
-          {@html priceTagIcon}
-        </span>
-        Type de service
-      </h3>
-
-      <ul class="text-f16 text-gray-text inline-flex flex-wrap">
-        {#if Array.isArray(service.kindsDisplay)}
-          {#each sortedServiceKindsDisplay as kind, index (kind)}
-            <li class:separator={index > 0}>{kind}</li>
-          {/each}
+    <div class="pb-s32">
+      <ServiceKeyInformationSection
+        icon={CheckboxCircleFillSystem}
+        title="Les critéres d’admission"
+      >
+        {#if Array.isArray(service.accessConditionsDisplay) || service.qpvOrZrr}
+          <ul class="list-inside list-disc">
+            {#if Array.isArray(service.accessConditionsDisplay)}
+              {#each service.accessConditionsDisplay as condition (condition)}
+                <li>{condition}</li>
+              {:else}
+                {#if !service.qpvOrZrr}
+                  <li>Aucun</li>
+                {/if}
+              {/each}
+            {/if}
+            {#if service.qpvOrZrr}
+              <li>Uniquement QPV ou ZRR</li>
+            {/if}
+          </ul>
         {:else}
           <li>Non renseigné</li>
         {/if}
-      </ul>
+      </ServiceKeyInformationSection>
     </div>
-
-    {#if service.feeCondition && isNotFreeService(service.feeCondition)}
+    <div class="pb-s32 gap-s32 flex flex-col sm:flex-row">
       <div class="flex-1">
-        <h3>
-          <span class="mr-s8 h-s24 w-s24 shrink-0 self-baseline fill-current">
-            {@html euroLineIcon}
-          </span>
-          Frais à charge
-        </h3>
-        <p class="pb-s10 block">
-          {getLabelFromValue(
-            service.feeCondition,
-            servicesOptions.feeConditions
-          )}
-        </p>
-        <p class="block">
-          {service.feeDetails != null
-            ? service.feeDetails
-            : "La structure n’a pas précisé le montant des frais"}
-        </p>
-      </div>
-    {/if}
-  </div>
-
-  <hr class="mb-s10 mt-s20" />
-
-  <div class="flex">
-    <div class="flex-1">
-      <h3>
-        <span class="mr-s8 h-s24 w-s24 shrink-0 self-baseline fill-current">
-          {@html mapPinUserFillIcon}
-        </span>
-        Lieu d’accueil
-      </h3>
-      {#if service.locationKinds?.length}
-        <div class="gap-s6 flex flex-col">
-          {#if service.locationKinds.includes("en-presentiel")}
-            <p class="mb-s6">
-              Présentiel,<br />
-              {#if service.address1}
-                {service.address1}{#if service.address2}, {service.address2}{/if},
-              {/if}
-              {service.postalCode}&nbsp;{service.city}
-            </p>
-          {/if}
-
-          {#if service.locationKinds.includes("a-distance")}
-            <p>
-              À distance
-              {#if service.remoteUrl}
-                ,<br />
-                <a
-                  target="_blank"
-                  rel="noopener ugc"
-                  href={service.remoteUrl}
-                  class="underline"
-                  title="Ouverture dans une nouvelle fenêtre"
-                >
-                  {shortenString(service.remoteUrl, 35)}
-                </a>
-              {/if}
-            </p>
-          {/if}
+        <div>
+          <ServiceKeyInformationSection
+            icon={MapPin2FillMap}
+            title="Lieu d’accueil"
+          >
+            {#if service.locationKinds?.length}
+              <div class="gap-s12 flex flex-col">
+                {#if service.locationKinds.includes("en-presentiel")}
+                  <div class="flex flex-col">
+                    <strong>Présentiel</strong>
+                    {#if service.addressLine}
+                      <address class="not-italic">
+                        {service.addressLine}
+                      </address>
+                      <a
+                        class="text-magenta-cta mt-s4 font-bold"
+                        href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(service.addressLine)}`}
+                        target="_blank"
+                        rel="noopener ugc">Voir sur la carte</a
+                      >
+                    {/if}
+                  </div>
+                {/if}
+                {#if service.locationKinds.includes("a-distance")}
+                  <div class="flex flex-col">
+                    <strong
+                      >À distance{service.locationKinds.includes(
+                        "en-presentiel"
+                      )
+                        ? " également"
+                        : ""}</strong
+                    >
+                    {#if service.remoteUrl}
+                      <a
+                        class="text-magenta-cta mt-s4 font-bold"
+                        href={service.remoteUrl}
+                        target="_blank"
+                        rel="noopener ugc"
+                      >
+                        {shortenString(service.remoteUrl, 35)}
+                      </a>
+                    {/if}
+                  </div>
+                {/if}
+              </div>
+            {:else}
+              Non renseigné
+            {/if}
+          </ServiceKeyInformationSection>
         </div>
-      {:else}
-        <p class="mb-s6">Non renseigné</p>
-      {/if}
-    </div>
-
-    {#if service.recurrence}
+        <div class="mt-s28">
+          <ServiceKeyInformationSection
+            icon={Compass3FillMap}
+            title="Périmètres géographiques"
+          >
+            {service.diffusionZoneDetailsDisplay} ({service.department})
+          </ServiceKeyInformationSection>
+        </div>
+      </div>
       <div class="flex-1">
-        <h3>
-          <span class="mr-s8 h-s24 w-s24 shrink-0 self-baseline fill-current">
-            {@html timeLineIcon}
-          </span>
-          Fréquence et horaires
-        </h3>
-        <p>
+        <ServiceKeyInformationSection
+          icon={TimeFillSystem}
+          title="Fréquence et horaires"
+        >
           {#if isDI && isValidformatOsmHours(service.recurrence)}
             <OsmHours osmHours={service.recurrence} />
           {:else}
             {service.recurrence}
           {/if}
-        </p>
+        </ServiceKeyInformationSection>
       </div>
-    {/if}
+    </div>
+    <div class="pb-s32">
+      <ServiceKeyInformationSection
+        icon={CalendarTodoFillBusiness}
+        title="Durée de la prestation"
+      >
+        <ServiceDuration {service} />
+      </ServiceKeyInformationSection>
+    </div>
+    <div class="pb-s32">
+      <ServiceKeyInformationSection
+        icon={MoneyEuroCircleFillFinance}
+        title="Frais à charge"
+      >
+        <div class="flex flex-col">
+          <span>
+            {getLabelFromValue(
+              service.feeCondition,
+              servicesOptions.feeConditions
+            )}
+          </span>
+          <span>
+            {#if service.feeDetails != null}
+              {service.feeDetails}
+            {:else}
+              La structure n’a pas précisé le montant des frais
+            {/if}
+          </span>
+        </div>
+      </ServiceKeyInformationSection>
+    </div>
+    <div class="gap-s12 text-f14 flex flex-col leading-16 font-bold">
+      {#if service.isCumulative}
+        <ServiceKeyInformationLabel
+          icon={AddCircleFillSystem}
+          label="Ce service est cumulable avec d’autres dispositifs"
+          textClass="text-available"
+        />
+      {:else}
+        <ServiceKeyInformationLabel
+          icon={ErrorWarningFillSystem}
+          label="Ce service n’est pas cumulable avec d’autres dispositifs"
+          textClass="text-warning"
+        />
+      {/if}
+      {#if service.fundingLabelsDisplay.length > 0}
+        <ServiceKeyInformationLabel
+          icon={MoneyEuroCircleFillFinance}
+          label="Financé par&#8239;: {service.fundingLabelsDisplay.join(', ')}"
+          textClass="text-info"
+        />
+      {/if}
+      {#if service.feeCondition && isNotFreeService(service.feeCondition)}
+        <ServiceKeyInformationLabel
+          icon={ErrorWarningFillSystem}
+          label="Frais à charge du bénéficiaire"
+          textClass="text-warning"
+        />
+      {/if}
+      {#if service.qpvOrZrr}
+        <ServiceKeyInformationLabel
+          icon={InformationFillSystem}
+          label="Uniquement QPV ou ZRR"
+          textClass="text-info"
+        />
+      {/if}
+    </div>
   </div>
-</div>
-
-<style lang="postcss">
-  @reference "../../../../../app.css";
-
-  h3 {
-    @apply mb-s2 mt-s10 text-f17 flex items-center;
-  }
-  p {
-    @apply m-s0 text-f16 text-gray-text;
-  }
-  li.separator::before {
-    content: "•";
-    @apply mx-s6;
-  }
-</style>
+</section>
