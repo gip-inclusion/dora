@@ -10,7 +10,6 @@
 
   import PreventFakeOrientationModal from "./modals/prevent-fake-orientation-modal.svelte";
 
-  import ServiceBeneficiaries from "./service-beneficiaries.svelte";
   import ServiceMobilisation from "./service-mobilisation.svelte";
   import SmallServiceShare from "./small-service-share.svelte";
   import ServicePresentation from "./service-presentation.svelte";
@@ -69,15 +68,7 @@
 <CenteredGrid>
   <div class="mb-s48 gap-x-s48 flex flex-col justify-between md:flex-row">
     <div class="flex-auto basis-2/3">
-      <div>
-        <ServicePresentation {service} {servicesOptions} {isDI} />
-      </div>
-      <div class="main-content">
-        <div>
-          <hr class="my-s24" />
-          <ServiceBeneficiaries {service} />
-        </div>
-      </div>
+      <ServicePresentation {service} {servicesOptions} {isDI} />
     </div>
 
     {#if browser}
