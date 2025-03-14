@@ -2,11 +2,11 @@
   import { page } from "$app/stores";
   import ServiceKeyInformations from "$lib/components/specialized/services/display/service-key-informations.svelte";
   import ServiceSteps from "$lib/components/specialized/services/display/service-steps.svelte";
+  import ServiceDocuments from "$lib/components/specialized/services/display/service-documents.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import Notice from "$lib/components/display/notice.svelte";
 
   import ServiceDescription from "../service-description.svelte";
-
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
   export let isDI = false;
@@ -15,15 +15,18 @@
 <div class="gap-s36 flex flex-col">
   <div>
     <p class="text-f16 leading-s32 text-gray-text">
-  {service.shortDesc || ""}
-</p>
+      {service.shortDesc || ""}
+    </p>
     {#if service.fullDesc}
       <ServiceDescription {service} />
     {/if}
-  <ServiceKeyInformations {service} {servicesOptions} />
-</div>
+    <ServiceKeyInformations {service} {servicesOptions} />
+  </div>
 
   <ServiceSteps {service} />
+
+  <ServiceDocuments {service} />
+</div>
 <div class="mb-s40 print:mb-s24" />
 
 {#if isDI}

@@ -12,7 +12,6 @@
 
   import ServiceBeneficiaries from "./service-beneficiaries.svelte";
   import ServiceMobilisation from "./service-mobilisation.svelte";
-  import ServiceMobilize from "./service-mobilize.svelte";
   import SmallServiceShare from "./small-service-share.svelte";
   import ServicePresentation from "./service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
@@ -77,15 +76,6 @@
         <div>
           <hr class="my-s24" />
           <ServiceBeneficiaries {service} />
-        </div>
-        <hr class="my-s24" />
-        <div class="mobilize">
-          <ServiceMobilize
-            on:trackMobilisation={handleTrackMobilisationEvent}
-            {service}
-            {orientationFormUrl}
-            {handleOrientationFormClickEvent}
-          />
         </div>
       </div>
     </div>
