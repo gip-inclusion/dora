@@ -10,7 +10,7 @@
   import MoneyEuroCircleFillFinance from "svelte-remix/MoneyEuroCircleFillFinance.svelte";
   import TimeFillSystem from "svelte-remix/TimeFillSystem.svelte";
 
-  import type { Service, ServicesOptions } from "$lib/types";
+  import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
   import { isValidformatOsmHours } from "$lib/utils/opening-hours";
@@ -21,7 +21,7 @@
   import ServiceKeyInformationLabel from "./service-key-information-label.svelte";
   import ServiceKeyInformationSection from "./service-key-information-section.svelte";
 
-  export let service: Service;
+  export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
 
   $: isDI = "source" in service;
@@ -38,19 +38,15 @@
         icon={GroupFillUserFaces}
         title="Le public concerné"
       >
-        {#if Array.isArray(service.concernedPublicDisplay)}
-          <ul
-            class="[&>li+li]:before:mx-s6 [&>li]:inline [&>li+li]:before:inline [&>li+li]:before:content-['·']"
-          >
-            {#each service.concernedPublicDisplay as pub}
-              <li>{pub}</li>
-            {:else}
-              <li>Tous publics</li>
-            {/each}
-          </ul>
-        {:else}
-          Non renseigné
-        {/if}
+        <ul
+          class="[&>li+li]:before:mx-s6 [&>li]:inline [&>li+li]:before:inline [&>li+li]:before:content-['·']"
+        >
+          {#each service.concernedPublicDisplay as pub}
+            <li>{pub}</li>
+          {:else}
+            <li>Tous publics</li>
+          {/each}
+        </ul>
       </ServiceKeyInformationSection>
     </div>
     <div class="pb-s32">
@@ -79,66 +75,68 @@
       </ServiceKeyInformationSection>
     </div>
     <div class="pb-s32 gap-s32 flex flex-col sm:flex-row">
-      <div class="flex-1">
-        <div>
-          <ServiceKeyInformationSection
-            icon={MapPin2FillMap}
-            title="Lieu d’accueil"
-          >
-            {#if service.locationKinds?.length}
-              <div class="gap-s12 flex flex-col">
-                {#if service.locationKinds.includes("en-presentiel")}
-                  <div class="flex flex-col">
-                    <strong>Présentiel</strong>
-                    {#if service.addressLine}
-                      <address class="not-italic">
-                        {service.addressLine}
-                      </address>
-                      <a
-                        class="text-magenta-cta mt-s4 font-bold"
-                        href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(service.addressLine)}`}
-                        target="_blank"
-                        rel="noopener ugc">Voir sur la carte</a
+      {#if !service.isModel}
+        <div class="flex-1">
+          <div>
+            <ServiceKeyInformationSection
+              icon={MapPin2FillMap}
+              title="Lieu d’accueil"
+            >
+              {#if service.locationKinds.length > 0}
+                <div class="gap-s12 flex flex-col">
+                  {#if service.locationKinds.includes("en-presentiel")}
+                    <div class="flex flex-col">
+                      <strong>Présentiel</strong>
+                      {#if service.addressLine}
+                        <address class="not-italic">
+                          {service.addressLine}
+                        </address>
+                        <a
+                          class="text-magenta-cta mt-s4 font-bold"
+                          href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(service.addressLine)}`}
+                          target="_blank"
+                          rel="noopener ugc">Voir sur la carte</a
+                        >
+                      {/if}
+                    </div>
+                  {/if}
+                  {#if service.locationKinds.includes("a-distance")}
+                    <div class="flex flex-col">
+                      <strong
+                        >À distance{service.locationKinds.includes(
+                          "en-presentiel"
+                        )
+                          ? " également"
+                          : ""}</strong
                       >
-                    {/if}
-                  </div>
-                {/if}
-                {#if service.locationKinds.includes("a-distance")}
-                  <div class="flex flex-col">
-                    <strong
-                      >À distance{service.locationKinds.includes(
-                        "en-presentiel"
-                      )
-                        ? " également"
-                        : ""}</strong
-                    >
-                    {#if service.remoteUrl}
-                      <a
-                        class="text-magenta-cta mt-s4 font-bold"
-                        href={service.remoteUrl}
-                        target="_blank"
-                        rel="noopener ugc"
-                      >
-                        {shortenString(service.remoteUrl, 35)}
-                      </a>
-                    {/if}
-                  </div>
-                {/if}
-              </div>
-            {:else}
-              Non renseigné
-            {/if}
-          </ServiceKeyInformationSection>
+                      {#if service.remoteUrl}
+                        <a
+                          class="text-magenta-cta mt-s4 font-bold"
+                          href={service.remoteUrl}
+                          target="_blank"
+                          rel="noopener ugc"
+                        >
+                          {shortenString(service.remoteUrl, 35)}
+                        </a>
+                      {/if}
+                    </div>
+                  {/if}
+                </div>
+              {:else}
+                Non renseigné
+              {/if}
+            </ServiceKeyInformationSection>
+          </div>
+          <div class="mt-s28">
+            <ServiceKeyInformationSection
+              icon={Compass3FillMap}
+              title="Périmètres géographiques"
+            >
+              {service.diffusionZoneDetailsDisplay} ({service.department})
+            </ServiceKeyInformationSection>
+          </div>
         </div>
-        <div class="mt-s28">
-          <ServiceKeyInformationSection
-            icon={Compass3FillMap}
-            title="Périmètres géographiques"
-          >
-            {service.diffusionZoneDetailsDisplay} ({service.department})
-          </ServiceKeyInformationSection>
-        </div>
-      </div>
+      {/if}
       <div class="flex-1">
         <ServiceKeyInformationSection
           icon={TimeFillSystem}
