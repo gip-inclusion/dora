@@ -37,7 +37,7 @@
 
 <CenteredGrid>
   <div class="mb-s48">
-    <Breadcrumb currentLocation="login" dark />
+    <Breadcrumb currentLocation="login" />
   </div>
 
   <h1 class="mb-s24 text-france-blue">Accéder à DORA</h1>

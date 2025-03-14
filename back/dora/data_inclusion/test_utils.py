@@ -53,6 +53,8 @@ def make_di_service_data(**kwargs) -> dict:
             "zone_diffusion_nom": "foo",
             "structure": {
                 "nom": "Rouge Empire",
+                "commune": "Sainte Jacquelineboeuf",
+                "code_insee": "59999",
                 "telephone": "1234",
                 "courriel": "contact@example.com",
             },

@@ -8,15 +8,12 @@
   export let wait = false;
   export let light = false;
   export let icon: string | null = null;
-  export let darkBg = false;
   export let smallIcon = false;
   export let truncate = false;
 </script>
 
 <div
-  class="text-f14 flex flex-row items-center {darkBg
-    ? 'print:text-gray-text text-white'
-    : ''}"
+  class="text-f14 flex flex-row items-center"
   class:bold
   class:italic
   class:success

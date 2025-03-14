@@ -324,6 +324,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "structure": service_data["structure_id"],
         "structure_info": {
             "name": service_data["structure"]["nom"],
+            "city": service_data["structure"]["commune"],
             "department": structure_department,
             "phone": service_data["structure"]["telephone"],
             "email": service_data["structure"]["courriel"],
