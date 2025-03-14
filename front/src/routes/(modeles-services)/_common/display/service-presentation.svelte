@@ -11,24 +11,18 @@
   export let isDI = false;
 </script>
 
-<h2 class="mb-s40">Présentation du service</h2>
-
-<p class="mb-s40 font-bold">
+<div class="gap-s36 flex flex-col">
+  <div>
+    <p class="text-f16 leading-s32 text-gray-text">
   {service.shortDesc || ""}
 </p>
-
-<div class=" border-gray-02 p-s32 pb-s48 rounded-3xl border">
+    {#if service.fullDesc}
+      <ServiceDescription {service} />
+    {/if}
   <ServiceKeyInformations {service} {servicesOptions} />
 </div>
 
 <div class="mb-s40 print:mb-s24" />
-
-{#if service.fullDesc}
-  <div>
-    <h3>Description du service</h3>
-    <ServiceDescription {service} />
-  </div>
-{/if}
 
 {#if isDI}
   <Notice
