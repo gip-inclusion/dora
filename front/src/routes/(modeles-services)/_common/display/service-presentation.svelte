@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import ServiceKeyInformations from "$lib/components/specialized/services/display/service-key-informations.svelte";
+  import ServiceSteps from "$lib/components/specialized/services/display/service-steps.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import Notice from "$lib/components/display/notice.svelte";
 
@@ -22,6 +23,7 @@
   <ServiceKeyInformations {service} {servicesOptions} />
 </div>
 
+  <ServiceSteps {service} />
 <div class="mb-s40 print:mb-s24" />
 
 {#if isDI}
