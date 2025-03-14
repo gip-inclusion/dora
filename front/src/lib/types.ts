@@ -619,6 +619,8 @@ export type Model = {
   forms: string[];
   formsInfo: FileInfo[];
   fullDesc: string;
+  fundingLabels: Array<FundingLabel["value"]>;
+  fundingLabelsDisplay: Array<FundingLabel["label"]>;
   isCumulative: boolean;
   kinds: ServiceKind[];
   kindsDisplay: string[];
