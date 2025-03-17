@@ -5,7 +5,7 @@
   export let service;
 </script>
 
-<div class="markdown-wrapper prose mb-s24 w-full">
+<div class="markdown-wrapper prose w-full">
   <TextClamp text={markdownToHTML(service.fullDesc, 4)} />
 </div>
 

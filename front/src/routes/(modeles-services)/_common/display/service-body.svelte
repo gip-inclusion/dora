@@ -64,7 +64,7 @@
 </script>
 
 <CenteredGrid>
-  <div class="md:gap-s48 flex flex-col md:flex-row">
+  <div class="md:gap-s48 mb-s32 flex flex-col md:flex-row">
     <div class="basis-2/3">
       <div class="text-f16 leading-s32 text-gray-text">
         <p>
