@@ -60,13 +60,7 @@
         <h3 class="text-f17 leading-s24 text-gray-dark mb-s8 font-bold">
           Type de service
         </h3>
-        <ul
-          class="[&>li+li]:before:mx-s6 [&>li]:inline [&>li+li]:before:content-['•']"
-        >
-          {#each service.kindsDisplay as kind}
-            <li>{kind}</li>
-          {/each}
-        </ul>
+        {service.kindsDisplay.join(", ")}
       </section>
     {/if}
     {#if hasSource}
