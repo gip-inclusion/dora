@@ -55,11 +55,7 @@
     />
   </CenteredGrid>
 
-  <ServiceBody
-    service={data.service}
-    servicesOptions={data.servicesOptions}
-    isDI={data.isDI}
-  />
+  <ServiceBody service={data.service} servicesOptions={data.servicesOptions} />
 
   {#if browser && data.service.canWrite && serviceWasJustPublished && !data.service.hasAlreadyBeenUnpublished}
     <TallyPopup

@@ -17,8 +17,7 @@
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
 
-  export let isModel = false;
-  export let isDI = false;
+  $: isDI = "source" in service;
 
   $: searchIdStr = $page.url.searchParams.get("searchId");
   $: searchIdNumber = searchIdStr ? parseInt(searchIdStr) : undefined;
@@ -65,21 +64,27 @@
 </script>
 
 <CenteredGrid>
-  <div class="mb-s48 gap-x-s48 flex flex-col justify-between md:flex-row">
-    <div class="flex-auto basis-2/3">
-      <div>
-        <p class="text-f16 leading-s32 text-gray-text">
+  <div class="md:gap-s48 flex flex-col md:flex-row">
+    <div class="basis-2/3">
+      <div class="text-f16 leading-s32 text-gray-text">
+        <p>
           {service.shortDesc || ""}
         </p>
         {#if service.fullDesc}
           <ServiceDescription {service} />
         {/if}
       </div>
+    </div>
+    <div class="basis-1/3" />
+  </div>
+
+  <div class="gap-s48 flex flex-col md:flex-row">
+    <div class="basis-2/3">
       <ServicePresentation {service} {servicesOptions} {isDI} />
     </div>
 
-    <div class="gap-y-s24 flex flex-none flex-col md:w-[320px] lg:w-[375px]">
-      {#if !isModel}
+    <div class="gap-y-s24 flex basis-1/3 flex-col">
+      {#if !service.isModel}
         <div class="top-s32 sticky">
           <div
             class="border-gray-02 bg-france-blue p-s24 px-s32 block rounded-3xl border text-white print:hidden"

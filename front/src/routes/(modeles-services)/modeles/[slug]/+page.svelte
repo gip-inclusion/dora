@@ -56,8 +56,4 @@
   <hr class="mt-s32" />
 </CenteredGrid>
 
-<ServiceBody
-  service={data.model}
-  servicesOptions={data.servicesOptions}
-  isModel
-/>
+<ServiceBody service={data.model} servicesOptions={data.servicesOptions} />
