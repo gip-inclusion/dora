@@ -11,7 +11,6 @@
   import PreventFakeOrientationModal from "./modals/prevent-fake-orientation-modal.svelte";
 
   import ServiceMobilisation from "./service-mobilisation.svelte";
-  import SmallServiceShare from "./small-service-share.svelte";
   import ServicePresentation from "./service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
 
@@ -90,12 +89,6 @@
             {#if !$userInfo && service.source === "mes-aides" && service.lienSource}
               <div class="mb-s8 mt-s16">
                 <ServiceIndividual url={service.lienSource} />
-              </div>
-            {/if}
-
-            {#if !isModel}
-              <div class="mt-s24 gap-y-s24 flex flex-col">
-                <SmallServiceShare {service} {isDI} />
               </div>
             {/if}
           </div>
