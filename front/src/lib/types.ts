@@ -459,6 +459,7 @@ export interface Service {
   isAvailable: boolean;
   isContactInfoPublic: boolean;
   isCumulative: boolean;
+  isModel: false;
   isOrientable: boolean;
   kinds: ServiceKind[];
   kindsDisplay: string[];
@@ -620,6 +621,7 @@ export type Model = {
   formsInfo: FileInfo[];
   fullDesc: string;
   isCumulative: boolean;
+  isModel: true;
   kinds: ServiceKind[];
   kindsDisplay: string[];
   modificationDate: string;
