@@ -319,6 +319,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             "is_available",
             "is_contact_info_public",
             "is_cumulative",
+            "is_model",
             "is_orientable",
             "kinds",
             "kinds_display",
@@ -354,6 +355,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             "city",
+            "is_model",
         ]
         lookup_field = "slug"
 
@@ -553,6 +555,7 @@ class ServiceModelSerializer(ServiceSerializer):
             "funding_labels_display",
             "full_desc",
             "is_cumulative",
+            "is_model",
             "kinds",
             "kinds_display",
             "modification_date",
@@ -571,6 +574,9 @@ class ServiceModelSerializer(ServiceSerializer):
             "subcategories_display",
             "suspension_date",
             "update_frequency",
+        ]
+        read_only_fields = [
+            "is_model",
         ]
         lookup_field = "slug"
 
