@@ -4,15 +4,6 @@
   import ServiceStructureLabel from "../../_common/service-structure-label.svelte";
 
   export let service: Service;
-
-  $: diffusionZoneDetails = service.diffusionZoneDetails
-    ? `(${service.diffusionZoneDetails})`
-    : "";
-  $: diffusionZone = service.diffusionZoneDetailsDisplay
-    ? [service.diffusionZoneDetailsDisplay, diffusionZoneDetails]
-        .filter(Boolean)
-        .join(" ")
-    : "Non renseigné";
 </script>
 
 <div class="gap-s48 text-gray-text flex flex-col">
@@ -30,7 +21,8 @@
       {service.name}
     </h1>
     <div class="text-f14">
-      Périmètre d’éligibilité&#8239;: {diffusionZone}
+      Périmètre d’éligibilité&#8239;: {service.diffusionZoneDetailsDisplay ||
+        "non renseigné"}
     </div>
   </div>
 </div>
