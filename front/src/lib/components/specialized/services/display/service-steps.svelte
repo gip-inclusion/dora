@@ -150,7 +150,7 @@
       <div class="mt-s16">
         <strong
           >Vous étes un particulier&#8239;? <a
-            class="text-magenta-cta"
+            class="text-magenta-cta underline"
             href="/structures/{service.structureInfo.slug}"
             >Voir les coordonnées de la structure</a
           ></strong
