@@ -1,5 +1,4 @@
 <script lang="ts">
-  import AddCircleFillSystem from "svelte-remix/AddCircleFillSystem.svelte";
   import CalendarTodoFillBusiness from "svelte-remix/CalendarTodoFillBusiness.svelte";
   import CheckboxCircleFillSystem from "svelte-remix/CheckboxCircleFillSystem.svelte";
   import Compass3FillMap from "svelte-remix/Compass3FillMap.svelte";
@@ -14,7 +13,7 @@
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
   import { isValidformatOsmHours } from "$lib/utils/opening-hours";
-  import { isNotFreeService } from "$lib/utils/service";
+  import { isNotFreeService, isDurationValid } from "$lib/utils/service";
 
   import OsmHours from "../../osm-hours.svelte";
   import ServiceDuration from "./service-duration.svelte";
@@ -25,6 +24,10 @@
   export let servicesOptions: ServicesOptions;
 
   $: isDI = "source" in service;
+
+  $: isNotCumulative = !service.isCumulative;
+  $: hasFundingLabels = service.fundingLabelsDisplay.length > 0;
+  $: isQpvOrZrr = service.qpvOrZrr;
 </script>
 
 <section>
@@ -61,7 +64,7 @@
                 <li>{condition}</li>
               {:else}
                 {#if !service.qpvOrZrr}
-                  <li>Aucun</li>
+                  <li>Aucun critère d’admission spécifique</li>
                 {/if}
               {/each}
             {/if}
@@ -70,7 +73,7 @@
             {/if}
           </ul>
         {:else}
-          <li>Non renseigné</li>
+          <li>Aucun détail n'a été renseigné par la structure</li>
         {/if}
       </ServiceKeyInformationSection>
     </div>
@@ -132,46 +135,55 @@
               icon={Compass3FillMap}
               title="Périmètres géographiques"
             >
-              {service.diffusionZoneDetailsDisplay} ({service.department})
+              {service.diffusionZoneDetailsDisplay}
             </ServiceKeyInformationSection>
           </div>
         </div>
       {/if}
-      <div class="flex-1">
+      {#if service.recurrence}
+        <div class="flex-1">
+          <ServiceKeyInformationSection
+            icon={TimeFillSystem}
+            title="Fréquence et horaires"
+          >
+            {#if isDI && isValidformatOsmHours(service.recurrence)}
+              <OsmHours osmHours={service.recurrence} />
+            {:else}
+              {service.recurrence}
+            {/if}
+          </ServiceKeyInformationSection>
+        </div>
+      {/if}
+    </div>
+    {#if isDurationValid(service)}
+      <div class="pb-s32">
         <ServiceKeyInformationSection
-          icon={TimeFillSystem}
-          title="Fréquence et horaires"
+          icon={CalendarTodoFillBusiness}
+          title="Durée de la prestation"
         >
-          {#if isDI && isValidformatOsmHours(service.recurrence)}
-            <OsmHours osmHours={service.recurrence} />
-          {:else}
-            {service.recurrence}
-          {/if}
+          <ServiceDuration {service} />
         </ServiceKeyInformationSection>
       </div>
-    </div>
-    <div class="pb-s32">
-      <ServiceKeyInformationSection
-        icon={CalendarTodoFillBusiness}
-        title="Durée de la prestation"
-      >
-        <ServiceDuration {service} />
-      </ServiceKeyInformationSection>
-    </div>
-    <div class="pb-s32">
+    {/if}
+    <div class:pb-s32={isNotCumulative || hasFundingLabels || isQpvOrZrr}>
       <ServiceKeyInformationSection
         icon={MoneyEuroCircleFillFinance}
         title="Frais à charge"
       >
         <div class="flex flex-col">
-          <span>
+          <span
+            class={service.feeCondition &&
+            isNotFreeService(service.feeCondition)
+              ? "text-warning font-bold"
+              : ""}
+          >
             {getLabelFromValue(
               service.feeCondition,
               servicesOptions.feeConditions
             )}
           </span>
           <span>
-            {#if service.feeDetails != null}
+            {#if service.feeDetails}
               {service.feeDetails}
             {:else}
               La structure n’a pas précisé le montant des frais
@@ -180,41 +192,32 @@
         </div>
       </ServiceKeyInformationSection>
     </div>
-    <div class="gap-s12 text-f14 flex flex-col leading-16 font-bold">
-      {#if service.isCumulative}
-        <ServiceKeyInformationLabel
-          icon={AddCircleFillSystem}
-          label="Ce service est cumulable avec d’autres dispositifs"
-          textClass="text-available"
-        />
-      {:else}
-        <ServiceKeyInformationLabel
-          icon={ErrorWarningFillSystem}
-          label="Ce service n’est pas cumulable avec d’autres dispositifs"
-          textClass="text-warning"
-        />
-      {/if}
-      {#if service.fundingLabelsDisplay.length > 0}
-        <ServiceKeyInformationLabel
-          icon={MoneyEuroCircleFillFinance}
-          label="Financé par&#8239;: {service.fundingLabelsDisplay.join(', ')}"
-          textClass="text-info"
-        />
-      {/if}
-      {#if service.feeCondition && isNotFreeService(service.feeCondition)}
-        <ServiceKeyInformationLabel
-          icon={ErrorWarningFillSystem}
-          label="Frais à charge du bénéficiaire"
-          textClass="text-warning"
-        />
-      {/if}
-      {#if service.qpvOrZrr}
-        <ServiceKeyInformationLabel
-          icon={InformationFillSystem}
-          label="Uniquement QPV ou ZRR"
-          textClass="text-info"
-        />
-      {/if}
-    </div>
+    {#if isNotCumulative || hasFundingLabels || isQpvOrZrr}
+      <div class="gap-s12 text-f14 flex flex-col leading-16 font-bold">
+        {#if isNotCumulative}
+          <ServiceKeyInformationLabel
+            icon={ErrorWarningFillSystem}
+            label="Ce service n’est pas cumulable avec d’autres dispositifs"
+            textClass="text-warning"
+          />
+        {/if}
+        {#if hasFundingLabels}
+          <ServiceKeyInformationLabel
+            icon={MoneyEuroCircleFillFinance}
+            label="Financé par&#8239;: {service.fundingLabelsDisplay.join(
+              ', '
+            )}"
+            textClass="text-info"
+          />
+        {/if}
+        {#if isQpvOrZrr}
+          <ServiceKeyInformationLabel
+            icon={InformationFillSystem}
+            label="Uniquement QPV ou ZRR"
+            textClass="text-info"
+          />
+        {/if}
+      </div>
+    {/if}
   </div>
 </section>
