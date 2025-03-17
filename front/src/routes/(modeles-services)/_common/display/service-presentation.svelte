@@ -5,22 +5,12 @@
   import ServiceSteps from "$lib/components/specialized/services/display/service-steps.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
 
-  import ServiceDescription from "../service-description.svelte";
-
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
 </script>
 
 <div class="gap-s36 flex flex-col">
-  <div>
-    <p class="text-f16 leading-s32 text-gray-text">
-      {service.shortDesc || ""}
-    </p>
-    {#if service.fullDesc}
-      <ServiceDescription {service} />
-    {/if}
-    <ServiceKeyInformations {service} {servicesOptions} />
-  </div>
+  <ServiceKeyInformations {service} {servicesOptions} />
 
   <ServiceSteps {service} />
 
