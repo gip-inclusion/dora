@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
   import { page } from "$app/stores";
 
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
@@ -79,31 +78,29 @@
       <ServicePresentation {service} {servicesOptions} {isDI} />
     </div>
 
-    {#if browser}
-      <div class="gap-y-s24 flex flex-none flex-col md:w-[320px] lg:w-[375px]">
-        {#if !isModel}
-          <div class="top-s32 sticky">
-            <div
-              class="border-gray-02 bg-france-blue p-s24 px-s32 block rounded-3xl border text-white print:hidden"
-            >
-              <ServiceMobilisation
-                on:trackMobilisation={handleTrackMobilisationEvent}
-                {service}
-                {isDI}
-                {orientationFormUrl}
-                {handleOrientationFormClickEvent}
-              />
-            </div>
-
-            {#if !$userInfo && service.source === "mes-aides" && service.lienSource}
-              <div class="mb-s8 mt-s16">
-                <ServiceIndividual url={service.lienSource} />
-              </div>
-            {/if}
+    <div class="gap-y-s24 flex flex-none flex-col md:w-[320px] lg:w-[375px]">
+      {#if !isModel}
+        <div class="top-s32 sticky">
+          <div
+            class="border-gray-02 bg-france-blue p-s24 px-s32 block rounded-3xl border text-white print:hidden"
+          >
+            <ServiceMobilisation
+              on:trackMobilisation={handleTrackMobilisationEvent}
+              {service}
+              {isDI}
+              {orientationFormUrl}
+              {handleOrientationFormClickEvent}
+            />
           </div>
-        {/if}
-      </div>
-    {/if}
+
+          {#if !$userInfo && service.source === "mes-aides" && service.lienSource}
+            <div class="mb-s8 mt-s16">
+              <ServiceIndividual url={service.lienSource} />
+            </div>
+          {/if}
+        </div>
+      {/if}
+    </div>
   </div>
 </CenteredGrid>
 
