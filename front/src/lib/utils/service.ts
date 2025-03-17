@@ -20,6 +20,8 @@ import {
 import type {
   Choice,
   FeeCondition,
+  Model,
+  Service,
   ServicesOptions,
   ServiceStatus,
 } from "$lib/types";
@@ -175,4 +177,13 @@ export function sortByCategories(
     result.push(...sortSubcategory(subCategoriesForCategory));
   });
   return result;
+}
+
+export function isDurationValid(service: Service | Model): boolean {
+  return (
+    isFinite(service.durationWeeklyHours) &&
+    service.durationWeeklyHours > 0 &&
+    isFinite(service.durationWeeks) &&
+    service.durationWeeks > 0
+  );
 }

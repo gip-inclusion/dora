@@ -1,13 +1,9 @@
 <script lang="ts">
   import type { Model, Service } from "$lib/types";
-
+  import { isDurationValid } from "$lib/utils/service";
   export let service: Service | Model;
 
-  $: isValid =
-    isFinite(service.durationWeeklyHours) &&
-    service.durationWeeklyHours > 0 &&
-    isFinite(service.durationWeeks) &&
-    service.durationWeeks > 0;
+  $: isValid = isDurationValid(service);
 
   $: totalHours = isValid
     ? service.durationWeeklyHours * service.durationWeeks
