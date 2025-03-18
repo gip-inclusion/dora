@@ -5,7 +5,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import MembershipPendingWarning from "$lib/components/specialized/membership-pending-warning.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import ServiceStructureLabel from "../../../_common/service-structure-label.svelte";
+  import ServiceStructureLabel from "../components/service-structure-label.svelte";
 
   export let data;
 

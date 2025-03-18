@@ -1,7 +1,7 @@
 <script lang="ts">
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import type { Service } from "$lib/types";
-  import ServiceStructureLabel from "../../_common/service-structure-label.svelte";
+  import ServiceStructureLabel from "./components/service-structure-label.svelte";
 
   export let service: Service;
 </script>
