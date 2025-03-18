@@ -2,6 +2,7 @@
   import type { Model, Service } from "$lib/types";
   import { formatFilePath } from "$lib/utils/file";
 
+  import ServiceList from "./components/service-list.svelte";
   import ServiceSection from "./components/service-section.svelte";
   import ServiceSubsection from "./components/service-subsection.svelte";
 
@@ -19,7 +20,7 @@
   <ServiceSection title="Les documents à fournir">
     {#if hasDocuments}
       <ServiceSubsection title="Documents à compléter">
-        <ul class="text-gray-text space-y-s2 list-inside list-disc">
+        <ServiceList>
           {#if Array.isArray(service.formsInfo)}
             {#each service.formsInfo as form}
               <li>
@@ -44,16 +45,16 @@
               >
             </li>
           {/if}
-        </ul>
+        </ServiceList>
       </ServiceSubsection>
     {/if}
     {#if hasCredentials}
       <ServiceSubsection title="Justificatifs à fournir">
-        <ul class="text-gray-text space-y-s2 list-inside list-disc">
+        <ServiceList>
           {#each service.credentialsDisplay as creds}
             <li>{creds}</li>
           {/each}
-        </ul>
+        </ServiceList>
       </ServiceSubsection>
     {/if}
   </ServiceSection>

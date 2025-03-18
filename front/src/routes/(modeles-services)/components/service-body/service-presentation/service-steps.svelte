@@ -10,6 +10,7 @@
     Service,
   } from "$lib/types";
 
+  import ServiceList from "./components/service-list.svelte";
   import ServiceSection from "./components/service-section.svelte";
   import ServiceSubsection from "./components/service-subsection.svelte";
 
@@ -72,7 +73,7 @@
 
 <ServiceSection title="Les démarches à réaliser">
   <ServiceSubsection title="Pour les professionnels de l’accompagnement">
-    <ul class="space-y-s2 list-inside list-disc">
+    <ServiceList>
       {#each coachOrientationModesValueAndDisplay as [modeValue, modeDisplay] (modeValue)}
         <li>
           {#if modeValue === "formulaire-dora"}
@@ -92,10 +93,10 @@
       {:else}
         <li>Non renseigné</li>
       {/each}
-    </ul>
+    </ServiceList>
   </ServiceSubsection>
   <ServiceSubsection title="Pour les particuliers">
-    <ul class=" space-y-s2 list-inside list-disc">
+    <ServiceList>
       {#each beneficiariesAccessModesValueAndDisplay as [modeValue, modeDisplay] (modeValue)}
         <li>
           {#if modeValue === "completer-le-formulaire-dadhesion"}
@@ -125,7 +126,7 @@
       {:else}
         <li>Non renseigné</li>
       {/each}
-    </ul>
+    </ServiceList>
     {#if !isDI}
       <div class="mt-s16">
         <strong

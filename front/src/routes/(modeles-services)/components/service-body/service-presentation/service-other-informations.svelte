@@ -2,6 +2,7 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getCategoryLabel, getSubCategoryLabel } from "$lib/utils/service";
 
+  import ServiceList from "./components/service-list.svelte";
   import ServiceSection from "./components/service-section.svelte";
   import ServiceSubsection from "./components/service-subsection.svelte";
 
@@ -30,7 +31,7 @@
   <ServiceSection title="Autres informations">
     {#if hasCategories}
       <ServiceSubsection title="Thématiques et besoins associés">
-        <ul class="space-y-s2 list-inside list-disc">
+        <ServiceList>
           {#each Object.entries(categories) as [categorySlug, subCategorySlugs]}
             <li>
               <strong
@@ -49,7 +50,7 @@
               {/each}
             </li>
           {/each}
-        </ul>
+        </ServiceList>
       </ServiceSubsection>
     {/if}
     {#if hasKinds}
