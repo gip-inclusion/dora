@@ -82,19 +82,6 @@
             Orienter votre bénéficiaire via le formulaire DORA
           {:else if modeValue === "envoyer-un-mail-avec-une-fiche-de-prescription" && "contactEmail" in service}
             Envoyer un email avec une fiche de prescription
-          {:else if modeValue === "completer-le-formulaire-dadhesion"}
-            <a
-              href={service.coachOrientationModesExternalFormLink}
-              target="_blank"
-              on:click={() =>
-                trackMobilisationUnconditionally(
-                  service.coachOrientationModesExternalFormLink
-                )}
-              class="text-magenta-cta underline"
-              >{service.coachOrientationModesExternalFormLinkText ||
-                "Orienter votre bénéficiaire"}
-              <ExternalLinkIcon />
-            </a>
           {:else if modeValue === "autre"}
             <Linkify
               text={service.coachOrientationModesOther}
@@ -127,8 +114,7 @@
                 )}
               class="text-magenta-cta underline"
               >{service.beneficiariesAccessModesExternalFormLinkText ||
-                "Faire une demande"}
-              <ExternalLinkIcon /></a
+                "Faire une demande"}<ExternalLinkIcon /></a
             >
           {:else if modeValue === "professionnel"}
             Orientation par un professionnel
