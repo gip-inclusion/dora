@@ -2,19 +2,17 @@
   import { randomId } from "$lib/utils/random";
   import Button from "./button.svelte";
 
-  export let text = "";
+  export let text: string;
 
+  const defaultHeight = 240;
   const id = `text-clamp-${randomId()}`;
 
   let showAll = false;
-  let label;
+  let height: number;
 
   function toggle() {
     showAll = !showAll;
   }
-
-  let textIsTooLong, height;
-  const defaultHeight = 240;
 
   $: textIsTooLong = height + 100 > defaultHeight;
   $: label = showAll ? "Réduire" : "Lire la suite";
@@ -24,9 +22,15 @@
   <div class="prose mb-s24">{@html text}</div>
 </div>
 <div class="print:hidden">
-  <div {id} class:h-s160={!showAll} class="mb-s24 relative overflow-hidden">
-    <div class="prose mb-s24" bind:clientHeight={height}>{@html text}</div>
-    <div class:gradient={!showAll && textIsTooLong} />
+  <div {id} class:h-s112={!showAll} class="relative overflow-hidden">
+    <div class="prose mb-s12" bind:clientHeight={height}>
+      {@html text}
+    </div>
+    {#if !showAll && textIsTooLong}
+      <div
+        class="bottom-s0 left-s0 h-s112 absolute w-full bg-gradient-to-b from-transparent to-white"
+      />
+    {/if}
   </div>
 
   {#if textIsTooLong}
@@ -40,24 +44,6 @@
       noBackground
       small
       noPadding
-      hoverUnderline
     />
   {/if}
 </div>
-
-<style lang="postcss">
-  @reference "../../../app.css";
-
-  .gradient {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100px;
-    background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 1) 100%
-    ); /* W3C */
-  }
-</style>
