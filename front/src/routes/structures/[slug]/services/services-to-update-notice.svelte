@@ -84,7 +84,7 @@
 
     <div class="mt-s16 w-full">
       <Button
-        label="Accepter pour tous les services"
+        label="Tout marquer comme à jour"
         extraClass="py-s8 text-f14! px-s12!"
         on:click={() => handleMarkServicesAsUpToDate(servicesToUpdate)}
       />

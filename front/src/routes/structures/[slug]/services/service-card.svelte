@@ -67,20 +67,19 @@
     </div>
 
     <div
-      class="gap-s10 border-t-gray-03 px-s20 py-s12 flex min-h-[100px] flex-col justify-center border-t"
+      class="gap-s8 border-t-gray-03 px-s20 py-s12 flex min-h-[100px] flex-col justify-center border-t"
     >
-      <div class="text-f14 text-gray-text flex items-center">
+      <div class="flex items-center">
         <span class="mr-s8">
           <UpdateNeededIcon updateNeeded={service.updateNeeded} small />
         </span>
-        {#if service.status !== "PUBLISHED" || service.updateNeeded}
+        <div class="text-f14">
           <RelativeDateLabel
             date={service.modificationDate}
             prefix="Actualisé"
+            bold={service.updateNeeded}
           />
-        {:else}
-          <span class="font-bold">Actualisation conseillée</span>
-        {/if}
+        </div>
       </div>
 
       {#if !readOnly && service.model}
