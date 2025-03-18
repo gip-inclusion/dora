@@ -47,7 +47,7 @@
     <ServiceHeader service={data.service} />
   </CenteredGrid>
 
-  <CenteredGrid roundedColor="bg-blue-light">
+  <CenteredGrid roundedColor="bg-blue-light" noPadding extraClass="mb-s8">
     <ServiceToolbar
       service={data.service}
       servicesOptions={data.servicesOptions}
