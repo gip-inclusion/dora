@@ -7,12 +7,11 @@
   import { token, userInfo } from "$lib/utils/auth";
   import { trackMobilisation } from "$lib/utils/stats";
 
-  import PreventFakeOrientationModal from "./modals/prevent-fake-orientation-modal.svelte";
-
+  import PreventFakeOrientationModal from "./prevent-fake-orientation-modal.svelte";
   import ServiceMobilisation from "./service-mobilisation.svelte";
-  import ServicePresentation from "./service-presentation.svelte";
+  import ServicePresentation from "./service-presentation/service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
-  import ServiceDescription from "../service-description.svelte";
+  import ServiceDescription from "./service-description.svelte";
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;

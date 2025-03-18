@@ -12,7 +12,7 @@
   import type { Service } from "$lib/types";
   import { token } from "$lib/utils/auth";
 
-  import SharingModal from "../../_common/display/modals/sharing-modal.svelte";
+  import SharingModal from "../../components/sharing-modal.svelte";
   import ServiceActionButton from "./service-action-button.svelte";
 
   export let service: Service;

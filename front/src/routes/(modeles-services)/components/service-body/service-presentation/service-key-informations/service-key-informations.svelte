@@ -15,7 +15,7 @@
   import { isValidformatOsmHours } from "$lib/utils/opening-hours";
   import { isNotFreeService, isDurationValid } from "$lib/utils/service";
 
-  import OsmHours from "../../osm-hours.svelte";
+  import OsmHours from "$lib/components/specialized/osm-hours.svelte";
   import ServiceDuration from "./service-duration.svelte";
   import ServiceKeyInformationLabel from "./service-key-information-label.svelte";
   import ServiceKeyInformationSection from "./service-key-information-section.svelte";

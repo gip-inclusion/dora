@@ -10,7 +10,7 @@
 </div>
 
 <style lang="postcss">
-  @reference "../../../app.css";
+  @reference "../../../../app.css";
 
   .markdown-wrapper {
     margin-top: var(--spacing-s16);
