@@ -10,6 +10,9 @@
     Service,
   } from "$lib/types";
 
+  import ServiceSection from "./components/service-section.svelte";
+  import ServiceSubsection from "./components/service-subsection.svelte";
+
   export let service: Service | Model;
 
   const orderedCoachOrientationModeValues: Record<
@@ -67,15 +70,9 @@
     );
 </script>
 
-<section class="gap-s24 text-gray-text flex flex-col">
-  <h2 class="text-f23 text-france-blue mb-s0 leading-32 font-bold">
-    Les démarches à réaliser
-  </h2>
-  <section>
-    <h3 class="text-f17 leading-s24 text-gray-dark mb-s8 font-bold">
-      Pour les professionnels de l’accompagnement
-    </h3>
-    <ul class=" space-y-s2 list-inside list-disc">
+<ServiceSection title="Les démarches à réaliser">
+  <ServiceSubsection title="Pour les professionnels de l’accompagnement">
+    <ul class="space-y-s2 list-inside list-disc">
       {#each coachOrientationModesValueAndDisplay as [modeValue, modeDisplay] (modeValue)}
         <li>
           {#if modeValue === "formulaire-dora"}
@@ -96,11 +93,8 @@
         <li>Non renseigné</li>
       {/each}
     </ul>
-  </section>
-  <section>
-    <h3 class="text-f17 leading-s24 text-gray-dark mb-s8 font-bold">
-      Pour les particuliers
-    </h3>
+  </ServiceSubsection>
+  <ServiceSubsection title="Pour les particuliers">
     <ul class=" space-y-s2 list-inside list-disc">
       {#each beneficiariesAccessModesValueAndDisplay as [modeValue, modeDisplay] (modeValue)}
         <li>
@@ -143,5 +137,5 @@
         >
       </div>
     {/if}
-  </section>
-</section>
+  </ServiceSubsection>
+</ServiceSection>

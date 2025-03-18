@@ -2,6 +2,9 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getCategoryLabel, getSubCategoryLabel } from "$lib/utils/service";
 
+  import ServiceSection from "./components/service-section.svelte";
+  import ServiceSubsection from "./components/service-subsection.svelte";
+
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
 
@@ -24,15 +27,9 @@
 </script>
 
 {#if hasOtherInformations}
-  <section class="gap-s24 text-gray-text flex flex-col">
-    <h2 class="text-f23 text-france-blue mb-s0 leading-32 font-bold">
-      Autres informations
-    </h2>
+  <ServiceSection title="Autres informations">
     {#if hasCategories}
-      <section>
-        <h3 class="text-f17 leading-s24 text-gray-dark mb-s8 font-bold">
-          Thématiques et besoins associés
-        </h3>
+      <ServiceSubsection title="Thématiques et besoins associés">
         <ul class="space-y-s2 list-inside list-disc">
           {#each Object.entries(categories) as [categorySlug, subCategorySlugs]}
             <li>
@@ -53,26 +50,18 @@
             </li>
           {/each}
         </ul>
-      </section>
+      </ServiceSubsection>
     {/if}
     {#if hasKinds}
-      <section>
-        <h3 class="text-f17 leading-s24 text-gray-dark mb-s8 font-bold">
-          Type de service
-        </h3>
+      <ServiceSubsection title="Type de service">
         {service.kindsDisplay.join(", ")}
-      </section>
+      </ServiceSubsection>
     {/if}
     {#if hasSource}
-      <section>
-        <h3 class="text-f17 leading-s24 text-gray-dark mb-s8 font-bold">
-          Source du service
-        </h3>
-        <div>
-          Ce service provient de {!service.isModel ? service.source : ""} et est
-          synchronisé via le référentiel data·inclusion.
-        </div>
-      </section>
+      <ServiceSubsection title="Source du service">
+        Ce service provient de {!service.isModel ? service.source : ""} et est synchronisé
+        via le référentiel data·inclusion.
+      </ServiceSubsection>
     {/if}
-  </section>
+  </ServiceSection>
 {/if}
