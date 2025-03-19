@@ -12,13 +12,18 @@
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
-  import type { Service } from "$lib/types";
+  import Tooltip from "$lib/components/ui/tooltip.svelte";
   import { token } from "$lib/utils/auth";
+  import type { Service } from "$lib/types";
 
   import SharingModal from "../../components/sharing-modal.svelte";
   import ServiceActionButton from "./service-action-button.svelte";
 
   export let service: Service;
+
+  const copyLabel = "Copier";
+  const printLabel = "Imprimer";
+  const shareLabel = "Partager par e-mail";
 
   let sharingModalIsOpen = false;
   let linkCopied = false;
@@ -53,38 +58,51 @@
 </script>
 
 <div class="gap-s16 flex">
-  <ServiceActionButton ariaLabel="Copier" on:click={handleCopy}>
-    <div class="w-s24 h-s24 relative">
-      {#if linkCopied}
-        <div class="absolute" transition:fly={{ y: 50, duration: 500 }}>
-          <CheckLineSystem />
-        </div>
-      {:else}
-        <div class="absolute" transition:fly={{ y: 50, duration: 500 }}>
-          <FileCopyLineDocument />
-        </div>
-      {/if}
-    </div>
-  </ServiceActionButton>
-  <ServiceActionButton ariaLabel="Imprimer" on:click={handlePrint}>
-    <PrinterLineBusiness />
-  </ServiceActionButton>
-  <ServiceActionButton ariaLabel="Partager par e-mail" on:click={handleShare}>
-    <MailLineBusiness />
-  </ServiceActionButton>
-  <Bookmarkable slug={service.slug} {isDI} let:onBookmark let:isBookmarked>
-    <ServiceActionButton
-      ariaLabel={isBookmarked
-        ? "Retirer de vos favoris"
-        : "Ajouter à vos favoris"}
-      on:click={() => handleBookmark(onBookmark)}
-    >
-      {#if isBookmarked}
-        <BookmarkFillBusiness class="text-magenta-cta" />
-      {:else}
-        <BookmarkLineBusiness />
-      {/if}
+  <Tooltip openDelay={0} side="bottom">
+    <ServiceActionButton ariaLabel={copyLabel} on:click={handleCopy}>
+      <div class="w-s24 h-s24 relative">
+        {#if linkCopied}
+          <div class="absolute" transition:fly={{ y: 50, duration: 500 }}>
+            <CheckLineSystem />
+          </div>
+        {:else}
+          <div class="absolute" transition:fly={{ y: 50, duration: 500 }}>
+            <FileCopyLineDocument />
+          </div>
+        {/if}
+      </div>
     </ServiceActionButton>
+    <span slot="content">{copyLabel}</span>
+  </Tooltip>
+  <Tooltip openDelay={0} side="bottom">
+    <ServiceActionButton ariaLabel={printLabel} on:click={handlePrint}>
+      <PrinterLineBusiness />
+    </ServiceActionButton>
+    <span slot="content">{printLabel}</span>
+  </Tooltip>
+  <Tooltip openDelay={0} side="bottom">
+    <ServiceActionButton ariaLabel={shareLabel} on:click={handleShare}>
+      <MailLineBusiness />
+    </ServiceActionButton>
+    <span slot="content">{shareLabel}</span>
+  </Tooltip>
+  <Bookmarkable slug={service.slug} {isDI} let:onBookmark let:isBookmarked>
+    {@const bookmarLabel = isBookmarked
+      ? "Retirer de vos favoris"
+      : "Ajouter à vos favoris"}
+    <Tooltip openDelay={0} side="bottom">
+      <ServiceActionButton
+        ariaLabel={bookmarLabel}
+        on:click={() => handleBookmark(onBookmark)}
+      >
+        {#if isBookmarked}
+          <BookmarkFillBusiness class="text-magenta-cta" />
+        {:else}
+          <BookmarkLineBusiness />
+        {/if}
+      </ServiceActionButton>
+      <span slot="content">{bookmarLabel}</span>
+    </Tooltip>
   </Bookmarkable>
 </div>
 
