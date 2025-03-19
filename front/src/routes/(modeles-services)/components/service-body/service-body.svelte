@@ -11,7 +11,6 @@
   import ServiceMobilisation from "./service-mobilisation.svelte";
   import ServicePresentation from "./service-presentation/service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
-  import ServiceDescription from "./service-description.svelte";
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
@@ -65,20 +64,17 @@
 <CenteredGrid>
   <div class="md:gap-s48 mb-s32 flex flex-col md:flex-row">
     <div class="basis-2/3">
-      <div class="text-f16 leading-s32 text-gray-text">
+      <div class="text-f18 leading-s32 text-gray-text">
         <p>
           {service.shortDesc || ""}
         </p>
-        {#if service.fullDesc}
-          <ServiceDescription {service} />
-        {/if}
       </div>
     </div>
     <div class="basis-1/3" />
   </div>
 
   <div class="gap-s48 flex flex-col md:flex-row">
-    <div class="basis-2/3">
+    <div class="text-f16 leading-s24 basis-2/3">
       <ServicePresentation {service} {servicesOptions} {isDI} />
     </div>
 
