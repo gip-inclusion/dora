@@ -22,7 +22,7 @@
   <div class="prose mb-s24">{@html text}</div>
 </div>
 <div class="print:hidden">
-  <div {id} class:h-s112={!showAll} class="relative overflow-hidden">
+  <div {id} class:h-s112={!showAll} class="mb-s6 relative overflow-hidden">
     <div class="prose mb-s12" bind:clientHeight={height}>
       {@html text}
     </div>
