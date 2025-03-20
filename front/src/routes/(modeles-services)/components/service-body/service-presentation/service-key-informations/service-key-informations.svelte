@@ -77,84 +77,86 @@
         {/if}
       </ServiceKeyInformationSection>
     </div>
-    <div class="pb-s32 gap-s32 flex flex-col sm:flex-row">
-      {#if !service.isModel}
-        <div class="flex-1">
-          <div>
+    {#if !service.isModel || service.recurrence}
+      <div class="pb-s32 gap-s32 flex flex-col sm:flex-row">
+        {#if !service.isModel}
+          <div class="flex-1">
+            <div>
+              <ServiceKeyInformationSection
+                icon={MapPin2FillMap}
+                title="Lieu d’accueil"
+              >
+                {#if service.locationKinds.length > 0}
+                  <div class="gap-s12 flex flex-col">
+                    {#if service.locationKinds.includes("en-presentiel")}
+                      <div class="flex flex-col">
+                        <strong>Présentiel</strong>
+                        {#if service.addressLine}
+                          <address class="not-italic">
+                            {service.addressLine}
+                          </address>
+                          <a
+                            class="text-magenta-cta mt-s4 font-bold"
+                            href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(service.addressLine)}`}
+                            target="_blank"
+                            rel="noopener ugc">Voir sur la carte</a
+                          >
+                        {/if}
+                      </div>
+                    {/if}
+                    {#if service.locationKinds.includes("a-distance")}
+                      <div class="flex flex-col">
+                        <strong
+                          >À distance{service.locationKinds.includes(
+                            "en-presentiel"
+                          )
+                            ? " également"
+                            : ""}</strong
+                        >
+                        {#if service.remoteUrl}
+                          <a
+                            class="text-magenta-cta mt-s4 font-bold"
+                            href={service.remoteUrl}
+                            target="_blank"
+                            rel="noopener ugc"
+                          >
+                            {shortenString(service.remoteUrl, 35)}
+                          </a>
+                        {/if}
+                      </div>
+                    {/if}
+                  </div>
+                {:else}
+                  Non renseigné
+                {/if}
+              </ServiceKeyInformationSection>
+            </div>
+            <div class="mt-s28">
+              <ServiceKeyInformationSection
+                icon={Compass3FillMap}
+                title="Périmètres géographiques"
+              >
+                {service.diffusionZoneDetailsDisplay}
+              </ServiceKeyInformationSection>
+            </div>
+          </div>
+        {/if}
+        {#if service.recurrence}
+          <div class="flex-1">
             <ServiceKeyInformationSection
-              icon={MapPin2FillMap}
-              title="Lieu d’accueil"
+              icon={TimeFillSystem}
+              title="Fréquence et horaires"
             >
-              {#if service.locationKinds.length > 0}
-                <div class="gap-s12 flex flex-col">
-                  {#if service.locationKinds.includes("en-presentiel")}
-                    <div class="flex flex-col">
-                      <strong>Présentiel</strong>
-                      {#if service.addressLine}
-                        <address class="not-italic">
-                          {service.addressLine}
-                        </address>
-                        <a
-                          class="text-magenta-cta mt-s4 font-bold"
-                          href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(service.addressLine)}`}
-                          target="_blank"
-                          rel="noopener ugc">Voir sur la carte</a
-                        >
-                      {/if}
-                    </div>
-                  {/if}
-                  {#if service.locationKinds.includes("a-distance")}
-                    <div class="flex flex-col">
-                      <strong
-                        >À distance{service.locationKinds.includes(
-                          "en-presentiel"
-                        )
-                          ? " également"
-                          : ""}</strong
-                      >
-                      {#if service.remoteUrl}
-                        <a
-                          class="text-magenta-cta mt-s4 font-bold"
-                          href={service.remoteUrl}
-                          target="_blank"
-                          rel="noopener ugc"
-                        >
-                          {shortenString(service.remoteUrl, 35)}
-                        </a>
-                      {/if}
-                    </div>
-                  {/if}
-                </div>
+              {#if isDI && isValidformatOsmHours(service.recurrence)}
+                <OsmHours osmHours={service.recurrence} />
               {:else}
-                Non renseigné
+                {service.recurrence}
               {/if}
             </ServiceKeyInformationSection>
           </div>
-          <div class="mt-s28">
-            <ServiceKeyInformationSection
-              icon={Compass3FillMap}
-              title="Périmètres géographiques"
-            >
-              {service.diffusionZoneDetailsDisplay}
-            </ServiceKeyInformationSection>
-          </div>
-        </div>
-      {/if}
-      {#if service.recurrence}
-        <div class="flex-1">
-          <ServiceKeyInformationSection
-            icon={TimeFillSystem}
-            title="Fréquence et horaires"
-          >
-            {#if isDI && isValidformatOsmHours(service.recurrence)}
-              <OsmHours osmHours={service.recurrence} />
-            {:else}
-              {service.recurrence}
-            {/if}
-          </ServiceKeyInformationSection>
-        </div>
-      {/if}
-    </div>
+        {/if}
+      </div>
+    {/if}
     {#if isDurationValid(service)}
       <div class="pb-s32">
         <ServiceKeyInformationSection
