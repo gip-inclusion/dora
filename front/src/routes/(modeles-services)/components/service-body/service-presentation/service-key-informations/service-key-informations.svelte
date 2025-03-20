@@ -55,7 +55,7 @@
     <div class="pb-s32">
       <ServiceKeyInformationSection
         icon={CheckboxCircleFillSystem}
-        title="Les critéres d’admission"
+        title="Les critères d’admission"
       >
         {#if Array.isArray(service.accessConditionsDisplay) || service.qpvOrZrr}
           <ul class="list-inside list-disc">
