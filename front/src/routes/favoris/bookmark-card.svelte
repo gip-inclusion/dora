@@ -44,7 +44,7 @@
       </div>
 
       {#if service?.name}
-        <h3 class=" mb-s0 text-france-blue lg:mb-s24">
+        <h3 class="mb-s0 text-france-blue lg:mb-s24">
           <a
             class="full-result-link hover:underline"
             href="/services/{bookmark.isDi ? 'di/' : ''}{bookmark?.slug}"

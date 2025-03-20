@@ -161,7 +161,7 @@
         <h1 class="mb-s12 mr-s12 text-france-blue">Tableau de bord</h1>
         <div class="gap-s16 flex flex-col justify-between md:flex-row">
           <div
-            class=" gap-s24 text-france-blue flex flex-col items-baseline justify-between md:flex-row"
+            class="gap-s24 text-france-blue flex flex-col items-baseline justify-between md:flex-row"
           >
             {#if data.departments?.length > 1}
               <DepartmentList

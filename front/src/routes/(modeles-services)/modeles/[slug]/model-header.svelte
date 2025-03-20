@@ -24,7 +24,7 @@
   </h1>
 
   <div
-    class=" bg-blue-information-dark px-s8 py-s2 text-f12 inline-flex items-center rounded-sm font-bold text-white uppercase"
+    class="bg-blue-information-dark px-s8 py-s2 text-f12 inline-flex items-center rounded-sm font-bold text-white uppercase"
   >
     Modèle&nbsp;•&nbsp;{model.numServices}
     {model.numServices > 1 ? "services synchronisés" : "service synchronisé"}

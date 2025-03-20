@@ -104,7 +104,7 @@
       <li>
         {#if structure.slug}
           {#if currentLocation === "structure-informations"}
-            <span class=" font-bold" aria-current="page">
+            <span class="font-bold" aria-current="page">
               <span class="hidden lg:inline">
                 Structure&nbsp;•&nbsp;</span
               >{structure.name}
@@ -117,9 +117,9 @@
             </a>
           {/if}
         {:else}
-          <span class=" print:text-france-blue hidden lg:inline">
+          <span class="print:text-france-blue hidden lg:inline">
             Structure&nbsp;•&nbsp;
-          </span><span class="  print:text-france-blue lg:inline"
+          </span><span class="print:text-france-blue lg:inline"
             >{structure.name}</span
           >
         {/if}
@@ -129,7 +129,7 @@
     {#if service}
       <li>
         {#if currentLocation === "service"}
-          <span class=" font-bold" aria-current="page">
+          <span class="font-bold" aria-current="page">
             <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
             >{service.name}
           </span>
@@ -142,7 +142,7 @@
       </li>
     {:else if currentLocation.startsWith("structure-") && currentLocation !== "structure-informations"}
       <li>
-        <span class=" font-bold" aria-current="page">
+        <span class="font-bold" aria-current="page">
           {structureData.name}
         </span>
       </li>
@@ -156,7 +156,7 @@
     {/if}
     {#if Object.keys(locationToText).includes(currentLocation)}
       <li>
-        <span aria-current="page" class=" font-bold">
+        <span aria-current="page" class="font-bold">
           {locationToText[currentLocation]}
         </span>
       </li>
@@ -165,7 +165,7 @@
     {#if model}
       <li>
         {#if currentLocation === "model"}
-          <span class=" font-bold" aria-current="page">
+          <span class="font-bold" aria-current="page">
             <span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
             >{model.name}
           </span>
