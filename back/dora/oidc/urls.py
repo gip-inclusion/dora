@@ -3,26 +3,7 @@ from django.urls import path
 
 import dora.oidc.views as views
 
-inclusion_connect_patterns = [
-    path(
-        "inclusion-connect-get-login-info/",
-        views.inclusion_connect_get_login_info,
-    ),
-    path(
-        "inclusion-connect-get-logout-info/",
-        views.inclusion_connect_get_logout_info,
-    ),
-    path(
-        "inclusion-connect-get-update-info/",
-        views.inclusion_connect_get_update_info,
-    ),
-    path(
-        "inclusion-connect-authenticate/",
-        views.inclusion_connect_authenticate,
-    ),
-]
-
-proconnect_patterns = [
+oidc_patterns = [
     # les patterns internes pour le callback et le logout sont définis
     # dans le fichier `urls.py` de mozilla_django_oidc
     # redirection vers ProConnect pour la connexion
@@ -36,6 +17,3 @@ proconnect_patterns = [
     # pas le logout
     path("oidc/logout/", views.CustomLogoutView.as_view(), name="oidc_logout"),
 ]
-
-
-oidc_patterns = inclusion_connect_patterns + proconnect_patterns
