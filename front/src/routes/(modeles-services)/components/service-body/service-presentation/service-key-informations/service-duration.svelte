@@ -16,7 +16,7 @@
   {:else}
     <p class="m-s0 text-f16 text-gray-text">
       {service.durationWeeklyHours} heure(s) sur {service.durationWeeks} semaine(s),
-      soit {totalHours} heure(s) au total.
+      soit {totalHours} heure(s) au total
     </p>
   {/if}
 </div>
