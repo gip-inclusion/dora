@@ -4,7 +4,6 @@
   import Compass3FillMap from "svelte-remix/Compass3FillMap.svelte";
   import ErrorWarningFillSystem from "svelte-remix/ErrorWarningFillSystem.svelte";
   import GroupFillUserFaces from "svelte-remix/GroupFillUserFaces.svelte";
-  import InformationFillSystem from "svelte-remix/InformationFillSystem.svelte";
   import MapPin2FillMap from "svelte-remix/MapPin2FillMap.svelte";
   import MoneyEuroCircleFillFinance from "svelte-remix/MoneyEuroCircleFillFinance.svelte";
   import TimeFillSystem from "svelte-remix/TimeFillSystem.svelte";
@@ -27,7 +26,12 @@
 
   $: isNotCumulative = !service.isCumulative;
   $: hasFundingLabels = service.fundingLabelsDisplay.length > 0;
-  $: isQpvOrZrr = service.qpvOrZrr;
+
+  $: eligibilityRequirements = [
+    ...(service.accessConditionsDisplay || []),
+    ...(service.requirementsDisplay || []),
+    ...(service.qpvOrZrr ? ["Uniquement QPV ou ZRR"] : []),
+  ];
 </script>
 
 <section>
@@ -57,23 +61,14 @@
         icon={CheckboxCircleFillSystem}
         title="Les critères d’admission"
       >
-        {#if Array.isArray(service.accessConditionsDisplay) || service.qpvOrZrr}
+        {#if eligibilityRequirements.length > 0}
           <ul class="list-inside list-disc">
-            {#if Array.isArray(service.accessConditionsDisplay)}
-              {#each service.accessConditionsDisplay as condition (condition)}
-                <li>{condition}</li>
-              {:else}
-                {#if !service.qpvOrZrr}
-                  <li>Aucun critère d’admission spécifique</li>
-                {/if}
-              {/each}
-            {/if}
-            {#if service.qpvOrZrr}
-              <li>Uniquement QPV ou ZRR</li>
-            {/if}
+            {#each eligibilityRequirements as requirement (requirement)}
+              <li>{requirement}</li>
+            {/each}
           </ul>
         {:else}
-          <li>Aucun détail n'a été renseigné par la structure</li>
+          <li>Aucun critère d’admission spécifique</li>
         {/if}
       </ServiceKeyInformationSection>
     </div>
@@ -167,7 +162,7 @@
         </ServiceKeyInformationSection>
       </div>
     {/if}
-    <div class:pb-s32={isNotCumulative || hasFundingLabels || isQpvOrZrr}>
+    <div class:pb-s32={isNotCumulative || hasFundingLabels}>
       <ServiceKeyInformationSection
         icon={MoneyEuroCircleFillFinance}
         title="Frais à charge"
@@ -194,7 +189,7 @@
         </div>
       </ServiceKeyInformationSection>
     </div>
-    {#if isNotCumulative || hasFundingLabels || isQpvOrZrr}
+    {#if isNotCumulative || hasFundingLabels}
       <div class="gap-s12 text-f14 flex flex-col leading-16 font-bold">
         {#if isNotCumulative}
           <ServiceKeyInformationLabel
@@ -209,13 +204,6 @@
             label="Financé par&#8239;: {service.fundingLabelsDisplay.join(
               ', '
             )}"
-            textClass="text-info"
-          />
-        {/if}
-        {#if isQpvOrZrr}
-          <ServiceKeyInformationLabel
-            icon={InformationFillSystem}
-            label="Uniquement QPV ou ZRR"
             textClass="text-info"
           />
         {/if}
