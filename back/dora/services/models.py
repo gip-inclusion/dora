@@ -634,9 +634,14 @@ class Service(ModerationMixin, models.Model):
             structure_blacklisted = siret[0:9] in settings.ORIENTATION_SIRENE_BLACKLIST
         return bool(
             self.status == ServiceStatus.PUBLISHED
-            and not self.structure.disable_orientation_form
-            and not structure_blacklisted
-            and self.contact_email
+            and (
+                self.is_orientable_ft_service()
+                or (
+                    not self.structure.disable_orientation_form
+                    and not structure_blacklisted
+                    and self.contact_email
+                )
+            )
         )
 
     @property
@@ -883,6 +888,12 @@ class FranceTravailOrientableService(models.Model):
     class Meta:
         verbose_name = "service France Travail orientable"
         verbose_name_plural = "services France Travail orientables"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["structure", "service"],
+                name="unique_structure_service",
+            )
+        ]
 
     def clean(self):
         if self.structure.typology != TypologieStructure.FT:
