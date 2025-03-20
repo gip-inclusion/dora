@@ -14,9 +14,7 @@
 <div class="gap-s36 flex flex-col">
   <ServiceKeyInformations {service} {servicesOptions} />
 
-  {#if service.fullDesc}
-    <ServiceDescription {service} />
-  {/if}
+  <ServiceDescription {service} />
 
   <ServiceSteps {service} />
 

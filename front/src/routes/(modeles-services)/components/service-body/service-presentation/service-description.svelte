@@ -7,11 +7,13 @@
   export let service;
 </script>
 
-<ServiceSection title="Description du service">
-  <div class="markdown-wrapper prose w-full">
-    <TextClamp text={markdownToHTML(service.fullDesc, 4)} />
-  </div>
-</ServiceSection>
+{#if service.fullDesc}
+  <ServiceSection title="Description du service">
+    <div class="markdown-wrapper prose w-full">
+      <TextClamp text={markdownToHTML(service.fullDesc, 4)} />
+    </div>
+  </ServiceSection>
+{/if}
 
 <style lang="postcss">
   @reference "../../../../../app.css";
