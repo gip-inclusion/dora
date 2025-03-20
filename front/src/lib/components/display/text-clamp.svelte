@@ -4,7 +4,7 @@
 
   export let text: string;
 
-  const defaultHeight = 240;
+  const defaultHeight = 200;
   const id = `text-clamp-${randomId()}`;
 
   let showAll = false;
