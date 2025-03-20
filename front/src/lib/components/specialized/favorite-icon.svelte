@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { starSmileFillIcon, starSmileLineIcon } from "$lib/icons";
+  import BookmarkFillBusiness from "svelte-remix/BookmarkFillBusiness.svelte";
+  import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
+
   import { userInfo } from "$lib/utils/auth";
   import { createEventDispatcher } from "svelte";
 
@@ -16,7 +18,6 @@
     }
   }
 
-  $: currentIcon = active ? starSmileFillIcon : starSmileLineIcon;
   $: disabled = !$userInfo;
   $: {
     if (disabled) {
@@ -36,7 +37,11 @@
   aria-label={title}
   on:click={handleClick}
 >
-  {@html currentIcon}
+  {#if active}
+    <BookmarkFillBusiness />
+  {:else}
+    <BookmarkLineBusiness />
+  {/if}
   <div
     class="tooltiptext bg-magenta-dark px-s8 py-s2 text-f12 invisible absolute top-[-1000px] left-[-1000px] z-10 w-max -translate-x-1/2 rounded-sm text-center font-bold text-white"
   >
