@@ -1,9 +1,11 @@
 <script lang="ts">
+  import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
+
   import illustration from "$lib/assets/illustrations/illu-favoris.svg";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import { externalLinkIcon, starSmileLineIcon } from "$lib/icons";
   import type { SavedSearch } from "$lib/types";
   import { getApiURL } from "$lib/utils/api";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
@@ -59,7 +61,7 @@
       >
         <div class="max-w-lg basis-1/2 text-center">
           <div class="mb-s12 h-s24 w-s24 mx-auto">
-            {@html starSmileLineIcon}
+            <BookmarkLineBusiness />
           </div>
           <h2 class="legend text-f32 text-gray-text leading-40 font-bold">
             Vous n’avez pas encore créé d’alerte
@@ -86,7 +88,7 @@
               class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current"
               aria-hidden="true"
             >
-              {@html externalLinkIcon}
+              <ExternalLinkLineSystem />
             </span>
           </a>
         </div>
