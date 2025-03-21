@@ -11,7 +11,7 @@
   import type { Service } from "$lib/types";
   import { token } from "$lib/utils/auth";
 
-  import SharingModal from "./modals/sharing-modal.svelte";
+  import SharingModal from "../sharing-modal.svelte";
 
   export let service: Service;
   export let isDI = false;

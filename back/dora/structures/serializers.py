@@ -51,6 +51,7 @@ class StructureSerializer(serializers.ModelSerializer):
 
     source = serializers.SerializerMethodField()
 
+    parent_name = serializers.SerializerMethodField()
     parent_siret = serializers.SerializerMethodField()
     parent_slug = serializers.SerializerMethodField()
 
@@ -94,6 +95,9 @@ class StructureSerializer(serializers.ModelSerializer):
             "opening_hours_details",
             "other_labels",
             "parent",
+            "parent_name",
+            "parent_siret",
+            "parent_slug",
             "phone",
             "postal_code",
             "quick_start_done",
@@ -102,8 +106,6 @@ class StructureSerializer(serializers.ModelSerializer):
             "short_desc",
             "siret",
             "slug",
-            "parent_siret",
-            "parent_slug",
             "source",
             "typology",
             "typology_display",
@@ -114,9 +116,13 @@ class StructureSerializer(serializers.ModelSerializer):
             "has_been_edited",
             "city",
             "department",
+            "parent_name",
             "parent_slug",
             "parent_siret",
         ]
+
+    def get_parent_name(self, obj):
+        return obj.parent.name if obj.parent else None
 
     def get_parent_siret(self, obj):
         return obj.parent.siret if obj.parent else None

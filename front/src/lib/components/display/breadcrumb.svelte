@@ -34,7 +34,6 @@
   export let service: Service | undefined = undefined;
   export let model: Model | undefined = undefined;
   export let currentLocation: BreadcrumbLocation | string;
-  export let dark = false;
 
   const locationToText: Record<string, string> = {
     search: "Recherche",
@@ -89,9 +88,11 @@
   $: structureData = getStructureData(currentLocation);
 </script>
 
-<nav aria-label="vous êtes ici :" class="print:hidden" class:dark>
-  <ol class="text-f14">
-    <li class="inline">
+<nav aria-label="vous êtes ici :" class="print:hidden">
+  <ol
+    class="text-f14 text-gray-text [&>li+li]:before:mx-s6 [&>li]:inline [&>li+li]:before:inline [&>li+li]:before:content-['/']"
+  >
+    <li>
       {#if currentLocation === "home"}
         <span aria-current="page" class="current">Accueil</span>
       {:else}
@@ -100,10 +101,10 @@
     </li>
 
     {#if structure}
-      <li class="inline before:content-['/']">
+      <li>
         {#if structure.slug}
           {#if currentLocation === "structure-informations"}
-            <span class="current" aria-current="page">
+            <span class="font-bold" aria-current="page">
               <span class="hidden lg:inline">
                 Structure&nbsp;•&nbsp;</span
               >{structure.name}
@@ -116,23 +117,19 @@
             </a>
           {/if}
         {:else}
-          <span
-            class="print:text-france-blue hidden text-white lg:inline"
-            class:text-gray-text={dark}
-          >
+          <span class="print:text-france-blue hidden lg:inline">
             Structure&nbsp;•&nbsp;
-          </span><span
-            class=" print:text-france-blue text-white lg:inline"
-            class:text-gray-text={dark}>{structure.name}</span
+          </span><span class="print:text-france-blue lg:inline"
+            >{structure.name}</span
           >
         {/if}
       </li>
     {/if}
 
     {#if service}
-      <li class="inline before:content-['/']">
+      <li>
         {#if currentLocation === "service"}
-          <span class="current" aria-current="page">
+          <span class="font-bold" aria-current="page">
             <span class="hidden lg:inline">Service&nbsp;•&nbsp;</span
             >{service.name}
           </span>
@@ -144,31 +141,31 @@
         {/if}
       </li>
     {:else if currentLocation.startsWith("structure-") && currentLocation !== "structure-informations"}
-      <li class="inline before:content-['/']">
-        <span class="current" aria-current="page">
+      <li>
+        <span class="font-bold" aria-current="page">
           {structureData.name}
         </span>
       </li>
     {/if}
     {#if currentLocation === "saved-search"}
-      <li class="inline before:content-['/']">
+      <li>
         <a href="/mes-alertes">
           <span class="hidden lg:inline">Mes alertes</span>
         </a>
       </li>
     {/if}
     {#if Object.keys(locationToText).includes(currentLocation)}
-      <li class="inline before:content-['/']">
-        <span aria-current="page" class="current">
+      <li>
+        <span aria-current="page" class="font-bold">
           {locationToText[currentLocation]}
         </span>
       </li>
     {/if}
 
     {#if model}
-      <li class="inline before:content-['/']">
+      <li>
         {#if currentLocation === "model"}
-          <span class="current" aria-current="page">
+          <span class="font-bold" aria-current="page">
             <span class="hidden lg:inline">Modèle&nbsp;•&nbsp;</span
             >{model.name}
           </span>
@@ -182,41 +179,3 @@
     {/if}
   </ol>
 </nav>
-
-<style lang="postcss">
-  @reference "../../../app.css";
-
-  a {
-    @apply text-magenta-40;
-  }
-
-  .current {
-    @apply font-bold text-white;
-  }
-
-  nav li + li::before {
-    @apply ml-s8 mr-s8 text-magenta-40 inline;
-  }
-
-  @media print {
-    a {
-      color: var(--color-france-blue);
-    }
-
-    .current {
-      color: var(--color-france-blue);
-    }
-
-    nav li + li::before {
-      color: var(--color-france-blue);
-    }
-  }
-
-  .dark a {
-    @apply text-gray-text;
-  }
-  .dark li::before,
-  .dark .current {
-    @apply text-gray-text;
-  }
-</style>

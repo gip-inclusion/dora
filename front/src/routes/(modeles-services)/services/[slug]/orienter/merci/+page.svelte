@@ -28,7 +28,7 @@
         <div class="mb-s12 h-s24 w-s24 text-gray-text mx-auto fill-current">
           {@html flashLightIcon}
         </div>
-        <h2 class=" text-gray-text font-bold">
+        <h2 class="text-gray-text font-bold">
           Votre demande a été transmise à la structure porteuse du service
         </h2>
         <p class="legend">

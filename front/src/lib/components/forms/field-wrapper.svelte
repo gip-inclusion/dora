@@ -49,7 +49,7 @@
       class:sr-only={hideLabel}
       aria-describedby={descriptionId}
     >
-      <span class=" text-f17 text-gray-dark font-bold">
+      <span class="text-f17 text-gray-dark font-bold">
         {label}{#if required && !readonly && !disabled}<span
             class="ml-s6 text-error">&nbsp;*</span
           >{/if}

@@ -14,7 +14,7 @@
     </h3>
 
     {#if showAddress && (structure.postalCode || structure.city)}
-      <Label label={`${structure.city} (${structure.postalCode})`} darkBg />
+      <Label label={`${structure.city} (${structure.postalCode})`} />
     {/if}
   </div>
   <div class="px-s20 py-s16">

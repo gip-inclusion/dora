@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
-  import { externalLinkIcon } from "$lib/icons";
+  import ExternalLinkIcon from "./external-link-icon.svelte";
 
   export let text: string;
 
@@ -47,11 +47,9 @@
       on:click={() => handleLinkClick(part.value)}
       target="_blank"
       rel="noopener ugc"
-      class="text-magenta-cta underline"
-      >{part.display}{#if part.value.startsWith("http")}
-        <span class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current"
-          >{@html externalLinkIcon}</span
-        >{/if}</a
+      class="underline"
+      >{part.display}{#if part.value.startsWith("http")}<ExternalLinkIcon
+        />{/if}</a
     >
   {:else}
     {part.value}

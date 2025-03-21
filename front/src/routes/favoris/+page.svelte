@@ -1,8 +1,9 @@
 <script lang="ts">
+  import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
+
   import illustration from "$lib/assets/illustrations/illu-favs.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import { starSmileLineIcon } from "$lib/icons";
   import { userInfo } from "$lib/utils/auth";
   import type { PageData } from "./$types";
   import BookmarkCard from "./bookmark-card.svelte";
@@ -18,7 +19,7 @@
     <h1 class="text-france-blue text-center">Mes favoris</h1>
 
     <div class="mb-s32">
-      <Breadcrumb currentLocation="bookmarks" dark />
+      <Breadcrumb currentLocation="bookmarks" />
     </div>
 
     {#if bookmarks.length}
@@ -38,7 +39,7 @@
       >
         <div class="max-w-lg basis-1/2 text-center">
           <div class="mb-s12 h-s24 w-s24 mx-auto">
-            {@html starSmileLineIcon}
+            <BookmarkLineBusiness />
           </div>
           <p class="legend text-gray-text font-bold">
             Vous n’avez pas encore ajouté de services à vos favoris.

@@ -3,9 +3,9 @@
   import { token, userInfo } from "$lib/utils/auth";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import { capitalize } from "$lib/utils/misc";
   import MembershipPendingWarning from "$lib/components/specialized/membership-pending-warning.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import ServiceStructureLabel from "../components/service-structure-label.svelte";
 
   export let data;
 
@@ -21,22 +21,16 @@
   }
 </script>
 
-<CenteredGrid bgColor="bg-france-blue">
-  <div class="mb-s48 print:mb-s0">
-    <Breadcrumb {service} structure={service.structureInfo} {currentLocation} />
-  </div>
-  <h1 class="print:text-france-blue text-white">
-    Orienter un ou une bénéficiaire vers le service&nbsp;:
+<CenteredGrid bgColor="bg-blue-light">
+  <Breadcrumb {service} structure={service.structureInfo} {currentLocation} />
+  <div class="mt-s48 mb-s16"><ServiceStructureLabel {service} /></div>
+  <h1 class="mb-s0 mr-s12 text-magenta-dark">
+    <span class="text-f38 leading-s48">Formulaire d’orientation&#8239;:</span>
+    <span class="mt-s2 text-f28 leading-s40 block">{service.name}</span>
   </h1>
-  <h2 class="print:text-france-blue text-white">
-    {service.name}
-  </h2>
-  <h3 class=" print:text-france-blue text-white">
-    <div><strong>{capitalize(service.structureInfo.name)}</strong></div>
-  </h3>
 </CenteredGrid>
 
-<CenteredGrid bgColor="bg-white" roundedColor="bg-france-blue">
+<CenteredGrid roundedColor="bg-blue-light">
   {#if $userInfo && !$userInfo.structures.length}
     <div class="m-auto max-w-xl">
       <Notice type="warning">

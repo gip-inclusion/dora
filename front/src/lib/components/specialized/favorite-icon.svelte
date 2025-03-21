@@ -1,67 +1,46 @@
 <script lang="ts">
-  import { starSmileFillIcon, starSmileLineIcon } from "$lib/icons";
-  import { userInfo } from "$lib/utils/auth";
   import { createEventDispatcher } from "svelte";
+
+  import BookmarkFillBusiness from "svelte-remix/BookmarkFillBusiness.svelte";
+  import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
+
+  import { userInfo } from "$lib/utils/auth";
+
+  import Tooltip from "../ui/tooltip.svelte";
 
   export let active = false;
 
-  let disabled;
-  let title;
-
   const dispatch = createEventDispatcher();
+
+  $: disabled = !$userInfo;
 
   function handleClick(evt: MouseEvent) {
     if (!disabled) {
       dispatch("click", evt);
     }
   }
-
-  $: currentIcon = active ? starSmileFillIcon : starSmileLineIcon;
-  $: disabled = !$userInfo;
-  $: {
-    if (disabled) {
-      title = "Connectez-vous pour ajouter<br/> ce service à vos favoris";
-    } else if (active) {
-      title = "Supprimer des favoris";
-    } else {
-      title = "Ajouter aux favoris";
-    }
-  }
 </script>
 
-<button
-  class="tooltip icon h-s20 w-s20 text-gray-text-alt2 hover:text-magenta-cta relative inline-block shrink-0 fill-current print:hidden"
-  class:active
-  class:disabled
-  aria-label={title}
-  on:click={handleClick}
->
-  {@html currentIcon}
-  <div
-    class="tooltiptext bg-magenta-dark px-s8 py-s2 text-f12 invisible absolute top-[-1000px] left-[-1000px] z-10 w-max -translate-x-1/2 rounded-sm text-center font-bold text-white"
+<Tooltip side="bottom" openDelay={0}>
+  <button
+    class="h-s20 w-s20 text-gray-text-alt2 hover:text-magenta-cta print:hidden"
+    class:text-magenta-cta={active}
+    class:text-gray-text-alt={disabled}
+    on:click={handleClick}
   >
-    {@html title}
-  </div>
-</button>
-
-<style lang="postcss">
-  @reference "../../../app.css";
-
-  .active {
-    @apply text-magenta-cta;
-  }
-
-  .disabled {
-    @apply text-gray-text-alt;
-  }
-
-  .tooltip .tooltiptext::after {
-    content: "";
-    @apply -ml-s4 border-b-magenta-dark absolute bottom-full left-1/2 border-4 border-solid border-transparent;
-  }
-
-  .tooltip:hover .tooltiptext,
-  .tooltip:focus .tooltiptext {
-    @apply top-s28 visible left-1/2 opacity-100;
-  }
-</style>
+    {#if active}
+      <BookmarkFillBusiness />
+    {:else}
+      <BookmarkLineBusiness />
+    {/if}
+  </button>
+  <span slot="content">
+    {#if disabled}
+      Connectez-vous pour ajouter ce service à vos favoris
+    {:else if active}
+      Supprimer des favoris
+    {:else}
+      Ajouter aux favoris
+    {/if}
+  </span>
+</Tooltip>

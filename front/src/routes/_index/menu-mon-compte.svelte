@@ -1,4 +1,6 @@
 <script lang="ts">
+  import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
+
   import { page } from "$app/stores";
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
   import { OIDC_AUTH_BACKEND } from "$lib/env";
@@ -6,7 +8,6 @@
     accountCircleLineIcon,
     logoutBoxLineIcon,
     notificationIcon,
-    starSmileLineIcon,
   } from "$lib/icons";
 
   export let mobileDesign = false;
@@ -33,7 +34,7 @@
       class:text-magenta-cta={$page.url.pathname === "/favoris"}
       aria-hidden="true"
     >
-      {@html starSmileLineIcon}
+      <BookmarkLineBusiness />
     </span>
     Mes favoris
   </a>

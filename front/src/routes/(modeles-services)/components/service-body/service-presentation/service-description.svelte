@@ -2,19 +2,21 @@
   import TextClamp from "$lib/components/display/text-clamp.svelte";
   import { markdownToHTML } from "$lib/utils/misc";
 
+  import ServiceSection from "./components/service-section.svelte";
+
   export let service;
 </script>
 
-<div class="markdown-wrapper prose mb-s24 w-full">
-  <TextClamp text={markdownToHTML(service.fullDesc, 4)} />
-</div>
+{#if service.fullDesc}
+  <ServiceSection title="Description du service">
+    <div class="markdown-wrapper prose w-full">
+      <TextClamp text={markdownToHTML(service.fullDesc, 4)} />
+    </div>
+  </ServiceSection>
+{/if}
 
 <style lang="postcss">
-  @reference "../../../app.css";
-
-  .markdown-wrapper {
-    margin-top: var(--spacing-s16);
-  }
+  @reference "../../../../../app.css";
 
   .markdown-wrapper :global(h1),
   .markdown-wrapper :global(h2),
@@ -26,6 +28,8 @@
   .markdown-wrapper :global(strong),
   .markdown-wrapper :global(li) {
     color: var(--col-text);
+    font-size: 16px !important;
+    line-height: 24px !important;
   }
 
   .prose {

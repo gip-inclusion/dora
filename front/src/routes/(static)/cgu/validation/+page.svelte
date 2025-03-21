@@ -23,7 +23,7 @@
 <EnsureLoggedIn>
   <CenteredGrid>
     <div class="mb-s48">
-      <Breadcrumb currentLocation="cgu" dark />
+      <Breadcrumb currentLocation="cgu" />
     </div>
 
     <h1 class="mb-s32 text-france-blue">

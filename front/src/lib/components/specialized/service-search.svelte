@@ -267,7 +267,7 @@
 
       {#if showDeploymentWarning && cityCode && !isInDeploymentDepartments(cityCode, servicesOptions)}
         <div
-          class=" border-gray-02 bg-blue-light p-s16 text-france-blue rounded-b-md border-t text-center"
+          class="border-gray-02 bg-blue-light p-s16 text-france-blue rounded-b-md border-t text-center"
         >
           <span>
             Sur votre territoire, le référencement des services débute – il se
