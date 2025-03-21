@@ -5,7 +5,7 @@
   import ServiceHeader from "./service-header.svelte";
   import ServiceToolbar from "./service-toolbar.svelte";
   import TallyPopup from "$lib/components/specialized/tally-popup.svelte";
-  import ServiceBody from "../../_common/display/service-body.svelte";
+  import ServiceBody from "../../components/service-body/service-body.svelte";
   import { getService } from "$lib/requests/services";
   import { TallyFormId } from "$lib/consts";
 
@@ -43,23 +43,19 @@
 </script>
 
 {#if data.service}
-  <CenteredGrid bgColor="bg-france-blue print:bg-white">
-    <ServiceHeader service={data.service} isDI={data.isDI} />
+  <CenteredGrid bgColor="bg-blue-light">
+    <ServiceHeader service={data.service} />
   </CenteredGrid>
 
-  <div>
+  <CenteredGrid roundedColor="bg-blue-light" noPadding extraClass="mb-s8">
     <ServiceToolbar
       service={data.service}
       servicesOptions={data.servicesOptions}
       onRefresh={handleRefresh}
     />
-  </div>
+  </CenteredGrid>
 
-  <ServiceBody
-    service={data.service}
-    servicesOptions={data.servicesOptions}
-    isDI={data.isDI}
-  />
+  <ServiceBody service={data.service} servicesOptions={data.servicesOptions} />
 
   {#if browser && data.service.canWrite && serviceWasJustPublished && !data.service.hasAlreadyBeenUnpublished}
     <TallyPopup

@@ -15,7 +15,7 @@
     <h1 class="text-france-blue text-center">Mon alerte</h1>
 
     <div class="mb-s32">
-      <Breadcrumb currentLocation="saved-search" dark />
+      <Breadcrumb currentLocation="saved-search" />
     </div>
 
     <SavedSearchTitle search={data.savedSearch} />

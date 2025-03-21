@@ -11,7 +11,7 @@
   import type { Service } from "$lib/types";
   import { trackServiceShare } from "$lib/utils/stats";
   import { page } from "$app/stores";
-
+  import { browser } from "$app/environment";
   export let isOpen = false;
   export let service: Service;
   export let isDI = false;
@@ -106,77 +106,79 @@
     !!service.beneficiariesAccessModesOther;
 </script>
 
-<Modal
-  bind:isOpen
-  width="medium"
-  title="Partager cette fiche"
-  subtitle="Envoyez cette fiche à un bénéficiaire ou à un autre professionnel."
-  on:close={handleClose}
->
-  {#if messageSent}
-    <Notice
-      type="success"
-      title="La fiche a été transmise à votre destinataire."
-      showIcon={false}
-    ></Notice>
-  {:else}
-    <Form
-      bind:data={formData}
-      schema={feedbackSchema}
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-      onSuccess={handleSuccess}
-      bind:requesting
-    >
-      <fieldset class="mb-s24 gap-s24 flex flex-col">
-        {#if !$token}
+{#if browser}
+  <Modal
+    bind:isOpen
+    width="medium"
+    title="Partager cette fiche"
+    subtitle="Envoyez cette fiche à un bénéficiaire ou à un autre professionnel."
+    on:close={handleClose}
+  >
+    {#if messageSent}
+      <Notice
+        type="success"
+        title="La fiche a été transmise à votre destinataire."
+        showIcon={false}
+      ></Notice>
+    {:else}
+      <Form
+        bind:data={formData}
+        schema={feedbackSchema}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+        onSuccess={handleSuccess}
+        bind:requesting
+      >
+        <fieldset class="mb-s24 gap-s24 flex flex-col">
+          {#if !$token}
+            <BasicInputField
+              type="email"
+              id="senderName"
+              bind:value={senderName}
+              description="Exemple : Nadia Comaneci"
+              autocomplete="name"
+              vertical
+            />
+          {/if}
           <BasicInputField
             type="email"
-            id="senderName"
-            bind:value={senderName}
-            description="Exemple : Nadia Comaneci"
-            autocomplete="name"
+            id="recipientEmail"
+            bind:value={recipientEmail}
+            description="Format attendu : nom@domaine.fr."
             vertical
           />
+          <RadioButtonsField
+            id="recipientKind"
+            bind:value={recipientKind}
+            choices={recipientKinds}
+            vertical
+          />
+        </fieldset>
+        {#if !mobilisableByBeneficiary}
+          <div class="mb-s24">
+            <Notice
+              type="warning"
+              title="Ce service ne peut pas être mobilisé par le bénéficiaire"
+              showIcon={false}
+            >
+              <p>
+                Le bénéficiaire pourra consulter le service, mais il n'aura pas
+                accès aux informations de contact. Seul un professionnel de
+                l'insertion est habilité à orienter un bénéficiaire vers ce
+                service.
+              </p>
+            </Notice>
+          </div>
         {/if}
-        <BasicInputField
-          type="email"
-          id="recipientEmail"
-          bind:value={recipientEmail}
-          description="Format attendu : nom@domaine.fr."
-          vertical
-        />
-        <RadioButtonsField
-          id="recipientKind"
-          bind:value={recipientKind}
-          choices={recipientKinds}
-          vertical
-        />
-      </fieldset>
-      {#if !mobilisableByBeneficiary}
-        <div class="mb-s24">
-          <Notice
-            type="warning"
-            title="Ce service ne peut pas être mobilisé par le bénéficiaire"
-            showIcon={false}
-          >
-            <p>
-              Le bénéficiaire pourra consulter le service, mais il n'aura pas
-              accès aux informations de contact. Seul un professionnel de
-              l'insertion est habilité à orienter un bénéficiaire vers ce
-              service.
-            </p>
-          </Notice>
+        <div class="flex justify-end">
+          <Button
+            type="submit"
+            label="Envoyer la fiche"
+            disabled={!recipientEmail || !recipientKind || requesting}
+            preventDefaultOnMouseDown
+          />
         </div>
-      {/if}
-      <div class="flex justify-end">
-        <Button
-          type="submit"
-          label="Envoyer la fiche"
-          disabled={!recipientEmail || !recipientKind || requesting}
-          preventDefaultOnMouseDown
-        />
-      </div>
-    </Form>
-  {/if}
-</Modal>
+      </Form>
+    {/if}
+  </Modal>
+{/if}

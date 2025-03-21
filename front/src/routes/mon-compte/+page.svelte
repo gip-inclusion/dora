@@ -11,7 +11,7 @@
 
 <EnsureLoggedIn>
   <div class="mb-s32">
-    <Breadcrumb currentLocation="account" dark />
+    <Breadcrumb currentLocation="account" />
   </div>
 
   <div class="gap-s24 flex flex-col md:flex-row">

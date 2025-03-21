@@ -295,6 +295,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "is_contact_info_public": service_data["contact_public"],
         "is_cumulative": service_data["cumulable"],
         "is_orientable": is_orientable(service_data),
+        "is_model": False,
         "kinds": [k.value for k in kinds] if kinds is not None else None,
         "kinds_display": [k.label for k in kinds] if kinds is not None else None,
         "lien_source": service_data["lien_source"],
@@ -324,6 +325,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "structure": service_data["structure_id"],
         "structure_info": {
             "name": service_data["structure"]["nom"],
+            "city": service_data["structure"]["commune"],
             "department": structure_department,
             "phone": service_data["structure"]["telephone"],
             "email": service_data["structure"]["courriel"],

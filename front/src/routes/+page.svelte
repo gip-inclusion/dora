@@ -120,7 +120,7 @@
   </div>
 
   <div
-    class=" border-gray-01 p-s16 md:gap-s32 flex flex-col items-center justify-between rounded-2xl border text-center md:flex-row md:items-baseline"
+    class="border-gray-01 p-s16 md:gap-s32 flex flex-col items-center justify-between rounded-2xl border text-center md:flex-row md:items-baseline"
   >
     <p class="m-s0 p-s0">
       <span

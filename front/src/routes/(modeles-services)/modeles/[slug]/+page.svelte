@@ -8,18 +8,20 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { userInfo } from "$lib/utils/auth";
   import { addCircleIcon, editIcon } from "$lib/icons";
-  import ServiceBody from "../../_common/display/service-body.svelte";
+  import ServiceBody from "../../components/service-body/service-body.svelte";
 
   export let data: PageData;
 </script>
 
-<CenteredGrid bgColor="bg-blue-information">
+<CenteredGrid bgColor="bg-blue-light">
   <ModelHeader model={data.model} />
 </CenteredGrid>
 
-<CenteredGrid roundedColor="bg-blue-information" extraClass="mb-s14 w-full">
+<CenteredGrid roundedColor="bg-blue-light">
   {#if browser}
-    <div class="text-gray-text flex items-center justify-between">
+    <div
+      class="text-gray-text gap-s24 flex flex-col items-center justify-between sm:flex-row"
+    >
       <div class="flex items-center">
         <span class="mr-s16">
           <UpdateNeededIcon updateNeeded={false} />
@@ -31,7 +33,7 @@
         />
       </div>
 
-      <div class="gap-s24 flex">
+      <div class="gap-s24 flex flex-col sm:flex-row">
         {#if data.model.canWrite}
           <LinkButton
             label="Modifier"
@@ -54,8 +56,4 @@
   <hr class="mt-s32" />
 </CenteredGrid>
 
-<ServiceBody
-  service={data.model}
-  servicesOptions={data.servicesOptions}
-  isModel
-/>
+<ServiceBody service={data.model} servicesOptions={data.servicesOptions} />

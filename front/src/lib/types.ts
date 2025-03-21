@@ -180,6 +180,9 @@ export interface Structure {
   openingHoursDetails: string | null;
   otherLabels: string;
   parent: string;
+  parentName: string;
+  parentSiret: string;
+  parentSlug: string;
   phone: string;
   postalCode: string;
   quickStartDone: boolean;
@@ -456,6 +459,7 @@ export interface Service {
   isAvailable: boolean;
   isContactInfoPublic: boolean;
   isCumulative: boolean;
+  isModel: false;
   isOrientable: boolean;
   kinds: ServiceKind[];
   kindsDisplay: string[];
@@ -616,7 +620,10 @@ export type Model = {
   forms: string[];
   formsInfo: FileInfo[];
   fullDesc: string;
+  fundingLabels: Array<FundingLabel["value"]>;
+  fundingLabelsDisplay: Array<FundingLabel["label"]>;
   isCumulative: boolean;
+  isModel: true;
   kinds: ServiceKind[];
   kindsDisplay: string[];
   modificationDate: string;

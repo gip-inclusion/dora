@@ -40,12 +40,20 @@ def test_models_not_visible_in_service_lists(api_client):
     assert service.slug not in [s["slug"] for s in response.data]
 
 
-def test_is_model_param_not_visible_in_services(api_client):
+def test_is_model_param_is_true_in_models(api_client):
+    service = make_model()
+    response = api_client.get(f"/models/{service.slug}/")
+
+    assert 200 == response.status_code
+    assert response.data["is_model"] is True
+
+
+def test_is_model_param_is_false_in_services(api_client):
     service = make_service(status=ServiceStatus.PUBLISHED)
     response = api_client.get(f"/services/{service.slug}/")
 
     assert 200 == response.status_code
-    assert "is_model" not in response.data
+    assert response.data["is_model"] is False
 
 
 def test_cant_set_is_model_param_on_service(api_client):
@@ -59,7 +67,7 @@ def test_cant_set_is_model_param_on_service(api_client):
 
     service.refresh_from_db()
 
-    assert not service.is_model
+    assert service.is_model is False
 
 
 def test_cant_unset_is_model_param_on_model(api_client):
@@ -73,7 +81,7 @@ def test_cant_unset_is_model_param_on_model(api_client):
 
     model.refresh_from_db()
 
-    assert model.is_model
+    assert model.is_model is True
 
 
 def test_can_create_model_from_scratch(api_client):
@@ -228,9 +236,9 @@ def test_update_model_and_update_all_linked_services(api_client):
 
     # ALORS le service est mise à jour avec le nouveau nom du modèle
     # nit: ou ajouter le commentaire dans la clause assert (1 pierre, 2 coups)
-    assert (
-        service.name == new_model_name
-    ), "le service doit être mis à jour avec le nouveau nom du modèle"
+    assert service.name == new_model_name, (
+        "le service doit être mis à jour avec le nouveau nom du modèle"
+    )
 
 
 def test_update_model_and_update_only_linked_services(api_client):
