@@ -194,7 +194,7 @@
 
 <div class="mb-s8 font-bold">Structures nécessitant une action&#8239;:</div>
 
-<div class="mb-s8 gap-s8 flex">
+<div class="mb-s8 gap-s8 flex flex-wrap">
   {#each filterButtons as { status, label }}
     <Button
       on:click={() => {
