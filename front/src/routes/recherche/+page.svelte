@@ -155,7 +155,6 @@
       fundingLabels={data.fundingLabels}
       categoryId={data.categoryIds[0]}
       subCategoryIds={[...data.subCategoryIds]}
-      showDeploymentWarning={false}
       useAdditionalFilters
     />
   </div>
