@@ -11,7 +11,11 @@ models:
       Une ligne par service, il faut donc bien penser à passer par un distinct(id_model) pour obtenir le modèles sans doublons.
 
   - name: int_orientations_following_mobilisation
-    description: tables containing orientations that are done after a mobilisation
+    description: 
+      Tables contenant les orientations réalisées après une mobilisation.
+    config:
+      indexes:
+        - columns: [mobilisation_id]
 
   - name: int_prescribers
     description:
@@ -25,6 +29,9 @@ models:
   - name: int_orientation_user_service
     description: 
       Orientations des utilisateurs vers des services.
+    config:
+      indexes:
+        - columns: [user_id, orientation_creation_date, service_slug]
 
   - name: int_user_page_views
     description: 
@@ -45,6 +52,9 @@ models:
   - name: int_service_structure
     description: 
       Structures de services.
+    config:
+      indexes:
+        - columns: [service_id]
 
   - name: int_service_structure_labels
     description: 
@@ -58,6 +68,9 @@ models:
     description: 
       Labels nationaux associés aux structures.  
       `structure_id` n'est pas une clé d'unicité étant donné qu'une structure peut avoir de 0 à n labels.
+    config:
+      indexes:
+        - columns: [structure_id]
 
   - name: int_structure_members
     description: 
