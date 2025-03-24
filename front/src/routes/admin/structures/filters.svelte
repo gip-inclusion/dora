@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
+  import Tooltip from "$lib/components/ui/tooltip.svelte";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
   import {
     isOrphan,
@@ -25,14 +26,48 @@
   export let structures: AdminShortStructure[] = [];
   export let filteredStructures: AdminShortStructure[];
 
-  const filterButtons: { status: StatusFilter; label: string }[] = [
-    { status: "toutes", label: "Toutes" },
-    { status: "orphelines", label: "Sans utilisateur" },
-    { status: "en_attente", label: "Administrateur invité" },
-    { status: "à_modérer", label: "À valider" },
-    { status: "à_activer", label: "Sans service" },
-    { status: "à_actualiser", label: "Services à actualiser" },
-    { status: "obsolète", label: "Non conforme" },
+  const filterButtons: {
+    status: StatusFilter;
+    label: string;
+    definition: string;
+  }[] = [
+    { status: "toutes", label: "Toutes", definition: "Toutes les structures" },
+    {
+      status: "orphelines",
+      label: "Sans utilisateur",
+      definition:
+        "Identifier un responsable et l’inviter à devenir administrateur de la structure",
+    },
+    {
+      status: "en_attente",
+      label: "Administrateur invité",
+      definition:
+        "Structures où un administrateur invité n’a pas encore accepté l’invitation",
+    },
+    {
+      status: "à_modérer",
+      label: "À valider",
+      definition:
+        "Structures nouvelles ou ayant un 1er administrateur, nécessitant une validation de conformité",
+    },
+    {
+      status: "à_activer",
+      label: "Sans service",
+      definition:
+        "Structures avec un administrateur validé sans services publiés",
+    },
+    {
+      status: "à_actualiser",
+      label: "Services à actualiser",
+      definition:
+        "Structures ayant un ou des services publiés qui nécessitent une actualisation",
+    },
+    {
+      status: "obsolète",
+      label: "Non conforme",
+      definition:
+        "Structures désactivées - qui n’existent plus ou qui ne respectent pas la charte DORA",
+    },
   ];
 
   let showAdvancedFilters = false;
@@ -195,17 +230,20 @@
 <div class="mb-s8 font-bold">Structures nécessitant une action&#8239;:</div>
 
 <div class="mb-s8 gap-s8 flex flex-wrap">
-  {#each filterButtons as { status, label }}
-    <Button
-      on:click={() => {
-        resetSearchParams();
-        searchStatus = status;
-      }}
-      label="{label}{status !== 'toutes'
-        ? ` (${filterAndSortEntities(structures, searchParams, status).length})`
-        : ''}"
-      secondary={searchStatus !== status}
-    />
+  {#each filterButtons as { status, label, definition }}
+    <Tooltip>
+      <Button
+        on:click={() => {
+          resetSearchParams();
+          searchStatus = status;
+        }}
+        label="{label}{status !== 'toutes'
+          ? ` (${filterAndSortEntities(structures, searchParams, status).length})`
+          : ''}"
+        secondary={searchStatus !== status}
+      />
+      <span slot="content">{definition}</span>
+    </Tooltip>
   {/each}
 </div>
 
