@@ -21,46 +21,58 @@
   import type { StatusFilter } from "./types";
 
   export let searchStatus: StatusFilter;
+  export let filterDefinition: string | undefined;
+  export let filterActions: string | undefined;
   export let servicesOptions: ServicesOptions;
   export let structuresOptions: StructuresOptions;
   export let structures: AdminShortStructure[] = [];
   export let filteredStructures: AdminShortStructure[];
 
-  const filterButtons: {
+  const statusFilterSettings: {
     status: StatusFilter;
     label: string;
     definition: string;
+    actions?: string;
   }[] = [
     { status: "toutes", label: "Toutes", definition: "Toutes les structures" },
     {
       status: "orphelines",
       label: "Sans utilisateur",
-      definition:
-        "Identifier un responsable et l’inviter à devenir administrateur de la structure",
+      definition: "Structures référencée mais sans utilisateur actif ou invité",
+      actions:
+        "Identifier un responsable et l’inviter à devenir administrateur de la structure.",
     },
     {
       status: "en_attente",
       label: "Administrateur invité",
       definition:
         "Structures où un administrateur invité n’a pas encore accepté l’invitation",
+      actions:
+        "Relancer l’administrateur via le tableau de bord, puis par mail/téléphone, ou identifier un autre administrateur en dernier recours.",
     },
     {
       status: "à_modérer",
       label: "À valider",
       definition:
         "Structures nouvelles ou ayant un 1er administrateur, nécessitant une validation de conformité",
+      actions:
+        "Vérifier la conformité de la structure et si les administrateurs font bien partie de ses effectifs. En cas de doute, contacter l’équipe DORA.",
     },
     {
       status: "à_activer",
       label: "Sans service",
       definition:
         "Structures avec un administrateur validé sans services publiés",
+      actions:
+        "Télécharger la liste des structures à activer, copier-coller les emails des administrateurs pour envoyer un mail groupé les invitant à référencer leurs services sur DORA. Les SIAE sont à exclure car elles n’ont pas vocation à référencer des services supplémentaires.",
     },
     {
       status: "à_actualiser",
       label: "Services à actualiser",
       definition:
         "Structures ayant un ou des services publiés qui nécessitent une actualisation",
+      actions:
+        "Télécharger la liste des structures à activer, copier-coller les emails des administrateurs pour envoyer un mail groupé les invitant à actualiser leur services.",
     },
     {
       status: "obsolète",
@@ -230,12 +242,14 @@
 <div class="mb-s8 font-bold">Structures nécessitant une action&#8239;:</div>
 
 <div class="mb-s8 gap-s8 flex flex-wrap">
-  {#each filterButtons as { status, label, definition }}
+  {#each statusFilterSettings as { status, label, definition, actions }}
     <Tooltip>
       <Button
         on:click={() => {
           resetSearchParams();
           searchStatus = status;
+          filterDefinition = definition;
+          filterActions = actions;
         }}
         label="{label}{status !== 'toutes'
           ? ` (${filterAndSortEntities(structures, searchParams, status).length})`

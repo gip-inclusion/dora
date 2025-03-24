@@ -4,6 +4,7 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
   import { CANONICAL_URL } from "$lib/env";
   import { addIcon } from "$lib/icons";
   import { getStructuresAdmin } from "$lib/requests/admin";
@@ -29,6 +30,8 @@
 
   let selectedDepartment = data.department;
   let searchStatus: StatusFilter = "toutes";
+  let filterDefinition: string | undefined;
+  let filterActions: string | undefined;
   let structures: AdminShortStructure[] = [];
   let filteredStructures: AdminShortStructure[] = [];
   let selectedStructureSlug: string | null = null;
@@ -202,6 +205,8 @@
       {structures}
       bind:filteredStructures
       bind:searchStatus
+      bind:filterDefinition
+      bind:filterActions
       servicesOptions={data.servicesOptions}
       structuresOptions={data.structuresOptions}
     />
@@ -232,6 +237,20 @@
               secondary
               disabled={!filteredStructures.length}
             />
+            {#if filterActions}
+              <Notice type="info" title={filterDefinition}>
+                <div>
+                  Action(s)&#8239;: {filterActions}
+                  <a
+                    href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/"
+                    target="_blank"
+                    class="text-magenta-cta underline"
+                  >
+                    Mode d’emploi détaillé
+                  </a>
+                </div>
+              </Notice>
+            {/if}
             <StructuresTable
               {filteredStructures}
               bind:selectedStructureSlug
