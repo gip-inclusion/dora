@@ -25,6 +25,16 @@
   export let structures: AdminShortStructure[] = [];
   export let filteredStructures: AdminShortStructure[];
 
+  const filterButtons: { status: StatusFilter; label: string }[] = [
+    { status: "toutes", label: "Toutes" },
+    { status: "orphelines", label: "Sans utilisateur" },
+    { status: "en_attente", label: "Administrateur invité" },
+    { status: "à_modérer", label: "À valider" },
+    { status: "à_activer", label: "Sans service" },
+    { status: "à_actualiser", label: "Services à actualiser" },
+    { status: "obsolète", label: "Non conforme" },
+  ];
+
   let showAdvancedFilters = false;
 
   const SORTING_CHOICES = [
@@ -185,94 +195,19 @@
 <div class="mb-s8 font-bold">Structures nécessitant une action&#8239;:</div>
 
 <div class="mb-s8 gap-s8 flex">
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "orphelines";
-    }}
-    label="orphelines ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'orphelines'
-    ).length})"
-    secondary={searchStatus !== "orphelines"}
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "en_attente";
-    }}
-    label="en attente ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'en_attente'
-    ).length})"
-    secondary={searchStatus !== "en_attente"}
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "à_modérer";
-    }}
-    label="à modérer ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'à_modérer'
-    ).length})"
-    secondary={searchStatus !== "à_modérer"}
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "à_activer";
-    }}
-    label="à activer ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'à_activer'
-    ).length})"
-    secondary={searchStatus !== "à_activer"}
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "à_actualiser";
-    }}
-    label="à actualiser ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'à_actualiser'
-    ).length})"
-    secondary={searchStatus !== "à_actualiser"}
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "obsolète";
-    }}
-    label="obsolètes ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'obsolète'
-    ).length})"
-    secondary={searchStatus !== "obsolète"}
-  />
+  {#each filterButtons as { status, label }}
+    <Button
+      on:click={() => {
+        resetSearchParams();
+        searchStatus = status;
+      }}
+      label="{label}{status !== 'toutes'
+        ? ` (${filterAndSortEntities(structures, searchParams, status).length})`
+        : ''}"
+      secondary={searchStatus !== status}
+    />
+  {/each}
 </div>
-
-<Button
-  on:click={() => {
-    resetSearchParams();
-    searchStatus = "toutes";
-  }}
-  label="Afficher toutes les structures"
-  noBackground
-  small
-/>
 
 <div class="mt-s16 gap-s12 flex flex-col">
   <div class="mb-s12 gap-s12 flex w-full flex-row items-center">
