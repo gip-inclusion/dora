@@ -58,7 +58,7 @@
 </script>
 
 <div class="gap-s16 flex">
-  <Tooltip openDelay={0} side="bottom">
+  <Tooltip>
     <ServiceActionButton ariaLabel={copyLabel} on:click={handleCopy}>
       <div class="w-s24 h-s24 relative">
         {#if linkCopied}
@@ -74,13 +74,13 @@
     </ServiceActionButton>
     <span slot="content">{copyLabel}</span>
   </Tooltip>
-  <Tooltip openDelay={0} side="bottom">
+  <Tooltip>
     <ServiceActionButton ariaLabel={printLabel} on:click={handlePrint}>
       <PrinterLineBusiness />
     </ServiceActionButton>
     <span slot="content">{printLabel}</span>
   </Tooltip>
-  <Tooltip openDelay={0} side="bottom">
+  <Tooltip>
     <ServiceActionButton ariaLabel={shareLabel} on:click={handleShare}>
       <MailLineBusiness />
     </ServiceActionButton>
@@ -90,7 +90,7 @@
     {@const bookmarLabel = isBookmarked
       ? "Retirer de vos favoris"
       : "Ajouter à vos favoris"}
-    <Tooltip openDelay={0} side="bottom">
+    <Tooltip>
       <ServiceActionButton
         ariaLabel={bookmarLabel}
         on:click={() => handleBookmark(onBookmark)}
