@@ -92,7 +92,7 @@
                           </address>
                           <a
                             class="text-magenta-cta mt-s4 font-bold"
-                            href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(service.addressLine)}`}
+                            href={`https://nominatim.openstreetmap.org/ui/search.html?q=${encodeURIComponent(service.addressLine)}`}
                             target="_blank"
                             rel="noopener ugc">Voir sur la carte</a
                           >
