@@ -6,13 +6,11 @@
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import type { ServiceSearchResult } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
   import { isInDeploymentDepartments } from "$lib/utils/misc";
 
   import type { PageData } from "./$types";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
-  import OnlyNationalResultsNotice from "./only-national-results-notice.svelte";
   import ServiceSuggestionNotice from "./service-suggestion-notice.svelte";
   import ResultFilters, { type Filters } from "./result-filters.svelte";
   import MapViewButton from "./map-view-button.svelte";
@@ -125,13 +123,6 @@
     );
   }
 
-  function hasOnlyNationalResults(services: ServiceSearchResult[]) {
-    if (services.length === 0) {
-      return false;
-    }
-    return services.every((service) => service.diffusionZoneType === "country");
-  }
-
   $: showDeploymentNotice =
     data.cityCode &&
     !isInDeploymentDepartments(data.cityCode, data.servicesOptions);
@@ -196,12 +187,6 @@
       {#if showDeploymentNotice}
         <div class="mt-s24">
           <DoraDeploymentNotice />
-        </div>
-      {/if}
-
-      {#if hasOnlyNationalResults(filteredServices)}
-        <div class="mt-s24">
-          <OnlyNationalResultsNotice />
         </div>
       {/if}
 
