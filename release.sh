@@ -35,8 +35,19 @@ if [ -z "$1" ]; then
 fi
 
 RELEASE_TYPE=$1
+SOURCE_BRANCH="main"  # Par défaut, on utilise main
 
-echo -e "Vérification du type de livraison (parmi "major", "minor" ou "patch")"
+# Pour les hotfix, on nécessite une branche source
+if [ "$RELEASE_TYPE" = "hotfix" ]; then
+  if [ -z "$2" ]; then
+    echo -e "${RED}⚠️  Pour un hotfix, vous devez spécifier la branche source.${NC}"
+    echo -e "Usage: $0 hotfix <branch_name>"
+    exit 1
+  fi
+  SOURCE_BRANCH=$2
+fi
+
+echo -e "Vérification du type de livraison (parmi "major", "minor", "patch" ou "hotfix")"
 if [[ "$RELEASE_TYPE" != "major" && "$RELEASE_TYPE" != "minor" && "$RELEASE_TYPE" != "patch" && "$RELEASE_TYPE" != "hotfix" ]]; then
   echo -e "${RED}⚠️  Type de release invalide : '$RELEASE_TYPE'. Utilisez uniquement 'major', 'minor', 'patch' ou 'hotfix'.${NC}"
   exit 1
@@ -107,11 +118,11 @@ get_next_version() {
       minor=$((minor + 1))
       patch=0
       ;;
-    patch)
+    patch|hotfix)
       patch=$((patch + 1))
       ;;
     *)
-      echo -e "${RED}⚠️  Type de release non valide. Utilisez major, minor ou patch.${NC}"
+      echo -e "${RED}⚠️  Type de release non valide. Utilisez major, minor, patch ou hotfix.${NC}"
       exit 1
       ;;
   esac
@@ -131,7 +142,7 @@ setup_workspace() {
   cd "$DORA_REPOSITORY_NAME"
 
   echo ""
-  echo -e "🚰 Récupération des tags existants"
+  echo -e "🚰 Récupération des tags existants et des branches"
   echo ""
   git fetch --all
 }
@@ -150,25 +161,50 @@ get_current_version() {
 
 check_version_deployment_status() {
   local current_version=$1
-  local main_commit_hash=$(git rev-parse main)
-  local tag_commit_hash=$(git rev-list -n 1 "$current_version" 2>/dev/null || echo "")
+  local source_branch=$2
+  local tag_commit_hash
+  local source_commit_hash
+  local clean_branch_name
 
-  if [ "$main_commit_hash" == "$tag_commit_hash" ]; then
-    echo -e "${YELLOW}🙅 La version '$current_version' est déjà déployée pour le dernier commit de main. Aucun nouveau déploiement nécessaire.${NC}"
+  # Nettoyer le nom de la branche (retirer le préfixe origin/ si présent)
+  clean_branch_name="${source_branch#origin/}"
+
+  # Vérifier si la branche source existe (localement ou à distance)
+  if ! git show-ref --verify --quiet refs/heads/"$clean_branch_name" && ! git show-ref --verify --quiet refs/remotes/origin/"$clean_branch_name"; then
+    echo -e "${RED}⚠️  La branche source '$clean_branch_name' n'existe pas localement ni à distance.${NC}"
+    echo -e "Branches disponibles:"
+    git branch -a | grep -v "HEAD" | sed 's/^/  /'
+    exit 1
+  fi
+
+  # Récupérer les hash des commits
+  source_commit_hash=$(git rev-parse "origin/$clean_branch_name" 2>/dev/null || git rev-parse "$clean_branch_name")
+  tag_commit_hash=$(git rev-list -n 1 "$current_version" 2>/dev/null || echo "")
+
+  if [ "$source_commit_hash" == "$tag_commit_hash" ]; then
+    echo -e "${YELLOW}🙅 La version '$current_version' est déjà déployée pour le dernier commit de '$clean_branch_name'. Aucun nouveau déploiement nécessaire.${NC}"
     return 1
   fi
   
-  echo -e "💡 Il y a des modifications non déployées dans la branche 'main'. Création d'une nouvelle version..."
+  echo -e "💡 Il y a des modifications non déployées. Création d'une nouvelle version..."
   echo ""
   return 0
 }
 
 create_and_push_tag() {
   local new_version=$1
+  local source_branch=$2
+  local clean_branch_name
+
+  # Nettoyer le nom de la branche (retirer le préfixe origin/ si présent)
+  clean_branch_name="${source_branch#origin/}"
+
   echo -e "${CYAN}📌 Création du tag $new_version (basée sur le type $RELEASE_TYPE)${NC}"
   echo ""
 
+  git checkout "$clean_branch_name"
   git tag "$new_version"
+  git push origin "$clean_branch_name"
   git push origin "$new_version"
 }
 
@@ -208,10 +244,10 @@ setup_workspace "$TEMP_DIR"
 CURRENT_VERSION=$(get_current_version)
 
 # Vérifier si un nouveau déploiement est nécessaire
-if check_version_deployment_status "$CURRENT_VERSION"; then
+if check_version_deployment_status "$CURRENT_VERSION" "$SOURCE_BRANCH"; then
   # Incrémenter la version et définir le nouveau tag
   NEW_VERSION=$(get_next_version "$CURRENT_VERSION" "$RELEASE_TYPE")
-  create_and_push_tag "$NEW_VERSION"
+  create_and_push_tag "$NEW_VERSION" "$SOURCE_BRANCH"
 
   echo -e "${CYAN}🚀 Déploiement de l'archive sur Scalingo pour les applications dora-back et dora-front${NC}"
   echo ""
