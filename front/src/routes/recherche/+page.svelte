@@ -124,7 +124,9 @@
   }
 
   $: showDeploymentNotice =
-    data.cityCode &&
+    filteredServices.length < 10 &&
+    !!data.cityCode &&
+    !!data.servicesOptions &&
     !isInDeploymentDepartments(data.cityCode, data.servicesOptions);
 
   $: showMesAidesDialog = !$userInfo && data.categoryIds.includes("mobilite");
@@ -184,15 +186,18 @@
         />
       </div>
 
-      {#if showDeploymentNotice}
-        <div class="mt-s24">
-          <DoraDeploymentNotice />
-        </div>
-      {/if}
-
       {#if filteredServices.length}
         <div class="mt-s32">
-          <SearchResults {data} {filters} {filteredServices} />
+          <SearchResults
+            {data}
+            {filters}
+            {filteredServices}
+            {showDeploymentNotice}
+          />
+        </div>
+      {:else if showDeploymentNotice}
+        <div class="mt-s24">
+          <DoraDeploymentNotice />
         </div>
       {/if}
 
