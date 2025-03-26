@@ -2,6 +2,8 @@
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
 
+  import illustration from "$lib/assets/illustrations/Validation_Orientation_Envoyee.webp";
+
   import Button from "$lib/components/display/button.svelte";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
@@ -14,8 +16,6 @@
   import { userInfo } from "$lib/utils/auth";
   import * as v from "$lib/validation/schema-utils";
   import { validate } from "$lib/validation/validation";
-
-  import FeedbackConfirmationModal from "./feedback-confirmation-modal.svelte";
 
   export let isOpen = false;
   export let service: Service;
@@ -31,16 +31,32 @@
   ];
   const reasonOptions = allReasons.map((label) => ({ label, value: label }));
 
-  let isConfirmationModalOpen = false;
-  let requesting = false;
-
+  let isRequesting = false;
+  let isFeedbackSent = false;
   let formPage: 1 | 2 = 1;
-
   let selectedReasons = [];
   let otherReason = "";
   let name = "";
   let email = "";
   let details = "";
+
+  function resetState() {
+    isRequesting = false;
+    isFeedbackSent = false;
+    formPage = 1;
+    selectedReasons = [];
+    otherReason = "";
+    name = "";
+    email = "";
+    details = "";
+  }
+
+  $: {
+    if (!isOpen) {
+      // Réinitialisation automatique lorsque la modale est fermée
+      resetState();
+    }
+  }
 
   $: formData = {
     selectedReasons,
@@ -104,15 +120,6 @@
     }
   });
 
-  function resetState() {
-    formPage = 1;
-    selectedReasons = [];
-    otherReason = "";
-    name = "";
-    email = "";
-    details = "";
-  }
-
   function handleClose() {
     resetState();
     isOpen = false;
@@ -149,67 +156,86 @@
   }
 
   function handleSuccess(_jsonResult) {
-    handleClose();
-    isConfirmationModalOpen = true;
+    isFeedbackSent = true;
   }
 </script>
 
 <Modal width="small" bind:isOpen title="Vous avez une suggestion ?">
-  <Form
-    bind:data={formData}
-    schema={feedbackSchema}
-    onSubmit={handleSubmit}
-    onSuccess={handleSuccess}
-    bind:requesting
-  >
-    <fieldset class="gap-s16 flex flex-col">
-      {#if formPage === 1}
-        <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
-          <div class="text-f16 leading-s24 text-gray-text">
-            Aidez-nous à améliorer la qualité de nos contenus en signalant une
-            erreur, une information manquante ou inexacte.
-          </div>
-          <CheckboxesField
-            id="selectedReasons"
-            bind:value={selectedReasons}
-            choices={reasonOptions}
-            vertical
-          />
-          {#if isOtherReasonSelected(selectedReasons)}
-            <BasicInputField
-              id="otherReason"
-              bind:value={otherReason}
-              vertical
-              hideLabel
-            />
+  {#if !isFeedbackSent}
+    <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+      <Form
+        bind:data={formData}
+        schema={feedbackSchema}
+        onSubmit={handleSubmit}
+        onSuccess={handleSuccess}
+        bind:requesting={isRequesting}
+      >
+        <fieldset class="gap-s16 flex flex-col">
+          {#if formPage === 1}
+            <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+              <div class="text-f16 leading-s24 text-gray-text">
+                Aidez-nous à améliorer la qualité de nos contenus en signalant
+                une erreur, une information manquante ou inexacte.
+              </div>
+              <CheckboxesField
+                id="selectedReasons"
+                bind:value={selectedReasons}
+                choices={reasonOptions}
+                vertical
+              />
+              {#if isOtherReasonSelected(selectedReasons)}
+                <BasicInputField
+                  id="otherReason"
+                  bind:value={otherReason}
+                  vertical
+                  hideLabel
+                />
+              {/if}
+            </div>
+          {:else if formPage === 2}
+            <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+              <BasicInputField id="name" bind:value={name} vertical />
+              <BasicInputField id="email" bind:value={email} vertical />
+              <TextareaField
+                id="details"
+                bind:value={details}
+                vertical
+                description="Décrivez les modifications nécessaires pour nous permettre de mettre à jour cette fiche. Plus votre description sera détaillée, plus nous pourrons traiter efficacement votre signalement."
+              />
+              <div class="text-f16 leading-s24 text-gray-text">
+                En soumettant ce formulaire, vous acceptez que vos données
+                soient utilisées pour le traitement de votre signalement, et
+                uniquement à cet effet.
+              </div>
+            </div>
           {/if}
-        </div>
-      {:else if formPage === 2}
-        <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
-          <BasicInputField id="name" bind:value={name} vertical />
-          <BasicInputField id="email" bind:value={email} vertical />
-          <TextareaField
-            id="details"
-            bind:value={details}
-            vertical
-            description="Décrivez les modifications nécessaires pour nous permettre de mettre à jour cette fiche. Plus votre description sera détaillée, plus nous pourrons traiter efficacement votre signalement."
-          />
-          <div class="text-f16 leading-s24 text-gray-text">
-            En soumettant ce formulaire, vous acceptez que vos données soient
-            utilisées pour le traitement de votre signalement, et uniquement à
-            cet effet.
+          <div class="mt-s12 gap-s16 flex justify-end">
+            <Button label="Annuler" secondary on:click={handleClose} />
+            {#if formPage === 1}
+              <Button label="Continuer" on:click={handleContinue} />
+            {:else if formPage === 2}
+              <Button label="Envoyer" type="submit" disabled={isRequesting} />
+            {/if}
           </div>
-        </div>
-      {/if}
-      <div class="mt-s12 gap-s16 flex justify-end">
-        <Button label="Annuler" secondary on:click={handleClose} />
-        {#if formPage === 1}
-          <Button label="Continuer" on:click={handleContinue} />
-        {:else if formPage === 2}
-          <Button label="Envoyer" type="submit" />
-        {/if}
+        </fieldset>
+      </Form>
+    </div>
+  {:else}
+    <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+      <div class="text-center">
+        <img
+          class="mx-auto w-[320px]"
+          src={illustration}
+          alt=""
+          aria-hidden="true"
+        />
+        <h2 class="text-f17 text-gray-text leading-s24 mb-s4 font-bold">
+          Merci pour votre signalement !
+        </h2>
+        <span class="text-f14 text-gray-text leading-s24">
+          La structure concernée sera informée des modifications suggérées.
+        </span>
       </div>
-    </fieldset>
-  </Form>
+    </div>
+  {/if}
 </Modal>
-<FeedbackConfirmationModal bind:isOpen={isConfirmationModalOpen} />
