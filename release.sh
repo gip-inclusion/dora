@@ -30,15 +30,26 @@ echo ""
 
 echo -e "Vérification des arguments"
 if [ -z "$1" ]; then
-  echo -e "${RED}⚠️  Vous devez spécifier le type de release (major, minor, patch).${NC}"
+  echo -e "${RED}⚠️  Vous devez spécifier le type de release (major, minor, patch, hotfix).${NC}"
   exit 1
 fi
 
 RELEASE_TYPE=$1
+SOURCE_BRANCH="main"  # Par défaut, on utilise main
 
-echo -e "Vérification du type de livraison (parmi "major", "minor" ou "patch")"
-if [[ "$RELEASE_TYPE" != "major" && "$RELEASE_TYPE" != "minor" && "$RELEASE_TYPE" != "patch" ]]; then
-  echo -e "${RED}⚠️  Type de release invalide : '$RELEASE_TYPE'. Utilisez uniquement 'major', 'minor' ou 'patch'.${NC}"
+# Pour les hotfix, on nécessite une branche source
+if [ "$RELEASE_TYPE" = "hotfix" ]; then
+  if [ -z "$2" ]; then
+    echo -e "${RED}⚠️  Pour un hotfix, vous devez spécifier la branche source.${NC}"
+    echo -e "Usage: $0 hotfix <branch_name>"
+    exit 1
+  fi
+  SOURCE_BRANCH=$2
+fi
+
+echo -e "Vérification du type de livraison (parmi "major", "minor", "patch" ou "hotfix")"
+if [[ "$RELEASE_TYPE" != "major" && "$RELEASE_TYPE" != "minor" && "$RELEASE_TYPE" != "patch" && "$RELEASE_TYPE" != "hotfix" ]]; then
+  echo -e "${RED}⚠️  Type de release invalide : '$RELEASE_TYPE'. Utilisez uniquement 'major', 'minor', 'patch' ou 'hotfix'.${NC}"
   exit 1
 fi
 
@@ -107,16 +118,115 @@ get_next_version() {
       minor=$((minor + 1))
       patch=0
       ;;
-    patch)
+    patch|hotfix)
       patch=$((patch + 1))
       ;;
     *)
-      echo -e "${RED}⚠️  Type de release non valide. Utilisez major, minor ou patch.${NC}"
+      echo -e "${RED}⚠️  Type de release non valide. Utilisez major, minor, patch ou hotfix.${NC}"
       exit 1
       ;;
   esac
 
   echo "v$major.$minor.$patch"
+}
+
+setup_workspace() {
+  local temp_dir=$1
+  echo "✨ Création d'un répertoire temporaire pour le travail : $temp_dir"
+  cd "$temp_dir"
+  echo ""
+
+  echo -e "🐑 Clonage du dépôt $DORA_REPOSITORY_NAME..."
+  echo ""
+  git clone "$DORA_REPOSITORY_URL"
+  cd "$DORA_REPOSITORY_NAME"
+
+  echo ""
+  echo -e "🚰 Récupération des tags existants et des branches"
+  echo ""
+  git fetch --all
+}
+
+get_current_version() {
+  local current_version
+  current_version=$(git describe --tags $(git rev-list --tags --max-count=1))
+  
+  if [ -z "$current_version" ]; then
+    echo -e "${RED}⚠️ Aucun tag de version trouvé. Assurez-vous qu'un tag existe dans le dépôt.${NC}"
+    exit 1
+  fi
+  
+  echo "$current_version"
+}
+
+check_version_deployment_status() {
+  local current_version=$1
+  local source_branch=$2
+  local tag_commit_hash
+  local source_commit_hash
+  local clean_branch_name
+
+  # Nettoyer le nom de la branche (retirer le préfixe origin/ si présent)
+  clean_branch_name="${source_branch#origin/}"
+
+  # Vérifier si la branche source existe (localement ou à distance)
+  if ! git show-ref --verify --quiet refs/heads/"$clean_branch_name" && ! git show-ref --verify --quiet refs/remotes/origin/"$clean_branch_name"; then
+    echo -e "${RED}⚠️  La branche source '$clean_branch_name' n'existe pas localement ni à distance.${NC}"
+    echo -e "Branches disponibles:"
+    git branch -a | grep -v "HEAD" | sed 's/^/  /'
+    exit 1
+  fi
+
+  # Récupérer les hash des commits
+  source_commit_hash=$(git rev-parse "origin/$clean_branch_name" 2>/dev/null || git rev-parse "$clean_branch_name")
+  tag_commit_hash=$(git rev-list -n 1 "$current_version" 2>/dev/null || echo "")
+
+  if [ "$source_commit_hash" == "$tag_commit_hash" ]; then
+    echo -e "${YELLOW}🙅 La version '$current_version' est déjà déployée pour le dernier commit de '$clean_branch_name'. Aucun nouveau déploiement nécessaire.${NC}"
+    return 1
+  fi
+  
+  echo -e "💡 Il y a des modifications non déployées. Création d'une nouvelle version..."
+  echo ""
+  return 0
+}
+
+create_and_push_tag() {
+  local new_version=$1
+  local source_branch=$2
+  local clean_branch_name
+
+  # Nettoyer le nom de la branche (retirer le préfixe origin/ si présent)
+  clean_branch_name="${source_branch#origin/}"
+
+  echo -e "${CYAN}📌 Création du tag $new_version (basée sur le type $RELEASE_TYPE)${NC}"
+  echo ""
+
+  git checkout "$clean_branch_name"
+  git tag "$new_version"
+  git push origin "$new_version"
+  echo ""
+}
+
+deploy_to_scalingo() {
+  local region=$1
+  local app_name=$2
+  local tag_archive_url=$3
+
+  echo -e "Déploiement de l'application $app_name"
+  echo ""
+  scalingo deploy --region "$region" --app "$app_name" "$tag_archive_url"
+  echo ""
+}
+
+cleanup_workspace() {
+  local temp_dir=$1
+  local current_dir=$2
+  
+  echo -e "🧹 Nettoyage : retour au répertoire initial et suppression du répertoire temporaire."
+  cd "$current_dir"
+  rm -rf "$temp_dir"
+  echo ""
 }
 
 # ===
@@ -128,74 +238,30 @@ echo -e "${YELLOW}🚀 Lancement de la procédure de livraison${NC}"
 echo ""
 
 TEMP_DIR=$(mktemp -d)
-echo "✨ Création d'un répertoire temporaire pour le travail : $TEMP_DIR"
-cd "$TEMP_DIR"
-echo ""
-
-# Déploiement
-
-echo -e "🐑 Clonage du dépôt $DORA_REPOSITORY_NAME..."
-echo ""
-git clone "$DORA_REPOSITORY_URL"
-cd "$DORA_REPOSITORY_NAME"
-
-echo ""
-echo -e "🚰 Récupération des tags existants"
-echo ""
-git fetch --all
+setup_workspace "$TEMP_DIR"
 
 # Récupérer le dernier tag pour déterminer la version actuelle
-CURRENT_VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
-if [ -z "$CURRENT_VERSION" ]; then
-  echo -e "${RED}⚠️ Aucun tag de version trouvé. Assurez-vous qu'un tag existe dans le dépôt.${NC}"
-  exit 1
-fi
+CURRENT_VERSION=$(get_current_version)
 
-# Vérifier si le tag de la version actuelle existe déjà sur le dernier commit de main
-MAIN_COMMIT_HASH=$(git rev-parse main)
-TAG_COMMIT_HASH=$(git rev-list -n 1 "$CURRENT_VERSION" 2>/dev/null || echo "")
-
-if [ "$MAIN_COMMIT_HASH" == "$TAG_COMMIT_HASH" ]; then
-  echo -e "${YELLOW}🙅 La version '$CURRENT_VERSION' est déjà déployée pour le dernier commit de main. Aucun nouveau déploiement nécessaire.${NC}"
-else
-  echo -e "💡 Il y a des modifications non déployées dans la branche 'main'. Création d'une nouvelle version..."
-  echo ""
-
+# Vérifier si un nouveau déploiement est nécessaire
+if check_version_deployment_status "$CURRENT_VERSION" "$SOURCE_BRANCH"; then
   # Incrémenter la version et définir le nouveau tag
   NEW_VERSION=$(get_next_version "$CURRENT_VERSION" "$RELEASE_TYPE")
-  echo -e "${CYAN}📌 Création du tag $NEW_VERSION (basée sur le type $RELEASE_TYPE)${NC}"
-  echo ""
+  create_and_push_tag "$NEW_VERSION" "$SOURCE_BRANCH"
 
-  git tag "$NEW_VERSION"
-  git push origin "$NEW_VERSION"
-
-  echo ""
   echo -e "${CYAN}🚀 Déploiement de l'archive sur Scalingo pour les applications dora-back et dora-front${NC}"
   echo ""
   tag_archive_url="https://github.com/gip-inclusion/dora/archive/refs/tags/$NEW_VERSION.tar.gz"
   
   # TODO : paralléliser les déploiements
-
-  echo -e "Déploiement de l'application back-end"
-  echo ""
-  scalingo deploy --region "$SCALINGO_REGION" --app "$SCALINGO_BACK_APP" "$tag_archive_url"
-  echo ""
-
-  echo -e "Déploiement de l'application front-end"
-  echo ""
-  scalingo deploy --region "$SCALINGO_REGION" --app "$SCALINGO_FRONT_APP" "$tag_archive_url"
-  echo ""
+  
+  # Déploiement des applications
+  deploy_to_scalingo "$SCALINGO_REGION" "$SCALINGO_BACK_APP" "$tag_archive_url"
+  deploy_to_scalingo "$SCALINGO_REGION" "$SCALINGO_FRONT_APP" "$tag_archive_url"
 fi
 
-# Revenir au répertoire temporaire
-cd ..
-echo ""
-
 # Nettoyage
-echo -e "🧹 Nettoyage : retour au répertoire initial et suppression du répertoire temporaire."
-cd "$CURRENT_DIR"
-rm -rf "$TEMP_DIR"
-echo ""
+cleanup_workspace "$TEMP_DIR" "$CURRENT_DIR"
 
 # Fin
 echo -e "${GREEN}🎉 Fin de la procédure de livraison${NC}"
