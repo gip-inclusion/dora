@@ -204,8 +204,8 @@ create_and_push_tag() {
 
   git checkout "$clean_branch_name"
   git tag "$new_version"
-  git push origin "$clean_branch_name"
   git push origin "$new_version"
+  echo ""
 }
 
 deploy_to_scalingo() {
