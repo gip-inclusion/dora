@@ -23,17 +23,6 @@
         <h2 class="m-s0 text-f23 text-france-blue leading-20">
           Mes informations
         </h2>
-
-        {#if OIDC_AUTH_BACKEND !== "proconnect"}
-          <LinkButton
-            label="Modifier vos informations"
-            to={`/auth/ic-update?next=${encodeURIComponent(
-              `${getApiURL()}/mon-compte`
-            )}`}
-            icon={externalLinkIcon}
-            iconOnRight
-          />
-        {/if}
       </div>
 
       <div class="gap-s36 p-s16 md:mb-s56 md:p-s36 flex flex-col">
@@ -57,21 +46,12 @@
         <hr class="mx-s12 md:mx-s36" />
 
         <p class="m-s0 px-s16 py-s12 text-f14 text-gray-text md:px-s36">
-          {#if OIDC_AUTH_BACKEND === "proconnect"}
-            Vous utilisez <a
-              class="underline"
-              href="https://agentconnect.crisp.help/fr/"
-              rel="noopener noreferrer"
-              target="_blank">ProConnect</a
-            > pour vous connecter à DORA.
-          {:else}
-            Vous utilisez <a
-              class="underline"
-              href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/inclusion-connect-quesaco-y13f84/"
-              rel="noopener noreferrer"
-              target="_blank">Inclusion Connect</a
-            > pour vous connecter à DORA.
-          {/if}
+          Vous utilisez <a
+            class="underline"
+            href="https://agentconnect.crisp.help/fr/"
+            rel="noopener noreferrer"
+            target="_blank">ProConnect</a
+          > pour vous connecter à DORA.
         </p>
       </div>
     </div>
