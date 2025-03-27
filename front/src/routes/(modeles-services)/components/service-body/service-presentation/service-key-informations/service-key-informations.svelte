@@ -172,20 +172,22 @@
             class={service.feeCondition &&
             isNotFreeService(service.feeCondition)
               ? "text-warning font-bold"
-              : ""}
+              : "font-bold"}
           >
             {getLabelFromValue(
               service.feeCondition,
               servicesOptions.feeConditions
             )}
           </span>
-          <span>
-            {#if service.feeDetails}
-              {service.feeDetails}
-            {:else}
-              La structure n’a pas précisé le montant des frais
-            {/if}
-          </span>
+          {#if isNotFreeService(service.feeCondition)}
+            <span>
+              {#if service.feeDetails}
+                {service.feeDetails}
+              {:else}
+                Aucun détail n’a été renseigné par la structure
+              {/if}
+            </span>
+          {/if}
         </div>
       </ServiceKeyInformationSection>
     </div>
