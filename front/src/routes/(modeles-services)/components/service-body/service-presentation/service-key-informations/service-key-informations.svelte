@@ -129,7 +129,7 @@
             <div class="mt-s28">
               <ServiceKeyInformationSection
                 icon={Compass3FillMap}
-                title="Périmètres géographiques"
+                title="Périmètre géographique"
               >
                 {service.diffusionZoneDetailsDisplay}
               </ServiceKeyInformationSection>
