@@ -9,6 +9,7 @@
     Model,
     Service,
   } from "$lib/types";
+  import { userInfo } from "$lib/utils/auth";
 
   import ServiceList from "./components/service-list.svelte";
   import ServiceSection from "./components/service-section.svelte";
@@ -127,7 +128,7 @@
         <li>Non renseigné</li>
       {/each}
     </ServiceList>
-    {#if !isDI}
+    {#if !$userInfo && !isDI}
       <div class="mt-s16">
         <strong
           >Vous étes un particulier&#8239;? <a
