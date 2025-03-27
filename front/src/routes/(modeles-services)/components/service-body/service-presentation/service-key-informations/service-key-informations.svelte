@@ -68,7 +68,7 @@
             {/each}
           </ul>
         {:else}
-          <li>Aucun critère d’admission spécifique</li>
+          Aucun critère d’admission spécifique
         {/if}
       </ServiceKeyInformationSection>
     </div>
