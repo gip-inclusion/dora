@@ -22,7 +22,7 @@
 
   const allReasons = [
     "Les aspects administratifs sont incorrects ou incomplets (critères d'éligibilité, public concerné, documents requis)",
-    "Les informations pratiques sont obsolètes(modalités d'accueil, horaires, contacts, adresse)",
+    "Les informations pratiques sont obsolètes (modalités d'accueil, horaires, contacts, adresse)",
     "La zone d'intervention est inexacte (territoire couvert, périmètre d'action)",
     "Le service ne correspond pas aux critères DORA (nature du service, missions d'insertion)",
     "Les partenariats ou dispositifs mentionnés n'existent plus ou sont temporairement suspendus (services suspendus, conventions terminées)",
