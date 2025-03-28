@@ -46,7 +46,7 @@
 </script>
 
 {#if visible}
-  <div
+  <section
     class="py-s32 px-s16 gap-s16 flex flex-col rounded-2xl sm:flex-row {types[
       type
     ].background}"
@@ -92,5 +92,5 @@
         </div>
       {/if}
     </div>
-  </div>
+  </section>
 {/if}
