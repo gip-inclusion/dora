@@ -15,6 +15,7 @@
   import CollectivityDirectoryBanner from "./collectivity-directory-banner.svelte";
   import type { Filters } from "./result-filters.svelte";
   import SearchResult from "./search-result.svelte";
+  import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
 
   export let data: PageData;
   export let filters: Filters;
@@ -23,6 +24,7 @@
   export let noAlertButtonBottomGap = false;
   export let summarized = false;
   export let noPagination = false;
+  export let showDeploymentNotice = false;
 
   const PAGE_LENGTH = 10;
 
@@ -101,6 +103,9 @@
           selected={service.slug === selectedServiceSlug}
           {summarized}
         />
+      {/if}
+      {#if showDeploymentNotice && index === Math.min(4, filteredServices.length - 1)}
+        <DoraDeploymentNotice />
       {/if}
       {#if index === 4}
         <CollectivityDirectoryBanner cityLabel={data.cityLabel} />

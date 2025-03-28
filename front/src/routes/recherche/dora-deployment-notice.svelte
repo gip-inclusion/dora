@@ -5,13 +5,15 @@
 <Notice
   type="info"
   titleLevel="h2"
-  title="Les acteurs de l’insertion de votre territoire débutent la mise en visibilité de leur offre de service."
+  title="DORA n’est pas encore déployé sur votre région"
 >
-  <p class="text-f14">
+  <p class="text-f14 mb-s0 text-gray-dark leading-24">
     Il est possible que votre recherche aboutisse à peu de résultats. En
-    attendant le déploiement sur votre région, vous pouvez toujours <a
-      href="/contribuer"
-      class="text-magenta-cta underline">suggérer les services</a
-    > de vos partenaires, qui ne sont pas encore référencés sur DORA.
+    attendant le déploiement sur votre région, vous pouvez toujours
+    <a
+      href="https://tally.so/r/nGegBe"
+      target="_blank"
+      class="text-magenta-cta underline">contribuer au référencement</a
+    > des services qui ne sont pas encore renseignés sur DORA.
   </p>
 </Notice>
