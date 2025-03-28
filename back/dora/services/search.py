@@ -376,6 +376,84 @@ def _get_dora_results(
     }
 
 
+def _get_unified_results(
+    request,
+    di_client: data_inclusion.DataInclusionClient,
+    city_code: str,
+    city: City,
+    categories: Optional[list[str]] = None,
+    subcategories: Optional[list[str]] = None,
+    kinds: Optional[list[str]] = None,
+    fees: Optional[list[str]] = None,
+    location_kinds: Optional[list[str]] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None,
+) -> list:
+    """Search data.inclusion services and convert them to the Dora format.
+
+    Returns:
+        A list of search results by SearchResultSerializer.
+    """
+    raw_di_results = _get_raw_di_results(
+        di_client=di_client,
+        city_code=city_code,
+        categories=categories,
+        subcategories=subcategories,
+        kinds=kinds,
+        fees=fees,
+        lat=lat,
+        lon=lon,
+        with_dora=True,
+    )
+
+    dora_results_ids = [
+        result["service"]["id"]
+        for result in raw_di_results
+        if result["service"]["source"] == "dora"
+    ]
+    dora_results = (
+        models.Service.objects.filter(id__in=dora_results_ids)
+        .select_related(
+            "structure",
+        )
+        .prefetch_related(
+            "kinds",
+            "fee_condition",
+            "location_kinds",
+            "categories",
+            "subcategories",
+            "funding_labels",
+            "coach_orientation_modes",
+            "beneficiaries_access_modes",
+        )
+    ).distinct()
+    with_remote = not location_kinds or "a-distance" in location_kinds
+    with_onsite = not location_kinds or "en-presentiel" in location_kinds
+    filtered_and_annotated_dora_results = _filter_and_annotate_dora_services(
+        dora_results,
+        city.geom if not lat or not lon else Point(lon, lat, srid=WGS84),
+        with_remote,
+        with_onsite,
+    )
+    serialized_dora_results = SearchResultSerializer(
+        filtered_and_annotated_dora_results, many=True, context={"request": request}
+    ).data
+    funding_labels_found = FundingLabel.objects.filter(
+        service__in=filtered_and_annotated_dora_results
+    ).distinct()
+
+    other_raw_results = [
+        result for result in raw_di_results if result["service"]["source"] != "dora"
+    ]
+    serialized_other_results = _map_di_results(other_raw_results, location_kinds)
+
+    serialized_results = [*serialized_dora_results, *serialized_other_results]
+
+    return serialized_results, {
+        "funding_labels": FundingLabelSerializer(funding_labels_found, many=True).data
+    }
+
+
 def search_services(
     request,
     city_code: str,
