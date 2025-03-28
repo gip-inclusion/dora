@@ -99,6 +99,7 @@ def _get_raw_di_results(
     fees: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
+    with_dora: bool = False,
 ) -> list:
     """Search data.inclusion services.
 
@@ -140,9 +141,13 @@ def _get_raw_di_results(
     if not thematiques and subcategories:
         return []
 
+    sources = settings.DATA_INCLUSION_STREAM_SOURCES
+    if with_dora:
+        sources = [*sources, "dora"]
+
     try:
         raw_di_results = di_client.search_services(
-            sources=settings.DATA_INCLUSION_STREAM_SOURCES,
+            sources=sources,
             score_qualite_minimum=settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM,
             code_insee=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
