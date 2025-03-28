@@ -15,6 +15,7 @@ from dora.services.models import Service
 from dora.structures.emails import send_moderation_rejected_notification
 
 from .models import (
+    NoDoraFormDIStructure,
     Structure,
     StructureMember,
     StructureNationalLabel,
@@ -414,8 +415,14 @@ class StructureAdmin(admin.ModelAdmin):
         return HttpResponseRedirect(self.get_moderation_pending_structure_list_url())
 
 
+class NoDoraFormDIStructureAdmin(admin.ModelAdmin):
+    list_display = ["source", "structure_id", "comment"]
+    search_fields = ["source", "structure_id", "comment"]
+
+
 admin.site.register(Structure, StructureAdmin)
 admin.site.register(StructureMember, StructureMemberAdmin)
 admin.site.register(StructurePutativeMember, StructurePutativeMemberAdmin)
 admin.site.register(StructureSource, EnumAdmin)
 admin.site.register(StructureNationalLabel, EnumAdmin)
+admin.site.register(NoDoraFormDIStructure, NoDoraFormDIStructureAdmin)
