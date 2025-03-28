@@ -1207,7 +1207,7 @@ class StructureMemberTestCase(APITestCase):
 # Tests au format pytest
 
 
-def test_restricted_national_labels(api_client):
+def test_restricted_national_labels(api_client, load_labels):
     # On s'assure que la liste des options contient
     # les label nationaux sélectionnables "restreints"
     response = api_client.get("/structures-options", follow=True)

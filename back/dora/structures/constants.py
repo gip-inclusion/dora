@@ -11,7 +11,7 @@ autant que possible les énumérations du schéma D·I.
 RESTRICTED_STRUCTURE_TYPOLOGIES = (TypologieStructure.FT,)
 
 # On indique ici les labels nationaux faisant l'objet d'une curation
-# et de restrictions particulières (FT, CapEmploi, partenaires régionaux).
+# et de restrictions particulières (FT, CapEmploi, partenaires régionaux, SIAE).
 # Note / TODO :
 # ce sont des `EnumModel`, donc pas de typage.
 # Il serait intéressant de les avoir sous forme de fixture.
@@ -20,4 +20,5 @@ RESTRICTED_NATIONAL_LABELS = (
     "cap-emploi-reseau-cheops",
     "conseil-departemental",
     "france-travail",
+    "siae",
 )
