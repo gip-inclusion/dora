@@ -7,7 +7,7 @@
   titleLevel="h2"
   title="DORA n’est pas encore déployé sur votre région"
 >
-  <span class="text-f14 leading-24">
+  <p class="text-f14 mb-s0 text-gray-dark leading-24">
     Il est possible que votre recherche aboutisse à peu de résultats. En
     attendant le déploiement sur votre région, vous pouvez toujours
     <a
@@ -15,5 +15,5 @@
       target="_blank"
       class="text-magenta-cta underline">contribuer au référencement</a
     > des services qui ne sont pas encore renseignés sur DORA.
-  </span>
+  </p>
 </Notice>

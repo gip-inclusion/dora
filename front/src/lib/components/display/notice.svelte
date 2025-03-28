@@ -80,7 +80,7 @@
 
       {#if $$slots?.default || $$slots.button}
         <div
-          class="gap-s12 flex flex-row flex-wrap items-start justify-between"
+          class="gap-s12 text-gray-dark flex flex-row flex-wrap items-start justify-between"
         >
           <slot />
 
