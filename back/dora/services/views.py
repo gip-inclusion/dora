@@ -868,6 +868,7 @@ def search(request):
     funding = request.GET.get("funding")
     lat = request.GET.get("lat")
     lon = request.GET.get("lon")
+    unified_search = request.GET.get("unifiedSearch") == "true"
 
     categories_list = categories.split(",") if categories is not None else None
     subcategories_list = subcategories.split(",") if subcategories is not None else None
@@ -897,6 +898,7 @@ def search(request):
         funding_labels=funding_labels_list,
         lat=lat,
         lon=lon,
+        unified_search=unified_search,
     )
 
     return Response(
