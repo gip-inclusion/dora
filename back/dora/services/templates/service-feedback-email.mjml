@@ -1,0 +1,48 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}
+  Signalement de modification pour votre service référencé sur DORA
+{% endblock %}
+
+{% block illustration %}
+  <mj-image src="{% frontend_url %}/emails/illu-orientation.png" alt=""/>
+{% endblock %}
+
+{% block title %}
+  Signalement de modification pour votre service référencé sur DORA
+{% endblock %}
+
+{% block content %}
+  <p>
+    <b>Bonjour,</b>
+  </p>
+
+  <p>
+    Une personne nous a signalé des informations à mettre à jour concernant votre service
+    <a href="{{ service.get_absolute_url }}">{{ service.name }}</a>.
+  </p>
+
+  <p>
+    Motif(s) du signalement&#8239;:
+  </p>
+
+  <ul>
+    {% for reason in reasons %}
+      <li>{{ reason }}</li>
+    {% endfor %}
+  </ul>
+
+  <p>
+    Détails fournis&#8239;:
+  </p>
+
+  <blockquote style="white-space: pre-line; margin-top: 0;">{{ details }}</blockquote>
+
+  <p>
+    Nous vous invitons à prendre en considération ces remarques. Des informations à jour sur DORA permettent aux professionnels de l’accompagnement d’identifier rapidement et efficacement les solutions adaptées pour leurs bénéficiaires.
+  </p>
+
+  <p>
+    La qualité et l’exactitude des informations sont essentielles pour orienter au mieux les personnes vers votre service.
+  </p>
+{% endblock %}

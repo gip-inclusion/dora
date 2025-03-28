@@ -193,7 +193,13 @@ class ServiceViewSet(
         serializer = FeedbackSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         d = serializer.validated_data
-        send_service_feedback_email(service, d["full_name"], d["email"], d["message"])
+        send_service_feedback_email(
+            service,
+            d["reasons"],
+            d["name"],
+            d["email"],
+            d["details"],
+        )
         return Response(status=201)
 
     @action(

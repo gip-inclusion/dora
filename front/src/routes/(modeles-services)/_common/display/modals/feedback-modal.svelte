@@ -1,26 +1,93 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import { slide } from "svelte/transition";
+
+  import illustration from "$lib/assets/illustrations/Validation_Orientation_Envoyee.webp";
+
   import Button from "$lib/components/display/button.svelte";
-  import Fieldset from "$lib/components/display/fieldset.svelte";
+  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
+  import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
+  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
+
+  import type { Service } from "$lib/types";
   import { getApiURL } from "$lib/utils/api";
   import { userInfo } from "$lib/utils/auth";
-  import { onMount } from "svelte";
-  import FeedbackConfirmationModal from "./feedback-confirmation-modal.svelte";
-  import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
-  import TextareaField from "$lib/components/forms/fields/textarea-field.svelte";
   import * as v from "$lib/validation/schema-utils";
+  import { validate } from "$lib/validation/validation";
 
   export let isOpen = false;
-  export let service;
+  export let service: Service;
 
-  let message, suggesterFullName, suggesterEmail;
-  let confirmationModalIsOpen = false;
-  let requesting = false;
+  const allReasons = [
+    "Les aspects administratifs sont incorrects ou incomplets (critères d'éligibilité, public concerné, documents requis)",
+    "Les informations pratiques sont obsolètes (modalités d'accueil, horaires, contacts, adresse)",
+    "La zone d'intervention est inexacte (territoire couvert, périmètre d'action)",
+    "Le service ne correspond pas aux critères DORA (nature du service, missions d'insertion)",
+    "Les partenariats ou dispositifs mentionnés n'existent plus ou sont temporairement suspendus (services suspendus, conventions terminées)",
+    "Le délai de traitement/d'attente indiqué n'est plus valable",
+    "Autre motif (merci de préciser)",
+  ];
+  const reasonOptions = allReasons.map((label) => ({ label, value: label }));
 
-  const feedbackSchema: v.Schema = {
-    fullName: {
-      label: "Nom",
+  let isRequesting = false;
+  let isFeedbackSent = false;
+  let formPage: 1 | 2 = 1;
+  let selectedReasons = [];
+  let otherReason = "";
+  let name = "";
+  let email = "";
+  let details = "";
+
+  function resetState() {
+    isRequesting = false;
+    isFeedbackSent = false;
+    formPage = 1;
+    selectedReasons = [];
+    otherReason = "";
+    name = `${$userInfo.firstName} ${$userInfo.lastName}`;
+    email = $userInfo.email;
+    details = "";
+  }
+
+  $: {
+    if (!isOpen) {
+      // Réinitialisation automatique lorsque la modale est fermée
+      resetState();
+    }
+  }
+
+  $: formData = {
+    selectedReasons,
+    otherReason,
+    name,
+    email,
+    details,
+  };
+
+  function isOtherReasonSelected(reasons: string[]) {
+    return reasons.includes(allReasons[allReasons.length - 1]);
+  }
+
+  const feedbackSchemaPage1: v.Schema = {
+    selectedReasons: {
+      label: "Sélectionner une raison",
+      default: "",
+      rules: [v.isArray([v.isString()])],
+      required: true,
+    },
+    otherReason: {
+      label: "Autre motif (merci de préciser)",
+      default: "",
+      rules: [v.isString()],
+      required: (data) => isOtherReasonSelected(data.selectedReasons),
+    },
+  };
+
+  const feedbackSchemaPage2: v.Schema = {
+    name: {
+      label: "Votre nom",
       default: "",
       rules: [v.isString(), v.maxStrLength(140)],
       post: [v.trim],
@@ -33,30 +100,53 @@
       post: [v.lower, v.trim],
       required: true,
     },
-    message: {
-      label: "Message",
+    details: {
+      label: "Précisez votre signalement",
       default: "",
       rules: [v.isString()],
       required: true,
     },
   };
 
+  const feedbackSchema = {
+    ...feedbackSchemaPage1,
+    ...feedbackSchemaPage2,
+  };
+
   onMount(() => {
     if ($userInfo) {
-      suggesterFullName = $userInfo.fullName;
-      suggesterEmail = $userInfo.email;
+      name = `${$userInfo.firstName} ${$userInfo.lastName}`;
+      email = $userInfo.email;
     }
   });
 
-  function handleChange(_validatedData) {}
+  function handleClose() {
+    resetState();
+    isOpen = false;
+  }
 
-  function handleSubmit(validatedData) {
+  function handleContinue() {
+    const { valid } = validate(formData, feedbackSchemaPage1);
+    if (valid) {
+      formPage = 2;
+    }
+  }
+
+  function handleSubmit() {
     const url = `${getApiURL()}/services/${service.slug}/feedback/`;
 
     return fetch(url, {
       method: "POST",
       body: JSON.stringify({
-        ...validatedData,
+        reasons: [
+          ...selectedReasons.filter(
+            (reason) => reason !== allReasons[allReasons.length - 1]
+          ),
+          ...(isOtherReasonSelected(selectedReasons) ? [otherReason] : []),
+        ],
+        name,
+        email,
+        details,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -66,74 +156,86 @@
   }
 
   function handleSuccess(_jsonResult) {
-    isOpen = false;
-    message = null;
-    confirmationModalIsOpen = true;
+    isFeedbackSent = true;
   }
-
-  $: formData = {
-    fullName: suggesterFullName,
-    email: suggesterEmail,
-    message,
-  };
 </script>
 
-<Modal bind:isOpen title="Suggestion">
-  <Form
-    bind:data={formData}
-    schema={feedbackSchema}
-    onChange={handleChange}
-    onSubmit={handleSubmit}
-    onSuccess={handleSuccess}
-    bind:requesting
-  >
-    <Fieldset>
-      {#if !$userInfo}
-        <BasicInputField
-          id="fullName"
-          bind:value={suggesterFullName}
-          vertical
-          placeholder="Aurélien Durand"
-          autocomplete="name"
-        />
-
-        <BasicInputField
-          type="email"
-          id="email"
-          bind:value={suggesterEmail}
-          placeholder="nom.prenom@organisation.fr"
-          autocomplete="email"
-          vertical
-        />
-      {/if}
-
-      <TextareaField
-        id="message"
-        bind:value={message}
-        description="Détaillez les éléments qui vous semblent erronés ou incomplets."
-        vertical
-        rows={6}
-        placeholder="Renseigner ici les détails"
-      />
-    </Fieldset>
-    <p class="mt-s24">
-      <small>
-        Vos informations de contact sont transmises à l’équipe Dora pour des
-        fins de traitement.<br />L'administrateur du service reçoit uniquement
-        votre message.
-      </small>
-    </p>
-    <div class="mt-s32 flex justify-end">
-      <Button
-        type="submit"
-        label="Envoyer"
-        disabled={!suggesterEmail ||
-          !suggesterFullName ||
-          !message ||
-          requesting}
-        preventDefaultOnMouseDown
-      />
+<Modal width="small" bind:isOpen title="Vous avez une suggestion ?">
+  {#if !isFeedbackSent}
+    <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+      <Form
+        bind:data={formData}
+        schema={feedbackSchema}
+        onSubmit={handleSubmit}
+        onSuccess={handleSuccess}
+        bind:requesting={isRequesting}
+      >
+        <fieldset class="gap-s16 flex flex-col">
+          {#if formPage === 1}
+            <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+              <div class="text-f16 leading-s24 text-gray-text">
+                Aidez-nous à améliorer la qualité de nos contenus en signalant
+                une erreur, une information manquante ou inexacte.
+              </div>
+              <CheckboxesField
+                id="selectedReasons"
+                bind:value={selectedReasons}
+                choices={reasonOptions}
+                vertical
+              />
+              {#if isOtherReasonSelected(selectedReasons)}
+                <BasicInputField
+                  id="otherReason"
+                  bind:value={otherReason}
+                  vertical
+                  hideLabel
+                />
+              {/if}
+            </div>
+          {:else if formPage === 2}
+            <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+              <BasicInputField id="name" bind:value={name} vertical />
+              <BasicInputField id="email" bind:value={email} vertical />
+              <TextareaField
+                id="details"
+                bind:value={details}
+                vertical
+                description="Décrivez les modifications nécessaires pour nous permettre de mettre à jour cette fiche. Plus votre description sera détaillée, plus nous pourrons traiter efficacement votre signalement."
+              />
+              <div class="text-f16 leading-s24 text-gray-text">
+                En soumettant ce formulaire, vous acceptez que vos données
+                soient utilisées pour le traitement de votre signalement, et
+                uniquement à cet effet.
+              </div>
+            </div>
+          {/if}
+          <div class="mt-s12 gap-s16 flex justify-end">
+            <Button label="Annuler" secondary on:click={handleClose} />
+            {#if formPage === 1}
+              <Button label="Continuer" on:click={handleContinue} />
+            {:else if formPage === 2}
+              <Button label="Envoyer" type="submit" disabled={isRequesting} />
+            {/if}
+          </div>
+        </fieldset>
+      </Form>
     </div>
-  </Form>
+  {:else}
+    <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
+      <div class="text-center">
+        <img
+          class="mx-auto w-[320px]"
+          src={illustration}
+          alt=""
+          aria-hidden="true"
+        />
+        <h2 class="text-f17 text-gray-text leading-s24 mb-s4 font-bold">
+          Merci pour votre signalement !
+        </h2>
+        <span class="text-f14 text-gray-text leading-s24">
+          La structure concernée sera informée des modifications suggérées.
+        </span>
+      </div>
+    </div>
+  {/if}
 </Modal>
-<FeedbackConfirmationModal bind:isOpen={confirmationModalIsOpen} />
