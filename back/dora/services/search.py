@@ -90,14 +90,13 @@ def _sort_services(services):
     return results
 
 
-def _get_di_results(
+def _get_raw_di_results(
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
     categories: Optional[list[str]] = None,
     subcategories: Optional[list[str]] = None,
     kinds: Optional[list[str]] = None,
     fees: Optional[list[str]] = None,
-    location_kinds: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
 ) -> list:
@@ -114,7 +113,6 @@ def _get_di_results(
 
     * maps the input parameters,
     * offloads the search to the data.inclusion client,
-    * maps the output results.
 
     This function should catch any client and upstream errors to prevent any impact on
     the classical flow of dora.
@@ -193,6 +191,18 @@ def _get_di_results(
         )
     ]
 
+    return raw_di_results
+
+
+def _map_di_results(
+    raw_di_results: list,
+    location_kinds: Optional[list[str]] = None,
+) -> list:
+    """Convert DI service to Dora format.
+
+    Returns:
+        A list of search results by SearchResultSerializer.
+    """
     supported_service_kinds = models.ServiceKind.objects.values_list("value", flat=True)
 
     mapped_di_results = [
@@ -228,6 +238,38 @@ def _get_di_results(
             or (with_remote and "a-distance" in result["location_kinds"])
         )
     ]
+    return mapped_di_results
+
+
+def _get_di_results(
+    di_client: data_inclusion.DataInclusionClient,
+    city_code: str,
+    categories: Optional[list[str]] = None,
+    subcategories: Optional[list[str]] = None,
+    kinds: Optional[list[str]] = None,
+    fees: Optional[list[str]] = None,
+    location_kinds: Optional[list[str]] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None,
+) -> list:
+    """Search data.inclusion services and convert them to the Dora format.
+
+    Returns:
+        A list of search results by SearchResultSerializer.
+    """
+    raw_di_results = _get_raw_di_results(
+        di_client=di_client,
+        city_code=city_code,
+        categories=categories,
+        subcategories=subcategories,
+        kinds=kinds,
+        fees=fees,
+        lat=lat,
+        lon=lon,
+    )
+
+    mapped_di_results = _map_di_results(raw_di_results, location_kinds)
+
     return mapped_di_results
 
 
