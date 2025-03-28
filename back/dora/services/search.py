@@ -467,6 +467,7 @@ def search_services(
     di_client: Optional[data_inclusion.DataInclusionClient] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
+    unified_search: bool = False,
 ) -> (list[dict], dict):
     """Search services from all available repositories.
 
@@ -481,6 +482,22 @@ def search_services(
         - A list of search results by SearchResultSerializer.
         - A metadata dictionary
     """
+    if unified_search:
+        results, metadata = _get_unified_results(
+            request=request,
+            di_client=di_client,
+            categories=categories,
+            subcategories=subcategories,
+            city_code=city_code,
+            city=city,
+            kinds=kinds,
+            fees=fees,
+            location_kinds=location_kinds,
+            lat=lat,
+            lon=lon,
+        )
+        return _sort_services(results), metadata
+
     di_results = (
         _get_di_results(
             di_client=di_client,
