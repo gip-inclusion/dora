@@ -665,9 +665,10 @@ class ServiceListSerializer(ServiceSerializer):
 
 
 class FeedbackSerializer(serializers.Serializer):
-    full_name = serializers.CharField()
+    reasons = serializers.ListField(child=serializers.CharField())
+    name = serializers.CharField()
     email = serializers.EmailField()
-    message = serializers.CharField()
+    details = serializers.CharField()
 
 
 class SavedSearchSerializer(serializers.ModelSerializer):
