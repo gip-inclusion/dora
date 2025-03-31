@@ -35,15 +35,15 @@
     "@sveltejs/kit": "2.20.2",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@tailwindcss/typography": "^0.5.16",
-    "@tailwindcss/vite": "^4.0.15",
-    "@tiptap/core": "^2.11.5",
-    "@tiptap/extension-link": "^2.11.5",
-    "@tiptap/extension-placeholder": "^2.11.5",
-    "@tiptap/starter-kit": "^2.11.5",
+    "@tailwindcss/vite": "^4.0.17",
+    "@tiptap/core": "^2.11.7",
+    "@tiptap/extension-link": "^2.11.7",
+    "@tiptap/extension-placeholder": "^2.11.7",
+    "@tiptap/starter-kit": "^2.11.7",
     "@types/iframe-resizer": "^3.5.13",
     "@types/showdown": "^2.0.6",
-    "@typescript-eslint/eslint-plugin": "^8.27.0",
-    "@typescript-eslint/parser": "^8.27.0",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
     "bits-ui": "^0.22.0",
     "dayjs": "^1.11.13",
     "eslint": "^9.23.0",
@@ -54,7 +54,7 @@
     "husky": "^9.1.7",
     "insane": "^2.6.2",
     "lint-staged": "^15.5.0",
-    "maplibre-gl": "^5.2.0",
+    "maplibre-gl": "^5.3.0",
     "opening_hours": "^3.8.0",
     "prettier": "^3.5.3",
     "prettier-plugin-svelte": "^3.3.3",
@@ -88,6 +88,6 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^9.8.0"
+    "@sentry/sveltekit": "^9.10.1"
   }
 }

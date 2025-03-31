@@ -18,10 +18,7 @@
     ServiceKind,
     ServicesOptions,
   } from "$lib/types";
-  import {
-    getDepartmentFromCityCode,
-    isInDeploymentDepartments,
-  } from "$lib/utils/misc";
+  import { getDepartmentFromCityCode } from "$lib/utils/misc";
   import {
     associateIconToCategory,
     sortCategory,
@@ -38,7 +35,6 @@
   export let lat: number | undefined = undefined;
   export let categoryId: string | undefined = undefined;
   export let subCategoryIds: string[] = [];
-  export let showDeploymentWarning = true;
   export let useAdditionalFilters = false;
   export let kindIds: ServiceKind[] = [];
   export let feeConditions: FeeCondition[] = [];
@@ -264,17 +260,6 @@
           />
         </div>
       </div>
-
-      {#if showDeploymentWarning && cityCode && !isInDeploymentDepartments(cityCode, servicesOptions)}
-        <div
-          class="border-gray-02 bg-blue-light p-s16 text-france-blue rounded-b-md border-t text-center"
-        >
-          <span>
-            Sur votre territoire, le référencement des services débute – il se
-            peut que votre recherche aboutisse à peu de résultats.
-          </span>
-        </div>
-      {/if}
     {:else}
       <p class="p-s16 text-center">Impossible de contacter le serveur</p>
     {/if}
