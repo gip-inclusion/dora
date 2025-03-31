@@ -1,12 +1,8 @@
 <script lang="ts">
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import LinkButton from "$lib/components/display/link-button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import { externalLinkIcon } from "$lib/icons";
-  import { getApiURL } from "$lib/utils/api";
   import { userInfo } from "$lib/utils/auth";
   import ImproveDoraNotif from "./notif-improve.svelte";
-  import { OIDC_AUTH_BACKEND } from "$lib/env";
 </script>
 
 <EnsureLoggedIn>

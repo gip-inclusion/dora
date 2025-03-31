@@ -1,35 +1,14 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import logoC1 from "$lib/assets/inclusion-connect/logo-c1.svg";
-  import logoDora from "$lib/assets/inclusion-connect/logo-dora-ic.svg";
-  import logoInclusionConnect from "$lib/assets/illustrations/inclusion-connect.png";
   import logoProConnect from "$lib/assets/proconnect/logo_proconnect.svg";
-  import logoCommunauteInclusion from "$lib/assets/inclusion-connect/logo-communaute-inclusion.svg";
-  import logoRDVS from "$lib/assets/inclusion-connect/logo-rdv-solidarites.svg";
-  import logoCNFS from "$lib/assets/inclusion-connect/logo-cnfs.svg";
-  import logoIF from "$lib/assets/inclusion-connect/logo-if.svg";
-  import logoMSS from "$lib/assets/inclusion-connect/logo-mss.svg";
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import { informationLineIcon } from "$lib/icons";
   import { getNextPage } from "../utils";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
-  import IcButton from "$lib/components/specialized/ic-button.svelte";
   import PcButton from "$lib/components/specialized/pc-button.svelte";
-  import { OIDC_AUTH_BACKEND } from "$lib/env";
   import SendMagicLink from "./send-magic-link.svelte";
 
-  function getLoginHint() {
-    const loginHint = $page.url.searchParams.get("login_hint");
-
-    if (loginHint) {
-      $page.url.searchParams.delete("login_hint");
-      return `&login_hint=${encodeURIComponent(loginHint)}`;
-    }
-    return "";
-  }
-
-  const loginHint = getLoginHint();
   const nextPage = getNextPage($page.url);
 
   let displayModal = false;
