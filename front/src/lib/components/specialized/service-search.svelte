@@ -26,6 +26,7 @@
   } from "$lib/utils/service";
   import { getQueryString } from "$lib/utils/service-search";
   import { onMount } from "svelte";
+  import RadioButtons from "../inputs/radio-buttons.svelte";
 
   export let servicesOptions: ServicesOptions;
   export let cityCode: string | undefined = undefined;
@@ -47,6 +48,7 @@
   let refreshMode = false;
   const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
   let subCategories: Choice[] = [];
+  let unifiedSearch = false;
 
   $: query = getQueryString({
     categoryIds: [categoryId ? categoryId : ""],
@@ -60,6 +62,7 @@
     fundingLabels,
     lon,
     lat,
+    unifiedSearch,
   });
 
   const categories = servicesOptions.categories
@@ -248,6 +251,22 @@
             {/key}
           </div>
         {/if}
+
+        <div class="flex items-center justify-center">
+          <RadioButtons
+            id="unifiedSearch"
+            name="unifiedSearch"
+            bind:group={unifiedSearch}
+            on:change={() => {
+              enableRefreshButton();
+            }}
+            choices={[
+              { label: "Mode Dora", value: false },
+              { label: "Mode DI", value: true },
+            ]}
+          />
+        </div>
+
         <div class="p-s12 lg:p-s16 text-center">
           <Button
             extraClass="h-s48"
@@ -281,10 +300,10 @@
       position: absolute;
     }
     .grid {
-      grid-template-columns: 3fr 3fr 1fr;
+      grid-template-columns: 2.5fr 2.5fr 1fr 1fr;
     }
     .with-subcategories {
-      grid-template-columns: 2fr 2fr 2fr 1fr;
+      grid-template-columns: 1.6fr 1.6fr 1.6fr 1fr 1fr;
     }
   }
 
