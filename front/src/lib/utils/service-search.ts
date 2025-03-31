@@ -15,6 +15,7 @@ export function getQueryString({
   kindIds,
   lon,
   lat,
+  unifiedSearch,
 }: SearchQuery) {
   const parameters = {
     cats: categoryIds.join(","),
@@ -30,6 +31,7 @@ export function getQueryString({
     funding: fundingLabels.join(","),
     lat: lat,
     lon: lon,
+    unifiedSearch: unifiedSearch,
   };
   const query = Object.entries(parameters)
     .filter(([_key, value]) => !!value)
