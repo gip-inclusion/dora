@@ -466,7 +466,7 @@ class Structure(ModerationMixin, models.Model):
         return siren in settings.ORIENTATION_SIRENE_BLACKLIST
 
 
-class NoDoraFormDIStructure(models.Model):
+class DisabledDoraFormDIStructure(models.Model):
     class Meta:
         verbose_name = "structure DI avec formulaire Dora désactivé"
         verbose_name_plural = "structures DI avec formulaire Dora désactivé"

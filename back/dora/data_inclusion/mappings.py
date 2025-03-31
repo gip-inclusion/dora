@@ -16,7 +16,7 @@ from dora.services.models import (
     get_diffusion_zone_details_display,
     get_update_needed,
 )
-from dora.structures.models import NoDoraFormDIStructure
+from dora.structures.models import DisabledDoraFormDIStructure
 
 from .constants import THEMATIQUES_MAPPING_DI_TO_DORA
 
@@ -113,7 +113,7 @@ def is_orientable(service_data: dict) -> bool:
     if blacklisted:
         return False
 
-    return not NoDoraFormDIStructure.objects.filter(
+    return not DisabledDoraFormDIStructure.objects.filter(
         source=service_data["source"], structure_id=service_data["structure_id"]
     ).exists()
 
