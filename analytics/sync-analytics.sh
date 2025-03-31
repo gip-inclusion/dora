@@ -4,57 +4,204 @@
 # you only have to provide the correct DATABASE_URL and DORA_DATABASE_URL
 # with an enabled proxy to the DORA database.
 
-# Chargement des variables d'environnement à partir du fichier .env s'il existe
-if [ -f .env ]; then
-    echo "Chargement des variables d'environnement à partir du fichier .env"
-    source .env
-fi
+load_env_file_if_exists() {
+    echo "Load env file if it exists..."
 
-# Vérification si les variables d'environnement requises sont définies
-required_vars=("DORA_DATABASE_URL" "DATABASE_URL")
-missing_vars=()
-
-for var in "${required_vars[@]}"; do
-    if [ -z "${!var}" ]; then
-        missing_vars+=("$var")
+    if [ -f .env ]; then
+        echo "Fichier .env trouvé"
+        source .env
     fi
-done
 
-if [ ${#missing_vars[@]} -ne 0 ]; then
-    echo "Erreur : variables d'environnement requises manquantes :"
-    for var in "${missing_vars[@]}"; do
-        echo "- $var"
+    echo "Done."
+    echo ""
+}
+
+check_required_vars() {
+    echo "Check required vars..."
+
+    required_vars=("DORA_DATABASE_URL" "DATABASE_URL" "S3_BUCKET_VARIANT" "S3_ACCESS_KEY" "S3_SECRET_KEY")
+    missing_vars=()
+
+    for var in "${required_vars[@]}"; do
+        if [ -z "${!var}" ]; then
+            missing_vars+=("$var")
+        fi
     done
-    exit 1
-fi
 
-if command -v dbclient-fetcher &> /dev/null; then
-    dbclient-fetcher pgsql
-fi
+    if [ ${#missing_vars[@]} -ne 0 ]; then
+        echo "Erreur : variables d'environnement requises manquantes :"
+        for var in "${missing_vars[@]}"; do
+            echo "- $var"
+        done
+        exit 1
+    fi
 
-# Generate the list of tables to be exported
-cat models/_sources.yml | grep '      - name' | cut -d':' -f2 > tables.txt
-xargs -I {} echo -n "-t {} " < tables.txt > args.txt
+    echo "Done."
+    echo ""
+}
 
-time pg_dump $DORA_DATABASE_URL --jobs=8 --format=directory --compress=1 --clean --if-exists --no-owner --no-privileges --verbose $(cat args.txt) --file=/tmp/out.dump
-time psql $DATABASE_URL -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; CREATE EXTENSION IF NOT EXISTS postgis;"
-time pg_restore --dbname=$DATABASE_URL --jobs=8 --format=directory --clean --if-exists --no-owner --no-privileges --verbose /tmp/out.dump
+configure_pg_env() {
+    echo "Configure PG environment variables"
 
-# Run DBT model generation & validation
-cleaned_url=${DATABASE_URL#postgresql://}
-cleaned_url=${cleaned_url#postgres://}
-cleaned_url=${cleaned_url#postgres://}
+    cleaned_url=${DATABASE_URL#postgresql://}
+    cleaned_url=${cleaned_url#postgres://}
 
-userpass=$(echo "$cleaned_url" | cut -d@ -f1)
-export PGUSER=$(echo "$userpass" | cut -d: -f1)
-export PGPASSWORD=$(echo "$userpass" | cut -d: -f2)
+    userpass=$(echo "$cleaned_url" | cut -d@ -f1)
+    export PGUSER=$(echo "$userpass" | cut -d: -f1)
+    export PGPASSWORD=$(echo "$userpass" | cut -d: -f2)
 
-hostportdb=$(echo "$cleaned_url" | cut -d@ -f2)
-export PGHOST=$(echo "$hostportdb" | cut -d: -f1)
-export PGPORT=$(echo "$hostportdb" | cut -d: -f2 | cut -d/ -f1)
-export PGDATABASE=$(echo "$hostportdb" | cut -d/ -f2 | cut -d'?' -f1)
+    hostportdb=$(echo "$cleaned_url" | cut -d@ -f2)
+    export PGHOST=$(echo "$hostportdb" | cut -d: -f1)
+    export PGPORT=$(echo "$hostportdb" | cut -d: -f2 | cut -d/ -f1)
+    export PGDATABASE=$(echo "$hostportdb" | cut -d/ -f2 | cut -d'?' -f1)
 
-dbt debug
-dbt deps
-dbt seed
-dbt build
+    echo "Done."
+    echo ""
+}
+
+fetch_and_export_dora_data() {
+    echo "Fetch and export DORA data..."
+
+    # Specific to Scalingo, cf. https://doc.scalingo.com/platform/databases/access#manually-install-the-databases-cli-in-one-off
+    # The program dbclient-fetcher on Scalingo downloads various CLI tools, such as psql, pg_dump, pg_restore, pg_ctl, etc.
+    # If this script is run outside of Scalingo, you must have these tools successfully installed
+    if command -v dbclient-fetcher &>/dev/null; then
+        dbclient-fetcher pgsql
+    fi
+
+    # Generate the list of tables to be exported
+    cat models/_sources.yml | grep '      - name' | cut -d':' -f2 >tables.txt
+    xargs -I {} echo -n "-t {} " <tables.txt >args.txt
+
+    time pg_dump $DORA_DATABASE_URL --jobs=8 --format=directory --compress=1 --clean --if-exists --no-owner --no-privileges --verbose $(cat args.txt) --file=/tmp/out.dump
+    time psql $DATABASE_URL -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; CREATE EXTENSION IF NOT EXISTS postgis;"
+    time pg_restore --dbname=$DATABASE_URL --jobs=8 --format=directory --clean --if-exists --no-owner --no-privileges --verbose /tmp/out.dump
+
+    echo "Done."
+    echo ""
+}
+
+fetch_di_data() {
+    echo "Fetch data·inclusion data..."
+
+    # Installation of tool `mc` on Scalingo/Linux
+    if command -v mc &>/dev/null; then
+        echo "mc is already installed, skipping download."
+    else
+        if [[ "$OSTYPE" == linux* ]]; then
+            echo "mc not found. Installing mc..."
+            curl -L -o /tmp/mc https://dl.min.io/client/mc/release/linux-amd64/mc
+            chmod +x /tmp/mc
+            export PATH="/tmp/mc:${PATH}"
+        else
+            echo "mc is not yet installed. "
+            exit 1
+        fi
+    fi
+
+    # Generation of S3 credentials file
+    cat <<EOF >/tmp/credentials.json
+{
+  "url": "https://s3.fr-par.scw.cloud",
+  "accessKey": "${S3_ACCESS_KEY}",
+  "secretKey": "${S3_SECRET_KEY}",
+  "api": "S3v4",
+  "path": "auto"
+}
+EOF
+
+    # Initialize `mc`
+    mc alias import data-inclusion-bucket /tmp/credentials.json
+
+    # List data·inclusion data marts (just for logging)
+    mc ls "data-inclusion-bucket/${S3_BUCKET_VARIANT}/data/marts/"
+
+    # Get the name of the latest published day
+    LAST_DIR=$(mc ls "data-inclusion-bucket/${S3_BUCKET_VARIANT}/data/marts/" \
+    | awk '{print $NF}' \
+    | grep -E '^20[0-9]{2}-[0-9]{2}-[0-9]{2}/$' \
+    | sort \
+    | tail -n1)
+
+    # Download Services and Structures parquet files (from the day, at midnight)
+    MART_URI="data-inclusion-bucket/${S3_BUCKET_VARIANT}/data/marts/${LAST_DIR}scheduled__${LAST_DIR%%/}T00:00:00+00:00"
+    time mc cp "${MART_URI}/services.parquet" /tmp/services.parquet
+    time mc cp "${MART_URI}/structures.parquet" /tmp/structures.parquet
+
+    echo "Done."
+    echo ""
+}
+
+export_di_data() {
+    echo "Export data·inclusion data..."
+
+    # Installation of tool `duckdb` on Scalingo/Linux
+    if command -v duckdb &>/dev/null; then
+        echo "duckdb is already installed, skipping download."
+    else
+        if [[ "$OSTYPE" == linux* ]]; then
+            echo "duckdb not found. Installing duckdb..."
+            curl -L -o /tmp/duckdb_cli.zip https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-amd64.zip
+            unzip -o /tmp/duckdb_cli.zip -d /tmp/duckdb
+            export PATH="/tmp/duckdb:${PATH}"
+        else
+            echo "duckdb is not yet installed. "
+            exit 1
+        fi
+    fi
+
+    # Generate DuckDB SQL file
+    DUCKSQL=$(mktemp)
+
+    cat > "$DUCKSQL" <<EOF
+INSTALL postgres;
+LOAD postgres;
+
+ATTACH 'dbname=$PGDATABASE host=$PGHOST user=$PGUSER password=$PGPASSWORD port=$PGPORT' AS analytics_pg (TYPE postgres);
+
+-- di_structures
+DROP TABLE IF EXISTS di_structures;
+CREATE TABLE di_structures AS SELECT * FROM read_parquet('/tmp/structures.parquet');
+DROP TABLE IF EXISTS analytics_pg.public.di_structures;
+CREATE TABLE analytics_pg.public.di_structures AS SELECT * FROM di_structures;
+
+-- di_services
+DROP TABLE IF EXISTS di_services;
+CREATE TABLE di_services AS SELECT * FROM read_parquet('/tmp/services.parquet');
+DROP TABLE IF EXISTS analytics_pg.public.di_services;
+CREATE TABLE analytics_pg.public.di_services AS SELECT * FROM di_services;
+EOF
+
+    # Execute SQL orders
+    time duckdb < "$DUCKSQL"
+
+    echo "Done."
+    echo ""
+}
+
+fetch_and_export_di_data() {
+    fetch_di_data
+    export_di_data
+}
+
+run_dbt_model_generation_and_validation() {
+    echo "Run DBT model generation and validation..."
+
+    dbt debug
+    dbt deps
+    dbt seed
+    dbt build
+
+    echo "Done."
+    echo ""
+}
+
+# Prepare (read)
+load_env_file_if_exists
+check_required_vars
+configure_pg_env
+
+# Perform (write)
+fetch_and_export_dora_data
+fetch_and_export_di_data
+run_dbt_model_generation_and_validation
