@@ -16,6 +16,7 @@ from dora.services.models import (
     get_diffusion_zone_details_display,
     get_update_needed,
 )
+from dora.structures.models import DisabledDoraFormDIStructure
 
 from .constants import THEMATIQUES_MAPPING_DI_TO_DORA
 
@@ -97,7 +98,6 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         "coordinates": (result["service"]["longitude"], result["service"]["latitude"])
         if result["service"]["longitude"] and result["service"]["latitude"]
         else None,
-        "is_orientable": is_orientable(service_data),
     }
 
 
@@ -109,7 +109,13 @@ def is_orientable(service_data: dict) -> bool:
     )
     blacklisted = siren in settings.ORIENTATION_SIRENE_BLACKLIST
     blacklisted |= not service_data["courriel"]
-    return not blacklisted
+
+    if blacklisted:
+        return False
+
+    return not DisabledDoraFormDIStructure.objects.filter(
+        source=service_data["source"], structure_id=service_data["structure_id"]
+    ).exists()
 
 
 def map_service(service_data: dict, is_authenticated: bool) -> dict:
