@@ -67,6 +67,8 @@
               <li>{requirement}</li>
             {/each}
           </ul>
+        {:else if isDI}
+          Aucun détail n’a été renseigné par la structure
         {:else}
           Aucun critère d’admission spécifique
         {/if}
