@@ -861,7 +861,6 @@ class SearchResultSerializer(ServiceListSerializer):
             "distance",
             "fee_condition",
             "funding_labels",
-            "is_orientable",
             "kinds",
             "location_kinds",
             "modification_date",

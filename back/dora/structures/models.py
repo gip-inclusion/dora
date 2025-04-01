@@ -464,3 +464,19 @@ class Structure(ModerationMixin, models.Model):
     def no_dora_form(self):
         siren = self.siret[:9] if self.siret else None
         return siren in settings.ORIENTATION_SIRENE_BLACKLIST
+
+
+class DisabledDoraFormDIStructure(models.Model):
+    class Meta:
+        verbose_name = "structure DI avec formulaire Dora désactivé"
+        verbose_name_plural = "structures DI avec formulaire Dora désactivé"
+
+    source = models.CharField(
+        verbose_name="Source",
+        max_length=255,
+    )
+    structure_id = models.CharField(
+        verbose_name="ID de la structure",
+        max_length=1024,
+    )
+    comment = models.TextField(verbose_name="Commentaire", blank=True)
