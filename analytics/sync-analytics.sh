@@ -41,7 +41,7 @@ check_required_vars() {
 }
 
 configure_pg_env() {
-    echo "Configure PG environment variables"
+    echo "Configure PG environment variables..."
 
     cleaned_url=${DATABASE_URL#postgresql://}
     cleaned_url=${cleaned_url#postgres://}
@@ -81,59 +81,8 @@ fetch_and_export_dora_data() {
     echo ""
 }
 
-fetch_di_data() {
-    echo "Fetch data·inclusion data..."
-
-    # Installation of tool `mc` on Scalingo/Linux
-    if command -v mc &>/dev/null; then
-        echo "mc is already installed, skipping download."
-    else
-        if [[ "$OSTYPE" == linux* ]]; then
-            echo "mc not found. Installing mc..."
-            curl -L -o /tmp/mc https://dl.min.io/client/mc/release/linux-amd64/mc
-            chmod +x /tmp/mc
-            export PATH="/tmp/mc:${PATH}"
-        else
-            echo "mc is not yet installed. "
-            exit 1
-        fi
-    fi
-
-    # Generation of S3 credentials file
-    cat <<EOF >/tmp/credentials.json
-{
-  "url": "https://s3.fr-par.scw.cloud",
-  "accessKey": "${S3_ACCESS_KEY}",
-  "secretKey": "${S3_SECRET_KEY}",
-  "api": "S3v4",
-  "path": "auto"
-}
-EOF
-
-    # Initialize `mc`
-    mc alias import data-inclusion-bucket /tmp/credentials.json
-
-    # List data·inclusion data marts (just for logging)
-    mc ls "data-inclusion-bucket/${S3_BUCKET_VARIANT}/data/marts/"
-
-    # Get the name of the latest published day
-    LAST_DIR=$(mc ls "data-inclusion-bucket/${S3_BUCKET_VARIANT}/data/marts/" \
-    | awk '{print $NF}' \
-    | grep -E '^20[0-9]{2}-[0-9]{2}-[0-9]{2}/$' \
-    | sort \
-    | tail -n1)
-
-    # Download Services and Structures parquet files (from the day, at midnight)
-    MART_URI="data-inclusion-bucket/${S3_BUCKET_VARIANT}/data/marts/${LAST_DIR}scheduled__${LAST_DIR%%/}T00:00:00+00:00"
-    time mc cp "${MART_URI}/services.parquet" /tmp/services.parquet
-    time mc cp "${MART_URI}/structures.parquet" /tmp/structures.parquet
-
-    echo "Done."
-    echo ""
-}
-
-export_di_data() {
-    echo "Export data·inclusion data..."
+fetch_and_export_di_data() {
+    echo "Fetch and export data·inclusion data..."
 
     # Installation of tool `duckdb` on Scalingo/Linux
     if command -v duckdb &>/dev/null; then
@@ -144,16 +93,32 @@ export_di_data() {
             curl -L -o /tmp/duckdb_cli.zip https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-amd64.zip
             unzip -o /tmp/duckdb_cli.zip -d /tmp/duckdb
             export PATH="/tmp/duckdb:${PATH}"
+            echo "duckdb installed."
         else
             echo "duckdb is not yet installed. "
             exit 1
         fi
     fi
 
+    CURRENT_DATE=$(date +%F)
+    MART_URI="${S3_BUCKET_VARIANT}/data/marts/${CURRENT_DATE}/scheduled__${CURRENT_DATE%%/}T00:00:00+00:00"
+
     # Generate DuckDB SQL file
     DUCKSQL=$(mktemp)
 
     cat > "$DUCKSQL" <<EOF
+INSTALL httpfs;
+LOAD httpfs;
+
+CREATE SECRET (
+    TYPE s3,
+    KEY_ID '$S3_ACCESS_KEY',
+    SECRET '$S3_SECRET_KEY',
+    ENDPOINT 's3.fr-par.scw.cloud',
+    REGION 'fr-par',
+    URL_STYLE 'path'
+);
+
 INSTALL postgres;
 LOAD postgres;
 
@@ -161,27 +126,22 @@ ATTACH 'dbname=$PGDATABASE host=$PGHOST user=$PGUSER password=$PGPASSWORD port=$
 
 -- di_structures
 DROP TABLE IF EXISTS di_structures;
-CREATE TABLE di_structures AS SELECT * FROM read_parquet('/tmp/structures.parquet');
+CREATE TABLE di_structures AS SELECT * FROM read_parquet('s3://$MART_URI/structures.parquet');
 DROP TABLE IF EXISTS analytics_pg.public.di_structures;
 CREATE TABLE analytics_pg.public.di_structures AS SELECT * FROM di_structures;
 
 -- di_services
 DROP TABLE IF EXISTS di_services;
-CREATE TABLE di_services AS SELECT * FROM read_parquet('/tmp/services.parquet');
+CREATE TABLE di_services AS SELECT * FROM read_parquet('s3://$MART_URI/services.parquet');
 DROP TABLE IF EXISTS analytics_pg.public.di_services;
 CREATE TABLE analytics_pg.public.di_services AS SELECT * FROM di_services;
 EOF
 
-    # Execute SQL orders
+    # Execute SQL export/import orders
     time duckdb < "$DUCKSQL"
 
     echo "Done."
     echo ""
-}
-
-fetch_and_export_di_data() {
-    fetch_di_data
-    export_di_data
 }
 
 run_dbt_model_generation_and_validation() {
@@ -196,12 +156,12 @@ run_dbt_model_generation_and_validation() {
     echo ""
 }
 
-# Prepare (read)
+# Prepare
 load_env_file_if_exists
 check_required_vars
 configure_pg_env
 
-# Perform (write)
+# Perform
 fetch_and_export_dora_data
 fetch_and_export_di_data
 run_dbt_model_generation_and_validation
