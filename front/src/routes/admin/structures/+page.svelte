@@ -237,10 +237,12 @@
               secondary
               disabled={!filteredStructures.length}
             />
-            {#if filterActions}
+            {#if searchStatus !== "toutes" && filterDefinition}
               <Notice type="info" title={filterDefinition}>
                 <div>
-                  Action(s)&#8239;: {filterActions}
+                  {#if filterActions}
+                    Action(s)&#8239;: {filterActions}
+                  {/if}
                   <a
                     href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/"
                     target="_blank"
