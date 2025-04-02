@@ -14,6 +14,7 @@
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
+  export let onFeedbackButtonClick: () => void;
 
   $: isDI = "source" in service;
 
@@ -75,7 +76,12 @@
 
   <div class="gap-s48 flex flex-col md:flex-row">
     <div class="text-f16 leading-s24 basis-2/3">
-      <ServicePresentation {service} {servicesOptions} {isDI} />
+      <ServicePresentation
+        {service}
+        {servicesOptions}
+        {isDI}
+        {onFeedbackButtonClick}
+      />
     </div>
 
     <div class="gap-y-s24 flex basis-1/3 flex-col">

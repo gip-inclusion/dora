@@ -9,10 +9,11 @@
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
+  export let onFeedbackButtonClick: () => void;
 </script>
 
 <div class="gap-s36 flex flex-col">
-  <ServiceKeyInformations {service} {servicesOptions} />
+  <ServiceKeyInformations {service} {servicesOptions} {onFeedbackButtonClick} />
 
   <ServiceDescription {service} />
 

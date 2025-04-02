@@ -8,24 +8,26 @@
   import MoneyEuroCircleFillFinance from "svelte-remix/MoneyEuroCircleFillFinance.svelte";
   import TimeFillSystem from "svelte-remix/TimeFillSystem.svelte";
 
+  import OsmHours from "$lib/components/specialized/osm-hours.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
   import { isValidformatOsmHours } from "$lib/utils/opening-hours";
   import { isNotFreeService, isDurationValid } from "$lib/utils/service";
 
-  import OsmHours from "$lib/components/specialized/osm-hours.svelte";
+  import ServiceFeedbackButton from "../../../../services/[slug]/service-feedback-button.svelte";
   import ServiceDuration from "./service-duration.svelte";
   import ServiceKeyInformationLabel from "./service-key-information-label.svelte";
   import ServiceKeyInformationSection from "./service-key-information-section.svelte";
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
-
+  export let onFeedbackButtonClick: () => void;
   $: isDI = "source" in service;
 
   $: isNotCumulative = !service.isCumulative;
   $: hasFundingLabels = service.fundingLabelsDisplay.length > 0;
+  $: hasLabelSection = isNotCumulative || hasFundingLabels;
 
   $: eligibilityRequirements = [
     ...(service.accessConditionsDisplay || []),
@@ -158,7 +160,7 @@
         </ServiceKeyInformationSection>
       </div>
     {/if}
-    <div class:pb-s32={isNotCumulative || hasFundingLabels}>
+    <div class:pb-s32={hasLabelSection}>
       <ServiceKeyInformationSection
         icon={MoneyEuroCircleFillFinance}
         title="Frais à charge"
@@ -186,25 +188,35 @@
           {/if}
         </div>
       </ServiceKeyInformationSection>
+      {#if !hasLabelSection}
+        <div class="mt-s32">
+          <ServiceFeedbackButton {service} on:click={onFeedbackButtonClick} />
+        </div>
+      {/if}
     </div>
-    {#if isNotCumulative || hasFundingLabels}
-      <div class="gap-s12 text-f14 flex flex-col leading-16 font-bold">
-        {#if isNotCumulative}
-          <ServiceKeyInformationLabel
-            icon={ErrorWarningFillSystem}
-            label="Ce service n’est pas cumulable avec d’autres dispositifs"
-            textClass="text-warning"
-          />
-        {/if}
-        {#if hasFundingLabels}
-          <ServiceKeyInformationLabel
-            icon={MoneyEuroCircleFillFinance}
-            label="Financé par&#8239;: {service.fundingLabelsDisplay.join(
-              ', '
-            )}"
-            textClass="text-info"
-          />
-        {/if}
+    {#if hasLabelSection}
+      <div>
+        <div class="gap-s12 text-f14 flex flex-col leading-16 font-bold">
+          {#if isNotCumulative}
+            <ServiceKeyInformationLabel
+              icon={ErrorWarningFillSystem}
+              label="Ce service n’est pas cumulable avec d’autres dispositifs"
+              textClass="text-warning"
+            />
+          {/if}
+          {#if hasFundingLabels}
+            <ServiceKeyInformationLabel
+              icon={MoneyEuroCircleFillFinance}
+              label="Financé par&#8239;: {service.fundingLabelsDisplay.join(
+                ', '
+              )}"
+              textClass="text-info"
+            />
+          {/if}
+        </div>
+        <div class="mt-s32">
+          <ServiceFeedbackButton {service} on:click={onFeedbackButtonClick} />
+        </div>
       </div>
     {/if}
   </div>

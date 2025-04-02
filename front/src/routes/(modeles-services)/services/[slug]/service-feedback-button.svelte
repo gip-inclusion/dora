@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Service } from "$lib/types";
+  import type { Model, Service } from "$lib/types";
 
-  export let service: Service;
+  export let service: Service | Model;
 
   $: isDI = "source" in service;
 </script>

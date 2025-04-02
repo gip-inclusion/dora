@@ -63,7 +63,11 @@
     />
   </CenteredGrid>
 
-  <ServiceBody service={data.service} servicesOptions={data.servicesOptions} />
+  <ServiceBody
+    service={data.service}
+    servicesOptions={data.servicesOptions}
+    onFeedbackButtonClick={() => (isFeedbackModalOpen = true)}
+  />
 
   {#if browser && !data.service.canWrite && !isDI}
     <FeedbackModal bind:isOpen={isFeedbackModalOpen} service={data.service} />
