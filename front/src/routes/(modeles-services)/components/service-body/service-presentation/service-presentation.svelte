@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Model, Service, ServicesOptions } from "$lib/types";
 
+  import ServiceFeedbackButton from "../../../services/[slug]/service-feedback-button.svelte";
   import ServiceDescription from "./service-description.svelte";
   import ServiceDocuments from "./service-documents.svelte";
   import ServiceKeyInformations from "./service-key-informations/service-key-informations.svelte";
@@ -22,4 +23,6 @@
   <ServiceDocuments {service} />
 
   <ServiceOtherInformations {service} {servicesOptions} />
+
+  <ServiceFeedbackButton {service} on:click={onFeedbackButtonClick} />
 </div>
