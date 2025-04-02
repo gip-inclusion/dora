@@ -2,6 +2,7 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
 
   import ServiceDescription from "./service-description.svelte";
+  import ServiceDiIdentification from "./service-di-identification.svelte";
   import ServiceDocuments from "./service-documents.svelte";
   import ServiceKeyInformations from "./service-key-informations/service-key-informations.svelte";
   import ServiceOtherInformations from "./service-other-informations.svelte";
@@ -21,4 +22,6 @@
   <ServiceDocuments {service} />
 
   <ServiceOtherInformations {service} {servicesOptions} />
+
+  <ServiceDiIdentification {service} />
 </div>
