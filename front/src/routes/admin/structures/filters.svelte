@@ -257,7 +257,7 @@
           : ''}"
         secondary={searchStatus !== status}
       />
-      <span slot="content">{definition}</span>
+      <div slot="content" class="max-w-s256 text-center">{definition}</div>
     </Tooltip>
   {/each}
 </div>
