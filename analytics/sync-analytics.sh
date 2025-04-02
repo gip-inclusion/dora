@@ -5,19 +5,22 @@
 # with an enabled proxy to the DORA database.
 
 load_env_file_if_exists() {
-    echo "Load env file if it exists..."
+    echo "💎 Chargement du fichier .env (si existant)..."
 
     if [ -f .env ]; then
-        echo "Fichier .env trouvé"
+        echo "Fichier .env trouvé."
         source .env
+        echo "Fichier .env chargé."
+    else 
+        echo "Aucun fichier .env trouvé."
     fi
 
-    echo "Done."
+    echo "✔️ Fait."
     echo ""
 }
 
 check_required_vars() {
-    echo "Check required vars..."
+    echo "💎 Vérification des variables d'environnement requises..."
 
     required_vars=("DORA_DATABASE_URL" "DATABASE_URL" "S3_BUCKET_VARIANT" "S3_ACCESS_KEY" "S3_SECRET_KEY")
     missing_vars=()
@@ -36,12 +39,12 @@ check_required_vars() {
         exit 1
     fi
 
-    echo "Done."
+    echo "✔️ Fait."
     echo ""
 }
 
 configure_pg_env() {
-    echo "Configure PG environment variables..."
+    echo "💎 Extraction des informations de connexion à la base de données..."
 
     cleaned_url=${DATABASE_URL#postgresql://}
     cleaned_url=${cleaned_url#postgres://}
@@ -55,12 +58,12 @@ configure_pg_env() {
     export PGPORT=$(echo "$hostportdb" | cut -d: -f2 | cut -d/ -f1)
     export PGDATABASE=$(echo "$hostportdb" | cut -d/ -f2 | cut -d'?' -f1)
 
-    echo "Done."
+    echo "✔️ Fait."
     echo ""
 }
 
 fetch_and_export_dora_data() {
-    echo "Fetch and export DORA data..."
+    echo "💎 Récupération et synchronisation des données DORA..."
 
     # Specific to Scalingo, cf. https://doc.scalingo.com/platform/databases/access#manually-install-the-databases-cli-in-one-off
     # The program dbclient-fetcher on Scalingo downloads various CLI tools, such as psql, pg_dump, pg_restore, pg_ctl, etc.
@@ -77,25 +80,25 @@ fetch_and_export_dora_data() {
     time psql $DATABASE_URL -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; CREATE EXTENSION IF NOT EXISTS postgis;"
     time pg_restore --dbname=$DATABASE_URL --jobs=8 --format=directory --clean --if-exists --no-owner --no-privileges --verbose /tmp/out.dump
 
-    echo "Done."
+    echo "✔️ Fait."
     echo ""
 }
 
 fetch_and_export_di_data() {
-    echo "Fetch and export data·inclusion data..."
+    echo "💎 Récupération et synchronisation des données de data·inclusion..."
 
     # Installation of tool `duckdb` on Scalingo/Linux
     if command -v duckdb &>/dev/null; then
-        echo "duckdb is already installed, skipping download."
+        echo "duckdb est déjà installé, installation ignorée."
     else
         if [[ "$OSTYPE" == linux* ]]; then
-            echo "duckdb not found. Installing duckdb..."
+            echo "Installation de duckdb pour Linux..."
             curl -L -o /tmp/duckdb_cli.zip https://github.com/duckdb/duckdb/releases/latest/download/duckdb_cli-linux-amd64.zip
             unzip -o /tmp/duckdb_cli.zip -d /tmp/duckdb
             export PATH="/tmp/duckdb:${PATH}"
-            echo "duckdb installed."
+            echo "duckdb installé."
         else
-            echo "duckdb is not yet installed. "
+            echo "duckdb est requis. Vous pouvez le télécharger depuis https://duckdb.org/docs/installation"
             exit 1
         fi
     fi
@@ -140,19 +143,19 @@ EOF
     # Execute SQL export/import orders
     time duckdb < "$DUCKSQL"
 
-    echo "Done."
+    echo "✔️ Fait."
     echo ""
 }
 
 run_dbt_model_generation_and_validation() {
-    echo "Run DBT model generation and validation..."
+    echo "💎 Génération et validation du modèle DBT..."
 
     dbt debug
     dbt deps
     dbt seed
     dbt build
 
-    echo "Done."
+    echo "✔️ Fait."
     echo ""
 }
 
