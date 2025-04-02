@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Tooltip } from "bits-ui";
 
-  export let openDelay: number | undefined = undefined;
+  export let openDelay: number = 0;
   export let closeDelay: number | undefined = undefined;
-  export let side: "top" | "bottom" | "left" | "right" | undefined = undefined;
+  export let side: "top" | "bottom" | "left" | "right" = "bottom";
 </script>
 
 <Tooltip.Root {openDelay} {closeDelay}>

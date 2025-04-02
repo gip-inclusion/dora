@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
+  import Tooltip from "$lib/components/ui/tooltip.svelte";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
   import {
     isOrphan,
@@ -20,10 +21,66 @@
   import type { StatusFilter } from "./types";
 
   export let searchStatus: StatusFilter;
+  export let filterDefinition: string | undefined;
+  export let filterActions: string | undefined;
   export let servicesOptions: ServicesOptions;
   export let structuresOptions: StructuresOptions;
   export let structures: AdminShortStructure[] = [];
   export let filteredStructures: AdminShortStructure[];
+
+  const statusFilterSettings: {
+    status: StatusFilter;
+    label: string;
+    definition: string;
+    actions?: string;
+  }[] = [
+    { status: "toutes", label: "Toutes", definition: "Toutes les structures" },
+    {
+      status: "orphelines",
+      label: "Sans utilisateur",
+      definition: "Structures référencée mais sans utilisateur actif ou invité",
+      actions:
+        "Identifier un responsable et l’inviter à devenir administrateur de la structure.",
+    },
+    {
+      status: "en_attente",
+      label: "Administrateur invité",
+      definition:
+        "Structures où un administrateur invité n’a pas encore accepté l’invitation",
+      actions:
+        "Relancer l’administrateur via le tableau de bord, puis par mail/téléphone, ou identifier un autre administrateur en dernier recours.",
+    },
+    {
+      status: "à_modérer",
+      label: "À valider",
+      definition:
+        "Structures nouvelles ou ayant un 1er administrateur, nécessitant une validation de conformité",
+      actions:
+        "Vérifier la conformité de la structure et si les administrateurs font bien partie de ses effectifs. En cas de doute, contacter l’équipe DORA.",
+    },
+    {
+      status: "à_activer",
+      label: "Sans service",
+      definition:
+        "Structures avec un administrateur validé sans services publiés",
+      actions:
+        "Télécharger la liste des structures à activer, copier-coller les emails des administrateurs pour envoyer un mail groupé les invitant à référencer leurs services sur DORA. Les SIAE sont à exclure car elles n’ont pas vocation à référencer des services supplémentaires.",
+    },
+    {
+      status: "à_actualiser",
+      label: "Services à actualiser",
+      definition:
+        "Structures ayant un ou des services publiés qui nécessitent une actualisation",
+      actions:
+        "Télécharger la liste des structures à activer, copier-coller les emails des administrateurs pour envoyer un mail groupé les invitant à actualiser leur services.",
+    },
+    {
+      status: "obsolète",
+      label: "Non conforme",
+      definition:
+        "Structures désactivées - qui n’existent plus ou qui ne respectent pas la charte DORA",
+    },
+  ];
 
   let showAdvancedFilters = false;
 
@@ -182,97 +239,27 @@
   );
 </script>
 
-<div class="mb-s8 font-bold">Actions en attente :</div>
+<div class="mb-s8 font-bold">Structures nécessitant une action&#8239;:</div>
 
-<div class="mb-s8 gap-s8 flex">
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "orphelines";
-    }}
-    label="orphelines ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'orphelines'
-    ).length})"
-    secondary={searchStatus !== "orphelines"}
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "en_attente";
-    }}
-    label="en attente ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'en_attente'
-    ).length})"
-    secondary={searchStatus !== "en_attente"}
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "à_modérer";
-    }}
-    label="à modérer ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'à_modérer'
-    ).length})"
-    secondary={searchStatus !== "à_modérer"}
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "à_activer";
-    }}
-    label="à activer ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'à_activer'
-    ).length})"
-    secondary={searchStatus !== "à_activer"}
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "à_actualiser";
-    }}
-    label="à actualiser ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'à_actualiser'
-    ).length})"
-    secondary={searchStatus !== "à_actualiser"}
-  />
-
-  <Button
-    on:click={() => {
-      resetSearchParams();
-      searchStatus = "obsolète";
-    }}
-    label="obsolètes ({filterAndSortEntities(
-      structures,
-      searchParams,
-      'obsolète'
-    ).length})"
-    secondary={searchStatus !== "obsolète"}
-  />
+<div class="mb-s8 gap-s8 flex flex-wrap">
+  {#each statusFilterSettings as { status, label, definition, actions }}
+    <Tooltip>
+      <Button
+        on:click={() => {
+          resetSearchParams();
+          searchStatus = status;
+          filterDefinition = definition;
+          filterActions = actions;
+        }}
+        label="{label}{status !== 'toutes'
+          ? ` (${filterAndSortEntities(structures, searchParams, status).length})`
+          : ''}"
+        secondary={searchStatus !== status}
+      />
+      <span slot="content">{definition}</span>
+    </Tooltip>
+  {/each}
 </div>
-
-<Button
-  on:click={() => {
-    resetSearchParams();
-    searchStatus = "toutes";
-  }}
-  label="Afficher toutes les structures"
-  noBackground
-  small
-/>
 
 <div class="mt-s16 gap-s12 flex flex-col">
   <div class="mb-s12 gap-s12 flex w-full flex-row items-center">

@@ -21,7 +21,7 @@
   }
 </script>
 
-<Tooltip side="bottom" openDelay={0}>
+<Tooltip>
   <button
     class="h-s20 w-s20 text-gray-text-alt2 hover:text-magenta-cta print:hidden"
     class:text-magenta-cta={active}
