@@ -1,8 +1,10 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+
   import type { Service } from "$lib/types";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
-  import FeedbackModal from "../../_common/display/modals/feedback-modal.svelte";
+
+  import ServiceFeedbackModal from "./service-feedback-modal.svelte";
 
   export let service: Service;
 
@@ -34,5 +36,5 @@
 </div>
 
 {#if browser && !service.canWrite && !isDI}
-  <FeedbackModal bind:isOpen={feedbackModalIsOpen} {service} />
+  <ServiceFeedbackModal bind:isOpen={feedbackModalIsOpen} {service} />
 {/if}
