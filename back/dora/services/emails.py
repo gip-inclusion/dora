@@ -14,6 +14,8 @@ def send_service_feedback_email(service, reasons, name, email, details):
     if service.last_editor:
         recipients.add(service.last_editor.email)
     recipients.update(admin.email for admin in service.structure.admins)
+    if settings.SUPPORT_EMAIL:
+        recipients.add(settings.SUPPORT_EMAIL)
 
     if not recipients:
         return
