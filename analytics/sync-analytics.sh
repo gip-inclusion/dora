@@ -76,9 +76,9 @@ fetch_and_export_dora_data() {
     cat models/_sources.yml | grep '      - name' | cut -d':' -f2 >tables.txt
     xargs -I {} echo -n "-t {} " <tables.txt >args.txt
 
-    time pg_dump $DORA_DATABASE_URL --jobs=8 --format=directory --compress=1 --clean --if-exists --no-owner --no-privileges --verbose $(cat args.txt) --file=/tmp/out.dump
-    time psql $DATABASE_URL -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; CREATE EXTENSION IF NOT EXISTS postgis;"
-    time pg_restore --dbname=$DATABASE_URL --jobs=8 --format=directory --clean --if-exists --no-owner --no-privileges --verbose /tmp/out.dump
+    time pg_dump "$DORA_DATABASE_URL" --jobs=8 --format=directory --compress=1 --clean --if-exists --no-owner --no-privileges --verbose $(cat args.txt) --file=/tmp/out.dump
+    time psql "$DATABASE_URL" -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; CREATE EXTENSION IF NOT EXISTS postgis;"
+    time pg_restore --dbname="$DATABASE_URL" --jobs=8 --format=directory --clean --if-exists --no-owner --no-privileges --verbose /tmp/out.dump
 
     echo "✔️ Fait."
     echo ""
