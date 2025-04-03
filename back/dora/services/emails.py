@@ -14,10 +14,8 @@ def send_service_feedback_email(service, reasons, name, email, details):
     if service.last_editor:
         recipients.add(service.last_editor.email)
     recipients.update(admin.email for admin in service.structure.admins)
-    if settings.SUPPORT_EMAIL:
-        recipients.add(settings.SUPPORT_EMAIL)
 
-    if not recipients:
+    if not recipients and not settings.SUPPORT_EMAIL:
         return
 
     context = {
@@ -33,6 +31,7 @@ def send_service_feedback_email(service, reasons, name, email, details):
         list(recipients),
         mjml2html(render_to_string("service-feedback-email.mjml", context)),
         tags=["feedback"],
+        bcc=[settings.SUPPORT_EMAIL] if settings.SUPPORT_EMAIL else None,
     )
 
 
