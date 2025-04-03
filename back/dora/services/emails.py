@@ -43,6 +43,7 @@ def send_service_feedback_email(
         mjml2html(render_to_string("service-feedback-email.mjml", context)),
         tags=["feedback"],
         bcc=bcc,
+        reply_to=[f"{name} <{email}>"],
     )
 
 
