@@ -21,6 +21,7 @@ def send_mail(
     tags=None,
     reply_to=None,
     cc=None,
+    bcc=None,
     attachments=None,
 ):
     headers = {
@@ -47,6 +48,7 @@ def send_mail(
         to,
         headers=headers,
         cc=cc,
+        bcc=bcc,
         reply_to=clean_reply_to(reply_to),
     )
     msg.content_subtype = "html"
