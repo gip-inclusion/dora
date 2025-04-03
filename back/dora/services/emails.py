@@ -9,13 +9,17 @@ from dora.core.emails import send_mail
 from dora.services.models import Service
 
 
-def send_service_feedback_email(service, reasons, name, email, details):
+def send_service_feedback_email(service, reasons, notify_support, name, email, details):
     recipients = set()
     if service.last_editor:
         recipients.add(service.last_editor.email)
     recipients.update(admin.email for admin in service.structure.admins)
 
-    if not recipients and not settings.SUPPORT_EMAIL:
+    bcc = (
+        [settings.SUPPORT_EMAIL] if notify_support and settings.SUPPORT_EMAIL else None
+    )
+
+    if not recipients and not bcc:
         return
 
     context = {
@@ -31,7 +35,7 @@ def send_service_feedback_email(service, reasons, name, email, details):
         list(recipients),
         mjml2html(render_to_string("service-feedback-email.mjml", context)),
         tags=["feedback"],
-        bcc=[settings.SUPPORT_EMAIL] if settings.SUPPORT_EMAIL else None,
+        bcc=bcc,
     )
 
 

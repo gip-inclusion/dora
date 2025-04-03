@@ -196,6 +196,7 @@ class ServiceViewSet(
         send_service_feedback_email(
             service,
             d["reasons"],
+            d["notify_support"],
             d["name"],
             d["email"],
             d["details"],

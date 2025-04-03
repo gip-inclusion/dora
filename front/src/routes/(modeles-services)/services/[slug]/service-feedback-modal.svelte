@@ -21,20 +21,44 @@
   export let service: Service;
 
   const allReasons = [
-    "Les aspects administratifs sont incorrects ou incomplets (critères d'éligibilité, public concerné, documents requis)",
-    "Les informations pratiques sont obsolètes (modalités d'accueil, horaires, contacts, adresse)",
-    "La zone d'intervention est inexacte (territoire couvert, périmètre d'action)",
-    "Le service ne correspond pas aux critères DORA (nature du service, missions d'insertion)",
-    "Les partenariats ou dispositifs mentionnés n'existent plus ou sont temporairement suspendus (services suspendus, conventions terminées)",
-    "Le délai de traitement/d'attente indiqué n'est plus valable",
-    "Autre motif (merci de préciser)",
+    {
+      label:
+        "Les aspects administratifs sont incorrects ou incomplets (critères d'éligibilité, public concerné, documents requis)",
+    },
+    {
+      label:
+        "Les informations pratiques sont obsolètes (modalités d'accueil, horaires, contacts, adresse)",
+    },
+    {
+      label:
+        "La zone d'intervention est inexacte (territoire couvert, périmètre d'action)",
+    },
+    {
+      label:
+        "Le service ne correspond pas aux critères DORA (nature du service, missions d'insertion)",
+      notifySupport: true,
+    },
+    {
+      label:
+        "Les partenariats ou dispositifs mentionnés n'existent plus ou sont temporairement suspendus (services suspendus, conventions terminées)",
+      notifySupport: true,
+    },
+    { label: "Le délai de traitement/d'attente indiqué n'est plus valable" },
+    { label: "Autre motif (merci de préciser)", other: true },
   ];
-  const reasonOptions = allReasons.map((label) => ({ label, value: label }));
+  const reasonOptions = allReasons.map(({ label }) => ({
+    label,
+    value: label,
+  }));
+  const notifySupportReasonLabels = allReasons
+    .filter(({ notifySupport }) => notifySupport)
+    .map(({ label }) => label);
+  const otherReasonLabel = allReasons.find(({ other }) => other)?.label;
 
   let isRequesting = false;
   let isFeedbackSent = false;
   let formPage: 1 | 2 = 1;
-  let selectedReasons = [];
+  let selectedReasons: string[] = [];
   let otherReason = "";
   let name = "";
   let email = "";
@@ -67,7 +91,11 @@
   };
 
   function isOtherReasonSelected(reasons: string[]) {
-    return reasons.includes(allReasons[allReasons.length - 1]);
+    return Boolean(otherReasonLabel && reasons.includes(otherReasonLabel));
+  }
+
+  function isNotifySupportReasonSelected(reasons: string[]) {
+    return notifySupportReasonLabels.some((reason) => reasons.includes(reason));
   }
 
   const feedbackSchemaPage1: v.Schema = {
@@ -139,11 +167,10 @@
       method: "POST",
       body: JSON.stringify({
         reasons: [
-          ...selectedReasons.filter(
-            (reason) => reason !== allReasons[allReasons.length - 1]
-          ),
+          ...selectedReasons.filter((reason) => reason !== otherReasonLabel),
           ...(isOtherReasonSelected(selectedReasons) ? [otherReason] : []),
         ],
+        notifySupport: isNotifySupportReasonSelected(selectedReasons),
         name,
         email,
         details,
