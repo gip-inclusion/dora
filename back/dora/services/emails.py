@@ -9,12 +9,9 @@ from dora.core.emails import send_mail
 from dora.services.models import Service
 
 
-def send_service_feedback_email(service, reasons, notify_support, name, email, details):
-    recipients = set()
-    if service.last_editor:
-        recipients.add(service.last_editor.email)
-    recipients.update(admin.email for admin in service.structure.admins)
-
+def send_service_feedback_email(
+    service_name, service_url, recipients, notify_support, reasons, name, email, details
+):
     bcc = (
         [settings.SUPPORT_EMAIL] if notify_support and settings.SUPPORT_EMAIL else None
     )
@@ -23,7 +20,8 @@ def send_service_feedback_email(service, reasons, notify_support, name, email, d
         return
 
     context = {
-        "service": service,
+        "service_name": service_name,
+        "service_url": service_url,
         "reasons": reasons,
         "name": name,
         "email": email,
@@ -32,7 +30,7 @@ def send_service_feedback_email(service, reasons, notify_support, name, email, d
 
     send_mail(
         f"[{settings.ENVIRONMENT}] Signalement de modification pour votre service référencé sur DORA",
-        list(recipients),
+        recipients,
         mjml2html(render_to_string("service-feedback-email.mjml", context)),
         tags=["feedback"],
         bcc=bcc,

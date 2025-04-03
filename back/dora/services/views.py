@@ -189,18 +189,27 @@ class ServiceViewSet(
         permission_classes=[permissions.AllowAny],
     )
     def post_feedback(self, request, slug):
-        service = self.get_object()
         serializer = FeedbackSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         d = serializer.validated_data
+
+        service = self.get_object()
+        recipients = set()
+        if service.last_editor:
+            recipients.add(service.last_editor.email)
+        recipients.update(admin.email for admin in service.structure.admins)
+
         send_service_feedback_email(
-            service,
-            d["reasons"],
+            service.name,
+            service.get_absolute_url(),
+            list(recipients),
             d["notify_support"],
+            d["reasons"],
             d["name"],
             d["email"],
             d["details"],
         )
+
         return Response(status=201)
 
     @action(
