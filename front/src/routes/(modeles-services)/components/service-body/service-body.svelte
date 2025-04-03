@@ -74,8 +74,8 @@
     <div class="basis-1/3" />
   </div>
 
-  <div class="gap-s48 flex flex-col md:flex-row">
-    <div class="text-f16 leading-s24 basis-2/3">
+  <div class="gap-s48 grid grid-cols-1 md:grid-cols-3">
+    <div class="md:col-span-2">
       <ServicePresentation
         {service}
         {servicesOptions}
@@ -84,7 +84,7 @@
       />
     </div>
 
-    <div class="gap-y-s24 flex basis-1/3 flex-col">
+    <div class="gap-y-s24 flex flex-col">
       {#if !service.isModel}
         <div class="top-s32 sticky">
           <div
