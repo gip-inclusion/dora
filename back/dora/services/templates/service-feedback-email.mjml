@@ -46,3 +46,10 @@
     La qualité et l’exactitude des informations sont essentielles pour orienter au mieux les personnes vers votre service.
   </p>
 {% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ service.get_absolute_url }}/editer">
+    Actualiser mon service
+  </mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}

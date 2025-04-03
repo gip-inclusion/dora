@@ -1,14 +1,11 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
   import type { Service } from "$lib/types";
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
-  import FeedbackModal from "../../_common/display/modals/feedback-modal.svelte";
+
+  import ServiceFeedbackButton from "./service-feedback-button.svelte";
 
   export let service: Service;
-
-  let feedbackModalIsOpen = false;
-
-  $: isDI = "source" in service;
+  export let onFeedbackButtonClick: () => void;
 </script>
 
 <div class="text-f16">
@@ -22,17 +19,5 @@
       bold
     />
   </div>
-  {#if !service.canWrite && !isDI}
-    <div>
-      <button
-        class="text-gray-text underline"
-        on:click={() => (feedbackModalIsOpen = true)}
-        >Signalez-nous toute erreur ou suggestion de modification.</button
-      >
-    </div>
-  {/if}
+  <ServiceFeedbackButton {service} on:click={onFeedbackButtonClick} />
 </div>
-
-{#if browser && !service.canWrite && !isDI}
-  <FeedbackModal bind:isOpen={feedbackModalIsOpen} {service} />
-{/if}

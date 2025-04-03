@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Model, Service, ServicesOptions } from "$lib/types";
 
+  import ServiceFeedbackButton from "../../../services/[slug]/service-feedback-button.svelte";
   import ServiceDescription from "./service-description.svelte";
   import ServiceDiIdentification from "./service-di-identification.svelte";
   import ServiceDocuments from "./service-documents.svelte";
@@ -10,10 +11,11 @@
 
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
+  export let onFeedbackButtonClick: () => void;
 </script>
 
 <div class="gap-s36 flex flex-col">
-  <ServiceKeyInformations {service} {servicesOptions} />
+  <ServiceKeyInformations {service} {servicesOptions} {onFeedbackButtonClick} />
 
   <ServiceDescription {service} />
 
@@ -24,4 +26,6 @@
   <ServiceOtherInformations {service} {servicesOptions} />
 
   <ServiceDiIdentification {service} />
+
+  <ServiceFeedbackButton {service} on:click={onFeedbackButtonClick} />
 </div>

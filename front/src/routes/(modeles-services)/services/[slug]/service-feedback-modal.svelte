@@ -46,8 +46,8 @@
     formPage = 1;
     selectedReasons = [];
     otherReason = "";
-    name = `${$userInfo.firstName} ${$userInfo.lastName}`;
-    email = $userInfo.email;
+    name = $userInfo ? `${$userInfo.firstName} ${$userInfo.lastName}` : "";
+    email = $userInfo ? $userInfo.email : "";
     details = "";
   }
 
