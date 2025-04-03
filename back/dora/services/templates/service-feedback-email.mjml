@@ -18,8 +18,8 @@
   </p>
 
   <p>
-    Une personne nous a signalé des informations à mettre à jour concernant votre service
-    <a href="{{ service.get_absolute_url }}">{{ service.name }}</a>.
+    {{ name }} &lt;{{ email }}&gt; nous a signalé des informations à mettre à jour concernant votre service
+    <a href="{{ service_url }}">{{ service_name }}</a>.
   </p>
 
   <p>
@@ -48,8 +48,10 @@
 {% endblock %}
 
 {% block cta %}
-  <mj-button mj-class="cta" href="{{ service.get_absolute_url }}/editer">
-    Actualiser mon service
-  </mj-button>
-  <mj-spacer height="24px"/>
+  {% if not is_di %}
+    <mj-button mj-class="cta" href="{{ service_url }}/editer">
+      Actualiser mon service
+    </mj-button>
+    <mj-spacer height="24px"/>
+  {% endif %}
 {% endblock %}

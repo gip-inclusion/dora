@@ -666,6 +666,7 @@ class ServiceListSerializer(ServiceSerializer):
 
 class FeedbackSerializer(serializers.Serializer):
     reasons = serializers.ListField(child=serializers.CharField())
+    notify_support = serializers.BooleanField(required=False, default=False)
     name = serializers.CharField()
     email = serializers.EmailField()
     details = serializers.CharField()

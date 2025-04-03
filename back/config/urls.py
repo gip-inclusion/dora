@@ -78,6 +78,10 @@ private_api_patterns = [
         "services-di/<str:di_id>/share/",
         dora.services.views.share_di_service,
     ),
+    path(
+        "services-di/<str:di_id>/feedback/",
+        dora.services.views.post_di_service_feedback,
+    ),
     path("admin-division-search/", dora.admin_express.views.search),
     path("admin-division-reverse-search/", dora.admin_express.views.reverse_search),
     path("admin-division-departments/", dora.admin_express.views.get_departments),
