@@ -20,6 +20,8 @@
   export let isOpen = false;
   export let service: Service;
 
+  const isDI = "source" in service;
+
   const allReasons = [
     {
       label:
@@ -161,7 +163,9 @@
   }
 
   function handleSubmit() {
-    const url = `${getApiURL()}/services/${service.slug}/feedback/`;
+    const url = `${getApiURL()}/services${isDI ? "-di" : ""}/${
+      service.slug
+    }/feedback/`;
 
     return fetch(url, {
       method: "POST",

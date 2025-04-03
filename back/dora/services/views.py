@@ -9,6 +9,7 @@ from django.http.response import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.timezone import now
+from furl import furl
 from rest_framework import (
     exceptions,
     mixins,
@@ -202,6 +203,7 @@ class ServiceViewSet(
         send_service_feedback_email(
             service.name,
             service.get_absolute_url(),
+            False,
             list(recipients),
             d["notify_support"],
             d["reasons"],
@@ -807,6 +809,43 @@ def share_di_service(
         raw_service, request.user.is_authenticated
     )
     return share_service(request, serialized_service, is_di=True)
+
+
+@api_view(["POST"])
+@permission_classes([permissions.AllowAny])
+def post_di_service_feedback(request, di_id: str):
+    # Vérification de la validité des données
+    serializer = FeedbackSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    d = serializer.validated_data
+
+    # Récupération et sérialisation du service DI
+    source_di, di_service_id = di_id.split("--")
+    di_client = data_inclusion.di_client_factory()
+    try:
+        raw_service = di_client.retrieve_service(source=source_di, id=di_service_id)
+    except requests.ConnectionError:
+        return Response(status=status.HTTP_502_BAD_GATEWAY)
+    if raw_service is None:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    service_name = raw_service["nom"]
+    service_url = furl(settings.FRONTEND_URL) / "services" / f"di--{di_id}"
+    contact_email = raw_service["courriel"] or raw_service["structure"]["courriel"]
+
+    send_service_feedback_email(
+        service_name,
+        service_url,
+        True,
+        [contact_email] if contact_email else [],
+        d["notify_support"],
+        d["reasons"],
+        d["name"],
+        d["email"],
+        d["details"],
+    )
+
+    return Response(status=201)
 
 
 @api_view()

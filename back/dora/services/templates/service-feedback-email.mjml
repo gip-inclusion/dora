@@ -48,8 +48,10 @@
 {% endblock %}
 
 {% block cta %}
-  <mj-button mj-class="cta" href="{{ service_url }}/editer">
-    Actualiser mon service
-  </mj-button>
-  <mj-spacer height="24px"/>
+  {% if not is_di %}
+    <mj-button mj-class="cta" href="{{ service_url }}/editer">
+      Actualiser mon service
+    </mj-button>
+    <mj-spacer height="24px"/>
+  {% endif %}
 {% endblock %}

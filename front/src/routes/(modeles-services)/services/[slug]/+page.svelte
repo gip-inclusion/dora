@@ -20,8 +20,6 @@
 
   export let data: PageData;
 
-  $: isDI = data.service ? "source" in data.service : false;
-
   let isServiceFeedbackModalOpen = false;
 
   onMount(() => {
@@ -69,7 +67,7 @@
     onFeedbackButtonClick={() => (isServiceFeedbackModalOpen = true)}
   />
 
-  {#if browser && !data.service.canWrite && !isDI}
+  {#if browser && !data.service.canWrite}
     <ServiceFeedbackModal
       bind:isOpen={isServiceFeedbackModalOpen}
       service={data.service}

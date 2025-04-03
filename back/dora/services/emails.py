@@ -10,7 +10,15 @@ from dora.services.models import Service
 
 
 def send_service_feedback_email(
-    service_name, service_url, recipients, notify_support, reasons, name, email, details
+    service_name,
+    service_url,
+    is_di,
+    recipients,
+    notify_support,
+    reasons,
+    name,
+    email,
+    details,
 ):
     bcc = (
         [settings.SUPPORT_EMAIL] if notify_support and settings.SUPPORT_EMAIL else None
@@ -22,6 +30,7 @@ def send_service_feedback_email(
     context = {
         "service_name": service_name,
         "service_url": service_url,
+        "is_di": is_di,
         "reasons": reasons,
         "name": name,
         "email": email,
