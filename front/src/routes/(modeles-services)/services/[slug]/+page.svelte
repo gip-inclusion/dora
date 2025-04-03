@@ -13,7 +13,7 @@
   import { trackService } from "$lib/utils/stats";
 
   import ServiceBody from "../../components/service-body/service-body.svelte";
-  import FeedbackModal from "./service-feedback-modal.svelte";
+  import ServiceFeedbackModal from "./service-feedback-modal.svelte";
   import ServiceHeader from "./service-header.svelte";
   import ServiceToolbar from "./service-toolbar.svelte";
   import type { PageData } from "./$types";
@@ -22,7 +22,7 @@
 
   $: isDI = data.service ? "source" in data.service : false;
 
-  let isFeedbackModalOpen = false;
+  let isServiceFeedbackModalOpen = false;
 
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");
@@ -59,18 +59,21 @@
       service={data.service}
       servicesOptions={data.servicesOptions}
       onRefresh={handleRefresh}
-      onFeedbackButtonClick={() => (isFeedbackModalOpen = true)}
+      onFeedbackButtonClick={() => (isServiceFeedbackModalOpen = true)}
     />
   </CenteredGrid>
 
   <ServiceBody
     service={data.service}
     servicesOptions={data.servicesOptions}
-    onFeedbackButtonClick={() => (isFeedbackModalOpen = true)}
+    onFeedbackButtonClick={() => (isServiceFeedbackModalOpen = true)}
   />
 
   {#if browser && !data.service.canWrite && !isDI}
-    <FeedbackModal bind:isOpen={isFeedbackModalOpen} service={data.service} />
+    <ServiceFeedbackModal
+      bind:isOpen={isServiceFeedbackModalOpen}
+      service={data.service}
+    />
   {/if}
 
   {#if browser && data.service.canWrite && serviceWasJustPublished && !data.service.hasAlreadyBeenUnpublished}
