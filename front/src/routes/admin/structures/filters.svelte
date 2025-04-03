@@ -38,7 +38,8 @@
     {
       status: "orphelines",
       label: "Sans utilisateur",
-      definition: "Structures référencée mais sans utilisateur actif ou invité",
+      definition:
+        "Structures référencées mais sans utilisateur actif ou invité",
       actions:
         "Identifier un responsable et l’inviter à devenir administrateur de la structure.",
     },
@@ -256,7 +257,7 @@
           : ''}"
         secondary={searchStatus !== status}
       />
-      <span slot="content">{definition}</span>
+      <div slot="content" class="max-w-s256 text-center">{definition}</div>
     </Tooltip>
   {/each}
 </div>
