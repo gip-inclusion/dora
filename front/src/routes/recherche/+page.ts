@@ -21,6 +21,7 @@ async function getResults({
   fundingLabels,
   lat,
   lon,
+  unifiedSearch,
 }: SearchQuery): Promise<{
   cityBounds: [number, number, number, number];
   fundingLabels: Array<{ value: string; label: string }>;
@@ -38,6 +39,7 @@ async function getResults({
     fundingLabels,
     lat,
     lon,
+    unifiedSearch,
   });
   const url = `${getApiURL()}/search/?${querystring}`;
 
@@ -76,6 +78,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     : [];
   const lon = query.get("lon");
   const lat = query.get("lat");
+  const unifiedSearch = query.get("unifiedSearch") === "true";
 
   const {
     cityBounds,
@@ -95,6 +98,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     fundingLabels: [],
     lon,
     lat,
+    unifiedSearch,
   });
 
   const searchId = await trackSearch(
