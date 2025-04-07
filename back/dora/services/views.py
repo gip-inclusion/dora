@@ -189,7 +189,7 @@ class ServiceViewSet(
         url_path="feedback",
         permission_classes=[permissions.AllowAny],
     )
-    def post_feedback(self, request, slug):
+    def post_dora_service_feedback(self, request, slug):
         serializer = FeedbackSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         d = serializer.validated_data
