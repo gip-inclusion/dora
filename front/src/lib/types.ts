@@ -410,15 +410,15 @@ export interface Point {
 
 export interface Service {
   markSynced?: boolean;
-  accessConditions: CustomizableFK[];
-  accessConditionsDisplay: string[];
+  accessConditions: CustomizableFK[] | null;
+  accessConditionsDisplay: string[] | null;
   address1: string;
-  address2: string;
+  address2: string | null;
   addressLine: string;
   beneficiariesAccessModes: BeneficiaryAccessModes[];
   beneficiariesAccessModesDisplay: string[];
   beneficiariesAccessModesExternalFormLinkText: string;
-  beneficiariesAccessModesExternalFormLink: string;
+  beneficiariesAccessModesExternalFormLink: string | null;
   beneficiariesAccessModesOther: string;
   canWrite: boolean;
   categories: ServiceCategory[];
@@ -428,17 +428,17 @@ export interface Service {
   coachOrientationModes: CoachOrientationModes[];
   coachOrientationModesDisplay: string[];
   coachOrientationModesExternalFormLinkText: string;
-  coachOrientationModesExternalFormLink: string;
+  coachOrientationModesExternalFormLink: string | null;
   coachOrientationModesOther: string;
-  concernedPublic: CustomizableFK[]; // TODO: should be plural
-  concernedPublicDisplay: string[];
+  concernedPublic: CustomizableFK[] | null; // TODO: should be plural
+  concernedPublicDisplay: string[] | null;
   contactInfoFilled: boolean;
   contactEmail: string;
-  contactName: string;
+  contactName: string | null;
   contactPhone: string;
   creationDate: string;
-  credentials: CustomizableFK[];
-  credentialsDisplay: string[];
+  credentials: CustomizableFK[] | null;
+  credentialsDisplay: string[] | null;
   department: string;
   diffusionZoneDetails: string;
   diffusionZoneDetailsDisplay: string;
@@ -449,13 +449,13 @@ export interface Service {
   feeCondition: FeeCondition | null;
   feeDetails: string;
   fillingDuration: number;
-  forms: string[];
-  formsInfo: FileInfo[];
+  forms: string[] | null;
+  formsInfo: FileInfo[] | null;
   fullDesc: string;
   fundingLabels: Array<FundingLabel["value"]>;
   fundingLabelsDisplay: Array<FundingLabel["label"]>;
-  geom: Point;
-  hasAlreadyBeenUnpublished: boolean;
+  geom: Point | null;
+  hasAlreadyBeenUnpublished: boolean | null;
   isAvailable: boolean;
   isContactInfoPublic: boolean;
   isCumulative: boolean;
@@ -470,12 +470,12 @@ export interface Service {
   modelChanged: boolean | null;
   modificationDate: string | null;
   name: string;
-  onlineForm: string;
+  onlineForm: string | null;
   postalCode: string;
-  publicationDate: string;
-  qpvOrZrr: boolean;
-  recurrence: string;
-  remoteUrl: string;
+  publicationDate: string | null;
+  qpvOrZrr: boolean | null;
+  recurrence: string | null;
+  remoteUrl: string | null;
   requirements: CustomizableFK[];
   requirementsDisplay: string[];
   shortDesc: string;
