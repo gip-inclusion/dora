@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="service",
             constraint=models.CheckConstraint(
-                check=models.Q(
+                condition=models.Q(
                     ("is_model", False), ("status__isnull", True), _connector="OR"
                 ),
                 name="services_service_status_not_empty_except_models",

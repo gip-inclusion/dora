@@ -304,11 +304,11 @@ class Structure(ModerationMixin, models.Model):
         constraints = [
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_valid_or_null_siren",
-                check=Q(siret__length=14) | Q(siret__isnull=True),
+                condition=Q(siret__length=14) | Q(siret__isnull=True),
             ),
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_null_siret_only_in_branches",
-                check=Q(siret__isnull=False) | Q(parent__isnull=False),
+                condition=Q(siret__isnull=False) | Q(parent__isnull=False),
             ),
         ]
 

@@ -195,7 +195,7 @@ class Orientation(models.Model):
         constraints = (
             # service lié à l'orientation : DORA ou D·I, mais pas les deux
             models.CheckConstraint(
-                check=(
+                condition=(
                     (models.Q(service=None) & ~models.Q(di_service_id=""))
                     | (~models.Q(service=None) & models.Q(di_service_id=""))
                 ),
