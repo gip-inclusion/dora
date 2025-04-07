@@ -444,9 +444,9 @@ export interface Service {
   diffusionZoneDetailsDisplay: string;
   diffusionZoneType: AdminDivisionType;
   diffusionZoneTypeDisplay: string;
-  durationWeeklyHours: number;
-  durationWeeks: number;
-  feeCondition: FeeCondition;
+  durationWeeklyHours: number | null;
+  durationWeeks: number | null;
+  feeCondition: FeeCondition | null;
   feeDetails: string;
   fillingDuration: number;
   forms: string[];
@@ -466,9 +466,9 @@ export interface Service {
   lienSource?: string;
   locationKinds: LocationKind[];
   locationKindsDisplay: string[];
-  model: string;
-  modelChanged: boolean;
-  modificationDate: string;
+  model: string | null;
+  modelChanged: boolean | null;
+  modificationDate: string | null;
   name: string;
   onlineForm: string;
   postalCode: string;
@@ -486,7 +486,7 @@ export interface Service {
   structureInfo: ServiceStructure;
   subcategories: string[];
   subcategoriesDisplay: string[];
-  suspensionDate: string;
+  suspensionDate: string | null;
   useInclusionNumeriqueScheme: boolean;
   updateFrequency: UpdateFrequency | null;
   updateFrequencyDisplay: string | null;
