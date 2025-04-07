@@ -166,17 +166,18 @@
         title="Frais à charge"
       >
         <div class="flex flex-col">
-          <span
-            class={service.feeCondition &&
-            isNotFreeService(service.feeCondition)
-              ? "text-warning font-bold"
-              : "font-bold"}
-          >
-            {getLabelFromValue(
-              service.feeCondition,
-              servicesOptions.feeConditions
-            )}
-          </span>
+          {#if service.feeCondition}
+            <span
+              class={isNotFreeService(service.feeCondition)
+                ? "text-warning font-bold"
+                : "font-bold"}
+            >
+              {getLabelFromValue(
+                service.feeCondition,
+                servicesOptions.feeConditions
+              )}
+            </span>
+          {/if}
           {#if isNotFreeService(service.feeCondition)}
             <span>
               {#if service.feeDetails}
