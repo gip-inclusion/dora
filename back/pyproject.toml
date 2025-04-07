@@ -6,7 +6,10 @@ python_files = ["test.py", "tests*.py", "test_*.py"]
 filterwarnings = [
 	# Ignore le warning spécifique de pyOpenSSL sur les CSR 
 	# (une PR en attente de @tonial dans `mozilla-django-oidc` règle le problème)
-	"ignore:CSR support in pyOpenSSL is deprecated:DeprecationWarning:pyopenssl.*",
+	"ignore:CSR support in pyOpenSSL is deprecated:DeprecationWarning",
+	# La partie `back` n'utilise pas les fichiers statiques : 
+	# on peut ignorer l'absence d'un répertoire `staticfiles`
+	"ignore:No directory at:UserWarning"
 ]
 
 [tool.ruff]
