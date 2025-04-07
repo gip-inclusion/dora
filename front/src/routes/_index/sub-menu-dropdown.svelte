@@ -65,7 +65,7 @@
 
   <ul
     {id}
-    class="{mobileDesign ? '' : 'absolute top-[100%)]'} z-10 bg-white"
+    class="{mobileDesign ? '' : 'top-[100%)] absolute'} z-10 bg-white"
     class:hidden={!isOpen}
   >
     {#each links as link, index}
