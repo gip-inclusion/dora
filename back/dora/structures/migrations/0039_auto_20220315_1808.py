@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="structure",
             constraint=models.CheckConstraint(
-                check=models.Q(
+                condition=models.Q(
                     ("siret__length", 14), ("siret__isnull", True), _connector="OR"
                 ),
                 name="structures_structure_valid_or_null_siren",
