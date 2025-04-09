@@ -1,4 +1,5 @@
 {
+  "addons": [],
   "copy_parent_database_urls": true,
   "env": {
     "DJANGO_ALLOWED_HOSTS": {
