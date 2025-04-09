@@ -3,6 +3,12 @@
 set -e
 set -o pipefail
 
+## Seulement sur la production 
+if [ "$ENVIRONMENT" != "production" ];then
+  echo "La mise à jour de la base de données Metabase ne se fait qu'en production"
+  exit 0;
+fi
+
 # Couleurs ANSI
 RED='\033[0;31m'
 GREEN='\033[0;32m'
