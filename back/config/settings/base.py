@@ -555,7 +555,7 @@ ORIENTATION_SIRENE_BLACKLIST = [
 ]
 
 # Environnement :
-# production | staging | local
+# production | staging | review | local
 # Utilisé our l'affichage de l'environnement sur l'admin,
 # et pour activer le SSL sur la connexion à la base de données.
 ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
