@@ -61,7 +61,7 @@ echo ""
 
 echo -e "${CYAN}🔐 Vérification de la connexion à Scalingo…${NC}"
 echo ""
-if ! scalingo whoami; then
+if ! scalingo whoami 2>/dev/null; then
   echo -e "${CYAN}🔑 Connexion à Scalingo…${NC}"
   scalingo login --api-token "${SCALINGO_API_TOKEN}"
   echo ""
