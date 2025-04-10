@@ -53,6 +53,12 @@ elif ! command -v scalingo &> /dev/null; then
   exit 1
 fi
 
+echo -e "${CYAN}📂 Création d’un répertoire temporaire…${NC}"
+temp_dir=$(mktemp -d)
+echo -e "${YELLOW}→ Utilisation du répertoire temporaire : $temp_dir${NC}"
+cd "$temp_dir"
+echo ""
+
 echo -e "${CYAN}🔐 Vérification de la connexion à Scalingo…${NC}"
 echo ""
 if ! scalingo whoami; then
@@ -61,16 +67,14 @@ if ! scalingo whoami; then
   echo ""
 fi
 
-echo -e "${CYAN}📂 Création d’un répertoire temporaire…${NC}"
-temp_dir=$(mktemp -d)
-echo -e "${YELLOW}→ Utilisation du répertoire temporaire : $temp_dir${NC}"
-cd "$temp_dir"
-echo ""
-
 echo -e "${CYAN}📥 Récupération de la dernière sauvegarde de staging…${NC}"
 scalingo --region "${DORA_BACK_STAGING_REGION}" --app "${DORA_BACK_STAGING_APP}" --addon "${DORA_BACK_STAGING_ADDON}" backups-download
 archive_filename=$(ls *.tar.gz)
 echo -e "${YELLOW}→ Fichier : $archive_filename${NC}"
+echo ""
+
+echo -e "${CYAN}🚪 Déconnexion de Scalingo…${NC}"
+scalingo logout
 echo ""
 
 echo -e "${CYAN}📦 Décompression de l’archive…${NC}"
