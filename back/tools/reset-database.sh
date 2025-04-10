@@ -28,13 +28,23 @@ for var in "${REQUIRED_ENV_VARS[@]}"; do
 done
 echo ""
 
-echo -e "${CYAN}🐘  Installation des outils PostgreSQL…${NC}"
-dbclient-fetcher pgsql
-echo ""
+if command -v dbclient-fetcher &>/dev/null; then
+  echo -e "${CYAN}🐘  Installation des outils PostgreSQL…${NC}"
+  dbclient-fetcher pgsql
+  echo ""
+elif ! command -v pg_restore &> /dev/null; then
+  echo -e "${RED}⚠️  pg_restore n'est pas installé. Veuillez l'installer avant d'exécuter ce script.${NC}"
+  exit 1
+fi
 
-echo -e "${CYAN}⬇️  Installation de Scalingo CLI…${NC}"
-install-scalingo-cli
-echo ""
+if command -v install-scalingo-cli &>/dev/null; then
+  echo -e "${CYAN}⬇️  Installation de Scalingo CLI…${NC}"
+  install-scalingo-cli
+  echo ""
+elif ! command -v scalingo &> /dev/null; then
+  echo -e "${RED}⚠️  Scalingo CLI n'est pas installé. Veuillez l'installer avant d'exécuter ce script.${NC}"
+  exit 1
+fi
 
 echo -e "${CYAN}🔗  Connexion à Scalingo…${NC}"
 scalingo login --api-token "${SCALINGO_API_TOKEN}"
