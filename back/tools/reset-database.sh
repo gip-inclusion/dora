@@ -54,10 +54,10 @@ scalingo login --api-token "${SCALINGO_API_TOKEN}"
 echo ""
 fi
 
-echo -e "${CYAN}🗑️  Suppression de tous les fichiers .tar.gz existants…${NC}"
-nb_files_to_delete=$(ls *.tar.gz 2>/dev/null | wc -l || echo 0)
-rm -f *.tar.gz
-echo -e "${YELLOW}→ $nb_files_to_delete fichier(s) supprimé(s)${NC}"
+echo -e "${CYAN}📂 Création d'un répertoire temporaire…${NC}"
+temp_dir=$(mktemp -d)
+echo -e "${YELLOW}→ Utilisation du répertoire temporaire : $temp_dir${NC}"
+cd "$temp_dir"
 echo ""
 
 echo -e "${CYAN}📥  Récupération de la dernière sauvegarde de staging…${NC}"
@@ -76,5 +76,9 @@ echo -e "${CYAN}🔄  Restauration des données…${NC}"
 pg_restore --clean --if-exists --no-owner --no-privileges --no-comments --dbname "$DATABASE_URL" "$decompressed_filename"
 echo ""
 
-echo -e "${GREEN}✅  Restauration des données terminée !${NC}"
+echo -e "${CYAN}🧹 Suppression du répertoire temporaire…${NC}"
+cd -
+rm -rf "$temp_dir"
 echo ""
+
+echo -e "${GREEN}✅  Restauration des données terminée !${NC}"
