@@ -46,9 +46,13 @@ elif ! command -v scalingo &> /dev/null; then
   exit 1
 fi
 
-echo -e "${CYAN}🔗  Connexion à Scalingo…${NC}"
+echo -e "${CYAN}🔐 Vérification de la connexion à Scalingo…${NC}"
+echo ""
+if ! scalingo whoami; then
+  echo -e "${CYAN}🔑 Connexion à Scalingo…${NC}"
 scalingo login --api-token "${SCALINGO_API_TOKEN}"
 echo ""
+fi
 
 echo -e "${CYAN}🗑️  Suppression de tous les fichiers .tar.gz existants…${NC}"
 nb_files_to_delete=$(ls *.tar.gz 2>/dev/null | wc -l || echo 0)
