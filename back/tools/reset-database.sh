@@ -20,12 +20,19 @@ fi
 echo ""
 
 echo -e "${CYAN}🔧 Vérification des variables d'environnement…${NC}"
+undefined_vars=()
 for var in "${REQUIRED_ENV_VARS[@]}"; do
   if [ -z "${!var}" ]; then
-    echo -e "${RED}❌ La variable d'environnement $var n'est pas définie.${NC}"
-    exit 1
+    undefined_vars+=("$var")
   fi
 done
+
+if [ ${#undefined_vars[@]} -ne 0 ]; then
+  for var in "${undefined_vars[@]}"; do
+    echo -e "${RED}❌ La variable d'environnement $var n'est pas définie.${NC}"
+  done
+  exit 1
+fi
 echo ""
 
 if command -v dbclient-fetcher &>/dev/null; then
