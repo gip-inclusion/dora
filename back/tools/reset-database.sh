@@ -83,8 +83,16 @@ decompressed_filename="${archive_filename%.tar.gz}.pgsql"
 echo -e "${YELLOW}→ Fichier : $decompressed_filename${NC}"
 echo ""
 
+echo -e "${CYAN}📋 Listage du contenu de l’archive…${NC}"
+pg_restore -l "$decompressed_filename" > restore.list
+echo ""
+
+echo -e "${CYAN}🗑️ Suppression de la table spatial_ref_sys de la liste…${NC}"
+sed -i '/spatial_ref_sys/d' restore.list
+echo ""
+
 echo -e "${CYAN}🔄 Restauration des données…${NC}"
-pg_restore --clean --if-exists --no-owner --no-privileges --no-comments --dbname "$DATABASE_URL" "$decompressed_filename"
+pg_restore --clean --if-exists --no-owner --no-privileges --no-comments --use-list=restore.list --dbname "$DATABASE_URL" "$decompressed_filename"
 echo ""
 
 echo -e "${CYAN}🧹 Suppression du répertoire temporaire…${NC}"
