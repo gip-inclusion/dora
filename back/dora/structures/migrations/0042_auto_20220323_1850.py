@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="structure",
             constraint=models.CheckConstraint(
-                check=models.Q(
+                condition=models.Q(
                     ("siret__isnull", False), ("parent__isnull", False), _connector="OR"
                 ),
                 name="structures_structure_null_siret_only_in_branches",
@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="structure",
             constraint=models.CheckConstraint(
-                check=models.Q(
+                condition=models.Q(
                     ("parent__isnull", True),
                     models.Q(("branch_id", ""), _negated=True),
                     _connector="OR",

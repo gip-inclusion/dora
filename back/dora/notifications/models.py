@@ -97,7 +97,7 @@ class Notification(NotificationMixin):
         constraints = [
             models.CheckConstraint(
                 name="check_owner",
-                check=~models.Q(owner_structure=None)
+                condition=~models.Q(owner_structure=None)
                 | ~models.Q(owner_user=None)
                 | ~models.Q(owner_structureputativemember=None),
                 # | ~models.Q(owner_other_model=None) ...
