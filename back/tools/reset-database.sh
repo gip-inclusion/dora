@@ -10,7 +10,7 @@ YELLOW='\033[0;33m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color (reset)
 
-REQUIRED_ENV_VARS=("ENVIRONMENT" "DORA_BACK_STAGING_REGION" "DORA_BACK_STAGING_APP" "DORA_BACK_STAGING_ADDON" "DATABASE_URL" "SCALINGO_API_TOKEN")
+REQUIRED_ENV_VARS=("ENVIRONMENT" "DORA_BACK_STAGING_REGION" "DORA_BACK_STAGING_APP" "DORA_BACK_STAGING_ADDON" "DATABASE_URL" "SCALINGO_CLI_TOKEN")
 
 echo -e "${CYAN}🔍 Vérification de l’environnement…${NC}"
 if [ "${ENVIRONMENT}" != "review" ];then
@@ -35,6 +35,14 @@ if [ ${#undefined_vars[@]} -ne 0 ]; then
 fi
 echo ""
 
+# Il y a un souci quand on lance le script install-scalingo-cli depuis un Custom Clock Process.
+# C'est pourtant un script officiel de Scalingo.
+# Si la variable SCALINGO_CLI_TOKEN est renseignée, alors l'installeur tente de faire un `scalingo login` de lui-même.
+# Si on n'indique pas le path $HOME/bin dans le $PATH, malgré que l'installation est réussie, alors l'authentification échoue.
+# Le support de Scalingo est au courant (11/04/2025).
+
+export PATH="${HOME}/bin:${PATH}"
+
 if command -v dbclient-fetcher &>/dev/null; then
   echo -e "${CYAN}🐘 Installation des outils PostgreSQL…${NC}"
   dbclient-fetcher pgsql
@@ -47,8 +55,9 @@ fi
 if command -v install-scalingo-cli &>/dev/null; then
   echo -e "${CYAN}⬇️ Installation de Scalingo CLI…${NC}"
   install-scalingo-cli
+  export PATH="${HOME}/bin/scalingo:${PATH}"
   echo ""
-elif ! command -v scalingo &> /dev/null; then
+elif ! command -v $HOME/bin/scalingo &> /dev/null; then
   echo -e "${RED}❌ Scalingo CLI n’est pas installé. Veuillez l’installer avant d’exécuter ce script.${NC}"
   exit 1
 fi
@@ -58,14 +67,6 @@ temp_dir=$(mktemp -d)
 echo -e "${YELLOW}→ Utilisation du répertoire temporaire : $temp_dir${NC}"
 cd "$temp_dir"
 echo ""
-
-echo -e "${CYAN}🔐 Vérification de la connexion à Scalingo…${NC}"
-echo ""
-if ! scalingo whoami 2>/dev/null; then
-  echo -e "${CYAN}🔑 Connexion à Scalingo…${NC}"
-  scalingo login --api-token "${SCALINGO_API_TOKEN}"
-  echo ""
-fi
 
 echo -e "${CYAN}📥 Récupération de la dernière sauvegarde de staging…${NC}"
 scalingo --region "${DORA_BACK_STAGING_REGION}" --app "${DORA_BACK_STAGING_APP}" --addon "${DORA_BACK_STAGING_ADDON}" backups-download
