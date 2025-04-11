@@ -2,6 +2,14 @@
   "env": {
     "VITE_PUBLIC_CANONICAL_URL": {
       "generator": "url"
+    },
+    "VITE_API_URL": {
+      "generator": "template",
+      "template": "https://dora-back-review-pr%PR_NUMBER%.osc-fr1.scalingo.io"
+    },
+    "VITE_WARNING_BANNER": {
+      "generator": "template",
+      "template": "⚠️  Review app de la PR #%PR_NUMBER%."
     }
   }
 }

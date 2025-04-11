@@ -11,7 +11,7 @@ DEBUG = False
 # Database : configuration de production
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Dans les environnements déployés sur Scalingo (prod et staging),
+# Dans les environnements déployés sur Scalingo (prod, staging, review),
 # seule la variable d'environnement DATABASE_URL est définie pour
 # établir la connexion à la base de données.
 
