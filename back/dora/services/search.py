@@ -427,6 +427,11 @@ def _get_unified_results(
             "beneficiaries_access_modes",
         )
     ).distinct()
+
+    # Certains services DORA venant de DI ont une structure obsolète ou orpheline
+    dora_results = dora_results.exclude(structure__is_obsolete=True)
+    dora_results = dora_results.exclude(structure__in=Structure.objects.orphans())
+
     with_remote = not location_kinds or "a-distance" in location_kinds
     with_onsite = not location_kinds or "en-presentiel" in location_kinds
     filtered_and_annotated_dora_results = _filter_and_annotate_dora_services(
