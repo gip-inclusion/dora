@@ -501,6 +501,22 @@ def search_services(
             lat=lat,
             lon=lon,
         )
+        if len(results) == 0:
+            # Pas de résultat peut signifier que DI n'est pas accessible.
+            # On relance la recherche sur les services DORA locaux.
+            results, metadata = _get_dora_results(
+                request=request,
+                categories=categories,
+                subcategories=subcategories,
+                city_code=city_code,
+                city=city,
+                kinds=kinds,
+                fees=fees,
+                location_kinds=location_kinds,
+                funding_labels=funding_labels,
+                lat=lat,
+                lon=lon,
+            )
         return _sort_services(results), metadata
 
     di_results = (
