@@ -336,7 +336,6 @@ export interface SearchQuery {
   fundingLabels: Array<FundingLabel["value"]>;
   lat?: number;
   lon?: number;
-  unifiedSearch?: boolean;
 }
 
 export type Coordinates = [longitude: number, latitude: number];
