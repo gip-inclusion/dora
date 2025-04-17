@@ -1,9 +1,9 @@
 data-inclusion-schema==0.21.0
 dj-database-url==2.3.0
-Django==4.2.20
+Django==5.2
 django-cors-headers==4.7.0
 django-csp==3.8
-django-filter==24.3
+django-filter==24.3 # les versions >25.x sont en conflit avec djangorestframework-gis
 django-storages[boto3]==1.14.6
 djangorestframework-camel-case==1.4.2
 djangorestframework-gis==1.1

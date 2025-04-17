@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="orientation",
             constraint=models.CheckConstraint(
-                check=models.Q(
+                condition=models.Q(
                     models.Q(
                         ("service", None),
                         models.Q(("di_service_id", ""), _negated=True),
