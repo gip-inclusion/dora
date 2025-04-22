@@ -37,6 +37,11 @@
       }
     } else if (department) {
       const coordinates = department.geom.coordinates[0];
+      // Quand la géométries a été sursimplifiée, on n'a pas de coordonnées.
+      // Dans ce cas, on ne fait rien en attendant que la logique de simplification soit mise à jour.
+      if (!coordinates) {
+        return;
+      }
       const bounds = coordinates.reduce(
         function (acc, coord) {
           return acc.extend(coord);
