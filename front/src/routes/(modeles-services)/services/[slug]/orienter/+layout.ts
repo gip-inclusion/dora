@@ -6,14 +6,18 @@ import {
   getServiceDI,
   getServicesOptions,
 } from "$lib/requests/services";
+import type { LayoutLoad } from "./$types";
 
 export const ssr = false;
 
-export const load = async ({ params, parent }) => {
+export const load: LayoutLoad = async ({ fetch, params, parent }) => {
   await parent();
 
   if (params.slug.startsWith("di--")) {
-    const service = (await getServiceDI(params.slug.slice(4))) as Service;
+    const service = (await getServiceDI(
+      params.slug.slice(4),
+      fetch // on passe l'implémentation Svelte de fetch pour éviter de dupliquer la requête
+    )) as Service;
     if (!service) {
       error(404, "Page Not Found");
     }
