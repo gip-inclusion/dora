@@ -10,11 +10,14 @@ import { error, redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ url, params, parent }) => {
+export const load: PageLoad = async ({ fetch, url, params, parent }) => {
   await parent();
 
   if (params.slug.startsWith("di--")) {
-    const service = (await getServiceDI(params.slug.slice(4))) as Service;
+    const service = (await getServiceDI(
+      params.slug.slice(4),
+      fetch // on passe l'implémentation Svelte de fetch pour éviter de dupliquer la requête
+    )) as Service;
     if (!service) {
       error(404, "Page Not Found");
     }
