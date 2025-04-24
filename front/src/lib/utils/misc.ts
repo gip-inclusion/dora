@@ -39,15 +39,25 @@ export function htmlToMarkdown(html: string) {
   return "";
 }
 
-export async function fetchData<T>(url: string) {
+// L'implémentation Svelte de fetch (passée en paramètre) permet
+// de ne pas dupliquer la requête lorsqu'elle est appellée depuis
+// une fonction load() (qui est appelée à la fois sur le client et
+// sur le serveur). Pour que cela fonctionne, il faut que la
+// requête ait des headers identiques. Or on n'a pas accès au
+// token côté serveur. Par conséquent, on ne passe pas l'en-tête
+// Authorization si on utilise l'implémentation Svelte de fetch.
+// Elle ne peut donc être utilisée que pour les requêtes qui ne
+// nécessitent pas d'authentification. Il nous faudrait idéalement
+// trouver une solution pour les requêtes authentifiées.
+export async function fetchData<T>(url: string, svelteFetch?: typeof fetch) {
   const headers = { Accept: defaultAcceptHeader };
   const currentToken = get(token);
 
-  if (currentToken) {
+  if (currentToken && !svelteFetch) {
     headers.Authorization = `Token ${currentToken}`;
   }
 
-  const response = await fetch(url, {
+  const response = await (svelteFetch || fetch)(url, {
     headers,
   });
 
