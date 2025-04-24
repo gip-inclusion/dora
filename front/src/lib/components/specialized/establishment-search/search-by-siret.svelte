@@ -3,7 +3,7 @@
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment } from "$lib/types";
 
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import { siretRegexp } from "$lib/validation/schema-utils";
 
   export let onEstablishmentChange: (
@@ -19,7 +19,7 @@
   $: siretIsValid = !!siretInput?.match(siretRegexp);
 
   async function handleValidateSiret() {
-    const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(
+    const url = `${API_URL}/search-siret/?siret=${encodeURIComponent(
       siretInput
     )}`;
 

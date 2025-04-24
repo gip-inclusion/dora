@@ -4,7 +4,7 @@
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import StickyFormSubmissionRow from "$lib/components/forms/sticky-form-submission-row.svelte";
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import { token } from "$lib/utils/auth";
   import Layout from "../orientation-layout.svelte";
   import type { PageData } from "./$types";
@@ -48,7 +48,7 @@
       validatedData.attachments
     ).flat();
 
-    return fetch(`${getApiURL()}/orientations/`, {
+    return fetch(`${API_URL}/orientations/`, {
       method: "POST",
       headers: {
         Accept: "application/json; version=1.0",

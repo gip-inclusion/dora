@@ -2,7 +2,7 @@
   import Button from "$lib/components/display/button.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import { token } from "$lib/utils/auth";
   import { addUserSchema } from "$lib/validation/schemas/dashboard";
   import { get } from "svelte/store";
@@ -50,7 +50,7 @@
         }),
       };
     }
-    const url = `${getApiURL()}/structure-putative-members/?structure=${
+    const url = `${API_URL}/structure-putative-members/?structure=${
       structure.slug
     }`;
     return fetch(url, {

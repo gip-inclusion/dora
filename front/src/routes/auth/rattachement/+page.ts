@@ -1,11 +1,11 @@
 import type { Establishment } from "$lib/types";
-import { getApiURL } from "$lib/utils/api";
+import { API_URL } from "$lib/env";
 import type { PageLoad } from "./$types";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
 
 function siretSearch(siret: string) {
-  const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(siret)}`;
+  const url = `${API_URL}/search-siret/?siret=${encodeURIComponent(siret)}`;
 
   return fetch(url, {
     headers: {
@@ -16,7 +16,7 @@ function siretSearch(siret: string) {
 }
 
 function safirSearch(safir: string) {
-  const url = `${getApiURL()}/search-safir/?safir=${encodeURIComponent(safir)}`;
+  const url = `${API_URL}/search-safir/?safir=${encodeURIComponent(safir)}`;
 
   return fetch(url, {
     headers: {

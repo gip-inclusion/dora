@@ -12,7 +12,7 @@
   import Modal from "$lib/components/hoc/modal.svelte";
 
   import type { Service } from "$lib/types";
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import { userInfo } from "$lib/utils/auth";
   import * as v from "$lib/validation/schema-utils";
   import { validate } from "$lib/validation/validation";
@@ -163,7 +163,7 @@
   }
 
   function handleSubmit() {
-    const url = `${getApiURL()}/services${isDI ? "-di" : ""}/${
+    const url = `${API_URL}/services${isDI ? "-di" : ""}/${
       service.slug
     }/feedback/`;
 

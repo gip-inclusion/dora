@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { token } from "./auth";
-import { getApiURL } from "./api";
+import { API_URL } from "$lib/env";
 import { CGU_VERSION } from "../../routes/(static)/cgu/version";
 
 export function needToAcceptCgu(currentUserInfo) {
@@ -11,7 +11,7 @@ export function needToAcceptCgu(currentUserInfo) {
 }
 
 export async function acceptCgu() {
-  const url = `${getApiURL()}/auth/accept-cgu/`;
+  const url = `${API_URL}/auth/accept-cgu/`;
   const method = "POST";
   const response = await fetch(url, {
     method,

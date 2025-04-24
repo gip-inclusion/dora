@@ -1,16 +1,16 @@
-import { getApiURL } from "./api";
+import { API_URL } from "$lib/env";
 import { fetchData } from "./misc";
 import { TEST_WORDS } from "$lib/consts";
 import type { Choice, Orientation, Service } from "$lib/types";
 
 export function getOrientation(queryId: string, queryHash: string) {
   return fetchData<Orientation>(
-    `${getApiURL()}/orientations/${queryId}/?h=${queryHash}`
+    `${API_URL}/orientations/${queryId}/?h=${queryHash}`
   );
 }
 
 export async function refreshOrientationLink(queryId: string) {
-  const url = `${getApiURL()}/orientations/${queryId}/refresh/`;
+  const url = `${API_URL}/orientations/${queryId}/refresh/`;
   const method = "PATCH";
   await fetch(url, {
     method,
@@ -24,7 +24,7 @@ export function contactBeneficiary(
   ccReferent: boolean,
   message: string
 ) {
-  const url = `${getApiURL()}/orientations/${queryId}/contact/beneficiary/?h=${queryHash}`;
+  const url = `${API_URL}/orientations/${queryId}/contact/beneficiary/?h=${queryHash}`;
   const method = "POST";
   return fetch(url, {
     method,
@@ -47,7 +47,7 @@ export function contactPrescriber(
   ccReferent: boolean,
   message: string
 ) {
-  const url = `${getApiURL()}/orientations/${queryId}/contact/prescriber/?h=${queryHash}`;
+  const url = `${API_URL}/orientations/${queryId}/contact/prescriber/?h=${queryHash}`;
   const method = "POST";
   return fetch(url, {
     method,
@@ -68,7 +68,7 @@ export function denyOrientation(
   queryHash: string,
   { reasons, message }: { reasons: string[]; message: string }
 ) {
-  const url = `${getApiURL()}/orientations/${queryId}/reject/?h=${queryHash}`;
+  const url = `${API_URL}/orientations/${queryId}/reject/?h=${queryHash}`;
   const method = "POST";
   return fetch(url, {
     method,
@@ -94,7 +94,7 @@ export function acceptOrientation(
     beneficiaryMessage: string;
   }
 ) {
-  const url = `${getApiURL()}/orientations/${queryId}/validate/?h=${queryHash}`;
+  const url = `${API_URL}/orientations/${queryId}/validate/?h=${queryHash}`;
   const method = "POST";
   return fetch(url, {
     method,

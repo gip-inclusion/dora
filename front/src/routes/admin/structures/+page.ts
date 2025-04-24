@@ -3,12 +3,12 @@ import { getStructuresOptions } from "$lib/requests/structures";
 import type { PageLoad } from "./$types";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
-import { getApiURL } from "$lib/utils/api";
+import { API_URL } from "$lib/env";
 import type { GeoApiValue } from "$lib/types";
 import { error } from "@sveltejs/kit";
 
 async function getDepartments(departmentCodes) {
-  const url = `${getApiURL()}/admin-division-departments/?dept_codes=${encodeURIComponent(
+  const url = `${API_URL}/admin-division-departments/?dept_codes=${encodeURIComponent(
     departmentCodes.join(",")
   )}`;
   const response = await fetch(url);

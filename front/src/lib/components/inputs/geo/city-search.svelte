@@ -2,7 +2,7 @@
   import Select from "$lib/components/inputs/select/select.svelte";
   import { pinDistanceIcon } from "$lib/icons";
   import type { Choice, GeoApiValue } from "$lib/types";
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import { fetchData, getDepartmentFromCityCode } from "$lib/utils/misc";
 
   export let onChange: (newValue: GeoApiValue) => void;
@@ -14,7 +14,7 @@
 
   let choices: Choice[] = [];
   async function searchCity(query) {
-    const url = `${getApiURL()}/admin-division-search/?type=city&q=${encodeURIComponent(
+    const url = `${API_URL}/admin-division-search/?type=city&q=${encodeURIComponent(
       query
     )}`;
 
@@ -39,7 +39,7 @@
     const longitude = position.coords.longitude;
     const latitude = position.coords.latitude;
 
-    const url = `${getApiURL()}/admin-division-reverse-search/?type=city&lon=${encodeURIComponent(
+    const url = `${API_URL}/admin-division-reverse-search/?type=city&lon=${encodeURIComponent(
       longitude
     )}&lat=${encodeURIComponent(latitude)}`;
 

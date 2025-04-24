@@ -1,6 +1,6 @@
 <script lang="ts">
   import { deleteBinIcon } from "$lib/icons";
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import { shortenString } from "$lib/utils/misc";
   import Alert from "../display/alert.svelte";
 
@@ -43,8 +43,8 @@
       const file = files.item(i);
       // We can't use fetch if we want a progress indicator
       const url = structureSlug
-        ? `${getApiURL()}/upload/${structureSlug}/${file.name}/`
-        : `${getApiURL()}/safe-upload/${file.name}/`;
+        ? `${API_URL}/upload/${structureSlug}/${file.name}/`
+        : `${API_URL}/safe-upload/${file.name}/`;
       const request = new XMLHttpRequest();
       request.open("POST", url);
       request.setRequestHeader("Accept", "application/json; version=1.0");

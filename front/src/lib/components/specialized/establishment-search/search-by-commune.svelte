@@ -1,6 +1,6 @@
 <script lang="ts">
   import { externalLinkIcon } from "$lib/icons";
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
@@ -32,7 +32,7 @@
 
   async function searchSirene(query) {
     if (city) {
-      const url = `${getApiURL()}/search-sirene/${
+      const url = `${API_URL}/search-sirene/${
         city.code
       }/?q=${encodeURIComponent(query)}`;
 

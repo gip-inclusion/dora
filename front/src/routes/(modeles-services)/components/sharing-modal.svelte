@@ -2,7 +2,7 @@
   import Button from "$lib/components/display/button.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import { token } from "$lib/utils/auth";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import * as v from "$lib/validation/schema-utils";
@@ -56,7 +56,7 @@
   function handleChange(_validatedData) {}
 
   function handleSubmit(validatedData) {
-    const url = `${getApiURL()}/services${isDI ? "-di" : ""}/${
+    const url = `${API_URL}/services${isDI ? "-di" : ""}/${
       service.slug
     }/share/`;
     const headers = new Headers({

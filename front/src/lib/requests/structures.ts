@@ -1,4 +1,4 @@
-import { getApiURL } from "$lib/utils/api";
+import { API_URL } from "$lib/env";
 import { token } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
@@ -32,7 +32,7 @@ function structureToFront(structure: Structure): Structure {
 }
 
 export async function siretWasAlreadyClaimed(siret: string) {
-  const url = `${getApiURL()}/siret-claimed/${siret}`;
+  const url = `${API_URL}/siret-claimed/${siret}`;
   const res = await fetch(url, {
     headers: {
       Accept: "application/json; version=1.0",
@@ -64,7 +64,7 @@ export async function getManagedStructures(
   searchText?: string
 ): Promise<ShortStructure[]> {
   const searchParam = searchText ? `&search=${searchText}` : "";
-  const url = `${getApiURL()}/structures/?managed=1${searchParam}`;
+  const url = `${API_URL}/structures/?managed=1${searchParam}`;
   return (await fetchData<ShortStructure[]>(url)).data;
 }
 
@@ -75,7 +75,7 @@ export async function getActiveStructures({
   pageSize: number;
   page: number;
 }) {
-  const url = new URL("/structures/", getApiURL());
+  const url = new URL("/structures/", API_URL);
 
   url.searchParams.append("active", "1");
   url.searchParams.append("page_size", pageSize.toString());
@@ -89,13 +89,13 @@ export async function getActiveStructures({
 }
 
 export async function getStructure(slug: string): Promise<Structure | null> {
-  const url = `${getApiURL()}/structures/${slug}/`;
+  const url = `${API_URL}/structures/${slug}/`;
   const structure = (await fetchData<Structure>(url)).data;
   return structure ? structureToFront(structure) : null;
 }
 
 export function createStructure(structure) {
-  const url = `${getApiURL()}/structures/`;
+  const url = `${API_URL}/structures/`;
   const method = "POST";
   return fetch(url, {
     method,
@@ -110,7 +110,7 @@ export function createStructure(structure) {
 }
 
 export function modifyStructure(structure) {
-  const url = `${getApiURL()}/structures/${structure.slug}/`;
+  const url = `${API_URL}/structures/${structure.slug}/`;
 
   const method = "PATCH";
   return fetch(url, {
@@ -129,7 +129,7 @@ let structuresOptions;
 
 export async function getStructuresOptions(): Promise<StructuresOptions> {
   if (!structuresOptions) {
-    const url = `${getApiURL()}/structures-options/`;
+    const url = `${API_URL}/structures-options/`;
     const res = await fetchData<StructuresOptions>(url);
     structuresOptions = res.data;
   }
@@ -137,7 +137,7 @@ export async function getStructuresOptions(): Promise<StructuresOptions> {
 }
 
 export async function getMembers(slug): Promise<Array<StructureMember> | null> {
-  const url = `${getApiURL()}/structure-members/?structure=${slug}`;
+  const url = `${API_URL}/structure-members/?structure=${slug}`;
 
   const result = await fetchData(url);
   if (result.ok) {
@@ -149,7 +149,7 @@ export async function getMembers(slug): Promise<Array<StructureMember> | null> {
 export async function getPutativeMembers(
   slug
 ): Promise<Array<PutativeStructureMember> | null> {
-  const url = `${getApiURL()}/structure-putative-members/?structure=${slug}`;
+  const url = `${API_URL}/structure-putative-members/?structure=${slug}`;
 
   const result = await fetchData(url);
   if (result.ok) {
@@ -159,7 +159,7 @@ export async function getPutativeMembers(
 }
 
 export async function deleteMember(uuid) {
-  const url = `${getApiURL()}/structure-members/${uuid}/`;
+  const url = `${API_URL}/structure-members/${uuid}/`;
   const method = "DELETE";
   const res = await fetch(url, {
     method,
@@ -184,7 +184,7 @@ export async function deleteMember(uuid) {
 }
 
 export async function resendInvite(uuid) {
-  const url = `${getApiURL()}/structure-putative-members/${uuid}/resend-invite/`;
+  const url = `${API_URL}/structure-putative-members/${uuid}/resend-invite/`;
   const method = "POST";
   const res = await fetch(url, {
     method,
@@ -209,7 +209,7 @@ export async function resendInvite(uuid) {
 }
 
 export async function cancelInvite(uuid) {
-  const url = `${getApiURL()}/structure-putative-members/${uuid}/cancel-invite/`;
+  const url = `${API_URL}/structure-putative-members/${uuid}/cancel-invite/`;
   const method = "POST";
   const res = await fetch(url, {
     method,
@@ -234,7 +234,7 @@ export async function cancelInvite(uuid) {
 }
 
 export async function acceptMember(uuid) {
-  const url = `${getApiURL()}/structure-putative-members/${uuid}/accept-membership-request/`;
+  const url = `${API_URL}/structure-putative-members/${uuid}/accept-membership-request/`;
   const method = "POST";
   const res = await fetch(url, {
     method,
@@ -259,7 +259,7 @@ export async function acceptMember(uuid) {
 }
 
 export async function rejectMembershipRequest(uuid) {
-  const url = `${getApiURL()}/structure-putative-members/${uuid}/reject-membership-request/`;
+  const url = `${API_URL}/structure-putative-members/${uuid}/reject-membership-request/`;
   const method = "POST";
   const res = await fetch(url, {
     method,

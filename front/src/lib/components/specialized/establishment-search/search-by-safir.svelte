@@ -3,7 +3,7 @@
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment } from "$lib/types";
 
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
 
   const safirRegexp = /^\d{5}$/u;
 
@@ -19,7 +19,7 @@
   $: safirIsValid = !!safirInput?.match(safirRegexp);
 
   async function handleValidateSafir() {
-    const url = `${getApiURL()}/search-safir/?safir=${encodeURIComponent(
+    const url = `${API_URL}/search-safir/?safir=${encodeURIComponent(
       safirInput
     )}`;
 

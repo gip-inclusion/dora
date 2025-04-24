@@ -4,7 +4,7 @@ import type {
   Service,
   Structure,
 } from "$lib/types";
-import { getApiURL } from "$lib/utils/api";
+import { API_URL } from "$lib/env";
 import { token } from "$lib/utils/auth";
 import { logException } from "$lib/utils/logger";
 import { fetchData } from "$lib/utils/misc";
@@ -13,7 +13,7 @@ import { get } from "svelte/store";
 export async function getStructuresAdmin(
   departmentCode
 ): Promise<AdminShortStructure[]> {
-  let url = `${getApiURL()}/structures-admin/`;
+  let url = `${API_URL}/structures-admin/`;
 
   if (departmentCode) {
     url += `?department=${departmentCode}`;
@@ -22,28 +22,28 @@ export async function getStructuresAdmin(
 }
 
 export async function getStructureAdmin(slug): Promise<AdminShortStructure> {
-  const url = `${getApiURL()}/structures-admin/${slug}/`;
+  const url = `${API_URL}/structures-admin/${slug}/`;
   return (await fetchData<Structure>(url)).data;
 }
 
 export async function getStructuresToModerate() {
-  const url = `${getApiURL()}/structures-admin/?moderation=1`;
+  const url = `${API_URL}/structures-admin/?moderation=1`;
   return (await fetchData(url)).data;
 }
 
 export async function getServicesAdmin() {
-  const url = `${getApiURL()}/services-admin/`;
+  const url = `${API_URL}/services-admin/`;
   return (await fetchData(url)).data;
 }
 
 export async function getServiceAdmin(slug) {
-  const url = `${getApiURL()}/services-admin/${slug}/`;
+  const url = `${API_URL}/services-admin/${slug}/`;
   return (await fetchData<Service>(url)).data;
 }
 
 export async function setModerationState(entity, status: ModerationStatus) {
   const urlFragment = entity.services ? "structures-admin" : "services-admin";
-  const url = `${getApiURL()}/${urlFragment}/${entity.slug}/`;
+  const url = `${API_URL}/${urlFragment}/${entity.slug}/`;
   const method = "PATCH";
   const response = await fetch(url, {
     method,
@@ -61,7 +61,7 @@ export async function setModerationState(entity, status: ModerationStatus) {
 }
 
 export async function getServiceSuggestions() {
-  const url = `${getApiURL()}/services-suggestions/`;
+  const url = `${API_URL}/services-suggestions/`;
   const results = (await fetchData(url)).data;
   if (!results) {
     return [];
@@ -71,7 +71,7 @@ export async function getServiceSuggestions() {
 }
 
 export async function deleteServiceSuggestion(suggestion) {
-  const url = `${getApiURL()}/services-suggestions/${suggestion.id}/`;
+  const url = `${API_URL}/services-suggestions/${suggestion.id}/`;
   const method = "DELETE";
   const res = await fetch(url, {
     method,
@@ -96,7 +96,7 @@ export async function deleteServiceSuggestion(suggestion) {
 }
 
 export async function acceptServiceSuggestion(suggestion) {
-  const url = `${getApiURL()}/services-suggestions/${suggestion.id}/validate/`;
+  const url = `${API_URL}/services-suggestions/${suggestion.id}/validate/`;
   const method = "POST";
   const res = await fetch(url, {
     method,
@@ -128,7 +128,7 @@ export async function acceptServiceSuggestion(suggestion) {
 }
 
 export function publishServiceSuggestion(suggestion, source) {
-  const url = `${getApiURL()}/services-suggestions/`;
+  const url = `${API_URL}/services-suggestions/`;
   const method = "POST";
   const { siret, name, ...contents } = suggestion;
   const authToken = get(token);

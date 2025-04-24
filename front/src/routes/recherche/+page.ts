@@ -1,6 +1,6 @@
 import { getServicesOptions } from "$lib/requests/services";
 import type { SearchQuery, ServiceSearchResult } from "$lib/types";
-import { getApiURL } from "$lib/utils/api";
+import { API_URL } from "$lib/env";
 import { trackSearch } from "$lib/utils/stats";
 import { getQueryString, storeLastSearchCity } from "$lib/utils/service-search";
 import type { PageLoad } from "./$types";
@@ -39,7 +39,7 @@ async function getResults({
     lat,
     lon,
   });
-  const url = `${getApiURL()}/search/?${querystring}`;
+  const url = `${API_URL}/search/?${querystring}`;
 
   const res = await fetch(url, {
     headers: { Accept: "application/json; version=1.0" },

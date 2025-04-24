@@ -1,5 +1,6 @@
 import { browser } from "$app/environment";
-import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+import { defaultAcceptHeader } from "$lib/utils/api";
+import { API_URL } from "$lib/env";
 import { get, writable } from "svelte/store";
 import type { SavedSearch, ShortBookmark, ShortStructure } from "../types";
 import { log, logException } from "./logger";
@@ -50,7 +51,7 @@ export function setToken(newToken: string) {
 }
 
 function getUserInfo(authToken) {
-  return fetch(`${getApiURL()}/auth/user-info/`, {
+  return fetch(`${API_URL}/auth/user-info/`, {
     method: "POST",
     headers: {
       Accept: defaultAcceptHeader,

@@ -5,19 +5,20 @@
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+  import { defaultAcceptHeader } from "$lib/utils/api";
   import { token, validateCredsAndFillUserInfo } from "$lib/utils/auth";
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";
+  import { API_URL } from "$lib/env";
 
   export let data: PageData;
   let cguAccepted = false;
   let joinError = "";
 
   async function handleJoin() {
-    const targetUrl = `${getApiURL()}/auth/join-structure/`;
+    const targetUrl = `${API_URL}/auth/join-structure/`;
 
     const response = await fetch(targetUrl, {
       method: "POST",

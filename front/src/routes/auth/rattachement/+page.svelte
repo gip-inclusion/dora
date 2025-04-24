@@ -3,7 +3,7 @@
   import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
-  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+  import { defaultAcceptHeader } from "$lib/utils/api";
   import { token, userInfo, refreshUserInfo } from "$lib/utils/auth";
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";
@@ -12,6 +12,7 @@
   import loopImg from "$lib/assets/icons/loop.svg";
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
+  import { API_URL } from "$lib/env";
 
   export let data: PageData;
 
@@ -22,7 +23,7 @@
   let joinError = "";
 
   async function handleJoin() {
-    const targetUrl = `${getApiURL()}/auth/join-structure/`;
+    const targetUrl = `${API_URL}/auth/join-structure/`;
     const response = await fetch(targetUrl, {
       method: "POST",
       headers: {

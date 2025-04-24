@@ -1,9 +1,9 @@
-import { getApiURL } from "../utils/api";
+import { API_URL } from "$lib/env";
 import { log } from "../utils/logger";
 import { fetchData } from "../utils/misc";
 
 export async function getCityLabel(inseeCode): Promise<string> {
-  const url = `${getApiURL()}/city-label/${inseeCode}/`;
+  const url = `${API_URL}/city-label/${inseeCode}/`;
   const result = await fetchData<string>(url);
   if (result.ok) {
     return result.data;

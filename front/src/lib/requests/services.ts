@@ -1,4 +1,4 @@
-import { getApiURL } from "$lib/utils/api";
+import { API_URL } from "$lib/env";
 import { token } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
@@ -35,7 +35,7 @@ function serviceToFront(service) {
 }
 
 export async function getService(slug): Promise<Service> {
-  const url = `${getApiURL()}/services/${slug}/`;
+  const url = `${API_URL}/services/${slug}/`;
   const response = await fetchData<Service>(url);
 
   if (!response.data) {
@@ -47,7 +47,7 @@ export async function getService(slug): Promise<Service> {
 }
 
 export async function getServiceDI(diId): Promise<Service> {
-  const url = `${getApiURL()}/services-di/${diId}/`;
+  const url = `${API_URL}/services-di/${diId}/`;
   const response = await fetchData<Service>(url);
 
   if (!response.data) {
@@ -65,7 +65,7 @@ export async function getPublishedServices({
   pageSize: number;
   page: number;
 }) {
-  const url = new URL("/services/", getApiURL());
+  const url = new URL("/services/", API_URL);
 
   url.searchParams.append("published", "1");
   url.searchParams.append("page_size", pageSize.toString());
@@ -77,7 +77,7 @@ export async function getPublishedServices({
 }
 
 export async function getModel(slug): Promise<Model> {
-  const url = `${getApiURL()}/models/${slug}/`;
+  const url = `${API_URL}/models/${slug}/`;
   const response = await fetchData<Model>(url);
 
   if (!response.data) {
@@ -91,10 +91,10 @@ export async function getModel(slug): Promise<Model> {
 export function createOrModifyService(service: Service) {
   let method, url;
   if (service.slug) {
-    url = `${getApiURL()}/services/${service.slug}/`;
+    url = `${API_URL}/services/${service.slug}/`;
     method = "PATCH";
   } else {
-    url = `${getApiURL()}/services/`;
+    url = `${API_URL}/services/`;
     method = "POST";
   }
 
@@ -110,7 +110,7 @@ export function createOrModifyService(service: Service) {
 }
 
 export function markServiceAsSynced(service: Service | ShortService) {
-  return fetch(`${getApiURL()}/services/${service.slug}/`, {
+  return fetch(`${API_URL}/services/${service.slug}/`, {
     method: "PATCH",
     headers: {
       Accept: "application/json; version=1.0",
@@ -124,10 +124,10 @@ export function markServiceAsSynced(service: Service | ShortService) {
 export async function createOrModifyModel(model, updateAllServices = false) {
   let method, url;
   if (model.slug) {
-    url = `${getApiURL()}/models/${model.slug}/`;
+    url = `${API_URL}/models/${model.slug}/`;
     method = "PATCH";
   } else {
-    url = `${getApiURL()}/models/`;
+    url = `${API_URL}/models/`;
     method = "POST";
   }
 
@@ -150,7 +150,7 @@ export async function createOrModifyModel(model, updateAllServices = false) {
 }
 
 export async function deleteService(serviceSlug) {
-  const url = `${getApiURL()}/services/${serviceSlug}/`;
+  const url = `${API_URL}/services/${serviceSlug}/`;
   const method = "DELETE";
   const res = await fetch(url, {
     method,
@@ -175,12 +175,12 @@ export async function deleteService(serviceSlug) {
 }
 
 export async function getBookmarks(): Promise<ShortService[]> {
-  const url = `${getApiURL()}/bookmarks/`;
+  const url = `${API_URL}/bookmarks/`;
   return (await fetchData<ShortService[]>(url)).data;
 }
 
 export async function setBookmark(bookmarkSlug: string, isDI: boolean) {
-  const url = `${getApiURL()}/bookmarks/`;
+  const url = `${API_URL}/bookmarks/`;
   const method = "POST";
   const response = await fetch(url, {
     method,
@@ -197,7 +197,7 @@ export async function setBookmark(bookmarkSlug: string, isDI: boolean) {
 }
 
 export async function clearBookmark(bookmarkId: number) {
-  const url = `${getApiURL()}/bookmarks/${bookmarkId}/`;
+  const url = `${API_URL}/bookmarks/${bookmarkId}/`;
   const method = "DELETE";
   const response = await fetch(url, {
     method,
@@ -213,7 +213,7 @@ export async function clearBookmark(bookmarkId: number) {
 }
 
 export async function unPublishService(serviceSlug) {
-  const url = `${getApiURL()}/services/${serviceSlug}/`;
+  const url = `${API_URL}/services/${serviceSlug}/`;
   const method = "PATCH";
   const status: ServiceStatus = "DRAFT";
   const response = await fetch(url, {
@@ -232,7 +232,7 @@ export async function unPublishService(serviceSlug) {
 }
 
 export async function archiveService(serviceSlug) {
-  const url = `${getApiURL()}/services/${serviceSlug}/`;
+  const url = `${API_URL}/services/${serviceSlug}/`;
   const method = "PATCH";
   const status: ServiceStatus = "ARCHIVED";
 
@@ -252,7 +252,7 @@ export async function archiveService(serviceSlug) {
 }
 
 export async function unarchiveService(serviceSlug) {
-  const url = `${getApiURL()}/services/${serviceSlug}/`;
+  const url = `${API_URL}/services/${serviceSlug}/`;
   const method = "PATCH";
   const status: ServiceStatus = "DRAFT";
 
@@ -272,7 +272,7 @@ export async function unarchiveService(serviceSlug) {
 }
 
 export async function publishService(serviceSlug) {
-  const url = `${getApiURL()}/services/${serviceSlug}/`;
+  const url = `${API_URL}/services/${serviceSlug}/`;
   const method = "PATCH";
   const status: ServiceStatus = "PUBLISHED";
 
@@ -292,7 +292,7 @@ export async function publishService(serviceSlug) {
 }
 
 export async function convertSuggestionToDraft(serviceSlug) {
-  const url = `${getApiURL()}/services/${serviceSlug}/`;
+  const url = `${API_URL}/services/${serviceSlug}/`;
   const method = "PATCH";
   const status: ServiceStatus = "DRAFT";
 
@@ -312,14 +312,14 @@ export async function convertSuggestionToDraft(serviceSlug) {
 }
 
 export async function getServicesOptions(): Promise<ServicesOptions | null> {
-  const url = `${getApiURL()}/services-options/`;
+  const url = `${API_URL}/services-options/`;
   return (await fetchData<ServicesOptions>(url)).data;
 }
 
 export function updateServicesFromModel(
   services: Service[] | StructureService[]
 ) {
-  return fetch(`${getApiURL()}/services/update-from-model/`, {
+  return fetch(`${API_URL}/services/update-from-model/`, {
     method: "POST",
     headers: {
       Accept: "application/json; version=1.0",
@@ -340,7 +340,7 @@ type ModelToService = {
 export function addIgnoredServicesToUpdate(
   modelToServiceSlugs: ModelToService[]
 ) {
-  return fetch(`${getApiURL()}/services/reject-update-from-model/`, {
+  return fetch(`${API_URL}/services/reject-update-from-model/`, {
     method: "POST",
     headers: {
       Accept: "application/json; version=1.0",
@@ -354,7 +354,7 @@ export function addIgnoredServicesToUpdate(
 }
 
 export function markServicesAsUpToDate(services: { slug: string }[]) {
-  return fetch(`${getApiURL()}/services/mark-as-up-to-date/`, {
+  return fetch(`${API_URL}/services/mark-as-up-to-date/`, {
     method: "POST",
     headers: {
       Accept: "application/json; version=1.0",

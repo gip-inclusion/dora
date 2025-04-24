@@ -1,7 +1,7 @@
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
 import { token } from "../utils/auth";
-import { getApiURL } from "../utils/api";
+import { API_URL } from "$lib/env";
 import type { SavedSearch, SavedSearchNotificationFrequency } from "$lib/types";
 import { getQueryString } from "../utils/service-search";
 
@@ -18,7 +18,7 @@ export async function saveSearch(
     | "fundingLabels"
   >
 ) {
-  const url = `${getApiURL()}/saved-searches/`;
+  const url = `${API_URL}/saved-searches/`;
   const method = "POST";
   const response = await fetch(url, {
     method,
@@ -38,7 +38,7 @@ export async function updateSavedSearchFrequency(
   savedSearchId: number,
   frequency: SavedSearchNotificationFrequency
 ) {
-  const url = `${getApiURL()}/saved-searches/${savedSearchId}/`;
+  const url = `${API_URL}/saved-searches/${savedSearchId}/`;
   const method = "PATCH";
 
   const response = await fetch(url, {
@@ -56,7 +56,7 @@ export async function updateSavedSearchFrequency(
 }
 
 export async function deleteSavedSearch(savedSearchId: number) {
-  const url = `${getApiURL()}/saved-searches/${savedSearchId}/`;
+  const url = `${API_URL}/saved-searches/${savedSearchId}/`;
   const method = "DELETE";
 
   const response = await fetch(url, {
@@ -73,7 +73,7 @@ export async function deleteSavedSearch(savedSearchId: number) {
 }
 
 export async function getRecentSearchResults(savedSearchId: number) {
-  const url = `${getApiURL()}/saved-searches/${savedSearchId}/recent/`;
+  const url = `${API_URL}/saved-searches/${savedSearchId}/recent/`;
 
   const response = await fetchData<SavedSearch[]>(url);
   if (!response.ok) {

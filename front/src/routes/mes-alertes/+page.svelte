@@ -7,7 +7,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import type { SavedSearch } from "$lib/types";
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
   import { fetchData } from "$lib/utils/misc";
   import { onMount } from "svelte";
@@ -16,7 +16,7 @@
   let savedSearches: SavedSearch[] | undefined = undefined;
 
   async function getSavedSearches() {
-    const url = `${getApiURL()}/saved-searches/`;
+    const url = `${API_URL}/saved-searches/`;
     const result = await fetchData(url);
     if (result.ok) {
       return result.data as Array<SavedSearch>;

@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { token } from "$lib/utils/auth";
 import { get } from "svelte/store";
-import { getApiURL } from "$lib/utils/api";
+import { API_URL } from "$lib/env";
 import { hexoid } from "hexoid";
 import type { Service, Structure } from "$lib/types";
 
@@ -33,7 +33,7 @@ async function logAnalyticsEvent(tag, path, params = {}) {
     headers.append("Authorization", `Token ${currentToken}`);
   }
 
-  const res = await fetch(`${getApiURL()}/stats/event/`, {
+  const res = await fetch(`${API_URL}/stats/event/`, {
     method: "POST",
     headers,
     body: JSON.stringify(data),

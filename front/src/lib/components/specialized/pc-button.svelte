@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { getApiURL } from "$lib/utils/api";
+  import { API_URL } from "$lib/env";
   import logoPC from "$lib/assets/proconnect/bouton_proconnect.svg";
 
   export let nextPage: string;
 
-  const loginUrl = `${getApiURL()}/oidc/login/?next=${encodeURIComponent(nextPage)}`;
+  const loginUrl = `${API_URL}/oidc/login/?next=${encodeURIComponent(nextPage)}`;
 </script>
 
 <div class="text-center">
