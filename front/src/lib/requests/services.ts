@@ -46,9 +46,12 @@ export async function getService(slug): Promise<Service> {
   return serviceToFront(response.data);
 }
 
-export async function getServiceDI(diId): Promise<Service> {
+export async function getServiceDI(
+  diId,
+  svelteFetch?: typeof fetch
+): Promise<Service> {
   const url = `${API_URL}/services-di/${diId}/`;
-  const response = await fetchData<Service>(url);
+  const response = await fetchData<Service>(url, svelteFetch);
 
   if (!response.data) {
     return null;
