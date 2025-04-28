@@ -95,7 +95,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="notification",
             constraint=models.CheckConstraint(
-                check=models.Q(("owner_structure", None), _negated=True),
+                condition=models.Q(("owner_structure", None), _negated=True),
                 name="check_structure",
             ),
         ),

@@ -553,7 +553,7 @@ class Service(ModerationMixin, models.Model):
         constraints = [
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_status_not_empty_except_models",
-                check=Q(is_model=False) | Q(status__isnull=True),
+                condition=Q(is_model=False) | Q(status__isnull=True),
             )
         ]
 
