@@ -7,7 +7,10 @@ import type { Service, Structure } from "$lib/types";
 
 const analyticsIdKey = "userHash";
 
-function getAnalyticsId() {
+export function getAnalyticsId() {
+  if (!browser) {
+    return null;
+  }
   let analyticsId = localStorage.getItem(analyticsIdKey);
   if (!analyticsId) {
     analyticsId = hexoid(32)();
