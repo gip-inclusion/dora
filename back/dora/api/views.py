@@ -65,7 +65,7 @@ class StructureViewSet(viewsets.ReadOnlyModelViewSet):
         structures = (
             Structure.objects.select_related("source")
             .prefetch_related("national_labels")
-            .all()
+            .filter(is_obsolete=False)
         )
         structures = structures.exclude(
             Q(membership=None) & Q(source__value__startswith="di-")
