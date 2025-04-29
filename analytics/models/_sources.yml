@@ -3,6 +3,8 @@ sources:
     schema: public
     tables:
       - name: orientations_orientation
+      - name: orientations_rejectionreason
+      - name: orientations_orientation_rejection_reasons
       - name: services_fundinglabel
       - name: services_savedsearch
       - name: services_service
