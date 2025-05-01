@@ -37,10 +37,22 @@ SESSION_COOKIE_SECURE = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # https://hstspreload.org/
 # SECURE_HSTS_PRELOAD = True
-# SECURE_BROWSER_XSS_FILTER = True : plus utilisé depuis Django 3.0
 SECURE_REFERRER_POLICY = "same-origin"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_SSL_REDIRECT = True
+
+# Sécurité (espace admin) :
+# L'espace d'admin est protégé par un système à 2FA
+# Et pontiellement désactivable par configuration
+DJANGO_ADMIN_2FA_ENABLED = os.getenv("DJANGO_ADMIN_2FA_ENABLED", "true") == "true"
+
+if DJANGO_ADMIN_2FA_ENABLED:
+    INSTALLED_APPS += [  # noqa
+        "django_otp",
+        "django_otp.plugins.otp_static",
+        "django_otp.plugins.otp_totp",
+    ]
+    MIDDLEWARE += ["django_otp.middleware.OTPMiddleware"]  # noqa
 
 # Certains formulaires d'admin (par ex. structures)
 # peuvent contenir un grand nombre de champs associés (par ex. membres)
