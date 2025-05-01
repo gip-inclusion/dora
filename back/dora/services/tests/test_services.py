@@ -1855,8 +1855,9 @@ class DataInclusionSearchTestCase(APITestCase):
             FakeDataInclusionClient, "retrieve_service", return_value=service_data
         ) as mock_retrieve_service:
             request = self.factory.get(
-                f"/services-di/{di_id}/?user_hash=1234567890",
+                f"/services-di/{di_id}/",
                 HTTP_USER_AGENT="test-agent",
+                HTTP_ANONYMOUS_USER_HASH="1234567890",
             )
             response = self.service_di(request, di_id=di_id)
             self.assertEqual(response.status_code, 200)

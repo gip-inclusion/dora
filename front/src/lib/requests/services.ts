@@ -50,10 +50,15 @@ export async function getService(slug): Promise<Service> {
 export async function getServiceDI(diId): Promise<Service> {
   const userHash = getAnalyticsId();
   const url = new URL(`/services-di/${diId}/`, getApiURL());
-  if (userHash) {
-    url.searchParams.append("user_hash", userHash);
-  }
-  const response = await fetchData<Service>(url.toString());
+
+  const response = await fetchData<Service>(
+    url.toString(),
+    userHash
+      ? {
+          "Anonymous-User-Hash": userHash,
+        }
+      : {}
+  );
 
   if (!response.data) {
     return null;

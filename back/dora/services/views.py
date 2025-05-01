@@ -773,7 +773,7 @@ def service_di(request, di_id: str):
     source_di, di_service_id = di_id.split("--")
 
     user_agent = request.META.get("HTTP_USER_AGENT")
-    user_hash = request.GET.get("user_hash")
+    user_hash = request.META.get("HTTP_ANONYMOUS_USER_HASH")
 
     di_client = data_inclusion.di_client_factory()
 

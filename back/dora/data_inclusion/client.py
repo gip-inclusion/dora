@@ -100,10 +100,10 @@ class DataInclusionClient:
         url = url / "services" / source / id
 
         if user_agent is not None:
-            url.args["user_agent"] = user_agent
+            self.session.headers.update({"User-Agent": user_agent})
 
         if user_hash is not None:
-            url.args["user_hash"] = user_hash
+            self.session.headers.update({"Anonymous-User-Hash": user_hash})
 
         try:
             response = self._get(url)
