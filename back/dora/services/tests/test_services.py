@@ -1848,6 +1848,26 @@ class DataInclusionSearchTestCase(APITestCase):
         assert response.status_code == 200
         assert len(response.data["services"]) == 2
 
+    def test_service_di_user_agent_user_hash(self):
+        service_data = self.make_di_service()
+        di_id = self.get_di_id(service_data)
+        with mock.patch.object(
+            FakeDataInclusionClient, "retrieve_service", return_value=service_data
+        ) as mock_retrieve_service:
+            request = self.factory.get(
+                f"/services-di/{di_id}/",
+                HTTP_USER_AGENT="test-agent",
+                HTTP_ANONYMOUS_USER_HASH="1234567890",
+            )
+            response = self.service_di(request, di_id=di_id)
+            self.assertEqual(response.status_code, 200)
+            mock_retrieve_service.assert_called_once_with(
+                source=service_data["source"],
+                id=service_data["id"],
+                user_agent="test-agent",
+                user_hash="1234567890",
+            )
+
 
 class ServiceSearchTestCase(APITestCase):
     def setUp(self):

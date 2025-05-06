@@ -772,10 +772,18 @@ def service_di(request, di_id: str):
     di_id = unquote(di_id)
     source_di, di_service_id = di_id.split("--")
 
+    user_agent = request.META.get("HTTP_USER_AGENT")
+    user_hash = request.META.get("HTTP_ANONYMOUS_USER_HASH")
+
     di_client = data_inclusion.di_client_factory()
 
     try:
-        raw_service = di_client.retrieve_service(source=source_di, id=di_service_id)
+        raw_service = di_client.retrieve_service(
+            source=source_di,
+            id=di_service_id,
+            user_agent=user_agent,
+            user_hash=user_hash,
+        )
     except requests.ConnectionError:
         return Response(status=status.HTTP_502_BAD_GATEWAY)
 

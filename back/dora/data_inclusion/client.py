@@ -89,9 +89,21 @@ class DataInclusionClient:
             return None
 
     @log_conn_error
-    def retrieve_service(self, source: str, id: str) -> Optional[dict]:
+    def retrieve_service(
+        self,
+        source: str,
+        id: str,
+        user_agent: Optional[str] = None,
+        user_hash: Optional[str] = None,
+    ) -> Optional[dict]:
         url = self.base_url.copy()
         url = url / "services" / source / id
+
+        if user_agent is not None:
+            self.session.headers.update({"User-Agent": user_agent})
+
+        if user_hash is not None:
+            self.session.headers.update({"Anonymous-User-Hash": user_hash})
 
         try:
             response = self._get(url)
