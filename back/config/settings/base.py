@@ -375,11 +375,6 @@ LOGIN_REDIRECT_URL_FAILURE = FRONTEND_URL
 # (essentiellement pour la gestion du `next_url`).
 OIDC_CALLBACK_CLASS = "dora.oidc.views.CustomAuthorizationCallbackView"
 
-# Recherches sauvegardées :
-INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS = (
-    os.getenv("INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS") == "true"
-)
-
 # Notifications :
 # voir management command `process_notification_tasks`
 
