@@ -10,6 +10,7 @@ import type {
   ShortService,
   StructureService,
 } from "$lib/types";
+import { getAnalyticsId } from "$lib/utils/stats";
 import { logException } from "$lib/utils/logger";
 
 function serviceToBack(service) {
@@ -47,8 +48,17 @@ export async function getService(slug): Promise<Service> {
 }
 
 export async function getServiceDI(diId): Promise<Service> {
-  const url = `${getApiURL()}/services-di/${diId}/`;
-  const response = await fetchData<Service>(url);
+  const userHash = getAnalyticsId();
+  const url = new URL(`/services-di/${diId}/`, getApiURL());
+
+  const response = await fetchData<Service>(
+    url.toString(),
+    userHash
+      ? {
+          "Anonymous-User-Hash": userHash,
+        }
+      : {}
+  );
 
   if (!response.data) {
     return null;
