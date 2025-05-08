@@ -275,9 +275,7 @@ REST_FRAMEWORK = {
 # CORS :
 # https://github.com/adamchainz/django-cors-headers/blob/main/README.rst
 CORS_ALLOWED_ORIGIN_REGEXES = [os.getenv("DJANGO_CORS_ALLOWED_ORIGIN_REGEXES")]
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    "sentry-trace",
-]
+CORS_ALLOW_HEADERS = list(default_headers) + ["sentry-trace", "anonymous-user-hash"]
 
 
 # Configuration spécifique de l'application DORA :
