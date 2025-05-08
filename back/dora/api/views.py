@@ -77,6 +77,8 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
     versioning_class = NamespaceVersioning
     queryset = (
         Service.objects.published()
+        .exclude(structure__is_obsolete=True)
+        .exclude(structure__in=Structure.objects.orphans())
         .select_related("structure", "fee_condition", "source")
         .prefetch_related(
             "subcategories",
