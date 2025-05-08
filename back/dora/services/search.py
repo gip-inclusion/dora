@@ -461,6 +461,7 @@ def _get_unified_results(
 
 def search_services(
     request,
+    di_client: data_inclusion.DataInclusionClient,
     city_code: str,
     city: City,
     categories: Optional[list[str]] = None,
@@ -469,7 +470,6 @@ def search_services(
     fees: Optional[list[str]] = None,
     location_kinds: Optional[list[str]] = None,
     funding_labels: Optional[list[str]] = None,
-    di_client: Optional[data_inclusion.DataInclusionClient] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
     search_mode: str = "unified",
