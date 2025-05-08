@@ -149,7 +149,10 @@ def _get_raw_di_results(
     try:
         raw_di_results = di_client.search_services(
             sources=sources,
-            score_qualite_minimum=settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM,
+            score_qualite_minimum=(
+                # Pas de filtrage sur le score de qualité si on veut aussi les services DORA
+                None if with_dora else settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
+            ),
             code_insee=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
             types=kinds,
@@ -451,6 +454,15 @@ def _get_unified_results(
     other_raw_results = [
         result for result in raw_di_results if result["service"]["source"] != "dora"
     ]
+
+    if settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM:
+        other_raw_results = [
+            result
+            for result in other_raw_results
+            if result["service"]["score_qualite"]
+            >= settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
+        ]
+
     serialized_other_results = _map_di_results(other_raw_results, location_kinds)
 
     serialized_results = [*serialized_dora_results, *serialized_other_results]
