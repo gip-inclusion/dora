@@ -841,6 +841,7 @@ class SavedSearch(models.Model):
 
         results, metadata = search_services(
             None,
+            di_client,
             self.city_code,
             city,
             [category.value] if category and not subcategories else None,
@@ -849,7 +850,6 @@ class SavedSearch(models.Model):
             fees,
             location_kinds,
             funding_labels,
-            di_client,
         )
 
         # On garde les contenus qui ont été publiés depuis la dernière notification
