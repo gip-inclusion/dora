@@ -1275,12 +1275,16 @@ class DataInclusionSearchTestCase(APITestCase):
         assert response.data["services"][0]["id"] == service_data["id"]
 
     def test_simple_search_with_data_inclusion_and_dora(self):
+        di_service_data = self.make_di_service(code_insee=self.city1.code)
+        dora_service_data = self.make_di_service(
+            code_insee=self.city1.code, source="dora"
+        )
         service_dora = make_service(
+            id=dora_service_data["id"],
             status=ServiceStatus.PUBLISHED,
             diffusion_zone_type=AdminDivisionType.CITY,
             diffusion_zone_details=self.city1.code,
         )
-        service_data = self.make_di_service(code_insee=self.city1.code)
         request = self.factory.get("/search/", {"city": self.city1.code})
         response = self.search(request)
         d = response.data
@@ -1289,7 +1293,7 @@ class DataInclusionSearchTestCase(APITestCase):
         assert len(d) == 3
         assert len(d["services"]) == 2
         assert service_dora.slug in [d["services"][0]["slug"], d["services"][1]["slug"]]
-        assert service_data["id"] in [
+        assert di_service_data["id"] in [
             d["services"][0].get("id"),
             d["services"][1].get("id"),
         ]
