@@ -807,11 +807,7 @@ class SavedSearch(models.Model):
     def get_recent_services(self, cutoff_date):
         from dora import data_inclusion
 
-        di_client = (
-            data_inclusion.di_client_factory()
-            if settings.INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS
-            else None
-        )
+        di_client = data_inclusion.di_client_factory()
 
         category = None
         if self.category:
