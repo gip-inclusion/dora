@@ -1339,10 +1339,13 @@ class DataInclusionSearchTestCase(APITestCase):
     #     self.assertEqual(response.data[2]["id"], service_data_2["id"])
 
     @override_settings(DATA_INCLUSION_STREAM_SOURCES=["foo"])
-    def test_search_target_sources(self):
+    def test_search_target_sources_on_distributed_search(self):
         service_data = self.make_di_service(source="foo", zone_diffusion_type="pays")
         self.make_di_service(source="bar", zone_diffusion_type="pays")
-        request = self.factory.get("/search/", {"city": self.city1.code})
+        request = self.factory.get(
+            "/search/",
+            {"city": self.city1.code, "searchMode": "distributed"},
+        )
         response = self.search(request)
 
         assert response.status_code == 200

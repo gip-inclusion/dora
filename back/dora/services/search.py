@@ -141,9 +141,10 @@ def _get_raw_di_results(
     if not thematiques and subcategories:
         return []
 
-    sources = settings.DATA_INCLUSION_STREAM_SOURCES
-    if with_dora:
-        sources = [*sources, "dora"]
+    # Si on veut toutes les sources incluant Dora, on ne spécifie pas de sources
+    # (on récupère tous les services de toutes les sources).
+    # Sinon, on spécifie les sources à récupérer (liste des sources sauf Dora).
+    sources = None if with_dora else settings.DATA_INCLUSION_STREAM_SOURCES
 
     try:
         raw_di_results = di_client.search_services(
