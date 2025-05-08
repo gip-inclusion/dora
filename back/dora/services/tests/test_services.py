@@ -1884,6 +1884,11 @@ class ServiceSearchTestCase(APITestCase):
         )
         self.city2 = baker.make("City")
 
+        self.di_client = FakeDataInclusionClient()
+        self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
+        self.mock_di_client_factory = self.patcher.start()
+        self.mock_di_client_factory.return_value = self.di_client
+
         baker.make("ServiceCategory", value="cat1", label="cat1")
         baker.make("ServiceSubCategory", value="cat1--sub1", label="cat1--sub1")
         baker.make("ServiceSubCategory", value="cat1--sub2", label="cat1--sub2")
@@ -1898,6 +1903,9 @@ class ServiceSearchTestCase(APITestCase):
         baker.make("FundingLabel", value="funding-label-1", label="Funding label 1")
         baker.make("FundingLabel", value="funding-label-2", label="Funding label 2")
         baker.make("FundingLabel", value="funding-label-3", label="Funding label 3")
+
+    def tearDown(self):
+        self.patcher.stop()
 
     def test_needs_city_code(self):
         make_service(
@@ -2572,6 +2580,14 @@ class ServiceSearchOrderingTestCase(APITestCase):
         self.assertTrue(toulouse.geom.contains(self.point_in_toulouse))
         self.assertFalse(toulouse.geom.contains(self.blagnac_center))
 
+        self.di_client = FakeDataInclusionClient()
+        self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
+        self.mock_di_client_factory = self.patcher.start()
+        self.mock_di_client_factory.return_value = self.di_client
+
+    def tearDown(self):
+        self.patcher.stop()
+
     def test_on_site_first(self):
         self.assertEqual(Service.objects.all().count(), 0)
         service1 = make_service(
@@ -2898,6 +2914,14 @@ class ServiceArchiveTestCase(APITestCase):
         self.me = baker.make("users.User", is_valid=True)
         self.superuser = baker.make("users.User", is_staff=True, is_valid=True)
         self.my_struct = make_structure(self.me)
+
+        self.di_client = FakeDataInclusionClient()
+        self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
+        self.mock_di_client_factory = self.patcher.start()
+        self.mock_di_client_factory.return_value = self.di_client
+
+    def tearDown(self):
+        self.patcher.stop()
 
     def test_can_archive_a_service(self):
         service = make_service(structure=self.my_struct, status=ServiceStatus.PUBLISHED)
