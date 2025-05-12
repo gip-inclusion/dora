@@ -140,6 +140,7 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
                     "userEmail": user.email,
                     "userId": user.pk,
                     "isManager": user.is_manager,
+                    "isAdmin": user.membership.filter(is_admin=True).exists(),
                 },
             )
             self.get_or_create_drf_token(user)
