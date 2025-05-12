@@ -139,6 +139,7 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
                     "legal": True,
                     "userEmail": user.email,
                     "userId": user.pk,
+                    "isManager": user.is_manager,
                 },
             )
             self.get_or_create_drf_token(user)
