@@ -334,19 +334,19 @@ class Orientation(models.Model):
                 },
             )
 
-    def delete_attachment(self, attachment: str) -> bool:
+    def delete_attachment(self, attachment: str) -> (str, bool):
         # Détruit une pièce-jointe de l'orientation, *si elle existe*.
         if default_storage.exists(attachment):
             default_storage.delete(attachment)
             logger.info("deleteOrientationAttachment", {"path": attachment})
             self.beneficiary_attachments.remove(attachment)
             self.save()
-            return True
+            return attachment, True
         else:
             logger.warning("deleteOrientationAttachment", {"pathNotFound": attachment})
-            return False
+            return attachment, False
 
-    def delete_attachments(self) -> bool:
+    def delete_attachments(self) -> dict[str, bool]:
         # Cette méthode effectue des appels synchrones via `django-storages` pour la destruction
         # des pièces-jointes de l'orientation concernée.
         # Elle ne devrait idéalement être utilisée que via des management-commands ou en shell.
