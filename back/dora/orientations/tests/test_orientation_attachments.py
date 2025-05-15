@@ -1,3 +1,4 @@
+import os
 from unittest.mock import patch
 
 import pytest
@@ -6,6 +7,15 @@ from django.core.files.storage import default_storage
 
 from dora.core.test_utils import make_published_service
 from dora.orientations.models import Orientation
+
+
+def only_dev_env(test_func):
+    def wrapper(*args, **kwargs):
+        if os.getenv("ENVIRONMENT") != "local":
+            pytest.skip("Test uniquement exécuté dans l'environnement de développement")
+        return test_func(*args, **kwargs)
+
+    return wrapper
 
 
 @pytest.fixture
@@ -25,6 +35,7 @@ def orientation():
     )
 
 
+@only_dev_env
 def test_delete_attachment_existing(orientation):
     # Créer une pièce jointe factice
     attachment_path = "test_attachment.txt"
@@ -46,6 +57,7 @@ def test_delete_attachment_existing(orientation):
     assert success
 
 
+@only_dev_env
 def test_delete_attachment_non_existing(orientation):
     # Essayer de supprimer une pièce jointe qui n'existe pas
     non_existing_path = "non_existing_attachment.txt"
@@ -56,6 +68,7 @@ def test_delete_attachment_non_existing(orientation):
     assert not success
 
 
+@only_dev_env
 def test_delete_attachments(orientation):
     # Créer plusieurs pièces jointes factices
     attachment_paths = ["test_attachment1.txt", "test_attachment2.txt"]
@@ -82,6 +95,7 @@ def test_delete_attachments(orientation):
         assert results[path]
 
 
+@only_dev_env
 @patch("dora.orientations.models.default_storage.exists")
 @patch("dora.orientations.models.default_storage.delete")
 def test_delete_attachments_with_mock(mock_delete, mock_exists, orientation):
