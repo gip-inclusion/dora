@@ -5,6 +5,7 @@ import uuid
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
+from django.core.files.storage import default_storage
 from django.db import models
 from django.utils import timezone
 
@@ -208,6 +209,11 @@ class Orientation(models.Model):
             self.original_service_name = self.get_service_name()
         return super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        if self.beneficiary_attachments:
+            self.delete_attachments()
+        super().delete(*args, **kwargs)
+
     def __str__(self):
         return f"Orientation #{self.id}"
 
@@ -327,6 +333,29 @@ class Orientation(models.Model):
                     "ttlInDays": ORIENTATION_QUERY_LINK_TTL_DAY,
                 },
             )
+
+    def delete_attachment(self, attachment: str) -> bool:
+        # Détruit une pièce-jointe de l'orientation, *si elle existe*.
+        if default_storage.exists(attachment):
+            default_storage.delete(attachment)
+            logger.info("deleteOrientationAttachment", {"path": attachment})
+            self.beneficiary_attachments.remove(attachment)
+            self.save()
+            return True
+        else:
+            logger.warning("deleteOrientationAttachment", {"pathNotFound": attachment})
+            return False
+
+    def delete_attachments(self) -> bool:
+        # Cette méthode effectue des appels synchrones via `django-storages` pour la destruction
+        # des pièces-jointes de l'orientation concernée.
+        # Elle ne devrait idéalement être utilisée que via des management-commands ou en shell.
+        return dict(
+            self.delete_attachment(attachment)
+            for attachment in list(
+                self.beneficiary_attachments
+            )  # ne pas oublier la copie...
+        )
 
     @property
     def query_expired(self) -> bool:
