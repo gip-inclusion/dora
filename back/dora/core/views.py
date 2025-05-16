@@ -32,7 +32,7 @@ def upload(request, filename, structure_slug):
     file_obj = request.data["file"]
     _validate_upload(file_obj)
     clean_filename = (
-        f"{settings.ENVIRONMENT}/{structure.id}/{get_valid_filename(filename)}"
+        f"{settings.ENVIRONMENT}/{structure.pk}/{get_valid_filename(filename)}"
     )
     result = default_storage.save(clean_filename, file_obj)
     return Response({"key": result}, status=201)
