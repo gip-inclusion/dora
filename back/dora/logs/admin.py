@@ -23,7 +23,7 @@ class ActionLogAdmin(admin.ModelAdmin):
     list_display = ("id", "created_at", "log_level", "legal")
     list_filter = (LogLevelFilter, "legal")
     # voir modèle : pour l'instant pas de recherche sur le message du log
-    search_fields = ("id",)
+    search_fields = ("id", "msg")
     readonly_fields = ("id", "created_at", "log_level", "legal", "msg", "payload")
     ordering = ("-created_at",)
 
