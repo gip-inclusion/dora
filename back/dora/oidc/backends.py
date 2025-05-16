@@ -137,7 +137,6 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
                 "Connexion utilisateur via ProConnect",
                 {
                     "legal": True,
-                    "userEmail": user.email,
                     "userId": user.pk,
                     "isManager": user.is_manager,
                     "isAdmin": user.membership.filter(is_admin=True).exists(),
