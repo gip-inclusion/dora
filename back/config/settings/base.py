@@ -308,6 +308,10 @@ try:
 except (TypeError, ValueError):
     DATA_INCLUSION_SCORE_QUALITE_MINIMUM = None
 
+DATA_INCLUSION_EXCLUDE_DUPLICATES = (
+    os.getenv("DATA_INCLUSION_EXCLUDE_DUPLICATES") == "true"
+)
+
 SKIP_DI_INTEGRATION_TESTS = True
 
 # Send In Blue :
