@@ -93,8 +93,8 @@
     }
   }
 
-  function handleSuccess(result) {
-    goto(`/services/${result.slug}`);
+  function handleSuccess() {
+    goto("/services/creer/succès");
   }
 
   function handleValidate(data, kind: "draft" | "publish") {
