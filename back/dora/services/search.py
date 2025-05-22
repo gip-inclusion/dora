@@ -90,16 +90,16 @@ def _sort_services(services):
     return results
 
 
-def _get_di_results(
+def _get_raw_di_results(
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
     categories: Optional[list[str]] = None,
     subcategories: Optional[list[str]] = None,
     kinds: Optional[list[str]] = None,
     fees: Optional[list[str]] = None,
-    location_kinds: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
+    with_dora: bool = False,
 ) -> list:
     """Search data.inclusion services.
 
@@ -114,7 +114,6 @@ def _get_di_results(
 
     * maps the input parameters,
     * offloads the search to the data.inclusion client,
-    * maps the output results.
 
     This function should catch any client and upstream errors to prevent any impact on
     the classical flow of dora.
@@ -142,10 +141,18 @@ def _get_di_results(
     if not thematiques and subcategories:
         return []
 
+    # Si on veut toutes les sources incluant Dora, on ne spécifie pas de sources
+    # (on récupère tous les services de toutes les sources).
+    # Sinon, on spécifie les sources à récupérer (liste des sources sauf Dora).
+    sources = None if with_dora else settings.DATA_INCLUSION_STREAM_SOURCES
+
     try:
         raw_di_results = di_client.search_services(
-            sources=settings.DATA_INCLUSION_STREAM_SOURCES,
-            score_qualite_minimum=settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM,
+            sources=sources,
+            score_qualite_minimum=(
+                # Pas de filtrage sur le score de qualité si on veut aussi les services DORA
+                None if with_dora else settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
+            ),
             code_insee=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
             types=kinds,
@@ -193,6 +200,18 @@ def _get_di_results(
         )
     ]
 
+    return raw_di_results
+
+
+def _map_di_results(
+    raw_di_results: list,
+    location_kinds: Optional[list[str]] = None,
+) -> list:
+    """Convert DI service to Dora format.
+
+    Returns:
+        A list of search results by SearchResultSerializer.
+    """
     supported_service_kinds = models.ServiceKind.objects.values_list("value", flat=True)
 
     mapped_di_results = [
@@ -228,6 +247,38 @@ def _get_di_results(
             or (with_remote and "a-distance" in result["location_kinds"])
         )
     ]
+    return mapped_di_results
+
+
+def _get_di_results(
+    di_client: data_inclusion.DataInclusionClient,
+    city_code: str,
+    categories: Optional[list[str]] = None,
+    subcategories: Optional[list[str]] = None,
+    kinds: Optional[list[str]] = None,
+    fees: Optional[list[str]] = None,
+    location_kinds: Optional[list[str]] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None,
+) -> list:
+    """Search data.inclusion services and convert them to the Dora format.
+
+    Returns:
+        A list of search results by SearchResultSerializer.
+    """
+    raw_di_results = _get_raw_di_results(
+        di_client=di_client,
+        city_code=city_code,
+        categories=categories,
+        subcategories=subcategories,
+        kinds=kinds,
+        fees=fees,
+        lat=lat,
+        lon=lon,
+    )
+
+    mapped_di_results = _map_di_results(raw_di_results, location_kinds)
+
     return mapped_di_results
 
 
@@ -329,8 +380,101 @@ def _get_dora_results(
     }
 
 
+def _get_unified_results(
+    request,
+    di_client: data_inclusion.DataInclusionClient,
+    city_code: str,
+    city: City,
+    categories: Optional[list[str]] = None,
+    subcategories: Optional[list[str]] = None,
+    kinds: Optional[list[str]] = None,
+    fees: Optional[list[str]] = None,
+    location_kinds: Optional[list[str]] = None,
+    lat: Optional[float] = None,
+    lon: Optional[float] = None,
+) -> list:
+    """Search data.inclusion services and convert them to the Dora format.
+
+    Returns:
+        A list of search results by SearchResultSerializer.
+    """
+    raw_di_results = _get_raw_di_results(
+        di_client=di_client,
+        city_code=city_code,
+        categories=categories,
+        subcategories=subcategories,
+        kinds=kinds,
+        fees=fees,
+        lat=lat,
+        lon=lon,
+        with_dora=True,
+    )
+
+    dora_results_ids = [
+        result["service"]["id"]
+        for result in raw_di_results
+        if result["service"]["source"] == "dora"
+    ]
+    dora_results = (
+        models.Service.objects.filter(id__in=dora_results_ids)
+        .select_related(
+            "structure",
+        )
+        .prefetch_related(
+            "kinds",
+            "fee_condition",
+            "location_kinds",
+            "categories",
+            "subcategories",
+            "funding_labels",
+            "coach_orientation_modes",
+            "beneficiaries_access_modes",
+        )
+    ).distinct()
+
+    # Certains services DORA venant de DI ont une structure obsolète ou orpheline
+    dora_results = dora_results.exclude(structure__is_obsolete=True)
+    dora_results = dora_results.exclude(structure__in=Structure.objects.orphans())
+
+    with_remote = not location_kinds or "a-distance" in location_kinds
+    with_onsite = not location_kinds or "en-presentiel" in location_kinds
+    filtered_and_annotated_dora_results = _filter_and_annotate_dora_services(
+        dora_results,
+        city.geom if not lat or not lon else Point(lon, lat, srid=WGS84),
+        with_remote,
+        with_onsite,
+    )
+    serialized_dora_results = SearchResultSerializer(
+        filtered_and_annotated_dora_results, many=True, context={"request": request}
+    ).data
+    funding_labels_found = FundingLabel.objects.filter(
+        service__in=filtered_and_annotated_dora_results
+    ).distinct()
+
+    other_raw_results = [
+        result for result in raw_di_results if result["service"]["source"] != "dora"
+    ]
+
+    if settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM:
+        other_raw_results = [
+            result
+            for result in other_raw_results
+            if result["service"]["score_qualite"]
+            >= settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
+        ]
+
+    serialized_other_results = _map_di_results(other_raw_results, location_kinds)
+
+    serialized_results = [*serialized_dora_results, *serialized_other_results]
+
+    return serialized_results, {
+        "funding_labels": FundingLabelSerializer(funding_labels_found, many=True).data
+    }
+
+
 def search_services(
     request,
+    di_client: data_inclusion.DataInclusionClient,
     city_code: str,
     city: City,
     categories: Optional[list[str]] = None,
@@ -339,9 +483,9 @@ def search_services(
     fees: Optional[list[str]] = None,
     location_kinds: Optional[list[str]] = None,
     funding_labels: Optional[list[str]] = None,
-    di_client: Optional[data_inclusion.DataInclusionClient] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
+    search_mode: str = "unified",
 ) -> (list[dict], dict):
     """Search services from all available repositories.
 
@@ -356,6 +500,42 @@ def search_services(
         - A list of search results by SearchResultSerializer.
         - A metadata dictionary
     """
+    distributed_search = search_mode == "distributed"
+
+    # Par défaut, le mode de recherche est unifié (recherche DI puis filtrage Dora)
+    if not distributed_search:
+        results, metadata = _get_unified_results(
+            request=request,
+            di_client=di_client,
+            categories=categories,
+            subcategories=subcategories,
+            city_code=city_code,
+            city=city,
+            kinds=kinds,
+            fees=fees,
+            location_kinds=location_kinds,
+            lat=lat,
+            lon=lon,
+        )
+        if len(results) == 0:
+            # Pas de résultat peut signifier que DI n'est pas accessible.
+            # On relance la recherche sur les services DORA locaux.
+            results, metadata = _get_dora_results(
+                request=request,
+                categories=categories,
+                subcategories=subcategories,
+                city_code=city_code,
+                city=city,
+                kinds=kinds,
+                fees=fees,
+                location_kinds=location_kinds,
+                funding_labels=funding_labels,
+                lat=lat,
+                lon=lon,
+            )
+        return _sort_services(results), metadata
+
+    # Sinon, le mode de recherche est distribué (recherche DI + recherche Dora)
     di_results = (
         _get_di_results(
             di_client=di_client,
