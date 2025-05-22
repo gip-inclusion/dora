@@ -21,3 +21,10 @@ export function toISODate(apiDate: string) {
   const isoDateString = date.toISOString();
   return isoDateString.slice(0, isoDateString.indexOf("T"));
 }
+
+export function isLessThanOneHourAgo(dateString: string) {
+  const date = new Date(dateString);
+  const oneHourInMs = 60 * 60 * 1000;
+  const oneHourAgo = new Date(Date.now() - oneHourInMs);
+  return date > oneHourAgo;
+}
