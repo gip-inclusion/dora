@@ -8,8 +8,8 @@ import os
 
 load_dotenv()
 
-def get_share_services_actions(matomo_base_url, token):
 
+def get_share_services_actions(matomo_base_url, token):
     start_date = datetime.strptime("2025-05-01", "%Y-%m-%d")
     end_date = datetime.today()
     current_date = start_date
@@ -39,44 +39,58 @@ def get_share_services_actions(matomo_base_url, token):
             data = response.json()
         except json.JSONDecodeError:
             continue
-    
-        event_actions = ("Clic Bouton Envoyer la Fiche",
-                         "Clic Bouton Partager cette Fiche",
-                         "Clic Bouton Profil Professionnel")
+
+        event_actions = (
+            "Clic Bouton Envoyer la Fiche",
+            "Clic Bouton Partager cette Fiche",
+            "Clic Bouton Profil Professionnel",
+        )
         changement_profil_pro = 0
 
         for visit in data:
             for event in visit["actionDetails"]:
-                if event['type'] == "event" and event["eventCategory"] == "Page Service" and event["eventAction"] in event_actions:
+                if (
+                    event["type"] == "event"
+                    and event["eventCategory"] == "Page Service"
+                    and event["eventAction"] in event_actions
+                ):
                     if event["eventAction"] == "Clic Bouton Partager cette Fiche":
-                        actions.append({'visitId': visit['idVisit'],
-                        'visitorId': visit['visitorId'],
-                        'slug': event['eventName'].split(" ")[0],
-                        'envoi_fiche': None,
-                        'partage_fiche': 1,
-                        'profil_pro': None,
-                        'serverdate' : event['serverTimePretty'],
-                        'date' : date_str
-                        })
+                        actions.append(
+                            {
+                                "visitId": visit["idVisit"],
+                                "visitorId": visit["visitorId"],
+                                "slug": event["eventName"].split(" ")[0],
+                                "envoi_fiche": None,
+                                "partage_fiche": 1,
+                                "profil_pro": None,
+                                "serverdate": event["serverTimePretty"],
+                                "date": date_str,
+                            }
+                        )
                     elif event["eventAction"] == "Clic Bouton Profil Professionnel":
                         changement_profil_pro += 1
                     elif event["eventAction"] == "Clic Bouton Envoyer la Fiche":
-                        actions.append({'visitId': visit['idVisit'],
-                        'visitorId': visit['visitorId'],
-                        'slug': event['eventName'].split(" ")[0],
-                        'envoi_fiche': 1,
-                        'partage_fiche': None,
-                        'profil_pro': "Bénéficiaire" if changement_profil_pro%2==0 else "Pro",
-                        'date' : date_str,
-                        'serverdate' : event['serverTimePretty']
-                        })
+                        actions.append(
+                            {
+                                "visitId": visit["idVisit"],
+                                "visitorId": visit["visitorId"],
+                                "slug": event["eventName"].split(" ")[0],
+                                "envoi_fiche": 1,
+                                "partage_fiche": None,
+                                "profil_pro": "Bénéficiaire"
+                                if changement_profil_pro % 2 == 0
+                                else "Pro",
+                                "date": date_str,
+                                "serverdate": event["serverTimePretty"],
+                            }
+                        )
                         changement_profil_pro = 0
         current_date += timedelta(days=1)
 
     return pd.DataFrame(actions)
 
-def push_to_db():
 
+def push_to_db():
     matomo_base_url = os.getenv("MATOMO_BASE_URL")
     matomo_token = os.getenv("MATOMO_TOKEN")
     database_url = os.getenv("DATABASE_URL")
@@ -87,7 +101,7 @@ def push_to_db():
     table = get_share_services_actions(matomo_base_url, matomo_token)
     print("🔄 Pushing data to database")
 
-    table.to_sql("mtm_share_service_tracking", engine, if_exists='replace', index=False)
+    table.to_sql("mtm_share_service_tracking", engine, if_exists="replace", index=False)
     print("✅ Data ready")
 
 
