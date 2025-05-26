@@ -1,5 +1,6 @@
 from datetime import timedelta
 from io import StringIO
+from unittest import mock
 
 from django.core import mail
 from django.core.management import call_command
@@ -9,6 +10,7 @@ from rest_framework.test import APITestCase
 
 from dora.admin_express.models import AdminDivisionType, City, Department
 from dora.core.test_utils import make_service
+from dora.data_inclusion.test_utils import FakeDataInclusionClient
 from dora.services.enums import ServiceStatus
 from dora.services.management.commands.send_saved_searches_notifications import (
     get_saved_search_notifications_to_send,
@@ -31,6 +33,15 @@ SAVE_SEARCH_ARGS = {
 
 
 class ServiceSavedSearchTestCase(APITestCase):
+    def setUp(self):
+        self.di_client = FakeDataInclusionClient()
+        self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
+        self.mock_di_client_factory = self.patcher.start()
+        self.mock_di_client_factory.return_value = self.di_client
+
+    def tearDown(self):
+        self.patcher.stop()
+
     def test_cant_create_search_if_no_logged_user(self):
         response = self.client.post("/saved-searches/", SAVE_SEARCH_ARGS)
         self.assertEqual(response.status_code, 401)
@@ -179,6 +190,14 @@ class ServiceSavedSearchNotificationTestCase(APITestCase):
         baker.make(Department, code="58", name="Nièvre")
         baker.make(City, code="58211", name="Poil")
         self.service_name = "serviceName"
+
+        self.di_client = FakeDataInclusionClient()
+        self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
+        self.mock_di_client_factory = self.patcher.start()
+        self.mock_di_client_factory.return_value = self.di_client
+
+    def tearDown(self):
+        self.patcher.stop()
 
     def call_command(self):
         call_command("send_saved_searches_notifications", stdout=StringIO())

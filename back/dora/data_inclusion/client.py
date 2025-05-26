@@ -134,6 +134,9 @@ class DataInclusionClient:
         if score_qualite_minimum is not None:
             url.args["score_qualite_minimum"] = score_qualite_minimum
 
+        if settings.DATA_INCLUSION_EXCLUDE_DUPLICATES:
+            url.args["exclure_doublons"] = "true"
+
         if code_insee is not None:
             url.args["code_insee"] = code_insee
 

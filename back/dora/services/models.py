@@ -807,11 +807,7 @@ class SavedSearch(models.Model):
     def get_recent_services(self, cutoff_date):
         from dora import data_inclusion
 
-        di_client = (
-            data_inclusion.di_client_factory()
-            if settings.INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS
-            else None
-        )
+        di_client = data_inclusion.di_client_factory()
 
         category = None
         if self.category:
@@ -845,6 +841,7 @@ class SavedSearch(models.Model):
 
         results, metadata = search_services(
             None,
+            di_client,
             self.city_code,
             city,
             [category.value] if category and not subcategories else None,
@@ -853,7 +850,6 @@ class SavedSearch(models.Model):
             fees,
             location_kinds,
             funding_labels,
-            di_client,
         )
 
         # On garde les contenus qui ont été publiés depuis la dernière notification
