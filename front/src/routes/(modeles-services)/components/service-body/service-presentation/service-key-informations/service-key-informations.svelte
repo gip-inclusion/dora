@@ -191,7 +191,7 @@
       </ServiceKeyInformationSection>
       {#if !hasLabelSection}
         <div class="mt-s32">
-          <ServiceFeedbackButton {service} on:click={onFeedbackButtonClick} />
+          <ServiceFeedbackButton on:click={onFeedbackButtonClick} />
         </div>
       {/if}
     </div>
@@ -216,7 +216,7 @@
           {/if}
         </div>
         <div class="mt-s32">
-          <ServiceFeedbackButton {service} on:click={onFeedbackButtonClick} />
+          <ServiceFeedbackButton on:click={onFeedbackButtonClick} />
         </div>
       </div>
     {/if}

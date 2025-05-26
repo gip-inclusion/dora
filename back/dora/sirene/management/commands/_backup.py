@@ -25,7 +25,7 @@ Backup lors de l'import SIRENE:
 
 
 def _suffix():
-    return f"{random.getrandbits(16*8):8x}"
+    return f"{random.getrandbits(16 * 8):8x}"
 
 
 def create_table(table_name: str):
@@ -98,7 +98,7 @@ def clean_tmp_tables(*tmp_tables):
 
 def create_insert_statement(table_name: str) -> tuple[str, list[str]]:
     fields = [f.name for f in Establishment._meta.fields]
-    stmt = f"INSERT INTO public.{table_name}({",".join(fields)}) VALUES({ ",".join(["%s"]*len(fields)) })"
+    stmt = f"INSERT INTO public.{table_name}({','.join(fields)}) VALUES({','.join(['%s'] * len(fields))})"
     return stmt, fields
 
 

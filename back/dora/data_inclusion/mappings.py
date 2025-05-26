@@ -1,4 +1,4 @@
-from data_inclusion.schema import Profil
+from data_inclusion.schema.v0 import Profil
 from django.conf import settings
 from django.utils import dateparse, timezone
 
@@ -98,6 +98,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         "coordinates": (result["service"]["longitude"], result["service"]["latitude"])
         if result["service"]["longitude"] and result["service"]["latitude"]
         else None,
+        "publication_date": None,
     }
 
 

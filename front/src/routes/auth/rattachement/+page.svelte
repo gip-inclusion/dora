@@ -70,7 +70,7 @@
       ctaLabel = "Rejoindre la structure";
     }
   }
-  $: establishment, (joinError = "");
+  $: (establishment, (joinError = ""));
 </script>
 
 <EnsureLoggedIn>

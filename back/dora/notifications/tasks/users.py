@@ -178,6 +178,7 @@ class ManagerStructureModerationTask(Task):
             # un ou plusieurs des départements du gestionnaire
             # contiennent des structures en attente de modération (overlap = PgSQL `&&`)
             departments__overlap=Structure.objects.awaiting_moderation()
+            .exclude(is_obsolete=True)
             .distinct("department")
             .values_list("department", flat=True)
         )

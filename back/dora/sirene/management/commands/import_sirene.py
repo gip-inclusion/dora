@@ -120,7 +120,7 @@ class Command(BaseCommand):
         if row["categorieJuridiqueUniteLegale"] == "1000":
             # personne physique
             unit_name = row["denominationUsuelle1UniteLegale"] or (
-                f'{row["prenomUsuelUniteLegale"]} {row["nomUsageUniteLegale"] or row["nomUniteLegale"]}'
+                f"{row['prenomUsuelUniteLegale']} {row['nomUsageUniteLegale'] or row['nomUniteLegale']}"
             )
         else:
             # personne morale
@@ -129,7 +129,7 @@ class Command(BaseCommand):
             )
 
             if row["sigleUniteLegale"]:
-                unit_name += f' — {row["sigleUniteLegale"]}'
+                unit_name += f" — {row['sigleUniteLegale']}"
 
         return unit_name
 
@@ -144,12 +144,12 @@ class Command(BaseCommand):
 
     def get_address1(self, row):
         return clean_spaces(
-            f'{row["numeroVoieEtablissement"]} {row["indiceRepetitionEtablissement"]} {row["typeVoieEtablissement"]} {row["libelleVoieEtablissement"]}'
+            f"{row['numeroVoieEtablissement']} {row['indiceRepetitionEtablissement']} {row['typeVoieEtablissement']} {row['libelleVoieEtablissement']}"
         )
 
     def get_city_name(self, row):
         return clean_spaces(
-            f'{row["libelleCedexEtablissement"] or row["libelleCommuneEtablissement"]} {row["distributionSpecialeEtablissement"]}'
+            f"{row['libelleCedexEtablissement'] or row['libelleCommuneEtablissement']} {row['distributionSpecialeEtablissement']}"
         )
 
     def create_establishment(self, siren, parent_name, row):
@@ -238,7 +238,9 @@ class Command(BaseCommand):
                 for i, row in enumerate(legal_units_reader):
                     if (i % 1_000_000) == 0:
                         self.stdout.write(
-                            self.style.NOTICE(f"{round(100*i/num_stock_items)}% done")
+                            self.style.NOTICE(
+                                f"{round(100 * i / num_stock_items)}% done"
+                            )
                         )
                     if row["etatAdministratifUniteLegale"] == "A":
                         # On ignore les unités légales fermées

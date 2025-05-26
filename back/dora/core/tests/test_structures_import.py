@@ -119,7 +119,7 @@ class StructuresImportTestCase(APITestCase):
             mail.outbox[0].body,
         )
         self.assertIn(
-            f"L’équipe DORA vous a invité(e) à rejoindre la structure { structure.name }",
+            f"L’équipe DORA vous a invité(e) à rejoindre la structure {structure.name}",
             mail.outbox[0].body,
         )
 
@@ -361,7 +361,7 @@ class StructuresImportTestCase(APITestCase):
             1,
         )
         self.assertIn(
-            f"L’équipe DORA vous a invité(e) à rejoindre la structure { branch.name }",
+            f"L’équipe DORA vous a invité(e) à rejoindre la structure {branch.name}",
             mail.outbox[0].body,
         )
 
@@ -396,7 +396,7 @@ class StructuresImportTestCase(APITestCase):
             1,
         )
         self.assertIn(
-            f"L’équipe DORA vous a invité(e) à rejoindre la structure { branch.name }",
+            f"L’équipe DORA vous a invité(e) à rejoindre la structure {branch.name}",
             mail.outbox[0].body,
         )
 

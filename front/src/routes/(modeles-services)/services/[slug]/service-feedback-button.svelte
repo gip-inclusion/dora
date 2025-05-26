@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Model, Service } from "$lib/types";
+  import { getContext } from "svelte";
 
-  export let service: Service | Model;
+  const showFeedbackModal = getContext("showFeedbackModal");
 </script>
 
-{#if !service.canWrite}
+{#if showFeedbackModal}
   <div>
     <button class="text-gray-text underline" on:click
       >Signalez-nous toute erreur ou suggestion de modification.</button

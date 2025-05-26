@@ -49,18 +49,18 @@ def test_onboard_other_activities(
         },
     )
 
-    assert (
-        invited_user in structure.putative_members.all()
-    ), "L'utilisateur n'est pas un invité de la structure"
+    assert invited_user in structure.putative_members.all(), (
+        "L'utilisateur n'est pas un invité de la structure"
+    )
     assert mock_create_contact.called, "Le contact Brevo n'a pas été créé"
 
     _, user, attrs, sib_list = mock_create_contact.call_args.args
 
     assert user == invited_user, "L'utilisateur ne correspond pas"
     assert attrs, "Les attributs Brevo ne sont pas définis"
-    assert (
-        str(sib_list) == expected_sib_list
-    ), "L'utilisateur n'est pas rattaché à la bonne liste Brevo"
+    assert str(sib_list) == expected_sib_list, (
+        "L'utilisateur n'est pas rattaché à la bonne liste Brevo"
+    )
 
 
 @pytest.mark.parametrize(
@@ -102,23 +102,23 @@ def test_onboard_new_member(
     # Etant différent du traditionnel 200, on teste le statut de retour.
     assert 201 == r.status_code, "Code de status invalide (201 attendu)"
 
-    assert (
-        member in structure.members.all()
-    ), "L'utilisateur n'est pas membre de la structure"
+    assert member in structure.members.all(), (
+        "L'utilisateur n'est pas membre de la structure"
+    )
     assert mock_create_contact.called, "Le contact Brevo n'a pas été créé"
 
     _, user, attrs, sib_list = mock_create_contact.call_args.args
 
     assert user == member, "L'utilisateur ne correspond pas"
     assert attrs, "Les attributs Brevo ne sont pas définis"
-    assert (
-        str(sib_list) == expected_sib_list
-    ), "L'utilisateur n'est pas rattaché à la bonne liste Brevo"
+    assert str(sib_list) == expected_sib_list, (
+        "L'utilisateur n'est pas rattaché à la bonne liste Brevo"
+    )
 
     # On retire un utilisateur de la liste Brevo "invité" après qu'il soit devenu membre.
-    assert (
-        mock_remove_from_list.called
-    ), "Pas de retrait de l'utilisateur de la liste Brevo des invités"
+    assert mock_remove_from_list.called, (
+        "Pas de retrait de l'utilisateur de la liste Brevo des invités"
+    )
     mock_remove_from_list.assert_called_with(
         True, user, int(settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST)
     )

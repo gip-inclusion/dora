@@ -6,6 +6,12 @@
 - PostgreSQL avec l'extension [PostGIS](https://postgis.net/).
 - [GDAL](https://gdal.org/).
 
+### Setup des variables d'environnement
+ 
+- Copier le dossier `envs-example` et renommer le `envs`
+- Dans le fichier `envs/dev.env`, compléter la variable `POSTGRES_USER`.
+- Dans le fichier `envs/secrets.env`, compléter les variables `POSTGRES_PASSWORD` et `DJANGO_SECRET_KEY`.
+
 ### Docker Compose
 
 PostgreSQL, PostGIS, Minio et Redis peuvent être installés simplement avec Docker Compose.
@@ -36,19 +42,30 @@ Accéder à pgAdmin 4 via http://localhost:8888/ en utilisant l'adresse e-mail e
 
 ## Installation
 
-- Créer une base de données PostgresQL `dora`.
-- Copier le dossier `envs-example` et renommer le `envs`
-- Dans le fichier `envs/dev.env`, compléter la variable `POSTGRES_USER`.
-- Dans le fichier `envs/secrets.env`, compléter les variables `POSTGRES_PASSWORD` et `DJANGO_SECRET_KEY`.
 
+# Installer graphviz
+Pour Mac:
 ```bash
+brew install graphviz
+```
+Pour Linux:
+```bash
+sudo apt install graphviz
+```
+Les consignes d'installation sont [ici](https://graphviz.org/download/).'
+
 # Installer les dépendances
+```bash
 pip install -r requirements/dev.txt
+```
 
 # Vérifier que tout fonctionne
+```bash
 ./manage.py check
+```
 
 # Créer les tables de la base de données
+```bash
 ./manage.py migrate
 ```
 
@@ -60,12 +77,32 @@ Pour que l’application soit utilisable, il faut _a minima_ importer les donné
 
 Mais pour avoir un jeu de données complet, il est plus simple d’importer la base de _staging_ entière.
 
+# Configurer le téléchargement de documents en local
+Vous devez créer un bucket dans Minio pour les téléchargements de documents.
+
+1. Allez sur http://localhost:9001/ et connectez-vous avec les identifiants par défaut que vous trouverez ici :
+  - Nom d'utilisateur : minio
+  - Mot de passe : miniosecret
+2. Créez un bucket nommé `dora`.
+3. Créez une clé d'accès et copiez la clé d'accès et la clé secrète.
+4. Dans `envs/secrets.env`, définissez les variables suivantes :
+    - AWS_ACCESS_KEY_ID=<votre_clé_d'accès>
+    - AWS_SECRET_ACCESS_KEY=<votre_clé_secrète>
+
+
 ## Problèmes avec GeoDjango
 
 GeoDjango a besoin des _packages_ `GEOS` et `GDAL` pour fonctionner.
 
 Si Django n'arrive pas à trouver les librairies nécessaires, vous pourrez ajouter les variables d'environnement suivante
 à votre shell
+
+C'est possible que vous ayez besoin d'installer `gdal`.
+Pour Mac:
+```bash
+brew install gdal
+```
+Les consignes d'installation sont [ici](https://gdal.org/en/stable/download.html).
 
 ```bash
 export GDAL_LIBRARY_PATH=
@@ -102,6 +139,32 @@ Vous pouvez corriger ce souci en ajoutant les variables d'environnement suivante
 ```
 export PATH="/opt/homebrew/opt/openssl@3/bin:$PATH"
 export LIBRARY_PATH=$LIBRARY_PATH:/opt/homebrew/opt/openssl@3/lib/
+```
+
+### Erreur avec Minio
+Si vous rencontrez une erreur avec Minio où vous voyez des dizaines de logs comme celui-ci :
+
+```
+Adding local Minio host to 'mc' configuration...
+```
+Suivi par :
+```
+INFO  ==> MinIO is already stopped...
+```
+
+Supprimer le conteneur `s3` :
+
+```bash
+docker compose stop s3
+docker compose rm -v s3
+```
+
+Utilisez une version spécifique de l'image au lieu de `bitnami/minio@latest` comme par exemple : `bitnami/minio:2024.5.1`
+La liste de toutes les versions disponibles est [ici](https://hub.docker.com/r/bitnami/minio/tags).
+
+Pour recréer les conteneurs :
+```bash
+docker compose up --build
 ```
 
 ## Développement

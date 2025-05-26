@@ -62,7 +62,9 @@ if DEBUG and PROFILE:
         "IGNORE_SQL_PATTERNS": [r"silk_"],
         "IGNORE_REQUEST_PATTERNS": [r"/silk/"],
     }
-    CSP_EXCLUDE_URL_PREFIXES += ("/silk/",)  # noqa F405
+    globals().setdefault("CONTENT_SECURITY_POLICY", {}).setdefault(
+        "EXCLUDE_URL_PREFIXES", []
+    ).append("/silk/")
 
 # TODO: nécessaire sur staging ?
 # ce paramètre n'était fixé que pour les environnement *HORS* production

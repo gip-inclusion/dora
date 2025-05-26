@@ -16,6 +16,37 @@ from dora.core.utils import TRUTHY_VALUES
 from .models import EPCI, AdminDivisionType, City, Department, Region
 
 
+class DeptSerializer(serializers.Serializer):
+    code = serializers.CharField()
+    name = serializers.CharField()
+    geom = GeometrySerializerMethodField()
+
+    def get_geom(self, obj):
+        """Simplifie la géométrie en s'assurant qu'elle reste valide.
+
+        Essaie différentes valeurs de tolérance de manière progressive :
+        - 0.1 : simplification agressive (moins de points)
+        - 0.05 : simplification moyenne
+        - 0.01 : simplification légère
+        - 0.005 : simplification très légère
+        Si aucune simplification ne fonctionne, retourne la géométrie originale.
+        """
+        # Liste des tolérances à essayer, de la plus agressive à la plus conservative
+        tolerances = [0.1, 0.05, 0.01, 0.005]
+
+        for tolerance in tolerances:
+            simplified = obj.geom.simplify(tolerance=tolerance)
+            # Vérifie que la géométrie n'est pas vide et a la bonne structure
+            if not simplified.empty and simplified.geom_type in [
+                "Polygon",
+                "MultiPolygon",
+            ]:
+                return simplified
+
+        # Si aucune simplification n'a fonctionné, retourner la géométrie originale
+        return obj.geom
+
+
 @api_view()
 @permission_classes([permissions.AllowAny])
 def search(request):
@@ -123,14 +154,6 @@ def get_city_label(request, insee_code):
 @api_view()
 @permission_classes([permissions.AllowAny])
 def get_departments(request):
-    class DeptSerializer(serializers.Serializer):
-        code = serializers.CharField()
-        name = serializers.CharField()
-        geom = GeometrySerializerMethodField()
-
-        def get_geom(self, obj):
-            return obj.geom.simplify(tolerance=0.1)
-
     q = request.GET.get("dept_codes", "")
     if q:
         departments = [Department.objects.get_from_code(code) for code in q.split(",")]

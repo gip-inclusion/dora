@@ -246,22 +246,32 @@ def test_manager_structure_moderation_candidates(
     # gestionnaire sans structure à modérer en attente
     manager = make_user(is_manager=True, departments=["37", "81"])
     assert manager not in manager_structure_moderation_task.candidates(), (
-        "Ce gestionnaire ne doit pas être candidat à une notification"
+        "Ce gestionnaire ne doit pas être candidat à une notification : aucune structure à modérer"
     )
 
     # création d'une structure en attente de validation (hors-scope du gestionnaire)
     structure = make_structure(department="11", moderation_status=moderation_status)
 
     assert manager not in manager_structure_moderation_task.candidates(), (
-        "Ce gestionnaire ne doit pas être candidat à une notification"
+        "Ce gestionnaire ne doit pas être candidat à une notification : la structure n'est pas dans un département en gestion"
     )
 
     # la structure est en attente de modération et dans le territoire du gestionnaire
     structure.department = "37"
+
+    # on vérifie que les structures obsolètes sont exclues
+    structure.is_obsolete = True
+    structure.save()
+
+    assert manager not in manager_structure_moderation_task.candidates(), (
+        "Ce gestionnaire ne doit pas être candidat à une notification : la structure à modérer est obsolète"
+    )
+
+    structure.is_obsolete = False
     structure.save()
 
     assert manager in manager_structure_moderation_task.candidates(), (
-        "Ce gestionnaire doit être candidat à une notification"
+        "Ce gestionnaire doit être candidat à une notification : les conditions sont réunies"
     )
 
 

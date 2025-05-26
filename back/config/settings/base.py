@@ -308,6 +308,10 @@ try:
 except (TypeError, ValueError):
     DATA_INCLUSION_SCORE_QUALITE_MINIMUM = None
 
+DATA_INCLUSION_EXCLUDE_DUPLICATES = (
+    os.getenv("DATA_INCLUSION_EXCLUDE_DUPLICATES") == "true"
+)
+
 SKIP_DI_INTEGRATION_TESTS = True
 
 # Send In Blue :
@@ -375,11 +379,6 @@ LOGIN_REDIRECT_URL_FAILURE = FRONTEND_URL
 # (essentiellement pour la gestion du `next_url`).
 OIDC_CALLBACK_CLASS = "dora.oidc.views.CustomAuthorizationCallbackView"
 
-# Recherches sauvegardées :
-INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS = (
-    os.getenv("INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS") == "true"
-)
-
 # Notifications :
 # voir management command `process_notification_tasks`
 
@@ -416,10 +415,12 @@ ADMINS = (
 # CSP :
 # règles pour l'admin et les versions d'API
 PUBLIC_API_VERSIONS = ["1", "2"]
-CSP_EXCLUDE_URL_PREFIXES = (
-    "/admin/",
-    *[f"/api/v{version}/schema/doc/" for version in PUBLIC_API_VERSIONS],
-)
+CONTENT_SECURITY_POLICY = {
+    "EXCLUDE_URL_PREFIXES": [
+        "/admin",
+        *[f"/api/v{version}/schema/doc/" for version in PUBLIC_API_VERSIONS],
+    ],
+}
 
 # Envoi d'e-mails transactionnels :
 # https://app.tipimail.com/#/app/settings/smtp_and_apis
@@ -571,3 +572,6 @@ SESAME_MAX_AGE = 5 * 60
 SESAME_ONE_TIME = True
 # Nom de la variable de session indiquant une connexion via sesame
 SESAME_SESSION_NAME = "sesame_magic_link"
+
+# Recherche unifiée activée par défaut
+DI_DORA_UNIFIED_SEARCH_ENABLED = os.getenv("DI_DORA_UNIFIED_SEARCH_ENABLED") != "false"
