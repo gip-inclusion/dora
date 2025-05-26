@@ -1275,12 +1275,16 @@ class DataInclusionSearchTestCase(APITestCase):
         assert response.data["services"][0]["id"] == service_data["id"]
 
     def test_simple_search_with_data_inclusion_and_dora(self):
+        di_service_data = self.make_di_service(code_insee=self.city1.code)
+        dora_service_data = self.make_di_service(
+            code_insee=self.city1.code, source="dora"
+        )
         service_dora = make_service(
+            id=dora_service_data["id"],
             status=ServiceStatus.PUBLISHED,
             diffusion_zone_type=AdminDivisionType.CITY,
             diffusion_zone_details=self.city1.code,
         )
-        service_data = self.make_di_service(code_insee=self.city1.code)
         request = self.factory.get("/search/", {"city": self.city1.code})
         response = self.search(request)
         d = response.data
@@ -1289,7 +1293,7 @@ class DataInclusionSearchTestCase(APITestCase):
         assert len(d) == 3
         assert len(d["services"]) == 2
         assert service_dora.slug in [d["services"][0]["slug"], d["services"][1]["slug"]]
-        assert service_data["id"] in [
+        assert di_service_data["id"] in [
             d["services"][0].get("id"),
             d["services"][1].get("id"),
         ]
@@ -1335,16 +1339,34 @@ class DataInclusionSearchTestCase(APITestCase):
     #     self.assertEqual(response.data[2]["id"], service_data_2["id"])
 
     @override_settings(DATA_INCLUSION_STREAM_SOURCES=["foo"])
-    def test_search_target_sources(self):
+    def test_search_target_sources_on_distributed_search(self):
         service_data = self.make_di_service(source="foo", zone_diffusion_type="pays")
         self.make_di_service(source="bar", zone_diffusion_type="pays")
-        request = self.factory.get("/search/", {"city": self.city1.code})
+        request = self.factory.get(
+            "/search/",
+            {"city": self.city1.code, "searchMode": "distributed"},
+        )
         response = self.search(request)
 
         assert response.status_code == 200
         assert len(response.data) == 3
         assert len(response.data["services"]) == 1
         assert response.data["services"][0]["id"] == service_data["id"]
+
+    @override_settings(DATA_INCLUSION_STREAM_SOURCES=["foo"])
+    def test_search_all_sources_on_unified_search(self):
+        # DATA_INCLUSION_STREAM_SOURCES doit être ignoré lors d'une recherche unifiée (par défaut, sans paramètre `searchMode`)
+        self.make_di_service(source="foo", zone_diffusion_type="pays")
+        self.make_di_service(source="bar", zone_diffusion_type="pays")
+        request = self.factory.get(
+            "/search/",
+            {"city": self.city1.code},
+        )
+        response = self.search(request)
+
+        assert response.status_code == 200
+        assert len(response.data) == 3
+        assert len(response.data["services"]) == 2
 
     def test_service_di_contains_service_fields(self):
         service_data = self.make_di_service()
@@ -1884,6 +1906,11 @@ class ServiceSearchTestCase(APITestCase):
         )
         self.city2 = baker.make("City")
 
+        self.di_client = FakeDataInclusionClient()
+        self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
+        self.mock_di_client_factory = self.patcher.start()
+        self.mock_di_client_factory.return_value = self.di_client
+
         baker.make("ServiceCategory", value="cat1", label="cat1")
         baker.make("ServiceSubCategory", value="cat1--sub1", label="cat1--sub1")
         baker.make("ServiceSubCategory", value="cat1--sub2", label="cat1--sub2")
@@ -1898,6 +1925,9 @@ class ServiceSearchTestCase(APITestCase):
         baker.make("FundingLabel", value="funding-label-1", label="Funding label 1")
         baker.make("FundingLabel", value="funding-label-2", label="Funding label 2")
         baker.make("FundingLabel", value="funding-label-3", label="Funding label 3")
+
+    def tearDown(self):
+        self.patcher.stop()
 
     def test_needs_city_code(self):
         make_service(
@@ -2572,6 +2602,14 @@ class ServiceSearchOrderingTestCase(APITestCase):
         self.assertTrue(toulouse.geom.contains(self.point_in_toulouse))
         self.assertFalse(toulouse.geom.contains(self.blagnac_center))
 
+        self.di_client = FakeDataInclusionClient()
+        self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
+        self.mock_di_client_factory = self.patcher.start()
+        self.mock_di_client_factory.return_value = self.di_client
+
+    def tearDown(self):
+        self.patcher.stop()
+
     def test_on_site_first(self):
         self.assertEqual(Service.objects.all().count(), 0)
         service1 = make_service(
@@ -2898,6 +2936,14 @@ class ServiceArchiveTestCase(APITestCase):
         self.me = baker.make("users.User", is_valid=True)
         self.superuser = baker.make("users.User", is_staff=True, is_valid=True)
         self.my_struct = make_structure(self.me)
+
+        self.di_client = FakeDataInclusionClient()
+        self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
+        self.mock_di_client_factory = self.patcher.start()
+        self.mock_di_client_factory.return_value = self.di_client
+
+    def tearDown(self):
+        self.patcher.stop()
 
     def test_can_archive_a_service(self):
         service = make_service(structure=self.my_struct, status=ServiceStatus.PUBLISHED)

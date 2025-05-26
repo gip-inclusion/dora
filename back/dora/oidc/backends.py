@@ -7,6 +7,8 @@ from mozilla_django_oidc.auth import (
 )
 from rest_framework.authtoken.models import Token
 
+from dora.logs import logger as core_logger
+
 logger = getLogger(__name__)
 
 
@@ -131,6 +133,15 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
         # simplement surchargé pour ajout du token DRF
         # note: DRF devrait être déprécié pour utiliser un autre type d'identification entre front et back.
         if user := super().get_user(user_id):
+            core_logger.info(
+                "Connexion utilisateur via ProConnect",
+                {
+                    "legal": True,
+                    "userId": user.pk,
+                    "isManager": user.is_manager,
+                    "isAdmin": user.membership.filter(is_admin=True).exists(),
+                },
+            )
             self.get_or_create_drf_token(user)
             return user
         return None
