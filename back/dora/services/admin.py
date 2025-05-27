@@ -1,3 +1,5 @@
+from data_inclusion.schema import Profil
+from django import forms
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
 
@@ -161,6 +163,22 @@ class CustomizableChoiceAdmin(admin.ModelAdmin):
     raw_id_fields = ["structure"]
 
 
+class ConcernedPublicForm(forms.ModelForm):
+    profile_families = forms.MultipleChoiceField(
+        choices=((p.value, p.label) for p in Profil),
+        widget=forms.SelectMultiple(attrs={"size": "10"}),
+        label="Familles de profils",
+    )
+
+    class Meta:
+        model = ConcernedPublic
+        fields = "__all__"
+
+
+class ConcernedPublicAdmin(CustomizableChoiceAdmin):
+    form = ConcernedPublicForm
+
+
 class ServiceModelInline(admin.TabularInline):
     model = ServiceModel
     show_change_link = True
@@ -202,7 +220,7 @@ class FranceTravailOrientableServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServiceModel, ServiceModelAdmin)
 admin.site.register(AccessCondition, CustomizableChoiceAdmin)
-admin.site.register(ConcernedPublic, CustomizableChoiceAdmin)
+admin.site.register(ConcernedPublic, ConcernedPublicAdmin)
 admin.site.register(Requirement, CustomizableChoiceAdmin)
 admin.site.register(Credential, CustomizableChoiceAdmin)
 admin.site.register(ServiceModificationHistoryItem, ServiceModificationHistoryItemAdmin)
