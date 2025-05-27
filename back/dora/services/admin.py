@@ -177,6 +177,14 @@ class ConcernedPublicForm(forms.ModelForm):
 
 class ConcernedPublicAdmin(CustomizableChoiceAdmin):
     form = ConcernedPublicForm
+    list_display = ("name", "get_profile_families", "structure")
+
+    def get_profile_families(self, obj):
+        if not obj.profile_families:
+            return "-"
+        return ", ".join(Profil(p).label for p in obj.profile_families)
+
+    get_profile_families.short_description = "Familles de profils"
 
 
 class ServiceModelInline(admin.TabularInline):
