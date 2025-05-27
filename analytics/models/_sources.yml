@@ -31,5 +31,9 @@ sources:
       - name: structures_structureputativemember
       - name: structures_structuretypology
       - name: users_user
+  - name: matomo
+    schema: public
+    tables:
+      - name: mtm_share_service_tracking
 
 
