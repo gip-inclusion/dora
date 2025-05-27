@@ -2,7 +2,7 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
-from data_inclusion.schema import TypologieStructure
+from data_inclusion.schema import Profil, TypologieStructure
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -81,6 +81,13 @@ class AccessCondition(CustomizableChoice):
 
 
 class ConcernedPublic(CustomizableChoice):
+    profile_families = ArrayField(
+        models.CharField(choices=((p.value, p.label) for p in Profil), max_length=255),
+        verbose_name="Familles de profils",
+        blank=False,
+        null=True,
+    )
+
     class Meta(CustomizableChoice.Meta):
         verbose_name = "Public concerné"
         verbose_name_plural = "Publics concernés"
