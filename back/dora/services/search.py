@@ -502,7 +502,7 @@ def search_services(
     """
 
     # Par défaut, le mode de recherche est unifié (recherche DI puis filtrage Dora)
-    if settings.UNIFIED_SEARCH_ENABLED and unified_search_enabled:
+    if settings.DI_DORA_UNIFIED_SEARCH_ENABLED and unified_search_enabled:
         results, metadata = _get_unified_results(
             request=request,
             di_client=di_client,

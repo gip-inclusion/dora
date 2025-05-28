@@ -572,4 +572,4 @@ SESAME_ONE_TIME = True
 SESAME_SESSION_NAME = "sesame_magic_link"
 
 # Recherche unifiée activée par défaut
-UNIFIED_SEARCH_ENABLED = os.getenv("UNIFIED_SEARCH_ENABLED") != "false"
+DI_DORA_UNIFIED_SEARCH_ENABLED = os.getenv("DI_DORA_UNIFIED_SEARCH_ENABLED") != "false"
