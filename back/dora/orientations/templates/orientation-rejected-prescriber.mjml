@@ -42,7 +42,6 @@
 {% endblock %}
 
 {% block cta %}
-  <mj-spacer height="24px"/>
   <mj-button mj-class="cta" href="{% frontend_url %}">
     Relancer la recherche
   </mj-button>
