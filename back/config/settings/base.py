@@ -570,3 +570,6 @@ SESAME_MAX_AGE = 5 * 60
 SESAME_ONE_TIME = True
 # Nom de la variable de session indiquant une connexion via sesame
 SESAME_SESSION_NAME = "sesame_magic_link"
+
+# Recherche unifiée activée par défaut
+UNIFIED_SEARCH_ENABLED = os.getenv("UNIFIED_SEARCH_ENABLED") != "false"

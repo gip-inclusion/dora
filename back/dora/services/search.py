@@ -485,7 +485,7 @@ def search_services(
     funding_labels: Optional[list[str]] = None,
     lat: Optional[float] = None,
     lon: Optional[float] = None,
-    search_mode: str = "unified",
+    unified_search_enabled: bool = True,
 ) -> (list[dict], dict):
     """Search services from all available repositories.
 
@@ -500,10 +500,9 @@ def search_services(
         - A list of search results by SearchResultSerializer.
         - A metadata dictionary
     """
-    distributed_search = search_mode == "distributed"
 
     # Par défaut, le mode de recherche est unifié (recherche DI puis filtrage Dora)
-    if not distributed_search:
+    if settings.UNIFIED_SEARCH_ENABLED and unified_search_enabled:
         results, metadata = _get_unified_results(
             request=request,
             di_client=di_client,
