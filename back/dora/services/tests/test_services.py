@@ -1344,7 +1344,7 @@ class DataInclusionSearchTestCase(APITestCase):
         self.make_di_service(source="bar", zone_diffusion_type="pays")
         request = self.factory.get(
             "/search/",
-            {"city": self.city1.code, "searchMode": "distributed"},
+            {"city": self.city1.code, "unifiedSearchEnabled": "false"},
         )
         response = self.search(request)
 
