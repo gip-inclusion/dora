@@ -3,9 +3,9 @@ tables:
     rules:
       email:
         template:
-          # Preserve beta.gouv addresses
+          # Préserve les adresses beta.gouv et inclusion.gouv
           format:
-            "{%if prev.email is ending_with('beta.gouv.fr') %}{{_0}}{% else
+            "{%if prev.email is ending_with('beta.gouv.fr') or prev.email is ending_with('inclusion.gouv.fr') %}{{_0}}{% else
             %}{{_1}}{% endif %}"
           rules:
             - email:
@@ -14,17 +14,17 @@ tables:
                 uniq: true
       first_name:
         template:
-          # Preserve beta.gouv addresses
+          # Préserve les adresses beta.gouv et inclusion.gouv
           format:
-            "{%if prev.email is ending_with('beta.gouv.fr') %}{{_0}}{% else
+            "{%if prev.email is ending_with('beta.gouv.fr') or prev.email is ending_with('inclusion.gouv.fr') %}{{_0}}{% else
             %}{{_1}}{% endif %}"
           rules:
             - first_name: {}
       last_name:
         template:
-          # Preserve beta.gouv addresses
+          # Préserve les adresses beta.gouv et inclusion.gouv
           format:
-            "{%if prev.email is ending_with('beta.gouv.fr') %}{{_0}}{% else
+            "{%if prev.email is ending_with('beta.gouv.fr') or prev.email is ending_with('inclusion.gouv.fr') %}{{_0}}{% else
             %}{{_1}}{% endif %}"
           rules:
             - last_name: {}
