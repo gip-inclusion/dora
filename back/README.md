@@ -14,6 +14,11 @@ Copier `docker-compose.yml.template` en `docker-compose.yml`.
 
 Vous pouvez modifier `docker-compose.yml` à votre guise (ports, volumes, etc.).
 
+Le fichier `docker-compose.yml` a besoin des valeurs stockées dans les fichiers `.env`. Pour les remplir : 
+- Copier le dossier `envs-example` et renommer le `envs`
+- Dans le fichier `envs/dev.env`, compléter la variable `POSTGRES_USER`.
+- Dans le fichier `envs/secrets.env`, compléter les variables `POSTGRES_PASSWORD` et `DJANGO_SECRET_KEY`.
+
 Créer et démarrer les conteneurs :
 
 ```bash
@@ -36,19 +41,30 @@ Accéder à pgAdmin 4 via http://localhost:8888/ en utilisant l'adresse e-mail e
 
 ## Installation
 
-- Créer une base de données PostgresQL `dora`.
-- Copier le dossier `envs-example` et renommer le `envs`
-- Dans le fichier `envs/dev.env`, compléter la variable `POSTGRES_USER`.
-- Dans le fichier `envs/secrets.env`, compléter les variables `POSTGRES_PASSWORD` et `DJANGO_SECRET_KEY`.
 
+# Installer graphviz
+Pour Mac:
 ```bash
+brew install graphviz
+```
+Pour Linux:
+```bash
+sudo apt install graphviz
+```
+Les consignes d'installation sont [ici](https://graphviz.org/download/).'
+
 # Installer les dépendances
+```bash
 pip install -r requirements/dev.txt
+```
 
 # Vérifier que tout fonctionne
+```bash
 ./manage.py check
+```
 
 # Créer les tables de la base de données
+```bash
 ./manage.py migrate
 ```
 
@@ -66,6 +82,13 @@ GeoDjango a besoin des _packages_ `GEOS` et `GDAL` pour fonctionner.
 
 Si Django n'arrive pas à trouver les librairies nécessaires, vous pourrez ajouter les variables d'environnement suivante
 à votre shell
+
+C'est possible que vous ayez besoin d'installer `gdal`.
+Pour Mac:
+```bash
+brew install gdal
+```
+Les consignes d'installation sont [ici](https://gdal.org/en/stable/download.html).
 
 ```bash
 export GDAL_LIBRARY_PATH=
