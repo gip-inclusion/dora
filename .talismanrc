@@ -2,5 +2,5 @@ fileignoreconfig:
   - filename: back/dora/services/migrations/0110_remove_service_fee_pass_numerique.py
     checksum: 8d45217f8fc80d3ffb37ca6040b04a9aa99a37c1eb82f4ae0939b91f6989850d
   - filename: back/README.md
-    checksum: be32ef778546615e1efde355bde2091a2640416c5dfcc60d1eb089d8d4d91a4b
+    checksum: cb06ebd13607002b081a9028b2baa3682554d482d193c43c12d25e6ceb0c3009
 version: ""

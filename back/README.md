@@ -76,6 +76,19 @@ Pour que l’application soit utilisable, il faut _a minima_ importer les donné
 
 Mais pour avoir un jeu de données complet, il est plus simple d’importer la base de _staging_ entière.
 
+# Configurer le téléchargement de documents en local
+Vous devez créer un bucket dans Minio pour les téléchargements de documents.
+
+1. Allez sur http://localhost:9001/ et connectez-vous avec les identifiants par défaut que vous trouverez ici :
+  - Nom d'utilisateur : minio
+  - Mot de passe : miniosecret
+2. Créez un bucket nommé `dora`.
+3. Créez une clé d'accès et copiez la clé d'accès et la clé secrète.
+4. Dans `envs/secrets.env`, définissez les variables suivantes :
+    - AWS_ACCESS_KEY_ID=<votre_clé_d'accès>
+    - AWS_SECRET_ACCESS_KEY=<votre_clé_secrète>
+
+
 ## Problèmes avec GeoDjango
 
 GeoDjango a besoin des _packages_ `GEOS` et `GDAL` pour fonctionner.
@@ -125,6 +138,32 @@ Vous pouvez corriger ce souci en ajoutant les variables d'environnement suivante
 ```
 export PATH="/opt/homebrew/opt/openssl@3/bin:$PATH"
 export LIBRARY_PATH=$LIBRARY_PATH:/opt/homebrew/opt/openssl@3/lib/
+```
+
+### Erreur avec Minio
+Si vous rencontrez une erreur avec Minio où vous voyez des dizaines de logs comme celui-ci :
+
+```
+Adding local Minio host to 'mc' configuration...
+```
+Suivi par :
+```
+INFO  ==> MinIO is already stopped...
+```
+
+Essayez de supprimer le containeur `s3` :
+* Note : la commande suivante supprimera tous les containeurs et leurs volumes y compris le db.
+
+```bash
+docker compose down -v
+```
+
+Utilisez une version spécifique de l'image au lieu de `bitnami/minio@latest` comme par exemple : `bitnami/minio:2024.5.1`
+La liste de toutes les versions disponibles est [ici](https://hub.docker.com/r/bitnami/minio/tags).
+
+Pour refaire les containeur :
+```bash
+docker compose up --build
 ```
 
 ## Développement
