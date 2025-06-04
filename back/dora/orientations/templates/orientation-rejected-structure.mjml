@@ -55,7 +55,6 @@
 {% endblock %}
 
 {% block cta %}
-  <mj-spacer height="24px"/>
   <mj-button mj-class="cta" href="{{ data.get_magic_link }}">
     Visualiser le récapitulatif de la demande
   </mj-button>

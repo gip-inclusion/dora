@@ -2,16 +2,17 @@
   import { page } from "$app/stores";
 
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { token, userInfo } from "$lib/utils/auth";
+  import { isLessThanOneHourAgo } from "$lib/utils/date";
   import { trackMobilisation } from "$lib/utils/stats";
 
   import PreventFakeOrientationModal from "./prevent-fake-orientation-modal.svelte";
   import ServiceMobilisation from "./service-mobilisation.svelte";
   import ServicePresentation from "./service-presentation/service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
-
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
   export let onFeedbackButtonClick: () => void;
@@ -28,6 +29,9 @@
         (structure) => structure.slug === service.structure
       )
     : false;
+
+  $: showServiceWillBeVisibleSoonNotice =
+    service.canWrite && isLessThanOneHourAgo(service.creationDate);
 
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;
@@ -64,7 +68,19 @@
 
 <CenteredGrid>
   <div class="md:gap-s48 mb-s32 flex flex-col md:flex-row">
-    <div class="basis-2/3">
+    <div class="gap-s32 flex basis-2/3 flex-col">
+      {#if showServiceWillBeVisibleSoonNotice}
+        <Notice
+          title="Votre service est publié et sera bientôt visible partout"
+          type="warning"
+        >
+          <p class="text-f14 text-gray-dark mb-s0">
+            Il apparaitra dans les résultats de recherche et sur les plateformes
+            partenaires via le référentiel commun data·inclusion dans un délai
+            d’une heure.
+          </p>
+        </Notice>
+      {/if}
       <div class="text-f18 leading-s32 text-gray-text">
         <p>
           {service.shortDesc || ""}
