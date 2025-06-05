@@ -76,7 +76,7 @@
     onFeedbackButtonClick={() => (isServiceFeedbackModalOpen = true)}
   />
 
-  {#if browser && showFeedbackModal}
+  {#if showFeedbackModal}
     <ServiceFeedbackModal
       bind:isOpen={isServiceFeedbackModalOpen}
       service={data.service}
