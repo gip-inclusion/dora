@@ -16,3 +16,16 @@ export function getCurrentlySelectedStructure(
       )
     : userStructures[0];
 }
+
+export function isMemberOrPotentialMemberOfStructure(
+  userInfo: UserInfo | null,
+  structureSlug: string
+): boolean {
+  if (!userInfo) {
+    return false;
+  }
+  return (
+    userInfo.structures.some(({ slug }) => slug === structureSlug) ||
+    userInfo.pendingStructures.some(({ slug }) => slug === structureSlug)
+  );
+}

@@ -27,5 +27,5 @@
 
   <ServiceDiIdentification {service} />
 
-  <ServiceFeedbackButton {service} on:click={onFeedbackButtonClick} />
+  <ServiceFeedbackButton on:click={onFeedbackButtonClick} />
 </div>
