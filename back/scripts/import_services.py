@@ -7,6 +7,7 @@ from django.db import transaction
 from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import get_geo_data
 from dora.services.models import (
+    FundingLabel,
     LocationKind,
     ServiceModel,
     ServiceSource,
@@ -16,20 +17,15 @@ from dora.services.utils import instantiate_model
 from dora.structures.models import Structure
 from dora.users.models import User
 
-csv_file_path = "/tmp/uploads/services_xxx.csv"
+csv_file_path = "/Users/dmc/Downloads/one-line.csv"
 
 # 💡 Mettre à True pour activer les écritures en base de données
-wet_run = False
 
-created_count = 0
-error_count = 0
+wet_run = True
+
 geo_data_missing_lines = []
 
 bot_user = User.objects.get_dora_bot()
-source, _ = ServiceSource.objects.get_or_create(
-    value="fichier-xxx",
-    defaults={"label": "Fichier CSV des services de XXX", },
-)
 
 
 def _extract_location_kinds_from_line(line):
@@ -81,12 +77,20 @@ def _extract_data_from_line(line):
         location_address=line.get("location_address").strip(),
         location_complement=line.get("location_complement").strip(),
         location_postal_code=line.get("location_postal_code").replace(" ", "").strip(),
+        label_financement=line.get("label_financement", "").strip(),
         diffusion_zone_type=_extract_diffusion_zone_type_from_line(line),
     )
     return data
 
 
 def _edit_and_save_service(service, data, idx):
+    source, _ = ServiceSource.objects.get_or_create(
+        value="fichier-xxx",
+        defaults={
+            "label": "Fichier CSV des services de XXX",
+        },
+    )
+
     service.creator = bot_user
     service.last_editor = bot_user
     service.source = source
@@ -101,7 +105,7 @@ def _edit_and_save_service(service, data, idx):
     service.location_kinds.set(data.location_kinds)
     service.diffusion_zone_type = data.diffusion_zone_type
 
-    if (service.address1 and service.city and service.postal_code):
+    if service.address1 and service.city and service.postal_code:
         geo_data = get_geo_data(
             service.address1, city=service.city, postal_code=service.postal_code
         )
@@ -120,105 +124,131 @@ def _edit_and_save_service(service, data, idx):
             )
 
     if wet_run:
+        if hasattr(data, "funding_label"):
+            service.funding_labels.add(data.funding_label)
+
         service.save()
 
 
-if wet_run:
-    print("⚠️ PRODUCTION RUN ⚠️")
-else:
-    print("🧘 DRY RUN 🧘")
+def import_services():
+    created_count = 0
+    error_count = 0
 
-with open(csv_file_path, "r") as f:
-    rdr = csv.reader(f)
-    [headers, *lines] = rdr
-    lines = [dict(zip(headers, line)) for line in lines]
+    if wet_run:
+        print("⚠️ PRODUCTION RUN ⚠️")
+    else:
+        print("🧘 DRY RUN 🧘")
 
-try:
-    with transaction.atomic():
-        for idx, line in enumerate(lines, 1):
-            try:
-                print(f"\nTraitement de la ligne {idx} :")
+    with open(csv_file_path, "r") as f:
+        rdr = csv.reader(f)
+        [headers, *lines] = rdr
+        lines = [dict(zip(headers, line)) for line in lines]
 
-                ####################
-                # EXTRACT
-                ####################
-
-                data = _extract_data_from_line(line)
-
-                ####################
-                # TRANSFORM
-                ####################
-
-                # Vérification que le SIRET de la structure est bien renseigné
-                if not data.structure_siret:
-                    print("❌ Erreur : SIRET manquant. Ligne ignorée.", file=sys.stderr)
-                    error_count += 1
-                    continue
-
-                # Vérification que la structure existe bien en BDD
+    try:
+        with transaction.atomic():
+            for idx, line in enumerate(lines, 1):
                 try:
-                    structure = Structure.objects.get(siret=data.structure_siret)
-                except Structure.DoesNotExist:
+                    print(f"\nTraitement de la ligne {idx} :")
+
+                    ####################
+                    # EXTRACT
+                    ####################
+
+                    data = _extract_data_from_line(line)
+
+                    ####################
+                    # TRANSFORM
+                    ####################
+
+                    # Vérification que le SIRET de la structure est bien renseigné
+                    if not data.structure_siret:
+                        print(
+                            "❌ Erreur : SIRET manquant. Ligne ignorée.",
+                            file=sys.stderr,
+                        )
+                        error_count += 1
+                        continue
+
+                    # Vérification que la structure existe bien en BDD
+                    try:
+                        structure = Structure.objects.get(siret=data.structure_siret)
+                    except Structure.DoesNotExist:
+                        print(
+                            f"❌ Erreur : Structure avec le SIRET {data.structure_siret} introuvable. Ligne ignorée.",
+                            file=sys.stderr,
+                        )
+                        error_count += 1
+                        continue
+
+                    # Vérification que le modèle de service existe lui aussi
+                    try:
+                        model = ServiceModel.objects.get(slug=data.modele_slug)
+                    except ServiceModel.DoesNotExist:
+                        print(
+                            f"❌ Erreur : Modèle de service avec le slug {data.modele_slug} introuvable. Ligne ignorée.",
+                            file=sys.stderr,
+                        )
+                        error_count += 1
+                        continue
+
+                    # Vérification du type de zone de diffusion (contrainte d'intégrité sur la table Services)
+                    if not data.diffusion_zone_type:
+                        print(
+                            "❌ Erreur : Type de zone de diffusion manquant. Ligne ignorée.",
+                            file=sys.stderr,
+                        )
+                        error_count += 1
+                        continue
+
+                    try:
+                        funding_label = (
+                            FundingLabel.objects.get(value=data.label_financement)
+                            if data.label_financement
+                            else None
+                        )
+                        if funding_label:
+                            data.funding_label = funding_label
+                    except FundingLabel.DoesNotExist:
+                        print(
+                            "❌ Erreur : Label de financement n'est pas reconnu. Ligne ignorée.",
+                            file=sys.stderr,
+                        )
+                        error_count += 1
+                        continue
+
+                    ####################
+                    # LOAD
+                    ####################
+
                     print(
-                        f"❌ Erreur : Structure avec le SIRET {data.structure_siret} introuvable. Ligne ignorée.",
-                        file=sys.stderr,
+                        f"Création d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'."
                     )
+                    new_service = instantiate_model(model, structure, bot_user)
+                    _edit_and_save_service(new_service, data, idx)
+                    created_count += 1
+                    print("✅ Service créé.")
+
+                except Exception as e:
+                    print(f"❌ Erreur lors du traitement - {e}", file=sys.stderr)
                     error_count += 1
                     continue
 
-                # Vérification que le modèle de service existe lui aussi
-                try:
-                    model = ServiceModel.objects.get(slug=data.modele_slug)
-                except ServiceModel.DoesNotExist:
-                    print(
-                        f"❌ Erreur : Modèle de service avec le slug {data.modele_slug} introuvable. Ligne ignorée.",
-                        file=sys.stderr,
-                    )
-                    error_count += 1
-                    continue
-
-                # Vérification du type de zone de diffusion (contrainte d'intégrité sur la table Services)
-                if not data.diffusion_zone_type:
-                    print(
-                        "❌ Erreur : Type de zone de diffusion manquant. Ligne ignorée.",
-                        file=sys.stderr,
-                    )
-                    error_count += 1
-                    continue
-
-                ####################
-                # LOAD
-                ####################
-
-                print(
-                    f"Création d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'."
+            if not wet_run:
+                raise Exception(
+                    "Mode dry-run activé. Toutes les modifications sont annulées."
                 )
-                new_service = instantiate_model(model, structure, bot_user)
-                _edit_and_save_service(new_service, data, idx)
-                created_count += 1
-                print("✅ Service créé.")
 
-            except Exception as e:
-                print(f"❌ Erreur lors du traitement - {e}", file=sys.stderr)
-                error_count += 1
-                continue
+    except Exception as e:
+        if str(e) != "Mode dry-run activé. Toutes les modifications sont annulées.":
+            print(f"Erreur critique : {e}", file=sys.stderr)
 
-        if not wet_run:
-            raise Exception(
-                "Mode dry-run activé. Toutes les modifications sont annulées."
-            )
-
-except Exception as e:
-    if str(e) != "Mode dry-run activé. Toutes les modifications sont annulées.":
-        print(f"Erreur critique : {e}", file=sys.stderr)
-
-print("\n--------------------------------------------------")
-print("Traitement du fichier CSV terminé.")
-print(f"Résumé : {created_count} services créés, {error_count} erreurs.")
-print(f"Lignes sans données géographiques ({len(geo_data_missing_lines)}) :")
-for entry in geo_data_missing_lines:
-    print(
-        f"Ligne {entry['idx']}: Adresse={entry['address']}, Ville={entry['city']}, "
-        f"Code postal={entry['postal_code']}"
-    )
-print("--------------------------------------------------\n")
+    print("\n--------------------------------------------------")
+    print("Traitement du fichier CSV terminé.")
+    print(f"Résumé : {created_count} services créés, {error_count} erreurs.")
+    print(f"Lignes sans données géographiques ({len(geo_data_missing_lines)}) :")
+    for entry in geo_data_missing_lines:
+        print(
+            f"Ligne {entry['idx']}: Adresse={entry['address']}, Ville={entry['city']}, "
+            f"Code postal={entry['postal_code']}"
+        )
+    print("--------------------------------------------------\n")
