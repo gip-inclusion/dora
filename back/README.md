@@ -162,7 +162,7 @@ docker compose rm -v s3
 Utilisez une version spécifique de l'image au lieu de `bitnami/minio@latest` comme par exemple : `bitnami/minio:2024.5.1`
 La liste de toutes les versions disponibles est [ici](https://hub.docker.com/r/bitnami/minio/tags).
 
-Pour recréer les containeurs :
+Pour recréer les conteneurs :
 ```bash
 docker compose up --build
 ```
