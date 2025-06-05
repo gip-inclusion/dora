@@ -1,4 +1,3 @@
-import csv
 import sys
 from types import SimpleNamespace
 
@@ -16,12 +15,6 @@ from dora.services.models import (
 from dora.services.utils import instantiate_model
 from dora.structures.models import Structure
 from dora.users.models import User
-
-csv_file_path = "/Users/dmc/Downloads/one-line.csv"
-
-# 💡 Mettre à True pour activer les écritures en base de données
-
-wet_run = True
 
 geo_data_missing_lines = []
 
@@ -83,7 +76,7 @@ def _extract_data_from_line(line):
     return data
 
 
-def _edit_and_save_service(service, data, idx):
+def _edit_and_save_service(service, data, idx, wet_run):
     source, _ = ServiceSource.objects.get_or_create(
         value="fichier-xxx",
         defaults={
@@ -130,7 +123,7 @@ def _edit_and_save_service(service, data, idx):
         service.save()
 
 
-def import_services():
+def import_services(reader, wet_run=False):
     created_count = 0
     error_count = 0
 
@@ -139,10 +132,8 @@ def import_services():
     else:
         print("🧘 DRY RUN 🧘")
 
-    with open(csv_file_path, "r") as f:
-        rdr = csv.reader(f)
-        [headers, *lines] = rdr
-        lines = [dict(zip(headers, line)) for line in lines]
+    [headers, *lines] = reader
+    lines = [dict(zip(headers, line)) for line in lines]
 
     try:
         with transaction.atomic():
@@ -224,7 +215,7 @@ def import_services():
                         f"Création d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'."
                     )
                     new_service = instantiate_model(model, structure, bot_user)
-                    _edit_and_save_service(new_service, data, idx)
+                    _edit_and_save_service(new_service, data, idx, wet_run)
                     created_count += 1
                     print("✅ Service créé.")
 
