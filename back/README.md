@@ -6,6 +6,12 @@
 - PostgreSQL avec l'extension [PostGIS](https://postgis.net/).
 - [GDAL](https://gdal.org/).
 
+### Setup des variables d'environnement
+ 
+- Copier le dossier `envs-example` et renommer le `envs`
+- Dans le fichier `envs/dev.env`, compléter la variable `POSTGRES_USER`.
+- Dans le fichier `envs/secrets.env`, compléter les variables `POSTGRES_PASSWORD` et `DJANGO_SECRET_KEY`.
+
 ### Docker Compose
 
 PostgreSQL, PostGIS, Minio et Redis peuvent être installés simplement avec Docker Compose.
@@ -13,11 +19,6 @@ PostgreSQL, PostGIS, Minio et Redis peuvent être installés simplement avec Doc
 Copier `docker-compose.yml.template` en `docker-compose.yml`.
 
 Vous pouvez modifier `docker-compose.yml` à votre guise (ports, volumes, etc.).
-
-Le fichier `docker-compose.yml` a besoin des valeurs stockées dans les fichiers `.env`. Pour les remplir : 
-- Copier le dossier `envs-example` et renommer le `envs`
-- Dans le fichier `envs/dev.env`, compléter la variable `POSTGRES_USER`.
-- Dans le fichier `envs/secrets.env`, compléter les variables `POSTGRES_PASSWORD` et `DJANGO_SECRET_KEY`.
 
 Créer et démarrer les conteneurs :
 
@@ -151,17 +152,17 @@ Suivi par :
 INFO  ==> MinIO is already stopped...
 ```
 
-Essayez de supprimer le containeur `s3` :
-* Note : la commande suivante supprimera tous les containeurs et leurs volumes y compris le db.
+Supprimer le containeur `s3` :
 
 ```bash
-docker compose down -v
+docker compose stop s3
+docker compose rm -v s3
 ```
 
 Utilisez une version spécifique de l'image au lieu de `bitnami/minio@latest` comme par exemple : `bitnami/minio:2024.5.1`
 La liste de toutes les versions disponibles est [ici](https://hub.docker.com/r/bitnami/minio/tags).
 
-Pour refaire les containeur :
+Pour recréer les containeurs :
 ```bash
 docker compose up --build
 ```
