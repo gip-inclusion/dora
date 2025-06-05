@@ -152,7 +152,7 @@ Suivi par :
 INFO  ==> MinIO is already stopped...
 ```
 
-Supprimer le containeur `s3` :
+Supprimer le conteneur `s3` :
 
 ```bash
 docker compose stop s3
