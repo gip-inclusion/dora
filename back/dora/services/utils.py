@@ -80,7 +80,6 @@ def instantiate_model(model, structure, user):
         service.geom = None
 
     # Metadata
-    service.is_draft = True
     service.is_model = False
     service.creator = model.creator
     service.last_editor = user
