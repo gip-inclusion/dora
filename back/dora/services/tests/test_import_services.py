@@ -8,6 +8,7 @@ from model_bakery import baker
 
 from dora.core.utils import GeoData
 from dora.service_suggestions.tests import DUMMY_SUGGESTION
+from dora.services.enums import ServiceStatus
 from dora.services.management.commands.import_services import import_services
 from dora.services.models import Service
 
@@ -487,3 +488,71 @@ class ImportServicesTestCase(TestCase):
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(len(result["errors"]), 1)
+
+    def test_publish_eligible_remote_service(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,0123456789,À distance,,,,,Commune"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+        self.assertEqual(created_service.status, ServiceStatus.PUBLISHED)
+
+    def test_publish_eligible_in_person_service(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,0123456789,En présentiel,Paris,1 rue de test,,75020,Commune"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+        self.assertEqual(created_service.status, ServiceStatus.PUBLISHED)
+
+    def test_keep_in_person_service_in_draft_when_ineligible(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,0123456789,En présentiel,Paris,1 rue de test,,,Commune"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+        self.assertEqual(created_service.status, ServiceStatus.DRAFT)
+
+    def test_keep_service_in_draft_when_ineligible(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,,À distance,,,,,Commune"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+        self.assertEqual(created_service.status, ServiceStatus.DRAFT)
