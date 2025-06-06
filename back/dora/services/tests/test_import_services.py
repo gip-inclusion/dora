@@ -317,6 +317,80 @@ class ImportServicesTestCase(TestCase):
             "Erreur lors du traitement de la ligne 1 - Un ou plusieurs labels de financement sont dupliqués. Ligne ignorée.",
         )
 
+    @patch(
+        "dora.services.management.commands.import_services.get_geo_data",
+        return_value=None,
+    )
+    def test_missing_geo_data(self, mock_geo_data):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,Commune"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(len(result["geo_data_missing_lines"]), 1)
+        self.assertEqual(
+            result["geo_data_missing_lines"][0],
+            {
+                "idx": 1,
+                "address": "1 rue de test",
+                "city": "Paris",
+                "postal_code": "75020",
+            },
+        )
+
+    @patch(
+        "dora.services.management.commands.import_services.get_geo_data",
+        return_value=GeoData(
+            city_code=75020,
+            city="Paris",
+            postal_code="75020",
+            address="1 rue de test",
+            geom=Point(2.3522, 48.8566, srid=4326),
+            lat="48.8566",
+            lon="2.3522",
+            score=1.0,
+        ),
+    )
+    def test_valid_geo_data(self, mock_geo_data):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},location@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,Commune"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(len(result["geo_data_missing_lines"]), 0)
+        created_service = Service.objects.get(contact_email="location@email.com")
+
+        self.assertEqual(created_service.city_code, "75020")
+        self.assertEqual(
+            created_service.geom,
+            Point(2.3522, 48.8566, srid=4326),
+        )
+        self.assertEqual(created_service.diffusion_zone_details, "75020")
+
+    def test_handle_one_invalid_line(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"invalid,{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,Commune\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,Commune"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(len(result["errors"]), 1)
+
     def test_handle_one_invalid_line(self):
         csv_content = (
             f"{self.csv_headers}\n"
