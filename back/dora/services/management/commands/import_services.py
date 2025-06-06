@@ -13,9 +13,6 @@ from dora.services.utils import instantiate_model
 from dora.structures.models import Structure
 from dora.users.models import User
 
-geo_data_missing_lines = []
-bot_user = User.objects.get_dora_bot()
-
 
 class Command(BaseCommand):
     help = "Créer des nouveaux services basés sur des modèles pour des structures en utilisant les infos fournies par un CSV"
