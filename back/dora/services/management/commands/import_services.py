@@ -271,3 +271,9 @@ def import_services(
             f"Code postal={entry['postal_code']}"
         )
     print("--------------------------------------------------\n")
+
+    return {
+        "created_count": created_count,
+        "error_count": error_count,
+        "geo_data_missing_lines": geo_data_missing_lines,
+    }
