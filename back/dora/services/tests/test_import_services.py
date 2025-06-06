@@ -33,7 +33,7 @@ class ImportServicesTestCase(TestCase):
     def test_import_services_wet_run(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,Commune"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,Commune"
         )
         reader = csv.reader(io.StringIO(csv_content))
 
@@ -48,6 +48,10 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(created_service.structure, self.structure)
         self.assertEqual(created_service.model, self.service_model)
         self.assertEqual(created_service.contact_email, "referent@email.com")
+        self.assertEqual(created_service.contact_name, "Test Person")
+        self.assertEqual(created_service.contact_phone, "0123456789")
+        self.assertEqual(created_service.diffusion_zone_type, "city")
+        self.assertEqual(created_service.last_editor, self.importing_user)
 
         self.assertEqual(created_service.funding_labels.count(), 1)
         self.assertEqual(
@@ -137,6 +141,22 @@ class ImportServicesTestCase(TestCase):
             "Erreur : Type de zone de diffusion manquant. Ligne 1 ignorée.",
         )
 
+    def test_invalid_diffusion_zone_type(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},'invalid-siret',referent@email.com,{self.funding_label.value},,,,,,,,invalid_zone_type"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        self.assertEqual(result["created_count"], 0)
+        self.assertEqual(
+            result["errors"][0],
+            "Erreur lors du traitement de la ligne 1 - Type de zone de diffusion avec la valeur 'invalid_zone_type' introuvable. Valeur ignorée.",
+        )
+
     def test_invalid_funding_label(self):
         csv_content = (
             f"{self.csv_headers}\n"
@@ -213,6 +233,41 @@ class ImportServicesTestCase(TestCase):
             Point(2.3522, 48.8566, srid=4326),
         )
         self.assertEqual(created_service.diffusion_zone_details, "75020")
+
+    def test_location_kinds(self):
+        baker.make("LocationKind", value="1", label="kind 1")
+        baker.make("LocationKind", value="2", label="kind 2")
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,kind 1;kind 2,,,,,Commune"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        self.assertEqual(result["created_count"], 1)
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(created_service.location_kinds.count(), 2)
+        self.assertTrue(created_service.location_kinds.filter(value="1").exists())
+        self.assertTrue(created_service.location_kinds.filter(value="2").exists())
+
+    def test_invalid_location_kinds(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,invalid kind,,,,,Commune"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(created_service.location_kinds.count(), 0)
 
     def test_handle_one_invalid_line(self):
         csv_content = (

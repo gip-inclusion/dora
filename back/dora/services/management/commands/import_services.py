@@ -45,7 +45,7 @@ def _extract_location_kinds_from_line(line):
     }
 
     location_kinds = []
-    for entry in location_kinds_raw.split(","):
+    for entry in location_kinds_raw.split(";"):
         cleaned_entry = entry.strip().lower()
         if cleaned_entry in location_kinds_entities:
             location_kinds.append(location_kinds_entities[cleaned_entry])
