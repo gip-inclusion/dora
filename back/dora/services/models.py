@@ -660,6 +660,21 @@ class Service(ModerationMixin, models.Model):
         # voir FranceTravailOrientableService
         return bool(self.orientable_ft_services.count())
 
+    def is_eligible_for_publishing(self) -> bool:
+        if (
+            not self.contact_name
+            or not self.contact_phone
+            or not self.diffusion_zone_type
+            or self.location_kinds.count() == 0
+        ):
+            return False
+
+        if self.location_kinds.filter(value="en-presentiel").exists():
+            if not self.city or not self.postal_code or not self.address1:
+                return False
+
+        return True
+
 
 class ServiceModelManager(models.Manager):
     def get_queryset(self):
