@@ -39,7 +39,7 @@ class ImportServicesTestCase(TestCase):
 
         result = import_services(reader, self.importing_user, wet_run=True)
 
-        created_service = Service.objects.get(creator=self.importing_user)
+        created_service = Service.objects.filter(creator=self.importing_user).last()
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
@@ -61,7 +61,7 @@ class ImportServicesTestCase(TestCase):
     def test_import_services_dry_run(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},dry-run@email.com,{self.funding_label.value},,,,,,,,Commune"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,Commune"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -73,7 +73,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["geo_data_missing_lines"], [])
 
         self.assertEqual(
-            Service.objects.filter(contact_email="dry-run@email.com").count(), 0
+            Service.objects.filter(contact_email="referent@email.com").count(), 0
         )
 
     def test_missing_siret(self):
@@ -216,7 +216,7 @@ class ImportServicesTestCase(TestCase):
     def test_valid_geo_data(self, mock_geo_data):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},location@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,Commune"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,Commune"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -225,7 +225,7 @@ class ImportServicesTestCase(TestCase):
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(len(result["geo_data_missing_lines"]), 0)
-        created_service = Service.objects.get(contact_email="location@email.com")
+        created_service = Service.objects.filter(creator=self.importing_user).last()
 
         self.assertEqual(created_service.city_code, "75020")
         self.assertEqual(
