@@ -13,9 +13,6 @@ from dora.services.utils import instantiate_model
 from dora.structures.models import Structure
 from dora.users.models import User
 
-geo_data_missing_lines = []
-bot_user = User.objects.get_dora_bot()
-
 
 class Command(BaseCommand):
     help = "Créer des nouveaux services basés sur des modèles pour des structures en utilisant les infos fournies par un CSV"
@@ -31,10 +28,11 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         file = kwargs["file"]
         wet_run = bool(kwargs["wet_run"])
+        bot_user = User.objects.get_dora_bot()
 
         with open(file, "r") as f:
             reader = csv.reader(f)
-            import_services(reader, wet_run)
+            import_services(reader, bot_user, wet_run)
 
 
 def _extract_location_kinds_from_line(line):
@@ -92,7 +90,9 @@ def _extract_data_from_line(line):
     return data
 
 
-def _edit_and_save_service(service, data, idx, wet_run):
+def _edit_and_save_service(
+    service, data, idx, importing_user, geo_data_missing_lines, wet_run
+):
     source, _ = ServiceSource.objects.get_or_create(
         value="fichier-xxx",
         defaults={
@@ -100,8 +100,8 @@ def _edit_and_save_service(service, data, idx, wet_run):
         },
     )
 
-    service.creator = bot_user
-    service.last_editor = bot_user
+    service.creator = importing_user
+    service.last_editor = importing_user
     service.source = source
     service.contact_name = data.contact_name
     service.contact_email = data.contact_email
@@ -139,9 +139,14 @@ def _edit_and_save_service(service, data, idx, wet_run):
         service.save()
 
 
-def import_services(reader, wet_run=False):
+def import_services(
+    reader,
+    importing_user,
+    wet_run=False,
+):
     created_count = 0
     error_count = 0
+    geo_data_missing_lines = []
 
     if wet_run:
         print("⚠️ PRODUCTION RUN ⚠️")
@@ -230,8 +235,15 @@ def import_services(reader, wet_run=False):
                     print(
                         f"Création d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'."
                     )
-                    new_service = instantiate_model(model, structure, bot_user)
-                    _edit_and_save_service(new_service, data, idx, wet_run)
+                    new_service = instantiate_model(model, structure, importing_user)
+                    _edit_and_save_service(
+                        new_service,
+                        data,
+                        idx,
+                        importing_user,
+                        geo_data_missing_lines,
+                        wet_run,
+                    )
                     created_count += 1
                     print("✅ Service créé.")
 
