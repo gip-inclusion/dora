@@ -1,24 +1,40 @@
+import csv
 import sys
 from types import SimpleNamespace
 
+from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import get_geo_data
-from dora.services.models import (
-    FundingLabel,
-    LocationKind,
-    ServiceModel,
-    ServiceSource,
-    ServiceStatus,
-)
+from dora.services.enums import ServiceStatus
+from dora.services.models import FundingLabel, LocationKind, ServiceModel, ServiceSource
 from dora.services.utils import instantiate_model
 from dora.structures.models import Structure
 from dora.users.models import User
 
 geo_data_missing_lines = []
-
 bot_user = User.objects.get_dora_bot()
+
+
+class Command(BaseCommand):
+    help = "Créer des nouveaux services basés sur des modèles pour des structures en utilisant les infos fournies par un CSV"
+
+    def add_arguments(self, parser):
+        parser.add_argument("--file", help="Fichier csv à importer ")
+        parser.add_argument(
+            "--wet-run",
+            help="Exécuter l'import en vrai (modifie la base de données)",
+            default=False,
+        )
+
+    def handle(self, *args, **kwargs):
+        file = kwargs["file"]
+        wet_run = bool(kwargs["wet_run"])
+
+        with open(file, "r") as f:
+            reader = csv.reader(f)
+            import_services(reader, wet_run)
 
 
 def _extract_location_kinds_from_line(line):
