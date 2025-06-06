@@ -135,29 +135,13 @@ def _edit_and_save_service(
                 }
             )
 
-    if _is_service_eligible_for_publishing(service):
+    if service.is_eligible_for_publishing():
         service.status = ServiceStatus.PUBLISHED
 
     if wet_run:
         service.funding_labels.add(*data.funding_labels)
 
         service.save()
-
-
-def _is_service_eligible_for_publishing(service):
-    if (
-        not service.contact_name
-        or not service.contact_phone
-        or not service.diffusion_zone_type
-        or service.location_kinds.count() == 0
-    ):
-        return False
-
-    if service.location_kinds.filter(value="en-presentiel").exists():
-        if not service.city or not service.postal_code or not service.address1:
-            return False
-
-    return True
 
 
 def import_services(
