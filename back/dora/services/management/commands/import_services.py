@@ -110,7 +110,6 @@ def _edit_and_save_service(
     service.address2 = data.location_complement
     service.city = data.location_city
     service.postal_code = data.location_postal_code
-    service.status = ServiceStatus.PUBLISHED
     service.location_kinds.set(data.location_kinds)
     service.diffusion_zone_type = data.diffusion_zone_type
 
@@ -132,11 +131,30 @@ def _edit_and_save_service(
                 }
             )
 
+    if _is_service_eligible_for_publishing(service):
+        service.status = ServiceStatus.PUBLISHED
+
     if wet_run:
         if hasattr(data, "funding_label"):
             service.funding_labels.add(data.funding_label)
 
         service.save()
+
+
+def _is_service_eligible_for_publishing(service):
+    if (
+        not service.contact_name
+        or not service.contact_phone
+        or not service.diffusion_zone_type
+        or service.location_kinds.count() == 0
+    ):
+        return False
+
+    if service.location_kinds.filter(value="en-presentiel").exists():
+        if not service.city or not service.postal_code or not service.address1:
+            return False
+
+    return True
 
 
 def import_services(
