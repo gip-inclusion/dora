@@ -145,7 +145,7 @@ def import_services(
     wet_run=False,
 ):
     created_count = 0
-    error_count = 0
+    errors = []
     geo_data_missing_lines = []
 
     if wet_run:
@@ -174,42 +174,46 @@ def import_services(
 
                     # Vérification que le SIRET de la structure est bien renseigné
                     if not data.structure_siret:
+                        error_msg = f"Erreur : SIRET manquant. Ligne {idx} ignorée."
                         print(
-                            "❌ Erreur : SIRET manquant. Ligne ignorée.",
+                            f"❌ {error_msg}",
                             file=sys.stderr,
                         )
-                        error_count += 1
+                        errors.append(error_msg)
                         continue
 
                     # Vérification que la structure existe bien en BDD
                     try:
                         structure = Structure.objects.get(siret=data.structure_siret)
                     except Structure.DoesNotExist:
+                        error_msg = f"Erreur : Structure avec le SIRET {data.structure_siret} introuvable. Ligne {idx} ignorée."
                         print(
-                            f"❌ Erreur : Structure avec le SIRET {data.structure_siret} introuvable. Ligne ignorée.",
+                            f"❌ {error_msg}",
                             file=sys.stderr,
                         )
-                        error_count += 1
+                        errors.append(error_msg)
                         continue
 
                     # Vérification que le modèle de service existe lui aussi
                     try:
                         model = ServiceModel.objects.get(slug=data.modele_slug)
                     except ServiceModel.DoesNotExist:
+                        error_msg = f"Erreur : Modèle de service avec le slug {data.modele_slug} introuvable. Ligne {idx} ignorée."
                         print(
-                            f"❌ Erreur : Modèle de service avec le slug {data.modele_slug} introuvable. Ligne ignorée.",
+                            f"❌ {error_msg}",
                             file=sys.stderr,
                         )
-                        error_count += 1
+                        errors.append(error_msg)
                         continue
 
                     # Vérification du type de zone de diffusion (contrainte d'intégrité sur la table Services)
                     if not data.diffusion_zone_type:
+                        error_msg = f"Erreur : Type de zone de diffusion manquant. Ligne {idx} ignorée."
                         print(
-                            "❌ Erreur : Type de zone de diffusion manquant. Ligne ignorée.",
+                            f"❌ {error_msg}",
                             file=sys.stderr,
                         )
-                        error_count += 1
+                        errors.append(error_msg)
                         continue
 
                     try:
@@ -221,11 +225,12 @@ def import_services(
                         if funding_label:
                             data.funding_label = funding_label
                     except FundingLabel.DoesNotExist:
+                        error_msg = f"Erreur : Label de financement '{data.label_financement}' introuvable. Ligne {idx} ignorée."
                         print(
-                            "❌ Erreur : Label de financement n'est pas reconnu. Ligne ignorée.",
+                            f"❌ {error_msg}",
                             file=sys.stderr,
                         )
-                        error_count += 1
+                        errors.append(error_msg)
                         continue
 
                     ####################
@@ -248,8 +253,9 @@ def import_services(
                     print("✅ Service créé.")
 
                 except Exception as e:
-                    print(f"❌ Erreur lors du traitement - {e}", file=sys.stderr)
-                    error_count += 1
+                    error_msg = f"Erreur lors du traitement de la ligne {idx} - {e}"
+                    print(f"❌ {error_msg}", file=sys.stderr)
+                    errors.append(error_msg)
                     continue
 
             if not wet_run:
@@ -263,7 +269,7 @@ def import_services(
 
     print("\n--------------------------------------------------")
     print("Traitement du fichier CSV terminé.")
-    print(f"Résumé : {created_count} services créés, {error_count} erreurs.")
+    print(f"Résumé : {created_count} services créés, {len(errors)} erreurs.")
     print(f"Lignes sans données géographiques ({len(geo_data_missing_lines)}) :")
     for entry in geo_data_missing_lines:
         print(
@@ -274,6 +280,6 @@ def import_services(
 
     return {
         "created_count": created_count,
-        "error_count": error_count,
+        "errors": errors,
         "geo_data_missing_lines": geo_data_missing_lines,
     }
