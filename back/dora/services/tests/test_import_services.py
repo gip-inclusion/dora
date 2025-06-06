@@ -359,7 +359,7 @@ class ImportServicesTestCase(TestCase):
     def test_valid_geo_data(self, mock_geo_data):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},location@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,Commune"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,Commune"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -368,7 +368,7 @@ class ImportServicesTestCase(TestCase):
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(len(result["geo_data_missing_lines"]), 0)
-        created_service = Service.objects.get(contact_email="location@email.com")
+        created_service = Service.objects.filter(creator=self.importing_user).last()
 
         self.assertEqual(created_service.city_code, "75020")
         self.assertEqual(
