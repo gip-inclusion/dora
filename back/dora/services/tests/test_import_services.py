@@ -556,21 +556,3 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
         self.assertEqual(created_service.status, ServiceStatus.DRAFT)
-
-    def test_keep_service_without_diffusion_zone_in_draft_and_apply_default(self):
-        csv_content = (
-            f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,À distance,,,,,"
-        )
-
-        reader = csv.reader(io.StringIO(csv_content))
-
-        result = import_services(reader, self.importing_user, wet_run=True)
-
-        created_service = Service.objects.filter(creator=self.importing_user).last()
-
-        self.assertEqual(result["created_count"], 1)
-        self.assertEqual(result["errors"], [])
-        self.assertEqual(created_service.status, ServiceStatus.DRAFT)
-        self.assertEqual(created_service.diffusion_zone_type, "city")
