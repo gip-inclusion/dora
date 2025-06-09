@@ -20,6 +20,7 @@
   import FieldsPublics from "$lib/components/specialized/services/fields-publics.svelte";
   import FieldsStructure from "../_common/fields-structure.svelte";
   import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
+  import { DI_DORA_UNIFIED_SEARCH_ENABLED } from "$lib/env";
   import { createOrModifyService } from "$lib/requests/services";
   import type {
     Model,
@@ -93,8 +94,12 @@
     }
   }
 
-  function handleSuccess() {
-    goto("/services/creer/succès");
+  function handleSuccess(result) {
+    if (DI_DORA_UNIFIED_SEARCH_ENABLED) {
+      goto("/services/creer/succès");
+    } else {
+      goto(`/services/${result.slug}`);
+    }
   }
 
   function handleValidate(data, kind: "draft" | "publish") {
