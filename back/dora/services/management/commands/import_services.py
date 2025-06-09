@@ -89,6 +89,7 @@ def _extract_data_from_line(line):
         funding_labels=_extract_multiple_values_from_line(
             line, "labels_financement", FundingLabel, "labels de financement"
         ),
+        is_contact_info_public=line.get("is_contact_info_public", "").strip(),
         diffusion_zone_type=_extract_diffusion_zone_type_from_line(line),
     )
     return data
@@ -116,6 +117,7 @@ def _edit_and_save_service(
     service.postal_code = data.location_postal_code
     service.location_kinds.set(data.location_kinds)
     service.diffusion_zone_type = data.diffusion_zone_type
+    service.is_contact_info_public = data.is_contact_info_public.lower() == "oui"
 
     if service.address1 and service.city and service.postal_code:
         geo_data = get_geo_data(
