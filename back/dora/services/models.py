@@ -85,7 +85,8 @@ class ConcernedPublic(CustomizableChoice):
         models.CharField(choices=((p.value, p.label) for p in Profil), max_length=255),
         verbose_name="Familles de profils",
         blank=False,
-        null=True,
+        null=False,
+        default=list,
     )
 
     class Meta(CustomizableChoice.Meta):

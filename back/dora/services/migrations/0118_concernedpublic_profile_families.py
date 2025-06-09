@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
                     ],
                     max_length=255,
                 ),
-                null=True,
+                default=list,
                 size=None,
                 verbose_name="Familles de profils",
             ),
