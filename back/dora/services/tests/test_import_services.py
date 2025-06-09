@@ -378,12 +378,9 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(created_service.diffusion_zone_details, "75020")
 
     def test_location_kinds(self):
-        baker.make("LocationKind", value="1", label="kind 1")
-        baker.make("LocationKind", value="2", label="kind 2")
-
         csv_content = (
             f"{self.csv_headers}\n"
-            f'{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,"kind 1,kind 2",,,,,Commune'
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,"a-distance,en-presentiel",,,,,Commune'
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -394,23 +391,74 @@ class ImportServicesTestCase(TestCase):
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
         self.assertEqual(created_service.location_kinds.count(), 2)
-        self.assertTrue(created_service.location_kinds.filter(value="1").exists())
-        self.assertTrue(created_service.location_kinds.filter(value="2").exists())
+        self.assertTrue(
+            created_service.location_kinds.filter(label="En présentiel").exists()
+        )
+        self.assertTrue(
+            created_service.location_kinds.filter(label="À distance").exists()
+        )
 
     def test_invalid_location_kinds(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,invalid kind,,,,,Commune"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,invalid_kind,,,,,Commune"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
 
         result = import_services(reader, self.importing_user, wet_run=True)
 
-        created_service = Service.objects.filter(creator=self.importing_user).last()
+        self.assertEqual(result["created_count"], 0)
+        self.assertEqual(
+            result["errors"][0],
+            "Erreur lors du traitement de la ligne 1 - Un ou plusieurs types d'accueil "
+            "sont introuvables : {'invalid_kind'}. Ligne ignorée.",
+        )
+
+    def test_multiple_financing_labels(self):
+        other_funding_label = baker.make(
+            "FundingLabel", value="other-value", label="other-label"
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{other_funding_label.value}",,,,,,,,Commune'
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
 
         self.assertEqual(result["created_count"], 1)
-        self.assertEqual(created_service.location_kinds.count(), 0)
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(created_service.funding_labels.count(), 2)
+        self.assertTrue(
+            created_service.funding_labels.filter(
+                label=self.funding_label.label
+            ).exists()
+        )
+        self.assertTrue(
+            created_service.funding_labels.filter(
+                label=other_funding_label.label
+            ).exists()
+        )
+
+    def test_duplicated_financing_labels(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{self.funding_label.value}",,,,,,,,Commune'
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        self.assertEqual(result["created_count"], 0)
+        self.assertEqual(
+            result["errors"][0],
+            "Erreur lors du traitement de la ligne 1 - Un ou plusieurs labels de financement sont dupliqués. Ligne ignorée.",
+        )
 
     def test_handle_one_invalid_line(self):
         csv_content = (
