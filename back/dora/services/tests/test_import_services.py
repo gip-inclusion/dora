@@ -240,7 +240,7 @@ class ImportServicesTestCase(TestCase):
 
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,kind 1;kind 2,,,,,Commune"
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,"kind 1,kind 2",,,,,Commune'
         )
 
         reader = csv.reader(io.StringIO(csv_content))
