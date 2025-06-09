@@ -117,12 +117,6 @@ def _edit_and_save_service(
     service.location_kinds.set(data.location_kinds)
     service.diffusion_zone_type = data.diffusion_zone_type
 
-    if service.is_eligible_for_publishing():
-        service.status = ServiceStatus.PUBLISHED
-
-    if not service.diffusion_zone_type:
-        service.diffusion_zone_type = AdminDivisionType.CITY
-
     if service.address1 and service.city and service.postal_code:
         geo_data = get_geo_data(
             service.address1, city=service.city, postal_code=service.postal_code
@@ -140,6 +134,9 @@ def _edit_and_save_service(
                     "postal_code": service.postal_code,
                 }
             )
+
+    if service.is_eligible_for_publishing():
+        service.status = ServiceStatus.PUBLISHED
 
     if wet_run:
         service.funding_labels.add(*data.funding_labels)
@@ -207,6 +204,16 @@ def import_services(
                         model = ServiceModel.objects.get(slug=data.modele_slug)
                     except ServiceModel.DoesNotExist:
                         error_msg = f"Erreur : Modèle de service avec le slug {data.modele_slug} introuvable. Ligne {idx} ignorée."
+                        print(
+                            f"❌ {error_msg}",
+                            file=sys.stderr,
+                        )
+                        errors.append(error_msg)
+                        continue
+
+                    # Vérification du type de zone de diffusion (contrainte d'intégrité sur la table Services)
+                    if not data.diffusion_zone_type:
+                        error_msg = f"Erreur : Type de zone de diffusion manquant. Ligne {idx} ignorée."
                         print(
                             f"❌ {error_msg}",
                             file=sys.stderr,
