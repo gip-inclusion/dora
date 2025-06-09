@@ -61,7 +61,7 @@ def _extract_multiple_values_from_line(line, header_name, model, category_label)
 def _extract_diffusion_zone_type_from_line(line):
     diffusion_zone_type_raw = line.get("diffusion_zone_type", "").strip()
     if not diffusion_zone_type_raw:
-        return None
+        return ""
 
     for choice in AdminDivisionType:
         if diffusion_zone_type_raw == choice.label:
@@ -206,26 +206,6 @@ def import_services(
                         model = ServiceModel.objects.get(slug=data.modele_slug)
                     except ServiceModel.DoesNotExist:
                         error_msg = f"Erreur : Modèle de service avec le slug {data.modele_slug} introuvable. Ligne {idx} ignorée."
-                        print(
-                            f"❌ {error_msg}",
-                            file=sys.stderr,
-                        )
-                        errors.append(error_msg)
-                        continue
-
-                    # Vérification du type de zone de diffusion (contrainte d'intégrité sur la table Services)
-                    if not data.diffusion_zone_type:
-                        error_msg = f"Erreur : Type de zone de diffusion manquant. Ligne {idx} ignorée."
-                        print(
-                            f"❌ {error_msg}",
-                            file=sys.stderr,
-                        )
-                        errors.append(error_msg)
-                        continue
-
-                    # Vérification du type de zone de diffusion (contrainte d'intégrité sur la table Services)
-                    if not data.diffusion_zone_type:
-                        error_msg = f"Erreur : Type de zone de diffusion manquant. Ligne {idx} ignorée."
                         print(
                             f"❌ {error_msg}",
                             file=sys.stderr,

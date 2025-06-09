@@ -63,7 +63,7 @@ class ImportServicesTestCase(TestCase):
     def test_import_services_dry_run(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,Commune,,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -81,7 +81,7 @@ class ImportServicesTestCase(TestCase):
     def test_missing_siret(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},,referent@email.com,{self.funding_label.value},,,,,,,,Commune,,"
+            f"{self.service_model.slug},,referent@email.com,{self.funding_label.value},,,,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -96,7 +96,7 @@ class ImportServicesTestCase(TestCase):
     def test_invalid_structure_siret(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},'invalid-siret',referent@email.com,{self.funding_label.value},,,,,,,,Commune,,"
+            f"{self.service_model.slug},'invalid-siret',referent@email.com,{self.funding_label.value},,,,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -112,7 +112,7 @@ class ImportServicesTestCase(TestCase):
     def test_invalid_service_model_slug(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"invalid-slug,{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,Commune,,"
+            f"invalid-slug,{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -127,21 +127,23 @@ class ImportServicesTestCase(TestCase):
         )
 
     def test_missing_diffusion_zone_type(self):
-        csv_content = (
-            f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,,{self.funding_label.value},,,,,,,,,"
-        )
+        def test_publish_eligible_remote_service(self):
+            csv_content = (
+                f"{self.csv_headers}\n"
+                f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+                f"{self.funding_label.value},Test Person,0123456789,a-distance,,,,,,"
+            )
 
-        reader = csv.reader(io.StringIO(csv_content))
+            reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+            result = import_services(reader, self.importing_user, wet_run=True)
 
-        self.assertEqual(result["created_count"], 0)
+            created_service = Service.objects.filter(creator=self.importing_user).last()
 
-        self.assertEqual(
-            result["errors"][0],
-            "Erreur : Type de zone de diffusion manquant. Ligne 1 ignorée.",
-        )
+            self.assertEqual(result["created_count"], 1)
+            self.assertEqual(result["errors"], [])
+            self.assertEqual(created_service.status, ServiceStatus.DRAFT)
+            self.assertEqual(created_service.diffusion_zone_type, "")
 
     def test_invalid_diffusion_zone_type(self):
         csv_content = (
@@ -162,7 +164,7 @@ class ImportServicesTestCase(TestCase):
     def test_invalid_funding_label(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,invalid-funding-label,,,,,,,,Commune,,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,invalid-funding-label,,,,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -183,7 +185,7 @@ class ImportServicesTestCase(TestCase):
     def test_missing_geo_data(self, mock_geo_data):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,Commune,,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -218,7 +220,7 @@ class ImportServicesTestCase(TestCase):
     def test_valid_geo_data(self, mock_geo_data):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,Commune,,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -239,7 +241,7 @@ class ImportServicesTestCase(TestCase):
     def test_location_kinds(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f'{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,"a-distance,en-presentiel",,,,,Commune,,'
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,"a-distance,en-presentiel",,,,,,,'
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -260,7 +262,7 @@ class ImportServicesTestCase(TestCase):
     def test_invalid_location_kinds(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,invalid_kind,,,,,Commune,,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,invalid_kind,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -281,7 +283,7 @@ class ImportServicesTestCase(TestCase):
 
         csv_content = (
             f"{self.csv_headers}\n"
-            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{other_funding_label.value}",,,,,,,,Commune,'
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{other_funding_label.value}",,,,,,,,,'
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -306,7 +308,7 @@ class ImportServicesTestCase(TestCase):
     def test_duplicated_financing_labels(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{self.funding_label.value}",,,,,,,Commune,,'
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{self.funding_label.value}",,,,,,,,,'
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -479,8 +481,8 @@ class ImportServicesTestCase(TestCase):
     def test_handle_one_invalid_line(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"invalid,{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,,Commune,,\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,Commune,,"
+            f"invalid,{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,,,,\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -528,7 +530,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,0123456789,en-presentiel,Paris,1 rue de test,,,Commune,"
+            f"{self.funding_label.value},Test Person,0123456789,en-presentiel,Paris,1 rue de test,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -545,7 +547,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,a-distance,,,,,Commune,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -562,7 +564,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,a-distance,,,,,Commune,oui"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,oui"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
