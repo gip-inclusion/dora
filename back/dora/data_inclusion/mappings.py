@@ -98,6 +98,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         "coordinates": (result["service"]["longitude"], result["service"]["latitude"])
         if result["service"]["longitude"] and result["service"]["latitude"]
         else None,
+        "publication_date": None,
     }
 
 
