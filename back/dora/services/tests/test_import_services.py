@@ -218,7 +218,7 @@ class ImportServicesTestCase(TestCase):
     def test_valid_geo_data(self, mock_geo_data):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,Commune,{self.funding_label.value},,,,Paris,1 rue de test,,75020,,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,Commune,{self.funding_label.value},,,,Paris,1 rue de test,,75020,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -336,8 +336,8 @@ class ImportServicesTestCase(TestCase):
     def test_publish_eligible_remote_service(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,0123456789,À distance,,,,,Commune,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,Commune,"
+            f"{self.funding_label.value},Test Person,0123456789,a-distance,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -353,8 +353,8 @@ class ImportServicesTestCase(TestCase):
     def test_publish_eligible_in_person_service(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,0123456789,En présentiel,Paris,1 rue de test,,75020,Commune,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,Commune,"
+            f"{self.funding_label.value},Test Person,0123456789,en-presentiel,Paris,1 rue de test,,75020,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -370,8 +370,8 @@ class ImportServicesTestCase(TestCase):
     def test_keep_in_person_service_in_draft_when_ineligible(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,0123456789,En présentiel,Paris,1 rue de test,,,Commune,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,Commune,"
+            f"{self.funding_label.value},Test Person,0123456789,en-presentiel,Paris,1 rue de test,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -387,8 +387,8 @@ class ImportServicesTestCase(TestCase):
     def test_keep_service_in_draft_when_ineligible(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,À distance,,,,,Commune,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,Commune,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -404,8 +404,8 @@ class ImportServicesTestCase(TestCase):
     def test_make_contact_info_public(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,,À distance,,,,,Commune,oui"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,Commune,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,oui"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
