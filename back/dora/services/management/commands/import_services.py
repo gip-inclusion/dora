@@ -35,27 +35,27 @@ class Command(BaseCommand):
             import_services(reader, bot_user, wet_run)
 
 
-def _extract_location_kinds_from_line(line):
-    location_kinds_raw = line.get("location_kinds", "").strip()
-    if not location_kinds_raw:
+def _extract_multiple_values_from_line(line, header_name, model, category_label):
+    values = [
+        label.strip() for label in line.get(header_name, "").split(",") if label.strip()
+    ]
+
+    if len(values) == 0:
         return []
 
-    location_kinds_entities = {
-        kind.label.lower(): kind for kind in LocationKind.objects.all()
-    }
+    queryset = model.objects.filter(value__in=values)
 
-    location_kinds = []
-    for entry in location_kinds_raw.split(","):
-        cleaned_entry = entry.strip().lower()
-        if cleaned_entry in location_kinds_entities:
-            location_kinds.append(location_kinds_entities[cleaned_entry])
-        else:
-            print(
-                f"Type d'accueil avec la valeur '{entry.strip()}' introuvable. Valeur ignorée.",
-                file=sys.stderr,
+    if queryset.count() != len(values):
+        invalid_values = set(values) - set(queryset.values_list("value", flat=True))
+        if len(invalid_values) > 0:
+            raise ValueError(
+                f"Un ou plusieurs {category_label} sont introuvables : {invalid_values}. Ligne ignorée.",
             )
+        raise ValueError(
+            f"Un ou plusieurs {category_label} sont dupliqués. Ligne ignorée.",
+        )
 
-    return location_kinds
+    return queryset
 
 
 def _extract_diffusion_zone_type_from_line(line):
@@ -79,12 +79,16 @@ def _extract_data_from_line(line):
         contact_name=line.get("contact_name").strip(),
         contact_email=line.get("contact_email").strip(),
         contact_phone=line.get("contact_phone").replace(" ", "").strip(),
-        location_kinds=_extract_location_kinds_from_line(line),
         location_city=line.get("location_city").strip(),
         location_address=line.get("location_address").strip(),
         location_complement=line.get("location_complement").strip(),
         location_postal_code=line.get("location_postal_code").replace(" ", "").strip(),
-        label_financement=line.get("label_financement", "").strip(),
+        location_kinds=_extract_multiple_values_from_line(
+            line, "location_kinds", LocationKind, "types d'accueil"
+        ),
+        funding_labels=_extract_multiple_values_from_line(
+            line, "labels_financement", FundingLabel, "labels de financement"
+        ),
         diffusion_zone_type=_extract_diffusion_zone_type_from_line(line),
     )
     return data
@@ -133,8 +137,7 @@ def _edit_and_save_service(
             )
 
     if wet_run:
-        if hasattr(data, "funding_label"):
-            service.funding_labels.add(data.funding_label)
+        service.funding_labels.add(*data.funding_labels)
 
         service.save()
 
@@ -209,23 +212,6 @@ def import_services(
                     # Vérification du type de zone de diffusion (contrainte d'intégrité sur la table Services)
                     if not data.diffusion_zone_type:
                         error_msg = f"Erreur : Type de zone de diffusion manquant. Ligne {idx} ignorée."
-                        print(
-                            f"❌ {error_msg}",
-                            file=sys.stderr,
-                        )
-                        errors.append(error_msg)
-                        continue
-
-                    try:
-                        funding_label = (
-                            FundingLabel.objects.get(value=data.label_financement)
-                            if data.label_financement
-                            else None
-                        )
-                        if funding_label:
-                            data.funding_label = funding_label
-                    except FundingLabel.DoesNotExist:
-                        error_msg = f"Erreur : Label de financement '{data.label_financement}' introuvable. Ligne {idx} ignorée."
                         print(
                             f"❌ {error_msg}",
                             file=sys.stderr,
