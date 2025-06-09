@@ -4,6 +4,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
+  import { DI_DORA_UNIFIED_SEARCH_ENABLED } from "$lib/env";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { token, userInfo } from "$lib/utils/auth";
   import { isLessThanOneHourAgo } from "$lib/utils/date";
@@ -13,6 +14,7 @@
   import ServiceMobilisation from "./service-mobilisation.svelte";
   import ServicePresentation from "./service-presentation/service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
+
   export let service: Service | Model;
   export let servicesOptions: ServicesOptions;
   export let onFeedbackButtonClick: () => void;
@@ -31,7 +33,9 @@
     : false;
 
   $: showServiceWillBeVisibleSoonNotice =
-    service.canWrite && isLessThanOneHourAgo(service.creationDate);
+    DI_DORA_UNIFIED_SEARCH_ENABLED &&
+    service.canWrite &&
+    isLessThanOneHourAgo(service.creationDate);
 
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;
