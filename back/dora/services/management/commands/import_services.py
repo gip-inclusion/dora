@@ -22,7 +22,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--wet-run",
             help="Exécuter l'import en vrai (modifie la base de données)",
-            default=False,
+            action="store_true",
         )
 
     def handle(self, *args, **kwargs):
