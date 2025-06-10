@@ -22,7 +22,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--wet-run",
             help="Exécuter l'import en vrai (modifie la base de données)",
-            default=False,
+            action="store_true",
         )
 
     def handle(self, *args, **kwargs):
@@ -61,7 +61,7 @@ def _extract_multiple_values_from_line(line, header_name, model, category_label)
 def _extract_diffusion_zone_type_from_line(line):
     diffusion_zone_type_raw = line.get("diffusion_zone_type", "").strip()
     if not diffusion_zone_type_raw:
-        return None
+        return ""
 
     for choice in AdminDivisionType:
         if diffusion_zone_type_raw == choice.label:
@@ -89,6 +89,7 @@ def _extract_data_from_line(line):
         funding_labels=_extract_multiple_values_from_line(
             line, "labels_financement", FundingLabel, "labels de financement"
         ),
+        is_contact_info_public=line.get("is_contact_info_public", "").strip(),
         diffusion_zone_type=_extract_diffusion_zone_type_from_line(line),
     )
     return data
@@ -114,9 +115,9 @@ def _edit_and_save_service(
     service.address2 = data.location_complement
     service.city = data.location_city
     service.postal_code = data.location_postal_code
-    service.status = ServiceStatus.PUBLISHED
     service.location_kinds.set(data.location_kinds)
     service.diffusion_zone_type = data.diffusion_zone_type
+    service.is_contact_info_public = data.is_contact_info_public.lower() == "oui"
 
     if service.address1 and service.city and service.postal_code:
         geo_data = get_geo_data(
@@ -135,6 +136,9 @@ def _edit_and_save_service(
                     "postal_code": service.postal_code,
                 }
             )
+
+    if service.is_eligible_for_publishing():
+        service.status = ServiceStatus.PUBLISHED
 
     if wet_run:
         service.funding_labels.add(*data.funding_labels)
@@ -202,16 +206,6 @@ def import_services(
                         model = ServiceModel.objects.get(slug=data.modele_slug)
                     except ServiceModel.DoesNotExist:
                         error_msg = f"Erreur : Modèle de service avec le slug {data.modele_slug} introuvable. Ligne {idx} ignorée."
-                        print(
-                            f"❌ {error_msg}",
-                            file=sys.stderr,
-                        )
-                        errors.append(error_msg)
-                        continue
-
-                    # Vérification du type de zone de diffusion (contrainte d'intégrité sur la table Services)
-                    if not data.diffusion_zone_type:
-                        error_msg = f"Erreur : Type de zone de diffusion manquant. Ligne {idx} ignorée."
                         print(
                             f"❌ {error_msg}",
                             file=sys.stderr,
