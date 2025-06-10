@@ -1,10 +1,17 @@
+import csv
+import io
+
 from data_inclusion.schema.v0 import Profil
 from django import forms
+from django.contrib import messages
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
+from django.shortcuts import redirect, render
+from django.urls import path
 
 from dora.core.admin import EnumAdmin
 
+from .management.commands.import_services import import_services
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -115,6 +122,60 @@ class ServiceAdmin(admin.GISModelAdmin):
         "data_inclusion_source",
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["import_url"] = "import-services/"
+        return super().changelist_view(request, extra_context)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "import-services/",
+                self.admin_site.admin_view(self.import_services_view),
+                name="services_service_import",
+            ),
+        ]
+        return custom_urls + urls
+
+    def import_services_view(self, request):
+        if request.method == "POST":
+            # Handle file upload
+            csv_file = request.FILES.get("csv_file")
+            if csv_file:
+                # Your import logic here
+                reader = csv.reader(io.TextIOWrapper(csv_file))
+                is_wet_run = request.POST.get("wet_run") == "on"
+                # TODO:
+                # source_label = request.POST.get("source_label", "Import from admin")
+                result = import_services(reader, request.user, wet_run=is_wet_run)
+
+                messages.success(
+                    request, f"Successfully imported {result['created_count']} services"
+                )
+
+                if not is_wet_run:
+                    if result["geo_data_missing_lines"]:
+                        messages.warning(
+                            request,
+                            "Some services could not be geocoded. "
+                            "Please check the log for details.",
+                        )
+                    if result["errors"]:
+                        messages.error(
+                            request,
+                            f"Errors occurred during import: {', '.join(result['errors'])}",
+                        )
+                    return redirect(".")
+
+                return redirect("..")
+
+        context = {
+            "title": "Import Services",
+            "opts": self.model._meta,
+        }
+        return render(request, "admin/import_services.html", context)
 
 
 class ServiceModelAdmin(admin.ModelAdmin):
