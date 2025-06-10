@@ -2,7 +2,7 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
-from data_inclusion.schema import Profil, TypologieStructure
+from data_inclusion.schema.v0 import Profil, TypologieStructure
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models

@@ -1,5 +1,5 @@
 import pytest
-from data_inclusion.schema import TypologieStructure
+from data_inclusion.schema.v0 import TypologieStructure
 from django.contrib.gis.geos import Point
 from model_bakery import baker
 

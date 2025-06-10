@@ -45,7 +45,7 @@ def test_empty_profile_families(concerned_public):
 
 
 def test_all_valid_profiles(concerned_public):
-    from data_inclusion.schema import Profil
+    from data_inclusion.schema.v0 import Profil
 
     all_profiles = [p.value for p in Profil]
     concerned_public.profile_families = all_profiles
