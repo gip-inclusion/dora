@@ -212,9 +212,11 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         ServiceKind.objects.get(value="information"),
     )
     service.concerned_public.add(
-        baker.make(ConcernedPublic, name="adultes"),
-        baker.make(ConcernedPublic, name="jeunes-16-26"),
-        baker.make(ConcernedPublic, name="femmes"),
+        baker.make(ConcernedPublic, name="adultes", profile_families=["adultes"]),
+        baker.make(
+            ConcernedPublic, name="jeunes-16-26", profile_families=["jeunes-16-26"]
+        ),
+        baker.make(ConcernedPublic, name="femmes", profile_families=["femmes"]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
@@ -390,9 +392,11 @@ def test_service_serialization_exemple_need_di_user(api_client):
         ServiceKind.objects.get(value="information"),
     )
     service.concerned_public.add(
-        baker.make(ConcernedPublic, name="adultes"),
-        baker.make(ConcernedPublic, name="jeunes-16-26"),
-        baker.make(ConcernedPublic, name="femmes"),
+        baker.make(ConcernedPublic, name="adultes", profile_families=["adultes"]),
+        baker.make(
+            ConcernedPublic, name="jeunes-16-26", profile_families=["jeunes-16-26"]
+        ),
+        baker.make(ConcernedPublic, name="femmes", profile_families=["femmes"]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
