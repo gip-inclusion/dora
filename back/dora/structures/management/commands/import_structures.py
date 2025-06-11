@@ -129,7 +129,7 @@ class Command(BaseCommand):
         super().__init__(*args, **kwargs)
 
     def add_arguments(self, parser):
-        parser.add_argument("filename")
+        parser.add_argument("file_path", help="Le path du fichier csv à importer")
 
         parser.add_argument(
             "-n",
@@ -139,7 +139,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        filename = options["filename"]
+        file_path = options["file_path"]
         wet_run = options["wet_run"]
 
         if wet_run:
@@ -147,48 +147,55 @@ class Command(BaseCommand):
         else:
             self.stdout.write(self.style.NOTICE("DRY RUN"))
 
-        with open(filename) as structures_file:
+        with open(file_path) as structures_file:
             reader = csv.DictReader(structures_file, delimiter=",")
             # index à 1 et entête CSV
-            for i, row in enumerate(reader, 2):
-                serializer = ImportSerializer(
-                    data={
-                        "name": row["nom"],
-                        "siret": row["siret"],
-                        "parent_siret": row["siret_parent"],
-                        "admins": to_string_array(row["courriels_administrateurs"]),
-                        "labels": to_string_array(row["labels"]),
-                        "models": to_string_array(row["modeles"]),
-                        # champs optionnels correspondant directement
-                        # à un champ du modèle structure
-                        "phone": row.get("telephone", ""),
-                        "email": row.get("courriel_structure", ""),
-                    }
-                )
+            self.import_structures(reader, wet_run)
 
-                if serializer.is_valid():
-                    data = serializer.validated_data
-                    self.stdout.write(
-                        self.style.SUCCESS(
-                            f"{i}. Import de la structure {serializer.data['name']} (SIRET:{serializer.data['siret']})"
-                        )
+    def import_structures(
+        self,
+        reader,
+        wet_run=False,
+    ):
+        for i, row in enumerate(reader, 1):
+            serializer = ImportSerializer(
+                data={
+                    "name": row["nom"],
+                    "siret": row["siret"],
+                    "parent_siret": row["siret_parent"],
+                    "admins": to_string_array(row["courriels_administrateurs"]),
+                    "labels": to_string_array(row["labels"]),
+                    "models": to_string_array(row["modeles"]),
+                    # champs optionnels correspondant directement
+                    # à un champ du modèle structure
+                    "phone": row.get("telephone", ""),
+                    "email": row.get("courriel_structure", ""),
+                }
+            )
+
+            if serializer.is_valid():
+                data = serializer.validated_data
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"{i}. Import de la structure {serializer.data['name']} (SIRET:{serializer.data['siret']})"
                     )
-                    if wet_run:
-                        structure = self.get_or_create_structure(
-                            data["name"],
-                            data["siret"],
-                            data["parent_siret"],
-                            phone=data.get("phone"),
-                            email=data.get("email"),
-                        )
-                        self.stdout.write(f"{structure.get_frontend_url()}")
-                        self.invite_users(structure, data["admins"])
-                        self.add_labels(structure, data["labels"])
-                        self.create_services(structure, data["models"])
-                else:
-                    self.stderr.write(
-                        self.style.ERROR(pformat(dict(serializer.errors.items())))
+                )
+                if wet_run:
+                    structure = self.get_or_create_structure(
+                        data["name"],
+                        data["siret"],
+                        data["parent_siret"],
+                        phone=data.get("phone"),
+                        email=data.get("email"),
                     )
+                    self.stdout.write(f"{structure.get_frontend_url()}")
+                    self.invite_users(structure, data["admins"])
+                    self.add_labels(structure, data["labels"])
+                    self.create_services(structure, data["models"])
+            else:
+                self.stderr.write(
+                    self.style.ERROR(pformat(dict(serializer.errors.items())))
+                )
 
     def get_or_create_structure(
         self,
@@ -331,7 +338,7 @@ class Command(BaseCommand):
 
     def _update_optional_fields(self, structure, **kwargs):
         # Même si la structure existe déjà,
-        # les champs optionnels peuvent être mis à jour si ils contiennent une valeur
+        # les champs optionnels peuvent être mis à jour s'ils contiennent une valeur
         to_update = dict({(k, v) for k, v in kwargs.items() if v})
         self.stdout.write(f" > mise à jour des champs : {to_update}")
         Structure.objects.filter(pk=structure.pk).update(**to_update)
