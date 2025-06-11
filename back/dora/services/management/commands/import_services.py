@@ -64,7 +64,7 @@ def _extract_diffusion_zone_type_from_line(line):
         return ""
 
     for choice in AdminDivisionType:
-        if diffusion_zone_type_raw == choice.label:
+        if diffusion_zone_type_raw == choice.value:
             return choice
 
     raise ValueError(
