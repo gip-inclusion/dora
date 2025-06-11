@@ -102,7 +102,6 @@ class StructuresImportTestCase(APITestCase):
             err,
         )
 
-    #
     def test_can_invite_new_user(self):
         structure = make_structure()
         self.add_row(
