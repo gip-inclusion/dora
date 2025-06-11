@@ -8,7 +8,13 @@ from django.db import transaction
 from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import get_geo_data
 from dora.services.enums import ServiceStatus
-from dora.services.models import FundingLabel, LocationKind, ServiceModel, ServiceSource
+from dora.services.models import (
+    FundingLabel,
+    LocationKind,
+    Service,
+    ServiceModel,
+    ServiceSource,
+)
 from dora.services.utils import instantiate_service_from_model
 from dora.structures.models import Structure
 from dora.users.models import User
@@ -143,6 +149,14 @@ def _edit_and_save_service(service, data, idx, importing_user, geo_data_missing_
     service.save()
 
 
+def _is_service_duplicated(data):
+    return Service.objects.filter(
+        structure__siret=data.structure_siret,
+        model__slug=data.modele_slug,
+        contact_email=data.contact_email,
+    ).exists()
+
+
 def import_services(
     reader,
     importing_user,
@@ -151,6 +165,7 @@ def import_services(
     created_count = 0
     errors = []
     geo_data_missing_lines = []
+    duplicated_services = []
 
     if wet_run:
         print("⚠️ PRODUCTION RUN ⚠️")
@@ -215,6 +230,13 @@ def import_services(
                         importing_user,
                         geo_data_missing_lines,
                     )
+                    if _is_service_duplicated(data):
+                        message = f"Ligne {idx} : Service dupliqué pour la structure {data.structure_siret} avec le modèle {data.modele_slug} et le contact {data.contact_email}."
+                        duplicated_services.append(message)
+                        print(
+                            message,
+                            file=sys.stderr,
+                        )
                     created_count += 1
                     print("✅ Service créé.")
 
@@ -255,4 +277,5 @@ def import_services(
         "created_count": created_count,
         "errors": errors,
         "geo_data_missing_lines": geo_data_missing_lines,
+        "duplicated_services": duplicated_services,
     }

@@ -422,3 +422,29 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["errors"], [])
 
         self.assertTrue(created_service.is_contact_info_public)
+
+    def test_alert_duplicated_structure(self):
+        baker.make(
+            "Service",
+            structure=self.structure,
+            model=self.service_model,
+            contact_email="referent@email.com",
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(reader, self.importing_user, wet_run=True)
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+        self.assertEqual(len(result["duplicated_services"]), 1)
+        self.assertEqual(
+            result["duplicated_services"][0],
+            f"Ligne 1 : Service dupliqué pour la structure {self.structure.siret} avec le modèle {self.service_model.slug} et le contact referent@email.com.",
+        )
