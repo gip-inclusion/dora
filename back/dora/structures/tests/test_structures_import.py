@@ -102,7 +102,6 @@ class StructuresImportTestCase(APITestCase):
             err,
         )
 
-    #
     def test_can_invite_new_user(self):
         structure = make_structure()
         self.add_row(
@@ -119,7 +118,7 @@ class StructuresImportTestCase(APITestCase):
             mail.outbox[0].body,
         )
         self.assertIn(
-            f"L’équipe DORA vous a invité(e) à rejoindre la structure { structure.name }",
+            f"L’équipe DORA vous a invité(e) à rejoindre la structure {structure.name}",
             mail.outbox[0].body,
         )
 
@@ -361,7 +360,7 @@ class StructuresImportTestCase(APITestCase):
             1,
         )
         self.assertIn(
-            f"L’équipe DORA vous a invité(e) à rejoindre la structure { branch.name }",
+            f"L’équipe DORA vous a invité(e) à rejoindre la structure {branch.name}",
             mail.outbox[0].body,
         )
 
@@ -396,7 +395,7 @@ class StructuresImportTestCase(APITestCase):
             1,
         )
         self.assertIn(
-            f"L’équipe DORA vous a invité(e) à rejoindre la structure { branch.name }",
+            f"L’équipe DORA vous a invité(e) à rejoindre la structure {branch.name}",
             mail.outbox[0].body,
         )
 
