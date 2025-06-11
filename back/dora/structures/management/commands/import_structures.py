@@ -149,12 +149,12 @@ class Command(BaseCommand):
 
         with open(file_path) as structures_file:
             reader = csv.DictReader(structures_file, delimiter=",")
-            # index à 1 et entête CSV
-            self.import_structures(reader, wet_run)
+            self.import_structures(reader, self.bot_user, wet_run)
 
     def import_structures(
         self,
         reader,
+        importing_user,
         wet_run=False,
     ):
         for i, row in enumerate(reader, 1):
@@ -185,13 +185,14 @@ class Command(BaseCommand):
                         data["name"],
                         data["siret"],
                         data["parent_siret"],
+                        importing_user,
                         phone=data.get("phone"),
                         email=data.get("email"),
                     )
                     self.stdout.write(f"{structure.get_frontend_url()}")
                     self.invite_users(structure, data["admins"])
                     self.add_labels(structure, data["labels"])
-                    self.create_services(structure, data["models"])
+                    self.create_services(structure, data["models"], importing_user)
             else:
                 self.stderr.write(
                     self.style.ERROR(pformat(dict(serializer.errors.items())))
@@ -202,17 +203,20 @@ class Command(BaseCommand):
         name,
         siret,
         parent_siret,
+        importing_user,
         **kwargs,
     ):
         if parent_siret:
             parent_structure = self._get_or_create_structure_from_siret(
-                parent_siret, is_parent=True, **kwargs
+                parent_siret, importing_user, is_parent=True, **kwargs
             )
             structure = self._get_or_create_branch(
                 name, siret, parent_structure, **kwargs
             )
         else:
-            structure = self._get_or_create_structure_from_siret(siret, **kwargs)
+            structure = self._get_or_create_structure_from_siret(
+                siret, importing_user, **kwargs
+            )
 
         return structure
 
@@ -259,11 +263,11 @@ class Command(BaseCommand):
                 self.stdout.write(f"Ajout du label {label.value}")
                 structure.national_labels.add(label)
 
-    def create_services(self, structure, models):
+    def create_services(self, structure, models, importing_user):
         for model in models:
             if not structure.services.filter(model=model).exists():
                 service = instantiate_service_from_model(
-                    model, structure, self.bot_user
+                    model, structure, importing_user
                 )
                 self.stdout.write(
                     f"Ajout du service {service.name} ({service.get_frontend_url()})"
@@ -304,7 +308,9 @@ class Command(BaseCommand):
             )
         return branch
 
-    def _get_or_create_structure_from_siret(self, siret, is_parent=False, **kwargs):
+    def _get_or_create_structure_from_siret(
+        self, siret, importing_user, is_parent=False, **kwargs
+    ):
         try:
             structure = Structure.objects.get(siret=siret)
             self.stdout.write(
@@ -319,8 +325,8 @@ class Command(BaseCommand):
             structure = Structure.objects.create_from_establishment(
                 establishment, **kwargs
             )
-            structure.creator = self.bot_user
-            structure.last_editor = self.bot_user
+            structure.creator = importing_user
+            structure.last_editor = importing_user
             structure.source = self.source
             structure.save()
 
@@ -329,7 +335,7 @@ class Command(BaseCommand):
             )
             send_moderation_notification(
                 structure,
-                self.bot_user,
+                importing_user,
                 "Structure créée à partir d'un import en masse",
                 ModerationStatus.VALIDATED,
             )
