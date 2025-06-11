@@ -34,7 +34,7 @@ class ImportServicesTestCase(TestCase):
     def test_import_services_wet_run(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,Commune,"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,city,"
         )
         reader = csv.reader(io.StringIO(csv_content))
 
@@ -338,7 +338,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,0123456789,a-distance,,,,,Commune,"
+            f"{self.funding_label.value},Test Person,0123456789,a-distance,,,,,city,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
@@ -355,7 +355,7 @@ class ImportServicesTestCase(TestCase):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
-            f"{self.funding_label.value},Test Person,0123456789,en-presentiel,Paris,1 rue de test,,75020,Commune,"
+            f"{self.funding_label.value},Test Person,0123456789,en-presentiel,Paris,1 rue de test,,75020,city,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
