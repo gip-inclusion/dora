@@ -1,4 +1,4 @@
-from data_inclusion.schema import Profil
+from data_inclusion.schema.v0 import Profil
 from django.conf import settings
 from django.utils import dateparse, timezone
 

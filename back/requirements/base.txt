@@ -1,4 +1,4 @@
-data-inclusion-schema==0.25.0
+data-inclusion-schema==0.26.0
 dj-database-url==3.0.0
 Django==5.2.1
 django-cors-headers==4.7.0
