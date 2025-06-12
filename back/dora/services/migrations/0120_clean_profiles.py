@@ -2250,7 +2250,6 @@ def clean_profiles(apps, schema_editor):
 
     for old_profile_id, profile_changes in PROFILE_CHANGES.items():
         try:
-            # Start a new transaction for each profile
             with schema_editor.connection.cursor() as cursor:
                 cursor.execute("BEGIN")
                 try:
@@ -2262,6 +2261,7 @@ def clean_profiles(apps, schema_editor):
                         concerned_public=old_profile
                     )
 
+                    # Récupération des nouveaux profils
                     if "newProfileIds" in profile_changes:
                         logger.info(
                             "Assignation des nouveaux profils %s",
@@ -2280,14 +2280,7 @@ def clean_profiles(apps, schema_editor):
                                 f"un ou plusieurs publics concernés non trouvés : {unfound_profile_ids}"
                             )
 
-                        for service in services:
-                            service.concerned_public.remove(old_profile)
-                            service.concerned_public.add(*new_profiles)
-
-                        for service_model in service_models:
-                            service_model.concerned_public.remove(old_profile)
-                            service_model.concerned_public.add(*new_profiles)
-
+                    # Récupération des conditions d'accès
                     if "accessConditionIds" in profile_changes:
                         logger.info(
                             "Assignation des conditions d'accès %s",
@@ -2306,41 +2299,43 @@ def clean_profiles(apps, schema_editor):
                                 f"une ou plusieures conditions d'accès non trouvées : {unfound_access_condition_ids}"
                             )
 
-                        for service in services:
-                            service.access_conditions.add(*access_conditions)
-                            if (
-                                ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR
-                                in profile_changes["accessConditionIds"]
-                            ):
-                                service.qpv_or_zrr = True
-                                service.save()
+                    # Assignation des nouveaux profils et conditions d'accès aux services
+                    for service in services:
+                        service.concerned_public.remove(old_profile)
+                        service.concerned_public.add(*new_profiles)
+                        service.access_conditions.add(*access_conditions)
+                        if (
+                            ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR
+                            in profile_changes["accessConditionIds"]
+                        ):
+                            service.qpv_or_zrr = True
+                            service.save()
 
-                        for service_model in service_models:
-                            service_model.access_conditions.add(*access_conditions)
-                            if (
-                                ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR
-                                in profile_changes["accessConditionIds"]
-                            ):
-                                service_model.qpv_or_zrr = True
-                                service_model.save()
+                    # Assignation des nouveaux profils et conditions d'accès aux modèles de services
+                    for service_model in service_models:
+                        service_model.concerned_public.remove(old_profile)
+                        service_model.concerned_public.add(*new_profiles)
+                        service_model.access_conditions.add(*access_conditions)
+                        if (
+                            ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR
+                            in profile_changes["accessConditionIds"]
+                        ):
+                            service_model.qpv_or_zrr = True
+                            service_model.save()
 
                     logger.info("Suppression de l'ancien profil %d", old_profile_id)
                     old_profile.delete()
 
-                    # If everything went well, commit the transaction
                     cursor.execute("COMMIT")
                 except Exception as e:
-                    # If there was an error, rollback this profile's transaction
                     cursor.execute("ROLLBACK")
                     logger.warning(
                         "Une erreur est survenue lors du traitement du profil %d : %s",
                         old_profile_id,
                         str(e),
                     )
-                    # Continue with the next profile
                     continue
         except Exception as e:
-            # This outer try-except is for any errors in transaction management
             logger.error(
                 "Erreur de transaction pour le profil %d : %s",
                 old_profile_id,
