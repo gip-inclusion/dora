@@ -162,7 +162,7 @@ def import_services(
 
     try:
         with transaction.atomic():
-            for idx, line in enumerate(lines, 1):
+            for idx, line in enumerate(lines, 2):
                 try:
                     print(f"\nTraitement de la ligne {idx} :")
 
