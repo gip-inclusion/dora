@@ -229,7 +229,7 @@ def get_new_di_service_orientation_data(user, structure, service):
         "diContactEmail": "di.contact@example.com",
         "diContactName": "DI Contact",
         "diContactPhone": "0987654321",
-        "diServiceId": "di--soliguide--630fa36e5c4d35d05bd267ab",
+        "diServiceId": "soliguide--630fa36e5c4d35d05bd267ab",
         "diServiceName": "DI Service Name",
         "diServiceAddressLine": "DI Address Line",
         "diStructureName": "DI Structure Name",
@@ -269,6 +269,7 @@ def test_query_create_triggers_moderation(
 
     data = get_new_orientation_data(user, structure, service)
 
+    print("data", data)
     response = api_client.post("/orientations/", data=data, follow=True)
 
     assert response.status_code == 201
