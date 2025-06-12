@@ -2273,8 +2273,11 @@ def clean_profiles(apps, schema_editor):
                         if new_profiles.count() != len(
                             profile_changes["newProfileIds"]
                         ):
+                            unfound_profile_ids = set(
+                                profile_changes["newProfileIds"]
+                            ) - set(new_profiles.values_list("id", flat=True))
                             raise ConcernedPublic.DoesNotExist(
-                                f"un ou plusieurs publics concernés non trouvés : {profile_changes['newProfileIds']}"
+                                f"un ou plusieurs publics concernés non trouvés : {unfound_profile_ids}"
                             )
 
                         for service in services:
