@@ -307,16 +307,13 @@ class ImportServicesTestCase(TestCase):
     def test_duplicated_financing_labels(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f'{self.service_model.slug},{self.structure.siret},invalid@email.com,"{self.funding_label.value},{self.funding_label.value}",,,,,,,,'
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{self.funding_label.value}",,,,,,,,'
         )
 
         reader = csv.reader(io.StringIO(csv_content))
 
         result = import_services(reader, self.importing_user, wet_run=True)
 
-        self.assertFalse(
-            Service.objects.filter(contact_email="invalid@email.com").exists()
-        )
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
@@ -326,7 +323,7 @@ class ImportServicesTestCase(TestCase):
     def test_handle_one_invalid_line(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"invalid,{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,,\n"
+            f"invalid,{self.structure.siret},invalid@email.com,{self.funding_label.value},,,,,,,,,\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,,"
         )
 
@@ -334,6 +331,9 @@ class ImportServicesTestCase(TestCase):
 
         result = import_services(reader, self.importing_user, wet_run=True)
 
+        self.assertFalse(
+            Service.objects.filter(contact_email="invalid@email.com").exists()
+        )
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(len(result["errors"]), 1)
 
