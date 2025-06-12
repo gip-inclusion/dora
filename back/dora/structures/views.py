@@ -1,4 +1,4 @@
-from data_inclusion.schema import TypologieStructure
+from data_inclusion.schema.v0 import TypologieStructure
 from django.db import transaction
 from django.db.models.query_utils import Q
 from django.shortcuts import get_object_or_404

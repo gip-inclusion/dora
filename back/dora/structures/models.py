@@ -1,7 +1,7 @@
 import uuid
 from typing import Optional
 
-from data_inclusion.schema import TypologieStructure
+from data_inclusion.schema.v0 import TypologieStructure
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError

@@ -2,7 +2,7 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
-from data_inclusion.schema import Profil, TypologieStructure
+from data_inclusion.schema.v0 import Profil, TypologieStructure
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -37,6 +37,12 @@ def make_unique_slug(instance, parent_slug, value, length=20):
             base_slug + "-" + get_random_string(4, "abcdefghijklmnopqrstuvwxyz")
         )
     return unique_slug
+
+
+def validate_profile_families(value):
+    valid_values = {p.value for p in Profil}
+    if value not in valid_values:
+        raise ValidationError(f"Invalid profile family: {value}")
 
 
 class CustomizableChoice(models.Model):
@@ -82,7 +88,7 @@ class AccessCondition(CustomizableChoice):
 
 class ConcernedPublic(CustomizableChoice):
     profile_families = ArrayField(
-        models.CharField(choices=((p.value, p.label) for p in Profil), max_length=255),
+        models.CharField(max_length=255, validators=[validate_profile_families]),
         verbose_name="Familles de profils",
         blank=False,
         null=False,
@@ -92,6 +98,10 @@ class ConcernedPublic(CustomizableChoice):
     class Meta(CustomizableChoice.Meta):
         verbose_name = "Public concerné"
         verbose_name_plural = "Publics concernés"
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class ServiceFee(EnumModel):

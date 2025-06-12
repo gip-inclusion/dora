@@ -1,4 +1,4 @@
-from data_inclusion.schema import Profil
+from data_inclusion.schema.v0 import Profil
 from django import forms
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin

@@ -2922,7 +2922,10 @@ class ServiceSyncTestCase(APITestCase):
         for field in SYNC_CUSTOM_M2M_FIELDS:
             initial_checksum = model.sync_checksum
             rel_model = getattr(model, field).target_field.related_model
-            new_value = baker.make(rel_model)
+            rel_models_fields = (
+                {"profile_families": ["adultes"]} if field == "concerned_public" else {}
+            )
+            new_value = baker.make(rel_model, **rel_models_fields)
             response = self.client.patch(
                 f"/models/{model.slug}/", {field: [new_value.id]}
             )

@@ -2,7 +2,7 @@ import json
 import logging
 
 import requests
-from data_inclusion.schema import TypologieStructure
+from data_inclusion.schema.v0 import TypologieStructure
 from django.conf import settings
 from django.contrib.gis.geos import Point
 from django.core.management.base import BaseCommand
