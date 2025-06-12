@@ -2270,7 +2270,7 @@ def clean_profiles(apps, schema_editor):
                         new_profiles = ConcernedPublic.objects.filter(
                             id__in=profile_changes["newProfileIds"]
                         )
-                        if not new_profiles.exists() or new_profiles.count() != len(
+                        if new_profiles.count() != len(
                             profile_changes["newProfileIds"]
                         ):
                             raise ConcernedPublic.DoesNotExist(
