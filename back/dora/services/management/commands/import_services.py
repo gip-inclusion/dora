@@ -228,7 +228,7 @@ def import_services(
                 created_count = 0
                 raise Exception(
                     f"⚠️ {len(errors)} erreurs rencontrées lors du traitement du fichier CSV.\n"
-                    "Toutes les modifications sont annulées"
+                    "Toutes les modifications sont annulées."
                 )
 
             if not wet_run:
@@ -238,7 +238,7 @@ def import_services(
 
     except Exception as e:
         if str(e) != "Mode dry-run activé. Toutes les modifications sont annulées.":
-            print(f"Erreur critique : {e}", file=sys.stderr)
+            print(f"\nErreur critique : {e}", file=sys.stderr)
 
     print("\n--------------------------------------------------")
     print("Traitement du fichier CSV terminé.")
