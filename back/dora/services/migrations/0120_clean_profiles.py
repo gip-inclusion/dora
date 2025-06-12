@@ -2299,8 +2299,11 @@ def clean_profiles(apps, schema_editor):
                         if access_conditions.count() != len(
                             profile_changes["accessConditionIds"]
                         ):
+                            unfound_access_condition_ids = set(
+                                profile_changes["accessConditionIds"]
+                            ) - set(access_conditions.values_list("id", flat=True))
                             raise AccessCondition.DoesNotExist(
-                                f"une ou plusieures conditions d'accès non trouvées : {profile_changes['accessConditionIds']}"
+                                f"une ou plusieures conditions d'accès non trouvées : {unfound_access_condition_ids}"
                             )
 
                         for service in services:
