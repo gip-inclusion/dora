@@ -1,6 +1,8 @@
+import requests
 from django.core.files.storage import default_storage
 from rest_framework import serializers
 
+import dora.data_inclusion.client
 from dora.orientations.models import Orientation
 from dora.services.models import Service
 from dora.structures.models import Structure
@@ -69,6 +71,51 @@ class OrientationSerializer(serializers.ModelSerializer):
             "status",
         ]
         extra_kwargs = {"beneficiary_attachments": {"write_only": True}}
+
+    def validate(self, orientation):
+        # Récupère le service depuis les données ou l'instance
+        service = orientation.get("service") or (
+            self.instance.service if self.instance else None
+        )
+
+        if service:
+            # Service Dora
+            requires_attachments = (
+                service.credentials.exists()  # A des justificatifs requis
+                or bool(service.forms)  # A des documents à compléter
+            )
+        elif orientation.get("di_service_id"):
+            # Service DI -> récupération du service depuis le client DI
+            source_di, di_service_id = orientation.get("di_service_id").split("--")
+            di_client = dora.data_inclusion.di_client_factory()
+            try:
+                raw_service = (
+                    di_client.retrieve_service(source=source_di, id=di_service_id)
+                    if di_client is not None
+                    else None
+                )
+            except requests.ConnectionError:
+                return orientation
+            if raw_service is None:
+                return orientation
+            di_service = dora.data_inclusion.map_service(raw_service, False)
+
+            requires_attachments = (
+                bool(di_service.get("credentials"))  # A des justificatifs requis
+                or bool(di_service.get("forms"))  # A des documents à compléter
+            )
+        else:
+            return orientation
+
+        # Si le service nécessite des documents mais qu'aucun n'est fourni
+        if requires_attachments and not orientation.get("beneficiary_attachments"):
+            raise serializers.ValidationError(
+                {
+                    "beneficiary_attachments": "Des documents sont requis pour ce service. Veuillez joindre au moins un document."
+                }
+            )
+
+        return orientation
 
     def get_service(self, orientation):
         return {
