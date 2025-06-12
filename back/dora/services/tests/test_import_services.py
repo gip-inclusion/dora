@@ -10,7 +10,7 @@ from dora.core.utils import GeoData
 from dora.service_suggestions.tests import DUMMY_SUGGESTION
 from dora.services.enums import ServiceStatus
 from dora.services.management.commands.import_services import import_services
-from dora.services.models import Service
+from dora.services.models import Service, ServiceSource
 
 
 class ImportServicesTestCase(TestCase):
@@ -31,6 +31,11 @@ class ImportServicesTestCase(TestCase):
             "FundingLabel", value="test-value", label="test-label"
         )
 
+        self.source_info = {
+            "value": "file_name",
+            "label": "Test Import",
+        }
+
     def test_import_services_wet_run(self):
         csv_content = (
             f"{self.csv_headers}\n"
@@ -38,7 +43,9 @@ class ImportServicesTestCase(TestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -68,7 +75,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=False)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=False
+        )
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
@@ -86,7 +95,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
@@ -101,7 +112,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
@@ -117,7 +130,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
 
@@ -135,7 +150,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -152,7 +169,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
@@ -168,7 +187,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
 
@@ -185,7 +206,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 1)
         created_service = Service.objects.filter(creator=self.importing_user).last()
@@ -206,7 +229,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
@@ -227,7 +252,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(len(result["geo_data_missing_lines"]), 1)
@@ -262,7 +289,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(len(result["geo_data_missing_lines"]), 0)
@@ -287,7 +316,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 1)
         created_service = Service.objects.filter(creator=self.importing_user).last()
@@ -312,7 +343,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
@@ -329,7 +362,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertFalse(
             Service.objects.filter(contact_email="invalid@email.com").exists()
@@ -346,7 +381,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -363,7 +400,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -380,7 +419,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -397,7 +438,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -414,7 +457,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -439,7 +484,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
@@ -448,3 +495,54 @@ class ImportServicesTestCase(TestCase):
             result["duplicated_services"][0],
             f"Ligne 1 : Service dupliqué pour la structure {self.structure.siret} avec le modèle {self.service_model.slug} et le contact referent@email.com.",
         )
+
+    def test_new_service_source(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(
+            reader,
+            self.importing_user,
+            {"value": "new_file", "label": "new file used"},
+            wet_run=True,
+        )
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        new_source = ServiceSource.objects.get(value="new_file", label="new file used")
+
+        self.assertEqual(created_service.source, new_source)
+
+    def test_existing_service_source(self):
+        existing_source = baker.make(
+            "ServiceSource", value="existing_file", label="Existing File"
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(
+            reader,
+            self.importing_user,
+            {"value": f"{existing_source.value}", "label": f"{existing_source.label}"},
+            wet_run=True,
+        )
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+        self.assertEqual(created_service.source, existing_source)

@@ -1,4 +1,5 @@
 import csv
+import os
 import sys
 from types import SimpleNamespace
 
@@ -38,7 +39,12 @@ class Command(BaseCommand):
 
         with open(file_path, "r") as f:
             reader = csv.reader(f)
-            import_services(reader, bot_user, wet_run)
+            file_name = os.path.basename(file_path).split(".")[0]
+            service_source = {
+                "value": file_name,
+                "label": "Services importés par la commande import_services",
+            }
+            import_services(reader, bot_user, service_source, wet_run)
 
 
 def _extract_multiple_values_from_line(line, header_name, model, category_label):
@@ -101,17 +107,11 @@ def _extract_data_from_line(line):
     return data
 
 
-def _edit_and_save_service(service, data, idx, importing_user, geo_data_missing_lines):
-    source, _ = ServiceSource.objects.get_or_create(
-        value="fichier-xxx",
-        defaults={
-            "label": "Fichier CSV des services de XXX",
-        },
-    )
-
+def _edit_and_save_service(
+    service, data, idx, importing_user, geo_data_missing_lines, source_info
+):
     service.creator = importing_user
     service.last_editor = importing_user
-    service.source = source
     service.contact_name = data.contact_name
     service.contact_email = data.contact_email
     service.contact_phone = data.contact_phone
@@ -122,6 +122,8 @@ def _edit_and_save_service(service, data, idx, importing_user, geo_data_missing_
     service.location_kinds.set(data.location_kinds)
     service.diffusion_zone_type = data.diffusion_zone_type
     service.is_contact_info_public = data.is_contact_info_public.lower() == "oui"
+
+    _set_service_source(service, source_info)
 
     if service.address1 and service.city and service.postal_code:
         geo_data = get_geo_data(
@@ -149,6 +151,14 @@ def _edit_and_save_service(service, data, idx, importing_user, geo_data_missing_
     service.save()
 
 
+def _set_service_source(service, source_info):
+    source, _ = ServiceSource.objects.get_or_create(
+        value=source_info["value"],
+        label=source_info["label"],
+    )
+    service.source = source
+
+
 def _is_service_duplicated(data):
     return Service.objects.filter(
         structure__siret=data.structure_siret,
@@ -160,6 +170,7 @@ def _is_service_duplicated(data):
 def import_services(
     reader,
     importing_user,
+    service_source,
     wet_run=False,
 ):
     created_count = 0
@@ -229,6 +240,7 @@ def import_services(
                         idx,
                         importing_user,
                         geo_data_missing_lines,
+                        service_source,
                     )
                     if _is_service_duplicated(data):
                         message = f"Ligne {idx} : Service dupliqué pour la structure {data.structure_siret} avec le modèle {data.modele_slug} et le contact {data.contact_email}."
