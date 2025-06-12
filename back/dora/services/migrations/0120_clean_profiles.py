@@ -2296,10 +2296,8 @@ def clean_profiles(apps, schema_editor):
                         access_conditions = AccessCondition.objects.filter(
                             id__in=profile_changes["accessConditionIds"]
                         )
-                        if (
-                            not access_conditions.exists()
-                            or access_conditions.count()
-                            != len(profile_changes["accessConditionIds"])
+                        if access_conditions.count() != len(
+                            profile_changes["accessConditionIds"]
                         ):
                             raise AccessCondition.DoesNotExist(
                                 f"une ou plusieures conditions d'accès non trouvées : {profile_changes['accessConditionIds']}"
