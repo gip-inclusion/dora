@@ -1,19 +1,17 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls static admin_modify %}
 
-{% block title %}Import Services{% endblock %}
-
 {% block breadcrumbs %}
   <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">Home</a>
-    &rsaquo; <a href="{% url 'admin:app_list' app_label='services' %}">Services</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label='services' %}">Administration de services</a>
     &rsaquo; <a href="{% url 'admin:services_service_changelist' %}">Services</a>
-    &rsaquo; Import Services
+    &rsaquo; Importer Services
   </div>
 {% endblock %}
 
 {% block content %}
-  <h1>Import Services from CSV</h1>
+  <h1>Importer des Services d'un CSV</h1>
 
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -24,12 +22,13 @@
           <input type="file" name="csv_file" accept=".csv" required>
         </div>
         <div>
-          <label for="source_label">Source Label:</label>
+          <label for="source_label">Label de source :</label>
           <input
             type="text"
             name="source_label"
             id="source_label"
-            placeholder="Source Label (optional)"
+            placeholder="Label de source"
+            required
           >
         </div>
         <div>

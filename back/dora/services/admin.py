@@ -141,15 +141,18 @@ class ServiceAdmin(admin.GISModelAdmin):
 
     def import_services_view(self, request):
         if request.method == "POST":
-            # Handle file upload
             csv_file = request.FILES.get("csv_file")
             if csv_file:
-                # Your import logic here
                 reader = csv.reader(io.TextIOWrapper(csv_file))
                 is_wet_run = request.POST.get("wet_run") == "on"
-                # TODO:
-                # source_label = request.POST.get("source_label", "Import from admin")
-                result = import_services(reader, request.user, wet_run=is_wet_run)
+                source_label = request.POST.get("source_label", "Import from admin")
+                source_info = {
+                    "value": csv_file.name.split(".")[0],
+                    "label": source_label,
+                }
+                result = import_services(
+                    reader, request.user, source_info, wet_run=is_wet_run
+                )
 
                 messages.success(
                     request, f"Successfully imported {result['created_count']} services"
@@ -172,7 +175,6 @@ class ServiceAdmin(admin.GISModelAdmin):
                 return redirect("..")
 
         context = {
-            "title": "Import Services",
             "opts": self.model._meta,
         }
         return render(request, "admin/import_services.html", context)
