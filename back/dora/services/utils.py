@@ -62,13 +62,13 @@ def _duplicate_customizable_choices(field, choices, structure):
             field.add(choice)
 
 
-def instantiate_model(model, structure, user):
+def instantiate_service_from_model(model, structure, user):
     service = model.__class__.objects.create(structure=structure)
 
     for field in SYNC_FIELDS:
         setattr(service, field, getattr(model, field))
 
-    # Overwrite address, to default to the new structure one
+    # Mettre l'adresse de la structure au lieu d'utiliser celle du modèle
     service.address1 = structure.address1
     service.address2 = structure.address2
     service.postal_code = structure.postal_code
@@ -139,8 +139,8 @@ def update_sync_checksum(service):
 
 
 def filter_services_by_city_code(services, city_code):
-    # Si la requete entrante contient un code insee d'arrondissement
-    # on le converti pour récupérer le code de la commune entière
+    # Si la requete entrante contient un code insee d'arrondissement,
+    # on le convertit pour récupérer le code de la commune entière.
     city_code = arrdt_to_main_insee_code(city_code)
     city = get_object_or_404(City, pk=city_code)
 
