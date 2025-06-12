@@ -8,7 +8,7 @@ from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.validators import validate_phone_number, validate_siret
 from dora.services.models import ServiceModel
-from dora.services.utils import instantiate_model
+from dora.services.utils import instantiate_service_from_model
 from dora.sirene.models import Establishment
 from dora.structures.emails import send_invitation_email
 from dora.structures.models import (
@@ -255,7 +255,9 @@ class Command(BaseCommand):
     def create_services(self, structure, models):
         for model in models:
             if not structure.services.filter(model=model).exists():
-                service = instantiate_model(model, structure, self.bot_user)
+                service = instantiate_service_from_model(
+                    model, structure, self.bot_user
+                )
                 self.stdout.write(
                     f"Ajout du service {service.name} ({service.get_frontend_url()})"
                 )

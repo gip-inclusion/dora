@@ -74,8 +74,8 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["errors"], [])
         self.assertEqual(result["geo_data_missing_lines"], [])
 
-        self.assertEqual(
-            Service.objects.filter(contact_email="referent@email.com").count(), 0
+        self.assertFalse(
+            Service.objects.filter(contact_email="referent@email.com").exists()
         )
 
     def test_missing_siret(self):
@@ -307,13 +307,16 @@ class ImportServicesTestCase(TestCase):
     def test_duplicated_financing_labels(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{self.funding_label.value}",,,,,,,,'
+            f'{self.service_model.slug},{self.structure.siret},invalid@email.com,"{self.funding_label.value},{self.funding_label.value}",,,,,,,,'
         )
 
         reader = csv.reader(io.StringIO(csv_content))
 
         result = import_services(reader, self.importing_user, wet_run=True)
 
+        self.assertFalse(
+            Service.objects.filter(contact_email="invalid@email.com").exists()
+        )
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
@@ -331,7 +334,7 @@ class ImportServicesTestCase(TestCase):
 
         result = import_services(reader, self.importing_user, wet_run=True)
 
-        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["created_count"], 0)
         self.assertEqual(len(result["errors"]), 1)
 
     def test_publish_eligible_remote_service(self):

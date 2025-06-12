@@ -9,7 +9,7 @@ from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import get_geo_data
 from dora.services.enums import ServiceStatus
 from dora.services.models import FundingLabel, LocationKind, ServiceModel, ServiceSource
-from dora.services.utils import instantiate_model
+from dora.services.utils import instantiate_service_from_model
 from dora.structures.models import Structure
 from dora.users.models import User
 
@@ -95,9 +95,7 @@ def _extract_data_from_line(line):
     return data
 
 
-def _edit_and_save_service(
-    service, data, idx, importing_user, geo_data_missing_lines, wet_run
-):
+def _edit_and_save_service(service, data, idx, importing_user, geo_data_missing_lines):
     source, _ = ServiceSource.objects.get_or_create(
         value="fichier-xxx",
         defaults={
@@ -140,10 +138,9 @@ def _edit_and_save_service(
     if service.is_eligible_for_publishing():
         service.status = ServiceStatus.PUBLISHED
 
-    if wet_run:
-        service.funding_labels.add(*data.funding_labels)
+    service.funding_labels.add(*data.funding_labels)
 
-        service.save()
+    service.save()
 
 
 def import_services(
@@ -169,15 +166,7 @@ def import_services(
                 try:
                     print(f"\nTraitement de la ligne {idx} :")
 
-                    ####################
-                    # EXTRACT
-                    ####################
-
                     data = _extract_data_from_line(line)
-
-                    ####################
-                    # TRANSFORM
-                    ####################
 
                     # Vérification que le SIRET de la structure est bien renseigné
                     if not data.structure_siret:
@@ -213,21 +202,18 @@ def import_services(
                         errors.append(error_msg)
                         continue
 
-                    ####################
-                    # LOAD
-                    ####################
-
                     print(
                         f"Création d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'."
                     )
-                    new_service = instantiate_model(model, structure, importing_user)
+                    new_service = instantiate_service_from_model(
+                        model, structure, importing_user
+                    )
                     _edit_and_save_service(
                         new_service,
                         data,
                         idx,
                         importing_user,
                         geo_data_missing_lines,
-                        wet_run,
                     )
                     created_count += 1
                     print("✅ Service créé.")
@@ -237,6 +223,13 @@ def import_services(
                     print(f"❌ {error_msg}", file=sys.stderr)
                     errors.append(error_msg)
                     continue
+
+            if len(errors) > 0 and wet_run:
+                created_count = 0
+                raise Exception(
+                    f"⚠️ {len(errors)} erreurs rencontrées lors du traitement du fichier CSV.\n"
+                    "Toutes les modifications sont annulées"
+                )
 
             if not wet_run:
                 raise Exception(
