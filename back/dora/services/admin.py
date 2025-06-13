@@ -8,6 +8,7 @@ from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
 from django.shortcuts import redirect, render
 from django.urls import path
+from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 
@@ -33,6 +34,8 @@ from .models import (
     ServiceStatusHistoryItem,
     ServiceSubCategory,
 )
+
+TEN_MB_LIMIT = 10 * 1024 * 1024
 
 
 class ServiceModificationHistoryItemInline(admin.TabularInline):
@@ -141,43 +144,135 @@ class ServiceAdmin(admin.GISModelAdmin):
 
     def import_services_view(self, request):
         if request.method == "POST":
-            csv_file = request.FILES.get("csv_file")
-            if csv_file:
-                reader = csv.reader(io.TextIOWrapper(csv_file))
-                is_wet_run = request.POST.get("wet_run") == "on"
-                source_label = request.POST.get("source_label", "Import from admin")
-                source_info = {
-                    "value": csv_file.name.split(".")[0],
-                    "label": source_label,
-                }
-                result = import_services(
-                    reader, request.user, source_info, wet_run=is_wet_run
-                )
-
-                messages.success(
-                    request, f"Successfully imported {result['created_count']} services"
-                )
-
-                if not is_wet_run:
-                    if result["geo_data_missing_lines"]:
-                        messages.warning(
-                            request,
-                            "Some services could not be geocoded. "
-                            "Please check the log for details.",
-                        )
-                    if result["errors"]:
-                        messages.error(
-                            request,
-                            f"Errors occurred during import: {', '.join(result['errors'])}",
-                        )
-                    return redirect(".")
-
-                return redirect("..")
+            return self._handle_import_post(request)
 
         context = {
+            "title": "Import Services d'un CSV",
             "opts": self.model._meta,
+            "has_view_permission": True,
         }
         return render(request, "admin/import_services.html", context)
+
+    def _handle_import_post(self, request):
+        csv_file = request.FILES.get("csv_file")
+        if not csv_file:
+            messages.error(request, "Veuillez sélectionner un fichier CSV.")
+            return redirect(".")
+
+        if not csv_file.name.lower().endswith(".csv"):
+            messages.error(request, "Veuillez télécharger un fichier CSV valide.")
+            return redirect(".")
+
+        if csv_file.size > TEN_MB_LIMIT:
+            messages.error(request, "Le fichier est trop volumineux (maximum 10MB).")
+            return redirect(".")
+
+        try:
+            is_wet_run = request.POST.get("wet_run") == "on"
+            source_label = request.POST.get("source_label", "Import from admin").strip()
+
+            source_info = {
+                "value": csv_file.name.rsplit(".", 1)[0],
+                "label": source_label or "Import from admin",
+            }
+
+            reader = csv.reader(io.TextIOWrapper(csv_file, encoding="utf-8"))
+            result = import_services(
+                reader, request.user, source_info, wet_run=is_wet_run
+            )
+
+            return self._handle_import_results(request, result, is_wet_run)
+
+        except UnicodeDecodeError:
+            messages.error(
+                request,
+                "Erreur d'encodage du fichier. Assurez-vous que le fichier est encodé en UTF-8.",
+            )
+            return redirect(".")
+        except Exception as e:
+            messages.error(request, f"Une erreur inattendue s'est produite : {str(e)}")
+            return redirect(".")
+
+    def _handle_import_results(self, request, result, is_wet_run):
+        created_count = result.get("created_count", 0)
+        errors = result.get("errors", [])
+        duplicated_services = result.get("duplicated_services", [])
+        geo_data_missing = result.get("geo_data_missing_lines", [])
+
+        if is_wet_run and not errors:
+            messages.success(
+                request,
+                f"Votre import a réussi. Vous avez créé {created_count} nouveaux services.",
+            )
+            self._add_warning_messages(request, duplicated_services, geo_data_missing)
+            return redirect("..")
+
+        if is_wet_run:
+            messages.info(
+                request, f"Import terminé avec {created_count} services créés."
+            )
+        else:
+            messages.success(
+                request,
+                f"Votre import de test est fini. Vous auriez créé {created_count} nouveaux services.",
+            )
+
+        self._add_error_messages(request, errors)
+        self._add_warning_messages(request, duplicated_services, geo_data_missing)
+
+        return redirect(".")
+
+    def _add_error_messages(self, request, errors):
+        if not errors:
+            return
+
+        if len(errors) == 1:
+            messages.error(request, f"Erreur : {errors[0]}")
+        else:
+            error_list = "<br/>".join(f"• {error}" for error in errors)
+            messages.error(
+                request,
+                mark_safe(
+                    f"Il faut résoudre les erreurs suivantes avant que vous puissiez faire l'import :<br/>"
+                    f"{error_list}"
+                ),
+            )
+
+    def _add_warning_messages(self, request, duplicated_services, geo_data_missing):
+        if duplicated_services:
+            if len(duplicated_services) == 1:
+                messages.warning(
+                    request, f"Service en double : {duplicated_services[0]}"
+                )
+            else:
+                duplicate_list = "<br/>".join(f"• {dup}" for dup in duplicated_services)
+                messages.warning(
+                    request,
+                    mark_safe(
+                        f"Certains services sont déjà présents dans la base de données :<br/>"
+                        f"{duplicate_list}"
+                    ),
+                )
+
+        if geo_data_missing:
+            if len(geo_data_missing) == 1:
+                missing_info = geo_data_missing[0]
+                messages.warning(
+                    request,
+                    f"Géolocalisation échouée pour : {missing_info.get('address', 'Adresse inconnue')}",
+                )
+            else:
+                missing_list = "<br/>".join(
+                    f"• Ligne {item.get('idx', '?')} - {item.get('address', 'Adresse inconnue')}"
+                    for item in geo_data_missing
+                )
+                messages.warning(
+                    request,
+                    mark_safe(
+                        f"Certains services n'ont pas pu être géolocalisés :<br/>"
+                        f"{missing_list}"
+                    ),
+                )
 
 
 class ServiceModelAdmin(admin.ModelAdmin):
