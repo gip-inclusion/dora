@@ -1,4 +1,5 @@
 import csv
+import os
 import sys
 from types import SimpleNamespace
 
@@ -8,10 +9,32 @@ from django.db import transaction
 from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import get_geo_data
 from dora.services.enums import ServiceStatus
-from dora.services.models import FundingLabel, LocationKind, ServiceModel, ServiceSource
+from dora.services.models import (
+    FundingLabel,
+    LocationKind,
+    Service,
+    ServiceModel,
+    ServiceSource,
+)
 from dora.services.utils import instantiate_service_from_model
 from dora.structures.models import Structure
 from dora.users.models import User
+
+CSV_HEADERS = [
+    "modele_slug",
+    "structure_siret",
+    "contact_email",
+    "diffusion_zone_type",
+    "labels_financement",
+    "contact_name",
+    "contact_phone",
+    "location_kinds",
+    "location_city",
+    "location_address",
+    "location_complement",
+    "location_postal_code",
+    "is_contact_info_public",
+]
 
 
 class Command(BaseCommand):
@@ -32,7 +55,12 @@ class Command(BaseCommand):
 
         with open(file_path, "r") as f:
             reader = csv.reader(f)
-            import_services(reader, bot_user, wet_run)
+            file_name = os.path.basename(file_path).split(".")[0]
+            service_source = {
+                "value": file_name,
+                "label": "Services importés par la commande import_services",
+            }
+            import_services(reader, bot_user, service_source, wet_run)
 
 
 def _extract_multiple_values_from_line(line, header_name, model, category_label):
@@ -49,10 +77,10 @@ def _extract_multiple_values_from_line(line, header_name, model, category_label)
         invalid_values = set(values) - set(queryset.values_list("value", flat=True))
         if len(invalid_values) > 0:
             raise ValueError(
-                f"Un ou plusieurs {category_label} sont introuvables : {invalid_values}. Ligne ignorée.",
+                f"Un ou plusieurs {category_label} sont introuvables : {invalid_values}.",
             )
         raise ValueError(
-            f"Un ou plusieurs {category_label} sont dupliqués. Ligne ignorée.",
+            f"Un ou plusieurs {category_label} sont dupliqués.",
         )
 
     return queryset
@@ -68,7 +96,7 @@ def _extract_diffusion_zone_type_from_line(line):
             return choice
 
     raise ValueError(
-        f"Type de zone de diffusion avec la valeur '{diffusion_zone_type_raw}' introuvable. Valeur ignorée.",
+        f"Type de zone de diffusion avec la valeur '{diffusion_zone_type_raw}' introuvable.",
     )
 
 
@@ -95,17 +123,11 @@ def _extract_data_from_line(line):
     return data
 
 
-def _edit_and_save_service(service, data, idx, importing_user, geo_data_missing_lines):
-    source, _ = ServiceSource.objects.get_or_create(
-        value="fichier-xxx",
-        defaults={
-            "label": "Fichier CSV des services de XXX",
-        },
-    )
-
+def _edit_and_save_service(
+    service, data, idx, importing_user, geo_data_missing_lines, source_info
+):
     service.creator = importing_user
     service.last_editor = importing_user
-    service.source = source
     service.contact_name = data.contact_name
     service.contact_email = data.contact_email
     service.contact_phone = data.contact_phone
@@ -116,6 +138,8 @@ def _edit_and_save_service(service, data, idx, importing_user, geo_data_missing_
     service.location_kinds.set(data.location_kinds)
     service.diffusion_zone_type = data.diffusion_zone_type
     service.is_contact_info_public = data.is_contact_info_public.lower() == "oui"
+
+    _set_service_source(service, source_info)
 
     if service.address1 and service.city and service.postal_code:
         geo_data = get_geo_data(
@@ -143,14 +167,32 @@ def _edit_and_save_service(service, data, idx, importing_user, geo_data_missing_
     service.save()
 
 
+def _set_service_source(service, source_info):
+    source, _ = ServiceSource.objects.get_or_create(
+        value=source_info["value"],
+        label=source_info["label"],
+    )
+    service.source = source
+
+
+def _is_service_duplicated(data):
+    return Service.objects.filter(
+        structure__siret=data.structure_siret,
+        model__slug=data.modele_slug,
+        contact_email=data.contact_email,
+    ).exists()
+
+
 def import_services(
     reader,
     importing_user,
+    service_source,
     wet_run=False,
 ):
     created_count = 0
     errors = []
     geo_data_missing_lines = []
+    duplicated_services = []
 
     if wet_run:
         print("⚠️ PRODUCTION RUN ⚠️")
@@ -161,8 +203,16 @@ def import_services(
     lines = [dict(zip(headers, line)) for line in lines]
 
     try:
+        invalid_headers = set(headers) - set(CSV_HEADERS)
+        if invalid_headers:
+            return {
+                "created_count": 0,
+                "errors": [
+                    f"En-têtes de colonnes invalides dans le fichier CSV : {', '.join(invalid_headers)}"
+                ],
+            }
         with transaction.atomic():
-            for idx, line in enumerate(lines, 1):
+            for idx, line in enumerate(lines, 2):
                 try:
                     print(f"\nTraitement de la ligne {idx} :")
 
@@ -170,7 +220,7 @@ def import_services(
 
                     # Vérification que le SIRET de la structure est bien renseigné
                     if not data.structure_siret:
-                        error_msg = f"Erreur : SIRET manquant. Ligne {idx} ignorée."
+                        error_msg = f"Ligne {idx} : SIRET manquant pour la structure."
                         print(
                             f"❌ {error_msg}",
                             file=sys.stderr,
@@ -182,7 +232,7 @@ def import_services(
                     try:
                         structure = Structure.objects.get(siret=data.structure_siret)
                     except Structure.DoesNotExist:
-                        error_msg = f"Erreur : Structure avec le SIRET {data.structure_siret} introuvable. Ligne {idx} ignorée."
+                        error_msg = f"Ligne {idx} : Structure avec le SIRET {data.structure_siret} introuvable."
                         print(
                             f"❌ {error_msg}",
                             file=sys.stderr,
@@ -194,7 +244,7 @@ def import_services(
                     try:
                         model = ServiceModel.objects.get(slug=data.modele_slug)
                     except ServiceModel.DoesNotExist:
-                        error_msg = f"Erreur : Modèle de service avec le slug {data.modele_slug} introuvable. Ligne {idx} ignorée."
+                        error_msg = f"Ligne {idx} : Modèle de service avec le slug {data.modele_slug} introuvable."
                         print(
                             f"❌ {error_msg}",
                             file=sys.stderr,
@@ -214,12 +264,20 @@ def import_services(
                         idx,
                         importing_user,
                         geo_data_missing_lines,
+                        service_source,
                     )
+                    if _is_service_duplicated(data):
+                        message = f"Ligne {idx} : Service dupliqué pour la structure {data.structure_siret} avec le modèle {data.modele_slug} et le contact {data.contact_email}."
+                        duplicated_services.append(message)
+                        print(
+                            message,
+                            file=sys.stderr,
+                        )
                     created_count += 1
                     print("✅ Service créé.")
 
                 except Exception as e:
-                    error_msg = f"Erreur lors du traitement de la ligne {idx} - {e}"
+                    error_msg = f"Ligne {idx} : {e}"
                     print(f"❌ {error_msg}", file=sys.stderr)
                     errors.append(error_msg)
                     continue
@@ -255,4 +313,5 @@ def import_services(
         "created_count": created_count,
         "errors": errors,
         "geo_data_missing_lines": geo_data_missing_lines,
+        "duplicated_services": duplicated_services,
     }

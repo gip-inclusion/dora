@@ -10,7 +10,7 @@ from dora.core.utils import GeoData
 from dora.service_suggestions.tests import DUMMY_SUGGESTION
 from dora.services.enums import ServiceStatus
 from dora.services.management.commands.import_services import import_services
-from dora.services.models import Service
+from dora.services.models import Service, ServiceSource
 
 
 class ImportServicesTestCase(TestCase):
@@ -31,6 +31,11 @@ class ImportServicesTestCase(TestCase):
             "FundingLabel", value="test-value", label="test-label"
         )
 
+        self.source_info = {
+            "value": "file_name",
+            "label": "Test Import",
+        }
+
     def test_import_services_wet_run(self):
         csv_content = (
             f"{self.csv_headers}\n"
@@ -38,7 +43,9 @@ class ImportServicesTestCase(TestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -68,7 +75,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=False)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=False
+        )
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
@@ -86,11 +95,13 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
-            result["errors"][0], "Erreur : SIRET manquant. Ligne 1 ignorée."
+            result["errors"][0], "Ligne 2 : SIRET manquant pour la structure."
         )
 
     def test_invalid_structure_siret(self):
@@ -101,12 +112,14 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Erreur : Structure avec le SIRET 'invalid-siret' introuvable. Ligne 1 ignorée.",
+            "Ligne 2 : Structure avec le SIRET 'invalid-siret' introuvable.",
         )
 
     def test_invalid_service_model_slug(self):
@@ -117,13 +130,15 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
 
         self.assertEqual(
             result["errors"][0],
-            "Erreur : Modèle de service avec le slug invalid-slug introuvable. Ligne 1 ignorée.",
+            "Ligne 2 : Modèle de service avec le slug invalid-slug introuvable.",
         )
 
     def test_missing_diffusion_zone_type(self):
@@ -135,7 +150,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -152,12 +169,14 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Erreur lors du traitement de la ligne 1 - Type de zone de diffusion avec la valeur 'invalid_zone_type' introuvable. Valeur ignorée.",
+            "Ligne 2 : Type de zone de diffusion avec la valeur 'invalid_zone_type' introuvable.",
         )
 
     def test_invalid_funding_label(self):
@@ -168,13 +187,15 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
 
         self.assertEqual(
             result["errors"][0],
-            "Erreur lors du traitement de la ligne 1 - Un ou plusieurs labels de financement sont introuvables : {'invalid-funding-label'}. Ligne ignorée.",
+            "Ligne 2 : Un ou plusieurs labels de financement sont introuvables : {'invalid-funding-label'}.",
         )
 
     def test_location_kinds(self):
@@ -185,7 +206,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 1)
         created_service = Service.objects.filter(creator=self.importing_user).last()
@@ -206,13 +229,14 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Erreur lors du traitement de la ligne 1 - Un ou plusieurs types d'accueil "
-            "sont introuvables : {'invalid_kind'}. Ligne ignorée.",
+            "Ligne 2 : Un ou plusieurs types d'accueil sont introuvables : {'invalid_kind'}.",
         )
 
     @patch(
@@ -227,14 +251,16 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(len(result["geo_data_missing_lines"]), 1)
         self.assertEqual(
             result["geo_data_missing_lines"][0],
             {
-                "idx": 1,
+                "idx": 2,
                 "address": "1 rue de test",
                 "city": "Paris",
                 "postal_code": "75020",
@@ -262,7 +288,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(len(result["geo_data_missing_lines"]), 0)
@@ -287,7 +315,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         self.assertEqual(result["created_count"], 1)
         created_service = Service.objects.filter(creator=self.importing_user).last()
@@ -307,33 +337,37 @@ class ImportServicesTestCase(TestCase):
     def test_duplicated_financing_labels(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f'{self.service_model.slug},{self.structure.siret},invalid@email.com,"{self.funding_label.value},{self.funding_label.value}",,,,,,,,'
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{self.funding_label.value}",,,,,,,,'
         )
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
-
-        self.assertFalse(
-            Service.objects.filter(contact_email="invalid@email.com").exists()
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
         )
+
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Erreur lors du traitement de la ligne 1 - Un ou plusieurs labels de financement sont dupliqués. Ligne ignorée.",
+            "Ligne 2 : Un ou plusieurs labels de financement sont dupliqués.",
         )
 
     def test_handle_one_invalid_line(self):
         csv_content = (
             f"{self.csv_headers}\n"
-            f"invalid,{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,,\n"
+            f"invalid,{self.structure.siret},invalid@email.com,{self.funding_label.value},,,,,,,,,\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,,,,,,"
         )
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
+        self.assertFalse(
+            Service.objects.filter(contact_email="invalid@email.com").exists()
+        )
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(len(result["errors"]), 1)
 
@@ -346,7 +380,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -363,7 +399,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -380,7 +418,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -397,7 +437,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -414,7 +456,9 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(reader, self.importing_user, wet_run=True)
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
@@ -422,3 +466,113 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["errors"], [])
 
         self.assertTrue(created_service.is_contact_info_public)
+
+    def test_alert_duplicated_structure(self):
+        baker.make(
+            "Service",
+            structure=self.structure,
+            model=self.service_model,
+            contact_email="referent@email.com",
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+        self.assertEqual(len(result["duplicated_services"]), 1)
+        self.assertEqual(
+            result["duplicated_services"][0],
+            f"Ligne 2 : Service dupliqué pour la structure {self.structure.siret} avec le modèle {self.service_model.slug} et le contact referent@email.com.",
+        )
+
+    def test_new_service_source(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(
+            reader,
+            self.importing_user,
+            {"value": "new_file", "label": "new file used"},
+            wet_run=True,
+        )
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        new_source = ServiceSource.objects.get(value="new_file", label="new file used")
+
+        self.assertEqual(created_service.source, new_source)
+
+    def test_existing_service_source(self):
+        existing_source = baker.make(
+            "ServiceSource", value="existing_file", label="Existing File"
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(
+            reader,
+            self.importing_user,
+            {"value": f"{existing_source.value}", "label": f"{existing_source.label}"},
+            wet_run=True,
+        )
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+        self.assertEqual(created_service.source, existing_source)
+
+    def test_invalid_headers(self):
+        invalid_headers = "invalid_header,another_invalid_header"
+        csv_content = (
+            f"{invalid_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(
+            reader,
+            self.importing_user,
+            {"value": "test", "label": "test"},
+            wet_run=True,
+        )
+
+        self.assertEqual(result["created_count"], 0)
+        self.assertIn(
+            "En-têtes de colonnes invalides dans le fichier CSV :",
+            result["errors"][0],
+        )
+        self.assertIn(
+            "invalid_header",
+            result["errors"][0],
+        )
+        self.assertIn(
+            "another_invalid_header",
+            result["errors"][0],
+        )

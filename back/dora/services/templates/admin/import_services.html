@@ -1,0 +1,61 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label='services' %}">Administration de services</a>
+    &rsaquo; <a href="{% url 'admin:services_service_changelist' %}">Services</a>
+    &rsaquo; Importer Services
+  </div>
+{% endblock %}
+
+{% block content %}
+  <h1>Importer des Services d'un CSV</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset class="module aligned">
+      <div class="form-row">
+        <div>
+          <label for="csv_file">CSV File:</label>
+          <input type="file" name="csv_file" accept=".csv" required>
+        </div>
+        <div>
+          <label for="source_label">Label de source :</label>
+          <input
+            type="text"
+            name="source_label"
+            id="source_label"
+            placeholder="Label de source"
+            required
+          >
+        </div>
+        <div>
+          <label for="wet_run">Wet Run?</label>
+          <input
+            type="checkbox"
+            name="wet_run"
+            id="wet_run"
+          />
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="submit-row">
+      <input type="submit" value="Import" class="default" />
+      <a href="{% url 'admin:services_service_changelist' %}" class="button cancel-link">Cancel</a>
+    </div>
+  </form>
+
+  <div class="help">
+    <p>Upload a CSV file with the following columns:</p>
+    <ul>
+      {% for header in csv_headers %}
+        <li>{{ header }}</li>
+      {% empty %}
+        <li>Aucun en-tête disponible</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
