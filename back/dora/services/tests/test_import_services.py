@@ -101,7 +101,7 @@ class ImportServicesTestCase(TestCase):
 
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
-            result["errors"][0], "Erreur : SIRET manquant. Ligne 2 ignorée."
+            result["errors"][0], "Ligne 2 : SIRET manquant pour la structure."
         )
 
     def test_invalid_structure_siret(self):
@@ -119,7 +119,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Erreur : Structure avec le SIRET 'invalid-siret' introuvable. Ligne 2 ignorée.",
+            "Ligne 2 : Structure avec le SIRET 'invalid-siret' introuvable.",
         )
 
     def test_invalid_service_model_slug(self):
@@ -138,7 +138,7 @@ class ImportServicesTestCase(TestCase):
 
         self.assertEqual(
             result["errors"][0],
-            "Erreur : Modèle de service avec le slug invalid-slug introuvable. Ligne 2 ignorée.",
+            "Ligne 2 : Modèle de service avec le slug invalid-slug introuvable.",
         )
 
     def test_missing_diffusion_zone_type(self):
@@ -176,7 +176,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Erreur lors du traitement de la ligne 2 - Type de zone de diffusion avec la valeur 'invalid_zone_type' introuvable. Valeur ignorée.",
+            "Ligne 2 : Type de zone de diffusion avec la valeur 'invalid_zone_type' introuvable.",
         )
 
     def test_invalid_funding_label(self):
@@ -195,7 +195,7 @@ class ImportServicesTestCase(TestCase):
 
         self.assertEqual(
             result["errors"][0],
-            "Erreur lors du traitement de la ligne 2 - Un ou plusieurs labels de financement sont introuvables : {'invalid-funding-label'}. Ligne ignorée.",
+            "Ligne 2 : Un ou plusieurs labels de financement sont introuvables : {'invalid-funding-label'}.",
         )
 
     def test_location_kinds(self):
@@ -236,8 +236,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Erreur lors du traitement de la ligne 2 - Un ou plusieurs types d'accueil "
-            "sont introuvables : {'invalid_kind'}. Ligne ignorée.",
+            "Ligne 2 : Un ou plusieurs types d'accueil sont introuvables : {'invalid_kind'}.",
         )
 
     @patch(
@@ -350,7 +349,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Erreur lors du traitement de la ligne 2 - Un ou plusieurs labels de financement sont dupliqués. Ligne ignorée.",
+            "Ligne 2 : Un ou plusieurs labels de financement sont dupliqués.",
         )
 
     def test_handle_one_invalid_line(self):

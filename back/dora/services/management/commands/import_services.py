@@ -61,10 +61,10 @@ def _extract_multiple_values_from_line(line, header_name, model, category_label)
         invalid_values = set(values) - set(queryset.values_list("value", flat=True))
         if len(invalid_values) > 0:
             raise ValueError(
-                f"Un ou plusieurs {category_label} sont introuvables : {invalid_values}. Ligne ignorée.",
+                f"Un ou plusieurs {category_label} sont introuvables : {invalid_values}.",
             )
         raise ValueError(
-            f"Un ou plusieurs {category_label} sont dupliqués. Ligne ignorée.",
+            f"Un ou plusieurs {category_label} sont dupliqués.",
         )
 
     return queryset
@@ -80,7 +80,7 @@ def _extract_diffusion_zone_type_from_line(line):
             return choice
 
     raise ValueError(
-        f"Type de zone de diffusion avec la valeur '{diffusion_zone_type_raw}' introuvable. Valeur ignorée.",
+        f"Type de zone de diffusion avec la valeur '{diffusion_zone_type_raw}' introuvable.",
     )
 
 
@@ -196,7 +196,7 @@ def import_services(
 
                     # Vérification que le SIRET de la structure est bien renseigné
                     if not data.structure_siret:
-                        error_msg = f"Erreur : SIRET manquant. Ligne {idx} ignorée."
+                        error_msg = f"Ligne {idx} : SIRET manquant pour la structure."
                         print(
                             f"❌ {error_msg}",
                             file=sys.stderr,
@@ -208,7 +208,7 @@ def import_services(
                     try:
                         structure = Structure.objects.get(siret=data.structure_siret)
                     except Structure.DoesNotExist:
-                        error_msg = f"Erreur : Structure avec le SIRET {data.structure_siret} introuvable. Ligne {idx} ignorée."
+                        error_msg = f"Ligne {idx} : Structure avec le SIRET {data.structure_siret} introuvable."
                         print(
                             f"❌ {error_msg}",
                             file=sys.stderr,
@@ -220,7 +220,7 @@ def import_services(
                     try:
                         model = ServiceModel.objects.get(slug=data.modele_slug)
                     except ServiceModel.DoesNotExist:
-                        error_msg = f"Erreur : Modèle de service avec le slug {data.modele_slug} introuvable. Ligne {idx} ignorée."
+                        error_msg = f"Ligne {idx} : Modèle de service avec le slug {data.modele_slug} introuvable."
                         print(
                             f"❌ {error_msg}",
                             file=sys.stderr,
@@ -253,7 +253,7 @@ def import_services(
                     print("✅ Service créé.")
 
                 except Exception as e:
-                    error_msg = f"Erreur lors du traitement de la ligne {idx} - {e}"
+                    error_msg = f"Ligne {idx} : {e}"
                     print(f"❌ {error_msg}", file=sys.stderr)
                     errors.append(error_msg)
                     continue
