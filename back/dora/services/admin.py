@@ -35,8 +35,6 @@ from .models import (
     ServiceSubCategory,
 )
 
-TEN_MB_LIMIT = 10 * 1024 * 1024
-
 
 class ServiceModificationHistoryItemInline(admin.TabularInline):
     model = ServiceModificationHistoryItem
@@ -88,6 +86,11 @@ class ServiceStatusHistoryItemAdmin(admin.ModelAdmin):
 
 
 class ServiceAdmin(admin.GISModelAdmin):
+    def __init__(self, *args, **kwargs):
+        self.default_source_label = "Importé de l'admin"
+        self.upload_size_limit_in_bytes = 10 * 1024 * 1024  # 10 MB
+        return super().__init__(*args, **kwargs)
+
     search_fields = ("name", "structure__name", "slug", "data_inclusion_id")
     list_display = [
         "name",
@@ -163,17 +166,19 @@ class ServiceAdmin(admin.GISModelAdmin):
             messages.error(request, "Veuillez télécharger un fichier CSV valide.")
             return redirect(".")
 
-        if csv_file.size > TEN_MB_LIMIT:
+        if csv_file.size > self.upload_size_limit_in_bytes:
             messages.error(request, "Le fichier est trop volumineux (maximum 10MB).")
             return redirect(".")
 
         try:
             is_wet_run = request.POST.get("wet_run") == "on"
-            source_label = request.POST.get("source_label", "Import from admin").strip()
+            source_label = request.POST.get(
+                "source_label", self.default_source_label
+            ).strip()
 
             source_info = {
                 "value": csv_file.name.rsplit(".", 1)[0],
-                "label": source_label or "Import from admin",
+                "label": source_label or self.default_source_label,
             }
 
             reader = csv.reader(io.TextIOWrapper(csv_file, encoding="utf-8"))
@@ -223,12 +228,7 @@ class ServiceAdmin(admin.GISModelAdmin):
         return redirect(".")
 
     def _add_error_messages(self, request, errors):
-        if not errors:
-            return
-
-        if len(errors) == 1:
-            messages.error(request, f"Erreur : {errors[0]}")
-        else:
+        if errors:
             error_list = "<br/>".join(f"• {error}" for error in errors)
             messages.error(
                 request,
@@ -240,39 +240,27 @@ class ServiceAdmin(admin.GISModelAdmin):
 
     def _add_warning_messages(self, request, duplicated_services, geo_data_missing):
         if duplicated_services:
-            if len(duplicated_services) == 1:
-                messages.warning(
-                    request, f"Service en double : {duplicated_services[0]}"
-                )
-            else:
-                duplicate_list = "<br/>".join(f"• {dup}" for dup in duplicated_services)
-                messages.warning(
-                    request,
-                    mark_safe(
-                        f"Certains services sont déjà présents dans la base de données :<br/>"
-                        f"{duplicate_list}"
-                    ),
-                )
+            duplicate_list = "<br/>".join(f"• {dup}" for dup in duplicated_services)
+            messages.warning(
+                request,
+                mark_safe(
+                    f"Certains services sont déjà présents dans la base de données :<br/>"
+                    f"{duplicate_list}"
+                ),
+            )
 
         if geo_data_missing:
-            if len(geo_data_missing) == 1:
-                missing_info = geo_data_missing[0]
-                messages.warning(
-                    request,
-                    f"Géolocalisation échouée pour : {missing_info.get('address', 'Adresse inconnue')}",
-                )
-            else:
-                missing_list = "<br/>".join(
-                    f"• Ligne {item.get('idx', '?')} - {item.get('address', 'Adresse inconnue')}"
-                    for item in geo_data_missing
-                )
-                messages.warning(
-                    request,
-                    mark_safe(
-                        f"Certains services n'ont pas pu être géolocalisés :<br/>"
-                        f"{missing_list}"
-                    ),
-                )
+            missing_list = "<br/>".join(
+                f"• Ligne {item.get('idx', '?')} - {item.get('address', 'Adresse inconnue')}"
+                for item in geo_data_missing
+            )
+            messages.warning(
+                request,
+                mark_safe(
+                    f"Certains services n'ont pas pu être géolocalisés :<br/>"
+                    f"{missing_list}"
+                ),
+            )
 
 
 class ServiceModelAdmin(admin.ModelAdmin):

@@ -3,4 +3,6 @@ fileignoreconfig:
     checksum: 8d45217f8fc80d3ffb37ca6040b04a9aa99a37c1eb82f4ae0939b91f6989850d
   - filename: back/README.md
     checksum: 0f0095589eeccad4a4447a8495ce9e2e0339c3ab5aa287eeee32e159a7bf2f7f
+  - filename: back/dora/services/tests/test_admin_import_view.py
+    checksum: be6767b36f71b8f5c14fbdbb3101a6b1cf434391a30bfdf02c231d3d3948044d
 version: ""
