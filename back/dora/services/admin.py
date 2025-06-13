@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 
-from .management.commands.import_services import import_services
+from .management.commands.import_services import CSV_HEADERS, import_services
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -153,6 +153,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             "title": "Import Services d'un CSV",
             "opts": self.model._meta,
             "has_view_permission": True,
+            "csv_headers": CSV_HEADERS,
         }
         return render(request, "admin/import_services.html", context)
 

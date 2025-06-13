@@ -51,10 +51,11 @@
   <div class="help">
     <p>Upload a CSV file with the following columns:</p>
     <ul>
-      <li>modele_slug</li>
-      <li>structure_siret</li>
-      <li>contact_email</li>
-        <!-- Add other column descriptions -->
+      {% for header in csv_headers %}
+        <li>{{ header }}</li>
+      {% empty %}
+        <li>Aucun en-tête disponible</li>
+      {% endfor %}
     </ul>
   </div>
 {% endblock %}

@@ -20,6 +20,22 @@ from dora.services.utils import instantiate_service_from_model
 from dora.structures.models import Structure
 from dora.users.models import User
 
+CSV_HEADERS = [
+    "modele_slug",
+    "structure_siret",
+    "contact_email",
+    "diffusion_zone_type",
+    "labels_financement",
+    "contact_name",
+    "contact_phone",
+    "location_kinds",
+    "location_city",
+    "location_address",
+    "location_complement",
+    "location_postal_code",
+    "is_contact_info_public",
+]
+
 
 class Command(BaseCommand):
     help = "Créer des nouveaux services basés sur des modèles pour des structures en utilisant les infos fournies par un CSV"
@@ -187,6 +203,14 @@ def import_services(
     lines = [dict(zip(headers, line)) for line in lines]
 
     try:
+        invalid_headers = set(headers) - set(CSV_HEADERS)
+        if invalid_headers:
+            return {
+                "created_count": 0,
+                "errors": [
+                    f"En-têtes de colonnes invalides dans le fichier CSV : {', '.join(invalid_headers)}"
+                ],
+            }
         with transaction.atomic():
             for idx, line in enumerate(lines, 2):
                 try:

@@ -545,3 +545,34 @@ class ImportServicesTestCase(TestCase):
 
         created_service = Service.objects.filter(creator=self.importing_user).last()
         self.assertEqual(created_service.source, existing_source)
+
+    def test_invalid_headers(self):
+        invalid_headers = "invalid_header,another_invalid_header"
+        csv_content = (
+            f"{invalid_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
+            f"{self.funding_label.value},Test Person,,a-distance,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = import_services(
+            reader,
+            self.importing_user,
+            {"value": "test", "label": "test"},
+            wet_run=True,
+        )
+
+        self.assertEqual(result["created_count"], 0)
+        self.assertIn(
+            "En-têtes de colonnes invalides dans le fichier CSV :",
+            result["errors"][0],
+        )
+        self.assertIn(
+            "invalid_header",
+            result["errors"][0],
+        )
+        self.assertIn(
+            "another_invalid_header",
+            result["errors"][0],
+        )
