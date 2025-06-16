@@ -64,7 +64,7 @@ class ImportServicesViewTestCase(APITestCase):
         response = self.service_admin.import_services_view(get_request)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Import Services")
+        self.assertContains(response, "Importer des Services d&#x27;un CSV")
         self.assertContains(response, "csv_file")
         self.assertContains(response, "wet_run")
         self.assertContains(response, "source_label")

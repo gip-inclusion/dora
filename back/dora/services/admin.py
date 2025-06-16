@@ -150,7 +150,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             return self._handle_import_post(request)
 
         context = {
-            "title": "Import Services d'un CSV",
+            "title": "Importer des Services d'un CSV",
             "opts": self.model._meta,
             "has_view_permission": True,
             "csv_headers": CSV_HEADERS,
