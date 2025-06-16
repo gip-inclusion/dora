@@ -28,14 +28,14 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.28.0",
+    "@eslint/js": "^9.29.0",
     "@iframe-resizer/parent": "^5.4.6",
     "@nazka/map-gl-js-spiderfy": "^1.2.6",
     "@sveltejs/adapter-node": "^5.2.12",
-    "@sveltejs/kit": "2.21.4",
+    "@sveltejs/kit": "2.21.5",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@tailwindcss/typography": "^0.5.16",
-    "@tailwindcss/vite": "^4.1.8",
+    "@tailwindcss/vite": "^4.1.10",
     "@tiptap/core": "^2.14.0",
     "@tiptap/extension-link": "^2.14.0",
     "@tiptap/extension-placeholder": "^2.14.0",
@@ -46,14 +46,14 @@
     "@typescript-eslint/parser": "^8.34.0",
     "bits-ui": "^0.22.0",
     "dayjs": "^1.11.13",
-    "eslint": "^9.28.0",
+    "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-svelte": "^2.46.1",
     "globals": "^16.2.0",
     "hexoid": "^2.0.0",
     "husky": "^9.1.7",
     "insane": "^2.6.2",
-    "lint-staged": "^16.1.0",
+    "lint-staged": "^16.1.2",
     "maplibre-gl": "^5.6.0",
     "opening_hours": "^3.9.0",
     "prettier": "^3.5.3",
@@ -88,6 +88,6 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^9.28.1"
+    "@sentry/sveltekit": "^9.29.0"
   }
 }
