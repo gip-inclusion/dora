@@ -66,7 +66,7 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Importer des Services d&#x27;un CSV")
         self.assertContains(response, "csv_file")
-        self.assertContains(response, "wet_run")
+        self.assertContains(response, "test_run")
         self.assertContains(response, "source_label")
 
         mock_messages.error.assert_not_called()
@@ -91,7 +91,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": txt_file, "wet_run": "on"},
+            {"csv_file": txt_file, "test_run": "off"},
         )
         request.user = self.user
 
@@ -112,7 +112,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": large_file, "wet_run": "on"},
+            {"csv_file": large_file, "test_run": "off"},
         )
         request.user = self.user
 
@@ -138,7 +138,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": invalid_file, "wet_run": "on"},
+            {"csv_file": invalid_file, "test_run": "off"},
         )
         request.user = self.user
 
@@ -159,7 +159,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on", "source_label": "Test Label"},
+            {"csv_file": csv_file, "test_run": "off", "source_label": "Test Label"},
         )
         request.user = self.user
 
@@ -181,7 +181,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on", "source_label": "Complex Test"},
+            {"csv_file": csv_file, "test_run": "off", "source_label": "Complex Test"},
         )
         request.user = self.user
 
@@ -203,7 +203,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on", "source_label": ""},
+            {"csv_file": csv_file, "test_run": "off", "source_label": ""},
         )
         request.user = self.user
 
@@ -224,7 +224,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on", "source_label": "   "},
+            {"csv_file": csv_file, "test_run": "off", "source_label": "   "},
         )
         request.user = self.user
 
@@ -247,7 +247,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on", "source_label": "Wet Run Test"},
+            {"csv_file": csv_file, "test_run": "off", "source_label": "Wet Run Test"},
         )
         request.user = self.user
 
@@ -275,7 +275,7 @@ class ImportServicesViewTestCase(APITestCase):
             "/admin/services/service/import-services/",
             {
                 "csv_file": csv_file,
-                "wet_run": False,
+                "test_run": "on",
                 "source_label": "Dry Run Test",
             },
         )
@@ -303,7 +303,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on", "source_label": "Error Test"},
+            {"csv_file": csv_file, "test_run": "off", "source_label": "Error Test"},
         )
         request.user = self.user
 
@@ -332,7 +332,11 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "source_label": "Dry Run Error Test"},
+            {
+                "csv_file": csv_file,
+                "test_run": "on",
+                "source_label": "Dry Run Error Test",
+            },
         )
         request.user = self.user
 
@@ -363,7 +367,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on"},
+            {"csv_file": csv_file, "test_run": "off"},
         )
         request.user = self.user
 
@@ -397,7 +401,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on"},
+            {"csv_file": csv_file, "test_run": "off"},
         )
         request.user = self.user
 
@@ -434,7 +438,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on"},
+            {"csv_file": csv_file, "test_run": "off"},
         )
         request.user = self.user
 
@@ -463,7 +467,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on"},
+            {"csv_file": csv_file, "test_run": "off"},
         )
         request.user = self.user
 
@@ -501,7 +505,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on"},
+            {"csv_file": csv_file, "test_run": "off"},
         )
         request.user = self.user
 
@@ -525,7 +529,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on"},
+            {"csv_file": csv_file, "test_run": "off"},
         )
         request.user = self.user
 
@@ -551,7 +555,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         request = self.factory.post(
             "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "wet_run": "on"},
+            {"csv_file": csv_file, "test_run": "off"},
         )
         request.user = self.user
 

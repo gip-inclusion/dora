@@ -172,7 +172,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             return redirect(".")
 
         try:
-            is_wet_run = request.POST.get("wet_run") == "on"
+            is_wet_run = request.POST.get("test_run") != "on"
             source_label = request.POST.get(
                 "source_label", self.default_source_label
             ).strip()
