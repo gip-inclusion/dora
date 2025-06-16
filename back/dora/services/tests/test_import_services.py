@@ -8,8 +8,8 @@ from model_bakery import baker
 
 from dora.core.utils import GeoData
 from dora.service_suggestions.tests import DUMMY_SUGGESTION
+from dora.services.csv_import import import_services
 from dora.services.enums import ServiceStatus
-from dora.services.management.commands.import_services import import_services
 from dora.services.models import Service, ServiceSource
 
 
@@ -240,7 +240,7 @@ class ImportServicesTestCase(TestCase):
         )
 
     @patch(
-        "dora.services.management.commands.import_services.get_geo_data",
+        "dora.services.csv_import.get_geo_data",
         return_value=None,
     )
     def test_missing_geo_data(self, mock_geo_data):
@@ -268,7 +268,7 @@ class ImportServicesTestCase(TestCase):
         )
 
     @patch(
-        "dora.services.management.commands.import_services.get_geo_data",
+        "dora.services.csv_import.get_geo_data",
         return_value=GeoData(
             city_code=75020,
             city="Paris",

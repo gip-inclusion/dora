@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 
-from .management.commands.import_services import CSV_HEADERS, import_services
+from .csv_import import CSV_HEADERS, import_services
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
