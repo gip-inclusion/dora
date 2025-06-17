@@ -2254,12 +2254,20 @@ def clean_profiles(apps, schema_editor):
                 cursor.execute("BEGIN")
                 try:
                     logger.info("Traitement de l'ancien profil %d", old_profile_id)
-                    old_profile = ConcernedPublic.objects.get(id=old_profile_id)
+                    try:
+                        old_profile = ConcernedPublic.objects.get(id=old_profile_id)
+                    except ConcernedPublic.DoesNotExist:
+                        raise ConcernedPublic.DoesNotExist(
+                            f"le profil {old_profile_id} n'existe pas"
+                        )
 
                     services = Service.objects.filter(concerned_public=old_profile)
                     service_models = ServiceModel.objects.filter(
                         concerned_public=old_profile
                     )
+
+                    new_profiles = None
+                    access_conditions = None
 
                     # Récupération des nouveaux profils
                     if "newProfileIds" in profile_changes:
@@ -2302,11 +2310,12 @@ def clean_profiles(apps, schema_editor):
                     # Assignation des nouveaux profils et conditions d'accès aux services
                     for service in services:
                         service.concerned_public.remove(old_profile)
-                        service.concerned_public.add(*new_profiles)
-                        service.access_conditions.add(*access_conditions)
-                        if (
-                            ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR
-                            in profile_changes["accessConditionIds"]
+                        if new_profiles:
+                            service.concerned_public.add(*new_profiles)
+                        if access_conditions:
+                            service.access_conditions.add(*access_conditions)
+                        if ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR in profile_changes.get(
+                            "accessConditionIds", []
                         ):
                             service.qpv_or_zrr = True
                             service.save()
@@ -2314,11 +2323,12 @@ def clean_profiles(apps, schema_editor):
                     # Assignation des nouveaux profils et conditions d'accès aux modèles de services
                     for service_model in service_models:
                         service_model.concerned_public.remove(old_profile)
-                        service_model.concerned_public.add(*new_profiles)
-                        service_model.access_conditions.add(*access_conditions)
-                        if (
-                            ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR
-                            in profile_changes["accessConditionIds"]
+                        if new_profiles:
+                            service_model.concerned_public.add(*new_profiles)
+                        if access_conditions:
+                            service_model.access_conditions.add(*access_conditions)
+                        if ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR in profile_changes.get(
+                            "accessConditionIds", []
                         ):
                             service_model.qpv_or_zrr = True
                             service_model.save()
