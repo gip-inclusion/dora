@@ -415,10 +415,12 @@ ADMINS = (
 # CSP :
 # règles pour l'admin et les versions d'API
 PUBLIC_API_VERSIONS = ["1", "2"]
-CSP_EXCLUDE_URL_PREFIXES = (
-    "/admin/",
-    *[f"/api/v{version}/schema/doc/" for version in PUBLIC_API_VERSIONS],
-)
+CONTENT_SECURITY_POLICY = {
+    "EXCLUDE_URL_PREFIXES": [
+        "/admin",
+        *[f"/api/v{version}/schema/doc/" for version in PUBLIC_API_VERSIONS],
+    ],
+}
 
 # Envoi d'e-mails transactionnels :
 # https://app.tipimail.com/#/app/settings/smtp_and_apis
