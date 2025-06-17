@@ -37,8 +37,8 @@ class ImportServicesViewTestCase(APITestCase):
         self.mock_error_result = {
             "created_count": 0,
             "errors": [
-                "Ligne 2 : SIRET manquant.",
-                "Ligne 3 : Structure introuvable.",
+                "[2] SIRET manquant.",
+                "[3] Structure introuvable.",
             ],
             "duplicated_services": [],
             "geo_data_missing_lines": [],
@@ -64,7 +64,7 @@ class ImportServicesViewTestCase(APITestCase):
         response = self.service_admin.import_services_view(get_request)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Importer des Services d&#x27;un CSV")
+        self.assertContains(response, "Module d&#x27;import de services")
         self.assertContains(response, "csv_file")
         self.assertContains(response, "test_run")
         self.assertContains(response, "source_label")
@@ -169,7 +169,8 @@ class ImportServicesViewTestCase(APITestCase):
             mock_import.call_args[0][2], {"value": "simple", "label": "Test Label"}
         )
         mock_messages.success.assert_called_once_with(
-            request, "Votre import a réussi. Vous avez créé 5 nouveaux services."
+            request,
+            "<b>Import terminé avec succès</b><br/>5 nouveaux services ont été créés et publiés",
         )
         self.assertEqual(response.url, "..")
 
@@ -192,7 +193,8 @@ class ImportServicesViewTestCase(APITestCase):
             {"value": "monthly.import.2024.01", "label": "Complex Test"},
         )
         mock_messages.success.assert_called_once_with(
-            request, "Votre import a réussi. Vous avez créé 5 nouveaux services."
+            request,
+            "<b>Import terminé avec succès</b><br/>5 nouveaux services ont été créés et publiés",
         )
         self.assertEqual(response.url, "..")
 
@@ -214,7 +216,8 @@ class ImportServicesViewTestCase(APITestCase):
             {"value": "test", "label": "Importé de l'admin"},
         )
         mock_messages.success.assert_called_once_with(
-            request, "Votre import a réussi. Vous avez créé 5 nouveaux services."
+            request,
+            "<b>Import terminé avec succès</b><br/>5 nouveaux services ont été créés et publiés",
         )
 
     def test_source_info_with_whitespace_label(self, mock_import, mock_messages):
@@ -235,7 +238,8 @@ class ImportServicesViewTestCase(APITestCase):
             {"value": "test", "label": "Importé de l'admin"},
         )
         mock_messages.success.assert_called_once_with(
-            request, "Votre import a réussi. Vous avez créé 5 nouveaux services."
+            request,
+            "<b>Import terminé avec succès</b><br/>5 nouveaux services ont été créés et publiés",
         )
 
     # Les Tests de Wet Run vs Dry Run
@@ -262,7 +266,8 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertTrue(call_args[1]["wet_run"])
 
         mock_messages.success.assert_called_once_with(
-            request, "Votre import a réussi. Vous avez créé 5 nouveaux services."
+            request,
+            "<b>Import terminé avec succès</b><br/>5 nouveaux services ont été créés et publiés",
         )
 
     def test_dry_run_success(self, mock_import, mock_messages):
@@ -292,7 +297,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         mock_messages.success.assert_called_once_with(
             request,
-            "Votre import de test est fini. Vous auriez créé 5 nouveaux services.",
+            "<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! 5 sont prêts à être importés et publiés.",
         )
 
     def test_wet_run_with_errors(self, mock_import, mock_messages):
@@ -312,15 +317,12 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, ".")
 
-        mock_messages.info.assert_called_once_with(
-            request, "Import terminé avec 0 services créés."
-        )
         mock_messages.error.assert_called_once_with(
             request,
             mark_safe(
-                "Il faut résoudre les erreurs suivantes avant que vous puissiez faire l'import :<br/>"
-                "• Ligne 2 : SIRET manquant.<br/>"
-                "• Ligne 3 : Structure introuvable."
+                "<b>Échec de l'import - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêchent l'import. Veuillez corriger les éléments suivants :<br/>"
+                "• [2] SIRET manquant.<br/>"
+                "• [3] Structure introuvable."
             ),
         )
 
@@ -345,16 +347,12 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, ".")
 
-        mock_messages.success.assert_called_once_with(
-            request,
-            "Votre import de test est fini. Vous auriez créé 0 nouveaux services.",
-        )
         mock_messages.error.assert_called_once_with(
             request,
             mark_safe(
-                "Il faut résoudre les erreurs suivantes avant que vous puissiez faire l'import :<br/>"
-                "• Ligne 2 : SIRET manquant.<br/>"
-                "• Ligne 3 : Structure introuvable."
+                "<b>Test terminé - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêchent l'import. Veuillez corriger les éléments suivants :<br/>"
+                "• [2] SIRET manquant.<br/>"
+                "• [3] Structure introuvable."
             ),
         )
 
@@ -376,15 +374,12 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, ".")
 
-        mock_messages.info.assert_called_once_with(
-            request, "Import terminé avec 0 services créés."
-        )
         mock_messages.error.assert_called_once_with(
             request,
             mark_safe(
-                "Il faut résoudre les erreurs suivantes avant que vous puissiez faire l'import :<br/>"
-                "• Ligne 2 : SIRET manquant.<br/>"
-                "• Ligne 3 : Structure introuvable."
+                "<b>Échec de l'import - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêchent l'import. Veuillez corriger les éléments suivants :<br/>"
+                "• [2] SIRET manquant.<br/>"
+                "• [3] Structure introuvable."
             ),
         )
 
@@ -410,13 +405,10 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, "..")
 
-        mock_messages.success.assert_called_once_with(
-            request, "Votre import a réussi. Vous avez créé 1 nouveaux services."
-        )
         mock_messages.warning.assert_called_once_with(
             request,
             mark_safe(
-                "Certains services sont déjà présents dans la base de données :<br/>"
+                "<b>Import réalisé - Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
                 "• Service A<br/>"
                 "• Service B"
             ),
@@ -428,8 +420,18 @@ class ImportServicesViewTestCase(APITestCase):
             "errors": [],
             "duplicated_services": [],
             "geo_data_missing_lines": [
-                {"idx": 1, "address": "123 Main St", "city": "Paris"},
-                {"idx": 3, "address": "456 Oak Ave", "city": "Lyon"},
+                {
+                    "idx": 2,
+                    "address": "123 Main St",
+                    "city": "Paris",
+                    "postal_code": "75001",
+                },
+                {
+                    "idx": 3,
+                    "address": "456 Oak Ave",
+                    "city": "Lyon",
+                    "postal_code": "69001",
+                },
             ],
         }
 
@@ -448,14 +450,15 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertEqual(response.url, "..")
 
         mock_messages.success.assert_called_once_with(
-            request, "Votre import a réussi. Vous avez créé 1 nouveaux services."
+            request,
+            "<b>Import terminé avec succès</b><br/>1 nouveaux services ont été créés et publiés",
         )
         mock_messages.warning.assert_called_once_with(
             request,
             mark_safe(
-                "Certains services n'ont pas pu être géolocalisés :<br/>"
-                "• Ligne 1 - 123 Main St<br/>"
-                "• Ligne 3 - 456 Oak Ave"
+                "<b>Import réalisé - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
+                "• [2] 123 Main St 75001 Paris<br/>"
+                "• [3] 456 Oak Ave 69001 Lyon"
             ),
         )
 
@@ -476,13 +479,10 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, "..")
 
-        mock_messages.success.assert_called_once_with(
-            request, "Votre import a réussi. Vous avez créé 3 nouveaux services."
-        )
         mock_messages.warning.assert_any_call(
             request,
             mark_safe(
-                "Certains services sont déjà présents dans la base de données :<br/>"
+                "<b>Import réalisé - Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
                 "• Service A<br/>"
                 "• Service B"
             ),
@@ -490,9 +490,9 @@ class ImportServicesViewTestCase(APITestCase):
         mock_messages.warning.assert_any_call(
             request,
             mark_safe(
-                "Certains services n'ont pas pu être géolocalisés :<br/>"
-                "• Ligne 1 - 123 Main St<br/>"
-                "• Ligne 3 - 456 Oak Ave"
+                "<b>Import réalisé - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
+                "• [1] 123 Main St  Paris<br/>"
+                "• [3] 456 Oak Ave  Lyon"
             ),
         )
 
@@ -539,7 +539,8 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertEqual(response.url, "..")
 
         mock_messages.success.assert_called_once_with(
-            request, "Votre import a réussi. Vous avez créé 1 nouveaux services."
+            request,
+            "<b>Import terminé avec succès</b><br/>1 nouveaux services ont été créés et publiés",
         )
 
     def test_geo_data_missing_address_key(self, mock_import, mock_messages):
@@ -547,7 +548,9 @@ class ImportServicesViewTestCase(APITestCase):
             "created_count": 1,
             "errors": [],
             "duplicated_services": [],
-            "geo_data_missing_lines": [{"idx": 1}],  # La clé 'address' est manquante
+            "geo_data_missing_lines": [
+                {"idx": 1, "address": "1 rue de test"}
+            ],  # Les clés 'city' et 'code_postal sont manquantes
         }
 
         csv_content = "header1,header2\nvalue1,value2"
@@ -564,13 +567,10 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, "..")
 
-        mock_messages.success.assert_called_once_with(
-            request, "Votre import a réussi. Vous avez créé 1 nouveaux services."
-        )
         mock_messages.warning.assert_called_once_with(
             request,
             mark_safe(
-                "Certains services n'ont pas pu être géolocalisés :<br/>"
-                "• Ligne 1 - Adresse inconnue"
+                "<b>Import réalisé - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
+                "• [1] 1 rue de test  "
             ),
         )

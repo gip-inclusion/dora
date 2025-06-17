@@ -150,7 +150,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             return self._handle_import_post(request)
 
         context = {
-            "title": "Importer des Services d'un CSV",
+            "title": "Module d'import de services",
             "opts": self.model._meta,
             "has_view_permission": True,
             "csv_headers": CSV_HEADERS,
@@ -205,60 +205,65 @@ class ServiceAdmin(admin.GISModelAdmin):
         duplicated_services = result.get("duplicated_services", [])
         geo_data_missing = result.get("geo_data_missing_lines", [])
 
+        self._add_error_messages(request, errors, is_wet_run)
+        self._add_warning_messages(
+            request, duplicated_services, geo_data_missing, is_wet_run
+        )
+
         if is_wet_run and not errors:
             messages.success(
                 request,
-                f"Votre import a réussi. Vous avez créé {created_count} nouveaux services.",
+                mark_safe(
+                    f"<b>Import terminé avec succès</b><br/>{created_count} nouveaux services ont été créés et publiés"
+                ),
             )
-            self._add_warning_messages(request, duplicated_services, geo_data_missing)
             return redirect("..")
 
-        if is_wet_run:
-            messages.info(
-                request, f"Import terminé avec {created_count} services créés."
-            )
-        else:
+        if not is_wet_run and not errors:
             messages.success(
                 request,
-                f"Votre import de test est fini. Vous auriez créé {created_count} nouveaux services.",
-            )
-
-        self._add_error_messages(request, errors)
-        self._add_warning_messages(request, duplicated_services, geo_data_missing)
-
-        return redirect(".")
-
-    def _add_error_messages(self, request, errors):
-        if errors:
-            error_list = "<br/>".join(f"• {error}" for error in errors)
-            messages.error(
-                request,
                 mark_safe(
-                    f"Il faut résoudre les erreurs suivantes avant que vous puissiez faire l'import :<br/>"
-                    f"{error_list}"
+                    f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {created_count} sont prêts à être importés et publiés."
                 ),
             )
 
-    def _add_warning_messages(self, request, duplicated_services, geo_data_missing):
+        return redirect(".")
+
+    def _add_error_messages(self, request, errors, is_wet_run):
+        if errors:
+            error_list = "<br/>".join(f"• {error}" for error in errors)
+            title_prefix = "Échec de l'import" if is_wet_run else "Test terminé"
+            messages.error(
+                request,
+                mark_safe(
+                    f"<b>{title_prefix} - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêchent l'import. Veuillez corriger les éléments suivants :<br/>"
+                    f"{error_list}",
+                ),
+            )
+
+    def _add_warning_messages(
+        self, request, duplicated_services, geo_data_missing, is_wet_run
+    ):
+        title_prefix = "Import réalisé" if is_wet_run else "Test terminé"
         if duplicated_services:
             duplicate_list = "<br/>".join(f"• {dup}" for dup in duplicated_services)
             messages.warning(
                 request,
                 mark_safe(
-                    f"Certains services sont déjà présents dans la base de données :<br/>"
+                    f"<b>{title_prefix} - Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
                     f"{duplicate_list}"
                 ),
             )
 
         if geo_data_missing:
             missing_list = "<br/>".join(
-                f"• Ligne {item.get('idx', '?')} - {item.get('address', 'Adresse inconnue')}"
+                f"• [{item.get('idx', '?')}] {item.get('address', '')} {item.get('postal_code', '')} {item.get('city', '')}"
                 for item in geo_data_missing
             )
             messages.warning(
                 request,
                 mark_safe(
-                    f"Certains services n'ont pas pu être géolocalisés :<br/>"
+                    f"<b>{title_prefix} - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
                     f"{missing_list}"
                 ),
             )

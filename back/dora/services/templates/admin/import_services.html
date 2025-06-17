@@ -16,17 +16,18 @@
     <fieldset class="module aligned">
       <div class="form-row">
         <div>
-          <label for="csv_file">CSV File:</label>
+          <label for="csv_file">Fichier d'import</label>
+          <div class="help">Format attendu : ficher.csv </div>
           <input type="file" name="csv_file" accept=".csv" required>
         </div>
         <div>
-          <label for="source_label">Label de source :</label>
+          <label for="source_label">Nom de la source :</label>
+          <div class="help" style="margin-bottom: 8px">Nom de la structure, du producteur de données, laisser vide si c'est nous (DORA) </div>
           <input
             type="text"
             name="source_label"
             id="source_label"
             placeholder="Label de source"
-            required
           >
         </div>
         <div>
@@ -37,6 +38,7 @@
             id="test_run"
             checked
           />
+          <div class="help">Cochez pour vérifier la conformité de votre fichier avant l'import définitif</div>
         </div>
       </div>
     </fieldset>
@@ -57,4 +59,19 @@
       {% endfor %}
     </ul>
   </div>
+
+
+  <script>
+    document.getElementById('csv-file-input').addEventListener('change', function(e) {
+      const fileStatus = document.getElementById('file-status');
+      if (e.target.files.length > 0) {
+        const fileName = e.target.files[0].name;
+        fileStatus.textContent = `✅ Fichier sélectionné: ${fileName}`;
+        fileStatus.className = 'file-status selected';
+      } else {
+        fileStatus.textContent = 'Aucun fichier sélectionné';
+        fileStatus.className = 'file-status';
+      }
+    });
+  </script>
 {% endblock %}

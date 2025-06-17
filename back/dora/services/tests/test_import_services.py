@@ -100,9 +100,7 @@ class ImportServicesTestCase(TestCase):
         )
 
         self.assertEqual(result["created_count"], 0)
-        self.assertEqual(
-            result["errors"][0], "Ligne 2 : SIRET manquant pour la structure."
-        )
+        self.assertEqual(result["errors"][0], "[2] SIRET manquant pour la structure.")
 
     def test_invalid_structure_siret(self):
         csv_content = (
@@ -119,7 +117,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Ligne 2 : Structure avec le SIRET 'invalid-siret' introuvable.",
+            "[2] Structure avec le SIRET 'invalid-siret' introuvable.",
         )
 
     def test_invalid_service_model_slug(self):
@@ -138,7 +136,7 @@ class ImportServicesTestCase(TestCase):
 
         self.assertEqual(
             result["errors"][0],
-            "Ligne 2 : Modèle de service avec le slug invalid-slug introuvable.",
+            "[2] Modèle de service avec le slug invalid-slug introuvable.",
         )
 
     def test_missing_diffusion_zone_type(self):
@@ -176,7 +174,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Ligne 2 : Type de zone de diffusion avec la valeur 'invalid_zone_type' introuvable.",
+            "[2] Type de zone de diffusion avec la valeur 'invalid_zone_type' introuvable.",
         )
 
     def test_invalid_funding_label(self):
@@ -195,7 +193,7 @@ class ImportServicesTestCase(TestCase):
 
         self.assertEqual(
             result["errors"][0],
-            "Ligne 2 : Un ou plusieurs labels de financement sont introuvables : {'invalid-funding-label'}.",
+            "[2] Un ou plusieurs labels de financement sont introuvables : {'invalid-funding-label'}.",
         )
 
     def test_location_kinds(self):
@@ -236,7 +234,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Ligne 2 : Un ou plusieurs types d'accueil sont introuvables : {'invalid_kind'}.",
+            "[2] Un ou plusieurs types d'accueil sont introuvables : {'invalid_kind'}.",
         )
 
     @patch(
@@ -349,7 +347,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            "Ligne 2 : Un ou plusieurs labels de financement sont dupliqués.",
+            "[2] Un ou plusieurs labels de financement sont dupliqués.",
         )
 
     def test_handle_one_invalid_line(self):
@@ -492,7 +490,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(len(result["duplicated_services"]), 1)
         self.assertEqual(
             result["duplicated_services"][0],
-            f"Ligne 2 : Service dupliqué pour la structure {self.structure.siret} avec le modèle {self.service_model.slug} et le contact referent@email.com.",
+            f'[2] SIRET {self.structure.siret} - il existe déjà un service avec le modèle {self.service_model.slug} et le courriel "referent@email.com"',
         )
 
     def test_new_service_source(self):
