@@ -118,7 +118,8 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, ".")
         mock_messages.error.assert_called_once_with(
-            request, "Veuillez télécharger un fichier CSV valide."
+            request,
+            "<b>Échec de l'import - Format de fichier non valide</b><br/>Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
         )
         mock_import.assert_not_called()
 
@@ -166,7 +167,7 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertEqual(response.url, ".")
         mock_messages.error.assert_called_once_with(
             request,
-            "Erreur d'encodage du fichier. Assurez-vous que le fichier est encodé en UTF-8.",
+            "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
         )
 
     # Les tests de l'info de la source
@@ -400,6 +401,34 @@ class ImportServicesViewTestCase(APITestCase):
                 "• [3] Structure introuvable."
             ),
         )
+        mock_messages.success.assert_not_called()
+
+    def test_missing_header_messages(self, mock_import, mock_messages):
+        mock_import.return_value = {
+            "missing_headers": ["header1", "header2"],
+        }
+
+        csv_content = "header1,header2\nvalue1,value2"
+        csv_file = self.create_csv_file(csv_content)
+
+        request = self.factory.post(
+            "/admin/services/service/import-services/",
+            {"csv_file": csv_file, "test_run": "off"},
+        )
+        request.user = self.user
+
+        response = self.service_admin.import_services_view(request)
+
+        self.assertIsInstance(response, HttpResponseRedirect)
+        self.assertEqual(response.url, ".")
+
+        mock_messages.error.assert_called_once_with(
+            request,
+            "<b>Échec de l'import - Colonnes manquantes</b><br/>Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>"
+            "• header1<br/>"
+            "• header2",
+        )
+        mock_messages.success.assert_not_called()
 
     def test_duplicate_services_warning(self, mock_import, mock_messages):
         mock_import.return_value = {
@@ -626,7 +655,8 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertEqual(response.url, ".")
 
         mock_messages.error.assert_called_once_with(
-            request, "Une erreur inattendue s'est produite : Unexpected error"
+            request,
+            "<b>Échec de l'import - Fichier illisible</b><br/>Le fichier CSV est vide ou corrompu. Vérifiez votre fichier et réessayez l'import.",
         )
 
     # Edge Cases

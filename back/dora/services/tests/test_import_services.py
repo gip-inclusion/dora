@@ -550,10 +550,10 @@ class ImportServicesTestCase(TestCase):
         created_service = Service.objects.filter(creator=self.importing_user).last()
         self.assertEqual(created_service.source, existing_source)
 
-    def test_invalid_headers(self):
-        invalid_headers = "invalid_header,another_invalid_header"
+    def test_missing_headers(self):
+        missing_headers = "modele_slug,structure_siret,contact_email,diffusion_zone_type,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement"
         csv_content = (
-            f"{invalid_headers}\n"
+            f"{missing_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
             f"{self.funding_label.value},Test Person,,a-distance,,,,,,"
         )
@@ -567,18 +567,12 @@ class ImportServicesTestCase(TestCase):
             wet_run=True,
         )
 
-        self.assertEqual(result["created_count"], 0)
-        self.assertIn(
-            "En-têtes de colonnes invalides dans le fichier CSV :",
-            result["errors"][0],
-        )
-        self.assertIn(
-            "invalid_header",
-            result["errors"][0],
-        )
-        self.assertIn(
-            "another_invalid_header",
-            result["errors"][0],
+        self.assertCountEqual(
+            result["missing_headers"],
+            [
+                "location_postal_code",
+                "is_contact_info_public",
+            ],
         )
 
     def test_results_do_not_carry_over_between_runs(self):

@@ -165,7 +165,13 @@ class ServiceAdmin(admin.GISModelAdmin):
             return redirect(".")
 
         if not csv_file.name.lower().endswith(".csv"):
-            messages.error(request, "Veuillez télécharger un fichier CSV valide.")
+            messages.error(
+                request,
+                mark_safe(
+                    "<b>Échec de l'import - Format de fichier non valide</b><br/>"
+                    "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
+                ),
+            )
             return redirect(".")
 
         if csv_file.size > self.upload_size_limit_in_bytes:
@@ -193,25 +199,36 @@ class ServiceAdmin(admin.GISModelAdmin):
         except UnicodeDecodeError:
             messages.error(
                 request,
-                "Erreur d'encodage du fichier. Assurez-vous que le fichier est encodé en UTF-8.",
+                mark_safe(
+                    "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
+                    "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
+                ),
             )
             return redirect(".")
-        except Exception as e:
-            messages.error(request, f"Une erreur inattendue s'est produite : {str(e)}")
+        except Exception:
+            messages.error(
+                request,
+                mark_safe(
+                    "<b>Échec de l'import - Fichier illisible</b><br/>"
+                    "Le fichier CSV est vide ou corrompu. Vérifiez votre fichier et réessayez l'import.",
+                ),
+            )
             return redirect(".")
 
     def _handle_import_results(self, request, result, is_wet_run):
         created_count = result.get("created_count", 0)
-        errors = result.get("errors", [])
+        no_errors = not result.get("missing_headers", []) and not result.get(
+            "errors", []
+        )
 
-        self._add_error_messages(request, errors, is_wet_run)
+        self._add_error_messages(request, result, is_wet_run)
         self._add_warning_messages(request, result, is_wet_run)
 
         total_services_published = created_count - len(
             result.get("draft_services_created", [])
         )
 
-        if is_wet_run and not errors:
+        if is_wet_run and no_errors:
             messages.success(
                 request,
                 mark_safe(
@@ -220,7 +237,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             )
             return redirect("..")
 
-        if not is_wet_run and not errors:
+        if not is_wet_run and no_errors:
             messages.success(
                 request,
                 mark_safe(
@@ -230,7 +247,16 @@ class ServiceAdmin(admin.GISModelAdmin):
 
         return redirect(".")
 
-    def _add_error_messages(self, request, errors, is_wet_run):
+    def _add_error_messages(self, request, result, is_wet_run):
+        missing_headers = result.get("missing_headers", [])
+        errors = result.get("errors", [])
+
+        if missing_headers:
+            headers_list = "<br/>".join(f"• {header}" for header in missing_headers)
+            message = f"<b>Échec de l'import - Colonnes manquantes</b><br/>Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>{headers_list}"
+
+            messages.error(request, mark_safe(message))
+
         if errors:
             error_list = "<br/>".join(f"• {error}" for error in errors)
             title_prefix = "Échec de l'import" if is_wet_run else "Test terminé"

@@ -68,14 +68,10 @@ class ImportServicesHelper:
         lines = [dict(zip(headers, line)) for line in lines]
 
         try:
-            invalid_headers = set(headers) - set(CSV_HEADERS)
-            if invalid_headers:
-                return {
-                    "created_count": 0,
-                    "errors": [
-                        f"En-têtes de colonnes invalides dans le fichier CSV : {', '.join(invalid_headers)}"
-                    ],
-                }
+            missing_headers = set(CSV_HEADERS) - set(headers)
+            if missing_headers:
+                return {"missing_headers": missing_headers}
+
             with transaction.atomic():
                 for idx, line in enumerate(lines, 2):
                     try:
