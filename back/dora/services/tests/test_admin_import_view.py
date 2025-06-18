@@ -13,7 +13,7 @@ from dora.services.models import Service
 
 
 @patch("dora.services.admin.messages")
-@patch("dora.services.admin.import_services")
+@patch("dora.services.admin.ImportServicesHelper.import_services")
 class ImportServicesViewTestCase(APITestCase):
     def setUp(self):
         self.user = baker.make("users.User", is_valid=True)

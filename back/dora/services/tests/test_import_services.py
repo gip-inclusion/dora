@@ -8,7 +8,7 @@ from model_bakery import baker
 
 from dora.core.utils import GeoData
 from dora.service_suggestions.tests import DUMMY_SUGGESTION
-from dora.services.csv_import import import_services
+from dora.services.csv_import import ImportServicesHelper
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service, ServiceSource
 
@@ -35,6 +35,7 @@ class ImportServicesTestCase(TestCase):
             "value": "file_name",
             "label": "Test Import",
         }
+        self.import_services_helper = ImportServicesHelper()
 
     def test_import_services_wet_run(self):
         csv_content = (
@@ -43,7 +44,7 @@ class ImportServicesTestCase(TestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -75,7 +76,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=False
         )
 
@@ -95,7 +96,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -110,7 +111,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -128,7 +129,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -148,7 +149,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -167,7 +168,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -185,7 +186,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -204,7 +205,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -227,7 +228,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -249,7 +250,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -286,7 +287,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -313,7 +314,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -340,7 +341,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -359,7 +360,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -378,7 +379,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -397,7 +398,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -416,7 +417,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -435,7 +436,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -454,7 +455,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -481,7 +482,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader, self.importing_user, self.source_info, wet_run=True
         )
 
@@ -507,7 +508,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader,
             self.importing_user,
             {"value": "new_file", "label": "new file used"},
@@ -536,7 +537,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader,
             self.importing_user,
             {"value": f"{existing_source.value}", "label": f"{existing_source.label}"},
@@ -559,7 +560,7 @@ class ImportServicesTestCase(TestCase):
 
         reader = csv.reader(io.StringIO(csv_content))
 
-        result = import_services(
+        result = self.import_services_helper.import_services(
             reader,
             self.importing_user,
             {"value": "test", "label": "test"},
@@ -579,3 +580,32 @@ class ImportServicesTestCase(TestCase):
             "another_invalid_header",
             result["errors"][0],
         )
+
+    def test_results_do_not_carry_over_between_runs(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,city,\n"
+            f"{self.service_model.slug},'invalid-siret',referent@email.com,{self.funding_label.value},,,,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=False
+        )
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(len(result["errors"]), 1)
+        self.assertEqual(len(result["duplicated_services"]), 1)
+        self.assertEqual(len(result["draft_services_created"]), 1)
+
+        reader_2 = csv.reader(io.StringIO(csv_content))
+
+        result_2 = self.import_services_helper.import_services(
+            reader_2, self.importing_user, self.source_info, wet_run=False
+        )
+
+        self.assertEqual(result_2["created_count"], 1)
+        self.assertEqual(len(result_2["errors"]), 1)
+        self.assertEqual(len(result_2["duplicated_services"]), 1)
+        self.assertEqual(len(result_2["draft_services_created"]), 1)

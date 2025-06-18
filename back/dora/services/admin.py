@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 
-from .csv_import import CSV_HEADERS, import_services
+from .csv_import import CSV_HEADERS, ImportServicesHelper
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -89,6 +89,7 @@ class ServiceAdmin(admin.GISModelAdmin):
     def __init__(self, *args, **kwargs):
         self.default_source_label = "Importé de l'admin"
         self.upload_size_limit_in_bytes = 10 * 1024 * 1024  # 10 MB
+        self.import_service_helper = ImportServicesHelper()
         return super().__init__(*args, **kwargs)
 
     search_fields = ("name", "structure__name", "slug", "data_inclusion_id")
@@ -183,7 +184,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             }
 
             reader = csv.reader(io.TextIOWrapper(csv_file, encoding="utf-8"))
-            result = import_services(
+            result = self.import_service_helper.import_services(
                 reader, request.user, source_info, wet_run=is_wet_run
             )
 
