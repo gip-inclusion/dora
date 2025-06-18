@@ -1,7 +1,7 @@
 import sys
 from types import SimpleNamespace
 
-from django.db import transaction
+from django.db import IntegrityError, transaction
 
 from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import get_geo_data
@@ -38,7 +38,7 @@ class ImportServicesHelper:
     def __init__(self):
         self.wet_run = False
         self.importing_user = None
-        self.source_info = None
+        self.source = None
         self.geo_data_missing_lines = []
         self.draft_services_created = []
 
@@ -58,7 +58,6 @@ class ImportServicesHelper:
         self.draft_services_created = []
         self.wet_run = wet_run
         self.importing_user = importing_user
-        self.source_info = source_info
 
         created_count = 0
         errors = []
@@ -71,6 +70,8 @@ class ImportServicesHelper:
             missing_headers = set(CSV_HEADERS) - set(headers)
             if missing_headers:
                 return {"missing_headers": missing_headers}
+
+            self._get_service_source(source_info)
 
             with transaction.atomic():
                 for idx, line in enumerate(lines, 2):
@@ -160,7 +161,13 @@ class ImportServicesHelper:
                     raise Exception(
                         "Mode dry-run activé. Toutes les modifications sont annulées."
                     )
-
+        except IntegrityError as e:
+            print(f"\nErreur critique : {e}", file=sys.stderr)
+            return {
+                "errors": [
+                    f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
+                ]
+            }
         except Exception as e:
             if str(e) != "Mode dry-run activé. Toutes les modifications sont annulées.":
                 print(f"\nErreur critique : {e}", file=sys.stderr)
@@ -270,7 +277,7 @@ class ImportServicesHelper:
         service.diffusion_zone_type = data.diffusion_zone_type
         service.is_contact_info_public = data.is_contact_info_public.lower() == "oui"
 
-        self._set_service_source(service, self.source_info)
+        service.source = self.source
 
         if service.address1 and service.city and service.postal_code:
             geo_data = get_geo_data(
@@ -306,12 +313,12 @@ class ImportServicesHelper:
 
         service.save()
 
-    def _set_service_source(self, service, source_info):
+    def _get_service_source(self, source_info):
         source, _ = ServiceSource.objects.get_or_create(
             value=source_info["value"],
             label=source_info["label"],
         )
-        service.source = source
+        self.source = source
 
     def _is_service_duplicated(self, data):
         return Service.objects.filter(
