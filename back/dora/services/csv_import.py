@@ -1,7 +1,10 @@
+import csv
 import sys
 from types import SimpleNamespace
+from typing import Any, Dict, List, Optional, Union
 
 from django.db import IntegrityError, transaction
+from django.db.models import QuerySet
 
 from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import get_geo_data
@@ -35,20 +38,20 @@ CSV_HEADERS = [
 
 
 class ImportServicesHelper:
-    def __init__(self):
-        self.wet_run = False
-        self.importing_user = None
-        self.source = None
-        self.geo_data_missing_lines = []
-        self.draft_services_created = []
+    def __init__(self) -> None:
+        self.wet_run: bool = False
+        self.importing_user: Optional[User] = None
+        self.source: Optional[ServiceSource] = None
+        self.geo_data_missing_lines: List[Dict[str, Union[int, str]]] = []
+        self.draft_services_created: List[Dict[str, Union[int, str, List[str]]]] = []
 
     def import_services(
         self,
-        reader,
+        reader: csv.reader,
         importing_user: User,
         source_info: dict[str, str],
         wet_run: bool = False,
-    ):
+    ) -> Dict[str, Union[List[Any], int, List[str]]]:
         if self.wet_run:
             print("⚠️ PRODUCTION RUN ⚠️")
         else:
@@ -196,8 +199,8 @@ class ImportServicesHelper:
         }
 
     def _extract_multiple_values_from_line(
-        self, line, header_name, model, category_label
-    ):
+        self, line: Dict[str, str], header_name: str, model: Any, category_label: str
+    ) -> QuerySet:
         values = [
             label.strip()
             for label in line.get(header_name, "").split(",")
@@ -221,7 +224,9 @@ class ImportServicesHelper:
 
         return queryset
 
-    def _extract_diffusion_zone_type_from_line(self, line):
+    def _extract_diffusion_zone_type_from_line(
+        self, line: Dict[str, str]
+    ) -> Union[AdminDivisionType, str]:
         diffusion_zone_type_raw = line.get("diffusion_zone_type", "").strip()
         if not diffusion_zone_type_raw:
             return ""
@@ -234,7 +239,7 @@ class ImportServicesHelper:
             f"Type de zone de diffusion avec la valeur '{diffusion_zone_type_raw}' introuvable.",
         )
 
-    def _extract_data_from_line(self, line):
+    def _extract_data_from_line(self, line: Dict[str, str]) -> SimpleNamespace:
         data = SimpleNamespace(
             modele_slug=line.get("modele_slug").strip(),
             structure_siret=line.get("structure_siret").replace(" ", "").strip(),
@@ -260,10 +265,10 @@ class ImportServicesHelper:
 
     def _edit_and_save_service(
         self,
-        service,
-        data,
-        idx,
-    ):
+        service: Service,
+        data: SimpleNamespace,
+        idx: int,
+    ) -> None:
         service.creator = self.importing_user
         service.last_editor = self.importing_user
         service.contact_name = data.contact_name
@@ -313,14 +318,14 @@ class ImportServicesHelper:
 
         service.save()
 
-    def _get_service_source(self, source_info):
+    def _get_service_source(self, source_info: Dict[str, str]) -> None:
         source, _ = ServiceSource.objects.get_or_create(
             value=source_info["value"],
             label=source_info["label"],
         )
         self.source = source
 
-    def _is_service_duplicated(self, data):
+    def _is_service_duplicated(self, data: SimpleNamespace) -> bool:
         return Service.objects.filter(
             structure__siret=data.structure_siret,
             model__slug=data.modele_slug,
