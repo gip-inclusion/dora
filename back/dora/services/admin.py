@@ -87,7 +87,7 @@ class ServiceStatusHistoryItemAdmin(admin.ModelAdmin):
 
 class ServiceAdmin(admin.GISModelAdmin):
     def __init__(self, *args, **kwargs):
-        self.default_source_label = "Importé de l'admin"
+        self.default_source_label = "DORA"
         self.upload_size_limit_in_bytes = 10 * 1024 * 1024  # 10 MB
         self.import_service_helper = ImportServicesHelper()
         return super().__init__(*args, **kwargs)

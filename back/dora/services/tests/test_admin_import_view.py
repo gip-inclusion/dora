@@ -232,7 +232,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         self.assertEqual(
             mock_import.call_args[0][2],
-            {"value": "test", "label": "Importé de l'admin"},
+            {"value": "test", "label": "DORA"},
         )
         mock_messages.success.assert_called_once_with(
             request,
@@ -254,7 +254,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         self.assertEqual(
             mock_import.call_args[0][2],
-            {"value": "test", "label": "Importé de l'admin"},
+            {"value": "test", "label": "DORA"},
         )
         mock_messages.success.assert_called_once_with(
             request,
