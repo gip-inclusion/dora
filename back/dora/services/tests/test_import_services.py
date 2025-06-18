@@ -490,7 +490,12 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(len(result["duplicated_services"]), 1)
         self.assertEqual(
             result["duplicated_services"][0],
-            f'[2] SIRET {self.structure.siret} - il existe déjà un service avec le modèle {self.service_model.slug} et le courriel "referent@email.com"',
+            {
+                "contact_email": "referent@email.com",
+                "idx": 2,
+                "model_slug": "test-service-model",
+                "siret": "12345678901234",
+            },
         )
 
     def test_new_service_source(self):

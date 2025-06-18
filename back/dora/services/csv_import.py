@@ -43,6 +43,7 @@ def import_services(
     errors = []
     geo_data_missing_lines = []
     duplicated_services = []
+    draft_services_created = []
 
     if wet_run:
         print("⚠️ PRODUCTION RUN ⚠️")
@@ -115,12 +116,19 @@ def import_services(
                         importing_user,
                         geo_data_missing_lines,
                         service_source,
+                        draft_services_created,
                     )
                     if _is_service_duplicated(data):
-                        message = f'[{idx}] SIRET {data.structure_siret} - il existe déjà un service avec le modèle {data.modele_slug} et le courriel "{data.contact_email}"'
-                        duplicated_services.append(message)
+                        duplicated_services.append(
+                            {
+                                "idx": idx,
+                                "siret": data.structure_siret,
+                                "model_slug": data.modele_slug,
+                                "contact_email": data.contact_email,
+                            }
+                        )
                         print(
-                            message,
+                            f"SIRET {data.structure_siret} - il existe déjà un service avec le modèle {data.modele_slug} et le courriel {data.contact_email}",
                             file=sys.stderr,
                         )
                     created_count += 1
@@ -151,7 +159,9 @@ def import_services(
     print("\n--------------------------------------------------")
     print("Traitement du fichier CSV terminé.")
     print(f"Résumé : {created_count} services créés, {len(errors)} erreurs.")
-    print(f"Lignes sans données géographiques ({len(geo_data_missing_lines)}) :")
+    print(f"Lignes sans données géographiques : ({len(geo_data_missing_lines)})")
+    print(f"Services dupliqués : ({len(duplicated_services)}):")
+    print(f"Services en brouillon créés : ({len(draft_services_created)})")
     for entry in geo_data_missing_lines:
         print(
             f"Ligne {entry['idx']}: Adresse={entry['address']}, Ville={entry['city']}, "
@@ -164,6 +174,7 @@ def import_services(
         "errors": errors,
         "geo_data_missing_lines": geo_data_missing_lines,
         "duplicated_services": duplicated_services,
+        "draft_services_created": draft_services_created,
     }
 
 
@@ -228,7 +239,13 @@ def _extract_data_from_line(line):
 
 
 def _edit_and_save_service(
-    service, data, idx, importing_user, geo_data_missing_lines, source_info
+    service,
+    data,
+    idx,
+    importing_user,
+    geo_data_missing_lines,
+    source_info,
+    draft_services_created,
 ):
     service.creator = importing_user
     service.last_editor = importing_user
@@ -265,6 +282,15 @@ def _edit_and_save_service(
 
     if service.is_eligible_for_publishing():
         service.status = ServiceStatus.PUBLISHED
+    else:
+        missing_fields = service.get_missing_properties_for_publishing()
+        draft_services_created.append(
+            {
+                "idx": idx,
+                "name": service.name,
+                "missing_fields": missing_fields,
+            }
+        )
 
     service.funding_labels.add(*data.funding_labels)
 

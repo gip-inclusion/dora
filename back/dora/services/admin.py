@@ -202,19 +202,19 @@ class ServiceAdmin(admin.GISModelAdmin):
     def _handle_import_results(self, request, result, is_wet_run):
         created_count = result.get("created_count", 0)
         errors = result.get("errors", [])
-        duplicated_services = result.get("duplicated_services", [])
-        geo_data_missing = result.get("geo_data_missing_lines", [])
 
         self._add_error_messages(request, errors, is_wet_run)
-        self._add_warning_messages(
-            request, duplicated_services, geo_data_missing, is_wet_run
+        self._add_warning_messages(request, result, is_wet_run)
+
+        total_services_published = created_count - len(
+            result.get("draft_services_created", [])
         )
 
         if is_wet_run and not errors:
             messages.success(
                 request,
                 mark_safe(
-                    f"<b>Import terminé avec succès</b><br/>{created_count} nouveaux services ont été créés et publiés"
+                    f"<b>Import terminé avec succès</b><br/>{total_services_published} nouveaux services ont été créés et publiés"
                 ),
             )
             return redirect("..")
@@ -223,7 +223,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             messages.success(
                 request,
                 mark_safe(
-                    f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {created_count} sont prêts à être importés et publiés."
+                    f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {total_services_published} sont prêts à être importés et publiés."
                 ),
             )
 
@@ -241,12 +241,17 @@ class ServiceAdmin(admin.GISModelAdmin):
                 ),
             )
 
-    def _add_warning_messages(
-        self, request, duplicated_services, geo_data_missing, is_wet_run
-    ):
+    def _add_warning_messages(self, request, result, is_wet_run):
+        duplicated_services = result.get("duplicated_services", [])
+        geo_data_missing = result.get("geo_data_missing_lines", [])
+        draft_services_created = result.get("draft_services_created", [])
+
         title_prefix = "Import réalisé" if is_wet_run else "Test terminé"
         if duplicated_services:
-            duplicate_list = "<br/>".join(f"• {dup}" for dup in duplicated_services)
+            duplicate_list = "<br/>".join(
+                f'• [{service["idx"]}] SIRET {service["siret"]} - il existe déjà un service avec le modèle {service["model_slug"]} et le courriel "{service["contact_email"]}"'
+                for service in duplicated_services
+            )
             messages.warning(
                 request,
                 mark_safe(
@@ -266,6 +271,20 @@ class ServiceAdmin(admin.GISModelAdmin):
                     f"<b>{title_prefix} - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
                     f"{missing_list}"
                 ),
+            )
+
+        if draft_services_created:
+            draft_list = "<br/>".join(
+                f'• [{service["idx"]}] Service "{service["name"]}" - Manque : {", ".join(service["missing_fields"])}'
+                for service in draft_services_created
+            )
+
+            wet_run_message = f"<b>{title_prefix} - Services importés en brouillon</b><br/>{len(draft_services_created)} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication"
+            test_run_message = f"<b>{title_prefix} - Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
+            message = wet_run_message if is_wet_run else test_run_message
+            messages.warning(
+                request,
+                mark_safe(message + f" :<br/>{draft_list}"),
             )
 
 
