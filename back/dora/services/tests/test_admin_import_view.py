@@ -140,7 +140,8 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, ".")
         mock_messages.error.assert_called_once_with(
-            request, "Le fichier est trop volumineux (maximum 10MB)."
+            request,
+            "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit être moins de 10MB.",
         )
         mock_import.assert_not_called()
 

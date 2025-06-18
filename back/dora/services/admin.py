@@ -175,7 +175,10 @@ class ServiceAdmin(admin.GISModelAdmin):
             return redirect(".")
 
         if csv_file.size > self.upload_size_limit_in_bytes:
-            messages.error(request, "Le fichier est trop volumineux (maximum 10MB).")
+            messages.error(
+                request,
+                "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit être moins de 10MB.",
+            )
             return redirect(".")
 
         try:
