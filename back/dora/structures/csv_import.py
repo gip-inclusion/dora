@@ -18,6 +18,17 @@ from dora.structures.models import (
 )
 from dora.users.models import User
 
+CSV_HEADERS = [
+    "nom",
+    "siret",
+    "siret_parent",
+    "courriels_administrateurs",
+    "labels",
+    "modeles",
+    "telephone",
+    "courriel_structure",
+]
+
 
 class ImportStructuresHelper:
     def __init__(self, *args, **kwargs):
@@ -41,6 +52,19 @@ class ImportStructuresHelper:
         self._initialize_trackers()
 
         [headers, *lines] = reader
+
+        missing_headers = set(CSV_HEADERS) - set(headers)
+
+        if missing_headers:
+            return {
+                "errors_map": {
+                    1: [
+                        f"Le fichier CSV manque les colonnes suivantes : {
+                            (', ').join(missing_headers)
+                        }"
+                    ]
+                }
+            }
         lines = [dict(zip(headers, line)) for line in lines]
         for idx, line in enumerate(lines, 2):
             serializer = ImportSerializer(
