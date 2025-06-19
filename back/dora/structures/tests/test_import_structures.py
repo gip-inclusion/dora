@@ -169,7 +169,7 @@ class StructuresImportTestCase(APITestCase):
 
         self.assertTrue(
             StructurePutativeMember.objects.filter(
-                user__email="foo@buzz.com", structure=structure
+                user__email="foo@buzz.com", structure=structure, is_admin=True
             ).exists()
         )
         self.assertEqual(len(mail.outbox), 1)
