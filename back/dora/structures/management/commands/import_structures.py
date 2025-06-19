@@ -30,13 +30,6 @@ from dora.users.models import User
 # | nom | siret | siret_parent | courriels_administrateurs | labels | modeles | telephone | courriel_structure
 
 
-def to_string_array(strings_list):
-    clean_str = strings_list.strip()
-    if clean_str:
-        return [value.strip() for value in clean_str.split(",")]
-    return []
-
-
 class ImportSerializer(serializers.Serializer):
     name = serializers.CharField()
     siret = serializers.CharField(allow_blank=True, validators=[validate_siret])
@@ -159,9 +152,14 @@ class ImportStructuresHelper:
     def __init__(self, *args, **kwargs):
         self.bot_user = User.objects.get_dora_bot()
         self.source = StructureSource.objects.get(value="invitations-masse")
+        self._initialize_trackers()
+
+    def _initialize_trackers(self):
         self.map_line_to_errors = {}
-        self.num_created_structures = 0
-        self.num_created_services = 0
+        self.created_structures_count = 0
+        self.created_services_count = 0
+        self.edited_structures_count = 0
+        self.invited_users = {}
 
     def import_structures(
         self,
@@ -169,6 +167,8 @@ class ImportStructuresHelper:
         importing_user,
         wet_run=False,
     ):
+        self._initialize_trackers()
+
         [headers, *lines] = reader
         lines = [dict(zip(headers, line)) for line in lines]
         for idx, line in enumerate(lines, 2):
@@ -177,9 +177,9 @@ class ImportStructuresHelper:
                     "name": line["nom"],
                     "siret": line["siret"],
                     "parent_siret": line["siret_parent"],
-                    "admins": to_string_array(line["courriels_administrateurs"]),
-                    "labels": to_string_array(line["labels"]),
-                    "models": to_string_array(line["modeles"]),
+                    "admins": self._to_string_array(line["courriels_administrateurs"]),
+                    "labels": self._to_string_array(line["labels"]),
+                    "models": self._to_string_array(line["modeles"]),
                     # champs optionnels correspondant directement
                     # à un champ du modèle structure
                     "phone": line.get("telephone", ""),
@@ -210,7 +210,12 @@ class ImportStructuresHelper:
                     str(error[0]) for error in serializer.errors.values()
                 ]
                 print(pformat(dict(serializer.errors.items())))
-        return {"errors_map": self.map_line_to_errors}
+        return {
+            "errors_map": self.map_line_to_errors,
+            "created_structures_count": self.created_structures_count,
+            "created_services_count": self.created_services_count,
+            "edited_structures_count": self.edited_structures_count,
+        }
 
     def get_or_create_structure(
         self,
@@ -284,6 +289,7 @@ class ImportStructuresHelper:
                     model, structure, importing_user
                 )
                 print(f"Ajout du service {service.name} ({service.get_frontend_url()})")
+                self.created_services_count += 1
 
     def _get_or_create_branch(self, name, siret, parent_structure, **kwargs):
         try:
@@ -306,6 +312,7 @@ class ImportStructuresHelper:
                     **kwargs,
                 )
             parent_structure.post_create_branch(branch, self.bot_user, self.source)
+            self.created_structures_count += 1
 
             print(f"Création de la branche {branch.name} ({branch.get_frontend_url()})")
             send_moderation_notification(
@@ -327,7 +334,8 @@ class ImportStructuresHelper:
             # certains champs comme le téléphone ou le courriel de structure
             # peuvent néanmoins être mis à jour lors d'un import,
             # même si la structure exite déjà
-            self._update_optional_fields(structure, **kwargs)
+            if any(value for value in kwargs.values()):
+                self._update_optional_fields(structure, **kwargs)
         except Structure.DoesNotExist:
             establishment = Establishment.objects.get(siret=siret)
             structure = Structure.objects.create_from_establishment(
@@ -341,6 +349,7 @@ class ImportStructuresHelper:
             print(
                 f"Création de la structure  {'parente' if is_parent else ''} {structure.name} ({structure.get_frontend_url()})"
             )
+            self.created_structures_count += 1
             send_moderation_notification(
                 structure,
                 importing_user,
@@ -356,3 +365,10 @@ class ImportStructuresHelper:
         to_update = dict({(k, v) for k, v in kwargs.items() if v})
         print(f" > mise à jour des champs : {to_update}")
         Structure.objects.filter(pk=structure.pk).update(**to_update)
+        self.edited_structures_count += 1
+
+    def _to_string_array(self, strings_list):
+        clean_str = strings_list.strip()
+        if clean_str:
+            return [value.strip() for value in clean_str.split(",")]
+        return []
