@@ -678,20 +678,35 @@ class Service(ModerationMixin, models.Model):
         # voir FranceTravailOrientableService
         return bool(self.orientable_ft_services.count())
 
-    def is_eligible_for_publishing(self) -> bool:
-        if (
-            not self.contact_name
-            or not self.contact_phone
-            or not self.diffusion_zone_type
-            or self.location_kinds.count() == 0
-        ):
-            return False
+    def get_missing_properties_for_publishing(self) -> list[str]:
+        missing = []
+
+        if not self.contact_name:
+            missing.append("nom du contact")
+
+        if not self.contact_phone:
+            missing.append("phone du contact")
+
+        if not self.diffusion_zone_type:
+            missing.append("périmètre d'intervention")
+
+        if self.location_kinds.count() == 0:
+            missing.append("lieu de déroulement")
 
         if self.location_kinds.filter(value="en-presentiel").exists():
-            if not self.city or not self.postal_code or not self.address1:
-                return False
+            if not self.city:
+                missing.append("ville")
 
-        return True
+            if not self.postal_code:
+                missing.append("code postale")
+
+            if not self.address1:
+                missing.append("adresse")
+
+        return missing
+
+    def is_eligible_for_publishing(self) -> bool:
+        return len(self.get_missing_properties_for_publishing()) == 0
 
 
 class ServiceModelManager(models.Manager):
