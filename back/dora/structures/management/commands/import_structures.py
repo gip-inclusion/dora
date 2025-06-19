@@ -22,10 +22,6 @@ from dora.users.models import User
 
 ##############################################################################
 # Script d’import en masse de structure.
-# TODO: est-ce que c'est toujours vrai?
-# Les administrateurs proposés ne seront ajoutés que s’il n’y a pas déjà
-# un administrateur
-#
 # Format du CSV attendu (entête):
 # | nom | siret | siret_parent | courriels_administrateurs | labels | modeles | telephone | courriel_structure
 
@@ -336,9 +332,6 @@ class ImportStructuresHelper:
             print(
                 f"La structure {'parente' if is_parent else ''} {structure.name} ({structure.get_frontend_url()}) existe déjà"
             )
-            # certains champs comme le téléphone ou le courriel de structure
-            # peuvent néanmoins être mis à jour lors d'un import,
-            # même si la structure exite déjà
             if any(value for value in kwargs.values()):
                 self._update_optional_fields(structure, **kwargs)
         except Structure.DoesNotExist:
@@ -366,7 +359,7 @@ class ImportStructuresHelper:
 
     def _update_optional_fields(self, structure, **kwargs):
         # Même si la structure existe déjà,
-        # les champs optionnels peuvent être mis à jour s'ils contiennent une valeur
+        # les champs optionnels (comme le téléphone et l'adresse mail) peuvent être mis à jour s'ils contiennent une valeur
         to_update = dict({(k, v) for k, v in kwargs.items() if v})
         print(f" > mise à jour des champs : {to_update}")
         Structure.objects.filter(pk=structure.pk).update(**to_update)
