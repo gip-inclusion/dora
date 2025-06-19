@@ -7,7 +7,7 @@ from model_bakery import baker
 from rest_framework.test import APITestCase
 
 from dora.core.test_utils import make_model, make_service, make_structure, make_user
-from dora.structures.management.commands.import_structures import ImportStructuresHelper
+from dora.structures.csv_import import ImportStructuresHelper
 from dora.structures.models import (
     Structure,
     StructureMember,
