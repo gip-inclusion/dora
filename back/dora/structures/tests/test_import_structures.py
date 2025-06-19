@@ -684,3 +684,15 @@ class StructuresImportTestCase(APITestCase):
 
         structure.refresh_from_db()
         self.assertEqual(structure.email, "email1@structure.com")
+
+    def test_check_missing_headeers(self):
+        csv_content = "invalid,wrong,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure\n"
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader, self.importing_user, wet_run=True
+        )
+
+        self.assertEqual(
+            result["errors_map"][1][0],
+            "Le fichier CSV manque les colonnes suivantes : nom, siret",
+        )
