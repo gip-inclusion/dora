@@ -134,7 +134,7 @@ def test_validate_dora_service_with_credentials_requires_attachments():
         serializer.validate(data)
 
     assert "beneficiary_attachments" in exc_info.value.detail
-    assert "Des documents sont requis" in str(
+    assert "vous devez ajouter les documents demandés" in str(
         exc_info.value.detail["beneficiary_attachments"]
     )
 

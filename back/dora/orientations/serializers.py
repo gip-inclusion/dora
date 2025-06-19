@@ -126,7 +126,7 @@ class OrientationSerializer(serializers.ModelSerializer):
         if requires_attachments and not orientation.get("beneficiary_attachments"):
             raise serializers.ValidationError(
                 {
-                    "beneficiary_attachments": "Des documents sont requis pour ce service. Veuillez joindre au moins un document."
+                    "beneficiary_attachments": "Pour valider l’envoi de votre demande, vous devez ajouter les documents demandés."
                 }
             )
 
