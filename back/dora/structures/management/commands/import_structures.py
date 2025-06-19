@@ -126,6 +126,7 @@ class Command(BaseCommand):
     def __init__(self, *args, **kwargs):
         self.bot_user = User.objects.get_dora_bot()
         self.source = StructureSource.objects.get(value="invitations-masse")
+        self.import_structures_helper = ImportStructuresHelper()
         super().__init__(*args, **kwargs)
 
     def add_arguments(self, parser):
@@ -143,13 +144,24 @@ class Command(BaseCommand):
         wet_run = options["wet_run"]
 
         if wet_run:
-            self.stdout.write(self.style.WARNING("PRODUCTION RUN"))
+            print("PRODUCTION RUN")
         else:
-            self.stdout.write(self.style.NOTICE("DRY RUN"))
+            print("DRY RUN")
 
         with open(file_path) as structures_file:
             reader = csv.DictReader(structures_file, delimiter=",")
-            self.import_structures(reader, self.bot_user, wet_run)
+            self.import_structures_helper.import_structures(
+                reader, self.bot_user, wet_run
+            )
+
+
+class ImportStructuresHelper:
+    def __init__(self, *args, **kwargs):
+        self.bot_user = User.objects.get_dora_bot()
+        self.source = StructureSource.objects.get(value="invitations-masse")
+        self.map_line_to_errors = {}
+        self.num_created_structures = 0
+        self.num_created_services = 0
 
     def import_structures(
         self,
@@ -157,28 +169,28 @@ class Command(BaseCommand):
         importing_user,
         wet_run=False,
     ):
-        for i, row in enumerate(reader, 1):
+        [headers, *lines] = reader
+        lines = [dict(zip(headers, line)) for line in lines]
+        for idx, line in enumerate(lines, 2):
             serializer = ImportSerializer(
                 data={
-                    "name": row["nom"],
-                    "siret": row["siret"],
-                    "parent_siret": row["siret_parent"],
-                    "admins": to_string_array(row["courriels_administrateurs"]),
-                    "labels": to_string_array(row["labels"]),
-                    "models": to_string_array(row["modeles"]),
+                    "name": line["nom"],
+                    "siret": line["siret"],
+                    "parent_siret": line["siret_parent"],
+                    "admins": to_string_array(line["courriels_administrateurs"]),
+                    "labels": to_string_array(line["labels"]),
+                    "models": to_string_array(line["modeles"]),
                     # champs optionnels correspondant directement
                     # à un champ du modèle structure
-                    "phone": row.get("telephone", ""),
-                    "email": row.get("courriel_structure", ""),
+                    "phone": line.get("telephone", ""),
+                    "email": line.get("courriel_structure", ""),
                 }
             )
 
             if serializer.is_valid():
                 data = serializer.validated_data
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"{i}. Import de la structure {serializer.data['name']} (SIRET:{serializer.data['siret']})"
-                    )
+                print(
+                    f"{idx}. Import de la structure {serializer.data['name']} (SIRET:{serializer.data['siret']})"
                 )
                 if wet_run:
                     structure = self.get_or_create_structure(
@@ -189,14 +201,16 @@ class Command(BaseCommand):
                         phone=data.get("phone"),
                         email=data.get("email"),
                     )
-                    self.stdout.write(f"{structure.get_frontend_url()}")
+                    print(f"{structure.get_frontend_url()}")
                     self.invite_users(structure, data["admins"])
                     self.add_labels(structure, data["labels"])
                     self.create_services(structure, data["models"], importing_user)
             else:
-                self.stderr.write(
-                    self.style.ERROR(pformat(dict(serializer.errors.items())))
-                )
+                self.map_line_to_errors[idx] = [
+                    str(error[0]) for error in serializer.errors.values()
+                ]
+                print(pformat(dict(serializer.errors.items())))
+        return {"errors_map": self.map_line_to_errors}
 
     def get_or_create_structure(
         self,
@@ -232,14 +246,14 @@ class Command(BaseCommand):
                 member = StructurePutativeMember.objects.get(
                     user=user, structure=structure
                 )
-                self.stdout.write(f"{email} a déjà été invité·e")
+                print(f"{email} a déjà été invité·e")
                 if not member.is_admin:
                     member.is_admin = True
                     member.save()
             except StructurePutativeMember.DoesNotExist:
                 try:
                     member = StructureMember.objects.get(user=user, structure=structure)
-                    self.stdout.write(f"{email} est déjà membre de la structure")
+                    print(f"{email} est déjà membre de la structure")
                     if not member.is_admin:
                         member.is_admin = True
                         member.save()
@@ -251,7 +265,7 @@ class Command(BaseCommand):
                         is_admin=True,
                     )
 
-                    self.stdout.write(f"{email} invité·e comme administrateur·rice")
+                    print(f"{email} invité·e comme administrateur·rice")
                     send_invitation_email(
                         member,
                         "L’équipe DORA",
@@ -260,7 +274,7 @@ class Command(BaseCommand):
     def add_labels(self, structure, labels):
         for label in labels:
             if label not in structure.national_labels.all():
-                self.stdout.write(f"Ajout du label {label.value}")
+                print(f"Ajout du label {label.value}")
                 structure.national_labels.add(label)
 
     def create_services(self, structure, models, importing_user):
@@ -269,9 +283,7 @@ class Command(BaseCommand):
                 service = instantiate_service_from_model(
                     model, structure, importing_user
                 )
-                self.stdout.write(
-                    f"Ajout du service {service.name} ({service.get_frontend_url()})"
-                )
+                print(f"Ajout du service {service.name} ({service.get_frontend_url()})")
 
     def _get_or_create_branch(self, name, siret, parent_structure, **kwargs):
         try:
@@ -280,9 +292,7 @@ class Command(BaseCommand):
             else:
                 branch = Structure.objects.get(parent=parent_structure, name=name)
 
-            self.stdout.write(
-                f"La branche {branch.name} ({branch.get_frontend_url()}) existe déjà"
-            )
+            print(f"La branche {branch.name} ({branch.get_frontend_url()}) existe déjà")
         except Structure.DoesNotExist:
             if siret:
                 establishment = Establishment.objects.get(siret=siret)
@@ -297,9 +307,7 @@ class Command(BaseCommand):
                 )
             parent_structure.post_create_branch(branch, self.bot_user, self.source)
 
-            self.stdout.write(
-                f"Création de la branche {branch.name} ({branch.get_frontend_url()})"
-            )
+            print(f"Création de la branche {branch.name} ({branch.get_frontend_url()})")
             send_moderation_notification(
                 branch,
                 self.bot_user,
@@ -313,7 +321,7 @@ class Command(BaseCommand):
     ):
         try:
             structure = Structure.objects.get(siret=siret)
-            self.stdout.write(
+            print(
                 f"La structure {'parente' if is_parent else ''} {structure.name} ({structure.get_frontend_url()}) existe déjà"
             )
             # certains champs comme le téléphone ou le courriel de structure
@@ -330,7 +338,7 @@ class Command(BaseCommand):
             structure.source = self.source
             structure.save()
 
-            self.stdout.write(
+            print(
                 f"Création de la structure  {'parente' if is_parent else ''} {structure.name} ({structure.get_frontend_url()})"
             )
             send_moderation_notification(
@@ -346,5 +354,5 @@ class Command(BaseCommand):
         # Même si la structure existe déjà,
         # les champs optionnels peuvent être mis à jour s'ils contiennent une valeur
         to_update = dict({(k, v) for k, v in kwargs.items() if v})
-        self.stdout.write(f" > mise à jour des champs : {to_update}")
+        print(f" > mise à jour des champs : {to_update}")
         Structure.objects.filter(pk=structure.pk).update(**to_update)
