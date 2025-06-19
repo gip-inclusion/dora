@@ -1,4 +1,5 @@
 import csv
+import io
 import tempfile
 from io import StringIO
 from urllib.parse import quote
@@ -9,6 +10,7 @@ from model_bakery import baker
 from rest_framework.test import APITestCase
 
 from dora.core.test_utils import make_model, make_service, make_structure, make_user
+from dora.structures.management.commands.import_structures import ImportStructuresHelper
 from dora.structures.models import (
     Structure,
     StructureMember,
@@ -22,6 +24,12 @@ class StructuresImportTestCase(APITestCase):
     def setUp(self):
         self.tmp_file = tempfile.NamedTemporaryFile(mode="w", newline="")
         self.csv_writer = self.create_csv(self.tmp_file)
+
+        self.import_structures_helper = ImportStructuresHelper()
+        self.importing_user = baker.make(
+            "users.User", first_name="Test", last_name="User"
+        )
+        self.csv_headers = "nom,siret,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure"
 
     def create_csv(self, file):
         writer = csv.writer(file, delimiter=",")
@@ -60,47 +68,94 @@ class StructuresImportTestCase(APITestCase):
 
     # Validité des sirets
     def test_unknown_siret_wont_create_anything(self):
-        self.add_row(["foo", "12345678901234", "", "foo@buzz.com", "", "", "", ""])
-        out, err = self.call_command()
-        self.assertIn("Siret inconnu", err)
+        csv_content = (
+            f"{self.csv_headers}\nfoo, 12345678901234, '', foo@buzz.com, '', '', '', ''"
+        )
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader, self.importing_user, wet_run=True
+        )
+
+        self.assertIn(
+            "Siret inconnu",
+            result["errors_map"][2][0],
+        )
         self.assertFalse(Structure.objects.filter(siret="12345678901234").exists())
         self.assertFalse(User.objects.filter(email="foo@buzz.com").exists())
         self.assertEqual(len(mail.outbox), 0)
 
     def test_invalid_siret_wont_create_anything(self):
-        self.add_row(["foo", "1234", "", "foo@buzz.com", "", "", "", ""])
-        out, err = self.call_command()
-        self.assertIn("Le numéro SIRET doit être composé de 14 chiffres.", err)
-        self.assertIn("siret", err)
+        csv_content = f"{self.csv_headers}\nfoo,1234,,foo@buzz.com,,,,"
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader, self.importing_user, wet_run=True
+        )
+        self.assertIn(
+            "Le numéro SIRET doit être composé de 14 chiffres.",
+            result["errors_map"][2][0],
+        )
         self.assertFalse(Structure.objects.filter(siret="12345").exists())
         self.assertFalse(User.objects.filter(email="foo@buzz.com").exists())
         self.assertEqual(len(mail.outbox), 0)
 
     def test_invalid_parent_siret_error(self):
-        self.add_row(["foo", "", "1234", "foo@buzz.com", "", "", "", ""])
-        out, err = self.call_command()
-        self.assertIn("Le numéro SIRET doit être composé de 14 chiffres.", err)
-        self.assertIn("parent_siret", err)
+        csv_content = f"{self.csv_headers}\nfoo,,1234,foo@buzz.com,,,,"
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader, self.importing_user, wet_run=True
+        )
+
+        self.assertIn(
+            "Le numéro SIRET doit être composé de 14 chiffres.",
+            result["errors_map"][2][0],
+        )
+        self.assertFalse(User.objects.filter(email="foo@buzz.com").exists())
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_unknown_parent_siret_error(self):
-        self.add_row(["foo", "", "12345678901234", "foo@buzz.com", "", "", "", ""])
-        out, err = self.call_command()
-        self.assertIn("SIRET parent inconnu", err)
+        csv_content = f"{self.csv_headers}\nfoo,,12345678901234,foo@buzz.com,,,,"
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader, self.importing_user, wet_run=True
+        )
+
+        self.assertIn(
+            "SIRET parent inconnu",
+            result["errors_map"][2][0],
+        )
+        self.assertFalse(User.objects.filter(email="foo@buzz.com").exists())
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_missing_siret_error(self):
-        self.add_row(["foo", "", "", "foo@buzz.com", "", "", "", ""])
-        out, err = self.call_command()
-        self.assertIn("`siret` ou `parent_siret` sont requis", err)
+        csv_content = f"{self.csv_headers}\nfoo,,,foo@buzz.com,,,,"
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader, self.importing_user, wet_run=True
+        )
+
+        self.assertIn(
+            "`siret` ou `parent_siret` sont requis",
+            result["errors_map"][2][0],
+        )
+        self.assertFalse(User.objects.filter(email="foo@buzz.com").exists())
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_no_recursive_branch(self):
         parent = make_structure()
         make_structure(parent=parent, siret="12345678901234")
-        self.add_row(["foo", "", "12345678901234", "foo@buzz.com", "", "", "", ""])
-        out, err = self.call_command()
+
+        csv_content = f"{self.csv_headers}\nfoo,,12345678901234,foo@buzz.com,,,,"
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader, self.importing_user, wet_run=True
+        )
+
         self.assertIn(
             "Le SIRET 12345678901234 est une antenne, il ne peut pas être utilisé comme parent",
-            err,
+            result["errors_map"][2][0],
         )
+        self.assertFalse(User.objects.filter(email="foo@buzz.com").exists())
+        self.assertEqual(len(mail.outbox), 0)
 
     def test_can_invite_new_user(self):
         structure = make_structure()
