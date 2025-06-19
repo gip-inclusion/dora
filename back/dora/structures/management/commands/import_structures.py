@@ -31,7 +31,12 @@ from dora.users.models import User
 
 
 class ImportSerializer(serializers.Serializer):
-    name = serializers.CharField()
+    name = serializers.CharField(
+        error_messages={
+            "blank": 'La colonne "nom" est obligatoire',
+            "required": 'La colonne "nom" est obligatoire',
+        }
+    )
     siret = serializers.CharField(allow_blank=True, validators=[validate_siret])
     parent_siret = serializers.CharField(allow_blank=True, validators=[validate_siret])
     admins = serializers.ListField(child=serializers.EmailField(), allow_empty=True)

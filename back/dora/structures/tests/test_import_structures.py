@@ -35,8 +35,8 @@ class StructuresImportTestCase(APITestCase):
             reader, self.importing_user, wet_run=True
         )
 
-        self.assertIn(
-            "Siret inconnu",
+        self.assertEqual(
+            "Siret inconnu: https://annuaire-entreprises.data.gouv.fr/etablissement/12345678901234",
             result["errors_map"][2][0],
         )
         self.assertFalse(Structure.objects.filter(siret="12345678901234").exists())
@@ -254,7 +254,7 @@ class StructuresImportTestCase(APITestCase):
             reader, self.importing_user, wet_run=True
         )
 
-        self.assertIn("Ce champ ne peut être vide.", result["errors_map"][2][0])
+        self.assertIn('La colonne "nom" est obligatoire', result["errors_map"][2][0])
         self.assertEqual(User.objects.filter(email="foo@buzz.com").count(), 0)
         self.assertEqual(len(mail.outbox), 0)
 
