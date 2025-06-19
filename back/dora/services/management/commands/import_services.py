@@ -18,7 +18,7 @@ class Command(BaseCommand):
     help = "Créer des nouveaux services basés sur des modèles pour des structures en utilisant les infos fournies par un CSV"
 
     def add_arguments(self, parser):
-        parser.add_argument("file_path", help="Le path du fichier csv à importer ")
+        parser.add_argument("file_path", help="Le path du fichier csv à importer")
         parser.add_argument(
             "--wet-run",
             help="Exécuter l'import en vrai (modifie la base de données)",
@@ -162,7 +162,7 @@ def import_services(
 
     try:
         with transaction.atomic():
-            for idx, line in enumerate(lines, 1):
+            for idx, line in enumerate(lines, 2):
                 try:
                     print(f"\nTraitement de la ligne {idx} :")
 
