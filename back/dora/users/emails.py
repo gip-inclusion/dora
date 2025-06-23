@@ -103,8 +103,10 @@ def send_structure_awaiting_moderation(manager):
 
     # pas de dépendances/import entre modèles sauf si indispensable
     structures = apps.get_model("structures.Structure").objects
-    to_moderate = structures.awaiting_moderation().filter(
-        department__in=manager.departments
+    to_moderate = (
+        structures.awaiting_moderation()
+        .exclude(is_obsolete=True)
+        .filter(department__in=manager.departments)
     )
 
     cta_link = furl(settings.FRONTEND_URL) / "admin" / "structures"

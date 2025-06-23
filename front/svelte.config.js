@@ -43,14 +43,14 @@ const config = {
         "worker-src": ["self", "blob:"],
         "child-src": [
           "https://aide.dora.inclusion.beta.gouv.fr/",
-          "https://metabase.dora.inclusion.beta.gouv.fr",
+          "https://metabase.dora.inclusion.gouv.fr",
           "https://tally.so",
           "https://tube.numerique.gouv.fr",
         ],
         "font-src": ["self"],
         "frame-src": [
           "self",
-          "https://metabase.dora.inclusion.beta.gouv.fr",
+          "https://metabase.dora.inclusion.gouv.fr",
           "https://cse.google.com",
           "https://syndicatedsearch.goog",
           "https://tally.so",
