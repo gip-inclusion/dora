@@ -1,6 +1,6 @@
 import csv
 from pprint import pformat
-from typing import Dict
+from typing import Dict, List, Union
 
 from django.db import IntegrityError
 from rest_framework import serializers
@@ -23,13 +23,13 @@ from dora.users.models import User
 
 
 class ImportStructuresHelper:
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self.bot_user = User.objects.get_dora_bot()
         self.source = StructureSource.objects.get(value="invitations-masse")
         self._initialize_trackers()
         self.importing_user = None
 
-    def _initialize_trackers(self):
+    def _initialize_trackers(self) -> None:
         self.map_line_to_errors = {}
         self.created_structures_count = 0
         self.created_services_count = 0
@@ -42,7 +42,7 @@ class ImportStructuresHelper:
         importing_user: User,
         source_info: Dict[str, str],
         wet_run: bool = False,
-    ):
+    ) -> Dict[str, Union[Dict[int, List[str]], int]]:
         self._initialize_trackers()
         self.importing_user = importing_user
 
@@ -121,12 +121,12 @@ class ImportStructuresHelper:
 
     def get_or_create_structure(
         self,
-        name,
-        siret,
-        parent_siret,
-        importing_user,
+        name: str,
+        siret: str,
+        parent_siret: str,
+        importing_user: User,
         **kwargs,
-    ):
+    ) -> Structure:
         if parent_siret:
             parent_structure = self._get_or_create_structure_from_siret(
                 parent_siret, importing_user, is_parent=True, **kwargs
@@ -141,7 +141,7 @@ class ImportStructuresHelper:
 
         return structure
 
-    def invite_users(self, structure, emails):
+    def invite_users(self, structure: Structure, emails: List[str]) -> None:
         for email in emails:
             try:
                 user = User.objects.get_by_email(email)
@@ -178,13 +178,17 @@ class ImportStructuresHelper:
                         "L’équipe DORA",
                     )
 
-    def add_labels(self, structure, labels):
+    def add_labels(
+        self, structure: Structure, labels: List[StructureNationalLabel]
+    ) -> None:
         for label in labels:
             if label not in structure.national_labels.all():
                 print(f"Ajout du label {label.value}")
                 structure.national_labels.add(label)
 
-    def create_services(self, structure, models, importing_user):
+    def create_services(
+        self, structure: Structure, models: List[ServiceModel], importing_user: User
+    ) -> None:
         for model in models:
             if not structure.services.filter(model=model).exists():
                 service = instantiate_service_from_model(
@@ -193,7 +197,9 @@ class ImportStructuresHelper:
                 print(f"Ajout du service {service.name} ({service.get_frontend_url()})")
                 self.created_services_count += 1
 
-    def _get_or_create_branch(self, name, siret, parent_structure, **kwargs):
+    def get_or_create_branch(
+        self, name: str, siret: str, parent_structure: Structure, **kwargs
+    ) -> Structure:
         try:
             if siret:
                 branch = Structure.objects.get(siret=siret)
@@ -228,8 +234,8 @@ class ImportStructuresHelper:
         return branch
 
     def _get_or_create_structure_from_siret(
-        self, siret, importing_user, is_parent=False, **kwargs
-    ):
+        self, siret: str, importing_user: User, is_parent: bool = False, **kwargs
+    ) -> Structure:
         try:
             structure = Structure.objects.get(siret=siret)
             print(
@@ -260,7 +266,7 @@ class ImportStructuresHelper:
 
         return structure
 
-    def _update_optional_fields(self, structure, **kwargs):
+    def _update_optional_fields(self, structure: Structure, **kwargs) -> None:
         # Même si la structure existe déjà,
         # les champs optionnels (comme le téléphone et l'adresse mail) peuvent être mis à jour s'ils contiennent une valeur
         to_update = dict({(k, v) for k, v in kwargs.items() if v})
@@ -268,7 +274,7 @@ class ImportStructuresHelper:
         Structure.objects.filter(pk=structure.pk).update(**to_update)
         self.edited_structures_count += 1
 
-    def _to_string_array(self, strings_list):
+    def _to_string_array(self, strings_list: str) -> List[str]:
         clean_str = strings_list.strip()
         if clean_str:
             return [value.strip() for value in clean_str.split(",")]
@@ -308,12 +314,12 @@ class ImportSerializer(serializers.Serializer):
     phone = serializers.CharField(allow_blank=True, validators=[validate_phone_number])
     email = serializers.EmailField(allow_blank=True)
 
-    def _clean_siret_or_phone(self, siret_or_phone: str):
+    def _clean_siret_or_phone(self, siret_or_phone: str) -> str:
         if not siret_or_phone:
             return ""
         return "".join([c for c in siret_or_phone if c.isdigit()])
 
-    def to_internal_value(self, data):
+    def to_internal_value(self, data: Dict) -> Dict:
         # nettoyage pré-validation
         data |= {
             "siret": self._clean_siret_or_phone(data["siret"]),
@@ -323,7 +329,7 @@ class ImportSerializer(serializers.Serializer):
 
         return super().to_internal_value(data)
 
-    def validate_siret(self, siret):
+    def validate_siret(self, siret: str) -> str:
         if (
             siret
             and not Structure.objects.filter(siret=siret).exists()
@@ -334,7 +340,7 @@ class ImportSerializer(serializers.Serializer):
             )
         return siret
 
-    def validate_parent_siret(self, parent_siret):
+    def validate_parent_siret(self, parent_siret: str) -> str:
         if (
             parent_siret
             and not Structure.objects.filter(siret=parent_siret).exists()
@@ -351,7 +357,7 @@ class ImportSerializer(serializers.Serializer):
 
         return parent_siret
 
-    def validate(self, data):
+    def validate(self, data: Dict) -> Dict:
         siret = data.get("siret")
         parent_siret = data.get("parent_siret")
 
@@ -360,7 +366,7 @@ class ImportSerializer(serializers.Serializer):
 
         return super().validate(data)
 
-    def validate_labels(self, label_slugs):
+    def validate_labels(self, label_slugs: List[str]) -> List[StructureNationalLabel]:
         labels = []
         for label in label_slugs:
             try:
@@ -370,7 +376,7 @@ class ImportSerializer(serializers.Serializer):
                 raise serializers.ValidationError(f"Label inconnu {label}")
         return labels
 
-    def validate_models(self, model_slugs):
+    def validate_models(self, model_slugs: List[str]) -> List[ServiceModel]:
         models = []
         for slug in model_slugs:
             try:
