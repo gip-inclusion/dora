@@ -215,12 +215,14 @@ class ServiceAdmin(admin.GISModelAdmin):
                 ),
             )
             return redirect(".")
-        except Exception:
+        except Exception as e:
             messages.error(
                 request,
                 mark_safe(
-                    "<b>Échec de l'import - Fichier illisible</b><br/>"
-                    "Le fichier CSV est vide ou corrompu. Vérifiez votre fichier et réessayez l'import.",
+                    "<b>Échec de l'import - Erreur inattendue</b><br/>"
+                    "L'erreur suivante s'est produite :<br/>"
+                    f"{e}<br/>"
+                    "Si le même problème arrive, envoyez un message aux développeurs.",
                 ),
             )
             return redirect(".")

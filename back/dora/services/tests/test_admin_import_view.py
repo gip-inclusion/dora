@@ -686,7 +686,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         mock_messages.error.assert_called_once_with(
             request,
-            "<b>Échec de l'import - Fichier illisible</b><br/>Le fichier CSV est vide ou corrompu. Vérifiez votre fichier et réessayez l'import.",
+            "<b>Échec de l'import - Erreur inattendue</b><br/>L'erreur suivante s'est produite :<br/>Unexpected error<br/>Si le même problème arrive, envoyez un message aux développeurs.",
         )
 
     # Edge Cases
