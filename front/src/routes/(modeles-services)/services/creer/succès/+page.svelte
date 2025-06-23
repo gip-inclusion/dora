@@ -12,7 +12,7 @@
 </script>
 
 <CenteredGrid>
-  <h1 class="mb-s40">Service créé avec succès</h1>
+  <h1 class="mb-s40">Service en cours de publication</h1>
   <div
     class="border-gray-02 py-s32 px-s20 gap-s40 flex flex-col items-center rounded-2xl border text-center md:flex-row"
   >
