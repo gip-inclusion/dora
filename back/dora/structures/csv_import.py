@@ -197,7 +197,7 @@ class ImportStructuresHelper:
                 print(f"Ajout du service {service.name} ({service.get_frontend_url()})")
                 self.created_services_count += 1
 
-    def get_or_create_branch(
+    def _get_or_create_branch(
         self, name: str, siret: str, parent_structure: Structure, **kwargs
     ) -> Structure:
         try:
