@@ -21,22 +21,6 @@ from dora.services.utils import instantiate_service_from_model
 from dora.structures.models import Structure
 from dora.users.models import User
 
-CSV_HEADERS = [
-    "modele_slug",
-    "structure_siret",
-    "contact_email",
-    "diffusion_zone_type",
-    "labels_financement",
-    "contact_name",
-    "contact_phone",
-    "location_kinds",
-    "location_city",
-    "location_address",
-    "location_complement",
-    "location_postal_code",
-    "is_contact_info_public",
-]
-
 
 class ImportServicesHelper:
     def __init__(self) -> None:
@@ -88,7 +72,7 @@ class ImportServicesHelper:
         lines = [dict(zip(headers, line)) for line in lines]
 
         try:
-            missing_headers = set(CSV_HEADERS) - set(headers)
+            missing_headers = set(self.CSV_HEADERS) - set(headers)
             if missing_headers:
                 return {"missing_headers": missing_headers}
 
@@ -357,3 +341,19 @@ class ImportServicesHelper:
 
         output.seek(0)
         return csv.reader(output)
+
+    CSV_HEADERS = [
+        "modele_slug",
+        "structure_siret",
+        "contact_email",
+        "diffusion_zone_type",
+        "labels_financement",
+        "contact_name",
+        "contact_phone",
+        "location_kinds",
+        "location_city",
+        "location_address",
+        "location_complement",
+        "location_postal_code",
+        "is_contact_info_public",
+    ]
