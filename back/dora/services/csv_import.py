@@ -66,6 +66,16 @@ class ImportServicesHelper:
         errors = []
         duplicated_services = []
 
+        try:
+            self._get_service_source(source_info)
+        except IntegrityError as e:
+            print(f"\nErreur critique : {e}", file=sys.stderr)
+            return {
+                "errors": [
+                    f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
+                ]
+            }
+
         [headers, *lines] = reader
         lines = [dict(zip(headers, line)) for line in lines]
 
@@ -73,8 +83,6 @@ class ImportServicesHelper:
             missing_headers = set(CSV_HEADERS) - set(headers)
             if missing_headers:
                 return {"missing_headers": missing_headers}
-
-            self._get_service_source(source_info)
 
             with transaction.atomic():
                 for idx, line in enumerate(lines, 2):
@@ -164,13 +172,6 @@ class ImportServicesHelper:
                     raise Exception(
                         "Mode dry-run activé. Toutes les modifications sont annulées."
                     )
-        except IntegrityError as e:
-            print(f"\nErreur critique : {e}", file=sys.stderr)
-            return {
-                "errors": [
-                    f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
-                ]
-            }
         except Exception as e:
             if str(e) != "Mode dry-run activé. Toutes les modifications sont annulées.":
                 print(f"\nErreur critique : {e}", file=sys.stderr)
