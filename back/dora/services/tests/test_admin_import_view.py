@@ -262,7 +262,7 @@ class ImportServicesViewTestCase(APITestCase):
             "<b>Import terminé avec succès</b><br/>5 nouveaux services ont été créés et publiés",
         )
 
-    # Les Tests de Wet Run vs Dry Run
+    # Les Tests de Configuration (Wet Run / Dry Run; Supprimer les 2 premières lignes)
     def test_wet_run_success(self, mock_import, mock_messages):
         mock_import.return_value = self.mock_success_result
 
@@ -375,6 +375,35 @@ class ImportServicesViewTestCase(APITestCase):
                 "• [3] Structure introuvable."
             ),
         )
+
+    def test_remove_instructions_lines(self, mock_import, mock_messages):
+        mock_import.return_value = self.mock_success_result
+
+        csv_content = (
+            "# This is a comment line\n"
+            "# Another comment line\n"
+            "header1,header2\n"
+            "value1,value2"
+        )
+        csv_file = self.create_csv_file(csv_content)
+
+        request = self.factory.post(
+            "/admin/services/service/import-services/",
+            {
+                "csv_file": csv_file,
+                "test_run": "off",
+                "should_remove_instructions": "on",
+            },
+        )
+        request.user = self.user
+
+        response = self.service_admin.import_services_view(request)
+
+        self.assertIsInstance(response, HttpResponseRedirect)
+        self.assertEqual(response.url, "..")
+
+        mock_import.assert_called_once()
+        self.assertTrue(mock_import.call_args.kwargs["should_remove_first_two_lines"])
 
     # Les tests pour les messages d'erreur d'avertissement
     def test_error_messages(self, mock_import, mock_messages):

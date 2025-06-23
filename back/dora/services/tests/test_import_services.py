@@ -628,3 +628,27 @@ class ImportServicesTestCase(TestCase):
             result["errors"][0],
             'Le fichier nommé "test_file" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
         )
+
+    def test_should_remove_first_two_lines(self):
+        csv_content = (
+            f"Some random text that should be ignored\n"
+            f"Another line that should be ignored\n"
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,city,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader,
+            self.importing_user,
+            {
+                "value": "test_file",
+                "label": "New Label",
+            },
+            wet_run=False,
+            should_remove_first_two_lines=True,
+        )
+
+        self.assertEqual(result["created_count"], 1)
+        self.assertEqual(result["errors"], [])

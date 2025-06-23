@@ -186,6 +186,9 @@ class ServiceAdmin(admin.GISModelAdmin):
             source_label = request.POST.get(
                 "source_label", self.default_source_label
             ).strip()
+            should_remove_instructions_from_csv = (
+                request.POST.get("should_remove_instructions") == "on"
+            )
 
             source_info = {
                 "value": csv_file.name.rsplit(".", 1)[0],
@@ -194,7 +197,11 @@ class ServiceAdmin(admin.GISModelAdmin):
 
             reader = csv.reader(io.TextIOWrapper(csv_file, encoding="utf-8"))
             result = self.import_service_helper.import_services(
-                reader, request.user, source_info, wet_run=is_wet_run
+                reader,
+                request.user,
+                source_info,
+                wet_run=is_wet_run,
+                should_remove_first_two_lines=should_remove_instructions_from_csv,
             )
 
             return self._handle_import_results(request, result, is_wet_run)
@@ -316,6 +323,14 @@ class ServiceAdmin(admin.GISModelAdmin):
                 request,
                 mark_safe(message + f" :<br/>{draft_list}"),
             )
+
+    def remove_first_two_lines(csv_content: str) -> str:
+        lines = csv_content.strip().split("\n")
+
+        if len(lines) <= 2:
+            return ""
+
+        return "\n".join(lines[2:])
 
 
 class ServiceModelAdmin(admin.ModelAdmin):

@@ -1,4 +1,5 @@
 import csv
+import io
 import sys
 from types import SimpleNamespace
 from typing import Any, Dict, List, Optional, Union
@@ -51,6 +52,7 @@ class ImportServicesHelper:
         importing_user: User,
         source_info: dict[str, str],
         wet_run: bool = False,
+        should_remove_first_two_lines: bool = False,
     ) -> Dict[str, Union[List[Any], int, List[str]]]:
         if self.wet_run:
             print("⚠️ PRODUCTION RUN ⚠️")
@@ -76,7 +78,13 @@ class ImportServicesHelper:
                 ]
             }
 
-        [headers, *lines] = reader
+        csv_reader = (
+            self._remove_first_two_csv_lines(reader)
+            if should_remove_first_two_lines
+            else reader
+        )
+
+        [headers, *lines] = csv_reader
         lines = [dict(zip(headers, line)) for line in lines]
 
         try:
@@ -326,9 +334,26 @@ class ImportServicesHelper:
         )
         self.source = source
 
-    def _is_service_duplicated(self, data: SimpleNamespace) -> bool:
+    @staticmethod
+    def _is_service_duplicated(data: SimpleNamespace) -> bool:
         return Service.objects.filter(
             structure__siret=data.structure_siret,
             model__slug=data.modele_slug,
             contact_email=data.contact_email,
         ).exists()
+
+    @staticmethod
+    def _remove_first_two_csv_lines(reader: csv.reader) -> csv.reader:
+        all_rows = list(reader)
+
+        if len(all_rows) <= 2:
+            remaining_rows = []
+        else:
+            remaining_rows = all_rows[2:]
+
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerows(remaining_rows)
+
+        output.seek(0)
+        return csv.reader(output)
