@@ -1,5 +1,4 @@
 import csv
-import io
 import sys
 from types import SimpleNamespace
 from typing import Any, Dict, List, Optional, Union
@@ -328,19 +327,9 @@ class ImportServicesHelper:
 
     @staticmethod
     def _remove_first_two_csv_lines(reader: csv.reader) -> csv.reader:
-        all_rows = list(reader)
-
-        if len(all_rows) <= 2:
-            remaining_rows = []
-        else:
-            remaining_rows = all_rows[2:]
-
-        output = io.StringIO()
-        writer = csv.writer(output)
-        writer.writerows(remaining_rows)
-
-        output.seek(0)
-        return csv.reader(output)
+        next(reader, None)
+        next(reader, None)
+        return reader
 
     CSV_HEADERS = [
         "modele_slug",
