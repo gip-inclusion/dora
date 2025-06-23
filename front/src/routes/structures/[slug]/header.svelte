@@ -76,7 +76,7 @@
   }
 
   $: {
-    if ($page.url.pathname.endsWith("/services")) {
+    if ($page.url.pathname.includes("/services")) {
       tabId = "services";
     } else if ($page.url.pathname.endsWith("/modeles")) {
       tabId = "modeles";

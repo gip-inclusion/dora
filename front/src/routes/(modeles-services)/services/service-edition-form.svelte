@@ -96,7 +96,7 @@
 
   function handleSuccess(result) {
     if (DI_DORA_UNIFIED_SEARCH_ENABLED) {
-      goto("/services/creer/succès");
+      goto(`/structures/${result.structure}/services/publication`);
     } else {
       goto(`/services/${result.slug}`);
     }
