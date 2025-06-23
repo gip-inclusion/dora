@@ -185,8 +185,8 @@
     }
   }
 
-  $: value, onValueChanged();
-  $: text, onTextChanged();
+  $: (value, onValueChanged());
+  $: (text, onTextChanged());
   $: clearable = showClear && (lock || multiple) && value;
 
   // --- Functions ---
@@ -238,7 +238,7 @@
     };
   }
 
-  $: items, prepareListItems();
+  $: (items, prepareListItems());
 
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {

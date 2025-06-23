@@ -219,7 +219,7 @@
     });
   }
 
-  $: onSiteServicesWithCoords, updateMapContent();
+  $: (onSiteServicesWithCoords, updateMapContent());
 </script>
 
 <Map bind:map on:load={handleMapLoaded} />

@@ -175,7 +175,7 @@
   }
 
   $: updateHoveredFeature(selectedStructureSlug);
-  $: filteredStructures, updateMapContent();
+  $: (filteredStructures, updateMapContent());
 </script>
 
 <Map bind:map on:load={handleMapLoaded} />
