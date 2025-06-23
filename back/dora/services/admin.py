@@ -222,7 +222,7 @@ class ServiceAdmin(admin.GISModelAdmin):
                     "<b>Échec de l'import - Erreur inattendue</b><br/>"
                     "L'erreur suivante s'est produite :<br/>"
                     f"{e}<br/>"
-                    "Si le même problème arrive, envoyez un message aux développeurs.",
+                    "Si le problème persiste, contactez les développeurs.",
                 ),
             )
             return redirect(".")
