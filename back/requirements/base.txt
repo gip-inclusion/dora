@@ -2,7 +2,7 @@ data-inclusion-schema==0.27.0
 dj-database-url==3.0.0
 Django==5.2.3
 django-cors-headers==4.7.0
-django-csp==3.8
+django-csp==4.0
 django-filter==25.1
 django-storages==1.14.6
 boto3==1.35.99 # bug avec CleverCloud et les versions supérieures de boto3
