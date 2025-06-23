@@ -1,6 +1,14 @@
 <script lang="ts">
   import illustration from "$lib/assets/illustrations/Referencer_Vos_Services.webp";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import { userInfo } from "$lib/utils/auth";
+  import { userPreferences } from "$lib/utils/preferences";
+  import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
+
+  $: lastVisitedStructure = getCurrentlySelectedStructure(
+    $userInfo,
+    $userPreferences
+  );
 </script>
 
 <CenteredGrid>
@@ -20,6 +28,16 @@
         le référentiel commun data·inclusion qui centralise toutes les données
         de l'offre d'insertion.
       </p>
+      {#if lastVisitedStructure}
+        <p class="text-f14">
+          <a
+            href={`/structures/${lastVisitedStructure.slug}/services`}
+            class="text-magenta-cta font-bold hover:underline"
+          >
+            Retour à mes services
+          </a>
+        </p>
+      {/if}
     </div>
     <div class="w-full max-w-[443px]">
       <img src={illustration} alt="" aria-hidden="true" />
