@@ -119,8 +119,6 @@ class OrientationSerializer(serializers.ModelSerializer):
                 bool(di_service.get("credentials"))  # A des justificatifs requis
                 or bool(di_service.get("forms"))  # A des documents à compléter
             )
-        else:
-            return orientation
 
         # Si le service nécessite des documents mais qu'aucun n'est fourni, une erreur est levée.
         if requires_attachments and not orientation.get("beneficiary_attachments"):

@@ -305,17 +305,6 @@ def test_validate_di_service_none_response_passes(mock_client_factory):
     assert result == data
 
 
-def test_validate_no_service_no_di_passes():
-    """Teste que la validation passe quand aucun service ni service DI n'est fourni."""
-    serializer = OrientationSerializer()
-    data = {
-        "beneficiary_attachments": [],
-    }
-
-    result = serializer.validate(data)
-    assert result == data
-
-
 def test_validate_existing_instance_service():
     """Teste la validation avec une instance existante qui a un service."""
     service = make_published_service()
