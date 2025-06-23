@@ -24,6 +24,10 @@ class StructuresImportTestCase(APITestCase):
             "users.User", first_name="Test", last_name="User"
         )
         self.csv_headers = "nom,siret,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure"
+        self.source_info = {
+            "value": "invitations-masse",
+            "label": "Invitations en masse",
+        }
 
     # Validité des sirets
     def test_unknown_siret_wont_create_anything(self):
@@ -32,7 +36,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(
@@ -47,7 +51,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nfoo,1234,,foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
         self.assertIn(
             "Le numéro SIRET doit être composé de 14 chiffres.",
@@ -61,7 +65,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nfoo,,1234,foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertIn(
@@ -75,7 +79,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nfoo,,12345678901234,foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertIn(
@@ -89,7 +93,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nfoo,,,foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertIn(
@@ -106,7 +110,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nfoo,,12345678901234,foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertIn(
@@ -123,7 +127,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["created_structures_count"], 0)
@@ -146,7 +150,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f'{self.csv_headers}\n{structure.name},{structure.siret},,"foo@buzz.com,bar@buzz.com",,,,,'
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["created_structures_count"], 0)
@@ -164,7 +168,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertTrue(
@@ -181,7 +185,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertTrue(
@@ -197,14 +201,14 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(len(mail.outbox), 1)
 
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(Structure.objects.filter(siret=structure.siret).count(), 1)
@@ -218,7 +222,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertTrue(
@@ -237,7 +241,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertIn(
@@ -251,7 +255,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\n,{structure.siret},,foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertIn('La colonne "nom" est obligatoire', result["errors_map"][2][0])
@@ -265,7 +269,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         user = User.objects.filter(email="foo@buzz.com").first()
@@ -278,7 +282,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         members = StructurePutativeMember.objects.filter(
@@ -300,7 +304,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(User.objects.filter(email=user.email).count(), 1)
@@ -329,7 +333,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         user.refresh_from_db()
@@ -349,7 +353,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         member.refresh_from_db()
@@ -367,7 +371,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         member.refresh_from_db()
@@ -383,7 +387,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nFoo,12345678901234,,foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["created_structures_count"], 1)
@@ -404,7 +408,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nFoo,,12345678901234,foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["created_structures_count"], 2)
@@ -420,7 +424,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nFoo,,{structure.siret},foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["created_structures_count"], 1)
@@ -444,7 +448,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nFoo,,{structure.siret},foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(structure.branches.count(), 1)
@@ -468,7 +472,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["created_structures_count"], 1)
@@ -489,7 +493,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nFoo,,{structure.siret},foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         branch = Structure.objects.filter(parent=structure).first()
@@ -509,7 +513,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nFoo,,{structure.siret},foo@buzz.com,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(
@@ -525,7 +529,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nbranch,,{parent_structure.siret},,,,,"
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         branches = Structure.objects.filter(parent=parent_structure, name="branch")
@@ -545,7 +549,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f'{self.csv_headers}\n{structure.name},{structure.siret},,foo@buzz.com,"l1, l2",,,'
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertTrue(structure.national_labels.filter(value="l1").exists())
@@ -559,7 +563,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["created_services_count"], 1)
@@ -570,7 +574,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f'{self.csv_headers}\n{structure.name},{structure.siret},,foo@buzz.com,"l1, l2",,,'
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertIn("Label inconnu l1", result["errors_map"][2][0])
@@ -580,7 +584,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f'{self.csv_headers}\n{structure.name},{structure.siret},,foo@buzz.com,,"mod1,mod2",,'
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertIn("Modèle inconnu mod1", result["errors_map"][2][0])
@@ -596,7 +600,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(structure.national_labels.filter(value="l1").count(), 1)
@@ -609,7 +613,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\n{structure.name}, {structure.siret}, '', '', '', {model.slug}, ''"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["created_structures_count"], 0)
@@ -625,7 +629,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nTest,12345678901234,,,,,0123456789,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["created_structures_count"], 1)
@@ -646,7 +650,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["created_structures_count"], 1)
@@ -661,7 +665,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = f"{self.csv_headers}\nTest,12345678900000,,,,,0234567891,"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["edited_structures_count"], 1)
@@ -677,7 +681,7 @@ class StructuresImportTestCase(APITestCase):
         )
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertEqual(result["edited_structures_count"], 1)
@@ -689,7 +693,7 @@ class StructuresImportTestCase(APITestCase):
         csv_content = "invalid,wrong,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure\n"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, wet_run=True
+            reader, self.importing_user, self.source_info, wet_run=True
         )
 
         self.assertIn(
@@ -703,4 +707,26 @@ class StructuresImportTestCase(APITestCase):
         self.assertIn(
             "siret",
             result["errors_map"][1][0],
+        )
+
+    def test_non_unique_source_label(self):
+        baker.make("StructureSource", value="test-source", label="Test Source")
+
+        csv_content = (
+            f"{self.csv_headers}\nTest,12345678900000,,,,,,email1@structure.com"
+        )
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader,
+            self.importing_user,
+            {
+                "value": "test-source",
+                "label": "New Label",
+            },
+            wet_run=True,
+        )
+
+        self.assertEqual(
+            result["errors_map"][1][0],
+            'Le fichier nommé "test-source" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
         )

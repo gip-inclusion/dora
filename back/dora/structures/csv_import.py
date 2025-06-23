@@ -1,5 +1,8 @@
+import csv
 from pprint import pformat
+from typing import Dict
 
+from django.db import IntegrityError
 from rest_framework import serializers
 
 from dora.core.models import ModerationStatus
@@ -18,17 +21,6 @@ from dora.structures.models import (
 )
 from dora.users.models import User
 
-CSV_HEADERS = [
-    "nom",
-    "siret",
-    "siret_parent",
-    "courriels_administrateurs",
-    "labels",
-    "modeles",
-    "telephone",
-    "courriel_structure",
-]
-
 
 class ImportStructuresHelper:
     def __init__(self, *args, **kwargs):
@@ -45,15 +37,27 @@ class ImportStructuresHelper:
 
     def import_structures(
         self,
-        reader,
-        importing_user,
-        wet_run=False,
+        reader: csv.reader,
+        importing_user: User,
+        source_info: Dict[str, str],
+        wet_run: bool = False,
     ):
         self._initialize_trackers()
 
+        try:
+            self._get_structure_source(source_info)
+        except IntegrityError:
+            return {
+                "errors_map": {
+                    1: [
+                        f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
+                    ]
+                }
+            }
+
         [headers, *lines] = reader
 
-        missing_headers = set(CSV_HEADERS) - set(headers)
+        missing_headers = set(self.CSV_HEADERS) - set(headers)
 
         if missing_headers:
             return {
@@ -65,6 +69,7 @@ class ImportStructuresHelper:
                     ]
                 }
             }
+
         lines = [dict(zip(headers, line)) for line in lines]
         for idx, line in enumerate(lines, 2):
             serializer = ImportSerializer(
@@ -264,6 +269,24 @@ class ImportStructuresHelper:
         if clean_str:
             return [value.strip() for value in clean_str.split(",")]
         return []
+
+    CSV_HEADERS = [
+        "nom",
+        "siret",
+        "siret_parent",
+        "courriels_administrateurs",
+        "labels",
+        "modeles",
+        "telephone",
+        "courriel_structure",
+    ]
+
+    def _get_structure_source(self, source_info: Dict[str, str]) -> None:
+        source, _ = StructureSource.objects.get_or_create(
+            value=source_info["value"],
+            label=source_info["label"],
+        )
+        self.source = source
 
 
 class ImportSerializer(serializers.Serializer):
