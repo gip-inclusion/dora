@@ -41,19 +41,6 @@ SECURE_REFERRER_POLICY = "same-origin"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_SSL_REDIRECT = True
 
-# Sécurité (espace admin) :
-# L'espace d'admin est protégé par un système à 2FA
-# Et pontiellement désactivable par configuration
-DJANGO_ADMIN_2FA_ENABLED = os.getenv("DJANGO_ADMIN_2FA_ENABLED", "true") == "true"
-
-if DJANGO_ADMIN_2FA_ENABLED:
-    INSTALLED_APPS += [  # noqa
-        "django_otp",
-        "django_otp.plugins.otp_static",
-        "django_otp.plugins.otp_totp",
-    ]
-    MIDDLEWARE += ["django_otp.middleware.OTPMiddleware"]  # noqa
-
 # Certains formulaires d'admin (par ex. structures)
 # peuvent contenir un grand nombre de champs associés (par ex. membres)
 # et déclencher une erreur de type : `TooManyFieldsSent` lors de la modification

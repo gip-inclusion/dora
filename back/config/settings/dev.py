@@ -72,6 +72,3 @@ if DEBUG and PROFILE:
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
 LOGGING["loggers"]["django"]["level"] = os.getenv("DJANGO_LOG_LEVEL", "INFO")  # noqa F405
-
-# 2FA de l'admin Django par défault désactivé pour les env de dev
-DJANGO_ADMIN_2FA_ENABLED = False

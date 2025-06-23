@@ -575,3 +575,16 @@ SESAME_SESSION_NAME = "sesame_magic_link"
 
 # Recherche unifiée activée par défaut
 DI_DORA_UNIFIED_SEARCH_ENABLED = os.getenv("DI_DORA_UNIFIED_SEARCH_ENABLED") != "false"
+
+# Sécurité (espace admin) :
+# L'espace d'admin est protégé par un système à 2FA
+# Et pontiellement désactivable par configuration
+DJANGO_ADMIN_2FA_ENABLED = os.getenv("DJANGO_ADMIN_2FA_ENABLED") == "true"
+
+if DJANGO_ADMIN_2FA_ENABLED:
+    INSTALLED_APPS += [  # noqa
+        "django_otp",
+        "django_otp.plugins.otp_static",
+        "django_otp.plugins.otp_totp",
+    ]
+    MIDDLEWARE += ["django_otp.middleware.OTPMiddleware"]  # noqa
