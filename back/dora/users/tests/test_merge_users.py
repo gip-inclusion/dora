@@ -57,9 +57,9 @@ def test_merge_memberships(src_user, dest_user):
     )
 
     # Vérifier que l'appartenance à la structure a été transférée
-    assert (
-        dest_user in structure.members.all()
-    ), "L'utilisateur doit être membre de la structure"
+    assert dest_user in structure.members.all(), (
+        "L'utilisateur doit être membre de la structure"
+    )
     assert "Fusion effectuée" in out.getvalue()
 
 
@@ -73,9 +73,9 @@ def test_merge_invitations(src_user, dest_user):
     )
 
     # Vérifier que l'invitation a été transférée
-    assert (
-        dest_user in structure.putative_members.all()
-    ), "L'utilisateur doit être invité de la structure"
+    assert dest_user in structure.putative_members.all(), (
+        "L'utilisateur doit être invité de la structure"
+    )
     assert "Fusion effectuée" in out.getvalue()
 
 
@@ -103,9 +103,9 @@ def test_dry_run_mode(src_user, dest_user):
 
     call_command("merge_users", src_user.email, dest_user.email, stdout=out)
 
-    assert (
-        dest_user not in structure.members.all()
-    ), "L'utilisateur ne doit pas être membre de la structure"
+    assert dest_user not in structure.members.all(), (
+        "L'utilisateur ne doit pas être membre de la structure"
+    )
     assert src_user.is_active, "L'utilisateur doit encore être actif"
     assert "Mode 'dry-run'" in out.getvalue()
 
@@ -114,8 +114,8 @@ def test_dry_run_mode(src_user, dest_user):
 
     call_command("merge_users", src_user.email, dest_user.email, stdout=out)
 
-    assert (
-        dest_user not in structure.putative_members.all()
-    ), "L'utilisateur ne doit pas être invité de la structure"
+    assert dest_user not in structure.putative_members.all(), (
+        "L'utilisateur ne doit pas être invité de la structure"
+    )
     assert src_user.is_active, "L'utilisateur doit encore être actif"
     assert "Mode 'dry-run'" in out.getvalue()

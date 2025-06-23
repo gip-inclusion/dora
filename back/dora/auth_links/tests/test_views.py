@@ -19,9 +19,9 @@ def test_send_link(client):
         reverse("send_link"),
         data={"email": user_no_ic.email},
     )
-    assert (
-        response.status_code == 404
-    ), "Une response 404 est attendue (utilisateur sans IC)"
+    assert response.status_code == 404, (
+        "Une response 404 est attendue (utilisateur sans IC)"
+    )
 
     # on vérifie qu'un lien est envoyé si l'utilisateur à un compte IC
     user_ic = make_user(ic_id=uuid4(), is_active=True)
@@ -30,9 +30,9 @@ def test_send_link(client):
         reverse("send_link"),
         data={"email": user_ic.email},
     )
-    assert (
-        response.status_code == 204
-    ), "Une response 204 est attendue (utilisateur avec IC trouvé)"
+    assert response.status_code == 204, (
+        "Une response 204 est attendue (utilisateur avec IC trouvé)"
+    )
 
 
 def test_authenticate_with_link(client):
@@ -41,9 +41,9 @@ def test_authenticate_with_link(client):
         reverse("authenticate_with_link", kwargs={"sesame": "foo"}),
     )
     assert response.status_code == 302, "Une redirection est attendue"
-    assert (
-        response.url == settings.FRONTEND_URL
-    ), "En cas d'échec, on doit rediriger vers l'accueil"
+    assert response.url == settings.FRONTEND_URL, (
+        "En cas d'échec, on doit rediriger vers l'accueil"
+    )
 
     # Redirection vers l'identification du frontend si le code fourni est valide
     user = make_user(ic_id=uuid4(), is_active=True)
@@ -54,6 +54,6 @@ def test_authenticate_with_link(client):
         ),
     )
     assert response.status_code == 302, "Une redirection est attendue"
-    assert (
-        "auth/pc-callback" in response.url
-    ), "On doit rediriger vers l'idetification du frontend"
+    assert "auth/pc-callback" in response.url, (
+        "On doit rediriger vers l'idetification du frontend"
+    )
