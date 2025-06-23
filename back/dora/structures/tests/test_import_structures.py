@@ -435,7 +435,7 @@ class StructuresImportTestCase(APITestCase):
         self.assertEqual(branch.name, "Foo")
         self.assertEqual(branch.ape, structure.ape)
         self.assertEqual(branch.siret, None)
-        self.assertEqual(branch.creator, User.objects.get_dora_bot())
+        self.assertEqual(branch.creator, self.importing_user)
         self.assertEqual(
             branch.source, StructureSource.objects.get(value="invitations-masse")
         )
@@ -482,7 +482,7 @@ class StructuresImportTestCase(APITestCase):
         branch = branches[0]
         self.assertEqual(branch.name, "Foo")
         self.assertEqual(branch.siret, "12345678901234")
-        self.assertEqual(branch.creator, User.objects.get_dora_bot())
+        self.assertEqual(branch.creator, self.importing_user)
         self.assertEqual(
             branch.source, StructureSource.objects.get(value="invitations-masse")
         )

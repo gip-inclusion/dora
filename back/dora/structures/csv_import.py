@@ -27,6 +27,7 @@ class ImportStructuresHelper:
         self.bot_user = User.objects.get_dora_bot()
         self.source = StructureSource.objects.get(value="invitations-masse")
         self._initialize_trackers()
+        self.importing_user = None
 
     def _initialize_trackers(self):
         self.map_line_to_errors = {}
@@ -43,6 +44,7 @@ class ImportStructuresHelper:
         wet_run: bool = False,
     ):
         self._initialize_trackers()
+        self.importing_user = importing_user
 
         try:
             self._get_structure_source(source_info)
@@ -211,13 +213,15 @@ class ImportStructuresHelper:
                     parent=parent_structure,
                     **kwargs,
                 )
-            parent_structure.post_create_branch(branch, self.bot_user, self.source)
+            parent_structure.post_create_branch(
+                branch, self.importing_user, self.source
+            )
             self.created_structures_count += 1
 
             print(f"Création de la branche {branch.name} ({branch.get_frontend_url()})")
             send_moderation_notification(
                 branch,
-                self.bot_user,
+                self.importing_user,
                 "Structure créée à partir d'un import en masse",
                 ModerationStatus.VALIDATED,
             )
