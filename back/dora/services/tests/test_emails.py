@@ -64,10 +64,10 @@ def test_send_service_notification(service, request):
         email.subject
         == "Des mises à jour de votre offre de service sur DORA sont nécessaires"
     )
-    assert (
-        user.first_name in email.body
-    ), "Le nom de l'éditeur du service doit être cité dans l'e-mail"
+    assert user.first_name in email.body, (
+        "Le nom de l'éditeur du service doit être cité dans l'e-mail"
+    )
 
-    assert (
-        quote(service.name) in email.body
-    ), "Le nom du service doit apparaitre dans l'e-mail"
+    assert quote(service.name) in email.body, (
+        "Le nom du service doit apparaitre dans l'e-mail"
+    )

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 
+from botocore.config import Config
 from corsheaders.defaults import default_headers
 
 from . import BASE_DIR
@@ -186,7 +187,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STORAGES = {
     "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "client_config": Config(
+                request_checksum_calculation="when_required",
+                response_checksum_validation="when_required",
+            ),
+        },
     },
     "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
