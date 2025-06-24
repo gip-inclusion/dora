@@ -34,6 +34,7 @@
 
   $: showServiceWillBeVisibleSoonNotice =
     DI_DORA_UNIFIED_SEARCH_ENABLED &&
+    service.status === "PUBLISHED" &&
     service.canWrite &&
     isLessThanOneHourAgo(service.creationDate);
 
