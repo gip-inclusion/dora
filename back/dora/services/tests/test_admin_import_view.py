@@ -686,7 +686,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         mock_messages.error.assert_called_once_with(
             request,
-            "<b>Échec de l'import - Erreur inattendue</b><br/>L'erreur suivante s'est produite :<br/>Unexpected error<br/>Si le même problème arrive, envoyez un message aux développeurs.",
+            "<b>Échec de l'import - Erreur inattendue</b><br/>L'erreur suivante s'est produite :<br/>Unexpected error<br/>Si le problème persiste, contactez les développeurs.",
         )
 
     # Edge Cases
