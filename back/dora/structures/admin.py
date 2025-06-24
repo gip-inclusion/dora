@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import path, reverse
 from django.utils import timezone
 
@@ -14,6 +15,7 @@ from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 from dora.structures.emails import send_moderation_rejected_notification
 
+from .csv_import import ImportStructuresHelper
 from .models import (
     DisabledDoraFormDIStructure,
     Structure,
@@ -281,6 +283,11 @@ class StructureAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.moderation_reject),
                 name="moderation_reject",
             ),
+            path(
+                "import-structures/",
+                self.admin_site.admin_view(self.import_structures_view),
+                name="structures_structure_import",
+            ),
         ]
         return custom_urls + urls
 
@@ -413,6 +420,26 @@ class StructureAdmin(admin.ModelAdmin):
 
         # Redirection vers la liste des structures en attente de modération
         return HttpResponseRedirect(self.get_moderation_pending_structure_list_url())
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["import_url"] = "import-structures/"
+        return super().changelist_view(request, extra_context)
+
+    def import_structures_view(self, request):
+        if request.method == "POST":
+            return self._handle_import_post(request)
+
+        context = {
+            "title": "Module d'import de structures",
+            "opts": self.model._meta,
+            "has_view_permission": True,
+            "csv_headers": ImportStructuresHelper.CSV_HEADERS,
+        }
+        return render(request, "admin/import_structures.html", context)
+
+    def _handle_import_post(self, request):
+        return
 
 
 class DisabledDoraFormDIStructureAdmin(admin.ModelAdmin):
