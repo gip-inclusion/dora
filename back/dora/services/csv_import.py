@@ -357,10 +357,6 @@ class ImportServicesHelper:
         return True
 
     @staticmethod
-    def is_service_completely_duplicated(data: SimpleNamespace):
-        return
-
-    @staticmethod
     def _remove_first_two_csv_lines(reader: csv.reader) -> csv.reader:
         next(reader, None)
         next(reader, None)

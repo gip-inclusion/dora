@@ -326,14 +326,6 @@ class ServiceAdmin(admin.GISModelAdmin):
                 mark_safe(message + f" :<br/>{draft_list}"),
             )
 
-    def remove_first_two_lines(csv_content: str) -> str:
-        lines = csv_content.strip().split("\n")
-
-        if len(lines) <= 2:
-            return ""
-
-        return "\n".join(lines[2:])
-
 
 class ServiceModelAdmin(admin.ModelAdmin):
     search_fields = (
