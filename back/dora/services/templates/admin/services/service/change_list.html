@@ -1,0 +1,10 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+  {{ block.super }}
+  <li>
+    <a href="{{ import_url }}" class="addlink">
+      Importer Services
+    </a>
+  </li>
+{% endblock %}

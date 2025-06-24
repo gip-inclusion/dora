@@ -1,10 +1,18 @@
+import csv
+import io
+
 from data_inclusion.schema.v0 import Profil
 from django import forms
+from django.contrib import messages
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
+from django.shortcuts import redirect, render
+from django.urls import path
+from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 
+from .csv_import import ImportServicesHelper
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -78,6 +86,12 @@ class ServiceStatusHistoryItemAdmin(admin.ModelAdmin):
 
 
 class ServiceAdmin(admin.GISModelAdmin):
+    def __init__(self, *args, **kwargs):
+        self.default_source_label = "DORA"
+        self.upload_size_limit_in_bytes = 10 * 1024 * 1024  # 10 MB
+        self.import_service_helper = ImportServicesHelper()
+        return super().__init__(*args, **kwargs)
+
     search_fields = ("name", "structure__name", "slug", "data_inclusion_id")
     list_display = [
         "name",
@@ -115,6 +129,202 @@ class ServiceAdmin(admin.GISModelAdmin):
         "data_inclusion_source",
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["import_url"] = "import-services/"
+        return super().changelist_view(request, extra_context)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "import-services/",
+                self.admin_site.admin_view(self.import_services_view),
+                name="services_service_import",
+            ),
+        ]
+        return custom_urls + urls
+
+    def import_services_view(self, request):
+        if request.method == "POST":
+            return self._handle_import_post(request)
+
+        context = {
+            "title": "Module d'import de services",
+            "opts": self.model._meta,
+            "has_view_permission": True,
+            "csv_headers": ImportServicesHelper.CSV_HEADERS,
+        }
+        return render(request, "admin/import_services.html", context)
+
+    def _handle_import_post(self, request):
+        csv_file = request.FILES.get("csv_file")
+        if not csv_file:
+            messages.error(request, "Veuillez sélectionner un fichier CSV.")
+            return redirect(".")
+
+        if not csv_file.name.lower().endswith(".csv"):
+            messages.error(
+                request,
+                mark_safe(
+                    "<b>Échec de l'import - Format de fichier non valide</b><br/>"
+                    "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
+                ),
+            )
+            return redirect(".")
+
+        if csv_file.size > self.upload_size_limit_in_bytes:
+            messages.error(
+                request,
+                "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit être moins de 10MB.",
+            )
+            return redirect(".")
+
+        try:
+            is_wet_run = request.POST.get("test_run") != "on"
+            source_label = request.POST.get(
+                "source_label", self.default_source_label
+            ).strip()
+            should_remove_instructions_from_csv = (
+                request.POST.get("should_remove_instructions") == "on"
+            )
+
+            source_info = {
+                "value": csv_file.name.rsplit(".", 1)[0],
+                "label": source_label or self.default_source_label,
+            }
+
+            reader = csv.reader(io.TextIOWrapper(csv_file, encoding="utf-8"))
+            result = self.import_service_helper.import_services(
+                reader,
+                request.user,
+                source_info,
+                wet_run=is_wet_run,
+                should_remove_first_two_lines=should_remove_instructions_from_csv,
+            )
+
+            return self._handle_import_results(request, result, is_wet_run)
+
+        except UnicodeDecodeError:
+            messages.error(
+                request,
+                mark_safe(
+                    "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
+                    "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
+                ),
+            )
+            return redirect(".")
+        except Exception as e:
+            messages.error(
+                request,
+                mark_safe(
+                    "<b>Échec de l'import - Erreur inattendue</b><br/>"
+                    "L'erreur suivante s'est produite :<br/>"
+                    f"{e}<br/>"
+                    "Si le problème persiste, contactez les développeurs.",
+                ),
+            )
+            return redirect(".")
+
+    def _handle_import_results(self, request, result, is_wet_run):
+        created_count = result.get("created_count", 0)
+        no_errors = not result.get("missing_headers", []) and not result.get(
+            "errors", []
+        )
+
+        self._add_error_messages(request, result, is_wet_run)
+        self._add_warning_messages(request, result, is_wet_run)
+
+        total_services_published = created_count - len(
+            result.get("draft_services_created", [])
+        )
+
+        if is_wet_run and no_errors:
+            messages.success(
+                request,
+                mark_safe(
+                    f"<b>Import terminé avec succès</b><br/>{total_services_published} nouveaux services ont été créés et publiés"
+                ),
+            )
+            return redirect("..")
+
+        if not is_wet_run and no_errors:
+            messages.success(
+                request,
+                mark_safe(
+                    f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {total_services_published} sont prêts à être importés et publiés."
+                ),
+            )
+
+        return redirect(".")
+
+    def _add_error_messages(self, request, result, is_wet_run):
+        missing_headers = result.get("missing_headers", [])
+        errors = result.get("errors", [])
+
+        if missing_headers:
+            headers_list = "<br/>".join(f"• {header}" for header in missing_headers)
+            message = f"<b>Échec de l'import - Colonnes manquantes</b><br/>Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>{headers_list}"
+
+            messages.error(request, mark_safe(message))
+
+        if errors:
+            error_list = "<br/>".join(f"• {error}" for error in errors)
+            title_prefix = "Échec de l'import" if is_wet_run else "Test terminé"
+            messages.error(
+                request,
+                mark_safe(
+                    f"<b>{title_prefix} - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêchent l'import. Veuillez corriger les éléments suivants :<br/>"
+                    f"{error_list}",
+                ),
+            )
+
+    def _add_warning_messages(self, request, result, is_wet_run):
+        duplicated_services = result.get("duplicated_services", [])
+        geo_data_missing = result.get("geo_data_missing_lines", [])
+        draft_services_created = result.get("draft_services_created", [])
+
+        title_prefix = "Import réalisé" if is_wet_run else "Test terminé"
+        if duplicated_services:
+            duplicate_list = "<br/>".join(
+                f'• [{service["idx"]}] SIRET {service["siret"]} - il existe déjà un service avec le modèle {service["model_slug"]} et le courriel "{service["contact_email"]}"'
+                for service in duplicated_services
+            )
+            messages.warning(
+                request,
+                mark_safe(
+                    f"<b>{title_prefix} - Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
+                    f"{duplicate_list}"
+                ),
+            )
+
+        if geo_data_missing:
+            missing_list = "<br/>".join(
+                f"• [{item.get('idx', '?')}] {item.get('address', '')} {item.get('postal_code', '')} {item.get('city', '')}"
+                for item in geo_data_missing
+            )
+            messages.warning(
+                request,
+                mark_safe(
+                    f"<b>{title_prefix} - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
+                    f"{missing_list}"
+                ),
+            )
+
+        if draft_services_created:
+            draft_list = "<br/>".join(
+                f'• [{service["idx"]}] Service "{service["name"]}" - Manque : {", ".join(service["missing_fields"])}'
+                for service in draft_services_created
+            )
+
+            wet_run_message = f"<b>{title_prefix} - Services importés en brouillon</b><br/>{len(draft_services_created)} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication"
+            test_run_message = f"<b>{title_prefix} - Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
+            message = wet_run_message if is_wet_run else test_run_message
+            messages.warning(
+                request,
+                mark_safe(message + f" :<br/>{draft_list}"),
+            )
 
 
 class ServiceModelAdmin(admin.ModelAdmin):
