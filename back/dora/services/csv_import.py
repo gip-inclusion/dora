@@ -26,8 +26,13 @@ class ImportServicesHelper:
         self.wet_run: bool = False
         self.importing_user: Optional[User] = None
         self.source: Optional[ServiceSource] = None
+
+    def _initialize_trackers(self):
         self.geo_data_missing_lines: List[Dict[str, Union[int, str]]] = []
         self.draft_services_created: List[Dict[str, Union[int, str, List[str]]]] = []
+        self.duplicated_services = []
+        self.errors = []
+        self.created_count = 0
 
     def import_services(
         self,
@@ -42,14 +47,9 @@ class ImportServicesHelper:
         else:
             print("🧘 DRY RUN 🧘")
 
-        self.geo_data_missing_lines = []
-        self.draft_services_created = []
         self.wet_run = wet_run
         self.importing_user = importing_user
-
-        created_count = 0
-        errors = []
-        duplicated_services = []
+        self._initialize_trackers()
 
         try:
             self._get_service_source(source_info)
@@ -89,7 +89,7 @@ class ImportServicesHelper:
                                 f"❌ {error_msg}",
                                 file=sys.stderr,
                             )
-                            errors.append(error_msg)
+                            self.errors.append(error_msg)
                             continue
 
                         # Vérification que la structure existe bien en BDD
@@ -103,7 +103,7 @@ class ImportServicesHelper:
                                 f"❌ {error_msg}",
                                 file=sys.stderr,
                             )
-                            errors.append(error_msg)
+                            self.errors.append(error_msg)
                             continue
 
                         # Vérification que le modèle de service existe lui aussi
@@ -115,7 +115,7 @@ class ImportServicesHelper:
                                 f"❌ {error_msg}",
                                 file=sys.stderr,
                             )
-                            errors.append(error_msg)
+                            self.errors.append(error_msg)
                             continue
 
                         print(
@@ -130,32 +130,26 @@ class ImportServicesHelper:
                             idx,
                         )
 
-                        if self._is_service_duplicated(data):
-                            duplicated_services.append(
-                                {
-                                    "idx": idx,
-                                    "siret": data.structure_siret,
-                                    "model_slug": data.modele_slug,
-                                    "contact_email": data.contact_email,
-                                }
-                            )
-                            print(
-                                f"SIRET {data.structure_siret} - il existe déjà un service avec le modèle {data.modele_slug} et le courriel {data.contact_email}",
-                                file=sys.stderr,
-                            )
-                        created_count += 1
+                        should_service_be_created = (
+                            self._check_if_service_is_duplicated(data, idx)
+                        )
+
+                        if not should_service_be_created:
+                            continue
+
+                        self.created_count += 1
                         print("✅ Service créé.")
 
                     except Exception as e:
                         error_msg = f"[{idx}] {e}"
                         print(f"❌ {error_msg}", file=sys.stderr)
-                        errors.append(error_msg)
+                        self.errors.append(error_msg)
                         continue
 
-                if len(errors) > 0 and self.wet_run:
-                    created_count = 0
+                if len(self.errors) > 0 and self.wet_run:
+                    self.created_count = 0
                     raise Exception(
-                        f"⚠️ {len(errors)} erreurs rencontrées lors du traitement du fichier CSV.\n"
+                        f"⚠️ {len(self.errors)} erreurs rencontrées lors du traitement du fichier CSV.\n"
                         "Toutes les modifications sont annulées."
                     )
 
@@ -169,11 +163,13 @@ class ImportServicesHelper:
 
         print("\n--------------------------------------------------")
         print("Traitement du fichier CSV terminé.")
-        print(f"Résumé : {created_count} services créés, {len(errors)} erreurs.")
+        print(
+            f"Résumé : {self.created_count} services créés, {len(self.errors)} erreurs."
+        )
         print(
             f"Lignes sans données géographiques : ({len(self.geo_data_missing_lines)})"
         )
-        print(f"Services dupliqués : ({len(duplicated_services)}):")
+        print(f"Services dupliqués : ({len(self.duplicated_services)}):")
         print(f"Services en brouillon créés : ({len(self.draft_services_created)})")
         for entry in self.geo_data_missing_lines:
             print(
@@ -183,10 +179,10 @@ class ImportServicesHelper:
         print("--------------------------------------------------\n")
 
         return {
-            "created_count": created_count,
-            "errors": errors,
+            "created_count": self.created_count,
+            "errors": self.errors,
             "geo_data_missing_lines": self.geo_data_missing_lines,
-            "duplicated_services": duplicated_services,
+            "duplicated_services": self.duplicated_services,
             "draft_services_created": self.draft_services_created,
         }
 
@@ -317,13 +313,52 @@ class ImportServicesHelper:
         )
         self.source = source
 
+    def _check_if_service_is_duplicated(self, data: SimpleNamespace, idx: int) -> bool:
+        base_filter = {
+            "structure__siret": data.structure_siret,
+            "model__slug": data.modele_slug,
+            "contact_email": data.contact_email,
+        }
+
+        if not Service.objects.filter(**base_filter).exists():
+            return True
+
+        has_location_data = all([data.location_address, data.location_postal_code])
+
+        full_filter = {
+            **base_filter,
+            "address1": data.location_address,
+            "postal_code": data.location_postal_code,
+        }
+
+        if has_location_data and Service.objects.filter(**full_filter).exists():
+            error_msg = (
+                f'[{idx}] Le même service avec le modèle "{data.modele_slug}", le référent "{data.contact_email}" '
+                f"et la même adresse existe déjà pour la structure "
+                f'dont le Siret est "{data.structure_siret}".'
+            )
+
+            self.errors.append(error_msg)
+            print(
+                error_msg,
+                file=sys.stderr,
+            )
+            return False
+
+        self.duplicated_services.append(
+            {
+                "idx": idx,
+                "siret": data.structure_siret,
+                "model_slug": data.modele_slug,
+                "contact_email": data.contact_email,
+            }
+        )
+
+        return True
+
     @staticmethod
-    def _is_service_duplicated(data: SimpleNamespace) -> bool:
-        return Service.objects.filter(
-            structure__siret=data.structure_siret,
-            model__slug=data.modele_slug,
-            contact_email=data.contact_email,
-        ).exists()
+    def is_service_completely_duplicated(data: SimpleNamespace):
+        return
 
     @staticmethod
     def _remove_first_two_csv_lines(reader: csv.reader) -> csv.reader:

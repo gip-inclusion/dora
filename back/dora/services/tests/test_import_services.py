@@ -499,6 +499,36 @@ class ImportServicesTestCase(TestCase):
             },
         )
 
+    def test_block_duplicated_service(self):
+        baker.make(
+            "Service",
+            structure=self.structure,
+            model=self.service_model,
+            contact_email="referent@email.com",
+            address1="1 rue de test",
+            postal_code="75020",
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertEqual(result["created_count"], 0)
+        self.assertEqual(
+            result["errors"][0],
+            f'[2] Le même service avec le modèle "{self.service_model.slug}", le référent "referent@email.com"'
+            f"et la même adresse existe déjà pour la structure"
+            f'dont le Siret est "{self.structure.siret}".',
+        )
+        self.assertEqual(len(result["duplicated_services"]), 0)
+
     def test_new_service_source(self):
         csv_content = (
             f"{self.csv_headers}\n"
