@@ -34,9 +34,10 @@
 
   $: showServiceWillBeVisibleSoonNotice =
     DI_DORA_UNIFIED_SEARCH_ENABLED &&
+    !service.isModel &&
     service.status === "PUBLISHED" &&
     service.canWrite &&
-    isLessThanOneHourAgo(service.creationDate);
+    isLessThanOneHourAgo(service.publicationDate);
 
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;
