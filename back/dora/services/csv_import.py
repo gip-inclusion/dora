@@ -118,6 +118,13 @@ class ImportServicesHelper:
                             self.errors.append(error_msg)
                             continue
 
+                        should_service_be_created = (
+                            self._check_if_service_is_duplicated(data, idx)
+                        )
+
+                        if not should_service_be_created:
+                            continue
+
                         print(
                             f"Création d'un nouveau service pour la structure avec le SIRET '{data.structure_siret}'."
                         )
@@ -129,13 +136,6 @@ class ImportServicesHelper:
                             data,
                             idx,
                         )
-
-                        should_service_be_created = (
-                            self._check_if_service_is_duplicated(data, idx)
-                        )
-
-                        if not should_service_be_created:
-                            continue
 
                         self.created_count += 1
                         print("✅ Service créé.")

@@ -523,8 +523,8 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(
             result["errors"][0],
-            f'[2] Le même service avec le modèle "{self.service_model.slug}", le référent "referent@email.com"'
-            f"et la même adresse existe déjà pour la structure"
+            f'[2] Le même service avec le modèle "{self.service_model.slug}", le référent "referent@email.com" '
+            f"et la même adresse existe déjà pour la structure "
             f'dont le Siret est "{self.structure.siret}".',
         )
         self.assertEqual(len(result["duplicated_services"]), 0)
@@ -606,6 +606,13 @@ class ImportServicesTestCase(TestCase):
         )
 
     def test_results_do_not_carry_over_between_runs(self):
+        baker.make(
+            "Service",
+            model=self.service_model,
+            structure=self.structure,
+            contact_email="referent@email.com",
+        )
+
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,city,\n"
