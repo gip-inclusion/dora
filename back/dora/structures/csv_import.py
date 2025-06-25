@@ -25,7 +25,6 @@ from dora.users.models import User
 
 class ImportStructuresHelper:
     def __init__(self, *args, **kwargs) -> None:
-        self.bot_user = User.objects.get_dora_bot()
         self.source = StructureSource.objects.get(value="invitations-masse")
         self._initialize_trackers()
         self.importing_user = None
