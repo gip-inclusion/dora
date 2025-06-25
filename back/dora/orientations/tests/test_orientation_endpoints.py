@@ -229,7 +229,7 @@ def get_new_di_service_orientation_data(user, structure, service):
         "diContactEmail": "di.contact@example.com",
         "diContactName": "DI Contact",
         "diContactPhone": "0987654321",
-        "diServiceId": "di--soliguide--630fa36e5c4d35d05bd267ab",
+        "diServiceId": "soliguide--630fa36e5c4d35d05bd267ab",
         "diServiceName": "DI Service Name",
         "diServiceAddressLine": "DI Address Line",
         "diStructureName": "DI Structure Name",

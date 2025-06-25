@@ -9,14 +9,17 @@
   import { orientation } from "../store";
   import { userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
+  import Alert from "$lib/components/display/alert.svelte";
   import Accordion from "$lib/components/display/accordion.svelte";
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import { orientationContainsTestWords } from "$lib/utils/orientation";
   import { userPreferences } from "$lib/utils/preferences";
   import type { Choice } from "$lib/types";
   import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
+  import { formErrors } from "$lib/validation/validation";
+  import type { Service } from "$lib/types";
 
-  export let service;
+  export let service: Service;
   export let credentials;
 
   let contactPrefOptions: Choice[] = [];
@@ -261,7 +264,7 @@
         </p>
       </Notice>
 
-      {#each service.formsInfo as form}
+      {#each service.formsInfo || [] as form}
         {#if $orientation.attachments[form.name]}
           <UploadField
             dynamicId
@@ -285,7 +288,7 @@
         {/if}
       {/each}
 
-      {#each credentials as cred}
+      {#each credentials || [] as cred}
         {#if $orientation.attachments[cred.label]}
           <UploadField
             dynamicId
@@ -297,6 +300,12 @@
           />
         {/if}
       {/each}
+
+      {#if $formErrors?.beneficiaryAttachments}
+        {#each $formErrors.beneficiaryAttachments as error, i}
+          <Alert id="beneficiaryAttachments-{i}" label={error} />
+        {/each}
+      {/if}
     </Fieldset>
   {/if}
 
