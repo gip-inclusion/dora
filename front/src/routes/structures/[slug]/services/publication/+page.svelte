@@ -4,7 +4,7 @@
 </script>
 
 <CenteredGrid>
-  <h1 class="mb-s40">Service créé avec succès</h1>
+  <h1 class="mb-s40">Service en cours de publication</h1>
   <div
     class="border-gray-02 py-s32 px-s20 gap-s40 flex flex-col items-center rounded-2xl border text-center md:flex-row"
   >
@@ -19,6 +19,11 @@
         Ce court délai est nécessaire pour que les informations transitent par
         le référentiel commun data·inclusion qui centralise toutes les données
         de l'offre d'insertion.
+      </p>
+      <p class="text-f14">
+        <a href="." class="text-magenta-cta font-bold hover:underline">
+          Retour à mes services
+        </a>
       </p>
     </div>
     <div class="w-full max-w-[443px]">

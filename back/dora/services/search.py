@@ -16,6 +16,7 @@ from dora import data_inclusion
 from dora.admin_express.models import City
 from dora.core.constants import WGS84
 from dora.data_inclusion.constants import THEMATIQUES_MAPPING_DORA_TO_DI
+from dora.services.models import ServiceStatus
 from dora.structures.models import Structure
 
 from .constants import EXCLUDED_DI_SERVICES_THEMATIQUES
@@ -431,6 +432,8 @@ def _get_unified_results(
             "beneficiaries_access_modes",
         )
     ).distinct()
+
+    dora_results = dora_results.filter(status=ServiceStatus.PUBLISHED)
 
     # Certains services DORA venant de DI ont une structure obsolète ou orpheline
     dora_results = dora_results.exclude(structure__is_obsolete=True)

@@ -7,7 +7,7 @@
   import { DI_DORA_UNIFIED_SEARCH_ENABLED } from "$lib/env";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { token, userInfo } from "$lib/utils/auth";
-  import { isLessThanOneHourAgo } from "$lib/utils/date";
+  import { isServiceRecentlyPublished } from "$lib/utils/service";
   import { trackMobilisation } from "$lib/utils/stats";
 
   import PreventFakeOrientationModal from "./prevent-fake-orientation-modal.svelte";
@@ -34,8 +34,10 @@
 
   $: showServiceWillBeVisibleSoonNotice =
     DI_DORA_UNIFIED_SEARCH_ENABLED &&
+    !service.isModel &&
+    service.status === "PUBLISHED" &&
     service.canWrite &&
-    isLessThanOneHourAgo(service.creationDate);
+    isServiceRecentlyPublished(service);
 
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;

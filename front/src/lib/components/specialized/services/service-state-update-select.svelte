@@ -102,6 +102,7 @@
 
     if (isValid) {
       await publishService(service.slug);
+      goto(`/structures/${service.structure}/services/publication`);
     } else {
       goto(`/services/${service.slug}/editer`);
     }

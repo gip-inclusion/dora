@@ -94,9 +94,9 @@
     }
   }
 
-  function handleSuccess(result) {
-    if (DI_DORA_UNIFIED_SEARCH_ENABLED) {
-      goto("/services/creer/succès");
+  function handleSuccess(result: Service) {
+    if (DI_DORA_UNIFIED_SEARCH_ENABLED && result.status === "PUBLISHED") {
+      goto(`/structures/${result.structure}/services/publication`);
     } else {
       goto(`/services/${result.slug}`);
     }
