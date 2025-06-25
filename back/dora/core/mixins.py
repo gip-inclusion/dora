@@ -55,7 +55,7 @@ class BaseImportAdminMixin:
                 wet_run=is_wet_run,
                 should_remove_first_two_lines=should_remove_instructions_from_csv,
             )
-            return self._handle_import_results(request, result, is_wet_run)
+            return self.handle_import_results(request, result, is_wet_run)
         except UnicodeDecodeError:
             messages.error(
                 request,
@@ -85,5 +85,5 @@ class BaseImportAdminMixin:
         """Override this method to return the import method name."""
         raise NotImplementedError("Subclasses must implement get_import_method_name()")
 
-    def _handle_import_results(self, request, result, is_wet_run):
+    def handle_import_results(self, request, result, is_wet_run):
         raise NotImplementedError("Subclasses must implement _handle_import_results()")

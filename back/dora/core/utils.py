@@ -1,3 +1,4 @@
+import csv
 import json
 import logging
 import re
@@ -134,3 +135,9 @@ def get_geo_data(address, city=None, postal_code=None, city_code=None):
     else:
         logger.error("Aucun résultat trouvé")
         return None
+
+
+def remove_first_two_csv_lines(reader: csv.reader) -> csv.reader:
+    next(reader, None)
+    next(reader, None)
+    return reader

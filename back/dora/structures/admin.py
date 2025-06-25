@@ -1,12 +1,13 @@
 import logging
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import path, reverse
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 from dora.core.models import ModerationStatus
@@ -15,6 +16,7 @@ from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 from dora.structures.emails import send_moderation_rejected_notification
 
+from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportStructuresHelper
 from .models import (
     DisabledDoraFormDIStructure,
@@ -208,7 +210,11 @@ class OrientationModerationPendingInline(admin.TabularInline):
         return False
 
 
-class StructureAdmin(admin.ModelAdmin):
+class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
+    def __init__(self, *args, **kwargs):
+        self.import_structure_helper = ImportStructuresHelper()
+        return super().__init__(*args, **kwargs)
+
     list_display = [
         "name",
         "slug",
@@ -428,7 +434,7 @@ class StructureAdmin(admin.ModelAdmin):
 
     def import_structures_view(self, request):
         if request.method == "POST":
-            return self._handle_import_post(request)
+            return self.import_csv(request)
 
         context = {
             "title": "Module d'import de structures",
@@ -438,8 +444,50 @@ class StructureAdmin(admin.ModelAdmin):
         }
         return render(request, "admin/import_structures.html", context)
 
-    def _handle_import_post(self, request):
-        return
+    def handle_import_results(self, request, result, is_wet_run):
+        errors_map = result.get("errors_map", {})
+        created_structures_count = result.get("created_structures_count", 0)
+        created_services_count = result.get("created_services_count", 0)
+        edited_structures_count = result.get("edited_structures_count", 0)
+
+        if not errors_map and is_wet_run:
+            messages.success(
+                request,
+                mark_safe(
+                    f"<b>Import terminé avec succès</b><br/>{created_structures_count} nouvelles structures ont été créées.<br/>"
+                    f"{edited_structures_count} structures existantes ont été modifiées.<br/>"
+                    f"{created_services_count} nouveaux services ont été crées en brouillon.<br/>"
+                ),
+            )
+
+            return redirect("..")
+
+        if errors_map:
+            error_messages = []
+            for line, errors in errors_map.items():
+                error_messages.append(f"[{line}]: {', '.join(errors)}")
+
+            messages.error(
+                request,
+                mark_safe(
+                    "<b>Échec de l'import - Erreurs rencontrées</b><br/>"
+                    f"{('<br/>').join(error_messages)}"
+                ),
+            )
+
+        elif not is_wet_run:
+            messages.success(
+                request,
+                mark_safe("<b>Import de test terminé avec succès</b><br/>"),
+            )
+
+        return redirect(".")
+
+    def get_import_helper(self):
+        return self.import_structure_helper
+
+    def get_import_method_name(self):
+        return "import_structures"
 
 
 class DisabledDoraFormDIStructureAdmin(admin.ModelAdmin):

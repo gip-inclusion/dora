@@ -154,7 +154,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         }
         return render(request, "admin/import_services.html", context)
 
-    def _handle_import_results(self, request, result, is_wet_run):
+    def handle_import_results(self, request, result, is_wet_run):
         created_count = result.get("created_count", 0)
         no_errors = not result.get("missing_headers", []) and not result.get(
             "errors", []
