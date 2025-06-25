@@ -37,6 +37,7 @@
     !service.isModel &&
     service.status === "PUBLISHED" &&
     service.canWrite &&
+    service.publicationDate !== null &&
     isLessThanOneHourAgo(service.publicationDate);
 
   // Utilisé pour prévenir le tracking multiple
