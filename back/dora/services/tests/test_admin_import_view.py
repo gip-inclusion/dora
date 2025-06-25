@@ -76,7 +76,8 @@ class ImportServicesViewTestCase(APITestCase):
             filename, content.encode("utf-8"), content_type="text/csv"
         )
 
-    def test_get_request_renders_form(self, mock_import, mock_messages):
+    @patch("django.contrib.messages.success")
+    def test_get_request_renders_form(self, mock_messages, mock_import, _):
         get_request = self.factory.get("/admin/services/service/import-services/")
 
         response = self.service_admin.import_services_view(get_request)
@@ -92,7 +93,8 @@ class ImportServicesViewTestCase(APITestCase):
         mock_messages.warning.assert_not_called()
 
     # Les tests de la validation du csv
-    def test_post_without_file(self, mock_import, mock_messages):
+    @patch("dora.core.mixins.messages")
+    def test_post_without_file(self, mock_messages, mock_import, _):
         response = self.service_admin.import_services_view(self.post_request)
 
         self.assertIsInstance(response, HttpResponseRedirect)
@@ -102,7 +104,8 @@ class ImportServicesViewTestCase(APITestCase):
         )
         mock_import.assert_not_called()
 
-    def test_post_with_non_csv_file(self, mock_import, mock_messages):
+    @patch("dora.core.mixins.messages")
+    def test_post_with_non_csv_file(self, mock_messages, mock_import, _):
         txt_file = SimpleUploadedFile(
             "test.txt", b"not a csv file", content_type="text/plain"
         )
@@ -123,7 +126,8 @@ class ImportServicesViewTestCase(APITestCase):
         )
         mock_import.assert_not_called()
 
-    def test_post_with_oversized_file(self, mock_import, mock_messages):
+    @patch("dora.core.mixins.messages")
+    def test_post_with_oversized_file(self, mock_messages, mock_import, _):
         large_content = "a" * (11 * 1024 * 1024)  # 11MB
         large_file = SimpleUploadedFile(
             "large.csv", large_content.encode("utf-8"), content_type="text/csv"
@@ -145,7 +149,8 @@ class ImportServicesViewTestCase(APITestCase):
         )
         mock_import.assert_not_called()
 
-    def test_post_with_invalid_encoding(self, mock_import, mock_messages):
+    @patch("dora.core.mixins.messages")
+    def test_post_with_invalid_encoding(self, mock_messages, mock_import, _):
         mock_import.side_effect = UnicodeDecodeError(
             "utf-8", b"invalid", 0, 1, "Invalid UTF-8 sequence"
         )
@@ -667,7 +672,8 @@ class ImportServicesViewTestCase(APITestCase):
         )
 
     # Tests de la gestion des exceptions
-    def test_import_function_raises_exception(self, mock_import, mock_messages):
+    @patch("dora.core.mixins.messages")
+    def test_import_function_raises_exception(self, mock_messages, mock_import, _):
         mock_import.side_effect = Exception("Unexpected error")
 
         csv_content = "header1,header2\nvalue1,value2"
