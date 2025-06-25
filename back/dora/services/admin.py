@@ -152,7 +152,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             "has_view_permission": True,
             "csv_headers": ImportServicesHelper.CSV_HEADERS,
         }
-        return render(request, "admin/import_services.html", context)
+        return render(request, "admin/import_csv_form.html", context)
 
     def handle_import_results(self, request, result, is_wet_run):
         created_count = result.get("created_count", 0)

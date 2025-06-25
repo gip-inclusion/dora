@@ -442,7 +442,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
             "has_view_permission": True,
             "csv_headers": ImportStructuresHelper.CSV_HEADERS,
         }
-        return render(request, "admin/import_structures.html", context)
+        return render(request, "admin/import_csv_form.html", context)
 
     def handle_import_results(self, request, result, is_wet_run):
         errors_map = result.get("errors_map", {})
