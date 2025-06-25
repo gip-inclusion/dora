@@ -76,7 +76,7 @@ class ImportServicesViewTestCase(APITestCase):
             filename, content.encode("utf-8"), content_type="text/csv"
         )
 
-    @patch("django.contrib.messages.success")
+    @patch("dora.core.mixins.messages")
     def test_get_request_renders_form(self, mock_messages, mock_import, _):
         get_request = self.factory.get("/admin/services/service/import-services/")
 

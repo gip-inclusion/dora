@@ -462,23 +462,25 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
 
             return redirect("..")
 
-        if errors_map:
+        elif not errors_map and not is_wet_run:
+            messages.success(
+                request,
+                mark_safe("<b>Import de test terminé avec succès</b><br/>"),
+            )
+
+        elif errors_map:
             error_messages = []
             for line, errors in errors_map.items():
                 error_messages.append(f"[{line}]: {', '.join(errors)}")
 
+            title_prefix = "Échec de l'import" if is_wet_run else "Test terminé"
+
             messages.error(
                 request,
                 mark_safe(
-                    "<b>Échec de l'import - Erreurs rencontrées</b><br/>"
+                    f"<b>{title_prefix} - Erreurs rencontrées</b><br/>"
                     f"{('<br/>').join(error_messages)}"
                 ),
-            )
-
-        elif not is_wet_run:
-            messages.success(
-                request,
-                mark_safe("<b>Import de test terminé avec succès</b><br/>"),
             )
 
         return redirect(".")
