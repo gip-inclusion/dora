@@ -25,6 +25,7 @@ import type {
   ServicesOptions,
   ServiceStatus,
 } from "$lib/types";
+import { isLessThanOneHourAgo } from "./date";
 import { log } from "./logger";
 
 export function getAvailableOptionsForStatus(
@@ -185,5 +186,11 @@ export function isDurationValid(service: Service | Model): boolean {
     service.durationWeeklyHours > 0 &&
     isFinite(service.durationWeeks) &&
     service.durationWeeks > 0
+  );
+}
+
+export function isServiceRecentlyPublished(service: Service): boolean {
+  return (
+    !!service.publicationDate && isLessThanOneHourAgo(service.publicationDate)
   );
 }
