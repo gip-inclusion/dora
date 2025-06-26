@@ -80,11 +80,6 @@ class UserCreationForm(forms.ModelForm):
         return user
 
 
-@admin.display(description="Sur Inclusion Connect", boolean=True, ordering="ic_id")
-def has_migrated_to_ic(obj):
-    return obj.ic_id is not None
-
-
 class UserAdmin(BaseUserAdmin):
     def get_actions(self, request):
         actions = super().get_actions(request)
@@ -108,7 +103,6 @@ class UserAdmin(BaseUserAdmin):
         "is_valid",
         "date_joined",
         "main_activity",
-        has_migrated_to_ic,
     )
     list_filter = (
         "is_staff",
@@ -130,7 +124,6 @@ class UserAdmin(BaseUserAdmin):
                     "main_activity",
                     "discovery_method",
                     "discovery_method_other",
-                    has_migrated_to_ic,
                 )
             },
         ),
@@ -160,7 +153,7 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
     search_fields = ("email", "last_name", "first_name")
-    readonly_fields = [has_migrated_to_ic, "discovery_method", "discovery_method_other"]
+    readonly_fields = ["discovery_method", "discovery_method_other"]
     ordering = ("-date_joined",)
     filter_horizontal = ()
     inlines = [

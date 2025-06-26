@@ -15,6 +15,10 @@ from dora.users.models import User
 
 logger = logging.getLogger("dora.logs.core")
 
+# TODO:
+# suite à la suppression d'inclusion-connect,
+# la connexion directe par lien est-elle toujours utilisée ?
+
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -25,7 +29,6 @@ def send_link(request):
         email=request.POST.get("email"),
         is_active=True,
         is_valid=True,
-        ic_id__isnull=False,
     )
 
     magic_link = get_token(user)
