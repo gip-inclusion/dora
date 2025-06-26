@@ -25,9 +25,9 @@ from dora.users.models import User
 
 class ImportStructuresHelper:
     def __init__(self, *args, **kwargs) -> None:
-        self.source = StructureSource.objects.get(value="invitations-masse")
-        self._initialize_trackers()
+        self.source = None
         self.importing_user = None
+        self._initialize_trackers()
 
     def _initialize_trackers(self) -> None:
         self.map_line_to_errors = {}
