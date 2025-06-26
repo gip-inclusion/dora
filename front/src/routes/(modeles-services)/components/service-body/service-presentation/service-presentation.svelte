@@ -19,7 +19,7 @@
 
   <ServiceDescription {service} />
 
-  <ServiceSteps {service} />
+  <ServiceSteps {service} on:trackMobilisation />
 
   <ServiceDocuments {service} />
 
