@@ -3,9 +3,6 @@ import csv
 from django.core.management.base import BaseCommand
 
 from dora.structures.csv_import import ImportStructuresHelper
-from dora.structures.models import (
-    StructureSource,
-)
 from dora.users.models import User
 
 
@@ -14,7 +11,10 @@ class Command(BaseCommand):
 
     def __init__(self, *args, **kwargs):
         self.bot_user = User.objects.get_dora_bot()
-        self.source = StructureSource.objects.get(value="invitations-masse")
+        self.source_info = {
+            "value": "invitations-masse",
+            "label": "Invitations en masse",
+        }
         self.import_structures_helper = ImportStructuresHelper()
         super().__init__(*args, **kwargs)
 
@@ -40,5 +40,8 @@ class Command(BaseCommand):
         with open(file_path) as structures_file:
             reader = csv.DictReader(structures_file, delimiter=",")
             self.import_structures_helper.import_structures(
-                reader, self.bot_user, wet_run
+                reader,
+                self.bot_user,
+                self.source_info,
+                wet_run,
             )
