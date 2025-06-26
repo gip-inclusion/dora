@@ -99,8 +99,8 @@
       <ServicePresentation
         {service}
         {servicesOptions}
-        {isDI}
         {onFeedbackButtonClick}
+        on:trackMobilisation={handleTrackMobilisationEvent}
       />
     </div>
 
