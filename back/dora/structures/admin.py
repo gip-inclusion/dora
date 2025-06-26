@@ -1,11 +1,13 @@
 import logging
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render
 from django.urls import path, reverse
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 from dora.core.models import ModerationStatus
@@ -14,6 +16,8 @@ from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 from dora.structures.emails import send_moderation_rejected_notification
 
+from ..core.mixins import BaseImportAdminMixin
+from .csv_import import ImportStructuresHelper
 from .models import (
     DisabledDoraFormDIStructure,
     Structure,
@@ -206,7 +210,11 @@ class OrientationModerationPendingInline(admin.TabularInline):
         return False
 
 
-class StructureAdmin(admin.ModelAdmin):
+class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
+    def __init__(self, *args, **kwargs):
+        self.import_structure_helper = ImportStructuresHelper()
+        return super().__init__(*args, **kwargs)
+
     list_display = [
         "name",
         "slug",
@@ -280,6 +288,11 @@ class StructureAdmin(admin.ModelAdmin):
                 "<path:object_id>/moderation_reject/",
                 self.admin_site.admin_view(self.moderation_reject),
                 name="moderation_reject",
+            ),
+            path(
+                "import-structures/",
+                self.admin_site.admin_view(self.import_structures_view),
+                name="structures_structure_import",
             ),
         ]
         return custom_urls + urls
@@ -413,6 +426,70 @@ class StructureAdmin(admin.ModelAdmin):
 
         # Redirection vers la liste des structures en attente de modération
         return HttpResponseRedirect(self.get_moderation_pending_structure_list_url())
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["import_url"] = "import-structures/"
+        return super().changelist_view(request, extra_context)
+
+    def import_structures_view(self, request):
+        if request.method == "POST":
+            return self.import_csv(request)
+
+        context = {
+            "title": "Module d'import de structures",
+            "opts": self.model._meta,
+            "has_view_permission": True,
+            "csv_headers": ImportStructuresHelper.CSV_HEADERS,
+        }
+        return render(request, "admin/import_csv_form.html", context)
+
+    def handle_import_results(self, request, result, is_wet_run):
+        errors_map = result.get("errors_map", {})
+        created_structures_count = result.get("created_structures_count", 0)
+        created_services_count = result.get("created_services_count", 0)
+        edited_structures_count = result.get("edited_structures_count", 0)
+
+        if not errors_map and is_wet_run:
+            messages.success(
+                request,
+                mark_safe(
+                    f"<b>Import terminé avec succès</b><br/>{created_structures_count} nouvelles structures ont été créées.<br/>"
+                    f"{edited_structures_count} structures existantes ont été modifiées.<br/>"
+                    f"{created_services_count} nouveaux services ont été crées en brouillon.<br/>"
+                ),
+            )
+
+            return redirect("..")
+
+        elif not errors_map and not is_wet_run:
+            messages.success(
+                request,
+                mark_safe("<b>Import de test terminé avec succès</b><br/>"),
+            )
+
+        elif errors_map:
+            error_messages = []
+            for line, errors in errors_map.items():
+                error_messages.append(f"[{line}]: {', '.join(errors)}")
+
+            title_prefix = "Échec de l'import" if is_wet_run else "Test terminé"
+
+            messages.error(
+                request,
+                mark_safe(
+                    f"<b>{title_prefix} - Erreurs rencontrées</b><br/>"
+                    f"{('<br/>').join(error_messages)}"
+                ),
+            )
+
+        return redirect(".")
+
+    def get_import_helper(self):
+        return self.import_structure_helper
+
+    def get_import_method_name(self):
+        return "import_structures"
 
 
 class DisabledDoraFormDIStructureAdmin(admin.ModelAdmin):
