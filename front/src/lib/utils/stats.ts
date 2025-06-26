@@ -40,6 +40,7 @@ async function logAnalyticsEvent(tag, path, params = {}) {
     method: "POST",
     headers,
     body: JSON.stringify(data),
+    keepalive: true,
   });
 
   if (res.ok) {
