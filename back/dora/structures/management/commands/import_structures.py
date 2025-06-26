@@ -1,4 +1,5 @@
 import csv
+import os
 
 from django.core.management.base import BaseCommand
 
@@ -10,17 +11,11 @@ class Command(BaseCommand):
     help = "Importe une liste de structures"
 
     def __init__(self, *args, **kwargs):
-        self.bot_user = User.objects.get_dora_bot()
-        self.source_info = {
-            "value": "invitations-masse",
-            "label": "Invitations en masse",
-        }
         self.import_structures_helper = ImportStructuresHelper()
         super().__init__(*args, **kwargs)
 
     def add_arguments(self, parser):
         parser.add_argument("file_path", help="Le path du fichier csv à importer")
-
         parser.add_argument(
             "-n",
             "--wet-run",
@@ -28,20 +23,23 @@ class Command(BaseCommand):
             help="Effectue l'opération de fichier et l'envoi de mail (mode 'dry-run' par défaut)",
         )
 
-    def handle(self, *args, **options):
-        file_path = options["file_path"]
-        wet_run = options["wet_run"]
+    def handle(self, *args, **kwargs):
+        file_path = kwargs["file_path"]
+        wet_run = kwargs["wet_run"]
 
-        if wet_run:
-            print("PRODUCTION RUN")
-        else:
-            print("DRY RUN")
+        bot_user = User.objects.get_dora_bot()
 
-        with open(file_path) as structures_file:
-            reader = csv.DictReader(structures_file, delimiter=",")
+        with open(file_path, "r") as f:
+            reader = csv.reader(f)
+            file_name = os.path.basename(file_path).rsplit(".", 1)[0]
+            service_source = {
+                "value": file_name,
+                "label": "Structures importés par la commande import_structures",
+            }
+
             self.import_structures_helper.import_structures(
                 reader,
-                self.bot_user,
-                self.source_info,
+                bot_user,
+                service_source,
                 wet_run,
             )

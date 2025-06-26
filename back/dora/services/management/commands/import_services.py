@@ -29,7 +29,7 @@ class Command(BaseCommand):
 
         with open(file_path, "r") as f:
             reader = csv.reader(f)
-            file_name = os.path.basename(file_path).split(".")[0]
+            file_name = os.path.basename(file_path).rsplit(".", 1)[0]
             service_source = {
                 "value": file_name,
                 "label": "Services importés par la commande import_services",

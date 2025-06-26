@@ -43,37 +43,32 @@ class ImportStructuresHelper:
         source_info: Dict[str, str],
         wet_run: bool = False,
     ) -> Dict[str, Union[Dict[int, List[str]], int]]:
+        if wet_run:
+            print("⚠️ PRODUCTION RUN ⚠️")
+        else:
+            print("🧘 DRY RUN 🧘")
+
         self._initialize_trackers()
         self.importing_user = importing_user
 
         try:
             self._get_structure_source(source_info)
         except IntegrityError:
-            return {
-                "errors_map": {
-                    1: [
-                        f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
-                    ]
-                }
-            }
+            error_message = f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
+            print(error_message)
+            return {"errors_map": {1: [error_message]}}
 
         [headers, *lines] = reader
 
         missing_headers = set(self.CSV_HEADERS) - set(headers)
 
         if missing_headers:
-            print(
-                f"Vous manquez les colonnes suivantes dans votre CSV : {', '.join(missing_headers)}"
-            )
-            return {
-                "errors_map": {
-                    1: [
-                        f"Le fichier CSV manque les colonnes suivantes : {
-                            (', ').join(missing_headers)
-                        }"
-                    ]
-                }
-            }
+            error_message = f"Le fichier CSV manque les colonnes suivantes : {
+                (', ').join(missing_headers)
+            }"
+
+            print(error_message)
+            return {"errors_map": {1: [error_message]}}
 
         lines = [dict(zip(headers, line)) for line in lines]
         for idx, line in enumerate(lines, 2):
