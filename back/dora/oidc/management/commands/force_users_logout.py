@@ -65,7 +65,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         wet_run = options["wet_run"]
         number = options["number"]
-        old = options["old"]
         targets = options["targets"]
         domain = options["domain"]
         force = options["force"]
@@ -89,10 +88,6 @@ class Command(BaseCommand):
                     " > déconnexion forcée des comptes PC (pas de restrictions)"
                 )
             )
-
-        if old:
-            self.stdout.write(" > déconnexion des anciens comptes IC encore connectés")
-            candidates = candidates.exclude(user__ic_id=None).filter(user__sub_pc=None)
 
         if targets:
             target_emails = targets.split(",")
