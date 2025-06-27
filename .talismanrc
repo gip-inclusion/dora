@@ -5,4 +5,6 @@ fileignoreconfig:
     checksum: 0f0095589eeccad4a4447a8495ce9e2e0339c3ab5aa287eeee32e159a7bf2f7f
   - filename: back/dora/services/tests/test_admin_import_view.py
     checksum: be6767b36f71b8f5c14fbdbb3101a6b1cf434391a30bfdf02c231d3d3948044d
+  - filename: back/config/settings/sentry.py
+    checksum: 84a119ca67b91a3c05381ffb8a01e00d6b5d8b9d1b6ac670598357b67dd51208
 version: ""
