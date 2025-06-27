@@ -413,9 +413,15 @@ class StructuresImportTestCase(APITestCase):
 
         self.assertEqual(result["created_structures_count"], 2)
 
+        parent_structure = Structure.objects.filter(
+            siret="12345678901234", name="My Establishment (Parent)"
+        )
+
+        self.assertTrue(parent_structure.exists())
+
         self.assertTrue(
             Structure.objects.filter(
-                siret="12345678901234", name="My Establishment (Parent)"
+                name="Foo", parent=parent_structure.first()
             ).exists()
         )
 
@@ -688,6 +694,47 @@ class StructuresImportTestCase(APITestCase):
 
         structure.refresh_from_db()
         self.assertEqual(structure.email, "email1@structure.com")
+
+    def test_add_email_to_new_structure_with_parent(self):
+        parent = make_structure(siret="21345678900000", email="old@email.com")
+
+        csv_content = (
+            f"{self.csv_headers}\nTest,,21345678900000,,,,,email1@structure.com"
+        )
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertEqual(result["created_structures_count"], 1)
+        self.assertEqual(result["edited_structures_count"], 1)
+
+        new_structure = Structure.objects.get(parent=parent)
+
+        parent.refresh_from_db()
+        self.assertEqual(new_structure.email, "email1@structure.com")
+        self.assertEqual(parent.email, "email1@structure.com")
+
+    def test_modify_email_of_existing_structure_with_parent(self):
+        parent = make_structure(siret="21345678900000", email="old@email.com")
+        branch = make_structure(
+            siret="12345678900000", email="other_old@email.com", parent=parent
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\nTest,12345678900000,,,,,,email1@structure.com"
+        )
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertEqual(result["edited_structures_count"], 1)
+
+        parent.refresh_from_db()
+        branch.refresh_from_db()
+        self.assertEqual(branch.email, "email1@structure.com")
+        self.assertEqual(parent.email, "old@email.com")
 
     def test_check_missing_headers(self):
         csv_content = "invalid,wrong,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure\n"
