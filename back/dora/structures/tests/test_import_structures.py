@@ -697,15 +697,15 @@ class StructuresImportTestCase(APITestCase):
         )
 
         self.assertIn(
-            "Le fichier CSV manque les colonnes suivantes :",
+            "Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>",
             result["errors_map"][1][0],
         )
         self.assertIn(
-            "nom",
+            "• nom",
             result["errors_map"][1][0],
         )
         self.assertIn(
-            "siret",
+            "• siret",
             result["errors_map"][1][0],
         )
 

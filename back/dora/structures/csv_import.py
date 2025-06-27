@@ -63,8 +63,9 @@ class ImportStructuresHelper:
         missing_headers = set(self.CSV_HEADERS) - set(headers)
 
         if missing_headers:
-            error_message = f"Le fichier CSV manque les colonnes suivantes : {
-                (', ').join(missing_headers)
+            headers_list = "<br/>".join(f"• {header}" for header in missing_headers)
+            error_message = f"Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/> {
+                headers_list
             }"
 
             print(error_message)
