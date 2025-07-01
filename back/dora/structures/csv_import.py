@@ -240,7 +240,7 @@ class ImportStructuresHelper:
             print(
                 f"La structure {'parente' if is_parent else ''} {structure.name} ({structure.get_frontend_url()}) existe déjà"
             )
-            if any(value for value in kwargs.values()):
+            if not is_parent and any(value for value in kwargs.values()):
                 self._update_optional_fields(structure, **kwargs)
         except Structure.DoesNotExist:
             establishment = Establishment.objects.get(siret=siret)

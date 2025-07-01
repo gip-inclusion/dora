@@ -29,7 +29,8 @@ class StructuresImportTestCase(APITestCase):
             "label": "Invitations en masse",
         }
 
-    # Validité des sirets
+    # Validitation du CSV
+
     def test_unknown_siret_wont_create_anything(self):
         csv_content = (
             f"{self.csv_headers}\nfoo, 12345678901234, '', foo@buzz.com, '', '', '', ''"
@@ -119,6 +120,50 @@ class StructuresImportTestCase(APITestCase):
         )
         self.assertFalse(User.objects.filter(email="foo@buzz.com").exists())
         self.assertEqual(len(mail.outbox), 0)
+
+    def test_check_missing_headers(self):
+        csv_content = "invalid,wrong,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure\n"
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertIn(
+            "Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>",
+            result["errors_map"][1][0],
+        )
+        self.assertIn(
+            "• nom",
+            result["errors_map"][1][0],
+        )
+        self.assertIn(
+            "• siret",
+            result["errors_map"][1][0],
+        )
+
+    def test_non_unique_source_label(self):
+        baker.make("StructureSource", value="test-source", label="Test Source")
+
+        csv_content = (
+            f"{self.csv_headers}\nTest,12345678900000,,,,,,email1@structure.com"
+        )
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader,
+            self.importing_user,
+            {
+                "value": "test-source",
+                "label": "New Label",
+            },
+            wet_run=True,
+        )
+
+        self.assertEqual(
+            result["errors_map"][1][0],
+            'Le fichier nommé "test-source" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
+        )
+
+    # Invitations des nouveaux utilisateurs
 
     def test_can_invite_new_user(self):
         structure = make_structure()
@@ -377,6 +422,8 @@ class StructuresImportTestCase(APITestCase):
         member.refresh_from_db()
         self.assertTrue(member.is_admin)
 
+    # Création/modification des nouvelles structures/services
+
     def test_create_structure_on_the_fly(self):
         baker.make(
             "Establishment",
@@ -384,7 +431,7 @@ class StructuresImportTestCase(APITestCase):
             name="My Establishment",
             parent_name="Parent",
         )
-        csv_content = f"{self.csv_headers}\nFoo,12345678901234,,foo@buzz.com,,,,"
+        csv_content = f"{self.csv_headers}\nFoo,12345678901234,,foo@buzz.com,,,,email@structure.com"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
             reader, self.importing_user, self.source_info, wet_run=True
@@ -394,7 +441,9 @@ class StructuresImportTestCase(APITestCase):
 
         self.assertTrue(
             Structure.objects.filter(
-                siret="12345678901234", name="My Establishment (Parent)"
+                siret="12345678901234",
+                name="My Establishment (Parent)",
+                email="email@structure.com",
             ).exists()
         )
 
@@ -405,7 +454,7 @@ class StructuresImportTestCase(APITestCase):
             name="My Establishment",
             parent_name="Parent",
         )
-        csv_content = f"{self.csv_headers}\nFoo,,12345678901234,foo@buzz.com,,,,"
+        csv_content = f"{self.csv_headers}\nFoo,,12345678901234,foo@buzz.com,,,,email@structure.com"
         reader = csv.reader(io.StringIO(csv_content))
         result = self.import_structures_helper.import_structures(
             reader, self.importing_user, self.source_info, wet_run=True
@@ -414,14 +463,16 @@ class StructuresImportTestCase(APITestCase):
         self.assertEqual(result["created_structures_count"], 2)
 
         parent_structure = Structure.objects.filter(
-            siret="12345678901234", name="My Establishment (Parent)"
+            siret="12345678901234",
+            name="My Establishment (Parent)",
+            email="email@structure.com",
         )
 
         self.assertTrue(parent_structure.exists())
 
         self.assertTrue(
             Structure.objects.filter(
-                name="Foo", parent=parent_structure.first()
+                name="Foo", parent=parent_structure.first(), email="email@structure.com"
             ).exists()
         )
 
@@ -707,13 +758,13 @@ class StructuresImportTestCase(APITestCase):
         )
 
         self.assertEqual(result["created_structures_count"], 1)
-        self.assertEqual(result["edited_structures_count"], 1)
+        self.assertEqual(result["edited_structures_count"], 0)
 
         new_structure = Structure.objects.get(parent=parent)
 
         parent.refresh_from_db()
         self.assertEqual(new_structure.email, "email1@structure.com")
-        self.assertEqual(parent.email, "email1@structure.com")
+        self.assertEqual(parent.email, "old@email.com")
 
     def test_modify_email_of_existing_structure_with_parent(self):
         parent = make_structure(siret="21345678900000", email="old@email.com")
@@ -735,45 +786,3 @@ class StructuresImportTestCase(APITestCase):
         branch.refresh_from_db()
         self.assertEqual(branch.email, "email1@structure.com")
         self.assertEqual(parent.email, "old@email.com")
-
-    def test_check_missing_headers(self):
-        csv_content = "invalid,wrong,siret_parent,courriels_administrateurs,labels,modeles,telephone,courriel_structure\n"
-        reader = csv.reader(io.StringIO(csv_content))
-        result = self.import_structures_helper.import_structures(
-            reader, self.importing_user, self.source_info, wet_run=True
-        )
-
-        self.assertIn(
-            "Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>",
-            result["errors_map"][1][0],
-        )
-        self.assertIn(
-            "• nom",
-            result["errors_map"][1][0],
-        )
-        self.assertIn(
-            "• siret",
-            result["errors_map"][1][0],
-        )
-
-    def test_non_unique_source_label(self):
-        baker.make("StructureSource", value="test-source", label="Test Source")
-
-        csv_content = (
-            f"{self.csv_headers}\nTest,12345678900000,,,,,,email1@structure.com"
-        )
-        reader = csv.reader(io.StringIO(csv_content))
-        result = self.import_structures_helper.import_structures(
-            reader,
-            self.importing_user,
-            {
-                "value": "test-source",
-                "label": "New Label",
-            },
-            wet_run=True,
-        )
-
-        self.assertEqual(
-            result["errors_map"][1][0],
-            'Le fichier nommé "test-source" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
-        )
