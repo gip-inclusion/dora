@@ -1,10 +1,7 @@
-import os
-
 import dj_database_url
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 from .base import *  # noqa F403
+from .sentry import sentry_init
 
 DEBUG = False
 
@@ -47,12 +44,6 @@ SECURE_SSL_REDIRECT = True
 # et de la validation des enregistrements.
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 4_000
 
+
 # Sentry :
-# uniquement sur les environnememts de production / staging
-sentry_sdk.init(
-    dsn=os.environ["SENTRY_DSN"],
-    integrations=[DjangoIntegration()],
-    traces_sample_rate=0,
-    send_default_pii=False,
-    environment=ENVIRONMENT,  # noqa F405
-)
+sentry_init()
