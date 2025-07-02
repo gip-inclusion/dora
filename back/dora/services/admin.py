@@ -271,11 +271,20 @@ class ServiceAdmin(admin.GISModelAdmin):
 
         if errors:
             error_list = "<br/>".join(f"• {error}" for error in errors)
-            title_prefix = "Échec de l'import" if is_wet_run else "Test terminé"
+            message_title = (
+                "Échec de l'import"
+                if is_wet_run
+                else "Test terminé - Erreurs à corriger"
+            )
+            message_text = (
+                "Aucun service n’a été importé, car le fichier comporte des erreurs."
+                if is_wet_run
+                else "Le fichier contient des erreurs qui empêchent l'import."
+            )
             messages.error(
                 request,
                 mark_safe(
-                    f"<b>{title_prefix} - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêchent l'import. Veuillez corriger les éléments suivants :<br/>"
+                    f"<b>{message_title}</b><br/>{message_text} Veuillez corriger les éléments suivants :<br/>"
                     f"{error_list}",
                 ),
             )
@@ -284,8 +293,14 @@ class ServiceAdmin(admin.GISModelAdmin):
         duplicated_services = result.get("duplicated_services", [])
         geo_data_missing = result.get("geo_data_missing_lines", [])
         draft_services_created = result.get("draft_services_created", [])
+        errors = result.get("errors", [])
 
-        title_prefix = "Import réalisé" if is_wet_run else "Test terminé"
+        title_prefix = ""
+        if not errors and is_wet_run:
+            title_prefix = "Import réalisé - "
+        elif not is_wet_run:
+            title_prefix = "Test terminé - "
+
         if duplicated_services:
             duplicate_list = "<br/>".join(
                 f'• [{service["idx"]}] SIRET {service["siret"]} - il existe déjà un service avec le modèle {service["model_slug"]} et le courriel "{service["contact_email"]}"'
@@ -294,7 +309,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             messages.warning(
                 request,
                 mark_safe(
-                    f"<b>{title_prefix} - Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
+                    f"<b>{title_prefix}Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
                     f"{duplicate_list}"
                 ),
             )
@@ -307,7 +322,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             messages.warning(
                 request,
                 mark_safe(
-                    f"<b>{title_prefix} - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
+                    f"<b>{title_prefix}Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
                     f"{missing_list}"
                 ),
             )
@@ -318,8 +333,8 @@ class ServiceAdmin(admin.GISModelAdmin):
                 for service in draft_services_created
             )
 
-            wet_run_message = f"<b>{title_prefix} - Services importés en brouillon</b><br/>{len(draft_services_created)} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication"
-            test_run_message = f"<b>{title_prefix} - Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
+            wet_run_message = f"<b>{title_prefix}Services importés en brouillon</b><br/>{len(draft_services_created)} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication"
+            test_run_message = f"<b>{title_prefix}Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
             message = wet_run_message if is_wet_run else test_run_message
             messages.warning(
                 request,
