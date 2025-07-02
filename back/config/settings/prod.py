@@ -1,5 +1,3 @@
-import os
-
 import dj_database_url
 
 from .base import *  # noqa F403
@@ -47,7 +45,6 @@ SECURE_SSL_REDIRECT = True
 # et de la validation des enregistrements.
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 4_000
 
+
 # Sentry :
-# uniquement sur les environnememts de production / staging
-SENTRY_DSN = os.environ["SENTRY_DSN"]
-sentry_init(SENTRY_DSN)
+sentry_init()

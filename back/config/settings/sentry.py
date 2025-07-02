@@ -35,14 +35,14 @@ sentry_logging = LoggingIntegration(
 )
 
 
-def sentry_init(dsn):
+def sentry_init():
     try:
         traces_sample_rate = float(os.getenv("SENTRY_TRACES_SAMPLE_RATE", ""))
     except ValueError:
         traces_sample_rate = 0
 
     sentry_sdk.init(
-        dsn=dsn,
+        dsn=os.getenv("SENTRY_DSN"),
         integrations=[sentry_logging, DjangoIntegration()],
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
