@@ -2,6 +2,7 @@ data-inclusion-schema==0.27.0
 dj-database-url==3.0.0
 Django==5.2.3
 django-cors-headers==4.7.0
+django-otp==1.6.0
 django-csp==4.0
 django-filter==25.1
 django-storages==1.14.6
