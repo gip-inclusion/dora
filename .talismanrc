@@ -7,4 +7,6 @@ fileignoreconfig:
     checksum: be6767b36f71b8f5c14fbdbb3101a6b1cf434391a30bfdf02c231d3d3948044d
   - filename: back/config/settings/sentry.py
     checksum: f65ff95262da014ae116d2c2f81e6438787e27d71ffcd6642773e803c78f8fbd
+  - filename: back/envs-example/dev.env
+    checksum: 09b186afff65d138433589b78cee86675d8118e18f61610248649ec0f33a1d81
 version: ""
