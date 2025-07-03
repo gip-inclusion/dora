@@ -13,13 +13,25 @@
   import { debounce } from "$lib/utils/misc";
   import { onMount } from "svelte";
 
-  export let servicesOptions: ServicesOptions;
-  export let service: Service;
-  export let managedStructureSearchMode = false;
-  export let structures: ShortStructure[];
-  export let structure: ShortStructure | undefined;
-  export let isModel = false;
-  export let model: Model | undefined | null = undefined;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    managedStructureSearchMode?: boolean;
+    structures: ShortStructure[];
+    structure: ShortStructure | undefined;
+    isModel?: boolean;
+    model?: Model | undefined | null;
+  }
+
+  let {
+    servicesOptions = $bindable(),
+    service = $bindable(),
+    managedStructureSearchMode = false,
+    structures,
+    structure = $bindable(),
+    isModel = false,
+    model = $bindable(undefined)
+  }: Props = $props();
 
   const propsWithSpecificFields = [
     "accessConditions",

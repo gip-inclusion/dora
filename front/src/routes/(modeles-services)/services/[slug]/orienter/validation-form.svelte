@@ -12,7 +12,7 @@
   import { orientationStep1Schema } from "./schema";
   import { orientation } from "./store";
 
-  export let service;
+  let { service } = $props();
 
   // Publics concernés par ce service
   const { concernedPublicChoices, concernedPublicRequired } =

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Button from "$lib/components/display/button.svelte";
   import StructureCard from "$lib/components/specialized/structure-card.svelte";
@@ -6,15 +8,27 @@
   import Count from "../count.svelte";
   import NewBranchModal from "./new-branch-modal.svelte";
 
-  export let structure, branches, total;
-  export let tabDisplay = true;
-  export let limit;
+  interface Props {
+    structure: any;
+    branches: any;
+    total: any;
+    tabDisplay?: boolean;
+    limit: any;
+  }
 
-  let newBranchModalOpen = false;
+  let {
+    structure,
+    branches,
+    total,
+    tabDisplay = true,
+    limit
+  }: Props = $props();
+
+  let newBranchModalOpen = $state(false);
 
   const departement = "tous";
   let filters;
-  let branchesFiltered = [];
+  let branchesFiltered = $state([]);
 
   function branchesFilter(allBranches) {
     let filteredBranches = allBranches.filter(
@@ -35,7 +49,9 @@
     return filteredBranches;
   }
 
-  $: branchesFiltered = branchesFilter(branches);
+  run(() => {
+    branchesFiltered = branchesFilter(branches);
+  });
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">

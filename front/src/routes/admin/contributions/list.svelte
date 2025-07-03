@@ -8,13 +8,12 @@
   } from "$lib/requests/admin";
   import SuggestionModal from "./suggestion-modal.svelte";
 
-  export let suggestions;
-  export let onRefresh;
+  let { suggestions, onRefresh } = $props();
 
-  let currentSuggestion;
-  let suggestionModalIsOpen = false;
-  let confirmationModalIsOpen = false;
-  let emailsContacted = null;
+  let currentSuggestion = $state();
+  let suggestionModalIsOpen = $state(false);
+  let confirmationModalIsOpen = $state(false);
+  let emailsContacted = $state(null);
 
   async function handleAccept(suggestion) {
     // eslint-disable-next-line no-alert

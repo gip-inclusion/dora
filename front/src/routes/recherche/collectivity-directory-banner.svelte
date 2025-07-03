@@ -1,10 +1,14 @@
 <script lang="ts">
   import { externalLinkIcon } from "$lib/icons";
 
-  export let cityLabel: string | null;
+  interface Props {
+    cityLabel: string | null;
+  }
 
-  $: queryString = cityLabel ? `?cl=${encodeURIComponent(cityLabel)}` : "";
-  $: url = `/annuaire-collectivite${queryString}`;
+  let { cityLabel }: Props = $props();
+
+  let queryString = $derived(cityLabel ? `?cl=${encodeURIComponent(cityLabel)}` : "");
+  let url = $derived(`/annuaire-collectivite${queryString}`);
 </script>
 
 <div

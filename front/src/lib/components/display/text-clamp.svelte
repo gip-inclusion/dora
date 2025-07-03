@@ -2,20 +2,24 @@
   import { randomId } from "$lib/utils/random";
   import Button from "./button.svelte";
 
-  export let text: string;
+  interface Props {
+    text: string;
+  }
+
+  let { text }: Props = $props();
 
   const defaultHeight = 200;
   const id = `text-clamp-${randomId()}`;
 
-  let showAll = false;
-  let height: number;
+  let showAll = $state(false);
+  let height: number = $state();
 
   function toggle() {
     showAll = !showAll;
   }
 
-  $: textIsTooLong = height + 100 > defaultHeight;
-  $: label = showAll ? "Réduire" : "Lire la suite";
+  let textIsTooLong = $derived(height + 100 > defaultHeight);
+  let label = $derived(showAll ? "Réduire" : "Lire la suite");
 </script>
 
 <div class="hidden print:inline">
@@ -29,7 +33,7 @@
     {#if !showAll && textIsTooLong}
       <div
         class="bottom-s0 left-s0 h-s112 absolute w-full bg-gradient-to-b from-transparent to-white"
-      />
+></div>
     {/if}
   </div>
 

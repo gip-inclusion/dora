@@ -11,20 +11,29 @@
     isNoticeHidden,
   } from "$lib/utils/service-update-notices";
 
-  export let structureSlug: string;
-  export let services: StructureService[] = [];
-  export let requesting = false;
-  export let onRefresh: () => void;
+  interface Props {
+    structureSlug: string;
+    services?: StructureService[];
+    requesting?: boolean;
+    onRefresh: () => void;
+  }
+
+  let {
+    structureSlug,
+    services = [],
+    requesting = $bindable(false),
+    onRefresh
+  }: Props = $props();
 
   const LIST_LENGTH = 3;
-  let showAll = false;
-  $: servicesToUpdate = services.filter(({ modelChanged }) => modelChanged);
+  let showAll = $state(false);
+  let servicesToUpdate = $derived(services.filter(({ modelChanged }) => modelChanged));
 
-  $: showNotice =
-    servicesToUpdate.length && !isNoticeHidden("modelSync", structureSlug);
-  $: updatedModels = new Set(
+  let showNotice =
+    $derived(servicesToUpdate.length && !isNoticeHidden("modelSync", structureSlug));
+  let updatedModels = $derived(new Set(
     servicesToUpdate.map(({ modelName }) => modelName)
-  );
+  ));
 
   async function doUpdate(selectedServices: StructureService[]) {
     requesting = true;

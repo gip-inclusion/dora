@@ -9,17 +9,26 @@
 
   type ServiceToUpdate = { name: string; slug: string };
 
-  export let structureSlug: string;
-  export let servicesToUpdate: ServiceToUpdate[] = [];
-  export let requesting = false;
-  export let onRefresh: () => void;
+  interface Props {
+    structureSlug: string;
+    servicesToUpdate?: ServiceToUpdate[];
+    requesting?: boolean;
+    onRefresh: () => void;
+  }
+
+  let {
+    structureSlug,
+    servicesToUpdate = [],
+    requesting = $bindable(false),
+    onRefresh
+  }: Props = $props();
 
   const LIST_LENGTH = 3;
 
-  let showAll = false;
+  let showAll = $state(false);
 
-  $: showNotice =
-    servicesToUpdate.length && !isNoticeHidden("update", structureSlug);
+  let showNotice =
+    $derived(servicesToUpdate.length && !isNoticeHidden("update", structureSlug));
 
   async function handleMarkServicesAsUpToDate(
     selectedServices: ServiceToUpdate[]

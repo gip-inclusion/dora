@@ -1,8 +1,12 @@
 <script lang="ts">
   import type { Partner } from "$lib/types";
 
-  export let imgHeight: "small" | "medium" | undefined = undefined;
-  export let partnersToShow: Partner[] = [];
+  interface Props {
+    imgHeight?: "small" | "medium" | undefined;
+    partnersToShow?: Partner[];
+  }
+
+  let { imgHeight = undefined, partnersToShow = [] }: Props = $props();
 </script>
 
 {#each partnersToShow as partner}

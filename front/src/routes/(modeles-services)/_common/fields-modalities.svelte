@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
@@ -16,16 +18,21 @@
     orderedCoachOrientationModeValues,
   } from "./modalities-order";
 
-  export let servicesOptions: ServicesOptions, service: Service;
-  export let model: Model | undefined = undefined;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    model?: Model | undefined;
+  }
+
+  let { servicesOptions, service = $bindable(), model = undefined }: Props = $props();
 
   function handleUseModelValue(fieldName) {
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  $: showModel = !!service.model;
+  let showModel = $derived(!!service.model);
 
-  $: fieldModelProps = model
+  let fieldModelProps = $derived(model
     ? getModelInputProps({
         service,
         servicesOptions,
@@ -33,38 +40,48 @@
         onUseModelValue: handleUseModelValue,
         model,
       })
-    : {};
+    : {});
 
-  $: fieldModelProps.coachOrientationModes?.value.sort((a, b) => {
-    return (
-      orderedCoachOrientationModeValues[a] -
-      orderedCoachOrientationModeValues[b]
-    );
+  run(() => {
+    fieldModelProps.coachOrientationModes?.value.sort((a, b) => {
+      return (
+        orderedCoachOrientationModeValues[a] -
+        orderedCoachOrientationModeValues[b]
+      );
+    });
   });
-  $: fieldModelProps.coachOrientationModes?.serviceValue.sort((a, b) => {
-    return (
-      orderedCoachOrientationModeValues[a] -
-      orderedCoachOrientationModeValues[b]
-    );
+  run(() => {
+    fieldModelProps.coachOrientationModes?.serviceValue.sort((a, b) => {
+      return (
+        orderedCoachOrientationModeValues[a] -
+        orderedCoachOrientationModeValues[b]
+      );
+    });
   });
-  $: fieldModelProps.beneficiariesAccessModes?.value.sort((a, b) => {
-    return (
-      orderedBeneficiariesAccessModeValues[a] -
-      orderedBeneficiariesAccessModeValues[b]
-    );
+  run(() => {
+    fieldModelProps.beneficiariesAccessModes?.value.sort((a, b) => {
+      return (
+        orderedBeneficiariesAccessModeValues[a] -
+        orderedBeneficiariesAccessModeValues[b]
+      );
+    });
   });
-  $: fieldModelProps.beneficiariesAccessModes?.serviceValue.sort((a, b) => {
-    return (
-      orderedBeneficiariesAccessModeValues[a] -
-      orderedBeneficiariesAccessModeValues[b]
-    );
+  run(() => {
+    fieldModelProps.beneficiariesAccessModes?.serviceValue.sort((a, b) => {
+      return (
+        orderedBeneficiariesAccessModeValues[a] -
+        orderedBeneficiariesAccessModeValues[b]
+      );
+    });
   });
 </script>
 
 <FieldSet title="Modalités" {showModel}>
-  <div slot="help">
-    <p class="text-f14">Modalités pour mobiliser le service.</p>
-  </div>
+  {#snippet help()}
+    <div >
+      <p class="text-f14">Modalités pour mobiliser le service.</p>
+    </div>
+  {/snippet}
   <Notice
     type="warning"
     title="Modalités d’orientation"

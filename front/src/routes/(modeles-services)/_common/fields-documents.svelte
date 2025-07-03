@@ -7,16 +7,21 @@
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
 
-  export let servicesOptions: ServicesOptions, service: Service;
-  export let model: Model | undefined = undefined;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    model?: Model | undefined;
+  }
 
-  $: showModel = !!service.model;
+  let { servicesOptions, service = $bindable(), model = undefined }: Props = $props();
+
+  let showModel = $derived(!!service.model);
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  $: fieldModelProps = model
+  let fieldModelProps = $derived(model
     ? getModelInputProps({
         service,
         servicesOptions,
@@ -24,17 +29,19 @@
         onUseModelValue: handleUseModelValue,
         model,
       })
-    : {};
+    : {});
 </script>
 
 <FieldSet title="Documents" {showModel}>
-  <div slot="help">
-    <p class="text-f14">
-      Justificatifs à fournir et documents à compléter pour postuler. Le lien
-      redirige vers une page web qui présente le service (formulaire, fiche de
-      prescription, simulateurs, etc.)
-    </p>
-  </div>
+  {#snippet help()}
+    <div >
+      <p class="text-f14">
+        Justificatifs à fournir et documents à compléter pour postuler. Le lien
+        redirige vers une page web qui présente le service (formulaire, fiche de
+        prescription, simulateurs, etc.)
+      </p>
+    </div>
+  {/snippet}
 
   <FieldModel {...fieldModelProps.forms ?? {}} type="files">
     <UploadField
@@ -68,7 +75,8 @@
       description=""
       bind:value={service.onlineForm}
     >
-      <small slot="description">
+      <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
+  <small slot="description">
         Lien vers un document à récupérer, un formulaire à compléter, etc.<br />
         Format attendu : https://example.fr</small
       >

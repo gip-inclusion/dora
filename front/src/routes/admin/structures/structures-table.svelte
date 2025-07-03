@@ -9,12 +9,16 @@
   import { capitalize, shortenString } from "$lib/utils/misc";
   import StructureModal from "./structure-modal.svelte";
 
-  export let filteredStructures: AdminShortStructure[];
-  export let selectedStructureSlug: string | null;
-  export let onRefresh;
+  interface Props {
+    filteredStructures: AdminShortStructure[];
+    selectedStructureSlug: string | null;
+    onRefresh: any;
+  }
 
-  let isStructureModalOpen = false;
-  let currentStructure: AdminShortStructure | null = null;
+  let { filteredStructures, selectedStructureSlug = $bindable(), onRefresh }: Props = $props();
+
+  let isStructureModalOpen = $state(false);
+  let currentStructure: AdminShortStructure | null = $state(null);
 
   async function updateStructureObsolete(
     structure: AdminShortStructure,
@@ -40,8 +44,8 @@
       class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-lg border shadow-xs"
       class:highlight={selectedStructureSlug === structure.slug}
       role="presentation"
-      on:mouseenter={() => (selectedStructureSlug = structure.slug)}
-      on:mouseleave={() => (selectedStructureSlug = null)}
+      onmouseenter={() => (selectedStructureSlug = structure.slug)}
+      onmouseleave={() => (selectedStructureSlug = null)}
     >
       <div class="flex grow flex-row items-center">
         <div>
@@ -77,30 +81,32 @@
         small
         hideLabel
         label="Actions disponibles sur la structure"
-        let:onClose={onCloseParent}
+        
       >
-        {#if !structure.isObsolete}
-          <Button
-            on:click={() => {
-              updateStructureObsolete(structure, true);
-              onCloseParent();
-            }}
-            label="Rendre&nbsp;obsolète"
-            small
-            noBackground
-          />
-        {:else}
-          <Button
-            on:click={() => {
-              updateStructureObsolete(structure, false);
-              onCloseParent();
-            }}
-            label="Ré&#8209;activer"
-            small
-            noBackground
-          />
-        {/if}
-      </ButtonMenu>
+        {#snippet children({ onClose: onCloseParent })}
+                {#if !structure.isObsolete}
+            <Button
+              on:click={() => {
+                updateStructureObsolete(structure, true);
+                onCloseParent();
+              }}
+              label="Rendre&nbsp;obsolète"
+              small
+              noBackground
+            />
+          {:else}
+            <Button
+              on:click={() => {
+                updateStructureObsolete(structure, false);
+                onCloseParent();
+              }}
+              label="Ré&#8209;activer"
+              small
+              noBackground
+            />
+          {/if}
+                      {/snippet}
+            </ButtonMenu>
     </div>
   {/each}
 </div>

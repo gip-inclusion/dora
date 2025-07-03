@@ -6,10 +6,14 @@
   import ServiceSection from "./components/service-section.svelte";
   import ServiceSubsection from "./components/service-subsection.svelte";
 
-  export let service: Service | Model;
-  export let servicesOptions: ServicesOptions;
+  interface Props {
+    service: Service | Model;
+    servicesOptions: ServicesOptions;
+  }
 
-  $: categories = service.subcategories.reduce(
+  let { service, servicesOptions }: Props = $props();
+
+  let categories = $derived(service.subcategories.reduce(
     (acc, subCategorySlug) => {
       const categorySlug = subCategorySlug.split("--")[0];
       return {
@@ -18,13 +22,13 @@
       };
     },
     {} as Record<string, string[]>
-  );
+  ));
 
-  $: hasCategories = Object.keys(categories).length > 0;
-  $: hasKinds = service.kinds && service.kinds.length > 0;
-  $: hasSource = !service.isModel && !!service.source;
+  let hasCategories = $derived(Object.keys(categories).length > 0);
+  let hasKinds = $derived(service.kinds && service.kinds.length > 0);
+  let hasSource = $derived(!service.isModel && !!service.source);
 
-  $: hasOtherInformations = hasCategories || hasKinds || hasSource;
+  let hasOtherInformations = $derived(hasCategories || hasKinds || hasSource);
 </script>
 
 {#if hasOtherInformations}

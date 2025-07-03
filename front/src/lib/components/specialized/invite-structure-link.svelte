@@ -1,7 +1,11 @@
 <script lang="ts">
   import LinkButton from "../display/link-button.svelte";
 
-  export let wFull = false;
+  interface Props {
+    wFull?: boolean;
+  }
+
+  let { wFull = false }: Props = $props();
 </script>
 
 <LinkButton

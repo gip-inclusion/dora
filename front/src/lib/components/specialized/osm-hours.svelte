@@ -1,7 +1,11 @@
 <script lang="ts">
   import { formatOsmHours } from "$lib/utils/opening-hours";
 
-  export let osmHours: string;
+  interface Props {
+    osmHours: string;
+  }
+
+  let { osmHours }: Props = $props();
 </script>
 
 <ul>

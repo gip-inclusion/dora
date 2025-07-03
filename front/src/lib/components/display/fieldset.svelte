@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (description to description_1) making the component unusable -->
 <script lang="ts">
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
   import { onMount } from "svelte";

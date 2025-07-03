@@ -8,12 +8,16 @@
   import { createEventDispatcher } from "svelte";
   import DayField from "./day-field.svelte";
 
-  export let id: string;
-  export let value;
+  interface Props {
+    id: string;
+    value: any;
+  }
+
+  let { id, value = $bindable() }: Props = $props();
 
   const dispatch = createEventDispatcher();
 
-  const data = value ? getHoursFromStr(value) : returnEmptyHoursData();
+  const data = $state(value ? getHoursFromStr(value) : returnEmptyHoursData());
 
   function handleHourChange() {
     value = fromJsonToOsmString(data);

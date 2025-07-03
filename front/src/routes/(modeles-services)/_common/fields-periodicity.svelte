@@ -6,16 +6,21 @@
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
 
-  export let servicesOptions: ServicesOptions, service: Service;
-  export let model: Model | undefined = undefined;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    model?: Model | undefined;
+  }
 
-  $: showModel = !!service.model;
+  let { servicesOptions, service = $bindable(), model = undefined }: Props = $props();
+
+  let showModel = $derived(!!service.model);
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  $: fieldModelProps = model
+  let fieldModelProps = $derived(model
     ? getModelInputProps({
         service,
         servicesOptions,
@@ -23,16 +28,18 @@
         onUseModelValue: handleUseModelValue,
         model,
       })
-    : {};
+    : {});
 </script>
 
 <FieldSet title="Périodicité" {showModel}>
-  <div slot="help">
-    <p class="text-f14">
-      La durée limitée permet de supendre automatiquement la visibilité du
-      service dans les résultat de recherche.
-    </p>
-  </div>
+  {#snippet help()}
+    <div >
+      <p class="text-f14">
+        La durée limitée permet de supendre automatiquement la visibilité du
+        service dans les résultat de recherche.
+      </p>
+    </div>
+  {/snippet}
   <FieldModel {...fieldModelProps.recurrence ?? {}}>
     <BasicInputField
       id="recurrence"

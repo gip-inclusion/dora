@@ -20,20 +20,24 @@
   import ServiceKeyInformationLabel from "./service-key-information-label.svelte";
   import ServiceKeyInformationSection from "./service-key-information-section.svelte";
 
-  export let service: Service | Model;
-  export let servicesOptions: ServicesOptions;
-  export let onFeedbackButtonClick: () => void;
-  $: isDI = "source" in service;
+  interface Props {
+    service: Service | Model;
+    servicesOptions: ServicesOptions;
+    onFeedbackButtonClick: () => void;
+  }
 
-  $: isNotCumulative = !service.isCumulative;
-  $: hasFundingLabels = service.fundingLabelsDisplay.length > 0;
-  $: hasLabelSection = isNotCumulative || hasFundingLabels;
+  let { service, servicesOptions, onFeedbackButtonClick }: Props = $props();
+  let isDI = $derived("source" in service);
 
-  $: eligibilityRequirements = [
+  let isNotCumulative = $derived(!service.isCumulative);
+  let hasFundingLabels = $derived(service.fundingLabelsDisplay.length > 0);
+  let hasLabelSection = $derived(isNotCumulative || hasFundingLabels);
+
+  let eligibilityRequirements = $derived([
     ...(service.accessConditionsDisplay || []),
     ...(service.requirementsDisplay || []),
     ...(service.qpvOrZrr ? ["Uniquement QPV ou ZRR"] : []),
-  ];
+  ]);
 </script>
 
 <section>

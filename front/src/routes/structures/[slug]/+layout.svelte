@@ -3,6 +3,11 @@
   import Header from "./header.svelte";
 
   import { structure } from "./store";
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
 </script>
 
 <CenteredGrid bgColor="bg-magenta-20 print:bg-white" noPadding>
@@ -10,5 +15,5 @@
 </CenteredGrid>
 
 <CenteredGrid roundedColor="bg-magenta-20">
-  <slot />
+  {@render children?.()}
 </CenteredGrid>

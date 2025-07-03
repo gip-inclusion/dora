@@ -1,7 +1,7 @@
 <script lang="ts">
   import SmallLink from "./small-link.svelte";
 
-  export let searchString;
+  let { searchString } = $props();
 </script>
 
 <SmallLink

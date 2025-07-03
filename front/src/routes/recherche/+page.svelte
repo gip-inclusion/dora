@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { onMount } from "svelte";
 
   import { page } from "$app/stores";
@@ -19,7 +21,11 @@
   import MesAidesDialog from "./mes-aides-dialog.svelte";
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   const FILTER_KEY_TO_QUERY_PARAM = {
     kinds: "kinds",
@@ -28,15 +34,15 @@
     locationKinds: "locs",
   };
 
-  let filtersInitialized = false;
+  let filtersInitialized = $state(false);
 
-  let filters = Object.entries(FILTER_KEY_TO_QUERY_PARAM).reduce<Filters>(
+  let filters = $state(Object.entries(FILTER_KEY_TO_QUERY_PARAM).reduce<Filters>(
     (acc, [filterKey, queryParam]) => ({
       ...acc,
       [filterKey]: $page.url.searchParams.get(queryParam)?.split(",") || [],
     }),
     {} as Filters
-  );
+  ));
 
   onMount(() => {
     // Vérifie si aucun filtre n'est sélectionné
@@ -61,17 +67,17 @@
   // Réinitialise les filtres quand la recherche est actualisée.
   // On observe l'objet data car celui-ci change à chaque fois que la recherche est actualisée.
   // Il n'est pas utile d'observer les champs de l'objet data vu que tout l'objet change.
-  $: {
+  run(() => {
     data;
     if (filtersInitialized) {
       resetFilters();
     } else {
       filtersInitialized = true;
     }
-  }
+  });
 
   // Filtre les services en fonctions des filtres sélectionnés
-  $: filteredServices = data.services.filter((service) => {
+  let filteredServices = $derived(data.services.filter((service) => {
     const kindsMatch =
       filters.kinds.length === 0 ||
       (service.kinds &&
@@ -103,10 +109,10 @@
       locationKindsMatch &&
       onSiteAndNearby
     );
-  });
+  }));
 
   // Met à jour les paramètres d'URL en fonction des filtres sélectionnés
-  $: {
+  run(() => {
     Object.keys(filters).forEach((filterKey) => {
       const queryParam = FILTER_KEY_TO_QUERY_PARAM[filterKey];
       if (filters[filterKey].length > 0) {
@@ -121,15 +127,15 @@
       "",
       `?${$page.url.searchParams.toString()}`
     );
-  }
+  });
 
-  $: showDeploymentNotice =
-    filteredServices.length < 10 &&
+  let showDeploymentNotice =
+    $derived(filteredServices.length < 10 &&
     !!data.cityCode &&
     !!data.servicesOptions &&
-    !isInDeploymentDepartments(data.cityCode, data.servicesOptions);
+    !isInDeploymentDepartments(data.cityCode, data.servicesOptions));
 
-  $: showMesAidesDialog = !$userInfo && data.categoryIds.includes("mobilite");
+  let showMesAidesDialog = $derived(!$userInfo && data.categoryIds.includes("mobilite"));
 </script>
 
 <CenteredGrid bgColor="bg-blue-light">

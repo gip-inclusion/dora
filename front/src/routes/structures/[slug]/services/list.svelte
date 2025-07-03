@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
@@ -26,15 +28,32 @@
   import ServicesToSyncWithModelNotice from "./services-to-sync-with-model-notice.svelte";
   import ServicesToUpdateNotice from "./services-to-update-notice.svelte";
 
-  export let structure, total, servicesOptions;
-  export let tabDisplay = true;
-  export let onRefresh;
-  export let limit: number | undefined = undefined;
-  export let withEmptyNotice = false;
 
-  export let serviceStatus: ServiceStatus | null;
-  export let updateNeeded: "true" | "false" | null;
-  export let servicesDisplayed: ShortService[] = [];
+  interface Props {
+    structure: any;
+    total: any;
+    servicesOptions: any;
+    tabDisplay?: boolean;
+    onRefresh: any;
+    limit?: number | undefined;
+    withEmptyNotice?: boolean;
+    serviceStatus: ServiceStatus | null;
+    updateNeeded: "true" | "false" | null;
+    servicesDisplayed?: ShortService[];
+  }
+
+  let {
+    structure,
+    total,
+    servicesOptions,
+    tabDisplay = true,
+    onRefresh,
+    limit = undefined,
+    withEmptyNotice = false,
+    serviceStatus = $bindable(),
+    updateNeeded = $bindable(),
+    servicesDisplayed = $bindable([])
+  }: Props = $props();
 
   function updateUrlQueryParams() {
     if (!browser) {
@@ -110,7 +129,7 @@
   ];
 
   // Service order
-  let selectedOrder = "modificationDateDesc";
+  let selectedOrder = $state("modificationDateDesc");
   const serviceOrderOptions: Choice[] = [
     {
       value: "modificationDateDesc",
@@ -192,11 +211,13 @@
     updateUrlQueryParams();
   }
 
-  $: servicesDisplayed = filterAndSortServices(structure.services);
+  run(() => {
+    servicesDisplayed = filterAndSortServices(structure.services);
+  });
 
-  $: servicesToUpdate = structure.services.filter(
+  let servicesToUpdate = $derived(structure.services.filter(
     (service) => service.updateNeeded
-  );
+  ));
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
@@ -269,7 +290,7 @@
         <button
           class:!text-magenta-cta={serviceStatus || updateNeeded}
           class="text-gray-text-alt"
-          on:click={handleResetFilters}
+          onclick={handleResetFilters}
         >
           Tout effacer
         </button>

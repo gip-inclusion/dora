@@ -1,15 +1,34 @@
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import CheckboxMark from "../display/checkbox-mark.svelte";
 
-  export let name: string;
-  export let group: string[];
-  export let label: string;
-  export let value: string;
-  export let disabled = false;
-  export let readonly = false;
-  export let horizontal = false;
-  export let errorMessage: string | null | undefined = undefined;
-  export let focused: boolean = false;
+  interface Props {
+    name: string;
+    group: string[];
+    label: string;
+    value: string;
+    disabled?: boolean;
+    readonly?: boolean;
+    horizontal?: boolean;
+    errorMessage?: string | null | undefined;
+    focused?: boolean;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    name,
+    group = $bindable(),
+    label,
+    value,
+    disabled = false,
+    readonly = false,
+    horizontal = false,
+    errorMessage = undefined,
+    focused = false,
+    children
+  }: Props = $props();
 
   // Malheureusement, utiliser bind:groups ici ne fonctionne pas :
   // https://github.com/sveltejs/svelte/issues/2308
@@ -37,16 +56,16 @@
     {disabled}
     {readonly}
     checked={group.includes(value)}
-    on:change={handleChange}
-    on:focus
-    on:blur
+    onchange={handleChange}
+    onfocus={bubble('focus')}
+    onblur={bubble('blur')}
   />
   <CheckboxMark />
   <span class="ml-s16 text-f16 text-gray-text inline-block">{label}</span>
 </label>
 
-{#if $$slots.default}
+{#if children}
   <div class="ml-s42">
-    <slot />
+    {@render children?.()}
   </div>
 {/if}

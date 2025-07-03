@@ -20,15 +20,25 @@
   import Modal from "$lib/components/hoc/modal.svelte";
   import { showNotice } from "$lib/utils/service-update-notices";
 
-  export let model: Model;
-  export let servicesOptions: ServicesOptions;
-  export let structures: ShortStructure[];
-  export let structure: ShortStructure;
-  export let showUpdateAllServicesModal = false;
-  let shouldUpdateAllServices = false;
+  interface Props {
+    model: Model;
+    servicesOptions: ServicesOptions;
+    structures: ShortStructure[];
+    structure: ShortStructure;
+    showUpdateAllServicesModal?: boolean;
+  }
 
-  let requesting = false;
-  let submitFormInput;
+  let {
+    model = $bindable(),
+    servicesOptions = $bindable(),
+    structures,
+    structure = $bindable(),
+    showUpdateAllServicesModal = $bindable(false)
+  }: Props = $props();
+  let shouldUpdateAllServices = $state(false);
+
+  let requesting = $state(false);
+  let submitFormInput = $state();
 
   const showMaxCategoriesNotice = (model.categories.length || 0) > 3;
 
@@ -56,7 +66,7 @@
   onSuccess={handleSuccess}
   bind:requesting
 >
-  <div id="modal-container" />
+  <div id="modal-container"></div>
 
   <hr />
   <CenteredGrid>
@@ -141,24 +151,26 @@
           </strong>
         </div>
 
-        <div slot="footer">
-          <div
-            class="mt-s24 gap-s24 flex flex-col-reverse justify-end md:flex-row"
-          >
-            <Button
-              label="Annuler"
-              secondary
-              on:click={() => (showUpdateAllServicesModal = false)}
-            />
+        {#snippet footer()}
+                <div >
+            <div
+              class="mt-s24 gap-s24 flex flex-col-reverse justify-end md:flex-row"
+            >
+              <Button
+                label="Annuler"
+                secondary
+                on:click={() => (showUpdateAllServicesModal = false)}
+              />
 
-            <Button
-              id="validate"
-              type="submit"
-              extraClass="justify-center"
-              label="Confirmer"
-            />
+              <Button
+                id="validate"
+                type="submit"
+                extraClass="justify-center"
+                label="Confirmer"
+              />
+            </div>
           </div>
-        </div>
+              {/snippet}
       </Modal>
     {/if}
   </CenteredGrid>

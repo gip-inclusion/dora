@@ -21,11 +21,15 @@
     },
   };
 
-  export let displayModal = false;
+  interface Props {
+    displayModal?: boolean;
+  }
 
-  let formData = { email: "" };
-  let displayNotice = false;
-  let requesting = false;
+  let { displayModal = $bindable(false) }: Props = $props();
+
+  let formData = $state({ email: "" });
+  let displayNotice = $state(false);
+  let requesting = $state(false);
 
   async function handleSubmit(validatedData) {
     const url = `${getApiURL()}/auth/send-link/`;

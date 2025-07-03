@@ -1,9 +1,21 @@
 <script lang="ts">
-  export let label;
-  export let data;
-  export let isList = false;
-  export let verticalLayout = false;
-  export let isBool = false;
+  interface Props {
+    label: any;
+    data: any;
+    isList?: boolean;
+    verticalLayout?: boolean;
+    isBool?: boolean;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    label,
+    data,
+    isList = false,
+    verticalLayout = false,
+    isBool = false,
+    children
+  }: Props = $props();
 </script>
 
 <div
@@ -18,13 +30,13 @@
         <li>{item}</li>
       {/each}
     {:else}
-      <slot>
+      {#if children}{@render children()}{:else}
         {#if isBool}
           {data ? "Oui" : "Non"}
         {:else}
           {data}
         {/if}
-      </slot>
+      {/if}
     {/if}
   </div>
 </div>

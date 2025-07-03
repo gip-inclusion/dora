@@ -4,9 +4,19 @@
   import { markdownToHTML } from "$lib/utils/misc";
   import Line from "./line.svelte";
 
-  export let suggestion;
-  export let isOpen = false;
-  export let onAccept, onReject;
+  interface Props {
+    suggestion: any;
+    isOpen?: boolean;
+    onAccept: any;
+    onReject: any;
+  }
+
+  let {
+    suggestion,
+    isOpen = $bindable(false),
+    onAccept,
+    onReject
+  }: Props = $props();
 </script>
 
 {#if suggestion}

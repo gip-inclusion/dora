@@ -2,7 +2,11 @@
   import { getSavedSearchQueryString } from "$lib/requests/saved-search";
   import type { SavedSearch } from "$lib/types";
 
-  export let search: SavedSearch;
+  interface Props {
+    search: SavedSearch;
+  }
+
+  let { search }: Props = $props();
   const onSiteOnly = search.locationKinds.toString() === "en-presentiel";
   const remoteOnly = search.locationKinds.toString() === "a-distance";
 </script>

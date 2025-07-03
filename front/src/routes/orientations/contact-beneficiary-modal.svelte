@@ -10,18 +10,27 @@
   import ConfirmationBloc from "./confirmation-bloc.svelte";
   import { createEventDispatcher } from "svelte";
 
-  export let isOpen = false;
-  export let onRefresh;
-  export let orientation: Orientation;
-  export let queryHash: string;
+  interface Props {
+    isOpen?: boolean;
+    onRefresh: any;
+    orientation: Orientation;
+    queryHash: string;
+  }
+
+  let {
+    isOpen = $bindable(false),
+    onRefresh,
+    orientation,
+    queryHash
+  }: Props = $props();
 
   const dispatch = createEventDispatcher();
 
-  let showConfirmation = false;
+  let showConfirmation = $state(false);
 
-  let message = "";
-  let extraRecipients: string[] = [];
-  let requesting = false;
+  let message = $state("");
+  let extraRecipients: string[] = $state([]);
+  let requesting = $state(false);
 
   const contactBeneficiarySchema: v.Schema = {
     extraRecipients: {
@@ -76,7 +85,7 @@
     showConfirmation = true;
   }
 
-  $: formData = { extraRecipients, message };
+  let formData = $derived({ extraRecipients, message });
 </script>
 
 <Modal
@@ -86,16 +95,18 @@
   title="Contacter le ou la bénéficiaire"
   width="medium"
 >
-  <div slot="subtitle">
-    Contacter {orientation.beneficiaryFirstName}
-    {orientation.beneficiaryLastName} - qui vous a été adressé·e par {orientation.referentFirstName}
-    {orientation.referentLastName}, pour le service «&nbsp;<a
-      class="text-magenta-cta"
-      href="/services/{orientation.service?.slug}"
-    >
-      {orientation.service?.name}
-    </a>&nbsp;»
-  </div>
+  {#snippet subtitle()}
+    <div >
+      Contacter {orientation.beneficiaryFirstName}
+      {orientation.beneficiaryLastName} - qui vous a été adressé·e par {orientation.referentFirstName}
+      {orientation.referentLastName}, pour le service «&nbsp;<a
+        class="text-magenta-cta"
+        href="/services/{orientation.service?.slug}"
+      >
+        {orientation.service?.name}
+      </a>&nbsp;»
+    </div>
+  {/snippet}
 
   {#if showConfirmation}
     <ConfirmationBloc title="Votre message a été transmis" />

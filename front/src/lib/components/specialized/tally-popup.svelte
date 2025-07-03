@@ -18,13 +18,25 @@
   // `MIN_DAYS_BETWEEN_DISPLAYS` ne soient passés
   const MIN_DAYS_BETWEEN_DISPLAYS = 30;
 
-  export let formId: TallyFormId;
-  export let keySuffix = "";
-  export let timeoutSeconds: number;
-  export let autoCloseSeconds = 0;
-  export let hiddenFields: Partial<HiddenFields> = {};
-  export let hideTitle = true;
-  export let minDaysBetweenDisplays: number | null = MIN_DAYS_BETWEEN_DISPLAYS;
+  interface Props {
+    formId: TallyFormId;
+    keySuffix?: string;
+    timeoutSeconds: number;
+    autoCloseSeconds?: number;
+    hiddenFields?: Partial<HiddenFields>;
+    hideTitle?: boolean;
+    minDaysBetweenDisplays?: number | null;
+  }
+
+  let {
+    formId,
+    keySuffix = "",
+    timeoutSeconds,
+    autoCloseSeconds = 0,
+    hiddenFields = {},
+    hideTitle = true,
+    minDaysBetweenDisplays = MIN_DAYS_BETWEEN_DISPLAYS
+  }: Props = $props();
 
   let timeoutFn: ReturnType<typeof setTimeout>;
 

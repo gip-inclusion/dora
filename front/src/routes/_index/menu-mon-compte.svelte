@@ -10,7 +10,11 @@
     notificationIcon,
   } from "$lib/icons";
 
-  export let mobileDesign = false;
+  interface Props {
+    mobileDesign?: boolean;
+  }
+
+  let { mobileDesign = false }: Props = $props();
 
   const aClass =
     "flex w-full lg:min-w-[200px] items-center p-s12 text-gray-text hover:bg-magenta-10 rounded-sm";

@@ -25,36 +25,46 @@
   import { trackStructureInfos } from "$lib/utils/stats";
   import ServicesToUpdateNotice from "./services/services-to-update-notice.svelte";
 
-  export let structure: Structure;
-  export let members: StructureMember[];
-  export let putativeMembers: PutativeStructureMember[];
-  export let structuresOptions: StructuresOptions;
-  export let onRefresh: () => void;
+  interface Props {
+    structure: Structure;
+    members: StructureMember[];
+    putativeMembers: PutativeStructureMember[];
+    structuresOptions: StructuresOptions;
+    onRefresh: () => void;
+  }
 
-  let fullDesc: string;
+  let {
+    structure,
+    members,
+    putativeMembers,
+    structuresOptions,
+    onRefresh
+  }: Props = $props();
 
-  $: fullDesc = markdownToHTML(structure.fullDesc, 4);
-  $: nationalLabelsDisplay = structure.nationalLabels
+  let fullDesc: string = $derived(markdownToHTML(structure.fullDesc, 4));
+
+  
+  let nationalLabelsDisplay = $derived(structure.nationalLabels
     .map((nationalLabel: string) => {
       return structuresOptions.nationalLabels.find(
         (label) => label.value === nationalLabel
       ).label;
     })
-    .join(", ");
-  $: sourceIsDataInclusion = structure.source?.value.startsWith("di-");
-  $: structureHasInfo =
-    structure.phone ||
+    .join(", "));
+  let sourceIsDataInclusion = $derived(structure.source?.value.startsWith("di-"));
+  let structureHasInfo =
+    $derived(structure.phone ||
     structure.email ||
     structure.url ||
     structure.openingHours ||
     structure.openingHoursDetails ||
-    structure.accesslibreUrl;
+    structure.accesslibreUrl);
 
-  $: servicesToUpdate = structure.services.filter(
+  let servicesToUpdate = $derived(structure.services.filter(
     (service) => service.updateNeeded
-  );
+  ));
 
-  let displayInformations = false;
+  let displayInformations = $state(false);
 
   async function showInformations() {
     displayInformations = true;

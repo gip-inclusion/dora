@@ -1,21 +1,44 @@
 <script lang="ts">
-  export let to: string;
-  export let otherTab = false;
-  export let nofollow = false;
-  export let label = "";
-  export let extraClass = "";
-  export let ariaLabel: string | undefined = undefined;
-  export let id: string | undefined = undefined;
-  export let icon: string | undefined = undefined;
-  export let iconOnRight = false;
-  export let small = false;
-  export let noBackground = false;
-  export let secondary = false;
-  export let hoverUnderline = false;
-  export let canWrap = false;
-  export let wFull = false;
+  import { createBubbler } from 'svelte/legacy';
 
-  let paddingX: string, paddingY: string, textSize: string;
+  const bubble = createBubbler();
+  interface Props {
+    to: string;
+    otherTab?: boolean;
+    nofollow?: boolean;
+    label?: string;
+    extraClass?: string;
+    ariaLabel?: string | undefined;
+    id?: string | undefined;
+    icon?: string | undefined;
+    iconOnRight?: boolean;
+    small?: boolean;
+    noBackground?: boolean;
+    secondary?: boolean;
+    hoverUnderline?: boolean;
+    canWrap?: boolean;
+    wFull?: boolean;
+  }
+
+  let {
+    to,
+    otherTab = false,
+    nofollow = false,
+    label = "",
+    extraClass = "",
+    ariaLabel = undefined,
+    id = undefined,
+    icon = undefined,
+    iconOnRight = false,
+    small = false,
+    noBackground = false,
+    secondary = false,
+    hoverUnderline = false,
+    canWrap = false,
+    wFull = false
+  }: Props = $props();
+
+  let paddingX: string = $state(), paddingY: string = $state(), textSize: string = $state();
 
   if (small) {
     paddingY = "py-s6";
@@ -31,7 +54,7 @@
     paddingX = "px-s20";
   }
 
-  let border: string, text: string, background: string;
+  let border: string = $state(), text: string = $state(), background: string = $state();
 
   border = "border-0";
 
@@ -65,7 +88,7 @@
   title={otherTab ? "Ouverture dans une nouvelle fenêtre" : ""}
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
-  on:click
+  onclick={bubble('click')}
   class="{paddingX} {paddingY} {textSize} {border} {text} {background} {extraClass} focus:shadow-focus inline-flex items-center justify-center rounded-sm leading-normal whitespace-nowrap"
   class:w-full={wFull}
   class:hover:underline={hoverUnderline}

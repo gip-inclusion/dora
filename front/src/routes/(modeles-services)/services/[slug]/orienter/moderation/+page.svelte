@@ -10,7 +10,11 @@
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   const showContactBeneficiary = !$orientation.beneficiaryEmail;
   onMount(() => {

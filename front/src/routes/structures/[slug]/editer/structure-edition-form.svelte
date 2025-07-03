@@ -10,12 +10,21 @@
   import { structureSchema } from "$lib/validation/schemas/structure";
   import StructureEditionFields from "./structure-edition-fields.svelte";
 
-  export let structure: Structure;
-  export let structuresOptions: StructuresOptions;
-  export let modify = false;
-  export let onRefresh: (() => Promise<void>) | undefined = undefined;
+  interface Props {
+    structure: Structure;
+    structuresOptions: StructuresOptions;
+    modify?: boolean;
+    onRefresh?: (() => Promise<void>) | undefined;
+  }
 
-  let requesting = false;
+  let {
+    structure = $bindable(),
+    structuresOptions,
+    modify = false,
+    onRefresh = undefined
+  }: Props = $props();
+
+  let requesting = $state(false);
 
   const serverErrors = {
     _default: {},

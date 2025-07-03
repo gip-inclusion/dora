@@ -30,10 +30,19 @@
     | "service"
     | "manager-dashboard";
 
-  export let structure: Structure | undefined = undefined;
-  export let service: Service | undefined = undefined;
-  export let model: Model | undefined = undefined;
-  export let currentLocation: BreadcrumbLocation | string;
+  interface Props {
+    structure?: Structure | undefined;
+    service?: Service | undefined;
+    model?: Model | undefined;
+    currentLocation: BreadcrumbLocation | string;
+  }
+
+  let {
+    structure = undefined,
+    service = undefined,
+    model = undefined,
+    currentLocation
+  }: Props = $props();
 
   const locationToText: Record<string, string> = {
     search: "Recherche",
@@ -85,7 +94,7 @@
     };
   }
 
-  $: structureData = getStructureData(currentLocation);
+  let structureData = $derived(getStructureData(currentLocation));
 </script>
 
 <nav aria-label="vous êtes ici :" class="print:hidden">

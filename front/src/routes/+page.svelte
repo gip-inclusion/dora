@@ -21,14 +21,18 @@
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let isVideoModalOpen = false;
+  let { data }: Props = $props();
 
-  $: lastVisitedStructure = getCurrentlySelectedStructure(
+  let isVideoModalOpen = $state(false);
+
+  let lastVisitedStructure = $derived(getCurrentlySelectedStructure(
     $userInfo,
     $userPreferences
-  );
+  ));
 </script>
 
 <OrientationVideo bind:isVideoModalOpen></OrientationVideo>

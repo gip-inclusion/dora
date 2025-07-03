@@ -1,6 +1,5 @@
 <script lang="ts">
-  export let link;
-  export let label;
+  let { link, label } = $props();
 </script>
 
 <a

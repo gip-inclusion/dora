@@ -1,9 +1,14 @@
 <script lang="ts">
-  export let condition = true;
+  interface Props {
+    condition?: boolean;
+    children?: import('svelte').Snippet;
+  }
+
+  let { condition = true, children }: Props = $props();
 </script>
 
 {#if condition}
   <div class="mb-s16 pl-s16">
-    <slot />
+    {@render children?.()}
   </div>
 {/if}

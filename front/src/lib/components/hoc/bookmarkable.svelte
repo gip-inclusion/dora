@@ -2,12 +2,17 @@
   import { clearBookmark, setBookmark } from "$lib/requests/services";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
 
-  export let slug: string;
-  export let isDI = false;
+  interface Props {
+    slug: string;
+    isDI?: boolean;
+    children?: import('svelte').Snippet<[any]>;
+  }
 
-  $: bookmarkId = $userInfo?.bookmarks?.find(
+  let { slug, isDI = false, children }: Props = $props();
+
+  let bookmarkId = $derived($userInfo?.bookmarks?.find(
     (bookmark) => bookmark.slug === slug
-  )?.id;
+  )?.id);
 
   async function handleFavClick() {
     if (bookmarkId) {
@@ -20,4 +25,4 @@
   }
 </script>
 
-<slot onBookmark={handleFavClick} isBookmarked={!!bookmarkId} />
+{@render children?.({ onBookmark: handleFavClick, isBookmarked: !!bookmarkId, })}

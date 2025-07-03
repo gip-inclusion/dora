@@ -7,13 +7,13 @@
   import Notice from "$lib/components/display/notice.svelte";
   import ServiceStructureLabel from "../components/service-structure-label.svelte";
 
-  export let data;
+  let { data, children, navbar } = $props();
 
   const { service } = data;
 
-  let currentLocation = $token
+  let currentLocation = $state($token
     ? "service-orientation-step1"
-    : "service-orientation";
+    : "service-orientation");
   if ($page.url.pathname.endsWith("/orienter/demande")) {
     currentLocation = "service-orientation-step2";
   } else if ($page.url.pathname.endsWith("/orienter/merci")) {
@@ -38,8 +38,8 @@
       </Notice>
     </div>
   {:else}
-    <slot />
+    {@render children?.()}
   {/if}
 </CenteredGrid>
 
-<slot name="navbar" />
+{@render navbar?.()}

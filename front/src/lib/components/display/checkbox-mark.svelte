@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let checked = false;
+  interface Props {
+    checked?: boolean;
+  }
+
+  let { checked = false }: Props = $props();
 </script>
 
 <div
@@ -8,7 +12,7 @@
   <div
     class="checkbox-mark h-s12 w-s12 bg-magenta-cta self-center"
     class:invisible={!checked}
-  />
+></div>
 </div>
 
 <style lang="postcss">

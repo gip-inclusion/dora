@@ -8,8 +8,12 @@
   import Modal from "$lib/components/hoc/modal.svelte";
   import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
 
-  export let isOpen = false;
-  export let orientationFormUrl: string;
+  interface Props {
+    isOpen?: boolean;
+    orientationFormUrl: string;
+  }
+
+  let { isOpen = $bindable(false), orientationFormUrl }: Props = $props();
 
   const dispatch = createEventDispatcher<{
     showVideo: object;
@@ -32,17 +36,19 @@
       > ou voir la vidéo de présentation pour comprendre l’utilisation du formulaire
       d’orientation.
     </p>
-    <div slot="footer" class="gap-s12 flex justify-end">
-      <LinkButton
-        label="Poursuivre l’orientation"
-        secondary
-        to={orientationFormUrl}
-        on:click={() => dispatch("trackMobilisation", {})}
-      />
-      <Button
-        label="Regarder la vidéo"
-        on:click={() => dispatch("showVideo", {})}
-      />
-    </div>
+    {#snippet footer()}
+        <div  class="gap-s12 flex justify-end">
+        <LinkButton
+          label="Poursuivre l’orientation"
+          secondary
+          to={orientationFormUrl}
+          on:click={() => dispatch("trackMobilisation", {})}
+        />
+        <Button
+          label="Regarder la vidéo"
+          on:click={() => dispatch("showVideo", {})}
+        />
+      </div>
+      {/snippet}
   </Modal>
 {/if}

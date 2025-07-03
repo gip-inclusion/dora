@@ -9,12 +9,14 @@
     propositions d’amélioration.
   </p>
 
-  <LinkButton
-    to="https://tally.so/r/mVLr7J?source=tdbuser"
-    label="Participer"
-    otherTab
-    small
-    secondary
-    slot="button"
-  />
+  {#snippet button()}
+    <LinkButton
+      to="https://tally.so/r/mVLr7J?source=tdbuser"
+      label="Participer"
+      otherTab
+      small
+      secondary
+      
+    />
+  {/snippet}
 </Notice>
