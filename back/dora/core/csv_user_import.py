@@ -11,21 +11,8 @@ from dora.structures.models import (
 )
 from dora.users.models import User
 
-"""
-Import des conseillers et admins de agences FT :
-    - fichiers aux format CSV en entrée : un pour les admins, l'autre pour les conseillers
-    - format : SAFIR,NOM,PRENOM,fonction (avec entête)
-
-Les adresses e-mail sont déduites à partir du nom / prénom (si absentes).
-"""
-
-# TODO: make idempotent
 # TODO: check headers
 # TODO: check email?
-
-
-class ImportError(Exception):
-    pass
 
 
 class ImportUserHelper:
@@ -38,21 +25,29 @@ class ImportUserHelper:
         wet_run=False,
         make_users_admin=False,
     ):
+        if wet_run:
+            print("PRODUCTION RUN")
+        else:
+            print("DRY RUN")
+
+        errors = []
         for i, row in enumerate(reader):
             try:
-                safir = row["SAFIR"]
+                safir = row["safir"]
                 structure = self._structure_by_safir(safir)
-                email = row.get("EMAIL") or self.name_to_france_travail_email(
-                    row["PRENOM"], row["NOM"]
+                email = row.get("email") or self.name_to_france_travail_email(
+                    row["prenom"], row["nom"]
                 )
-                first_name = row.get("PRENOM")
-                last_name = row.get("NOM")
+                first_name = row.get("prenom")
+                last_name = row.get("nom")
             except Exception as ex:
-                print(f"Erreur de traitement L{i + 1}: {ex}")
+                line_number = i + 1
+                print(f"Erreur de traitement Ligne {line_number}: {ex}")
+                errors.append(line_number)
             else:
                 print(f"{i}. Import pour l'agence avec le code SAFIR : {safir}")
 
-                if wet_run:
+                if not errors and wet_run:
                     print(
                         self.invite_user(
                             structure,
@@ -64,19 +59,32 @@ class ImportUserHelper:
                         )
                     )
 
-    def import_users(self, reader, structure_id, wet_run=False, make_users_admin=False):
-        structure = self._structure_by_id(structure_id)
+    def import_users(self, reader, wet_run=False, make_users_admin=False):
+        errors = []
+
+        if wet_run:
+            print("PRODUCTION RUN")
+        else:
+            print("DRY RUN")
+
         for i, row in enumerate(reader):
             try:
-                email = row.get("EMAIL")
-                first_name = row.get("PRENOM")
-                last_name = row.get("NOM")
+                structure_siret = row.get("structure_siret")
+                structure = self._structure_by_siret(structure_siret)
+                email = row.get("email")
+                first_name = row.get("prenom")
+                last_name = row.get("nom")
             except Exception as ex:
-                print(f"Erreur de traitement L{i + 1}: {ex}")
-            else:
-                print(f"{i}. Import pour l'agence avec l'ID : {structure_id}")
+                line_number = i + 1
+                print(f"Erreur de traitement Ligne {line_number}: {ex}")
+                errors.append(line_number)
 
-                if wet_run:
+            else:
+                print(
+                    f"{i}. Import pour la structure avec le SIRET : {structure_siret}"
+                )
+
+                if not errors and wet_run:
                     print(
                         self.invite_user(
                             structure,
@@ -100,19 +108,19 @@ class ImportUserHelper:
 
     def name_to_france_travail_email(self, first_name: str, last_name: str) -> str:
         if not all([first_name, last_name]):
-            raise ImportError(f"Erreur nom ou prénom : {first_name} - {last_name}")
+            raise Exception(f"Erreur nom ou prénom : {first_name} - {last_name}")
 
         return f"{self._strip_accents(first_name.lower())}.{self._strip_accents(last_name.lower())}@francetravail.fr".replace(
             " ", "-"
         )
 
     @staticmethod
-    def _structure_by_id(id: str) -> Structure:
+    def _structure_by_siret(siret: str) -> Structure:
         try:
-            return Structure.objects.get(id=id)
+            return Structure.objects.get(siret=siret)
         except Structure.DoesNotExist as ex:
-            raise ImportError(
-                f"La structure avec l'ID {id} n'existe pas en base"
+            raise Exception(
+                f"La structure avec le SIRET {siret} n'existe pas en base"
             ) from ex
 
     @staticmethod
@@ -120,7 +128,7 @@ class ImportUserHelper:
         try:
             return Structure.objects.get(code_safir_pe=safir)
         except Structure.DoesNotExist as ex:
-            raise ImportError(
+            raise Exception(
                 f"L'agence FT avec le code {safir} n'existe pas en base"
             ) from ex
 
@@ -130,7 +138,7 @@ class ImportUserHelper:
         try:
             return Structure.objects.get(**filter)
         except Structure.DoesNotExist:
-            raise ImportError(
+            raise Exception(
                 f"La structure avec {'le code safir' if self.is_france_travail else "l'id"} : {structure_id} n'existe pas en base"
             )
 
