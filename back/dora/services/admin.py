@@ -279,7 +279,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             message_text = (
                 "Aucun service n’a été importé, car le fichier comporte des erreurs."
                 if is_wet_run
-                else "Le fichier contient des erreurs qui empêchent l'import."
+                else "Le fichier contient des erreurs qui empêcheront l'import."
             )
             messages.error(
                 request,
@@ -294,6 +294,18 @@ class ServiceAdmin(admin.GISModelAdmin):
         geo_data_missing = result.get("geo_data_missing_lines", [])
         draft_services_created = result.get("draft_services_created", [])
         errors = result.get("errors", [])
+
+        if (
+            errors
+            and is_wet_run
+            and (duplicated_services or geo_data_missing or draft_services_created)
+        ):
+            messages.error(
+                request,
+                mark_safe(
+                    "<b>Les avertissements ci-dessous sont uniquement à titre informatif. Aucune opération décrite n'a été effectuée dans la base de données.</b>"
+                ),
+            )
 
         title_prefix = ""
         if not errors and is_wet_run:

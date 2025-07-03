@@ -345,7 +345,7 @@ class ImportServicesViewTestCase(APITestCase):
         mock_messages.error.assert_called_once_with(
             request,
             mark_safe(
-                "<b>Test terminé - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêchent l'import. Veuillez corriger les éléments suivants :<br/>"
+                "<b>Test terminé - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêcheront l'import. Veuillez corriger les éléments suivants :<br/>"
                 "• [2] SIRET manquant.<br/>"
                 "• [3] Structure introuvable."
             ),
@@ -578,6 +578,13 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, ".")
 
+        mock_messages.error.assert_any_call(
+            request,
+            mark_safe(
+                "<b>Les avertissements ci-dessous sont uniquement à titre informatif. Aucune opération décrite n'a été effectuée dans la base de données.</b>"
+            ),
+        )
+
         mock_messages.warning.assert_any_call(
             request,
             mark_safe(
@@ -647,6 +654,8 @@ class ImportServicesViewTestCase(APITestCase):
 
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, "..")
+
+        mock_messages.error.assert_not_called()
 
         mock_messages.warning.assert_any_call(
             request,
