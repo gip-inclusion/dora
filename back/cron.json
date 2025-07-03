@@ -1,10 +1,6 @@
 {
   "jobs": [
     {
-      "command": "0 6,13 * * * tools/update-metabase-db.sh",
-      "size": "S"
-    },
-    {
       "command": "8 7 * * * tools/send-orientations-reminders-emails.sh",
       "size": "S"
     },
