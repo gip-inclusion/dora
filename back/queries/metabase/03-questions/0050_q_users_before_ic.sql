@@ -25,9 +25,10 @@ where
     -- adresse e-mail non validée :
     and not mu.is_valid
     -- aucun rattachement en attente : 
-    and mu.id not in (select user_id from structures_structureputativemember where not invited_by_admin)
-    -- aucune connexion IC :
-    and mu.ic_id is null
+    and mu.id not in (
+        select user_id from structures_structureputativemember
+        where not invited_by_admin
+    )
 order by mu.date_joined desc;
 
 -- Indexes et PK
