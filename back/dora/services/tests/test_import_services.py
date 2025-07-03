@@ -641,7 +641,32 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(len(result_2["duplicated_services"]), 1)
         self.assertEqual(len(result_2["draft_services_created"]), 1)
 
-    def test_non_unique_source_label(self):
+    def test_non_unique_source_label_wet_run(self):
+        baker.make("ServiceSource", value="test_file", label="Test Source")
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,city,\n"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader,
+            self.importing_user,
+            {
+                "value": "test_file",
+                "label": "New Label",
+            },
+            wet_run=True,
+        )
+
+        self.assertEqual(
+            result["errors"][0],
+            'Le fichier nommé "test_file" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
+        )
+
+    def test_non_unique_source_label_dry_run(self):
         baker.make("ServiceSource", value="test_file", label="Test Source")
 
         csv_content = (
@@ -661,10 +686,8 @@ class ImportServicesTestCase(TestCase):
             wet_run=False,
         )
 
-        self.assertEqual(
-            result["errors"][0],
-            'Le fichier nommé "test_file" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
-        )
+        self.assertFalse(result["errors"])
+        self.assertEqual(result["created_count"], 1)
 
     def test_should_remove_first_two_lines(self):
         csv_content = (
