@@ -300,11 +300,13 @@ class ServiceAdmin(admin.GISModelAdmin):
             and is_wet_run
             and (duplicated_services or geo_data_missing or draft_services_created)
         ):
-            messages.warning(
+            messages.add_message(
                 request,
+                messages.INFO,
                 mark_safe(
                     "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
                 ),
+                extra_tags="plain",
             )
 
         title_prefix = ""

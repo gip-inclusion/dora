@@ -578,11 +578,9 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, ".")
 
-        mock_messages.warning.assert_any_call(
-            request,
-            mark_safe(
-                "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
-            ),
+        self.assertEqual(
+            mock_messages.add_message.call_args[0][2],
+            "<b>D'autres irrégularités non bloquantes ont été détectées :</b>",
         )
 
         mock_messages.warning.assert_any_call(
@@ -655,7 +653,7 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, "..")
 
-        mock_messages.error.assert_not_called()
+        mock_messages.add_message.assert_not_called()
 
         mock_messages.warning.assert_any_call(
             request,
