@@ -5,17 +5,29 @@
 
   import Checkbox from "./checkbox.svelte";
 
-  export let name: string;
-  export let group: string[];
-  export let choices: { label: string; value: string }[];
-  export let disabled = false;
-  export let readonly = false;
-  export let horizontalCheckboxes = false;
-  export let errorMessages: string[] = [];
+  interface Props {
+    name: string;
+    group: string[];
+    choices: { label: string; value: string }[];
+    disabled?: boolean;
+    readonly?: boolean;
+    horizontalCheckboxes?: boolean;
+    errorMessages?: string[];
+  }
+
+  let {
+    name,
+    group = $bindable(),
+    choices,
+    disabled = false,
+    readonly = false,
+    horizontalCheckboxes = false,
+    errorMessages = []
+  }: Props = $props();
 
   const dispatch = createEventDispatcher();
 
-  let focusValue: string | undefined = undefined;
+  let focusValue: string | undefined = $state(undefined);
 
   // We want the change event to come from this component, not from
   // the individual checkboxes, in order to be able to validate properly

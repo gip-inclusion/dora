@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
@@ -38,15 +40,28 @@
   import type { Schema } from "$lib/validation/schema-utils";
   import { shortenString } from "$lib/utils/misc";
 
-  export let service: Service;
-  export let servicesOptions: ServicesOptions;
-  export let managedStructureSearchMode = false;
-  export let structures: ShortStructure[];
-  export let structure: ShortStructure | undefined;
-  export let model: Model | undefined;
+  interface Props {
+    service: Service;
+    servicesOptions: ServicesOptions;
+    managedStructureSearchMode?: boolean;
+    structures: ShortStructure[];
+    structure: ShortStructure | undefined;
+    model: Model | undefined;
+  }
 
-  let requesting = false;
-  let currentSchema: Schema;
+  let {
+    service = $bindable(),
+    servicesOptions = $bindable(),
+    managedStructureSearchMode = false,
+    structures,
+    structure = $bindable(),
+    model = $bindable()
+  }: Props = $props();
+
+  let requesting = $state(false);
+  let currentSchema: Schema = $derived(service.useInclusionNumeriqueScheme
+    ? inclusionNumeriqueSchema
+    : serviceSchema);
 
   // Affichage d'un message aux anciennes structures suite à l'ajout d'une limitation du nombre de typologies
   const showMaxCategoriesNotice = (service.categories.length || 0) > 3;
@@ -110,7 +125,7 @@
     });
   }
 
-  let modelSlugTmp = null;
+  let modelSlugTmp = $state(null);
 
   function unsync() {
     modelSlugTmp = service.model;
@@ -122,18 +137,16 @@
     modelSlugTmp = null;
   }
 
-  $: currentSchema = service.useInclusionNumeriqueScheme
-    ? inclusionNumeriqueSchema
-    : serviceSchema;
+  
 
-  $: {
+  run(() => {
     if (structure?.noDoraForm) {
       servicesOptions.coachOrientationModes =
         servicesOptions.coachOrientationModes.filter(
           (mode) => mode.value !== "formulaire-dora"
         );
     }
-  }
+  });
 </script>
 
 <FormErrors />
@@ -208,14 +221,16 @@
             <p class="text-f14">
               Après enregistrement, cette action sera définitive.
             </p>
-            <div slot="button">
-              <Button
-                label="Re-synchroniser avec le modèle"
-                secondary
-                small
-                on:click={sync}
-              />
-            </div>
+            {#snippet button()}
+                        <div >
+                <Button
+                  label="Re-synchroniser avec le modèle"
+                  secondary
+                  small
+                  on:click={sync}
+                />
+              </div>
+                      {/snippet}
           </Notice>
         </div>
       {:else if service.modelChanged}

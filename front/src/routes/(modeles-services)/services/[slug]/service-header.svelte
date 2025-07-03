@@ -3,7 +3,11 @@
   import type { Service } from "$lib/types";
   import ServiceStructureLabel from "./components/service-structure-label.svelte";
 
-  export let service: Service;
+  interface Props {
+    service: Service;
+  }
+
+  let { service }: Props = $props();
 </script>
 
 <div class="gap-s48 text-gray-text flex flex-col">

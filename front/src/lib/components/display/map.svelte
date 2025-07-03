@@ -7,11 +7,15 @@
 
   const METROPOLE_BB: mlgl.LngLatBoundsLike = [-5, 42, 8, 51];
 
-  export let map: mlgl.Map;
+  interface Props {
+    map: mlgl.Map;
+  }
+
+  let { map = $bindable() }: Props = $props();
 
   const dispatch = createEventDispatcher();
 
-  let mapDiv: HTMLElement;
+  let mapDiv: HTMLElement = $state();
 
   onMount(() => {
     map = new mlgl.Map({
@@ -35,4 +39,4 @@
   });
 </script>
 
-<div class="h-full w-full" bind:this={mapDiv} />
+<div class="h-full w-full" bind:this={mapDiv}></div>

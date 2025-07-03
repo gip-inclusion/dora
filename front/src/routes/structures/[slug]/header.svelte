@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type TabItem = {
     id: string;
     name: string;
@@ -8,6 +8,8 @@
 </script>
 
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import HomeSmileLineBuildings from "svelte-remix/HomeSmileLineBuildings.svelte";
   import { page } from "$app/stores";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
@@ -26,12 +28,16 @@
   import PendingNotice from "./pending-notice.svelte";
   import type { Structure } from "$lib/types";
 
-  export let structure: Structure;
-  export let tabId = "informations";
+  interface Props {
+    structure: Structure;
+    tabId?: string;
+  }
 
-  let tabs: TabItem[] = [];
+  let { structure, tabId = $bindable("informations") }: Props = $props();
 
-  $: {
+  let tabs: TabItem[] = $state([]);
+
+  run(() => {
     tabs = [
       {
         id: "informations",
@@ -73,9 +79,9 @@
         href: `/structures/${structure.slug}/antennes`,
       });
     }
-  }
+  });
 
-  $: {
+  run(() => {
     if ($page.url.pathname.includes("/services")) {
       tabId = "services";
     } else if ($page.url.pathname.endsWith("/modeles")) {
@@ -87,7 +93,7 @@
     } else {
       tabId = "informations";
     }
-  }
+  });
 </script>
 
 <div class="text-gray-text pt-s32">

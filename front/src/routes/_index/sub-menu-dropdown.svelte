@@ -7,15 +7,24 @@
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
-  export let mobileDesign = false;
-  export let buttonClass = mobileDesign
-    ? "py-s16 text-f18 font-bold text-gray-dark w-full flex justify-between"
-    : "text-f14 text-gray-text p-s16";
 
-  export let label: string;
-  export let links: { href: string; label: string }[] = [];
-  let isOpen = false;
-  let dropdownButton;
+  interface Props {
+    mobileDesign?: boolean;
+    buttonClass?: any;
+    label: string;
+    links?: { href: string; label: string }[];
+  }
+
+  let {
+    mobileDesign = false,
+    buttonClass = mobileDesign
+    ? "py-s16 text-f18 font-bold text-gray-dark w-full flex justify-between"
+    : "text-f14 text-gray-text p-s16",
+    label,
+    links = []
+  }: Props = $props();
+  let isOpen = $state(false);
+  let dropdownButton = $state();
   const id = `sub-dropdown-menu-${randomId()}`;
 
   function handleClickOutside(_event) {
@@ -38,8 +47,8 @@
   class="relative {mobileDesign ? 'border-gray-03 border-b' : ''}"
   use:clickOutside
   role="presentation"
-  on:click_outside={handleClickOutside}
-  on:keydown={onKeyDown}
+  onclick_outside={handleClickOutside}
+  onkeydown={onKeyDown}
 >
   <button
     bind:this={dropdownButton}
@@ -47,7 +56,7 @@
     aria-controls={id}
     class:bg-magenta-10={isOpen}
     class="hover:bg-magenta-10 flex h-full items-center {buttonClass}"
-    on:click={() => (isOpen = !isOpen)}
+    onclick={() => (isOpen = !isOpen)}
   >
     <span>{label}</span>
     <span

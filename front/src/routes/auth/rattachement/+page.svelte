@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
@@ -13,13 +15,17 @@
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let cguAccepted = false;
-  let { establishment } = data;
+  let { data }: Props = $props();
+
+  let cguAccepted = $state(false);
+  let { establishment } = $state(data);
   const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
-  let ctaLabel = "";
-  let joinError = "";
+  let ctaLabel = $state("");
+  let joinError = $state("");
 
   async function handleJoin() {
     const targetUrl = `${getApiURL()}/auth/join-structure/`;
@@ -54,14 +60,14 @@
     }
   }
 
-  $: alreadyMember = $userInfo?.structures
+  let alreadyMember = $derived($userInfo?.structures
     ?.map((struct) => struct.siret)
-    ?.includes(establishment?.siret);
-  $: alreadyRequested = $userInfo?.pendingStructures
+    ?.includes(establishment?.siret));
+  let alreadyRequested = $derived($userInfo?.pendingStructures
     ?.map((struct) => struct.siret)
-    ?.includes(establishment?.siret);
+    ?.includes(establishment?.siret));
 
-  $: {
+  run(() => {
     if (alreadyRequested) {
       ctaLabel = "Relancer l’administrateur";
     } else if (alreadyMember) {
@@ -69,8 +75,10 @@
     } else {
       ctaLabel = "Rejoindre la structure";
     }
-  }
-  $: (establishment, (joinError = ""));
+  });
+  run(() => {
+    (establishment, (joinError = ""));
+  });
 </script>
 
 <EnsureLoggedIn>
@@ -83,52 +91,54 @@
       {proposedSiret}
       showSafir={userIsFranceTravail}
     >
-      <div slot="cta">
-        {#if establishment?.siret}
-          <div class="mt-s24">
-            {#if alreadyMember}
-              Votre compte est déjà rattaché à cette structure.
-            {:else if alreadyRequested}
-              Votre précédente demande d’adhésion est en attente de validation
-              par l’administrateur de la structure.
-            {:else}
-              <div class="legend">
-                <label class="flex flex-row items-start">
-                  <input
-                    bind:checked={cguAccepted}
-                    type="checkbox"
-                    class="hidden"
-                  />
-                  <CheckboxMark />
-                  <span class="ml-s16 text-f14 text-gray-text inline-block">
-                    Je déclare avoir lu les
-                    <a
-                      href="/cgu"
-                      class="underline"
-                      target="_blank"
-                      rel="noopener">Conditions générales d’utilisation</a
-                    > et faire partie de la structure mentionnée ci-dessus.</span
-                  >
-                </label>
-              </div>
-            {/if}
+      {#snippet cta()}
+            <div >
+          {#if establishment?.siret}
             <div class="mt-s24">
-              {#if joinError}
-                <Notice title={joinError} type="error" />
+              {#if alreadyMember}
+                Votre compte est déjà rattaché à cette structure.
+              {:else if alreadyRequested}
+                Votre précédente demande d’adhésion est en attente de validation
+                par l’administrateur de la structure.
+              {:else}
+                <div class="legend">
+                  <label class="flex flex-row items-start">
+                    <input
+                      bind:checked={cguAccepted}
+                      type="checkbox"
+                      class="hidden"
+                    />
+                    <CheckboxMark />
+                    <span class="ml-s16 text-f14 text-gray-text inline-block">
+                      Je déclare avoir lu les
+                      <a
+                        href="/cgu"
+                        class="underline"
+                        target="_blank"
+                        rel="noopener">Conditions générales d’utilisation</a
+                      > et faire partie de la structure mentionnée ci-dessus.</span
+                    >
+                  </label>
+                </div>
               {/if}
+              <div class="mt-s24">
+                {#if joinError}
+                  <Notice title={joinError} type="error" />
+                {/if}
+              </div>
+              <div class="mt-s24 flex justify-end">
+                <Button
+                  type="submit"
+                  label={ctaLabel}
+                  on:click={handleJoin}
+                  preventDefaultOnMouseDown
+                  disabled={!alreadyMember && !alreadyRequested && !cguAccepted}
+                />
+              </div>
             </div>
-            <div class="mt-s24 flex justify-end">
-              <Button
-                type="submit"
-                label={ctaLabel}
-                on:click={handleJoin}
-                preventDefaultOnMouseDown
-                disabled={!alreadyMember && !alreadyRequested && !cguAccepted}
-              />
-            </div>
-          </div>
-        {/if}
-      </div>
+          {/if}
+        </div>
+          {/snippet}
     </StructureSearch>
 
     <div class="mt-s24 border-gray-02 px-s32 py-s24 rounded-lg border bg-white">

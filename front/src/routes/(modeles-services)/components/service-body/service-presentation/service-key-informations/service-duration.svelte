@@ -1,13 +1,17 @@
 <script lang="ts">
   import type { Model, Service } from "$lib/types";
   import { isDurationValid } from "$lib/utils/service";
-  export let service: Service | Model;
+  interface Props {
+    service: Service | Model;
+  }
 
-  $: isValid = isDurationValid(service);
+  let { service }: Props = $props();
 
-  $: totalHours = isValid
+  let isValid = $derived(isDurationValid(service));
+
+  let totalHours = $derived(isValid
     ? service.durationWeeklyHours * service.durationWeeks
-    : 0;
+    : 0);
 </script>
 
 <div>

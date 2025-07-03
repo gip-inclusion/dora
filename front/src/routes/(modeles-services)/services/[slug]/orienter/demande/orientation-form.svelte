@@ -19,10 +19,14 @@
   import { formErrors } from "$lib/validation/validation";
   import type { Service } from "$lib/types";
 
-  export let service: Service;
-  export let credentials;
+  interface Props {
+    service: Service;
+    credentials: any;
+  }
 
-  let contactPrefOptions: Choice[] = [];
+  let { service, credentials }: Props = $props();
+
+  let contactPrefOptions: Choice[] = $state([]);
 
   if ($userInfo.structures?.length === 1) {
     $orientation.prescriberStructureSlug = $userInfo.structures[0].slug;
@@ -48,7 +52,7 @@
     $orientation.referentEmail = $userInfo.email;
   });
 
-  $: testWordDetected = orientationContainsTestWords($orientation);
+  let testWordDetected = $derived(orientationContainsTestWords($orientation));
 </script>
 
 <div>
@@ -146,7 +150,8 @@
       bind:value={$orientation.beneficiaryAvailability}
       vertical
     >
-      <p slot="description" class="legend italic">
+      <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
+  <p slot="description" class="legend italic">
         Date à partir de laquelle la personne est disponible.<br />
         Format attendu&nbsp;: JJ/MM/AAAA (par exemple, 17/01/2023 pour 17 janvier
         2023)
@@ -274,7 +279,8 @@
             description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
             bind:fileKeys={$orientation.attachments[form.name]}
           >
-            <p slot="description">
+            <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
+  <p slot="description">
               <a
                 href={form.url}
                 class="font-bold underline"

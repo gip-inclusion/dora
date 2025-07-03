@@ -5,11 +5,25 @@
   import CheckboxCircleFillSystem from "svelte-remix/CheckboxCircleFillSystem.svelte";
   import CloseFillSystem from "svelte-remix/CloseFillSystem.svelte";
 
-  export let title = "";
-  export let type: "info" | "success" | "warning" | "error" = "info";
-  export let hasCloseButton = false;
-  export let showIcon = true;
-  export let titleLevel: "h2" | "h3" | "h4" = "h4";
+  interface Props {
+    title?: string;
+    type?: "info" | "success" | "warning" | "error";
+    hasCloseButton?: boolean;
+    showIcon?: boolean;
+    titleLevel?: "h2" | "h3" | "h4";
+    children?: import('svelte').Snippet;
+    button?: import('svelte').Snippet;
+  }
+
+  let {
+    title = "",
+    type = "info",
+    hasCloseButton = false,
+    showIcon = true,
+    titleLevel = "h4",
+    children,
+    button
+  }: Props = $props();
 
   const types = {
     info: {
@@ -38,7 +52,7 @@
     },
   };
 
-  let visible = true;
+  let visible = $state(true);
 
   function handleHide() {
     visible = !visible;
@@ -52,8 +66,9 @@
     ].background}"
   >
     {#if showIcon}
+      {@const SvelteComponent = types[type].icon}
       <div class={types[type].text}>
-        <svelte:component this={types[type].icon} size={32} />
+        <SvelteComponent size={32} />
       </div>
     {/if}
 
@@ -71,22 +86,22 @@
             </svelte:element>
           {/if}
           {#if hasCloseButton}
-            <button on:click={handleHide}>
-              <svelte:component this={CloseFillSystem} size={24} />
+            <button onclick={handleHide}>
+              <CloseFillSystem size={24} />
             </button>
           {/if}
         </div>
       {/if}
 
-      {#if $$slots?.default || $$slots.button}
+      {#if children || button}
         <div
           class="gap-s12 text-gray-dark flex flex-row flex-wrap items-start justify-between"
         >
-          <slot />
+          {@render children?.()}
 
-          {#if $$slots.button}
+          {#if button}
             <div class="mb-s0 self-end">
-              <slot name="button" />
+              {@render button?.()}
             </div>
           {/if}
         </div>

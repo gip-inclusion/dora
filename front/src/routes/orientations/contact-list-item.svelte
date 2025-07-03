@@ -1,10 +1,19 @@
 <script lang="ts">
   import { externalLinkIcon } from "$lib/icons";
 
-  export let icon: string;
-  export let text: string;
-  export let link: string | undefined = undefined;
-  export let isPreference = false;
+  interface Props {
+    icon: string;
+    text: string;
+    link?: string | undefined;
+    isPreference?: boolean;
+  }
+
+  let {
+    icon,
+    text,
+    link = undefined,
+    isPreference = false
+  }: Props = $props();
 </script>
 
 <li class="text-gray-text flex items-center">

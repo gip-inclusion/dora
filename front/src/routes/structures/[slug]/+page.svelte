@@ -7,7 +7,11 @@
   import ServicesList from "./services/list.svelte";
   import { structure } from "./store";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   async function handleRefresh() {
     $structure = await getStructure($structure.slug);
@@ -21,7 +25,7 @@
   structuresOptions={data.structuresOptions}
   onRefresh={handleRefresh}
 />
-<div class="mb-s64" />
+<div class="mb-s64"></div>
 
 {#if !!$structure.services?.length}
   <hr class="mb-s24" />

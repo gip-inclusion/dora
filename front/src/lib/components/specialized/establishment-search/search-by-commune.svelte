@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { externalLinkIcon } from "$lib/icons";
   import { getApiURL } from "$lib/utils/api";
   import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
@@ -6,14 +8,18 @@
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment, GeoApiValue } from "$lib/types";
 
-  export let establishment;
 
-  export let onCityChange: (newCity: GeoApiValue | null) => void;
-  export let onEstablishmentChange: (estab: Establishment | null) => void;
+  interface Props {
+    establishment: any;
+    onCityChange: (newCity: GeoApiValue | null) => void;
+    onEstablishmentChange: (estab: Establishment | null) => void;
+  }
 
-  let queryText: string | undefined;
+  let { establishment = $bindable(), onCityChange, onEstablishmentChange }: Props = $props();
 
-  let city: GeoApiValue | null;
+  let queryText: string | undefined = $state();
+
+  let city: GeoApiValue | null = $state();
 
   function handleCityChange(newCity: GeoApiValue | null) {
     city = newCity;
@@ -57,8 +63,8 @@
     return [];
   }
 
-  let annuaireEntreprisePath: string;
-  $: {
+  let annuaireEntreprisePath: string = $state();
+  run(() => {
     annuaireEntreprisePath = "";
     if (city?.code && queryText) {
       const code = city.code;
@@ -69,7 +75,7 @@
         annuaireEntreprisePath = `/rechercher?terme=${queryText}&cp_dep_type=insee&cp_dep=${code}`;
       }
     }
-  }
+  });
 </script>
 
 <FieldWrapper
@@ -100,26 +106,28 @@
     localFiltering={false}
     minCharactersToSearch="3"
   >
-    <div
-      slot="itemContent"
-      class="gap-s4 px-s8 pt-s8 flex grow flex-row items-baseline justify-between"
-      let:item
-    >
-      <div class="grow">
-        {item.label}<br />
-        <span class="text-f12 text-gray-text-alt">{item.value.address1}</span>
-      </div>
-      {#if item.value.isSiege}
+    {#snippet itemContent({ item })}
         <div
-          class="bg-gray-01 px-s6 py-s4 text-f12 text-gray-text shrink-0 rounded-sm font-bold"
-        >
-          Siège
+        
+        class="gap-s4 px-s8 pt-s8 flex grow flex-row items-baseline justify-between"
+        
+      >
+        <div class="grow">
+          {item.label}<br />
+          <span class="text-f12 text-gray-text-alt">{item.value.address1}</span>
         </div>
-      {/if}
-      <div class="ml-s8 w-s88 text-f12 text-gray-text-alt">
-        {item.value.siret}
+        {#if item.value.isSiege}
+          <div
+            class="bg-gray-01 px-s6 py-s4 text-f12 text-gray-text shrink-0 rounded-sm font-bold"
+          >
+            Siège
+          </div>
+        {/if}
+        <div class="ml-s8 w-s88 text-f12 text-gray-text-alt">
+          {item.value.siret}
+        </div>
       </div>
-    </div>
+      {/snippet}
   </Select>
 
   <p class="pt-s4 text-f14">

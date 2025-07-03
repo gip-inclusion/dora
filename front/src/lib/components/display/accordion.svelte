@@ -1,13 +1,28 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
   import { randomId } from "$lib/utils/random";
 
-  export let title: string;
-  export let subTitle = "";
-  export let expanded = true;
-  export let titleClass = "";
-  export let noTitleMargin = false;
-  export let titleLevel: "h2" | "h3" | "h4" = "h2";
+  interface Props {
+    title: string;
+    subTitle?: string;
+    expanded?: boolean;
+    titleClass?: string;
+    noTitleMargin?: boolean;
+    titleLevel?: "h2" | "h3" | "h4";
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    title,
+    subTitle = "",
+    expanded = $bindable(true),
+    titleClass = "",
+    noTitleMargin = false,
+    titleLevel = "h2",
+    children
+  }: Props = $props();
 
   const id = randomId();
 </script>
@@ -20,7 +35,7 @@
     aria-expanded={expanded}
     aria-controls={id}
     class="flex h-[45px] w-full items-center justify-between text-left"
-    on:click|preventDefault={() => (expanded = !expanded)}
+    onclick={preventDefault(() => (expanded = !expanded))}
   >
     <span>
       {title}
@@ -41,4 +56,4 @@
   </button>
 </svelte:element>
 
-<div {id} class:hidden={!expanded}><slot /></div>
+<div {id} class:hidden={!expanded}>{@render children?.()}</div>

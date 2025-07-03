@@ -13,18 +13,22 @@
   import type { PageData } from "./$types";
   import ContributionEditionFields from "./contribution-edition-fields.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let establishment: Establishment = undefined;
-  let requesting = false;
+  let { data }: Props = $props();
+
+  let establishment: Establishment = $state(undefined);
+  let requesting = $state(false);
 
   // TODO: Ajouter le type Contribution
-  let contribution: Service = Object.fromEntries(
+  let contribution: Service = $state(Object.fromEntries(
     Object.entries(contribSchema).map(([fieldName, props]) => [
       fieldName,
       props.default,
     ])
-  );
+  ));
 
   function handleChange(validatedData) {
     contribution = { ...contribution, ...validatedData };

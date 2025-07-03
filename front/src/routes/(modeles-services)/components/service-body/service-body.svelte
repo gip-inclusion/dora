@@ -15,35 +15,39 @@
   import ServicePresentation from "./service-presentation/service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
 
-  export let service: Service | Model;
-  export let servicesOptions: ServicesOptions;
-  export let onFeedbackButtonClick: () => void;
+  interface Props {
+    service: Service | Model;
+    servicesOptions: ServicesOptions;
+    onFeedbackButtonClick: () => void;
+  }
 
-  $: isDI = "source" in service;
+  let { service, servicesOptions, onFeedbackButtonClick }: Props = $props();
 
-  $: searchIdStr = $page.url.searchParams.get("searchId");
-  $: searchIdNumber = searchIdStr ? parseInt(searchIdStr) : undefined;
-  $: searchFragment = searchIdStr ? `?searchId=${searchIdStr}` : "";
-  $: orientationFormUrl = `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`;
+  let isDI = $derived("source" in service);
 
-  $: isServiceFromOwnStructure = $userInfo
+  let searchIdStr = $derived($page.url.searchParams.get("searchId"));
+  let searchIdNumber = $derived(searchIdStr ? parseInt(searchIdStr) : undefined);
+  let searchFragment = $derived(searchIdStr ? `?searchId=${searchIdStr}` : "");
+  let orientationFormUrl = $derived(`/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`);
+
+  let isServiceFromOwnStructure = $derived($userInfo
     ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
         (structure) => structure.slug === service.structure
       )
-    : false;
+    : false);
 
-  $: showServiceWillBeVisibleSoonNotice =
-    DI_DORA_UNIFIED_SEARCH_ENABLED &&
+  let showServiceWillBeVisibleSoonNotice =
+    $derived(DI_DORA_UNIFIED_SEARCH_ENABLED &&
     !service.isModel &&
     service.status === "PUBLISHED" &&
     service.canWrite &&
-    isServiceRecentlyPublished(service);
+    isServiceRecentlyPublished(service));
 
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;
 
-  let isPreventFakeOrientationModalOpen = false;
-  let isVideoModalOpen = false;
+  let isPreventFakeOrientationModalOpen = $state(false);
+  let isVideoModalOpen = $state(false);
 
   function handleShowVideoModal() {
     isPreventFakeOrientationModalOpen = false;
@@ -93,7 +97,7 @@
         </p>
       </div>
     </div>
-    <div class="basis-1/3" />
+    <div class="basis-1/3"></div>
   </div>
 
   <div class="gap-s48 grid grid-cols-1 md:grid-cols-3">

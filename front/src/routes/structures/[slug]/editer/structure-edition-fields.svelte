@@ -11,8 +11,12 @@
   import { getDepartmentFromCityCode } from "$lib/utils/misc";
   import type { NationalLabel } from "$lib/types";
 
-  export let structure: Structure;
-  export let structuresOptions: StructuresOptions;
+  interface Props {
+    structure: Structure;
+    structuresOptions: StructuresOptions;
+  }
+
+  let { structure = $bindable(), structuresOptions }: Props = $props();
 
   const fixedNationalLabelValues: string[] =
     structuresOptions.restrictedNationalLabels.map(
@@ -28,7 +32,7 @@
     return `https://acceslibre.beta.gouv.fr/recherche/?what=&where=${where}&lat=${lat}&lon=${lon}&code=${code}`;
   }
 
-  $: accesslibreUrl = getAccessLibreUrl(structure);
+  let accesslibreUrl = $derived(getAccessLibreUrl(structure));
 </script>
 
 <BasicInputField id="siret" bind:value={structure.siret} />
@@ -56,20 +60,22 @@
   placeholder="https://acceslibre.beta.gouv.fr/…"
   vertical
 >
-  <div slot="description">
-    <small>
-      Afin de renseigner les informations d’accessibilité sur la structure,
-      retrouvez-la via la plateforme
-      <a
-        class="text-magenta-cta underline"
-        href={accesslibreUrl}
-        target="_blank"
-        title="Ouverture dans une nouvelle fenêtre"
-        rel="noopener ugc">acceslibre</a
-      >
-      et copiez l’url dans le champ ci-dessous.
-    </small>
-  </div>
+  {#snippet description()}
+    <div >
+      <small>
+        Afin de renseigner les informations d’accessibilité sur la structure,
+        retrouvez-la via la plateforme
+        <a
+          class="text-magenta-cta underline"
+          href={accesslibreUrl}
+          target="_blank"
+          title="Ouverture dans une nouvelle fenêtre"
+          rel="noopener ugc">acceslibre</a
+        >
+        et copiez l’url dans le champ ci-dessous.
+      </small>
+    </div>
+  {/snippet}
 </BasicInputField>
 
 <BasicInputField

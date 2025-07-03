@@ -61,8 +61,8 @@
     setCookie(CONSENT_REMOVED_COOKIE_NAME, new Date().getTime(), 946080000000);
   }
 
-  let consent: boolean;
-  let useTracker = true;
+  let consent: boolean = $state();
+  let useTracker = $state(true);
 
   if (browser) {
     consent = !!hasConsent();
@@ -94,7 +94,7 @@
     {:else if consent}
       {#if useTracker}
         <input
-          on:click={() => {
+          onclick={() => {
             window._paq.push(["optUserOut"]);
             consent = false;
             useTracker = true;
@@ -105,7 +105,7 @@
         />
       {:else}
         <input
-          on:click={() => {
+          onclick={() => {
             consentRevoked();
             consent = false;
             useTracker = false;
@@ -125,7 +125,7 @@
     {:else}
       {#if useTracker}
         <input
-          on:click={() => {
+          onclick={() => {
             window._paq.push(["forgetUserOptOut"]);
             consent = true;
             useTracker = true;
@@ -135,7 +135,7 @@
         />
       {:else}
         <input
-          on:click={() => {
+          onclick={() => {
             consentGiven();
             consent = true;
             useTracker = false;

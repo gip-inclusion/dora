@@ -4,7 +4,12 @@
   import Button from "$lib/components/display/button.svelte";
   import { closeLineIcon } from "$lib/icons";
 
-  export let isOpen: boolean;
+  interface Props {
+    isOpen: boolean;
+    children?: import('svelte').Snippet;
+  }
+
+  let { isOpen = $bindable(), children }: Props = $props();
 
   function handleClose() {
     isOpen = false;
@@ -26,7 +31,7 @@
           />
         </div>
 
-        <slot />
+        {@render children?.()}
       </div>
     </div>
   </Portal>

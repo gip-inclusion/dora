@@ -11,16 +11,25 @@
   import { renderRejectMessage } from "$lib/utils/orientation-templates";
   import { formatPhoneNumber } from "$lib/utils/misc";
 
-  export let isOpen = false;
-  export let onRefresh;
-  export let orientation: Orientation;
-  export let queryHash: string;
+  interface Props {
+    isOpen?: boolean;
+    onRefresh: any;
+    orientation: Orientation;
+    queryHash: string;
+  }
 
-  let showConfirmation = false;
+  let {
+    isOpen = $bindable(false),
+    onRefresh,
+    orientation,
+    queryHash
+  }: Props = $props();
 
-  let message = "";
-  let reasons: string[] = [];
-  let requesting = false;
+  let showConfirmation = $state(false);
+
+  let message = $state("");
+  let reasons: string[] = $state([]);
+  let requesting = $state(false);
   let messageTouched = false;
 
   const denyOrientationSchema: v.Schema = {
@@ -117,7 +126,7 @@
     showConfirmation = true;
   }
 
-  $: formData = { reasons, message };
+  let formData = $derived({ reasons, message });
 </script>
 
 <Modal
@@ -127,22 +136,24 @@
   width="medium"
   hideTitle={showConfirmation}
 >
-  <div slot="subtitle">
-    Vous êtes sur le point de refuser une demande de prescription de service qui
-    vous a été adressée par {orientation.prescriber?.name} de la structure {orientation
-      .prescriberStructure?.name}
-    pour le service «&nbsp;<a
-      class="text-magenta-cta"
-      href="/services/{orientation.service?.slug}"
-    >
-      {orientation.service?.name}
-    </a>&nbsp;».<br />
-    <div class="mt-s16">
-      Le ou la bénéficiaire, {orientation.beneficiaryFirstName}
-      {orientation.beneficiaryLastName}, sera informé•e de la décision par {orientation.referentFirstName}
-      {orientation.referentLastName}.
+  {#snippet subtitle()}
+    <div >
+      Vous êtes sur le point de refuser une demande de prescription de service qui
+      vous a été adressée par {orientation.prescriber?.name} de la structure {orientation
+        .prescriberStructure?.name}
+      pour le service «&nbsp;<a
+        class="text-magenta-cta"
+        href="/services/{orientation.service?.slug}"
+      >
+        {orientation.service?.name}
+      </a>&nbsp;».<br />
+      <div class="mt-s16">
+        Le ou la bénéficiaire, {orientation.beneficiaryFirstName}
+        {orientation.beneficiaryLastName}, sera informé•e de la décision par {orientation.referentFirstName}
+        {orientation.referentLastName}.
+      </div>
     </div>
-  </div>
+  {/snippet}
 
   {#if showConfirmation}
     <ConfirmationBloc

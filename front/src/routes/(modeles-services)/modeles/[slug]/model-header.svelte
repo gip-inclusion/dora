@@ -4,7 +4,11 @@
   import { capitalize } from "$lib/utils/misc";
   import type { Model } from "$lib/types";
 
-  export let model: Model;
+  interface Props {
+    model: Model;
+  }
+
+  let { model }: Props = $props();
 </script>
 
 <div class="text-gray-text">

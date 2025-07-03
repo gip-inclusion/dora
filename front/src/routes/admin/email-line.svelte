@@ -1,7 +1,7 @@
 <script lang="ts">
   import CopyableText from "./copyable-text.svelte";
 
-  export let email;
+  let { email } = $props();
 </script>
 
 {#if email}

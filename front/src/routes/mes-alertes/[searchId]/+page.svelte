@@ -7,7 +7,7 @@
   import SavedSearchDescription from "../description.svelte";
   import SavedSearchTitle from "../title.svelte";
 
-  export let data;
+  let { data } = $props();
 </script>
 
 <EnsureLoggedIn>

@@ -3,8 +3,12 @@
   import { pageLineIcon } from "$lib/icons";
   import { capitalize } from "$lib/utils/misc";
 
-  export let structure;
-  export let showAddress = true;
+  interface Props {
+    structure: any;
+    showAddress?: boolean;
+  }
+
+  let { structure, showAddress = true }: Props = $props();
 </script>
 
 <div class="flex flex-col rounded-lg bg-white shadow-md">

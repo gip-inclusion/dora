@@ -14,11 +14,15 @@
   import { isNotFreeService } from "$lib/utils/service";
   import OsmHours from "../../osm-hours.svelte";
 
-  export let service: Service | ShortService;
-  export let servicesOptions: ServicesOptions;
-  export let display: "sidebar" | "full" = "full";
+  interface Props {
+    service: Service | ShortService;
+    servicesOptions: ServicesOptions;
+    display?: "sidebar" | "full";
+  }
 
-  $: isDI = "source" in service;
+  let { service, servicesOptions, display = "full" }: Props = $props();
+
+  let isDI = $derived("source" in service);
 </script>
 
 <h2 class:text-f23={display === "sidebar"}>Informations clés</h2>

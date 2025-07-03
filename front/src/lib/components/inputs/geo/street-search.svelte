@@ -6,14 +6,27 @@
   } from "$lib/validation/validation";
   import { getContext } from "svelte";
 
-  export let id: string;
-  export let onChange: (newValue: string) => void;
-  export let placeholder: string;
-  export let cityCode: string;
-  export let disabled: boolean;
-  export let value: string | undefined = undefined;
-  export let initialValue: string | undefined = undefined;
-  export let readonly = false;
+  interface Props {
+    id: string;
+    onChange: (newValue: string) => void;
+    placeholder: string;
+    cityCode: string;
+    disabled: boolean;
+    value?: string | undefined;
+    initialValue?: string | undefined;
+    readonly?: boolean;
+  }
+
+  let {
+    id,
+    onChange,
+    placeholder,
+    cityCode,
+    disabled,
+    value = $bindable(undefined),
+    initialValue = undefined,
+    readonly = false
+  }: Props = $props();
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";
 

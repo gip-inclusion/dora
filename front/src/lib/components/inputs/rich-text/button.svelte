@@ -1,12 +1,19 @@
 <script lang="ts">
-  export let icon: string;
-  export let active: boolean;
-  export let label: string;
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
+  interface Props {
+    icon: string;
+    active: boolean;
+    label: string;
+  }
+
+  let { icon, active, label }: Props = $props();
 </script>
 
 <button
   type="button"
-  on:click
+  onclick={bubble('click')}
   class:active
   class="tb-button"
   aria-label={label}

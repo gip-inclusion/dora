@@ -9,9 +9,13 @@
   import ServiceOtherInformations from "./service-other-informations.svelte";
   import ServiceSteps from "./service-steps.svelte";
 
-  export let service: Service | Model;
-  export let servicesOptions: ServicesOptions;
-  export let onFeedbackButtonClick: () => void;
+  interface Props {
+    service: Service | Model;
+    servicesOptions: ServicesOptions;
+    onFeedbackButtonClick: () => void;
+  }
+
+  let { service, servicesOptions, onFeedbackButtonClick }: Props = $props();
 </script>
 
 <div class="gap-s36 flex flex-col">

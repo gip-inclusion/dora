@@ -15,7 +15,11 @@
   import ServiceSection from "./components/service-section.svelte";
   import ServiceSubsection from "./components/service-subsection.svelte";
 
-  export let service: Service | Model;
+  interface Props {
+    service: Service | Model;
+  }
+
+  let { service }: Props = $props();
 
   const orderedCoachOrientationModeValues: Record<
     CoachOrientationModes,
@@ -49,9 +53,9 @@
     dispatch("trackMobilisation", { externalUrl });
   }
 
-  $: isDI = "source" in service;
+  let isDI = $derived("source" in service);
 
-  $: coachOrientationModesValueAndDisplay = (
+  let coachOrientationModesValueAndDisplay = $derived((
     service.coachOrientationModes ?? []
   )
     .map((val, index) => [val, service.coachOrientationModesDisplay[index]])
@@ -59,9 +63,9 @@
       (a, b) =>
         orderedCoachOrientationModeValues[a[0]] -
         orderedCoachOrientationModeValues[b[0]]
-    );
+    ));
 
-  $: beneficiariesAccessModesValueAndDisplay = (
+  let beneficiariesAccessModesValueAndDisplay = $derived((
     service.beneficiariesAccessModes ?? []
   )
     .map((val, index) => [val, service.beneficiariesAccessModesDisplay[index]])
@@ -69,7 +73,7 @@
       (a, b) =>
         orderedBeneficiariesAccessModeValues[a[0]] -
         orderedBeneficiariesAccessModeValues[b[0]]
-    );
+    ));
 </script>
 
 <ServiceSection title="Les démarches à réaliser">
@@ -104,7 +108,7 @@
             <a
               href={service.beneficiariesAccessModesExternalFormLink}
               target="_blank"
-              on:click={() =>
+              onclick={() =>
                 trackMobilisationUnconditionally(
                   service.beneficiariesAccessModesExternalFormLink
                 )}

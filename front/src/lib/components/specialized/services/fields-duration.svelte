@@ -6,15 +6,20 @@
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
 
-  export let model: Model | undefined = undefined;
-  export let servicesOptions: ServicesOptions, service: Service;
+  interface Props {
+    model?: Model | undefined;
+    servicesOptions: ServicesOptions;
+    service: Service;
+  }
+
+  let { model = undefined, servicesOptions, service = $bindable() }: Props = $props();
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  $: showModel = !!service.model;
-  $: fieldModelProps = model
+  let showModel = $derived(!!service.model);
+  let fieldModelProps = $derived(model
     ? getModelInputProps({
         service,
         servicesOptions,
@@ -22,12 +27,12 @@
         onUseModelValue: handleUseModelValue,
         model,
       })
-    : {};
+    : {});
 
-  $: totalHours =
-    isNaN(service.durationWeeklyHours) || isNaN(service.durationWeeks)
+  let totalHours =
+    $derived(isNaN(service.durationWeeklyHours) || isNaN(service.durationWeeks)
       ? 0
-      : (service.durationWeeklyHours || 0) * (service.durationWeeks || 0);
+      : (service.durationWeeklyHours || 0) * (service.durationWeeks || 0));
 </script>
 
 <FieldSet title="Durée de la prestation">
