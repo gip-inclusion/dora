@@ -300,10 +300,10 @@ class ServiceAdmin(admin.GISModelAdmin):
             and is_wet_run
             and (duplicated_services or geo_data_missing or draft_services_created)
         ):
-            messages.error(
+            messages.warning(
                 request,
                 mark_safe(
-                    "<b>Les avertissements ci-dessous sont uniquement à titre informatif. Aucune opération décrite n'a été effectuée dans la base de données.</b>"
+                    "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
                 ),
             )
 
@@ -345,9 +345,13 @@ class ServiceAdmin(admin.GISModelAdmin):
                 for service in draft_services_created
             )
 
-            wet_run_message = f"<b>{title_prefix}Services importés en brouillon</b><br/>{len(draft_services_created)} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication"
-            test_run_message = f"<b>{title_prefix}Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
-            message = wet_run_message if is_wet_run else test_run_message
+            if errors and is_wet_run:
+                message = "<b>Informations manquantes</b><br/> Contactez les structures pour compléter ces éléments avant importation"
+            if not errors and is_wet_run:
+                message = f"<b>{title_prefix}Services importés en brouillon</b><br/>{len(draft_services_created)} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication"
+            if not is_wet_run:
+                message = f"<b>{title_prefix}Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
+
             messages.warning(
                 request,
                 mark_safe(message + f" :<br/>{draft_list}"),

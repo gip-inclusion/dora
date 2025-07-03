@@ -578,10 +578,10 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, ".")
 
-        mock_messages.error.assert_any_call(
+        mock_messages.warning.assert_any_call(
             request,
             mark_safe(
-                "<b>Les avertissements ci-dessous sont uniquement à titre informatif. Aucune opération décrite n'a été effectuée dans la base de données.</b>"
+                "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
             ),
         )
 
@@ -604,7 +604,7 @@ class ImportServicesViewTestCase(APITestCase):
         mock_messages.warning.assert_any_call(
             request,
             mark_safe(
-                '<b>Services importés en brouillon</b><br/>1 services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication :<br/>• [1] Service "Service Test" - Manque : contact email, lieu de déroulement'
+                '<b>Informations manquantes</b><br/> Contactez les structures pour compléter ces éléments avant importation :<br/>• [1] Service "Service Test" - Manque : contact email, lieu de déroulement'
             ),
         )
 
