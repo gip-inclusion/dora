@@ -45,31 +45,6 @@ class ImportServicesViewTestCase(APITestCase):
             "geo_data_missing_lines": [],
             "draft_services_created": [],
         }
-        self.mock_warning_result = {
-            "created_count": 3,
-            "errors": [],
-            "duplicated_services": [
-                {
-                    "idx": 2,
-                    "siret": "1234",
-                    "name": "Service A",
-                    "model_slug": "slug_1",
-                    "contact_email": "a@a.com",
-                },
-                {
-                    "idx": 3,
-                    "siret": "3456",
-                    "name": "Service B",
-                    "model_slug": "slug_2",
-                    "contact_email": "b@b.com",
-                },
-            ],
-            "geo_data_missing_lines": [
-                {"idx": 1, "address": "123 Main St", "city": "Paris"},
-                {"idx": 3, "address": "456 Oak Ave", "city": "Lyon"},
-            ],
-            "draft_services_created": [],
-        }
 
     def create_csv_file(self, content, filename="test.csv"):
         return SimpleUploadedFile(
@@ -170,7 +145,7 @@ class ImportServicesViewTestCase(APITestCase):
         mock_messages.error.assert_called_once_with(
             request,
             mark_safe(
-                "<b>Échec de l'import - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêchent l'import. Veuillez corriger les éléments suivants :<br/>"
+                "<b>Échec de l'import</b><br/>Aucun service n’a été importé, car le fichier comporte des erreurs. Veuillez corriger les éléments suivants :<br/>"
                 "• [2] SIRET manquant.<br/>"
                 "• [3] Structure introuvable."
             ),
@@ -256,7 +231,7 @@ class ImportServicesViewTestCase(APITestCase):
         mock_messages.error.assert_called_once_with(
             request,
             mark_safe(
-                "<b>Échec de l'import - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêchent l'import. Veuillez corriger les éléments suivants :<br/>"
+                "<b>Échec de l'import</b><br/>Aucun service n’a été importé, car le fichier comporte des erreurs. Veuillez corriger les éléments suivants :<br/>"
                 "• [2] SIRET manquant.<br/>"
                 "• [3] Structure introuvable."
             ),
@@ -384,8 +359,110 @@ class ImportServicesViewTestCase(APITestCase):
             ),
         )
 
-    def test_combined_warnings(self, mock_import, mock_messages):
-        mock_import.return_value = self.mock_warning_result
+    def test_combined_warnings_when_wet_run_with_errors(
+        self, mock_import, mock_messages
+    ):
+        mock_import.return_value = {
+            "created_count": 3,
+            "errors": ["[2] Siret manquant"],
+            "duplicated_services": [
+                {
+                    "idx": 2,
+                    "siret": "1234",
+                    "name": "Service A",
+                    "model_slug": "slug_1",
+                    "contact_email": "a@a.com",
+                },
+                {
+                    "idx": 3,
+                    "siret": "3456",
+                    "name": "Service B",
+                    "model_slug": "slug_2",
+                    "contact_email": "b@b.com",
+                },
+            ],
+            "geo_data_missing_lines": [
+                {"idx": 1, "address": "123 Main St", "city": "Paris"},
+                {"idx": 3, "address": "456 Oak Ave", "city": "Lyon"},
+            ],
+            "draft_services_created": [
+                {
+                    "idx": 1,
+                    "name": "Service Test",
+                    "missing_fields": ["contact email", "lieu de déroulement"],
+                }
+            ],
+        }
+
+        csv_content = "header1,header2\nvalue1,value2"
+        csv_file = self.create_csv_file(csv_content)
+
+        request = self.factory.post(
+            "/admin/services/service/import-services/",
+            {"csv_file": csv_file, "test_run": "off"},
+        )
+        request.user = self.user
+
+        response = self.service_admin.import_services_view(request)
+
+        self.assertIsInstance(response, HttpResponseRedirect)
+        self.assertEqual(response.url, ".")
+
+        mock_messages.warning.assert_any_call(
+            request,
+            mark_safe(
+                "<b>Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
+                '• [2] SIRET 1234 - il existe déjà un service avec le modèle slug_1 et le courriel "a@a.com"<br/>'
+                '• [3] SIRET 3456 - il existe déjà un service avec le modèle slug_2 et le courriel "b@b.com"'
+            ),
+        )
+        mock_messages.warning.assert_any_call(
+            request,
+            mark_safe(
+                "<b>Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
+                "• [1] 123 Main St  Paris<br/>"
+                "• [3] 456 Oak Ave  Lyon"
+            ),
+        )
+        mock_messages.warning.assert_any_call(
+            request,
+            mark_safe(
+                '<b>Services importés en brouillon</b><br/>1 services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication :<br/>• [1] Service "Service Test" - Manque : contact email, lieu de déroulement'
+            ),
+        )
+
+    def test_combined_warnings_when_wet_run_no_errors(self, mock_import, mock_messages):
+        mock_import.return_value = {
+            "created_count": 3,
+            "errors": [],
+            "duplicated_services": [
+                {
+                    "idx": 2,
+                    "siret": "1234",
+                    "name": "Service A",
+                    "model_slug": "slug_1",
+                    "contact_email": "a@a.com",
+                },
+                {
+                    "idx": 3,
+                    "siret": "3456",
+                    "name": "Service B",
+                    "model_slug": "slug_2",
+                    "contact_email": "b@b.com",
+                },
+            ],
+            "geo_data_missing_lines": [
+                {"idx": 1, "address": "123 Main St", "city": "Paris"},
+                {"idx": 3, "address": "456 Oak Ave", "city": "Lyon"},
+            ],
+            "draft_services_created": [
+                {
+                    "idx": 1,
+                    "name": "Service Test",
+                    "missing_fields": ["contact email", "lieu de déroulement"],
+                }
+            ],
+        }
 
         csv_content = "header1,header2\nvalue1,value2"
         csv_file = self.create_csv_file(csv_content)
@@ -415,6 +492,12 @@ class ImportServicesViewTestCase(APITestCase):
                 "<b>Import réalisé - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
                 "• [1] 123 Main St  Paris<br/>"
                 "• [3] 456 Oak Ave  Lyon"
+            ),
+        )
+        mock_messages.warning.assert_any_call(
+            request,
+            mark_safe(
+                '<b>Import réalisé - Services importés en brouillon</b><br/>1 services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication :<br/>• [1] Service "Service Test" - Manque : contact email, lieu de déroulement'
             ),
         )
 
