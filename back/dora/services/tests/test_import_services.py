@@ -666,9 +666,7 @@ class ImportServicesTestCase(TestCase):
             'Le fichier nommé "test_file" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
         )
 
-    def test_non_unique_source_label_dry_run(self):
-        baker.make("ServiceSource", value="test_file", label="Test Source")
-
+    def test_source_label_not_created_dry_run(self):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,city,\n"
@@ -688,6 +686,7 @@ class ImportServicesTestCase(TestCase):
 
         self.assertFalse(result["errors"])
         self.assertEqual(result["created_count"], 1)
+        self.assertFalse(ServiceSource.objects.filter(label="New Label").exists())
 
     def test_should_remove_first_two_lines(self):
         csv_content = (
