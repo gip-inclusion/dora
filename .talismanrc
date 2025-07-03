@@ -9,4 +9,6 @@ fileignoreconfig:
     checksum: f65ff95262da014ae116d2c2f81e6438787e27d71ffcd6642773e803c78f8fbd
   - filename: back/envs-example/dev.env
     checksum: 09b186afff65d138433589b78cee86675d8118e18f61610248649ec0f33a1d81
+  - filename: back/dora/core/csv_user_import.py
+    checksum: a9925f16fd3bb1de8e75a8a21a5e4872f0f4a12b638a61206f5cf275ebd6e172
 version: ""
