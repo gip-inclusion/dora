@@ -3,7 +3,6 @@ drop table if exists mb_user;
 create table mb_user as
 select
     users_user.id,
-    users_user.ic_id,
     users_user.email,
     users_user.last_name,
     users_user.first_name,
