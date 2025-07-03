@@ -345,7 +345,7 @@ class ImportServicesViewTestCase(APITestCase):
         mock_messages.error.assert_called_once_with(
             request,
             mark_safe(
-                "<b>Test terminé - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêchent l'import. Veuillez corriger les éléments suivants :<br/>"
+                "<b>Test terminé - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêcheront l'import. Veuillez corriger les éléments suivants :<br/>"
                 "• [2] SIRET manquant.<br/>"
                 "• [3] Structure introuvable."
             ),
@@ -578,6 +578,11 @@ class ImportServicesViewTestCase(APITestCase):
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, ".")
 
+        self.assertEqual(
+            mock_messages.add_message.call_args[0][2],
+            "<b>D'autres irrégularités non bloquantes ont été détectées :</b>",
+        )
+
         mock_messages.warning.assert_any_call(
             request,
             mark_safe(
@@ -597,7 +602,7 @@ class ImportServicesViewTestCase(APITestCase):
         mock_messages.warning.assert_any_call(
             request,
             mark_safe(
-                '<b>Services importés en brouillon</b><br/>1 services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication :<br/>• [1] Service "Service Test" - Manque : contact email, lieu de déroulement'
+                '<b>Informations manquantes</b><br/> Contactez les structures pour compléter ces éléments avant importation :<br/>• [1] Service "Service Test" - Manque : contact email, lieu de déroulement'
             ),
         )
 
@@ -647,6 +652,8 @@ class ImportServicesViewTestCase(APITestCase):
 
         self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.url, "..")
+
+        mock_messages.add_message.assert_not_called()
 
         mock_messages.warning.assert_any_call(
             request,
