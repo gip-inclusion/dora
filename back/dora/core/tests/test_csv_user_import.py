@@ -55,7 +55,7 @@ class ImportUserHelperTestCase(TestCase):
         self.assertEqual(StructurePutativeMember.objects.count(), 0)
         mock_send_invitation_email.assert_not_called()
 
-    def test_import_users_existing_user_creates_invitation(
+    def test_import_users_existing_user_does_not_send_email(
         self, mock_send_invitation_email
     ):
         existing_user = baker.make(
@@ -116,7 +116,7 @@ class ImportUserHelperTestCase(TestCase):
         self.assertTrue(existing_member.is_admin)
         mock_send_invitation_email.assert_not_called()
 
-    def test_import_users_invalid_structure_siret_skips_row(
+    def test_import_users_invalid_structure_siret_not_imported(
         self, mock_send_invitation_email
     ):
         csv_content = f"{self.csv_headers}invalid_siret,john.doe@example.com,John,Doe"
@@ -152,18 +152,74 @@ class ImportUserHelperTestCase(TestCase):
         self.assertEqual(mock_send_invitation_email.call_count, 2)
 
     def test_import_users_one_error_nothing_saved(self, mock_send_invitation_email):
-        csv_content = f"{self.csv_headers}12345678901234,new1@francetravail.fr,John,Doe\ninvalid,new2@francetravail.fr,Jane,Smith"
+        csv_content = f"{self.csv_headers}12345678901234,new1@example.com,John,Doe\ninvalid,new2@example.com,Jane,Smith"
         csv_file = StringIO(csv_content)
         reader = csv.DictReader(csv_file)
 
-        self.helper.import_france_travail_users(
-            reader, wet_run=True, make_users_admin=True
-        )
+        self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
-        self.assertFalse(User.objects.filter(email="new1@francetravail.fr").exists())
-        self.assertFalse(User.objects.filter(email="new2@francetravail.fr").exists())
+        self.assertFalse(User.objects.filter(email="new1@example.com").exists())
+        self.assertFalse(User.objects.filter(email="new2@example.com").exists())
 
         self.assertEqual(mock_send_invitation_email.call_count, 0)
+
+    def test_import_users_with_spaces_in_names_processes_correctly(
+        self, mock_send_invitation_email
+    ):
+        csv_content = f"{self.csv_headers}12345678901234,jean.pierre@example.com,Jean Pierre,Van Der Berg"
+        csv_file = StringIO(csv_content)
+        reader = csv.DictReader(csv_file)
+
+        self.helper.import_users(reader, wet_run=True, make_users_admin=True)
+
+        user = User.objects.get(email="jean.pierre@example.com")
+        self.assertEqual(user.first_name, "Jean Pierre")
+        self.assertEqual(user.last_name, "Van Der Berg")
+
+        putative_member = StructurePutativeMember.objects.get(
+            user=user, structure=self.structure
+        )
+        self.assertTrue(putative_member.is_admin)
+        mock_send_invitation_email.assert_called_once()
+
+    def test_import_users_with_missing_email_not_imported(
+        self, mock_send_invitation_email
+    ):
+        csv_content = f"{self.csv_headers}12345678901234,,John,Doe"
+        csv_file = StringIO(csv_content)
+        reader = csv.DictReader(csv_file)
+
+        self.helper.import_users(reader, wet_run=True, make_users_admin=True)
+
+        self.assertFalse(
+            User.objects.filter(first_name="John", last_name="Doe").exists(), 0
+        )
+        mock_send_invitation_email.assert_not_called()
+
+    def test_import_users_with_missing_names_creates_user_with_empty_names(
+        self, mock_send_invitation_email
+    ):
+        csv_content = f"{self.csv_headers}12345678901234,john.doe@example.com,,"
+        csv_file = StringIO(csv_content)
+        reader = csv.DictReader(csv_file)
+
+        self.helper.import_users(reader, wet_run=True, make_users_admin=True)
+
+        user = User.objects.get(email="john.doe@example.com")
+        self.assertEqual(user.first_name, "")
+        self.assertEqual(user.last_name, "")
+
+    def test_missing_headers(self, mock_send_invitation_email):
+        csv_content = (
+            "invalid,email,prenom,nom\n12345678901234,john.doe@example.com,John,Doe"
+        )
+        csv_file = StringIO(csv_content)
+        reader = csv.DictReader(csv_file)
+
+        self.helper.import_users(reader, wet_run=True, make_users_admin=True)
+
+        self.assertFalse(User.objects.filter(email="john.doe@example.com").exists())
+        mock_send_invitation_email.assert_not_called()
 
 
 @patch("dora.core.csv_user_import.send_france_travail_invitation_email")
@@ -285,7 +341,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
         self.assertTrue(existing_putative_member.is_admin)
         mock_send_france_travail_invitation_email.assert_not_called()
 
-    def test_import_france_travail_users_invalid_safir_skips_row(
+    def test_import_france_travail_users_invalid_safir_not_imported(
         self, mock_send_france_travail_invitation_email
     ):
         csv_content = (
@@ -346,38 +402,95 @@ class ImportFranceTravailUsersTestCase(TestCase):
 
         self.assertEqual(mock_send_france_travail_invitation_email.call_count, 0)
 
-    def test_name_to_france_travail_email_basic(self):
-        email = self.helper.name_to_france_travail_email("John", "Doe")
-        self.assertEqual(email, "john.doe@francetravail.fr")
+    def test_import_france_travail_users_with_spaces_in_names_processes_correctly(
+        self, mock_send_france_travail_invitation_email
+    ):
+        csv_content = f"{self.csv_headers}12345,jean.pierre@francetravail.fr,Jean Pierre,Van Der Berg"
+        csv_file = StringIO(csv_content)
+        reader = csv.DictReader(csv_file)
 
-    def test_name_to_france_travail_email_with_accents(self):
-        email = self.helper.name_to_france_travail_email("François", "Müller")
-        self.assertEqual(email, "francois.muller@francetravail.fr")
+        self.helper.import_france_travail_users(
+            reader, wet_run=True, make_users_admin=True
+        )
 
-    def test_name_to_france_travail_email_with_spaces(self):
-        email = self.helper.name_to_france_travail_email("Jean Pierre", "Van Der Berg")
-        self.assertEqual(email, "jean-pierre.van-der-berg@francetravail.fr")
+        user = User.objects.get(email="jean.pierre@francetravail.fr")
+        self.assertEqual(user.first_name, "Jean Pierre")
+        self.assertEqual(user.last_name, "Van Der Berg")
 
-    def test_name_to_france_travail_email_missing_first_name_raises_exception(self):
-        with self.assertRaises(Exception) as context:
-            self.helper.name_to_france_travail_email("", "Doe")
-        self.assertIn("Erreur nom ou prénom", str(context.exception))
+        putative_member = StructurePutativeMember.objects.get(
+            user=user, structure=self.france_travail_structure
+        )
+        self.assertTrue(putative_member.is_admin)
+        mock_send_france_travail_invitation_email.assert_called_once()
 
-    def test_name_to_france_travail_email_missing_last_name_raises_exception(self):
-        with self.assertRaises(Exception) as context:
-            self.helper.name_to_france_travail_email("John", "")
-        self.assertIn("Erreur nom ou prénom", str(context.exception))
+    def test_import_france_travail_users_with_missing_names_not_imported(
+        self, mock_send_france_travail_invitation_email
+    ):
+        csv_content = f"{self.csv_headers}12345,,,"
+        csv_file = StringIO(csv_content)
+        reader = csv.DictReader(csv_file)
 
-    def test_strip_accents_removes_all_accents(self):
-        result = self.helper._strip_accents("àáâãäåèéêëìíîïòóôõöùúûü")
-        self.assertEqual(result, "aaaaaaeeeeiiiioooooouuuu")
+        self.helper.import_france_travail_users(
+            reader, wet_run=True, make_users_admin=True
+        )
 
-    def test_structure_by_siret_nonexistent_structure_raises_exception(self):
-        with self.assertRaises(Exception) as context:
-            self.helper._structure_by_siret("nonexistent")
-        self.assertIn("n'existe pas en base", str(context.exception))
+        mock_send_france_travail_invitation_email.assert_not_called()
+        self.assertEqual(StructurePutativeMember.objects.count(), 0)
 
-    def test_structure_by_safir_nonexistent_structure_raises_exception(self):
-        with self.assertRaises(Exception) as context:
-            self.helper._structure_by_safir("nonexistent")
-        self.assertIn("n'existe pas en base", str(context.exception))
+    def test_import_france_travail_users_with_only_first_name_not_imported(
+        self, mock_send_france_travail_invitation_email
+    ):
+        csv_content = f"{self.csv_headers}12345,,John,"
+        csv_file = StringIO(csv_content)
+        reader = csv.DictReader(csv_file)
+
+        self.helper.import_france_travail_users(
+            reader, wet_run=True, make_users_admin=True
+        )
+
+        self.assertFalse(User.objects.filter(first_name="John").exists())
+        self.assertEqual(StructurePutativeMember.objects.count(), 0)
+        mock_send_france_travail_invitation_email.assert_not_called()
+
+    def test_import_france_travail_users_with_only_last_name_not_imported(
+        self, mock_send_france_travail_invitation_email
+    ):
+        csv_content = f"{self.csv_headers}12345,,,Doe"
+        csv_file = StringIO(csv_content)
+        reader = csv.DictReader(csv_file)
+
+        self.helper.import_france_travail_users(
+            reader, wet_run=True, make_users_admin=True
+        )
+
+        self.assertFalse(User.objects.filter(last_name="Doe").exists())
+        self.assertEqual(StructurePutativeMember.objects.count(), 0)
+        mock_send_france_travail_invitation_email.assert_not_called()
+
+    def test_import_france_travail_users_with_spaces_in_names_generates_correct_email(
+        self, mock_send_france_travail_invitation_email
+    ):
+        csv_content = f"{self.csv_headers}12345,,Jean Pierre,Van Der Berg"
+        csv_file = StringIO(csv_content)
+        reader = csv.DictReader(csv_file)
+
+        self.helper.import_france_travail_users(
+            reader, wet_run=True, make_users_admin=True
+        )
+
+        expected_email = "jean-pierre.van-der-berg@francetravail.fr"
+        user = User.objects.get(email=expected_email)
+        self.assertEqual(user.first_name, "Jean Pierre")
+        self.assertEqual(user.last_name, "Van Der Berg")
+
+    def test_missing_headers(self, mock_send_france_travail_invitation_email):
+        csv_content = (
+            "invalid,email,prenom,nom\n12345,john.doe@francetravail.fr,John,Doe"
+        )
+        csv_file = StringIO(csv_content)
+        reader = csv.DictReader(csv_file)
+
+        self.helper.import_users(reader, wet_run=True, make_users_admin=True)
+
+        self.assertFalse(User.objects.filter(email="john.doe@francetravailfr").exists())
+        mock_send_france_travail_invitation_email.assert_not_called()

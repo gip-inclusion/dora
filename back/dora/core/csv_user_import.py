@@ -72,9 +72,12 @@ class ImportUserHelper:
             try:
                 structure_siret = row.get("structure_siret")
                 structure = self._structure_by_siret(structure_siret)
-                email = row.get("email")
+                email = row.get("email").strip()
                 first_name = row.get("prenom")
                 last_name = row.get("nom")
+
+                if not email:
+                    raise Exception("An email is required")
 
                 users_to_import.append(
                     {
@@ -111,6 +114,7 @@ class ImportUserHelper:
         result = re.sub(r"[ìíîï]", "i", result)
         result = re.sub(r"[òóôõö]", "o", result)
         result = re.sub(r"[ùúûü]", "u", result)
+        result = re.sub(r"[ç]", "c", result)
 
         return result
 
