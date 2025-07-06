@@ -1,4 +1,5 @@
 import re
+from typing import Dict
 
 from dora.structures.emails import (
     send_france_travail_invitation_email,
@@ -10,9 +11,6 @@ from dora.structures.models import (
     StructurePutativeMember,
 )
 from dora.users.models import User
-
-# TODO: check headers
-# TODO: check email?
 
 
 class ImportUserHelper:
@@ -57,7 +55,7 @@ class ImportUserHelper:
                     f"{index}. Import {user['first_name']} {user['last_name']} pour l'agence avec le code SAFIR : {safir}"
                 )
                 if wet_run:
-                    self.invite_user(
+                    self.import_user(
                         user,
                         is_france_travail=True,
                         admin=make_users_admin,
@@ -101,7 +99,7 @@ class ImportUserHelper:
                     f"{index}. Import {user['first_name']} {user['last_name']} pour la structure avec le SIRET : {structure_siret}"
                 )
                 if wet_run:
-                    self.invite_user(
+                    self.import_user(
                         user,
                         is_france_travail=False,
                         admin=make_users_admin,
@@ -146,21 +144,14 @@ class ImportUserHelper:
             return " (mais désormais en tant qu'admin)"
         return ""
 
-    def invite_user(self, user, is_france_travail, admin=True) -> None:
+    def import_user(self, user, is_france_travail, admin=True) -> None:
         email = user["email"]
-        first_name = user["first_name"]
-        last_name = user["last_name"]
         structure = user["structure"]
 
         try:
             user = User.objects.get_by_email(email)
         except User.DoesNotExist:
-            user = User.objects.create_user(
-                email,
-            )
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
+            user = self.create_new_user(user)
         try:
             member = StructurePutativeMember.objects.get(user=user, structure=structure)
             result = f"{email} a déjà été invité·e"
@@ -182,17 +173,38 @@ class ImportUserHelper:
                 if admin:
                     result += " comme administrateur·rice"
 
-                inviter_name = "L’équipe DORA"
-
-                if is_france_travail:
-                    send_france_travail_invitation_email(
-                        member,
-                        inviter_name,
-                    )
-                else:
-                    send_invitation_email(member, inviter_name)
+                self.send_email_to_new_member(member, is_france_travail)
 
         print(result)
+
+    @staticmethod
+    def create_new_user(user: Dict[str, str]) -> User:
+        email = user["email"]
+        first_name = user["first_name"]
+        last_name = user["last_name"]
+
+        user = User.objects.create_user(
+            email,
+        )
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+
+        return user
+
+    @staticmethod
+    def send_email_to_new_member(
+        member: StructurePutativeMember, is_france_travail: bool
+    ) -> None:
+        inviter_name = "L’équipe DORA"
+
+        if is_france_travail:
+            send_france_travail_invitation_email(
+                member,
+                inviter_name,
+            )
+        else:
+            send_invitation_email(member, inviter_name)
 
     @staticmethod
     def _display_run_type(wet_run):
