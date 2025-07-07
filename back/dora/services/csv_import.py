@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional, Union
 
 from django.db import IntegrityError, transaction
 from django.db.models import QuerySet
+from django.utils import timezone
 
 from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import get_geo_data
@@ -292,6 +293,7 @@ class ImportServicesHelper:
 
         if service.is_eligible_for_publishing():
             service.status = ServiceStatus.PUBLISHED
+            service.publication_date = timezone.now()
         else:
             missing_fields = service.get_missing_properties_for_publishing()
             self.draft_services_created.append(
