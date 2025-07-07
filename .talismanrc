@@ -9,4 +9,6 @@ fileignoreconfig:
     checksum: f65ff95262da014ae116d2c2f81e6438787e27d71ffcd6642773e803c78f8fbd
   - filename: back/envs-example/dev.env
     checksum: 09b186afff65d138433589b78cee86675d8118e18f61610248649ec0f33a1d81
+  - filename: front/src/routes/_index/sub-menu.svelte
+    checksum: 86a32003f7024fbc9fce4a66043aa3c1099f0d4dd02a49be740dfbb87459ff36
 version: ""
