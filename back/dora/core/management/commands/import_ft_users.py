@@ -39,7 +39,7 @@ class Command(BaseCommand):
         admin = options["admin"]
 
         with open(filename) as structures_file:
-            reader = csv.DictReader(structures_file, delimiter=",")
+            reader = csv.reader(structures_file)
             self.import_helper.import_france_travail_users(
                 reader, wet_run=wet_run, make_users_admin=admin
             )

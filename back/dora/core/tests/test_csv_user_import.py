@@ -23,7 +23,7 @@ class ImportUserHelperTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345678901234,john.doe@example.com,John,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.assertFalse(User.objects.filter(email="john.doe@example.com").exists())
         self.assertEqual(StructurePutativeMember.objects.count(), 0)
@@ -47,7 +47,7 @@ class ImportUserHelperTestCase(TestCase):
     def test_import_users_dry_run_no_db_changes(self, mock_send_invitation_email):
         csv_content = f"{self.csv_headers}12345678901234,john.doe@example.com,John,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=False, make_users_admin=True)
 
@@ -64,7 +64,7 @@ class ImportUserHelperTestCase(TestCase):
 
         csv_content = f"{self.csv_headers}12345678901234,john.doe@example.com,John,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=False)
 
@@ -90,7 +90,7 @@ class ImportUserHelperTestCase(TestCase):
 
         csv_content = f"{self.csv_headers}12345678901234,john.doe@example.com,John,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
@@ -108,7 +108,7 @@ class ImportUserHelperTestCase(TestCase):
 
         csv_content = f"{self.csv_headers}12345678901234,john.doe@example.com,John,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
@@ -121,7 +121,7 @@ class ImportUserHelperTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}invalid_siret,john.doe@example.com,John,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
@@ -133,7 +133,7 @@ class ImportUserHelperTestCase(TestCase):
 
         csv_content = f"{self.csv_headers}12345678901234,john.doe@example.com,John,Doe\n98765432109876,jane.smith@example.com,Jane,Smith"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
@@ -154,7 +154,7 @@ class ImportUserHelperTestCase(TestCase):
     def test_import_users_one_error_nothing_saved(self, mock_send_invitation_email):
         csv_content = f"{self.csv_headers}12345678901234,new1@example.com,John,Doe\ninvalid,new2@example.com,Jane,Smith"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
@@ -168,7 +168,7 @@ class ImportUserHelperTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345678901234,jean.pierre@example.com,Jean Pierre,Van Der Berg"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
@@ -187,7 +187,7 @@ class ImportUserHelperTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345678901234,,John,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
@@ -201,7 +201,7 @@ class ImportUserHelperTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345678901234,john.doe@example.com,,"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
@@ -214,12 +214,31 @@ class ImportUserHelperTestCase(TestCase):
             "invalid,email,prenom,nom\n12345678901234,john.doe@example.com,John,Doe"
         )
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
         self.assertFalse(User.objects.filter(email="john.doe@example.com").exists())
         mock_send_invitation_email.assert_not_called()
+
+    def test_idempotence(self, mock_send_invitation_email):
+        csv_content = f"{self.csv_headers}12345678901234,john.doe@example.com,John,Doe"
+        csv_file = StringIO(csv_content)
+        reader = csv.reader(csv_file)
+
+        self.helper.import_users(reader, wet_run=True, make_users_admin=True)
+        initial_user_count = User.objects.count()
+        initial_putative_member_count = StructurePutativeMember.objects.count()
+
+        csv_file = StringIO(csv_content)
+        reader = csv.reader(csv_file)
+        self.helper.import_users(reader, wet_run=True, make_users_admin=True)
+
+        self.assertEqual(User.objects.count(), initial_user_count)
+        self.assertEqual(
+            StructurePutativeMember.objects.count(), initial_putative_member_count
+        )
+        self.assertEqual(mock_send_invitation_email.call_count, 1)
 
 
 @patch("dora.core.csv_user_import.send_france_travail_invitation_email")
@@ -235,7 +254,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345,john.doe@francetravail.fr,John,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.assertFalse(
             User.objects.filter(email="john.doe@francetravail.fr").exists()
@@ -265,7 +284,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345,john.doe@francetravail.fr,John,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=False, make_users_admin=True
@@ -282,7 +301,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345,,Jean-Pierre,Dupont"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -307,7 +326,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345,,François,Müller"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -331,7 +350,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
 
         csv_content = f"{self.csv_headers}12345,john.doe@francetravail.fr,John,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -348,7 +367,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
             f"{self.csv_headers}invalid_safir,john.doe@francetravail.fr,John,Doe"
         )
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -366,7 +385,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
 
         csv_content = f"{self.csv_headers}12345,john.doe@francetravail.fr,John,Doe\n67890,jane.smith@francetravail.fr,Jane,Smith"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -391,7 +410,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345,new1@francetravail.fr,John,Doe\ninvalid,new2@francetravail.fr,Jane,Smith"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -407,7 +426,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345,jean.pierre@francetravail.fr,Jean Pierre,Van Der Berg"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -428,7 +447,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345,,,"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -442,7 +461,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345,,John,"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -457,7 +476,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345,,,Doe"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -472,7 +491,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     ):
         csv_content = f"{self.csv_headers}12345,,Jean Pierre,Van Der Berg"
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_france_travail_users(
             reader, wet_run=True, make_users_admin=True
@@ -488,9 +507,32 @@ class ImportFranceTravailUsersTestCase(TestCase):
             "invalid,email,prenom,nom\n12345,john.doe@francetravail.fr,John,Doe"
         )
         csv_file = StringIO(csv_content)
-        reader = csv.DictReader(csv_file)
+        reader = csv.reader(csv_file)
 
         self.helper.import_users(reader, wet_run=True, make_users_admin=True)
 
         self.assertFalse(User.objects.filter(email="john.doe@francetravailfr").exists())
         mock_send_france_travail_invitation_email.assert_not_called()
+
+    def test_idempotence(self, mock_send_france_travail_invitation_email):
+        csv_content = f"{self.csv_headers}12345,john.doe@francetravail.fr,John,Doe"
+        csv_file = StringIO(csv_content)
+        reader = csv.reader(csv_file)
+
+        self.helper.import_france_travail_users(
+            reader, wet_run=True, make_users_admin=True
+        )
+        initial_user_count = User.objects.count()
+        initial_putative_member_count = StructurePutativeMember.objects.count()
+
+        csv_file = StringIO(csv_content)
+        reader = csv.reader(csv_file)
+        self.helper.import_france_travail_users(
+            reader, wet_run=True, make_users_admin=True
+        )
+
+        self.assertEqual(User.objects.count(), initial_user_count)
+        self.assertEqual(
+            StructurePutativeMember.objects.count(), initial_putative_member_count
+        )
+        self.assertEqual(mock_send_france_travail_invitation_email.call_count, 1)

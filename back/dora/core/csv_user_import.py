@@ -1,5 +1,5 @@
 import re
-from typing import Dict
+from typing import Dict, List
 
 from dora.structures.emails import (
     send_france_travail_invitation_email,
@@ -24,7 +24,13 @@ class ImportUserHelper:
         users_to_import = []
         self._display_run_type(wet_run)
 
-        for index, row in enumerate(reader):
+        [headers, *lines] = reader
+
+        if self.check_headers(headers, self.FRANCE_TRAVAIL_CSV_HEADERS):
+            return
+
+        lines = [dict(zip(headers, line)) for line in lines]
+        for index, row in enumerate(lines, 2):
             try:
                 safir = row["safir"]
                 structure = self._structure_by_safir(safir)
@@ -66,7 +72,14 @@ class ImportUserHelper:
         users_to_import = []
         self._display_run_type(wet_run)
 
-        for index, row in enumerate(reader):
+        [headers, *lines] = reader
+
+        if self.check_headers(headers, self.NON_FRANCE_TRAVAIL_CSV_HEADERS):
+            return
+
+        lines = [dict(zip(headers, line)) for line in lines]
+
+        for index, row in enumerate(lines, 2):
             try:
                 structure_siret = row.get("structure_siret")
                 structure = self._structure_by_siret(structure_siret)
@@ -207,8 +220,24 @@ class ImportUserHelper:
             send_invitation_email(member, inviter_name)
 
     @staticmethod
-    def _display_run_type(wet_run):
+    def _display_run_type(wet_run: bool) -> None:
         if wet_run:
             print("PRODUCTION RUN")
         else:
             print("DRY RUN")
+
+    @staticmethod
+    def check_headers(
+        actual_headers: List[str], expected_headers: List[str]
+    ) -> set[str]:
+        missing_headers = set(expected_headers) - set(actual_headers)
+        if missing_headers:
+            print(
+                f"Les headers suivants sont manquants : ({', '.join(missing_headers)})"
+            )
+
+        return missing_headers
+
+    FRANCE_TRAVAIL_CSV_HEADERS = ["safir", "email", "prenom", "nom"]
+
+    NON_FRANCE_TRAVAIL_CSV_HEADERS = ["structure_siret", "email", "prenom", "nom"]
