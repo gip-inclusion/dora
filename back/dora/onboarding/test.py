@@ -11,12 +11,13 @@ from dora.users.enums import MainActivity
 @pytest.mark.parametrize(
     "main_activity,expected_sib_list",
     [
-        (MainActivity.OFFREUR, settings.SIB_ONBOARDING_LIST),
+        (MainActivity.OFFREUR, settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST),
         (MainActivity.ACCOMPAGNATEUR, settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST),
         (
             MainActivity.ACCOMPAGNATEUR_OFFREUR,
             settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST,
         ),
+        (MainActivity.AUTRE, settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST),
     ],
 )
 @patch("dora.onboarding._create_or_update_sib_contact")
@@ -68,6 +69,8 @@ def test_onboard_other_activities(
     [
         (MainActivity.ACCOMPAGNATEUR, settings.SIB_ONBOARDING_MEMBER_LIST),
         (MainActivity.ACCOMPAGNATEUR_OFFREUR, settings.SIB_ONBOARDING_MEMBER_LIST),
+        (MainActivity.AUTRE, settings.SIB_ONBOARDING_MEMBER_LIST),
+        (MainActivity.OFFREUR, settings.SIB_ONBOARDING_MEMBER_LIST),
     ],
 )
 @patch("dora.onboarding._remove_from_sib_list")
