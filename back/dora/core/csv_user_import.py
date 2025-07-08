@@ -54,7 +54,7 @@ class ImportUserHelper:
                     }
                 )
             except Exception as ex:
-                errors.append(f"[{index + 1}]: {ex}")
+                errors.append(f"[{index}]: {ex}")
 
         if errors:
             print("Il y a des erreurs qui empêchent l'import :")
@@ -107,7 +107,7 @@ class ImportUserHelper:
                 )
 
             except Exception as ex:
-                errors.append(f"[{index + 1}]: {ex}")
+                errors.append(f"[{index}]: {ex}")
 
         if errors:
             print("Il y a des erreurs qui empêchent l'import :")
