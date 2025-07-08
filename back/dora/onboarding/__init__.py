@@ -6,7 +6,6 @@ from django.conf import settings
 from sib_api_v3_sdk.rest import ApiException as SibApiException
 
 from dora.structures.models import Structure
-from dora.users.enums import MainActivity
 from dora.users.models import User
 
 """
@@ -22,9 +21,6 @@ Il y a également deux nouvelles listes ("routes") SIB distinctes pour l'envoi d
 voir dans les settings :
     - `SIB_ONBOARDING_MEMBER_LIST`
     - `SIB_ONBOARDING_PUTATIVE_MEMBER_LIST`
-
-La route/liste par défaut (`SIB_ONBOARDING_LIST`) reste encore active pour tous les utilisateurs
-offreurs ou d'une autre catégorie.
 """
 
 logger = logging.getLogger(__name__)
@@ -221,7 +217,6 @@ def onboard_user(user: User, structure: Structure):
     if not client:
         return
 
-    # attributs communs à toute les "routes" d'onboarding
     is_first_admin = not structure.has_admin()
     attributes = {
         "PRENOM": user.first_name,
@@ -233,45 +228,19 @@ def onboard_user(user: User, structure: Structure):
         "NEED_VALIDATION": structure.is_pending_member(user),
     }
 
-    # détermination de la liste SiB
-    match user.main_activity:
-        case MainActivity.OFFREUR | MainActivity.AUTRE:
-            # process "standard", on utilise la liste principale
-            sib_list_id = settings.SIB_ONBOARDING_LIST
-            admin_contact = structure.get_most_recently_active_admin()
-            attributes |= {
-                "CONTACT_ADHESION": admin_contact.user.get_safe_name()
-                if admin_contact and not is_first_admin
-                else ""
-            }
-        case MainActivity.ACCOMPAGNATEUR | MainActivity.ACCOMPAGNATEUR_OFFREUR:
-            # pour les accompagnateurs et accompagnateurs + offreurs :
-            sib_list_id = (
-                settings.SIB_ONBOARDING_MEMBER_LIST
-                if user in structure.members.all()
-                else settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST
-            )
-            attributes |= {
-                "NOM_STRUCTURE": structure.name,
-                "CONTACT_ADHESION": [admin.email for admin in structure.admins],
-                "VILLE": quote(structure.city),
-                "CITY_CODE_DORA": structure.city_code,
-                "NO_DEPARTEMENT": structure.department,
-            }
-        case _:
-            logger.error(
-                "Type d'activité inconnue pour l'utilisateur #%s (%s)",
-                user.pk,
-                user.main_activity,
-            )
-            return
+    sib_list_id = int(
+        settings.SIB_ONBOARDING_MEMBER_LIST
+        if user in structure.members.all()
+        else settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST
+    )
 
-    if not sib_list_id:
-        logger.error(
-            "Impossible de déterminer la liste SiB (variables d'environnement ?)"
-        )
-
-    sib_list_id = int(sib_list_id)
+    attributes |= {
+        "NOM_STRUCTURE": structure.name,
+        "CONTACT_ADHESION": [admin.email for admin in structure.admins],
+        "VILLE": quote(structure.city),
+        "CITY_CODE_DORA": structure.city_code,
+        "NO_DEPARTEMENT": structure.department,
+    }
 
     # création ou maj du contact SiB
     _create_or_update_sib_contact(client, user, attributes, sib_list_id)
