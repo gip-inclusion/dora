@@ -11,4 +11,6 @@ fileignoreconfig:
     checksum: 09b186afff65d138433589b78cee86675d8118e18f61610248649ec0f33a1d81
   - filename: front/src/routes/_index/sub-menu.svelte
     checksum: 86a32003f7024fbc9fce4a66043aa3c1099f0d4dd02a49be740dfbb87459ff36
+  - filename: back/dora/onboarding/__init__.py
+    checksum: 870040153fd696507b63900fe42659c64ced9e2d47c6672fe5adbb2658b465a3
 version: ""

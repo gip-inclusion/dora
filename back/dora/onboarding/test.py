@@ -9,21 +9,21 @@ from dora.users.enums import MainActivity
 
 
 @pytest.mark.parametrize(
-    "main_activity,expected_sib_list",
+    "main_activity,expected_brevo_list",
     [
-        (MainActivity.OFFREUR, settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST),
-        (MainActivity.ACCOMPAGNATEUR, settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST),
+        (MainActivity.OFFREUR, settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST),
+        (MainActivity.ACCOMPAGNATEUR, settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST),
         (
             MainActivity.ACCOMPAGNATEUR_OFFREUR,
-            settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST,
+            settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST,
         ),
-        (MainActivity.AUTRE, settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST),
+        (MainActivity.AUTRE, settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST),
     ],
 )
-@patch("dora.onboarding._create_or_update_sib_contact")
-@patch("dora.onboarding._setup_sib_client", Mock(return_value=True))
+@patch("dora.onboarding._create_or_update_brevo_contact")
+@patch("dora.onboarding._setup_brevo_client", Mock(return_value=True))
 def test_onboard_other_activities(
-    mock_create_contact, main_activity, expected_sib_list, api_client
+    mock_create_contact, main_activity, expected_brevo_list, api_client
 ):
     # Les utilisateurs ayant offreurs ou autre pour activité principale
     # sont redirigés vers l'ancienne liste Brevo (onboarding "traditionnel").
@@ -55,33 +55,33 @@ def test_onboard_other_activities(
     )
     assert mock_create_contact.called, "Le contact Brevo n'a pas été créé"
 
-    _, user, attrs, sib_list = mock_create_contact.call_args.args
+    _, user, attrs, brevo_list = mock_create_contact.call_args.args
 
     assert user == invited_user, "L'utilisateur ne correspond pas"
     assert attrs, "Les attributs Brevo ne sont pas définis"
-    assert str(sib_list) == expected_sib_list, (
+    assert str(brevo_list) == expected_brevo_list, (
         "L'utilisateur n'est pas rattaché à la bonne liste Brevo"
     )
 
 
 @pytest.mark.parametrize(
-    "main_activity,expected_sib_list",
+    "main_activity,expected_brevo_list",
     [
-        (MainActivity.ACCOMPAGNATEUR, settings.SIB_ONBOARDING_MEMBER_LIST),
-        (MainActivity.ACCOMPAGNATEUR_OFFREUR, settings.SIB_ONBOARDING_MEMBER_LIST),
-        (MainActivity.AUTRE, settings.SIB_ONBOARDING_MEMBER_LIST),
-        (MainActivity.OFFREUR, settings.SIB_ONBOARDING_MEMBER_LIST),
+        (MainActivity.ACCOMPAGNATEUR, settings.BREVO_ONBOARDING_MEMBER_LIST),
+        (MainActivity.ACCOMPAGNATEUR_OFFREUR, settings.BREVO_ONBOARDING_MEMBER_LIST),
+        (MainActivity.AUTRE, settings.BREVO_ONBOARDING_MEMBER_LIST),
+        (MainActivity.OFFREUR, settings.BREVO_ONBOARDING_MEMBER_LIST),
     ],
 )
-@patch("dora.onboarding._remove_from_sib_list")
-@patch("dora.onboarding._create_or_update_sib_contact")
-@patch("dora.onboarding._setup_sib_client", Mock(return_value=True))
-@patch("dora.onboarding._contact_in_sib_list", Mock(return_value=True))
+@patch("dora.onboarding._remove_from_brevo_list")
+@patch("dora.onboarding._create_or_update_brevo_contact")
+@patch("dora.onboarding._setup_brevo_client", Mock(return_value=True))
+@patch("dora.onboarding._contact_in_brevo_list", Mock(return_value=True))
 def test_onboard_new_member(
     mock_create_contact,
     mock_remove_from_list,
     main_activity,
-    expected_sib_list,
+    expected_brevo_list,
     api_client,
 ):
     # Les utilisateurs accompagnateurs ou accompagnateurs/offreurs
@@ -110,11 +110,11 @@ def test_onboard_new_member(
     )
     assert mock_create_contact.called, "Le contact Brevo n'a pas été créé"
 
-    _, user, attrs, sib_list = mock_create_contact.call_args.args
+    _, user, attrs, brevo_list = mock_create_contact.call_args.args
 
     assert user == member, "L'utilisateur ne correspond pas"
     assert attrs, "Les attributs Brevo ne sont pas définis"
-    assert str(sib_list) == expected_sib_list, (
+    assert str(brevo_list) == expected_brevo_list, (
         "L'utilisateur n'est pas rattaché à la bonne liste Brevo"
     )
 
@@ -123,5 +123,5 @@ def test_onboard_new_member(
         "Pas de retrait de l'utilisateur de la liste Brevo des invités"
     )
     mock_remove_from_list.assert_called_with(
-        True, user, int(settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST)
+        True, user, int(settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST)
     )
