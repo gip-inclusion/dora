@@ -15,6 +15,10 @@ from dora.users.models import User
 
 
 class ImportUserHelper:
+    FRANCE_TRAVAIL_CSV_HEADERS = ["safir", "email", "prenom", "nom"]
+
+    NON_FRANCE_TRAVAIL_CSV_HEADERS = ["structure_siret", "email", "prenom", "nom"]
+
     def import_france_travail_users(
         self,
         reader: csv.reader,
@@ -55,18 +59,18 @@ class ImportUserHelper:
         if errors:
             print("Il y a des erreurs qui empêchent l'import :")
             print(("\n".join(errors)))
+            return
 
-        else:
-            for index, user in enumerate(users_to_import):
-                print(
-                    f"{index}. Import {user['first_name']} {user['last_name']} pour l'agence avec le code SAFIR : {safir}"
+        for index, user in enumerate(users_to_import):
+            print(
+                f"{index}. Import {user['first_name']} {user['last_name']} pour l'agence avec le code SAFIR : {safir}"
+            )
+            if wet_run:
+                self._import_user(
+                    user,
+                    is_france_travail=True,
+                    admin=make_users_admin,
                 )
-                if wet_run:
-                    self._import_user(
-                        user,
-                        is_france_travail=True,
-                        admin=make_users_admin,
-                    )
 
     def import_users(
         self, reader: csv.reader, wet_run: bool = False, make_users_admin: bool = False
@@ -108,18 +112,18 @@ class ImportUserHelper:
         if errors:
             print("Il y a des erreurs qui empêchent l'import :")
             print(("\n".join(errors)))
+            return
 
-        else:
-            for index, user in enumerate(users_to_import):
-                print(
-                    f"{index}. Import {user['first_name']} {user['last_name']} pour la structure avec le SIRET : {structure_siret}"
+        for index, user in enumerate(users_to_import):
+            print(
+                f"{index}. Import {user['first_name']} {user['last_name']} pour la structure avec le SIRET : {structure_siret}"
+            )
+            if wet_run:
+                self._import_user(
+                    user,
+                    is_france_travail=False,
+                    admin=make_users_admin,
                 )
-                if wet_run:
-                    self._import_user(
-                        user,
-                        is_france_travail=False,
-                        admin=make_users_admin,
-                    )
 
     @staticmethod
     def _structure_by_siret(siret: str) -> Structure:
@@ -225,10 +229,6 @@ class ImportUserHelper:
             )
 
         return missing_headers
-
-    FRANCE_TRAVAIL_CSV_HEADERS = ["safir", "email", "prenom", "nom"]
-
-    NON_FRANCE_TRAVAIL_CSV_HEADERS = ["structure_siret", "email", "prenom", "nom"]
 
     @staticmethod
     def _strip_accents(term: str) -> str:
