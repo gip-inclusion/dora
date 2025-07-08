@@ -38,11 +38,7 @@ def send_invitation_email(member, inviter_name):
     )
 
 
-def send_invitation_for_pe_members_email(member, inviter_name):
-    # FIXME: devrait être temporaire,
-    # donc simple copie de l'invitation standard avec quelques variations
-    # ne pas oublier de retirer le template également
-
+def send_france_travail_invitation_email(member, inviter_name):
     structure = member.structure
     invitation_link = furl(settings.FRONTEND_URL).add(
         path="/auth/invitation",
