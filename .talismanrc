@@ -11,4 +11,8 @@ fileignoreconfig:
     checksum: 09b186afff65d138433589b78cee86675d8118e18f61610248649ec0f33a1d81
   - filename: front/src/routes/_index/sub-menu.svelte
     checksum: 86a32003f7024fbc9fce4a66043aa3c1099f0d4dd02a49be740dfbb87459ff36
+  - filename: back/queries/metabase/01-base/0150_mb_location_kinds.sql
+    checksum: 8b2ca8f866c076f8d3cb9f3667d7baa86f2c8d69f51c350f6934700464e193cd
+  - filename: back/queries/metabase/01-base/0160_mb_services_location_kinds.sql
+    checksum: 614c3fc2eff10047184180c7a4072be29b1149ec9b9b046bc50493b547796495
 version: ""
