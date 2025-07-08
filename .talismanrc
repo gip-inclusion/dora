@@ -14,4 +14,8 @@ fileignoreconfig:
   - filename: back/config/settings/sentry.py
     checksum: 31d504c501153d444f0f80eb8a5ddd1028cb344d7921b00c2fed4ef3587eb43d
 
+  - filename: back/queries/metabase/01-base/0150_mb_location_kinds.sql
+    checksum: 8b2ca8f866c076f8d3cb9f3667d7baa86f2c8d69f51c350f6934700464e193cd
+  - filename: back/queries/metabase/01-base/0160_mb_services_location_kinds.sql
+    checksum: 614c3fc2eff10047184180c7a4072be29b1149ec9b9b046bc50493b547796495
 version: ""
