@@ -1,9 +1,10 @@
 import logging
+from typing import Dict, List
 from urllib.parse import quote
 
-import sib_api_v3_sdk as sib_api
+import sib_api_v3_sdk as brevo_api
 from django.conf import settings
-from sib_api_v3_sdk.rest import ApiException as SibApiException
+from sib_api_v3_sdk.rest import ApiException as BrevoApiException
 
 from dora.structures.models import Structure
 from dora.users.models import User
@@ -13,89 +14,69 @@ L'onboarding d'un utilisateur est maintenant décomposé en 2 parties :
     - pour les utilisateurs en attente de validation,
     - pour les utilisateurs déjà validés.
 
-Le process d'onboarding fait essentiellement appel à l'API SendInBlue/Brevo et
-devrait être distinct du modèle utilisateur et/ou structure, d'ou l'implémentation
-dans un module distinct `dora.onboarding`.
-
-Il y a également deux nouvelles listes ("routes") SIB distinctes pour l'envoi des données,
+Il y a également deux nouvelles listes ("routes") Brevo distinctes pour l'envoi des données,
 voir dans les settings :
-    - `SIB_ONBOARDING_MEMBER_LIST`
-    - `SIB_ONBOARDING_PUTATIVE_MEMBER_LIST`
+    - `BREVO_ONBOARDING_MEMBER_LIST`
+    - `BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST`
 """
 
 logger = logging.getLogger(__name__)
 
-
-# note :
-# on mélange ici de l'API SIB et du comportement métier (déclenchement de l'onboarding).
-# Les fonctions "privées" seront déplacées vers l'app `dora.external` qui comportera les
-# éléments de connexion vers des systèmes tiers (API FT, Cheops, Tipimail ...).
+Attributes = Dict[str, str | List[str]]
 
 
-def _setup_sib_client() -> sib_api.ContactsApi | None:
-    # retourne une instance de client d'API SIB
-    # TODO: à bouger vers `external` une fois validé
-    if not settings.SIB_ACTIVE:
+def _setup_brevo_client() -> brevo_api.ContactsApi | None:
+    if not settings.BREVO_ACTIVE:
         logger.warning(
-            "L'API SiB n'est pas active sur cet environnement (dev / test ?)"
+            f"L'API Brevo n'est pas active sur cet environnement {settings.ENVIRONMENT}"
         )
         return
 
-    configuration = sib_api.Configuration()
-    configuration.api_key["api-key"] = settings.SIB_API_KEY
-    return sib_api.ContactsApi(sib_api.ApiClient(configuration))
+    configuration = brevo_api.Configuration()
+    configuration.api_key["api-key"] = settings.BREVO_API_KEY
+    return brevo_api.ContactsApi(brevo_api.ApiClient(configuration))
 
 
-def _sib_contact_for_user(
-    client: sib_api.ContactsApi, user: User
-) -> sib_api.GetExtendedContactDetails | None:
-    # on vérifie l'existence de l'utilisateur en tant que contact Brevo / SiB
+def _brevo_contact_for_user(
+    client: brevo_api.ContactsApi, user: User
+) -> brevo_api.GetExtendedContactDetails | None:
     try:
-        # l'API SiB renvoie une erreur 404 si l'utilisateur n'est pas trouvé
         return client.get_contact_info(user.email)
-    except SibApiException as exc:
-        # 404 : l'utilisateur n'existe pas dans SiB, on peut continuer
+    except BrevoApiException as exc:
+        # l'API Brevo renvoie une erreur 404 si l'utilisateur n'est pas trouvé
         if exc.status != 404:
-            # sinon il s'agit d'une autre erreur SiB
             raise exc
 
 
-def _contact_in_sib_list(
-    client: sib_api.ContactsApi, user: User, sib_list_id: int
+def _contact_in_brevo_list(
+    client: brevo_api.ContactsApi, user: User, brevo_list_id: int
 ) -> bool:
-    # vérifie si l'utilisateur est déjà dans la liste SIB donnée
-
-    # on vérifie d'abord l'existence de l'utilisateur en tant que contact Brevo
     try:
-        # l'API SiB renvoie une erreur 400 si l'utilisateur n'est pas trouvé
         contact = client.get_contact_info(user.email)
-    except SibApiException as exc:
-        # 404 : l'utilisateur n'existe pas dans SiB, on peut continuer
+    except BrevoApiException as exc:
+        # l'API Brevo renvoie une erreur 400 si l'utilisateur n'est pas trouvé
         if exc.status != 400:
-            # sinon il s'agit d'une autre erreur SiB
             raise exc
     else:
-        # on vérifie l'appartenance à la liste SIB ciblée
-        if sib_list_id in contact.list_ids:
-            # rien de plus à faire : l'utilisateur appartient déjà à la liste
+        if brevo_list_id in contact.list_ids:
             logger.warning(
-                "L'utilisateur #%s est déja membre de la liste SiB: %s",
+                "L'utilisateur #%s est déja membre de la liste Brevo: %s",
                 user.pk,
-                sib_list_id,
+                brevo_list_id,
             )
             return True
 
     return False
 
 
-def _update_sib_contact(
-    client: sib_api.ContactsApi, user: User, attributes: dict
+def _update_brevo_contact(
+    client: brevo_api.ContactsApi, user: User, attributes: Attributes
 ) -> bool:
-    # création/ maj des attributs de contact SiB pour l'utilisateur
-    contact_attributes = sib_api.UpdateContact(attributes=attributes)
+    # création/ maj des attributs de contact Brevp pour l'utilisateur
+    contact_attributes = brevo_api.UpdateContact(attributes=attributes)
     try:
         client.update_contact(user.email, contact_attributes)
-    except SibApiException as exc:
+    except BrevoApiException as exc:
         logger.exception(exc)
         logger.error(
             "Impossible de modifier les attributs pour l'utilisateur %s",
@@ -106,24 +87,24 @@ def _update_sib_contact(
     return True
 
 
-def _add_user_to_sib_list(
-    client: sib_api.ContactsApi, user: User, sib_list_id: int
+def _add_user_to_brevo_list(
+    client: brevo_api.ContactsApi, user: User, brevo_list_id: int
 ) -> bool:
-    # rattachement de l'utilisateur à la liste SiB cible
+    # rattachement de l'utilisateur à la liste Brevo cible
     try:
         client.add_contact_to_list(
-            sib_list_id,
-            sib_api.AddContactToList(emails=[user.email]),
+            brevo_list_id,
+            brevo_api.AddContactToList(emails=[user.email]),
         )
         logger.info(
-            "L'utilisateur #%s a été ajouté à la liste d'onboarding SiB: %s",
+            "L'utilisateur #%s a été ajouté à la liste d'onboarding Brevo: %s",
             user.pk,
-            sib_list_id,
+            brevo_list_id,
         )
-    except SibApiException as exc:
+    except BrevoApiException as exc:
         logger.exception(exc)
         logger.error(
-            "Impossible d'ajouter l'utilisateur #%s à la liste d'onboarding SiB",
+            "Impossible d'ajouter l'utilisateur #%s à la liste d'onboarding Brevo",
             user.pk,
         )
         return False
@@ -131,89 +112,87 @@ def _add_user_to_sib_list(
     return True
 
 
-def _remove_from_sib_list(
-    client: sib_api.ContactsApi, user: User, sib_list_id: int
+def _remove_from_brevo_list(
+    client: brevo_api.ContactsApi, user: User, brevo_list_id: int
 ) -> bool:
-    # retire un utilisateur donné d'une liste SiB
+    # retire un utilisateur donné d'une liste Brevo
     try:
         client.remove_contact_from_list(
-            sib_list_id, sib_api.RemoveContactFromList(emails=[user.email])
+            brevo_list_id, brevo_api.RemoveContactFromList(emails=[user.email])
         )
         logger.info(
-            "L'utilisateur #%s a été retiré de la liste SiB: %s", user.pk, sib_list_id
+            "L'utilisateur #%s a été retiré de la liste Brevo: %s",
+            user.pk,
+            brevo_list_id,
         )
-    except SibApiException as exc:
+    except BrevoApiException as exc:
         logger.exception(exc)
         logger.error(
-            "Impossible de retirer l'utilisateur #%s de la liste SiB: %s",
+            "Impossible de retirer l'utilisateur #%s de la liste Brevo: %s",
             user.pk,
-            sib_list_id,
+            brevo_list_id,
         )
         return False
 
     return True
 
 
-def _create_sib_contact(
-    client: sib_api.ContactsApi, user: User, attributes: dict, sib_list_id: int
+def _create_brevo_contact(
+    client: brevo_api.ContactsApi,
+    user: User,
+    attributes: Attributes,
+    brevo_list_id: int,
 ) -> bool:
-    # comme toujours avec l'API SiB, on droit créer un objet métier avant de le transmettre
-    create_contact = sib_api.CreateContact(
+    create_contact = brevo_api.CreateContact(
         email=user.email,
         attributes=attributes,
-        list_ids=[sib_list_id],
+        list_ids=[brevo_list_id],
         update_enabled=False,
     )
 
     try:
         api_response = client.create_contact(create_contact)
         logger.info(
-            "Utilisateur #%s ajouté en tant que contact à la liste SiB: %s (%s)",
+            "Utilisateur #%s ajouté en tant que contact à la liste Brevo: %s (%s)",
             user.pk,
-            sib_list_id,
+            brevo_list_id,
             api_response,
         )
         return True
-    except SibApiException as e:
+    except BrevoApiException as e:
         # note : les traces de l'exception peuvent être tronquées sur Sentry
         logger.exception(e)
 
     return False
 
 
-def _create_or_update_sib_contact(
-    client: sib_api.ContactsApi, user: User, attributes: dict, sib_list_id: int
+def _create_or_update_brevo_contact(
+    client: brevo_api.ContactsApi,
+    user: User,
+    attributes: Attributes,
+    brevo_list_id: int,
 ):
-    # On vérifie d'abord si le contact existe
-    # (les appels d'API sont différents pour la création et la maj).
-    contact = _sib_contact_for_user(client, user)
+    contact = _brevo_contact_for_user(client, user)
 
     if not contact:
-        # meilleur des cas : création et affectation à la liste en une passe
-        contact = _create_sib_contact(client, user, attributes, sib_list_id)
+        _create_brevo_contact(client, user, attributes, brevo_list_id)
         return
 
-    # le contact existe, on vérifie si il est déjà rattaché à la liste
-    if not _contact_in_sib_list(client, user, sib_list_id):
-        # si l'utilisateur existe mais n'est pas rattaché :
-        # on mets à jour les attributs du contact (pas possible en une étape à date)
-        if _update_sib_contact(client, user, attributes):
-            # on rattache le contact à la liste SiB voulue
-            _add_user_to_sib_list(client, user, sib_list_id)
-
-    # à ce point, l'utilisateur est déjà onboardé / rattaché, rien d'autre à faire
+    if not _contact_in_brevo_list(client, user, brevo_list_id):
+        if _update_brevo_contact(client, user, attributes):
+            _add_user_to_brevo_list(client, user, brevo_list_id)
 
 
 def onboard_user(user: User, structure: Structure):
     """
     Onboarding de l'utilisateur pour une structure :
         Déclenché lors du rattachement à une structure.
-        L'utilisateur est transformé en 'contact' de l'API Brevo / SiB,
+        L'utilisateur est transformé en 'contact' de l'API Brevo,
         puis rattaché à une liste selon son status (membre ou en attente)
         et son type d'activité.
     """
 
-    client = _setup_sib_client()
+    client = _setup_brevo_client()
     if not client:
         return
 
@@ -226,15 +205,6 @@ def onboard_user(user: User, structure: Structure):
         "IS_FIRST_ADMIN": is_first_admin,
         "URL_DORA_STRUCTURE": structure.get_frontend_url(),
         "NEED_VALIDATION": structure.is_pending_member(user),
-    }
-
-    sib_list_id = int(
-        settings.SIB_ONBOARDING_MEMBER_LIST
-        if user in structure.members.all()
-        else settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST
-    )
-
-    attributes |= {
         "NOM_STRUCTURE": structure.name,
         "CONTACT_ADHESION": [admin.email for admin in structure.admins],
         "VILLE": quote(structure.city),
@@ -242,16 +212,21 @@ def onboard_user(user: User, structure: Structure):
         "NO_DEPARTEMENT": structure.department,
     }
 
-    # création ou maj du contact SiB
-    _create_or_update_sib_contact(client, user, attributes, sib_list_id)
+    brevo_list_id = int(
+        settings.BREVO_ONBOARDING_MEMBER_LIST
+        if user in structure.members.all()
+        else settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST
+    )
+
+    _create_or_update_brevo_contact(client, user, attributes, brevo_list_id)
 
     # dans le cas d'un utilisateur passé membre, le retirer de la liste des invités
-    if sib_list_id == int(settings.SIB_ONBOARDING_MEMBER_LIST):
-        if _contact_in_sib_list(client, user, sib_list_id):
+    if brevo_list_id == int(settings.BREVO_ONBOARDING_MEMBER_LIST):
+        if _contact_in_brevo_list(client, user, brevo_list_id):
             # Dans le cas des imports via commande / script,
             # les utilisateurs peuvent ne pas être passés par la liste "invité".
-            # Les retirer de la liste sans y vérifier leur présense provoque un log d'erreur,
+            # Les retirer de la liste sans y vérifier leur présence provoque un log d'erreur,
             # sans conséquence, mais qui alimente quand même les erreurs Sentry.
-            _remove_from_sib_list(
-                client, user, int(settings.SIB_ONBOARDING_PUTATIVE_MEMBER_LIST)
+            _remove_from_brevo_list(
+                client, user, int(settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST)
             )
