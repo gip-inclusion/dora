@@ -13,7 +13,8 @@
     : "text-f14 text-gray-text p-s16";
 
   export let label: string;
-  export let links: { href: string; label: string }[] = [];
+  export let links: { href: string; label: string; openInNewTab?: boolean }[] =
+    [];
   let isOpen = false;
   let dropdownButton;
   const id = `sub-dropdown-menu-${randomId()}`;
@@ -68,11 +69,11 @@
     class="{mobileDesign ? '' : 'top-[100%)] absolute'} z-10 bg-white"
     class:hidden={!isOpen}
   >
-    {#each links as link, index}
-      {@const currentPage = $page.url.pathname === link.href}
+    {#each links as { href, label: linkLabel, openInNewTab }, index}
+      {@const currentPage = $page.url.pathname === href}
       <li class="text-f14 hover:bg-magenta-10 whitespace-nowrap">
         <a
-          href={link.href}
+          {href}
           class="py-s16 pl-s16 pr-s32 inline-block w-full
           {currentPage
             ? 'border-magenta-cta text-magenta-cta'
@@ -80,8 +81,10 @@
           {index === links.length - 1 || mobileDesign
             ? 'border-b-none'
             : 'border-b'}"
+          target={openInNewTab ? "_blank" : undefined}
+          rel={openInNewTab ? "noopener noreferrer" : undefined}
         >
-          {link.label}
+          {linkLabel}
         </a>
       </li>
     {/each}
