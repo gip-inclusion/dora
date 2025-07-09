@@ -3,6 +3,7 @@ from pprint import pformat
 from typing import Dict, List, Union
 
 from django.db import IntegrityError
+from django.utils import timezone
 from rest_framework import serializers
 
 from dora.core.models import ModerationStatus
@@ -275,7 +276,11 @@ class ImportStructuresHelper:
         # les champs optionnels (comme le téléphone et l'adresse mail) peuvent être mis à jour s'ils contiennent une valeur
         to_update = dict({(k, v) for k, v in kwargs.items() if v})
         print(f" > mise à jour des champs : {to_update}")
-        Structure.objects.filter(pk=structure.pk).update(**to_update)
+        Structure.objects.filter(pk=structure.pk).update(
+            **to_update,
+            modification_date=timezone.now(),
+            last_editor=self.importing_user,
+        )
         self.edited_structures_count += 1
 
     def _to_string_array(self, strings_list: str) -> List[str]:

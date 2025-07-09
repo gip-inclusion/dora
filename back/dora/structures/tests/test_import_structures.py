@@ -3,6 +3,7 @@ import io
 from urllib.parse import quote
 
 from django.core import mail
+from freezegun import freeze_time
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -716,6 +717,7 @@ class StructuresImportTestCase(APITestCase):
 
         self.assertEqual(structure.email, "email@structure.com")
 
+    @freeze_time("2022-01-01")
     def test_modify_phone_of_existing_structure(self):
         structure = make_structure(siret="12345678900000", phone="0123456789")
 
@@ -729,7 +731,10 @@ class StructuresImportTestCase(APITestCase):
 
         structure.refresh_from_db()
         self.assertEqual(structure.phone, "0234567891")
+        self.assertEqual(structure.last_editor, self.importing_user)
+        self.assertEqual(str(structure.modification_date), "2022-01-01 00:00:00+00:00")
 
+    @freeze_time("2022-01-01")
     def test_modify_email_of_existing_structure(self):
         structure = make_structure(siret="12345678900000", email="old@email.com")
 
@@ -745,6 +750,8 @@ class StructuresImportTestCase(APITestCase):
 
         structure.refresh_from_db()
         self.assertEqual(structure.email, "email1@structure.com")
+        self.assertEqual(structure.last_editor, self.importing_user)
+        self.assertEqual(str(structure.modification_date), "2022-01-01 00:00:00+00:00")
 
     def test_add_email_to_new_structure_with_parent(self):
         parent = make_structure(siret="21345678900000", email="old@email.com")
