@@ -1,123 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-  </head>
-  <body>
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify %}
 
-  </body>{% extends "admin/base_site.html" %}
-  {% load i18n admin_urls static admin_modify %}
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static 'admin/css/import_form.css' %}">
+{% endblock %}
 
-  {% block extrahead %}
-    <link rel="stylesheet" href="{% static 'admin/css/import_form.css' %}">
-  {% endblock %}
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">Administration de {{ opts.app_label|title }}</a>
+    &rsaquo; <a href="{% url 'admin:'|add:opts.app_label|add:'_'|add:opts.model_name|add:'_changelist' %}">{{ opts.verbose_name_plural|title }}</a>
+    &rsaquo; Importer {{ opts.verbose_name_plural|lower }}
+  </div>
+{% endblock %}
 
-  {% block breadcrumbs %}
-    <div class="breadcrumbs">
-      <a href="{% url 'admin:index' %}">Home</a>
-      &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">Administration de {{ opts.app_label|title }}</a>
-      &rsaquo; <a href="{% url 'admin:'|add:opts.app_label|add:'_'|add:opts.model_name|add:'_changelist' %}">{{ opts.verbose_name_plural|title }}</a>
-      &rsaquo; Importer {{ opts.verbose_name_plural|lower }}
-    </div>
-  {% endblock %}
+{% block content %}
+  <div class="form-container">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
 
-  {% block content %}
-    <div class="form-container">
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        <div class="form-section">
-          <h3>📁 Sélection du fichier</h3>
-          <div class="form-row">
-            <div class="file-upload-container">
-              <label class="file-upload-wrapper" data-text="📁 Choisir un fichier CSV" id="file-upload-label">
-                <input type="file" name="csv_file" accept=".csv" required id="csv-file-input">
-              </label>
-              <span class="file-status no-file" id="file-status">Aucun fichier sélectionné</span>
-            </div>
-            <div class="help">Format attendu : fichier.csv avec les colonnes spécifiées ci-dessous</div>
+      <div class="form-section">
+        <h3>📁 Sélection du fichier</h3>
+        <div class="form-row">
+          <div class="file-upload-container">
+            <label class="file-upload-wrapper" data-text="📁 Choisir un fichier CSV" id="file-upload-label">
+              <input type="file" name="csv_file" accept=".csv" required id="csv-file-input">
+            </label>
+            <span class="file-status no-file" id="file-status">Aucun fichier sélectionné</span>
           </div>
+          <div class="help">Format attendu : fichier.csv avec les colonnes spécifiées ci-dessous</div>
         </div>
-
-        <div class="form-section">
-          <h3>⚙️ Configuration</h3>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="source_label">Nom de la source :</label>
-              <input
-                type="text"
-                name="source_label"
-                id="source_label"
-                placeholder="Ex: Mairie de Paris, CAF..."
-              >
-              <div class="help">Nom du producteur de données. Laisser vide si c'est DORA qui produit les données.</div>
-            </div>
-
-            <div class="form-field">
-              <div class="checkbox-field">
-                <input
-                  type="checkbox"
-                  name="test_run"
-                  id="test_run"
-                  checked
-                />
-                <label for="test_run">Mode test (recommandé)</label>
-              </div>
-              <div class="help">Cochez pour vérifier la conformité de votre fichier avant l'import définitif. Aucune donnée ne sera sauvegardée.</div>
-            </div>
-
-            <div class="form-field">
-              <div class="checkbox-field">
-                <input
-                  type="checkbox"
-                  name="should_remove_instructions"
-                  id="should_remove_instructions"
-                  checked
-                />
-                <label for="should_remove_instructions">Enlever les instructions du CSV</label>
-              </div>
-              <div class="help">Cochez pour ne pas prendre en compte les deux premières lignes du CSV.</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="submit-section">
-          <div class="submit-row">
-            <input type="submit" value="🚀 Lancer l'import" class="default" />
-            <a href="{% url 'admin:structures_structure_changelist' %}" class="cancel-link">❌ Annuler</a>
-          </div>
-        </div>
-      </form>
-
-      <div class="help-section">
-        <h4>📋 Colonnes requises dans le fichier CSV :</h4>
-        <ul>
-          {% for header in csv_headers %}
-            <li><strong>{{ header }}</strong></li>
-          {% empty %}
-            <li>Aucun en-tête disponible</li>
-          {% endfor %}
-        </ul>
       </div>
+
+      <div class="form-section">
+        <h3>⚙️ Configuration</h3>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="source_label">Nom de la source :</label>
+            <input
+              type="text"
+              name="source_label"
+              id="source_label"
+              placeholder="Ex: Mairie de Paris, CAF..."
+            >
+            <div class="help">Nom du producteur de données. Laisser vide si c'est DORA qui produit les données.</div>
+          </div>
+
+          <div class="form-field">
+            <div class="checkbox-field">
+              <input
+                type="checkbox"
+                name="test_run"
+                id="test_run"
+                checked
+              />
+              <label for="test_run">Mode test (recommandé)</label>
+            </div>
+            <div class="help">Cochez pour vérifier la conformité de votre fichier avant l'import définitif. Aucune donnée ne sera sauvegardée.</div>
+          </div>
+
+          <div class="form-field">
+            <div class="checkbox-field">
+              <input
+                type="checkbox"
+                name="should_remove_instructions"
+                id="should_remove_instructions"
+                checked
+              />
+              <label for="should_remove_instructions">Enlever les instructions du CSV</label>
+            </div>
+            <div class="help">Cochez pour ne pas prendre en compte les deux premières lignes du CSV.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-section">
+        <div class="submit-row">
+          <input type="submit" value="🚀 Lancer l'import" class="default" />
+          <a href="{% url 'admin:structures_structure_changelist' %}" class="cancel-link">❌ Annuler</a>
+        </div>
+      </div>
+    </form>
+
+    <div class="help-section">
+      <h4>📋 Colonnes requises dans le fichier CSV :</h4>
+      <ul>
+        {% for header in csv_headers %}
+          <li><strong>{{ header }}</strong></li>
+        {% empty %}
+          <li>Aucun en-tête disponible</li>
+        {% endfor %}
+      </ul>
     </div>
+  </div>
 
-    <script>
-      document.getElementById('csv-file-input').addEventListener('change', function(e) {
-        const fileStatus = document.getElementById('file-status');
+  <script>
+    document.getElementById('csv-file-input').addEventListener('change', function(e) {
+      const fileStatus = document.getElementById('file-status');
 
-        if (e.target.files.length > 0) {
-          const fileName = e.target.files[0].name;
-          const fileSize = (e.target.files[0].size / 1024).toFixed(1);
+      if (e.target.files.length > 0) {
+        const fileName = e.target.files[0].name;
+        const fileSize = (e.target.files[0].size / 1024).toFixed(1);
 
-          fileStatus.textContent = `📄 ${fileName} (${fileSize} KB)`;
-          fileStatus.className = 'file-status file-selected';
-        } else {
-          fileStatus.textContent = 'Aucun fichier sélectionné';
-          fileStatus.className = 'file-status no-file';
-        }
-      });
-    </script>
-  {% endblock %}
-
-</html>
+        fileStatus.textContent = `📄 ${fileName} (${fileSize} KB)`;
+        fileStatus.className = 'file-status file-selected';
+      } else {
+        fileStatus.textContent = 'Aucun fichier sélectionné';
+        fileStatus.className = 'file-status no-file';
+      }
+    });
+  </script>
+{% endblock %}
