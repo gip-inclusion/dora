@@ -41,7 +41,7 @@
     fixedItemsValues = [],
     sort = false,
     value = $bindable(undefined),
-    searchText = $bindable(),
+    searchText = $bindable(""),
     disabled = false,
     readonly = false,
     placeholder = "",
