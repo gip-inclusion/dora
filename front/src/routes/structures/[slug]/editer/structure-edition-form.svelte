@@ -21,7 +21,7 @@
     structure = $bindable(),
     structuresOptions,
     modify = false,
-    onRefresh = undefined
+    onRefresh = undefined,
   }: Props = $props();
 
   let requesting = $state(false);

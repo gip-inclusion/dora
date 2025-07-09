@@ -7,11 +7,6 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import RadioButtons from "../../inputs/radio-buttons.svelte";
 
-
-
-  
-
-  
   interface Props {
     id: string;
     value: any;
@@ -35,15 +30,13 @@
     description = "",
     hidden = false,
     hideLabel = false,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    
-    
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -54,7 +47,7 @@
     {readonly}
   >
     {#snippet children({ onChange, errorMessages })}
-        <RadioButtons
+      <RadioButtons
         bind:group={value}
         on:change={onChange}
         {id}
@@ -64,6 +57,6 @@
         {readonly}
         {errorMessages}
       />
-          {/snippet}
-    </FieldWrapper>
+    {/snippet}
+  </FieldWrapper>
 {/if}

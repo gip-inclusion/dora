@@ -110,7 +110,11 @@
     }
   }
 
-  let formData = $derived({ mainActivity, discoveryMethod, discoveryMethodOther });
+  let formData = $derived({
+    mainActivity,
+    discoveryMethod,
+    discoveryMethodOther,
+  });
 </script>
 
 <Form

@@ -3,7 +3,7 @@
   https://github.com/pstanoev/simple-svelte-autocomplete/blob/2de0d7618b37192ec1ca47bbe4ffd47477b38792/src/SimpleAutocomplete.svelte
 -->
 <script lang="ts">
-  import { run, createBubbler, preventDefault } from 'svelte/legacy';
+  import { run, createBubbler, preventDefault } from "svelte/legacy";
 
   const bubble = createBubbler();
   // TODO: lint this file properly
@@ -13,70 +13,11 @@
   import { clickOutside } from "$lib/utils/misc";
   import { formatErrors } from "$lib/validation/validation";
 
-  
-
-  
-
-  
-
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
   // UI properties
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
   // HTML input UI properties
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
 
   // --- Public State ----
-
-  
 
   // --- Internal State ----
   const uniqueId = `sautocomplete-${Math.floor(Math.random() * 1000)}`;
@@ -96,9 +37,7 @@
     // a list of items values that the user can not remove (ex: structure national labels)
     fixedItemsValues?: string[];
     // function to use to get all items (alternative to providing items)
-    searchFunction?: 
-    | ((searchText: string) => Promise<any[]>)
-    | undefined;
+    searchFunction?: ((searchText: string) => Promise<any[]>) | undefined;
     textCleanFunction?: any;
     // events
     onChange?: any;
@@ -169,9 +108,9 @@
     value?: any;
     initialValue?: any;
     text?: string;
-    prepend?: import('svelte').Snippet;
-    itemContent?: import('svelte').Snippet<[any]>;
-    append?: import('svelte').Snippet;
+    prepend?: import("svelte").Snippet;
+    itemContent?: import("svelte").Snippet<[any]>;
+    append?: import("svelte").Snippet;
   }
 
   let {
@@ -179,8 +118,8 @@
     fixedItemsValues = [],
     searchFunction = undefined,
     textCleanFunction = function (userEnteredText) {
-    return userEnteredText;
-  },
+      return userEnteredText;
+    },
     onChange = function (_newValue) {},
     onFocus = function () {},
     selectFirstIfEmpty = false,
@@ -222,7 +161,7 @@
     text = $bindable(""),
     prepend,
     itemContent,
-    append
+    append,
   }: Props = $props();
 
   let filteredTextLength = 0;
@@ -857,15 +796,14 @@
       bind:value={text}
       oninput={onInput}
       onfocus={onFocusInternal}
-      onblur={bubble('blur')}
+      onblur={bubble("blur")}
       onkeydown={onKeyDown}
       onclick={onInputClick}
       onkeypress={onKeyPress}
       aria-describedby={formatErrors(name, errorMessages)}
     />
     {#if clearable && text?.length}
-      <button onclick={clear} class="autocomplete-clear-button"
-        >&#10006;</button
+      <button onclick={clear} class="autocomplete-clear-button">&#10006;</button
       >
     {/if}
   </div>
@@ -906,7 +844,7 @@
                 {/if}
 
                 {#if hasCustomContentSlot}
-                  {@render itemContent?.({ item: listItem, })}
+                  {@render itemContent?.({ item: listItem })}
                 {:else}
                   <div>
                     {@html listItem.highlighted

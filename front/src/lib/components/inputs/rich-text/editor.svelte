@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import {
     boldIcon,
@@ -38,7 +38,7 @@
     placeholder = "",
     disabled = false,
     readonly = false,
-    ariaDescribedBy = ""
+    ariaDescribedBy = "",
   }: Props = $props();
 
   let element = $state();

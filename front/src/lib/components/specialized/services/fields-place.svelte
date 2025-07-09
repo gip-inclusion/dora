@@ -12,7 +12,11 @@
     structure?: Structure | undefined;
   }
 
-  let { servicesOptions, service = $bindable(), structure = undefined }: Props = $props();
+  let {
+    servicesOptions,
+    service = $bindable(),
+    structure = undefined,
+  }: Props = $props();
 </script>
 
 <FieldSet title="Accueil">

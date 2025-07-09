@@ -14,5 +14,5 @@
     onload={() => iframeResize({ license: "GPLv3" }, "#metabaseIframe")}
     id="metabaseIframe"
     class="w-full border-0"
-></iframe>
+  ></iframe>
 </CenteredGrid>

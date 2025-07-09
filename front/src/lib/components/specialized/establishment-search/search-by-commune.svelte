@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import { externalLinkIcon } from "$lib/icons";
   import { getApiURL } from "$lib/utils/api";
@@ -8,14 +8,17 @@
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment, GeoApiValue } from "$lib/types";
 
-
   interface Props {
     establishment: any;
     onCityChange: (newCity: GeoApiValue | null) => void;
     onEstablishmentChange: (estab: Establishment | null) => void;
   }
 
-  let { establishment = $bindable(), onCityChange, onEstablishmentChange }: Props = $props();
+  let {
+    establishment = $bindable(),
+    onCityChange,
+    onEstablishmentChange,
+  }: Props = $props();
 
   let queryText: string | undefined = $state();
 
@@ -107,10 +110,8 @@
     minCharactersToSearch="3"
   >
     {#snippet itemContent({ item })}
-        <div
-        
+      <div
         class="gap-s4 px-s8 pt-s8 flex grow flex-row items-baseline justify-between"
-        
       >
         <div class="grow">
           {item.label}<br />
@@ -127,7 +128,7 @@
           {item.value.siret}
         </div>
       </div>
-      {/snippet}
+    {/snippet}
   </Select>
 
   <p class="pt-s4 text-f14">

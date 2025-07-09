@@ -19,7 +19,7 @@
     isOpen = $bindable(false),
     service,
     servicesOptions,
-    onRefresh
+    onRefresh,
   }: Props = $props();
 
   async function setAsUpdated() {
@@ -47,7 +47,7 @@
   <ExtendedServiceKeyInformations {service} {servicesOptions} />
 
   {#snippet footer()}
-    <div >
+    <div>
       <div class="mt-s24 gap-s24 flex flex-col-reverse justify-end md:flex-row">
         <LinkButton
           id="modal-update"

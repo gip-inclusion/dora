@@ -2,7 +2,7 @@
   import { afterNavigate } from "$app/navigation";
   import { closeIcon, menuIcon } from "$lib/icons";
   interface Props {
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { children }: Props = $props();

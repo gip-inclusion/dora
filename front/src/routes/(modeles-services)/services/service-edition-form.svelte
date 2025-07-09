@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
@@ -55,13 +55,15 @@
     managedStructureSearchMode = false,
     structures,
     structure = $bindable(),
-    model = $bindable()
+    model = $bindable(),
   }: Props = $props();
 
   let requesting = $state(false);
-  let currentSchema: Schema = $derived(service.useInclusionNumeriqueScheme
-    ? inclusionNumeriqueSchema
-    : serviceSchema);
+  let currentSchema: Schema = $derived(
+    service.useInclusionNumeriqueScheme
+      ? inclusionNumeriqueSchema
+      : serviceSchema
+  );
 
   // Affichage d'un message aux anciennes structures suite à l'ajout d'une limitation du nombre de typologies
   const showMaxCategoriesNotice = (service.categories.length || 0) > 3;
@@ -136,8 +138,6 @@
     service.model = modelSlugTmp;
     modelSlugTmp = null;
   }
-
-  
 
   run(() => {
     if (structure?.noDoraForm) {
@@ -222,7 +222,7 @@
               Après enregistrement, cette action sera définitive.
             </p>
             {#snippet button()}
-                        <div >
+              <div>
                 <Button
                   label="Re-synchroniser avec le modèle"
                   secondary
@@ -230,7 +230,7 @@
                   on:click={sync}
                 />
               </div>
-                      {/snippet}
+            {/snippet}
           </Notice>
         </div>
       {:else if service.modelChanged}

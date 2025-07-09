@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
@@ -22,7 +22,8 @@
 
   let { id, service = $bindable(), servicesOptions }: Props = $props();
 
-  let beneficiariesAccessModesFocusValue: string | undefined = $state(undefined);
+  let beneficiariesAccessModesFocusValue: string | undefined =
+    $state(undefined);
   let preventUpdateExternalFormFields = true;
 
   function updateExternalFormFields(text: string) {
@@ -35,9 +36,11 @@
     service.beneficiariesAccessModesExternalFormLinkText = text;
   }
 
-  let externalFormToggle = $derived(service.beneficiariesAccessModes.includes(
-    "completer-le-formulaire-dadhesion"
-  ));
+  let externalFormToggle = $derived(
+    service.beneficiariesAccessModes.includes(
+      "completer-le-formulaire-dadhesion"
+    )
+  );
   run(() => {
     updateExternalFormFields(externalFormToggle ? "Faire une demande" : "");
   });
@@ -54,15 +57,13 @@
 {#if $currentSchema && "beneficiariesAccessModes" in $currentSchema}
   <FieldWrapper
     {id}
-    
-    
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     description="Plusieurs choix possibles."
     readonly={$currentSchema?.[id]?.readonly}
   >
     {#snippet children({ onChange, errorMessages })}
-        <div class="gap-s8 flex flex-col">
+      <div class="gap-s8 flex flex-col">
         {#each servicesOptions.beneficiariesAccessModes as choice}
           {#if choice.value === "completer-le-formulaire-dadhesion" && service.beneficiariesAccessModes.includes("completer-le-formulaire-dadhesion")}
             <Checkbox
@@ -74,14 +75,17 @@
               errorMessage={formatErrors(id, errorMessages)}
               focused={beneficiariesAccessModesFocusValue === choice.value}
               on:change={onChange}
-              on:focus={() => (beneficiariesAccessModesFocusValue = choice.value)}
+              on:focus={() =>
+                (beneficiariesAccessModesFocusValue = choice.value)}
               on:blur={() => (beneficiariesAccessModesFocusValue = undefined)}
             >
               <BasicInputField
                 id="beneficiariesAccessModesExternalFormLinkText"
                 description="Par exemple : Faire une demande, Faire une simulation, Prendre rendez-vous, etc."
                 vertical
-                bind:value={service.beneficiariesAccessModesExternalFormLinkText}
+                bind:value={
+                  service.beneficiariesAccessModesExternalFormLinkText
+                }
               />
               <BasicInputField
                 id="beneficiariesAccessModesExternalFormLink"
@@ -101,7 +105,8 @@
               errorMessage={formatErrors(id, errorMessages)}
               focused={beneficiariesAccessModesFocusValue === choice.value}
               on:change={onChange}
-              on:focus={() => (beneficiariesAccessModesFocusValue = choice.value)}
+              on:focus={() =>
+                (beneficiariesAccessModesFocusValue = choice.value)}
               on:blur={() => (beneficiariesAccessModesFocusValue = undefined)}
             >
               <BasicInputField
@@ -121,12 +126,13 @@
               errorMessage={formatErrors(id, errorMessages)}
               focused={beneficiariesAccessModesFocusValue === choice.value}
               on:change={onChange}
-              on:focus={() => (beneficiariesAccessModesFocusValue = choice.value)}
+              on:focus={() =>
+                (beneficiariesAccessModesFocusValue = choice.value)}
               on:blur={() => (beneficiariesAccessModesFocusValue = undefined)}
             />
           {/if}
         {/each}
       </div>
-          {/snippet}
-    </FieldWrapper>
+    {/snippet}
+  </FieldWrapper>
 {/if}

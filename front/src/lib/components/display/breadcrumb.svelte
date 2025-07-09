@@ -41,7 +41,7 @@
     structure = undefined,
     service = undefined,
     model = undefined,
-    currentLocation
+    currentLocation,
   }: Props = $props();
 
   const locationToText: Record<string, string> = {

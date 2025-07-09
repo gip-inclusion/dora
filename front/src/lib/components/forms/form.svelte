@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run, preventDefault } from 'svelte/legacy';
+  import { run, preventDefault } from "svelte/legacy";
 
   import { beforeNavigate } from "$app/navigation";
   import type { ServicesOptions } from "$lib/types";
@@ -15,7 +15,6 @@
   } from "$lib/validation/validation";
   import { onDestroy, onMount, setContext } from "svelte";
 
-
   let hasUnsavedChange = false;
   interface Props {
     data: any;
@@ -27,13 +26,13 @@
     servicesOptions?: ServicesOptions | undefined;
     onChange?: ((validatedData, fieldName?) => void) | undefined;
     disableExitWarning?: boolean;
-    onValidate?: 
-    | ((
-        submittedData,
-        submitterId: string | undefined
-      ) => { validatedData; valid: boolean })
-    | undefined;
-    children?: import('svelte').Snippet;
+    onValidate?:
+      | ((
+          submittedData,
+          submitterId: string | undefined
+        ) => { validatedData; valid: boolean })
+      | undefined;
+    children?: import("svelte").Snippet;
   }
 
   let {
@@ -47,7 +46,7 @@
     onChange = undefined,
     disableExitWarning = false,
     onValidate = undefined,
-    children
+    children,
   }: Props = $props();
 
   run(() => {

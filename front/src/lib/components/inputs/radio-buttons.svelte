@@ -19,7 +19,7 @@
     disabled = false,
     name,
     readonly = false,
-    errorMessages = []
+    errorMessages = [],
   }: Props = $props();
 
   let focusValue = $state(undefined);
@@ -57,7 +57,7 @@
       >
         <div
           class="toggle-circle h-s12 w-s12 bg-magenta-cta hidden self-center rounded-full"
-></div>
+        ></div>
       </div>
       <span class="ml-s16 text-f16 text-gray-text inline-block">
         {choice.label}

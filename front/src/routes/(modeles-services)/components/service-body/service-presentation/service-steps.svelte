@@ -55,25 +55,28 @@
 
   let isDI = $derived("source" in service);
 
-  let coachOrientationModesValueAndDisplay = $derived((
-    service.coachOrientationModes ?? []
-  )
-    .map((val, index) => [val, service.coachOrientationModesDisplay[index]])
-    .sort(
-      (a, b) =>
-        orderedCoachOrientationModeValues[a[0]] -
-        orderedCoachOrientationModeValues[b[0]]
-    ));
+  let coachOrientationModesValueAndDisplay = $derived(
+    (service.coachOrientationModes ?? [])
+      .map((val, index) => [val, service.coachOrientationModesDisplay[index]])
+      .sort(
+        (a, b) =>
+          orderedCoachOrientationModeValues[a[0]] -
+          orderedCoachOrientationModeValues[b[0]]
+      )
+  );
 
-  let beneficiariesAccessModesValueAndDisplay = $derived((
-    service.beneficiariesAccessModes ?? []
-  )
-    .map((val, index) => [val, service.beneficiariesAccessModesDisplay[index]])
-    .sort(
-      (a, b) =>
-        orderedBeneficiariesAccessModeValues[a[0]] -
-        orderedBeneficiariesAccessModeValues[b[0]]
-    ));
+  let beneficiariesAccessModesValueAndDisplay = $derived(
+    (service.beneficiariesAccessModes ?? [])
+      .map((val, index) => [
+        val,
+        service.beneficiariesAccessModesDisplay[index],
+      ])
+      .sort(
+        (a, b) =>
+          orderedBeneficiariesAccessModeValues[a[0]] -
+          orderedBeneficiariesAccessModeValues[b[0]]
+      )
+  );
 </script>
 
 <ServiceSection title="Les démarches à réaliser">

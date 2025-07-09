@@ -10,7 +10,7 @@
     icon?: any;
     whiteBg?: boolean;
     leftBorder?: boolean;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let {
@@ -21,7 +21,7 @@
     icon = $bindable(undefined),
     whiteBg = false,
     leftBorder = false,
-    children
+    children,
   }: Props = $props();
   if (!icon && (positiveMood || negativeMood)) {
     icon = positiveMood ? emotionHappyIcon : errorWarningIcon;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
+  import { createBubbler } from "svelte/legacy";
 
   const bubble = createBubbler();
   interface Props {
@@ -13,7 +13,7 @@
 
 <button
   type="button"
-  onclick={bubble('click')}
+  onclick={bubble("click")}
   class:active
   class="tb-button"
   aria-label={label}

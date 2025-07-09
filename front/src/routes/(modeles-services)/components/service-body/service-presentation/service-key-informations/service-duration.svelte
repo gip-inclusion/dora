@@ -9,9 +9,9 @@
 
   let isValid = $derived(isDurationValid(service));
 
-  let totalHours = $derived(isValid
-    ? service.durationWeeklyHours * service.durationWeeks
-    : 0);
+  let totalHours = $derived(
+    isValid ? service.durationWeeklyHours * service.durationWeeks : 0
+  );
 </script>
 
 <div>

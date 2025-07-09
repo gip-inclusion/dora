@@ -10,19 +10,19 @@
 
   const monRecapTallyFormCompletedKey = `tallyForm-${TallyFormId.NOTEBOOK_ORDER_FORM_ID}-completed`;
 
-  let lastVisitedStructure = $derived(getCurrentlySelectedStructure(
-    $userInfo,
-    $userPreferences
-  ));
+  let lastVisitedStructure = $derived(
+    getCurrentlySelectedStructure($userInfo, $userPreferences)
+  );
 
-  let shouldDisplayMonRecapForm =
-    $derived($userInfo &&
-    ($userInfo.mainActivity === "accompagnateur" ||
-      $userInfo.mainActivity === "accompagnateur_offreur") &&
-    lastVisitedStructure &&
-    lastVisitedStructure.canEditInformations &&
-    MON_RECAP_DEPARTMENTS.includes(lastVisitedStructure.department) &&
-    !localStorage.getItem(monRecapTallyFormCompletedKey));
+  let shouldDisplayMonRecapForm = $derived(
+    $userInfo &&
+      ($userInfo.mainActivity === "accompagnateur" ||
+        $userInfo.mainActivity === "accompagnateur_offreur") &&
+      lastVisitedStructure &&
+      lastVisitedStructure.canEditInformations &&
+      MON_RECAP_DEPARTMENTS.includes(lastVisitedStructure.department) &&
+      !localStorage.getItem(monRecapTallyFormCompletedKey)
+  );
 
   const hiddenFields = { source: "dora" };
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { preventDefault } from 'svelte/legacy';
+  import { preventDefault } from "svelte/legacy";
 
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
   import { randomId } from "$lib/utils/random";
@@ -11,7 +11,7 @@
     titleClass?: string;
     noTitleMargin?: boolean;
     titleLevel?: "h2" | "h3" | "h4";
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let {
@@ -21,7 +21,7 @@
     titleClass = "",
     noTitleMargin = false,
     titleLevel = "h2",
-    children
+    children,
   }: Props = $props();
 
   const id = randomId();

@@ -21,7 +21,7 @@
     onRefresh,
     readOnly = true,
     structureSlug,
-    isMyself
+    isMyself,
   }: Props = $props();
 
   let modalChangeUserIsOpen = $state(false);
@@ -49,13 +49,13 @@
 <ModalChangeUser bind:isOpen={modalChangeUserIsOpen} bind:member {onRefresh} />
 <Member {member} {isMyself} {readOnly}>
   {#snippet label()}
-    <div >
+    <div>
       <Label label={userLevel} smallIcon icon={userLevelIcon} />
     </div>
   {/snippet}
 
   {#snippet actions({ onCloseParent })}
-    <div  >
+    <div>
       <div class="flex flex-col items-end">
         <Button
           label="Modifier"

@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { preventDefault, stopPropagation } from 'svelte/legacy';
+  import { preventDefault, stopPropagation } from "svelte/legacy";
 
   import Select from "$lib/components/inputs/select/select.svelte";
   import { pinDistanceIcon } from "$lib/icons";
   import type { Choice, GeoApiValue } from "$lib/types";
   import { getApiURL } from "$lib/utils/api";
   import { fetchData, getDepartmentFromCityCode } from "$lib/utils/misc";
-
 
   interface Props {
     onChange: (newValue: GeoApiValue) => void;
@@ -21,7 +20,7 @@
     disabled = false,
     id,
     value = $bindable(undefined),
-    initialValue = undefined
+    initialValue = undefined,
   }: Props = $props();
 
   let choices: Choice[] = $state([]);
@@ -103,7 +102,7 @@
   minCharactersToSearch="3"
 >
   {#snippet prepend({ results })}
-    <div  class="px-s8 pt-s8" >
+    <div class="px-s8 pt-s8">
       <button
         class="border-gray-02 px-s8 py-s12 text-f14 text-gray-text flex w-full"
         onclick={stopPropagation(preventDefault(searchCityFromLocation))}

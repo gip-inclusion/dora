@@ -7,7 +7,6 @@
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
-
   interface Props {
     mobileDesign?: boolean;
     buttonClass?: any;
@@ -18,10 +17,10 @@
   let {
     mobileDesign = false,
     buttonClass = mobileDesign
-    ? "py-s16 text-f18 font-bold text-gray-dark w-full flex justify-between"
-    : "text-f14 text-gray-text p-s16",
+      ? "py-s16 text-f18 font-bold text-gray-dark w-full flex justify-between"
+      : "text-f14 text-gray-text p-s16",
     label,
-    links = []
+    links = [],
   }: Props = $props();
   let isOpen = $state(false);
   let dropdownButton = $state();

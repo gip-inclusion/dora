@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
@@ -27,9 +27,9 @@
     display?: "horizontal" | "vertical";
     style?: "common" | "filter" | "search";
     onChange?: (event: {
-    detail: string;
-    value: string | string[];
-  }) => void | undefined;
+      detail: string;
+      value: string | string[];
+    }) => void | undefined;
   }
 
   let {
@@ -48,7 +48,7 @@
     choices = $bindable(),
     display = "horizontal",
     style = "common",
-    onChange = undefined
+    onChange = undefined,
   }: Props = $props();
 
   const originalChoices: Choice[] = [...choices];
@@ -62,9 +62,9 @@
   let selectedOptionIndex: number | null = null;
   let selectedOption: Choice | undefined = $state();
 
-  let hasSelectAllOption = $derived(choices.some((choice) =>
-    choice.value.endsWith("--all")
-  ));
+  let hasSelectAllOption = $derived(
+    choices.some((choice) => choice.value.endsWith("--all"))
+  );
 
   function toggleCombobox(forceValue?: boolean) {
     expanded = forceValue !== undefined ? forceValue : !expanded;

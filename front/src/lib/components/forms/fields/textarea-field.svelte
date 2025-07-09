@@ -7,11 +7,6 @@
   } from "$lib/validation/validation";
   import FieldWrapper from "../field-wrapper.svelte";
 
-
-
-  
-
-  
   interface Props {
     id: string;
     value: string;
@@ -43,15 +38,13 @@
     hidden = false,
     hideLabel = false,
     label = $currentSchema?.[id]?.label,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    
-    
     {label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -62,7 +55,7 @@
     {readonly}
   >
     {#snippet children({ onBlur, errorMessages })}
-        <div class="flex flex-col">
+      <div class="flex flex-col">
         <textarea
           bind:value
           onblur={onBlur}
@@ -76,7 +69,7 @@
           maxlength={maxLength}
           aria-describedby={formatErrors(id, errorMessages)}
           class="border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus read-only:text-gray-03 disabled:bg-gray-00 min-h-[3rem] grow rounded-sm border outline-hidden"
-  ></textarea>
+        ></textarea>
         {#if value && maxLength != null && !readonly && !disabled}
           <div
             class="mt-s4 text-f12 text-gray-text self-end"
@@ -86,6 +79,6 @@
           </div>
         {/if}
       </div>
-          {/snippet}
-    </FieldWrapper>
+    {/snippet}
+  </FieldWrapper>
 {/if}

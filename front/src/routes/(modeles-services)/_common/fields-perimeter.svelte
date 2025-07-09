@@ -29,18 +29,18 @@
 
 <FieldSet title="Périmètre géographique d’intervention">
   {#snippet help()}
-    <div >
+    <div>
       <p class="text-f14">
         Qu’il soit national, régional, départemental, intercommunal ou communal,
-        le service peut être délimité aux bénéficiaires habitant sur un territoire
-        spécifique.
+        le service peut être délimité aux bénéficiaires habitant sur un
+        territoire spécifique.
       </p>
 
       <h5 class="mb-s0">QPV et ZRR</h5>
       <p class="text-f14">
-        Activez cette option si votre offre s’adresse uniquement aux bénéficiaires
-        résidants dans des Quartiers Prioritaires de la politique de la Ville ou
-        des Zones de Revitalisation Rurale.
+        Activez cette option si votre offre s’adresse uniquement aux
+        bénéficiaires résidants dans des Quartiers Prioritaires de la politique
+        de la Ville ou des Zones de Revitalisation Rurale.
       </p>
     </div>
   {/snippet}

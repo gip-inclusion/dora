@@ -7,9 +7,6 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import DaysGrid from "../../inputs/opening-hours/days-grid.svelte";
 
-
-
-  
   interface Props {
     id: string;
     value: string;
@@ -30,7 +27,7 @@
     description = "",
     hidden = false,
     hideLabel = false,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 </script>
 

@@ -39,7 +39,7 @@
     {/if}
   </button>
   {#snippet content()}
-    <span >
+    <span>
       {#if disabled}
         Connectez-vous pour ajouter ce service à vos favoris
       {:else if active}

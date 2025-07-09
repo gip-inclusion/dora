@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
+  import { createBubbler } from "svelte/legacy";
 
   const bubble = createBubbler();
   import { createEventDispatcher } from "svelte";
 
-  
   interface Props {
     // https://tailwindcomponents.com/component/toggle-button-1
     id: string;
@@ -21,7 +20,7 @@
     disabled = false,
     readonly = false,
     yesLabel = "Oui",
-    noLabel = "Non"
+    noLabel = "Non",
   }: Props = $props();
 
   const dispatcher = createEventDispatcher();
@@ -53,7 +52,7 @@
     name={id}
     type="checkbox"
     bind:checked
-    onchange={bubble('change')}
+    onchange={bubble("change")}
     class="hidden"
     {disabled}
     {readonly}
@@ -61,11 +60,11 @@
   <!-- path -->
   <span
     class="toggle-path h-s24 w-s40 border-gray-03 inline-block shrink-0 rounded-full border bg-white"
-></span>
+  ></span>
   <!-- circle -->
   <span
     class="toggle-circle inset-y-s0 left-s0 h-s16 w-s16 bg-gray-text-alt absolute inline-block shrink-0 rounded-full"
-></span>
+  ></span>
   <span class="ml-s8 pb-s2 text-f14 text-gray-text">
     {#if checked}
       <span class="text-magenta-cta">{yesLabel}</span>

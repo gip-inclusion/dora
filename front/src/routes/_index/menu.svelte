@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import { page } from "$app/stores";
   import LinkButton from "$lib/components/display/link-button.svelte";

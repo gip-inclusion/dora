@@ -8,12 +8,7 @@
     isPreference?: boolean;
   }
 
-  let {
-    icon,
-    text,
-    link = undefined,
-    isPreference = false
-  }: Props = $props();
+  let { icon, text, link = undefined, isPreference = false }: Props = $props();
 </script>
 
 <li class="text-gray-text flex items-center">

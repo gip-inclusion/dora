@@ -11,7 +11,7 @@
     icon?: string | null;
     smallIcon?: boolean;
     truncate?: boolean;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let {
@@ -26,7 +26,7 @@
     icon = null,
     smallIcon = false,
     truncate = false,
-    children
+    children,
   }: Props = $props();
 </script>
 
@@ -47,7 +47,9 @@
   {/if}
 
   {#if label || children}
-    <span class:truncate>{#if children}{@render children()}{:else}{label}{/if}</span>
+    <span class:truncate
+      >{#if children}{@render children()}{:else}{label}{/if}</span
+    >
   {/if}
 </div>
 

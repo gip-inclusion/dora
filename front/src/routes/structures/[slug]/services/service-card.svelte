@@ -19,11 +19,11 @@
     service,
     servicesOptions,
     readOnly = true,
-    onRefresh
+    onRefresh,
   }: Props = $props();
 </script>
 
-<Bookmarkable slug={service.slug}  >
+<Bookmarkable slug={service.slug}>
   {#snippet children({ onBookmark, isBookmarked })}
     <div
       class="relative flex flex-col justify-between rounded-lg bg-white shadow-md"

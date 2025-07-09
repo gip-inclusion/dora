@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import { tick } from "svelte";
 
@@ -38,7 +38,7 @@
     noAlertButtonBottomGap = false,
     summarized = false,
     noPagination = false,
-    showDeploymentNotice = false
+    showDeploymentNotice = false,
   }: Props = $props();
 
   const PAGE_LENGTH = 10;

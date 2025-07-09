@@ -24,16 +24,17 @@
     service,
     isDI = false,
     orientationFormUrl,
-    handleOrientationFormClickEvent
+    handleOrientationFormClickEvent,
   }: Props = $props();
 
-  let isOrientableWithDoraForm =
-    $derived((service.isOrientable &&
+  let isOrientableWithDoraForm = $derived(
+    (service.isOrientable &&
       service.coachOrientationModes?.includes("formulaire-dora")) ||
-    service.isOrientableFtService);
-  let hasExternalForm = $derived(service.coachOrientationModes?.includes(
-    "completer-le-formulaire-dadhesion"
-  ));
+      service.isOrientableFtService
+  );
+  let hasExternalForm = $derived(
+    service.coachOrientationModes?.includes("completer-le-formulaire-dadhesion")
+  );
 
   const dispatch = createEventDispatcher<{
     trackMobilisation: { externalUrl?: string };

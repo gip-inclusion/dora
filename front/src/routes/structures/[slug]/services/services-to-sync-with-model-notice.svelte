@@ -22,18 +22,21 @@
     structureSlug,
     services = [],
     requesting = $bindable(false),
-    onRefresh
+    onRefresh,
   }: Props = $props();
 
   const LIST_LENGTH = 3;
   let showAll = $state(false);
-  let servicesToUpdate = $derived(services.filter(({ modelChanged }) => modelChanged));
+  let servicesToUpdate = $derived(
+    services.filter(({ modelChanged }) => modelChanged)
+  );
 
-  let showNotice =
-    $derived(servicesToUpdate.length && !isNoticeHidden("modelSync", structureSlug));
-  let updatedModels = $derived(new Set(
-    servicesToUpdate.map(({ modelName }) => modelName)
-  ));
+  let showNotice = $derived(
+    servicesToUpdate.length && !isNoticeHidden("modelSync", structureSlug)
+  );
+  let updatedModels = $derived(
+    new Set(servicesToUpdate.map(({ modelName }) => modelName))
+  );
 
   async function doUpdate(selectedServices: StructureService[]) {
     requesting = true;

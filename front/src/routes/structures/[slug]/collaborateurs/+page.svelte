@@ -21,10 +21,9 @@
 
   let modalAddUserIsOpen = $state(false);
 
-  let showNoMemberNotice = $state(!hasAtLeastTwoMembersOrInvitedMembers(
-    data.members,
-    data.putativeMembers
-  ));
+  let showNoMemberNotice = $state(
+    !hasAtLeastTwoMembersOrInvitedMembers(data.members, data.putativeMembers)
+  );
 
   async function handleRefreshMemberList() {
     data.members = await getMembers($structure.slug);

@@ -37,7 +37,7 @@
       d’orientation.
     </p>
     {#snippet footer()}
-        <div  class="gap-s12 flex justify-end">
+      <div class="gap-s12 flex justify-end">
         <LinkButton
           label="Poursuivre l’orientation"
           secondary
@@ -49,6 +49,6 @@
           on:click={() => dispatch("showVideo", {})}
         />
       </div>
-      {/snippet}
+    {/snippet}
   </Modal>
 {/if}

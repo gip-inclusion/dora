@@ -17,9 +17,9 @@
       />
     </div>
     <div class="text-gray-02">|</div>
-    <ButtonMenu icon={arrowDownSIcon}  small>
+    <ButtonMenu icon={arrowDownSIcon} small>
       {#snippet children({ onClose: onCloseParent })}
-            <div class="w-max">
+        <div class="w-max">
           <ModerationMenu
             {entity}
             onRefresh={async () => {
@@ -28,7 +28,7 @@
             }}
           />
         </div>
-                {/snippet}
-        </ButtonMenu>
+      {/snippet}
+    </ButtonMenu>
   </div>
 </div>

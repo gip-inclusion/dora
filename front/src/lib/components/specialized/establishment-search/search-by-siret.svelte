@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import Button from "$lib/components/display/button.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
@@ -8,21 +8,18 @@
   import { getApiURL } from "$lib/utils/api";
   import { siretRegexp } from "$lib/validation/schema-utils";
 
-
   interface Props {
-    onEstablishmentChange: (
-    establishment: Establishment | null
-  ) => void;
+    onEstablishmentChange: (establishment: Establishment | null) => void;
     establishment: Establishment | null;
     proposedSiret: string;
-    description?: import('svelte').Snippet;
+    description?: import("svelte").Snippet;
   }
 
   let {
     onEstablishmentChange,
     establishment = $bindable(),
     proposedSiret,
-    description
+    description,
   }: Props = $props();
   let siretInput = $state(proposedSiret);
   let siretIsValid = $state(false);

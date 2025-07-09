@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import HomeSmileLineBuildings from "svelte-remix/HomeSmileLineBuildings.svelte";
   import { page } from "$app/stores";

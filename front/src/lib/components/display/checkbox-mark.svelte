@@ -12,7 +12,7 @@
   <div
     class="checkbox-mark h-s12 w-s12 bg-magenta-cta self-center"
     class:invisible={!checked}
-></div>
+  ></div>
 </div>
 
 <style lang="postcss">

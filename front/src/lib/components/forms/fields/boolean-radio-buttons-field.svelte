@@ -8,17 +8,12 @@
   import RadioButtons from "../../inputs/radio-buttons.svelte";
 
   // Laisser la valeur par défault ici. Si la valeur entrante est undefined ou null
-  
-
-
-  
 
   const choices = [
     { value: true, label: yesLabel },
     { value: false, label: noLabel },
   ];
 
-  
   interface Props {
     id: string;
     // on veut la considérer comme false;
@@ -45,14 +40,13 @@
     description = "",
     hidden = false,
     hideLabel = false,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -63,7 +57,7 @@
     {readonly}
   >
     {#snippet children({ errorMessages })}
-        <RadioButtons
+      <RadioButtons
         {id}
         name={id}
         bind:group={value}
@@ -73,6 +67,6 @@
         {readonly}
         {errorMessages}
       />
-          {/snippet}
-    </FieldWrapper>
+    {/snippet}
+  </FieldWrapper>
 {/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import { onMount } from "svelte";
 
@@ -36,13 +36,15 @@
 
   let filtersInitialized = $state(false);
 
-  let filters = $state(Object.entries(FILTER_KEY_TO_QUERY_PARAM).reduce<Filters>(
-    (acc, [filterKey, queryParam]) => ({
-      ...acc,
-      [filterKey]: $page.url.searchParams.get(queryParam)?.split(",") || [],
-    }),
-    {} as Filters
-  ));
+  let filters = $state(
+    Object.entries(FILTER_KEY_TO_QUERY_PARAM).reduce<Filters>(
+      (acc, [filterKey, queryParam]) => ({
+        ...acc,
+        [filterKey]: $page.url.searchParams.get(queryParam)?.split(",") || [],
+      }),
+      {} as Filters
+    )
+  );
 
   onMount(() => {
     // Vérifie si aucun filtre n'est sélectionné
@@ -77,39 +79,41 @@
   });
 
   // Filtre les services en fonctions des filtres sélectionnés
-  let filteredServices = $derived(data.services.filter((service) => {
-    const kindsMatch =
-      filters.kinds.length === 0 ||
-      (service.kinds &&
-        filters.kinds.some((value) => service.kinds!.includes(value)));
-    const fundingLabelsMatch =
-      filters.fundingLabels.length === 0 ||
-      filters.fundingLabels.some((value) =>
-        service.fundingLabels.includes(value)
+  let filteredServices = $derived(
+    data.services.filter((service) => {
+      const kindsMatch =
+        filters.kinds.length === 0 ||
+        (service.kinds &&
+          filters.kinds.some((value) => service.kinds!.includes(value)));
+      const fundingLabelsMatch =
+        filters.fundingLabels.length === 0 ||
+        filters.fundingLabels.some((value) =>
+          service.fundingLabels.includes(value)
+        );
+      const feeConditionMatch =
+        filters.feeConditions.length === 0 ||
+        (service.feeCondition &&
+          filters.feeConditions.includes(service.feeCondition));
+      const locationKindsMatch =
+        filters.locationKinds.length === 0 ||
+        filters.locationKinds.some((value) =>
+          service.locationKinds.includes(value)
+        );
+      // Lorsqu'on ne veut que les services en présentiels, on exclue ceux à plus de 50 km de distance
+      const onSiteAndNearby = !(
+        filters.locationKinds.length === 1 &&
+        filters.locationKinds[0] === "en-presentiel" &&
+        service.distance > 50
       );
-    const feeConditionMatch =
-      filters.feeConditions.length === 0 ||
-      (service.feeCondition &&
-        filters.feeConditions.includes(service.feeCondition));
-    const locationKindsMatch =
-      filters.locationKinds.length === 0 ||
-      filters.locationKinds.some((value) =>
-        service.locationKinds.includes(value)
+      return (
+        kindsMatch &&
+        fundingLabelsMatch &&
+        feeConditionMatch &&
+        locationKindsMatch &&
+        onSiteAndNearby
       );
-    // Lorsqu'on ne veut que les services en présentiels, on exclue ceux à plus de 50 km de distance
-    const onSiteAndNearby = !(
-      filters.locationKinds.length === 1 &&
-      filters.locationKinds[0] === "en-presentiel" &&
-      service.distance > 50
-    );
-    return (
-      kindsMatch &&
-      fundingLabelsMatch &&
-      feeConditionMatch &&
-      locationKindsMatch &&
-      onSiteAndNearby
-    );
-  }));
+    })
+  );
 
   // Met à jour les paramètres d'URL en fonction des filtres sélectionnés
   run(() => {
@@ -129,13 +133,16 @@
     );
   });
 
-  let showDeploymentNotice =
-    $derived(filteredServices.length < 10 &&
-    !!data.cityCode &&
-    !!data.servicesOptions &&
-    !isInDeploymentDepartments(data.cityCode, data.servicesOptions));
+  let showDeploymentNotice = $derived(
+    filteredServices.length < 10 &&
+      !!data.cityCode &&
+      !!data.servicesOptions &&
+      !isInDeploymentDepartments(data.cityCode, data.servicesOptions)
+  );
 
-  let showMesAidesDialog = $derived(!$userInfo && data.categoryIds.includes("mobilite"));
+  let showMesAidesDialog = $derived(
+    !$userInfo && data.categoryIds.includes("mobilite")
+  );
 </script>
 
 <CenteredGrid bgColor="bg-blue-light">

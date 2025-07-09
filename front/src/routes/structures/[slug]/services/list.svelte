@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
@@ -28,7 +28,6 @@
   import ServicesToSyncWithModelNotice from "./services-to-sync-with-model-notice.svelte";
   import ServicesToUpdateNotice from "./services-to-update-notice.svelte";
 
-
   interface Props {
     structure: any;
     total: any;
@@ -52,7 +51,7 @@
     withEmptyNotice = false,
     serviceStatus = $bindable(),
     updateNeeded = $bindable(),
-    servicesDisplayed = $bindable([])
+    servicesDisplayed = $bindable([]),
   }: Props = $props();
 
   function updateUrlQueryParams() {
@@ -215,9 +214,9 @@
     servicesDisplayed = filterAndSortServices(structure.services);
   });
 
-  let servicesToUpdate = $derived(structure.services.filter(
-    (service) => service.updateNeeded
-  ));
+  let servicesToUpdate = $derived(
+    structure.services.filter((service) => service.updateNeeded)
+  );
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">

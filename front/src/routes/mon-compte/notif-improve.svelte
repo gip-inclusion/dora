@@ -16,7 +16,6 @@
       otherTab
       small
       secondary
-      
     />
   {/snippet}
 </Notice>

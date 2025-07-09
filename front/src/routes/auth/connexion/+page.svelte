@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { preventDefault } from 'svelte/legacy';
+  import { preventDefault } from "svelte/legacy";
 
   import { page } from "$app/state";
   import logoProConnect from "$lib/assets/proconnect/logo_proconnect.svg";
@@ -44,7 +44,7 @@
           </div>
           <PcButton {nextPage}>
             <!-- @migration-task: migrate this slot by hand, `pc-help-link` is an invalid identifier -->
-  <a
+            <a
               slot="pc-help-link"
               class="text-magenta-cta underline"
               target="_blank"

@@ -81,7 +81,7 @@
     servicesOptions,
     onRefresh,
     hideLabel = true,
-    fullWidth = false
+    fullWidth = false,
   }: Props = $props();
 
   let availableOptions = $derived(getAvailableOptionsForStatus(service.status));
@@ -202,7 +202,9 @@
   }
 
   // *** Valeurs pour l'affichage
-  let currentStatusPresentation = $derived(SERVICE_STATUS_PRESENTATION[service.status]);
+  let currentStatusPresentation = $derived(
+    SERVICE_STATUS_PRESENTATION[service.status]
+  );
 </script>
 
 <div

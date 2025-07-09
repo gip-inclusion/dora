@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
@@ -60,12 +60,16 @@
     }
   }
 
-  let alreadyMember = $derived($userInfo?.structures
-    ?.map((struct) => struct.siret)
-    ?.includes(establishment?.siret));
-  let alreadyRequested = $derived($userInfo?.pendingStructures
-    ?.map((struct) => struct.siret)
-    ?.includes(establishment?.siret));
+  let alreadyMember = $derived(
+    $userInfo?.structures
+      ?.map((struct) => struct.siret)
+      ?.includes(establishment?.siret)
+  );
+  let alreadyRequested = $derived(
+    $userInfo?.pendingStructures
+      ?.map((struct) => struct.siret)
+      ?.includes(establishment?.siret)
+  );
 
   run(() => {
     if (alreadyRequested) {
@@ -92,7 +96,7 @@
       showSafir={userIsFranceTravail}
     >
       {#snippet cta()}
-            <div >
+        <div>
           {#if establishment?.siret}
             <div class="mt-s24">
               {#if alreadyMember}
@@ -138,7 +142,7 @@
             </div>
           {/if}
         </div>
-          {/snippet}
+      {/snippet}
     </StructureSearch>
 
     <div class="mt-s24 border-gray-02 px-s32 py-s24 rounded-lg border bg-white">

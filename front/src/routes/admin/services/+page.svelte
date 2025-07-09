@@ -7,7 +7,8 @@
   import { shortenString } from "$lib/utils/misc";
   import { onMount } from "svelte";
 
-  let services = $state(), filteredServices = $state();
+  let services = $state(),
+    filteredServices = $state();
 
   function filterAndSortEntities(searchString) {
     return (

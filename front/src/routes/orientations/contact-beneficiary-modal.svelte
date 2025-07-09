@@ -21,7 +21,7 @@
     isOpen = $bindable(false),
     onRefresh,
     orientation,
-    queryHash
+    queryHash,
   }: Props = $props();
 
   const dispatch = createEventDispatcher();
@@ -96,7 +96,7 @@
   width="medium"
 >
   {#snippet subtitle()}
-    <div >
+    <div>
       Contacter {orientation.beneficiaryFirstName}
       {orientation.beneficiaryLastName} - qui vous a été adressé·e par {orientation.referentFirstName}
       {orientation.referentLastName}, pour le service «&nbsp;<a

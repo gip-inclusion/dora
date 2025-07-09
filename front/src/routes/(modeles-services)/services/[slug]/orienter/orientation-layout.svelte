@@ -11,9 +11,9 @@
 
   const { service } = data;
 
-  let currentLocation = $state($token
-    ? "service-orientation-step1"
-    : "service-orientation");
+  let currentLocation = $state(
+    $token ? "service-orientation-step1" : "service-orientation"
+  );
   if ($page.url.pathname.endsWith("/orienter/demande")) {
     currentLocation = "service-orientation-step2";
   } else if ($page.url.pathname.endsWith("/orienter/merci")) {

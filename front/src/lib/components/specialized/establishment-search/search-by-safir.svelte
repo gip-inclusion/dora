@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import Button from "$lib/components/display/button.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
@@ -10,19 +10,17 @@
   const safirRegexp = /^\d{5}$/u;
 
   interface Props {
-    onEstablishmentChange: (
-    establishment: Establishment | null
-  ) => void;
+    onEstablishmentChange: (establishment: Establishment | null) => void;
     proposedSafir: any;
     establishment: Establishment | null;
-    description?: import('svelte').Snippet;
+    description?: import("svelte").Snippet;
   }
 
   let {
     onEstablishmentChange,
     proposedSafir,
     establishment = $bindable(),
-    description
+    description,
   }: Props = $props();
   let safirInput = $state(proposedSafir);
   let safirIsValid = $state(false);

@@ -8,7 +8,8 @@
   import ModerationLabel from "../moderation-label.svelte";
 
   // let services,
-  let structures, entities = $state();
+  let structures,
+    entities = $state();
   let filteredEntities = $state([]);
 
   const STATUS_VALUE = {

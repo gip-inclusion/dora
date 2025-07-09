@@ -7,11 +7,6 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import StreetSearch from "../../inputs/geo/street-search.svelte";
 
-
-
-  
-
-  
   interface Props {
     id: string;
     value?: string | undefined;
@@ -41,7 +36,7 @@
     description = "Commencez à saisir le nom et choisissez dans la liste.",
     hidden = false,
     hideLabel = false,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 </script>
 

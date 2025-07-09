@@ -17,18 +17,20 @@
 
   let isDI = $derived("source" in service);
   let showComponent = $derived($userInfo?.isStaff && !service.isModel && isDI);
-  let info = $derived(service.isModel
-    ? []
-    : [
-        {
-          label: "Source",
-          value: service.source as string, // toujours string car c’est un service DI
-        },
-        {
-          label: "Identifiant de structure",
-          value: service.structure,
-        },
-      ]);
+  let info = $derived(
+    service.isModel
+      ? []
+      : [
+          {
+            label: "Source",
+            value: service.source as string, // toujours string car c’est un service DI
+          },
+          {
+            label: "Identifiant de structure",
+            value: service.structure,
+          },
+        ]
+  );
 
   let copiedIndex: number | null = $state(null);
 

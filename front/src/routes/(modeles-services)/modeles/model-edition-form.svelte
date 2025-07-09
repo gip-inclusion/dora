@@ -33,7 +33,7 @@
     servicesOptions = $bindable(),
     structures,
     structure = $bindable(),
-    showUpdateAllServicesModal = $bindable(false)
+    showUpdateAllServicesModal = $bindable(false),
   }: Props = $props();
   let shouldUpdateAllServices = $state(false);
 
@@ -152,7 +152,7 @@
         </div>
 
         {#snippet footer()}
-                <div >
+          <div>
             <div
               class="mt-s24 gap-s24 flex flex-col-reverse justify-end md:flex-row"
             >
@@ -170,7 +170,7 @@
               />
             </div>
           </div>
-              {/snippet}
+        {/snippet}
       </Modal>
     {/if}
   </CenteredGrid>

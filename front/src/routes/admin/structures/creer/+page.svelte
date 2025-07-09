@@ -167,13 +167,12 @@
             {/if}
           </p>
           {#snippet button()}
-                    <LinkButton
+            <LinkButton
               to="/structures/{alreadyClaimedEstablishment?.slug}"
               label="Consultez la structure"
               small
-              
             />
-                  {/snippet}
+          {/snippet}
         </Notice>
       {/if}
 

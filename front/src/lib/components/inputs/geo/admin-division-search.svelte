@@ -32,7 +32,7 @@
     readonly = false,
     choices = $bindable([]),
     searchType,
-    withGeom = false
+    withGeom = false,
   }: Props = $props();
 
   async function searchAdminDivision(query) {

@@ -12,12 +12,14 @@
 
   let { service }: Props = $props();
 
-  let hasDocuments =
-    $derived((Array.isArray(service.formsInfo) && service.formsInfo.length > 0) ||
-    service.onlineForm);
-  let hasCredentials =
-    $derived(Array.isArray(service.credentialsDisplay) &&
-    service.credentialsDisplay.length > 0);
+  let hasDocuments = $derived(
+    (Array.isArray(service.formsInfo) && service.formsInfo.length > 0) ||
+      service.onlineForm
+  );
+  let hasCredentials = $derived(
+    Array.isArray(service.credentialsDisplay) &&
+      service.credentialsDisplay.length > 0
+  );
 </script>
 
 {#if hasDocuments || hasCredentials}

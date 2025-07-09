@@ -35,7 +35,7 @@
     autoCloseSeconds = 0,
     hiddenFields = {},
     hideTitle = true,
-    minDaysBetweenDisplays = MIN_DAYS_BETWEEN_DISPLAYS
+    minDaysBetweenDisplays = MIN_DAYS_BETWEEN_DISPLAYS,
   }: Props = $props();
 
   let timeoutFn: ReturnType<typeof setTimeout>;

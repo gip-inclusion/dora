@@ -5,14 +5,14 @@
   interface Props {
     slug: string;
     isDI?: boolean;
-    children?: import('svelte').Snippet<[any]>;
+    children?: import("svelte").Snippet<[any]>;
   }
 
   let { slug, isDI = false, children }: Props = $props();
 
-  let bookmarkId = $derived($userInfo?.bookmarks?.find(
-    (bookmark) => bookmark.slug === slug
-  )?.id);
+  let bookmarkId = $derived(
+    $userInfo?.bookmarks?.find((bookmark) => bookmark.slug === slug)?.id
+  );
 
   async function handleFavClick() {
     if (bookmarkId) {
@@ -25,4 +25,4 @@
   }
 </script>
 
-{@render children?.({ onBookmark: handleFavClick, isBookmarked: !!bookmarkId, })}
+{@render children?.({ onBookmark: handleFavClick, isBookmarked: !!bookmarkId })}

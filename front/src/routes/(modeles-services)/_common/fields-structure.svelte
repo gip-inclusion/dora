@@ -30,7 +30,7 @@
     structures,
     structure = $bindable(),
     isModel = false,
-    model = $bindable(undefined)
+    model = $bindable(undefined),
   }: Props = $props();
 
   const propsWithSpecificFields = [

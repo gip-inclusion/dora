@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import Modal from "$lib/components/hoc/modal.svelte";
   import { getStructureAdmin } from "$lib/requests/admin";
@@ -13,7 +13,11 @@
     onRefresh: any;
   }
 
-  let { isOpen = $bindable(false), structureSlug = $bindable(), onRefresh }: Props = $props();
+  let {
+    isOpen = $bindable(false),
+    structureSlug = $bindable(),
+    onRefresh,
+  }: Props = $props();
 
   let structure: AdminShortStructure | null = $state(null);
 

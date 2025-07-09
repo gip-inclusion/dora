@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
@@ -19,22 +19,23 @@
     result,
     searchId,
     selected = false,
-    summarized = false
+    summarized = false,
   }: Props = $props();
 
   let element: HTMLDivElement = $state();
 
   let isDI = $derived(result.type === "di");
 
-  let onSite =
-    $derived(result.locationKinds.includes("en-presentiel") &&
-    result.distance != null &&
-    result.distance <= 50);
+  let onSite = $derived(
+    result.locationKinds.includes("en-presentiel") &&
+      result.distance != null &&
+      result.distance <= 50
+  );
   let remote = $derived(result.locationKinds.includes("a-distance"));
 
-  let servicePagePath = $derived(`/services/${
-    isDI ? "di--" : ""
-  }${result.slug}?searchId=${searchId}`);
+  let servicePagePath = $derived(
+    `/services/${isDI ? "di--" : ""}${result.slug}?searchId=${searchId}`
+  );
 
   run(() => {
     if (selected) {
@@ -47,7 +48,7 @@
   });
 </script>
 
-<Bookmarkable slug={result.slug} {isDI}  >
+<Bookmarkable slug={result.slug} {isDI}>
   {#snippet children({ onBookmark, isBookmarked })}
     <div
       bind:this={element}
@@ -107,7 +108,9 @@
         </div>
 
         {#if !summarized}
-          <p class="mt-s16 text-f16 text-gray-text relative z-10 hidden md:block">
+          <p
+            class="mt-s16 text-f16 text-gray-text relative z-10 hidden md:block"
+          >
             <a href={servicePagePath}>{result.shortDesc}</a>
           </p>
           <div

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run, createBubbler } from 'svelte/legacy';
+  import { run, createBubbler } from "svelte/legacy";
 
   const bubble = createBubbler();
   import { alertIcon } from "$lib/icons";
@@ -22,7 +22,7 @@
     openAt = $bindable(),
     closeAt = $bindable(),
     day,
-    dayPeriod
+    dayPeriod,
   }: Props = $props();
 
   const dispatch = createEventDispatcher();
@@ -64,7 +64,7 @@
         <label class:error={inError}>
           <span class="sr-only">Horaire d’ouverture pour le {label}</span>
           <input
-            onchange={bubble('change')}
+            onchange={bubble("change")}
             bind:value={openAt}
             type="time"
             aria-describedby={ariaDescribedBy}
@@ -81,7 +81,7 @@
           <span class="sr-only">Horaire de fermeture pour le {label}</span>
 
           <input
-            onchange={bubble('change')}
+            onchange={bubble("change")}
             bind:value={closeAt}
             disabled={!isOpen}
             class:disabled-bg={!isOpen}

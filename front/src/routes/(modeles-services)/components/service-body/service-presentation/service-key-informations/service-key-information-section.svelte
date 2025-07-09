@@ -4,7 +4,7 @@
   interface Props {
     icon: ComponentType;
     title: string;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { icon, title, children }: Props = $props();

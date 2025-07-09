@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import type { AdminShortStructure, GeoApiValue } from "$lib/types";
   import * as mlgl from "maplibre-gl";
@@ -12,7 +12,11 @@
     department: GeoApiValue;
   }
 
-  let { filteredStructures = [], selectedStructureSlug = $bindable(), department }: Props = $props();
+  let {
+    filteredStructures = [],
+    selectedStructureSlug = $bindable(),
+    department,
+  }: Props = $props();
 
   let map: mlgl.Map = $state();
   let popup: mlgl.Popup;

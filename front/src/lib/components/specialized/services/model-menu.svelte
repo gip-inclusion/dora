@@ -2,7 +2,6 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { userInfo } from "$lib/utils/auth";
 
-
   interface Props {
     model: any;
     readOnly?: boolean;

@@ -5,7 +5,7 @@
     isList?: boolean;
     verticalLayout?: boolean;
     isBool?: boolean;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let {
@@ -14,7 +14,7 @@
     isList = false,
     verticalLayout = false,
     isBool = false,
-    children
+    children,
   }: Props = $props();
 </script>
 
@@ -29,14 +29,10 @@
       {#each data as item}
         <li>{item}</li>
       {/each}
+    {:else if children}{@render children()}{:else if isBool}
+      {data ? "Oui" : "Non"}
     {:else}
-      {#if children}{@render children()}{:else}
-        {#if isBool}
-          {data ? "Oui" : "Non"}
-        {:else}
-          {data}
-        {/if}
-      {/if}
+      {data}
     {/if}
   </div>
 </div>

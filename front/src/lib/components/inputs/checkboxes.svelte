@@ -22,7 +22,7 @@
     disabled = false,
     readonly = false,
     horizontalCheckboxes = false,
-    errorMessages = []
+    errorMessages = [],
   }: Props = $props();
 
   const dispatch = createEventDispatcher();

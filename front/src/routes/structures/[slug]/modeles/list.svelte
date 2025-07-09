@@ -20,7 +20,7 @@
     total,
     tabDisplay = true,
     withEmptyNotice = false,
-    limit
+    limit,
   }: Props = $props();
 
   const orders = [
@@ -57,8 +57,6 @@
 
     return sortedModels;
   }
-
-  
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">

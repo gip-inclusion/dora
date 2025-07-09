@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { preventDefault } from 'svelte/legacy';
+  import { preventDefault } from "svelte/legacy";
 
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
@@ -60,7 +60,7 @@
     feeConditions = [],
     locationKinds = [],
     fundingLabels = [],
-    initialSearch = false
+    initialSearch = false,
   }: Props = $props();
 
   let innerWidth = $state();
@@ -69,19 +69,23 @@
   const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
   let subCategories: Choice[] = $state([]);
 
-  let query = $derived(getQueryString({
-    categoryIds: [categoryId ? categoryId : ""],
-    subCategoryIds: subCategoryIds.filter((value) => !value.endsWith("--all")),
-    cityCode,
-    cityLabel,
-    label,
-    kindIds,
-    feeConditions,
-    locationKinds,
-    fundingLabels,
-    lon,
-    lat,
-  }));
+  let query = $derived(
+    getQueryString({
+      categoryIds: [categoryId ? categoryId : ""],
+      subCategoryIds: subCategoryIds.filter(
+        (value) => !value.endsWith("--all")
+      ),
+      cityCode,
+      cityLabel,
+      label,
+      kindIds,
+      feeConditions,
+      locationKinds,
+      fundingLabels,
+      lon,
+      lat,
+    })
+  );
 
   const categories = servicesOptions.categories
     ? associateIconToCategory(sortCategory(servicesOptions.categories))

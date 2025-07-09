@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
+  import { createBubbler } from "svelte/legacy";
 
   const bubble = createBubbler();
   interface Props {
@@ -35,10 +35,12 @@
     secondary = false,
     hoverUnderline = false,
     canWrap = false,
-    wFull = false
+    wFull = false,
   }: Props = $props();
 
-  let paddingX: string = $state(), paddingY: string = $state(), textSize: string = $state();
+  let paddingX: string = $state(),
+    paddingY: string = $state(),
+    textSize: string = $state();
 
   if (small) {
     paddingY = "py-s6";
@@ -54,7 +56,9 @@
     paddingX = "px-s20";
   }
 
-  let border: string = $state(), text: string = $state(), background: string = $state();
+  let border: string = $state(),
+    text: string = $state(),
+    background: string = $state();
 
   border = "border-0";
 
@@ -88,7 +92,7 @@
   title={otherTab ? "Ouverture dans une nouvelle fenêtre" : ""}
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
-  onclick={bubble('click')}
+  onclick={bubble("click")}
   class="{paddingX} {paddingY} {textSize} {border} {text} {background} {extraClass} focus:shadow-focus inline-flex items-center justify-center rounded-sm leading-normal whitespace-nowrap"
   class:w-full={wFull}
   class:hover:underline={hoverUnderline}

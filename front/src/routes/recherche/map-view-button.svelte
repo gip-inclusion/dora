@@ -23,7 +23,7 @@
     data,
     availableFundingLabels,
     filters = $bindable(),
-    filteredServices
+    filteredServices,
   }: Props = $props();
 
   let isMapViewOpen = $state(false);

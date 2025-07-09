@@ -19,7 +19,7 @@
     servicesOptions,
     service = $bindable(),
     model = undefined,
-    noTopPadding = false
+    noTopPadding = false,
   }: Props = $props();
 
   let showModel = $derived(!!service.model);
@@ -28,15 +28,17 @@
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  let fieldModelProps = $derived(model
-    ? getModelInputProps({
-        service,
-        servicesOptions,
-        showModel,
-        onUseModelValue: handleUseModelValue,
-        model,
-      })
-    : {});
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+        })
+      : {}
+  );
 </script>
 
 <FieldSet title="Typologie" {showModel} {noTopPadding}>
@@ -51,7 +53,7 @@
     />
   </FieldModel>
   {#snippet help()}
-    <div >
+    <div>
       <p class="mb-s10 text-f14">
         Classez le service par thématique et besoin pour faciliter votre
         référencement et la lisibilité de votre offre auprès de vos partenaires.
@@ -100,8 +102,8 @@
             title="Ouverture dans une nouvelle fenêtre"
             rel="noopener"
           >
-            Référencer votre offre de formation professionnalisante ou qualifiante
-            sur Dora
+            Référencer votre offre de formation professionnalisante ou
+            qualifiante sur Dora
           </a>
         </li>
       </ul>

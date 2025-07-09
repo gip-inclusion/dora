@@ -12,7 +12,11 @@
     model?: Model | undefined;
   }
 
-  let { servicesOptions, service = $bindable(), model = undefined }: Props = $props();
+  let {
+    servicesOptions,
+    service = $bindable(),
+    model = undefined,
+  }: Props = $props();
 
   let showModel = $derived(!!service.model);
 
@@ -20,15 +24,17 @@
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  let fieldModelProps = $derived(model
-    ? getModelInputProps({
-        service,
-        servicesOptions,
-        showModel,
-        onUseModelValue: handleUseModelValue,
-        model,
-      })
-    : {});
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+        })
+      : {}
+  );
 </script>
 
 <FieldSet title="Publics" {showModel}>

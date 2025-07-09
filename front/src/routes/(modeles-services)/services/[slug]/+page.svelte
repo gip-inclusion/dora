@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import { onMount, setContext } from "svelte";
 
@@ -30,10 +30,11 @@
 
   let isServiceFeedbackModalOpen = $state(false);
 
-  let showFeedbackModal =
-    $derived(browser &&
-    data.service &&
-    !isMemberOrPotentialMemberOfStructure($userInfo, data.service.structure));
+  let showFeedbackModal = $derived(
+    browser &&
+      data.service &&
+      !isMemberOrPotentialMemberOfStructure($userInfo, data.service.structure)
+  );
 
   run(() => {
     setContext("showFeedbackModal", showFeedbackModal);

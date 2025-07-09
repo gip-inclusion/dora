@@ -171,7 +171,7 @@
 
 <FieldSet title="Service de l’inclusion numérique">
   {#snippet help()}
-    <div >
+    <div>
       <p class="text-f14">
         Le <b>Formulaire de l’inclusion numérique</b> est un outil de saisie
         compatible avec le
@@ -179,12 +179,13 @@
           href="https://lamednum.coop/schema-de-donnees-des-lieux-de-mediation-numerique-2/"
           target="_blank"
           rel="noopener"
-          class="underline">schéma de données des lieux de médiation numérique</a
+          class="underline"
+          >schéma de données des lieux de médiation numérique</a
         >.
         <br />
-        La standardisation des données de l’inclusion numérique permet de décrire l’offre
-        disponible de manière harmonisée, assurant ainsi la compatibilité de ces données
-        avec de nombreux outils.
+        La standardisation des données de l’inclusion numérique permet de décrire
+        l’offre disponible de manière harmonisée, assurant ainsi la compatibilité
+        de ces données avec de nombreux outils.
       </p>
     </div>
   {/snippet}
@@ -231,7 +232,7 @@
 
 <FieldSet title="Modalités">
   {#snippet help()}
-    <div >
+    <div>
       <p class="text-f14">Modalités pour mobiliser le service.</p>
     </div>
   {/snippet}

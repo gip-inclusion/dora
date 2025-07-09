@@ -13,7 +13,11 @@
     establishment: Establishment;
   }
 
-  let { servicesOptions, contribution = $bindable(), establishment }: Props = $props();
+  let {
+    servicesOptions,
+    contribution = $bindable(),
+    establishment,
+  }: Props = $props();
 </script>
 
 {#if contribution.siret}

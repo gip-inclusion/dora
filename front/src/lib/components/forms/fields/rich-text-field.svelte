@@ -7,9 +7,6 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import RichText from "$lib/components/inputs/rich-text/editor.svelte";
 
-
-
-  
   interface Props {
     id: string;
     value: string;
@@ -32,7 +29,7 @@
     description = "",
     hidden = false,
     hideLabel = false,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 
   let editor: RichText = $state();

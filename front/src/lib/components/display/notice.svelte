@@ -11,8 +11,8 @@
     hasCloseButton?: boolean;
     showIcon?: boolean;
     titleLevel?: "h2" | "h3" | "h4";
-    children?: import('svelte').Snippet;
-    button?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
+    button?: import("svelte").Snippet;
   }
 
   let {
@@ -22,7 +22,7 @@
     showIcon = true,
     titleLevel = "h4",
     children,
-    button
+    button,
   }: Props = $props();
 
   const types = {

@@ -8,11 +8,6 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import Select from "../../inputs/select/select.svelte";
 
-
-
-  
-
-  
   interface Props {
     id: string;
     value?: string[] | number[] | undefined;
@@ -48,15 +43,13 @@
     description = "",
     hidden = false,
     hideLabel = false,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    
-    
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -67,7 +60,7 @@
     {readonly}
   >
     {#snippet children({ onBlur, errorMessages })}
-        <Select
+      <Select
         bind:value
         on:blur={onBlur}
         {id}
@@ -83,6 +76,6 @@
         {errorMessages}
         multiple
       />
-          {/snippet}
-    </FieldWrapper>
+    {/snippet}
+  </FieldWrapper>
 {/if}

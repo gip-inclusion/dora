@@ -1,12 +1,11 @@
 <script lang="ts">
-  import { stopPropagation } from 'svelte/legacy';
+  import { stopPropagation } from "svelte/legacy";
 
   import { checkIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import { getChoiceFromValue } from "$lib/utils/choice";
   import SelectLabel from "./select-label.svelte";
-
 
   interface Props {
     value: string | string[];
@@ -25,7 +24,7 @@
     choices,
     extraClass = "",
     setAsSelected,
-    updateValue
+    updateValue,
   }: Props = $props();
 </script>
 

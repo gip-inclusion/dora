@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
@@ -24,7 +24,11 @@
     model?: Model | undefined;
   }
 
-  let { servicesOptions, service = $bindable(), model = undefined }: Props = $props();
+  let {
+    servicesOptions,
+    service = $bindable(),
+    model = undefined,
+  }: Props = $props();
 
   function handleUseModelValue(fieldName) {
     service[fieldName] = model ? model[fieldName] : undefined;
@@ -32,15 +36,17 @@
 
   let showModel = $derived(!!service.model);
 
-  let fieldModelProps = $derived(model
-    ? getModelInputProps({
-        service,
-        servicesOptions,
-        showModel,
-        onUseModelValue: handleUseModelValue,
-        model,
-      })
-    : {});
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+        })
+      : {}
+  );
 
   run(() => {
     fieldModelProps.coachOrientationModes?.value.sort((a, b) => {
@@ -78,7 +84,7 @@
 
 <FieldSet title="Modalités" {showModel}>
   {#snippet help()}
-    <div >
+    <div>
       <p class="text-f14">Modalités pour mobiliser le service.</p>
     </div>
   {/snippet}

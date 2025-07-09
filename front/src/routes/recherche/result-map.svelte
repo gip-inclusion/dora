@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import * as mlgl from "maplibre-gl";
   import Spiderfy from "@nazka/map-gl-js-spiderfy";
@@ -28,12 +28,14 @@
   let popup: mlgl.Popup;
   let spiderfy: Spiderfy;
 
-  let onSiteServicesWithCoords = $derived(filteredServices.filter(
-    (service) =>
-      service.locationKinds.includes("en-presentiel") &&
-      service.distance <= 50 &&
-      !!service.coordinates
-  ) as ServiceWithCoords[]);
+  let onSiteServicesWithCoords = $derived(
+    filteredServices.filter(
+      (service) =>
+        service.locationKinds.includes("en-presentiel") &&
+        service.distance <= 50 &&
+        !!service.coordinates
+    ) as ServiceWithCoords[]
+  );
 
   let zoomToAddress = $derived(Boolean(data.lat && data.lon));
 

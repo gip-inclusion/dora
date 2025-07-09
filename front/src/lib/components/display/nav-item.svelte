@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
+  import { createBubbler } from "svelte/legacy";
 
   const bubble = createBubbler();
   interface Props {
@@ -13,13 +13,13 @@
     label = "",
     otherTab = false,
     disabled = false,
-    href
+    href,
   }: Props = $props();
 </script>
 
 <a
   class="text-f14 text-gray-text"
-  onclick={bubble('click')}
+  onclick={bubble("click")}
   {href}
   target={otherTab ? "_blank" : ""}
   rel="noopener"

@@ -3,7 +3,6 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import InclusionNumSwitch from "./inclusion-num-switch.svelte";
 
-
   interface Props {
     servicesOptions: ServicesOptions;
     service: Service;
@@ -17,7 +16,7 @@
     service = $bindable(),
     model = undefined,
     isModel = false,
-    description = ""
+    description = "",
   }: Props = $props();
   const useModel = model != null;
 

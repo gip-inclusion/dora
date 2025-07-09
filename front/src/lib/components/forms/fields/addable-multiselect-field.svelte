@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import {
     currentFormData,
@@ -12,11 +12,6 @@
   import Button from "../../display/button.svelte";
   import Select from "../../inputs/select/select.svelte";
 
-
-
-  
-
-  
   interface Props {
     id: string;
     values: CustomizableFK[];
@@ -54,7 +49,7 @@
     description = "",
     hidden = false,
     hideLabel = false,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 
   let textInputVisible = $state(false);
@@ -84,8 +79,6 @@
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    
-    
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -96,7 +89,7 @@
     {readonly}
   >
     {#snippet children({ onBlur, errorMessages })}
-        <Select
+      <Select
         {id}
         bind:value={values}
         on:blur={onBlur}
@@ -160,7 +153,7 @@
           </div>
         </div>
       {/if}
-          {/snippet}
-    </FieldWrapper>
+    {/snippet}
+  </FieldWrapper>
   <div></div>
 {/if}

@@ -15,7 +15,7 @@
     suggestion,
     isOpen = $bindable(false),
     onAccept,
-    onReject
+    onReject,
   }: Props = $props();
 </script>
 

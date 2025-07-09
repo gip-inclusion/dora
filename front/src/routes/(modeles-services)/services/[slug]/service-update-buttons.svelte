@@ -5,7 +5,6 @@
   import { checkboxLineIcon, editIcon } from "$lib/icons";
   import type { Service, ServicesOptions } from "$lib/types";
 
-
   interface Props {
     service: Service;
     servicesOptions: ServicesOptions;

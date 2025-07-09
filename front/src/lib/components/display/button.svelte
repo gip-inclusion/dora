@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run, createBubbler } from 'svelte/legacy';
+  import { run, createBubbler } from "svelte/legacy";
 
   const bubble = createBubbler();
   interface Props {
@@ -23,9 +23,9 @@
     noWrap?: boolean;
     preventDefaultOnMouseDown?: boolean;
     ariaAttributes?: Partial<{
-    "aria-expanded": boolean;
-    "aria-controls": string;
-  }>;
+      "aria-expanded": boolean;
+      "aria-controls": string;
+    }>;
   }
 
   let {
@@ -48,10 +48,12 @@
     wFull = false,
     noWrap = false,
     preventDefaultOnMouseDown = false,
-    ariaAttributes = {}
+    ariaAttributes = {},
   }: Props = $props();
 
-  let paddingX: string = $state(), paddingY: string = $state(), textSize: string = $state();
+  let paddingX: string = $state(),
+    paddingY: string = $state(),
+    textSize: string = $state();
 
   if (small) {
     paddingY = "py-s6";
@@ -72,7 +74,9 @@
     paddingX = "px-s20";
   }
 
-  let border: string = $state(), text: string = $state(), background: string = $state();
+  let border: string = $state(),
+    text: string = $state(),
+    background: string = $state();
 
   run(() => {
     if (secondary) {
@@ -118,7 +122,7 @@
   class:flex-row={icon}
   class:items-center={icon}
   {...ariaAttributes}
-  onclick={bubble('click')}
+  onclick={bubble("click")}
   onmousedown={handleMouseDown}
   {disabled}
 >

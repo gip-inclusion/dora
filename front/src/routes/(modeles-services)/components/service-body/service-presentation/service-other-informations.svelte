@@ -13,16 +13,18 @@
 
   let { service, servicesOptions }: Props = $props();
 
-  let categories = $derived(service.subcategories.reduce(
-    (acc, subCategorySlug) => {
-      const categorySlug = subCategorySlug.split("--")[0];
-      return {
-        ...acc,
-        [categorySlug]: [...(acc[categorySlug] ?? []), subCategorySlug],
-      };
-    },
-    {} as Record<string, string[]>
-  ));
+  let categories = $derived(
+    service.subcategories.reduce(
+      (acc, subCategorySlug) => {
+        const categorySlug = subCategorySlug.split("--")[0];
+        return {
+          ...acc,
+          [categorySlug]: [...(acc[categorySlug] ?? []), subCategorySlug],
+        };
+      },
+      {} as Record<string, string[]>
+    )
+  );
 
   let hasCategories = $derived(Object.keys(categories).length > 0);
   let hasKinds = $derived(service.kinds && service.kinds.length > 0);

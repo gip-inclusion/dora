@@ -15,14 +15,22 @@
     mobileDesign?: boolean;
   }
 
-  let { structures = [], lastVisitedStructure = undefined, mobileDesign = false }: Props = $props();
+  let {
+    structures = [],
+    lastVisitedStructure = undefined,
+    mobileDesign = false,
+  }: Props = $props();
 
   let filterText = $state("");
-  let structuresToDisplay = $derived(filterText
-    ? structures.filter((struct) =>
-        struct.name.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())
-      )
-    : structures);
+  let structuresToDisplay = $derived(
+    filterText
+      ? structures.filter((struct) =>
+          struct.name
+            .toLocaleLowerCase()
+            .includes(filterText.toLocaleLowerCase())
+        )
+      : structures
+  );
 </script>
 
 <div class="mb-s16 lg:mb-s0 lg:mr-s10">
@@ -30,7 +38,7 @@
     <div class="flex w-full items-center lg:w-auto">
       <DropdownMenu label="Mes structures" hideLabel {mobileDesign}>
         <!-- @migration-task: migrate this slot by hand, `label` would shadow a prop on the parent component -->
-  <div slot="label" class="flex w-full items-center">
+        <div slot="label" class="flex w-full items-center">
           <span
             class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
           >
@@ -92,7 +100,7 @@
         </div>
 
         {#snippet bottom()}
-                <div >
+          <div>
             <a
               class="text-gray-text flex whitespace-nowrap"
               href="/auth/rattachement"
@@ -103,7 +111,7 @@
               <span>Adhérer à une autre structure </span>
             </a>
           </div>
-              {/snippet}
+        {/snippet}
       </DropdownMenu>
     </div>
   {/if}

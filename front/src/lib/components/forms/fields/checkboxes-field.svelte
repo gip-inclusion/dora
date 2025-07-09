@@ -7,11 +7,6 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import Checkboxes from "../../inputs/checkboxes.svelte";
 
-
-
-  
-
-  
   interface Props {
     id: string;
     value: any;
@@ -37,15 +32,13 @@
     hidden = false,
     hideLabel = false,
     vertical = false,
-    horizontalCheckboxes = false
+    horizontalCheckboxes = false,
   }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    
-    
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -56,7 +49,7 @@
     {readonly}
   >
     {#snippet children({ onChange, errorMessages })}
-        <Checkboxes
+      <Checkboxes
         bind:group={value}
         on:change={onChange}
         name={id}
@@ -66,6 +59,6 @@
         {horizontalCheckboxes}
         {errorMessages}
       />
-          {/snippet}
-    </FieldWrapper>
+    {/snippet}
+  </FieldWrapper>
 {/if}

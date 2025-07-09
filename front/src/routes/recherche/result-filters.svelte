@@ -25,7 +25,11 @@
     filters: Filters;
   }
 
-  let { servicesOptions, availableFundingLabels, filters = $bindable() }: Props = $props();
+  let {
+    servicesOptions,
+    availableFundingLabels,
+    filters = $bindable(),
+  }: Props = $props();
 </script>
 
 <div class="gap-s32 flex flex-col">

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import type { Choice } from "$lib/types";
 
@@ -11,7 +11,9 @@
 
   let { choice, showIcon = true, useSelectedLabel = false }: Props = $props();
 
-  let icon = $state(), iconOnRight = $state(), label = $state();
+  let icon = $state(),
+    iconOnRight = $state(),
+    label = $state();
   run(() => {
     icon = choice.icon;
     iconOnRight = choice.iconOnRight;

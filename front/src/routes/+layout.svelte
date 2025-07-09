@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import { page } from "$app/stores";
   import { ENVIRONMENT } from "$lib/env";
@@ -11,7 +11,7 @@
   import { userInfo } from "$lib/utils/auth";
   import { trackPageView } from "$lib/utils/stats";
   interface Props {
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { children }: Props = $props();

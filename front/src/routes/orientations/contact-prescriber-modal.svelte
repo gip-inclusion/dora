@@ -21,7 +21,7 @@
     isOpen = $bindable(false),
     onRefresh,
     orientation,
-    queryHash
+    queryHash,
   }: Props = $props();
 
   const dispatch = createEventDispatcher();
@@ -99,7 +99,7 @@
   title="Contacter le prescripteur ou la prescriptrice"
 >
   {#snippet subtitle()}
-    <div >
+    <div>
       Contacter {orientation.prescriber?.name} - concernant l’orientation qui vous
       a été adressé pour le service «&nbsp;<a
         class="text-magenta-cta"

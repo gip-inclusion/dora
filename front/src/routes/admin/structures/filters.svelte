@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
@@ -39,7 +39,7 @@
     servicesOptions,
     structuresOptions,
     structures = [],
-    filteredStructures = $bindable()
+    filteredStructures = $bindable(),
   }: Props = $props();
 
   const statusFilterSettings: {
@@ -274,8 +274,8 @@
         secondary={searchStatus !== status}
       />
       {#snippet content()}
-            <div  class="max-w-s256 text-center">{definition}</div>
-          {/snippet}
+        <div class="max-w-s256 text-center">{definition}</div>
+      {/snippet}
     </Tooltip>
   {/each}
 </div>

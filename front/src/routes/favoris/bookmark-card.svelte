@@ -10,12 +10,7 @@
   let { bookmark }: Props = $props();
 </script>
 
-<Bookmarkable
-  slug={bookmark.slug}
-  isDI={bookmark.isDi}
-  
-  
->
+<Bookmarkable slug={bookmark.slug} isDI={bookmark.isDi}>
   {#snippet children({ onBookmark, isBookmarked })}
     {@const service = bookmark.service}
 
@@ -35,7 +30,10 @@
                 >{/if}
             </div>
           {:else}
-            <a href="/structures/{service?.structureSlug}" class="text-f14 block">
+            <a
+              href="/structures/{service?.structureSlug}"
+              class="text-f14 block"
+            >
               {service?.structureName}
               {#if service?.postalCode}<span
                   class="legend ml-s8 text-gray-dark font-bold"
@@ -67,8 +65,8 @@
             <div
               class="border-gray-02 px-s8 py-s2 text-f12 text-gray-text inline rounded-sm border"
             >
-              Source&nbsp;: <span class="capitalize">{service?.source}</span>, via
-              data·inclusion
+              Source&nbsp;: <span class="capitalize">{service?.source}</span>,
+              via data·inclusion
             </div>
           {/if}
         {/if}

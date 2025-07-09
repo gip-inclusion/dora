@@ -3,7 +3,6 @@
   import Button from "$lib/components/display/button.svelte";
   import { arrowDownSIcon } from "$lib/icons";
 
-  
   interface Props {
     // on pourrait affiner les types, mais ça alourdirait de beaucoup
     departments: any;
@@ -22,10 +21,11 @@
   noPadding
   extraClass="text-france-blue!"
   alignRight={false}
-  
 >
   {#snippet children({ onClose: onCloseParent })}
-    <div class="gap-s12 px-s12 py-s12 text-gray-dark! flex flex-col items-start">
+    <div
+      class="gap-s12 px-s12 py-s12 text-gray-dark! flex flex-col items-start"
+    >
       {#each departments as dpt}
         <Button
           on:click={() => {

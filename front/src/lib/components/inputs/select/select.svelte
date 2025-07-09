@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import AutoComplete from "./simple-autocomplete.svelte";
 
@@ -18,23 +18,21 @@
     placeholderMulti?: string;
     multiple?: boolean;
     hideArrow?: boolean;
-    searchFunction?: 
-    | ((searchTxt: string) => Promise<Choice[]>)
-    | undefined;
+    searchFunction?: ((searchTxt: string) => Promise<Choice[]>) | undefined;
     delay?: any;
     localFiltering?: any;
     minCharactersToSearch?: any;
-    onChange?: 
-    | ((newValue: string) => void)
-    | ((newValues: string[]) => void)
-    | undefined;
+    onChange?:
+      | ((newValue: string) => void)
+      | ((newValues: string[]) => void)
+      | undefined;
     initialValue?: any;
     showClear?: boolean;
     errorMessages?: string[];
     extraClass?: string;
-    prepend?: import('svelte').Snippet;
-    append?: import('svelte').Snippet;
-    itemContent?: import('svelte').Snippet<[any]>;
+    prepend?: import("svelte").Snippet;
+    append?: import("svelte").Snippet;
+    itemContent?: import("svelte").Snippet<[any]>;
   }
 
   let {
@@ -61,7 +59,7 @@
     extraClass = "",
     prepend,
     append,
-    itemContent
+    itemContent,
   }: Props = $props();
 
   // https://github.com/sveltejs/svelte/issues/5604
@@ -117,9 +115,7 @@
   {/snippet}
 
   {#snippet itemContent({ item })}
-  
-      {@render itemContent_render?.({ item, })}
-    
+    {@render itemContent_render?.({ item })}
   {/snippet}
 
   {#snippet append()}

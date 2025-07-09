@@ -39,9 +39,11 @@
     },
   };
 
-  let currentNotice = $derived(service.useInclusionNumeriqueScheme
-    ? inclusionNumFormActiveNotice
-    : inclusionNumFormAvailableNotice);
+  let currentNotice = $derived(
+    service.useInclusionNumeriqueScheme
+      ? inclusionNumFormActiveNotice
+      : inclusionNumFormAvailableNotice
+  );
 </script>
 
 <Modal bind:isOpen={isSwitchModalOpen} title="Attention !" width="small">

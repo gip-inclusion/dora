@@ -23,12 +23,14 @@
   let requesting = $state(false);
 
   // TODO: Ajouter le type Contribution
-  let contribution: Service = $state(Object.fromEntries(
-    Object.entries(contribSchema).map(([fieldName, props]) => [
-      fieldName,
-      props.default,
-    ])
-  ));
+  let contribution: Service = $state(
+    Object.fromEntries(
+      Object.entries(contribSchema).map(([fieldName, props]) => [
+        fieldName,
+        props.default,
+      ])
+    )
+  );
 
   function handleChange(validatedData) {
     contribution = { ...contribution, ...validatedData };

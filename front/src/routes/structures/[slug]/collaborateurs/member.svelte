@@ -6,9 +6,9 @@
     member: any;
     isMyself?: boolean;
     readOnly?: boolean;
-    status?: import('svelte').Snippet;
-    label?: import('svelte').Snippet;
-    actions?: import('svelte').Snippet<[any]>;
+    status?: import("svelte").Snippet;
+    label?: import("svelte").Snippet;
+    actions?: import("svelte").Snippet<[any]>;
   }
 
   let {
@@ -17,7 +17,7 @@
     readOnly = false,
     status,
     label,
-    actions
+    actions,
   }: Props = $props();
 </script>
 
@@ -44,14 +44,13 @@
         <ButtonMenu
           small
           icon={moreIcon}
-          
           hideLabel
           label="Actions disponibles pour l'utilisateur"
         >
           {#snippet children({ onClose: onCloseParent })}
-                    {@render actions?.({ onCloseParent, })}
-                            {/snippet}
-                </ButtonMenu>
+            {@render actions?.({ onCloseParent })}
+          {/snippet}
+        </ButtonMenu>
       {/if}
     </div>
   </div>

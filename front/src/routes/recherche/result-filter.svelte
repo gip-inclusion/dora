@@ -11,12 +11,7 @@
     group: Array<Choice["value"]>;
   }
 
-  let {
-    id,
-    label,
-    choices,
-    group = $bindable()
-  }: Props = $props();
+  let { id, label, choices, group = $bindable() }: Props = $props();
 
   const searchText = "";
 
@@ -52,16 +47,15 @@
         placeholderMulti="Choisir"
       >
         {#snippet append()}
-                <Button
+          <Button
             on:click={clearSelection}
             extraClass={`mx-s20 my-s6 ${group.length > 0 ? "" : "hidden"}`}
             label="Effacer la sélection"
             noBackground
             noPadding
             small
-            
           />
-              {/snippet}
+        {/snippet}
       </Select>
     {:else}
       <Checkboxes name={id} {choices} bind:group />

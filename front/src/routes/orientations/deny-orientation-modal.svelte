@@ -22,7 +22,7 @@
     isOpen = $bindable(false),
     onRefresh,
     orientation,
-    queryHash
+    queryHash,
   }: Props = $props();
 
   let showConfirmation = $state(false);
@@ -137,10 +137,10 @@
   hideTitle={showConfirmation}
 >
   {#snippet subtitle()}
-    <div >
-      Vous êtes sur le point de refuser une demande de prescription de service qui
-      vous a été adressée par {orientation.prescriber?.name} de la structure {orientation
-        .prescriberStructure?.name}
+    <div>
+      Vous êtes sur le point de refuser une demande de prescription de service
+      qui vous a été adressée par {orientation.prescriber?.name} de la structure
+      {orientation.prescriberStructure?.name}
       pour le service «&nbsp;<a
         class="text-magenta-cta"
         href="/services/{orientation.service?.slug}"

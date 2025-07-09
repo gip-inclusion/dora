@@ -3,7 +3,7 @@
 
   interface Props {
     justifyBetween?: boolean;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { justifyBetween = false, children }: Props = $props();

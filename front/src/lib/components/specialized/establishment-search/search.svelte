@@ -6,16 +6,13 @@
   import SearchBySiret from "./search-by-siret.svelte";
   import type { Establishment, GeoApiValue } from "$lib/types";
 
-
   type Tab = "nom" | "siret" | "safir";
-
-
 
   interface Props {
     onCityChange?: ((city: GeoApiValue | null) => void) | undefined;
-    onEstablishmentChange?: 
-    | ((establishment: Establishment | null) => void)
-    | undefined;
+    onEstablishmentChange?:
+      | ((establishment: Establishment | null) => void)
+      | undefined;
     establishment?: Establishment | null;
     showSafir?: boolean;
     tabId?: Tab;
@@ -23,7 +20,7 @@
     description?: string | undefined;
     proposedSafir?: string;
     proposedSiret?: string;
-    cta?: import('svelte').Snippet;
+    cta?: import("svelte").Snippet;
   }
 
   let {
@@ -36,7 +33,7 @@
     description = undefined,
     proposedSafir = $bindable(""),
     proposedSiret = "",
-    cta
+    cta,
   }: Props = $props();
 
   if (!showSafir) {
@@ -86,7 +83,7 @@
 
 <FieldSet {title} headerBg="bg-magenta-brand" noHeaderBorder noTopPadding>
   {#snippet description()}
-    <div >
+    <div>
       <p class="m-s0 text-f14 text-white">
         {#if description}
           {description}
@@ -99,7 +96,8 @@
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
             rel="noopener"
-            href="https://aide.dora.inclusion.beta.gouv.fr/fr/">nous contacter</a
+            href="https://aide.dora.inclusion.beta.gouv.fr/fr/"
+            >nous contacter</a
           >.
         {/if}
       </p>

@@ -33,7 +33,7 @@
     {#if !showAll && textIsTooLong}
       <div
         class="bottom-s0 left-s0 h-s112 absolute w-full bg-gradient-to-b from-transparent to-white"
-></div>
+      ></div>
     {/if}
   </div>
 

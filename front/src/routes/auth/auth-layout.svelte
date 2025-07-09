@@ -2,7 +2,7 @@
   import connexionPic from "$lib/assets/illustrations/illu-connexion.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   interface Props {
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { children }: Props = $props();

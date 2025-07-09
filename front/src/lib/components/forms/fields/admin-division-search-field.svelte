@@ -8,11 +8,6 @@
   import AdminDivisionSearch from "../../inputs/geo/admin-division-search.svelte";
   import type { GeoApiValue } from "$lib/types";
 
-
-
-  
-
-  
   interface Props {
     id: string;
     value?: string | undefined;
@@ -44,7 +39,7 @@
     description = "",
     hidden = false,
     hideLabel = false,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 </script>
 

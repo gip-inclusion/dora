@@ -35,12 +35,11 @@
     showIcon={false}
   >
     {#snippet button()}
-        <Button
-        
+      <Button
         on:click={() => (isVideoModalOpen = true)}
         label="Voir la vidéo de démonstration."
         secondary
       />
-      {/snippet}
+    {/snippet}
   </Notice>
 </div>

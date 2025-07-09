@@ -38,31 +38,35 @@
     members,
     putativeMembers,
     structuresOptions,
-    onRefresh
+    onRefresh,
   }: Props = $props();
 
   let fullDesc: string = $derived(markdownToHTML(structure.fullDesc, 4));
 
-  
-  let nationalLabelsDisplay = $derived(structure.nationalLabels
-    .map((nationalLabel: string) => {
-      return structuresOptions.nationalLabels.find(
-        (label) => label.value === nationalLabel
-      ).label;
-    })
-    .join(", "));
-  let sourceIsDataInclusion = $derived(structure.source?.value.startsWith("di-"));
-  let structureHasInfo =
-    $derived(structure.phone ||
-    structure.email ||
-    structure.url ||
-    structure.openingHours ||
-    structure.openingHoursDetails ||
-    structure.accesslibreUrl);
+  let nationalLabelsDisplay = $derived(
+    structure.nationalLabels
+      .map((nationalLabel: string) => {
+        return structuresOptions.nationalLabels.find(
+          (label) => label.value === nationalLabel
+        ).label;
+      })
+      .join(", ")
+  );
+  let sourceIsDataInclusion = $derived(
+    structure.source?.value.startsWith("di-")
+  );
+  let structureHasInfo = $derived(
+    structure.phone ||
+      structure.email ||
+      structure.url ||
+      structure.openingHours ||
+      structure.openingHoursDetails ||
+      structure.accesslibreUrl
+  );
 
-  let servicesToUpdate = $derived(structure.services.filter(
-    (service) => service.updateNeeded
-  ));
+  let servicesToUpdate = $derived(
+    structure.services.filter((service) => service.updateNeeded)
+  );
 
   let displayInformations = $state(false);
 

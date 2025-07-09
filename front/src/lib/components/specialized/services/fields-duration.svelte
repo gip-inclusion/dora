@@ -12,27 +12,34 @@
     service: Service;
   }
 
-  let { model = undefined, servicesOptions, service = $bindable() }: Props = $props();
+  let {
+    model = undefined,
+    servicesOptions,
+    service = $bindable(),
+  }: Props = $props();
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
   let showModel = $derived(!!service.model);
-  let fieldModelProps = $derived(model
-    ? getModelInputProps({
-        service,
-        servicesOptions,
-        showModel,
-        onUseModelValue: handleUseModelValue,
-        model,
-      })
-    : {});
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+        })
+      : {}
+  );
 
-  let totalHours =
-    $derived(isNaN(service.durationWeeklyHours) || isNaN(service.durationWeeks)
+  let totalHours = $derived(
+    isNaN(service.durationWeeklyHours) || isNaN(service.durationWeeks)
       ? 0
-      : (service.durationWeeklyHours || 0) * (service.durationWeeks || 0));
+      : (service.durationWeeklyHours || 0) * (service.durationWeeks || 0)
+  );
 </script>
 
 <FieldSet title="Durée de la prestation">

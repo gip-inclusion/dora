@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { preventDefault, createBubbler } from 'svelte/legacy';
+  import { preventDefault, createBubbler } from "svelte/legacy";
 
   const bubble = createBubbler();
   import { deleteBinIcon } from "$lib/icons";
@@ -18,7 +18,7 @@
     id,
     structureSlug,
     fileKeys = $bindable([]),
-    disabled = false
+    disabled = false,
   }: Props = $props();
 
   let errorMessage = $state("");
@@ -123,7 +123,7 @@
       name={id}
       {id}
       bind:this={uploadInput}
-      onblur={bubble('blur')}
+      onblur={bubble("blur")}
       onchange={handleSubmit}
       {disabled}
       type="file"

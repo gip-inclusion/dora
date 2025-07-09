@@ -7,7 +7,9 @@
 
   let { cityLabel }: Props = $props();
 
-  let queryString = $derived(cityLabel ? `?cl=${encodeURIComponent(cityLabel)}` : "");
+  let queryString = $derived(
+    cityLabel ? `?cl=${encodeURIComponent(cityLabel)}` : ""
+  );
   let url = $derived(`/annuaire-collectivite${queryString}`);
 </script>
 

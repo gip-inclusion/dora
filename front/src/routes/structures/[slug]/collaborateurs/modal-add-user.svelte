@@ -38,7 +38,7 @@
     structure,
     members,
     onRefresh,
-    suggestAdmin = false
+    suggestAdmin = false,
   }: Props = $props();
 
   let email = $state("");

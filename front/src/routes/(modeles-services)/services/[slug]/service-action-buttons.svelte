@@ -77,28 +77,28 @@
       </div>
     </ServiceActionButton>
     {#snippet content()}
-        <span >{copyLabel}</span>
-      {/snippet}
+      <span>{copyLabel}</span>
+    {/snippet}
   </Tooltip>
   <Tooltip>
     <ServiceActionButton ariaLabel={printLabel} on:click={handlePrint}>
       <PrinterLineBusiness />
     </ServiceActionButton>
     {#snippet content()}
-        <span >{printLabel}</span>
-      {/snippet}
+      <span>{printLabel}</span>
+    {/snippet}
   </Tooltip>
   <Tooltip>
     <ServiceActionButton ariaLabel={shareLabel} on:click={handleShare}>
       <MailLineBusiness />
     </ServiceActionButton>
     {#snippet content()}
-        <span >{shareLabel}</span>
-      {/snippet}
+      <span>{shareLabel}</span>
+    {/snippet}
   </Tooltip>
-  <Bookmarkable slug={service.slug} {isDI}  >
+  <Bookmarkable slug={service.slug} {isDI}>
     {#snippet children({ onBookmark, isBookmarked })}
-        {@const bookmarLabel = isBookmarked
+      {@const bookmarLabel = isBookmarked
         ? "Retirer de vos favoris"
         : "Ajouter à vos favoris"}
       <Tooltip>
@@ -113,11 +113,11 @@
           {/if}
         </ServiceActionButton>
         {#snippet content()}
-            <span >{bookmarLabel}</span>
-          {/snippet}
+          <span>{bookmarLabel}</span>
+        {/snippet}
       </Tooltip>
-          {/snippet}
-    </Bookmarkable>
+    {/snippet}
+  </Bookmarkable>
 </div>
 
 {#if browser}

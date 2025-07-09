@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
+  import { createBubbler } from "svelte/legacy";
 
   const bubble = createBubbler();
   import CheckboxMark from "../display/checkbox-mark.svelte";
@@ -14,7 +14,7 @@
     horizontal?: boolean;
     errorMessage?: string | null | undefined;
     focused?: boolean;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let {
@@ -27,7 +27,7 @@
     horizontal = false,
     errorMessage = undefined,
     focused = false,
-    children
+    children,
   }: Props = $props();
 
   // Malheureusement, utiliser bind:groups ici ne fonctionne pas :
@@ -57,8 +57,8 @@
     {readonly}
     checked={group.includes(value)}
     onchange={handleChange}
-    onfocus={bubble('focus')}
-    onblur={bubble('blur')}
+    onfocus={bubble("focus")}
+    onblur={bubble("blur")}
   />
   <CheckboxMark />
   <span class="ml-s16 text-f16 text-gray-text inline-block">{label}</span>

@@ -20,15 +20,16 @@
     structureSlug,
     servicesToUpdate = [],
     requesting = $bindable(false),
-    onRefresh
+    onRefresh,
   }: Props = $props();
 
   const LIST_LENGTH = 3;
 
   let showAll = $state(false);
 
-  let showNotice =
-    $derived(servicesToUpdate.length && !isNoticeHidden("update", structureSlug));
+  let showNotice = $derived(
+    servicesToUpdate.length && !isNoticeHidden("update", structureSlug)
+  );
 
   async function handleMarkServicesAsUpToDate(
     selectedServices: ServiceToUpdate[]

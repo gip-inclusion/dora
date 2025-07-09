@@ -1,17 +1,16 @@
 <script lang="ts">
-
   interface Props {
     selfStart?: boolean;
     bgColorClass?: string;
     textColorClass?: string;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let {
     selfStart = false,
     bgColorClass = "bg-gray-text-alt",
     textColorClass = "text-white",
-    children
+    children,
   }: Props = $props();
 </script>
 

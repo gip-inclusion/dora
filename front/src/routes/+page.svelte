@@ -29,10 +29,9 @@
 
   let isVideoModalOpen = $state(false);
 
-  let lastVisitedStructure = $derived(getCurrentlySelectedStructure(
-    $userInfo,
-    $userPreferences
-  ));
+  let lastVisitedStructure = $derived(
+    getCurrentlySelectedStructure($userInfo, $userPreferences)
+  );
 </script>
 
 <OrientationVideo bind:isVideoModalOpen></OrientationVideo>

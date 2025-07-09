@@ -18,7 +18,7 @@
     servicesOptions,
     service = $bindable(),
     model = undefined,
-    noTopPadding = false
+    noTopPadding = false,
   }: Props = $props();
 
   let fullDesc = $state();
@@ -31,20 +31,22 @@
   }
 
   let showModel = $derived(!!service.model);
-  let fieldModelProps = $derived(model
-    ? getModelInputProps({
-        service,
-        servicesOptions,
-        showModel,
-        onUseModelValue: handleUseModelValue,
-        model,
-      })
-    : {});
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+        })
+      : {}
+  );
 </script>
 
 <FieldSet title="Présentation" {showModel} {noTopPadding}>
   {#snippet help()}
-    <div >
+    <div>
       <p class="text-f14">
         Le <b>Résumé</b> présente le service en une phrase courte. Il apparait dans
         les résultats de recherche.

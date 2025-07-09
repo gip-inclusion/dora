@@ -8,11 +8,6 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import Select from "../../inputs/select/select.svelte";
 
-
-
-  
-
-  
   interface Props {
     id: string;
     value?: string | number | undefined;
@@ -22,9 +17,7 @@
     initialValue?: string | undefined;
     // Spécifique du select
     choices: Choice[];
-    searchFunction?: 
-    | ((searchText: string) => Promise<Choice[]>)
-    | undefined;
+    searchFunction?: ((searchText: string) => Promise<Choice[]>) | undefined;
     sort?: boolean;
     onChange?: any;
     placeholderMulti?: string;
@@ -50,15 +43,13 @@
     description = "",
     hidden = false,
     hideLabel = false,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    
-    
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -69,7 +60,7 @@
     {disabled}
   >
     {#snippet children({ onBlur, errorMessages })}
-        <Select
+      <Select
         {id}
         {choices}
         {sort}
@@ -84,6 +75,6 @@
         {initialValue}
         {errorMessages}
       />
-          {/snippet}
-    </FieldWrapper>
+    {/snippet}
+  </FieldWrapper>
 {/if}

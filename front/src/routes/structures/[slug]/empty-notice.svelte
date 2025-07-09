@@ -6,7 +6,7 @@
     title?: string;
     illustration?: string;
     links?: { label: string; url: string }[];
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let {
@@ -14,7 +14,7 @@
     title = "",
     illustration = "",
     links = [],
-    children
+    children,
   }: Props = $props();
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import type { Service, ServicesOptions } from "$lib/types";
@@ -11,7 +11,11 @@
     description?: string;
   }
 
-  let { service = $bindable(), servicesOptions, description = "" }: Props = $props();
+  let {
+    service = $bindable(),
+    servicesOptions,
+    description = "",
+  }: Props = $props();
 
   let availableSubcategories = $state([]);
 

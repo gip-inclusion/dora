@@ -15,7 +15,11 @@
     onRefresh: any;
   }
 
-  let { filteredStructures, selectedStructureSlug = $bindable(), onRefresh }: Props = $props();
+  let {
+    filteredStructures,
+    selectedStructureSlug = $bindable(),
+    onRefresh,
+  }: Props = $props();
 
   let isStructureModalOpen = $state(false);
   let currentStructure: AdminShortStructure | null = $state(null);
@@ -81,10 +85,9 @@
         small
         hideLabel
         label="Actions disponibles sur la structure"
-        
       >
         {#snippet children({ onClose: onCloseParent })}
-                {#if !structure.isObsolete}
+          {#if !structure.isObsolete}
             <Button
               on:click={() => {
                 updateStructureObsolete(structure, true);
@@ -105,8 +108,8 @@
               noBackground
             />
           {/if}
-                      {/snippet}
-            </ButtonMenu>
+        {/snippet}
+      </ButtonMenu>
     </div>
   {/each}
 </div>

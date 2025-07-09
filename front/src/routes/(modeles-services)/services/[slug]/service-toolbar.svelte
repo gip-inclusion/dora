@@ -13,12 +13,8 @@
     onFeedbackButtonClick: () => void;
   }
 
-  let {
-    service,
-    servicesOptions,
-    onRefresh,
-    onFeedbackButtonClick
-  }: Props = $props();
+  let { service, servicesOptions, onRefresh, onFeedbackButtonClick }: Props =
+    $props();
 </script>
 
 <div class="hidden print:block">

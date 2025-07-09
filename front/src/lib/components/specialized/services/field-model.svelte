@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import Button from "$lib/components/display/button.svelte";
   import Tag from "$lib/components/display/tag.svelte";
@@ -8,8 +8,6 @@
     markdownToHTML,
     htmlToMarkdown,
   } from "$lib/utils/misc";
-
-
 
   interface Props {
     value?: any | undefined;
@@ -20,20 +18,20 @@
     options?: any | undefined;
     paddingTop?: boolean;
     serviceValue?: any | undefined;
-    subFields?: 
-    | Record<
-        string,
-        Array<{
-          label?: string;
-          showModel: boolean;
-          value: any;
-          serviceValue: any;
-          options: any;
-          onUseValue: (() => void) | undefined;
-        }>
-      >
-    | undefined;
-    children?: import('svelte').Snippet;
+    subFields?:
+      | Record<
+          string,
+          Array<{
+            label?: string;
+            showModel: boolean;
+            value: any;
+            serviceValue: any;
+            options: any;
+            onUseValue: (() => void) | undefined;
+          }>
+        >
+      | undefined;
+    children?: import("svelte").Snippet;
   }
 
   let {
@@ -46,7 +44,7 @@
     paddingTop = false,
     serviceValue = undefined,
     subFields = undefined,
-    children
+    children,
   }: Props = $props();
 
   let haveSameValue = $state(false);
@@ -77,11 +75,13 @@
     }
   }
 
-  let subFieldsHaveSameValue = $derived(subFields
-    ? Object.values(subFields).every((fields) =>
-        fields.every((field) => field.value === field.serviceValue)
-      )
-    : true);
+  let subFieldsHaveSameValue = $derived(
+    subFields
+      ? Object.values(subFields).every((fields) =>
+          fields.every((field) => field.value === field.serviceValue)
+        )
+      : true
+  );
   run(() => {
     haveSameValue =
       showModel && compare(value, serviceValue) && subFieldsHaveSameValue;

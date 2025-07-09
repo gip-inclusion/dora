@@ -6,7 +6,7 @@
 
   interface Props {
     isOpen: boolean;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { isOpen = $bindable(), children }: Props = $props();

@@ -26,22 +26,29 @@
   let isDI = $derived("source" in service);
 
   let searchIdStr = $derived($page.url.searchParams.get("searchId"));
-  let searchIdNumber = $derived(searchIdStr ? parseInt(searchIdStr) : undefined);
+  let searchIdNumber = $derived(
+    searchIdStr ? parseInt(searchIdStr) : undefined
+  );
   let searchFragment = $derived(searchIdStr ? `?searchId=${searchIdStr}` : "");
-  let orientationFormUrl = $derived(`/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`);
+  let orientationFormUrl = $derived(
+    `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`
+  );
 
-  let isServiceFromOwnStructure = $derived($userInfo
-    ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
-        (structure) => structure.slug === service.structure
-      )
-    : false);
+  let isServiceFromOwnStructure = $derived(
+    $userInfo
+      ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
+          (structure) => structure.slug === service.structure
+        )
+      : false
+  );
 
-  let showServiceWillBeVisibleSoonNotice =
-    $derived(DI_DORA_UNIFIED_SEARCH_ENABLED &&
-    !service.isModel &&
-    service.status === "PUBLISHED" &&
-    service.canWrite &&
-    isServiceRecentlyPublished(service));
+  let showServiceWillBeVisibleSoonNotice = $derived(
+    DI_DORA_UNIFIED_SEARCH_ENABLED &&
+      !service.isModel &&
+      service.status === "PUBLISHED" &&
+      service.canWrite &&
+      isServiceRecentlyPublished(service)
+  );
 
   // Utilisé pour prévenir le tracking multiple
   let mobilisationTracked = false;

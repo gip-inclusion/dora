@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
@@ -35,9 +35,9 @@
     service.coachOrientationModesExternalFormLinkText = text;
   }
 
-  let externalFormToggle = $derived(service.coachOrientationModes.includes(
-    "completer-le-formulaire-dadhesion"
-  ));
+  let externalFormToggle = $derived(
+    service.coachOrientationModes.includes("completer-le-formulaire-dadhesion")
+  );
   run(() => {
     updateExternalFormFields(
       externalFormToggle ? "Orienter votre bénéficiaire" : ""
@@ -56,15 +56,13 @@
 {#if $currentSchema && "coachOrientationModes" in $currentSchema}
   <FieldWrapper
     {id}
-    
-    
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     description="Plusieurs choix possibles."
     readonly={$currentSchema?.[id]?.readonly}
   >
     {#snippet children({ onChange, errorMessages })}
-        <div class="gap-s8 flex flex-col">
+      <div class="gap-s8 flex flex-col">
         {#each servicesOptions.coachOrientationModes as choice}
           {#if choice.value === "completer-le-formulaire-dadhesion" && service.coachOrientationModes.includes("completer-le-formulaire-dadhesion")}
             <Checkbox
@@ -129,6 +127,6 @@
           {/if}
         {/each}
       </div>
-          {/snippet}
-    </FieldWrapper>
+    {/snippet}
+  </FieldWrapper>
 {/if}

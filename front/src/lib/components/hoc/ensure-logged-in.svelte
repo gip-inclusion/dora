@@ -4,7 +4,7 @@
   import { token, userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
   interface Props {
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { children }: Props = $props();

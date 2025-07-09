@@ -14,7 +14,7 @@
     noPadding?: boolean;
     alignRight?: boolean;
     extraClass?: string;
-    children?: import('svelte').Snippet<[any]>;
+    children?: import("svelte").Snippet<[any]>;
   }
 
   let {
@@ -28,7 +28,7 @@
     noPadding = false,
     alignRight = true,
     extraClass = "",
-    children
+    children,
   }: Props = $props();
 
   let isOpen = $state(false);
@@ -65,7 +65,7 @@
       class:flex={isOpen}
       class:hidden={!isOpen}
     >
-      {@render children?.({ onClose: () => (isOpen = false), })}
+      {@render children?.({ onClose: () => (isOpen = false) })}
     </div>
   </div>
 </div>

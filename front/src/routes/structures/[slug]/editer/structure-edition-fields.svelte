@@ -61,7 +61,7 @@
   vertical
 >
   {#snippet description()}
-    <div >
+    <div>
       <small>
         Afin de renseigner les informations d’accessibilité sur la structure,
         retrouvez-la via la plateforme

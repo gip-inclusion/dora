@@ -39,12 +39,12 @@
 
 <Member {member} {readOnly}>
   {#snippet label()}
-    <div >
+    <div>
       <Label label={userLevel} smallIcon icon={userLevelIcon} />
     </div>
   {/snippet}
   {#snippet status()}
-    <div >
+    <div>
       <span
         class="bg-service-orange px-s12 py-s6 inline-block rounded-lg text-center"
       >
@@ -54,7 +54,7 @@
   {/snippet}
 
   {#snippet actions({ onCloseParent })}
-    <div  >
+    <div>
       <div class="flex flex-col items-end">
         <Button
           label="Accepter"

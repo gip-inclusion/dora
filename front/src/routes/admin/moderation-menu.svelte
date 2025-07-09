@@ -26,8 +26,6 @@
       await onRefresh();
     }
   }
-
-  
 </script>
 
 <div class="flex flex-col items-end">

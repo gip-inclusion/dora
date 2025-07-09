@@ -8,11 +8,6 @@
   import CitySearch from "../../inputs/geo/city-search.svelte";
   import type { GeoApiValue } from "$lib/types";
 
-
-
-  
-
-  
   interface Props {
     id: string;
     disabled?: boolean;
@@ -36,14 +31,13 @@
     description = "Commencez à saisir le nom et choisissez dans la liste.",
     hidden = false,
     hideLabel = false,
-    vertical = false
+    vertical = false,
   }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
     {description}
@@ -54,7 +48,7 @@
     {readonly}
   >
     {#snippet children({ onBlur })}
-        <CitySearch on:blur={onBlur} {id} {onChange} {initialValue} {disabled} />
-          {/snippet}
-    </FieldWrapper>
+      <CitySearch on:blur={onBlur} {id} {onChange} {initialValue} {disabled} />
+    {/snippet}
+  </FieldWrapper>
 {/if}

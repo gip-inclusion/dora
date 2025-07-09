@@ -7,7 +7,7 @@
 
 <Notice title="Vous gérez cette structure ?">
   {#snippet button()}
-    <div >
+    <div>
       <LinkButton
         label="Demander l’accès"
         to="/auth/rattachement?siret={structure.siret}"

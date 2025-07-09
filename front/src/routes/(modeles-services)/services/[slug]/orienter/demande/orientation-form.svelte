@@ -151,7 +151,7 @@
       vertical
     >
       <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
-  <p slot="description" class="legend italic">
+      <p slot="description" class="legend italic">
         Date à partir de laquelle la personne est disponible.<br />
         Format attendu&nbsp;: JJ/MM/AAAA (par exemple, 17/01/2023 pour 17 janvier
         2023)
@@ -280,7 +280,7 @@
             bind:fileKeys={$orientation.attachments[form.name]}
           >
             <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
-  <p slot="description">
+            <p slot="description">
               <a
                 href={form.url}
                 class="font-bold underline"

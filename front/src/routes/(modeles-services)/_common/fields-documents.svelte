@@ -13,7 +13,11 @@
     model?: Model | undefined;
   }
 
-  let { servicesOptions, service = $bindable(), model = undefined }: Props = $props();
+  let {
+    servicesOptions,
+    service = $bindable(),
+    model = undefined,
+  }: Props = $props();
 
   let showModel = $derived(!!service.model);
 
@@ -21,20 +25,22 @@
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  let fieldModelProps = $derived(model
-    ? getModelInputProps({
-        service,
-        servicesOptions,
-        showModel,
-        onUseModelValue: handleUseModelValue,
-        model,
-      })
-    : {});
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+        })
+      : {}
+  );
 </script>
 
 <FieldSet title="Documents" {showModel}>
   {#snippet help()}
-    <div >
+    <div>
       <p class="text-f14">
         Justificatifs à fournir et documents à compléter pour postuler. Le lien
         redirige vers une page web qui présente le service (formulaire, fiche de
@@ -76,7 +82,7 @@
       bind:value={service.onlineForm}
     >
       <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
-  <small slot="description">
+      <small slot="description">
         Lien vers un document à récupérer, un formulaire à compléter, etc.<br />
         Format attendu : https://example.fr</small
       >

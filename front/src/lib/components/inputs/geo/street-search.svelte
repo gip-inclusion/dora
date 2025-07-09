@@ -25,7 +25,7 @@
     disabled,
     value = $bindable(undefined),
     initialValue = undefined,
-    readonly = false
+    readonly = false,
   }: Props = $props();
 
   const banAPIUrl = "https://api-adresse.data.gouv.fr/search/";

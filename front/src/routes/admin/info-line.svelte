@@ -1,7 +1,7 @@
 <script lang="ts">
   interface Props {
     condition?: boolean;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { condition = true, children }: Props = $props();

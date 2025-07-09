@@ -4,7 +4,7 @@
     extraClass?: string;
     bgColor?: string;
     roundedColor?: string;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let {
@@ -12,7 +12,7 @@
     extraClass = "",
     bgColor = "bg-white",
     roundedColor = "",
-    children
+    children,
   }: Props = $props();
 
   const padding = noPadding ? "" : "pt-s32 pb-s32";

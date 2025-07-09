@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Button from "$lib/components/display/button.svelte";
@@ -21,7 +21,7 @@
     branches,
     total,
     tabDisplay = true,
-    limit
+    limit,
   }: Props = $props();
 
   let newBranchModalOpen = $state(false);

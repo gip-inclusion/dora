@@ -24,7 +24,7 @@
     isOpen = $bindable(false),
     onRefresh,
     orientation,
-    queryHash
+    queryHash,
   }: Props = $props();
 
   let showConfirmation = $state(false);
@@ -89,7 +89,7 @@
   width="medium"
 >
   {#snippet subtitle()}
-    <div >
+    <div>
       Vous êtes sur le point de valider une demande d’orientation qui vous a été
       adressée par {orientation.prescriber?.name} pour le service «&nbsp;<a
         class="text-magenta-cta"
