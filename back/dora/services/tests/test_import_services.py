@@ -4,6 +4,7 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from django.contrib.gis.geos import Point
+from freezegun import freeze_time
 from model_bakery import baker
 
 from dora.core.utils import GeoData
@@ -370,6 +371,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(len(result["errors"]), 1)
 
+    @freeze_time("2022-01-01")
     def test_publish_eligible_remote_service(self):
         csv_content = (
             f"{self.csv_headers}\n"
@@ -388,7 +390,11 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
         self.assertEqual(created_service.status, ServiceStatus.PUBLISHED)
+        self.assertEqual(
+            str(created_service.publication_date), "2022-01-01 00:00:00+00:00"
+        )
 
+    @freeze_time("2022-01-01")
     def test_publish_eligible_in_person_service(self):
         csv_content = (
             f"{self.csv_headers}\n"
@@ -407,6 +413,9 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
         self.assertEqual(created_service.status, ServiceStatus.PUBLISHED)
+        self.assertEqual(
+            str(created_service.publication_date), "2022-01-01 00:00:00+00:00"
+        )
 
     def test_keep_in_person_service_in_draft_when_ineligible(self):
         csv_content = (
@@ -426,6 +435,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
         self.assertEqual(created_service.status, ServiceStatus.DRAFT)
+        self.assertIsNone(created_service.publication_date)
 
     def test_keep_service_in_draft_when_ineligible(self):
         csv_content = (
@@ -445,6 +455,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
         self.assertEqual(created_service.status, ServiceStatus.DRAFT)
+        self.assertIsNone(created_service.publication_date)
 
     def test_make_contact_info_public(self):
         csv_content = (
@@ -641,9 +652,32 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(len(result_2["duplicated_services"]), 1)
         self.assertEqual(len(result_2["draft_services_created"]), 1)
 
-    def test_non_unique_source_label(self):
+    def test_non_unique_source_label_wet_run(self):
         baker.make("ServiceSource", value="test_file", label="Test Source")
 
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,city,\n"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader,
+            self.importing_user,
+            {
+                "value": "test_file",
+                "label": "New Label",
+            },
+            wet_run=True,
+        )
+
+        self.assertEqual(
+            result["errors"][0],
+            'Le fichier nommé "test_file" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
+        )
+
+    def test_source_label_not_created_dry_run(self):
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},Test Person,0123456789,,,,,,city,\n"
@@ -661,10 +695,9 @@ class ImportServicesTestCase(TestCase):
             wet_run=False,
         )
 
-        self.assertEqual(
-            result["errors"][0],
-            'Le fichier nommé "test_file" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
-        )
+        self.assertFalse(result["errors"])
+        self.assertEqual(result["created_count"], 1)
+        self.assertFalse(ServiceSource.objects.filter(label="New Label").exists())
 
     def test_should_remove_first_two_lines(self):
         csv_content = (

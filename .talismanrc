@@ -7,8 +7,10 @@ fileignoreconfig:
     checksum: be6767b36f71b8f5c14fbdbb3101a6b1cf434391a30bfdf02c231d3d3948044d
   - filename: back/envs-example/dev.env
     checksum: 09b186afff65d138433589b78cee86675d8118e18f61610248649ec0f33a1d81
+  - filename: front/src/routes/_index/sub-menu.svelte
+    checksum: 86a32003f7024fbc9fce4a66043aa3c1099f0d4dd02a49be740dfbb87459ff36
   - filename: front/package-lock.json
-    checksum: 7b837a0fd97ab27fc331bad7d6e668062fef2fa19cc407cd4cc60c1a71e6fb92
+    checksum: 987b1af6c775755a24a67872fe8e926b3ffdba8c6d935a298a438b92da5df73a
   - filename: back/config/settings/sentry.py
     checksum: 31d504c501153d444f0f80eb8a5ddd1028cb344d7921b00c2fed4ef3587eb43d
 

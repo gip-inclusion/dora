@@ -207,6 +207,10 @@
     background-color: #5a6268;
 }
 
+.messagelist .plain {
+    background: none;
+}
+
 @media (max-width: 768px) {
     .form-container {
         margin: 0 10px;
