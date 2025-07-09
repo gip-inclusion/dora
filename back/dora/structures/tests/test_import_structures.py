@@ -786,3 +786,27 @@ class StructuresImportTestCase(APITestCase):
         branch.refresh_from_db()
         self.assertEqual(branch.email, "email1@structure.com")
         self.assertEqual(parent.email, "old@email.com")
+
+    def test_remove_first_two_lines(self):
+        baker.make(
+            "Establishment",
+            siret="12345678901234",
+            name="My Establishment",
+            parent_name="Parent",
+        )
+
+        csv_content = (
+            f"instruction, line, 1\ninstruction, line ,2 \n"
+            f"{self.csv_headers}\nFoo,12345678901234,,foo@buzz.com,,,,"
+        )
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader,
+            self.importing_user,
+            self.source_info,
+            wet_run=True,
+            should_remove_first_two_lines=True,
+        )
+
+        self.assertEqual(len(result["errors_map"].keys()), 0)
+        self.assertEqual(result["created_structures_count"], 1)

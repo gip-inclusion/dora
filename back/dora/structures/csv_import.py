@@ -7,6 +7,7 @@ from rest_framework import serializers
 
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
+from dora.core.utils import skip_csv_lines
 from dora.core.validators import validate_phone_number, validate_siret
 from dora.services.models import ServiceModel
 from dora.services.utils import instantiate_service_from_model
@@ -24,10 +25,9 @@ from dora.users.models import User
 
 class ImportStructuresHelper:
     def __init__(self, *args, **kwargs) -> None:
-        self.bot_user = User.objects.get_dora_bot()
-        self.source = StructureSource.objects.get(value="invitations-masse")
-        self._initialize_trackers()
+        self.source = None
         self.importing_user = None
+        self._initialize_trackers()
 
     def _initialize_trackers(self) -> None:
         self.map_line_to_errors = {}
@@ -42,6 +42,7 @@ class ImportStructuresHelper:
         importing_user: User,
         source_info: Dict[str, str],
         wet_run: bool = False,
+        should_remove_first_two_lines: bool = False,
     ) -> Dict[str, Union[Dict[int, List[str]], int]]:
         if wet_run:
             print("⚠️ PRODUCTION RUN ⚠️")
@@ -58,7 +59,11 @@ class ImportStructuresHelper:
             print(error_message)
             return {"errors_map": {1: [error_message]}}
 
-        [headers, *lines] = reader
+        csv_reader = (
+            skip_csv_lines(reader, 2) if should_remove_first_two_lines else reader
+        )
+
+        [headers, *lines] = csv_reader
 
         missing_headers = set(self.CSV_HEADERS) - set(headers)
 
