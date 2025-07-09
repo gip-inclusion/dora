@@ -7,7 +7,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import QuerySet
 
 from dora.admin_express.models import AdminDivisionType
-from dora.core.utils import get_geo_data, remove_first_two_csv_lines
+from dora.core.utils import get_geo_data, skip_csv_lines
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     FundingLabel,
@@ -62,9 +62,7 @@ class ImportServicesHelper:
             }
 
         csv_reader = (
-            remove_first_two_csv_lines(reader)
-            if should_remove_first_two_lines
-            else reader
+            skip_csv_lines(reader, 2) if should_remove_first_two_lines else reader
         )
 
         [headers, *lines] = csv_reader

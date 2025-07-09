@@ -7,7 +7,7 @@ from rest_framework import serializers
 
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
-from dora.core.utils import remove_first_two_csv_lines
+from dora.core.utils import skip_csv_lines
 from dora.core.validators import validate_phone_number, validate_siret
 from dora.services.models import ServiceModel
 from dora.services.utils import instantiate_service_from_model
@@ -60,9 +60,7 @@ class ImportStructuresHelper:
             return {"errors_map": {1: [error_message]}}
 
         csv_reader = (
-            remove_first_two_csv_lines(reader)
-            if should_remove_first_two_lines
-            else reader
+            skip_csv_lines(reader, 2) if should_remove_first_two_lines else reader
         )
 
         [headers, *lines] = csv_reader
