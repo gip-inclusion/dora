@@ -86,7 +86,7 @@ class BaseImportAdminMixinTest(TestCase):
 
         expected_message = (
             "<b>Échec de l'import - Fichier trop volumineux</b><br/>"
-            "Le fichier doit être moins de 10MB."
+            "Le fichier doit faire moins de 10 Mio."
         )
         mock_messages.error.assert_called_once_with(request, expected_message)
         mock_redirect.assert_called_once_with(".")

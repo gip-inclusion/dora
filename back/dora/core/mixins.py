@@ -27,7 +27,7 @@ class BaseImportAdminMixin:
         if csv_file.size > self.upload_size_limit_in_bytes:
             messages.error(
                 request,
-                "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit être moins de 10MB.",
+                "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit faire moins de 10 Mio.",
             )
             return redirect(".")
         try:
