@@ -151,15 +151,16 @@ class StructuresImportTestCase(APITestCase):
             f"{self.csv_headers}\n{structure.name},{structure.siret},,foo@buzz.com,,,,"
         )
         reader = csv.reader(io.StringIO(csv_content))
-        self.assertEqual(Structure.objects.filter(name=structure.name).count(), 1)
+        self.assertEqual(Structure.objects.filter(siret=structure.siret).count(), 1)
 
+        source_info = {
+            "value": "test-source",
+            "label": "New Label",
+        }
         result = self.import_structures_helper.import_structures(
             reader,
             self.importing_user,
-            {
-                "value": "test-source",
-                "label": "New Label",
-            },
+            source_info,
             wet_run=True,
         )
 
@@ -167,7 +168,8 @@ class StructuresImportTestCase(APITestCase):
             result["errors_map"][1][0],
             'Le fichier nommé "test-source" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
         )
-        self.assertEqual(Structure.objects.filter(name=structure.name).count(), 1)
+        self.assertEqual(Structure.objects.filter(siret=structure.siret).count(), 1)
+        self.assertEqual(StructureSource.objects.filter(**source_info).count(), 0)
 
     def test_source_label_not_created_when_errors_wet_run(self):
         csv_content = (
