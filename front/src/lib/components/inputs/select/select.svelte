@@ -37,7 +37,7 @@
 
   let {
     id,
-    choices = $bindable(undefined),
+    choices = $bindable([]),
     fixedItemsValues = [],
     sort = false,
     value = $bindable(undefined),
