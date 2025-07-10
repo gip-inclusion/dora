@@ -52,17 +52,6 @@ class ImportServicesHelper:
         self.importing_user = importing_user
         self._initialize_trackers()
 
-        if self.wet_run:
-            try:
-                self._get_service_source(source_info)
-            except IntegrityError as e:
-                print(f"\nErreur critique : {e}", file=sys.stderr)
-                return {
-                    "errors": [
-                        f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
-                    ]
-                }
-
         csv_reader = (
             skip_csv_lines(reader, 2) if should_remove_first_two_lines else reader
         )
@@ -76,6 +65,16 @@ class ImportServicesHelper:
                 return {"missing_headers": missing_headers}
 
             with transaction.atomic():
+                if self.wet_run:
+                    try:
+                        self._get_service_source(source_info)
+                    except IntegrityError as e:
+                        print(f"\nErreur critique : {e}", file=sys.stderr)
+                        return {
+                            "errors": [
+                                f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
+                            ]
+                        }
                 for idx, line in enumerate(lines, 2):
                     try:
                         print(f"\nTraitement de la ligne {idx} :")
