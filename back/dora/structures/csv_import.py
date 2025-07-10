@@ -53,13 +53,6 @@ class ImportStructuresHelper:
         self._initialize_trackers()
         self.importing_user = importing_user
 
-        try:
-            self._get_structure_source(source_info)
-        except IntegrityError:
-            error_message = f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
-            print(error_message)
-            return {"errors_map": {1: [error_message]}}
-
         csv_reader = (
             skip_csv_lines(reader, 2) if should_remove_first_two_lines else reader
         )
@@ -100,6 +93,13 @@ class ImportStructuresHelper:
                     f"{idx}. Import de la structure {serializer.data['name']} (SIRET:{serializer.data['siret']})"
                 )
                 if wet_run:
+                    try:
+                        self._get_structure_source(source_info)
+                    except IntegrityError:
+                        error_message = f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
+                        print(error_message)
+                        return {"errors_map": {1: [error_message]}}
+
                     structure = self.get_or_create_structure(
                         data["name"],
                         data["siret"],
