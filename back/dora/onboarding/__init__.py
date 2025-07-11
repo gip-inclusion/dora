@@ -205,7 +205,7 @@ def onboard_user(user: User, structure: Structure) -> None:
 
     is_user_member = structure.is_member(user)
 
-    brevo_list_id = int(
+    brevo_list_id = (
         settings.BREVO_ONBOARDING_MEMBER_LIST
         if is_user_member
         else settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST
