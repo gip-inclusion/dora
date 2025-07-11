@@ -220,6 +220,27 @@ export function clickOutside(node: HTMLElement) {
   };
 }
 
+// Svelte 5 attachment version of clickOutside
+export function clickOutsideAttachment(callback: () => void) {
+  return (node: HTMLElement) => {
+    const handleClick = (event: Event) => {
+      if (
+        node &&
+        !node.contains(event.target as Node) &&
+        !event.defaultPrevented
+      ) {
+        callback();
+      }
+    };
+
+    document.addEventListener("click", handleClick, true);
+
+    return () => {
+      document.removeEventListener("click", handleClick, true);
+    };
+  };
+}
+
 // Helper type pour aplatir les promesses
 type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 
