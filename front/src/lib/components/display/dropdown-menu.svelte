@@ -2,7 +2,7 @@
 <script lang="ts">
   import { afterNavigate } from "$app/navigation";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
-  import { clickOutsideAttachment } from "$lib/utils/misc";
+  import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
   export let icon: string | undefined = undefined;
@@ -29,7 +29,7 @@
 </script>
 
 <div
-  {@attach clickOutsideAttachment(closeDropdown)}
+  {@attach clickOutside(closeDropdown)}
   role="presentation"
   on:keydown={onKeyDown}
   class="w-full lg:w-auto"

@@ -5,7 +5,7 @@
   import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
   import { getChoiceFromValue } from "$lib/utils/choice";
-  import { clickOutsideAttachment } from "$lib/utils/misc";
+  import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";
@@ -218,7 +218,7 @@
     aria-label={placeholder}
     onclick={() => toggleCombobox()}
     onkeydown={handleKeydown}
-    {@attach clickOutsideAttachment(() => toggleCombobox(false))}
+    {@attach clickOutside(() => toggleCombobox(false))}
   >
     <div class="current-value flex cursor-pointer items-center justify-between">
       <div class="w-[90%] overflow-hidden text-ellipsis whitespace-nowrap">

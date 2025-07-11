@@ -7,7 +7,7 @@
   /* eslint-disable */
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import { checkIcon, closeCircleIcon } from "$lib/icons";
-  import { clickOutsideAttachment } from "$lib/utils/misc";
+  import { clickOutside } from "$lib/utils/misc";
   import { formatErrors } from "$lib/validation/validation";
   import { onMount } from "svelte";
 
@@ -760,7 +760,7 @@
   {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
   class:is-loading={showLoadingIndicator && loading}
-  {@attach clickOutsideAttachment(close)}
+  {@attach clickOutside(close)}
 >
   <select name={selectName} id={selectId}>
     {#if !multiple && value}

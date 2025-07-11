@@ -4,7 +4,7 @@
   import { afterNavigate } from "$app/navigation";
   import { page } from "$app/stores";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
-  import { clickOutsideAttachment } from "$lib/utils/misc";
+  import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
   interface Props {
@@ -44,7 +44,7 @@
 
 <div
   class="relative {mobileDesign ? 'border-gray-03 border-b' : ''}"
-  {@attach clickOutsideAttachment(handleClickOutside)}
+  {@attach clickOutside(handleClickOutside)}
   role="presentation"
   onkeydown={onKeyDown}
 >
