@@ -4,7 +4,7 @@
   import { afterNavigate } from "$app/navigation";
   import { page } from "$app/stores";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
-  import { clickOutside } from "$lib/utils/misc";
+  import { clickOutsideAttachment } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
   interface Props {
@@ -26,7 +26,7 @@
   let dropdownButton = $state();
   const id = `sub-dropdown-menu-${randomId()}`;
 
-  function handleClickOutside(_event) {
+  function handleClickOutside() {
     isOpen = false;
   }
 
@@ -44,9 +44,8 @@
 
 <div
   class="relative {mobileDesign ? 'border-gray-03 border-b' : ''}"
-  use:clickOutside
+  {@attach clickOutsideAttachment(handleClickOutside)}
   role="presentation"
-  onclick_outside={handleClickOutside}
   onkeydown={onKeyDown}
 >
   <button
