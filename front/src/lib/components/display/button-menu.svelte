@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
-  import { clickOutside } from "$lib/utils/misc";
+  import { clickOutsideAttachment } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
   interface Props {
@@ -34,12 +34,12 @@
   let isOpen = $state(false);
   const id = `button-menu-${randomId()}`;
 
-  function handleClickOutside(_event) {
+  function handleClickOutside() {
     isOpen = false;
   }
 </script>
 
-<div use:clickOutside onclick_outside={handleClickOutside}>
+<div {@attach clickOutsideAttachment(handleClickOutside)}>
   <div class="wrapper relative">
     <Button
       {icon}
