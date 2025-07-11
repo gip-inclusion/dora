@@ -66,7 +66,7 @@
         {sort}
         {searchFunction}
         bind:value
-        on:blur={onBlur}
+        onblur={onBlur}
         {onChange}
         {placeholder}
         {placeholderMulti}

@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
+  import { run, createBubbler } from "svelte/legacy";
 
   import AutoComplete from "./simple-autocomplete.svelte";
+
+  const bubble = createBubbler();
 
   type Choice = { value: string | number; label: string };
 
@@ -22,6 +24,7 @@
     delay?: any;
     localFiltering?: any;
     minCharactersToSearch?: any;
+    onblur?: (evt: FocusEvent) => void;
     onChange?:
       | ((newValue: string) => void)
       | ((newValues: string[]) => void)
@@ -52,6 +55,7 @@
     delay = undefined,
     localFiltering = undefined,
     minCharactersToSearch = undefined,
+    onblur = undefined,
     onChange = undefined,
     initialValue = undefined,
     showClear = true,
@@ -63,9 +67,9 @@
   }: Props = $props();
 
   // https://github.com/sveltejs/svelte/issues/5604
-  const hasPrependSlot = prepend;
-  const hasAppendSlot = append;
-  const hasCustomContentSlot = itemContent;
+  const hasPrependSlot = !!prepend;
+  const hasAppendSlot = !!append;
+  const hasCustomContentSlot = !!itemContent;
 
   run(() => {
     if (sort) {
@@ -85,7 +89,7 @@
   inputId={id}
   bind:value
   bind:text={searchText}
-  on:blur
+  {onblur}
   {localFiltering}
   {minCharactersToSearch}
   {onChange}
@@ -111,14 +115,20 @@
   {errorMessages}
 >
   {#snippet prepend()}
-    {@render prepend_render?.()}
+    {#if prepend_render}
+      {@render prepend_render()}
+    {/if}
   {/snippet}
 
   {#snippet itemContent({ item })}
-    {@render itemContent_render?.({ item })}
+    {#if itemContent_render}
+      {@render itemContent_render({ item })}
+    {/if}
   {/snippet}
 
   {#snippet append()}
-    {@render append_render?.()}
+    {#if append_render}
+      {@render append_render()}
+    {/if}
   {/snippet}
 </AutoComplete>

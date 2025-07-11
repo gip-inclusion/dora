@@ -50,7 +50,7 @@
     servicesOptions,
     cityCode = $bindable(undefined),
     cityLabel = $bindable(undefined),
-    label = $bindable(undefined),
+    label = $bindable(""),
     lon = $bindable(undefined),
     lat = $bindable(undefined),
     categoryId = $bindable(undefined),
@@ -135,7 +135,8 @@
           : address.geometry.coordinates;
       enableRefreshButton();
     } else {
-      cityCode = cityLabel = label = lon = lat = undefined;
+      cityCode = cityLabel = lon = lat = undefined;
+      label = "";
     }
   }
 

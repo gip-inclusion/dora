@@ -92,7 +92,7 @@
       <Select
         {id}
         bind:value={values}
-        on:blur={onBlur}
+        onblur={onBlur}
         choices={filteredChoices}
         {onChange}
         {sort}

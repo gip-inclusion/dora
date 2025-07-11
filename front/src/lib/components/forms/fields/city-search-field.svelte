@@ -48,7 +48,7 @@
     {readonly}
   >
     {#snippet children({ onBlur })}
-      <CitySearch on:blur={onBlur} {id} {onChange} {initialValue} {disabled} />
+      <CitySearch onblur={onBlur} {id} {onChange} {initialValue} {disabled} />
     {/snippet}
   </FieldWrapper>
 {/if}

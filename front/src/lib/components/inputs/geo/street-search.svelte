@@ -57,7 +57,7 @@
 <Select
   {id}
   bind:value
-  on:blur={handleBlur}
+  onblur={handleBlur}
   {onChange}
   {initialValue}
   {placeholder}
