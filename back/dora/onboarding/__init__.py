@@ -58,13 +58,7 @@ def _contact_in_brevo_list(
         if exc.status != 400:
             raise exc
     else:
-        if brevo_list_id in contact.list_ids:
-            logger.warning(
-                "L'utilisateur #%s est déja membre de la liste Brevo: %s",
-                user.pk,
-                brevo_list_id,
-            )
-            return True
+        return brevo_list_id in contact.list_ids
 
     return False
 
@@ -72,7 +66,6 @@ def _contact_in_brevo_list(
 def _update_brevo_contact(
     client: brevo_api.ContactsApi, user: User, attributes: Attributes
 ) -> bool:
-    # création/ maj des attributs de contact Brevp pour l'utilisateur
     contact_attributes = brevo_api.UpdateContact(attributes=attributes)
     try:
         client.update_contact(user.email, contact_attributes)
@@ -90,7 +83,6 @@ def _update_brevo_contact(
 def _add_user_to_brevo_list(
     client: brevo_api.ContactsApi, user: User, brevo_list_id: int
 ) -> bool:
-    # rattachement de l'utilisateur à la liste Brevo cible
     try:
         client.add_contact_to_list(
             brevo_list_id,
@@ -115,7 +107,6 @@ def _add_user_to_brevo_list(
 def _remove_from_brevo_list(
     client: brevo_api.ContactsApi, user: User, brevo_list_id: int
 ) -> bool:
-    # retire un utilisateur donné d'une liste Brevo
     try:
         client.remove_contact_from_list(
             brevo_list_id, brevo_api.RemoveContactFromList(emails=[user.email])
@@ -212,21 +203,24 @@ def onboard_user(user: User, structure: Structure):
         "NO_DEPARTEMENT": structure.department,
     }
 
+    is_user_member = structure.is_member(user)
+
     brevo_list_id = int(
         settings.BREVO_ONBOARDING_MEMBER_LIST
-        if user in structure.members.all()
+        if is_user_member
         else settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST
     )
 
     _create_or_update_brevo_contact(client, user, attributes, brevo_list_id)
 
     # dans le cas d'un utilisateur passé membre, le retirer de la liste des invités
-    if brevo_list_id == int(settings.BREVO_ONBOARDING_MEMBER_LIST):
-        if _contact_in_brevo_list(client, user, brevo_list_id):
-            # Dans le cas des imports via commande / script,
-            # les utilisateurs peuvent ne pas être passés par la liste "invité".
-            # Les retirer de la liste sans y vérifier leur présence provoque un log d'erreur,
-            # sans conséquence, mais qui alimente quand même les erreurs Sentry.
-            _remove_from_brevo_list(
-                client, user, int(settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST)
-            )
+    if is_user_member and _contact_in_brevo_list(
+        client, user, settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST
+    ):
+        # Dans le cas des imports via commande / script,
+        # les utilisateurs peuvent ne pas être passés par la liste "invité".
+        # Les retirer de la liste sans y vérifier leur présence provoque un log d'erreur,
+        # sans conséquence, mais qui alimente quand même les erreurs Sentry.
+        _remove_from_brevo_list(
+            client, user, int(settings.BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST)
+        )

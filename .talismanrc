@@ -13,4 +13,6 @@ fileignoreconfig:
     checksum: 86a32003f7024fbc9fce4a66043aa3c1099f0d4dd02a49be740dfbb87459ff36
   - filename: back/dora/onboarding/__init__.py
     checksum: 870040153fd696507b63900fe42659c64ced9e2d47c6672fe5adbb2658b465a3
+  - filename: back/config/settings/base.py
+    checksum: 192cb904b692b4d5b7d8df4eeaef528cd20f55a3506a49151a2052d37b549d18
 version: ""
