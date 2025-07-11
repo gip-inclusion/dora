@@ -162,7 +162,7 @@ def _create_or_update_brevo_contact(
     user: User,
     attributes: Attributes,
     brevo_list_id: int,
-):
+) -> None:
     contact = _brevo_contact_for_user(client, user)
 
     if not contact:
@@ -174,7 +174,7 @@ def _create_or_update_brevo_contact(
             _add_user_to_brevo_list(client, user, brevo_list_id)
 
 
-def onboard_user(user: User, structure: Structure):
+def onboard_user(user: User, structure: Structure) -> None:
     """
     Onboarding de l'utilisateur pour une structure :
         Déclenché lors du rattachement à une structure.
