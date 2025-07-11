@@ -8,9 +8,9 @@
 {% block breadcrumbs %}
   <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">Home</a>
-    &rsaquo; <a href="{% url 'admin:app_list' app_label='services' %}">Administration de services</a>
-    &rsaquo; <a href="{% url 'admin:services_service_changelist' %}">Services</a>
-    &rsaquo; Importer Services
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">Administration de {{ opts.app_label|title }}</a>
+    &rsaquo; <a href="{% url 'admin:'|add:opts.app_label|add:'_'|add:opts.model_name|add:'_changelist' %}">{{ opts.verbose_name_plural|title }}</a>
+    &rsaquo; Importer {{ opts.verbose_name_plural|lower }}
   </div>
 {% endblock %}
 
@@ -43,7 +43,7 @@
               id="source_label"
               placeholder="Ex: Mairie de Paris, CAF..."
             >
-            <div class="help">Nom de la structure ou du producteur de données. Laisser vide si c'est DORA qui produit les données.</div>
+            <div class="help">Nom du producteur de données. Laisser vide si c'est DORA qui produit les données.</div>
           </div>
 
           <div class="form-field">
@@ -77,7 +77,7 @@
       <div class="submit-section">
         <div class="submit-row">
           <input type="submit" value="🚀 Lancer l'import" class="default" />
-          <a href="{% url 'admin:services_service_changelist' %}" class="cancel-link">❌ Annuler</a>
+          <a href="{% url 'admin:structures_structure_changelist' %}" class="cancel-link">❌ Annuler</a>
         </div>
       </div>
     </form>

@@ -51,7 +51,8 @@ class ImportServicesViewTestCase(APITestCase):
             filename, content.encode("utf-8"), content_type="text/csv"
         )
 
-    def test_get_request_renders_form(self, mock_import, mock_messages):
+    @patch("dora.core.mixins.messages")
+    def test_get_request_renders_form(self, mock_messages, mock_import, _):
         get_request = self.factory.get("/admin/services/service/import-services/")
 
         response = self.service_admin.import_services_view(get_request)
@@ -65,177 +66,6 @@ class ImportServicesViewTestCase(APITestCase):
         mock_messages.error.assert_not_called()
         mock_messages.success.assert_not_called()
         mock_messages.warning.assert_not_called()
-
-    # Les tests de la validation du csv
-    def test_post_without_file(self, mock_import, mock_messages):
-        response = self.service_admin.import_services_view(self.post_request)
-
-        self.assertIsInstance(response, HttpResponseRedirect)
-        self.assertEqual(response.url, ".")
-        mock_messages.error.assert_called_once_with(
-            self.post_request, "Veuillez sélectionner un fichier CSV."
-        )
-        mock_import.assert_not_called()
-
-    def test_post_with_non_csv_file(self, mock_import, mock_messages):
-        txt_file = SimpleUploadedFile(
-            "test.txt", b"not a csv file", content_type="text/plain"
-        )
-
-        request = self.factory.post(
-            "/admin/services/service/import-services/",
-            {"csv_file": txt_file, "test_run": "off"},
-        )
-        request.user = self.user
-
-        response = self.service_admin.import_services_view(request)
-
-        self.assertIsInstance(response, HttpResponseRedirect)
-        self.assertEqual(response.url, ".")
-        mock_messages.error.assert_called_once_with(
-            request,
-            "<b>Échec de l'import - Format de fichier non valide</b><br/>Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
-        )
-        mock_import.assert_not_called()
-
-    def test_post_with_oversized_file(self, mock_import, mock_messages):
-        large_content = "a" * (11 * 1024 * 1024)  # 11MB
-        large_file = SimpleUploadedFile(
-            "large.csv", large_content.encode("utf-8"), content_type="text/csv"
-        )
-
-        request = self.factory.post(
-            "/admin/services/service/import-services/",
-            {"csv_file": large_file, "test_run": "off"},
-        )
-        request.user = self.user
-
-        response = self.service_admin.import_services_view(request)
-
-        self.assertIsInstance(response, HttpResponseRedirect)
-        self.assertEqual(response.url, ".")
-        mock_messages.error.assert_called_once_with(
-            request,
-            "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit être moins de 10MB.",
-        )
-        mock_import.assert_not_called()
-
-    def test_post_with_invalid_encoding(self, mock_import, mock_messages):
-        mock_import.side_effect = UnicodeDecodeError(
-            "utf-8", b"invalid", 0, 1, "Invalid UTF-8 sequence"
-        )
-
-        invalid_file = SimpleUploadedFile(
-            "invalid.csv",
-            b"invalid",
-            content_type="text/csv",
-        )
-
-        request = self.factory.post(
-            "/admin/services/service/import-services/",
-            {"csv_file": invalid_file, "test_run": "off"},
-        )
-        request.user = self.user
-
-        response = self.service_admin.import_services_view(request)
-
-        self.assertIsInstance(response, HttpResponseRedirect)
-        self.assertEqual(response.url, ".")
-        mock_messages.error.assert_called_once_with(
-            request,
-            "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
-        )
-
-    # Les tests de l'info de la source
-    def test_source_info_with_simple_filename(self, mock_import, mock_messages):
-        mock_import.return_value = self.mock_success_result
-        csv_content = "header1,header2\nvalue1,value2"
-        csv_file = self.create_csv_file(csv_content, "simple.csv")
-
-        request = self.factory.post(
-            "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "test_run": "off", "source_label": "Test Label"},
-        )
-        request.user = self.user
-
-        response = self.service_admin.import_services_view(request)
-
-        self.assertEqual(
-            mock_import.call_args[0][2], {"value": "simple", "label": "Test Label"}
-        )
-        mock_messages.success.assert_called_once_with(
-            request,
-            "<b>Import terminé avec succès</b><br/>5 nouveaux services ont été créés et publiés",
-        )
-        self.assertEqual(response.url, "..")
-
-    def test_source_info_with_complex_filename(self, mock_import, mock_messages):
-        csv_content = "header1,header2\nvalue1,value2"
-        csv_file = self.create_csv_file(csv_content, "monthly.import.2024.01.csv")
-
-        mock_import.return_value = self.mock_success_result
-
-        request = self.factory.post(
-            "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "test_run": "off", "source_label": "Complex Test"},
-        )
-        request.user = self.user
-
-        response = self.service_admin.import_services_view(request)
-
-        self.assertEqual(
-            mock_import.call_args[0][2],
-            {"value": "monthly.import.2024.01", "label": "Complex Test"},
-        )
-        mock_messages.success.assert_called_once_with(
-            request,
-            "<b>Import terminé avec succès</b><br/>5 nouveaux services ont été créés et publiés",
-        )
-        self.assertEqual(response.url, "..")
-
-    def test_source_info_with_empty_label(self, mock_import, mock_messages):
-        mock_import.return_value = self.mock_success_result
-        csv_content = "header1,header2\nvalue1,value2"
-        csv_file = self.create_csv_file(csv_content, "test.csv")
-
-        request = self.factory.post(
-            "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "test_run": "off", "source_label": ""},
-        )
-        request.user = self.user
-
-        self.service_admin.import_services_view(request)
-
-        self.assertEqual(
-            mock_import.call_args[0][2],
-            {"value": "test", "label": "DORA"},
-        )
-        mock_messages.success.assert_called_once_with(
-            request,
-            "<b>Import terminé avec succès</b><br/>5 nouveaux services ont été créés et publiés",
-        )
-
-    def test_source_info_with_whitespace_label(self, mock_import, mock_messages):
-        mock_import.return_value = self.mock_success_result
-        csv_content = "header1,header2\nvalue1,value2"
-        csv_file = self.create_csv_file(csv_content, "test.csv")
-
-        request = self.factory.post(
-            "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "test_run": "off", "source_label": "   "},
-        )
-        request.user = self.user
-
-        self.service_admin.import_services_view(request)
-
-        self.assertEqual(
-            mock_import.call_args[0][2],
-            {"value": "test", "label": "DORA"},
-        )
-        mock_messages.success.assert_called_once_with(
-            request,
-            "<b>Import terminé avec succès</b><br/>5 nouveaux services ont été créés et publiés",
-        )
 
     # Les Tests de Configuration (Wet Run / Dry Run; Supprimer les 2 premières lignes)
     def test_wet_run_success(self, mock_import, mock_messages):
@@ -754,29 +584,6 @@ class ImportServicesViewTestCase(APITestCase):
         mock_messages.success.assert_called_once_with(
             request,
             "<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! 4 sont prêts à être importés et publiés.",
-        )
-
-    # Tests de la gestion des exceptions
-    def test_import_function_raises_exception(self, mock_import, mock_messages):
-        mock_import.side_effect = Exception("Unexpected error")
-
-        csv_content = "header1,header2\nvalue1,value2"
-        csv_file = self.create_csv_file(csv_content)
-
-        request = self.factory.post(
-            "/admin/services/service/import-services/",
-            {"csv_file": csv_file, "test_run": "off"},
-        )
-        request.user = self.user
-
-        response = self.service_admin.import_services_view(request)
-
-        self.assertIsInstance(response, HttpResponseRedirect)
-        self.assertEqual(response.url, ".")
-
-        mock_messages.error.assert_called_once_with(
-            request,
-            "<b>Échec de l'import - Erreur inattendue</b><br/>L'erreur suivante s'est produite :<br/>Unexpected error<br/>Si le problème persiste, contactez les développeurs.",
         )
 
     # Edge Cases

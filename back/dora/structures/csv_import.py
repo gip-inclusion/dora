@@ -3,10 +3,12 @@ from pprint import pformat
 from typing import Dict, List, Union
 
 from django.db import IntegrityError
+from django.utils import timezone
 from rest_framework import serializers
 
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
+from dora.core.utils import skip_csv_lines
 from dora.core.validators import validate_phone_number, validate_siret
 from dora.services.models import ServiceModel
 from dora.services.utils import instantiate_service_from_model
@@ -24,10 +26,9 @@ from dora.users.models import User
 
 class ImportStructuresHelper:
     def __init__(self, *args, **kwargs) -> None:
-        self.bot_user = User.objects.get_dora_bot()
-        self.source = StructureSource.objects.get(value="invitations-masse")
-        self._initialize_trackers()
+        self.source = None
         self.importing_user = None
+        self._initialize_trackers()
 
     def _initialize_trackers(self) -> None:
         self.map_line_to_errors = {}
@@ -42,6 +43,7 @@ class ImportStructuresHelper:
         importing_user: User,
         source_info: Dict[str, str],
         wet_run: bool = False,
+        should_remove_first_two_lines: bool = False,
     ) -> Dict[str, Union[Dict[int, List[str]], int]]:
         if wet_run:
             print("⚠️ PRODUCTION RUN ⚠️")
@@ -51,14 +53,11 @@ class ImportStructuresHelper:
         self._initialize_trackers()
         self.importing_user = importing_user
 
-        try:
-            self._get_structure_source(source_info)
-        except IntegrityError:
-            error_message = f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
-            print(error_message)
-            return {"errors_map": {1: [error_message]}}
+        csv_reader = (
+            skip_csv_lines(reader, 2) if should_remove_first_two_lines else reader
+        )
 
-        [headers, *lines] = reader
+        [headers, *lines] = csv_reader
 
         missing_headers = set(self.CSV_HEADERS) - set(headers)
 
@@ -94,6 +93,13 @@ class ImportStructuresHelper:
                     f"{idx}. Import de la structure {serializer.data['name']} (SIRET:{serializer.data['siret']})"
                 )
                 if wet_run:
+                    try:
+                        self._get_structure_source(source_info)
+                    except IntegrityError:
+                        error_message = f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
+                        print(error_message)
+                        return {"errors_map": {1: [error_message]}}
+
                     structure = self.get_or_create_structure(
                         data["name"],
                         data["siret"],
@@ -270,7 +276,11 @@ class ImportStructuresHelper:
         # les champs optionnels (comme le téléphone et l'adresse mail) peuvent être mis à jour s'ils contiennent une valeur
         to_update = dict({(k, v) for k, v in kwargs.items() if v})
         print(f" > mise à jour des champs : {to_update}")
-        Structure.objects.filter(pk=structure.pk).update(**to_update)
+        Structure.objects.filter(pk=structure.pk).update(
+            **to_update,
+            modification_date=timezone.now(),
+            last_editor=self.importing_user,
+        )
         self.edited_structures_count += 1
 
     def _to_string_array(self, strings_list: str) -> List[str]:

@@ -699,6 +699,22 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 1)
         self.assertFalse(ServiceSource.objects.filter(label="New Label").exists())
 
+    def test_source_label_not_created_wet_run_with_errors(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,invalid_kind,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertEqual(len(result["errors"]), 1)
+        self.assertEqual(result["created_count"], 0)
+        self.assertFalse(ServiceSource.objects.filter(**self.source_info).exists())
+
     def test_should_remove_first_two_lines(self):
         csv_content = (
             f"Some random text that should be ignored\n"
