@@ -201,7 +201,7 @@ export function isInDeploymentDepartments(
 }
 
 // Svelte 5 attachment version of clickOutside
-export function clickOutsideAttachment(callback: () => void) {
+export function clickOutside(callback: () => void) {
   return (node: HTMLElement) => {
     const handleClick = (event: Event) => {
       if (

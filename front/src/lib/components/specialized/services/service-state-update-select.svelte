@@ -20,7 +20,7 @@
     unPublishService,
   } from "$lib/requests/services";
   import type { Service, ServiceStatus, ShortService } from "$lib/types";
-  import { clickOutsideAttachment } from "$lib/utils/misc";
+  import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
   import { getAvailableOptionsForStatus } from "$lib/utils/service";
   import { serviceSchema } from "$lib/validation/schemas/service";
@@ -210,7 +210,7 @@
 <div
   id="service-state-update"
   class="text-gray-dark relative flex cursor-pointer items-center rounded-lg font-bold {currentStatusPresentation.bgClass} hover:{currentStatusPresentation.hoverBgClass}"
-  {@attach clickOutsideAttachment(() => toggleCombobox(false))}
+  {@attach clickOutside(() => toggleCombobox(false))}
 >
   <span id={`button-label-${uuid}`} class="sr-only">
     Modifier le status du service

@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
-  import { clickOutsideAttachment } from "$lib/utils/misc";
+  import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
   interface Props {
@@ -39,7 +39,7 @@
   }
 </script>
 
-<div {@attach clickOutsideAttachment(handleClickOutside)}>
+<div {@attach clickOutside(handleClickOutside)}>
   <div class="wrapper relative">
     <Button
       {icon}
