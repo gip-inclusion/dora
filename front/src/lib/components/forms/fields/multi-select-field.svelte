@@ -62,7 +62,7 @@
     {#snippet children({ onBlur, errorMessages })}
       <Select
         bind:value
-        on:blur={onBlur}
+        onblur={onBlur}
         {id}
         {choices}
         {fixedItemsValues}

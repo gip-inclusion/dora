@@ -3,34 +3,17 @@
   https://github.com/pstanoev/simple-svelte-autocomplete/blob/2de0d7618b37192ec1ca47bbe4ffd47477b38792/src/SimpleAutocomplete.svelte
 -->
 <script lang="ts">
-  import { run, createBubbler, preventDefault } from "svelte/legacy";
-
-  const bubble = createBubbler();
   // TODO: lint this file properly
   /* eslint-disable */
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import { checkIcon, closeCircleIcon } from "$lib/icons";
-  import { clickOutside } from "$lib/utils/misc";
+  import { clickOutsideAttachment } from "$lib/utils/misc";
   import { formatErrors } from "$lib/validation/validation";
-
-  // UI properties
-
-  // HTML input UI properties
-
-  // --- Public State ----
+  import { onMount } from "svelte";
 
   // --- Internal State ----
   const uniqueId = `sautocomplete-${Math.floor(Math.random() * 1000)}`;
 
-  // HTML elements
-  let input = $state();
-  let list = $state();
-
-  // UI state
-  let opened = $state(false);
-  let loading = $state(false);
-
-  let highlightIndex = $state(-1);
   interface Props {
     // the list of items the user can select from
     items?: any;
@@ -40,6 +23,7 @@
     searchFunction?: ((searchText: string) => Promise<any[]>) | undefined;
     textCleanFunction?: any;
     // events
+    onblur?: (evt: FocusEvent) => void;
     onChange?: any;
     onFocus?: any;
     // Behaviour properties
@@ -67,6 +51,9 @@
     delay?: number;
     // true to perform local filtering of items, even if searchFunction is provided
     localFiltering?: boolean;
+
+    // UI properties
+
     // option to hide the dropdown arrow
     hideArrow?: boolean;
     // option to show clear selection button
@@ -83,6 +70,9 @@
     placeholderMulti?: string;
     // apply a className to the control
     className?: string;
+
+    // HTML input UI properties
+
     // apply a className to the input control
     inputClassName?: string;
     // apply a id to the input control
@@ -104,9 +94,13 @@
     // adds the disabled tag to the HTML input and tag deletion
     disabled?: boolean;
     errorMessages?: string[];
+
+    // --- Public State ----
+
     // selected item state
     value?: any;
     initialValue?: any;
+
     text?: string;
     prepend?: import("svelte").Snippet;
     itemContent?: import("svelte").Snippet<[any]>;
@@ -120,6 +114,7 @@
     textCleanFunction = function (userEnteredText) {
       return userEnteredText;
     },
+    onblur = undefined,
     onChange = function (_newValue) {},
     onFocus = function () {},
     selectFirstIfEmpty = false,
@@ -164,11 +159,20 @@
     append,
   }: Props = $props();
 
+  // HTML elements
+  let input: HTMLInputElement | undefined = $state();
+  let list: HTMLDivElement | undefined = $state();
+
+  // UI state
+  let opened = $state(false);
+  let loading = $state(false);
+
+  let highlightIndex = $state(-1);
+
   let filteredTextLength = 0;
 
   // view model
-  let filteredListItems = $state();
-  let listItems = [];
+  let filteredListItems: any[] = $state([]);
 
   // requests/responses counters
   let lastRequestId = 0;
@@ -192,15 +196,15 @@
     return !!fixedItemValue;
   }
 
-  function onValueChanged() {
-    if (value !== undefined) {
-      if (multiple) {
-        text = "";
-      } else {
-        text = getLabelForValue(value);
+  function updateValue(newValue) {
+    if (newValue) {
+      const newText = multiple ? "" : getLabelForValue(newValue);
+      if (text !== newText) {
+        text = newText;
       }
-      onChange(value);
-    } else if (initialValue) {
+      value = newValue;
+      onChange(newValue);
+    } else if (initialValue && text !== initialValue) {
       text = initialValue;
     }
     if (!multiple) {
@@ -208,18 +212,21 @@
     }
   }
 
-  function onTextChanged() {
-    if (!multiple && (text == null || text === "")) {
-      value = null;
+  onMount(() => {
+    if (value && !text) {
+      text = getLabelForValue(value);
     }
-  }
+  });
 
-  run(() => {
-    (value, onValueChanged());
+  $effect(() => {
+    // Si text est vide et qu'on est en sélection simple, on réinitialise la valeur
+    if (!multiple && !text) {
+      updateValue(undefined);
+    }
   });
-  run(() => {
-    (text, onTextChanged());
-  });
+
+  let listItems: any[] = $derived(prepareListItems(items));
+
   let clearable = $derived(showClear && (lock || multiple) && value);
 
   // --- Functions ---
@@ -234,11 +241,9 @@
     return result;
   }
 
-  function prepareListItems() {
+  function prepareListItems(items: any[]) {
     if (!Array.isArray(items) || items.length === 0) {
-      items = [];
-      listItems = [];
-      return;
+      return [];
     }
 
     let selectableItems;
@@ -251,12 +256,7 @@
       selectableItems = items;
     }
 
-    listItems = new Array(selectableItems.length);
-
-    selectableItems.forEach((item, i) => {
-      const listItem = getListItem(item);
-      listItems[i] = listItem;
-    });
+    return selectableItems.map(getListItem);
   }
 
   function getListItem(item) {
@@ -270,10 +270,6 @@
       item,
     };
   }
-
-  run(() => {
-    (items, prepareListItems());
-  });
 
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
@@ -341,7 +337,7 @@
 
       // searchFunction is a generator
       if (searchFunction.constructor.name === "AsyncGeneratorFunction") {
-        for await (const chunk of searchFunction(textFiltered)) {
+        for await (const chunk of await searchFunction(textFiltered)) {
           // a chunk of an old response: throw it away
           if (currentRequestId < lastResponseId) {
             return false;
@@ -401,7 +397,7 @@
 
   function processListItems(textFiltered) {
     // cleans, filters, orders, and highlights the list items
-    prepareListItems();
+    prepareListItems(items);
 
     // local search
     let tempfilteredListItems;
@@ -451,19 +447,19 @@
   function selectListItem(newValue) {
     // simple selection
     if (!multiple) {
-      value = newValue;
+      updateValue(newValue);
     }
     // first selection of multiple ones
     else if (!value) {
-      value = [newValue];
+      updateValue([newValue]);
     }
     // selecting something already selected => unselect it
     else if (value.includes(newValue)) {
-      value = value.filter((i) => i !== newValue);
+      updateValue(value.filter((i) => i !== newValue));
     }
     // adds the element to the selection
     else {
-      value = [...value, newValue];
+      updateValue([...value, newValue]);
     }
 
     return true;
@@ -475,7 +471,7 @@
       if (selectListItem(listItem.value)) {
         close();
         if (multiple) {
-          input.focus();
+          input?.focus();
         }
       }
     }
@@ -496,8 +492,8 @@
 
     const el = list && list.querySelector(query);
     if (el) {
-      if (typeof el.scrollIntoViewIfNeeded === "function") {
-        el.scrollIntoViewIfNeeded();
+      if (typeof (el as any).scrollIntoViewIfNeeded === "function") {
+        (el as any).scrollIntoViewIfNeeded();
       }
     }
   }
@@ -506,7 +502,7 @@
     if (selectListItem(listItem.value)) {
       close();
       if (multiple) {
-        input.focus();
+        input?.focus();
       }
     }
   }
@@ -570,15 +566,14 @@
   function unselectItem(tag) {
     if (disabled || readonly) return;
 
-    value = value.filter((i) => i !== tag);
-    input.focus();
+    updateValue(value.filter((i) => i !== tag));
+    input?.focus();
   }
 
-  function processInput() {
-    if (search()) {
-      highlightIndex = 0;
-      open();
-    }
+  async function processInput() {
+    await search();
+    highlightIndex = 0;
+    open();
   }
 
   function onInputClick() {
@@ -589,7 +584,7 @@
     if (opened) {
       e.stopPropagation();
 
-      input.focus();
+      input?.focus();
       close();
     }
   }
@@ -657,11 +652,11 @@
   }
 
   function clear() {
-    value = multiple ? [] : null;
+    updateValue(multiple ? [] : undefined);
     text = "";
 
     setTimeout(() => {
-      input.focus();
+      input?.focus();
       close();
     });
   }
@@ -765,8 +760,7 @@
   {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
   class:is-loading={showLoadingIndicator && loading}
-  use:clickOutside
-  onclick_outside={close}
+  {@attach clickOutsideAttachment(close)}
 >
   <select name={selectName} id={selectId}>
     {#if !multiple && value}
@@ -796,7 +790,7 @@
       bind:value={text}
       oninput={onInput}
       onfocus={onFocusInternal}
-      onblur={bubble("blur")}
+      {onblur}
       onkeydown={onKeyDown}
       onclick={onInputClick}
       onkeypress={onKeyPress}
@@ -834,7 +828,10 @@
                   ? 'selected'
                   : ''} {multiple ? 'gap-s10' : 'justify-between'}"
                 class:confirmed
-                onclick={preventDefault(() => onListItemClick(listItem))}
+                onclick={(event) => {
+                  event.preventDefault();
+                  onListItemClick(listItem);
+                }}
                 onpointerenter={() => {
                   highlightIndex = i;
                 }}
@@ -898,7 +895,10 @@
         {#if !disabled && !readonly && !isFixedItem(tagItem)}
           <button
             class="tag-delete"
-            onclick={preventDefault(unselectItem(tagItem))}
+            onclick={(event) => {
+              event.preventDefault();
+              unselectItem(tagItem);
+            }}
           >
             {@html closeCircleIcon}
           </button>

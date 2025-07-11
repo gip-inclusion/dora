@@ -8,6 +8,7 @@
   import { fetchData, getDepartmentFromCityCode } from "$lib/utils/misc";
 
   interface Props {
+    onblur?: (evt: FocusEvent) => void;
     onChange: (newValue: GeoApiValue) => void;
     disabled?: boolean;
     id: any;
@@ -16,6 +17,7 @@
   }
 
   let {
+    onblur,
     onChange,
     disabled = false,
     id,
@@ -89,7 +91,7 @@
 
 <Select
   bind:value
-  on:blur
+  {onblur}
   {id}
   {onChange}
   {initialValue}

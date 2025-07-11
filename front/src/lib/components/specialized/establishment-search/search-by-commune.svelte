@@ -20,7 +20,7 @@
     onEstablishmentChange,
   }: Props = $props();
 
-  let queryText: string | undefined = $state();
+  let queryText: string = $state("");
 
   let city: GeoApiValue | null = $state();
 
