@@ -98,20 +98,22 @@ def send_account_deletion_notification(user):
 
 
 def send_structure_awaiting_moderation(manager):
-    # envoyé au gestionnaires de territoire tous les mercredis
+    # envoyé aux gestionnaires de territoire tous les mercredis
     # avec la liste des structures
 
-    # pas de dépendances/import entre modèles sauf si indispensable
     structures = apps.get_model("structures.Structure").objects
-    to_moderate = (
-        structures.awaiting_moderation()
-        .exclude(is_obsolete=True)
-        .filter(department__in=manager.departments)
-    )
+    awaiting_moderation = structures.awaiting_moderation()
+    orphans = structures.orphans()
+
+    non_filtered_structures = awaiting_moderation | orphans
+
+    structures_requiring_action = non_filtered_structures.filter(
+        is_obsolete=False, department__in=manager.departments
+    ).values_list("name", flat=True)
 
     cta_link = furl(settings.FRONTEND_URL) / "admin" / "structures"
     context = {
-        "structures": to_moderate,
+        "structures": structures_requiring_action,
         "cta_link": cta_link.url,
     }
 
