@@ -7,13 +7,6 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import RadioButtons from "../../inputs/radio-buttons.svelte";
 
-  // Laisser la valeur par défault ici. Si la valeur entrante est undefined ou null
-
-  const choices = [
-    { value: true, label: yesLabel },
-    { value: false, label: noLabel },
-  ];
-
   interface Props {
     id: string;
     // on veut la considérer comme false;
@@ -42,6 +35,13 @@
     hideLabel = false,
     vertical = false,
   }: Props = $props();
+
+  // Laisser la valeur par défault ici. Si la valeur entrante est undefined ou null
+
+  const choices = [
+    { value: true, label: yesLabel },
+    { value: false, label: noLabel },
+  ];
 </script>
 
 {#if $currentSchema && id in $currentSchema}
