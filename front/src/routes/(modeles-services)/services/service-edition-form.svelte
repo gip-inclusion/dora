@@ -1,7 +1,6 @@
 <script lang="ts">
   import { run } from "svelte/legacy";
 
-  import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
@@ -113,9 +112,9 @@
 
   function handleSuccess(result: Service) {
     if (DI_DORA_UNIFIED_SEARCH_ENABLED && result.status === "PUBLISHED") {
-      goto(`/structures/${result.structure}/services/publication`);
+      window.location.href = `/structures/${result.structure}/services/publication`;
     } else {
-      goto(`/services/${result.slug}`);
+      window.location.href = `/services/${result.slug}`;
     }
   }
 
