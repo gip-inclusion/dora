@@ -190,7 +190,7 @@
         >
           <Fieldset
             title="Premier administrateur"
-            description="Veuillez saisir le courriel de la personne que vous souhaitez inviter."
+            descriptionText="Veuillez saisir le courriel de la personne que vous souhaitez inviter."
           >
             <BasicInputField
               type="email"

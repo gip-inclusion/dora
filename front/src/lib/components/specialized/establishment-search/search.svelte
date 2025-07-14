@@ -17,9 +17,9 @@
     showSafir?: boolean;
     tabId?: Tab;
     title?: string;
-    description?: string | undefined;
-    proposedSafir?: string;
-    proposedSiret?: string;
+    descriptionText?: string | undefined;
+    proposedSafir?: string | null;
+    proposedSiret?: string | null;
     cta?: import("svelte").Snippet;
   }
 
@@ -30,7 +30,7 @@
     showSafir = false,
     tabId = $bindable(showSafir ? "safir" : "nom"),
     title = "Structure",
-    description = undefined,
+    descriptionText = undefined,
     proposedSafir = $bindable(""),
     proposedSiret = "",
     cta,
@@ -85,8 +85,8 @@
   {#snippet description()}
     <div>
       <p class="m-s0 text-f14 text-white">
-        {#if description}
-          {description}
+        {#if descriptionText}
+          {descriptionText}
         {:else}
           Veuillez choisir une méthode d’identification parmi les options
           disponibles. Si vous rencontrez des difficultés ou avez besoin
