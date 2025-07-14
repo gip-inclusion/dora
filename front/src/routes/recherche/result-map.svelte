@@ -1,14 +1,12 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import * as mlgl from "maplibre-gl";
   import Spiderfy from "@nazka/map-gl-js-spiderfy";
 
   import insane from "insane";
 
   import circleIcon from "$lib/assets/icons/circle.png";
-  import type { ServiceSearchResult } from "$lib/types";
   import Map from "$lib/components/display/map.svelte";
+  import type { ServiceSearchResult } from "$lib/types";
 
   import type { PageData } from "./$types";
 
@@ -24,7 +22,7 @@
 
   let { data, filteredServices, onServiceClick = undefined }: Props = $props();
 
-  let map: mlgl.Map = $state();
+  let map: mlgl.Map | undefined = $state();
   let popup: mlgl.Popup;
   let spiderfy: Spiderfy;
 
@@ -46,6 +44,10 @@
   }
 
   function handleLeafEnter(feature: mlgl.MapGeoJSONFeature) {
+    if (!map) {
+      return;
+    }
+
     if (feature.geometry.type !== "Point") {
       return;
     }
@@ -62,6 +64,10 @@
   }
 
   function zoomToAddressOrCity() {
+    if (!map) {
+      return;
+    }
+
     if (zoomToAddress) {
       // Déplacement animé vers les coordonnées de l'adresse avec zoom de niveau 15
       map.flyTo({
@@ -86,6 +92,20 @@
   }
 
   async function handleMapLoaded() {
+    console.log("handleMapLoaded", map);
+    if (!map) {
+      return;
+    }
+
+    // Redimensionne la carte après un court délai pour gérer l'ouverture de la modale
+    setTimeout(() => {
+      if (map) {
+        map.resize();
+        // Re-centre après le redimensionnement pour assurer un positionnement correct
+        zoomToAddressOrCity();
+      }
+    }, 200);
+
     spiderfy = new Spiderfy(map, {
       minZoomLevel: 14,
       zoomIncrement: 2,
@@ -156,6 +176,10 @@
 
     let lastHovered: mlgl.MapGeoJSONFeature | null = null;
     map.on("mousemove", function (evt) {
+      if (!map) {
+        return;
+      }
+
       const featuresUnderMouse = map
         .queryRenderedFeatures(evt.point)
         .filter(
@@ -196,10 +220,11 @@
 
     map.addControl(new mlgl.NavigationControl({ showCompass: false }));
 
+    // Centrage initial (sera remplacé par le centrage du timeout)
     zoomToAddressOrCity();
   }
 
-  function updateMapContent() {
+  function updateMapContent(services: ServiceWithCoords[]) {
     if (!map) {
       return;
     }
@@ -214,7 +239,7 @@
 
     servicesSource.setData({
       type: "FeatureCollection",
-      features: onSiteServicesWithCoords.map((service) => ({
+      features: services.map((service) => ({
         type: "Feature",
         properties: {
           ...service,
@@ -227,9 +252,9 @@
     });
   }
 
-  run(() => {
-    (onSiteServicesWithCoords, updateMapContent());
+  $effect(() => {
+    updateMapContent(onSiteServicesWithCoords);
   });
 </script>
 
-<Map bind:map on:load={handleMapLoaded} />
+<Map bind:map onLoad={handleMapLoaded} />

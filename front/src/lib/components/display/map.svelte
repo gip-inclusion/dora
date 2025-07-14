@@ -1,21 +1,21 @@
 <script lang="ts">
-  import { createEventDispatcher, onDestroy, onMount } from "svelte";
-  import mapStyle from "./map-style.json?raw"; // Basé sur https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/style.json
-  import * as mlgl from "maplibre-gl";
+  import { onDestroy, onMount } from "svelte";
 
+  import * as mlgl from "maplibre-gl";
   import "maplibre-gl/dist/maplibre-gl.css";
+
+  import mapStyle from "./map-style.json?raw"; // Basé sur https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/style.json
 
   const METROPOLE_BB: mlgl.LngLatBoundsLike = [-5, 42, 8, 51];
 
   interface Props {
-    map: mlgl.Map;
+    map?: mlgl.Map;
+    onLoad?: () => void;
   }
 
-  let { map = $bindable() }: Props = $props();
+  let { map = $bindable(), onLoad }: Props = $props();
 
-  const dispatch = createEventDispatcher();
-
-  let mapDiv: HTMLElement = $state();
+  let mapDiv: HTMLElement;
 
   onMount(() => {
     map = new mlgl.Map({
@@ -25,17 +25,15 @@
       zoom: 4,
       maxZoom: 17,
     });
-    map.fitBounds(METROPOLE_BB, {
-      padding: 20,
-    });
+    map.fitBounds(METROPOLE_BB, { padding: 20 });
 
-    map.on("load", () => {
-      dispatch("load");
-    });
+    if (onLoad) {
+      map.on("load", onLoad);
+    }
   });
 
   onDestroy(() => {
-    map.remove();
+    map?.remove();
   });
 </script>
 
