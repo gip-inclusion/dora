@@ -14,4 +14,10 @@ fileignoreconfig:
   - filename: back/config/settings/sentry.py
     checksum: 31d504c501153d444f0f80eb8a5ddd1028cb344d7921b00c2fed4ef3587eb43d
 
+  - filename: back/dora/onboarding/__init__.py
+    checksum: 870040153fd696507b63900fe42659c64ced9e2d47c6672fe5adbb2658b465a3
+  - filename: back/config/settings/base.py
+    checksum: 192cb904b692b4d5b7d8df4eeaef528cd20f55a3506a49151a2052d37b549d18
+  - filename: back/dora/onboarding/test.py
+    checksum: 080dc7bd80288be826662ca2b08e579ff60c412106853d3fd825370c34f2a7c6
 version: ""
