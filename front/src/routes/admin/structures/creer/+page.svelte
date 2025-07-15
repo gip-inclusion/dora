@@ -196,7 +196,7 @@
               type="email"
               id="email"
               bind:value={structure.email}
-              description="Format attendu&nbsp;: mail@domaine.fr"
+              descriptionText="Format attendu&nbsp;: mail@domaine.fr"
               vertical
             />
           </Fieldset>

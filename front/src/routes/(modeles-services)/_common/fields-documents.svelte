@@ -54,7 +54,7 @@
       id="forms"
       structureSlug={service.structure}
       on:blur
-      description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
+      descriptionText="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
       bind:fileKeys={service.forms}
     />
   </FieldModel>
@@ -75,17 +75,14 @@
   {/if}
 
   <FieldModel {...fieldModelProps.onlineForm ?? {}}>
-    <BasicInputField
-      id="onlineForm"
-      type="url"
-      description=""
-      bind:value={service.onlineForm}
-    >
-      <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
-      <small slot="description">
-        Lien vers un document à récupérer, un formulaire à compléter, etc.<br />
-        Format attendu : https://example.fr</small
-      >
+    <BasicInputField id="onlineForm" type="url" bind:value={service.onlineForm}>
+      {#snippet description()}
+        <small>
+          Lien vers un document à récupérer, un formulaire à compléter, etc.<br
+          />
+          Format attendu : https://example.fr
+        </small>
+      {/snippet}
     </BasicInputField>
   </FieldModel>
 </FieldSet>

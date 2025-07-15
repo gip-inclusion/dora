@@ -86,7 +86,7 @@
   label="Commune"
   required
   vertical
-  description="Ville où la structure mène ses activités ou où elle est officiellement immatriculée. Veuillez commencer à saisir le nom de la ville et choisir parmi les options qui apparaissent."
+  descriptionText="Ville où la structure mène ses activités ou où elle est officiellement immatriculée. Veuillez commencer à saisir le nom de la ville et choisir parmi les options qui apparaissent."
 >
   <CitySearch id="city" onChange={handleCityChange} />
 </FieldWrapper>
@@ -96,7 +96,7 @@
   label="Dénomination"
   required
   vertical
-  description="Veuillez commencer à saisir le nom de la structure et choisir parmi les options qui apparaissent."
+  descriptionText="Veuillez commencer à saisir le nom de la structure et choisir parmi les options qui apparaissent."
 >
   <Select
     id="siret-select"

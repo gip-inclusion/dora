@@ -31,7 +31,7 @@
     <BasicInputField
       type="url"
       id="remoteUrl"
-      description="Visioconférence, URL du formulaire, etc. Format attendu : https://example.fr."
+      descriptionText="Visioconférence, URL du formulaire, etc. Format attendu : https://example.fr."
       bind:value={service.remoteUrl}
     />
   {/if}

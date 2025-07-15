@@ -59,7 +59,7 @@
     {id}
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
-    description="Plusieurs choix possibles."
+    descriptionText="Plusieurs choix possibles."
     readonly={$currentSchema?.[id]?.readonly}
   >
     {#snippet children({ onChange, errorMessages })}
@@ -81,7 +81,7 @@
             >
               <BasicInputField
                 id="beneficiariesAccessModesExternalFormLinkText"
-                description="Par exemple : Faire une demande, Faire une simulation, Prendre rendez-vous, etc."
+                descriptionText="Par exemple : Faire une demande, Faire une simulation, Prendre rendez-vous, etc."
                 vertical
                 bind:value={
                   service.beneficiariesAccessModesExternalFormLinkText
@@ -89,7 +89,7 @@
               />
               <BasicInputField
                 id="beneficiariesAccessModesExternalFormLink"
-                description="Lien vers votre formulaire ou plateforme. Format attendu : https://exemple.fr"
+                descriptionText="Lien vers votre formulaire ou plateforme. Format attendu : https://exemple.fr"
                 type="url"
                 vertical
                 bind:value={service.beneficiariesAccessModesExternalFormLink}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { run } from "svelte/legacy";
 
   import Button from "$lib/components/display/button.svelte";
@@ -12,7 +13,7 @@
     onEstablishmentChange: (establishment: Establishment | null) => void;
     establishment: Establishment | null;
     proposedSiret: string;
-    description?: import("svelte").Snippet;
+    description?: Snippet;
   }
 
   let {
@@ -21,6 +22,7 @@
     proposedSiret,
     description,
   }: Props = $props();
+
   let siretInput = $state(proposedSiret);
   let siretIsValid = $state(false);
   let serverErrorMsg = $state("");
@@ -59,20 +61,16 @@
       }
     }
   }
-
-  const description_render = $derived(description);
 </script>
 
 <FieldWrapper
   id="siret-select"
   label="Numéro SIRET"
   required
-  description="Sur 14 chiffres"
+  descriptionText="Sur 14 chiffres"
   vertical
+  {description}
 >
-  <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
-  {@render description_render?.()}
-
   <div class="flex flex-col">
     <div class="gap-s12 flex flex-row">
       <input

@@ -30,20 +30,20 @@
   <BasicInputField
     id="contactName"
     bind:value={service.contactName}
-    description="Personne (prénom et nom) ou département/service interne (nom) en charge de la réception et du traitement des orientations, pour ce service."
+    descriptionText="Personne (prénom et nom) ou département/service interne (nom) en charge de la réception et du traitement des orientations, pour ce service."
   />
 
   <BasicInputField
     id="contactPhone"
     type="tel"
-    description="Format attendu : 4 à 10 caractères alphanumériques (sans l'indicatif pays). Par exemple : 0123456789."
+    descriptionText="Format attendu : 4 à 10 caractères alphanumériques (sans l'indicatif pays). Par exemple : 0123456789."
     bind:value={service.contactPhone}
   />
 
   <BasicInputField
     id="contactEmail"
     type="email"
-    description="Format attendu&nbsp;: nom@domaine.fr"
+    descriptionText="Format attendu&nbsp;: nom@domaine.fr"
     bind:value={service.contactEmail}
   />
 

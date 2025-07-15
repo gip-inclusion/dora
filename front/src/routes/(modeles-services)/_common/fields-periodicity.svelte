@@ -49,7 +49,7 @@
   <FieldModel {...fieldModelProps.recurrence ?? {}}>
     <BasicInputField
       id="recurrence"
-      description="Par exemple : tous les jours à 14h, une fois par mois, etc."
+      descriptionText="Par exemple : tous les jours à 14h, une fois par mois, etc."
       bind:value={service.recurrence}
     />
   </FieldModel>
@@ -59,7 +59,7 @@
       id="suspensionDate"
       type="date"
       bind:value={service.suspensionDate}
-      description="Date à partir de laquelle le service ne sera plus visible dans la recherche."
+      descriptionText="Date à partir de laquelle le service ne sera plus visible dans la recherche."
     />
   </FieldModel>
 

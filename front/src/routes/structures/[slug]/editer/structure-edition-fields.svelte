@@ -83,7 +83,7 @@
   id="phone"
   bind:value={structure.phone}
   placeholder="0123456789"
-  description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
+  descriptionText="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
 />
 
 <BasicInputField
@@ -91,7 +91,7 @@
   id="email"
   bind:value={structure.email}
   placeholder="nom@domaine.fr"
-  description="Format attendu&nbsp;: mail@domaine.fr"
+  descriptionText="Format attendu&nbsp;: mail@domaine.fr"
 />
 
 <BasicInputField
@@ -128,7 +128,7 @@
 <BasicInputField
   id="otherLabels"
   bind:value={structure.otherLabels}
-  description="Indiquez si la structure fait partie d’autres labels (régionaux, locaux…)"
+  descriptionText="Indiquez si la structure fait partie d’autres labels (régionaux, locaux…)"
   vertical
 />
 
@@ -141,7 +141,7 @@
 <BasicInputField
   id="openingHoursDetails"
   bind:value={structure.openingHoursDetails}
-  description="Vous pouvez renseigner des informations spécifiques concernant les horaires dans ce champ"
+  descriptionText="Vous pouvez renseigner des informations spécifiques concernant les horaires dans ce champ"
   vertical
 />
 

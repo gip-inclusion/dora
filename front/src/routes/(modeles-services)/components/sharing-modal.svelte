@@ -143,7 +143,7 @@
               type="email"
               id="senderName"
               bind:value={senderName}
-              description="Exemple : Nadia Comaneci"
+              descriptionText="Exemple : Nadia Comaneci"
               autocomplete="name"
               vertical
             />
@@ -152,7 +152,7 @@
             type="email"
             id="recipientEmail"
             bind:value={recipientEmail}
-            description="Format attendu : nom@domaine.fr."
+            descriptionText="Format attendu : nom@domaine.fr."
             vertical
           />
           <RadioButtonsField

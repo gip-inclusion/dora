@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { run } from "svelte/legacy";
 
   import Button from "$lib/components/display/button.svelte";
@@ -13,7 +14,7 @@
     onEstablishmentChange: (establishment: Establishment | null) => void;
     proposedSafir: any;
     establishment: Establishment | null;
-    description?: import("svelte").Snippet;
+    description?: Snippet;
   }
 
   let {
@@ -22,6 +23,7 @@
     establishment = $bindable(),
     description,
   }: Props = $props();
+
   let safirInput = $state(proposedSafir);
   let safirIsValid = $state(false);
   let serverErrorMsg = $state("");
@@ -60,20 +62,16 @@
       }
     }
   }
-
-  const description_render = $derived(description);
 </script>
 
 <FieldWrapper
   id="safir-select"
   label="Code Safir de votre agence"
   required
-  description="Sur 5 chiffres"
+  descriptionText="Sur 5 chiffres"
   vertical
+  {description}
 >
-  <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
-  {@render description_render?.()}
-
   <div class="flex flex-col">
     <div class="gap-s12 flex flex-row">
       <input

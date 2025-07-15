@@ -69,7 +69,7 @@
     <BasicInputField
       id="name"
       bind:value={service.name}
-      description="140 caractères maximum"
+      descriptionText="140 caractères maximum"
     />
   </FieldModel>
 

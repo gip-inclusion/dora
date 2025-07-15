@@ -105,7 +105,7 @@
           id="referentPhone"
           type="tel"
           placeholder="0123456789"
-          description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
+          descriptionText="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
           bind:value={$orientation.referentPhone}
           vertical
         />
@@ -115,7 +115,7 @@
           id="referentEmail"
           type="email"
           placeholder="nom@domaine.fr"
-          description="Saisissez votre adresse professionnelle. Format attendu&nbsp;: mail@domaine.fr"
+          descriptionText="Saisissez votre adresse professionnelle. Format attendu&nbsp;: mail@domaine.fr"
           bind:value={$orientation.referentEmail}
           vertical
         />
@@ -146,7 +146,7 @@
     <BasicInputField
       id="beneficiaryAvailability"
       type="date"
-      description=""
+      descriptionText=""
       bind:value={$orientation.beneficiaryAvailability}
       vertical
     >
@@ -215,7 +215,7 @@
           id="beneficiaryPhone"
           type="tel"
           placeholder="0123456789"
-          description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
+          descriptionText="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
           bind:value={$orientation.beneficiaryPhone}
           vertical
         />
@@ -225,7 +225,7 @@
           id="beneficiaryEmail"
           type="email"
           placeholder="nom@domaine.fr"
-          description="Format attendu&nbsp;: nom@domaine.fr"
+          descriptionText="Format attendu&nbsp;: nom@domaine.fr"
           bind:value={$orientation.beneficiaryEmail}
           vertical
         />
@@ -235,7 +235,7 @@
     {#if $orientation.beneficiaryContactPreferences.includes("AUTRE")}
       <TextareaField
         id="beneficiaryOtherContactMethod"
-        description="Préciser quelle autre méthode de contact est possible"
+        descriptionText="Préciser quelle autre méthode de contact est possible"
         bind:value={$orientation.beneficiaryOtherContactMethod}
         vertical
       />
@@ -276,20 +276,21 @@
             label="Document à compléter"
             vertical
             id={form.name}
-            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
+            descriptionText="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
             bind:fileKeys={$orientation.attachments[form.name]}
           >
-            <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
-            <p slot="description">
-              <a
-                href={form.url}
-                class="font-bold underline"
-                target="_blank"
-                rel="noopener nofollow ugc"
-              >
-                {formatFilePath(form.name)}
-              </a>
-            </p>
+            {#snippet description()}
+              <p>
+                <a
+                  href={form.url}
+                  class="font-bold underline"
+                  target="_blank"
+                  rel="noopener nofollow ugc"
+                >
+                  {formatFilePath(form.name)}
+                </a>
+              </p>
+            {/snippet}
           </UploadField>
         {/if}
       {/each}
@@ -301,7 +302,7 @@
             label={cred.label}
             vertical
             id={cred.label}
-            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
+            descriptionText="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
             bind:fileKeys={$orientation.attachments[cred.label]}
           />
         {/if}
