@@ -50,14 +50,14 @@
           <h3 class="mb-s0 text-france-blue lg:mb-s24">
             <a
               class="full-result-link hover:underline"
-              href="/services/{bookmark.isDi ? 'di/' : ''}{bookmark?.slug}"
+              href="/services/{bookmark.isDi ? 'di--' : ''}{bookmark?.slug}"
             >
               {service?.name}
             </a>
           </h3>
 
           <p class="mt-s16 text-f16 text-gray-text z-10 hidden md:block">
-            <a href="/services/{bookmark.isDi ? 'di/' : ''}{bookmark?.slug}">
+            <a href="/services/{bookmark.isDi ? 'di--' : ''}{bookmark?.slug}">
               {service?.shortDesc}
             </a>
           </p>
