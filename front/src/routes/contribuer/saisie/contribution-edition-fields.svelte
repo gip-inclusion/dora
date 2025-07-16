@@ -10,7 +10,7 @@
   interface Props {
     servicesOptions: ServicesOptions;
     contribution: Service;
-    establishment: Establishment;
+    establishment: Establishment | null;
   }
 
   let {

@@ -3,6 +3,7 @@
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import BooleanRadioButtonsField from "$lib/components/forms/fields/boolean-radio-buttons-field.svelte";
   import type { Service } from "$lib/types";
+  import { currentSchema } from "$lib/validation/validation";
 
   interface Props {
     service: Service;
@@ -47,10 +48,12 @@
     bind:value={service.contactEmail}
   />
 
-  <BooleanRadioButtonsField
-    id="isContactInfoPublic"
-    bind:value={service.isContactInfoPublic}
-    yesLabel="OUI – visibles publiquement"
-    noLabel="NON – visibles par les acteurs de l’insertion"
-  />
+  {#if $currentSchema && "isContactInfoPublic" in $currentSchema}
+    <BooleanRadioButtonsField
+      id="isContactInfoPublic"
+      bind:value={service.isContactInfoPublic}
+      yesLabel="OUI – visibles publiquement"
+      noLabel="NON – visibles par les acteurs de l’insertion"
+    />
+  {/if}
 </FieldSet>

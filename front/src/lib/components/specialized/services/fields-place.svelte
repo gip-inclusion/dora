@@ -9,7 +9,7 @@
   interface Props {
     servicesOptions: ServicesOptions;
     service: Service;
-    structure?: Structure | undefined;
+    structure?: Structure | undefined | null;
   }
 
   let {

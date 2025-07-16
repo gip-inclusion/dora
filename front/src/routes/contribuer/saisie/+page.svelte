@@ -19,7 +19,7 @@
 
   let { data }: Props = $props();
 
-  let establishment: Establishment = $state(undefined);
+  let establishment: Establishment | null = $state(null);
   let requesting = $state(false);
 
   // TODO: Ajouter le type Contribution
@@ -79,7 +79,7 @@
 </CenteredGrid>
 
 <Form
-  bind:data={contribution}
+  data={contribution}
   schema={contribSchema}
   onChange={handleChange}
   onSubmit={handleSubmit}

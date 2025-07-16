@@ -103,12 +103,11 @@
   localFiltering={false}
   minCharactersToSearch="3"
 >
-  {#snippet prepend({ results })}
+  {#snippet prepend()}
     <div class="px-s8 pt-s8">
       <button
         class="border-gray-02 px-s8 py-s12 text-f14 text-gray-text flex w-full"
         onclick={stopPropagation(preventDefault(searchCityFromLocation))}
-        class:border-b={results?.length}
       >
         <span class="mr-s8 h-s24 w-s24 fill-current">
           {@html pinDistanceIcon}
