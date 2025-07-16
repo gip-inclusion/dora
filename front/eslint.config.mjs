@@ -132,7 +132,8 @@ export default [
         },
       ],
 
-      "prefer-const": "error",
+      "prefer-const": "off",
+      "svelte/prefer-const": "off",
       "require-await": "error",
       "svelte/no-at-html-tags": "warn",
       "svelte/valid-compile": "warn",
