@@ -201,7 +201,7 @@
   {#if !isFeedbackSent}
     <div in:slide={{ duration: 300 }} out:slide={{ duration: 300 }}>
       <Form
-        bind:data={formData}
+        data={formData}
         schema={feedbackSchema}
         onSubmit={handleSubmit}
         onSuccess={handleSuccess}
