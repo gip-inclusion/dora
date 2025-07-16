@@ -1,7 +1,7 @@
 <script lang="ts">
   import { run } from "svelte/legacy";
 
-  import { onMount } from "svelte";
+  import { onMount, untrack } from "svelte";
 
   import { page } from "$app/stores";
 
@@ -58,6 +58,7 @@
   });
 
   function resetFilters() {
+    console.log("RESET FILTERS");
     filters = {
       kinds: [],
       fundingLabels: [],
@@ -69,12 +70,14 @@
   // Réinitialise les filtres quand la recherche est actualisée.
   // On observe l'objet data car celui-ci change à chaque fois que la recherche est actualisée.
   // Il n'est pas utile d'observer les champs de l'objet data vu que tout l'objet change.
-  run(() => {
+  $effect(() => {
     data;
-    if (filtersInitialized) {
+    if (untrack(() => filtersInitialized)) {
       resetFilters();
     } else {
-      filtersInitialized = true;
+      untrack(() => {
+        filtersInitialized = true;
+      });
     }
   });
 
