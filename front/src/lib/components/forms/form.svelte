@@ -36,7 +36,7 @@
   }
 
   let {
-    data,
+    data = $bindable(),
     schema,
     requesting = $bindable(false),
     serverErrorsDict = {},
