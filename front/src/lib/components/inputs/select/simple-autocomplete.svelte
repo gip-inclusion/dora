@@ -9,7 +9,7 @@
   import { checkIcon, closeCircleIcon } from "$lib/icons";
   import { clickOutside } from "$lib/utils/misc";
   import { formatErrors } from "$lib/validation/validation";
-  import { onMount } from "svelte";
+  import { onMount, type Snippet } from "svelte";
 
   // --- Internal State ----
   const uniqueId = `sautocomplete-${Math.floor(Math.random() * 1000)}`;
@@ -102,9 +102,9 @@
     initialValue?: any;
 
     text?: string;
-    prepend?: import("svelte").Snippet;
-    itemContent?: import("svelte").Snippet<[any]>;
-    append?: import("svelte").Snippet;
+    prepend?: Snippet;
+    itemContent?: Snippet<[any]>;
+    append?: Snippet;
   }
 
   let {

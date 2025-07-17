@@ -29,7 +29,6 @@
   ];
 
   const order = orders[0].value;
-  let modelsOrdered = $derived(modelsOrder(models));
   let filters;
 
   function modelsOrder(allModels) {
@@ -57,6 +56,8 @@
 
     return sortedModels;
   }
+
+  let modelsOrdered = $derived(modelsOrder(models));
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">

@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { run, createBubbler } from "svelte/legacy";
+  import { run } from "svelte/legacy";
 
   import AutoComplete from "./simple-autocomplete.svelte";
-
-  const bubble = createBubbler();
 
   type Choice = { value: string | number; label: string };
 
@@ -78,10 +76,6 @@
       );
     }
   });
-
-  const prepend_render = $derived(prepend);
-  const itemContent_render = $derived(itemContent);
-  const append_render = $derived(append);
 </script>
 
 <AutoComplete
@@ -113,22 +107,7 @@
   {hasAppendSlot}
   {hasCustomContentSlot}
   {errorMessages}
->
-  {#snippet prepend()}
-    {#if prepend_render}
-      {@render prepend_render()}
-    {/if}
-  {/snippet}
-
-  {#snippet itemContent({ item })}
-    {#if itemContent_render}
-      {@render itemContent_render({ item })}
-    {/if}
-  {/snippet}
-
-  {#snippet append()}
-    {#if append_render}
-      {@render append_render()}
-    {/if}
-  {/snippet}
-</AutoComplete>
+  {prepend}
+  {itemContent}
+  {append}
+/>

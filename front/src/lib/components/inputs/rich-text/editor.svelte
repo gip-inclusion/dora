@@ -71,9 +71,9 @@
       content: markdownToHTML(initialContent),
       injectCSS: false,
       onTransaction: () => {
+        console.log("onTransaction");
         // force re-render so `editor.isActive` works as expected
         htmlContent = htmlToMarkdown(editor.getHTML());
-        editor = editor;
       },
       editorProps: {
         attributes: {

@@ -164,7 +164,7 @@
     zoomToStructures(filteredStructures);
   }
 
-  function updateMapContent(filteredStructures: AdminShortStructure[]) {
+  function updateMapContent(structures: AdminShortStructure[]) {
     if (!map) {
       return;
     }
@@ -179,7 +179,7 @@
 
     structuresSource.setData({
       type: "FeatureCollection",
-      features: filteredStructures.map((struct) => ({
+      features: structures.map((struct) => ({
         type: "Feature",
         properties: {
           ...struct,
@@ -191,7 +191,7 @@
       })),
     });
 
-    zoomToStructures(filteredStructures);
+    zoomToStructures(structures);
   }
 
   function updateHoveredFeature(structureSlug: string | null) {
