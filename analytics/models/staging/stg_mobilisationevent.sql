@@ -56,7 +56,7 @@ final AS (
     UNION
     SELECT *
     FROM di_events
-    WHERE date >= '2024-07-01'
+    WHERE date >= '2024-01-01'
 )
 
 SELECT * FROM final
