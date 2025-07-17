@@ -8,7 +8,6 @@
   import { contactBeneficiary } from "$lib/utils/orientation";
   import type { Orientation } from "$lib/types";
   import ConfirmationBloc from "./confirmation-bloc.svelte";
-  import { createEventDispatcher } from "svelte";
 
   interface Props {
     isOpen?: boolean;
@@ -25,8 +24,6 @@
     orientation,
     queryHash,
   }: Props = $props();
-
-  const dispatch = createEventDispatcher();
 
   let showConfirmation = $state(false);
 
@@ -69,7 +66,7 @@
       extraRecipients = [];
       message = "";
     }
-    dispatch("close");
+    onClose?.();
   }
 
   function handleSubmit(validatedData) {
@@ -92,7 +89,7 @@
 
 <Modal
   bind:isOpen
-  {onClose}
+  onClose={handleClose}
   hideTitle={showConfirmation}
   title="Contacter le ou la bénéficiaire"
   width="medium"
