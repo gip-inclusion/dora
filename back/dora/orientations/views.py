@@ -85,8 +85,12 @@ class OrientationViewSet(
         orientation = self.get_object()
         prescriber_message = self.request.data.get("message")
         beneficiary_message = self.request.data.get("beneficiary_message")
-        orientation.duration_weekly_hours = orientation.service.duration_weekly_hours
-        orientation.duration_weeks = orientation.service.duration_weeks
+        if orientation.service:
+            # L'objet service et les durées n'existent pas dans le cas des services DI
+            orientation.duration_weekly_hours = (
+                orientation.service.duration_weekly_hours
+            )
+            orientation.duration_weeks = orientation.service.duration_weeks
         orientation.processing_date = timezone.now()
         orientation.status = OrientationStatus.ACCEPTED
         orientation.save()
