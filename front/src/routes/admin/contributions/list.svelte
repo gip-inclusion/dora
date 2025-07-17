@@ -110,7 +110,7 @@
 
 <Modal
   bind:isOpen={confirmationModalIsOpen}
-  on:close={onConfirmationClose}
+  onClose={onConfirmationClose}
   title="Création du service réussie"
 >
   {#if emailsContacted}

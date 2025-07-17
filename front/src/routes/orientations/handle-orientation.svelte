@@ -48,28 +48,28 @@
 {#if browser}
   <DenyOrientationModal
     isOpen={modalOpened === "deny"}
-    on:close={closeModal}
+    onClose={closeModal}
     {orientation}
     {queryHash}
     {onRefresh}
   />
   <AcceptOrientationModal
     isOpen={modalOpened === "accept"}
-    on:close={closeModal}
+    onClose={closeModal}
     {orientation}
     {queryHash}
     {onRefresh}
   />
   <ContactBeneficiaryModal
     isOpen={modalOpened === "contact-beneficiary"}
-    on:close={closeModal}
+    onClose={closeModal}
     {onRefresh}
     {orientation}
     {queryHash}
   />
   <ContactPrescriberModal
     isOpen={modalOpened === "contact-service"}
-    on:close={closeModal}
+    onClose={closeModal}
     {orientation}
     {queryHash}
     {onRefresh}

@@ -12,7 +12,7 @@
 <Modal
   bind:isOpen
   title="Dites-nous en plus sur vous !"
-  subtitle="Pour nous permettre de mieux vous connaître et de répondre précisément à vos besoins."
+  subtitleText="Pour nous permettre de mieux vous connaître et de répondre précisément à vos besoins."
   width="medium"
   canClose={false}
 >

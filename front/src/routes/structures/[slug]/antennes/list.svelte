@@ -84,7 +84,4 @@
   {/each}
 </div>
 
-<NewBranchModal
-  bind:isOpen={newBranchModalOpen}
-  on:close={() => (newBranchModalOpen = false)}
-/>
+<NewBranchModal bind:isOpen={newBranchModalOpen} />

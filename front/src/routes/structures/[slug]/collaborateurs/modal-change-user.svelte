@@ -27,7 +27,11 @@
     onRefresh: any;
   }
 
-  let { isOpen = $bindable(false), member, onRefresh }: Props = $props();
+  let {
+    isOpen = $bindable(false),
+    member = $bindable(),
+    onRefresh,
+  }: Props = $props();
 
   let level = $state(member.isAdmin ? "admin" : "user");
 

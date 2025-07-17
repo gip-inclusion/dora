@@ -2,31 +2,53 @@
 <script lang="ts">
   import { browser } from "$app/environment";
   import { closeLineIcon } from "$lib/icons";
-  import { createEventDispatcher, onDestroy } from "svelte";
+  import type { Snippet } from "svelte";
+  import { onDestroy } from "svelte";
+  import { run } from "svelte/legacy";
   import Portal from "svelte-portal";
   import "wicg-inert";
   import Button from "../display/button.svelte";
 
-  export let isOpen: boolean;
-  export let title: string | undefined = undefined;
-  export let subtitle: string | undefined = undefined;
-  export let hideTitle = false;
-  export let width: "small" | "medium" | undefined = undefined;
-  export let noPadding = false;
-  export let targetId: string | undefined = undefined;
-  export let canClose = true;
-  export let hideCloseButton = false;
+  interface Props {
+    isOpen: boolean;
+    title?: string;
+    subtitleText?: string;
+    hideTitle?: boolean;
+    width?: "small" | "medium";
+    noPadding?: boolean;
+    targetId?: string;
+    canClose?: boolean;
+    hideCloseButton?: boolean;
+    onClose?: () => void;
+    subtitle?: Snippet;
+    children?: Snippet;
+    footer?: Snippet;
+  }
+
+  let {
+    isOpen = $bindable(),
+    title = undefined,
+    subtitleText = undefined,
+    hideTitle = false,
+    width = undefined,
+    noPadding = false,
+    targetId = undefined,
+    canClose = true,
+    hideCloseButton = false,
+    onClose = undefined,
+    subtitle = undefined,
+    children = undefined,
+    footer = undefined,
+  }: Props = $props();
 
   const target = (
     targetId ? document.getElementById(targetId) : document.body
   ) as HTMLElement;
 
-  const dispatch = createEventDispatcher();
-
   const appSelector = "body > div:first-child";
 
-  let activeElementSave: HTMLButtonElement;
-  let modalEl: HTMLDivElement;
+  let activeElementSave = $state<HTMLButtonElement | null>(null);
+  let modalEl = $state<HTMLDivElement | null>(null);
 
   function closeActions() {
     document.body.style.overflow = "inherit";
@@ -41,7 +63,7 @@
 
   onDestroy(() => closeActions());
 
-  $: {
+  run(() => {
     // Prevent scrolling the background while the modal is open
     if (browser) {
       if (isOpen) {
@@ -50,18 +72,20 @@
         activeElementSave = document.activeElement as HTMLButtonElement;
 
         setTimeout(() => {
-          modalEl.focus();
+          if (modalEl) {
+            modalEl.focus();
 
-          // On limite le parcours clavier à la modale en excluant la div immédiatement après le body
-          if (!targetId) {
-            document.querySelector(appSelector)?.setAttribute("inert", "");
+            // On limite le parcours clavier à la modale en excluant la div immédiatement après le body
+            if (!targetId) {
+              document.querySelector(appSelector)?.setAttribute("inert", "");
+            }
           }
         }, 10);
       } else {
         closeActions();
       }
     }
-  }
+  });
 
   function handleClose() {
     if (!canClose) {
@@ -69,16 +93,25 @@
     }
 
     isOpen = false;
-    dispatch("close");
+    onClose?.();
   }
+
   function handleKeydown(event) {
     if (event.key === "Escape") {
       handleClose();
     }
   }
+
+  function handleModalClick(event) {
+    event.stopPropagation();
+  }
+
+  function handleModalKeypress(event) {
+    event.stopPropagation();
+  }
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window onkeydown={handleKeydown} />
 
 {#if isOpen}
   <Portal {target}>
@@ -86,8 +119,8 @@
       id="background"
       class="flex items-center justify-center"
       role="presentation"
-      on:click={handleClose}
-      on:keypress={(event) => {
+      onclick={handleClose}
+      onkeypress={(event) => {
         if (event.code === "Escape") {
           handleClose();
         }
@@ -106,8 +139,8 @@
         class:w-[560px]={width === "small"}
         class:w-[820px]={width === "medium"}
         class:min-w-[80vw]={!width}
-        on:click|stopPropagation
-        on:keypress|stopPropagation
+        onclick={handleModalClick}
+        onkeypress={handleModalKeypress}
       >
         <div class:mb-s24={!hideTitle} class:float-right={hideTitle}>
           <div class="flex justify-between">
@@ -131,14 +164,14 @@
               </div>
             {/if}
           </div>
-          {#if subtitle && !hideTitle}
+          {#if subtitleText && !hideTitle}
             <div>
-              <p class="text-f14 text-gray-text">{subtitle}</p>
+              <p class="text-f14 text-gray-text">{subtitleText}</p>
             </div>
           {/if}
-          {#if $$slots.subtitle && !hideTitle}
+          {#if subtitle && !hideTitle}
             <div class="text-f14 text-gray-text">
-              <slot name="subtitle" />
+              {@render subtitle()}
             </div>
           {/if}
           {#if !hideTitle}
@@ -146,15 +179,16 @@
           {/if}
         </div>
 
-        <div>
-          <slot />
-        </div>
+        {#if children}
+          <div>
+            {@render children()}
+          </div>
+        {/if}
 
-        {#if $$slots.footer}
+        {#if footer}
           <div class="footer">
             <hr class="-mx-s24 my-s24 mt-s32" />
-
-            <slot name="footer" />
+            {@render footer()}
           </div>
         {/if}
       </div>

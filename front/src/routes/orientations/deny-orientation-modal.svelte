@@ -13,6 +13,7 @@
 
   interface Props {
     isOpen?: boolean;
+    onClose?: () => void;
     onRefresh: any;
     orientation: Orientation;
     queryHash: string;
@@ -20,6 +21,7 @@
 
   let {
     isOpen = $bindable(false),
+    onClose = undefined,
     onRefresh,
     orientation,
     queryHash,
@@ -131,7 +133,7 @@
 
 <Modal
   bind:isOpen
-  on:close
+  {onClose}
   title="Refuser la demande"
   width="medium"
   hideTitle={showConfirmation}

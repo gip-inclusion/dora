@@ -119,8 +119,8 @@
     bind:isOpen
     width="medium"
     title="Partager cette fiche"
-    subtitle="Envoyez cette fiche à un bénéficiaire ou à un autre professionnel."
-    on:close={handleClose}
+    subtitleText="Envoyez cette fiche à un bénéficiaire ou à un autre professionnel."
+    onClose={handleClose}
   >
     {#if messageSent}
       <Notice

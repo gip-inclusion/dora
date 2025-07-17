@@ -52,16 +52,11 @@
     displayNotice = false;
     formData = { email: "" };
   }
-
-  function handleCloseModal() {
-    displayModal = false;
-  }
 </script>
 
 <Modal
-  isOpen={displayModal}
+  bind:isOpen={displayModal}
   title="Des difficultés à vous connecter&#8239;?"
-  on:close={handleCloseModal}
 >
   <CenteredGrid>
     <p>

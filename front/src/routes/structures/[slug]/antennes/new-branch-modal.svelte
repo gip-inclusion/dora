@@ -9,12 +9,7 @@
 </script>
 
 {#if isOpen}
-  <Modal
-    bind:isOpen
-    on:close
-    title="Créer une ou plusieurs antennes"
-    width="medium"
-  >
+  <Modal bind:isOpen title="Créer une ou plusieurs antennes" width="medium">
     <p class="text-f16">
       Pour demander la création d’une ou plusieurs antennes, il suffit
       simplement de nous en faire la demande via notre chatbot (bouton “Discuter

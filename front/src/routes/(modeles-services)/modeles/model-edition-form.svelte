@@ -135,7 +135,6 @@
         targetId="modal-container"
         bind:isOpen={showUpdateAllServicesModal}
         title="Mise à jour automatiquement"
-        on:close={() => (showUpdateAllServicesModal = false)}
         width="small"
       >
         <div class="pt-s16 text-f14 text-gray-text">

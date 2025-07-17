@@ -62,7 +62,6 @@
             title="Affiner la recherche"
             width="small"
             bind:isOpen={isResultFiltersOpen}
-            on:close={() => (isResultFiltersOpen = false)}
           >
             <ResultFilters
               servicesOptions={data.servicesOptions}

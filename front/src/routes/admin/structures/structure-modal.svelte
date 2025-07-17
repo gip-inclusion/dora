@@ -37,7 +37,7 @@
 </script>
 
 <Modal
-  on:close={() => (structureSlug = null)}
+  onClose={() => (structureSlug = null)}
   bind:isOpen
   title={structure?.name}
   width="medium"
