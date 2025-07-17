@@ -131,3 +131,65 @@ def make_orientation(**kwargs):
         **kwargs,
     )
     return orientation
+
+
+def make_di_orientation(**kwargs):
+    di_service_id = (
+        kwargs.pop("di_service_id") if "di_service_id" in kwargs else "di_service_id"
+    )
+    di_service_name = (
+        kwargs.pop("di_service_name")
+        if "di_service_name" in kwargs
+        else "di_service_name"
+    )
+    di_service_address_line = (
+        kwargs.pop("di_service_address_line")
+        if "di_service_address_line" in kwargs
+        else "di_service_address_line"
+    )
+    di_contact_email = (
+        kwargs.pop("di_contact_email")
+        if "di_contact_email" in kwargs
+        else "di_contact_email"
+    )
+    di_contact_name = (
+        kwargs.pop("di_contact_name")
+        if "di_contact_name" in kwargs
+        else "di_contact_name"
+    )
+    di_contact_phone = (
+        kwargs.pop("di_contact_phone")
+        if "di_contact_phone" in kwargs
+        else "di_contact_phone"
+    )
+    di_structure_name = (
+        kwargs.pop("di_structure_name")
+        if "di_structure_name" in kwargs
+        else "di_structure_name"
+    )
+    prescriber_structure = (
+        kwargs.pop("prescriber_structure")
+        if "prescriber_structure" in kwargs
+        else make_structure()
+    )
+    prescriber = (
+        kwargs.pop("prescriber")
+        if "prescriber" in kwargs
+        else make_user(structure=prescriber_structure)
+    )
+
+    orientation = baker.make(
+        "Orientation",
+        prescriber=prescriber,
+        prescriber_structure=prescriber_structure,
+        service=None,
+        di_service_id=di_service_id,
+        di_service_name=di_service_name,
+        di_service_address_line=di_service_address_line,
+        di_contact_email=di_contact_email,
+        di_contact_name=di_contact_name,
+        di_contact_phone=di_contact_phone,
+        di_structure_name=di_structure_name,
+        **kwargs,
+    )
+    return orientation

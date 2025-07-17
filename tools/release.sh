@@ -85,7 +85,7 @@ APPS_LIST=$(scalingo apps --region "$SCALINGO_REGION")
 
 check_app_access() {
   local app_name=$1
-  if echo "$APPS_LIST" | grep -E "^\|[[:space:]]*$app_name[[:space:]]*\|[[:space:]]*collaborator[[:space:]]*\|" &> /dev/null; then
+  if echo "$APPS_LIST" | grep -E "^.[[:space:]]*$app_name[[:space:]]*.[[:space:]]*collaborator" &> /dev/null; then
     echo -e "Accès confirmé pour l'application '$app_name'."
   else
     echo -e "${RED}⚠️  Vous n'avez pas accès en tant que collaborateur à l'application '$app_name' dans la région '$SCALINGO_REGION'. Veuillez vérifier vos permissions.${NC}"

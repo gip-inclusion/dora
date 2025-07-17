@@ -187,7 +187,7 @@
     class="mt-s64 gap-s24 bg-gray-bg p-s24 flex flex-col rounded-lg md:flex-row"
   >
     <div class="w-1/3 self-center text-center">
-      <a href="https://www.data.inclusion.beta.gouv.fr/">
+      <a href="https://data.inclusion.gouv.fr/">
         <img
           src={logoDataInclusion}
           alt="Data inclusion - Contributeur officiel"

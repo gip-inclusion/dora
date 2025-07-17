@@ -1,6 +1,3 @@
-import csv
-import io
-
 from data_inclusion.schema.v0 import Profil
 from django import forms
 from django.contrib import messages
@@ -12,6 +9,7 @@ from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 
+from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportServicesHelper
 from .models import (
     AccessCondition,
@@ -85,10 +83,8 @@ class ServiceStatusHistoryItemAdmin(admin.ModelAdmin):
         return False
 
 
-class ServiceAdmin(admin.GISModelAdmin):
+class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
     def __init__(self, *args, **kwargs):
-        self.default_source_label = "DORA"
-        self.upload_size_limit_in_bytes = 10 * 1024 * 1024  # 10 MB
         self.import_service_helper = ImportServicesHelper()
         return super().__init__(*args, **kwargs)
 
@@ -148,7 +144,7 @@ class ServiceAdmin(admin.GISModelAdmin):
 
     def import_services_view(self, request):
         if request.method == "POST":
-            return self._handle_import_post(request)
+            return self.import_csv(request)
 
         context = {
             "title": "Module d'import de services",
@@ -156,78 +152,9 @@ class ServiceAdmin(admin.GISModelAdmin):
             "has_view_permission": True,
             "csv_headers": ImportServicesHelper.CSV_HEADERS,
         }
-        return render(request, "admin/import_services.html", context)
+        return render(request, "admin/import_csv_form.html", context)
 
-    def _handle_import_post(self, request):
-        csv_file = request.FILES.get("csv_file")
-        if not csv_file:
-            messages.error(request, "Veuillez sélectionner un fichier CSV.")
-            return redirect(".")
-
-        if not csv_file.name.lower().endswith(".csv"):
-            messages.error(
-                request,
-                mark_safe(
-                    "<b>Échec de l'import - Format de fichier non valide</b><br/>"
-                    "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
-                ),
-            )
-            return redirect(".")
-
-        if csv_file.size > self.upload_size_limit_in_bytes:
-            messages.error(
-                request,
-                "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit être moins de 10MB.",
-            )
-            return redirect(".")
-
-        try:
-            is_wet_run = request.POST.get("test_run") != "on"
-            source_label = request.POST.get(
-                "source_label", self.default_source_label
-            ).strip()
-            should_remove_instructions_from_csv = (
-                request.POST.get("should_remove_instructions") == "on"
-            )
-
-            source_info = {
-                "value": csv_file.name.rsplit(".", 1)[0],
-                "label": source_label or self.default_source_label,
-            }
-
-            reader = csv.reader(io.TextIOWrapper(csv_file, encoding="utf-8"))
-            result = self.import_service_helper.import_services(
-                reader,
-                request.user,
-                source_info,
-                wet_run=is_wet_run,
-                should_remove_first_two_lines=should_remove_instructions_from_csv,
-            )
-
-            return self._handle_import_results(request, result, is_wet_run)
-
-        except UnicodeDecodeError:
-            messages.error(
-                request,
-                mark_safe(
-                    "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
-                    "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
-                ),
-            )
-            return redirect(".")
-        except Exception as e:
-            messages.error(
-                request,
-                mark_safe(
-                    "<b>Échec de l'import - Erreur inattendue</b><br/>"
-                    "L'erreur suivante s'est produite :<br/>"
-                    f"{e}<br/>"
-                    "Si le problème persiste, contactez les développeurs.",
-                ),
-            )
-            return redirect(".")
-
-    def _handle_import_results(self, request, result, is_wet_run):
+    def handle_import_results(self, request, result, is_wet_run):
         created_count = result.get("created_count", 0)
         no_errors = not result.get("missing_headers", []) and not result.get(
             "errors", []
@@ -279,7 +206,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             message_text = (
                 "Aucun service n’a été importé, car le fichier comporte des erreurs."
                 if is_wet_run
-                else "Le fichier contient des erreurs qui empêchent l'import."
+                else "Le fichier contient des erreurs qui empêcheront l'import."
             )
             messages.error(
                 request,
@@ -294,6 +221,20 @@ class ServiceAdmin(admin.GISModelAdmin):
         geo_data_missing = result.get("geo_data_missing_lines", [])
         draft_services_created = result.get("draft_services_created", [])
         errors = result.get("errors", [])
+
+        if (
+            errors
+            and is_wet_run
+            and (duplicated_services or geo_data_missing or draft_services_created)
+        ):
+            messages.add_message(
+                request,
+                messages.INFO,
+                mark_safe(
+                    "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
+                ),
+                extra_tags="plain",
+            )
 
         title_prefix = ""
         if not errors and is_wet_run:
@@ -333,13 +274,23 @@ class ServiceAdmin(admin.GISModelAdmin):
                 for service in draft_services_created
             )
 
-            wet_run_message = f"<b>{title_prefix}Services importés en brouillon</b><br/>{len(draft_services_created)} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication"
-            test_run_message = f"<b>{title_prefix}Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
-            message = wet_run_message if is_wet_run else test_run_message
+            if errors and is_wet_run:
+                message = "<b>Informations manquantes</b><br/> Contactez les structures pour compléter ces éléments avant importation"
+            if not errors and is_wet_run:
+                message = f"<b>{title_prefix}Services importés en brouillon</b><br/>{len(draft_services_created)} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication"
+            if not is_wet_run:
+                message = f"<b>{title_prefix}Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
+
             messages.warning(
                 request,
                 mark_safe(message + f" :<br/>{draft_list}"),
             )
+
+    def get_import_helper(self):
+        return self.import_service_helper
+
+    def get_import_method_name(self):
+        return "import_services"
 
 
 class ServiceModelAdmin(admin.ModelAdmin):
