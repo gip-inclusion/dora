@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
+  import type { Snippet } from "svelte";
   import { page } from "$app/stores";
   import { ENVIRONMENT } from "$lib/env";
   import "../app.css";
@@ -11,12 +10,12 @@
   import { userInfo } from "$lib/utils/auth";
   import { trackPageView } from "$lib/utils/stats";
   interface Props {
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let { children }: Props = $props();
 
-  run(() => {
+  $effect(() => {
     trackPageView($page.url.pathname, $page.data.title);
   });
 </script>
