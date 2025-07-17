@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from "svelte/legacy";
+
   import Button from "$lib/components/display/button.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
@@ -12,16 +14,20 @@
   import { trackServiceShare } from "$lib/utils/stats";
   import { page } from "$app/stores";
   import { browser } from "$app/environment";
-  export let isOpen = false;
-  export let service: Service;
-  export let isDI = false;
+  interface Props {
+    isOpen?: boolean;
+    service: Service;
+    isDI?: boolean;
+  }
 
-  let senderName: string;
-  let recipientEmail: string | undefined;
-  let recipientKind: string = "beneficiary";
-  let requesting = false;
-  let messageSent = false;
-  let mobilisableByBeneficiary = true;
+  let { isOpen = $bindable(false), service, isDI = false }: Props = $props();
+
+  let senderName: string = $state();
+  let recipientEmail: string | undefined = $state();
+  let recipientKind: string = $state("beneficiary");
+  let requesting = $state(false);
+  let messageSent = $state(false);
+  let mobilisableByBeneficiary = $state(true);
 
   const recipientKinds = [
     { value: "beneficiary", label: "Bénéficiaire" },
@@ -96,14 +102,16 @@
     recipientKind = "beneficiary";
   }
 
-  $: formData = {
+  let formData = $derived({
     senderName: senderName,
     recipientEmail,
     recipientKind,
-  };
-  $: mobilisableByBeneficiary =
-    !!service.beneficiariesAccessModes?.length ||
-    !!service.beneficiariesAccessModesOther;
+  });
+  run(() => {
+    mobilisableByBeneficiary =
+      !!service.beneficiariesAccessModes?.length ||
+      !!service.beneficiariesAccessModesOther;
+  });
 </script>
 
 {#if browser}
@@ -111,8 +119,8 @@
     bind:isOpen
     width="medium"
     title="Partager cette fiche"
-    subtitle="Envoyez cette fiche à un bénéficiaire ou à un autre professionnel."
-    on:close={handleClose}
+    subtitleText="Envoyez cette fiche à un bénéficiaire ou à un autre professionnel."
+    onClose={handleClose}
   >
     {#if messageSent}
       <Notice
@@ -135,7 +143,7 @@
               type="email"
               id="senderName"
               bind:value={senderName}
-              description="Exemple : Nadia Comaneci"
+              descriptionText="Exemple : Nadia Comaneci"
               autocomplete="name"
               vertical
             />
@@ -144,7 +152,7 @@
             type="email"
             id="recipientEmail"
             bind:value={recipientEmail}
-            description="Format attendu : nom@domaine.fr."
+            descriptionText="Format attendu : nom@domaine.fr."
             vertical
           />
           <RadioButtonsField

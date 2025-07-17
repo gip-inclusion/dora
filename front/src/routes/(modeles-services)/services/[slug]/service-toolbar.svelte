@@ -6,10 +6,15 @@
   import ServiceUpdateButtons from "./service-update-buttons.svelte";
   import ServiceUpdateDate from "./service-update-date.svelte";
 
-  export let service: Service;
-  export let servicesOptions: ServicesOptions;
-  export let onRefresh: () => void;
-  export let onFeedbackButtonClick: () => void;
+  interface Props {
+    service: Service;
+    servicesOptions: ServicesOptions;
+    onRefresh: () => void;
+    onFeedbackButtonClick: () => void;
+  }
+
+  let { service, servicesOptions, onRefresh, onFeedbackButtonClick }: Props =
+    $props();
 </script>
 
 <div class="hidden print:block">

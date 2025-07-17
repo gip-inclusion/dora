@@ -1,16 +1,15 @@
 <script lang="ts">
   import Modal from "$lib/components/hoc/modal.svelte";
 
-  export let isOpen = false;
+  interface Props {
+    isOpen?: boolean;
+  }
+
+  let { isOpen = $bindable(false) }: Props = $props();
 </script>
 
 {#if isOpen}
-  <Modal
-    bind:isOpen
-    on:close
-    title="Créer une ou plusieurs antennes"
-    width="medium"
-  >
+  <Modal bind:isOpen title="Créer une ou plusieurs antennes" width="medium">
     <p class="text-f16">
       Pour demander la création d’une ou plusieurs antennes, il suffit
       simplement de nous en faire la demande via notre chatbot (bouton “Discuter

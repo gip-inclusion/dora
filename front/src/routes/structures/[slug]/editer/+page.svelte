@@ -6,7 +6,11 @@
   import { structure } from "../store";
   import type { PageData } from "./$types";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   async function handleRefresh() {
     $structure = await getStructure($structure.slug);

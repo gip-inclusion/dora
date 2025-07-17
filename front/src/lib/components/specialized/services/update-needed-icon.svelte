@@ -1,8 +1,12 @@
 <script lang="ts">
   import { errorWarningLineIcon, historyLineIcon } from "$lib/icons";
 
-  export let small = false;
-  export let updateNeeded: boolean;
+  interface Props {
+    small?: boolean;
+    updateNeeded: boolean;
+  }
+
+  let { small = false, updateNeeded }: Props = $props();
 
   const textColor = updateNeeded ? "text-white" : "text-service-blue-dark";
   const icon = updateNeeded ? errorWarningLineIcon : historyLineIcon;

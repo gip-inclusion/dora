@@ -3,8 +3,12 @@
   import { copyIcon2, historyLineIcon } from "$lib/icons";
   import ModelMenu from "./model-button-menu.svelte";
 
-  export let model;
-  export let readOnly = true;
+  interface Props {
+    model: any;
+    readOnly?: boolean;
+  }
+
+  let { model, readOnly = true }: Props = $props();
 </script>
 
 <div class="flex flex-col justify-between rounded-2xl bg-white shadow-md">

@@ -5,7 +5,11 @@
   import ModelEditionForm from "../../model-edition-form.svelte";
   import type { PageData } from "./$types";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 </script>
 
 <EnsureLoggedIn>

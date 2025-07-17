@@ -15,7 +15,11 @@
   import GoogleSearchLink from "../../google-search-link.svelte";
   import type { PageData } from "./$types";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data = $bindable() }: Props = $props();
 
   const structure = data.service.structure;
   const description = markdownToHTML(data.service.fullDesc, 2);

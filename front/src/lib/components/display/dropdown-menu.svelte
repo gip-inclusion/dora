@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (label to label_1) making the component unusable -->
 <script lang="ts">
   import { afterNavigate } from "$app/navigation";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
@@ -28,9 +29,8 @@
 </script>
 
 <div
-  use:clickOutside
+  {@attach clickOutside(closeDropdown)}
   role="presentation"
-  on:click_outside={closeDropdown}
   on:keydown={onKeyDown}
   class="w-full lg:w-auto"
 >

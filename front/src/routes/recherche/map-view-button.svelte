@@ -12,14 +12,23 @@
   import SearchResults from "./search-results.svelte";
   import ResultMap from "./result-map.svelte";
 
-  export let data: PageData;
-  export let availableFundingLabels: Array<FundingLabel>;
-  export let filters: Filters;
-  export let filteredServices: ServiceSearchResult[];
+  interface Props {
+    data: PageData;
+    availableFundingLabels: Array<FundingLabel>;
+    filters: Filters;
+    filteredServices: ServiceSearchResult[];
+  }
 
-  let isMapViewOpen = false;
-  let isResultFiltersOpen = false;
-  let selectedServiceSlug: string | undefined;
+  let {
+    data,
+    availableFundingLabels,
+    filters = $bindable(),
+    filteredServices,
+  }: Props = $props();
+
+  let isMapViewOpen = $state(false);
+  let isResultFiltersOpen = $state(false);
+  let selectedServiceSlug: string | undefined = $state();
 
   function handleServiceClick(slug: string) {
     selectedServiceSlug = slug;
@@ -53,7 +62,6 @@
             title="Affiner la recherche"
             width="small"
             bind:isOpen={isResultFiltersOpen}
-            on:close={() => (isResultFiltersOpen = false)}
           >
             <ResultFilters
               servicesOptions={data.servicesOptions}

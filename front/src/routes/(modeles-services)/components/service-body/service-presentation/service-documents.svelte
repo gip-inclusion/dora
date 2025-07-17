@@ -6,14 +6,20 @@
   import ServiceSection from "./components/service-section.svelte";
   import ServiceSubsection from "./components/service-subsection.svelte";
 
-  export let service: Service | Model;
+  interface Props {
+    service: Service | Model;
+  }
 
-  $: hasDocuments =
+  let { service }: Props = $props();
+
+  let hasDocuments = $derived(
     (Array.isArray(service.formsInfo) && service.formsInfo.length > 0) ||
-    service.onlineForm;
-  $: hasCredentials =
+      service.onlineForm
+  );
+  let hasCredentials = $derived(
     Array.isArray(service.credentialsDisplay) &&
-    service.credentialsDisplay.length > 0;
+      service.credentialsDisplay.length > 0
+  );
 </script>
 
 {#if hasDocuments || hasCredentials}

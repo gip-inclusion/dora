@@ -8,24 +8,39 @@
   import AdminDivisionSearch from "../../inputs/geo/admin-division-search.svelte";
   import type { GeoApiValue } from "$lib/types";
 
-  export let id: string;
-  export let value: string | undefined = undefined;
+  interface Props {
+    id: string;
+    value?: string | undefined;
+    disabled?: boolean;
+    readonly?: any;
+    placeholder?: string;
+    initialValue?: string;
+    // Spécifiques:
+    searchType: string;
+    onChange: (adminDetails: GeoApiValue) => void;
+    choices: any;
+    // Proxy vers le FieldWrapper
+    description?: string;
+    hidden?: boolean;
+    hideLabel?: boolean;
+    vertical?: boolean;
+  }
 
-  export let disabled = false;
-  export let readonly = $currentSchema?.[id]?.readonly;
-  export let placeholder = "";
-  export let initialValue = "";
-
-  // Spécifiques:
-  export let searchType: string;
-  export let onChange: (adminDetails: GeoApiValue) => void;
-  export let choices;
-
-  // Proxy vers le FieldWrapper
-  export let description = "";
-  export let hidden = false;
-  export let hideLabel = false;
-  export let vertical = false;
+  let {
+    id,
+    value = $bindable(undefined),
+    disabled = false,
+    readonly = $currentSchema?.[id]?.readonly,
+    placeholder = "",
+    initialValue = "",
+    searchType,
+    onChange,
+    choices = $bindable(),
+    description = "",
+    hidden = false,
+    hideLabel = false,
+    vertical = false,
+  }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
@@ -33,7 +48,7 @@
     {id}
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
-    {description}
+    descriptionText={description}
     {hidden}
     {hideLabel}
     {vertical}

@@ -3,8 +3,7 @@
   import { moreIcon } from "$lib/icons";
   import ModelMenu from "$lib/components/specialized/services/model-menu.svelte";
 
-  export let model;
-  export let readOnly;
+  let { model, readOnly } = $props();
 </script>
 
 <div class="border-magenta-cta py-s4 rounded-sm border">

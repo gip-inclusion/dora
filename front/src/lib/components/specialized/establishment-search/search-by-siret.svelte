@@ -1,4 +1,7 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+  import { run } from "svelte/legacy";
+
   import Button from "$lib/components/display/button.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment } from "$lib/types";
@@ -6,17 +9,27 @@
   import { getApiURL } from "$lib/utils/api";
   import { siretRegexp } from "$lib/validation/schema-utils";
 
-  export let onEstablishmentChange: (
-    establishment: Establishment | null
-  ) => void;
+  interface Props {
+    onEstablishmentChange: (establishment: Establishment | null) => void;
+    establishment: Establishment | null;
+    proposedSiret: string;
+    description?: Snippet;
+  }
 
-  export let establishment: Establishment | null;
-  export let proposedSiret: string;
-  let siretInput = proposedSiret;
-  let siretIsValid = false;
-  let serverErrorMsg = "";
+  let {
+    onEstablishmentChange,
+    establishment = $bindable(),
+    proposedSiret,
+    description,
+  }: Props = $props();
 
-  $: siretIsValid = !!siretInput?.match(siretRegexp);
+  let siretInput = $state(proposedSiret);
+  let siretIsValid = $state(false);
+  let serverErrorMsg = $state("");
+
+  run(() => {
+    siretIsValid = !!siretInput?.match(siretRegexp);
+  });
 
   async function handleValidateSiret() {
     const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(
@@ -54,19 +67,18 @@
   id="siret-select"
   label="Numéro SIRET"
   required
-  description="Sur 14 chiffres"
+  descriptionText="Sur 14 chiffres"
   vertical
+  {description}
 >
-  <slot slot="description" name="description" />
-
   <div class="flex flex-col">
     <div class="gap-s12 flex flex-row">
       <input
         class="h-s48 border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt focus:shadow-focus grow rounded-sm border outline-hidden"
         id="siret-select"
         type="text"
-        on:input={() => (serverErrorMsg = "")}
-        on:keydown={handleKeydown}
+        oninput={() => (serverErrorMsg = "")}
+        onkeydown={handleKeydown}
         bind:value={siretInput}
         placeholder="1234567891234"
         maxlength="14"

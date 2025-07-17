@@ -18,12 +18,16 @@
   import { arrowLeftLineIcon } from "$lib/icons";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   const { service } = data;
   const isDI = !!data.isDI;
 
-  let requesting = false;
+  let requesting = $state(false);
 
   // Fichiers à uploader
   const credentials = (service.credentialsDisplay || [])

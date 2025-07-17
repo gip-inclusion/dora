@@ -7,24 +7,37 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import StreetSearch from "../../inputs/geo/street-search.svelte";
 
-  export let id: string;
-  export let value: string | undefined = undefined;
+  interface Props {
+    id: string;
+    value?: string | undefined;
+    disabled?: boolean;
+    readonly?: any;
+    placeholder?: string;
+    initialValue?: string;
+    // Spécifiques:
+    cityCode: string;
+    onChange: (newValue: string) => void;
+    // Proxy vers le FieldWrapper
+    description?: string;
+    hidden?: boolean;
+    hideLabel?: boolean;
+    vertical?: boolean;
+  }
 
-  export let disabled = false;
-  export let readonly = $currentSchema?.[id]?.readonly;
-  export let placeholder = "";
-  export let initialValue = "";
-
-  // Spécifiques:
-  export let cityCode: string;
-  export let onChange: (newValue: string) => void;
-
-  // Proxy vers le FieldWrapper
-  export let description =
-    "Commencez à saisir le nom et choisissez dans la liste.";
-  export let hidden = false;
-  export let hideLabel = false;
-  export let vertical = false;
+  let {
+    id,
+    value = $bindable(undefined),
+    disabled = false,
+    readonly = $currentSchema?.[id]?.readonly,
+    placeholder = "",
+    initialValue = "",
+    cityCode,
+    onChange,
+    description = "Commencez à saisir le nom et choisissez dans la liste.",
+    hidden = false,
+    hideLabel = false,
+    vertical = false,
+  }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
@@ -32,7 +45,7 @@
     {id}
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
-    {description}
+    descriptionText={description}
     {hidden}
     {hideLabel}
     {vertical}

@@ -20,9 +20,13 @@
 
   import FieldsModalitiesBeneficiary from "./fields-modalities-beneficiary.svelte";
 
-  export let servicesOptions: ServicesOptions;
-  export let service: Service;
-  export let structure: Structure | ShortStructure;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    structure: Structure | ShortStructure;
+  }
+
+  let { servicesOptions, service = $bindable(), structure }: Props = $props();
 
   function existInServicesOptionsConcernedPublic(concernedPublicOption) {
     return servicesOptions.concernedPublic
@@ -166,22 +170,25 @@
 </script>
 
 <FieldSet title="Service de l’inclusion numérique">
-  <div slot="help">
-    <p class="text-f14">
-      Le <b>Formulaire de l’inclusion numérique</b> est un outil de saisie
-      compatible avec le
-      <a
-        href="https://lamednum.coop/schema-de-donnees-des-lieux-de-mediation-numerique-2/"
-        target="_blank"
-        rel="noopener"
-        class="underline">schéma de données des lieux de médiation numérique</a
-      >.
-      <br />
-      La standardisation des données de l’inclusion numérique permet de décrire l’offre
-      disponible de manière harmonisée, assurant ainsi la compatibilité de ces données
-      avec de nombreux outils.
-    </p>
-  </div>
+  {#snippet help()}
+    <div>
+      <p class="text-f14">
+        Le <b>Formulaire de l’inclusion numérique</b> est un outil de saisie
+        compatible avec le
+        <a
+          href="https://lamednum.coop/schema-de-donnees-des-lieux-de-mediation-numerique-2/"
+          target="_blank"
+          rel="noopener"
+          class="underline"
+          >schéma de données des lieux de médiation numérique</a
+        >.
+        <br />
+        La standardisation des données de l’inclusion numérique permet de décrire
+        l’offre disponible de manière harmonisée, assurant ainsi la compatibilité
+        de ces données avec de nombreux outils.
+      </p>
+    </div>
+  {/snippet}
 
   <FieldSubcategory
     bind:service
@@ -224,9 +231,11 @@
 </FieldSet>
 
 <FieldSet title="Modalités">
-  <div slot="help">
-    <p class="text-f14">Modalités pour mobiliser le service.</p>
-  </div>
+  {#snippet help()}
+    <div>
+      <p class="text-f14">Modalités pour mobiliser le service.</p>
+    </div>
+  {/snippet}
 
   <FieldsModalitiesBeneficiary
     id="beneficiariesAccessModes"

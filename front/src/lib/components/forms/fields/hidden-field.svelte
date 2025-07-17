@@ -2,8 +2,12 @@
   import { currentSchema } from "$lib/validation/validation";
   import FieldWrapper from "../field-wrapper.svelte";
 
-  export let id: string;
-  export let value: string | number | undefined = undefined;
+  interface Props {
+    id: string;
+    value?: string | number | undefined;
+  }
+
+  let { id, value = $bindable(undefined) }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}

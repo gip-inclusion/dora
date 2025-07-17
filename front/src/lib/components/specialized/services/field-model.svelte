@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from "svelte/legacy";
+
   import Button from "$lib/components/display/button.svelte";
   import Tag from "$lib/components/display/tag.svelte";
   import {
@@ -7,31 +9,45 @@
     htmlToMarkdown,
   } from "$lib/utils/misc";
 
-  export let value: any | undefined = undefined;
-  export let onUseValue: (() => void) | undefined = undefined;
-  export let showUseButton = true;
-  export let showModel = false;
-  export let type = "text";
-  export let options: any | undefined = undefined;
+  interface Props {
+    value?: any | undefined;
+    onUseValue?: (() => void) | undefined;
+    showUseButton?: boolean;
+    showModel?: boolean;
+    type?: string;
+    options?: any | undefined;
+    paddingTop?: boolean;
+    serviceValue?: any | undefined;
+    subFields?:
+      | Record<
+          string,
+          Array<{
+            label?: string;
+            showModel: boolean;
+            value: any;
+            serviceValue: any;
+            options: any;
+            onUseValue: (() => void) | undefined;
+          }>
+        >
+      | undefined;
+    children?: import("svelte").Snippet;
+  }
 
-  export let paddingTop = false;
-  export let serviceValue: any | undefined = undefined;
+  let {
+    value = undefined,
+    onUseValue = undefined,
+    showUseButton = true,
+    showModel = false,
+    type = "text",
+    options = undefined,
+    paddingTop = false,
+    serviceValue = undefined,
+    subFields = undefined,
+    children,
+  }: Props = $props();
 
-  export let subFields:
-    | Record<
-        string,
-        Array<{
-          label?: string;
-          showModel: boolean;
-          value: any;
-          serviceValue: any;
-          options: any;
-          onUseValue: (() => void) | undefined;
-        }>
-      >
-    | undefined = undefined;
-
-  let haveSameValue = false;
+  let haveSameValue = $state(false);
 
   function compare(val1, val2) {
     if (type === "array" || type === "files") {
@@ -59,13 +75,17 @@
     }
   }
 
-  $: subFieldsHaveSameValue = subFields
-    ? Object.values(subFields).every((fields) =>
-        fields.every((field) => field.value === field.serviceValue)
-      )
-    : true;
-  $: haveSameValue =
-    showModel && compare(value, serviceValue) && subFieldsHaveSameValue;
+  let subFieldsHaveSameValue = $derived(
+    subFields
+      ? Object.values(subFields).every((fields) =>
+          fields.every((field) => field.value === field.serviceValue)
+        )
+      : true
+  );
+  run(() => {
+    haveSameValue =
+      showModel && compare(value, serviceValue) && subFieldsHaveSameValue;
+  });
 </script>
 
 <div
@@ -76,7 +96,7 @@
   class:gap-s16={showModel}
 >
   <div class={showModel ? "lg:w-2/3" : ""}>
-    <slot />
+    {@render children?.()}
   </div>
   {#if showModel}
     <div

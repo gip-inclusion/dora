@@ -4,9 +4,13 @@
   import type { Service } from "$lib/types";
   import { capitalize } from "$lib/utils/misc";
 
-  export let service: Service;
+  interface Props {
+    service: Service;
+  }
 
-  $: isDI = "source" in service;
+  let { service }: Props = $props();
+
+  let isDI = $derived("source" in service);
 </script>
 
 <div class="gap-s6 text-f14 text-gray-text flex items-center">
