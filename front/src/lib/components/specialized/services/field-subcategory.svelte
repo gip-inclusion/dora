@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
   import type { Service, ServicesOptions } from "$lib/types";
   import { orderAndReformatSubcategories } from "$lib/utils/misc";
@@ -17,10 +15,8 @@
     description = "",
   }: Props = $props();
 
-  let availableSubcategories = $state([]);
-
-  run(() => {
-    availableSubcategories = orderAndReformatSubcategories(
+  let availableSubcategories = $derived(
+    orderAndReformatSubcategories(
       service.categories.length
         ? servicesOptions.subcategories.filter(({ value }) =>
             service.categories.some((cat) => value.startsWith(cat))
@@ -28,8 +24,8 @@
         : [],
       service.categories,
       servicesOptions
-    );
-  });
+    )
+  );
 </script>
 
 <MultiSelectField
