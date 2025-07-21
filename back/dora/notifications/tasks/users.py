@@ -34,7 +34,7 @@ class UsersWithoutStructureTask(Task):
 
     @classmethod
     def candidates(cls):
-        return User.objects.exclude(ic_id=None).filter(
+        return User.objects.filter(
             is_valid=True,
             membership=None,
             putative_membership=None,

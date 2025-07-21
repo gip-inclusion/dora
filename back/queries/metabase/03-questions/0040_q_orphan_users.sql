@@ -21,7 +21,6 @@ select
             else mu.last_login < now() - interval '24 months'
         end
     )                                   as "Compte inactif",
-    (select ic_id is not null)          as "Inscrit IC",
     (select date_joined < '2022-10-03') as "Créé avant MEP IC"
 from mb_user as mu
 where
