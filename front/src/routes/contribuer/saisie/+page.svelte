@@ -79,7 +79,7 @@
 </CenteredGrid>
 
 <Form
-  data={contribution}
+  bind:data={contribution}
   schema={contribSchema}
   onChange={handleChange}
   onSubmit={handleSubmit}
