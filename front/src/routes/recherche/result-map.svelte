@@ -92,7 +92,6 @@
   }
 
   async function handleMapLoaded() {
-    console.log("handleMapLoaded", map);
     if (!map) {
       return;
     }

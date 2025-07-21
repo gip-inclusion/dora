@@ -48,14 +48,6 @@
       requesting = false;
     }
   }
-
-  $effect(() => {
-    console.log(
-      "frequencyValue !== search.frequency",
-      frequencyValue,
-      search.frequency
-    );
-  });
 </script>
 
 <div

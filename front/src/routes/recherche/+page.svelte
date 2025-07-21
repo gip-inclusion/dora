@@ -58,7 +58,6 @@
   });
 
   function resetFilters() {
-    console.log("RESET FILTERS");
     filters = {
       kinds: [],
       fundingLabels: [],
