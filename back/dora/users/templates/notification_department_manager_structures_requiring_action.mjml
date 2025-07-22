@@ -7,11 +7,11 @@
     <strong>Bonjour,</strong>
   </p>
   <p>
-    {{ num_structures }} structure(s) sont à valider sur votre tableau de bord gestionnaire.
+    {{ num_structures }} structure(s) en attente d'une action depuis votre tableau de bord gestionnaire.
   </p>
   <p>Pour rappel, la modération permet de s’assurer de la bonne qualité de l’offre d’insertion référencée sur votre territoire.</p>
-  <p>Merci de vérifier que ces structures ont bien leur place sur Dora et que les administrateurs auto-déclarés en sont bien membres (le format du mail étant un bon indicateur).</p>
-  <p>Les structures en attente d’une action de votre part :
+  <p>Merci de vérifier que ces structures ont bien leur place sur DORA et que les administrateurs auto-déclarés en sont bien membres (le format du mail étant un bon indicateur).</p>
+  <p>Liste des structures en attente d’une action de votre part :
     {% if structures_awaiting_moderation %}
       <p>À valider :</p>
       <ul>
@@ -21,7 +21,7 @@
       </ul>
     {% endif %}
     {% if structures_without_users %}
-      <p>Sans utilisateurs :</p>
+      <p>Sans utilisateur :</p>
       <ul>
         {% for structure in structures_without_users %}
           <li>{{ structure }}</li>
