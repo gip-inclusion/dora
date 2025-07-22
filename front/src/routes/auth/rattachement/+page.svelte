@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
@@ -24,7 +22,6 @@
   let cguAccepted = $state(false);
   let { establishment } = $state(data);
   const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
-  let ctaLabel = $state("");
   let joinError = $state("");
 
   async function handleJoin() {
@@ -71,17 +68,17 @@
       ?.includes(establishment?.siret)
   );
 
-  run(() => {
-    if (alreadyRequested) {
-      ctaLabel = "Relancer l’administrateur";
-    } else if (alreadyMember) {
-      ctaLabel = "Accéder à la structure";
-    } else {
-      ctaLabel = "Rejoindre la structure";
-    }
-  });
-  run(() => {
-    (establishment, (joinError = ""));
+  const ctaLabel = $derived(
+    alreadyRequested
+      ? "Relancer l’administrateur"
+      : alreadyMember
+        ? "Accéder à la structure"
+        : "Rejoindre la structure"
+  );
+
+  $effect(() => {
+    establishment;
+    joinError = "";
   });
 </script>
 
