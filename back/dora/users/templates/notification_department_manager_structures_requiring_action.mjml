@@ -32,6 +32,6 @@
 {% endblock %}
 
 {% block cta %}
-  <mj-button mj-class="cta" href="{{ cta_link }}">>Voir mon tableau de bord</mj-button>
+  <mj-button mj-class="cta" href="{{ cta_link }}">Voir mon tableau de bord</mj-button>
   <mj-spacer height="24px"/>
 {% endblock %}
