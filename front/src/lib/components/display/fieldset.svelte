@@ -33,7 +33,7 @@
     children,
   }: Props = $props();
 
-  let wrapper: HTMLElement | undefined = $state();
+  let wrapper: HTMLElement;
   let showHelp = $state(false);
   const helpId = randomId();
 
