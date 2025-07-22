@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { preventDefault, createBubbler } from "svelte/legacy";
-
-  const bubble = createBubbler();
   import { deleteBinIcon } from "$lib/icons";
   import { getApiURL } from "$lib/utils/api";
   import { shortenString } from "$lib/utils/misc";
@@ -12,6 +9,7 @@
     structureSlug: string | undefined;
     fileKeys?: string[];
     disabled?: boolean;
+    onblur?: (event: Event) => void;
   }
 
   let {
@@ -19,28 +17,32 @@
     structureSlug,
     fileKeys = $bindable([]),
     disabled = false,
+    onblur,
   }: Props = $props();
+
+  let uploadInput: HTMLInputElement;
 
   let errorMessage = $state("");
   let progress: number | null = $state(null);
-  let uploadInput: HTMLInputElement = $state();
 
-  function handleRemove(fileKey) {
+  function handleRemove(fileKey: string) {
     fileKeys = fileKeys.filter((key) => key !== fileKey);
   }
 
   function clearInput() {
-    uploadInput.value = null;
+    uploadInput.value = "";
     uploadInput.disabled = false;
     progress = null;
   }
 
-  function handleSubmit() {
-    function updateProgress(loaded, total) {
+  function handleSubmit(event: Event) {
+    event.preventDefault();
+
+    function updateProgress(loaded: number, total: number) {
       progress = (loaded / total) * 100;
     }
 
-    function handleUploadDone(request) {
+    function handleUploadDone(request: XMLHttpRequest) {
       const jsonResponse = JSON.parse(request.response);
       fileKeys = [jsonResponse.key, ...fileKeys];
       clearInput();
@@ -51,8 +53,16 @@
 
     const files = uploadInput.files;
 
+    if (!files) {
+      return;
+    }
+
     for (let i = 0; i < files.length; i++) {
       const file = files.item(i);
+      if (!file) {
+        continue;
+      }
+
       // We can't use fetch if we want a progress indicator
       const url = structureSlug
         ? `${getApiURL()}/upload/${structureSlug}/${file.name}/`
@@ -84,12 +94,13 @@
       });
 
       // request finished event
-      request.addEventListener("load", (event) => {
-        if (event.target.status !== 201) {
+      request.addEventListener("load", (event: ProgressEvent) => {
+        const target = event.target as XMLHttpRequest;
+        if (target.status !== 201) {
           let message = "";
           clearInput();
           try {
-            message = JSON.parse(event.target.response)[0].message;
+            message = JSON.parse(target.response)[0].message;
 
             if (message === "INVALID_EXTENSION") {
               errorMessage = `Le fichier "${file.name}" n’est pas au bon format`;
@@ -111,19 +122,19 @@
     }
   }
 
-  function urlStringPathRemove(string) {
-    const pathElements = string.split("/");
-    return pathElements[pathElements.length - 1];
+  function urlStringPathRemove(path: string): string {
+    const pathElements = path.split("/");
+    return pathElements[pathElements.length - 1] ?? "";
   }
 </script>
 
-<form onsubmit={preventDefault(handleSubmit)} class="mb-s8 cursor-pointer">
+<form onsubmit={handleSubmit} class="mb-s8 cursor-pointer">
   <label>
     <input
       name={id}
       {id}
       bind:this={uploadInput}
-      onblur={bubble("blur")}
+      {onblur}
       onchange={handleSubmit}
       {disabled}
       type="file"
@@ -143,7 +154,7 @@
       <div class="text-f14">{shortenString(urlStringPathRemove(uploaded))}</div>
       <div class="h-s24 w-s24">
         <button
-          onclick={handleRemove(uploaded)}
+          onclick={() => handleRemove(uploaded)}
           class="ml-s16 h-s24 w-s24 fill-error"
         >
           {@html deleteBinIcon}
