@@ -16,7 +16,7 @@
     disabled?: boolean;
     readonly?: boolean;
     label?: string;
-    fileKeys: string[];
+    fileKeys?: string[];
     structureSlug?: string;
     descriptionText?: string;
     hidden?: boolean;
@@ -31,7 +31,7 @@
     disabled = false,
     readonly = $currentSchema?.[id]?.readonly,
     label = $currentSchema?.[id]?.label,
-    fileKeys,
+    fileKeys = $bindable([]),
     structureSlug = undefined,
     descriptionText = "",
     hidden = false,
@@ -56,13 +56,7 @@
     {description}
   >
     {#snippet children({ onBlur })}
-      <Uploader
-        {id}
-        {structureSlug}
-        on:blur={onBlur}
-        bind:fileKeys
-        {disabled}
-      />
+      <Uploader {id} {structureSlug} onblur={onBlur} bind:fileKeys {disabled} />
     {/snippet}
   </FieldWrapper>
 {/if}
