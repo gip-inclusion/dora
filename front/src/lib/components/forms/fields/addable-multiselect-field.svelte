@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import {
     currentFormData,
     currentSchema,
@@ -57,12 +55,11 @@
 
   const maxLength = 140;
 
-  let filteredChoices = $state(choices);
-  run(() => {
-    filteredChoices = choices.filter(
+  let filteredChoices = $derived(
+    choices.filter(
       (choice) => choice.structure == null || choice.structure === structureSlug
-    );
-  });
+    )
+  );
 
   function handleAddValue() {
     const value = newValue;
