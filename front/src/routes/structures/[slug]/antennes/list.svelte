@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Button from "$lib/components/display/button.svelte";
   import StructureCard from "$lib/components/specialized/structure-card.svelte";
@@ -28,7 +26,6 @@
 
   const departement = "tous";
   let filters;
-  let branchesFiltered = $state([]);
 
   function branchesFilter(allBranches) {
     let filteredBranches = allBranches.filter(
@@ -49,9 +46,7 @@
     return filteredBranches;
   }
 
-  run(() => {
-    branchesFiltered = branchesFilter(branches);
-  });
+  let branchesFiltered = $derived(branchesFilter(branches));
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
