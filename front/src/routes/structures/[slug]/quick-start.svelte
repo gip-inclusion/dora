@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import Button from "$lib/components/display/button.svelte";
   import {
     checkboxCircleFillIcon,
@@ -50,7 +48,7 @@
     },
   ]);
 
-  run(() => {
+  $effect(() => {
     if (
       steps.filter(({ complete }) => complete).length === steps.length &&
       !structure.quickStartDone
