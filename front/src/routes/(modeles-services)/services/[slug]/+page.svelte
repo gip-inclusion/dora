@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import { onMount, setContext } from "svelte";
 
   import { browser } from "$app/environment";
@@ -36,7 +34,7 @@
       !isMemberOrPotentialMemberOfStructure($userInfo, data.service.structure)
   );
 
-  run(() => {
+  $effect(() => {
     setContext("showFeedbackModal", showFeedbackModal);
   });
 
