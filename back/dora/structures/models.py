@@ -191,6 +191,9 @@ class StructureManager(models.Manager):
         return structure
 
 
+StructureManager = StructureManager.from_queryset(StructureQuerySet)
+
+
 class Structure(ModerationMixin, models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Les antennes peuvent avoir un Siret null
