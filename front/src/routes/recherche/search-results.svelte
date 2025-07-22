@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import { tick } from "svelte";
 
   import type { ServiceSearchResult } from "$lib/types";
@@ -46,8 +44,7 @@
   let currentPageLength = $state(PAGE_LENGTH);
   let creatingAlert = $state(false);
 
-  let currentSearchWasAlreadySaved = $state();
-  run(() => {
+  let currentSearchWasAlreadySaved = $derived.by(() => {
     // Saved searches don't store the street address neither lat/lon
     const currentShortQueryString = getQueryString({
       categoryIds: [data.categoryIds[0] ? data.categoryIds[0] : ""],
@@ -68,7 +65,7 @@
     const result = userSavedSearches.some(
       (search) => getSavedSearchQueryString(search) === currentShortQueryString
     );
-    currentSearchWasAlreadySaved = result;
+    return result;
   });
 
   function getResultId(index: number) {
