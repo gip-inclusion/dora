@@ -12,8 +12,8 @@ from dora.core.test_utils import make_structure, make_user
 from dora.users.emails import (
     send_account_deletion_notification,
     send_invitation_reminder,
-    send_structure_awaiting_moderation,
     send_user_without_structure_notification,
+    send_weekly_email_to_department_managers,
 )
 
 
@@ -91,7 +91,7 @@ class SendWeeklyRegionalManagerEmail(TestCase):
             user=make_user(),
         )
 
-        send_structure_awaiting_moderation(self.manager)
+        send_weekly_email_to_department_managers(self.manager)
 
         mock_send_email.assert_called_once()
         self.assertEqual(
@@ -112,7 +112,7 @@ class SendWeeklyRegionalManagerEmail(TestCase):
             moderation_status=ModerationStatus.VALIDATED,
         )
 
-        send_structure_awaiting_moderation(self.manager)
+        send_weekly_email_to_department_managers(self.manager)
 
         mock_send_email.assert_called_once()
         self.assertEqual(
@@ -132,7 +132,7 @@ class SendWeeklyRegionalManagerEmail(TestCase):
             user=make_user(),
         )
 
-        send_structure_awaiting_moderation(self.manager)
+        send_weekly_email_to_department_managers(self.manager)
 
         mock_send_email.assert_not_called()
 
@@ -155,7 +155,7 @@ class SendWeeklyRegionalManagerEmail(TestCase):
             name="Zeta",
         )
 
-        send_structure_awaiting_moderation(self.manager)
+        send_weekly_email_to_department_managers(self.manager)
 
         mock_send_email.assert_called_once()
         self.assertEqual(

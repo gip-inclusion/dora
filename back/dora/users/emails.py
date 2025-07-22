@@ -100,23 +100,23 @@ def send_account_deletion_notification(user):
 MAX_STRUCTURES_PER_CATEGORY = 10
 
 
-def send_structure_awaiting_moderation(manager):
+def send_weekly_email_to_department_managers(manager):
     # envoyé aux gestionnaires de territoire tous les mercredis
-    # avec la liste des structures
+    # avec la liste des structures qui exigent une action de leur part
 
     structures = apps.get_model("structures.Structure").objects
 
-    filtered_structures = structures.filter(
-        is_obsolete=False, department__in=manager.departments
-    )
+    structure_filters = {"is_obsolete": False, "department__in": manager.departments}
 
     awaiting_moderation = (
-        filtered_structures.awaiting_moderation()
+        structures.awaiting_moderation()
+        .filter(**structure_filters)
         .order_by("name")[:MAX_STRUCTURES_PER_CATEGORY]
         .values_list("name", flat=True)
     )
     orphans = (
-        filtered_structures.orphans()
+        structures.orphans()
+        .filter(**structure_filters)
         .order_by("name")[:MAX_STRUCTURES_PER_CATEGORY]
         .values_list("name", flat=True)
     )
@@ -134,7 +134,8 @@ def send_structure_awaiting_moderation(manager):
             manager.email,
             mjml2html(
                 render_to_string(
-                    "notification_structure_moderation_for_manager.mjml", context
+                    "notification_department_manager_structures_requiring_action.mjml",
+                    context,
                 )
             ),
             from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
