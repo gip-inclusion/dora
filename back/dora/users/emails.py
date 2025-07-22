@@ -112,12 +112,12 @@ def send_structure_awaiting_moderation(manager):
 
     awaiting_moderation = (
         filtered_structures.awaiting_moderation()
-        .order_by("-name")[:MAX_STRUCTURES_PER_CATEGORY]
+        .order_by("name")[:MAX_STRUCTURES_PER_CATEGORY]
         .values_list("name", flat=True)
     )
     orphans = (
         filtered_structures.orphans()
-        .order_by("-name")[:MAX_STRUCTURES_PER_CATEGORY]
+        .order_by("name")[:MAX_STRUCTURES_PER_CATEGORY]
         .values_list("name", flat=True)
     )
 
