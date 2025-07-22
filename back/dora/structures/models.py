@@ -148,7 +148,7 @@ class StructureNationalLabel(EnumModel):
         verbose_name_plural = "Labels nationaux"
 
 
-class StructureManager(models.Manager):
+class StructureQuerySet(models.QuerySet):
     def orphans(self):
         return self.filter(membership=None, putative_membership=None)
 
@@ -160,6 +160,11 @@ class StructureManager(models.Manager):
             ]
         )
 
+    def requiring_action_from_department_managers(self):
+        return self.orphans() | self.awaiting_moderation()
+
+
+class StructureManager(models.Manager):
     def create_from_establishment(
         self, establishment, name="", parent=None, structure_id=None, **kwargs
     ):
@@ -185,8 +190,8 @@ class StructureManager(models.Manager):
         structure.save()
         return structure
 
-    def requiring_action_from_department_managers(self):
-        return self.orphans() | self.awaiting_moderation()
+
+StructureManager = StructureManager.from_queryset(StructureQuerySet)
 
 
 class Structure(ModerationMixin, models.Model):
@@ -387,6 +392,9 @@ class Structure(ModerationMixin, models.Model):
 
     def has_admin(self):
         return bool(self.num_admins())
+
+    def is_orphan(self):
+        return self.orphans
 
     def num_admins(self):
         return len(self.admins)

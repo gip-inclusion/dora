@@ -1,7 +1,8 @@
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
-from dora.core.test_utils import make_service, make_structure
+from dora.core.models import ModerationStatus
+from dora.core.test_utils import make_service, make_structure, make_user
 from dora.services.enums import ServiceStatus
 
 
@@ -162,6 +163,28 @@ class ManagerTestCase(APITestCase):
         self.client.force_authenticate(user=manager)
         response = self.client.get(f"/structures-admin/{structure.slug}/")
         self.assertEqual(response.status_code, 403)
+
+    def test_coord_can_see_if_structure_is_orphan(self):
+        manager = make_user(
+            is_valid=True, is_staff=False, is_manager=True, departments=[31]
+        )
+        structure = make_structure(department=31, user=None, putative_member=None)
+        self.client.force_authenticate(user=manager)
+        response = self.client.get(f"/structures-admin/{structure.slug}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["is_orphan"])
+
+    def test_coord_can_see_if_structure_is_awaiting_moderation(self):
+        manager = make_user(
+            is_valid=True, is_staff=False, is_manager=True, departments=[31]
+        )
+        structure = make_structure(
+            department=31, moderation_status=ModerationStatus.NEED_NEW_MODERATION
+        )
+        self.client.force_authenticate(user=manager)
+        response = self.client.get(f"/structures-admin/{structure.slug}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["awaiting_moderation"])
 
     ## Plusieurs départements
     def test_bicoord_can_see_structures_in_his_depts(self):
