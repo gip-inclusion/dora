@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import { page } from "$app/stores";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import type { ShortStructure } from "$lib/types";
@@ -12,21 +10,12 @@
   import MenuMesStructures from "./menu-mes-structures.svelte";
   import { userPreferences } from "$lib/utils/preferences";
 
-  let structures: ShortStructure[] = $state([]);
-  let lastVisitedStructure: ShortStructure | undefined = $state(undefined);
-
-  run(() => {
-    structures = $userInfo
-      ? [...$userInfo.structures, ...$userInfo.pendingStructures]
-      : [];
-  });
-
-  run(() => {
-    lastVisitedStructure = getCurrentlySelectedStructure(
-      $userInfo,
-      $userPreferences
-    );
-  });
+  let structures: ShortStructure[] = $derived(
+    $userInfo ? [...$userInfo.structures, ...$userInfo.pendingStructures] : []
+  );
+  let lastVisitedStructure: ShortStructure | undefined = $derived(
+    getCurrentlySelectedStructure($userInfo, $userPreferences)
+  );
 </script>
 
 <HamburgerMenu>
