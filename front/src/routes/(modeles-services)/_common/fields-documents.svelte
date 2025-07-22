@@ -11,12 +11,14 @@
     servicesOptions: ServicesOptions;
     service: Service;
     model?: Model | undefined;
+    onblur?: (event: Event) => void;
   }
 
   let {
     servicesOptions,
     service = $bindable(),
     model = undefined,
+    onblur = undefined,
   }: Props = $props();
 
   let showModel = $derived(!!service.model);
@@ -53,7 +55,7 @@
     <UploadField
       id="forms"
       structureSlug={service.structure}
-      on:blur
+      {onblur}
       descriptionText="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
       bind:fileKeys={service.forms}
     />
