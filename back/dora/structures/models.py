@@ -148,7 +148,23 @@ class StructureNationalLabel(EnumModel):
         verbose_name_plural = "Labels nationaux"
 
 
+class StructureQuerySet(models.QuerySet):
+    def orphans(self):
+        return self.filter(membership=None, putative_membership=None)
+
+    def awaiting_moderation(self):
+        return self.filter(
+            moderation_status__in=[
+                ModerationStatus.NEED_NEW_MODERATION,
+                ModerationStatus.NEED_INITIAL_MODERATION,
+            ]
+        )
+
+
 class StructureManager(models.Manager):
+    def get_queryset(self):
+        return StructureQuerySet(self.model, using=self._db)
+
     def create_from_establishment(
         self, establishment, name="", parent=None, structure_id=None, **kwargs
     ):
@@ -173,21 +189,6 @@ class StructureManager(models.Manager):
             structure.id = structure_id
         structure.save()
         return structure
-
-    def orphans(self):
-        # structures "orphelines" :
-        # pas de membres enregistrés, ni en attente d'enregistrement
-        return self.filter(membership=None, putative_membership=None)
-
-    def awaiting_moderation(self):
-        # structures ayant besoin de modération :
-        # essentiellement pour les gestionnaires
-        return self.filter(
-            moderation_status__in=[
-                ModerationStatus.NEED_NEW_MODERATION,
-                ModerationStatus.NEED_INITIAL_MODERATION,
-            ]
-        )
 
 
 class Structure(ModerationMixin, models.Model):

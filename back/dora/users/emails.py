@@ -97,34 +97,46 @@ def send_account_deletion_notification(user):
     )
 
 
+MAX_STRUCTURES_PER_CATEGORY = 10
+
+
 def send_structure_awaiting_moderation(manager):
     # envoyé aux gestionnaires de territoire tous les mercredis
     # avec la liste des structures
 
     structures = apps.get_model("structures.Structure").objects
-    awaiting_moderation = structures.awaiting_moderation()
-    orphans = structures.orphans()
 
-    non_filtered_structures = awaiting_moderation | orphans
-
-    structures_requiring_action = non_filtered_structures.filter(
+    filtered_structures = structures.filter(
         is_obsolete=False, department__in=manager.departments
-    ).values_list("name", flat=True)
+    )
+
+    awaiting_moderation = (
+        filtered_structures.awaiting_moderation()
+        .order_by("-name")[:MAX_STRUCTURES_PER_CATEGORY]
+        .values_list("name", flat=True)
+    )
+    orphans = (
+        filtered_structures.orphans()
+        .order_by("-name")[:MAX_STRUCTURES_PER_CATEGORY]
+        .values_list("name", flat=True)
+    )
 
     cta_link = furl(settings.FRONTEND_URL) / "admin" / "structures"
     context = {
-        "structures": structures_requiring_action,
+        "structures_awaiting_moderation": awaiting_moderation,
+        "structures_without_users": orphans,
         "cta_link": cta_link.url,
     }
 
-    send_mail(
-        "DORA - Vous avez des structures à modérer cette semaine",
-        manager.email,
-        mjml2html(
-            render_to_string(
-                "notification_structure_moderation_for_manager.mjml", context
-            )
-        ),
-        from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
-        tags=["notification", "gestionnaires"],
-    )
+    if awaiting_moderation or orphans:
+        send_mail(
+            "DORA - Vous avez des structures à modérer cette semaine",
+            manager.email,
+            mjml2html(
+                render_to_string(
+                    "notification_structure_moderation_for_manager.mjml", context
+                )
+            ),
+            from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
+            tags=["notification", "gestionnaires"],
+        )

@@ -12,11 +12,22 @@
   <p>Pour rappel, la modération permet de s’assurer de la bonne qualité de l’offre d’insertion référencée sur votre territoire.</p>
   <p>Merci de vérifier que ces structures ont bien leur place sur Dora et que les administrateurs auto-déclarés en sont bien membres (le format du mail étant un bon indicateur).</p>
   <p>Les structures en attente d’une action de votre part :
-    <ul>
-      {% for structure in structures %}
-        <li>{{ structure }}</li>
-      {% endfor %}
-    </ul>
+    {% if structures_awaiting_moderation %}
+      <p>À valider :</p>
+      <ul>
+        {% for structure in structures_awaiting_moderation %}
+          <li>{{ structure }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% if structures_without_users %}
+      <p>Sans utilisateurs :</p>
+      <ul>
+        {% for structure in structures_without_users %}
+          <li>{{ structure }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </p>
 {% endblock %}
 
