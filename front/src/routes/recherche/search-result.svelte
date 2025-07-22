@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import FavoriteIcon from "$lib/components/specialized/favorite-icon.svelte";
@@ -22,7 +20,7 @@
     summarized = false,
   }: Props = $props();
 
-  let element: HTMLDivElement = $state();
+  let element: HTMLDivElement;
 
   let isDI = $derived(result.type === "di");
 
@@ -37,7 +35,7 @@
     `/services/${isDI ? "di--" : ""}${result.slug}?searchId=${searchId}`
   );
 
-  run(() => {
+  $effect(() => {
     if (selected) {
       element.scrollIntoView({
         behavior: "smooth",
