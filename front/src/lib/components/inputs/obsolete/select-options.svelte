@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { stopPropagation } from "svelte/legacy";
-
   import { checkIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
@@ -26,6 +24,11 @@
     setAsSelected,
     updateValue,
   }: Props = $props();
+
+  function handleClick(event: MouseEvent, optionValue: string) {
+    event.stopPropagation();
+    updateValue(optionValue);
+  }
 </script>
 
 {#each choices as option (option.value)}
@@ -48,7 +51,7 @@
         updateValue(option.value);
       }
     }}
-    onclick={stopPropagation(() => updateValue(option.value))}
+    onclick={(event: MouseEvent) => handleClick(event, option.value)}
     onmouseenter={() => setAsSelected(option.value)}
     onmouseleave={() => setAsSelected(null)}
   >
