@@ -103,6 +103,7 @@ class SendWeeklyRegionalManagerEmail(TestCase):
             f"<p>À valider :</p><ul><li>{structure_awaiting_moderation.name}</li></ul>",
             mock_send_email.call_args[0][2],
         )
+        self.assertIn("1 structure(s) sont à valider", mock_send_email.call_args[0][2])
 
     def test_send_email_with_orphaned_structures(self, mock_send_email):
         orphaned_structure = make_structure(
@@ -124,6 +125,7 @@ class SendWeeklyRegionalManagerEmail(TestCase):
             f"<p>Sans utilisateurs :</p><ul><li>{orphaned_structure.name}</li></ul>",
             mock_send_email.call_args[0][2],
         )
+        self.assertIn("1 structure(s) sont à valider", mock_send_email.call_args[0][2])
 
     def test_do_not_send_email_with_no_structures(self, mock_send_email):
         make_structure(
@@ -169,3 +171,4 @@ class SendWeeklyRegionalManagerEmail(TestCase):
             "<ul><li>Alpha</li><li>Zeta</li></ul></p>",
             mock_send_email.call_args[0][2],
         )
+        self.assertIn("4 structure(s) sont à valider", mock_send_email.call_args[0][2])

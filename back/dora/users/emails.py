@@ -110,15 +110,15 @@ def send_weekly_email_to_department_managers(manager):
         is_obsolete=False, department__in=manager.departments
     )
 
-    awaiting_moderation = (
-        relevant_structures.awaiting_moderation()
-        .order_by("name")[:MAX_STRUCTURES_PER_CATEGORY]
-        .values_list("name", flat=True)
-    )
-    orphans = (
-        relevant_structures.orphans()
-        .order_by("name")[:MAX_STRUCTURES_PER_CATEGORY]
-        .values_list("name", flat=True)
+    all_awaiting_moderation = relevant_structures.awaiting_moderation()
+    all_orphans = relevant_structures.orphans()
+    total_structures_count = all_awaiting_moderation.count() + all_orphans.count()
+
+    awaiting_moderation = all_awaiting_moderation.order_by("name")[
+        :MAX_STRUCTURES_PER_CATEGORY
+    ].values_list("name", flat=True)
+    orphans = all_orphans.order_by("name")[:MAX_STRUCTURES_PER_CATEGORY].values_list(
+        "name", flat=True
     )
 
     cta_link = furl(settings.FRONTEND_URL) / "admin" / "structures"
@@ -126,6 +126,7 @@ def send_weekly_email_to_department_managers(manager):
         "structures_awaiting_moderation": awaiting_moderation,
         "structures_without_users": orphans,
         "cta_link": cta_link.url,
+        "num_structures": total_structures_count,
     }
 
     if awaiting_moderation or orphans:
