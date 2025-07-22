@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { preventDefault } from "svelte/legacy";
-
   import { page } from "$app/state";
   import logoProConnect from "$lib/assets/proconnect/logo_proconnect.svg";
   import FieldSet from "$lib/components/display/fieldset.svelte";
@@ -14,6 +12,11 @@
   const nextPage = getNextPage(page.url);
 
   let displayModal = $state(false);
+
+  function handleOpenModal(event: MouseEvent) {
+    event.preventDefault();
+    displayModal = true;
+  }
 </script>
 
 <CenteredGrid>
@@ -51,9 +54,7 @@
               title="Obtention d'un lien de connexion - ouverture dans une fenêtre modale"
               rel="noopener noreferrer"
               href="#"
-              onclick={preventDefault(() => {
-                displayModal = true;
-              })}
+              onclick={handleOpenModal}
             >
               Des difficultés à vous connecter&#8239;?
             </a>
