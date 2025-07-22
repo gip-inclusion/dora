@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run, preventDefault } from "svelte/legacy";
-
   import { beforeNavigate } from "$app/navigation";
   import type { ServicesOptions } from "$lib/types";
   import type { Schema } from "$lib/validation/schema-utils";
@@ -49,10 +47,11 @@
     children,
   }: Props = $props();
 
-  run(() => {
+  $effect(() => {
     $currentFormData = data;
   });
-  run(() => {
+
+  $effect(() => {
     $currentSchema = schema;
   });
 
@@ -123,6 +122,7 @@
   }
 
   async function handleSubmit(event: Event) {
+    event.preventDefault();
     const submitterId = (event as SubmitEvent).submitter?.id;
     $formErrors = {};
 
@@ -162,6 +162,6 @@
   }
 </script>
 
-<form onsubmit={preventDefault(handleSubmit)} novalidate>
+<form onsubmit={handleSubmit} novalidate>
   {@render children?.()}
 </form>
