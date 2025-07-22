@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import type { Choice } from "$lib/types";
 
   interface Props {
@@ -11,34 +9,28 @@
 
   let { choice, showIcon = true, useSelectedLabel = false }: Props = $props();
 
-  let icon = $state(),
-    iconOnRight = $state(),
-    label = $state();
-  run(() => {
-    icon = choice.icon;
-    iconOnRight = choice.iconOnRight;
-    label =
-      useSelectedLabel && choice.selectedLabel
-        ? choice.selectedLabel
-        : choice.label;
-  });
+  let label = $derived(
+    useSelectedLabel && choice.selectedLabel
+      ? choice.selectedLabel
+      : choice.label
+  );
 </script>
 
 <span
   class="gap-s4 flex w-full items-center"
-  class:justify-between={icon && showIcon && iconOnRight}
+  class:justify-between={choice.icon && showIcon && choice.iconOnRight}
 >
-  {#if icon && showIcon && !iconOnRight}
+  {#if choice.icon && showIcon && !choice.iconOnRight}
     <span class="mr-s4 h-s24 w-s24 shrink-0 fill-current">
-      {@html icon}
+      {@html choice.icon}
     </span>
   {/if}
 
   {label}
 
-  {#if icon && showIcon && iconOnRight}
+  {#if choice.icon && showIcon && choice.iconOnRight}
     <span class="mr-s4 h-s24 w-s24 shrink-0 fill-current">
-      {@html icon}
+      {@html choice.icon}
     </span>
   {/if}
 </span>
