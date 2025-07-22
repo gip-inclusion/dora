@@ -106,17 +106,17 @@ def send_weekly_email_to_department_managers(manager):
 
     structures = apps.get_model("structures.Structure").objects
 
-    structure_filters = {"is_obsolete": False, "department__in": manager.departments}
+    relevant_structures = structures.filter(
+        is_obsolete=False, department__in=manager.departments
+    )
 
     awaiting_moderation = (
-        structures.awaiting_moderation()
-        .filter(**structure_filters)
+        relevant_structures.awaiting_moderation()
         .order_by("name")[:MAX_STRUCTURES_PER_CATEGORY]
         .values_list("name", flat=True)
     )
     orphans = (
-        structures.orphans()
-        .filter(**structure_filters)
+        relevant_structures.orphans()
         .order_by("name")[:MAX_STRUCTURES_PER_CATEGORY]
         .values_list("name", flat=True)
     )
