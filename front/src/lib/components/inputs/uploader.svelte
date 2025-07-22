@@ -72,9 +72,9 @@
       request.setRequestHeader("Accept", "application/json; version=1.0");
 
       // upload progress event
-      request.upload.addEventListener("progress", (event) => {
+      request.upload.addEventListener("progress", (progressEvent) => {
         // upload progress as percentage
-        updateProgress(event.loaded, event.total);
+        updateProgress(progressEvent.loaded, progressEvent.total);
       });
 
       // upload progress event
@@ -94,8 +94,8 @@
       });
 
       // request finished event
-      request.addEventListener("load", (event: ProgressEvent) => {
-        const target = event.target as XMLHttpRequest;
+      request.addEventListener("load", (progressEvent: ProgressEvent) => {
+        const target = progressEvent.target as XMLHttpRequest;
         if (target.status !== 201) {
           let message = "";
           clearInput();
