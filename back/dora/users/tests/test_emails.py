@@ -79,7 +79,7 @@ def test_send_user_without_structure_notification(deletion, subject):
 
 
 @patch("dora.users.emails.send_mail")
-class SendWeeklyRegionalManagerEmail(TestCase):
+class SendWeeklyDepartmentManagerEmail(TestCase):
     def setUp(self):
         self.department = "42"
         self.manager = make_user(is_manager=True, departments=[self.department])
