@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
 
@@ -83,7 +81,7 @@
     details = "";
   }
 
-  run(() => {
+  $effect(() => {
     if (!isOpen) {
       // Réinitialisation automatique lorsque la modale est fermée
       resetState();
