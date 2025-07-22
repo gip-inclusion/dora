@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import Tooltip from "$lib/components/ui/tooltip.svelte";
@@ -247,7 +245,7 @@
     searchStatus = "toutes";
   }
 
-  run(() => {
+  $effect(() => {
     filteredStructures = filterAndSortEntities(
       structures,
       searchParams,
