@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { preventDefault, stopPropagation } from "svelte/legacy";
-
   import Select from "$lib/components/inputs/select/select.svelte";
   import { pinDistanceIcon } from "$lib/icons";
   import type { Choice, GeoApiValue } from "$lib/types";
@@ -87,6 +85,12 @@
       );
     }
   }
+
+  function handleClickSearchCityFromLocation(event: MouseEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+    searchCityFromLocation();
+  }
 </script>
 
 <Select
@@ -107,7 +111,7 @@
     <div class="px-s8 pt-s8">
       <button
         class="border-gray-02 px-s8 py-s12 text-f14 text-gray-text flex w-full"
-        onclick={stopPropagation(preventDefault(searchCityFromLocation))}
+        onclick={handleClickSearchCityFromLocation}
       >
         <span class="mr-s8 h-s24 w-s24 fill-current">
           {@html pinDistanceIcon}
