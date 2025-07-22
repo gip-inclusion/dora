@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import Checkbox from "$lib/components/inputs/checkbox.svelte";
@@ -41,11 +39,12 @@
       "completer-le-formulaire-dadhesion"
     )
   );
-  run(() => {
+
+  $effect(() => {
     updateExternalFormFields(externalFormToggle ? "Faire une demande" : "");
   });
 
-  run(() => {
+  $effect(() => {
     servicesOptions.beneficiariesAccessModes.sort(
       (a, b) =>
         orderedBeneficiariesAccessModeValues[a.value] -
