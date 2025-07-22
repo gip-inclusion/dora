@@ -43,7 +43,7 @@
   const showMaxCategoriesNotice = (model.categories.length || 0) > 3;
 
   function handleChange(validatedData) {
-    structure = { ...model, ...validatedData };
+    model = { ...model, ...validatedData };
   }
   function handleSubmit(validatedData) {
     showUpdateAllServicesModal = false;
