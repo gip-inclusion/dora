@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import Button from "$lib/components/display/button.svelte";
   import DenyOrientationModal from "./deny-orientation-modal.svelte";
   import AcceptOrientationModal from "./accept-orientation-modal.svelte";
@@ -30,19 +28,18 @@
     modalOpened = undefined;
   }
 
-  let statusMessage: { label?: string; cssClass?: string } = $state({});
-  run(() => {
-    if (orientation.status === "VALIDÉE") {
-      statusMessage = { label: "Validé", cssClass: "text-success" };
-    } else if (orientation.status === "OUVERTE") {
-      statusMessage = {
-        label: "Ouverte / En cours de traitement",
-        cssClass: "text-blue-information-dark",
-      };
-    } else if (orientation.status === "REFUSÉE") {
-      statusMessage = { label: "Refusé", cssClass: "text-error" };
-    }
-  });
+  const statusMessage = $derived(
+    orientation.status === "VALIDÉE"
+      ? { label: "Validé", cssClass: "text-success" }
+      : orientation.status === "OUVERTE"
+        ? {
+            label: "Ouverte / En cours de traitement",
+            cssClass: "text-blue-information-dark",
+          }
+        : orientation.status === "REFUSÉE"
+          ? { label: "Refusé", cssClass: "text-error" }
+          : {}
+  );
 </script>
 
 {#if browser}
