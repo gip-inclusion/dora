@@ -1,10 +1,10 @@
 <script lang="ts">
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
-  import type { Service, ServicesOptions } from "$lib/types";
+  import type { Model, Service, ServicesOptions } from "$lib/types";
   import { orderAndReformatSubcategories } from "$lib/utils/misc";
 
   interface Props {
-    service: Service;
+    service: Service | Model;
     servicesOptions: ServicesOptions;
     description?: string;
   }

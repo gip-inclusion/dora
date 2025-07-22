@@ -5,7 +5,7 @@
 
   interface Props {
     servicesOptions: ServicesOptions;
-    service: Service;
+    service: Service | Model;
     model?: Model | undefined;
     isModel?: boolean;
     description?: string;
