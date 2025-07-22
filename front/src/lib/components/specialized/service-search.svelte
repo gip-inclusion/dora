@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { preventDefault } from "svelte/legacy";
-
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
@@ -140,7 +138,8 @@
     }
   }
 
-  function handleSearch() {
+  function handleSearch(event: Event) {
+    event.preventDefault();
     submitDisabled = true;
     refreshMode = false;
     goto(`/recherche?${query}`, { noScroll: true });
@@ -177,7 +176,7 @@
 
 <svelte:window bind:innerWidth />
 
-<form onsubmit={preventDefault(handleSearch)}>
+<form onsubmit={handleSearch}>
   <div class="border-gray-02 w-full rounded-lg border bg-white">
     {#if servicesOptions.categories}
       <div class="grid" class:with-subcategories={useAdditionalFilters}>
