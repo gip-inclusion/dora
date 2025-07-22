@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { preventDefault } from "svelte/legacy";
-
   import DateLabel from "$lib/components/display/date-label.svelte";
   import {
     closeCircleIcon,
@@ -39,7 +37,8 @@
   // Mise à jour de la fréquence d'envoi des alertes
   let frequencyValue = $state(search.frequency);
 
-  async function handleSubmit() {
+  async function handleSubmit(event: Event) {
+    event.preventDefault();
     requesting = true;
     try {
       await updateSavedSearchFrequency(search.id, frequencyValue);
@@ -79,7 +78,7 @@
   </p>
   <div class="gap-s8 flex">
     <div class="form-container">
-      <form onsubmit={preventDefault(handleSubmit)} class="gap-s16 flex">
+      <form onsubmit={handleSubmit} class="gap-s16 flex">
         <div class="border-gray-02 p-s12 flex items-center rounded-sm border">
           <span class="mr-s8 h-s24 w-s24 inline-block fill-current">
             {@html mailSendLineIcon}
