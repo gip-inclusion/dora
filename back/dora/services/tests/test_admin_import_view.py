@@ -4,7 +4,7 @@ from django.contrib.admin.sites import AdminSite
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponseRedirect
 from django.test import RequestFactory
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -144,7 +144,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         mock_messages.error.assert_called_once_with(
             request,
-            mark_safe(
+            format_html(
                 "<b>Échec de l'import</b><br/>Aucun service n’a été importé, car le fichier comporte des erreurs. Veuillez corriger les éléments suivants :<br/>"
                 "• [2] SIRET manquant.<br/>"
                 "• [3] Structure introuvable."
@@ -174,7 +174,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         mock_messages.error.assert_called_once_with(
             request,
-            mark_safe(
+            format_html(
                 "<b>Test terminé - Erreurs à corriger</b><br/>Le fichier contient des erreurs qui empêcheront l'import. Veuillez corriger les éléments suivants :<br/>"
                 "• [2] SIRET manquant.<br/>"
                 "• [3] Structure introuvable."
@@ -230,7 +230,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         mock_messages.error.assert_called_once_with(
             request,
-            mark_safe(
+            format_html(
                 "<b>Échec de l'import</b><br/>Aucun service n’a été importé, car le fichier comporte des erreurs. Veuillez corriger les éléments suivants :<br/>"
                 "• [2] SIRET manquant.<br/>"
                 "• [3] Structure introuvable."
@@ -304,7 +304,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         mock_messages.warning.assert_called_once_with(
             request,
-            mark_safe(
+            format_html(
                 "<b>Import réalisé - Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
                 '• [2] SIRET 1234 - il existe déjà un service avec le modèle slug_1 et le courriel "a@a.com"<br/>'
                 '• [3] SIRET 3456 - il existe déjà un service avec le modèle slug_2 et le courriel "b@b.com"'
@@ -352,7 +352,7 @@ class ImportServicesViewTestCase(APITestCase):
         )
         mock_messages.warning.assert_called_once_with(
             request,
-            mark_safe(
+            format_html(
                 "<b>Import réalisé - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
                 "• [2] 123 Main St 75001 Paris<br/>"
                 "• [3] 456 Oak Ave 69001 Lyon"
@@ -415,7 +415,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         mock_messages.warning.assert_any_call(
             request,
-            mark_safe(
+            format_html(
                 "<b>Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
                 '• [2] SIRET 1234 - il existe déjà un service avec le modèle slug_1 et le courriel "a@a.com"<br/>'
                 '• [3] SIRET 3456 - il existe déjà un service avec le modèle slug_2 et le courriel "b@b.com"'
@@ -423,7 +423,7 @@ class ImportServicesViewTestCase(APITestCase):
         )
         mock_messages.warning.assert_any_call(
             request,
-            mark_safe(
+            format_html(
                 "<b>Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
                 "• [1] 123 Main St  Paris<br/>"
                 "• [3] 456 Oak Ave  Lyon"
@@ -431,7 +431,7 @@ class ImportServicesViewTestCase(APITestCase):
         )
         mock_messages.warning.assert_any_call(
             request,
-            mark_safe(
+            format_html(
                 '<b>Informations manquantes</b><br/> Contactez les structures pour compléter ces éléments avant importation :<br/>• [1] Service "Service Test" - Manque : contact email, lieu de déroulement'
             ),
         )
@@ -487,7 +487,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         mock_messages.warning.assert_any_call(
             request,
-            mark_safe(
+            format_html(
                 "<b>Import réalisé - Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
                 '• [2] SIRET 1234 - il existe déjà un service avec le modèle slug_1 et le courriel "a@a.com"<br/>'
                 '• [3] SIRET 3456 - il existe déjà un service avec le modèle slug_2 et le courriel "b@b.com"'
@@ -495,7 +495,7 @@ class ImportServicesViewTestCase(APITestCase):
         )
         mock_messages.warning.assert_any_call(
             request,
-            mark_safe(
+            format_html(
                 "<b>Import réalisé - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
                 "• [1] 123 Main St  Paris<br/>"
                 "• [3] 456 Oak Ave  Lyon"
@@ -503,7 +503,7 @@ class ImportServicesViewTestCase(APITestCase):
         )
         mock_messages.warning.assert_any_call(
             request,
-            mark_safe(
+            format_html(
                 '<b>Import réalisé - Services importés en brouillon</b><br/>1 services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication :<br/>• [1] Service "Service Test" - Manque : contact email, lieu de déroulement'
             ),
         )
@@ -637,7 +637,7 @@ class ImportServicesViewTestCase(APITestCase):
 
         mock_messages.warning.assert_called_once_with(
             request,
-            mark_safe(
+            format_html(
                 "<b>Import réalisé - Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
                 "• [1] 1 rue de test  "
             ),
