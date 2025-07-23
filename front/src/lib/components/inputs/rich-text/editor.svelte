@@ -94,13 +94,15 @@
       (linkDialogHasSelection || linkDialogText)
   );
 
-  let linkDialogButtontext = $derived(
-    !linkDialogHrefPrev
-      ? "Ajouter le lien"
-      : !linkDialogHref
-        ? "Supprimer le lien"
-        : "Modifier le lien"
-  );
+  let linkDialogButtontext = $derived.by(() => {
+    if (!linkDialogHrefPrev) {
+      return "Ajouter le lien";
+    }
+    if (!linkDialogHref) {
+      return "Supprimer le lien";
+    }
+    return "Modifier le lien";
+  });
 
   export function updateValue(value) {
     editor.commands.setContent(markdownToHTML(value));

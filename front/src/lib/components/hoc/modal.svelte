@@ -63,7 +63,7 @@
   onDestroy(() => closeActions());
 
   $effect(() => {
-    let timeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout>;
     // Prevent scrolling the background while the modal is open
     if (browser) {
       if (isOpen) {

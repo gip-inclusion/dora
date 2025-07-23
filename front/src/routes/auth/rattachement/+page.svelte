@@ -68,13 +68,15 @@
       ?.includes(establishment?.siret)
   );
 
-  const ctaLabel = $derived(
-    alreadyRequested
-      ? "Relancer l’administrateur"
-      : alreadyMember
-        ? "Accéder à la structure"
-        : "Rejoindre la structure"
-  );
+  const ctaLabel = $derived.by(() => {
+    if (alreadyRequested) {
+      return "Relancer l'administrateur";
+    }
+    if (alreadyMember) {
+      return "Accéder à la structure";
+    }
+    return "Rejoindre la structure";
+  });
 
   $effect(() => {
     establishment;

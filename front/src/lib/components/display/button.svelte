@@ -50,32 +50,57 @@
     onclick,
   }: Props = $props();
 
-  let paddingX: string = $derived(
-    noPadding ? "" : small ? (label ? "px-s12" : "px-s8") : "px-s20"
-  );
-  let paddingY: string = $derived(small ? "py-s6" : big ? "py-s12" : "py-s12");
-  let textSize: string = $derived(
-    small ? "text-f14" : big ? "text-f23" : "text-f16"
-  );
-  let border: string = $derived(
-    secondary
-      ? "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue"
-      : "border-0"
-  );
-  let text: string = $derived(
-    secondary
-      ? "font-bold text-magenta-cta hover:text-white disabled:text-gray-text-alt2 active:text-france-blue"
-      : noBackground
-        ? "font-bold text-magenta-cta hover:text-magenta-hover disabled:text-gray-text active:text-france-blue"
-        : "font-bold text-white disabled:text-gray-text"
-  );
-  let background: string = $derived(
-    secondary
-      ? "bg-white hover:bg-magenta-hover disabled:bg-white"
-      : noBackground
-        ? "bg-transparent"
-        : "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue"
-  );
+  let paddingX: string = $derived.by(() => {
+    if (noPadding) {
+      return "";
+    }
+    if (small) {
+      return label ? "px-s12" : "px-s8";
+    }
+    return "px-s20";
+  });
+  let paddingY: string = $derived.by(() => {
+    if (small) {
+      return "py-s6";
+    }
+    if (big) {
+      return "py-s12";
+    }
+    return "py-s12";
+  });
+  let textSize: string = $derived.by(() => {
+    if (small) {
+      return "text-f14";
+    }
+    if (big) {
+      return "text-f23";
+    }
+    return "text-f16";
+  });
+  let border: string = $derived.by(() => {
+    if (secondary) {
+      return "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue";
+    }
+    return "border-0";
+  });
+  let text: string = $derived.by(() => {
+    if (secondary) {
+      return "font-bold text-magenta-cta hover:text-white disabled:text-gray-text-alt2 active:text-france-blue";
+    }
+    if (noBackground) {
+      return "font-bold text-magenta-cta hover:text-magenta-hover disabled:text-gray-text active:text-france-blue";
+    }
+    return "font-bold text-white disabled:text-gray-text";
+  });
+  let background: string = $derived.by(() => {
+    if (secondary) {
+      return "bg-white hover:bg-magenta-hover disabled:bg-white";
+    }
+    if (noBackground) {
+      return "bg-transparent";
+    }
+    return "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
+  });
 
   const iconWidth = small ? "w-s24" : "w-s32";
   const iconHeight = small ? "h-s24" : "h-s32";

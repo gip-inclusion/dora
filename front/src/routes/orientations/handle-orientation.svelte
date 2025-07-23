@@ -9,6 +9,14 @@
   import Notice from "$lib/components/display/notice.svelte";
   import { formatNumericDate } from "$lib/utils/date";
 
+  const statusMap = {
+    VALIDÉE: { label: "Validé", cssClass: "text-success" },
+    OUVERTE: {
+      label: "Ouverte / En cours de traitement",
+      cssClass: "text-blue-information-dark",
+    },
+    REFUSÉE: { label: "Refusé", cssClass: "text-error" },
+  };
   interface Props {
     orientation: Orientation;
     queryHash: string;
@@ -28,18 +36,7 @@
     modalOpened = undefined;
   }
 
-  const statusMessage = $derived(
-    orientation.status === "VALIDÉE"
-      ? { label: "Validé", cssClass: "text-success" }
-      : orientation.status === "OUVERTE"
-        ? {
-            label: "Ouverte / En cours de traitement",
-            cssClass: "text-blue-information-dark",
-          }
-        : orientation.status === "REFUSÉE"
-          ? { label: "Refusé", cssClass: "text-error" }
-          : {}
-  );
+  const statusMessage = $derived(statusMap[orientation.status] || {});
 </script>
 
 {#if browser}
