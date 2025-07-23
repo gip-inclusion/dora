@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import Button from "$lib/components/display/button.svelte";
   import Tag from "$lib/components/display/tag.svelte";
   import {
@@ -47,8 +45,6 @@
     children,
   }: Props = $props();
 
-  let haveSameValue = $state(false);
-
   function compare(val1, val2) {
     if (type === "array" || type === "files") {
       return arraysCompare(val1, val2);
@@ -82,10 +78,10 @@
         )
       : true
   );
-  run(() => {
-    haveSameValue =
-      showModel && compare(value, serviceValue) && subFieldsHaveSameValue;
-  });
+
+  let haveSameValue = $derived(
+    showModel && compare(value, serviceValue) && subFieldsHaveSameValue
+  );
 </script>
 
 <div
