@@ -23,5 +23,5 @@
       bold
     />
   </div>
-  <ServiceFeedbackButton on:click={onFeedbackButtonClick} />
+  <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
 </div>
