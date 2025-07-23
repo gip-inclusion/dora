@@ -42,7 +42,7 @@
             </a>
           {/if}
           <div class="gap-s8 flex items-center">
-            <FavoriteIcon on:click={onBookmark} active={isBookmarked} />
+            <FavoriteIcon onclick={onBookmark} active={isBookmarked} />
           </div>
         </div>
 

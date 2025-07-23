@@ -57,7 +57,7 @@
           </h3>
           {#if readOnly}
             <div class="top-s6 relative flex">
-              <FavoriteIcon on:click={onBookmark} active={isBookmarked} />
+              <FavoriteIcon onclick={onBookmark} active={isBookmarked} />
             </div>
           {/if}
         </div>

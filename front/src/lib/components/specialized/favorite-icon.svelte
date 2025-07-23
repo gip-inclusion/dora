@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import BookmarkFillBusiness from "svelte-remix/BookmarkFillBusiness.svelte";
   import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
 
@@ -10,17 +8,16 @@
 
   interface Props {
     active?: boolean;
+    onclick?: (event: MouseEvent) => void;
   }
 
-  let { active = false }: Props = $props();
-
-  const dispatch = createEventDispatcher();
+  let { active = false, onclick }: Props = $props();
 
   let disabled = $derived(!$userInfo);
 
   function handleClick(evt: MouseEvent) {
     if (!disabled) {
-      dispatch("click", evt);
+      onclick?.(evt);
     }
   }
 </script>
