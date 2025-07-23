@@ -48,9 +48,9 @@
       horizontal={horizontalCheckboxes}
       errorMessage={formatErrors(name, errorMessages)}
       focused={focusValue === choice.value}
-      on:change={handleChange}
-      on:focus={() => (focusValue = choice.value)}
-      on:blur={() => (focusValue = undefined)}
+      onchange={handleChange}
+      onfocus={() => (focusValue = choice.value)}
+      onblur={() => (focusValue = undefined)}
     />
   {/each}
 </div>

@@ -73,10 +73,10 @@
               readonly={$currentSchema?.[id]?.readonly}
               errorMessage={formatErrors(id, errorMessages)}
               focused={beneficiariesAccessModesFocusValue === choice.value}
-              on:change={onChange}
-              on:focus={() =>
+              onchange={onChange}
+              onfocus={() =>
                 (beneficiariesAccessModesFocusValue = choice.value)}
-              on:blur={() => (beneficiariesAccessModesFocusValue = undefined)}
+              onblur={() => (beneficiariesAccessModesFocusValue = undefined)}
             >
               <BasicInputField
                 id="beneficiariesAccessModesExternalFormLinkText"
@@ -103,10 +103,10 @@
               readonly={$currentSchema?.[id]?.readonly}
               errorMessage={formatErrors(id, errorMessages)}
               focused={beneficiariesAccessModesFocusValue === choice.value}
-              on:change={onChange}
-              on:focus={() =>
+              onchange={onChange}
+              onfocus={() =>
                 (beneficiariesAccessModesFocusValue = choice.value)}
-              on:blur={() => (beneficiariesAccessModesFocusValue = undefined)}
+              onblur={() => (beneficiariesAccessModesFocusValue = undefined)}
             >
               <BasicInputField
                 id="beneficiariesAccessModesOther"
@@ -124,10 +124,10 @@
               readonly={$currentSchema?.[id]?.readonly}
               errorMessage={formatErrors(id, errorMessages)}
               focused={beneficiariesAccessModesFocusValue === choice.value}
-              on:change={onChange}
-              on:focus={() =>
+              onchange={onChange}
+              onfocus={() =>
                 (beneficiariesAccessModesFocusValue = choice.value)}
-              on:blur={() => (beneficiariesAccessModesFocusValue = undefined)}
+              onblur={() => (beneficiariesAccessModesFocusValue = undefined)}
             />
           {/if}
         {/each}

@@ -72,9 +72,9 @@
               readonly={$currentSchema?.[id]?.readonly}
               errorMessage={formatErrors(id, errorMessages)}
               focused={coachOrientationModesFocusValue === choice.value}
-              on:change={onChange}
-              on:focus={() => (coachOrientationModesFocusValue = choice.value)}
-              on:blur={() => (coachOrientationModesFocusValue = undefined)}
+              onchange={onChange}
+              onfocus={() => (coachOrientationModesFocusValue = choice.value)}
+              onblur={() => (coachOrientationModesFocusValue = undefined)}
             >
               <BasicInputField
                 id="coachOrientationModesExternalFormLinkText"
@@ -99,9 +99,9 @@
               readonly={$currentSchema?.[id]?.readonly}
               errorMessage={formatErrors(id, errorMessages)}
               focused={coachOrientationModesFocusValue === choice.value}
-              on:change={onChange}
-              on:focus={() => (coachOrientationModesFocusValue = choice.value)}
-              on:blur={() => (coachOrientationModesFocusValue = undefined)}
+              onchange={onChange}
+              onfocus={() => (coachOrientationModesFocusValue = choice.value)}
+              onblur={() => (coachOrientationModesFocusValue = undefined)}
             >
               <BasicInputField
                 id="coachOrientationModesOther"
@@ -119,9 +119,9 @@
               readonly={$currentSchema?.[id]?.readonly}
               errorMessage={formatErrors(id, errorMessages)}
               focused={coachOrientationModesFocusValue === choice.value}
-              on:change={onChange}
-              on:focus={() => (coachOrientationModesFocusValue = choice.value)}
-              on:blur={() => (coachOrientationModesFocusValue = undefined)}
+              onchange={onChange}
+              onfocus={() => (coachOrientationModesFocusValue = choice.value)}
+              onblur={() => (coachOrientationModesFocusValue = undefined)}
             />
           {/if}
         {/each}

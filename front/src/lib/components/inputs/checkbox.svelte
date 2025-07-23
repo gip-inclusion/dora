@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { createBubbler } from "svelte/legacy";
+  import type { Snippet } from "svelte";
 
-  const bubble = createBubbler();
   import CheckboxMark from "../display/checkbox-mark.svelte";
 
   interface Props {
@@ -14,7 +13,10 @@
     horizontal?: boolean;
     errorMessage?: string | null | undefined;
     focused?: boolean;
-    children?: import("svelte").Snippet;
+    onchange?: (event: Event) => void;
+    onfocus?: (event: FocusEvent) => void;
+    onblur?: (event: FocusEvent) => void;
+    children?: Snippet;
   }
 
   let {
@@ -27,19 +29,23 @@
     horizontal = false,
     errorMessage = undefined,
     focused = false,
+    onchange,
+    onfocus,
+    onblur,
     children,
   }: Props = $props();
 
   // Malheureusement, utiliser bind:groups ici ne fonctionne pas :
   // https://github.com/sveltejs/svelte/issues/2308
   // La mise à jour de group doit être faite manuellement
-  function handleChange(event) {
+  function handleChange(event: Event) {
     const isChecked = event.target.checked;
     if (isChecked && !group.includes(value)) {
       group = [...group, value];
     } else if (!isChecked) {
       group = group.filter((val) => val !== value);
     }
+    onchange?.(event);
   }
 </script>
 
@@ -57,8 +63,8 @@
     {readonly}
     checked={group.includes(value)}
     onchange={handleChange}
-    onfocus={bubble("focus")}
-    onblur={bubble("blur")}
+    {onfocus}
+    {onblur}
   />
   <CheckboxMark />
   <span class="ml-s16 text-f16 text-gray-text inline-block">{label}</span>
