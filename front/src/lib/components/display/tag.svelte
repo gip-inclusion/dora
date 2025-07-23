@@ -1,9 +1,11 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   interface Props {
     selfStart?: boolean;
     bgColorClass?: string;
     textColorClass?: string;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let {

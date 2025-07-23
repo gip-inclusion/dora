@@ -1,10 +1,12 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   interface Props {
     noPadding?: boolean;
     extraClass?: string;
     bgColor?: string;
     roundedColor?: string;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let {

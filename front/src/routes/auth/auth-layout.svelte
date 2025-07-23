@@ -1,8 +1,10 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import connexionPic from "$lib/assets/illustrations/illu-connexion.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   interface Props {
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let { children }: Props = $props();

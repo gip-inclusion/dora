@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import InformationFillSystem from "svelte-remix/InformationFillSystem.svelte";
   import ErrorWarningFillSystem from "svelte-remix/ErrorWarningFillSystem.svelte";
   import CloseCircleFillSystem from "svelte-remix/CloseCircleFillSystem.svelte";
@@ -11,8 +13,8 @@
     hasCloseButton?: boolean;
     showIcon?: boolean;
     titleLevel?: "h2" | "h3" | "h4";
-    children?: import("svelte").Snippet;
-    button?: import("svelte").Snippet;
+    children?: Snippet;
+    button?: Snippet;
   }
 
   let {

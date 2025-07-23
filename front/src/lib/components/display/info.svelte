@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import Label from "$lib/components/display/label.svelte";
   import { emotionHappyIcon, errorWarningIcon } from "$lib/icons";
 
@@ -10,7 +12,7 @@
     icon?: any;
     whiteBg?: boolean;
     leftBorder?: boolean;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let {

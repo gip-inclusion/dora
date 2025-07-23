@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { ComponentType } from "svelte";
+  import type { Component, Snippet } from "svelte";
 
   interface Props {
-    icon: ComponentType;
+    icon: Component;
     title: string;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let { icon, title, children }: Props = $props();

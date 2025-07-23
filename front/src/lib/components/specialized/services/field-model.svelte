@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import Tag from "$lib/components/display/tag.svelte";
   import {
@@ -29,7 +31,7 @@
           }>
         >
       | undefined;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let {

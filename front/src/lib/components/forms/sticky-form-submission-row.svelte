@@ -1,9 +1,11 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import CenteredGrid from "../display/centered-grid.svelte";
 
   interface Props {
     justifyBetween?: boolean;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let { justifyBetween = false, children }: Props = $props();

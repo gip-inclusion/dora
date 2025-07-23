@@ -1,7 +1,9 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   interface Props {
     condition?: boolean;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let { condition = true, children }: Props = $props();

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   interface Props {
     label?: string;
     bold?: boolean;
@@ -11,7 +13,7 @@
     icon?: string | null;
     smallIcon?: boolean;
     truncate?: boolean;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let {

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import ButtonMenu from "$lib/components/display/button-menu.svelte";
   import { moreIcon } from "$lib/icons";
 
@@ -6,9 +8,9 @@
     member: any;
     isMyself?: boolean;
     readOnly?: boolean;
-    status?: import("svelte").Snippet;
-    label?: import("svelte").Snippet;
-    actions?: import("svelte").Snippet<[any]>;
+    status?: Snippet;
+    label?: Snippet;
+    actions?: Snippet<[any]>;
   }
 
   let {

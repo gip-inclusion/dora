@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import Portal from "svelte-portal";
 
   import Button from "$lib/components/display/button.svelte";
@@ -6,7 +8,7 @@
 
   interface Props {
     isOpen: boolean;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let { isOpen = $bindable(), children }: Props = $props();

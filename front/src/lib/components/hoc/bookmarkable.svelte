@@ -1,11 +1,13 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import { clearBookmark, setBookmark } from "$lib/requests/services";
   import { refreshUserInfo, userInfo } from "$lib/utils/auth";
 
   interface Props {
     slug: string;
     isDI?: boolean;
-    children?: import("svelte").Snippet<[any]>;
+    children?: Snippet<[any]>;
   }
 
   let { slug, isDI = false, children }: Props = $props();

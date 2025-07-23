@@ -1,4 +1,7 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+  import { onDestroy, onMount, setContext } from "svelte";
+
   import { beforeNavigate } from "$app/navigation";
   import type { ServicesOptions } from "$lib/types";
   import type { Schema } from "$lib/validation/schema-utils";
@@ -11,7 +14,6 @@
     validate,
     type ValidationContext,
   } from "$lib/validation/validation";
-  import { onDestroy, onMount, setContext } from "svelte";
 
   let hasUnsavedChange = false;
   interface Props {
@@ -30,7 +32,7 @@
           submitterId: string | undefined
         ) => { validatedData; valid: boolean })
       | undefined;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let {

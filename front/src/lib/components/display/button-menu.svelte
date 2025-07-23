@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
@@ -14,7 +16,7 @@
     noPadding?: boolean;
     alignRight?: boolean;
     extraClass?: string;
-    children?: import("svelte").Snippet<[any]>;
+    children?: Snippet<[any]>;
   }
 
   let {

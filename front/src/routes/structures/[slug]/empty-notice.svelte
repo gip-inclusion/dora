@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import { externalLinkIcon } from "$lib/icons";
 
   interface Props {
@@ -6,7 +8,7 @@
     title?: string;
     illustration?: string;
     links?: { label: string; url: string }[];
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let {

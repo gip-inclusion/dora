@@ -1,11 +1,13 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import { Tooltip } from "bits-ui";
 
   interface Props {
     delayDuration?: number;
     side?: "top" | "bottom" | "left" | "right";
-    children?: import("svelte").Snippet;
-    content?: import("svelte").Snippet;
+    children?: Snippet;
+    content?: Snippet;
   }
 
   let {

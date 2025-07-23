@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import Tabs from "$lib/components/display/tabs.svelte";
   import SearchByCommune from "./search-by-commune.svelte";
@@ -20,7 +22,7 @@
     descriptionText?: string | undefined;
     proposedSafir?: string | null;
     proposedSiret?: string | null;
-    cta?: import("svelte").Snippet;
+    cta?: Snippet;
   }
 
   let {

@@ -1,10 +1,12 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
   import { token, userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
   interface Props {
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let { children }: Props = $props();

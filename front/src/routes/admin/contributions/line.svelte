@@ -1,11 +1,13 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   interface Props {
     label: any;
     data: any;
     isList?: boolean;
     verticalLayout?: boolean;
     isBool?: boolean;
-    children?: import("svelte").Snippet;
+    children?: Snippet;
   }
 
   let {
