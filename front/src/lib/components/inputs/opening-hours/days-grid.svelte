@@ -5,23 +5,21 @@
     getHoursFromStr,
     returnEmptyHoursData,
   } from "$lib/utils/opening-hours";
-  import { createEventDispatcher } from "svelte";
   import DayField from "./day-field.svelte";
 
   interface Props {
     id: string;
     value: any;
+    onchange?: (event: Event) => void;
   }
 
-  let { id, value = $bindable() }: Props = $props();
-
-  const dispatch = createEventDispatcher();
+  let { id, value = $bindable(), onchange }: Props = $props();
 
   const data = $state(value ? getHoursFromStr(value) : returnEmptyHoursData());
 
-  function handleHourChange() {
+  function handleHourChange(event: Event) {
     value = fromJsonToOsmString(data);
-    dispatch("change", id);
+    onchange?.(event);
   }
 
   const weekDays: { label: string; day: Day }[] = [

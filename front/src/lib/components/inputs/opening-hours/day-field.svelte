@@ -10,7 +10,7 @@
     closeAt: string;
     day: Day;
     dayPeriod: DayPeriod;
-    onchange: () => void;
+    onchange?: (event: Event) => void;
   }
 
   let {
@@ -31,13 +31,13 @@
     inError ? `error-${day}—${dayPeriod}` : undefined
   );
 
-  function handleUpdate() {
+  function handleUpdate(event: Event) {
     // Clear values and notify change
     if (!isOpen) {
       openAt = "";
       closeAt = "";
     }
-    onchange();
+    onchange?.(event);
   }
 </script>
 
@@ -94,7 +94,7 @@
       </span>
     </label>
     <Toggle
-      onchange={handleUpdate}
+      onchange={(event) => handleUpdate(event)}
       bind:checked={isOpen}
       yesLabel="Ouvert"
       noLabel="Fermé"

@@ -7,7 +7,7 @@
     readonly?: boolean;
     yesLabel?: string;
     noLabel?: string;
-    onchange: () => void;
+    onchange?: (event: Event) => void;
   }
 
   let {
@@ -33,9 +33,9 @@
 
 <div
   class="mt-s8 relative flex flex-row items-center self-start"
-  onclick={() => {
+  onclick={(event: MouseEvent) => {
     checked = !checked;
-    onchange();
+    onchange?.(event);
   }}
   onkeydown={handleKeyDown}
   tabindex="0"
