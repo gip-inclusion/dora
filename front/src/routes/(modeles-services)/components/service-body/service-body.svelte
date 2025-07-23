@@ -145,8 +145,8 @@
 
 <PreventFakeOrientationModal
   bind:isOpen={isPreventFakeOrientationModalOpen}
-  on:showVideo={handleShowVideoModal}
-  on:trackMobilisation={handleTrackMobilisationEvent}
+  onShowVideo={handleShowVideoModal}
+  onTrackMobilisation={handleTrackMobilisation}
   {orientationFormUrl}
 />
 <OrientationVideo bind:isVideoModalOpen />

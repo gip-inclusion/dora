@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import { browser } from "$app/environment";
 
   import Button from "$lib/components/display/button.svelte";
@@ -11,14 +9,16 @@
   interface Props {
     isOpen?: boolean;
     orientationFormUrl: string;
+    onShowVideo: () => void;
+    onTrackMobilisation: () => void;
   }
 
-  let { isOpen = $bindable(false), orientationFormUrl }: Props = $props();
-
-  const dispatch = createEventDispatcher<{
-    showVideo: object;
-    trackMobilisation: object;
-  }>();
+  let {
+    isOpen = $bindable(false),
+    orientationFormUrl,
+    onShowVideo,
+    onTrackMobilisation,
+  }: Props = $props();
 </script>
 
 {#if browser}
@@ -42,12 +42,9 @@
           label="Poursuivre l’orientation"
           secondary
           to={orientationFormUrl}
-          onclick={() => dispatch("trackMobilisation", {})}
+          onclick={onTrackMobilisation}
         />
-        <Button
-          label="Regarder la vidéo"
-          onclick={() => dispatch("showVideo", {})}
-        />
+        <Button label="Regarder la vidéo" onclick={onShowVideo} />
       </div>
     {/snippet}
   </Modal>
