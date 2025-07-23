@@ -1,7 +1,7 @@
 <script lang="ts" module>
   import dayjs from "dayjs";
 
-  function computeRelativeDateLabel(dateString: string) {
+  export function computeRelativeDateLabel(dateString: string) {
     const day = dayjs(dateString);
     const dayDiff = dayjs().diff(day, "day");
     const weekDiff = dayjs().diff(day, "week");
