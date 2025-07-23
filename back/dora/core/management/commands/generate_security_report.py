@@ -1,5 +1,4 @@
 import json
-import sys
 from pathlib import Path
 
 from django.core.management import BaseCommand
@@ -25,10 +24,10 @@ class Command(BaseCommand):
                 report = json.load(f)
         except FileNotFoundError:
             print(f"Erreur: Fichier '{json_file}' pas trouvé")
-            sys.exit(1)
+            return
         except json.JSONDecodeError:
             print(f"Erreur: JSON invalide à '{json_file}'")
-            sys.exit(1)
+            return
 
         results = report.get("results", [])
 
@@ -49,9 +48,9 @@ class Command(BaseCommand):
 
             # Only include high-confidence or high-severity issues
             if confidence in ["HIGH", "MEDIUM"] or severity == "HIGH":
-                if test_id in self.CRITICAL_TESTS:
+                if test_id in self.CRITICAL_ISSUES:
                     critical_issues.append(result)
-                elif test_id in self.HIGH_RISK_TESTS or severity == "HIGH":
+                elif test_id in self.HIGH_RISK_ISSUES or severity == "HIGH":
                     high_risk_issues.append(result)
 
         total_actionable = len(critical_issues) + len(high_risk_issues)
@@ -227,7 +226,7 @@ class Command(BaseCommand):
 
         return guidance_map.get(test_id)
 
-    CRITICAL_TESTS = {
+    CRITICAL_ISSUES = {
         "B608": "Hardcoded SQL expression",
         "B609": "SQL Injection via string concatenation",
         "B610": "Potential SQL injection on extra function",
@@ -249,7 +248,7 @@ class Command(BaseCommand):
         "B702": "Use of Mako templates",
     }
 
-    HIGH_RISK_TESTS = {
+    HIGH_RISK_ISSUES = {
         "B104": "Hardcoded bind to all network interfaces",
         "B105": "Hardcoded password in code",
         "B106": "Hardcoded password in function argument",
