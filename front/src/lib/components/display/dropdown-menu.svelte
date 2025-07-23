@@ -18,7 +18,7 @@
     isOpen = false;
   }
 
-  function onKeyDown(event) {
+  function onKeyDown(event: KeyboardEvent) {
     if (event.key === "Escape") {
       closeDropdown();
       dropdownButton.focus();
@@ -31,7 +31,7 @@
 <div
   {@attach clickOutside(closeDropdown)}
   role="presentation"
-  on:keydown={onKeyDown}
+  onkeydown={onKeyDown}
   class="w-full lg:w-auto"
 >
   <div class="text-f14 relative flex w-full lg:w-auto">
@@ -42,7 +42,7 @@
       class:bg-magenta-10={isOpen}
       class="border-gray-03 flex w-full items-center justify-between rounded-sm border text-left lg:w-auto"
       class:border-magenta-cta={isOpen}
-      on:click={() => (isOpen = !isOpen)}
+      onclick={() => (isOpen = !isOpen)}
     >
       {#if $$slots.label}
         <div class="px-s12">
