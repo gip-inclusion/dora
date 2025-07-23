@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import { externalLinkIcon } from "$lib/icons";
   import { getApiURL } from "$lib/utils/api";
   import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
@@ -66,18 +64,17 @@
     return [];
   }
 
-  let annuaireEntreprisePath: string = $state();
-  run(() => {
-    annuaireEntreprisePath = "";
+  let annuaireEntreprisePath: string = $derived.by(() => {
     if (city?.code && queryText) {
       const code = city.code;
       const dept = code.slice(0, 2);
       if (["75", "69", "13"].includes(dept)) {
-        annuaireEntreprisePath = `/rechercher?terme=${queryText}&cp_dep_type=dep&cp_dep=${dept}`;
+        return `/rechercher?terme=${queryText}&cp_dep_type=dep&cp_dep=${dept}`;
       } else {
-        annuaireEntreprisePath = `/rechercher?terme=${queryText}&cp_dep_type=insee&cp_dep=${code}`;
+        return `/rechercher?terme=${queryText}&cp_dep_type=insee&cp_dep=${code}`;
       }
     }
+    return "";
   });
 </script>
 
