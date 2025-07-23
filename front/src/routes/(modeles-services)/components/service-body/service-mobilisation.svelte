@@ -17,7 +17,7 @@
     service: Service;
     isDI?: boolean;
     orientationFormUrl: string;
-    handleOrientationFormClickEvent: (event: any) => void;
+    handleOrientationFormClickEvent: (event: MouseEvent) => void;
   }
 
   let {
@@ -77,7 +77,7 @@
         label="Orienter votre bénéficiaire"
         to={orientationFormUrl}
         extraClass="bg-white text-france-blue! hover:text-white!"
-        on:click={handleOrientationFormClickEvent}
+        onclick={handleOrientationFormClickEvent}
       />
     {:else if service.contactInfoFilled}
       {#if !contactBoxOpen}
@@ -97,7 +97,7 @@
 
   {#if hasExternalForm}
     <LinkButton
-      on:click={() =>
+      onclick={() =>
         handleExternalFormClick(service.coachOrientationModesExternalFormLink)}
       to={service.coachOrientationModesExternalFormLink}
       extraClass="bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"

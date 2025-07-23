@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { createBubbler } from "svelte/legacy";
-
-  const bubble = createBubbler();
   interface Props {
     to: string;
     otherTab?: boolean;
@@ -18,6 +15,7 @@
     hoverUnderline?: boolean;
     canWrap?: boolean;
     wFull?: boolean;
+    onclick?: (event: MouseEvent) => void;
   }
 
   let {
@@ -36,6 +34,7 @@
     hoverUnderline = false,
     canWrap = false,
     wFull = false,
+    onclick,
   }: Props = $props();
 
   let paddingX: string = $state(),
@@ -92,7 +91,7 @@
   title={otherTab ? "Ouverture dans une nouvelle fenêtre" : ""}
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
-  onclick={bubble("click")}
+  {onclick}
   class="{paddingX} {paddingY} {textSize} {border} {text} {background} {extraClass} focus:shadow-focus inline-flex items-center justify-center rounded-sm leading-normal whitespace-nowrap"
   class:w-full={wFull}
   class:hover:underline={hoverUnderline}

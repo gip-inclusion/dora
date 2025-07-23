@@ -42,7 +42,7 @@
           label="Poursuivre l’orientation"
           secondary
           to={orientationFormUrl}
-          on:click={() => dispatch("trackMobilisation", {})}
+          onclick={() => dispatch("trackMobilisation", {})}
         />
         <Button
           label="Regarder la vidéo"
