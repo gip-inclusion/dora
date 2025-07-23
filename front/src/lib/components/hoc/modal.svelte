@@ -1,4 +1,3 @@
-<!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (subtitle to subtitle_1) making the component unusable -->
 <script lang="ts">
   import { browser } from "$app/environment";
   import { closeLineIcon } from "$lib/icons";

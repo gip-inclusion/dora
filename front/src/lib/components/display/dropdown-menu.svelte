@@ -1,4 +1,3 @@
-<!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (label to label_1) making the component unusable -->
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { afterNavigate } from "$app/navigation";
