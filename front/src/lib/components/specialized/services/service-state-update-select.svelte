@@ -34,7 +34,7 @@
     label: string;
   };
 
-  export const SERVICE_STATUS_PRESENTATION: Record<
+  const SERVICE_STATUS_PRESENTATION: Record<
     ServiceStatus,
     ServiceStatusPresentation
   > = {

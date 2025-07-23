@@ -36,7 +36,7 @@
 
   let isOpen = $state(false);
 
-  export function closeDropdown() {
+  function closeDropdown() {
     isOpen = false;
   }
 
