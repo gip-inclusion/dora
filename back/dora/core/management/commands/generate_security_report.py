@@ -36,7 +36,7 @@ class Command(BaseCommand):
         results.extend(custom_issues)
 
         if not results:
-            print("✅ AUCUNE VULNERABILITÉ DE SECURITÉ DÉTECTÉ")
+            print("✅ AUCUNE VULNÉRABILITÉ DE SECURITÉ DÉTECTÉ")
             return
 
         critical_issues = []
@@ -57,11 +57,11 @@ class Command(BaseCommand):
         total_actionable = len(critical_issues) + len(high_risk_issues)
 
         if total_actionable == 0:
-            print("✅ AUCUNE VULNERABILITÉ DE SECURITÉ ACTIONNABLE DÉTECTÉ")
+            print("✅ AUCUNE VULNÉRABILITÉ DE SECURITÉ ACTIONNABLE DÉTECTÉ")
             return
 
         print(
-            f"🚨 VULNERABILITÉS DE SECURITÉ DÉTECTÉES: {total_actionable} problèmes exique de l'attention immédiate\n"
+            f"🚨 VULNÉRABILITÉS DE SECURITÉ DÉTECTÉES: {total_actionable} problèmes exique de l'attention immédiate\n"
         )
 
         # Output critical issues first
