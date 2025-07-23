@@ -44,7 +44,7 @@
     {readonly}
   >
     {#snippet children({ onChange })}
-      <DaysGrid bind:value {id} onchange={onChange} />
+      <DaysGrid bind:value onchange={onChange} />
     {/snippet}
   </FieldWrapper>
 {/if}

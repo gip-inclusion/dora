@@ -8,12 +8,11 @@
   import DayField from "./day-field.svelte";
 
   interface Props {
-    id: string;
     value: any;
     onchange?: (event: Event) => void;
   }
 
-  let { id, value = $bindable(), onchange }: Props = $props();
+  let { value = $bindable(), onchange }: Props = $props();
 
   const data = $state(value ? getHoursFromStr(value) : returnEmptyHoursData());
 
