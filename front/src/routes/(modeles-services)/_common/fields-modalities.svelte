@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
@@ -48,7 +46,7 @@
       : {}
   );
 
-  run(() => {
+  $effect(() => {
     fieldModelProps.coachOrientationModes?.value.sort((a, b) => {
       return (
         orderedCoachOrientationModeValues[a] -
@@ -56,7 +54,8 @@
       );
     });
   });
-  run(() => {
+
+  $effect(() => {
     fieldModelProps.coachOrientationModes?.serviceValue.sort((a, b) => {
       return (
         orderedCoachOrientationModeValues[a] -
@@ -64,7 +63,8 @@
       );
     });
   });
-  run(() => {
+
+  $effect(() => {
     fieldModelProps.beneficiariesAccessModes?.value.sort((a, b) => {
       return (
         orderedBeneficiariesAccessModeValues[a] -
@@ -72,7 +72,8 @@
       );
     });
   });
-  run(() => {
+
+  $effect(() => {
     fieldModelProps.beneficiariesAccessModes?.serviceValue.sort((a, b) => {
       return (
         orderedBeneficiariesAccessModeValues[a] -
