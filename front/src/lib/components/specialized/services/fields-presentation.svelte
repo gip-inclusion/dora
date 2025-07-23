@@ -21,7 +21,7 @@
     noTopPadding = false,
   }: Props = $props();
 
-  let fullDesc = $state();
+  let fullDesc: RichTextField;
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
