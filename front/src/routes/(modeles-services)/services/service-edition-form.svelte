@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
@@ -138,7 +136,7 @@
     modelSlugTmp = null;
   }
 
-  run(() => {
+  $effect(() => {
     if (structure?.noDoraForm) {
       servicesOptions.coachOrientationModes =
         servicesOptions.coachOrientationModes.filter(
