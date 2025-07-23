@@ -1,5 +1,4 @@
 from unittest import TestCase
-from unittest.mock import patch
 
 import pytest
 from dateutil.relativedelta import relativedelta
@@ -78,13 +77,12 @@ def test_send_user_without_structure_notification(deletion, subject):
     assert "Nous avons accès à vos données à caractère personnel" in mail.outbox[0].body
 
 
-@patch("dora.users.emails.send_mail")
 class SendWeeklyDepartmentManagerEmail(TestCase):
     def setUp(self):
         self.department = "42"
         self.manager = make_user(is_manager=True, departments=[self.department])
 
-    def test_send_email_with_structures_awaiting_moderation(self, mock_send_email):
+    def test_send_email_with_structures_awaiting_moderation(self):
         structure_awaiting_moderation = make_structure(
             department=self.department,
             moderation_status=ModerationStatus.NEED_NEW_MODERATION,
@@ -93,19 +91,20 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         send_weekly_email_to_department_managers(self.manager)
 
-        mock_send_email.assert_called_once()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [self.manager.email])
+
         self.assertEqual(
-            mock_send_email.call_args[0][0],
+            mail.outbox[0].subject,
             "DORA - Vous avez des structures à modérer cette semaine",
         )
-        self.assertEqual(mock_send_email.call_args[0][1], self.manager.email)
         self.assertIn(
             f"<p>À valider :</p><ul><li>{structure_awaiting_moderation.name}</li></ul>",
-            mock_send_email.call_args[0][2],
+            mail.outbox[0].body,
         )
-        self.assertIn("1 structure(s) en attente", mock_send_email.call_args[0][2])
+        self.assertIn("1 structure(s) en attente", mail.outbox[0].body)
 
-    def test_send_email_with_orphaned_structures(self, mock_send_email):
+    def test_send_email_with_orphaned_structures(self):
         orphaned_structure = make_structure(
             department=self.department,
             user=None,
@@ -115,19 +114,20 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         send_weekly_email_to_department_managers(self.manager)
 
-        mock_send_email.assert_called_once()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [self.manager.email])
+
         self.assertEqual(
-            mock_send_email.call_args[0][0],
+            mail.outbox[0].subject,
             "DORA - Vous avez des structures à modérer cette semaine",
         )
-        self.assertEqual(mock_send_email.call_args[0][1], self.manager.email)
         self.assertIn(
             f"<p>Sans utilisateur :</p><ul><li>{orphaned_structure.name}</li></ul>",
-            mock_send_email.call_args[0][2],
+            mail.outbox[0].body,
         )
-        self.assertIn("1 structure(s) en attente", mock_send_email.call_args[0][2])
+        self.assertIn("1 structure(s) en attente", mail.outbox[0].body)
 
-    def test_do_not_send_email_with_no_structures(self, mock_send_email):
+    def test_do_not_send_email_with_no_structures(self):
         make_structure(
             department=self.department,
             moderation_status=ModerationStatus.VALIDATED,
@@ -136,11 +136,9 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         send_weekly_email_to_department_managers(self.manager)
 
-        mock_send_email.assert_not_called()
+        self.assertEqual(len(mail.outbox), 0)
 
-    def test_structures_listed_in_alphabetical_order_and_in_correct_categories(
-        self, mock_send_email
-    ):
+    def test_structures_listed_in_alphabetical_order_and_in_correct_categories(self):
         make_structure(
             department=self.department,
             user=None,
@@ -159,16 +157,17 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         send_weekly_email_to_department_managers(self.manager)
 
-        mock_send_email.assert_called_once()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [self.manager.email])
+
         self.assertEqual(
-            mock_send_email.call_args[0][0],
+            mail.outbox[0].subject,
             "DORA - Vous avez des structures à modérer cette semaine",
         )
-        self.assertEqual(mock_send_email.call_args[0][1], self.manager.email)
         self.assertIn(
             "<p>À valider :</p><ul><li>Alpha</li><li>Zeta</li>"
             "</ul><p>Sans utilisateur :</p>"
             "<ul><li>Alpha</li><li>Zeta</li></ul></p>",
-            mock_send_email.call_args[0][2],
+            mail.outbox[0].body,
         )
-        self.assertIn("4 structure(s) en attente", mock_send_email.call_args[0][2])
+        self.assertIn("4 structure(s) en attente", mail.outbox[0].body)
