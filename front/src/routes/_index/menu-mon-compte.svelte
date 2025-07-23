@@ -20,7 +20,7 @@
     "flex w-full lg:min-w-[200px] items-center p-s12 text-gray-text hover:bg-magenta-10 rounded-sm";
 </script>
 
-<DropdownMenu label="Mon compte" {mobileDesign}>
+<DropdownMenu labelText="Mon compte" {mobileDesign}>
   <a href="/mon-compte" class={aClass}>
     <span
       class="mr-s10 h-s24 w-s24 inline-block fill-current"

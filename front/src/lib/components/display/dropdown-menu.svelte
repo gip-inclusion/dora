@@ -1,18 +1,41 @@
 <!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (label to label_1) making the component unusable -->
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { afterNavigate } from "$app/navigation";
   import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
-  export let icon: string | undefined = undefined;
-  export let label: string | undefined = undefined;
-  export let hideLabel = false;
-  export let mobileDesign = false;
+  interface Props {
+    icon?: string;
+    labelText?: string;
+    hideLabel?: boolean;
+    mobileDesign?: boolean;
+    label?: Snippet;
+    children: Snippet<
+      [
+        {
+          closeDropdown: () => void;
+        },
+      ]
+    >;
+    bottom?: Snippet;
+  }
 
-  let isOpen = false;
-  let dropdownButton;
+  let {
+    icon,
+    labelText,
+    hideLabel,
+    mobileDesign,
+    label,
+    children,
+    bottom,
+  }: Props = $props();
+
   const id = `dropdown-menu-${randomId()}`;
+  let dropdownButton: HTMLButtonElement;
+
+  let isOpen = $state(false);
 
   export function closeDropdown() {
     isOpen = false;
@@ -44,30 +67,30 @@
       class:border-magenta-cta={isOpen}
       onclick={() => (isOpen = !isOpen)}
     >
-      {#if $$slots.label}
+      {#if label}
         <div class="px-s12">
-          <slot name="label" />
+          {@render label()}
         </div>
       {/if}
 
-      <span class="flex items-center" class:pl-s12={!$$slots.label}>
+      <span class="flex items-center" class:pl-s12={!label}>
         {#if icon}
           <span class="mr-s10 h-s24 w-s24 text-magenta-cta fill-current">
             {@html icon}
           </span>
         {/if}
 
-        {#if !$$slots.label}
+        {#if !label}
           <span
             class:sr-only={hideLabel}
             class="text-gray-text text-left whitespace-nowrap"
           >
-            {label}
+            {labelText}
           </span>
         {/if}
       </span>
 
-      <span class="border-gray-03 p-s12 flex" class:border-l={$$slots.label}>
+      <span class="border-gray-03 p-s12 flex" class:border-l={label}>
         <span class="h-s24 w-s24 text-magenta-cta fill-current">
           {#if isOpen}
             {@html arrowUpSIcon}
@@ -85,12 +108,12 @@
       class:!flex={isOpen}
     >
       <div class="p-s12 w-full">
-        <slot {closeDropdown} />
+        {@render children({ closeDropdown })}
       </div>
 
-      {#if $$slots.bottom}
+      {#if bottom}
         <div class="border-gray-03 px-s24 py-s20 w-full border-t">
-          <slot name="bottom" />
+          {@render bottom()}
         </div>
       {/if}
     </div>

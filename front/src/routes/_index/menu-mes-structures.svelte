@@ -36,26 +36,27 @@
 <div class="mb-s16 lg:mb-s0 lg:mr-s10">
   {#if structures.length !== 0}
     <div class="flex w-full items-center lg:w-auto">
-      <DropdownMenu label="Mes structures" hideLabel {mobileDesign}>
-        <!-- @migration-task: migrate this slot by hand, `label` would shadow a prop on the parent component -->
-        <div slot="label" class="flex w-full items-center">
-          <span
-            class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
-          >
-            {@html homeSmile2Icon}
-          </span>
-          {#if lastVisitedStructure}
-            <a
-              class="text-gray-text block w-[150px] overflow-hidden text-ellipsis whitespace-nowrap"
-              onclick={(evt) => evt.stopPropagation()}
-              href={`/structures/${lastVisitedStructure.slug}`}
+      <DropdownMenu labelText="Mes structures" hideLabel {mobileDesign}>
+        {#snippet label()}
+          <div class="flex w-full items-center">
+            <span
+              class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
             >
-              {lastVisitedStructure.name}
-            </a>
-          {:else}
-            <span class="text-gray-text">Vos structures</span>
-          {/if}
-        </div>
+              {@html homeSmile2Icon}
+            </span>
+            {#if lastVisitedStructure}
+              <a
+                class="text-gray-text block w-[150px] overflow-hidden text-ellipsis whitespace-nowrap"
+                onclick={(evt) => evt.stopPropagation()}
+                href={`/structures/${lastVisitedStructure.slug}`}
+              >
+                {lastVisitedStructure.name}
+              </a>
+            {:else}
+              <span class="text-gray-text">Vos structures</span>
+            {/if}
+          </div>
+        {/snippet}
 
         {#if structures.length > 10}
           <div class="mt-s10 relative w-full">
