@@ -8,8 +8,6 @@
 </script>
 
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import HomeSmileLineBuildings from "svelte-remix/HomeSmileLineBuildings.svelte";
   import { page } from "$app/stores";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
@@ -37,7 +35,7 @@
 
   let tabs: TabItem[] = $state([]);
 
-  run(() => {
+  $effect(() => {
     tabs = [
       {
         id: "informations",
@@ -81,7 +79,7 @@
     }
   });
 
-  run(() => {
+  $effect(() => {
     if ($page.url.pathname.includes("/services")) {
       tabId = "services";
     } else if ($page.url.pathname.endsWith("/modeles")) {
