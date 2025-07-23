@@ -7,6 +7,7 @@
   import FieldCategory from "./field-category.svelte";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import FieldSubcategory from "./field-subcategory.svelte";
+  import { currentSchema } from "$lib/validation/validation";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -36,6 +37,7 @@
           showModel,
           onUseModelValue: handleUseModelValue,
           model,
+          schema: $currentSchema,
         })
       : {}
   );

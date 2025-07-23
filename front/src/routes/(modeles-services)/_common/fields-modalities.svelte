@@ -42,6 +42,7 @@
           showModel,
           onUseModelValue: handleUseModelValue,
           model,
+          schema: $currentSchema,
         })
       : {}
   );

@@ -1,7 +1,6 @@
 import type { Model, Service, ServicesOptions } from "$lib/types";
+import type { Schema } from "$lib/validation/schema-utils";
 import { modelSchema, serviceSchema } from "$lib/validation/schemas/service";
-import { currentSchema } from "$lib/validation/validation";
-import { get } from "svelte/store";
 
 const defaultServiceCache = Object.fromEntries(
   Object.entries(serviceSchema).map(([fieldName, props]) => [
@@ -44,14 +43,15 @@ export function getModelInputProps({
   showModel,
   onUseModelValue,
   model,
+  schema,
 }: {
   service: Service;
   servicesOptions: ServicesOptions;
   showModel: boolean;
   onUseModelValue: (fieldName: string) => void;
   model?: Model;
+  schema?: Schema;
 }) {
-  const schema = get(currentSchema);
   return schema
     ? Object.fromEntries(
         Object.keys(schema).map((fieldName) => [

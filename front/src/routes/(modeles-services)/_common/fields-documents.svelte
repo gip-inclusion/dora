@@ -6,6 +6,7 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
+  import { currentSchema } from "$lib/validation/validation";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -35,6 +36,7 @@
           showModel,
           onUseModelValue: handleUseModelValue,
           model,
+          schema: $currentSchema,
         })
       : {}
   );
