@@ -54,10 +54,10 @@
       cityCode: data.cityCode,
       cityLabel: data.cityLabel,
       label: undefined,
-      kindIds: filters.kinds.sort(),
-      feeConditions: filters.feeConditions.sort(),
-      locationKinds: filters.locationKinds.sort(),
-      fundingLabels: filters.fundingLabels.sort(),
+      kindIds: filters.kinds.toSorted(),
+      feeConditions: filters.feeConditions.toSorted(),
+      locationKinds: filters.locationKinds.toSorted(),
+      fundingLabels: filters.fundingLabels.toSorted(),
     });
 
     const userSavedSearches = $userInfo?.savedSearches || [];
