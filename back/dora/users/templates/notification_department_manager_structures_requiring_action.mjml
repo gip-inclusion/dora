@@ -1,13 +1,13 @@
 {% extends "email-base.mjml" %}
 
-{% block preview %}Connectez-cous à votre tableau de bord gestionnaire{% endblock %}
+{% block preview %}Connectez-vous à votre tableau de bord gestionnaire{% endblock %}
 
 {% block content %}
   <p>
     <strong>Bonjour,</strong>
   </p>
   <p>
-    {{ num_structures }} structure(s) en attente d'une action depuis votre tableau de bord gestionnaire.
+    {{ num_structures }} structure(s) en attente d’une action depuis votre tableau de bord gestionnaire.
   </p>
   <p>Pour rappel, la modération permet de s’assurer de la bonne qualité de l’offre d’insertion référencée sur votre territoire.</p>
   <p>Merci de vérifier que ces structures ont bien leur place sur DORA et que les administrateurs auto-déclarés en sont bien membres (le format du mail étant un bon indicateur).</p>

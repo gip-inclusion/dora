@@ -393,9 +393,6 @@ class Structure(ModerationMixin, models.Model):
     def has_admin(self):
         return bool(self.num_admins())
 
-    def is_orphan(self):
-        return self.orphans
-
     def num_admins(self):
         return len(self.admins)
 
