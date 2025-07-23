@@ -150,12 +150,13 @@
       bind:value={$orientation.beneficiaryAvailability}
       vertical
     >
-      <!-- @migration-task: migrate this slot by hand, `description` would shadow a prop on the parent component -->
-      <p slot="description" class="legend italic">
-        Date à partir de laquelle la personne est disponible.<br />
-        Format attendu&nbsp;: JJ/MM/AAAA (par exemple, 17/01/2023 pour 17 janvier
-        2023)
-      </p>
+      {#snippet description()}
+        <p class="legend italic">
+          Date à partir de laquelle la personne est disponible.<br />
+          Format attendu&nbsp;: JJ/MM/AAAA (par exemple, 17/01/2023 pour 17 janvier
+          2023)
+        </p>
+      {/snippet}
     </BasicInputField>
 
     {#if $orientation.requirements.length || $orientation.situation.length}
