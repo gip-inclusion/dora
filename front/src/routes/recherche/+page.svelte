@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import { onMount, untrack } from "svelte";
 
   import { page } from "$app/stores";
@@ -118,7 +116,7 @@
   );
 
   // Met à jour les paramètres d'URL en fonction des filtres sélectionnés
-  run(() => {
+  $effect(() => {
     Object.keys(filters).forEach((filterKey) => {
       const queryParam = FILTER_KEY_TO_QUERY_PARAM[filterKey];
       if (filters[filterKey].length > 0) {
