@@ -49,7 +49,7 @@
     {#snippet children({ onChange, errorMessages })}
       <RadioButtons
         bind:group={value}
-        on:change={onChange}
+        onchange={onChange}
         {id}
         name={id}
         {choices}

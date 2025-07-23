@@ -1,6 +1,5 @@
 <script lang="ts">
   import { formatErrors } from "$lib/validation/validation";
-  import { createEventDispatcher } from "svelte";
 
   interface Props {
     id: string;
@@ -10,6 +9,7 @@
     name: string;
     readonly?: boolean;
     errorMessages?: string[];
+    onchange?: (event: Event) => void;
   }
 
   let {
@@ -20,16 +20,10 @@
     name,
     readonly = false,
     errorMessages = [],
+    onchange,
   }: Props = $props();
 
   let focusValue = $state(undefined);
-  const dispatch = createEventDispatcher();
-
-  // We want the change event to come from this component, not from
-  // the individual radio buttons, in order to be able to validate properly
-  function handleChange() {
-    dispatch("change", name);
-  }
 </script>
 
 <div class="gap-s8 flex flex-col">
@@ -41,7 +35,7 @@
       <input
         id={`${id}-${i}`}
         bind:group
-        onchange={handleChange}
+        {onchange}
         onfocus={() => (focusValue = choice.value)}
         onblur={() => (focusValue = undefined)}
         value={choice.value}

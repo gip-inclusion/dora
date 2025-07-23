@@ -56,12 +56,12 @@
     {disabled}
     {readonly}
   >
-    {#snippet children({ errorMessages })}
+    {#snippet children({ onChange, errorMessages })}
       <RadioButtons
         {id}
         name={id}
         bind:group={value}
-        on:change
+        onchange={onChange}
         {choices}
         {disabled}
         {readonly}
