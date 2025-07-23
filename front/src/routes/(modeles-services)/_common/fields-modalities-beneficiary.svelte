@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { untrack } from "svelte";
+
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import Checkbox from "$lib/components/inputs/checkbox.svelte";
@@ -22,17 +24,6 @@
 
   let beneficiariesAccessModesFocusValue: string | undefined =
     $state(undefined);
-  let preventUpdateExternalFormFields = true;
-
-  function updateExternalFormFields(text: string) {
-    if (preventUpdateExternalFormFields) {
-      // Pas de réinitialisation des champs au premier chargement
-      preventUpdateExternalFormFields = false;
-      return;
-    }
-    service.beneficiariesAccessModesExternalFormLink = "";
-    service.beneficiariesAccessModesExternalFormLinkText = text;
-  }
 
   let externalFormToggle = $derived(
     service.beneficiariesAccessModes.includes(
@@ -41,7 +32,13 @@
   );
 
   $effect(() => {
-    updateExternalFormFields(externalFormToggle ? "Faire une demande" : "");
+    if (!externalFormToggle) {
+      untrack(() => {
+        service.beneficiariesAccessModesExternalFormLink = "";
+        service.beneficiariesAccessModesExternalFormLinkText =
+          "Faire une demande";
+      });
+    }
   });
 
   $effect(() => {
