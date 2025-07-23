@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { run } from "svelte/legacy";
 
   import Button from "$lib/components/display/button.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
@@ -24,12 +23,9 @@
   }: Props = $props();
 
   let siretInput = $state(proposedSiret);
-  let siretIsValid = $state(false);
   let serverErrorMsg = $state("");
 
-  run(() => {
-    siretIsValid = !!siretInput?.match(siretRegexp);
-  });
+  let siretIsValid = $derived(!!siretInput?.match(siretRegexp));
 
   async function handleValidateSiret() {
     const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(
