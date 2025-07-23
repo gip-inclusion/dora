@@ -63,7 +63,7 @@
 
 <div class="gap-s16 flex">
   <Tooltip>
-    <ServiceActionButton ariaLabel={copyLabel} on:click={handleCopy}>
+    <ServiceActionButton ariaLabel={copyLabel} onclick={handleCopy}>
       <div class="w-s24 h-s24 relative">
         {#if linkCopied}
           <div class="absolute" transition:fly={{ y: 50, duration: 500 }}>
@@ -81,7 +81,7 @@
     {/snippet}
   </Tooltip>
   <Tooltip>
-    <ServiceActionButton ariaLabel={printLabel} on:click={handlePrint}>
+    <ServiceActionButton ariaLabel={printLabel} onclick={handlePrint}>
       <PrinterLineBusiness />
     </ServiceActionButton>
     {#snippet content()}
@@ -89,7 +89,7 @@
     {/snippet}
   </Tooltip>
   <Tooltip>
-    <ServiceActionButton ariaLabel={shareLabel} on:click={handleShare}>
+    <ServiceActionButton ariaLabel={shareLabel} onclick={handleShare}>
       <MailLineBusiness />
     </ServiceActionButton>
     {#snippet content()}
@@ -104,7 +104,7 @@
       <Tooltip>
         <ServiceActionButton
           ariaLabel={bookmarLabel}
-          on:click={() => handleBookmark(onBookmark)}
+          onclick={() => handleBookmark(onBookmark)}
         >
           {#if isBookmarked}
             <BookmarkFillBusiness class="text-magenta-cta" />
