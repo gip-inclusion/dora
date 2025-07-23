@@ -4,7 +4,6 @@
   import { closeLineIcon } from "$lib/icons";
   import type { Snippet } from "svelte";
   import { onDestroy } from "svelte";
-  import { run } from "svelte/legacy";
   import Portal from "svelte-portal";
   import "wicg-inert";
   import Button from "../display/button.svelte";
@@ -63,7 +62,8 @@
 
   onDestroy(() => closeActions());
 
-  run(() => {
+  $effect(() => {
+    let timeout: NodeJS.Timeout;
     // Prevent scrolling the background while the modal is open
     if (browser) {
       if (isOpen) {
@@ -71,7 +71,7 @@
         // Sauvegarde du bouton à l'origine de la modale
         activeElementSave = document.activeElement as HTMLButtonElement;
 
-        setTimeout(() => {
+        timeout = setTimeout(() => {
           if (modalEl) {
             modalEl.focus();
 
@@ -85,6 +85,7 @@
         closeActions();
       }
     }
+    return () => timeout && clearTimeout(timeout);
   });
 
   function handleClose() {
