@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
@@ -192,7 +190,7 @@
     selectedOption = choices[selectedOptionIndex];
   }
 
-  run(() => {
+  $effect(() => {
     if (!filterText) {
       choices = [...originalChoices];
     } else {
