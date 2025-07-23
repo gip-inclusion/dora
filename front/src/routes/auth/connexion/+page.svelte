@@ -46,18 +46,18 @@
             </p>
           </div>
           <PcButton {nextPage}>
-            <!-- @migration-task: migrate this slot by hand, `pc-help-link` is an invalid identifier -->
-            <a
-              slot="pc-help-link"
-              class="text-magenta-cta underline"
-              target="_blank"
-              title="Obtention d'un lien de connexion - ouverture dans une fenêtre modale"
-              rel="noopener noreferrer"
-              href="#"
-              onclick={handleOpenModal}
-            >
-              Des difficultés à vous connecter&#8239;?
-            </a>
+            {#snippet pcHelpLink()}
+              <a
+                class="text-magenta-cta underline"
+                target="_blank"
+                title="Obtention d'un lien de connexion - ouverture dans une fenêtre modale"
+                rel="noopener noreferrer"
+                href="#"
+                onclick={handleOpenModal}
+              >
+                Des difficultés à vous connecter&#8239;?
+              </a>
+            {/snippet}
           </PcButton>
         </div>
       </FieldSet>
