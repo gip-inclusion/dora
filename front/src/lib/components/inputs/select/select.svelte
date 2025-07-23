@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import AutoComplete from "./simple-autocomplete.svelte";
 
   type Choice = { value: string | number; label: string };
@@ -29,9 +31,9 @@
     showClear?: boolean;
     errorMessages?: string[];
     extraClass?: string;
-    prepend?: import("svelte").Snippet;
-    append?: import("svelte").Snippet;
-    itemContent?: import("svelte").Snippet<[any]>;
+    prepend?: Snippet;
+    append?: Snippet;
+    itemContent?: Snippet<[any]>;
   }
 
   let {
@@ -61,11 +63,6 @@
     append,
     itemContent,
   }: Props = $props();
-
-  // https://github.com/sveltejs/svelte/issues/5604
-  const hasPrependSlot = !!prepend;
-  const hasAppendSlot = !!append;
-  const hasCustomContentSlot = !!itemContent;
 
   $effect(() => {
     if (sort) {
@@ -101,9 +98,6 @@
   showLoadingIndicator
   {hideArrow}
   {showClear}
-  {hasPrependSlot}
-  {hasAppendSlot}
-  {hasCustomContentSlot}
   {errorMessages}
   {prepend}
   {itemContent}

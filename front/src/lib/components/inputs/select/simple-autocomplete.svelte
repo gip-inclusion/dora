@@ -31,10 +31,6 @@
     minCharactersToSearch?: number;
     maxItemsToShowInList?: number;
     multiple?: boolean;
-    // Workaround for https://github.com/sveltejs/svelte/issues/5604
-    hasPrependSlot?: boolean;
-    hasAppendSlot?: boolean;
-    hasCustomContentSlot?: boolean;
     // ignores the accents when matching items
     ignoreAccents?: boolean;
     // all the input keywords should be matched in the item keywords
@@ -121,9 +117,6 @@
     minCharactersToSearch = 1,
     maxItemsToShowInList = 0,
     multiple = false,
-    hasPrependSlot = false,
-    hasAppendSlot = false,
-    hasCustomContentSlot = false,
     ignoreAccents = true,
     matchAllKeywords = true,
     sortByMatchedKeywords = false,
@@ -635,7 +628,7 @@
           filteredTextLength >= minCharactersToSearch)) &&
       ((items && items.length > 0) || filteredTextLength > 0);
 
-    if (!hasPrependSlot && !hasAppendSlot && !showList) {
+    if (!prepend && !append && !showList) {
       return;
     }
 
@@ -807,8 +800,8 @@
     class:hidden={!opened}
     bind:this={list}
   >
-    {#if hasPrependSlot}
-      {@render prepend?.()}
+    {#if prepend}
+      {@render prepend()}
       <hr class:hidden={!showList} class="mx-s20" />
     {/if}
 
@@ -840,8 +833,8 @@
                   <CheckboxMark checked={confirmed} />
                 {/if}
 
-                {#if hasCustomContentSlot}
-                  {@render itemContent?.({ item: listItem })}
+                {#if itemContent}
+                  {@render itemContent({ item: listItem })}
                 {:else}
                   <div>
                     {@html listItem.highlighted
@@ -878,9 +871,9 @@
       {/if}
     </div>
 
-    {#if hasAppendSlot}
+    {#if append}
       <hr class:hidden={!showList} class="mx-s20" />
-      {@render append?.()}
+      {@render append()}
     {/if}
   </div>
 </div>
