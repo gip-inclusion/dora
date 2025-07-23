@@ -33,7 +33,7 @@
     timeoutSeconds={12}
     minDaysBetweenDisplays={1}
     {hiddenFields}
-    on:submit={() => {
+    onsubmit={() => {
       localStorage.setItem(monRecapTallyFormCompletedKey, dayjs().toString());
       shouldDisplayMonRecapForm = false;
     }}

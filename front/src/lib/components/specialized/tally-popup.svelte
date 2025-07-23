@@ -4,7 +4,7 @@
 
   import { browser } from "$app/environment";
   import type { TallyFormId } from "$lib/consts";
-  import { createEventDispatcher, onDestroy, onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
   interface TallyFormLocalStorageItem {
     lastSubmitted: string;
@@ -26,6 +26,7 @@
     hiddenFields?: Partial<HiddenFields>;
     hideTitle?: boolean;
     minDaysBetweenDisplays?: number | null;
+    onsubmit?: () => void;
   }
 
   let {
@@ -36,14 +37,13 @@
     hiddenFields = {},
     hideTitle = true,
     minDaysBetweenDisplays = MIN_DAYS_BETWEEN_DISPLAYS,
+    onsubmit,
   }: Props = $props();
 
   let timeoutFn: ReturnType<typeof setTimeout>;
 
   // Pour différencier un formulaire fermé par l'utilisateur vs un changement de page
   let tallyFormClosedByNavigation = false;
-
-  const dispatch = createEventDispatcher();
 
   function getTallyAnswerLocalStorageKey(): string {
     let key = `tallyForm-${formId}`;
@@ -112,7 +112,7 @@
             },
             onSubmit: () => {
               saveClosureDate();
-              dispatch("submit");
+              onsubmit?.();
             },
           });
         }
