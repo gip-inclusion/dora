@@ -108,8 +108,8 @@
             type="text"
             class={inputClasses}
             bind:value
-            on:blur={onBlur}
-            on:change={onChange}
+            onblur={onBlur}
+            onchange={onChange}
             {...props}
           />
         {:else if type === "date"}
@@ -117,8 +117,8 @@
             type="date"
             class={inputClasses}
             bind:value
-            on:blur={onBlur}
-            on:change={onChange}
+            onblur={onBlur}
+            onchange={onChange}
             {...props}
           />
         {:else if type === "number"}
@@ -126,8 +126,8 @@
             type="text"
             class={inputClasses}
             bind:value
-            on:blur={onBlur}
-            on:change={onChange}
+            onblur={onBlur}
+            onchange={onChange}
             inputmode="numeric"
             {...props}
           />
@@ -136,8 +136,8 @@
             type="email"
             class={inputClasses}
             bind:value
-            on:blur={onBlur}
-            on:change={onChange}
+            onblur={onBlur}
+            onchange={onChange}
             {...props}
           />
         {:else if type === "tel"}
@@ -145,12 +145,12 @@
             type="tel"
             class={inputClasses}
             bind:value={phoneValue}
-            on:blur={(evt) => {
+            onblur={(evt) => {
               handlePhoneBlur();
               onBlur(evt);
             }}
-            on:focus={handlePhoneFocus}
-            on:input={handlePhoneChange}
+            onfocus={handlePhoneFocus}
+            oninput={handlePhoneChange}
             {...props}
             maxlength={null}
           />
@@ -159,8 +159,8 @@
             type="url"
             class={inputClasses}
             bind:value
-            on:blur={onBlur}
-            on:change={onChange}
+            onblur={onBlur}
+            onchange={onChange}
             {...props}
           />
         {/if}
