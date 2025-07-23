@@ -105,7 +105,7 @@
       </span>
     </label>
     <Toggle
-      on:change={handleUpdate}
+      onchange={handleUpdate}
       bind:checked={isOpen}
       yesLabel="Ouvert"
       noLabel="Fermé"

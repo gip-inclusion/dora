@@ -1,9 +1,4 @@
 <script lang="ts">
-  import { createBubbler } from "svelte/legacy";
-
-  const bubble = createBubbler();
-  import { createEventDispatcher } from "svelte";
-
   interface Props {
     // https://tailwindcomponents.com/component/toggle-button-1
     id: string;
@@ -12,6 +7,7 @@
     readonly?: boolean;
     yesLabel?: string;
     noLabel?: string;
+    onchange: () => void;
   }
 
   let {
@@ -21,9 +17,8 @@
     readonly = false,
     yesLabel = "Oui",
     noLabel = "Non",
+    onchange,
   }: Props = $props();
-
-  const dispatcher = createEventDispatcher();
 
   function handleKeyDown(event) {
     if (event.code === "Space" || event.code === "Enter") {
@@ -40,7 +35,7 @@
   class="mt-s8 relative flex flex-row items-center self-start"
   onclick={() => {
     checked = !checked;
-    dispatcher("change");
+    onchange();
   }}
   onkeydown={handleKeyDown}
   tabindex="0"
@@ -52,7 +47,7 @@
     name={id}
     type="checkbox"
     bind:checked
-    onchange={bubble("change")}
+    {onchange}
     class="hidden"
     {disabled}
     {readonly}
