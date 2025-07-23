@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import Button from "$lib/components/display/button.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
@@ -22,12 +20,11 @@
 
   let { isOpen = $bindable(false), service, isDI = false }: Props = $props();
 
-  let senderName: string = $state();
+  let senderName: string | undefined = $state();
   let recipientEmail: string | undefined = $state();
   let recipientKind: string = $state("beneficiary");
   let requesting = $state(false);
   let messageSent = $state(false);
-  let mobilisableByBeneficiary = $state(true);
 
   const recipientKinds = [
     { value: "beneficiary", label: "Bénéficiaire" },
@@ -107,11 +104,11 @@
     recipientEmail,
     recipientKind,
   });
-  run(() => {
-    mobilisableByBeneficiary =
-      !!service.beneficiariesAccessModes?.length ||
-      !!service.beneficiariesAccessModesOther;
-  });
+
+  let mobilisableByBeneficiary = $derived(
+    !!service.beneficiariesAccessModes?.length ||
+      !!service.beneficiariesAccessModesOther
+  );
 </script>
 
 {#if browser}
