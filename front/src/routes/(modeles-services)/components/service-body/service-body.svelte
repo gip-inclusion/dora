@@ -124,7 +124,7 @@
             class="border-gray-02 bg-france-blue p-s24 px-s32 block rounded-3xl border text-white print:hidden"
           >
             <ServiceMobilisation
-              on:trackMobilisation={handleTrackMobilisationEvent}
+              onTrackMobilisation={handleTrackMobilisation}
               {service}
               {isDI}
               {orientationFormUrl}

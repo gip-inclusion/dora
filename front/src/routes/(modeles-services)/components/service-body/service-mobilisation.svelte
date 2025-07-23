@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
 
@@ -18,6 +16,7 @@
     isDI?: boolean;
     orientationFormUrl: string;
     handleOrientationFormClickEvent: (event: MouseEvent) => void;
+    onTrackMobilisation: (url?: string) => void;
   }
 
   let {
@@ -25,6 +24,7 @@
     isDI = false,
     orientationFormUrl,
     handleOrientationFormClickEvent,
+    onTrackMobilisation,
   }: Props = $props();
 
   let isOrientableWithDoraForm = $derived(
@@ -35,10 +35,6 @@
   let hasExternalForm = $derived(
     service.coachOrientationModes?.includes("completer-le-formulaire-dadhesion")
   );
-
-  const dispatch = createEventDispatcher<{
-    trackMobilisation: { externalUrl?: string };
-  }>();
 
   let sharingModalIsOpen = $state(false);
   let contactBoxOpen = $state(false);
@@ -54,11 +50,11 @@
     }
     contactBoxOpen = true;
     // on tracke comme une MER si les contacts du service sont publics
-    dispatch("trackMobilisation", {});
+    onTrackMobilisation();
   }
 
   function handleExternalFormClick(externalUrl: string) {
-    dispatch("trackMobilisation", { externalUrl });
+    onTrackMobilisation(externalUrl);
   }
 
   function handleShareClick() {
