@@ -6,7 +6,6 @@
     group: any;
     choices: any;
     disabled?: boolean;
-    name: string;
     readonly?: boolean;
     errorMessages?: string[];
     onchange?: (event: Event) => void;
@@ -17,7 +16,6 @@
     group = $bindable(),
     choices,
     disabled = false,
-    name,
     readonly = false,
     errorMessages = [],
     onchange,

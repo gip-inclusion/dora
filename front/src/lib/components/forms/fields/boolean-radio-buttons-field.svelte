@@ -59,7 +59,6 @@
     {#snippet children({ onChange, errorMessages })}
       <RadioButtons
         {id}
-        name={id}
         bind:group={value}
         onchange={onChange}
         {choices}

@@ -51,7 +51,6 @@
         bind:group={value}
         onchange={onChange}
         {id}
-        name={id}
         {choices}
         {disabled}
         {readonly}
