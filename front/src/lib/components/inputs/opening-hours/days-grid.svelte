@@ -58,7 +58,7 @@
           label="{label.toLowerCase()} matin ou toute la journée"
           {day}
           dayPeriod="timeSlot1"
-          on:change={() => handleHourChange()}
+          onchange={handleHourChange}
         />
       </div>
       <div>
@@ -72,7 +72,7 @@
           label="{label.toLowerCase()} après-midi"
           {day}
           dayPeriod="timeSlot2"
-          on:change={() => handleHourChange()}
+          onchange={handleHourChange}
         />
       </div>
     </div>

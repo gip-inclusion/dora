@@ -1,10 +1,6 @@
 <script lang="ts">
-  import { run, createBubbler } from "svelte/legacy";
-
-  const bubble = createBubbler();
   import { alertIcon } from "$lib/icons";
   import type { Day, DayPeriod } from "$lib/types";
-  import { createEventDispatcher } from "svelte";
   import Toggle from "./toggle.svelte";
 
   interface Props {
@@ -14,6 +10,7 @@
     closeAt: string;
     day: Day;
     dayPeriod: DayPeriod;
+    onchange: () => void;
   }
 
   let {
@@ -23,24 +20,16 @@
     closeAt = $bindable(),
     day,
     dayPeriod,
+    onchange,
   }: Props = $props();
 
-  const dispatch = createEventDispatcher();
+  let inError = $derived(
+    isOpen && (closeAt || openAt) && (!closeAt || !openAt || openAt >= closeAt)
+  );
 
-  let inError = $state(false);
-  let ariaDescribedBy: string | undefined = $state(undefined);
-
-  run(() => {
-    // Un jour ouvert mais sans valeur est ignoré
-    if (isOpen && (closeAt || openAt)) {
-      inError = !closeAt || !openAt || openAt >= closeAt;
-      if (inError) {
-        ariaDescribedBy = `error-${day}—${dayPeriod}`;
-      }
-    } else {
-      inError = false;
-    }
-  });
+  let ariaDescribedBy = $derived(
+    inError ? `error-${day}—${dayPeriod}` : undefined
+  );
 
   function handleUpdate() {
     // Clear values and notify change
@@ -48,7 +37,7 @@
       openAt = "";
       closeAt = "";
     }
-    dispatch("change");
+    onchange();
   }
 </script>
 
@@ -64,7 +53,7 @@
         <label class:error={inError}>
           <span class="sr-only">Horaire d’ouverture pour le {label}</span>
           <input
-            onchange={bubble("change")}
+            {onchange}
             bind:value={openAt}
             type="time"
             aria-describedby={ariaDescribedBy}
@@ -81,7 +70,7 @@
           <span class="sr-only">Horaire de fermeture pour le {label}</span>
 
           <input
-            onchange={bubble("change")}
+            {onchange}
             bind:value={closeAt}
             disabled={!isOpen}
             class:disabled-bg={!isOpen}
