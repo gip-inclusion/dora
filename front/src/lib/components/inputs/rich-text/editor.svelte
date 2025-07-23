@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import {
     boldIcon,
     h1Icon,
@@ -46,8 +44,6 @@
   let linkDialogIsOpen = $state(false);
   let linkDialogHref = $state();
   let linkDialogHrefPrev = $state();
-  let linkDialogButtontext = $state();
-  let linkDialogButtonIsActive = $state(false);
   let linkDialogText = $state();
   let linkDialogHasSelection = $state();
   let linkDialogTextInput = $state();
@@ -92,22 +88,19 @@
     }
   });
 
-  run(() => {
-    linkDialogButtonIsActive =
-      linkDialogHref !== linkDialogHrefPrev &&
+  let linkDialogButtonIsActive = $derived(
+    linkDialogHref !== linkDialogHrefPrev &&
       !(linkDialogHref === "" && linkDialogHrefPrev === undefined) &&
-      (linkDialogHasSelection || linkDialogText);
-  });
+      (linkDialogHasSelection || linkDialogText)
+  );
 
-  run(() => {
-    if (!linkDialogHrefPrev) {
-      linkDialogButtontext = "Ajouter le lien";
-    } else if (!linkDialogHref) {
-      linkDialogButtontext = "Supprimer le lien";
-    } else {
-      linkDialogButtontext = "Modifier le lien";
-    }
-  });
+  let linkDialogButtontext = $derived(
+    !linkDialogHrefPrev
+      ? "Ajouter le lien"
+      : !linkDialogHref
+        ? "Supprimer le lien"
+        : "Modifier le lien"
+  );
 
   export function updateValue(value) {
     editor.commands.setContent(markdownToHTML(value));
