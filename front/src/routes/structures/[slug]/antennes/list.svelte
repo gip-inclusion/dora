@@ -66,7 +66,7 @@
     {#if structure.canEditInformations}
       <Button
         label="Ajouter une antenne"
-        on:click={() => (newBranchModalOpen = true)}
+        onclick={() => (newBranchModalOpen = true)}
         icon={home3Icon}
       />
     {/if}

@@ -25,7 +25,7 @@
         <div class="right-s0 top-s0 absolute">
           <Button
             icon={closeLineIcon}
-            on:click={handleClose}
+            onclick={handleClose}
             noBackground
             noPadding
           />

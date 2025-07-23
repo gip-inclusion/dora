@@ -76,7 +76,7 @@
           name="validate"
           type="button"
           label="Faire une nouvelle demande"
-          on:click={handleNewRequest}
+          onclick={handleNewRequest}
         />
       </div>
     {:else}

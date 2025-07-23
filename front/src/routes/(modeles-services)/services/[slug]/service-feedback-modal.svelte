@@ -245,9 +245,9 @@
             </div>
           {/if}
           <div class="mt-s12 gap-s16 flex justify-end">
-            <Button label="Annuler" secondary on:click={handleClose} />
+            <Button label="Annuler" secondary onclick={handleClose} />
             {#if formPage === 1}
-              <Button label="Continuer" on:click={handleContinue} />
+              <Button label="Continuer" onclick={handleContinue} />
             {:else if formPage === 2}
               <Button label="Envoyer" type="submit" disabled={isRequesting} />
             {/if}

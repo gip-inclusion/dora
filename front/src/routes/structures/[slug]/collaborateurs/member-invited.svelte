@@ -53,7 +53,7 @@
       <div class="flex flex-col items-end">
         <Button
           label="Relancer"
-          on:click={() => {
+          onclick={() => {
             handleResendInvite();
             onCloseParent();
           }}
@@ -65,7 +65,7 @@
 
         <Button
           label="Révoquer"
-          on:click={() => {
+          onclick={() => {
             handleCancelInvite();
             onCloseParent();
           }}

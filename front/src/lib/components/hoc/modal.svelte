@@ -157,7 +157,7 @@
               <div class="ml-auto">
                 <Button
                   icon={closeLineIcon}
-                  on:click={handleClose}
+                  onclick={handleClose}
                   noBackground
                   noPadding
                   extraClass="-mt-s10"

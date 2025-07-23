@@ -53,11 +53,11 @@
     <Button
       label="Rester sur le formulaire classique"
       secondary
-      on:click={() => (isSwitchModalOpen = false)}
+      onclick={() => (isSwitchModalOpen = false)}
     />
     <Button
       label="Passer au formulaire de l’inclusion numérique"
-      on:click={activateInclusionNumForm}
+      onclick={activateInclusionNumForm}
     />
   </div>
 </Modal>
@@ -76,7 +76,7 @@
         small
         noBackground
         noPadding
-        on:click={currentNotice.action}
+        onclick={currentNotice.action}
       />
     </p>
   </Notice>

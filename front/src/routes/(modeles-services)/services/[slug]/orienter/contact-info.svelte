@@ -44,6 +44,6 @@
 {:else}
   <Button
     label="Afficher les informations de contact"
-    on:click={handleShowContactClick}
+    onclick={handleShowContactClick}
   />
 {/if}

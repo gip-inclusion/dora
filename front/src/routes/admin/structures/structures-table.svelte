@@ -72,7 +72,7 @@
         />
       {/if}
       <Button
-        on:click={() => {
+        onclick={() => {
           currentStructure = structure;
           isStructureModalOpen = true;
         }}
@@ -89,7 +89,7 @@
         {#snippet children({ onClose: onCloseParent })}
           {#if !structure.isObsolete}
             <Button
-              on:click={() => {
+              onclick={() => {
                 updateStructureObsolete(structure, true);
                 onCloseParent();
               }}
@@ -99,7 +99,7 @@
             />
           {:else}
             <Button
-              on:click={() => {
+              onclick={() => {
                 updateStructureObsolete(structure, false);
                 onCloseParent();
               }}

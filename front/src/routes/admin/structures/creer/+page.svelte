@@ -139,7 +139,7 @@
           secondary
         />
 
-        <Button on:click={resetForm} label="Ajouter une autre structure" />
+        <Button onclick={resetForm} label="Ajouter une autre structure" />
       </div>
     {:else}
       <FormErrors />

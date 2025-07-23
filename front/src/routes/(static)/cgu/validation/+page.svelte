@@ -54,7 +54,7 @@
       <Button
         type="submit"
         label="Valider et accéder à DORA"
-        on:click={doAcceptCgu}
+        onclick={doAcceptCgu}
         disabled={!cguCanBeValidated}
       />
     </div>

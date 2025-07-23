@@ -104,7 +104,7 @@
 
         <Button
           label="Voir la vidéo de démonstration"
-          on:click={() => (isVideoModalOpen = true)}
+          onclick={() => (isVideoModalOpen = true)}
           noBackground
           noPadding
         />

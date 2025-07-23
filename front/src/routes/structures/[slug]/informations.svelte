@@ -158,7 +158,7 @@
         <h3 class="mb-s8 text-france-blue">Informations pratiques</h3>
 
         {#if !displayInformations}
-          <Button on:click={showInformations} label="Afficher les contacts" />
+          <Button onclick={showInformations} label="Afficher les contacts" />
         {:else}
           {#if structure.phone}
             <div>

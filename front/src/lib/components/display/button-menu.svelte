@@ -56,7 +56,7 @@
       {small}
       {big}
       {noPadding}
-      on:click={() => (isOpen = !isOpen)}
+      onclick={() => (isOpen = !isOpen)}
     />
     <div
       {id}

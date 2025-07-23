@@ -87,7 +87,7 @@
           iconOnRight
           icon={closeCircleIcon}
           noBackground
-          on:click={() => {
+          onclick={() => {
             handleReject(suggestion);
           }}
         />
@@ -98,7 +98,7 @@
           iconOnRight
           icon={arrowRightSIcon}
           noBackground
-          on:click={() => {
+          onclick={() => {
             currentSuggestion = suggestion;
             suggestionModalIsOpen = true;
           }}

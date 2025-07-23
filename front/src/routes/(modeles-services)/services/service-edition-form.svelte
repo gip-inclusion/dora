@@ -203,12 +203,7 @@
       {#if service.model}
         <div class="lg:flex lg:items-center lg:justify-between">
           <h3>Synchronisé avec un modèle</h3>
-          <Button
-            label="Détacher du modèle"
-            secondary
-            small
-            on:click={unsync}
-          />
+          <Button label="Détacher du modèle" secondary small onclick={unsync} />
         </div>
       {/if}
 
@@ -224,7 +219,7 @@
                   label="Re-synchroniser avec le modèle"
                   secondary
                   small
-                  on:click={sync}
+                  onclick={sync}
                 />
               </div>
             {/snippet}

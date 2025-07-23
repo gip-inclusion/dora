@@ -131,7 +131,7 @@
                 <Button
                   type="submit"
                   label={ctaLabel}
-                  on:click={handleJoin}
+                  onclick={handleJoin}
                   preventDefaultOnMouseDown
                   disabled={!alreadyMember && !alreadyRequested && !cguAccepted}
                 />

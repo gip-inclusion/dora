@@ -87,7 +87,7 @@
                   "aria-controls": helpId,
                 }}
                 label="Aide"
-                on:click={toggleHelp}
+                onclick={toggleHelp}
                 icon={!showHelp ? arrowDownSIcon : arrowUpSIcon}
                 iconOnRight
                 noBackground
@@ -97,7 +97,7 @@
 
             {#if collapsable}
               <Button
-                on:click={toggleFold}
+                onclick={toggleFold}
                 icon={collapsed ? arrowDownSIcon : arrowUpSIcon}
                 noBackground
                 small

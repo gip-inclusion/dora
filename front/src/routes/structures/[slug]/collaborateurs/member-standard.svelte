@@ -59,7 +59,7 @@
       <div class="flex flex-col items-end">
         <Button
           label="Modifier"
-          on:click={() => {
+          onclick={() => {
             modalChangeUserIsOpen = true;
             onCloseParent();
           }}
@@ -71,7 +71,7 @@
 
         <Button
           label={isMyself ? "Quitter la structure" : "Révoquer"}
-          on:click={() => {
+          onclick={() => {
             handleDelete();
             onCloseParent();
           }}

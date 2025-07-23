@@ -27,7 +27,7 @@
       small
       noBackground
       {extraClass}
-      on:click={() => (setAsUpdatedModalOpen = true)}
+      onclick={() => (setAsUpdatedModalOpen = true)}
     />
 
     <SetAsUpdatedModal

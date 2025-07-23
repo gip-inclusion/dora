@@ -164,14 +164,14 @@
   {#if editor}
     <div class="gap-s8 bg-gray-03 p-s12 flex flex-row items-center">
       <Button
-        on:click={() => editor.chain().focus().toggleBold().run()}
+        onclick={() => editor.chain().focus().toggleBold().run()}
         active={editor.isActive("bold")}
         icon={boldIcon}
         label="Gras"
       />
 
       <Button
-        on:click={() => editor.chain().focus().toggleItalic().run()}
+        onclick={() => editor.chain().focus().toggleItalic().run()}
         active={editor.isActive("italic")}
         icon={italicIcon}
         label="Italique"
@@ -180,23 +180,21 @@
       <Separator />
 
       <Button
-        on:click={() => editor.chain().focus().setParagraph().run()}
+        onclick={() => editor.chain().focus().setParagraph().run()}
         active={editor.isActive("paragraph")}
         icon={paraIcon}
         label="Paragraphe"
       />
 
       <Button
-        on:click={() =>
-          editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        onclick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         active={editor.isActive("heading", { level: 1 })}
         icon={h1Icon}
         label="Titre de niveau 1"
       />
 
       <Button
-        on:click={() =>
-          editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        onclick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         active={editor.isActive("heading", { level: 2 })}
         icon={h2Icon}
         label="Titre de niveau 2"
@@ -205,7 +203,7 @@
       <Separator />
 
       <Button
-        on:click={() => editor.chain().focus().toggleBulletList().run()}
+        onclick={() => editor.chain().focus().toggleBulletList().run()}
         active={editor.isActive("bulletList")}
         icon={liIcon}
         label="Liste à puces"
@@ -214,7 +212,7 @@
       <Separator />
 
       <Button
-        on:click={linkDialogToggle}
+        onclick={linkDialogToggle}
         active={editor.isActive("link")}
         icon={linkIcon}
         label="Lien"

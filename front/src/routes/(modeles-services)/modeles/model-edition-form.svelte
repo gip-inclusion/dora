@@ -158,7 +158,7 @@
               <Button
                 label="Annuler"
                 secondary
-                on:click={() => (showUpdateAllServicesModal = false)}
+                onclick={() => (showUpdateAllServicesModal = false)}
               />
 
               <Button
@@ -193,7 +193,7 @@
 
         {#if shouldUpdateAllServices}
           <Button
-            on:click={() => (showUpdateAllServicesModal = true)}
+            onclick={() => (showUpdateAllServicesModal = true)}
             name="validate"
             type="button"
             label="Enregistrer"

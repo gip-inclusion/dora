@@ -58,7 +58,7 @@
       <div class="flex flex-col items-end">
         <Button
           label="Accepter"
-          on:click={() => {
+          onclick={() => {
             handleAcceptRequest();
             onCloseParent();
           }}
@@ -70,7 +70,7 @@
 
         <Button
           label="Révoquer"
-          on:click={() => {
+          onclick={() => {
             handleCancelRequest();
             onCloseParent();
           }}

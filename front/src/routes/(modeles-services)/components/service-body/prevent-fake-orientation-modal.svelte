@@ -46,7 +46,7 @@
         />
         <Button
           label="Regarder la vidéo"
-          on:click={() => dispatch("showVideo", {})}
+          onclick={() => dispatch("showVideo", {})}
         />
       </div>
     {/snippet}

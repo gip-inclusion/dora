@@ -108,7 +108,7 @@
               icon={addIcon}
               noBackground
               small
-              on:click={() => (textInputVisible = true)}
+              onclick={() => (textInputVisible = true)}
             />
           </div>
           <div class="gap-s16 flex flex-row" class:hidden={!textInputVisible}>
@@ -137,13 +137,13 @@
                   label="Ajouter"
                   small
                   disabled={!newValue}
-                  on:click={handleAddValue}
+                  onclick={handleAddValue}
                 />
                 <Button
                   label="Annuler"
                   secondary
                   small
-                  on:click={() => (textInputVisible = false)}
+                  onclick={() => (textInputVisible = false)}
                 />
               </div>
             </div>

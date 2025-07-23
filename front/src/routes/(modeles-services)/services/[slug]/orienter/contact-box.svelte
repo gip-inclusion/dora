@@ -36,7 +36,7 @@
   >
     {#snippet button()}
       <Button
-        on:click={() => (isVideoModalOpen = true)}
+        onclick={() => (isVideoModalOpen = true)}
         label="Voir la vidéo de démonstration."
         secondary
       />

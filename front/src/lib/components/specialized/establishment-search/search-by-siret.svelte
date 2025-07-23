@@ -83,7 +83,7 @@
       <Button
         label="Rechercher"
         disabled={!siretIsValid}
-        on:click={handleValidateSiret}
+        onclick={handleValidateSiret}
         small
       />
     </div>

@@ -236,7 +236,7 @@
           </div>
           <div class="gap-s24 flex w-full flex-col">
             <Button
-              on:click={handleClick}
+              onclick={handleClick}
               label="Télécharger"
               secondary
               disabled={!filteredStructures.length}

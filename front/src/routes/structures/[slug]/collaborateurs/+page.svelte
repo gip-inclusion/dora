@@ -69,7 +69,7 @@
       <Button
         label="Ajouter un collaborateur"
         icon={userAddIcon}
-        on:click={() => (modalAddUserIsOpen = true)}
+        onclick={() => (modalAddUserIsOpen = true)}
       />
     {/if}
   </div>

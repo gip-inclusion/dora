@@ -260,7 +260,7 @@
   {#each statusFilterSettings as { status, label, definition, actions }}
     <Tooltip>
       <Button
-        on:click={() => {
+        onclick={() => {
           resetSearchParams();
           searchStatus = status;
           filterDefinition = definition;
@@ -295,7 +295,7 @@
 <div class="mb-s32">
   <Button
     label="Voir les filtres avancés"
-    on:click={() => (showAdvancedFilters = !showAdvancedFilters)}
+    onclick={() => (showAdvancedFilters = !showAdvancedFilters)}
     icon={!showAdvancedFilters ? arrowDownSIcon : arrowUpSIcon}
     iconOnRight
     noBackground

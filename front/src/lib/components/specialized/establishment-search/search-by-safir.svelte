@@ -84,7 +84,7 @@
       <Button
         label="Rechercher"
         disabled={!safirIsValid}
-        on:click={handleValidateSafir}
+        onclick={handleValidateSafir}
         small
       />
     </div>

@@ -147,12 +147,7 @@
         <h5 class="mb-s0 lg:hidden">Modèle</h5>
         {#if !haveSameValue && showUseButton}
           <div class="lg:ml-s0 ml-auto">
-            <Button
-              label="Utiliser"
-              small
-              secondary
-              on:click={handleUseValue}
-            />
+            <Button label="Utiliser" small secondary onclick={handleUseValue} />
           </div>
         {/if}
       </div>

@@ -129,7 +129,7 @@
     <div class="text-center">
       <Button
         label="Charger plus de résultats"
-        on:click={loadMoreResult}
+        onclick={loadMoreResult}
         noBackground
       />
     </div>
@@ -146,7 +146,7 @@
       <Button
         label="Créer une alerte"
         disabled={!data.cityCode || creatingAlert}
-        on:click={handleCreateAlertClick}
+        onclick={handleCreateAlertClick}
       />
     {/if}
   </div>

@@ -22,7 +22,7 @@
       secondary
       label="Marquer comme à jour"
       icon={checkboxLineIcon}
-      on:click={() => (setAsUpdatedModalOpen = true)}
+      onclick={() => (setAsUpdatedModalOpen = true)}
     />
 
     <SetAsUpdatedModal

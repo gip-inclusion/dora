@@ -115,7 +115,7 @@
         <div class="mt-s24 flex justify-end">
           <Button
             label="Adhérer à la structure"
-            on:click={handleJoin}
+            onclick={handleJoin}
             preventDefaultOnMouseDown
             disabled={!cguAccepted}
           />

@@ -151,8 +151,8 @@
     </div>
 
     <div class="mt-s32 gap-s16 flex flex-row justify-end">
-      <Button label="Rejeter" secondary on:click={() => onReject(suggestion)} />
-      <Button label="Valider" on:click={() => onAccept(suggestion)} />
+      <Button label="Rejeter" secondary onclick={() => onReject(suggestion)} />
+      <Button label="Valider" onclick={() => onAccept(suggestion)} />
     </div>
   </Modal>
 {/if}

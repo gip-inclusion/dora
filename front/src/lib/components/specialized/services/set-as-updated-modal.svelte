@@ -61,7 +61,7 @@
           extraClass="justify-center"
           label="Confirmer"
           icon={checkboxCircleFillIcon}
-          on:click={setAsUpdated}
+          onclick={setAsUpdated}
         />
       </div>
     </div>

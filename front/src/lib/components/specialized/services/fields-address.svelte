@@ -63,7 +63,7 @@
     {#if parent}
       <div class="mb-s8 lg:w-2/3 lg:self-end">
         <Button
-          on:click={fillAddress}
+          onclick={fillAddress}
           icon={syncIcon}
           noBackground
           small

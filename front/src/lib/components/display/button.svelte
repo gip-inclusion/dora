@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { run, createBubbler } from "svelte/legacy";
-
-  const bubble = createBubbler();
   interface Props {
     label?: string;
     type?: "button" | "submit";
@@ -26,6 +23,7 @@
       "aria-expanded": boolean;
       "aria-controls": string;
     }>;
+    onclick?: (event: MouseEvent) => void;
   }
 
   let {
@@ -49,60 +47,40 @@
     noWrap = false,
     preventDefaultOnMouseDown = false,
     ariaAttributes = {},
+    onclick,
   }: Props = $props();
 
-  let paddingX: string = $state(),
-    paddingY: string = $state(),
-    textSize: string = $state();
+  let paddingX: string = $derived(
+    noPadding ? "" : small ? (label ? "px-s12" : "px-s8") : "px-s20"
+  );
+  let paddingY: string = $derived(small ? "py-s6" : big ? "py-s12" : "py-s12");
+  let textSize: string = $derived(
+    small ? "text-f14" : big ? "text-f23" : "text-f16"
+  );
+  let border: string = $derived(
+    secondary
+      ? "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue"
+      : "border-0"
+  );
+  let text: string = $derived(
+    secondary
+      ? "font-bold text-magenta-cta hover:text-white disabled:text-gray-text-alt2 active:text-france-blue"
+      : noBackground
+        ? "font-bold text-magenta-cta hover:text-magenta-hover disabled:text-gray-text active:text-france-blue"
+        : "font-bold text-white disabled:text-gray-text"
+  );
+  let background: string = $derived(
+    secondary
+      ? "bg-white hover:bg-magenta-hover disabled:bg-white"
+      : noBackground
+        ? "bg-transparent"
+        : "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue"
+  );
 
-  if (small) {
-    paddingY = "py-s6";
-    textSize = "text-f14";
-  } else if (big) {
-    paddingY = "py-s12";
-    textSize = "text-f23";
-  } else {
-    paddingY = "py-s12";
-    textSize = "text-f16";
-  }
-
-  if (noPadding) {
-    paddingX = "";
-  } else if (small) {
-    paddingX = label ? "px-s12" : "px-s8";
-  } else {
-    paddingX = "px-s20";
-  }
-
-  let border: string = $state(),
-    text: string = $state(),
-    background: string = $state();
-
-  run(() => {
-    if (secondary) {
-      border =
-        "border border-magenta-cta hover:border-magenta-hover disabled:border-gray-01 active:border-france-blue";
-      text =
-        "font-bold text-magenta-cta hover:text-white disabled:text-gray-text-alt2 active:text-france-blue";
-      background = "bg-white hover:bg-magenta-hover disabled:bg-white";
-    } else {
-      border = "border-0";
-
-      if (noBackground) {
-        text =
-          "font-bold text-magenta-cta hover:text-magenta-hover disabled:text-gray-text active:text-france-blue";
-        background = "bg-transparent";
-      } else {
-        text = "font-bold text-white disabled:text-gray-text";
-        background =
-          "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
-      }
-    }
-  });
   const iconWidth = small ? "w-s24" : "w-s32";
   const iconHeight = small ? "h-s24" : "h-s32";
 
-  function handleMouseDown(evt) {
+  function handleMouseDown(evt: MouseEvent) {
     if (preventDefaultOnMouseDown) {
       evt.preventDefault();
     }
@@ -122,7 +100,7 @@
   class:flex-row={icon}
   class:items-center={icon}
   {...ariaAttributes}
-  onclick={bubble("click")}
+  {onclick}
   onmousedown={handleMouseDown}
   {disabled}
 >

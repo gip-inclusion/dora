@@ -44,7 +44,7 @@
         "aria-controls": id,
       }}
       {label}
-      on:click={toggle}
+      onclick={toggle}
       noBackground
       small
       noPadding

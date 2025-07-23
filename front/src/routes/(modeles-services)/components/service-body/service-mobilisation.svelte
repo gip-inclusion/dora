@@ -82,7 +82,7 @@
     {:else if service.contactInfoFilled}
       {#if !contactBoxOpen}
         <Button
-          on:click={handleShowContactClick}
+          onclick={handleShowContactClick}
           extraClass="mt-s16 bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
           label="Orienter votre bénéficiaire"
           wFull
@@ -111,7 +111,7 @@
   {/if}
 
   <Button
-    on:click={handleShareClick}
+    onclick={handleShareClick}
     extraClass="bg-france-blue! text-white border! border-white! hover:bg-magenta-cta! hover:border-france-blue!"
     label="Partager cette fiche"
     wFull

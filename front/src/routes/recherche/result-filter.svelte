@@ -26,7 +26,7 @@
   >
     <label for={id} class="text-f14 font-bold">{label}</label>
     <Button
-      on:click={clearSelection}
+      onclick={clearSelection}
       label="Effacer la sélection"
       extraClass={group.length > 0 ? "" : "invisible"}
       noBackground
@@ -48,7 +48,7 @@
       >
         {#snippet append()}
           <Button
-            on:click={clearSelection}
+            onclick={clearSelection}
             extraClass={`mx-s20 my-s6 ${group.length > 0 ? "" : "hidden"}`}
             label="Effacer la sélection"
             noBackground

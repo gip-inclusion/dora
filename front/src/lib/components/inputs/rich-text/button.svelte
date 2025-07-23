@@ -1,19 +1,17 @@
 <script lang="ts">
-  import { createBubbler } from "svelte/legacy";
-
-  const bubble = createBubbler();
   interface Props {
     icon: string;
     active: boolean;
     label: string;
+    onclick?: (event: MouseEvent) => void;
   }
 
-  let { icon, active, label }: Props = $props();
+  let { icon, active, label, onclick }: Props = $props();
 </script>
 
 <button
   type="button"
-  onclick={bubble("click")}
+  {onclick}
   class:active
   class="tb-button"
   aria-label={label}

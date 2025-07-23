@@ -97,11 +97,7 @@
         {/each}
 
         <li class="py-s36 text-right">
-          <Button
-            label="Masquer le guide"
-            secondary
-            on:click={hideQuickStart}
-          />
+          <Button label="Masquer le guide" secondary onclick={hideQuickStart} />
         </li>
       </ul>
     </div>

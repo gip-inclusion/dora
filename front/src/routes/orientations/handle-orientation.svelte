@@ -94,13 +94,13 @@
       <div class="gap-s12 flex flex-col">
         <Button
           label="Valider la demande"
-          on:click={() => (modalOpened = "accept")}
+          onclick={() => (modalOpened = "accept")}
         />
         <Button
           secondary
           label="Refuser la demande"
           extraClass="border-error! text-error! hover:text-white! hover:border-error hover:bg-error!"
-          on:click={() => (modalOpened = "deny")}
+          onclick={() => (modalOpened = "deny")}
         />
 
         {#if orientation.beneficiaryEmail}
@@ -108,7 +108,7 @@
             secondary
             extraClass="border-gray-dark! text-gray-text! hover:text-white! hover:border-gray-dark hover:bg-gray-dark!"
             label="Contacter le ou la bénéficiaire"
-            on:click={() => (modalOpened = "contact-beneficiary")}
+            onclick={() => (modalOpened = "contact-beneficiary")}
           />
         {/if}
 
@@ -116,7 +116,7 @@
           secondary
           extraClass="border-gray-dark! text-gray-text! hover:text-white! hover:border-gray-dark hover:bg-gray-dark!"
           label="Contacter le ou la prescripteur·rice"
-          on:click={() => (modalOpened = "contact-service")}
+          onclick={() => (modalOpened = "contact-service")}
         />
       </div>
     {:else if orientation.status === "VALIDÉE"}

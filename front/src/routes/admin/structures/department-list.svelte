@@ -28,7 +28,7 @@
     >
       {#each departments as dpt}
         <Button
-          on:click={() => {
+          onclick={() => {
             onRefresh(dpt.value);
             onCloseParent();
           }}

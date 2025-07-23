@@ -42,7 +42,7 @@
     <Button
       label="Envoyer un nouveau lien par e-mail"
       extraClass="mt-s16"
-      on:click={sendNewLink}
+      onclick={sendNewLink}
     />
   </div>
 {/if}
