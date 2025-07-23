@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { untrack } from "svelte";
+
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import Checkbox from "$lib/components/inputs/checkbox.svelte";
@@ -11,7 +13,6 @@
   } from "$lib/validation/validation";
 
   import { orderedCoachOrientationModeValues } from "./modalities-order";
-
   interface Props {
     id: string;
     service: Service;
@@ -21,26 +22,19 @@
   let { id, service = $bindable(), servicesOptions }: Props = $props();
 
   let coachOrientationModesFocusValue: string | undefined = $state(undefined);
-  let preventUpdateExternalFormFields = true;
-
-  function updateExternalFormFields(text: string) {
-    if (preventUpdateExternalFormFields) {
-      // Pas de réinitialisation des champs au premier chargement
-      preventUpdateExternalFormFields = false;
-      return;
-    }
-    service.coachOrientationModesExternalFormLink = "";
-    service.coachOrientationModesExternalFormLinkText = text;
-  }
 
   let externalFormToggle = $derived(
     service.coachOrientationModes.includes("completer-le-formulaire-dadhesion")
   );
 
   $effect(() => {
-    updateExternalFormFields(
-      externalFormToggle ? "Orienter votre bénéficiaire" : ""
-    );
+    if (!externalFormToggle) {
+      untrack(() => {
+        service.coachOrientationModesExternalFormLink = "";
+        service.coachOrientationModesExternalFormLinkText =
+          "Orienter votre bénéficiaire";
+      });
+    }
   });
 
   $effect(() => {
