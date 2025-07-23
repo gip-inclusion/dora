@@ -51,7 +51,7 @@
     {#snippet children({ onChange, errorMessages })}
       <Checkboxes
         bind:group={value}
-        on:change={onChange}
+        onchange={(event) => onChange(event)}
         name={id}
         {choices}
         {disabled}

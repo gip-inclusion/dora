@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import { formatErrors } from "$lib/validation/validation";
 
   import Checkbox from "./checkbox.svelte";
@@ -13,6 +11,7 @@
     readonly?: boolean;
     horizontalCheckboxes?: boolean;
     errorMessages?: string[];
+    onchange?: (event: Event) => void;
   }
 
   let {
@@ -23,17 +22,10 @@
     readonly = false,
     horizontalCheckboxes = false,
     errorMessages = [],
+    onchange,
   }: Props = $props();
 
-  const dispatch = createEventDispatcher();
-
   let focusValue: string | undefined = $state(undefined);
-
-  // We want the change event to come from this component, not from
-  // the individual checkboxes, in order to be able to validate properly
-  function handleChange() {
-    dispatch("change", name);
-  }
 </script>
 
 <div class="gap-s8 flex" class:flex-col={!horizontalCheckboxes}>
@@ -48,7 +40,7 @@
       horizontal={horizontalCheckboxes}
       errorMessage={formatErrors(name, errorMessages)}
       focused={focusValue === choice.value}
-      onchange={handleChange}
+      {onchange}
       onfocus={() => (focusValue = choice.value)}
       onblur={() => (focusValue = undefined)}
     />
