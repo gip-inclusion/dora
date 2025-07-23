@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import AutoComplete from "./simple-autocomplete.svelte";
 
   type Choice = { value: string | number; label: string };
@@ -69,7 +67,7 @@
   const hasAppendSlot = !!append;
   const hasCustomContentSlot = !!itemContent;
 
-  run(() => {
+  $effect(() => {
     if (sort) {
       choices = choices.sort((a, b) =>
         a.label.localeCompare(b.label, "fr", { numeric: true })
