@@ -13,9 +13,15 @@
     service: Service | Model;
     servicesOptions: ServicesOptions;
     onFeedbackButtonClick: () => void;
+    onTrackMobilisation: (url?: string) => void;
   }
 
-  let { service, servicesOptions, onFeedbackButtonClick }: Props = $props();
+  let {
+    service,
+    servicesOptions,
+    onFeedbackButtonClick,
+    onTrackMobilisation,
+  }: Props = $props();
 </script>
 
 <div class="gap-s36 flex flex-col">
@@ -23,7 +29,7 @@
 
   <ServiceDescription {service} />
 
-  <ServiceSteps {service} on:trackMobilisation />
+  <ServiceSteps {service} {onTrackMobilisation} />
 
   <ServiceDocuments {service} />
 

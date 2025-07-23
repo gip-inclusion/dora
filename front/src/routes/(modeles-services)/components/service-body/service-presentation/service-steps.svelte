@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import ExternalLinkIcon from "$lib/components/display/external-link-icon.svelte";
   import Linkify from "$lib/components/display/linkify.svelte";
   import type {
@@ -17,9 +15,10 @@
 
   interface Props {
     service: Service | Model;
+    onTrackMobilisation: (url?: string) => void;
   }
 
-  let { service }: Props = $props();
+  let { service, onTrackMobilisation }: Props = $props();
 
   const orderedCoachOrientationModeValues: Record<
     CoachOrientationModes,
@@ -44,14 +43,6 @@
     professionnel: 4,
     autre: 5,
   };
-
-  const dispatch = createEventDispatcher<{
-    trackMobilisation: { externalUrl?: string };
-  }>();
-
-  function trackMobilisationUnconditionally(externalUrl: string) {
-    dispatch("trackMobilisation", { externalUrl });
-  }
 
   let isDI = $derived("source" in service);
 
@@ -91,7 +82,7 @@
           {:else if modeValue === "autre"}
             <Linkify
               text={service.coachOrientationModesOther}
-              onLinkClick={(url) => trackMobilisationUnconditionally(url)}
+              onLinkClick={onTrackMobilisation}
             />
           {:else}
             {modeDisplay}
@@ -111,8 +102,8 @@
               href={service.beneficiariesAccessModesExternalFormLink}
               target="_blank"
               onclick={() =>
-                trackMobilisationUnconditionally(
-                  service.beneficiariesAccessModesExternalFormLink
+                onTrackMobilisation(
+                  service.beneficiariesAccessModesExternalFormLink ?? undefined
                 )}
               class="text-magenta-cta underline"
               >{service.beneficiariesAccessModesExternalFormLinkText ||
@@ -123,7 +114,7 @@
           {:else if modeValue === "autre"}
             <Linkify
               text={service.beneficiariesAccessModesOther}
-              onLinkClick={(url) => trackMobilisationUnconditionally(url)}
+              onLinkClick={onTrackMobilisation}
             />
           {:else}
             {modeDisplay}

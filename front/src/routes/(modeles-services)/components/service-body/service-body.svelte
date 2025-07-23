@@ -67,11 +67,6 @@
       mobilisationTracked = true;
     }
   }
-  function handleTrackMobilisationEvent(
-    event: CustomEvent<{ externalUrl?: string }>
-  ) {
-    handleTrackMobilisation(event.detail.externalUrl);
-  }
 
   function handleOrientationFormClickEvent(event) {
     if (isServiceFromOwnStructure) {
@@ -113,7 +108,7 @@
         {service}
         {servicesOptions}
         {onFeedbackButtonClick}
-        on:trackMobilisation={handleTrackMobilisationEvent}
+        onTrackMobilisation={handleTrackMobilisation}
       />
     </div>
 
