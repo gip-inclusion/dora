@@ -131,7 +131,7 @@ def send_weekly_email_to_department_managers(manager):
 
     if awaiting_moderation or orphans:
         send_mail(
-            "DORA - Vous avez des structures à modérer cette semaine",
+            "Vous avez des structures à modérer cette semaine",
             manager.email,
             mjml2html(
                 render_to_string(

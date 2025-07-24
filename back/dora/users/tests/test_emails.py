@@ -96,7 +96,7 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         self.assertEqual(
             mail.outbox[0].subject,
-            "DORA - Vous avez des structures à modérer cette semaine",
+            "Vous avez des structures à modérer cette semaine",
         )
         self.assertIn(
             f"<p>À valider :</p><ul><li>{structure_awaiting_moderation.name}</li></ul>",
@@ -119,7 +119,7 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         self.assertEqual(
             mail.outbox[0].subject,
-            "DORA - Vous avez des structures à modérer cette semaine",
+            "Vous avez des structures à modérer cette semaine",
         )
         self.assertIn(
             f"<p>Sans utilisateur :</p><ul><li>{orphaned_structure.name}</li></ul>",
@@ -162,7 +162,7 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         self.assertEqual(
             mail.outbox[0].subject,
-            "DORA - Vous avez des structures à modérer cette semaine",
+            "Vous avez des structures à modérer cette semaine",
         )
         self.assertIn(
             "<p>À valider :</p><ul><li>Alpha</li><li>Zeta</li>"
