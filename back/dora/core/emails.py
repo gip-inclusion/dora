@@ -1,8 +1,11 @@
 import json
+import re
 
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.mail import EmailMessage
+from django.utils.html import escape
+from rest_framework.exceptions import ValidationError
 
 
 def clean_reply_to(emails):
@@ -67,3 +70,33 @@ def send_mail(
         if attachments is not None:
             for attachment in attachments:
                 default_storage.delete(attachment)
+
+
+def sanitize_user_input_injected_in_email(user_input, max_length=5000):
+    if not user_input:
+        return ""
+
+    if len(user_input) > max_length:
+        raise ValidationError(f"Message trop long (max {max_length} caractères)")
+
+    dangerous_patterns = [
+        r"\{\{.*?\}\}",  # Django templates
+        r"\{%.*?%\}",  # Django template tags
+        r"<script[^>]*>",  # Script tags
+        r"javascript:",  # JavaScript URLs
+    ]
+
+    for pattern in dangerous_patterns:
+        if re.search(pattern, user_input, re.IGNORECASE | re.DOTALL):
+            raise ValidationError("Contenu dangereux détecté dans le message")
+
+    # # Validate only allowed placeholders
+    # allowed_placeholders = ["#SERVICE_ADDRESS#"]
+    # found_placeholders = re.findall(r"#[A-Z_]+#", user_input)
+    #
+    # for placeholder in found_placeholders:
+    #     if placeholder not in allowed_placeholders:
+    #         raise ValidationError(f"Placeholder non autorisé: {placeholder}")
+
+    # Escape HTML
+    return escape(user_input)
