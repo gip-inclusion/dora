@@ -1,3 +1,5 @@
+from unittest import TestCase
+
 import pytest
 from dateutil.relativedelta import relativedelta
 from django.core import mail
@@ -9,8 +11,8 @@ from dora.core.test_utils import make_structure, make_user
 from dora.users.emails import (
     send_account_deletion_notification,
     send_invitation_reminder,
-    send_structure_awaiting_moderation,
     send_user_without_structure_notification,
+    send_weekly_email_to_department_managers,
 )
 
 
@@ -75,21 +77,97 @@ def test_send_user_without_structure_notification(deletion, subject):
     assert "Nous avons accès à vos données à caractère personnel" in mail.outbox[0].body
 
 
-@pytest.mark.parametrize(
-    "moderation_status",
-    (ModerationStatus.NEED_NEW_MODERATION, ModerationStatus.NEED_INITIAL_MODERATION),
-)
-def test_send_structure_awaiting_moderation(moderation_status):
-    manager = make_user(is_manager=True, departments=["37"])
-    structure = make_structure(department="37", moderation_status=moderation_status)
+class SendWeeklyDepartmentManagerEmail(TestCase):
+    def setUp(self):
+        self.department = "42"
+        self.manager = make_user(is_manager=True, departments=[self.department])
 
-    send_structure_awaiting_moderation(manager)
+    def test_send_email_with_structures_awaiting_moderation(self):
+        structure_awaiting_moderation = make_structure(
+            department=self.department,
+            moderation_status=ModerationStatus.NEED_NEW_MODERATION,
+            user=make_user(),
+        )
 
-    assert len(mail.outbox) == 1
-    assert mail.outbox[0].to == [manager.email]
-    assert (
-        mail.outbox[0].subject
-        == "DORA - Vous avez des structures à modérer cette semaine"
-    )
-    assert structure.name in mail.outbox[0].body
-    assert "/admin/structures" in mail.outbox[0].body
+        send_weekly_email_to_department_managers(self.manager)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [self.manager.email])
+
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "Vous avez des structures à modérer cette semaine",
+        )
+        self.assertIn(
+            f"<p>À valider :</p><ul><li>{structure_awaiting_moderation.name}</li></ul>",
+            mail.outbox[0].body,
+        )
+        self.assertIn("1 structure(s) en attente", mail.outbox[0].body)
+
+    def test_send_email_with_orphaned_structures(self):
+        orphaned_structure = make_structure(
+            department=self.department,
+            user=None,
+            putative_member=None,
+            moderation_status=ModerationStatus.VALIDATED,
+        )
+
+        send_weekly_email_to_department_managers(self.manager)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [self.manager.email])
+
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "Vous avez des structures à modérer cette semaine",
+        )
+        self.assertIn(
+            f"<p>Sans utilisateur :</p><ul><li>{orphaned_structure.name}</li></ul>",
+            mail.outbox[0].body,
+        )
+        self.assertIn("1 structure(s) en attente", mail.outbox[0].body)
+
+    def test_do_not_send_email_with_no_structures(self):
+        make_structure(
+            department=self.department,
+            moderation_status=ModerationStatus.VALIDATED,
+            user=make_user(),
+        )
+
+        send_weekly_email_to_department_managers(self.manager)
+
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_structures_listed_in_alphabetical_order_and_in_correct_categories(self):
+        make_structure(
+            department=self.department,
+            user=None,
+            putative_member=None,
+            moderation_status=ModerationStatus.NEED_NEW_MODERATION,
+            name="Alpha",
+        )
+
+        make_structure(
+            department=self.department,
+            user=None,
+            putative_member=None,
+            moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
+            name="Zeta",
+        )
+
+        send_weekly_email_to_department_managers(self.manager)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [self.manager.email])
+
+        self.assertEqual(
+            mail.outbox[0].subject,
+            "Vous avez des structures à modérer cette semaine",
+        )
+        self.assertIn(
+            "<p>À valider :</p><ul><li>Alpha</li><li>Zeta</li>"
+            "</ul><p>Sans utilisateur :</p>"
+            "<ul><li>Alpha</li><li>Zeta</li></ul></p>",
+            mail.outbox[0].body,
+        )
+        self.assertIn("4 structure(s) en attente", mail.outbox[0].body)
