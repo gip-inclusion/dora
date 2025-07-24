@@ -30,6 +30,7 @@
 
   function handleUseModelValue(fieldName) {
     service[fieldName] = model ? model[fieldName] : undefined;
+    service = { ...service }; // Force le re-rendu
   }
 
   let showModel = $derived(!!service.model);
