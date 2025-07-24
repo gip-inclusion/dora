@@ -25,7 +25,7 @@
   let {
     id,
     disabled = false,
-    readonly = $currentSchema?.[id]?.readonly,
+    readonly = undefined,
     initialValue = "",
     onChange,
     description = "Commencez à saisir le nom et choisissez dans la liste.",
@@ -45,7 +45,7 @@
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
     {#snippet children({ onBlur })}
       <CitySearch onblur={onBlur} {id} {onChange} {initialValue} {disabled} />

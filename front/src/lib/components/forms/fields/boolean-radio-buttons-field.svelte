@@ -27,7 +27,7 @@
     id,
     value = $bindable(false),
     disabled = false,
-    readonly = $currentSchema?.[id]?.readonly,
+    readonly = undefined,
     yesLabel = "Oui",
     noLabel = "Non",
     description = "",
@@ -54,7 +54,7 @@
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
     {#snippet children({ onChange, errorMessages })}
       <RadioButtons

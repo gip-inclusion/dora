@@ -30,7 +30,7 @@
     id,
     value = $bindable(undefined),
     disabled = false,
-    readonly = $currentSchema?.[id]?.readonly,
+    readonly = undefined,
     placeholder = "",
     initialValue = "",
     searchType,
@@ -53,7 +53,7 @@
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
     <AdminDivisionSearch
       {id}

@@ -23,7 +23,7 @@
     id,
     value = $bindable(),
     disabled = false,
-    readonly = $currentSchema?.[id]?.readonly,
+    readonly = undefined,
     description = "",
     hidden = false,
     hideLabel = false,
@@ -41,7 +41,7 @@
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
     {#snippet children({ onChange })}
       <DaysGrid bind:value onchange={onChange} />

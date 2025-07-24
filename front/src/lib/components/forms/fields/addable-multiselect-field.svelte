@@ -35,7 +35,7 @@
     id,
     values = $bindable(),
     disabled = false,
-    readonly = $currentSchema?.[id]?.readonly,
+    readonly = undefined,
     placeholder = "Choisir",
     addButtonLabel = undefined,
     choices = $bindable(),
@@ -83,7 +83,7 @@
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
     {#snippet children({ onBlur, errorMessages })}
       <Select

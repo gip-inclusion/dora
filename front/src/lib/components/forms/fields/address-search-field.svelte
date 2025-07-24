@@ -28,7 +28,7 @@
     id,
     value = $bindable(undefined),
     disabled = false,
-    readonly = $currentSchema?.[id]?.readonly,
+    readonly = undefined,
     placeholder = "",
     initialValue = "",
     cityCode,
@@ -50,7 +50,7 @@
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
     <StreetSearch
       {id}

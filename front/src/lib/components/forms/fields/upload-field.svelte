@@ -28,8 +28,8 @@
   let {
     id,
     disabled = false,
-    readonly = $currentSchema?.[id]?.readonly,
-    label = $currentSchema?.[id]?.label,
+    readonly = undefined,
+    label = undefined,
     fileKeys = $bindable([]),
     structureSlug = undefined,
     descriptionText = "",
@@ -44,14 +44,14 @@
 {#if $currentSchema && (id in $currentSchema || dynamicId)}
   <FieldWrapper
     {id}
-    {label}
+    label={label ?? $currentSchema?.[id]?.label}
     required={isRequired($currentSchema?.[id], $currentFormData)}
     {descriptionText}
     {hidden}
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
     {description}
   >
     {#snippet children({ onBlur })}

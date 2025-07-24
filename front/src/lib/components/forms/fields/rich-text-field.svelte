@@ -24,7 +24,7 @@
     id,
     value = $bindable(),
     disabled = false,
-    readonly = $currentSchema?.[id]?.readonly,
+    readonly = undefined,
     placeholder = "",
     description = "",
     hidden = false,
@@ -32,7 +32,7 @@
     vertical = false,
   }: Props = $props();
 
-  let editor: RichText = $state();
+  let editor: RichText;
 
   export function updateValue(newValue: string) {
     editor.updateValue(newValue);
@@ -49,7 +49,7 @@
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
     <RichText
       bind:this={editor}

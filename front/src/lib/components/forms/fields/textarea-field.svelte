@@ -30,14 +30,14 @@
     value = $bindable(),
     autocomplete = undefined,
     disabled = false,
-    readonly = $currentSchema?.[id]?.readonly,
+    readonly = undefined,
     placeholder = undefined,
-    maxLength = $currentSchema?.[id]?.maxLength,
+    maxLength = undefined,
     rows = 4,
     description = "",
     hidden = false,
     hideLabel = false,
-    label = $currentSchema?.[id]?.label,
+    label = undefined,
     vertical = false,
   }: Props = $props();
 </script>
@@ -45,14 +45,14 @@
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    {label}
+    label={label ?? $currentSchema?.[id]?.label}
     required={isRequired($currentSchema[id], $currentFormData)}
     descriptionText={description}
     {hidden}
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
     {#snippet children({ onBlur, errorMessages })}
       <div class="flex flex-col">
@@ -66,7 +66,7 @@
           {readonly}
           {placeholder}
           {rows}
-          maxlength={maxLength}
+          maxlength={maxLength ?? $currentSchema?.[id]?.maxLength}
           aria-describedby={formatErrors(id, errorMessages)}
           class="border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus read-only:text-gray-03 disabled:bg-gray-00 min-h-[3rem] grow rounded-sm border outline-hidden"
         ></textarea>
