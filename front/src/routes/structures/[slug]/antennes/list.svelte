@@ -6,15 +6,26 @@
   import Count from "../count.svelte";
   import NewBranchModal from "./new-branch-modal.svelte";
 
-  export let structure, branches, total;
-  export let tabDisplay = true;
-  export let limit;
+  interface Props {
+    structure: any;
+    branches: any;
+    total: any;
+    tabDisplay?: boolean;
+    limit: any;
+  }
 
-  let newBranchModalOpen = false;
+  let {
+    structure,
+    branches,
+    total,
+    tabDisplay = true,
+    limit,
+  }: Props = $props();
+
+  let newBranchModalOpen = $state(false);
 
   const departement = "tous";
   let filters;
-  let branchesFiltered = [];
 
   function branchesFilter(allBranches) {
     let filteredBranches = allBranches.filter(
@@ -35,7 +46,7 @@
     return filteredBranches;
   }
 
-  $: branchesFiltered = branchesFilter(branches);
+  let branchesFiltered = $derived(branchesFilter(branches));
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
@@ -55,7 +66,7 @@
     {#if structure.canEditInformations}
       <Button
         label="Ajouter une antenne"
-        on:click={() => (newBranchModalOpen = true)}
+        onclick={() => (newBranchModalOpen = true)}
         icon={home3Icon}
       />
     {/if}
@@ -68,7 +79,4 @@
   {/each}
 </div>
 
-<NewBranchModal
-  bind:isOpen={newBranchModalOpen}
-  on:close={() => (newBranchModalOpen = false)}
-/>
+<NewBranchModal bind:isOpen={newBranchModalOpen} />

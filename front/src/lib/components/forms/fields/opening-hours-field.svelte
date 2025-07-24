@@ -7,17 +7,28 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import DaysGrid from "../../inputs/opening-hours/days-grid.svelte";
 
-  export let id: string;
-  export let value: string;
+  interface Props {
+    id: string;
+    value: string;
+    disabled?: boolean;
+    readonly?: any;
+    // Proxy vers le FieldWrapper
+    description?: string;
+    hidden?: boolean;
+    hideLabel?: boolean;
+    vertical?: boolean;
+  }
 
-  export let disabled = false;
-  export let readonly = $currentSchema?.[id]?.readonly;
-
-  // Proxy vers le FieldWrapper
-  export let description = "";
-  export let hidden = false;
-  export let hideLabel = false;
-  export let vertical = false;
+  let {
+    id,
+    value = $bindable(),
+    disabled = false,
+    readonly = undefined,
+    description = "",
+    hidden = false,
+    hideLabel = false,
+    vertical = false,
+  }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
@@ -25,13 +36,15 @@
     {id}
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
-    {description}
+    descriptionText={description}
     {hidden}
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
-    <DaysGrid bind:value {id} />
+    {#snippet children({ onChange })}
+      <DaysGrid bind:value onchange={onChange} />
+    {/snippet}
   </FieldWrapper>
 {/if}

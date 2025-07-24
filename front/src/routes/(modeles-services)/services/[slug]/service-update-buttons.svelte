@@ -5,12 +5,15 @@
   import { checkboxLineIcon, editIcon } from "$lib/icons";
   import type { Service, ServicesOptions } from "$lib/types";
 
-  export let service: Service;
-  export let servicesOptions: ServicesOptions;
+  interface Props {
+    service: Service;
+    servicesOptions: ServicesOptions;
+    onRefresh: () => void;
+  }
 
-  export let onRefresh: () => void;
+  let { service, servicesOptions, onRefresh }: Props = $props();
 
-  let setAsUpdatedModalOpen = false;
+  let setAsUpdatedModalOpen = $state(false);
 </script>
 
 <div class="gap-s16 flex flex-col sm:flex-row">
@@ -19,7 +22,7 @@
       secondary
       label="Marquer comme à jour"
       icon={checkboxLineIcon}
-      on:click={() => (setAsUpdatedModalOpen = true)}
+      onclick={() => (setAsUpdatedModalOpen = true)}
     />
 
     <SetAsUpdatedModal

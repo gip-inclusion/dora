@@ -2,13 +2,20 @@
   import { getSavedSearchQueryString } from "$lib/requests/saved-search";
   import type { SavedSearch } from "$lib/types";
 
-  export let search: SavedSearch;
+  interface Props {
+    search: SavedSearch;
+  }
+
+  let { search }: Props = $props();
+
   const onSiteOnly = search.locationKinds.toString() === "en-presentiel";
   const remoteOnly = search.locationKinds.toString() === "a-distance";
+
+  const queryString = getSavedSearchQueryString(search);
 </script>
 
 <h2 class="text-f20">
-  <a href={`/recherche?${getSavedSearchQueryString(search)}`}>
+  <a href={`/recherche?${queryString}`}>
     Services d’insertion
     {#if onSiteOnly}
       en présentiel

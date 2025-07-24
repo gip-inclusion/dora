@@ -15,7 +15,6 @@ export function allCategoriesHaveSubcategories() {
     );
 
     if (!servicesOptions) {
-      console.log("Missing servicesOptions in rules check");
       return {
         valid: true,
       };

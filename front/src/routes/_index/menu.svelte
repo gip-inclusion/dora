@@ -10,16 +10,11 @@
   import MenuMesStructures from "./menu-mes-structures.svelte";
   import { userPreferences } from "$lib/utils/preferences";
 
-  let structures: ShortStructure[] = [];
-  let lastVisitedStructure: ShortStructure | undefined = undefined;
-
-  $: structures = $userInfo
-    ? [...$userInfo.structures, ...$userInfo.pendingStructures]
-    : [];
-
-  $: lastVisitedStructure = getCurrentlySelectedStructure(
-    $userInfo,
-    $userPreferences
+  let structures: ShortStructure[] = $derived(
+    $userInfo ? [...$userInfo.structures, ...$userInfo.pendingStructures] : []
+  );
+  let lastVisitedStructure: ShortStructure | undefined = $derived(
+    getCurrentlySelectedStructure($userInfo, $userPreferences)
   );
 </script>
 

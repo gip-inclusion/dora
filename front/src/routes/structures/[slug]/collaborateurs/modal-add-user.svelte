@@ -25,18 +25,28 @@
   ] as const;
   type userLevelKind = (typeof USER_LEVEL_CHOICES)[number]["value"];
 
-  export let isOpen = false;
-  export let structure;
-  export let members;
-  export let onRefresh;
-  export let suggestAdmin = false;
+  interface Props {
+    isOpen?: boolean;
+    structure: any;
+    members: any;
+    onRefresh: any;
+    suggestAdmin?: boolean;
+  }
 
-  let email = "";
-  let level: userLevelKind = suggestAdmin ? "admin" : "user";
+  let {
+    isOpen = $bindable(false),
+    structure,
+    members,
+    onRefresh,
+    suggestAdmin = false,
+  }: Props = $props();
 
-  let successEmailMsg;
-  let confirmationModalIsOpen = false;
-  let requesting = false;
+  let email = $state("");
+  let level: userLevelKind = $state(suggestAdmin ? "admin" : "user");
+
+  let successEmailMsg = $state();
+  let confirmationModalIsOpen = $state(false);
+  let requesting = $state(false);
 
   function handleSubmit(validatedData) {
     const membersEmails = members.map((member) => member.user.email);
@@ -79,11 +89,11 @@
     confirmationModalIsOpen = true;
   }
 
-  $: formData = {
+  let formData = $derived({
     email,
     level,
     siret: structure.siret || structure.parentSiret,
-  };
+  });
 </script>
 
 <Modal bind:isOpen title="Nouveau collaborateur">

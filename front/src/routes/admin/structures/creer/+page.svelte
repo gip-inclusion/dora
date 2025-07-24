@@ -41,10 +41,10 @@
     ])
   );
 
-  let requesting = false;
-  let structure = JSON.parse(JSON.stringify(defaultStructure));
-  let alreadyClaimedEstablishment: Structure | null = null;
-  let structureAdded = false;
+  let requesting = $state(false);
+  let structure = $state(JSON.parse(JSON.stringify(defaultStructure)));
+  let alreadyClaimedEstablishment: Structure | null = $state(null);
+  let structureAdded = $state(false);
 
   function resetForm() {
     requesting = false;
@@ -139,7 +139,7 @@
           secondary
         />
 
-        <Button on:click={resetForm} label="Ajouter une autre structure" />
+        <Button onclick={resetForm} label="Ajouter une autre structure" />
       </div>
     {:else}
       <FormErrors />
@@ -166,12 +166,13 @@
               Elle compte déjà {alreadyClaimedEstablishment.numAdmins} administrateurs.
             {/if}
           </p>
-          <LinkButton
-            to="/structures/{alreadyClaimedEstablishment?.slug}"
-            label="Consultez la structure"
-            small
-            slot="button"
-          />
+          {#snippet button()}
+            <LinkButton
+              to="/structures/{alreadyClaimedEstablishment?.slug}"
+              label="Consultez la structure"
+              small
+            />
+          {/snippet}
         </Notice>
       {/if}
 
@@ -189,13 +190,13 @@
         >
           <Fieldset
             title="Premier administrateur"
-            description="Veuillez saisir le courriel de la personne que vous souhaitez inviter."
+            descriptionText="Veuillez saisir le courriel de la personne que vous souhaitez inviter."
           >
             <BasicInputField
               type="email"
               id="email"
               bind:value={structure.email}
-              description="Format attendu&nbsp;: mail@domaine.fr"
+              descriptionText="Format attendu&nbsp;: mail@domaine.fr"
               vertical
             />
           </Fieldset>

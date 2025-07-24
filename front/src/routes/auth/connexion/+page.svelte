@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import logoProConnect from "$lib/assets/proconnect/logo_proconnect.svg";
   import FieldSet from "$lib/components/display/fieldset.svelte";
   import { informationLineIcon } from "$lib/icons";
@@ -9,9 +9,14 @@
   import PcButton from "$lib/components/specialized/pc-button.svelte";
   import SendMagicLink from "./send-magic-link.svelte";
 
-  const nextPage = getNextPage($page.url);
+  const nextPage = getNextPage(page.url);
 
-  let displayModal = false;
+  let displayModal = $state(false);
+
+  function handleOpenModal(event: MouseEvent) {
+    event.preventDefault();
+    displayModal = true;
+  }
 </script>
 
 <CenteredGrid>
@@ -41,19 +46,18 @@
             </p>
           </div>
           <PcButton {nextPage}>
-            <a
-              slot="pc-help-link"
-              class="text-magenta-cta underline"
-              target="_blank"
-              title="Obtention d'un lien de connexion - ouverture dans une fenêtre modale"
-              rel="noopener noreferrer"
-              href="#"
-              on:click|preventDefault={() => {
-                displayModal = true;
-              }}
-            >
-              Des difficultés à vous connecter&#8239;?
-            </a>
+            {#snippet pcHelpLink()}
+              <a
+                class="text-magenta-cta underline"
+                target="_blank"
+                title="Obtention d'un lien de connexion - ouverture dans une fenêtre modale"
+                rel="noopener noreferrer"
+                href="#"
+                onclick={handleOpenModal}
+              >
+                Des difficultés à vous connecter&#8239;?
+              </a>
+            {/snippet}
           </PcButton>
         </div>
       </FieldSet>

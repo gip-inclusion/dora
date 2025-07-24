@@ -13,13 +13,16 @@
   import { hasAtLeastTwoMembersOrInvitedMembers } from "../quick-start";
   import Button from "$lib/components/display/button.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let modalAddUserIsOpen = false;
+  let { data = $bindable() }: Props = $props();
 
-  let showNoMemberNotice = !hasAtLeastTwoMembersOrInvitedMembers(
-    data.members,
-    data.putativeMembers
+  let modalAddUserIsOpen = $state(false);
+
+  let showNoMemberNotice = $state(
+    !hasAtLeastTwoMembersOrInvitedMembers(data.members, data.putativeMembers)
   );
 
   async function handleRefreshMemberList() {
@@ -46,7 +49,7 @@
     });
   }
 
-  $: canAdd = $structure.canEditMembers;
+  let canAdd = $derived($structure.canEditMembers);
 </script>
 
 <EnsureLoggedIn>
@@ -66,7 +69,7 @@
       <Button
         label="Ajouter un collaborateur"
         icon={userAddIcon}
-        on:click={() => (modalAddUserIsOpen = true)}
+        onclick={() => (modalAddUserIsOpen = true)}
       />
     {/if}
   </div>

@@ -19,10 +19,14 @@
   import { formErrors } from "$lib/validation/validation";
   import type { Service } from "$lib/types";
 
-  export let service: Service;
-  export let credentials;
+  interface Props {
+    service: Service;
+    credentials: any;
+  }
 
-  let contactPrefOptions: Choice[] = [];
+  let { service, credentials }: Props = $props();
+
+  let contactPrefOptions: Choice[] = $state([]);
 
   if ($userInfo.structures?.length === 1) {
     $orientation.prescriberStructureSlug = $userInfo.structures[0].slug;
@@ -48,7 +52,7 @@
     $orientation.referentEmail = $userInfo.email;
   });
 
-  $: testWordDetected = orientationContainsTestWords($orientation);
+  let testWordDetected = $derived(orientationContainsTestWords($orientation));
 </script>
 
 <div>
@@ -101,7 +105,7 @@
           id="referentPhone"
           type="tel"
           placeholder="0123456789"
-          description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
+          descriptionText="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
           bind:value={$orientation.referentPhone}
           vertical
         />
@@ -111,7 +115,7 @@
           id="referentEmail"
           type="email"
           placeholder="nom@domaine.fr"
-          description="Saisissez votre adresse professionnelle. Format attendu&nbsp;: mail@domaine.fr"
+          descriptionText="Saisissez votre adresse professionnelle. Format attendu&nbsp;: mail@domaine.fr"
           bind:value={$orientation.referentEmail}
           vertical
         />
@@ -142,15 +146,17 @@
     <BasicInputField
       id="beneficiaryAvailability"
       type="date"
-      description=""
+      descriptionText=""
       bind:value={$orientation.beneficiaryAvailability}
       vertical
     >
-      <p slot="description" class="legend italic">
-        Date à partir de laquelle la personne est disponible.<br />
-        Format attendu&nbsp;: JJ/MM/AAAA (par exemple, 17/01/2023 pour 17 janvier
-        2023)
-      </p>
+      {#snippet description()}
+        <p class="legend italic">
+          Date à partir de laquelle la personne est disponible.<br />
+          Format attendu&nbsp;: JJ/MM/AAAA (par exemple, 17/01/2023 pour 17 janvier
+          2023)
+        </p>
+      {/snippet}
     </BasicInputField>
 
     {#if $orientation.requirements.length || $orientation.situation.length}
@@ -210,7 +216,7 @@
           id="beneficiaryPhone"
           type="tel"
           placeholder="0123456789"
-          description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
+          descriptionText="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
           bind:value={$orientation.beneficiaryPhone}
           vertical
         />
@@ -220,7 +226,7 @@
           id="beneficiaryEmail"
           type="email"
           placeholder="nom@domaine.fr"
-          description="Format attendu&nbsp;: nom@domaine.fr"
+          descriptionText="Format attendu&nbsp;: nom@domaine.fr"
           bind:value={$orientation.beneficiaryEmail}
           vertical
         />
@@ -230,7 +236,7 @@
     {#if $orientation.beneficiaryContactPreferences.includes("AUTRE")}
       <TextareaField
         id="beneficiaryOtherContactMethod"
-        description="Préciser quelle autre méthode de contact est possible"
+        descriptionText="Préciser quelle autre méthode de contact est possible"
         bind:value={$orientation.beneficiaryOtherContactMethod}
         vertical
       />
@@ -271,19 +277,21 @@
             label="Document à compléter"
             vertical
             id={form.name}
-            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
+            descriptionText="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
             bind:fileKeys={$orientation.attachments[form.name]}
           >
-            <p slot="description">
-              <a
-                href={form.url}
-                class="font-bold underline"
-                target="_blank"
-                rel="noopener nofollow ugc"
-              >
-                {formatFilePath(form.name)}
-              </a>
-            </p>
+            {#snippet description()}
+              <p>
+                <a
+                  href={form.url}
+                  class="font-bold underline"
+                  target="_blank"
+                  rel="noopener nofollow ugc"
+                >
+                  {formatFilePath(form.name)}
+                </a>
+              </p>
+            {/snippet}
           </UploadField>
         {/if}
       {/each}
@@ -295,7 +303,7 @@
             label={cred.label}
             vertical
             id={cred.label}
-            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
+            descriptionText="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
             bind:fileKeys={$orientation.attachments[cred.label]}
           />
         {/if}

@@ -11,19 +11,31 @@
     isNoticeHidden,
   } from "$lib/utils/service-update-notices";
 
-  export let structureSlug: string;
-  export let services: StructureService[] = [];
-  export let requesting = false;
-  export let onRefresh: () => void;
+  interface Props {
+    structureSlug: string;
+    services?: StructureService[];
+    requesting?: boolean;
+    onRefresh: () => void;
+  }
+
+  let {
+    structureSlug,
+    services = [],
+    requesting = $bindable(false),
+    onRefresh,
+  }: Props = $props();
 
   const LIST_LENGTH = 3;
-  let showAll = false;
-  $: servicesToUpdate = services.filter(({ modelChanged }) => modelChanged);
+  let showAll = $state(false);
+  let servicesToUpdate = $derived(
+    services.filter(({ modelChanged }) => modelChanged)
+  );
 
-  $: showNotice =
-    servicesToUpdate.length && !isNoticeHidden("modelSync", structureSlug);
-  $: updatedModels = new Set(
-    servicesToUpdate.map(({ modelName }) => modelName)
+  let showNotice = $derived(
+    servicesToUpdate.length && !isNoticeHidden("modelSync", structureSlug)
+  );
+  let updatedModels = $derived(
+    new Set(servicesToUpdate.map(({ modelName }) => modelName))
   );
 
   async function doUpdate(selectedServices: StructureService[]) {
@@ -80,7 +92,7 @@
                 noPadding
                 disabled={requesting}
                 label="Mettre à jour"
-                on:click={() => doUpdate([service])}
+                onclick={() => doUpdate([service])}
               />
               <Button
                 extraClass="ml-s10 text-marianne-red text-f14! p-s0!"
@@ -88,7 +100,7 @@
                 noPadding
                 disabled={requesting}
                 label="Refuser"
-                on:click={() => reject(service.model, service.slug)}
+                onclick={() => reject(service.model, service.slug)}
               />
             </li>
           {/if}
@@ -101,7 +113,7 @@
             noBackground
             noPadding
             label={showAll ? "Réduire la liste" : "Voir toute la liste"}
-            on:click={() => {
+            onclick={() => {
               showAll = !showAll;
             }}
           />
@@ -113,19 +125,19 @@
       <Button
         label="Tout mettre à jour"
         extraClass="py-s8 text-f14! px-s12!"
-        on:click={() => doUpdate(servicesToUpdate)}
+        onclick={() => doUpdate(servicesToUpdate)}
       />
       <Button
         secondary
         extraClass="py-s8 text-f14! px-s12!"
         label="Tout refuser"
-        on:click={rejectAll}
+        onclick={rejectAll}
       />
       <Button
         secondary
         extraClass="py-s8 text-f14! px-s12!"
         label="Cacher cette fenêtre"
-        on:click={() => {
+        onclick={() => {
           hideNotice("modelSync", structureSlug);
           showNotice = false;
         }}

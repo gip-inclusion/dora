@@ -36,6 +36,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     service.structure = null;
     service.slug = null;
     service.locationKinds = [];
+    service.isContactInfoPublic = false;
   } else {
     service = getNewService();
   }

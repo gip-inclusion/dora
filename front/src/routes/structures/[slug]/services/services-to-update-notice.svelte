@@ -9,17 +9,27 @@
 
   type ServiceToUpdate = { name: string; slug: string };
 
-  export let structureSlug: string;
-  export let servicesToUpdate: ServiceToUpdate[] = [];
-  export let requesting = false;
-  export let onRefresh: () => void;
+  interface Props {
+    structureSlug: string;
+    servicesToUpdate?: ServiceToUpdate[];
+    requesting?: boolean;
+    onRefresh: () => void;
+  }
+
+  let {
+    structureSlug,
+    servicesToUpdate = [],
+    requesting = $bindable(false),
+    onRefresh,
+  }: Props = $props();
 
   const LIST_LENGTH = 3;
 
-  let showAll = false;
+  let showAll = $state(false);
 
-  $: showNotice =
-    servicesToUpdate.length && !isNoticeHidden("update", structureSlug);
+  let showNotice = $derived(
+    servicesToUpdate.length && !isNoticeHidden("update", structureSlug)
+  );
 
   async function handleMarkServicesAsUpToDate(
     selectedServices: ServiceToUpdate[]
@@ -57,7 +67,7 @@
                 noPadding
                 disabled={requesting}
                 label="Marquer comme à jour"
-                on:click={() => handleMarkServicesAsUpToDate([service])}
+                onclick={() => handleMarkServicesAsUpToDate([service])}
               />
               <a
                 href="/services/{service.slug}/editer"
@@ -74,7 +84,7 @@
             noBackground
             noPadding
             label={showAll ? "Réduire la liste" : "Voir toute la liste"}
-            on:click={() => {
+            onclick={() => {
               showAll = !showAll;
             }}
           />
@@ -86,13 +96,13 @@
       <Button
         label="Tout marquer comme à jour"
         extraClass="py-s8 text-f14! px-s12!"
-        on:click={() => handleMarkServicesAsUpToDate(servicesToUpdate)}
+        onclick={() => handleMarkServicesAsUpToDate(servicesToUpdate)}
       />
       <Button
         secondary
         extraClass="py-s8 text-f14! px-s12!"
         label="Cacher cette fenêtre"
-        on:click={() => {
+        onclick={() => {
           hideNotice("update", structureSlug);
           showNotice = false;
         }}

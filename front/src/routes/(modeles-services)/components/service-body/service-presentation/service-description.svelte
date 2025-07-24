@@ -4,7 +4,7 @@
 
   import ServiceSection from "./components/service-section.svelte";
 
-  export let service;
+  let { service } = $props();
 </script>
 
 {#if service.fullDesc}

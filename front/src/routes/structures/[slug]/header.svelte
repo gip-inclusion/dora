@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type TabItem = {
     id: string;
     name: string;
@@ -26,13 +26,14 @@
   import PendingNotice from "./pending-notice.svelte";
   import type { Structure } from "$lib/types";
 
-  export let structure: Structure;
-  export let tabId = "informations";
+  interface Props {
+    structure: Structure;
+  }
 
-  let tabs: TabItem[] = [];
+  let { structure }: Props = $props();
 
-  $: {
-    tabs = [
+  let tabs: TabItem[] = $derived.by(() => {
+    const tabList = [
       {
         id: "informations",
         name: "Informations",
@@ -42,14 +43,14 @@
     ];
 
     if (structure.canViewMembers) {
-      tabs.push({
+      tabList.push({
         id: "collaborateurs",
         name: "Collaborateurs",
         icon: teamLineIcon,
         href: `/structures/${structure.slug}/collaborateurs`,
       });
     }
-    tabs.push({
+    tabList.push({
       id: "services",
       name: "Services",
       icon: pageLineIcon,
@@ -57,7 +58,7 @@
     });
 
     if (structure.canEditServices) {
-      tabs.push({
+      tabList.push({
         id: "modeles",
         name: "Modèles",
         icon: bookReadLineIcon,
@@ -66,28 +67,30 @@
     }
 
     if (!structure.parent && structure.branches?.length) {
-      tabs.push({
+      tabList.push({
         id: "antennes",
         name: "Antennes",
         icon: homeSmile2Icon,
         href: `/structures/${structure.slug}/antennes`,
       });
     }
-  }
 
-  $: {
+    return tabList;
+  });
+
+  let tabId = $derived.by(() => {
     if ($page.url.pathname.includes("/services")) {
-      tabId = "services";
+      return "services";
     } else if ($page.url.pathname.endsWith("/modeles")) {
-      tabId = "modeles";
+      return "modeles";
     } else if ($page.url.pathname.endsWith("/antennes")) {
-      tabId = "antennes";
+      return "antennes";
     } else if ($page.url.pathname.endsWith("/collaborateurs")) {
-      tabId = "collaborateurs";
+      return "collaborateurs";
     } else {
-      tabId = "informations";
+      return "informations";
     }
-  }
+  });
 </script>
 
 <div class="text-gray-text pt-s32">

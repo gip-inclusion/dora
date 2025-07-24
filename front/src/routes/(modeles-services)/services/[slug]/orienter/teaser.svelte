@@ -5,8 +5,12 @@
   import ContactInfo from "./contact-info.svelte";
   import PcButton from "$lib/components/specialized/pc-button.svelte";
 
-  export let service: Service;
-  export let isDI: boolean;
+  interface Props {
+    service: Service;
+    isDI: boolean;
+  }
+
+  let { service, isDI }: Props = $props();
 
   const nextURL = new URL($page.url);
   nextURL.searchParams.set("newlogin", "1");

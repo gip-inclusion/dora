@@ -9,9 +9,19 @@
   import ServiceOtherInformations from "./service-other-informations.svelte";
   import ServiceSteps from "./service-steps.svelte";
 
-  export let service: Service | Model;
-  export let servicesOptions: ServicesOptions;
-  export let onFeedbackButtonClick: () => void;
+  interface Props {
+    service: Service | Model;
+    servicesOptions: ServicesOptions;
+    onFeedbackButtonClick: () => void;
+    onTrackMobilisation: (url?: string) => void;
+  }
+
+  let {
+    service,
+    servicesOptions,
+    onFeedbackButtonClick,
+    onTrackMobilisation,
+  }: Props = $props();
 </script>
 
 <div class="gap-s36 flex flex-col">
@@ -19,7 +29,7 @@
 
   <ServiceDescription {service} />
 
-  <ServiceSteps {service} on:trackMobilisation />
+  <ServiceSteps {service} {onTrackMobilisation} />
 
   <ServiceDocuments {service} />
 
@@ -27,5 +37,5 @@
 
   <ServiceDiIdentification {service} />
 
-  <ServiceFeedbackButton on:click={onFeedbackButtonClick} />
+  <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
 </div>

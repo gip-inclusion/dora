@@ -1,12 +1,17 @@
 <script lang="ts">
-  export let icon: string;
-  export let active: boolean;
-  export let label: string;
+  interface Props {
+    icon: string;
+    active: boolean;
+    label: string;
+    onclick?: (event: MouseEvent) => void;
+  }
+
+  let { icon, active, label, onclick }: Props = $props();
 </script>
 
 <button
   type="button"
-  on:click
+  {onclick}
   class:active
   class="tb-button"
   aria-label={label}

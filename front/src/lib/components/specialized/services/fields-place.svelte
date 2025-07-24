@@ -6,8 +6,17 @@
   import type { Service, ServicesOptions, Structure } from "$lib/types";
   import { moveToTheEnd } from "$lib/utils/misc";
 
-  export let servicesOptions: ServicesOptions, service: Service;
-  export let structure: Structure | undefined = undefined;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    structure?: Structure | undefined | null;
+  }
+
+  let {
+    servicesOptions,
+    service = $bindable(),
+    structure = undefined,
+  }: Props = $props();
 </script>
 
 <FieldSet title="Accueil">
@@ -22,7 +31,7 @@
     <BasicInputField
       type="url"
       id="remoteUrl"
-      description="Visioconférence, URL du formulaire, etc. Format attendu : https://example.fr."
+      descriptionText="Visioconférence, URL du formulaire, etc. Format attendu : https://example.fr."
       bind:value={service.remoteUrl}
     />
   {/if}

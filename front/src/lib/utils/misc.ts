@@ -200,23 +200,24 @@ export function isInDeploymentDepartments(
   );
 }
 
-export function clickOutside(node: HTMLElement) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore erreurs de typage inextricables...
-  const handleClick = (event) => {
-    if (node && !node.contains(event.target) && !event.defaultPrevented) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore erreurs de typage inextricables...
-      node.dispatchEvent(new CustomEvent("click_outside", node));
-    }
-  };
+// Svelte 5 attachment version of clickOutside
+export function clickOutside(callback: () => void) {
+  return (node: HTMLElement) => {
+    const handleClick = (event: Event) => {
+      if (
+        node &&
+        !node.contains(event.target as Node) &&
+        !event.defaultPrevented
+      ) {
+        callback();
+      }
+    };
 
-  document.addEventListener("click", handleClick, true);
+    document.addEventListener("click", handleClick, true);
 
-  return {
-    destroy() {
+    return () => {
       document.removeEventListener("click", handleClick, true);
-    },
+    };
   };
 }
 

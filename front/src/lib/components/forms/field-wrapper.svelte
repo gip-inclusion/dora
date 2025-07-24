@@ -1,39 +1,67 @@
 <script lang="ts">
+  import { getContext, type Snippet } from "svelte";
+
+  import { randomId } from "$lib/utils/random";
   import {
     contextValidationKey,
     formErrors,
     type ValidationContext,
   } from "$lib/validation/validation";
-  import { getContext } from "svelte";
-  import Alert from "../display/alert.svelte";
-  import { randomId } from "$lib/utils/random";
 
-  export let id: string;
-  export let label = "";
-  export let description = "";
-  export let hidden = false;
-  export let hideLabel = false;
-  export let required = false;
-  export let vertical = false;
-  export let readonly = false;
-  export let disabled = false;
+  import Alert from "../display/alert.svelte";
+
+  interface Props {
+    id: string;
+    label?: string;
+    descriptionText?: string;
+    hidden?: boolean;
+    hideLabel?: boolean;
+    required?: boolean;
+    vertical?: boolean;
+    readonly?: boolean;
+    disabled?: boolean;
+    description?: Snippet;
+    children?: Snippet<
+      [
+        {
+          onBlur: (evt: Event) => void;
+          onChange: (evt: Event) => void;
+          errorMessages: Array<string>;
+        },
+      ]
+    >;
+  }
+
+  let {
+    id,
+    label = "",
+    descriptionText = "",
+    hidden = false,
+    hideLabel = false,
+    required = false,
+    vertical = false,
+    readonly = false,
+    disabled = false,
+    description,
+    children,
+  }: Props = $props();
 
   const context = getContext<ValidationContext>(contextValidationKey);
 
-  function handleBlur(evt) {
+  function handleBlur(evt: Event) {
     if (context) {
       context.onBlur(evt);
     }
   }
 
-  function handleChange(evt) {
+  function handleChange(evt: Event) {
     if (context) {
       context.onChange(evt);
     }
   }
 
-  $: errorMessages = $formErrors[id];
-  const descriptionId = description ? randomId() : null;
+  const errorMessages = $derived($formErrors[id]);
+  const descriptionId = descriptionText ? randomId() : null;
 </script>
 
 <div
@@ -55,19 +83,23 @@
           >{/if}
       </span>
     </label>
-    {#if description}
-      <small id={descriptionId}>{description}</small>
+    {#if descriptionText}
+      <small id={descriptionId}>{descriptionText}</small>
     {/if}
-    {#if $$slots.description}
+    {#if description}
       <div class="mb-s4">
-        <slot name="description" />
+        {@render description()}
       </div>
     {/if}
   </div>
   <div class="flex flex-col {!vertical ? 'lg:w-2/3' : ''}">
-    <!-- Slot principal -->
-    <slot onBlur={handleBlur} onChange={handleChange} {errorMessages} />
-    <!--  -->
+    {#if children}
+      {@render children({
+        onBlur: handleBlur,
+        onChange: handleChange,
+        errorMessages,
+      })}
+    {/if}
     {#each errorMessages || [] as msg, i}
       <Alert id="{id}-error-{i}" label={msg} />
     {/each}

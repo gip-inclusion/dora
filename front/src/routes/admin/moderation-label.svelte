@@ -3,8 +3,12 @@
   import DateLabel from "$lib/components/display/date-label.svelte";
   import type { ModerationStatus } from "$lib/types";
 
-  export let status: ModerationStatus;
-  export let date: string;
+  interface Props {
+    status: ModerationStatus;
+    date: string;
+  }
+
+  let { status, date }: Props = $props();
 </script>
 
 {#if status === "NEED_INITIAL_MODERATION"}

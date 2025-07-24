@@ -1,8 +1,14 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import { getApiURL } from "$lib/utils/api";
   import logoPC from "$lib/assets/proconnect/bouton_proconnect.svg";
+  interface Props {
+    nextPage: string;
+    pcHelpLink?: Snippet;
+  }
 
-  export let nextPage: string;
+  let { nextPage, pcHelpLink }: Props = $props();
 
   const loginUrl = `${getApiURL()}/oidc/login/?next=${encodeURIComponent(nextPage)}`;
 </script>
@@ -13,7 +19,9 @@
   </a>
 
   <div class="text-center">
-    <slot name="pc-help-link">
+    {#if pcHelpLink}
+      {@render pcHelpLink()}
+    {:else}
       <a
         class="text-magenta-cta underline"
         target="_blank"
@@ -23,7 +31,7 @@
       >
         Besoin d’aide&#8239;? Contactez-nous
       </a>
-    </slot>
+    {/if}
     &nbsp;
     <a
       class="text-magenta-cta underline"

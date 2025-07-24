@@ -21,11 +21,19 @@
         "Administrateur (saisie d’offres, modification profil, édition de la structure, gestion des utilisateurs)",
     },
   ];
-  export let isOpen = false;
-  export let member;
-  export let onRefresh;
+  interface Props {
+    isOpen?: boolean;
+    member: any;
+    onRefresh: any;
+  }
 
-  let level = member.isAdmin ? "admin" : "user";
+  let {
+    isOpen = $bindable(false),
+    member = $bindable(),
+    onRefresh,
+  }: Props = $props();
+
+  let level = $state(member.isAdmin ? "admin" : "user");
 
   function handleSubmit(validatedData) {
     const url = `${getApiURL()}/structure-members/${member.id}/`;
@@ -47,7 +55,7 @@
     isOpen = false;
   }
 
-  $: formData = { level };
+  let formData = $derived({ level });
 </script>
 
 <Modal bind:isOpen title="Utilisateur">
