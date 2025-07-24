@@ -59,7 +59,7 @@ class OrientationViewSet(
     viewsets.GenericViewSet,
 ):
     serializer_class = OrientationSerializer
-    # permission_classes = [ModeratedOrientationPermission, OrientationPermission]
+    permission_classes = [ModeratedOrientationPermission, OrientationPermission]
     lookup_field = "query_id"
 
     def get_queryset(self):
