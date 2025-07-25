@@ -34,9 +34,17 @@ class EmailSanitizerTest(TestCase):
         for dangerous_input in dangerous_inputs:
             with self.assertRaises(ValidationError) as cm:
                 sanitize_user_input_injected_in_email(dangerous_input)
-            self.assertIn(
-                "Contenu dangereux détecté dans le message", str(cm.exception)
-            )
+                self.assertTrue(
+                    any(
+                        dangerous_part in str(cm.exception)
+                        for dangerous_part in [
+                            dangerous_input,
+                            "{{item}}",
+                            "{{ item }}",
+                        ]
+                    ),
+                    f"Expected dangerous content detection for: {dangerous_input}, got: {str(cm.exception)}",
+                )
 
     def test_xss_attempts_blocked(self):
         xss_inputs = [

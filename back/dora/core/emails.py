@@ -92,6 +92,9 @@ def sanitize_user_input_injected_in_email(user_input, max_length=1000):
 
     for pattern in dangerous_patterns:
         if re.search(pattern, user_input, re.IGNORECASE | re.DOTALL):
-            raise ValidationError("Contenu dangereux détecté dans le message")
+            match = re.search(pattern, user_input, re.IGNORECASE | re.DOTALL)
+            raise ValidationError(
+                f"Contenu dangereux détecté dans le message : {match.group(0)}"
+            )
 
     return escape(user_input)
