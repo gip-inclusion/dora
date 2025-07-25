@@ -3,7 +3,7 @@ import io
 
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 
 class BaseImportAdminMixin:
@@ -18,7 +18,7 @@ class BaseImportAdminMixin:
         if not csv_file.name.lower().endswith(".csv"):
             messages.error(
                 request,
-                mark_safe(
+                format_html(
                     "<b>Échec de l'import - Format de fichier non valide</b><br/>"
                     "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
                 ),
@@ -59,7 +59,7 @@ class BaseImportAdminMixin:
         except UnicodeDecodeError:
             messages.error(
                 request,
-                mark_safe(
+                format_html(
                     "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
                     "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
                 ),
@@ -68,7 +68,7 @@ class BaseImportAdminMixin:
         except Exception as e:
             messages.error(
                 request,
-                mark_safe(
+                format_html(
                     "<b>Échec de l'import - Erreur inattendue</b><br/>"
                     "L'erreur suivante s'est produite :<br/>"
                     f"{e}<br/>"

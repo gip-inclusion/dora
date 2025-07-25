@@ -6,3 +6,6 @@ pre-commit==4.2.0
 
 # Génération du schéma de données
 pygraphviz==1.14
+
+# Génération d'un bilan de sécurité
+bandit==1.8.6

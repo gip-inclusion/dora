@@ -10,3 +10,4 @@ docker-compose.yml
 talisman_report
 .env
 .envrc
+security_report.json
