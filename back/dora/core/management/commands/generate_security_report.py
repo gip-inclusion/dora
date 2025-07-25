@@ -6,7 +6,7 @@ from django.core.management import BaseCommand
 
 class Command(BaseCommand):
     help = (
-        "Dans le dossier du back, générer un bilan de bandit avec `bandit -r ./ -f json -o security_report.json`"
+        "Dans le dossier du back, générer un bilan de bandit avec `bandit -r . --exclude ./.venv/ --format json -o security_report.json`"
         "Analyser ce bilan avec ce script avec python manage.py generate_security_report ./security_report.json"
     )
 
