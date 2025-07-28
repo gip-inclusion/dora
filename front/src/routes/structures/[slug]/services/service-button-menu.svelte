@@ -7,7 +7,7 @@
   interface Props {
     service: Service | ShortService;
     servicesOptions: ServicesOptions;
-    onRefresh?: () => void;
+    onRefresh: () => void;
   }
 
   let { service, servicesOptions, onRefresh }: Props = $props();
