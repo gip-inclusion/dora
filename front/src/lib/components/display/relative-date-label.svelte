@@ -28,7 +28,7 @@
   import DateLabel from "./date-label.svelte";
 
   interface Props {
-    date: any;
+    date: string;
     bold?: boolean;
     prefix?: string;
   }
