@@ -37,13 +37,13 @@
     }
   });
 
-  $effect(() => {
-    servicesOptions.coachOrientationModes.sort(
+  const sortedCoachOrientationModes = $derived(
+    servicesOptions.coachOrientationModes.toSorted(
       (a, b) =>
         orderedCoachOrientationModeValues[a.value] -
         orderedCoachOrientationModeValues[b.value]
-    );
-  });
+    )
+  );
 </script>
 
 {#if $currentSchema && "coachOrientationModes" in $currentSchema}
@@ -56,7 +56,7 @@
   >
     {#snippet children({ onChange, errorMessages })}
       <div class="gap-s8 flex flex-col">
-        {#each servicesOptions.coachOrientationModes as choice}
+        {#each sortedCoachOrientationModes as choice}
           {#if choice.value === "completer-le-formulaire-dadhesion" && service.coachOrientationModes.includes("completer-le-formulaire-dadhesion")}
             <Checkbox
               name={id}

@@ -31,6 +31,14 @@
     )
   );
 
+  const sortedBeneficiariesAccessModes = $derived(
+    servicesOptions.beneficiariesAccessModes.toSorted(
+      (a, b) =>
+        orderedBeneficiariesAccessModeValues[a.value] -
+        orderedBeneficiariesAccessModeValues[b.value]
+    )
+  );
+
   $effect(() => {
     if (!externalFormToggle) {
       untrack(() => {
@@ -39,14 +47,6 @@
           "Faire une demande";
       });
     }
-  });
-
-  $effect(() => {
-    servicesOptions.beneficiariesAccessModes.sort(
-      (a, b) =>
-        orderedBeneficiariesAccessModeValues[a.value] -
-        orderedBeneficiariesAccessModeValues[b.value]
-    );
   });
 </script>
 
@@ -60,7 +60,7 @@
   >
     {#snippet children({ onChange, errorMessages })}
       <div class="gap-s8 flex flex-col">
-        {#each servicesOptions.beneficiariesAccessModes as choice}
+        {#each sortedBeneficiariesAccessModes as choice}
           {#if choice.value === "completer-le-formulaire-dadhesion" && service.beneficiariesAccessModes.includes("completer-le-formulaire-dadhesion")}
             <Checkbox
               name={id}
