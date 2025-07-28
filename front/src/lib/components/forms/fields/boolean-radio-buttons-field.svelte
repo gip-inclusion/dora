@@ -12,7 +12,7 @@
     // on veut la considérer comme false;
     value?: boolean;
     disabled?: boolean;
-    readonly?: any;
+    readonly?: boolean;
     // Spécifiques
     yesLabel?: string;
     noLabel?: string;
@@ -27,7 +27,7 @@
     id,
     value = $bindable(false),
     disabled = false,
-    readonly = undefined,
+    readonly = false,
     yesLabel = "Oui",
     noLabel = "Non",
     description = "",
