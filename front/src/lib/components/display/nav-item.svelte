@@ -3,7 +3,7 @@
     label?: string;
     otherTab?: boolean;
     disabled?: boolean;
-    href: any;
+    href?: string;
     onclick?: () => void;
   }
 
