@@ -79,7 +79,7 @@
           </span>
         {/if}
 
-        {#if !label}
+        {#if !label && labelText}
           <span
             class:sr-only={hideLabel}
             class="text-gray-text text-left whitespace-nowrap"
