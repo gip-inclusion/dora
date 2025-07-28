@@ -28,7 +28,7 @@
   let {
     onCityChange = undefined,
     onEstablishmentChange = undefined,
-    establishment = $bindable(null),
+    establishment = $bindable(),
     showSafir = false,
     tabId = $bindable(showSafir ? "safir" : "nom"),
     title = "Structure",
