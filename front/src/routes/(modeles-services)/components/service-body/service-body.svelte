@@ -51,7 +51,7 @@
   );
 
   // Utilisé pour prévenir le tracking multiple
-  let mobilisationTracked = false;
+  let mobilisationTracked = $state(false);
 
   let isPreventFakeOrientationModalOpen = $state(false);
   let isVideoModalOpen = $state(false);
