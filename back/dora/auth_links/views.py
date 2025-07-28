@@ -25,7 +25,6 @@ def send_link(request):
         email=request.POST.get("email"),
         is_active=True,
         is_valid=True,
-        ic_id__isnull=False,
     )
 
     magic_link = get_token(user)
