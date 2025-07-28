@@ -121,7 +121,7 @@
                   bind:value={newValue}
                   maxlength={maxLength}
                 />
-                {#if newValue && maxLength != null}
+                {#if newValue}
                   <div
                     class="mt-s4 text-f12 text-gray-text self-end"
                     class:text-error={newValue?.length > maxLength}
