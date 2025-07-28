@@ -4,7 +4,7 @@ import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
 import { getStructure } from "$lib/requests/structures";
 import type { PageLoad } from "./$types";
-import type { Model, Service, ShortStructure } from "$lib/types";
+import type { Model, Service, ShortStructure, Structure } from "$lib/types";
 import { error } from "@sveltejs/kit";
 
 // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
@@ -27,7 +27,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   let structures: ShortStructure[] = user.structures;
   let service: Service;
   let model: Model | undefined = undefined;
-  let structure: ShortStructure | undefined;
+  let structure: Structure | undefined;
 
   if (modelSlug) {
     model = await getModel(modelSlug);
@@ -42,10 +42,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   }
 
   if (structureSlug) {
-    structure = structures.find((struct) => struct.slug === structureSlug);
-    if (!structure && (user.isStaff || user.isManager)) {
-      structure = await getStructure(structureSlug);
-    }
+    structure = (await getStructure(structureSlug)) || undefined;
     if (structure) {
       structures = [structure];
     } else {
