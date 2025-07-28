@@ -12,7 +12,7 @@
   const id = `text-clamp-${randomId()}`;
 
   let showAll = $state(false);
-  let height: number = $state();
+  let height: number = $state(0);
 
   function toggle() {
     showAll = !showAll;
