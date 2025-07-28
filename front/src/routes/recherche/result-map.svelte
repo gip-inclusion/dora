@@ -17,10 +17,10 @@
   interface Props {
     data: PageData;
     filteredServices: ServiceSearchResult[];
-    onServiceClick?: ((slug: string) => void) | undefined;
+    onServiceClick?: (slug: string) => void;
   }
 
-  let { data, filteredServices, onServiceClick = undefined }: Props = $props();
+  let { data, filteredServices, onServiceClick }: Props = $props();
 
   let map: mlgl.Map | undefined = $state();
   let popup: mlgl.Popup;

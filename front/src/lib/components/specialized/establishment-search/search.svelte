@@ -11,28 +11,26 @@
   type Tab = "nom" | "siret" | "safir";
 
   interface Props {
-    onCityChange?: ((city: GeoApiValue | null) => void) | undefined;
-    onEstablishmentChange?:
-      | ((establishment: Establishment | null) => void)
-      | undefined;
+    onCityChange?: (city: GeoApiValue | null) => void;
+    onEstablishmentChange?: (establishment: Establishment | null) => void;
     establishment?: Establishment | null;
     showSafir?: boolean;
     tabId?: Tab;
     title?: string;
-    descriptionText?: string | undefined;
+    descriptionText?: string;
     proposedSafir?: string | null;
     proposedSiret?: string | null;
     cta?: Snippet;
   }
 
   let {
-    onCityChange = undefined,
-    onEstablishmentChange = undefined,
+    onCityChange,
+    onEstablishmentChange,
     establishment = $bindable(),
     showSafir = false,
     tabId = $bindable(showSafir ? "safir" : "nom"),
     title = "Structure",
-    descriptionText = undefined,
+    descriptionText,
     proposedSafir = $bindable(""),
     proposedSiret = "",
     cta,

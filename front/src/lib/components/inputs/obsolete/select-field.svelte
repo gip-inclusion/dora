@@ -12,9 +12,9 @@
     label: string;
     name: string;
     minDropdownWidth?: string;
-    value: string | string[] | undefined;
+    value?: string | string[];
     placeholder?: string;
-    inputMode?: "none" | undefined;
+    inputMode?: "none";
     required?: boolean;
     isMultiple?: boolean;
     withAutoComplete?: boolean;
@@ -24,10 +24,7 @@
     choices: Choice[];
     display?: "horizontal" | "vertical";
     style?: "common" | "filter" | "search";
-    onChange?: (event: {
-      detail: string;
-      value: string | string[];
-    }) => void | undefined;
+    onChange?: (event: { detail: string; value: string | string[] }) => void;
   }
 
   let {
@@ -36,7 +33,7 @@
     minDropdownWidth = "min-w-full",
     value = $bindable(),
     placeholder = "",
-    inputMode = undefined,
+    inputMode,
     required = false,
     isMultiple = false,
     withAutoComplete = false,
@@ -46,7 +43,7 @@
     choices = $bindable(),
     display = "horizontal",
     style = "common",
-    onChange = undefined,
+    onChange,
   }: Props = $props();
 
   const originalChoices: Choice[] = [...choices];

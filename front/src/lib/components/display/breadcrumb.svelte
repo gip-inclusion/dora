@@ -31,18 +31,13 @@
     | "manager-dashboard";
 
   interface Props {
-    structure?: Structure | undefined;
-    service?: Service | undefined;
-    model?: Model | undefined;
+    structure?: Structure;
+    service?: Service;
+    model?: Model;
     currentLocation: BreadcrumbLocation | string;
   }
 
-  let {
-    structure = undefined,
-    service = undefined,
-    model = undefined,
-    currentLocation,
-  }: Props = $props();
+  let { structure, service, model, currentLocation }: Props = $props();
 
   const locationToText: Record<string, string> = {
     search: "Recherche",

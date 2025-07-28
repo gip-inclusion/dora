@@ -22,8 +22,8 @@
 
   interface Props {
     searchStatus: StatusFilter;
-    filterDefinition: string | undefined;
-    filterActions: string | undefined;
+    filterDefinition?: string;
+    filterActions?: string;
     servicesOptions: ServicesOptions;
     structuresOptions: StructuresOptions;
     structures?: AdminShortStructure[];

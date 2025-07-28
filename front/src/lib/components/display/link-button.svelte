@@ -5,9 +5,9 @@
     nofollow?: boolean;
     label?: string;
     extraClass?: string;
-    ariaLabel?: string | undefined;
-    id?: string | undefined;
-    icon?: string | undefined;
+    ariaLabel?: string;
+    id?: string;
+    icon?: string;
     iconOnRight?: boolean;
     small?: boolean;
     noBackground?: boolean;
@@ -24,9 +24,9 @@
     nofollow = false,
     label = "",
     extraClass = "",
-    ariaLabel = undefined,
-    id = undefined,
-    icon = undefined,
+    ariaLabel,
+    id,
+    icon,
     iconOnRight = false,
     small = false,
     noBackground = false,

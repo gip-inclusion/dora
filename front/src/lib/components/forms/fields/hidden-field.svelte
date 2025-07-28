@@ -4,10 +4,10 @@
 
   interface Props {
     id: string;
-    value?: string | number | undefined;
+    value?: string | number;
   }
 
-  let { id, value = $bindable(undefined) }: Props = $props();
+  let { id, value = $bindable() }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}

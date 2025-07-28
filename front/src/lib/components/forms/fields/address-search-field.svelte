@@ -9,7 +9,7 @@
 
   interface Props {
     id: string;
-    value?: string | undefined;
+    value?: string;
     disabled?: boolean;
     readonly?: any;
     placeholder?: string;
@@ -26,9 +26,9 @@
 
   let {
     id,
-    value = $bindable(undefined),
+    value = $bindable(),
     disabled = false,
-    readonly = undefined,
+    readonly,
     placeholder = "",
     initialValue = "",
     cityCode,

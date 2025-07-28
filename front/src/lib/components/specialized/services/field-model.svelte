@@ -10,40 +10,38 @@
   } from "$lib/utils/misc";
 
   interface Props {
-    value?: any | undefined;
-    onUseValue?: (() => void) | undefined;
+    value?: any;
+    onUseValue?: () => void;
     showUseButton?: boolean;
     showModel?: boolean;
     type?: string;
-    options?: any | undefined;
+    options?: any;
     paddingTop?: boolean;
-    serviceValue?: any | undefined;
-    subFields?:
-      | Record<
-          string,
-          Array<{
-            label?: string;
-            showModel: boolean;
-            value: any;
-            serviceValue: any;
-            options: any;
-            onUseValue: (() => void) | undefined;
-          }>
-        >
-      | undefined;
+    serviceValue?: any;
+    subFields?: Record<
+      string,
+      Array<{
+        label?: string;
+        showModel: boolean;
+        value: any;
+        serviceValue: any;
+        options: any;
+        onUseValue?: () => void;
+      }>
+    >;
     children?: Snippet;
   }
 
   let {
-    value = undefined,
-    onUseValue = undefined,
+    value,
+    onUseValue,
     showUseButton = true,
     showModel = false,
     type = "text",
-    options = undefined,
+    options,
     paddingTop = false,
-    serviceValue = undefined,
-    subFields = undefined,
+    serviceValue,
+    subFields,
     children,
   }: Props = $props();
 

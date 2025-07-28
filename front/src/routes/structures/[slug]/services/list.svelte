@@ -32,7 +32,7 @@
     servicesOptions: any;
     tabDisplay?: boolean;
     onRefresh: any;
-    limit?: number | undefined;
+    limit?: number;
     withEmptyNotice?: boolean;
     serviceStatus: ServiceStatus | null;
     updateNeeded: "true" | "false" | null;
@@ -45,7 +45,7 @@
     servicesOptions,
     tabDisplay = true,
     onRefresh,
-    limit = undefined,
+    limit,
     withEmptyNotice = false,
     serviceStatus = $bindable(),
     updateNeeded = $bindable(),

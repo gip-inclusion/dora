@@ -11,7 +11,7 @@
     disabled?: boolean;
     readonly?: boolean;
     horizontal?: boolean;
-    errorMessage?: string | null | undefined;
+    errorMessage?: string | null;
     focused?: boolean;
     onchange?: (event: Event) => void;
     onfocus?: (event: FocusEvent) => void;
@@ -27,7 +27,7 @@
     disabled = false,
     readonly = false,
     horizontal = false,
-    errorMessage = undefined,
+    errorMessage,
     focused = false,
     onchange,
     onfocus,

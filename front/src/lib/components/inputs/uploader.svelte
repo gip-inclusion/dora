@@ -6,7 +6,7 @@
 
   interface Props {
     id: string;
-    structureSlug: string | undefined;
+    structureSlug?: string;
     fileKeys?: string[];
     disabled?: boolean;
     onblur?: (event: Event) => void;

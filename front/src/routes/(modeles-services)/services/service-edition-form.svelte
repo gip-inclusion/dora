@@ -42,8 +42,8 @@
     servicesOptions: ServicesOptions;
     managedStructureSearchMode?: boolean;
     structures: ShortStructure[];
-    structure: ShortStructure | undefined;
-    model: Model | undefined;
+    structure?: ShortStructure;
+    model?: Model;
   }
 
   let {

@@ -16,10 +16,7 @@ const INSANE_CONFIGURATION = {
   },
 };
 
-export function markdownToHTML(
-  markdownContent: string,
-  titleLevel: number | undefined = undefined
-) {
+export function markdownToHTML(markdownContent: string, titleLevel?: number) {
   const converter = new showdown.Converter({
     headerLevelStart: titleLevel,
     tables: true,

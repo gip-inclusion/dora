@@ -2,11 +2,11 @@
   import type { Partner } from "$lib/types";
 
   interface Props {
-    imgHeight?: "small" | "medium" | undefined;
+    imgHeight?: "small" | "medium";
     partnersToShow?: Partner[];
   }
 
-  let { imgHeight = undefined, partnersToShow = [] }: Props = $props();
+  let { imgHeight, partnersToShow = [] }: Props = $props();
 </script>
 
 {#each partnersToShow as partner}

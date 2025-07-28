@@ -17,13 +17,13 @@
     readonly?: any;
     placeholder?: string;
     // Spécifiques
-    addButtonLabel?: string | undefined;
+    addButtonLabel?: string;
     choices: CustomChoice[];
     sort?: boolean;
-    onChange?: ((newValues: string[]) => void) | undefined;
+    onChange?: (newValues: string[]) => void;
     placeholderMulti?: string;
     canAdd?: boolean;
-    structureSlug?: string | undefined;
+    structureSlug?: string;
     // Proxy vers le FieldWrapper
     description?: string;
     hidden?: boolean;
@@ -35,15 +35,15 @@
     id,
     values = $bindable(),
     disabled = false,
-    readonly = undefined,
+    readonly,
     placeholder = "Choisir",
-    addButtonLabel = undefined,
+    addButtonLabel,
     choices = $bindable(),
     sort = false,
-    onChange = undefined,
+    onChange,
     placeholderMulti = "Choisir",
     canAdd = true,
-    structureSlug = undefined,
+    structureSlug,
     description = "",
     hidden = false,
     hideLabel = false,

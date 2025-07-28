@@ -12,14 +12,14 @@
   interface Props {
     servicesOptions: ServicesOptions;
     service: Service | Model;
-    model?: Model | undefined;
+    model?: Model;
     noTopPadding?: boolean;
   }
 
   let {
     servicesOptions,
     service = $bindable(),
-    model = undefined,
+    model,
     noTopPadding = false,
   }: Props = $props();
 

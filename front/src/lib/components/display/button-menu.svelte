@@ -6,9 +6,9 @@
   import { randomId } from "$lib/utils/random";
 
   interface Props {
-    icon?: string | undefined;
+    icon?: string;
     iconOnRight?: boolean;
-    label?: string | undefined;
+    label?: string;
     hideLabel?: boolean;
     disabled?: boolean;
     small?: boolean;
@@ -20,9 +20,9 @@
   }
 
   let {
-    icon = undefined,
+    icon,
     iconOnRight = false,
-    label = undefined,
+    label,
     hideLabel = false,
     disabled = false,
     small = false,

@@ -14,14 +14,14 @@
     structure: Structure;
     structuresOptions: StructuresOptions;
     modify?: boolean;
-    onRefresh?: (() => Promise<void>) | undefined;
+    onRefresh?: () => Promise<void>;
   }
 
   let {
     structure = $bindable(),
     structuresOptions,
     modify = false,
-    onRefresh = undefined,
+    onRefresh,
   }: Props = $props();
 
   let requesting = $state(false);

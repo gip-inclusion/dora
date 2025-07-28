@@ -10,7 +10,7 @@
 
   interface Props {
     id: string;
-    value?: string[] | number[] | undefined;
+    value?: string[] | number[];
     disabled?: boolean;
     readonly?: any;
     placeholder?: string;
@@ -18,7 +18,7 @@
     // Spécifique du select
     choices: Choice[];
     sort?: boolean;
-    onChange?: ((newValues: string[]) => void) | undefined;
+    onChange?: (newValues: string[]) => void;
     placeholderMulti?: string;
     fixedItemsValues?: string[];
     // Proxy vers le FieldWrapper
@@ -30,14 +30,14 @@
 
   let {
     id,
-    value = $bindable(undefined),
+    value = $bindable(),
     disabled = false,
-    readonly = undefined,
+    readonly,
     placeholder = "Choisir",
     initialValue = undefined,
     choices,
     sort = false,
-    onChange = undefined,
+    onChange,
     placeholderMulti = "Choisir",
     fixedItemsValues = [],
     description = "",

@@ -8,16 +8,12 @@
   import { currentSchema } from "$lib/validation/validation";
 
   interface Props {
-    model?: Model | undefined;
+    model?: Model;
     servicesOptions: ServicesOptions;
     service: Service;
   }
 
-  let {
-    model = undefined,
-    servicesOptions,
-    service = $bindable(),
-  }: Props = $props();
+  let { model, servicesOptions, service = $bindable() }: Props = $props();
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;

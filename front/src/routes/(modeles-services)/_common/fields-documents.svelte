@@ -11,15 +11,15 @@
   interface Props {
     servicesOptions: ServicesOptions;
     service: Service;
-    model?: Model | undefined;
+    model?: Model;
     onblur?: (event: Event) => void;
   }
 
   let {
     servicesOptions,
     service = $bindable(),
-    model = undefined,
-    onblur = undefined,
+    model,
+    onblur,
   }: Props = $props();
 
   let showModel = $derived(!!service.model);

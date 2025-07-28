@@ -2,10 +2,10 @@
   interface Props {
     onSelectedChange: any;
     items?: { id: string; name: string }[];
-    itemId?: string | undefined;
+    itemId?: string;
   }
 
-  let { onSelectedChange, items = [], itemId = undefined }: Props = $props();
+  let { onSelectedChange, items = [], itemId }: Props = $props();
 </script>
 
 <ul class="gap-s8 pt-s16 flex flex-wrap">

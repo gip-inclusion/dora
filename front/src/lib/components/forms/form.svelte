@@ -23,15 +23,13 @@
     serverErrorsDict?: any;
     onSubmit: any;
     onSuccess: any;
-    servicesOptions?: ServicesOptions | undefined;
-    onChange?: ((validatedData, fieldName?) => void) | undefined;
+    servicesOptions?: ServicesOptions;
+    onChange?: (validatedData, fieldName?) => void;
     disableExitWarning?: boolean;
-    onValidate?:
-      | ((
-          submittedData,
-          submitterId: string | undefined
-        ) => { validatedData; valid: boolean })
-      | undefined;
+    onValidate?: (
+      submittedData,
+      submitterId?: string
+    ) => { validatedData; valid: boolean };
     children?: Snippet;
   }
 
@@ -42,10 +40,10 @@
     serverErrorsDict = {},
     onSubmit,
     onSuccess,
-    servicesOptions = undefined,
-    onChange = undefined,
+    servicesOptions,
+    onChange,
     disableExitWarning = false,
-    onValidate = undefined,
+    onValidate,
     children,
   }: Props = $props();
 

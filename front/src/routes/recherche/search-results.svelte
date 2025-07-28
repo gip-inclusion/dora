@@ -21,7 +21,7 @@
     data: PageData;
     filters: Filters;
     filteredServices: ServiceSearchResult[];
-    selectedServiceSlug?: string | undefined;
+    selectedServiceSlug?: string;
     noAlertButtonBottomGap?: boolean;
     summarized?: boolean;
     noPagination?: boolean;
@@ -32,7 +32,7 @@
     data,
     filters,
     filteredServices,
-    selectedServiceSlug = undefined,
+    selectedServiceSlug,
     noAlertButtonBottomGap = false,
     summarized = false,
     noPagination = false,

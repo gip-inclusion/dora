@@ -8,7 +8,7 @@
   interface Props {
     value: string | string[];
     isMultiple: boolean;
-    selectedOption: Choice | undefined;
+    selectedOption?: Choice;
     choices: Choice[];
     extraClass?: string;
     setAsSelected: (i: string | null) => void;

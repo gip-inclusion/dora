@@ -19,14 +19,10 @@
   interface Props {
     servicesOptions: ServicesOptions;
     service: Service;
-    model?: Model | undefined;
+    model?: Model;
   }
 
-  let {
-    servicesOptions,
-    service = $bindable(),
-    model = undefined,
-  }: Props = $props();
+  let { servicesOptions, service = $bindable(), model }: Props = $props();
 
   function handleUseModelValue(fieldName) {
     service[fieldName] = model ? model[fieldName] : undefined;

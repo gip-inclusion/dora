@@ -11,13 +11,13 @@
 
   interface Props {
     structures?: ShortStructure[];
-    lastVisitedStructure?: ShortStructure | undefined;
+    lastVisitedStructure?: ShortStructure;
     mobileDesign?: boolean;
   }
 
   let {
     structures = [],
-    lastVisitedStructure = undefined,
+    lastVisitedStructure,
     mobileDesign = false,
   }: Props = $props();
 

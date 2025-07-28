@@ -11,7 +11,7 @@
     disabled?: boolean;
     id: any;
     value?: any;
-    initialValue?: string | undefined;
+    initialValue?: string;
   }
 
   let {
@@ -19,8 +19,8 @@
     onChange,
     disabled = false,
     id,
-    value = $bindable(undefined),
-    initialValue = undefined,
+    value = $bindable(),
+    initialValue,
   }: Props = $props();
 
   let choices: Choice[] = $state([]);

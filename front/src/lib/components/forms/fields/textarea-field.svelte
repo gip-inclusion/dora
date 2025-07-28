@@ -13,9 +13,9 @@
     autocomplete?: any;
     disabled?: boolean;
     readonly?: any;
-    placeholder?: string | undefined;
+    placeholder?: string;
     // Specifique
-    maxLength?: number | undefined;
+    maxLength?: number;
     rows?: number;
     // Proxy vers le FieldWrapper
     description?: string;
@@ -28,10 +28,10 @@
   let {
     id,
     value = $bindable(),
-    autocomplete = undefined,
+    autocomplete,
     disabled = false,
-    readonly = undefined,
-    placeholder = undefined,
+    readonly,
+    placeholder,
     maxLength = undefined,
     rows = 4,
     description = "",

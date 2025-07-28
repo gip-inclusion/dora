@@ -21,7 +21,7 @@
 
   let { id, service = $bindable(), servicesOptions }: Props = $props();
 
-  let coachOrientationModesFocusValue: string | undefined = $state(undefined);
+  let coachOrientationModesFocusValue: string | undefined = $state();
 
   let externalFormToggle = $derived(
     service.coachOrientationModes.includes("completer-le-formulaire-dadhesion")

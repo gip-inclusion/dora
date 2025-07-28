@@ -6,7 +6,7 @@
   interface Props {
     servicesOptions: ServicesOptions;
     service: Service | Model;
-    model?: Model | undefined;
+    model?: Model;
     isModel?: boolean;
     description?: string;
   }
@@ -14,7 +14,7 @@
   let {
     servicesOptions,
     service = $bindable(),
-    model = undefined,
+    model,
     isModel = false,
     description = "",
   }: Props = $props();

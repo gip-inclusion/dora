@@ -10,14 +10,14 @@
 
   interface Props {
     id: string;
-    value?: string | number | undefined;
+    value?: string | number;
     disabled?: boolean;
     readonly?: any;
     placeholder?: string;
-    initialValue?: string | undefined;
+    initialValue?: string;
     // Spécifique du select
     choices: Choice[];
-    searchFunction?: ((searchText: string) => Promise<Choice[]>) | undefined;
+    searchFunction?: (searchText: string) => Promise<Choice[]>;
     sort?: boolean;
     onChange?: any;
     placeholderMulti?: string;
@@ -30,15 +30,15 @@
 
   let {
     id,
-    value = $bindable(undefined),
+    value = $bindable(),
     disabled = false,
     readonly = $currentSchema?.[id]?.readonly,
     placeholder = "Choisir",
-    initialValue = undefined,
+    initialValue,
     choices,
-    searchFunction = undefined,
+    searchFunction,
     sort = false,
-    onChange = undefined,
+    onChange,
     placeholderMulti = "Choisir",
     description = "",
     hidden = false,

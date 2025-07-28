@@ -2,10 +2,10 @@
   interface Props {
     label?: string;
     type?: "button" | "submit";
-    id?: string | undefined;
-    name?: string | undefined;
-    icon?: string | undefined;
-    title?: string | undefined;
+    id?: string;
+    name?: string;
+    icon?: string;
+    title?: string;
     extraClass?: string;
     iconOnRight?: boolean;
     hideLabel?: boolean;
@@ -29,10 +29,10 @@
   let {
     label = "",
     type = "button",
-    id = undefined,
-    name = undefined,
-    icon = undefined,
-    title = undefined,
+    id,
+    name,
+    icon,
+    title,
     extraClass = "",
     iconOnRight = false,
     hideLabel = false,

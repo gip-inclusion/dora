@@ -25,7 +25,7 @@
     onchange,
   }: Props = $props();
 
-  let focusValue: string | undefined = $state(undefined);
+  let focusValue: string | undefined = $state();
 </script>
 
 <div class="gap-s8 flex" class:flex-col={!horizontalCheckboxes}>

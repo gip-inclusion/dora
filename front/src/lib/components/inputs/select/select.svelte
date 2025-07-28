@@ -7,26 +7,23 @@
 
   interface Props {
     id: string;
-    choices?: Choice[] | undefined;
+    choices?: Choice[];
     fixedItemsValues?: string[];
     sort?: boolean;
-    value?: string | number | string[] | number[] | undefined;
-    searchText: string | undefined;
+    value?: string | number | string[] | number[];
+    searchText?: string;
     disabled?: boolean;
     readonly?: boolean;
     placeholder?: string;
     placeholderMulti?: string;
     multiple?: boolean;
     hideArrow?: boolean;
-    searchFunction?: ((searchTxt: string) => Promise<Choice[]>) | undefined;
+    searchFunction?: (searchTxt: string) => Promise<Choice[]>;
     delay?: any;
     localFiltering?: any;
     minCharactersToSearch?: any;
     onblur?: (evt: FocusEvent) => void;
-    onChange?:
-      | ((newValue: string) => void)
-      | ((newValues: string[]) => void)
-      | undefined;
+    onChange?: ((newValue: string) => void) | ((newValues: string[]) => void);
     initialValue?: any;
     showClear?: boolean;
     errorMessages?: string[];

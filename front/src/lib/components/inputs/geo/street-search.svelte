@@ -12,8 +12,8 @@
     placeholder: string;
     cityCode: string;
     disabled: boolean;
-    value?: string | undefined;
-    initialValue?: string | undefined;
+    value?: string;
+    initialValue?: string;
     readonly?: boolean;
   }
 
@@ -23,8 +23,8 @@
     placeholder,
     cityCode,
     disabled,
-    value = $bindable(undefined),
-    initialValue = undefined,
+    value = $bindable(),
+    initialValue,
     readonly = false,
   }: Props = $props();
 

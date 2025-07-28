@@ -14,7 +14,7 @@
     onChange: (adminDetails: GeoApiValue) => void;
     placeholder?: string;
     disabled?: boolean;
-    value?: GeoApiValue | undefined;
+    value?: GeoApiValue;
     initialValue?: any;
     readonly?: boolean;
     choices?: any;
@@ -27,7 +27,7 @@
     onChange,
     placeholder = "",
     disabled = false,
-    value = $bindable(undefined),
+    value = $bindable(),
     initialValue = undefined,
     readonly = false,
     choices = $bindable([]),

@@ -29,12 +29,12 @@
 
   interface Props {
     servicesOptions: ServicesOptions;
-    cityCode?: string | undefined;
-    cityLabel?: string | undefined;
-    label?: string | undefined;
-    lon?: number | undefined;
-    lat?: number | undefined;
-    categoryId?: string | undefined;
+    cityCode?: string;
+    cityLabel?: string;
+    label?: string;
+    lon?: number;
+    lat?: number;
+    categoryId?: string;
     subCategoryIds?: string[];
     useAdditionalFilters?: boolean;
     kindIds?: ServiceKind[];
@@ -46,12 +46,12 @@
 
   let {
     servicesOptions,
-    cityCode = $bindable(undefined),
-    cityLabel = $bindable(undefined),
+    cityCode = $bindable(),
+    cityLabel = $bindable(),
     label = $bindable(""),
-    lon = $bindable(undefined),
-    lat = $bindable(undefined),
-    categoryId = $bindable(undefined),
+    lon = $bindable(),
+    lat = $bindable(),
+    categoryId = $bindable(),
     subCategoryIds = $bindable([]),
     useAdditionalFilters = false,
     kindIds = [],

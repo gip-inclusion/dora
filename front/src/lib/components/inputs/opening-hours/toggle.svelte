@@ -2,7 +2,7 @@
   interface Props {
     // https://tailwindcomponents.com/component/toggle-button-1
     id: string;
-    checked?: boolean | undefined;
+    checked?: boolean;
     disabled?: boolean;
     readonly?: boolean;
     yesLabel?: string;
@@ -12,7 +12,7 @@
 
   let {
     id,
-    checked = $bindable(undefined),
+    checked = $bindable(),
     disabled = false,
     readonly = false,
     yesLabel = "Oui",

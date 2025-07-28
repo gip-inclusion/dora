@@ -18,9 +18,9 @@
     service: Service;
     managedStructureSearchMode?: boolean;
     structures: ShortStructure[];
-    structure: ShortStructure | undefined;
+    structure?: ShortStructure;
     isModel?: boolean;
-    model?: Model | undefined | null;
+    model?: Model | null;
   }
 
   let {
@@ -30,7 +30,7 @@
     structures,
     structure = $bindable(),
     isModel = false,
-    model = $bindable(undefined),
+    model = $bindable(),
   }: Props = $props();
 
   const propsWithSpecificFields = [

@@ -20,7 +20,7 @@
     // a list of items values that the user can not remove (ex: structure national labels)
     fixedItemsValues?: string[];
     // function to use to get all items (alternative to providing items)
-    searchFunction?: ((searchText: string) => Promise<any[]>) | undefined;
+    searchFunction?: (searchText: string) => Promise<any[]>;
     textCleanFunction?: any;
     // events
     onblur?: (evt: FocusEvent) => void;
@@ -106,11 +106,11 @@
   let {
     items = $bindable([]),
     fixedItemsValues = [],
-    searchFunction = undefined,
+    searchFunction,
     textCleanFunction = function (userEnteredText) {
       return userEnteredText;
     },
-    onblur = undefined,
+    onblur,
     onChange = function (_newValue) {},
     onFocus = function () {},
     selectFirstIfEmpty = false,
@@ -120,8 +120,8 @@
     ignoreAccents = true,
     matchAllKeywords = true,
     sortByMatchedKeywords = false,
-    itemFilterFunction = undefined,
-    itemSortFunction = undefined,
+    itemFilterFunction,
+    itemSortFunction,
     lock = false,
     delay = 0,
     localFiltering = true,
@@ -135,17 +135,17 @@
     className = "",
     inputClassName = "",
     inputId,
-    name = undefined,
-    selectName = undefined,
-    selectId = undefined,
-    title = undefined,
+    name,
+    selectName,
+    selectId,
+    title,
     html5autocomplete = false,
     readonly = false,
     dropdownClassName = "",
     disabled = false,
     errorMessages = [],
-    value = $bindable(undefined),
-    initialValue = undefined,
+    value = $bindable(),
+    initialValue,
     text = $bindable(""),
     prepend,
     itemContent,

@@ -4,11 +4,11 @@
   interface Props {
     icon: string;
     text: string;
-    link?: string | undefined;
+    link?: string;
     isPreference?: boolean;
   }
 
-  let { icon, text, link = undefined, isPreference = false }: Props = $props();
+  let { icon, text, link, isPreference = false }: Props = $props();
 </script>
 
 <li class="text-gray-text flex items-center">

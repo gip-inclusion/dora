@@ -22,8 +22,7 @@
 
   let { id, service = $bindable(), servicesOptions }: Props = $props();
 
-  let beneficiariesAccessModesFocusValue: string | undefined =
-    $state(undefined);
+  let beneficiariesAccessModesFocusValue: string | undefined = $state();
 
   let externalFormToggle = $derived(
     service.beneficiariesAccessModes.includes(

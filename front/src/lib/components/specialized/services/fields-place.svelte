@@ -9,14 +9,10 @@
   interface Props {
     servicesOptions: ServicesOptions;
     service: Service;
-    structure?: Structure | undefined | null;
+    structure?: Structure | null;
   }
 
-  let {
-    servicesOptions,
-    service = $bindable(),
-    structure = undefined,
-  }: Props = $props();
+  let { servicesOptions, service = $bindable(), structure }: Props = $props();
 </script>
 
 <FieldSet title="Accueil">
