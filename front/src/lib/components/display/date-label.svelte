@@ -1,7 +1,7 @@
 <script lang="ts">
-interface Props {
-  let date: string | number | Date;
-}
+  interface Props {
+    date: string | number | Date;
+  }
 
   let { date }: Props = $props();
 </script>
