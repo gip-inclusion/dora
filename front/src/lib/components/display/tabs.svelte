@@ -1,6 +1,6 @@
 <script lang="ts">
   interface Props {
-    onSelectedChange: any;
+    onSelectedChange: (id: string) => void;
     items?: { id: string; name: string }[];
     itemId?: string;
   }
