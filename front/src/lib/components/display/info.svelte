@@ -5,7 +5,7 @@
   import { emotionHappyIcon, errorWarningIcon } from "$lib/icons";
 
   interface Props {
-    label: any;
+    label?: string;
     positiveMood?: boolean;
     negativeMood?: boolean;
     info?: boolean;
