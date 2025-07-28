@@ -13,18 +13,7 @@ from dora.core.test_utils import make_user
 
 
 def test_send_link(client):
-    # aucun lien n'est envoyé si l'utilisateur n'a pas un compte IC
-    user_no_ic = make_user()
-    response = client.post(
-        reverse("send_link"),
-        data={"email": user_no_ic.email},
-    )
-    assert response.status_code == 404, (
-        "Une response 404 est attendue (utilisateur sans IC)"
-    )
-
-    # on vérifie qu'un lien est envoyé si l'utilisateur à un compte IC
-    user_ic = make_user(ic_id=uuid4(), is_active=True)
+    user_ic = make_user(is_active=True)
 
     response = client.post(
         reverse("send_link"),
