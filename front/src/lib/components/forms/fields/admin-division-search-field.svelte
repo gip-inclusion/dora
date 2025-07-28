@@ -12,7 +12,7 @@
     id: string;
     value?: string;
     disabled?: boolean;
-    readonly?: any;
+    readonly?: boolean;
     placeholder?: string;
     initialValue?: string;
     // Spécifiques:
