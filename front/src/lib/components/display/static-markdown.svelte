@@ -1,6 +1,11 @@
 <script lang="ts">
   import { markdownToHTML } from "$lib/utils/misc";
-  let { content } = $props();
+
+  interface Props {
+    content: string;
+  }
+
+  let { content }: Props = $props();
 </script>
 
 <div class="prose max-w-3xl">
