@@ -9,7 +9,7 @@
     positiveMood?: boolean;
     negativeMood?: boolean;
     info?: boolean;
-    icon?: any;
+    icon?: string;
     whiteBg?: boolean;
     leftBorder?: boolean;
     children?: Snippet;
@@ -20,7 +20,7 @@
     positiveMood = false,
     negativeMood = false,
     info = false,
-    icon = $bindable(undefined),
+    icon = $bindable(),
     whiteBg = false,
     leftBorder = false,
     children,
