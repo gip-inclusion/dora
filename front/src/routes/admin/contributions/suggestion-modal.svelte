@@ -7,8 +7,8 @@
   interface Props {
     suggestion: any;
     isOpen?: boolean;
-    onAccept: any;
-    onReject: any;
+    onAccept: (suggestion: unknown) => Promise<void>;
+    onReject: (suggestion: unknown) => Promise<void>;
   }
 
   let {
