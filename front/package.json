@@ -44,7 +44,7 @@
     "@types/showdown": "^2.0.6",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
-    "bits-ui": "^2.8.11",
+    "bits-ui": "^2.8.13",
     "dayjs": "^1.11.13",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.8",
