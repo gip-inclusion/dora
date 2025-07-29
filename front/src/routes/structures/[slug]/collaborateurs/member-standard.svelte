@@ -8,15 +8,25 @@
   import Member from "./member.svelte";
   import ModalChangeUser from "./modal-change-user.svelte";
 
-  export let member;
-  export let onRefresh;
-  export let readOnly = true;
-  export let structureSlug: string;
-  export let isMyself;
+  interface Props {
+    member: any;
+    onRefresh: any;
+    readOnly?: boolean;
+    structureSlug: string;
+    isMyself: any;
+  }
 
-  let modalChangeUserIsOpen = false;
-  $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
-  $: userLevelIcon = member.isAdmin ? user2Icon : userIcon;
+  let {
+    member = $bindable(),
+    onRefresh,
+    readOnly = true,
+    structureSlug,
+    isMyself,
+  }: Props = $props();
+
+  let modalChangeUserIsOpen = $state(false);
+  let userLevel = $derived(member.isAdmin ? "Admin" : "Utilisateur");
+  let userLevelIcon = $derived(member.isAdmin ? user2Icon : userIcon);
 
   async function handleDelete() {
     const confirmText = isMyself
@@ -38,35 +48,39 @@
 
 <ModalChangeUser bind:isOpen={modalChangeUserIsOpen} bind:member {onRefresh} />
 <Member {member} {isMyself} {readOnly}>
-  <div slot="label">
-    <Label label={userLevel} smallIcon icon={userLevelIcon} />
-  </div>
-
-  <div slot="actions" let:onCloseParent>
-    <div class="flex flex-col items-end">
-      <Button
-        label="Modifier"
-        on:click={() => {
-          modalChangeUserIsOpen = true;
-          onCloseParent();
-        }}
-        icon={settingsIcon}
-        iconOnRight
-        small
-        noBackground
-      />
-
-      <Button
-        label={isMyself ? "Quitter la structure" : "Révoquer"}
-        on:click={() => {
-          handleDelete();
-          onCloseParent();
-        }}
-        icon={forbidIcon}
-        iconOnRight
-        small
-        noBackground
-      />
+  {#snippet label()}
+    <div>
+      <Label label={userLevel} smallIcon icon={userLevelIcon} />
     </div>
-  </div></Member
+  {/snippet}
+
+  {#snippet actions({ onCloseParent })}
+    <div>
+      <div class="flex flex-col items-end">
+        <Button
+          label="Modifier"
+          onclick={() => {
+            modalChangeUserIsOpen = true;
+            onCloseParent();
+          }}
+          icon={settingsIcon}
+          iconOnRight
+          small
+          noBackground
+        />
+
+        <Button
+          label={isMyself ? "Quitter la structure" : "Révoquer"}
+          onclick={() => {
+            handleDelete();
+            onCloseParent();
+          }}
+          icon={forbidIcon}
+          iconOnRight
+          small
+          noBackground
+        />
+      </div>
+    </div>
+  {/snippet}</Member
 >

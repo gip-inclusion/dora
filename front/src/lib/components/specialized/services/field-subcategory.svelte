@@ -1,22 +1,30 @@
 <script lang="ts">
   import MultiSelectField from "$lib/components/forms/fields/multi-select-field.svelte";
-  import type { Service, ServicesOptions } from "$lib/types";
+  import type { Model, Service, ServicesOptions } from "$lib/types";
   import { orderAndReformatSubcategories } from "$lib/utils/misc";
 
-  export let service: Service;
-  export let servicesOptions: ServicesOptions;
-  export let description = "";
+  interface Props {
+    service: Service | Model;
+    servicesOptions: ServicesOptions;
+    description?: string;
+  }
 
-  let availableSubcategories = [];
+  let {
+    service = $bindable(),
+    servicesOptions,
+    description = "",
+  }: Props = $props();
 
-  $: availableSubcategories = orderAndReformatSubcategories(
-    service.categories.length
-      ? servicesOptions.subcategories.filter(({ value }) =>
-          service.categories.some((cat) => value.startsWith(cat))
-        )
-      : [],
-    service.categories,
-    servicesOptions
+  let availableSubcategories = $derived(
+    orderAndReformatSubcategories(
+      service.categories.length
+        ? servicesOptions.subcategories.filter(({ value }) =>
+            service.categories.some((cat) => value.startsWith(cat))
+          )
+        : [],
+      service.categories,
+      servicesOptions
+    )
   );
 </script>
 

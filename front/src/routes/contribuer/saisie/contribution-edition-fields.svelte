@@ -7,9 +7,17 @@
   import FieldsTypology from "$lib/components/specialized/services/fields-typology.svelte";
   import type { Establishment, Service, ServicesOptions } from "$lib/types";
 
-  export let servicesOptions: ServicesOptions;
-  export let contribution: Service;
-  export let establishment: Establishment;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    contribution: Service;
+    establishment: Establishment | null;
+  }
+
+  let {
+    servicesOptions,
+    contribution = $bindable(),
+    establishment,
+  }: Props = $props();
 </script>
 
 {#if contribution.siret}

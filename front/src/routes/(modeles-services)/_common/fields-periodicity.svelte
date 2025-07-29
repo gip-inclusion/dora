@@ -5,38 +5,49 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
+  import { currentSchema } from "$lib/validation/validation";
 
-  export let servicesOptions: ServicesOptions, service: Service;
-  export let model: Model | undefined = undefined;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    model?: Model;
+  }
 
-  $: showModel = !!service.model;
+  let { servicesOptions, service = $bindable(), model }: Props = $props();
+
+  let showModel = $derived(!!service.model);
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  $: fieldModelProps = model
-    ? getModelInputProps({
-        service,
-        servicesOptions,
-        showModel,
-        onUseModelValue: handleUseModelValue,
-        model,
-      })
-    : {};
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+          schema: $currentSchema,
+        })
+      : {}
+  );
 </script>
 
 <FieldSet title="Périodicité" {showModel}>
-  <div slot="help">
-    <p class="text-f14">
-      La durée limitée permet de supendre automatiquement la visibilité du
-      service dans les résultat de recherche.
-    </p>
-  </div>
+  {#snippet help()}
+    <div>
+      <p class="text-f14">
+        La durée limitée permet de supendre automatiquement la visibilité du
+        service dans les résultat de recherche.
+      </p>
+    </div>
+  {/snippet}
   <FieldModel {...fieldModelProps.recurrence ?? {}}>
     <BasicInputField
       id="recurrence"
-      description="Par exemple : tous les jours à 14h, une fois par mois, etc."
+      descriptionText="Par exemple : tous les jours à 14h, une fois par mois, etc."
       bind:value={service.recurrence}
     />
   </FieldModel>
@@ -46,7 +57,7 @@
       id="suspensionDate"
       type="date"
       bind:value={service.suspensionDate}
-      description="Date à partir de laquelle le service ne sera plus visible dans la recherche."
+      descriptionText="Date à partir de laquelle le service ne sera plus visible dans la recherche."
     />
   </FieldModel>
 

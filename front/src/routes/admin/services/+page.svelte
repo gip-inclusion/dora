@@ -7,7 +7,8 @@
   import { shortenString } from "$lib/utils/misc";
   import { onMount } from "svelte";
 
-  let services, filteredServices;
+  let services = $state(),
+    filteredServices = $state();
 
   function filterAndSortEntities(searchString) {
     return (
@@ -65,7 +66,7 @@
     <div class="mb-s12 gap-s12 flex w-full flex-row items-center">
       <div class="grow">
         <input
-          on:input={handleFilterChange}
+          oninput={handleFilterChange}
           class="border-gray-02 p-s8 w-full border"
           placeholder="rechercher (nom du service, de sa structure, numéro du département)…"
         />

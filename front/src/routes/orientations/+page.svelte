@@ -29,9 +29,13 @@
   import { formatFilePath } from "$lib/utils/file";
   import LinkExpired from "./link-expired.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
   const { askForNewLink, queryId, queryHash } = data;
-  let { orientation } = data;
+  let { orientation } = $state(data);
 
   async function onRefresh() {
     const response = await getOrientation(queryId, queryHash);

@@ -8,8 +8,9 @@
   import ModerationLabel from "../moderation-label.svelte";
 
   // let services,
-  let structures, entities;
-  let filteredEntities = [];
+  let structures,
+    entities = $state();
+  let filteredEntities = $state([]);
 
   const STATUS_VALUE = {
     NEED_INITIAL_MODERATION: 1,
@@ -102,7 +103,7 @@
     <div class="mb-s12 gap-s12 flex w-full flex-row items-center">
       <div class="grow">
         <input
-          on:input={handleFilterChange}
+          oninput={handleFilterChange}
           class="border-gray-02 p-s8 w-full border"
           placeholder="rechercher (nom du service, de la structure ou numéro du département)…"
         />

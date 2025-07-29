@@ -2,7 +2,11 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { externalLinkIcon } from "$lib/icons";
 
-  export let url: string;
+  interface Props {
+    url: string;
+  }
+
+  let { url }: Props = $props();
 
   function addTrackingParamsToUrl(urlStr: string) {
     const urlObj = new URL(urlStr);
@@ -14,7 +18,7 @@
     return urlObj.toString();
   }
 
-  $: urlWithTrackingParams = addTrackingParamsToUrl(url);
+  let urlWithTrackingParams = $derived(addTrackingParamsToUrl(url));
 </script>
 
 <div class="border-gray-02 p-s32 rounded-2xl border shadow-sm">

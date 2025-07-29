@@ -13,14 +13,25 @@
   } from "$lib/utils/orientation-templates";
   import { formatPhoneNumber } from "$lib/utils/misc";
 
-  export let isOpen = false;
-  export let onRefresh;
-  export let orientation: Orientation;
-  export let queryHash: string;
+  interface Props {
+    isOpen?: boolean;
+    onClose?: () => void;
+    onRefresh: any;
+    orientation: Orientation;
+    queryHash: string;
+  }
 
-  let showConfirmation = false;
+  let {
+    isOpen = $bindable(false),
+    onClose = undefined,
+    onRefresh,
+    orientation,
+    queryHash,
+  }: Props = $props();
 
-  let requesting = false;
+  let showConfirmation = $state(false);
+
+  let requesting = $state(false);
 
   const acceptOrientationSchema: v.Schema = {
     message: {
@@ -69,25 +80,27 @@
     serviceContactName: orientation.service?.contactName,
   });
 
-  $: formData = { message, beneficiaryMessage };
+  let formData = $derived({ message, beneficiaryMessage });
 </script>
 
 <Modal
   bind:isOpen
-  on:close
+  {onClose}
   title="Valider la demande"
   hideTitle={showConfirmation}
   width="medium"
 >
-  <div slot="subtitle">
-    Vous êtes sur le point de valider une demande d’orientation qui vous a été
-    adressée par {orientation.prescriber?.name} pour le service «&nbsp;<a
-      class="text-magenta-cta"
-      href="/services/{orientation.service?.slug}"
-    >
-      {orientation.service?.name}
-    </a>&nbsp;»
-  </div>
+  {#snippet subtitle()}
+    <div>
+      Vous êtes sur le point de valider une demande d’orientation qui vous a été
+      adressée par {orientation.prescriber?.name} pour le service «&nbsp;<a
+        class="text-magenta-cta"
+        href="/services/{orientation.service?.slug}"
+      >
+        {orientation.service?.name}
+      </a>&nbsp;»
+    </div>
+  {/snippet}
 
   {#if showConfirmation}
     <ConfirmationBloc

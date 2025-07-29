@@ -11,8 +11,12 @@
   import { getDepartmentFromCityCode } from "$lib/utils/misc";
   import type { NationalLabel } from "$lib/types";
 
-  export let structure: Structure;
-  export let structuresOptions: StructuresOptions;
+  interface Props {
+    structure: Structure;
+    structuresOptions: StructuresOptions;
+  }
+
+  let { structure = $bindable(), structuresOptions }: Props = $props();
 
   const fixedNationalLabelValues: string[] =
     structuresOptions.restrictedNationalLabels.map(
@@ -28,7 +32,7 @@
     return `https://acceslibre.beta.gouv.fr/recherche/?what=&where=${where}&lat=${lat}&lon=${lon}&code=${code}`;
   }
 
-  $: accesslibreUrl = getAccessLibreUrl(structure);
+  let accesslibreUrl = $derived(getAccessLibreUrl(structure));
 </script>
 
 <BasicInputField id="siret" bind:value={structure.siret} />
@@ -56,20 +60,22 @@
   placeholder="https://acceslibre.beta.gouv.fr/…"
   vertical
 >
-  <div slot="description">
-    <small>
-      Afin de renseigner les informations d’accessibilité sur la structure,
-      retrouvez-la via la plateforme
-      <a
-        class="text-magenta-cta underline"
-        href={accesslibreUrl}
-        target="_blank"
-        title="Ouverture dans une nouvelle fenêtre"
-        rel="noopener ugc">acceslibre</a
-      >
-      et copiez l’url dans le champ ci-dessous.
-    </small>
-  </div>
+  {#snippet description()}
+    <div>
+      <small>
+        Afin de renseigner les informations d’accessibilité sur la structure,
+        retrouvez-la via la plateforme
+        <a
+          class="text-magenta-cta underline"
+          href={accesslibreUrl}
+          target="_blank"
+          title="Ouverture dans une nouvelle fenêtre"
+          rel="noopener ugc">acceslibre</a
+        >
+        et copiez l’url dans le champ ci-dessous.
+      </small>
+    </div>
+  {/snippet}
 </BasicInputField>
 
 <BasicInputField
@@ -77,7 +83,7 @@
   id="phone"
   bind:value={structure.phone}
   placeholder="0123456789"
-  description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
+  descriptionText="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
 />
 
 <BasicInputField
@@ -85,7 +91,7 @@
   id="email"
   bind:value={structure.email}
   placeholder="nom@domaine.fr"
-  description="Format attendu&nbsp;: mail@domaine.fr"
+  descriptionText="Format attendu&nbsp;: mail@domaine.fr"
 />
 
 <BasicInputField
@@ -122,7 +128,7 @@
 <BasicInputField
   id="otherLabels"
   bind:value={structure.otherLabels}
-  description="Indiquez si la structure fait partie d’autres labels (régionaux, locaux…)"
+  descriptionText="Indiquez si la structure fait partie d’autres labels (régionaux, locaux…)"
   vertical
 />
 
@@ -135,7 +141,7 @@
 <BasicInputField
   id="openingHoursDetails"
   bind:value={structure.openingHoursDetails}
-  description="Vous pouvez renseigner des informations spécifiques concernant les horaires dans ce champ"
+  descriptionText="Vous pouvez renseigner des informations spécifiques concernant les horaires dans ce champ"
   vertical
 />
 

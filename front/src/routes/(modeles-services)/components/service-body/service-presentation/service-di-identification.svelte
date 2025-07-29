@@ -9,24 +9,30 @@
 
   import ServiceSection from "./components/service-section.svelte";
 
-  export let service: Service | Model;
+  interface Props {
+    service: Service | Model;
+  }
 
-  $: isDI = "source" in service;
-  $: showComponent = $userInfo?.isStaff && !service.isModel && isDI;
-  $: info = service.isModel
-    ? []
-    : [
-        {
-          label: "Source",
-          value: service.source as string, // toujours string car c’est un service DI
-        },
-        {
-          label: "Identifiant de structure",
-          value: service.structure,
-        },
-      ];
+  let { service }: Props = $props();
 
-  let copiedIndex: number | null = null;
+  let isDI = $derived("source" in service);
+  let showComponent = $derived($userInfo?.isStaff && !service.isModel && isDI);
+  let info = $derived(
+    service.isModel
+      ? []
+      : [
+          {
+            label: "Source",
+            value: service.source as string, // toujours string car c’est un service DI
+          },
+          {
+            label: "Identifiant de structure",
+            value: service.structure,
+          },
+        ]
+  );
+
+  let copiedIndex: number | null = $state(null);
 
   function handleCopy(value: string, index: number) {
     navigator.clipboard.writeText(value);
@@ -45,7 +51,7 @@
             >{item.value}</code
           ><button
             class="text-magenta-brand"
-            on:click={() => handleCopy(item.value, index)}
+            onclick={() => handleCopy(item.value, index)}
           >
             <div class="w-s24 h-s24 relative">
               {#if copiedIndex === index}

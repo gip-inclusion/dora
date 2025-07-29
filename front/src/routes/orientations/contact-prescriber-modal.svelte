@@ -8,20 +8,28 @@
   import { contactPrescriber } from "$lib/utils/orientation";
   import type { Orientation } from "$lib/types";
   import ConfirmationBloc from "./confirmation-bloc.svelte";
-  import { createEventDispatcher } from "svelte";
 
-  export let isOpen = false;
-  export let onRefresh;
-  export let orientation: Orientation;
-  export let queryHash: string;
+  interface Props {
+    isOpen?: boolean;
+    onClose?: () => void;
+    onRefresh: any;
+    orientation: Orientation;
+    queryHash: string;
+  }
 
-  const dispatch = createEventDispatcher();
+  let {
+    isOpen = $bindable(false),
+    onClose = undefined,
+    onRefresh,
+    orientation,
+    queryHash,
+  }: Props = $props();
 
-  let showConfirmation = false;
+  let showConfirmation = $state(false);
 
-  let message = "";
-  let extraRecipients: string[] = [];
-  let requesting = false;
+  let message = $state("");
+  let extraRecipients: string[] = $state([]);
+  let requesting = $state(false);
 
   const contactPrescriberSchema: v.Schema = {
     extraRecipients: {
@@ -61,7 +69,7 @@
       extraRecipients = [];
       message = "";
     }
-    dispatch("close");
+    onClose?.();
   }
 
   function handleSubmit(validatedData) {
@@ -79,25 +87,27 @@
     showConfirmation = true;
   }
 
-  $: formData = { extraRecipients, message };
+  let formData = $derived({ extraRecipients, message });
 </script>
 
 <Modal
   bind:isOpen
-  on:close={handleClose}
+  onClose={handleClose}
   hideTitle={showConfirmation}
   width="medium"
   title="Contacter le prescripteur ou la prescriptrice"
 >
-  <div slot="subtitle">
-    Contacter {orientation.prescriber?.name} - concernant l’orientation qui vous
-    a été adressé pour le service «&nbsp;<a
-      class="text-magenta-cta"
-      href="/services/{orientation.service?.slug}"
-    >
-      {orientation.service?.name}
-    </a>&nbsp;».
-  </div>
+  {#snippet subtitle()}
+    <div>
+      Contacter {orientation.prescriber?.name} - concernant l’orientation qui vous
+      a été adressé pour le service «&nbsp;<a
+        class="text-magenta-cta"
+        href="/services/{orientation.service?.slug}"
+      >
+        {orientation.service?.name}
+      </a>&nbsp;».
+    </div>
+  {/snippet}
 
   {#if showConfirmation}
     <ConfirmationBloc title="Votre message a été transmis" />

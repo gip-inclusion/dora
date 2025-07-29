@@ -5,11 +5,19 @@
   import ModerationButtonMenu from "../moderation-button-menu.svelte";
   import StructureContacts from "../structure-contacts.svelte";
 
-  export let isOpen = false;
-  export let structureSlug: string | null;
-  export let onRefresh;
+  interface Props {
+    isOpen?: boolean;
+    structureSlug: string | null;
+    onRefresh: any;
+  }
 
-  let structure: AdminShortStructure | null = null;
+  let {
+    isOpen = $bindable(false),
+    structureSlug = $bindable(),
+    onRefresh,
+  }: Props = $props();
+
+  let structure: AdminShortStructure | null = $state(null);
 
   async function handleRefresh() {
     structure = structureSlug ? await getStructureAdmin(structureSlug) : null;
@@ -18,14 +26,16 @@
     }
   }
 
-  $: (async () =>
-    (structure = structureSlug
-      ? await getStructureAdmin(structureSlug)
-      : null))();
+  $effect(() => {
+    (async () =>
+      (structure = structureSlug
+        ? await getStructureAdmin(structureSlug)
+        : null))();
+  });
 </script>
 
 <Modal
-  on:close={() => (structureSlug = null)}
+  onClose={() => (structureSlug = null)}
   bind:isOpen
   title={structure?.name}
   width="medium"

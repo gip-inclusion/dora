@@ -3,7 +3,7 @@
   import GoogleSearchLink from "./google-search-link.svelte";
   import LinkedinSearchLink from "./linkedin-search-link.svelte";
 
-  export let user, structure;
+  let { user, structure } = $props();
 </script>
 
 {#if user}

@@ -26,16 +26,20 @@
   import * as XLSX from "xlsx";
   import type { StatusFilter } from "./types";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let selectedDepartment = data.department;
-  let searchStatus: StatusFilter = "toutes";
-  let filterDefinition: string | undefined;
-  let filterActions: string | undefined;
-  let structures: AdminShortStructure[] = [];
-  let filteredStructures: AdminShortStructure[] = [];
-  let selectedStructureSlug: string | null = null;
-  let loading = false;
+  let { data }: Props = $props();
+
+  let selectedDepartment = $state(data.department);
+  let searchStatus: StatusFilter = $state("toutes");
+  let filterDefinition: string | undefined = $state();
+  let filterActions: string | undefined = $state();
+  let structures: AdminShortStructure[] = $state([]);
+  let filteredStructures: AdminShortStructure[] = $state([]);
+  let selectedStructureSlug: string | null = $state(null);
+  let loading = $state(false);
 
   function filterIgnoredStructures(structs) {
     function isOrphanOrWaitingOrToActivateSIAE(struct) {
@@ -232,7 +236,7 @@
           </div>
           <div class="gap-s24 flex w-full flex-col">
             <Button
-              on:click={handleClick}
+              onclick={handleClick}
               label="Télécharger"
               secondary
               disabled={!filteredStructures.length}

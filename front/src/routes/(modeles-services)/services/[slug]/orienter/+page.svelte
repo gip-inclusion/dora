@@ -18,12 +18,18 @@
   import { trackMobilisation } from "$lib/utils/stats";
   import { page } from "$app/stores";
   import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
-  export let data;
+  import type { Service } from "$lib/types";
+
+  interface Props {
+    data: { service: Service; isDI: boolean };
+  }
+
+  let { data }: Props = $props();
 
   const { service } = data;
   const isDI = !!data.isDI;
 
-  let requesting = false;
+  let requesting = $state(false);
 
   // tracking activé sur la page courante :
   const shouldTrack = Boolean($page.url.searchParams.get("newlogin"));

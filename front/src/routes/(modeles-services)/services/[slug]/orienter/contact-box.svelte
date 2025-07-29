@@ -5,11 +5,15 @@
   import ContactInfo from "./contact-info.svelte";
   import type { Service } from "$lib/types";
 
-  export let service: Service;
-  export let isDI: boolean;
+  interface Props {
+    service: Service;
+    isDI: boolean;
+  }
+
+  let { service, isDI }: Props = $props();
 
   const displayContact = service.contactPhone || service.contactEmail;
-  let isVideoModalOpen = false;
+  let isVideoModalOpen = $state(false);
 </script>
 
 <OrientationVideo bind:isVideoModalOpen></OrientationVideo>
@@ -30,11 +34,12 @@
     title="Vous utilisez le formulaire d’orientation pour la première fois ?"
     showIcon={false}
   >
-    <Button
-      slot="button"
-      on:click={() => (isVideoModalOpen = true)}
-      label="Voir la vidéo de démonstration."
-      secondary
-    />
+    {#snippet button()}
+      <Button
+        onclick={() => (isVideoModalOpen = true)}
+        label="Voir la vidéo de démonstration."
+        secondary
+      />
+    {/snippet}
   </Notice>
 </div>

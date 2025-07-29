@@ -21,11 +21,15 @@
     },
   };
 
-  export let displayModal = false;
+  interface Props {
+    displayModal?: boolean;
+  }
 
-  let formData = { email: "" };
-  let displayNotice = false;
-  let requesting = false;
+  let { displayModal = $bindable(false) }: Props = $props();
+
+  let formData = $state({ email: "" });
+  let displayNotice = $state(false);
+  let requesting = $state(false);
 
   async function handleSubmit(validatedData) {
     const url = `${getApiURL()}/auth/send-link/`;
@@ -48,16 +52,11 @@
     displayNotice = false;
     formData = { email: "" };
   }
-
-  function handleCloseModal() {
-    displayModal = false;
-  }
 </script>
 
 <Modal
-  isOpen={displayModal}
+  bind:isOpen={displayModal}
   title="Des difficultés à vous connecter&#8239;?"
-  on:close={handleCloseModal}
 >
   <CenteredGrid>
     <p>
@@ -77,7 +76,7 @@
           name="validate"
           type="button"
           label="Faire une nouvelle demande"
-          on:click={handleNewRequest}
+          onclick={handleNewRequest}
         />
       </div>
     {:else}

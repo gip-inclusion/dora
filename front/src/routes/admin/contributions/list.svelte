@@ -8,13 +8,17 @@
   } from "$lib/requests/admin";
   import SuggestionModal from "./suggestion-modal.svelte";
 
-  export let suggestions;
-  export let onRefresh;
+  interface Props {
+    suggestions: unknown;
+    onRefresh: () => Promise<void>;
+  }
 
-  let currentSuggestion;
-  let suggestionModalIsOpen = false;
-  let confirmationModalIsOpen = false;
-  let emailsContacted = null;
+  let { suggestions, onRefresh }: Props = $props();
+
+  let currentSuggestion = $state();
+  let suggestionModalIsOpen = $state(false);
+  let confirmationModalIsOpen = $state(false);
+  let emailsContacted = $state(null);
 
   async function handleAccept(suggestion) {
     // eslint-disable-next-line no-alert
@@ -88,7 +92,7 @@
           iconOnRight
           icon={closeCircleIcon}
           noBackground
-          on:click={() => {
+          onclick={() => {
             handleReject(suggestion);
           }}
         />
@@ -99,7 +103,7 @@
           iconOnRight
           icon={arrowRightSIcon}
           noBackground
-          on:click={() => {
+          onclick={() => {
             currentSuggestion = suggestion;
             suggestionModalIsOpen = true;
           }}
@@ -111,7 +115,7 @@
 
 <Modal
   bind:isOpen={confirmationModalIsOpen}
-  on:close={onConfirmationClose}
+  onClose={onConfirmationClose}
   title="Création du service réussie"
 >
   {#if emailsContacted}

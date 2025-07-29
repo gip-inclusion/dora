@@ -3,8 +3,12 @@
   import { phoneLineIcon } from "$lib/icons";
   import { formatPhoneNumber } from "$lib/utils/misc";
 
-  export let service: Service | ShortService;
-  export let preferred = false;
+  interface Props {
+    service: Service | ShortService;
+    preferred?: boolean;
+  }
+
+  let { service, preferred = false }: Props = $props();
 </script>
 
 <div class="mb-s6 mr-s24">

@@ -10,7 +10,11 @@
   import { addCircleIcon, editIcon } from "$lib/icons";
   import ServiceBody from "../../components/service-body/service-body.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 </script>
 
 <CenteredGrid bgColor="bg-blue-light">
