@@ -12,7 +12,7 @@
     value: string;
     autocomplete?: any;
     disabled?: boolean;
-    readonly?: any;
+    readonly?: boolean;
     placeholder?: string;
     // Specifique
     maxLength?: number;
@@ -32,12 +32,12 @@
     disabled = false,
     readonly,
     placeholder,
-    maxLength = undefined,
+    maxLength,
     rows = 4,
     description = "",
     hidden = false,
     hideLabel = false,
-    label = undefined,
+    label,
     vertical = false,
   }: Props = $props();
 </script>
