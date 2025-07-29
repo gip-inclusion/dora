@@ -7,7 +7,7 @@
   interface Props {
     slug: string;
     isDI?: boolean;
-    children?: Snippet<[any]>;
+    children?: Snippet<[{ onBookmark: () => void; isBookmarked: boolean }]>;
   }
 
   let { slug, isDI = false, children }: Props = $props();
