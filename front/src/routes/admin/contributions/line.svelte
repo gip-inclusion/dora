@@ -2,7 +2,7 @@
   import type { Snippet } from "svelte";
 
   interface Props {
-    label: any;
+    label: string;
     data: any;
     isList?: boolean;
     verticalLayout?: boolean;
