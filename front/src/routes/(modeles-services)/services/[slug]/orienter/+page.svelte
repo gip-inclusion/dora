@@ -18,7 +18,13 @@
   import { trackMobilisation } from "$lib/utils/stats";
   import { page } from "$app/stores";
   import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
-  let { data } = $props();
+  import type { Service } from "$lib/types";
+
+  interface Props {
+    data: { service: Service; isDI: boolean };
+  }
+
+  let { data }: Props = $props();
 
   const { service } = data;
   const isDI = !!data.isDI;
