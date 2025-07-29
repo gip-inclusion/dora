@@ -7,7 +7,7 @@
   import type { Establishment, GeoApiValue } from "$lib/types";
 
   interface Props {
-    establishment: any;
+    establishment: Establishment | null;
     onCityChange: (newCity: GeoApiValue | null) => void;
     onEstablishmentChange: (estab: Establishment | null) => void;
   }
