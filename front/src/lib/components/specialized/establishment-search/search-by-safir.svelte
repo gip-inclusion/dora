@@ -11,7 +11,7 @@
 
   interface Props {
     onEstablishmentChange: (establishment: Establishment | null) => void;
-    proposedSafir: any;
+    proposedSafir: string;
     establishment: Establishment | null;
     description?: Snippet;
   }
