@@ -821,7 +821,7 @@
                   ? 'selected'
                   : ''} {multiple ? 'gap-s10' : 'justify-between'}"
                 class:confirmed
-                onclick={(event) => {
+                onclick={(event: Event) => {
                   event.preventDefault();
                   onListItemClick(listItem);
                 }}
