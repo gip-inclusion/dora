@@ -15,7 +15,7 @@
     placeholder?: string;
     disabled?: boolean;
     value?: GeoApiValue;
-    initialValue?: any;
+    initialValue?: GeoApiValue;
     readonly?: boolean;
     choices?: any;
     searchType: AdminDivisionType;
@@ -28,7 +28,7 @@
     placeholder = "",
     disabled = false,
     value = $bindable(),
-    initialValue = undefined,
+    initialValue,
     readonly = false,
     choices = $bindable([]),
     searchType,
