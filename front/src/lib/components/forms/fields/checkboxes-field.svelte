@@ -11,7 +11,7 @@
     id: string;
     value: any;
     disabled?: boolean;
-    readonly?: any;
+    readonly?: boolean;
     // Spécifiques
     choices: any;
     // Proxy vers le FieldWrapper
@@ -26,7 +26,7 @@
     id,
     value = $bindable(),
     disabled = false,
-    readonly = undefined,
+    readonly,
     choices,
     description = "",
     hidden = false,
