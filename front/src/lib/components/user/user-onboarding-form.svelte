@@ -19,7 +19,11 @@
   let discoveryMethodOther = $state("");
   let requesting = $state(false);
 
-  let { onSuccess } = $props();
+  interface Props {
+    onSuccess: () => void;
+  }
+
+  let { onSuccess }: Props = $props();
 
   interface Option<T> {
     value: T;
