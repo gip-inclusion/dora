@@ -24,7 +24,7 @@
     minCharactersToSearch?: any;
     onblur?: (evt: FocusEvent) => void;
     onChange?: ((newValue: string) => void) | ((newValues: string[]) => void);
-    initialValue?: any;
+    initialValue?: string | number | string[] | number[];
     showClear?: boolean;
     errorMessages?: string[];
     extraClass?: string;
