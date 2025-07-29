@@ -8,7 +8,7 @@
   import DayField from "./day-field.svelte";
 
   interface Props {
-    value: any;
+    value: string;
     onchange?: (event: Event) => void;
   }
 
