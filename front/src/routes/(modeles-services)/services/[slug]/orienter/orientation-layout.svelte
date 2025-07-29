@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { page } from "$app/stores";
   import { token, userInfo } from "$lib/utils/auth";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
@@ -6,8 +7,15 @@
   import MembershipPendingWarning from "$lib/components/specialized/membership-pending-warning.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import ServiceStructureLabel from "../components/service-structure-label.svelte";
+  import type { Service } from "$lib/types";
 
-  let { data, children, navbar } = $props();
+  interface Props {
+    data: { service: Service };
+    children?: Snippet;
+    navbar?: Snippet;
+  }
+
+  let { data, children, navbar }: Props = $props();
 
   const { service } = data;
 
