@@ -9,7 +9,7 @@
 
   interface Props {
     mobileDesign?: boolean;
-    buttonClass?: any;
+    buttonClass?: string;
     label: string;
     links?: { href: string; label: string; openInNewTab?: boolean }[];
   }
