@@ -8,7 +8,12 @@
   } from "$lib/requests/admin";
   import SuggestionModal from "./suggestion-modal.svelte";
 
-  let { suggestions, onRefresh } = $props();
+  interface Props {
+    suggestions: unknown;
+    onRefresh: () => Promise<void>;
+  }
+
+  let { suggestions, onRefresh }: Props = $props();
 
   let currentSuggestion = $state();
   let suggestionModalIsOpen = $state(false);
