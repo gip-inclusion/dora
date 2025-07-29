@@ -14,7 +14,7 @@
     disabled?: boolean;
     readonly?: any;
     placeholder?: string;
-    initialValue?: any;
+    initialValue?: string[] | number[];
     // Spécifique du select
     choices: Choice[];
     sort?: boolean;
@@ -34,7 +34,7 @@
     disabled = false,
     readonly,
     placeholder = "Choisir",
-    initialValue = undefined,
+    initialValue,
     choices,
     sort = false,
     onChange,
