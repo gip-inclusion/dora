@@ -1,5 +1,9 @@
 <script lang="ts">
-  let { text } = $props();
+  interface Props {
+    text: string;
+  }
+
+  let { text }: Props = $props();
 </script>
 
 <span
