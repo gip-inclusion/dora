@@ -9,7 +9,7 @@
     onblur?: (evt: FocusEvent) => void;
     onChange: (newValue: GeoApiValue) => void;
     disabled?: boolean;
-    id: any;
+    id: string;
     value?: any;
     initialValue?: string;
   }
