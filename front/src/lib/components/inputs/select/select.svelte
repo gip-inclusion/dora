@@ -20,8 +20,8 @@
     hideArrow?: boolean;
     searchFunction?: (searchTxt: string) => Promise<Choice[]>;
     delay?: any;
-    localFiltering?: any;
-    minCharactersToSearch?: any;
+    localFiltering?: boolean;
+    minCharactersToSearch?: number;
     onblur?: (evt: FocusEvent) => void;
     onChange?: ((newValue: string) => void) | ((newValues: string[]) => void);
     initialValue?: string | number | string[] | number[];
