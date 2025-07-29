@@ -2,9 +2,10 @@
   import Label from "$lib/components/display/label.svelte";
   import { pageLineIcon } from "$lib/icons";
   import { capitalize } from "$lib/utils/misc";
+  import type { Structure } from "$lib/types";
 
   interface Props {
-    structure: any;
+    structure: Structure;
     showAddress?: boolean;
   }
 
