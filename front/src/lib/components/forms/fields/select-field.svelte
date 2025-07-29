@@ -14,7 +14,7 @@
     disabled?: boolean;
     readonly?: any;
     placeholder?: string;
-    initialValue?: string;
+    initialValue?: string | number;
     // Spécifique du select
     choices: Choice[];
     searchFunction?: (searchText: string) => Promise<Choice[]>;
