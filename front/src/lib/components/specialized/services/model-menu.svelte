@@ -1,9 +1,10 @@
 <script lang="ts">
   import LinkButton from "$lib/components/display/link-button.svelte";
+  import type { Model } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
 
   interface Props {
-    model: any;
+    model: Model;
     readOnly?: boolean;
   }
 
