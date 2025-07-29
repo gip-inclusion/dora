@@ -4,8 +4,8 @@
 
   interface Props {
     mobileDesign?: boolean;
-    externalIconColor?: any;
-    aClass?: any;
+    externalIconColor?: string;
+    aClass?: string;
   }
 
   let {
