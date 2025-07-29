@@ -14,7 +14,7 @@
     id: string;
     values: CustomizableFK[];
     disabled?: boolean;
-    readonly?: any;
+    readonly?: boolean;
     placeholder?: string;
     // Spécifiques
     addButtonLabel?: string;
