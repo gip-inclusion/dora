@@ -132,7 +132,10 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
                     "pcSub": sub,
                 },
             )
-            if user.email != email:
+            if user.email == email:
+                user.sub_pc = sub
+                user.save()
+            else:
                 raise SuspiciousOperation(
                     "Le sub et l'adresse e-mail fournis par ProConnect sont différents de ceux enregistrés"
                 )
