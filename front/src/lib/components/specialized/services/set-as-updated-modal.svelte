@@ -8,10 +8,19 @@
   import ServiceContact from "./display/service-contact.svelte";
   import ExtendedServiceKeyInformations from "./display/extended-service-key-informations.svelte";
 
-  export let isOpen = false;
-  export let service: Service | ShortService;
-  export let servicesOptions: ServicesOptions;
-  export let onRefresh: () => Promise<void>;
+  interface Props {
+    isOpen?: boolean;
+    service: Service | ShortService;
+    servicesOptions: ServicesOptions;
+    onRefresh: () => Promise<void>;
+  }
+
+  let {
+    isOpen = $bindable(false),
+    service,
+    servicesOptions,
+    onRefresh,
+  }: Props = $props();
 
   async function setAsUpdated() {
     await markServiceAsSynced(service);
@@ -23,9 +32,8 @@
 <Modal
   bind:isOpen
   title="Actualisation"
-  subtitle=" Avant de marquer votre service comme à jour, veuillez vérifier que ces
+  subtitleText=" Avant de marquer votre service comme à jour, veuillez vérifier que ces
   informations sur le service sont exactes."
-  on:close={() => (isOpen = false)}
   width="small"
 >
   <div class="pt-s16 text-f18 text-france-blue">
@@ -37,23 +45,25 @@
   <hr class="my-s24" />
   <ExtendedServiceKeyInformations {service} {servicesOptions} />
 
-  <div slot="footer">
-    <div class="mt-s24 gap-s24 flex flex-col-reverse justify-end md:flex-row">
-      <LinkButton
-        id="modal-update"
-        label="Modifier"
-        secondary
-        to="/services/{service.slug}/editer"
-        icon={editIcon}
-      />
+  {#snippet footer()}
+    <div>
+      <div class="mt-s24 gap-s24 flex flex-col-reverse justify-end md:flex-row">
+        <LinkButton
+          id="modal-update"
+          label="Modifier"
+          secondary
+          to="/services/{service.slug}/editer"
+          icon={editIcon}
+        />
 
-      <Button
-        id="confirm-updated"
-        extraClass="justify-center"
-        label="Confirmer"
-        icon={checkboxCircleFillIcon}
-        on:click={setAsUpdated}
-      />
+        <Button
+          id="confirm-updated"
+          extraClass="justify-center"
+          label="Confirmer"
+          icon={checkboxCircleFillIcon}
+          onclick={setAsUpdated}
+        />
+      </div>
     </div>
-  </div>
+  {/snippet}
 </Modal>

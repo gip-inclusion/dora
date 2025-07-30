@@ -17,22 +17,34 @@
   import SearchResult from "./search-result.svelte";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
 
-  export let data: PageData;
-  export let filters: Filters;
-  export let filteredServices: ServiceSearchResult[];
-  export let selectedServiceSlug: string | undefined = undefined;
-  export let noAlertButtonBottomGap = false;
-  export let summarized = false;
-  export let noPagination = false;
-  export let showDeploymentNotice = false;
+  interface Props {
+    data: PageData;
+    filters: Filters;
+    filteredServices: ServiceSearchResult[];
+    selectedServiceSlug?: string;
+    noAlertButtonBottomGap?: boolean;
+    summarized?: boolean;
+    noPagination?: boolean;
+    showDeploymentNotice?: boolean;
+  }
+
+  let {
+    data,
+    filters,
+    filteredServices,
+    selectedServiceSlug,
+    noAlertButtonBottomGap = false,
+    summarized = false,
+    noPagination = false,
+    showDeploymentNotice = false,
+  }: Props = $props();
 
   const PAGE_LENGTH = 10;
 
-  let currentPageLength = PAGE_LENGTH;
-  let creatingAlert = false;
+  let currentPageLength = $state(PAGE_LENGTH);
+  let creatingAlert = $state(false);
 
-  let currentSearchWasAlreadySaved;
-  $: {
+  let currentSearchWasAlreadySaved = $derived.by(() => {
     // Saved searches don't store the street address neither lat/lon
     const currentShortQueryString = getQueryString({
       categoryIds: [data.categoryIds[0] ? data.categoryIds[0] : ""],
@@ -42,10 +54,10 @@
       cityCode: data.cityCode,
       cityLabel: data.cityLabel,
       label: undefined,
-      kindIds: filters.kinds.sort(),
-      feeConditions: filters.feeConditions.sort(),
-      locationKinds: filters.locationKinds.sort(),
-      fundingLabels: filters.fundingLabels.sort(),
+      kindIds: filters.kinds.toSorted(),
+      feeConditions: filters.feeConditions.toSorted(),
+      locationKinds: filters.locationKinds.toSorted(),
+      fundingLabels: filters.fundingLabels.toSorted(),
     });
 
     const userSavedSearches = $userInfo?.savedSearches || [];
@@ -53,8 +65,8 @@
     const result = userSavedSearches.some(
       (search) => getSavedSearchQueryString(search) === currentShortQueryString
     );
-    currentSearchWasAlreadySaved = result;
-  }
+    return result;
+  });
 
   function getResultId(index: number) {
     return `#result-${index}`;
@@ -117,7 +129,7 @@
     <div class="text-center">
       <Button
         label="Charger plus de résultats"
-        on:click={loadMoreResult}
+        onclick={loadMoreResult}
         noBackground
       />
     </div>
@@ -134,7 +146,7 @@
       <Button
         label="Créer une alerte"
         disabled={!data.cityCode || creatingAlert}
-        on:click={handleCreateAlertClick}
+        onclick={handleCreateAlertClick}
       />
     {/if}
   </div>

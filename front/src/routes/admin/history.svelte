@@ -1,7 +1,7 @@
 <script lang="ts">
   import DateLabel from "$lib/components/display/date-label.svelte";
 
-  export let notes;
+  let { notes } = $props();
 </script>
 
 <div class="max-h-s160 overflow-scroll">

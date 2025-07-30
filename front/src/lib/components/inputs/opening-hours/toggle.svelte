@@ -1,15 +1,24 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  interface Props {
+    // https://tailwindcomponents.com/component/toggle-button-1
+    id: string;
+    checked?: boolean;
+    disabled?: boolean;
+    readonly?: boolean;
+    yesLabel?: string;
+    noLabel?: string;
+    onchange?: (event: Event) => void;
+  }
 
-  // https://tailwindcomponents.com/component/toggle-button-1
-  export let id: string;
-  export let checked: boolean | undefined = undefined;
-  export let disabled = false;
-  export let readonly = false;
-  export let yesLabel = "Oui";
-  export let noLabel = "Non";
-
-  const dispatcher = createEventDispatcher();
+  let {
+    id,
+    checked = $bindable(),
+    disabled = false,
+    readonly = false,
+    yesLabel = "Oui",
+    noLabel = "Non",
+    onchange,
+  }: Props = $props();
 
   function handleKeyDown(event) {
     if (event.code === "Space" || event.code === "Enter") {
@@ -24,11 +33,11 @@
 
 <div
   class="mt-s8 relative flex flex-row items-center self-start"
-  on:click={() => {
+  onclick={(event: MouseEvent) => {
     checked = !checked;
-    dispatcher("change");
+    onchange?.(event);
   }}
-  on:keydown={handleKeyDown}
+  onkeydown={handleKeyDown}
   tabindex="0"
   role="radio"
   aria-checked={checked}
@@ -38,7 +47,7 @@
     name={id}
     type="checkbox"
     bind:checked
-    on:change
+    {onchange}
     class="hidden"
     {disabled}
     {readonly}
@@ -46,11 +55,11 @@
   <!-- path -->
   <span
     class="toggle-path h-s24 w-s40 border-gray-03 inline-block shrink-0 rounded-full border bg-white"
-  />
+  ></span>
   <!-- circle -->
   <span
     class="toggle-circle inset-y-s0 left-s0 h-s16 w-s16 bg-gray-text-alt absolute inline-block shrink-0 rounded-full"
-  />
+  ></span>
   <span class="ml-s8 pb-s2 text-f14 text-gray-text">
     {#if checked}
       <span class="text-magenta-cta">{yesLabel}</span>

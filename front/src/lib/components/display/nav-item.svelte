@@ -1,13 +1,24 @@
 <script lang="ts">
-  export let label = "";
-  export let otherTab = false;
-  export let disabled = false;
-  export let href;
+  interface Props {
+    label?: string;
+    otherTab?: boolean;
+    disabled?: boolean;
+    href?: string;
+    onclick?: () => void;
+  }
+
+  let {
+    label = "",
+    otherTab = false,
+    disabled = false,
+    href,
+    onclick,
+  }: Props = $props();
 </script>
 
 <a
   class="text-f14 text-gray-text"
-  on:click
+  {onclick}
   {href}
   target={otherTab ? "_blank" : ""}
   rel="noopener"

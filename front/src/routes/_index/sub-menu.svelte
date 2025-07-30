@@ -2,14 +2,19 @@
   import { externalLinkIcon } from "$lib/icons";
   import SubMenuDropdown from "./sub-menu-dropdown.svelte";
 
-  export let mobileDesign = false;
-  export let externalIconColor = mobileDesign
-    ? "text-magenta-cta"
-    : "text-gray-text";
+  interface Props {
+    mobileDesign?: boolean;
+    externalIconColor?: string;
+    aClass?: string;
+  }
 
-  export let aClass = mobileDesign
-    ? "py-s16 text-f18 font-bold text-gray-dark"
-    : "text-f14 text-gray-text p-s16";
+  let {
+    mobileDesign = false,
+    externalIconColor = mobileDesign ? "text-magenta-cta" : "text-gray-text",
+    aClass = mobileDesign
+      ? "py-s16 text-f18 font-bold text-gray-dark"
+      : "text-f14 text-gray-text p-s16",
+  }: Props = $props();
 </script>
 
 <div class="{mobileDesign ? 'hidden' : 'block'} py-s10 md:hidden">

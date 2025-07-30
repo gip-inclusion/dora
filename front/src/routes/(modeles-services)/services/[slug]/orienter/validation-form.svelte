@@ -2,7 +2,7 @@
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxesField from "$lib/components/forms/fields/checkboxes-field.svelte";
-
+  import type { Service } from "$lib/types";
   import { formatFilePath } from "$lib/utils/file";
   import {
     computeConcernedPublicChoices,
@@ -12,7 +12,11 @@
   import { orientationStep1Schema } from "./schema";
   import { orientation } from "./store";
 
-  export let service;
+  interface Props {
+    service: Service;
+  }
+
+  let { service }: Props = $props();
 
   // Publics concernés par ce service
   const { concernedPublicChoices, concernedPublicRequired } =

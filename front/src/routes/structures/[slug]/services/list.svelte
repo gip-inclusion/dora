@@ -26,15 +26,31 @@
   import ServicesToSyncWithModelNotice from "./services-to-sync-with-model-notice.svelte";
   import ServicesToUpdateNotice from "./services-to-update-notice.svelte";
 
-  export let structure, total, servicesOptions;
-  export let tabDisplay = true;
-  export let onRefresh;
-  export let limit: number | undefined = undefined;
-  export let withEmptyNotice = false;
+  interface Props {
+    structure: any;
+    total: any;
+    servicesOptions: any;
+    tabDisplay?: boolean;
+    onRefresh: any;
+    limit?: number;
+    withEmptyNotice?: boolean;
+    serviceStatus: ServiceStatus | null;
+    updateNeeded: "true" | "false" | null;
+    servicesDisplayed?: ShortService[];
+  }
 
-  export let serviceStatus: ServiceStatus | null;
-  export let updateNeeded: "true" | "false" | null;
-  export let servicesDisplayed: ShortService[] = [];
+  let {
+    structure,
+    total,
+    servicesOptions,
+    tabDisplay = true,
+    onRefresh,
+    limit,
+    withEmptyNotice = false,
+    serviceStatus = $bindable(),
+    updateNeeded = $bindable(),
+    servicesDisplayed = $bindable([]),
+  }: Props = $props();
 
   function updateUrlQueryParams() {
     if (!browser) {
@@ -110,7 +126,7 @@
   ];
 
   // Service order
-  let selectedOrder = "modificationDateDesc";
+  let selectedOrder = $state("modificationDateDesc");
   const serviceOrderOptions: Choice[] = [
     {
       value: "modificationDateDesc",
@@ -192,10 +208,12 @@
     updateUrlQueryParams();
   }
 
-  $: servicesDisplayed = filterAndSortServices(structure.services);
+  $effect(() => {
+    servicesDisplayed = filterAndSortServices(structure.services);
+  });
 
-  $: servicesToUpdate = structure.services.filter(
-    (service) => service.updateNeeded
+  let servicesToUpdate = $derived(
+    structure.services.filter((service) => service.updateNeeded)
   );
 </script>
 
@@ -269,7 +287,7 @@
         <button
           class:!text-magenta-cta={serviceStatus || updateNeeded}
           class="text-gray-text-alt"
-          on:click={handleResetFilters}
+          onclick={handleResetFilters}
         >
           Tout effacer
         </button>

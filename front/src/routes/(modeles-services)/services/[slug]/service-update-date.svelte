@@ -4,8 +4,12 @@
 
   import ServiceFeedbackButton from "./service-feedback-button.svelte";
 
-  export let service: Service;
-  export let onFeedbackButtonClick: () => void;
+  interface Props {
+    service: Service;
+    onFeedbackButtonClick: () => void;
+  }
+
+  let { service, onFeedbackButtonClick }: Props = $props();
 </script>
 
 <div class="text-f16">
@@ -19,5 +23,5 @@
       bold
     />
   </div>
-  <ServiceFeedbackButton on:click={onFeedbackButtonClick} />
+  <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
 </div>

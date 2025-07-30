@@ -88,7 +88,7 @@ export interface Branches {
   department: string;
   modificationDate: string;
   name: string;
-  numServices: number | undefined;
+  numServices?: number;
   slug: string;
   typologyDisplay: string;
 }
@@ -376,7 +376,7 @@ export interface ServiceSearchResult {
     slug: string;
     url: string;
   };
-  type: "di" | undefined;
+  type?: "di";
 }
 
 export interface FileInfo {

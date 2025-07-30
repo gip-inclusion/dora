@@ -21,13 +21,16 @@
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let isVideoModalOpen = false;
+  let { data }: Props = $props();
 
-  $: lastVisitedStructure = getCurrentlySelectedStructure(
-    $userInfo,
-    $userPreferences
+  let isVideoModalOpen = $state(false);
+
+  let lastVisitedStructure = $derived(
+    getCurrentlySelectedStructure($userInfo, $userPreferences)
   );
 </script>
 
@@ -101,7 +104,7 @@
 
         <Button
           label="Voir la vidéo de démonstration"
-          on:click={() => (isVideoModalOpen = true)}
+          onclick={() => (isVideoModalOpen = true)}
           noBackground
           noPadding
         />

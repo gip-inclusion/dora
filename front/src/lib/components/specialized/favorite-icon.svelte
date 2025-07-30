@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import BookmarkFillBusiness from "svelte-remix/BookmarkFillBusiness.svelte";
   import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
 
@@ -8,15 +6,18 @@
 
   import Tooltip from "../ui/tooltip.svelte";
 
-  export let active = false;
+  interface Props {
+    active?: boolean;
+    onclick?: (event: MouseEvent) => void;
+  }
 
-  const dispatch = createEventDispatcher();
+  let { active = false, onclick }: Props = $props();
 
-  $: disabled = !$userInfo;
+  let disabled = $derived(!$userInfo);
 
   function handleClick(evt: MouseEvent) {
     if (!disabled) {
-      dispatch("click", evt);
+      onclick?.(evt);
     }
   }
 </script>
@@ -26,7 +27,7 @@
     class="h-s20 w-s20 text-gray-text-alt2 hover:text-magenta-cta print:hidden"
     class:text-magenta-cta={active}
     class:text-gray-text-alt={disabled}
-    on:click={handleClick}
+    onclick={handleClick}
   >
     {#if active}
       <BookmarkFillBusiness />
@@ -34,13 +35,15 @@
       <BookmarkLineBusiness />
     {/if}
   </button>
-  <span slot="content">
-    {#if disabled}
-      Connectez-vous pour ajouter ce service à vos favoris
-    {:else if active}
-      Supprimer des favoris
-    {:else}
-      Ajouter aux favoris
-    {/if}
-  </span>
+  {#snippet content()}
+    <span>
+      {#if disabled}
+        Connectez-vous pour ajouter ce service à vos favoris
+      {:else if active}
+        Supprimer des favoris
+      {:else}
+        Ajouter aux favoris
+      {/if}
+    </span>
+  {/snippet}
 </Tooltip>

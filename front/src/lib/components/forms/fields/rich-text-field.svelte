@@ -7,18 +7,30 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import RichText from "$lib/components/inputs/rich-text/editor.svelte";
 
-  export let id: string;
-  export let value: string;
+  interface Props {
+    id: string;
+    value: string;
+    disabled?: boolean;
+    readonly?: any;
+    placeholder?: string;
+    // Proxy vers le FieldWrapper
+    description?: string;
+    hidden?: boolean;
+    hideLabel?: boolean;
+    vertical?: boolean;
+  }
 
-  export let disabled = false;
-  export let readonly = $currentSchema?.[id]?.readonly;
-  export let placeholder = "";
-
-  // Proxy vers le FieldWrapper
-  export let description = "";
-  export let hidden = false;
-  export let hideLabel = false;
-  export let vertical = false;
+  let {
+    id,
+    value = $bindable(),
+    disabled = false,
+    readonly = undefined,
+    placeholder = "",
+    description = "",
+    hidden = false,
+    hideLabel = false,
+    vertical = false,
+  }: Props = $props();
 
   let editor: RichText;
 
@@ -32,12 +44,12 @@
     {id}
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
-    {description}
+    descriptionText={description}
     {hidden}
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
     <RichText
       bind:this={editor}

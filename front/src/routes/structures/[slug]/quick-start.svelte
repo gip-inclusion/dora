@@ -17,16 +17,20 @@
   } from "$lib/types";
   import { modifyStructure } from "$lib/requests/structures";
 
-  export let structure: Structure;
-  export let members: StructureMember[];
-  export let putativeMembers: PutativeStructureMember[];
+  interface Props {
+    structure: Structure;
+    members: StructureMember[];
+    putativeMembers: PutativeStructureMember[];
+  }
+
+  let { structure = $bindable(), members, putativeMembers }: Props = $props();
 
   async function hideQuickStart() {
     await modifyStructure({ slug: structure.slug, quickStartDone: true });
     structure.quickStartDone = true;
   }
 
-  $: steps = [
+  let steps = $derived([
     {
       label: "Compléter le profil de votre structure",
       complete: isStructureInformationsComplete(structure),
@@ -42,14 +46,16 @@
       complete: hasAtLeastOneServiceNotArchived(structure),
       url: `/services/creer?structure=${structure.slug}`,
     },
-  ];
+  ]);
 
-  $: if (
-    steps.filter(({ complete }) => complete).length === steps.length &&
-    !structure.quickStartDone
-  ) {
-    hideQuickStart();
-  }
+  $effect(() => {
+    if (
+      steps.filter(({ complete }) => complete).length === steps.length &&
+      !structure.quickStartDone
+    ) {
+      hideQuickStart();
+    }
+  });
 </script>
 
 {#if !structure.quickStartDone}
@@ -62,7 +68,7 @@
         <p class="m-s0 text-f14">Vos premiers pas sur DORA</p>
       </div>
 
-      <button class="flex" on:click={hideQuickStart}>
+      <button class="flex" onclick={hideQuickStart}>
         <span class="h-s24 w-s24 fill-magenta-cta">
           {@html closeIcon}
         </span>
@@ -91,11 +97,7 @@
         {/each}
 
         <li class="py-s36 text-right">
-          <Button
-            label="Masquer le guide"
-            secondary
-            on:click={hideQuickStart}
-          />
+          <Button label="Masquer le guide" secondary onclick={hideQuickStart} />
         </li>
       </ul>
     </div>

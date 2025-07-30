@@ -1,0 +1,37 @@
+{% extends "email-base.mjml" %}
+
+{% block preview %}Connectez-vous à votre tableau de bord gestionnaire{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+  <p>
+    {{ num_structures }} structure(s) en attente d’une action depuis votre tableau de bord gestionnaire.
+  </p>
+  <p>Pour rappel, la modération permet de s’assurer de la bonne qualité de l’offre d’insertion référencée sur votre territoire.</p>
+  <p>Merci de vérifier que ces structures ont bien leur place sur DORA et que les administrateurs auto-déclarés en sont bien membres (le format du mail étant un bon indicateur).</p>
+  <p>Liste des structures en attente d’une action de votre part :
+    {% if structures_awaiting_moderation %}
+      <p>À valider :</p>
+      <ul>
+        {% for structure in structures_awaiting_moderation %}
+          <li>{{ structure }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% if structures_without_users %}
+      <p>Sans utilisateur :</p>
+      <ul>
+        {% for structure in structures_without_users %}
+          <li>{{ structure }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </p>
+{% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ cta_link }}">Voir mon tableau de bord</mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}

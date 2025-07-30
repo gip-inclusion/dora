@@ -20,16 +20,23 @@
   import ServiceToolbar from "./service-toolbar.svelte";
   import type { PageData } from "./$types";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let isServiceFeedbackModalOpen = false;
+  let { data = $bindable() }: Props = $props();
 
-  $: showFeedbackModal =
+  let isServiceFeedbackModalOpen = $state(false);
+
+  let showFeedbackModal = $derived(
     browser &&
-    data.service &&
-    !isMemberOrPotentialMemberOfStructure($userInfo, data.service.structure);
+      data.service &&
+      !isMemberOrPotentialMemberOfStructure($userInfo, data.service.structure)
+  );
 
-  $: setContext("showFeedbackModal", showFeedbackModal);
+  $effect(() => {
+    setContext("showFeedbackModal", showFeedbackModal);
+  });
 
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");

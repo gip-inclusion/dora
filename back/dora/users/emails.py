@@ -97,32 +97,48 @@ def send_account_deletion_notification(user):
     )
 
 
-def send_structure_awaiting_moderation(manager):
-    # envoyé au gestionnaires de territoire tous les mercredis
-    # avec la liste des structures
+MAX_STRUCTURES_PER_CATEGORY = 10
 
-    # pas de dépendances/import entre modèles sauf si indispensable
+
+def send_weekly_email_to_department_managers(manager):
+    # envoyé aux gestionnaires de territoire tous les mercredis
+    # avec la liste des structures qui exigent une action de leur part
+
     structures = apps.get_model("structures.Structure").objects
-    to_moderate = (
-        structures.awaiting_moderation()
-        .exclude(is_obsolete=True)
-        .filter(department__in=manager.departments)
+
+    relevant_structures = structures.filter(
+        is_obsolete=False, department__in=manager.departments
+    )
+
+    all_awaiting_moderation = relevant_structures.awaiting_moderation()
+    all_orphans = relevant_structures.orphans()
+    total_structures_count = all_awaiting_moderation.count() + all_orphans.count()
+
+    awaiting_moderation = all_awaiting_moderation.order_by("name")[
+        :MAX_STRUCTURES_PER_CATEGORY
+    ].values_list("name", flat=True)
+    orphans = all_orphans.order_by("name")[:MAX_STRUCTURES_PER_CATEGORY].values_list(
+        "name", flat=True
     )
 
     cta_link = furl(settings.FRONTEND_URL) / "admin" / "structures"
     context = {
-        "structures": to_moderate,
+        "structures_awaiting_moderation": awaiting_moderation,
+        "structures_without_users": orphans,
         "cta_link": cta_link.url,
+        "num_structures": total_structures_count,
     }
 
-    send_mail(
-        "DORA - Vous avez des structures à modérer cette semaine",
-        manager.email,
-        mjml2html(
-            render_to_string(
-                "notification_structure_moderation_for_manager.mjml", context
-            )
-        ),
-        from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
-        tags=["notification", "gestionnaires"],
-    )
+    if awaiting_moderation or orphans:
+        send_mail(
+            "Vous avez des structures à modérer cette semaine",
+            manager.email,
+            mjml2html(
+                render_to_string(
+                    "notification_department_manager_structures_requiring_action.mjml",
+                    context,
+                )
+            ),
+            from_email=("La plateforme DORA", settings.NO_REPLY_EMAIL),
+            tags=["notification", "gestionnaires"],
+        )
