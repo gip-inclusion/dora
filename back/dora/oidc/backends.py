@@ -128,7 +128,7 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
                     "userId": str(user.pk),
                     "userEmail": user.email,
                     "pcEmail": email,
-                    "userSub": user.sub_pc,
+                    "userSub": str(user.sub_pc),
                     "pcSub": sub,
                 },
             )
