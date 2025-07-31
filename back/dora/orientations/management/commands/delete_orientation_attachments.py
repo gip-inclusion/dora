@@ -28,7 +28,7 @@ class Command(BaseCommand):
                         "Certaines pièces-jointes de l'orientation n'ont pas pu être supprimées :"
                     )
                 )
-                for path, result in results.items():
+                for deleted_path, success in results.items():
                     if not result:
                         self.stdout.write(self.style.WARNING(f" > {path} : KO"))
                     else:
