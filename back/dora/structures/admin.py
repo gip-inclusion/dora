@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import path, reverse
 from django.utils import timezone
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 from dora.core.admin import EnumAdmin
 from dora.core.models import ModerationStatus
@@ -453,7 +453,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
         if not errors_map and is_wet_run:
             messages.success(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>Import terminé avec succès</b><br/>{created_structures_count} nouvelles structures ont été créées.<br/>"
                     f"{edited_structures_count} structures existantes ont été modifiées.<br/>"
                     f"{created_services_count} nouveaux services ont été crées en brouillon.<br/>"
@@ -465,7 +465,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
         elif not errors_map and not is_wet_run:
             messages.success(
                 request,
-                mark_safe("<b>Import de test terminé avec succès</b><br/>"),
+                format_html("<b>Import de test terminé avec succès</b><br/>"),
             )
 
         elif errors_map:
@@ -477,7 +477,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
 
             messages.error(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>{title_prefix} - Erreurs rencontrées</b><br/>"
                     f"{('<br/>').join(error_messages)}"
                 ),

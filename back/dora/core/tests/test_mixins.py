@@ -2,7 +2,7 @@ from unittest.mock import Mock, patch
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import RequestFactory, TestCase
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from model_bakery import baker
 
 from dora.core.mixins import BaseImportAdminMixin
@@ -69,7 +69,7 @@ class BaseImportAdminMixinTest(TestCase):
             "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules."
         )
         mock_messages.error.assert_called_once_with(
-            request, mark_safe(expected_message)
+            request, format_html(expected_message)
         )
         mock_redirect.assert_called_once_with(".")
 
@@ -109,7 +109,7 @@ class BaseImportAdminMixinTest(TestCase):
             "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import."
         )
         mock_messages.error.assert_called_once_with(
-            request, mark_safe(expected_message)
+            request, format_html(expected_message)
         )
         mock_redirect.assert_called_once_with(".")
 

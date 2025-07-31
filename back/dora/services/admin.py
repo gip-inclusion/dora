@@ -5,7 +5,7 @@ from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
 from django.shortcuts import redirect, render
 from django.urls import path
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 from dora.core.admin import EnumAdmin
 
@@ -170,7 +170,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         if is_wet_run and no_errors:
             messages.success(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>Import terminé avec succès</b><br/>{total_services_published} nouveaux services ont été créés et publiés"
                 ),
             )
@@ -179,7 +179,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         if not is_wet_run and no_errors:
             messages.success(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {total_services_published} sont prêts à être importés et publiés."
                 ),
             )
@@ -194,7 +194,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             headers_list = "<br/>".join(f"• {header}" for header in missing_headers)
             message = f"<b>Échec de l'import - Colonnes manquantes</b><br/>Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>{headers_list}"
 
-            messages.error(request, mark_safe(message))
+            messages.error(request, format_html(message))
 
         if errors:
             error_list = "<br/>".join(f"• {error}" for error in errors)
@@ -210,7 +210,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             )
             messages.error(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>{message_title}</b><br/>{message_text} Veuillez corriger les éléments suivants :<br/>"
                     f"{error_list}",
                 ),
@@ -230,7 +230,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             messages.add_message(
                 request,
                 messages.INFO,
-                mark_safe(
+                format_html(
                     "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
                 ),
                 extra_tags="plain",
@@ -249,7 +249,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             )
             messages.warning(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>{title_prefix}Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
                     f"{duplicate_list}"
                 ),
@@ -262,7 +262,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             )
             messages.warning(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>{title_prefix}Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
                     f"{missing_list}"
                 ),
@@ -283,7 +283,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
 
             messages.warning(
                 request,
-                mark_safe(message + f" :<br/>{draft_list}"),
+                format_html(message + f" :<br/>{draft_list}"),
             )
 
     def get_import_helper(self):

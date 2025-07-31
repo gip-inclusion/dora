@@ -3,7 +3,7 @@ from unittest.mock import patch
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponseRedirect
 from django.test import RequestFactory
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -82,7 +82,7 @@ class ImportStructuresViewTestCase(APITestCase):
 
         mock_messages.success.assert_called_once_with(
             request,
-            mark_safe(
+            format_html(
                 "<b>Import terminé avec succès</b><br/>5 nouvelles structures ont été créées.<br/>"
                 "2 structures existantes ont été modifiées.<br/>"
                 "3 nouveaux services ont été crées en brouillon.<br/>"
@@ -109,7 +109,7 @@ class ImportStructuresViewTestCase(APITestCase):
 
         mock_messages.success.assert_called_once_with(
             request,
-            mark_safe("<b>Import de test terminé avec succès</b><br/>"),
+            format_html("<b>Import de test terminé avec succès</b><br/>"),
         )
 
         mock_messages.error.assert_not_called()
@@ -133,7 +133,7 @@ class ImportStructuresViewTestCase(APITestCase):
 
         mock_messages.error.assert_called_once_with(
             request,
-            mark_safe(
+            format_html(
                 "<b>Échec de l'import - Erreurs rencontrées</b><br/>"
                 "[2]: Nom requis, Email invalide<br/>"
                 "[5]: Structure déjà existante"
@@ -161,7 +161,7 @@ class ImportStructuresViewTestCase(APITestCase):
 
         mock_messages.error.assert_called_once_with(
             request,
-            mark_safe(
+            format_html(
                 "<b>Test terminé - Erreurs rencontrées</b><br/>"
                 "[2]: Nom requis, Email invalide<br/>"
                 "[5]: Structure déjà existante"
