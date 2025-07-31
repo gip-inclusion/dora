@@ -182,7 +182,7 @@
               )}
             </span>
           {/if}
-          {#if isNotFreeService(service.feeCondition)}
+          {#if service.feeCondition && isNotFreeService(service.feeCondition)}
             <span>
               {#if service.feeDetails}
                 {service.feeDetails}
