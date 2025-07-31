@@ -87,7 +87,7 @@
             icon={MapPin2FillMap}
             title="Lieu d’accueil"
           >
-            {#if service.locationKinds.length > 0}
+            {#if service.locationKinds && service.locationKinds.length > 0}
               <div class="gap-s12 flex flex-col">
                 {#if service.locationKinds.includes("en-presentiel")}
                   <div class="flex flex-col">
