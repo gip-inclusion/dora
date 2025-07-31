@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from rest_framework import mixins, permissions, serializers, viewsets
 from rest_framework.decorators import action
@@ -86,6 +87,21 @@ class OrientationViewSet(
         orientation = self.get_object()
         prescriber_message = self.request.data.get("message")
         beneficiary_message = self.request.data.get("beneficiary_message")
+
+        try:
+            sanitized_prescriber_message = sanitize_user_input_injected_in_email(
+                prescriber_message
+            )
+        except ValidationError as error:
+            raise serializers.ValidationError({"message": error.messages})
+
+        try:
+            sanitized_beneficiary_message = sanitize_user_input_injected_in_email(
+                beneficiary_message
+            )
+        except ValidationError as error:
+            raise serializers.ValidationError({"beneficiary_message": error.messages})
+
         if orientation.service:
             # L'objet service et les durées n'existent pas dans le cas des services DI
             orientation.duration_weekly_hours = (
@@ -96,12 +112,6 @@ class OrientationViewSet(
         orientation.status = OrientationStatus.ACCEPTED
         orientation.save()
 
-        sanitized_prescriber_message = sanitize_user_input_injected_in_email(
-            prescriber_message
-        )
-        sanitized_beneficiary_message = sanitize_user_input_injected_in_email(
-            beneficiary_message
-        )
         send_orientation_accepted_emails(
             orientation, sanitized_prescriber_message, sanitized_beneficiary_message
         )
@@ -116,6 +126,12 @@ class OrientationViewSet(
         orientation = self.get_object()
         message = self.request.data.get("message", "")
         reasons = self.request.data.get("reasons", [])
+
+        try:
+            sanitized_message = sanitize_user_input_injected_in_email(message)
+        except ValidationError as error:
+            raise serializers.ValidationError({"message": error.messages})
+
         orientation.processing_date = timezone.now()
         orientation.status = OrientationStatus.REJECTED
         orientation.save()
@@ -123,7 +139,6 @@ class OrientationViewSet(
             RejectionReason.objects.filter(value__in=reasons)
         )
 
-        sanitized_message = sanitize_user_input_injected_in_email(message)
         send_orientation_rejected_emails(orientation, sanitized_message)
         return Response(status=204)
 
