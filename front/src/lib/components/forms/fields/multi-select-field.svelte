@@ -8,57 +8,74 @@
   import FieldWrapper from "../field-wrapper.svelte";
   import Select from "../../inputs/select/select.svelte";
 
-  export let id: string;
-  export let value: string[] | number[] | undefined = undefined;
+  interface Props {
+    id: string;
+    value?: string[] | number[];
+    disabled?: boolean;
+    readonly?: any;
+    placeholder?: string;
+    initialValue?: string[] | number[];
+    // Spécifique du select
+    choices: Choice[];
+    sort?: boolean;
+    onChange?: (newValues: string[]) => void;
+    placeholderMulti?: string;
+    fixedItemsValues?: string[];
+    // Proxy vers le FieldWrapper
+    description?: string;
+    hidden?: boolean;
+    hideLabel?: boolean;
+    vertical?: boolean;
+  }
 
-  export let disabled = false;
-  export let readonly = $currentSchema?.[id]?.readonly;
-  export let placeholder = "Choisir";
-  export let initialValue = undefined;
-
-  // Spécifique du select
-  export let choices: Choice[];
-  export let sort = false;
-  export let onChange: ((newValues: string[]) => void) | undefined = undefined;
-  export let placeholderMulti = "Choisir";
-  export let fixedItemsValues: string[] = [];
-
-  // Proxy vers le FieldWrapper
-  export let description = "";
-  export let hidden = false;
-  export let hideLabel = false;
-  export let vertical = false;
+  let {
+    id,
+    value = $bindable(),
+    disabled = false,
+    readonly,
+    placeholder = "Choisir",
+    initialValue,
+    choices,
+    sort = false,
+    onChange,
+    placeholderMulti = "Choisir",
+    fixedItemsValues = [],
+    description = "",
+    hidden = false,
+    hideLabel = false,
+    vertical = false,
+  }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    let:onBlur
-    let:errorMessages
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
-    {description}
+    descriptionText={description}
     {hidden}
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
-    <Select
-      bind:value
-      on:blur={onBlur}
-      {id}
-      {choices}
-      {fixedItemsValues}
-      {onChange}
-      {sort}
-      {placeholder}
-      {placeholderMulti}
-      {disabled}
-      {readonly}
-      {initialValue}
-      {errorMessages}
-      multiple
-    />
+    {#snippet children({ onBlur, errorMessages })}
+      <Select
+        bind:value
+        onblur={onBlur}
+        {id}
+        {choices}
+        {fixedItemsValues}
+        {onChange}
+        {sort}
+        {placeholder}
+        {placeholderMulti}
+        {disabled}
+        {readonly}
+        {initialValue}
+        {errorMessages}
+        multiple
+      />
+    {/snippet}
   </FieldWrapper>
 {/if}

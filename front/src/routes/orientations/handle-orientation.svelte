@@ -9,61 +9,61 @@
   import Notice from "$lib/components/display/notice.svelte";
   import { formatNumericDate } from "$lib/utils/date";
 
-  export let orientation: Orientation;
-  export let queryHash: string;
-  export let onRefresh;
+  const statusMap = {
+    VALIDÉE: { label: "Validé", cssClass: "text-success" },
+    OUVERTE: {
+      label: "Ouverte / En cours de traitement",
+      cssClass: "text-blue-information-dark",
+    },
+    REFUSÉE: { label: "Refusé", cssClass: "text-error" },
+  };
+  interface Props {
+    orientation: Orientation;
+    queryHash: string;
+    onRefresh: any;
+  }
+
+  let { orientation, queryHash, onRefresh }: Props = $props();
 
   let modalOpened:
     | "accept"
     | "deny"
     | "contact-beneficiary"
     | "contact-service"
-    | undefined = undefined;
+    | undefined = $state(undefined);
 
   function closeModal() {
     modalOpened = undefined;
   }
 
-  let statusMessage: { label?: string; cssClass?: string } = {};
-  $: {
-    if (orientation.status === "VALIDÉE") {
-      statusMessage = { label: "Validé", cssClass: "text-success" };
-    } else if (orientation.status === "OUVERTE") {
-      statusMessage = {
-        label: "Ouverte / En cours de traitement",
-        cssClass: "text-blue-information-dark",
-      };
-    } else if (orientation.status === "REFUSÉE") {
-      statusMessage = { label: "Refusé", cssClass: "text-error" };
-    }
-  }
+  const statusMessage = $derived(statusMap[orientation.status] || {});
 </script>
 
 {#if browser}
   <DenyOrientationModal
     isOpen={modalOpened === "deny"}
-    on:close={closeModal}
+    onClose={closeModal}
     {orientation}
     {queryHash}
     {onRefresh}
   />
   <AcceptOrientationModal
     isOpen={modalOpened === "accept"}
-    on:close={closeModal}
+    onClose={closeModal}
     {orientation}
     {queryHash}
     {onRefresh}
   />
   <ContactBeneficiaryModal
     isOpen={modalOpened === "contact-beneficiary"}
-    on:close={closeModal}
+    onClose={closeModal}
     {onRefresh}
     {orientation}
     {queryHash}
   />
   <ContactPrescriberModal
     isOpen={modalOpened === "contact-service"}
-    on:close={closeModal}
+    onClose={closeModal}
     {orientation}
     {queryHash}
     {onRefresh}
@@ -91,13 +91,13 @@
       <div class="gap-s12 flex flex-col">
         <Button
           label="Valider la demande"
-          on:click={() => (modalOpened = "accept")}
+          onclick={() => (modalOpened = "accept")}
         />
         <Button
           secondary
           label="Refuser la demande"
           extraClass="border-error! text-error! hover:text-white! hover:border-error hover:bg-error!"
-          on:click={() => (modalOpened = "deny")}
+          onclick={() => (modalOpened = "deny")}
         />
 
         {#if orientation.beneficiaryEmail}
@@ -105,7 +105,7 @@
             secondary
             extraClass="border-gray-dark! text-gray-text! hover:text-white! hover:border-gray-dark hover:bg-gray-dark!"
             label="Contacter le ou la bénéficiaire"
-            on:click={() => (modalOpened = "contact-beneficiary")}
+            onclick={() => (modalOpened = "contact-beneficiary")}
           />
         {/if}
 
@@ -113,7 +113,7 @@
           secondary
           extraClass="border-gray-dark! text-gray-text! hover:text-white! hover:border-gray-dark hover:bg-gray-dark!"
           label="Contacter le ou la prescripteur·rice"
-          on:click={() => (modalOpened = "contact-service")}
+          onclick={() => (modalOpened = "contact-service")}
         />
       </div>
     {:else if orientation.status === "VALIDÉE"}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { page } from "$app/stores";
   import { token, userInfo } from "$lib/utils/auth";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
@@ -6,14 +7,21 @@
   import MembershipPendingWarning from "$lib/components/specialized/membership-pending-warning.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import ServiceStructureLabel from "../components/service-structure-label.svelte";
+  import type { Service } from "$lib/types";
 
-  export let data;
+  interface Props {
+    data: { service: Service };
+    children?: Snippet;
+    navbar?: Snippet;
+  }
+
+  let { data, children, navbar }: Props = $props();
 
   const { service } = data;
 
-  let currentLocation = $token
-    ? "service-orientation-step1"
-    : "service-orientation";
+  let currentLocation = $state(
+    $token ? "service-orientation-step1" : "service-orientation"
+  );
   if ($page.url.pathname.endsWith("/orienter/demande")) {
     currentLocation = "service-orientation-step2";
   } else if ($page.url.pathname.endsWith("/orienter/merci")) {
@@ -38,8 +46,8 @@
       </Notice>
     </div>
   {:else}
-    <slot />
+    {@render children?.()}
   {/if}
 </CenteredGrid>
 
-<slot name="navbar" />
+{@render navbar?.()}

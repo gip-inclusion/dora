@@ -3,9 +3,13 @@
   import LinkButton from "$lib/components/display/link-button.svelte";
   import type { Structure } from "$lib/types";
 
-  export let structure: Structure;
+  interface Props {
+    structure: Structure;
+  }
 
-  $: sourceName = structure.source?.label;
+  let { structure }: Props = $props();
+
+  let sourceName = $derived(structure.source?.label);
 </script>
 
 <div

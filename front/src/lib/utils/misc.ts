@@ -16,10 +16,7 @@ const INSANE_CONFIGURATION = {
   },
 };
 
-export function markdownToHTML(
-  markdownContent: string,
-  titleLevel: number | undefined = undefined
-) {
+export function markdownToHTML(markdownContent: string, titleLevel?: number) {
   const converter = new showdown.Converter({
     headerLevelStart: titleLevel,
     tables: true,
@@ -200,23 +197,24 @@ export function isInDeploymentDepartments(
   );
 }
 
-export function clickOutside(node: HTMLElement) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore erreurs de typage inextricables...
-  const handleClick = (event) => {
-    if (node && !node.contains(event.target) && !event.defaultPrevented) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore erreurs de typage inextricables...
-      node.dispatchEvent(new CustomEvent("click_outside", node));
-    }
-  };
+// Svelte 5 attachment version of clickOutside
+export function clickOutside(callback: () => void) {
+  return (node: HTMLElement) => {
+    const handleClick = (event: Event) => {
+      if (
+        node &&
+        !node.contains(event.target as Node) &&
+        !event.defaultPrevented
+      ) {
+        callback();
+      }
+    };
 
-  document.addEventListener("click", handleClick, true);
+    document.addEventListener("click", handleClick, true);
 
-  return {
-    destroy() {
+    return () => {
       document.removeEventListener("click", handleClick, true);
-    },
+    };
   };
 }
 

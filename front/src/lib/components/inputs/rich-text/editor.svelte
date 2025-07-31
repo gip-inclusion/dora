@@ -17,26 +17,37 @@
   import Button from "./button.svelte";
   import Separator from "./separator.svelte";
 
-  export let id: string;
-  export let name: string;
-  export let htmlContent = "";
-  export let initialContent = "";
-  export let placeholder = "";
-  export let disabled = false;
-  export let readonly = false;
-  export let ariaDescribedBy = "";
+  interface Props {
+    id: string;
+    name: string;
+    htmlContent?: string;
+    initialContent?: string;
+    placeholder?: string;
+    disabled?: boolean;
+    readonly?: boolean;
+    ariaDescribedBy?: string;
+  }
 
-  let element;
-  let editor;
-  let linkDialogIsOpen = false;
-  let linkDialogHref;
-  let linkDialogHrefPrev;
-  let linkDialogButtontext;
-  let linkDialogButtonIsActive = false;
-  let linkDialogText;
-  let linkDialogHasSelection;
-  let linkDialogTextInput;
-  let linkDialogUrlInput;
+  let {
+    id,
+    name,
+    htmlContent = $bindable(""),
+    initialContent = "",
+    placeholder = "",
+    disabled = false,
+    readonly = false,
+    ariaDescribedBy = "",
+  }: Props = $props();
+
+  let element = $state();
+  let editor = $state();
+  let linkDialogIsOpen = $state(false);
+  let linkDialogHref = $state();
+  let linkDialogHrefPrev = $state();
+  let linkDialogText = $state();
+  let linkDialogHasSelection = $state();
+  let linkDialogTextInput = $state();
+  let linkDialogUrlInput = $state();
 
   function toString(bool: boolean) {
     return bool ? "true" : "false";
@@ -58,7 +69,6 @@
       onTransaction: () => {
         // force re-render so `editor.isActive` works as expected
         htmlContent = htmlToMarkdown(editor.getHTML());
-        editor = editor;
       },
       editorProps: {
         attributes: {
@@ -78,20 +88,21 @@
     }
   });
 
-  $: linkDialogButtonIsActive =
+  let linkDialogButtonIsActive = $derived(
     linkDialogHref !== linkDialogHrefPrev &&
-    !(linkDialogHref === "" && linkDialogHrefPrev === undefined) &&
-    (linkDialogHasSelection || linkDialogText);
+      !(linkDialogHref === "" && linkDialogHrefPrev === undefined) &&
+      (linkDialogHasSelection || linkDialogText)
+  );
 
-  $: {
+  let linkDialogButtontext = $derived.by(() => {
     if (!linkDialogHrefPrev) {
-      linkDialogButtontext = "Ajouter le lien";
-    } else if (!linkDialogHref) {
-      linkDialogButtontext = "Supprimer le lien";
-    } else {
-      linkDialogButtontext = "Modifier le lien";
+      return "Ajouter le lien";
     }
-  }
+    if (!linkDialogHref) {
+      return "Supprimer le lien";
+    }
+    return "Modifier le lien";
+  });
 
   export function updateValue(value) {
     editor.commands.setContent(markdownToHTML(value));
@@ -155,14 +166,14 @@
   {#if editor}
     <div class="gap-s8 bg-gray-03 p-s12 flex flex-row items-center">
       <Button
-        on:click={() => editor.chain().focus().toggleBold().run()}
+        onclick={() => editor.chain().focus().toggleBold().run()}
         active={editor.isActive("bold")}
         icon={boldIcon}
         label="Gras"
       />
 
       <Button
-        on:click={() => editor.chain().focus().toggleItalic().run()}
+        onclick={() => editor.chain().focus().toggleItalic().run()}
         active={editor.isActive("italic")}
         icon={italicIcon}
         label="Italique"
@@ -171,23 +182,21 @@
       <Separator />
 
       <Button
-        on:click={() => editor.chain().focus().setParagraph().run()}
+        onclick={() => editor.chain().focus().setParagraph().run()}
         active={editor.isActive("paragraph")}
         icon={paraIcon}
         label="Paragraphe"
       />
 
       <Button
-        on:click={() =>
-          editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        onclick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         active={editor.isActive("heading", { level: 1 })}
         icon={h1Icon}
         label="Titre de niveau 1"
       />
 
       <Button
-        on:click={() =>
-          editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        onclick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         active={editor.isActive("heading", { level: 2 })}
         icon={h2Icon}
         label="Titre de niveau 2"
@@ -196,7 +205,7 @@
       <Separator />
 
       <Button
-        on:click={() => editor.chain().focus().toggleBulletList().run()}
+        onclick={() => editor.chain().focus().toggleBulletList().run()}
         active={editor.isActive("bulletList")}
         icon={liIcon}
         label="Liste à puces"
@@ -205,7 +214,7 @@
       <Separator />
 
       <Button
-        on:click={linkDialogToggle}
+        onclick={linkDialogToggle}
         active={editor.isActive("link")}
         icon={linkIcon}
         label="Lien"
@@ -233,18 +242,18 @@
         />
         <button
           class="border-gray-text px-s8 py-s4 text-f12 hover:bg-gray-text disabled:border-gray-03 disabled:bg-gray-01 disabled:text-gray-03 rounded-lg border font-bold hover:text-white"
-          on:click={setLink}
+          onclick={setLink}
           disabled={!linkDialogButtonIsActive}
         >
           {linkDialogButtontext}
         </button>
         <button
           class="border-gray-text px-s8 py-s4 text-f12 hover:bg-gray-text rounded-lg border font-bold hover:text-white"
-          on:click={linkDialogClose}>Annuler</button
+          onclick={linkDialogClose}>Annuler</button
         >
       </div>
     {/if}
-    <div {id} aria-describedby={ariaDescribedBy} bind:this={element} />
+    <div {id} aria-describedby={ariaDescribedBy} bind:this={element}></div>
   </div>
 </div>
 

@@ -4,6 +4,7 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from django.contrib.gis.geos import Point
+from freezegun import freeze_time
 from model_bakery import baker
 
 from dora.core.utils import GeoData
@@ -370,6 +371,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 0)
         self.assertEqual(len(result["errors"]), 1)
 
+    @freeze_time("2022-01-01")
     def test_publish_eligible_remote_service(self):
         csv_content = (
             f"{self.csv_headers}\n"
@@ -388,7 +390,11 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
         self.assertEqual(created_service.status, ServiceStatus.PUBLISHED)
+        self.assertEqual(
+            str(created_service.publication_date), "2022-01-01 00:00:00+00:00"
+        )
 
+    @freeze_time("2022-01-01")
     def test_publish_eligible_in_person_service(self):
         csv_content = (
             f"{self.csv_headers}\n"
@@ -407,6 +413,9 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
         self.assertEqual(created_service.status, ServiceStatus.PUBLISHED)
+        self.assertEqual(
+            str(created_service.publication_date), "2022-01-01 00:00:00+00:00"
+        )
 
     def test_keep_in_person_service_in_draft_when_ineligible(self):
         csv_content = (
@@ -426,6 +435,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
         self.assertEqual(created_service.status, ServiceStatus.DRAFT)
+        self.assertIsNone(created_service.publication_date)
 
     def test_keep_service_in_draft_when_ineligible(self):
         csv_content = (
@@ -445,6 +455,7 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
         self.assertEqual(created_service.status, ServiceStatus.DRAFT)
+        self.assertIsNone(created_service.publication_date)
 
     def test_make_contact_info_public(self):
         csv_content = (
@@ -687,6 +698,22 @@ class ImportServicesTestCase(TestCase):
         self.assertFalse(result["errors"])
         self.assertEqual(result["created_count"], 1)
         self.assertFalse(ServiceSource.objects.filter(label="New Label").exists())
+
+    def test_source_label_not_created_wet_run_with_errors(self):
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,invalid_kind,,,,,,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertEqual(len(result["errors"]), 1)
+        self.assertEqual(result["created_count"], 0)
+        self.assertFalse(ServiceSource.objects.filter(**self.source_info).exists())
 
     def test_should_remove_first_two_lines(self):
         csv_content = (

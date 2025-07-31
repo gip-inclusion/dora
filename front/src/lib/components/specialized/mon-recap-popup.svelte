@@ -10,19 +10,19 @@
 
   const monRecapTallyFormCompletedKey = `tallyForm-${TallyFormId.NOTEBOOK_ORDER_FORM_ID}-completed`;
 
-  $: lastVisitedStructure = getCurrentlySelectedStructure(
-    $userInfo,
-    $userPreferences
+  let lastVisitedStructure = $derived(
+    getCurrentlySelectedStructure($userInfo, $userPreferences)
   );
 
-  $: shouldDisplayMonRecapForm =
+  let shouldDisplayMonRecapForm = $derived(
     $userInfo &&
-    ($userInfo.mainActivity === "accompagnateur" ||
-      $userInfo.mainActivity === "accompagnateur_offreur") &&
-    lastVisitedStructure &&
-    lastVisitedStructure.canEditInformations &&
-    MON_RECAP_DEPARTMENTS.includes(lastVisitedStructure.department) &&
-    !localStorage.getItem(monRecapTallyFormCompletedKey);
+      ($userInfo.mainActivity === "accompagnateur" ||
+        $userInfo.mainActivity === "accompagnateur_offreur") &&
+      lastVisitedStructure &&
+      lastVisitedStructure.canEditInformations &&
+      MON_RECAP_DEPARTMENTS.includes(lastVisitedStructure.department) &&
+      !localStorage.getItem(monRecapTallyFormCompletedKey)
+  );
 
   const hiddenFields = { source: "dora" };
 </script>
@@ -33,7 +33,7 @@
     timeoutSeconds={12}
     minDaysBetweenDisplays={1}
     {hiddenFields}
-    on:submit={() => {
+    onsubmit={() => {
       localStorage.setItem(monRecapTallyFormCompletedKey, dayjs().toString());
       shouldDisplayMonRecapForm = false;
     }}

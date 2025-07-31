@@ -1,27 +1,31 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import { formatErrors } from "$lib/validation/validation";
 
   import Checkbox from "./checkbox.svelte";
 
-  export let name: string;
-  export let group: string[];
-  export let choices: { label: string; value: string }[];
-  export let disabled = false;
-  export let readonly = false;
-  export let horizontalCheckboxes = false;
-  export let errorMessages: string[] = [];
-
-  const dispatch = createEventDispatcher();
-
-  let focusValue: string | undefined = undefined;
-
-  // We want the change event to come from this component, not from
-  // the individual checkboxes, in order to be able to validate properly
-  function handleChange() {
-    dispatch("change", name);
+  interface Props {
+    name: string;
+    group: string[];
+    choices: { label: string; value: string }[];
+    disabled?: boolean;
+    readonly?: boolean;
+    horizontalCheckboxes?: boolean;
+    errorMessages?: string[];
+    onchange?: (event: Event) => void;
   }
+
+  let {
+    name,
+    group = $bindable(),
+    choices,
+    disabled = false,
+    readonly = false,
+    horizontalCheckboxes = false,
+    errorMessages = [],
+    onchange,
+  }: Props = $props();
+
+  let focusValue: string | undefined = $state();
 </script>
 
 <div class="gap-s8 flex" class:flex-col={!horizontalCheckboxes}>
@@ -36,9 +40,9 @@
       horizontal={horizontalCheckboxes}
       errorMessage={formatErrors(name, errorMessages)}
       focused={focusValue === choice.value}
-      on:change={handleChange}
-      on:focus={() => (focusValue = choice.value)}
-      on:blur={() => (focusValue = undefined)}
+      {onchange}
+      onfocus={() => (focusValue = choice.value)}
+      onblur={() => (focusValue = undefined)}
     />
   {/each}
 </div>

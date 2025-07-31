@@ -1,8 +1,12 @@
 <script lang="ts">
   import SmallLink from "./small-link.svelte";
 
-  export let searchString;
-  export let kind: "people" | "companies";
+  interface Props {
+    searchString: any;
+    kind: "people" | "companies";
+  }
+
+  let { searchString, kind }: Props = $props();
 </script>
 
 <SmallLink

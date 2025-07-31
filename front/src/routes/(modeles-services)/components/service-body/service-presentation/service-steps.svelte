@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import ExternalLinkIcon from "$lib/components/display/external-link-icon.svelte";
   import Linkify from "$lib/components/display/linkify.svelte";
   import type {
@@ -15,7 +13,12 @@
   import ServiceSection from "./components/service-section.svelte";
   import ServiceSubsection from "./components/service-subsection.svelte";
 
-  export let service: Service | Model;
+  interface Props {
+    service: Service | Model;
+    onTrackMobilisation: (url?: string) => void;
+  }
+
+  let { service, onTrackMobilisation }: Props = $props();
 
   const orderedCoachOrientationModeValues: Record<
     CoachOrientationModes,
@@ -41,35 +44,30 @@
     autre: 5,
   };
 
-  const dispatch = createEventDispatcher<{
-    trackMobilisation: { externalUrl?: string };
-  }>();
+  let isDI = $derived("source" in service);
 
-  function trackMobilisationUnconditionally(externalUrl: string) {
-    dispatch("trackMobilisation", { externalUrl });
-  }
+  let coachOrientationModesValueAndDisplay = $derived(
+    (service.coachOrientationModes ?? [])
+      .map((val, index) => [val, service.coachOrientationModesDisplay[index]])
+      .sort(
+        (a, b) =>
+          orderedCoachOrientationModeValues[a[0]] -
+          orderedCoachOrientationModeValues[b[0]]
+      )
+  );
 
-  $: isDI = "source" in service;
-
-  $: coachOrientationModesValueAndDisplay = (
-    service.coachOrientationModes ?? []
-  )
-    .map((val, index) => [val, service.coachOrientationModesDisplay[index]])
-    .sort(
-      (a, b) =>
-        orderedCoachOrientationModeValues[a[0]] -
-        orderedCoachOrientationModeValues[b[0]]
-    );
-
-  $: beneficiariesAccessModesValueAndDisplay = (
-    service.beneficiariesAccessModes ?? []
-  )
-    .map((val, index) => [val, service.beneficiariesAccessModesDisplay[index]])
-    .sort(
-      (a, b) =>
-        orderedBeneficiariesAccessModeValues[a[0]] -
-        orderedBeneficiariesAccessModeValues[b[0]]
-    );
+  let beneficiariesAccessModesValueAndDisplay = $derived(
+    (service.beneficiariesAccessModes ?? [])
+      .map((val, index) => [
+        val,
+        service.beneficiariesAccessModesDisplay[index],
+      ])
+      .sort(
+        (a, b) =>
+          orderedBeneficiariesAccessModeValues[a[0]] -
+          orderedBeneficiariesAccessModeValues[b[0]]
+      )
+  );
 </script>
 
 <ServiceSection title="Les démarches à réaliser">
@@ -84,8 +82,7 @@
           {:else if modeValue === "autre"}
             <Linkify
               text={service.coachOrientationModesOther}
-              on:linkClick={(event) =>
-                trackMobilisationUnconditionally(event.detail.url)}
+              onLinkClick={onTrackMobilisation}
             />
           {:else}
             {modeDisplay}
@@ -104,9 +101,9 @@
             <a
               href={service.beneficiariesAccessModesExternalFormLink}
               target="_blank"
-              on:click={() =>
-                trackMobilisationUnconditionally(
-                  service.beneficiariesAccessModesExternalFormLink
+              onclick={() =>
+                onTrackMobilisation(
+                  service.beneficiariesAccessModesExternalFormLink ?? undefined
                 )}
               class="text-magenta-cta underline"
               >{service.beneficiariesAccessModesExternalFormLinkText ||
@@ -117,8 +114,7 @@
           {:else if modeValue === "autre"}
             <Linkify
               text={service.beneficiariesAccessModesOther}
-              on:linkClick={(event) =>
-                trackMobilisationUnconditionally(event.detail.url)}
+              onLinkClick={onTrackMobilisation}
             />
           {:else}
             {modeDisplay}

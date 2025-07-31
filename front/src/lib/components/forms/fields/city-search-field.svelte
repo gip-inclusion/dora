@@ -8,36 +8,47 @@
   import CitySearch from "../../inputs/geo/city-search.svelte";
   import type { GeoApiValue } from "$lib/types";
 
-  export let id: string;
+  interface Props {
+    id: string;
+    disabled?: boolean;
+    readonly?: any;
+    initialValue?: string;
+    // Spécifique
+    onChange: (newValue: GeoApiValue) => void;
+    // Proxy vers le FieldWrapper
+    description?: string;
+    hidden?: boolean;
+    hideLabel?: boolean;
+    vertical?: boolean;
+  }
 
-  export let disabled = false;
-  export let readonly = $currentSchema?.[id]?.readonly;
-  export let initialValue = "";
-
-  // Spécifique
-  export let onChange: (newValue: GeoApiValue) => void;
-
-  // Proxy vers le FieldWrapper
-  export let description =
-    "Commencez à saisir le nom et choisissez dans la liste.";
-  export let hidden = false;
-  export let hideLabel = false;
-  export let vertical = false;
+  let {
+    id,
+    disabled = false,
+    readonly = undefined,
+    initialValue = "",
+    onChange,
+    description = "Commencez à saisir le nom et choisissez dans la liste.",
+    hidden = false,
+    hideLabel = false,
+    vertical = false,
+  }: Props = $props();
 </script>
 
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    let:onBlur
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
-    {description}
+    descriptionText={description}
     {hidden}
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
   >
-    <CitySearch on:blur={onBlur} {id} {onChange} {initialValue} {disabled} />
+    {#snippet children({ onBlur })}
+      <CitySearch onblur={onBlur} {id} {onChange} {initialValue} {disabled} />
+    {/snippet}
   </FieldWrapper>
 {/if}

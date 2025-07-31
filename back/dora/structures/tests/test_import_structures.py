@@ -3,6 +3,7 @@ import io
 from urllib.parse import quote
 
 from django.core import mail
+from freezegun import freeze_time
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -141,9 +142,36 @@ class StructuresImportTestCase(APITestCase):
             result["errors_map"][1][0],
         )
 
-    def test_non_unique_source_label(self):
+    def test_non_unique_source_label_wet_run(self):
+        structure = make_structure()
+
         baker.make("StructureSource", value="test-source", label="Test Source")
 
+        csv_content = (
+            f"{self.csv_headers}\n{structure.name},{structure.siret},,foo@buzz.com,,,,"
+        )
+        reader = csv.reader(io.StringIO(csv_content))
+        self.assertEqual(Structure.objects.filter(siret=structure.siret).count(), 1)
+
+        source_info = {
+            "value": "test-source",
+            "label": "New Label",
+        }
+        result = self.import_structures_helper.import_structures(
+            reader,
+            self.importing_user,
+            source_info,
+            wet_run=True,
+        )
+
+        self.assertEqual(
+            result["errors_map"][1][0],
+            'Le fichier nommé "test-source" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
+        )
+        self.assertEqual(Structure.objects.filter(siret=structure.siret).count(), 1)
+        self.assertEqual(StructureSource.objects.filter(**source_info).count(), 0)
+
+    def test_source_label_not_created_when_errors_wet_run(self):
         csv_content = (
             f"{self.csv_headers}\nTest,12345678900000,,,,,,email1@structure.com"
         )
@@ -159,9 +187,10 @@ class StructuresImportTestCase(APITestCase):
         )
 
         self.assertEqual(
-            result["errors_map"][1][0],
-            'Le fichier nommé "test-source" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.',
+            len(result["errors_map"].values()),
+            1,
         )
+        self.assertEqual(StructureSource.objects.filter(value="test-source").count(), 0)
 
     # Invitations des nouveaux utilisateurs
 
@@ -716,6 +745,7 @@ class StructuresImportTestCase(APITestCase):
 
         self.assertEqual(structure.email, "email@structure.com")
 
+    @freeze_time("2022-01-01")
     def test_modify_phone_of_existing_structure(self):
         structure = make_structure(siret="12345678900000", phone="0123456789")
 
@@ -729,7 +759,10 @@ class StructuresImportTestCase(APITestCase):
 
         structure.refresh_from_db()
         self.assertEqual(structure.phone, "0234567891")
+        self.assertEqual(structure.last_editor, self.importing_user)
+        self.assertEqual(str(structure.modification_date), "2022-01-01 00:00:00+00:00")
 
+    @freeze_time("2022-01-01")
     def test_modify_email_of_existing_structure(self):
         structure = make_structure(siret="12345678900000", email="old@email.com")
 
@@ -745,6 +778,8 @@ class StructuresImportTestCase(APITestCase):
 
         structure.refresh_from_db()
         self.assertEqual(structure.email, "email1@structure.com")
+        self.assertEqual(structure.last_editor, self.importing_user)
+        self.assertEqual(str(structure.modification_date), "2022-01-01 00:00:00+00:00")
 
     def test_add_email_to_new_structure_with_parent(self):
         parent = make_structure(siret="21345678900000", email="old@email.com")
@@ -786,3 +821,27 @@ class StructuresImportTestCase(APITestCase):
         branch.refresh_from_db()
         self.assertEqual(branch.email, "email1@structure.com")
         self.assertEqual(parent.email, "old@email.com")
+
+    def test_remove_first_two_lines(self):
+        baker.make(
+            "Establishment",
+            siret="12345678901234",
+            name="My Establishment",
+            parent_name="Parent",
+        )
+
+        csv_content = (
+            f"instruction, line, 1\ninstruction, line ,2 \n"
+            f"{self.csv_headers}\nFoo,12345678901234,,foo@buzz.com,,,,"
+        )
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader,
+            self.importing_user,
+            self.source_info,
+            wet_run=True,
+            should_remove_first_two_lines=True,
+        )
+
+        self.assertEqual(len(result["errors_map"].keys()), 0)
+        self.assertEqual(result["created_structures_count"], 1)

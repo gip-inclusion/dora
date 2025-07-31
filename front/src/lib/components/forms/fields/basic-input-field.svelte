@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import { formatPhoneNumber } from "$lib/utils/misc";
   import {
     currentFormData,
@@ -6,46 +8,67 @@
     formatErrors,
     isRequired,
   } from "$lib/validation/validation";
+
   import FieldWrapper from "../field-wrapper.svelte";
 
-  export let id: string;
-  export let value: string | undefined = undefined;
+  interface Props {
+    id: string;
+    value?: string;
+    type?: "email" | "tel" | "text" | "url" | "date" | "number";
+    autocomplete?: string;
+    disabled?: boolean;
+    readonly?: boolean;
+    placeholder?: string;
+    maxLength?: number;
+    descriptionText?: string;
+    hidden?: boolean;
+    hideLabel?: boolean;
+    vertical?: boolean;
+    description?: Snippet;
+  }
 
-  export let type: "email" | "tel" | "text" | "url" | "date" | "number" =
-    "text";
-  export let autocomplete: string | undefined = undefined;
-  export let disabled = false;
-  export let readonly = $currentSchema?.[id]?.readonly;
-  export let placeholder: string | undefined = undefined;
+  let {
+    id,
+    value = $bindable(),
+    type = "text",
+    autocomplete = undefined,
+    disabled = false,
+    readonly = undefined,
+    placeholder = undefined,
+    maxLength = undefined,
+    descriptionText = "",
+    hidden = false,
+    hideLabel = false,
+    vertical = false,
+    description,
+  }: Props = $props();
 
-  // Specifique
-  export let maxLength: number | undefined = $currentSchema?.[id]?.maxLength;
+  // Get readonly and maxLength from schema if not provided
+  readonly = readonly ?? $currentSchema?.[id]?.readonly;
+  maxLength = maxLength ?? $currentSchema?.[id]?.maxLength;
 
-  // Proxy vers le FieldWrapper
-  export let description = "";
-  export let hidden = false;
-  export let hideLabel = false;
-  export let vertical = false;
+  let phoneValue = $state(value);
 
-  let phoneValue = value;
   function handlePhoneChange() {
     if (phoneValue) {
       phoneValue = phoneValue.toString().replace(/[^0-9]/g, "");
     }
     value = phoneValue;
   }
+
   function handlePhoneBlur() {
     if (phoneValue) {
       phoneValue = formatPhoneNumber(phoneValue.toString());
     }
   }
+
   function handlePhoneFocus() {
     if (phoneValue) {
       phoneValue = phoneValue.toString().replace(/[^0-9]/g, "");
     }
   }
 
-  $: commonProps = {
+  const commonProps = $derived({
     id,
     name: id,
     autocomplete,
@@ -53,7 +76,7 @@
     readonly,
     placeholder,
     maxLength,
-  };
+  });
 
   const inputClasses =
     "h-s48 border-gray-03 px-s12 py-s6 text-f16 placeholder-gray-text-alt focus:shadow-focus rounded-sm border outline-hidden read-only:text-gray-03 disabled:bg-gray-00 grow";
@@ -62,95 +85,93 @@
 {#if $currentSchema && id in $currentSchema}
   <FieldWrapper
     {id}
-    let:onBlur
-    let:onChange
-    let:errorMessages
     label={$currentSchema[id].label}
     required={isRequired($currentSchema[id], $currentFormData)}
-    {description}
+    {descriptionText}
     {hidden}
     {hideLabel}
     {vertical}
     {readonly}
     {disabled}
+    {description}
   >
-    <slot slot="description" name="description" />
+    {#snippet children({ onBlur, onChange, errorMessages })}
+      {@const props = {
+        ...commonProps,
+        "aria-describedby": formatErrors(id, errorMessages),
+      }}
 
-    {@const props = {
-      ...commonProps,
-      "aria-describedby": formatErrors(id, errorMessages),
-    }}
-
-    <div class="flex flex-col">
-      {#if type === "text"}
-        <input
-          type="text"
-          class={inputClasses}
-          bind:value
-          on:blur={onBlur}
-          on:change={onChange}
-          {...props}
-        />
-      {:else if type === "date"}
-        <input
-          type="date"
-          class={inputClasses}
-          bind:value
-          on:blur={onBlur}
-          on:change={onChange}
-          {...props}
-        />
-      {:else if type === "number"}
-        <input
-          type="text"
-          class={inputClasses}
-          bind:value
-          on:blur={onBlur}
-          on:change={onChange}
-          inputmode="numeric"
-          {...props}
-        />
-      {:else if type === "email"}
-        <input
-          type="email"
-          class={inputClasses}
-          bind:value
-          on:blur={onBlur}
-          on:change={onChange}
-          {...props}
-        />
-      {:else if type === "tel"}
-        <input
-          type="tel"
-          class={inputClasses}
-          bind:value={phoneValue}
-          on:blur={(evt) => {
-            handlePhoneBlur();
-            onBlur(evt);
-          }}
-          on:focus={handlePhoneFocus}
-          on:input={handlePhoneChange}
-          {...props}
-          maxlength={null}
-        />
-      {:else if type === "url"}
-        <input
-          type="url"
-          class={inputClasses}
-          bind:value
-          on:blur={onBlur}
-          on:change={onChange}
-          {...props}
-        />
-      {/if}
-      {#if value && maxLength != null && !readonly && !disabled}
-        <div
-          class="mt-s4 text-f12 text-gray-text-alt self-end"
-          class:text-error={value.toString().length > maxLength}
-        >
-          {value.toString().length}/{maxLength} caractères
-        </div>
-      {/if}
-    </div>
+      <div class="flex flex-col">
+        {#if type === "text"}
+          <input
+            type="text"
+            class={inputClasses}
+            bind:value
+            onblur={onBlur}
+            onchange={onChange}
+            {...props}
+          />
+        {:else if type === "date"}
+          <input
+            type="date"
+            class={inputClasses}
+            bind:value
+            onblur={onBlur}
+            onchange={onChange}
+            {...props}
+          />
+        {:else if type === "number"}
+          <input
+            type="text"
+            class={inputClasses}
+            bind:value
+            onblur={onBlur}
+            onchange={onChange}
+            inputmode="numeric"
+            {...props}
+          />
+        {:else if type === "email"}
+          <input
+            type="email"
+            class={inputClasses}
+            bind:value
+            onblur={onBlur}
+            onchange={onChange}
+            {...props}
+          />
+        {:else if type === "tel"}
+          <input
+            type="tel"
+            class={inputClasses}
+            bind:value={phoneValue}
+            onblur={(evt) => {
+              handlePhoneBlur();
+              onBlur(evt);
+            }}
+            onfocus={handlePhoneFocus}
+            oninput={handlePhoneChange}
+            {...props}
+            maxlength={null}
+          />
+        {:else if type === "url"}
+          <input
+            type="url"
+            class={inputClasses}
+            bind:value
+            onblur={onBlur}
+            onchange={onChange}
+            {...props}
+          />
+        {/if}
+        {#if value && maxLength != null && !readonly && !disabled}
+          <div
+            class="mt-s4 text-f12 text-gray-text-alt self-end"
+            class:text-error={value.toString().length > maxLength}
+          >
+            {value.toString().length}/{maxLength} caractères
+          </div>
+        {/if}
+      </div>
+    {/snippet}
   </FieldWrapper>
 {/if}

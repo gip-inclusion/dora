@@ -4,7 +4,7 @@
   import ModerationLabel from "./moderation-label.svelte";
   import ModerationMenu from "./moderation-menu.svelte";
 
-  export let entity, onRefresh;
+  let { entity, onRefresh } = $props();
 </script>
 
 <div class="gap-s4 flex flex-row items-center font-bold">
@@ -17,16 +17,18 @@
       />
     </div>
     <div class="text-gray-02">|</div>
-    <ButtonMenu icon={arrowDownSIcon} let:onClose={onCloseParent} small>
-      <div class="w-max">
-        <ModerationMenu
-          {entity}
-          onRefresh={async () => {
-            await onCloseParent();
-            await onRefresh();
-          }}
-        />
-      </div>
+    <ButtonMenu icon={arrowDownSIcon} small>
+      {#snippet children({ onClose: onCloseParent })}
+        <div class="w-max">
+          <ModerationMenu
+            {entity}
+            onRefresh={async () => {
+              await onCloseParent();
+              await onRefresh();
+            }}
+          />
+        </div>
+      {/snippet}
     </ButtonMenu>
   </div>
 </div>

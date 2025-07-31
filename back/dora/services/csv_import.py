@@ -5,9 +5,10 @@ from typing import Any, Dict, List, Optional, Union
 
 from django.db import IntegrityError, transaction
 from django.db.models import QuerySet
+from django.utils import timezone
 
 from dora.admin_express.models import AdminDivisionType
-from dora.core.utils import get_geo_data
+from dora.core.utils import get_geo_data, skip_csv_lines
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     FundingLabel,
@@ -51,21 +52,8 @@ class ImportServicesHelper:
         self.importing_user = importing_user
         self._initialize_trackers()
 
-        if self.wet_run:
-            try:
-                self._get_service_source(source_info)
-            except IntegrityError as e:
-                print(f"\nErreur critique : {e}", file=sys.stderr)
-                return {
-                    "errors": [
-                        f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
-                    ]
-                }
-
         csv_reader = (
-            self._remove_first_two_csv_lines(reader)
-            if should_remove_first_two_lines
-            else reader
+            skip_csv_lines(reader, 2) if should_remove_first_two_lines else reader
         )
 
         [headers, *lines] = csv_reader
@@ -77,6 +65,16 @@ class ImportServicesHelper:
                 return {"missing_headers": missing_headers}
 
             with transaction.atomic():
+                if self.wet_run:
+                    try:
+                        self._get_service_source(source_info)
+                    except IntegrityError as e:
+                        print(f"\nErreur critique : {e}", file=sys.stderr)
+                        return {
+                            "errors": [
+                                f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
+                            ]
+                        }
                 for idx, line in enumerate(lines, 2):
                     try:
                         print(f"\nTraitement de la ligne {idx} :")
@@ -293,6 +291,7 @@ class ImportServicesHelper:
 
         if service.is_eligible_for_publishing():
             service.status = ServiceStatus.PUBLISHED
+            service.publication_date = timezone.now()
         else:
             missing_fields = service.get_missing_properties_for_publishing()
             self.draft_services_created.append(
@@ -356,12 +355,6 @@ class ImportServicesHelper:
         )
 
         return True
-
-    @staticmethod
-    def _remove_first_two_csv_lines(reader: csv.reader) -> csv.reader:
-        next(reader, None)
-        next(reader, None)
-        return reader
 
     CSV_HEADERS = [
         "modele_slug",

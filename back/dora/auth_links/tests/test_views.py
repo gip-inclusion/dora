@@ -10,6 +10,18 @@ from dora.core.test_utils import make_user
 # c'est de la response de `django-sesame`
 
 
+def test_send_link(client):
+    user_ic = make_user(is_active=True)
+
+    response = client.post(
+        reverse("send_link"),
+        data={"email": user_ic.email},
+    )
+    assert response.status_code == 204, (
+        "Une response 204 est attendue (utilisateur avec IC trouvé)"
+    )
+
+
 def test_authenticate_with_link(client):
     # Redirection vers l'accueil si le code fourni est invalide
     response = client.get(

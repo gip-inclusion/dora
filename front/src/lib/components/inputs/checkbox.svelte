@@ -1,26 +1,51 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import CheckboxMark from "../display/checkbox-mark.svelte";
 
-  export let name: string;
-  export let group: string[];
-  export let label: string;
-  export let value: string;
-  export let disabled = false;
-  export let readonly = false;
-  export let horizontal = false;
-  export let errorMessage: string | null | undefined = undefined;
-  export let focused: boolean = false;
+  interface Props {
+    name: string;
+    group: string[];
+    label: string;
+    value: string;
+    disabled?: boolean;
+    readonly?: boolean;
+    horizontal?: boolean;
+    errorMessage?: string | null;
+    focused?: boolean;
+    onchange?: (event: Event) => void;
+    onfocus?: (event: FocusEvent) => void;
+    onblur?: (event: FocusEvent) => void;
+    children?: Snippet;
+  }
+
+  let {
+    name,
+    group = $bindable(),
+    label,
+    value,
+    disabled = false,
+    readonly = false,
+    horizontal = false,
+    errorMessage,
+    focused = false,
+    onchange,
+    onfocus,
+    onblur,
+    children,
+  }: Props = $props();
 
   // Malheureusement, utiliser bind:groups ici ne fonctionne pas :
   // https://github.com/sveltejs/svelte/issues/2308
   // La mise à jour de group doit être faite manuellement
-  function handleChange(event) {
+  function handleChange(event: Event) {
     const isChecked = event.target.checked;
     if (isChecked && !group.includes(value)) {
       group = [...group, value];
     } else if (!isChecked) {
       group = group.filter((val) => val !== value);
     }
+    onchange?.(event);
   }
 </script>
 
@@ -37,16 +62,16 @@
     {disabled}
     {readonly}
     checked={group.includes(value)}
-    on:change={handleChange}
-    on:focus
-    on:blur
+    onchange={handleChange}
+    {onfocus}
+    {onblur}
   />
   <CheckboxMark />
   <span class="ml-s16 text-f16 text-gray-text inline-block">{label}</span>
 </label>
 
-{#if $$slots.default}
+{#if children}
   <div class="ml-s42">
-    <slot />
+    {@render children?.()}
   </div>
 {/if}

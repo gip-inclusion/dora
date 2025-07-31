@@ -5,19 +5,20 @@
     getHoursFromStr,
     returnEmptyHoursData,
   } from "$lib/utils/opening-hours";
-  import { createEventDispatcher } from "svelte";
   import DayField from "./day-field.svelte";
 
-  export let id: string;
-  export let value;
+  interface Props {
+    value: string;
+    onchange?: (event: Event) => void;
+  }
 
-  const dispatch = createEventDispatcher();
+  let { value = $bindable(), onchange }: Props = $props();
 
-  const data = value ? getHoursFromStr(value) : returnEmptyHoursData();
+  const data = $state(value ? getHoursFromStr(value) : returnEmptyHoursData());
 
-  function handleHourChange() {
+  function handleHourChange(event: Event) {
     value = fromJsonToOsmString(data);
-    dispatch("change", id);
+    onchange?.(event);
   }
 
   const weekDays: { label: string; day: Day }[] = [
@@ -54,7 +55,7 @@
           label="{label.toLowerCase()} matin ou toute la journée"
           {day}
           dayPeriod="timeSlot1"
-          on:change={() => handleHourChange()}
+          onchange={handleHourChange}
         />
       </div>
       <div>
@@ -68,7 +69,7 @@
           label="{label.toLowerCase()} après-midi"
           {day}
           dayPeriod="timeSlot2"
-          on:change={() => handleHourChange()}
+          onchange={handleHourChange}
         />
       </div>
     </div>

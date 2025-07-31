@@ -1,10 +1,17 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import Portal from "svelte-portal";
 
   import Button from "$lib/components/display/button.svelte";
   import { closeLineIcon } from "$lib/icons";
 
-  export let isOpen: boolean;
+  interface Props {
+    isOpen: boolean;
+    children?: Snippet;
+  }
+
+  let { isOpen = $bindable(), children }: Props = $props();
 
   function handleClose() {
     isOpen = false;
@@ -20,13 +27,13 @@
         <div class="right-s0 top-s0 absolute">
           <Button
             icon={closeLineIcon}
-            on:click={handleClose}
+            onclick={handleClose}
             noBackground
             noPadding
           />
         </div>
 
-        <slot />
+        {@render children?.()}
       </div>
     </div>
   </Portal>

@@ -5,26 +5,34 @@
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import { currentSchema } from "$lib/validation/validation";
 
-  export let servicesOptions: ServicesOptions;
-  export let service: Service;
-  export let model: Model | undefined = undefined;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    model?: Model;
+  }
 
-  $: showModel = !!service.model;
+  let { servicesOptions, service = $bindable(), model }: Props = $props();
+
+  let showModel = $derived(!!service.model);
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  $: fieldModelProps = model
-    ? getModelInputProps({
-        service,
-        servicesOptions,
-        showModel,
-        onUseModelValue: handleUseModelValue,
-        model,
-      })
-    : {};
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+          schema: $currentSchema,
+        })
+      : {}
+  );
 </script>
 
 <FieldSet title="Publics" {showModel}>

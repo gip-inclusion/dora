@@ -17,8 +17,12 @@
   import * as v from "$lib/validation/schema-utils";
   import { validate } from "$lib/validation/validation";
 
-  export let isOpen = false;
-  export let service: Service;
+  interface Props {
+    isOpen?: boolean;
+    service: Service;
+  }
+
+  let { isOpen = $bindable(false), service }: Props = $props();
 
   const isDI = "source" in service;
 
@@ -57,14 +61,14 @@
     .map(({ label }) => label);
   const otherReasonLabel = allReasons.find(({ other }) => other)?.label;
 
-  let isRequesting = false;
-  let isFeedbackSent = false;
-  let formPage: 1 | 2 = 1;
-  let selectedReasons: string[] = [];
-  let otherReason = "";
-  let name = "";
-  let email = "";
-  let details = "";
+  let isRequesting = $state(false);
+  let isFeedbackSent = $state(false);
+  let formPage: 1 | 2 = $state(1);
+  let selectedReasons: string[] = $state([]);
+  let otherReason = $state("");
+  let name = $state("");
+  let email = $state("");
+  let details = $state("");
 
   function resetState() {
     isRequesting = false;
@@ -77,20 +81,20 @@
     details = "";
   }
 
-  $: {
+  $effect(() => {
     if (!isOpen) {
       // Réinitialisation automatique lorsque la modale est fermée
       resetState();
     }
-  }
+  });
 
-  $: formData = {
+  let formData = $derived({
     selectedReasons,
     otherReason,
     name,
     email,
     details,
-  };
+  });
 
   function isOtherReasonSelected(reasons: string[]) {
     return Boolean(otherReasonLabel && reasons.includes(otherReasonLabel));
@@ -241,9 +245,9 @@
             </div>
           {/if}
           <div class="mt-s12 gap-s16 flex justify-end">
-            <Button label="Annuler" secondary on:click={handleClose} />
+            <Button label="Annuler" secondary onclick={handleClose} />
             {#if formPage === 1}
-              <Button label="Continuer" on:click={handleContinue} />
+              <Button label="Continuer" onclick={handleContinue} />
             {:else if formPage === 2}
               <Button label="Envoyer" type="submit" disabled={isRequesting} />
             {/if}

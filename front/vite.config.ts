@@ -19,11 +19,18 @@ export default defineConfig(({ mode }) => {
 
     build: {
       sourcemap: true,
+      target: "esnext",
+      minify: "esbuild",
     },
     server: {
       host: true,
+      hmr: {
+        overlay: true,
+      },
     },
-
+    optimizeDeps: {
+      include: ["svelte"],
+    },
     test: {
       include: ["src/**/*.{test,spec}.{js,ts}"],
     },

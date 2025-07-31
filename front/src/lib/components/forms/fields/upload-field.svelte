@@ -1,44 +1,61 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import {
     currentFormData,
     currentSchema,
     isRequired,
   } from "$lib/validation/validation";
+
   import FieldWrapper from "../field-wrapper.svelte";
   import Uploader from "../../inputs/uploader.svelte";
 
-  export let id: string;
-  export let disabled = false;
-  export let readonly = $currentSchema?.[id]?.readonly;
-  export let label = $currentSchema?.[id]?.label;
+  interface Props {
+    id: string;
+    disabled?: boolean;
+    readonly?: boolean;
+    label?: string;
+    fileKeys?: string[];
+    structureSlug?: string;
+    descriptionText?: string;
+    hidden?: boolean;
+    hideLabel?: boolean;
+    vertical?: boolean;
+    dynamicId?: boolean;
+    description?: Snippet;
+  }
 
-  // Spécifique
-  export let fileKeys: string[];
-  export let structureSlug: string | undefined = undefined;
-
-  // Proxy vers le FieldWrapper
-  export let description = "";
-  export let hidden = false;
-  export let hideLabel = false;
-  export let vertical = false;
-  export let dynamicId = false;
+  let {
+    id,
+    disabled = false,
+    readonly = undefined,
+    label = undefined,
+    fileKeys = $bindable([]),
+    structureSlug = undefined,
+    descriptionText = "",
+    hidden = false,
+    hideLabel = false,
+    vertical = false,
+    dynamicId = false,
+    description,
+  }: Props = $props();
 </script>
 
 {#if $currentSchema && (id in $currentSchema || dynamicId)}
   <FieldWrapper
     {id}
-    let:onBlur
-    {label}
+    label={label ?? $currentSchema?.[id]?.label}
     required={isRequired($currentSchema?.[id], $currentFormData)}
-    {description}
+    {descriptionText}
     {hidden}
     {hideLabel}
     {vertical}
     {disabled}
-    {readonly}
+    readonly={readonly ?? $currentSchema?.[id]?.readonly}
+    {description}
   >
-    <slot slot="description" name="description" />
-
-    <Uploader {id} {structureSlug} on:blur={onBlur} bind:fileKeys {disabled} />
+    {#snippet children({ onBlur })}
+      <Uploader {id} {structureSlug} onblur={onBlur} bind:fileKeys {disabled} />
+    {/snippet}
   </FieldWrapper>
 {/if}

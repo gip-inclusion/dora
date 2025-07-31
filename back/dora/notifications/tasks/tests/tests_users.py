@@ -13,7 +13,7 @@ from dora.users.models import User
 
 from ..core import Task
 from ..users import (
-    ManagerStructureModerationTask,
+    DepartmentManagerWeeklyEmailTask,
     ServiceEditorsTask,
     UserAccountDeletionTask,
     UsersWithoutStructureTask,
@@ -220,31 +220,31 @@ def test_user_without_structure_task_should_trigger(user_without_structure_task)
 
 
 @pytest.fixture
-def manager_structure_moderation_task():
-    return ManagerStructureModerationTask()
+def department_manager_weekly_email_task():
+    return DepartmentManagerWeeklyEmailTask()
 
 
-def test_manager_structure_moderation_task_is_registered():
-    assert ManagerStructureModerationTask in Task.registered_tasks()
+def test_department_manager_weekly_email_task_is_registered():
+    assert DepartmentManagerWeeklyEmailTask in Task.registered_tasks()
 
 
 @pytest.mark.parametrize(
     "moderation_status",
     (ModerationStatus.NEED_NEW_MODERATION, ModerationStatus.NEED_INITIAL_MODERATION),
 )
-def test_manager_structure_moderation_candidates(
-    moderation_status, manager_structure_moderation_task
+def test_select_correct_department_managers_for_email(
+    moderation_status, department_manager_weekly_email_task
 ):
     # gestionnaire sans structure à modérer en attente
     manager = make_user(is_manager=True, departments=["37", "81"])
-    assert manager not in manager_structure_moderation_task.candidates(), (
+    assert manager not in department_manager_weekly_email_task.candidates(), (
         "Ce gestionnaire ne doit pas être candidat à une notification : aucune structure à modérer"
     )
 
     # création d'une structure en attente de validation (hors-scope du gestionnaire)
     structure = make_structure(department="11", moderation_status=moderation_status)
 
-    assert manager not in manager_structure_moderation_task.candidates(), (
+    assert manager not in department_manager_weekly_email_task.candidates(), (
         "Ce gestionnaire ne doit pas être candidat à une notification : la structure n'est pas dans un département en gestion"
     )
 
@@ -255,14 +255,34 @@ def test_manager_structure_moderation_candidates(
     structure.is_obsolete = True
     structure.save()
 
-    assert manager not in manager_structure_moderation_task.candidates(), (
+    assert manager not in department_manager_weekly_email_task.candidates(), (
         "Ce gestionnaire ne doit pas être candidat à une notification : la structure à modérer est obsolète"
     )
 
     structure.is_obsolete = False
     structure.save()
 
-    assert manager in manager_structure_moderation_task.candidates(), (
+    assert manager in department_manager_weekly_email_task.candidates(), (
+        "Ce gestionnaire doit être candidat à une notification : les conditions sont réunies"
+    )
+
+
+def test_select_correct_department_managers_for_structures_without_users(
+    department_manager_weekly_email_task,
+):
+    manager = make_user(is_manager=True, departments=["37", "81"])
+    assert manager not in department_manager_weekly_email_task.candidates(), (
+        "Ce gestionnaire ne doit pas être candidat à une notification : aucune structure à modérer"
+    )
+
+    make_structure(
+        department="37",
+        user=None,
+        putative_member=None,
+        moderation_status=ModerationStatus.VALIDATED,
+    )
+
+    assert manager in department_manager_weekly_email_task.candidates(), (
         "Ce gestionnaire doit être candidat à une notification : les conditions sont réunies"
     )
 
@@ -271,14 +291,14 @@ def test_manager_structure_moderation_candidates(
     "moderation_status",
     (ModerationStatus.NEED_NEW_MODERATION, ModerationStatus.NEED_INITIAL_MODERATION),
 )
-def test_manager_structure_moderation_task_should_trigger(
+def test_department_manager_weekly_email_task_should_trigger(
     moderation_status,
-    manager_structure_moderation_task,
+    department_manager_weekly_email_task,
 ):
     manager = make_user(is_manager=True, departments=["37"])
 
     # le gestionnaire n'a aucune structure à modérer
-    ok, _, _ = manager_structure_moderation_task.run()
+    ok, _, _ = department_manager_weekly_email_task.run()
     assert not ok, "Le gestionnaire n'a aucune structure à modérer"
 
     # Le gestionnaire à une structure à modérer
@@ -288,7 +308,7 @@ def test_manager_structure_moderation_task_should_trigger(
     monday = timezone.datetime.strptime("2024-10-14", "%Y-%m-%d")
 
     with freeze_time(monday - relativedelta(days=1)):
-        manager_structure_moderation_task.run()
+        department_manager_weekly_email_task.run()
         # cette étape, la notification est créée mais pas déclenchée
 
     notification = Notification.objects.first()
@@ -298,7 +318,7 @@ def test_manager_structure_moderation_task_should_trigger(
 
     for d in range(6):
         with freeze_time(monday + relativedelta(days=d)):
-            ok, _, _ = manager_structure_moderation_task.run()
+            ok, _, _ = department_manager_weekly_email_task.run()
             notification.refresh_from_db()
 
             # ok, uniquement les mercredis
@@ -308,7 +328,7 @@ def test_manager_structure_moderation_task_should_trigger(
 
     # le mercredi suivant
     with freeze_time(monday + relativedelta(days=9)):
-        ok, _, _ = manager_structure_moderation_task.run()
+        ok, _, _ = department_manager_weekly_email_task.run()
         assert ok, "Cette notification doit pouvoir être executée"
 
         # on en profite pour vérifier l'envoi d'e-mail (en surface)
@@ -316,7 +336,7 @@ def test_manager_structure_moderation_task_should_trigger(
         assert mail.outbox[0].to == [manager.email]
 
         # pas deux fois le même mercredi
-        ok, _, _ = manager_structure_moderation_task.run()
+        ok, _, _ = department_manager_weekly_email_task.run()
         assert not ok, "Cette notification ne doit pas être executée une deuxième fois"
 
 
@@ -329,20 +349,20 @@ def test_manager_structure_moderation_task_should_trigger(
     "moderation_status",
     (ModerationStatus.NEED_NEW_MODERATION, ModerationStatus.NEED_INITIAL_MODERATION),
 )
-def test_simpler_manager_structure_moderation_task_should_trigger(
+def test_simpler_department_manager_weekly_email_task_should_trigger(
     moderation_status,
-    manager_structure_moderation_task,
+    department_manager_weekly_email_task,
 ):
     # création d'une notification avec les bonnes conditions (date)
     manager = make_user(is_manager=True, departments=["37"])
     with freeze_time("2024-10-14"):
         n = Notification(
-            task_type=manager_structure_moderation_task.task_type(),
+            task_type=department_manager_weekly_email_task.task_type(),
             owner_user=manager,
         )
         n.save()
 
-        assert not manager_structure_moderation_task.should_trigger(n), (
+        assert not department_manager_weekly_email_task.should_trigger(n), (
             "Il n'y pas de structure à modérer : pas de déclenchement attendu"
         )
 
@@ -351,12 +371,12 @@ def test_simpler_manager_structure_moderation_task_should_trigger(
 
     # la notificaction ne peut être déclenchée que les mercredis
     with freeze_time("2024-10-14"):
-        assert not manager_structure_moderation_task.should_trigger(n), (
+        assert not department_manager_weekly_email_task.should_trigger(n), (
             "Pas de déclenchement attendu hors mercredis"
         )
 
     with freeze_time("2024-10-16"):
-        assert manager_structure_moderation_task.should_trigger(n), (
+        assert department_manager_weekly_email_task.should_trigger(n), (
             "Déclenchement attendu les mercredis"
         )
 
@@ -365,7 +385,7 @@ def test_simpler_manager_structure_moderation_task_should_trigger(
 
     # on relance la vérification le même jour : pas de déclenchement attendu
     with freeze_time("2024-10-16"):
-        assert not manager_structure_moderation_task.should_trigger(n), (
+        assert not department_manager_weekly_email_task.should_trigger(n), (
             "Double déclenchement à cette date"
         )
 
