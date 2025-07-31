@@ -12,9 +12,11 @@ if (ENVIRONMENT !== "local") {
 }
 
 export const handleError: HandleClientError = Sentry.handleErrorWithSentry(
-  ({ error, _event }) => {
+  ({ error }) => {
     const message =
-      ENVIRONMENT === "local" ? error.message : "Erreur inattendue";
+      ENVIRONMENT === "local" && error instanceof Error
+        ? error.message
+        : "Erreur inattendue";
 
     return {
       message,
