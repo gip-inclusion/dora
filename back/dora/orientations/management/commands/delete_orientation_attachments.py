@@ -29,10 +29,10 @@ class Command(BaseCommand):
                     )
                 )
                 for deleted_path, success in results.items():
-                    if not result:
-                        self.stdout.write(self.style.WARNING(f" > {path} : KO"))
+                    if success:
+                        self.stdout.write(self.style.SUCCESS(f" > {deleted_path} : OK"))
                     else:
-                        self.stdout.write(self.style.SUCCESS(f" > {path} : OK"))
+                        self.stdout.write(self.style.WARNING(f" > {deleted_path} : KO"))
 
         except Orientation.DoesNotExist:
             self.stdout.write(
