@@ -1,5 +1,3 @@
-import uuid
-
 import pytest
 from dateutil.relativedelta import relativedelta
 from django.core import mail
@@ -134,36 +132,30 @@ def test_user_without_structure_task_is_registered():
 
 
 def test_user_without_structure_task_candidates(user_without_structure_task):
-    # pas d'id IC
-    nok_user = make_user()
-    assert nok_user not in user_without_structure_task.candidates()
-
     # adresse e-mail non validée
     nok_user = make_user(is_valid=False)
     assert nok_user not in user_without_structure_task.candidates()
 
     # utilisateurs incrits depuis plus de 4 mois exclus
-    nok_user = make_user(
-        ic_id=uuid.uuid4(), date_joined=timezone.now() - relativedelta(months=4, days=1)
-    )
+    nok_user = make_user(date_joined=timezone.now() - relativedelta(months=4, days=1))
     assert nok_user not in user_without_structure_task.candidates()
 
     # membres de structure exclus
-    nok_user = make_user(structure=make_structure(), ic_id=uuid.uuid4())
+    nok_user = make_user(structure=make_structure())
     assert nok_user not in user_without_structure_task.candidates()
 
     # utilisateurs invités exclus
-    nok_user = make_user(ic_id=uuid.uuid4())
+    nok_user = make_user()
     make_structure(putative_member=nok_user)
     assert nok_user not in user_without_structure_task.candidates()
 
     # candidat potentiel
-    ok_user = make_user(ic_id=uuid.uuid4())
+    ok_user = make_user()
     assert ok_user in user_without_structure_task.candidates()
 
 
 def test_user_without_structure_task_should_trigger(user_without_structure_task):
-    user = make_user(ic_id=uuid.uuid4())
+    user = make_user()
 
     # première notification à +1j
     ok, _, _ = user_without_structure_task.run()

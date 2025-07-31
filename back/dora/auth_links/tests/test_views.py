@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 import sesame.utils
 from django.conf import settings
 from django.shortcuts import reverse
@@ -35,7 +33,7 @@ def test_authenticate_with_link(client):
     )
 
     # Redirection vers l'identification du frontend si le code fourni est valide
-    user = make_user(ic_id=uuid4(), is_active=True)
+    user = make_user(is_active=True)
 
     response = client.get(
         reverse(

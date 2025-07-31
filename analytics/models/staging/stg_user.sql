@@ -10,7 +10,6 @@ WITH src AS (
 final AS (
     SELECT
         id,
-        ic_id,
         email,
         last_name,
         first_name,
