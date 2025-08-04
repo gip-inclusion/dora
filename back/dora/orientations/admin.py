@@ -32,6 +32,7 @@ class OrientationAdmin(admin.ModelAdmin):
         "prescriber_structure",
         "service",
     )
+    exclude = ("beneficiary_france_travail_number",)
     readonly_fields = (
         "service",
         "di_service_id",
