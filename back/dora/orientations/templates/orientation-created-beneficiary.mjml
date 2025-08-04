@@ -67,7 +67,7 @@
     <p>
       Pour plus d’informations, notamment sur vos autres droits RGPD (droit d’accès, d’opposition, de limitation,
       notamment)&#8239;:
-      <a href="https://dora.inclusion.beta.gouv.fr/">https://dora.inclusion.beta.gouv.fr/</a>.
+      <a href="https://dora.inclusion.beta.gouv.fr/politique-de-confidentialite">https://dora.inclusion.beta.gouv.fr/politique-de-confidentialite</a>.
     </p>
   </mj-text>
 {% endblock %}
