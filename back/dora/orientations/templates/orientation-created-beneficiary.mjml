@@ -21,14 +21,14 @@
     a réalisé une prescription en votre nom, pour le service {% include "partials/service-link.html" %}, ayant lieu au&#8239;: {{ service_address }}.
   </p>
 
-  <p><strong>Pour des questions concernant cette demande, veuillez contacter le prescripteur ou la prescriptrice&nbsp;:</strong></p>
+  <p><strong>Pour des questions concernant cette demande, veuillez contacter le prescripteur ou la prescriptrice&#8239;:</strong></p>
 
   {% if data.prescriber.email !=  data.referent_email %}
     <ul>
       <li>{{ data.prescriber.get_full_name }}</li>
       <li>{{ data.prescriber.email }}</li>
     </ul>
-    <p>ou bien votre conseillèr·e référent·e&nbsp;:</p>
+    <p>ou bien votre conseillèr·e référent·e&#8239;:</p>
   {% endif %}
   <ul>
     <li>{{ data.get_referent_full_name }}</li>
@@ -50,7 +50,7 @@
   <mj-text>
     <h2>Mention d’information</h2>
     <p>
-      Dora est une application portée par le GIP «&nbsp;plateforme de l’inclusion&nbsp;». Les documents listés
+      Dora est une application portée par le GIP «&#8239;plateforme de l’inclusion&#8239;». Les documents listés
       plus
       haut
       ont
@@ -66,7 +66,7 @@
     </p>
     <p>
       Pour plus d’informations, notamment sur vos autres droits RGPD (droit d’accès, d’opposition, de limitation,
-      notamment)&nbsp;:
+      notamment)&#8239;:
       <a href="https://dora.inclusion.beta.gouv.fr/">https://dora.inclusion.beta.gouv.fr/</a>.
     </p>
   </mj-text>
