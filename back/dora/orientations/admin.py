@@ -42,6 +42,7 @@ class OrientationAdmin(admin.ModelAdmin):
         "di_contact_name",
         "di_contact_phone",
         "di_structure_name",
+        "data_protection_commitment",
         "query_id",
         "query_expires_at",
         "original_service_name",
