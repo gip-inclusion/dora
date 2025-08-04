@@ -686,6 +686,7 @@ export interface Orientation {
   referentEmail: string;
   prescriberStructureSlug: string;
 
+  beneficiaryFranceTravailNumber: string;
   beneficiaryLastName: string;
   beneficiaryFirstName: string;
   beneficiaryAvailability: string | null;
