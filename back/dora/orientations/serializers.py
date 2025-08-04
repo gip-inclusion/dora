@@ -40,6 +40,7 @@ class OrientationSerializer(serializers.ModelSerializer):
             "beneficiary_availability",
             "beneficiary_contact_preferences",
             "beneficiary_email",
+            "beneficiary_france_travail_number",
             "beneficiary_first_name",
             "beneficiary_last_name",
             "beneficiary_other_contact_method",
