@@ -1,8 +1,12 @@
 <script lang="ts">
   import type { TabItem } from "./header.svelte";
 
-  export let items: TabItem[] = [];
-  export let itemId: string;
+  interface Props {
+    items?: TabItem[];
+    itemId: string;
+  }
+
+  let { items = [], itemId }: Props = $props();
 </script>
 
 <ul class="gap-s8 pt-s16 flex overflow-x-auto font-bold">

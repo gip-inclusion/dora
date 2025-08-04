@@ -1,10 +1,14 @@
 <script lang="ts">
   import LinkButton from "$lib/components/display/link-button.svelte";
+  import type { Model } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
 
-  export let model;
+  interface Props {
+    model: Model;
+    readOnly?: boolean;
+  }
 
-  export let readOnly = true;
+  let { model, readOnly = true }: Props = $props();
 </script>
 
 <div class="flex flex-col items-end">

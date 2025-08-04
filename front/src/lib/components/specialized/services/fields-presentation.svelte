@@ -6,12 +6,23 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
+  import { currentSchema } from "$lib/validation/validation";
 
-  export let servicesOptions: ServicesOptions, service: Service;
-  export let model: Model | undefined = undefined;
-  export let noTopPadding = false;
+  interface Props {
+    servicesOptions: ServicesOptions;
+    service: Service;
+    model?: Model;
+    noTopPadding?: boolean;
+  }
 
-  let fullDesc;
+  let {
+    servicesOptions,
+    service = $bindable(),
+    model,
+    noTopPadding = false,
+  }: Props = $props();
+
+  let fullDesc: RichTextField;
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
@@ -20,42 +31,47 @@
     }
   }
 
-  $: showModel = !!service.model;
-  $: fieldModelProps = model
-    ? getModelInputProps({
-        service,
-        servicesOptions,
-        showModel,
-        onUseModelValue: handleUseModelValue,
-        model,
-      })
-    : {};
+  let showModel = $derived(!!service.model);
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+          schema: $currentSchema,
+        })
+      : {}
+  );
 </script>
 
 <FieldSet title="Présentation" {showModel} {noTopPadding}>
-  <div slot="help">
-    <p class="text-f14">
-      Le <b>Résumé</b> présente le service en une phrase courte. Il apparait dans
-      les résultats de recherche.
-    </p>
-    <p class="text-f14">
-      <strong>Exemple</strong> :
-      <i>
-        Faciliter vos déplacements en cas de reprise d’emploi ou de formation
-        (entretien d’embauche, concours public…)
-      </i>
-    </p>
-    <p class="text-f14">
-      Si besoin, détaillez dans la partie
-      <b>Description</b>.
-    </p>
-  </div>
+  {#snippet help()}
+    <div>
+      <p class="text-f14">
+        Le <b>Résumé</b> présente le service en une phrase courte. Il apparait dans
+        les résultats de recherche.
+      </p>
+      <p class="text-f14">
+        <strong>Exemple</strong> :
+        <i>
+          Faciliter vos déplacements en cas de reprise d’emploi ou de formation
+          (entretien d’embauche, concours public…)
+        </i>
+      </p>
+      <p class="text-f14">
+        Si besoin, détaillez dans la partie
+        <b>Description</b>.
+      </p>
+    </div>
+  {/snippet}
 
   <FieldModel {...fieldModelProps.name ?? {}}>
     <BasicInputField
       id="name"
       bind:value={service.name}
-      description="140 caractères maximum"
+      descriptionText="140 caractères maximum"
     />
   </FieldModel>
 

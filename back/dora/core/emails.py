@@ -1,8 +1,11 @@
 import json
+import re
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
 from django.core.mail import EmailMessage
+from django.utils.html import escape
 
 
 def clean_reply_to(emails):
@@ -67,3 +70,31 @@ def send_mail(
         if attachments is not None:
             for attachment in attachments:
                 default_storage.delete(attachment)
+
+
+def sanitize_user_input_injected_in_email(user_input, max_length=1000):
+    if not user_input:
+        return ""
+
+    if len(user_input) > max_length:
+        raise ValidationError(f"Message trop long (max {max_length} caractères)")
+
+    dangerous_patterns = [
+        r"\{\s*\{\s*.*?\s*\}\s*\}",  # Django templates (with flexible spacing)
+        r"\{\s*%\s*.*?\s*%\s*\}",  # Django template tags (with flexible spacing)
+        r"<script[^>]*>",  # Script tags
+        r"javascript\s*:",  # JavaScript URLs (with flexible spacing)
+        r"vbscript\s*:",  # VBScript URLs
+        r"data\s*:\s*text\s*/\s*html",  # Data URLs
+        r"on(load|click|mouse|key|focus|blur|submit|change|error|resize|scroll)\s*=",  # Specific event handlers only
+        r"\$\s*\{\s*.*?\s*\}",  # JavaScript template literals
+    ]
+
+    for pattern in dangerous_patterns:
+        if re.search(pattern, user_input, re.IGNORECASE | re.DOTALL):
+            match = re.search(pattern, user_input, re.IGNORECASE | re.DOTALL)
+            raise ValidationError(
+                f"Contenu dangereux détecté dans le message : {match.group(0)}"
+            )
+
+    return escape(user_input)

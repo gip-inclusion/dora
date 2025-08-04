@@ -4,9 +4,19 @@
   import { markdownToHTML } from "$lib/utils/misc";
   import Line from "./line.svelte";
 
-  export let suggestion;
-  export let isOpen = false;
-  export let onAccept, onReject;
+  interface Props {
+    suggestion: any;
+    isOpen?: boolean;
+    onAccept: (suggestion: unknown) => Promise<void>;
+    onReject: (suggestion: unknown) => Promise<void>;
+  }
+
+  let {
+    suggestion,
+    isOpen = $bindable(false),
+    onAccept,
+    onReject,
+  }: Props = $props();
 </script>
 
 {#if suggestion}
@@ -141,8 +151,8 @@
     </div>
 
     <div class="mt-s32 gap-s16 flex flex-row justify-end">
-      <Button label="Rejeter" secondary on:click={() => onReject(suggestion)} />
-      <Button label="Valider" on:click={() => onAccept(suggestion)} />
+      <Button label="Rejeter" secondary onclick={() => onReject(suggestion)} />
+      <Button label="Valider" onclick={() => onAccept(suggestion)} />
     </div>
   </Modal>
 {/if}

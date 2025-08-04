@@ -10,8 +10,8 @@ from dora.services.models import Service, ServiceModificationHistoryItem
 from dora.structures.models import Structure
 from dora.users.emails import (
     send_account_deletion_notification,
-    send_structure_awaiting_moderation,
     send_user_without_structure_notification,
+    send_weekly_email_to_department_managers,
 )
 from dora.users.models import User
 
@@ -34,7 +34,7 @@ class UsersWithoutStructureTask(Task):
 
     @classmethod
     def candidates(cls):
-        return User.objects.exclude(ic_id=None).filter(
+        return User.objects.filter(
             is_valid=True,
             membership=None,
             putative_membership=None,
@@ -159,9 +159,10 @@ class UserAccountDeletionTask(Task):
             # à ce point, la notification est détruite en cascade
 
 
-class ManagerStructureModerationTask(Task):
+class DepartmentManagerWeeklyEmailTask(Task):
     """
-    Rappel des structures à modérer pour les gestionnaires de territoire.
+    Rappel aux gestionnaires de territoire qu'il y a des structures qui
+    exigent une action de leur part.
     Envoi d'un e-mail redirigeant vers leur espace de gestion avec le récapitulatif
     des structures à modérer.
     Déclenchée tous les mercredis matin.
@@ -173,11 +174,10 @@ class ManagerStructureModerationTask(Task):
 
     @classmethod
     def candidates(cls):
-        # Les gestionnaires de territoire avec une ou plusieurs structures en attente de modération.
         return User.objects.managers().filter(
-            # un ou plusieurs des départements du gestionnaire
-            # contiennent des structures en attente de modération (overlap = PgSQL `&&`)
-            departments__overlap=Structure.objects.awaiting_moderation()
+            departments__overlap=(
+                Structure.objects.requiring_action_from_department_managers()
+            )
             .exclude(is_obsolete=True)
             .distinct("department")
             .values_list("department", flat=True)
@@ -192,11 +192,7 @@ class ManagerStructureModerationTask(Task):
 
     @classmethod
     def process(cls, notification: Notification):
-        # Envoi d'un e-mail au gestionnaire avec le récapitulatif
-        # des structures en attente de modération.
-        # Ici pas de compteur de notification, la notification se répète tous les mercredis
-        # tant que le gestionnaire est défini comme candidat à la notification.
-        send_structure_awaiting_moderation(notification.owner_user)
+        send_weekly_email_to_department_managers(notification.owner_user)
 
 
 class ServiceEditorsTask(Task):
@@ -252,5 +248,5 @@ class ServiceEditorsTask(Task):
 
 Task.register(UsersWithoutStructureTask)
 Task.register(UserAccountDeletionTask)
-Task.register(ManagerStructureModerationTask)
+Task.register(DepartmentManagerWeeklyEmailTask)
 Task.register(ServiceEditorsTask)

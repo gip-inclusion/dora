@@ -1,7 +1,8 @@
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
-from dora.core.test_utils import make_service, make_structure
+from dora.core.models import ModerationStatus
+from dora.core.test_utils import make_service, make_structure, make_user
 from dora.services.enums import ServiceStatus
 
 
@@ -118,21 +119,21 @@ class ManagerTestCase(APITestCase):
             departments=["31", "08"],
         )
 
-    def test_coord_can_see_structures_in_his_dept(self):
+    def test_manager_can_see_structures_in_his_dept(self):
         structure = make_structure(department=31)
         self.client.force_authenticate(user=self.manager)
         response = self.client.get("/structures-admin/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["slug"], structure.slug)
 
-    def test_coord_cant_see_structures_outside_his_dept(self):
+    def test_manager_cant_see_structures_outside_his_dept(self):
         make_structure(department=12)
         self.client.force_authenticate(user=self.manager)
         response = self.client.get("/structures-admin/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 0)
 
-    def test_coord_without_dept_cant_see_structures(self):
+    def test_manager_without_dept_cant_see_structures(self):
         manager = baker.make(
             "users.User", is_valid=True, is_staff=False, is_manager=True
         )
@@ -141,20 +142,20 @@ class ManagerTestCase(APITestCase):
         response = self.client.get("/structures-admin/")
         self.assertEqual(response.status_code, 403)
 
-    def test_coord_can_see_specific_structure_in_his_dept(self):
+    def test_manager_can_see_specific_structure_in_his_dept(self):
         structure = make_structure(department=31)
         self.client.force_authenticate(user=self.manager)
         response = self.client.get(f"/structures-admin/{structure.slug}/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["slug"], structure.slug)
 
-    def test_coord_cant_see_specific_structure_outside_his_dept(self):
+    def test_manager_cant_see_specific_structure_outside_his_dept(self):
         structure = make_structure(department=12)
         self.client.force_authenticate(user=self.manager)
         response = self.client.get(f"/structures-admin/{structure.slug}/")
         self.assertEqual(response.status_code, 404)
 
-    def test_coord_without_dept_cant_see_specific_structure(self):
+    def test_manager_without_dept_cant_see_specific_structure(self):
         manager = baker.make(
             "users.User", is_valid=True, is_staff=False, is_manager=True
         )
@@ -163,8 +164,30 @@ class ManagerTestCase(APITestCase):
         response = self.client.get(f"/structures-admin/{structure.slug}/")
         self.assertEqual(response.status_code, 403)
 
+    def test_manager_can_see_if_structure_is_orphan(self):
+        manager = make_user(
+            is_valid=True, is_staff=False, is_manager=True, departments=[31]
+        )
+        structure = make_structure(department=31, user=None, putative_member=None)
+        self.client.force_authenticate(user=manager)
+        response = self.client.get(f"/structures-admin/{structure.slug}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["is_orphan"])
+
+    def test_manager_can_see_if_structure_is_awaiting_moderation(self):
+        manager = make_user(
+            is_valid=True, is_staff=False, is_manager=True, departments=[31]
+        )
+        structure = make_structure(
+            department=31, moderation_status=ModerationStatus.NEED_NEW_MODERATION
+        )
+        self.client.force_authenticate(user=manager)
+        response = self.client.get(f"/structures-admin/{structure.slug}/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["awaiting_moderation"])
+
     ## Plusieurs départements
-    def test_bicoord_can_see_structures_in_his_depts(self):
+    def test_manager_can_see_structures_in_his_depts(self):
         structure1 = make_structure(department="31")
         structure2 = make_structure(department="08")
         self.client.force_authenticate(user=self.bimanager)
@@ -179,14 +202,14 @@ class ManagerTestCase(APITestCase):
             or response.data[1]["slug"] == structure2.slug
         )
 
-    def test_bicoord_cant_see_structures_outside_his_depts(self):
+    def test_manager_cant_see_structures_outside_his_depts(self):
         make_structure(department="12")
         self.client.force_authenticate(user=self.bimanager)
         response = self.client.get("/structures-admin/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 0)
 
-    def test_bicoord_can_see_specific_structures_in_his_depts(self):
+    def test_manager_can_see_specific_structures_in_his_depts(self):
         structure1 = make_structure(department="31")
         structure2 = make_structure(department="08")
         self.client.force_authenticate(user=self.bimanager)
@@ -197,7 +220,7 @@ class ManagerTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["slug"], structure2.slug)
 
-    def test_bicoord_cant_see_specific_structure_outside_his_depts(self):
+    def test_manager_cant_see_specific_structure_outside_his_depts(self):
         structure = make_structure(department=12)
         self.client.force_authenticate(user=self.bimanager)
         response = self.client.get(f"/structures-admin/{structure.slug}/")

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
@@ -38,15 +37,30 @@
   import type { Schema } from "$lib/validation/schema-utils";
   import { shortenString } from "$lib/utils/misc";
 
-  export let service: Service;
-  export let servicesOptions: ServicesOptions;
-  export let managedStructureSearchMode = false;
-  export let structures: ShortStructure[];
-  export let structure: ShortStructure | undefined;
-  export let model: Model | undefined;
+  interface Props {
+    service: Service;
+    servicesOptions: ServicesOptions;
+    managedStructureSearchMode?: boolean;
+    structures: ShortStructure[];
+    structure?: ShortStructure;
+    model?: Model;
+  }
 
-  let requesting = false;
-  let currentSchema: Schema;
+  let {
+    service = $bindable(),
+    servicesOptions = $bindable(),
+    managedStructureSearchMode = false,
+    structures,
+    structure = $bindable(),
+    model = $bindable(),
+  }: Props = $props();
+
+  let requesting = $state(false);
+  let currentSchema: Schema = $derived(
+    service.useInclusionNumeriqueScheme
+      ? inclusionNumeriqueSchema
+      : serviceSchema
+  );
 
   // Affichage d'un message aux anciennes structures suite à l'ajout d'une limitation du nombre de typologies
   const showMaxCategoriesNotice = (service.categories.length || 0) > 3;
@@ -96,9 +110,9 @@
 
   function handleSuccess(result: Service) {
     if (DI_DORA_UNIFIED_SEARCH_ENABLED && result.status === "PUBLISHED") {
-      goto(`/structures/${result.structure}/services/publication`);
+      window.location.href = `/structures/${result.structure}/services/publication`;
     } else {
-      goto(`/services/${result.slug}`);
+      window.location.href = `/services/${result.slug}`;
     }
   }
 
@@ -110,7 +124,7 @@
     });
   }
 
-  let modelSlugTmp = null;
+  let modelSlugTmp = $state(null);
 
   function unsync() {
     modelSlugTmp = service.model;
@@ -122,18 +136,14 @@
     modelSlugTmp = null;
   }
 
-  $: currentSchema = service.useInclusionNumeriqueScheme
-    ? inclusionNumeriqueSchema
-    : serviceSchema;
-
-  $: {
+  $effect(() => {
     if (structure?.noDoraForm) {
       servicesOptions.coachOrientationModes =
         servicesOptions.coachOrientationModes.filter(
           (mode) => mode.value !== "formulaire-dora"
         );
     }
-  }
+  });
 </script>
 
 <FormErrors />
@@ -193,12 +203,7 @@
       {#if service.model}
         <div class="lg:flex lg:items-center lg:justify-between">
           <h3>Synchronisé avec un modèle</h3>
-          <Button
-            label="Détacher du modèle"
-            secondary
-            small
-            on:click={unsync}
-          />
+          <Button label="Détacher du modèle" secondary small onclick={unsync} />
         </div>
       {/if}
 
@@ -208,14 +213,16 @@
             <p class="text-f14">
               Après enregistrement, cette action sera définitive.
             </p>
-            <div slot="button">
-              <Button
-                label="Re-synchroniser avec le modèle"
-                secondary
-                small
-                on:click={sync}
-              />
-            </div>
+            {#snippet button()}
+              <div>
+                <Button
+                  label="Re-synchroniser avec le modèle"
+                  secondary
+                  small
+                  onclick={sync}
+                />
+              </div>
+            {/snippet}
           </Notice>
         </div>
       {:else if service.modelChanged}

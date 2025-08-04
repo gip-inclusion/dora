@@ -1,23 +1,27 @@
 <script lang="ts">
   import { formatErrors } from "$lib/validation/validation";
-  import { createEventDispatcher } from "svelte";
 
-  export let id: string,
-    group,
+  interface Props {
+    id: string;
+    group: any;
+    choices: any;
+    disabled?: boolean;
+    readonly?: boolean;
+    errorMessages?: string[];
+    onchange?: (event: Event) => void;
+  }
+
+  let {
+    id,
+    group = $bindable(),
     choices,
     disabled = false,
-    name: string,
     readonly = false,
-    errorMessages: string[] = [];
+    errorMessages = [],
+    onchange,
+  }: Props = $props();
 
-  let focusValue = undefined;
-  const dispatch = createEventDispatcher();
-
-  // We want the change event to come from this component, not from
-  // the individual radio buttons, in order to be able to validate properly
-  function handleChange() {
-    dispatch("change", name);
-  }
+  let focusValue = $state(undefined);
 </script>
 
 <div class="gap-s8 flex flex-col">
@@ -29,9 +33,9 @@
       <input
         id={`${id}-${i}`}
         bind:group
-        on:change={handleChange}
-        on:focus={() => (focusValue = choice.value)}
-        on:blur={() => (focusValue = undefined)}
+        {onchange}
+        onfocus={() => (focusValue = choice.value)}
+        onblur={() => (focusValue = undefined)}
         value={choice.value}
         name={id}
         type="radio"
@@ -45,7 +49,7 @@
       >
         <div
           class="toggle-circle h-s12 w-s12 bg-magenta-cta hidden self-center rounded-full"
-        />
+        ></div>
       </div>
       <span class="ml-s16 text-f16 text-gray-text inline-block">
         {choice.label}

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment } from "$lib/types";
@@ -7,16 +9,24 @@
 
   const safirRegexp = /^\d{5}$/u;
 
-  export let onEstablishmentChange: (
-    establishment: Establishment | null
-  ) => void;
-  export let proposedSafir;
-  export let establishment: Establishment | null;
-  let safirInput = proposedSafir;
-  let safirIsValid = false;
-  let serverErrorMsg = "";
+  interface Props {
+    onEstablishmentChange: (establishment: Establishment | null) => void;
+    proposedSafir: string;
+    establishment: Establishment | null;
+    description?: Snippet;
+  }
 
-  $: safirIsValid = !!safirInput?.match(safirRegexp);
+  let {
+    onEstablishmentChange,
+    proposedSafir,
+    establishment = $bindable(),
+    description,
+  }: Props = $props();
+
+  let safirInput = $state(proposedSafir);
+  let serverErrorMsg = $state("");
+
+  let safirIsValid = $derived(!!safirInput?.match(safirRegexp));
 
   async function handleValidateSafir() {
     const url = `${getApiURL()}/search-safir/?safir=${encodeURIComponent(
@@ -54,19 +64,18 @@
   id="safir-select"
   label="Code Safir de votre agence"
   required
-  description="Sur 5 chiffres"
+  descriptionText="Sur 5 chiffres"
   vertical
+  {description}
 >
-  <slot slot="description" name="description" />
-
   <div class="flex flex-col">
     <div class="gap-s12 flex flex-row">
       <input
         class="h-s48 border-gray-03 px-s12 py-s6 text-f14 placeholder-gray-text-alt focus:shadow-focus grow rounded-sm border outline-hidden"
         id="safir-select"
         type="text"
-        on:input={() => (serverErrorMsg = "")}
-        on:keydown={handleKeydown}
+        oninput={() => (serverErrorMsg = "")}
+        onkeydown={handleKeydown}
         bind:value={safirInput}
         placeholder="12345"
         maxlength="5"
@@ -75,7 +84,7 @@
       <Button
         label="Rechercher"
         disabled={!safirIsValid}
-        on:click={handleValidateSafir}
+        onclick={handleValidateSafir}
         small
       />
     </div>

@@ -6,8 +6,12 @@
   import ContactPhone from "../contact-phone.svelte";
   import MembershipPendingWarning from "$lib/components/specialized/membership-pending-warning.svelte";
 
-  export let service: Service | ShortService;
-  export let useWhiteText = true;
+  interface Props {
+    service: Service | ShortService;
+    useWhiteText?: boolean;
+  }
+
+  let { service, useWhiteText = true }: Props = $props();
 </script>
 
 <div>

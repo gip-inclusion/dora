@@ -3,8 +3,8 @@ from difflib import SequenceMatcher
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
+from django.utils.html import format_html
 from django.utils.http import urlencode
-from django.utils.safestring import mark_safe
 
 from dora.core.models import ModerationStatus
 
@@ -161,6 +161,6 @@ def format_warnings(warnings: list) -> str:
     msgs = [f"<p>- {msg}</p>" for msg in warnings]
     msgs = "".join(msgs)
 
-    return mark_safe(
+    return format_html(
         f"<p>Cette demande d'orientation comporte des avertissements :</p><p>{msgs}</p>"
     )

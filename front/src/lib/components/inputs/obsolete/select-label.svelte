@@ -1,36 +1,36 @@
 <script lang="ts">
   import type { Choice } from "$lib/types";
 
-  export let choice: Choice;
-  export let showIcon = true;
-  export let useSelectedLabel = false;
-
-  let icon, iconOnRight, label;
-  $: {
-    icon = choice.icon;
-    iconOnRight = choice.iconOnRight;
-    label =
-      useSelectedLabel && choice.selectedLabel
-        ? choice.selectedLabel
-        : choice.label;
+  interface Props {
+    choice: Choice;
+    showIcon?: boolean;
+    useSelectedLabel?: boolean;
   }
+
+  let { choice, showIcon = true, useSelectedLabel = false }: Props = $props();
+
+  let label = $derived(
+    useSelectedLabel && choice.selectedLabel
+      ? choice.selectedLabel
+      : choice.label
+  );
 </script>
 
 <span
   class="gap-s4 flex w-full items-center"
-  class:justify-between={icon && showIcon && iconOnRight}
+  class:justify-between={choice.icon && showIcon && choice.iconOnRight}
 >
-  {#if icon && showIcon && !iconOnRight}
+  {#if choice.icon && showIcon && !choice.iconOnRight}
     <span class="mr-s4 h-s24 w-s24 shrink-0 fill-current">
-      {@html icon}
+      {@html choice.icon}
     </span>
   {/if}
 
   {label}
 
-  {#if icon && showIcon && iconOnRight}
+  {#if choice.icon && showIcon && choice.iconOnRight}
     <span class="mr-s4 h-s24 w-s24 shrink-0 fill-current">
-      {@html icon}
+      {@html choice.icon}
     </span>
   {/if}
 </span>

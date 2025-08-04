@@ -5,7 +5,11 @@
   import type { PageData } from "./$types";
   import NoticePublication from "./notice-publication.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 </script>
 
 <EnsureLoggedIn>

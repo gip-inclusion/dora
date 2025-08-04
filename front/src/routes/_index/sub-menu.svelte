@@ -2,14 +2,19 @@
   import { externalLinkIcon } from "$lib/icons";
   import SubMenuDropdown from "./sub-menu-dropdown.svelte";
 
-  export let mobileDesign = false;
-  export let externalIconColor = mobileDesign
-    ? "text-magenta-cta"
-    : "text-gray-text";
+  interface Props {
+    mobileDesign?: boolean;
+    externalIconColor?: string;
+    aClass?: string;
+  }
 
-  export let aClass = mobileDesign
-    ? "py-s16 text-f18 font-bold text-gray-dark"
-    : "text-f14 text-gray-text p-s16";
+  let {
+    mobileDesign = false,
+    externalIconColor = mobileDesign ? "text-magenta-cta" : "text-gray-text",
+    aClass = mobileDesign
+      ? "py-s16 text-f18 font-bold text-gray-dark"
+      : "text-f14 text-gray-text p-s16",
+  }: Props = $props();
 </script>
 
 <div class="{mobileDesign ? 'hidden' : 'block'} py-s10 md:hidden">
@@ -48,14 +53,16 @@
           {
             href: "https://www.youtube.com/channel/UCadIsy9gfHgLmLkutRGC5ew/playlists",
             label: "Tutoriels vidéo",
+            openInNewTab: true,
           },
           {
             href: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/participer-a-un-webinaire-dora-h3n747/",
             label: "Webinaires",
           },
           {
-            href: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/deployer-la-plateforme-dora-sur-votre-territoire-qb9ner/",
+            href: "https://docs.google.com/presentation/d/e/2PACX-1vQ1xdf83eiY7CVTcWLpOg9cE8Zjd_9oEVe4RCeia9FNNB7FnTYXX6S21nbsMV3es6zgIwhwgKODI8dk/pub?start=false&loop=false&delayms=3000",
             label: "Kit de déploiement",
+            openInNewTab: true,
           },
           {
             href: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/kit-de-communication-1x9t4kj/",

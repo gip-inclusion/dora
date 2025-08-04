@@ -1,18 +1,25 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+
   import CenteredGrid from "../display/centered-grid.svelte";
 
-  export let justifyBetween = false;
+  interface Props {
+    justifyBetween?: boolean;
+    children?: Snippet;
+  }
+
+  let { justifyBetween = false, children }: Props = $props();
 </script>
 
 <div class="bottom-s0 sticky z-20">
-  <div class="top-shadow bottom-s0 h-s24 sticky -z-10 bg-white" />
+  <div class="top-shadow bottom-s0 h-s24 sticky -z-10 bg-white"></div>
   <CenteredGrid noPadding>
     <div
       class="gap-s12 pb-s24 z-50 flex flex-row bg-white"
       class:justify-end={!justifyBetween}
       class:justify-between={justifyBetween}
     >
-      <slot />
+      {@render children?.()}
     </div>
   </CenteredGrid>
 </div>

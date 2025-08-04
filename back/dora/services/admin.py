@@ -1,6 +1,3 @@
-import csv
-import io
-
 from data_inclusion.schema.v0 import Profil
 from django import forms
 from django.contrib import messages
@@ -8,10 +5,11 @@ from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
 from django.shortcuts import redirect, render
 from django.urls import path
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 from dora.core.admin import EnumAdmin
 
+from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportServicesHelper
 from .models import (
     AccessCondition,
@@ -85,10 +83,8 @@ class ServiceStatusHistoryItemAdmin(admin.ModelAdmin):
         return False
 
 
-class ServiceAdmin(admin.GISModelAdmin):
+class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
     def __init__(self, *args, **kwargs):
-        self.default_source_label = "DORA"
-        self.upload_size_limit_in_bytes = 10 * 1024 * 1024  # 10 MB
         self.import_service_helper = ImportServicesHelper()
         return super().__init__(*args, **kwargs)
 
@@ -148,7 +144,7 @@ class ServiceAdmin(admin.GISModelAdmin):
 
     def import_services_view(self, request):
         if request.method == "POST":
-            return self._handle_import_post(request)
+            return self.import_csv(request)
 
         context = {
             "title": "Module d'import de services",
@@ -156,78 +152,9 @@ class ServiceAdmin(admin.GISModelAdmin):
             "has_view_permission": True,
             "csv_headers": ImportServicesHelper.CSV_HEADERS,
         }
-        return render(request, "admin/import_services.html", context)
+        return render(request, "admin/import_csv_form.html", context)
 
-    def _handle_import_post(self, request):
-        csv_file = request.FILES.get("csv_file")
-        if not csv_file:
-            messages.error(request, "Veuillez sélectionner un fichier CSV.")
-            return redirect(".")
-
-        if not csv_file.name.lower().endswith(".csv"):
-            messages.error(
-                request,
-                mark_safe(
-                    "<b>Échec de l'import - Format de fichier non valide</b><br/>"
-                    "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
-                ),
-            )
-            return redirect(".")
-
-        if csv_file.size > self.upload_size_limit_in_bytes:
-            messages.error(
-                request,
-                "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit être moins de 10MB.",
-            )
-            return redirect(".")
-
-        try:
-            is_wet_run = request.POST.get("test_run") != "on"
-            source_label = request.POST.get(
-                "source_label", self.default_source_label
-            ).strip()
-            should_remove_instructions_from_csv = (
-                request.POST.get("should_remove_instructions") == "on"
-            )
-
-            source_info = {
-                "value": csv_file.name.rsplit(".", 1)[0],
-                "label": source_label or self.default_source_label,
-            }
-
-            reader = csv.reader(io.TextIOWrapper(csv_file, encoding="utf-8"))
-            result = self.import_service_helper.import_services(
-                reader,
-                request.user,
-                source_info,
-                wet_run=is_wet_run,
-                should_remove_first_two_lines=should_remove_instructions_from_csv,
-            )
-
-            return self._handle_import_results(request, result, is_wet_run)
-
-        except UnicodeDecodeError:
-            messages.error(
-                request,
-                mark_safe(
-                    "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
-                    "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
-                ),
-            )
-            return redirect(".")
-        except Exception as e:
-            messages.error(
-                request,
-                mark_safe(
-                    "<b>Échec de l'import - Erreur inattendue</b><br/>"
-                    "L'erreur suivante s'est produite :<br/>"
-                    f"{e}<br/>"
-                    "Si le problème persiste, contactez les développeurs.",
-                ),
-            )
-            return redirect(".")
-
-    def _handle_import_results(self, request, result, is_wet_run):
+    def handle_import_results(self, request, result, is_wet_run):
         created_count = result.get("created_count", 0)
         no_errors = not result.get("missing_headers", []) and not result.get(
             "errors", []
@@ -243,7 +170,7 @@ class ServiceAdmin(admin.GISModelAdmin):
         if is_wet_run and no_errors:
             messages.success(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>Import terminé avec succès</b><br/>{total_services_published} nouveaux services ont été créés et publiés"
                 ),
             )
@@ -252,7 +179,7 @@ class ServiceAdmin(admin.GISModelAdmin):
         if not is_wet_run and no_errors:
             messages.success(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {total_services_published} sont prêts à être importés et publiés."
                 ),
             )
@@ -267,7 +194,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             headers_list = "<br/>".join(f"• {header}" for header in missing_headers)
             message = f"<b>Échec de l'import - Colonnes manquantes</b><br/>Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>{headers_list}"
 
-            messages.error(request, mark_safe(message))
+            messages.error(request, format_html(message))
 
         if errors:
             error_list = "<br/>".join(f"• {error}" for error in errors)
@@ -283,7 +210,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             )
             messages.error(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>{message_title}</b><br/>{message_text} Veuillez corriger les éléments suivants :<br/>"
                     f"{error_list}",
                 ),
@@ -303,7 +230,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             messages.add_message(
                 request,
                 messages.INFO,
-                mark_safe(
+                format_html(
                     "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
                 ),
                 extra_tags="plain",
@@ -322,7 +249,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             )
             messages.warning(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>{title_prefix}Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
                     f"{duplicate_list}"
                 ),
@@ -335,7 +262,7 @@ class ServiceAdmin(admin.GISModelAdmin):
             )
             messages.warning(
                 request,
-                mark_safe(
+                format_html(
                     f"<b>{title_prefix}Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
                     f"{missing_list}"
                 ),
@@ -356,8 +283,14 @@ class ServiceAdmin(admin.GISModelAdmin):
 
             messages.warning(
                 request,
-                mark_safe(message + f" :<br/>{draft_list}"),
+                format_html(message + f" :<br/>{draft_list}"),
             )
+
+    def get_import_helper(self):
+        return self.import_service_helper
+
+    def get_import_method_name(self):
+        return "import_services"
 
 
 class ServiceModelAdmin(admin.ModelAdmin):

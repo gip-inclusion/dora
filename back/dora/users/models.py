@@ -60,10 +60,7 @@ class UserManager(BaseUserManager):
 
     def to_delete(self):
         return self.filter(putative_membership=None).filter(
-            # non validés avant IC
-            models.Q(is_valid=False, date_joined__lt=IC_PRODUCTION_DATE)
-            # non validés et sans identifiant IC
-            | models.Q(is_valid=False, ic_id=None)
+            is_valid=False, date_joined__lt=IC_PRODUCTION_DATE
         )
 
     def members_invited(self):
@@ -79,11 +76,6 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    # obsolète : sera remplacé par `sub_pc` pour ProConnect
-    ic_id = models.UUIDField(
-        verbose_name="Identifiant Inclusion Connect", null=True, blank=True
-    )
-
     # null possible en base ... pour l'instant
     sub_pc = models.UUIDField(verbose_name="Identifiant ProConnect", null=True)
 

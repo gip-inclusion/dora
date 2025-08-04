@@ -2,9 +2,14 @@
   import Label from "$lib/components/display/label.svelte";
   import { pageLineIcon } from "$lib/icons";
   import { capitalize } from "$lib/utils/misc";
+  import type { Structure } from "$lib/types";
 
-  export let structure;
-  export let showAddress = true;
+  interface Props {
+    structure: Structure;
+    showAddress?: boolean;
+  }
+
+  let { structure, showAddress = true }: Props = $props();
 </script>
 
 <div class="flex flex-col rounded-lg bg-white shadow-md">

@@ -5,14 +5,30 @@
   import { getChoiceFromValue } from "$lib/utils/choice";
   import SelectLabel from "./select-label.svelte";
 
-  export let value: string | string[];
-  export let isMultiple: boolean;
-  export let selectedOption: Choice | undefined;
-  export let choices: Choice[];
-  export let extraClass = "";
+  interface Props {
+    value: string | string[];
+    isMultiple: boolean;
+    selectedOption?: Choice;
+    choices: Choice[];
+    extraClass?: string;
+    setAsSelected: (i: string | null) => void;
+    updateValue: (i: string) => void;
+  }
 
-  export let setAsSelected: (i: string | null) => void;
-  export let updateValue: (i: string) => void;
+  let {
+    value,
+    isMultiple,
+    selectedOption,
+    choices,
+    extraClass = "",
+    setAsSelected,
+    updateValue,
+  }: Props = $props();
+
+  function handleClick(event: MouseEvent, optionValue: string) {
+    event.stopPropagation();
+    updateValue(optionValue);
+  }
 </script>
 
 {#each choices as option (option.value)}
@@ -30,14 +46,14 @@
     class:hover={option.value === selectedOption?.value}
     class:selected
     tabindex="0"
-    on:keypress={(event) => {
+    onkeypress={(event) => {
       if (event.code === "Enter") {
         updateValue(option.value);
       }
     }}
-    on:click|stopPropagation={() => updateValue(option.value)}
-    on:mouseenter={() => setAsSelected(option.value)}
-    on:mouseleave={() => setAsSelected(null)}
+    onclick={(event: MouseEvent) => handleClick(event, option.value)}
+    onmouseenter={() => setAsSelected(option.value)}
+    onmouseleave={() => setAsSelected(null)}
   >
     {#if isMultiple}
       <CheckboxMark checked={selected} />

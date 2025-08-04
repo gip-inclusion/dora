@@ -109,6 +109,7 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
         # L'utilisateur peut déjà étre inscrit à IC, dans ce cas on réutilise la plupart
         # des informations déjà connues
         sub = claims.get("sub")
+        email = claims.get("email")
 
         if not sub:
             raise SuspiciousOperation(
@@ -116,9 +117,28 @@ class OIDCAuthenticationBackend(MozillaOIDCAuthenticationBackend):
             )
 
         if user.sub_pc and str(user.sub_pc) != sub:
-            raise SuspiciousOperation(
-                "Le sub enregistré est différent de celui fourni par ProConnect"
+            # Le sub n'est pas censé changer sauf dans certains cas où
+            # l'utilisateur utilise deux fournisseurs d'identité différents.
+            # Dans ce cas, on vérifie que l'adresse e-mail est la même.
+            # Si l'adresse e-mail n'est pas la même, on considère l'opération comme suspecte.
+            core_logger.warning(
+                "sub ProConnect différent de celui enregistré",
+                {
+                    "legal": True,
+                    "userId": str(user.pk),
+                    "userEmail": user.email,
+                    "pcEmail": email,
+                    "userSub": str(user.sub_pc),
+                    "pcSub": sub,
+                },
             )
+            if user.email == email:
+                user.sub_pc = sub
+                user.save()
+            else:
+                raise SuspiciousOperation(
+                    "Le sub et l'adresse e-mail fournis par ProConnect sont différents de ceux enregistrés"
+                )
 
         if not user.sub_pc:
             # utilisateur existant, mais non-enregistré sur ProConnect

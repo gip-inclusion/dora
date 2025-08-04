@@ -10,8 +10,6 @@ from dora.users.models import User
 
 
 class UserAdminSerializer(serializers.ModelSerializer):
-    is_on_ic = serializers.SerializerMethodField()
-
     class Meta:
         model = User
         fields = [
@@ -20,7 +18,6 @@ class UserAdminSerializer(serializers.ModelSerializer):
             "email",
             "first_name",
             "is_active",
-            "is_on_ic",
             "is_valid",
             "last_name",
             "newsletter",
@@ -35,9 +32,6 @@ class UserAdminSerializer(serializers.ModelSerializer):
             "last_name",
             "newsletter",
         ]
-
-    def get_is_on_ic(self, obj):
-        return obj.ic_id is not None
 
 
 class LogItemSerializer(serializers.ModelSerializer):
@@ -73,6 +67,11 @@ class StructureAdminSerializer(StructureSerializer):
     admins_to_remind = serializers.SerializerMethodField()
     num_potential_members_to_validate = serializers.SerializerMethodField()
     num_potential_members_to_remind = serializers.SerializerMethodField()
+    is_orphan = serializers.SerializerMethodField()
+    is_waiting = serializers.SerializerMethodField()
+    awaiting_moderation = serializers.SerializerMethodField()
+    awaiting_activation = serializers.SerializerMethodField()
+    awaiting_update = serializers.SerializerMethodField()
 
     class Meta:
         model = Structure
@@ -83,6 +82,9 @@ class StructureAdminSerializer(StructureSerializer):
             "admins_to_moderate",
             "admins_to_remind",
             "ape",
+            "awaiting_moderation",
+            "awaiting_activation",
+            "awaiting_update",
             "branches",
             "categories",
             "city",
@@ -93,6 +95,8 @@ class StructureAdminSerializer(StructureSerializer):
             "email",
             "full_desc",
             "has_admin",
+            "is_orphan",
+            "is_waiting",
             "last_editor",
             "latitude",
             "longitude",
@@ -129,6 +133,9 @@ class StructureAdminSerializer(StructureSerializer):
             "admins_to_moderate",
             "admins_to_remind",
             "ape",
+            "awaiting_moderation",
+            "awaiting_activation",
+            "awaiting_update",
             "branches",
             "categories",
             "city",
@@ -139,6 +146,8 @@ class StructureAdminSerializer(StructureSerializer):
             "email",
             "full_desc",
             "has_admin",
+            "is_orphan",
+            "is_waiting",
             "last_editor",
             "latitude",
             "longitude",
@@ -294,6 +303,21 @@ class StructureAdminSerializer(StructureSerializer):
             user__is_active=True,
         ).count()
 
+    def get_is_orphan(self, obj: Structure) -> bool:
+        return Structure.objects.filter(id=obj.id).orphans().exists()
+
+    def get_is_waiting(self, obj: Structure) -> bool:
+        return len(self.get_admins_to_remind(obj)) > 0
+
+    def get_awaiting_moderation(self, obj: Structure) -> bool:
+        return Structure.objects.filter(id=obj.id).awaiting_moderation().exists()
+
+    def get_awaiting_activation(self, obj: Structure) -> bool:
+        return self.get_num_published_services(obj) == 0
+
+    def get_awaiting_update(self, obj: Structure) -> bool:
+        return self.get_num_outdated_services(obj) > 0
+
 
 class StructureAdminListSerializer(StructureAdminSerializer):
     class Meta:
@@ -302,6 +326,9 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "admins",
             "admins_to_moderate",
             "admins_to_remind",
+            "awaiting_moderation",
+            "awaiting_activation",
+            "awaiting_update",
             "categories",
             "city",
             "department",
@@ -309,6 +336,8 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "email",
             "has_admin",
             "is_obsolete",
+            "is_orphan",
+            "is_waiting",
             "latitude",
             "longitude",
             "moderation_date",
@@ -332,6 +361,9 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "admins",
             "admins_to_moderate",
             "admins_to_remind",
+            "awaiting_moderation",
+            "awaiting_activation",
+            "awaiting_update",
             "categories",
             "city",
             "department",
@@ -339,6 +371,8 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "email",
             "has_admin",
             "is_obsolete",
+            "is_orphan",
+            "is_waiting",
             "latitude",
             "longitude",
             "moderation_date",
