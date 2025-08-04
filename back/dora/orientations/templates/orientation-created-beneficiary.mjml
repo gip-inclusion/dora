@@ -47,29 +47,7 @@
 
 {% block footer %}
   <mj-divider border-width="1px" border-color="#F5F5F5" width="100%" padding="24px 0"/>
-  <mj-text>
-    <h2>Mention d’information</h2>
-    <p>
-      Dora est une application portée par le GIP «&#8239;plateforme de l’inclusion&#8239;». Les documents listés
-      plus
-      haut
-      ont
-      été communiqués à une structure proposant un service répondant à vos besoins.
-    </p>
-    <p>
-      Vous pouvez néanmoins vous opposer à tout moment ici et vos données seront supprimées:
-      <a href="mailto:dpo@numericite.eu">s’opposer</a>.
-    </p>
-    <p>
-      Si vous estimez que vos droits ne sont pas respectés, vous pouvez à tout moment introduire une réclamation
-      auprès de la CNIL.
-    </p>
-    <p>
-      Pour plus d’informations, notamment sur vos autres droits RGPD (droit d’accès, d’opposition, de limitation,
-      notamment)&#8239;:
-      <a href="https://dora.inclusion.beta.gouv.fr/politique-de-confidentialite">https://dora.inclusion.beta.gouv.fr/politique-de-confidentialite</a>.
-    </p>
-  </mj-text>
+  {% include "partials/block-information-notice.html" %}
 {% endblock %}
 
 {% block support %}
