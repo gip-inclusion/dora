@@ -15,6 +15,7 @@ export function initEmptyOrientation(): Orientation {
     referentPhone: "",
     referentEmail: "",
 
+    beneficiaryFranceTravailNumber: "",
     beneficiaryLastName: "",
     beneficiaryFirstName: "",
     beneficiaryAvailability: new Date().toISOString().split("T")[0],
