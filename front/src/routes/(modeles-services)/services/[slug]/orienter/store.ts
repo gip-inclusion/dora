@@ -26,6 +26,8 @@ export function initEmptyOrientation(): Orientation {
     orientationReasons: "",
 
     attachments: {},
+
+    dataProtectionCommitment: false,
   };
 }
 
