@@ -376,3 +376,44 @@ def test_create_with_france_travail_number(api_client):
         orientation.beneficiary_france_travail_number
         == data["beneficiaryFranceTravailNumber"]
     )
+
+
+def test_create_with_data_protection_commitment(api_client):
+    user = make_user()
+    structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
+    service = make_service(contact_email="contact.service@example.com")
+
+    api_client.force_authenticate(user=user)
+
+    data = get_new_dora_service_orientation_data(user, structure, service)
+
+    data["dataProtectionCommitment"] = True
+
+    response = api_client.post("/orientations/", data=data, follow=True)
+
+    assert response.status_code == 201
+
+    assert structure.orientations.count() == 1
+
+    orientation = structure.orientations.first()
+
+    assert orientation.data_protection_commitment
+
+
+def test_create_without_data_protection_commitment(api_client):
+    user = make_user()
+    structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
+    service = make_service(contact_email="contact.service@example.com")
+
+    api_client.force_authenticate(user=user)
+
+    data = get_new_dora_service_orientation_data(user, structure, service)
+
+    data["dataProtectionCommitment"] = False
+
+    response = api_client.post("/orientations/", data=data, follow=True)
+
+    assert response.status_code == 400
+    assert "data_protection_commitment" in response.data
+
+    assert structure.orientations.count() == 0
