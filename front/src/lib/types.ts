@@ -698,6 +698,8 @@ export interface Orientation {
 
   attachments: { [key: string]: string[] };
 
+  dataProtectionCommitment: boolean;
+
   // Champs après la création de l'orientation
   id?: number;
   queryId: string;
