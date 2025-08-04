@@ -75,7 +75,9 @@ class OrientationSerializer(serializers.ModelSerializer):
         extra_kwargs = {"beneficiary_attachments": {"write_only": True}}
 
     def validate(self, orientation):
-        """Valide les documents joints.
+        """Valide l'engagement de protection des données et les documents joints.
+
+        L'engagement de protection des données (`data_protection_commitment`) doit être True lors de la création.
 
         Si au moins un document (`Service.forms`) ou justificatif (`Service.credentials`) est demandé par le service,
         alors le bénéficiaire doit joindre au moins un document (`Orientation.beneficiary_attachments`).
@@ -83,6 +85,14 @@ class OrientationSerializer(serializers.ModelSerializer):
 
         À la fois les services Dora et DI sont supportés.
         """
+        # Validation de l'engagement de protection des données
+        if not self.instance and not orientation.get("data_protection_commitment"):
+            raise serializers.ValidationError(
+                {
+                    "data_protection_commitment": "Vous devez accepter l’engagement de protection des données."
+                }
+            )
+
         # Récupère le service depuis les données ou l'instance
         service = orientation.get("service") or (
             self.instance.service if self.instance else None
