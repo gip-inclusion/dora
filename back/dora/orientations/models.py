@@ -172,6 +172,10 @@ class Orientation(models.Model):
     di_contact_phone = models.TextField(blank=True, default="")
     di_structure_name = models.TextField(blank=True, default="")
 
+    data_protection_commitment = models.BooleanField(
+        verbose_name="Engagement RGPD accompagnateur", default=False
+    )
+
     original_service_name = models.CharField(
         verbose_name="Nom original", max_length=140, default="", editable=False
     )
