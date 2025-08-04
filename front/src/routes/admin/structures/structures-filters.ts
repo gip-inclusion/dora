@@ -13,7 +13,7 @@ export function toModerate(struct) {
 }
 
 export function toActivate(struct) {
-  return !struct.awaitingActivation;
+  return struct.awaitingActivation;
 }
 
 export function toUpdate(struct) {
