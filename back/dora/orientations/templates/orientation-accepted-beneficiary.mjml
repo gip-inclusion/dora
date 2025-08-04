@@ -14,6 +14,11 @@
 
 {% block signature %}{% endblock %}
 
+{% block footer %}
+  <mj-divider border-width="1px" border-color="#F5F5F5" width="100%" padding="24px 0"/>
+  {% include "partials/block-information-notice.html" %}
+{% endblock %}
+
 {% block support %}
   En cas de difficulté, n’hésitez pas à
   <a style="color: #555" href="mailto:{{ support_email }}">contacter le support</a>
