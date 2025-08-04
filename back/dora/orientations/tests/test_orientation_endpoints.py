@@ -233,6 +233,7 @@ def get_new_dora_service_orientation_data(user, structure, service):
         "requirements": [],
         "serviceSlug": service.slug,
         "situation": [],
+        "dataProtectionCommitment": True,
     }
 
 
@@ -266,6 +267,7 @@ def get_new_di_service_orientation_data(user, structure, service):
         "requirements": [],
         "serviceSlug": None,
         "situation": [],
+        "dataProtectionCommitment": True,
     }
 
 
