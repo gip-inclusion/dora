@@ -56,7 +56,12 @@ export const orientationStep2Schema: v.Schema = {
     maxLength: 254,
     required: true,
   },
-
+  beneficiaryFranceTravailNumber: {
+    label: "Numéro France Travail",
+    default: "",
+    rules: [v.isString(), v.maxStrLength(11)],
+    maxLength: 11,
+  },
   beneficiaryLastName: {
     label: "Nom",
     default: "",
