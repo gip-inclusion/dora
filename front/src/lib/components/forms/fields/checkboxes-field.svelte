@@ -9,11 +9,11 @@
 
   interface Props {
     id: string;
-    value: any;
+    value: string[];
     disabled?: boolean;
     readonly?: boolean;
     // Spécifiques
-    choices: any;
+    choices: { label: string; value: string }[];
     // Proxy vers le FieldWrapper
     description?: string;
     hidden?: boolean;
