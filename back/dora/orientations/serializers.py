@@ -46,6 +46,7 @@ class OrientationSerializer(serializers.ModelSerializer):
             "beneficiary_other_contact_method",
             "beneficiary_phone",
             "creation_date",
+            "data_protection_commitment",
             "di_service_id",
             "di_service_name",
             "di_service_address_line",
