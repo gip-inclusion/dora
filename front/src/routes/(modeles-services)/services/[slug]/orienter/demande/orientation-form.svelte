@@ -11,6 +11,7 @@
   import { onMount } from "svelte";
   import Alert from "$lib/components/display/alert.svelte";
   import Accordion from "$lib/components/display/accordion.svelte";
+  import BooleanCheckboxField from "$lib/components/forms/fields/boolean-checkbox-field.svelte";
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import { orientationContainsTestWords } from "$lib/utils/orientation";
   import { userPreferences } from "$lib/utils/preferences";
@@ -341,9 +342,13 @@
         </p></Notice
       >
     {/if}
-    <Notice
-      type="info"
-      title="L’accompagnateur s’engage à informer la personne concernée de ce traitement de données."
+
+    <BooleanCheckboxField
+      id="dataProtectionCommitment"
+      label="Je m’engage, en tant qu’accompagnateur, à informer la personne concernée du traitement de ses données personnelles dans le cadre de cette orientation."
+      bind:value={$orientation.dataProtectionCommitment}
+      hideLabel
+      vertical
     />
   </div>
 </div>
