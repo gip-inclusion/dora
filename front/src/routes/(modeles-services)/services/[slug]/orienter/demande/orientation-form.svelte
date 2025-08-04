@@ -124,6 +124,14 @@
   </Fieldset>
 
   <Fieldset title="Le ou la bénéficiaire">
+    <BasicInputField
+      id="beneficiaryFranceTravailNumber"
+      placeholder=""
+      descriptionText="Numéro unique à 11 chiffres"
+      bind:value={$orientation.beneficiaryFranceTravailNumber}
+      vertical
+    />
+
     <div class="gap-s24 flex flex-row justify-items-stretch">
       <div class="flex-1">
         <BasicInputField
