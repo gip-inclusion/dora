@@ -31,6 +31,7 @@ class OrientationSerializer(serializers.ModelSerializer):
     prescriber_structure = serializers.SerializerMethodField()
     prescriber = serializers.SerializerMethodField()
     beneficiary_attachments_details = serializers.SerializerMethodField()
+    beneficiary_france_travail_number = serializers.SerializerMethodField()
 
     class Meta:
         model = Orientation
@@ -176,3 +177,10 @@ class OrientationSerializer(serializers.ModelSerializer):
             {"name": a, "url": default_storage.url(a)}
             for a in orientation.beneficiary_attachments
         ]
+
+    def get_beneficiary_france_travail_number(self, orientation):
+        return (
+            orientation.beneficiary_france_travail_number
+            if orientation.status == "VALIDÉE"
+            else ""
+        )
