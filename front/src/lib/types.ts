@@ -710,7 +710,10 @@ export interface Orientation {
   };
   processingDate?: string;
   status: "OUVERTE" | "VALIDÉE" | "REFUSÉE";
-  beneficiaryAttachmentsDetails?: string[];
+  beneficiaryAttachmentsDetails?: {
+    name: string;
+    url: string;
+  }[];
   service?: {
     name: string;
     slug: string;
