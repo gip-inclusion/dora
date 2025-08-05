@@ -36,6 +36,7 @@ export { default as pageLineIcon } from "remixicon/icons/Document/pages-line.svg
 export { default as boldIcon } from "remixicon/icons/Editor/bold.svg?raw";
 export { default as h1Icon } from "remixicon/icons/Editor/h-1.svg?raw";
 export { default as h2Icon } from "remixicon/icons/Editor/h-2.svg?raw";
+export { default as hashtagIcon } from "remixicon/icons/Editor/hashtag.svg?raw";
 export { default as italicIcon } from "remixicon/icons/Editor/italic.svg?raw";
 export { default as linkIcon } from "remixicon/icons/Editor/link.svg?raw";
 export { default as liIcon } from "remixicon/icons/Editor/list-unordered.svg?raw";
