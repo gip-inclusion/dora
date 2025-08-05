@@ -8,6 +8,7 @@
     attachmentIcon,
     calendarEventLineIcon,
     compass3Icon,
+    hashtagIcon,
     homeSmile2Icon,
     inboxLineIcon,
     listCheckIcon,
@@ -123,6 +124,13 @@
                         icon={user6Icon}
                         text={`${orientation.beneficiaryFirstName} ${orientation.beneficiaryLastName}`}
                       />
+
+                      {#if orientation.status === "VALIDÉE" && orientation.beneficiaryFranceTravailNumber}
+                        <ContactListItem
+                          icon={hashtagIcon}
+                          text={`Numéro France Travail : ${orientation.beneficiaryFranceTravailNumber}`}
+                        />
+                      {/if}
 
                       {#if orientation.beneficiaryEmail}
                         <ContactListItem
