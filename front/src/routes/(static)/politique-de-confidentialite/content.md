@@ -18,7 +18,7 @@ DORA manipule des données à caractère personnel pour :
 DORA manipule les données à caractère personnel suivantes relatives aux utilisateurs de la plateforme:
 
 - **Données relatives aux utilisateurs de la plateforme** (nom, prénom, adresse e-mail, numéro de téléphone) ;
-- **Données relatives aux personnes suivies par les agents accompagnateurs** (nom, prénom, adresse e-mail des personnes suivies, pièces justificatives relatives au dossier proposé par l’agent accompagnateur qui peuvent contenir des informations financières, des informations relatives à l’insertion sociale et l’emploi, des informations relatives à la situation familiale, RQTH ) ;
+- **Données relatives aux personnes suivies par les agents accompagnateurs** (nom, prénom, adresse e-mail des personnes suivies, identifiant unique France Travail, pièces justificatives relatives au dossier proposé par l’agent accompagnateur qui peuvent contenir des informations financières, des informations relatives à l’insertion sociale et l’emploi, des informations relatives à la situation familiale, RQTH ) ;
 - **Données relatives aux personnes à contacter pour référencer une structure** (prénom, nom, adresse e-mail, numéro de téléphone).
 
 ## Qu’est-ce qui nous autorise à manipuler ces données ?
