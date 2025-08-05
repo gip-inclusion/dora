@@ -176,3 +176,13 @@ class OrientationSerializer(serializers.ModelSerializer):
             {"name": a, "url": default_storage.url(a)}
             for a in orientation.beneficiary_attachments
         ]
+
+    def to_representation(self, instance):
+        """Contrôle la représentation des champs en lecture."""
+        data = super().to_representation(instance)
+
+        # Le numéro France Travail n'est retourné que si l'orientation est validée
+        if instance.status != "VALIDÉE":
+            data["beneficiary_france_travail_number"] = ""
+
+        return data

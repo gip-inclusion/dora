@@ -8,6 +8,7 @@
     attachmentIcon,
     calendarEventLineIcon,
     compass3Icon,
+    hashtagIcon,
     homeSmile2Icon,
     inboxLineIcon,
     listCheckIcon,
@@ -57,7 +58,7 @@
       <LinkExpired {queryId} />
     </div>
   </CenteredGrid>
-{:else}
+{:else if orientation}
   <CenteredGrid noPadding>
     <div class="mt-s24 print:mb-s0">
       <Breadcrumb currentLocation="orientation" />
@@ -123,6 +124,13 @@
                         icon={user6Icon}
                         text={`${orientation.beneficiaryFirstName} ${orientation.beneficiaryLastName}`}
                       />
+
+                      {#if orientation.status === "VALIDÉE" && orientation.beneficiaryFranceTravailNumber}
+                        <ContactListItem
+                          icon={hashtagIcon}
+                          text={`Numéro France Travail : ${orientation.beneficiaryFranceTravailNumber}`}
+                        />
+                      {/if}
 
                       {#if orientation.beneficiaryEmail}
                         <ContactListItem
@@ -282,7 +290,7 @@
                         />
                       {/if}
 
-                      {#if orientation.referentPhone && orientation.referentEmail === orientation.prescriber.email}
+                      {#if orientation.referentPhone && orientation.referentEmail === orientation.prescriber?.email}
                         <ContactListItem
                           icon={phoneLineIcon}
                           text={formatPhoneNumber(orientation.referentPhone)}
@@ -292,7 +300,7 @@
                   </div>
                 </div>
 
-                {#if orientation.referentEmail !== orientation.prescriber.email}
+                {#if orientation.referentEmail !== orientation.prescriber?.email}
                   <hr class="border-gray-02 border" />
                   <div>
                     <SubTitle
