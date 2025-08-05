@@ -76,6 +76,10 @@ class Orientation(models.Model):
         max_length=480, verbose_name="Situation - autre", blank=True
     )
 
+    beneficiary_france_travail_number = models.CharField(
+        max_length=11, verbose_name="Numéro France Travail", blank=True
+    )
+
     beneficiary_last_name = models.CharField(
         max_length=140, verbose_name="Nom bénéficiaire"
     )
@@ -167,6 +171,10 @@ class Orientation(models.Model):
     di_contact_name = models.TextField(blank=True, default="")
     di_contact_phone = models.TextField(blank=True, default="")
     di_structure_name = models.TextField(blank=True, default="")
+
+    data_protection_commitment = models.BooleanField(
+        verbose_name="Engagement RGPD accompagnateur", default=False
+    )
 
     original_service_name = models.CharField(
         verbose_name="Nom original", max_length=140, default="", editable=False

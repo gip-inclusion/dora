@@ -686,6 +686,7 @@ export interface Orientation {
   referentEmail: string;
   prescriberStructureSlug: string;
 
+  beneficiaryFranceTravailNumber: string;
   beneficiaryLastName: string;
   beneficiaryFirstName: string;
   beneficiaryAvailability: string | null;
@@ -696,6 +697,8 @@ export interface Orientation {
   orientationReasons: string;
 
   attachments: { [key: string]: string[] };
+
+  dataProtectionCommitment: boolean;
 
   // Champs après la création de l'orientation
   id?: number;

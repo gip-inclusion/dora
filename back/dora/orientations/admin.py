@@ -32,7 +32,21 @@ class OrientationAdmin(admin.ModelAdmin):
         "prescriber_structure",
         "service",
     )
-    readonly_fields = ("service", "di_service")
+    exclude = ("beneficiary_france_travail_number",)
+    readonly_fields = (
+        "service",
+        "di_service_id",
+        "di_service_name",
+        "di_service_address_line",
+        "di_contact_email",
+        "di_contact_name",
+        "di_contact_phone",
+        "di_structure_name",
+        "data_protection_commitment",
+        "query_id",
+        "query_expires_at",
+        "original_service_name",
+    )
     search_fields = (
         "beneficiary_last_name",
         "beneficiary_email",
@@ -44,7 +58,6 @@ class OrientationAdmin(admin.ModelAdmin):
     )
     date_hierarchy = "creation_date"
     ordering = ("-id",)
-    readonly_fields = ("query_id", "query_expires_at", "original_service_name")
     filter_horizontal = ("rejection_reasons",)
     inlines = [SentContactEmailInline]
 
