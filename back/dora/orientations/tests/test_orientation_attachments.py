@@ -128,6 +128,7 @@ def test_validate_dora_service_with_credentials_requires_attachments():
     data = {
         "service": service,
         "beneficiary_attachments": [],
+        "data_protection_commitment": True,
     }
 
     with pytest.raises(serializers.ValidationError) as exc_info:
@@ -148,6 +149,7 @@ def test_validate_dora_service_with_forms_requires_attachments():
         data = {
             "service": service,
             "beneficiary_attachments": [],
+            "data_protection_commitment": True,
         }
 
         with pytest.raises(serializers.ValidationError) as exc_info:
@@ -167,6 +169,7 @@ def test_validate_dora_service_with_attachments_passes():
     data = {
         "service": service,
         "beneficiary_attachments": ["document.pdf"],
+        "data_protection_commitment": True,
     }
 
     result = serializer.validate(data)
@@ -181,6 +184,7 @@ def test_validate_dora_service_no_requirements_passes():
     data = {
         "service": service,
         "beneficiary_attachments": [],
+        "data_protection_commitment": True,
     }
 
     result = serializer.validate(data)
@@ -208,6 +212,7 @@ def test_validate_di_service_with_credentials_requires_attachments(
     data = {
         "di_service_id": "soliguide--test-service-id",
         "beneficiary_attachments": [],
+        "data_protection_commitment": True,
     }
 
     with pytest.raises(serializers.ValidationError) as exc_info:
@@ -237,6 +242,7 @@ def test_validate_di_service_with_attachments_passes(
     data = {
         "di_service_id": "soliguide--test-service-id",
         "beneficiary_attachments": ["document.pdf"],
+        "data_protection_commitment": True,
     }
 
     result = serializer.validate(data)
@@ -265,6 +271,7 @@ def test_validate_di_service_no_requirements_passes(
     data = {
         "di_service_id": "soliguide--test-service-id",
         "beneficiary_attachments": [],
+        "data_protection_commitment": True,
     }
 
     result = serializer.validate(data)
@@ -282,6 +289,7 @@ def test_validate_di_service_connection_error_passes(mock_client_factory):
     data = {
         "di_service_id": "soliguide--test-service-id",
         "beneficiary_attachments": [],
+        "data_protection_commitment": True,
     }
 
     result = serializer.validate(data)
@@ -299,6 +307,7 @@ def test_validate_di_service_none_response_passes(mock_client_factory):
     data = {
         "di_service_id": "soliguide--test-service-id",
         "beneficiary_attachments": [],
+        "data_protection_commitment": True,
     }
 
     result = serializer.validate(data)
@@ -324,6 +333,7 @@ def test_validate_existing_instance_service():
     serializer = OrientationSerializer(instance=orientation)
     data = {
         "beneficiary_attachments": [],
+        "data_protection_commitment": True,
     }
 
     with pytest.raises(serializers.ValidationError) as exc_info:
