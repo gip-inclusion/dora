@@ -57,7 +57,7 @@
       <LinkExpired {queryId} />
     </div>
   </CenteredGrid>
-{:else}
+{:else if orientation}
   <CenteredGrid noPadding>
     <div class="mt-s24 print:mb-s0">
       <Breadcrumb currentLocation="orientation" />
