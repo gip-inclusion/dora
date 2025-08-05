@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { pageLineIcon } from "$lib/icons";
+  import PagesLineDocument from "svelte-remix/PagesLineDocument.svelte";
+
   import illuServices from "$lib/assets/illustrations/services.svg";
   import EmptyNotice from "../empty-notice.svelte";
 </script>
 
 <EmptyNotice
-  textTopIcon={pageLineIcon}
+  textTopIcon={PagesLineDocument}
   illustration={illuServices}
   title="Vous n’avez pas encore renseigné vos services sur DORA"
   links={[

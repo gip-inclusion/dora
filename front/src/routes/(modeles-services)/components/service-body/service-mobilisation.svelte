@@ -5,7 +5,7 @@
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import ServiceContact from "$lib/components/specialized/services/display/service-contact.svelte";
-  import { externalLinkIcon } from "$lib/icons";
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
   import type { Service } from "$lib/types";
   import { token } from "$lib/utils/auth";
 
@@ -99,7 +99,7 @@
       extraClass="bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
       label={service.coachOrientationModesExternalFormLinkText ||
         "Orienter votre bénéficiaire"}
-      icon={externalLinkIcon}
+      icon={ExternalLinkLineSystem}
       iconOnRight
       otherTab
       wFull

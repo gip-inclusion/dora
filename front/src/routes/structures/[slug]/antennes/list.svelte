@@ -1,8 +1,10 @@
 <script lang="ts">
+  import Home3LineBuildings from "svelte-remix/Home3LineBuildings.svelte";
+
   import LinkButton from "$lib/components/display/link-button.svelte";
   import Button from "$lib/components/display/button.svelte";
   import StructureCard from "$lib/components/specialized/structure-card.svelte";
-  import { home3Icon } from "$lib/icons";
+
   import Count from "../count.svelte";
   import NewBranchModal from "./new-branch-modal.svelte";
 
@@ -67,7 +69,7 @@
       <Button
         label="Ajouter une antenne"
         onclick={() => (newBranchModalOpen = true)}
-        icon={home3Icon}
+        icon={Home3LineBuildings}
       />
     {/if}
   </div>

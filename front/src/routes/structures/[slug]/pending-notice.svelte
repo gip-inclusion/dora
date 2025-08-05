@@ -1,8 +1,9 @@
 <script lang="ts">
+  import AdminFillUserFaces from "svelte-remix/AdminFillUserFaces.svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import Info from "$lib/components/display/info.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import { adminIcon } from "$lib/icons";
 
   const requestResent = false;
 
@@ -32,7 +33,7 @@
     {#if requestResent}
       <Info
         label="Votre demande a été enregistrée"
-        icon={adminIcon}
+        icon={AdminFillUserFaces}
         info
         whiteBg
         leftBorder

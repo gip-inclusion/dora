@@ -1,21 +1,22 @@
 <script lang="ts">
+  import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
+  import AlertFillSystem from "svelte-remix/AlertFillSystem.svelte";
+  import ArrowDownLineArrows from "svelte-remix/ArrowDownLineArrows.svelte";
+  import ArrowUpLineArrows from "svelte-remix/ArrowUpLineArrows.svelte";
+  import DraftFillDocument from "svelte-remix/DraftFillDocument.svelte";
+  import EarthFillMap from "svelte-remix/EarthFillMap.svelte";
+  import ErrorWarningFillSystem from "svelte-remix/ErrorWarningFillSystem.svelte";
+  import FileEditFillDocument from "svelte-remix/FileEditFillDocument.svelte";
+  import Folder5FillDocument from "svelte-remix/Folder5FillDocument.svelte";
+
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
+
   import LinkButton from "$lib/components/display/link-button.svelte";
   import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
-  import {
-    addIcon,
-    alertIcon,
-    arrowDownLineIcon,
-    arrowUpLineIcon,
-    draftFillIcon,
-    earthFillIcon,
-    errorWarningIcon,
-    fileEditFillIcon,
-    folderFillIcon,
-  } from "$lib/icons";
   import type { Choice, ServiceStatus, ShortService } from "$lib/types";
+
   import Count from "../count.svelte";
   import {
     hasArchivedServices,
@@ -85,26 +86,26 @@
     {
       value: "PUBLISHED",
       label: "Publié",
-      icon: earthFillIcon,
+      icon: EarthFillMap,
       selectedLabel: "Status : Publié",
     },
     {
       value: "DRAFT",
       label: "Brouillon",
-      icon: draftFillIcon,
+      icon: DraftFillDocument,
       selectedLabel: "Status : Brouillon",
     },
     {
       value: "ARCHIVED",
       label: "Archivé",
       selectedLabel: "Status : Archivé",
-      icon: folderFillIcon,
+      icon: Folder5FillDocument,
     },
     {
       value: "SUGGESTION",
       label: "Suggestion",
       selectedLabel: "Status : Suggestion",
-      icon: fileEditFillIcon,
+      icon: FileEditFillDocument,
     },
   ];
 
@@ -115,13 +116,13 @@
       value: "true",
       label: "Actualisation nécessaire",
       selectedLabel: "Actualisation : nécessaire",
-      icon: errorWarningIcon,
+      icon: ErrorWarningFillSystem,
     },
     {
       value: "false",
       label: "Actualisation non nécessaire",
       selectedLabel: "Actualisation : non nécessaire",
-      icon: alertIcon,
+      icon: AlertFillSystem,
     },
   ];
 
@@ -132,14 +133,14 @@
       value: "modificationDateDesc",
       label: "Trier par ordre décroissant",
       selectedLabel: "Tri : Par date d’actualisation",
-      icon: arrowUpLineIcon,
+      icon: ArrowUpLineArrows,
       iconOnRight: true,
     },
     {
       value: "modificationDateAsc",
       label: "Trier par ordre croissant",
       selectedLabel: "Tri : Par date d’actualisation",
-      icon: arrowDownLineIcon,
+      icon: ArrowDownLineArrows,
       iconOnRight: true,
     },
   ];
@@ -234,7 +235,7 @@
     {#if structure.canEditServices}
       <LinkButton
         label="Ajouter un service"
-        icon={addIcon}
+        icon={AddFillSystem}
         to="/services/creer?structure={structure.slug}"
       />
     {/if}

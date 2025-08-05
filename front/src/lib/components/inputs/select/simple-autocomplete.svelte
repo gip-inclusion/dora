@@ -5,11 +5,14 @@
 <script lang="ts">
   // TODO: lint this file properly
   /* eslint-disable */
+  import { onMount, type Snippet } from "svelte";
+
+  import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
+  import CloseCircleFillSystem from "svelte-remix/CloseCircleFillSystem.svelte";
+
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
-  import { checkIcon, closeCircleIcon } from "$lib/icons";
   import { clickOutside } from "$lib/utils/misc";
   import { formatErrors } from "$lib/validation/validation";
-  import { onMount, type Snippet } from "svelte";
 
   // --- Internal State ----
   const uniqueId = `sautocomplete-${Math.floor(Math.random() * 1000)}`;
@@ -846,7 +849,7 @@
                 {#if !multiple}
                   <div class="checkmark invisible grow-0">
                     <div class="ml-s8 h-s16 w-s24 fill-current">
-                      {@html checkIcon}
+                      <CheckLineSystem class="w-s24 h-s16" />
                     </div>
                   </div>
                 {/if}
@@ -893,7 +896,7 @@
               unselectItem(tagItem);
             }}
           >
-            {@html closeCircleIcon}
+            <CloseCircleFillSystem />
           </button>
         {/if}
       </div>

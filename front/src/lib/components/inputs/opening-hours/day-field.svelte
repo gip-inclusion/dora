@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { alertIcon } from "$lib/icons";
+  import AlertFillSystem from "svelte-remix/AlertFillSystem.svelte";
+
   import type { Day, DayPeriod } from "$lib/types";
   import Toggle from "./toggle.svelte";
 
@@ -109,7 +110,7 @@
     class="mt-s4 text-f12 text-error flex items-center"
   >
     <span class="mr-s4 h-s16 w-s16 fill-current">
-      {@html alertIcon}
+      <AlertFillSystem class="w-s16 h-s16" />
     </span>
     <span>Horaire incomplet ou incohérent.</span>
   </div>

@@ -1,10 +1,15 @@
 <script lang="ts">
+  import UserLineUserFaces from "svelte-remix/UserLineUserFaces.svelte";
+  import User2LineUserFaces from "svelte-remix/User2LineUserFaces.svelte";
+  import Settings4LineSystem from "svelte-remix/Settings4LineSystem.svelte";
+  import Forbid2LineSystem from "svelte-remix/Forbid2LineSystem.svelte";
+
   import { goto } from "$app/navigation";
   import Button from "$lib/components/display/button.svelte";
   import Label from "$lib/components/display/label.svelte";
-  import { userIcon, user2Icon, settingsIcon, forbidIcon } from "$lib/icons";
   import { deleteMember } from "$lib/requests/structures";
   import { refreshUserInfo } from "$lib/utils/auth";
+
   import Member from "./member.svelte";
   import ModalChangeUser from "./modal-change-user.svelte";
 
@@ -26,7 +31,9 @@
 
   let modalChangeUserIsOpen = $state(false);
   let userLevel = $derived(member.isAdmin ? "Admin" : "Utilisateur");
-  let userLevelIcon = $derived(member.isAdmin ? user2Icon : userIcon);
+  let userLevelIcon = $derived(
+    member.isAdmin ? User2LineUserFaces : UserLineUserFaces
+  );
 
   async function handleDelete() {
     const confirmText = isMyself
@@ -63,7 +70,7 @@
             modalChangeUserIsOpen = true;
             onCloseParent();
           }}
-          icon={settingsIcon}
+          icon={Settings4LineSystem}
           iconOnRight
           small
           noBackground
@@ -75,7 +82,7 @@
             handleDelete();
             onCloseParent();
           }}
-          icon={forbidIcon}
+          icon={Forbid2LineSystem}
           iconOnRight
           small
           noBackground

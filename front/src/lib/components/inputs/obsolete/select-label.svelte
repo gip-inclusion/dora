@@ -22,7 +22,7 @@
 >
   {#if choice.icon && showIcon && !choice.iconOnRight}
     <span class="mr-s4 h-s24 w-s24 shrink-0 fill-current">
-      {@html choice.icon}
+      <choice.icon />
     </span>
   {/if}
 
@@ -30,7 +30,7 @@
 
   {#if choice.icon && showIcon && choice.iconOnRight}
     <span class="mr-s4 h-s24 w-s24 shrink-0 fill-current">
-      {@html choice.icon}
+      <choice.icon />
     </span>
   {/if}
 </span>

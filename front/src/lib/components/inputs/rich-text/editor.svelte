@@ -1,19 +1,21 @@
 <script lang="ts">
-  import {
-    boldIcon,
-    h1Icon,
-    h2Icon,
-    italicIcon,
-    liIcon,
-    linkIcon,
-    paraIcon,
-  } from "$lib/icons";
-  import { htmlToMarkdown, markdownToHTML } from "$lib/utils/misc";
+  import { onDestroy, onMount, tick } from "svelte";
+
+  import BoldEditor from "svelte-remix/BoldEditor.svelte";
+  import H1Editor from "svelte-remix/H1Editor.svelte";
+  import H2Editor from "svelte-remix/H2Editor.svelte";
+  import ItalicEditor from "svelte-remix/ItalicEditor.svelte";
+  import ListUnorderedEditor from "svelte-remix/ListUnorderedEditor.svelte";
+  import LinkEditor from "svelte-remix/LinkEditor.svelte";
+  import ParagraphEditor from "svelte-remix/ParagraphEditor.svelte";
+
   import { Editor } from "@tiptap/core";
   import Link from "@tiptap/extension-link";
   import Placeholder from "@tiptap/extension-placeholder";
   import StarterKit from "@tiptap/starter-kit";
-  import { onDestroy, onMount, tick } from "svelte";
+
+  import { htmlToMarkdown, markdownToHTML } from "$lib/utils/misc";
+
   import Button from "./button.svelte";
   import Separator from "./separator.svelte";
 
@@ -168,14 +170,14 @@
       <Button
         onclick={() => editor.chain().focus().toggleBold().run()}
         active={editor.isActive("bold")}
-        icon={boldIcon}
+        icon={BoldEditor}
         label="Gras"
       />
 
       <Button
         onclick={() => editor.chain().focus().toggleItalic().run()}
         active={editor.isActive("italic")}
-        icon={italicIcon}
+        icon={ItalicEditor}
         label="Italique"
       />
 
@@ -184,21 +186,21 @@
       <Button
         onclick={() => editor.chain().focus().setParagraph().run()}
         active={editor.isActive("paragraph")}
-        icon={paraIcon}
+        icon={ParagraphEditor}
         label="Paragraphe"
       />
 
       <Button
         onclick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         active={editor.isActive("heading", { level: 1 })}
-        icon={h1Icon}
+        icon={H1Editor}
         label="Titre de niveau 1"
       />
 
       <Button
         onclick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         active={editor.isActive("heading", { level: 2 })}
-        icon={h2Icon}
+        icon={H2Editor}
         label="Titre de niveau 2"
       />
 
@@ -207,7 +209,7 @@
       <Button
         onclick={() => editor.chain().focus().toggleBulletList().run()}
         active={editor.isActive("bulletList")}
-        icon={liIcon}
+        icon={ListUnorderedEditor}
         label="Liste à puces"
       />
 
@@ -216,7 +218,7 @@
       <Button
         onclick={linkDialogToggle}
         active={editor.isActive("link")}
-        icon={linkIcon}
+        icon={LinkEditor}
         label="Lien"
       />
     </div>

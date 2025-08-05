@@ -11,7 +11,7 @@
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import { orientationStep1Schema } from "./schema";
   import { goto } from "$app/navigation";
-  import { arrowLeftLineIcon } from "$lib/icons";
+  import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import { onMount, setContext } from "svelte";
   import { token } from "$lib/utils/auth";
   import Teaser from "./teaser.svelte";
@@ -117,7 +117,7 @@
     </Layout>
     <StickyFormSubmissionRow justifyBetween>
       <LinkButton
-        icon={arrowLeftLineIcon}
+        icon={ArrowLeftSLineArrows}
         to="/services/{isDI ? 'di--' : ''}{service.slug}"
         label="Retour à la fiche"
         secondary

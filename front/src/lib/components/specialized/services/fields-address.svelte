@@ -4,7 +4,7 @@
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import CitySearchField from "$lib/components/forms/fields/city-search-field.svelte";
   import HiddenField from "$lib/components/forms/fields/hidden-field.svelte";
-  import { syncIcon } from "$lib/icons";
+  import SyncIcon from "$lib/assets/icons/ico-sync.svelte";
   import type { GeoApiValue, Service, Structure } from "$lib/types";
   import { randomId } from "$lib/utils/random";
 
@@ -64,7 +64,7 @@
       <div class="mb-s8 lg:w-2/3 lg:self-end">
         <Button
           onclick={fillAddress}
-          icon={syncIcon}
+          icon={SyncIcon}
           noBackground
           small
           noPadding

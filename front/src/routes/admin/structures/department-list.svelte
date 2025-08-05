@@ -1,7 +1,8 @@
 <script lang="ts">
+  import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
+
   import ButtonMenu from "$lib/components/display/button-menu.svelte";
   import Button from "$lib/components/display/button.svelte";
-  import { arrowDownSIcon } from "$lib/icons";
 
   interface Props {
     // on pourrait affiner les types, mais ça alourdirait de beaucoup
@@ -15,7 +16,7 @@
 
 <ButtonMenu
   label="{selectedDepartment.name} ({selectedDepartment.code})"
-  icon={arrowDownSIcon}
+  icon={ArrowDownSLineArrows}
   iconOnRight
   big
   noPadding

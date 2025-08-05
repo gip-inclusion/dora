@@ -1,12 +1,14 @@
 <script lang="ts">
+  import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
+
   import {
     currentFormData,
     currentSchema,
     isRequired,
   } from "$lib/validation/validation";
-  import FieldWrapper from "../field-wrapper.svelte";
-  import { addIcon } from "$lib/icons";
   import type { CustomChoice, CustomizableFK } from "$lib/types";
+
+  import FieldWrapper from "../field-wrapper.svelte";
   import Button from "../../display/button.svelte";
   import Select from "../../inputs/select/select.svelte";
 
@@ -105,7 +107,7 @@
           <div class:hidden={textInputVisible}>
             <Button
               label={addButtonLabel || "Ajouter une autre option"}
-              icon={addIcon}
+              icon={AddFillSystem}
               noBackground
               small
               onclick={() => (textInputVisible = true)}

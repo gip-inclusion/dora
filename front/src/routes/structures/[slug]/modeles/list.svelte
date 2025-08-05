@@ -1,7 +1,9 @@
 <script lang="ts">
+  import FileCopyLineDocument from "svelte-remix/FileCopyLineDocument.svelte";
+
   import LinkButton from "$lib/components/display/link-button.svelte";
+
   import ModelCard from "./model-card.svelte";
-  import { copyIcon } from "$lib/icons";
   import Count from "../count.svelte";
   import NoModelNotice from "./no-model-notice.svelte";
 
@@ -77,7 +79,7 @@
     {#if structure.canEditServices}
       <LinkButton
         label="Ajouter un modèle"
-        icon={copyIcon}
+        icon={FileCopyLineDocument}
         to="/modeles/creer?structure={structure.slug}"
       />
     {/if}

@@ -1,7 +1,9 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+  import ArrowDownSIcon from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSIcon from "svelte-remix/ArrowUpSLineArrows.svelte";
+
   import { randomId } from "$lib/utils/random";
 
   interface Props {
@@ -53,9 +55,9 @@
 
     <span class="ml-s10 h-s24 w-s24 text-magenta-cta fill-current print:hidden">
       {#if expanded}
-        {@html arrowUpSIcon}
+        <ArrowUpSIcon />
       {:else}
-        {@html arrowDownSIcon}
+        <ArrowDownSIcon />
       {/if}
     </span>
   </button>

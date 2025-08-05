@@ -1,6 +1,7 @@
 <script lang="ts">
+  import PinDistanceFillMap from "svelte-remix/PinDistanceFillMap.svelte";
+
   import Select from "$lib/components/inputs/select/select.svelte";
-  import { pinDistanceIcon } from "$lib/icons";
   import type { Choice, GeoApiValue } from "$lib/types";
   import { getApiURL } from "$lib/utils/api";
   import { fetchData, getDepartmentFromCityCode } from "$lib/utils/misc";
@@ -114,7 +115,7 @@
         onclick={handleClickSearchCityFromLocation}
       >
         <span class="mr-s8 h-s24 w-s24 fill-current">
-          {@html pinDistanceIcon}
+          <PinDistanceFillMap />
         </span>
 
         {geolocLabel}

@@ -1,30 +1,34 @@
 <script lang="ts" module>
+  import type { Component } from "svelte";
+
   export type TabItem = {
     id: string;
     name: string;
-    icon: string;
+    icon: Component;
     href: string;
   };
 </script>
 
 <script lang="ts">
+  import BookReadLineDocument from "svelte-remix/BookReadLineDocument.svelte";
+  import FileInfoLineDocument from "svelte-remix/FileInfoLineDocument.svelte";
   import HomeSmileLineBuildings from "svelte-remix/HomeSmileLineBuildings.svelte";
+  import HomeSmile2LineBuildings from "svelte-remix/HomeSmile2LineBuildings.svelte";
+  import MapPin2LineMap from "svelte-remix/MapPin2LineMap.svelte";
+  import PagesLineDocument from "svelte-remix/PagesLineDocument.svelte";
+  import TeamLineUserFaces from "svelte-remix/TeamLineUserFaces.svelte";
+
   import { page } from "$app/stores";
+
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Label from "$lib/components/display/label.svelte";
-  import TabsLink from "./tabs-links.svelte";
-  import {
-    bookReadLineIcon,
-    fileInfoLineIcon,
-    homeSmile2Icon,
-    mapPinIcon,
-    pageLineIcon,
-    teamLineIcon,
-  } from "$lib/icons";
+  import type { Structure } from "$lib/types";
   import { capitalize } from "$lib/utils/misc";
+
+  import TabsLink from "./tabs-links.svelte";
+
   import AdminNotice from "./admin-notice.svelte";
   import PendingNotice from "./pending-notice.svelte";
-  import type { Structure } from "$lib/types";
 
   interface Props {
     structure: Structure;
@@ -37,7 +41,7 @@
       {
         id: "informations",
         name: "Informations",
-        icon: fileInfoLineIcon,
+        icon: FileInfoLineDocument,
         href: `/structures/${structure.slug}`,
       },
     ];
@@ -46,14 +50,14 @@
       tabList.push({
         id: "collaborateurs",
         name: "Collaborateurs",
-        icon: teamLineIcon,
+        icon: TeamLineUserFaces,
         href: `/structures/${structure.slug}/collaborateurs`,
       });
     }
     tabList.push({
       id: "services",
       name: "Services",
-      icon: pageLineIcon,
+      icon: PagesLineDocument,
       href: `/structures/${structure.slug}/services`,
     });
 
@@ -61,7 +65,7 @@
       tabList.push({
         id: "modeles",
         name: "Modèles",
-        icon: bookReadLineIcon,
+        icon: BookReadLineDocument,
         href: `/structures/${structure.slug}/modeles`,
       });
     }
@@ -70,7 +74,7 @@
       tabList.push({
         id: "antennes",
         name: "Antennes",
-        icon: homeSmile2Icon,
+        icon: HomeSmile2LineBuildings,
         href: `/structures/${structure.slug}/antennes`,
       });
     }
@@ -117,7 +121,7 @@
       label={`${structure.address1}${
         structure.address2 ? `, ${structure.address2}` : ""
       }, ${structure.postalCode} ${structure.city}`}
-      icon={mapPinIcon}
+      icon={MapPin2LineMap}
       smallIcon
     />
   </div>

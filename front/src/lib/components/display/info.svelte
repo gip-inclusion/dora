@@ -1,15 +1,17 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
+  import type { Component, Snippet } from "svelte";
+
+  import EmotionHappyFillUserFaces from "svelte-remix/EmotionHappyFillUserFaces.svelte";
+  import ErrorWarningFillSystem from "svelte-remix/ErrorWarningFillSystem.svelte";
 
   import Label from "$lib/components/display/label.svelte";
-  import { emotionHappyIcon, errorWarningIcon } from "$lib/icons";
 
   interface Props {
     label?: string;
     positiveMood?: boolean;
     negativeMood?: boolean;
     info?: boolean;
-    icon?: string;
+    icon?: Component;
     whiteBg?: boolean;
     leftBorder?: boolean;
     children?: Snippet;
@@ -25,8 +27,9 @@
     leftBorder = false,
     children,
   }: Props = $props();
+
   if (!icon && (positiveMood || negativeMood)) {
-    icon = positiveMood ? emotionHappyIcon : errorWarningIcon;
+    icon = positiveMood ? EmotionHappyFillUserFaces : ErrorWarningFillSystem;
   }
 </script>
 

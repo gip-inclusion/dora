@@ -1,12 +1,16 @@
 <script lang="ts">
+  import EyeLineSystem from "svelte-remix/EyeLineSystem.svelte";
+  import More2FillSystem from "svelte-remix/More2FillSystem.svelte";
+  import PhoneLineDevice from "svelte-remix/PhoneLineDevice.svelte";
+
   import ButtonMenu from "$lib/components/display/button-menu.svelte";
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { eyeIcon, moreIcon, phoneLineIcon } from "$lib/icons";
   import { modifyStructure } from "$lib/requests/structures";
   import type { AdminShortStructure } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
   import { capitalize, shortenString } from "$lib/utils/misc";
+
   import StructureModal from "./structure-modal.svelte";
 
   interface Props {
@@ -66,7 +70,7 @@
       {#if $userInfo.isStaff}
         <LinkButton
           to="/admin/structures/{structure.slug}"
-          icon={eyeIcon}
+          icon={EyeLineSystem}
           noBackground
           otherTab
         />
@@ -76,12 +80,12 @@
           currentStructure = structure;
           isStructureModalOpen = true;
         }}
-        icon={phoneLineIcon}
+        icon={PhoneLineDevice}
         noBackground
       />
 
       <ButtonMenu
-        icon={moreIcon}
+        icon={More2FillSystem}
         small
         hideLabel
         label="Actions disponibles sur la structure"

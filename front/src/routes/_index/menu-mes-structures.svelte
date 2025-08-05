@@ -1,13 +1,12 @@
 <script lang="ts">
+  import AddCircleLineSystem from "svelte-remix/AddCircleLineSystem.svelte";
+  import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
+  import HomeSmile2LineBuildings from "svelte-remix/HomeSmile2LineBuildings.svelte";
+  import SearchLineSystem from "svelte-remix/SearchLineSystem.svelte";
+
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
 
   import type { ShortStructure } from "$lib/types";
-  import {
-    addCircleLineIcon,
-    checkIcon,
-    homeSmile2Icon,
-    searchIcon,
-  } from "$lib/icons";
 
   interface Props {
     structures?: ShortStructure[];
@@ -42,7 +41,7 @@
             <span
               class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
             >
-              {@html homeSmile2Icon}
+              <HomeSmile2LineBuildings />
             </span>
             {#if lastVisitedStructure}
               <a
@@ -71,7 +70,7 @@
             <span
               class="right-s8 h-s24 w-s24 text-gray-03 absolute top-[11px] z-40 inline-block fill-current"
             >
-              {@html searchIcon}
+              <SearchLineSystem />
             </span>
           </div>
         {/if}
@@ -91,7 +90,7 @@
                     <span
                       class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
                     >
-                      {@html checkIcon}
+                      <CheckLineSystem />
                     </span>
                   {/if}
                 </a>
@@ -107,7 +106,7 @@
               href="/auth/rattachement"
             >
               <span class="mr-s10 h-s24 w-s24 fill-current">
-                {@html addCircleLineIcon}
+                <AddCircleLineSystem />
               </span>
               <span>Adhérer à une autre structure </span>
             </a>

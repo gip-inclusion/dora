@@ -1,17 +1,17 @@
 <script lang="ts">
-  import {
-    addCircleIcon,
-    errorWarningIcon,
-    euroLineIcon,
-    informationIcon,
-    mapPinUserFillIcon,
-    timeLineIcon,
-  } from "$lib/icons";
+  import AddCircleFillSystem from "svelte-remix/AddCircleFillSystem.svelte";
+  import ErrorWarningFillSystem from "svelte-remix/ErrorWarningFillSystem.svelte";
+  import MoneyEuroCircleLineFinance from "svelte-remix/MoneyEuroCircleLineFinance.svelte";
+  import InformationFillSystem from "svelte-remix/InformationFillSystem.svelte";
+  import MapPinUserFillMap from "svelte-remix/MapPinUserFillMap.svelte";
+  import TimeLineSystem from "svelte-remix/TimeLineSystem.svelte";
+
   import type { Service, ServicesOptions, ShortService } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
   import { isValidformatOsmHours } from "$lib/utils/opening-hours";
   import { isNotFreeService } from "$lib/utils/service";
+
   import OsmHours from "../../osm-hours.svelte";
 
   interface Props {
@@ -32,14 +32,14 @@
     {#if service.isCumulative}
       <div class="bold text-available flex items-center font-bold">
         <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
-          {@html addCircleIcon}
+          <AddCircleFillSystem />
         </span>
         Ce service est cumulable avec d’autres dispositifs
       </div>
     {:else}
       <div class="bold text-error flex items-center font-bold">
         <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
-          {@html errorWarningIcon}
+          <ErrorWarningFillSystem />
         </span>
         Ce service n’est pas cumulable avec d’autres dispositifs
       </div>
@@ -49,7 +49,7 @@
   {#if service.feeCondition && isNotFreeService(service.feeCondition)}
     <div class="bold text-error flex items-center font-bold">
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
-        {@html errorWarningIcon}
+        <ErrorWarningFillSystem />
       </span>
       Frais à charge du bénéficiaire
     </div>
@@ -58,7 +58,7 @@
   {#if service.qpvOrZrr}
     <div class="bold text-info flex items-center font-bold">
       <span class="mr-s8 h-s24 w-s24 min-w-[24px] fill-current">
-        {@html informationIcon}
+        <InformationFillSystem />
       </span>
       Uniquement QPV ou ZRR
     </div>
@@ -72,7 +72,7 @@
     <div>
       <h3>
         <span class="mr-s8 h-s24 w-s24 fill-current">
-          {@html euroLineIcon}
+          <MoneyEuroCircleLineFinance />
         </span>
         Frais à charge
       </h3>
@@ -91,7 +91,7 @@
     <div>
       <h3>
         <span class="mr-s8 h-s24 w-s24 fill-current">
-          {@html timeLineIcon}
+          <TimeLineSystem />
         </span>
         Fréquence et horaires
       </h3>
@@ -108,7 +108,7 @@
   <div>
     <h3>
       <span class="mr-s8 h-s24 w-s24 fill-current">
-        {@html mapPinUserFillIcon}
+        <MapPinUserFillMap />
       </span>
       Accueil
     </h3>

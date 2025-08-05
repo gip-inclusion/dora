@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { deleteBinIcon } from "$lib/icons";
+  import DeleteBinLineSystem from "svelte-remix/DeleteBinLineSystem.svelte";
+
   import { getApiURL } from "$lib/utils/api";
   import { shortenString } from "$lib/utils/misc";
+
   import Alert from "../display/alert.svelte";
 
   interface Props {
@@ -157,7 +159,7 @@
           onclick={() => handleRemove(uploaded)}
           class="ml-s16 h-s24 w-s24 fill-error"
         >
-          {@html deleteBinIcon}
+          <DeleteBinLineSystem />
         </button>
       </div>
     </li>
