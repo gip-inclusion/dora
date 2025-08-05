@@ -31,7 +31,6 @@ class OrientationSerializer(serializers.ModelSerializer):
     prescriber_structure = serializers.SerializerMethodField()
     prescriber = serializers.SerializerMethodField()
     beneficiary_attachments_details = serializers.SerializerMethodField()
-    beneficiary_france_travail_number = serializers.SerializerMethodField()
 
     class Meta:
         model = Orientation
@@ -178,9 +177,12 @@ class OrientationSerializer(serializers.ModelSerializer):
             for a in orientation.beneficiary_attachments
         ]
 
-    def get_beneficiary_france_travail_number(self, orientation):
-        return (
-            orientation.beneficiary_france_travail_number
-            if orientation.status == "VALIDÉE"
-            else ""
-        )
+    def to_representation(self, instance):
+        """Contrôle la représentation des champs en lecture."""
+        data = super().to_representation(instance)
+
+        # Le numéro France Travail n'est retourné que si l'orientation est validée
+        if instance.status != "VALIDÉE":
+            data["beneficiary_france_travail_number"] = ""
+
+        return data
