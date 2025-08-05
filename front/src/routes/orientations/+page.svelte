@@ -282,7 +282,7 @@
                         />
                       {/if}
 
-                      {#if orientation.referentPhone && orientation.referentEmail === orientation.prescriber.email}
+                      {#if orientation.referentPhone && orientation.referentEmail === orientation.prescriber?.email}
                         <ContactListItem
                           icon={phoneLineIcon}
                           text={formatPhoneNumber(orientation.referentPhone)}
@@ -292,7 +292,7 @@
                   </div>
                 </div>
 
-                {#if orientation.referentEmail !== orientation.prescriber.email}
+                {#if orientation.referentEmail !== orientation.prescriber?.email}
                   <hr class="border-gray-02 border" />
                   <div>
                     <SubTitle
