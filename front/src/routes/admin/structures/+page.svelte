@@ -76,11 +76,15 @@
 
   async function handleStructuresRefresh() {
     structures = filterIgnoredStructures(
-      await getStructuresAdmin(selectedDepartment.code)
+      await getStructuresAdmin(selectedDepartment?.code)
     );
   }
 
   function handleClick() {
+    if (!selectedDepartment) {
+      return;
+    }
+
     const sheetData = filteredStructures.map((structure) => {
       let status = "";
       if (isObsolete(structure)) {
@@ -140,7 +144,7 @@
     );
   }
 
-  if (data.isManager) {
+  if (data.isManager && data.department) {
     handleDepartmentChange(data.department);
   }
 </script>
