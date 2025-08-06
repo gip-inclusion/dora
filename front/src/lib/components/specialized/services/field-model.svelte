@@ -2,6 +2,7 @@
   import type { Snippet } from "svelte";
 
   import Button from "$lib/components/display/button.svelte";
+  import MarkdownRenderer from "$lib/components/display/markdown-renderer.svelte";
   import Tag from "$lib/components/display/tag.svelte";
   import {
     arraysCompare,
@@ -134,7 +135,7 @@
               {/each}
             </div>
           {:else if type === "markdown"}
-            {@html markdownToHTML(value, 2)}
+            <MarkdownRenderer content={value} titleLevel={2} />
           {:else if type === "boolean"}
             <p class="mb-s0 text-f14">{value === true ? "Oui" : "Non"}</p>
           {:else if type === "text"}
