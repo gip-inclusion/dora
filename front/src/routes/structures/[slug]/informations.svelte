@@ -1,16 +1,18 @@
 <script lang="ts">
+  import ComputerLineDevice from "svelte-remix/ComputerLineDevice.svelte";
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
+  import MailSendLineBusiness from "svelte-remix/MailSendLineBusiness.svelte";
+  import PhoneLineDevice from "svelte-remix/PhoneLineDevice.svelte";
+  import TimeLineSystem from "svelte-remix/TimeLineSystem.svelte";
+  import WheelchairLineOthers from "svelte-remix/WheelchairLineOthers.svelte";
+
+  import { page } from "$app/stores";
+
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import DateLabel from "$lib/components/display/date-label.svelte";
   import TextClamp from "$lib/components/display/text-clamp.svelte";
-  import {
-    computerIcon,
-    externalLinkIcon,
-    mailSendLineIcon,
-    phoneLineIcon,
-    timeLineIcon,
-    wheelChairIcon,
-  } from "$lib/icons";
+  import OsmHours from "$lib/components/specialized/osm-hours.svelte";
   import type {
     StructureMember,
     Structure,
@@ -18,11 +20,10 @@
     PutativeStructureMember,
   } from "$lib/types";
   import { formatPhoneNumber, markdownToHTML } from "$lib/utils/misc";
+  import { trackStructureInfos } from "$lib/utils/stats";
+
   import DataInclusionNotice from "./data-inclusion-notice.svelte";
   import QuickStart from "./quick-start.svelte";
-  import OsmHours from "$lib/components/specialized/osm-hours.svelte";
-  import { page } from "$app/stores";
-  import { trackStructureInfos } from "$lib/utils/stats";
   import ServicesToUpdateNotice from "./services/services-to-update-notice.svelte";
 
   interface Props {
@@ -164,7 +165,7 @@
             <div>
               <h4 class="mb-s8 flex items-center">
                 <span class="mr-s8 h-s24 w-s24 fill-current">
-                  {@html phoneLineIcon}
+                  <PhoneLineDevice />
                 </span>
                 Téléphone
               </h4>
@@ -179,7 +180,7 @@
             <div>
               <h4 class="mb-s8 flex items-center">
                 <span class="mr-s8 h-s24 w-s24 fill-current">
-                  {@html mailSendLineIcon}
+                  <MailSendLineBusiness />
                 </span>
                 E-mail
               </h4>
@@ -194,7 +195,7 @@
             <div>
               <h4 class="mb-s8 flex items-center">
                 <span class="mr-s8 h-s24 w-s24 fill-current">
-                  {@html computerIcon}
+                  <ComputerLineDevice />
                 </span>
                 Site web
               </h4>
@@ -215,7 +216,7 @@
             <div>
               <h4 class="mb-s8 flex items-center">
                 <span class="mr-s8 h-s24 w-s24 fill-current">
-                  {@html timeLineIcon}
+                  <TimeLineSystem />
                 </span>
                 Horaires
               </h4>
@@ -235,7 +236,7 @@
             <div>
               <h4 class="mb-s8 flex items-center">
                 <span class="mr-s8 h-s24 w-s24 fill-current">
-                  {@html wheelChairIcon}
+                  <WheelchairLineOthers />
                 </span>
                 Accessibilité
               </h4>
@@ -249,7 +250,7 @@
                 Retrouvez toutes les infos via ce lien<span
                   class="mb-s2 ml-s8 h-s16 w-s16 inline-block justify-end fill-current align-sub"
                 >
-                  {@html externalLinkIcon}
+                  <ExternalLinkLineSystem size="16" />
                 </span>
               </a>
             </div>

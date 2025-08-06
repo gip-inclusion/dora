@@ -1,6 +1,7 @@
 <script lang="ts">
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
+
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { externalLinkIcon } from "$lib/icons";
 
   interface Props {
     url: string;
@@ -27,7 +28,7 @@
     id="mtm-bloc-mes-aides-page-service"
     to={urlWithTrackingParams}
     label="Faire une demande"
-    icon={externalLinkIcon}
+    icon={ExternalLinkLineSystem}
     iconOnRight
     otherTab
     wFull

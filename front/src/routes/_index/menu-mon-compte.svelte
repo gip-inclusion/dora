@@ -1,14 +1,12 @@
 <script lang="ts">
+  import AccountCircleLineUserFaces from "svelte-remix/AccountCircleLineUserFaces.svelte";
   import BookmarkLineBusiness from "svelte-remix/BookmarkLineBusiness.svelte";
+  import LogoutBoxLineSystem from "svelte-remix/LogoutBoxLineSystem.svelte";
+  import Notification3LineMedia from "svelte-remix/Notification3LineMedia.svelte";
 
   import { page } from "$app/stores";
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
   import { OIDC_AUTH_BACKEND } from "$lib/env";
-  import {
-    accountCircleLineIcon,
-    logoutBoxLineIcon,
-    notificationIcon,
-  } from "$lib/icons";
 
   interface Props {
     mobileDesign?: boolean;
@@ -27,7 +25,7 @@
       class:text-magenta-cta={$page.url.pathname === "/mon-compte"}
       aria-hidden="true"
     >
-      {@html accountCircleLineIcon}
+      <AccountCircleLineUserFaces />
     </span>
     Mes informations
   </a>
@@ -49,7 +47,7 @@
       class:text-magenta-cta={$page.url.pathname === "/mes-alertes"}
       aria-hidden="true"
     >
-      {@html notificationIcon}
+      <Notification3LineMedia />
     </span>Mes alertes
   </a>
 
@@ -61,7 +59,7 @@
         class="mr-s10 h-s24 w-s24 inline-block fill-current"
         aria-hidden="true"
       >
-        {@html logoutBoxLineIcon}
+        <LogoutBoxLineSystem />
       </span>
       Déconnexion
     </a>
@@ -71,7 +69,7 @@
         class="mr-s10 h-s24 w-s24 inline-block fill-current"
         aria-hidden="true"
       >
-        {@html logoutBoxLineIcon}
+        <LogoutBoxLineSystem />
       </span>
       Déconnexion
     </a>

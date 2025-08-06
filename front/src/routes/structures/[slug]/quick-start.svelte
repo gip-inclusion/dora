@@ -1,22 +1,21 @@
 <script lang="ts">
+  import CheckboxCircleFillSystem from "svelte-remix/CheckboxCircleFillSystem.svelte";
+  import CheckboxBlankCircleLineSystem from "svelte-remix/CheckboxBlankCircleLineSystem.svelte";
+  import CloseFillSystem from "svelte-remix/CloseFillSystem.svelte";
+
   import Button from "$lib/components/display/button.svelte";
-  import {
-    checkboxCircleFillIcon,
-    checkboxBlankCircle,
-    closeIcon,
-  } from "$lib/icons";
-  import {
-    isStructureInformationsComplete,
-    hasAtLeastOneServiceNotArchived,
-    hasAtLeastTwoMembersOrInvitedMembers,
-  } from "./quick-start";
+  import { modifyStructure } from "$lib/requests/structures";
   import type {
     Structure,
     StructureMember,
     PutativeStructureMember,
   } from "$lib/types";
-  import { modifyStructure } from "$lib/requests/structures";
 
+  import {
+    isStructureInformationsComplete,
+    hasAtLeastOneServiceNotArchived,
+    hasAtLeastTwoMembersOrInvitedMembers,
+  } from "./quick-start";
   interface Props {
     structure: Structure;
     members: StructureMember[];
@@ -70,7 +69,7 @@
 
       <button class="flex" onclick={hideQuickStart}>
         <span class="h-s24 w-s24 fill-magenta-cta">
-          {@html closeIcon}
+          <CloseFillSystem />
         </span>
         <span class="sr-only">Masquer le guide</span>
       </button>
@@ -89,7 +88,11 @@
               class:fill-success={complete}
             >
               <span class="mr-s16 h-s24 w-s24">
-                {@html complete ? checkboxCircleFillIcon : checkboxBlankCircle}
+                {#if complete}
+                  <CheckboxCircleFillSystem />
+                {:else}
+                  <CheckboxBlankCircleLineSystem />
+                {/if}
               </span>
               {label}
             </a>

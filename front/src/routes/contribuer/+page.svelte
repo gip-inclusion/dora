@@ -1,13 +1,12 @@
 <script lang="ts">
+  import AddCircleFillSystem from "svelte-remix/AddCircleFillSystem.svelte";
+  import QuillPenLineDesign from "svelte-remix/QuillPenLineDesign.svelte";
+  import TimerFlashLineSystem from "svelte-remix/TimerFlashLineSystem.svelte";
+  import UploadCloud2LineSystem from "svelte-remix/UploadCloud2LineSystem.svelte";
+
   import ContributionPic from "$lib/assets/illustrations/illu-contribution.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import {
-    addCircleIcon,
-    quillPenIcon,
-    timerFlashIcon,
-    uploadCloudIcon,
-  } from "$lib/icons";
 </script>
 
 <CenteredGrid extraClass="bg-linear-to-b from-magenta-10 to-magenta-10/0">
@@ -32,14 +31,14 @@
       <LinkButton
         label="Proposer un service"
         to={"/contribuer/saisie"}
-        icon={addCircleIcon}
+        icon={AddCircleFillSystem}
         iconOnRight
       />
 
       <div class="mb-s48 mt-s48 gap-s20 flex flex-col">
         <div class="flex">
           <div class="icon">
-            {@html timerFlashIcon}
+            <TimerFlashLineSystem />
           </div>
           <div class="paragraph-small">
             <strong
@@ -49,7 +48,7 @@
         </div>
         <div class="flex">
           <div class="icon">
-            {@html quillPenIcon}
+            <QuillPenLineDesign />
           </div>
           <div class="paragraph-small">
             Complétez uniquement les informations que vous possédez sur le
@@ -61,7 +60,7 @@
 
         <div class="flex">
           <div class="icon">
-            {@html uploadCloudIcon}
+            <UploadCloud2LineSystem />
           </div>
           <div class="paragraph-small">
             Les services renseignés sont enregistrés dans la base de données

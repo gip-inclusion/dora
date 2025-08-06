@@ -14,7 +14,7 @@
     METABASE_DASHBOARD_URL,
   } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
-  import { addIcon } from "$lib/icons";
+  import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminShortStructure, GeoApiValue } from "$lib/types";
 
@@ -198,7 +198,7 @@
             <LinkButton
               label="Ajouter une structure"
               to="/admin/structures/creer"
-              icon={addIcon}
+              icon={AddFillSystem}
               extraClass="mb-s12"
             />
             <a

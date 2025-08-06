@@ -1,12 +1,16 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
+  import type { Component, Snippet } from "svelte";
+
+  import ArrowDownSIcon from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSIcon from "svelte-remix/ArrowUpSLineArrows.svelte";
+
   import { afterNavigate } from "$app/navigation";
-  import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
   interface Props {
-    icon?: string;
+    icon?: Component;
     labelText?: string;
     hideLabel?: boolean;
     mobileDesign?: boolean;
@@ -22,7 +26,7 @@
   }
 
   let {
-    icon,
+    icon: Icon,
     labelText,
     hideLabel,
     mobileDesign,
@@ -73,9 +77,9 @@
       {/if}
 
       <span class="flex items-center" class:pl-s12={!label}>
-        {#if icon}
+        {#if Icon}
           <span class="mr-s10 h-s24 w-s24 text-magenta-cta fill-current">
-            {@html icon}
+            <Icon />
           </span>
         {/if}
 
@@ -92,9 +96,9 @@
       <span class="border-gray-03 p-s12 flex" class:border-l={label}>
         <span class="h-s24 w-s24 text-magenta-cta fill-current">
           {#if isOpen}
-            {@html arrowUpSIcon}
+            <ArrowUpSIcon />
           {:else}
-            {@html arrowDownSIcon}
+            <ArrowDownSIcon />
           {/if}
         </span>
       </span>

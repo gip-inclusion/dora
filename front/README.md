@@ -68,5 +68,4 @@ D'autres regroupements pourraient être envisagés, par exemple `services` et `m
 - `validation`: gestion de la validation des formulaires
   - `schema`: les schemas déterminent les règles de validation des differents formulaire, ainsi que certaines valeurs d'affichage par defaut.
 - `env.ts`: gestion des variables d'environnement
-- `icons.ts`: chargement des icones
 - `types.ts`: liste des types typescript partagés.

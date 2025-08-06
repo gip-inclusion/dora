@@ -1,8 +1,11 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
+  import CloseFillSystem from "svelte-remix/CloseFillSystem.svelte";
+  import MenuLineSystem from "svelte-remix/MenuLineSystem.svelte";
+
   import { afterNavigate } from "$app/navigation";
-  import { closeIcon, menuIcon } from "$lib/icons";
+
   interface Props {
     children?: Snippet;
   }
@@ -25,7 +28,7 @@
       aria-controls="hamburger-content"
     >
       <span class="mt-s16 h-s24 w-s24 text-gray-dark inline-block self-end">
-        {@html menuIcon}
+        <MenuLineSystem />
       </span>
     </button>
 
@@ -41,7 +44,7 @@
           >
             Fermer
             <span class="h-s24 w-s24 inline-block fill-current">
-              {@html closeIcon}
+              <CloseFillSystem />
             </span>
           </button>
         </div>

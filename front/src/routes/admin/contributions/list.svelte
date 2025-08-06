@@ -1,7 +1,9 @@
 <script lang="ts">
+  import ArrowRightSLineArrows from "svelte-remix/ArrowRightSLineArrows.svelte";
+  import CloseCircleFillSystem from "svelte-remix/CloseCircleFillSystem.svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
-  import { arrowRightSIcon, closeCircleIcon } from "$lib/icons";
   import {
     acceptServiceSuggestion,
     deleteServiceSuggestion,
@@ -90,7 +92,7 @@
         <Button
           label="Rejeter"
           iconOnRight
-          icon={closeCircleIcon}
+          icon={CloseCircleFillSystem}
           noBackground
           onclick={() => {
             handleReject(suggestion);
@@ -101,7 +103,7 @@
         <Button
           label="Détails"
           iconOnRight
-          icon={arrowRightSIcon}
+          icon={ArrowRightSLineArrows}
           noBackground
           onclick={() => {
             currentSuggestion = suggestion;

@@ -1,6 +1,7 @@
 <script lang="ts">
+  import PhoneLineDevice from "svelte-remix/PhoneLineDevice.svelte";
+
   import type { Service, ShortService } from "$lib/types";
-  import { phoneLineIcon } from "$lib/icons";
   import { formatPhoneNumber } from "$lib/utils/misc";
 
   interface Props {
@@ -22,7 +23,7 @@
       role="img"
       aria-label="Numéro de téléphone"
     >
-      {@html phoneLineIcon}
+      <PhoneLineDevice />
     </span>
     {formatPhoneNumber(service.contactPhone)}
   </a>

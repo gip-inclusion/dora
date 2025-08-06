@@ -7,7 +7,8 @@
   import UpdateNeededIcon from "$lib/components/specialized/services/update-needed-icon.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import { userInfo } from "$lib/utils/auth";
-  import { addCircleIcon, editIcon } from "$lib/icons";
+  import AddCircleFillSystem from "svelte-remix/AddCircleFillSystem.svelte";
+  import Edit2LineDesign from "svelte-remix/Edit2LineDesign.svelte";
   import ServiceBody from "../../components/service-body/service-body.svelte";
 
   interface Props {
@@ -43,13 +44,13 @@
             label="Modifier"
             to="/modeles/{data.model.slug}/editer"
             secondary
-            icon={editIcon}
+            icon={Edit2LineDesign}
           />
         {/if}
 
         {#if $userInfo}
           <LinkButton
-            icon={addCircleIcon}
+            icon={AddCircleFillSystem}
             label="Créer un service"
             to={`/services/creer?modele=${data.model.slug}`}
           />

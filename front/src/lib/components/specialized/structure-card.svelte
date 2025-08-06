@@ -1,8 +1,9 @@
 <script lang="ts">
+  import PagesLineDocument from "svelte-remix/PagesLineDocument.svelte";
+
   import Label from "$lib/components/display/label.svelte";
-  import { pageLineIcon } from "$lib/icons";
-  import { capitalize } from "$lib/utils/misc";
   import type { Structure } from "$lib/types";
+  import { capitalize } from "$lib/utils/misc";
 
   interface Props {
     structure: Structure;
@@ -28,7 +29,7 @@
         class="mr-s8 h-s28 w-s28 bg-service-blue text-service-blue-dark flex items-center justify-center rounded-full"
       >
         <span class="h-s16 w-s16 inline-block fill-current">
-          {@html pageLineIcon}
+          <PagesLineDocument class="w-s16 h-s16" />
         </span>
       </div>
 

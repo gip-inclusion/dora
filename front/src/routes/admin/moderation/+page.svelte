@@ -1,7 +1,7 @@
 <script lang="ts">
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { eyeIcon } from "$lib/icons";
+  import EyeLineSystem from "svelte-remix/EyeLineSystem.svelte";
   import { getStructuresToModerate } from "$lib/requests/admin";
   import { capitalize, shortenString } from "$lib/utils/misc";
   import { onMount } from "svelte";
@@ -140,7 +140,7 @@
               />
               <LinkButton
                 to="/structures/{entity.slug}"
-                icon={eyeIcon}
+                icon={EyeLineSystem}
                 noBackground
                 otherTab
               />
@@ -162,7 +162,7 @@
               <div class="basis-s32 flex-none">
                 <LinkButton
                   to="/services/{entity.slug}"
-                  icon={eyeIcon}
+                  icon={EyeLineSystem}
                   noBackground
                   otherTab
                 />

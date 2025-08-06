@@ -1,3 +1,5 @@
+import type { Component } from "svelte";
+
 export type AdminDivisionType =
   | "country"
   | "region"
@@ -653,7 +655,7 @@ export type Choice<T = string> = {
   value: T;
   label: string;
   selectedLabel?: string;
-  icon?: string;
+  icon?: Component | null;
   iconOnRight?: boolean;
 };
 

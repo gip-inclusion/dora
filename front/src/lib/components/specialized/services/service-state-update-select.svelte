@@ -1,15 +1,17 @@
 <script lang="ts">
   // Source pour l'accessibilité : https://www.w3.org/WAI/ARIA/apg/example-index/combobox/combobox-select-only.html
+  import type { Component } from "svelte";
+
+  import ArrowDownSIcon from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSIcon from "svelte-remix/ArrowUpSLineArrows.svelte";
+  import DeleteBinLineSystem from "svelte-remix/DeleteBinLineSystem.svelte";
+  import DraftFillDocument from "svelte-remix/DraftFillDocument.svelte";
+  import EarthFillMap from "svelte-remix/EarthFillMap.svelte";
+  import FileEditFillDocument from "svelte-remix/FileEditFillDocument.svelte";
+  import Folder5FillDocument from "svelte-remix/Folder5FillDocument.svelte";
+
   import { goto } from "$app/navigation";
-  import {
-    arrowDownSIcon,
-    arrowUpSIcon,
-    deleteBinIcon,
-    draftFillIcon,
-    earthFillIcon,
-    fileEditFillIcon,
-    folderFillIcon,
-  } from "$lib/icons";
+
   import {
     archiveService,
     convertSuggestionToDraft,
@@ -30,7 +32,7 @@
     bgClass: string;
     iconClass: string;
     hoverBgClass: string;
-    icon: string;
+    icon: Component;
     label: string;
   };
 
@@ -42,28 +44,28 @@
       bgClass: "bg-service-violet",
       iconClass: "text-service-violet-darker",
       hoverBgClass: "bg-service-violet-dark",
-      icon: fileEditFillIcon,
+      icon: FileEditFillDocument,
       label: "Suggestion",
     },
     DRAFT: {
       bgClass: "bg-service-orange",
       iconClass: "text-service-orange-darker",
       hoverBgClass: "bg-service-orange-dark",
-      icon: draftFillIcon,
+      icon: DraftFillDocument,
       label: "Brouillon",
     },
     PUBLISHED: {
       bgClass: "bg-service-green",
       iconClass: "text-service-green-darker",
       hoverBgClass: "bg-service-green-dark",
-      icon: earthFillIcon,
+      icon: EarthFillMap,
       label: "Publié",
     },
     ARCHIVED: {
       bgClass: "bg-service-gray",
       iconClass: "text-gray-darker",
       hoverBgClass: "bg-service-gray-dark",
-      icon: folderFillIcon,
+      icon: Folder5FillDocument,
       label: "Archivé",
     },
   };
@@ -233,15 +235,15 @@
     <span
       class="{currentStatusPresentation.iconClass} mr-s8 h-s24 w-s24 fill-current"
     >
-      {@html currentStatusPresentation.icon}
+      <currentStatusPresentation.icon />
     </span>
 
     <span>{currentStatusPresentation.label}</span>
     <span class="ml-s10 h-s24 w-s24 text-magenta-cta fill-current">
       {#if isDropdownOpen}
-        {@html arrowUpSIcon}
+        <ArrowUpSIcon />
       {:else}
-        {@html arrowDownSIcon}
+        <ArrowDownSIcon />
       {/if}
     </span>
   </div>
@@ -272,7 +274,7 @@
           onclick={() => updateServiceStatus(option)}
         >
           <span class="mr-s8 h-s24 w-s24 text-service-red-dark fill-current">
-            {@html deleteBinIcon}
+            <DeleteBinLineSystem />
           </span>
           <span>Supprimer</span>
         </div>
@@ -296,7 +298,7 @@
           onclick={() => updateServiceStatus(option)}
         >
           <span class="{data.iconClass} mr-s8 h-s24 w-s24 fill-current">
-            {@html data.icon}
+            <data.icon />
           </span>
           <span>{data.label}</span>
         </div>

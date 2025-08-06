@@ -1,17 +1,19 @@
 <script lang="ts">
+  import UserAddLineUserFaces from "svelte-remix/UserAddLineUserFaces.svelte";
+
+  import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import { getMembers, getPutativeMembers } from "$lib/requests/structures";
+  import { userInfo } from "$lib/utils/auth";
+
+  import { structure } from "../store";
   import MemberInvited from "./member-invited.svelte";
   import MemberStandard from "./member-standard.svelte";
   import MemberToConfirm from "./member-to-confirm.svelte";
   import ModalAddUser from "./modal-add-user.svelte";
-  import { userAddIcon } from "$lib/icons";
-  import { getMembers, getPutativeMembers } from "$lib/requests/structures";
-  import { userInfo } from "$lib/utils/auth";
-  import { structure } from "../store";
   import type { PageData } from "./$types";
   import NoMemberNotice from "./no-member-notice.svelte";
   import { hasAtLeastTwoMembersOrInvitedMembers } from "../quick-start";
-  import Button from "$lib/components/display/button.svelte";
 
   interface Props {
     data: PageData;
@@ -68,7 +70,7 @@
     {#if canAdd}
       <Button
         label="Ajouter un collaborateur"
-        icon={userAddIcon}
+        icon={UserAddLineUserFaces}
         onclick={() => (modalAddUserIsOpen = true)}
       />
     {/if}

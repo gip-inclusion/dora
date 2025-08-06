@@ -1,6 +1,8 @@
 <script lang="ts">
+  import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
+
   import ButtonMenu from "$lib/components/display/button-menu.svelte";
-  import { arrowDownSIcon } from "$lib/icons";
+
   import ModerationLabel from "./moderation-label.svelte";
   import ModerationMenu from "./moderation-menu.svelte";
 
@@ -17,7 +19,7 @@
       />
     </div>
     <div class="text-gray-02">|</div>
-    <ButtonMenu icon={arrowDownSIcon} small>
+    <ButtonMenu icon={ArrowDownSLineArrows} small>
       {#snippet children({ onClose: onCloseParent })}
         <div class="w-max">
           <ModerationMenu

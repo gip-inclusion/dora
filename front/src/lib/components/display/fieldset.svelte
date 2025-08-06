@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+  import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
+
   import { onMount, type Snippet } from "svelte";
   import Button from "./button.svelte";
   import { randomId } from "$lib/utils/random";
@@ -87,7 +89,7 @@
                 }}
                 label="Aide"
                 onclick={toggleHelp}
-                icon={!showHelp ? arrowDownSIcon : arrowUpSIcon}
+                icon={!showHelp ? ArrowDownSLineArrows : ArrowUpSLineArrows}
                 iconOnRight
                 noBackground
                 small
@@ -97,7 +99,7 @@
             {#if collapsable}
               <Button
                 onclick={toggleFold}
-                icon={collapsed ? arrowDownSIcon : arrowUpSIcon}
+                icon={collapsed ? ArrowDownSLineArrows : ArrowUpSLineArrows}
                 noBackground
                 small
               />

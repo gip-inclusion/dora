@@ -1,12 +1,14 @@
 <script lang="ts">
+  import type { Component } from "svelte";
+
   interface Props {
-    icon: string;
+    icon: Component;
     active: boolean;
     label: string;
     onclick?: (event: MouseEvent) => void;
   }
 
-  let { icon, active, label, onclick }: Props = $props();
+  let { icon: Icon, active, label, onclick }: Props = $props();
 </script>
 
 <button
@@ -16,7 +18,7 @@
   class="tb-button"
   aria-label={label}
 >
-  {@html icon}
+  <Icon />
 </button>
 
 <style lang="postcss">

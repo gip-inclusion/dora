@@ -1,15 +1,16 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
+  import DeleteBack2FillSystem from "svelte-remix/DeleteBack2FillSystem.svelte";
+  import ListCheck2Editor from "svelte-remix/ListCheck2Editor.svelte";
+  import MapPin2LineMap from "svelte-remix/MapPin2LineMap.svelte";
+  import SearchLineSystem from "svelte-remix/SearchLineSystem.svelte";
+
   import { goto } from "$app/navigation";
+
   import Button from "$lib/components/display/button.svelte";
   import SelectField from "$lib/components/inputs/obsolete/select-field.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
-
-  import {
-    deleteBackIcon,
-    listCheckIcon,
-    mapPinIcon,
-    searchIcon,
-  } from "$lib/icons";
   import type {
     Choice,
     FeeCondition,
@@ -25,7 +26,6 @@
     sortSubcategory,
   } from "$lib/utils/service";
   import { getQueryString } from "$lib/utils/service-search";
-  import { onMount } from "svelte";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -185,7 +185,7 @@
           class:has-value={!!cityCode}
         >
           <div class="mr-s8 h-s24 w-s24 text-magenta-cta fill-current">
-            {@html mapPinIcon}
+            <MapPin2LineMap />
           </div>
           <div class="relative w-full">
             <label class="sr-only" for="city">
@@ -214,7 +214,7 @@
                   }}
                 >
                   <span class="h-s24 w-s24 text-gray-text-alt fill-current">
-                    {@html deleteBackIcon}
+                    <DeleteBack2FillSystem />
                   </span>
                   <span class="sr-only">Supprimer la ville sélectionnée</span>
                 </button>
@@ -229,7 +229,7 @@
           <div
             class="mr-s8 h-s24 w-s24 text-magenta-cta self-center fill-current"
           >
-            {@html searchIcon}
+            <SearchLineSystem />
           </div>
 
           <SelectField
@@ -253,7 +253,7 @@
             <div
               class="mr-s8 h-s24 w-s24 text-magenta-cta self-center fill-current"
             >
-              {@html listCheckIcon}
+              <ListCheck2Editor />
             </div>
 
             {#key subCategories}

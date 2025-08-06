@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { externalLinkIcon } from "$lib/icons";
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
 
   interface Props {
     cityLabel: string | null;
@@ -20,7 +20,7 @@
     <a class="full-result-link hover:underline" href={url} target="_blank">
       Annuaire des Collectivités<span
         class="h-s28 w-s28 pl-s6 pt-s8 inline-block fill-current"
-        >{@html externalLinkIcon}</span
+        ><ExternalLinkLineSystem size="28" /></span
       >
     </a>
   </h3>

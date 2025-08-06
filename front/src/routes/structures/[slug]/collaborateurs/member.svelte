@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
+  import More2FillSystem from "svelte-remix/More2FillSystem.svelte";
+
   import ButtonMenu from "$lib/components/display/button-menu.svelte";
-  import { moreIcon } from "$lib/icons";
 
   interface Props {
     member: any;
@@ -45,7 +46,7 @@
       {#if !readOnly}
         <ButtonMenu
           small
-          icon={moreIcon}
+          icon={More2FillSystem}
           hideLabel
           label="Actions disponibles pour l'utilisateur"
         >

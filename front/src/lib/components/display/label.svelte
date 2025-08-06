@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
+  import type { Component, Snippet } from "svelte";
 
   interface Props {
     label?: string;
@@ -10,7 +10,7 @@
     error?: boolean;
     wait?: boolean;
     light?: boolean;
-    icon?: string | null;
+    icon?: Component;
     smallIcon?: boolean;
     truncate?: boolean;
     children?: Snippet;
@@ -25,7 +25,7 @@
     error = false,
     wait = false,
     light = false,
-    icon = null,
+    icon: Icon,
     smallIcon = false,
     truncate = false,
     children,
@@ -42,9 +42,9 @@
   class:wait
   class:light
 >
-  {#if icon}
+  {#if Icon}
     <i class="icon flex-none" class:small-icon={smallIcon} class:mr-s8={label}>
-      {@html icon}
+      <Icon size={16} />
     </i>
   {/if}
 

@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
+  import type { Component, Snippet } from "svelte";
 
   import Button from "$lib/components/display/button.svelte";
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
   interface Props {
-    icon?: string;
+    icon?: Component;
     iconOnRight?: boolean;
     label?: string;
     hideLabel?: boolean;
@@ -20,7 +20,7 @@
   }
 
   let {
-    icon,
+    icon: Icon,
     iconOnRight = false,
     label,
     hideLabel = false,
@@ -44,7 +44,7 @@
 <div {@attach clickOutside(handleClickOutside)}>
   <div class="wrapper relative">
     <Button
-      {icon}
+      icon={Icon}
       {iconOnRight}
       {label}
       noBackground

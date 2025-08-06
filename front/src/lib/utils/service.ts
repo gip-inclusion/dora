@@ -1,22 +1,21 @@
-import {
-  bankIcon,
-  chatQuoteIcon,
-  chatSmileIcon,
-  compassDiscoverIcon,
-  euroLineIcon,
-  graduationCapIcon,
-  homeSmileIcon,
-  macLineIcon,
-  mentalHealthIcon,
-  parentIcon,
-  walkIcon,
-  rocketIcon,
-  serviceIcon,
-  stethoscopeIcon,
-  storeIcon,
-  textIcon,
-  wheelChairIcon,
-} from "$lib/icons";
+import BankLineBuildings from "svelte-remix/BankLineBuildings.svelte";
+import ChatQuoteLineCommunication from "svelte-remix/ChatQuoteLineCommunication.svelte";
+import ChatSmile3LineCommunication from "svelte-remix/ChatSmile3LineCommunication.svelte";
+import CompassDiscoverLineMap from "svelte-remix/CompassDiscoverLineMap.svelte";
+import MoneyEuroCircleLineFinance from "svelte-remix/MoneyEuroCircleLineFinance.svelte";
+import GraduationCapLineOthers from "svelte-remix/GraduationCapLineOthers.svelte";
+import HomeSmileLineBuildings from "svelte-remix/HomeSmileLineBuildings.svelte";
+import MacLineDevice from "svelte-remix/MacLineDevice.svelte";
+import MentalHealthLineHealthMedical from "svelte-remix/MentalHealthLineHealthMedical.svelte";
+import ParentLineUserFaces from "svelte-remix/ParentLineUserFaces.svelte";
+import WalkLineMap from "svelte-remix/WalkLineMap.svelte";
+import Rocket2LineMap from "svelte-remix/Rocket2LineMap.svelte";
+import ServiceLineBusiness from "svelte-remix/ServiceLineBusiness.svelte";
+import StethoscopeLineHealthMedical from "svelte-remix/StethoscopeLineHealthMedical.svelte";
+import Store2LineBuildings from "svelte-remix/Store2LineBuildings.svelte";
+import TextEditor from "svelte-remix/TextEditor.svelte";
+import WheelchairLineOthers from "svelte-remix/WheelchairLineOthers.svelte";
+
 import type {
   Choice,
   FeeCondition,
@@ -25,6 +24,7 @@ import type {
   ServicesOptions,
   ServiceStatus,
 } from "$lib/types";
+
 import { isLessThanOneHourAgo } from "./date";
 import { log } from "./logger";
 
@@ -50,61 +50,61 @@ export function getAvailableOptionsForStatus(
 
 export function getCategoryIcon(slug: string) {
   if ("creation-activite" === slug) {
-    return rocketIcon;
+    return Rocket2LineMap;
   }
   if ("numerique" === slug) {
-    return macLineIcon;
+    return MacLineDevice;
   }
   if ("equipement-et-alimentation" === slug) {
-    return storeIcon;
+    return Store2LineBuildings;
   }
   if ("famille" === slug) {
-    return parentIcon;
+    return ParentLineUserFaces;
   }
   if ("gestion-financiere" === slug) {
-    return euroLineIcon;
+    return MoneyEuroCircleLineFinance;
   }
   if ("apprendre-francais" === slug) {
-    return chatQuoteIcon;
+    return ChatQuoteLineCommunication;
   }
   if ("accompagnement-social-et-professionnel-personnalise" === slug) {
-    return chatSmileIcon;
+    return ChatSmile3LineCommunication;
   }
   if ("handicap" === slug) {
-    return wheelChairIcon;
+    return WheelchairLineOthers;
   }
   if ("sante" === slug) {
-    return stethoscopeIcon;
+    return StethoscopeLineHealthMedical;
   }
   if ("logement-hebergement" === slug) {
-    return homeSmileIcon;
+    return HomeSmileLineBuildings;
   }
   if ("illettrisme" === slug) {
-    return textIcon;
+    return TextEditor;
   }
   if ("mobilite" === slug) {
-    return compassDiscoverIcon;
+    return CompassDiscoverLineMap;
   }
   if ("remobilisation" === slug) {
-    return mentalHealthIcon;
+    return MentalHealthLineHealthMedical;
   }
   if ("acces-aux-droits-et-citoyennete" === slug) {
-    return bankIcon;
+    return BankLineBuildings;
   }
   if ("choisir-un-metier" === slug) {
-    return serviceIcon;
+    return ServiceLineBusiness;
   }
   if ("preparer-sa-candidature" === slug) {
-    return serviceIcon;
+    return ServiceLineBusiness;
   }
   if ("trouver-un-emploi" === slug) {
-    return serviceIcon;
+    return ServiceLineBusiness;
   }
   if ("se-former" === slug) {
-    return graduationCapIcon;
+    return GraduationCapLineOthers;
   }
   if ("souvrir-a-linternational" === slug) {
-    return walkIcon;
+    return WalkLineMap;
   }
   log(`Pas d'icone définie pour la thématique ${slug}`);
   return null;

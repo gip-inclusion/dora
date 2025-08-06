@@ -1,12 +1,15 @@
 <script lang="ts">
+  import InformationLineSystem from "svelte-remix/InformationLineSystem.svelte";
+
   import { page } from "$app/state";
+
   import logoProConnect from "$lib/assets/proconnect/logo_proconnect.svg";
   import FieldSet from "$lib/components/display/fieldset.svelte";
-  import { informationLineIcon } from "$lib/icons";
-  import { getNextPage } from "../utils";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import PcButton from "$lib/components/specialized/pc-button.svelte";
+
+  import { getNextPage } from "../utils";
   import SendMagicLink from "./send-magic-link.svelte";
 
   const nextPage = getNextPage(page.url);
@@ -35,7 +38,7 @@
           <div class="mb-s24 bg-info-light p-s16 rounded-2xl">
             <h3 class="text-f17 text-info flex leading-24">
               <div class="mr-s8 h-s24 w-s24 inline-block fill-current">
-                {@html informationLineIcon}
+                <InformationLineSystem />
               </div>
               <div>DORA utilise ProConnect</div>
             </h3>

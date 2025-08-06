@@ -1,10 +1,9 @@
 <script lang="ts">
+  import CloseCircleFillSystem from "svelte-remix/CloseCircleFillSystem.svelte";
+  import HistoryLineSystem from "svelte-remix/HistoryLineSystem.svelte";
+  import MailSendLineBusiness from "svelte-remix/MailSendLineBusiness.svelte";
+
   import DateLabel from "$lib/components/display/date-label.svelte";
-  import {
-    closeCircleIcon,
-    historyLineIcon,
-    mailSendLineIcon,
-  } from "$lib/icons";
   import type { SavedSearch } from "$lib/types";
   import {
     updateSavedSearchFrequency,
@@ -12,6 +11,7 @@
   } from "$lib/requests/saved-search";
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
+
   import SavedSearchDescription from "./description.svelte";
   import SavedSearchTitle from "./title.svelte";
 
@@ -64,7 +64,7 @@
       class="mb-s12 h-s24 w-s24 mx-auto block fill-current"
       aria-label="Supprimer cette alerte"
     >
-      {@html closeCircleIcon}
+      <CloseCircleFillSystem />
     </span>
   </button>
 
@@ -72,7 +72,7 @@
 
   <p class="text-f16">
     <span class="mr-s8 h-s16 w-s16 inline-block fill-current">
-      {@html historyLineIcon}
+      <HistoryLineSystem size="16" />
     </span>
     Le <DateLabel date={search.creationDate} />
   </p>
@@ -81,7 +81,7 @@
       <form onsubmit={handleSubmit} class="gap-s16 flex">
         <div class="border-gray-02 p-s12 flex items-center rounded-sm border">
           <span class="mr-s8 h-s24 w-s24 inline-block fill-current">
-            {@html mailSendLineIcon}
+            <MailSendLineBusiness />
           </span>
 
           <select

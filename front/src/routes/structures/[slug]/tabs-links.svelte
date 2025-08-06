@@ -17,7 +17,7 @@
           class="px-s24 py-s12 text-france-blue flex items-center rounded-t bg-white"
         >
           <span class="mr-s8 h-s24 w-s24 fill-current">
-            {@html item.icon}
+            <item.icon />
           </span>
           {item.name}
         </span>
@@ -28,7 +28,7 @@
           data-sveltekit-noscroll
         >
           <span class="mr-s8 h-s24 w-s24 fill-current">
-            {@html item.icon}
+            <item.icon />
           </span>
           {item.name}
         </a>

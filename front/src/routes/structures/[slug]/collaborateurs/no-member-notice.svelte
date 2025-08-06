@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { teamLineIcon } from "$lib/icons";
+  import TeamLineUserFaces from "svelte-remix/TeamLineUserFaces.svelte";
+
   import illuMember from "$lib/assets/illustrations/collaborateurs.svg";
   import EmptyNotice from "../empty-notice.svelte";
 </script>
 
 <EmptyNotice
-  textTopIcon={teamLineIcon}
+  textTopIcon={TeamLineUserFaces}
   illustration={illuMember}
   title="Vous n’avez pas encore invité vos collaborateurs"
   links={[

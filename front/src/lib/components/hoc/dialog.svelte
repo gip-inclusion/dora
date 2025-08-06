@@ -3,8 +3,9 @@
 
   import Portal from "svelte-portal";
 
+  import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
+
   import Button from "$lib/components/display/button.svelte";
-  import { closeLineIcon } from "$lib/icons";
 
   interface Props {
     isOpen: boolean;
@@ -26,7 +27,7 @@
       <div class="relative">
         <div class="right-s0 top-s0 absolute">
           <Button
-            icon={closeLineIcon}
+            icon={CloseLineSystem}
             onclick={handleClose}
             noBackground
             noPadding

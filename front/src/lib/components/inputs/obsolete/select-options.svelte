@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { checkIcon } from "$lib/icons";
-  import type { Choice } from "$lib/types";
+  import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
+
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
+  import type { Choice } from "$lib/types";
   import { getChoiceFromValue } from "$lib/utils/choice";
+
   import SelectLabel from "./select-label.svelte";
 
   interface Props {
@@ -64,7 +66,7 @@
     {#if !isMultiple}
       <span class="h-s24 w-s24 text-magenta-cta fill-current" class:selected>
         {#if selected}
-          {@html checkIcon}
+          <CheckLineSystem />
         {/if}
       </span>
     {/if}

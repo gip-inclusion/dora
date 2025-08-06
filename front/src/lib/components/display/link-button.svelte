@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Component } from "svelte";
+
   interface Props {
     to: string;
     otherTab?: boolean;
@@ -7,7 +9,7 @@
     extraClass?: string;
     ariaLabel?: string;
     id?: string;
-    icon?: string;
+    icon?: Component;
     iconOnRight?: boolean;
     small?: boolean;
     noBackground?: boolean;
@@ -26,7 +28,7 @@
     extraClass = "",
     ariaLabel,
     id,
-    icon,
+    icon: Icon,
     iconOnRight = false,
     small = false,
     noBackground = false,
@@ -98,24 +100,24 @@
   aria-label={ariaLabel}
   class:whitespace-nowrap={!canWrap}
 >
-  {#if icon && !iconOnRight}
+  {#if Icon && !iconOnRight}
     <i
       class="{iconWidth} {iconHeight} shrink-0 fill-current"
       class:mr-s8={!!label}
       class:-my-s2={small}
     >
-      {@html icon}
+      <Icon />
     </i>
   {/if}
 
   {label}
 
-  {#if iconOnRight}
+  {#if Icon && iconOnRight}
     <i
       class="{iconWidth} {iconHeight} ml-s8 shrink-0 fill-current"
       class:-my-s2={small}
     >
-      {@html icon}
+      <Icon />
     </i>
   {/if}
 </a>

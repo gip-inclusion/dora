@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { Service, ShortService } from "$lib/types";
+  import MailSendLineBusiness from "svelte-remix/MailSendLineBusiness.svelte";
+
   import { CANONICAL_URL } from "$lib/env";
-  import { mailSendLineIcon } from "$lib/icons";
+  import type { Service, ShortService } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
 
   interface Props {
@@ -50,7 +51,7 @@
       role="img"
       aria-label="Courriel"
     >
-      {@html mailSendLineIcon}
+      <MailSendLineBusiness />
     </span>
     {service.contactEmail}
   </a>

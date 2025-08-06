@@ -1,9 +1,12 @@
 <script lang="ts">
   // Dropdown avec le design issu du header du DSFR
   // => https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/en-tete/
+  import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
+
   import { afterNavigate } from "$app/navigation";
   import { page } from "$app/stores";
-  import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
@@ -63,9 +66,9 @@
         : 'text-gray-text'}"
     >
       {#if isOpen}
-        {@html arrowUpSIcon}
+        <ArrowUpSLineArrows />
       {:else}
-        {@html arrowDownSIcon}
+        <ArrowDownSLineArrows />
       {/if}
     </span>
   </button>

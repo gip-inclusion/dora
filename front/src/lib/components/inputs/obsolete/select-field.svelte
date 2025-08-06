@@ -1,10 +1,14 @@
 <script lang="ts">
+  import ArrowDownSIcon from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSIcon from "svelte-remix/ArrowUpSLineArrows.svelte";
+  import DeleteBack2FillSystem from "svelte-remix/DeleteBack2FillSystem.svelte";
+
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
-  import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
   import { getChoiceFromValue } from "$lib/utils/choice";
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
+
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";
 
@@ -251,14 +255,14 @@
       <div class="h-s24 w-s24 text-gray-text-alt">
         {#if (isMultiple ? value.length > 0 : !!value) && withClearButton}
           <button class="h-s24 w-s24 fill-current" onclick={clearAll}>
-            {@html deleteBackIcon}
+            <DeleteBack2FillSystem />
           </button>
         {:else}
           <span class="chevron h-s24 w-s24 fill-current">
             {#if expanded}
-              {@html arrowUpSIcon}
+              <ArrowUpSIcon />
             {:else}
-              {@html arrowDownSIcon}
+              <ArrowDownSIcon />
             {/if}
           </span>
         {/if}

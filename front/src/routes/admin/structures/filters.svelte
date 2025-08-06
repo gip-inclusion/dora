@@ -1,8 +1,18 @@
 <script lang="ts">
+  import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import Tooltip from "$lib/components/ui/tooltip.svelte";
-  import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+  import type {
+    AdminShortStructure,
+    ServiceCategory,
+    ServicesOptions,
+    StructuresOptions,
+    Typology,
+  } from "$lib/types";
+
   import {
     isOrphan,
     isObsolete,
@@ -11,13 +21,6 @@
     toUpdate,
     waiting,
   } from "./structures-filters";
-  import type {
-    AdminShortStructure,
-    ServiceCategory,
-    ServicesOptions,
-    StructuresOptions,
-    Typology,
-  } from "$lib/types";
   import type { StatusFilter } from "./types";
 
   interface Props {
@@ -296,7 +299,7 @@
   <Button
     label="Voir les filtres avancés"
     onclick={() => (showAdvancedFilters = !showAdvancedFilters)}
-    icon={!showAdvancedFilters ? arrowDownSIcon : arrowUpSIcon}
+    icon={!showAdvancedFilters ? ArrowDownSLineArrows : ArrowUpSLineArrows}
     iconOnRight
     noBackground
     small

@@ -1,10 +1,15 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
-  import { closeLineIcon } from "$lib/icons";
   import type { Snippet } from "svelte";
   import { onDestroy } from "svelte";
+
   import Portal from "svelte-portal";
+
+  import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
+
   import "wicg-inert";
+
+  import { browser } from "$app/environment";
+
   import Button from "../display/button.svelte";
 
   interface Props {
@@ -155,7 +160,7 @@
             {#if canClose && !hideCloseButton}
               <div class="ml-auto">
                 <Button
-                  icon={closeLineIcon}
+                  icon={CloseLineSystem}
                   onclick={handleClose}
                   noBackground
                   noPadding

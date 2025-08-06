@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { externalLinkIcon } from "$lib/icons";
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
   import SubMenuDropdown from "./sub-menu-dropdown.svelte";
 
   interface Props {
@@ -85,7 +85,7 @@
           class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current {externalIconColor}"
           aria-hidden="true"
         >
-          {@html externalLinkIcon}
+          <ExternalLinkLineSystem size="16" />
         </span>
       </a>
     </li>
@@ -103,7 +103,7 @@
           class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current {externalIconColor}"
           aria-hidden="true"
         >
-          {@html externalLinkIcon}
+          <ExternalLinkLineSystem size="16" />
         </span>
       </a>
     </li>

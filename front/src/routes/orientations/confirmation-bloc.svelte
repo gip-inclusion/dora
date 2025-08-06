@@ -1,6 +1,7 @@
 <script lang="ts">
+  import FlashlightLineWeather from "svelte-remix/FlashlightLineWeather.svelte";
+
   import illustration from "$lib/assets/illustrations/illu-favs.svg";
-  import { flashLightIcon } from "$lib/icons";
 
   interface Props {
     title: any;
@@ -14,7 +15,7 @@
 <div class="mb-s24 gap-s24 flex flex-col items-center">
   {#if withThunder}
     <div class="mt-s10 h-s24 w-s24 mx-auto">
-      {@html flashLightIcon}
+      <FlashlightLineWeather />
     </div>
   {/if}
 

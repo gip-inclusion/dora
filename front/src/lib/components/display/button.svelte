@@ -1,10 +1,12 @@
 <script lang="ts">
+  import type { Component } from "svelte";
+
   interface Props {
     label?: string;
     type?: "button" | "submit";
     id?: string;
     name?: string;
-    icon?: string;
+    icon?: Component;
     title?: string;
     extraClass?: string;
     iconOnRight?: boolean;
@@ -31,7 +33,7 @@
     type = "button",
     id,
     name,
-    icon,
+    icon: Icon,
     title,
     extraClass = "",
     iconOnRight = false,
@@ -121,32 +123,32 @@
   class:w-full={wFull}
   class:whitespace-nowrap={noWrap}
   class:hover:underline={hoverUnderline}
-  class:flex={icon}
-  class:flex-row={icon}
-  class:items-center={icon}
+  class:flex={!!Icon}
+  class:flex-row={!!Icon}
+  class:items-center={!!Icon}
   {...ariaAttributes}
   {onclick}
   onmousedown={handleMouseDown}
   {disabled}
 >
-  {#if icon && !iconOnRight}
+  {#if Icon && !iconOnRight}
     <span
       class="{iconWidth} {iconHeight} fill-current"
       class:mr-s8={!!label && !hideLabel}
       class:-my-s2={small}
     >
-      {@html icon}
+      <Icon />
     </span>
   {/if}
 
   <span class:sr-only={hideLabel}>{label}</span>
 
-  {#if iconOnRight}
+  {#if Icon && iconOnRight}
     <span
       class="{iconWidth} {iconHeight} ml-s8 justify-end fill-current"
       class:-my-s2={small}
     >
-      {@html icon}
+      <Icon />
     </span>
   {/if}
 </button>

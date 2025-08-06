@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { externalLinkIcon } from "$lib/icons";
-  import { getApiURL } from "$lib/utils/api";
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
+
   import CitySearch from "$lib/components/inputs/geo/city-search.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment, GeoApiValue } from "$lib/types";
+  import { getApiURL } from "$lib/utils/api";
 
   interface Props {
     establishment: Establishment | null;
@@ -141,7 +142,7 @@
         class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current"
         aria-hidden="true"
       >
-        {@html externalLinkIcon}
+        <ExternalLinkLineSystem class="w-s20 h-s20" />
       </span>
     </a>
   </p>

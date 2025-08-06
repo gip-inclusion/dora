@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
+  import type { Component, Snippet } from "svelte";
 
-  import { externalLinkIcon } from "$lib/icons";
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
 
   interface Props {
-    textTopIcon?: string;
+    textTopIcon: Component;
     title?: string;
     illustration?: string;
     links?: { label: string; url: string }[];
@@ -12,7 +12,7 @@
   }
 
   let {
-    textTopIcon = "",
+    textTopIcon: TextTopIcon,
     title = "",
     illustration = "",
     links = [],
@@ -26,7 +26,7 @@
       <span
         class="ml-s10 h-s24 w-s24 text-gray-text-alt2 inline-block fill-current"
       >
-        {@html textTopIcon}
+        <TextTopIcon />
       </span>
     </div>
     <h3 class="text-f30 text-gray-text text-center leading-40">{title}</h3>
@@ -49,7 +49,7 @@
                   class="h-s20 w-s20 pt-s4 inline-block fill-current"
                   aria-hidden="true"
                 >
-                  {@html externalLinkIcon}
+                  <ExternalLinkLineSystem size="20" />
                 </span>
               </a>
             </li>

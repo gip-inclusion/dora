@@ -1,4 +1,6 @@
 <script lang="ts">
+  import VideoFillMedia from "svelte-remix/VideoFillMedia.svelte";
+
   import illuAccompagner from "$lib/assets/illustrations/illu-accompagner.svg";
   import illuMobiliser from "$lib/assets/illustrations/illu-mobiliser.svg";
   import illuRecenser from "$lib/assets/illustrations/illu-recenser.svg";
@@ -9,17 +11,16 @@
   import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
   import PartnerList from "$lib/components/specialized/partner-list.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import { GOOGLE_CSE_ID } from "$lib/env";
-
-  import type { PageData } from "./$types";
-  import { videoIcon } from "$lib/icons";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
+  import { GOOGLE_CSE_ID } from "$lib/env";
   import { refreshUserInfo } from "$lib/utils/auth";
   import { userInfo } from "$lib/utils/auth";
   import { userPreferences } from "$lib/utils/preferences";
   import ServicesToUpdateNotice from "./structures/[slug]/services/services-to-update-notice.svelte";
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
+
+  import type { PageData } from "./$types";
 
   interface Props {
     data: PageData;
@@ -129,7 +130,7 @@
       <span
         class="h-s24 w-s24 text-france-blue inline-block flex-none fill-current align-bottom"
       >
-        {@html videoIcon}
+        <VideoFillMedia />
       </span>
       Rejoignez-nous lors d'un webinaire pour explorer les possibilités offertes
       par DORA.

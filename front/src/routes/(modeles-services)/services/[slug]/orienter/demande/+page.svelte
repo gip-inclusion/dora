@@ -15,7 +15,7 @@
   import { orientationStep2Schema } from "../schema";
   import Form from "$lib/components/forms/form.svelte";
   import { goto } from "$app/navigation";
-  import { arrowLeftLineIcon } from "$lib/icons";
+  import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
 
   interface Props {
@@ -117,7 +117,7 @@
 
     <StickyFormSubmissionRow justifyBetween>
       <LinkButton
-        icon={arrowLeftLineIcon}
+        icon={ArrowLeftSLineArrows}
         to="/services/{data.service.slug}/orienter"
         label="Revenir à l’étape précédente"
         secondary

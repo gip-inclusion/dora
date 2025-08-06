@@ -1,9 +1,12 @@
 <script lang="ts">
-  import type { Service } from "$lib/types";
-  import { checkboxCircleFillIcon } from "$lib/icons";
+  import CheckboxCircleFillSystem from "svelte-remix/CheckboxCircleFillSystem.svelte";
+
   import { page } from "$app/stores";
-  import ContactInfo from "./contact-info.svelte";
+
+  import type { Service } from "$lib/types";
   import PcButton from "$lib/components/specialized/pc-button.svelte";
+
+  import ContactInfo from "./contact-info.svelte";
 
   interface Props {
     service: Service;
@@ -27,20 +30,20 @@
     </h3>
     <ul class="line text-f18 leading-40">
       <li>
-        <span class="checkbox">{@html checkboxCircleFillIcon}</span>Orientez
-        vers la solution identifiée en moins de 5 minutes
+        <span class="checkbox"><CheckboxCircleFillSystem /></span>Orientez vers
+        la solution identifiée en moins de 5 minutes
       </li>
       <li>
-        <span class="checkbox">{@html checkboxCircleFillIcon}</span>Incluez le
+        <span class="checkbox"><CheckboxCircleFillSystem /></span>Incluez le
         bénéficiaire dans la démarche
       </li>
       <li>
-        <span class="checkbox">{@html checkboxCircleFillIcon}</span>Recevez des
+        <span class="checkbox"><CheckboxCircleFillSystem /></span>Recevez des
         notifications sur l'avancement de votre demande
       </li>
       <li>
-        <span class="checkbox">{@html checkboxCircleFillIcon}</span>Suivez
-        toutes vos demandes grâce au tableau de bord
+        <span class="checkbox"><CheckboxCircleFillSystem /></span>Suivez toutes
+        vos demandes grâce au tableau de bord
         <span
           class="ml-s4 h-s24 bg-magenta-brand px-s8 py-s2 text-f12 inline-block rounded-sm align-baseline leading-20 text-white"
         >

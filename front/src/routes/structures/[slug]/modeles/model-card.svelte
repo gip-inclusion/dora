@@ -1,6 +1,8 @@
 <script lang="ts">
+  import FileCopy2LineDocument from "svelte-remix/FileCopy2LineDocument.svelte";
+  import HistoryLineSystem from "svelte-remix/HistoryLineSystem.svelte";
+
   import RelativeDateLabel from "$lib/components/display/relative-date-label.svelte";
-  import { copyIcon2, historyLineIcon } from "$lib/icons";
   import ModelMenu from "./model-button-menu.svelte";
 
   interface Props {
@@ -19,7 +21,7 @@
           class="mr-s8 h-s28 w-s28 bg-service-blue text-service-blue-dark flex items-center justify-center rounded-full"
         >
           <span class="h-s16 w-s16 inline-block fill-current">
-            {@html copyIcon2}
+            <FileCopy2LineDocument size="16" />
           </span>
         </div>
         {model.numServices}
@@ -40,7 +42,7 @@
         class="mr-s8 h-s28 w-s28 bg-service-blue text-service-blue-dark flex items-center justify-center rounded-full"
       >
         <span class="h-s16 w-s16 inline-block fill-current">
-          {@html historyLineIcon}
+          <HistoryLineSystem size="16" />
         </span>
       </div>
       <RelativeDateLabel date={model.modificationDate} prefix="Mis à jour" />
