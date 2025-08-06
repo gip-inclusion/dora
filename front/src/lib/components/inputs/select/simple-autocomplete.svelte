@@ -10,6 +10,8 @@
   import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
   import CloseCircleFillSystem from "svelte-remix/CloseCircleFillSystem.svelte";
 
+  import insane from "insane";
+
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import { clickOutside } from "$lib/utils/misc";
   import { formatErrors } from "$lib/validation/validation";
@@ -840,9 +842,13 @@
                   {@render itemContent({ item: listItem })}
                 {:else}
                   <div>
-                    {@html listItem.highlighted
-                      ? listItem.highlighted.label
-                      : listItem.label}
+                    {#if listItem.highlighted}
+                      {@html insane(listItem.highlighted.label, {
+                        allowedTags: ["b"],
+                      })}
+                    {:else}
+                      {listItem.label}
+                    {/if}
                   </div>
                 {/if}
 
