@@ -192,12 +192,20 @@
               </span>
               <span class="text-f23 hidden font-bold md:block">•</span>
             {/if}
+          </div>
 
+          <div class="flex flex-col items-end">
+            <LinkButton
+              label="Ajouter une structure"
+              to="/admin/structures/creer"
+              icon={addIcon}
+              extraClass="mb-s12"
+            />
             <a
               href={METABASE_DASHBOARD_URL(selectedDepartment.code)}
               target="_blank"
               rel="noopener nofollow"
-              class="text-f18 underline"
+              class="text-f18 text-france-blue leading-32 underline"
             >
               Voir les statistiques
             </a>
@@ -205,18 +213,10 @@
               href={DI_METABASE_DASHBOARD_URL(selectedDepartment.name)}
               target="_blank"
               rel="noopener nofollow"
-              class="text-f18 underline"
+              class="text-f18 text-france-blue leading-32 underline"
             >
               Statistiques d’utilisation de mon territoire
             </a>
-          </div>
-
-          <div>
-            <LinkButton
-              label="Ajouter une structure"
-              to="/admin/structures/creer"
-              icon={addIcon}
-            />
           </div>
         </div>
       </div>
