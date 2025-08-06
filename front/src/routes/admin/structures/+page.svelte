@@ -1,4 +1,8 @@
 <script lang="ts">
+  import dayjs from "dayjs";
+
+  import * as XLSX from "xlsx";
+
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
@@ -9,12 +13,12 @@
   import { addIcon } from "$lib/icons";
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminShortStructure, GeoApiValue } from "$lib/types";
-  import dayjs from "dayjs";
+
   import type { PageData } from "./$types";
+  import DepartmentList from "./department-list.svelte";
   import Filters from "./filters.svelte";
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
-  import DepartmentList from "./department-list.svelte";
   import {
     isOrphan,
     toActivate,
@@ -23,9 +27,7 @@
     toUpdate,
     toModerate,
   } from "./structures-filters";
-  import * as XLSX from "xlsx";
   import type { StatusFilter } from "./types";
-
   interface Props {
     data: PageData;
   }
