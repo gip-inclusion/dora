@@ -104,8 +104,8 @@
     return "bg-magenta-cta hover:bg-magenta-hover disabled:bg-gray-01 active:bg-france-blue";
   });
 
-  const iconWidth = small ? "w-s24" : "w-s32";
-  const iconHeight = small ? "h-s24" : "h-s32";
+  const iconWidth = "w-s24";
+  const iconHeight = "h-s24";
 
   function handleMouseDown(evt: MouseEvent) {
     if (preventDefaultOnMouseDown) {
