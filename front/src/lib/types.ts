@@ -33,7 +33,7 @@ export type ModerationStatus =
 export type GeoApiValue = {
   code: string;
   name: string;
-  similarity: number;
+  similarity?: number;
   geom?: object;
 };
 
