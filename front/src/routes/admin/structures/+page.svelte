@@ -207,7 +207,7 @@
               rel="noopener nofollow"
               class="text-f18 text-france-blue leading-32 underline"
             >
-              Voir les statistiques
+              Cartographie des services référencés
             </a>
             <a
               href={DI_METABASE_DASHBOARD_URL(selectedDepartment.name)}
