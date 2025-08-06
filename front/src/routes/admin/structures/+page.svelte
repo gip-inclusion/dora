@@ -9,6 +9,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import { METABASE_DASHBOARD_URL } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
   import { addIcon } from "$lib/icons";
   import { getStructuresAdmin } from "$lib/requests/admin";
@@ -186,7 +187,7 @@
             {/if}
 
             <a
-              href="https://metabase.dora.inclusion.beta.gouv.fr/public/dashboard/860a9da9-9300-4289-878c-7bf8ec74f9b7?d%25C3%25A9partement={selectedDepartment.code}"
+              href={METABASE_DASHBOARD_URL(selectedDepartment.code)}
               target="_blank"
               rel="noopener nofollow"
               class="text-f18 underline"
