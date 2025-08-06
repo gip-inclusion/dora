@@ -20,7 +20,7 @@
     <a class="full-result-link hover:underline" href={url} target="_blank">
       Annuaire des Collectivités<span
         class="h-s28 w-s28 pl-s6 pt-s8 inline-block fill-current"
-        ><ExternalLinkLineSystem size="28" /></span
+        ><ExternalLinkLineSystem /></span
       >
     </a>
   </h3>
