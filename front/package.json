@@ -41,6 +41,7 @@
     "@tiptap/extension-placeholder": "^3.0.9",
     "@tiptap/starter-kit": "^3.0.9",
     "@types/iframe-resizer": "^4.0.0",
+    "@types/insane": "^1.0.0",
     "@types/showdown": "^2.0.6",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",

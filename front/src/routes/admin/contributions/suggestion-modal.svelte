@@ -1,7 +1,8 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
+  import MarkdownRenderer from "$lib/components/display/markdown-renderer.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
-  import { markdownToHTML } from "$lib/utils/misc";
+
   import Line from "./line.svelte";
 
   interface Props {
@@ -46,13 +47,12 @@
           data={suggestion.serviceInfo.shortDesc}
         />
 
-        <Line
-          label="Descriptif complet du service"
-          data={markdownToHTML(suggestion.serviceInfo.fullDesc, 2)}
-          verticalLayout
-        >
+        <Line label="Descriptif complet du service" verticalLayout>
           <div class="m-s16 border-gray-02 pl-s16 border-l-8">
-            {@html markdownToHTML(suggestion.serviceInfo.fullDesc, 2)}
+            <MarkdownRenderer
+              content={suggestion.serviceInfo.fullDesc}
+              titleLevel={2}
+            />
           </div>
         </Line>
 

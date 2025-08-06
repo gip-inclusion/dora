@@ -1,6 +1,8 @@
 <script lang="ts">
   import { randomId } from "$lib/utils/random";
+
   import Button from "./button.svelte";
+  import MarkdownRenderer from "./markdown-renderer.svelte";
 
   interface Props {
     text: string;
@@ -23,12 +25,12 @@
 </script>
 
 <div class="hidden print:inline">
-  <div class="prose mb-s24">{@html text}</div>
+  <div class="prose mb-s24"><MarkdownRenderer content={text} /></div>
 </div>
 <div class="print:hidden">
   <div {id} class:h-s112={!showAll} class="mb-s6 relative overflow-hidden">
     <div class="prose mb-s12" bind:clientHeight={height}>
-      {@html text}
+      <MarkdownRenderer content={text} />
     </div>
     {#if !showAll && textIsTooLong}
       <div
