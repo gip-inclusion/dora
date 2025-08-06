@@ -9,7 +9,10 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
   import Notice from "$lib/components/display/notice.svelte";
-  import { METABASE_DASHBOARD_URL } from "$lib/consts";
+  import {
+    DI_METABASE_DASHBOARD_URL,
+    METABASE_DASHBOARD_URL,
+  } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
   import { addIcon } from "$lib/icons";
   import { getStructuresAdmin } from "$lib/requests/admin";
@@ -197,6 +200,14 @@
               class="text-f18 underline"
             >
               Voir les statistiques
+            </a>
+            <a
+              href={DI_METABASE_DASHBOARD_URL(selectedDepartment.name)}
+              target="_blank"
+              rel="noopener nofollow"
+              class="text-f18 underline"
+            >
+              Statistiques d’utilisation de mon territoire
             </a>
           </div>
 
