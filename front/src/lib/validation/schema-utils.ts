@@ -151,7 +151,7 @@ export function isSiret(msg = "") {
       value == null ||
       (typeof value === "string" &&
         (value === "" || !!value.match(siretRegexp))),
-    msg: msg || "Ce champ doit comporter 14 chiffres",
+    msg: msg || "Format invalide. 14 chiffres attendus.",
   });
 }
 
@@ -161,7 +161,7 @@ export function isFranceTravailNumber(msg = "") {
       value == null ||
       (typeof value === "string" &&
         (value === "" || !!value.match(franceTravailNumberRegexp))),
-    msg: msg || "Ce champ doit comporter 11 chiffres",
+    msg: msg || "Format invalide. 11 chiffres attendus.",
   });
 }
 
