@@ -3,7 +3,7 @@
 
   interface Props {
     label: string;
-    data: any;
+    data?: any;
     isList?: boolean;
     verticalLayout?: boolean;
     isBool?: boolean;
@@ -28,10 +28,12 @@
   <div class="mr-s16 text-gray-text w-1/3 font-bold">{label}</div>
   <div class="text-gray-text">
     {#if isList}
-      {#each data as item}
+      {#each data || [] as item}
         <li>{item}</li>
       {/each}
-    {:else if children}{@render children()}{:else if isBool}
+    {:else if children}
+      {@render children()}
+    {:else if isBool}
       {data ? "Oui" : "Non"}
     {:else}
       {data}
