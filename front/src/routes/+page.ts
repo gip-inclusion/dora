@@ -9,7 +9,7 @@ export const load: PageLoad = async ({ parent, url, data }) => {
   const query = url.searchParams;
 
   let cityCode = query.get("city");
-  let cityLabel: string | undefined;
+  let cityLabel: string | null | undefined;
 
   if (cityCode) {
     cityLabel = await getCityLabel(cityCode);
