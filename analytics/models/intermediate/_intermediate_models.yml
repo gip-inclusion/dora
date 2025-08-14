@@ -91,3 +91,7 @@ models:
   - name: int_monthly_user_service_views
     description:
       Suivi du nombre de vues de services par utilisateur et par mois.
+
+  - name: int_services_outside_structure_department
+    description: 
+      Liste des services rattaché à un département différent de la structure.
