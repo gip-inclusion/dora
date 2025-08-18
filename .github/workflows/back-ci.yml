@@ -55,7 +55,7 @@ jobs:
         run: sudo apt update && sudo apt install -y gdal-bin postgresql-client
 
       - name: Checkout du projet
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # On spécifie que toutes les étapes suivantes se feront dans le répertoire 'back'
       - name: Création de la base de données
