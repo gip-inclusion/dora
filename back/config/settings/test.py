@@ -3,6 +3,7 @@ import os
 import dj_database_url
 
 from .base import *  # noqa F403
+from .base import REST_FRAMEWORK
 
 DEBUG = True
 
@@ -45,3 +46,8 @@ BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST = int(
 BREVO_ONBOARDING_MEMBER_LIST = int(os.getenv("BREVO_ONBOARDING_MEMBER_LIST", "3"))
 
 DATA_INCLUSION_SCORE_QUALITE_MINIMUM = None
+
+REST_FRAMEWORK = {
+    **REST_FRAMEWORK,
+    "DEFAULT_THROTTLE_CLASSES": [],
+}
