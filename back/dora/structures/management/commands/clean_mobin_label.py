@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
     MOBIN_LABEL = "mobin"
 
-    def clean_mobin_label(self, reader, wet_run):
+    def clean_mobin_label(self, reader, wet_run=False):
         try:
             mobin_label = StructureNationalLabel.objects.get(value=self.MOBIN_LABEL)
         except StructureNationalLabel.DoesNotExist:
