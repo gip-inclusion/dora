@@ -73,6 +73,9 @@ class Command(BaseCommand):
                             raise Structure.DoesNotExist
 
                         structure.national_labels.add(mobin_label)
+                        self.stdout.write(
+                            f"Ajouté le label à la structure dont le siret est {siret}"
+                        )
                         total_labels_added += 1
 
                     else:
