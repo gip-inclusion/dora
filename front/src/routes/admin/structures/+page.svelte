@@ -202,7 +202,7 @@
               extraClass="mb-s12"
             />
             <a
-              href={METABASE_DASHBOARD_URL(selectedDepartment.code)}
+              href={DI_METABASE_DASHBOARD_URL(selectedDepartment.name)}
               target="_blank"
               rel="noopener nofollow"
               class="text-f18 text-france-blue leading-32 underline"
@@ -210,7 +210,7 @@
               Cartographie des services référencés
             </a>
             <a
-              href={DI_METABASE_DASHBOARD_URL(selectedDepartment.name)}
+              href={METABASE_DASHBOARD_URL(selectedDepartment.code)}
               target="_blank"
               rel="noopener nofollow"
               class="text-f18 text-france-blue leading-32 underline"
