@@ -30,6 +30,8 @@ class Command(BaseCommand):
 
     MOBIN_LABEL = "mobin"
 
+    HEADER = "Numéro de SIRET"
+
     def clean_mobin_label(self, reader, wet_run=False):
         try:
             mobin_label = StructureNationalLabel.objects.get(value=self.MOBIN_LABEL)
@@ -37,12 +39,10 @@ class Command(BaseCommand):
             self.stderr.write("Le label Mob'in n'existe pas en base.")
             return
 
-        # get all structures with mob'in label
         structures_with_mobin_label = Structure.objects.filter(
             national_labels=mobin_label
         )
 
-        # make list of their ids
         ids_of_structures_with_label = structures_with_mobin_label.values_list(
             "id", flat=True
         )
@@ -51,21 +51,25 @@ class Command(BaseCommand):
         total_labels_added = 0
 
         [headers, *lines] = reader
+
+        if headers[0] != self.HEADER:
+            self.stderr.write(f"Le CSV manque le header obligatioire {self.HEADER} !")
+            return
+
         lines = [dict(zip(headers, line)) for line in lines]
 
         with transaction.atomic():
-            sirets_from_csv = [row["Numéro de SIRET"] for row in lines]
+            sirets_from_csv = [row[self.HEADER] for row in lines]
 
             structures_in_csv = Structure.objects.filter(siret__in=sirets_from_csv)
 
             structures_in_csv_by_siret = {s.siret: s for s in structures_in_csv}
 
             for index, row in enumerate(lines, 2):
-                siret = row["Numéro de SIRET"]
+                siret = row[self.HEADER]
                 try:
                     validate_siret(siret)
 
-                    # check if siret is in list of structures with label
                     if not structures_with_mobin_label.filter(siret=siret).exists():
                         structure = structures_in_csv_by_siret.get(siret)
 
@@ -87,10 +91,13 @@ class Command(BaseCommand):
                     self.stderr.write(f"Erreur de validation du SIRET {index}: {siret}")
                 except Structure.DoesNotExist:
                     self.stderr.write(f"Structure inexistant {index}: {siret}")
+                except KeyError:
+                    self.stderr.write(f"Erreur de format {index}: {siret}")
+                except Structure.MultipleObjectsReturned:
+                    self.stderr.write(f"Plusieurs structures avec le SIRET {siret}")
                 except Exception as e:
                     self.stderr.write(f"Erreur inconnue {index}: {siret} - {e}")
 
-            # remove label from all structures in list
             ids_of_ineligible_structures = set(ids_of_structures_with_label) - set(
                 ids_of_eligible_structures
             )
