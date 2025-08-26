@@ -1,17 +1,19 @@
 import csv
 import io
 
-from model_bakery import baker
 from rest_framework.test import APITestCase
 
 from dora.core.test_utils import make_structure
 from dora.structures.management.commands.clean_mobin_label import Command
+from dora.structures.models import StructureNationalLabel
 
 
 class CleanMobinLabelTestCase(APITestCase):
     def setUp(self):
         self.csv_header = "Numéro de SIRET"
-        self.mobin_label = baker.make("StructureNationalLabel", value="mobin")
+        self.mobin_label, _ = StructureNationalLabel.objects.get_or_create(
+            value="mobin"
+        )
         self.structure_with_label = make_structure()
         self.structure_with_label.national_labels.add(self.mobin_label)
 
