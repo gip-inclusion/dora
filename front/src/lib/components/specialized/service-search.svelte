@@ -85,7 +85,7 @@
     })
   );
 
-  const categories = servicesOptions.categories
+  const categories = servicesOptions?.categories
     ? associateIconToCategory(sortCategory(servicesOptions.categories))
     : [];
 
