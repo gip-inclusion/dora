@@ -138,7 +138,7 @@ Ils peuvent s’exercer par voie postale ou par voie électronique.
 La demande d’exercice des droits est exercée auprès du Groupement d’intérêt Public « Plateforme de l’inclusion » à l’adresse suivante :
 
 - Le Groupement d’intérêt public :
-- par courrier électronique à dpo@numericite.eu
+- par courrier électronique à rgpd@inclusion.gouv.fr
 
 Ces obligations ne sont pas opposables aux personnes concernées par le traitement de données à caractère personnel.
 
