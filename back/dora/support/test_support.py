@@ -225,3 +225,10 @@ class ManagerTestCase(APITestCase):
         self.client.force_authenticate(user=self.bimanager)
         response = self.client.get(f"/structures-admin/{structure.slug}/")
         self.assertEqual(response.status_code, 404)
+
+    def test_num_queries(self):
+        structure1 = make_structure(department="31")
+        self.client.force_authenticate(user=make_user(is_staff=True))
+
+        with self.assertNumQueries(11):
+            self.client.get(f"/structures-admin/{structure1.slug}/")

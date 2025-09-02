@@ -1,4 +1,3 @@
-from django.conf import settings
 from rest_framework import serializers
 
 from dora.core.models import LogItem, ModerationStatus
@@ -243,36 +242,31 @@ class StructureAdminSerializer(StructureSerializer):
         return LogItemSerializer(logs, many=True).data
 
     def get_has_admin(self, obj):
-        return obj.has_admin()
+        return getattr(obj, "has_valid_admin", obj.has_admin())
 
     def get_num_draft_services(self, obj):
-        return obj.services.draft().count()
+        return getattr(obj, "num_draft_services", 0)
 
     def get_num_published_services(self, obj):
-        return obj.services.published().count()
+        return getattr(obj, "num_published_services", 0)
 
     def get_num_outdated_services(self, obj):
         return obj.services.update_advised().count()
 
     def get_num_services(self, obj):
-        return obj.services.active().count()
+        return getattr(obj, "num_active_services", 0)
 
     def get_categories(self, obj):
-        return obj.services.values_list("categories__value", flat=True).distinct()
+        categories = getattr(obj, "categories_list", None)
+        return [c for c in categories if c is not None] if categories else []
 
     def get_admins(self, obj):
-        admins = obj.membership.filter(
-            is_admin=True, user__is_valid=True, user__is_active=True
-        )
-        return [a.user.email for a in admins]
+        emails = getattr(obj, "admin_emails", None)
+        return [e for e in emails if e is not None] if emails else []
 
     def get_editors(self, obj):
-        return set(
-            s.last_editor.email
-            for s in obj.services.published()
-            if s.last_editor is not None
-            and s.last_editor.email != settings.DORA_BOT_USER
-        )
+        emails = getattr(obj, "editor_emails", None)
+        return list(set(e for e in emails if e is not None)) if emails else []
 
     def get_admins_to_moderate(self, obj):
         if obj.moderation_status != ModerationStatus.VALIDATED:
@@ -280,42 +274,30 @@ class StructureAdminSerializer(StructureSerializer):
         return []
 
     def get_admins_to_remind(self, obj):
-        if not obj.has_admin():
-            admins = obj.putative_membership.filter(
-                is_admin=True,
-                invited_by_admin=True,
-                user__is_active=True,
-            )
-            return [a.user.email for a in admins]
+        if not getattr(obj, "has_valid_admin", obj.has_admin):
+            emails = getattr(obj, "putative_admin_emails", None)
+            return [e for e in emails if e is not None] if emails else []
         return []
 
     def get_num_potential_members_to_validate(self, obj):
-        return obj.putative_membership.filter(
-            invited_by_admin=False,
-            user__is_valid=True,
-            user__is_active=True,
-        ).count()
+        return getattr(obj, "num_potential_members_to_validate", 0)
 
     def get_num_potential_members_to_remind(self, obj):
-        # les membres invités n'ont pas forcément validé leur adresse e-mail
-        return obj.putative_membership.filter(
-            invited_by_admin=True,
-            user__is_active=True,
-        ).count()
+        return getattr(obj, "num_potential_members_to_remind", 0)
 
-    def get_is_orphan(self, obj: Structure) -> bool:
-        return Structure.objects.filter(id=obj.id).orphans().exists()
+    def get_is_orphan(self, obj):
+        return getattr(obj, "is_orphan", False)
 
-    def get_is_waiting(self, obj: Structure) -> bool:
+    def get_is_waiting(self, obj):
         return len(self.get_admins_to_remind(obj)) > 0
 
-    def get_awaiting_moderation(self, obj: Structure) -> bool:
-        return Structure.objects.filter(id=obj.id).awaiting_moderation().exists()
+    def get_awaiting_moderation(self, obj):
+        return getattr(obj, "awaiting_moderation", False)
 
-    def get_awaiting_activation(self, obj: Structure) -> bool:
+    def get_awaiting_activation(self, obj):
         return self.get_num_published_services(obj) == 0
 
-    def get_awaiting_update(self, obj: Structure) -> bool:
+    def get_awaiting_update(self, obj):
         return self.get_num_outdated_services(obj) > 0
 
 
