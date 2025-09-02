@@ -24,19 +24,24 @@
     data: PageData;
   }
 
+  export type ShowFeedbackModalContext = () => boolean;
+
   let { data = $bindable() }: Props = $props();
 
   let isServiceFeedbackModalOpen = $state(false);
 
   let showFeedbackModal = $derived(
-    browser &&
-      data.service &&
-      !isMemberOrPotentialMemberOfStructure($userInfo, data.service.structure)
+    Boolean(
+      browser &&
+        data.service &&
+        !isMemberOrPotentialMemberOfStructure($userInfo, data.service.structure)
+    )
   );
 
-  $effect(() => {
-    setContext("showFeedbackModal", showFeedbackModal);
-  });
+  setContext<ShowFeedbackModalContext>(
+    "showFeedbackModal",
+    () => showFeedbackModal
+  );
 
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");
