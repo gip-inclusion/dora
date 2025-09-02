@@ -9,7 +9,7 @@
   interface Props {
     service: Service;
     servicesOptions: ServicesOptions;
-    onRefresh: () => void;
+    onRefresh: () => Promise<void>;
     onFeedbackButtonClick: () => void;
   }
 
