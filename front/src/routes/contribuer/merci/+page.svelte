@@ -1,8 +1,9 @@
 <script lang="ts">
+  import AddCircleFillSystem from "svelte-remix/AddCircleFillSystem.svelte";
+
   import ContributionPic from "$lib/assets/illustrations/illu-contribution.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { addCircleIcon } from "$lib/icons";
 </script>
 
 <CenteredGrid extraClass="bg-linear-to-b from-magenta-10 to-magenta-10/0">
@@ -22,7 +23,7 @@
         <LinkButton
           label="Proposer un nouveau service"
           to={"/contribuer/saisie"}
-          icon={addCircleIcon}
+          icon={AddCircleFillSystem}
           iconOnRight
         />
       </div>
@@ -35,7 +36,7 @@
         marginheight="0"
         marginwidth="0"
         title="Formulaire d’évaluation de la proposition d’un service"
-      />
+      ></iframe>
     </div>
   </div>
 </CenteredGrid>

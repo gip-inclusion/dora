@@ -14,6 +14,8 @@ const phoneRegexp = /^\d{10}$/u;
 const postalCodeRegexp = /^\d[0-9abAB]\d{3}$/u;
 
 export const siretRegexp = /^\d{14}$/u;
+
+export const franceTravailNumberRegexp = /^\d{11}$/u;
 /* eslint-enable */
 
 export type Action<T> = (value: T) => T;
@@ -149,9 +151,20 @@ export function isSiret(msg = "") {
       value == null ||
       (typeof value === "string" &&
         (value === "" || !!value.match(siretRegexp))),
-    msg: msg || "Ce champ doit comporter 14 chiffres",
+    msg: msg || "Format invalide. 14 chiffres attendus.",
   });
 }
+
+export function isFranceTravailNumber(msg = "") {
+  return (name, value, _data) => ({
+    valid:
+      value == null ||
+      (typeof value === "string" &&
+        (value === "" || !!value.match(franceTravailNumberRegexp))),
+    msg: msg || "Format invalide. 11 chiffres attendus.",
+  });
+}
+
 export function isAccessLibreUrl(msg = "") {
   return (name, value, _data) => ({
     valid:

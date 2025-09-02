@@ -20,20 +20,24 @@
   import ServiceKeyInformationLabel from "./service-key-information-label.svelte";
   import ServiceKeyInformationSection from "./service-key-information-section.svelte";
 
-  export let service: Service | Model;
-  export let servicesOptions: ServicesOptions;
-  export let onFeedbackButtonClick: () => void;
-  $: isDI = "source" in service;
+  interface Props {
+    service: Service | Model;
+    servicesOptions: ServicesOptions;
+    onFeedbackButtonClick: () => void;
+  }
 
-  $: isNotCumulative = !service.isCumulative;
-  $: hasFundingLabels = service.fundingLabelsDisplay.length > 0;
-  $: hasLabelSection = isNotCumulative || hasFundingLabels;
+  let { service, servicesOptions, onFeedbackButtonClick }: Props = $props();
+  let isDI = $derived("source" in service);
 
-  $: eligibilityRequirements = [
+  let isNotCumulative = $derived(!service.isCumulative);
+  let hasFundingLabels = $derived(service.fundingLabelsDisplay.length > 0);
+  let hasLabelSection = $derived(isNotCumulative || hasFundingLabels);
+
+  let eligibilityRequirements = $derived([
     ...(service.accessConditionsDisplay || []),
     ...(service.requirementsDisplay || []),
     ...(service.qpvOrZrr ? ["Uniquement QPV ou ZRR"] : []),
-  ];
+  ]);
 </script>
 
 <section>
@@ -83,7 +87,7 @@
             icon={MapPin2FillMap}
             title="Lieu d’accueil"
           >
-            {#if service.locationKinds.length > 0}
+            {#if service.locationKinds && service.locationKinds.length > 0}
               <div class="gap-s12 flex flex-col">
                 {#if service.locationKinds.includes("en-presentiel")}
                   <div class="flex flex-col">
@@ -174,11 +178,11 @@
             >
               {getLabelFromValue(
                 service.feeCondition,
-                servicesOptions.feeConditions
+                servicesOptions?.feeConditions
               )}
             </span>
           {/if}
-          {#if isNotFreeService(service.feeCondition)}
+          {#if service.feeCondition && isNotFreeService(service.feeCondition)}
             <span>
               {#if service.feeDetails}
                 {service.feeDetails}
@@ -191,7 +195,7 @@
       </ServiceKeyInformationSection>
       {#if !hasLabelSection}
         <div class="mt-s32">
-          <ServiceFeedbackButton {service} on:click={onFeedbackButtonClick} />
+          <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
         </div>
       {/if}
     </div>
@@ -216,7 +220,7 @@
           {/if}
         </div>
         <div class="mt-s32">
-          <ServiceFeedbackButton {service} on:click={onFeedbackButtonClick} />
+          <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
         </div>
       </div>
     {/if}

@@ -56,7 +56,12 @@ export const orientationStep2Schema: v.Schema = {
     maxLength: 254,
     required: true,
   },
-
+  beneficiaryFranceTravailNumber: {
+    label: "Numéro France Travail",
+    default: "",
+    rules: [v.isFranceTravailNumber()],
+    maxLength: 11,
+  },
   beneficiaryLastName: {
     label: "Nom",
     default: "",
@@ -131,5 +136,19 @@ export const orientationStep2Schema: v.Schema = {
   },
   attachments: {
     rules: [],
+  },
+  dataProtectionCommitment: {
+    label:
+      "Je m’engage, en tant qu’accompagnateur, à informer la personne concernée du traitement de ses données personnelles dans le cadre de cette orientation.",
+    rules: [
+      v.isBool(),
+      (_fieldname, value) => {
+        return {
+          valid: value,
+          msg: "Vous devez cocher la case d’engagement d’information pour pouvoir soumettre la demande.",
+        };
+      },
+    ],
+    required: true,
   },
 };

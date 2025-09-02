@@ -1,46 +1,68 @@
 <script lang="ts">
+  import ArrowDownSIcon from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSIcon from "svelte-remix/ArrowUpSLineArrows.svelte";
+  import DeleteBack2FillSystem from "svelte-remix/DeleteBack2FillSystem.svelte";
+
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
-  import { arrowDownSIcon, arrowUpSIcon, deleteBackIcon } from "$lib/icons";
   import type { Choice } from "$lib/types";
   import { getChoiceFromValue } from "$lib/utils/choice";
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
+
   import SelectLabel from "./select-label.svelte";
   import SelectOptions from "./select-options.svelte";
 
-  export let label: string;
-  export let name: string;
-  export let minDropdownWidth = "min-w-full";
-  export let value: string | string[] | undefined;
-  export let placeholder = "";
-  export let inputMode: "none" | undefined = undefined;
-  export let required = false;
-  export let isMultiple = false;
-  export let withAutoComplete = false;
-  export let withClearButton = false;
-  export let hideLabel = false;
-  export let showIconForSelectedOption = false;
-  export let choices: Choice[];
-  export let display: "horizontal" | "vertical" = "horizontal";
-  export let style: "common" | "filter" | "search" = "common";
-  export let onChange: (event: {
-    detail: string;
-    value: string | string[];
-  }) => void | undefined = undefined;
+  interface Props {
+    label: string;
+    name: string;
+    minDropdownWidth?: string;
+    value?: string | string[];
+    placeholder?: string;
+    inputMode?: "none";
+    required?: boolean;
+    isMultiple?: boolean;
+    withAutoComplete?: boolean;
+    withClearButton?: boolean;
+    hideLabel?: boolean;
+    showIconForSelectedOption?: boolean;
+    choices: Choice[];
+    display?: "horizontal" | "vertical";
+    style?: "common" | "filter" | "search";
+    onChange?: (event: { detail: string; value: string | string[] }) => void;
+  }
+
+  let {
+    label,
+    name,
+    minDropdownWidth = "min-w-full",
+    value = $bindable(),
+    placeholder = "",
+    inputMode,
+    required = false,
+    isMultiple = false,
+    withAutoComplete = false,
+    withClearButton = false,
+    hideLabel = false,
+    showIconForSelectedOption = false,
+    choices = $bindable(),
+    display = "horizontal",
+    style = "common",
+    onChange,
+  }: Props = $props();
 
   const originalChoices: Choice[] = [...choices];
-  let filterText = "";
+  let filterText = $state("");
 
   // *** Accessibilité
   const uuid: string = randomId(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
-  let expanded = false;
+  let expanded = $state(false);
 
   // Gestion de l'outline avec la navigation au clavier
   let selectedOptionIndex: number | null = null;
-  let selectedOption: Choice | undefined;
+  let selectedOption: Choice | undefined = $state();
 
-  $: hasSelectAllOption = choices.some((choice) =>
-    choice.value.endsWith("--all")
+  let hasSelectAllOption = $derived(
+    choices.some((choice) => choice.value.endsWith("--all"))
   );
 
   function toggleCombobox(forceValue?: boolean) {
@@ -169,14 +191,14 @@
     selectedOption = choices[selectedOptionIndex];
   }
 
-  $: {
+  $effect(() => {
     if (!filterText) {
       choices = [...originalChoices];
     } else {
       setAsSelected(null); // On réinitialise la sélection pour le clavier
       toggleCombobox(true); // On ouvre la liste des résultats
     }
-  }
+  });
 </script>
 
 <FieldWrapper {label} id={name} {required} vertical {hideLabel}>
@@ -193,10 +215,9 @@
     role="combobox"
     tabindex="0"
     aria-label={placeholder}
-    on:click={() => toggleCombobox()}
-    on:keydown={handleKeydown}
-    use:clickOutside
-    on:click_outside={() => toggleCombobox(false)}
+    onclick={() => toggleCombobox()}
+    onkeydown={handleKeydown}
+    {@attach clickOutside(() => toggleCombobox(false))}
   >
     <div class="current-value flex cursor-pointer items-center justify-between">
       <div class="w-[90%] overflow-hidden text-ellipsis whitespace-nowrap">
@@ -233,15 +254,15 @@
 
       <div class="h-s24 w-s24 text-gray-text-alt">
         {#if (isMultiple ? value.length > 0 : !!value) && withClearButton}
-          <button class="h-s24 w-s24 fill-current" on:click={clearAll}>
-            {@html deleteBackIcon}
+          <button class="h-s24 w-s24 fill-current" onclick={clearAll}>
+            <DeleteBack2FillSystem />
           </button>
         {:else}
           <span class="chevron h-s24 w-s24 fill-current">
             {#if expanded}
-              {@html arrowUpSIcon}
+              <ArrowUpSIcon />
             {:else}
-              {@html arrowDownSIcon}
+              <ArrowDownSIcon />
             {/if}
           </span>
         {/if}

@@ -1,20 +1,26 @@
 <script lang="ts">
+  import ArrowRightSLineArrows from "svelte-remix/ArrowRightSLineArrows.svelte";
+  import CloseCircleFillSystem from "svelte-remix/CloseCircleFillSystem.svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
-  import { arrowRightSIcon, closeCircleIcon } from "$lib/icons";
   import {
     acceptServiceSuggestion,
     deleteServiceSuggestion,
   } from "$lib/requests/admin";
   import SuggestionModal from "./suggestion-modal.svelte";
 
-  export let suggestions;
-  export let onRefresh;
+  interface Props {
+    suggestions: unknown;
+    onRefresh: () => Promise<void>;
+  }
 
-  let currentSuggestion;
-  let suggestionModalIsOpen = false;
-  let confirmationModalIsOpen = false;
-  let emailsContacted = null;
+  let { suggestions, onRefresh }: Props = $props();
+
+  let currentSuggestion = $state();
+  let suggestionModalIsOpen = $state(false);
+  let confirmationModalIsOpen = $state(false);
+  let emailsContacted = $state(null);
 
   async function handleAccept(suggestion) {
     // eslint-disable-next-line no-alert
@@ -86,9 +92,9 @@
         <Button
           label="Rejeter"
           iconOnRight
-          icon={closeCircleIcon}
+          icon={CloseCircleFillSystem}
           noBackground
-          on:click={() => {
+          onclick={() => {
             handleReject(suggestion);
           }}
         />
@@ -97,9 +103,9 @@
         <Button
           label="Détails"
           iconOnRight
-          icon={arrowRightSIcon}
+          icon={ArrowRightSLineArrows}
           noBackground
-          on:click={() => {
+          onclick={() => {
             currentSuggestion = suggestion;
             suggestionModalIsOpen = true;
           }}
@@ -111,7 +117,7 @@
 
 <Modal
   bind:isOpen={confirmationModalIsOpen}
-  on:close={onConfirmationClose}
+  onClose={onConfirmationClose}
   title="Création du service réussie"
 >
   {#if emailsContacted}

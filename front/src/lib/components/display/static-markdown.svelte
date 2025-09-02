@@ -1,10 +1,15 @@
 <script lang="ts">
-  import { markdownToHTML } from "$lib/utils/misc";
-  export let content;
+  import MarkdownRenderer from "./markdown-renderer.svelte";
+
+  interface Props {
+    content: string;
+  }
+
+  let { content }: Props = $props();
 </script>
 
 <div class="prose max-w-3xl">
-  {@html markdownToHTML(content, 1)}
+  <MarkdownRenderer {content} titleLevel={1} />
 </div>
 
 <style lang="postcss">

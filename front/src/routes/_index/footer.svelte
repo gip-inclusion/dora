@@ -1,9 +1,10 @@
 <script lang="ts">
+  import NewspaperLineDocument from "svelte-remix/NewspaperLineDocument.svelte";
+
   import LogoRF from "$lib/assets/logos/logo-rf.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import NavItem from "$lib/components/display/nav-item.svelte";
-  import { newspaperIcon } from "$lib/icons";
 </script>
 
 <hr class="border-t-gray-01 print:hidden" />
@@ -20,7 +21,7 @@
 
     <LinkButton
       label="S’abonner à l’infolettre"
-      icon={newspaperIcon}
+      icon={NewspaperLineDocument}
       iconOnRight
       noBackground
       small

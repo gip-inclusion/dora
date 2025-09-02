@@ -1,16 +1,27 @@
 <script lang="ts">
+  import UserLineUserFaces from "svelte-remix/UserLineUserFaces.svelte";
+  import User2LineUserFaces from "svelte-remix/User2LineUserFaces.svelte";
+  import Forbid2LineSystem from "svelte-remix/Forbid2LineSystem.svelte";
+  import RepeatLineMedia from "svelte-remix/RepeatLineMedia.svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import Label from "$lib/components/display/label.svelte";
-  import { userIcon, user2Icon, forbidIcon, repeatIcon } from "$lib/icons";
   import { cancelInvite, resendInvite } from "$lib/requests/structures";
+
   import Member from "./member.svelte";
 
-  export let member;
-  export let onRefresh;
-  export let readOnly = false;
+  interface Props {
+    member: any;
+    onRefresh: any;
+    readOnly?: boolean;
+  }
 
-  $: userLevel = member.isAdmin ? "Admin" : "Utilisateur";
-  $: userLevelIcon = member.isAdmin ? user2Icon : userIcon;
+  let { member, onRefresh, readOnly = false }: Props = $props();
+
+  let userLevel = $derived(member.isAdmin ? "Admin" : "Utilisateur");
+  let userLevelIcon = $derived(
+    member.isAdmin ? User2LineUserFaces : UserLineUserFaces
+  );
 
   async function handleCancelInvite() {
     if (
@@ -29,42 +40,48 @@
 </script>
 
 <Member {member} {readOnly}>
-  <div slot="label">
-    <Label label={userLevel} smallIcon icon={userLevelIcon} />
-  </div>
-  <div slot="status">
-    <span
-      class="bg-blue-light px-s12 py-s6 inline-block rounded-lg text-center"
-    >
-      Invitation envoyée
-    </span>
-  </div>
-
-  <div slot="actions" let:onCloseParent>
-    <div class="flex flex-col items-end">
-      <Button
-        label="Relancer"
-        on:click={() => {
-          handleResendInvite();
-          onCloseParent();
-        }}
-        icon={repeatIcon}
-        iconOnRight
-        small
-        noBackground
-      />
-
-      <Button
-        label="Révoquer"
-        on:click={() => {
-          handleCancelInvite();
-          onCloseParent();
-        }}
-        icon={forbidIcon}
-        iconOnRight
-        small
-        noBackground
-      />
+  {#snippet label()}
+    <div>
+      <Label label={userLevel} smallIcon icon={userLevelIcon} />
     </div>
-  </div></Member
+  {/snippet}
+  {#snippet status()}
+    <div>
+      <span
+        class="bg-blue-light px-s12 py-s6 inline-block rounded-lg text-center"
+      >
+        Invitation envoyée
+      </span>
+    </div>
+  {/snippet}
+
+  {#snippet actions({ onCloseParent })}
+    <div>
+      <div class="flex flex-col items-end">
+        <Button
+          label="Relancer"
+          onclick={() => {
+            handleResendInvite();
+            onCloseParent();
+          }}
+          icon={RepeatLineMedia}
+          iconOnRight
+          small
+          noBackground
+        />
+
+        <Button
+          label="Révoquer"
+          onclick={() => {
+            handleCancelInvite();
+            onCloseParent();
+          }}
+          icon={Forbid2LineSystem}
+          iconOnRight
+          small
+          noBackground
+        />
+      </div>
+    </div>
+  {/snippet}</Member
 >

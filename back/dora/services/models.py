@@ -2,7 +2,7 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
-from data_inclusion.schema import TypologieStructure
+from data_inclusion.schema.v0 import Profil, TypologieStructure
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -37,6 +37,12 @@ def make_unique_slug(instance, parent_slug, value, length=20):
             base_slug + "-" + get_random_string(4, "abcdefghijklmnopqrstuvwxyz")
         )
     return unique_slug
+
+
+def validate_profile_families(value):
+    valid_values = {p.value for p in Profil}
+    if value not in valid_values:
+        raise ValidationError(f"Invalid profile family: {value}")
 
 
 class CustomizableChoice(models.Model):
@@ -81,9 +87,21 @@ class AccessCondition(CustomizableChoice):
 
 
 class ConcernedPublic(CustomizableChoice):
+    profile_families = ArrayField(
+        models.CharField(max_length=255, validators=[validate_profile_families]),
+        verbose_name="Familles de profils",
+        blank=False,
+        null=False,
+        default=list,
+    )
+
     class Meta(CustomizableChoice.Meta):
         verbose_name = "Public concerné"
         verbose_name_plural = "Publics concernés"
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class ServiceFee(EnumModel):
@@ -660,6 +678,36 @@ class Service(ModerationMixin, models.Model):
         # voir FranceTravailOrientableService
         return bool(self.orientable_ft_services.count())
 
+    def get_missing_properties_for_publishing(self) -> list[str]:
+        missing = []
+
+        if not self.contact_name:
+            missing.append("nom du contact")
+
+        if not self.contact_phone:
+            missing.append("phone du contact")
+
+        if not self.diffusion_zone_type:
+            missing.append("périmètre d'intervention")
+
+        if self.location_kinds.count() == 0:
+            missing.append("lieu de déroulement")
+
+        if self.location_kinds.filter(value="en-presentiel").exists():
+            if not self.city:
+                missing.append("ville")
+
+            if not self.postal_code:
+                missing.append("code postale")
+
+            if not self.address1:
+                missing.append("adresse")
+
+        return missing
+
+    def is_eligible_for_publishing(self) -> bool:
+        return len(self.get_missing_properties_for_publishing()) == 0
+
 
 class ServiceModelManager(models.Manager):
     def get_queryset(self):
@@ -807,11 +855,7 @@ class SavedSearch(models.Model):
     def get_recent_services(self, cutoff_date):
         from dora import data_inclusion
 
-        di_client = (
-            data_inclusion.di_client_factory()
-            if settings.INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS
-            else None
-        )
+        di_client = data_inclusion.di_client_factory()
 
         category = None
         if self.category:
@@ -845,6 +889,7 @@ class SavedSearch(models.Model):
 
         results, metadata = search_services(
             None,
+            di_client,
             self.city_code,
             city,
             [category.value] if category and not subcategories else None,
@@ -853,7 +898,6 @@ class SavedSearch(models.Model):
             fees,
             location_kinds,
             funding_labels,
-            di_client,
         )
 
         # On garde les contenus qui ont été publiés depuis la dernière notification

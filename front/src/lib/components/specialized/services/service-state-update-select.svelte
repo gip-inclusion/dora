@@ -1,15 +1,17 @@
 <script lang="ts">
   // Source pour l'accessibilité : https://www.w3.org/WAI/ARIA/apg/example-index/combobox/combobox-select-only.html
+  import type { Component } from "svelte";
+
+  import ArrowDownSIcon from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSIcon from "svelte-remix/ArrowUpSLineArrows.svelte";
+  import DeleteBinLineSystem from "svelte-remix/DeleteBinLineSystem.svelte";
+  import DraftFillDocument from "svelte-remix/DraftFillDocument.svelte";
+  import EarthFillMap from "svelte-remix/EarthFillMap.svelte";
+  import FileEditFillDocument from "svelte-remix/FileEditFillDocument.svelte";
+  import Folder5FillDocument from "svelte-remix/Folder5FillDocument.svelte";
+
   import { goto } from "$app/navigation";
-  import {
-    arrowDownSIcon,
-    arrowUpSIcon,
-    deleteBinIcon,
-    draftFillIcon,
-    earthFillIcon,
-    fileEditFillIcon,
-    folderFillIcon,
-  } from "$lib/icons";
+
   import {
     archiveService,
     convertSuggestionToDraft,
@@ -30,11 +32,11 @@
     bgClass: string;
     iconClass: string;
     hoverBgClass: string;
-    icon: string;
+    icon: Component;
     label: string;
   };
 
-  export const SERVICE_STATUS_PRESENTATION: Record<
+  const SERVICE_STATUS_PRESENTATION: Record<
     ServiceStatus,
     ServiceStatusPresentation
   > = {
@@ -42,47 +44,57 @@
       bgClass: "bg-service-violet",
       iconClass: "text-service-violet-darker",
       hoverBgClass: "bg-service-violet-dark",
-      icon: fileEditFillIcon,
+      icon: FileEditFillDocument,
       label: "Suggestion",
     },
     DRAFT: {
       bgClass: "bg-service-orange",
       iconClass: "text-service-orange-darker",
       hoverBgClass: "bg-service-orange-dark",
-      icon: draftFillIcon,
+      icon: DraftFillDocument,
       label: "Brouillon",
     },
     PUBLISHED: {
       bgClass: "bg-service-green",
       iconClass: "text-service-green-darker",
       hoverBgClass: "bg-service-green-dark",
-      icon: earthFillIcon,
+      icon: EarthFillMap,
       label: "Publié",
     },
     ARCHIVED: {
       bgClass: "bg-service-gray",
       iconClass: "text-gray-darker",
       hoverBgClass: "bg-service-gray-dark",
-      icon: folderFillIcon,
+      icon: Folder5FillDocument,
       label: "Archivé",
     },
   };
 
-  export let service: Service | ShortService;
-  export let servicesOptions;
-  export let onRefresh: () => void;
-  export let hideLabel = true;
-  export let fullWidth = false;
+  interface Props {
+    service: Service | ShortService;
+    servicesOptions: any;
+    onRefresh: () => void;
+    hideLabel?: boolean;
+    fullWidth?: boolean;
+  }
 
-  $: availableOptions = getAvailableOptionsForStatus(service.status);
+  let {
+    service,
+    servicesOptions,
+    onRefresh,
+    hideLabel = true,
+    fullWidth = false,
+  }: Props = $props();
+
+  let availableOptions = $derived(getAvailableOptionsForStatus(service.status));
 
   // *** Accessibilité
   const uuid: string = randomId(); // Pour éviter les conflits d'id si le composant est présent plusieurs fois sur la page
-  let isDropdownOpen = false;
+  let isDropdownOpen = $state(false);
 
   // Gestion de l'outline avec la navigation au clavier
   let selectedOptionIndex: number | null = null;
-  let selectedOption: ServiceStatus | "DELETE" | null = null;
+  let selectedOption: ServiceStatus | "DELETE" | null = $state(null);
 
   // Actions disponibles
   async function publish() {
@@ -102,6 +114,7 @@
 
     if (isValid) {
       await publishService(service.slug);
+      goto(`/structures/${service.structure}/services/publication`);
     } else {
       goto(`/services/${service.slug}/editer`);
     }
@@ -191,14 +204,15 @@
   }
 
   // *** Valeurs pour l'affichage
-  $: currentStatusPresentation = SERVICE_STATUS_PRESENTATION[service.status];
+  let currentStatusPresentation = $derived(
+    SERVICE_STATUS_PRESENTATION[service.status]
+  );
 </script>
 
 <div
   id="service-state-update"
   class="text-gray-dark relative flex cursor-pointer items-center rounded-lg font-bold {currentStatusPresentation.bgClass} hover:{currentStatusPresentation.hoverBgClass}"
-  use:clickOutside
-  on:click_outside={() => toggleCombobox(false)}
+  {@attach clickOutside(() => toggleCombobox(false))}
 >
   <span id={`button-label-${uuid}`} class="sr-only">
     Modifier le status du service
@@ -213,23 +227,23 @@
     class="cursor:pointer px-s20 py-s10 flex items-center"
     role="combobox"
     tabindex="0"
-    on:click={() => toggleCombobox()}
-    on:keydown={handleKeydown}
+    onclick={() => toggleCombobox()}
+    onkeydown={handleKeydown}
   >
     <span class:hidden={hideLabel} class="mr-s10">Statut du service :</span>
 
     <span
       class="{currentStatusPresentation.iconClass} mr-s8 h-s24 w-s24 fill-current"
     >
-      {@html currentStatusPresentation.icon}
+      <currentStatusPresentation.icon />
     </span>
 
     <span>{currentStatusPresentation.label}</span>
     <span class="ml-s10 h-s24 w-s24 text-magenta-cta fill-current">
       {#if isDropdownOpen}
-        {@html arrowUpSIcon}
+        <ArrowUpSIcon />
       {:else}
-        {@html arrowDownSIcon}
+        <ArrowDownSIcon />
       {/if}
     </span>
   </div>
@@ -248,19 +262,19 @@
         <div
           class="mb-s10 p-s10 flex items-center rounded-sm bg-transparent"
           class:bg-service-red={selectedOption === option}
-          on:mouseenter={() => setAsSelected(option, index)}
+          onmouseenter={() => setAsSelected(option, index)}
           role="option"
           tabindex="0"
           aria-selected="false"
-          on:keypress={(event) => {
+          onkeypress={(event) => {
             if (event.code === "Enter") {
               updateServiceStatus(option);
             }
           }}
-          on:click={() => updateServiceStatus(option)}
+          onclick={() => updateServiceStatus(option)}
         >
           <span class="mr-s8 h-s24 w-s24 text-service-red-dark fill-current">
-            {@html deleteBinIcon}
+            <DeleteBinLineSystem />
           </span>
           <span>Supprimer</span>
         </div>
@@ -275,16 +289,16 @@
           id={option}
           aria-selected="false"
           tabindex="0"
-          on:keypress={(event) => {
+          onkeypress={(event) => {
             if (event.code === "Enter") {
               updateServiceStatus(option);
             }
           }}
-          on:mouseenter={() => setAsSelected(option, index)}
-          on:click={() => updateServiceStatus(option)}
+          onmouseenter={() => setAsSelected(option, index)}
+          onclick={() => updateServiceStatus(option)}
         >
           <span class="{data.iconClass} mr-s8 h-s24 w-s24 fill-current">
-            {@html data.icon}
+            <data.icon />
           </span>
           <span>{data.label}</span>
         </div>

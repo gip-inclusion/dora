@@ -10,8 +10,12 @@
   import { acceptCgu } from "$lib/utils/cgu";
   import type { PageData } from "./$types";
 
-  export let data: PageData;
-  let cguCanBeValidated = false;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
+  let cguCanBeValidated = $state(false);
 
   async function doAcceptCgu() {
     await acceptCgu();
@@ -32,7 +36,7 @@
 
     <div
       class="cgu mb-s48 max-h-s512 bg-blue-light p-s32 overflow-auto rounded-lg"
-      on:scroll={(evt) => {
+      onscroll={(evt) => {
         const { scrollTop, scrollHeight, clientHeight } = evt.target;
         cguCanBeValidated = scrollTop + clientHeight >= scrollHeight - 100;
       }}
@@ -50,7 +54,7 @@
       <Button
         type="submit"
         label="Valider et accéder à DORA"
-        on:click={doAcceptCgu}
+        onclick={doAcceptCgu}
         disabled={!cguCanBeValidated}
       />
     </div>

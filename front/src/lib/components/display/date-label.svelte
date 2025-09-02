@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let date;
+  interface Props {
+    date: string | number | Date;
+  }
+
+  let { date }: Props = $props();
 </script>
 
 {new Date(date).toLocaleDateString("fr-FR", {

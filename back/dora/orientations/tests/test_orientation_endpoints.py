@@ -58,6 +58,27 @@ def test_query_validate(api_client, orientation):
     assert mail.outbox[3].to == [orientation.beneficiary_email]
 
 
+def test_query_validate_service_di(api_client, di_orientation):
+    url = f"/orientations/{di_orientation.query_id}/validate/?h={di_orientation.get_query_id_hash()}"
+    data = {
+        "message": "test_message",
+        "beneficiary_message": "test_beneficiary_message",
+    }
+    response = api_client.post(url, data=data, follow=True)
+    di_orientation.refresh_from_db()
+
+    assert response.status_code == 204
+    assert di_orientation.status == OrientationStatus.ACCEPTED
+
+    # on vérifie qu'un e-mail a bien été envoyé au bon destinataire
+    # (vérifier le contenu n'est pas pertinent dans cette série de tests)
+    assert len(mail.outbox) == 4
+    assert mail.outbox[0].to == [di_orientation.get_contact_email()]
+    assert mail.outbox[1].to == [di_orientation.prescriber.email]
+    assert mail.outbox[2].to == [di_orientation.referent_email]
+    assert mail.outbox[3].to == [di_orientation.beneficiary_email]
+
+
 def test_query_reject(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/reject/"
     response = api_client.post(url, follow=True)
@@ -189,6 +210,7 @@ def get_new_dora_service_orientation_data(user, structure, service):
         "beneficiaryAvailability": "2024-12-17",
         "beneficiaryContactPreferences": ["EMAIL"],
         "beneficiaryEmail": "beneficiary@example.com",
+        "beneficiaryFranceTravailNumber": "12345678901",
         "beneficiaryFirstName": "Beneficiary First Name",
         "beneficiaryLastName": "Beneficiary Last Name",
         "beneficiaryOtherContactMethod": "",
@@ -211,6 +233,7 @@ def get_new_dora_service_orientation_data(user, structure, service):
         "requirements": [],
         "serviceSlug": service.slug,
         "situation": [],
+        "dataProtectionCommitment": True,
     }
 
 
@@ -221,6 +244,7 @@ def get_new_di_service_orientation_data(user, structure, service):
         "beneficiaryAvailability": "2024-12-17",
         "beneficiaryContactPreferences": ["EMAIL"],
         "beneficiaryEmail": "beneficiary@example.com",
+        "beneficiaryFranceTravailNumber": "12345678901",
         "beneficiaryFirstName": "Beneficiary First Name",
         "beneficiaryLastName": "Beneficiary Last Name",
         "beneficiaryOtherContactMethod": "",
@@ -229,7 +253,7 @@ def get_new_di_service_orientation_data(user, structure, service):
         "diContactEmail": "di.contact@example.com",
         "diContactName": "DI Contact",
         "diContactPhone": "0987654321",
-        "diServiceId": "di--soliguide--630fa36e5c4d35d05bd267ab",
+        "diServiceId": "soliguide--630fa36e5c4d35d05bd267ab",
         "diServiceName": "DI Service Name",
         "diServiceAddressLine": "DI Address Line",
         "diStructureName": "DI Structure Name",
@@ -243,6 +267,7 @@ def get_new_di_service_orientation_data(user, structure, service):
         "requirements": [],
         "serviceSlug": None,
         "situation": [],
+        "dataProtectionCommitment": True,
     }
 
 
@@ -328,3 +353,44 @@ def test_query_validate_service_duration_copy_on_orientation(api_client):
 
     assert orientation.duration_weekly_hours == 6
     assert orientation.duration_weeks == 4
+
+
+def test_create_with_data_protection_commitment(api_client):
+    user = make_user()
+    structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
+    service = make_service(contact_email="contact.service@example.com")
+
+    api_client.force_authenticate(user=user)
+
+    data = get_new_dora_service_orientation_data(user, structure, service)
+
+    data["dataProtectionCommitment"] = True
+
+    response = api_client.post("/orientations/", data=data, follow=True)
+
+    assert response.status_code == 201
+
+    assert structure.orientations.count() == 1
+
+    orientation = structure.orientations.first()
+
+    assert orientation.data_protection_commitment
+
+
+def test_create_without_data_protection_commitment(api_client):
+    user = make_user()
+    structure = make_structure(user, moderation_status=ModerationStatus.VALIDATED)
+    service = make_service(contact_email="contact.service@example.com")
+
+    api_client.force_authenticate(user=user)
+
+    data = get_new_dora_service_orientation_data(user, structure, service)
+
+    data["dataProtectionCommitment"] = False
+
+    response = api_client.post("/orientations/", data=data, follow=True)
+
+    assert response.status_code == 400
+    assert "data_protection_commitment" in response.data
+
+    assert structure.orientations.count() == 0

@@ -21,14 +21,14 @@
     a réalisé une prescription en votre nom, pour le service {% include "partials/service-link.html" %}, ayant lieu au&#8239;: {{ service_address }}.
   </p>
 
-  <p><strong>Pour des questions concernant cette demande, veuillez contacter le prescripteur ou la prescriptrice&nbsp;:</strong></p>
+  <p><strong>Pour des questions concernant cette demande, veuillez contacter le prescripteur ou la prescriptrice&#8239;:</strong></p>
 
   {% if data.prescriber.email !=  data.referent_email %}
     <ul>
       <li>{{ data.prescriber.get_full_name }}</li>
       <li>{{ data.prescriber.email }}</li>
     </ul>
-    <p>ou bien votre conseillèr·e référent·e&nbsp;:</p>
+    <p>ou bien votre conseillèr·e référent·e&#8239;:</p>
   {% endif %}
   <ul>
     <li>{{ data.get_referent_full_name }}</li>
@@ -47,29 +47,7 @@
 
 {% block footer %}
   <mj-divider border-width="1px" border-color="#F5F5F5" width="100%" padding="24px 0"/>
-  <mj-text>
-    <h2>Mention d’information</h2>
-    <p>
-      Dora est une application portée par le GIP «&nbsp;plateforme de l’inclusion&nbsp;». Les documents listés
-      plus
-      haut
-      ont
-      été communiqués à une structure proposant un service répondant à vos besoins.
-    </p>
-    <p>
-      Vous pouvez néanmoins vous opposer à tout moment ici et vos données seront supprimées:
-      <a href="mailto:dpo@numericite.eu">s’opposer</a>.
-    </p>
-    <p>
-      Si vous estimez que vos droits ne sont pas respectés, vous pouvez à tout moment introduire une réclamation
-      auprès de la CNIL.
-    </p>
-    <p>
-      Pour plus d’informations, notamment sur vos autres droits RGPD (droit d’accès, d’opposition, de limitation,
-      notamment)&nbsp;:
-      <a href="https://dora.inclusion.beta.gouv.fr/">https://dora.inclusion.beta.gouv.fr/</a>.
-    </p>
-  </mj-text>
+  {% include "partials/block-information-notice.html" %}
 {% endblock %}
 
 {% block support %}

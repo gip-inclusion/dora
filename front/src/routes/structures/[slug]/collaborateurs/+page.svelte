@@ -1,25 +1,30 @@
 <script lang="ts">
+  import UserAddLineUserFaces from "svelte-remix/UserAddLineUserFaces.svelte";
+
+  import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
+  import { getMembers, getPutativeMembers } from "$lib/requests/structures";
+  import { userInfo } from "$lib/utils/auth";
+
+  import { structure } from "../store";
   import MemberInvited from "./member-invited.svelte";
   import MemberStandard from "./member-standard.svelte";
   import MemberToConfirm from "./member-to-confirm.svelte";
   import ModalAddUser from "./modal-add-user.svelte";
-  import { userAddIcon } from "$lib/icons";
-  import { getMembers, getPutativeMembers } from "$lib/requests/structures";
-  import { userInfo } from "$lib/utils/auth";
-  import { structure } from "../store";
   import type { PageData } from "./$types";
   import NoMemberNotice from "./no-member-notice.svelte";
   import { hasAtLeastTwoMembersOrInvitedMembers } from "../quick-start";
-  import Button from "$lib/components/display/button.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let modalAddUserIsOpen = false;
+  let { data = $bindable() }: Props = $props();
 
-  let showNoMemberNotice = !hasAtLeastTwoMembersOrInvitedMembers(
-    data.members,
-    data.putativeMembers
+  let modalAddUserIsOpen = $state(false);
+
+  let showNoMemberNotice = $state(
+    !hasAtLeastTwoMembersOrInvitedMembers(data.members, data.putativeMembers)
   );
 
   async function handleRefreshMemberList() {
@@ -46,7 +51,7 @@
     });
   }
 
-  $: canAdd = $structure.canEditMembers;
+  let canAdd = $derived($structure.canEditMembers);
 </script>
 
 <EnsureLoggedIn>
@@ -65,8 +70,8 @@
     {#if canAdd}
       <Button
         label="Ajouter un collaborateur"
-        icon={userAddIcon}
-        on:click={() => (modalAddUserIsOpen = true)}
+        icon={UserAddLineUserFaces}
+        onclick={() => (modalAddUserIsOpen = true)}
       />
     {/if}
   </div>

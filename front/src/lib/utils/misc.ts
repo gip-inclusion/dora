@@ -16,10 +16,7 @@ const INSANE_CONFIGURATION = {
   },
 };
 
-export function markdownToHTML(
-  markdownContent: string,
-  titleLevel: number | undefined = undefined
-) {
+export function markdownToHTML(markdownContent: string, titleLevel?: number) {
   const converter = new showdown.Converter({
     headerLevelStart: titleLevel,
     tables: true,
@@ -180,10 +177,33 @@ export function arraysCompare(a, b) {
 }
 
 export function formatPhoneNumber(phoneNumber: string): string {
-  // Supprime tous les espaces
-  const cleanedNumber = phoneNumber.replace(/\s+/g, "");
+  // Supprime tous les espaces et caractères non numériques sauf le +
+  let cleanedNumber = phoneNumber.replace(/[^\d+]/g, "");
 
-  // Découpe en groupes de 2 chiffres
+  // Gère les préfixes internationaux
+  if (cleanedNumber.startsWith("+")) {
+    // Remplace +33 par 0
+    if (cleanedNumber.startsWith("+33")) {
+      cleanedNumber = "0" + cleanedNumber.substring(3);
+    }
+    // Pour les autres préfixes, on garde le + et on traite le reste
+    else {
+      // On extrait le préfixe (+1, +44, etc.) et les chiffres après
+      // Limite le préfixe à 1-3 chiffres après le +
+      const prefixMatch = cleanedNumber.match(/^(\+\d{1,3})(\d*)/);
+      if (prefixMatch) {
+        const prefix = prefixMatch[1]; // +1, +44, etc.
+        const digits = prefixMatch[2]; // les chiffres après le préfixe
+
+        // Formate les chiffres en groupes de 2
+        const formattedDigits = digits.match(/\d{1,2}/g)?.join(" ") || "";
+
+        return prefix + " " + formattedDigits;
+      }
+    }
+  }
+
+  // Découpe en groupes de 2 chiffres pour les numéros sans préfixe international
   const formattedNumber = cleanedNumber.match(/\d{1,2}/g)?.join(" ") || "";
 
   return formattedNumber;
@@ -200,23 +220,24 @@ export function isInDeploymentDepartments(
   );
 }
 
-export function clickOutside(node: HTMLElement) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore erreurs de typage inextricables...
-  const handleClick = (event) => {
-    if (node && !node.contains(event.target) && !event.defaultPrevented) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore erreurs de typage inextricables...
-      node.dispatchEvent(new CustomEvent("click_outside", node));
-    }
-  };
+// Svelte 5 attachment version of clickOutside
+export function clickOutside(callback: () => void) {
+  return (node: HTMLElement) => {
+    const handleClick = (event: Event) => {
+      if (
+        node &&
+        !node.contains(event.target as Node) &&
+        !event.defaultPrevented
+      ) {
+        callback();
+      }
+    };
 
-  document.addEventListener("click", handleClick, true);
+    document.addEventListener("click", handleClick, true);
 
-  return {
-    destroy() {
+    return () => {
       document.removeEventListener("click", handleClick, true);
-    },
+    };
   };
 }
 

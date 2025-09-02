@@ -14,12 +14,16 @@
   import RadioButtonsField from "$lib/components/forms/fields/radio-buttons-field.svelte";
   import { updateUserProfile } from "$lib/utils/user";
 
-  let mainActivity = "";
-  let discoveryMethod = "";
-  let discoveryMethodOther = "";
-  let requesting = false;
+  let mainActivity = $state("");
+  let discoveryMethod = $state("");
+  let discoveryMethodOther = $state("");
+  let requesting = $state(false);
 
-  export let onSuccess;
+  interface Props {
+    onSuccess: () => void;
+  }
+
+  let { onSuccess }: Props = $props();
 
   interface Option<T> {
     value: T;
@@ -110,7 +114,11 @@
     }
   }
 
-  $: formData = { mainActivity, discoveryMethod, discoveryMethodOther };
+  let formData = $derived({
+    mainActivity,
+    discoveryMethod,
+    discoveryMethodOther,
+  });
 </script>
 
 <Form

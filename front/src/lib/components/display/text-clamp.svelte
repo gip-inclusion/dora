@@ -1,35 +1,41 @@
 <script lang="ts">
   import { randomId } from "$lib/utils/random";
-  import Button from "./button.svelte";
 
-  export let text: string;
+  import Button from "./button.svelte";
+  import MarkdownRenderer from "./markdown-renderer.svelte";
+
+  interface Props {
+    text: string;
+  }
+
+  let { text }: Props = $props();
 
   const defaultHeight = 200;
   const id = `text-clamp-${randomId()}`;
 
-  let showAll = false;
-  let height: number;
+  let showAll = $state(false);
+  let height: number = $state(0);
 
   function toggle() {
     showAll = !showAll;
   }
 
-  $: textIsTooLong = height + 100 > defaultHeight;
-  $: label = showAll ? "Réduire" : "Lire la suite";
+  let textIsTooLong = $derived(height + 100 > defaultHeight);
+  let label = $derived(showAll ? "Réduire" : "Lire la suite");
 </script>
 
 <div class="hidden print:inline">
-  <div class="prose mb-s24">{@html text}</div>
+  <div class="prose mb-s24"><MarkdownRenderer content={text} /></div>
 </div>
 <div class="print:hidden">
   <div {id} class:h-s112={!showAll} class="mb-s6 relative overflow-hidden">
     <div class="prose mb-s12" bind:clientHeight={height}>
-      {@html text}
+      <MarkdownRenderer content={text} />
     </div>
     {#if !showAll && textIsTooLong}
       <div
         class="bottom-s0 left-s0 h-s112 absolute w-full bg-gradient-to-b from-transparent to-white"
-      />
+      ></div>
     {/if}
   </div>
 
@@ -40,7 +46,7 @@
         "aria-controls": id,
       }}
       {label}
-      on:click={toggle}
+      onclick={toggle}
       noBackground
       small
       noPadding

@@ -1,16 +1,35 @@
 <script lang="ts">
-  import Label from "$lib/components/display/label.svelte";
-  import { emotionHappyIcon, errorWarningIcon } from "$lib/icons";
+  import type { Component, Snippet } from "svelte";
 
-  export let label;
-  export let positiveMood = false;
-  export let negativeMood = false;
-  export let info = false;
-  export let icon = undefined;
-  export let whiteBg = false;
-  export let leftBorder = false;
+  import EmotionHappyFillUserFaces from "svelte-remix/EmotionHappyFillUserFaces.svelte";
+  import ErrorWarningFillSystem from "svelte-remix/ErrorWarningFillSystem.svelte";
+
+  import Label from "$lib/components/display/label.svelte";
+
+  interface Props {
+    label?: string;
+    positiveMood?: boolean;
+    negativeMood?: boolean;
+    info?: boolean;
+    icon?: Component;
+    whiteBg?: boolean;
+    leftBorder?: boolean;
+    children?: Snippet;
+  }
+
+  let {
+    label,
+    positiveMood = false,
+    negativeMood = false,
+    info = false,
+    icon = $bindable(),
+    whiteBg = false,
+    leftBorder = false,
+    children,
+  }: Props = $props();
+
   if (!icon && (positiveMood || negativeMood)) {
-    icon = positiveMood ? emotionHappyIcon : errorWarningIcon;
+    icon = positiveMood ? EmotionHappyFillUserFaces : ErrorWarningFillSystem;
   }
 </script>
 
@@ -33,6 +52,6 @@
     </div>
   {/if}
   <div class="text-f14 text-gray-text">
-    <slot />
+    {@render children?.()}
   </div>
 </div>

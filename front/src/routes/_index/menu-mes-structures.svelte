@@ -1,48 +1,61 @@
 <script lang="ts">
+  import AddCircleLineSystem from "svelte-remix/AddCircleLineSystem.svelte";
+  import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
+  import HomeSmile2LineBuildings from "svelte-remix/HomeSmile2LineBuildings.svelte";
+  import SearchLineSystem from "svelte-remix/SearchLineSystem.svelte";
+
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
 
   import type { ShortStructure } from "$lib/types";
-  import {
-    addCircleLineIcon,
-    checkIcon,
-    homeSmile2Icon,
-    searchIcon,
-  } from "$lib/icons";
 
-  export let structures: ShortStructure[] = [];
-  export let lastVisitedStructure: ShortStructure | undefined = undefined;
-  export let mobileDesign = false;
+  interface Props {
+    structures?: ShortStructure[];
+    lastVisitedStructure?: ShortStructure;
+    mobileDesign?: boolean;
+  }
 
-  let filterText = "";
-  $: structuresToDisplay = filterText
-    ? structures.filter((struct) =>
-        struct.name.toLocaleLowerCase().includes(filterText.toLocaleLowerCase())
-      )
-    : structures;
+  let {
+    structures = [],
+    lastVisitedStructure,
+    mobileDesign = false,
+  }: Props = $props();
+
+  let filterText = $state("");
+  let structuresToDisplay = $derived(
+    filterText
+      ? structures.filter((struct) =>
+          struct.name
+            .toLocaleLowerCase()
+            .includes(filterText.toLocaleLowerCase())
+        )
+      : structures
+  );
 </script>
 
 <div class="mb-s16 lg:mb-s0 lg:mr-s10">
   {#if structures.length !== 0}
     <div class="flex w-full items-center lg:w-auto">
-      <DropdownMenu label="Mes structures" hideLabel {mobileDesign}>
-        <div slot="label" class="flex w-full items-center">
-          <span
-            class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
-          >
-            {@html homeSmile2Icon}
-          </span>
-          {#if lastVisitedStructure}
-            <a
-              class="text-gray-text block w-[150px] overflow-hidden text-ellipsis whitespace-nowrap"
-              on:click={(evt) => evt.stopPropagation()}
-              href={`/structures/${lastVisitedStructure.slug}`}
+      <DropdownMenu labelText="Mes structures" hideLabel {mobileDesign}>
+        {#snippet label()}
+          <div class="flex w-full items-center">
+            <span
+              class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
             >
-              {lastVisitedStructure.name}
-            </a>
-          {:else}
-            <span class="text-gray-text">Vos structures</span>
-          {/if}
-        </div>
+              <HomeSmile2LineBuildings />
+            </span>
+            {#if lastVisitedStructure}
+              <a
+                class="text-gray-text block w-[150px] overflow-hidden text-ellipsis whitespace-nowrap"
+                onclick={(evt) => evt.stopPropagation()}
+                href={`/structures/${lastVisitedStructure.slug}`}
+              >
+                {lastVisitedStructure.name}
+              </a>
+            {:else}
+              <span class="text-gray-text">Vos structures</span>
+            {/if}
+          </div>
+        {/snippet}
 
         {#if structures.length > 10}
           <div class="mt-s10 relative w-full">
@@ -57,7 +70,7 @@
             <span
               class="right-s8 h-s24 w-s24 text-gray-03 absolute top-[11px] z-40 inline-block fill-current"
             >
-              {@html searchIcon}
+              <SearchLineSystem />
             </span>
           </div>
         {/if}
@@ -77,7 +90,7 @@
                     <span
                       class="mr-s8 h-s24 w-s24 text-magenta-cta inline-block fill-current"
                     >
-                      {@html checkIcon}
+                      <CheckLineSystem />
                     </span>
                   {/if}
                 </a>
@@ -86,17 +99,19 @@
           </ul>
         </div>
 
-        <div slot="bottom">
-          <a
-            class="text-gray-text flex whitespace-nowrap"
-            href="/auth/rattachement"
-          >
-            <span class="mr-s10 h-s24 w-s24 fill-current">
-              {@html addCircleLineIcon}
-            </span>
-            <span>Adhérer à une autre structure </span>
-          </a>
-        </div>
+        {#snippet bottom()}
+          <div>
+            <a
+              class="text-gray-text flex whitespace-nowrap"
+              href="/auth/rattachement"
+            >
+              <span class="mr-s10 h-s24 w-s24 fill-current">
+                <AddCircleLineSystem />
+              </span>
+              <span>Adhérer à une autre structure </span>
+            </a>
+          </div>
+        {/snippet}
       </DropdownMenu>
     </div>
   {/if}

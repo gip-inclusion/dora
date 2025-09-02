@@ -12,14 +12,23 @@
   import SearchResults from "./search-results.svelte";
   import ResultMap from "./result-map.svelte";
 
-  export let data: PageData;
-  export let availableFundingLabels: Array<FundingLabel>;
-  export let filters: Filters;
-  export let filteredServices: ServiceSearchResult[];
+  interface Props {
+    data: PageData;
+    availableFundingLabels: Array<FundingLabel>;
+    filters: Filters;
+    filteredServices: ServiceSearchResult[];
+  }
 
-  let isMapViewOpen = false;
-  let isResultFiltersOpen = false;
-  let selectedServiceSlug: string | undefined;
+  let {
+    data,
+    availableFundingLabels,
+    filters = $bindable(),
+    filteredServices,
+  }: Props = $props();
+
+  let isMapViewOpen = $state(false);
+  let isResultFiltersOpen = $state(false);
+  let selectedServiceSlug: string | undefined = $state();
 
   function handleServiceClick(slug: string) {
     selectedServiceSlug = slug;
@@ -36,24 +45,23 @@
   style={`background-image: url('${mapViewImage}'); height: 116px`}
   class="flex items-center justify-center rounded-2xl bg-cover"
 >
-  <Button label="Voir sur la carte" on:click={() => (isMapViewOpen = true)} />
+  <Button label="Voir sur la carte" onclick={() => (isMapViewOpen = true)} />
   <Modal bind:isOpen={isMapViewOpen} hideTitle hideCloseButton noPadding>
     <div class="flex h-[90vh]">
       <div class="pb-s16 flex w-[448px] flex-col overflow-y-auto">
         <div
           class="top-s0 gap-s8 px-s32 pt-s32 sticky z-10 flex flex-col bg-white"
         >
-          <Button label="Fermer la carte" on:click={handleCloseModal} />
+          <Button label="Fermer la carte" onclick={handleCloseModal} />
           <Button
             label="Affiner la recherche"
             secondary
-            on:click={() => (isResultFiltersOpen = true)}
+            onclick={() => (isResultFiltersOpen = true)}
           />
           <Modal
             title="Affiner la recherche"
             width="small"
             bind:isOpen={isResultFiltersOpen}
-            on:close={() => (isResultFiltersOpen = false)}
           >
             <ResultFilters
               servicesOptions={data.servicesOptions}

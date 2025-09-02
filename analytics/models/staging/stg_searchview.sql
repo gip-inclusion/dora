@@ -5,7 +5,7 @@ WITH events AS (
 final AS (
     SELECT * FROM events
     WHERE
-        CAST(date AS DATE) >= '2024-07-01'
+        CAST(date AS DATE) >= '2024-01-01'
         AND is_staff IS FALSE
 )
 

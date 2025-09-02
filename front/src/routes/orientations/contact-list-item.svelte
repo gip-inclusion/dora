@@ -1,22 +1,28 @@
 <script lang="ts">
-  import { externalLinkIcon } from "$lib/icons";
+  import type { Component } from "svelte";
 
-  export let icon: string;
-  export let text: string;
-  export let link: string | undefined = undefined;
-  export let isPreference = false;
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
+
+  interface Props {
+    icon: Component;
+    text: string;
+    link?: string;
+    isPreference?: boolean;
+  }
+
+  let { icon: Icon, text, link, isPreference = false }: Props = $props();
 </script>
 
 <li class="text-gray-text flex items-center">
   <span class="mr-s8 h-s24 w-s24 inline-block fill-current">
-    {@html icon}
+    <Icon />
   </span>
 
   {#if link}
     <a href={link} class="text-magenta-cta hover:underline" target="_blank">
       {text}
       <span class="h-s20 w-s20 pl-s4 pt-s6 inline-block fill-current">
-        {@html externalLinkIcon}
+        <ExternalLinkLineSystem size="20" />
       </span>
     </a>
   {:else}

@@ -11,19 +11,25 @@
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import { orientationStep1Schema } from "./schema";
   import { goto } from "$app/navigation";
-  import { arrowLeftLineIcon } from "$lib/icons";
+  import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import { onMount, setContext } from "svelte";
   import { token } from "$lib/utils/auth";
   import Teaser from "./teaser.svelte";
   import { trackMobilisation } from "$lib/utils/stats";
   import { page } from "$app/stores";
   import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
-  export let data;
+  import type { Service } from "$lib/types";
+
+  interface Props {
+    data: { service: Service; isDI: boolean };
+  }
+
+  let { data }: Props = $props();
 
   const { service } = data;
   const isDI = !!data.isDI;
 
-  let requesting = false;
+  let requesting = $state(false);
 
   // tracking activé sur la page courante :
   const shouldTrack = Boolean($page.url.searchParams.get("newlogin"));
@@ -111,7 +117,7 @@
     </Layout>
     <StickyFormSubmissionRow justifyBetween>
       <LinkButton
-        icon={arrowLeftLineIcon}
+        icon={ArrowLeftSLineArrows}
         to="/services/{isDI ? 'di--' : ''}{service.slug}"
         label="Retour à la fiche"
         secondary

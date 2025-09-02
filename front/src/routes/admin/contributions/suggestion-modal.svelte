@@ -1,12 +1,23 @@
 <script lang="ts">
   import Button from "$lib/components/display/button.svelte";
+  import MarkdownRenderer from "$lib/components/display/markdown-renderer.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
-  import { markdownToHTML } from "$lib/utils/misc";
+
   import Line from "./line.svelte";
 
-  export let suggestion;
-  export let isOpen = false;
-  export let onAccept, onReject;
+  interface Props {
+    suggestion: any;
+    isOpen?: boolean;
+    onAccept: (suggestion: unknown) => Promise<void>;
+    onReject: (suggestion: unknown) => Promise<void>;
+  }
+
+  let {
+    suggestion,
+    isOpen = $bindable(false),
+    onAccept,
+    onReject,
+  }: Props = $props();
 </script>
 
 {#if suggestion}
@@ -36,13 +47,12 @@
           data={suggestion.serviceInfo.shortDesc}
         />
 
-        <Line
-          label="Descriptif complet du service"
-          data={markdownToHTML(suggestion.serviceInfo.fullDesc, 2)}
-          verticalLayout
-        >
+        <Line label="Descriptif complet du service" verticalLayout>
           <div class="m-s16 border-gray-02 pl-s16 border-l-8">
-            {@html markdownToHTML(suggestion.serviceInfo.fullDesc, 2)}
+            <MarkdownRenderer
+              content={suggestion.serviceInfo.fullDesc}
+              titleLevel={2}
+            />
           </div>
         </Line>
 
@@ -141,8 +151,8 @@
     </div>
 
     <div class="mt-s32 gap-s16 flex flex-row justify-end">
-      <Button label="Rejeter" secondary on:click={() => onReject(suggestion)} />
-      <Button label="Valider" on:click={() => onAccept(suggestion)} />
+      <Button label="Rejeter" secondary onclick={() => onReject(suggestion)} />
+      <Button label="Valider" onclick={() => onAccept(suggestion)} />
     </div>
   </Modal>
 {/if}

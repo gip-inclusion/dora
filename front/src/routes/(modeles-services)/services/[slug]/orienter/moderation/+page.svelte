@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { arrowLeftLineIcon, flashLightIcon } from "$lib/icons";
+  import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
+  import FlashlightLineWeather from "svelte-remix/FlashlightLineWeather.svelte";
   import Layout from "../orientation-layout.svelte";
   import type { PageData } from "./$types";
   import { orientation } from "../store";
@@ -10,7 +11,11 @@
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   const showContactBeneficiary = !$orientation.beneficiaryEmail;
   onMount(() => {
@@ -26,7 +31,7 @@
     >
       <div class="max-w-lg basis-1/2 text-center">
         <div class="mb-s12 h-s24 w-s24 text-orange mx-auto">
-          {@html flashLightIcon}
+          <FlashlightLineWeather />
         </div>
         <h2 class="text-orange font-bold">
           Votre demande fera l’objet d’une vérification par nos équipes.
@@ -66,7 +71,7 @@
         {/if}
 
         <LinkButton
-          icon={arrowLeftLineIcon}
+          icon={ArrowLeftSLineArrows}
           label="Retour à la fiche"
           to="/services/{data.isDI ? 'di--' : ''}{data.service.slug}"
           noBackground

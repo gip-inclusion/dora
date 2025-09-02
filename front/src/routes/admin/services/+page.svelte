@@ -1,13 +1,17 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
+  import EyeLineSystem from "svelte-remix/EyeLineSystem.svelte";
+  import Home6LineBuildings from "svelte-remix/Home6LineBuildings.svelte";
+
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Label from "$lib/components/display/label.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { eyeIcon, homeIcon } from "$lib/icons";
   import { getServicesAdmin } from "$lib/requests/admin";
   import { shortenString } from "$lib/utils/misc";
-  import { onMount } from "svelte";
 
-  let services, filteredServices;
+  let services = $state(),
+    filteredServices = $state();
 
   function filterAndSortEntities(searchString) {
     return (
@@ -65,7 +69,7 @@
     <div class="mb-s12 gap-s12 flex w-full flex-row items-center">
       <div class="grow">
         <input
-          on:input={handleFilterChange}
+          oninput={handleFilterChange}
           class="border-gray-02 p-s8 w-full border"
           placeholder="rechercher (nom du service, de sa structure, numéro du département)…"
         />
@@ -90,7 +94,7 @@
             <Label
               label="{service.structureName} ({service.structureDept})"
               smallIcon
-              icon={homeIcon}
+              icon={Home6LineBuildings}
             />
           </div>
           <div class="flex flex-none basis-1/6 flex-col">
@@ -103,7 +107,7 @@
           <div class="basis-s32 flex-none">
             <LinkButton
               to="/services/{service.slug}"
-              icon={eyeIcon}
+              icon={EyeLineSystem}
               noBackground
               otherTab
             />

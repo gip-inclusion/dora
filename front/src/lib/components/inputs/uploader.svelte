@@ -1,34 +1,50 @@
 <script lang="ts">
-  import { deleteBinIcon } from "$lib/icons";
+  import DeleteBinLineSystem from "svelte-remix/DeleteBinLineSystem.svelte";
+
   import { getApiURL } from "$lib/utils/api";
   import { shortenString } from "$lib/utils/misc";
+
   import Alert from "../display/alert.svelte";
 
-  export let id: string;
-  export let structureSlug: string | undefined;
-  export let fileKeys: string[] = [];
-  export let disabled = false;
+  interface Props {
+    id: string;
+    structureSlug?: string;
+    fileKeys?: string[];
+    disabled?: boolean;
+    onblur?: (event: Event) => void;
+  }
 
-  let errorMessage = "";
-  let progress: number | null = null;
+  let {
+    id,
+    structureSlug,
+    fileKeys = $bindable([]),
+    disabled = false,
+    onblur,
+  }: Props = $props();
+
   let uploadInput: HTMLInputElement;
 
-  function handleRemove(fileKey) {
+  let errorMessage = $state("");
+  let progress: number | null = $state(null);
+
+  function handleRemove(fileKey: string) {
     fileKeys = fileKeys.filter((key) => key !== fileKey);
   }
 
   function clearInput() {
-    uploadInput.value = null;
+    uploadInput.value = "";
     uploadInput.disabled = false;
     progress = null;
   }
 
-  function handleSubmit() {
-    function updateProgress(loaded, total) {
+  function handleSubmit(event: Event) {
+    event.preventDefault();
+
+    function updateProgress(loaded: number, total: number) {
       progress = (loaded / total) * 100;
     }
 
-    function handleUploadDone(request) {
+    function handleUploadDone(request: XMLHttpRequest) {
       const jsonResponse = JSON.parse(request.response);
       fileKeys = [jsonResponse.key, ...fileKeys];
       clearInput();
@@ -39,8 +55,16 @@
 
     const files = uploadInput.files;
 
+    if (!files) {
+      return;
+    }
+
     for (let i = 0; i < files.length; i++) {
       const file = files.item(i);
+      if (!file) {
+        continue;
+      }
+
       // We can't use fetch if we want a progress indicator
       const url = structureSlug
         ? `${getApiURL()}/upload/${structureSlug}/${file.name}/`
@@ -50,9 +74,9 @@
       request.setRequestHeader("Accept", "application/json; version=1.0");
 
       // upload progress event
-      request.upload.addEventListener("progress", (event) => {
+      request.upload.addEventListener("progress", (progressEvent) => {
         // upload progress as percentage
-        updateProgress(event.loaded, event.total);
+        updateProgress(progressEvent.loaded, progressEvent.total);
       });
 
       // upload progress event
@@ -72,12 +96,13 @@
       });
 
       // request finished event
-      request.addEventListener("load", (event) => {
-        if (event.target.status !== 201) {
+      request.addEventListener("load", (progressEvent: ProgressEvent) => {
+        const target = progressEvent.target as XMLHttpRequest;
+        if (target.status !== 201) {
           let message = "";
           clearInput();
           try {
-            message = JSON.parse(event.target.response)[0].message;
+            message = JSON.parse(target.response)[0].message;
 
             if (message === "INVALID_EXTENSION") {
               errorMessage = `Le fichier "${file.name}" n’est pas au bon format`;
@@ -99,20 +124,20 @@
     }
   }
 
-  function urlStringPathRemove(string) {
-    const pathElements = string.split("/");
-    return pathElements[pathElements.length - 1];
+  function urlStringPathRemove(path: string): string {
+    const pathElements = path.split("/");
+    return pathElements[pathElements.length - 1] ?? "";
   }
 </script>
 
-<form on:submit|preventDefault={handleSubmit} class="mb-s8 cursor-pointer">
+<form onsubmit={handleSubmit} class="mb-s8 cursor-pointer">
   <label>
     <input
       name={id}
       {id}
       bind:this={uploadInput}
-      on:blur
-      on:change={handleSubmit}
+      {onblur}
+      onchange={handleSubmit}
       {disabled}
       type="file"
       accept=".doc, .docx, .pdf, .png, .jpeg, .jpg, .odt, .xls, .xlsx, .ods"
@@ -131,10 +156,10 @@
       <div class="text-f14">{shortenString(urlStringPathRemove(uploaded))}</div>
       <div class="h-s24 w-s24">
         <button
-          on:click={handleRemove(uploaded)}
+          onclick={() => handleRemove(uploaded)}
           class="ml-s16 h-s24 w-s24 fill-error"
         >
-          {@html deleteBinIcon}
+          <DeleteBinLineSystem />
         </button>
       </div>
     </li>

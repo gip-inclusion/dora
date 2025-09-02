@@ -2,14 +2,17 @@ import { getApiURL } from "../utils/api";
 import { log } from "../utils/logger";
 import { fetchData } from "../utils/misc";
 
-export async function getCityLabel(inseeCode): Promise<string> {
-  const url = `${getApiURL()}/city-label/${inseeCode}/`;
-  const result = await fetchData<string>(url);
-  if (result.ok) {
-    return result.data;
+export async function getCityLabel(inseeCode: string): Promise<string | null> {
+  // Validation simple du code INSEE (que des chiffres)
+  if (!inseeCode || !/^[0-9]+$/.test(inseeCode.trim())) {
+    log(`Code INSEE invalide: ${inseeCode}`);
+    return null;
   }
-  log(
-    `Impossible de trouver la ville correspondant au code INSEE ${inseeCode}`
-  );
-  return "";
+
+  const cleanInseeCode = inseeCode.trim();
+  const url = new URL(`city-label/${cleanInseeCode}/`, getApiURL()).toString();
+
+  const result = await fetchData<string>(url);
+
+  return result.ok ? result.data : null;
 }

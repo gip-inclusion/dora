@@ -1,10 +1,16 @@
 <script lang="ts">
-  import { externalLinkIcon } from "$lib/icons";
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
 
-  export let cityLabel: string | null;
+  interface Props {
+    cityLabel: string | null;
+  }
 
-  $: queryString = cityLabel ? `?cl=${encodeURIComponent(cityLabel)}` : "";
-  $: url = `/annuaire-collectivite${queryString}`;
+  let { cityLabel }: Props = $props();
+
+  let queryString = $derived(
+    cityLabel ? `?cl=${encodeURIComponent(cityLabel)}` : ""
+  );
+  let url = $derived(`/annuaire-collectivite${queryString}`);
 </script>
 
 <div
@@ -14,7 +20,7 @@
     <a class="full-result-link hover:underline" href={url} target="_blank">
       Annuaire des Collectivités<span
         class="h-s28 w-s28 pl-s6 pt-s8 inline-block fill-current"
-        >{@html externalLinkIcon}</span
+        ><ExternalLinkLineSystem /></span
       >
     </a>
   </h3>

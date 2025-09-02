@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { copyIcon2 } from "$lib/icons";
+  import FileCopy2LineDocument from "svelte-remix/FileCopy2LineDocument.svelte";
 
-  export let warning = false;
-  export let small = false;
+  interface Props {
+    warning?: boolean;
+    small?: boolean;
+  }
+
+  let { warning = false, small = false }: Props = $props();
 </script>
 
 <div
@@ -11,7 +15,7 @@
   class:warning
 >
   <div class="h-s16 w-s16 fill-current">
-    {@html copyIcon2}
+    <FileCopy2LineDocument class="w-s16 h-s16" />
   </div>
 </div>
 

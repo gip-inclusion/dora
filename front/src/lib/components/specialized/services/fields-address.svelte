@@ -4,14 +4,18 @@
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
   import CitySearchField from "$lib/components/forms/fields/city-search-field.svelte";
   import HiddenField from "$lib/components/forms/fields/hidden-field.svelte";
-  import { syncIcon } from "$lib/icons";
+  import SyncIcon from "$lib/assets/icons/ico-sync.svelte";
   import type { GeoApiValue, Service, Structure } from "$lib/types";
   import { randomId } from "$lib/utils/random";
 
-  export let entity: Service | Structure;
-  export let parent: Structure | null = null;
+  interface Props {
+    entity: Service | Structure;
+    parent?: Structure | null;
+  }
 
-  let key = randomId();
+  let { entity = $bindable(), parent = null }: Props = $props();
+
+  let key = $state(randomId());
 
   function handleAddressChange(address) {
     const props = address?.properties;
@@ -59,8 +63,8 @@
     {#if parent}
       <div class="mb-s8 lg:w-2/3 lg:self-end">
         <Button
-          on:click={fillAddress}
-          icon={syncIcon}
+          onclick={fillAddress}
+          icon={SyncIcon}
           noBackground
           small
           noPadding
@@ -85,12 +89,12 @@
   <BasicInputField
     id="address2"
     bind:value={entity.address2}
-    description="Indication : bâtiment, immeuble, étage, numéro d’appartement, etc."
+    descriptionText="Indication : bâtiment, immeuble, étage, numéro d’appartement, etc."
   />
 
   <BasicInputField
     id="postalCode"
-    description="Format attendu : 5 chiffres. Par exemple : 75000."
+    descriptionText="Format attendu : 5 chiffres. Par exemple : 75000."
     bind:value={entity.postalCode}
   />
 

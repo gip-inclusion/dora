@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 
+from botocore.config import Config
 from corsheaders.defaults import default_headers
 
 from . import BASE_DIR
@@ -180,13 +181,22 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "dora", "static"),
+]
 
 # Téléversement de fichiers
 # https://django-storages.readthedocs.io/en/latest/backends/azure.html
 
 STORAGES = {
     "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "client_config": Config(
+                request_checksum_calculation="when_required",
+                response_checksum_validation="when_required",
+            ),
+        },
     },
     "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
@@ -270,6 +280,14 @@ REST_FRAMEWORK = {
     },
     "EXCEPTION_HANDLER": "dora.core.exceptions_handler.custom_exception_handler",
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "16/minute",
+        "user": "120/minute",
+    },
 }
 
 # CORS :
@@ -308,14 +326,19 @@ try:
 except (TypeError, ValueError):
     DATA_INCLUSION_SCORE_QUALITE_MINIMUM = None
 
+DATA_INCLUSION_EXCLUDE_DUPLICATES = (
+    os.getenv("DATA_INCLUSION_EXCLUDE_DUPLICATES") == "true"
+)
+
 SKIP_DI_INTEGRATION_TESTS = True
 
-# Send In Blue :
-SIB_ACTIVE = os.getenv("SIB_ACTIVE") == "true"
-SIB_API_KEY = os.getenv("SIB_API_KEY")
-SIB_ONBOARDING_LIST = os.getenv("SIB_ONBOARDING_LIST")
-SIB_ONBOARDING_PUTATIVE_MEMBER_LIST = os.getenv("SIB_ONBOARDING_PUTATIVE_MEMBER_LIST")
-SIB_ONBOARDING_MEMBER_LIST = os.getenv("SIB_ONBOARDING_MEMBER_LIST")
+# BREVO :
+BREVO_ACTIVE = os.getenv("BREVO_ACTIVE", "").lower() == "true"
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST = int(
+    os.getenv("BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST", 0)
+)
+BREVO_ONBOARDING_MEMBER_LIST = int(os.getenv("BREVO_ONBOARDING_MEMBER_LIST", 0))
 
 # Modération :
 MATTERMOST_HOOK_KEY = os.getenv("MATTERMOST_HOOK_KEY")
@@ -375,11 +398,6 @@ LOGIN_REDIRECT_URL_FAILURE = FRONTEND_URL
 # (essentiellement pour la gestion du `next_url`).
 OIDC_CALLBACK_CLASS = "dora.oidc.views.CustomAuthorizationCallbackView"
 
-# Recherches sauvegardées :
-INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS = (
-    os.getenv("INCLUDES_DI_SERVICES_IN_SAVED_SEARCH_NOTIFICATIONS") == "true"
-)
-
 # Notifications :
 # voir management command `process_notification_tasks`
 
@@ -416,10 +434,12 @@ ADMINS = (
 # CSP :
 # règles pour l'admin et les versions d'API
 PUBLIC_API_VERSIONS = ["1", "2"]
-CSP_EXCLUDE_URL_PREFIXES = (
-    "/admin/",
-    *[f"/api/v{version}/schema/doc/" for version in PUBLIC_API_VERSIONS],
-)
+CONTENT_SECURITY_POLICY = {
+    "EXCLUDE_URL_PREFIXES": [
+        "/admin",
+        *[f"/api/v{version}/schema/doc/" for version in PUBLIC_API_VERSIONS],
+    ],
+}
 
 # Envoi d'e-mails transactionnels :
 # https://app.tipimail.com/#/app/settings/smtp_and_apis
@@ -571,3 +591,19 @@ SESAME_MAX_AGE = 5 * 60
 SESAME_ONE_TIME = True
 # Nom de la variable de session indiquant une connexion via sesame
 SESAME_SESSION_NAME = "sesame_magic_link"
+
+# Recherche unifiée activée par défaut
+DI_DORA_UNIFIED_SEARCH_ENABLED = os.getenv("DI_DORA_UNIFIED_SEARCH_ENABLED") != "false"
+
+# Sécurité (espace admin) :
+# L'espace d'admin est protégé par un système à 2FA
+# Et pontiellement désactivable par configuration
+DJANGO_ADMIN_2FA_ENABLED = os.getenv("DJANGO_ADMIN_2FA_ENABLED") == "true"
+
+if DJANGO_ADMIN_2FA_ENABLED:
+    INSTALLED_APPS += [  # noqa
+        "django_otp",
+        "django_otp.plugins.otp_static",
+        "django_otp.plugins.otp_totp",
+    ]
+    MIDDLEWARE += ["django_otp.middleware.OTPMiddleware"]  # noqa

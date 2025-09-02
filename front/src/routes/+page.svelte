@@ -1,4 +1,6 @@
 <script lang="ts">
+  import VideoFillMedia from "svelte-remix/VideoFillMedia.svelte";
+
   import illuAccompagner from "$lib/assets/illustrations/illu-accompagner.svg";
   import illuMobiliser from "$lib/assets/illustrations/illu-mobiliser.svg";
   import illuRecenser from "$lib/assets/illustrations/illu-recenser.svg";
@@ -9,11 +11,8 @@
   import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
   import PartnerList from "$lib/components/specialized/partner-list.svelte";
   import SearchForm from "$lib/components/specialized/service-search.svelte";
-  import { GOOGLE_CSE_ID } from "$lib/env";
-
-  import type { PageData } from "./$types";
-  import { videoIcon } from "$lib/icons";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
+  import { GOOGLE_CSE_ID } from "$lib/env";
   import { refreshUserInfo } from "$lib/utils/auth";
   import { userInfo } from "$lib/utils/auth";
   import { userPreferences } from "$lib/utils/preferences";
@@ -21,13 +20,18 @@
   import MonRecapPopup from "$lib/components/specialized/mon-recap-popup.svelte";
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
 
-  export let data: PageData;
+  import type { PageData } from "./$types";
 
-  let isVideoModalOpen = false;
+  interface Props {
+    data: PageData;
+  }
 
-  $: lastVisitedStructure = getCurrentlySelectedStructure(
-    $userInfo,
-    $userPreferences
+  let { data }: Props = $props();
+
+  let isVideoModalOpen = $state(false);
+
+  let lastVisitedStructure = $derived(
+    getCurrentlySelectedStructure($userInfo, $userPreferences)
   );
 </script>
 
@@ -101,7 +105,7 @@
 
         <Button
           label="Voir la vidéo de démonstration"
-          on:click={() => (isVideoModalOpen = true)}
+          onclick={() => (isVideoModalOpen = true)}
           noBackground
           noPadding
         />
@@ -126,7 +130,7 @@
       <span
         class="h-s24 w-s24 text-france-blue inline-block flex-none fill-current align-bottom"
       >
-        {@html videoIcon}
+        <VideoFillMedia />
       </span>
       Rejoignez-nous lors d'un webinaire pour explorer les possibilités offertes
       par DORA.
@@ -184,7 +188,7 @@
     class="mt-s64 gap-s24 bg-gray-bg p-s24 flex flex-col rounded-lg md:flex-row"
   >
     <div class="w-1/3 self-center text-center">
-      <a href="https://www.data.inclusion.beta.gouv.fr/">
+      <a href="https://data.inclusion.gouv.fr/">
         <img
           src={logoDataInclusion}
           alt="Data inclusion - Contributeur officiel"

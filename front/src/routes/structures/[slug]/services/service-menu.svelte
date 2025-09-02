@@ -1,15 +1,22 @@
 <script lang="ts">
+  import CheckboxCircleFillSystem from "svelte-remix/CheckboxCircleFillSystem.svelte";
+  import FileCopy2LineDocument from "svelte-remix/FileCopy2LineDocument.svelte";
+  import Edit2LineDesign from "svelte-remix/Edit2LineDesign.svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import SetAsUpdatedModal from "$lib/components/specialized/services/set-as-updated-modal.svelte";
-  import { checkboxCircleFillIcon, copyIcon2, editIcon } from "$lib/icons";
   import type { Service, ServicesOptions, ShortService } from "$lib/types";
 
-  export let service: Service | ShortService;
-  export let servicesOptions: ServicesOptions;
-  export let onRefresh: () => void | undefined;
+  interface Props {
+    service: Service | ShortService;
+    servicesOptions: ServicesOptions;
+    onRefresh?: () => void;
+  }
 
-  let setAsUpdatedModalOpen = false;
+  let { service, servicesOptions, onRefresh }: Props = $props();
+
+  let setAsUpdatedModalOpen = $state(false);
 
   const extraClass = "hover:bg-magenta-cta hover:text-white! justify-start!";
 </script>
@@ -18,12 +25,12 @@
   {#if service.status === "PUBLISHED" && service.updateNeeded}
     <Button
       label="Marquer comme à jour"
-      icon={checkboxCircleFillIcon}
+      icon={CheckboxCircleFillSystem}
       iconOnRight
       small
       noBackground
       {extraClass}
-      on:click={() => (setAsUpdatedModalOpen = true)}
+      onclick={() => (setAsUpdatedModalOpen = true)}
     />
 
     <SetAsUpdatedModal
@@ -38,7 +45,7 @@
     <LinkButton
       label="Modifier"
       to="/services/{service.slug}/editer"
-      icon={editIcon}
+      icon={Edit2LineDesign}
       iconOnRight
       noBackground
       small
@@ -48,7 +55,7 @@
     <LinkButton
       label="Voir le modèle"
       to="/modeles/{service.model}"
-      icon={copyIcon2}
+      icon={FileCopy2LineDocument}
       iconOnRight
       noBackground
       small
@@ -60,7 +67,7 @@
       to="/services/{service.slug}/editer"
       small
       noBackground
-      icon={editIcon}
+      icon={Edit2LineDesign}
       iconOnRight
       {extraClass}
     />
@@ -69,7 +76,7 @@
         label="Créer un modèle"
         to={`/modeles/creer?service=${service.slug}&structure=${service.structure}`}
         small
-        icon={copyIcon2}
+        icon={FileCopy2LineDocument}
         iconOnRight
         noBackground
         {extraClass}

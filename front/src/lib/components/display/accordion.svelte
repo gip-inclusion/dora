@@ -1,15 +1,37 @@
 <script lang="ts">
-  import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+  import type { Snippet } from "svelte";
+
+  import ArrowDownSIcon from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSIcon from "svelte-remix/ArrowUpSLineArrows.svelte";
+
   import { randomId } from "$lib/utils/random";
 
-  export let title: string;
-  export let subTitle = "";
-  export let expanded = true;
-  export let titleClass = "";
-  export let noTitleMargin = false;
-  export let titleLevel: "h2" | "h3" | "h4" = "h2";
+  interface Props {
+    title: string;
+    subTitle?: string;
+    expanded?: boolean;
+    titleClass?: string;
+    noTitleMargin?: boolean;
+    titleLevel?: "h2" | "h3" | "h4";
+    children?: Snippet;
+  }
+
+  let {
+    title,
+    subTitle = "",
+    expanded = $bindable(true),
+    titleClass = "",
+    noTitleMargin = false,
+    titleLevel = "h2",
+    children,
+  }: Props = $props();
 
   const id = randomId();
+
+  function handleClick(event: MouseEvent) {
+    event.preventDefault();
+    expanded = !expanded;
+  }
 </script>
 
 <svelte:element
@@ -20,7 +42,7 @@
     aria-expanded={expanded}
     aria-controls={id}
     class="flex h-[45px] w-full items-center justify-between text-left"
-    on:click|preventDefault={() => (expanded = !expanded)}
+    onclick={handleClick}
   >
     <span>
       {title}
@@ -33,12 +55,12 @@
 
     <span class="ml-s10 h-s24 w-s24 text-magenta-cta fill-current print:hidden">
       {#if expanded}
-        {@html arrowUpSIcon}
+        <ArrowUpSIcon />
       {:else}
-        {@html arrowDownSIcon}
+        <ArrowDownSIcon />
       {/if}
     </span>
   </button>
 </svelte:element>
 
-<div {id} class:hidden={!expanded}><slot /></div>
+<div {id} class:hidden={!expanded}>{@render children?.()}</div>

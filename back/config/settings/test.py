@@ -3,6 +3,7 @@ import os
 import dj_database_url
 
 from .base import *  # noqa F403
+from .base import REST_FRAMEWORK
 
 DEBUG = True
 
@@ -31,7 +32,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "192.168.0.1", "0.0.0.0"]
 AUTH_PASSWORD_VALIDATORS = []
 
 # Configuration nécessaire pour les tests :
-SIB_ACTIVE = False
+BREVO_ACTIVE = False
 
 # Nécessaire pour la C.I. : fixe des valeurs par défaut pour les conteneurs
 # faire correspondre les valeurs définies dans la configuration de la CI
@@ -39,10 +40,14 @@ CORS_ALLOWED_ORIGIN_REGEXES = [os.getenv("DJANGO_CORS_ALLOWED_ORIGIN_REGEXES", "
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 IC_TOKEN_URL = os.getenv("IC_TOKEN_URL", "https://whatever-oidc-token-url.com")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "dora")
-SIB_ONBOARDING_LIST = os.getenv("SIB_ONBOARDING_LIST", "1")
-SIB_ONBOARDING_PUTATIVE_MEMBER_LIST = os.getenv(
-    "SIB_ONBOARDING_PUTATIVE_MEMBER_LIST", "2"
+BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST = int(
+    os.getenv("BREVO_ONBOARDING_PUTATIVE_MEMBER_LIST", "2")
 )
-SIB_ONBOARDING_MEMBER_LIST = os.getenv("SIB_ONBOARDING_MEMBER_LIST", "3")
+BREVO_ONBOARDING_MEMBER_LIST = int(os.getenv("BREVO_ONBOARDING_MEMBER_LIST", "3"))
 
 DATA_INCLUSION_SCORE_QUALITE_MINIMUM = None
+
+REST_FRAMEWORK = {
+    **REST_FRAMEWORK,
+    "DEFAULT_THROTTLE_CLASSES": [],
+}

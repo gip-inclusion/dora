@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { arrowLeftLineIcon, flashLightIcon } from "$lib/icons";
+  import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
+  import FlashlightLineWeather from "svelte-remix/FlashlightLineWeather.svelte";
   import Layout from "../orientation-layout.svelte";
   import type { PageData } from "./$types";
   import { initEmptyOrientation, orientation } from "../store";
@@ -9,7 +10,11 @@
   import Notice from "$lib/components/display/notice.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   const showContactBeneficiary = !$orientation.beneficiaryEmail;
   $orientation = initEmptyOrientation();
@@ -26,7 +31,7 @@
     >
       <div class="max-w-lg basis-1/2 text-center">
         <div class="mb-s12 h-s24 w-s24 text-gray-text mx-auto fill-current">
-          {@html flashLightIcon}
+          <FlashlightLineWeather />
         </div>
         <h2 class="text-gray-text font-bold">
           Votre demande a été transmise à la structure porteuse du service
@@ -53,7 +58,7 @@
         {/if}
 
         <LinkButton
-          icon={arrowLeftLineIcon}
+          icon={ArrowLeftSLineArrows}
           label="Retour à la fiche"
           to="/services/{data.isDI ? 'di--' : ''}{data.service.slug}"
           noBackground

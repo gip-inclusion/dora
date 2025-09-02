@@ -9,17 +9,25 @@
   import { orientation } from "../store";
   import { userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
+  import Alert from "$lib/components/display/alert.svelte";
   import Accordion from "$lib/components/display/accordion.svelte";
+  import BooleanCheckboxField from "$lib/components/forms/fields/boolean-checkbox-field.svelte";
   import SelectField from "$lib/components/forms/fields/select-field.svelte";
   import { orientationContainsTestWords } from "$lib/utils/orientation";
   import { userPreferences } from "$lib/utils/preferences";
   import type { Choice } from "$lib/types";
   import { URL_DOCUMENTATION_ORIENTATION } from "$lib/consts";
+  import { formErrors } from "$lib/validation/validation";
+  import type { Service } from "$lib/types";
 
-  export let service;
-  export let credentials;
+  interface Props {
+    service: Service;
+    credentials: any;
+  }
 
-  let contactPrefOptions: Choice[] = [];
+  let { service, credentials }: Props = $props();
+
+  let contactPrefOptions: Choice[] = $state([]);
 
   if ($userInfo.structures?.length === 1) {
     $orientation.prescriberStructureSlug = $userInfo.structures[0].slug;
@@ -45,7 +53,7 @@
     $orientation.referentEmail = $userInfo.email;
   });
 
-  $: testWordDetected = orientationContainsTestWords($orientation);
+  let testWordDetected = $derived(orientationContainsTestWords($orientation));
 </script>
 
 <div>
@@ -98,7 +106,7 @@
           id="referentPhone"
           type="tel"
           placeholder="0123456789"
-          description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
+          descriptionText="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
           bind:value={$orientation.referentPhone}
           vertical
         />
@@ -108,7 +116,7 @@
           id="referentEmail"
           type="email"
           placeholder="nom@domaine.fr"
-          description="Saisissez votre adresse professionnelle. Format attendu&nbsp;: mail@domaine.fr"
+          descriptionText="Saisissez votre adresse professionnelle. Format attendu&nbsp;: mail@domaine.fr"
           bind:value={$orientation.referentEmail}
           vertical
         />
@@ -117,6 +125,14 @@
   </Fieldset>
 
   <Fieldset title="Le ou la bénéficiaire">
+    <BasicInputField
+      id="beneficiaryFranceTravailNumber"
+      placeholder=""
+      descriptionText="Numéro unique à 11 chiffres"
+      bind:value={$orientation.beneficiaryFranceTravailNumber}
+      vertical
+    />
+
     <div class="gap-s24 flex flex-row justify-items-stretch">
       <div class="flex-1">
         <BasicInputField
@@ -139,15 +155,17 @@
     <BasicInputField
       id="beneficiaryAvailability"
       type="date"
-      description=""
+      descriptionText=""
       bind:value={$orientation.beneficiaryAvailability}
       vertical
     >
-      <p slot="description" class="legend italic">
-        Date à partir de laquelle la personne est disponible.<br />
-        Format attendu&nbsp;: JJ/MM/AAAA (par exemple, 17/01/2023 pour 17 janvier
-        2023)
-      </p>
+      {#snippet description()}
+        <p class="legend italic">
+          Date à partir de laquelle la personne est disponible.<br />
+          Format attendu&nbsp;: JJ/MM/AAAA (par exemple, 17/01/2023 pour 17 janvier
+          2023)
+        </p>
+      {/snippet}
     </BasicInputField>
 
     {#if $orientation.requirements.length || $orientation.situation.length}
@@ -207,7 +225,7 @@
           id="beneficiaryPhone"
           type="tel"
           placeholder="0123456789"
-          description="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
+          descriptionText="Format attendu&nbsp;: 4 à 10 caractères alphanumériques (sans l'indicatif pays)&nbsp;; ex. 0123456789"
           bind:value={$orientation.beneficiaryPhone}
           vertical
         />
@@ -217,7 +235,7 @@
           id="beneficiaryEmail"
           type="email"
           placeholder="nom@domaine.fr"
-          description="Format attendu&nbsp;: nom@domaine.fr"
+          descriptionText="Format attendu&nbsp;: nom@domaine.fr"
           bind:value={$orientation.beneficiaryEmail}
           vertical
         />
@@ -227,7 +245,7 @@
     {#if $orientation.beneficiaryContactPreferences.includes("AUTRE")}
       <TextareaField
         id="beneficiaryOtherContactMethod"
-        description="Préciser quelle autre méthode de contact est possible"
+        descriptionText="Préciser quelle autre méthode de contact est possible"
         bind:value={$orientation.beneficiaryOtherContactMethod}
         vertical
       />
@@ -261,42 +279,50 @@
         </p>
       </Notice>
 
-      {#each service.formsInfo as form}
+      {#each service.formsInfo || [] as form}
         {#if $orientation.attachments[form.name]}
           <UploadField
             dynamicId
             label="Document à compléter"
             vertical
             id={form.name}
-            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
+            descriptionText="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
             bind:fileKeys={$orientation.attachments[form.name]}
           >
-            <p slot="description">
-              <a
-                href={form.url}
-                class="font-bold underline"
-                target="_blank"
-                rel="noopener nofollow ugc"
-              >
-                {formatFilePath(form.name)}
-              </a>
-            </p>
+            {#snippet description()}
+              <p>
+                <a
+                  href={form.url}
+                  class="font-bold underline"
+                  target="_blank"
+                  rel="noopener nofollow ugc"
+                >
+                  {formatFilePath(form.name)}
+                </a>
+              </p>
+            {/snippet}
           </UploadField>
         {/if}
       {/each}
 
-      {#each credentials as cred}
+      {#each credentials || [] as cred}
         {#if $orientation.attachments[cred.label]}
           <UploadField
             dynamicId
             label={cred.label}
             vertical
             id={cred.label}
-            description="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
+            descriptionText="Taille maximale&nbsp;: 5 Mo. Formats supportés&nbsp;: doc, docx, pdf, png, jpeg, jpg, odt, xls, xlsx, ods"
             bind:fileKeys={$orientation.attachments[cred.label]}
           />
         {/if}
       {/each}
+
+      {#if $formErrors?.beneficiaryAttachments}
+        {#each $formErrors.beneficiaryAttachments as error, i}
+          <Alert id="beneficiaryAttachments-{i}" label={error} />
+        {/each}
+      {/if}
     </Fieldset>
   {/if}
 
@@ -316,9 +342,13 @@
         </p></Notice
       >
     {/if}
-    <Notice
-      type="info"
-      title="L’accompagnateur s’engage à informer la personne concernée de ce traitement de données."
+
+    <BooleanCheckboxField
+      id="dataProtectionCommitment"
+      label="Je m’engage, en tant qu’accompagnateur, à informer la personne concernée du traitement de ses données personnelles dans le cadre de cette orientation."
+      bind:value={$orientation.dataProtectionCommitment}
+      hideLabel
+      vertical
     />
   </div>
 </div>

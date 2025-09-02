@@ -1,40 +1,44 @@
 <script lang="ts">
-  import { alertIcon } from "$lib/icons";
+  import AlertFillSystem from "svelte-remix/AlertFillSystem.svelte";
+
   import type { Day, DayPeriod } from "$lib/types";
-  import { createEventDispatcher } from "svelte";
   import Toggle from "./toggle.svelte";
 
-  export let label: string;
-  export let isOpen: boolean;
-  export let openAt: string;
-  export let closeAt: string;
-  export let day: Day;
-  export let dayPeriod: DayPeriod;
-
-  const dispatch = createEventDispatcher();
-
-  let inError = false;
-  let ariaDescribedBy: string | undefined = undefined;
-
-  $: {
-    // Un jour ouvert mais sans valeur est ignoré
-    if (isOpen && (closeAt || openAt)) {
-      inError = !closeAt || !openAt || openAt >= closeAt;
-      if (inError) {
-        ariaDescribedBy = `error-${day}—${dayPeriod}`;
-      }
-    } else {
-      inError = false;
-    }
+  interface Props {
+    label: string;
+    isOpen: boolean;
+    openAt: string;
+    closeAt: string;
+    day: Day;
+    dayPeriod: DayPeriod;
+    onchange?: (event: Event) => void;
   }
 
-  function handleUpdate() {
+  let {
+    label,
+    isOpen = $bindable(),
+    openAt = $bindable(),
+    closeAt = $bindable(),
+    day,
+    dayPeriod,
+    onchange,
+  }: Props = $props();
+
+  let inError = $derived(
+    isOpen && (closeAt || openAt) && (!closeAt || !openAt || openAt >= closeAt)
+  );
+
+  let ariaDescribedBy = $derived(
+    inError ? `error-${day}—${dayPeriod}` : undefined
+  );
+
+  function handleUpdate(event: Event) {
     // Clear values and notify change
     if (!isOpen) {
       openAt = "";
       closeAt = "";
     }
-    dispatch("change");
+    onchange?.(event);
   }
 </script>
 
@@ -50,7 +54,7 @@
         <label class:error={inError}>
           <span class="sr-only">Horaire d’ouverture pour le {label}</span>
           <input
-            on:change
+            {onchange}
             bind:value={openAt}
             type="time"
             aria-describedby={ariaDescribedBy}
@@ -67,7 +71,7 @@
           <span class="sr-only">Horaire de fermeture pour le {label}</span>
 
           <input
-            on:change
+            {onchange}
             bind:value={closeAt}
             disabled={!isOpen}
             class:disabled-bg={!isOpen}
@@ -91,7 +95,7 @@
       </span>
     </label>
     <Toggle
-      on:change={handleUpdate}
+      onchange={(event) => handleUpdate(event)}
       bind:checked={isOpen}
       yesLabel="Ouvert"
       noLabel="Fermé"
@@ -106,7 +110,7 @@
     class="mt-s4 text-f12 text-error flex items-center"
   >
     <span class="mr-s4 h-s16 w-s16 fill-current">
-      {@html alertIcon}
+      <AlertFillSystem class="w-s16 h-s16" />
     </span>
     <span>Horaire incomplet ou incohérent.</span>
   </div>

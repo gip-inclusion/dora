@@ -1,37 +1,43 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
 
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import ServiceContact from "$lib/components/specialized/services/display/service-contact.svelte";
-  import { externalLinkIcon } from "$lib/icons";
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
   import type { Service } from "$lib/types";
   import { token } from "$lib/utils/auth";
 
   import SharingModal from "../sharing-modal.svelte";
 
-  export let service: Service;
-  export let isDI = false;
-  export let orientationFormUrl: string;
-  export let handleOrientationFormClickEvent: (event: any) => void;
+  interface Props {
+    service: Service;
+    isDI?: boolean;
+    orientationFormUrl: string;
+    handleOrientationFormClickEvent: (event: MouseEvent) => void;
+    onTrackMobilisation: (url?: string) => void;
+  }
 
-  $: isOrientableWithDoraForm =
+  let {
+    service,
+    isDI = false,
+    orientationFormUrl,
+    handleOrientationFormClickEvent,
+    onTrackMobilisation,
+  }: Props = $props();
+
+  let isOrientableWithDoraForm = $derived(
     (service.isOrientable &&
       service.coachOrientationModes?.includes("formulaire-dora")) ||
-    service.isOrientableFtService;
-  $: hasExternalForm = service.coachOrientationModes?.includes(
-    "completer-le-formulaire-dadhesion"
+      service.isOrientableFtService
+  );
+  let hasExternalForm = $derived(
+    service.coachOrientationModes?.includes("completer-le-formulaire-dadhesion")
   );
 
-  const dispatch = createEventDispatcher<{
-    trackMobilisation: { externalUrl?: string };
-  }>();
-
-  let sharingModalIsOpen = false;
-  let contactBoxOpen = false;
+  let sharingModalIsOpen = $state(false);
+  let contactBoxOpen = $state(false);
 
   function handleShowContactClick() {
     if (!$token && !service.isContactInfoPublic) {
@@ -44,11 +50,11 @@
     }
     contactBoxOpen = true;
     // on tracke comme une MER si les contacts du service sont publics
-    dispatch("trackMobilisation", {});
+    onTrackMobilisation();
   }
 
   function handleExternalFormClick(externalUrl: string) {
-    dispatch("trackMobilisation", { externalUrl });
+    onTrackMobilisation(externalUrl);
   }
 
   function handleShareClick() {
@@ -67,12 +73,12 @@
         label="Orienter votre bénéficiaire"
         to={orientationFormUrl}
         extraClass="bg-white text-france-blue! hover:text-white!"
-        on:click={handleOrientationFormClickEvent}
+        onclick={handleOrientationFormClickEvent}
       />
     {:else if service.contactInfoFilled}
       {#if !contactBoxOpen}
         <Button
-          on:click={handleShowContactClick}
+          onclick={handleShowContactClick}
           extraClass="mt-s16 bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
           label="Orienter votre bénéficiaire"
           wFull
@@ -87,13 +93,13 @@
 
   {#if hasExternalForm}
     <LinkButton
-      on:click={() =>
+      onclick={() =>
         handleExternalFormClick(service.coachOrientationModesExternalFormLink)}
       to={service.coachOrientationModesExternalFormLink}
       extraClass="bg-white text-france-blue! hover:text-white! text-center whitespace-normal! text-center"
       label={service.coachOrientationModesExternalFormLinkText ||
         "Orienter votre bénéficiaire"}
-      icon={externalLinkIcon}
+      icon={ExternalLinkLineSystem}
       iconOnRight
       otherTab
       wFull
@@ -101,7 +107,7 @@
   {/if}
 
   <Button
-    on:click={handleShareClick}
+    onclick={handleShareClick}
     extraClass="bg-france-blue! text-white border! border-white! hover:bg-magenta-cta! hover:border-france-blue!"
     label="Partager cette fiche"
     wFull

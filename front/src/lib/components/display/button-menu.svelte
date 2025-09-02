@@ -1,31 +1,50 @@
 <script lang="ts">
+  import type { Component, Snippet } from "svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import { clickOutside } from "$lib/utils/misc";
   import { randomId } from "$lib/utils/random";
 
-  export let icon: string | undefined = undefined;
-  export let iconOnRight = false;
-  export let label: string | undefined = undefined;
-  export let hideLabel = false;
-  export let disabled = false;
-  export let small = false;
-  export let big = false;
-  export let noPadding = false;
-  export let alignRight = true;
-  export let extraClass = "";
+  interface Props {
+    icon?: Component;
+    iconOnRight?: boolean;
+    label?: string;
+    hideLabel?: boolean;
+    disabled?: boolean;
+    small?: boolean;
+    big?: boolean;
+    noPadding?: boolean;
+    alignRight?: boolean;
+    extraClass?: string;
+    children?: Snippet<[any]>;
+  }
 
-  let isOpen = false;
+  let {
+    icon: Icon,
+    iconOnRight = false,
+    label,
+    hideLabel = false,
+    disabled = false,
+    small = false,
+    big = false,
+    noPadding = false,
+    alignRight = true,
+    extraClass = "",
+    children,
+  }: Props = $props();
+
+  let isOpen = $state(false);
   const id = `button-menu-${randomId()}`;
 
-  function handleClickOutside(_event) {
+  function handleClickOutside() {
     isOpen = false;
   }
 </script>
 
-<div use:clickOutside on:click_outside={handleClickOutside}>
+<div {@attach clickOutside(handleClickOutside)}>
   <div class="wrapper relative">
     <Button
-      {icon}
+      icon={Icon}
       {iconOnRight}
       {label}
       noBackground
@@ -39,7 +58,7 @@
       {small}
       {big}
       {noPadding}
-      on:click={() => (isOpen = !isOpen)}
+      onclick={() => (isOpen = !isOpen)}
     />
     <div
       {id}
@@ -48,7 +67,7 @@
       class:flex={isOpen}
       class:hidden={!isOpen}
     >
-      <slot onClose={() => (isOpen = false)} />
+      {@render children?.({ onClose: () => (isOpen = false) })}
     </div>
   </div>
 </div>

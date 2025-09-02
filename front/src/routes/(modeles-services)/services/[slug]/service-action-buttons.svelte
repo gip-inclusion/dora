@@ -19,14 +19,18 @@
   import SharingModal from "../../components/sharing-modal.svelte";
   import ServiceActionButton from "./service-action-button.svelte";
 
-  export let service: Service;
+  interface Props {
+    service: Service;
+  }
+
+  let { service }: Props = $props();
 
   const copyLabel = "Copier";
   const printLabel = "Imprimer";
   const shareLabel = "Partager par e-mail";
 
-  let sharingModalIsOpen = false;
-  let linkCopied = false;
+  let sharingModalIsOpen = $state(false);
+  let linkCopied = $state(false);
 
   function handleCopy() {
     navigator.clipboard.writeText(window.location.href);
@@ -54,12 +58,12 @@
     onBookmark();
   }
 
-  $: isDI = "source" in service;
+  let isDI = $derived("source" in service);
 </script>
 
 <div class="gap-s16 flex">
   <Tooltip>
-    <ServiceActionButton ariaLabel={copyLabel} on:click={handleCopy}>
+    <ServiceActionButton ariaLabel={copyLabel} onclick={handleCopy}>
       <div class="w-s24 h-s24 relative">
         {#if linkCopied}
           <div class="absolute" transition:fly={{ y: 50, duration: 500 }}>
@@ -72,37 +76,47 @@
         {/if}
       </div>
     </ServiceActionButton>
-    <span slot="content">{copyLabel}</span>
+    {#snippet content()}
+      <span>{copyLabel}</span>
+    {/snippet}
   </Tooltip>
   <Tooltip>
-    <ServiceActionButton ariaLabel={printLabel} on:click={handlePrint}>
+    <ServiceActionButton ariaLabel={printLabel} onclick={handlePrint}>
       <PrinterLineBusiness />
     </ServiceActionButton>
-    <span slot="content">{printLabel}</span>
+    {#snippet content()}
+      <span>{printLabel}</span>
+    {/snippet}
   </Tooltip>
   <Tooltip>
-    <ServiceActionButton ariaLabel={shareLabel} on:click={handleShare}>
+    <ServiceActionButton ariaLabel={shareLabel} onclick={handleShare}>
       <MailLineBusiness />
     </ServiceActionButton>
-    <span slot="content">{shareLabel}</span>
+    {#snippet content()}
+      <span>{shareLabel}</span>
+    {/snippet}
   </Tooltip>
-  <Bookmarkable slug={service.slug} {isDI} let:onBookmark let:isBookmarked>
-    {@const bookmarLabel = isBookmarked
-      ? "Retirer de vos favoris"
-      : "Ajouter à vos favoris"}
-    <Tooltip>
-      <ServiceActionButton
-        ariaLabel={bookmarLabel}
-        on:click={() => handleBookmark(onBookmark)}
-      >
-        {#if isBookmarked}
-          <BookmarkFillBusiness class="text-magenta-cta" />
-        {:else}
-          <BookmarkLineBusiness />
-        {/if}
-      </ServiceActionButton>
-      <span slot="content">{bookmarLabel}</span>
-    </Tooltip>
+  <Bookmarkable slug={service.slug} {isDI}>
+    {#snippet children({ onBookmark, isBookmarked })}
+      {@const bookmarLabel = isBookmarked
+        ? "Retirer de vos favoris"
+        : "Ajouter à vos favoris"}
+      <Tooltip>
+        <ServiceActionButton
+          ariaLabel={bookmarLabel}
+          onclick={() => handleBookmark(onBookmark)}
+        >
+          {#if isBookmarked}
+            <BookmarkFillBusiness class="text-magenta-cta" />
+          {:else}
+            <BookmarkLineBusiness />
+          {/if}
+        </ServiceActionButton>
+        {#snippet content()}
+          <span>{bookmarLabel}</span>
+        {/snippet}
+      </Tooltip>
+    {/snippet}
   </Bookmarkable>
 </div>
 

@@ -36,9 +36,9 @@ def test_check_notification(structure_task):
 
     n = Notification(task_type="generic_task")
 
-    assert (
-        structure_task._check(n) == n
-    ), "doit retourner la notification, si elle est valide"
+    assert structure_task._check(n) == n, (
+        "doit retourner la notification, si elle est valide"
+    )
 
 
 def test_new_notification(structure_task):

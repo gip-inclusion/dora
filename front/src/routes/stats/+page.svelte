@@ -11,8 +11,8 @@
     title="Dashboard Metabase"
     src={METABASE_EMBED_URL}
     allowtransparency
-    on:load={() => iframeResize({ license: "GPLv3" }, "#metabaseIframe")}
+    onload={() => iframeResize({ license: "GPLv3" }, "#metabaseIframe")}
     id="metabaseIframe"
     class="w-full border-0"
-  />
+  ></iframe>
 </CenteredGrid>

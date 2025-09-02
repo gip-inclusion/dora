@@ -1,21 +1,21 @@
 export function isOrphan(struct) {
-  return !struct.hasAdmin && !struct.adminsToRemind.length;
+  return struct.isOrphan;
 }
 export function isObsolete(struct) {
   return struct.isObsolete;
 }
 export function waiting(struct) {
-  return struct.adminsToRemind.length;
+  return struct.isWaiting;
 }
 
 export function toModerate(struct) {
-  return struct.moderationStatus !== "VALIDATED";
+  return struct.awaitingModeration;
 }
 
 export function toActivate(struct) {
-  return !struct.numPublishedServices;
+  return struct.awaitingActivation;
 }
 
 export function toUpdate(struct) {
-  return struct.numOutdatedServices;
+  return struct.awaitingUpdate;
 }

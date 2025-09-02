@@ -15,15 +15,19 @@
   import { orientationStep2Schema } from "../schema";
   import Form from "$lib/components/forms/form.svelte";
   import { goto } from "$app/navigation";
-  import { arrowLeftLineIcon } from "$lib/icons";
+  import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
 
   const { service } = data;
   const isDI = !!data.isDI;
 
-  let requesting = false;
+  let requesting = $state(false);
 
   // Fichiers à uploader
   const credentials = (service.credentialsDisplay || [])
@@ -113,7 +117,7 @@
 
     <StickyFormSubmissionRow justifyBetween>
       <LinkButton
-        icon={arrowLeftLineIcon}
+        icon={ArrowLeftSLineArrows}
         to="/services/{data.service.slug}/orienter"
         label="Revenir à l’étape précédente"
         secondary

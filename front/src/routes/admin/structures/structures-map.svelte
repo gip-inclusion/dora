@@ -1,30 +1,43 @@
 <script lang="ts">
-  import type { AdminShortStructure, GeoApiValue } from "$lib/types";
-  import * as mlgl from "maplibre-gl";
-  import Map from "$lib/components/display/map.svelte";
   import insane from "insane";
 
-  export let filteredStructures: AdminShortStructure[] = [];
-  export let selectedStructureSlug: string | null;
-  export let department: GeoApiValue;
+  import * as mlgl from "maplibre-gl";
 
-  let map: mlgl.Map;
+  import Map from "$lib/components/display/map.svelte";
+  import type { AdminShortStructure, GeoApiValue } from "$lib/types";
+
+  interface Props {
+    filteredStructures?: AdminShortStructure[];
+    selectedStructureSlug: string | null;
+    department: GeoApiValue;
+  }
+
+  let {
+    filteredStructures = [],
+    selectedStructureSlug = $bindable(),
+    department,
+  }: Props = $props();
+
+  let map: mlgl.Map | undefined = $state();
   let popup: mlgl.Popup;
 
-  function getPopupContent(feature): string {
+  function getPopupContent(feature: mlgl.MapGeoJSONFeature): string {
     return insane(
       `<strong>${feature.properties.name}</strong><br>${feature.properties.shortDesc}`
     );
   }
 
-  function zoomToStructures(features) {
+  function zoomToStructures(features: AdminShortStructure[]) {
     if (!map) {
       return;
     }
     if (features.length) {
-      const firstCoordinates = [features[0].longitude, features[0].latitude];
+      const firstCoordinates: mlgl.LngLatLike = [
+        features[0].longitude,
+        features[0].latitude,
+      ];
       const bounds = features.reduce(
-        function (acc, feature) {
+        function (acc: mlgl.LngLatBounds, feature: AdminShortStructure) {
           return acc.extend([feature.longitude, feature.latitude]);
         },
         new mlgl.LngLatBounds(firstCoordinates, firstCoordinates)
@@ -35,15 +48,15 @@
           padding: 60,
         });
       }
-    } else if (department) {
-      const coordinates = department.geom.coordinates[0];
+    } else if (department?.geom) {
+      const coordinates = (department.geom as any).coordinates?.[0];
       // Quand la géométries a été sursimplifiée, on n'a pas de coordonnées.
       // Dans ce cas, on ne fait rien en attendant que la logique de simplification soit mise à jour.
       if (!coordinates) {
         return;
       }
       const bounds = coordinates.reduce(
-        function (acc, coord) {
+        function (acc: mlgl.LngLatBounds, coord: [number, number]) {
           return acc.extend(coord);
         },
         new mlgl.LngLatBounds(coordinates[0], coordinates[0])
@@ -56,6 +69,10 @@
   }
 
   function handleMapLoaded() {
+    if (!map) {
+      return;
+    }
+
     map.addSource("structuresSource", {
       type: "geojson",
       promoteId: "slug",
@@ -98,34 +115,56 @@
       closeOnClick: false,
     });
 
-    map.on("mouseenter", "structuresLayer", function (evt) {
-      // Change the cursor style as a UI indicator.
-      map.getCanvas().style.cursor = "pointer";
-      const feature = evt.features[0];
-      const coordinates = feature.geometry.coordinates.slice();
-      selectedStructureSlug = feature.properties.slug;
+    map.on(
+      "mouseenter",
+      "structuresLayer",
+      function (evt: mlgl.MapLayerMouseEvent) {
+        if (!map || !evt.features || evt.features.length === 0) {
+          return;
+        }
+        // Change the cursor style as a UI indicator.
+        map.getCanvas().style.cursor = "pointer";
+        const feature = evt.features[0];
+        const coordinates = (feature.geometry as any).coordinates.slice();
+        selectedStructureSlug = feature.properties.slug;
 
-      // Populate the popup and set its coordinates
-      // based on the feature found.
-      popup.setLngLat(coordinates).setHTML(getPopupContent(feature)).addTo(map);
-      popup._update();
-    });
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup
+          .setLngLat(coordinates)
+          .setHTML(getPopupContent(feature))
+          .addTo(map);
+        popup._update();
+      }
+    );
 
     map.on("mouseleave", "structuresLayer", function () {
+      if (!map) {
+        return;
+      }
       map.getCanvas().style.cursor = "";
       selectedStructureSlug = null;
       popup.remove();
     });
 
     map.on("click", "structuresLayer", function (evt) {
+      if (!evt.features) {
+        return;
+      }
       const feature = evt.features[0];
-      window.open(`/structures/${feature.properties.slug}`, "_blank").focus();
+      const windowRef = window.open(
+        `/structures/${feature.properties.slug}`,
+        "_blank"
+      );
+      if (windowRef) {
+        windowRef.focus();
+      }
     });
 
     zoomToStructures(filteredStructures);
   }
 
-  function updateMapContent() {
+  function updateMapContent(structures: AdminShortStructure[]) {
     if (!map) {
       return;
     }
@@ -140,7 +179,7 @@
 
     structuresSource.setData({
       type: "FeatureCollection",
-      features: filteredStructures.map((struct) => ({
+      features: structures.map((struct) => ({
         type: "Feature",
         properties: {
           ...struct,
@@ -152,7 +191,7 @@
       })),
     });
 
-    zoomToStructures(filteredStructures);
+    zoomToStructures(structures);
   }
 
   function updateHoveredFeature(structureSlug: string | null) {
@@ -174,8 +213,13 @@
     }
   }
 
-  $: updateHoveredFeature(selectedStructureSlug);
-  $: filteredStructures, updateMapContent();
+  $effect(() => {
+    updateHoveredFeature(selectedStructureSlug);
+  });
+
+  $effect(() => {
+    updateMapContent(filteredStructures);
+  });
 </script>
 
-<Map bind:map on:load={handleMapLoaded} />
+<Map bind:map onLoad={handleMapLoaded} />

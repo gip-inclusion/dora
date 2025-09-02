@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, setContext } from "svelte";
 
   import { browser } from "$app/environment";
   import { page } from "$app/stores";
@@ -10,6 +10,8 @@
   import { TallyFormId } from "$lib/consts";
   import { getService } from "$lib/requests/services";
   import type { Service } from "$lib/types";
+  import { userInfo } from "$lib/utils/auth";
+  import { isMemberOrPotentialMemberOfStructure } from "$lib/utils/current-structure";
   import { trackService } from "$lib/utils/stats";
 
   import ServiceBody from "../../components/service-body/service-body.svelte";
@@ -18,9 +20,23 @@
   import ServiceToolbar from "./service-toolbar.svelte";
   import type { PageData } from "./$types";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
 
-  let isServiceFeedbackModalOpen = false;
+  let { data = $bindable() }: Props = $props();
+
+  let isServiceFeedbackModalOpen = $state(false);
+
+  let showFeedbackModal = $derived(
+    browser &&
+      data.service &&
+      !isMemberOrPotentialMemberOfStructure($userInfo, data.service.structure)
+  );
+
+  $effect(() => {
+    setContext("showFeedbackModal", showFeedbackModal);
+  });
 
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");
@@ -67,7 +83,7 @@
     onFeedbackButtonClick={() => (isServiceFeedbackModalOpen = true)}
   />
 
-  {#if browser && !data.service.canWrite}
+  {#if showFeedbackModal}
     <ServiceFeedbackModal
       bind:isOpen={isServiceFeedbackModalOpen}
       service={data.service}

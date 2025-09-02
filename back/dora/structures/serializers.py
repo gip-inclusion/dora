@@ -1,4 +1,4 @@
-from data_inclusion.schema import TypologieStructure
+from data_inclusion.schema.v0 import TypologieStructure
 from django.db.models import Count, Q
 from rest_framework import exceptions, serializers
 

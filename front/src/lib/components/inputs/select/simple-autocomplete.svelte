@@ -5,141 +5,172 @@
 <script lang="ts">
   // TODO: lint this file properly
   /* eslint-disable */
+  import { onMount, type Snippet } from "svelte";
+
+  import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
+  import CloseCircleFillSystem from "svelte-remix/CloseCircleFillSystem.svelte";
+
+  import insane from "insane";
+
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
-  import { checkIcon, closeCircleIcon } from "$lib/icons";
   import { clickOutside } from "$lib/utils/misc";
   import { formatErrors } from "$lib/validation/validation";
-
-  // the list of items the user can select from
-  export let items = [];
-
-  // a list of items values that the user can not remove (ex: structure national labels)
-  export let fixedItemsValues: string[] = [];
-
-  // function to use to get all items (alternative to providing items)
-  export let searchFunction:
-    | ((searchText: string) => Promise<any[]>)
-    | undefined = undefined;
-
-  export let textCleanFunction = function (userEnteredText) {
-    return userEnteredText;
-  };
-
-  // events
-
-  export let onChange = function (_newValue) {};
-  export let onFocus = function () {};
-
-  // Behaviour properties
-  export let selectFirstIfEmpty = false;
-  export let minCharactersToSearch = 1;
-  export let maxItemsToShowInList = 0;
-  export let multiple = false;
-
-  // Workaround for https://github.com/sveltejs/svelte/issues/5604
-  export let hasPrependSlot = false;
-  export let hasAppendSlot = false;
-  export let hasCustomContentSlot = false;
-
-  // ignores the accents when matching items
-  export let ignoreAccents = true;
-
-  // all the input keywords should be matched in the item keywords
-  export let matchAllKeywords = true;
-
-  // sorts the items by the number of matching keywords
-  export let sortByMatchedKeywords = false;
-
-  // allow users to use a custom item filter function
-  export let itemFilterFunction = undefined;
-
-  // allow users to use a custom item sort function
-  export let itemSortFunction = undefined;
-
-  // do not allow re-selection after initial selection
-  export let lock = false;
-
-  // delay to wait after a keypress to search for new items
-  export let delay = 0;
-
-  // true to perform local filtering of items, even if searchFunction is provided
-  export let localFiltering = true;
-
-  // UI properties
-
-  // option to hide the dropdown arrow
-  export let hideArrow = false;
-
-  // option to show clear selection button
-  export let showClear = true;
-
-  // option to show loading indicator when the async function is executed
-  export let showLoadingIndicator = false;
-
-  // text displayed when no items match the input text
-  export let noResultsText = "Aucun résultat";
-
-  // text displayed when async data is being loaded
-  export let loadingText = "Chargement des résultats…";
-
-  // the text displayed when no option is selected
-  export let placeholder = "";
-
-  // the text displayed when at least one option is selected
-  export let placeholderMulti = "";
-
-  // apply a className to the control
-  export let className = "";
-
-  // HTML input UI properties
-  // apply a className to the input control
-  export let inputClassName = "";
-  // apply a id to the input control
-  export let inputId: string;
-  // generate an HTML input with this name
-  export let name = undefined;
-  // generate a <select> tag that holds the value
-  export let selectName = undefined;
-  // apply a id to the <select>
-  export let selectId = undefined;
-  // add the title to the HTML input
-  export let title = undefined;
-  // enable the html5 autocompletion to the HTML input
-  export let html5autocomplete = false;
-  // make the input readonly
-  export let readonly = false;
-  // apply a className to the dropdown div
-  export let dropdownClassName = "";
-  // adds the disabled tag to the HTML input and tag deletion
-  export let disabled = false;
-
-  export let errorMessages: string[] = [];
-
-  // --- Public State ----
-
-  // selected item state
-  export let value = undefined;
-  export let initialValue = undefined;
 
   // --- Internal State ----
   const uniqueId = `sautocomplete-${Math.floor(Math.random() * 1000)}`;
 
+  interface Props {
+    // the list of items the user can select from
+    items?: any;
+    // a list of items values that the user can not remove (ex: structure national labels)
+    fixedItemsValues?: string[];
+    // function to use to get all items (alternative to providing items)
+    searchFunction?: (searchText: string) => Promise<any[]>;
+    textCleanFunction?: any;
+    // events
+    onblur?: (evt: FocusEvent) => void;
+    onChange?: any;
+    onFocus?: any;
+    // Behaviour properties
+    selectFirstIfEmpty?: boolean;
+    minCharactersToSearch?: number;
+    maxItemsToShowInList?: number;
+    multiple?: boolean;
+    // ignores the accents when matching items
+    ignoreAccents?: boolean;
+    // all the input keywords should be matched in the item keywords
+    matchAllKeywords?: boolean;
+    // sorts the items by the number of matching keywords
+    sortByMatchedKeywords?: boolean;
+    // allow users to use a custom item filter function
+    itemFilterFunction?: any;
+    // allow users to use a custom item sort function
+    itemSortFunction?: any;
+    // do not allow re-selection after initial selection
+    lock?: boolean;
+    // delay to wait after a keypress to search for new items
+    delay?: number;
+    // true to perform local filtering of items, even if searchFunction is provided
+    localFiltering?: boolean;
+
+    // UI properties
+
+    // option to hide the dropdown arrow
+    hideArrow?: boolean;
+    // option to show clear selection button
+    showClear?: boolean;
+    // option to show loading indicator when the async function is executed
+    showLoadingIndicator?: boolean;
+    // text displayed when no items match the input text
+    noResultsText?: string;
+    // text displayed when async data is being loaded
+    loadingText?: string;
+    // the text displayed when no option is selected
+    placeholder?: string;
+    // the text displayed when at least one option is selected
+    placeholderMulti?: string;
+    // apply a className to the control
+    className?: string;
+
+    // HTML input UI properties
+
+    // apply a className to the input control
+    inputClassName?: string;
+    // apply a id to the input control
+    inputId: string;
+    // generate an HTML input with this name
+    name?: any;
+    // generate a <select> tag that holds the value
+    selectName?: any;
+    // apply a id to the <select>
+    selectId?: any;
+    // add the title to the HTML input
+    title?: any;
+    // enable the html5 autocompletion to the HTML input
+    html5autocomplete?: boolean;
+    // make the input readonly
+    readonly?: boolean;
+    // apply a className to the dropdown div
+    dropdownClassName?: string;
+    // adds the disabled tag to the HTML input and tag deletion
+    disabled?: boolean;
+    errorMessages?: string[];
+
+    // --- Public State ----
+
+    // selected item state
+    value?: any;
+    initialValue?: any;
+
+    text?: string;
+    prepend?: Snippet;
+    itemContent?: Snippet<[any]>;
+    append?: Snippet;
+  }
+
+  let {
+    items = $bindable([]),
+    fixedItemsValues = [],
+    searchFunction,
+    textCleanFunction = function (userEnteredText) {
+      return userEnteredText;
+    },
+    onblur,
+    onChange = function (_newValue) {},
+    onFocus = function () {},
+    selectFirstIfEmpty = false,
+    minCharactersToSearch = 1,
+    maxItemsToShowInList = 0,
+    multiple = false,
+    ignoreAccents = true,
+    matchAllKeywords = true,
+    sortByMatchedKeywords = false,
+    itemFilterFunction,
+    itemSortFunction,
+    lock = false,
+    delay = 0,
+    localFiltering = true,
+    hideArrow = false,
+    showClear = true,
+    showLoadingIndicator = false,
+    noResultsText = "Aucun résultat",
+    loadingText = "Chargement des résultats…",
+    placeholder = "",
+    placeholderMulti = "",
+    className = "",
+    inputClassName = "",
+    inputId,
+    name,
+    selectName,
+    selectId,
+    title,
+    html5autocomplete = false,
+    readonly = false,
+    dropdownClassName = "",
+    disabled = false,
+    errorMessages = [],
+    value = $bindable(),
+    initialValue,
+    text = $bindable(""),
+    prepend,
+    itemContent,
+    append,
+  }: Props = $props();
+
   // HTML elements
-  let input;
-  let list;
+  let input: HTMLInputElement | undefined = $state();
+  let list: HTMLDivElement | undefined = $state();
 
   // UI state
-  let opened = false;
-  let loading = false;
+  let opened = $state(false);
+  let loading = $state(false);
 
-  let highlightIndex = -1;
-  export let text = "";
+  let highlightIndex = $state(-1);
 
   let filteredTextLength = 0;
 
   // view model
-  let filteredListItems;
-  let listItems = [];
+  let filteredListItems: any[] = $state([]);
 
   // requests/responses counters
   let lastRequestId = 0;
@@ -147,7 +178,7 @@
 
   // other state
   let inputDelayTimeout;
-  let showList = false;
+  let showList = $state(false);
 
   // -- Reactivity --
 
@@ -163,15 +194,15 @@
     return !!fixedItemValue;
   }
 
-  function onValueChanged() {
-    if (value !== undefined) {
-      if (multiple) {
-        text = "";
-      } else {
-        text = getLabelForValue(value);
+  function updateValue(newValue) {
+    if (newValue) {
+      const newText = multiple ? "" : getLabelForValue(newValue);
+      if (text !== newText) {
+        text = newText;
       }
-      onChange(value);
-    } else if (initialValue) {
+      value = newValue;
+      onChange(newValue);
+    } else if (initialValue && text !== initialValue) {
       text = initialValue;
     }
     if (!multiple) {
@@ -179,15 +210,22 @@
     }
   }
 
-  function onTextChanged() {
-    if (!multiple && (text == null || text === "")) {
-      value = null;
+  onMount(() => {
+    if (value && !text) {
+      text = getLabelForValue(value);
     }
-  }
+  });
 
-  $: value, onValueChanged();
-  $: text, onTextChanged();
-  $: clearable = showClear && (lock || multiple) && value;
+  $effect(() => {
+    // Si text est vide et qu'on est en sélection simple, on réinitialise la valeur
+    if (!multiple && !text) {
+      updateValue(undefined);
+    }
+  });
+
+  let listItems: any[] = $derived(prepareListItems(items));
+
+  let clearable = $derived(showClear && (lock || multiple) && value);
 
   // --- Functions ---
 
@@ -201,11 +239,9 @@
     return result;
   }
 
-  function prepareListItems() {
+  function prepareListItems(items: any[]) {
     if (!Array.isArray(items) || items.length === 0) {
-      items = [];
-      listItems = [];
-      return;
+      return [];
     }
 
     let selectableItems;
@@ -218,12 +254,7 @@
       selectableItems = items;
     }
 
-    listItems = new Array(selectableItems.length);
-
-    selectableItems.forEach((item, i) => {
-      const listItem = getListItem(item);
-      listItems[i] = listItem;
-    });
+    return selectableItems.map(getListItem);
   }
 
   function getListItem(item) {
@@ -237,8 +268,6 @@
       item,
     };
   }
-
-  $: items, prepareListItems();
 
   function prepareUserEnteredText(userEnteredText) {
     if (userEnteredText === undefined || userEnteredText === null) {
@@ -306,7 +335,7 @@
 
       // searchFunction is a generator
       if (searchFunction.constructor.name === "AsyncGeneratorFunction") {
-        for await (const chunk of searchFunction(textFiltered)) {
+        for await (const chunk of await searchFunction(textFiltered)) {
           // a chunk of an old response: throw it away
           if (currentRequestId < lastResponseId) {
             return false;
@@ -366,7 +395,7 @@
 
   function processListItems(textFiltered) {
     // cleans, filters, orders, and highlights the list items
-    prepareListItems();
+    prepareListItems(items);
 
     // local search
     let tempfilteredListItems;
@@ -416,19 +445,19 @@
   function selectListItem(newValue) {
     // simple selection
     if (!multiple) {
-      value = newValue;
+      updateValue(newValue);
     }
     // first selection of multiple ones
     else if (!value) {
-      value = [newValue];
+      updateValue([newValue]);
     }
     // selecting something already selected => unselect it
     else if (value.includes(newValue)) {
-      value = value.filter((i) => i !== newValue);
+      updateValue(value.filter((i) => i !== newValue));
     }
     // adds the element to the selection
     else {
-      value = [...value, newValue];
+      updateValue([...value, newValue]);
     }
 
     return true;
@@ -440,7 +469,7 @@
       if (selectListItem(listItem.value)) {
         close();
         if (multiple) {
-          input.focus();
+          input?.focus();
         }
       }
     }
@@ -461,8 +490,8 @@
 
     const el = list && list.querySelector(query);
     if (el) {
-      if (typeof el.scrollIntoViewIfNeeded === "function") {
-        el.scrollIntoViewIfNeeded();
+      if (typeof (el as any).scrollIntoViewIfNeeded === "function") {
+        (el as any).scrollIntoViewIfNeeded();
       }
     }
   }
@@ -471,7 +500,7 @@
     if (selectListItem(listItem.value)) {
       close();
       if (multiple) {
-        input.focus();
+        input?.focus();
       }
     }
   }
@@ -535,15 +564,14 @@
   function unselectItem(tag) {
     if (disabled || readonly) return;
 
-    value = value.filter((i) => i !== tag);
-    input.focus();
+    updateValue(value.filter((i) => i !== tag));
+    input?.focus();
   }
 
-  function processInput() {
-    if (search()) {
-      highlightIndex = 0;
-      open();
-    }
+  async function processInput() {
+    await search();
+    highlightIndex = 0;
+    open();
   }
 
   function onInputClick() {
@@ -554,7 +582,7 @@
     if (opened) {
       e.stopPropagation();
 
-      input.focus();
+      input?.focus();
       close();
     }
   }
@@ -605,7 +633,7 @@
           filteredTextLength >= minCharactersToSearch)) &&
       ((items && items.length > 0) || filteredTextLength > 0);
 
-    if (!hasPrependSlot && !hasAppendSlot && !showList) {
+    if (!prepend && !append && !showList) {
       return;
     }
 
@@ -622,16 +650,16 @@
   }
 
   function clear() {
-    value = multiple ? [] : null;
+    updateValue(multiple ? [] : undefined);
     text = "";
 
     setTimeout(() => {
-      input.focus();
+      input?.focus();
       close();
     });
   }
 
-  export function highlightFilter(keywords, fields) {
+  function highlightFilter(keywords, fields) {
     keywords = keywords.split(/\s+/gu);
     return (item) => {
       const newItem = Object.assign({ highlighted: {} }, item);
@@ -730,8 +758,7 @@
   {multiple ? 'is-multiple' : ''} autocomplete select is-fullwidth {uniqueId}"
   class:show-clear={clearable}
   class:is-loading={showLoadingIndicator && loading}
-  use:clickOutside
-  on:click_outside={close}
+  {@attach clickOutside(close)}
 >
   <select name={selectName} id={selectId}>
     {#if !multiple && value}
@@ -759,17 +786,16 @@
       readonly={readonly || (lock && value)}
       bind:this={input}
       bind:value={text}
-      on:input={onInput}
-      on:focus={onFocusInternal}
-      on:blur
-      on:keydown={onKeyDown}
-      on:click={onInputClick}
-      on:keypress={onKeyPress}
+      oninput={onInput}
+      onfocus={onFocusInternal}
+      {onblur}
+      onkeydown={onKeyDown}
+      onclick={onInputClick}
+      onkeypress={onKeyPress}
       aria-describedby={formatErrors(name, errorMessages)}
     />
     {#if clearable && text?.length}
-      <button on:click={clear} class="autocomplete-clear-button"
-        >&#10006;</button
+      <button onclick={clear} class="autocomplete-clear-button">&#10006;</button
       >
     {/if}
   </div>
@@ -779,8 +805,8 @@
     class:hidden={!opened}
     bind:this={list}
   >
-    {#if hasPrependSlot}
-      <slot name="prepend" />
+    {#if prepend}
+      {@render prepend()}
       <hr class:hidden={!showList} class="mx-s20" />
     {/if}
 
@@ -800,8 +826,11 @@
                   ? 'selected'
                   : ''} {multiple ? 'gap-s10' : 'justify-between'}"
                 class:confirmed
-                on:click|preventDefault={() => onListItemClick(listItem)}
-                on:pointerenter={() => {
+                onclick={(event: Event) => {
+                  event.preventDefault();
+                  onListItemClick(listItem);
+                }}
+                onpointerenter={() => {
                   highlightIndex = i;
                 }}
               >
@@ -809,20 +838,24 @@
                   <CheckboxMark checked={confirmed} />
                 {/if}
 
-                {#if hasCustomContentSlot}
-                  <slot name="itemContent" item={listItem} />
+                {#if itemContent}
+                  {@render itemContent({ item: listItem })}
                 {:else}
                   <div>
-                    {@html listItem.highlighted
-                      ? listItem.highlighted.label
-                      : listItem.label}
+                    {#if listItem.highlighted}
+                      {@html insane(listItem.highlighted.label, {
+                        allowedTags: ["b"],
+                      })}
+                    {:else}
+                      {listItem.label}
+                    {/if}
                   </div>
                 {/if}
 
                 {#if !multiple}
                   <div class="checkmark invisible grow-0">
                     <div class="ml-s8 h-s16 w-s24 fill-current">
-                      {@html checkIcon}
+                      <CheckLineSystem class="w-s24 h-s16" />
                     </div>
                   </div>
                 {/if}
@@ -847,9 +880,9 @@
       {/if}
     </div>
 
-    {#if hasAppendSlot}
+    {#if append}
       <hr class:hidden={!showList} class="mx-s20" />
-      <slot name="append" />
+      {@render append()}
     {/if}
   </div>
 </div>
@@ -864,16 +897,19 @@
         {#if !disabled && !readonly && !isFixedItem(tagItem)}
           <button
             class="tag-delete"
-            on:click|preventDefault={unselectItem(tagItem)}
+            onclick={(event) => {
+              event.preventDefault();
+              unselectItem(tagItem);
+            }}
           >
-            {@html closeCircleIcon}
+            <CloseCircleFillSystem />
           </button>
         {/if}
       </div>
     {/each}
   </div>
 {/if}
-<svelte:window on:click={onDocumentClick} />
+<svelte:window onclick={onDocumentClick} />
 
 <style lang="postcss">
   @reference "../../../../app.css";

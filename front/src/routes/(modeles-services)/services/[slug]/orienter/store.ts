@@ -15,6 +15,7 @@ export function initEmptyOrientation(): Orientation {
     referentPhone: "",
     referentEmail: "",
 
+    beneficiaryFranceTravailNumber: "",
     beneficiaryLastName: "",
     beneficiaryFirstName: "",
     beneficiaryAvailability: new Date().toISOString().split("T")[0],
@@ -25,6 +26,8 @@ export function initEmptyOrientation(): Orientation {
     orientationReasons: "",
 
     attachments: {},
+
+    dataProtectionCommitment: false,
   };
 }
 

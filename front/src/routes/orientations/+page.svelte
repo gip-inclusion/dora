@@ -1,37 +1,43 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { page } from "$app/stores";
-  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
 
+  import Attachment2Editor from "svelte-remix/Attachment2Editor.svelte";
+  import CalendarEventLineBusiness from "svelte-remix/CalendarEventLineBusiness.svelte";
+  import Compass3LineMap from "svelte-remix/Compass3LineMap.svelte";
+  import HashtagEditor from "svelte-remix/HashtagEditor.svelte";
+  import HomeSmile2LineBuildings from "svelte-remix/HomeSmile2LineBuildings.svelte";
+  import InboxLineBusiness from "svelte-remix/InboxLineBusiness.svelte";
+  import ListCheck2Editor from "svelte-remix/ListCheck2Editor.svelte";
+  import MailAddLineBusiness from "svelte-remix/MailAddLineBusiness.svelte";
+  import MessageLineCommunication from "svelte-remix/MessageLineCommunication.svelte";
+  import PhoneLineDevice from "svelte-remix/PhoneLineDevice.svelte";
+  import ServiceLineBusiness from "svelte-remix/ServiceLineBusiness.svelte";
+  import User6LineUserFaces from "svelte-remix/User6LineUserFaces.svelte";
+  import UserShared2LineUserFaces from "svelte-remix/UserShared2LineUserFaces.svelte";
+
+  import { page } from "$app/stores";
+
+  import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
-  import {
-    attachmentIcon,
-    calendarEventLineIcon,
-    compass3Icon,
-    homeSmile2Icon,
-    inboxLineIcon,
-    listCheckIcon,
-    mailAddLineIcon,
-    messageLineIcon,
-    phoneLineIcon,
-    serviceIcon,
-    user6Icon,
-    userSharedLineIcon,
-  } from "$lib/icons";
+  import { formatLongDate } from "$lib/utils/date";
+  import { formatFilePath } from "$lib/utils/file";
+  import { formatPhoneNumber } from "$lib/utils/misc";
+  import { getOrientation } from "$lib/utils/orientation";
   import { trackOrientation } from "$lib/utils/stats";
+
   import HandleOrientation from "./handle-orientation.svelte";
   import SubTitle from "./sub-title.svelte";
   import ContactListItem from "./contact-list-item.svelte";
-  import { formatPhoneNumber } from "$lib/utils/misc";
-  import { getOrientation } from "$lib/utils/orientation";
   import type { PageData } from "./$types";
-  import { formatLongDate } from "$lib/utils/date";
-  import { formatFilePath } from "$lib/utils/file";
   import LinkExpired from "./link-expired.svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
   const { askForNewLink, queryId, queryHash } = data;
-  let { orientation } = data;
+  let { orientation } = $state(data);
 
   async function onRefresh() {
     const response = await getOrientation(queryId, queryHash);
@@ -53,7 +59,7 @@
       <LinkExpired {queryId} />
     </div>
   </CenteredGrid>
-{:else}
+{:else if orientation}
   <CenteredGrid noPadding>
     <div class="mt-s24 print:mb-s0">
       <Breadcrumb currentLocation="orientation" />
@@ -79,7 +85,7 @@
               class="mr-s16 bg-blue-information-dark p-s12 inline-block rounded-3xl"
             >
               <div class="h-s24 w-s24 fill-current text-white">
-                {@html compass3Icon}
+                <Compass3LineMap />
               </div>
             </div>
 
@@ -112,17 +118,24 @@
 
               <div class="gap-s32 p-s36 flex flex-col">
                 <div>
-                  <SubTitle label="Bénéficiaire" icon={compass3Icon} />
+                  <SubTitle label="Bénéficiaire" icon={Compass3LineMap} />
                   <div class="ml-s64">
                     <ul class="gap-s12 flex flex-col">
                       <ContactListItem
-                        icon={user6Icon}
+                        icon={User6LineUserFaces}
                         text={`${orientation.beneficiaryFirstName} ${orientation.beneficiaryLastName}`}
                       />
 
+                      {#if orientation.status === "VALIDÉE" && orientation.beneficiaryFranceTravailNumber}
+                        <ContactListItem
+                          icon={HashtagEditor}
+                          text={`Numéro France Travail : ${orientation.beneficiaryFranceTravailNumber}`}
+                        />
+                      {/if}
+
                       {#if orientation.beneficiaryEmail}
                         <ContactListItem
-                          icon={mailAddLineIcon}
+                          icon={MailAddLineBusiness}
                           text={orientation.beneficiaryEmail}
                           isPreference={orientation.beneficiaryContactPreferences.includes(
                             "EMAIL"
@@ -132,7 +145,7 @@
 
                       {#if orientation.beneficiaryPhone}
                         <ContactListItem
-                          icon={phoneLineIcon}
+                          icon={PhoneLineDevice}
                           text={formatPhoneNumber(orientation.beneficiaryPhone)}
                           isPreference={orientation.beneficiaryContactPreferences.includes(
                             "TELEPHONE"
@@ -142,7 +155,7 @@
 
                       {#if orientation.beneficiaryOtherContactMethod}
                         <ContactListItem
-                          icon={inboxLineIcon}
+                          icon={InboxLineBusiness}
                           text={`Autre méthode de contact : ${orientation.beneficiaryOtherContactMethod}`}
                           isPreference={orientation.beneficiaryContactPreferences.includes(
                             "AUTRE"
@@ -152,7 +165,7 @@
 
                       {#if orientation.beneficiaryAvailability}
                         <ContactListItem
-                          icon={calendarEventLineIcon}
+                          icon={CalendarEventLineBusiness}
                           text={`Disponible à partir de ${formatLongDate(
                             orientation.beneficiaryAvailability
                           )}`}
@@ -165,7 +178,7 @@
                 {#if orientation.situation.length}
                   <hr class="border-gray-02 border" />
                   <div>
-                    <SubTitle label="Situation" icon={listCheckIcon} />
+                    <SubTitle label="Situation" icon={ListCheck2Editor} />
                     <div class="ml-s64">
                       <ul>
                         {#each orientation.situation as beneficiarySituation}
@@ -187,7 +200,7 @@
                   <div>
                     <SubTitle
                       label="Critères auxquels le ou la bénéficiaire répond"
-                      icon={listCheckIcon}
+                      icon={ListCheck2Editor}
                     />
                     <div class="ml-s64">
                       <ul>
@@ -206,7 +219,7 @@
                   <div>
                     <SubTitle
                       label="Motifs de l’orientation"
-                      icon={messageLineIcon}
+                      icon={MessageLineCommunication}
                     />
                     <div class="ml-s64 text-f16 text-gray-text italic">
                       {orientation.orientationReasons}
@@ -216,7 +229,7 @@
 
                 {#if orientation.beneficiaryAttachmentsDetails?.length}
                   <div>
-                    <SubTitle label="Pièces jointes" icon={attachmentIcon} />
+                    <SubTitle label="Pièces jointes" icon={Attachment2Editor} />
                     <div class="ml-s64 text-gray-text">
                       <ul class="mb-s24">
                         {#each orientation.beneficiaryAttachmentsDetails as attachment}
@@ -252,35 +265,35 @@
                 <div>
                   <SubTitle
                     label="Prescripteur ou prescriptrice"
-                    icon={userSharedLineIcon}
+                    icon={UserShared2LineUserFaces}
                   />
                   <div class="ml-s64 text-f16 text-gray-text">
                     <ul class="gap-s12 flex flex-col">
                       {#if orientation.prescriber?.name}
                         <ContactListItem
-                          icon={user6Icon}
+                          icon={User6LineUserFaces}
                           text={orientation.prescriber?.name}
                         />
                       {/if}
 
                       {#if orientation.prescriber?.email}
                         <ContactListItem
-                          icon={mailAddLineIcon}
+                          icon={MailAddLineBusiness}
                           text={orientation.prescriber?.email}
                         />
                       {/if}
 
                       {#if orientation.prescriberStructure?.name}
                         <ContactListItem
-                          icon={homeSmile2Icon}
+                          icon={HomeSmile2LineBuildings}
                           text={orientation.prescriberStructure?.name}
                           link={`/structures/${orientation.prescriberStructure?.slug}`}
                         />
                       {/if}
 
-                      {#if orientation.referentPhone && orientation.referentEmail === orientation.prescriber.email}
+                      {#if orientation.referentPhone && orientation.referentEmail === orientation.prescriber?.email}
                         <ContactListItem
-                          icon={phoneLineIcon}
+                          icon={PhoneLineDevice}
                           text={formatPhoneNumber(orientation.referentPhone)}
                         />
                       {/if}
@@ -288,29 +301,29 @@
                   </div>
                 </div>
 
-                {#if orientation.referentEmail !== orientation.prescriber.email}
+                {#if orientation.referentEmail !== orientation.prescriber?.email}
                   <hr class="border-gray-02 border" />
                   <div>
                     <SubTitle
                       label="Conseiller ou conseillère référente"
-                      icon={serviceIcon}
+                      icon={ServiceLineBusiness}
                     />
                     <div class="ml-s64 text-f16 text-gray-text">
                       <ul class="gap-s12 flex flex-col">
                         <ContactListItem
-                          icon={user6Icon}
+                          icon={User6LineUserFaces}
                           text={`${orientation.referentFirstName} ${orientation.referentLastName}`}
                         />
                         {#if orientation.referentEmail}
                           <ContactListItem
-                            icon={mailAddLineIcon}
+                            icon={MailAddLineBusiness}
                             text={orientation.referentEmail}
                           />
                         {/if}
 
                         {#if orientation.referentPhone}
                           <ContactListItem
-                            icon={phoneLineIcon}
+                            icon={PhoneLineDevice}
                             text={formatPhoneNumber(orientation.referentPhone)}
                           />
                         {/if}

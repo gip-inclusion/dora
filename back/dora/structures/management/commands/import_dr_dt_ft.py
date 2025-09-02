@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 
-from data_inclusion.schema import TypologieStructure
+from data_inclusion.schema.v0 import TypologieStructure
 from django.core.management.base import BaseCommand
 from django.db import transaction
 

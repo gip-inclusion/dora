@@ -1,33 +1,56 @@
 <script lang="ts">
-  import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
-  import { onMount } from "svelte";
+  import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
+
+  import { onMount, type Snippet } from "svelte";
   import Button from "./button.svelte";
   import { randomId } from "$lib/utils/random";
 
-  export let title = "";
-  export let description = "";
-  export let noTopPadding = false;
-  export let headerBg = "bg-white";
-  export let noHeaderBorder = false;
-  export let collapsable = false;
-  export let collapsed = true;
-  export let showModel = false;
-  let wrapper;
+  interface Props {
+    title?: string;
+    noTopPadding?: boolean;
+    headerBg?: string;
+    noHeaderBorder?: boolean;
+    collapsable?: boolean;
+    collapsed?: boolean;
+    showModel?: boolean;
+    descriptionText?: string;
+    description?: Snippet;
+    help?: Snippet;
+    children?: Snippet;
+  }
+
+  let {
+    title = "",
+    noTopPadding = false,
+    headerBg = "bg-white",
+    noHeaderBorder = false,
+    collapsable = false,
+    collapsed = true,
+    showModel = false,
+    descriptionText,
+    description,
+    help,
+    children,
+  }: Props = $props();
+
+  let wrapper: HTMLElement;
+  let showHelp = $state(false);
+  const helpId = randomId();
 
   onMount(() => {
-    const breakPoint = window
-      .getComputedStyle(wrapper, ":before")
-      .content.replace(/"/gu, "");
+    if (wrapper) {
+      const breakPoint = window
+        .getComputedStyle(wrapper, ":before")
+        .content.replace(/"/gu, "");
 
-    collapsed = breakPoint === "xs" || breakPoint === "md";
+      collapsed = breakPoint === "xs" || breakPoint === "md";
+    }
   });
 
   function toggleFold() {
     collapsed = !collapsed;
   }
-
-  let showHelp = false;
-  const helpId = randomId();
 
   function toggleHelp() {
     showHelp = !showHelp;
@@ -58,15 +81,15 @@
             {title}
           </h2>
           <div class="flex">
-            {#if $$slots.help}
+            {#if help}
               <Button
                 ariaAttributes={{
                   "aria-expanded": showHelp,
                   "aria-controls": helpId,
                 }}
                 label="Aide"
-                on:click={toggleHelp}
-                icon={!showHelp ? arrowDownSIcon : arrowUpSIcon}
+                onclick={toggleHelp}
+                icon={!showHelp ? ArrowDownSLineArrows : ArrowUpSLineArrows}
                 iconOnRight
                 noBackground
                 small
@@ -75,8 +98,8 @@
 
             {#if collapsable}
               <Button
-                on:click={toggleFold}
-                icon={collapsed ? arrowDownSIcon : arrowUpSIcon}
+                onclick={toggleFold}
+                icon={collapsed ? ArrowDownSLineArrows : ArrowUpSLineArrows}
                 noBackground
                 small
               />
@@ -89,19 +112,19 @@
           </div>
         {/if}
       </div>
-      <slot name="description">
-        {#if description}
-          <p class="mb-s0 text-f14 text-gray-text-alt2">{description}</p>
-        {/if}
-      </slot>
+      {#if description}
+        {@render description()}
+      {:else if descriptionText}
+        <p class="mb-s0 text-f14 text-gray-text-alt2">{descriptionText}</p>
+      {/if}
     </div>
 
-    {#if $$slots.help && showHelp}
+    {#if help && showHelp}
       <div
         id={helpId}
         class="border-info bg-info-light py-s16 pl-s24 pr-s32 border-l-8"
       >
-        <slot name="help" />
+        {@render help()}
       </div>
     {/if}
   {/if}
@@ -112,6 +135,6 @@
     class:pt-s32={!title}
     class:hidden={collapsable && collapsed}
   >
-    <slot />
+    {@render children?.()}
   </div>
 </fieldset>

@@ -1,15 +1,35 @@
 <script lang="ts">
-  export let label = "";
-  export let bold = false;
-  export let italic = false;
-  export let info = false;
-  export let success = false;
-  export let error = false;
-  export let wait = false;
-  export let light = false;
-  export let icon: string | null = null;
-  export let smallIcon = false;
-  export let truncate = false;
+  import type { Component, Snippet } from "svelte";
+
+  interface Props {
+    label?: string;
+    bold?: boolean;
+    italic?: boolean;
+    info?: boolean;
+    success?: boolean;
+    error?: boolean;
+    wait?: boolean;
+    light?: boolean;
+    icon?: Component;
+    smallIcon?: boolean;
+    truncate?: boolean;
+    children?: Snippet;
+  }
+
+  let {
+    label = "",
+    bold = false,
+    italic = false,
+    info = false,
+    success = false,
+    error = false,
+    wait = false,
+    light = false,
+    icon: Icon,
+    smallIcon = false,
+    truncate = false,
+    children,
+  }: Props = $props();
 </script>
 
 <div
@@ -22,14 +42,16 @@
   class:wait
   class:light
 >
-  {#if icon}
+  {#if Icon}
     <i class="icon flex-none" class:small-icon={smallIcon} class:mr-s8={label}>
-      {@html icon}
+      <Icon size={16} />
     </i>
   {/if}
 
-  {#if label || $$slots.default}
-    <span class:truncate><slot>{label}</slot></span>
+  {#if label || children}
+    <span class:truncate
+      >{#if children}{@render children()}{:else}{label}{/if}</span
+    >
   {/if}
 </div>
 

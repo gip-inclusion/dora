@@ -1,12 +1,18 @@
 <script lang="ts">
-  import type { Model, Service } from "$lib/types";
+  import { getContext } from "svelte";
 
-  export let service: Service | Model;
+  interface Props {
+    onclick: () => void;
+  }
+
+  let { onclick }: Props = $props();
+
+  const showFeedbackModal = getContext("showFeedbackModal");
 </script>
 
-{#if !service.canWrite}
+{#if showFeedbackModal}
   <div>
-    <button class="text-gray-text underline" on:click
+    <button class="text-gray-text underline" {onclick}
       >Signalez-nous toute erreur ou suggestion de modification.</button
     >
   </div>

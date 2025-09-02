@@ -1,20 +1,28 @@
 <script lang="ts">
+  import dayjs from "dayjs";
+
+  import * as XLSX from "xlsx";
+
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import AdminDivisionSearch from "$lib/components/inputs/geo/admin-division-search.svelte";
   import Notice from "$lib/components/display/notice.svelte";
+  import {
+    DI_METABASE_DASHBOARD_URL,
+    METABASE_DASHBOARD_URL,
+  } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
-  import { addIcon } from "$lib/icons";
+  import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
   import { getStructuresAdmin } from "$lib/requests/admin";
   import type { AdminShortStructure, GeoApiValue } from "$lib/types";
-  import dayjs from "dayjs";
+
   import type { PageData } from "./$types";
+  import DepartmentList from "./department-list.svelte";
   import Filters from "./filters.svelte";
   import StructuresMap from "./structures-map.svelte";
   import StructuresTable from "./structures-table.svelte";
-  import DepartmentList from "./department-list.svelte";
   import {
     isOrphan,
     toActivate,
@@ -23,19 +31,21 @@
     toUpdate,
     toModerate,
   } from "./structures-filters";
-  import * as XLSX from "xlsx";
   import type { StatusFilter } from "./types";
+  interface Props {
+    data: PageData;
+  }
 
-  export let data: PageData;
+  let { data }: Props = $props();
 
-  let selectedDepartment = data.department;
-  let searchStatus: StatusFilter = "toutes";
-  let filterDefinition: string | undefined;
-  let filterActions: string | undefined;
-  let structures: AdminShortStructure[] = [];
-  let filteredStructures: AdminShortStructure[] = [];
-  let selectedStructureSlug: string | null = null;
-  let loading = false;
+  let selectedDepartment = $state(data.department);
+  let searchStatus: StatusFilter = $state("toutes");
+  let filterDefinition: string | undefined = $state();
+  let filterActions: string | undefined = $state();
+  let structures: AdminShortStructure[] = $state([]);
+  let filteredStructures: AdminShortStructure[] = $state([]);
+  let selectedStructureSlug: string | null = $state(null);
+  let loading = $state(false);
 
   function filterIgnoredStructures(structs) {
     function isOrphanOrWaitingOrToActivateSIAE(struct) {
@@ -69,11 +79,15 @@
 
   async function handleStructuresRefresh() {
     structures = filterIgnoredStructures(
-      await getStructuresAdmin(selectedDepartment.code)
+      await getStructuresAdmin(selectedDepartment?.code)
     );
   }
 
   function handleClick() {
+    if (!selectedDepartment) {
+      return;
+    }
+
     const sheetData = filteredStructures.map((structure) => {
       let status = "";
       if (isObsolete(structure)) {
@@ -133,7 +147,7 @@
     );
   }
 
-  if (data.isManager) {
+  if (data.isManager && data.department) {
     handleDepartmentChange(data.department);
   }
 </script>
@@ -178,23 +192,31 @@
               </span>
               <span class="text-f23 hidden font-bold md:block">•</span>
             {/if}
-
-            <a
-              href="https://metabase.dora.inclusion.beta.gouv.fr/public/dashboard/860a9da9-9300-4289-878c-7bf8ec74f9b7?d%25C3%25A9partement={selectedDepartment.code}"
-              target="_blank"
-              rel="noopener nofollow"
-              class="text-f18 underline"
-            >
-              Voir les statistiques
-            </a>
           </div>
 
-          <div>
+          <div class="flex flex-col items-end">
             <LinkButton
               label="Ajouter une structure"
               to="/admin/structures/creer"
-              icon={addIcon}
+              icon={AddFillSystem}
+              extraClass="mb-s12"
             />
+            <a
+              href={DI_METABASE_DASHBOARD_URL(selectedDepartment.name)}
+              target="_blank"
+              rel="noopener nofollow"
+              class="text-f18 text-france-blue leading-32 underline"
+            >
+              Cartographie des services référencés
+            </a>
+            <a
+              href={METABASE_DASHBOARD_URL(selectedDepartment.code)}
+              target="_blank"
+              rel="noopener nofollow"
+              class="text-f18 text-france-blue leading-32 underline"
+            >
+              Statistiques d’utilisation de mon territoire
+            </a>
           </div>
         </div>
       </div>
@@ -232,7 +254,7 @@
           </div>
           <div class="gap-s24 flex w-full flex-col">
             <Button
-              on:click={handleClick}
+              onclick={handleClick}
               label="Télécharger"
               secondary
               disabled={!filteredStructures.length}

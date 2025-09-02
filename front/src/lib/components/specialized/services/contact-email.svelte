@@ -1,11 +1,16 @@
 <script lang="ts">
-  import type { Service, ShortService } from "$lib/types";
+  import MailSendLineBusiness from "svelte-remix/MailSendLineBusiness.svelte";
+
   import { CANONICAL_URL } from "$lib/env";
-  import { mailSendLineIcon } from "$lib/icons";
+  import type { Service, ShortService } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
 
-  export let service: Service | ShortService;
-  export let preferred = false;
+  interface Props {
+    service: Service | ShortService;
+    preferred?: boolean;
+  }
+
+  let { service, preferred = false }: Props = $props();
   const emailSubject = encodeURIComponent(
     `Candidature ${service.name} / Demande d’orientation`
   );
@@ -46,7 +51,7 @@
       role="img"
       aria-label="Courriel"
     >
-      {@html mailSendLineIcon}
+      <MailSendLineBusiness />
     </span>
     {service.contactEmail}
   </a>

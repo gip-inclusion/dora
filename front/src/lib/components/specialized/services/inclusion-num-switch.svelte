@@ -4,9 +4,13 @@
   import Notice from "$lib/components/display/notice.svelte";
   import type { Service } from "$lib/types";
 
-  export let service: Service;
+  interface Props {
+    service: Service;
+  }
 
-  let isSwitchModalOpen = false;
+  let { service = $bindable() }: Props = $props();
+
+  let isSwitchModalOpen = $state(false);
 
   function activateInclusionNumForm() {
     service.useInclusionNumeriqueScheme = true;
@@ -35,9 +39,11 @@
     },
   };
 
-  $: currentNotice = service.useInclusionNumeriqueScheme
-    ? inclusionNumFormActiveNotice
-    : inclusionNumFormAvailableNotice;
+  let currentNotice = $derived(
+    service.useInclusionNumeriqueScheme
+      ? inclusionNumFormActiveNotice
+      : inclusionNumFormAvailableNotice
+  );
 </script>
 
 <Modal bind:isOpen={isSwitchModalOpen} title="Attention !" width="small">
@@ -47,11 +53,11 @@
     <Button
       label="Rester sur le formulaire classique"
       secondary
-      on:click={() => (isSwitchModalOpen = false)}
+      onclick={() => (isSwitchModalOpen = false)}
     />
     <Button
       label="Passer au formulaire de l’inclusion numérique"
-      on:click={activateInclusionNumForm}
+      onclick={activateInclusionNumForm}
     />
   </div>
 </Modal>
@@ -70,7 +76,7 @@
         small
         noBackground
         noPadding
-        on:click={currentNotice.action}
+        onclick={currentNotice.action}
       />
     </p>
   </Notice>

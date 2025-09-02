@@ -1,14 +1,29 @@
 <script lang="ts">
+  import FileCopyLineDocument from "svelte-remix/FileCopyLineDocument.svelte";
+
   import LinkButton from "$lib/components/display/link-button.svelte";
+
   import ModelCard from "./model-card.svelte";
-  import { copyIcon } from "$lib/icons";
   import Count from "../count.svelte";
   import NoModelNotice from "./no-model-notice.svelte";
 
-  export let structure, models, total;
-  export let tabDisplay = true;
-  export let withEmptyNotice = false;
-  export let limit;
+  interface Props {
+    structure: any;
+    models: any;
+    total: any;
+    tabDisplay?: boolean;
+    withEmptyNotice?: boolean;
+    limit: any;
+  }
+
+  let {
+    structure,
+    models,
+    total,
+    tabDisplay = true,
+    withEmptyNotice = false,
+    limit,
+  }: Props = $props();
 
   const orders = [
     { value: "date", label: "Date de mise à jour" },
@@ -16,7 +31,6 @@
   ];
 
   const order = orders[0].value;
-  let modelsOrdered;
   let filters;
 
   function modelsOrder(allModels) {
@@ -45,7 +59,7 @@
     return sortedModels;
   }
 
-  $: modelsOrdered = modelsOrder(models);
+  let modelsOrdered = $derived(modelsOrder(models));
 </script>
 
 <div class="mb-s24 md:flex md:items-center md:justify-between">
@@ -65,7 +79,7 @@
     {#if structure.canEditServices}
       <LinkButton
         label="Ajouter un modèle"
-        icon={copyIcon}
+        icon={FileCopyLineDocument}
         to="/modeles/creer?structure={structure.slug}"
       />
     {/if}

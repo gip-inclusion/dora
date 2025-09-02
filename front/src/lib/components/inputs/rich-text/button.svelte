@@ -1,17 +1,24 @@
 <script lang="ts">
-  export let icon: string;
-  export let active: boolean;
-  export let label: string;
+  import type { Component } from "svelte";
+
+  interface Props {
+    icon: Component;
+    active: boolean;
+    label: string;
+    onclick?: (event: MouseEvent) => void;
+  }
+
+  let { icon: Icon, active, label, onclick }: Props = $props();
 </script>
 
 <button
   type="button"
-  on:click
+  {onclick}
   class:active
   class="tb-button"
   aria-label={label}
 >
-  {@html icon}
+  <Icon />
 </button>
 
 <style lang="postcss">

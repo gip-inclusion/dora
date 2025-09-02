@@ -1,8 +1,18 @@
 <script lang="ts">
-  import { afterNavigate } from "$app/navigation";
-  import { closeIcon, menuIcon } from "$lib/icons";
+  import type { Snippet } from "svelte";
 
-  let isOpen = false;
+  import CloseFillSystem from "svelte-remix/CloseFillSystem.svelte";
+  import MenuLineSystem from "svelte-remix/MenuLineSystem.svelte";
+
+  import { afterNavigate } from "$app/navigation";
+
+  interface Props {
+    children?: Snippet;
+  }
+
+  let { children }: Props = $props();
+
+  let isOpen = $state(false);
 
   afterNavigate(() => {
     isOpen = false;
@@ -12,13 +22,13 @@
 <div class="flex lg:hidden">
   <div>
     <button
-      on:click={() => (isOpen = true)}
+      onclick={() => (isOpen = true)}
       class="text-gray-text"
       aria-expanded={isOpen}
       aria-controls="hamburger-content"
     >
       <span class="mt-s16 h-s24 w-s24 text-gray-dark inline-block self-end">
-        {@html menuIcon}
+        <MenuLineSystem />
       </span>
     </button>
 
@@ -30,17 +40,17 @@
         <div class="flex justify-end">
           <button
             class="pb-s20 text-magenta-cta flex items-center"
-            on:click={() => (isOpen = false)}
+            onclick={() => (isOpen = false)}
           >
             Fermer
             <span class="h-s24 w-s24 inline-block fill-current">
-              {@html closeIcon}
+              <CloseFillSystem />
             </span>
           </button>
         </div>
 
         <div>
-          <slot />
+          {@render children?.()}
         </div>
       </div>
     {/if}
@@ -48,5 +58,5 @@
 </div>
 
 <div class="hidden lg:flex">
-  <slot />
+  {@render children?.()}
 </div>

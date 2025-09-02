@@ -1,16 +1,17 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-
   import ExternalLinkIcon from "./external-link-icon.svelte";
 
-  export let text: string;
+  interface Props {
+    text: string;
+    onLinkClick: (url: string) => void;
+  }
+
+  let { text, onLinkClick }: Props = $props();
 
   type Parts = Array<
     | { type: "link"; value: string; display: string; key: number }
     | { type: "text"; value: string; key: number }
   >;
-
-  const dispatch = createEventDispatcher<{ linkClick: { url: string } }>();
 
   function linkify(string: string) {
     const urlRegex = /(https?:\/\/[^\s]+|mailto:[^\s]+|tel:[^\s]+)/g;
@@ -33,18 +34,14 @@
     }) as Parts;
   }
 
-  function handleLinkClick(url: string) {
-    dispatch("linkClick", { url });
-  }
-
-  $: parts = linkify(text);
+  let parts = $derived(linkify(text));
 </script>
 
 {#each parts as part}
   {#if part.type === "link"}
     <a
       href={part.value}
-      on:click={() => handleLinkClick(part.value)}
+      onclick={() => onLinkClick(part.value)}
       target="_blank"
       rel="noopener ugc"
       class="underline"

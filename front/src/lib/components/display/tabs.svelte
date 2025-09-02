@@ -1,7 +1,11 @@
 <script lang="ts">
-  export let onSelectedChange;
-  export let items: { id: string; name: string }[] = [];
-  export let itemId: string | undefined = undefined;
+  interface Props {
+    onSelectedChange: (id: string) => void;
+    items?: { id: string; name: string }[];
+    itemId?: string;
+  }
+
+  let { onSelectedChange, items = [], itemId }: Props = $props();
 </script>
 
 <ul class="gap-s8 pt-s16 flex flex-wrap">
@@ -11,7 +15,7 @@
         class="px-s20 py-s12 rounded-t font-bold {itemId === item.id
           ? 'text-france-blue bg-white'
           : 'bg-magenta-dark text-white'}"
-        on:click={() => {
+        onclick={() => {
           onSelectedChange(item.id);
         }}>{item.name}</button
       >

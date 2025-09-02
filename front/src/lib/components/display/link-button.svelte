@@ -1,21 +1,47 @@
 <script lang="ts">
-  export let to: string;
-  export let otherTab = false;
-  export let nofollow = false;
-  export let label = "";
-  export let extraClass = "";
-  export let ariaLabel: string | undefined = undefined;
-  export let id: string | undefined = undefined;
-  export let icon: string | undefined = undefined;
-  export let iconOnRight = false;
-  export let small = false;
-  export let noBackground = false;
-  export let secondary = false;
-  export let hoverUnderline = false;
-  export let canWrap = false;
-  export let wFull = false;
+  import type { Component } from "svelte";
 
-  let paddingX: string, paddingY: string, textSize: string;
+  interface Props {
+    to: string;
+    otherTab?: boolean;
+    nofollow?: boolean;
+    label?: string;
+    extraClass?: string;
+    ariaLabel?: string;
+    id?: string;
+    icon?: Component;
+    iconOnRight?: boolean;
+    small?: boolean;
+    noBackground?: boolean;
+    secondary?: boolean;
+    hoverUnderline?: boolean;
+    canWrap?: boolean;
+    wFull?: boolean;
+    onclick?: (event: MouseEvent) => void;
+  }
+
+  let {
+    to,
+    otherTab = false,
+    nofollow = false,
+    label = "",
+    extraClass = "",
+    ariaLabel,
+    id,
+    icon: Icon,
+    iconOnRight = false,
+    small = false,
+    noBackground = false,
+    secondary = false,
+    hoverUnderline = false,
+    canWrap = false,
+    wFull = false,
+    onclick,
+  }: Props = $props();
+
+  let paddingX: string = $state(),
+    paddingY: string = $state(),
+    textSize: string = $state();
 
   if (small) {
     paddingY = "py-s6";
@@ -31,7 +57,9 @@
     paddingX = "px-s20";
   }
 
-  let border: string, text: string, background: string;
+  let border: string = $state(),
+    text: string = $state(),
+    background: string = $state();
 
   border = "border-0";
 
@@ -65,31 +93,31 @@
   title={otherTab ? "Ouverture dans une nouvelle fenêtre" : ""}
   rel="noopener {nofollow ? 'nofollow' : ''}"
   href={to}
-  on:click
+  {onclick}
   class="{paddingX} {paddingY} {textSize} {border} {text} {background} {extraClass} focus:shadow-focus inline-flex items-center justify-center rounded-sm leading-normal whitespace-nowrap"
   class:w-full={wFull}
   class:hover:underline={hoverUnderline}
   aria-label={ariaLabel}
   class:whitespace-nowrap={!canWrap}
 >
-  {#if icon && !iconOnRight}
+  {#if Icon && !iconOnRight}
     <i
       class="{iconWidth} {iconHeight} shrink-0 fill-current"
       class:mr-s8={!!label}
       class:-my-s2={small}
     >
-      {@html icon}
+      <Icon />
     </i>
   {/if}
 
   {label}
 
-  {#if iconOnRight}
+  {#if Icon && iconOnRight}
     <i
       class="{iconWidth} {iconHeight} ml-s8 shrink-0 fill-current"
       class:-my-s2={small}
     >
-      {@html icon}
+      <Icon />
     </i>
   {/if}
 </a>

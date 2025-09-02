@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { bookReadLineIcon } from "$lib/icons";
+  import BookReadLineDocument from "svelte-remix/BookReadLineDocument.svelte";
+
   import illuModeles from "$lib/assets/illustrations/modeles.svg";
   import EmptyNotice from "../empty-notice.svelte";
 </script>
 
 <EmptyNotice
-  textTopIcon={bookReadLineIcon}
+  textTopIcon={BookReadLineDocument}
   illustration={illuModeles}
   title="Vous n’avez pas encore créé votre premier modèle"
   links={[

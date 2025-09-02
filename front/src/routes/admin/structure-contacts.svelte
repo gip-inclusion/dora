@@ -3,7 +3,7 @@
   import InfoLine from "./info-line.svelte";
   import UserInfo from "./user-info.svelte";
 
-  export let structure;
+  let { structure } = $props();
   const administrators = structure.members.filter((member) => member.isAdmin);
 </script>
 

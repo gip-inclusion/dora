@@ -1,10 +1,15 @@
 <script lang="ts">
+  import PhoneLineDevice from "svelte-remix/PhoneLineDevice.svelte";
+
   import type { Service, ShortService } from "$lib/types";
-  import { phoneLineIcon } from "$lib/icons";
   import { formatPhoneNumber } from "$lib/utils/misc";
 
-  export let service: Service | ShortService;
-  export let preferred = false;
+  interface Props {
+    service: Service | ShortService;
+    preferred?: boolean;
+  }
+
+  let { service, preferred = false }: Props = $props();
 </script>
 
 <div class="mb-s6 mr-s24">
@@ -18,7 +23,7 @@
       role="img"
       aria-label="Numéro de téléphone"
     >
-      {@html phoneLineIcon}
+      <PhoneLineDevice />
     </span>
     {formatPhoneNumber(service.contactPhone)}
   </a>

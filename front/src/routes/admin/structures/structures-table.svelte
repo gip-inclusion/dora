@@ -1,20 +1,32 @@
 <script lang="ts">
+  import EyeLineSystem from "svelte-remix/EyeLineSystem.svelte";
+  import More2FillSystem from "svelte-remix/More2FillSystem.svelte";
+  import PhoneLineDevice from "svelte-remix/PhoneLineDevice.svelte";
+
   import ButtonMenu from "$lib/components/display/button-menu.svelte";
   import Button from "$lib/components/display/button.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
-  import { eyeIcon, moreIcon, phoneLineIcon } from "$lib/icons";
   import { modifyStructure } from "$lib/requests/structures";
   import type { AdminShortStructure } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
   import { capitalize, shortenString } from "$lib/utils/misc";
+
   import StructureModal from "./structure-modal.svelte";
 
-  export let filteredStructures: AdminShortStructure[];
-  export let selectedStructureSlug: string | null;
-  export let onRefresh;
+  interface Props {
+    filteredStructures: AdminShortStructure[];
+    selectedStructureSlug: string | null;
+    onRefresh: any;
+  }
 
-  let isStructureModalOpen = false;
-  let currentStructure: AdminShortStructure | null = null;
+  let {
+    filteredStructures,
+    selectedStructureSlug = $bindable(),
+    onRefresh,
+  }: Props = $props();
+
+  let isStructureModalOpen = $state(false);
+  let currentStructure: AdminShortStructure | null = $state(null);
 
   async function updateStructureObsolete(
     structure: AdminShortStructure,
@@ -40,8 +52,8 @@
       class="gap-s16 border-gray-01 p-s16 flex flex-row items-center rounded-lg border shadow-xs"
       class:highlight={selectedStructureSlug === structure.slug}
       role="presentation"
-      on:mouseenter={() => (selectedStructureSlug = structure.slug)}
-      on:mouseleave={() => (selectedStructureSlug = null)}
+      onmouseenter={() => (selectedStructureSlug = structure.slug)}
+      onmouseleave={() => (selectedStructureSlug = null)}
     >
       <div class="flex grow flex-row items-center">
         <div>
@@ -58,48 +70,49 @@
       {#if $userInfo.isStaff}
         <LinkButton
           to="/admin/structures/{structure.slug}"
-          icon={eyeIcon}
+          icon={EyeLineSystem}
           noBackground
           otherTab
         />
       {/if}
       <Button
-        on:click={() => {
+        onclick={() => {
           currentStructure = structure;
           isStructureModalOpen = true;
         }}
-        icon={phoneLineIcon}
+        icon={PhoneLineDevice}
         noBackground
       />
 
       <ButtonMenu
-        icon={moreIcon}
+        icon={More2FillSystem}
         small
         hideLabel
         label="Actions disponibles sur la structure"
-        let:onClose={onCloseParent}
       >
-        {#if !structure.isObsolete}
-          <Button
-            on:click={() => {
-              updateStructureObsolete(structure, true);
-              onCloseParent();
-            }}
-            label="Rendre&nbsp;obsolète"
-            small
-            noBackground
-          />
-        {:else}
-          <Button
-            on:click={() => {
-              updateStructureObsolete(structure, false);
-              onCloseParent();
-            }}
-            label="Ré&#8209;activer"
-            small
-            noBackground
-          />
-        {/if}
+        {#snippet children({ onClose: onCloseParent })}
+          {#if !structure.isObsolete}
+            <Button
+              onclick={() => {
+                updateStructureObsolete(structure, true);
+                onCloseParent();
+              }}
+              label="Rendre&nbsp;obsolète"
+              small
+              noBackground
+            />
+          {:else}
+            <Button
+              onclick={() => {
+                updateStructureObsolete(structure, false);
+                onCloseParent();
+              }}
+              label="Ré&#8209;activer"
+              small
+              noBackground
+            />
+          {/if}
+        {/snippet}
       </ButtonMenu>
     </div>
   {/each}

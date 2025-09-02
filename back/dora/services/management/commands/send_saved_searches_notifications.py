@@ -84,7 +84,7 @@ class Command(BaseCommand):
             location_txt = "en présentiel"
         elif remote_only:
             location_txt = "à distance"
-        text = f'Services d’insertion {location_txt}{" " if location_txt else ""}à proximité de {saved_search.city_label}'
+        text = f"Services d’insertion {location_txt}{' ' if location_txt else ''}à proximité de {saved_search.city_label}"
         if saved_search.category:
             text += f', pour la thématique "{saved_search.category.label}"'
 

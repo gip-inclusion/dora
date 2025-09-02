@@ -1,93 +1,100 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
+  import type { Component } from "svelte";
+
   export type TabItem = {
     id: string;
     name: string;
-    icon: string;
+    icon: Component;
     href: string;
   };
 </script>
 
 <script lang="ts">
+  import BookReadLineDocument from "svelte-remix/BookReadLineDocument.svelte";
+  import FileInfoLineDocument from "svelte-remix/FileInfoLineDocument.svelte";
   import HomeSmileLineBuildings from "svelte-remix/HomeSmileLineBuildings.svelte";
+  import HomeSmile2LineBuildings from "svelte-remix/HomeSmile2LineBuildings.svelte";
+  import MapPin2LineMap from "svelte-remix/MapPin2LineMap.svelte";
+  import PagesLineDocument from "svelte-remix/PagesLineDocument.svelte";
+  import TeamLineUserFaces from "svelte-remix/TeamLineUserFaces.svelte";
+
   import { page } from "$app/stores";
+
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import Label from "$lib/components/display/label.svelte";
-  import TabsLink from "./tabs-links.svelte";
-  import {
-    bookReadLineIcon,
-    fileInfoLineIcon,
-    homeSmile2Icon,
-    mapPinIcon,
-    pageLineIcon,
-    teamLineIcon,
-  } from "$lib/icons";
+  import type { Structure } from "$lib/types";
   import { capitalize } from "$lib/utils/misc";
+
+  import TabsLink from "./tabs-links.svelte";
+
   import AdminNotice from "./admin-notice.svelte";
   import PendingNotice from "./pending-notice.svelte";
-  import type { Structure } from "$lib/types";
 
-  export let structure: Structure;
-  export let tabId = "informations";
+  interface Props {
+    structure: Structure;
+  }
 
-  let tabs: TabItem[] = [];
+  let { structure }: Props = $props();
 
-  $: {
-    tabs = [
+  let tabs: TabItem[] = $derived.by(() => {
+    const tabList = [
       {
         id: "informations",
         name: "Informations",
-        icon: fileInfoLineIcon,
+        icon: FileInfoLineDocument,
         href: `/structures/${structure.slug}`,
       },
     ];
 
     if (structure.canViewMembers) {
-      tabs.push({
+      tabList.push({
         id: "collaborateurs",
         name: "Collaborateurs",
-        icon: teamLineIcon,
+        icon: TeamLineUserFaces,
         href: `/structures/${structure.slug}/collaborateurs`,
       });
     }
-    tabs.push({
+    tabList.push({
       id: "services",
       name: "Services",
-      icon: pageLineIcon,
+      icon: PagesLineDocument,
       href: `/structures/${structure.slug}/services`,
     });
 
     if (structure.canEditServices) {
-      tabs.push({
+      tabList.push({
         id: "modeles",
         name: "Modèles",
-        icon: bookReadLineIcon,
+        icon: BookReadLineDocument,
         href: `/structures/${structure.slug}/modeles`,
       });
     }
 
     if (!structure.parent && structure.branches?.length) {
-      tabs.push({
+      tabList.push({
         id: "antennes",
         name: "Antennes",
-        icon: homeSmile2Icon,
+        icon: HomeSmile2LineBuildings,
         href: `/structures/${structure.slug}/antennes`,
       });
     }
-  }
 
-  $: {
-    if ($page.url.pathname.endsWith("/services")) {
-      tabId = "services";
+    return tabList;
+  });
+
+  let tabId = $derived.by(() => {
+    if ($page.url.pathname.includes("/services")) {
+      return "services";
     } else if ($page.url.pathname.endsWith("/modeles")) {
-      tabId = "modeles";
+      return "modeles";
     } else if ($page.url.pathname.endsWith("/antennes")) {
-      tabId = "antennes";
+      return "antennes";
     } else if ($page.url.pathname.endsWith("/collaborateurs")) {
-      tabId = "collaborateurs";
+      return "collaborateurs";
     } else {
-      tabId = "informations";
+      return "informations";
     }
-  }
+  });
 </script>
 
 <div class="text-gray-text pt-s32">
@@ -114,7 +121,7 @@
       label={`${structure.address1}${
         structure.address2 ? `, ${structure.address2}` : ""
       }, ${structure.postalCode} ${structure.city}`}
-      icon={mapPinIcon}
+      icon={MapPin2LineMap}
       smallIcon
     />
   </div>

@@ -1,3 +1,5 @@
+import type { Component } from "svelte";
+
 export type AdminDivisionType =
   | "country"
   | "region"
@@ -33,7 +35,7 @@ export type ModerationStatus =
 export type GeoApiValue = {
   code: string;
   name: string;
-  similarity: number;
+  similarity?: number;
   geom?: object;
 };
 
@@ -88,7 +90,7 @@ export interface Branches {
   department: string;
   modificationDate: string;
   name: string;
-  numServices: number | undefined;
+  numServices?: number;
   slug: string;
   typologyDisplay: string;
 }
@@ -376,7 +378,7 @@ export interface ServiceSearchResult {
     slug: string;
     url: string;
   };
-  type: "di" | undefined;
+  type?: "di";
 }
 
 export interface FileInfo {
@@ -415,28 +417,28 @@ export interface Service {
   address1: string;
   address2: string | null;
   addressLine: string;
-  beneficiariesAccessModes: BeneficiaryAccessModes[];
-  beneficiariesAccessModesDisplay: string[];
+  beneficiariesAccessModes: BeneficiaryAccessModes[] | null;
+  beneficiariesAccessModesDisplay: string[] | null;
   beneficiariesAccessModesExternalFormLinkText: string;
   beneficiariesAccessModesExternalFormLink: string | null;
-  beneficiariesAccessModesOther: string;
+  beneficiariesAccessModesOther: string | null;
   canWrite: boolean;
   categories: ServiceCategory[];
   categoriesDisplay: string[];
   city: string;
   cityCode: string;
-  coachOrientationModes: CoachOrientationModes[];
-  coachOrientationModesDisplay: string[];
+  coachOrientationModes: CoachOrientationModes[] | null;
+  coachOrientationModesDisplay: string[] | null;
   coachOrientationModesExternalFormLinkText: string;
   coachOrientationModesExternalFormLink: string | null;
-  coachOrientationModesOther: string;
+  coachOrientationModesOther: string | null;
   concernedPublic: CustomizableFK[] | null; // TODO: should be plural
   concernedPublicDisplay: string[] | null;
   contactInfoFilled: boolean;
-  contactEmail: string;
+  contactEmail: string | null;
   contactName: string | null;
-  contactPhone: string;
-  creationDate: string;
+  contactPhone: string | null;
+  creationDate: string | null;
   credentials: CustomizableFK[] | null;
   credentialsDisplay: string[] | null;
   department: string;
@@ -447,8 +449,8 @@ export interface Service {
   durationWeeklyHours: number | null;
   durationWeeks: number | null;
   feeCondition: FeeCondition | null;
-  feeDetails: string;
-  fillingDuration: number;
+  feeDetails: string | null;
+  fillingDuration?: number;
   forms: string[] | null;
   formsInfo: FileInfo[] | null;
   fullDesc: string;
@@ -457,15 +459,15 @@ export interface Service {
   geom: Point | null;
   hasAlreadyBeenUnpublished: boolean | null;
   isAvailable: boolean;
-  isContactInfoPublic: boolean;
+  isContactInfoPublic: boolean | null;
   isCumulative: boolean;
   isModel: false;
   isOrientable: boolean;
-  kinds: ServiceKind[];
-  kindsDisplay: string[];
-  lienSource?: string;
-  locationKinds: LocationKind[];
-  locationKindsDisplay: string[];
+  kinds: ServiceKind[] | null;
+  kindsDisplay: string[] | null;
+  lienSource?: string | null;
+  locationKinds: LocationKind[] | null;
+  locationKindsDisplay: string[] | null;
   model: string | null;
   modelChanged: boolean | null;
   modificationDate: string | null;
@@ -476,8 +478,8 @@ export interface Service {
   qpvOrZrr: boolean | null;
   recurrence: string | null;
   remoteUrl: string | null;
-  requirements: CustomizableFK[];
-  requirementsDisplay: string[];
+  requirements: CustomizableFK[] | null;
+  requirementsDisplay: string[] | null;
   shortDesc: string;
   slug: string;
   source?: string;
@@ -653,7 +655,7 @@ export type Choice<T = string> = {
   value: T;
   label: string;
   selectedLabel?: string;
-  icon?: string;
+  icon?: Component | null;
   iconOnRight?: boolean;
 };
 
@@ -686,6 +688,7 @@ export interface Orientation {
   referentEmail: string;
   prescriberStructureSlug: string;
 
+  beneficiaryFranceTravailNumber: string;
   beneficiaryLastName: string;
   beneficiaryFirstName: string;
   beneficiaryAvailability: string | null;
@@ -697,6 +700,8 @@ export interface Orientation {
 
   attachments: { [key: string]: string[] };
 
+  dataProtectionCommitment: boolean;
+
   // Champs après la création de l'orientation
   id?: number;
   queryId: string;
@@ -707,7 +712,10 @@ export interface Orientation {
   };
   processingDate?: string;
   status: "OUVERTE" | "VALIDÉE" | "REFUSÉE";
-  beneficiaryAttachmentsDetails?: string[];
+  beneficiaryAttachmentsDetails?: {
+    name: string;
+    url: string;
+  }[];
   service?: {
     name: string;
     slug: string;

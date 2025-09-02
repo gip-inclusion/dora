@@ -1,10 +1,23 @@
 <script lang="ts">
-  import { externalLinkIcon } from "$lib/icons";
+  import type { Component, Snippet } from "svelte";
 
-  export let textTopIcon = "";
-  export let title = "";
-  export let illustration = "";
-  export let links: { label: string; url: string }[] = [];
+  import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
+
+  interface Props {
+    textTopIcon: Component;
+    title?: string;
+    illustration?: string;
+    links?: { label: string; url: string }[];
+    children?: Snippet;
+  }
+
+  let {
+    textTopIcon: TextTopIcon,
+    title = "",
+    illustration = "",
+    links = [],
+    children,
+  }: Props = $props();
 </script>
 
 <div class="border-gray-03 p-s40 flex flex-col rounded-lg border md:flex-row">
@@ -13,13 +26,13 @@
       <span
         class="ml-s10 h-s24 w-s24 text-gray-text-alt2 inline-block fill-current"
       >
-        {@html textTopIcon}
+        <TextTopIcon />
       </span>
     </div>
     <h3 class="text-f30 text-gray-text text-center leading-40">{title}</h3>
 
     <div class="text-gray-text">
-      <slot />
+      {@render children?.()}
 
       <div class="mt-s20 text-center">
         <ul class="gap-s20 text-magenta-cta flex flex-col">
@@ -36,7 +49,7 @@
                   class="h-s20 w-s20 pt-s4 inline-block fill-current"
                   aria-hidden="true"
                 >
-                  {@html externalLinkIcon}
+                  <ExternalLinkLineSystem size="20" />
                 </span>
               </a>
             </li>

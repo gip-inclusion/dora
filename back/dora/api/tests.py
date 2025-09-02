@@ -1,11 +1,11 @@
 import pytest
-from data_inclusion.schema import TypologieStructure
+from data_inclusion.schema.v0 import TypologieStructure
 from django.contrib.gis.geos import Point
 from model_bakery import baker
 
 from dora.admin_express.models import City, Department
 from dora.core.constants import WGS84
-from dora.core.test_utils import make_service, make_structure
+from dora.core.test_utils import make_service, make_structure, make_user
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
@@ -176,7 +176,8 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
     baker.make(Department, code="29", name="Finistère")
     baker.make(City, code="29188", name="Plougasnou")
 
-    structure = make_structure()
+    user = make_user()
+    structure = make_structure(user=user)
     service = make_service(
         structure=structure,
         status=ServiceStatus.PUBLISHED,
@@ -211,9 +212,11 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         ServiceKind.objects.get(value="information"),
     )
     service.concerned_public.add(
-        baker.make(ConcernedPublic, name="adultes"),
-        baker.make(ConcernedPublic, name="jeunes-16-26"),
-        baker.make(ConcernedPublic, name="femmes"),
+        baker.make(ConcernedPublic, name="adultes", profile_families=["adultes"]),
+        baker.make(
+            ConcernedPublic, name="jeunes-16-26", profile_families=["jeunes-16-26"]
+        ),
+        baker.make(ConcernedPublic, name="femmes", profile_families=["femmes"]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
@@ -389,9 +392,11 @@ def test_service_serialization_exemple_need_di_user(api_client):
         ServiceKind.objects.get(value="information"),
     )
     service.concerned_public.add(
-        baker.make(ConcernedPublic, name="adultes"),
-        baker.make(ConcernedPublic, name="jeunes-16-26"),
-        baker.make(ConcernedPublic, name="femmes"),
+        baker.make(ConcernedPublic, name="adultes", profile_families=["adultes"]),
+        baker.make(
+            ConcernedPublic, name="jeunes-16-26", profile_families=["jeunes-16-26"]
+        ),
+        baker.make(ConcernedPublic, name="femmes", profile_families=["femmes"]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
@@ -410,7 +415,8 @@ def test_service_serialization_exemple_need_di_user(api_client):
 def test_subcategories_other_excluded(authenticated_user, api_client):
     # Example adapté de la doc data·inclusion :
     # https://www.data.inclusion.beta.gouv.fr/schemas-de-donnees-de-loffre/schema-des-structures-et-services-dinsertion
-    structure = make_structure()
+    user = make_user()
+    structure = make_structure(user=user)
     service = make_service(
         structure=structure,
         name="TISF",
@@ -427,3 +433,23 @@ def test_subcategories_other_excluded(authenticated_user, api_client):
 
     assert 200 == response.status_code
     assert response.json().get("thematiques") == ["numerique--acceder-a-du-materiel"]
+
+
+def test_service_from_obsolete_structure_is_excluded(authenticated_user, api_client):
+    user = make_user()
+    structure = make_structure(user=user)
+    structure.is_obsolete = True
+    structure.save()
+    service = make_service(structure=structure, status=ServiceStatus.PUBLISHED)
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert 404 == response.status_code
+
+
+def test_service_from_orphan_structure_is_excluded(authenticated_user, api_client):
+    structure = make_structure(user=None)
+    structure.save()
+    service = make_service(structure=structure, status=ServiceStatus.PUBLISHED)
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+
+    assert 404 == response.status_code

@@ -5,29 +5,39 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getModelInputProps } from "$lib/utils/forms";
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
+  import { currentSchema } from "$lib/validation/validation";
 
-  export let model: Model | undefined = undefined;
-  export let servicesOptions: ServicesOptions, service: Service;
+  interface Props {
+    model?: Model;
+    servicesOptions: ServicesOptions;
+    service: Service;
+  }
+
+  let { model, servicesOptions, service = $bindable() }: Props = $props();
 
   function handleUseModelValue(fieldName: string) {
     service[fieldName] = model ? model[fieldName] : undefined;
   }
 
-  $: showModel = !!service.model;
-  $: fieldModelProps = model
-    ? getModelInputProps({
-        service,
-        servicesOptions,
-        showModel,
-        onUseModelValue: handleUseModelValue,
-        model,
-      })
-    : {};
+  let showModel = $derived(!!service.model);
+  let fieldModelProps = $derived(
+    model
+      ? getModelInputProps({
+          service,
+          servicesOptions,
+          showModel,
+          onUseModelValue: handleUseModelValue,
+          model,
+          schema: $currentSchema,
+        })
+      : {}
+  );
 
-  $: totalHours =
+  let totalHours = $derived(
     isNaN(service.durationWeeklyHours) || isNaN(service.durationWeeks)
       ? 0
-      : (service.durationWeeklyHours || 0) * (service.durationWeeks || 0);
+      : (service.durationWeeklyHours || 0) * (service.durationWeeks || 0)
+  );
 </script>
 
 <FieldSet title="Durée de la prestation">
@@ -49,7 +59,7 @@
     <BasicInputField
       type="number"
       id="durationWeeklyHours"
-      description="Si moins d’une heure, laisser 1."
+      descriptionText="Si moins d’une heure, laisser 1."
       bind:value={service.durationWeeklyHours}
     />
   </FieldModel>
@@ -58,7 +68,7 @@
     <BasicInputField
       type="number"
       id="durationWeeks"
-      description="Si moins d’une semaine, laisser 1."
+      descriptionText="Si moins d’une semaine, laisser 1."
       bind:value={service.durationWeeks}
     />
   </FieldModel>

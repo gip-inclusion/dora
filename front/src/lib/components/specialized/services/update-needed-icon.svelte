@@ -1,17 +1,21 @@
 <script lang="ts">
-  import { errorWarningLineIcon, historyLineIcon } from "$lib/icons";
+  import ErrorWarningLineSystem from "svelte-remix/ErrorWarningLineSystem.svelte";
+  import HistoryLineSystem from "svelte-remix/HistoryLineSystem.svelte";
+  interface Props {
+    small?: boolean;
+    updateNeeded: boolean;
+  }
 
-  export let small = false;
-  export let updateNeeded: boolean;
+  let { small = false, updateNeeded }: Props = $props();
 
   const textColor = updateNeeded ? "text-white" : "text-service-blue-dark";
-  const icon = updateNeeded ? errorWarningLineIcon : historyLineIcon;
+  const Icon = updateNeeded ? ErrorWarningLineSystem : HistoryLineSystem;
   const iconBg = updateNeeded ? "bg-wait-dark" : "bg-service-blue";
 </script>
 
 <div class="p-s12 container rounded-full {iconBg}" class:small>
   <div class="icon h-s24 w-s24 fill-current {textColor}" class:small>
-    {@html icon}
+    <Icon />
   </div>
 </div>
 

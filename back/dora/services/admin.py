@@ -1,8 +1,16 @@
+from data_inclusion.schema.v0 import Profil
+from django import forms
+from django.contrib import messages
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
+from django.shortcuts import redirect, render
+from django.urls import path
+from django.utils.html import format_html
 
 from dora.core.admin import EnumAdmin
 
+from ..core.mixins import BaseImportAdminMixin
+from .csv_import import ImportServicesHelper
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -75,7 +83,11 @@ class ServiceStatusHistoryItemAdmin(admin.ModelAdmin):
         return False
 
 
-class ServiceAdmin(admin.GISModelAdmin):
+class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
+    def __init__(self, *args, **kwargs):
+        self.import_service_helper = ImportServicesHelper()
+        return super().__init__(*args, **kwargs)
+
     search_fields = ("name", "structure__name", "slug", "data_inclusion_id")
     list_display = [
         "name",
@@ -113,6 +125,172 @@ class ServiceAdmin(admin.GISModelAdmin):
         "data_inclusion_source",
     )
     raw_id_fields = ["structure", "model", "creator", "last_editor"]
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context["import_url"] = "import-services/"
+        return super().changelist_view(request, extra_context)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "import-services/",
+                self.admin_site.admin_view(self.import_services_view),
+                name="services_service_import",
+            ),
+        ]
+        return custom_urls + urls
+
+    def import_services_view(self, request):
+        if request.method == "POST":
+            return self.import_csv(request)
+
+        context = {
+            "title": "Module d'import de services",
+            "opts": self.model._meta,
+            "has_view_permission": True,
+            "csv_headers": ImportServicesHelper.CSV_HEADERS,
+        }
+        return render(request, "admin/import_csv_form.html", context)
+
+    def handle_import_results(self, request, result, is_wet_run):
+        created_count = result.get("created_count", 0)
+        no_errors = not result.get("missing_headers", []) and not result.get(
+            "errors", []
+        )
+
+        self._add_error_messages(request, result, is_wet_run)
+        self._add_warning_messages(request, result, is_wet_run)
+
+        total_services_published = created_count - len(
+            result.get("draft_services_created", [])
+        )
+
+        if is_wet_run and no_errors:
+            messages.success(
+                request,
+                format_html(
+                    f"<b>Import terminé avec succès</b><br/>{total_services_published} nouveaux services ont été créés et publiés"
+                ),
+            )
+            return redirect("..")
+
+        if not is_wet_run and no_errors:
+            messages.success(
+                request,
+                format_html(
+                    f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {total_services_published} sont prêts à être importés et publiés."
+                ),
+            )
+
+        return redirect(".")
+
+    def _add_error_messages(self, request, result, is_wet_run):
+        missing_headers = result.get("missing_headers", [])
+        errors = result.get("errors", [])
+
+        if missing_headers:
+            headers_list = "<br/>".join(f"• {header}" for header in missing_headers)
+            message = f"<b>Échec de l'import - Colonnes manquantes</b><br/>Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>{headers_list}"
+
+            messages.error(request, format_html(message))
+
+        if errors:
+            error_list = "<br/>".join(f"• {error}" for error in errors)
+            message_title = (
+                "Échec de l'import"
+                if is_wet_run
+                else "Test terminé - Erreurs à corriger"
+            )
+            message_text = (
+                "Aucun service n’a été importé, car le fichier comporte des erreurs."
+                if is_wet_run
+                else "Le fichier contient des erreurs qui empêcheront l'import."
+            )
+            messages.error(
+                request,
+                format_html(
+                    f"<b>{message_title}</b><br/>{message_text} Veuillez corriger les éléments suivants :<br/>"
+                    f"{error_list}",
+                ),
+            )
+
+    def _add_warning_messages(self, request, result, is_wet_run):
+        duplicated_services = result.get("duplicated_services", [])
+        geo_data_missing = result.get("geo_data_missing_lines", [])
+        draft_services_created = result.get("draft_services_created", [])
+        errors = result.get("errors", [])
+
+        if (
+            errors
+            and is_wet_run
+            and (duplicated_services or geo_data_missing or draft_services_created)
+        ):
+            messages.add_message(
+                request,
+                messages.INFO,
+                format_html(
+                    "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
+                ),
+                extra_tags="plain",
+            )
+
+        title_prefix = ""
+        if not errors and is_wet_run:
+            title_prefix = "Import réalisé - "
+        elif not is_wet_run:
+            title_prefix = "Test terminé - "
+
+        if duplicated_services:
+            duplicate_list = "<br/>".join(
+                f'• [{service["idx"]}] SIRET {service["siret"]} - il existe déjà un service avec le modèle {service["model_slug"]} et le courriel "{service["contact_email"]}"'
+                for service in duplicated_services
+            )
+            messages.warning(
+                request,
+                format_html(
+                    f"<b>{title_prefix}Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
+                    f"{duplicate_list}"
+                ),
+            )
+
+        if geo_data_missing:
+            missing_list = "<br/>".join(
+                f"• [{item.get('idx', '?')}] {item.get('address', '')} {item.get('postal_code', '')} {item.get('city', '')}"
+                for item in geo_data_missing
+            )
+            messages.warning(
+                request,
+                format_html(
+                    f"<b>{title_prefix}Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
+                    f"{missing_list}"
+                ),
+            )
+
+        if draft_services_created:
+            draft_list = "<br/>".join(
+                f'• [{service["idx"]}] Service "{service["name"]}" - Manque : {", ".join(service["missing_fields"])}'
+                for service in draft_services_created
+            )
+
+            if errors and is_wet_run:
+                message = "<b>Informations manquantes</b><br/> Contactez les structures pour compléter ces éléments avant importation"
+            if not errors and is_wet_run:
+                message = f"<b>{title_prefix}Services importés en brouillon</b><br/>{len(draft_services_created)} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication"
+            if not is_wet_run:
+                message = f"<b>{title_prefix}Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
+
+            messages.warning(
+                request,
+                format_html(message + f" :<br/>{draft_list}"),
+            )
+
+    def get_import_helper(self):
+        return self.import_service_helper
+
+    def get_import_method_name(self):
+        return "import_services"
 
 
 class ServiceModelAdmin(admin.ModelAdmin):
@@ -161,6 +339,28 @@ class CustomizableChoiceAdmin(admin.ModelAdmin):
     raw_id_fields = ["structure"]
 
 
+class ConcernedPublicForm(forms.ModelForm):
+    profile_families = forms.MultipleChoiceField(
+        choices=((p.value, p.label) for p in Profil),
+        widget=forms.SelectMultiple(attrs={"size": "10"}),
+        label="Familles de profils",
+    )
+
+    class Meta:
+        model = ConcernedPublic
+        fields = "__all__"
+
+
+class ConcernedPublicAdmin(CustomizableChoiceAdmin):
+    form = ConcernedPublicForm
+    list_display = ("name", "get_profile_families", "structure")
+
+    def get_profile_families(self, obj):
+        return ", ".join(Profil(p).label for p in obj.profile_families)
+
+    get_profile_families.short_description = "Familles de profils"
+
+
 class ServiceModelInline(admin.TabularInline):
     model = ServiceModel
     show_change_link = True
@@ -202,7 +402,7 @@ class FranceTravailOrientableServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServiceModel, ServiceModelAdmin)
 admin.site.register(AccessCondition, CustomizableChoiceAdmin)
-admin.site.register(ConcernedPublic, CustomizableChoiceAdmin)
+admin.site.register(ConcernedPublic, ConcernedPublicAdmin)
 admin.site.register(Requirement, CustomizableChoiceAdmin)
 admin.site.register(Credential, CustomizableChoiceAdmin)
 admin.site.register(ServiceModificationHistoryItem, ServiceModificationHistoryItemAdmin)

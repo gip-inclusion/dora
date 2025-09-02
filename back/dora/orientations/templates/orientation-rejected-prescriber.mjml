@@ -9,7 +9,41 @@
 {% endblock %}
 
 {% block content %}
-  {{ message|linebreaks }}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+
+  <p>
+    La structure <a href="{{ data.service.structure.get_frontend_url }}">{{ data.service.structure.name }}</a>
+    n’a pas pu donner suite à votre demande d’orientation pour {{ data.get_beneficiary_full_name }}
+    sur le service {% include "partials/service-link.html" %}.
+  </p>
+
+  <p>
+    La ou les raisons spécifiques évoquées sont les suivantes&#8239;:
+  </p>
+  <ul>
+    {% for reason in data.rejection_reasons.all %}
+      <li>{{ reason.label }}</li>
+    {% endfor %}
+  </ul>
+  <p>{{ other_details }}</p>
+  <p>
+    La structure vous informe également de&#8239;:
+  </p>
+
+  <p style="font-style: italic">
+    {{ message|linebreaksbr }}
+  </p>
+
+  <p>
+    Vous souhaiter faire une nouvelle recherche pour trouver un service adapté au besoin de votre bénéficiaire&#8239;?
+  </p>
 {% endblock %}
 
-{% block signature %}{% endblock %}
+{% block cta %}
+  <mj-button mj-class="cta" href="{% frontend_url %}">
+    Relancer la recherche
+  </mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}

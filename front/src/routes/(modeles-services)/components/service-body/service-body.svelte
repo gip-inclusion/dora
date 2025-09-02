@@ -2,9 +2,12 @@
   import { page } from "$app/stores";
 
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import Notice from "$lib/components/display/notice.svelte";
   import OrientationVideo from "$lib/components/specialized/orientation-video.svelte";
+  import { DI_DORA_UNIFIED_SEARCH_ENABLED } from "$lib/env";
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { token, userInfo } from "$lib/utils/auth";
+  import { isServiceRecentlyPublished } from "$lib/utils/service";
   import { trackMobilisation } from "$lib/utils/stats";
 
   import PreventFakeOrientationModal from "./prevent-fake-orientation-modal.svelte";
@@ -12,28 +15,46 @@
   import ServicePresentation from "./service-presentation/service-presentation.svelte";
   import ServiceIndividual from "./service-individual.svelte";
 
-  export let service: Service | Model;
-  export let servicesOptions: ServicesOptions;
-  export let onFeedbackButtonClick: () => void;
+  interface Props {
+    service: Service | Model;
+    servicesOptions: ServicesOptions;
+    onFeedbackButtonClick: () => void;
+  }
 
-  $: isDI = "source" in service;
+  let { service, servicesOptions, onFeedbackButtonClick }: Props = $props();
 
-  $: searchIdStr = $page.url.searchParams.get("searchId");
-  $: searchIdNumber = searchIdStr ? parseInt(searchIdStr) : undefined;
-  $: searchFragment = searchIdStr ? `?searchId=${searchIdStr}` : "";
-  $: orientationFormUrl = `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`;
+  let isDI = $derived("source" in service);
 
-  $: isServiceFromOwnStructure = $userInfo
-    ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
-        (structure) => structure.slug === service.structure
-      )
-    : false;
+  let searchIdStr = $derived($page.url.searchParams.get("searchId"));
+  let searchIdNumber = $derived(
+    searchIdStr ? parseInt(searchIdStr) : undefined
+  );
+  let searchFragment = $derived(searchIdStr ? `?searchId=${searchIdStr}` : "");
+  let orientationFormUrl = $derived(
+    `/services/${isDI ? "di--" : ""}${service.slug}/orienter${searchFragment}`
+  );
+
+  let isServiceFromOwnStructure = $derived(
+    $userInfo
+      ? [...$userInfo.structures, ...$userInfo.pendingStructures].some(
+          (structure) => structure.slug === service.structure
+        )
+      : false
+  );
+
+  let showServiceWillBeVisibleSoonNotice = $derived(
+    DI_DORA_UNIFIED_SEARCH_ENABLED &&
+      !service.isModel &&
+      service.status === "PUBLISHED" &&
+      service.canWrite &&
+      isServiceRecentlyPublished(service)
+  );
 
   // Utilisé pour prévenir le tracking multiple
-  let mobilisationTracked = false;
+  let mobilisationTracked = $state(false);
 
-  let isPreventFakeOrientationModalOpen = false;
-  let isVideoModalOpen = false;
+  let isPreventFakeOrientationModalOpen = $state(false);
+  let isVideoModalOpen = $state(false);
 
   function handleShowVideoModal() {
     isPreventFakeOrientationModalOpen = false;
@@ -45,11 +66,6 @@
       trackMobilisation(service, $page.url, isDI, searchIdNumber, externalUrl);
       mobilisationTracked = true;
     }
-  }
-  function handleTrackMobilisationEvent(
-    event: CustomEvent<{ externalUrl?: string }>
-  ) {
-    handleTrackMobilisation(event.detail.externalUrl);
   }
 
   function handleOrientationFormClickEvent(event) {
@@ -64,14 +80,26 @@
 
 <CenteredGrid>
   <div class="md:gap-s48 mb-s32 flex flex-col md:flex-row">
-    <div class="basis-2/3">
+    <div class="gap-s32 flex basis-2/3 flex-col">
+      {#if showServiceWillBeVisibleSoonNotice}
+        <Notice
+          title="Votre service est publié et sera bientôt visible partout"
+          type="warning"
+        >
+          <p class="text-f14 text-gray-dark mb-s0">
+            Il apparaitra dans les résultats de recherche et sur les plateformes
+            partenaires via le référentiel commun data·inclusion dans un délai
+            d’une heure.
+          </p>
+        </Notice>
+      {/if}
       <div class="text-f18 leading-s32 text-gray-text">
         <p>
           {service.shortDesc || ""}
         </p>
       </div>
     </div>
-    <div class="basis-1/3" />
+    <div class="basis-1/3"></div>
   </div>
 
   <div class="gap-s48 grid grid-cols-1 md:grid-cols-3">
@@ -79,8 +107,8 @@
       <ServicePresentation
         {service}
         {servicesOptions}
-        {isDI}
         {onFeedbackButtonClick}
+        onTrackMobilisation={handleTrackMobilisation}
       />
     </div>
 
@@ -91,7 +119,7 @@
             class="border-gray-02 bg-france-blue p-s24 px-s32 block rounded-3xl border text-white print:hidden"
           >
             <ServiceMobilisation
-              on:trackMobilisation={handleTrackMobilisationEvent}
+              onTrackMobilisation={handleTrackMobilisation}
               {service}
               {isDI}
               {orientationFormUrl}
@@ -112,8 +140,8 @@
 
 <PreventFakeOrientationModal
   bind:isOpen={isPreventFakeOrientationModalOpen}
-  on:showVideo={handleShowVideoModal}
-  on:trackMobilisation={handleTrackMobilisationEvent}
+  onShowVideo={handleShowVideoModal}
+  onTrackMobilisation={handleTrackMobilisation}
   {orientationFormUrl}
 />
 <OrientationVideo bind:isVideoModalOpen />

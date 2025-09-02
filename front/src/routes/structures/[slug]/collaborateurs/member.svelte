@@ -1,10 +1,27 @@
 <script lang="ts">
-  import ButtonMenu from "$lib/components/display/button-menu.svelte";
-  import { moreIcon } from "$lib/icons";
+  import type { Snippet } from "svelte";
 
-  export let member;
-  export let isMyself = false;
-  export let readOnly = false;
+  import More2FillSystem from "svelte-remix/More2FillSystem.svelte";
+
+  import ButtonMenu from "$lib/components/display/button-menu.svelte";
+
+  interface Props {
+    member: any;
+    isMyself?: boolean;
+    readOnly?: boolean;
+    status?: Snippet;
+    label?: Snippet;
+    actions?: Snippet<[any]>;
+  }
+
+  let {
+    member,
+    isMyself = false,
+    readOnly = false,
+    status,
+    label,
+    actions,
+  }: Props = $props();
 </script>
 
 <div
@@ -20,21 +37,22 @@
       {#if isMyself}
         <span class="bg-magenta-10 px-s12 py-s6 rounded-lg">Vous</span>
       {/if}
-      <slot name="status" />
+      {@render status?.()}
     </div>
     <div class="flex-2">
-      <slot name="label" />
+      {@render label?.()}
     </div>
     <div class="flex-1">
       {#if !readOnly}
         <ButtonMenu
           small
-          icon={moreIcon}
-          let:onClose={onCloseParent}
+          icon={More2FillSystem}
           hideLabel
           label="Actions disponibles pour l'utilisateur"
         >
-          <slot name="actions" {onCloseParent} />
+          {#snippet children({ onClose: onCloseParent })}
+            {@render actions?.({ onCloseParent })}
+          {/snippet}
         </ButtonMenu>
       {/if}
     </div>

@@ -1,8 +1,18 @@
 <script lang="ts">
+  import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
+
   import Button from "$lib/components/display/button.svelte";
   import Select from "$lib/components/inputs/select/select.svelte";
   import Tooltip from "$lib/components/ui/tooltip.svelte";
-  import { arrowDownSIcon, arrowUpSIcon } from "$lib/icons";
+  import type {
+    AdminShortStructure,
+    ServiceCategory,
+    ServicesOptions,
+    StructuresOptions,
+    Typology,
+  } from "$lib/types";
+
   import {
     isOrphan,
     isObsolete,
@@ -11,22 +21,27 @@
     toUpdate,
     waiting,
   } from "./structures-filters";
-  import type {
-    AdminShortStructure,
-    ServiceCategory,
-    ServicesOptions,
-    StructuresOptions,
-    Typology,
-  } from "$lib/types";
   import type { StatusFilter } from "./types";
 
-  export let searchStatus: StatusFilter;
-  export let filterDefinition: string | undefined;
-  export let filterActions: string | undefined;
-  export let servicesOptions: ServicesOptions;
-  export let structuresOptions: StructuresOptions;
-  export let structures: AdminShortStructure[] = [];
-  export let filteredStructures: AdminShortStructure[];
+  interface Props {
+    searchStatus: StatusFilter;
+    filterDefinition?: string;
+    filterActions?: string;
+    servicesOptions: ServicesOptions;
+    structuresOptions: StructuresOptions;
+    structures?: AdminShortStructure[];
+    filteredStructures: AdminShortStructure[];
+  }
+
+  let {
+    searchStatus = $bindable(),
+    filterDefinition = $bindable(),
+    filterActions = $bindable(),
+    servicesOptions,
+    structuresOptions,
+    structures = [],
+    filteredStructures = $bindable(),
+  }: Props = $props();
 
   const statusFilterSettings: {
     status: StatusFilter;
@@ -83,7 +98,7 @@
     },
   ];
 
-  let showAdvancedFilters = false;
+  let showAdvancedFilters = $state(false);
 
   const SORTING_CHOICES = [
     { value: "name", label: "Nom" },
@@ -112,7 +127,7 @@
     sortChoice: "name",
   };
 
-  let searchParams: SearchParams = emptySearchParams;
+  let searchParams: SearchParams = $state(emptySearchParams);
 
   function normalizeString(str: string): string {
     return (
@@ -233,11 +248,13 @@
     searchStatus = "toutes";
   }
 
-  $: filteredStructures = filterAndSortEntities(
-    structures,
-    searchParams,
-    searchStatus
-  );
+  $effect(() => {
+    filteredStructures = filterAndSortEntities(
+      structures,
+      searchParams,
+      searchStatus
+    );
+  });
 </script>
 
 <div class="mb-s8 font-bold">Structures nécessitant une action&#8239;:</div>
@@ -246,7 +263,7 @@
   {#each statusFilterSettings as { status, label, definition, actions }}
     <Tooltip>
       <Button
-        on:click={() => {
+        onclick={() => {
           resetSearchParams();
           searchStatus = status;
           filterDefinition = definition;
@@ -257,7 +274,9 @@
           : ''}"
         secondary={searchStatus !== status}
       />
-      <div slot="content" class="max-w-s256 text-center">{definition}</div>
+      {#snippet content()}
+        <div class="max-w-s256 text-center">{definition}</div>
+      {/snippet}
     </Tooltip>
   {/each}
 </div>
@@ -279,8 +298,8 @@
 <div class="mb-s32">
   <Button
     label="Voir les filtres avancés"
-    on:click={() => (showAdvancedFilters = !showAdvancedFilters)}
-    icon={!showAdvancedFilters ? arrowDownSIcon : arrowUpSIcon}
+    onclick={() => (showAdvancedFilters = !showAdvancedFilters)}
+    icon={!showAdvancedFilters ? ArrowDownSLineArrows : ArrowUpSLineArrows}
     iconOnRight
     noBackground
     small
@@ -335,7 +354,7 @@
           />
         </div>
       </div>
-      <div class="gap-s16 flex justify-between" />
+      <div class="gap-s16 flex justify-between"></div>
     </div>
   </div>
 </div>
