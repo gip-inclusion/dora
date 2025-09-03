@@ -24,6 +24,24 @@
 
 <nav class="{mobileDesign ? 'block' : 'hidden'} md:block">
   <ul class={mobileDesign ? "flex flex-col" : "inline-flex"}>
+    <li
+      class="border-gray-03 leading-24 lg:border-none"
+      class:border-b={mobileDesign}
+    >
+      <a href="/" class="inline-block h-full {aClass}">
+        Recherche par besoins
+      </a>
+    </li>
+
+    <li
+      class="border-gray-03 leading-24 lg:border-none"
+      class:border-b={mobileDesign}
+    >
+      <a href="/recherche-textuelle" class="inline-block h-full {aClass}">
+        Recherche par mots-clés 🆕
+      </a>
+    </li>
+
     <li>
       <SubMenuDropdown
         {mobileDesign}
