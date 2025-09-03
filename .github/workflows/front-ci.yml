@@ -1,5 +1,8 @@
 name: Dora Front CI
 
+permissions:
+  contents: read
+
 on:
   push:
     paths:
