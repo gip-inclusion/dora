@@ -1,5 +1,8 @@
 name: Dora Back CI
 
+permissions:
+  contents: read
+
 on:
   push:
     paths:
