@@ -28,15 +28,14 @@
 
   let reactiveData = $state(data);
 
+  let { service, servicesOptions, isDI } = $derived(reactiveData);
+
   let isServiceFeedbackModalOpen = $state(false);
 
   let showFeedbackModal = $derived(
     browser &&
-      reactiveData.service &&
-      !isMemberOrPotentialMemberOfStructure(
-        $userInfo,
-        reactiveData.service.structure
-      )
+      service &&
+      !isMemberOrPotentialMemberOfStructure($userInfo, service.structure)
   );
 
   $effect(() => {
@@ -45,57 +44,54 @@
 
   onMount(() => {
     const searchId = $page.url.searchParams.get("searchId");
-    trackService(reactiveData.service, $page.url, searchId, reactiveData.isDI);
+    trackService(service, $page.url, searchId, isDI);
   });
 
   async function handleRefresh() {
-    if (reactiveData.service) {
-      reactiveData.service = await getService(reactiveData.service.slug);
+    if (service) {
+      service = await getService(service.slug);
     }
   }
 
-  function getMinutesSincePublication(service: Service) {
+  function getMinutesSincePublication(serv: Service) {
     return (
-      (new Date().getTime() - new Date(service.publicationDate).getTime()) /
-      60000
+      (new Date().getTime() - new Date(serv.publicationDate).getTime()) / 60000
     );
   }
 
-  const serviceWasJustPublished =
-    reactiveData.service &&
-    reactiveData.service.publicationDate &&
-    reactiveData.service.status === "PUBLISHED" &&
-    getMinutesSincePublication(reactiveData.service) < 1;
+  const serviceWasJustPublished = $derived(
+    service &&
+      service.publicationDate &&
+      service.status === "PUBLISHED" &&
+      getMinutesSincePublication(service) < 1
+  );
 </script>
 
-{#if reactiveData.service}
+{#if service}
   <CenteredGrid bgColor="bg-blue-light">
-    <ServiceHeader service={reactiveData.service} />
+    <ServiceHeader {service} />
   </CenteredGrid>
 
   <CenteredGrid roundedColor="bg-blue-light" noPadding extraClass="mb-s8">
     <ServiceToolbar
-      service={reactiveData.service}
-      servicesOptions={reactiveData.servicesOptions}
+      {service}
+      {servicesOptions}
       onRefresh={handleRefresh}
       onFeedbackButtonClick={() => (isServiceFeedbackModalOpen = true)}
     />
   </CenteredGrid>
 
   <ServiceBody
-    service={reactiveData.service}
-    servicesOptions={reactiveData.servicesOptions}
+    {service}
+    {servicesOptions}
     onFeedbackButtonClick={() => (isServiceFeedbackModalOpen = true)}
   />
 
   {#if showFeedbackModal}
-    <ServiceFeedbackModal
-      bind:isOpen={isServiceFeedbackModalOpen}
-      service={reactiveData.service}
-    />
+    <ServiceFeedbackModal bind:isOpen={isServiceFeedbackModalOpen} {service} />
   {/if}
 
-  {#if browser && reactiveData.service.canWrite && serviceWasJustPublished && !reactiveData.service.hasAlreadyBeenUnpublished}
+  {#if browser && service.canWrite && serviceWasJustPublished && !service.hasAlreadyBeenUnpublished}
     <TallyPopup
       formId={TallyFormId.SERVICE_CREATION_FORM_ID}
       timeoutSeconds={3}
