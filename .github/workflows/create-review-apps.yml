@@ -1,5 +1,8 @@
 name: Création des review apps
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:
