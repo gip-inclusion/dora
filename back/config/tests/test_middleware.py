@@ -1,6 +1,6 @@
 import os
 
-from django.http import HttpResponsePermanentRedirect
+from django.http import HttpResponseRedirect
 from django.test import RequestFactory, TestCase, override_settings
 
 from config.domain_redirect_middleware import DomainRedirectMiddleware
@@ -19,7 +19,7 @@ class DomainRedirectMiddlewareTest(TestCase):
 
         response = self.middleware.process_request(request)
 
-        self.assertIsInstance(response, HttpResponsePermanentRedirect)
+        self.assertIsInstance(response, HttpResponseRedirect)
         self.assertEqual(response.status_code, 307)
         self.assertEqual(response["Location"], "https://new-domain.com/api/test/")
 

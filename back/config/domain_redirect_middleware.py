@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.http import HttpResponsePermanentRedirect
+from django.http import HttpResponseRedirect
 from django.utils.deprecation import MiddlewareMixin
 
 
@@ -14,10 +14,10 @@ class DomainRedirectMiddleware(MiddlewareMixin):
         current_host = request.get_host()
 
         if current_host == old_domain:
-            new_url = f"https://{new_domain}{request.get_full_path()}"
+            new_url = f"http://{new_domain}{request.get_full_path()}"
 
-            response = HttpResponsePermanentRedirect(new_url)
-            response.status_code = 307
+            response = HttpResponseRedirect(new_url)
+            response.status_code = response.status_code_preserve_request
             return response
 
         return None
