@@ -84,10 +84,7 @@ def test_delete_attachments(orientation):
         assert default_storage.exists(path)
 
     # Supprimer toutes les pièces jointes
-    print("attn:", orientation.beneficiary_attachments)
     results = orientation.delete_attachments()
-    print("results:", results)
-    print("attn:", orientation.beneficiary_attachments)
 
     # Vérifier que toutes les pièces jointes ont été supprimées
     for path in attachment_paths:
