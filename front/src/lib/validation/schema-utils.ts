@@ -2,7 +2,7 @@
 import type { ServicesOptions } from "$lib/types";
 import { INVALID_OPENING_HOURS_MARKER } from "$lib/utils/opening-hours";
 
-const urlRegexp = /^(https?|ftp):\/\/[^\s]+$/;
+const urlRegexp = /^(https?|ftp):\/\/[^\s]{1,2000}$/;
 
 // Prise sur https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address
 const emailRegexp =
