@@ -17,11 +17,13 @@
     class:text-orange={service.updateNeeded}
     class:text-service-green-darker={!service.updateNeeded}
   >
-    <RelativeDateLabel
-      date={service.modificationDate}
-      prefix="Actualisé"
-      bold
-    />
+    {#if service.modificationDate}
+      <RelativeDateLabel
+        date={service.modificationDate}
+        prefix="Actualisé"
+        bold
+      />
+    {/if}
   </div>
   <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
 </div>

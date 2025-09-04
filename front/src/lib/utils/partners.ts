@@ -11,7 +11,7 @@ import logoCollectifEmploi from "$lib/assets/logos/partners/logo_collectifemploi
 import logoCravateSolidaire from "$lib/assets/logos/partners/logo_cravatesolidaire.png";
 import logoCresus from "$lib/assets/logos/partners/logo_cresus.png";
 import logoEc2 from "$lib/assets/logos/partners/logo_e2c.png";
-import logoFace from "$lib/assets/logos/partners/logo_face.png";
+import logoFace from "$lib/assets/logos/partners/logo_face.webp";
 import logoLesEmplois from "$lib/assets/logos/partners/logo_lesemplois.png";
 import logoOrange from "$lib/assets/logos/partners/logo_orange.png";
 import logoSocialBuilder from "$lib/assets/logos/partners/logo_socialbuilder.png";

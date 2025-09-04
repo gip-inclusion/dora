@@ -9,7 +9,7 @@
   interface Props {
     service: Service;
     servicesOptions: ServicesOptions;
-    onRefresh: () => void;
+    onRefresh: () => Promise<void>;
     onFeedbackButtonClick: () => void;
   }
 
@@ -17,9 +17,12 @@
     $props();
 </script>
 
-<div class="hidden print:block">
-  <RelativeDateLabel date={service.modificationDate} prefix="Actualisé le" />
-</div>
+{#if service.modificationDate}
+  <div class="hidden print:block">
+    <RelativeDateLabel date={service.modificationDate} prefix="Actualisé le" />
+  </div>
+{/if}
+
 <div
   class="border-gray-02 py-s40 gap-s24 relative flex flex-col items-center justify-between border-b sm:flex-row print:hidden"
 >

@@ -10,7 +10,7 @@
   interface Props {
     service: Service;
     servicesOptions: ServicesOptions;
-    onRefresh: () => void;
+    onRefresh: () => Promise<void>;
   }
 
   let { service, servicesOptions, onRefresh }: Props = $props();
