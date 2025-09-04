@@ -38,7 +38,7 @@
   width="small"
 >
   <div class="pt-s16 text-f18 text-france-blue">
-    Périmètre : <strong>{service.diffusionZoneDetailsDisplay}</strong>
+    Périmètre&#8239;: <strong>{service.diffusionZoneDetailsDisplay}</strong>
   </div>
 
   <hr class="my-s24" />
