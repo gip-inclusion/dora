@@ -20,7 +20,7 @@ class DomainRedirectMiddlewareTest(TestCase):
         response = self.middleware.process_request(request)
 
         self.assertIsInstance(response, HttpResponsePermanentRedirect)
-        self.assertEqual(response.status_code, 308)
+        self.assertEqual(response.status_code, 307)
         self.assertEqual(response["Location"], "https://new-domain.com/api/test/")
 
     def test_preserves_query_parameters(self):
@@ -32,14 +32,14 @@ class DomainRedirectMiddlewareTest(TestCase):
             response["Location"], "https://new-domain.com/search/?q=test&page=2"
         )
 
-    def test_preserves_post_data_with_308(self):
+    def test_preserves_post_data_with_307(self):
         request = self.factory.post(
             "/api/create/", {"name": "test"}, HTTP_HOST="old-domain.com"
         )
 
         response = self.middleware.process_request(request)
 
-        self.assertEqual(response.status_code, 308)
+        self.assertEqual(response.status_code, 307)
 
     def test_no_redirect_for_new_domain(self):
         request = self.factory.get("/api/test/", HTTP_HOST="new-domain.com")

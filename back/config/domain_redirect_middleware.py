@@ -17,7 +17,7 @@ class DomainRedirectMiddleware(MiddlewareMixin):
             new_url = f"https://{new_domain}{request.get_full_path()}"
 
             response = HttpResponsePermanentRedirect(new_url)
-            response.status_code = 308
+            response.status_code = 307
             return response
 
         return None
