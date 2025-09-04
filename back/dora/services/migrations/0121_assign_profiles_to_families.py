@@ -2,8 +2,9 @@
 
 import logging
 
-from data_inclusion.schema.v1.publics import Public
 from django.db import migrations
+
+from dora.services.enums import Public
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +85,11 @@ def assign_families_to_profiles(apps, _schema_editor):
             profile.save()
         except ConcernedPublic.DoesNotExist:
             logger.error("Le profil %d n'a pas été trouvé", profile_id)
+
+    # Tous les autres profils sont assignés à la famille « Tous publics »
+    for profile in ConcernedPublic.objects.exclude(id__in=PROFILES_TO_FAMILIES.keys()):
+        profile.profile_families = (Public.TOUS_PUBLICS,)
+        profile.save()
 
 
 class Migration(migrations.Migration):
