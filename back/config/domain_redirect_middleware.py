@@ -5,16 +5,16 @@ from django.utils.deprecation import MiddlewareMixin
 
 class DomainRedirectMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        old_domain = getattr(settings, "OLD_DOMAIN", None)
-        new_domain = getattr(settings, "NEW_DOMAIN", None)
+        old_host = getattr(settings, "OLD_HOST", None)
+        new_host = getattr(settings, "NEW_HOST", None)
 
-        if not old_domain or not new_domain:
+        if not old_host or not new_host:
             return None
 
         current_host = request.get_host()
 
-        if current_host == old_domain:
-            new_url = f"https://{new_domain}{request.get_full_path()}"
+        if current_host == old_host:
+            new_url = f"https://{new_host}{request.get_full_path()}"
 
             response = HttpResponseRedirect(new_url, preserve_request=True)
             return response
