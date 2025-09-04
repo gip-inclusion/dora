@@ -2923,7 +2923,9 @@ class ServiceSyncTestCase(APITestCase):
             initial_checksum = model.sync_checksum
             rel_model = getattr(model, field).target_field.related_model
             rel_models_fields = (
-                {"profile_families": ["adultes"]} if field == "concerned_public" else {}
+                {"profile_families": ["familles"]}
+                if field == "concerned_public"
+                else {}
             )
             new_value = baker.make(rel_model, **rel_models_fields)
             response = self.client.patch(
