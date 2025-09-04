@@ -1,4 +1,3 @@
-from data_inclusion.schema.v0 import Profil
 from django import forms
 from django.contrib import messages
 from django.contrib.admin import RelatedOnlyFieldListFilter
@@ -8,6 +7,7 @@ from django.urls import path
 from django.utils.html import format_html
 
 from dora.core.admin import EnumAdmin
+from dora.services.enums import Public
 
 from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportServicesHelper
@@ -341,7 +341,7 @@ class CustomizableChoiceAdmin(admin.ModelAdmin):
 
 class ConcernedPublicForm(forms.ModelForm):
     profile_families = forms.MultipleChoiceField(
-        choices=((p.value, p.label) for p in Profil),
+        choices=((p.value, p.label) for p in Public),
         widget=forms.SelectMultiple(attrs={"size": "10"}),
         label="Familles de profils",
     )
@@ -356,7 +356,7 @@ class ConcernedPublicAdmin(CustomizableChoiceAdmin):
     list_display = ("name", "get_profile_families", "structure")
 
     def get_profile_families(self, obj):
-        return ", ".join(Profil(p).label for p in obj.profile_families)
+        return ", ".join(Public(p).label for p in obj.profile_families)
 
     get_profile_families.short_description = "Familles de profils"
 
