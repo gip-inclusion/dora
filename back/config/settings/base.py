@@ -59,6 +59,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "config.domain_redirect_middleware.DomainRedirectMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -144,6 +145,8 @@ ALLOWED_HOSTS = (
     else None
 )
 
+OLD_HOST = os.getenv("OLD_HOST", None)
+NEW_HOST = os.getenv("NEW_HOST", None)
 
 # Validation des mot de passe :
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
