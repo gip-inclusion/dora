@@ -2,9 +2,8 @@
 
 import logging
 
+from data_inclusion.schema.v1.publics import Public
 from django.db import migrations
-
-from dora.services.enums import Public
 
 logger = logging.getLogger(__name__)
 

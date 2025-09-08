@@ -45,7 +45,7 @@ def test_empty_profile_families(concerned_public):
 
 
 def test_all_valid_profiles(concerned_public):
-    from dora.services.enums import Public
+    from data_inclusion.schema.v1.publics import Public
 
     all_profiles = [p.value for p in Public]
     concerned_public.profile_families = all_profiles

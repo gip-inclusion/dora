@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime, timedelta
 
 from data_inclusion.schema.v0 import TypologieStructure
+from data_inclusion.schema.v1.publics import Public
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -22,7 +23,7 @@ from dora.core.models import EnumModel, LogItem, ModerationMixin
 from dora.core.utils import address_to_one_line
 from dora.structures.models import Structure
 
-from .enums import Public, ServiceStatus
+from .enums import ServiceStatus
 
 logger = logging.getLogger(__name__)
 

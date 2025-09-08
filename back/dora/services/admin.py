@@ -1,3 +1,4 @@
+from data_inclusion.schema.v1.publics import Public
 from django import forms
 from django.contrib import messages
 from django.contrib.admin import RelatedOnlyFieldListFilter
@@ -7,7 +8,6 @@ from django.urls import path
 from django.utils.html import format_html
 
 from dora.core.admin import EnumAdmin
-from dora.services.enums import Public
 
 from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportServicesHelper
