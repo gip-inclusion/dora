@@ -14,9 +14,8 @@ class DomainRedirectMiddleware(MiddlewareMixin):
         current_host = request.get_host()
 
         if current_host == old_host:
-            new_url = f"https://{new_host}{request.get_full_path()}"
+            new_url = f"{request.scheme}://{new_host}{request.get_full_path()}"
 
-            response = HttpResponseRedirect(new_url, preserve_request=True)
-            return response
+            return HttpResponseRedirect(new_url, preserve_request=True)
 
         return None

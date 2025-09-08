@@ -59,8 +59,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "config.domain_redirect_middleware.DomainRedirectMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "config.domain_redirect_middleware.DomainRedirectMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
