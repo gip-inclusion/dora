@@ -113,8 +113,8 @@
 
     <div
       {id}
-      class="border-gray-00 absolute top-[100%] right-0 z-1000 hidden flex-col justify-end rounded-lg border bg-white shadow-md"
-      class:left-0={mobileDesign}
+      class="border-gray-00 right-s0 absolute top-[100%] z-1000 hidden flex-col justify-end rounded-lg border bg-white shadow-md"
+      class:left-s0={mobileDesign}
       class:!flex={isOpen}
     >
       <div class="p-s12 w-full">
