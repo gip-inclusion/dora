@@ -1,0 +1,14 @@
+<% if ENV['ENABLE_DOMAIN_REDIRECT'] == 'true' %>
+if ($host = <%= ENV['OLD_FRONTEND_HOST'] %>) {
+    return 307 $scheme://<%= ENV['NEW_FRONTEND_HOST'] %>$request_uri;
+}
+<% end %>
+
+location / {
+    try_files $uri $uri/ /index.html;
+}
+
+location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+}
