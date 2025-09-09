@@ -13,6 +13,7 @@
   <a
     href="https://aide.dora.inclusion.beta.gouv.fr/fr/"
     target="_blank"
+    rel="noopener noreferrer"
     class={aClass}
   >
     Documentation
@@ -21,6 +22,7 @@
   <a
     href="https://www.youtube.com/@dora.inclusion/videos"
     target="_blank"
+    rel="noopener noreferrer"
     class={aClass}
   >
     Tutoriels vidéos
@@ -29,6 +31,7 @@
   <a
     href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/participer-a-un-webinaire-dora-h3n747/"
     target="_blank"
+    rel="noopener noreferrer"
     class={aClass}
   >
     Webinaires d’appropriation
@@ -37,6 +40,7 @@
   <a
     href="https://docs.google.com/presentation/d/1IUAh7fqMXsrhjAE5GH7h1t7jQBSXwg6vIKO0KeRULpA/edit?slide=id.g31dc9d5c052_0_0#slide=id.g31dc9d5c052_0_0"
     target="_blank"
+    rel="noopener noreferrer"
     class={aClass}
   >
     Kit de déploiement
