@@ -1,6 +1,6 @@
 <% if ENV['ENABLE_DOMAIN_REDIRECT'] == 'true' %>
-if ($host = <%= ENV['OLD_FRONTEND_HOST'] %>) {
-    return 307 $scheme://<%= ENV['NEW_FRONTEND_HOST'] %>$request_uri;
+if ($host = <%= ENV['OLD_HOST'] %>) {
+    return 307 $scheme://<%= ENV['NEW_HOST'] %>$request_uri;
 }
 <% end %>
 
