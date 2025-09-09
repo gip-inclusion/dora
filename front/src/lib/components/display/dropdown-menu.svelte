@@ -67,11 +67,10 @@
       bind:this={dropdownButton}
       aria-expanded={isOpen}
       aria-controls={id}
-      class:bg-magenta-10={isOpen}
       class={[
         "flex w-full items-center justify-between rounded-sm text-left lg:w-auto",
         withBorders && "border-gray-03 border",
-        isOpen && "border-magenta-cta",
+        isOpen && "bg-magenta-10 border-magenta-cta",
       ]}
       onclick={() => (isOpen = !isOpen)}
     >
@@ -90,8 +89,10 @@
 
         {#if !label && labelText}
           <span
-            class:sr-only={hideLabel}
-            class="text-gray-text text-left whitespace-nowrap"
+            class={[
+              "text-gray-text text-left whitespace-nowrap",
+              hideLabel && "sr-only",
+            ]}
           >
             {labelText}
           </span>
@@ -117,9 +118,11 @@
 
     <div
       {id}
-      class="border-gray-00 right-s0 absolute top-[100%] z-1000 hidden flex-col justify-end rounded-lg border bg-white shadow-md"
-      class:left-s0={mobileDesign}
-      class:!flex={isOpen}
+      class={[
+        "border-gray-00 right-s0 absolute top-[100%] z-1000 hidden flex-col justify-end rounded-lg border bg-white shadow-md",
+        mobileDesign && "left-s0",
+        isOpen && "!flex",
+      ]}
     >
       <div class="p-s12 w-full">
         {@render children({ closeDropdown })}
