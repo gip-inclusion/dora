@@ -5,7 +5,7 @@
     "flex w-full lg:min-w-[200px] items-center p-s12 text-gray-text hover:text-magenta-cta hover:bg-magenta-10 rounded-sm";
 </script>
 
-<DropdownMenu withBorders={false}>
+<DropdownMenu>
   {#snippet label()}
     <span class="text-magenta-cta font-bold">Besoin d’aide&#8239;?</span>
   {/snippet}

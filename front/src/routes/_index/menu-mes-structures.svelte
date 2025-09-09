@@ -35,7 +35,12 @@
 <div class="mb-s16 lg:mb-s0 lg:mr-s10">
   {#if structures.length !== 0}
     <div class="flex w-full items-center lg:w-auto">
-      <DropdownMenu labelText="Mes structures" hideLabel {mobileDesign}>
+      <DropdownMenu
+        labelText="Mes structures"
+        hideLabel
+        withBorders
+        {mobileDesign}
+      >
         {#snippet label()}
           <div class="flex w-full items-center">
             <span

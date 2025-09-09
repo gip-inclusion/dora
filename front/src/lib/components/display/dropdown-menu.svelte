@@ -30,7 +30,7 @@
     icon: Icon,
     labelText,
     hideLabel,
-    withBorders = true,
+    withBorders = false,
     mobileDesign,
     label,
     children,
