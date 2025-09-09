@@ -68,14 +68,15 @@
       aria-expanded={isOpen}
       aria-controls={id}
       class:bg-magenta-10={isOpen}
-      class=" flex w-full items-center justify-between rounded-sm text-left lg:w-auto {withBorders
-        ? 'border-gray-03 border'
-        : ''}"
-      class:border-magenta-cta={isOpen}
+      class={[
+        "flex w-full items-center justify-between rounded-sm text-left lg:w-auto",
+        withBorders && "border-gray-03 border",
+        isOpen && "border-magenta-cta",
+      ]}
       onclick={() => (isOpen = !isOpen)}
     >
       {#if label}
-        <div class="px-s12 {withBorders ? '' : 'lg:px-s8'}">
+        <div class={["px-s12", !withBorders && "lg:px-s8"]}>
           {@render label()}
         </div>
       {/if}
@@ -98,8 +99,11 @@
       </span>
 
       <span
-        class="border-gray-03 p-s12 flex {withBorders ? '' : 'lg:px-s8'}"
-        class:border-l={label && withBorders}
+        class={[
+          "border-gray-03 p-s12 flex",
+          !withBorders && "lg:px-s8",
+          !!label && withBorders && "border-l",
+        ]}
       >
         <span class="h-s24 w-s24 text-magenta-cta fill-current">
           {#if isOpen}
