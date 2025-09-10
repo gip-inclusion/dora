@@ -4,6 +4,8 @@ if ($host = <%= ENV['OLD_HOST'] %>) {
 }
 <% end %>
 
+root /app/build;
+
 location / {
     try_files $uri $uri/ /index.html;
 }
