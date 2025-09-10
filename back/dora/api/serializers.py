@@ -180,6 +180,8 @@ class ServiceSerializer(serializers.ModelSerializer):
     frais = serializers.SerializerMethodField()
     frais_autres = serializers.SerializerMethodField()
     profils = serializers.SerializerMethodField()
+    publics = serializers.SerializerMethodField()
+    publics_precisions = serializers.SerializerMethodField()
     pre_requis = serializers.SerializerMethodField()
     cumulable = serializers.SerializerMethodField()
     justificatifs = serializers.SerializerMethodField()
@@ -242,6 +244,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             "presentation_resume",
             "prise_rdv",
             "profils",
+            "publics",
+            "publics_precisions",
             "recurrence",
             "source",
             "structure_id",
@@ -296,6 +300,20 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_profils(self, obj):
         # TODO: mapping DORA à faire
         return [c.name for c in obj.concerned_public.all()]
+
+    def get_publics(self, obj):
+        return list(
+            {
+                profile_family
+                for concerned_public in obj.concerned_public.all()
+                for profile_family in concerned_public.profile_families
+            }
+        )
+
+    def get_publics_precisions(self, obj):
+        return ", ".join(
+            [concerned_public.name for concerned_public in obj.concerned_public.all()]
+        )
 
     def get_pre_requis(self, obj):
         return [c.name for c in obj.requirements.all()]
