@@ -1,5 +1,6 @@
 import pytest
 from data_inclusion.schema.v0 import TypologieStructure
+from data_inclusion.schema.v1.publics import Public
 from django.contrib.gis.geos import Point
 from model_bakery import baker
 
@@ -212,11 +213,13 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         ServiceKind.objects.get(value="information"),
     )
     service.concerned_public.add(
-        baker.make(ConcernedPublic, name="adultes", profile_families=["adultes"]),
         baker.make(
-            ConcernedPublic, name="jeunes-16-26", profile_families=["jeunes-16-26"]
+            ConcernedPublic, name="familles", profile_families=[Public.FAMILLES]
         ),
-        baker.make(ConcernedPublic, name="femmes", profile_families=["femmes"]),
+        baker.make(
+            ConcernedPublic, name="etudiants", profile_families=[Public.ETUDIANTS]
+        ),
+        baker.make(ConcernedPublic, name="femmes", profile_families=[Public.FEMMES]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
@@ -269,7 +272,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "presentation_detail": "Service de proximité visant à soutenir les familles ayant la responsabilité de jeunes enfants, en particulier les familles monoparentales.",
         "presentation_resume": "Accompagnement des familles à domicile",
         "prise_rdv": "https://example.com",
-        "profils": ["adultes", "jeunes-16-26", "femmes"],
+        "profils": ["familles", "etudiants", "femmes"],
         "recurrence": "Tu 09:00-12:00;We 14:00-17:00",
         "source": None,
         "structure_id": str(structure.id),
@@ -392,11 +395,13 @@ def test_service_serialization_exemple_need_di_user(api_client):
         ServiceKind.objects.get(value="information"),
     )
     service.concerned_public.add(
-        baker.make(ConcernedPublic, name="adultes", profile_families=["adultes"]),
         baker.make(
-            ConcernedPublic, name="jeunes-16-26", profile_families=["jeunes-16-26"]
+            ConcernedPublic, name="familles", profile_families=[Public.FAMILLES]
         ),
-        baker.make(ConcernedPublic, name="femmes", profile_families=["femmes"]),
+        baker.make(
+            ConcernedPublic, name="etudiants", profile_families=[Public.ETUDIANTS]
+        ),
+        baker.make(ConcernedPublic, name="femmes", profile_families=[Public.FEMMES]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))

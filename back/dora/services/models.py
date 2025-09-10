@@ -2,7 +2,8 @@ import logging
 import uuid
 from datetime import datetime, timedelta
 
-from data_inclusion.schema.v0 import Profil, TypologieStructure
+from data_inclusion.schema.v0 import TypologieStructure
+from data_inclusion.schema.v1.publics import Public
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -40,7 +41,7 @@ def make_unique_slug(instance, parent_slug, value, length=20):
 
 
 def validate_profile_families(value):
-    valid_values = {p.value for p in Profil}
+    valid_values = {p.value for p in Public}
     if value not in valid_values:
         raise ValidationError(f"Invalid profile family: {value}")
 

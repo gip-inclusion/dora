@@ -2,6 +2,7 @@ from datetime import timedelta
 from unittest import mock
 
 import requests
+from data_inclusion.schema.v1.publics import Public
 from django.conf import settings
 from django.contrib.gis.geos import MultiPolygon, Point
 from django.core.exceptions import ValidationError
@@ -2923,7 +2924,9 @@ class ServiceSyncTestCase(APITestCase):
             initial_checksum = model.sync_checksum
             rel_model = getattr(model, field).target_field.related_model
             rel_models_fields = (
-                {"profile_families": ["adultes"]} if field == "concerned_public" else {}
+                {"profile_families": [Public.FAMILLES]}
+                if field == "concerned_public"
+                else {}
             )
             new_value = baker.make(rel_model, **rel_models_fields)
             response = self.client.patch(
