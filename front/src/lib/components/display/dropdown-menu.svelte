@@ -13,6 +13,7 @@
     icon?: Component;
     labelText?: string;
     hideLabel?: boolean;
+    withBorders?: boolean;
     mobileDesign?: boolean;
     label?: Snippet;
     children: Snippet<
@@ -29,6 +30,7 @@
     icon: Icon,
     labelText,
     hideLabel,
+    withBorders = false,
     mobileDesign,
     label,
     children,
@@ -65,13 +67,15 @@
       bind:this={dropdownButton}
       aria-expanded={isOpen}
       aria-controls={id}
-      class:bg-magenta-10={isOpen}
-      class="border-gray-03 flex w-full items-center justify-between rounded-sm border text-left lg:w-auto"
-      class:border-magenta-cta={isOpen}
+      class={[
+        "flex w-full items-center justify-between rounded-sm text-left lg:w-auto",
+        withBorders && "border-gray-03 border",
+        isOpen && "bg-magenta-10 border-magenta-cta",
+      ]}
       onclick={() => (isOpen = !isOpen)}
     >
       {#if label}
-        <div class="px-s12">
+        <div class={["px-s12", !withBorders && "lg:px-s8"]}>
           {@render label()}
         </div>
       {/if}
@@ -85,15 +89,23 @@
 
         {#if !label && labelText}
           <span
-            class:sr-only={hideLabel}
-            class="text-gray-text text-left whitespace-nowrap"
+            class={[
+              "text-gray-text text-left whitespace-nowrap",
+              hideLabel && "sr-only",
+            ]}
           >
             {labelText}
           </span>
         {/if}
       </span>
 
-      <span class="border-gray-03 p-s12 flex" class:border-l={label}>
+      <span
+        class={[
+          "border-gray-03 p-s12 flex",
+          !withBorders && "lg:px-s8",
+          !!label && withBorders && "border-l",
+        ]}
+      >
         <span class="h-s24 w-s24 text-magenta-cta fill-current">
           {#if isOpen}
             <ArrowUpSIcon />
@@ -106,9 +118,11 @@
 
     <div
       {id}
-      class="border-gray-00 absolute top-[100%] right-0 z-1000 hidden flex-col justify-end rounded-lg border bg-white shadow-md"
-      class:left-0={mobileDesign}
-      class:!flex={isOpen}
+      class={[
+        "border-gray-00 right-s0 absolute top-[100%] z-1000 hidden flex-col justify-end rounded-lg border bg-white shadow-md",
+        mobileDesign && "left-s0",
+        isOpen && "!flex",
+      ]}
     >
       <div class="p-s12 w-full">
         {@render children({ closeDropdown })}

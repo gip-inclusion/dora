@@ -1,14 +1,17 @@
 <script lang="ts">
   import { page } from "$app/stores";
+
+  import HamburgerMenu from "$lib/components/display/hamburger.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import type { ShortStructure } from "$lib/types";
   import { userInfo } from "$lib/utils/auth";
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
-  import MenuMonCompte from "./menu-mon-compte.svelte";
-  import HamburgerMenu from "$lib/components/display/hamburger.svelte";
-  import SubMenu from "./sub-menu.svelte";
-  import MenuMesStructures from "./menu-mes-structures.svelte";
   import { userPreferences } from "$lib/utils/preferences";
+
+  import MenuAide from "./menu-aide.svelte";
+  import MenuMesStructures from "./menu-mes-structures.svelte";
+  import MenuMonCompte from "./menu-mon-compte.svelte";
+  import SubMenu from "./sub-menu.svelte";
 
   let structures: ShortStructure[] = $derived(
     $userInfo ? [...$userInfo.structures, ...$userInfo.pendingStructures] : []
@@ -20,14 +23,8 @@
 
 <HamburgerMenu>
   <div class="flex flex-col lg:flex-row print:hidden">
-    <div class="my-s20 lg:my-s0 text-center lg:text-left">
-      <LinkButton
-        to="https://aide.dora.inclusion.beta.gouv.fr/fr/"
-        noBackground
-        otherTab
-        extraClass="mr-s8 text-f14!"
-        label="Besoin d’aide ?"
-      />
+    <div class="mb-s16 lg:mb-s0 lg:mr-s16 h-[50px]">
+      <MenuAide />
     </div>
 
     {#if !$userInfo}
