@@ -38,9 +38,9 @@ from dora.services.models import (
     BeneficiaryAccessMode,
     Bookmark,
     CoachOrientationMode,
-    ConcernedPublic,
     Credential,
     LocationKind,
+    Public,
     Requirement,
     SavedSearch,
     Service,
@@ -630,7 +630,7 @@ def options(request):
 
     class ConcernedPublicSerializer(CustomChoiceSerializer):
         class Meta(CustomChoiceSerializer.Meta):
-            model = ConcernedPublic
+            model = Public
 
     class RequirementSerializer(CustomChoiceSerializer):
         class Meta(CustomChoiceSerializer.Meta):
@@ -726,9 +726,7 @@ def options(request):
             context={"request": request},
         ).data,
         "concerned_public": ConcernedPublicSerializer(
-            filter_custom_choices(
-                ConcernedPublic.objects.select_related("structure").all()
-            ),
+            filter_custom_choices(Public.objects.select_related("structure").all()),
             many=True,
             context={"request": request},
         ).data,

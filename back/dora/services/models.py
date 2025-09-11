@@ -87,7 +87,7 @@ class AccessCondition(CustomizableChoice):
         verbose_name_plural = "Critères d’admission"
 
 
-class ConcernedPublic(CustomizableChoice):
+class Public(CustomizableChoice):
     profile_families = ArrayField(
         models.CharField(max_length=255, validators=[validate_profile_families]),
         verbose_name="Familles de profils",
@@ -97,8 +97,8 @@ class ConcernedPublic(CustomizableChoice):
     )
 
     class Meta(CustomizableChoice.Meta):
-        verbose_name = "Public concerné"
-        verbose_name_plural = "Publics concernés"
+        verbose_name = "Public"
+        verbose_name_plural = "Publics"
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -350,7 +350,7 @@ class Service(ModerationMixin, models.Model):
         AccessCondition, verbose_name="Critères d’admission", blank=True
     )
     concerned_public = models.ManyToManyField(
-        ConcernedPublic, verbose_name="Publics concernés", blank=True
+        Public, verbose_name="Publics concernés", blank=True
     )
     is_cumulative = models.BooleanField(verbose_name="Solution cumulable", default=True)
 

@@ -16,11 +16,11 @@ from .models import (
     BeneficiaryAccessMode,
     Bookmark,
     CoachOrientationMode,
-    ConcernedPublic,
     Credential,
     FranceTravailOrientableService,
     FundingLabel,
     LocationKind,
+    Public,
     Requirement,
     SavedSearch,
     Service,
@@ -347,7 +347,7 @@ class ConcernedPublicForm(forms.ModelForm):
     )
 
     class Meta:
-        model = ConcernedPublic
+        model = Public
         fields = "__all__"
 
 
@@ -402,7 +402,7 @@ class FranceTravailOrientableServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServiceModel, ServiceModelAdmin)
 admin.site.register(AccessCondition, CustomizableChoiceAdmin)
-admin.site.register(ConcernedPublic, ConcernedPublicAdmin)
+admin.site.register(Public, ConcernedPublicAdmin)
 admin.site.register(Requirement, CustomizableChoiceAdmin)
 admin.site.register(Credential, CustomizableChoiceAdmin)
 admin.site.register(ServiceModificationHistoryItem, ServiceModificationHistoryItemAdmin)
