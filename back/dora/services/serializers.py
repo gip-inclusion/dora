@@ -20,10 +20,10 @@ from .models import (
     BeneficiaryAccessMode,
     Bookmark,
     CoachOrientationMode,
-    ConcernedPublic,
     Credential,
     FundingLabel,
     LocationKind,
+    Public,
     Requirement,
     SavedSearch,
     Service,
@@ -190,7 +190,7 @@ class ServiceSerializer(serializers.ModelSerializer):
     access_conditions_display = serializers.SerializerMethodField()
     concerned_public = CreatablePrimaryKeyRelatedField(
         many=True,
-        queryset=ConcernedPublic.objects.all(),
+        queryset=Public.objects.all(),
         max_length=140,
         required=False,
     )
@@ -494,7 +494,7 @@ class ServiceModelSerializer(ServiceSerializer):
 
     concerned_public = ModelCreatablePrimaryKeyRelatedField(
         many=True,
-        queryset=ConcernedPublic.objects.all(),
+        queryset=Public.objects.all(),
         max_length=140,
         required=False,
     )

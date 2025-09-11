@@ -18,9 +18,9 @@ from dora.service_suggestions.emails import (
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     AccessCondition,
-    ConcernedPublic,
     Credential,
     LocationKind,
+    Public,
     Requirement,
     Service,
     ServiceCategory,
@@ -140,9 +140,7 @@ class ServiceSuggestion(models.Model):
             service.access_conditions.set(
                 AccessCondition.objects.filter(id__in=access_conditions)
             )
-            service.concerned_public.set(
-                ConcernedPublic.objects.filter(id__in=concerned_public)
-            )
+            service.concerned_public.set(Public.objects.filter(id__in=concerned_public))
             service.requirements.set(Requirement.objects.filter(id__in=requirements))
             service.credentials.set(Credential.objects.filter(id__in=credentials))
 

@@ -10,9 +10,9 @@ from dora.core.test_utils import make_service, make_structure, make_user
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
-    ConcernedPublic,
     Credential,
     LocationKind,
+    Public,
     Requirement,
     ServiceFee,
     ServiceKind,
@@ -213,13 +213,9 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         ServiceKind.objects.get(value="information"),
     )
     service.concerned_public.add(
-        baker.make(
-            ConcernedPublic, name="familles", profile_families=[DiPublic.FAMILLES]
-        ),
-        baker.make(
-            ConcernedPublic, name="etudiants", profile_families=[DiPublic.ETUDIANTS]
-        ),
-        baker.make(ConcernedPublic, name="femmes", profile_families=[DiPublic.FEMMES]),
+        baker.make(Public, name="familles", profile_families=[DiPublic.FAMILLES]),
+        baker.make(Public, name="etudiants", profile_families=[DiPublic.ETUDIANTS]),
+        baker.make(Public, name="femmes", profile_families=[DiPublic.FEMMES]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
@@ -395,13 +391,9 @@ def test_service_serialization_exemple_need_di_user(api_client):
         ServiceKind.objects.get(value="information"),
     )
     service.concerned_public.add(
-        baker.make(
-            ConcernedPublic, name="familles", profile_families=[DiPublic.FAMILLES]
-        ),
-        baker.make(
-            ConcernedPublic, name="etudiants", profile_families=[DiPublic.ETUDIANTS]
-        ),
-        baker.make(ConcernedPublic, name="femmes", profile_families=[DiPublic.FEMMES]),
+        baker.make(Public, name="familles", profile_families=[DiPublic.FAMILLES]),
+        baker.make(Public, name="etudiants", profile_families=[DiPublic.ETUDIANTS]),
+        baker.make(Public, name="femmes", profile_families=[DiPublic.FEMMES]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))

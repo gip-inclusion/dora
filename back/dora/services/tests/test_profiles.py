@@ -3,7 +3,7 @@ from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.core.exceptions import ValidationError
 
 from dora.core.test_utils import make_structure
-from dora.services.models import ConcernedPublic
+from dora.services.models import Public
 
 
 @pytest.fixture
@@ -13,7 +13,7 @@ def structure():
 
 @pytest.fixture
 def concerned_public(structure):
-    return ConcernedPublic(name="Test", structure=structure)
+    return Public(name="Test", structure=structure)
 
 
 def test_valid_profile_families(concerned_public):
