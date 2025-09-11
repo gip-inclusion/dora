@@ -2924,7 +2924,7 @@ class ServiceSyncTestCase(APITestCase):
             initial_checksum = model.sync_checksum
             rel_model = getattr(model, field).target_field.related_model
             rel_models_fields = (
-                {"profile_families": [DiPublic.FAMILLES]}
+                {"corresponding_di_publics": [DiPublic.FAMILLES]}
                 if field == "concerned_public"
                 else {}
             )

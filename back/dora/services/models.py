@@ -40,7 +40,7 @@ def make_unique_slug(instance, parent_slug, value, length=20):
     return unique_slug
 
 
-def validate_profile_families(value):
+def validate_corresponding_di_publics(value):
     valid_values = {p.value for p in DiPublic}
     if value not in valid_values:
         raise ValidationError(f"Invalid profile family: {value}")
@@ -88,9 +88,11 @@ class AccessCondition(CustomizableChoice):
 
 
 class Public(CustomizableChoice):
-    profile_families = ArrayField(
-        models.CharField(max_length=255, validators=[validate_profile_families]),
-        verbose_name="Familles de profils",
+    corresponding_di_publics = ArrayField(
+        models.CharField(
+            max_length=255, validators=[validate_corresponding_di_publics]
+        ),
+        verbose_name="Publics Data Inclusion correspondants",
         blank=False,
         null=False,
         default=list,
