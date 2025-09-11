@@ -2,7 +2,7 @@ from datetime import timedelta
 from unittest import mock
 
 import requests
-from data_inclusion.schema.v1.publics import Public
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.conf import settings
 from django.contrib.gis.geos import MultiPolygon, Point
 from django.core.exceptions import ValidationError
@@ -1538,24 +1538,22 @@ class DataInclusionSearchTestCase(APITestCase):
             response.data["coach_orientation_modes_other"], "Nous consulter"
         )
 
-    def test_service_di_concerned_public(self):
+    def test_service_di_publics(self):
         cases = [
             (None, None, None),
             ([], [], []),
             (["valeur-inconnue"], [], []),
             (["jeunes-16-26"], ["jeunes-16-26"], ["Jeunes (16-26 ans)"]),
         ]
-        for profils, concerned_public, concerned_public_display in cases:
+        for profils, publics, publics_display in cases:
             with self.subTest(profils=profils):
                 service_data = self.make_di_service(profils=profils)
                 di_id = self.get_di_id(service_data)
                 request = self.factory.get(f"/services-di/{di_id}/")
                 response = self.service_di(request, di_id=di_id)
                 self.assertEqual(response.status_code, 200)
-                self.assertEqual(response.data["concerned_public"], concerned_public)
-                self.assertEqual(
-                    response.data["concerned_public_display"], concerned_public_display
-                )
+                self.assertEqual(response.data["publics"], publics)
+                self.assertEqual(response.data["publics_display"], publics_display)
 
     def test_service_di_contact(self):
         cases = [
@@ -2924,8 +2922,8 @@ class ServiceSyncTestCase(APITestCase):
             initial_checksum = model.sync_checksum
             rel_model = getattr(model, field).target_field.related_model
             rel_models_fields = (
-                {"profile_families": [Public.FAMILLES]}
-                if field == "concerned_public"
+                {"corresponding_di_publics": [DiPublic.FAMILLES]}
+                if field == "publics"
                 else {}
             )
             new_value = baker.make(rel_model, **rel_models_fields)

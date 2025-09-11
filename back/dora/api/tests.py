@@ -1,6 +1,6 @@
 import pytest
 from data_inclusion.schema.v0 import TypologieStructure
-from data_inclusion.schema.v1.publics import Public
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
 from model_bakery import baker
 
@@ -10,9 +10,9 @@ from dora.core.test_utils import make_service, make_structure, make_user
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
-    ConcernedPublic,
     Credential,
     LocationKind,
+    Public,
     Requirement,
     ServiceFee,
     ServiceKind,
@@ -212,14 +212,14 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         ServiceKind.objects.get(value="formation"),
         ServiceKind.objects.get(value="information"),
     )
-    service.concerned_public.add(
+    service.publics.add(
         baker.make(
-            ConcernedPublic, name="familles", profile_families=[Public.FAMILLES]
+            Public, name="familles", corresponding_di_publics=[DiPublic.FAMILLES]
         ),
         baker.make(
-            ConcernedPublic, name="etudiants", profile_families=[Public.ETUDIANTS]
+            Public, name="etudiants", corresponding_di_publics=[DiPublic.ETUDIANTS]
         ),
-        baker.make(ConcernedPublic, name="femmes", profile_families=[Public.FEMMES]),
+        baker.make(Public, name="femmes", corresponding_di_publics=[DiPublic.FEMMES]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
@@ -394,14 +394,14 @@ def test_service_serialization_exemple_need_di_user(api_client):
         ServiceKind.objects.get(value="formation"),
         ServiceKind.objects.get(value="information"),
     )
-    service.concerned_public.add(
+    service.publics.add(
         baker.make(
-            ConcernedPublic, name="familles", profile_families=[Public.FAMILLES]
+            Public, name="familles", corresponding_di_publics=[DiPublic.FAMILLES]
         ),
         baker.make(
-            ConcernedPublic, name="etudiants", profile_families=[Public.ETUDIANTS]
+            Public, name="etudiants", corresponding_di_publics=[DiPublic.ETUDIANTS]
         ),
-        baker.make(ConcernedPublic, name="femmes", profile_families=[Public.FEMMES]),
+        baker.make(Public, name="femmes", corresponding_di_publics=[DiPublic.FEMMES]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))

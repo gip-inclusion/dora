@@ -19,9 +19,9 @@ from dora.services.enums import ServiceStatus
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
-    ConcernedPublic,
     Credential,
     LocationKind,
+    Public,
     Requirement,
     Service,
     ServiceCategory,
@@ -299,9 +299,7 @@ class Command(BaseCommand):
 
                 service.status = ServiceStatus.PUBLISHED
                 service.publication_date = timezone.now()
-                service.concerned_public.set(
-                    cust_choice_to_objects(ConcernedPublic, s["profils"])
-                )
+                service.publics.set(cust_choice_to_objects(Public, s["profils"]))
                 service.requirements.set(
                     cust_choice_to_objects(Requirement, s["pre_requis"])
                 )
