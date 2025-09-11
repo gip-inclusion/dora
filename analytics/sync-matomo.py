@@ -101,7 +101,7 @@ def push_to_db():
     table = get_share_services_actions(matomo_base_url, matomo_token)
     print("🔄 Pushing data to database")
 
-    table.to_sql("mtm_share_service_tracking", engine, if_exists="replace", index=False)
+    table.to_sql("mtm_share_service_tracking", engine, schema="matomo", if_exists="replace", index=False)
     print("✅ Data ready")
 
 
