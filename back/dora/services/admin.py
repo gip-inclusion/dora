@@ -339,7 +339,7 @@ class CustomizableChoiceAdmin(admin.ModelAdmin):
     raw_id_fields = ["structure"]
 
 
-class ConcernedPublicForm(forms.ModelForm):
+class PublicForm(forms.ModelForm):
     corresponding_di_publics = forms.MultipleChoiceField(
         choices=((p.value, p.label) for p in DiPublic),
         widget=forms.SelectMultiple(attrs={"size": "10"}),
@@ -351,8 +351,8 @@ class ConcernedPublicForm(forms.ModelForm):
         fields = "__all__"
 
 
-class ConcernedPublicAdmin(CustomizableChoiceAdmin):
-    form = ConcernedPublicForm
+class PublicAdmin(CustomizableChoiceAdmin):
+    form = PublicForm
     list_display = ("name", "get_corresponding_di_publics", "structure")
 
     def get_corresponding_di_publics(self, obj):
@@ -404,7 +404,7 @@ class FranceTravailOrientableServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServiceModel, ServiceModelAdmin)
 admin.site.register(AccessCondition, CustomizableChoiceAdmin)
-admin.site.register(Public, ConcernedPublicAdmin)
+admin.site.register(Public, PublicAdmin)
 admin.site.register(Requirement, CustomizableChoiceAdmin)
 admin.site.register(Credential, CustomizableChoiceAdmin)
 admin.site.register(ServiceModificationHistoryItem, ServiceModificationHistoryItemAdmin)

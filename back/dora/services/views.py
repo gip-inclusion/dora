@@ -628,7 +628,7 @@ def options(request):
         class Meta(CustomChoiceSerializer.Meta):
             model = AccessCondition
 
-    class ConcernedPublicSerializer(CustomChoiceSerializer):
+    class PublicSerializer(CustomChoiceSerializer):
         class Meta(CustomChoiceSerializer.Meta):
             model = Public
 
@@ -725,7 +725,7 @@ def options(request):
             many=True,
             context={"request": request},
         ).data,
-        "publics": ConcernedPublicSerializer(
+        "publics": PublicSerializer(
             filter_custom_choices(Public.objects.select_related("structure").all()),
             many=True,
             context={"request": request},
