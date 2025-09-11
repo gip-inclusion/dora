@@ -111,7 +111,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         "categories",
         "subcategories",
         "access_conditions",
-        "concerned_public",
+        "publics",
         "requirements",
         "credentials",
     ]
@@ -315,7 +315,7 @@ class ServiceModelAdmin(admin.ModelAdmin):
         "categories",
         "subcategories",
         "access_conditions",
-        "concerned_public",
+        "publics",
         "requirements",
         "credentials",
     ]

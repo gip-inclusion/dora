@@ -110,8 +110,7 @@ def send_service_sharing_email(
         "cta_link": cta_link,
         "with_legal_info": True,
         "with_dora_info": True,
-        "publics": [s for s in service["concerned_public_display"] or []]
-        or ["Tous publics"],
+        "publics": [s for s in service["publics_display"] or []] or ["Tous publics"],
         "requirements": [
             *[ac for ac in service["access_conditions_display"] or []],
             *[r for r in service["requirements_display"] or []],

@@ -86,7 +86,7 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
             "location_kinds",
             "coach_orientation_modes",
             "beneficiaries_access_modes",
-            "concerned_public",
+            "publics",
             "requirements",
             "credentials",
         )

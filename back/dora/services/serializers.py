@@ -188,13 +188,13 @@ class ServiceSerializer(serializers.ModelSerializer):
         required=False,
     )
     access_conditions_display = serializers.SerializerMethodField()
-    concerned_public = CreatablePrimaryKeyRelatedField(
+    publics = CreatablePrimaryKeyRelatedField(
         many=True,
         queryset=Public.objects.all(),
         max_length=140,
         required=False,
     )
-    concerned_public_display = serializers.SerializerMethodField()
+    publics_display = serializers.SerializerMethodField()
     requirements = CreatablePrimaryKeyRelatedField(
         many=True,
         queryset=Requirement.objects.all(),
@@ -291,8 +291,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             "coach_orientation_modes_external_form_link",
             "coach_orientation_modes_external_form_link_text",
             "coach_orientation_modes_other",
-            "concerned_public",
-            "concerned_public_display",
+            "publics",
+            "publics_display",
             "contact_info_filled",
             "contact_email",
             "contact_name",
@@ -394,8 +394,8 @@ class ServiceSerializer(serializers.ModelSerializer):
     def get_access_conditions_display(self, obj):
         return [item.name for item in obj.access_conditions.all()]
 
-    def get_concerned_public_display(self, obj):
-        return [item.name for item in obj.concerned_public.all()]
+    def get_publics_display(self, obj):
+        return [item.name for item in obj.publics.all()]
 
     def get_requirements_display(self, obj):
         return [item.name for item in obj.requirements.all()]
@@ -435,9 +435,9 @@ class ServiceSerializer(serializers.ModelSerializer):
                 "access_conditions", data, user, user_structures, structure
             )
 
-        if "concerned_public" in data:
+        if "publics" in data:
             self._validate_custom_choice(
-                "concerned_public", data, user, user_structures, structure
+                "publics", data, user, user_structures, structure
             )
 
         if "requirements" in data:
@@ -492,7 +492,7 @@ class ServiceModelSerializer(ServiceSerializer):
         required=False,
     )
 
-    concerned_public = ModelCreatablePrimaryKeyRelatedField(
+    publics = ModelCreatablePrimaryKeyRelatedField(
         many=True,
         queryset=Public.objects.all(),
         max_length=140,
@@ -539,8 +539,8 @@ class ServiceModelSerializer(ServiceSerializer):
             "coach_orientation_modes_external_form_link",
             "coach_orientation_modes_external_form_link_text",
             "coach_orientation_modes_other",
-            "concerned_public",
-            "concerned_public_display",
+            "publics",
+            "publics_display",
             "creation_date",
             "credentials",
             "credentials_display",

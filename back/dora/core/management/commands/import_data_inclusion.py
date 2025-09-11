@@ -297,9 +297,7 @@ class Command(BaseCommand):
                 # service.status = ServiceStatus.PUBLISHED
                 # service.publication_date = timezone.now()
 
-                service.concerned_public.set(
-                    cust_choice_to_objects(Public, s["profils"])
-                )
+                service.publics.set(cust_choice_to_objects(Public, s["profils"]))
                 service.requirements.set(
                     cust_choice_to_objects(Requirement, s["pre_requis"])
                 )

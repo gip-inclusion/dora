@@ -45,7 +45,7 @@ SYNC_M2M_FIELDS = [
 # Custom Many to many fields
 SYNC_CUSTOM_M2M_FIELDS = [
     "access_conditions",
-    "concerned_public",
+    "publics",
     "requirements",
     "credentials",
 ]

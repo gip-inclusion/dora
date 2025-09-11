@@ -110,7 +110,7 @@ def get_visible_services(user):
             "categories",
             "subcategories",
             "access_conditions",
-            "concerned_public",
+            "publics",
             "beneficiaries_access_modes",
             "coach_orientation_modes",
             "requirements",
@@ -506,7 +506,7 @@ class ModelViewSet(ServiceViewSet):
                 "categories",
                 "subcategories",
                 "access_conditions",
-                "concerned_public",
+                "publics",
                 "beneficiaries_access_modes",
                 "coach_orientation_modes",
                 "requirements",
@@ -725,7 +725,7 @@ def options(request):
             many=True,
             context={"request": request},
         ).data,
-        "concerned_public": ConcernedPublicSerializer(
+        "publics": ConcernedPublicSerializer(
             filter_custom_choices(Public.objects.select_related("structure").all()),
             many=True,
             context={"request": request},

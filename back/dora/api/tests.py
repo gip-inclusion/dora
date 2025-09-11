@@ -212,7 +212,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         ServiceKind.objects.get(value="formation"),
         ServiceKind.objects.get(value="information"),
     )
-    service.concerned_public.add(
+    service.publics.add(
         baker.make(
             Public, name="familles", corresponding_di_publics=[DiPublic.FAMILLES]
         ),
@@ -394,7 +394,7 @@ def test_service_serialization_exemple_need_di_user(api_client):
         ServiceKind.objects.get(value="formation"),
         ServiceKind.objects.get(value="information"),
     )
-    service.concerned_public.add(
+    service.publics.add(
         baker.make(
             Public, name="familles", corresponding_di_publics=[DiPublic.FAMILLES]
         ),
