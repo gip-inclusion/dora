@@ -1,5 +1,5 @@
 import pytest
-from data_inclusion.schema.v1.publics import Public
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.core.exceptions import ValidationError
 
 from dora.core.test_utils import make_structure
@@ -17,22 +17,25 @@ def concerned_public(structure):
 
 
 def test_valid_profile_families(concerned_public):
-    concerned_public.profile_families = [Public.FAMILLES, Public.JEUNES]
+    concerned_public.profile_families = [DiPublic.FAMILLES, DiPublic.JEUNES]
     concerned_public.full_clean()
     concerned_public.save()
     concerned_public.refresh_from_db()
-    assert set(concerned_public.profile_families) == {Public.FAMILLES, Public.JEUNES}
+    assert set(concerned_public.profile_families) == {
+        DiPublic.FAMILLES,
+        DiPublic.JEUNES,
+    }
 
 
 def test_invalid_profile_families(concerned_public):
-    concerned_public.profile_families = ["invalid-profile", Public.FAMILLES]
+    concerned_public.profile_families = ["invalid-profile", DiPublic.FAMILLES]
     with pytest.raises(ValidationError) as exc_info:
         concerned_public.full_clean()
     assert "Invalid profile family: invalid-profile" in str(exc_info.value)
 
 
 def test_invalid_profile_families_on_save(concerned_public):
-    concerned_public.profile_families = ["invalid-profile", Public.FAMILLES]
+    concerned_public.profile_families = ["invalid-profile", DiPublic.FAMILLES]
     with pytest.raises(ValidationError) as exc_info:
         concerned_public.save()
     assert "Invalid profile family: invalid-profile" in str(exc_info.value)
@@ -46,7 +49,7 @@ def test_empty_profile_families(concerned_public):
 
 
 def test_all_valid_profiles(concerned_public):
-    all_profiles = [p.value for p in Public]
+    all_profiles = [p.value for p in DiPublic]
     concerned_public.profile_families = all_profiles
     concerned_public.full_clean()
     concerned_public.save()
@@ -56,9 +59,9 @@ def test_all_valid_profiles(concerned_public):
 
 def test_mixed_valid_invalid_profiles(concerned_public):
     concerned_public.profile_families = [
-        Public.FAMILLES,
+        DiPublic.FAMILLES,
         "invalid-profile",
-        Public.JEUNES,
+        DiPublic.JEUNES,
         "another-invalid",
     ]
     with pytest.raises(ValidationError) as exc_info:

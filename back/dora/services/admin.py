@@ -1,4 +1,4 @@
-from data_inclusion.schema.v1.publics import Public
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from django import forms
 from django.contrib import messages
 from django.contrib.admin import RelatedOnlyFieldListFilter
@@ -341,7 +341,7 @@ class CustomizableChoiceAdmin(admin.ModelAdmin):
 
 class ConcernedPublicForm(forms.ModelForm):
     profile_families = forms.MultipleChoiceField(
-        choices=((p.value, p.label) for p in Public),
+        choices=((p.value, p.label) for p in DiPublic),
         widget=forms.SelectMultiple(attrs={"size": "10"}),
         label="Familles de profils",
     )
@@ -356,7 +356,7 @@ class ConcernedPublicAdmin(CustomizableChoiceAdmin):
     list_display = ("name", "get_profile_families", "structure")
 
     def get_profile_families(self, obj):
-        return ", ".join(Public(p).label for p in obj.profile_families)
+        return ", ".join(DiPublic(p).label for p in obj.profile_families)
 
     get_profile_families.short_description = "Familles de profils"
 

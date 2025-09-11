@@ -1,6 +1,6 @@
 import pytest
 from data_inclusion.schema.v0 import TypologieStructure
-from data_inclusion.schema.v1.publics import Public
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
 from model_bakery import baker
 
@@ -214,12 +214,12 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
     )
     service.concerned_public.add(
         baker.make(
-            ConcernedPublic, name="familles", profile_families=[Public.FAMILLES]
+            ConcernedPublic, name="familles", profile_families=[DiPublic.FAMILLES]
         ),
         baker.make(
-            ConcernedPublic, name="etudiants", profile_families=[Public.ETUDIANTS]
+            ConcernedPublic, name="etudiants", profile_families=[DiPublic.ETUDIANTS]
         ),
-        baker.make(ConcernedPublic, name="femmes", profile_families=[Public.FEMMES]),
+        baker.make(ConcernedPublic, name="femmes", profile_families=[DiPublic.FEMMES]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
@@ -396,12 +396,12 @@ def test_service_serialization_exemple_need_di_user(api_client):
     )
     service.concerned_public.add(
         baker.make(
-            ConcernedPublic, name="familles", profile_families=[Public.FAMILLES]
+            ConcernedPublic, name="familles", profile_families=[DiPublic.FAMILLES]
         ),
         baker.make(
-            ConcernedPublic, name="etudiants", profile_families=[Public.ETUDIANTS]
+            ConcernedPublic, name="etudiants", profile_families=[DiPublic.ETUDIANTS]
         ),
-        baker.make(ConcernedPublic, name="femmes", profile_families=[Public.FEMMES]),
+        baker.make(ConcernedPublic, name="femmes", profile_families=[DiPublic.FEMMES]),
     )
     service.location_kinds.add(LocationKind.objects.get(value="en-presentiel"))
     service.location_kinds.add(LocationKind.objects.get(value="a-distance"))
