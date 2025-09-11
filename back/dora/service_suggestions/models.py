@@ -100,7 +100,7 @@ class ServiceSuggestion(models.Model):
                 raise serializers.ValidationError("SIRET inconnu", code="wrong_siret")
 
         access_conditions = self.contents.pop("access_conditions", [])
-        concerned_public = self.contents.pop("concerned_public", [])
+        publics = self.contents.pop("publics", [])
         requirements = self.contents.pop("requirements", [])
         credentials = self.contents.pop("credentials", [])
         categories = self.contents.pop("categories", [])
@@ -140,7 +140,7 @@ class ServiceSuggestion(models.Model):
             service.access_conditions.set(
                 AccessCondition.objects.filter(id__in=access_conditions)
             )
-            service.concerned_public.set(Public.objects.filter(id__in=concerned_public))
+            service.publics.set(Public.objects.filter(id__in=publics))
             service.requirements.set(Requirement.objects.filter(id__in=requirements))
             service.credentials.set(Credential.objects.filter(id__in=credentials))
 

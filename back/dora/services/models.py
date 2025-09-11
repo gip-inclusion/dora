@@ -351,9 +351,7 @@ class Service(ModerationMixin, models.Model):
     access_conditions = models.ManyToManyField(
         AccessCondition, verbose_name="Critères d’admission", blank=True
     )
-    concerned_public = models.ManyToManyField(
-        Public, verbose_name="Publics concernés", blank=True
-    )
+    publics = models.ManyToManyField(Public, verbose_name="Publics", blank=True)
     is_cumulative = models.BooleanField(verbose_name="Solution cumulable", default=True)
 
     fee_condition = models.ForeignKey(
