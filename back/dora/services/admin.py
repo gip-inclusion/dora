@@ -340,10 +340,10 @@ class CustomizableChoiceAdmin(admin.ModelAdmin):
 
 
 class ConcernedPublicForm(forms.ModelForm):
-    profile_families = forms.MultipleChoiceField(
+    corresponding_di_publics = forms.MultipleChoiceField(
         choices=((p.value, p.label) for p in DiPublic),
         widget=forms.SelectMultiple(attrs={"size": "10"}),
-        label="Familles de profils",
+        label="Publics Data Inclusion correspondants",
     )
 
     class Meta:
@@ -353,12 +353,14 @@ class ConcernedPublicForm(forms.ModelForm):
 
 class ConcernedPublicAdmin(CustomizableChoiceAdmin):
     form = ConcernedPublicForm
-    list_display = ("name", "get_profile_families", "structure")
+    list_display = ("name", "get_corresponding_di_publics", "structure")
 
-    def get_profile_families(self, obj):
-        return ", ".join(DiPublic(p).label for p in obj.profile_families)
+    def get_corresponding_di_publics(self, obj):
+        return ", ".join(DiPublic(p).label for p in obj.corresponding_di_publics)
 
-    get_profile_families.short_description = "Familles de profils"
+    get_corresponding_di_publics.short_description = (
+        "Publics Data Inclusion correspondants"
+    )
 
 
 class ServiceModelInline(admin.TabularInline):
