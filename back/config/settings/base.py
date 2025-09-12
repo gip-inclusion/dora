@@ -354,6 +354,7 @@ PC_ISSUER = os.getenv("PC_ISSUER", f"{PC_DOMAIN}/api/v2")
 PC_AUTHORIZE_PATH = os.getenv("PC_AUTHORIZE_PATH", "authorize")
 PC_TOKEN_PATH = os.getenv("PC_TOKEN_PATH", "token")
 PC_USERINFO_PATH = os.getenv("PC_USERINFO_PATH", "userinfo")
+OIDC_AUTHENTICATION_CALLBACK_URL = os.getenv("OIDC_AUTHENTICATION_CALLBACK_URL")
 
 # ProConnect à besoin de ce setting pour le logout
 FRONTEND_URL = os.getenv("FRONTEND_URL")
