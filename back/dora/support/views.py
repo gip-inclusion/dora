@@ -74,9 +74,27 @@ class StructureAdminViewSet(
         user = self.request.user
         department = self.request.query_params.get("department")
 
+        if department:
+            if user.is_manager:
+                # assuré par StructureAdminPermission
+                assert user.departments
+                if department not in user.departments:
+                    raise PermissionDenied
+            structures = Structure.objects.filter(department=department)
+        else:
+            if user.is_manager:
+                structures = Structure.objects.filter(department__in=user.departments)
+            elif user.is_staff:
+                structures = Structure.objects.all()
+            else:
+                raise PermissionDenied
+
+        moderation = self.request.query_params.get("moderation") in TRUTHY_VALUES
+        if moderation:
+            return structures.exclude(moderation_status=ModerationStatus.VALIDATED)
+
         structures = (
-            Structure.objects.all()
-            .select_related("parent", "creator", "last_editor", "source")
+            structures.select_related("parent", "creator", "last_editor", "source")
             .prefetch_related(
                 "membership__user",
                 "putative_membership__user",
@@ -173,21 +191,6 @@ class StructureAdminViewSet(
                 ),
             )
         )
-
-        if department:
-            if user.is_manager:
-                # assuré par StructureAdminPermission
-                assert user.departments
-                if department not in user.departments:
-                    raise PermissionDenied
-            structures = structures.filter(department=department)
-        else:
-            if user.is_manager:
-                structures = structures.filter(department__in=user.departments)
-
-        moderation = self.request.query_params.get("moderation") in TRUTHY_VALUES
-        if moderation:
-            return structures.exclude(moderation_status=ModerationStatus.VALIDATED)
 
         return structures
 
