@@ -169,10 +169,12 @@ class ImportServicesHelper:
             f"Résumé : {self.created_count} services créés, {len(self.errors)} erreurs."
         )
         print(
+            f"Services potentiellement dupliqués : ({len(self.duplicated_services)}):"
+        )
+        print(f"Services en brouillon créés : ({len(self.draft_services_created)})")
+        print(
             f"Lignes sans données géographiques : ({len(self.geo_data_missing_lines)})"
         )
-        print(f"Services dupliqués : ({len(self.duplicated_services)}):")
-        print(f"Services en brouillon créés : ({len(self.draft_services_created)})")
         for entry in self.geo_data_missing_lines:
             print(
                 f"Ligne {entry['idx']}: Adresse={entry['address']}, Ville={entry['city']}, "
