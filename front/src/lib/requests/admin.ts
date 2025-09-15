@@ -6,7 +6,6 @@ import type {
 } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
 import { token } from "$lib/utils/auth";
-import { logException } from "$lib/utils/logger";
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
 
@@ -58,92 +57,4 @@ export async function setModerationState(entity, status: ModerationStatus) {
     throw Error(response.statusText);
   }
   return response.json();
-}
-
-export async function getServiceSuggestions() {
-  const url = `${getApiURL()}/services-suggestions/`;
-  const results = (await fetchData(url)).data;
-  if (!results) {
-    return [];
-  }
-
-  return results;
-}
-
-export async function deleteServiceSuggestion(suggestion) {
-  const url = `${getApiURL()}/services-suggestions/${suggestion.id}/`;
-  const method = "DELETE";
-  const res = await fetch(url, {
-    method,
-    headers: {
-      Accept: "application/json; version=1.0",
-      Authorization: `Token ${get(token)}`,
-    },
-  });
-
-  const result = {
-    ok: res.ok,
-    status: res.status,
-  };
-  if (!res.ok) {
-    try {
-      result.error = await res.json();
-    } catch (err) {
-      logException(err);
-    }
-  }
-  return result;
-}
-
-export async function acceptServiceSuggestion(suggestion) {
-  const url = `${getApiURL()}/services-suggestions/${suggestion.id}/validate/`;
-  const method = "POST";
-  const res = await fetch(url, {
-    method,
-    headers: {
-      Accept: "application/json; version=1.0",
-      Authorization: `Token ${get(token)}`,
-    },
-  });
-
-  const result = {
-    ok: res.ok,
-    status: res.status,
-  };
-
-  if (!res.ok) {
-    try {
-      result.error = await res.json();
-    } catch (err) {
-      logException(err);
-    }
-  } else {
-    try {
-      result.data = await res.json();
-    } catch (err) {
-      logException(err);
-    }
-  }
-  return result;
-}
-
-export function publishServiceSuggestion(suggestion, source) {
-  const url = `${getApiURL()}/services-suggestions/`;
-  const method = "POST";
-  const { siret, name, ...contents } = suggestion;
-  const authToken = get(token);
-  return fetch(url, {
-    method,
-    headers: {
-      Accept: "application/json; version=1.0",
-      "Content-Type": "application/json",
-      Authorization: authToken ? `Token ${get(token)}` : undefined,
-    },
-    body: JSON.stringify({
-      siret,
-      name,
-      contents,
-      source,
-    }),
-  });
 }

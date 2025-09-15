@@ -1,6 +1,5 @@
 <script lang="ts">
   import illuSuggerer from "$lib/assets/illustrations/illu-suggerer.svg";
-  import LinkButton from "$lib/components/display/link-button.svelte";
   import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
 </script>
 
