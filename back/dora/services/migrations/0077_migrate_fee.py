@@ -6,7 +6,12 @@ from django.db import migrations
 def migrate_fee(apps, schema_editor):
     Service = apps.get_model("services", "Service")
     ServiceFee = apps.get_model("services", "ServiceFee")
-    ServiceSuggestion = apps.get_model("service_suggestions", "ServiceSuggestion")
+
+    try:
+        ServiceSuggestion = apps.get_model("service_suggestions", "ServiceSuggestion")
+        service_suggestion_exists = True
+    except LookupError:
+        service_suggestion_exists = False
 
     free = ServiceFee.objects.filter(value="gratuit").first()
     not_free = ServiceFee.objects.filter(value="payant").first()
@@ -16,17 +21,16 @@ def migrate_fee(apps, schema_editor):
         service.fee_condition = not_free if service.has_fee else free
         service.save(update_fields=["fee_condition"])
 
-    # Migrate service suggestion
-    for s in ServiceSuggestion.objects.all():
-        has_fee = s.contents.pop("has_fee", False)
-        s.contents["fee_condition"] = "payant" if has_fee else "gratuit"
-        s.save(update_fields=["contents"])
+    if service_suggestion_exists:
+        for s in ServiceSuggestion.objects.all():
+            has_fee = s.contents.pop("has_fee", False)
+            s.contents["fee_condition"] = "payant" if has_fee else "gratuit"
+            s.save(update_fields=["contents"])
 
 
 class Migration(migrations.Migration):
     dependencies = [
         ("services", "0076_servicefee_service_fee_condition"),
-        ("service_suggestions", "0002_alter_servicesuggestion_options"),
     ]
 
     operations = [
