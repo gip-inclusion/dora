@@ -16,7 +16,13 @@ SUBSTITUTIONS = {
 def migrate_categories(apps, schema_editor):
     Service = apps.get_model("services", "Service")
     ServiceSubCategory = apps.get_model("services", "ServiceSubCategory")
-    ServiceSuggestion = apps.get_model("service_suggestions", "ServiceSuggestion")
+
+    # Vérifier si le modèle ServiceSuggestion existe encore
+    try:
+        ServiceSuggestion = apps.get_model("service_suggestions", "ServiceSuggestion")
+        service_suggestion_exists = True
+    except LookupError:
+        service_suggestion_exists = False
 
     # Création d'activité
     create_subcategory(
@@ -42,11 +48,12 @@ def migrate_categories(apps, schema_editor):
     )
     delete_subcategory(ServiceSubCategory, "mobilite--identifier-freins")
 
-    for s in ServiceSuggestion.objects.all():
-        subcats = list(s.contents["subcategories"])
-        subcats = list(set(SUBSTITUTIONS.get(value, value) for value in subcats))
-        s.contents["subcategories"] = subcats
-        s.save(update_fields=["contents"])
+    if service_suggestion_exists:
+        for s in ServiceSuggestion.objects.all():
+            subcats = list(s.contents["subcategories"])
+            subcats = list(set(SUBSTITUTIONS.get(value, value) for value in subcats))
+            s.contents["subcategories"] = subcats
+            s.save(update_fields=["contents"])
 
 
 class Migration(migrations.Migration):
