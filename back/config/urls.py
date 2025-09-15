@@ -6,7 +6,6 @@ from rest_framework.routers import SimpleRouter
 import dora.admin_express.views
 import dora.core.views
 import dora.orientations.views
-import dora.service_suggestions.views
 import dora.services.views
 import dora.sirene.views
 import dora.stats.views
@@ -37,12 +36,6 @@ router.register(r"bookmarks", dora.services.views.BookmarkViewSet, basename="boo
 router.register(r"models", dora.services.views.ModelViewSet, basename="model")
 router.register(
     r"saved-searches", dora.services.views.SavedSearchViewSet, basename="saved-search"
-)
-
-router.register(
-    r"services-suggestions",
-    dora.service_suggestions.views.ServiceSuggestionViewSet,
-    basename="service-suggestion",
 )
 
 router.register(
