@@ -21,7 +21,6 @@
       suggérant les services de vos partenaires locaux.
     </p>
     <div class="gap-s16 flex flex-col">
-      <LinkButton label="Suggérer un service" wFull to="/contribuer" />
       <InviteStructureLink wFull />
     </div>
   </div>
