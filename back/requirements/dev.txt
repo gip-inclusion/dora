@@ -1,7 +1,7 @@
 -r ./test.txt
 
 django-extensions==4.1
-django-silk==5.4.2
+django-silk==5.4.3
 pre-commit==4.3.0
 
 # Génération du schéma de données
