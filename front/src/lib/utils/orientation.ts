@@ -109,19 +109,19 @@ export function acceptOrientation(
   });
 }
 
-export function computeConcernedPublicChoices(service: Service): {
-  concernedPublicChoices: Choice[];
-  concernedPublicRequired: boolean;
+export function computePublicsChoices(service: Service): {
+  publicsChoices: Choice[];
+  publicsRequired: boolean;
 } {
-  const excludedConcernedPublicLabels = ["Autre", "Tous publics"];
-  const concernedPublicChoices = (service.concernedPublicDisplay || [])
+  const excludedPublicsLabels = ["Autre", "Tous publics"];
+  const publicsChoices = (service.publicsDisplay || [])
     .map((value) => ({ value: value, label: value }))
-    .filter((elt) => !excludedConcernedPublicLabels.includes(elt.value));
+    .filter((elt) => !excludedPublicsLabels.includes(elt.value));
 
   return {
-    concernedPublicChoices,
-    concernedPublicRequired:
-      concernedPublicChoices.filter((elt) => elt.value !== "Autre").length > 0,
+    publicsChoices,
+    publicsRequired:
+      publicsChoices.filter((elt) => elt.value !== "Autre").length > 0,
   };
 }
 

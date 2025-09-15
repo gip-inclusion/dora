@@ -5,7 +5,7 @@
   import type { Service } from "$lib/types";
   import { formatFilePath } from "$lib/utils/file";
   import {
-    computeConcernedPublicChoices,
+    computePublicsChoices,
     computeRequirementsChoices,
   } from "$lib/utils/orientation";
   import { isNotFreeService } from "$lib/utils/service";
@@ -19,10 +19,9 @@
   let { service }: Props = $props();
 
   // Publics concernés par ce service
-  const { concernedPublicChoices, concernedPublicRequired } =
-    computeConcernedPublicChoices(service);
-  orientationStep1Schema.situation.required = concernedPublicRequired;
-  const serviceAcceptsAllPublic = concernedPublicChoices.length === 0;
+  const { publicsChoices, publicsRequired } = computePublicsChoices(service);
+  orientationStep1Schema.situation.required = publicsRequired;
+  const serviceAcceptsAllPublic = publicsChoices.length === 0;
 
   // Critères et conditions d’accès
   const { requirementChoices, requirementRequired } =
@@ -53,7 +52,7 @@
       {:else}
         <CheckboxesField
           id="situation"
-          choices={concernedPublicChoices}
+          choices={publicsChoices}
           description={!serviceAcceptsAllPublic
             ? "Merci de cocher au moins un profil ou situation"
             : ""}

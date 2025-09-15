@@ -35,7 +35,7 @@
 
   const propsWithSpecificFields = [
     "accessConditions",
-    "concernedPublic",
+    "publics",
     "requirements",
     "credentials",
   ];

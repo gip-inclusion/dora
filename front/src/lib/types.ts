@@ -432,8 +432,8 @@ export interface Service {
   coachOrientationModesExternalFormLinkText: string;
   coachOrientationModesExternalFormLink: string | null;
   coachOrientationModesOther: string | null;
-  concernedPublic: CustomizableFK[] | null; // TODO: should be plural
-  concernedPublicDisplay: string[] | null;
+  publics: CustomizableFK[] | null; // TODO: should be plural
+  publicsDisplay: string[] | null;
   contactInfoFilled: boolean;
   contactEmail: string | null;
   contactName: string | null;
@@ -579,7 +579,7 @@ export type ServicesOptions = {
   categories: { value: ServiceCategory; label: string }[];
   coachOrientationModes: { value: CoachOrientationModes; label: string }[];
 
-  concernedPublic: CustomChoice[];
+  publics: CustomChoice[];
   credentials: CustomChoice[];
   deploymentDepartments: string[];
   diffusionZoneType: { value: AdminDivisionType; label: string }; // TODO: should be plural
@@ -607,8 +607,8 @@ export type Model = {
   coachOrientationModesExternalFormLinkText: string;
   coachOrientationModesExternalFormLink: string;
   coachOrientationModesOther: string;
-  concernedPublic: CustomizableFK[];
-  concernedPublicDisplay: string[];
+  publics: CustomizableFK[];
+  publicsDisplay: string[];
   creationDate: string;
   credentials: CustomizableFK[];
   credentialsDisplay: string[];
