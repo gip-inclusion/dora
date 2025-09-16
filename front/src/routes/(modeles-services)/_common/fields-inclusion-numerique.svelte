@@ -145,7 +145,7 @@
     }
   }
 
-  function filterPublicss() {
+  function filterPublics() {
     service.publics = service.publics.filter((publicsValue: string): boolean =>
       publicsOptions
         .map((publicsOption): string => publicsOption.value)
@@ -159,7 +159,7 @@
     );
   }
 
-  filterPublicss();
+  filterPublics();
   preSetContact();
   preSetDiffusionZone();
   filterKinds();
