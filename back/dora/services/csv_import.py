@@ -43,14 +43,14 @@ class ImportServicesHelper:
         wet_run: bool = False,
         should_remove_first_two_lines: bool = False,
     ) -> Dict[str, Union[List[Any], int, List[str]]]:
+        self.wet_run = wet_run
+        self.importing_user = importing_user
+        self._initialize_trackers()
+
         if self.wet_run:
             print("⚠️ PRODUCTION RUN ⚠️")
         else:
             print("🧘 DRY RUN 🧘")
-
-        self.wet_run = wet_run
-        self.importing_user = importing_user
-        self._initialize_trackers()
 
         csv_reader = (
             skip_csv_lines(reader, 2) if should_remove_first_two_lines else reader
@@ -62,6 +62,9 @@ class ImportServicesHelper:
         try:
             missing_headers = set(self.CSV_HEADERS) - set(headers)
             if missing_headers:
+                print(
+                    f"Les headers suivants sont manquants : ({', '.join(missing_headers)})"
+                )
                 return {"missing_headers": missing_headers}
 
             with transaction.atomic():
@@ -166,10 +169,12 @@ class ImportServicesHelper:
             f"Résumé : {self.created_count} services créés, {len(self.errors)} erreurs."
         )
         print(
+            f"Services potentiellement dupliqués : ({len(self.duplicated_services)}):"
+        )
+        print(f"Services en brouillon créés : ({len(self.draft_services_created)})")
+        print(
             f"Lignes sans données géographiques : ({len(self.geo_data_missing_lines)})"
         )
-        print(f"Services dupliqués : ({len(self.duplicated_services)}):")
-        print(f"Services en brouillon créés : ({len(self.draft_services_created)})")
         for entry in self.geo_data_missing_lines:
             print(
                 f"Ligne {entry['idx']}: Adresse={entry['address']}, Ville={entry['city']}, "
