@@ -78,7 +78,7 @@ fetch_and_export_dora_data() {
 
     time pg_dump "$DORA_DATABASE_URL" --jobs=8 --format=directory --compress=1 --clean --if-exists --no-owner --no-privileges --verbose $(cat args.txt) --file=/tmp/out.dump
     time psql "$DATABASE_URL" -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; CREATE EXTENSION IF NOT EXISTS postgis;"
-    time pg_restore --dbname="$DATABASE_URL" --jobs=8 --format=directory --clean --if-exists --no-owner --no-privileges --verbose /tmp/out.dump
+    time pg_restore --dbname="$DATABASE_URL" --jobs=8 --format=directory --clean --if-exists --no-owner --no-privileges --verbose /tmp/out.dump --exclude-table=matomo.mtm_share_service_tracking
 
     echo "✔️ Fait."
     echo ""
