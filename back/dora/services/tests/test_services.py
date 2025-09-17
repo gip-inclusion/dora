@@ -2037,6 +2037,22 @@ class ServiceSearchTestCase(APITestCase):
         assert len(response.data["services"]) == 1
         assert response.data["services"][0]["slug"] == service.slug
 
+    def test_find_service_with_matching_city_code(self):
+        """
+        Si la valeur de diffusion_zone_details correspond exactement au city_code, le service doit être trouvé
+        peu importe son diffusion_zone_type
+        """
+        service = make_service(
+            status=ServiceStatus.PUBLISHED,
+            diffusion_zone_type=AdminDivisionType.REGION,
+            diffusion_zone_details=self.city1.code,
+        )
+        response = self.client.get(f"/search/?city={self.city1.code}")
+        assert response.status_code == 200
+        assert len(response.data) == 3
+        assert len(response.data["services"]) == 1
+        assert response.data["services"][0]["slug"] == service.slug
+
     def test_dont_find_services_in_other_city(self):
         make_service(
             status=ServiceStatus.PUBLISHED,
