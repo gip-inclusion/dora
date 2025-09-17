@@ -55,13 +55,13 @@
     </p>
   </Notice>
 
-  {#if servicesOptions.concernedPublic.length}
-    <FieldModel {...fieldModelProps.concernedPublic ?? {}} type="array">
+  {#if servicesOptions.publics.length}
+    <FieldModel {...fieldModelProps.publics ?? {}} type="array">
       <AddableMultiSelectField
-        id="concernedPublic"
-        bind:values={service.concernedPublic}
+        id="publics"
+        bind:values={service.publics}
         structureSlug={service.structure}
-        choices={servicesOptions.concernedPublic}
+        choices={servicesOptions.publics}
         sort
         description="Si le service n’est pas ouvert à tous les publics, sélectionnez le profil concerné. Plusieurs choix possibles."
         placeholder="Tous publics"

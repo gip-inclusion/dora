@@ -1,9 +1,9 @@
 import pytest
-from data_inclusion.schema.v1.publics import Public
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.core.exceptions import ValidationError
 
 from dora.core.test_utils import make_structure
-from dora.services.models import ConcernedPublic
+from dora.services.models import Public
 
 
 @pytest.fixture
@@ -12,55 +12,58 @@ def structure():
 
 
 @pytest.fixture
-def concerned_public(structure):
-    return ConcernedPublic(name="Test", structure=structure)
+def public(structure):
+    return Public(name="Test", structure=structure)
 
 
-def test_valid_profile_families(concerned_public):
-    concerned_public.profile_families = [Public.FAMILLES, Public.JEUNES]
-    concerned_public.full_clean()
-    concerned_public.save()
-    concerned_public.refresh_from_db()
-    assert set(concerned_public.profile_families) == {Public.FAMILLES, Public.JEUNES}
+def test_valid_corresponding_di_publics(public):
+    public.corresponding_di_publics = [DiPublic.FAMILLES, DiPublic.JEUNES]
+    public.full_clean()
+    public.save()
+    public.refresh_from_db()
+    assert set(public.corresponding_di_publics) == {
+        DiPublic.FAMILLES,
+        DiPublic.JEUNES,
+    }
 
 
-def test_invalid_profile_families(concerned_public):
-    concerned_public.profile_families = ["invalid-profile", Public.FAMILLES]
+def test_invalid_corresponding_di_publics(public):
+    public.corresponding_di_publics = ["invalid-profile", DiPublic.FAMILLES]
     with pytest.raises(ValidationError) as exc_info:
-        concerned_public.full_clean()
+        public.full_clean()
     assert "Invalid profile family: invalid-profile" in str(exc_info.value)
 
 
-def test_invalid_profile_families_on_save(concerned_public):
-    concerned_public.profile_families = ["invalid-profile", Public.FAMILLES]
+def test_invalid_corresponding_di_publics_on_save(public):
+    public.corresponding_di_publics = ["invalid-profile", DiPublic.FAMILLES]
     with pytest.raises(ValidationError) as exc_info:
-        concerned_public.save()
+        public.save()
     assert "Invalid profile family: invalid-profile" in str(exc_info.value)
 
 
-def test_empty_profile_families(concerned_public):
-    concerned_public.profile_families = []
+def test_empty_corresponding_di_publics(public):
+    public.corresponding_di_publics = []
     with pytest.raises(ValidationError) as exc_info:
-        concerned_public.full_clean()
-    assert "profile_families" in str(exc_info.value)
+        public.full_clean()
+    assert "corresponding_di_publics" in str(exc_info.value)
 
 
-def test_all_valid_profiles(concerned_public):
-    all_profiles = [p.value for p in Public]
-    concerned_public.profile_families = all_profiles
-    concerned_public.full_clean()
-    concerned_public.save()
-    concerned_public.refresh_from_db()
-    assert set(concerned_public.profile_families) == set(all_profiles)
+def test_all_valid_profiles(public):
+    all_profiles = [p.value for p in DiPublic]
+    public.corresponding_di_publics = all_profiles
+    public.full_clean()
+    public.save()
+    public.refresh_from_db()
+    assert set(public.corresponding_di_publics) == set(all_profiles)
 
 
-def test_mixed_valid_invalid_profiles(concerned_public):
-    concerned_public.profile_families = [
-        Public.FAMILLES,
+def test_mixed_valid_invalid_profiles(public):
+    public.corresponding_di_publics = [
+        DiPublic.FAMILLES,
         "invalid-profile",
-        Public.JEUNES,
+        DiPublic.JEUNES,
         "another-invalid",
     ]
     with pytest.raises(ValidationError) as exc_info:
-        concerned_public.full_clean()
+        public.full_clean()
     assert "Invalid profile family: invalid-profile" in str(exc_info.value)

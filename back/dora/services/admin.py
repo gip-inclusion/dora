@@ -1,4 +1,4 @@
-from data_inclusion.schema.v1.publics import Public
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from django import forms
 from django.contrib import messages
 from django.contrib.admin import RelatedOnlyFieldListFilter
@@ -16,11 +16,11 @@ from .models import (
     BeneficiaryAccessMode,
     Bookmark,
     CoachOrientationMode,
-    ConcernedPublic,
     Credential,
     FranceTravailOrientableService,
     FundingLabel,
     LocationKind,
+    Public,
     Requirement,
     SavedSearch,
     Service,
@@ -111,7 +111,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         "categories",
         "subcategories",
         "access_conditions",
-        "concerned_public",
+        "publics",
         "requirements",
         "credentials",
     ]
@@ -315,7 +315,7 @@ class ServiceModelAdmin(admin.ModelAdmin):
         "categories",
         "subcategories",
         "access_conditions",
-        "concerned_public",
+        "publics",
         "requirements",
         "credentials",
     ]
@@ -339,26 +339,28 @@ class CustomizableChoiceAdmin(admin.ModelAdmin):
     raw_id_fields = ["structure"]
 
 
-class ConcernedPublicForm(forms.ModelForm):
-    profile_families = forms.MultipleChoiceField(
-        choices=((p.value, p.label) for p in Public),
+class PublicForm(forms.ModelForm):
+    corresponding_di_publics = forms.MultipleChoiceField(
+        choices=((p.value, p.label) for p in DiPublic),
         widget=forms.SelectMultiple(attrs={"size": "10"}),
-        label="Familles de profils",
+        label="Publics Data Inclusion correspondants",
     )
 
     class Meta:
-        model = ConcernedPublic
+        model = Public
         fields = "__all__"
 
 
-class ConcernedPublicAdmin(CustomizableChoiceAdmin):
-    form = ConcernedPublicForm
-    list_display = ("name", "get_profile_families", "structure")
+class PublicAdmin(CustomizableChoiceAdmin):
+    form = PublicForm
+    list_display = ("name", "get_corresponding_di_publics", "structure")
 
-    def get_profile_families(self, obj):
-        return ", ".join(Public(p).label for p in obj.profile_families)
+    def get_corresponding_di_publics(self, obj):
+        return ", ".join(DiPublic(p).label for p in obj.corresponding_di_publics)
 
-    get_profile_families.short_description = "Familles de profils"
+    get_corresponding_di_publics.short_description = (
+        "Publics Data Inclusion correspondants"
+    )
 
 
 class ServiceModelInline(admin.TabularInline):
@@ -402,7 +404,7 @@ class FranceTravailOrientableServiceAdmin(admin.ModelAdmin):
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(ServiceModel, ServiceModelAdmin)
 admin.site.register(AccessCondition, CustomizableChoiceAdmin)
-admin.site.register(ConcernedPublic, ConcernedPublicAdmin)
+admin.site.register(Public, PublicAdmin)
 admin.site.register(Requirement, CustomizableChoiceAdmin)
 admin.site.register(Credential, CustomizableChoiceAdmin)
 admin.site.register(ServiceModificationHistoryItem, ServiceModificationHistoryItemAdmin)

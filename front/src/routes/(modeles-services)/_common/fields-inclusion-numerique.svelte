@@ -28,31 +28,28 @@
 
   let { servicesOptions, service = $bindable(), structure }: Props = $props();
 
-  function existInServicesOptionsConcernedPublic(concernedPublicOption) {
-    return servicesOptions.concernedPublic
+  function doesPublicExistInServiceOptions(publicsOption) {
+    return servicesOptions.publics
       .filter(
-        (genericConcernedPublicOption): boolean =>
-          genericConcernedPublicOption.structure == null
+        (genericPublicsOption): boolean =>
+          genericPublicsOption.structure == null
       )
-      .map(
-        (genericConcernedPublicOption: Choice): string =>
-          genericConcernedPublicOption.label
-      )
-      .includes(concernedPublicOption.label);
+      .map((genericPublicsOption: Choice): string => genericPublicsOption.label)
+      .includes(publicsOption.label);
   }
 
-  function addServicesOptionsConcernedPublicValues(concernedPublicOption: {
+  function addServicesOptionsPublicsValues(publicsOption: {
     label: string;
   }): Choice {
     return {
-      label: concernedPublicOption.label,
-      value: servicesOptions.concernedPublic.find(
-        (option: Choice) => option.label === concernedPublicOption.label
+      label: publicsOption.label,
+      value: servicesOptions.publics.find(
+        (option: Choice) => option.label === publicsOption.label
       ).value,
     };
   }
 
-  const concernedPublicOptions: Choice[] = [
+  const publicsOptions: Choice[] = [
     {
       label: "Familles/enfants",
       structure: null,
@@ -100,8 +97,8 @@
       structure: null,
     },
   ]
-    .filter(existInServicesOptionsConcernedPublic)
-    .map(addServicesOptionsConcernedPublicValues);
+    .filter(doesPublicExistInServiceOptions)
+    .map(addServicesOptionsPublicsValues);
 
   function existInServicesOptionsKinds(kindsOption) {
     return servicesOptions.kinds
@@ -148,12 +145,11 @@
     }
   }
 
-  function filterConcernedPublics() {
-    service.concernedPublic = service.concernedPublic.filter(
-      (concernedPublicValue: string): boolean =>
-        concernedPublicOptions
-          .map((concernedPublicOption): string => concernedPublicOption.value)
-          .includes(concernedPublicValue)
+  function filterPublics() {
+    service.publics = service.publics.filter((publicsValue: string): boolean =>
+      publicsOptions
+        .map((publicsOption): string => publicsOption.value)
+        .includes(publicsValue)
     );
   }
 
@@ -163,7 +159,7 @@
     );
   }
 
-  filterConcernedPublics();
+  filterPublics();
   preSetContact();
   preSetDiffusionZone();
   filterKinds();
@@ -196,11 +192,11 @@
     description="Sélectionnez au moins un besoin."
   />
 
-  {#if concernedPublicOptions.length}
+  {#if publicsOptions.length}
     <MultiSelectField
-      id="concernedPublic"
-      bind:value={service.concernedPublic}
-      choices={concernedPublicOptions}
+      id="publics"
+      bind:value={service.publics}
+      choices={publicsOptions}
       description="Si le service n’est pas ouvert à tous les publics, sélectionnez le profil concerné. Plusieurs choix possibles."
     />
   {/if}

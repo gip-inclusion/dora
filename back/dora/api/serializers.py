@@ -294,8 +294,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         return obj.fee_details or None
 
     def get_profils(self, obj):
-        # TODO: mapping DORA à faire
-        return [c.name for c in obj.concerned_public.all()]
+        return [c.name for c in obj.publics.all()]
 
     def get_pre_requis(self, obj):
         return [c.name for c in obj.requirements.all()]

@@ -257,10 +257,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "coach_orientation_modes_other": service_data[
             "modes_orientation_accompagnateur_autres"
         ],
-        "concerned_public": [p.value for p in profils] if profils is not None else None,
-        "concerned_public_display": [p.label for p in profils]
-        if profils is not None
-        else None,
+        "publics": [p.value for p in profils] if profils is not None else None,
+        "publics_display": [p.label for p in profils] if profils is not None else None,
         "contact_email": service_data["courriel"]
         if service_data["contact_public"] or is_authenticated
         else None,

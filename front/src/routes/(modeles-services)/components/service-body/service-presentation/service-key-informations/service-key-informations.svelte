@@ -54,7 +54,7 @@
         <ul
           class="[&>li+li]:before:mx-s6 [&>li]:inline [&>li+li]:before:inline [&>li+li]:before:content-['·']"
         >
-          {#each service.concernedPublicDisplay || [] as pub}
+          {#each service.publicsDisplay || [] as pub}
             <li>{pub}</li>
           {:else}
             <li>Tous publics</li>

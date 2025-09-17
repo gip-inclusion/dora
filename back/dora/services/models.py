@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime, timedelta
 
 from data_inclusion.schema.v0 import TypologieStructure
-from data_inclusion.schema.v1.publics import Public
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -40,8 +40,8 @@ def make_unique_slug(instance, parent_slug, value, length=20):
     return unique_slug
 
 
-def validate_profile_families(value):
-    valid_values = {p.value for p in Public}
+def validate_corresponding_di_publics(value):
+    valid_values = {p.value for p in DiPublic}
     if value not in valid_values:
         raise ValidationError(f"Invalid profile family: {value}")
 
@@ -87,18 +87,20 @@ class AccessCondition(CustomizableChoice):
         verbose_name_plural = "Critères d’admission"
 
 
-class ConcernedPublic(CustomizableChoice):
-    profile_families = ArrayField(
-        models.CharField(max_length=255, validators=[validate_profile_families]),
-        verbose_name="Familles de profils",
+class Public(CustomizableChoice):
+    corresponding_di_publics = ArrayField(
+        models.CharField(
+            max_length=255, validators=[validate_corresponding_di_publics]
+        ),
+        verbose_name="Publics Data Inclusion correspondants",
         blank=False,
         null=False,
         default=list,
     )
 
     class Meta(CustomizableChoice.Meta):
-        verbose_name = "Public concerné"
-        verbose_name_plural = "Publics concernés"
+        verbose_name = "Public"
+        verbose_name_plural = "Publics"
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -349,9 +351,7 @@ class Service(ModerationMixin, models.Model):
     access_conditions = models.ManyToManyField(
         AccessCondition, verbose_name="Critères d’admission", blank=True
     )
-    concerned_public = models.ManyToManyField(
-        ConcernedPublic, verbose_name="Publics concernés", blank=True
-    )
+    publics = models.ManyToManyField(Public, verbose_name="Publics", blank=True)
     is_cumulative = models.BooleanField(verbose_name="Solution cumulable", default=True)
 
     fee_condition = models.ForeignKey(

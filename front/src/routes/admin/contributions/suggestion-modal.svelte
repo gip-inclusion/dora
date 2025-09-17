@@ -81,7 +81,7 @@
 
         <Line
           label="Publics concernés"
-          data={suggestion.serviceInfo.concernedPublicDisplay}
+          data={suggestion.serviceInfo.publicsDisplay}
           isList
         />
 
