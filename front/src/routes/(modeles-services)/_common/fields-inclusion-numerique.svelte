@@ -28,7 +28,7 @@
 
   let { servicesOptions, service = $bindable(), structure }: Props = $props();
 
-  function existInServicesOptionsPublics(publicsOption) {
+  function doesPublicExistInServiceOptions(publicsOption) {
     return servicesOptions.publics
       .filter(
         (genericPublicsOption): boolean =>
@@ -97,7 +97,7 @@
       structure: null,
     },
   ]
-    .filter(existInServicesOptionsPublics)
+    .filter(doesPublicExistInServiceOptions)
     .map(addServicesOptionsPublicsValues);
 
   function existInServicesOptionsKinds(kindsOption) {
