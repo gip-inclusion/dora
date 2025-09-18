@@ -2,6 +2,8 @@ import pytest
 from data_inclusion.schema.v0 import TypologieStructure
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.contrib.gis.geos import Point
+from django.utils import timezone
+from django.utils.timezone import timedelta
 from model_bakery import baker
 
 from dora.admin_express.models import City, Department
@@ -458,3 +460,31 @@ def test_service_from_orphan_structure_is_excluded(authenticated_user, api_clien
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
     assert 404 == response.status_code
+
+
+def test_service_with_suspension_date_in_the_past_is_excluded(
+    authenticated_user, api_client
+):
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        suspension_date=timezone.now() - timedelta(days=1),
+    )
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+    assert 404 == response.status_code
+
+
+def test_service_with_suspension_date_in_the_future_is_included(
+    authenticated_user, api_client
+):
+    service = make_service(
+        status=ServiceStatus.PUBLISHED,
+        suspension_date=timezone.now() + timedelta(days=1),
+    )
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+    assert 200 == response.status_code
+
+
+def test_service_without_suspension_date_is_included(authenticated_user, api_client):
+    service = make_service(status=ServiceStatus.PUBLISHED, suspension_date=None)
+    response = api_client.get(f"/api/v2/services/{service.id}/")
+    assert 200 == response.status_code

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db.models import Q
+from django.utils import timezone
 from djangorestframework_camel_case.render import CamelCaseJSONRenderer
 from rest_framework import permissions, viewsets
 from rest_framework.renderers import JSONRenderer
@@ -79,6 +80,7 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
         Service.objects.published()
         .exclude(structure__is_obsolete=True)
         .exclude(structure__in=Structure.objects.orphans())
+        .exclude(suspension_date__lt=timezone.now())
         .select_related("structure", "fee_condition", "source")
         .prefetch_related(
             "subcategories",
