@@ -8,7 +8,6 @@ from freezegun import freeze_time
 from model_bakery import baker
 
 from dora.core.utils import GeoData
-from dora.service_suggestions.tests import DUMMY_SUGGESTION
 from dora.services.csv_import import ImportServicesHelper
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service, ServiceSource
@@ -18,7 +17,7 @@ class ImportServicesTestCase(TestCase):
     def setUp(self):
         self.importing_user = baker.make("users.User")
         self.csv_headers = "modele_slug,structure_siret,contact_email,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement,location_postal_code,diffusion_zone_type,is_contact_info_public"
-        self.structure = baker.make("Structure", siret=DUMMY_SUGGESTION["siret"])
+        self.structure = baker.make("Structure", siret="12345678901234")
 
         self.service_model = baker.make(
             "Service",

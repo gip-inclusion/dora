@@ -1,6 +1,5 @@
 <script lang="ts">
   import illuSuggerer from "$lib/assets/illustrations/illu-suggerer.svg";
-  import LinkButton from "$lib/components/display/link-button.svelte";
   import InviteStructureLink from "$lib/components/specialized/invite-structure-link.svelte";
 </script>
 
@@ -21,7 +20,6 @@
       suggérant les services de vos partenaires locaux.
     </p>
     <div class="gap-s16 flex flex-col">
-      <LinkButton label="Suggérer un service" wFull to="/contribuer" />
       <InviteStructureLink wFull />
     </div>
   </div>

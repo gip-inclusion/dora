@@ -50,10 +50,6 @@
             label: "Inviter une structure partenaire",
           },
           {
-            href: "/contribuer",
-            label: "Suggérer le service d’un partenaire",
-          },
-          {
             href: "/services/creer",
             label: "Référencer vos services",
           },
