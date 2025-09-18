@@ -80,9 +80,9 @@ Mais pour avoir un jeu de données complet, il est plus simple d’importer la b
 # Configurer le téléchargement de documents en local
 Vous devez créer un bucket dans Minio pour les téléchargements de documents.
 
-1. Allez sur http://localhost:9001/ et connectez-vous avec les identifiants par défaut que vous trouverez ici :
-  - Nom d'utilisateur : minio
-  - Mot de passe : miniosecret
+1. Allez sur http://localhost:9001/ et connectez-vous avec les identifiants par défaut :
+  - Nom d'utilisateur : minio (configuré dans `envs/dev.env`)
+  - Mot de passe : miniosecret (configuré dans `envs/dev.env`)
 2. Créez un bucket nommé `dora`.
 3. Créez une clé d'accès et copiez la clé d'accès et la clé secrète.
 4. Dans `envs/secrets.env`, définissez les variables suivantes :
@@ -159,8 +159,8 @@ docker compose stop s3
 docker compose rm -v s3
 ```
 
-Utilisez une version spécifique de l'image au lieu de `bitnami/minio@latest` comme par exemple : `bitnami/minio:2024.5.1`
-La liste de toutes les versions disponibles est [ici](https://hub.docker.com/r/bitnami/minio/tags).
+Utilisez une version spécifique de l'image au lieu de `minio/minio:latest` comme par exemple : `minio/minio:RELEASE.2024-01-16T16-07-38Z`
+La liste de toutes les versions disponibles est [ici](https://hub.docker.com/r/minio/minio/tags).
 
 Pour recréer les conteneurs :
 ```bash
