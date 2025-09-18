@@ -33,12 +33,13 @@ jobs:
 
     services:
       s3:
-        image: bitnami/minio:latest
+        image: minio/minio:latest
         env:
-          MINIO_SERVER_ACCESS_KEY: minio-access-key
-          MINIO_SERVER_SECRET_KEY: $MINIO_SECRET_KEY
+          MINIO_ROOT_USER: minio-access-key
+          MINIO_ROOT_PASSWORD: $MINIO_SECRET_KEY
         ports:
           - 9000:9000
+        command: server /data --console-address ":9001"
       redis:
         image: redis:alpine
         ports:
