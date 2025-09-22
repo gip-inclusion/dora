@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "dora.logs.utils.RequestContextMiddleware",
     "config.domain_redirect_middleware.DomainRedirectMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -132,9 +133,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": os.getenv("REDIS_URL"),
-        "TIMEOUT": int(
-            os.getenv("DJANGO_CACHE_TIMEOUT", 300)
-        ),  # 5 minutes par défaut
+        "TIMEOUT": int(os.getenv("DJANGO_CACHE_TIMEOUT", 300)),  # 5 minutes par défaut
     }
 }
 
@@ -238,22 +237,47 @@ ALLOWED_UPLOADED_FILES_EXTENSIONS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Logging :
-# permet un niveau de log 'INFO' pour le logger `dora.logs.core`,
-# qui est également réglable via variable d'environnement, si besoin
-# (le reste de la configuration de logging par défaut n'est pas modifié).
-# Concernant Django, avoir des logs visibles à certains point critiques
-# de la configuration peut être une bonne idée.
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} [{request_id}] [{ip_address}] [{user_id}] {name} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} [{request_id}] [{ip_address}] [{user_id}] {name}: {message}",
+            "style": "{",
+        },
+    },
+    "filters": {
+        "request_context": {
+            "()": "dora.logs.utils.RequestContextFilter",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "filters": ["request_context"],
+        },
+    },
     "loggers": {
         "django": {
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "handlers": ["console"],
+            "propagate": False,
         },
         "dora.logs.core": {
             "level": os.getenv("DORA_LOGS_CORE_LEVEL", "INFO"),
+            "handlers": ["console"],
+            "propagate": False,
         },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
     },
 }
 
