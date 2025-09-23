@@ -241,11 +241,11 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "{levelname} {asctime} [{request_id}] [{ip_address}] [{user_id}] {name} {process:d} {thread:d} {message}",
+            "format": "{levelname} {asctime} [request_id={request_id}] [ip={ip_address}] [user_id={user_id}] {name} {process:d} {thread:d} {message}",
             "style": "{",
         },
         "simple": {
-            "format": "{levelname} [{request_id}] [{ip_address}] [{user_id}] {name}: {message}",
+            "format": "{levelname} [request_id={request_id}] [ip={ip_address}] [user_id={user_id}] {name}: {message}",
             "style": "{",
         },
     },
