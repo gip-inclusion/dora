@@ -1,6 +1,14 @@
-from django.conf import settings
-from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import BooleanField, Case, Count, Exists, OuterRef, Q, Value, When
+from django.db.models import (
+    BooleanField,
+    Case,
+    Count,
+    Exists,
+    OuterRef,
+    Prefetch,
+    Q,
+    Value,
+    When,
+)
 from rest_framework import mixins, permissions, serializers, viewsets
 from rest_framework.exceptions import PermissionDenied
 
@@ -10,7 +18,7 @@ from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service
-from dora.structures.models import Structure, StructureMember
+from dora.structures.models import Structure, StructureMember, StructurePutativeMember
 from dora.support.serializers import (
     ServiceAdminListSerializer,
     ServiceAdminSerializer,
@@ -93,103 +101,69 @@ class StructureAdminViewSet(
         if moderation:
             return structures.exclude(moderation_status=ModerationStatus.VALIDATED)
 
-        structures = (
-            structures.select_related("parent", "creator", "last_editor", "source")
-            .prefetch_related(
-                "membership__user",
-                "putative_membership__user",
-                "services__categories",
-                "branches",
-            )
-            .annotate(
-                num_draft_services=Count(
-                    "services",
-                    filter=Q(services__status=ServiceStatus.DRAFT),
+        # Base queryset with essential select_related only
+        structures = structures.select_related(
+            "parent", "creator", "last_editor", "source"
+        )
+
+        # Optimize prefetch_related with targeted querysets
+        structures = structures.prefetch_related(
+            Prefetch(
+                "membership",
+                queryset=StructureMember.objects.select_related("user").filter(
+                    user__is_active=True
                 ),
-                num_published_services=Count(
-                    "services",
-                    filter=Q(services__status=ServiceStatus.PUBLISHED),
+            ),
+            Prefetch(
+                "putative_membership",
+                queryset=StructurePutativeMember.objects.select_related("user").filter(
+                    user__is_active=True
                 ),
-                num_active_services=Count(
-                    "services",
-                    filter=~Q(services__status=ServiceStatus.ARCHIVED),
+            ),
+            Prefetch(
+                "services",
+                queryset=Service.objects.select_related("last_editor")
+                .prefetch_related("categories")
+                .filter(~Q(status=ServiceStatus.ARCHIVED)),
+            ),
+            "branches",
+        )
+
+        # Split complex annotations into separate queries or simpler ones
+        structures = structures.annotate(
+            # Keep simple counts
+            num_draft_services=Count(
+                "services",
+                filter=Q(services__status=ServiceStatus.DRAFT),
+            ),
+            num_published_services=Count(
+                "services",
+                filter=Q(services__status=ServiceStatus.PUBLISHED),
+            ),
+            num_active_services=Count(
+                "services",
+                filter=~Q(services__status=ServiceStatus.ARCHIVED),
+            ),
+            # Simplified boolean fields
+            has_valid_admin=Exists(
+                StructureMember.objects.filter(
+                    structure=OuterRef("pk"),
+                    is_admin=True,
+                    user__is_valid=True,
+                    user__is_active=True,
+                )
+            ),
+            awaiting_moderation=Case(
+                When(
+                    moderation_status__in=[
+                        ModerationStatus.NEED_NEW_MODERATION,
+                        ModerationStatus.NEED_INITIAL_MODERATION,
+                    ],
+                    then=Value(True),
                 ),
-                has_valid_admin=Exists(
-                    StructureMember.objects.filter(
-                        structure=OuterRef("pk"),
-                        is_admin=True,
-                        user__is_valid=True,
-                        user__is_active=True,
-                    )
-                ),
-                is_orphan=Case(
-                    When(
-                        Q(membership__isnull=True)
-                        & Q(putative_membership__isnull=True),
-                        then=Value(True),
-                    ),
-                    default=Value(False),
-                    output_field=BooleanField(),
-                ),
-                awaiting_moderation=Case(
-                    When(
-                        moderation_status__in=[
-                            ModerationStatus.NEED_NEW_MODERATION,
-                            ModerationStatus.NEED_INITIAL_MODERATION,
-                        ],
-                        then=Value(True),
-                    ),
-                    default=Value(False),
-                    output_field=BooleanField(),
-                ),
-                num_potential_members_to_validate=Count(
-                    "putative_membership",
-                    filter=Q(
-                        putative_membership__invited_by_admin=False,
-                        putative_membership__user__is_valid=True,
-                        putative_membership__user__is_active=True,
-                    ),
-                ),
-                num_potential_members_to_remind=Count(
-                    "putative_membership",
-                    filter=Q(
-                        putative_membership__invited_by_admin=True,
-                        putative_membership__user__is_active=True,
-                    ),
-                ),
-                categories_list=ArrayAgg(
-                    "services__categories__value",
-                    distinct=True,
-                    filter=Q(services__categories__isnull=False),
-                ),
-                admin_emails=ArrayAgg(
-                    "membership__user__email",
-                    distinct=True,
-                    filter=Q(
-                        membership__is_admin=True,
-                        membership__user__is_valid=True,
-                        membership__user__is_active=True,
-                    ),
-                ),
-                editor_emails=ArrayAgg(
-                    "services__last_editor__email",
-                    distinct=True,
-                    filter=Q(
-                        ~Q(services__last_editor__email=settings.DORA_BOT_USER),
-                        services__status=ServiceStatus.PUBLISHED,
-                        services__last_editor__isnull=False,
-                    ),
-                ),
-                putative_admin_emails=ArrayAgg(
-                    "putative_membership__user__email",
-                    distinct=True,
-                    filter=Q(
-                        putative_membership__is_admin=True,
-                        putative_membership__invited_by_admin=True,
-                        putative_membership__user__is_active=True,
-                    ),
-                ),
-            )
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
         )
 
         return structures
