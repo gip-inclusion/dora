@@ -7,12 +7,6 @@
   <div class="gap-s8 flex w-1/3 flex-col lg:flex-row">
     <LinkButton label="Structures" to="/admin/structures" secondary small />
     <LinkButton label="Services" to="/admin/services" secondary small />
-    <LinkButton
-      label="Contributions"
-      to="/admin/contributions"
-      secondary
-      small
-    />
     <LinkButton label="Moderation" to="/admin/moderation" secondary small />
   </div>
 </CenteredGrid>

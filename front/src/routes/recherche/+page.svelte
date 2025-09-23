@@ -11,7 +11,6 @@
 
   import type { PageData } from "./$types";
   import DoraDeploymentNotice from "./dora-deployment-notice.svelte";
-  import ServiceSuggestionNotice from "./service-suggestion-notice.svelte";
   import ResultFilters, { type Filters } from "./result-filters.svelte";
   import MapViewButton from "./map-view-button.svelte";
   import ResultCount from "./result-count.svelte";
@@ -212,10 +211,6 @@
           <DoraDeploymentNotice />
         </div>
       {/if}
-
-      <div class="mb-s24 mt-s48 lg:gap-s24 lg:flex">
-        <ServiceSuggestionNotice />
-      </div>
     </div>
   </div>
 </CenteredGrid>
