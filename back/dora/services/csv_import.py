@@ -7,8 +7,8 @@ from django.db import IntegrityError, transaction
 from django.db.models import QuerySet
 from django.utils import timezone
 
-from dora.admin_express.models import AdminDivisionType
-from dora.core.utils import get_geo_data, skip_csv_lines
+from dora.admin_express.models import EPCI, AdminDivisionType, Department
+from dora.core.utils import code_insee_to_code_dept, get_geo_data, skip_csv_lines
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     FundingLabel,
@@ -283,7 +283,9 @@ class ImportServicesHelper:
             if geo_data:
                 service.city_code = geo_data.city_code
                 service.geom = geo_data.geom
-                service.diffusion_zone_details = geo_data.city_code
+                service.diffusion_zone_details = self.get_diffusion_zone_details(
+                    service
+                )
             else:
                 self.geo_data_missing_lines.append(
                     {
@@ -360,6 +362,31 @@ class ImportServicesHelper:
         )
 
         return True
+
+    @staticmethod
+    def get_diffusion_zone_details(service: Service):
+        city_code = service.city_code
+
+        department_code = code_insee_to_code_dept(city_code)
+
+        if service.diffusion_zone_type == AdminDivisionType.DEPARTMENT:
+            return department_code
+
+        if service.diffusion_zone_type == AdminDivisionType.REGION:
+            try:
+                region = Department.objects.get(code=department_code).region
+
+                return region
+            except Department.DoesNotExist:
+                return city_code
+
+        if service.diffusion_zone_type == AdminDivisionType.EPCI:
+            epci = EPCI.objects.filter(departments__contains=[department_code]).first()
+
+            if epci:
+                return epci.code
+
+        return city_code
 
     CSV_HEADERS = [
         "modele_slug",

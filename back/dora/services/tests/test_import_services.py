@@ -15,6 +15,17 @@ from dora.services.models import Service, ServiceSource
 
 
 class ImportServicesTestCase(TestCase):
+    geo_data = GeoData(
+        city_code="75020",
+        city="Paris",
+        postal_code="75020",
+        address="1 rue de test",
+        geom=Point(2.3522, 48.8566, srid=4326),
+        lat="48.8566",
+        lon="2.3522",
+        score=1.0,
+    )
+
     def setUp(self):
         self.importing_user = baker.make("users.User")
         self.csv_headers = "modele_slug,structure_siret,contact_email,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement,location_postal_code,diffusion_zone_type,is_contact_info_public"
@@ -269,18 +280,10 @@ class ImportServicesTestCase(TestCase):
 
     @patch(
         "dora.services.csv_import.get_geo_data",
-        return_value=GeoData(
-            city_code=75020,
-            city="Paris",
-            postal_code="75020",
-            address="1 rue de test",
-            geom=Point(2.3522, 48.8566, srid=4326),
-            lat="48.8566",
-            lon="2.3522",
-            score=1.0,
-        ),
     )
     def test_valid_geo_data(self, mock_geo_data):
+        mock_geo_data.return_value = self.geo_data
+
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,,"
@@ -302,6 +305,103 @@ class ImportServicesTestCase(TestCase):
             Point(2.3522, 48.8566, srid=4326),
         )
         self.assertEqual(created_service.diffusion_zone_details, "75020")
+
+    @patch(
+        "dora.services.csv_import.get_geo_data",
+    )
+    def test_diffusion_zone_details_when_service_for_department(self, mock_geo_data):
+        mock_geo_data.return_value = self.geo_data
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,department,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(created_service.diffusion_zone_details, "75")
+
+    @patch(
+        "dora.services.csv_import.get_geo_data",
+    )
+    def test_diffusion_zone_details_when_service_for_dom_tom_department(
+        self, mock_geo_data
+    ):
+        mock_geo_data.return_value = GeoData(
+            city_code="97123",
+            city="Réunion",
+            postal_code="97123",
+            address="1 rue de test",
+            geom=Point(2.3522, 48.8566, srid=4326),
+            lat="48.8566",
+            lon="2.3522",
+            score=1.0,
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,department,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(created_service.diffusion_zone_details, "971")
+
+    @patch(
+        "dora.services.csv_import.get_geo_data",
+    )
+    def test_diffusion_zone_details_when_service_for_region(self, mock_geo_data):
+        mock_geo_data.return_value = self.geo_data
+        baker.make("Department", code="75", region="11")
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,region,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(created_service.diffusion_zone_details, "11")
+
+    @patch(
+        "dora.services.csv_import.get_geo_data",
+    )
+    def test_diffusion_zone_details_when_service_for_epci(self, mock_geo_data):
+        mock_geo_data.return_value = self.geo_data
+        baker.make("EPCI", departments=["75", "91", "92"], code="012345678")
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,epci,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(created_service.diffusion_zone_details, "012345678")
 
     def test_multiple_financing_labels(self):
         other_funding_label = baker.make(
