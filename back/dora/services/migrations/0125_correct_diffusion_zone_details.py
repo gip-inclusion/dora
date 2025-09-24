@@ -10,14 +10,15 @@ from dora.admin_express.models import AdminDivisionType
 logger = logging.getLogger(__name__)
 
 
-def get_department_for_service(service):
-    if service.city_code.startswith("97"):
-        department = service.city_code[:3]
-    else:
-        department = service.city_code[:2]
-    if not department:
-        department = service.structure.department
-    return department
+def get_city_by_code(apps, city_code):
+    City = apps.get_model("admin_express", "City")
+    try:
+        city = City.objects.get(code=city_code)
+    except City.DoesNotExist:
+        logger.error(f"La ville dont le code est {city_code} n'existe pas")
+        raise City.DoesNotExist
+
+    return city
 
 
 def fix_departmental_diffusion_zone_details(apps):
@@ -29,13 +30,16 @@ def fix_departmental_diffusion_zone_details(apps):
         diffusion_zone_type=AdminDivisionType.DEPARTMENT
     )
 
+    # Les services pour les régions doivent avoir soit deux chiffres soit
+    # trois chiffres qui commencent avec `97` pour les régions DOM-TOM.
     problematic_services = departmental_services.filter(
         ~Q(diffusion_zone_details__length=2)
         & ~Q(diffusion_zone_details__length=3, diffusion_zone_details__startswith="97")
     )
 
     for service in problematic_services:
-        department = get_department_for_service(service)
+        city = get_city_by_code(apps, service.city_code)
+        department = city.department
 
         service.diffusion_zone_details = department
         services_to_update.append(service)
@@ -50,7 +54,6 @@ def fix_departmental_diffusion_zone_details(apps):
 def fix_regional_diffusion_zone_details(apps):
     services_to_update = []
     Service = apps.get_model("services", "Service")
-    Department = apps.get_model("admin_express", "Department")
 
     regional_services = Service.objects.filter(
         diffusion_zone_type=AdminDivisionType.REGION
@@ -59,12 +62,8 @@ def fix_regional_diffusion_zone_details(apps):
         ~Q(diffusion_zone_details__length=2)
     )
     for service in problematic_services:
-        department = get_department_for_service(service)
-        try:
-            region = Department.objects.get(code=department).region
-        except Department.DoesNotExist:
-            logger.error(f"Le département {department} n'existe pas")
-            raise Department.DoesNotExist
+        city = get_city_by_code(apps, service.city_code)
+        region = city.region
         service.diffusion_zone_details = region
         services_to_update.append(service)
 
@@ -78,22 +77,15 @@ def fix_regional_diffusion_zone_details(apps):
 def fix_epci_diffusion_zone_details(apps):
     services_to_update = []
     Service = apps.get_model("services", "Service")
-    EPCI = apps.get_model("admin_express", "EPCI")
 
     epci_services = Service.objects.filter(diffusion_zone_type=AdminDivisionType.EPCI)
 
     problematic_services = epci_services.filter(~Q(diffusion_zone_details__length=9))
 
     for service in problematic_services:
-        department = get_department_for_service(service)
+        city = get_city_by_code(apps, service.city_code)
 
-        epci = EPCI.objects.filter(departments__contains=[department]).first()
-
-        if not epci:
-            logger.error(f"L'EPCI pour le département {department} n'existe pas")
-            raise EPCI.DoesNotExist
-
-        epci_code = epci.code
+        epci_code = city.epci
         service.diffusion_zone_details = epci_code
         services_to_update.append(service)
 

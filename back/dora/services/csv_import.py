@@ -1,4 +1,5 @@
 import csv
+import logging
 import sys
 from types import SimpleNamespace
 from typing import Any, Dict, List, Optional, Union
@@ -7,8 +8,8 @@ from django.db import IntegrityError, transaction
 from django.db.models import QuerySet
 from django.utils import timezone
 
-from dora.admin_express.models import EPCI, AdminDivisionType, Department
-from dora.core.utils import code_insee_to_code_dept, get_geo_data, skip_csv_lines
+from dora.admin_express.models import AdminDivisionType, City
+from dora.core.utils import get_geo_data, skip_csv_lines
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     FundingLabel,
@@ -20,6 +21,8 @@ from dora.services.models import (
 from dora.services.utils import instantiate_service_from_model
 from dora.structures.models import Structure
 from dora.users.models import User
+
+logger = logging.getLogger(__name__)
 
 
 class ImportServicesHelper:
@@ -367,24 +370,20 @@ class ImportServicesHelper:
     def get_diffusion_zone_details(service: Service):
         city_code = service.city_code
 
-        department_code = code_insee_to_code_dept(city_code)
+        try:
+            city = City.objects.get(code=city_code)
+        except City.DoesNotExist:
+            logger.error(f"La ville dont le code est {city_code} n'existe pas")
+            raise City.DoesNotExist
 
         if service.diffusion_zone_type == AdminDivisionType.DEPARTMENT:
-            return department_code
+            return city.department
 
         if service.diffusion_zone_type == AdminDivisionType.REGION:
-            try:
-                region = Department.objects.get(code=department_code).region
-
-                return region
-            except Department.DoesNotExist:
-                return city_code
+            return city.region
 
         if service.diffusion_zone_type == AdminDivisionType.EPCI:
-            epci = EPCI.objects.filter(departments__contains=[department_code]).first()
-
-            if epci:
-                return epci.code
+            return city.epci
 
         return city_code
 
