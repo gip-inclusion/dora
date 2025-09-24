@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 def get_department_for_service(service):
-    logger.info(f"Mise à jour du service avec l'id {service.id}")
     if service.city_code.startswith("97"):
         department = service.city_code[:3]
     else:
@@ -41,6 +40,10 @@ def fix_departmental_diffusion_zone_details(apps):
         service.diffusion_zone_details = department
         services_to_update.append(service)
 
+        logger.info(
+            f"Le service avec l'id {service.id} est du type 'département' et ses diffusion_zone_details sont {department}."
+        )
+
     return services_to_update
 
 
@@ -65,6 +68,10 @@ def fix_regional_diffusion_zone_details(apps):
         service.diffusion_zone_details = region
         services_to_update.append(service)
 
+        logger.info(
+            f"Le service avec l'id {service.id} est du type 'région' et ses diffusion_zone_details sont {region}."
+        )
+
     return services_to_update
 
 
@@ -86,8 +93,13 @@ def fix_epci_diffusion_zone_details(apps):
             logger.error(f"L'EPCI pour le département {department} n'existe pas")
             raise EPCI.DoesNotExist
 
-        service.diffusion_zone_details = epci.code
+        epci_code = epci.code
+        service.diffusion_zone_details = epci_code
         services_to_update.append(service)
+
+        logger.info(
+            f"Le service avec l'id {service.id} est du type 'epci' et ses diffusion_zone_details sont {epci_code}."
+        )
 
     return services_to_update
 
