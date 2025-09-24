@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.db import migrations
 from django.db.models import Q
@@ -5,8 +7,11 @@ from django.utils import timezone
 
 from dora.admin_express.models import AdminDivisionType
 
+logger = logging.getLogger(__name__)
+
 
 def get_department_for_service(service):
+    logger.info(f"Mise à jour du service avec l'id {service.id}")
     if service.city_code.startswith("97"):
         department = service.city_code[:3]
     else:
@@ -55,7 +60,8 @@ def fix_regional_diffusion_zone_details(apps):
         try:
             region = Department.objects.get(code=department).region
         except Department.DoesNotExist:
-            continue
+            logger.error(f"Le département {department} n'existe pas")
+            raise Department.DoesNotExist
         service.diffusion_zone_details = region
         services_to_update.append(service)
 
@@ -77,7 +83,8 @@ def fix_epci_diffusion_zone_details(apps):
         epci = EPCI.objects.filter(departments__contains=[department]).first()
 
         if not epci:
-            continue
+            logger.error(f"L'EPCI pour le département {department} n'existe pas")
+            raise EPCI.DoesNotExist
 
         service.diffusion_zone_details = epci.code
         services_to_update.append(service)
@@ -89,27 +96,40 @@ def fix_all_services_with_incorrect_diffusion_zone_details(apps, schema_editor):
     Service = apps.get_model("services", "Service")
     User = apps.get_model("users", "User")
 
-    departmental_services = fix_departmental_diffusion_zone_details(
-        apps,
-    )
-    regional_services = fix_regional_diffusion_zone_details(
-        apps,
-    )
-    epci_services = fix_epci_diffusion_zone_details(
-        apps,
-    )
+    try:
+        with schema_editor.connection.cursor() as cursor:
+            cursor.execute("BEGIN")
 
-    all_services = departmental_services + regional_services + epci_services
+            departmental_services = fix_departmental_diffusion_zone_details(
+                apps,
+            )
+            regional_services = fix_regional_diffusion_zone_details(
+                apps,
+            )
+            epci_services = fix_epci_diffusion_zone_details(
+                apps,
+            )
 
-    bot_user = User.objects.get(email=settings.DORA_BOT_USER)
+            all_services = departmental_services + regional_services + epci_services
 
-    for service in all_services:
-        service.modification_date = timezone.now()
-        service.last_editor = bot_user
+            bot_user = User.objects.get(email=settings.DORA_BOT_USER)
 
-    Service.objects.bulk_update(
-        all_services, ["diffusion_zone_details", "modification_date", "last_editor"]
-    )
+            for service in all_services:
+                service.modification_date = timezone.now()
+                service.last_editor = bot_user
+
+            Service.objects.bulk_update(
+                all_services,
+                ["diffusion_zone_details", "modification_date", "last_editor"],
+            )
+            cursor.execute("COMMIT")
+    except Exception as e:
+        logger.error(
+            "Erreur de transaction",
+            str(e),
+        )
+        cursor.execute("ROLLBACK")
+        raise e
 
 
 class Migration(migrations.Migration):
