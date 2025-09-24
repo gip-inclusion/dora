@@ -102,11 +102,11 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
     },
     268: {
         "newProfileIds": (51,),
-        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE),
+        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,),
     },
     215: {
         "newProfileIds": (51,),
-        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE),
+        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,),
     },
     407: {
         "newProfileIds": (422,),
@@ -228,8 +228,8 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
     1068: {
         "newProfileIds": (61,),
     },
-    988: {"accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE)},
-    992: {"accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE)},
+    988: {"accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,)},
+    992: {"accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,)},
     1290: {
         "newProfileIds": (422,),
     },
@@ -253,22 +253,22 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
     },
     896: {
         "newProfileIds": (422,),
-        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE),
+        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,),
     },
     1143: {
         "newProfileIds": (422,),
-        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE),
+        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,),
     },
     1119: {
         "newProfileIds": (422,),
     },
     995: {
         "newProfileIds": (422,),
-        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE),
+        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,),
     },
     987: {
         "newProfileIds": (422,),
-        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE),
+        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,),
     },
     902: {
         "newProfileIds": (68,),
@@ -326,11 +326,11 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
     },
     1152: {
         "newProfileIds": (51,),
-        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE),
+        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,),
     },
     1468: {
         "newProfileIds": (51,),
-        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE),
+        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,),
     },
     1153: {
         "newProfileIds": (
@@ -355,7 +355,7 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
     },
     1232: {
         "newProfileIds": (61,),
-        "accessConditionIds": (ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR),
+        "accessConditionIds": (ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR,),
     },
     1171: {
         "newProfileIds": (74,),
@@ -378,7 +378,7 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
     1265: {
         "newProfileIds": (28,),
     },
-    194: {"accessConditionIds": (ACCESS_CONDITION_PERSONNE_NON_IMPOSABLE)},
+    194: {"accessConditionIds": (ACCESS_CONDITION_PERSONNE_NON_IMPOSABLE,)},
     979: {
         "newProfileIds": (38,),
     },
@@ -436,13 +436,13 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
     1033: {
         "newProfileIds": (61,),
     },
-    358: {"accessConditionIds": (ACCESS_CONDITION_SALARIE_SIAE)},
+    358: {"accessConditionIds": (ACCESS_CONDITION_SALARIE_SIAE,)},
     1114: {
         "newProfileIds": (51,),
     },
     354: {
         "newProfileIds": (51,),
-        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE),
+        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,),
     },
     1007: {
         "newProfileIds": (420,),
@@ -452,7 +452,7 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
     },
     193: {
         "newProfileIds": (51,),
-        "accessConditionIds": (ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR),
+        "accessConditionIds": (ACCESS_CONDITION_RESIDENT_QPV_OU_ZRR,),
     },
     1142: {
         "newProfileIds": (50,),
@@ -492,7 +492,7 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
             47,
             422,
         ),
-        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE),
+        "accessConditionIds": (ACCESS_CONDITION_INSCRIT_MISSION_LOCALE,),
     },
     295: {
         "newProfileIds": (61,),
@@ -566,7 +566,7 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
     942: {
         "newProfileIds": (61,),
     },
-    784: {"accessConditionIds": (ACCESS_CONDITION_ETRE_ELIGIBLE_CRITERES_IAE)},
+    784: {"accessConditionIds": (ACCESS_CONDITION_ETRE_ELIGIBLE_CRITERES_IAE,)},
     340: {
         "newProfileIds": (28,),
     },
@@ -620,7 +620,7 @@ PROFILE_CHANGES: dict[int, dict[str, list[int]]] = {
     165: {
         "newProfileIds": (61,),
     },
-    1210: {"accessConditionIds": (ACCESS_CONDITION_ETRE_ELIGIBLE_CRITERES_IAE)},
+    1210: {"accessConditionIds": (ACCESS_CONDITION_ETRE_ELIGIBLE_CRITERES_IAE,)},
 }
 
 
