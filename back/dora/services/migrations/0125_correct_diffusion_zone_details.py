@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import migrations
 from django.db.models import Q
 from django.utils import timezone
@@ -16,6 +17,8 @@ def get_department_for_service(service):
 
 
 def fix_departmental_diffusion_zone_details(apps):
+    services_to_update = []
+
     Service = apps.get_model("services", "Service")
 
     departmental_services = Service.objects.filter(
@@ -31,11 +34,13 @@ def fix_departmental_diffusion_zone_details(apps):
         department = get_department_for_service(service)
 
         service.diffusion_zone_details = department
-        service.modification_date = timezone.now()
-        service.save()
+        services_to_update.append(service)
+
+    return services_to_update
 
 
 def fix_regional_diffusion_zone_details(apps):
+    services_to_update = []
     Service = apps.get_model("services", "Service")
     Department = apps.get_model("admin_express", "Department")
 
@@ -52,11 +57,13 @@ def fix_regional_diffusion_zone_details(apps):
         except Department.DoesNotExist:
             continue
         service.diffusion_zone_details = region
-        service.modification_date = timezone.now()
-        service.save()
+        services_to_update.append(service)
+
+    return services_to_update
 
 
 def fix_epci_diffusion_zone_details(apps):
+    services_to_update = []
     Service = apps.get_model("services", "Service")
     EPCI = apps.get_model("admin_express", "EPCI")
 
@@ -73,14 +80,36 @@ def fix_epci_diffusion_zone_details(apps):
             continue
 
         service.diffusion_zone_details = epci.code
-        service.modification_date = timezone.now()
-        service.save()
+        services_to_update.append(service)
+
+    return services_to_update
 
 
 def fix_all_services_with_incorrect_diffusion_zone_details(apps, schema_editor):
-    fix_departmental_diffusion_zone_details(apps)
-    fix_regional_diffusion_zone_details(apps)
-    fix_epci_diffusion_zone_details(apps)
+    Service = apps.get_model("services", "Service")
+    User = apps.get_model("users", "User")
+
+    departmental_services = fix_departmental_diffusion_zone_details(
+        apps,
+    )
+    regional_services = fix_regional_diffusion_zone_details(
+        apps,
+    )
+    epci_services = fix_epci_diffusion_zone_details(
+        apps,
+    )
+
+    all_services = departmental_services + regional_services + epci_services
+
+    bot_user = User.objects.get(email=settings.DORA_BOT_USER)
+
+    for service in all_services:
+        service.modification_date = timezone.now()
+        service.last_editor = bot_user
+
+    Service.objects.bulk_update(
+        all_services, ["diffusion_zone_details", "modification_date", "last_editor"]
+    )
 
 
 class Migration(migrations.Migration):
