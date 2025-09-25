@@ -38,7 +38,15 @@ def fix_departmental_diffusion_zone_details(apps):
     )
 
     for service in problematic_services:
-        city = get_city_by_code(apps, service.city_code)
+        city_code = (
+            service.city_code if service.city_code else service.structure.city_code
+        )
+
+        if not city_code:
+            logger.warning(f"Le service dont l'id {service.id} n'a pas de city_code.")
+            continue
+
+        city = get_city_by_code(apps, city_code)
         department = city.department
 
         service.diffusion_zone_details = department
@@ -101,38 +109,33 @@ def fix_all_services_with_incorrect_diffusion_zone_details(apps, schema_editor):
     User = apps.get_model("users", "User")
 
     try:
-        with schema_editor.connection.cursor() as cursor:
-            cursor.execute("BEGIN")
+        departmental_services = fix_departmental_diffusion_zone_details(
+            apps,
+        )
+        regional_services = fix_regional_diffusion_zone_details(
+            apps,
+        )
+        epci_services = fix_epci_diffusion_zone_details(
+            apps,
+        )
 
-            departmental_services = fix_departmental_diffusion_zone_details(
-                apps,
-            )
-            regional_services = fix_regional_diffusion_zone_details(
-                apps,
-            )
-            epci_services = fix_epci_diffusion_zone_details(
-                apps,
-            )
+        all_services = departmental_services + regional_services + epci_services
 
-            all_services = departmental_services + regional_services + epci_services
+        bot_user = User.objects.get(email=settings.DORA_BOT_USER)
 
-            bot_user = User.objects.get(email=settings.DORA_BOT_USER)
+        for service in all_services:
+            service.modification_date = timezone.now()
+            service.last_editor = bot_user
 
-            for service in all_services:
-                service.modification_date = timezone.now()
-                service.last_editor = bot_user
-
-            Service.objects.bulk_update(
-                all_services,
-                ["diffusion_zone_details", "modification_date", "last_editor"],
-            )
-            cursor.execute("COMMIT")
+        Service.objects.bulk_update(
+            all_services,
+            ["diffusion_zone_details", "modification_date", "last_editor"],
+        )
     except Exception as e:
         logger.error(
-            "Erreur de transaction",
+            "Erreur de transaction pour le profil %d : %s",
             str(e),
         )
-        cursor.execute("ROLLBACK")
         raise e
 
 
