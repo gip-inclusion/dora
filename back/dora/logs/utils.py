@@ -13,11 +13,14 @@ def set_current_request(request):
     _thread_locals.request = request
 
 
+PRO_CONNECT_URL_ROOT = "/oidc/"
+
+
 class RequestContextFilter(logging.Filter):
     def filter(self, record):
         request = get_current_request()
 
-        if request:
+        if request and not request.path.startswith(PRO_CONNECT_URL_ROOT):
             x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
             if x_forwarded_for:
                 record.ip_address = x_forwarded_for.split(",")[0].strip()
@@ -34,6 +37,10 @@ class RequestContextFilter(logging.Filter):
                 record.user_id = str(request.user.id)
             else:
                 record.user_id = "anonymous"
+        elif request and request.path.startswith(PRO_CONNECT_URL_ROOT):
+            record.ip_address = request.META.get("REMOTE_ADDR", "unknown")
+            record.request_id = getattr(request, "id", "no-request-id")
+            record.user_id = "authenticating"
         else:
             record.ip_address = "no-request"
             record.request_id = "no-request"
