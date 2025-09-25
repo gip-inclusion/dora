@@ -1,6 +1,8 @@
+from data_inclusion.schema.v0 import TypologieStructure
 from rest_framework import serializers
 
 from dora.core.models import LogItem, ModerationStatus
+from dora.services.enums import ServiceStatus
 from dora.services.models import Service, ServiceModel
 from dora.services.serializers import ServiceSerializer
 from dora.structures.models import Structure, StructureMember, StructurePutativeMember
@@ -374,6 +376,194 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "typology_display",
         ]
         lookup_field = "slug"
+
+
+class StructureAdminListOptimizedSerializer(serializers.ModelSerializer):
+    """
+    Serializer optimisé pour la liste des structures admin.
+    Calcule les valeurs dans le serializer pour éviter les annotations coûteuses.
+    """
+
+    # Champs calculés dans le serializer (plus efficace)
+    num_draft_services = serializers.SerializerMethodField()
+    num_published_services = serializers.SerializerMethodField()
+    num_active_services = serializers.SerializerMethodField()
+    num_outdated_services = serializers.SerializerMethodField()
+    has_valid_admin = serializers.SerializerMethodField()
+    is_orphan = serializers.SerializerMethodField()
+    awaiting_moderation = serializers.SerializerMethodField()
+    num_potential_members_to_validate = serializers.SerializerMethodField()
+    num_potential_members_to_remind = serializers.SerializerMethodField()
+    categories_list = serializers.SerializerMethodField()
+    admin_emails = serializers.SerializerMethodField()
+    editor_emails = serializers.SerializerMethodField()
+    putative_admin_emails = serializers.SerializerMethodField()
+
+    # Champs calculés optimisés
+    categories = serializers.SerializerMethodField()
+    admins = serializers.SerializerMethodField()
+    editors = serializers.SerializerMethodField()
+    admins_to_moderate = serializers.SerializerMethodField()
+    admins_to_remind = serializers.SerializerMethodField()
+    has_admin = serializers.SerializerMethodField()
+    is_waiting = serializers.SerializerMethodField()
+    awaiting_activation = serializers.SerializerMethodField()
+    awaiting_update = serializers.SerializerMethodField()
+    num_services = serializers.SerializerMethodField()
+    typology_display = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Structure
+        fields = [
+            "name",
+            "slug",
+            "department",
+            "city",
+            "email",
+            "phone",
+            "moderation_status",
+            "moderation_date",
+            "typology",
+            "typology_display",
+            "siret",
+            "short_desc",
+            "latitude",
+            "longitude",
+            "num_draft_services",
+            "num_published_services",
+            "num_active_services",
+            "num_outdated_services",
+            "has_valid_admin",
+            "is_orphan",
+            "awaiting_moderation",
+            "num_potential_members_to_validate",
+            "num_potential_members_to_remind",
+            "categories",
+            "admins",
+            "editors",
+            "admins_to_moderate",
+            "admins_to_remind",
+            "has_admin",
+            "is_waiting",
+            "awaiting_activation",
+            "awaiting_update",
+            "num_services",
+            "categories_list",
+            "admin_emails",
+            "editor_emails",
+            "putative_admin_emails",
+        ]
+
+    # Méthodes pour calculer les valeurs de manière optimisée
+    def get_num_draft_services(self, obj):
+        return obj.services.filter(status=ServiceStatus.DRAFT).count()
+
+    def get_num_published_services(self, obj):
+        return obj.services.filter(status=ServiceStatus.PUBLISHED).count()
+
+    def get_num_active_services(self, obj):
+        return obj.services.exclude(status=ServiceStatus.ARCHIVED).count()
+
+    def get_num_outdated_services(self, obj):
+        return obj.services.update_advised().count()
+
+    def get_has_valid_admin(self, obj):
+        return obj.membership.filter(
+            is_admin=True, user__is_valid=True, user__is_active=True
+        ).exists()
+
+    def get_is_orphan(self, obj):
+        return not obj.membership.exists() and not obj.putative_membership.exists()
+
+    def get_awaiting_moderation(self, obj):
+        return obj.moderation_status in [
+            ModerationStatus.NEED_NEW_MODERATION,
+            ModerationStatus.NEED_INITIAL_MODERATION,
+        ]
+
+    def get_num_potential_members_to_validate(self, obj):
+        return obj.putative_membership.filter(
+            invited_by_admin=False,
+            user__is_valid=True,
+            user__is_active=True,
+        ).count()
+
+    def get_num_potential_members_to_remind(self, obj):
+        return obj.putative_membership.filter(
+            invited_by_admin=True,
+            user__is_active=True,
+        ).count()
+
+    def get_categories_list(self, obj):
+        return list(obj.services.values_list("categories__value", flat=True).distinct())
+
+    def get_admin_emails(self, obj):
+        return list(
+            obj.membership.filter(
+                is_admin=True,
+                user__is_valid=True,
+                user__is_active=True,
+            ).values_list("user__email", flat=True)
+        )
+
+    def get_editor_emails(self, obj):
+        from django.conf import settings
+
+        return list(
+            obj.services.filter(
+                status=ServiceStatus.PUBLISHED,
+                last_editor__isnull=False,
+            )
+            .exclude(last_editor__email=settings.DORA_BOT_USER)
+            .values_list("last_editor__email", flat=True)
+            .distinct()
+        )
+
+    def get_putative_admin_emails(self, obj):
+        return list(
+            obj.putative_membership.filter(
+                is_admin=True,
+                invited_by_admin=True,
+                user__is_active=True,
+            ).values_list("user__email", flat=True)
+        )
+
+    def get_categories(self, obj):
+        return self.get_categories_list(obj)
+
+    def get_admins(self, obj):
+        return self.get_admin_emails(obj)
+
+    def get_editors(self, obj):
+        return self.get_editor_emails(obj)
+
+    def get_admins_to_moderate(self, obj):
+        if obj.moderation_status != ModerationStatus.VALIDATED:
+            return self.get_admins(obj)
+        return []
+
+    def get_admins_to_remind(self, obj):
+        if not self.get_has_valid_admin(obj):
+            return self.get_putative_admin_emails(obj)
+        return []
+
+    def get_has_admin(self, obj):
+        return self.get_has_valid_admin(obj)
+
+    def get_is_waiting(self, obj):
+        return len(self.get_admins_to_remind(obj)) > 0
+
+    def get_awaiting_activation(self, obj):
+        return self.get_num_published_services(obj) == 0
+
+    def get_awaiting_update(self, obj):
+        return self.get_num_outdated_services(obj) > 0
+
+    def get_num_services(self, obj):
+        return self.get_num_active_services(obj)
+
+    def get_typology_display(self, obj):
+        return TypologieStructure[obj.typology].label if obj.typology else ""
 
 
 class ServiceAdminSerializer(ServiceSerializer):
