@@ -1,4 +1,5 @@
 import csv
+import logging
 import sys
 from types import SimpleNamespace
 from typing import Any, Dict, List, Optional, Union
@@ -7,7 +8,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import QuerySet
 from django.utils import timezone
 
-from dora.admin_express.models import AdminDivisionType
+from dora.admin_express.models import AdminDivisionType, City
 from dora.core.utils import get_geo_data, skip_csv_lines
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
@@ -20,6 +21,8 @@ from dora.services.models import (
 from dora.services.utils import instantiate_service_from_model
 from dora.structures.models import Structure
 from dora.users.models import User
+
+logger = logging.getLogger(__name__)
 
 
 class ImportServicesHelper:
@@ -283,7 +286,9 @@ class ImportServicesHelper:
             if geo_data:
                 service.city_code = geo_data.city_code
                 service.geom = geo_data.geom
-                service.diffusion_zone_details = geo_data.city_code
+                service.diffusion_zone_details = self.get_diffusion_zone_details(
+                    service
+                )
             else:
                 self.geo_data_missing_lines.append(
                     {
@@ -360,6 +365,27 @@ class ImportServicesHelper:
         )
 
         return True
+
+    @staticmethod
+    def get_diffusion_zone_details(service: Service):
+        city_code = service.city_code
+
+        try:
+            city = City.objects.get(code=city_code)
+        except City.DoesNotExist:
+            logger.error(f"La ville dont le code est {city_code} n'existe pas")
+            raise City.DoesNotExist
+
+        if service.diffusion_zone_type == AdminDivisionType.DEPARTMENT:
+            return city.department
+
+        if service.diffusion_zone_type == AdminDivisionType.REGION:
+            return city.region
+
+        if service.diffusion_zone_type == AdminDivisionType.EPCI:
+            return city.epci
+
+        return city_code
 
     CSV_HEADERS = [
         "modele_slug",

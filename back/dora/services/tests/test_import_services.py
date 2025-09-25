@@ -37,6 +37,18 @@ class ImportServicesTestCase(TestCase):
         }
         self.import_services_helper = ImportServicesHelper()
 
+        self.geo_data = GeoData(
+            city_code="75056",
+            city="Paris",
+            postal_code="75020",
+            address="1 rue de test",
+            geom=Point(2.3522, 48.8566, srid=4326),
+            lat="48.8566",
+            lon="2.3522",
+            score=1.0,
+        )
+        self.city = baker.make("City", code="75056", epci="012345678")
+
     def test_import_services_wet_run(self):
         csv_content = (
             f"{self.csv_headers}\n"
@@ -268,18 +280,10 @@ class ImportServicesTestCase(TestCase):
 
     @patch(
         "dora.services.csv_import.get_geo_data",
-        return_value=GeoData(
-            city_code=75020,
-            city="Paris",
-            postal_code="75020",
-            address="1 rue de test",
-            geom=Point(2.3522, 48.8566, srid=4326),
-            lat="48.8566",
-            lon="2.3522",
-            score=1.0,
-        ),
     )
     def test_valid_geo_data(self, mock_geo_data):
+        mock_geo_data.return_value = self.geo_data
+
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,,"
@@ -295,12 +299,110 @@ class ImportServicesTestCase(TestCase):
         self.assertEqual(len(result["geo_data_missing_lines"]), 0)
         created_service = Service.objects.filter(creator=self.importing_user).last()
 
-        self.assertEqual(created_service.city_code, "75020")
+        self.assertEqual(created_service.city_code, self.city.code)
         self.assertEqual(
             created_service.geom,
             Point(2.3522, 48.8566, srid=4326),
         )
-        self.assertEqual(created_service.diffusion_zone_details, "75020")
+        self.assertEqual(created_service.diffusion_zone_details, self.city.code)
+
+    @patch(
+        "dora.services.csv_import.get_geo_data",
+    )
+    def test_diffusion_zone_details_when_service_for_department(self, mock_geo_data):
+        mock_geo_data.return_value = self.geo_data
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,department,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(created_service.diffusion_zone_details, self.city.department)
+
+    @patch(
+        "dora.services.csv_import.get_geo_data",
+    )
+    def test_diffusion_zone_details_when_service_for_dom_tom_department(
+        self, mock_geo_data
+    ):
+        mock_geo_data.return_value = GeoData(
+            city_code="97123",
+            city="Réunion",
+            postal_code="97123",
+            address="1 rue de test",
+            geom=Point(2.3522, 48.8566, srid=4326),
+            lat="48.8566",
+            lon="2.3522",
+            score=1.0,
+        )
+        dom_tom_city = baker.make("City", code="97123")
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,department,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(
+            created_service.diffusion_zone_details, dom_tom_city.department
+        )
+
+    @patch(
+        "dora.services.csv_import.get_geo_data",
+    )
+    def test_diffusion_zone_details_when_service_for_region(self, mock_geo_data):
+        mock_geo_data.return_value = self.geo_data
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,region,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(created_service.diffusion_zone_details, self.city.region)
+
+    @patch(
+        "dora.services.csv_import.get_geo_data",
+    )
+    def test_diffusion_zone_details_when_service_for_epci(self, mock_geo_data):
+        mock_geo_data.return_value = self.geo_data
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,epci,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(created_service.diffusion_zone_details, self.city.epci)
 
     def test_multiple_financing_labels(self):
         other_funding_label = baker.make(
@@ -394,7 +496,12 @@ class ImportServicesTestCase(TestCase):
         )
 
     @freeze_time("2022-01-01")
-    def test_publish_eligible_in_person_service(self):
+    @patch(
+        "dora.services.csv_import.get_geo_data",
+    )
+    def test_publish_eligible_in_person_service(self, mock_geo_data):
+        mock_geo_data.return_value = self.geo_data
+
         csv_content = (
             f"{self.csv_headers}\n"
             f"{self.service_model.slug},{self.structure.siret},referent@email.com,"
