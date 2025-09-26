@@ -1,8 +1,10 @@
 import logging
 import threading
+import time
 import uuid
 
 _thread_locals = threading.local()
+logger = logging.getLogger("dora.requests")
 
 
 def get_current_request():
@@ -58,5 +60,14 @@ class RequestContextMiddleware:
             request.id = str(uuid.uuid4())
 
         set_current_request(request)
+
+        start_time = time.time()
+        response = self.get_response(request)
+        duration = time.time() - start_time
+
+        logger.info(
+            f'"{request.method} {request.get_full_path()}" '
+            f"{response.status_code} {duration * 1000:.0f}ms"
+        )
 
         return self.get_response(request)

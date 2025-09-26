@@ -273,6 +273,11 @@ LOGGING = {
             "handlers": ["console"],
             "propagate": False,
         },
+        "dora.requests": {
+            "level": os.getenv("DORA_LOGS_CORE_LEVEL", "INFO"),
+            "handlers": ["console"],
+            "propagate": False,
+        },
     },
     "root": {
         "handlers": ["console"],
