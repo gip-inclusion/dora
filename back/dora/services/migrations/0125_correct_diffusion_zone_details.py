@@ -6,14 +6,18 @@ from django.db.models import Q
 from django.utils import timezone
 
 from dora.admin_express.models import AdminDivisionType
+from dora.admin_express.utils import arrdt_to_main_insee_code
 
 logger = logging.getLogger(__name__)
 
 
 def get_city_by_code(apps, city_code):
     City = apps.get_model("admin_express", "City")
+
+    insee_code = arrdt_to_main_insee_code(city_code)
+
     try:
-        city = City.objects.get(code=city_code)
+        city = City.objects.get(code=insee_code)
     except City.DoesNotExist:
         logger.error(f"La ville dont le code est {city_code} n'existe pas")
         raise City.DoesNotExist

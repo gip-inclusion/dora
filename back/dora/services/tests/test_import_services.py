@@ -365,6 +365,38 @@ class ImportServicesTestCase(TestCase):
     @patch(
         "dora.services.csv_import.get_geo_data",
     )
+    def test_diffusion_zone_details_when_city_code_requires_translation_to_insee(
+        self, mock_geo_data
+    ):
+        mock_geo_data.return_value = GeoData(
+            city_code="75120",
+            city="Réunion",
+            postal_code="75120",
+            address="1 rue de test",
+            geom=Point(2.3522, 48.8566, srid=4326),
+            lat="48.8566",
+            lon="2.3522",
+            score=1.0,
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f"{self.service_model.slug},{self.structure.siret},referent@email.com,{self.funding_label.value},,,,Paris,1 rue de test,,75020,department,"
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        created_service = Service.objects.filter(creator=self.importing_user).last()
+
+        self.assertEqual(created_service.diffusion_zone_details, self.city.department)
+
+    @patch(
+        "dora.services.csv_import.get_geo_data",
+    )
     def test_diffusion_zone_details_when_service_for_region(self, mock_geo_data):
         mock_geo_data.return_value = self.geo_data
 
