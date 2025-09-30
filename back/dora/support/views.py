@@ -132,7 +132,7 @@ class StructureAdminViewSet(
             ),
         )
 
-        if self.action == "list":
+        if not self.action == "list":
             structures = structures.select_related(
                 "parent", "creator", "last_editor", "source"
             )
