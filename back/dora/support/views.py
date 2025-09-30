@@ -165,10 +165,16 @@ class StructureAdminViewSet(
     @action(detail=False, methods=["post"], url_path="csv-data")
     def csv_data(self, request):
         """
-        Si un gestionnaire territoire a besoin d'un export CSV, cette route supplemente
-        les infos fournies par StructureAdminListSerializer
+        Si un gestionnaire territoire a besoin d'un export CSV, cette route supplémente
+        les infos fournies par StructureAdminListSerializer. La route a besoin d'être un POST
+        parce que si on envoie beaucoup de structure slugs pour le csv export et il faut le
+        faire dans le body de la requête.
         """
-        slugs = request.data.get("slugs").split(",") or []
+        slugs = (
+            request.data.get("slugs", "").split(",")
+            if request.data.get("slugs")
+            else []
+        )
 
         structures = Structure.objects.filter(slug__in=slugs).annotate(
             num_potential_members_to_validate=Count(
@@ -203,6 +209,14 @@ class StructureAdminViewSet(
                     services__status=ServiceStatus.PUBLISHED,
                     services__last_editor__isnull=False,
                 ),
+            ),
+            has_valid_admin=Exists(
+                StructureMember.objects.filter(
+                    structure=OuterRef("pk"),
+                    is_admin=True,
+                    user__is_valid=True,
+                    user__is_active=True,
+                )
             ),
             putative_admin_emails=ArrayAgg(
                 "putative_membership__user__email",

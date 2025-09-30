@@ -20,10 +20,24 @@ export async function getStructuresAdmin(
   return (await fetchData<AdminShortStructure[]>(url)).data;
 }
 
-export async function getStructuresAdminCsvData(structureIds: string[]) {
-  let url = `${getApiURL()}/structures-admin/csv-data/?slugs=${structureIds.join()}`;
+export async function getStructuresAdminCsvData(slugs: string[]) {
+  const url = `${getApiURL()}/structures-admin/csv-data/`;
 
-  return (await fetchData<AdminShortStructure[]>(url)).data;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json; version=1.0",
+      "Content-Type": "application/json",
+      Authorization: `Token ${get(token)}`,
+    },
+    body: JSON.stringify({ slugs: slugs.join(",") }),
+  });
+
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+
+  return response.json();
 }
 
 export async function getStructureAdmin(slug): Promise<AdminShortStructure> {
