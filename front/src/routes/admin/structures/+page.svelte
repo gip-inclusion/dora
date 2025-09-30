@@ -91,6 +91,8 @@
       return;
     }
 
+    loading = true;
+
     const filteredStructureSlugs = filteredStructures.map(
       (structure) => structure.slug
     );
@@ -124,6 +126,8 @@
       } else if (toUpdate(structure)) {
         status = "à actualiser";
       }
+
+      loading = false;
 
       // prettier-ignore
       return {
@@ -278,7 +282,7 @@
               onclick={handleClick}
               label="Télécharger"
               secondary
-              disabled={!filteredStructures.length}
+              disabled={!filteredStructures.length || loading}
             />
             {#if searchStatus !== "toutes" && filterDefinition}
               <Notice type="info" title={filterDefinition}>
