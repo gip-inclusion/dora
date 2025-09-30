@@ -25,7 +25,7 @@ from dora.support.serializers import (
 class StructureAdminPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user
-        if request.method in [*permissions.SAFE_METHODS, "PATCH"]:
+        if request.method in [*permissions.SAFE_METHODS, "PATCH", "POST"]:
             return (
                 user
                 and user.is_authenticated
