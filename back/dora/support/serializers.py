@@ -251,12 +251,16 @@ class StructureAdminSerializer(StructureSerializer):
         return getattr(obj, "num_published_services", 0)
 
     def get_num_outdated_services(self, obj):
-        return obj.services.update_advised().count()
+        return getattr(obj, "num_outdated_services", 0)
 
     def get_num_services(self, obj):
         return getattr(obj, "num_draft_services", 0) + getattr(
             obj, "num_published_services", 0
         )
+
+    def get_awaiting_update(self, obj):
+        num_outdated_services = self.get_num_outdated_services(obj)
+        return num_outdated_services > 0
 
     def get_categories(self, obj):
         categories = getattr(obj, "categories_list", None)
@@ -298,9 +302,6 @@ class StructureAdminSerializer(StructureSerializer):
 
     def get_awaiting_activation(self, obj):
         return self.get_num_published_services(obj) == 0
-
-    def get_awaiting_update(self, obj):
-        return self.get_num_outdated_services(obj) > 0
 
 
 class StructureAdminListSerializer(StructureAdminSerializer):

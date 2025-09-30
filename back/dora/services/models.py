@@ -208,28 +208,39 @@ class ServiceManager(models.Manager):
         return self.filter(status=ServiceStatus.PUBLISHED)
 
     def update_advised(self):
-        return self.filter(
-            Q(status=ServiceStatus.PUBLISHED)
+        return self.filter(self.get_update_advised_filter())
+
+    @staticmethod
+    def get_update_advised_filter(field_prefix=""):
+        """
+        Returns the Q object for filtering services that need updates.
+
+        Args:
+            field_prefix (str): Prefix for field names (e.g., "services__" for related lookups)
+        """
+        prefix = field_prefix
+        return Q(
+            Q(**{f"{prefix}status": ServiceStatus.PUBLISHED})
             & (
                 Q(
-                    update_frequency=UpdateFrequency.EVERY_MONTH,
-                    modification_date__lte=timezone.now() - relativedelta(months=1),
+                    **{f"{prefix}update_frequency": UpdateFrequency.EVERY_MONTH},
+                    **{f"{prefix}modification_date__lte": timezone.now() - relativedelta(months=1)},
                 )
                 | Q(
-                    update_frequency=UpdateFrequency.EVERY_3_MONTHS,
-                    modification_date__lte=timezone.now() - relativedelta(months=3),
+                    **{f"{prefix}update_frequency": UpdateFrequency.EVERY_3_MONTHS},
+                    **{f"{prefix}modification_date__lte": timezone.now() - relativedelta(months=3)},
                 )
                 | Q(
-                    update_frequency=UpdateFrequency.EVERY_6_MONTHS,
-                    modification_date__lte=timezone.now() - relativedelta(months=6),
+                    **{f"{prefix}update_frequency": UpdateFrequency.EVERY_6_MONTHS},
+                    **{f"{prefix}modification_date__lte": timezone.now() - relativedelta(months=6)},
                 )
                 | Q(
-                    update_frequency=UpdateFrequency.EVERY_12_MONTHS,
-                    modification_date__lte=timezone.now() - relativedelta(months=12),
+                    **{f"{prefix}update_frequency": UpdateFrequency.EVERY_12_MONTHS},
+                    **{f"{prefix}modification_date__lte": timezone.now() - relativedelta(months=12)},
                 )
                 | Q(
-                    update_frequency=UpdateFrequency.EVERY_16_MONTHS,
-                    modification_date__lte=timezone.now() - relativedelta(months=16),
+                    **{f"{prefix}update_frequency": UpdateFrequency.EVERY_16_MONTHS},
+                    **{f"{prefix}modification_date__lte": timezone.now() - relativedelta(months=16)},
                 )
             )
         )

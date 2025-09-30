@@ -109,6 +109,10 @@ class StructureAdminViewSet(
                     structure__membership__user__is_active=True,
                 )
             ),
+            num_outdated_services=Count(
+                "services",
+                filter=Service.objects.get_update_advised_filter("services__"),
+            ),
             awaiting_moderation=Case(
                 When(
                     moderation_status__in=[
