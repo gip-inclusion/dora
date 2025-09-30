@@ -2,7 +2,9 @@ from django.conf import settings
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import BooleanField, Case, Count, Exists, OuterRef, Q, Value, When
 from rest_framework import mixins, permissions, serializers, viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.response import Response
 
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
@@ -14,6 +16,7 @@ from dora.structures.models import Structure, StructureMember
 from dora.support.serializers import (
     ServiceAdminListSerializer,
     ServiceAdminSerializer,
+    StructureAdminCSVDataSerializer,
     StructureAdminListSerializer,
     StructureAdminSerializer,
 )
@@ -74,105 +77,58 @@ class StructureAdminViewSet(
         user = self.request.user
         department = self.request.query_params.get("department")
 
-        structures = (
-            Structure.objects.all()
-            .select_related("parent", "creator", "last_editor", "source")
-            .prefetch_related(
-                "membership__user",
-                "putative_membership__user",
-                "services__categories",
-                "branches",
-            )
-            .annotate(
-                num_draft_services=Count(
-                    "services",
-                    filter=Q(services__status=ServiceStatus.DRAFT),
+        structures = Structure.objects.all().annotate(
+            num_published_services=Count(
+                "services",
+                filter=Q(services__status=ServiceStatus.PUBLISHED),
+            ),
+            has_valid_admin=Exists(
+                StructureMember.objects.filter(
+                    structure=OuterRef("pk"),
+                    is_admin=True,
+                    user__is_valid=True,
+                    user__is_active=True,
+                )
+            ),
+            is_orphan=Case(
+                When(
+                    Q(membership__isnull=True) & Q(putative_membership__isnull=True),
+                    then=Value(True),
                 ),
-                num_published_services=Count(
-                    "services",
-                    filter=Q(services__status=ServiceStatus.PUBLISHED),
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
+            awaiting_moderation=Case(
+                When(
+                    moderation_status__in=[
+                        ModerationStatus.NEED_NEW_MODERATION,
+                        ModerationStatus.NEED_INITIAL_MODERATION,
+                    ],
+                    then=Value(True),
                 ),
-                num_active_services=Count(
-                    "services",
-                    filter=~Q(services__status=ServiceStatus.ARCHIVED),
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
+            categories_list=ArrayAgg(
+                "services__categories__value",
+                distinct=True,
+                filter=Q(services__categories__isnull=False),
+            ),
+            putative_admin_emails=ArrayAgg(
+                "putative_membership__user__email",
+                distinct=True,
+                filter=Q(
+                    putative_membership__is_admin=True,
+                    putative_membership__invited_by_admin=True,
+                    putative_membership__user__is_active=True,
                 ),
-                has_valid_admin=Exists(
-                    StructureMember.objects.filter(
-                        structure=OuterRef("pk"),
-                        is_admin=True,
-                        user__is_valid=True,
-                        user__is_active=True,
-                    )
-                ),
-                is_orphan=Case(
-                    When(
-                        Q(membership__isnull=True)
-                        & Q(putative_membership__isnull=True),
-                        then=Value(True),
-                    ),
-                    default=Value(False),
-                    output_field=BooleanField(),
-                ),
-                awaiting_moderation=Case(
-                    When(
-                        moderation_status__in=[
-                            ModerationStatus.NEED_NEW_MODERATION,
-                            ModerationStatus.NEED_INITIAL_MODERATION,
-                        ],
-                        then=Value(True),
-                    ),
-                    default=Value(False),
-                    output_field=BooleanField(),
-                ),
-                num_potential_members_to_validate=Count(
-                    "putative_membership",
-                    filter=Q(
-                        putative_membership__invited_by_admin=False,
-                        putative_membership__user__is_valid=True,
-                        putative_membership__user__is_active=True,
-                    ),
-                ),
-                num_potential_members_to_remind=Count(
-                    "putative_membership",
-                    filter=Q(
-                        putative_membership__invited_by_admin=True,
-                        putative_membership__user__is_active=True,
-                    ),
-                ),
-                categories_list=ArrayAgg(
-                    "services__categories__value",
-                    distinct=True,
-                    filter=Q(services__categories__isnull=False),
-                ),
-                admin_emails=ArrayAgg(
-                    "membership__user__email",
-                    distinct=True,
-                    filter=Q(
-                        membership__is_admin=True,
-                        membership__user__is_valid=True,
-                        membership__user__is_active=True,
-                    ),
-                ),
-                editor_emails=ArrayAgg(
-                    "services__last_editor__email",
-                    distinct=True,
-                    filter=Q(
-                        ~Q(services__last_editor__email=settings.DORA_BOT_USER),
-                        services__status=ServiceStatus.PUBLISHED,
-                        services__last_editor__isnull=False,
-                    ),
-                ),
-                putative_admin_emails=ArrayAgg(
-                    "putative_membership__user__email",
-                    distinct=True,
-                    filter=Q(
-                        putative_membership__is_admin=True,
-                        putative_membership__invited_by_admin=True,
-                        putative_membership__user__is_active=True,
-                    ),
-                ),
-            )
+            ),
         )
+
+        if self.action == "list":
+            structures = structures.select_related(
+                "parent", "creator", "last_editor", "source"
+            )
 
         if department:
             if user.is_manager:
@@ -195,6 +151,88 @@ class StructureAdminViewSet(
         if self.action == "list":
             return StructureAdminListSerializer
         return super().get_serializer_class()
+
+    @action(detail=False, methods=["get"], url_path="csv-data")
+    def csv_data(self, request):
+        """
+        Return structures with full annotations for CSV export.
+        Includes all the detailed calculations needed for comprehensive data export.
+        """
+        slugs = request.query_params.get("slugs").split(",") or []
+
+        # Full queryset with all annotations for CSV export
+        structures = Structure.objects.filter(slug__in=slugs).annotate(
+            num_draft_services=Count(
+                "services",
+                filter=Q(services__status=ServiceStatus.DRAFT),
+            ),
+            num_published_services=Count(
+                "services",
+                filter=Q(services__status=ServiceStatus.PUBLISHED),
+            ),
+            num_active_services=Count(
+                "services",
+                filter=~Q(services__status=ServiceStatus.ARCHIVED),
+            ),
+            has_valid_admin=Exists(
+                StructureMember.objects.filter(
+                    structure=OuterRef("pk"),
+                    is_admin=True,
+                    user__is_valid=True,
+                    user__is_active=True,
+                )
+            ),
+            num_potential_members_to_validate=Count(
+                "putative_membership",
+                filter=Q(
+                    putative_membership__invited_by_admin=False,
+                    putative_membership__user__is_valid=True,
+                    putative_membership__user__is_active=True,
+                ),
+            ),
+            num_potential_members_to_remind=Count(
+                "putative_membership",
+                filter=Q(
+                    putative_membership__invited_by_admin=True,
+                    putative_membership__user__is_active=True,
+                ),
+            ),
+            categories_list=ArrayAgg(
+                "services__categories__value",
+                distinct=True,
+                filter=Q(services__categories__isnull=False),
+            ),
+            admin_emails=ArrayAgg(
+                "membership__user__email",
+                distinct=True,
+                filter=Q(
+                    membership__is_admin=True,
+                    membership__user__is_valid=True,
+                    membership__user__is_active=True,
+                ),
+            ),
+            editor_emails=ArrayAgg(
+                "services__last_editor__email",
+                distinct=True,
+                filter=Q(
+                    ~Q(services__last_editor__email=settings.DORA_BOT_USER),
+                    services__status=ServiceStatus.PUBLISHED,
+                    services__last_editor__isnull=False,
+                ),
+            ),
+            putative_admin_emails=ArrayAgg(
+                "putative_membership__user__email",
+                distinct=True,
+                filter=Q(
+                    putative_membership__is_admin=True,
+                    putative_membership__invited_by_admin=True,
+                    putative_membership__user__is_active=True,
+                ),
+            ),
+        )
+
+        serializer = StructureAdminCSVDataSerializer(structures, many=True)
+        return Response(serializer.data)
 
 
 class ServiceAdminViewSet(

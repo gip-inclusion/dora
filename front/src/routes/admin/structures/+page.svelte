@@ -15,7 +15,10 @@
   } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
   import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
-  import { getStructuresAdmin } from "$lib/requests/admin";
+  import {
+    getStructuresAdmin,
+    getStructuresAdminCsvData,
+  } from "$lib/requests/admin";
   import type { AdminShortStructure, GeoApiValue } from "$lib/types";
 
   import type { PageData } from "./$types";
@@ -83,12 +86,30 @@
     );
   }
 
-  function handleClick() {
+  async function handleClick() {
     if (!selectedDepartment) {
       return;
     }
 
-    const sheetData = filteredStructures.map((structure) => {
+    const filteredStructureSlugs = filteredStructures.map(
+      (structure) => structure.slug
+    );
+
+    const csvData = await getStructuresAdminCsvData(filteredStructureSlugs);
+
+    const filteredStructuresSnapshot = $state.snapshot(filteredStructures);
+
+    const result = [...csvData, ...filteredStructuresSnapshot].reduce(
+      (acc, item) => {
+        acc.set(item.slug, { ...acc.get(item.slug), ...item });
+        return acc;
+      },
+      new Map()
+    );
+
+    const mergedData = Array.from(result.values());
+
+    const sheetData = mergedData.map((structure) => {
       let status = "";
       if (isObsolete(structure)) {
         status = "obsolète";
