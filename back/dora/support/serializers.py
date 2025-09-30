@@ -290,9 +290,6 @@ class StructureAdminSerializer(StructureSerializer):
 
     def get_is_waiting(self, obj):
         return len(self.get_admins_to_remind(obj)) > 0
-        # if getattr(obj, "num_admins_to_remind", None):
-        #     return obj.num_admins_to_remind
-        # else:
 
     def get_awaiting_moderation(self, obj):
         return getattr(obj, "awaiting_moderation", False)
@@ -305,6 +302,8 @@ class StructureAdminSerializer(StructureSerializer):
 
 
 class StructureAdminListSerializer(StructureAdminSerializer):
+    is_waiting = serializers.SerializerMethodField()
+
     class Meta:
         model = Structure
         fields = [
@@ -359,6 +358,11 @@ class StructureAdminListSerializer(StructureAdminSerializer):
         ]
         lookup_field = "slug"
 
+    def get_is_waiting(self, obj):
+        if not getattr(obj, "has_valid_admin", obj.has_admin):
+            return getattr(obj, "is_waiting", False)
+        return False
+
 
 class StructureAdminCSVDataSerializer(StructureAdminSerializer):
     class Meta:
@@ -397,8 +401,8 @@ class StructureAdminCSVDataSerializer(StructureAdminSerializer):
             "moderation_status",
             "modification_date",
             "name",
-            "num_potential_members_to_remind",  #
-            "num_potential_members_to_validate",  #
+            "num_potential_members_to_remind",
+            "num_potential_members_to_validate",
             "phone",
             "postal_code",
             "short_desc",

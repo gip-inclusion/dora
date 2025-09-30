@@ -12,7 +12,7 @@ from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service
-from dora.structures.models import Structure, StructureMember
+from dora.structures.models import Structure, StructureMember, StructurePutativeMember
 from dora.support.serializers import (
     ServiceAdminListSerializer,
     ServiceAdminSerializer,
@@ -106,6 +106,14 @@ class StructureAdminViewSet(
                 default=Value(False),
                 output_field=BooleanField(),
             ),
+            is_waiting=Exists(
+                StructurePutativeMember.objects.filter(
+                    structure=OuterRef("pk"),
+                    is_admin=True,
+                    invited_by_admin=True,
+                    user__is_active=True,
+                )
+            ),
             awaiting_moderation=Case(
                 When(
                     moderation_status__in=[
@@ -121,15 +129,6 @@ class StructureAdminViewSet(
                 "services__categories__value",
                 distinct=True,
                 filter=Q(services__categories__isnull=False),
-            ),
-            putative_admin_emails=ArrayAgg(
-                "putative_membership__user__email",
-                distinct=True,
-                filter=Q(
-                    putative_membership__is_admin=True,
-                    putative_membership__invited_by_admin=True,
-                    putative_membership__user__is_active=True,
-                ),
             ),
         )
 
