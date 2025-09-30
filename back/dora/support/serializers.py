@@ -359,9 +359,7 @@ class StructureAdminListSerializer(StructureAdminSerializer):
         lookup_field = "slug"
 
     def get_is_waiting(self, obj):
-        if not getattr(obj, "has_valid_admin", obj.has_admin):
-            return getattr(obj, "is_waiting", False)
-        return False
+        return getattr(obj, "is_waiting", False)
 
 
 class StructureAdminCSVDataSerializer(StructureAdminSerializer):

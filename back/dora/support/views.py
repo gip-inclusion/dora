@@ -12,7 +12,7 @@ from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service
-from dora.structures.models import Structure, StructureMember, StructurePutativeMember
+from dora.structures.models import Structure, StructurePutativeMember
 from dora.support.serializers import (
     ServiceAdminListSerializer,
     ServiceAdminSerializer,
@@ -90,14 +90,6 @@ class StructureAdminViewSet(
                 "services",
                 filter=~Q(services__status=ServiceStatus.ARCHIVED),
             ),
-            has_valid_admin=Exists(
-                StructureMember.objects.filter(
-                    structure=OuterRef("pk"),
-                    is_admin=True,
-                    user__is_valid=True,
-                    user__is_active=True,
-                )
-            ),
             is_orphan=Case(
                 When(
                     Q(membership__isnull=True) & Q(putative_membership__isnull=True),
@@ -112,6 +104,10 @@ class StructureAdminViewSet(
                     is_admin=True,
                     invited_by_admin=True,
                     user__is_active=True,
+                ).exclude(
+                    structure__membership__is_admin=True,
+                    structure__membership__user__is_valid=True,
+                    structure__membership__user__is_active=True,
                 )
             ),
             awaiting_moderation=Case(
@@ -162,21 +158,13 @@ class StructureAdminViewSet(
     @action(detail=False, methods=["get"], url_path="csv-data")
     def csv_data(self, request):
         """
-        Return structures with full annotations for CSV export.
-        Includes all the detailed calculations needed for comprehensive data export.
+        Si un gestionnaire territoire a besoin d'un export CSV, cette route supplemente
+        les infos fournies par StructureAdminListSerializer
         """
         slugs = request.query_params.get("slugs").split(",") or []
 
         # Full queryset with all annotations for CSV export
         structures = Structure.objects.filter(slug__in=slugs).annotate(
-            has_valid_admin=Exists(
-                StructureMember.objects.filter(
-                    structure=OuterRef("pk"),
-                    is_admin=True,
-                    user__is_valid=True,
-                    user__is_active=True,
-                )
-            ),
             num_potential_members_to_validate=Count(
                 "putative_membership",
                 filter=Q(
