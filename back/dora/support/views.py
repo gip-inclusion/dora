@@ -86,6 +86,10 @@ class StructureAdminViewSet(
                 "services",
                 filter=Q(services__status=ServiceStatus.PUBLISHED),
             ),
+            num_active_services=Count(
+                "services",
+                filter=~Q(services__status=ServiceStatus.ARCHIVED),
+            ),
             is_orphan=Case(
                 When(
                     Exists(StructureMember.objects.filter(structure=OuterRef("pk")))

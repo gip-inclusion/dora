@@ -254,9 +254,7 @@ class StructureAdminSerializer(StructureSerializer):
         return getattr(obj, "num_outdated_services", 0)
 
     def get_num_services(self, obj):
-        return getattr(obj, "num_draft_services", 0) + getattr(
-            obj, "num_published_services", 0
-        )
+        return getattr(obj, "num_active_services", 0)
 
     def get_awaiting_update(self, obj):
         num_outdated_services = self.get_num_outdated_services(obj)
