@@ -78,9 +78,17 @@ class StructureAdminViewSet(
         department = self.request.query_params.get("department")
 
         structures = Structure.objects.all().annotate(
+            num_draft_services=Count(
+                "services",
+                filter=Q(services__status=ServiceStatus.DRAFT),
+            ),
             num_published_services=Count(
                 "services",
                 filter=Q(services__status=ServiceStatus.PUBLISHED),
+            ),
+            num_active_services=Count(
+                "services",
+                filter=~Q(services__status=ServiceStatus.ARCHIVED),
             ),
             has_valid_admin=Exists(
                 StructureMember.objects.filter(
@@ -162,18 +170,6 @@ class StructureAdminViewSet(
 
         # Full queryset with all annotations for CSV export
         structures = Structure.objects.filter(slug__in=slugs).annotate(
-            num_draft_services=Count(
-                "services",
-                filter=Q(services__status=ServiceStatus.DRAFT),
-            ),
-            num_published_services=Count(
-                "services",
-                filter=Q(services__status=ServiceStatus.PUBLISHED),
-            ),
-            num_active_services=Count(
-                "services",
-                filter=~Q(services__status=ServiceStatus.ARCHIVED),
-            ),
             has_valid_admin=Exists(
                 StructureMember.objects.filter(
                     structure=OuterRef("pk"),
@@ -196,11 +192,6 @@ class StructureAdminViewSet(
                     putative_membership__invited_by_admin=True,
                     putative_membership__user__is_active=True,
                 ),
-            ),
-            categories_list=ArrayAgg(
-                "services__categories__value",
-                distinct=True,
-                filter=Q(services__categories__isnull=False),
             ),
             admin_emails=ArrayAgg(
                 "membership__user__email",
