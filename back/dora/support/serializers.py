@@ -254,7 +254,9 @@ class StructureAdminSerializer(StructureSerializer):
         return obj.services.update_advised().count()
 
     def get_num_services(self, obj):
-        return getattr(obj, "num_active_services", 0)
+        return getattr(obj, "num_draft_services", 0) + getattr(
+            obj, "num_published_services", 0
+        )
 
     def get_categories(self, obj):
         categories = getattr(obj, "categories_list", None)
@@ -312,14 +314,11 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "awaiting_update",
             "categories",
             "department",
-            "has_admin",
             "is_obsolete",
             "is_orphan",
             "is_waiting",
             "latitude",
             "longitude",
-            "moderation_date",
-            "moderation_status",
             "name",
             "national_labels",
             "num_draft_services",
@@ -336,15 +335,11 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "awaiting_activation",
             "awaiting_update",
             "categories",
-            "department",
-            "has_admin",
             "is_obsolete",
             "is_orphan",
             "is_waiting",
             "latitude",
             "longitude",
-            "moderation_date",
-            "moderation_status",
             "name",
             "national_labels",
             "num_draft_services",
