@@ -117,8 +117,8 @@
       new Map()
     );
 
-    const mergedData = Array.from(result.values()).sort(
-      (a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+    const mergedData = Array.from(result.values()).sort((a, b) =>
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase())
     );
 
     const sheetData = mergedData.map((structure) => {
