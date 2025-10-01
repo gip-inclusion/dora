@@ -31,7 +31,7 @@ export async function getStructuresExportData(
       "Content-Type": "application/json",
       Authorization: `Token ${get(token)}`,
     },
-    body: JSON.stringify({ slugs: slugs.join(",") }),
+    body: JSON.stringify({ slugs }),
   });
 
   if (!response.ok) {

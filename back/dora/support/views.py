@@ -170,11 +170,7 @@ class StructureAdminViewSet(
         parce que si on envoie beaucoup de structure slugs pour l'export et il faut le
         faire dans le body de la requête.
         """
-        slugs = (
-            request.data.get("slugs", "").split(",")
-            if request.data.get("slugs")
-            else []
-        )
+        slugs = request.data.get("slugs", [])
 
         structures = Structure.objects.filter(slug__in=slugs).annotate(
             num_potential_members_to_validate=Count(
