@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django_datadog_logger.middleware.request_id.RequestIdMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "config.domain_redirect_middleware.DomainRedirectMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -71,6 +72,7 @@ MIDDLEWARE = [
     "csp.middleware.CSPMiddleware",
     # Rafraichissement du token ProConnect
     "mozilla_django_oidc.middleware.SessionRefresh",
+    "django_datadog_logger.middleware.request_log.RequestLoggingMiddleware",
 ]
 
 # OIDC / ProConnect / Sesame
@@ -131,9 +133,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": os.getenv("REDIS_URL"),
-        "TIMEOUT": int(
-            os.getenv("DJANGO_CACHE_TIMEOUT", 300)
-        ),  # 5 minutes par défaut
+        "TIMEOUT": int(os.getenv("DJANGO_CACHE_TIMEOUT", 300)),  # 5 minutes par défaut
     }
 }
 
@@ -246,7 +246,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "json": {"()": "dora.logs.core.RedactUserInformationDataDogJSONFormatter"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "json"},
+        "null": {"class": "logging.NullHandler"},
+    },
     "loggers": {
+        "": {"handlers": ["console"], "level": "INFO"},
         "django": {
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
         },
