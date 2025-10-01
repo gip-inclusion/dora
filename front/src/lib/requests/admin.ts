@@ -1,26 +1,27 @@
 import type {
   AdminShortStructure,
+  AdminStructureCsvData,
+  AdminStructureDisplay,
   ModerationStatus,
   Service,
-  Structure,
 } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
 import { token } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
 
-export async function getStructuresAdmin(
-  departmentCode
-): Promise<AdminShortStructure[]> {
+export async function getStructuresAdmin(departmentCode?: string) {
   let url = `${getApiURL()}/structures-admin/`;
 
   if (departmentCode) {
     url += `?department=${departmentCode}`;
   }
-  return (await fetchData<AdminShortStructure[]>(url)).data;
+  return (await fetchData<AdminStructureDisplay[]>(url)).data;
 }
 
-export async function getStructuresAdminCsvData(slugs: string[]) {
+export async function getStructuresAdminCsvData(
+  slugs: string[]
+): Promise<AdminStructureCsvData[] | null> {
   const url = `${getApiURL()}/structures-admin/csv-data/`;
 
   const response = await fetch(url, {
@@ -34,15 +35,15 @@ export async function getStructuresAdminCsvData(slugs: string[]) {
   });
 
   if (!response.ok) {
-    throw Error(response.statusText);
+    return null;
   }
 
   return response.json();
 }
 
-export async function getStructureAdmin(slug): Promise<AdminShortStructure> {
+export async function getStructureAdmin(slug: string) {
   const url = `${getApiURL()}/structures-admin/${slug}/`;
-  return (await fetchData<Structure>(url)).data;
+  return (await fetchData<AdminShortStructure>(url)).data;
 }
 
 export async function getStructuresToModerate() {

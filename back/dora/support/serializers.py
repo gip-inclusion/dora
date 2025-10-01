@@ -374,7 +374,6 @@ class StructureAdminCSVDataSerializer(StructureAdminSerializer):
             "short_desc",
             "siret",
             "slug",
-            "source",
             "url",
         ]
         read_only_fields = [
@@ -400,7 +399,6 @@ class StructureAdminCSVDataSerializer(StructureAdminSerializer):
             "short_desc",
             "siret",
             "slug",
-            "source",
             "url",
         ]
         lookup_field = "slug"

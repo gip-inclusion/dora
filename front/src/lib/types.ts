@@ -109,12 +109,17 @@ export interface ShortStructure {
 }
 
 export interface AdminShortStructure {
+  awaitingModeration: boolean;
+  awaitingActivation: boolean;
+  awaitingUpdate: boolean;
+  isOrphan: boolean;
   categories: ServiceCategory[];
   city: string;
   department: string;
   email: string;
   hasAdmin: boolean;
   isObsolete: boolean;
+  isWaiting: boolean;
   latitude: number;
   longitude: number;
   moderationDate: string;
@@ -139,7 +144,52 @@ export interface AdminShortStructure {
   adminsToRemind: string[];
   numPotentialMembersToValidate: number;
   numPotentialMembersToRemind: number;
+  url: string;
+  source: string;
 }
+
+export type AdminStructureDisplay = Pick<
+  AdminShortStructure,
+  | "awaitingModeration"
+  | "awaitingActivation"
+  | "awaitingUpdate"
+  | "categories"
+  | "department"
+  | "isObsolete"
+  | "isOrphan"
+  | "isWaiting"
+  | "latitude"
+  | "longitude"
+  | "name"
+  | "nationalLabels"
+  | "numDraftServices"
+  | "numOutdatedServices"
+  | "numPublishedServices"
+  | "numServices"
+  | "siret"
+  | "slug"
+  | "typology"
+  | "typologyDisplay"
+>;
+
+export type AdminStructureCsvData = Pick<
+  AdminShortStructure,
+  | "admins"
+  | "adminsToModerate"
+  | "adminsToRemind"
+  | "city"
+  | "department"
+  | "editors"
+  | "email"
+  | "name"
+  | "numPotentialMembersToRemind"
+  | "numPotentialMembersToValidate"
+  | "phone"
+  | "shortDesc"
+  | "siret"
+  | "slug"
+  | "url"
+>;
 
 export interface StructureSource {
   value: string;
