@@ -49,6 +49,7 @@
   let filteredStructures: AdminShortStructure[] = $state([]);
   let selectedStructureSlug: string | null = $state(null);
   let loading = $state(false);
+  let csvDataError = $state(false);
 
   function filterIgnoredStructures(structs) {
     function isOrphanOrWaitingOrToActivateSIAE(struct) {
@@ -87,17 +88,24 @@
   }
 
   async function handleClick() {
+    csvDataError = false;
+    loading = true;
+
     if (!selectedDepartment) {
       return;
     }
-
-    loading = true;
 
     const filteredStructureSlugs = filteredStructures.map(
       (structure) => structure.slug
     );
 
     const csvData = await getStructuresAdminCsvData(filteredStructureSlugs);
+
+    if (!csvData) {
+      loading = false;
+      csvDataError = true;
+      return;
+    }
 
     const filteredStructuresSnapshot = $state.snapshot(filteredStructures);
 
@@ -278,6 +286,12 @@
             />
           </div>
           <div class="gap-s24 flex w-full flex-col">
+            {#if csvDataError}
+              <Notice type="error" title="Erreur lors du téléchargement">
+                Une erreur s'est produite lors de la récupération des données
+                CSV. Veuillez réessayer.
+              </Notice>
+            {/if}
             <Button
               onclick={handleClick}
               label="Télécharger"
