@@ -226,9 +226,89 @@ class ManagerTestCase(APITestCase):
         response = self.client.get(f"/structures-admin/{structure.slug}/")
         self.assertEqual(response.status_code, 404)
 
-    def test_num_queries(self):
+    def test_manager_can_export_structure_data(self):
+        structure1 = make_structure(department="31")
+        structure2 = make_structure(department="08")
+
+        self.client.force_authenticate(user=self.bimanager)
+
+        response = self.client.post(
+            "/structures-admin/export-data/",
+            {"slugs": [structure1.slug, structure2.slug]},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+
+
+class StructureAdminTestCase(APITestCase):
+    def setUp(self):
+        self.admin = baker.make(
+            "users.User",
+            is_staff=True,
+        )
+
+    def test_num_queries_structures_admin(self):
         structure1 = make_structure(department="31")
         self.client.force_authenticate(user=make_user(is_staff=True))
 
-        with self.assertNumQueries(11):
+        with self.assertNumQueries(8):
             self.client.get(f"/structures-admin/{structure1.slug}/")
+
+    def test_structures_admin_export_data(self):
+        structure_1 = make_structure()
+
+        self.client.force_authenticate(user=make_user(is_staff=True))
+
+        response = self.client.post(
+            "/structures-admin/export-data/",
+            {
+                "slugs": [
+                    structure_1.slug,
+                ]
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["siret"], structure_1.siret)
+        self.assertEqual(response.data[0]["name"], structure_1.name)
+
+    def test_structures_admin_export_data_when_multiple_structures(self):
+        structure_1 = make_structure()
+        structure_2 = make_structure()
+
+        self.client.force_authenticate(user=make_user(is_staff=True))
+
+        response = self.client.post(
+            "/structures-admin/export-data/",
+            {"slugs": [structure_1.slug, structure_2.slug]},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 2)
+
+    def test_structures_admin_export_data_handles_no_post_body(self):
+        self.client.force_authenticate(user=make_user(is_staff=True))
+
+        response = self.client.post(
+            "/structures-admin/export-data/",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 0)
+
+    def test_num_queries_structures_admin_export_data(self):
+        structure = make_structure()
+
+        self.client.force_authenticate(user=make_user(is_staff=True))
+
+        with self.assertNumQueries(1):
+            self.client.post(
+                "/structures-admin/export-data/",
+                {
+                    "slugs": [
+                        structure.slug,
+                    ]
+                },
+            )
