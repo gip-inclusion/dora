@@ -80,14 +80,17 @@ class StructureAdminViewSet(
         structures = Structure.objects.all().annotate(
             num_draft_services=Count(
                 "services",
+                distinct=True,
                 filter=Q(services__status=ServiceStatus.DRAFT),
             ),
             num_published_services=Count(
                 "services",
+                distinct=True,
                 filter=Q(services__status=ServiceStatus.PUBLISHED),
             ),
             num_active_services=Count(
                 "services",
+                distinct=True,
                 filter=~Q(services__status=ServiceStatus.ARCHIVED),
             ),
             is_orphan=Case(
@@ -115,6 +118,7 @@ class StructureAdminViewSet(
             ),
             num_outdated_services=Count(
                 "services",
+                distinct=True,
                 filter=Service.objects.get_update_advised_filter("services__"),
             ),
             awaiting_moderation=Case(
@@ -180,6 +184,7 @@ class StructureAdminViewSet(
                     putative_membership__user__is_valid=True,
                     putative_membership__user__is_active=True,
                 ),
+                distinct=True,
             ),
             num_potential_members_to_remind=Count(
                 "putative_membership",
@@ -187,6 +192,7 @@ class StructureAdminViewSet(
                     putative_membership__invited_by_admin=True,
                     putative_membership__user__is_active=True,
                 ),
+                distinct=True,
             ),
             admin_emails=ArrayAgg(
                 "membership__user__email",
