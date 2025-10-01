@@ -1,6 +1,6 @@
 import type {
   AdminShortStructure,
-  AdminStructureCsvData,
+  AdminStructureExportData,
   AdminStructureDisplay,
   ModerationStatus,
   Service,
@@ -19,10 +19,10 @@ export async function getStructuresAdmin(departmentCode?: string) {
   return (await fetchData<AdminStructureDisplay[]>(url)).data;
 }
 
-export async function getStructuresAdminCsvData(
+export async function getStructuresExportData(
   slugs: string[]
-): Promise<AdminStructureCsvData[] | null> {
-  const url = `${getApiURL()}/structures-admin/csv-data/`;
+): Promise<AdminStructureExportData[] | null> {
+  const url = `${getApiURL()}/structures-admin/export-data/`;
 
   const response = await fetch(url, {
     method: "POST",

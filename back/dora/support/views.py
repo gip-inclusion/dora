@@ -16,7 +16,7 @@ from dora.structures.models import Structure, StructureMember, StructurePutative
 from dora.support.serializers import (
     ServiceAdminListSerializer,
     ServiceAdminSerializer,
-    StructureAdminCSVDataSerializer,
+    StructureAdminExportDataSerializer,
     StructureAdminListSerializer,
     StructureAdminSerializer,
 )
@@ -162,12 +162,12 @@ class StructureAdminViewSet(
             return StructureAdminListSerializer
         return super().get_serializer_class()
 
-    @action(detail=False, methods=["post"], url_path="csv-data")
-    def csv_data(self, request):
+    @action(detail=False, methods=["post"], url_path="export-data")
+    def export_data(self, request):
         """
-        Si un gestionnaire territoire a besoin d'un export CSV, cette route supplémente
+        Si un gestionnaire territoire a besoin d'un export des donées, cette route supplémente
         les infos fournies par StructureAdminListSerializer. La route a besoin d'être un POST
-        parce que si on envoie beaucoup de structure slugs pour le csv export et il faut le
+        parce que si on envoie beaucoup de structure slugs pour l'export et il faut le
         faire dans le body de la requête.
         """
         slugs = (
@@ -229,7 +229,7 @@ class StructureAdminViewSet(
             ),
         )
 
-        serializer = StructureAdminCSVDataSerializer(structures, many=True)
+        serializer = StructureAdminExportDataSerializer(structures, many=True)
         return Response(serializer.data)
 
 

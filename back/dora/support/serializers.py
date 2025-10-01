@@ -356,7 +356,7 @@ class StructureAdminListSerializer(StructureAdminSerializer):
         return getattr(obj, "is_waiting", False)
 
 
-class StructureAdminCSVDataSerializer(StructureAdminSerializer):
+class StructureAdminExportDataSerializer(StructureAdminSerializer):
     class Meta:
         model = Structure
         fields = [

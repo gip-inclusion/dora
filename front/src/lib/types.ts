@@ -172,7 +172,7 @@ export type AdminStructureDisplay = Pick<
   | "typologyDisplay"
 >;
 
-export type AdminStructureCsvData = Pick<
+export type AdminStructureExportData = Pick<
   AdminShortStructure,
   | "admins"
   | "adminsToModerate"

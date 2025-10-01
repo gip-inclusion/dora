@@ -17,7 +17,7 @@
   import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
   import {
     getStructuresAdmin,
-    getStructuresAdminCsvData,
+    getStructuresExportData,
   } from "$lib/requests/admin";
   import type { AdminShortStructure, GeoApiValue } from "$lib/types";
 
@@ -49,7 +49,7 @@
   let filteredStructures: AdminShortStructure[] = $state([]);
   let selectedStructureSlug: string | null = $state(null);
   let loading = $state(false);
-  let csvDataError = $state(false);
+  let exportError = $state(false);
 
   function filterIgnoredStructures(structs) {
     function isOrphanOrWaitingOrToActivateSIAE(struct) {
@@ -88,7 +88,7 @@
   }
 
   async function handleClick() {
-    csvDataError = false;
+    exportError = false;
     loading = true;
 
     if (!selectedDepartment) {
@@ -99,17 +99,17 @@
       (structure) => structure.slug
     );
 
-    const csvData = await getStructuresAdminCsvData(filteredStructureSlugs);
+    const exportData = await getStructuresExportData(filteredStructureSlugs);
 
-    if (!csvData) {
+    if (!exportData) {
       loading = false;
-      csvDataError = true;
+      exportError = true;
       return;
     }
 
     const filteredStructuresSnapshot = $state.snapshot(filteredStructures);
 
-    const result = [...csvData, ...filteredStructuresSnapshot].reduce(
+    const result = [...exportData, ...filteredStructuresSnapshot].reduce(
       (acc, item) => {
         acc.set(item.slug, { ...acc.get(item.slug), ...item });
         return acc;
@@ -286,10 +286,10 @@
             />
           </div>
           <div class="gap-s24 flex w-full flex-col">
-            {#if csvDataError}
+            {#if exportError}
               <Notice type="error" title="Erreur lors du téléchargement">
-                Une erreur s'est produite lors de la récupération des données
-                CSV. Veuillez réessayer.
+                Une erreur s'est produite lors du téléchargement de l'export.
+                Veuillez réessayer.
               </Notice>
             {/if}
             <Button
