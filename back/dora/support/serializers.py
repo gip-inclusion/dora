@@ -242,30 +242,30 @@ class StructureAdminSerializer(StructureSerializer):
         return LogItemSerializer(logs, many=True).data
 
     def get_has_admin(self, obj):
-        return getattr(obj, "has_valid_admin", obj.has_admin())
+        return obj.has_valid_admin
 
     def get_num_draft_services(self, obj):
-        return getattr(obj, "num_draft_services", 0)
+        return obj.num_draft_services
 
     def get_num_published_services(self, obj):
-        return getattr(obj, "num_published_services", 0)
+        return obj.num_published_services
 
     def get_num_outdated_services(self, obj):
-        return obj.services.update_advised().count()
+        return obj.num_outdated_services
 
     def get_num_services(self, obj):
-        return getattr(obj, "num_active_services", 0)
+        return obj.num_active_services
 
     def get_categories(self, obj):
-        categories = getattr(obj, "categories_list", None)
+        categories = obj.categories_list
         return [c for c in categories if c is not None] if categories else []
 
     def get_admins(self, obj):
-        emails = getattr(obj, "admin_emails", None)
+        emails = obj.admin_emails
         return [e for e in emails if e is not None] if emails else []
 
     def get_editors(self, obj):
-        emails = getattr(obj, "editor_emails", None)
+        emails = obj.editor_emails
         return list(set(e for e in emails if e is not None)) if emails else []
 
     def get_admins_to_moderate(self, obj):
@@ -274,34 +274,49 @@ class StructureAdminSerializer(StructureSerializer):
         return []
 
     def get_admins_to_remind(self, obj):
-        if not getattr(obj, "has_valid_admin", obj.has_admin):
-            emails = getattr(obj, "putative_admin_emails", None)
-            return [e for e in emails if e is not None] if emails else []
+        if not obj.has_valid_admin:
+            return [
+                member.user.email
+                for member in obj.potential_members
+                if member.is_admin and member.invited_by_admin
+            ]
         return []
 
     def get_num_potential_members_to_validate(self, obj):
-        return getattr(obj, "num_potential_members_to_validate", 0)
+        potential_members_to_validate = [
+            member
+            for member in obj.potential_members
+            if member.user.is_valid and not member.invited_by_admin
+        ]
+
+        return len(potential_members_to_validate)
 
     def get_num_potential_members_to_remind(self, obj):
-        return getattr(obj, "num_potential_members_to_remind", 0)
+        potential_members_to_validate = [
+            member for member in obj.potential_members if member.invited_by_admin
+        ]
+
+        return len(potential_members_to_validate)
 
     def get_is_orphan(self, obj):
-        return getattr(obj, "is_orphan", False)
+        return obj.is_orphan
 
     def get_is_waiting(self, obj):
         return len(self.get_admins_to_remind(obj)) > 0
 
     def get_awaiting_moderation(self, obj):
-        return getattr(obj, "awaiting_moderation", False)
+        return obj.awaiting_moderation
 
     def get_awaiting_activation(self, obj):
         return self.get_num_published_services(obj) == 0
 
     def get_awaiting_update(self, obj):
-        return self.get_num_outdated_services(obj) > 0
+        return obj.num_outdated_services > 0
 
 
 class StructureAdminListSerializer(StructureAdminSerializer):
+    is_waiting = serializers.SerializerMethodField()
+
     class Meta:
         model = Structure
         fields = [
@@ -374,6 +389,9 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "typology_display",
         ]
         lookup_field = "slug"
+
+        def get_is_waiting(self, obj):
+            return obj.is_waiting
 
 
 class ServiceAdminSerializer(ServiceSerializer):
