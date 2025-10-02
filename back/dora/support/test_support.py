@@ -239,11 +239,14 @@ class StructureAdminTestCase(APITestCase):
         )
 
     def test_num_queries_structures_admin(self):
-        structure1 = make_structure(department="31")
+        make_structure()
+        make_structure()
+        make_structure()
+        make_structure()
         self.client.force_authenticate(user=make_user(is_staff=True))
 
-        with self.assertNumQueries(9):
-            self.client.get(f"/structures-admin/{structure1.slug}/")
+        with self.assertNumQueries(3):
+            self.client.get("/structures-admin/")
 
     def test_structures_admin_list_basic_fields(self):
         structure = make_structure(department="31")
