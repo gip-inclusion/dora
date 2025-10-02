@@ -47,6 +47,9 @@ REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] += (  # noqa F405
     "rest_framework.renderers.BrowsableAPIRenderer",
 )
 
+# Don't use json formatter in dev
+del LOGGING["handlers"]["console"]["formatter"]  # noqa: F405
+
 # Profiling :
 # utilisation de Silk (configurable via var env)
 PROFILE = os.getenv("DJANGO_PROFILE") == "true"
