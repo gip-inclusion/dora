@@ -117,18 +117,6 @@ class StructureAdminViewSet(
                 .values("structure")
                 .annotate(count=Count("*"))
                 .values("count")[:1],
-                is_waiting=Exists(
-                    StructurePutativeMember.objects.filter(
-                        structure=OuterRef("pk"),
-                        is_admin=True,
-                        invited_by_admin=True,
-                        user__is_active=True,
-                    ).exclude(
-                        structure__membership__is_admin=True,
-                        structure__membership__user__is_valid=True,
-                        structure__membership__user__is_active=True,
-                    )
-                ),
                 has_valid_admin=Exists(
                     StructureMember.objects.filter(
                         structure=OuterRef("pk"),

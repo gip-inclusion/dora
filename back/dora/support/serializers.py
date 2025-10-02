@@ -245,19 +245,19 @@ class StructureAdminSerializer(StructureSerializer):
         return getattr(obj, "has_valid_admin", False)
 
     def get_num_draft_services(self, obj):
-        return getattr(obj, "num_draft_services", None) or 0
+        return getattr(obj, "num_draft_services", 0)
 
     def get_num_published_services(self, obj):
-        return getattr(obj, "num_published_services", None) or 0
+        return getattr(obj, "num_published_services", 0)
 
     def get_num_outdated_services(self, obj):
-        return getattr(obj, "num_outdated_services", None) or 0
+        return getattr(obj, "num_outdated_services", 0)
 
     def get_num_services(self, obj):
-        return getattr(obj, "num_active_services", None) or 0
+        return getattr(obj, "num_active_services", 0)
 
     def get_categories(self, obj):
-        categories = getattr(obj, "categories", None)
+        categories = getattr(obj, "categories_list", None)
         return [c for c in categories if c is not None] if categories else []
 
     def get_admins(self, obj):
@@ -269,7 +269,7 @@ class StructureAdminSerializer(StructureSerializer):
         return list(set(e for e in emails if e is not None)) if emails else []
 
     def get_admins_to_moderate(self, obj):
-        if getattr(obj, "moderation_status") != ModerationStatus.VALIDATED:
+        if obj.moderation_status != ModerationStatus.VALIDATED:
             return self.get_admins(obj)
         return []
 
@@ -317,8 +317,6 @@ class StructureAdminSerializer(StructureSerializer):
 
 
 class StructureAdminListSerializer(StructureAdminSerializer):
-    is_waiting = serializers.SerializerMethodField()
-
     class Meta:
         model = Structure
         fields = [
@@ -391,9 +389,6 @@ class StructureAdminListSerializer(StructureAdminSerializer):
             "typology_display",
         ]
         lookup_field = "slug"
-
-        def get_is_waiting(self, obj):
-            return obj.is_waiting
 
 
 class ServiceAdminSerializer(ServiceSerializer):
