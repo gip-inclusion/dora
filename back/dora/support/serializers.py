@@ -251,7 +251,7 @@ class StructureAdminSerializer(StructureSerializer):
         return obj.num_published_services
 
     def get_num_outdated_services(self, obj):
-        return obj.num_outdated_services
+        return obj.num_outdated_services or 0
 
     def get_num_services(self, obj):
         return obj.num_active_services
@@ -311,7 +311,7 @@ class StructureAdminSerializer(StructureSerializer):
         return self.get_num_published_services(obj) == 0
 
     def get_awaiting_update(self, obj):
-        return obj.num_outdated_services > 0
+        return bool(obj.num_outdated_services)
 
 
 class StructureAdminListSerializer(StructureAdminSerializer):

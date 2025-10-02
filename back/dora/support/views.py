@@ -1,4 +1,3 @@
-from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import (
@@ -12,7 +11,6 @@ from django.db.models import (
     Value,
     When,
 )
-from django.utils import timezone
 from rest_framework import mixins, permissions, serializers, viewsets
 from rest_framework.exceptions import PermissionDenied
 
@@ -21,7 +19,7 @@ from dora.core.notify import send_moderation_notification
 from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
 from dora.services.enums import ServiceStatus
-from dora.services.models import Service, UpdateFrequency
+from dora.services.models import Service
 from dora.structures.models import Structure, StructureMember, StructurePutativeMember
 from dora.support.serializers import (
     ServiceAdminListSerializer,
@@ -115,40 +113,11 @@ class StructureAdminViewSet(
                     distinct=True,
                     filter=~Q(services__status=ServiceStatus.ARCHIVED),
                 ),
-                num_outdated_services=Count(
-                    "services",
-                    distinct=True,
-                    filter=(
-                        Q(services__status=ServiceStatus.PUBLISHED)
-                        & (
-                            Q(
-                                services__update_frequency=UpdateFrequency.EVERY_MONTH,
-                                services__modification_date__lte=timezone.now()
-                                - relativedelta(months=1),
-                            )
-                            | Q(
-                                services__update_frequency=UpdateFrequency.EVERY_3_MONTHS,
-                                services__modification_date__lte=timezone.now()
-                                - relativedelta(months=3),
-                            )
-                            | Q(
-                                services__update_frequency=UpdateFrequency.EVERY_6_MONTHS,
-                                services__modification_date__lte=timezone.now()
-                                - relativedelta(months=6),
-                            )
-                            | Q(
-                                services__update_frequency=UpdateFrequency.EVERY_12_MONTHS,
-                                services__modification_date__lte=timezone.now()
-                                - relativedelta(months=12),
-                            )
-                            | Q(
-                                services__update_frequency=UpdateFrequency.EVERY_16_MONTHS,
-                                services__modification_date__lte=timezone.now()
-                                - relativedelta(months=16),
-                            )
-                        )
-                    ),
-                ),
+                num_outdated_services=Service.objects.update_advised()
+                .filter(structure=OuterRef("pk"))
+                .values("structure")
+                .annotate(count=Count("*"))
+                .values("count")[:1],
                 is_waiting=Exists(
                     StructurePutativeMember.objects.filter(
                         structure=OuterRef("pk"),
