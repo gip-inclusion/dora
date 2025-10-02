@@ -391,11 +391,16 @@ class StructureAdminListSerializer(StructureAdminSerializer):
         lookup_field = "slug"
 
 
+class ServiceStructureAdminSerializer(StructureAdminSerializer):
+    def get_has_admin(self, obj):
+        return obj.has_admin()
+
+
 class ServiceAdminSerializer(ServiceSerializer):
     creator = UserAdminSerializer()
     last_editor = UserAdminSerializer()
     model = serializers.SerializerMethodField()
-    structure = StructureAdminSerializer()
+    structure = ServiceStructureAdminSerializer()
     notes = serializers.SerializerMethodField()
 
     class Meta:
