@@ -247,18 +247,19 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "json": {"()": "dora.logs.core.RedactUserInformationDataDogJSONFormatter"},
+        "json": {"()": "dora.logs.utils.RedactUserInformationDataDogJSONFormatter"},
     },
     "handlers": {
         "console": {"class": "logging.StreamHandler", "formatter": "json"},
         "null": {"class": "logging.NullHandler"},
     },
     "loggers": {
-        "": {"handlers": ["console"], "level": "INFO"},
         "django": {
+            "handlers": ["console"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
         },
         "dora.logs.core": {
+            "handlers": ["console"],
             "level": os.getenv("DORA_LOGS_CORE_LEVEL", "INFO"),
         },
     },
