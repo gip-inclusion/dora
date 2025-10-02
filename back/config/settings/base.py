@@ -251,15 +251,16 @@ LOGGING = {
     },
     "handlers": {
         "console": {"class": "logging.StreamHandler", "formatter": "json"},
-        "null": {"class": "logging.NullHandler"},
     },
     "loggers": {
-        "django": {
+        "": {
             "handlers": ["console"],
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
         },
+        "django": {
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+        },
         "dora.logs.core": {
-            "handlers": ["console"],
             "level": os.getenv("DORA_LOGS_CORE_LEVEL", "INFO"),
         },
     },

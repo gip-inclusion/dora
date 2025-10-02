@@ -47,9 +47,6 @@ REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] += (  # noqa F405
     "rest_framework.renderers.BrowsableAPIRenderer",
 )
 
-# Don't use json formatter in dev
-del LOGGING["handlers"]["console"]["formatter"]  # noqa: F405
-
 # Profiling :
 # utilisation de Silk (configurable via var env)
 PROFILE = os.getenv("DJANGO_PROFILE") == "true"
@@ -74,4 +71,6 @@ if DEBUG and PROFILE:
 # Q : est-ce c'est justifié pour staging ?
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
+# Don't use json formatter in dev
+# del LOGGING["handlers"]["console"]["formatter"]  # noqa: F405
 LOGGING["loggers"]["django"]["level"] = os.getenv("DJANGO_LOG_LEVEL", "INFO")  # noqa F405
