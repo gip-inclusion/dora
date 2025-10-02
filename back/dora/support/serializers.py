@@ -242,42 +242,42 @@ class StructureAdminSerializer(StructureSerializer):
         return LogItemSerializer(logs, many=True).data
 
     def get_has_admin(self, obj):
-        return obj.has_valid_admin
+        return getattr(obj, "has_valid_admin", False)
 
     def get_num_draft_services(self, obj):
-        return obj.num_draft_services
+        return getattr(obj, "num_draft_services", None) or 0
 
     def get_num_published_services(self, obj):
-        return obj.num_published_services
+        return getattr(obj, "num_published_services", None) or 0
 
     def get_num_outdated_services(self, obj):
-        return obj.num_outdated_services or 0
+        return getattr(obj, "num_outdated_services", None) or 0
 
     def get_num_services(self, obj):
-        return obj.num_active_services
+        return getattr(obj, "num_active_services", None) or 0
 
     def get_categories(self, obj):
-        categories = obj.categories_list
+        categories = getattr(obj, "categories", None)
         return [c for c in categories if c is not None] if categories else []
 
     def get_admins(self, obj):
-        emails = obj.admin_emails
+        emails = getattr(obj, "admin_emails", None)
         return [e for e in emails if e is not None] if emails else []
 
     def get_editors(self, obj):
-        emails = obj.editor_emails
+        emails = getattr(obj, "editor_emails", None)
         return list(set(e for e in emails if e is not None)) if emails else []
 
     def get_admins_to_moderate(self, obj):
-        if obj.moderation_status != ModerationStatus.VALIDATED:
+        if getattr(obj, "moderation_status") != ModerationStatus.VALIDATED:
             return self.get_admins(obj)
         return []
 
     def get_admins_to_remind(self, obj):
-        if not obj.has_valid_admin:
+        if not getattr(obj, "has_valid_admin", False):
             return [
                 member.user.email
-                for member in obj.potential_members
+                for member in getattr(obj, "potential_members", [])
                 if member.is_admin and member.invited_by_admin
             ]
         return []
@@ -285,7 +285,7 @@ class StructureAdminSerializer(StructureSerializer):
     def get_num_potential_members_to_validate(self, obj):
         potential_members_to_validate = [
             member
-            for member in obj.potential_members
+            for member in getattr(obj, "potential_members", [])
             if member.user.is_valid and not member.invited_by_admin
         ]
 
@@ -293,25 +293,27 @@ class StructureAdminSerializer(StructureSerializer):
 
     def get_num_potential_members_to_remind(self, obj):
         potential_members_to_validate = [
-            member for member in obj.potential_members if member.invited_by_admin
+            member
+            for member in getattr(obj, "potential_members", [])
+            if member.invited_by_admin
         ]
 
         return len(potential_members_to_validate)
 
     def get_is_orphan(self, obj):
-        return obj.is_orphan
+        return getattr(obj, "is_orphan", False)
 
     def get_is_waiting(self, obj):
         return len(self.get_admins_to_remind(obj)) > 0
 
     def get_awaiting_moderation(self, obj):
-        return obj.awaiting_moderation
+        return getattr(obj, "awaiting_moderation", False)
 
     def get_awaiting_activation(self, obj):
         return self.get_num_published_services(obj) == 0
 
     def get_awaiting_update(self, obj):
-        return bool(obj.num_outdated_services)
+        return bool(getattr(obj, "num_outdated_services", None))
 
 
 class StructureAdminListSerializer(StructureAdminSerializer):

@@ -86,7 +86,6 @@ class StructureAdminViewSet(
 
         structures = (
             Structure.objects.all()
-            # .select_related("parent", "creator", "last_editor", "source")
             .prefetch_related(
                 "national_labels",
                 Prefetch(
@@ -187,6 +186,11 @@ class StructureAdminViewSet(
                 ),
             )
         )
+
+        if not self.action == "list":
+            structures = structures.select_related(
+                "parent", "creator", "last_editor", "source"
+            )
 
         if department:
             if user.is_manager:

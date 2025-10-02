@@ -230,5 +230,5 @@ class ManagerTestCase(APITestCase):
         structure1 = make_structure(department="31")
         self.client.force_authenticate(user=make_user(is_staff=True))
 
-        with self.assertNumQueries(11):
+        with self.assertNumQueries(9):
             self.client.get(f"/structures-admin/{structure1.slug}/")
