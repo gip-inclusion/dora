@@ -59,7 +59,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "config.domain_redirect_middleware.DomainRedirectMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -131,9 +130,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": os.getenv("REDIS_URL"),
-        "TIMEOUT": int(
-            os.getenv("DJANGO_CACHE_TIMEOUT", 300)
-        ),  # 5 minutes par défaut
+        "TIMEOUT": int(os.getenv("DJANGO_CACHE_TIMEOUT", 300)),  # 5 minutes par défaut
     }
 }
 
@@ -145,9 +142,6 @@ ALLOWED_HOSTS = (
     if os.getenv("DJANGO_ALLOWED_HOSTS")
     else None
 )
-
-OLD_HOST = os.getenv("OLD_HOST", None)
-NEW_HOST = os.getenv("NEW_HOST", None)
 
 # Validation des mot de passe :
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
