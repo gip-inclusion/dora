@@ -71,4 +71,6 @@ if DEBUG and PROFILE:
 # Q : est-ce c'est justifié pour staging ?
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
+# Pas de json formatting en développement
+del LOGGING["handlers"]["console"]["formatter"]  # noqa: F405
 LOGGING["loggers"]["django"]["level"] = os.getenv("DJANGO_LOG_LEVEL", "INFO")  # noqa F405
