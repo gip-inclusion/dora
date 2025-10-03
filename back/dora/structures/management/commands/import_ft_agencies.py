@@ -145,7 +145,7 @@ class Command(BaseCommand):
                         send_moderation_notification(
                             structure,
                             bot_user,
-                            "Structure créée à partir de l’API Pole Emploi",
+                            "Structure créée à partir de l’API France Travail",
                             ModerationStatus.VALIDATED,
                         )
 

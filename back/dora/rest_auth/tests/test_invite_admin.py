@@ -142,7 +142,7 @@ def test_can_invite_pe_agents_to_pe_structure_pe_address(api_client):
     api_client.force_authenticate(user=user)
     response = api_client.post(
         "/auth/invite-first-admin/",
-        {"siret": siret_pe, "invitee_email": "foo@pole-emploi.fr"},
+        {"siret": siret_pe, "invitee_email": "foo@francetravail.fr"},
     )
     assert response.status_code == 201
     assert len(mail.outbox) == 1

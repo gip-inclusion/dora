@@ -131,9 +131,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": os.getenv("REDIS_URL"),
-        "TIMEOUT": int(
-            os.getenv("DJANGO_CACHE_TIMEOUT", 300)
-        ),  # 5 minutes par défaut
+        "TIMEOUT": int(os.getenv("DJANGO_CACHE_TIMEOUT", 300)),  # 5 minutes par défaut
     }
 }
 
@@ -464,7 +462,7 @@ SUPPORT_LINK = "https://aide.dora.inclusion.beta.gouv.fr"
 ORIENTATION_SUPPORT_LINK = os.getenv("ORIENTATION_SUPPORT_LINK")
 ORIENTATION_EMAILS_DEBUG = os.getenv("ORIENTATION_EMAILS_DEBUG") == "true"
 ORIENTATION_SIRENE_BLACKLIST = [
-    # Pole Emploi / France Travail
+    # France Travail
     "130005481",
     # CAF
     "779311224",

@@ -53,7 +53,7 @@ class Command(BaseCommand):
             "-d",
             "--domain",
             type=str,
-            help="Domaine d'utilisateurs à déconnecter (par ex.: '@pole-emploi.fr')",
+            help="Domaine d'utilisateurs à déconnecter (par ex.: '@francetravail.fr')",
         )
         parser.add_argument(
             "-f",
