@@ -242,7 +242,7 @@ class StructureAdminSerializer(StructureSerializer):
         return LogItemSerializer(logs, many=True).data
 
     def get_has_admin(self, obj):
-        return getattr(obj, "has_valid_admin", obj.has_admin())
+        return getattr(obj, "has_valid_admin", False)
 
     def get_num_draft_services(self, obj):
         return getattr(obj, "num_draft_services", 0)
@@ -251,7 +251,7 @@ class StructureAdminSerializer(StructureSerializer):
         return getattr(obj, "num_published_services", 0)
 
     def get_num_outdated_services(self, obj):
-        return obj.services.update_advised().count()
+        return getattr(obj, "num_outdated_services", 0)
 
     def get_num_services(self, obj):
         return getattr(obj, "num_active_services", 0)
@@ -274,16 +274,31 @@ class StructureAdminSerializer(StructureSerializer):
         return []
 
     def get_admins_to_remind(self, obj):
-        if not getattr(obj, "has_valid_admin", obj.has_admin):
-            emails = getattr(obj, "putative_admin_emails", None)
-            return [e for e in emails if e is not None] if emails else []
+        if not getattr(obj, "has_valid_admin", False):
+            return [
+                member.user.email
+                for member in getattr(obj, "potential_members", [])
+                if member.is_admin and member.invited_by_admin
+            ]
         return []
 
     def get_num_potential_members_to_validate(self, obj):
-        return getattr(obj, "num_potential_members_to_validate", 0)
+        potential_members_to_validate = [
+            member
+            for member in getattr(obj, "potential_members", [])
+            if member.user.is_valid and not member.invited_by_admin
+        ]
+
+        return len(potential_members_to_validate)
 
     def get_num_potential_members_to_remind(self, obj):
-        return getattr(obj, "num_potential_members_to_remind", 0)
+        potential_members_to_validate = [
+            member
+            for member in getattr(obj, "potential_members", [])
+            if member.invited_by_admin
+        ]
+
+        return len(potential_members_to_validate)
 
     def get_is_orphan(self, obj):
         return getattr(obj, "is_orphan", False)
@@ -298,7 +313,7 @@ class StructureAdminSerializer(StructureSerializer):
         return self.get_num_published_services(obj) == 0
 
     def get_awaiting_update(self, obj):
-        return self.get_num_outdated_services(obj) > 0
+        return bool(getattr(obj, "num_outdated_services", None))
 
 
 class StructureAdminListSerializer(StructureAdminSerializer):
@@ -376,11 +391,16 @@ class StructureAdminListSerializer(StructureAdminSerializer):
         lookup_field = "slug"
 
 
+class ServiceStructureAdminSerializer(StructureAdminSerializer):
+    def get_has_admin(self, obj):
+        return obj.has_admin()
+
+
 class ServiceAdminSerializer(ServiceSerializer):
     creator = UserAdminSerializer()
     last_editor = UserAdminSerializer()
     model = serializers.SerializerMethodField()
-    structure = StructureAdminSerializer()
+    structure = ServiceStructureAdminSerializer()
     notes = serializers.SerializerMethodField()
 
     class Meta:

@@ -1,6 +1,16 @@
 from django.conf import settings
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import BooleanField, Case, Count, Exists, OuterRef, Q, Value, When
+from django.db.models import (
+    BooleanField,
+    Case,
+    Count,
+    Exists,
+    OuterRef,
+    Prefetch,
+    Q,
+    Value,
+    When,
+)
 from rest_framework import mixins, permissions, serializers, viewsets
 from rest_framework.exceptions import PermissionDenied
 
@@ -10,7 +20,7 @@ from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service
-from dora.structures.models import Structure, StructureMember
+from dora.structures.models import Structure, StructureMember, StructurePutativeMember
 from dora.support.serializers import (
     ServiceAdminListSerializer,
     ServiceAdminSerializer,
@@ -76,26 +86,37 @@ class StructureAdminViewSet(
 
         structures = (
             Structure.objects.all()
-            .select_related("parent", "creator", "last_editor", "source")
             .prefetch_related(
-                "membership__user",
-                "putative_membership__user",
-                "services__categories",
-                "branches",
+                "national_labels",
+                Prefetch(
+                    "putative_membership",
+                    queryset=StructurePutativeMember.objects.filter(
+                        user__is_active=True
+                    ).select_related("user"),
+                    to_attr="potential_members",
+                ),
             )
             .annotate(
                 num_draft_services=Count(
                     "services",
+                    distinct=True,
                     filter=Q(services__status=ServiceStatus.DRAFT),
                 ),
                 num_published_services=Count(
                     "services",
+                    distinct=True,
                     filter=Q(services__status=ServiceStatus.PUBLISHED),
                 ),
                 num_active_services=Count(
                     "services",
+                    distinct=True,
                     filter=~Q(services__status=ServiceStatus.ARCHIVED),
                 ),
+                num_outdated_services=Service.objects.update_advised()
+                .filter(structure=OuterRef("pk"))
+                .values("structure")
+                .annotate(count=Count("*"))
+                .values("count")[:1],
                 has_valid_admin=Exists(
                     StructureMember.objects.filter(
                         structure=OuterRef("pk"),
@@ -106,11 +127,15 @@ class StructureAdminViewSet(
                 ),
                 is_orphan=Case(
                     When(
-                        Q(membership__isnull=True)
-                        & Q(putative_membership__isnull=True),
-                        then=Value(True),
+                        Exists(StructureMember.objects.filter(structure=OuterRef("pk")))
+                        | Exists(
+                            StructurePutativeMember.objects.filter(
+                                structure=OuterRef("pk")
+                            )
+                        ),
+                        then=Value(False),
                     ),
-                    default=Value(False),
+                    default=Value(True),
                     output_field=BooleanField(),
                 ),
                 awaiting_moderation=Case(
@@ -123,21 +148,6 @@ class StructureAdminViewSet(
                     ),
                     default=Value(False),
                     output_field=BooleanField(),
-                ),
-                num_potential_members_to_validate=Count(
-                    "putative_membership",
-                    filter=Q(
-                        putative_membership__invited_by_admin=False,
-                        putative_membership__user__is_valid=True,
-                        putative_membership__user__is_active=True,
-                    ),
-                ),
-                num_potential_members_to_remind=Count(
-                    "putative_membership",
-                    filter=Q(
-                        putative_membership__invited_by_admin=True,
-                        putative_membership__user__is_active=True,
-                    ),
                 ),
                 categories_list=ArrayAgg(
                     "services__categories__value",
@@ -162,17 +172,13 @@ class StructureAdminViewSet(
                         services__last_editor__isnull=False,
                     ),
                 ),
-                putative_admin_emails=ArrayAgg(
-                    "putative_membership__user__email",
-                    distinct=True,
-                    filter=Q(
-                        putative_membership__is_admin=True,
-                        putative_membership__invited_by_admin=True,
-                        putative_membership__user__is_active=True,
-                    ),
-                ),
             )
         )
+
+        if not self.action == "list":
+            structures = structures.select_related(
+                "parent", "creator", "last_editor", "source"
+            )
 
         if department:
             if user.is_manager:
