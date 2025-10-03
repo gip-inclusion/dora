@@ -4,7 +4,7 @@ import pytest
 from django.core import mail
 from model_bakery import baker
 
-from dora.core.constants import SIREN_POLE_EMPLOI
+from dora.core.constants import SIREN_FRANCE_TRAVAIL
 from dora.core.test_utils import make_structure, make_user
 from dora.structures.models import Structure, StructureMember, StructurePutativeMember
 
@@ -124,7 +124,7 @@ def test_invitee_email_is_mandatory(api_client):
 
 def test_cant_invite_non_pe_agents_to_pe_structure(api_client):
     user = make_user(is_staff=False, is_manager=True, departments=[31])
-    siret_pe = SIREN_POLE_EMPLOI + "12345"
+    siret_pe = SIREN_FRANCE_TRAVAIL + "12345"
     baker.make("Establishment", siret=siret_pe)
     api_client.force_authenticate(user=user)
     response = api_client.post(
@@ -137,7 +137,7 @@ def test_cant_invite_non_pe_agents_to_pe_structure(api_client):
 
 def test_can_invite_pe_agents_to_pe_structure_pe_address(api_client):
     user = make_user(is_staff=False, is_manager=True, departments=[31])
-    siret_pe = SIREN_POLE_EMPLOI + "12345"
+    siret_pe = SIREN_FRANCE_TRAVAIL + "12345"
     baker.make("Establishment", siret=siret_pe)
     api_client.force_authenticate(user=user)
     response = api_client.post(
@@ -150,7 +150,7 @@ def test_can_invite_pe_agents_to_pe_structure_pe_address(api_client):
 
 def test_can_invite_pe_agents_to_pe_structure_ft_address(api_client):
     user = make_user(is_staff=False, is_manager=True, departments=[31])
-    siret_pe = SIREN_POLE_EMPLOI + "12345"
+    siret_pe = SIREN_FRANCE_TRAVAIL + "12345"
     baker.make("Establishment", siret=siret_pe)
     api_client.force_authenticate(user=user)
     response = api_client.post(

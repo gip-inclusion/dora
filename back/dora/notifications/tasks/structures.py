@@ -67,7 +67,8 @@ class StructureServiceActivationTask(Task):
         one_month_ago = timezone.now() - relativedelta(months=1)
         return (
             Structure.objects.exclude(
-                Q(siret__startswith=constants.SIREN_POLE_EMPLOI) | Q(is_obsolete=True),
+                Q(siret__startswith=constants.SIREN_FRANCE_TRAVAIL)
+                | Q(is_obsolete=True),
             )
             .filter(
                 services=None,
