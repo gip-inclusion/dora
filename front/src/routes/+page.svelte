@@ -165,7 +165,7 @@
 
     <div class="mt-s16">
       <p class="text-f12 text-center">
-        Plus de 5 000 structures ont déjà commencé à référencer leurs services
+        Plus de 23 000 structures ont déjà commencé à référencer leurs services
         sur DORA
       </p>
 
