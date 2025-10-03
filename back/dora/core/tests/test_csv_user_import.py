@@ -246,7 +246,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     def setUp(self):
         self.helper = ImportUserHelper()
         self.structure = make_structure(siret="12345678901234")
-        self.france_travail_structure = make_structure(code_safir_pe="12345")
+        self.france_travail_structure = make_structure(code_safir_ft="12345")
         self.csv_headers = "safir,email,prenom,nom\n"
 
     def test_import_france_travail_users_wet_run_creates_new_user_and_invitation(
@@ -381,7 +381,7 @@ class ImportFranceTravailUsersTestCase(TestCase):
     def test_import_france_travail_users_multiple_rows_processes_all(
         self, mock_send_france_travail_invitation_email
     ):
-        structure2 = make_structure(code_safir_pe="67890")
+        structure2 = make_structure(code_safir_ft="67890")
 
         csv_content = f"{self.csv_headers}12345,john.doe@francetravail.fr,John,Doe\n67890,jane.smith@francetravail.fr,Jane,Smith"
         csv_file = StringIO(csv_content)

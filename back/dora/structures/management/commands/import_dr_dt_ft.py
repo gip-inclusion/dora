@@ -25,7 +25,7 @@ class Command(BaseCommand):
         )
 
     def finalize_structure(self, structure, safir):
-        structure.code_safir_pe = safir
+        structure.code_safir_ft = safir
         structure.source = SOURCE
         structure.creator = BOT_USER
         structure.last_editor = BOT_USER
@@ -99,7 +99,7 @@ class Command(BaseCommand):
                         # S'il existe une structure avec ce code safir, mais un siret different,
                         # il faut résoudre manuellement
                         if (
-                            Structure.objects.filter(code_safir_pe=safir, parent=None)
+                            Structure.objects.filter(code_safir_ft=safir, parent=None)
                             .exclude(siret=siret)
                             .exists()
                         ):
@@ -110,18 +110,18 @@ class Command(BaseCommand):
                         try:
                             structure = Structure.objects.get(siret=siret)
                             # Si la structure n'a pas de safir, on l'assigne
-                            if not structure.code_safir_pe:
-                                structure.code_safir_pe = safir
+                            if not structure.code_safir_ft:
+                                structure.code_safir_ft = safir
                                 structure.save()
                                 continue
 
                             # Si on a déjà une structure avec les mêmes siret/safir, on ignore
-                            if structure.code_safir_pe == safir:
+                            if structure.code_safir_ft == safir:
                                 continue
 
                             # S'il existe déjà une antenne avec le même safir,dont le parent à le même siret, on ignore
                             if Structure.objects.filter(
-                                parent=structure, code_safir_pe=safir
+                                parent=structure, code_safir_ft=safir
                             ).exists():
                                 continue
 

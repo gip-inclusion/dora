@@ -209,7 +209,7 @@ class Structure(ModerationMixin, models.Model):
         "self", on_delete=models.CASCADE, blank=True, null=True, related_name="branches"
     )
 
-    code_safir_pe = models.CharField(
+    code_safir_ft = models.CharField(
         verbose_name="code SAFIR France Travail",
         max_length=5,
         validators=[validate_safir],

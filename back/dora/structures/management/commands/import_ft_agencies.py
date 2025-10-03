@@ -56,7 +56,7 @@ def get_pe_agencies(token):
 def get_structure_info(structure, prefix):
     return (
         f"{prefix} {structure.name}\n"
-        f"{' ' * len(prefix)} siret : {structure.siret}, safir : {structure.code_safir_pe}\n"
+        f"{' ' * len(prefix)} siret : {structure.siret}, safir : {structure.code_safir_ft}\n"
         f"{' ' * len(prefix)} {structure.get_admin_url()}\n"
         f"{' ' * len(prefix)} https://annuaire-entreprises.data.gouv.fr/etablissement/{structure.siret}\n"
     )
@@ -100,7 +100,7 @@ class Command(BaseCommand):
                     safir = agency.get("codeSafir")
 
                     s_from_siret = Structure.objects.filter(siret=siret).first()
-                    s_from_safir = Structure.objects.filter(code_safir_pe=safir).first()
+                    s_from_safir = Structure.objects.filter(code_safir_ft=safir).first()
                     if s_from_safir and s_from_siret and s_from_safir != s_from_siret:
                         self.log_agency_error(
                             "Il existe déjà une structure ayant ce siret mais un code safir différent, "
@@ -117,8 +117,8 @@ class Command(BaseCommand):
                         continue
                     elif (
                         s_from_siret
-                        and s_from_siret.code_safir_pe
-                        and s_from_siret.code_safir_pe != safir
+                        and s_from_siret.code_safir_ft
+                        and s_from_siret.code_safir_ft != safir
                     ):
                         self.log_agency_error(
                             "Il existe déjà une structure ayant ce siret mais un code safir différent",
@@ -132,7 +132,7 @@ class Command(BaseCommand):
                         else Structure.objects.create(
                             siret=agency.get("siret"),
                             name=agency.get("libelleEtendu"),
-                            code_safir_pe=agency.get("codeSafir"),
+                            code_safir_ft=agency.get("codeSafir"),
                         )
                     )
 
@@ -151,7 +151,7 @@ class Command(BaseCommand):
 
                     mod = self.maybe_update(
                         structure,
-                        "code_safir_pe",
+                        "code_safir_ft",
                         agency.get("codeSafir"),
                         existing,
                     )

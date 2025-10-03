@@ -28,13 +28,13 @@ def test_should_not_join_structure():
 
 def test_should_not_join_ft_agency():
     user = make_user()
-    make_structure(putative_member=user, code_safir_pe="02012")
+    make_structure(putative_member=user, code_safir_ft="02012")
 
     assert not user.structure_to_join(safir="02012"), (
         "L'utilisateur ne devrait pas pouvoir rejoindre cette agence (invité)"
     )
 
-    make_structure(user=user, code_safir_pe="02013")
+    make_structure(user=user, code_safir_ft="02013")
     assert not user.structure_to_join(safir="02013"), (
         "L'utilisateur ne devrait pas pouvoir rejoindre cette agence (membre)"
     )

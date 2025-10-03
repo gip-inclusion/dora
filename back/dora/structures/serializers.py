@@ -70,7 +70,7 @@ class StructureSerializer(serializers.ModelSerializer):
             "can_view_members",
             "city",
             "city_code",
-            "code_safir_pe",
+            "code_safir_ft",
             "creation_date",
             "department",
             "email",
