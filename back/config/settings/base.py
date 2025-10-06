@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django_datadog_logger.middleware.request_id.RequestIdMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -70,6 +71,7 @@ MIDDLEWARE = [
     "csp.middleware.CSPMiddleware",
     # Rafraichissement du token ProConnect
     "mozilla_django_oidc.middleware.SessionRefresh",
+    "django_datadog_logger.middleware.request_log.RequestLoggingMiddleware",
 ]
 
 # OIDC / ProConnect / Sesame
@@ -240,7 +242,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "json": {"()": "dora.logs.utils.RedactUserInformationDataDogJSONFormatter"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "json"},
+    },
     "loggers": {
+        "": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+        },
         "django": {
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
         },
