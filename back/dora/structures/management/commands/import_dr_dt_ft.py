@@ -12,7 +12,7 @@ from dora.structures.models import Structure, StructureNationalLabel, StructureS
 from dora.users.models import User
 
 BOT_USER = User.objects.get_dora_bot()
-SOURCE = StructureSource.objects.get(value="dr-dt-pole-emploi")
+SOURCE = StructureSource.objects.get(value="dr-dt-france-travail")
 LABEL = StructureNationalLabel.objects.get(value="france-travail")
 
 
