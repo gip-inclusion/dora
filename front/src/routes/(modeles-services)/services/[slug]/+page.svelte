@@ -72,7 +72,7 @@
   );
 </script>
 
-{#if service}
+{#if service && servicesOptions}
   <CenteredGrid bgColor="bg-blue-light">
     <ServiceHeader {service} />
   </CenteredGrid>
