@@ -178,7 +178,7 @@
             >
               {getLabelFromValue(
                 service.feeCondition,
-                servicesOptions?.feeConditions
+                servicesOptions.feeConditions
               )}
             </span>
           {/if}
