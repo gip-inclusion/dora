@@ -321,9 +321,13 @@ export async function convertSuggestionToDraft(serviceSlug) {
   return response.json();
 }
 
-export async function getServicesOptions(): Promise<ServicesOptions | null> {
+export async function getServicesOptions() {
   const url = `${getApiURL()}/services-options/`;
-  return (await fetchData<ServicesOptions>(url)).data;
+  const response = await fetchData<ServicesOptions>(url);
+  if (!response.data) {
+    throw Error(response.statusText);
+  }
+  return response.data;
 }
 
 export function updateServicesFromModel(
