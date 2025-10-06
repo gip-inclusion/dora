@@ -18,6 +18,7 @@ def rename_structure_sources(apps, schema_editor):
             source = StructureSource.objects.get(value=old_value)
         except StructureSource.DoesNotExist:
             logger.error(f"StructureSource {old_value} does not exist")
+            continue
 
         source.value = new_value
         source.save()
