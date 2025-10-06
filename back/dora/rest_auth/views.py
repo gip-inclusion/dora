@@ -11,7 +11,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 import dora.onboarding as onboarding
-from dora.core.constants import SIREN_POLE_EMPLOI
+from dora.core.constants import SIREN_FRANCE_TRAVAIL
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.sirene.models import Establishment
@@ -150,7 +150,7 @@ def join_structure(request):
     siret = establishment.siret if establishment else structure.siret
     if (
         siret
-        and siret.startswith(SIREN_POLE_EMPLOI)
+        and siret.startswith(SIREN_FRANCE_TRAVAIL)
         and user.email.split("@")[1]
         not in (
             "pole-emploi.fr",
@@ -219,7 +219,7 @@ def invite_first_admin(request):
 
     if (
         siret
-        and siret.startswith(SIREN_POLE_EMPLOI)
+        and siret.startswith(SIREN_FRANCE_TRAVAIL)
         and invitee_email.split("@")[1]
         not in (
             "pole-emploi.fr",

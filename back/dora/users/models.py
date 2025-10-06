@@ -209,10 +209,10 @@ class User(AbstractBaseUser):
         if safir:
             # on vérifie si l'utilisateur est membre ou en attente d'invitation sur l'agence FT
             test_safir = (
-                self.putative_membership.filter(structure__code_safir_pe=safir)
+                self.putative_membership.filter(structure__code_safir_ft=safir)
                 .select_related("structure")
                 .exists()
-                or self.membership.filter(structure__code_safir_pe=safir)
+                or self.membership.filter(structure__code_safir_ft=safir)
                 .select_related("structure")
                 .exists()
             )

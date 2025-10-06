@@ -1,7 +1,7 @@
 import pytest
 from django.core.exceptions import ValidationError
 
-from ..constants import SIREN_LA_POSTE, SIREN_POLE_EMPLOI
+from ..constants import SIREN_FRANCE_TRAVAIL, SIREN_LA_POSTE
 from ..validators import validate_full_siret, validate_phone_number, validate_siren
 
 
@@ -13,7 +13,7 @@ def test_validate_siren():
     validate_siren(SIREN_LA_POSTE)
 
     # SIREN FT / PE
-    validate_siren(SIREN_POLE_EMPLOI)
+    validate_siren(SIREN_FRANCE_TRAVAIL)
 
     with pytest.raises(ValidationError, match="Le numéro SIREN est incorrect"):
         # SIREN exemple
@@ -26,7 +26,7 @@ def test_validate_siret_full():
 
     with pytest.raises(ValidationError, match="Le numéro SIRET est incorrect"):
         # un SIRET incorrect basé sur le SIREN FT / PE
-        validate_full_siret(SIREN_POLE_EMPLOI + "12345")
+        validate_full_siret(SIREN_FRANCE_TRAVAIL + "12345")
 
 
 def test_validate_siret_full_la_poste():

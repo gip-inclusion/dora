@@ -304,8 +304,8 @@ RECENT_SERVICES_CUTOFF_DAYS = 30
 DORA_BOT_USER = "dora-bot@dora.beta.gouv.fr"
 
 # Authentifications tierces parties :
-PE_CLIENT_ID = os.getenv("PE_CLIENT_ID")
-PE_CLIENT_SECRET = os.getenv("PE_CLIENT_SECRET")
+FT_CLIENT_ID = os.getenv("FT_CLIENT_ID")
+FT_CLIENT_SECRET = os.getenv("FT_CLIENT_SECRET")
 
 # Compte utilisateur Data·Inclusion
 DATA_INCLUSION_EMAIL = "data.inclusion@beta.gouv.fr"
@@ -458,7 +458,7 @@ SUPPORT_LINK = "https://aide.dora.inclusion.beta.gouv.fr"
 ORIENTATION_SUPPORT_LINK = os.getenv("ORIENTATION_SUPPORT_LINK")
 ORIENTATION_EMAILS_DEBUG = os.getenv("ORIENTATION_EMAILS_DEBUG") == "true"
 ORIENTATION_SIRENE_BLACKLIST = [
-    # Pole Emploi / France Travail
+    # France Travail
     "130005481",
     # CAF
     "779311224",
