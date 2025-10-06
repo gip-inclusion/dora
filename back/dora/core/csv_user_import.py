@@ -135,7 +135,7 @@ class ImportUserHelper:
     @staticmethod
     def _structure_by_safir(safir: str) -> Structure | None:
         try:
-            return Structure.objects.get(code_safir_pe=safir)
+            return Structure.objects.get(code_safir_ft=safir)
         except Structure.DoesNotExist:
             raise Exception(f"L'agence FT avec le code {safir} n'existe pas en base")
 

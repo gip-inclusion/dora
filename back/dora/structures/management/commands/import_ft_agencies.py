@@ -16,7 +16,7 @@ from dora.structures.models import Structure, StructureNationalLabel, StructureS
 from dora.users.models import User
 
 
-def get_pe_credentials():
+def get_ft_credentials():
     # https://francetravail.io/data/documentation/utilisation-api-pole-emploi/generer-access-token
     try:
         response = requests.post(
@@ -26,9 +26,9 @@ def get_pe_credentials():
             },
             data={
                 "grant_type": "client_credentials",
-                "client_id": settings.PE_CLIENT_ID,
-                "client_secret": settings.PE_CLIENT_SECRET,
-                "scope": f"application_{settings.PE_CLIENT_ID} api_referentielagencesv1 organisationpe",
+                "client_id": settings.FT_CLIENT_ID,
+                "client_secret": settings.FT_CLIENT_SECRET,
+                "scope": f"application_{settings.FT_CLIENT_ID} api_referentielagencesv1 organisationpe",
             },
         )
         return json.loads(response.content)
@@ -36,7 +36,7 @@ def get_pe_credentials():
         print("HTTP Request failed")
 
 
-def get_pe_agencies(token):
+def get_ft_agencies(token):
     # https://francetravail.io/data/api/referentiel-agences
     try:
         response = requests.get(
@@ -56,7 +56,7 @@ def get_pe_agencies(token):
 def get_structure_info(structure, prefix):
     return (
         f"{prefix} {structure.name}\n"
-        f"{' ' * len(prefix)} siret : {structure.siret}, safir : {structure.code_safir_pe}\n"
+        f"{' ' * len(prefix)} siret : {structure.siret}, safir : {structure.code_safir_ft}\n"
         f"{' ' * len(prefix)} {structure.get_admin_url()}\n"
         f"{' ' * len(prefix)} https://annuaire-entreprises.data.gouv.fr/etablissement/{structure.siret}\n"
     )
@@ -71,14 +71,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write("Authentification à l’API Pôle emploi…")
-        pe_access_token = get_pe_credentials()["access_token"]
+        ft_access_token = get_ft_credentials()["access_token"]
         self.stdout.write("Récupération de la liste des agences Pôle emploi…")
-        agencies = get_pe_agencies(pe_access_token)
+        agencies = get_ft_agencies(ft_access_token)
 
         bot_user = User.objects.get_dora_bot()
         label = StructureNationalLabel.objects.get(value="france-travail")
         source = StructureSource.objects.get(
-            value="api-referentiel-agences-pole-emploi"
+            value="api-referentiel-agences-france-travail"
         )
 
         created_count = 0
@@ -100,7 +100,7 @@ class Command(BaseCommand):
                     safir = agency.get("codeSafir")
 
                     s_from_siret = Structure.objects.filter(siret=siret).first()
-                    s_from_safir = Structure.objects.filter(code_safir_pe=safir).first()
+                    s_from_safir = Structure.objects.filter(code_safir_ft=safir).first()
                     if s_from_safir and s_from_siret and s_from_safir != s_from_siret:
                         self.log_agency_error(
                             "Il existe déjà une structure ayant ce siret mais un code safir différent, "
@@ -117,8 +117,8 @@ class Command(BaseCommand):
                         continue
                     elif (
                         s_from_siret
-                        and s_from_siret.code_safir_pe
-                        and s_from_siret.code_safir_pe != safir
+                        and s_from_siret.code_safir_ft
+                        and s_from_siret.code_safir_ft != safir
                     ):
                         self.log_agency_error(
                             "Il existe déjà une structure ayant ce siret mais un code safir différent",
@@ -132,7 +132,7 @@ class Command(BaseCommand):
                         else Structure.objects.create(
                             siret=agency.get("siret"),
                             name=agency.get("libelleEtendu"),
-                            code_safir_pe=agency.get("codeSafir"),
+                            code_safir_ft=agency.get("codeSafir"),
                         )
                     )
 
@@ -145,13 +145,13 @@ class Command(BaseCommand):
                         send_moderation_notification(
                             structure,
                             bot_user,
-                            "Structure créée à partir de l’API Pole Emploi",
+                            "Structure créée à partir de l’API France Travail",
                             ModerationStatus.VALIDATED,
                         )
 
                     mod = self.maybe_update(
                         structure,
-                        "code_safir_pe",
+                        "code_safir_ft",
                         agency.get("codeSafir"),
                         existing,
                     )

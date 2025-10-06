@@ -1,13 +1,13 @@
 data-inclusion-schema==1.0.0b8
 dj-database-url==3.0.1
-Django==5.2.6
+Django==5.2.7
 django-cors-headers==4.9.0
 django-otp==1.6.1
 django-csp==4.0
-django-filter==25.1
+django-filter==25.2
 django-storages==1.14.6
 django-datadog-logger==0.7.3
-boto3==1.40.35
+boto3==1.40.45
 djangorestframework-camel-case==1.4.2
 djangorestframework-gis==1.2.0
 djangorestframework==3.16.1
@@ -24,7 +24,7 @@ PyJWT==2.10.1
 redis==6.4.0
 requests==2.32.5
 segno==1.6.6
-sentry-sdk==2.38.0
+sentry-sdk==2.39.0
 sib-api-v3-sdk==7.6.0
 Unidecode==1.4.0
 whitenoise==6.11.0

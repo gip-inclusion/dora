@@ -6,7 +6,7 @@ from django.core import mail
 from django.utils import timezone
 from freezegun import freeze_time
 
-from dora.core.constants import SIREN_POLE_EMPLOI
+from dora.core.constants import SIREN_FRANCE_TRAVAIL
 from dora.core.test_utils import make_service, make_structure, make_user
 from dora.notifications.enums import NotificationStatus, TaskType
 from dora.notifications.models import Notification
@@ -112,7 +112,7 @@ def test_structure_services_activation_candidates(
     assert structure_service_activation_task.candidates()
 
     # la structure est une agence France Travail
-    structure_with_admin.siret = SIREN_POLE_EMPLOI + "12345"
+    structure_with_admin.siret = SIREN_FRANCE_TRAVAIL + "12345"
     structure_with_admin.save()
 
     assert not structure_service_activation_task.candidates()

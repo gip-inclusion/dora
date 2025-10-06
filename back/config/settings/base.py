@@ -60,7 +60,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django_datadog_logger.middleware.request_id.RequestIdMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "config.domain_redirect_middleware.DomainRedirectMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
@@ -145,9 +144,6 @@ ALLOWED_HOSTS = (
     if os.getenv("DJANGO_ALLOWED_HOSTS")
     else None
 )
-
-OLD_HOST = os.getenv("OLD_HOST", None)
-NEW_HOST = os.getenv("NEW_HOST", None)
 
 # Validation des mot de passe :
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -320,8 +316,8 @@ RECENT_SERVICES_CUTOFF_DAYS = 30
 DORA_BOT_USER = "dora-bot@dora.beta.gouv.fr"
 
 # Authentifications tierces parties :
-PE_CLIENT_ID = os.getenv("PE_CLIENT_ID")
-PE_CLIENT_SECRET = os.getenv("PE_CLIENT_SECRET")
+FT_CLIENT_ID = os.getenv("FT_CLIENT_ID")
+FT_CLIENT_SECRET = os.getenv("FT_CLIENT_SECRET")
 
 # Compte utilisateur Data·Inclusion
 DATA_INCLUSION_EMAIL = "data.inclusion@beta.gouv.fr"
@@ -474,7 +470,7 @@ SUPPORT_LINK = "https://aide.dora.inclusion.beta.gouv.fr"
 ORIENTATION_SUPPORT_LINK = os.getenv("ORIENTATION_SUPPORT_LINK")
 ORIENTATION_EMAILS_DEBUG = os.getenv("ORIENTATION_EMAILS_DEBUG") == "true"
 ORIENTATION_SIRENE_BLACKLIST = [
-    # Pole Emploi / France Travail
+    # France Travail
     "130005481",
     # CAF
     "779311224",

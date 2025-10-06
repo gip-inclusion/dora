@@ -19,8 +19,8 @@
   <div>
     <h1 class="text-france-blue">Nos partenaires</h1>
     <p>
-      Plus de 1 000 structures ont déjà commencé à référencer leurs services sur
-      DORA
+      Plus de 23 000 structures ont déjà commencé à référencer leurs services
+      sur DORA
     </p>
 
     <ul class="mt-s24 gap-s24 flex w-full flex-wrap justify-center">

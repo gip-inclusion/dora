@@ -242,7 +242,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
     search_fields = (
         "name",
         "siret",
-        "code_safir_pe",
+        "code_safir_ft",
         "city",
         "department",
         "slug",

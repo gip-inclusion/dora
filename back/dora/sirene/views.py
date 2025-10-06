@@ -99,18 +99,18 @@ def search_safir(request):
     if not safir:
         return Response("`safir` requis")
     try:
-        pe_structure = Structure.objects.get(code_safir_pe=safir)
+        ft_structure = Structure.objects.get(code_safir_ft=safir)
     except Structure.DoesNotExist:
         raise NotFound
     return Response(
         {
-            "address1": pe_structure.address1,
-            "address2": pe_structure.address2,
-            "city": pe_structure.city,
-            "name": pe_structure.name,
-            "postal_code": pe_structure.postal_code,
-            "siret": pe_structure.siret
-            or (pe_structure.parent.siret if pe_structure.parent else ""),
-            "slug": pe_structure.slug,
+            "address1": ft_structure.address1,
+            "address2": ft_structure.address2,
+            "city": ft_structure.city,
+            "name": ft_structure.name,
+            "postal_code": ft_structure.postal_code,
+            "siret": ft_structure.siret
+            or (ft_structure.parent.siret if ft_structure.parent else ""),
+            "slug": ft_structure.slug,
         }
     )
