@@ -8,9 +8,13 @@
 
 ### Setup des variables d'environnement
  
+Si vous utilisez l'environnement Docker Compose fourni par défaut :
+```bash
+  ln -s envs-example envs
+```
+Sinon :
 - Copier le dossier `envs-example` et renommer le `envs`
-- Dans le fichier `envs/dev.env`, compléter la variable `POSTGRES_USER`.
-- Dans le fichier `envs/secrets.env`, compléter les variables `POSTGRES_PASSWORD` et `DJANGO_SECRET_KEY`.
+- Modifier les variables nécessaires
 
 ### Docker Compose
 
