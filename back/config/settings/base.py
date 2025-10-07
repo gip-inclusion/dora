@@ -266,6 +266,9 @@ LOGGING = {
 # Rest Framework :
 # https://www.django-rest-framework.org/api-guide/settings/
 
+ANON_THROTTLE_RATE_PER_MINUTE = os.getenv("ANON_THROTTLE_RATE", "24")
+USER_THROTTLE_RATE_PER_MINUTE = os.getenv("USER_THROTTLE_RATE", "120")
+
 REST_FRAMEWORK = {
     # Let's lock down access by default
     "DEFAULT_PERMISSION_CLASSES": [
@@ -295,8 +298,8 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.UserRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
-        "anon": "16/minute",
-        "user": "120/minute",
+        "anon": f"{ANON_THROTTLE_RATE_PER_MINUTE}/minute",
+        "user": f"{USER_THROTTLE_RATE_PER_MINUTE}/minute",
     },
 }
 
