@@ -266,8 +266,8 @@ LOGGING = {
 # Rest Framework :
 # https://www.django-rest-framework.org/api-guide/settings/
 
-ANON_THROTTLE_RATE_PER_MINUTE = os.getenv("ANON_THROTTLE_RATE", "24")
-USER_THROTTLE_RATE_PER_MINUTE = os.getenv("USER_THROTTLE_RATE", "120")
+ANON_THROTTLE_RATE_PER_MINUTE = os.getenv("ANON_THROTTLE_RATE_PER_MINUTE", "24")
+USER_THROTTLE_RATE_PER_MINUTE = os.getenv("USER_THROTTLE_RATE_PER_MINUTE", "120")
 
 REST_FRAMEWORK = {
     # Let's lock down access by default
