@@ -8,7 +8,7 @@ services:
       - pgdata:/var/lib/postgresql/data
       - pgconf:/etc/postgresql
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
   pgadmin:
     image: dpage/pgadmin4
     env_file:
@@ -16,7 +16,7 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     ports:
-      - "8888:80"
+      - "127.0.0.1:8888:80"
   s3:
     image: minio/minio:latest
     env_file:
@@ -25,13 +25,13 @@ services:
     volumes:
       - miniodata:/data
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
     command: server /data --console-address ":9001"
   redis:
     image: redis:alpine
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
 volumes:
   pgdata:
   pgconf:
