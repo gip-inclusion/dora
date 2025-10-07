@@ -3,6 +3,12 @@
 
 {% block extrahead %}
   <link rel="stylesheet" href="{% static 'admin/css/import_form.css' %}">
+  <style>
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -16,8 +22,16 @@
 
 {% block content %}
   <div class="form-container">
-    <form method="post" enctype="multipart/form-data">
+    <!-- Messages container (for dynamically added messages) -->
+    <div id="dynamic-messages"></div>
+
+    <form method="post" enctype="multipart/form-data" id="import-form">
       {% csrf_token %}
+
+    <div id="import-progress" style="display: none; background: #f0f0f0; border-radius: 4px; padding: 20px; margin: 20px 0;">
+      <div class="spinner-inline" style="border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: inline-block; margin-right: 10px; vertical-align: middle;"></div>
+      <span id="import-status">Traitement en cours...</span>
+    </div>
 
       <div class="form-section">
         <h3>📁 Sélection du fichier</h3>
@@ -76,7 +90,7 @@
 
       <div class="submit-section">
         <div class="submit-row">
-          <input type="submit" value="🚀 Lancer l'import" class="default" />
+          <input type="submit" value="🚀 Lancer l'import" class="default" id="submit-btn" />
           <a href="{% url 'admin:structures_structure_changelist' %}" class="cancel-link">❌ Annuler</a>
         </div>
       </div>
@@ -107,6 +121,125 @@
       } else {
         fileStatus.textContent = 'Aucun fichier sélectionné';
         fileStatus.className = 'file-status no-file';
+      }
+    });
+
+    // Function to display Django-style messages
+    function displayMessage(level, message) {
+      const messagesContainer = document.getElementById('dynamic-messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `messagelist`;
+
+      const messageItem = document.createElement('li');
+      messageItem.className = level;
+      messageItem.innerHTML = message;
+
+      messageDiv.appendChild(messageItem);
+      messagesContainer.appendChild(messageDiv);
+
+      // Scroll to messages
+      messagesContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Function to clear previous messages
+    function clearMessages() {
+      document.getElementById('dynamic-messages').innerHTML = '';
+    }
+
+    // Intercept form submission and use streaming AJAX
+    document.getElementById('import-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const progressDiv = document.getElementById('import-progress');
+      const submitBtn = document.getElementById('submit-btn');
+      const statusSpan = document.getElementById('import-status');
+
+      // Clear previous messages
+      clearMessages();
+
+      // Show progress indicator
+      progressDiv.style.display = 'block';
+      submitBtn.disabled = true;
+      statusSpan.textContent = 'Traitement en cours...';
+
+      // Prepare form data
+      const formData = new FormData(this);
+
+      try {
+        // Submit via fetch with streaming
+        const response = await fetch(this.action || window.location.href, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        // Read the stream line by line
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+
+          // Process complete lines
+          const lines = buffer.split('\n');
+          buffer = lines.pop(); // Keep incomplete line in buffer
+
+          for (const line of lines) {
+            if (!line.trim()) continue;
+
+            try {
+              const data = JSON.parse(line);
+
+              if (data.type === 'progress') {
+                // Progress messages are silently consumed (not displayed)
+              } else if (data.type === 'complete') {
+                // Import completed successfully
+                // Hide progress div
+                progressDiv.style.display = 'none';
+
+                // Display messages
+                if (data.messages && data.messages.length > 0) {
+                  for (const msg of data.messages) {
+                    displayMessage(msg.level, msg.message);
+                  }
+                }
+
+                // Re-enable the button
+                submitBtn.disabled = false;
+              } else if (data.type === 'error') {
+                // Error occurred
+                // Hide progress div
+                progressDiv.style.display = 'none';
+
+                displayMessage('error', data.error);
+                submitBtn.disabled = false;
+              }
+            } catch (parseError) {
+              console.error('Failed to parse JSON:', line, parseError);
+            }
+          }
+        }
+
+      } catch (error) {
+        console.error('Error during import:', error);
+
+        // Hide progress div
+        progressDiv.style.display = 'none';
+
+        displayMessage('error', 'Une erreur est survenue lors de l\'import : ' + error.message);
+        submitBtn.disabled = false;
       }
     });
   </script>
