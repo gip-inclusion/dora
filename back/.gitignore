@@ -1,7 +1,7 @@
 /staticfiles
 __pycache__
 .DS_Store
-/envs/*
+/envs
 .cache_ggshield
 .idea
 .vscode
