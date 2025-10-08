@@ -1,10 +1,10 @@
+import argparse
 import re
 from collections import Counter
+from urllib.parse import unquote, urlparse
 
-import sqlglot
 import psycopg2
-import argparse
-from urllib.parse import urlparse, unquote
+import sqlglot
 
 MAX_JOINS = 3
 
@@ -179,7 +179,8 @@ def main():
         TABLE_FIELDS[id] = name
 
     cur.execute(
-        "select id, dataset_query::jsonb from report_card where not archived order by id"
+        "select id, dataset_query::jsonb "
+        "from report_card where not archived order by id"
     )
     for card_id, query in cur.fetchall():
         QUESTIONS[card_id] = MetabaseQuestion(card_id, query)
@@ -189,7 +190,8 @@ def main():
             question.resolve_inceptions()
         except KeyError:
             print(
-                f"Could not resolve inceptions for question {question.id}, source question does not exist"
+                f"Could not resolve inceptions for question {question.id},"
+                " source question does not exist"
             )
             continue
         question.resolve_names()

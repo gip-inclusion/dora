@@ -4,8 +4,8 @@ SELECT
     usr.main_activity                               AS user_kind,
     struct_members.structure_typology,
     struct_members.structure_department,
-    date_trunc('month', orientations.creation_date) AS events_month,
-    count(distinct orientations.id)                 AS nb_orientations
+    DATE_TRUNC('month', orientations.creation_date) AS events_month,
+    COUNT(DISTINCT orientations.id)                 AS nb_orientations
 FROM {{ ref('stg_user') }} AS usr
 LEFT JOIN
     {{ source('dora', 'orientations_orientation') }} AS orientations
@@ -19,5 +19,4 @@ GROUP BY
     usr.main_activity,
     struct_members.structure_typology,
     struct_members.structure_department,
-    date_trunc('month', orientations.creation_date)
-
+    DATE_TRUNC('month', orientations.creation_date)
