@@ -1,3 +1,8 @@
+[project]
+name = "dora-back"
+dynamic = ["version"]
+requires-python = "==3.13.*"
+
 [tool.pytest.ini_options]
 # Les variables d'environnement ont priorité sur la configuration du fichier de config.
 # Pour sélectionner une configuration de settings Django depuis ce fichier:
