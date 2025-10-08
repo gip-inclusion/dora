@@ -7,11 +7,11 @@ on:
   push:
     paths:
       - 'back/**'
-      - '.github/workflows/**'
+      - '.github/workflows/back-ci.yml'
   pull_request:
     paths:
       - 'back/**'
-      - '.github/workflows/**'
+      - '.github/workflows/back-ci.yml'
 
 jobs:
   build:

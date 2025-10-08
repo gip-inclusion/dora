@@ -7,11 +7,11 @@ on:
   push:
     paths:
       - 'front/**'
-      - '.github/workflows/**'
+      - '.github/workflows/front-ci.yml'
   pull_request:
     paths:
       - 'front/**'
-      - '.github/workflows/**'
+      - '.github/workflows/front-ci.yml'
 
 jobs:
   build:
