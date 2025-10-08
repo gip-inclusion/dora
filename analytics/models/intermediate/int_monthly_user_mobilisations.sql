@@ -4,8 +4,8 @@ SELECT
     usr.main_activity                             AS user_kind,
     struct_members.structure_typology,
     struct_members.structure_department,
-    date_trunc('month', mobilisations.event_date) AS events_month,
-    count(distinct mobilisations.event_id)        AS nb_mobilisations
+    DATE_TRUNC('month', mobilisations.event_date) AS events_month,
+    COUNT(DISTINCT mobilisations.event_id)        AS nb_mobilisations
 FROM {{ ref('stg_user') }} AS usr
 LEFT JOIN
     {{ ref('int_mobilisationevent_user') }} AS mobilisations
@@ -19,5 +19,4 @@ GROUP BY
     usr.is_manager,
     struct_members.structure_typology,
     struct_members.structure_department,
-    date_trunc('month', mobilisations.event_date)
-
+    DATE_TRUNC('month', mobilisations.event_date)
