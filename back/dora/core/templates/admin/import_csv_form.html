@@ -157,6 +157,7 @@
       statusSpan.textContent = 'Traitement en cours...';
 
       const formData = new FormData(this);
+      let importCompleted = false;
 
       try {
         const response = await fetch(window.location.href, {
@@ -193,6 +194,7 @@
               const data = JSON.parse(line);
 
               if (data.type === 'complete') {
+                importCompleted = true;
                 progressDiv.style.display = 'none';
 
                 if (data.messages && data.messages.length > 0) {
@@ -203,6 +205,7 @@
 
                 submitBtn.disabled = false;
               } else if (data.type === 'error') {
+                importCompleted = true;
                 progressDiv.style.display = 'none';
 
                 displayMessage('error', data.error);
@@ -217,10 +220,22 @@
         }
 
       } catch (error) {
-        console.error('Error during import:', error);
-        progressDiv.style.display = 'none';
+        if (importCompleted) {
+          console.log('Import completed successfully, connection closed by server');
+          return;
+        }
 
-        displayMessage('error', 'Une erreur est survenue lors de l\'import : ' + error.message);
+        // Network error during streaming - backend may still be running
+        console.error('Network error during import:', error);
+
+        // Show warning - the import might still complete on the server
+        progressDiv.style.display = 'none';
+        statusSpan.textContent = 'Connexion interrompue';
+
+        displayMessage('warning',
+          'La connexion a été interrompue. L\'import peut continuer sur le serveur. ' +
+          'Patientez quelques minutes puis vérifiez si les données ont été importées.'
+        );
         submitBtn.disabled = false;
       }
     });
