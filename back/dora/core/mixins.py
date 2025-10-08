@@ -125,9 +125,7 @@ class BaseImportAdminMixin:
                     progress_callback=progress_callback,
                 )
                 messages = self.format_results(result, is_wet_run)
-                message_queue.put(
-                    {"type": "complete", "result": result, "messages": messages}
-                )
+                message_queue.put({"type": "complete", "messages": messages})
             except Exception as e:
                 message_queue.put({"type": "error", "error": str(e)})
             finally:
