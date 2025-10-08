@@ -5,7 +5,7 @@ __pycache__
 .idea
 .vscode
 *.rdb
-docker-compose.yml
+docker-compose.override.yml
 talisman_report
 .env
 .envrc

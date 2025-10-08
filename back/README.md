@@ -20,9 +20,7 @@ Sinon :
 
 PostgreSQL, PostGIS, Minio et Redis peuvent être installés simplement avec Docker Compose.
 
-Copier `docker-compose.yml.template` en `docker-compose.yml`.
-
-Vous pouvez modifier `docker-compose.yml` à votre guise (ports, volumes, etc.).
+Vous pouvez surcharger le `docker-compose.yml` fournis par défaut en créant un fichier `docker-compose.override.yml` : https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/.
 
 Créer et démarrer les conteneurs :
 
