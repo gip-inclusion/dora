@@ -108,7 +108,10 @@ class BaseImportAdminMixin:
         is_wet_run,
         should_remove_instructions,
     ):
-        """Generator that yields progress updates and final result as JSON."""
+        """
+        Cette méthode est nécessaire pour empêcher un timeout quand l'import est fait dans l'admin.
+        Les messages dans la queue font en sorte que la connection reste ouverte la durée de l'import.
+        """
         message_queue = queue.Queue()
 
         def progress_callback(msg):
@@ -129,7 +132,7 @@ class BaseImportAdminMixin:
             except Exception as e:
                 message_queue.put({"type": "error", "error": str(e)})
             finally:
-                message_queue.put(None)  # Signal completion
+                message_queue.put(None)
 
         thread = threading.Thread(target=run_import, daemon=True)
         thread.start()
@@ -137,9 +140,9 @@ class BaseImportAdminMixin:
         while True:
             try:
                 msg = message_queue.get(timeout=5)
-                if msg is None:  # End signal
+                if msg is None:
                     break
                 yield json.dumps(msg) + "\n"
             except queue.Empty:
-                # Send keep-alive to prevent worker timeout
+                # Envoie heartbeat pour empêcher un timeout
                 yield json.dumps({"type": "heartbeat"}) + "\n"

@@ -124,7 +124,6 @@
       }
     });
 
-    // Function to display Django-style messages
     function displayMessage(level, message) {
       const messagesContainer = document.getElementById('dynamic-messages');
       const messageDiv = document.createElement('div');
@@ -137,16 +136,13 @@
       messageDiv.appendChild(messageItem);
       messagesContainer.appendChild(messageDiv);
 
-      // Scroll to messages
       messagesContainer.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Function to clear previous messages
     function clearMessages() {
       document.getElementById('dynamic-messages').innerHTML = '';
     }
 
-    // Intercept form submission and use streaming AJAX
     document.getElementById('import-form').addEventListener('submit', async function(e) {
       e.preventDefault();
 
@@ -154,20 +150,16 @@
       const submitBtn = document.getElementById('submit-btn');
       const statusSpan = document.getElementById('import-status');
 
-      // Clear previous messages
       clearMessages();
 
-      // Show progress indicator
       progressDiv.style.display = 'block';
       submitBtn.disabled = true;
       statusSpan.textContent = 'Traitement en cours...';
 
-      // Prepare form data
       const formData = new FormData(this);
 
       try {
-        // Submit via fetch with streaming
-        const response = await fetch(this.action || window.location.href, {
+        const response = await fetch(window.location.href, {
           method: 'POST',
           body: formData,
           headers: {
@@ -180,7 +172,6 @@
           throw new Error('Network response was not ok');
         }
 
-        // Read the stream line by line
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
@@ -192,9 +183,8 @@
 
           buffer += decoder.decode(value, { stream: true });
 
-          // Process complete lines
           const lines = buffer.split('\n');
-          buffer = lines.pop(); // Keep incomplete line in buffer
+          buffer = lines.pop();
 
           for (const line of lines) {
             if (!line.trim()) continue;
@@ -202,27 +192,17 @@
             try {
               const data = JSON.parse(line);
 
-              if (data.type === 'progress') {
-                // Progress messages are silently consumed (not displayed)
-              } else if (data.type === 'heartbeat') {
-                // Keep-alive messages to prevent timeout - silently consumed
-              } else if (data.type === 'complete') {
-                // Import completed successfully
-                // Hide progress div
+              if (data.type === 'complete') {
                 progressDiv.style.display = 'none';
 
-                // Display messages
                 if (data.messages && data.messages.length > 0) {
                   for (const msg of data.messages) {
                     displayMessage(msg.level, msg.message);
                   }
                 }
 
-                // Re-enable the button
                 submitBtn.disabled = false;
               } else if (data.type === 'error') {
-                // Error occurred
-                // Hide progress div
                 progressDiv.style.display = 'none';
 
                 displayMessage('error', data.error);
@@ -230,14 +210,14 @@
               }
             } catch (parseError) {
               console.error('Failed to parse JSON:', line, parseError);
+              displayMessage('error', parseError.message);
+
             }
           }
         }
 
       } catch (error) {
         console.error('Error during import:', error);
-
-        // Hide progress div
         progressDiv.style.display = 'none';
 
         displayMessage('error', 'Une erreur est survenue lors de l\'import : ' + error.message);

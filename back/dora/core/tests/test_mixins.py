@@ -55,7 +55,6 @@ class BaseImportAdminMixinTest(TestCase):
     def test_no_csv_file_uploaded(self):
         request = self.factory.post("/import/", {})
         request.user = self.user
-        request.headers = {}
 
         response = self.mixin.import_csv(request)
         messages = self.parse_streaming_response(response)
@@ -71,7 +70,6 @@ class BaseImportAdminMixinTest(TestCase):
 
         request = self.factory.post("/import/", {"csv_file": txt_file})
         request.user = self.user
-        request.headers = {}
 
         response = self.mixin.import_csv(request)
         messages = self.parse_streaming_response(response)
@@ -92,7 +90,6 @@ class BaseImportAdminMixinTest(TestCase):
 
         request = self.factory.post("/import/", {"csv_file": large_file})
         request.user = self.user
-        request.headers = {}
 
         response = self.mixin.import_csv(request)
         messages = self.parse_streaming_response(response)
@@ -115,7 +112,6 @@ class BaseImportAdminMixinTest(TestCase):
 
         request = self.factory.post("/import/", {"csv_file": csv_file})
         request.user = self.user
-        request.headers = {}
 
         response = self.mixin.import_csv(request)
         messages = self.parse_streaming_response(response)
@@ -136,7 +132,6 @@ class BaseImportAdminMixinTest(TestCase):
 
         request = self.factory.post("/import/", {"csv_file": csv_file})
         request.user = self.user
-        request.headers = {}
 
         response = self.mixin.import_csv(request)
         messages = self.parse_streaming_response(response)
@@ -152,7 +147,6 @@ class BaseImportAdminMixinTest(TestCase):
 
         request = self.factory.post("/import/", {"csv_file": csv_file})
         request.user = self.user
-        request.headers = {}
 
         mock_import_method = Mock(return_value={"success": True})
         self.mixin.import_helper.import_data = mock_import_method
@@ -186,7 +180,6 @@ class BaseImportAdminMixinTest(TestCase):
             },
         )
         request.user = self.user
-        request.headers = {}
 
         mock_import_method = Mock(return_value={"success": True})
         self.mixin.import_helper.import_data = mock_import_method
@@ -215,7 +208,6 @@ class BaseImportAdminMixinTest(TestCase):
             },
         )
         request.user = self.user
-        request.headers = {}
 
         mock_import_method = Mock(return_value={"success": True})
         self.mixin.import_helper.import_data = mock_import_method
@@ -240,7 +232,6 @@ class BaseImportAdminMixinTest(TestCase):
 
                 request = self.factory.post("/import/", {"csv_file": csv_file})
                 request.user = self.user
-                request.headers = {}
 
                 mock_import_method = Mock(return_value={"success": True})
                 self.mixin.import_helper.import_data = mock_import_method
