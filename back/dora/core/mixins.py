@@ -57,7 +57,7 @@ class BaseImportAdminMixin:
             method_name = self.get_import_method_name()
             import_method = getattr(helper, method_name)
 
-            return StreamingHttpResponse(
+            response = StreamingHttpResponse(
                 self._streaming_import_generator(
                     import_method,
                     reader,
@@ -68,6 +68,10 @@ class BaseImportAdminMixin:
                 ),
                 content_type="application/json",
             )
+            # Headers to ensure streaming works through Scalingo's HAProxy
+            response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            response["X-Accel-Buffering"] = "no"  # In case of nginx upstream
+            return response
 
         except UnicodeDecodeError:
             error_msg = format_html(
