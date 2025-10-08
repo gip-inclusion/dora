@@ -138,10 +138,10 @@ class BaseImportAdminMixin:
 
         while True:
             try:
-                msg = message_queue.get(timeout=1)
+                msg = message_queue.get(timeout=5)
                 if msg is None:  # End signal
                     break
                 yield json.dumps(msg) + "\n"
             except queue.Empty:
-                # Keep connection alive
-                continue
+                # Send keep-alive to prevent worker timeout
+                yield json.dumps({"type": "heartbeat"}) + "\n"
