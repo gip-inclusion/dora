@@ -1,7 +1,16 @@
-import { sequence } from "@sveltejs/kit/hooks";
-import * as Sentry from "@sentry/sveltekit";
-import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 import type { Handle, HandleServerError } from "@sveltejs/kit";
+import { sequence } from "@sveltejs/kit/hooks";
+import { error } from "@sveltejs/kit";
+
+import * as Sentry from "@sentry/sveltekit";
+
+import { RetryAfterRateLimiter } from "sveltekit-rate-limiter/server";
+
+import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
+
+const rateLimiter = new RetryAfterRateLimiter({
+  IPUA: [24, "m"],
+});
 
 if (ENVIRONMENT !== "local") {
   Sentry.init({
@@ -13,10 +22,10 @@ if (ENVIRONMENT !== "local") {
 }
 
 export const handleError: HandleServerError = Sentry.handleErrorWithSentry(
-  ({ error }) => {
+  ({ error: err }) => {
     const message =
-      ENVIRONMENT === "local" && error instanceof Error
-        ? error.message
+      ENVIRONMENT === "local" && err instanceof Error
+        ? err.message
         : "Erreur inattendue";
 
     return {
@@ -28,6 +37,14 @@ export const handleError: HandleServerError = Sentry.handleErrorWithSentry(
 export const handle: Handle = sequence(
   Sentry.sentryHandle({ injectFetchProxyScript: false }),
   async ({ event, resolve }) => {
+    const status = await rateLimiter.check(event);
+    if (status.limited) {
+      throw error(
+        429,
+        `Trop de requêtes. Réessayez après ${status.retryAfter} secondes.`
+      );
+    }
+
     const response = await resolve(event);
 
     if (ENVIRONMENT !== "production") {
