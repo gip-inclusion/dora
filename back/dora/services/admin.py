@@ -2,7 +2,7 @@ from data_inclusion.schema.v1.publics import Public as DiPublic
 from django import forms
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import path
 from django.utils.html import format_html
 
@@ -177,7 +177,6 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                     ),
                 }
             )
-            return redirect("..")
 
         if not is_wet_run and no_errors:
             success_messages.append(

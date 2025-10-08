@@ -44,6 +44,7 @@ class ImportStructuresHelper:
         source_info: Dict[str, str],
         wet_run: bool = False,
         should_remove_first_two_lines: bool = False,
+        progress_callback=None,
     ) -> Dict[str, Union[Dict[int, List[str]], int]]:
         if wet_run:
             print("⚠️ PRODUCTION RUN ⚠️")
@@ -89,9 +90,10 @@ class ImportStructuresHelper:
 
             if serializer.is_valid():
                 data = serializer.validated_data
-                print(
-                    f"{idx}. Import de la structure {serializer.data['name']} (SIRET:{serializer.data['siret']})"
-                )
+                msg = f"{idx}. Import de la structure {serializer.data['name']} (SIRET:{serializer.data['siret']})"
+                print(msg)
+                if progress_callback:
+                    progress_callback(msg)
                 if wet_run:
                     try:
                         self._get_structure_source(source_info)

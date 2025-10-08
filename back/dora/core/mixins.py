@@ -1,6 +1,8 @@
 import csv
 import io
 import json
+import queue
+import threading
 
 from django.http import StreamingHttpResponse
 from django.utils.html import format_html
@@ -107,24 +109,39 @@ class BaseImportAdminMixin:
         should_remove_instructions,
     ):
         """Generator that yields progress updates and final result as JSON."""
+        message_queue = queue.Queue()
 
-        def yield_json(data):
-            yield json.dumps(data) + "\n"
+        def progress_callback(msg):
+            message_queue.put({"type": "progress", "message": msg})
 
-        try:
-            result = import_method(
-                reader,
-                user,
-                source_info,
-                wet_run=is_wet_run,
-                should_remove_first_two_lines=should_remove_instructions,
-            )
+        def run_import():
+            try:
+                result = import_method(
+                    reader,
+                    user,
+                    source_info,
+                    wet_run=is_wet_run,
+                    should_remove_first_two_lines=should_remove_instructions,
+                    progress_callback=progress_callback,
+                )
+                messages = self.format_results(result, is_wet_run)
+                message_queue.put(
+                    {"type": "complete", "result": result, "messages": messages}
+                )
+            except Exception as e:
+                message_queue.put({"type": "error", "error": str(e)})
+            finally:
+                message_queue.put(None)  # Signal completion
 
-            messages = self.format_results(result, is_wet_run)
+        thread = threading.Thread(target=run_import, daemon=True)
+        thread.start()
 
-            yield from yield_json(
-                {"type": "complete", "result": result, "messages": messages}
-            )
-
-        except Exception as e:
-            yield from yield_json({"type": "error", "error": str(e)})
+        while True:
+            try:
+                msg = message_queue.get(timeout=1)
+                if msg is None:  # End signal
+                    break
+                yield json.dumps(msg) + "\n"
+            except queue.Empty:
+                # Keep connection alive
+                continue

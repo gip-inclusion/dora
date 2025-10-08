@@ -46,6 +46,7 @@ class ImportServicesHelper:
         source_info: dict[str, str],
         wet_run: bool = False,
         should_remove_first_two_lines: bool = False,
+        progress_callback=None,
     ) -> Dict[str, Union[List[Any], int, List[str]]]:
         self.wet_run = wet_run
         self.importing_user = importing_user
@@ -84,7 +85,10 @@ class ImportServicesHelper:
                         }
                 for idx, line in enumerate(lines, 2):
                     try:
-                        print(f"\nTraitement de la ligne {idx} :")
+                        msg = f"\nTraitement de la ligne {idx} :"
+                        print(msg)
+                        if progress_callback:
+                            progress_callback(msg)
 
                         data = self._extract_data_from_line(line)
 
