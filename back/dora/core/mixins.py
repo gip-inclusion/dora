@@ -2,7 +2,6 @@ import csv
 import io
 import json
 
-from django.contrib.messages.storage.base import BaseStorage
 from django.http import StreamingHttpResponse
 from django.utils.html import format_html
 
@@ -90,15 +89,13 @@ class BaseImportAdminMixin:
             )
 
     def get_import_helper(self):
-        """Override this method to return the appropriate import helper."""
         raise NotImplementedError("Subclasses must implement get_import_helper()")
 
     def get_import_method_name(self):
-        """Override this method to return the import method name."""
         raise NotImplementedError("Subclasses must implement get_import_method_name()")
 
-    def handle_import_results(self, request, result, is_wet_run):
-        raise NotImplementedError("Subclasses must implement _handle_import_results()")
+    def format_results(self, result, is_wet_run):
+        raise NotImplementedError("Subclasses must implement format_results()")
 
     def _streaming_import_generator(
         self,
@@ -123,31 +120,10 @@ class BaseImportAdminMixin:
                 should_remove_first_two_lines=should_remove_instructions,
             )
 
-            class MessageCollector(BaseStorage):
-                def __init__(self):
-                    self._queued_messages = []
-                    self.used = False
-                    self.added_new = False
-
-            # Create a mock request with proper message storage
-            mock_request = type(
-                "MockRequest",
-                (),
-                {
-                    "_messages": MessageCollector(),
-                },
-            )()
-
-            self.handle_import_results(mock_request, result, is_wet_run)
-
-            final_messages = []
-            for msg in mock_request._messages._queued_messages:
-                final_messages.append(
-                    {"level": msg.level_tag, "message": str(msg.message)}
-                )
+            messages = self.format_results(result, is_wet_run)
 
             yield from yield_json(
-                {"type": "complete", "result": result, "messages": final_messages}
+                {"type": "complete", "result": result, "messages": messages}
             )
 
         except Exception as e:

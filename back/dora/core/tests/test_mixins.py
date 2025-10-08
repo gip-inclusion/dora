@@ -19,7 +19,7 @@ class ConcreteImportAdminMixin(BaseImportAdminMixin):
     def get_import_method_name(self):
         return self.import_method_name
 
-    def handle_import_results(self, request, result, is_wet_run):
+    def format_results(self, request, result, is_wet_run):
         return Mock(status_code=200)
 
 
@@ -263,7 +263,7 @@ class BaseImportAdminMixinTest(TestCase):
         result = Mock()
 
         with self.assertRaises(NotImplementedError) as context:
-            base_mixin.handle_import_results(request, result, True)
+            base_mixin.format_results(request, result, True)
 
         self.assertIn(
             "Subclasses must implement _handle_import_results()", str(context.exception)
