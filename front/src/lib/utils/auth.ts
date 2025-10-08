@@ -4,6 +4,7 @@ import { get, writable } from "svelte/store";
 import type { SavedSearch, ShortBookmark, ShortStructure } from "../types";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
+import { invalidateServicesOptionsCache } from "$lib/cache/services-options";
 
 const tokenKey = "token";
 
@@ -67,6 +68,9 @@ export async function refreshUserInfo() {
       const info = (await result.json()) as UserInfo;
       userInfo.set(info);
       userPreferencesSet([...info.structures, ...info.pendingStructures]);
+
+      // Invalide le cache des servicesOptions car les informations utilisateur ont changé
+      invalidateServicesOptionsCache();
     } else {
       log("Unexpected status code", { result });
     }
@@ -79,6 +83,9 @@ export function disconnect() {
   token.set(null);
   userInfo.set(null);
   localStorage.clear();
+
+  // Invalide le cache des servicesOptions car l'utilisateur s'est déconnecté
+  invalidateServicesOptionsCache();
 }
 
 export async function validateCredsAndFillUserInfo() {
@@ -97,6 +104,9 @@ export async function validateCredsAndFillUserInfo() {
           const info = await result.json();
           userInfo.set(info);
           userPreferencesSet([...info.structures, ...info.pendingStructures]);
+
+          // Invalide le cache des servicesOptions car l'utilisateur s'est connecté
+          invalidateServicesOptionsCache();
         } else if (result.status === 404) {
           // Le token est invalide, on déconnecte l'utilisateur
           disconnect();
