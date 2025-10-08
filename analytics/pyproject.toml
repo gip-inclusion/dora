@@ -45,7 +45,3 @@ preferred_type_casting_style = "cast"
 # être les champs métiers définitifs, c'est le travail de Metabase
 additional_allowed_characters = "àéè '-"
 
-[tool.sqlfluff.templater.dbt]
-project_dir = "./analytics"
-profiles_dir = "./analytics"
-
