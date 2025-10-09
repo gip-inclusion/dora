@@ -9,19 +9,24 @@ services AS (
         ST_Y(CAST(src.geom AS geometry)) AS latitude,
         ST_X(CAST(src.geom AS geometry)) AS longitude,
         CASE
-            WHEN status != 'PUBLISHED' THEN FALSE
-            WHEN update_frequency = 'tous-les-mois' 
-                AND modification_date + INTERVAL '1 month' <= NOW() THEN TRUE
-            WHEN update_frequency = 'tous-les-3-mois'
-                AND modification_date + INTERVAL '3 months' <= NOW() THEN TRUE
-            WHEN update_frequency = 'tous-les-6-mois'
-                AND modification_date + INTERVAL '6 months' <= NOW() THEN TRUE
-            WHEN update_frequency = 'tous-les-12-mois'
-                AND modification_date + INTERVAL '12 months' <= NOW() THEN TRUE
-            WHEN update_frequency = 'tous-les-16-mois'
-                AND modification_date + INTERVAL '16 months' <= NOW() THEN TRUE
+            WHEN src.status != 'PUBLISHED' THEN FALSE
+            WHEN
+                src.update_frequency = 'tous-les-mois'
+                AND src.modification_date + interval '1 month' <= NOW() THEN TRUE
+            WHEN
+                src.update_frequency = 'tous-les-3-mois'
+                AND src.modification_date + interval '3 months' <= NOW() THEN TRUE
+            WHEN
+                src.update_frequency = 'tous-les-6-mois'
+                AND src.modification_date + interval '6 months' <= NOW() THEN TRUE
+            WHEN
+                src.update_frequency = 'tous-les-12-mois'
+                AND src.modification_date + interval '12 months' <= NOW() THEN TRUE
+            WHEN
+                src.update_frequency = 'tous-les-16-mois'
+                AND src.modification_date + interval '16 months' <= NOW() THEN TRUE
             ELSE FALSE
-        END AS update_needed
+        END                              AS update_needed
     FROM src
 ),
 
