@@ -2,7 +2,6 @@
 __pycache__
 .DS_Store
 /envs/*
-.cache_ggshield
 .idea
 .vscode
 *.rdb
