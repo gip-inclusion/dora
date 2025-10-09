@@ -29,7 +29,7 @@ La conformité aux normes d’accessibilité numérique est un objectif ultérie
 
 ### Signaler un dysfonctionnement
 
-Si vous rencontrez un défaut d’accessibilité vous empêchant d’accéder à un contenu ou une fonctionnalité du site, merci de nous en faire part à l’adresse [contact@dora.inclusion.beta.gouv.fr](mailto:contact@dora.inclusion.beta.gouv.fr)​
+Si vous rencontrez un défaut d’accessibilité vous empêchant d’accéder à un contenu ou une fonctionnalité du site, merci de nous en faire part à l’adresse [support.dora@inclusion.gouv.fr](mailto:support.dora@inclusion.gouv.fr)​
 
 ## Sécurité
 
