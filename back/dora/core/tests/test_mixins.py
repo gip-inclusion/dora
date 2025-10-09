@@ -2,10 +2,10 @@ from unittest.mock import Mock, patch
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import RequestFactory, TestCase
-from django.utils.html import format_html
 from model_bakery import baker
 
 from dora.core.mixins import BaseImportAdminMixin
+from dora.core.models import ImportJob
 
 
 class ConcreteImportAdminMixin(BaseImportAdminMixin):
@@ -19,12 +19,22 @@ class ConcreteImportAdminMixin(BaseImportAdminMixin):
     def get_import_method_name(self):
         return self.import_method_name
 
-    def handle_import_results(self, request, result, is_wet_run):
-        return Mock(status_code=200)
+    def format_results(self, result, is_wet_run):
+        return []
+
+    def get_import_type_name(self):
+        return "services"
+
+    def get_import_title(self):
+        return "Import services"
+
+    def get_csv_headers(self):
+        return ["header1", "header2"]
+
+    def _create_failed_job(self, request, filename, message):
+        return {}
 
 
-@patch("dora.core.mixins.redirect")
-@patch("dora.core.mixins.messages")
 class BaseImportAdminMixinTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
@@ -32,29 +42,40 @@ class BaseImportAdminMixinTest(TestCase):
 
         self.mixin = ConcreteImportAdminMixin()
 
+        self.thread_mock = Mock()
+
+        def run_sync(target=None, args=None, **kwargs):
+            # Le threading doit être synchrone pour les tests
+            self.thread_mock.start = lambda: target(*args)
+            return self.thread_mock
+
+        self.run_sync = run_sync
+
     def create_csv_file(
         self, content="header1,header2\nvalue1,value2", filename="test.csv", size=None
     ):
         csv_content = content.encode("utf-8")
         if size:
-            # Create a file with specific size for testing file size limits
+            # Créer un fichier avec une taille spécifique
             csv_content = b"a" * size
         return SimpleUploadedFile(filename, csv_content, content_type="text/csv")
 
     # Tests des erreurs de l'import
 
-    def test_no_csv_file_uploaded(self, mock_messages, mock_redirect):
+    def test_no_csv_file_uploaded(self):
         request = self.factory.post("/import/", {})
         request.user = self.user
 
-        self.mixin.import_csv(request)
+        with patch.object(self.mixin, "_create_failed_job") as mock_failed:
+            mock_failed.return_value = Mock()
+            self.mixin.import_csv(request)
 
-        mock_messages.error.assert_called_once_with(
-            request, "Veuillez sélectionner un fichier CSV."
-        )
-        mock_redirect.assert_called_once_with(".")
+            mock_failed.assert_called_once()
+            call_args = mock_failed.call_args[0]
+            self.assertEqual(call_args[1], "fichier-manquant.csv")
+            self.assertEqual("Veuillez sélectionner un fichier CSV.", call_args[2])
 
-    def test_invalid_file_extension(self, mock_messages, mock_redirect):
+    def test_invalid_file_extension(self):
         txt_file = SimpleUploadedFile(
             "test.txt", b"some content", content_type="text/plain"
         )
@@ -62,58 +83,52 @@ class BaseImportAdminMixinTest(TestCase):
         request = self.factory.post("/import/", {"csv_file": txt_file})
         request.user = self.user
 
-        self.mixin.import_csv(request)
+        with patch.object(self.mixin, "_create_failed_job") as mock_failed:
+            mock_failed.return_value = Mock()
+            self.mixin.import_csv(request)
 
-        expected_message = (
-            "<b>Échec de l'import - Format de fichier non valide</b><br/>"
-            "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules."
-        )
-        mock_messages.error.assert_called_once_with(
-            request, format_html(expected_message)
-        )
-        mock_redirect.assert_called_once_with(".")
+            mock_failed.assert_called_once()
+            call_args = mock_failed.call_args[0]
+            self.assertEqual(call_args[1], "test.txt")
+            self.assertIn("Format de fichier non valide", call_args[2])
 
-    def test_file_too_large(self, mock_messages, mock_redirect):
+    def test_file_too_large(self):
         large_file = self.create_csv_file(
             content="header\nvalue",
-            size=11 * 1024 * 1024,  # 11MB, exceeds 10MB limit
+            size=51 * 1024 * 1024,  # 51MB, exceeds 50MB limit
         )
 
         request = self.factory.post("/import/", {"csv_file": large_file})
         request.user = self.user
 
-        self.mixin.import_csv(request)
+        with patch.object(self.mixin, "_create_failed_job") as mock_failed:
+            mock_failed.return_value = Mock()
+            self.mixin.import_csv(request)
 
-        expected_message = (
-            "<b>Échec de l'import - Fichier trop volumineux</b><br/>"
-            "Le fichier doit faire moins de 10 Mio."
-        )
-        mock_messages.error.assert_called_once_with(request, expected_message)
-        mock_redirect.assert_called_once_with(".")
+            mock_failed.assert_called_once()
+            call_args = mock_failed.call_args[0]
+            self.assertIn("Fichier trop volumineux", call_args[2])
 
-    @patch("dora.core.mixins.io.TextIOWrapper")
-    def test_unicode_decode_error(self, mock_wrapper, mock_messages, mock_redirect):
-        mock_wrapper.side_effect = UnicodeDecodeError(
-            "utf-8", b"", 0, 1, "invalid start byte"
+    def test_unicode_decode_error(self):
+        invalid_file = SimpleUploadedFile(
+            "test.csv", b"\xff\xfe", content_type="text/csv"
         )
 
-        csv_file = self.create_csv_file()
-
-        request = self.factory.post("/import/", {"csv_file": csv_file})
+        request = self.factory.post("/import/", {"csv_file": invalid_file})
         request.user = self.user
 
-        self.mixin.import_csv(request)
+        with patch.object(self.mixin, "_create_failed_job") as mock_failed:
+            mock_failed.return_value = Mock()
+            self.mixin.import_csv(request)
 
-        expected_message = (
-            "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
-            "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import."
-        )
-        mock_messages.error.assert_called_once_with(
-            request, format_html(expected_message)
-        )
-        mock_redirect.assert_called_once_with(".")
+            mock_failed.assert_called_once()
+            call_args = mock_failed.call_args[0]
+            self.assertIn("Erreur d'encodage", call_args[2])
 
-    def test_general_exception_handling(self, mock_messages, mock_redirect):
+    @patch("dora.core.mixins.threading.Thread")
+    def test_general_exception_handling(self, mock_thread):
+        mock_thread.side_effect = self.run_sync
+
         mock_import_method = Mock(side_effect=ValueError("Unexpected error"))
         self.mixin.import_helper.import_data = mock_import_method
 
@@ -122,43 +137,49 @@ class BaseImportAdminMixinTest(TestCase):
         request = self.factory.post("/import/", {"csv_file": csv_file})
         request.user = self.user
 
-        self.mixin.import_csv(request)
+        with patch("dora.core.mixins.render") as mock_render:
+            mock_render.return_value = Mock()
+            self.mixin.import_csv(request)
 
-        mock_messages.error.assert_called_once_with(
-            request,
-            "<b>Échec de l'import - Erreur inattendue</b><br/>L'erreur suivante s'est produite :<br/>Unexpected error<br/>Si le problème persiste, contactez les développeurs.",
-        )
-        mock_redirect.assert_called_once_with(".")
+            job = ImportJob.objects.get(user=self.user)
+            self.assertEqual(job.status, "failed")
 
     # Tests des cas de succès de l'import
 
-    def test_successful_import_with_defaults(self, mock_messages, mock_redirect):
+    @patch("dora.core.mixins.render")
+    @patch("dora.core.mixins.threading.Thread")
+    def test_successful_import_with_defaults(self, mock_thread, mock_render):
+        mock_thread.side_effect = self.run_sync
+        mock_render.return_value = Mock(status_code=200)
+
         csv_file = self.create_csv_file()
 
         request = self.factory.post("/import/", {"csv_file": csv_file})
         request.user = self.user
 
-        mock_import_method = Mock()
+        mock_import_method = Mock(return_value={"created_count": 3})
         self.mixin.import_helper.import_data = mock_import_method
 
-        expected_response = Mock(status_code=200)
-        with patch.object(
-            self.mixin, "handle_import_results", return_value=expected_response
-        ):
-            result = self.mixin.import_csv(request)
+        self.mixin.import_csv(request)
 
-            mock_import_method.assert_called_once()
-            call_args = mock_import_method.call_args
+        job = ImportJob.objects.get(user=self.user)
+        self.assertEqual(job.status, "completed")
 
-            self.assertEqual(call_args[0][1], request.user)
-            self.assertEqual(call_args[0][2]["value"], "test")
-            self.assertEqual(call_args[0][2]["label"], "DORA")
-            self.assertEqual(call_args[1]["wet_run"], True)
-            self.assertEqual(call_args[1]["should_remove_first_two_lines"], False)
+        mock_import_method.assert_called_once()
+        call_args = mock_import_method.call_args
 
-            self.assertEqual(result, expected_response)
+        self.assertEqual(call_args[0][1], request.user)
+        self.assertEqual(call_args[0][2]["value"], "test")
+        self.assertEqual(call_args[0][2]["label"], "DORA")
+        self.assertEqual(call_args[1]["wet_run"], True)
+        self.assertEqual(call_args[1]["should_remove_first_two_lines"], False)
 
-    def test_import_with_custom_parameters(self, mock_messages, mock_redirect):
+    @patch("dora.core.mixins.render")
+    @patch("dora.core.mixins.threading.Thread")
+    def test_import_with_custom_parameters(self, mock_thread, mock_render):
+        mock_thread.side_effect = self.run_sync
+        mock_render.return_value = Mock(status_code=200)
+
         csv_file = self.create_csv_file(filename="custom_file.csv")
 
         request = self.factory.post(
@@ -172,23 +193,34 @@ class BaseImportAdminMixinTest(TestCase):
         )
         request.user = self.user
 
-        mock_import_method = Mock()
+        mock_import_method = Mock(return_value={"created_count": 5})
         self.mixin.import_helper.import_data = mock_import_method
 
-        expected_response = Mock(status_code=200)
-        with patch.object(
-            self.mixin, "handle_import_results", return_value=expected_response
-        ):
-            self.mixin.import_csv(request)
+        self.mixin.import_csv(request)
 
-            call_args = mock_import_method.call_args
+        job = ImportJob.objects.get(user=self.user)
+        self.assertEqual(job.import_type, "services")
+        self.assertEqual(job.filename, "custom_file.csv")
+        self.assertEqual(job.status, "completed")
 
-            self.assertEqual(call_args[0][2]["value"], "custom_file")
-            self.assertEqual(call_args[0][2]["label"], "Custom Source")
-            self.assertEqual(call_args[1]["wet_run"], False)
-            self.assertEqual(call_args[1]["should_remove_first_two_lines"], True)
+        call_args = mock_import_method.call_args
+        self.assertEqual(call_args[0][2]["value"], "custom_file")
+        self.assertEqual(call_args[0][2]["label"], "Custom Source")
+        self.assertEqual(call_args[1]["wet_run"], False)
+        self.assertEqual(call_args[1]["should_remove_first_two_lines"], True)
 
-    def test_empty_source_label_uses_default(self, mock_messages, mock_redirect):
+        mock_render.assert_called_once()
+        render_call_args = mock_render.call_args
+        context = render_call_args[0][2]
+        self.assertEqual(context["filename"], "custom_file.csv")
+        self.assertEqual(context["job_id"], str(job.id))
+
+    @patch("dora.core.mixins.render")
+    @patch("dora.core.mixins.threading.Thread")
+    def test_empty_source_label_uses_default(self, mock_thread, mock_render):
+        mock_thread.side_effect = self.run_sync
+        mock_render.return_value = Mock()
+
         csv_file = self.create_csv_file()
 
         request = self.factory.post(
@@ -203,13 +235,17 @@ class BaseImportAdminMixinTest(TestCase):
         mock_import_method = Mock(return_value={"success": True})
         self.mixin.import_helper.import_data = mock_import_method
 
-        with patch.object(self.mixin, "handle_import_results", return_value=Mock()):
-            self.mixin.import_csv(request)
+        self.mixin.import_csv(request)
 
-            call_args = mock_import_method.call_args
-            self.assertEqual(call_args[0][2]["label"], "DORA")  # should use default
+        call_args = mock_import_method.call_args
+        self.assertEqual(call_args[0][2]["label"], "DORA")  # should use default
 
-    def test_source_info_filename_extraction(self, mock_messages, mock_redirect):
+    @patch("dora.core.mixins.render")
+    @patch("dora.core.mixins.threading.Thread")
+    def test_source_info_filename_extraction(self, mock_thread, mock_render):
+        mock_thread.side_effect = self.run_sync
+        mock_render.return_value = Mock()
+
         test_cases = [
             ("simple.csv", "simple"),
             ("file.with.dots.csv", "file.with.dots"),
@@ -223,21 +259,18 @@ class BaseImportAdminMixinTest(TestCase):
                 request = self.factory.post("/import/", {"csv_file": csv_file})
                 request.user = self.user
 
-                mock_import_method = Mock()
+                mock_import_method = Mock(return_value={})
                 self.mixin.import_helper.import_data = mock_import_method
 
-                with patch.object(
-                    self.mixin, "handle_import_results", return_value=Mock()
-                ):
-                    self.mixin.import_csv(request)
+                self.mixin.import_csv(request)
 
-                    call_args = mock_import_method.call_args
-                    source_info = call_args[0][2]
-                    self.assertEqual(source_info["value"], expected_value)
+                call_args = mock_import_method.call_args
+                source_info = call_args[0][2]
+                self.assertEqual(source_info["value"], expected_value)
 
     # Tests des méthodes non-implémentés
 
-    def test_get_import_helper_not_implemented(self, mock_messages, mock_redirect):
+    def test_get_import_helper_not_implemented(self):
         base_mixin = BaseImportAdminMixin()
 
         with self.assertRaises(NotImplementedError) as context:
@@ -247,7 +280,7 @@ class BaseImportAdminMixinTest(TestCase):
             "Subclasses must implement get_import_helper()", str(context.exception)
         )
 
-    def test_get_import_method_name_not_implemented(self, mock_messages, mock_redirect):
+    def test_get_import_method_name_not_implemented(self):
         base_mixin = BaseImportAdminMixin()
 
         with self.assertRaises(NotImplementedError) as context:
@@ -257,14 +290,13 @@ class BaseImportAdminMixinTest(TestCase):
             "Subclasses must implement get_import_method_name()", str(context.exception)
         )
 
-    def test_handle_import_results_not_implemented(self, mock_messages, mock_redirect):
+    def test_format_results_not_implemented(self):
         base_mixin = BaseImportAdminMixin()
-        request = Mock()
         result = Mock()
 
         with self.assertRaises(NotImplementedError) as context:
-            base_mixin.handle_import_results(request, result, True)
+            base_mixin.format_results(result, True)
 
         self.assertIn(
-            "Subclasses must implement _handle_import_results()", str(context.exception)
+            "Subclasses must implement format_results()", str(context.exception)
         )

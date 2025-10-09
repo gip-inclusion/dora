@@ -4,6 +4,7 @@ from urllib.parse import unquote
 
 import requests
 from django.conf import settings
+from django.core.cache import cache
 from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import get_object_or_404
@@ -696,6 +697,18 @@ def options(request):
 
         return choices.filter(filters)
 
+    user = request.user
+    cache_key = "options:anon"
+
+    # If options depend on user permissions, include user ID
+    if user.is_authenticated:
+        cache_key = f"options:user:{user.pk}"
+
+    # Try to serve from cache
+    cached_data = cache.get(cache_key)
+    if cached_data is not None:
+        return Response(cached_data)
+
     result = {
         "categories": ServiceCategorySerializer(
             ServiceCategory.objects.all(), many=True
@@ -755,6 +768,8 @@ def options(request):
             ).values()
         ],
     }
+
+    cache.set(cache_key, result, timeout=3600)
     return Response(result)
 
 

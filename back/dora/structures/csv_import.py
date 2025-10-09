@@ -44,6 +44,7 @@ class ImportStructuresHelper:
         source_info: Dict[str, str],
         wet_run: bool = False,
         should_remove_first_two_lines: bool = False,
+        import_job=None,
     ) -> Dict[str, Union[Dict[int, List[str]], int]]:
         if wet_run:
             print("⚠️ PRODUCTION RUN ⚠️")
@@ -72,6 +73,8 @@ class ImportStructuresHelper:
 
         lines = [dict(zip(headers, line)) for line in lines]
         for idx, line in enumerate(lines, 2):
+            # Note: Structure imports don't use atomic(), so progress updates would work here
+            # But keeping it simple for consistency
             serializer = ImportSerializer(
                 data={
                     "name": line["nom"],
