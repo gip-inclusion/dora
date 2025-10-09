@@ -89,15 +89,6 @@ class ImportJob(models.Model):
     )
     total_rows = models.IntegerField(default=0, help_text="Nombre total de lignes")
 
-    # Results - stored as JSON
-    result_data = models.JSONField(
-        default=dict, blank=True, help_text="Résultats de l'import"
-    )
-    messages = models.JSONField(
-        default=list, blank=True, help_text="Messages formatés pour affichage"
-    )
-    error_message = models.TextField(blank=True, help_text="Message d'erreur si échec")
-
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     started_at = models.DateTimeField(null=True, blank=True)

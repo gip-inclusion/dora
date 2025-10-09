@@ -11,6 +11,11 @@ from django.utils.html import format_html
 
 from .models import ImportJob
 
+# Temporary storage for import results (keyed by job_id)
+# Format: {job_id: {"timestamp": datetime, "result_data": ..., "messages": ...}}
+_import_results = {}
+_RESULT_CACHE_TTL_SECONDS = 3600  # Keep results for 1 hour
+
 
 def sanitize_for_json(obj):
     """Convert non-JSON-serializable objects to serializable ones."""
@@ -21,6 +26,20 @@ def sanitize_for_json(obj):
     elif isinstance(obj, (list, tuple)):
         return [sanitize_for_json(item) for item in obj]
     return obj
+
+
+def _cleanup_old_results():
+    """Remove import results older than TTL."""
+    from datetime import datetime, timedelta
+
+    cutoff_time = datetime.now() - timedelta(seconds=_RESULT_CACHE_TTL_SECONDS)
+    expired_keys = [
+        job_id
+        for job_id, data in _import_results.items()
+        if data.get("timestamp", datetime.now()) < cutoff_time
+    ]
+    for job_id in expired_keys:
+        del _import_results[job_id]
 
 
 class BaseImportAdminMixin:
@@ -171,19 +190,40 @@ class BaseImportAdminMixin:
                 import_job=job,  # Pass job for progress updates
             )
 
-            # Update job with results
+            # Store results temporarily in memory
+            from datetime import datetime
+
+            _import_results[str(job_id)] = {
+                "timestamp": datetime.now(),
+                "result_data": sanitize_for_json(result),
+                "messages": self.format_results(result, is_wet_run),
+                "is_wet_run": is_wet_run,
+            }
+
+            # Opportunistic cleanup of old results
+            _cleanup_old_results()
+
+            # Update job status
             job.status = "completed"
             job.completed_at = timezone.now()
-            job.result_data = sanitize_for_json(result)
-            job.messages = self.format_results(result, is_wet_run)
             job.save()
 
         except Exception as e:
+            # Store error temporarily in memory
+            from datetime import datetime
+
+            _import_results[str(job_id)] = {
+                "timestamp": datetime.now(),
+                "error_message": f"{str(e)}\n\n{traceback.format_exc()}",
+            }
+
+            # Opportunistic cleanup of old results
+            _cleanup_old_results()
+
             # Handle errors
             job = ImportJob.objects.get(id=job_id)
             job.status = "failed"
             job.completed_at = timezone.now()
-            job.error_message = f"{str(e)}\n\n{traceback.format_exc()}"
             job.save()
 
     def get_import_helper(self):
@@ -210,19 +250,22 @@ class BaseImportAdminMixin:
         raise NotImplementedError("Subclasses must implement format_results()")
 
     def import_job_status(self, request, job_id):
-        """API endpoint to check import job status."""
         try:
             job = ImportJob.objects.get(id=job_id, user=request.user)
-            return JsonResponse(
-                {
-                    "status": job.status,
-                    "progress": job.progress_percentage,
-                    "current_row": job.current_row,
-                    "total_rows": job.total_rows,
-                    "messages": job.messages,
-                    "error_message": job.error_message,
-                    "result_data": job.result_data,
-                }
-            )
+
+            # Get cached results from memory
+            cached_result = _import_results.get(str(job_id), {})
+
+            response_data = {
+                "status": job.status,
+                "progress": job.progress_percentage,
+                "current_row": job.current_row,
+                "total_rows": job.total_rows,
+                "messages": cached_result.get("messages", []),
+                "error_message": cached_result.get("error_message", ""),
+                "result_data": cached_result.get("result_data", {}),
+            }
+
+            return JsonResponse(response_data)
         except ImportJob.DoesNotExist:
             return JsonResponse({"error": "Job not found"}, status=404)
