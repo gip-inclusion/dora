@@ -39,7 +39,6 @@ jobs:
           MINIO_ROOT_PASSWORD: $MINIO_SECRET_KEY
         ports:
           - 9000:9000
-        command: server /data --console-address ":9001"
       redis:
         image: redis:alpine
         ports:
