@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Installation de Scalingo CLI
-        uses: scalingo-community/setup-scalingo@87fe86eedc708ffb9d232c756b21f6a5784f6c8a
+        uses: scalingo-community/setup-scalingo@87fe86eedc708ffb9d232c756b21f6a5784f6c8a # v0.1.1
         with:
           region: 'osc-fr1'
           api_token: ${{ secrets.SCALINGO_CLI_TOKEN }}
