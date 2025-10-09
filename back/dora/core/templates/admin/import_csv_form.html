@@ -358,9 +358,6 @@
             }
 
             progressActions.style.display = 'block';
-
-          // Auto-hide progress and show form after 8 seconds (more time to read results)
-            setTimeout(showForm, 8000);
           } else if (data.status === 'failed') {
             clearInterval(pollInterval);
             progressBar.classList.add('failed');
