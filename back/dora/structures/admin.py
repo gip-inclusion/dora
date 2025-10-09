@@ -1,10 +1,10 @@
 import logging
 
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
@@ -448,47 +448,6 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
             "csv_headers": ImportStructuresHelper.CSV_HEADERS,
         }
         return render(request, "admin/import_csv_form.html", context)
-
-    def handle_import_results(self, request, result, is_wet_run):
-        errors_map = result.get("errors_map", {})
-        created_structures_count = result.get("created_structures_count", 0)
-        created_services_count = result.get("created_services_count", 0)
-        edited_structures_count = result.get("edited_structures_count", 0)
-
-        if not errors_map and is_wet_run:
-            messages.success(
-                request,
-                format_html(
-                    f"<b>Import terminé avec succès</b><br/>{created_structures_count} nouvelles structures ont été créées.<br/>"
-                    f"{edited_structures_count} structures existantes ont été modifiées.<br/>"
-                    f"{created_services_count} nouveaux services ont été crées en brouillon.<br/>"
-                ),
-            )
-
-            return redirect("..")
-
-        elif not errors_map and not is_wet_run:
-            messages.success(
-                request,
-                format_html("<b>Import de test terminé avec succès</b><br/>"),
-            )
-
-        elif errors_map:
-            error_messages = []
-            for line, errors in errors_map.items():
-                error_messages.append(f"[{line}]: {', '.join(errors)}")
-
-            title_prefix = "Échec de l'import" if is_wet_run else "Test terminé"
-
-            messages.error(
-                request,
-                format_html(
-                    f"<b>{title_prefix} - Erreurs rencontrées</b><br/>"
-                    f"{('<br/>').join(error_messages)}"
-                ),
-            )
-
-        return redirect(".")
 
     def format_results(self, result, is_wet_run):
         messages = []

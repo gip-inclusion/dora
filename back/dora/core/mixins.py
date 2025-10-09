@@ -3,11 +3,9 @@ import io
 import threading
 import traceback
 
-from django.contrib import messages
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.utils import timezone
-from django.utils.html import format_html
 
 from .models import ImportJob
 
@@ -48,24 +46,29 @@ class BaseImportAdminMixin:
 
     def import_csv(self, request):
         csv_file = request.FILES.get("csv_file")
+
+        # Validation errors - create job immediately and show in progress dialog
         if not csv_file:
-            messages.error(request, "Veuillez sélectionner un fichier CSV.")
-            return redirect(".")
-        if not csv_file.name.lower().endswith(".csv"):
-            messages.error(
+            return self._create_failed_job(
                 request,
-                format_html(
-                    "<b>Échec de l'import - Format de fichier non valide</b><br/>"
-                    "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
-                ),
+                "fichier-manquant.csv",
+                "Veuillez sélectionner un fichier CSV.",
             )
-            return redirect(".")
-        if csv_file.size > self.upload_size_limit_in_bytes:
-            messages.error(
+
+        if not csv_file.name.lower().endswith(".csv"):
+            return self._create_failed_job(
                 request,
+                csv_file.name,
+                "<b>Échec de l'import - Format de fichier non valide</b><br/>"
+                "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
+            )
+
+        if csv_file.size > self.upload_size_limit_in_bytes:
+            return self._create_failed_job(
+                request,
+                csv_file.name,
                 "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit faire moins de 50 Mio.",
             )
-            return redirect(".")
 
         try:
             is_wet_run = request.POST.get("test_run") != "on"
@@ -115,39 +118,70 @@ class BaseImportAdminMixin:
             thread.start()
 
             # Return to form page with job_id to trigger polling
-            return render(
-                request,
-                "admin/import_csv_form.html",
-                {
-                    "job_id": str(import_job.id),
-                    "filename": csv_file.name,
-                    "opts": self.model._meta,
-                    "title": self.get_import_title(),
-                    "csv_headers": self.get_csv_headers(),
-                    "has_view_permission": True,
-                },
-            )
+            context = {
+                "job_id": str(import_job.id),
+                "filename": csv_file.name,
+                "title": self.get_import_title(),
+                "csv_headers": self.get_csv_headers(),
+                "has_view_permission": True,
+            }
+
+            # Add opts if model is available (when used with ModelAdmin)
+            if hasattr(self, "model"):
+                context["opts"] = self.model._meta
+
+            return render(request, "admin/import_csv_form.html", context)
 
         except UnicodeDecodeError:
-            messages.error(
+            return self._create_failed_job(
                 request,
-                format_html(
-                    "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
-                    "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
-                ),
+                csv_file.name,
+                "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
+                "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
             )
-            return redirect(".")
         except Exception as e:
-            messages.error(
+            return self._create_failed_job(
                 request,
-                format_html(
-                    "<b>Échec de l'import - Erreur inattendue</b><br/>"
-                    "L'erreur suivante s'est produite :<br/>"
-                    f"{e}<br/>"
-                    "Si le problème persiste, contactez les développeurs.",
-                ),
+                csv_file.name,
+                f"<b>Échec de l'import - Erreur inattendue</b><br/>"
+                f"L'erreur suivante s'est produite :<br/>"
+                f"{e}<br/>"
+                f"Si le problème persiste, contactez les développeurs.",
             )
-            return redirect(".")
+
+    def _create_failed_job(self, request, filename, error_message):
+        """Create a failed import job and display error in progress dialog."""
+        from datetime import datetime
+
+        # Create ImportJob
+        import_job = ImportJob.objects.create(
+            user=request.user,
+            import_type=self.get_import_type_name(),
+            filename=filename,
+            status="failed",
+            total_rows=0,
+        )
+
+        # Store error message in memory
+        _import_results[str(import_job.id)] = {
+            "timestamp": datetime.now(),
+            "messages": [{"level": "error", "message": error_message}],
+        }
+
+        # Return to form page with job_id to show error
+        context = {
+            "job_id": str(import_job.id),
+            "filename": filename,
+            "title": self.get_import_title(),
+            "csv_headers": self.get_csv_headers(),
+            "has_view_permission": True,
+        }
+
+        # Add opts if model is available (when used with ModelAdmin)
+        if hasattr(self, "model"):
+            context["opts"] = self.model._meta
+
+        return render(request, "admin/import_csv_form.html", context)
 
     def _run_import_in_background(
         self,

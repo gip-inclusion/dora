@@ -1,9 +1,8 @@
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django import forms
-from django.contrib import messages
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import path
 from django.utils.html import format_html
 
@@ -158,38 +157,6 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             "csv_headers": ImportServicesHelper.CSV_HEADERS,
         }
         return render(request, "admin/import_csv_form.html", context)
-
-    def handle_import_results(self, request, result, is_wet_run):
-        created_count = result.get("created_count", 0)
-        no_errors = not result.get("missing_headers", []) and not result.get(
-            "errors", []
-        )
-
-        self._add_error_messages(request, result, is_wet_run)
-        self._add_warning_messages(request, result, is_wet_run)
-
-        total_services_published = created_count - len(
-            result.get("draft_services_created", [])
-        )
-
-        if is_wet_run and no_errors:
-            messages.success(
-                request,
-                format_html(
-                    f"<b>Import terminé avec succès</b><br/>{total_services_published} nouveaux services ont été créés et publiés"
-                ),
-            )
-            return redirect("..")
-
-        if not is_wet_run and no_errors:
-            messages.success(
-                request,
-                format_html(
-                    f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {total_services_published} sont prêts à être importés et publiés."
-                ),
-            )
-
-        return redirect(".")
 
     def format_results(self, result, is_wet_run):
         success_messages = []
