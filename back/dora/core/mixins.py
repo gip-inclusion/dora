@@ -7,12 +7,12 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
 
+from dora.users.models import User
+
 from .models import ImportJob
 
-# Temporary storage for import results (keyed by job_id)
-# Format: {job_id: {"timestamp": datetime, "result_data": ..., "messages": ...}}
+# Stockage temporaire des résultats de l'import
 _import_results = {}
-_RESULT_CACHE_TTL_SECONDS = 3600  # Keep results for 1 hour
 
 
 def sanitize_for_json(obj):
@@ -24,20 +24,6 @@ def sanitize_for_json(obj):
     elif isinstance(obj, (list, tuple)):
         return [sanitize_for_json(item) for item in obj]
     return obj
-
-
-def _cleanup_old_results():
-    """Remove import results older than TTL."""
-    from datetime import datetime, timedelta
-
-    cutoff_time = datetime.now() - timedelta(seconds=_RESULT_CACHE_TTL_SECONDS)
-    expired_keys = [
-        job_id
-        for job_id, data in _import_results.items()
-        if data.get("timestamp", datetime.now()) < cutoff_time
-    ]
-    for job_id in expired_keys:
-        del _import_results[job_id]
 
 
 class BaseImportAdminMixin:
@@ -79,15 +65,12 @@ class BaseImportAdminMixin:
                 request.POST.get("should_remove_instructions") == "on"
             )
 
-            # Read CSV content into memory
             csv_content = csv_file.read().decode("utf-8")
 
-            # Count total rows for progress tracking
             total_rows = len(csv_content.splitlines()) - 1  # Exclude header
             if should_remove_instructions_from_csv:
                 total_rows = max(0, total_rows - 2)  # Exclude instruction rows
 
-            # Create ImportJob
             import_job = ImportJob.objects.create(
                 user=request.user,
                 import_type=self.get_import_type_name(),
@@ -96,13 +79,12 @@ class BaseImportAdminMixin:
                 total_rows=total_rows,
             )
 
-            # Prepare import parameters
             source_info = {
                 "value": csv_file.name.rsplit(".", 1)[0],
                 "label": source_label or self.default_source_label,
             }
 
-            # Start background thread
+            # L'import va se passer dans un background thread pour empêcher un timeout
             thread = threading.Thread(
                 target=self._run_import_in_background,
                 args=(
@@ -117,7 +99,6 @@ class BaseImportAdminMixin:
             thread.daemon = True
             thread.start()
 
-            # Return to form page with job_id to trigger polling
             context = {
                 "job_id": str(import_job.id),
                 "filename": csv_file.name,
@@ -126,7 +107,7 @@ class BaseImportAdminMixin:
                 "has_view_permission": True,
             }
 
-            # Add opts if model is available (when used with ModelAdmin)
+            # Nécessiare pour les breadcrumbs dans l'admin
             if hasattr(self, "model"):
                 context["opts"] = self.model._meta
 
@@ -150,10 +131,6 @@ class BaseImportAdminMixin:
             )
 
     def _create_failed_job(self, request, filename, error_message):
-        """Create a failed import job and display error in progress dialog."""
-        from datetime import datetime
-
-        # Create ImportJob
         import_job = ImportJob.objects.create(
             user=request.user,
             import_type=self.get_import_type_name(),
@@ -162,13 +139,10 @@ class BaseImportAdminMixin:
             total_rows=0,
         )
 
-        # Store error message in memory
         _import_results[str(import_job.id)] = {
-            "timestamp": datetime.now(),
             "messages": [{"level": "error", "message": error_message}],
         }
 
-        # Return to form page with job_id to show error
         context = {
             "job_id": str(import_job.id),
             "filename": filename,
@@ -177,7 +151,7 @@ class BaseImportAdminMixin:
             "has_view_permission": True,
         }
 
-        # Add opts if model is available (when used with ModelAdmin)
+        # Nécessiare pour les breadscrumbs dans ModelAdmin
         if hasattr(self, "model"):
             context["opts"] = self.model._meta
 
@@ -192,29 +166,20 @@ class BaseImportAdminMixin:
         is_wet_run,
         should_remove_instructions,
     ):
-        """Run import in background thread and update ImportJob status."""
-        from django.contrib.auth import get_user_model
-
-        User = get_user_model()
-
         try:
             job = ImportJob.objects.get(id=job_id)
             job.status = "processing"
             job.started_at = timezone.now()
             job.save()
 
-            # Get user object
             user = User.objects.get(id=user_id)
 
-            # Create CSV reader from content
             reader = csv.reader(io.StringIO(csv_content))
 
-            # Get import method
             helper = self.get_import_helper()
             method_name = self.get_import_method_name()
             import_method = getattr(helper, method_name)
 
-            # Run import
             result = import_method(
                 reader,
                 user,
@@ -224,60 +189,39 @@ class BaseImportAdminMixin:
                 import_job=job,  # Pass job for progress updates
             )
 
-            # Store results temporarily in memory
-            from datetime import datetime
-
             _import_results[str(job_id)] = {
-                "timestamp": datetime.now(),
                 "result_data": sanitize_for_json(result),
                 "messages": self.format_results(result, is_wet_run),
                 "is_wet_run": is_wet_run,
             }
 
-            # Opportunistic cleanup of old results
-            _cleanup_old_results()
-
-            # Update job status
             job.status = "completed"
             job.completed_at = timezone.now()
             job.save()
 
         except Exception as e:
-            # Store error temporarily in memory
-            from datetime import datetime
-
             _import_results[str(job_id)] = {
-                "timestamp": datetime.now(),
                 "error_message": f"{str(e)}\n\n{traceback.format_exc()}",
             }
 
-            # Opportunistic cleanup of old results
-            _cleanup_old_results()
-
-            # Handle errors
             job = ImportJob.objects.get(id=job_id)
             job.status = "failed"
             job.completed_at = timezone.now()
             job.save()
 
     def get_import_helper(self):
-        """Override this method to return the appropriate import helper."""
         raise NotImplementedError("Subclasses must implement get_import_helper()")
 
     def get_import_method_name(self):
-        """Override this method to return the import method name."""
         raise NotImplementedError("Subclasses must implement get_import_method_name()")
 
     def get_import_type_name(self):
-        """Override this method to return a readable import type name."""
         raise NotImplementedError("Subclasses must implement get_import_type_name()")
 
     def get_import_title(self):
-        """Override this method to return the import page title."""
         raise NotImplementedError("Subclasses must implement get_import_title()")
 
     def get_csv_headers(self):
-        """Override this method to return CSV headers for display."""
         raise NotImplementedError("Subclasses must implement get_csv_headers()")
 
     def format_results(self, result, is_wet_run):
@@ -299,6 +243,9 @@ class BaseImportAdminMixin:
                 "error_message": cached_result.get("error_message", ""),
                 "result_data": cached_result.get("result_data", {}),
             }
+
+            if job.status in ["completed", "failed"] and str(job_id) in _import_results:
+                del _import_results[str(job_id)]
 
             return JsonResponse(response_data)
         except ImportJob.DoesNotExist:
