@@ -46,6 +46,7 @@ class ImportServicesHelper:
         source_info: dict[str, str],
         wet_run: bool = False,
         should_remove_first_two_lines: bool = False,
+        import_job=None,
     ) -> Dict[str, Union[List[Any], int, List[str]]]:
         self.wet_run = wet_run
         self.importing_user = importing_user
@@ -69,7 +70,7 @@ class ImportServicesHelper:
                 print(
                     f"Les headers suivants sont manquants : ({', '.join(missing_headers)})"
                 )
-                return {"missing_headers": missing_headers}
+                return {"missing_headers": list(missing_headers)}
 
             with transaction.atomic():
                 if self.wet_run:
@@ -83,6 +84,12 @@ class ImportServicesHelper:
                             ]
                         }
                 for idx, line in enumerate(lines, 2):
+                    # Update progress every row
+                    if import_job:
+                        import_job.current_row = (
+                            idx - 1
+                        )  # idx starts at 2, so subtract 1 to get actual row count
+                        import_job.save()
                     try:
                         print(f"\nTraitement de la ligne {idx} :")
 

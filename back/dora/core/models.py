@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.db import models
 
@@ -59,3 +61,60 @@ class LogItem(models.Model):
     )
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
+
+
+class ImportJob(models.Model):
+    """Tracks the status of CSV imports for monitoring and polling."""
+
+    STATUS_CHOICES = [
+        ("pending", "En attente"),
+        ("processing", "En cours"),
+        ("completed", "Terminé"),
+        ("failed", "Échoué"),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="import_jobs"
+    )
+    import_type = models.CharField(
+        max_length=50, help_text="Type d'import (services, structures, etc.)"
+    )
+    filename = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+
+    # Progress tracking
+    current_row = models.IntegerField(
+        default=0, help_text="Ligne en cours de traitement"
+    )
+    total_rows = models.IntegerField(default=0, help_text="Nombre total de lignes")
+
+    # Results - stored as JSON
+    result_data = models.JSONField(
+        default=dict, blank=True, help_text="Résultats de l'import"
+    )
+    messages = models.JSONField(
+        default=list, blank=True, help_text="Messages formatés pour affichage"
+    )
+    error_message = models.TextField(blank=True, help_text="Message d'erreur si échec")
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    started_at = models.DateTimeField(null=True, blank=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "-created_at"]),
+            models.Index(fields=["status"]),
+        ]
+
+    def __str__(self):
+        return f"{self.import_type} - {self.filename} ({self.status})"
+
+    @property
+    def progress_percentage(self):
+        if self.total_rows == 0:
+            return 0
+        return int((self.current_row / self.total_rows) * 100)
