@@ -8,7 +8,7 @@ import { invalidateServicesOptionsCache } from "$lib/cache/services-options";
 
 const tokenKey = "token";
 
-export const token = writable<string>(null);
+export const token = writable<string | null>(null);
 
 export type UserMainActivity =
   | "accompagnateur"
@@ -43,7 +43,14 @@ export interface UserInfo {
   discoveryMethodOther: string;
 }
 
-export const userInfo = writable<UserInfo>(null);
+export const userInfo = writable<UserInfo | null>(null);
+
+export function setUserInfo(newUserInfo: UserInfo | null) {
+  userInfo.set(newUserInfo);
+
+  // Invalide le cache des servicesOptions car les informations utilisateur ont changé
+  invalidateServicesOptionsCache();
+}
 
 export function setToken(newToken: string) {
   token.set(newToken);
@@ -66,11 +73,8 @@ export async function refreshUserInfo() {
     const result = await getUserInfo(get(token));
     if (result.status === 200) {
       const info = (await result.json()) as UserInfo;
-      userInfo.set(info);
+      setUserInfo(info);
       userPreferencesSet([...info.structures, ...info.pendingStructures]);
-
-      // Invalide le cache des servicesOptions car les informations utilisateur ont changé
-      invalidateServicesOptionsCache();
     } else {
       log("Unexpected status code", { result });
     }
@@ -81,16 +85,13 @@ export async function refreshUserInfo() {
 
 export function disconnect() {
   token.set(null);
-  userInfo.set(null);
+  setUserInfo(null);
   localStorage.clear();
-
-  // Invalide le cache des servicesOptions car l'utilisateur s'est déconnecté
-  invalidateServicesOptionsCache();
 }
 
 export async function validateCredsAndFillUserInfo() {
   token.set(null);
-  userInfo.set(null);
+  setUserInfo(null);
 
   if (browser) {
     const lsToken = localStorage.getItem(tokenKey);
@@ -102,11 +103,8 @@ export async function validateCredsAndFillUserInfo() {
         if (result.status === 200) {
           token.set(lsToken);
           const info = await result.json();
-          userInfo.set(info);
+          setUserInfo(info);
           userPreferencesSet([...info.structures, ...info.pendingStructures]);
-
-          // Invalide le cache des servicesOptions car l'utilisateur s'est connecté
-          invalidateServicesOptionsCache();
         } else if (result.status === 404) {
           // Le token est invalide, on déconnecte l'utilisateur
           disconnect();
