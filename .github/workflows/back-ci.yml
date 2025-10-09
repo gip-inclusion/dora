@@ -76,7 +76,7 @@ jobs:
       - name: Installation de Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: "3.13"
           cache: pip
           cache-dependency-path: back/$REQUIREMENTS_PATH
 
