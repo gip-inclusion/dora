@@ -10,6 +10,11 @@ import type {
   ShortService,
   StructureService,
 } from "$lib/types";
+import {
+  getCachedServicesOptions,
+  setCachedServicesOptions,
+} from "$lib/cache/services-options";
+import { userInfo } from "$lib/utils/auth";
 import { getAnalyticsId } from "$lib/utils/stats";
 import { logException } from "$lib/utils/logger";
 
@@ -321,12 +326,29 @@ export async function convertSuggestionToDraft(serviceSlug) {
   return response.json();
 }
 
-export async function getServicesOptions() {
+export async function getServicesOptions(
+  useCache = true
+): Promise<ServicesOptions> {
+  const currentUserInfo = get(userInfo);
+
+  if (useCache) {
+    // Retourne les données du cache s'il existe et est valide
+    const cached = getCachedServicesOptions(currentUserInfo);
+    if (cached) {
+      return cached;
+    }
+  }
+
+  // Si pas de cache valide ou si le cache n'est pas utilisé, on fait l'appel API
   const url = `${getApiURL()}/services-options/`;
   const response = await fetchData<ServicesOptions>(url);
   if (!response.data) {
     throw Error(response.statusText);
   }
+
+  // On met en cache les nouvelles données avec le contexte utilisateur actuel
+  setCachedServicesOptions(response.data, currentUserInfo);
+
   return response.data;
 }
 

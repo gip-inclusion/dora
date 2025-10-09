@@ -109,7 +109,8 @@
         model = await getModel(model.slug);
       }
 
-      servicesOptions = await getServicesOptions();
+      // On rafraîchit les servicesOptions avant qu'elles ne soient modifiées par updateServiceOptions()
+      servicesOptions = await getServicesOptions(false);
 
       updateServiceOptions();
     }
