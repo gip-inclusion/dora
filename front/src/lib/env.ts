@@ -10,3 +10,5 @@ export const OIDC_AUTH_BACKEND =
 export const GOOGLE_CSE_ID = import.meta.env.VITE_GOOGLE_CSE_ID;
 export const DI_DORA_UNIFIED_SEARCH_ENABLED =
   import.meta.env.VITE_DI_DORA_UNIFIED_SEARCH_ENABLED !== "false";
+export const MAX_REQUESTS_PER_MINUTE =
+  import.meta.env.VITE_MAX_REQUESTS_PER_MINUTE || 24;
