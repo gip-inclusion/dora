@@ -73,12 +73,8 @@ class ImportStructuresHelper:
 
         lines = [dict(zip(headers, line)) for line in lines]
         for idx, line in enumerate(lines, 2):
-            # Update progress every row
-            if import_job:
-                import_job.current_row = (
-                    idx - 1
-                )  # idx starts at 2, so subtract 1 to get actual row count
-                import_job.save()
+            # Note: Structure imports don't use atomic(), so progress updates would work here
+            # But keeping it simple for consistency
             serializer = ImportSerializer(
                 data={
                     "name": line["nom"],

@@ -321,22 +321,24 @@
         let pollInterval;
 
         function updateProgress(data) {
-        // Update progress bar
-          progressBar.style.width = data.progress + '%';
-          progressBar.textContent = data.progress + '%';
-
         // Update status
           if (data.status === 'pending') {
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
             progressIcon.textContent = '⏳';
             progressIcon.className = 'progress-icon processing';
             progressTitle.textContent = 'Import en attente...';
             progressInfo.textContent = 'Préparation de l\'import...';
           } else if (data.status === 'processing') {
+            progressBar.style.width = '50%';
+            progressBar.textContent = '50%';
             progressIcon.textContent = '🔄';
             progressIcon.className = 'progress-icon processing';
             progressTitle.textContent = 'Import en cours...';
-            progressInfo.textContent = `Traitement: ligne ${data.current_row} / ${data.total_rows}`;
+            progressInfo.textContent = 'Traitement des données...';
           } else if (data.status === 'completed') {
+            progressBar.style.width = '100%';
+            progressBar.textContent = '100%';
             clearInterval(pollInterval);
             progressBar.classList.add('completed');
             progressIcon.textContent = '✅';
@@ -359,6 +361,8 @@
 
             progressActions.style.display = 'block';
           } else if (data.status === 'failed') {
+            progressBar.style.width = '100%';
+            progressBar.textContent = 'Échoué';
             clearInterval(pollInterval);
             progressBar.classList.add('failed');
             progressIcon.textContent = '❌';

@@ -27,7 +27,6 @@ class ImportJobAdmin(admin.ModelAdmin):
         "import_type",
         "user",
         "status",
-        "progress_percentage",
         "created_at",
         "completed_at",
     ]
@@ -39,9 +38,6 @@ class ImportJobAdmin(admin.ModelAdmin):
         "import_type",
         "filename",
         "status",
-        "current_row",
-        "total_rows",
-        "progress_percentage",
         "created_at",
         "started_at",
         "completed_at",

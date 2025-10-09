@@ -83,12 +83,6 @@ class ImportJob(models.Model):
     filename = models.CharField(max_length=255)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
 
-    # Progress tracking
-    current_row = models.IntegerField(
-        default=0, help_text="Ligne en cours de traitement"
-    )
-    total_rows = models.IntegerField(default=0, help_text="Nombre total de lignes")
-
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     started_at = models.DateTimeField(null=True, blank=True)
@@ -103,9 +97,3 @@ class ImportJob(models.Model):
 
     def __str__(self):
         return f"{self.import_type} - {self.filename} ({self.status})"
-
-    @property
-    def progress_percentage(self):
-        if self.total_rows == 0:
-            return 0
-        return int((self.current_row / self.total_rows) * 100)

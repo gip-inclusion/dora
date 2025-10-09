@@ -84,12 +84,8 @@ class ImportServicesHelper:
                             ]
                         }
                 for idx, line in enumerate(lines, 2):
-                    # Update progress every row
-                    if import_job:
-                        import_job.current_row = (
-                            idx - 1
-                        )  # idx starts at 2, so subtract 1 to get actual row count
-                        import_job.save()
+                    # Note: Progress updates don't work inside atomic() blocks
+                    # The progress will show as 100% instantly when import completes
                     try:
                         print(f"\nTraitement de la ligne {idx} :")
 

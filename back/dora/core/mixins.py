@@ -67,16 +67,11 @@ class BaseImportAdminMixin:
 
             csv_content = csv_file.read().decode("utf-8")
 
-            total_rows = len(csv_content.splitlines()) - 1  # Exclude header
-            if should_remove_instructions_from_csv:
-                total_rows = max(0, total_rows - 2)  # Exclude instruction rows
-
             import_job = ImportJob.objects.create(
                 user=request.user,
                 import_type=self.get_import_type_name(),
                 filename=csv_file.name,
                 status="pending",
-                total_rows=total_rows,
             )
 
             source_info = {
@@ -136,7 +131,6 @@ class BaseImportAdminMixin:
             import_type=self.get_import_type_name(),
             filename=filename,
             status="failed",
-            total_rows=0,
         )
 
         _import_results[str(import_job.id)] = {
@@ -236,9 +230,6 @@ class BaseImportAdminMixin:
 
             response_data = {
                 "status": job.status,
-                "progress": job.progress_percentage,
-                "current_row": job.current_row,
-                "total_rows": job.total_rows,
                 "messages": cached_result.get("messages", []),
                 "error_message": cached_result.get("error_message", ""),
                 "result_data": cached_result.get("result_data", {}),
