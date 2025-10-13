@@ -52,7 +52,7 @@ L’administrateur peut gérer les comptes relatifs à sa structure en créant d
 
 #### Suspension ou Suppression de l’espace de la structure
 
-Tout Utilisateur membre régulièrement inscrit pourra solliciter sa désinscription en contactant [contact@dora.inclusion.beta.gouv.fr](mailto:contact@dora.inclusion.beta.gouv.fr). Celle-ci sera effective dans un délai raisonnable.
+Tout Utilisateur membre régulièrement inscrit pourra solliciter sa désinscription en contactant [support.dora@inclusion.gouv.fr](mailto:support.dora@inclusion.gouv.fr). Celle-ci sera effective dans un délai raisonnable.
 
 ### Accompagnement dans l’insertion professionnelle par l’emploi
 

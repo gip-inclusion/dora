@@ -24,7 +24,7 @@
       les relancer.
     {/if}
     En cas de difficultés, n’hésitez pas à
-    <a class="underline" href="mailto:contact@dora.inclusion.beta.gouv.fr"
+    <a class="underline" href="mailto:support.dora@inclusion.gouv.fr"
       >nous contacter</a
     >.
   </p>
