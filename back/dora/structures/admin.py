@@ -447,6 +447,11 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
             "has_view_permission": True,
             "csv_headers": ImportStructuresHelper.CSV_HEADERS,
         }
+
+        job_id = request.GET.get("job_id")
+        if job_id:
+            context["job_id"] = job_id
+
         return render(request, "admin/import_csv_form.html", context)
 
     def format_results(self, result, is_wet_run):

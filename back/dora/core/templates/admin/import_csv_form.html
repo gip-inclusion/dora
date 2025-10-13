@@ -4,28 +4,56 @@
 {% block extrahead %}
   <link rel="stylesheet" href="{% static 'admin/css/import_form.css' %}">
   <style>
-    /* Progress container styles */
-    .progress-container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 30px;
-      background: #f8f9fa;
+    /* Spinner overlay styles */
+    .spinner-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spinner-content {
+      background: white;
+      padding: 40px;
       border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .progress-header {
       text-align: center;
-      margin-bottom: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      position: relative;
     }
 
-    .progress-icon {
-      font-size: 48px;
-      margin-bottom: 10px;
+    .spinner-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #dc3545;
+      cursor: pointer;
+      padding: 5px 10px;
+      line-height: 1;
+      transition: color 0.2s;
     }
 
-    .progress-icon.processing {
-      animation: spin 2s linear infinite;
+    .spinner-close-btn:hover {
+      color: #a71d2a;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #417690;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
     }
 
     @keyframes spin {
@@ -33,70 +61,45 @@
       100% { transform: rotate(360deg); }
     }
 
-    .progress-filename {
-      color: #666;
-      font-size: 14px;
-    }
-
-    .progress-bar-container {
-      background: #e9ecef;
-      border-radius: 10px;
-      height: 30px;
-      margin: 20px 0;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .progress-bar {
-      background: linear-gradient(90deg, #4CAF50, #45a049);
-      height: 100%;
-      width: 0%;
-      transition: width 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
+    .spinner-text {
+      font-size: 18px;
       font-weight: bold;
-      font-size: 14px;
+      color: #333;
+      margin-bottom: 10px;
     }
 
-    .progress-bar.failed {
-      background: linear-gradient(90deg, #f44336, #da190b);
-    }
-
-    .progress-bar.completed {
-      background: linear-gradient(90deg, #4CAF50, #388E3C);
-    }
-
-    .progress-info {
-      text-align: center;
-      margin: 20px 0;
-      font-size: 16px;
-      color: #555;
-    }
-
-    .progress-actions {
-      text-align: center;
+    .spinner-actions {
       margin-top: 30px;
     }
 
-    .progress-actions a {
+    .spinner-actions a,
+    .spinner-actions button {
       display: inline-block;
       padding: 10px 20px;
       margin: 0 10px;
       text-decoration: none;
       border-radius: 5px;
       font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .spinner-actions a {
       background: #417690;
       color: white;
     }
 
-    .progress-actions a:hover {
+    .spinner-actions a:hover {
       background: #2e5266;
     }
 
-    .progress-actions button:hover {
-      background: #218838 !important;
+    .spinner-actions button {
+      background: #28a745;
+      color: white;
+    }
+
+    .spinner-actions button:hover {
+      background: #218838;
     }
 
     .error-details {
@@ -112,46 +115,6 @@
       overflow-y: auto;
       border: 1px solid #f5c6cb;
     }
-
-    .result-message {
-      padding: 15px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border-left: 4px solid #ddd;
-    }
-
-    .result-message.success {
-      background: #d4edda;
-      border-left-color: #28a745;
-      color: #155724;
-    }
-
-    .result-message.error {
-      background: #f8d7da;
-      border-left-color: #dc3545;
-      color: #721c24;
-    }
-
-    .result-message.warning {
-      background: #fff3cd;
-      border-left-color: #ffc107;
-      color: #856404;
-    }
-
-    .result-message.info {
-      background: #d1ecf1;
-      border-left-color: #17a2b8;
-      color: #0c5460;
-    }
-
-    .result-message strong {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .result-message ul {
-      margin: 10px 0 0 20px;
-    }
   </style>
 {% endblock %}
 
@@ -165,37 +128,24 @@
 {% endblock %}
 
 {% block content %}
-  <!-- Progress section (shown when import is running) -->
-  <div class="progress-container" id="progress-container" {% if not job_id %}style="display: none;"{% endif %}>
-    <div class="progress-header">
-      <div class="progress-icon" id="progress-icon">⏳</div>
-      <h2 id="progress-title">Import en cours...</h2>
-      <div class="progress-filename" id="progress-filename">{{ filename }}</div>
-    </div>
-
-    <div class="progress-bar-container">
-      <div class="progress-bar" id="progress-bar">0%</div>
-    </div>
-
-    <div class="progress-info" id="progress-info">
-      Initialisation...
-    </div>
-
-    <div id="progress-messages" style="display: none; margin-top: 20px;"></div>
-    <div id="progress-error" style="display: none;"></div>
-
-    <div class="progress-actions" id="progress-actions" style="display: none;">
-      <a href="{% url 'admin:'|add:opts.app_label|add:'_'|add:opts.model_name|add:'_changelist' %}">
-        Retour à la liste
-      </a>
-      <button type="button" id="new-import-btn" style="background: #28a745; border: none; padding: 10px 20px; margin: 0 10px; border-radius: 5px; font-weight: bold; color: white; cursor: pointer;">
-        Nouvel import
-      </button>
+  <!-- Spinner overlay (shown when import is running) -->
+  <div class="spinner-overlay" id="spinner-overlay" {% if job_id %}style="display: flex;"{% endif %}>
+    <div class="spinner-content">
+      <button type="button" class="spinner-close-btn" id="spinner-close-btn" aria-label="Fermer">✕</button>
+      <div class="spinner"></div>
+      <div class="spinner-text" id="spinner-text">Import en cours...</div>
+      <div id="spinner-messages" style="display: none;"></div>
+      <div id="spinner-error" style="display: none;"></div>
+      <div class="spinner-actions" id="spinner-actions" style="display: none;">
+        <a href="{% url 'admin:'|add:opts.app_label|add:'_'|add:opts.model_name|add:'_changelist' %}">
+          Voir la liste des {{ opts.verbose_name_plural|lower }}
+        </a>
+        <button type="button" id="new-import-btn">Nouvel import</button>
+      </div>
     </div>
   </div>
 
-  <!-- Import form (always present, hidden during import) -->
-  <div class="form-container" id="form-container" {% if job_id %}style="display: none;"{% endif %}>
+  <div class="form-container" id="form-container">
     <form method="post" enctype="multipart/form-data" id="import-form">
       {% csrf_token %}
 
@@ -275,23 +225,34 @@
   </div>
 
   <script>
-    // Show/hide form and progress
-    function showProgress() {
-      document.getElementById('progress-container').style.display = 'block';
-      document.getElementById('form-container').style.display = 'none';
+    // Show/hide spinner overlay
+    function showSpinner() {
+      document.getElementById('spinner-overlay').style.display = 'flex';
     }
 
-    function showForm() {
-      document.getElementById('progress-container').style.display = 'none';
-      document.getElementById('form-container').style.display = 'block';
+    function hideSpinner() {
+      document.getElementById('spinner-overlay').style.display = 'none';
+    }
+
+    // Redirect to clean URL without query parameters
+    function redirectToCleanUrl() {
+      const cleanUrl = window.location.pathname;
+      window.location.href = cleanUrl;
     }
 
     // Handle "Nouvel import" button
     const newImportBtn = document.getElementById('new-import-btn');
     if (newImportBtn) {
-      newImportBtn.addEventListener('click', showForm);
+      newImportBtn.addEventListener('click', redirectToCleanUrl);
     }
 
+    // Handle close button
+    const closeBtn = document.getElementById('spinner-close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', redirectToCleanUrl);
+    }
+
+    // File input change handler
     document.getElementById('csv-file-input').addEventListener('change', function(e) {
       const fileStatus = document.getElementById('file-status');
 
@@ -307,73 +268,50 @@
       }
     });
 
-    // Progress polling logic
+    // Job status polling logic
     {% if job_id %}
       (function() {
         const statusUrl = "{% url 'admin:'|add:opts.app_label|add:'_import_job_status' job_id=job_id %}";
-        const progressBar = document.getElementById('progress-bar');
-        const progressIcon = document.getElementById('progress-icon');
-        const progressTitle = document.getElementById('progress-title');
-        const progressInfo = document.getElementById('progress-info');
-        const progressMessages = document.getElementById('progress-messages');
-        const progressError = document.getElementById('progress-error');
-        const progressActions = document.getElementById('progress-actions');
+        const spinner = document.querySelector('.spinner');
+        const spinnerText = document.getElementById('spinner-text');
+        const spinnerMessages = document.getElementById('spinner-messages');
+        const spinnerError = document.getElementById('spinner-error');
+        const spinnerActions = document.getElementById('spinner-actions');
         let pollInterval;
 
-        function updateProgress(data) {
-        // Update status
+        function updateStatus(data) {
           if (data.status === 'pending') {
-            progressBar.style.width = '0%';
-            progressBar.textContent = '0%';
-            progressIcon.textContent = '⏳';
-            progressIcon.className = 'progress-icon processing';
-            progressTitle.textContent = 'Import en attente...';
-            progressInfo.textContent = 'Préparation de l\'import...';
+            spinnerText.textContent = 'Import en attente...';
           } else if (data.status === 'processing') {
-            progressBar.style.width = '50%';
-            progressBar.textContent = '50%';
-            progressIcon.textContent = '🔄';
-            progressIcon.className = 'progress-icon processing';
-            progressTitle.textContent = 'Import en cours...';
-            progressInfo.textContent = 'Traitement des données...';
+            spinnerText.textContent = 'Import en cours...';
           } else if (data.status === 'completed') {
-            progressBar.style.width = '100%';
-            progressBar.textContent = '100%';
             clearInterval(pollInterval);
-            progressBar.classList.add('completed');
-            progressIcon.textContent = '✅';
-            progressIcon.className = 'progress-icon';
-            progressTitle.textContent = 'Import terminé !';
-            progressInfo.textContent = '';
+            spinner.style.display = 'none';
+            spinnerText.textContent = 'Import terminé !';
 
-          // Display result messages
+            // Display result messages
             if (data.messages && data.messages.length > 0) {
-              progressMessages.style.display = 'block';
-              progressMessages.innerHTML = '<ul class="messagelist">' +
+              spinnerMessages.style.display = 'block';
+              spinnerMessages.innerHTML = '<ul class="messagelist">' +
               data.messages.map(msg =>
                 `<li class="${msg.level || 'info'}">${msg.message}</li>`
               ).join('') + '</ul>';
             } else if (data.result_data) {
-            // Fallback: display raw result data if no formatted messages
-              progressMessages.style.display = 'block';
-              progressMessages.innerHTML = '<ul class="messagelist"><li class="success"><strong>Import terminé avec succès</strong>' + formatResultData(data.result_data) + '</li></ul>';
+              // Fallback: display raw result data if no formatted messages
+              spinnerMessages.style.display = 'block';
+              spinnerMessages.innerHTML = '<ul class="messagelist"><li class="success"><strong>Import terminé avec succès</strong>' + formatResultData(data.result_data) + '</li></ul>';
             }
 
-            progressActions.style.display = 'block';
+            spinnerActions.style.display = 'block';
           } else if (data.status === 'failed') {
-            progressBar.style.width = '100%';
-            progressBar.textContent = 'Échoué';
             clearInterval(pollInterval);
-            progressBar.classList.add('failed');
-            progressIcon.textContent = '❌';
-            progressIcon.className = 'progress-icon';
-            progressTitle.textContent = 'Import échoué';
-            progressInfo.textContent = 'Une erreur est survenue lors de l\'import';
-            progressActions.style.display = 'block';
+            spinner.style.display = 'none';
+            spinnerText.textContent = 'Import échoué';
+            spinnerActions.style.display = 'block';
 
             if (data.error_message) {
-              progressError.style.display = 'block';
-              progressError.innerHTML = '<div class="error-details">' + escapeHtml(data.error_message) + '</div>';
+              spinnerError.style.display = 'block';
+              spinnerError.innerHTML = '<div class="error-details">' + escapeHtml(data.error_message) + '</div>';
             }
           }
         }
@@ -414,14 +352,14 @@
                 clearInterval(pollInterval);
                 return;
               }
-              updateProgress(data);
+              updateStatus(data);
             })
             .catch(error => {
               console.error('Error:', error);
             });
         }
 
-      // Start polling every 1 second
+        // Start polling every 1 second
         pollInterval = setInterval(pollStatus, 1000);
         pollStatus(); // Poll immediately
       })();

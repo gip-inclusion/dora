@@ -4,7 +4,7 @@ import threading
 import traceback
 
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.utils import timezone
 
 from dora.users.models import User
@@ -16,7 +16,6 @@ _import_results = {}
 
 
 def sanitize_for_json(obj):
-    """Convert non-JSON-serializable objects to serializable ones."""
     if isinstance(obj, set):
         return list(obj)
     elif isinstance(obj, dict):
@@ -94,19 +93,7 @@ class BaseImportAdminMixin:
             thread.daemon = True
             thread.start()
 
-            context = {
-                "job_id": str(import_job.id),
-                "filename": csv_file.name,
-                "title": self.get_import_title(),
-                "csv_headers": self.get_csv_headers(),
-                "has_view_permission": True,
-            }
-
-            # Nécessiare pour les breadcrumbs dans l'admin
-            if hasattr(self, "model"):
-                context["opts"] = self.model._meta
-
-            return render(request, "admin/import_csv_form.html", context)
+            return redirect(f"{request.path}?job_id={import_job.id}")
 
         except UnicodeDecodeError:
             return self._create_failed_job(
@@ -137,19 +124,7 @@ class BaseImportAdminMixin:
             "messages": [{"level": "error", "message": error_message}],
         }
 
-        context = {
-            "job_id": str(import_job.id),
-            "filename": filename,
-            "title": self.get_import_title(),
-            "csv_headers": self.get_csv_headers(),
-            "has_view_permission": True,
-        }
-
-        # Nécessiare pour les breadscrumbs dans ModelAdmin
-        if hasattr(self, "model"):
-            context["opts"] = self.model._meta
-
-        return render(request, "admin/import_csv_form.html", context)
+        return redirect(f"{request.path}?job_id={import_job.id}")
 
     def _run_import_in_background(
         self,
