@@ -3,7 +3,7 @@ from difflib import SequenceMatcher
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
 from django.utils.http import urlencode
 
 from dora.core.models import ModerationStatus
@@ -127,7 +127,10 @@ def check_prescriber(orientation: Orientation) -> list:
             }
         )
         result.append(
-            f"vérifier les informations du prescripteur en ligne : <a href='https://www.google.com/search?{q}' target='_blank'>via Google</a>"
+            format_html(
+                "vérifier les informations du prescripteur en ligne : <a href='{}' target='_blank'>via Google</a>",
+                "https://www.google.com/search?" + q,
+            )
         )
 
     return result
@@ -157,10 +160,7 @@ def check_orientation(orientation: Orientation) -> list | None:
 
 
 def format_warnings(warnings: list) -> str:
-    # des <li> étaient possibles, mais c'était vraiment trop moche
-    msgs = [f"<p>- {msg}</p>" for msg in warnings]
-    msgs = "".join(msgs)
-
     return format_html(
-        f"<p>Cette demande d'orientation comporte des avertissements :</p><p>{msgs}</p>"
+        "<p>Cette demande d'orientation comporte des avertissements :</p><p>{}</p>",
+        format_html_join("", "<p>- {}</p>", ((w,) for w in warnings)),
     )

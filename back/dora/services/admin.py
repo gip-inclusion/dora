@@ -4,7 +4,7 @@ from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
 from django.shortcuts import render
 from django.urls import path
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
@@ -210,19 +210,25 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         messages = []
 
         if missing_headers:
-            headers_list = "<br/>".join(f"• {header}" for header in missing_headers)
-            message = f"<b>Échec de l'import - Colonnes manquantes</b><br/>Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>{headers_list}"
-
-            messages.append({"level": "error", "message": format_html(message)})
+            messages.append(
+                {
+                    "level": "error",
+                    "message": format_html(
+                        "<b>Échec de l'import - Colonnes manquantes</b><br/>Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>{}",
+                        format_html_join(
+                            mark_safe("<br/>"), "• {}", ((h,) for h in missing_headers)
+                        ),
+                    ),
+                }
+            )
 
         if errors:
-            error_list = "<br/>".join(f"• {error}" for error in errors)
-            message_title = (
+            message_title = mark_safe(
                 "Échec de l'import"
                 if is_wet_run
                 else "Test terminé - Erreurs à corriger"
             )
-            message_text = (
+            message_text = mark_safe(
                 "Aucun service n’a été importé, car le fichier comporte des erreurs."
                 if is_wet_run
                 else "Le fichier contient des erreurs qui empêcheront l'import."
@@ -231,8 +237,12 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                 {
                     "level": "error",
                     "message": format_html(
-                        f"<b>{message_title}</b><br/>{message_text} Veuillez corriger les éléments suivants :<br/>"
-                        f"{error_list}",
+                        "<b>{}</b><br/>{} Veuillez corriger les éléments suivants :<br/>{}",
+                        message_title,
+                        message_text,
+                        format_html_join(
+                            mark_safe("<br/>"), "• {}", ((e,) for e in errors)
+                        ),
                     ),
                 }
             )
@@ -267,51 +277,82 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         elif not is_wet_run:
             title_prefix = "Test terminé - "
         if duplicated_services:
-            duplicate_list = "<br/>".join(
-                f'• [{service["idx"]}] SIRET {service["siret"]} - il existe déjà un service avec le modèle {service["model_slug"]} et le courriel "{service["contact_email"]}"'
-                for service in duplicated_services
-            )
             messages.append(
                 {
                     "level": "warning",
                     "message": format_html(
-                        f"<b>{title_prefix}Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
-                        f"{duplicate_list}"
+                        "<b>{}Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>{}",
+                        title_prefix,
+                        format_html_join(
+                            mark_safe("<br/>"),
+                            '• [{idx}] SIRET {siret} - il existe déjà un service avec le modèle {model_slug} et le courriel "{contact_email}"',
+                            duplicated_services,
+                        ),
                     ),
                 }
             )
 
         if geo_data_missing:
-            missing_list = "<br/>".join(
-                f"• [{item.get('idx', '?')}] {item.get('address', '')} {item.get('postal_code', '')} {item.get('city', '')}"
-                for item in geo_data_missing
-            )
             messages.append(
                 {
                     "level": "warning",
                     "message": format_html(
-                        f"<b>{title_prefix}Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
-                        f"{missing_list}"
+                        "<b>{}Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>{}",
+                        title_prefix,
+                        format_html_join(
+                            mark_safe("<br/>"),
+                            "• [{idx}] {address} {postal_code} {city}",
+                            (
+                                {
+                                    "idx": item.get("idx", "?"),
+                                    "address": item.get("address", ""),
+                                    "postal_code": item.get("postal_code", ""),
+                                    "city": item.get("city", ""),
+                                }
+                                for item in geo_data_missing
+                            ),
+                        ),
                     ),
                 }
             )
 
         if draft_services_created:
-            draft_list = "<br/>".join(
-                f'• [{service["idx"]}] Service "{service["name"]}" - Manque : {", ".join(service["missing_fields"])}'
-                for service in draft_services_created
-            )
             if errors and is_wet_run:
-                message = "<b>Informations manquantes</b><br/> Contactez les structures pour compléter ces éléments avant importation"
+                message = mark_safe(
+                    "<b>Informations manquantes</b><br/> Contactez les structures pour compléter ces éléments avant importation"
+                )
             if not errors and is_wet_run:
-                message = f"<b>{title_prefix}Services importés en brouillon</b><br/>{len(draft_services_created)} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication"
+                message = format_html(
+                    "<b>{}Services importés en brouillon</b><br/>{} services ont été importés en brouillon. Contactez les structures pour compléter ces éléments avant publication",
+                    title_prefix,
+                    len(draft_services_created),
+                )
             if not is_wet_run:
-                message = f"<b>{title_prefix}Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
+                message = format_html(
+                    "<b>{}Services incomplets</b><br/>{} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation",
+                    title_prefix,
+                    len(draft_services_created),
+                )
 
             messages.append(
                 {
                     "level": "warning",
-                    "message": format_html(message + f" :<br/>{draft_list}"),
+                    "message": format_html(
+                        "{} :<br/>{}",
+                        message,
+                        format_html_join(
+                            mark_safe("<br/>"),
+                            '• [{}] Service "{}" - Manque : {}',
+                            (
+                                (
+                                    service["idx"],
+                                    service["name"],
+                                    ", ".join(service["missing_fields"]),
+                                )
+                                for service in draft_services_created
+                            ),
+                        ),
+                    ),
                 }
             )
 
