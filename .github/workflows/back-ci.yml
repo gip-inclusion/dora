@@ -8,10 +8,6 @@ on:
     paths:
       - 'back/**'
       - '.github/workflows/back-ci.yml'
-  pull_request:
-    paths:
-      - 'back/**'
-      - '.github/workflows/back-ci.yml'
 
 jobs:
   build:
@@ -95,7 +91,7 @@ jobs:
       - name: Vérification Django (check et migrations)
         working-directory: back
         run: |
-          ./manage.py check 
+          ./manage.py check
           ./manage.py makemigrations --check --dry-run --noinput
 
       - name: Vérification des fichier HTML et templates
