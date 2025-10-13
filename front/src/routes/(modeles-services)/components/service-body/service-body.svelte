@@ -18,7 +18,7 @@
   interface Props {
     service: Service | Model;
     servicesOptions: ServicesOptions;
-    onFeedbackButtonClick: () => void;
+    onFeedbackButtonClick?: () => void;
   }
 
   let { service, servicesOptions, onFeedbackButtonClick }: Props = $props();
