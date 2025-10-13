@@ -15,16 +15,6 @@ from .models import ImportJob
 _import_results = {}
 
 
-def sanitize_for_json(obj):
-    if isinstance(obj, set):
-        return list(obj)
-    elif isinstance(obj, dict):
-        return {k: sanitize_for_json(v) for k, v in obj.items()}
-    elif isinstance(obj, (list, tuple)):
-        return [sanitize_for_json(item) for item in obj]
-    return obj
-
-
 class BaseImportAdminMixin:
     upload_size_limit_in_bytes = 50 * 1024 * 1024  # 50MB to handle larger CSVs
     default_source_label = "DORA"
@@ -32,7 +22,6 @@ class BaseImportAdminMixin:
     def import_csv(self, request):
         csv_file = request.FILES.get("csv_file")
 
-        # Validation errors - create job immediately and show in progress dialog
         if not csv_file:
             return self._create_failed_job(
                 request,
@@ -155,11 +144,9 @@ class BaseImportAdminMixin:
                 source_info,
                 wet_run=is_wet_run,
                 should_remove_first_two_lines=should_remove_instructions,
-                import_job=job,  # Pass job for progress updates
             )
 
             _import_results[str(job_id)] = {
-                "result_data": sanitize_for_json(result),
                 "messages": self.format_results(result, is_wet_run),
                 "is_wet_run": is_wet_run,
             }
@@ -200,14 +187,13 @@ class BaseImportAdminMixin:
         try:
             job = ImportJob.objects.get(id=job_id, user=request.user)
 
-            # Get cached results from memory
+            # Chercher les résultats stocké en memoire
             cached_result = _import_results.get(str(job_id), {})
 
             response_data = {
                 "status": job.status,
                 "messages": cached_result.get("messages", []),
                 "error_message": cached_result.get("error_message", ""),
-                "result_data": cached_result.get("result_data", {}),
             }
 
             if job.status in ["completed", "failed"] and str(job_id) in _import_results:

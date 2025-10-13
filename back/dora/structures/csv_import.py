@@ -72,8 +72,6 @@ class ImportStructuresHelper:
 
         lines = [dict(zip(headers, line)) for line in lines]
         for idx, line in enumerate(lines, 2):
-            # Note: Structure imports don't use atomic(), so progress updates would work here
-            # But keeping it simple for consistency
             serializer = ImportSerializer(
                 data={
                     "name": line["nom"],
