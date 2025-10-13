@@ -137,20 +137,16 @@ class BaseImportAdminMixinTest(TestCase):
         request = self.factory.post("/import/", {"csv_file": csv_file})
         request.user = self.user
 
-        with patch("dora.core.mixins.render") as mock_render:
-            mock_render.return_value = Mock()
-            self.mixin.import_csv(request)
+        self.mixin.import_csv(request)
 
-            job = ImportJob.objects.get(user=self.user)
-            self.assertEqual(job.status, "failed")
+        job = ImportJob.objects.get(user=self.user)
+        self.assertEqual(job.status, "failed")
 
     # Tests des cas de succès de l'import
 
-    @patch("dora.core.mixins.render")
     @patch("dora.core.mixins.threading.Thread")
-    def test_successful_import_with_defaults(self, mock_thread, mock_render):
+    def test_successful_import_with_defaults(self, mock_thread):
         mock_thread.side_effect = self.run_sync
-        mock_render.return_value = Mock(status_code=200)
 
         csv_file = self.create_csv_file()
 
@@ -174,11 +170,11 @@ class BaseImportAdminMixinTest(TestCase):
         self.assertEqual(call_args[1]["wet_run"], True)
         self.assertEqual(call_args[1]["should_remove_first_two_lines"], False)
 
-    @patch("dora.core.mixins.render")
+    @patch("dora.core.mixins.redirect")
     @patch("dora.core.mixins.threading.Thread")
-    def test_import_with_custom_parameters(self, mock_thread, mock_render):
+    def test_import_with_custom_parameters(self, mock_thread, mock_redirect):
         mock_thread.side_effect = self.run_sync
-        mock_render.return_value = Mock(status_code=200)
+        mock_redirect.return_value = Mock(status_code=200)
 
         csv_file = self.create_csv_file(filename="custom_file.csv")
 
@@ -209,17 +205,15 @@ class BaseImportAdminMixinTest(TestCase):
         self.assertEqual(call_args[1]["wet_run"], False)
         self.assertEqual(call_args[1]["should_remove_first_two_lines"], True)
 
-        mock_render.assert_called_once()
-        render_call_args = mock_render.call_args
-        context = render_call_args[0][2]
-        self.assertEqual(context["filename"], "custom_file.csv")
-        self.assertEqual(context["job_id"], str(job.id))
+        mock_redirect.assert_called_once()
+        self.assertEqual(
+            mock_redirect.call_args[0][0],
+            f"/import/?job_id={job.id}",
+        )
 
-    @patch("dora.core.mixins.render")
     @patch("dora.core.mixins.threading.Thread")
-    def test_empty_source_label_uses_default(self, mock_thread, mock_render):
+    def test_empty_source_label_uses_default(self, mock_thread):
         mock_thread.side_effect = self.run_sync
-        mock_render.return_value = Mock()
 
         csv_file = self.create_csv_file()
 
@@ -240,11 +234,9 @@ class BaseImportAdminMixinTest(TestCase):
         call_args = mock_import_method.call_args
         self.assertEqual(call_args[0][2]["label"], "DORA")  # should use default
 
-    @patch("dora.core.mixins.render")
     @patch("dora.core.mixins.threading.Thread")
-    def test_source_info_filename_extraction(self, mock_thread, mock_render):
+    def test_source_info_filename_extraction(self, mock_thread):
         mock_thread.side_effect = self.run_sync
-        mock_render.return_value = Mock()
 
         test_cases = [
             ("simple.csv", "simple"),
