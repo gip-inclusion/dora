@@ -115,6 +115,12 @@
       overflow-y: auto;
       border: 1px solid #f5c6cb;
     }
+
+    #spinner-messages {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 15px;
+    }
   </style>
 {% endblock %}
 
@@ -131,7 +137,6 @@
   <!-- Spinner overlay (shown when import is running) -->
   <div class="spinner-overlay" id="spinner-overlay" {% if job_id %}style="display: flex;"{% endif %}>
     <div class="spinner-content">
-      <button type="button" class="spinner-close-btn" id="spinner-close-btn" aria-label="Fermer">✕</button>
       <div class="spinner"></div>
       <div class="spinner-text" id="spinner-text">Import en cours...</div>
       <div id="spinner-messages" style="display: none;"></div>
