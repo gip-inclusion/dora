@@ -3,7 +3,6 @@ repos:
     rev: v0.8.1
     hooks:
       - id: ruff-format
-        args: [--config=analytics/pyproject.toml]
         files: ^analytics
         types_or: [python]
 
@@ -16,5 +15,3 @@ repos:
         additional_dependencies:
           - sqlfluff-templater-dbt==3.2.5
           - dbt-postgres==1.8.2
-        args:
-          - --config=./analytics/pyproject.toml

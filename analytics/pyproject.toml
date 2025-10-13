@@ -1,3 +1,8 @@
+[project]
+name = "dora-analytics"
+dynamic = ["version"]
+requires-python = "==3.13.*"
+
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = ["setuptools", "wheel"]
@@ -44,8 +49,4 @@ preferred_type_casting_style = "cast"
 # Ceci est une mauvaise pratique, les champs internes ne devraient pas
 # être les champs métiers définitifs, c'est le travail de Metabase
 additional_allowed_characters = "àéè '-"
-
-[tool.sqlfluff.templater.dbt]
-project_dir = "./analytics"
-profiles_dir = "./analytics"
 
