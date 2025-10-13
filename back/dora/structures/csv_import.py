@@ -44,7 +44,6 @@ class ImportStructuresHelper:
         source_info: Dict[str, str],
         wet_run: bool = False,
         should_remove_first_two_lines: bool = False,
-        import_job=None,
     ) -> Dict[str, Union[Dict[int, List[str]], int]]:
         if wet_run:
             print("⚠️ PRODUCTION RUN ⚠️")

@@ -134,7 +134,6 @@
 {% endblock %}
 
 {% block content %}
-  <!-- Spinner overlay (shown when import is running) -->
   <div class="spinner-overlay" id="spinner-overlay" {% if job_id %}style="display: flex;"{% endif %}>
     <div class="spinner-content">
       <div class="spinner"></div>
@@ -230,7 +229,6 @@
   </div>
 
   <script>
-    // Show/hide spinner overlay
     function showSpinner() {
       document.getElementById('spinner-overlay').style.display = 'flex';
     }
@@ -239,25 +237,16 @@
       document.getElementById('spinner-overlay').style.display = 'none';
     }
 
-    // Redirect to clean URL without query parameters
     function redirectToCleanUrl() {
       const cleanUrl = window.location.pathname;
       window.location.href = cleanUrl;
     }
 
-    // Handle "Nouvel import" button
     const newImportBtn = document.getElementById('new-import-btn');
     if (newImportBtn) {
       newImportBtn.addEventListener('click', redirectToCleanUrl);
     }
 
-    // Handle close button
-    const closeBtn = document.getElementById('spinner-close-btn');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', redirectToCleanUrl);
-    }
-
-    // File input change handler
     document.getElementById('csv-file-input').addEventListener('change', function(e) {
       const fileStatus = document.getElementById('file-status');
 
@@ -273,7 +262,6 @@
       }
     });
 
-    // Job status polling logic
     {% if job_id %}
       (function() {
         const statusUrl = "{% url 'admin:'|add:opts.app_label|add:'_import_job_status' job_id=job_id %}";
@@ -294,17 +282,13 @@
             spinner.style.display = 'none';
             spinnerText.textContent = 'Import terminé !';
 
-            // Display result messages
+            // Afficher les résultats
             if (data.messages && data.messages.length > 0) {
               spinnerMessages.style.display = 'block';
               spinnerMessages.innerHTML = '<ul class="messagelist">' +
               data.messages.map(msg =>
                 `<li class="${msg.level || 'info'}">${msg.message}</li>`
               ).join('') + '</ul>';
-            } else if (data.result_data) {
-              // Fallback: display raw result data if no formatted messages
-              spinnerMessages.style.display = 'block';
-              spinnerMessages.innerHTML = '<ul class="messagelist"><li class="success"><strong>Import terminé avec succès</strong>' + formatResultData(data.result_data) + '</li></ul>';
             }
 
             spinnerActions.style.display = 'block';
@@ -327,27 +311,6 @@
           return div.innerHTML;
         }
 
-        function formatResultData(resultData) {
-          let html = '<ul>';
-          if (resultData.created_count !== undefined) {
-            html += `<li>${resultData.created_count} service(s) créé(s)</li>`;
-          }
-          if (resultData.created_structures_count !== undefined) {
-            html += `<li>${resultData.created_structures_count} structure(s) créée(s)</li>`;
-          }
-          if (resultData.created_services_count !== undefined) {
-            html += `<li>${resultData.created_services_count} service(s) créé(s)</li>`;
-          }
-          if (resultData.edited_structures_count !== undefined) {
-            html += `<li>${resultData.edited_structures_count} structure(s) modifiée(s)</li>`;
-          }
-          if (resultData.errors && resultData.errors.length > 0) {
-            html += `<li class="error">${resultData.errors.length} erreur(s)</li>`;
-          }
-          html += '</ul>';
-          return html;
-        }
-
         function pollStatus() {
           fetch(statusUrl)
             .then(response => response.json())
@@ -364,9 +327,8 @@
             });
         }
 
-        // Start polling every 1 second
-        pollInterval = setInterval(pollStatus, 1000);
-        pollStatus(); // Poll immediately
+        pollInterval = setInterval(pollStatus, 3000);
+        pollStatus();
       })();
     {% endif %}
   </script>

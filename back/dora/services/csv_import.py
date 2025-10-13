@@ -46,7 +46,6 @@ class ImportServicesHelper:
         source_info: dict[str, str],
         wet_run: bool = False,
         should_remove_first_two_lines: bool = False,
-        import_job=None,
     ) -> Dict[str, Union[List[Any], int, List[str]]]:
         self.wet_run = wet_run
         self.importing_user = importing_user
@@ -84,8 +83,6 @@ class ImportServicesHelper:
                             ]
                         }
                 for idx, line in enumerate(lines, 2):
-                    # Note: Progress updates don't work inside atomic() blocks
-                    # The progress will show as 100% instantly when import completes
                     try:
                         print(f"\nTraitement de la ligne {idx} :")
 
