@@ -8,10 +8,6 @@ on:
     paths:
       - 'front/**'
       - '.github/workflows/front-ci.yml'
-  pull_request:
-    paths:
-      - 'front/**'
-      - '.github/workflows/front-ci.yml'
 
 jobs:
   build:
