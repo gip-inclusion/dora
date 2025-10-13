@@ -1,13 +1,18 @@
+[project]
+name = "dora-back"
+dynamic = ["version"]
+requires-python = "==3.13.*"
+
 [tool.pytest.ini_options]
 # Les variables d'environnement ont priorité sur la configuration du fichier de config.
 # Pour sélectionner une configuration de settings Django depuis ce fichier:
 addopts="--ds=config.settings.test"
 python_files = ["test.py", "tests*.py", "test_*.py"]
 filterwarnings = [
-	# Ignore le warning spécifique de pyOpenSSL sur les CSR 
+	# Ignore le warning spécifique de pyOpenSSL sur les CSR
 	# (une PR en attente de @tonial dans `mozilla-django-oidc` règle le problème)
 	"ignore:CSR support in pyOpenSSL is deprecated:DeprecationWarning",
-	# La partie `back` n'utilise pas les fichiers statiques : 
+	# La partie `back` n'utilise pas les fichiers statiques :
 	# on peut ignorer l'absence d'un répertoire `staticfiles`
 	"ignore:No directory at:UserWarning"
 ]
@@ -30,35 +35,3 @@ select = [
 
 [tool.ruff.lint.isort]
 known-first-party = ["dora"]
-
-# Note : la plupart des éléments de configuration de sqlfluff
-# sont basés sur les recommandantions et usages de Data-Inclusion
-[tool.sqlfluff.core]
-dialect = "postgres"
-sql_file_exts = ".sql"
-
-[tool.sqlfluff.layout.type.alias_expression]
-# Alignement vertical pour les aliases
-# https://docs.sqlfluff.com/en/stable/layout.html#aligned-elements
-spacing_before = "align"
-# Aliases alignés dans la clause SELECT
-align_within = "select_clause"
-# Alignement des éléments entre parenthèses : 
-align_scope = "bracketed"
-
-# Pour les règles de sqlfluff, voir :  
-# - https://docs.sqlfluff.com/en/stable/rules.html
-# Pour les directives de configuration dans les fichiers : 
-# - https://docs.sqlfluff.com/en/stable/configuration.html#in-file-configuration-directives
-[tool.sqlfluff.rules.capitalisation.keywords]
-capitalisation_policy = "lower"
-
-[tool.sqlfluff.rules.capitalisation.functions]
-extended_capitalisation_policy = "lower"
-
-[tool.sqlfluff.rules.capitalisation.literals]
-capitalisation_policy = "lower"
-
-[tool.sqlfluff.rules.references.special_chars]
-# Utiles pour les aliases de champs Metabase
-additional_allowed_characters = "àéè '-"
