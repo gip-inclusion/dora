@@ -184,7 +184,8 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                 {
                     "level": "success",
                     "message": format_html(
-                        f"<b>Import terminé avec succès</b><br/>{total_services_published} nouveaux services ont été créés et publiés"
+                        "<b>Import terminé avec succès</b><br/>{} nouveaux services ont été créés et publiés",
+                        total_services_published,
                     ),
                 }
             )
@@ -194,7 +195,8 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                 {
                     "level": "success",
                     "message": format_html(
-                        f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {total_services_published} sont prêts à être importés et publiés."
+                        "<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {} sont prêts à être importés et publiés.",
+                        total_services_published,
                     ),
                 }
             )

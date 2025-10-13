@@ -467,9 +467,12 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
                 {
                     "level": "success",
                     "message": format_html(
-                        f"<b>Import terminé avec succès</b><br/>{created_structures_count} nouvelles structures ont été créées.<br/>"
-                        f"{edited_structures_count} structures existantes ont été modifiées.<br/>"
-                        f"{created_services_count} nouveaux services ont été crées en brouillon.<br/>"
+                        "<b>Import terminé avec succès</b><br/>{} nouvelles structures ont été créées.<br/>"
+                        "{} structures existantes ont été modifiées.<br/>"
+                        "{} nouveaux services ont été crées en brouillon.<br/>",
+                        created_structures_count,
+                        edited_structures_count,
+                        created_services_count,
                     ),
                 }
             )
