@@ -5,6 +5,7 @@ from django.contrib.gis import admin
 from django.shortcuts import render
 from django.urls import path
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 
@@ -252,7 +253,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             messages.append(
                 {
                     "level": "warning",
-                    "message": format_html(
+                    "message": mark_safe(
                         "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
                     ),
                 }

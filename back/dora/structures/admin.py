@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 from dora.core.models import ModerationStatus
@@ -477,7 +478,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
             messages.append(
                 {
                     "level": "success",
-                    "message": format_html(
+                    "message": mark_safe(
                         "<b>Import de test terminé avec succès</b><br/>"
                     ),
                 }
