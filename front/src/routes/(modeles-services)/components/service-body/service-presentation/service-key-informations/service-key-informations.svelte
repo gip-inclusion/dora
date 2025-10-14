@@ -23,7 +23,7 @@
   interface Props {
     service: Service | Model;
     servicesOptions: ServicesOptions;
-    onFeedbackButtonClick: () => void;
+    onFeedbackButtonClick?: () => void;
   }
 
   let { service, servicesOptions, onFeedbackButtonClick }: Props = $props();
@@ -193,7 +193,7 @@
           {/if}
         </div>
       </ServiceKeyInformationSection>
-      {#if !hasLabelSection}
+      {#if !hasLabelSection && onFeedbackButtonClick}
         <div class="mt-s32">
           <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
         </div>
@@ -219,9 +219,11 @@
             />
           {/if}
         </div>
-        <div class="mt-s32">
-          <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
-        </div>
+        {#if onFeedbackButtonClick}
+          <div class="mt-s32">
+            <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
+          </div>
+        {/if}
       </div>
     {/if}
   </div>

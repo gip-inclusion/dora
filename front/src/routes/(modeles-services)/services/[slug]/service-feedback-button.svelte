@@ -13,7 +13,7 @@
     getContext<ShowFeedbackModalContext>("showFeedbackModal");
 </script>
 
-{#if showFeedbackModal()}
+{#if showFeedbackModal && showFeedbackModal()}
   <div>
     <button class="text-gray-text underline" {onclick}
       >Signalez-nous toute erreur ou suggestion de modification.</button

@@ -12,7 +12,7 @@
   interface Props {
     service: Service | Model;
     servicesOptions: ServicesOptions;
-    onFeedbackButtonClick: () => void;
+    onFeedbackButtonClick?: () => void;
     onTrackMobilisation: (url?: string) => void;
   }
 
@@ -37,5 +37,7 @@
 
   <ServiceDiIdentification {service} />
 
-  <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
+  {#if onFeedbackButtonClick}
+    <ServiceFeedbackButton onclick={onFeedbackButtonClick} />
+  {/if}
 </div>
