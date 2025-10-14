@@ -1,10 +1,10 @@
 import logging
 
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.admin.filters import RelatedOnlyFieldListFilter
 from django.forms.models import BaseInlineFormSet
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
@@ -294,6 +294,11 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
                 self.admin_site.admin_view(self.import_structures_view),
                 name="structures_structure_import",
             ),
+            path(
+                "import-job-status/<uuid:job_id>/",
+                self.admin_site.admin_view(self.import_job_status),
+                name="structures_import_job_status",
+            ),
         ]
         return custom_urls + urls
 
@@ -442,30 +447,40 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
             "has_view_permission": True,
             "csv_headers": ImportStructuresHelper.CSV_HEADERS,
         }
+
+        job_id = request.GET.get("job_id")
+        if job_id:
+            context["job_id"] = job_id
+
         return render(request, "admin/import_csv_form.html", context)
 
-    def handle_import_results(self, request, result, is_wet_run):
+    def format_results(self, result, is_wet_run):
+        messages = []
         errors_map = result.get("errors_map", {})
         created_structures_count = result.get("created_structures_count", 0)
         created_services_count = result.get("created_services_count", 0)
         edited_structures_count = result.get("edited_structures_count", 0)
 
         if not errors_map and is_wet_run:
-            messages.success(
-                request,
-                format_html(
-                    f"<b>Import terminé avec succès</b><br/>{created_structures_count} nouvelles structures ont été créées.<br/>"
-                    f"{edited_structures_count} structures existantes ont été modifiées.<br/>"
-                    f"{created_services_count} nouveaux services ont été crées en brouillon.<br/>"
-                ),
+            messages.append(
+                {
+                    "level": "success",
+                    "message": format_html(
+                        f"<b>Import terminé avec succès</b><br/>{created_structures_count} nouvelles structures ont été créées.<br/>"
+                        f"{edited_structures_count} structures existantes ont été modifiées.<br/>"
+                        f"{created_services_count} nouveaux services ont été crées en brouillon.<br/>"
+                    ),
+                }
             )
 
-            return redirect("..")
-
         elif not errors_map and not is_wet_run:
-            messages.success(
-                request,
-                format_html("<b>Import de test terminé avec succès</b><br/>"),
+            messages.append(
+                {
+                    "level": "success",
+                    "message": format_html(
+                        "<b>Import de test terminé avec succès</b><br/>"
+                    ),
+                }
             )
 
         elif errors_map:
@@ -475,21 +490,32 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
 
             title_prefix = "Échec de l'import" if is_wet_run else "Test terminé"
 
-            messages.error(
-                request,
-                format_html(
-                    f"<b>{title_prefix} - Erreurs rencontrées</b><br/>"
-                    f"{('<br/>').join(error_messages)}"
-                ),
+            messages.append(
+                {
+                    "level": "error",
+                    "message": format_html(
+                        f"<b>{title_prefix} - Erreurs rencontrées</b><br/>"
+                        f"{('<br/>').join(error_messages)}"
+                    ),
+                }
             )
 
-        return redirect(".")
+        return messages
 
     def get_import_helper(self):
         return self.import_structure_helper
 
     def get_import_method_name(self):
         return "import_structures"
+
+    def get_import_type_name(self):
+        return "structures"
+
+    def get_import_title(self):
+        return "Module d'import de structures"
+
+    def get_csv_headers(self):
+        return ImportStructuresHelper.CSV_HEADERS
 
 
 class DisabledDoraFormDIStructureAdmin(admin.ModelAdmin):

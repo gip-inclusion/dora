@@ -1,35 +1,49 @@
 import csv
 import io
+import threading
+import traceback
 
-from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import redirect
-from django.utils.html import format_html
+from django.utils import timezone
+
+from dora.users.models import User
+
+from .models import ImportJob
+
+# Stockage temporaire des résultats de l'import
+_import_results = {}
 
 
 class BaseImportAdminMixin:
-    upload_size_limit_in_bytes = 10 * 1024 * 1024  # 10MB
+    upload_size_limit_in_bytes = 50 * 1024 * 1024  # 50MB to handle larger CSVs
     default_source_label = "DORA"
 
     def import_csv(self, request):
         csv_file = request.FILES.get("csv_file")
+
         if not csv_file:
-            messages.error(request, "Veuillez sélectionner un fichier CSV.")
-            return redirect(".")
+            return self._create_failed_job(
+                request,
+                "fichier-manquant.csv",
+                "Veuillez sélectionner un fichier CSV.",
+            )
+
         if not csv_file.name.lower().endswith(".csv"):
-            messages.error(
+            return self._create_failed_job(
                 request,
-                format_html(
-                    "<b>Échec de l'import - Format de fichier non valide</b><br/>"
-                    "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
-                ),
+                csv_file.name,
+                "<b>Échec de l'import - Format de fichier non valide</b><br/>"
+                "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
             )
-            return redirect(".")
+
         if csv_file.size > self.upload_size_limit_in_bytes:
-            messages.error(
+            return self._create_failed_job(
                 request,
-                "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit faire moins de 10 Mio.",
+                csv_file.name,
+                "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit faire moins de 50 Mio.",
             )
-            return redirect(".")
+
         try:
             is_wet_run = request.POST.get("test_run") != "on"
             source_label = request.POST.get(
@@ -38,11 +52,87 @@ class BaseImportAdminMixin:
             should_remove_instructions_from_csv = (
                 request.POST.get("should_remove_instructions") == "on"
             )
+
+            csv_content = csv_file.read().decode("utf-8")
+
+            import_job = ImportJob.objects.create(
+                user=request.user,
+                import_type=self.get_import_type_name(),
+                filename=csv_file.name,
+                status="pending",
+            )
+
             source_info = {
                 "value": csv_file.name.rsplit(".", 1)[0],
                 "label": source_label or self.default_source_label,
             }
-            reader = csv.reader(io.TextIOWrapper(csv_file, encoding="utf-8"))
+
+            # L'import va se passer dans un background thread pour empêcher un timeout
+            thread = threading.Thread(
+                target=self._run_import_in_background,
+                args=(
+                    import_job.id,
+                    csv_content,
+                    request.user.id,
+                    source_info,
+                    is_wet_run,
+                    should_remove_instructions_from_csv,
+                ),
+            )
+            thread.daemon = True
+            thread.start()
+
+            return redirect(f"{request.path}?job_id={import_job.id}")
+
+        except UnicodeDecodeError:
+            return self._create_failed_job(
+                request,
+                csv_file.name,
+                "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
+                "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
+            )
+        except Exception as e:
+            return self._create_failed_job(
+                request,
+                csv_file.name,
+                f"<b>Échec de l'import - Erreur inattendue</b><br/>"
+                f"L'erreur suivante s'est produite :<br/>"
+                f"{e}<br/>"
+                f"Si le problème persiste, contactez les développeurs.",
+            )
+
+    def _create_failed_job(self, request, filename, error_message):
+        import_job = ImportJob.objects.create(
+            user=request.user,
+            import_type=self.get_import_type_name(),
+            filename=filename,
+            status="failed",
+        )
+
+        _import_results[str(import_job.id)] = {
+            "messages": [{"level": "error", "message": error_message}],
+        }
+
+        return redirect(f"{request.path}?job_id={import_job.id}")
+
+    def _run_import_in_background(
+        self,
+        job_id,
+        csv_content,
+        user_id,
+        source_info,
+        is_wet_run,
+        should_remove_instructions,
+    ):
+        try:
+            job = ImportJob.objects.get(id=job_id)
+            job.status = "processing"
+            job.started_at = timezone.now()
+            job.save()
+
+            user = User.objects.get(id=user_id)
+
+            reader = csv.reader(io.StringIO(csv_content))
 
             helper = self.get_import_helper()
             method_name = self.get_import_method_name()
@@ -50,40 +140,65 @@ class BaseImportAdminMixin:
 
             result = import_method(
                 reader,
-                request.user,
+                user,
                 source_info,
                 wet_run=is_wet_run,
-                should_remove_first_two_lines=should_remove_instructions_from_csv,
+                should_remove_first_two_lines=should_remove_instructions,
             )
-            return self.handle_import_results(request, result, is_wet_run)
-        except UnicodeDecodeError:
-            messages.error(
-                request,
-                format_html(
-                    "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
-                    "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
-                ),
-            )
-            return redirect(".")
+
+            _import_results[str(job_id)] = {
+                "messages": self.format_results(result, is_wet_run),
+                "is_wet_run": is_wet_run,
+            }
+
+            job.status = "completed"
+            job.completed_at = timezone.now()
+            job.save()
+
         except Exception as e:
-            messages.error(
-                request,
-                format_html(
-                    "<b>Échec de l'import - Erreur inattendue</b><br/>"
-                    "L'erreur suivante s'est produite :<br/>"
-                    f"{e}<br/>"
-                    "Si le problème persiste, contactez les développeurs.",
-                ),
-            )
-            return redirect(".")
+            _import_results[str(job_id)] = {
+                "error_message": f"{str(e)}\n\n{traceback.format_exc()}",
+            }
+
+            job = ImportJob.objects.get(id=job_id)
+            job.status = "failed"
+            job.completed_at = timezone.now()
+            job.save()
 
     def get_import_helper(self):
-        """Override this method to return the appropriate import helper."""
         raise NotImplementedError("Subclasses must implement get_import_helper()")
 
     def get_import_method_name(self):
-        """Override this method to return the import method name."""
         raise NotImplementedError("Subclasses must implement get_import_method_name()")
 
-    def handle_import_results(self, request, result, is_wet_run):
-        raise NotImplementedError("Subclasses must implement _handle_import_results()")
+    def get_import_type_name(self):
+        raise NotImplementedError("Subclasses must implement get_import_type_name()")
+
+    def get_import_title(self):
+        raise NotImplementedError("Subclasses must implement get_import_title()")
+
+    def get_csv_headers(self):
+        raise NotImplementedError("Subclasses must implement get_csv_headers()")
+
+    def format_results(self, result, is_wet_run):
+        raise NotImplementedError("Subclasses must implement format_results()")
+
+    def import_job_status(self, request, job_id):
+        try:
+            job = ImportJob.objects.get(id=job_id, user=request.user)
+
+            # Chercher les résultats stocké en memoire
+            cached_result = _import_results.get(str(job_id), {})
+
+            response_data = {
+                "status": job.status,
+                "messages": cached_result.get("messages", []),
+                "error_message": cached_result.get("error_message", ""),
+            }
+
+            if job.status in ["completed", "failed"] and str(job_id) in _import_results:
+                del _import_results[str(job_id)]
+
+            return JsonResponse(response_data)
+        except ImportJob.DoesNotExist:
+            return JsonResponse({"error": "Job not found"}, status=404)

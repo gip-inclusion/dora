@@ -15,8 +15,23 @@
 {% endblock %}
 
 {% block content %}
-  <div class="form-container">
-    <form method="post" enctype="multipart/form-data">
+  <div class="spinner-overlay" id="spinner-overlay" {% if job_id %}style="display: flex;"{% endif %}>
+    <div class="spinner-content">
+      <div class="spinner"></div>
+      <div class="spinner-text" id="spinner-text">Import en cours...</div>
+      <div id="spinner-messages" style="display: none;"></div>
+      <div id="spinner-error" style="display: none;"></div>
+      <div class="spinner-actions" id="spinner-actions" style="display: none;">
+        <a href="{% url 'admin:'|add:opts.app_label|add:'_'|add:opts.model_name|add:'_changelist' %}">
+          Voir la liste des {{ opts.verbose_name_plural|lower }}
+        </a>
+        <button type="button" id="new-import-btn">Nouvel import</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-container" id="form-container">
+    <form method="post" enctype="multipart/form-data" id="import-form">
       {% csrf_token %}
 
       <div class="form-section">
@@ -95,6 +110,24 @@
   </div>
 
   <script>
+    function showSpinner() {
+      document.getElementById('spinner-overlay').style.display = 'flex';
+    }
+
+    function hideSpinner() {
+      document.getElementById('spinner-overlay').style.display = 'none';
+    }
+
+    function redirectToCleanUrl() {
+      const cleanUrl = window.location.pathname;
+      window.location.href = cleanUrl;
+    }
+
+    const newImportBtn = document.getElementById('new-import-btn');
+    if (newImportBtn) {
+      newImportBtn.addEventListener('click', redirectToCleanUrl);
+    }
+
     document.getElementById('csv-file-input').addEventListener('change', function(e) {
       const fileStatus = document.getElementById('file-status');
 
@@ -109,5 +142,75 @@
         fileStatus.className = 'file-status no-file';
       }
     });
+
+    {% if job_id %}
+      (function() {
+        const statusUrl = "{% url 'admin:'|add:opts.app_label|add:'_import_job_status' job_id=job_id %}";
+        const spinner = document.querySelector('.spinner');
+        const spinnerText = document.getElementById('spinner-text');
+        const spinnerMessages = document.getElementById('spinner-messages');
+        const spinnerError = document.getElementById('spinner-error');
+        const spinnerActions = document.getElementById('spinner-actions');
+        let pollInterval;
+
+        function updateStatus(data) {
+          if (data.status === 'pending') {
+            spinnerText.textContent = 'Import en attente...';
+          } else if (data.status === 'processing') {
+            spinnerText.textContent = 'Import en cours...';
+          } else if (data.status === 'completed') {
+            clearInterval(pollInterval);
+            spinner.style.display = 'none';
+            spinnerText.textContent = 'Import terminé !';
+
+            // Afficher les résultats
+            if (data.messages && data.messages.length > 0) {
+              spinnerMessages.style.display = 'block';
+              spinnerMessages.innerHTML = '<ul class="messagelist">' +
+              data.messages.map(msg =>
+                `<li class="${msg.level || 'info'}">${msg.message}</li>`
+              ).join('') + '</ul>';
+            }
+
+            spinnerActions.style.display = 'block';
+          } else if (data.status === 'failed') {
+            clearInterval(pollInterval);
+            spinner.style.display = 'none';
+            spinnerText.textContent = 'Import échoué';
+            spinnerActions.style.display = 'block';
+
+            if (data.error_message) {
+              spinnerError.style.display = 'block';
+              spinnerError.innerHTML = '<div class="error-details">' + escapeHtml(data.error_message) + '</div>';
+            }
+          }
+        }
+
+        function escapeHtml(text) {
+          const div = document.createElement('div');
+          div.textContent = text;
+          return div.innerHTML;
+        }
+
+        function pollStatus() {
+          fetch(statusUrl)
+            .then(response => response.json())
+            .then(data => {
+              if (data.error) {
+                console.error('Error fetching status:', data.error);
+                clearInterval(pollInterval);
+                return;
+              }
+              updateStatus(data);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+        }
+
+        pollInterval = setInterval(pollStatus, 3000);
+        pollStatus();
+      })();
+    {% endif %}
   </script>
 {% endblock %}

@@ -69,7 +69,7 @@ class ImportServicesHelper:
                 print(
                     f"Les headers suivants sont manquants : ({', '.join(missing_headers)})"
                 )
-                return {"missing_headers": missing_headers}
+                return {"missing_headers": list(missing_headers)}
 
             with transaction.atomic():
                 if self.wet_run:

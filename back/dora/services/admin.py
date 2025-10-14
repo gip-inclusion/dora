@@ -1,9 +1,8 @@
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django import forms
-from django.contrib import messages
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import path
 from django.utils.html import format_html
 
@@ -139,6 +138,11 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                 self.admin_site.admin_view(self.import_services_view),
                 name="services_service_import",
             ),
+            path(
+                "import-job-status/<uuid:job_id>/",
+                self.admin_site.admin_view(self.import_job_status),
+                name="services_import_job_status",
+            ),
         ]
         return custom_urls + urls
 
@@ -152,49 +156,61 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             "has_view_permission": True,
             "csv_headers": ImportServicesHelper.CSV_HEADERS,
         }
+
+        job_id = request.GET.get("job_id")
+        if job_id:
+            context["job_id"] = job_id
+
         return render(request, "admin/import_csv_form.html", context)
 
-    def handle_import_results(self, request, result, is_wet_run):
+    def format_results(self, result, is_wet_run):
+        success_messages = []
+
         created_count = result.get("created_count", 0)
         no_errors = not result.get("missing_headers", []) and not result.get(
             "errors", []
         )
 
-        self._add_error_messages(request, result, is_wet_run)
-        self._add_warning_messages(request, result, is_wet_run)
+        error_messages = self._add_error_messages(result, is_wet_run)
+        warning_messages = self._add_warning_messages(result, is_wet_run)
 
         total_services_published = created_count - len(
             result.get("draft_services_created", [])
         )
 
         if is_wet_run and no_errors:
-            messages.success(
-                request,
-                format_html(
-                    f"<b>Import terminé avec succès</b><br/>{total_services_published} nouveaux services ont été créés et publiés"
-                ),
+            success_messages.append(
+                {
+                    "level": "success",
+                    "message": format_html(
+                        f"<b>Import terminé avec succès</b><br/>{total_services_published} nouveaux services ont été créés et publiés"
+                    ),
+                }
             )
-            return redirect("..")
 
         if not is_wet_run and no_errors:
-            messages.success(
-                request,
-                format_html(
-                    f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {total_services_published} sont prêts à être importés et publiés."
-                ),
+            success_messages.append(
+                {
+                    "level": "success",
+                    "message": format_html(
+                        f"<b>Test réalisé avec succès - aucune erreur détectée</b><br/>C'est tout bon ! {total_services_published} sont prêts à être importés et publiés."
+                    ),
+                }
             )
 
-        return redirect(".")
+        return success_messages + error_messages + warning_messages
 
-    def _add_error_messages(self, request, result, is_wet_run):
+    def _add_error_messages(self, result, is_wet_run):
         missing_headers = result.get("missing_headers", [])
         errors = result.get("errors", [])
+
+        messages = []
 
         if missing_headers:
             headers_list = "<br/>".join(f"• {header}" for header in missing_headers)
             message = f"<b>Échec de l'import - Colonnes manquantes</b><br/>Votre fichier CSV ne contient pas toutes les colonnes requises. Ajoutez les colonnes suivantes :<br/>{headers_list}"
 
-            messages.error(request, format_html(message))
+            messages.append({"level": "error", "message": format_html(message)})
 
         if errors:
             error_list = "<br/>".join(f"• {error}" for error in errors)
@@ -208,32 +224,38 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                 if is_wet_run
                 else "Le fichier contient des erreurs qui empêcheront l'import."
             )
-            messages.error(
-                request,
-                format_html(
-                    f"<b>{message_title}</b><br/>{message_text} Veuillez corriger les éléments suivants :<br/>"
-                    f"{error_list}",
-                ),
+            messages.append(
+                {
+                    "level": "error",
+                    "message": format_html(
+                        f"<b>{message_title}</b><br/>{message_text} Veuillez corriger les éléments suivants :<br/>"
+                        f"{error_list}",
+                    ),
+                }
             )
 
-    def _add_warning_messages(self, request, result, is_wet_run):
+        return messages
+
+    def _add_warning_messages(self, result, is_wet_run):
         duplicated_services = result.get("duplicated_services", [])
         geo_data_missing = result.get("geo_data_missing_lines", [])
         draft_services_created = result.get("draft_services_created", [])
         errors = result.get("errors", [])
+
+        messages = []
 
         if (
             errors
             and is_wet_run
             and (duplicated_services or geo_data_missing or draft_services_created)
         ):
-            messages.add_message(
-                request,
-                messages.INFO,
-                format_html(
-                    "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
-                ),
-                extra_tags="plain",
+            messages.append(
+                {
+                    "level": "warning",
+                    "message": format_html(
+                        "<b>D'autres irrégularités non bloquantes ont été détectées :</b>"
+                    ),
+                }
             )
 
         title_prefix = ""
@@ -241,18 +263,19 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             title_prefix = "Import réalisé - "
         elif not is_wet_run:
             title_prefix = "Test terminé - "
-
         if duplicated_services:
             duplicate_list = "<br/>".join(
                 f'• [{service["idx"]}] SIRET {service["siret"]} - il existe déjà un service avec le modèle {service["model_slug"]} et le courriel "{service["contact_email"]}"'
                 for service in duplicated_services
             )
-            messages.warning(
-                request,
-                format_html(
-                    f"<b>{title_prefix}Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
-                    f"{duplicate_list}"
-                ),
+            messages.append(
+                {
+                    "level": "warning",
+                    "message": format_html(
+                        f"<b>{title_prefix}Doublons potentiels détectés</b><br/>Nous avons détecté des similitudes avec des services existants. Nous vous recommandons de vérifier :<br/>"
+                        f"{duplicate_list}"
+                    ),
+                }
             )
 
         if geo_data_missing:
@@ -260,12 +283,14 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                 f"• [{item.get('idx', '?')}] {item.get('address', '')} {item.get('postal_code', '')} {item.get('city', '')}"
                 for item in geo_data_missing
             )
-            messages.warning(
-                request,
-                format_html(
-                    f"<b>{title_prefix}Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
-                    f"{missing_list}"
-                ),
+            messages.append(
+                {
+                    "level": "warning",
+                    "message": format_html(
+                        f"<b>{title_prefix}Géolocalisation incomplète</b><br/>Certaines adresses n'ont pas pu être géolocalisées correctement et risquent de ne pas apparaître dans les résultats de recherche :<br/>"
+                        f"{missing_list}"
+                    ),
+                }
             )
 
         if draft_services_created:
@@ -273,7 +298,6 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                 f'• [{service["idx"]}] Service "{service["name"]}" - Manque : {", ".join(service["missing_fields"])}'
                 for service in draft_services_created
             )
-
             if errors and is_wet_run:
                 message = "<b>Informations manquantes</b><br/> Contactez les structures pour compléter ces éléments avant importation"
             if not errors and is_wet_run:
@@ -281,16 +305,29 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
             if not is_wet_run:
                 message = f"<b>{title_prefix}Services incomplets</b><br/>{len(draft_services_created)} services seront passés en brouillon en cas d'import. Contactez les structures pour compléter ces éléments avant importation"
 
-            messages.warning(
-                request,
-                format_html(message + f" :<br/>{draft_list}"),
+            messages.append(
+                {
+                    "level": "warning",
+                    "message": format_html(message + f" :<br/>{draft_list}"),
+                }
             )
+
+        return messages
 
     def get_import_helper(self):
         return self.import_service_helper
 
     def get_import_method_name(self):
         return "import_services"
+
+    def get_import_type_name(self):
+        return "services"
+
+    def get_import_title(self):
+        return "Module d'import de services"
+
+    def get_csv_headers(self):
+        return ImportServicesHelper.CSV_HEADERS
 
 
 class ServiceModelAdmin(admin.ModelAdmin):
