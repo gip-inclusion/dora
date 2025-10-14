@@ -275,6 +275,8 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "presentation_resume": "Accompagnement des familles à domicile",
         "prise_rdv": "https://example.com",
         "profils": ["familles", "etudiants", "femmes"],
+        "publics": ["familles", "etudiants", "femmes"],
+        "publics_precisions": "familles, etudiants, femmes",
         "recurrence": "Tu 09:00-12:00;We 14:00-17:00",
         "source": None,
         "structure_id": str(structure.id),
