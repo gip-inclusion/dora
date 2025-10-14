@@ -92,7 +92,7 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
             "requirements",
             "credentials",
         )
-        .order_by("pk")
+        .order_by("creation_date")
     )
     serializer_class = ServiceSerializer
     permission_classes = [APIPermission]
