@@ -4,6 +4,15 @@ import pytest
 from rest_framework.test import APIClient
 
 
+@pytest.hookimpl(tryfirst=True)
+def pytest_collection_modifyitems(config, items):
+    """Active automatiquement la gestion de la db"""
+    for item in items:
+        markers = {marker.name for marker in item.iter_markers()}
+        if "no_django_db" not in markers and "django_db" not in markers:
+            item.add_marker(pytest.mark.django_db)
+
+
 @pytest.fixture(autouse=True, scope="session")
 def patch_di_client():
     # Remplace le client D·I par défaut :
@@ -12,13 +21,6 @@ def patch_di_client():
     with patch("dora.data_inclusion.di_client_factory") as mocked_di_client:
         mocked_di_client.return_value = None
         yield
-
-
-@pytest.fixture(autouse=True)
-def _use_db(db):
-    # Active automatiquement la gestion de la db
-    # (ce qui n'est pas fait par défaut avec pytest).
-    pass
 
 
 @pytest.fixture
