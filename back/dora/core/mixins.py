@@ -3,6 +3,7 @@ import io
 import threading
 import traceback
 
+from django.core.cache import cache
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils import timezone
@@ -11,8 +12,8 @@ from dora.users.models import User
 
 from .models import ImportJob
 
-# Stockage temporaire des résultats de l'import
-_import_results = {}
+# Durée de conservation des résultats d'import dans le cache (en secondes)
+IMPORT_RESULTS_TTL = 3600  # 1 heure
 
 
 class BaseImportAdminMixin:
@@ -109,9 +110,12 @@ class BaseImportAdminMixin:
             status="failed",
         )
 
-        _import_results[str(import_job.id)] = {
-            "messages": [{"level": "error", "message": error_message}],
-        }
+        cache_key = f"import_results:{import_job.id}"
+        cache.set(
+            cache_key,
+            {"messages": [{"level": "error", "message": error_message}]},
+            timeout=IMPORT_RESULTS_TTL,
+        )
 
         return redirect(f"{request.path}?job_id={import_job.id}")
 
@@ -146,19 +150,27 @@ class BaseImportAdminMixin:
                 should_remove_first_two_lines=should_remove_instructions,
             )
 
-            _import_results[str(job_id)] = {
-                "messages": self.format_results(result, is_wet_run),
-                "is_wet_run": is_wet_run,
-            }
+            cache_key = f"import_results:{job_id}"
+            cache.set(
+                cache_key,
+                {
+                    "messages": self.format_results(result, is_wet_run),
+                    "is_wet_run": is_wet_run,
+                },
+                timeout=IMPORT_RESULTS_TTL,
+            )
 
             job.status = "completed"
             job.completed_at = timezone.now()
             job.save()
 
         except Exception as e:
-            _import_results[str(job_id)] = {
-                "error_message": f"{str(e)}\n\n{traceback.format_exc()}",
-            }
+            cache_key = f"import_results:{job_id}"
+            cache.set(
+                cache_key,
+                {"error_message": f"{str(e)}\n\n{traceback.format_exc()}"},
+                timeout=IMPORT_RESULTS_TTL,
+            )
 
             job = ImportJob.objects.get(id=job_id)
             job.status = "failed"
@@ -187,8 +199,9 @@ class BaseImportAdminMixin:
         try:
             job = ImportJob.objects.get(id=job_id, user=request.user)
 
-            # Chercher les résultats stocké en memoire
-            cached_result = _import_results.get(str(job_id), {})
+            # Chercher les résultats stockés dans le cache Redis
+            cache_key = f"import_results:{job_id}"
+            cached_result = cache.get(cache_key, {})
 
             response_data = {
                 "status": job.status,
@@ -196,8 +209,8 @@ class BaseImportAdminMixin:
                 "error_message": cached_result.get("error_message", ""),
             }
 
-            if job.status in ["completed", "failed"] and str(job_id) in _import_results:
-                del _import_results[str(job_id)]
+            # Les résultats seront automatiquement supprimés après le TTL (1 heure)
+            # Pas besoin de supprimer manuellement
 
             return JsonResponse(response_data)
         except ImportJob.DoesNotExist:
