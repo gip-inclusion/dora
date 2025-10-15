@@ -7,7 +7,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
 from django.utils import timezone
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
+from django.utils.safestring import mark_safe
 
 from dora.core.admin import EnumAdmin
 from dora.core.models import ModerationStatus
@@ -466,9 +467,12 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
                 {
                     "level": "success",
                     "message": format_html(
-                        f"<b>Import terminé avec succès</b><br/>{created_structures_count} nouvelles structures ont été créées.<br/>"
-                        f"{edited_structures_count} structures existantes ont été modifiées.<br/>"
-                        f"{created_services_count} nouveaux services ont été crées en brouillon.<br/>"
+                        "<b>Import terminé avec succès</b><br/>{} nouvelles structures ont été créées.<br/>"
+                        "{} structures existantes ont été modifiées.<br/>"
+                        "{} nouveaux services ont été crées en brouillon.<br/>",
+                        created_structures_count,
+                        edited_structures_count,
+                        created_services_count,
                     ),
                 }
             )
@@ -477,7 +481,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
             messages.append(
                 {
                     "level": "success",
-                    "message": format_html(
+                    "message": mark_safe(
                         "<b>Import de test terminé avec succès</b><br/>"
                     ),
                 }
@@ -488,14 +492,24 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
             for line, errors in errors_map.items():
                 error_messages.append(f"[{line}]: {', '.join(errors)}")
 
-            title_prefix = "Échec de l'import" if is_wet_run else "Test terminé"
+            title_prefix = (
+                mark_safe("Échec de l'import") if is_wet_run else "Test terminé"
+            )
 
             messages.append(
                 {
                     "level": "error",
                     "message": format_html(
-                        f"<b>{title_prefix} - Erreurs rencontrées</b><br/>"
-                        f"{('<br/>').join(error_messages)}"
+                        "<b>{} - Erreurs rencontrées</b><br/>{}",
+                        title_prefix,
+                        format_html_join(
+                            mark_safe("<br/>"),
+                            "[{}]: {}",
+                            (
+                                (line, ", ".join(errors))
+                                for line, errors in errors_map.items()
+                            ),
+                        ),
                     ),
                 }
             )
