@@ -16,6 +16,9 @@ filterwarnings = [
 	# on peut ignorer l'absence d'un répertoire `staticfiles`
 	"ignore:No directory at:UserWarning"
 ]
+markers = [
+    "no_django_db: mark tests that should not be marked with django_db."
+]
 
 [tool.ruff]
 target-version = "py313"

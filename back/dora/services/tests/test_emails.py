@@ -42,7 +42,6 @@ def outdated_service():
     return service
 
 
-@pytest.mark.django_db
 @pytest.mark.parametrize("service", ["draft_service", "outdated_service"])
 def test_send_service_notification(service, request):
     service = request.getfixturevalue(service)
