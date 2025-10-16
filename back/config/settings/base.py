@@ -294,7 +294,7 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "dora.core.exceptions_handler.custom_exception_handler",
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
     "DEFAULT_THROTTLE_CLASSES": [
-        "rest_framework.throttling.AnonRateThrottle",
+        "dora.core.throttling.ClientIPAnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
