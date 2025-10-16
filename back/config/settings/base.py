@@ -301,6 +301,7 @@ REST_FRAMEWORK = {
         "anon": f"{ANON_THROTTLE_RATE_PER_MINUTE}/minute",
         "user": f"{USER_THROTTLE_RATE_PER_MINUTE}/minute",
     },
+    "NUM_PROXIES": int(os.getenv("NUM_PROXIES", 100)),
 }
 
 # CORS :
