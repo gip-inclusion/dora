@@ -180,6 +180,8 @@ class ServiceSerializer(serializers.ModelSerializer):
     frais = serializers.SerializerMethodField()
     frais_autres = serializers.SerializerMethodField()
     profils = serializers.SerializerMethodField()
+    publics = serializers.SerializerMethodField()
+    publics_precisions = serializers.SerializerMethodField()
     pre_requis = serializers.SerializerMethodField()
     cumulable = serializers.SerializerMethodField()
     justificatifs = serializers.SerializerMethodField()
@@ -242,6 +244,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             "presentation_resume",
             "prise_rdv",
             "profils",
+            "publics",
+            "publics_precisions",
             "recurrence",
             "source",
             "structure_id",
@@ -295,6 +299,17 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     def get_profils(self, obj):
         return [c.name for c in obj.publics.all()]
+
+    def get_publics(self, obj):
+        all_items = [
+            item
+            for public in obj.publics.all()
+            for item in public.corresponding_di_publics
+        ]
+        return list(dict.fromkeys(all_items))
+
+    def get_publics_precisions(self, obj):
+        return ", ".join([p.name for p in obj.publics.all()])
 
     def get_pre_requis(self, obj):
         return [c.name for c in obj.requirements.all()]
