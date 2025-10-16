@@ -70,9 +70,7 @@ class Command(BaseCommand):
             the_dir = pathlib.Path("/tmp")
         self.stdout.write("Sauvegarde des fichiers SIRENE dans : " + str(the_dir))
 
-        legal_units_file_url = (
-            "https://files.data.gouv.fr/insee-sirene/StockUniteLegale_utf8.zip"
-        )
+        legal_units_file_url = "https://object.files.data.gouv.fr/data-pipeline-open/siren/stock/StockUniteLegale_utf8.zip"
         zipped_stock_file = the_dir / "StockUniteLegale_utf8.zip"
 
         if not os.path.exists(zipped_stock_file):
