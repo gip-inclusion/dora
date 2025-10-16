@@ -301,11 +301,12 @@ class ServiceSerializer(serializers.ModelSerializer):
         return [c.name for c in obj.publics.all()]
 
     def get_publics(self, obj):
-        return list(
-            dict.fromkeys(
-                item for p in obj.publics.all() for item in p.corresponding_di_publics
-            )
-        )
+        all_items = [
+            item
+            for public in obj.publics.all()
+            for item in public.corresponding_di_publics
+        ]
+        return list(dict.fromkeys(all_items))
 
     def get_publics_precisions(self, obj):
         return ", ".join([p.name for p in obj.publics.all()])
