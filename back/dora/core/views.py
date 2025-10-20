@@ -5,12 +5,13 @@ from django.core.files.storage import default_storage
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from django.utils.text import get_valid_filename
-from rest_framework import permissions
+from rest_framework import permissions, status
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 
+from dora.core.serializers import ConsentRecordSerializer
 from dora.services.models import Service
 from dora.structures.models import Structure
 
@@ -61,3 +62,22 @@ def ping(request):
 def trigger_error(request):
     division_by_zero = 1 / 0
     print(division_by_zero)
+
+
+@api_view(["POST"])
+@permission_classes([permissions.AllowAny])
+def record_consent(request):
+    """
+    Enregistrer la décision de consentement de l'utilisateur.
+    """
+    serializer = ConsentRecordSerializer(
+        data=request.data, context={"request": request}
+    )
+
+    serializer.is_valid(raise_exception=True)
+
+    consent = serializer.save()
+
+    return Response(
+        {"success": True, "consent_id": str(consent.id)}, status=status.HTTP_201_CREATED
+    )

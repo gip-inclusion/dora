@@ -97,6 +97,7 @@ private_api_patterns = [
     path(
         "profile/main-activity/", dora.users.views.update_user_profile
     ),  # TODO: remove when not used by frontend anymore
+    path("consent-record", dora.core.views.record_consent),
 ]
 
 di_api_patterns = [
