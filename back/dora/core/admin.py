@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ImportJob, LogItem
+from .models import ConsentRecord, ImportJob, LogItem
 
 
 class EnumAdmin(admin.ModelAdmin):
@@ -53,5 +53,72 @@ class ImportJobAdmin(admin.ModelAdmin):
         return False
 
 
+class ConsentRecordAdmin(admin.ModelAdmin):
+    list_display = [
+        "get_user_identifier",
+        "consent_version",
+        "consented_to_google",
+        "consented_to_matomo",
+        "created_at",
+    ]
+
+    list_filter = [
+        "consent_version",
+        "consented_to_google",
+        "consented_to_matomo",
+        "created_at",
+    ]
+
+    search_fields = [
+        "user__email",
+        "user__username",
+        "anonymous_id",
+        "id",
+    ]
+
+    ordering = ["-created_at"]
+
+    readonly_fields = [
+        "id",
+        "user",
+        "anonymous_id",
+        "consent_version",
+        "consented_to_google",
+        "consented_to_matomo",
+        "created_at",
+    ]
+
+    fieldsets = (
+        ("Identification", {"fields": ("id", "user", "anonymous_id")}),
+        (
+            "Consentement",
+            {
+                "fields": (
+                    "consent_version",
+                    "consented_to_google",
+                    "consented_to_matomo",
+                )
+            },
+        ),
+        ("Métadonnées", {"fields": ("created_at",)}),
+    )
+
+    @admin.display(description="Identifiant", ordering="user__email")
+    def get_user_identifier(self, obj):
+        if obj.user:
+            return obj.user.email
+        return f"Anonyme ({obj.anonymous_id[:8]})" if obj.anonymous_id else "N/A"
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
 admin.site.register(LogItem, LogItemAdmin)
 admin.site.register(ImportJob, ImportJobAdmin)
+admin.site.register(ConsentRecord, ConsentRecordAdmin)
