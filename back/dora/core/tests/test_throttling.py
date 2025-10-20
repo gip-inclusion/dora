@@ -76,3 +76,45 @@ class ThrottlingTestCase(APITestCase):
 
         response = self.client.get(self.test_endpoint)
         self.assertEqual(response.status_code, 429)
+
+    def test_should_throttle_different_ips_with_same_proxy(self):
+        for i in range(ANON_THROTTLE_RATE_PER_MINUTE):
+            response_1 = self.client.get(
+                self.test_endpoint, HTTP_X_FORWARDED_FOR="192.168.1.100,10.0.0.1"
+            )
+            self.assertEqual(response_1.status_code, 200)
+            response_2 = self.client.get(
+                self.test_endpoint, HTTP_X_FORWARDED_FOR="192.168.1.101,10.0.0.1"
+            )
+            self.assertEqual(response_2.status_code, 200)
+
+        response_1 = self.client.get(
+            self.test_endpoint, HTTP_X_FORWARDED_FOR="192.168.1.100,10.0.0.1"
+        )
+        self.assertEqual(response_1.status_code, 429)
+        response_2 = self.client.get(
+            self.test_endpoint, HTTP_X_FORWARDED_FOR="192.168.1.101,10.0.0.1"
+        )
+        self.assertEqual(response_2.status_code, 429)
+
+    def test_should_throttle_same_ip_with_different_proxies(self):
+        for i in range(int(ANON_THROTTLE_RATE_PER_MINUTE / 2)):
+            response = self.client.get(
+                self.test_endpoint, HTTP_X_FORWARDED_FOR="192.168.1.100,10.0.0.1"
+            )
+            self.assertEqual(response.status_code, 200)
+
+        for i in range(int(ANON_THROTTLE_RATE_PER_MINUTE / 2)):
+            response = self.client.get(
+                self.test_endpoint, HTTP_X_FORWARDED_FOR="192.168.1.100,10.0.0.2"
+            )
+            self.assertEqual(response.status_code, 200)
+
+        response_1 = self.client.get(
+            self.test_endpoint, HTTP_X_FORWARDED_FOR="192.168.1.100,10.0.0.1"
+        )
+        self.assertEqual(response_1.status_code, 429)
+        response_2 = self.client.get(
+            self.test_endpoint, HTTP_X_FORWARDED_FOR="192.168.1.100,10.0.0.2"
+        )
+        self.assertEqual(response_2.status_code, 429)
