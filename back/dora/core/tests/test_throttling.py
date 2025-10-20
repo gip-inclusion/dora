@@ -1,5 +1,5 @@
+import pytest
 from django.core.cache import cache
-from django.test import override_settings
 from django.urls import path
 from rest_framework.response import Response
 from rest_framework.test import APITestCase
@@ -27,7 +27,7 @@ urlpatterns = [
 ]
 
 
-@override_settings(ROOT_URLCONF=__name__)
+@pytest.mark.urls("dora.core.tests.test_throttling")
 class ThrottlingTestCase(APITestCase):
     def setUp(self):
         cache.clear()
@@ -40,8 +40,7 @@ class ThrottlingTestCase(APITestCase):
             response = self.client.get(
                 self.test_endpoint, HTTP_X_FORWARDED_FOR="192.168.1.100"
             )
-            if i < ANON_THROTTLE_RATE_PER_MINUTE:
-                self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.status_code, 200)
 
         response = self.client.get(
             self.test_endpoint, HTTP_X_FORWARDED_FOR="192.168.1.100"
