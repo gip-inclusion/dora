@@ -1,4 +1,3 @@
-import pytest
 from django.contrib.messages import get_messages
 from django.core import mail
 from django.urls import reverse
@@ -9,7 +8,6 @@ from dora.orientations.models import OrientationStatus
 from dora.structures.models import StructurePutativeMember
 
 
-@pytest.mark.django_db
 def test_moderation_template(admin_client):
     # Création de la structure
     structure = make_structure(
@@ -73,7 +71,6 @@ def test_moderation_template(admin_client):
     assert "Modération du rattachement".encode("utf-8") not in response.content
 
 
-@pytest.mark.django_db
 def test_moderation_approve(admin_client):
     # Création de la structure
     structure = make_structure(
@@ -170,7 +167,6 @@ def test_moderation_approve(admin_client):
     assert response.redirect_chain[-1][0] == pending_moderation_structure_list_url
 
 
-@pytest.mark.django_db
 def test_moderation_reject(admin_client):
     # Création de la structure
     structure = make_structure(
