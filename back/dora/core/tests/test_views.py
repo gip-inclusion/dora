@@ -11,8 +11,10 @@ class ConsentRecordTestCase(APITestCase):
             {
                 "anonymous_id": "12345abcdef",
                 "consent_version": "1.1",
-                "consented_to_google": True,
-                "consented_to_matomo": True,
+                "consent_choices": {
+                    "google_cse": True,
+                    "matomo": True,
+                },
             },
         )
 
@@ -27,12 +29,11 @@ class ConsentRecordTestCase(APITestCase):
             "1.1",
         )
         self.assertEqual(
-            consent_record.consented_to_google,
-            True,
-        )
-        self.assertEqual(
-            consent_record.consented_to_matomo,
-            True,
+            consent_record.consent_choices,
+            {
+                "google_cse": True,
+                "matomo": True,
+            },
         )
 
     def test_create_consent_record_for_authenticated_user(self):
@@ -44,8 +45,10 @@ class ConsentRecordTestCase(APITestCase):
             {
                 "anonymous_id": "12345abcdef",
                 "consent_version": "1.2",
-                "consented_to_google": False,
-                "consented_to_matomo": True,
+                "consent_choices": {
+                    "google_cse": False,
+                    "matomo": False,
+                },
             },
         )
 
@@ -60,22 +63,58 @@ class ConsentRecordTestCase(APITestCase):
             "1.2",
         )
         self.assertEqual(
-            consent_record.consented_to_google,
-            False,
-        )
-        self.assertEqual(
-            consent_record.consented_to_matomo,
-            True,
+            consent_record.consent_choices,
+            {
+                "google_cse": False,
+                "matomo": False,
+            },
         )
 
     def test_raise_validation_error_when_neither_user_nor_anonymous_id(self):
         response = self.client.post(
             "/consent-record/",
+            {"consent_version": "1.1", "consent_choices": {}},
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            str(response.data["non_field_errors"][0]["message"]),
+            "Doit fournir anonymous_id ou être connecté",
+        )
+
+    def test_raise_validation_error_when_consent_choices_not_a_dict(self):
+        response = self.client.post(
+            "/consent-record/",
             {
-                "consent_version": "1.1",
-                "consented_to_google": True,
-                "consented_to_matomo": True,
+                "anonymous_id": "12345abcdef",
+                "consent_version": "1.2",
+                "consent_choices": "abc",
             },
         )
 
         self.assertEqual(response.status_code, 400)
+
+        self.assertEqual(
+            str(response.data["consent_choices"][0]["message"]),
+            "Le consentement doit être dans un objet JSON",
+        )
+
+    def test_raise_validation_error_when_consent_choices_invalid(self):
+        response = self.client.post(
+            "/consent-record/",
+            {
+                "anonymous_id": "12345abcdef",
+                "consent_version": "1.2",
+                "consent_choices": {
+                    "google_cse": "abc",
+                    "matomo": False,
+                },
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+        self.assertEqual(
+            str(response.data["consent_choices"][0]["message"]),
+            "La valeur pour 'google_cse' doit être un booléen (true/false)",
+        )

@@ -132,11 +132,10 @@ class ConsentRecord(models.Model):
         help_text="Version de la politique de consentement présentée à l'utilisateur",
     )
 
-    consented_to_google = models.BooleanField(
-        default=False, verbose_name="Consentement Google Custom Search Engine (CSE)"
-    )
-    consented_to_matomo = models.BooleanField(
-        default=False, verbose_name="Consentement Matomo Analytics"
+    consent_choices = models.JSONField(
+        default=dict,
+        verbose_name="Services consentis",
+        help_text="Statut de consentement pour chaque service",
     )
 
     created_at = models.DateTimeField(
@@ -160,15 +159,3 @@ class ConsentRecord(models.Model):
                 name="soit_utilisateur_soit_anonyme",
             )
         ]
-
-    def __str__(self):
-        identifier = self.user.email if self.user else f"Anon-{self.anonymous_id[:8]}"
-        services = []
-        if self.consented_to_google:
-            services.append("Google CSE")
-        if self.consented_to_matomo:
-            services.append("Matomo")
-
-        services_str = ", ".join(services) if services else "Tout refusé"
-
-        return f"{identifier} | {services_str} | v{self.consent_version}"
