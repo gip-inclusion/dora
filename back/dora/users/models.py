@@ -250,8 +250,6 @@ class ConsentRecord(models.Model):
         verbose_name="Utilisateur",
     )
     anonymous_id = models.CharField(
-        max_length=100,
-        db_index=True,
         null=True,
         blank=True,
         verbose_name="Identifiant anonyme",
