@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
+from django.utils.safestring import mark_safe
 
 from dora.services.models import Bookmark, SavedSearch
 from dora.structures.models import StructureMember, StructurePutativeMember
@@ -200,6 +201,8 @@ class ConsentRecordAdmin(admin.ModelAdmin):
         ("Métadonnées", {"fields": ("created_at",)}),
     )
 
+    list_select_related = ["user"]
+
     # Méthode pour afficher l'identifiant utilisateur
     @admin.display(description="Identifiant", ordering="user__email")
     def get_user_identifier(self, obj):
@@ -230,8 +233,6 @@ class ConsentRecordAdmin(admin.ModelAdmin):
         if not obj.consent_choices:
             return "Aucun consentement enregistré"
 
-        from django.utils.html import format_html
-
         rows = []
         for service, consented in obj.consent_choices.items():
             icon = "✓" if consented else "✗"
@@ -260,7 +261,7 @@ class ConsentRecordAdmin(admin.ModelAdmin):
         </table>
         """
 
-        return format_html(html)
+        return mark_safe(html)
 
     def has_add_permission(self, request):
         return False
