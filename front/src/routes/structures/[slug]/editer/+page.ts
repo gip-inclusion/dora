@@ -3,7 +3,7 @@ import { getStructuresOptions } from "$lib/requests/structures";
 import { capitalize } from "$lib/utils/misc";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ parent, params }) => {
+export const load: PageLoad = async ({ fetch, parent, params }) => {
   const { structure } = await parent();
   if (!structure.canEditInformations) {
     redirect(302, `/structures/${params.slug}`);
@@ -11,6 +11,6 @@ export const load: PageLoad = async ({ parent, params }) => {
   return {
     title: `Éditer | ${capitalize(structure.name)} | DORA`,
     noIndex: true,
-    structuresOptions: await getStructuresOptions(),
+    structuresOptions: await getStructuresOptions(fetch),
   };
 };

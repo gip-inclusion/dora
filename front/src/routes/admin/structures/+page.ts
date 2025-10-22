@@ -27,7 +27,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 
   const [servicesOptions, structuresOptions] = await Promise.all([
     getServicesOptions(fetch),
-    getStructuresOptions(),
+    getStructuresOptions(fetch),
   ]);
 
   const user = get(userInfo);

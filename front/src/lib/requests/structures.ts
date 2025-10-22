@@ -130,10 +130,12 @@ export function modifyStructure(structure) {
 
 let structuresOptions;
 
-export async function getStructuresOptions(): Promise<StructuresOptions> {
+export async function getStructuresOptions(
+  fetch = window.fetch
+): Promise<StructuresOptions> {
   if (!structuresOptions) {
     const url = `${getApiURL()}/structures-options/`;
-    const res = await fetchData<StructuresOptions>(url);
+    const res = await fetchData<StructuresOptions>(url, fetch);
     structuresOptions = res.data;
   }
   return structuresOptions;
