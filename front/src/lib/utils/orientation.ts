@@ -3,9 +3,14 @@ import { fetchData } from "./misc";
 import { TEST_WORDS } from "$lib/consts";
 import type { Choice, Orientation, Service } from "$lib/types";
 
-export function getOrientation(queryId: string, queryHash: string) {
+export function getOrientation(
+  queryId: string,
+  queryHash: string,
+  fetch = window.fetch
+) {
   return fetchData<Orientation>(
-    `${getApiURL()}/orientations/${queryId}/?h=${queryHash}`
+    `${getApiURL()}/orientations/${queryId}/?h=${queryHash}`,
+    fetch
   );
 }
 
