@@ -68,7 +68,6 @@ class ConsentRecordAdmin(admin.ModelAdmin):
 
     search_fields = [
         "user__email",
-        "user__username",
         "anonymous_id",
         "id",
     ]
@@ -94,7 +93,7 @@ class ConsentRecordAdmin(admin.ModelAdmin):
     @admin.display(description="Identifiant", ordering="user__email")
     def get_user_identifier(self, obj):
         if obj.user:
-            return obj.user.email or obj.user.username
+            return obj.user.email
         return f"Anonyme ({obj.anonymous_id[:8]}...)" if obj.anonymous_id else "N/A"
 
     # Méthode pour afficher les consentements dans la liste (compact)
