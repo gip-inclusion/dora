@@ -1,6 +1,5 @@
 import { redirect } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
-
 interface CityResult {
   city: string;
   zip_code: string;
@@ -18,7 +17,11 @@ function redirectToCollectiviteFr(citySlug = "") {
   );
 }
 
-async function searchCitySlug(cityName: string, departmentCode: string) {
+async function searchCitySlug(
+  cityName: string,
+  departmentCode: string,
+  fetch = window.fetch
+) {
   // Recherche du nom de la ville sur l'API de collectivites.fr
   const response = await fetch(
     `https://api.collectivite.fr/api/commune/search/${cityName}`
@@ -35,7 +38,7 @@ async function searchCitySlug(cityName: string, departmentCode: string) {
   return firstMatchingResult?.slug_alias || firstMatchingResult?.slug || "";
 }
 
-export const load: PageLoad = async ({ url }) => {
+export const load: PageLoad = async ({ fetch, url }) => {
   const query = url.searchParams;
   const cityLabel = query.get("cl");
 
@@ -54,7 +57,7 @@ export const load: PageLoad = async ({ url }) => {
   let citySlug: string;
   try {
     // Recherche du slug correspondant à la ville et au département
-    citySlug = await searchCitySlug(cityName, departmentCode);
+    citySlug = await searchCitySlug(cityName, departmentCode, fetch);
   } catch {
     citySlug = "";
   }
