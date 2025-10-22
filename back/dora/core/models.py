@@ -3,8 +3,6 @@ import uuid
 from django.conf import settings
 from django.db import models
 
-from dora.users.models import User
-
 
 class EnumModel(models.Model):
     value = models.CharField(max_length=255, unique=True, db_index=True)
@@ -99,63 +97,3 @@ class ImportJob(models.Model):
 
     def __str__(self):
         return f"{self.import_type} - {self.filename} ({self.status})"
-
-
-class ConsentRecord(models.Model):
-    """
-    Enregistrements de consentement immuables pour la conformité RGPD.
-    Chaque action de consentement crée un nouvel enregistrement (jamais de mise à jour).
-    """
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="consent_records",
-        verbose_name="Utilisateur",
-    )
-    anonymous_id = models.CharField(
-        max_length=100,
-        db_index=True,
-        null=True,
-        blank=True,
-        verbose_name="Identifiant anonyme",
-        help_text="userHash du localStorage pour les utilisateurs anonymes",
-    )
-
-    consent_version = models.CharField(
-        max_length=10,
-        verbose_name="Version du consentement",
-        help_text="Version de la politique de consentement présentée à l'utilisateur",
-    )
-
-    consent_choices = models.JSONField(
-        default=dict,
-        verbose_name="Services consentis",
-        help_text="Statut de consentement pour chaque service",
-    )
-
-    created_at = models.DateTimeField(
-        auto_now_add=True, db_index=True, verbose_name="Date et heure du consentement"
-    )
-
-    class Meta:
-        ordering = ["-created_at"]
-        verbose_name = "Enregistrement de consentement"
-        verbose_name_plural = "Enregistrements de consentement"
-        indexes = [
-            models.Index(fields=["user", "-created_at"]),
-            models.Index(fields=["anonymous_id", "-created_at"]),
-        ]
-        constraints = [
-            models.CheckConstraint(
-                check=(
-                    models.Q(user__isnull=False, anonymous_id__isnull=True)
-                    | models.Q(user__isnull=True, anonymous_id__isnull=False)
-                ),
-                name="soit_utilisateur_soit_anonyme",
-            )
-        ]

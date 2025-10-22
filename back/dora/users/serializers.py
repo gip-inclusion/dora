@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from dora.core.models import ConsentRecord
+from dora.users.models import ConsentRecord
 
 
 class ConsentRecordSerializer(serializers.ModelSerializer):

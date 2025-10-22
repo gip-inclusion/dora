@@ -1,8 +1,9 @@
-from rest_framework import permissions, serializers
+from rest_framework import permissions, serializers, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from .models import User
+from .serializers import ConsentRecordSerializer
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -25,3 +26,22 @@ def update_user_profile(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(status=204)
+
+
+@api_view(["POST"])
+@permission_classes([permissions.AllowAny])
+def record_consent(request):
+    """
+    Enregistrer la décision de consentement de l'utilisateur.
+    """
+    serializer = ConsentRecordSerializer(
+        data=request.data, context={"request": request}
+    )
+
+    serializer.is_valid(raise_exception=True)
+
+    consent = serializer.save()
+
+    return Response(
+        {"success": True, "consent_id": str(consent.id)}, status=status.HTTP_201_CREATED
+    )

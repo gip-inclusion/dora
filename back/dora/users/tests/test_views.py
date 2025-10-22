@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 
-from dora.core.models import ConsentRecord
 from dora.core.test_utils import make_user
+from dora.users.models import ConsentRecord
 
 
 class ConsentRecordTestCase(APITestCase):
