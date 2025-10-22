@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.utils import timezone
 from rest_framework import permissions, viewsets
+from rest_framework.renderers import JSONRenderer
 from rest_framework.versioning import NamespaceVersioning
 
 from dora.core.pagination import OptionalPageNumberPagination
@@ -42,6 +43,7 @@ class StructureViewSet(viewsets.ReadOnlyModelViewSet):
     versioning_class = NamespaceVersioning
     permission_classes = [APIPermission]
     serializer_class = StructureSerializer
+    renderer_classes = [JSONRenderer]
     pagination_class = OptionalPageNumberPagination
 
     def get_queryset(self):
@@ -60,6 +62,7 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
     versioning_class = NamespaceVersioning
     permission_classes = [APIPermission]
     serializer_class = ServiceSerializer
+    renderer_classes = [JSONRenderer]
     pagination_class = OptionalPageNumberPagination
 
     def get_queryset(self):
