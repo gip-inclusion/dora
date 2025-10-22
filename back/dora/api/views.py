@@ -86,7 +86,7 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
             Service.objects.published()
             .exclude(structure__is_obsolete=True)
             .exclude(structure__in=Structure.objects.orphans())
-            .exclude(suspension_date__lt=timezone.now())
+            .exclude(suspension_date__lt=timezone.localdate())
             .select_related("structure", "fee_condition", "source")
             .prefetch_related(
                 "subcategories",
