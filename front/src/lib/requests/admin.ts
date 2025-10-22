@@ -35,9 +35,9 @@ export async function getServicesAdmin() {
   return (await fetchData(url)).data;
 }
 
-export async function getServiceAdmin(slug) {
+export async function getServiceAdmin(slug: string, fetch = window.fetch) {
   const url = `${getApiURL()}/services-admin/${slug}/`;
-  return (await fetchData<Service>(url)).data;
+  return (await fetchData<Service>(url, fetch)).data;
 }
 
 export async function setModerationState(entity, status: ModerationStatus) {
