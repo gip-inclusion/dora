@@ -180,7 +180,7 @@ class ConsentRecordAdmin(admin.ModelAdmin):
 
     search_fields = [
         "user__email",
-        "anonymous_id",
+        "anonymous_user_hash",
         "id",
     ]
 
@@ -189,14 +189,14 @@ class ConsentRecordAdmin(admin.ModelAdmin):
     readonly_fields = [
         "id",
         "user",
-        "anonymous_id",
+        "anonymous_user_hash",
         "consent_version",
         "get_consents_formatted",
         "created_at",
     ]
 
     fieldsets = (
-        ("Identification", {"fields": ("id", "user", "anonymous_id")}),
+        ("Identification", {"fields": ("id", "user", "anonymous_user_hash")}),
         ("Consentement", {"fields": ("consent_version", "get_consents_formatted")}),
         ("Métadonnées", {"fields": ("created_at",)}),
     )
@@ -208,7 +208,11 @@ class ConsentRecordAdmin(admin.ModelAdmin):
     def get_user_identifier(self, obj):
         if obj.user:
             return obj.user.email
-        return f"Anonyme ({obj.anonymous_id[:8]}...)" if obj.anonymous_id else "N/A"
+        return (
+            f"Anonyme ({obj.anonymous_user_hash[:8]}...)"
+            if obj.anonymous_user_hash
+            else "N/A"
+        )
 
     # Méthode pour afficher les consentements dans la liste (compact)
     @admin.display(description="Consentements")

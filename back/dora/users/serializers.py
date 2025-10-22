@@ -8,16 +8,16 @@ class ConsentRecordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConsentRecord
-        fields = ["anonymous_id", "consent_version", "consent_choices"]
+        fields = ["anonymous_user_hash", "consent_version", "consent_choices"]
 
     def validate(self, data):
         request = self.context.get("request")
         user = request.user if request and request.user.is_authenticated else None
-        anonymous_id = data.get("anonymous_id")
+        anonymous_user_hash = data.get("anonymous_user_hash")
 
-        if not user and not anonymous_id:
+        if not user and not anonymous_user_hash:
             raise serializers.ValidationError(
-                "Doit fournir anonymous_id ou être connecté"
+                "Doit fournir anonymous_user_hash ou être connecté"
             )
 
         return data
@@ -28,6 +28,6 @@ class ConsentRecordSerializer(serializers.ModelSerializer):
 
         if user:
             validated_data["user"] = user
-            validated_data["anonymous_id"] = None
+            validated_data["anonymous_user_hash"] = None
 
         return super().create(validated_data)

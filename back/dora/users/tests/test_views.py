@@ -9,7 +9,7 @@ class ConsentRecordTestCase(APITestCase):
         response = self.client.post(
             "/consent-record/",
             {
-                "anonymous_id": "12345abcdef",
+                "anonymous_user_hash": "12345abcdef",
                 "consent_version": "1.1",
                 "consent_choices": {
                     "google_cse": True,
@@ -22,7 +22,7 @@ class ConsentRecordTestCase(APITestCase):
 
         consent_record = ConsentRecord.objects.last()
 
-        self.assertEqual(consent_record.anonymous_id, "12345abcdef")
+        self.assertEqual(consent_record.anonymous_user_hash, "12345abcdef")
         self.assertEqual(consent_record.user, None)
         self.assertEqual(
             consent_record.consent_version,
@@ -43,7 +43,7 @@ class ConsentRecordTestCase(APITestCase):
         response = self.client.post(
             "/consent-record/",
             {
-                "anonymous_id": "12345abcdef",
+                "anonymous_user_hash": "12345abcdef",
                 "consent_version": "1.2",
                 "consent_choices": {
                     "google_cse": False,
@@ -57,7 +57,7 @@ class ConsentRecordTestCase(APITestCase):
         consent_record = ConsentRecord.objects.last()
 
         self.assertEqual(consent_record.user, user)
-        self.assertEqual(consent_record.anonymous_id, None)
+        self.assertEqual(consent_record.anonymous_user_hash, None)
         self.assertEqual(
             consent_record.consent_version,
             "1.2",
@@ -70,7 +70,7 @@ class ConsentRecordTestCase(APITestCase):
             },
         )
 
-    def test_raise_validation_error_when_neither_user_nor_anonymous_id(self):
+    def test_raise_validation_error_when_neither_user_nor_anonymous_user_hash(self):
         response = self.client.post(
             "/consent-record/",
             {"consent_version": "1.1", "consent_choices": {}},
@@ -79,14 +79,14 @@ class ConsentRecordTestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             str(response.data["non_field_errors"][0]["message"]),
-            "Doit fournir anonymous_id ou être connecté",
+            "Doit fournir anonymous_user_hash ou être connecté",
         )
 
     def test_raise_validation_error_when_consent_choices_not_a_dict(self):
         response = self.client.post(
             "/consent-record/",
             {
-                "anonymous_id": "12345abcdef",
+                "anonymous_user_hash": "12345abcdef",
                 "consent_version": "1.2",
                 "consent_choices": "abc",
             },
@@ -98,7 +98,7 @@ class ConsentRecordTestCase(APITestCase):
         response = self.client.post(
             "/consent-record/",
             {
-                "anonymous_id": "12345abcdef",
+                "anonymous_user_hash": "12345abcdef",
                 "consent_version": "1.2",
                 "consent_choices": {
                     "google_cse": "abc",
@@ -108,3 +108,36 @@ class ConsentRecordTestCase(APITestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+
+    def test_anonymous_user_id_as_empty_string_raises_400_when_anonymous_user(self):
+        response = self.client.post(
+            "/consent-record/",
+            {
+                "anonymous_user_hash": "",
+                "consent_version": "1.2",
+                "consent_choices": {
+                    "google_cse": False,
+                    "matomo": False,
+                },
+            },
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+    def test_anonymous_user_id_saved_as_none_when_connected_user(self):
+        self.client.force_authenticate(user=make_user())
+
+        response = self.client.post(
+            "/consent-record/",
+            {
+                "anonymous_user_hash": "",
+                "consent_version": "1.2",
+                "consent_choices": {
+                    "google_cse": False,
+                    "matomo": False,
+                },
+            },
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(ConsentRecord.objects.last().anonymous_user_hash, None)

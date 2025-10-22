@@ -249,7 +249,7 @@ class ConsentRecord(models.Model):
         related_name="consent_records",
         verbose_name="Utilisateur",
     )
-    anonymous_id = models.CharField(
+    anonymous_user_hash = models.CharField(
         null=True,
         blank=True,
         verbose_name="Identifiant anonyme",
@@ -272,19 +272,24 @@ class ConsentRecord(models.Model):
         auto_now_add=True, db_index=True, verbose_name="Date et heure du consentement"
     )
 
+    def save(self, *args, **kwargs):
+        if self.anonymous_user_hash == "":
+            self.anonymous_user_hash = None
+        super().save(*args, **kwargs)
+
     class Meta:
         ordering = ["-created_at"]
         verbose_name = "Enregistrement de consentement"
         verbose_name_plural = "Enregistrements de consentement"
         indexes = [
             models.Index(fields=["user", "-created_at"]),
-            models.Index(fields=["anonymous_id", "-created_at"]),
+            models.Index(fields=["anonymous_user_hash", "-created_at"]),
         ]
         constraints = [
             models.CheckConstraint(
                 check=(
-                    models.Q(user__isnull=False, anonymous_id__isnull=True)
-                    | models.Q(user__isnull=True, anonymous_id__isnull=False)
+                    models.Q(user__isnull=False, anonymous_user_hash__isnull=True)
+                    | models.Q(user__isnull=True, anonymous_user_hash__isnull=False)
                 ),
                 name="soit_utilisateur_soit_anonyme",
             )
