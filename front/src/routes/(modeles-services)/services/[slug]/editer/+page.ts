@@ -22,7 +22,7 @@ export const load: PageLoad = async ({ fetch, params, parent }) => {
     error(404, "Page Not Found");
   }
 
-  const structure = await getStructure(service.structure);
+  const structure = await getStructure(service.structure, fetch);
 
   const model = service.model ? await getModel(service.model, fetch) : null;
 

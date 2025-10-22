@@ -88,9 +88,12 @@ export async function getActiveStructures({
   ).data;
 }
 
-export async function getStructure(slug: string): Promise<Structure | null> {
+export async function getStructure(
+  slug: string,
+  fetch = window.fetch
+): Promise<Structure | null> {
   const url = `${getApiURL()}/structures/${slug}/`;
-  const structure = (await fetchData<Structure>(url)).data;
+  const structure = (await fetchData<Structure>(url, fetch)).data;
   return structure ? structureToFront(structure) : null;
 }
 

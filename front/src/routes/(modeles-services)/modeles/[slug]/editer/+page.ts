@@ -16,7 +16,7 @@ export const load: PageLoad = async ({ fetch, params, parent }) => {
     error(404, "Page Not Found");
   }
 
-  const structure = await getStructure(model.structure);
+  const structure = await getStructure(model.structure, fetch);
 
   return {
     title: `Éditer | ${model.name} | ${structure.name} | DORA`,

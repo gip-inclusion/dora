@@ -42,7 +42,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   }
 
   if (structureSlug) {
-    structure = (await getStructure(structureSlug)) || undefined;
+    structure = (await getStructure(structureSlug, fetch)) || undefined;
     if (structure) {
       structures = [structure];
     } else {

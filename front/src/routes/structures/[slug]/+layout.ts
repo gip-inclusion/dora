@@ -12,10 +12,10 @@ import { structure } from "./store";
 import { browser } from "$app/environment";
 import type { PutativeStructureMember, StructureMember } from "$lib/types";
 
-export const load: LayoutLoad = async ({ params, parent, url }) => {
+export const load: LayoutLoad = async ({ fetch, params, parent, url }) => {
   await parent();
 
-  const currentStructure = await getStructure(params.slug);
+  const currentStructure = await getStructure(params.slug, fetch);
 
   let preferences: UserPreferences;
   let info: UserInfo;

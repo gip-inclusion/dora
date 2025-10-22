@@ -34,7 +34,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   if (structureSlug) {
     structure = structures.find((struct) => struct.slug === structureSlug);
     if (!structure && (user.isStaff || user.isManager)) {
-      structure = await getStructure(structureSlug);
+      structure = await getStructure(structureSlug, fetch);
     }
     if (structure) {
       structures = [structure];
