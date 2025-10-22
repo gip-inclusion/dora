@@ -2,7 +2,7 @@ import { getModel, getServicesOptions } from "$lib/requests/services";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ params, parent }) => {
+export const load: PageLoad = async ({ fetch, params, parent }) => {
   await parent();
 
   const model = await getModel(params.slug);
@@ -15,6 +15,6 @@ export const load: PageLoad = async ({ params, parent }) => {
     title: `${model.name} | ${model.structureInfo.name} | DORA`,
     description: "model.shortDesc",
     model,
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
   };
 };

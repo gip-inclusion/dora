@@ -8,7 +8,7 @@ import { getStructure } from "$lib/requests/structures";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ params, parent }) => {
+export const load: PageLoad = async ({ fetch, params, parent }) => {
   await parent();
 
   const service = await getService(params.slug);
@@ -30,7 +30,7 @@ export const load: PageLoad = async ({ params, parent }) => {
     title: `Éditer | ${service.name} | ${structure.name} | DORA`,
     noIndex: true,
     service,
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
     structures: [structure],
     structure,
     model,

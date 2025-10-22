@@ -21,7 +21,7 @@ export const load: PageLoad = async ({ fetch, parent, url, data }) => {
     title: "DORA : recensement et mise à jour de l’offre d’insertion",
     description:
       "Le service public numérique de recensement et mise à jour de l’offre d’insertion.",
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
     cityCode,
     cityLabel,
     ...data,

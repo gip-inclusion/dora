@@ -9,7 +9,7 @@ import {
 
 export const ssr = false;
 
-export const load = async ({ params, parent }) => {
+export const load = async ({ fetch, params, parent }) => {
   await parent();
 
   if (params.slug.startsWith("di--")) {
@@ -23,7 +23,7 @@ export const load = async ({ params, parent }) => {
       noIndex: true,
       service,
       isDI: true,
-      servicesOptions: await getServicesOptions(),
+      servicesOptions: await getServicesOptions(fetch),
     };
   }
 
@@ -42,6 +42,6 @@ export const load = async ({ params, parent }) => {
     title: `Mobiliser | ${service.name} | ${service.structureInfo.name} | DORA`,
     noIndex: true,
     service,
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
   };
 };

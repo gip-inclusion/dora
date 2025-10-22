@@ -5,12 +5,12 @@ import type { PageLoad } from "./$types";
 
 export const ssr = false;
 
-export const load: PageLoad = async ({ params, parent }) => {
+export const load: PageLoad = async ({ fetch, params, parent }) => {
   await parent();
 
   const model = await getModel(params.slug);
 
-  const servicesOptions = await getServicesOptions();
+  const servicesOptions = await getServicesOptions(fetch);
 
   if (!model) {
     error(404, "Page Not Found");

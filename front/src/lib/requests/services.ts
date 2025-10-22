@@ -327,6 +327,7 @@ export async function convertSuggestionToDraft(serviceSlug) {
 }
 
 export async function getServicesOptions(
+  fetch = window.fetch,
   useCache = true
 ): Promise<ServicesOptions> {
   const currentUserInfo = get(userInfo);
@@ -341,7 +342,7 @@ export async function getServicesOptions(
 
   // Si pas de cache valide ou si le cache n'est pas utilisé, on fait l'appel API
   const url = `${getApiURL()}/services-options/`;
-  const response = await fetchData<ServicesOptions>(url);
+  const response = await fetchData<ServicesOptions>(url, fetch);
   if (!response.data) {
     throw Error(response.statusText);
   }

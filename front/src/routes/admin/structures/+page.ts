@@ -26,7 +26,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
   await parent();
 
   const [servicesOptions, structuresOptions] = await Promise.all([
-    getServicesOptions(),
+    getServicesOptions(fetch),
     getStructuresOptions(),
   ]);
 

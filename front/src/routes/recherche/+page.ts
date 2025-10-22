@@ -143,7 +143,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     fundingLabels,
     availableFundingLabels,
     services,
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
     searchId,
   };
 };

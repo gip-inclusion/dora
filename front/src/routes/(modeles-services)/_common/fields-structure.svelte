@@ -110,7 +110,7 @@
       }
 
       // On rafraîchit les servicesOptions avant qu'elles ne soient modifiées par updateServiceOptions()
-      servicesOptions = await getServicesOptions(false);
+      servicesOptions = await getServicesOptions(fetch, false);
 
       updateServiceOptions();
     }

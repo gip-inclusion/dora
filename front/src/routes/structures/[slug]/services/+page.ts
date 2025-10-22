@@ -3,7 +3,7 @@ import type { ServiceStatus } from "$lib/types";
 import { capitalize } from "$lib/utils/misc";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ url, parent }) => {
+export const load: PageLoad = async ({ fetch, url, parent }) => {
   const { structure } = await parent();
 
   const query = url.searchParams;
@@ -14,7 +14,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     | "true"
     | "false"
     | null;
-  const servicesOptions = await getServicesOptions();
+  const servicesOptions = await getServicesOptions(fetch);
 
   return {
     title: `Services | ${capitalize(structure.name)} | DORA`,
