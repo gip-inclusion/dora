@@ -4,23 +4,11 @@ from dora.users.models import ConsentRecord
 
 
 class ConsentRecordSerializer(serializers.ModelSerializer):
+    consent_choices = serializers.DictField(child=serializers.BooleanField())
+
     class Meta:
         model = ConsentRecord
         fields = ["anonymous_id", "consent_version", "consent_choices"]
-
-    def validate_consent_choices(self, value):
-        if not isinstance(value, dict):
-            raise serializers.ValidationError(
-                "Le consentement doit être dans un objet JSON"
-            )
-
-        for key, val in value.items():
-            if not isinstance(val, bool):
-                raise serializers.ValidationError(
-                    f"La valeur pour '{key}' doit être un booléen (true/false)"
-                )
-
-        return value
 
     def validate(self, data):
         request = self.context.get("request")

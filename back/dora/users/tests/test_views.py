@@ -94,11 +94,6 @@ class ConsentRecordTestCase(APITestCase):
 
         self.assertEqual(response.status_code, 400)
 
-        self.assertEqual(
-            str(response.data["consent_choices"][0]["message"]),
-            "Le consentement doit être dans un objet JSON",
-        )
-
     def test_raise_validation_error_when_consent_choices_invalid(self):
         response = self.client.post(
             "/consent-record/",
@@ -113,8 +108,3 @@ class ConsentRecordTestCase(APITestCase):
         )
 
         self.assertEqual(response.status_code, 400)
-
-        self.assertEqual(
-            str(response.data["consent_choices"][0]["message"]),
-            "La valeur pour 'google_cse' doit être un booléen (true/false)",
-        )
