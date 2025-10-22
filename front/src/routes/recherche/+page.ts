@@ -9,19 +9,22 @@ import type { PageLoad } from "./$types";
 // à ce qu'elles soient indexées
 export const ssr = false;
 
-async function getResults({
-  categoryIds,
-  subCategoryIds,
-  cityCode,
-  cityLabel,
-  label,
-  kindIds,
-  feeConditions,
-  locationKinds,
-  fundingLabels,
-  lat,
-  lon,
-}: SearchQuery): Promise<{
+async function getResults(
+  {
+    categoryIds,
+    subCategoryIds,
+    cityCode,
+    cityLabel,
+    label,
+    kindIds,
+    feeConditions,
+    locationKinds,
+    fundingLabels,
+    lat,
+    lon,
+  }: SearchQuery,
+  fetch = window.fetch
+): Promise<{
   cityBounds: [number, number, number, number];
   fundingLabels: Array<{ value: string; label: string }>;
   services: ServiceSearchResult[];
@@ -58,7 +61,7 @@ async function getResults({
   return [];
 }
 
-export const load: PageLoad = async ({ url, parent }) => {
+export const load: PageLoad = async ({ fetch, url, parent }) => {
   await parent();
 
   const query = url.searchParams;
@@ -81,21 +84,24 @@ export const load: PageLoad = async ({ url, parent }) => {
     cityBounds,
     fundingLabels: availableFundingLabels,
     services,
-  } = await getResults({
-    // La priorité est donnée aux sous-catégories
-    categoryIds: subCategoryIds.length ? [] : categoryIds,
-    subCategoryIds,
-    cityCode,
-    cityLabel,
-    label,
-    // Le filtrage sur kindIds, feeConditions et locationKinds se fait côté frontend
-    kindIds: [],
-    feeConditions: [],
-    locationKinds: [],
-    fundingLabels: [],
-    lon,
-    lat,
-  });
+  } = await getResults(
+    {
+      // La priorité est donnée aux sous-catégories
+      categoryIds: subCategoryIds.length ? [] : categoryIds,
+      subCategoryIds,
+      cityCode,
+      cityLabel,
+      label,
+      // Le filtrage sur kindIds, feeConditions et locationKinds se fait côté frontend
+      kindIds: [],
+      feeConditions: [],
+      locationKinds: [],
+      fundingLabels: [],
+      lon,
+      lat,
+    },
+    fetch
+  );
 
   const searchId = await trackSearch(
     url,
