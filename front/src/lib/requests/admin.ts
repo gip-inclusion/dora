@@ -20,9 +20,12 @@ export async function getStructuresAdmin(
   return (await fetchData<AdminShortStructure[]>(url)).data;
 }
 
-export async function getStructureAdmin(slug): Promise<AdminShortStructure> {
+export async function getStructureAdmin(
+  slug: string,
+  fetch = window.fetch
+): Promise<AdminShortStructure> {
   const url = `${getApiURL()}/structures-admin/${slug}/`;
-  return (await fetchData<Structure>(url)).data;
+  return (await fetchData<Structure>(url, fetch)).data;
 }
 
 export async function getStructuresToModerate() {
