@@ -91,9 +91,9 @@ export async function getPublishedServices({
   ).data;
 }
 
-export async function getModel(slug): Promise<Model> {
+export async function getModel(slug, fetch = window.fetch): Promise<Model> {
   const url = `${getApiURL()}/models/${slug}/`;
-  const response = await fetchData<Model>(url);
+  const response = await fetchData<Model>(url, fetch);
 
   if (!response.data) {
     return null;

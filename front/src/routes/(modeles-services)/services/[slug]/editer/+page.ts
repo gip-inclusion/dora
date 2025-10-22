@@ -24,7 +24,7 @@ export const load: PageLoad = async ({ fetch, params, parent }) => {
 
   const structure = await getStructure(service.structure);
 
-  const model = service.model ? await getModel(service.model) : null;
+  const model = service.model ? await getModel(service.model, fetch) : null;
 
   return {
     title: `Éditer | ${service.name} | ${structure.name} | DORA`,

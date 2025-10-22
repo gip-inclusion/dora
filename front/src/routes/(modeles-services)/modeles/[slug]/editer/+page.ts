@@ -8,7 +8,7 @@ export const ssr = false;
 export const load: PageLoad = async ({ fetch, params, parent }) => {
   await parent();
 
-  const model = await getModel(params.slug);
+  const model = await getModel(params.slug, fetch);
 
   const servicesOptions = await getServicesOptions(fetch);
 

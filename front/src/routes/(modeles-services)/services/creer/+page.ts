@@ -30,7 +30,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   let structure: Structure | undefined;
 
   if (modelSlug) {
-    model = await getModel(modelSlug);
+    model = await getModel(modelSlug, fetch);
     service = JSON.parse(JSON.stringify(model));
     service.model = modelSlug;
     service.structure = null;
