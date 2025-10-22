@@ -11,7 +11,7 @@ import type { PageLoad } from "./$types";
 export const load: PageLoad = async ({ fetch, params, parent }) => {
   await parent();
 
-  const service = await getService(params.slug);
+  const service = await getService(params.slug, fetch);
 
   // on ne retourne une 404 que sur le client
   if (!browser) {

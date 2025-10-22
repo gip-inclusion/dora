@@ -40,9 +40,12 @@ function serviceToFront(service) {
   return service;
 }
 
-export async function getService(slug): Promise<Service> {
+export async function getService(
+  slug: string,
+  fetch = window.fetch
+): Promise<Service> {
   const url = `${getApiURL()}/services/${slug}/`;
-  const response = await fetchData<Service>(url);
+  const response = await fetchData<Service>(url, fetch);
 
   if (!response.data) {
     return null;

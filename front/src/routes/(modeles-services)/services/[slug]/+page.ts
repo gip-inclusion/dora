@@ -29,7 +29,7 @@ export const load: PageLoad = async ({ fetch, url, params, parent }) => {
     };
   }
 
-  const service = await getService(params.slug);
+  const service = await getService(params.slug, fetch);
   // si le service est en brouillon il faut un token pour y accéder
   // on renvoie donc un objet vide côté serveur
   if (!service) {
