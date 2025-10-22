@@ -55,12 +55,16 @@ export async function getService(
   return serviceToFront(response.data);
 }
 
-export async function getServiceDI(diId): Promise<Service> {
+export async function getServiceDI(
+  diId: string,
+  fetch = window.fetch
+): Promise<Service> {
   const userHash = getAnalyticsId();
   const url = new URL(`/services-di/${diId}/`, getApiURL());
 
   const response = await fetchData<Service>(
     url.toString(),
+    fetch,
     userHash
       ? {
           "Anonymous-User-Hash": userHash,

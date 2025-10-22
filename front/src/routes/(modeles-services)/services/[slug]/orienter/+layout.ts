@@ -6,14 +6,18 @@ import {
   getServiceDI,
   getServicesOptions,
 } from "$lib/requests/services";
+import type { PageLoad } from "./$types";
 
 export const ssr = false;
 
-export const load = async ({ fetch, params, parent }) => {
+export const load: PageLoad = async ({ fetch, params, parent }) => {
   await parent();
 
   if (params.slug.startsWith("di--")) {
-    const service = (await getServiceDI(params.slug.slice(4))) as Service;
+    const service = (await getServiceDI(
+      params.slug.slice(4),
+      fetch
+    )) as Service;
     if (!service) {
       error(404, "Page Not Found");
     }

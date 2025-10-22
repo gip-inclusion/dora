@@ -14,7 +14,10 @@ export const load: PageLoad = async ({ fetch, url, params, parent }) => {
   await parent();
 
   if (params.slug.startsWith("di--")) {
-    const service = (await getServiceDI(params.slug.slice(4))) as Service;
+    const service = (await getServiceDI(
+      params.slug.slice(4),
+      fetch
+    )) as Service;
     if (!service) {
       error(404, "Page Not Found");
     }
