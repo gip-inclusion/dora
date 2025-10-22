@@ -4,7 +4,7 @@ import type { PageLoad } from "./$types";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
 
-function siretSearch(siret: string) {
+function siretSearch(siret: string, fetch = window.fetch) {
   const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(siret)}`;
 
   return fetch(url, {
@@ -15,7 +15,7 @@ function siretSearch(siret: string) {
   });
 }
 
-function safirSearch(safir: string) {
+function safirSearch(safir: string, fetch = window.fetch) {
   const url = `${getApiURL()}/search-safir/?safir=${encodeURIComponent(safir)}`;
 
   return fetch(url, {
@@ -26,7 +26,7 @@ function safirSearch(safir: string) {
   });
 }
 
-export const load: PageLoad = async ({ url, parent }) => {
+export const load: PageLoad = async ({ fetch, url, parent }) => {
   await parent();
   const userEmail = get(userInfo)?.email;
   const userIsFranceTravail =
@@ -42,12 +42,12 @@ export const load: PageLoad = async ({ url, parent }) => {
     : "";
 
   if (proposedSiret) {
-    const response = await siretSearch(proposedSiret);
+    const response = await siretSearch(proposedSiret, fetch);
     if (response.status === 200) {
       establishment = (await response.json()) as Establishment;
     }
   } else if (proposedSafir) {
-    const response = await safirSearch(proposedSafir);
+    const response = await safirSearch(proposedSafir, fetch);
     if (response.status === 200) {
       establishment = (await response.json()) as Establishment;
     }
