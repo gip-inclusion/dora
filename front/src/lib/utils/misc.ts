@@ -38,6 +38,7 @@ export function htmlToMarkdown(html: string) {
 
 export async function fetchData<T>(
   url: string,
+  fetch = window.fetch,
   customHeaders: Record<string, string> = {}
 ) {
   const headers = { Accept: defaultAcceptHeader, ...customHeaders };
