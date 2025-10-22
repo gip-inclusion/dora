@@ -114,7 +114,8 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     feeConditions,
     locationKinds,
     fundingLabels,
-    services
+    services,
+    fetch
   );
 
   if (cityCode && cityLabel) {

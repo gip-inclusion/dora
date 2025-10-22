@@ -19,7 +19,7 @@ export function getAnalyticsId() {
   return analyticsId;
 }
 
-async function logAnalyticsEvent(tag, path, params = {}) {
+async function logAnalyticsEvent(tag, path, params = {}, fetch = window.fetch) {
   const data = {
     tag,
     path,
@@ -130,7 +130,8 @@ export async function trackSearch(
   feeConditions,
   locationKinds,
   fundingLabels,
-  results
+  results,
+  fetch = window.fetch
 ) {
   if (browser) {
     const numResults = results.length;
@@ -144,19 +145,24 @@ export async function trackSearch(
       .slice(0, 10)
       .map((service) => service.slug);
 
-    const event = await logAnalyticsEvent("search", url.pathname, {
-      searchCityCode: cityCode,
-      searchNumResults: numResults,
-      categoryIds: categoryIds,
-      subCategoryIds: subCategoryIds,
-      numDiResults,
-      numDiResultsTop10,
-      resultsSlugsTop10,
-      kinds,
-      feeConditions,
-      locationKinds,
-      fundingLabels,
-    });
+    const event = await logAnalyticsEvent(
+      "search",
+      url.pathname,
+      {
+        searchCityCode: cityCode,
+        searchNumResults: numResults,
+        categoryIds: categoryIds,
+        subCategoryIds: subCategoryIds,
+        numDiResults,
+        numDiResultsTop10,
+        resultsSlugsTop10,
+        kinds,
+        feeConditions,
+        locationKinds,
+        fundingLabels,
+      },
+      fetch
+    );
     const searchId = event && event.event;
     return searchId;
   }
