@@ -76,25 +76,27 @@ class StructureViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
     versioning_class = NamespaceVersioning
-    queryset = (
-        Service.objects.published()
-        .exclude(structure__is_obsolete=True)
-        .exclude(structure__in=Structure.objects.orphans())
-        .exclude(suspension_date__lt=timezone.now())
-        .select_related("structure", "fee_condition", "source")
-        .prefetch_related(
-            "subcategories",
-            "kinds",
-            "location_kinds",
-            "coach_orientation_modes",
-            "beneficiaries_access_modes",
-            "publics",
-            "requirements",
-            "credentials",
-        )
-        .order_by("creation_date")
-    )
-    serializer_class = ServiceSerializer
     permission_classes = [APIPermission]
+    serializer_class = ServiceSerializer
     renderer_classes = [PrettyJSONRenderer]
     pagination_class = OptionalPageNumberPagination
+
+    def get_queryset(self):
+        return (
+            Service.objects.published()
+            .exclude(structure__is_obsolete=True)
+            .exclude(structure__in=Structure.objects.orphans())
+            .exclude(suspension_date__lt=timezone.now())
+            .select_related("structure", "fee_condition", "source")
+            .prefetch_related(
+                "subcategories",
+                "kinds",
+                "location_kinds",
+                "coach_orientation_modes",
+                "beneficiaries_access_modes",
+                "publics",
+                "requirements",
+                "credentials",
+            )
+            .order_by("pk")
+        )
