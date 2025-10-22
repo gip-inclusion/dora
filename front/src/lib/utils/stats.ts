@@ -225,11 +225,20 @@ export function trackServiceShare(
   }
 }
 
-export function trackStructure(structure, url) {
+export function trackStructure(
+  structure: Structure,
+  url: URL,
+  fetch = window.fetch
+) {
   if (browser) {
-    logAnalyticsEvent("structure", url.pathname, {
-      structure: structure.slug,
-    });
+    logAnalyticsEvent(
+      "structure",
+      url.pathname,
+      {
+        structure: structure.slug,
+      },
+      fetch
+    );
   }
 }
 

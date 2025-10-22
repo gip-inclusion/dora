@@ -69,7 +69,7 @@ export const load: LayoutLoad = async ({ fetch, params, parent, url }) => {
 
   // TODO: can we get rid of this store, and just cascade the structure?
   structure.set(currentStructure);
-  trackStructure(currentStructure, url);
+  trackStructure(currentStructure, url, fetch);
 
   return {
     structure: currentStructure,
