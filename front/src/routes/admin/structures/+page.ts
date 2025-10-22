@@ -7,7 +7,7 @@ import { getApiURL } from "$lib/utils/api";
 import type { GeoApiValue } from "$lib/types";
 import { error } from "@sveltejs/kit";
 
-async function getDepartments(departmentCodes: string[]) {
+async function getDepartments(departmentCodes: string[], fetch = window.fetch) {
   const url = `${getApiURL()}/admin-division-departments/?dept_codes=${encodeURIComponent(
     departmentCodes.join(",")
   )}`;
@@ -22,7 +22,7 @@ async function getDepartments(departmentCodes: string[]) {
 
 type GetDepartmentsResults = Awaited<ReturnType<typeof getDepartments>>;
 
-export const load: PageLoad = async ({ parent }) => {
+export const load: PageLoad = async ({ fetch, parent }) => {
   await parent();
 
   const [servicesOptions, structuresOptions] = await Promise.all([
@@ -37,7 +37,7 @@ export const load: PageLoad = async ({ parent }) => {
   let title = "Structures | Administration | DORA";
 
   if (user.isManager) {
-    departments = await getDepartments(user.departments);
+    departments = await getDepartments(user.departments, fetch);
     if (departments.length === 0) {
       error(403, "Accès réservé");
     }
