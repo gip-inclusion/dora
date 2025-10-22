@@ -4,7 +4,7 @@ import { userInfo } from "$lib/utils/auth";
 import { getBookmarks } from "$lib/requests/services";
 import type { Bookmark } from "$lib/types";
 
-export const load: PageLoad = async ({ parent }) => {
+export const load: PageLoad = async ({ fetch, parent }) => {
   await parent();
 
   const user = get(userInfo);
@@ -12,7 +12,7 @@ export const load: PageLoad = async ({ parent }) => {
     return {};
   }
 
-  const bookmarks: Bookmark[] = await getBookmarks();
+  const bookmarks: Bookmark[] = await getBookmarks(fetch);
 
   return {
     title: "Mes favoris | DORA",

@@ -196,9 +196,11 @@ export async function deleteService(serviceSlug) {
   return result;
 }
 
-export async function getBookmarks(): Promise<ShortService[]> {
+export async function getBookmarks(
+  fetch = window.fetch
+): Promise<ShortService[]> {
   const url = `${getApiURL()}/bookmarks/`;
-  return (await fetchData<ShortService[]>(url)).data;
+  return (await fetchData<ShortService[]>(url, fetch)).data;
 }
 
 export async function setBookmark(bookmarkSlug: string, isDI: boolean) {
