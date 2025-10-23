@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
 from dora.services.models import Bookmark, SavedSearch
@@ -242,30 +243,40 @@ class ConsentRecordAdmin(admin.ModelAdmin):
             icon = "✓" if consented else "✗"
             color = "var(--primary)" if consented else "var(--error-fg)"
             service_name = service.replace("_", " ").title()
-            rows.append(
-                f"<tr>"
-                f'<td style="padding: 8px; font-weight: bold;">{service_name}</td>'
-                f'<td style="padding: 8px; color: {color}; font-size: 16px;">{icon}</td>'
-                f'<td style="padding: 8px;">{"Accepté" if consented else "Refusé"}</td>'
-                f"</tr>"
+            status_text = "Accepté" if consented else "Refusé"
+
+            row = format_html(
+                "<tr>"
+                '<td style="padding: 8px; font-weight: bold;">{}</td>'
+                '<td style="padding: 8px; color: {}; font-size: 16px;">{}</td>'
+                '<td style="padding: 8px;">{}</td>'
+                "</tr>",
+                service_name,
+                color,
+                icon,
+                status_text,
             )
+            rows.append(row)
 
-        html = f"""
-        <table style="border-collapse: collapse; width: 100%; max-width: 500px;">
-            <thead>
-                <tr style="background-color: var(--darkened-bg);">
-                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border-color);">Service</th>
-                    <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border-color);">Statut</th>
-                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border-color);">Décision</th>
-                </tr>
-            </thead>
-            <tbody>
-                {"".join(rows)}
-            </tbody>
-        </table>
-        """
+        rows_html = mark_safe("".join(str(row) for row in rows))
 
-        return mark_safe(html)
+        html = format_html(
+            '<table style="border-collapse: collapse; width: 100%; max-width: 500px;">'
+            "<thead>"
+            '<tr style="background-color: var(--darkened-bg);">'
+            '<th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border-color);">Service</th>'
+            '<th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border-color);">Statut</th>'
+            '<th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border-color);">Décision</th>'
+            "</tr>"
+            "</thead>"
+            "<tbody>"
+            "{}"
+            "</tbody>"
+            "</table>",
+            rows_html,
+        )
+
+        return html
 
     def has_add_permission(self, request):
         return False
