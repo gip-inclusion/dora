@@ -240,7 +240,7 @@ class ConsentRecordAdmin(admin.ModelAdmin):
         rows = []
         for service, consented in obj.consent_choices.items():
             icon = "✓" if consented else "✗"
-            color = "#28a745" if consented else "#dc3545"
+            color = "var(--primary)" if consented else "var(--error-fg)"
             service_name = service.replace("_", " ").title()
             rows.append(
                 f"<tr>"
@@ -253,10 +253,10 @@ class ConsentRecordAdmin(admin.ModelAdmin):
         html = f"""
         <table style="border-collapse: collapse; width: 100%; max-width: 500px;">
             <thead>
-                <tr style="background-color: #f8f9fa;">
-                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid #dee2e6;">Service</th>
-                    <th style="padding: 8px; text-align: center; border-bottom: 2px solid #dee2e6;">Statut</th>
-                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid #dee2e6;">Décision</th>
+                <tr style="background-color: var(--darkened-bg);">
+                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border-color);">Service</th>
+                    <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border-color);">Statut</th>
+                    <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border-color);">Décision</th>
                 </tr>
             </thead>
             <tbody>
