@@ -3,36 +3,105 @@ sources:
     schema: public
     tables:
       - name: orientations_orientation
+        description:
+        Liste des orientations.
+        Une orientation (id) correspond à l'envoi d'un formulaire de la part d'un precripteur (prescriber_id).
+        Un formulaire étant la recommandation d'un service (service_id) à un tiers (beneficiary).
       - name: orientations_rejectionreason
+        description:
+        Table de correspondance id-label des motifs de refus des orientations refusées.
       - name: orientations_orientation_rejection_reasons
+        description:
+        Motifs de refus des orientations refusées.
       - name: services_fundinglabel
+        description:
+        Table de correspondance id-fundinglabel des labels de financement.
       - name: services_locationkind
+        description:
+        Table de correspondance id-locationkind des services.
+        Attention toutes les aides financières sont de type `à distance`.
       - name: services_savedsearch
+        ToDo: à clarifier avec métier
       - name: services_service
+        description:
+        Liste des services.
+        Un service est rattaché à une structure (structure_id).
       - name: services_service_categories
+        description:
+        Catégorie à laquelle un service est rattaché (mobilité, emploi, santé..).
       - name: services_servicecategory
+        description:
+        Table de correspondance id-servicecategory.
       - name: services_service_coach_orientation_modes
+        ToDo: à documenter avec le métier
+      - name: services_coachorientationmodes
+        ToDo: à documenter avec le métier
       - name: services_service_funding_labels
+        description:
+        Labels de financement des services financés.
       - name: services_service_location_kinds
+        description:
+        Type de mise à disposition des services (à distance ou en présentiel).
       - name: stats_deploymentstate
+        description:
+        Etat de déploiement pour chaque département.
+        Donnée complétée à la main sur l'admin par les bizdev en fonction du stade de maturité.
+        Doc maturité : https://www.notion.so/gip-inclusion/Calcul-de-la-maturit-1995f321b6048092b876f7b08a87fa11
       - name: stats_dimobilisationevent
+        description:
+        Événements de mobilisation (visualisation de fiche service ou d'informations de contact) sur les services di.
       - name: stats_dimobilisationevent_categories
+        description:
+        Catégorie des services concernés par les événements de mobilisation.
       - name: stats_diserviceview
+        description:
+        Événements de visualisation de services di.
       - name: stats_mobilisationevent
+        description:
+        Événements de mobilisation des services dora.
       - name: stats_mobilisationevent_categories
+        description:
+        Catégorie des services concernés par les événements de mobilisation.
       - name: stats_pageview
+        description:
+        Événements de visualisation d'une page sur dora (structure, service, page de connexion..).
       - name: stats_searchview
+        description:
+        Événements de recherche d'un service ou d'une structure.
       - name: stats_searchview_categories
+        description:
+        Catégorie des services concernés par les événements de recherche.
       - name: stats_serviceview
+        description:
+        Événements de visualisation d'une page service.
       - name: stats_structureinfosview
+        description:
+        Événements de visualisation des informations d'une structure.
       - name: stats_structureview
+        description:
+        Événements de visualisation d'une page structure.
       - name: structures_structure
+        description:
+        Liste des structures.
       - name: structures_structuremember
+        description:
+        Table de correspondance entre les utilisateurs et leur structures de rattachement pour les utilisateurs rattachés.
       - name: structures_structurenationallabel
+        description:
+        Table de correspondance id-nationallabel.
       - name: structures_structure_national_labels
+        description:
+        Labels nationaux des structures.
       - name: structures_structureputativemember
+        description:
+        Table de correspondance entre les utilisateurs et leur structure potentielle, pour lesquels le rattachement n'est pas finalisé (invitation en attente ou demande de rattachement en attente)
       - name: structures_structuretypology
+        description:
+        Typologie des structures (donnée déclarative, fiable pour FT, ML et les CD).
       - name: users_user
+        description:
+        Liste des utilisateurs.
+
   - name: matomo
     schema: public
     tables:
