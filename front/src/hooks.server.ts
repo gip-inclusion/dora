@@ -11,7 +11,7 @@ import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 import { MAX_REQUESTS_PER_MINUTE } from "$env/static/private";
 
 const rateLimiter = new RetryAfterRateLimiter({
-  IPUA: [Number(MAX_REQUESTS_PER_MINUTE), "m"],
+  IPUA: [Number(MAX_REQUESTS_PER_MINUTE) || 24, "m"],
 });
 
 if (ENVIRONMENT !== "local") {
