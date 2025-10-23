@@ -6,10 +6,12 @@ import * as Sentry from "@sentry/sveltekit";
 
 import { RetryAfterRateLimiter } from "sveltekit-rate-limiter/server";
 
-import { ENVIRONMENT, MAX_REQUESTS_PER_MINUTE, SENTRY_DSN } from "$lib/env";
+import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
+
+import { MAX_REQUESTS_PER_MINUTE } from "$env/static/private";
 
 const rateLimiter = new RetryAfterRateLimiter({
-  IPUA: [MAX_REQUESTS_PER_MINUTE, "m"],
+  IPUA: [Number(MAX_REQUESTS_PER_MINUTE) || 24, "m"],
 });
 
 if (ENVIRONMENT !== "local") {
