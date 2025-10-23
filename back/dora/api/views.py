@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db.models import Q
 from django.utils import timezone
-from djangorestframework_camel_case.render import CamelCaseJSONRenderer
 from rest_framework import permissions, viewsets
 from rest_framework.renderers import JSONRenderer
 from rest_framework.versioning import NamespaceVersioning
@@ -16,14 +15,6 @@ from .serializers import (
     ServiceSerializer,
     StructureSerializer,
 )
-
-
-class PrettyCamelCaseJSONRenderer(CamelCaseJSONRenderer):
-    def render(self, data, media_type=None, renderer_context=None):
-        renderer_context = renderer_context or {}
-        renderer_context["indent"] = 4
-        return super().render(data, media_type, renderer_context)
-
 
 ############
 # V2
@@ -48,18 +39,11 @@ class APIPermission(permissions.BasePermission):
         )
 
 
-class PrettyJSONRenderer(JSONRenderer):
-    def render(self, data, media_type=None, renderer_context=None):
-        renderer_context = renderer_context or {}
-        renderer_context["indent"] = 4
-        return super().render(data, media_type, renderer_context)
-
-
 class StructureViewSet(viewsets.ReadOnlyModelViewSet):
     versioning_class = NamespaceVersioning
     permission_classes = [APIPermission]
     serializer_class = StructureSerializer
-    renderer_classes = [PrettyJSONRenderer]
+    renderer_classes = [JSONRenderer]
     pagination_class = OptionalPageNumberPagination
 
     def get_queryset(self):
@@ -78,7 +62,7 @@ class ServiceViewSet(viewsets.ReadOnlyModelViewSet):
     versioning_class = NamespaceVersioning
     permission_classes = [APIPermission]
     serializer_class = ServiceSerializer
-    renderer_classes = [PrettyJSONRenderer]
+    renderer_classes = [JSONRenderer]
     pagination_class = OptionalPageNumberPagination
 
     def get_queryset(self):
