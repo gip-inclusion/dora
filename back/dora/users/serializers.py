@@ -11,6 +11,8 @@ class ConsentRecordSerializer(serializers.ModelSerializer):
         fields = ["anonymous_user_hash", "consent_version", "consent_choices"]
 
     def validate(self, data):
+        data = super().validate(data)
+
         request = self.context.get("request")
         user = request.user if request and request.user.is_authenticated else None
         anonymous_user_hash = data.get("anonymous_user_hash")

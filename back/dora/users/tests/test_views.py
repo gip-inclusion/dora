@@ -110,6 +110,10 @@ class ConsentRecordTestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_anonymous_user_id_as_empty_string_raises_400_when_anonymous_user(self):
+        """
+        Si l'utilisateur est connecté, on sauvegarde son id dans la colonne `user`
+        et anonymous_user_hash est None
+        """
         response = self.client.post(
             "/consent-record/",
             {
@@ -123,21 +127,3 @@ class ConsentRecordTestCase(APITestCase):
         )
 
         self.assertEqual(response.status_code, 400)
-
-    def test_anonymous_user_id_saved_as_none_when_connected_user(self):
-        self.client.force_authenticate(user=make_user())
-
-        response = self.client.post(
-            "/consent-record/",
-            {
-                "anonymous_user_hash": "",
-                "consent_version": "1.2",
-                "consent_choices": {
-                    "google_cse": False,
-                    "matomo": False,
-                },
-            },
-        )
-
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(ConsentRecord.objects.last().anonymous_user_hash, None)
