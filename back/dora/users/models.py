@@ -258,7 +258,6 @@ class ConsentRecord(models.Model):
     )
 
     consent_version = models.CharField(
-        max_length=10,
         verbose_name="Version du consentement",
         help_text="Version de la politique de consentement présentée à l'utilisateur",
         validators=[validate_version],
