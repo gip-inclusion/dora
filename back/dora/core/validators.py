@@ -1,3 +1,4 @@
+import re
 from itertools import chain
 
 from django.core.exceptions import ValidationError
@@ -92,3 +93,11 @@ def validate_phone_number(phone_number: str):
             raise ValidationError(
                 f"Le numéro de téléphone {phone_number} ne contient pas que des chiffres"
             )
+
+
+def validate_version(value: str):
+    """
+    Assurer qu'une version est dans le format <int>.<int> comme 2.1 ou 10.52
+    """
+    if not re.match(r"^\d+\.\d+$", value):
+        raise ValidationError("La version doit être dans le format <int>.<int>")

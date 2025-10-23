@@ -4,11 +4,13 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from dora.services.models import Bookmark, SavedSearch
 from dora.structures.models import StructureMember, StructurePutativeMember
 
-from .models import User
+from .models import ConsentRecord, User
 
 
 class StructureMemberInline(admin.TabularInline):
@@ -164,8 +166,131 @@ class UserAdmin(BaseUserAdmin):
     ]
 
 
+class ConsentRecordAdmin(admin.ModelAdmin):
+    list_display = [
+        "get_user_identifier",
+        "consent_version",
+        "get_consents_display",
+        "created_at",
+    ]
+
+    list_filter = [
+        "consent_version",
+        "created_at",
+    ]
+
+    search_fields = [
+        "user__email",
+        "anonymous_user_hash",
+        "id",
+    ]
+
+    ordering = ["-created_at"]
+
+    readonly_fields = [
+        "id",
+        "user",
+        "anonymous_user_hash",
+        "consent_version",
+        "get_consents_formatted",
+        "created_at",
+    ]
+
+    fieldsets = (
+        ("Identification", {"fields": ("id", "user", "anonymous_user_hash")}),
+        ("Consentement", {"fields": ("consent_version", "get_consents_formatted")}),
+        ("Métadonnées", {"fields": ("created_at",)}),
+    )
+
+    list_select_related = ["user"]
+
+    # Méthode pour afficher l'identifiant utilisateur
+    @admin.display(description="Identifiant", ordering="user__email")
+    def get_user_identifier(self, obj):
+        if obj.user:
+            return obj.user.email
+        return (
+            f"Anonyme ({obj.anonymous_user_hash[:8]}...)"
+            if obj.anonymous_user_hash
+            else "N/A"
+        )
+
+    # Méthode pour afficher les consentements dans la liste (compact)
+    @admin.display(description="Consentements")
+    def get_consents_display(self, obj):
+        if not obj.consent_choices:
+            return "Aucun"
+
+        # Créer une liste des services acceptés
+        accepted = [
+            key.replace("_", " ").title()
+            for key, value in obj.consent_choices.items()
+            if value is True
+        ]
+
+        if not accepted:
+            return "❌ Tous refusés"
+
+        return "✓ " + ", ".join(accepted)
+
+    @admin.display(description="Consentements par service")
+    def get_consents_formatted(self, obj):
+        if not obj.consent_choices:
+            return "Aucun consentement enregistré"
+
+        rows = []
+        for service, consented in obj.consent_choices.items():
+            icon = "✓" if consented else "✗"
+            color = "var(--primary)" if consented else "var(--error-fg)"
+            service_name = service.replace("_", " ").title()
+            status_text = "Accepté" if consented else "Refusé"
+
+            row = format_html(
+                "<tr>"
+                '<td style="padding: 8px; font-weight: bold;">{}</td>'
+                '<td style="padding: 8px; color: {}; font-size: 16px;">{}</td>'
+                '<td style="padding: 8px;">{}</td>'
+                "</tr>",
+                service_name,
+                color,
+                icon,
+                status_text,
+            )
+            rows.append(row)
+
+        rows_html = mark_safe("".join(str(row) for row in rows))
+
+        html = format_html(
+            '<table style="border-collapse: collapse; width: 100%; max-width: 500px;">'
+            "<thead>"
+            '<tr style="background-color: var(--darkened-bg);">'
+            '<th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border-color);">Service</th>'
+            '<th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border-color);">Statut</th>'
+            '<th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border-color);">Décision</th>'
+            "</tr>"
+            "</thead>"
+            "<tbody>"
+            "{}"
+            "</tbody>"
+            "</table>",
+            rows_html,
+        )
+
+        return html
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
+admin.site.register(ConsentRecord, ConsentRecordAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
