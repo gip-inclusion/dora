@@ -8,6 +8,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils import timezone
 
+from ..core.validators import validate_version
 from .enums import DiscoveryMethod, MainActivity
 
 logger = logging.getLogger(__name__)
@@ -260,6 +261,7 @@ class ConsentRecord(models.Model):
         max_length=10,
         verbose_name="Version du consentement",
         help_text="Version de la politique de consentement présentée à l'utilisateur",
+        validators=[validate_version],
     )
 
     consent_choices = models.JSONField(

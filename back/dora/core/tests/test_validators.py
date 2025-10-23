@@ -2,7 +2,12 @@ import pytest
 from django.core.exceptions import ValidationError
 
 from ..constants import SIREN_FRANCE_TRAVAIL, SIREN_LA_POSTE
-from ..validators import validate_full_siret, validate_phone_number, validate_siren
+from ..validators import (
+    validate_full_siret,
+    validate_phone_number,
+    validate_siren,
+    validate_version,
+)
 
 
 def test_validate_siren():
@@ -59,3 +64,19 @@ def test_validate_phone_number():
 
     with pytest.raises(ValidationError, match="ne contient pas que des chiffres"):
         validate_phone_number("1x")
+
+
+def test_validate_version():
+    validate_version("2.1")
+
+    validate_version("10.52")
+
+    with pytest.raises(
+        ValidationError, match="La version doit être dans le format <int>.<int>"
+    ):
+        validate_version("10.52.1")
+
+    with pytest.raises(
+        ValidationError, match="La version doit être dans le format <int>.<int>"
+    ):
+        validate_version("10.52a")
