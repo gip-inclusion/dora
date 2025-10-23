@@ -9,7 +9,7 @@ class ConsentRecordTestCase(APITestCase):
         response = self.client.post(
             "/consent-record/",
             {
-                "anonymous_user_hash": "12345abcdef",
+                "anonymous_user_hash": "057c49070eb7e2504610edbdab56ea00",
                 "consent_version": "1.1",
                 "consent_choices": {
                     "google_cse": True,
@@ -22,7 +22,9 @@ class ConsentRecordTestCase(APITestCase):
 
         consent_record = ConsentRecord.objects.last()
 
-        self.assertEqual(consent_record.anonymous_user_hash, "12345abcdef")
+        self.assertEqual(
+            consent_record.anonymous_user_hash, "057c49070eb7e2504610edbdab56ea00"
+        )
         self.assertEqual(consent_record.user, None)
         self.assertEqual(
             consent_record.consent_version,
@@ -43,7 +45,7 @@ class ConsentRecordTestCase(APITestCase):
         response = self.client.post(
             "/consent-record/",
             {
-                "anonymous_user_hash": "12345abcdef",
+                "anonymous_user_hash": "057c49070eb7e2504610edbdab56ea00",
                 "consent_version": "1.2",
                 "consent_choices": {
                     "google_cse": False,
@@ -57,7 +59,9 @@ class ConsentRecordTestCase(APITestCase):
         consent_record = ConsentRecord.objects.last()
 
         self.assertEqual(consent_record.user, user)
-        self.assertEqual(consent_record.anonymous_user_hash, None)
+        self.assertEqual(
+            consent_record.anonymous_user_hash, "057c49070eb7e2504610edbdab56ea00"
+        )
         self.assertEqual(
             consent_record.consent_version,
             "1.2",
@@ -77,10 +81,6 @@ class ConsentRecordTestCase(APITestCase):
         )
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            str(response.data["non_field_errors"][0]["message"]),
-            "Doit fournir anonymous_user_hash ou être connecté",
-        )
 
     def test_raise_validation_error_when_consent_choices_not_a_dict(self):
         response = self.client.post(

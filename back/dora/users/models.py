@@ -244,17 +244,16 @@ class ConsentRecord(models.Model):
 
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="consent_records",
         verbose_name="Utilisateur",
     )
+
     anonymous_user_hash = models.CharField(
-        null=True,
-        blank=True,
         verbose_name="Identifiant anonyme",
-        help_text="userHash du localStorage pour les utilisateurs anonymes",
+        help_text="userHash du localStorage pour les utilisateurs",
     )
 
     consent_version = models.CharField(
@@ -273,11 +272,6 @@ class ConsentRecord(models.Model):
         auto_now_add=True, db_index=True, verbose_name="Date et heure du consentement"
     )
 
-    def save(self, *args, **kwargs):
-        if self.anonymous_user_hash == "":
-            self.anonymous_user_hash = None
-        super().save(*args, **kwargs)
-
     class Meta:
         ordering = ["-created_at"]
         verbose_name = "Enregistrement de consentement"
@@ -285,13 +279,4 @@ class ConsentRecord(models.Model):
         indexes = [
             models.Index(fields=["user", "-created_at"]),
             models.Index(fields=["anonymous_user_hash", "-created_at"]),
-        ]
-        constraints = [
-            models.CheckConstraint(
-                check=(
-                    models.Q(user__isnull=False, anonymous_user_hash__isnull=True)
-                    | models.Q(user__isnull=True, anonymous_user_hash__isnull=False)
-                ),
-                name="soit_utilisateur_soit_anonyme",
-            )
         ]
