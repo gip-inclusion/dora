@@ -86,7 +86,7 @@ class ConsentRecordTestCase(APITestCase):
         response = self.client.post(
             "/consent-record/",
             {
-                "anonymous_user_hash": "12345abcdef",
+                "anonymous_user_hash": "057c49070eb7e2504610edbdab56ea00",
                 "consent_version": "1.2",
                 "consent_choices": "abc",
             },
@@ -98,7 +98,7 @@ class ConsentRecordTestCase(APITestCase):
         response = self.client.post(
             "/consent-record/",
             {
-                "anonymous_user_hash": "12345abcdef",
+                "anonymous_user_hash": "057c49070eb7e2504610edbdab56ea00",
                 "consent_version": "1.2",
                 "consent_choices": {
                     "google_cse": "abc",
