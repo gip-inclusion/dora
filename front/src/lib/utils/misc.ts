@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
 import type { ServicesOptions } from "$lib/types";
-import { defaultAcceptHeader } from "$lib/utils/api";
+import { customFetch, defaultAcceptHeader } from "$lib/utils/api";
 import { token } from "$lib/utils/auth";
 import insane from "insane";
 import showdown from "showdown";
@@ -38,7 +38,7 @@ export function htmlToMarkdown(html: string) {
 
 export async function fetchData<T>(
   url: string,
-  fetchFunction = fetch,
+  fetchFunction = customFetch,
   customHeaders: Record<string, string> = {}
 ) {
   const headers = { Accept: defaultAcceptHeader, ...customHeaders };

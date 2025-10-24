@@ -5,7 +5,7 @@
   import Select from "$lib/components/inputs/select/select.svelte";
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment, GeoApiValue } from "$lib/types";
-  import { getApiURL } from "$lib/utils/api";
+  import { customFetch, getApiURL } from "$lib/utils/api";
 
   interface Props {
     establishment: Establishment | null;
@@ -44,7 +44,7 @@
         city.code
       }/?q=${encodeURIComponent(query)}`;
 
-      const response = await fetch(url, {
+      const response = await customFetch(url, {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json; version=1.0",

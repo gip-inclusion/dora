@@ -26,6 +26,7 @@
     sortSubcategory,
   } from "$lib/utils/service";
   import { getQueryString } from "$lib/utils/service-search";
+  import { customFetch } from "$lib/utils/api";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -105,7 +106,7 @@
 
   async function searchAddress(addrQuery) {
     const url = `${banAPIUrl}?q=${encodeURIComponent(addrQuery)}&limit=10`;
-    const response = await fetch(url);
+    const response = await customFetch(url);
     const jsonResponse = await response.json();
     const results = jsonResponse.features.map((feature) => ({
       value: feature,
