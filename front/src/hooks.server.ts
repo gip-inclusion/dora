@@ -6,12 +6,9 @@ import * as Sentry from "@sentry/sveltekit";
 
 import { RetryAfterRateLimiter } from "sveltekit-rate-limiter/server";
 
-import { API_URL, ENVIRONMENT, SENTRY_DSN } from "$lib/env";
+import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 
-import {
-  MAX_REQUESTS_PER_MINUTE,
-  SVELTEKIT_SERVER_SECRET,
-} from "$env/static/private";
+import { MAX_REQUESTS_PER_MINUTE } from "$env/static/private";
 
 const rateLimiter = new RetryAfterRateLimiter({
   IPUA: [Number(MAX_REQUESTS_PER_MINUTE) || 24, "m"],
@@ -64,17 +61,13 @@ export const handle: Handle = sequence(
   }
 );
 
-export const handleFetch: HandleFetch = ({ request, fetch }) => {
-  if (SVELTEKIT_SERVER_SECRET && request.url.startsWith(API_URL)) {
-    const headers = new Headers(request.headers);
-    headers.set("X-SvelteKit-Secret", SVELTEKIT_SERVER_SECRET);
+export const handleFetch: HandleFetch = ({ event, request, fetch }) => {
+  const headers = new Headers(request.headers);
+  headers.set("X-Forwarded-For", event.getClientAddress());
 
-    const modifiedRequest = new Request(request, {
-      headers,
-    });
+  const modifiedRequest = new Request(request, {
+    headers,
+  });
 
-    return fetch(modifiedRequest);
-  }
-
-  return fetch(request);
+  return fetch(modifiedRequest);
 };
