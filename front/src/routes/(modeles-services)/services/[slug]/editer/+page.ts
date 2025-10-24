@@ -8,10 +8,10 @@ import { getStructure } from "$lib/requests/structures";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ params, parent }) => {
+export const load: PageLoad = async ({ fetch, params, parent }) => {
   await parent();
 
-  const service = await getService(params.slug);
+  const service = await getService(params.slug, fetch);
 
   // on ne retourne une 404 que sur le client
   if (!browser) {
@@ -22,15 +22,15 @@ export const load: PageLoad = async ({ params, parent }) => {
     error(404, "Page Not Found");
   }
 
-  const structure = await getStructure(service.structure);
+  const structure = await getStructure(service.structure, fetch);
 
-  const model = service.model ? await getModel(service.model) : null;
+  const model = service.model ? await getModel(service.model, fetch) : null;
 
   return {
     title: `Éditer | ${service.name} | ${structure.name} | DORA`,
     noIndex: true,
     service,
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
     structures: [structure],
     structure,
     model,

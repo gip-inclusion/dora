@@ -1,4 +1,4 @@
-import type { Handle, HandleServerError } from "@sveltejs/kit";
+import type { Handle, HandleFetch, HandleServerError } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 import { error } from "@sveltejs/kit";
 
@@ -60,3 +60,14 @@ export const handle: Handle = sequence(
     return response;
   }
 );
+
+export const handleFetch: HandleFetch = ({ event, request, fetch }) => {
+  const headers = new Headers(request.headers);
+  headers.set("X-Forwarded-For", event.getClientAddress());
+
+  const modifiedRequest = new Request(request, {
+    headers,
+  });
+
+  return fetch(modifiedRequest);
+};

@@ -4,7 +4,7 @@ import { getServicesOptions } from "$lib/requests/services";
 import { getLastSearchCity } from "$lib/utils/service-search";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ parent, url, data }) => {
+export const load: PageLoad = async ({ fetch, parent, url, data }) => {
   await parent();
   const query = url.searchParams;
 
@@ -12,7 +12,7 @@ export const load: PageLoad = async ({ parent, url, data }) => {
   let cityLabel: string | null | undefined;
 
   if (cityCode) {
-    cityLabel = await getCityLabel(cityCode);
+    cityLabel = await getCityLabel(cityCode, fetch);
   } else if (browser) {
     ({ cityCode, cityLabel } = getLastSearchCity());
   }
@@ -21,7 +21,7 @@ export const load: PageLoad = async ({ parent, url, data }) => {
     title: "DORA : recensement et mise à jour de l’offre d’insertion",
     description:
       "Le service public numérique de recensement et mise à jour de l’offre d’insertion.",
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
     cityCode,
     cityLabel,
     ...data,

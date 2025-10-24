@@ -10,11 +10,14 @@ import { error, redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = async ({ url, params, parent }) => {
+export const load: PageLoad = async ({ fetch, url, params, parent }) => {
   await parent();
 
   if (params.slug.startsWith("di--")) {
-    const service = (await getServiceDI(params.slug.slice(4))) as Service;
+    const service = (await getServiceDI(
+      params.slug.slice(4),
+      fetch
+    )) as Service;
     if (!service) {
       error(404, "Page Not Found");
     }
@@ -23,13 +26,13 @@ export const load: PageLoad = async ({ url, params, parent }) => {
       title: `${service.name} | ${service.structureInfo.name} | DORA`,
       description: service.shortDesc,
       service,
-      servicesOptions: await getServicesOptions(),
+      servicesOptions: await getServicesOptions(fetch),
       isDI: true,
       noIndex: true,
     };
   }
 
-  const service = await getService(params.slug);
+  const service = await getService(params.slug, fetch);
   // si le service est en brouillon il faut un token pour y accéder
   // on renvoie donc un objet vide côté serveur
   if (!service) {
@@ -51,6 +54,6 @@ export const load: PageLoad = async ({ url, params, parent }) => {
     title: `${service.name} | ${service.structureInfo.name} | DORA`,
     description: service.shortDesc,
     service,
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
   };
 };

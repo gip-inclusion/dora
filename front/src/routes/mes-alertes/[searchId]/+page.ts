@@ -6,7 +6,7 @@ import type { PageLoad } from "./$types";
 
 export const ssr = false;
 
-export const load: PageLoad = async ({ url, params, parent }) => {
+export const load: PageLoad = async ({ fetch, url, params, parent }) => {
   await parent();
   if (!get(token)) {
     redirect(
@@ -22,7 +22,7 @@ export const load: PageLoad = async ({ url, params, parent }) => {
     error(404);
   }
 
-  const recentResults = await getRecentSearchResults(savedSearch.id);
+  const recentResults = await getRecentSearchResults(savedSearch.id, fetch);
 
   return {
     title: `Mon alerte | DORA`,

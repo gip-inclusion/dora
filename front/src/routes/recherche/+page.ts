@@ -9,19 +9,22 @@ import type { PageLoad } from "./$types";
 // à ce qu'elles soient indexées
 export const ssr = false;
 
-async function getResults({
-  categoryIds,
-  subCategoryIds,
-  cityCode,
-  cityLabel,
-  label,
-  kindIds,
-  feeConditions,
-  locationKinds,
-  fundingLabels,
-  lat,
-  lon,
-}: SearchQuery): Promise<{
+async function getResults(
+  {
+    categoryIds,
+    subCategoryIds,
+    cityCode,
+    cityLabel,
+    label,
+    kindIds,
+    feeConditions,
+    locationKinds,
+    fundingLabels,
+    lat,
+    lon,
+  }: SearchQuery,
+  fetchFunction: typeof fetch
+): Promise<{
   cityBounds: [number, number, number, number];
   fundingLabels: Array<{ value: string; label: string }>;
   services: ServiceSearchResult[];
@@ -41,7 +44,7 @@ async function getResults({
   });
   const url = `${getApiURL()}/search/?${querystring}`;
 
-  const res = await fetch(url, {
+  const res = await fetchFunction(url, {
     headers: { Accept: "application/json; version=1.0" },
   });
 
@@ -58,7 +61,7 @@ async function getResults({
   return [];
 }
 
-export const load: PageLoad = async ({ url, parent }) => {
+export const load: PageLoad = async ({ fetch, url, parent }) => {
   await parent();
 
   const query = url.searchParams;
@@ -81,21 +84,24 @@ export const load: PageLoad = async ({ url, parent }) => {
     cityBounds,
     fundingLabels: availableFundingLabels,
     services,
-  } = await getResults({
-    // La priorité est donnée aux sous-catégories
-    categoryIds: subCategoryIds.length ? [] : categoryIds,
-    subCategoryIds,
-    cityCode,
-    cityLabel,
-    label,
-    // Le filtrage sur kindIds, feeConditions et locationKinds se fait côté frontend
-    kindIds: [],
-    feeConditions: [],
-    locationKinds: [],
-    fundingLabels: [],
-    lon,
-    lat,
-  });
+  } = await getResults(
+    {
+      // La priorité est donnée aux sous-catégories
+      categoryIds: subCategoryIds.length ? [] : categoryIds,
+      subCategoryIds,
+      cityCode,
+      cityLabel,
+      label,
+      // Le filtrage sur kindIds, feeConditions et locationKinds se fait côté frontend
+      kindIds: [],
+      feeConditions: [],
+      locationKinds: [],
+      fundingLabels: [],
+      lon,
+      lat,
+    },
+    fetch
+  );
 
   const searchId = await trackSearch(
     url,
@@ -108,7 +114,8 @@ export const load: PageLoad = async ({ url, parent }) => {
     feeConditions,
     locationKinds,
     fundingLabels,
-    services
+    services,
+    fetch
   );
 
   if (cityCode && cityLabel) {
@@ -137,7 +144,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     fundingLabels,
     availableFundingLabels,
     services,
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
     searchId,
   };
 };

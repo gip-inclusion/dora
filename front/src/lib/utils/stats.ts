@@ -19,7 +19,12 @@ export function getAnalyticsId() {
   return analyticsId;
 }
 
-async function logAnalyticsEvent(tag, path, params = {}) {
+async function logAnalyticsEvent(
+  tag,
+  path,
+  params = {},
+  fetchFunction = fetch
+) {
   const data = {
     tag,
     path,
@@ -36,7 +41,7 @@ async function logAnalyticsEvent(tag, path, params = {}) {
     headers.append("Authorization", `Token ${currentToken}`);
   }
 
-  const res = await fetch(`${getApiURL()}/stats/event/`, {
+  const res = await fetchFunction(`${getApiURL()}/stats/event/`, {
     method: "POST",
     headers,
     body: JSON.stringify(data),
@@ -130,7 +135,8 @@ export async function trackSearch(
   feeConditions,
   locationKinds,
   fundingLabels,
-  results
+  results,
+  fetchFunction = fetch
 ) {
   if (browser) {
     const numResults = results.length;
@@ -144,19 +150,24 @@ export async function trackSearch(
       .slice(0, 10)
       .map((service) => service.slug);
 
-    const event = await logAnalyticsEvent("search", url.pathname, {
-      searchCityCode: cityCode,
-      searchNumResults: numResults,
-      categoryIds: categoryIds,
-      subCategoryIds: subCategoryIds,
-      numDiResults,
-      numDiResultsTop10,
-      resultsSlugsTop10,
-      kinds,
-      feeConditions,
-      locationKinds,
-      fundingLabels,
-    });
+    const event = await logAnalyticsEvent(
+      "search",
+      url.pathname,
+      {
+        searchCityCode: cityCode,
+        searchNumResults: numResults,
+        categoryIds: categoryIds,
+        subCategoryIds: subCategoryIds,
+        numDiResults,
+        numDiResultsTop10,
+        resultsSlugsTop10,
+        kinds,
+        feeConditions,
+        locationKinds,
+        fundingLabels,
+      },
+      fetchFunction
+    );
     const searchId = event && event.event;
     return searchId;
   }
@@ -219,11 +230,20 @@ export function trackServiceShare(
   }
 }
 
-export function trackStructure(structure, url) {
+export function trackStructure(
+  structure: Structure,
+  url: URL,
+  fetchFunction = fetch
+) {
   if (browser) {
-    logAnalyticsEvent("structure", url.pathname, {
-      structure: structure.slug,
-    });
+    logAnalyticsEvent(
+      "structure",
+      url.pathname,
+      {
+        structure: structure.slug,
+      },
+      fetchFunction
+    );
   }
 }
 

@@ -40,9 +40,12 @@ function serviceToFront(service) {
   return service;
 }
 
-export async function getService(slug): Promise<Service> {
+export async function getService(
+  slug: string,
+  fetchFunction = fetch
+): Promise<Service> {
   const url = `${getApiURL()}/services/${slug}/`;
-  const response = await fetchData<Service>(url);
+  const response = await fetchData<Service>(url, fetchFunction);
 
   if (!response.data) {
     return null;
@@ -52,12 +55,16 @@ export async function getService(slug): Promise<Service> {
   return serviceToFront(response.data);
 }
 
-export async function getServiceDI(diId): Promise<Service> {
+export async function getServiceDI(
+  diId: string,
+  fetchFunction = fetch
+): Promise<Service> {
   const userHash = getAnalyticsId();
   const url = new URL(`/services-di/${diId}/`, getApiURL());
 
   const response = await fetchData<Service>(
     url.toString(),
+    fetchFunction,
     userHash
       ? {
           "Anonymous-User-Hash": userHash,
@@ -91,9 +98,9 @@ export async function getPublishedServices({
   ).data;
 }
 
-export async function getModel(slug): Promise<Model> {
+export async function getModel(slug, fetchFunction = fetch): Promise<Model> {
   const url = `${getApiURL()}/models/${slug}/`;
-  const response = await fetchData<Model>(url);
+  const response = await fetchData<Model>(url, fetchFunction);
 
   if (!response.data) {
     return null;
@@ -189,9 +196,11 @@ export async function deleteService(serviceSlug) {
   return result;
 }
 
-export async function getBookmarks(): Promise<ShortService[]> {
+export async function getBookmarks(
+  fetchFunction = fetch
+): Promise<ShortService[]> {
   const url = `${getApiURL()}/bookmarks/`;
-  return (await fetchData<ShortService[]>(url)).data;
+  return (await fetchData<ShortService[]>(url, fetchFunction)).data;
 }
 
 export async function setBookmark(bookmarkSlug: string, isDI: boolean) {
@@ -327,6 +336,7 @@ export async function convertSuggestionToDraft(serviceSlug) {
 }
 
 export async function getServicesOptions(
+  fetchFunction = fetch,
   useCache = true
 ): Promise<ServicesOptions> {
   const currentUserInfo = get(userInfo);
@@ -341,7 +351,7 @@ export async function getServicesOptions(
 
   // Si pas de cache valide ou si le cache n'est pas utilisé, on fait l'appel API
   const url = `${getApiURL()}/services-options/`;
-  const response = await fetchData<ServicesOptions>(url);
+  const response = await fetchData<ServicesOptions>(url, fetchFunction);
   if (!response.data) {
     throw Error(response.statusText);
   }

@@ -6,14 +6,18 @@ import {
   getServiceDI,
   getServicesOptions,
 } from "$lib/requests/services";
+import type { PageLoad } from "./$types";
 
 export const ssr = false;
 
-export const load = async ({ params, parent }) => {
+export const load: PageLoad = async ({ fetch, params, parent }) => {
   await parent();
 
   if (params.slug.startsWith("di--")) {
-    const service = (await getServiceDI(params.slug.slice(4))) as Service;
+    const service = (await getServiceDI(
+      params.slug.slice(4),
+      fetch
+    )) as Service;
     if (!service) {
       error(404, "Page Not Found");
     }
@@ -23,11 +27,11 @@ export const load = async ({ params, parent }) => {
       noIndex: true,
       service,
       isDI: true,
-      servicesOptions: await getServicesOptions(),
+      servicesOptions: await getServicesOptions(fetch),
     };
   }
 
-  const service = await getService(params.slug);
+  const service = await getService(params.slug, fetch);
 
   // on ne retourne une 404 que sur le client
   if (!browser) {
@@ -42,6 +46,6 @@ export const load = async ({ params, parent }) => {
     title: `Mobiliser | ${service.name} | ${service.structureInfo.name} | DORA`,
     noIndex: true,
     service,
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
   };
 };

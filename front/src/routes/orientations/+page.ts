@@ -4,7 +4,7 @@ import { error } from "@sveltejs/kit";
 import type { Orientation } from "$lib/types";
 export const ssr = false;
 
-export const load: PageLoad = async ({ parent, url }) => {
+export const load: PageLoad = async ({ fetch, parent, url }) => {
   await parent();
   const queryId = url.searchParams.get("token");
   const queryHash = url.searchParams.get("h");
@@ -13,7 +13,7 @@ export const load: PageLoad = async ({ parent, url }) => {
     error(401, "Accès refusé");
   }
 
-  return getOrientation(queryId, queryHash).then((response) => {
+  return getOrientation(queryId, queryHash, fetch).then((response) => {
     if (response.status === 404) {
       error(404, "Non trouvé");
     }

@@ -10,7 +10,7 @@ import { error } from "@sveltejs/kit";
 // pages authentifiées sur lesquelles la première requête non authentifiée n'a pas de sens
 export const ssr = false;
 
-export const load: PageLoad = async ({ url, parent }) => {
+export const load: PageLoad = async ({ fetch, url, parent }) => {
   await parent();
 
   const serviceSlug = url.searchParams.get("service");
@@ -22,7 +22,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   let structure: ShortStructure | undefined;
 
   if (serviceSlug) {
-    const service = await getService(serviceSlug);
+    const service = await getService(serviceSlug, fetch);
     model = createModelFromService(service);
     model.slug = null;
     model.structure = null;
@@ -34,7 +34,7 @@ export const load: PageLoad = async ({ url, parent }) => {
   if (structureSlug) {
     structure = structures.find((struct) => struct.slug === structureSlug);
     if (!structure && (user.isStaff || user.isManager)) {
-      structure = await getStructure(structureSlug);
+      structure = await getStructure(structureSlug, fetch);
     }
     if (structure) {
       structures = [structure];
@@ -58,7 +58,7 @@ export const load: PageLoad = async ({ url, parent }) => {
     title: "Création d’un modèle | DORA",
     noIndex: true,
     model,
-    servicesOptions: await getServicesOptions(),
+    servicesOptions: await getServicesOptions(fetch),
     structures,
     structure,
     serviceSlug,
