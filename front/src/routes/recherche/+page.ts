@@ -23,7 +23,7 @@ async function getResults(
     lat,
     lon,
   }: SearchQuery,
-  fetch = window.fetch
+  fetchFunction: typeof fetch
 ): Promise<{
   cityBounds: [number, number, number, number];
   fundingLabels: Array<{ value: string; label: string }>;
@@ -44,7 +44,7 @@ async function getResults(
   });
   const url = `${getApiURL()}/search/?${querystring}`;
 
-  const res = await fetch(url, {
+  const res = await fetchFunction(url, {
     headers: { Accept: "application/json; version=1.0" },
   });
 

@@ -7,11 +7,14 @@ import { getApiURL } from "$lib/utils/api";
 import type { GeoApiValue } from "$lib/types";
 import { error } from "@sveltejs/kit";
 
-async function getDepartments(departmentCodes: string[], fetch = window.fetch) {
+async function getDepartments(
+  departmentCodes: string[],
+  fetchFunction: typeof fetch
+) {
   const url = `${getApiURL()}/admin-division-departments/?dept_codes=${encodeURIComponent(
     departmentCodes.join(",")
   )}`;
-  const response = await fetch(url);
+  const response = await fetchFunction(url);
   const jsonResponse = (await response.json()) as GeoApiValue[];
   const results = jsonResponse.map((result) => ({
     value: result,

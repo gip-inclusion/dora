@@ -19,7 +19,12 @@ export function getAnalyticsId() {
   return analyticsId;
 }
 
-async function logAnalyticsEvent(tag, path, params = {}, fetch = window.fetch) {
+async function logAnalyticsEvent(
+  tag,
+  path,
+  params = {},
+  fetchFunction = fetch
+) {
   const data = {
     tag,
     path,
@@ -36,7 +41,7 @@ async function logAnalyticsEvent(tag, path, params = {}, fetch = window.fetch) {
     headers.append("Authorization", `Token ${currentToken}`);
   }
 
-  const res = await fetch(`${getApiURL()}/stats/event/`, {
+  const res = await fetchFunction(`${getApiURL()}/stats/event/`, {
     method: "POST",
     headers,
     body: JSON.stringify(data),
@@ -131,7 +136,7 @@ export async function trackSearch(
   locationKinds,
   fundingLabels,
   results,
-  fetch = window.fetch
+  fetchFunction = fetch
 ) {
   if (browser) {
     const numResults = results.length;
@@ -161,7 +166,7 @@ export async function trackSearch(
         locationKinds,
         fundingLabels,
       },
-      fetch
+      fetchFunction
     );
     const searchId = event && event.event;
     return searchId;
@@ -228,7 +233,7 @@ export function trackServiceShare(
 export function trackStructure(
   structure: Structure,
   url: URL,
-  fetch = window.fetch
+  fetchFunction = fetch
 ) {
   if (browser) {
     logAnalyticsEvent(
@@ -237,7 +242,7 @@ export function trackStructure(
       {
         structure: structure.slug,
       },
-      fetch
+      fetchFunction
     );
   }
 }

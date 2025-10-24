@@ -20,10 +20,10 @@ function redirectToCollectiviteFr(citySlug = "") {
 async function searchCitySlug(
   cityName: string,
   departmentCode: string,
-  fetch = window.fetch
+  fetchFunction: typeof fetch
 ) {
   // Recherche du nom de la ville sur l'API de collectivites.fr
-  const response = await fetch(
+  const response = await fetchFunction(
     `https://api.collectivite.fr/api/commune/search/${cityName}`
   );
   const results = (await response.json()) as CityResult[];

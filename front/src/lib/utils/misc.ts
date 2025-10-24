@@ -38,7 +38,7 @@ export function htmlToMarkdown(html: string) {
 
 export async function fetchData<T>(
   url: string,
-  fetch = window.fetch,
+  fetchFunction = fetch,
   customHeaders: Record<string, string> = {}
 ) {
   const headers = { Accept: defaultAcceptHeader, ...customHeaders };
@@ -48,7 +48,7 @@ export async function fetchData<T>(
     headers.Authorization = `Token ${currentToken}`;
   }
 
-  const response = await fetch(url, {
+  const response = await fetchFunction(url, {
     headers,
   });
 

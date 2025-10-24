@@ -6,11 +6,11 @@ import type { Choice, Orientation, Service } from "$lib/types";
 export function getOrientation(
   queryId: string,
   queryHash: string,
-  fetch = window.fetch
+  fetchFunction = fetch
 ) {
   return fetchData<Orientation>(
     `${getApiURL()}/orientations/${queryId}/?h=${queryHash}`,
-    fetch
+    fetchFunction
   );
 }
 

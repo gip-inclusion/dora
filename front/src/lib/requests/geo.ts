@@ -4,7 +4,7 @@ import { fetchData } from "../utils/misc";
 
 export async function getCityLabel(
   inseeCode: string,
-  fetch = window.fetch
+  fetchFunction = fetch
 ): Promise<string | null> {
   // Validation simple du code INSEE (que des chiffres)
   if (!inseeCode || !/^[0-9]+$/.test(inseeCode.trim())) {
@@ -15,7 +15,7 @@ export async function getCityLabel(
   const cleanInseeCode = inseeCode.trim();
   const url = new URL(`city-label/${cleanInseeCode}/`, getApiURL()).toString();
 
-  const result = await fetchData<string>(url, fetch);
+  const result = await fetchData<string>(url, fetchFunction);
 
   return result.ok ? result.data : null;
 }

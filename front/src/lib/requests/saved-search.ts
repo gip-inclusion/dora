@@ -74,11 +74,11 @@ export async function deleteSavedSearch(savedSearchId: number) {
 
 export async function getRecentSearchResults(
   savedSearchId: number,
-  fetch = window.fetch
+  fetchFunction = fetch
 ) {
   const url = `${getApiURL()}/saved-searches/${savedSearchId}/recent/`;
 
-  const response = await fetchData<SavedSearch[]>(url, fetch);
+  const response = await fetchData<SavedSearch[]>(url, fetchFunction);
   if (!response.ok) {
     throw Error(response.statusText);
   }

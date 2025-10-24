@@ -90,10 +90,10 @@ export async function getActiveStructures({
 
 export async function getStructure(
   slug: string,
-  fetch = window.fetch
+  fetchFunction = fetch
 ): Promise<Structure | null> {
   const url = `${getApiURL()}/structures/${slug}/`;
-  const structure = (await fetchData<Structure>(url, fetch)).data;
+  const structure = (await fetchData<Structure>(url, fetchFunction)).data;
   return structure ? structureToFront(structure) : null;
 }
 
@@ -131,11 +131,11 @@ export function modifyStructure(structure) {
 let structuresOptions;
 
 export async function getStructuresOptions(
-  fetch = window.fetch
+  fetchFunction = fetch
 ): Promise<StructuresOptions> {
   if (!structuresOptions) {
     const url = `${getApiURL()}/structures-options/`;
-    const res = await fetchData<StructuresOptions>(url, fetch);
+    const res = await fetchData<StructuresOptions>(url, fetchFunction);
     structuresOptions = res.data;
   }
   return structuresOptions;

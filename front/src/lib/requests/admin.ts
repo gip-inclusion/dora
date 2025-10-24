@@ -22,10 +22,10 @@ export async function getStructuresAdmin(
 
 export async function getStructureAdmin(
   slug: string,
-  fetch = window.fetch
+  fetchFunction = fetch
 ): Promise<AdminShortStructure> {
   const url = `${getApiURL()}/structures-admin/${slug}/`;
-  return (await fetchData<Structure>(url, fetch)).data;
+  return (await fetchData<Structure>(url, fetchFunction)).data;
 }
 
 export async function getStructuresToModerate() {
@@ -38,9 +38,9 @@ export async function getServicesAdmin() {
   return (await fetchData(url)).data;
 }
 
-export async function getServiceAdmin(slug: string, fetch = window.fetch) {
+export async function getServiceAdmin(slug: string, fetchFunction = fetch) {
   const url = `${getApiURL()}/services-admin/${slug}/`;
-  return (await fetchData<Service>(url, fetch)).data;
+  return (await fetchData<Service>(url, fetchFunction)).data;
 }
 
 export async function setModerationState(entity, status: ModerationStatus) {

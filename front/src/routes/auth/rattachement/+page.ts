@@ -4,10 +4,10 @@ import type { PageLoad } from "./$types";
 import { userInfo } from "$lib/utils/auth";
 import { get } from "svelte/store";
 
-function siretSearch(siret: string, fetch = window.fetch) {
+function siretSearch(siret: string, fetchFunction: typeof fetch) {
   const url = `${getApiURL()}/search-siret/?siret=${encodeURIComponent(siret)}`;
 
-  return fetch(url, {
+  return fetchFunction(url, {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json; version=1.0",
@@ -15,10 +15,10 @@ function siretSearch(siret: string, fetch = window.fetch) {
   });
 }
 
-function safirSearch(safir: string, fetch = window.fetch) {
+function safirSearch(safir: string, fetchFunction: typeof fetch) {
   const url = `${getApiURL()}/search-safir/?safir=${encodeURIComponent(safir)}`;
 
-  return fetch(url, {
+  return fetchFunction(url, {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json; version=1.0",
