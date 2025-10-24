@@ -3,10 +3,11 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import { GOOGLE_CSE_ID } from "$lib/env";
   import Notice from "$lib/components/display/notice.svelte";
+  import { consent } from "$lib/utils/consent.svelte";
 </script>
 
 <svelte:head>
-  {#if GOOGLE_CSE_ID}
+  {#if GOOGLE_CSE_ID && consent.consentChoices.googleCSE}
     <!-- Google Custom Search Engine -->
     <script
       async
