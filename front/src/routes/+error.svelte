@@ -6,6 +6,7 @@
 
   const notFound = $page.status === 404;
   const forbidden = $page.status === 403;
+  const rateLimit = $page.status === 429;
 
   onMount(() => {
     if (!notFound) {
@@ -24,6 +25,8 @@
       Cette page n’existe pas.
     {:else if forbidden}
       Accès réservé
+    {:else if rateLimit}
+      Trop de requêtes. Réessayez après 1 minute.
     {:else}
       Erreur inattendue.
     {/if}
