@@ -5,7 +5,7 @@
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
-  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+  import { customFetch, defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import { token, validateCredsAndFillUserInfo } from "$lib/utils/auth";
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";
@@ -23,7 +23,7 @@
   async function handleJoin() {
     const targetUrl = `${getApiURL()}/auth/join-structure/`;
 
-    const response = await fetch(targetUrl, {
+    const response = await customFetch(targetUrl, {
       method: "POST",
       headers: {
         Accept: defaultAcceptHeader,
