@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { getApiURL } from "./api";
+import { customFetch, getApiURL } from "./api";
 import { token, type DiscoveryMethod, type UserMainActivity } from "./auth";
 
 export interface UpdateUserProfileInput {
@@ -9,7 +9,7 @@ export interface UpdateUserProfileInput {
 }
 
 export function updateUserProfile(userProfileData: UpdateUserProfileInput) {
-  return fetch(`${getApiURL()}/profile/`, {
+  return customFetch(`${getApiURL()}/profile/`, {
     method: "PATCH",
     body: JSON.stringify(userProfileData),
     headers: {

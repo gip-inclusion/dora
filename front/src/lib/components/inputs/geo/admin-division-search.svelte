@@ -1,7 +1,7 @@
 <script lang="ts">
   import Select from "$lib/components/inputs/select/select.svelte";
   import type { AdminDivisionType, GeoApiValue } from "$lib/types";
-  import { getApiURL } from "$lib/utils/api";
+  import { customFetch, getApiURL } from "$lib/utils/api";
   import { getDepartmentFromCityCode } from "$lib/utils/misc";
   import {
     contextValidationKey,
@@ -39,7 +39,7 @@
     const url = `${getApiURL()}/admin-division-search/?type=${searchType}&q=${encodeURIComponent(
       query
     )}&${withGeom ? "with_geom=1" : ""}`;
-    const response = await fetch(url);
+    const response = await customFetch(url);
     const jsonResponse = await response.json();
     const results = jsonResponse.map((result) => {
       let label = result.name;

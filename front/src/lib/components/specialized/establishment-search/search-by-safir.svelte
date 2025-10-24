@@ -5,7 +5,7 @@
   import FieldWrapper from "$lib/components/forms/field-wrapper.svelte";
   import type { Establishment } from "$lib/types";
 
-  import { getApiURL } from "$lib/utils/api";
+  import { customFetch, getApiURL } from "$lib/utils/api";
 
   const safirRegexp = /^\d{5}$/u;
 
@@ -33,7 +33,7 @@
       safirInput
     )}`;
 
-    const response = await fetch(url, {
+    const response = await customFetch(url, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json; version=1.0",

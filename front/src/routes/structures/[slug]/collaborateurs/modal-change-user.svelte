@@ -3,7 +3,7 @@
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
-  import { getApiURL } from "$lib/utils/api";
+  import { customFetch, getApiURL } from "$lib/utils/api";
   import { token } from "$lib/utils/auth";
   import { modifyUserSchema } from "$lib/validation/schemas/dashboard";
   import { get } from "svelte/store";
@@ -37,7 +37,7 @@
 
   function handleSubmit(validatedData) {
     const url = `${getApiURL()}/structure-members/${member.id}/`;
-    return fetch(url, {
+    return customFetch(url, {
       method: "PATCH",
       body: JSON.stringify({
         isAdmin: validatedData.level === "admin",

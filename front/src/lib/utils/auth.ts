@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+import { customFetch, defaultAcceptHeader, getApiURL } from "$lib/utils/api";
 import { get, writable } from "svelte/store";
 import type { SavedSearch, ShortBookmark, ShortStructure } from "../types";
 import { log, logException } from "./logger";
@@ -58,7 +58,7 @@ export function setToken(newToken: string) {
 }
 
 function getUserInfo(authToken) {
-  return fetch(`${getApiURL()}/auth/user-info/`, {
+  return customFetch(`${getApiURL()}/auth/user-info/`, {
     method: "POST",
     headers: {
       Accept: defaultAcceptHeader,
