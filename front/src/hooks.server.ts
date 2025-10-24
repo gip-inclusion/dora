@@ -61,7 +61,7 @@ export const handle: Handle = sequence(
   }
 );
 
-export const handleFetch: HandleFetch = ({ event, request, fetch }) => {
+export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
   const headers = new Headers(request.headers);
   headers.set("X-Forwarded-For", event.getClientAddress());
 
@@ -69,5 +69,14 @@ export const handleFetch: HandleFetch = ({ event, request, fetch }) => {
     headers,
   });
 
-  return fetch(modifiedRequest);
+  const response = await fetch(modifiedRequest);
+
+  if (response.status === 429) {
+    Sentry.captureMessage(response.statusText);
+    // Erreur attendue 429 (rate limiting)
+    // Déclenche l'affichage du message d'erreur du fichier +error.svelte racine
+    error(429, response.statusText);
+  }
+
+  return response;
 };
