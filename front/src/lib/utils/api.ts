@@ -1,7 +1,7 @@
-import { error } from "@sveltejs/kit";
 import { browser } from "$app/environment";
 import { API_URL, INTERNAL_API_URL } from "$lib/env";
 import * as Sentry from "@sentry/sveltekit";
+import { toast } from "@zerodevx/svelte-toast";
 
 export function getApiURL() {
   if (browser || !INTERNAL_API_URL) {
@@ -21,8 +21,8 @@ export async function customFetch(
   if (response.status === 429) {
     Sentry.captureMessage(response.statusText);
     // Erreur attendue 429 (rate limiting)
-    // Déclenche l'affichage du message d'erreur du fichier +error.svelte racine
-    error(429, response.statusText);
+    // Affichage d'un message d'erreur dans un toast
+    toast.push("Trop de requêtes. Réessayez après 1 minute.");
   }
 
   return response;
