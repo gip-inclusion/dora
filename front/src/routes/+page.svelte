@@ -141,7 +141,7 @@
       otherTab
       nofollow
       noBackground
-      label="Consulter le calendrier"
+      label="En savoir plus"
     ></LinkButton>
   </div>
 </CenteredGrid>
