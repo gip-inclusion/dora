@@ -4,7 +4,7 @@ django-environ==0.12.0
 django-querycount==0.8.3
 djhtml==3.0.10
 freezegun==1.5.5
-ruff==0.14.1
+ruff==0.14.2
 pytest==8.4.2
 pytest-django==4.11.1
 sqlfluff==3.5.0
