@@ -1,14 +1,22 @@
 WITH structures AS (
-    SELECT * FROM {{ ref("stg_structure") }}
+    SELECT
+        id,
+        siret,
+        name,
+        department,
+        typology
+    FROM {{ ref("stg_structure") }}
 ),
 
-WITH services AS (
-    SELECT * FROM {{ ref("int_service_structure") }}
-),
+services AS (
+    SELECT structure_id FROM {{ ref("int_service_structure") }}
+)
 
 SELECT
     structures.id,
-    count(services.id)
+    structures.siret,
+    structures.name,
+    structures.department,
+    structures.typology
 FROM structures
-LEFT JOIN services on structures.id = services.structure_id
-GROUP BY structures.id
+WHERE NOT EXISTS (SELECT 1 FROM services WHERE services.structure_id = structures.id)
