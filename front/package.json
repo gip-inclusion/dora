@@ -23,7 +23,7 @@
     "format": "prettier --write . && svgo --pretty --recursive --folder src/lib/assets",
     "format:check": "prettier --check .",
     "svg-optimize": "svgo --pretty -r -f ./src/lib/assets",
-    "prepare": "husky install",
+    "prepare": "husky",
     "security-scan": "ggshield secret scan path -r . -y"
   },
   "devDependencies": {
