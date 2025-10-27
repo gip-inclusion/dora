@@ -28,10 +28,6 @@ npm install
 npm run dev
 ```
 
-### Testing - e2e
-
-Merci de vous reporter au README : [./e2e/README.md](./e2e/README.md).
-
 ## Contribution
 
 ```bash
