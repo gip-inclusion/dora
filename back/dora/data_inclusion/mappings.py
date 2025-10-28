@@ -290,8 +290,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "diffusion_zone_type_display": AdminDivisionType(zone_diffusion_type).label
         if zone_diffusion_type is not None
         else "",
-        "duration_weekly_hours": None,
-        "duration_weeks": None,
+        "duration_weekly_hours": service_data["volume_horaire_hebdomadaire"],
+        "duration_weeks": service_data["nombre_semaines"],
         "fee_condition": fee_condition,
         "fee_details": service_data["frais_autres"],
         "forms": None,
