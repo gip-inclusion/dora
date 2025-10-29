@@ -61,9 +61,9 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
     if location_kinds == [] and result["distance"] is not None:
         location_kinds = ["en-presentiel"]
 
-    kinds = (
-        filter(lambda kind: kind in supported_service_kinds, service_data["types"])
-        if service_data["types"] is not None
+    kind = (
+        service_data["type"]
+        if service_data["type"] in supported_service_kinds
         else None
     )
 
@@ -87,7 +87,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         #
         # TODO: spécifier 'en-presentiel' si on a une geoloc/adresse?
         "location_kinds": location_kinds,
-        "kinds": kinds,
+        "kinds": [kind] if kind is not None else None,
         "fee_condition": service_data["frais"],
         "funding_labels": [],
         "modification_date": service_data["date_maj"],
@@ -152,9 +152,11 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
             value__in=service_data["modes_accueil"]
         )
 
-    kinds = None
-    if service_data["types"] is not None:
-        kinds = ServiceKind.objects.filter(value__in=service_data["types"])
+    kind = (
+        ServiceKind.objects.get(value=service_data["type"])
+        if service_data["type"]
+        else None
+    )
 
     zone_diffusion_type = DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING.get(
         service_data["zone_diffusion_type"], None
@@ -314,8 +316,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "is_cumulative": service_data["cumulable"],
         "is_orientable": is_orientable(service_data),
         "is_model": False,
-        "kinds": [k.value for k in kinds] if kinds is not None else None,
-        "kinds_display": [k.label for k in kinds] if kinds is not None else None,
+        "kinds": [kind.value] if kind is not None else None,
+        "kinds_display": [kind.label] if kind is not None else None,
         "lien_source": service_data["lien_source"],
         "location_kinds": [lk.value for lk in location_kinds]
         if location_kinds is not None
