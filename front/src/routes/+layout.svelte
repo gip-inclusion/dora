@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import { SvelteToast } from "@zerodevx/svelte-toast";
   import { page } from "$app/stores";
   import { ENVIRONMENT } from "$lib/env";
   import "../app.css";
@@ -9,6 +10,7 @@
   import UserOnboardingModal from "$lib/components/user/user-onboarding-modal.svelte";
   import { userInfo } from "$lib/utils/auth";
   import { trackPageView } from "$lib/utils/stats";
+
   interface Props {
     children?: Snippet;
   }
@@ -53,3 +55,4 @@
 </main>
 
 <Footer />
+<SvelteToast />

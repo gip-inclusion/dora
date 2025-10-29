@@ -1,4 +1,4 @@
-import { getApiURL } from "$lib/utils/api";
+import { customFetch, getApiURL } from "$lib/utils/api";
 import { token } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
@@ -42,8 +42,8 @@ function serviceToFront(service) {
 
 export async function getService(
   slug: string,
-  fetchFunction = fetch
-): Promise<Service> {
+  fetchFunction = customFetch
+): Promise<Service | null> {
   const url = `${getApiURL()}/services/${slug}/`;
   const response = await fetchData<Service>(url, fetchFunction);
 
@@ -57,7 +57,7 @@ export async function getService(
 
 export async function getServiceDI(
   diId: string,
-  fetchFunction = fetch
+  fetchFunction = customFetch
 ): Promise<Service> {
   const userHash = getAnalyticsId();
   const url = new URL(`/services-di/${diId}/`, getApiURL());
@@ -98,7 +98,10 @@ export async function getPublishedServices({
   ).data;
 }
 
-export async function getModel(slug, fetchFunction = fetch): Promise<Model> {
+export async function getModel(
+  slug,
+  fetchFunction = customFetch
+): Promise<Model | null> {
   const url = `${getApiURL()}/models/${slug}/`;
   const response = await fetchData<Model>(url, fetchFunction);
 
@@ -120,7 +123,7 @@ export function createOrModifyService(service: Service) {
     method = "POST";
   }
 
-  return fetch(url, {
+  return customFetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -132,7 +135,7 @@ export function createOrModifyService(service: Service) {
 }
 
 export function markServiceAsSynced(service: Service | ShortService) {
-  return fetch(`${getApiURL()}/services/${service.slug}/`, {
+  return customFetch(`${getApiURL()}/services/${service.slug}/`, {
     method: "PATCH",
     headers: {
       Accept: "application/json; version=1.0",
@@ -158,7 +161,7 @@ export async function createOrModifyModel(model, updateAllServices = false) {
     data = { ...data, updateAllServices };
   }
 
-  const result = await fetch(url, {
+  const result = await customFetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -174,7 +177,7 @@ export async function createOrModifyModel(model, updateAllServices = false) {
 export async function deleteService(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "DELETE";
-  const res = await fetch(url, {
+  const res = await customFetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -197,7 +200,7 @@ export async function deleteService(serviceSlug) {
 }
 
 export async function getBookmarks(
-  fetchFunction = fetch
+  fetchFunction = customFetch
 ): Promise<ShortService[]> {
   const url = `${getApiURL()}/bookmarks/`;
   return (await fetchData<ShortService[]>(url, fetchFunction)).data;
@@ -206,7 +209,7 @@ export async function getBookmarks(
 export async function setBookmark(bookmarkSlug: string, isDI: boolean) {
   const url = `${getApiURL()}/bookmarks/`;
   const method = "POST";
-  const response = await fetch(url, {
+  const response = await customFetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -223,7 +226,7 @@ export async function setBookmark(bookmarkSlug: string, isDI: boolean) {
 export async function clearBookmark(bookmarkId: number) {
   const url = `${getApiURL()}/bookmarks/${bookmarkId}/`;
   const method = "DELETE";
-  const response = await fetch(url, {
+  const response = await customFetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -240,7 +243,7 @@ export async function unPublishService(serviceSlug) {
   const url = `${getApiURL()}/services/${serviceSlug}/`;
   const method = "PATCH";
   const status: ServiceStatus = "DRAFT";
-  const response = await fetch(url, {
+  const response = await customFetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -260,7 +263,7 @@ export async function archiveService(serviceSlug) {
   const method = "PATCH";
   const status: ServiceStatus = "ARCHIVED";
 
-  const response = await fetch(url, {
+  const response = await customFetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -280,7 +283,7 @@ export async function unarchiveService(serviceSlug) {
   const method = "PATCH";
   const status: ServiceStatus = "DRAFT";
 
-  const response = await fetch(url, {
+  const response = await customFetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -300,7 +303,7 @@ export async function publishService(serviceSlug) {
   const method = "PATCH";
   const status: ServiceStatus = "PUBLISHED";
 
-  const response = await fetch(url, {
+  const response = await customFetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -320,7 +323,7 @@ export async function convertSuggestionToDraft(serviceSlug) {
   const method = "PATCH";
   const status: ServiceStatus = "DRAFT";
 
-  const response = await fetch(url, {
+  const response = await customFetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -336,7 +339,7 @@ export async function convertSuggestionToDraft(serviceSlug) {
 }
 
 export async function getServicesOptions(
-  fetchFunction = fetch,
+  fetchFunction = customFetch,
   useCache = true
 ): Promise<ServicesOptions> {
   const currentUserInfo = get(userInfo);
@@ -365,7 +368,7 @@ export async function getServicesOptions(
 export function updateServicesFromModel(
   services: Service[] | StructureService[]
 ) {
-  return fetch(`${getApiURL()}/services/update-from-model/`, {
+  return customFetch(`${getApiURL()}/services/update-from-model/`, {
     method: "POST",
     headers: {
       Accept: "application/json; version=1.0",
@@ -386,7 +389,7 @@ type ModelToService = {
 export function addIgnoredServicesToUpdate(
   modelToServiceSlugs: ModelToService[]
 ) {
-  return fetch(`${getApiURL()}/services/reject-update-from-model/`, {
+  return customFetch(`${getApiURL()}/services/reject-update-from-model/`, {
     method: "POST",
     headers: {
       Accept: "application/json; version=1.0",
@@ -400,7 +403,7 @@ export function addIgnoredServicesToUpdate(
 }
 
 export function markServicesAsUpToDate(services: { slug: string }[]) {
-  return fetch(`${getApiURL()}/services/mark-as-up-to-date/`, {
+  return customFetch(`${getApiURL()}/services/mark-as-up-to-date/`, {
     method: "POST",
     headers: {
       Accept: "application/json; version=1.0",
