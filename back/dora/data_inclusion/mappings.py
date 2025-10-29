@@ -278,8 +278,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
             service_data["courriel"] or service_data["telephone"]
         ),
         "creation_date": service_data["date_creation"],
-        "credentials": service_data["justificatifs"],
-        "credentials_display": service_data["justificatifs"],
+        "credentials": [],
+        "credentials_display": [],
         "department": department,
         "diffusion_zone_details": service_data["zone_diffusion_code"],
         "diffusion_zone_details_display": get_diffusion_zone_details_display(
@@ -326,8 +326,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "qpv_or_zrr": None,
         "recurrence": service_data["recurrence"],
         "remote_url": None,
-        "requirements": service_data["pre_requis"],
-        "requirements_display": service_data["pre_requis"],
+        "requirements": service_data["conditions_acces"],
+        "requirements_display": service_data["conditions_acces"],
         "short_desc": service_data["presentation_resume"] or "",
         "slug": f"{service_data['source']}--{service_data['id']}",
         "source": service_data["source"],
