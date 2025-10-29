@@ -11,7 +11,7 @@ load_env_file_if_exists() {
         echo "Fichier .env trouvé."
         source .env
         echo "Fichier .env chargé."
-    else 
+    else
         echo "Aucun fichier .env trouvé."
     fi
 
@@ -104,7 +104,8 @@ fetch_and_export_di_data() {
     fi
 
     CURRENT_DATE=$(date +%F)
-    MART_URI="${S3_BUCKET_VARIANT}/data/marts/${CURRENT_DATE}/scheduled__${CURRENT_DATE%%/}T00:00:00+00:00"
+    # to be sure not to break anything, we keep v0 old version of the api
+    MART_URI="${S3_BUCKET_VARIANT}/data/marts/${CURRENT_DATE}/scheduled__${CURRENT_DATE%%/}T00:00:00+00:00/v0"
 
     # Generate DuckDB SQL file
     DUCKSQL=$(mktemp)
