@@ -18,7 +18,12 @@ from dora.services.models import (
 )
 from dora.structures.models import DisabledDoraFormDIStructure
 
-from .constants import THEMATIQUES_MAPPING_DI_TO_DORA
+from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
+
+from .constants import (
+    MODE_MOBILISATION_DI_TO_DORA,
+    THEMATIQUES_MAPPING_DI_TO_DORA,
+)
 
 DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING = {
     "commune": "city",
@@ -171,25 +176,31 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
     )
 
     beneficiaries_access_modes = None
-    if service_data["modes_orientation_beneficiaire"] is not None:
+    if PersonneMobilisatrice.USAGERS in service_data["mobilisable_par"]:
         beneficiaries_access_modes = BeneficiaryAccessMode.objects.filter(
-            value__in=service_data["modes_orientation_beneficiaire"]
+            value__in=[
+                MODE_MOBILISATION_DI_TO_DORA[mode]
+                for mode in service_data["modes_mobilisation"]
+            ]
         )
 
     coach_orientation_modes = None
-    if service_data["modes_orientation_accompagnateur"] is not None:
-        coach_orientation_mode_values = service_data[
-            "modes_orientation_accompagnateur"
-        ].copy()
-        # Suppression du mode completer-le-formulaire-dadhesion si le formulaire en ligne n'est pas spécifié
+    if PersonneMobilisatrice.PROFESSIONNELS in service_data["mobilisable_par"]:
+        modes_mobilisation = service_data["modes_mobilisation"].copy()
+        # Suppression du mode utiliser-lien-mobilisation si lien_mobilisation n'est pas spécifié
         if (
-            "completer-le-formulaire-dadhesion" in coach_orientation_mode_values
-            and not service_data["formulaire_en_ligne"]
+            ModeMobilisation.UTILISER_LIEN_MOBILISATION in modes_mobilisation
+            and not service_data["lien_mobilisation"]
         ):
-            coach_orientation_mode_values.remove("completer-le-formulaire-dadhesion")
-        # Ajout du mode formulaire-dora si pas de mode completer-le-formulaire-dadhesion et si un e-mail de contact existe
+            modes_mobilisation.remove(ModeMobilisation.UTILISER_LIEN_MOBILISATION)
+        # Conversion des modes de mobilisation en modes d'orientation accompagnateur
+        coach_orientation_mode_values = [
+            MODE_MOBILISATION_DI_TO_DORA[mode]
+            for mode in modes_mobilisation
+        ]
+        # Ajout du mode formulaire-dora si pas de mode utiliser-lien-mobilisation et si courriel existe
         if (
-            "completer-le-formulaire-dadhesion" not in coach_orientation_mode_values
+            ModeMobilisation.UTILISER_LIEN_MOBILISATION not in modes_mobilisation
             and service_data["courriel"]
         ):
             coach_orientation_mode_values.append("formulaire-dora")
