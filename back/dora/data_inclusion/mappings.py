@@ -244,7 +244,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         if beneficiaries_access_modes is not None
         else None,
         "beneficiaries_access_modes_external_form_link": service_data[
-            "formulaire_en_ligne"
+            "lien_mobilisation"
         ],
         "beneficiaries_access_modes_external_form_link_text": "",
         "beneficiaries_access_modes_other": service_data[
@@ -264,7 +264,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         if coach_orientation_modes is not None
         else None,
         "coach_orientation_modes_external_form_link": service_data[
-            "formulaire_en_ligne"
+            "lien_mobilisation"
         ],
         "coach_orientation_modes_external_form_link_text": "",
         "coach_orientation_modes_other": service_data[
