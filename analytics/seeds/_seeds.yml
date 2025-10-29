@@ -1,0 +1,14 @@
+seeds:
+  - name: stats_insertion
+    description:
+      Données départementales autour de l'insertion.
+      Données apriori stables à l'année, à mettre à jour à la main pour le moment, voire brancher à sa source si pertinent.
+      (Référent = Yoan Levy)
+    config:
+      column_types:
+        Num Accompagnateurs: int
+        Num Dea Brsa: int
+        Num Conseillers: int
+        Ft Les Emplois: int
+        Num Dea 202309: int
+        Num Brsa 202309: int

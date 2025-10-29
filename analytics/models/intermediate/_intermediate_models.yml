@@ -11,69 +11,76 @@ models:
       Une ligne par service, il faut donc bien penser à passer par un distinct(id_model) pour obtenir le modèles sans doublons.
 
   - name: int_orientations_following_mobilisation
-    description: 
+    description:
       Tables contenant les orientations réalisées après une mobilisation.
     config:
       indexes:
         - columns: [mobilisation_id]
 
+  - name: int_pilotage_bizdev
+    description:
+      Indicateurs de pilotage du déploiement par département.
+      Contient notamment la maturité telle que définie [ici](https://www.notion.so/gip-inclusion/Calcul-de-la-maturit-1995f321b6048092b876f7b08a87fa11?source=copy_link).
+      Ainsi que : le score de maturité, le nombre de DEA et BRSA à partir des données d'insertion de France Travail, le nombre d'accompagnateurs, et de services et structures publiées dans le département.
+      Référent métier: Yoan.
+
   - name: int_prescribers
     description:
-      Accompagnateurs avec le label national de leur structure.  
+      Accompagnateurs avec le label national de leur structure.
       `user_id` n'est pas une clé d'unicité étant donné qu'un utilisateur peut avoir de 0 à n labels.
 
   - name: int_mobilisationevent_user
-    description: 
+    description:
       Événements de mobilisation des utilisateurs.
 
   - name: int_orientation_user_service
-    description: 
+    description:
       Orientations des utilisateurs vers des services.
     config:
       indexes:
         - columns: [user_id, orientation_creation_date, service_slug]
 
   - name: int_user_page_views
-    description: 
+    description:
       Vues de pages par les utilisateurs.
 
   - name: int_user_search_views
-    description: 
+    description:
       Recherches par les utilisateurs.
 
   - name: int_service_categories
-    description: 
+    description:
       Catégories de services.
 
   - name: int_service_funding_labels
-    description: 
+    description:
       Labels de financement des services.
 
   - name: int_service_structure
-    description: 
+    description:
       Structures de services.
     config:
       indexes:
         - columns: [service_id]
 
   - name: int_service_structure_labels
-    description: 
+    description:
       Labels des structures de services.
 
   - name: int_serviceview_user_service
-    description: 
+    description:
       Vues de services par les utilisateurs.
 
   - name: int_structure_national_labels
-    description: 
-      Labels nationaux associés aux structures.  
+    description:
+      Labels nationaux associés aux structures.
       `structure_id` n'est pas une clé d'unicité étant donné qu'une structure peut avoir de 0 à n labels.
     config:
       indexes:
         - columns: [structure_id]
 
   - name: int_structure_members
-    description: 
+    description:
       Membres des structures.
 
   - name: int_monthly_user_iMER
