@@ -268,15 +268,9 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         ],
         "publics": [p.value for p in profils] if profils is not None else None,
         "publics_display": [p.label for p in profils] if profils is not None else None,
-        "contact_email": service_data["courriel"]
-        if service_data["contact_public"] or is_authenticated
-        else None,
-        "contact_name": service_data["contact_nom_prenom"]
-        if service_data["contact_public"] or is_authenticated
-        else None,
-        "contact_phone": service_data["telephone"]
-        if service_data["contact_public"] or is_authenticated
-        else None,
+        "contact_email": service_data["courriel"],
+        "contact_name": service_data["contact_nom_prenom"],
+        "contact_phone": service_data["telephone"],
         # double implémentation de cette valeur métier (voir modèle du service DORA) 😩
         "contact_info_filled": bool(
             service_data["courriel"] or service_data["telephone"]
@@ -306,7 +300,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "geom": None,
         "has_already_been_unpublished": None,
         "is_available": True,
-        "is_contact_info_public": service_data["contact_public"],
+        "is_contact_info_public": True,
         "is_cumulative": service_data["cumulable"],
         "is_orientable": is_orientable(service_data),
         "is_model": False,
