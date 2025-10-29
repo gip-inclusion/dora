@@ -81,7 +81,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         # TODO: spécifier 'en-presentiel' si on a une geoloc/adresse?
         "location_kinds": location_kinds,
         "kinds": kinds,
-        "fee_condition": service_data["frais"][0] if service_data["frais"] else None,
+        "fee_condition": service_data["frais"],
         "funding_labels": [],
         "modification_date": service_data["date_maj"],
         "name": service_data["nom"],
@@ -164,10 +164,6 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
                 dateparse.parse_datetime(service_data["date_maj"])
             ),
         )
-
-    fee_condition = None
-    if service_data["frais"] is not None:
-        fee_condition = ", ".join(service_data["frais"])
 
     structure_insee_code = (
         service_data["structure"]["code_insee"]
@@ -292,7 +288,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         else "",
         "duration_weekly_hours": service_data["volume_horaire_hebdomadaire"],
         "duration_weeks": service_data["nombre_semaines"],
-        "fee_condition": fee_condition,
+        "fee_condition": service_data["frais"],
         "fee_details": service_data["frais_autres"],
         "forms": None,
         "forms_info": None,
