@@ -3,6 +3,8 @@ from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
 from django.conf import settings
 from django.utils import dateparse, timezone
 
+import textwrap
+
 from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import (
     address_to_one_line,
@@ -90,7 +92,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         "funding_labels": [],
         "modification_date": service_data["date_maj"],
         "name": service_data["nom"],
-        "short_desc": service_data["presentation_resume"] or "",
+        "short_desc": textwrap.shorten(service_data["description"], width=200, placeholder="…"),
         "slug": f"{service_data['source']}--{service_data['id']}",
         "status": ServiceStatus.PUBLISHED.value,
         "structure": service_data["structure_id"],
@@ -302,7 +304,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "fee_details": service_data["frais_autres"],
         "forms": None,
         "forms_info": None,
-        "full_desc": service_data["presentation_detail"] or "",
+        "full_desc": service_data["description"],
         "funding_labels": [],
         "funding_labels_display": [],
         "geom": None,
@@ -334,7 +336,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "remote_url": None,
         "requirements": service_data["conditions_acces"],
         "requirements_display": service_data["conditions_acces"],
-        "short_desc": service_data["presentation_resume"] or "",
+        "short_desc": textwrap.shorten(service_data["description"], width=200, placeholder="…"),
         "slug": f"{service_data['source']}--{service_data['id']}",
         "source": service_data["source"],
         "status": ServiceStatus.PUBLISHED.value,
