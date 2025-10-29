@@ -1,4 +1,7 @@
+import textwrap
+
 from data_inclusion.schema.v0 import Profil
+from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
 from django.conf import settings
 from django.utils import dateparse, timezone
 
@@ -18,7 +21,10 @@ from dora.services.models import (
 )
 from dora.structures.models import DisabledDoraFormDIStructure
 
-from .constants import THEMATIQUES_MAPPING_DI_TO_DORA
+from .constants import (
+    MODE_MOBILISATION_DI_TO_DORA,
+    THEMATIQUES_MAPPING_DI_TO_DORA,
+)
 
 DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING = {
     "commune": "city",
@@ -52,9 +58,9 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
     if location_kinds == [] and result["distance"] is not None:
         location_kinds = ["en-presentiel"]
 
-    kinds = (
-        filter(lambda kind: kind in supported_service_kinds, service_data["types"])
-        if service_data["types"] is not None
+    kind = (
+        service_data["type"]
+        if service_data["type"] in supported_service_kinds
         else None
     )
 
@@ -78,12 +84,14 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         #
         # TODO: spécifier 'en-presentiel' si on a une geoloc/adresse?
         "location_kinds": location_kinds,
-        "kinds": kinds,
-        "fee_condition": service_data["frais"][0] if service_data["frais"] else None,
+        "kinds": [kind] if kind is not None else None,
+        "fee_condition": service_data["frais"],
         "funding_labels": [],
         "modification_date": service_data["date_maj"],
         "name": service_data["nom"],
-        "short_desc": service_data["presentation_resume"] or "",
+        "short_desc": textwrap.shorten(
+            service_data["description"], width=200, placeholder="…"
+        ),
         "slug": f"{service_data['source']}--{service_data['id']}",
         "status": ServiceStatus.PUBLISHED.value,
         "structure": service_data["structure_id"],
@@ -138,9 +146,11 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
             value__in=service_data["modes_accueil"]
         )
 
-    kinds = None
-    if service_data["types"] is not None:
-        kinds = ServiceKind.objects.filter(value__in=service_data["types"])
+    kind = (
+        ServiceKind.objects.get(value=service_data["type"])
+        if service_data["type"]
+        else None
+    )
 
     zone_diffusion_type = DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING.get(
         service_data["zone_diffusion_type"], None
@@ -160,10 +170,6 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
             ),
         )
 
-    fee_condition = None
-    if service_data["frais"] is not None:
-        fee_condition = ", ".join(service_data["frais"])
-
     structure_insee_code = (
         service_data["structure"]["code_insee"]
         if service_data["structure"].get("code_insee")
@@ -175,25 +181,30 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
     )
 
     beneficiaries_access_modes = None
-    if service_data["modes_orientation_beneficiaire"] is not None:
+    if PersonneMobilisatrice.USAGERS in service_data["mobilisable_par"]:
         beneficiaries_access_modes = BeneficiaryAccessMode.objects.filter(
-            value__in=service_data["modes_orientation_beneficiaire"]
+            value__in=[
+                MODE_MOBILISATION_DI_TO_DORA[mode]
+                for mode in service_data["modes_mobilisation"]
+            ]
         )
 
     coach_orientation_modes = None
-    if service_data["modes_orientation_accompagnateur"] is not None:
-        coach_orientation_mode_values = service_data[
-            "modes_orientation_accompagnateur"
-        ].copy()
-        # Suppression du mode completer-le-formulaire-dadhesion si le formulaire en ligne n'est pas spécifié
+    if PersonneMobilisatrice.PROFESSIONNELS in service_data["mobilisable_par"]:
+        modes_mobilisation = service_data["modes_mobilisation"].copy()
+        # Suppression du mode utiliser-lien-mobilisation si lien_mobilisation n'est pas spécifié
         if (
-            "completer-le-formulaire-dadhesion" in coach_orientation_mode_values
-            and not service_data["formulaire_en_ligne"]
+            ModeMobilisation.UTILISER_LIEN_MOBILISATION in modes_mobilisation
+            and not service_data["lien_mobilisation"]
         ):
-            coach_orientation_mode_values.remove("completer-le-formulaire-dadhesion")
-        # Ajout du mode formulaire-dora si pas de mode completer-le-formulaire-dadhesion et si un e-mail de contact existe
+            modes_mobilisation.remove(ModeMobilisation.UTILISER_LIEN_MOBILISATION)
+        # Conversion des modes de mobilisation en modes d'orientation accompagnateur
+        coach_orientation_mode_values = [
+            MODE_MOBILISATION_DI_TO_DORA[mode] for mode in modes_mobilisation
+        ]
+        # Ajout du mode formulaire-dora si pas de mode utiliser-lien-mobilisation et si courriel existe
         if (
-            "completer-le-formulaire-dadhesion" not in coach_orientation_mode_values
+            ModeMobilisation.UTILISER_LIEN_MOBILISATION not in modes_mobilisation
             and service_data["courriel"]
         ):
             coach_orientation_mode_values.append("formulaire-dora")
@@ -231,7 +242,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         if beneficiaries_access_modes is not None
         else None,
         "beneficiaries_access_modes_external_form_link": service_data[
-            "formulaire_en_ligne"
+            "lien_mobilisation"
         ],
         "beneficiaries_access_modes_external_form_link_text": "",
         "beneficiaries_access_modes_other": service_data[
@@ -250,31 +261,23 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "coach_orientation_modes_display": [m.label for m in coach_orientation_modes]
         if coach_orientation_modes is not None
         else None,
-        "coach_orientation_modes_external_form_link": service_data[
-            "formulaire_en_ligne"
-        ],
+        "coach_orientation_modes_external_form_link": service_data["lien_mobilisation"],
         "coach_orientation_modes_external_form_link_text": "",
         "coach_orientation_modes_other": service_data[
             "modes_orientation_accompagnateur_autres"
         ],
         "publics": [p.value for p in profils] if profils is not None else None,
         "publics_display": [p.label for p in profils] if profils is not None else None,
-        "contact_email": service_data["courriel"]
-        if service_data["contact_public"] or is_authenticated
-        else None,
-        "contact_name": service_data["contact_nom_prenom"]
-        if service_data["contact_public"] or is_authenticated
-        else None,
-        "contact_phone": service_data["telephone"]
-        if service_data["contact_public"] or is_authenticated
-        else None,
+        "contact_email": service_data["courriel"],
+        "contact_name": service_data["contact_nom_prenom"],
+        "contact_phone": service_data["telephone"],
         # double implémentation de cette valeur métier (voir modèle du service DORA) 😩
         "contact_info_filled": bool(
             service_data["courriel"] or service_data["telephone"]
         ),
         "creation_date": service_data["date_creation"],
-        "credentials": service_data["justificatifs"],
-        "credentials_display": service_data["justificatifs"],
+        "credentials": [],
+        "credentials_display": [],
         "department": department,
         "diffusion_zone_details": service_data["zone_diffusion_code"],
         "diffusion_zone_details_display": get_diffusion_zone_details_display(
@@ -285,24 +288,24 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "diffusion_zone_type_display": AdminDivisionType(zone_diffusion_type).label
         if zone_diffusion_type is not None
         else "",
-        "duration_weekly_hours": None,
-        "duration_weeks": None,
-        "fee_condition": fee_condition,
+        "duration_weekly_hours": service_data["volume_horaire_hebdomadaire"],
+        "duration_weeks": service_data["nombre_semaines"],
+        "fee_condition": service_data["frais"],
         "fee_details": service_data["frais_autres"],
         "forms": None,
         "forms_info": None,
-        "full_desc": service_data["presentation_detail"] or "",
+        "full_desc": service_data["description"],
         "funding_labels": [],
         "funding_labels_display": [],
         "geom": None,
         "has_already_been_unpublished": None,
         "is_available": True,
-        "is_contact_info_public": service_data["contact_public"],
-        "is_cumulative": service_data["cumulable"],
+        "is_contact_info_public": True,
+        "is_cumulative": None,
         "is_orientable": is_orientable(service_data),
         "is_model": False,
-        "kinds": [k.value for k in kinds] if kinds is not None else None,
-        "kinds_display": [k.label for k in kinds] if kinds is not None else None,
+        "kinds": [kind.value] if kind is not None else None,
+        "kinds_display": [kind.label] if kind is not None else None,
         "lien_source": service_data["lien_source"],
         "location_kinds": [lk.value for lk in location_kinds]
         if location_kinds is not None
@@ -321,9 +324,11 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "qpv_or_zrr": None,
         "recurrence": service_data["recurrence"],
         "remote_url": None,
-        "requirements": service_data["pre_requis"],
-        "requirements_display": service_data["pre_requis"],
-        "short_desc": service_data["presentation_resume"] or "",
+        "requirements": service_data["conditions_acces"],
+        "requirements_display": service_data["conditions_acces"],
+        "short_desc": textwrap.shorten(
+            service_data["description"], width=200, placeholder="…"
+        ),
         "slug": f"{service_data['source']}--{service_data['id']}",
         "source": service_data["source"],
         "status": ServiceStatus.PUBLISHED.value,
