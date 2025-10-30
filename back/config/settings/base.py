@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "dora.logs",
     "dora.oidc",
     "dora.auth_links",
+    "dora.nexus",
 ]
 
 MIDDLEWARE = [
@@ -620,3 +621,12 @@ if DJANGO_ADMIN_2FA_ENABLED:
         "django_otp.plugins.otp_totp",
     ]
     MIDDLEWARE += ["django_otp.middleware.OTPMiddleware"]  # noqa
+
+
+# Nexus metabase db
+# ---------------------------------------
+NEXUS_METABASE_DB_HOST = os.getenv("NEXUS_METABASE_DB_HOST")
+NEXUS_METABASE_DB_PORT = os.getenv("NEXUS_METABASE_DB_PORT")
+NEXUS_METABASE_DB_DATABASE = os.getenv("NEXUS_METABASE_DB_DATABASE")
+NEXUS_METABASE_DB_USER = os.getenv("NEXUS_METABASE_DB_USER")
+NEXUS_METABASE_DB_PASSWORD = os.getenv("NEXUS_METABASE_DB_PASSWORD")
