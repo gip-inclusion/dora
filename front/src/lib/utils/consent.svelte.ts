@@ -127,6 +127,14 @@ async function sendConsentToAPI(consentChoices: Consent["consentChoices"]) {
   }
 }
 
+function handleMatomoConsent(hasMatomoConsent: boolean) {
+  if (hasMatomoConsent) {
+    (window as any)._paq.push(["optUserOut"]);
+  } else {
+    (window as any)._paq.push(["forgetUserOptOut", false]);
+  }
+}
+
 function persistConsent(updatedConsent: Consent) {
   const consentString = JSON.stringify(updatedConsent);
 
@@ -154,6 +162,8 @@ export function setConsentChoices(consentChoices: ConsentChoices) {
     timestamp: now,
   };
   persistConsent(updatedConsent);
+
+  handleMatomoConsent(consentChoices.matomo);
 
   //On ne peut pas exporter un $state déclaré avec un let donc il faut modifier les propriétés
   consent.consentChoices = consentChoices;
