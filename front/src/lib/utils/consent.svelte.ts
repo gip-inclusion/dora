@@ -111,6 +111,14 @@ function enforceMatomoConsent(hasMatomoConsent: boolean) {
   }
 }
 
+function handleMatomoConsent(hasMatomoConsent: boolean) {
+  if (hasMatomoConsent) {
+    (window as any)._paq.push(["optUserOut"]);
+  } else {
+    (window as any)._paq.push(["forgetUserOptOut", false]);
+  }
+}
+
 function persistConsent(updatedConsent: Consent) {
   const consentString = JSON.stringify(updatedConsent);
 
