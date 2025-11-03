@@ -20,9 +20,9 @@ export async function customFetch(
 
   if (response.status === 429) {
     Sentry.captureMessage(response.statusText);
-    // Erreur attendue 429 (rate limiting)
-    // Affichage d'un message d'erreur dans un toast
-    toast.push("Trop de requêtes. Réessayez après 1 minute.");
+    toast.push(
+      "Vous avez effectué trop de requêtes. Veuillez patienter une minute avant de réessayer."
+    );
   }
 
   return response;
