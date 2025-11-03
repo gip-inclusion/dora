@@ -2,17 +2,17 @@
 
 Les présentes conditions générales d’utilisation (ci-après « CGU ») fixent le cadre juridique de DORA et définissent les conditions d’accès et d’utilisation des Services par l’Utilisateur.
 
-## **Article 1 — Champ d’application**
+## Article 1 — Champ d’application
 
 La Plateforme est accessible gratuitement pour l’Utilisateur inscrit à savoir pour les offreurs de solutions, les accompagnateurs de l’insertion sur le territoire, et les bénéficiaires des solutions d’insertion.
 
-## **Article 2 — Objet**
+## Article 2 — Objet
 
 La Plateforme développée au sein du GIP Plateforme de l’inclusion est un service public numérique alimenté par les offreurs de solutions d’insertion locales, nationales et numériques.
 
 Elle centralise des données et permet aux accompagnateurs de l’insertion de mobiliser rapidement l’offre d’insertion adaptée aux besoins des bénéficiaires qu’ils accompagnent par le biais d’une recherche simple et personnalisée, des résultats qualifiés et des fiches de solutions claires.
 
-## **Article 3 — Définitions**
+## Article 3 — Définitions
 
 « L’Utilisateur » est :
 
@@ -28,9 +28,9 @@ Tout Bénéficiaire désirant réussir son insertion professionnelle par l’emp
 
 « Les Services » sont l’ensemble des fonctionnalités proposées sur la Plateforme qui facilitent l’accompagnement dans la réussite de l’insertion professionnelle, sociale et socio-professionnel par et vers l’emploi.
 
-## **Article 4 — Fonctionnalités**
+## Article 4 — Fonctionnalités
 
-### **4.1 Création de compte**
+### 4.1 Création de compte
 
 Tout Utilisateur peut créer un compte sur DORA grâce à la solution ProConnect en fournissant les informations suivantes :
 
@@ -44,13 +44,13 @@ Lorsque l’Utilisateur fournit ces informations, il reçoit un mail pour vérif
 
 Par dérogation, les “gestionnaires de territoire” ont un compte avec des accès et fonctionnalités renforcés. Une double authentification est mise en place.
 
-### **4.2 Identification de la structure**
+### 4.2 Identification de la structure
 
 Lorsque l’Utilisateur se connecte (via son adresse e-mail et son mot de passe ProConnect), il doit identifier sa structure soit en renseignant sa commune et le nom de sa structure soit en renseignant un numéro SIRET ou le numéro RNA.
 
 Toute violation de cette disposition entraîne l’engagement de la responsabilité de l’Utilisateur frauduleux.
 
-### **4.3 Fonctionnalités uniquement ouvertes au compte Accompagnateur**
+### 4.3 Fonctionnalités uniquement ouvertes au compte Accompagnateur
 
 L’Accompagnateur dispose d’un compte dédié à partir duquel il peut avoir accès aux informations relatives aux structures et aux points de contacts.
 
@@ -58,7 +58,7 @@ L’Accompagnateur pourra également remplir un formulaire de demande de prise e
 
 Ce formulaire comprend des pièces jointes nécessaires à la compréhension du dossier d’un bénéficiaire (nom, prénom, e-mail et documents demandés). L’Accompagnateur s’engage à informer la personne concernée de ce traitement de données.
 
-### **4.4 Fonctionnalités uniquement ouvertes au compte Gestionnaire de Territoire**
+### 4.4 Fonctionnalités uniquement ouvertes au compte Gestionnaire de Territoire
 
 Le Gestionnaire de Territoire dispose d’un compte dédié à partir duquel il peut :
 
@@ -70,7 +70,7 @@ Le Gestionnaire de Territoire dispose d’un compte dédié à partir duquel il 
 
 Le Gestionnaire de territoire dispose également des mêmes fonctionnalités que les autres Utilisateurs avec compte.
 
-## **Article 5 — Orientation des bénéficiaires**
+## Article 5 — Orientation des bénéficiaires
 
 **5.1 Principes d’orientation et obligations générales**
 
@@ -97,7 +97,7 @@ Lorsqu’un Accompagnateur oriente un bénéficiaire pour la première fois, la 
 
 Lorsque l’équipe Dora refuse une organisation, et donc l’orientation qui en suit, l’ensemble des utilisateurs de la structure sont désactivés et un e-mail leur est envoyé pour leur expliquer la situation.
 
-## **Article 6 — Suspension ou Suppression de l’espace de la structure ou d’un compte**
+## Article 6 — Suspension ou Suppression de l’espace de la structure ou d’un compte
 
 Tout Utilisateur régulièrement inscrit pourra solliciter sa désinscription en contactant [support.dora@inclusion.gouv.fr](mailto:support.dora@inclusion.gouv.fr) .
 
@@ -105,13 +105,13 @@ En cas de violation des dispositions de l’article 8 des présentes conditions 
 
 Lorsqu’une sanction au titre de l’article 6 est envisagée, l’éditeur informe la structure et procède au déréférencement du compte incriminé ou de l’espace de la structure. Elle précise les motifs de la décision de suspension ou de suppression prévue, et l’informe des éléments à son endroit, sauf si une disposition législative ou réglementaire l’en empêche. La structure dispose d’un délai de 10 jours pour apporter le contradictoire. A l’issue de ce délai, l’éditeur communique sa décision dans un délai raisonnable. La décision comprend les motifs de la décision et précise les faits reprochés, ainsi que les délais et voies de recours.
 
-## **Article 7 — Abonnement à la lettre d’information**
+## Article 7 — Abonnement à la lettre d’information
 
 Tout Offreur de solution ou Accompagnateur qui le souhaite peut s’abonner à la lettre d’information de Dora et se maintenir informé de manière hebdomadaire sur les offres d’insertion proposées sur son territoire, en cliquant sur le lien « s’abonner à l’infolettre » depuis la page de la Plateforme.
 
-## **Article 8 — Responsabilités**
+## Article 8 — Responsabilités
 
-### **8.1 L’Éditeur de la Plateforme**
+### 8.1 L’Éditeur de la Plateforme
 
 Les sources des informations diffusées sur la Plateforme sont réputées fiables mais ne garantit pas être exempte de défauts, d’erreurs ou d’omissions.
 
@@ -123,7 +123,7 @@ La Plateforme peut mettre à disposition des liens pouvant orienter l’utilisat
 
 En cas de manquement à une ou plusieurs des stipulations des présentes conditions générales d’utilisation, l’Éditeur se réserve le droit de suspendre ou de supprimer les contenus et le compte de l’Utilisateur responsable.
 
-### **8.2 Responsabilités de l’Utilisateur**
+### 8.2 Responsabilités de l’Utilisateur
 
 Toute information transmise par l’Utilisateur est de sa seule responsabilité. Il appartient à l’Utilisateur de ne divulguer que des informations de contact professionnel dans la zone de texte dédiée à la rédaction des messages sur l’ensemble des formulaires du site. Cette obligation concerne également les informations qu’il fournit concernant une autre structure.
 
@@ -135,9 +135,9 @@ L’Utilisateur s’engage à ne pas mettre en ligne de contenus ou informations
 
 Il est rappelé que toute personne procédant à une fausse déclaration pour elle-même ou pour autrui s’expose, notamment, aux sanctions prévues à l’article 441-1 du code pénal, prévoyant des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amendes.
 
-## **Article 9 — Accord de responsabilité conjointe de traitement de données à caractère personnel**
+## Article 9 — Accord de responsabilité conjointe de traitement de données à caractère personnel
 
-### **9.1 Principe de la responsabilité conjointe et obligations communes**
+### 9.1 Principe de la responsabilité conjointe et obligations communes
 
 La présente clause vise à clarifier les responsabilités et rôles des responsables conjoints de traitement, conformément aux exigences de l’article 26 du RGPD. L’utilisation des Services implique la mise en œuvre d’un traitement de données à caractère personnel. Sont responsables de traitement conjoint : Le Groupement d’intérêt public « Plateforme de l’inclusion » et toute personne morale utilisant le service Dora et dont les salariés ou assimilés réalisent des orientations.
 
@@ -145,11 +145,11 @@ Les responsables conjoints garantissent chacun l’exercice des droits des perso
 
 Chaque responsable conjoint est également chargé de procéder à la documentation s’assurant du respect de la réglementation relative aux données à caractère personnel. Il s’assure et garantit qu’il traite les données de manière licite.
 
-### **9.2 Champ d’application de l’accord de responsabilité conjointe**
+### 9.2 Champ d’application de l’accord de responsabilité conjointe
 
 Dans le cadre du service Dora, le champ d’application de cet accord couvre le traitement de données relatif à l’orientation d’un usager ou bénéficiaire par une structure. Les autres traitements de données sont de la seule responsabilité du Groupement d’intérêt public « Plateforme de l’inclusion »
 
-### **9.3 Obligations du Groupement d’intérêt public « Plateforme de l’inclusion »**
+### 9.3 Obligations du Groupement d’intérêt public « Plateforme de l’inclusion »
 
 En sa qualité de responsable de traitement, le Groupement d’intérêt public « Plateforme de l’inclusion » est chargé de : mettre en œuvre les mesures de sécurité techniques et organisationnelles garantissant la sécurité du service numérique, la mise en œuvre d’une procédure de violation des données à caractère personnel.
 
@@ -170,21 +170,21 @@ par courrier électronique à [rgpd@inclusion.gouv.fr](mailto:rgpd@inclusion.gou
 
 Ces obligations ne sont pas opposables aux personnes concernées par le traitement de données à caractère personnel.
 
-### **9.4 Obligations du partenaire responsable conjoint**
+### 9.4 Obligations du partenaire responsable conjoint
 
 Le partenaire responsable conjoint s’engage à utiliser les données traitées pour orienter les usagers ou bénéficiaires vers la structure adéquate, et le cas échéant pour la finalité compatible relative au suivi effectif de la personne en dehors du traitement de données réalisé sur Dora.
 
-### **9.5 Obligations relatives à l’information des personnes**
+### 9.5 Obligations relatives à l’information des personnes
 
 Les parties informent les personnes concernées d’une orientation par tous moyen. Elles renvoient vers la mention d’information relative à Dora.
 
-### **9.6 Sécurité des données**
+### 9.6 Sécurité des données
 
 Le Groupement d’intérêt public « Plateforme de l’inclusion » prend toutes les mesures techniques et organisationnelles nécessaires à la sécurité des données. Il met en œuvre des mesures de sécurité physiques (sécurité des locaux, verrouillage des portes) et informatiques (cloisonnement des données, mesures de traçabilité, surveillance, protection des réseaux, sauvegarde, antivirus, politique de mot de passe sécurisé).
 
 Chaque responsable conjoint met en place les mesures organisationnelles nécessaires à la sécurité des données (politique de contrôle d’accès des données, sensibilisation des utilisateurs à la protection des données à caractère personnel, procédures en cas de fuite des données personnelles et audits réguliers des procédures et traitements).
 
-### **9.7 Principe de minimisation**
+### 9.7 Principe de minimisation
 
 Chaque partenaire responsable conjoint qui établit la liste de données personnelles ou de documents s’engage à respecter le principe de minimisation. Il lui revient de veiller à ce que seules les données et documents strictement nécessaires soient exigés.
 
@@ -194,13 +194,13 @@ Néanmoins, il peut, soit de manière aléatoire, soit après une plainte d’un
 
 Particulièrement, le partenaire responsable conjoint s’engage à ne pas demander de données sensibles, sauf lorsqu’elles sont strictement nécessaires au bon fonctionnement de l’orientation.
 
-### **9.8 Notification en cas de violation de données**
+### 9.8 Notification en cas de violation de données
 
 En cas de violation de données dans le cadre du traitement de données, le Groupement d’intérêt public « Plateforme de l’inclusion » réalise les formalités exigées par le RGPD, le cas échéant l’information de la CNIL et des personnes concernées.
 
 Il informe par tout moyen le partenaire responsable conjoint d’une violation et de l’évaluation qu’il fait de sa gravité.
 
-### **9.9 Sous-traitance**
+### 9.9 Sous-traitance
 
 Le partenaire responsable conjoint autorise le traitement des données par les sous-traitants du Groupement d’intérêt public « Plateforme de l’inclusion ». Tout changement fait l’objet d’une mention publique auquel le responsable conjoint a accès via le site Dora.
 
@@ -208,11 +208,11 @@ Le Groupement d’intérêt public « Plateforme de l’inclusion » s’ass
 
 En cas de transfert de données, le Groupement d’intérêt public « Plateforme de l’inclusion » s’assure de la légalité du transfert dont la responsabilité lui revient.
 
-### **9.10 Négligence grave des utilisateurs**
+### 9.10 Négligence grave des utilisateurs
 
 La mise en œuvre des mesures de sécurité et techniques relève de la responsabilité du Groupement d’intérêt public "Plateforme de l’inclusion" sous réserve de l’absence de négligence grave des utilisateurs de Dora. Particulièrement, la sécurité des mots de passe est de la responsabilité de partenaire responsable conjoint. Celui-ci sensibilise toute personne traitant des données "pour son compte" ou habilitée par lui à traiter les données, à respecter les mesures de sécurité et à ne pas commettre de négligence grave, notamment eu égard aux mots de passe et à leur confidentialité.
 
-## **Article 10 — Mise à jour des conditions générales d’utilisation**
+## Article 10 — Mise à jour des conditions générales d’utilisation
 
 Les termes des présentes CGU peuvent être amendés à tout moment, en fonction des modifications apportées à la plateforme, de l’évolution de la législation ou pour tout autre motif jugé nécessaire. Chaque modification donne lieu à une nouvelle version qui est acceptée par les parties.
 
