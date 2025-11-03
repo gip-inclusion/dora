@@ -3,7 +3,7 @@
   import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
-  import { customFetch, defaultAcceptHeader, getApiURL } from "$lib/utils/api";
+  import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
   import { token, userInfo, refreshUserInfo } from "$lib/utils/auth";
   import { get } from "svelte/store";
   import AuthLayout from "../auth-layout.svelte";
@@ -26,7 +26,7 @@
 
   async function handleJoin() {
     const targetUrl = `${getApiURL()}/auth/join-structure/`;
-    const response = await customFetch(targetUrl, {
+    const response = await fetch(targetUrl, {
       method: "POST",
       headers: {
         Accept: defaultAcceptHeader,

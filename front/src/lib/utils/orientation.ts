@@ -1,4 +1,4 @@
-import { customFetch, getApiURL } from "./api";
+import { getApiURL } from "./api";
 import { fetchData } from "./misc";
 import { TEST_WORDS } from "$lib/consts";
 import type { Choice, Orientation, Service } from "$lib/types";
@@ -6,7 +6,7 @@ import type { Choice, Orientation, Service } from "$lib/types";
 export function getOrientation(
   queryId: string,
   queryHash: string,
-  fetchFunction = customFetch
+  fetchFunction = fetch
 ) {
   return fetchData<Orientation>(
     `${getApiURL()}/orientations/${queryId}/?h=${queryHash}`,
@@ -17,7 +17,7 @@ export function getOrientation(
 export async function refreshOrientationLink(queryId: string) {
   const url = `${getApiURL()}/orientations/${queryId}/refresh/`;
   const method = "PATCH";
-  await customFetch(url, {
+  await fetch(url, {
     method,
   });
 }
@@ -31,7 +31,7 @@ export function contactBeneficiary(
 ) {
   const url = `${getApiURL()}/orientations/${queryId}/contact/beneficiary/?h=${queryHash}`;
   const method = "POST";
-  return customFetch(url, {
+  return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -54,7 +54,7 @@ export function contactPrescriber(
 ) {
   const url = `${getApiURL()}/orientations/${queryId}/contact/prescriber/?h=${queryHash}`;
   const method = "POST";
-  return customFetch(url, {
+  return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -75,7 +75,7 @@ export function denyOrientation(
 ) {
   const url = `${getApiURL()}/orientations/${queryId}/reject/?h=${queryHash}`;
   const method = "POST";
-  return customFetch(url, {
+  return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -101,7 +101,7 @@ export function acceptOrientation(
 ) {
   const url = `${getApiURL()}/orientations/${queryId}/validate/?h=${queryHash}`;
   const method = "POST";
-  return customFetch(url, {
+  return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",

@@ -1,10 +1,10 @@
-import { customFetch, getApiURL } from "../utils/api";
+import { getApiURL } from "../utils/api";
 import { log } from "../utils/logger";
 import { fetchData } from "../utils/misc";
 
 export async function getCityLabel(
   inseeCode: string,
-  fetchFunction = customFetch
+  fetchFunction = fetch
 ): Promise<string | null> {
   // Validation simple du code INSEE (que des chiffres)
   if (!inseeCode || !/^[0-9]+$/.test(inseeCode.trim())) {

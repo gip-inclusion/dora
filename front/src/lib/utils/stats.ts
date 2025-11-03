@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { token } from "$lib/utils/auth";
 import { get } from "svelte/store";
-import { customFetch, getApiURL } from "$lib/utils/api";
+import { getApiURL } from "$lib/utils/api";
 import { hexoid } from "hexoid";
 import type { Service, Structure } from "$lib/types";
 
@@ -23,7 +23,7 @@ async function logAnalyticsEvent(
   tag,
   path,
   params = {},
-  fetchFunction = customFetch
+  fetchFunction = fetch
 ) {
   const data = {
     tag,
@@ -136,7 +136,7 @@ export async function trackSearch(
   locationKinds,
   fundingLabels,
   results,
-  fetchFunction = customFetch
+  fetchFunction = fetch
 ) {
   if (browser) {
     const numResults = results.length;
@@ -233,7 +233,7 @@ export function trackServiceShare(
 export function trackStructure(
   structure: Structure,
   url: URL,
-  fetchFunction = customFetch
+  fetchFunction = fetch
 ) {
   if (browser) {
     logAnalyticsEvent(

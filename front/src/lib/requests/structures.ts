@@ -1,4 +1,4 @@
-import { customFetch, getApiURL } from "$lib/utils/api";
+import { getApiURL } from "$lib/utils/api";
 import { token } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
@@ -33,7 +33,7 @@ function structureToFront(structure: Structure): Structure {
 
 export async function siretWasAlreadyClaimed(siret: string) {
   const url = `${getApiURL()}/siret-claimed/${siret}`;
-  const res = await customFetch(url, {
+  const res = await fetch(url, {
     headers: {
       Accept: "application/json; version=1.0",
     },
@@ -90,7 +90,7 @@ export async function getActiveStructures({
 
 export async function getStructure(
   slug: string,
-  fetchFunction = customFetch
+  fetchFunction = fetch
 ): Promise<Structure | null> {
   const url = `${getApiURL()}/structures/${slug}/`;
   const structure = (await fetchData<Structure>(url, fetchFunction)).data;
@@ -100,7 +100,7 @@ export async function getStructure(
 export function createStructure(structure) {
   const url = `${getApiURL()}/structures/`;
   const method = "POST";
-  return customFetch(url, {
+  return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -116,7 +116,7 @@ export function modifyStructure(structure) {
   const url = `${getApiURL()}/structures/${structure.slug}/`;
 
   const method = "PATCH";
-  return customFetch(url, {
+  return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -131,7 +131,7 @@ export function modifyStructure(structure) {
 let structuresOptions;
 
 export async function getStructuresOptions(
-  fetchFunction = customFetch
+  fetchFunction = fetch
 ): Promise<StructuresOptions> {
   if (!structuresOptions) {
     const url = `${getApiURL()}/structures-options/`;
@@ -166,7 +166,7 @@ export async function getPutativeMembers(
 export async function deleteMember(uuid) {
   const url = `${getApiURL()}/structure-members/${uuid}/`;
   const method = "DELETE";
-  const res = await customFetch(url, {
+  const res = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -191,7 +191,7 @@ export async function deleteMember(uuid) {
 export async function resendInvite(uuid) {
   const url = `${getApiURL()}/structure-putative-members/${uuid}/resend-invite/`;
   const method = "POST";
-  const res = await customFetch(url, {
+  const res = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -216,7 +216,7 @@ export async function resendInvite(uuid) {
 export async function cancelInvite(uuid) {
   const url = `${getApiURL()}/structure-putative-members/${uuid}/cancel-invite/`;
   const method = "POST";
-  const res = await customFetch(url, {
+  const res = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -241,7 +241,7 @@ export async function cancelInvite(uuid) {
 export async function acceptMember(uuid) {
   const url = `${getApiURL()}/structure-putative-members/${uuid}/accept-membership-request/`;
   const method = "POST";
-  const res = await customFetch(url, {
+  const res = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
@@ -266,7 +266,7 @@ export async function acceptMember(uuid) {
 export async function rejectMembershipRequest(uuid) {
   const url = `${getApiURL()}/structure-putative-members/${uuid}/reject-membership-request/`;
   const method = "POST";
-  const res = await customFetch(url, {
+  const res = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",

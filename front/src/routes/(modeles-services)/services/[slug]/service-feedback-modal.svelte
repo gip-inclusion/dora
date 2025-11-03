@@ -12,7 +12,7 @@
   import Modal from "$lib/components/hoc/modal.svelte";
 
   import type { Service } from "$lib/types";
-  import { customFetch, getApiURL } from "$lib/utils/api";
+  import { getApiURL } from "$lib/utils/api";
   import { userInfo } from "$lib/utils/auth";
   import * as v from "$lib/validation/schema-utils";
   import { validate } from "$lib/validation/validation";
@@ -171,7 +171,7 @@
       service.slug
     }/feedback/`;
 
-    return customFetch(url, {
+    return fetch(url, {
       method: "POST",
       body: JSON.stringify({
         reasons: [

@@ -8,7 +8,7 @@
   import Notice from "$lib/components/display/notice.svelte";
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
-  import { customFetch, getApiURL } from "$lib/utils/api";
+  import { getApiURL } from "$lib/utils/api";
 
   const schema: v.Schema = {
     email: {
@@ -34,7 +34,7 @@
   async function handleSubmit(validatedData) {
     const url = `${getApiURL()}/auth/send-link/`;
     const method = "POST";
-    const result = await customFetch(url, {
+    const result = await fetch(url, {
       method,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",

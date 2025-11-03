@@ -1,6 +1,5 @@
 <script lang="ts">
   import Select from "$lib/components/inputs/select/select.svelte";
-  import { customFetch } from "$lib/utils/api";
   import {
     contextValidationKey,
     type ValidationContext,
@@ -35,7 +34,7 @@
     const url = `${banAPIUrl}?q=${encodeURIComponent(
       query
     )}&limit=10&citycode=${cityCode}`;
-    const response = await customFetch(url);
+    const response = await fetch(url);
     const jsonResponse = await response.json();
     const results = jsonResponse.features
       .filter((feature) => feature.properties.type !== "municipality")

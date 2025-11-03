@@ -3,7 +3,7 @@
 
   import Select from "$lib/components/inputs/select/select.svelte";
   import type { Choice, GeoApiValue } from "$lib/types";
-  import { customFetch, getApiURL } from "$lib/utils/api";
+  import { getApiURL } from "$lib/utils/api";
   import { fetchData, getDepartmentFromCityCode } from "$lib/utils/misc";
 
   interface Props {
@@ -30,7 +30,7 @@
       query
     )}`;
 
-    const response = await customFetch(url);
+    const response = await fetch(url);
     const jsonResponse = await response.json();
     const results = jsonResponse.map((result) => ({
       value: result,

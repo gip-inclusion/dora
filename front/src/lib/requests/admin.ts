@@ -4,7 +4,7 @@ import type {
   Service,
   Structure,
 } from "$lib/types";
-import { customFetch, getApiURL } from "$lib/utils/api";
+import { getApiURL } from "$lib/utils/api";
 import { token } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
 import { get } from "svelte/store";
@@ -22,7 +22,7 @@ export async function getStructuresAdmin(
 
 export async function getStructureAdmin(
   slug: string,
-  fetchFunction = customFetch
+  fetchFunction = fetch
 ): Promise<AdminShortStructure> {
   const url = `${getApiURL()}/structures-admin/${slug}/`;
   return (await fetchData<Structure>(url, fetchFunction)).data;
@@ -38,10 +38,7 @@ export async function getServicesAdmin() {
   return (await fetchData(url)).data;
 }
 
-export async function getServiceAdmin(
-  slug: string,
-  fetchFunction = customFetch
-) {
+export async function getServiceAdmin(slug: string, fetchFunction = fetch) {
   const url = `${getApiURL()}/services-admin/${slug}/`;
   return (await fetchData<Service>(url, fetchFunction)).data;
 }
@@ -50,7 +47,7 @@ export async function setModerationState(entity, status: ModerationStatus) {
   const urlFragment = entity.services ? "structures-admin" : "services-admin";
   const url = `${getApiURL()}/${urlFragment}/${entity.slug}/`;
   const method = "PATCH";
-  const response = await customFetch(url, {
+  const response = await fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",

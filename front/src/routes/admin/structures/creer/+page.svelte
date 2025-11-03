@@ -10,7 +10,7 @@
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { siretWasAlreadyClaimed } from "$lib/requests/structures";
-  import { customFetch, getApiURL } from "$lib/utils/api";
+  import { getApiURL } from "$lib/utils/api";
   import * as v from "$lib/validation/schema-utils";
   import { structureSchema } from "$lib/validation/schemas/structure";
   import { formErrors } from "$lib/validation/validation";
@@ -60,7 +60,7 @@
     const url = `${getApiURL()}/auth/invite-first-admin/`;
     const method = "POST";
 
-    return customFetch(url, {
+    return fetch(url, {
       method,
       headers: {
         Accept: "application/json; version=1.0",
