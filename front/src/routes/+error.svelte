@@ -26,7 +26,8 @@
     {:else if forbidden}
       Accès réservé
     {:else if rateLimit}
-      Trop de requêtes. Réessayez après 1 minute.
+      Vous avez effectué trop de requêtes. Veuillez patienter une minute avant
+      de réessayer.
     {:else}
       Erreur inattendue.
     {/if}
