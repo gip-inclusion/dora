@@ -106,7 +106,9 @@ export const consent: Consent = $state(loadConsent());
 
 function hasConsentChanged(current: Consent, updates: ConsentChoices) {
   return CONSENT_KEYS.some(
-    (key) => Object.hasOwn(updates, key) && updates[key] !== current[key]
+    (key) =>
+      Object.hasOwn(updates, key) &&
+      updates[key] !== current.consentChoices[key]
   );
 }
 
