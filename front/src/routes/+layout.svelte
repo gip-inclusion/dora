@@ -10,7 +10,7 @@
   import UserOnboardingModal from "$lib/components/user/user-onboarding-modal.svelte";
   import { userInfo } from "$lib/utils/auth";
   import { trackPageView } from "$lib/utils/stats";
-
+  import { enforceCrispConsent } from "$lib/utils/consent.svelte";
   interface Props {
     children?: Snippet;
   }
@@ -19,6 +19,10 @@
 
   $effect(() => {
     trackPageView($page.url.pathname, $page.data.title);
+  });
+
+  $effect(() => {
+    enforceCrispConsent();
   });
 </script>
 

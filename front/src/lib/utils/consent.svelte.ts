@@ -189,3 +189,18 @@ export function shouldShowBanner() {
 
   return false;
 }
+
+export function enforceCrispConsent() {
+  if (!browser) {
+    return;
+  }
+
+  if (!consent.consentChoices.crisp) {
+    document.cookie.split(";").forEach((cookie) => {
+      const cookieName = cookie.split("=")[0].trim();
+      if (cookieName.startsWith("crisp-client")) {
+        document.cookie = `${cookieName}=;max-age=0;path=/;domain=.beta.gouv.fr`;
+      }
+    });
+  }
+}
