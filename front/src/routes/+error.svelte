@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+  import { RATE_LIMIT_MESSAGE } from "$lib/consts";
   import { logException } from "$lib/utils/logger";
   import { onMount } from "svelte";
 
@@ -26,8 +27,7 @@
     {:else if forbidden}
       Accès réservé
     {:else if rateLimit}
-      Vous avez effectué trop de requêtes. Veuillez patienter une minute avant
-      de réessayer.
+      {RATE_LIMIT_MESSAGE}
     {:else}
       Erreur inattendue.
     {/if}

@@ -1,4 +1,5 @@
 import { browser } from "$app/environment";
+import { RATE_LIMIT_MESSAGE } from "$lib/consts";
 import * as Sentry from "@sentry/sveltekit";
 import { toast } from "@zerodevx/svelte-toast";
 
@@ -28,9 +29,7 @@ export function setupFetchInterceptor(): void {
 
     if (response.status === 429) {
       Sentry.captureMessage(response.statusText);
-      toast.push(
-        "Vous avez effectué trop de requêtes. Veuillez patienter une minute avant de réessayer."
-      );
+      toast.push(RATE_LIMIT_MESSAGE);
     }
 
     return response;

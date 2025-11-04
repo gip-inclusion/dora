@@ -19,3 +19,6 @@ export const METABASE_DASHBOARD_URL = (departmentCode: string) =>
 
 export const DI_METABASE_DASHBOARD_URL = (departmentName: string) =>
   `https://stats.inclusion.beta.gouv.fr/public/dashboard/9a839a8a-2af2-4593-a800-1a67661247e8?d%25C3%25A9partement=${departmentName}`;
+
+export const RATE_LIMIT_MESSAGE =
+  "Vous avez effectué trop de requêtes. Veuillez patienter une minute avant de réessayer.";
