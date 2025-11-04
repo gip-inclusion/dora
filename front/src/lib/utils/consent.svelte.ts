@@ -65,7 +65,7 @@ function clearConsent() {
     return;
   }
 
-  document.cookie = `${CONSENT_COOKIE_NAME}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax; Secure`;
+  document.cookie = `${CONSENT_COOKIE_NAME}=; max-age=0; path=/; SameSite=Lax; Secure`;
 }
 
 function getCookie(name: string) {
@@ -95,7 +95,7 @@ function loadConsent() {
 
       return parsedConsent as Consent;
     } catch (error) {
-      log("Le contenu du cookie de consentement n'a pas pu être lu", error);
+      log("Le contenu du cookie de consentement n'a pas pu être parsé", error);
     }
   }
 
@@ -105,10 +105,13 @@ function loadConsent() {
 export const consent: Consent = $state(loadConsent());
 
 function hasConsentChanged(current: Consent, updates: ConsentChoices) {
-  return CONSENT_KEYS.some(
-    (key) =>
-      Object.hasOwn(updates, key) &&
-      updates[key] !== current.consentChoices[key]
+  return (
+    !current.timestamp ||
+    CONSENT_KEYS.some(
+      (key) =>
+        Object.hasOwn(updates, key) &&
+        updates[key] !== current.consentChoices[key]
+    )
   );
 }
 
@@ -130,7 +133,7 @@ async function sendConsentToAPI(consentChoices: Consent["consentChoices"]) {
   }
 }
 
-function handleMatomoConsent(hasMatomoConsent: boolean) {
+function enforceMatomoConsent(hasMatomoConsent: boolean) {
   if (hasMatomoConsent) {
     (window as any)._paq.push(["optUserOut"]);
   } else {
@@ -166,31 +169,17 @@ export function setConsentChoices(consentChoices: ConsentChoices) {
   };
   persistConsent(updatedConsent);
 
-  handleMatomoConsent(consentChoices.matomo);
+  if (consent.consentChoices.matomo !== consentChoices.matomo) {
+    enforceMatomoConsent(consentChoices.matomo);
+  }
 
-  //On ne peut pas exporter un $state déclaré avec un let donc il faut modifier les propriétés
+  //On ne peut pas exporter un $state déclaré avec un let donc il faut modifier les propriétés individuellement
   consent.consentChoices = consentChoices;
   consent.timestamp = now;
 }
 
-export function shouldShowBanner() {
-  if (!browser) {
-    return false;
-  }
-
-  if (!consent.timestamp) {
-    return true;
-  }
-
-  if (isConsentExpired(consent.timestamp)) {
-    return true;
-  }
-
-  if (isConsentOutdated(consent.version)) {
-    return true;
-  }
-
-  return false;
+export function shouldShowCookieBanner() {
+  return !hasValidConsent(consent);
 }
 
 export function enforceCrispConsent() {
@@ -202,7 +191,7 @@ export function enforceCrispConsent() {
     document.cookie.split(";").forEach((cookie) => {
       const cookieName = cookie.split("=")[0].trim();
       if (cookieName.startsWith("crisp-client")) {
-        document.cookie = `${cookieName}=;max-age=0;path=/;domain=.beta.gouv.fr`;
+        document.cookie = `${cookieName}=; max-age=0; path=/;domain=.beta.gouv.fr`;
       }
     });
   }
