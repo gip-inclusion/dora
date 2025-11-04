@@ -22,9 +22,9 @@ interface Consent {
 const defaultConsent: Consent = {
   version: CONSENT_VERSION,
   consentChoices: {
-    matomo: false,
-    googleCSE: false,
-    crisp: false,
+    matomo: true,
+    googleCSE: true,
+    crisp: true,
   },
   timestamp: "",
 };
