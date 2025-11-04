@@ -1,6 +1,7 @@
 import { browser } from "$app/environment";
 import { getApiURL } from "$lib/utils/api";
 import { getAnalyticsId } from "$lib/utils/stats";
+import { log } from "$lib/utils/logger";
 
 const CONSENT_COOKIE_NAME = "cookie_consent";
 const CONSENT_VERSION = "1.0";
@@ -52,9 +53,10 @@ function hasValidConsent(currentConsent: Consent) {
   return (
     currentConsent.timestamp &&
     !isConsentExpired(currentConsent.timestamp) &&
-    !isConsentOutdated(currentConsent.version)
-
-    // TODO: check consent has all keys present
+    !isConsentOutdated(currentConsent.version) &&
+    CONSENT_KEYS.every((key) =>
+      Object.hasOwn(currentConsent.consentChoices, key)
+    )
   );
 }
 
@@ -93,7 +95,7 @@ function loadConsent() {
 
       return parsedConsent as Consent;
     } catch (error) {
-      console.error("Failed to parse consent cookie", error);
+      log("Le contenu du cookie de consentement n'a pas pu être lu", error);
     }
   }
 
@@ -103,9 +105,9 @@ function loadConsent() {
 export const consent: Consent = $state(loadConsent());
 
 function hasConsentChanged(current: Consent, updates: ConsentChoices) {
-  return CONSENT_KEYS.some((key) => {
-    return updates.hasOwnProperty(key) && updates[key] !== current[key];
-  });
+  return CONSENT_KEYS.some(
+    (key) => Object.hasOwn(updates, key) && updates[key] !== current[key]
+  );
 }
 
 async function sendConsentToAPI(consentChoices: Consent["consentChoices"]) {
@@ -122,8 +124,7 @@ async function sendConsentToAPI(consentChoices: Consent["consentChoices"]) {
       }),
     });
   } catch (error) {
-    console.error("Failed to send consent to API", error);
-    // Could implement retry logic or queue here
+    log("Le consentement de l'utilisateur n'a pas été sauvegardé", error);
   }
 }
 
