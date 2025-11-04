@@ -43,7 +43,7 @@ function serviceToFront(service) {
 export async function getService(
   slug: string,
   fetchFunction = fetch
-): Promise<Service> {
+): Promise<Service | null> {
   const url = `${getApiURL()}/services/${slug}/`;
   const response = await fetchData<Service>(url, fetchFunction);
 
@@ -98,7 +98,10 @@ export async function getPublishedServices({
   ).data;
 }
 
-export async function getModel(slug, fetchFunction = fetch): Promise<Model> {
+export async function getModel(
+  slug,
+  fetchFunction = fetch
+): Promise<Model | null> {
   const url = `${getApiURL()}/models/${slug}/`;
   const response = await fetchData<Model>(url, fetchFunction);
 

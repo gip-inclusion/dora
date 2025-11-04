@@ -2,6 +2,10 @@ import * as Sentry from "@sentry/sveltekit";
 import { ENVIRONMENT, SENTRY_DSN } from "$lib/env";
 import type { HandleClientError } from "@sveltejs/kit";
 
+import { setupFetchInterceptor } from "$lib/utils/fetch-interceptor";
+
+setupFetchInterceptor();
+
 if (ENVIRONMENT !== "local") {
   Sentry.init({
     dsn: SENTRY_DSN,
