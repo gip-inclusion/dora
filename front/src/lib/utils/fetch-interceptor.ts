@@ -40,5 +40,3 @@ export function setupFetchInterceptor(): void {
 
   (window.fetch as any).__intercepted = true;
 }
-
-setupFetchInterceptor();
