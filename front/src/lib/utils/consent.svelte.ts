@@ -1,19 +1,23 @@
 import { browser } from "$app/environment";
-import { getApiURL } from "$lib/utils/api";
-import { getAnalyticsId } from "$lib/utils/stats";
 import { log } from "$lib/utils/logger";
+import {
+  clearConsentCookie,
+  CONSENT_COOKIE_NAME,
+  deleteCrispCookie,
+  getCookie,
+} from "$lib/utils/cookie";
+import { sendConsentToAPI } from "$lib/requests/consent";
 
-const CONSENT_COOKIE_NAME = "cookie_consent";
-const CONSENT_VERSION = "1.0";
+export const CONSENT_VERSION = "1.0";
 const CONSENT_EXPIRY_MONTHS = 13;
 
-export const CONSENT_KEYS = ["matomo", "googleCSE", "crisp"] as const;
+const CONSENT_KEYS = ["matomo", "googleCSE", "crisp"] as const;
 
 type ConsentKey = (typeof CONSENT_KEYS)[number];
 
-export type ConsentChoices = Record<ConsentKey, boolean>;
+type ConsentChoices = Record<ConsentKey, boolean>;
 
-interface Consent {
+export interface Consent {
   version: string;
   consentChoices: ConsentChoices;
   timestamp: string;
@@ -60,24 +64,6 @@ function hasValidConsent(currentConsent: Consent) {
   );
 }
 
-function clearConsent() {
-  if (!browser) {
-    return;
-  }
-
-  document.cookie = `${CONSENT_COOKIE_NAME}=; max-age=0; path=/; SameSite=Lax; Secure`;
-}
-
-function getCookie(name: string) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    return parts.pop()?.split(";").shift();
-  }
-
-  return undefined;
-}
-
 function loadConsent() {
   if (!browser) {
     return defaultConsent;
@@ -89,7 +75,7 @@ function loadConsent() {
       const parsedConsent = JSON.parse(cookieConsent);
 
       if (!hasValidConsent(parsedConsent)) {
-        clearConsent();
+        clearConsentCookie();
         return defaultConsent;
       }
 
@@ -113,24 +99,6 @@ function hasConsentChanged(current: Consent, updates: ConsentChoices) {
         updates[key] !== current.consentChoices[key]
     )
   );
-}
-
-async function sendConsentToAPI(consentChoices: Consent["consentChoices"]) {
-  try {
-    await fetch(`${getApiURL()}/consent-record/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        consentChoices,
-        consentVersion: CONSENT_VERSION,
-        anonymousUserHash: getAnalyticsId(),
-      }),
-    });
-  } catch (error) {
-    log("Le consentement de l'utilisateur n'a pas été sauvegardé", error);
-  }
 }
 
 function enforceMatomoConsent(hasMatomoConsent: boolean) {
@@ -183,16 +151,7 @@ export function shouldShowCookieBanner() {
 }
 
 export function enforceCrispConsent() {
-  if (!browser) {
-    return;
-  }
-
   if (!consent.consentChoices.crisp) {
-    document.cookie.split(";").forEach((cookie) => {
-      const cookieName = cookie.split("=")[0].trim();
-      if (cookieName.startsWith("crisp-client")) {
-        document.cookie = `${cookieName}=; max-age=0; path=/;domain=.beta.gouv.fr`;
-      }
-    });
+    deleteCrispCookie();
   }
 }

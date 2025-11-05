@@ -22,6 +22,7 @@
   });
 
   $effect(() => {
+    $page.url;
     enforceCrispConsent();
   });
 </script>
