@@ -167,16 +167,6 @@ def _get_raw_di_results(
     if raw_di_results is None:
         return []
 
-    raw_di_results = [
-        result
-        for result in raw_di_results
-        if (
-            result["service"]["date_suspension"] is None
-            or date.fromisoformat(result["service"]["date_suspension"])
-            > timezone.now().date()
-        )
-    ]
-
     # Exclus les services ayant des thématiques à exclure
     raw_di_results = [
         result
