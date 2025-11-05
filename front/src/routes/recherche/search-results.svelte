@@ -26,7 +26,10 @@
     summarized?: boolean;
     noPagination?: boolean;
     showDeploymentNotice?: boolean;
+    currentPageLength?: number;
   }
+
+  const PAGE_LENGTH = 10;
 
   let {
     data,
@@ -37,11 +40,9 @@
     summarized = false,
     noPagination = false,
     showDeploymentNotice = false,
+    currentPageLength = $bindable(PAGE_LENGTH),
   }: Props = $props();
 
-  const PAGE_LENGTH = 10;
-
-  let currentPageLength = $state(PAGE_LENGTH);
   let creatingAlert = $state(false);
 
   let currentSearchWasAlreadySaved = $derived.by(() => {
