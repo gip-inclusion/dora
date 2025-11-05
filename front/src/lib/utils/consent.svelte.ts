@@ -14,9 +14,9 @@ const CONSENT_EXPIRY_MONTHS = 13;
 
 const CONSENT_KEYS = ["matomo", "googleCSE", "crisp"] as const;
 
-type ConsentKey = (typeof CONSENT_KEYS)[number];
+export type ConsentKey = (typeof CONSENT_KEYS)[number];
 
-type ConsentChoices = Record<ConsentKey, boolean>;
+export type ConsentChoices = Record<ConsentKey, boolean>;
 
 export interface Consent {
   version: string;
