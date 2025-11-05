@@ -1,3 +1,7 @@
+<script module lang="ts">
+  export const SEARCH_RESULTS_PAGE_LENGTH = 10;
+</script>
+
 <script lang="ts">
   import { tick } from "svelte";
 
@@ -29,8 +33,6 @@
     currentPageLength?: number;
   }
 
-  const PAGE_LENGTH = 10;
-
   let {
     data,
     filters,
@@ -40,7 +42,7 @@
     summarized = false,
     noPagination = false,
     showDeploymentNotice = false,
-    currentPageLength = $bindable(PAGE_LENGTH),
+    currentPageLength = $bindable(SEARCH_RESULTS_PAGE_LENGTH),
   }: Props = $props();
 
   let creatingAlert = $state(false);
@@ -75,7 +77,7 @@
 
   async function loadMoreResult() {
     const oldPageLength = currentPageLength;
-    currentPageLength += PAGE_LENGTH;
+    currentPageLength += SEARCH_RESULTS_PAGE_LENGTH;
     await tick();
 
     // A11y : focus on the first new result
