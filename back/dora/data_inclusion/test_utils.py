@@ -91,14 +91,11 @@ class FakeDataInclusionClient:
 
     def retrieve_service(
         self,
-        source: str,
         id: str,
         user_agent: Optional[str] = None,
         user_hash: Optional[str] = None,
     ) -> Optional[dict]:
-        return next(
-            (s for s in self.services if s["source"] == source and s["id"] == id), None
-        )
+        return next((s for s in self.services if s["id"] == id), None)
 
     def search_services(
         self,

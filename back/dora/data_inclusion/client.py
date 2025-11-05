@@ -89,13 +89,12 @@ class DataInclusionClient:
     @log_conn_error
     def retrieve_service(
         self,
-        source: str,
         id: str,
         user_agent: Optional[str] = None,
         user_hash: Optional[str] = None,
     ) -> Optional[dict]:
         url = self.base_url.copy()
-        url = url / "services" / source / id
+        url = url / "services" / id
 
         if user_agent is not None:
             self.session.headers.update({"User-Agent": user_agent})
