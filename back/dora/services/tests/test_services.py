@@ -1776,7 +1776,6 @@ class DataInclusionSearchTestCase(APITestCase):
             date_creation="2022-01-01",
             date_maj="2023-01-01",
             recurrence="Tous les jours",
-            date_suspension="2030-01-01",
             structure={
                 "nom": "Rouge Empire",
                 "commune": "Sainte Jacquelineboeuf",
@@ -1793,9 +1792,6 @@ class DataInclusionSearchTestCase(APITestCase):
         self.assertEqual(response.data["modification_date"], service_data["date_maj"])
         self.assertEqual(response.data["publication_date"], None)
         self.assertEqual(response.data["recurrence"], service_data["recurrence"])
-        self.assertEqual(
-            response.data["suspension_date"], service_data["date_suspension"]
-        )
         self.assertEqual(response.data["publication_date"], None)
 
     def test_service_di_structure(self):
