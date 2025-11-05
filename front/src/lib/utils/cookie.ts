@@ -20,15 +20,23 @@ export function getCookie(name: string) {
   return undefined;
 }
 
-export function deleteCrispCookie() {
+function deleteCookieByPrefix(prefix: string) {
   if (!browser) {
     return;
   }
 
   document.cookie.split(";").forEach((cookie) => {
     const cookieName = cookie.split("=")[0].trim();
-    if (cookieName.startsWith("crisp-client")) {
+    if (cookieName.startsWith(prefix)) {
       document.cookie = `${cookieName}=; max-age=0; path=/;domain=localhost`;
     }
   });
+}
+
+export function deleteMatomoCookies() {
+  deleteCookieByPrefix("_pk_");
+}
+
+export function deleteCrispCookie() {
+  deleteCookieByPrefix("crisp-client");
 }

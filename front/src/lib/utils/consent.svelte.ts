@@ -4,6 +4,7 @@ import {
   clearConsentCookie,
   CONSENT_COOKIE_NAME,
   deleteCrispCookie,
+  deleteMatomoCookies,
   getCookie,
 } from "$lib/utils/cookie";
 import { sendConsentToAPI } from "$lib/requests/consent";
@@ -106,6 +107,7 @@ function enforceMatomoConsent(hasMatomoConsent: boolean) {
     (window as any)._paq.push(["optUserOut"]);
   } else {
     (window as any)._paq.push(["forgetUserOptOut", false]);
+    deleteMatomoCookies();
   }
 }
 
