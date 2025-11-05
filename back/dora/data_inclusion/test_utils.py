@@ -3,14 +3,15 @@ from uuid import uuid4
 
 
 def make_di_service_data(**kwargs) -> dict:
-    structure_id = f"dora--{str(uuid4())}"
+    source = kwargs.pop("source", "emplois-de-linclusion")
+    structure_id = f"{source}--{str(uuid4())}"
     return {
         **{
             "_di_geocodage_code_insee": None,
             "_di_geocodage_score": None,
-            "source": "emplois-de-linclusion",
+            "source": source,
             "structure_id": structure_id,
-            "id": f"emplois-de-linclusion--{str(uuid4())}",
+            "id": f"{source}--{str(uuid4())}",
             "nom": "Atelier insertion et posture professionnelle",
             "description": "Cet atelier-conseil vous permet d’identifier les compétences à développer pour atteindre vos objectifs d’évolution professionnelle et à découvrir les différentes modalités de formation.  Durée d’une journée et inscription via votre espace France Travail.",
             "lien_source": "https://dora.inclusion.beta.gouv.fr/services/ass-pour-droit-a-l-i-nhes",
@@ -43,7 +44,7 @@ def make_di_service_data(**kwargs) -> dict:
             "horaires_accueil": "Mo-Fr 08:30-12:30; PH off",
             "score_qualite": 1,
             "structure": {
-                "source": "emplois-de-linclusion",
+                "source": source,
                 "id": structure_id,
                 "nom": "Centre social Le Tournesol",
                 "date_maj": "2025-02-14",

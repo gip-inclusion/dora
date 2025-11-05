@@ -369,7 +369,7 @@ def _get_unified_results(
     )
 
     dora_results_ids = [
-        result["service"]["id"]
+        result["service"]["id"].split("--")[1]
         for result in raw_di_results
         if result["service"]["source"] == "dora"
     ]
