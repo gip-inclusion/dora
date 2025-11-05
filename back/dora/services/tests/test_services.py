@@ -1278,8 +1278,9 @@ class DataInclusionSearchTestCase(APITestCase):
         dora_service_data = self.make_di_service(
             code_insee=self.city1.code, source="dora"
         )
+        dora_service_id = dora_service_data["id"].split("--")[1]
         service_dora = make_service(
-            id=dora_service_data["id"],
+            id=dora_service_id,
             status=ServiceStatus.PUBLISHED,
             diffusion_zone_type=AdminDivisionType.CITY,
             diffusion_zone_details=self.city1.code,
