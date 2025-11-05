@@ -110,11 +110,10 @@ class OrientationSerializer(serializers.ModelSerializer):
             # Il s'agit d'un service DI
 
             # Récupération du service depuis le client DI
-            source_di, di_service_id = orientation.get("di_service_id").split("--")
             di_client = dora.data_inclusion.di_client_factory()
             try:
                 raw_service = (
-                    di_client.retrieve_service(source=source_di, id=di_service_id)
+                    di_client.retrieve_service(id=orientation.get("di_service_id"))
                     if di_client is not None
                     else None
                 )
