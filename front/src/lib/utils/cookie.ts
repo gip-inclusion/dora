@@ -20,7 +20,7 @@ export function getCookie(name: string) {
   return undefined;
 }
 
-function deleteCookieByPrefix(prefix: string) {
+function deleteCookieByPrefix(prefix: string, domain: string) {
   if (!browser) {
     return;
   }
@@ -28,15 +28,15 @@ function deleteCookieByPrefix(prefix: string) {
   document.cookie.split(";").forEach((cookie) => {
     const cookieName = cookie.split("=")[0].trim();
     if (cookieName.startsWith(prefix)) {
-      document.cookie = `${cookieName}=; max-age=0; path=/;domain=localhost`;
+      document.cookie = `${cookieName}=; max-age=0; path=/; domain=${domain}`;
     }
   });
 }
 
 export function deleteMatomoCookies() {
-  deleteCookieByPrefix("_pk_");
+  deleteCookieByPrefix("_pk_", "dora.inclusion.gouv.fr");
 }
 
 export function deleteCrispCookie() {
-  deleteCookieByPrefix("crisp-client");
+  deleteCookieByPrefix("crisp-client", ".beta.gouv.fr");
 }
