@@ -1150,21 +1150,17 @@ class DataInclusionSearchTestCase(APITestCase):
             mock_di_client_factory.return_value = di_client or self.di_client
             return search(request)
 
-    def service_di(self, request, di_id):
+    def service_di(self, request, di_service_id):
         with mock.patch(
             "dora.data_inclusion.di_client_factory"
         ) as mock_di_client_factory:
             mock_di_client_factory.return_value = self.di_client
-            return service_di(request, di_id=di_id)
+            return service_di(request, di_service_id=di_service_id)
 
     def make_di_service(self, **kwargs) -> dict:
         service_data = make_di_service_data(**kwargs)
         self.di_client.services.append(service_data)
         return service_data
-
-    @staticmethod
-    def get_di_id(service_data: dict) -> str:
-        return service_data["source"] + "--" + service_data["id"]
 
     def test_find_services_in_city(self):
         service_data = self.make_di_service(
@@ -1371,9 +1367,8 @@ class DataInclusionSearchTestCase(APITestCase):
 
     def test_service_di_contains_service_fields(self):
         service_data = self.make_di_service()
-        di_id = self.get_di_id(service_data)
-        request = self.factory.get(f"/services-di/{di_id}/")
-        response = self.service_di(request, di_id=di_id)
+        request = self.factory.get(f"/services-di/{service_data['id']}/")
+        response = self.service_di(request, di_service_id=service_data["id"])
 
         for field in set(ServiceSerializer.Meta.fields):
             with self.subTest(field=field):
@@ -1389,9 +1384,8 @@ class DataInclusionSearchTestCase(APITestCase):
             longitude=-61.64115,
             latitude=9.8741475,
         )
-        di_id = self.get_di_id(service_data)
-        request = self.factory.get(f"/services-di/{di_id}/")
-        response = self.service_di(request, di_id=di_id)
+        request = self.factory.get(f"/services-di/{service_data['id']}/")
+        response = self.service_di(request, di_service_id=service_data["id"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["address1"], service_data["adresse"])
         self.assertEqual(response.data["address2"], service_data["complement_adresse"])
@@ -1422,9 +1416,8 @@ class DataInclusionSearchTestCase(APITestCase):
         ) in cases:
             with self.subTest(thematiques=thematiques):
                 service_data = self.make_di_service(thematiques=thematiques)
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["categories"], categories)
                 self.assertEqual(
@@ -1460,9 +1453,8 @@ class DataInclusionSearchTestCase(APITestCase):
                 service_data = self.make_di_service(
                     modes_orientation_beneficiaire=modes_orientation_beneficiaire
                 )
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(
                     response.data["beneficiaries_access_modes"],
@@ -1477,9 +1469,8 @@ class DataInclusionSearchTestCase(APITestCase):
         service_data = self.make_di_service(
             modes_orientation_beneficiaire_autres="Nous consulter"
         )
-        di_id = self.get_di_id(service_data)
-        request = self.factory.get(f"/services-di/{di_id}/")
-        response = self.service_di(request, di_id=di_id)
+        request = self.factory.get(f"/services-di/{service_data['id']}/")
+        response = self.service_di(request, di_service_id=service_data["id"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.data["beneficiaries_access_modes_other"], "Nous consulter"
@@ -1513,9 +1504,8 @@ class DataInclusionSearchTestCase(APITestCase):
                 service_data = self.make_di_service(
                     modes_orientation_accompagnateur=modes_orientation_accompagnateur
                 )
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(
                     sorted(response.data["coach_orientation_modes"]),
@@ -1530,9 +1520,8 @@ class DataInclusionSearchTestCase(APITestCase):
         service_data = self.make_di_service(
             modes_orientation_accompagnateur_autres="Nous consulter"
         )
-        di_id = self.get_di_id(service_data)
-        request = self.factory.get(f"/services-di/{di_id}/")
-        response = self.service_di(request, di_id=di_id)
+        request = self.factory.get(f"/services-di/{service_data['id']}/")
+        response = self.service_di(request, di_service_id=service_data["id"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.data["coach_orientation_modes_other"], "Nous consulter"
@@ -1548,9 +1537,8 @@ class DataInclusionSearchTestCase(APITestCase):
         for profils, publics, publics_display in cases:
             with self.subTest(profils=profils):
                 service_data = self.make_di_service(profils=profils)
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["publics"], publics)
                 self.assertEqual(response.data["publics_display"], publics_display)
@@ -1573,9 +1561,8 @@ class DataInclusionSearchTestCase(APITestCase):
                     telephone=telephone,
                     contact_public=contact_public,
                 )
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["contact_email"], courriel)
                 self.assertEqual(response.data["contact_name"], contact_nom_prenom)
@@ -1593,9 +1580,8 @@ class DataInclusionSearchTestCase(APITestCase):
         for justificatifs, credentials, credentials_display in cases:
             with self.subTest(justificatifs=justificatifs):
                 service_data = self.make_di_service(justificatifs=justificatifs)
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["credentials"], credentials)
                 self.assertEqual(
@@ -1646,9 +1632,8 @@ class DataInclusionSearchTestCase(APITestCase):
                     zone_diffusion_type=zone_diffusion_type,
                     zone_diffusion_code=zone_diffusion_code,
                 )
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(
                     response.data["diffusion_zone_details"], diffusion_zone_details
@@ -1675,9 +1660,8 @@ class DataInclusionSearchTestCase(APITestCase):
         for frais, fee_condition in cases:
             with self.subTest(frais=frais):
                 service_data = self.make_di_service(frais=frais)
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["fee_condition"], fee_condition)
 
@@ -1689,9 +1673,8 @@ class DataInclusionSearchTestCase(APITestCase):
         for frais_autres, fee_details in cases:
             with self.subTest(frais_autres=frais_autres):
                 service_data = self.make_di_service(frais_autres=frais_autres)
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["fee_details"], fee_details)
 
@@ -1704,9 +1687,8 @@ class DataInclusionSearchTestCase(APITestCase):
         for modes_accueil, location_kinds, location_kinds_display in cases:
             with self.subTest(modes_accueil=modes_accueil):
                 service_data = self.make_di_service(modes_accueil=modes_accueil)
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["location_kinds"], location_kinds)
                 self.assertEqual(
@@ -1722,9 +1704,8 @@ class DataInclusionSearchTestCase(APITestCase):
         for pre_requis, requirements, requirements_display in cases:
             with self.subTest(pre_requis=pre_requis):
                 service_data = self.make_di_service(pre_requis=pre_requis)
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["requirements"], requirements)
                 self.assertEqual(
@@ -1740,9 +1721,8 @@ class DataInclusionSearchTestCase(APITestCase):
         for types, kinds, kinds_display in cases:
             with self.subTest(types=types):
                 service_data = self.make_di_service(types=types)
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["kinds"], kinds)
                 self.assertEqual(response.data["kinds_display"], kinds_display)
@@ -1761,9 +1741,8 @@ class DataInclusionSearchTestCase(APITestCase):
                     presentation_resume=presentation,
                     presentation_detail=presentation,
                 )
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["name"], service_data["nom"])
                 self.assertEqual(response.data["full_desc"], desc)
@@ -1782,9 +1761,8 @@ class DataInclusionSearchTestCase(APITestCase):
                 "courriel": "contact@example.com",
             },
         )
-        di_id = self.get_di_id(service_data)
-        request = self.factory.get(f"/services-di/{di_id}/")
-        response = self.service_di(request, di_id=di_id)
+        request = self.factory.get(f"/services-di/{service_data['id']}/")
+        response = self.service_di(request, di_service_id=service_data["id"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["creation_date"], service_data["date_creation"])
         self.assertEqual(response.data["modification_date"], service_data["date_maj"])
@@ -1803,9 +1781,8 @@ class DataInclusionSearchTestCase(APITestCase):
                 "courriel": "contact@example.com",
             },
         )
-        di_id = self.get_di_id(service_data)
-        request = self.factory.get(f"/services-di/{di_id}/")
-        response = self.service_di(request, di_id=di_id)
+        request = self.factory.get(f"/services-di/{service_data['id']}/")
+        response = self.service_di(request, di_service_id=service_data["id"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["structure"], service_data["structure_id"])
         self.assertEqual(
@@ -1816,9 +1793,8 @@ class DataInclusionSearchTestCase(APITestCase):
         for cumulable in [True, False, None]:
             with self.subTest(cumulable=cumulable):
                 service_data = self.make_di_service(cumulable=cumulable)
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["is_cumulative"], cumulable)
 
@@ -1830,17 +1806,15 @@ class DataInclusionSearchTestCase(APITestCase):
         for date_maj, update_needed in cases:
             with self.subTest(update_needed=update_needed):
                 service_data = self.make_di_service(date_maj=date_maj)
-                di_id = self.get_di_id(service_data)
-                request = self.factory.get(f"/services-di/{di_id}/")
-                response = self.service_di(request, di_id=di_id)
+                request = self.factory.get(f"/services-di/{service_data['id']}/")
+                response = self.service_di(request, di_service_id=service_data["id"])
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.data["update_needed"], update_needed)
 
     def test_service_di_misc(self):
         service_data = self.make_di_service()
-        di_id = self.get_di_id(service_data)
-        request = self.factory.get(f"/services-di/{di_id}/")
-        response = self.service_di(request, di_id=di_id)
+        request = self.factory.get(f"/services-di/{service_data['id']}/")
+        response = self.service_di(request, di_service_id=service_data["id"])
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["can_write"], False)
         self.assertEqual(response.data["has_already_been_unpublished"], None)
@@ -1867,16 +1841,15 @@ class DataInclusionSearchTestCase(APITestCase):
 
     def test_service_di_user_agent_user_hash(self):
         service_data = self.make_di_service()
-        di_id = self.get_di_id(service_data)
         with mock.patch.object(
             FakeDataInclusionClient, "retrieve_service", return_value=service_data
         ) as mock_retrieve_service:
             request = self.factory.get(
-                f"/services-di/{di_id}/",
+                f"/services-di/{service_data['id']}/",
                 HTTP_USER_AGENT="test-agent",
                 HTTP_ANONYMOUS_USER_HASH="1234567890",
             )
-            response = self.service_di(request, di_id=di_id)
+            response = self.service_di(request, di_service_id=service_data["id"])
             self.assertEqual(response.status_code, 200)
             mock_retrieve_service.assert_called_once_with(
                 source=service_data["source"],
