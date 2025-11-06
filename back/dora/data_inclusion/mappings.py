@@ -1,7 +1,6 @@
 import textwrap
 
-from data_inclusion.schema.v0 import Profil
-from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice
+from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice, Public
 from django.conf import settings
 from django.utils import dateparse, timezone
 
@@ -222,11 +221,11 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
             value="formulaire-dora"
         )
 
-    profils = None
-    if service_data["profils"] is not None:
-        profils = [
-            Profil(p)
-            for p in (set(service_data["profils"]) & {p.value for p in Profil})
+    publics = None
+    if service_data["publics"] is not None:
+        publics = [
+            Public(p)
+            for p in (set(service_data["publics"]) & {p.value for p in Public})
         ]
     return {
         "access_conditions": None,
@@ -272,8 +271,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "coach_orientation_modes_other": service_data[
             "modes_orientation_accompagnateur_autres"
         ],
-        "publics": [p.value for p in profils] if profils is not None else None,
-        "publics_display": [p.label for p in profils] if profils is not None else None,
+        "publics": [p.value for p in publics] if publics is not None else None,
+        "publics_display": [p.label for p in publics] if publics is not None else None,
         "contact_email": service_data["courriel"],
         "contact_name": service_data["contact_nom_prenom"],
         "contact_phone": service_data["telephone"],
