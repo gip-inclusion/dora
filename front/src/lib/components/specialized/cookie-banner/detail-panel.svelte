@@ -1,92 +1,71 @@
 <script lang="ts">
   import {
     consent,
+    CONSENT_CONFIG,
     type ConsentChoices,
     type ConsentKey,
   } from "$lib/utils/consent.svelte";
+  import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
+  import Button from "$lib/components/display/button.svelte";
+  import DetailCard from "$lib/components/specialized/cookie-banner/detail-card.svelte";
 
   interface Props {
     handleSavePreferences: (consentChoices: ConsentChoices) => void;
     handleBackClick: () => void;
+    handleAcceptAll: () => void;
+    handleRejectAll: () => void;
   }
 
-  let { handleSavePreferences, handleBackClick }: Props = $props();
+  let {
+    handleSavePreferences,
+    handleBackClick,
+    handleAcceptAll,
+    handleRejectAll,
+  }: Props = $props();
 
-  let consentChoices: ConsentChoices = { ...consent.consentChoices };
+  let consentChoices = $state({ ...consent.consentChoices });
 
   function toggleConsentByKey(key: ConsentKey) {
     consentChoices[key] = !consentChoices[key];
   }
 </script>
 
-<div>
-  <p class="mb-6 leading-relaxed text-gray-600">
-    Choose which cookies you want to allow:
-  </p>
-
-  <div class="mb-6">
-    <div class="mb-3 rounded border border-gray-200 p-4">
-      <label class="flex cursor-pointer items-start gap-4">
-        <input
-          type="checkbox"
-          class="mt-1 cursor-pointer"
-          checked={consentChoices.matomo}
-          on:change={() => toggleConsentByKey("matomo")}
-        />
-        <div>
-          <strong class="mb-1 block">Matomo Analytics</strong>
-          <span class="text-sm text-gray-500"
-            >Help us understand how you use our site</span
-          >
-        </div>
-      </label>
+<div class="p-s32 h-[600px] w-[792px] overflow-y-scroll">
+  <Button
+    extraClass="absolute top-s4 right-s8"
+    label="Fermer"
+    onclick={handleBackClick}
+    icon={CloseLineSystem}
+    iconOnRight
+    noBackground
+    noPadding
+  />
+  <h2 class="mb-s32 mt-s16 text-[1.5rem]">Panneau de gestion des cookies</h2>
+  <div class="mb-s16 pb-s8 flex justify-between border-b-1">
+    <div>
+      <p class="text-[1rem]">Préférences pour tous les services</p>
+      <a href="www.google.com">Données personnelles et cookies</a>
     </div>
-
-    <div class="mb-3 rounded border border-gray-200 p-4">
-      <label class="flex cursor-pointer items-start gap-4">
-        <input
-          type="checkbox"
-          class="mt-1 cursor-pointer"
-          checked={consentChoices.googleCSE}
-          on:change={() => toggleConsentByKey("googleCSE")}
-        />
-        <div>
-          <strong class="mb-1 block">Google Custom Search</strong>
-          <span class="text-sm text-gray-500"
-            >Enhanced search functionality</span
-          >
-        </div>
-      </label>
-    </div>
-
-    <div class="mb-3 rounded border border-gray-200 p-4">
-      <label class="flex cursor-pointer items-start gap-4">
-        <input
-          type="checkbox"
-          class="mt-1 cursor-pointer"
-          checked={consentChoices.crisp}
-          on:change={() => toggleConsentByKey("crisp")}
-        />
-        <div>
-          <strong class="mb-1 block">Crisp Chat</strong>
-          <span class="text-sm text-gray-500">Live customer support chat</span>
-        </div>
-      </label>
+    <div class="gap-s16 flex">
+      <Button label="Tout accepter" onclick={handleAcceptAll} />
+      <Button label="Tout refuser" secondary onclick={handleRejectAll} />
     </div>
   </div>
 
-  <div class="flex flex-wrap gap-3">
-    <button
-      class="cursor-pointer rounded bg-blue-600 px-6 py-3 text-base text-white transition-all duration-200 hover:bg-blue-700"
-      on:click={() => handleSavePreferences(consentChoices)}
-    >
-      Save Preferences
-    </button>
-    <button
-      class="cursor-pointer rounded bg-transparent px-6 py-3 text-base text-blue-600 underline transition-all duration-200 hover:text-blue-700"
-      on:click={handleBackClick}
-    >
-      Back
-    </button>
+  <div class="mb-6">
+    {#each Object.values(CONSENT_CONFIG) as categoryConfig}
+      <DetailCard
+        {categoryConfig}
+        disabled={categoryConfig.consentKey === "required"}
+        {toggleConsentByKey}
+      />
+    {/each}
+  </div>
+
+  <div class="mt-s16 flex justify-end">
+    <Button
+      label="Confirmer mes choix"
+      onclick={() => handleSavePreferences(consentChoices)}
+    />
   </div>
 </div>

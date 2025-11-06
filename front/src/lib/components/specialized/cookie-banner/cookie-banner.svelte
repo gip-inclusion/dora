@@ -41,19 +41,19 @@
 
 {#if showBanner}
   <div class="bottom-s40 left-s40 p-s32 fixed z-[9999] bg-white shadow-md">
-    <div class="mx-auto max-w-[588px] rounded-lg bg-white p-6">
-      {#if !showDetails}
-        <GeneralPanel
-          {handleAcceptAll}
-          {handleRejectAll}
-          handlePersonalize={() => (showDetails = true)}
-        />
-      {:else}
-        <DetailPanel
-          {handleSavePreferences}
-          handleBackClick={() => (showDetails = false)}
-        />
-      {/if}
-    </div>
+    {#if !showDetails}
+      <GeneralPanel
+        {handleAcceptAll}
+        {handleRejectAll}
+        handlePersonalize={() => (showDetails = true)}
+      />
+    {:else}
+      <DetailPanel
+        {handleSavePreferences}
+        handleBackClick={() => (showDetails = false)}
+        {handleAcceptAll}
+        {handleRejectAll}
+      />
+    {/if}
   </div>
 {/if}

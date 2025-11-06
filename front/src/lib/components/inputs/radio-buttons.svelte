@@ -9,6 +9,7 @@
     readonly?: boolean;
     errorMessages?: string[];
     onchange?: (event: Event) => void;
+    horizontal?: boolean;
   }
 
   let {
@@ -19,16 +20,18 @@
     readonly = false,
     errorMessages = [],
     onchange,
+    horizontal = false,
   }: Props = $props();
 
   let focusValue = $state(undefined);
 </script>
 
-<div class="gap-s8 flex flex-col">
+<div class="gap-s8 flex {horizontal ? 'flex-row' : 'flex-col'}">
   {#each choices as choice, i}
     <label
       class="focus-within:shadow-focus p-s2 flex flex-row items-center rounded outline-0"
       class:outline={choice.value === focusValue}
+      class:horizontal-divider={horizontal && i > 0}
     >
       <input
         id={`${id}-${i}`}
@@ -63,5 +66,9 @@
 
   input[type="radio"]:checked + div div {
     @apply block;
+  }
+
+  .horizontal-divider {
+    @apply border-l border-gray-03 pl-s8;
   }
 </style>

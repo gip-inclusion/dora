@@ -62,4 +62,5 @@
 </main>
 
 <Footer />
+<CookieBanner />
 <SvelteToast />

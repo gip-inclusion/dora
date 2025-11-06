@@ -157,3 +157,60 @@ export function enforceCrispConsent() {
     deleteCrispCookie();
   }
 }
+
+export const CONSENT_CONFIG = {
+  required: {
+    consentKey: "required",
+    title: "Cookies obligatoires",
+    description:
+      "Ce site utilise des cookies nécessaires à son bon fonctionnement qui ne peuvent pas être désactivés.",
+    cookies: [
+      {
+        title: "Matomo",
+        descripton:
+          "Matomo est un outil de mesure d'audience qui nous permet de suivre les visites de notre site et d'améliorer son contenu. Il peut déposer 7 cookies sur votre navigateur.\n" +
+          "Voir le site officiel",
+      },
+    ],
+  },
+  audience: {
+    consentKey: "matomo",
+    title: "Mesure d'audience",
+    description:
+      "Nous utilisons des cookies pour mesurer l’audience de notre site et améliorer son contenu.",
+    cookies: [
+      {
+        title: "Crisp",
+        description:
+          "Crisp est un outil de chat qui nous permet de vous proposer la fonctionnalité de contact par chat avec le support d'Immersion Facilitée. Il peut déposer 5 cookies sur votre navigateur.",
+      },
+    ],
+  },
+  support: {
+    consentKey: "crisp",
+    title: "Support et assistance utilisateur",
+    description:
+      "Nous utilisons les cookies pour vous proposer la fonctionnalité de contact par chat avec le support de Dora",
+    cookies: [
+      {
+        title: "Crisp",
+        description:
+          "Crisp est un outil de chat qui nous permet de vous proposer la fonctionnalité de contact par chat avec le support d'Immersion Facilitée. Il peut déposer 5 cookies sur votre navigateur.",
+      },
+    ],
+  },
+  search: {
+    consentKey: "googleCSE",
+    title: "Fonctionnalité de recherche",
+    description:
+      "Nous utilisons Google Programmable Search Engine (CSE) pour vous permettre d’effectuer des recherches sur notre site à l’aide de la technologie Google.\n" +
+      "La désactivation de cette fonctionnalité peut altérer ou désactiver la recherche sur Dora.",
+    cookies: [
+      {
+        title: "Google CSE",
+        description:
+          "Google CSE est un outil de recherche qui nous permet de vous proposer la fonctionnalité de contact par chat avec le support d'Immersion Facilitée. Il peut déposer 5 cookies sur votre navigateur.",
+      },
+    ],
+  },
+};
