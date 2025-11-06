@@ -8,12 +8,12 @@
 
   import { onMount } from "svelte";
 
-  let showBanner = false;
-  let showDetails = false;
+  let showBanner = $state(true);
+  let showDetails = $state(true);
 
-  onMount(() => {
-    showBanner = shouldShowCookieBanner();
-  });
+  // onMount(() => {
+  //   showBanner = shouldShowCookieBanner();
+  // });
 
   function handleAcceptAll() {
     setConsentChoices({
@@ -50,9 +50,9 @@
     {:else}
       <DetailPanel
         {handleSavePreferences}
-        handleBackClick={() => (showDetails = false)}
         {handleAcceptAll}
         {handleRejectAll}
+        handleBackClick={() => (showDetails = false)}
       />
     {/if}
   </div>

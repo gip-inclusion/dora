@@ -32,6 +32,8 @@
       class="focus-within:shadow-focus p-s2 flex flex-row items-center rounded outline-0"
       class:outline={choice.value === focusValue}
       class:horizontal-divider={horizontal && i > 0}
+      class:opacity-50={disabled}
+      class:cursor-not-allowed={disabled}
     >
       <input
         id={`${id}-${i}`}
@@ -69,6 +71,6 @@
   }
 
   .horizontal-divider {
-    @apply border-l border-gray-03 pl-s8;
+    @apply border-gray-03 px-s16 border-l;
   }
 </style>

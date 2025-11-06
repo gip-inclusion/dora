@@ -30,9 +30,9 @@
   }
 </script>
 
-<div class="p-s32 h-[600px] w-[792px] overflow-y-scroll">
+<div class="p-s32 h-[580px] w-[792px]">
   <Button
-    extraClass="absolute top-s4 right-s8"
+    extraClass="absolute top-s16 right-s64"
     label="Fermer"
     onclick={handleBackClick}
     icon={CloseLineSystem}
@@ -40,33 +40,38 @@
     noBackground
     noPadding
   />
-  <h2 class="mb-s32 mt-s16 text-[1.5rem]">Panneau de gestion des cookies</h2>
-  <div class="mb-s16 pb-s8 flex justify-between border-b-1">
-    <div>
-      <p class="text-[1rem]">Préférences pour tous les services</p>
-      <a href="www.google.com">Données personnelles et cookies</a>
+  <div class="h-[550px] overflow-y-scroll">
+    <h2 class="mb-s32 mt-s16 text-[1.5rem]">Panneau de gestion des cookies</h2>
+    <div class="mb-s16 pb-s8 flex justify-between border-b-1">
+      <div class="justify-items flex flex-col">
+        <p class="mb-s4 text-[1rem]">Préférences pour tous les services</p>
+        <a
+          class="text-magenta-cta underline"
+          href="/politique-de-confidentialite"
+          >Données personnelles et cookies</a
+        >
+      </div>
+      <div class="gap-s16 flex">
+        <Button label="Tout accepter" onclick={handleAcceptAll} />
+        <Button label="Tout refuser" secondary onclick={handleRejectAll} />
+      </div>
     </div>
-    <div class="gap-s16 flex">
-      <Button label="Tout accepter" onclick={handleAcceptAll} />
-      <Button label="Tout refuser" secondary onclick={handleRejectAll} />
+
+    <div class="mb-6">
+      {#each Object.values(CONSENT_CONFIG) as categoryConfig}
+        <DetailCard
+          {categoryConfig}
+          disabled={categoryConfig.consentKey === "required"}
+          {toggleConsentByKey}
+          value={consentChoices[categoryConfig.consentKey]}
+        />
+      {/each}
     </div>
   </div>
-
-  <div class="mb-6">
-    {#each Object.values(CONSENT_CONFIG) as categoryConfig}
-      <DetailCard
-        {categoryConfig}
-        disabled={categoryConfig.consentKey === "required"}
-        {toggleConsentByKey}
-        value={consentChoices[categoryConfig.consentKey]}
-      />
-    {/each}
-  </div>
-
-  <div class="mt-s16 flex justify-end">
-    <Button
-      label="Confirmer mes choix"
-      onclick={() => handleSavePreferences(consentChoices)}
-    />
-  </div>
+</div>
+<div class="mt-s32 mx-s32 flex justify-end">
+  <Button
+    label="Confirmer mes choix"
+    onclick={() => handleSavePreferences(consentChoices)}
+  />
 </div>

@@ -149,7 +149,8 @@ export function setConsentChoices(consentChoices: ConsentChoices) {
 }
 
 export function shouldShowCookieBanner() {
-  return !hasValidConsent(consent);
+  // return !hasValidConsent(consent);
+  return true;
 }
 
 export function enforceCrispConsent() {
@@ -164,12 +165,6 @@ export const CONSENT_CONFIG = {
     title: "Cookies obligatoires",
     description:
       "Ce site utilise des cookies nécessaires à son bon fonctionnement qui ne peuvent pas être désactivés.",
-    cookies: [
-      {
-        title: "Sentry",
-        description: "Nécessaire pour gérer les erreurs",
-      },
-    ],
   },
   audience: {
     consentKey: "matomo",

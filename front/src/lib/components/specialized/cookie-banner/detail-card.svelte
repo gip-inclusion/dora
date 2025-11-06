@@ -11,10 +11,19 @@
   } = $props();
 
   let showCookieDetails = $state(false);
+  let detailsContainer: HTMLDivElement | undefined = $state();
 
   if (categoryConfig.consentKey === "required") {
     value = true;
   }
+
+  $effect(() => {
+    if (showCookieDetails && detailsContainer) {
+      setTimeout(() => {
+        detailsContainer?.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 100);
+    }
+  });
 </script>
 
 {#snippet card(title, description, id)}
@@ -55,28 +64,32 @@
     categoryConfig.description,
     categoryConfig.consentKey
   )}
-  <div class="flex flex-col">
-    {#if !showCookieDetails}
-      <div
-        class="flex"
-        on:click={() => (showCookieDetails = !showCookieDetails)}
-      >
-        Voir plus de détails <ArrowDownSLineArrows />
-      </div>
-    {:else}
-      <div
-        class="flex"
-        on:click={() => (showCookieDetails = !showCookieDetails)}
-      >
-        Cacher les détails <ArrowUpSLineArrows />
-      </div>
-      {#each categoryConfig.cookies as cookie, i}
-        {@render card(
-          cookie.title,
-          cookie.description,
-          `${categoryConfig.consentKey}-cookie-${i}`
-        )}
-      {/each}
+  <div class="mb-s8 flex flex-col">
+    {#if categoryConfig.consentKey !== "required"}
+      {#if !showCookieDetails}
+        <div
+          class="text-magenta-cta flex underline"
+          on:click={() => (showCookieDetails = !showCookieDetails)}
+        >
+          Voir plus de détails <ArrowDownSLineArrows />
+        </div>
+      {:else}
+        <div
+          class="text-magenta-cta mb-s8 flex underline"
+          on:click={() => (showCookieDetails = !showCookieDetails)}
+        >
+          Cacher les détails <ArrowUpSLineArrows />
+        </div>
+        <div bind:this={detailsContainer}>
+          {#each categoryConfig.cookies as cookie, i}
+            {@render card(
+              cookie.title,
+              cookie.description,
+              `${categoryConfig.consentKey}-cookie-${i}`
+            )}
+          {/each}
+        </div>
+      {/if}
     {/if}
   </div>
 </div>
