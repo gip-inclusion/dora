@@ -345,7 +345,6 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "subcategories_display": [c.label for c in subcategories]
         if subcategories is not None
         else None,
-        "suspension_date": service_data["date_suspension"],
         "update_frequency": None,
         "update_frequency_display": None,
         "update_needed": update_needed,
