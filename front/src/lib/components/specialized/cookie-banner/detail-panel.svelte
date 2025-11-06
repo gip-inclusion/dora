@@ -58,6 +58,7 @@
         {categoryConfig}
         disabled={categoryConfig.consentKey === "required"}
         {toggleConsentByKey}
+        value={consentChoices[categoryConfig.consentKey]}
       />
     {/each}
   </div>

@@ -166,10 +166,8 @@ export const CONSENT_CONFIG = {
       "Ce site utilise des cookies nécessaires à son bon fonctionnement qui ne peuvent pas être désactivés.",
     cookies: [
       {
-        title: "Matomo",
-        descripton:
-          "Matomo est un outil de mesure d'audience qui nous permet de suivre les visites de notre site et d'améliorer son contenu. Il peut déposer 7 cookies sur votre navigateur.\n" +
-          "Voir le site officiel",
+        title: "Sentry",
+        description: "Nécessaire pour gérer les erreurs",
       },
     ],
   },
@@ -180,9 +178,10 @@ export const CONSENT_CONFIG = {
       "Nous utilisons des cookies pour mesurer l’audience de notre site et améliorer son contenu.",
     cookies: [
       {
-        title: "Crisp",
+        title: "Matomo",
         description:
-          "Crisp est un outil de chat qui nous permet de vous proposer la fonctionnalité de contact par chat avec le support d'Immersion Facilitée. Il peut déposer 5 cookies sur votre navigateur.",
+          "Matomo est un outil de mesure d'audience qui nous permet de suivre les visites de notre site et d'améliorer son contenu. Il peut déposer 7 cookies sur votre navigateur.\n" +
+          "Voir le site officiel",
       },
     ],
   },
