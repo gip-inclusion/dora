@@ -4,7 +4,6 @@ from data_inclusion.schema.v1 import ModeMobilisation, PersonneMobilisatrice, Pu
 from django.conf import settings
 from django.utils import dateparse, timezone
 
-from dora.admin_express.models import AdminDivisionType
 from dora.core.utils import address_to_one_line, code_insee_to_code_dept
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
@@ -15,7 +14,6 @@ from dora.services.models import (
     ServiceKind,
     ServiceSubCategory,
     UpdateFrequency,
-    get_diffusion_zone_details_display,
     get_update_needed,
 )
 from dora.structures.models import DisabledDoraFormDIStructure
@@ -24,6 +22,7 @@ from .constants import (
     MODE_MOBILISATION_DI_TO_DORA,
     THEMATIQUES_MAPPING_DI_TO_DORA,
 )
+from .zone_codes import get_zone_codes_display
 
 DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING = {
     "commune": "city",
@@ -146,10 +145,6 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         ServiceKind.objects.get(value=service_data["type"])
         if service_data["type"]
         else None
-    )
-
-    zone_diffusion_type = DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING.get(
-        service_data["zone_diffusion_type"], None
     )
 
     department = None
@@ -275,15 +270,12 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "credentials": [],
         "credentials_display": [],
         "department": department,
-        "diffusion_zone_details": service_data["zone_diffusion_code"],
-        "diffusion_zone_details_display": get_diffusion_zone_details_display(
-            diffusion_zone_details=service_data["zone_diffusion_code"],
-            diffusion_zone_type=zone_diffusion_type,
+        "diffusion_zone_details": "",
+        "diffusion_zone_details_display": get_zone_codes_display(
+            service_data["zone_eligibilite"]
         ),
-        "diffusion_zone_type": zone_diffusion_type,
-        "diffusion_zone_type_display": AdminDivisionType(zone_diffusion_type).label
-        if zone_diffusion_type is not None
-        else "",
+        "diffusion_zone_type": "",
+        "diffusion_zone_type_display": "",
         "duration_weekly_hours": service_data["volume_horaire_hebdomadaire"],
         "duration_weeks": service_data["nombre_semaines"],
         "fee_condition": service_data["frais"],
