@@ -102,9 +102,6 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         "di_source": service_data["source"],
         "di_source_display": service_data["source"].title(),  # TODO
         "id": service_data["id"],
-        "diffusion_zone_type": DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING.get(
-            result["service"]["zone_diffusion_type"], None
-        ),
         "coordinates": (result["service"]["longitude"], result["service"]["latitude"])
         if result["service"]["longitude"] and result["service"]["latitude"]
         else None,
