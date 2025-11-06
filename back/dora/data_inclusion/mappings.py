@@ -321,7 +321,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "postal_code": service_data["code_postal"],
         "publication_date": None,
         "qpv_or_zrr": None,
-        "recurrence": service_data["recurrence"],
+        "recurrence": service_data["horaires_accueil"],
         "remote_url": None,
         "requirements": service_data["conditions_acces"],
         "requirements_display": service_data["conditions_acces"],
