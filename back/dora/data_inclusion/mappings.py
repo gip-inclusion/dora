@@ -178,6 +178,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
     )
 
     beneficiaries_access_modes = None
+    beneficiaries_access_modes_external_form_link = None
+    beneficiaries_access_modes_other = None
     if PersonneMobilisatrice.USAGERS in service_data["mobilisable_par"]:
         beneficiaries_access_modes = BeneficiaryAccessMode.objects.filter(
             value__in=[
@@ -185,8 +187,15 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
                 for mode in service_data["modes_mobilisation"]
             ]
         )
+        # Autres champs
+        beneficiaries_access_modes_external_form_link = service_data[
+            "lien_mobilisation"
+        ]
+        beneficiaries_access_modes_other = service_data["mobilisation_precisions"]
 
     coach_orientation_modes = None
+    coach_orientation_modes_external_form_link = None
+    coach_orientation_modes_other = None
     if PersonneMobilisatrice.PROFESSIONNELS in service_data["mobilisable_par"]:
         modes_mobilisation = service_data["modes_mobilisation"].copy()
         # Suppression du mode utiliser-lien-mobilisation si lien_mobilisation n'est pas spécifié
@@ -208,6 +217,9 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         coach_orientation_modes = CoachOrientationMode.objects.filter(
             value__in=coach_orientation_mode_values
         )
+        # Autres champs
+        coach_orientation_modes_external_form_link = service_data["lien_mobilisation"]
+        coach_orientation_modes_other = service_data["mobilisation_precisions"]
     elif service_data["courriel"]:
         coach_orientation_modes = CoachOrientationMode.objects.filter(
             value="formulaire-dora"
@@ -238,13 +250,9 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         ]
         if beneficiaries_access_modes is not None
         else None,
-        "beneficiaries_access_modes_external_form_link": service_data[
-            "lien_mobilisation"
-        ],
+        "beneficiaries_access_modes_external_form_link": beneficiaries_access_modes_external_form_link,
         "beneficiaries_access_modes_external_form_link_text": "",
-        "beneficiaries_access_modes_other": service_data[
-            "modes_orientation_beneficiaire_autres"
-        ],
+        "beneficiaries_access_modes_other": beneficiaries_access_modes_other,
         "can_write": False,
         "categories": [c.value for c in categories] if categories is not None else None,
         "categories_display": [c.label for c in categories]
@@ -258,11 +266,9 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "coach_orientation_modes_display": [m.label for m in coach_orientation_modes]
         if coach_orientation_modes is not None
         else None,
-        "coach_orientation_modes_external_form_link": service_data["lien_mobilisation"],
+        "coach_orientation_modes_external_form_link": coach_orientation_modes_external_form_link,
         "coach_orientation_modes_external_form_link_text": "",
-        "coach_orientation_modes_other": service_data[
-            "modes_orientation_accompagnateur_autres"
-        ],
+        "coach_orientation_modes_other": coach_orientation_modes_other,
         "publics": [p.value for p in publics] if publics is not None else None,
         "publics_display": [p.label for p in publics] if publics is not None else None,
         "contact_email": service_data["courriel"],
