@@ -290,7 +290,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "duration_weekly_hours": service_data["volume_horaire_hebdomadaire"],
         "duration_weeks": service_data["nombre_semaines"],
         "fee_condition": service_data["frais"],
-        "fee_details": service_data["frais_autres"],
+        "fee_details": service_data["frais_precisions"],
         "forms": None,
         "forms_info": None,
         "full_desc": service_data["description"],
