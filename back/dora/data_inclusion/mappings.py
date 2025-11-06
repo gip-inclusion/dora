@@ -278,7 +278,6 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "contact_info_filled": bool(
             service_data["courriel"] or service_data["telephone"]
         ),
-        "creation_date": service_data["date_creation"],
         "credentials": [],
         "credentials_display": [],
         "department": department,
