@@ -1164,8 +1164,7 @@ class DataInclusionSearchTestCase(APITestCase):
 
     def test_find_services_in_city(self):
         service_data = self.make_di_service(
-            zone_diffusion_type="commune",
-            zone_diffusion_code=self.city1.code,
+            zone_eligibilite=[self.city1.code],
         )
         request = self.factory.get("/search/", {"city": self.city1.code})
         response = self.search(request)
@@ -1176,8 +1175,7 @@ class DataInclusionSearchTestCase(APITestCase):
 
     def test_dont_find_services_in_other_city(self):
         self.make_di_service(
-            zone_diffusion_type="commune",
-            zone_diffusion_code=self.city1.code,
+            zone_eligibilite=[self.city1.code],
         )
         request = self.factory.get("/search/", {"city": self.city2.code})
         response = self.search(request)
@@ -1191,9 +1189,9 @@ class DataInclusionSearchTestCase(APITestCase):
 
     def test_filter_by_fee(self):
         service_data = self.make_di_service(
-            zone_diffusion_type="pays", frais=["gratuit"]
+            zone_eligibilite=[self.city2.code], frais=["gratuit"]
         )
-        self.make_di_service(zone_diffusion_type="pays", frais=["payant"])
+        self.make_di_service(zone_eligibilite=[self.city2.code], frais=["payant"])
         request = self.factory.get(
             "/search/",
             {
@@ -1209,9 +1207,9 @@ class DataInclusionSearchTestCase(APITestCase):
 
     def test_filter_by_kind(self):
         service_data = self.make_di_service(
-            zone_diffusion_type="pays", types=["atelier", "accompagnement"]
+            zone_eligibilite=[self.city2.code], types=["atelier", "accompagnement"]
         )
-        self.make_di_service(zone_diffusion_type="pays", types=["formation"])
+        self.make_di_service(zone_eligibilite=[self.city2.code], types=["formation"])
         request = self.factory.get(
             "/search/",
             {
@@ -1230,14 +1228,16 @@ class DataInclusionSearchTestCase(APITestCase):
 
     def test_filter_by_cat(self):
         service_data_1 = self.make_di_service(
-            zone_diffusion_type="pays",
+            zone_eligibilite=[self.city2.code],
             thematiques=["famille", "sante"],
         )
         service_data_2 = self.make_di_service(
-            zone_diffusion_type="pays",
+            zone_eligibilite=[self.city2.code],
             thematiques=["famille--garde-denfants"],
         )
-        self.make_di_service(zone_diffusion_type="pays", thematiques=["numerique"])
+        self.make_di_service(
+            zone_eligibilite=[self.city2.code], thematiques=["numerique"]
+        )
         request = self.factory.get(
             "/search/",
             {
@@ -1261,7 +1261,7 @@ class DataInclusionSearchTestCase(APITestCase):
         assert response.data["services"][0]["id"] != response.data["services"][1]["id"]
 
     def test_simple_search_with_data_inclusion(self):
-        service_data = self.make_di_service(code_insee=self.city1.code)
+        service_data = self.make_di_service(zone_eligibilite=[self.city1.code])
         request = self.factory.get("/search/", {"city": self.city1.code})
         response = self.search(request)
 
@@ -1272,9 +1272,9 @@ class DataInclusionSearchTestCase(APITestCase):
         assert response.data["services"][0]["id"] == service_data["id"]
 
     def test_simple_search_with_data_inclusion_and_dora(self):
-        di_service_data = self.make_di_service(code_insee=self.city1.code)
+        di_service_data = self.make_di_service(zone_eligibilite=[self.city1.code])
         dora_service_data = self.make_di_service(
-            code_insee=self.city1.code, source="dora"
+            zone_eligibilite=[self.city1.code], source="dora"
         )
         dora_service_id = dora_service_data["id"].split("--")[1]
         service_dora = make_service(
@@ -1319,27 +1319,12 @@ class DataInclusionSearchTestCase(APITestCase):
         service, *_ = response.data["services"]
         assert service["slug"] == service_dora.slug
 
-    # TODO: FIXME
-    # def test_on_site_first(self):
-    #     self.make_di_service(
-    #         zone_diffusion_type="pays", modes_accueil=["en-presentiel"]
-    #     )
-    #     service_data_2 = self.make_di_service(
-    #         zone_diffusion_type="pays", modes_accueil=["a-distance"]
-    #     )
-    #     self.make_di_service(
-    #         zone_diffusion_type="pays", modes_accueil=["en-presentiel"]
-    #     )
-    #     request = self.factory.get("/search/", {"city": "12345"})
-    #     response = self.search(request)
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(len(response.data), 3)
-    #     self.assertEqual(response.data[2]["id"], service_data_2["id"])
-
     @override_settings(DATA_INCLUSION_STREAM_SOURCES=["foo"])
     def test_search_target_sources_on_distributed_search(self):
-        service_data = self.make_di_service(source="foo", zone_diffusion_type="pays")
-        self.make_di_service(source="bar", zone_diffusion_type="pays")
+        service_data = self.make_di_service(
+            source="foo", zone_eligibilite=[self.city1.code]
+        )
+        self.make_di_service(source="bar", zone_eligibilite=[self.city1.code])
         request = self.factory.get(
             "/search/",
             {"city": self.city1.code, "unifiedSearchEnabled": "false"},
@@ -1354,8 +1339,8 @@ class DataInclusionSearchTestCase(APITestCase):
     @override_settings(DATA_INCLUSION_STREAM_SOURCES=["foo"])
     def test_search_all_sources_on_unified_search(self):
         # DATA_INCLUSION_STREAM_SOURCES doit être ignoré lors d'une recherche unifiée (par défaut, sans paramètre `searchMode`)
-        self.make_di_service(source="foo", zone_diffusion_type="pays")
-        self.make_di_service(source="bar", zone_diffusion_type="pays")
+        self.make_di_service(source="foo", zone_eligibilite=[self.city1.code])
+        self.make_di_service(source="bar", zone_eligibilite=[self.city1.code])
         request = self.factory.get(
             "/search/",
             {"city": self.city1.code},
@@ -1592,24 +1577,21 @@ class DataInclusionSearchTestCase(APITestCase):
     def test_service_di_diffusion_zone(self):
         cases = [
             (
-                None,
-                None,
+                [],
                 None,
                 "",
                 None,
                 "",
             ),
             (
-                "commune",
-                self.city1.code,
+                [self.city1.code],
                 self.city1.code,
                 f"{self.city1.name} ({self.dept.code})",
                 AdminDivisionType.CITY.value,
                 AdminDivisionType.CITY.label,
             ),
             (
-                "pays",
-                None,
+                ["france"],
                 None,
                 "France entière",
                 AdminDivisionType.COUNTRY.value,
@@ -1618,20 +1600,17 @@ class DataInclusionSearchTestCase(APITestCase):
         ]
 
         for (
-            zone_diffusion_type,
-            zone_diffusion_code,
+            zone_eligibilite,
             diffusion_zone_details,
             diffusion_zone_details_display,
             diffusion_zone_type,
             diffusion_zone_type_display,
         ) in cases:
             with self.subTest(
-                zone_diffusion_type=zone_diffusion_type,
-                zone_diffusion_code=zone_diffusion_code,
+                zone_eligibilite=zone_eligibilite,
             ):
                 service_data = self.make_di_service(
-                    zone_diffusion_type=zone_diffusion_type,
-                    zone_diffusion_code=zone_diffusion_code,
+                    zone_eligibilite=zone_eligibilite,
                 )
                 request = self.factory.get(f"/services-di/{service_data['id']}/")
                 response = self.service_di(request, di_service_id=service_data["id"])
