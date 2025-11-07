@@ -22,7 +22,7 @@ from .constants import (
     MODE_MOBILISATION_DI_TO_DORA,
     THEMATIQUES_MAPPING_DI_TO_DORA,
 )
-from .zone_codes import get_zone_codes_display
+from .diffusion_zone_info import get_diffusion_zone_info
 
 DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING = {
     "commune": "city",
@@ -225,6 +225,9 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
             Public(p)
             for p in (set(service_data["publics"]) & {p.value for p in Public})
         ]
+
+    diffusion_zone_info = get_diffusion_zone_info(service_data["zone_eligibilite"])
+
     return {
         "access_conditions": None,
         "access_conditions_display": None,
@@ -275,12 +278,14 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "credentials": [],
         "credentials_display": [],
         "department": department,
-        "diffusion_zone_details": "",
-        "diffusion_zone_details_display": get_zone_codes_display(
-            service_data["zone_eligibilite"]
-        ),
-        "diffusion_zone_type": "",
-        "diffusion_zone_type_display": "",
+        "diffusion_zone_details": diffusion_zone_info["diffusion_zone_details"],
+        "diffusion_zone_details_display": diffusion_zone_info[
+            "diffusion_zone_details_display"
+        ],
+        "diffusion_zone_type": diffusion_zone_info["diffusion_zone_type"],
+        "diffusion_zone_type_display": diffusion_zone_info[
+            "diffusion_zone_type_display"
+        ],
         "duration_weekly_hours": service_data["volume_horaire_hebdomadaire"],
         "duration_weeks": service_data["nombre_semaines"],
         "fee_condition": service_data["frais"],
