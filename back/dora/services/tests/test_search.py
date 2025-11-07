@@ -121,7 +121,7 @@ def test_search_services_includes_thematiques_empty_list(api_client):
 
     with mock.patch("dora.data_inclusion.di_client_factory") as mock_di_client_factory:
         di_client = FakeDataInclusionClient()
-        service = make_di_service_data(thematiques=[])
+        service = make_di_service_data(zone_eligibilite=[city.code], thematiques=[])
         di_client.services.append(service)
 
         mock_di_client_factory.return_value = di_client
@@ -141,7 +141,7 @@ def test_search_services_includes_thematiques_null(api_client):
 
     with mock.patch("dora.data_inclusion.di_client_factory") as mock_di_client_factory:
         di_client = FakeDataInclusionClient()
-        service = make_di_service_data(thematiques=None)
+        service = make_di_service_data(zone_eligibilite=[city.code], thematiques=None)
         di_client.services.append(service)
 
         mock_di_client_factory.return_value = di_client
