@@ -89,7 +89,9 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         "name": service_data["nom"],
         "short_desc": textwrap.shorten(
             service_data["description"], width=200, placeholder="…"
-        ),
+        )
+        if service_data["description"]
+        else "",
         "slug": f"{service_data['source']}--{service_data['id']}",
         "status": ServiceStatus.PUBLISHED.value,
         "structure": service_data["structure_id"],
@@ -174,7 +176,11 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
     beneficiaries_access_modes = None
     beneficiaries_access_modes_external_form_link = None
     beneficiaries_access_modes_other = None
-    if PersonneMobilisatrice.USAGERS in service_data["mobilisable_par"]:
+    if (
+        service_data["modes_mobilisation"] is not None
+        and service_data["mobilisable_par"] is not None
+        and PersonneMobilisatrice.USAGERS in service_data["mobilisable_par"]
+    ):
         beneficiaries_access_modes = BeneficiaryAccessMode.objects.filter(
             value__in=[
                 MODE_MOBILISATION_DI_TO_DORA[mode]
@@ -190,7 +196,11 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
     coach_orientation_modes = None
     coach_orientation_modes_external_form_link = None
     coach_orientation_modes_other = None
-    if PersonneMobilisatrice.PROFESSIONNELS in service_data["mobilisable_par"]:
+    if (
+        service_data["modes_mobilisation"] is not None
+        and service_data["mobilisable_par"] is not None
+        and PersonneMobilisatrice.PROFESSIONNELS in service_data["mobilisable_par"]
+    ):
         modes_mobilisation = service_data["modes_mobilisation"].copy()
         # Suppression du mode utiliser-lien-mobilisation si lien_mobilisation n'est pas spécifié
         if (
@@ -275,6 +285,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "contact_info_filled": bool(
             service_data["courriel"] or service_data["telephone"]
         ),
+        "creation_date": None,
         "credentials": [],
         "credentials_display": [],
         "department": department,
@@ -292,7 +303,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "fee_details": service_data["frais_precisions"],
         "forms": None,
         "forms_info": None,
-        "full_desc": service_data["description"],
+        "full_desc": service_data["description"] or "",
         "funding_labels": [],
         "funding_labels_display": [],
         "geom": None,
@@ -326,7 +337,9 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "requirements_display": service_data["conditions_acces"],
         "short_desc": textwrap.shorten(
             service_data["description"], width=200, placeholder="…"
-        ),
+        )
+        if service_data["description"]
+        else "",
         "slug": f"{service_data['source']}--{service_data['id']}",
         "source": service_data["source"],
         "status": ServiceStatus.PUBLISHED.value,
@@ -344,6 +357,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "subcategories_display": [c.label for c in subcategories]
         if subcategories is not None
         else None,
+        "suspension_date": None,
         "update_frequency": None,
         "update_frequency_display": None,
         "update_needed": update_needed,
