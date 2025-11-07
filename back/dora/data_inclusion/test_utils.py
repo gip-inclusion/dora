@@ -142,7 +142,7 @@ class FakeDataInclusionClient:
             return [
                 # overly simple distance for tests.
                 {
-                    "distance": 30 if code_insee != s["code_insee"] else 0,
+                    "distance": 0 if code_insee in s["zone_eligibilite"] else 30,
                     "service": s,
                 }
                 for s in services
