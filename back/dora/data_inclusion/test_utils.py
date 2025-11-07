@@ -137,15 +137,7 @@ class FakeDataInclusionClient:
             services = [r for r in services if any(t in r["frais"] for t in frais)]
 
         if code_insee is not None:
-            # filter for zone_diffusion_type=commune only
-            # the goal is simply to make it possible to
-            # validate the usage of the zone_diffusion_* by the caller
-            services = [
-                r
-                for r in services
-                if r["zone_diffusion_type"] != "commune"
-                or r["zone_diffusion_code"] == code_insee
-            ]
+            services = [r for r in services if code_insee in r["zone_eligibilite"]]
 
             return [
                 # overly simple distance for tests.
