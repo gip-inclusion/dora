@@ -4,6 +4,7 @@
     CONSENT_CONFIG,
     type ConsentChoices,
     type ConsentKey,
+    handleBackClick,
   } from "$lib/utils/consent.svelte";
   import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
   import Button from "$lib/components/display/button.svelte";
@@ -11,17 +12,12 @@
 
   interface Props {
     handleSavePreferences: (consentChoices: ConsentChoices) => void;
-    handleBackClick: () => void;
     handleAcceptAll: () => void;
     handleRejectAll: () => void;
   }
 
-  let {
-    handleSavePreferences,
-    handleBackClick,
-    handleAcceptAll,
-    handleRejectAll,
-  }: Props = $props();
+  let { handleSavePreferences, handleAcceptAll, handleRejectAll }: Props =
+    $props();
 
   let consentChoices = $state({ ...consent.consentChoices });
 
@@ -30,7 +26,7 @@
   }
 </script>
 
-<div class="p-s32 h-[580px] w-full md:w-[792px]">
+<div class="p-s32 h-[580px] w-full overflow-y-scroll md:w-[792px]">
   <Button
     extraClass="absolute top-s16 right-s64"
     label="Fermer"
@@ -40,7 +36,7 @@
     noBackground
     noPadding
   />
-  <div class="h-[550px] overflow-y-scroll">
+  <div class="h-[550px]">
     <h2 class="mb-s32 mt-s16 text-[1.5rem]">Panneau de gestion des cookies</h2>
     <div class="mb-s16 pb-s8 border-b-gray-02 flex justify-between border-b-1">
       <div class="justify-items flex flex-col">

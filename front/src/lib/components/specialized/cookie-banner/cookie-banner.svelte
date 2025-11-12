@@ -2,16 +2,10 @@
   import {
     setConsentChoices,
     cookieBannerState,
+    hideCookieBanner,
   } from "$lib/utils/consent.svelte";
   import GeneralPanel from "$lib/components/specialized/cookie-banner/general-panel.svelte";
   import DetailPanel from "$lib/components/specialized/cookie-banner/detail-panel.svelte";
-
-  let showDetails = $state(false);
-
-  function closeBanner() {
-    cookieBannerState.showBanner = false;
-    showDetails = false;
-  }
 
   function handleAcceptAll() {
     setConsentChoices({
@@ -19,7 +13,7 @@
       googleCSE: true,
       crisp: true,
     });
-    closeBanner();
+    hideCookieBanner();
   }
 
   function handleRejectAll() {
@@ -28,12 +22,12 @@
       googleCSE: false,
       crisp: false,
     });
-    closeBanner();
+    hideCookieBanner();
   }
 
   function handleSavePreferences(consentChoices) {
     setConsentChoices(consentChoices);
-    closeBanner();
+    hideCookieBanner();
   }
 </script>
 
@@ -41,18 +35,17 @@
   <div
     class="mx-s16 md:mx-s0 bottom-s40 md:left-s40 p-s32 fixed z-[9999] bg-white shadow-md"
   >
-    {#if !showDetails}
+    {#if !cookieBannerState.showDetails}
       <GeneralPanel
         {handleAcceptAll}
         {handleRejectAll}
-        handlePersonalize={() => (showDetails = true)}
+        handlePersonalize={() => (cookieBannerState.showDetails = true)}
       />
     {:else}
       <DetailPanel
         {handleSavePreferences}
         {handleAcceptAll}
         {handleRejectAll}
-        handleBackClick={() => (showDetails = false)}
       />
     {/if}
   </div>

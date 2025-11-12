@@ -214,10 +214,24 @@ export function shouldShowCookieBanner() {
 
 export const cookieBannerState = $state({
   showBanner: browser ? shouldShowCookieBanner() : false,
+  showDetails: false,
 });
 
 export function showCookieBanner() {
   cookieBannerState.showBanner = true;
+  cookieBannerState.showDetails = !shouldShowCookieBanner();
+}
+
+export function hideCookieBanner() {
+  cookieBannerState.showBanner = false;
+}
+
+export function handleBackClick() {
+  if (shouldShowCookieBanner()) {
+    cookieBannerState.showDetails = false;
+  } else {
+    hideCookieBanner();
+  }
 }
 
 export function enforceCrispConsent() {
