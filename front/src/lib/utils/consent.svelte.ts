@@ -212,6 +212,14 @@ export function shouldShowCookieBanner() {
   return !hasValidConsent(consent);
 }
 
+export const cookieBannerState = $state({
+  showBanner: browser ? shouldShowCookieBanner() : false,
+});
+
+export function showCookieBanner() {
+  cookieBannerState.showBanner = true;
+}
+
 export function enforceCrispConsent() {
   if (!consent.consentChoices.crisp) {
     deleteCrispCookie();

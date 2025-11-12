@@ -1,19 +1,17 @@
 <script lang="ts">
   import {
     setConsentChoices,
-    shouldShowCookieBanner,
+    cookieBannerState,
   } from "$lib/utils/consent.svelte";
   import GeneralPanel from "$lib/components/specialized/cookie-banner/general-panel.svelte";
   import DetailPanel from "$lib/components/specialized/cookie-banner/detail-panel.svelte";
 
-  import { onMount } from "svelte";
-
-  let showBanner = $state(false);
   let showDetails = $state(false);
 
-  onMount(() => {
-    showBanner = shouldShowCookieBanner();
-  });
+  function closeBanner() {
+    cookieBannerState.showBanner = false;
+    showDetails = false;
+  }
 
   function handleAcceptAll() {
     setConsentChoices({
@@ -21,7 +19,7 @@
       googleCSE: true,
       crisp: true,
     });
-    showBanner = false;
+    closeBanner();
   }
 
   function handleRejectAll() {
@@ -30,16 +28,16 @@
       googleCSE: false,
       crisp: false,
     });
-    showBanner = false;
+    closeBanner();
   }
 
   function handleSavePreferences(consentChoices) {
     setConsentChoices(consentChoices);
-    showBanner = false;
+    closeBanner();
   }
 </script>
 
-{#if showBanner}
+{#if cookieBannerState.showBanner}
   <div
     class="mx-s16 md:mx-s0 bottom-s40 md:left-s40 p-s32 fixed z-[9999] bg-white shadow-md"
   >
