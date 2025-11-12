@@ -32,21 +32,13 @@
 </script>
 
 {#if cookieBannerState.showBanner}
-  <div
-    class="mx-s16 md:mx-s0 bottom-s40 md:left-s40 p-s32 fixed z-[9999] bg-white shadow-md"
-  >
-    {#if !cookieBannerState.showDetails}
-      <GeneralPanel
-        {handleAcceptAll}
-        {handleRejectAll}
-        handlePersonalize={() => (cookieBannerState.showDetails = true)}
-      />
-    {:else}
-      <DetailPanel
-        {handleSavePreferences}
-        {handleAcceptAll}
-        {handleRejectAll}
-      />
-    {/if}
-  </div>
+  {#if !cookieBannerState.showDetails}
+    <GeneralPanel
+      {handleAcceptAll}
+      {handleRejectAll}
+      handlePersonalize={() => (cookieBannerState.showDetails = true)}
+    />
+  {:else}
+    <DetailPanel {handleSavePreferences} {handleAcceptAll} {handleRejectAll} />
+  {/if}
 {/if}

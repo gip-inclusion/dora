@@ -17,6 +17,8 @@
     value = true;
   }
 
+  let innerWidth = $state(0);
+
   $effect(() => {
     if (showCookieDetails && detailsContainer) {
       setTimeout(() => {
@@ -47,7 +49,7 @@
               label: "Refuser",
             },
           ]}
-          horizontal
+          horizontal={innerWidth > 768}
           onchange={() => toggleConsentByKey(categoryConfig.consentKey)}
           {disabled}
         />
@@ -61,6 +63,7 @@
   </div>
 {/snippet}
 
+<svelte:window bind:innerWidth />
 <div
   class="gap-s64 border-color-gray pt-s8 border-b-gray-02 flex-col justify-between border-b-1"
 >
