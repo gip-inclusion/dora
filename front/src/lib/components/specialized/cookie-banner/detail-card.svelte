@@ -2,6 +2,7 @@
   import RadioButtons from "$lib/components/inputs/radio-buttons.svelte";
   import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
   import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import { MOBILE_BREAKPOINT } from "$lib/consts";
 
   let {
     categoryConfig,
@@ -49,7 +50,7 @@
               label: "Refuser",
             },
           ]}
-          horizontal={innerWidth > 768}
+          horizontal={innerWidth > MOBILE_BREAKPOINT}
           onchange={() => toggleConsentByKey(categoryConfig.consentKey)}
           {disabled}
         />
