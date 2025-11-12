@@ -11,7 +11,7 @@
 </script>
 
 <div
-  class="mx-s4 md:mx-s0 bottom-s40 md:left-s40 py-s32 px-s4 md:px-s32 fixed z-[9999] rounded-lg bg-white shadow-md"
+  class="mx-s4 md:mx-s0 bottom-s40 md:left-s40 py-s32 px-s4 md:px-s32 fixed z-[9999] bg-white shadow-md"
 >
   <div class="md:w-[588px]">
     <h2 class="text-gray-dark mb-s32 text-[1.5rem]">
