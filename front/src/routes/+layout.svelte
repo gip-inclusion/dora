@@ -51,7 +51,6 @@
 
 <SkipLink />
 <Header />
-<CookieBanner />
 
 <main id="main-content">
   {#if $userInfo && !$userInfo.mainActivity}

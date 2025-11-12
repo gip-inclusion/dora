@@ -1,4 +1,4 @@
-<script module lang="ts">
+<script lang="ts">
   import {
     setConsentChoices,
     shouldShowCookieBanner,
@@ -8,12 +8,12 @@
 
   import { onMount } from "svelte";
 
-  let showBanner = $state(true);
-  let showDetails = $state(true);
+  let showBanner = $state(false);
+  let showDetails = $state(false);
 
-  // onMount(() => {
-  //   showBanner = shouldShowCookieBanner();
-  // });
+  onMount(() => {
+    showBanner = shouldShowCookieBanner();
+  });
 
   function handleAcceptAll() {
     setConsentChoices({

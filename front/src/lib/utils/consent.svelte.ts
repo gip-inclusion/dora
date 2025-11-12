@@ -87,9 +87,9 @@ export interface Consent {
 const defaultConsent: Consent = {
   version: CONSENT_VERSION,
   consentChoices: {
-    matomo: true,
-    googleCSE: true,
-    crisp: true,
+    matomo: false,
+    googleCSE: false,
+    crisp: false,
   },
   timestamp: "",
 };
@@ -164,9 +164,9 @@ function hasConsentChanged(current: Consent, updates: ConsentChoices) {
 
 function enforceMatomoConsent(hasMatomoConsent: boolean) {
   if (hasMatomoConsent) {
-    (window as any)._paq.push(["optUserOut"]);
-  } else {
     (window as any)._paq.push(["forgetUserOptOut", false]);
+  } else {
+    (window as any)._paq.push(["optUserOut"]);
     deleteMatomoCookies();
   }
 }
@@ -209,7 +209,7 @@ export function setConsentChoices(consentChoices: ConsentChoices) {
 }
 
 export function shouldShowCookieBanner() {
-  return true;
+  return !hasValidConsent(consent);
 }
 
 export function enforceCrispConsent() {
