@@ -26,7 +26,7 @@
   });
 </script>
 
-{#snippet card(title, description, id)}
+{#snippet card(title, description, id, link = null)}
   <div>
     <div class="flex justify-between">
       <div>
@@ -53,6 +53,11 @@
         />
       </div>
     </div>
+    {#if link}
+      <a class="text-gray-text text-[1rem] underline" href={link}
+        >Voir le site officiel</a
+      >
+    {/if}
   </div>
 {/snippet}
 
@@ -85,7 +90,8 @@
             {@render card(
               cookie.title,
               cookie.description,
-              `${categoryConfig.consentKey}-cookie-${i}`
+              `${categoryConfig.consentKey}-cookie-${i}`,
+              cookie.link
             )}
           {/each}
         </div>
