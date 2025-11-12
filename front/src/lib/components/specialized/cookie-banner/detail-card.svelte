@@ -57,7 +57,7 @@
 {/snippet}
 
 <div
-  class="gap-s64 border-color-gray pt-s8 flex-col justify-between border-b-1"
+  class="gap-s64 border-color-gray pt-s8 border-b-gray-02 flex-col justify-between border-b-1"
 >
   {@render card(
     categoryConfig.title,

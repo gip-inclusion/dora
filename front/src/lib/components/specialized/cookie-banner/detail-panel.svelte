@@ -30,7 +30,7 @@
   }
 </script>
 
-<div class="p-s32 h-[580px] w-[792px]">
+<div class="p-s32 h-[580px] w-full md:w-[792px]">
   <Button
     extraClass="absolute top-s16 right-s64"
     label="Fermer"
@@ -42,7 +42,7 @@
   />
   <div class="h-[550px] overflow-y-scroll">
     <h2 class="mb-s32 mt-s16 text-[1.5rem]">Panneau de gestion des cookies</h2>
-    <div class="mb-s16 pb-s8 flex justify-between border-b-1">
+    <div class="mb-s16 pb-s8 border-b-gray-02 flex justify-between border-b-1">
       <div class="justify-items flex flex-col">
         <p class="mb-s4 text-[1rem]">Préférences pour tous les services</p>
         <a
@@ -51,7 +51,7 @@
           >Données personnelles et cookies</a
         >
       </div>
-      <div class="gap-s16 flex">
+      <div class="gap-s16 flex md:flex-row">
         <Button label="Tout accepter" onclick={handleAcceptAll} />
         <Button label="Tout refuser" secondary onclick={handleRejectAll} />
       </div>

@@ -10,7 +10,7 @@
   let { handleAcceptAll, handleRejectAll, handlePersonalize }: Props = $props();
 </script>
 
-<div class="mx-auto max-w-[588px] rounded-lg bg-white p-6">
+<div class="mx-auto w-full rounded-lg bg-white p-6 md:w-[588px] md:max-w-full">
   <h2 class="text-gray-dark mb-s32 text-[1.5rem]">
     À propos des cookies sur dora.inclusion.gouv.fr
   </h2>
