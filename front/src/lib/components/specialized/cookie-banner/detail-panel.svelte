@@ -4,6 +4,7 @@
     CONSENT_CONFIG,
     type ConsentChoices,
     type ConsentKey,
+    cookieBannerState,
     handleBackClick,
   } from "$lib/utils/consent.svelte";
   import CloseLineSystem from "svelte-remix/CloseLineSystem.svelte";
@@ -57,7 +58,9 @@
           <a
             class="text-magenta-cta underline"
             href="/politique-de-confidentialite"
-            >Données personnelles et cookies</a
+            onclick={() => {
+              cookieBannerState.showDetails = false;
+            }}>Données personnelles et cookies</a
           >
         </div>
         <div class="gap-s16 flex flex-col md:flex-row">
