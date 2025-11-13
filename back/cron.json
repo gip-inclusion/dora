@@ -11,6 +11,10 @@
     {
       "command": "0 0-6 * * * tools/run-notification-tasks.sh",
       "size": "S"
+    },
+    {
+      "command": "0 40 * * * tools/sync-nexus.sh",
+      "size": "S"
     }
   ]
 }
