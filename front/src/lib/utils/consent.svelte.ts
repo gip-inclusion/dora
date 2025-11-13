@@ -27,18 +27,18 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
     consentKey: "required",
     title: "Cookies obligatoires",
     description:
-      "Ce site utilise des cookies nécessaires à son bon fonctionnement qui ne peuvent pas être désactivés.",
+      "Ce site utilise des cookies nécessaires à son bon fonctionnement qui ne peuvent pas être désactivés. Ils incluent les cookies de session pour l'authentification et la gestion de votre consentement aux cookies.",
   },
   audience: {
     consentKey: "matomo",
     title: "Mesure d'audience",
     description:
-      "Nous utilisons des cookies pour mesurer l’audience de notre site et améliorer son contenu.",
+      "Nous utilisons Matomo pour mesurer l'audience de notre site et améliorer son contenu. Vos données restent sur nos serveurs et ne sont jamais partagées avec des tiers. Ces cookies peuvent être supprimés automatiquement si vous retirez votre consentement.",
     cookies: [
       {
         title: "Matomo",
         description:
-          "Matomo est un outil de mesure d'audience qui nous permet de suivre les visites de notre site et d'améliorer son contenu. Il peut déposer 7 cookies sur votre navigateur.",
+          "Matomo est un outil de mesure d'audience respectueux de la vie privée. Il peut déposer jusqu'à 7 cookies sur votre navigateur pour suivre votre navigation et nous aider à améliorer le site. Ces cookies sont stockés sur notre domaine et peuvent être supprimés à tout moment.",
         link: "https://matomo.org/faq/general/faq_146/",
       },
     ],
@@ -47,12 +47,12 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
     consentKey: "crisp",
     title: "Support et assistance utilisateur",
     description:
-      "Nous utilisons les cookies pour vous proposer la fonctionnalité de contact par chat avec le support de Dora",
+      "Nous utilisons Crisp pour vous proposer un chat de support en direct. Ces cookies proviennent de notre site d'aide (aide.dora.inclusion.beta.gouv.fr) et peuvent être supprimés si vous retirez votre consentement.",
     cookies: [
       {
         title: "Crisp",
         description:
-          "Crisp est un outil de chat qui nous permet de vous proposer la fonctionnalité de contact par chat avec le support d'Immersion Facilitée. Il peut déposer 5 cookies sur votre navigateur.",
+          "Crisp est un outil de chat qui nous permet de vous proposer une assistance en direct. Il peut déposer jusqu'à 5 cookies sur votre navigateur. Ces cookies proviennent de notre domaine beta.gouv.fr.",
         link: "https://crisp.chat/fr/privacy/",
       },
     ],
@@ -61,13 +61,12 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
     consentKey: "googleCSE",
     title: "Fonctionnalité de recherche",
     description:
-      "Nous utilisons Google Programmable Search Engine (CSE) pour vous permettre d’effectuer des recherches sur notre site à l’aide de la technologie Google.\n" +
-      "La désactivation de cette fonctionnalité peut altérer ou désactiver la recherche sur Dora.",
+      "Nous utilisons Google Programmable Search Engine (CSE) pour la recherche sur notre site. Important : Les cookies Google sont stockés sur le domaine google.com. Le refus de consentement empêche le chargement de nouveaux cookies, mais ne peut pas supprimer les cookies Google existants. Pour les supprimer, utilisez les paramètres de votre navigateur. La désactivation de cette fonctionnalité peut altérer ou désactiver la recherche sur Dora.",
     cookies: [
       {
         title: "Google CSE",
         description:
-          "Nous utilisons Google Programmable Search Engine (CSE) pour vous permettre d’effectuer des recherches sur notre site à l’aide de la technologie Google. La désactivation de cette fonctionnalité peut altérer ou désactiver la recherche sur Dora.",
+          "Google Programmable Search Engine permet d'effectuer des recherches sur notre site. Limitation technique : Les cookies Google sont déposés sur le domaine google.com et ne peuvent pas être supprimés automatiquement par notre site. Le refus de consentement empêchera le chargement de la fonctionnalité de recherche et donc de nouveaux cookies Google.",
         link: "https://policies.google.com/technologies/cookies?hl=fr-fr",
       },
     ],
