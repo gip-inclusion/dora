@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from django.core.management.base import BaseCommand
 
-from dora.services.models import Service
+from dora.services.models import Service, ServiceSubCategory
 
 
 class Command(BaseCommand):
@@ -62,6 +62,26 @@ class Command(BaseCommand):
                 )
             )
             return
+
+        # Validation des subcategories
+        if subcategories:
+            valid_subcategories = set(
+                ServiceSubCategory.objects.values_list("value", flat=True)
+            )
+            invalid_subcategories = [
+                subcat for subcat in subcategories if subcat not in valid_subcategories
+            ]
+
+            if invalid_subcategories:
+                self.stdout.write(
+                    self.style.ERROR(
+                        f"Erreur: Les sous-catégories suivantes ne sont pas valides: {', '.join(invalid_subcategories)}\n"
+                    )
+                )
+                self.stdout.write(
+                    f"Sous-catégories valides disponibles: {', '.join(sorted(valid_subcategories))}"
+                )
+                return
 
         # Construction de la requête
         filters = []
