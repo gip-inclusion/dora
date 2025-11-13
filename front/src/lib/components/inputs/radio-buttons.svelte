@@ -34,6 +34,7 @@
       class:horizontal-divider={horizontal && i > 0}
       class:opacity-50={disabled}
       class:cursor-not-allowed={disabled}
+      class:cursor-pointer={!disabled}
     >
       <input
         id={`${id}-${i}`}

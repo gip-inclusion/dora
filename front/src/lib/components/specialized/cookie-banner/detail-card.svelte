@@ -73,14 +73,14 @@
     {#if categoryConfig.consentKey !== "required"}
       {#if !showCookieDetails}
         <div
-          class="text-magenta-cta flex underline"
+          class="text-magenta-cta flex cursor-pointer underline"
           on:click={() => (showCookieDetails = !showCookieDetails)}
         >
           Voir plus de détails <ArrowDownSLineArrows />
         </div>
       {:else}
         <div
-          class="text-magenta-cta mb-s8 flex underline"
+          class="text-magenta-cta mb-s8 flex cursor-pointer underline"
           on:click={() => (showCookieDetails = !showCookieDetails)}
         >
           Cacher les détails <ArrowUpSLineArrows />
