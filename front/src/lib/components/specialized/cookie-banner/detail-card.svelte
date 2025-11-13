@@ -54,8 +54,11 @@
       </div>
     </div>
     {#if link}
-      <a class="text-gray-text text-[1rem] underline" href={link}
-        >Voir le site officiel</a
+      <a
+        class="text-gray-text text-[1rem] underline"
+        target="_blank"
+        rel="noopener noreferrer"
+        href={link}>Voir le site officiel</a
       >
     {/if}
   </div>
