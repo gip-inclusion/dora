@@ -45,13 +45,9 @@ class Command(BaseCommand):
         return {
             "id": service.id,
             "slug": service.slug,
-            "nom": service.name.strip() if service.name else "",
-            "description_courte": service.short_desc.strip()
-            if service.short_desc
-            else "",
-            "description_longue": service.full_desc.strip()
-            if service.full_desc
-            else "",
+            "nom": service.name.strip(),
+            "description_courte": service.short_desc.strip(),
+            "description_longue": service.full_desc.strip(),
         }
 
     def handle(self, *args, **options):
