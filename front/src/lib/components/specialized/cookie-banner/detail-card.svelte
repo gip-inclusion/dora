@@ -32,11 +32,11 @@
 {#snippet card(title, description, id, link = null)}
   <div>
     <div class="flex justify-between">
-      <div class="md:pr-s64 pr-s8">
+      <div class="md:pr-s64 pr-s32 max-w-1/2 md:max-w-full">
         <h2 class="text-[1.25rem]">{title}</h2>
         <p class="text-[1rem]">{description}</p>
       </div>
-      <div>
+      <div class="max-w-1/2 md:max-w-full">
         <RadioButtons
           {id}
           bind:group={value}
