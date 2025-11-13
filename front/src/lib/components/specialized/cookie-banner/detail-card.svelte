@@ -2,7 +2,6 @@
   import RadioButtons from "$lib/components/inputs/radio-buttons.svelte";
   import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
   import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
-  import { MOBILE_BREAKPOINT } from "$lib/consts";
 
   let {
     categoryConfig,
@@ -18,8 +17,6 @@
     value = true;
   }
 
-  let innerWidth = $state(0);
-
   $effect(() => {
     if (showCookieDetails && detailsContainer) {
       setTimeout(() => {
@@ -31,12 +28,12 @@
 
 {#snippet card(title, description, id, link = null)}
   <div>
-    <div class="flex justify-between">
-      <div class="md:pr-s64 pr-s32 max-w-1/2 md:max-w-full">
+    <div class="flex flex-col justify-between md:flex-row">
+      <div class="md:pr-s64 pr-0">
         <h2 class="text-[1.25rem]">{title}</h2>
         <p class="text-[1rem]">{description}</p>
       </div>
-      <div class="max-w-1/2 md:max-w-full">
+      <div class="mb-s8 md:mb-0">
         <RadioButtons
           {id}
           bind:group={value}
@@ -50,7 +47,7 @@
               label: "Refuser",
             },
           ]}
-          horizontal={innerWidth > MOBILE_BREAKPOINT}
+          horizontal
           onchange={() => toggleConsentByKey(categoryConfig.consentKey)}
           {disabled}
         />
@@ -64,7 +61,6 @@
   </div>
 {/snippet}
 
-<svelte:window bind:innerWidth />
 <div
   class="gap-s64 border-color-gray pt-s8 border-b-gray-02 flex-col justify-between border-b-1"
 >

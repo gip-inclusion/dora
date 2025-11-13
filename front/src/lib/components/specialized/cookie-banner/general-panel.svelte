@@ -11,7 +11,7 @@
 </script>
 
 <div
-  class="mx-s4 md:mx-s0 bottom-s40 md:left-s40 p-s4 md:p-s32 fixed z-[9999] bg-white shadow-md"
+  class="mx-s8 md:mx-s0 bottom-s8 md:bottom-s40 md:left-s40 p-s32 fixed z-[9999] bg-white shadow-md"
 >
   <div class="md:w-[588px]">
     <h2 class="text-gray-dark mb-s32 text-[1.5rem]">
@@ -30,7 +30,9 @@
       activer.
     </p>
 
-    <div class="gap-s4 md:gap-s16 flex justify-center md:justify-end">
+    <div
+      class="gap-s8 md:gap-s16 flex w-full flex-col justify-center md:flex-row md:justify-end"
+    >
       <Button label="Personnaliser" secondary onclick={handlePersonalize}
       ></Button>
       <Button label="Tout refuser" onclick={handleRejectAll}></Button>

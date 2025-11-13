@@ -26,7 +26,6 @@
     sortSubcategory,
   } from "$lib/utils/service";
   import { getQueryString } from "$lib/utils/service-search";
-  import { MOBILE_BREAKPOINT } from "$lib/consts";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -65,6 +64,7 @@
   let innerWidth = $state();
   let submitDisabled = $state(!initialSearch);
   let refreshMode = $state(false);
+  const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
   let subCategories: Choice[] = $state([]);
 
   let query = $derived(

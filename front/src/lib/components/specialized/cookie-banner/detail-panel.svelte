@@ -51,9 +51,9 @@
         Panneau de gestion des cookies
       </h2>
       <div
-        class="mb-s16 pb-s8 border-b-gray-02 flex justify-between border-b-1"
+        class="mb-s16 pb-s8 border-b-gray-02 flex flex-col justify-between border-b-1 md:flex-row"
       >
-        <div class="justify-items pr-s16 flex flex-col">
+        <div class="justify-items pr-s16 mb-s8 flex flex-col md:mb-0">
           <p class="mb-s4 text-[1rem]">Préférences pour tous les services</p>
           <a
             class="text-magenta-cta underline"

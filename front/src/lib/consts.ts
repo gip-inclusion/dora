@@ -22,5 +22,3 @@ export const DI_METABASE_DASHBOARD_URL = (departmentName: string) =>
 
 export const RATE_LIMIT_MESSAGE =
   "Vous avez effectué trop de requêtes. Veuillez patienter une minute avant de réessayer.";
-
-export const MOBILE_BREAKPOINT = 768; // 'md' from https://tailwindcss.com/docs/screens
