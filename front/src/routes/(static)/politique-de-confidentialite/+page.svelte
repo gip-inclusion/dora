@@ -27,15 +27,13 @@
       en l’ayant configuré en mode « exempté », conformément aux
       <a
         href="https://www.cnil.fr/fr/solutions-pour-la-mesure-daudience"
-        class="underline"
-      >
-        recommandations de la CNIL</a
+        class="underline">recommandations de la CNIL</a
       >. Elle ne nécessite donc pas le consentement des personnes concernées.
       Vous pouvez malgré tout vous opposer au suivi de votre navigation via
-      <a
+      <button
         class="text-magenta-cta cursor-pointer underline"
-        onclick={showCookieBanner}>le gestionnaire de cookies.</a
-      >
+        onclick={showCookieBanner}>le gestionnaire de cookies</button
+      >.
     </p>
   </div>
 </CenteredGrid>

@@ -75,19 +75,19 @@
   <div class="mb-s8 flex flex-col">
     {#if categoryConfig.consentKey !== "required"}
       {#if !showCookieDetails}
-        <div
+        <button
           class="text-magenta-cta flex cursor-pointer underline"
-          on:click={() => (showCookieDetails = !showCookieDetails)}
+          onclick={() => (showCookieDetails = !showCookieDetails)}
         >
           Voir plus de détails <ArrowDownSLineArrows />
-        </div>
+        </button>
       {:else}
-        <div
+        <button
           class="text-magenta-cta mb-s8 flex cursor-pointer underline"
-          on:click={() => (showCookieDetails = !showCookieDetails)}
+          onclick={() => (showCookieDetails = !showCookieDetails)}
         >
           Cacher les détails <ArrowUpSLineArrows />
-        </div>
+        </button>
         <div bind:this={detailsContainer}>
           {#each categoryConfig.cookies as cookie, i}
             {@render card(
