@@ -61,7 +61,7 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
     consentKey: "googleCSE",
     title: "Fonctionnalité de recherche",
     description:
-      "Nous utilisons Google Programmable Search Engine (CSE) pour la recherche sur notre site. Important : Les cookies Google sont stockés sur le domaine google.com. Le refus de consentement empêche le chargement de nouveaux cookies, mais ne peut pas supprimer les cookies Google existants. Pour les supprimer, utilisez les paramètres de votre navigateur. La désactivation de cette fonctionnalité peut altérer ou désactiver la recherche sur Dora.",
+      "Nous utilisons Google Programmable Search Engine (CSE) pour la recherche sur notre site. Important : Les cookies Google sont stockés sur le domaine google.com. Le refus de consentement empêche le chargement de nouveaux cookies, mais ne peut pas supprimer les cookies Google existants. Pour les supprimer, utilisez les paramètres de votre navigateur. La désactivation de cette fonctionnalité peut altérer ou désactiver la recherche sur Dora.",
     cookies: [
       {
         title: "Google CSE",
