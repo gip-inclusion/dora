@@ -38,7 +38,7 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
       {
         title: "Matomo",
         description:
-          "Matomo est un outil de mesure d'audience respectueux de la vie privée. Il peut déposer jusqu'à 7 cookies sur votre navigateur pour suivre votre navigation et nous aider à améliorer le site. Ces cookies sont stockés sur notre domaine et peuvent être supprimés à tout moment.",
+          "Matomo est un outil de mesure d’audience respectueux de la vie privée. Il peut déposer jusqu'à 7 cookies sur votre navigateur pour suivre votre navigation et nous aider à améliorer le site. Ces cookies sont stockés sur notre domaine et peuvent être supprimés à tout moment.",
         link: "https://matomo.org/faq/general/faq_146/",
       },
     ],
