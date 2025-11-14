@@ -1,7 +1,10 @@
 <script lang="ts">
+  import { slide } from "svelte/transition";
   import RadioButtons from "$lib/components/inputs/radio-buttons.svelte";
   import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
   import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
+
+  const TRANSITION_DURATION = 300;
 
   let {
     categoryConfig,
@@ -21,7 +24,7 @@
     if (showCookieDetails && detailsContainer) {
       setTimeout(() => {
         detailsContainer?.scrollIntoView({ behavior: "smooth", block: "end" });
-      }, 100);
+      }, TRANSITION_DURATION + 50);
     }
   });
 </script>
@@ -88,7 +91,10 @@
         >
           Cacher les détails <ArrowUpSLineArrows />
         </button>
-        <div bind:this={detailsContainer}>
+        <div
+          bind:this={detailsContainer}
+          transition:slide={{ duration: TRANSITION_DURATION }}
+        >
           {#each categoryConfig.cookies as cookie, i}
             {@render card(
               cookie.title,
