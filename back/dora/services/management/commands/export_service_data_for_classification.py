@@ -4,28 +4,19 @@ from datetime import datetime
 from typing import Any, Dict
 
 from django.core.management.base import BaseCommand
+from django.db.models import Count, F, Q
 
-from dora.services.models import Service, ServiceCategory, ServiceSubCategory
+from dora.services.models import Service, ServiceCategory
 
 
 class Command(BaseCommand):
     help = (
         "Exporte les données des services vers un fichier CSV. "
-        "Permet de filtrer par sous-catégories spécifiques ou par sous-catégories se terminant par '--autre'."
+        "Filtre automatiquement les services ayant uniquement des sous-catégories se terminant par '--autre' "
+        "et/ou la sous-catégorie 'accompagnement-social-et-professionnel-personnalise--parcours-d-insertion-socioprofessionnel'."
     )
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            "--subcategories",
-            nargs="+",
-            type=str,
-            help="Une ou plusieurs sous-catégories (values) à filtrer",
-        )
-        parser.add_argument(
-            "--autre",
-            action="store_true",
-            help="Sélectionne les services dont la sous-catégorie se termine par '--autre'",
-        )
         parser.add_argument(
             "--output",
             type=str,
@@ -75,63 +66,36 @@ class Command(BaseCommand):
         }
 
     def handle(self, *args, **options):
-        subcategories = options.get("subcategories")
-        autre = options.get("autre")
+        # Filtre pour les services ayant uniquement des sous-catégories se terminant par "--autre"
+        # ou la sous-catégorie "accompagnement-social-et-professionnel-personnalise--parcours-d-insertion-socioprofessionnel"
+        generalist_category = "accompagnement-social-et-professionnel-personnalise--parcours-d-insertion-socioprofessionnel"
 
-        # Validation des arguments
-        if not subcategories and not autre:
-            self.stdout.write(
-                self.style.ERROR(
-                    "Erreur: Vous devez spécifier au moins --subcategories ou --autre"
-                )
+        self.stdout.write(
+            "Recherche des services ayant uniquement des sous-catégories se terminant par '--autre' "
+            f"ou la sous-catégorie '{generalist_category}'...\n"
+        )
+
+        # Filtrer les services qui ont UNIQUEMENT des sous-catégories généralistes
+        # On annote chaque service avec :
+        # - Le nombre total de sous-catégories
+        # - Le nombre de sous-catégories généralistes (se terminant par --autre ou égales à generalist_category)
+        # On ne garde que ceux où ces deux nombres sont égaux
+        services = (
+            Service.objects.annotate(
+                total_subcats=Count("subcategories", distinct=True),
+                generalist_subcats=Count(
+                    "subcategories",
+                    filter=Q(subcategories__value__endswith="--autre")
+                    | Q(subcategories__value=generalist_category),
+                    distinct=True,
+                ),
             )
-            return
-
-        # Validation des subcategories
-        if subcategories:
-            valid_subcategories = set(
-                ServiceSubCategory.objects.values_list("value", flat=True)
-            )
-            invalid_subcategories = [
-                subcat for subcat in subcategories if subcat not in valid_subcategories
-            ]
-
-            if invalid_subcategories:
-                self.stdout.write(
-                    self.style.ERROR(
-                        f"Erreur: Les sous-catégories suivantes ne sont pas valides: {', '.join(invalid_subcategories)}\n"
-                    )
-                )
-                self.stdout.write(
-                    f"Sous-catégories valides disponibles: {', '.join(sorted(valid_subcategories))}"
-                )
-                return
-
-        # Construction de la requête
-        filters = []
-        messages = []
-
-        if subcategories:
-            filters.append(
-                Service.objects.filter(subcategories__value__in=subcategories)
-            )
-            messages.append(f"sous-catégories: {', '.join(subcategories)}")
-
-        if autre:
-            filters.append(
-                Service.objects.filter(subcategories__value__endswith="--autre")
-            )
-            messages.append("sous-catégories se terminant par '--autre'")
-
-        if len(filters) == 1:
-            services = filters[0].distinct()
-            self.stdout.write(f"Recherche des services avec {messages[0]}...\n")
-        else:
-            # Combinaison: sous-catégories spécifiques OU se terminant par --autre
-            services = filters[0].distinct() | filters[1].distinct()
-            self.stdout.write(
-                f"Recherche des services avec {', ou '.join(messages)}...\n"
-            )
+            .filter(total_subcats__gt=0)  # Au moins une sous-catégorie
+            .filter(
+                total_subcats=F("generalist_subcats")
+            )  # Toutes les sous-catégories sont généralistes
+            .distinct()
+        )
 
         # Rassemblement des données
         service_data_list = []
