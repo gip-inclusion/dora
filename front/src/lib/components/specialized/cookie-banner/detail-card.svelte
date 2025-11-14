@@ -3,15 +3,23 @@
   import RadioButtons from "$lib/components/inputs/radio-buttons.svelte";
   import ArrowUpSLineArrows from "svelte-remix/ArrowUpSLineArrows.svelte";
   import ArrowDownSLineArrows from "svelte-remix/ArrowDownSLineArrows.svelte";
+  import type { ConsentConfig } from "$lib/utils/consent.svelte";
 
   const TRANSITION_DURATION = 300;
+
+  interface Props {
+    categoryConfig: ConsentConfig;
+    toggleConsentByKey: (consentKey: string) => void;
+    disabled: boolean;
+    value: boolean;
+  }
 
   let {
     categoryConfig,
     toggleConsentByKey,
-    disabled = false,
+    disabled,
     value = $bindable(),
-  } = $props();
+  }: Props = $props();
 
   let showCookieDetails = $state(false);
   let detailsContainer = $state<HTMLDivElement | undefined>();

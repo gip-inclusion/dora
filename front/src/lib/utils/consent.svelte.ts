@@ -15,7 +15,8 @@ const CONSENT_EXPIRY_MONTHS = 13;
 const CONSENT_KEYS = ["matomo", "googleCSE", "crisp"] as const;
 
 type ConsentConfigKey = ConsentKey | "required";
-interface ConsentConfig {
+
+export interface ConsentConfig {
   consentKey: ConsentConfigKey;
   title: string;
   description: string;
