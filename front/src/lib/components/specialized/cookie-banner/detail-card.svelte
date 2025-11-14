@@ -79,14 +79,14 @@
     {#if categoryConfig.consentKey !== "required"}
       {#if !showCookieDetails}
         <button
-          class="text-magenta-cta flex cursor-pointer underline"
+          class="text-magenta-cta flex underline"
           onclick={() => (showCookieDetails = !showCookieDetails)}
         >
           Voir plus de détails <ArrowDownSLineArrows />
         </button>
       {:else}
         <button
-          class="text-magenta-cta mb-s8 flex cursor-pointer underline"
+          class="text-magenta-cta mb-s8 flex underline"
           onclick={() => (showCookieDetails = !showCookieDetails)}
         >
           Cacher les détails <ArrowUpSLineArrows />

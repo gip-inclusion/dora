@@ -29,9 +29,8 @@
         class="underline">recommandations de la CNIL</a
       >. Elle ne nécessite donc pas le consentement des personnes concernées.
       Vous pouvez malgré tout vous opposer au suivi de votre navigation via
-      <button
-        class="text-magenta-cta cursor-pointer underline"
-        onclick={showCookieBanner}>le gestionnaire de cookies</button
+      <button class="text-magenta-cta underline" onclick={showCookieBanner}
+        >le gestionnaire de cookies</button
       >.
     </p>
   </div>
