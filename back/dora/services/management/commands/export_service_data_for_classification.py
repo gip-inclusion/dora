@@ -1,10 +1,11 @@
 import csv
+from collections import defaultdict
 from datetime import datetime
 from typing import Any, Dict
 
 from django.core.management.base import BaseCommand
 
-from dora.services.models import Service, ServiceSubCategory
+from dora.services.models import Service, ServiceCategory, ServiceSubCategory
 
 
 class Command(BaseCommand):
@@ -41,6 +42,28 @@ class Command(BaseCommand):
         Returns:
             Dictionnaire contenant les données du service
         """
+        categories_dict = defaultdict(list)
+
+        for subcat in service.subcategories.all().order_by("value"):
+            category_value = (
+                subcat.value.split("--")[0] if "--" in subcat.value else None
+            )
+
+            if category_value:
+                try:
+                    category = ServiceCategory.objects.get(value=category_value)
+                    category_label = category.label
+                except ServiceCategory.DoesNotExist:
+                    category_label = category_value
+                categories_dict[category_label].append(subcat.label)
+
+        cats_subcats = []
+        for category_label in sorted(categories_dict.keys()):
+            subcats = categories_dict[category_label]
+            for subcat_label in subcats:
+                cats_subcats.append(f"{category_label} > {subcat_label}")
+
+        cats_subcats_concat = "\n".join(cats_subcats)
 
         return {
             "id": service.id,
@@ -48,6 +71,7 @@ class Command(BaseCommand):
             "nom": service.name.strip(),
             "description_courte": service.short_desc.strip(),
             "description_longue": service.full_desc.strip(),
+            "thematiques_existantes": cats_subcats_concat,
         }
 
     def handle(self, *args, **options):
@@ -145,6 +169,7 @@ class Command(BaseCommand):
                 "nom",
                 "description_courte",
                 "description_longue",
+                "thematiques_existantes",
             ]
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writeheader()
