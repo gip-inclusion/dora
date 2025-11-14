@@ -139,7 +139,7 @@ class Command(BaseCommand):
                 "",
                 user.last_login,
                 "ProConnect" if user.sub_pc else "Magic Link",
-                "",  # employeur / prescripteur ?
+                user.get_main_activity_display().lower(),
                 self.run_at,
             ]
 
