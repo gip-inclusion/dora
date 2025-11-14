@@ -24,7 +24,7 @@
       DORA utilise également la solution de mesure d’audience
       <a href="https://matomo.org/" class="underline"> Matomo </a>
 
-      en l'ayant configuré en mode « exempté », conformément aux
+      en l’ayant configuré en mode « exempté », conformément aux
       <a
         href="https://www.cnil.fr/fr/solutions-pour-la-mesure-daudience"
         class="underline"
