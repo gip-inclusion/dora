@@ -18,7 +18,7 @@
       À propos des cookies sur dora.inclusion.gouv.fr
     </h2>
     <p class="mb-s32 leading-relaxed text-gray-600">
-      Bienvenue ! Nous utilisons des cookies pour améliorer votre expérience et
+      Bienvenue ! Nous utilisons des cookies pour améliorer votre expérience et
       les services disponibles sur ce site. Pour en savoir plus, visitez la page
       <a
         href="politique-de-confidentialite"
