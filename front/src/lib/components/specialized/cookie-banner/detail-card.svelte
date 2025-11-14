@@ -11,7 +11,7 @@
   } = $props();
 
   let showCookieDetails = $state(false);
-  let detailsContainer: HTMLDivElement | undefined = $state();
+  let detailsContainer = $state<HTMLDivElement | undefined>();
 
   if (categoryConfig.consentKey === "required") {
     value = true;
