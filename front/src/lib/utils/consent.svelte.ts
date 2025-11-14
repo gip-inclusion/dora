@@ -66,7 +66,7 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
       {
         title: "Google CSE",
         description:
-          "Google Programmable Search Engine permet d'effectuer des recherches sur notre site. Limitation technique : Les cookies Google sont déposés sur le domaine google.com et ne peuvent pas être supprimés automatiquement par notre site. Le refus de consentement empêchera le chargement de la fonctionnalité de recherche et donc de nouveaux cookies Google.",
+          "Google Programmable Search Engine permet d’effectuer des recherches sur notre site. Limitation technique : Les cookies Google sont déposés sur le domaine google.com et ne peuvent pas être supprimés automatiquement par notre site. Le refus de consentement empêchera le chargement de la fonctionnalité de recherche et donc de nouveaux cookies Google.",
         link: "https://policies.google.com/technologies/cookies?hl=fr-fr",
       },
     ],
