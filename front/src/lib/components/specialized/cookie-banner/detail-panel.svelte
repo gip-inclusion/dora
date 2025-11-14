@@ -47,14 +47,12 @@
       noPadding
     />
     <div>
-      <h2 class="mb-s32 mt-s16 text-[1.5rem]">
-        Panneau de gestion des cookies
-      </h2>
+      <h2 class="mb-s32 mt-s16 text-f24">Panneau de gestion des cookies</h2>
       <div
         class="mb-s16 pb-s8 border-b-gray-02 flex flex-col justify-between border-b-1 md:flex-row"
       >
         <div class="justify-items pr-s16 mb-s8 flex flex-col md:mb-0">
-          <p class="mb-s4 text-[1rem]">Préférences pour tous les services</p>
+          <p class="mb-s4 text-f16">Préférences pour tous les services</p>
           <a
             class="text-magenta-cta underline"
             href="/politique-de-confidentialite"

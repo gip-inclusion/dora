@@ -14,7 +14,7 @@
   class="mx-s8 md:mx-s0 bottom-s8 md:bottom-s40 md:left-s40 p-s32 fixed z-[9999] bg-white shadow-md"
 >
   <div class="md:w-[588px]">
-    <h2 class="text-gray-dark mb-s32 text-[1.5rem]">
+    <h2 class="text-gray-dark mb-s32 text-f24">
       À propos des cookies sur dora.inclusion.gouv.fr
     </h2>
     <p class="mb-s32 leading-relaxed text-gray-600">
