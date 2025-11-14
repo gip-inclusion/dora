@@ -27,7 +27,7 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
     consentKey: "required",
     title: "Cookies obligatoires",
     description:
-      "Ce site utilise des cookies nécessaires à son bon fonctionnement qui ne peuvent pas être désactivés. Ils incluent les cookies de session pour l'authentification et la gestion de votre consentement aux cookies.",
+      "Ce site utilise des cookies nécessaires à son bon fonctionnement qui ne peuvent pas être désactivés. Ils incluent les cookies de session pour l’authentification et la gestion de votre consentement aux cookies.",
   },
   audience: {
     consentKey: "matomo",
