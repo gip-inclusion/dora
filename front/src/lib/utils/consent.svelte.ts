@@ -33,7 +33,7 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
     consentKey: "matomo",
     title: "Mesure d'audience",
     description:
-      "Nous utilisons Matomo pour mesurer l'audience de notre site et améliorer son contenu. Vos données restent sur nos serveurs et ne sont jamais partagées avec des tiers. Ces cookies peuvent être supprimés automatiquement si vous retirez votre consentement.",
+      "Nous utilisons Matomo pour mesurer l’audience de notre site et améliorer son contenu. Vos données restent sur nos serveurs et ne sont jamais partagées avec des tiers. Ces cookies peuvent être supprimés automatiquement si vous retirez votre consentement.",
     cookies: [
       {
         title: "Matomo",
