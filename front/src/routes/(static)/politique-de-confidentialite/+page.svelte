@@ -21,7 +21,7 @@
 
   <div class="mt-s48 max-w-3xl">
     <p>
-      DORA utilise également la solution de mesure d'audience
+      DORA utilise également la solution de mesure d’audience
       <a href="https://matomo.org/" class="underline"> Matomo </a>
 
       en l'ayant configuré en mode « exempté », conformément aux
