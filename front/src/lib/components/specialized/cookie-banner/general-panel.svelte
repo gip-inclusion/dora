@@ -11,7 +11,7 @@
 </script>
 
 <div
-  class="mx-s8 md:mx-s0 bottom-s8 md:bottom-s40 md:left-s40 p-s32 fixed z-[9999] bg-white shadow-md"
+  class="mx-s8 md:mx-s0 bottom-s8 md:bottom-s40 md:left-s40 p-s32 fixed z-9999 bg-white shadow-md"
 >
   <div class="md:w-[588px]">
     <h2 class="text-gray-dark mb-s32 text-f24">
