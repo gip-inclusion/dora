@@ -29,12 +29,16 @@
 <div class="gap-s8 flex {horizontal ? 'flex-row' : 'flex-col'}">
   {#each choices as choice, i}
     <label
-      class="focus-within:shadow-focus p-s2 flex flex-row items-center rounded outline-0"
-      class:outline={choice.value === focusValue}
-      class:horizontal-divider={horizontal && i > 0}
-      class:opacity-50={disabled}
-      class:cursor-not-allowed={disabled}
-      class:cursor-pointer={!disabled}
+      class={[
+        "focus-within:shadow-focus p-s2 flex flex-row items-center rounded outline-0",
+        {
+          outline: choice.value === focusValue,
+          "horizontal-divider": horizontal && i > 0,
+          "opacity-50": disabled,
+          "cursor-not-allowed": disabled,
+          "cursor-pointer": !disabled,
+        },
+      ]}
     >
       <input
         id={`${id}-${i}`}
