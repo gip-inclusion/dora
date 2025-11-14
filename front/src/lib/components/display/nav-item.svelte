@@ -17,7 +17,7 @@
 </script>
 
 <a
-  class="text-f14 text-gray-text"
+  class="text-f14 text-gray-text cursor-pointer"
   {onclick}
   {href}
   target={otherTab ? "_blank" : ""}

@@ -11,6 +11,7 @@
   import { userInfo } from "$lib/utils/auth";
   import { trackPageView } from "$lib/utils/stats";
   import { enforceCrispConsent } from "$lib/utils/consent.svelte";
+  import CookieBanner from "$lib/components/specialized/cookie-banner/cookie-banner.svelte";
   interface Props {
     children?: Snippet;
   }
@@ -60,4 +61,5 @@
 </main>
 
 <Footer />
+<CookieBanner />
 <SvelteToast />

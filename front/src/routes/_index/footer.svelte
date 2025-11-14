@@ -5,6 +5,7 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import LinkButton from "$lib/components/display/link-button.svelte";
   import NavItem from "$lib/components/display/nav-item.svelte";
+  import { showCookieBanner } from "$lib/utils/consent.svelte";
 </script>
 
 <hr class="border-t-gray-01 print:hidden" />
@@ -77,6 +78,7 @@
         label="Données personnelles"
         href="/politique-de-confidentialite"
       />
+      <NavItem label="Gestion des cookies" onclick={showCookieBanner} />
       <NavItem label="Accessibilité : non conforme" href="/accessibilite" />
 
       <NavItem label="Statistiques" href="/stats" />
