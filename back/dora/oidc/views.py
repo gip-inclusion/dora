@@ -16,6 +16,8 @@ from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 
+from dora.core.constants import FRONTEND_PC_CALLBACK_URL
+
 logger = logging.getLogger(__name__)
 
 
@@ -39,7 +41,7 @@ def oidc_logged_in(request):
     # attention : l'utilisateur est toujours anonyme (à ce point il n'existe qu'un token DRF)
     token = Token.objects.get(user_id=request.session["_auth_user_id"])
 
-    redirect_uri = f"{settings.FRONTEND_URL}/auth/pc-callback"
+    redirect_uri = FRONTEND_PC_CALLBACK_URL
 
     # gestion du `next` :
     if request.GET.get("next"):
