@@ -39,7 +39,7 @@ def oidc_logged_in(request):
     # attention : l'utilisateur est toujours anonyme (à ce point il n'existe qu'un token DRF)
     token = Token.objects.get(user_id=request.session["_auth_user_id"])
 
-    redirect_uri = f"{settings.FRONTEND_URL}/auth/pc-callback/{token}/"
+    redirect_uri = f"{settings.FRONTEND_URL}/auth/pc-callback"
 
     # gestion du `next` :
     if request.GET.get("next"):
@@ -52,6 +52,8 @@ def oidc_logged_in(request):
             siret=siret_safir["siret"], safir=siret_safir["safir"]
         )
         redirect_uri += "&" + urlencode(url_params)
+
+    redirect_uri += f"#token={token.key}"
 
     # on redirige (pour l'instant) vers le front en faisant passer le token DRF
     return HttpResponseRedirect(redirect_to=redirect_uri)
