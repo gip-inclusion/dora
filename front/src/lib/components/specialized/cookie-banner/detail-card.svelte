@@ -41,7 +41,11 @@
   <div>
     <div class="flex flex-col justify-between md:flex-row">
       <div class={["md:pr-s64 pr-0", { "ml-s8": link }]}>
-        <h2 class={link ? "text-f16" : "text-f20"}>{title}</h2>
+        {#if !link}
+          <h2>{title}</h2>
+        {:else}
+          <h3 class="text-france-blue">{title}</h3>
+        {/if}
         <p class="text-f16">{description}</p>
       </div>
       <div class="mb-s8 md:mb-0">
