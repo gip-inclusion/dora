@@ -4,8 +4,7 @@ import { redirect } from "@sveltejs/kit";
 import { getNextPage } from "../utils";
 
 export const load = ({ url }) => {
-  const hash = window.location.hash;
-  const token = hash.split("=")[1];
+  const token = window.location.hash.substring(1);
 
   setToken(token);
 

@@ -70,7 +70,7 @@ def authenticate_with_link(request, sesame):
             # pour ne pas effectuer le flow de déconnexion OIDC en entier
             request.session[settings.SESAME_SESSION_NAME] = True
 
-            redirect_uri = f"{FRONTEND_PC_CALLBACK_URL}#token={token}"
+            redirect_uri = f"{FRONTEND_PC_CALLBACK_URL}#{token.key}"
             return HttpResponseRedirect(redirect_uri)
 
     logger.warning(

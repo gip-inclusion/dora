@@ -55,7 +55,7 @@ def oidc_logged_in(request):
         )
         redirect_uri += "&" + urlencode(url_params)
 
-    redirect_uri += f"#token={token.key}"
+    redirect_uri += f"#{token.key}"
 
     # on redirige (pour l'instant) vers le front en faisant passer le token DRF
     return HttpResponseRedirect(redirect_to=redirect_uri)
