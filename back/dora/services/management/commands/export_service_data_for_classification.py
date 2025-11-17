@@ -48,13 +48,13 @@ class Command(BaseCommand):
                     category_label = category_value
                 categories_dict[category_label].append(subcat.label)
 
-        cats_subcats = []
+        formatted_subcats = []
         for category_label in sorted(categories_dict.keys()):
             subcats = categories_dict[category_label]
             for subcat_label in subcats:
-                cats_subcats.append(f"{category_label} > {subcat_label}")
+                formatted_subcats.append(f"{category_label} > {subcat_label}")
 
-        cats_subcats_concat = "\n".join(cats_subcats)
+        joined_formatted_subcats = "\n".join(formatted_subcats)
 
         return {
             "id": service.id,
@@ -62,7 +62,7 @@ class Command(BaseCommand):
             "nom": service.name.strip(),
             "description_courte": service.short_desc.strip(),
             "description_longue": service.full_desc.strip(),
-            "thematiques_existantes": cats_subcats_concat,
+            "thematiques_existantes": joined_formatted_subcats,
         }
 
     def handle(self, *args, **options):
