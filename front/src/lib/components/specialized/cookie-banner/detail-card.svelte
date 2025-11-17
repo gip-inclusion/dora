@@ -40,7 +40,7 @@
 {#snippet card(title = "", description = "", id = "", link = "")}
   <div>
     <div class="flex flex-col justify-between md:flex-row">
-      <div class={[" md:pr-s64 pr-0", { "ml-s8": link }]}>
+      <div class={["md:pr-s64 pr-0", { "ml-s8": link }]}>
         {#if !link}
           <h3 class="text-france-blue">{title}</h3>
         {:else}
