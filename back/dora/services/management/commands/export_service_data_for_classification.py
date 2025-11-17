@@ -10,10 +10,12 @@ from dora.services.models import Service, ServiceCategory
 
 
 class Command(BaseCommand):
+    generalist_category = "accompagnement-social-et-professionnel-personnalise--parcours-d-insertion-socioprofessionnel"
+
     help = (
         "Exporte les données des services vers un fichier CSV. "
         "Filtre automatiquement les services ayant uniquement des sous-catégories se terminant par '--autre' "
-        "et/ou la sous-catégorie 'accompagnement-social-et-professionnel-personnalise--parcours-d-insertion-socioprofessionnel'."
+        f"et/ou la sous-catégorie '{generalist_category}'."
     )
 
     def add_arguments(self, parser):
@@ -67,12 +69,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Filtre pour les services ayant uniquement des sous-catégories se terminant par "--autre"
-        # ou la sous-catégorie "accompagnement-social-et-professionnel-personnalise--parcours-d-insertion-socioprofessionnel"
-        generalist_category = "accompagnement-social-et-professionnel-personnalise--parcours-d-insertion-socioprofessionnel"
+        # ou la sous-catégorie généraliste
 
         self.stdout.write(
             "Recherche des services ayant uniquement des sous-catégories se terminant par '--autre' "
-            f"ou la sous-catégorie '{generalist_category}'...\n"
+            f"et/ou la sous-catégorie '{self.generalist_category}'...\n"
         )
 
         # Filtrer les services qui ont UNIQUEMENT des sous-catégories généralistes
@@ -86,7 +87,7 @@ class Command(BaseCommand):
                 generalist_subcats=Count(
                     "subcategories",
                     filter=Q(subcategories__value__endswith="--autre")
-                    | Q(subcategories__value=generalist_category),
+                    | Q(subcategories__value=self.generalist_category),
                     distinct=True,
                 ),
             )
