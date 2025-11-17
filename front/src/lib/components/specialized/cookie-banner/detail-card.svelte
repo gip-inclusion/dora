@@ -40,8 +40,8 @@
 {#snippet card(title = "", description = "", id = "", link = "")}
   <div>
     <div class="flex flex-col justify-between md:flex-row">
-      <div class="md:pr-s64 pr-0">
-        <h2 class="text-f20">{title}</h2>
+      <div class={["md:pr-s64 pr-0", { "ml-s8": link }]}>
+        <h2 class={link ? "text-f16" : "text-f20"}>{title}</h2>
         <p class="text-f16">{description}</p>
       </div>
       <div class="mb-s8 md:mb-0">
@@ -66,7 +66,7 @@
     </div>
     {#if link}
       <a
-        class="text-gray-text text-f16 underline"
+        class="text-gray-text text-f16 ml-s8 underline"
         target="_blank"
         rel="noopener noreferrer"
         href={link}>Voir le site officiel</a
