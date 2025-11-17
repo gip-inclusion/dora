@@ -20,7 +20,7 @@ export interface ConsentConfig {
   consentKey: ConsentConfigKey;
   title: string;
   description: string;
-  cookies?: Array<{ title: string; description: string; link: string }>;
+  cookies: Array<{ title: string; description: string; link: string }>;
 }
 
 export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
@@ -29,6 +29,7 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
     title: "Cookies obligatoires",
     description:
       "Ce site utilise des cookies nécessaires à son bon fonctionnement qui ne peuvent pas être désactivés. Ils incluent les cookies de session pour l’authentification et la gestion de votre consentement aux cookies.",
+    cookies: [],
   },
   audience: {
     consentKey: "matomo",

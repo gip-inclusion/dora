@@ -37,7 +37,7 @@
   });
 </script>
 
-{#snippet card(title, description, id, link = null)}
+{#snippet card(title = "", description = "", id = "", link = "")}
   <div>
     <div class="flex flex-col justify-between md:flex-row">
       <div class="md:pr-s64 pr-0">
