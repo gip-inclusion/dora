@@ -7,7 +7,7 @@ from django.utils.crypto import get_random_string
 from django.utils.text import get_valid_filename
 from rest_framework import permissions
 from rest_framework.decorators import api_view, parser_classes, permission_classes
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -38,7 +38,7 @@ def upload(request: Request, filename: str, structure_slug: str) -> Response:
         user__is_active=True,
         user__is_valid=True,
     ).exists():
-        raise ValidationError(
+        raise PermissionDenied(
             "Uniquement les membres actifs d'une structure peuvent charger des documents."
         )
 
