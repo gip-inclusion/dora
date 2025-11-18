@@ -98,6 +98,10 @@ private_api_patterns = [
         "profile/main-activity/", dora.users.views.update_user_profile
     ),  # TODO: remove when not used by frontend anymore
     path("consent-record/", dora.users.views.record_consent),
+    path(
+        "orientations/stats/<slug:structure_slug>/",
+        dora.orientations.views.display_orientation_stats,
+    ),
 ]
 
 di_api_patterns = [

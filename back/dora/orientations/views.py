@@ -1,13 +1,18 @@
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import mixins, permissions, serializers, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from dora.core.models import ModerationStatus
 from dora.core.utils import TRUTHY_VALUES
 
 from ..core.emails import sanitize_user_input_injected_in_email
+from ..structures.models import Structure
+from ..users.enums import MainActivity
 from .emails import (
     send_message_to_beneficiary,
     send_message_to_prescriber,
@@ -229,3 +234,64 @@ class OrientationViewSet(
         send_orientation_created_to_structure(orientation)
 
         return Response(status=204)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def display_orientation_stats(request: Request, structure_slug: str) -> Response:
+    user = request.user
+    structure = get_object_or_404(Structure.objects.all(), slug=structure_slug)
+
+    if not structure.is_member(user):
+        raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
+
+    main_activity = user.main_activity
+
+    is_sender = main_activity in (
+        MainActivity.ACCOMPAGNATEUR,
+        MainActivity.ACCOMPAGNATEUR_OFFREUR,
+    )
+    is_receiver = main_activity in (
+        MainActivity.OFFREUR,
+        MainActivity.ACCOMPAGNATEUR_OFFREUR,
+    )
+
+    sender_stats = {}
+    receiver_stats = {}
+
+    if is_sender:
+        orientations_sent = Orientation.objects.filter(
+            prescriber_structure=structure,
+        )
+
+        total_orientations_sent = orientations_sent.count()
+
+        total_orientations_pending = orientations_sent.filter(
+            status=OrientationStatus.PENDING
+        ).count()
+
+        sender_stats["total"] = total_orientations_sent
+        sender_stats["pending"] = total_orientations_pending
+
+    if is_receiver:
+        orientations_received = Orientation.objects.filter(
+            service__structure=structure,
+        )
+
+        total_orientations_received = orientations_received.count()
+
+        total_orientations_pending = orientations_received.filter(
+            status=OrientationStatus.PENDING
+        ).count()
+
+        receiver_stats["total"] = total_orientations_received
+        receiver_stats["pending"] = total_orientations_pending
+
+    data = {
+        "is_sender": is_sender,
+        "is_receiver": is_receiver,
+        "sender_stats": sender_stats,
+        "receiver_stats": receiver_stats,
+    }
+
+    return Response(data)
