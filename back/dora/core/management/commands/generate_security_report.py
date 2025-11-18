@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from django.core.management import BaseCommand
+from dora.core.commands import BaseCommand
 
 
 class Command(BaseCommand):

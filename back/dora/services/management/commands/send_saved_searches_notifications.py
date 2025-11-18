@@ -1,11 +1,11 @@
 from datetime import timedelta
 
 from django.conf import settings
-from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.utils import timezone
 from mjml import mjml2html
 
+from dora.core.commands import BaseCommand
 from dora.core.emails import send_mail
 from dora.services.models import LocationKind
 

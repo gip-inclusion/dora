@@ -2,9 +2,9 @@ import csv
 from pathlib import Path
 
 from data_inclusion.schema.v0 import TypologieStructure
-from django.core.management.base import BaseCommand
 from django.db import transaction
 
+from dora.core.commands import BaseCommand
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.sirene.models import Establishment

@@ -9,10 +9,10 @@ import logging
 
 import psycopg
 from django.conf import settings
-from django.core.management.base import BaseCommand
 from django.utils import timezone
 from psycopg import sql
 
+from dora.core.commands import BaseCommand
 from dora.structures.models import Structure, StructureMember
 from dora.users.models import User
 

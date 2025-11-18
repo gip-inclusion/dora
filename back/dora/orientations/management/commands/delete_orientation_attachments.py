@@ -1,5 +1,4 @@
-from django.core.management.base import BaseCommand
-
+from dora.core.commands import BaseCommand
 from dora.orientations.models import Orientation
 
 
