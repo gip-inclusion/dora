@@ -5,6 +5,8 @@
   import { shortenString } from "$lib/utils/misc";
 
   import Alert from "../display/alert.svelte";
+  import { get } from "svelte/store";
+  import { token } from "$lib/utils/auth";
 
   interface Props {
     id: string;
@@ -72,6 +74,7 @@
       const request = new XMLHttpRequest();
       request.open("POST", url);
       request.setRequestHeader("Accept", "application/json; version=1.0");
+      request.setRequestHeader("Authorization", `Token ${get(token)}`);
 
       // upload progress event
       request.upload.addEventListener("progress", (progressEvent) => {
