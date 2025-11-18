@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import Callable
 
-from django.core.management.base import BaseCommand
-
+from dora.core.commands import BaseCommand
 from dora.decoupage_administratif.importer import DecoupageAdministratifImporter
 
 
