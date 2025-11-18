@@ -164,6 +164,10 @@ function hasConsentChanged(current: Consent, updates: ConsentChoices) {
 }
 
 function enforceMatomoConsent(hasMatomoConsent: boolean) {
+  if (!(window as any)._paq) {
+    return;
+  }
+
   if (hasMatomoConsent) {
     (window as any)._paq.push(["forgetUserOptOut", false]);
   } else {
