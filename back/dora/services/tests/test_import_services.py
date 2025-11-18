@@ -3,7 +3,9 @@ import io
 from unittest import TestCase
 from unittest.mock import patch
 
+import pytest
 from django.contrib.gis.geos import Point
+from django.core.management import call_command
 from freezegun import freeze_time
 from model_bakery import baker
 
@@ -11,6 +13,42 @@ from dora.core.utils import GeoData
 from dora.services.csv_import import ImportServicesHelper
 from dora.services.enums import ServiceStatus
 from dora.services.models import Service, ServiceSource
+from dora.users.models import User
+
+
+@pytest.mark.parametrize("wet_run", [True, False])
+def test_management_command(caplog, capsys, tmp_path, snapshot, wet_run):
+    structure = baker.make("Structure", siret="12345678901234")
+    service_model = baker.make(
+        "Service",
+        is_model=True,
+        slug="test-service-model",
+        name="test-service",
+        structure=structure,
+    )
+    funding_label = baker.make("FundingLabel", value="test-value", label="test-label")
+
+    csv_file = tmp_path.joinpath("file_name.csv")
+    csv_file.write_text(
+        "\n".join(
+            [
+                "modele_slug,structure_siret,contact_email,labels_financement,contact_name,contact_phone,location_kinds,location_city,location_address,location_complement,location_postal_code,diffusion_zone_type,is_contact_info_public",
+                f"{service_model.slug},{structure.siret},referent@email.com,{funding_label.value},Test Person,0123456789,,,,,,city,",
+            ]
+        )
+    )
+
+    assert not Service.objects.filter(creator=User.objects.get_dora_bot()).exists()
+    command_args = [csv_file.as_posix()]
+    if wet_run:
+        command_args.append("--wet-run")
+    call_command("import_services", *command_args)
+
+    assert (
+        Service.objects.filter(creator=User.objects.get_dora_bot()).exists() is wet_run
+    )
+    assert caplog.messages == snapshot(name="logs")
+    assert capsys.readouterr() == snapshot(name="output")
 
 
 class ImportServicesTestCase(TestCase):
