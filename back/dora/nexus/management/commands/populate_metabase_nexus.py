@@ -124,9 +124,7 @@ class Command(BaseCommand):
     help = "Populate nexus metabase database."
 
     def populate_users(self):
-        queryset = User.objects.filter(
-            is_active=True
-        ).exclude(membership=None)
+        queryset = User.objects.filter(is_active=True).exclude(membership=None)
 
         def serializer(user):
             return [
@@ -160,9 +158,9 @@ class Command(BaseCommand):
         populate_table(USER_TABLE, columns, serializer, [queryset])
 
     def populate_memberships(self):
-        queryset = StructureMember.objects.filter(user__is_active=True, structure__is_obsolete=False).select_related(
-            "structure"
-        )
+        queryset = StructureMember.objects.filter(
+            user__is_active=True, structure__is_obsolete=False
+        ).select_related("structure")
 
         def serializer(membership):
             return [
