@@ -22,7 +22,10 @@ logger = logging.getLogger(__name__)
 def _validate_upload(file_name: str, file_size: int) -> None:
     if file_size > settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024:
         raise ValidationError("FILE_TOO_BIG")
-    if file_name.split(".")[-1] not in settings.ALLOWED_UPLOADED_FILES_EXTENSIONS:
+    if (
+        "." not in file_name
+        or file_name.split(".")[-1] not in settings.ALLOWED_UPLOADED_FILES_EXTENSIONS
+    ):
         raise ValidationError("INVALID_EXTENSION")
 
 

@@ -104,6 +104,17 @@ class SafeFileUploadTestCase(APITestCase):
             "INVALID_EXTENSION",
         )
 
+    def test_file_name_contains_point(self):
+        response = self.client.post(
+            "/safe-upload/pdf/", {"file": SimpleUploadedFile("pdf", b"content")}
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            str(response.data[0]["message"]),
+            "INVALID_EXTENSION",
+        )
+
     def test_validate_file_size(self):
         large_content = b"x" * (settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024 + 1)
         large_file = SimpleUploadedFile("test.pdf", large_content)
