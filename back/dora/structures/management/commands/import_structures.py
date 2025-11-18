@@ -1,5 +1,5 @@
 import csv
-import os
+import pathlib
 
 from dora.core.commands import BaseCommand
 from dora.structures.csv_import import ImportStructuresHelper
@@ -14,31 +14,23 @@ class Command(BaseCommand):
         super().__init__(*args, **kwargs)
 
     def add_arguments(self, parser):
-        parser.add_argument("file_path", help="Le path du fichier csv à importer")
         parser.add_argument(
-            "-n",
+            "file_path", help="Le path du fichier csv à importer", type=pathlib.Path
+        )
+        parser.add_argument(
             "--wet-run",
             action="store_true",
             help="Effectue l'opération de fichier et l'envoi de mail (mode 'dry-run' par défaut)",
         )
 
-    def handle(self, *args, **kwargs):
-        file_path = kwargs["file_path"]
-        wet_run = kwargs["wet_run"]
-
-        bot_user = User.objects.get_dora_bot()
-
-        with open(file_path, "r") as f:
-            reader = csv.reader(f)
-            file_name = os.path.basename(file_path).rsplit(".", 1)[0]
-            service_source = {
-                "value": file_name,
-                "label": "Structures importés par la commande import_structures",
-            }
-
+    def handle(self, file_path: pathlib.Path, wet_run, **options):
+        with file_path.open() as f:
             self.import_structures_helper.import_structures(
-                reader,
-                bot_user,
-                service_source,
+                csv.reader(f),
+                User.objects.get_dora_bot(),
+                {
+                    "value": file_path.stem,
+                    "label": "Structures importés par la commande import_structures",
+                },
                 wet_run,
             )
