@@ -1,5 +1,7 @@
 import pytest
 from django.core import mail
+from model_bakery import baker
+from rest_framework.test import APITestCase
 
 from dora.core.test_utils import (
     make_orientation,
@@ -7,9 +9,9 @@ from dora.core.test_utils import (
     make_structure,
     make_user,
 )
-from dora.structures.models import ModerationStatus
+from dora.structures.models import ModerationStatus, StructureMember
 
-from ..models import OrientationStatus
+from ..models import Orientation, OrientationStatus
 
 
 def test_query_refresh(api_client, orientation):
@@ -394,3 +396,59 @@ def test_create_without_data_protection_commitment(api_client):
     assert "data_protection_commitment" in response.data
 
     assert structure.orientations.count() == 0
+
+
+class OrientationStatsTestCase(APITestCase):
+    def setUp(self):
+        self.structure = make_structure()
+        self.service = make_service(structure=self.structure)
+        self.user = make_user()
+        baker.make(StructureMember, structure=self.structure, user=self.user)
+
+        baker.make(
+            Orientation,
+            service=self.service,
+            status=OrientationStatus.ACCEPTED,
+        )
+        baker.make(
+            Orientation,
+            service=self.service,
+            status=OrientationStatus.PENDING,
+        )
+
+        baker.make(
+            Orientation,
+            service=self.service,
+            prescriber_structure=self.structure,
+            status=OrientationStatus.REJECTED,
+        )
+        baker.make(
+            Orientation,
+            service=self.service,
+            prescriber_structure=self.structure,
+            status=OrientationStatus.PENDING,
+        )
+
+        self.client.force_authenticate(user=self.user)
+
+    def test_get_stats(self):
+        with self.assertNumQueries(3):
+            response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data,
+            {
+                "total_sent": 2,
+                "total_sent_pending": 1,
+                "total_received": 4,
+                "total_received_pending": 2,
+            },
+        )
+
+    def test_raise_403_when_user_not_structure_member(self):
+        self.client.force_authenticate(user=make_user())
+
+        response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
+
+        self.assertEqual(response.status_code, 403)

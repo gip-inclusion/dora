@@ -1,13 +1,18 @@
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import mixins, permissions, serializers, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from dora.core.models import ModerationStatus
 from dora.core.utils import TRUTHY_VALUES
 
 from ..core.emails import sanitize_user_input_injected_in_email
+from ..structures.models import Structure
 from .emails import (
     send_message_to_beneficiary,
     send_message_to_prescriber,
@@ -229,3 +234,30 @@ class OrientationViewSet(
         send_orientation_created_to_structure(orientation)
 
         return Response(status=204)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def display_orientation_stats(request: Request, structure_slug: str) -> Response:
+    user = request.user
+    structure = get_object_or_404(Structure.objects.all(), slug=structure_slug)
+
+    if not structure.is_member(user):
+        raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
+
+    stats = Orientation.objects.filter(
+        Q(prescriber_structure=structure) | Q(service__structure=structure)
+    ).aggregate(
+        total_sent=Count("id", filter=Q(prescriber_structure=structure)),
+        total_sent_pending=Count(
+            "id",
+            filter=Q(prescriber_structure=structure, status=OrientationStatus.PENDING),
+        ),
+        total_received=Count("id", filter=Q(service__structure=structure)),
+        total_received_pending=Count(
+            "id",
+            filter=Q(service__structure=structure, status=OrientationStatus.PENDING),
+        ),
+    )
+
+    return Response(stats)
