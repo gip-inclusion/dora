@@ -40,6 +40,15 @@
       </a>
     </li>
 
+    <li
+      class="border-gray-03 leading-24 lg:border-none"
+      class:border-b={mobileDesign}
+    >
+      <a href="/orientations/suivi" class="inline-block h-full {aClass}">
+        Suivi des orientations 🆕
+      </a>
+    </li>
+
     <li>
       <SubMenuDropdown
         {mobileDesign}
