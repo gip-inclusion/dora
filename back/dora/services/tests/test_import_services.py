@@ -47,7 +47,10 @@ def test_management_command(caplog, capsys, tmp_path, snapshot, wet_run):
     assert (
         Service.objects.filter(creator=User.objects.get_dora_bot()).exists() is wet_run
     )
-    assert caplog.messages == snapshot(name="logs")
+    assert caplog.messages[-1].startswith(
+        "Management command dora.services.management.commands.import_services succeeded in "
+    )
+    assert caplog.messages[:-1] == snapshot(name="logs")
     assert capsys.readouterr() == snapshot(name="output")
 
 

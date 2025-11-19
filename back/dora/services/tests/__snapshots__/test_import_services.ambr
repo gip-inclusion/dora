@@ -1,17 +1,19 @@
 # serializer version: 1
 # name: test_management_command[False][logs]
   list([
+    '🧘 DRY RUN 🧘',
+    '''
+      
+      Traitement de la ligne 2 :
+    ''',
+    "Création d'un nouveau service pour la structure avec le SIRET '12345678901234'.",
+    '✅ Service créé.',
   ])
 # ---
 # name: test_management_command[False][output]
   CaptureResult(
     err='',
     out='''
-      🧘 DRY RUN 🧘
-      
-      Traitement de la ligne 2 :
-      Création d'un nouveau service pour la structure avec le SIRET '12345678901234'.
-      ✅ Service créé.
       
       --------------------------------------------------
       Traitement du fichier CSV terminé.
@@ -27,17 +29,19 @@
 # ---
 # name: test_management_command[True][logs]
   list([
+    '⚠️ PRODUCTION RUN ⚠️',
+    '''
+      
+      Traitement de la ligne 2 :
+    ''',
+    "Création d'un nouveau service pour la structure avec le SIRET '12345678901234'.",
+    '✅ Service créé.',
   ])
 # ---
 # name: test_management_command[True][output]
   CaptureResult(
     err='',
     out='''
-      ⚠️ PRODUCTION RUN ⚠️
-      
-      Traitement de la ligne 2 :
-      Création d'un nouveau service pour la structure avec le SIRET '12345678901234'.
-      ✅ Service créé.
       
       --------------------------------------------------
       Traitement du fichier CSV terminé.

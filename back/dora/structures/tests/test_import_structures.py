@@ -45,7 +45,10 @@ def test_management_command(caplog, capsys, tmp_path, snapshot, wet_run):
     call_command("import_structures", *command_args)
 
     assert Structure.objects.filter(siret="12345678901234").exists() is wet_run
-    assert caplog.messages == snapshot(name="logs")
+    assert caplog.messages[-1].startswith(
+        "Management command dora.structures.management.commands.import_structures succeeded in "
+    )
+    assert caplog.messages[:-1] == snapshot(name="logs")
     assert capsys.readouterr() == snapshot(name="output")
 
 
