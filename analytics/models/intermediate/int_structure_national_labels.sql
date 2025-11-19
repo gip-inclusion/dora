@@ -13,8 +13,8 @@ national_labels AS (
 final AS (
     SELECT
         {{ dbt_utils.star(relation_alias='structures', from=ref('stg_structure'), prefix='structure_') }},
-        national_labels.label AS national_label_name,
-        national_labels.value AS national_label_code
+        national_labels.label           AS national_label_name,
+        national_labels.value           AS national_label_code
     FROM structures
     LEFT JOIN national_label_pairs ON structures.id = national_label_pairs.structure_id
     LEFT JOIN national_labels ON national_label_pairs.structurenationallabel_id = national_labels.id

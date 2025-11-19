@@ -1,10 +1,49 @@
 models:
-
+  - name: int_accompagnateurs_1_orientation_max
+    description: |
+      Accompagnateurs ayant réalisé au plus une orientation. Table crée afin de fournir aux UX les utilisateurs accompagnateurs ciblés pour des interviews.
+    config:
+      indexes:
+        - columns: [id_prescriber]
+    columns:
+      - name: id_prescriber
+        description: |
+          Identifiant de l'accompagnateur (pouvant être joigné à la colonne id dans la table user).
+        data_tests:
+          - not_null
+          - unique
+      - name: email_prescriber
+        description: |
+          Email de l'accompagnateur.
+        data_tests:
+          - not_null
+          - unique
+      - name: first_name_prescriber
+        description: |
+          Prénom de l'accompagnateur.
+      - name: last_name_prescriber
+        description: |
+          Nom de l'accompagnateur.
+      - name: last_login_prescriber
+        description: |
+          Date de la dernière connexion de l'accompagnateur.
+        data_tests:
+          - not_null
+      - name: main_activity_prescriber
+        description: |
+          Activité principale de l'accompagnateur pouvant être "accompagnateur" ou "accompagnateur-offreur".
+      - name: last_orientation_date
+        description: |
+          Date de la dernière orientation réalisée par l'accompagnateur.
+      - name: total_orientations
+        description: |
+          Nombre total d'orientations réalisées par l'accompagnateur.
+        data_tests:
+          - not_null
   - name: int_iMER
     description: |
       Intentions de mise en relation.
       Combinaison des tables orientation et mobilisation.
-
   - name: int_services_models
     description: |
       Services créés à partir de modèles.
