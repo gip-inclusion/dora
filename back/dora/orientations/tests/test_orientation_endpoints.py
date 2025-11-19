@@ -438,8 +438,6 @@ class OrientationStatsTestCase(APITestCase):
         self.assertEqual(
             response.data,
             {
-                "is_sender": True,
-                "is_receiver": True,
                 "sender_stats": {"total": 2, "pending": 1},
                 "receiver_stats": {"total": 4, "pending": 2},
             },
