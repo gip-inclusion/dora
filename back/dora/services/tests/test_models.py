@@ -340,7 +340,9 @@ def test_update_service_from_model_m2m(api_client):
     # SYNC_M2M_FIELDS
     model.categories.add(ServiceCategory.objects.get(value="numerique"))
     model.subcategories.add(
-        ServiceSubCategory.objects.get(value="numerique--acceder-a-du-materiel")
+        ServiceSubCategory.objects.get(
+            value="choisir-un-metier--confirmer-son-choix-de-metier"
+        )
     )
 
     service = make_service(

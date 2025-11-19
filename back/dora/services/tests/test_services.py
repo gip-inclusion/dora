@@ -1410,7 +1410,7 @@ class DataInclusionSearchTestCase(APITestCase):
                 ["mobilite"],
                 ["Mobilité"],
                 ["famille--garde-denfants"],
-                ["Garde d'enfants"],
+                ["Garde d’enfants"],
             ),
         ]
         for (

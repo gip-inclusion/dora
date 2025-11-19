@@ -98,12 +98,14 @@ def test_structures_serialization_exemple(
     )
     s1 = make_service(structure=struct, status=ServiceStatus.PUBLISHED)
     s1.subcategories.add(
-        ServiceSubCategory.objects.get(value="numerique--acceder-a-du-materiel")
+        ServiceSubCategory.objects.get(
+            value="choisir-un-metier--confirmer-son-choix-de-metier"
+        )
     )
     s2 = make_service(structure=struct, status=ServiceStatus.PUBLISHED)
     s2.subcategories.add(
         ServiceSubCategory.objects.get(
-            value="equipement-et-alimentation--acces-a-du-materiel-informatique"
+            value="mobilite--entretenir-reparer-son-vehicule"
         )
     )
     struct.save()
@@ -208,7 +210,9 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
     )
 
     service.subcategories.add(
-        ServiceSubCategory.objects.get(value="numerique--acceder-a-du-materiel")
+        ServiceSubCategory.objects.get(
+            value="choisir-un-metier--confirmer-son-choix-de-metier"
+        )
     )
     service.kinds.add(
         ServiceKind.objects.get(value="formation"),
@@ -281,7 +285,7 @@ def test_service_serialization_exemple(authenticated_user, api_client, settings)
         "source": None,
         "structure_id": str(structure.id),
         "telephone": "0278911262",
-        "thematiques": ["numerique--acceder-a-du-materiel"],
+        "thematiques": ["choisir-un-metier--confirmer-son-choix-de-metier"],
         "types": [
             "formation",
             "information",
@@ -392,7 +396,9 @@ def test_service_serialization_exemple_need_di_user(api_client):
     )
 
     service.subcategories.add(
-        ServiceSubCategory.objects.get(value="numerique--acceder-a-du-materiel")
+        ServiceSubCategory.objects.get(
+            value="choisir-un-metier--confirmer-son-choix-de-metier"
+        )
     )
     service.kinds.add(
         ServiceKind.objects.get(value="formation"),
@@ -434,14 +440,19 @@ def test_subcategories_other_excluded(authenticated_user, api_client):
         status=ServiceStatus.PUBLISHED,
     )
     service.subcategories.add(
-        ServiceSubCategory.objects.get(value="numerique--acceder-a-du-materiel")
+        ServiceSubCategory.objects.get(
+            value="mobilite--entretenir-reparer-son-vehicule"
+        )
     )
-    service.subcategories.add(ServiceSubCategory.objects.get(value="numerique--autre"))
+    ServiceSubCategory.objects.create(value="mobilite--autre", label="Autre")
+    service.subcategories.add(ServiceSubCategory.objects.get(value="mobilite--autre"))
 
     response = api_client.get(f"/api/v2/services/{service.id}/")
 
     assert 200 == response.status_code
-    assert response.json().get("thematiques") == ["numerique--acceder-a-du-materiel"]
+    assert response.json().get("thematiques") == [
+        "mobilite--entretenir-reparer-son-vehicule"
+    ]
 
 
 def test_service_from_obsolete_structure_is_excluded(authenticated_user, api_client):

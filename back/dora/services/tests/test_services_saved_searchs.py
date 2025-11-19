@@ -58,6 +58,11 @@ class ServiceSavedSearchTestCase(APITestCase):
 
     def test_create_search(self):
         baker.make(
+            "ServiceCategory",
+            value=SAVE_SEARCH_ARGS.get("category"),
+            label="Mobilite",
+        )
+        baker.make(
             "ServiceSubCategory",
             value=SAVE_SEARCH_ARGS.get("subcategories")[0],
             label="cat1--sub1",
