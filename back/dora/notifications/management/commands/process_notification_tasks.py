@@ -28,33 +28,17 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--wet-run",
-            action="store_true",
-            help="Par défaut les taches sont seulement listées, pas executées. Ce paramètre active le traitement effectif des tâches.",
-        )
-        parser.add_argument(
             "--limit",
             type=int,
             help="Limite du nombre de tâches à traiter",
             default=settings.NOTIFICATIONS_LIMIT,
         )
-
-        # FIXME:
-        # si on inclut directement la valeur de `possible_tasks` dans la f-string ci-dessous,
-        # ruff formattera le fichier au format python 3.12 (menant à une erreur sur python 3.11)
-        # impossible de forcer un formattage compatible python 3.11 à cette heure (même avec `target-version`)
-        # cause : voir https://docs.python.org/3/whatsnew/3.12.html#pep-701-syntactic-formalization-of-f-strings
-        possible_tasks = "|".join(
-            [task.task_type() for task in Task.registered_tasks()]
-        )
-
         parser.add_argument(
             "--types",
+            nargs="*",
             type=str,
-            help=(
-                f"Types de tâche de notification à prendre en compte, séparés par ','"
-                f" ({possible_tasks})"
-            ),
+            help=("Types de tâche de notification à prendre en compte"),
+            choices=[task.task_type() for task in Task.registered_tasks()],
             default=settings.NOTIFICATIONS_TASK_TYPES,
         )
 
@@ -64,18 +48,18 @@ class Command(BaseCommand):
             help="Force l'activation des notifications sans tenir compte de 'settings.NOTIFICATIONS_ENABLED'. Utile pour un lancement manuel.",
         )
 
-    def handle(self, *args, **options):
-        force = options["force"]
+        parser.add_argument(
+            "--wet-run",
+            action="store_true",
+            help="Par défaut les taches sont seulement listées, pas executées. Ce paramètre active le traitement effectif des tâches.",
+        )
 
+    def handle(self, *, limit, types, wet_run, force, **options):
         if not (settings.NOTIFICATIONS_ENABLED or force):
             self.logger.info(
                 "Le système de notification n'est pas activé sur cet environnement."
             )
             return
-
-        wet_run = options["wet_run"]
-        limit = options["limit"]
-        types = options["types"]
 
         if wet_run:
             self.logger.info("PRODUCTION RUN")
@@ -100,11 +84,9 @@ class Command(BaseCommand):
         selected_types = Task.registered_tasks()
 
         if types:
-            selected_types = [
-                task
-                for task in Task.registered_tasks()
-                if task.task_type() in types.split(",")
-            ]
+            selected_types = {
+                task for task in Task.registered_tasks() if task.task_type() in types
+            }
 
         if not selected_types:
             self.logger.info(

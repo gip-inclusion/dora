@@ -419,8 +419,9 @@ OIDC_CALLBACK_CLASS = "dora.oidc.views.CustomAuthorizationCallbackView"
 NOTIFICATIONS_ENABLED = os.getenv("NOTIFICATIONS_ENABLED", "") == "true"
 
 # si défini, seules ces tâches de notification seront lancées par le CRON
-# même principe que pour la management command, les tâches sélectionnées sont séparées par des ","
-NOTIFICATIONS_TASK_TYPES = os.getenv("NOTIFICATIONS_TASK_TYPES", "")
+NOTIFICATIONS_TASK_TYPES = [
+    t for t in os.getenv("NOTIFICATIONS_TASK_TYPES", "").split(",") if t
+]
 
 # nombre de Notifications à envoyer pour chaque tâche
 try:

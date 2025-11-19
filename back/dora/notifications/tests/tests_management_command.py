@@ -40,7 +40,7 @@ def test_notifications_with_limit(caplog, capsys, snapshot, settings):
 
 def test_notifications_with_types(caplog, capsys, snapshot, settings):
     settings.NOTIFICATIONS_ENABLED = True
-    settings.NOTIFICATIONS_TASK_TYPES = "orphan_structures"
+    settings.NOTIFICATIONS_TASK_TYPES = ["orphan_structures"]
 
     call_command("process_notification_tasks")
 
