@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
+# Trace execution
+[[ "${DEBUG}" ]] && set -x
+
 # This program can also be used to synchronize the source table locally,
 # you only have to provide the correct DATABASE_URL and DORA_DATABASE_URL
 # with an enabled proxy to the DORA database.
