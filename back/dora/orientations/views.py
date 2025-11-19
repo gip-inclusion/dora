@@ -12,7 +12,6 @@ from dora.core.utils import TRUTHY_VALUES
 
 from ..core.emails import sanitize_user_input_injected_in_email
 from ..structures.models import Structure
-from ..users.enums import MainActivity
 from .emails import (
     send_message_to_beneficiary,
     send_message_to_prescriber,
@@ -245,51 +244,36 @@ def display_orientation_stats(request: Request, structure_slug: str) -> Response
     if not structure.is_member(user):
         raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
 
-    main_activity = user.main_activity
-
-    is_sender = main_activity in (
-        MainActivity.ACCOMPAGNATEUR,
-        MainActivity.ACCOMPAGNATEUR_OFFREUR,
-    )
-    is_receiver = main_activity in (
-        MainActivity.OFFREUR,
-        MainActivity.ACCOMPAGNATEUR_OFFREUR,
-    )
-
     sender_stats = {}
     receiver_stats = {}
 
-    if is_sender:
-        orientations_sent = Orientation.objects.filter(
-            prescriber_structure=structure,
-        )
+    orientations_sent = Orientation.objects.filter(
+        prescriber_structure=structure,
+    )
 
-        total_orientations_sent = orientations_sent.count()
+    total_orientations_sent = orientations_sent.count()
 
-        total_orientations_pending = orientations_sent.filter(
-            status=OrientationStatus.PENDING
-        ).count()
+    total_orientations_pending = orientations_sent.filter(
+        status=OrientationStatus.PENDING
+    ).count()
 
-        sender_stats["total"] = total_orientations_sent
-        sender_stats["pending"] = total_orientations_pending
+    sender_stats["total"] = total_orientations_sent
+    sender_stats["pending"] = total_orientations_pending
 
-    if is_receiver:
-        orientations_received = Orientation.objects.filter(
-            service__structure=structure,
-        )
+    orientations_received = Orientation.objects.filter(
+        service__structure=structure,
+    )
 
-        total_orientations_received = orientations_received.count()
+    total_orientations_received = orientations_received.count()
 
-        total_orientations_pending = orientations_received.filter(
-            status=OrientationStatus.PENDING
-        ).count()
+    total_orientations_pending = orientations_received.filter(
+        status=OrientationStatus.PENDING
+    ).count()
 
-        receiver_stats["total"] = total_orientations_received
-        receiver_stats["pending"] = total_orientations_pending
+    receiver_stats["total"] = total_orientations_received
+    receiver_stats["pending"] = total_orientations_pending
 
     data = {
-        "is_sender": is_sender,
-        "is_receiver": is_receiver,
         "sender_stats": sender_stats,
         "receiver_stats": receiver_stats,
     }

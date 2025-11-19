@@ -11,7 +11,6 @@ from dora.core.test_utils import (
 )
 from dora.structures.models import ModerationStatus, StructureMember
 
-from ...users.enums import MainActivity
 from ..models import Orientation, OrientationStatus
 
 
@@ -403,7 +402,7 @@ class OrientationStatsTestCase(APITestCase):
     def setUp(self):
         self.structure = make_structure()
         self.service = make_service(structure=self.structure)
-        self.user = make_user(main_activity=MainActivity.ACCOMPAGNATEUR_OFFREUR)
+        self.user = make_user()
         baker.make(StructureMember, structure=self.structure, user=self.user)
 
         baker.make(
@@ -432,7 +431,7 @@ class OrientationStatsTestCase(APITestCase):
 
         self.client.force_authenticate(user=self.user)
 
-    def test_get_stats_when_user_both_sends_and_receives(self):
+    def test_get_stats(self):
         response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
 
         self.assertEqual(response.status_code, 200)
@@ -442,40 +441,6 @@ class OrientationStatsTestCase(APITestCase):
                 "is_sender": True,
                 "is_receiver": True,
                 "sender_stats": {"total": 2, "pending": 1},
-                "receiver_stats": {"total": 4, "pending": 2},
-            },
-        )
-
-    def test_get_stats_when_user_is_only_sender(self):
-        self.user.main_activity = MainActivity.ACCOMPAGNATEUR
-        self.user.save()
-
-        response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data,
-            {
-                "is_sender": True,
-                "is_receiver": False,
-                "sender_stats": {"total": 2, "pending": 1},
-                "receiver_stats": {},
-            },
-        )
-
-    def test_get_stats_when_user_is_only_receiver(self):
-        self.user.main_activity = MainActivity.OFFREUR
-        self.user.save()
-
-        response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data,
-            {
-                "is_sender": False,
-                "is_receiver": True,
-                "sender_stats": {},
                 "receiver_stats": {"total": 4, "pending": 2},
             },
         )
