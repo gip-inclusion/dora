@@ -432,14 +432,17 @@ class OrientationStatsTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
     def test_get_stats(self):
-        response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
+        with self.assertNumQueries(3):
+            response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.data,
             {
-                "sender_stats": {"total": 2, "pending": 1},
-                "receiver_stats": {"total": 4, "pending": 2},
+                "total_sent": 2,
+                "total_sent_pending": 1,
+                "total_received": 4,
+                "total_received_pending": 2,
             },
         )
 

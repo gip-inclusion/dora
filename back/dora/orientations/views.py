@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import mixins, permissions, serializers, viewsets
@@ -244,38 +245,19 @@ def display_orientation_stats(request: Request, structure_slug: str) -> Response
     if not structure.is_member(user):
         raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
 
-    sender_stats = {}
-    receiver_stats = {}
-
-    orientations_sent = Orientation.objects.filter(
-        prescriber_structure=structure,
+    stats = Orientation.objects.filter(
+        Q(prescriber_structure=structure) | Q(service__structure=structure)
+    ).aggregate(
+        total_sent=Count("id", filter=Q(prescriber_structure=structure)),
+        total_sent_pending=Count(
+            "id",
+            filter=Q(prescriber_structure=structure, status=OrientationStatus.PENDING),
+        ),
+        total_received=Count("id", filter=Q(service__structure=structure)),
+        total_received_pending=Count(
+            "id",
+            filter=Q(service__structure=structure, status=OrientationStatus.PENDING),
+        ),
     )
 
-    total_orientations_sent = orientations_sent.count()
-
-    total_orientations_pending = orientations_sent.filter(
-        status=OrientationStatus.PENDING
-    ).count()
-
-    sender_stats["total"] = total_orientations_sent
-    sender_stats["pending"] = total_orientations_pending
-
-    orientations_received = Orientation.objects.filter(
-        service__structure=structure,
-    )
-
-    total_orientations_received = orientations_received.count()
-
-    total_orientations_pending = orientations_received.filter(
-        status=OrientationStatus.PENDING
-    ).count()
-
-    receiver_stats["total"] = total_orientations_received
-    receiver_stats["pending"] = total_orientations_pending
-
-    data = {
-        "sender_stats": sender_stats,
-        "receiver_stats": receiver_stats,
-    }
-
-    return Response(data)
+    return Response(stats)
