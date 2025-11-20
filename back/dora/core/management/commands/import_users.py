@@ -1,7 +1,6 @@
 import csv
 
-from django.core.management.base import BaseCommand
-
+from dora.core.commands import BaseCommand
 from dora.core.csv_user_import import ImportUserHelper
 
 """

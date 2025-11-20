@@ -5,12 +5,12 @@ import requests
 from data_inclusion.schema.v0 import TypologieStructure
 from django.conf import settings
 from django.contrib.gis.geos import Point
-from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.utils.text import Truncator
 from furl import furl
 
 from dora.core import utils
+from dora.core.commands import BaseCommand
 from dora.core.constants import WGS84
 from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification

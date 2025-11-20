@@ -1,11 +1,11 @@
 from datetime import timedelta
 
 from django.conf import settings
-from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.utils import timezone
 from mjml import mjml2html
 
+from dora.core.commands import BaseCommand
 from dora.core.emails import send_mail
 from dora.services.models import LocationKind
 
@@ -39,7 +39,7 @@ class Command(BaseCommand):
         self.remote = LocationKind.objects.get(value="a-distance")
 
     def handle(self, *args, **options):
-        self.stdout.write("Vérification des notifications de recherches sauvegardées")
+        self.logger.info("Vérification des notifications de recherches sauvegardées")
         saved_searches = get_saved_search_notifications_to_send()
         tracking_params = (
             "mtm_campaign=MailsTransactionnels&mtm_kwd=AlertesNouveauxServices"
@@ -74,7 +74,7 @@ class Command(BaseCommand):
             # Mise à jour de la date de dernière notification
             saved_search.last_notification_date = timezone.now()
             saved_search.save()
-        self.stdout.write(f"{num_emails_sent} courriels envoyés")
+        self.logger.info("%s courriels envoyés", num_emails_sent)
 
     def compute_search_label(self, saved_search):
         on_site_only = self.on_site in saved_search.location_kinds.all()

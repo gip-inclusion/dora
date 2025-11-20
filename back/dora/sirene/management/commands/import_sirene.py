@@ -5,10 +5,10 @@ import subprocess
 import tempfile
 
 from django.conf import settings
-from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.db.utils import DataError
 
+from dora.core.commands import BaseCommand
 from dora.sirene.models import Establishment
 
 from ._backup import (
