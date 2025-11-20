@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "dora.oidc",
     "dora.auth_links",
     "dora.nexus",
+    "dora.decoupage_administratif",
 ]
 
 MIDDLEWARE = [
