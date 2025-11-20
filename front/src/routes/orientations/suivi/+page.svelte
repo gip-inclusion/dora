@@ -3,11 +3,13 @@
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
 
   import { orientationState, items } from "./state.svelte.js";
+
+  const { data } = $props();
 </script>
 
 <EnsureLoggedIn>
   <ExportDisplay
-    stats={{ pending: 0, total: 0 }}
+    stats={data.stats}
     type={orientationState.selectedType}
     title={items.filter((item) => item.id === orientationState.selectedType)[0]
       .name}

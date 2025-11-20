@@ -2,11 +2,12 @@
   import NoOrientationsCard from "./no-orientations-card.svelte";
 
   import type { OrientationType } from "./state.svelte.js";
+  import type { OrientationStats } from "$lib/types";
 
   interface Props {
     type: OrientationType;
     title: string;
-    stats: { pending: number; total: number };
+    stats: OrientationStats;
   }
 
   const { type, title, stats }: Props = $props();
@@ -15,11 +16,16 @@
 <div>
   <h2>{title}</h2>
   {#if type === "sent"}
-    <p><b>{stats.pending} demandes en cours</b> / {stats.total} envoyées</p>
+    <p>
+      <b>{stats.totalSentPending} demandes en cours</b> / {stats.totalSent} envoyées
+    </p>
   {:else}
-    <p><b>{stats.pending} demandes à traiter</b> / {stats.total} reçues</p>
+    <p>
+      <b>{stats.totalReceivedPending} demandes à traiter</b> / {stats.totalReceived}
+      reçues
+    </p>
   {/if}
-  {#if type === "received" && stats.total === 0}
+  {#if type === "received" && stats.totalReceivedPending === 0}
     <NoOrientationsCard
       title="Aucune demande d'orientation reçue pour le moment"
       text="Assurez-vous d'avoir activé le formulaire DORA sur vos services. Pour
@@ -30,7 +36,7 @@
       <button class="text-magenta-cta">Copier le lien de ma structure</button
       ></NoOrientationsCard
     >
-  {:else if type === "sent" && stats.total === 0}
+  {:else if type === "sent" && stats.totalSent === 0}
     <NoOrientationsCard
       title="Vous n'avez pas encore réalisé d'orientations"
       text="Besoin d'orienter des bénéficiaires vers des dispositifs adaptés ?
