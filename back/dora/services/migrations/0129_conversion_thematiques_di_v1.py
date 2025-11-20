@@ -399,14 +399,14 @@ def assign_new_thematiques(apps, schema_editor):
         # Récupération des catégories et sous-catégories correspondant aux nouvelles thématiques
         new_categories = []
         new_subcategories = []
-        for thematique_output in new_thematiques:
-            if thematique_output == old_thematique:
+        for new_thematique in new_thematiques:
+            if new_thematique == old_thematique:
                 continue
             new_categories.append(
-                ServiceCategory.objects.get(value=thematique_output.split("--")[0])
+                ServiceCategory.objects.get(value=new_thematique.split("--")[0])
             )
             new_subcategories.append(
-                ServiceSubCategory.objects.get(value=thematique_output)
+                ServiceSubCategory.objects.get(value=new_thematique)
             )
 
         # Mise à jour des services et modèles de services
