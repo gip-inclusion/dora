@@ -124,7 +124,9 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
     subcategories = None
     if service_data["thematiques"] is not None:
         categories = ServiceCategory.objects.filter(
-            value__in=service_data["thematiques"]
+            value__in=[
+                thematique.split("--")[0] for thematique in service_data["thematiques"]
+            ]
         )
         subcategories = ServiceSubCategory.objects.filter(
             value__in=service_data["thematiques"]

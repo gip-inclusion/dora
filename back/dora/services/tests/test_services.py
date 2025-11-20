@@ -1406,9 +1406,9 @@ class DataInclusionSearchTestCase(APITestCase):
             (None, None, None, None, None),
             ([], [], [], [], []),
             (
-                ["mobilite", "famille--garde-denfants"],
-                ["mobilite"],
-                ["Mobilité"],
+                ["famille--garde-denfants", "mobilite"],
+                ["famille", "mobilite"],
+                ["Famille", "Mobilité"],
                 ["famille--garde-denfants"],
                 ["Garde d’enfants"],
             ),
