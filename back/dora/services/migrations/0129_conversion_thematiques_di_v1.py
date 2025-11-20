@@ -361,7 +361,7 @@ def check_thematiques_exist_in_dora(apps, schema_editor):
 
 
 def check_thematiques_exist_in_di_v1(apps, schema_editor):
-    # Vérification de l'existence des nouvellesthématiques dans le référentiel DI v1
+    # Vérification de l'existence des nouvelles thématiques dans le référentiel DI v1
     for thematiques in MAPPING_THEMATIQUES.values():
         invalid_thematiques = {
             thematique for thematique in thematiques if thematique not in Thematique
