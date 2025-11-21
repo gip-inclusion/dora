@@ -1,8 +1,7 @@
 <script lang="ts">
-  import NoOrientationsCard from "./no-orientations-card.svelte";
-
   import type { OrientationType } from "./state.svelte.js";
   import type { OrientationStats } from "$lib/types";
+  import OrientationsExportCard from "./orientations-export-card.svelte";
 
   interface Props {
     type: OrientationType;
@@ -12,9 +11,9 @@
 
   const { type, title, stats }: Props = $props();
 
-  const showNoOrientationsCard =
-    (type === "sent" && stats.totalSent === 0) ||
-    (type === "received" && stats.totalReceivedPending === 0);
+  const hasOrientations =
+    (type === "sent" && stats.totalSent > 0) ||
+    (type === "received" && stats.totalReceivedPending > 0);
 </script>
 
 <div>
@@ -29,7 +28,5 @@
       reçues
     </p>
   {/if}
-  {#if showNoOrientationsCard}
-    <NoOrientationsCard {type} />
-  {/if}
+  <OrientationsExportCard {type} {hasOrientations} />
 </div>

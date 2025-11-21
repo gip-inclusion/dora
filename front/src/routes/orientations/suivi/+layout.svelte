@@ -14,10 +14,10 @@
   let { children, data }: Props = $props();
 </script>
 
-<CenteredGrid bgColor="bg-blue-information" noPadding>
+<CenteredGrid extraClass="pt-s16" bgColor="bg-blue-information" noPadding>
   <Breadcrumb currentLocation="orientation-export" />
-  <h1 class="my-0">{data.title}</h1>
-  <div class="flex">
+  <h1 class="pt-s48">{data.title}</h1>
+  <div class="gap-s8 py-s16 flex">
     <HomeSmile2LineBuildings></HomeSmile2LineBuildings><a
       class="underline"
       href={`/structures/${data.structure.slug}`}>{data.structure.name}</a
