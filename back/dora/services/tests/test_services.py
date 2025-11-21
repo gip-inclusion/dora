@@ -1236,14 +1236,15 @@ class DataInclusionSearchTestCase(APITestCase):
     def test_filter_by_cat(self):
         service_data_1 = self.make_di_service(
             zone_eligibilite=[self.city2.code],
-            thematiques=["famille", "sante"],
+            thematiques=["famille--soutien-aidants", "sante--addictions"],
         )
         service_data_2 = self.make_di_service(
             zone_eligibilite=[self.city2.code],
             thematiques=["famille--garde-denfants"],
         )
         self.make_di_service(
-            zone_eligibilite=[self.city2.code], thematiques=["numerique"]
+            zone_eligibilite=[self.city2.code],
+            thematiques=["numerique--acceder-a-une-connexion-internet"],
         )
         request = self.factory.get(
             "/search/",
