@@ -1,6 +1,7 @@
 import random
 from _operator import itemgetter
 from datetime import date
+from functools import reduce
 from typing import Optional
 
 import requests
@@ -15,7 +16,7 @@ import dora.services.models as models
 from dora import data_inclusion
 from dora.admin_express.models import City
 from dora.core.constants import WGS84
-from dora.services.models import ServiceStatus
+from dora.services.models import ServiceStatus, ServiceSubCategory
 from dora.structures.models import Structure
 
 from .models import FundingLabel
@@ -122,7 +123,14 @@ def _get_raw_di_results(
     """
     thematiques = []
     if categories is not None:
-        thematiques += categories
+        # Sélection des sous-catégories correspondant aux catégories
+        subcategories_filters = reduce(
+            lambda x, y: x | y,
+            [Q(value__startswith=category) for category in categories],
+        )
+        thematiques += ServiceSubCategory.objects.filter(
+            subcategories_filters
+        ).values_list("value", flat=True)
     if subcategories is not None:
         # Exclusion des sous-catégories --autre
         thematiques += [subcat for subcat in subcategories if "--autre" not in subcat]
