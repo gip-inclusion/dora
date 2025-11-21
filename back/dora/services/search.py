@@ -153,7 +153,7 @@ def _get_raw_di_results(
                 # Pas de filtrage sur le score de qualité si on veut aussi les services DORA
                 None if with_dora else settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
             ),
-            code_insee=city_code,
+            code_commune=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
             types=kinds,
             frais=fees,
