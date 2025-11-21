@@ -52,7 +52,7 @@ class DataInclusionClient:
         self.timeout_timedelta = (
             timedelta(seconds=timeout_seconds)
             if timeout_seconds is not None
-            else timedelta(seconds=2)
+            else timedelta(seconds=10)
         )
 
     def _get(self, url: furl.furl):
