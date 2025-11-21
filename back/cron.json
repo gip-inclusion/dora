@@ -15,6 +15,10 @@
     {
       "command": "40 0 * * * tools/sync-nexus.sh",
       "size": "S"
+    },
+    {
+      "command": "0 0 1 * * tools/import-decoupage-administratif.sh",
+      "size": "S"
     }
   ]
 }
