@@ -102,7 +102,7 @@ class FakeDataInclusionClient:
         self,
         sources: Optional[str] = None,
         score_qualite_minimum: Optional[float] = None,
-        code_insee: Optional[str] = None,
+        code_commune: Optional[str] = None,
         thematiques: Optional[list[str]] = None,
         types: Optional[list[str]] = None,
         frais: Optional[list[str]] = None,
@@ -136,13 +136,13 @@ class FakeDataInclusionClient:
         if frais is not None:
             services = [r for r in services if any(t in r["frais"] for t in frais)]
 
-        if code_insee is not None:
-            services = [r for r in services if code_insee in r["zone_eligibilite"]]
+        if code_commune is not None:
+            services = [r for r in services if code_commune in r["zone_eligibilite"]]
 
             return [
                 # overly simple distance for tests.
                 {
-                    "distance": 0 if code_insee in s["zone_eligibilite"] else 30,
+                    "distance": 0 if code_commune in s["zone_eligibilite"] else 30,
                     "service": s,
                 }
                 for s in services
