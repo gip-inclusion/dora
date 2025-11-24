@@ -23,7 +23,14 @@ export const load = async ({ parent, fetch }) => {
   return {
     title: "Suivi des orientations",
     noIndex: true,
-    stats: result?.data,
-    structure,
+    stats: result.data
+      ? result.data
+      : {
+          totalSent: 0,
+          totalSentPending: 0,
+          totalReceived: 0,
+          totalReceivedPending: 0,
+        },
+    structure: structure ? structure : { slug: "Pas trouvé" },
   };
 };

@@ -4,11 +4,12 @@
   import InboxArchiveLineBusiness from "svelte-remix/InboxArchiveLineBusiness.svelte";
   import InboxUnarchiveLineBusiness from "svelte-remix/InboxUnarchiveLineBusiness.svelte";
   import type { OrientationType } from "./state.svelte";
-  import DownloadLineSystem from "svelte-remix/DownloadLineSystem.svelte";
+  import type { Snippet } from "svelte";
 
   interface Props {
     type: OrientationType;
     hasOrientations: boolean;
+    children: Snippet;
   }
 
   const CONTENT_BY_TYPE = {
@@ -34,7 +35,7 @@
     },
   };
 
-  const { type, hasOrientations }: Props = $props();
+  const { type, hasOrientations, children }: Props = $props();
   const contentMapKey = hasOrientations ? "hasOrientations" : "noOrientations";
 </script>
 
@@ -57,19 +58,7 @@
         { "gap-s32": !hasOrientations, "gap-s4": hasOrientations },
       ]}
     >
-      {#if hasOrientations}
-        <DownloadLineSystem class="fill-magenta-cta" /><button
-          class="text-magenta-cta">Télécharger la liste</button
-        >
-      {:else if type === "received"}
-        <button class="text-magenta-cta">Passer en revue mes services</button>
-        <button class="text-magenta-cta">Copier le lien de ma structure</button>
-      {:else}
-        <a href="recherche" class="text-magenta-cta">Rechercher par mots-clé</a>
-        <a href="recherche" class="text-magenta-cta"
-          >Rechercher par lieu et besoins</a
-        >
-      {/if}
+      {@render children()}
     </div>
   </div>
   <div class="flex-1">
