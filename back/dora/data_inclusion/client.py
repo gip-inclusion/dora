@@ -7,8 +7,6 @@ import furl
 import requests
 from django.conf import settings
 
-from .constants import THEMATIQUES_MAPPING_DORA_TO_DI
-
 logger = logging.getLogger(__name__)
 
 
@@ -141,12 +139,7 @@ class DataInclusionClient:
             url.args["code_insee"] = code_insee
 
         if thematiques is not None:
-            enriched_thematiques = []
-            for thematique in thematiques:
-                enriched_thematiques += THEMATIQUES_MAPPING_DORA_TO_DI.get(
-                    thematique, [thematique]
-                )
-            url.args["thematiques"] = enriched_thematiques
+            url.args["thematiques"] = thematiques
 
         if types is not None:
             url.args["types"] = types

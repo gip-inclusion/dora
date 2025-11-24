@@ -3,7 +3,11 @@ from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from dora.core.utils import code_insee_to_code_dept, get_object_or_none
+from dora.core.utils import (
+    code_insee_to_code_dept,
+    get_category_from_subcategory,
+    get_object_or_none,
+)
 from dora.orientations.models import Orientation
 from dora.services.models import (
     LocationKind,
@@ -35,7 +39,9 @@ from .models import PageView
 def log_event(request):
     def get_categories(cats_values, subcats_values):
         # On loggue également toutes les catégories des sous-catégories demandées
-        subcats_cats_values = set(subcat.split("--")[0] for subcat in subcats_values)
+        subcats_cats_values = set(
+            get_category_from_subcategory(subcat) for subcat in subcats_values
+        )
 
         all_categories = ServiceCategory.objects.filter(
             Q(value__in=cats_values) | Q(value__in=subcats_cats_values)

@@ -15,11 +15,9 @@ import dora.services.models as models
 from dora import data_inclusion
 from dora.admin_express.models import City
 from dora.core.constants import WGS84
-from dora.data_inclusion.constants import THEMATIQUES_MAPPING_DORA_TO_DI
 from dora.services.models import ServiceStatus
 from dora.structures.models import Structure
 
-from .constants import EXCLUDED_DI_SERVICES_THEMATIQUES
 from .models import FundingLabel
 from .serializers import FundingLabelSerializer, SearchResultSerializer
 from .utils import filter_services_by_city_code
@@ -126,17 +124,10 @@ def _get_raw_di_results(
     if categories is not None:
         thematiques += categories
     if subcategories is not None:
-        # Les sous-catégories --autre ne sont conservées comme thématiques que lorsqu'elles
-        # sont présentes dans la table de correspondance de thématiques DORA vers DI.
-        # La correspondance sera faite plus tard, dans DataInclusionClient.search_services().
-        thematiques += [
-            subcat
-            for subcat in subcategories
-            if ("--autre" not in subcat or subcat in THEMATIQUES_MAPPING_DORA_TO_DI)
-        ]
+        # Exclusion des sous-catégories --autre
+        thematiques += [subcat for subcat in subcategories if "--autre" not in subcat]
 
-    # Si on recherche uniquement des sous-catégories `autre` qui n'ont pas de correspondances
-    # de thématiques DORA vers DI (THEMATIQUES_MAPPING_DORA_TO_DI), la liste des thématiques
+    # Si on recherche uniquement des sous-catégories `autre`, la liste des thématiques
     # va être vide et d·i renverrait *tous* les services.
     # On renvoie donc plutôt une liste vide.
     if not thematiques and subcategories:
@@ -174,17 +165,6 @@ def _get_raw_di_results(
             result["service"]["date_suspension"] is None
             or date.fromisoformat(result["service"]["date_suspension"])
             > timezone.now().date()
-        )
-    ]
-
-    # Exclus les services ayant des thématiques à exclure
-    raw_di_results = [
-        result
-        for result in raw_di_results
-        if result["service"]["thematiques"] is None
-        or not any(
-            thematique in result["service"]["thematiques"]
-            for thematique in EXCLUDED_DI_SERVICES_THEMATIQUES
         )
     ]
 
