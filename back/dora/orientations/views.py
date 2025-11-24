@@ -240,7 +240,10 @@ class OrientationViewSet(
 @permission_classes([IsAuthenticated])
 def display_orientation_stats(request: Request, structure_slug: str) -> Response:
     user = request.user
-    structure = get_object_or_404(Structure.objects.all(), slug=structure_slug)
+    structure = get_object_or_404(
+        Structure.objects.annotate(services_count=Count("services")),
+        slug=structure_slug,
+    )
 
     if not structure.is_member(user):
         raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
@@ -259,5 +262,7 @@ def display_orientation_stats(request: Request, structure_slug: str) -> Response
             filter=Q(service__structure=structure, status=OrientationStatus.PENDING),
         ),
     )
+
+    stats["structure_has_services"] = structure.services_count > 0
 
     return Response(stats)
