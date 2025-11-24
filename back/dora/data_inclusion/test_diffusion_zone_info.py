@@ -1,6 +1,7 @@
-from unittest.mock import Mock, patch
+import pytest
 
 from dora.admin_express.models import AdminDivisionType
+from dora.decoupage_administratif.models import Commune, Departement, Epci, Region
 
 from .diffusion_zone_info import get_diffusion_zone_info
 
@@ -14,13 +15,16 @@ def test_get_diffusion_zone_info_france():
     }
 
 
-@patch("dora.admin_express.models.City.objects.get_from_code")
-def test_get_diffusion_zone_info_city(mock_get_city):
-    mock_city = Mock()
-    mock_city.code = "75056"
-    mock_city.name = "Paris"
-    mock_city.department = "75"
-    mock_get_city.return_value = mock_city
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_city():
+    Commune.objects.create(
+        code="75056",
+        nom="Paris",
+        code_departement="75",
+        code_epci="200054781",
+        code_region="11",
+        codes_postaux=["75001"],
+    )
 
     result = get_diffusion_zone_info(["75056"])
     assert result == {
@@ -31,10 +35,8 @@ def test_get_diffusion_zone_info_city(mock_get_city):
     }
 
 
-@patch("dora.admin_express.models.City.objects.get_from_code")
-def test_get_diffusion_zone_info_city_not_found(mock_get_city):
-    mock_get_city.return_value = None
-
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_city_not_found():
     result = get_diffusion_zone_info(["99999"])
     assert result == {
         "diffusion_zone_details": None,
@@ -44,12 +46,9 @@ def test_get_diffusion_zone_info_city_not_found(mock_get_city):
     }
 
 
-@patch("dora.admin_express.models.Department.objects.get_from_code")
-def test_get_diffusion_zone_info_department(mock_get_department):
-    mock_department = Mock()
-    mock_department.code = "75"
-    mock_department.name = "Paris"
-    mock_get_department.return_value = mock_department
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_department():
+    Departement.objects.create(code="75", nom="Paris", code_region="11")
 
     result = get_diffusion_zone_info(["75"])
     assert result == {
@@ -60,12 +59,9 @@ def test_get_diffusion_zone_info_department(mock_get_department):
     }
 
 
-@patch("dora.admin_express.models.Department.objects.get_from_code")
-def test_get_diffusion_zone_info_department_with_letter(mock_get_department):
-    mock_department = Mock()
-    mock_department.code = "2A"
-    mock_department.name = "Corse-du-Sud"
-    mock_get_department.return_value = mock_department
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_department_with_letter():
+    Departement.objects.create(code="2A", nom="Corse-du-Sud", code_region="94")
 
     result = get_diffusion_zone_info(["2A"])
     assert result == {
@@ -76,10 +72,8 @@ def test_get_diffusion_zone_info_department_with_letter(mock_get_department):
     }
 
 
-@patch("dora.admin_express.models.Department.objects.get_from_code")
-def test_get_diffusion_zone_info_department_not_found(mock_get_department):
-    mock_get_department.return_value = None
-
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_department_not_found():
     result = get_diffusion_zone_info(["99"])
     assert result == {
         "diffusion_zone_details": None,
@@ -89,12 +83,14 @@ def test_get_diffusion_zone_info_department_not_found(mock_get_department):
     }
 
 
-@patch("dora.admin_express.models.EPCI.objects.get_from_code")
-def test_get_diffusion_zone_info_epci(mock_get_epci):
-    mock_epci = Mock()
-    mock_epci.code = "200054781"
-    mock_epci.name = "Métropole du Grand Paris"
-    mock_get_epci.return_value = mock_epci
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_epci():
+    Epci.objects.create(
+        code="200054781",
+        nom="Métropole du Grand Paris",
+        codes_departements=["75", "77", "78", "91", "92", "93", "94", "95"],
+        codes_regions=["11"],
+    )
 
     result = get_diffusion_zone_info(["200054781"])
     assert result == {
@@ -105,10 +101,8 @@ def test_get_diffusion_zone_info_epci(mock_get_epci):
     }
 
 
-@patch("dora.admin_express.models.EPCI.objects.get_from_code")
-def test_get_diffusion_zone_info_epci_not_found(mock_get_epci):
-    mock_get_epci.return_value = None
-
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_epci_not_found():
     result = get_diffusion_zone_info(["999999999"])
     assert result == {
         "diffusion_zone_details": None,
@@ -148,7 +142,18 @@ def test_get_diffusion_zone_info_unknown():
     }
 
 
+@pytest.mark.django_db
 def test_get_diffusion_zone_info_region():
+    Region.objects.create(code="11", nom="Île-de-France")
+    Departement.objects.create(code="75", nom="Paris", code_region="11")
+    Departement.objects.create(code="77", nom="Seine-et-Marne", code_region="11")
+    Departement.objects.create(code="78", nom="Yvelines", code_region="11")
+    Departement.objects.create(code="91", nom="Essonne", code_region="11")
+    Departement.objects.create(code="92", nom="Hauts-de-Seine", code_region="11")
+    Departement.objects.create(code="93", nom="Seine-Saint-Denis", code_region="11")
+    Departement.objects.create(code="94", nom="Val-de-Marne", code_region="11")
+    Departement.objects.create(code="95", nom="Val-d'Oise", code_region="11")
+
     zone_codes = ["75", "77", "78", "91", "92", "93", "94", "95"]
     result = get_diffusion_zone_info(zone_codes)
     assert result == {
@@ -159,7 +164,18 @@ def test_get_diffusion_zone_info_region():
     }
 
 
+@pytest.mark.django_db
 def test_get_diffusion_zone_info_region_different_order():
+    Region.objects.create(code="11", nom="Île-de-France")
+    Departement.objects.create(code="75", nom="Paris", code_region="11")
+    Departement.objects.create(code="77", nom="Seine-et-Marne", code_region="11")
+    Departement.objects.create(code="78", nom="Yvelines", code_region="11")
+    Departement.objects.create(code="91", nom="Essonne", code_region="11")
+    Departement.objects.create(code="92", nom="Hauts-de-Seine", code_region="11")
+    Departement.objects.create(code="93", nom="Seine-Saint-Denis", code_region="11")
+    Departement.objects.create(code="94", nom="Val-de-Marne", code_region="11")
+    Departement.objects.create(code="95", nom="Val-d'Oise", code_region="11")
+
     zone_codes = ["95", "94", "93", "92", "91", "78", "77", "75"]
     result = get_diffusion_zone_info(zone_codes)
     assert result == {
@@ -170,18 +186,17 @@ def test_get_diffusion_zone_info_region_different_order():
     }
 
 
-@patch("dora.admin_express.models.Department.objects.get_from_code")
-def test_get_diffusion_zone_info_region_partial(mock_get_department):
-    mock_dept_75 = Mock()
-    mock_dept_75.code = "75"
-    mock_dept_75.name = "Paris"
-    mock_dept_77 = Mock()
-    mock_dept_77.code = "77"
-    mock_dept_77.name = "Seine-et-Marne"
-    mock_get_department.side_effect = lambda code: {
-        "75": mock_dept_75,
-        "77": mock_dept_77,
-    }.get(code)
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_region_partial():
+    Region.objects.create(code="11", nom="Île-de-France")
+    Departement.objects.create(code="75", nom="Paris", code_region="11")
+    Departement.objects.create(code="77", nom="Seine-et-Marne", code_region="11")
+    Departement.objects.create(code="78", nom="Yvelines", code_region="11")
+    Departement.objects.create(code="91", nom="Essonne", code_region="11")
+    Departement.objects.create(code="92", nom="Hauts-de-Seine", code_region="11")
+    Departement.objects.create(code="93", nom="Seine-Saint-Denis", code_region="11")
+    Departement.objects.create(code="94", nom="Val-de-Marne", code_region="11")
+    Departement.objects.create(code="95", nom="Val-d'Oise", code_region="11")
 
     zone_codes = ["75", "77"]
     result = get_diffusion_zone_info(zone_codes)
@@ -193,20 +208,24 @@ def test_get_diffusion_zone_info_region_partial(mock_get_department):
     }
 
 
-@patch("dora.admin_express.models.City.objects.get_from_code")
-def test_get_diffusion_zone_info_multiple_codes(mock_get_city):
-    mock_city_75056 = Mock()
-    mock_city_75056.code = "75056"
-    mock_city_75056.name = "Paris"
-    mock_city_75056.department = "75"
-    mock_city_13001 = Mock()
-    mock_city_13001.code = "13001"
-    mock_city_13001.name = "Aix-en-Provence"
-    mock_city_13001.department = "13"
-    mock_get_city.side_effect = lambda code: {
-        "75056": mock_city_75056,
-        "13001": mock_city_13001,
-    }.get(code)
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_multiple_codes():
+    Commune.objects.create(
+        code="75056",
+        nom="Paris",
+        code_departement="75",
+        code_epci="200054781",
+        code_region="11",
+        codes_postaux=["75001"],
+    )
+    Commune.objects.create(
+        code="13001",
+        nom="Aix-en-Provence",
+        code_departement="13",
+        code_epci="200054781",
+        code_region="93",
+        codes_postaux=["13100"],
+    )
 
     zone_codes = ["75056", "13001"]
     result = get_diffusion_zone_info(zone_codes)
@@ -218,21 +237,24 @@ def test_get_diffusion_zone_info_multiple_codes(mock_get_city):
     }
 
 
-@patch("dora.admin_express.models.City.objects.get_from_code")
-def test_get_diffusion_zone_info_with_empty_display(mock_get_city):
-    mock_city_75056 = Mock()
-    mock_city_75056.code = "75056"
-    mock_city_75056.name = "Paris"
-    mock_city_75056.department = "75"
-    mock_city_13001 = Mock()
-    mock_city_13001.code = "13001"
-    mock_city_13001.name = "Aix-en-Provence"
-    mock_city_13001.department = "13"
-    mock_get_city.side_effect = lambda code: {
-        "75056": mock_city_75056,
-        "13001": mock_city_13001,
-        "99999": None,
-    }.get(code)
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_with_empty_display():
+    Commune.objects.create(
+        code="75056",
+        nom="Paris",
+        code_departement="75",
+        code_epci="200054781",
+        code_region="11",
+        codes_postaux=["75001"],
+    )
+    Commune.objects.create(
+        code="13001",
+        nom="Aix-en-Provence",
+        code_departement="13",
+        code_epci="200054781",
+        code_region="93",
+        codes_postaux=["13100"],
+    )
 
     zone_codes = ["75056", "99999", "13001"]
     result = get_diffusion_zone_info(zone_codes)
@@ -244,10 +266,8 @@ def test_get_diffusion_zone_info_with_empty_display(mock_get_city):
     }
 
 
-@patch("dora.admin_express.models.City.objects.get_from_code")
-def test_get_diffusion_zone_info_all_empty(mock_get_city):
-    mock_get_city.return_value = None
-
+@pytest.mark.django_db
+def test_get_diffusion_zone_info_all_empty():
     zone_codes = ["99999", "88888"]
     result = get_diffusion_zone_info(zone_codes)
     assert result == {
@@ -258,18 +278,26 @@ def test_get_diffusion_zone_info_all_empty(mock_get_city):
     }
 
 
+@pytest.mark.django_db
 def test_get_diffusion_zone_info_guadeloupe():
+    Departement.objects.create(code="971", nom="Guadeloupe", code_region="01")
+
     zone_codes = ["971"]
     result = get_diffusion_zone_info(zone_codes)
     assert result == {
-        "diffusion_zone_details": None,
+        "diffusion_zone_details": "971",
         "diffusion_zone_details_display": "Guadeloupe",
-        "diffusion_zone_type": AdminDivisionType.REGION.value,
-        "diffusion_zone_type_display": AdminDivisionType.REGION.label,
+        "diffusion_zone_type": AdminDivisionType.DEPARTMENT.value,
+        "diffusion_zone_type_display": AdminDivisionType.DEPARTMENT.label,
     }
 
 
+@pytest.mark.django_db
 def test_get_diffusion_zone_info_corse():
+    Region.objects.create(code="94", nom="Corse")
+    Departement.objects.create(code="2A", nom="Corse-du-Sud", code_region="94")
+    Departement.objects.create(code="2B", nom="Haute-Corse", code_region="94")
+
     zone_codes = ["2A", "2B"]
     result = get_diffusion_zone_info(zone_codes)
     assert result == {
