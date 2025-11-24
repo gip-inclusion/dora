@@ -31,6 +31,8 @@ export const load = async ({ parent, fetch }) => {
           totalReceived: 0,
           totalReceivedPending: 0,
         },
-    structure: structure ? structure : { slug: "Pas trouvé" },
+    structure: structure
+      ? structure
+      : { typologyDisplay: "Pas trouvé", slug: "Pas trouvé" },
   };
 };

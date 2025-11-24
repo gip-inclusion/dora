@@ -6,9 +6,11 @@
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Tabs from "$lib/components/display/tabs.svelte";
   import { orientationState, items } from "./state.svelte.js";
+  import type { PageData } from "./$types";
 
   interface Props {
     children?: Snippet;
+    data: PageData;
   }
 
   let { children, data }: Props = $props();
@@ -20,7 +22,8 @@
   <div class="gap-s8 py-s16 flex">
     <HomeSmile2LineBuildings></HomeSmile2LineBuildings><a
       class="underline"
-      href={`/structures/${data.structure.slug}`}>{data.structure.name}</a
+      href={`/structures/${data.structure.slug}`}
+      >{data.structure.typologyDisplay}</a
     >
   </div>
   <Tabs
