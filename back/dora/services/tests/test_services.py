@@ -1145,6 +1145,12 @@ class DataInclusionSearchTestCase(APITestCase):
             department=self.dept.code,
             region=self.region.code,
         )
+        self.city1_decoupage_administratif = baker.make(
+            "Commune",
+            code="12345",
+            nom="Sainte Jacquelineboeuf",
+            code_departement=self.dept.code,
+        )
         self.city2 = baker.make("City")
 
         self.di_client = FakeDataInclusionClient()
