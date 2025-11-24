@@ -44,7 +44,7 @@
         <DownloadLineSystem class="fill-magenta-cta" /><button
           class="text-magenta-cta">Télécharger la liste</button
         >
-      {:else if orientationState.selectedType === "received"}
+      {:else if orientationState.selectedType === "received" && data.stats.structureHasServices}
         <a
           href={`/structures/${data.structure.slug}/services`}
           class="text-magenta-cta">Passer en revue mes services</a
@@ -56,6 +56,12 @@
               `${CANONICAL_URL}/structures/${data.structure.slug}`
             )}>Copier le lien de ma structure</button
         >
+      {:else if orientationState.selectedType === "received" && !data.stats.structureHasServices}
+        <a
+          href={`/services/creer?structure=${data.structure.slug}`}
+          class="text-magenta-cta"
+          >Référencer un service
+        </a>
       {:else}
         <a href="/recherche-textuelle" class="text-magenta-cta"
           >Rechercher par mots-clé</a

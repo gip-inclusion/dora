@@ -735,4 +735,5 @@ export interface OrientationStats {
   totalSentPending: number;
   totalReceived: number;
   totalReceivedPending: number;
+  structureHasServices: boolean;
 }

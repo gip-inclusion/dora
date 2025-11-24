@@ -30,6 +30,7 @@ export const load = async ({ parent, fetch }) => {
           totalSentPending: 0,
           totalReceived: 0,
           totalReceivedPending: 0,
+          structureHasServices: false,
         },
     structure: structure
       ? structure
