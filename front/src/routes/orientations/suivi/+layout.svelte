@@ -20,9 +20,8 @@
   <Breadcrumb currentLocation="orientation-export" />
   <h1 class="pt-s48">{data.title}</h1>
   <div class="gap-s8 py-s16 flex">
-    <HomeSmile2LineBuildings></HomeSmile2LineBuildings><a
-      class="underline"
-      href={`/structures/${data.structure.slug}`}
+    <HomeSmile2LineBuildings />
+    <a class="underline" href={`/structures/${data.structure.slug}`}
       >{data.structure.typologyDisplay}</a
     >
   </div>
