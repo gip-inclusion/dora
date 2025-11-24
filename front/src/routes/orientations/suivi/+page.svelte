@@ -13,13 +13,11 @@
   }
   const { data }: Props = $props();
 
-  function checkIfOrientations() {
-    return (
-      (orientationState.selectedType === "sent" && data.stats.totalSent > 0) ||
+  const hasOrientations = $derived(
+    (orientationState.selectedType === "sent" && data.stats.totalSent > 0) ||
       (orientationState.selectedType === "received" &&
-        data.stats.totalReceivedPending > 0)
-    );
-  }
+        data.stats.totalReceived > 0)
+  );
 </script>
 
 <EnsureLoggedIn>
@@ -41,10 +39,10 @@
     {/if}
     <OrientationsExportCard
       type={orientationState.selectedType}
-      hasOrientations={checkIfOrientations()}
+      {hasOrientations}
       structureHasServices={data.stats.structureHasServices}
     >
-      {#if checkIfOrientations()}
+      {#if hasOrientations}
         <DownloadLineSystem class="fill-magenta-cta" /><button
           class="text-magenta-cta">Télécharger la liste</button
         >

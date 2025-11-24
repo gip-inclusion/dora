@@ -55,6 +55,9 @@
     }
     return "noOrientationsAndNoServices";
   }
+
+  const title = $derived(CONTENT_BY_TYPE[type][getContentMapKey()].title);
+  const text = $derived(CONTENT_BY_TYPE[type][getContentMapKey()].text);
 </script>
 
 <div
@@ -66,10 +69,8 @@
     {:else}
       <InboxUnarchiveLineBusiness />
     {/if}
-    <h2>{CONTENT_BY_TYPE[type][getContentMapKey()].title}</h2>
-    <h4>
-      {CONTENT_BY_TYPE[type][getContentMapKey()].text}
-    </h4>
+    <h2>{title}</h2>
+    <h4>{text}</h4>
     <div
       class={[
         "flex flex-row justify-center",
