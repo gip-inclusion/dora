@@ -94,6 +94,6 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^10.26.0"
+    "@sentry/sveltekit": "^10.27.0"
   }
 }
