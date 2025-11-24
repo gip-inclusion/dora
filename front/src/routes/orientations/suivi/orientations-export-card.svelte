@@ -9,6 +9,7 @@
   interface Props {
     type: OrientationType;
     hasOrientations: boolean;
+    structureHasServices: boolean;
     children: Snippet;
   }
 
@@ -24,19 +25,36 @@
       },
     },
     received: {
-      noOrientations: {
+      noOrientationsAndServices: {
         title: "Vous n'avez pas encore réalisé d'orientations",
         text: "Besoin d'orienter des bénéficiaires vers des dispositifs adaptés ? Commencez par identifier les services disponibles selon leurs besoins et votre territoire.",
       },
+      noOrientationsAndNoServices: {
+        title: "Vous n'avez pas encore réalisé d'orientations",
+        text: "Pour recevoir des orientations, vous devez d'abord référencer vos services ! Si vous proposez des dispositifs, ajoutez-les sur DORA pour que vos partenaires puissent y orienter leurs bénéficiaires.",
+      },
       hasOrientations: {
         title: "Vous avez reçu des orientations",
-        text: "Téléchargez la liste des orientations reçues par votre structure. Vous pourrez ainsi consulter et trier ces orientations. Fichier proposé au format .xls",
+        text: "Téléchargez la liste des orientatins reçues par votre structure. Vous pourrez ainsi consulter et trier ces orientations. Fichier proposé au format .xls",
       },
     },
   };
 
-  const { type, hasOrientations, children }: Props = $props();
-  const contentMapKey = hasOrientations ? "hasOrientations" : "noOrientations";
+  const { type, hasOrientations, structureHasServices, children }: Props =
+    $props();
+
+  function getContentMapKey() {
+    if (type === "sent") {
+      return hasOrientations ? "hasOrientations" : "noOrientations";
+    }
+    if (hasOrientations) {
+      return "hasOrientations";
+    }
+    if (structureHasServices) {
+      return "noOrientationsAndServices";
+    }
+    return "noOrientationsAndNoServices";
+  }
 </script>
 
 <div
@@ -48,9 +66,9 @@
     {:else}
       <InboxUnarchiveLineBusiness />
     {/if}
-    <h2>{CONTENT_BY_TYPE[type][contentMapKey].title}</h2>
+    <h2>{CONTENT_BY_TYPE[type][getContentMapKey()].title}</h2>
     <h4>
-      {CONTENT_BY_TYPE[type][contentMapKey].text}
+      {CONTENT_BY_TYPE[type][getContentMapKey()].text}
     </h4>
     <div
       class={[

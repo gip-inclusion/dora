@@ -39,6 +39,7 @@
     <OrientationsExportCard
       type={orientationState.selectedType}
       {hasOrientations}
+      structureHasServices={data.stats.structureHasServices}
     >
       {#if hasOrientations}
         <DownloadLineSystem class="fill-magenta-cta" /><button
