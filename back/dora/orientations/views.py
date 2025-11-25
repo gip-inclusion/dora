@@ -7,6 +7,7 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from dora.core.models import ModerationStatus
 from dora.core.utils import TRUTHY_VALUES
@@ -29,7 +30,7 @@ from .models import (
     RejectionReason,
     SentContactEmail,
 )
-from .serializers import OrientationSerializer
+from .serializers import OrientationSerializer, SentOrientationExportSerializer
 
 
 class ModeratedOrientationPermission(permissions.BasePermission):
@@ -269,3 +270,39 @@ def display_orientation_stats(request: Request, structure_slug: str) -> Response
     stats["structure_has_services"] = structure.has_services
 
     return Response(stats)
+
+
+class OrientationExportView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, structure_slug: str) -> Response:
+        export_type = request.query_params.get("type")
+
+        if export_type == "sent":
+            return self._export_sent_orientations(request, structure_slug)
+        else:
+            raise serializers.ValidationError(
+                {"type": "Le paramètre 'type' doit être 'sent'."}
+            )
+
+    def _export_sent_orientations(
+        self, request: Request, structure_slug: str
+    ) -> Response:
+        user = request.user
+        structure = get_object_or_404(
+            Structure.objects.all(),
+            slug=structure_slug,
+        )
+
+        if not structure.is_member(user):
+            raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
+
+        orientations = (
+            Orientation.objects.filter(prescriber_structure=structure)
+            .order_by("-creation_date")
+            .select_related("service__structure")
+        )
+
+        serializer = SentOrientationExportSerializer(orientations, many=True)
+
+        return Response(serializer.data)

@@ -186,3 +186,34 @@ class OrientationSerializer(serializers.ModelSerializer):
             data["beneficiary_france_travail_number"] = ""
 
         return data
+
+
+class SentOrientationExportSerializer(serializers.ModelSerializer):
+    creation_date = serializers.DateTimeField(format="%Y-%m-%d")
+    beneficiary_name = serializers.SerializerMethodField()
+    referent_name = serializers.SerializerMethodField()
+    structure_name = serializers.SerializerMethodField()
+    service_name = serializers.SerializerMethodField()
+
+    def get_beneficiary_name(self, obj):
+        return obj.get_beneficiary_full_name()
+
+    def get_referent_name(self, obj):
+        return obj.get_referent_full_name()
+
+    def get_structure_name(self, obj):
+        return obj.get_structure_name()
+
+    def get_service_name(self, obj):
+        return obj.get_service_name()
+
+    class Meta:
+        model = Orientation
+        fields = [
+            "creation_date",
+            "status",
+            "beneficiary_name",
+            "referent_name",
+            "structure_name",
+            "service_name",
+        ]
