@@ -1,12 +1,21 @@
 import { fetchData } from "$lib/utils/misc";
 import { getApiURL } from "$lib/utils/api";
 import type { OrientationType } from "./state.svelte";
-import * as XLSX from "xlsx";
-import dayjs from "dayjs";
+import { toast } from "@zerodevx/svelte-toast";
+import { generateSpreadsheet } from "$lib/utils/spreadsheet";
 
 interface OrientationExportParams {
   structureSlug: string;
   type: OrientationType;
+}
+
+interface SentOrientationExportData {
+  creationDate: string;
+  status: string;
+  beneficiaryName: string;
+  structureName: string;
+  serviceName: string;
+  referentName: string;
 }
 
 async function fetchOrientationExportData({
@@ -15,12 +24,14 @@ async function fetchOrientationExportData({
 }: OrientationExportParams) {
   const url = `${getApiURL()}/structures/${structureSlug}/orientations/export?type=${type}`;
 
-  const result = await fetchData(url);
+  const result = await fetchData<Array<SentOrientationExportData>>(url);
 
   return result.data;
 }
 
-function formatSentOrientationExportData(exportData: any[]) {
+function formatSentOrientationExportData(
+  exportData: Array<SentOrientationExportData>
+) {
   return exportData.map((orientation) => ({
     "Envoyée le": orientation.creationDate,
     Statut: orientation.status,
@@ -36,20 +47,23 @@ export async function generateOrientationExport(
 ) {
   const exportData = await fetchOrientationExportData(params);
 
+  const { structureSlug, type } = params;
+
   let sheetData;
 
-  if (params.type === "sent") {
+  if (!exportData) {
+    toast.push(
+      "Il y a eu une erreur en cherchant les données des orientations."
+    );
+    return;
+  }
+
+  if (type === "sent") {
     sheetData = formatSentOrientationExportData(exportData);
   }
 
-  const worksheet = XLSX.utils.json_to_sheet(sheetData);
-  worksheet["!cols"] = Array(sheetData.keys().length).fill({ wch: 20 });
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet);
-  const date = dayjs().format("YYYY-MM-DD");
-  XLSX.writeFile(
-    workbook,
-    `orientations-sent-dora-${params.structureSlug}-${date}.xlsx`,
-    { compression: true }
-  );
+  generateSpreadsheet<Array<SentOrientationExportData>>({
+    sheetData,
+    sheetName: `orientations-${type}-dora-${structureSlug}`,
+  });
 }
