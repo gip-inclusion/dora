@@ -635,8 +635,8 @@ NEXUS_METABASE_DB_PASSWORD = os.getenv("NEXUS_METABASE_DB_PASSWORD")
 
 # API de découpage administratif
 # ---------------------------------------
-GEO_API_GOUV_BASE_URL = os.getenv("GEO_API_GOUV_BASE_URL")
+GEO_API_GOUV_BASE_URL = os.getenv("GEO_API_GOUV_BASE_URL", "https://geo.api.gouv.fr")
 try:
-    GEO_API_GOUV_TIMEOUT_SECONDS = int(os.getenv("GEO_API_GOUV_TIMEOUT_SECONDS"))
+    GEO_API_GOUV_TIMEOUT_SECONDS = int(os.getenv("GEO_API_GOUV_TIMEOUT_SECONDS"), 10)
 except (TypeError, ValueError):
     GEO_API_GOUV_TIMEOUT_SECONDS = None
