@@ -339,8 +339,12 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "qpv_or_zrr": None,
         "recurrence": service_data["horaires_accueil"],
         "remote_url": None,
-        "requirements": [service_data["conditions_acces"]],
-        "requirements_display": [service_data["conditions_acces"]],
+        "requirements": [service_data["conditions_acces"]]
+        if service_data["conditions_acces"]
+        else None,
+        "requirements_display": [service_data["conditions_acces"]]
+        if service_data["conditions_acces"]
+        else None,
         "short_desc": textwrap.shorten(
             service_data["description"], width=200, placeholder="…"
         )
