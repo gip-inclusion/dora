@@ -1573,8 +1573,7 @@ class DataInclusionSearchTestCase(APITestCase):
     def test_service_di_credentials(self):
         cases = [
             (None, None, None),
-            ([], [], []),
-            (["lorem", "ipsum"], ["lorem", "ipsum"], ["lorem", "ipsum"]),
+            ("lorem ipsum", ["lorem ipsum"], ["lorem ipsum"]),
         ]
         for conditions_acces, requirements, requirements_display in cases:
             with self.subTest(conditions_acces=conditions_acces):
@@ -1692,8 +1691,7 @@ class DataInclusionSearchTestCase(APITestCase):
     def test_service_di_requirements(self):
         cases = [
             (None, None, None),
-            ([], [], []),
-            (["lorem", "ipsum"], ["lorem", "ipsum"], ["lorem", "ipsum"]),
+            ("lorem ipsum", ["lorem ipsum"], ["lorem ipsum"]),
         ]
         for conditions_acces, requirements, requirements_display in cases:
             with self.subTest(conditions_acces=conditions_acces):
