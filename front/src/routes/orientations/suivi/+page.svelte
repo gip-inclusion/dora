@@ -5,8 +5,10 @@
 
   import OrientationsExportCard from "./orientations-export-card.svelte";
   import DownloadLineSystem from "svelte-remix/DownloadLineSystem.svelte";
+  import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
   import { CANONICAL_URL } from "$lib/env";
   import type { PageData } from "./$types";
+  import { fly } from "svelte/transition";
 
   interface Props {
     data: PageData;
@@ -18,6 +20,16 @@
       (orientationState.selectedType === "received" &&
         data.stats.totalReceived > 0)
   );
+
+  let linkCopied = $state(false);
+
+  function handleCopy() {
+    navigator.clipboard.writeText(
+      `${CANONICAL_URL}/structures/${data.structure.slug}`
+    );
+    linkCopied = true;
+    setTimeout(() => (linkCopied = false), 2000);
+  }
 </script>
 
 <EnsureLoggedIn>
@@ -43,29 +55,33 @@
       structureHasServices={data.stats.structureHasServices}
     >
       {#if hasOrientations}
-        <button class="text-magenta-cta"
+        <button class="text-magenta-cta flex flex-row font-bold"
           ><DownloadLineSystem class="fill-magenta-cta" />Télécharger la liste</button
         >
       {:else if orientationState.selectedType === "received" && data.stats.structureHasServices}
         <a
           href={`/structures/${data.structure.slug}/services`}
-          class="text-magenta-cta">Passer en revue mes services</a
+          class="text-magenta-cta font-bold">Passer en revue mes services</a
         >
-        <button
-          class="text-magenta-cta"
-          onclick={() =>
-            navigator.clipboard.writeText(
-              `${CANONICAL_URL}/structures/${data.structure.slug}`
-            )}>Copier le lien de ma structure</button
-        >
+        {#if !linkCopied}
+          <button
+            out:fly={{ y: 50, duration: 200 }}
+            class="text-magenta-cta font-bold"
+            onclick={handleCopy}>Copier le lien de ma structure</button
+          >
+        {:else}
+          <div in:fly={{ y: 50, duration: 200, delay: 200 }}>
+            <CheckLineSystem />
+          </div>
+        {/if}
       {:else if orientationState.selectedType === "received" && !data.stats.structureHasServices}
         <a
           href={`/services/creer?structure=${data.structure.slug}`}
-          class="text-magenta-cta"
+          class="text-magenta-cta font-bold"
           >Référencer un service
         </a>
       {:else}
-        <a href="/recherche-textuelle" class="text-magenta-cta"
+        <a href="/recherche-textuelle" class="text-magenta-cta font-bold"
           >Rechercher par mots-clé</a
         >
         <a href="/" class="text-magenta-cta">Rechercher par lieu et besoins</a>
