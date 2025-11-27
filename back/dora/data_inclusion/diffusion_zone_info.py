@@ -65,31 +65,31 @@ def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
     }
 
 
-def are_all_potential_departments_codes(departement_codes: set[str]) -> bool:
+def are_all_potential_departments_codes(department_codes: set[str]) -> bool:
     # Codes attendus : 2 ou 3 lettres ou chiffres
-    return all(re.match(DEPARTMENT_CODE_PATTERN, code) for code in departement_codes)
+    return all(re.match(DEPARTMENT_CODE_PATTERN, code) for code in department_codes)
 
 
 def get_region_if_all_department_codes_belong_to_it(
-    departement_codes: list[str],
+    department_codes: list[str],
 ) -> Region | None:
-    departement_codes = set(departement_codes)
+    department_codes = set(department_codes)
 
-    if not departement_codes:
+    if not department_codes:
         # Liste vide
         return None
 
-    if not are_all_potential_departments_codes(departement_codes):
+    if not are_all_potential_departments_codes(department_codes):
         # Un ou plusieurs codes n'ont pas le format attendu
         return None
 
     departements = list(
-        Departement.objects.filter(code__in=departement_codes).values(
+        Departement.objects.filter(code__in=department_codes).values(
             "code", "code_region"
         )
     )
 
-    if len(departements) != len(departement_codes):
+    if len(departements) != len(department_codes):
         # Un ou plusieurs codes ne correspondent pas à des départements
         return None
 
@@ -104,7 +104,7 @@ def get_region_if_all_department_codes_belong_to_it(
         code_region=region_code
     ).count()
 
-    if region_departments_count != len(departement_codes):
+    if region_departments_count != len(department_codes):
         # La région comporte un nombre de départements différent des départements fournis
         return None
 
