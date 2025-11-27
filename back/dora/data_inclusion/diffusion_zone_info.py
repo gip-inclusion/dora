@@ -11,17 +11,23 @@ FRANCE_DIFFUSION_ZONE_INFO = {
     "diffusion_zone_type_display": AdminDivisionType.COUNTRY.label,
 }
 
+COUNTRY_CODE_PATTERN = r"^99[0-5]\d{2}$"
+CITY_CODE_PATTERN = r"^\w{5}$"
+DEPARTMENT_CODE_PATTERN = r"^\w{2,3}$"
+EPCI_CODE_PATTERN = r"^\d{9}$"
+REGION_CODE_PATTERN = r"^\w{2}$"
+
 
 def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
     if zone_code == "france":
         return FRANCE_DIFFUSION_ZONE_INFO
 
-    if re.match(r"^99[0-5]\d{2}$", zone_code):
+    if re.match(COUNTRY_CODE_PATTERN, zone_code):
         # Pays
         if zone_code == FRANCE_INSEE_CODE:
             return FRANCE_DIFFUSION_ZONE_INFO
 
-    if re.match(r"^\w{5}$", zone_code):
+    if re.match(CITY_CODE_PATTERN, zone_code):
         commune = Commune.objects.filter(code=zone_code).first()
         if commune:
             return {
@@ -31,7 +37,7 @@ def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
                 "diffusion_zone_type_display": AdminDivisionType.CITY.label,
             }
 
-    if re.match(r"^\w{2,3}$", zone_code):
+    if re.match(DEPARTMENT_CODE_PATTERN, zone_code):
         department = Departement.objects.filter(code=zone_code).first()
         if department:
             return {
@@ -41,7 +47,7 @@ def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
                 "diffusion_zone_type_display": AdminDivisionType.DEPARTMENT.label,
             }
 
-    if re.match(r"^\d{9}$", zone_code):
+    if re.match(EPCI_CODE_PATTERN, zone_code):
         epci = Epci.objects.filter(code=zone_code).first()
         if epci:
             return {
@@ -61,7 +67,7 @@ def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
 
 def are_all_potential_departments_codes(departement_codes: set[str]) -> bool:
     # Codes attendus : 2 ou 3 lettres ou chiffres
-    return all(re.match(r"^\w{2,3}$", code) for code in departement_codes)
+    return all(re.match(DEPARTMENT_CODE_PATTERN, code) for code in departement_codes)
 
 
 def get_region_if_all_department_codes_belong_to_it(
