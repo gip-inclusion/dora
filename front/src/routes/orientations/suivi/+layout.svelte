@@ -5,7 +5,7 @@
   import Breadcrumb from "$lib/components/display/breadcrumb.svelte";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
   import Tabs from "$lib/components/display/tabs.svelte";
-  import { orientationState, items } from "./state.svelte.js";
+  import { orientationState } from "./state.svelte.js";
   import type { PageData } from "./$types";
 
   interface Props {
@@ -14,6 +14,11 @@
   }
 
   let { children, data }: Props = $props();
+
+  const orientationTabs = [
+    { id: "received", name: "Orientations reçues" },
+    { id: "sent", name: "Orientations envoyées" },
+  ];
 </script>
 
 <CenteredGrid extraClass="pt-s16" bgColor="bg-blue-information" noPadding>
@@ -26,7 +31,7 @@
     >
   </div>
   <Tabs
-    {items}
+    items={orientationTabs}
     itemId={orientationState.selectedType}
     onSelectedChange={orientationState.setSelectedType}
   />

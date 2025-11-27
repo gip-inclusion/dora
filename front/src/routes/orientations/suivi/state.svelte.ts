@@ -8,9 +8,4 @@ class OrientationState {
   };
 }
 
-export const items = [
-  { id: "received", name: "Orientations reçues" },
-  { id: "sent", name: "Orientations envoyées" },
-];
-
 export const orientationState = new OrientationState();

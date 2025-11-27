@@ -43,8 +43,8 @@
       structureHasServices={data.stats.structureHasServices}
     >
       {#if hasOrientations}
-        <DownloadLineSystem class="fill-magenta-cta" /><button
-          class="text-magenta-cta">Télécharger la liste</button
+        <button class="text-magenta-cta"
+          ><DownloadLineSystem class="fill-magenta-cta" />Télécharger la liste</button
         >
       {:else if orientationState.selectedType === "received" && data.stats.structureHasServices}
         <a

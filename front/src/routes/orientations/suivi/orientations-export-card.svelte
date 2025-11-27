@@ -84,7 +84,7 @@
     {#if hasOrientations}
       <img src={illuModeEmploi} alt="" class="mb-s16 w-full" />
     {:else}
-      <img src={illuRecenser} alt="illustration-recenser" />
+      <img src={illuRecenser} alt="" />
     {/if}
   </div>
 </div>
