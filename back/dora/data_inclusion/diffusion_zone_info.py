@@ -108,7 +108,15 @@ def are_all_departements_codes_of_a_region(
     return Region.objects.filter(code=region_code).first()
 
 
-def get_diffusion_zone_info(zone_codes: list[str]) -> list[str]:
+def get_diffusion_zone_info(zone_codes: list[str] | None) -> list[str]:
+    if zone_codes is None:
+        return {
+            "diffusion_zone_details": None,
+            "diffusion_zone_details_display": "",
+            "diffusion_zone_type": None,
+            "diffusion_zone_type_display": "",
+        }
+
     if len(zone_codes) == 1:
         return get_diffusion_zone_info_for_zone_code(zone_codes[0])
 
