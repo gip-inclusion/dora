@@ -65,7 +65,7 @@ def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
     }
 
 
-def are_all_potential_departments_codes(department_codes: set[str]) -> bool:
+def are_department_codes(department_codes: set[str]) -> bool:
     # Codes attendus : 2 ou 3 lettres ou chiffres
     return all(re.match(DEPARTMENT_CODE_PATTERN, code) for code in department_codes)
 
@@ -79,7 +79,7 @@ def get_region_if_all_department_codes_belong_to_it(
         # Liste vide
         return None
 
-    if not are_all_potential_departments_codes(department_codes):
+    if not are_department_codes(department_codes):
         # Un ou plusieurs codes n'ont pas le format attendu
         return None
 
