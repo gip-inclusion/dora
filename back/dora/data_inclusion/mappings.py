@@ -244,6 +244,10 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
 
     diffusion_zone_info = get_diffusion_zone_info(service_data["zone_eligibilite"])
 
+    requirements = requirements_display = (
+        [service_data["conditions_acces"]] if service_data["conditions_acces"] else None
+    )
+
     return {
         "access_conditions": None,
         "access_conditions_display": None,
@@ -339,12 +343,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "qpv_or_zrr": None,
         "recurrence": service_data["horaires_accueil"],
         "remote_url": None,
-        "requirements": [service_data["conditions_acces"]]
-        if service_data["conditions_acces"]
-        else None,
-        "requirements_display": [service_data["conditions_acces"]]
-        if service_data["conditions_acces"]
-        else None,
+        "requirements": requirements,
+        "requirements_display": requirements_display,
         "short_desc": textwrap.shorten(
             service_data["description"], width=200, placeholder="…"
         )
