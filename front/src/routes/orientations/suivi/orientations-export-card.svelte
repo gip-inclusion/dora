@@ -16,8 +16,8 @@
   const CONTENT_BY_TYPE = {
     sent: {
       noOrientations: {
-        title: "Aucune demande d'orientation reçue pour le moment",
-        text: "Assurez-vous d'avoir activé le formulaire DORA sur vos services. Pour augmenter votre visibilité, partagez le lien de votre structure avec vos partenaires afin qu'ils puissent orienter leurs bénéficiaires vers vos dispositifs via DORA.",
+        title: "Aucune demande d’orientation reçue pour le moment",
+        text: "Assurez-vous d’avoir activé le formulaire DORA sur vos services. Pour augmenter votre visibilité, partagez le lien de votre structure avec vos partenaires afin qu’ils puissent orienter leurs bénéficiaires vers vos dispositifs via DORA.",
       },
       hasOrientations: {
         title: "Liste des orientations envoyées",
@@ -26,16 +26,16 @@
     },
     received: {
       noOrientationsAndServices: {
-        title: "Vous n'avez pas encore réalisé d'orientations",
-        text: "Besoin d'orienter des bénéficiaires vers des dispositifs adaptés ? Commencez par identifier les services disponibles selon leurs besoins et votre territoire.",
+        title: "Vous n’avez pas encore réalisé d’orientations",
+        text: "Besoin d’orienter des bénéficiaires vers des dispositifs adaptés ? Commencez par identifier les services disponibles selon leurs besoins et votre territoire.",
       },
       noOrientationsAndNoServices: {
-        title: "Vous n'avez pas encore réalisé d'orientations",
-        text: "Pour recevoir des orientations, vous devez d'abord référencer vos services ! Si vous proposez des dispositifs, ajoutez-les sur DORA pour que vos partenaires puissent y orienter leurs bénéficiaires.",
+        title: "Vous n’avez pas encore réalisé d’orientations",
+        text: "Pour recevoir des orientations, vous devez d’abord référencer vos services ! Si vous proposez des dispositifs, ajoutez-les sur DORA pour que vos partenaires puissent y orienter leurs bénéficiaires.",
       },
       hasOrientations: {
         title: "Vous avez reçu des orientations",
-        text: "Téléchargez la liste des orientatins reçues par votre structure. Vous pourrez ainsi consulter et trier ces orientations. Fichier proposé au format .xls",
+        text: "Téléchargez la liste des orientations reçues par votre structure. Vous pourrez ainsi consulter et trier ces orientations. Fichier proposé au format .xls",
       },
     },
   };
