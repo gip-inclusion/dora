@@ -4,26 +4,22 @@ from dora.admin_express.models import AdminDivisionType
 from dora.decoupage_administratif.models import Commune, Departement, Epci, Region
 
 FRANCE_INSEE_CODE = "99100"
+FRANCE_DIFFUSION_ZONE_INFO = {
+    "diffusion_zone_details": None,
+    "diffusion_zone_details_display": "France entière",
+    "diffusion_zone_type": AdminDivisionType.COUNTRY.value,
+    "diffusion_zone_type_display": AdminDivisionType.COUNTRY.label,
+}
 
 
 def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
     if zone_code == "france":
-        return {
-            "diffusion_zone_details": None,
-            "diffusion_zone_details_display": "France entière",
-            "diffusion_zone_type": AdminDivisionType.COUNTRY.value,
-            "diffusion_zone_type_display": AdminDivisionType.COUNTRY.label,
-        }
+        return FRANCE_DIFFUSION_ZONE_INFO
 
     if re.match(r"^99[0-5]\d{2}$", zone_code):
         # Pays
         if zone_code == FRANCE_INSEE_CODE:
-            return {
-                "diffusion_zone_details": None,
-                "diffusion_zone_details_display": "France entière",
-                "diffusion_zone_type": AdminDivisionType.COUNTRY.value,
-                "diffusion_zone_type_display": AdminDivisionType.COUNTRY.label,
-            }
+            return FRANCE_DIFFUSION_ZONE_INFO
 
     if re.match(r"^\w{5}$", zone_code):
         commune = Commune.objects.filter(code=zone_code).first()
