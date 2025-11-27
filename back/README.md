@@ -7,7 +7,7 @@
 - [GDAL](https://gdal.org/).
 
 ### Setup des variables d'environnement
- 
+
 Si vous utilisez l'environnement Docker Compose fourni par défaut :
 ```bash
   ln -s envs-example envs
@@ -61,6 +61,13 @@ Les consignes d'installation sont [ici](https://graphviz.org/download/).'
 pip install -r requirements/dev.txt
 ```
 
+Vous pouvez aussi utiliser la recette `venv` du Makefile pour créer et/ou mettre à jour votre _virtualenv_,
+celle-ci a besoin du petit utilitaire [`uv`](https://docs.astral.sh/uv/getting-started/installation/) installer sur votre système :
+
+```bash
+make venv
+```
+
 # Vérifier que tout fonctionne
 ```bash
 ./manage.py check
@@ -71,10 +78,12 @@ pip install -r requirements/dev.txt
 ./manage.py migrate
 ```
 
-Pour que l’application soit utilisable, il faut _a minima_ importer les données géographiques :
+Pour que l’application soit utilisable, il faut _a minima_ importer les données géographiques et les labels nationaux :
 
 ```bash
 ./manage.py import_admin_express
+./manage.py loaddata dora/structures/fixtures/01_structure_national_labels.json.gz
+# Ou make populate_db
 ```
 
 Mais pour avoir un jeu de données complet, il est plus simple d’importer la base de _staging_ entière.
@@ -180,7 +189,7 @@ export DJANGO_SETTINGS_MODULE=config.settings.dev
 
 ```bash
 # Démarrer le serveur
-./manage.py runserver
+./manage.py runserver # Ou make runserver
 ```
 
 ## Contribution
@@ -192,3 +201,14 @@ pre-commit install
 
 Le pre-commit du projet nécessite une installation locale sur le poste de dev de Talisman (en remplacement de GGShield).
 Voir [la procédure d'installation](https://github.com/thoughtworks/talisman?tab=readme-ov-file#installation).
+
+Vous pouvez aussi utiliser les recettes `quality` et `fix` du fichier Makefile :
+```bash
+make fix
+make quality
+```
+
+Pour lancer la suite de tests :
+```bash
+pytest # Ou make test
+```
