@@ -64,7 +64,7 @@ def are_all_potential_departments_codes(departement_codes: set[str]) -> bool:
     return all(re.match(r"^\w{2,3}$", code) for code in departement_codes)
 
 
-def are_all_departements_codes_of_a_region(
+def get_region_if_all_department_codes_belong_to_it(
     departement_codes: list[str],
 ) -> Region | None:
     departement_codes = set(departement_codes)
@@ -118,7 +118,7 @@ def get_diffusion_zone_info(zone_codes: list[str] | None) -> list[str]:
     if len(zone_codes) == 1:
         return get_diffusion_zone_info_for_zone_code(zone_codes[0])
 
-    region = are_all_departements_codes_of_a_region(zone_codes)
+    region = get_region_if_all_department_codes_belong_to_it(zone_codes)
     if region:
         return {
             "diffusion_zone_details": None,
