@@ -27,7 +27,7 @@
   <div class="gap-s8 py-s16 flex">
     <HomeSmile2LineBuildings />
     <a class="underline" href={`/structures/${data.structure.slug}`}
-      >{data.structure.typologyDisplay}</a
+      >{data.structure.name}</a
     >
   </div>
   <Tabs

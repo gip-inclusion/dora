@@ -34,6 +34,6 @@ export const load = async ({ parent, fetch }) => {
         },
     structure: structure
       ? structure
-      : { typologyDisplay: "Pas trouvé", slug: "Pas trouvé" },
+      : { name: "Pas trouvé", slug: "Pas trouvé" },
   };
 };
