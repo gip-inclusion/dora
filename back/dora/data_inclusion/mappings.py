@@ -83,7 +83,6 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         #
         # ServiceSerializer
         #
-        # TODO: spécifier 'en-presentiel' si on a une geoloc/adresse?
         "location_kinds": location_kinds,
         "kinds": [kind] if kind is not None else None,
         "fee_condition": service_data["frais"],
