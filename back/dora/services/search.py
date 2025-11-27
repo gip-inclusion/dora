@@ -376,6 +376,8 @@ def _get_unified_results(
         with_dora=True,
     )
 
+    # Les ID de services DI sont de la forme "source--id".
+    # On récupère uniquement l'ID Dora du service.
     dora_results_ids = [
         result["service"]["id"].split("--")[1]
         for result in raw_di_results
