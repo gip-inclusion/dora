@@ -221,3 +221,26 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
             "structure_name",
             "service_name",
         ]
+
+
+class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
+    prescriber_structure_name = serializers.SerializerMethodField()
+    service_frontend_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Orientation
+        fields = [
+            "creation_date",
+            "status",
+            "beneficiary_name",
+            "referent_name",
+            "service_name",
+            "prescriber_structure_name",
+            "service_frontend_url",
+        ]
+
+    def get_prescriber_structure_name(self, obj: Orientation) -> str:
+        return obj.prescriber_structure.name if obj.prescriber_structure else None
+
+    def get_service_frontend_url(self, obj: Orientation) -> str | None:
+        return obj.get_service_frontend_url()
