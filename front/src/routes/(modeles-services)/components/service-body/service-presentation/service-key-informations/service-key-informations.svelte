@@ -67,7 +67,15 @@
         icon={CheckboxCircleFillSystem}
         title="Les critères d’admission"
       >
-        {#if eligibilityRequirements.length > 0}
+        {#if eligibilityRequirements.length === 1}
+          <!-- Les services DI n'ont qu'un seul élément de critère d'admission mais il peut comporter plusieurs lignes.
+               On affiche chaque ligne comme élément de liste. -->
+          <ul class="list-inside list-disc">
+            {#each eligibilityRequirements[0].split("\n") as requirement (requirement)}
+              <li>{requirement}</li>
+            {/each}
+          </ul>
+        {:else if eligibilityRequirements.length > 1}
           <ul class="list-inside list-disc">
             {#each eligibilityRequirements as requirement (requirement)}
               <li>{requirement}</li>
