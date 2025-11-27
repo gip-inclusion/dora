@@ -95,7 +95,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         )
         if service_data["description"]
         else "",
-        "slug": f"{service_data['source']}--{service_data['id']}",
+        "slug": service_data["id"],
         "status": ServiceStatus.PUBLISHED.value,
         "structure": service_data["structure_id"],
         # Champs spécifiques aux résultats d·i
@@ -346,7 +346,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         )
         if service_data["description"]
         else "",
-        "slug": f"{service_data['source']}--{service_data['id']}",
+        "slug": service_data["id"],
         "source": service_data["source"],
         "status": ServiceStatus.PUBLISHED.value,
         "structure": service_data["structure_id"],
