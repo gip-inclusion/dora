@@ -775,14 +775,14 @@ def options(request):
 
 @api_view()
 @permission_classes([permissions.AllowAny])
-def service_di(request, di_service_id: str):
+def service_di(request, di_id: str):
     """Retrieve a single service from data.inclusion.
 
     The ``di_client`` acts as an entrypoint to the data.inclusion service repository.
 
     The output format matches the ServiceSerializer.
     """
-    di_service_id = unquote(di_service_id)
+    di_service_id = unquote(di_id)
 
     user_agent = request.META.get("HTTP_USER_AGENT")
     user_hash = request.META.get("HTTP_ANONYMOUS_USER_HASH")
