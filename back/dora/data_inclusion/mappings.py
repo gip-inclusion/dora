@@ -64,6 +64,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         if service_data["type"] in supported_service_kinds
         else None
     )
+    kinds = [kind] if kind is not None else None
 
     return {
         #
@@ -84,7 +85,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         # ServiceSerializer
         #
         "location_kinds": location_kinds,
-        "kinds": [kind] if kind is not None else None,
+        "kinds": kinds,
         "fee_condition": service_data["frais"],
         "funding_labels": [],
         "modification_date": service_data["date_maj"],
