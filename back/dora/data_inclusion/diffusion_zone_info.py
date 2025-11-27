@@ -3,6 +3,8 @@ import re
 from dora.admin_express.models import AdminDivisionType
 from dora.decoupage_administratif.models import Commune, Departement, Epci, Region
 
+FRANCE_INSEE_CODE = "99100"
+
 
 def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
     if zone_code == "france":
@@ -15,7 +17,7 @@ def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
 
     if re.match(r"^99[0-5]\d{2}$", zone_code):
         # Pays
-        if zone_code == "99100":
+        if zone_code == FRANCE_INSEE_CODE:
             return {
                 "diffusion_zone_details": None,
                 "diffusion_zone_details_display": "France entière",
