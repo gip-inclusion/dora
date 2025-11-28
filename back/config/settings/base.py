@@ -412,6 +412,10 @@ LOGIN_REDIRECT_URL_FAILURE = FRONTEND_URL
 # (essentiellement pour la gestion du `next_url`).
 OIDC_CALLBACK_CLASS = "dora.oidc.views.CustomAuthorizationCallbackView"
 
+# OIDC : permet de préciser quelle est la class/vue en charge de l'initiation de l'authentification
+# (pour l'ajout du paramètre `login_hint`).
+OIDC_AUTHENTICATE_CLASS = "dora.oidc.views.CustomAuthenticationRequestView"
+
 # Notifications :
 # voir management command `process_notification_tasks`
 

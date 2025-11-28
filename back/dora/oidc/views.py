@@ -9,6 +9,7 @@ from django.utils.crypto import get_random_string
 from furl import furl
 from mozilla_django_oidc.views import (
     OIDCAuthenticationCallbackView,
+    OIDCAuthenticationRequestView,
     OIDCLogoutView,
     resolve_url,
 )
@@ -102,6 +103,24 @@ def oidc_pre_logout(request):
 
     # Dans tous les cas, effacement de la session Django :
     return HttpResponseRedirect(redirect_to=reverse("oidc_logout"))
+
+
+class CustomAuthenticationRequestView(OIDCAuthenticationRequestView):
+    """
+    Vue d'authentification OIDC personnalisée :
+        Surcharge la vue par défaut de `mozilla-django-oidc` pour ajouter
+        le paramètre `login_hint` à la requête d'autorisation si celui-ci
+        est présent dans les paramètres de la requête HTTP.
+    """
+
+    def get_extra_params(self, request):
+        extra_params = super().get_extra_params(request) or {}
+
+        login_hint = request.GET.get("login_hint")
+        if login_hint:
+            extra_params["login_hint"] = login_hint
+
+        return extra_params
 
 
 class CustomAuthorizationCallbackView(OIDCAuthenticationCallbackView):
