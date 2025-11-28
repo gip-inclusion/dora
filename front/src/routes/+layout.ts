@@ -4,6 +4,7 @@ import { redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { LayoutLoad } from "./$types";
 import { needToAcceptCgu } from "$lib/utils/cgu";
+import { handleNexusAutoLogin } from "$lib/utils/nexus";
 
 export const prerender = false;
 
@@ -26,6 +27,8 @@ export const load: LayoutLoad = async ({ url }) => {
     // => on peut court-circuiter les vérifications ici
     return {};
   }
+
+  await handleNexusAutoLogin(url);
 
   let currentUserInfo = get(userInfo);
   if (!currentUserInfo) {
