@@ -52,7 +52,7 @@ class DataInclusionClient:
         self.timeout_timedelta = (
             timedelta(seconds=timeout_seconds)
             if timeout_seconds is not None
-            else timedelta(seconds=2)
+            else timedelta(seconds=10)
         )
 
     def _get(self, url: furl.furl):
@@ -89,13 +89,12 @@ class DataInclusionClient:
     @log_conn_error
     def retrieve_service(
         self,
-        source: str,
         id: str,
         user_agent: Optional[str] = None,
         user_hash: Optional[str] = None,
     ) -> Optional[dict]:
         url = self.base_url.copy()
-        url = url / "services" / source / id
+        url = url / "services" / id
 
         if user_agent is not None:
             self.session.headers.update({"User-Agent": user_agent})
@@ -116,7 +115,7 @@ class DataInclusionClient:
         self,
         sources: Optional[list[str]] = None,
         score_qualite_minimum: Optional[float] = None,
-        code_insee: Optional[str] = None,
+        code_commune: Optional[str] = None,
         thematiques: Optional[list[str]] = None,
         types: Optional[list[str]] = None,
         frais: Optional[list[str]] = None,
@@ -135,8 +134,8 @@ class DataInclusionClient:
         if settings.DATA_INCLUSION_EXCLUDE_DUPLICATES:
             url.args["exclure_doublons"] = "true"
 
-        if code_insee is not None:
-            url.args["code_insee"] = code_insee
+        if code_commune is not None:
+            url.args["code_commune"] = code_commune
 
         if thematiques is not None:
             url.args["thematiques"] = thematiques
