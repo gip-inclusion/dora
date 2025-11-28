@@ -30,7 +30,11 @@ from .models import (
     RejectionReason,
     SentContactEmail,
 )
-from .serializers import OrientationSerializer, SentOrientationExportSerializer
+from .serializers import (
+    OrientationSerializer,
+    ReceivedOrientationExportSerializer,
+    SentOrientationExportSerializer,
+)
 
 
 class ModeratedOrientationPermission(permissions.BasePermission):
@@ -278,25 +282,26 @@ class OrientationExportView(APIView):
     def get(self, request: Request, structure_slug: str) -> Response:
         export_type = request.query_params.get("type")
 
-        if export_type == "sent":
-            return self._export_sent_orientations(request, structure_slug)
-        else:
-            raise serializers.ValidationError(
-                {"type": "Le paramètre 'type' doit être 'sent'."}
-            )
-
-    def _export_sent_orientations(
-        self, request: Request, structure_slug: str
-    ) -> Response:
-        user = request.user
         structure = get_object_or_404(
             Structure.objects.all(),
             slug=structure_slug,
         )
 
-        if not structure.is_member(user):
+        if not structure.is_member(request.user):
             raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
 
+        if export_type == "sent":
+            return self._export_sent_orientations(request, structure)
+        elif export_type == "received":
+            return self._export_received_orientations(request, structure)
+        else:
+            raise serializers.ValidationError(
+                {"type": "Le paramètre 'type' doit être 'sent' ou 'received'."}
+            )
+
+    def _export_sent_orientations(
+        self, request: Request, structure: Structure
+    ) -> Response:
         orientations = (
             Orientation.objects.filter(prescriber_structure=structure)
             .order_by("-creation_date")
@@ -304,5 +309,18 @@ class OrientationExportView(APIView):
         )
 
         serializer = SentOrientationExportSerializer(orientations, many=True)
+
+        return Response(serializer.data)
+
+    def _export_received_orientations(
+        self, request: Request, structure: Structure
+    ) -> Response:
+        orientations = (
+            Orientation.objects.filter(service__structure=structure)
+            .order_by("-creation_date")
+            .select_related("service__structure", "prescriber_structure")
+        )
+
+        serializer = ReceivedOrientationExportSerializer(orientations, many=True)
 
         return Response(serializer.data)
