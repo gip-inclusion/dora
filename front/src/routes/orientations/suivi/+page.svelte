@@ -9,6 +9,7 @@
   import { CANONICAL_URL } from "$lib/env";
   import type { PageData } from "./$types";
   import { fly } from "svelte/transition";
+  import { generateOrientationExport } from "./orientation-export";
 
   interface Props {
     data: PageData;
@@ -55,7 +56,13 @@
       structureHasServices={data.stats.structureHasServices}
     >
       {#if hasOrientations}
-        <button class="text-magenta-cta gap-s4 flex flex-row font-bold"
+        <button
+          onclick={() =>
+            generateOrientationExport({
+              structureSlug: data.structure.slug,
+              type: orientationState.selectedType,
+            })}
+          class="text-magenta-cta gap-s4 flex flex-row font-bold"
           ><DownloadLineSystem class="fill-magenta-cta" />Télécharger la liste</button
         >
       {:else if orientationState.selectedType === "received" && data.stats.structureHasServices}

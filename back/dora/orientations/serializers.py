@@ -3,7 +3,7 @@ from django.core.files.storage import default_storage
 from rest_framework import serializers
 
 import dora.data_inclusion.client
-from dora.orientations.models import Orientation
+from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 from dora.structures.models import Structure
 
@@ -186,3 +186,72 @@ class OrientationSerializer(serializers.ModelSerializer):
             data["beneficiary_france_travail_number"] = ""
 
         return data
+
+
+class SentOrientationExportSerializer(serializers.ModelSerializer):
+    creation_date = serializers.DateTimeField(format="%Y-%m-%d")
+    beneficiary_name = serializers.SerializerMethodField()
+    referent_name = serializers.SerializerMethodField()
+    structure_name = serializers.SerializerMethodField()
+    service_name = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_beneficiary_name(obj: Orientation) -> str:
+        return obj.get_beneficiary_full_name()
+
+    @staticmethod
+    def get_referent_name(obj: Orientation) -> str:
+        return obj.get_referent_full_name()
+
+    @staticmethod
+    def get_structure_name(obj: Orientation) -> str:
+        return obj.get_structure_name()
+
+    @staticmethod
+    def get_service_name(obj: Orientation) -> str:
+        return obj.get_service_name()
+
+    @staticmethod
+    def get_status(obj: Orientation) -> str:
+        return OrientationStatus(obj.status).label
+
+    class Meta:
+        model = Orientation
+        fields = [
+            "creation_date",
+            "status",
+            "beneficiary_name",
+            "referent_name",
+            "structure_name",
+            "service_name",
+        ]
+
+
+class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
+    prescriber_structure_name = serializers.SerializerMethodField()
+    service_frontend_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Orientation
+        fields = [
+            "creation_date",
+            "status",
+            "beneficiary_name",
+            "referent_name",
+            "service_name",
+            "prescriber_structure_name",
+            "service_frontend_url",
+        ]
+
+    @staticmethod
+    def get_prescriber_structure_name(obj: Orientation) -> str:
+        return (
+            obj.prescriber_structure.name
+            if obj.prescriber_structure
+            else "Pas de prescripteur"
+        )
+
+    @staticmethod
+    def get_service_frontend_url(obj: Orientation) -> str:
+        return obj.get_service_frontend_url()

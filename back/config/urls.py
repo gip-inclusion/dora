@@ -102,6 +102,10 @@ private_api_patterns = [
         "orientations/stats/<slug:structure_slug>/",
         dora.orientations.views.display_orientation_stats,
     ),
+    path(
+        "structures/<slug:structure_slug>/orientations/export/",
+        dora.orientations.views.OrientationExportView.as_view(),
+    ),
 ]
 
 di_api_patterns = [

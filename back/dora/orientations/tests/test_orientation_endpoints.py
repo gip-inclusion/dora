@@ -1,5 +1,7 @@
 import pytest
+from dateutil.relativedelta import relativedelta
 from django.core import mail
+from django.utils import timezone
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -453,3 +455,137 @@ class OrientationStatsTestCase(APITestCase):
         response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
 
         self.assertEqual(response.status_code, 403)
+
+
+class OrientationsExportTestCase(APITestCase):
+    def setUp(self):
+        self.structure = make_structure()
+        self.service = make_service(structure=self.structure)
+        self.user = make_user()
+        baker.make(StructureMember, structure=self.structure, user=self.user)
+
+        self.client.force_authenticate(user=self.user)
+
+    def test_get_export_of_sent_orientations(self):
+        orientation_1 = baker.make(
+            Orientation,
+            creation_date=timezone.now() - relativedelta(days=1),
+            service=self.service,
+            status=OrientationStatus.ACCEPTED,
+            prescriber_structure=self.structure,
+        )
+
+        orientation_2 = baker.make(
+            Orientation,
+            creation_date=timezone.now() - relativedelta(days=2),
+            service=self.service,
+            status=OrientationStatus.MODERATION_PENDING,
+            prescriber_structure=self.structure,
+        )
+
+        # Assurer que cette orientation n'est pas incluse dans les résultats
+        baker.make(
+            Orientation,
+            service=make_service(),
+        )
+
+        with self.assertNumQueries(3):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=sent"
+            )
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(
+            response.data,
+            [
+                {
+                    "creation_date": orientation_1.creation_date.strftime("%Y-%m-%d"),
+                    "status": "Validée",
+                    "beneficiary_name": orientation_1.get_beneficiary_full_name(),
+                    "referent_name": orientation_1.get_referent_full_name(),
+                    "structure_name": orientation_1.get_structure_name(),
+                    "service_name": orientation_1.get_service_name(),
+                },
+                {
+                    "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
+                    "status": "En cours de modération",
+                    "beneficiary_name": orientation_2.get_beneficiary_full_name(),
+                    "referent_name": orientation_2.get_referent_full_name(),
+                    "structure_name": orientation_2.get_structure_name(),
+                    "service_name": orientation_2.get_service_name(),
+                },
+            ],
+        )
+
+    def test_get_export_of_received_orientations(self):
+        orientation_1 = baker.make(
+            Orientation,
+            creation_date=timezone.now() - relativedelta(days=1),
+            service=self.service,
+            status=OrientationStatus.ACCEPTED,
+            prescriber_structure=self.structure,
+        )
+
+        orientation_2 = baker.make(
+            Orientation,
+            creation_date=timezone.now() - relativedelta(days=2),
+            service=self.service,
+            status=OrientationStatus.MODERATION_PENDING,
+            prescriber_structure=None,
+        )
+
+        # Assurer que cette orientation n'est pas incluse dans les résultats
+        baker.make(
+            Orientation,
+            service=make_service(),
+        )
+
+        with self.assertNumQueries(3):
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/export/?type=received"
+            )
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(
+            response.data,
+            [
+                {
+                    "creation_date": orientation_1.creation_date.strftime("%Y-%m-%d"),
+                    "status": "Validée",
+                    "beneficiary_name": orientation_1.get_beneficiary_full_name(),
+                    "referent_name": orientation_1.get_referent_full_name(),
+                    "prescriber_structure_name": orientation_1.prescriber_structure.name,
+                    "service_name": orientation_1.get_service_name(),
+                    "service_frontend_url": orientation_1.get_service_frontend_url(),
+                },
+                {
+                    "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
+                    "status": "En cours de modération",
+                    "beneficiary_name": orientation_2.get_beneficiary_full_name(),
+                    "referent_name": orientation_2.get_referent_full_name(),
+                    "prescriber_structure_name": "Pas de prescripteur",
+                    "service_name": orientation_2.get_service_name(),
+                    "service_frontend_url": orientation_2.get_service_frontend_url(),
+                },
+            ],
+        )
+
+    def test_raise_403_if_user_not_structure_member(self):
+        self.client.force_authenticate(user=make_user())
+
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/export/?type=sent"
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_raise_400_when_invalid_orientation_type(self):
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/export/?type=other"
+        )
+
+        self.assertEqual(response.status_code, 400)
