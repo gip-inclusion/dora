@@ -1,5 +1,5 @@
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.db.models import Count, Q
+from django.db.models import Count, Exists, OuterRef, Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import mixins, permissions, serializers, viewsets
@@ -12,6 +12,7 @@ from dora.core.models import ModerationStatus
 from dora.core.utils import TRUTHY_VALUES
 
 from ..core.emails import sanitize_user_input_injected_in_email
+from ..services.models import Service
 from ..structures.models import Structure
 from .emails import (
     send_message_to_beneficiary,
@@ -240,7 +241,12 @@ class OrientationViewSet(
 @permission_classes([IsAuthenticated])
 def display_orientation_stats(request: Request, structure_slug: str) -> Response:
     user = request.user
-    structure = get_object_or_404(Structure.objects.all(), slug=structure_slug)
+    structure = get_object_or_404(
+        Structure.objects.annotate(
+            has_services=Exists(Service.objects.filter(structure=OuterRef("pk")))
+        ),
+        slug=structure_slug,
+    )
 
     if not structure.is_member(user):
         raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
@@ -259,5 +265,7 @@ def display_orientation_stats(request: Request, structure_slug: str) -> Response
             filter=Q(service__structure=structure, status=OrientationStatus.PENDING),
         ),
     )
+
+    stats["structure_has_services"] = structure.has_services
 
     return Response(stats)

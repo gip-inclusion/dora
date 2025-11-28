@@ -729,3 +729,11 @@ export interface Orientation {
     email: string;
   };
 }
+
+export interface OrientationStats {
+  totalSent: number;
+  totalSentPending: number;
+  totalReceived: number;
+  totalReceivedPending: number;
+  structureHasServices: boolean;
+}

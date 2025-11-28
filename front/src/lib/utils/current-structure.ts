@@ -3,7 +3,7 @@ import type { UserInfo } from "./auth";
 import type { UserPreferences } from "./preferences";
 
 export function getCurrentlySelectedStructure(
-  userInfo: UserInfo,
+  userInfo: UserInfo | null,
   preferences: UserPreferences
 ): ShortStructure | undefined {
   const userStructures = userInfo

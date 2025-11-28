@@ -443,6 +443,7 @@ class OrientationStatsTestCase(APITestCase):
                 "total_sent_pending": 1,
                 "total_received": 4,
                 "total_received_pending": 2,
+                "structure_has_services": True,
             },
         )
 
