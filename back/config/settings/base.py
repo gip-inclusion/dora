@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import json
 import os
 
 from botocore.config import Config
@@ -622,13 +623,16 @@ if DJANGO_ADMIN_2FA_ENABLED:
     MIDDLEWARE += ["django_otp.middleware.OTPMiddleware"]  # noqa
 
 
-# Nexus metabase db
+# Nexus
 # ---------------------------------------
 NEXUS_METABASE_DB_HOST = os.getenv("NEXUS_METABASE_DB_HOST")
 NEXUS_METABASE_DB_PORT = os.getenv("NEXUS_METABASE_DB_PORT")
 NEXUS_METABASE_DB_DATABASE = os.getenv("NEXUS_METABASE_DB_DATABASE")
 NEXUS_METABASE_DB_USER = os.getenv("NEXUS_METABASE_DB_USER")
 NEXUS_METABASE_DB_PASSWORD = os.getenv("NEXUS_METABASE_DB_PASSWORD")
+nexus_key = os.getenv("NEXUS_AUTO_LOGIN_KEY")
+NEXUS_AUTO_LOGIN_KEY = json.loads(nexus_key) if nexus_key else None
+NEXUS_ALLOWED_REDIRECT_HOSTS = os.getenv("NEXUS_ALLOWED_REDIRECT_HOSTS", "").split(",")
 
 
 # API de découpage administratif
