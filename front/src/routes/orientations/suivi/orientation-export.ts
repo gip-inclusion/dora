@@ -38,7 +38,7 @@ function formatSentOrientationExportData(
     Bénéficiaire: orientation.beneficiaryName,
     "Structure concernée": orientation.structureName,
     "Service concerné": orientation.serviceName,
-    Emetteur: orientation.referentName,
+    Émetteur: orientation.referentName,
   }));
 }
 
@@ -52,9 +52,7 @@ export async function generateOrientationExport(
   let sheetData;
 
   if (!exportData) {
-    toast.push(
-      "Il y a eu une erreur en cherchant les données des orientations."
-    );
+    toast.push("Une erreur est survenue lors de l’export des orientations.");
     return;
   }
 

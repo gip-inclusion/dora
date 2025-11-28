@@ -3,7 +3,7 @@ from django.core.files.storage import default_storage
 from rest_framework import serializers
 
 import dora.data_inclusion.client
-from dora.orientations.models import Orientation
+from dora.orientations.models import Orientation, OrientationStatus
 from dora.services.models import Service
 from dora.structures.models import Structure
 
@@ -194,6 +194,7 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
     referent_name = serializers.SerializerMethodField()
     structure_name = serializers.SerializerMethodField()
     service_name = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
 
     def get_beneficiary_name(self, obj):
         return obj.get_beneficiary_full_name()
@@ -206,6 +207,9 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
 
     def get_service_name(self, obj):
         return obj.get_service_name()
+
+    def get_status(self, obj):
+        return OrientationStatus(obj.status).label
 
     class Meta:
         model = Orientation

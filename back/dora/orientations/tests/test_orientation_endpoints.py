@@ -483,6 +483,12 @@ class SentOrientationsExportTestCase(APITestCase):
             prescriber_structure=self.structure,
         )
 
+        # Assurer que cette orientation n'est pas incluse dans les résultats
+        baker.make(
+            Orientation,
+            service=make_service(),
+        )
+
         with self.assertNumQueries(3):
             response = self.client.get(
                 f"/structures/{self.structure.slug}/orientations/export/?type=sent"
@@ -490,12 +496,13 @@ class SentOrientationsExportTestCase(APITestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(len(response.data), 2)
         self.assertEqual(
             response.data,
             [
                 {
                     "creation_date": orientation_1.creation_date.strftime("%Y-%m-%d"),
-                    "status": orientation_1.status,
+                    "status": "Validée",
                     "beneficiary_name": orientation_1.get_beneficiary_full_name(),
                     "referent_name": orientation_1.get_referent_full_name(),
                     "structure_name": orientation_1.get_structure_name(),
@@ -503,7 +510,7 @@ class SentOrientationsExportTestCase(APITestCase):
                 },
                 {
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
-                    "status": orientation_2.status,
+                    "status": "En cours de modération",
                     "beneficiary_name": orientation_2.get_beneficiary_full_name(),
                     "referent_name": orientation_2.get_referent_full_name(),
                     "structure_name": orientation_2.get_structure_name(),
