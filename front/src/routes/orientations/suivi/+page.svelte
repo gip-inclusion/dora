@@ -55,7 +55,7 @@
       structureHasServices={data.stats.structureHasServices}
     >
       {#if hasOrientations}
-        <button class="text-magenta-cta flex flex-row font-bold"
+        <button class="text-magenta-cta gap-s4 flex flex-row font-bold"
           ><DownloadLineSystem class="fill-magenta-cta" />Télécharger la liste</button
         >
       {:else if orientationState.selectedType === "received" && data.stats.structureHasServices}
@@ -63,17 +63,19 @@
           href={`/structures/${data.structure.slug}/services`}
           class="text-magenta-cta font-bold">Passer en revue mes services</a
         >
-        {#if !linkCopied}
-          <button
-            out:fly={{ y: 50, duration: 200 }}
-            class="text-magenta-cta font-bold"
-            onclick={handleCopy}>Copier le lien de ma structure</button
+        <div class="relative">
+          <button class="text-magenta-cta font-bold" onclick={handleCopy}
+            >Copier le lien de ma structure</button
           >
-        {:else}
-          <div in:fly={{ y: 50, duration: 200, delay: 200 }}>
-            <CheckLineSystem />
-          </div>
-        {/if}
+          {#if linkCopied}
+            <div
+              class="ml-s6 absolute top-1/2 left-full -translate-y-1/2"
+              transition:fly={{ y: 50, duration: 500 }}
+            >
+              <CheckLineSystem />
+            </div>
+          {/if}
+        </div>
       {:else if orientationState.selectedType === "received" && !data.stats.structureHasServices}
         <a
           href={`/services/creer?structure=${data.structure.slug}`}
@@ -84,7 +86,9 @@
         <a href="/recherche-textuelle" class="text-magenta-cta font-bold"
           >Rechercher par mots-clé</a
         >
-        <a href="/" class="text-magenta-cta">Rechercher par lieu et besoins</a>
+        <a href="/" class="text-magenta-cta font-bold"
+          >Rechercher par lieu et besoins</a
+        >
       {/if}
     </OrientationsExportCard>
   </div>
