@@ -67,7 +67,7 @@ function formatReceivedOrientationExportData(
     Bénéficiaire: orientation.beneficiaryName,
     "Service concerné": orientation.serviceName,
     "Structure émettrice": orientation.prescriberStructureName,
-    "Contact emetteur": orientation.referentName,
+    "Contact émetteur": orientation.referentName,
     Lien: orientation.serviceFrontendUrl,
   }));
 }

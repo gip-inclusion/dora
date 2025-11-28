@@ -533,7 +533,13 @@ class OrientationsExportTestCase(APITestCase):
             creation_date=timezone.now() - relativedelta(days=2),
             service=self.service,
             status=OrientationStatus.MODERATION_PENDING,
-            prescriber_structure=self.structure,
+            prescriber_structure=None,
+        )
+
+        # Assurer que cette orientation n'est pas incluse dans les résultats
+        baker.make(
+            Orientation,
+            service=make_service(),
         )
 
         with self.assertNumQueries(3):
@@ -543,6 +549,7 @@ class OrientationsExportTestCase(APITestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(len(response.data), 2)
         self.assertEqual(
             response.data,
             [
@@ -560,7 +567,7 @@ class OrientationsExportTestCase(APITestCase):
                     "status": "En cours de modération",
                     "beneficiary_name": orientation_2.get_beneficiary_full_name(),
                     "referent_name": orientation_2.get_referent_full_name(),
-                    "prescriber_structure_name": orientation_1.prescriber_structure.name,
+                    "prescriber_structure_name": "Pas de prescripteur",
                     "service_name": orientation_2.get_service_name(),
                     "service_frontend_url": orientation_2.get_service_frontend_url(),
                 },

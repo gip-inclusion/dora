@@ -196,19 +196,24 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
     service_name = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
 
-    def get_beneficiary_name(self, obj):
+    @staticmethod
+    def get_beneficiary_name(obj: Orientation) -> str:
         return obj.get_beneficiary_full_name()
 
-    def get_referent_name(self, obj):
+    @staticmethod
+    def get_referent_name(obj: Orientation) -> str:
         return obj.get_referent_full_name()
 
-    def get_structure_name(self, obj):
+    @staticmethod
+    def get_structure_name(obj: Orientation) -> str:
         return obj.get_structure_name()
 
-    def get_service_name(self, obj):
+    @staticmethod
+    def get_service_name(obj: Orientation) -> str:
         return obj.get_service_name()
 
-    def get_status(self, obj):
+    @staticmethod
+    def get_status(obj: Orientation) -> str:
         return OrientationStatus(obj.status).label
 
     class Meta:
@@ -239,8 +244,14 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
             "service_frontend_url",
         ]
 
-    def get_prescriber_structure_name(self, obj: Orientation) -> str:
-        return obj.prescriber_structure.name if obj.prescriber_structure else None
+    @staticmethod
+    def get_prescriber_structure_name(obj: Orientation) -> str:
+        return (
+            obj.prescriber_structure.name
+            if obj.prescriber_structure
+            else "Pas de prescripteur"
+        )
 
-    def get_service_frontend_url(self, obj: Orientation) -> str | None:
+    @staticmethod
+    def get_service_frontend_url(obj: Orientation) -> str:
         return obj.get_service_frontend_url()
