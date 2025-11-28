@@ -1,6 +1,4 @@
 import BankLineBuildings from "svelte-remix/BankLineBuildings.svelte";
-import ChatQuoteLineCommunication from "svelte-remix/ChatQuoteLineCommunication.svelte";
-import ChatSmile3LineCommunication from "svelte-remix/ChatSmile3LineCommunication.svelte";
 import CompassDiscoverLineMap from "svelte-remix/CompassDiscoverLineMap.svelte";
 import MoneyEuroCircleLineFinance from "svelte-remix/MoneyEuroCircleLineFinance.svelte";
 import GraduationCapLineOthers from "svelte-remix/GraduationCapLineOthers.svelte";
@@ -14,7 +12,6 @@ import ServiceLineBusiness from "svelte-remix/ServiceLineBusiness.svelte";
 import StethoscopeLineHealthMedical from "svelte-remix/StethoscopeLineHealthMedical.svelte";
 import Store2LineBuildings from "svelte-remix/Store2LineBuildings.svelte";
 import TextEditor from "svelte-remix/TextEditor.svelte";
-import WheelchairLineOthers from "svelte-remix/WheelchairLineOthers.svelte";
 
 import type {
   Choice,
@@ -47,64 +44,28 @@ export function getAvailableOptionsForStatus(
 
   return result;
 }
+const CATEGORY_ICONS = {
+  "choisir-un-metier": ServiceLineBusiness,
+  "creer-une-entreprise": Rocket2LineMap,
+  "difficultes-administratives-ou-juridiques": BankLineBuildings,
+  "difficultes-financieres": MoneyEuroCircleLineFinance,
+  "equipement-et-alimentation": Store2LineBuildings,
+  famille: ParentLineUserFaces,
+  "lecture-ecriture-calcul": TextEditor,
+  "logement-hebergement": HomeSmileLineBuildings,
+  mobilite: CompassDiscoverLineMap,
+  numerique: MacLineDevice,
+  "preparer-sa-candidature": ServiceLineBusiness,
+  remobilisation: MentalHealthLineHealthMedical,
+  sante: StethoscopeLineHealthMedical,
+  "se-former": GraduationCapLineOthers,
+  "souvrir-a-linternational": WalkLineMap,
+  "trouver-un-emploi": ServiceLineBusiness,
+};
 
 export function getCategoryIcon(slug: string) {
-  if ("creation-activite" === slug) {
-    return Rocket2LineMap;
-  }
-  if ("numerique" === slug) {
-    return MacLineDevice;
-  }
-  if ("equipement-et-alimentation" === slug) {
-    return Store2LineBuildings;
-  }
-  if ("famille" === slug) {
-    return ParentLineUserFaces;
-  }
-  if ("gestion-financiere" === slug) {
-    return MoneyEuroCircleLineFinance;
-  }
-  if ("apprendre-francais" === slug) {
-    return ChatQuoteLineCommunication;
-  }
-  if ("accompagnement-social-et-professionnel-personnalise" === slug) {
-    return ChatSmile3LineCommunication;
-  }
-  if ("handicap" === slug) {
-    return WheelchairLineOthers;
-  }
-  if ("sante" === slug) {
-    return StethoscopeLineHealthMedical;
-  }
-  if ("logement-hebergement" === slug) {
-    return HomeSmileLineBuildings;
-  }
-  if ("illettrisme" === slug) {
-    return TextEditor;
-  }
-  if ("mobilite" === slug) {
-    return CompassDiscoverLineMap;
-  }
-  if ("remobilisation" === slug) {
-    return MentalHealthLineHealthMedical;
-  }
-  if ("acces-aux-droits-et-citoyennete" === slug) {
-    return BankLineBuildings;
-  }
-  if ("choisir-un-metier" === slug) {
-    return ServiceLineBusiness;
-  }
-  if ("preparer-sa-candidature" === slug) {
-    return ServiceLineBusiness;
-  }
-  if ("trouver-un-emploi" === slug) {
-    return ServiceLineBusiness;
-  }
-  if ("se-former" === slug) {
-    return GraduationCapLineOthers;
-  }
-  if ("souvrir-a-linternational" === slug) {
-    return WalkLineMap;
+  if (CATEGORY_ICONS[slug]) {
+    return CATEGORY_ICONS[slug];
   }
   log(`Pas d'icone définie pour la thématique ${slug}`);
   return null;
@@ -147,20 +108,6 @@ export function sortCategory(categories: Choice[]) {
 
 export function sortSubcategory(subcategories: Choice[]) {
   return subcategories.sort((a, b) => {
-    if (a.value.endsWith("--autre")) {
-      return 1;
-    }
-    if (b.value.endsWith("--autre")) {
-      return -1;
-    }
-
-    if (a.value.endsWith("--all")) {
-      return -1;
-    }
-    if (b.value.endsWith("--all")) {
-      return 1;
-    }
-
     return a.label.localeCompare(b.label, "fr", { numeric: true });
   });
 }

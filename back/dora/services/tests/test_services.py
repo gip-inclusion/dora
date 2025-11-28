@@ -1126,10 +1126,12 @@ class ServiceTestCase(APITestCase):
 
 class DataInclusionSearchTestCase(APITestCase):
     def setUp(self):
-        self.region = baker.make("Region", code="99")
-        self.dept = baker.make("Department", region=self.region.code, code="77")
-        self.epci11 = baker.make("EPCI", code="11111")
-        self.epci12 = baker.make("EPCI", code="22222")
+        self.region = baker.make("admin_express.Region", code="99")
+        self.dept = baker.make(
+            "admin_express.Department", region=self.region.code, code="77"
+        )
+        self.epci11 = baker.make("admin_express.EPCI", code="11111")
+        self.epci12 = baker.make("admin_express.EPCI", code="22222")
         self.city1 = baker.make(
             "City",
             name="Sainte Jacquelineboeuf",
@@ -1406,11 +1408,11 @@ class DataInclusionSearchTestCase(APITestCase):
             (None, None, None, None, None),
             ([], [], [], [], []),
             (
-                ["mobilite", "famille--garde-denfants"],
-                ["mobilite"],
-                ["Mobilité"],
+                ["famille--garde-denfants", "mobilite"],
+                ["famille", "mobilite"],
+                ["Famille", "Mobilité"],
                 ["famille--garde-denfants"],
-                ["Garde d'enfants"],
+                ["Garde d’enfants"],
             ),
         ]
         for (
@@ -1892,10 +1894,12 @@ class DataInclusionSearchTestCase(APITestCase):
 
 class ServiceSearchTestCase(APITestCase):
     def setUp(self):
-        self.region = baker.make("Region", code="99")
-        self.dept = baker.make("Department", region=self.region.code, code="77")
-        self.epci11 = baker.make("EPCI", code="11111")
-        self.epci12 = baker.make("EPCI", code="22222")
+        self.region = baker.make("admin_express.Region", code="99")
+        self.dept = baker.make(
+            "admin_express.Department", region=self.region.code, code="77"
+        )
+        self.epci11 = baker.make("admin_express.EPCI", code="11111")
+        self.epci12 = baker.make("admin_express.EPCI", code="22222")
         self.city1 = baker.make(
             "City",
             code="12345",
@@ -2586,8 +2590,8 @@ class ServiceSearchOrderingTestCase(APITestCase):
         )
         self.paris_center = Point(2.349014, 48.864716, srid=WGS84)
 
-        region = baker.make("Region", code="76")
-        dept = baker.make("Department", region=region.code, code="31")
+        region = baker.make("admin_express.Region", code="76")
+        dept = baker.make("admin_express.Department", region=region.code, code="31")
         toulouse = baker.make(
             "City",
             code="31555",

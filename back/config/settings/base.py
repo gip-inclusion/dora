@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "dora.oidc",
     "dora.auth_links",
     "dora.nexus",
+    "dora.decoupage_administratif",
 ]
 
 MIDDLEWARE = [
@@ -630,3 +631,12 @@ NEXUS_METABASE_DB_PORT = os.getenv("NEXUS_METABASE_DB_PORT")
 NEXUS_METABASE_DB_DATABASE = os.getenv("NEXUS_METABASE_DB_DATABASE")
 NEXUS_METABASE_DB_USER = os.getenv("NEXUS_METABASE_DB_USER")
 NEXUS_METABASE_DB_PASSWORD = os.getenv("NEXUS_METABASE_DB_PASSWORD")
+
+
+# API de découpage administratif
+# ---------------------------------------
+GEO_API_GOUV_BASE_URL = os.getenv("GEO_API_GOUV_BASE_URL", "https://geo.api.gouv.fr")
+try:
+    GEO_API_GOUV_TIMEOUT_SECONDS = int(os.getenv("GEO_API_GOUV_TIMEOUT_SECONDS"), 10)
+except (TypeError, ValueError):
+    GEO_API_GOUV_TIMEOUT_SECONDS = None

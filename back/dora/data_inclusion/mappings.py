@@ -3,7 +3,11 @@ from django.conf import settings
 from django.utils import dateparse, timezone
 
 from dora.admin_express.models import AdminDivisionType
-from dora.core.utils import address_to_one_line, code_insee_to_code_dept
+from dora.core.utils import (
+    address_to_one_line,
+    code_insee_to_code_dept,
+    get_category_from_subcategory,
+)
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     BeneficiaryAccessMode,
@@ -17,8 +21,6 @@ from dora.services.models import (
     get_update_needed,
 )
 from dora.structures.models import DisabledDoraFormDIStructure
-
-from .constants import THEMATIQUES_MAPPING_DI_TO_DORA
 
 DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING = {
     "commune": "city",
@@ -125,12 +127,15 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
     categories = None
     subcategories = None
     if service_data["thematiques"] is not None:
-        thematiques = [
-            THEMATIQUES_MAPPING_DI_TO_DORA.get(thematique, thematique)
-            for thematique in service_data["thematiques"]
-        ]
-        categories = ServiceCategory.objects.filter(value__in=thematiques)
-        subcategories = ServiceSubCategory.objects.filter(value__in=thematiques)
+        categories = ServiceCategory.objects.filter(
+            value__in=[
+                get_category_from_subcategory(thematique)
+                for thematique in service_data["thematiques"]
+            ]
+        )
+        subcategories = ServiceSubCategory.objects.filter(
+            value__in=service_data["thematiques"]
+        )
 
     location_kinds = None
     if service_data["modes_accueil"] is not None:

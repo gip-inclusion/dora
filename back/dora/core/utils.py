@@ -141,3 +141,7 @@ def skip_csv_lines(reader: csv.reader, num_lines_to_skip: int) -> csv.reader:
     for _ in range(num_lines_to_skip):
         next(reader, None)
     return reader
+
+
+def get_category_from_subcategory(subcategory: str) -> str:
+    return subcategory.split("--")[0]

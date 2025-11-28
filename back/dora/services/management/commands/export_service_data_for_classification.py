@@ -6,6 +6,7 @@ from typing import Any, Dict
 from django.core.management.base import BaseCommand
 from django.db.models import Count, F, Q
 
+from dora.core.utils import get_category_from_subcategory
 from dora.services.models import Service, ServiceCategory
 
 
@@ -39,7 +40,9 @@ class Command(BaseCommand):
 
         for subcat in service.subcategories.all().order_by("value"):
             category_value = (
-                subcat.value.split("--")[0] if "--" in subcat.value else None
+                get_category_from_subcategory(subcat.value)
+                if "--" in subcat.value
+                else None
             )
 
             if category_value:
