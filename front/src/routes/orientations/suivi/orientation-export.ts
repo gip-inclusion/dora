@@ -18,13 +18,29 @@ interface SentOrientationExportData {
   referentName: string;
 }
 
+interface ReceivedOrientationExportData
+  extends Pick<
+    SentOrientationExportData,
+    | "creationDate"
+    | "status"
+    | "beneficiaryName"
+    | "serviceName"
+    | "referentName"
+  > {
+  prescriberStructureName: string;
+  serviceFrontendUrl: string;
+}
+
 async function fetchOrientationExportData({
   structureSlug,
   type,
 }: OrientationExportParams) {
   const url = `${getApiURL()}/structures/${structureSlug}/orientations/export?type=${type}`;
 
-  const result = await fetchData<Array<SentOrientationExportData>>(url);
+  const result =
+    await fetchData<
+      Array<SentOrientationExportData | ReceivedOrientationExportData>
+    >(url);
 
   return result.data;
 }
@@ -39,6 +55,20 @@ function formatSentOrientationExportData(
     "Structure concernée": orientation.structureName,
     "Service concerné": orientation.serviceName,
     Émetteur: orientation.referentName,
+  }));
+}
+
+function formatReceivedOrientationExportData(
+  exportData: Array<ReceivedOrientationExportData>
+) {
+  return exportData.map((orientation) => ({
+    "Reçue le": orientation.creationDate,
+    Statut: orientation.status,
+    Bénéficiaire: orientation.beneficiaryName,
+    "Service concerné": orientation.serviceName,
+    "Structure émettrice": orientation.prescriberStructureName,
+    "Contact emetteur": orientation.referentName,
+    Lien: orientation.serviceFrontendUrl,
   }));
 }
 
@@ -57,7 +87,13 @@ export async function generateOrientationExport(
   }
 
   if (type === "sent") {
-    sheetData = formatSentOrientationExportData(exportData);
+    sheetData = formatSentOrientationExportData(
+      exportData as Array<SentOrientationExportData>
+    );
+  } else if (type === "received") {
+    sheetData = formatReceivedOrientationExportData(
+      exportData as Array<ReceivedOrientationExportData>
+    );
   }
 
   const translatedType = type === "sent" ? "envoyees" : "recues";
