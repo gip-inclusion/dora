@@ -457,7 +457,7 @@ class OrientationStatsTestCase(APITestCase):
         self.assertEqual(response.status_code, 403)
 
 
-class SentOrientationsExportTestCase(APITestCase):
+class OrientationsExportTestCase(APITestCase):
     def setUp(self):
         self.structure = make_structure()
         self.service = make_service(structure=self.structure)
@@ -466,7 +466,7 @@ class SentOrientationsExportTestCase(APITestCase):
 
         self.client.force_authenticate(user=self.user)
 
-    def test_get_export(self):
+    def test_get_export_of_sent_orientations(self):
         orientation_1 = baker.make(
             Orientation,
             creation_date=timezone.now() - relativedelta(days=1),
@@ -519,26 +519,7 @@ class SentOrientationsExportTestCase(APITestCase):
             ],
         )
 
-    def test_raise_403_if_user_not_structure_member(self):
-        self.client.force_authenticate(user=make_user())
-
-        response = self.client.get(
-            f"/structures/{self.structure.slug}/orientations/export/?type=sent"
-        )
-
-        self.assertEqual(response.status_code, 403)
-
-
-class ReceivedOrientationsExportTestCase(APITestCase):
-    def setUp(self):
-        self.structure = make_structure()
-        self.service = make_service(structure=self.structure)
-        self.user = make_user()
-        baker.make(StructureMember, structure=self.structure, user=self.user)
-
-        self.client.force_authenticate(user=self.user)
-
-    def test_get_export(self):
+    def test_get_export_of_received_orientations(self):
         orientation_1 = baker.make(
             Orientation,
             creation_date=timezone.now() - relativedelta(days=1),
@@ -567,7 +548,7 @@ class ReceivedOrientationsExportTestCase(APITestCase):
             [
                 {
                     "creation_date": orientation_1.creation_date.strftime("%Y-%m-%d"),
-                    "status": orientation_1.status,
+                    "status": "Validée",
                     "beneficiary_name": orientation_1.get_beneficiary_full_name(),
                     "referent_name": orientation_1.get_referent_full_name(),
                     "prescriber_structure_name": orientation_1.prescriber_structure.name,
@@ -576,7 +557,7 @@ class ReceivedOrientationsExportTestCase(APITestCase):
                 },
                 {
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
-                    "status": orientation_2.status,
+                    "status": "En cours de modération",
                     "beneficiary_name": orientation_2.get_beneficiary_full_name(),
                     "referent_name": orientation_2.get_referent_full_name(),
                     "prescriber_structure_name": orientation_1.prescriber_structure.name,
@@ -590,7 +571,14 @@ class ReceivedOrientationsExportTestCase(APITestCase):
         self.client.force_authenticate(user=make_user())
 
         response = self.client.get(
-            f"/structures/{self.structure.slug}/orientations/export/?type=received"
+            f"/structures/{self.structure.slug}/orientations/export/?type=sent"
         )
 
         self.assertEqual(response.status_code, 403)
+
+    def test_raise_400_when_invalid_orientation_type(self):
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/export/?type=other"
+        )
+
+        self.assertEqual(response.status_code, 400)
