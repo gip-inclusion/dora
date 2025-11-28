@@ -60,8 +60,10 @@ export async function generateOrientationExport(
     sheetData = formatSentOrientationExportData(exportData);
   }
 
+  const translatedType = type === "sent" ? "envoyees" : "recues";
+
   generateSpreadsheet<Array<SentOrientationExportData>>({
     sheetData,
-    sheetName: `orientations-${type}-dora-${structureSlug}`,
+    sheetName: `orientations-${translatedType}-dora-${structureSlug}`,
   });
 }
