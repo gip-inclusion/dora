@@ -80,7 +80,7 @@
       {@render children()}
     </div>
   </div>
-  <div class="flex-1">
+  <div class="hidden flex-1 md:flex">
     {#if hasOrientations}
       <img src={illuModeEmploi} alt="" class="mb-s16 w-full" />
     {:else}
