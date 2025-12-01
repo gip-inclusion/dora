@@ -36,7 +36,7 @@ function deleteCookieByPrefix(prefix: string, domain: string) {
     if (cookieName.startsWith(prefix)) {
       Cookies.remove(cookieName, {
         path: "/",
-        domain: domain,
+        domain,
       });
     }
   });
