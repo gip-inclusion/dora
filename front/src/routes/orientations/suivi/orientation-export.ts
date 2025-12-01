@@ -28,7 +28,7 @@ interface ReceivedOrientationExportData
     | "referentName"
   > {
   prescriberStructureName: string;
-  serviceFrontendUrl: string;
+  detailPageUrl: string;
 }
 
 async function fetchOrientationExportData({
@@ -68,7 +68,7 @@ function formatReceivedOrientationExportData(
     "Service concerné": orientation.serviceName,
     "Structure émettrice": orientation.prescriberStructureName,
     "Contact émetteur": orientation.referentName,
-    Lien: orientation.serviceFrontendUrl,
+    Lien: orientation.detailPageUrl,
   }));
 }
 

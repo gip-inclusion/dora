@@ -560,7 +560,7 @@ class OrientationsExportTestCase(APITestCase):
                     "referent_name": orientation_1.get_referent_full_name(),
                     "prescriber_structure_name": orientation_1.prescriber_structure.name,
                     "service_name": orientation_1.get_service_name(),
-                    "service_frontend_url": orientation_1.get_service_frontend_url(),
+                    "detail_page_url": orientation_1.get_magic_link(),
                 },
                 {
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
@@ -569,7 +569,7 @@ class OrientationsExportTestCase(APITestCase):
                     "referent_name": orientation_2.get_referent_full_name(),
                     "prescriber_structure_name": "Pas de prescripteur",
                     "service_name": orientation_2.get_service_name(),
-                    "service_frontend_url": orientation_2.get_service_frontend_url(),
+                    "detail_page_url": orientation_2.get_magic_link(),
                 },
             ],
         )
