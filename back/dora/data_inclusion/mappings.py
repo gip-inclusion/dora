@@ -59,12 +59,11 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
     if location_kinds == [] and result["distance"] is not None:
         location_kinds = ["en-presentiel"]
 
-    kind = (
-        service_data["type"]
+    kinds = (
+        [service_data["type"]]
         if service_data["type"] in supported_service_kinds
         else None
     )
-    kinds = [kind] if kind is not None else None
 
     return {
         #
