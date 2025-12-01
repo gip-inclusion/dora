@@ -16,8 +16,8 @@
   const CONTENT_BY_TYPE = {
     sent: {
       noOrientations: {
-        title: "Aucune demande d’orientation reçue pour le moment",
-        text: "Assurez-vous d’avoir activé le formulaire DORA sur vos services. Pour augmenter votre visibilité, partagez le lien de votre structure avec vos partenaires afin qu’ils puissent orienter leurs bénéficiaires vers vos dispositifs via DORA.",
+        title: "Vous n'avez pas encore réalisé d’orientations",
+        text: "Besoin d’orienter des bénéficiaires vers des dispositifs adaptés ? Commencez par identifier les services disponibles selon leurs besoins et votre territoire.",
       },
       hasOrientations: {
         title: "Liste des orientations envoyées",
@@ -26,11 +26,11 @@
     },
     received: {
       noOrientationsAndServices: {
-        title: "Vous n’avez pas encore réalisé d’orientations",
-        text: "Besoin d’orienter des bénéficiaires vers des dispositifs adaptés ? Commencez par identifier les services disponibles selon leurs besoins et votre territoire.",
+        title: "Aucune demande d’orientation reçue pour le moment",
+        text: "Assurez-vous d’avoir activé le formulaire DORA sur vos services. Pour augmenter votre visibilité, partagez le lien de votre structure avec vos partenaires afin qu’ils puissent orienter leurs bénéficiaires vers vos dispositifs via DORA.",
       },
       noOrientationsAndNoServices: {
-        title: "Vous n’avez pas encore réalisé d’orientations",
+        title: "Aucune demande d’orientation reçue pour le moment",
         text: "Pour recevoir des orientations, vous devez d’abord référencer vos services ! Si vous proposez des dispositifs, ajoutez-les sur DORA pour que vos partenaires puissent y orienter leurs bénéficiaires.",
       },
       hasOrientations: {
