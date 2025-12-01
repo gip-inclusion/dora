@@ -77,17 +77,17 @@ def get_region_if_all_department_codes_belong_to_it(
         # Un ou plusieurs codes n'ont pas le format attendu
         return None
 
-    departements = list(
+    departments = list(
         Departement.objects.filter(code__in=department_codes).values(
             "code", "code_region"
         )
     )
 
-    if len(departements) != len(department_codes):
+    if len(departments) != len(department_codes):
         # Un ou plusieurs codes ne correspondent pas à des départements
         return None
 
-    region_codes = {dept["code_region"] for dept in departements}
+    region_codes = {dept["code_region"] for dept in departments}
 
     if len(region_codes) != 1:
         # Les départements ne correspondent pas à une seule région
