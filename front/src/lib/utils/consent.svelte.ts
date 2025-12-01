@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 import { browser } from "$app/environment";
 import { log } from "$lib/utils/logger";
 import {
@@ -181,7 +183,13 @@ function persistConsent(updatedConsent: Consent) {
 
   const expiryDate = new Date();
   expiryDate.setMonth(expiryDate.getMonth() + CONSENT_EXPIRY_MONTHS);
-  document.cookie = `${CONSENT_COOKIE_NAME}=${consentString}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Lax; Secure`;
+
+  Cookies.set(CONSENT_COOKIE_NAME, consentString, {
+    expires: expiryDate,
+    path: "/",
+    sameSite: "Lax",
+    secure: true,
+  });
 
   sendConsentToAPI(updatedConsent.consentChoices);
 }
