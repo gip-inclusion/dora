@@ -1,6 +1,9 @@
+import Cookies from "js-cookie";
+
+import { get, writable } from "svelte/store";
+
 import { browser } from "$app/environment";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-import { get, writable } from "svelte/store";
 import type { SavedSearch, ShortBookmark, ShortStructure } from "../types";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
@@ -53,8 +56,16 @@ export function setUserInfo(newUserInfo: UserInfo | null) {
 }
 
 export function setToken(newToken: string) {
+  if (!browser) {
+    return;
+  }
+
   token.set(newToken);
-  localStorage.setItem(tokenKey, newToken);
+  Cookies.set(tokenKey, newToken, {
+    path: "/",
+    sameSite: "Lax",
+    secure: true,
+  });
 }
 
 function getUserInfo(authToken) {
@@ -84,9 +95,12 @@ export async function refreshUserInfo() {
 }
 
 export function disconnect() {
-  token.set(null);
-  setUserInfo(null);
-  localStorage.clear();
+  if (browser) {
+    token.set(null);
+    setUserInfo(null);
+    Cookies.remove(tokenKey, { path: "/" });
+    localStorage.clear();
+  }
 }
 
 export async function validateCredsAndFillUserInfo() {
@@ -94,14 +108,27 @@ export async function validateCredsAndFillUserInfo() {
   setUserInfo(null);
 
   if (browser) {
-    const lsToken = localStorage.getItem(tokenKey);
-    if (lsToken) {
+    let authToken = Cookies.get(tokenKey);
+
+    // Migration depuis localStorage vers cookie pour les utilisateurs existants
+    if (!authToken) {
+      const lsToken = localStorage.getItem(tokenKey);
+      if (lsToken) {
+        // Migre le token depuis localStorage vers le cookie
+        setToken(lsToken);
+        authToken = lsToken;
+        // Supprime le token de localStorage après migration
+        localStorage.removeItem(tokenKey);
+      }
+    }
+
+    if (authToken) {
       // Valide le token actuel et remplit les informations
       // utilisateur
       try {
-        const result = await getUserInfo(lsToken);
+        const result = await getUserInfo(authToken);
         if (result.status === 200) {
-          token.set(lsToken);
+          token.set(authToken);
           const info = await result.json();
           setUserInfo(info);
           userPreferencesSet([...info.structures, ...info.pendingStructures]);
