@@ -69,8 +69,8 @@
     {:else}
       <InboxUnarchiveLineBusiness />
     {/if}
-    <h2>{title}</h2>
-    <h4>{text}</h4>
+    <h2 class="text-gray-text">{title}</h2>
+    <p>{text}</p>
     <div
       class={[
         "flex flex-row justify-center",
