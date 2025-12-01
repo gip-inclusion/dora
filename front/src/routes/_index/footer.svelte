@@ -16,8 +16,7 @@
   >
     <div class="text-f14 text-gray-dark">
       <strong>Infolettre &nbsp;•&nbsp;</strong>
-      Une fois par mois, recevez un courriel pour être informé des évolutions de
-      DORA.
+      Une fois par mois, recevez un courriel pour être informé des évolutions de DORA.
     </div>
 
     <LinkButton

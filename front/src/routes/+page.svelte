@@ -132,8 +132,8 @@
       >
         <VideoFillMedia />
       </span>
-      Rejoignez-nous lors d'un webinaire pour explorer les possibilités offertes
-      par DORA.
+      Rejoignez-nous lors d'un webinaire pour explorer les possibilités offertes par
+      DORA.
     </p>
 
     <LinkButton

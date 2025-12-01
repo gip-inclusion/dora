@@ -50,8 +50,7 @@
       <strong>Exemples&nbsp;:</strong> Pour un atelier ponctuel de 3 h : temps hebdomadaire
       = 3 heures, durée = 1 semaine (même si la durée réelle est inférieure, elle
       sera arrondie à une semaine pour le calcul). Pour un accompagnement total de
-      30 h réparties sur 3 semaines : temps hebdomadaire moyen = 10 h, durée = 3
-      semaines.
+      30 h réparties sur 3 semaines : temps hebdomadaire moyen = 10 h, durée = 3 semaines.
     </div>
   </Notice>
 
