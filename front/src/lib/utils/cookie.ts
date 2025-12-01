@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 import { browser } from "$app/environment";
 
 export const CONSENT_COOKIE_NAME = "cookie_consent";
@@ -7,17 +9,19 @@ export function clearConsentCookie() {
     return;
   }
 
-  document.cookie = `${CONSENT_COOKIE_NAME}=; max-age=0; path=/; SameSite=Lax; Secure`;
+  Cookies.remove(CONSENT_COOKIE_NAME, {
+    path: "/",
+    sameSite: "Lax",
+    secure: true,
+  });
 }
 
 export function getCookie(name: string) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    return parts.pop()?.split(";").shift();
+  if (!browser) {
+    return undefined;
   }
 
-  return undefined;
+  return Cookies.get(name);
 }
 
 function deleteCookieByPrefix(prefix: string, domain: string) {
@@ -25,10 +29,15 @@ function deleteCookieByPrefix(prefix: string, domain: string) {
     return;
   }
 
+  // js-cookie ne propose pas de méthode pour lister tous les cookies,
+  // donc nous utilisons document.cookie pour itérer sur les cookies
   document.cookie.split(";").forEach((cookie) => {
     const cookieName = cookie.split("=")[0].trim();
     if (cookieName.startsWith(prefix)) {
-      document.cookie = `${cookieName}=; max-age=0; path=/; domain=${domain}`;
+      Cookies.remove(cookieName, {
+        path: "/",
+        domain: domain,
+      });
     }
   });
 }
