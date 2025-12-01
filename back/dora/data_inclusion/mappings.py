@@ -149,11 +149,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
             value__in=service_data["modes_accueil"]
         )
 
-    kind = (
-        ServiceKind.objects.get(value=service_data["type"])
-        if service_data["type"]
-        else None
-    )
+    kind = ServiceKind.objects.filter(value=service_data["type"]).first()
 
     department = None
     if service_data["code_insee"] is not None:
