@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 import { browser } from "$app/environment";
 import { log } from "$lib/utils/logger";
 import {
@@ -179,9 +181,12 @@ function enforceMatomoConsent(hasMatomoConsent: boolean) {
 function persistConsent(updatedConsent: Consent) {
   const consentString = JSON.stringify(updatedConsent);
 
-  const expiryDate = new Date();
-  expiryDate.setMonth(expiryDate.getMonth() + CONSENT_EXPIRY_MONTHS);
-  document.cookie = `${CONSENT_COOKIE_NAME}=${consentString}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Lax; Secure`;
+  Cookies.set(CONSENT_COOKIE_NAME, consentString, {
+    expires: CONSENT_EXPIRY_MONTHS * 30,
+    path: "/",
+    sameSite: "Lax",
+    secure: true,
+  });
 
   sendConsentToAPI(updatedConsent.consentChoices);
 }
