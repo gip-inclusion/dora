@@ -24,9 +24,9 @@
 {#if browser}
   <Modal bind:isOpen title="Avant de continuer" width="medium">
     <p>
-      ⚠️ <strong>Rappel :</strong> Les orientations fictives, destinées à tester
-      l’outil, nécessitent une vérification manuelle, ajoutant une charge de travail
-      pour nos équipes.
+      ⚠️ <strong>Rappel :</strong> Les orientations fictives, destinées à tester l’outil,
+      nécessitent une vérification manuelle, ajoutant une charge de travail pour nos
+      équipes.
     </p>
     <p>
       Nous vous invitons à consulter notre <a

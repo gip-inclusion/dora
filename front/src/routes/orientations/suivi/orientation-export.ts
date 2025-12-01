@@ -18,15 +18,10 @@ interface SentOrientationExportData {
   referentName: string;
 }
 
-interface ReceivedOrientationExportData
-  extends Pick<
-    SentOrientationExportData,
-    | "creationDate"
-    | "status"
-    | "beneficiaryName"
-    | "serviceName"
-    | "referentName"
-  > {
+interface ReceivedOrientationExportData extends Pick<
+  SentOrientationExportData,
+  "creationDate" | "status" | "beneficiaryName" | "serviceName" | "referentName"
+> {
   prescriberStructureName: string;
   serviceFrontendUrl: string;
 }
