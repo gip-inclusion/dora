@@ -181,11 +181,8 @@ function enforceMatomoConsent(hasMatomoConsent: boolean) {
 function persistConsent(updatedConsent: Consent) {
   const consentString = JSON.stringify(updatedConsent);
 
-  const expiryDate = new Date();
-  expiryDate.setMonth(expiryDate.getMonth() + CONSENT_EXPIRY_MONTHS);
-
   Cookies.set(CONSENT_COOKIE_NAME, consentString, {
-    expires: expiryDate,
+    expires: CONSENT_EXPIRY_MONTHS * 30,
     path: "/",
     sameSite: "Lax",
     secure: true,
