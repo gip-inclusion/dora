@@ -2,7 +2,6 @@ import { fetchData } from "$lib/utils/misc";
 import { getApiURL } from "$lib/utils/api";
 import { toast } from "@zerodevx/svelte-toast";
 import { generateSpreadsheet } from "$lib/utils/spreadsheet";
-import type { OrientationStats } from "$lib/types";
 import { orientationState } from "./state.svelte";
 
 interface SentOrientationExportData {
