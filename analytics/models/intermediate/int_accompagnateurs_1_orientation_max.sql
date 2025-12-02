@@ -4,6 +4,7 @@ SELECT
     acc.last_name                   AS last_name_prescriber,
     acc.first_name                  AS first_name_prescriber,
     acc.last_login                  AS last_login_prescriber,
+    acc.date_joined                 AS date_joined_prescriber,
     acc.main_activity               AS main_activity_prescriber,
     nb_orient.last_orientation_date,
     COALESCE(total_orientations, 0) AS total_orientations
