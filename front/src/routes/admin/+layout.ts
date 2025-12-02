@@ -1,4 +1,4 @@
-import { token, userInfo } from "$lib/utils/auth";
+import { getToken, userInfo } from "$lib/utils/auth";
 import { error, redirect } from "@sveltejs/kit";
 import { get } from "svelte/store";
 import type { LayoutLoad } from "./$types";
@@ -9,8 +9,7 @@ export const ssr = false;
 export const load: LayoutLoad = async ({ url, parent }) => {
   await parent();
 
-  const myToken = get(token);
-  if (!myToken) {
+  if (!getToken()) {
     redirect(
       302,
       `/auth/connexion?next=${encodeURIComponent(url.pathname + url.search)}`

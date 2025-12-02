@@ -1,14 +1,15 @@
+import Cookies from "js-cookie";
+
+import { writable } from "svelte/store";
+
 import { browser } from "$app/environment";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-import { get, writable } from "svelte/store";
 import type { SavedSearch, ShortBookmark, ShortStructure } from "../types";
 import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
 import { invalidateServicesOptionsCache } from "$lib/cache/services-options";
 
-const tokenKey = "token";
-
-export const token = writable<string | null>(null);
+const TOKEN_KEY = "token";
 
 export type UserMainActivity =
   | "accompagnateur"
@@ -52,9 +53,32 @@ export function setUserInfo(newUserInfo: UserInfo | null) {
   invalidateServicesOptionsCache();
 }
 
+export function getToken() {
+  if (!browser) {
+    return null;
+  }
+
+  return Cookies.get(TOKEN_KEY) ?? null;
+}
+
 export function setToken(newToken: string) {
-  token.set(newToken);
-  localStorage.setItem(tokenKey, newToken);
+  if (!browser) {
+    return;
+  }
+
+  Cookies.set(TOKEN_KEY, newToken, {
+    path: "/",
+    sameSite: "Lax",
+    secure: true,
+  });
+}
+
+export function removeToken() {
+  if (!browser) {
+    return;
+  }
+
+  Cookies.remove(TOKEN_KEY, { path: "/" });
 }
 
 function getUserInfo(authToken) {
@@ -70,7 +94,7 @@ function getUserInfo(authToken) {
 
 export async function refreshUserInfo() {
   try {
-    const result = await getUserInfo(get(token));
+    const result = await getUserInfo(getToken());
     if (result.status === 200) {
       const info = (await result.json()) as UserInfo;
       setUserInfo(info);
@@ -84,24 +108,42 @@ export async function refreshUserInfo() {
 }
 
 export function disconnect() {
-  token.set(null);
-  setUserInfo(null);
-  localStorage.clear();
+  if (browser) {
+    setUserInfo(null);
+    removeToken();
+    localStorage.clear();
+  }
+}
+
+function migrateTokenFromLocalStorageToCookie(
+  authTokenFromCookie: string | null
+) {
+  if (!authTokenFromCookie) {
+    const lsToken = localStorage.getItem(TOKEN_KEY);
+    if (lsToken) {
+      setToken(lsToken);
+      localStorage.removeItem(TOKEN_KEY);
+      return lsToken;
+    }
+  }
+
+  return authTokenFromCookie;
 }
 
 export async function validateCredsAndFillUserInfo() {
-  token.set(null);
   setUserInfo(null);
 
   if (browser) {
-    const lsToken = localStorage.getItem(tokenKey);
-    if (lsToken) {
+    let authToken = getToken();
+
+    authToken = migrateTokenFromLocalStorageToCookie(authToken);
+
+    if (authToken) {
       // Valide le token actuel et remplit les informations
       // utilisateur
       try {
-        const result = await getUserInfo(lsToken);
+        const result = await getUserInfo(authToken);
         if (result.status === 200) {
-          token.set(lsToken);
           const info = await result.json();
           setUserInfo(info);
           userPreferencesSet([...info.structures, ...info.pendingStructures]);

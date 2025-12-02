@@ -1,7 +1,6 @@
 import { getApiURL } from "$lib/utils/api";
-import { token } from "$lib/utils/auth";
+import { getToken } from "$lib/utils/auth";
 import { fetchData } from "$lib/utils/misc";
-import { get } from "svelte/store";
 import type {
   PutativeStructureMember,
   ShortStructure,
@@ -106,7 +105,7 @@ export function createStructure(structure) {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
 
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify(structureToBack(structure)),
   });
@@ -122,7 +121,7 @@ export function modifyStructure(structure) {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
 
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify(structureToBack(structure)),
   });
@@ -170,7 +169,7 @@ export async function deleteMember(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -195,7 +194,7 @@ export async function resendInvite(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -220,7 +219,7 @@ export async function cancelInvite(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -245,7 +244,7 @@ export async function acceptMember(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
   });
 
@@ -270,7 +269,7 @@ export async function rejectMembershipRequest(uuid) {
     method,
     headers: {
       Accept: "application/json; version=1.0",
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
   });
 

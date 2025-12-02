@@ -7,7 +7,7 @@
   import ServiceContact from "$lib/components/specialized/services/display/service-contact.svelte";
   import ExternalLinkLineSystem from "svelte-remix/ExternalLinkLineSystem.svelte";
   import type { Service } from "$lib/types";
-  import { token } from "$lib/utils/auth";
+  import { getToken } from "$lib/utils/auth";
 
   import SharingModal from "../sharing-modal.svelte";
 
@@ -40,7 +40,7 @@
   let contactBoxOpen = $state(false);
 
   function handleShowContactClick() {
-    if (!$token && !service.isContactInfoPublic) {
+    if (!getToken() && !service.isContactInfoPublic) {
       goto(
         `/auth/connexion?next=${encodeURIComponent(
           $page.url.pathname + $page.url.search

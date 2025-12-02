@@ -13,7 +13,7 @@
   import { goto } from "$app/navigation";
   import ArrowLeftSLineArrows from "svelte-remix/ArrowLeftSLineArrows.svelte";
   import { onMount, setContext } from "svelte";
-  import { token } from "$lib/utils/auth";
+  import { getToken } from "$lib/utils/auth";
   import Teaser from "./teaser.svelte";
   import { trackMobilisation } from "$lib/utils/stats";
   import { page } from "$app/stores";
@@ -42,7 +42,7 @@
   // au composant enfant 'ContactInfo'.
 
   // Raccourci : on ne peut accéder à cette page que si connecté.
-  setContext("shouldTrack", !$token);
+  setContext("shouldTrack", !getToken());
 
   onMount(() => {
     $orientation.firstStepDone = true;
@@ -62,7 +62,7 @@
   }
 
   onMount(async () => {
-    if ($token && shouldTrack) {
+    if (getToken() && shouldTrack) {
       await trackMobilisation(service, $page.url, isDI);
       $page.url.searchParams.delete("newlogin");
       history.replaceState(null, "", $page.url.pathname + $page.url.search);
@@ -70,7 +70,7 @@
   });
 </script>
 
-{#if $token}
+{#if getToken()}
   <FormErrors />
 
   <Form

@@ -3,9 +3,8 @@
   import Form from "$lib/components/forms/form.svelte";
   import Modal from "$lib/components/hoc/modal.svelte";
   import { getApiURL } from "$lib/utils/api";
-  import { token } from "$lib/utils/auth";
+  import { getToken } from "$lib/utils/auth";
   import { addUserSchema } from "$lib/validation/schemas/dashboard";
-  import { get } from "svelte/store";
   import ConfirmationModal from "./modal-confirmation.svelte";
   import FormErrors from "$lib/components/forms/form-errors.svelte";
   import BasicInputField from "$lib/components/forms/fields/basic-input-field.svelte";
@@ -74,7 +73,7 @@
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json; version=1.0",
-        Authorization: `Token ${get(token)}`,
+        Authorization: `Token ${getToken()}`,
       },
     });
   }

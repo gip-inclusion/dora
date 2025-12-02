@@ -5,9 +5,8 @@ import {
   getServicesOptions,
 } from "$lib/requests/services";
 import type { Service } from "$lib/types";
-import { token } from "$lib/utils/auth";
+import { getToken } from "$lib/utils/auth";
 import { error, redirect } from "@sveltejs/kit";
-import { get } from "svelte/store";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ fetch, url, params, parent }) => {
@@ -41,7 +40,7 @@ export const load: PageLoad = async ({ fetch, url, params, parent }) => {
         service: null,
       };
     }
-    if (!get(token)) {
+    if (!getToken()) {
       redirect(
         302,
         `/auth/connexion?next=${encodeURIComponent(url.pathname + url.search)}`
