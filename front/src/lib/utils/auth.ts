@@ -103,24 +103,29 @@ export function disconnect() {
   }
 }
 
+function migrateTokenFromLocalStorageToCookie(
+  authTokenFromCookie: string | null
+) {
+  if (!authTokenFromCookie) {
+    const lsToken = localStorage.getItem(TOKEN_KEY);
+    if (lsToken) {
+      setToken(lsToken);
+      localStorage.removeItem(TOKEN_KEY);
+      return lsToken;
+    }
+  }
+
+  return authTokenFromCookie;
+}
+
 export async function validateCredsAndFillUserInfo() {
   token.set(null);
   setUserInfo(null);
 
   if (browser) {
-    let authToken = Cookies.get(TOKEN_KEY);
+    let authToken = Cookies.get(TOKEN_KEY) ?? null;
 
-    // Migration depuis localStorage vers cookie pour les utilisateurs existants
-    if (!authToken) {
-      const lsToken = localStorage.getItem(TOKEN_KEY);
-      if (lsToken) {
-        // Migre le token depuis localStorage vers le cookie
-        setToken(lsToken);
-        authToken = lsToken;
-        // Supprime le token de localStorage après migration
-        localStorage.removeItem(TOKEN_KEY);
-      }
-    }
+    authToken = migrateTokenFromLocalStorageToCookie(authToken);
 
     if (authToken) {
       // Valide le token actuel et remplit les informations
