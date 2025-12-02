@@ -9,7 +9,10 @@
   import { CANONICAL_URL } from "$lib/env";
   import type { PageData } from "./$types";
   import { fly } from "svelte/transition";
-  import { generateOrientationExport } from "./orientation-export";
+  import {
+    generateOrientationExport,
+    outputOrientationStats,
+  } from "./orientation-export";
 
   interface Props {
     data: PageData;
@@ -31,6 +34,10 @@
     linkCopied = true;
     setTimeout(() => (linkCopied = false), 2000);
   }
+
+  const orientationStats = $derived(
+    outputOrientationStats(orientationState.selectedType, data.stats)
+  );
 </script>
 
 <EnsureLoggedIn>
@@ -38,18 +45,9 @@
     <h2>
       {`Orientations ${orientationState.selectedType === "sent" ? "envoyées" : "reçues"}`}
     </h2>
-    {#if orientationState.selectedType === "sent"}
-      <p>
-        <b>{data.stats.totalSentPending} demandes en cours</b> / {data.stats
-          .totalSent} envoyées
-      </p>
-    {:else}
-      <p>
-        <b>{data.stats.totalReceivedPending} demandes à traiter</b> / {data
-          .stats.totalReceived}
-        reçues
-      </p>
-    {/if}
+    <p>
+      {@html orientationStats}
+    </p>
     <OrientationsExportCard
       type={orientationState.selectedType}
       {hasOrientations}

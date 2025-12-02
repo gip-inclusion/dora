@@ -1,8 +1,9 @@
 import { fetchData } from "$lib/utils/misc";
 import { getApiURL } from "$lib/utils/api";
-import type { OrientationType } from "./state.svelte";
+import { orientationState, type OrientationType } from "./state.svelte";
 import { toast } from "@zerodevx/svelte-toast";
 import { generateSpreadsheet } from "$lib/utils/spreadsheet";
+import type { OrientationStats } from "$lib/types";
 
 interface OrientationExportParams {
   structureSlug: string;
@@ -102,4 +103,35 @@ export async function generateOrientationExport(
     sheetData,
     sheetName: `orientations-${translatedType}-dora-${structureSlug}`,
   });
+}
+
+export function outputOrientationStats(
+  type: OrientationType,
+  {
+    totalSentPending,
+    totalSent,
+    totalReceivedPending,
+    totalReceived,
+  }: OrientationStats
+) {
+  if (type === "sent") {
+    const pendingOrientations =
+      totalSentPending > 1
+        ? `${totalSentPending} demandes`
+        : `${totalSentPending} demande`;
+
+    const totalOrientations =
+      totalSent > 1 ? `${totalSent} envoyées` : `${totalSent} envoyée`;
+
+    return `<b>${pendingOrientations} en cours</b> / ${totalOrientations}`;
+  }
+
+  const pendingOrientations =
+    totalSentPending > 1
+      ? `${totalReceivedPending} demandes`
+      : `${totalReceivedPending} demande`;
+
+  const totalOrientations =
+    totalReceived > 1 ? `${totalReceived} reçues` : `${totalReceived} reçue`;
+  return `<b>${pendingOrientations} à traiter</b> / ${totalOrientations}`;
 }
