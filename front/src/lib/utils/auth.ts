@@ -9,7 +9,7 @@ import { log, logException } from "./logger";
 import { userPreferencesSet } from "./preferences";
 import { invalidateServicesOptionsCache } from "$lib/cache/services-options";
 
-const tokenKey = "token";
+const TOKEN_KEY = "token";
 
 export const token = writable<string | null>(null);
 
@@ -61,7 +61,7 @@ export function setToken(newToken: string) {
   }
 
   token.set(newToken);
-  Cookies.set(tokenKey, newToken, {
+  Cookies.set(TOKEN_KEY, newToken, {
     path: "/",
     sameSite: "Lax",
     secure: true,
@@ -98,7 +98,7 @@ export function disconnect() {
   if (browser) {
     token.set(null);
     setUserInfo(null);
-    Cookies.remove(tokenKey, { path: "/" });
+    Cookies.remove(TOKEN_KEY, { path: "/" });
     localStorage.clear();
   }
 }
@@ -108,17 +108,17 @@ export async function validateCredsAndFillUserInfo() {
   setUserInfo(null);
 
   if (browser) {
-    let authToken = Cookies.get(tokenKey);
+    let authToken = Cookies.get(TOKEN_KEY);
 
     // Migration depuis localStorage vers cookie pour les utilisateurs existants
     if (!authToken) {
-      const lsToken = localStorage.getItem(tokenKey);
+      const lsToken = localStorage.getItem(TOKEN_KEY);
       if (lsToken) {
         // Migre le token depuis localStorage vers le cookie
         setToken(lsToken);
         authToken = lsToken;
         // Supprime le token de localStorage après migration
-        localStorage.removeItem(tokenKey);
+        localStorage.removeItem(TOKEN_KEY);
       }
     }
 
