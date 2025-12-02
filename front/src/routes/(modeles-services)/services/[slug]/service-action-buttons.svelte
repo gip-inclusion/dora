@@ -13,7 +13,7 @@
   import { page } from "$app/stores";
   import Bookmarkable from "$lib/components/hoc/bookmarkable.svelte";
   import Tooltip from "$lib/components/ui/tooltip.svelte";
-  import { token } from "$lib/utils/auth";
+  import { getToken } from "$lib/utils/auth";
   import type { Service } from "$lib/types";
 
   import SharingModal from "../../components/sharing-modal.svelte";
@@ -47,7 +47,7 @@
   }
 
   function handleBookmark(onBookmark: () => void) {
-    if (!$token) {
+    if (!getToken()) {
       goto(
         `/auth/connexion?next=${encodeURIComponent(
           $page.url.pathname + $page.url.search

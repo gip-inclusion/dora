@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-import { get, writable } from "svelte/store";
+import { writable } from "svelte/store";
 
 import { browser } from "$app/environment";
 import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
@@ -10,8 +10,6 @@ import { userPreferencesSet } from "./preferences";
 import { invalidateServicesOptionsCache } from "$lib/cache/services-options";
 
 const TOKEN_KEY = "token";
-
-export const token = writable<string | null>(null);
 
 export type UserMainActivity =
   | "accompagnateur"
@@ -55,17 +53,32 @@ export function setUserInfo(newUserInfo: UserInfo | null) {
   invalidateServicesOptionsCache();
 }
 
+export function getToken() {
+  if (!browser) {
+    return null;
+  }
+
+  return Cookies.get(TOKEN_KEY) ?? null;
+}
+
 export function setToken(newToken: string) {
   if (!browser) {
     return;
   }
 
-  token.set(newToken);
   Cookies.set(TOKEN_KEY, newToken, {
     path: "/",
     sameSite: "Lax",
     secure: true,
   });
+}
+
+export function removeToken() {
+  if (!browser) {
+    return;
+  }
+
+  Cookies.remove(TOKEN_KEY, { path: "/" });
 }
 
 function getUserInfo(authToken) {
@@ -81,7 +94,7 @@ function getUserInfo(authToken) {
 
 export async function refreshUserInfo() {
   try {
-    const result = await getUserInfo(get(token));
+    const result = await getUserInfo(getToken());
     if (result.status === 200) {
       const info = (await result.json()) as UserInfo;
       setUserInfo(info);
@@ -96,9 +109,8 @@ export async function refreshUserInfo() {
 
 export function disconnect() {
   if (browser) {
-    token.set(null);
     setUserInfo(null);
-    Cookies.remove(TOKEN_KEY, { path: "/" });
+    removeToken();
     localStorage.clear();
   }
 }
@@ -119,11 +131,10 @@ function migrateTokenFromLocalStorageToCookie(
 }
 
 export async function validateCredsAndFillUserInfo() {
-  token.set(null);
   setUserInfo(null);
 
   if (browser) {
-    let authToken = Cookies.get(TOKEN_KEY) ?? null;
+    let authToken = getToken();
 
     authToken = migrateTokenFromLocalStorageToCookie(authToken);
 
@@ -133,7 +144,6 @@ export async function validateCredsAndFillUserInfo() {
       try {
         const result = await getUserInfo(authToken);
         if (result.status === 200) {
-          token.set(authToken);
           const info = await result.json();
           setUserInfo(info);
           userPreferencesSet([...info.structures, ...info.pendingStructures]);

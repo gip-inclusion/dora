@@ -1,6 +1,5 @@
-import { get } from "svelte/store";
-import { token } from "./auth";
 import { getApiURL } from "./api";
+import { getToken } from "./auth";
 import { CGU_VERSION } from "../../routes/(static)/cgu/version";
 
 export function needToAcceptCgu(currentUserInfo) {
@@ -18,7 +17,7 @@ export async function acceptCgu() {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ cguVersion: CGU_VERSION }),
   });

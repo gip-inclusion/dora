@@ -1,9 +1,8 @@
-import { fetchData } from "$lib/utils/misc";
-import { get } from "svelte/store";
-import { token } from "../utils/auth";
-import { getApiURL } from "../utils/api";
 import type { SavedSearch, SavedSearchNotificationFrequency } from "$lib/types";
-import { getQueryString } from "../utils/service-search";
+import { fetchData } from "$lib/utils/misc";
+import { getApiURL } from "$lib/utils/api";
+import { getToken } from "$lib/utils/auth";
+import { getQueryString } from "$lib/utils/service-search";
 
 export async function saveSearch(
   savedSearch: Pick<
@@ -25,7 +24,7 @@ export async function saveSearch(
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ ...savedSearch }),
   });
@@ -46,7 +45,7 @@ export async function updateSavedSearchFrequency(
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
     body: JSON.stringify({ frequency }),
   });
@@ -64,7 +63,7 @@ export async function deleteSavedSearch(savedSearchId: number) {
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
-      Authorization: `Token ${get(token)}`,
+      Authorization: `Token ${getToken()}`,
     },
   });
   if (!response.ok) {

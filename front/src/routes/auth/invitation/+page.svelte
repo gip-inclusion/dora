@@ -6,8 +6,7 @@
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
-  import { token, validateCredsAndFillUserInfo } from "$lib/utils/auth";
-  import { get } from "svelte/store";
+  import { getToken, validateCredsAndFillUserInfo } from "$lib/utils/auth";
   import AuthLayout from "../auth-layout.svelte";
   import type { PageData } from "./$types";
   import { CGU_VERSION } from "../../(static)/cgu/version";
@@ -28,7 +27,7 @@
       headers: {
         Accept: defaultAcceptHeader,
         "Content-Type": "application/json",
-        Authorization: `Token ${get(token)}`,
+        Authorization: `Token ${getToken()}`,
       },
       body: JSON.stringify({
         structureSlug: data.structure.slug,
