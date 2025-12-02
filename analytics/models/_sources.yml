@@ -5,6 +5,7 @@ sources:
       - name: orientations_orientation
       - name: orientations_rejectionreason
       - name: orientations_orientation_rejection_reasons
+      - name: services_coachorientationmode
       - name: services_fundinglabel
       - name: services_locationkind
       - name: services_savedsearch
@@ -12,8 +13,10 @@ sources:
       - name: services_service_categories
       - name: services_servicecategory
       - name: services_service_coach_orientation_modes
+      - name: services_servicefee
       - name: services_service_funding_labels
       - name: services_service_location_kinds
+      - name: services_servicesource
       - name: stats_deploymentstate
       - name: stats_dimobilisationevent
       - name: stats_dimobilisationevent_categories
@@ -31,6 +34,7 @@ sources:
       - name: structures_structurenationallabel
       - name: structures_structure_national_labels
       - name: structures_structureputativemember
+      - name: structures_structuresource
       - name: structures_structuretypology
       - name: users_user
   - name: matomo
