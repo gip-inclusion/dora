@@ -1,4 +1,4 @@
-export type OrientationType = "sent" | "received";
+type OrientationType = "sent" | "received";
 
 class OrientationState {
   selectedType = $state<OrientationType>("received");

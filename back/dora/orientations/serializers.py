@@ -230,7 +230,7 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
 
 class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
     prescriber_structure_name = serializers.SerializerMethodField()
-    service_frontend_url = serializers.SerializerMethodField()
+    detail_page_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Orientation
@@ -241,7 +241,7 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
             "referent_name",
             "service_name",
             "prescriber_structure_name",
-            "service_frontend_url",
+            "detail_page_url",
         ]
 
     @staticmethod
@@ -253,5 +253,5 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
         )
 
     @staticmethod
-    def get_service_frontend_url(obj: Orientation) -> str:
-        return obj.get_service_frontend_url()
+    def get_detail_page_url(obj: Orientation) -> str:
+        return obj.get_magic_link()

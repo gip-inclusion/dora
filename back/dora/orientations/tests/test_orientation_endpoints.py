@@ -435,7 +435,9 @@ class OrientationStatsTestCase(APITestCase):
 
     def test_get_stats(self):
         with self.assertNumQueries(3):
-            response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/stats/"
+            )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -452,7 +454,9 @@ class OrientationStatsTestCase(APITestCase):
     def test_raise_403_when_user_not_structure_member(self):
         self.client.force_authenticate(user=make_user())
 
-        response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/stats/"
+        )
 
         self.assertEqual(response.status_code, 403)
 
@@ -560,7 +564,7 @@ class OrientationsExportTestCase(APITestCase):
                     "referent_name": orientation_1.get_referent_full_name(),
                     "prescriber_structure_name": orientation_1.prescriber_structure.name,
                     "service_name": orientation_1.get_service_name(),
-                    "service_frontend_url": orientation_1.get_service_frontend_url(),
+                    "detail_page_url": orientation_1.get_magic_link(),
                 },
                 {
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
@@ -569,7 +573,7 @@ class OrientationsExportTestCase(APITestCase):
                     "referent_name": orientation_2.get_referent_full_name(),
                     "prescriber_structure_name": "Pas de prescripteur",
                     "service_name": orientation_2.get_service_name(),
-                    "service_frontend_url": orientation_2.get_service_frontend_url(),
+                    "detail_page_url": orientation_2.get_magic_link(),
                 },
             ],
         )

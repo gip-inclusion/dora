@@ -3,11 +3,10 @@
   import illuModeEmploi from "$lib/assets/illustrations/illu-modeemploi.svg";
   import InboxArchiveLineBusiness from "svelte-remix/InboxArchiveLineBusiness.svelte";
   import InboxUnarchiveLineBusiness from "svelte-remix/InboxUnarchiveLineBusiness.svelte";
-  import type { OrientationType } from "./state.svelte";
+  import { orientationState } from "./state.svelte";
   import type { Snippet } from "svelte";
 
   interface Props {
-    type: OrientationType;
     hasOrientations: boolean;
     structureHasServices: boolean;
     children: Snippet;
@@ -16,8 +15,8 @@
   const CONTENT_BY_TYPE = {
     sent: {
       noOrientations: {
-        title: "Aucune demande d’orientation reçue pour le moment",
-        text: "Assurez-vous d’avoir activé le formulaire DORA sur vos services. Pour augmenter votre visibilité, partagez le lien de votre structure avec vos partenaires afin qu’ils puissent orienter leurs bénéficiaires vers vos dispositifs via DORA.",
+        title: "Vous n'avez pas encore réalisé d’orientations",
+        text: "Besoin d’orienter des bénéficiaires vers des dispositifs adaptés ? Commencez par identifier les services disponibles selon leurs besoins et leur territoire.",
       },
       hasOrientations: {
         title: "Liste des orientations envoyées",
@@ -26,11 +25,11 @@
     },
     received: {
       noOrientationsAndServices: {
-        title: "Vous n’avez pas encore réalisé d’orientations",
-        text: "Besoin d’orienter des bénéficiaires vers des dispositifs adaptés ? Commencez par identifier les services disponibles selon leurs besoins et votre territoire.",
+        title: "Aucune demande d’orientation reçue pour le moment",
+        text: "Assurez-vous d’avoir activé le formulaire DORA sur vos services. Pour augmenter votre visibilité, partagez le lien de votre structure avec vos partenaires afin qu’ils puissent orienter leurs bénéficiaires vers vos dispositifs.",
       },
       noOrientationsAndNoServices: {
-        title: "Vous n’avez pas encore réalisé d’orientations",
+        title: "Aucune demande d’orientation reçue pour le moment",
         text: "Pour recevoir des orientations, vous devez d’abord référencer vos services ! Si vous proposez des dispositifs, ajoutez-les sur DORA pour que vos partenaires puissent y orienter leurs bénéficiaires.",
       },
       hasOrientations: {
@@ -40,8 +39,9 @@
     },
   };
 
-  const { type, hasOrientations, structureHasServices, children }: Props =
-    $props();
+  const { hasOrientations, structureHasServices, children }: Props = $props();
+
+  const type = $derived(orientationState.selectedType);
 
   function getContentMapKey() {
     if (type === "sent") {
@@ -69,8 +69,8 @@
     {:else}
       <InboxUnarchiveLineBusiness />
     {/if}
-    <h2>{title}</h2>
-    <h4>{text}</h4>
+    <h2 class="text-gray-text">{title}</h2>
+    <p>{text}</p>
     <div
       class={[
         "flex flex-row justify-center",
@@ -80,7 +80,7 @@
       {@render children()}
     </div>
   </div>
-  <div class="flex-1">
+  <div class="hidden flex-1 md:flex">
     {#if hasOrientations}
       <img src={illuModeEmploi} alt="" class="mb-s16 w-full" />
     {:else}

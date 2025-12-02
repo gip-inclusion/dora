@@ -4,6 +4,7 @@
   import { orientationState } from "./state.svelte.js";
 
   import OrientationsExportCard from "./orientations-export-card.svelte";
+  import OrientationsStatsDisplay from "./orientations-stats-display.svelte";
   import DownloadLineSystem from "svelte-remix/DownloadLineSystem.svelte";
   import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
   import { CANONICAL_URL } from "$lib/env";
@@ -38,30 +39,14 @@
     <h2>
       {`Orientations ${orientationState.selectedType === "sent" ? "envoyées" : "reçues"}`}
     </h2>
-    {#if orientationState.selectedType === "sent"}
-      <p>
-        <b>{data.stats.totalSentPending} demandes en cours</b> / {data.stats
-          .totalSent} envoyées
-      </p>
-    {:else}
-      <p>
-        <b>{data.stats.totalReceivedPending} demandes à traiter</b> / {data
-          .stats.totalReceived}
-        reçues
-      </p>
-    {/if}
+    <OrientationsStatsDisplay stats={data.stats} />
     <OrientationsExportCard
-      type={orientationState.selectedType}
       {hasOrientations}
       structureHasServices={data.stats.structureHasServices}
     >
       {#if hasOrientations}
         <button
-          onclick={() =>
-            generateOrientationExport({
-              structureSlug: data.structure.slug,
-              type: orientationState.selectedType,
-            })}
+          onclick={() => generateOrientationExport(data.structure.slug)}
           class="text-magenta-cta gap-s4 flex flex-row font-bold"
           ><DownloadLineSystem class="fill-magenta-cta" />Télécharger la liste</button
         >
