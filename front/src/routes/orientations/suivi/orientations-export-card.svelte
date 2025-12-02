@@ -17,7 +17,7 @@
     sent: {
       noOrientations: {
         title: "Vous n'avez pas encore réalisé d’orientations",
-        text: "Besoin d’orienter des bénéficiaires vers des dispositifs adaptés ? Commencez par identifier les services disponibles selon leurs besoins et votre territoire.",
+        text: "Besoin d’orienter des bénéficiaires vers des dispositifs adaptés ? Commencez par identifier les services disponibles selon leurs besoins et leur territoire.",
       },
       hasOrientations: {
         title: "Liste des orientations envoyées",
@@ -27,7 +27,7 @@
     received: {
       noOrientationsAndServices: {
         title: "Aucune demande d’orientation reçue pour le moment",
-        text: "Assurez-vous d’avoir activé le formulaire DORA sur vos services. Pour augmenter votre visibilité, partagez le lien de votre structure avec vos partenaires afin qu’ils puissent orienter leurs bénéficiaires vers vos dispositifs via DORA.",
+        text: "Assurez-vous d’avoir activé le formulaire DORA sur vos services. Pour augmenter votre visibilité, partagez le lien de votre structure avec vos partenaires afin qu’ils puissent orienter leurs bénéficiaires vers vos dispositifs.",
       },
       noOrientationsAndNoServices: {
         title: "Aucune demande d’orientation reçue pour le moment",
