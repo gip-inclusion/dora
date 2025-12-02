@@ -1,14 +1,9 @@
 import { fetchData } from "$lib/utils/misc";
 import { getApiURL } from "$lib/utils/api";
-import { orientationState, type OrientationType } from "./state.svelte";
 import { toast } from "@zerodevx/svelte-toast";
 import { generateSpreadsheet } from "$lib/utils/spreadsheet";
 import type { OrientationStats } from "$lib/types";
-
-interface OrientationExportParams {
-  structureSlug: string;
-  type: OrientationType;
-}
+import { orientationState } from "./state.svelte";
 
 interface SentOrientationExportData {
   creationDate: string;
@@ -32,11 +27,8 @@ interface ReceivedOrientationExportData
   detailPageUrl: string;
 }
 
-async function fetchOrientationExportData({
-  structureSlug,
-  type,
-}: OrientationExportParams) {
-  const url = `${getApiURL()}/structures/${structureSlug}/orientations/export?type=${type}`;
+async function fetchOrientationExportData(structureSlug: string) {
+  const url = `${getApiURL()}/structures/${structureSlug}/orientations/export?type=${orientationState.selectedType}`;
 
   const result =
     await fetchData<
@@ -73,12 +65,8 @@ function formatReceivedOrientationExportData(
   }));
 }
 
-export async function generateOrientationExport(
-  params: OrientationExportParams
-) {
-  const exportData = await fetchOrientationExportData(params);
-
-  const { structureSlug, type } = params;
+export async function generateOrientationExport(structureSlug: string) {
+  const exportData = await fetchOrientationExportData(structureSlug);
 
   let sheetData;
 
@@ -86,6 +74,8 @@ export async function generateOrientationExport(
     toast.push("Une erreur est survenue lors de l’export des orientations.");
     return;
   }
+
+  const type = orientationState.selectedType;
 
   if (type === "sent") {
     sheetData = formatSentOrientationExportData(
@@ -105,16 +95,13 @@ export async function generateOrientationExport(
   });
 }
 
-export function outputOrientationStats(
-  type: OrientationType,
-  {
-    totalSentPending,
-    totalSent,
-    totalReceivedPending,
-    totalReceived,
-  }: OrientationStats
-) {
-  if (type === "sent") {
+export function outputOrientationStats({
+  totalSentPending,
+  totalSent,
+  totalReceivedPending,
+  totalReceived,
+}: OrientationStats) {
+  if (orientationState.selectedType === "sent") {
     const pendingOrientations =
       totalSentPending > 1
         ? `${totalSentPending} demandes`

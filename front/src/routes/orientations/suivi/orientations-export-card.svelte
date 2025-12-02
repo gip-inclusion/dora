@@ -3,11 +3,10 @@
   import illuModeEmploi from "$lib/assets/illustrations/illu-modeemploi.svg";
   import InboxArchiveLineBusiness from "svelte-remix/InboxArchiveLineBusiness.svelte";
   import InboxUnarchiveLineBusiness from "svelte-remix/InboxUnarchiveLineBusiness.svelte";
-  import type { OrientationType } from "./state.svelte";
+  import { orientationState } from "./state.svelte";
   import type { Snippet } from "svelte";
 
   interface Props {
-    type: OrientationType;
     hasOrientations: boolean;
     structureHasServices: boolean;
     children: Snippet;
@@ -40,8 +39,7 @@
     },
   };
 
-  const { type, hasOrientations, structureHasServices, children }: Props =
-    $props();
+  const { hasOrientations, structureHasServices, children }: Props = $props();
 
   function getContentMapKey() {
     if (type === "sent") {
@@ -56,6 +54,7 @@
     return "noOrientationsAndNoServices";
   }
 
+  const type = $derived(orientationState.selectedType);
   const title = $derived(CONTENT_BY_TYPE[type][getContentMapKey()].title);
   const text = $derived(CONTENT_BY_TYPE[type][getContentMapKey()].text);
 </script>

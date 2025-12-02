@@ -35,9 +35,7 @@
     setTimeout(() => (linkCopied = false), 2000);
   }
 
-  const orientationStats = $derived(
-    outputOrientationStats(orientationState.selectedType, data.stats)
-  );
+  const orientationStats = $derived(outputOrientationStats(data.stats));
 </script>
 
 <EnsureLoggedIn>
@@ -49,17 +47,12 @@
       {@html orientationStats}
     </p>
     <OrientationsExportCard
-      type={orientationState.selectedType}
       {hasOrientations}
       structureHasServices={data.stats.structureHasServices}
     >
       {#if hasOrientations}
         <button
-          onclick={() =>
-            generateOrientationExport({
-              structureSlug: data.structure.slug,
-              type: orientationState.selectedType,
-            })}
+          onclick={() => generateOrientationExport(data.structure.slug)}
           class="text-magenta-cta gap-s4 flex flex-row font-bold"
           ><DownloadLineSystem class="fill-magenta-cta" />Télécharger la liste</button
         >
