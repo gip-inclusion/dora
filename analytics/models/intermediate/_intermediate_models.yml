@@ -29,6 +29,10 @@ models:
           Date de la dernière connexion de l'accompagnateur.
         data_tests:
           - not_null
+      - name: date_joined_prescriber
+        description: |
+          Date à laquelle l'accompagnateur a été ajouté à la base utilisateurs. Cela ne corresponds pas forcement au premier login.
+          En effet, il peut être ajouté en tant que utilisateur potentiel (invité par un service tiers par exemple).
       - name: main_activity_prescriber
         description: |
           Activité principale de l'accompagnateur pouvant être "accompagnateur" ou "accompagnateur-offreur".
