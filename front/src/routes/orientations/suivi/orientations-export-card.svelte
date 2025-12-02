@@ -41,6 +41,8 @@
 
   const { hasOrientations, structureHasServices, children }: Props = $props();
 
+  const type = $derived(orientationState.selectedType);
+
   function getContentMapKey() {
     if (type === "sent") {
       return hasOrientations ? "hasOrientations" : "noOrientations";
@@ -54,7 +56,6 @@
     return "noOrientationsAndNoServices";
   }
 
-  const type = $derived(orientationState.selectedType);
   const title = $derived(CONTENT_BY_TYPE[type][getContentMapKey()].title);
   const text = $derived(CONTENT_BY_TYPE[type][getContentMapKey()].text);
 </script>
