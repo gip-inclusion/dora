@@ -94,31 +94,3 @@ export async function generateOrientationExport(structureSlug: string) {
     sheetName: `orientations-${translatedType}-dora-${structureSlug}`,
   });
 }
-
-export function outputOrientationStats({
-  totalSentPending,
-  totalSent,
-  totalReceivedPending,
-  totalReceived,
-}: OrientationStats) {
-  if (orientationState.selectedType === "sent") {
-    const pendingOrientations =
-      totalSentPending > 1
-        ? `${totalSentPending} demandes`
-        : `${totalSentPending} demande`;
-
-    const totalOrientations =
-      totalSent > 1 ? `${totalSent} envoyées` : `${totalSent} envoyée`;
-
-    return `<b>${pendingOrientations} en cours</b> / ${totalOrientations}`;
-  }
-
-  const pendingOrientations =
-    totalSentPending > 1
-      ? `${totalReceivedPending} demandes`
-      : `${totalReceivedPending} demande`;
-
-  const totalOrientations =
-    totalReceived > 1 ? `${totalReceived} reçues` : `${totalReceived} reçue`;
-  return `<b>${pendingOrientations} à traiter</b> / ${totalOrientations}`;
-}

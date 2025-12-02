@@ -4,15 +4,13 @@
   import { orientationState } from "./state.svelte.js";
 
   import OrientationsExportCard from "./orientations-export-card.svelte";
+  import OrientationStatsDisplay from "./orientations-stats-display.svelte";
   import DownloadLineSystem from "svelte-remix/DownloadLineSystem.svelte";
   import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
   import { CANONICAL_URL } from "$lib/env";
   import type { PageData } from "./$types";
   import { fly } from "svelte/transition";
-  import {
-    generateOrientationExport,
-    outputOrientationStats,
-  } from "./orientation-export";
+  import { generateOrientationExport } from "./orientation-export";
 
   interface Props {
     data: PageData;
@@ -34,8 +32,6 @@
     linkCopied = true;
     setTimeout(() => (linkCopied = false), 2000);
   }
-
-  const orientationStats = $derived(outputOrientationStats(data.stats));
 </script>
 
 <EnsureLoggedIn>
@@ -43,9 +39,7 @@
     <h2>
       {`Orientations ${orientationState.selectedType === "sent" ? "envoyées" : "reçues"}`}
     </h2>
-    <p>
-      {@html orientationStats}
-    </p>
+    <OrientationStatsDisplay stats={data.stats} />
     <OrientationsExportCard
       {hasOrientations}
       structureHasServices={data.stats.structureHasServices}
