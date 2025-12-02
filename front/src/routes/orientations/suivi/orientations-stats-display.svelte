@@ -26,9 +26,10 @@
       >{stats.totalReceivedPending > 1
         ? `${stats.totalReceivedPending} demandes`
         : `${stats.totalReceivedPending} demande`}
-      à traiter / {stats.totalReceived > 1
-        ? `${stats.totalReceived} reçues`
-        : `${stats.totalReceived} reçue`}
-    </b>
+      à traiter</b
+    >
+    / {stats.totalReceived > 1
+      ? `${stats.totalReceived} reçues`
+      : `${stats.totalReceived} reçue`}
   {/if}
 </p>

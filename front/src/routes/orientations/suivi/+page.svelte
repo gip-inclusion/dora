@@ -4,7 +4,7 @@
   import { orientationState } from "./state.svelte.js";
 
   import OrientationsExportCard from "./orientations-export-card.svelte";
-  import OrientationStatsDisplay from "./orientations-stats-display.svelte";
+  import OrientationsStatsDisplay from "./orientations-stats-display.svelte";
   import DownloadLineSystem from "svelte-remix/DownloadLineSystem.svelte";
   import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
   import { CANONICAL_URL } from "$lib/env";
@@ -39,7 +39,7 @@
     <h2>
       {`Orientations ${orientationState.selectedType === "sent" ? "envoyées" : "reçues"}`}
     </h2>
-    <OrientationStatsDisplay stats={data.stats} />
+    <OrientationsStatsDisplay stats={data.stats} />
     <OrientationsExportCard
       {hasOrientations}
       structureHasServices={data.stats.structureHasServices}
