@@ -17,7 +17,7 @@ export const load = async ({ parent, fetch }) => {
     get(userPreferences)
   );
 
-  const url = `${getApiURL()}/orientations/stats/${structure?.slug}/`;
+  const url = `${getApiURL()}/structures/${structure?.slug}/orientations/stats/`;
   const result = await fetchData<OrientationStats>(url, fetch);
 
   return {

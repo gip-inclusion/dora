@@ -435,7 +435,9 @@ class OrientationStatsTestCase(APITestCase):
 
     def test_get_stats(self):
         with self.assertNumQueries(3):
-            response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
+            response = self.client.get(
+                f"/structures/{self.structure.slug}/orientations/stats/"
+            )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -452,7 +454,9 @@ class OrientationStatsTestCase(APITestCase):
     def test_raise_403_when_user_not_structure_member(self):
         self.client.force_authenticate(user=make_user())
 
-        response = self.client.get(f"/orientations/stats/{self.structure.slug}/")
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/stats/"
+        )
 
         self.assertEqual(response.status_code, 403)
 

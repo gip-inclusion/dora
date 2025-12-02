@@ -99,7 +99,7 @@ private_api_patterns = [
     ),  # TODO: remove when not used by frontend anymore
     path("consent-record/", dora.users.views.record_consent),
     path(
-        "orientations/stats/<slug:structure_slug>/",
+        "structures/<slug:structure_slug>/orientations/stats/",
         dora.orientations.views.display_orientation_stats,
     ),
     path(
