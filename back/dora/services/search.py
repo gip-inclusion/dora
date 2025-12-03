@@ -1,6 +1,7 @@
 import random
 from _operator import itemgetter
 from datetime import date
+from functools import reduce
 from typing import Optional
 
 import requests
@@ -15,7 +16,7 @@ import dora.services.models as models
 from dora import data_inclusion
 from dora.admin_express.models import City
 from dora.core.constants import WGS84
-from dora.services.models import ServiceStatus
+from dora.services.models import ServiceStatus, ServiceSubCategory
 from dora.structures.models import Structure
 
 from .models import FundingLabel
@@ -122,7 +123,14 @@ def _get_raw_di_results(
     """
     thematiques = []
     if categories is not None:
-        thematiques += categories
+        # Sélection des sous-catégories correspondant aux catégories
+        subcategories_filters = reduce(
+            lambda x, y: x | y,
+            [Q(value__startswith=category) for category in categories],
+        )
+        thematiques += ServiceSubCategory.objects.filter(
+            subcategories_filters
+        ).values_list("value", flat=True)
     if subcategories is not None:
         # Exclusion des sous-catégories --autre
         thematiques += [subcat for subcat in subcategories if "--autre" not in subcat]
@@ -145,7 +153,7 @@ def _get_raw_di_results(
                 # Pas de filtrage sur le score de qualité si on veut aussi les services DORA
                 None if with_dora else settings.DATA_INCLUSION_SCORE_QUALITE_MINIMUM
             ),
-            code_insee=city_code,
+            code_commune=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
             types=kinds,
             frais=fees,
@@ -157,16 +165,6 @@ def _get_raw_di_results(
 
     if raw_di_results is None:
         return []
-
-    raw_di_results = [
-        result
-        for result in raw_di_results
-        if (
-            result["service"]["date_suspension"] is None
-            or date.fromisoformat(result["service"]["date_suspension"])
-            > timezone.now().date()
-        )
-    ]
 
     return raw_di_results
 
@@ -378,8 +376,10 @@ def _get_unified_results(
         with_dora=True,
     )
 
+    # Les ID de services DI sont de la forme "source--id".
+    # On récupère uniquement l'ID Dora du service.
     dora_results_ids = [
-        result["service"]["id"]
+        result["service"]["id"].split("--")[1]
         for result in raw_di_results
         if result["service"]["source"] == "dora"
     ]

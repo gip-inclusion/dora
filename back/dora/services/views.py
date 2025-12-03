@@ -782,8 +782,7 @@ def service_di(request, di_id: str):
 
     The output format matches the ServiceSerializer.
     """
-    di_id = unquote(di_id)
-    source_di, di_service_id = di_id.split("--")
+    di_service_id = unquote(di_id)
 
     user_agent = request.META.get("HTTP_USER_AGENT")
     user_hash = request.META.get("HTTP_ANONYMOUS_USER_HASH")
@@ -792,7 +791,6 @@ def service_di(request, di_id: str):
 
     try:
         raw_service = di_client.retrieve_service(
-            source=source_di,
             id=di_service_id,
             user_agent=user_agent,
             user_hash=user_hash,
@@ -814,12 +812,10 @@ def share_di_service(
     request,
     di_id: str,
 ):
-    source_di, di_service_id = di_id.split("--")
-
     di_client = data_inclusion.di_client_factory()
 
     try:
-        raw_service = di_client.retrieve_service(source=source_di, id=di_service_id)
+        raw_service = di_client.retrieve_service(id=di_id)
     except requests.ConnectionError:
         return Response(status=status.HTTP_502_BAD_GATEWAY)
 
@@ -841,10 +837,9 @@ def post_di_service_feedback(request, di_id: str):
     d = serializer.validated_data
 
     # Récupération et sérialisation du service DI
-    source_di, di_service_id = di_id.split("--")
     di_client = data_inclusion.di_client_factory()
     try:
-        raw_service = di_client.retrieve_service(source=source_di, id=di_service_id)
+        raw_service = di_client.retrieve_service(id=di_id)
     except requests.ConnectionError:
         return Response(status=status.HTTP_502_BAD_GATEWAY)
     if raw_service is None:
