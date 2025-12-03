@@ -4,6 +4,7 @@ import logging
 import re
 from dataclasses import dataclass
 from typing import Tuple
+from urllib.parse import parse_qsl, urlencode, urlsplit
 
 import requests
 from django.contrib.gis.geos import Point
@@ -145,3 +146,17 @@ def skip_csv_lines(reader: csv.reader, num_lines_to_skip: int) -> csv.reader:
 
 def get_category_from_subcategory(subcategory: str) -> str:
     return subcategory.split("--")[0]
+
+
+def add_url_params(url: str, params: dict[str, str]) -> str:
+    params = {key: params[key] for key in params if params[key] is not None}
+    try:
+        url_parts = urlsplit(url)
+    except ValueError:
+        return None
+    query = dict(parse_qsl(url_parts.query))
+    query.update(params)
+
+    new_url = url_parts._replace(query=urlencode(query)).geturl()
+
+    return new_url
