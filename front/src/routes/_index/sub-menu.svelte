@@ -37,7 +37,7 @@
       class:border-b={mobileDesign}
     >
       <a href="/recherche-textuelle" class="inline-block h-full {aClass}">
-        Recherche par mots-clés 🆕
+        Recherche par mots-clés
       </a>
     </li>
     {#if ENVIRONMENT !== "production"}
