@@ -31,6 +31,7 @@ class OrientationStatus(models.TextChoices):
     PENDING = "OUVERTE", "Ouverte / En cours de traitement"
     ACCEPTED = "VALIDÉE", "Validée"
     REJECTED = "REFUSÉE", "Refusée"
+    EXPIRED = "EXPIRÉE", "Expirée"
 
 
 class RejectionReason(EnumModel):
