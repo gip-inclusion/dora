@@ -3,9 +3,9 @@ from collections import defaultdict
 from datetime import datetime
 from typing import Any, Dict
 
-from django.core.management.base import BaseCommand
 from django.db.models import Count, F, Q
 
+from dora.core.commands import BaseCommand
 from dora.core.utils import get_category_from_subcategory
 from dora.services.models import Service, ServiceCategory
 

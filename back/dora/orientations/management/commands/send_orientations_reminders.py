@@ -1,10 +1,10 @@
 from datetime import timedelta
 
 from django.conf import settings
-from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.utils import timezone
 
+from dora.core.commands import BaseCommand
 from dora.orientations.emails import send_orientation_reminder_emails
 from dora.orientations.models import Orientation, OrientationStatus
 
