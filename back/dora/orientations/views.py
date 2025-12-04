@@ -1,7 +1,6 @@
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Count, Exists, OuterRef, Q
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
 from rest_framework import mixins, permissions, serializers, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -119,7 +118,6 @@ class OrientationViewSet(
                 orientation.service.duration_weekly_hours
             )
             orientation.duration_weeks = orientation.service.duration_weeks
-        orientation.processing_date = timezone.now()
         orientation.status = OrientationStatus.ACCEPTED
         orientation.save()
 
@@ -143,7 +141,6 @@ class OrientationViewSet(
         except ValidationError as error:
             raise serializers.ValidationError({"message": error.messages})
 
-        orientation.processing_date = timezone.now()
         orientation.status = OrientationStatus.REJECTED
         orientation.save()
         orientation.rejection_reasons.set(

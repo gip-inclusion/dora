@@ -2,6 +2,7 @@ import pytest
 from dateutil.relativedelta import relativedelta
 from django.core import mail
 from django.utils import timezone
+from freezegun import freeze_time
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
@@ -36,6 +37,7 @@ def test_query_access(api_client, orientation):
     assert response.status_code == 200
 
 
+@freeze_time("2022-01-01")
 def test_query_validate(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/validate/"
     response = api_client.post(url, follow=True)
@@ -52,6 +54,7 @@ def test_query_validate(api_client, orientation):
 
     assert response.status_code == 204
     assert orientation.status == OrientationStatus.ACCEPTED
+    assert orientation.processing_date == timezone.now()
 
     # on vérifie qu'un e-mail a bien été envoyé au bon destinataire
     # (vérifier le contenu n'est pas pertinent dans cette série de tests)
@@ -83,6 +86,7 @@ def test_query_validate_service_di(api_client, di_orientation):
     assert mail.outbox[3].to == [di_orientation.beneficiary_email]
 
 
+@freeze_time("2022-01-01")
 def test_query_reject(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/reject/"
     response = api_client.post(url, follow=True)
@@ -99,6 +103,7 @@ def test_query_reject(api_client, orientation):
 
     assert response.status_code == 204
     assert orientation.status == OrientationStatus.REJECTED
+    assert orientation.processing_date == timezone.now()
 
     # on vérifie qu'un e-mail a bien été envoyé au bon destinataire
     # (vérifier le contenu n'est pas pertinent dans cette série de tests)
