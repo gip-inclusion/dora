@@ -5,7 +5,7 @@ from django.utils import timezone
 from mjml import mjml2html
 
 from dora.core.emails import send_mail
-from dora.orientations.models import ContactPreference
+from dora.orientations.models import ContactPreference, Orientation
 
 debug = settings.ORIENTATION_EMAILS_DEBUG
 
@@ -343,4 +343,27 @@ def send_orientation_reminder_emails(orientation):
         mjml2html(render_to_string("notification-prescriber.mjml", context)),
         tags=["orientation"],
         cc=cc,
+    )
+
+
+def send_orientation_expiration_emails(orientation: Orientation) -> None:
+    send_mail(
+        "For the referent",
+        orientation.referent_email,
+        "TBD",
+        tags=["orientation"],
+    )
+
+    send_mail(
+        "For the service provider",
+        orientation.service.contact_email,
+        "TBD",
+        tags=["orientation"],
+    )
+
+    send_mail(
+        "For the beneficiary",
+        orientation.beneficiary_email,
+        "TBD",
+        tags=["orientation"],
     )
