@@ -24,12 +24,13 @@ class Command(BaseCommand):
         dry_run = options["dry_run"]
 
         if dry_run:
-            self.stdout.write(self.style.NOTICE("DRY RUN"))
+            self.logger.info("DRY RUN")
         else:
-            self.stdout.write(self.style.WARNING("PRODUCTION RUN"))
+            self.logger.info("PRODUCTION RUN")
 
-        self.stdout.write(
-            f"Vérification des orientations de plus de {settings.NUM_DAYS_BEFORE_ORIENTATIONS_NOTIFICATION} jours…"
+        self.logger.info(
+            "Vérification des orientations de plus de %s jours…",
+            settings.NUM_DAYS_BEFORE_ORIENTATIONS_NOTIFICATION,
         )
         cutoff_date = timezone.now() - timedelta(
             days=settings.NUM_DAYS_BEFORE_ORIENTATIONS_NOTIFICATION
@@ -41,7 +42,7 @@ class Command(BaseCommand):
             | Q(last_reminder_email_sent__lte=cutoff_date)
         )
 
-        self.stdout.write(f"{orientations.count()} orientations concernées")
+        self.logger.info("%s orientations concernées", orientations.count())
         for orientation in orientations:
             if not dry_run:
                 send_orientation_reminder_emails(orientation)

@@ -1,36 +1,51 @@
 from django.core.management import call_command
 
 
-def test_notifications_disabled(notifications_disabled, stdout):
-    call_command("process_notification_tasks", stdout=stdout)
-    result = stdout.getvalue()
+def test_notifications_disabled(caplog, capsys, snapshot, settings):
+    settings.NOTIFICATIONS_ENABLED = False
 
-    assert (
-        "Le système de notification n'est pas activé sur cet environnement." in result
+    call_command("process_notification_tasks")
+
+    assert caplog.messages[-1].startswith(
+        "Management command dora.notifications.management.commands.process_notification_tasks succeeded in "
     )
+    assert caplog.messages[:-1] == snapshot(name="logs")
+    assert capsys.readouterr() == snapshot(name="output")
 
 
-def test_notifications_enabled(notifications_enabled, stdout):
-    call_command("process_notification_tasks", stdout=stdout)
-    result = stdout.getvalue()
+def test_notifications_enabled(caplog, capsys, snapshot, settings):
+    settings.NOTIFICATIONS_ENABLED = True
 
-    assert (
-        "Le système de notification n'est pas activé sur cet environnement."
-        not in result
+    call_command("process_notification_tasks")
+
+    assert caplog.messages[-1].startswith(
+        "Management command dora.notifications.management.commands.process_notification_tasks succeeded in "
     )
-    assert "les notifications ne sont pas créées dans ce mode" in result
+    assert caplog.messages[:-1] == snapshot(name="logs")
+    assert capsys.readouterr() == snapshot(name="output")
 
 
-def test_notifications_with_limit(with_limit, stdout):
-    call_command("process_notification_tasks", stdout=stdout)
-    result = stdout.getvalue()
+def test_notifications_with_limit(caplog, capsys, snapshot, settings):
+    settings.NOTIFICATIONS_ENABLED = True
+    settings.NOTIFICATIONS_LIMIT = 10
 
-    assert "limite de notifications par tâche : 10" in result
+    call_command("process_notification_tasks")
+
+    assert caplog.messages[-1].startswith(
+        "Management command dora.notifications.management.commands.process_notification_tasks succeeded in "
+    )
+    assert caplog.messages[:-1] == snapshot(name="logs")
+    assert capsys.readouterr() == snapshot(name="output")
 
 
-def test_notifications_with_types(with_types, stdout):
-    call_command("process_notification_tasks", stdout=stdout)
-    result = stdout.getvalue()
+def test_notifications_with_types(caplog, capsys, snapshot, settings):
+    settings.NOTIFICATIONS_ENABLED = True
+    settings.NOTIFICATIONS_TASK_TYPES = "orphan_structures"
 
-    assert "tâche(s) sélectionnée(s)" in result
-    assert "orphan_structures" in result
+    call_command("process_notification_tasks")
+
+    assert caplog.messages[-1].startswith(
+        "Management command dora.notifications.management.commands.process_notification_tasks succeeded in "
+    )
+    assert caplog.messages[:-1] == snapshot(name="logs")
+    assert capsys.readouterr() == snapshot(name="output")
