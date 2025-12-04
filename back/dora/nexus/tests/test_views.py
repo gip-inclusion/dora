@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from urllib.parse import urlencode
+from urllib.parse import parse_qs, urlencode, urlparse
 
 import pytest
 from django.conf import settings
@@ -7,7 +7,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from dora.core.test_utils import make_user
-from dora.nexus.utils import generate_jwt
+from dora.nexus.utils import decode_jwt, generate_jwt
 
 
 @pytest.fixture
@@ -139,3 +139,130 @@ class TestAutoLoginIn:
                 format="json",
             )
             assert response.status_code == status.HTTP_204_NO_CONTENT
+
+
+class TestAutoLoginOut:
+    def test_user_not_authenticated(self, api_client):
+        """Test avec un utilisateur non authentifié"""
+        response = api_client.post(
+            reverse("auto-login-out"),
+            data={"next": "https://domain.fr/some/path"},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_user_authenticated_without_next_param(self, api_client, user):
+        """Test avec un utilisateur authentifié mais sans paramètre next_url"""
+        api_client.force_authenticate(user=user)
+        response = api_client.post(
+            reverse("auto-login-out"),
+            data={},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_user_authenticated_with_next_url_but_no_key(self, api_client, user):
+        """Test avec un utilisateur authentifié avec next_url mais NEXUS_AUTO_LOGIN_KEY est None"""
+        api_client.force_authenticate(user=user)
+        with patch.object(settings, "NEXUS_AUTO_LOGIN_KEY", None):
+            response = api_client.post(
+                reverse("auto-login-out"),
+                data={"next_url": "https://domain.fr/some/path"},
+                format="json",
+            )
+            assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_user_authenticated_with_valid_next_url(self, api_client, user):
+        """Test avec un utilisateur authentifié et une URL next_url valide et autorisée"""
+        api_client.force_authenticate(user=user)
+        next_url = "https://domain.fr/some/path"
+        response = api_client.post(
+            reverse("auto-login-out"),
+            data={"next_url": next_url},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert "redirect_url" in response.data
+        redirect_url = response.data["redirect_url"]
+        assert redirect_url.startswith(next_url)
+
+        # Vérifier que le paramètre auto_login est présent dans l'URL
+        parsed_url = urlparse(redirect_url)
+        query_params = parse_qs(parsed_url.query)
+        assert "auto_login" in query_params
+
+        # Vérifier que le token JWT est valide
+        auto_login_token = query_params["auto_login"][0]
+        claims = decode_jwt(auto_login_token)
+        assert claims["email"] == user.email
+
+    def test_user_authenticated_with_next_url_and_existing_params(
+        self, api_client, user
+    ):
+        """Test avec une URL next qui contient déjà des paramètres"""
+        api_client.force_authenticate(user=user)
+        next_url = "https://domain.fr/some/path?existing=param"
+        response = api_client.post(
+            reverse("auto-login-out"),
+            data={"next_url": next_url},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert "redirect_url" in response.data
+        redirect_url = response.data["redirect_url"]
+        assert redirect_url.startswith("https://domain.fr/some/path")
+
+        # Vérifier que les paramètres existants sont préservés
+        parsed_url = urlparse(redirect_url)
+        query_params = parse_qs(parsed_url.query)
+        assert "existing" in query_params
+        assert query_params["existing"][0] == "param"
+        assert "auto_login" in query_params
+
+    def test_user_authenticated_with_unauthorized_host(self, api_client, user):
+        """Test avec un utilisateur authentifié mais un host non autorisé"""
+        api_client.force_authenticate(user=user)
+        next_url = "https://evil.com/some/path"
+        response = api_client.post(
+            reverse("auto-login-out"),
+            data={"next_url": next_url},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_user_authenticated_with_http_instead_of_https(self, api_client, user):
+        """Test avec un utilisateur authentifié mais une URL HTTP au lieu de HTTPS"""
+        api_client.force_authenticate(user=user)
+        next_url = "http://domain.fr/some/path"
+        response = api_client.post(
+            reverse("auto-login-out"),
+            data={"next_url": next_url},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_user_authenticated_with_valid_next_url_different_domain(
+        self, api_client, user
+    ):
+        """Test avec un utilisateur authentifié et une URL next valide sur un autre domaine autorisé"""
+        api_client.force_authenticate(user=user)
+        next_url = "https://domain.com/another/path"
+        response = api_client.post(
+            reverse("auto-login-out"),
+            data={"next_url": next_url},
+            format="json",
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert "redirect_url" in response.data
+        redirect_url = response.data["redirect_url"]
+        assert redirect_url.startswith(next_url)
+
+        # Vérifier que le paramètre auto_login est présent
+        parsed_url = urlparse(redirect_url)
+        query_params = parse_qs(parsed_url.query)
+        assert "auto_login" in query_params
+
+        # Vérifier que le token JWT est valide
+        auto_login_token = query_params["auto_login"][0]
+        claims = decode_jwt(auto_login_token)
+        assert claims["email"] == user.email
