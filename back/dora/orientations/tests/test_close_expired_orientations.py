@@ -3,7 +3,7 @@ from io import StringIO
 from unittest.mock import patch
 
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils import timezone
 from freezegun import freeze_time
 
@@ -15,6 +15,7 @@ from dora.orientations.models import OrientationStatus
 @patch(
     "dora.orientations.management.commands.close_expired_orientations.send_orientation_expiration_emails"
 )
+@override_settings(ORIENTATION_EXPIRATION_PERIOD_DAYS=30)
 class CloseExpiredOrientationsTestCase(TestCase):
     def setUp(self):
         self.expired_orientation_1 = make_orientation(

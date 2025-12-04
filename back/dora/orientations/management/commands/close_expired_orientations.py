@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.conf import settings
 from django.core.management import BaseCommand
 from django.db.models import Q
 from django.utils import timezone
@@ -7,23 +8,19 @@ from django.utils import timezone
 from dora.orientations.emails import send_orientation_expiration_emails
 from dora.orientations.models import Orientation, OrientationStatus
 
-# TODO: make env vars
-ORIENTATION_EXPIRATION_PERIOD_DAYS = 30
-EMAIL_CUTOFF_PERIOD_DAYS = 60
-
 
 class Command(BaseCommand):
     help = "Clôturer les orientations qui sont en cours  qui sont plus valables"
 
     def handle(self, *args, **options):
         self.stdout.write(
-            f"Clôture automatique des orientations en cours qui ne sont plus valables après {ORIENTATION_EXPIRATION_PERIOD_DAYS} jours."
+            f"Clôture automatique des orientations en cours qui ne sont plus valables après {settings.ORIENTATION_EXPIRATION_PERIOD_DAYS} jours."
         )
 
         expiration_date = timezone.now() - timedelta(
-            days=ORIENTATION_EXPIRATION_PERIOD_DAYS
+            days=settings.ORIENTATION_EXPIRATION_PERIOD_DAYS
         )
-        email_cutoff_date = timezone.now() - timedelta(days=EMAIL_CUTOFF_PERIOD_DAYS)
+        email_cutoff_date = timezone.now() - timedelta(days=60)
 
         expired_orientations = (
             Orientation.objects.filter(
