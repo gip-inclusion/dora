@@ -3,11 +3,13 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.urls import reverse
-from rest_framework import permissions, status
+from django.utils.http import url_has_allowed_host_and_scheme
+from rest_framework import exceptions, permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from dora.nexus.utils import decode_jwt
+from dora.core.utils import add_url_params
+from dora.nexus.utils import decode_jwt, generate_jwt
 
 logger = logging.getLogger(__name__)
 
@@ -51,3 +53,22 @@ def auto_login_in(request):
     )
 
     return Response({"redirect_url": redirect_url}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
+def auto_login_out(request):
+    next_url = request.data.get("next_url")
+
+    if next_url is None or settings.NEXUS_AUTO_LOGIN_KEY is None:
+        raise exceptions.NotFound
+
+    if url_has_allowed_host_and_scheme(
+        next_url, settings.NEXUS_ALLOWED_REDIRECT_HOSTS, require_https=True
+    ):
+        redirect_url = add_url_params(
+            next_url, {"auto_login": generate_jwt(request.user)}
+        )
+        return Response({"redirect_url": redirect_url}, status=status.HTTP_200_OK)
+
+    raise exceptions.NotFound
