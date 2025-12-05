@@ -471,12 +471,15 @@ class OrientationsExportTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
 
     def test_get_export_of_sent_orientations(self):
+        prescriber = make_user()
+
         orientation_1 = baker.make(
             Orientation,
             creation_date=timezone.now() - relativedelta(days=1),
             service=self.service,
             status=OrientationStatus.ACCEPTED,
             prescriber_structure=self.structure,
+            prescriber=prescriber,
         )
 
         orientation_2 = baker.make(
@@ -485,6 +488,7 @@ class OrientationsExportTestCase(APITestCase):
             service=self.service,
             status=OrientationStatus.MODERATION_PENDING,
             prescriber_structure=self.structure,
+            prescriber=None,
         )
 
         # Assurer que cette orientation n'est pas incluse dans les résultats
@@ -508,7 +512,7 @@ class OrientationsExportTestCase(APITestCase):
                     "creation_date": orientation_1.creation_date.strftime("%Y-%m-%d"),
                     "status": "Validée",
                     "beneficiary_name": orientation_1.get_beneficiary_full_name(),
-                    "referent_name": orientation_1.get_referent_full_name(),
+                    "prescriber_name": prescriber.get_full_name(),
                     "structure_name": orientation_1.get_structure_name(),
                     "service_name": orientation_1.get_service_name(),
                 },
@@ -516,7 +520,7 @@ class OrientationsExportTestCase(APITestCase):
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
                     "status": "En cours de modération",
                     "beneficiary_name": orientation_2.get_beneficiary_full_name(),
-                    "referent_name": orientation_2.get_referent_full_name(),
+                    "prescriber_name": "Utilisateur supprimé",
                     "structure_name": orientation_2.get_structure_name(),
                     "service_name": orientation_2.get_service_name(),
                 },
@@ -524,12 +528,15 @@ class OrientationsExportTestCase(APITestCase):
         )
 
     def test_get_export_of_received_orientations(self):
+        prescriber = make_user()
+
         orientation_1 = baker.make(
             Orientation,
             creation_date=timezone.now() - relativedelta(days=1),
             service=self.service,
             status=OrientationStatus.ACCEPTED,
             prescriber_structure=self.structure,
+            prescriber=prescriber,
         )
 
         orientation_2 = baker.make(
@@ -538,6 +545,7 @@ class OrientationsExportTestCase(APITestCase):
             service=self.service,
             status=OrientationStatus.MODERATION_PENDING,
             prescriber_structure=None,
+            prescriber=None,
         )
 
         # Assurer que cette orientation n'est pas incluse dans les résultats
@@ -561,7 +569,7 @@ class OrientationsExportTestCase(APITestCase):
                     "creation_date": orientation_1.creation_date.strftime("%Y-%m-%d"),
                     "status": "Validée",
                     "beneficiary_name": orientation_1.get_beneficiary_full_name(),
-                    "referent_name": orientation_1.get_referent_full_name(),
+                    "prescriber_name": prescriber.get_full_name(),
                     "prescriber_structure_name": orientation_1.prescriber_structure.name,
                     "service_name": orientation_1.get_service_name(),
                     "detail_page_url": orientation_1.get_magic_link(),
@@ -570,7 +578,7 @@ class OrientationsExportTestCase(APITestCase):
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
                     "status": "En cours de modération",
                     "beneficiary_name": orientation_2.get_beneficiary_full_name(),
-                    "referent_name": orientation_2.get_referent_full_name(),
+                    "prescriber_name": "Utilisateur supprimé",
                     "prescriber_structure_name": "Pas de prescripteur",
                     "service_name": orientation_2.get_service_name(),
                     "detail_page_url": orientation_2.get_magic_link(),
