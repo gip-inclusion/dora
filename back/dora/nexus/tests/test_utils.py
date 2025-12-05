@@ -5,7 +5,7 @@ from freezegun import freeze_time
 from jwcrypto import jwt
 
 from dora.core.test_utils import make_user
-from dora.nexus.utils import EXPIRY_DELAY, decode_jwt, generate_jwt
+from dora.nexus.utils import EXPIRY_DELAY_SECONDS, decode_jwt, generate_jwt
 
 
 @pytest.fixture
@@ -26,6 +26,6 @@ def test_generate_and_decode_jwt(user):
 
         # Wait for the JWT to expire, and then extra time for the leeway.
         leeway = 60
-        frozen_now.tick(datetime.timedelta(seconds=EXPIRY_DELAY + leeway + 1))
+        frozen_now.tick(datetime.timedelta(seconds=EXPIRY_DELAY_SECONDS + leeway + 1))
         with pytest.raises(ValueError):
             decode_jwt(token)

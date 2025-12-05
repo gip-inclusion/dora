@@ -12,13 +12,13 @@ logger = logging.getLogger(__name__)
 KEY = (
     jwk.JWK(**settings.NEXUS_AUTO_LOGIN_KEY) if settings.NEXUS_AUTO_LOGIN_KEY else None
 )
-EXPIRY_DELAY = 60  # secondes
+EXPIRY_DELAY_SECONDS = 60
 
 
 def generate_jwt(user: User):
     token = jwt.JWT(
         header={"alg": "A256KW", "enc": "A256CBC-HS512"},
-        claims={"email": user.email, "exp": round(time.time()) + EXPIRY_DELAY},
+        claims={"email": user.email, "exp": round(time.time()) + EXPIRY_DELAY_SECONDS},
     )
     token.make_encrypted_token(KEY)
     return token.serialize()
