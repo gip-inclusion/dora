@@ -42,8 +42,19 @@ class StructureFileUploadTestCase(APITestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(
             str(response.data["detail"]["message"]),
-            "Uniquement les membres actifs d'une structure peuvent charger des documents.",
+            "Uniquement les membres et les gestionnaires territoires peuvent charger des documents.",
         )
+
+    def test_department_managers_can_upload_documents(self):
+        department_manager = make_user(
+            is_active=True, is_manager=True, departments=[self.structure.department]
+        )
+
+        self.client.force_authenticate(user=department_manager)
+
+        response = self.client.post(self.url, {"file": self.file_mock})
+
+        self.assertEqual(response.status_code, 201)
 
     def test_validate_file_name_with_url(self):
         response = self.client.post(
