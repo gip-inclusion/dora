@@ -190,7 +190,7 @@ class OrientationSerializer(serializers.ModelSerializer):
 class SentOrientationExportSerializer(serializers.ModelSerializer):
     creation_date = serializers.DateTimeField(format="%Y-%m-%d")
     beneficiary_name = serializers.SerializerMethodField()
-    referent_name = serializers.SerializerMethodField()
+    prescriber_name = serializers.SerializerMethodField()
     structure_name = serializers.SerializerMethodField()
     service_name = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
@@ -200,8 +200,10 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
         return obj.get_beneficiary_full_name()
 
     @staticmethod
-    def get_referent_name(obj: Orientation) -> str:
-        return obj.get_referent_full_name()
+    def get_prescriber_name(obj: Orientation) -> str:
+        return (
+            obj.prescriber.get_full_name() if obj.prescriber else "Utilisateur supprimé"
+        )
 
     @staticmethod
     def get_structure_name(obj: Orientation) -> str:
@@ -221,7 +223,7 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
             "creation_date",
             "status",
             "beneficiary_name",
-            "referent_name",
+            "prescriber_name",
             "structure_name",
             "service_name",
         ]
@@ -237,7 +239,7 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
             "creation_date",
             "status",
             "beneficiary_name",
-            "referent_name",
+            "prescriber_name",
             "service_name",
             "prescriber_structure_name",
             "detail_page_url",
