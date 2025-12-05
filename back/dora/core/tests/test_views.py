@@ -45,7 +45,8 @@ class StructureFileUploadTestCase(APITestCase):
             "Uniquement les membres et les gestionnaires territoires peuvent charger des documents.",
         )
 
-    def test_department_managers_can_upload_documents(self):
+    @patch("dora.core.views.default_storage.save", return_value="upload_key")
+    def test_department_managers_can_upload_documents(self, mock_save):
         department_manager = make_user(
             is_active=True, is_manager=True, departments=[self.structure.department]
         )
