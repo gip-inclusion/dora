@@ -1,5 +1,4 @@
 import logging
-from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core.exceptions import SuspiciousOperation
@@ -18,6 +17,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 
 from dora.core.constants import FRONTEND_PC_CALLBACK_URL
+from dora.core.utils import add_url_params
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ def oidc_logged_in(request):
 
     # gestion du `next` :
     if request.GET.get("next"):
-        redirect_uri += "?" + request.GET.urlencode()
+        redirect_uri = add_url_params(redirect_uri, request.GET)
 
     # Passage au front des informations complémentaires de l'utilisateur
     # ici : SAFIR et / ou SIRET
@@ -54,7 +54,7 @@ def oidc_logged_in(request):
         url_params = token.user.structure_to_join(
             siret=siret_safir["siret"], safir=siret_safir["safir"]
         )
-        redirect_uri += "&" + urlencode(url_params)
+        redirect_uri = add_url_params(redirect_uri, url_params)
 
     redirect_uri += f"#{token.key}"
 
