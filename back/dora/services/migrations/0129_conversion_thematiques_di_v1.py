@@ -5,6 +5,10 @@ import logging
 from data_inclusion.schema.v1 import Thematique
 from django.db import migrations
 
+from dora.services.migration_utils import (
+    update_all_models_categories_and_subcategories,
+)
+
 logger = logging.getLogger(__name__)
 
 MAPPING_THEMATIQUES = {
@@ -376,7 +380,6 @@ def check_thematiques_exist_in_di_v1(apps, schema_editor):
 
 
 def assign_new_thematiques(apps, schema_editor):
-    Service = apps.get_model("services", "Service")
     ServiceCategory = apps.get_model("services", "ServiceCategory")
     ServiceSubCategory = apps.get_model("services", "ServiceSubCategory")
 
@@ -409,14 +412,14 @@ def assign_new_thematiques(apps, schema_editor):
                 ServiceSubCategory.objects.get(value=new_thematique)
             )
 
-        # Mise à jour des services et modèles de services
-        # _base_manager pour avoir les services et les modèles de services
-        for service in Service._base_manager.filter(categories=old_category):
-            service.categories.remove(old_category)
-            service.categories.add(*new_categories)
-        for service in Service._base_manager.filter(subcategories=old_subcategory):
-            service.subcategories.remove(old_subcategory)
-            service.subcategories.add(*new_subcategories)
+        # Mise à jour de tous les modèles
+        update_all_models_categories_and_subcategories(
+            apps,
+            old_category,
+            new_categories,
+            old_subcategory,
+            new_subcategories,
+        )
 
 
 class Migration(migrations.Migration):

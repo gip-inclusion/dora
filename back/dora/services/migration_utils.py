@@ -254,3 +254,108 @@ def delete_category(ServiceCategory, value):
 
 def create_service_kind(ServiceKind, value, label):
     return ServiceKind.objects.create(value=value, label=label)
+
+
+def update_categories_and_subcategories(
+    model, old_category, new_categories, old_subcategory, new_subcategories
+):
+    """Met à jour les catégories et sous-catégories d'un modèle.
+
+    Gère le cas où le modèle n'a pas de champ 'categories' (ex: SavedSearch).
+    """
+    # Vérifier si le modèle a un champ 'categories' (ManyToManyField)
+    if hasattr(model, "categories"):
+        for obj in model.objects.filter(categories=old_category):
+            obj.categories.remove(old_category)
+            obj.categories.add(*new_categories)
+
+    # Vérifier si le modèle a un champ 'subcategories' (ManyToManyField)
+    if hasattr(model, "subcategories"):
+        for obj in model.objects.filter(subcategories=old_subcategory):
+            obj.subcategories.remove(old_subcategory)
+            obj.subcategories.add(*new_subcategories)
+
+
+def update_saved_search_categories(SavedSearch, old_category, new_categories):
+    """Met à jour les SavedSearch avec une nouvelle catégorie.
+
+    Si plusieurs nouvelles catégories remplacent l'ancienne, crée un nouveau
+    SavedSearch pour chaque nouvelle catégorie.
+    """
+    if not new_categories:
+        return
+
+    saved_searches_to_update = list(SavedSearch.objects.filter(category=old_category))
+    for saved_search in saved_searches_to_update:
+        if len(new_categories) == 1:
+            # Une seule nouvelle catégorie : mettre à jour l'objet existant
+            saved_search.category = new_categories[0]
+            saved_search.save()
+        else:
+            # Plusieurs nouvelles catégories : créer un nouveau SavedSearch pour chaque
+            # (sauf la première qui remplace l'ancien)
+            saved_search.category = new_categories[0]
+            saved_search.save()
+
+            # Créer un nouveau SavedSearch pour chaque catégorie supplémentaire
+            for new_category in new_categories[1:]:
+                new_saved_search = SavedSearch.objects.create(
+                    user=saved_search.user,
+                    city_code=saved_search.city_code,
+                    city_label=saved_search.city_label,
+                    category=new_category,
+                    frequency=saved_search.frequency,
+                    last_notification_date=saved_search.last_notification_date,
+                )
+                # Copier les relations ManyToMany
+                new_saved_search.subcategories.set(saved_search.subcategories.all())
+                new_saved_search.kinds.set(saved_search.kinds.all())
+                new_saved_search.fees.set(saved_search.fees.all())
+                new_saved_search.location_kinds.set(saved_search.location_kinds.all())
+                new_saved_search.funding_labels.set(saved_search.funding_labels.all())
+
+
+def update_all_models_categories_and_subcategories(
+    apps, old_category, new_categories, old_subcategory, new_subcategories
+):
+    """Met à jour les catégories et sous-catégories pour tous les modèles concernés.
+
+    Récupère automatiquement tous les modèles nécessaires et appelle les fonctions
+    de mise à jour appropriées.
+    """
+    # Récupération des modèles
+    Service = apps.get_model("services", "Service")
+    ServiceModel = apps.get_model("services", "ServiceModel")
+    SavedSearch = apps.get_model("services", "SavedSearch")
+    ServiceView = apps.get_model("stats", "ServiceView")
+    OrientationView = apps.get_model("stats", "OrientationView")
+    ServiceShare = apps.get_model("stats", "ServiceShare")
+    MobilisationEvent = apps.get_model("stats", "MobilisationEvent")
+    DiServiceView = apps.get_model("stats", "DiServiceView")
+    DiMobilisationEvent = apps.get_model("stats", "DiMobilisationEvent")
+    SearchView = apps.get_model("stats", "SearchView")
+
+    # Mise à jour de SavedSearch.category (ForeignKey)
+    update_saved_search_categories(SavedSearch, old_category, new_categories)
+
+    # Mise à jour de tous les modèles avec categories et subcategories (ManyToManyField)
+    models_to_update = [
+        Service,
+        ServiceModel,
+        SavedSearch,
+        ServiceView,
+        OrientationView,
+        ServiceShare,
+        MobilisationEvent,
+        DiServiceView,
+        DiMobilisationEvent,
+        SearchView,
+    ]
+    for model in models_to_update:
+        update_categories_and_subcategories(
+            model,
+            old_category,
+            new_categories,
+            old_subcategory,
+            new_subcategories,
+        )
