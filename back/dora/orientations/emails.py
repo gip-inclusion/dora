@@ -347,23 +347,36 @@ def send_orientation_reminder_emails(orientation):
 
 
 def send_orientation_expiration_emails(orientation: Orientation) -> None:
+    start_date = (
+        orientation.processing_date
+        if orientation.processing_date
+        else orientation.creation_date
+    )
+
+    context = {
+        "data": orientation,
+        "expiration_period_days": settings.ORIENTATION_EXPIRATION_PERIOD_DAYS,
+        "search_link": settings.FRONTEND_URL + "/recherche",
+        "start_date": start_date.strftime("%-d %B %Y"),
+    }
+
     send_mail(
-        "For the referent",
-        orientation.referent_email,
-        "TBD",
+        f"Votre demande d'orientation pour {orientation.get_beneficiary_full_name()} a expirée",
+        orientation.prescriber.email,
+        mjml2html(render_to_string("orientation-expired-prescriber.mjml", context)),
         tags=["orientation"],
     )
 
     send_mail(
-        "For the service provider",
+        f"La demande d'orientation pour {orientation.get_beneficiary_full_name()} a expirée.",
         orientation.service.contact_email,
-        "TBD",
+        mjml2html(render_to_string("orientation-expired-service.mjml", context)),
         tags=["orientation"],
     )
 
     send_mail(
-        "For the beneficiary",
+        "Cette demande d'orientation a été annulée.",
         orientation.beneficiary_email,
-        "TBD",
+        mjml2html(render_to_string("orientation-expired-beneficiary.mjml", context)),
         tags=["orientation"],
     )

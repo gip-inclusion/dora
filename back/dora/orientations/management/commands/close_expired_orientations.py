@@ -47,14 +47,15 @@ class Command(BaseCommand):
         for orientation in expired_orientations:
             orientation.status = OrientationStatus.EXPIRED
 
+            # send emails after to ensure no error
+            if orientation.should_send_email:
+                send_orientation_expiration_emails(orientation)
+                orientation.last_reminder_email_sent = timezone.now()
+
             # bulk_update n'invoque pas save() donc il faut mettre à jour le processing_date
             orientation.processing_date = timezone.now()
 
             orientation.delete_attachments()
-
-            if orientation.should_send_email:
-                send_orientation_expiration_emails(orientation)
-                orientation.last_reminder_email_sent = timezone.now()
 
             orientations_to_update.append(orientation)
 

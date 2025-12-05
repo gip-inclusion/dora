@@ -1,0 +1,35 @@
+{% extends "orientation-email-base.mjml" %}
+{% load orientation_extras %}
+
+{% block preview %}
+  L’expiration de la demande d’orientation à {{ data.get_structure_name }}
+{% endblock %}
+
+{% block title %}
+  Une orientation effectuée en votre nom a été annulée.
+{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+  <p>
+    {{ data.prescriber.get_full_name }} de la structure {{ data.prescriber_structure.name }} a envoyé une demande d’orientation en votre nom, auprès du service «&nbsp;{{ data.get_service_name }}&nbsp;», le {{ start_date }}.
+  </p>
+
+  <p>Le service n’a pas répondu à la demande dans le délai limite des 30 jours. Par conséquent, la demande a été automatiquement annulée.</p>
+
+  <p><strong>Vous n’avez rien à faire</strong>&nbsp;: l’accompagnateur de la structure {{ data.get_structure_name }} a également été informé.</p>
+
+  <p><strong>Des questions&nbsp;?</strong> Contactez la personne qui vous accompagne&nbsp;:</p>
+  <ul>
+    <li>{{ data.prescriber.get_full_name }}</li>
+    <li>{{ data.prescriber.email }}</li>
+  </ul>
+
+  <p>ou bien votre conseiller·e référent·e</p>
+  <ul>
+    <li>{{ data.get_referent_full_name }}</li>
+    <li>{{ data.referent_email }} - {{data.referent_phone}}</li>
+  </ul>
+{% endblock %}
