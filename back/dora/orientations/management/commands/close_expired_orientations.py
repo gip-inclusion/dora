@@ -43,13 +43,24 @@ class Command(BaseCommand):
         )
 
         orientations_to_update = []
+        email_notifications_to_send = []
 
         for orientation in expired_orientations:
             orientation.status = OrientationStatus.EXPIRED
 
-            # send emails after to ensure no error
             if orientation.should_send_email:
-                send_orientation_expiration_emails(orientation)
+                start_date = (
+                    orientation.processing_date
+                    if orientation.processing_date
+                    else orientation.creation_date
+                )
+                email_notifications_to_send.append(
+                    [
+                        orientation,
+                        start_date,
+                    ]
+                )
+
                 orientation.last_reminder_email_sent = timezone.now()
 
             # bulk_update n'invoque pas save() donc il faut mettre à jour le processing_date
@@ -64,4 +75,11 @@ class Command(BaseCommand):
             ["status", "last_reminder_email_sent", "processing_date"],
         )
 
-        self.stdout.write(f"{len(orientations_to_update)} orientations ont clôturées")
+        for (
+            orientation,
+            start_date,
+        ) in email_notifications_to_send:
+            send_orientation_expiration_emails(orientation, start_date)
+
+        self.stdout.write(f"{len(orientations_to_update)} orientations ont clôturées.")
+        self.stdout.write(f"{len(email_notifications_to_send)} mails ont été envoyés.")

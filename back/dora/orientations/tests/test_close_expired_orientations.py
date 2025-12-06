@@ -18,12 +18,16 @@ from dora.orientations.models import OrientationStatus
 @override_settings(ORIENTATION_EXPIRATION_PERIOD_DAYS=30)
 class CloseExpiredOrientationsTestCase(TestCase):
     def setUp(self):
+        self.orientation_1_start_date = timezone.now() - timedelta(days=31)
         self.expired_orientation_1 = make_orientation(
-            creation_date=timezone.now() - timedelta(days=31), processing_date=None
+            creation_date=self.orientation_1_start_date, processing_date=None
         )
+
+        self.orientation_2_start_date = timezone.now() - timedelta(days=41)
+
         self.expired_orientation_2 = make_orientation(
             creation_date=timezone.now() - timedelta(days=51),
-            processing_date=timezone.now() - timedelta(days=41),
+            processing_date=self.orientation_2_start_date,
         )
 
     @staticmethod
@@ -56,7 +60,13 @@ class CloseExpiredOrientationsTestCase(TestCase):
             mock_send_emails.call_args_list[0][0][0], self.expired_orientation_1
         )
         self.assertEqual(
+            mock_send_emails.call_args_list[0][0][1], self.orientation_1_start_date
+        )
+        self.assertEqual(
             mock_send_emails.call_args_list[1][0][0], self.expired_orientation_2
+        )
+        self.assertEqual(
+            mock_send_emails.call_args_list[1][0][1], self.orientation_2_start_date
         )
 
         self.assertEqual(mock_delete_attachments.call_count, 2)

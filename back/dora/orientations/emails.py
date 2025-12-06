@@ -346,13 +346,9 @@ def send_orientation_reminder_emails(orientation):
     )
 
 
-def send_orientation_expiration_emails(orientation: Orientation) -> None:
-    start_date = (
-        orientation.processing_date
-        if orientation.processing_date
-        else orientation.creation_date
-    )
-
+def send_orientation_expiration_emails(
+    orientation: Orientation, start_date: str
+) -> None:
     context = {
         "data": orientation,
         "expiration_period_days": settings.ORIENTATION_EXPIRATION_PERIOD_DAYS,
