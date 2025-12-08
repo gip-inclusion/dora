@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.management import BaseCommand
-from django.db.models import Q
+from django.db.models import BooleanField, Case, Q, Value, When
 from django.utils import timezone
 
 from dora.orientations.emails import send_orientation_expiration_emails
@@ -33,7 +33,13 @@ class Command(BaseCommand):
                 ),
                 status=OrientationStatus.PENDING,
             )
-            .annotate(should_send_email=Q(creation_date__gte=email_cutoff_date))
+            .annotate(
+                should_send_email=Case(
+                    When(creation_date__gte=email_cutoff_date, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                )
+            )
             .select_related("service")
         )
 
