@@ -116,8 +116,11 @@
       <div class="tag bg-blue-information text-gray-text!">Nouveauté !</div>
       <h3>Suivre vos demandes</h3>
       <p class="text-f16">
-        DORA vous permet de <strong>suivre l’ensemble de vos demandes d’orientation</strong>
-        depuis votre espace DORA et de voir rapidement la réponse de la structure partenaire.
+        DORA vous permet de <strong
+          >suivre l’ensemble de vos demandes d’orientation</strong
+        >
+        depuis votre espace DORA et de voir rapidement la réponse de la structure
+        partenaire.
       </p>
     </div>
   </div>
