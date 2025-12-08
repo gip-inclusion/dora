@@ -76,11 +76,23 @@ class Command(BaseCommand):
             ["status", "last_reminder_email_sent", "processing_date"],
         )
 
+        emails_sent = 0
         for (
             orientation,
             start_date,
         ) in email_notifications_to_send:
-            send_orientation_expiration_emails(orientation, start_date)
+            try:
+                send_orientation_expiration_emails(orientation, start_date)
+                emails_sent += 1
+            except Exception as e:
+                self.stderr.write(
+                    f"Erreur lors de l'envoi de l'email pour l'orientation {orientation.id}: {e}"
+                )
+                continue
 
-        self.stdout.write(f"{len(orientations_to_update)} orientations ont clôturées.")
-        self.stdout.write(f"{len(email_notifications_to_send)} mails ont été envoyés.")
+        self.stdout.write(
+            f"{len(orientations_to_update)} orientations ont été clôturées."
+        )
+        self.stdout.write(
+            f"{emails_sent} mails envoyés avec succès sur un total de {len(email_notifications_to_send)}."
+        )
