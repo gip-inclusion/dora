@@ -42,7 +42,7 @@ class CloseExpiredOrientationsTestCase(TestCase):
     def test_should_close_expired_orientations_and_send_emails(
         self, mock_delete_attachments, mock_send_emails
     ):
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(3):
             self.call_command()
 
         self.expired_orientation_1.refresh_from_db()

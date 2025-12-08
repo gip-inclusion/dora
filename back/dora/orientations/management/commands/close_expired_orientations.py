@@ -43,56 +43,42 @@ class Command(BaseCommand):
             .select_related("service")
         )
 
-        orientations_to_update = []
-        email_notifications_to_send = []
+        orientations_closed = 0
+        emails_sent = 0
+        emails_attempted = 0
 
         for orientation in expired_orientations:
+            start_date = (
+                orientation.processing_date
+                if orientation.processing_date
+                else orientation.creation_date
+            )
+
             orientation.status = OrientationStatus.EXPIRED
-
-            if orientation.should_send_email:
-                start_date = (
-                    orientation.processing_date
-                    if orientation.processing_date
-                    else orientation.creation_date
-                )
-                email_notifications_to_send.append(
-                    [
-                        orientation,
-                        start_date,
-                    ]
-                )
-
-                orientation.last_reminder_email_sent = timezone.now()
-
-            # bulk_update n'invoque pas save() donc il faut mettre à jour le processing_date
             orientation.processing_date = timezone.now()
 
-            orientation.delete_attachments()
-
-            orientations_to_update.append(orientation)
-
-        Orientation.objects.bulk_update(
-            orientations_to_update,
-            ["status", "last_reminder_email_sent", "processing_date"],
-        )
-
-        emails_sent = 0
-        for (
-            orientation,
-            start_date,
-        ) in email_notifications_to_send:
             try:
-                send_orientation_expiration_emails(orientation, start_date)
-                emails_sent += 1
+                orientation.delete_attachments()
             except Exception as e:
                 self.stderr.write(
-                    f"Erreur lors de l'envoi de l'email pour l'orientation {orientation.id}: {e}"
+                    f"Erreur lors de la suppression des pièces jointes pour l'orientation {orientation.id}: {e}"
                 )
-                continue
 
+            if orientation.should_send_email:
+                emails_attempted += 1
+                try:
+                    send_orientation_expiration_emails(orientation, start_date)
+                    orientation.last_reminder_email_sent = timezone.now()
+                    emails_sent += 1
+                except Exception as e:
+                    self.stderr.write(
+                        f"Erreur lors de l'envoi de l'email pour l'orientation {orientation.id}: {e}"
+                    )
+
+            orientation.save()
+            orientations_closed += 1
+
+        self.stdout.write(f"{orientations_closed} orientations ont été clôturées.")
         self.stdout.write(
-            f"{len(orientations_to_update)} orientations ont été clôturées."
-        )
-        self.stdout.write(
-            f"{emails_sent} mails envoyés avec succès sur un total de {len(email_notifications_to_send)}."
+            f"{emails_sent} mails envoyés avec succès sur un total de {emails_attempted}."
         )
