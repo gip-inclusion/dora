@@ -1,6 +1,8 @@
 from django.contrib.messages import get_messages
 from django.core import mail
 from django.urls import reverse
+from django.utils import timezone
+from freezegun import freeze_time
 
 from dora.core.models import ModerationStatus
 from dora.core.test_utils import make_orientation, make_structure, make_user
@@ -71,6 +73,7 @@ def test_moderation_template(admin_client):
     assert "Modération du rattachement".encode("utf-8") not in response.content
 
 
+@freeze_time("2022-01-01")
 def test_moderation_approve(admin_client):
     # Création de la structure
     structure = make_structure(
@@ -120,6 +123,9 @@ def test_moderation_approve(admin_client):
     # Vérification que les deux orientations avec le statut MODERATION_PENDING sont passées au statut PENDING
     assert orientation_moderation_pending_1.status == OrientationStatus.PENDING
     assert orientation_moderation_pending_2.status == OrientationStatus.PENDING
+
+    assert orientation_moderation_pending_1.processing_date == timezone.now()
+    assert orientation_moderation_pending_2.processing_date == timezone.now()
 
     # Vérification que les autres orientations n'ont pas vu leur statut changer
     assert (

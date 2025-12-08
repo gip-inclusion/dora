@@ -31,6 +31,7 @@ class OrientationStatus(models.TextChoices):
     PENDING = "OUVERTE", "Ouverte / En cours de traitement"
     ACCEPTED = "VALIDÉE", "Validée"
     REJECTED = "REFUSÉE", "Refusée"
+    EXPIRED = "EXPIRÉE", "Expirée"
 
 
 class RejectionReason(EnumModel):
@@ -212,10 +213,21 @@ class Orientation(models.Model):
             ),
         )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._original_status = self.status
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.original_service_name = self.get_service_name()
-        return super().save(*args, **kwargs)
+
+        if self.pk and self.status != self._original_status:
+            self.processing_date = timezone.now()
+            self._original_status = self.status
+
+        result = super().save(*args, **kwargs)
+
+        return result
 
     def delete(self, *args, **kwargs):
         if self.beneficiary_attachments:
