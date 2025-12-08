@@ -102,7 +102,7 @@ class CloseExpiredOrientationsTestCase(TestCase):
         self.expired_orientation_1.creation_date = timezone.now() - timedelta(days=61)
         self.expired_orientation_1.save()
 
-        self.expired_orientation_2.processing_date = timezone.now() - timedelta(days=61)
+        self.expired_orientation_2.creation_date = timezone.now() - timedelta(days=61)
         self.expired_orientation_2.save()
 
         self.call_command()

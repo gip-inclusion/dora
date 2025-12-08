@@ -33,12 +33,7 @@ class Command(BaseCommand):
                 ),
                 status=OrientationStatus.PENDING,
             )
-            .annotate(
-                should_send_email=Q(
-                    processing_date__isnull=True, creation_date__gte=email_cutoff_date
-                )
-                | Q(processing_date__gte=email_cutoff_date)
-            )
+            .annotate(should_send_email=Q(creation_date__gte=email_cutoff_date))
             .select_related("service")
         )
 
