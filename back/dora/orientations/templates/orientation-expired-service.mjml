@@ -17,7 +17,7 @@
     {{ data.prescriber.get_full_name }} de la structure {{ data.prescriber_structure.name }} vous a adressé un bénéficiaire pour le service «&nbsp;{{ data.get_service_name }}&nbsp;», le {{ start_date }}.
   </p>
 
-  <p>N'ayant pas de réponses de votre part dans le délai limite des {{ expiration_period_days }} jours, cette demande a été automatiquement annulée.</p>
+  <p>N'ayant pas reçu de réponses de votre part dans le délai limite des {{ expiration_period_days }} jours, cette demande a été automatiquement annulée.</p>
 
   <p>Nous vous remercions pour votre engagement.</p>
 {% endblock %}

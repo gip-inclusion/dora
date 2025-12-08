@@ -357,15 +357,8 @@ def send_orientation_expiration_emails(
     }
 
     send_mail(
-        f"Votre demande d'orientation pour {orientation.get_beneficiary_full_name()} a expirée",
-        orientation.prescriber.email,
-        mjml2html(render_to_string("orientation-expired-prescriber.mjml", context)),
-        tags=["orientation"],
-    )
-
-    send_mail(
-        f"La demande d'orientation pour {orientation.get_beneficiary_full_name()} a expirée.",
-        orientation.service.contact_email,
+        "Cette demande d'orientation a expirée.",
+        orientation.get_contact_email(),
         mjml2html(render_to_string("orientation-expired-service.mjml", context)),
         tags=["orientation"],
     )
@@ -376,3 +369,18 @@ def send_orientation_expiration_emails(
         mjml2html(render_to_string("orientation-expired-beneficiary.mjml", context)),
         tags=["orientation"],
     )
+
+    send_mail(
+        "Votre demande d'orientation a expirée",
+        orientation.prescriber.email,
+        mjml2html(render_to_string("orientation-expired-prescriber.mjml", context)),
+        tags=["orientation"],
+    )
+
+    if orientation.referent_email != orientation.prescriber.email:
+        send_mail(
+            "Votre demande d'orientation a expirée",
+            orientation.referent_email,
+            mjml2html(render_to_string("orientation-expired-prescriber.mjml", context)),
+            tags=["orientation"],
+        )

@@ -17,19 +17,23 @@
     {{ data.prescriber.get_full_name }} de la structure {{ data.prescriber_structure.name }} a envoyé une demande d’orientation en votre nom, auprès du service «&nbsp;{{ data.get_service_name }}&nbsp;», le {{ start_date }}.
   </p>
 
-  <p>Le service n’a pas répondu à la demande dans le délai limite des 30 jours. Par conséquent, la demande a été automatiquement annulée.</p>
+  <p>Le service n’a pas répondu à la demande dans le délai limite des {{ expiration_period_days }} jours. Par conséquent, la demande a été automatiquement annulée.</p>
 
   <p><strong>Vous n’avez rien à faire</strong>&nbsp;: l’accompagnateur de la structure {{ data.get_structure_name }} a également été informé.</p>
 
   <p><strong>Des questions&nbsp;?</strong> Contactez la personne qui vous accompagne&nbsp;:</p>
-  <ul>
-    <li>{{ data.prescriber.get_full_name }}</li>
-    <li>{{ data.prescriber.email }}</li>
-  </ul>
-
-  <p>ou bien votre conseiller·e référent·e</p>
+  {% if data.prescriber.email !=  data.referent_email %}
+    <ul>
+      <li>{{ data.prescriber.get_full_name }}</li>
+      <li>{{ data.prescriber.email }}</li>
+    </ul>
+    <p>ou bien votre conseillèr·e référent·e&#8239;:</p>
+  {% endif %}
   <ul>
     <li>{{ data.get_referent_full_name }}</li>
-    <li>{{ data.referent_email }} - {{data.referent_phone}}</li>
+    <li>{{ data.referent_email }}
+      {% if not is_beneficiary and data.referent_phone %} –
+        {{ data.referent_phone|format_phone }}
+      {% endif %}</li>
   </ul>
 {% endblock %}
