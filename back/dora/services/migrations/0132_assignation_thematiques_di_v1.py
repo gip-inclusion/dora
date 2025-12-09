@@ -99,7 +99,7 @@ def assign_thematiques(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0129_conversion_thematiques_di_v1"),
+        ("services", "0131_conversion_thematiques_di_v1"),
     ]
 
     operations = [
