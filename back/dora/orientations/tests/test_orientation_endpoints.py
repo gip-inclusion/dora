@@ -465,6 +465,19 @@ class OrientationStatsTestCase(APITestCase):
 
         self.assertEqual(response.status_code, 403)
 
+    def test_department_managers_can_get_stats(self):
+        department_manager = make_user(
+            is_active=True, is_manager=True, departments=[self.structure.department]
+        )
+
+        self.client.force_authenticate(user=department_manager)
+
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/stats/"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
 
 class OrientationsExportTestCase(APITestCase):
     def setUp(self):
@@ -591,6 +604,19 @@ class OrientationsExportTestCase(APITestCase):
         )
 
         self.assertEqual(response.status_code, 403)
+
+    def test_department_managers_can_get_export(self):
+        department_manager = make_user(
+            is_active=True, is_manager=True, departments=[self.structure.department]
+        )
+
+        self.client.force_authenticate(user=department_manager)
+
+        response = self.client.get(
+            f"/structures/{self.structure.slug}/orientations/export/?type=sent"
+        )
+
+        self.assertEqual(response.status_code, 200)
 
     def test_raise_400_when_invalid_orientation_type(self):
         response = self.client.get(
