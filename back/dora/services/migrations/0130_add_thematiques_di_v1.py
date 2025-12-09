@@ -26,22 +26,29 @@ CATEGORY_LABELS = {
 def add_thematiques_di_v1(apps, schema_editor):
     ServiceCategory = apps.get_model("services", "ServiceCategory")
     ServiceSubCategory = apps.get_model("services", "ServiceSubCategory")
+
     for thematique in Thematique:
         category_value, _ = thematique.value.split("--")
         try:
             category = ServiceCategory.objects.get(value=category_value)
+            category.is_obsolete = False
             category.label = CATEGORY_LABELS[category_value]
             category.save()
         except ServiceCategory.DoesNotExist:
             ServiceCategory.objects.create(
-                value=category_value, label=CATEGORY_LABELS[category_value]
+                value=category_value,
+                label=CATEGORY_LABELS[category_value],
+                is_obsolete=False,
             )
         try:
             subcategory = ServiceSubCategory.objects.get(value=thematique)
+            subcategory.is_obsolete = False
             subcategory.label = thematique.label
             subcategory.save()
         except ServiceSubCategory.DoesNotExist:
-            ServiceSubCategory.objects.create(value=thematique, label=thematique.label)
+            ServiceSubCategory.objects.create(
+                value=thematique, label=thematique.label, is_obsolete=False
+            )
 
 
 class Migration(migrations.Migration):
