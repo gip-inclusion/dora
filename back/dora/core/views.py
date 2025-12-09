@@ -35,13 +35,7 @@ def _validate_upload(file_name: str, file_size: int) -> None:
 def upload(request: Request, filename: str, structure_slug: str) -> Response:
     structure = get_object_or_404(Structure.objects.all(), slug=structure_slug)
 
-    user = request.user
-
-    if (
-        not user.is_staff
-        and not structure.is_manager(user)
-        and not structure.is_member(user)
-    ):
+    if not structure.can_edit_services(request.user):
         raise PermissionDenied(
             "Uniquement les membres et les gestionnaires territoires peuvent charger des documents."
         )
