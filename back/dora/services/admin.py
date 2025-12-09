@@ -475,6 +475,32 @@ class SavedSearchAdmin(admin.ModelAdmin):
     ordering = ["-creation_date"]
 
 
+class ServiceCategoryAdmin(EnumAdmin):
+    list_display = [
+        "value",
+        "label",
+        "is_obsolete",
+    ]
+    list_filter = ["is_obsolete"]
+    readonly_fields = ["is_obsolete"]
+
+    def get_queryset(self, request):
+        return ServiceCategory._base_manager.all()
+
+
+class ServiceSubCategoryAdmin(EnumAdmin):
+    list_display = [
+        "value",
+        "label",
+        "is_obsolete",
+    ]
+    list_filter = ["is_obsolete"]
+    readonly_fields = ["is_obsolete"]
+
+    def get_queryset(self, request):
+        return ServiceSubCategory._base_manager.all()
+
+
 class FranceTravailOrientableServiceAdmin(admin.ModelAdmin):
     list_display = ("created_at", "structure", "service")
     search_fields = ("structure__name", "service__name")
@@ -492,13 +518,12 @@ admin.site.register(ServiceModificationHistoryItem, ServiceModificationHistoryIt
 admin.site.register(ServiceStatusHistoryItem, ServiceStatusHistoryItemAdmin)
 admin.site.register(Bookmark, BookmarkAdmin)
 admin.site.register(SavedSearch, SavedSearchAdmin)
-
 admin.site.register(BeneficiaryAccessMode, EnumAdmin)
 admin.site.register(CoachOrientationMode, EnumAdmin)
 admin.site.register(LocationKind, EnumAdmin)
-admin.site.register(ServiceCategory, EnumAdmin)
+admin.site.register(ServiceCategory, ServiceCategoryAdmin)
 admin.site.register(ServiceKind, EnumAdmin)
-admin.site.register(ServiceSubCategory, EnumAdmin)
+admin.site.register(ServiceSubCategory, ServiceSubCategoryAdmin)
 admin.site.register(ServiceSource, EnumAdmin)
 admin.site.register(FundingLabel, EnumAdmin)
 
