@@ -377,6 +377,8 @@ def check_thematiques_exist_in_di_v1(apps, schema_editor):
 
 def assign_new_thematiques(apps, schema_editor):
     Service = apps.get_model("services", "Service")
+    ServiceModel = apps.get_model("services", "ServiceModel")
+    SavedSearch = apps.get_model("services", "SavedSearch")
     ServiceCategory = apps.get_model("services", "ServiceCategory")
     ServiceSubCategory = apps.get_model("services", "ServiceSubCategory")
 
@@ -409,14 +411,14 @@ def assign_new_thematiques(apps, schema_editor):
                 ServiceSubCategory.objects.get(value=new_thematique)
             )
 
-        # Mise à jour des services et modèles de services
-        # _base_manager pour avoir les services et les modèles de services
-        for service in Service._base_manager.filter(categories=old_category):
-            service.categories.remove(old_category)
-            service.categories.add(*new_categories)
-        for service in Service._base_manager.filter(subcategories=old_subcategory):
-            service.subcategories.remove(old_subcategory)
-            service.subcategories.add(*new_subcategories)
+        # Mise à jour des services, modèles de services et recherches sauvegardées
+        for model in (Service, ServiceModel, SavedSearch):
+            for obj in model.objects.filter(categories=old_category):
+                obj.categories.remove(old_category)
+                obj.categories.add(*new_categories)
+            for obj in model.objects.filter(subcategories=old_subcategory):
+                obj.subcategories.remove(old_subcategory)
+                obj.subcategories.add(*new_subcategories)
 
 
 class Migration(migrations.Migration):
