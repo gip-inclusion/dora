@@ -131,12 +131,16 @@ class Credential(CustomizableChoice):
 
 
 class ServiceCategory(EnumModel):
+    is_obsolete = models.BooleanField(default=False)
+
     class Meta:
         verbose_name = "Catégorie principale"
         verbose_name_plural = "Catégories principales"
 
 
 class ServiceSubCategory(EnumModel):
+    is_obsolete = models.BooleanField(default=False)
+
     class Meta:
         verbose_name = "Sous-catégorie"
 

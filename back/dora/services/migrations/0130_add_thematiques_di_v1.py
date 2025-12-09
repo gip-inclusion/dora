@@ -46,7 +46,7 @@ def add_thematiques_di_v1(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0127_assignation_public_handicap"),
+        ("services", "0128_servicecategory_is_obsolete_and_more"),
     ]
 
     operations = [
