@@ -324,6 +324,18 @@ MAPPING_THEMATIQUES = {
     ],
 }
 
+MAPPING_CATEGORIES = {
+    "acces-aux-droits-et-citoyennete": "difficultes-administratives-ou-juridiques",
+    "apprendre-francais": "lecture-ecriture-calcul",
+    "creation-activite": "creer-une-entreprise",
+    "gestion-financiere": "difficultes-financieres",
+    "illettrisme": "lecture-ecriture-calcul",
+}
+
+
+def get_category_from_subcategory(subcategory: str) -> str:
+    return subcategory.split("--")[0]
+
 
 def check_thematiques_exist_in_dora(apps, schema_editor):
     ServiceCategory = apps.get_model("services", "ServiceCategory")
@@ -377,8 +389,14 @@ def check_thematiques_exist_in_di_v1(apps, schema_editor):
 
 def assign_new_thematiques(apps, schema_editor):
     Service = apps.get_model("services", "Service")
+    SavedSearch = apps.get_model("services", "SavedSearch")
     ServiceCategory = apps.get_model("services", "ServiceCategory")
     ServiceSubCategory = apps.get_model("services", "ServiceSubCategory")
+
+    # Remplacement manager par défaut par _base_manager pour que les jointures SQL
+    # utilisent le _base_manager au lieu du manager personnalisé qui filtre les obsolètes
+    ServiceCategory.objects = ServiceCategory._base_manager
+    ServiceSubCategory.objects = ServiceSubCategory._base_manager
 
     for old_thematique, new_thematiques in MAPPING_THEMATIQUES.items():
         if len(new_thematiques) == 1 and new_thematiques[0] == old_thematique:
@@ -386,42 +404,84 @@ def assign_new_thematiques(apps, schema_editor):
             continue
 
         # Récupération de la catégorie et de la sous-catégorie correspondant à l'ancienne thématique
-        try:
-            old_category = ServiceCategory.objects.get(
-                value=old_thematique.split("--")[0]
-            )
-            old_subcategory = ServiceSubCategory.objects.get(value=old_thematique)
-        except ServiceCategory.DoesNotExist:
-            continue
-        except ServiceSubCategory.DoesNotExist:
-            continue
+        old_category = ServiceCategory._base_manager.get(
+            value=get_category_from_subcategory(old_thematique)
+        )
+        old_subcategory = ServiceSubCategory._base_manager.get(value=old_thematique)
 
         # Récupération des catégories et sous-catégories correspondant aux nouvelles thématiques
-        new_categories = []
-        new_subcategories = []
+        new_categories = set()
+        new_subcategories = set()
         for new_thematique in new_thematiques:
-            if new_thematique == old_thematique:
-                continue
-            new_categories.append(
-                ServiceCategory.objects.get(value=new_thematique.split("--")[0])
+            new_categories.add(
+                ServiceCategory.objects.get(
+                    value=get_category_from_subcategory(new_thematique)
+                )
             )
-            new_subcategories.append(
-                ServiceSubCategory.objects.get(value=new_thematique)
-            )
+            new_subcategories.add(ServiceSubCategory.objects.get(value=new_thematique))
+        new_categories = list(new_categories)
+        new_subcategories = list(new_subcategories)
 
-        # Mise à jour des services et modèles de services
         # _base_manager pour avoir les services et les modèles de services
-        for service in Service._base_manager.filter(categories=old_category):
+        for service in Service._base_manager.filter(subcategories=old_subcategory):
             service.categories.remove(old_category)
             service.categories.add(*new_categories)
-        for service in Service._base_manager.filter(subcategories=old_subcategory):
             service.subcategories.remove(old_subcategory)
             service.subcategories.add(*new_subcategories)
+
+        for saved_search in SavedSearch.objects.filter(subcategories=old_subcategory):
+            # Première catégorie : modification du SavedSearch
+            first_new_category = new_categories[0]
+            subcategories_for_category = list(
+                filter(
+                    lambda sc: get_category_from_subcategory(sc.value)
+                    == first_new_category.value,
+                    new_subcategories,
+                )
+            )
+            saved_search.category = first_new_category
+            saved_search.subcategories.remove(old_subcategory)
+            saved_search.subcategories.add(*subcategories_for_category)
+            saved_search.save()
+            # Autres catégories : création de nouveaux SavedSearch
+            for new_category in new_categories[1:]:
+                subcategories_for_category = list(
+                    filter(
+                        lambda sc: get_category_from_subcategory(sc.value)
+                        == new_category.value,
+                        new_subcategories,
+                    )
+                )
+                new_saved_search = SavedSearch.objects.create(
+                    user=saved_search.user,
+                    creation_date=saved_search.creation_date,
+                    city_code=saved_search.city_code,
+                    city_label=saved_search.city_label,
+                    category=new_category,
+                    frequency=saved_search.frequency,
+                    last_notification_date=saved_search.last_notification_date,
+                )
+                new_saved_search.subcategories.add(*subcategories_for_category)
+                new_saved_search.kinds.add(*saved_search.kinds.all())
+                new_saved_search.fees.add(*saved_search.fees.all())
+                new_saved_search.location_kinds.add(*saved_search.location_kinds.all())
+                new_saved_search.funding_labels.add(*saved_search.funding_labels.all())
+
+    for old_category_value, new_category_value in MAPPING_CATEGORIES.items():
+        new_category = ServiceCategory.objects.get(value=new_category_value)
+        for saved_search in SavedSearch.objects.filter(
+            category__value=old_category_value
+        ):
+            saved_search.category = new_category
+            saved_search.save()
+
+    obsolete_categories = ServiceCategory._base_manager.filter(is_obsolete=True)
+    SavedSearch.objects.filter(category__in=obsolete_categories).delete()
 
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0128_add_thematiques_di_v1"),
+        ("services", "0130_add_thematiques_di_v1"),
     ]
 
     operations = [
