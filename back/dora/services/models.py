@@ -130,13 +130,13 @@ class Credential(CustomizableChoice):
         verbose_name_plural = "Justificatifs à fournir"
 
 
-class ServiceCategoryManager(models.Manager):
+class ExcludeObsoleteManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_obsolete=False)
 
 
 class ServiceCategory(EnumModel):
-    objects = ServiceCategoryManager()
+    objects = ExcludeObsoleteManager()
 
     is_obsolete = models.BooleanField(default=False)
 
@@ -145,13 +145,8 @@ class ServiceCategory(EnumModel):
         verbose_name_plural = "Catégories principales"
 
 
-class ServiceSubCategoryManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(is_obsolete=False)
-
-
 class ServiceSubCategory(EnumModel):
-    objects = ServiceSubCategoryManager()
+    objects = ExcludeObsoleteManager()
 
     is_obsolete = models.BooleanField(default=False)
 
