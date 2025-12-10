@@ -385,21 +385,21 @@ def assign_new_thematiques(apps, schema_editor):
     ServiceCategory = apps.get_model("services", "ServiceCategory")
     ServiceSubCategory = apps.get_model("services", "ServiceSubCategory")
 
+    # Remplacement manager par défaut par _base_manager pour que les jointures SQL
+    # utilisent le _base_manager au lieu du manager personnalisé qui filtre les obsolètes
+    ServiceCategory.objects = ServiceCategory._base_manager
+    ServiceSubCategory.objects = ServiceCategory._base_manager
+
     for old_thematique, new_thematiques in MAPPING_THEMATIQUES.items():
         if len(new_thematiques) == 1 and new_thematiques[0] == old_thematique:
             # Si la thématique est la même, on passe à la suivante
             continue
 
         # Récupération de la catégorie et de la sous-catégorie correspondant à l'ancienne thématique
-        try:
-            old_category = ServiceCategory.objects.get(
-                value=get_category_from_subcategory(old_thematique)
-            )
-            old_subcategory = ServiceSubCategory.objects.get(value=old_thematique)
-        except ServiceCategory.DoesNotExist:
-            continue
-        except ServiceSubCategory.DoesNotExist:
-            continue
+        old_category = ServiceCategory._base_manager.get(
+            value=get_category_from_subcategory(old_thematique)
+        )
+        old_subcategory = ServiceSubCategory._base_manager.get(value=old_thematique)
 
         # Récupération des catégories et sous-catégories correspondant aux nouvelles thématiques
         new_categories = set()
@@ -459,8 +459,8 @@ def assign_new_thematiques(apps, schema_editor):
                 new_saved_search.location_kinds.add(*saved_search.location_kinds.all())
                 new_saved_search.funding_labels.add(*saved_search.funding_labels.all())
 
-        obsolete_categories = ServiceCategory._base_manager.filter(is_obsolete=True)
-        SavedSearch.objects.filter(category__in=obsolete_categories).delete()
+    obsolete_categories = ServiceCategory._base_manager.filter(is_obsolete=True)
+    SavedSearch.objects.filter(category__in=obsolete_categories).delete()
 
 
 class Migration(migrations.Migration):
