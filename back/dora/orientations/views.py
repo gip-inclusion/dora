@@ -301,7 +301,7 @@ class OrientationExportView(APIView):
         orientations = (
             Orientation.objects.filter(prescriber_structure=structure)
             .order_by("-creation_date")
-            .select_related("service__structure")
+            .select_related("service__structure", "prescriber")
         )
 
         serializer = SentOrientationExportSerializer(orientations, many=True)
@@ -314,7 +314,7 @@ class OrientationExportView(APIView):
         orientations = (
             Orientation.objects.filter(service__structure=structure)
             .order_by("-creation_date")
-            .select_related("service__structure", "prescriber_structure")
+            .select_related("service__structure", "prescriber_structure", "prescriber")
         )
 
         serializer = ReceivedOrientationExportSerializer(orientations, many=True)
