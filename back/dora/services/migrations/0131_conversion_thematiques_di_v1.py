@@ -459,6 +459,9 @@ def assign_new_thematiques(apps, schema_editor):
                 new_saved_search.location_kinds.add(*saved_search.location_kinds.all())
                 new_saved_search.funding_labels.add(*saved_search.funding_labels.all())
 
+        obsolete_categories = ServiceCategory._base_manager.filter(is_obsolete=True)
+        SavedSearch.objects.filter(category__in=obsolete_categories).delete()
+
 
 class Migration(migrations.Migration):
     dependencies = [
