@@ -14,28 +14,25 @@ class TestCategorySubCategoryFiltering:
     def test_default_manager_excludes_obsolete(self, model_class):
         """Le manager par défaut doit exclure les éléments obsolètes."""
         model_name = model_class.__name__
-        active_item = baker.make(
-            model_name, value="active", label="Active", is_obsolete=False
+        active_item_1 = baker.make(
+            model_name, value="active1", label="Active 1", is_obsolete=False
         )
-        obsolete_item = baker.make(
-            model_name, value="obsolete", label="Obsolete", is_obsolete=True
+        active_item_2 = baker.make(
+            model_name, value="active2", label="Active 2", is_obsolete=False
+        )
+        obsolete_item_1 = baker.make(
+            model_name, value="obsolete1", label="Obsolete 1", is_obsolete=True
+        )
+        obsolete_item_2 = baker.make(
+            model_name, value="obsolete2", label="Obsolete 2", is_obsolete=True
         )
 
         items = model_class.objects.all()
         # Vérifier que l'élément actif est présent et l'obsolète est absent
-        assert active_item in items
-        assert obsolete_item not in items
-
-    def test_default_manager_includes_non_obsolete(self, model_class):
-        """Le manager par défaut doit inclure les éléments non obsolètes."""
-        model_name = model_class.__name__
-        item1 = baker.make(model_name, value="item1", label="Item 1", is_obsolete=False)
-        item2 = baker.make(model_name, value="item2", label="Item 2", is_obsolete=False)
-
-        items = model_class.objects.all()
-        # Vérifier que les deux éléments non obsolètes sont présents
-        assert item1 in items
-        assert item2 in items
+        assert active_item_1 in items
+        assert active_item_2 in items
+        assert obsolete_item_1 not in items
+        assert obsolete_item_2 not in items
 
     def test_base_manager_includes_all(self, model_class):
         """Le _base_manager doit inclure tous les éléments, y compris les obsolètes."""
