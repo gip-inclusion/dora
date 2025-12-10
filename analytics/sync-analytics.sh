@@ -85,6 +85,40 @@ fetch_and_export_dora_data() {
     time pg_dump "$DORA_DATABASE_URL" --jobs=8 --format=directory --compress=1 --clean --if-exists --no-owner --no-privileges --verbose $(cat args.txt) --file=/tmp/out.dump
     time psql "$DATABASE_URL" -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; CREATE EXTENSION IF NOT EXISTS postgis;"
     time pg_restore --dbname="$DATABASE_URL" --jobs=8 --format=directory --clean --if-exists --no-owner --no-privileges --verbose /tmp/out.dump
+    
+    # Clean the files created by the script as they now serve no purpose and could contains sensitive data
+    rm tables.txt args.txt
+    shred -u -z /tmp/out.dump/*
+    rmdir /tmp/out.dump
+
+    # Suppression des colonnes sensibles
+    time psql "$DATABASE_URL" <<SQL
+ALTER TABLE public.orientations_orientation 
+DROP COLUMN IF EXISTS beneficiary_last_name,
+DROP COLUMN IF EXISTS beneficiary_first_name,
+DROP COLUMN IF EXISTS beneficiary_phone,
+DROP COLUMN IF EXISTS beneficiary_email,
+DROP COLUMN IF EXISTS referent_last_name,
+DROP COLUMN IF EXISTS referent_first_name,
+DROP COLUMN IF EXISTS referent_phone,
+DROP COLUMN IF EXISTS referent_email,
+DROP COLUMN IF EXISTS di_contact_email,
+DROP COLUMN IF EXISTS di_contact_phone,
+DROP COLUMN IF EXISTS di_contact_name;
+
+ALTER TABLE public.services_service 
+DROP COLUMN IF EXISTS contact_name,
+DROP COLUMN IF EXISTS contact_email,
+DROP COLUMN IF EXISTS contact_phone,
+DROP COLUMN IF EXISTS is_contact_info_public;
+
+ALTER TABLE public.users_user 
+DROP COLUMN IF EXISTS password;
+
+VACUUM FULL public.orientations_orientation;
+VACUUM FULL public.services_service;
+VACUUM FULL public.users_user;
+SQL
 
     echo "✔️ Fait."
     echo ""
