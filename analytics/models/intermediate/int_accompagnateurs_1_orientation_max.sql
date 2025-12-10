@@ -7,7 +7,7 @@ SELECT
     acc.date_joined                 AS date_joined_prescriber,
     acc.main_activity               AS main_activity_prescriber,
     nb_orient.last_orientation_date,
-    COALESCE(total_orientations, 0) AS total_orientations
+    COALESCE(nb_orient.total_orientations, 0) AS total_orientations
 FROM {{ ref('stg_accompagnateurs') }} AS acc
 LEFT JOIN {{ ref('stg_nb_orientations_per_user') }} AS nb_orient
     ON acc.id = nb_orient.prescriber_id
