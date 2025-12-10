@@ -324,6 +324,14 @@ MAPPING_THEMATIQUES = {
     ],
 }
 
+MAPPING_CATEGORIES = {
+    "acces-aux-droits-et-citoyennete": "difficultes-administratives-ou-juridiques",
+    "apprendre-francais": "lecture-ecriture-calcul",
+    "creation-activite": "creer-une-entreprise",
+    "gestion-financiere": "difficultes-financieres",
+    "illettrisme": "lecture-ecriture-calcul",
+}
+
 
 def get_category_from_subcategory(subcategory: str) -> str:
     return subcategory.split("--")[0]
@@ -388,7 +396,7 @@ def assign_new_thematiques(apps, schema_editor):
     # Remplacement manager par défaut par _base_manager pour que les jointures SQL
     # utilisent le _base_manager au lieu du manager personnalisé qui filtre les obsolètes
     ServiceCategory.objects = ServiceCategory._base_manager
-    ServiceSubCategory.objects = ServiceCategory._base_manager
+    ServiceSubCategory.objects = ServiceSubCategory._base_manager
 
     for old_thematique, new_thematiques in MAPPING_THEMATIQUES.items():
         if len(new_thematiques) == 1 and new_thematiques[0] == old_thematique:
@@ -458,6 +466,14 @@ def assign_new_thematiques(apps, schema_editor):
                 new_saved_search.fees.add(*saved_search.fees.all())
                 new_saved_search.location_kinds.add(*saved_search.location_kinds.all())
                 new_saved_search.funding_labels.add(*saved_search.funding_labels.all())
+
+    for old_category_value, new_category_value in MAPPING_CATEGORIES.items():
+        new_category = ServiceCategory.objects.get(value=new_category_value)
+        for saved_search in SavedSearch.objects.filter(
+            category__value=old_category_value
+        ):
+            saved_search.category = new_category
+            saved_search.save()
 
     obsolete_categories = ServiceCategory._base_manager.filter(is_obsolete=True)
     SavedSearch.objects.filter(category__in=obsolete_categories).delete()
