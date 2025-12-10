@@ -10,11 +10,11 @@ from dora.orientations.models import Orientation, OrientationStatus
 
 
 class Command(BaseCommand):
-    help = "Clôturer les orientations qui sont en cours  qui sont plus valables"
+    help = "Clôturer les orientations en attente après un délai"
 
     def handle(self, *args, **options):
         self.stdout.write(
-            f"Clôture automatique des orientations en cours qui ne sont plus valables après {settings.ORIENTATION_EXPIRATION_PERIOD_DAYS} jours."
+            f"Clôture automatique des orientations en attente après {settings.ORIENTATION_EXPIRATION_PERIOD_DAYS} jours."
         )
 
         expiration_date = timezone.now() - timedelta(

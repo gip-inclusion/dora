@@ -2,11 +2,11 @@
 {% load orientation_extras %}
 
 {% block preview %}
-  L'expiration de la demande d'orientation à {{ data.get_structure_name }}
+  Expiration de la demande d’orientation à {{ data.get_structure_name }}
 {% endblock %}
 
 {% block title %}
-  La demande d'orientation pour {{ data.get_beneficiary_full_name }} a expirée.
+  La demande d’orientation pour {{ data.get_beneficiary_full_name }} a expirée.
 {% endblock %}
 
 {% block content %}
@@ -14,10 +14,10 @@
     <strong>Bonjour,</strong>
   </p>
   <p>
-    {{ data.prescriber.get_full_name }} de la structure {{ data.prescriber_structure.name }} vous a adressé un bénéficiaire pour le service «&nbsp;{{ data.get_service_name }}&nbsp;», le {{ start_date }}.
+    {{ data.prescriber.get_full_name }} de la structure {{ data.prescriber_structure.name }} vous a adressé un bénéficiaire pour le service «&#8239;{{ data.get_service_name }}&#8239;», le {{ start_date }}.
   </p>
 
-  <p>N'ayant pas reçu de réponses de votre part dans le délai limite des {{ expiration_period_days }} jours, cette demande a été automatiquement annulée.</p>
+  <p>N’ayant pas reçu de réponses de votre part dans le délai limite des {{ expiration_period_days }} jours, cette demande a été automatiquement annulée.</p>
 
   <p>Nous vous remercions pour votre engagement.</p>
 {% endblock %}

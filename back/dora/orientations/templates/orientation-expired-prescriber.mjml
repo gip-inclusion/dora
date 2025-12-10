@@ -2,11 +2,11 @@
 {% load orientation_extras %}
 
 {% block preview %}
-  L'expiration de la demande d'orientation à {{ data.get_structure_name }}
+  Expiration de la demande d’orientation à {{ data.get_structure_name }}
 {% endblock %}
 
 {% block title %}
-  Votre demande d'orientation pour {{ data.get_beneficiary_full_name }} est restée sans réponses.
+  Votre demande d’orientation pour {{ data.get_beneficiary_full_name }} est restée sans réponse.
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
     <strong>Bonjour,</strong>
   </p>
   <p>
-    La structure {{ data.get_structure_name }} n'a pas répondu dans le délai limite des {{ expiration_period_days }} jours à votre demande d'orientation pour {{ data.get_beneficiary_full_name }} auprès du service {{ data.get_service_name }}.
+    La structure {{ data.get_structure_name }} n’a pas répondu dans le délai limite des {{ expiration_period_days }} jours à votre demande d’orientation pour {{ data.get_beneficiary_full_name }} auprès du service {{ data.get_service_name }}.
   </p>
 
   <p>Cette demande a été automatiquement annulée.</p>
