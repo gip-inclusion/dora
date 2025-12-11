@@ -1,5 +1,4 @@
 {% extends "orientation-email-base.mjml" %}
-{% load orientation_extras %}
 
 {% block preview %}
   Expiration de la demande d’orientation à {{ data.get_structure_name }}

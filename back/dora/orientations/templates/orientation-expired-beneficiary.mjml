@@ -32,7 +32,7 @@
   <ul>
     <li>{{ data.get_referent_full_name }}</li>
     <li>{{ data.referent_email }}
-      {% if not is_beneficiary and data.referent_phone %} –
+      {% if data.referent_phone %} –
         {{ data.referent_phone|format_phone }}
       {% endif %}</li>
   </ul>
