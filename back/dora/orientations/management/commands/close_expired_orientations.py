@@ -45,7 +45,9 @@ class Command(BaseCommand):
                     self.stdout.write(f"L'orientation {orientation.id} a été clôturée.")
 
                     transaction.on_commit(
-                        lambda: self.send_mail(orientation, effective_start_date)
+                        lambda: self.send_email_notifications(
+                            orientation, effective_start_date
+                        )
                     )
 
             except Exception as e:
@@ -57,7 +59,9 @@ class Command(BaseCommand):
             f"{len(expired_orientations)} orientations ont été clôturées."
         )
 
-    def send_mail(self, orientation: Orientation, start_date: str) -> None:
+    def send_email_notifications(
+        self, orientation: Orientation, start_date: str
+    ) -> None:
         email_cutoff_date = timezone.localdate() - timedelta(days=60)
 
         if orientation.creation_date.date() >= email_cutoff_date:
