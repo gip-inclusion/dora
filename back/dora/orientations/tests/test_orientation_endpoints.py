@@ -561,12 +561,18 @@ class OrientationsExportTestCase(APITestCase):
             Orientation,
             creation_date=timezone.now() - relativedelta(days=2),
             service=self.service,
-            status=OrientationStatus.MODERATION_PENDING,
+            status=OrientationStatus.REJECTED,
             prescriber_structure=None,
             prescriber=None,
         )
 
-        # Assurer que cette orientation n'est pas incluse dans les résultats
+        # Assurer que ces orientations ne sont pas incluses dans les résultats
+        baker.make(
+            Orientation,
+            service=self.service,
+            status=OrientationStatus.MODERATION_PENDING,
+        )
+
         baker.make(
             Orientation,
             service=make_service(),
@@ -594,7 +600,7 @@ class OrientationsExportTestCase(APITestCase):
                 },
                 {
                     "creation_date": orientation_2.creation_date.strftime("%Y-%m-%d"),
-                    "status": "En cours de modération",
+                    "status": "Refusée",
                     "beneficiary_name": orientation_2.get_beneficiary_full_name(),
                     "prescriber_name": "Utilisateur supprimé",
                     "prescriber_structure_name": "Pas de prescripteur",
