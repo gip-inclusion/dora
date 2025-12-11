@@ -1,4 +1,5 @@
 import logging
+import textwrap
 from datetime import timedelta
 
 import requests
@@ -818,7 +819,6 @@ class BookmarkSerializer(BookmarkListSerializer):
                 "source": str(obj.service.source),
             }
         else:
-            source_di, di_service_id = obj.di_id.split("--")
             # note : pour pouvoir être mocké correctement,
             # le client D·I doit être importé avec le *même* chemin que
             # celui utilisé au moment du `patch`
@@ -827,7 +827,7 @@ class BookmarkSerializer(BookmarkListSerializer):
 
             try:
                 di_service = (
-                    di_client.retrieve_service(source=source_di, id=di_service_id)
+                    di_client.retrieve_service(id=obj.di_id)
                     if di_client is not None
                     else None
                 )
@@ -840,7 +840,9 @@ class BookmarkSerializer(BookmarkListSerializer):
                 "postal_code": di_service["code_postal"],
                 "city": di_service["commune"],
                 "name": di_service["nom"],
-                "shortDesc": di_service["presentation_resume"] or "",
+                "shortDesc": textwrap.shorten(
+                    di_service["description"], width=200, placeholder="…"
+                ),
                 "source": di_service["source"],
             }
 

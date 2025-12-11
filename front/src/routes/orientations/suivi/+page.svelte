@@ -4,6 +4,7 @@
   import { orientationState } from "./state.svelte.js";
 
   import OrientationsExportCard from "./orientations-export-card.svelte";
+  import ExportWarningModal from "./export-warning-modal.svelte";
   import OrientationsStatsDisplay from "./orientations-stats-display.svelte";
   import DownloadLineSystem from "svelte-remix/DownloadLineSystem.svelte";
   import CheckLineSystem from "svelte-remix/CheckLineSystem.svelte";
@@ -32,6 +33,17 @@
     linkCopied = true;
     setTimeout(() => (linkCopied = false), 2000);
   }
+
+  let isModalOpen = $state(false);
+
+  const toggleModal = () => {
+    isModalOpen = !isModalOpen;
+  };
+
+  const handleModalSubmit = () => {
+    generateOrientationExport(data.structure.slug);
+    toggleModal();
+  };
 </script>
 
 <EnsureLoggedIn>
@@ -46,7 +58,7 @@
     >
       {#if hasOrientations}
         <button
-          onclick={() => generateOrientationExport(data.structure.slug)}
+          onclick={toggleModal}
           class="text-magenta-cta gap-s4 flex flex-row font-bold"
           ><DownloadLineSystem class="fill-magenta-cta" />Télécharger la liste</button
         >
@@ -84,4 +96,9 @@
       {/if}
     </OrientationsExportCard>
   </div>
+  <ExportWarningModal
+    isOpen={isModalOpen}
+    handleClose={toggleModal}
+    handleSubmit={handleModalSubmit}
+  />
 </EnsureLoggedIn>

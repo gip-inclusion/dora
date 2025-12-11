@@ -14,7 +14,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from dora.services.models import Service
-from dora.structures.models import Structure, StructureMember
+from dora.structures.models import Structure
 
 logger = logging.getLogger(__name__)
 
@@ -35,14 +35,9 @@ def _validate_upload(file_name: str, file_size: int) -> None:
 def upload(request: Request, filename: str, structure_slug: str) -> Response:
     structure = get_object_or_404(Structure.objects.all(), slug=structure_slug)
 
-    if not StructureMember.objects.filter(
-        user=request.user,
-        structure=structure,
-        user__is_active=True,
-        user__is_valid=True,
-    ).exists():
+    if not structure.can_edit_services(request.user):
         raise PermissionDenied(
-            "Uniquement les membres actifs d'une structure peuvent charger des documents."
+            "Uniquement les membres et les gestionnaires territoires peuvent charger des documents."
         )
 
     file_obj = request.data["file"]

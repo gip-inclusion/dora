@@ -240,7 +240,6 @@ class OrientationViewSet(
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def display_orientation_stats(request: Request, structure_slug: str) -> Response:
-    user = request.user
     structure = get_object_or_404(
         Structure.objects.annotate(
             has_services=Exists(Service.objects.filter(structure=OuterRef("pk")))
@@ -248,7 +247,7 @@ def display_orientation_stats(request: Request, structure_slug: str) -> Response
         slug=structure_slug,
     )
 
-    if not structure.is_member(user):
+    if not structure.can_edit_services(request.user):
         raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
 
     stats = Orientation.objects.filter(
@@ -282,7 +281,7 @@ class OrientationExportView(APIView):
             slug=structure_slug,
         )
 
-        if not structure.is_member(request.user):
+        if not structure.can_edit_services(request.user):
             raise PermissionDenied("L'utilisateur n'est pas membre de cette structure.")
 
         if export_type == "sent":
@@ -300,7 +299,7 @@ class OrientationExportView(APIView):
         orientations = (
             Orientation.objects.filter(prescriber_structure=structure)
             .order_by("-creation_date")
-            .select_related("service__structure")
+            .select_related("service__structure", "prescriber")
         )
 
         serializer = SentOrientationExportSerializer(orientations, many=True)
@@ -313,7 +312,7 @@ class OrientationExportView(APIView):
         orientations = (
             Orientation.objects.filter(service__structure=structure)
             .order_by("-creation_date")
-            .select_related("service__structure", "prescriber_structure")
+            .select_related("service__structure", "prescriber_structure", "prescriber")
         )
 
         serializer = ReceivedOrientationExportSerializer(orientations, many=True)

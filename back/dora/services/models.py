@@ -130,13 +130,26 @@ class Credential(CustomizableChoice):
         verbose_name_plural = "Justificatifs à fournir"
 
 
+class ExcludeObsoleteManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_obsolete=False)
+
+
 class ServiceCategory(EnumModel):
+    objects = ExcludeObsoleteManager()
+
+    is_obsolete = models.BooleanField(default=False)
+
     class Meta:
         verbose_name = "Catégorie principale"
         verbose_name_plural = "Catégories principales"
 
 
 class ServiceSubCategory(EnumModel):
+    objects = ExcludeObsoleteManager()
+
+    is_obsolete = models.BooleanField(default=False)
+
     class Meta:
         verbose_name = "Sous-catégorie"
 

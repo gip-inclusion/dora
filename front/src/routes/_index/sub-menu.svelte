@@ -1,6 +1,5 @@
 <script lang="ts">
   import SubMenuDropdown from "./sub-menu-dropdown.svelte";
-  import { ENVIRONMENT } from "$lib/env";
 
   interface Props {
     mobileDesign?: boolean;
@@ -37,19 +36,17 @@
       class:border-b={mobileDesign}
     >
       <a href="/recherche-textuelle" class="inline-block h-full {aClass}">
-        Recherche par mots-clés 🆕
+        Recherche par mots-clés
       </a>
     </li>
-    {#if ENVIRONMENT !== "production"}
-      <li
-        class="border-gray-03 leading-24 lg:border-none"
-        class:border-b={mobileDesign}
-      >
-        <a href="/orientations/suivi" class="inline-block h-full {aClass}">
-          Suivi des orientations 🆕
-        </a>
-      </li>
-    {/if}
+    <li
+      class="border-gray-03 leading-24 lg:border-none"
+      class:border-b={mobileDesign}
+    >
+      <a href="/orientations/suivi" class="inline-block h-full {aClass}">
+        Suivi des orientations 🆕
+      </a>
+    </li>
     <li>
       <SubMenuDropdown
         {mobileDesign}

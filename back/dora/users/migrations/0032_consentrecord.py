@@ -10,7 +10,6 @@ import dora.core.validators
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("users", "0031_remove_user_ic_id"),
     ]
@@ -19,18 +18,72 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="ConsentRecord",
             fields=[
-                ("id", models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ("anonymous_user_hash", models.CharField(help_text="userHash du localStorage pour les utilisateurs", verbose_name="Identifiant anonyme")),
-                ("consent_version", models.CharField(help_text="Version de la politique de consentement présentée à l'utilisateur", validators=[dora.core.validators.validate_version], verbose_name="Version du consentement")),
-                ("consent_choices", models.JSONField(default=dict, help_text="Statut de consentement pour chaque service", verbose_name="Services consentis")),
-                ("created_at", models.DateTimeField(auto_now_add=True, db_index=True, verbose_name="Date et heure du consentement")),
-                ("user", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="consent_records", to=settings.AUTH_USER_MODEL, verbose_name="Utilisateur")),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "anonymous_user_hash",
+                    models.CharField(
+                        help_text="userHash du localStorage pour les utilisateurs",
+                        verbose_name="Identifiant anonyme",
+                    ),
+                ),
+                (
+                    "consent_version",
+                    models.CharField(
+                        help_text="Version de la politique de consentement présentée à l'utilisateur",
+                        validators=[dora.core.validators.validate_version],
+                        verbose_name="Version du consentement",
+                    ),
+                ),
+                (
+                    "consent_choices",
+                    models.JSONField(
+                        default=dict,
+                        help_text="Statut de consentement pour chaque service",
+                        verbose_name="Services consentis",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_index=True,
+                        verbose_name="Date et heure du consentement",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="consent_records",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Utilisateur",
+                    ),
+                ),
             ],
             options={
                 "verbose_name": "Enregistrement de consentement",
                 "verbose_name_plural": "Enregistrements de consentement",
                 "ordering": ["-created_at"],
-                "indexes": [models.Index(fields=["user", "-created_at"], name="users_conse_user_id_9b8797_idx"), models.Index(fields=["anonymous_user_hash", "-created_at"], name="users_conse_anonymo_f95d1c_idx")],
+                "indexes": [
+                    models.Index(
+                        fields=["user", "-created_at"],
+                        name="users_conse_user_id_9b8797_idx",
+                    ),
+                    models.Index(
+                        fields=["anonymous_user_hash", "-created_at"],
+                        name="users_conse_anonymo_f95d1c_idx",
+                    ),
+                ],
             },
         ),
     ]

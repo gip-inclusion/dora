@@ -110,11 +110,10 @@ class OrientationSerializer(serializers.ModelSerializer):
             # Il s'agit d'un service DI
 
             # Récupération du service depuis le client DI
-            source_di, di_service_id = orientation.get("di_service_id").split("--")
             di_client = dora.data_inclusion.di_client_factory()
             try:
                 raw_service = (
-                    di_client.retrieve_service(source=source_di, id=di_service_id)
+                    di_client.retrieve_service(id=orientation.get("di_service_id"))
                     if di_client is not None
                     else None
                 )
@@ -191,7 +190,7 @@ class OrientationSerializer(serializers.ModelSerializer):
 class SentOrientationExportSerializer(serializers.ModelSerializer):
     creation_date = serializers.DateTimeField(format="%Y-%m-%d")
     beneficiary_name = serializers.SerializerMethodField()
-    referent_name = serializers.SerializerMethodField()
+    prescriber_name = serializers.SerializerMethodField()
     structure_name = serializers.SerializerMethodField()
     service_name = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
@@ -201,8 +200,10 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
         return obj.get_beneficiary_full_name()
 
     @staticmethod
-    def get_referent_name(obj: Orientation) -> str:
-        return obj.get_referent_full_name()
+    def get_prescriber_name(obj: Orientation) -> str:
+        return (
+            obj.prescriber.get_full_name() if obj.prescriber else "Utilisateur supprimé"
+        )
 
     @staticmethod
     def get_structure_name(obj: Orientation) -> str:
@@ -222,7 +223,7 @@ class SentOrientationExportSerializer(serializers.ModelSerializer):
             "creation_date",
             "status",
             "beneficiary_name",
-            "referent_name",
+            "prescriber_name",
             "structure_name",
             "service_name",
         ]
@@ -238,7 +239,7 @@ class ReceivedOrientationExportSerializer(SentOrientationExportSerializer):
             "creation_date",
             "status",
             "beneficiary_name",
-            "referent_name",
+            "prescriber_name",
             "service_name",
             "prescriber_structure_name",
             "detail_page_url",

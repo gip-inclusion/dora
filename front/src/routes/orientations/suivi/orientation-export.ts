@@ -10,12 +10,16 @@ interface SentOrientationExportData {
   beneficiaryName: string;
   structureName: string;
   serviceName: string;
-  referentName: string;
+  prescriberName: string;
 }
 
 interface ReceivedOrientationExportData extends Pick<
   SentOrientationExportData,
-  "creationDate" | "status" | "beneficiaryName" | "serviceName" | "referentName"
+  | "creationDate"
+  | "status"
+  | "beneficiaryName"
+  | "serviceName"
+  | "prescriberName"
 > {
   prescriberStructureName: string;
   detailPageUrl: string;
@@ -41,7 +45,7 @@ function formatSentOrientationExportData(
     Bénéficiaire: orientation.beneficiaryName,
     "Structure concernée": orientation.structureName,
     "Service concerné": orientation.serviceName,
-    Émetteur: orientation.referentName,
+    Émetteur: orientation.prescriberName,
   }));
 }
 
@@ -54,7 +58,7 @@ function formatReceivedOrientationExportData(
     Bénéficiaire: orientation.beneficiaryName,
     "Service concerné": orientation.serviceName,
     "Structure émettrice": orientation.prescriberStructureName,
-    "Contact émetteur": orientation.referentName,
+    "Contact émetteur": orientation.prescriberName,
     Lien: orientation.detailPageUrl,
   }));
 }
