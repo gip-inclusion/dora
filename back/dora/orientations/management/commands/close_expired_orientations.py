@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.management import BaseCommand
+from django.db import transaction
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 
@@ -10,11 +11,11 @@ from dora.orientations.models import Orientation, OrientationStatus
 
 
 class Command(BaseCommand):
-    help = "Clôturer les orientations en attente après un délai"
+    help = "Clôturer les orientations qui sont en cours sans réponse après un délai"
 
     def handle(self, *args, **options):
         self.stdout.write(
-            f"Clôture automatique des orientations en attente après {settings.ORIENTATION_EXPIRATION_PERIOD_DAYS} jours."
+            f"Clôture des orientations qui sont en cours sans réponse après {settings.ORIENTATION_EXPIRATION_PERIOD_DAYS} jours."
         )
 
         expiration_date = timezone.localdate() - timedelta(
@@ -32,41 +33,37 @@ class Command(BaseCommand):
             .select_related("service")
         )
 
-        orientations_closed = 0
-        emails_sent = 0
-        emails_attempted = 0
-
         for orientation in expired_orientations:
-            effective_start_date = (
-                orientation.processing_date or orientation.creation_date
-            )
-
-            orientation.set_status(OrientationStatus.EXPIRED)
-
             try:
-                orientation.delete_attachments()
+                with transaction.atomic():
+                    effective_start_date = (
+                        orientation.processing_date or orientation.creation_date
+                    )
+
+                    orientation.set_status(OrientationStatus.EXPIRED)
+
+                    orientation.delete_attachments()
+
+                    self.stdout.write(f"L'orientation {orientation.id} a été clôturée.")
+
+                    transaction.on_commit(
+                        lambda: self.send_mail(orientation, effective_start_date)
+                    )
+
             except Exception as e:
                 self.stderr.write(
-                    f"Erreur lors de la suppression des pièces jointes pour l'orientation {orientation.id}: {e}"
+                    f"Erreur lors de la clôture de l'orientation {orientation.id}: {e}"
                 )
 
-            email_cutoff_date = timezone.localdate() - timedelta(days=60)
-            if orientation.creation_date.date() >= email_cutoff_date:
-                emails_attempted += 1
-
-                try:
-                    send_orientation_expiration_emails(
-                        orientation, effective_start_date
-                    )
-                    emails_sent += 1
-                except Exception as e:
-                    self.stderr.write(
-                        f"Erreur lors de l'envoi de l'email pour l'orientation {orientation.id}: {e}"
-                    )
-
-            orientations_closed += 1
-
-        self.stdout.write(f"{orientations_closed} orientations ont été clôturées.")
         self.stdout.write(
-            f"{emails_sent} mails envoyés avec succès sur un total de {emails_attempted}."
+            f"{len(expired_orientations)} orientations ont été clôturées."
         )
+
+    def send_mail(self, orientation: Orientation, start_date: str) -> None:
+        email_cutoff_date = timezone.localdate() - timedelta(days=60)
+
+        if orientation.creation_date.date() >= email_cutoff_date:
+            send_orientation_expiration_emails(orientation, start_date)
+            self.stdout.write(
+                f"Des mails ont été envoyés pour l'orientation {orientation.id}."
+            )
