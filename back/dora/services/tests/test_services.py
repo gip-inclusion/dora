@@ -1397,7 +1397,7 @@ class DataInclusionSearchTestCase(APITestCase):
 
     def test_service_di_categories(self):
         cases = [
-            (None, None, None, None, None),
+            (None, [], [], [], []),
             ([], [], [], [], []),
             (
                 ["famille--garde-denfants", "mobilite"],

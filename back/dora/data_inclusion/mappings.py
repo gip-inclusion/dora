@@ -129,8 +129,8 @@ def is_orientable(service_data: dict) -> bool:
 def map_service(service_data: dict, is_authenticated: bool) -> dict:
     # Voir différence entre les types "" ou [] et None dans le commentaire en haut du fichier
 
-    categories = None
-    subcategories = None
+    categories = []
+    subcategories = []
     if service_data["thematiques"] is not None:
         categories = ServiceCategory.objects.filter(
             value__in=[
@@ -266,10 +266,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "beneficiaries_access_modes_external_form_link_text": "",
         "beneficiaries_access_modes_other": beneficiaries_access_modes_other,
         "can_write": False,
-        "categories": [c.value for c in categories] if categories is not None else None,
-        "categories_display": [c.label for c in categories]
-        if categories is not None
-        else None,
+        "categories": [c.value for c in categories],
+        "categories_display": [c.label for c in categories],
         "city": service_data["commune"],
         "city_code": service_data["code_insee"],
         "coach_orientation_modes": [m.value for m in coach_orientation_modes]
@@ -356,12 +354,8 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
             "phone": service_data["structure"]["telephone"],
             "email": service_data["structure"]["courriel"],
         },
-        "subcategories": [c.value for c in subcategories]
-        if subcategories is not None
-        else None,
-        "subcategories_display": [c.label for c in subcategories]
-        if subcategories is not None
-        else None,
+        "subcategories": [c.value for c in subcategories],
+        "subcategories_display": [c.label for c in subcategories],
         "suspension_date": None,
         "update_frequency": None,
         "update_frequency_display": None,
