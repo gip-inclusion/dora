@@ -58,14 +58,12 @@ class Command(BaseCommand):
                     send_orientation_expiration_emails(
                         orientation, effective_start_date
                     )
-                    orientation.last_reminder_email_sent = timezone.now()
                     emails_sent += 1
                 except Exception as e:
                     self.stderr.write(
                         f"Erreur lors de l'envoi de l'email pour l'orientation {orientation.id}: {e}"
                     )
 
-            orientation.save()
             orientations_closed += 1
 
         self.stdout.write(f"{orientations_closed} orientations ont été clôturées.")

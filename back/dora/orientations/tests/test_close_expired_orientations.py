@@ -48,16 +48,10 @@ class CloseExpiredOrientationsTestCase(TestCase):
         self.expired_orientation_1.refresh_from_db()
         self.assertEqual(self.expired_orientation_1.status, OrientationStatus.EXPIRED)
         self.assertEqual(self.expired_orientation_1.processing_date, timezone.now())
-        self.assertEqual(
-            self.expired_orientation_1.last_reminder_email_sent, timezone.now()
-        )
 
         self.expired_orientation_2.refresh_from_db()
         self.assertEqual(self.expired_orientation_2.status, OrientationStatus.EXPIRED)
         self.assertEqual(self.expired_orientation_2.processing_date, timezone.now())
-        self.assertEqual(
-            self.expired_orientation_2.last_reminder_email_sent, timezone.now()
-        )
 
         self.assertEqual(mock_send_emails.call_count, 2)
         self.assertEqual(
