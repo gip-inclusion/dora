@@ -12,24 +12,26 @@ from dora.core.test_utils import make_orientation
 from dora.orientations.models import OrientationStatus
 
 
-@freeze_time("2022-01-01")
 @override_settings(ORIENTATION_EXPIRATION_PERIOD_DAYS=30)
 class CloseExpiredOrientationsTestCase(TestCase):
     def setUp(self):
         self.beneficiary_email = "test@email.com"
-        self.orientation_1_start_date = timezone.now() - timedelta(days=31)
-        self.expired_orientation_1 = make_orientation(
-            creation_date=self.orientation_1_start_date,
-            processing_date=None,
-            beneficiary_email=self.beneficiary_email,
-        )
+        self.starting_date = "2022-01-28"
 
-        self.orientation_2_start_date = timezone.now() - timedelta(days=41)
+        with freeze_time(self.starting_date):
+            self.orientation_1_start_date = timezone.now() - timedelta(days=31)
+            self.expired_orientation_1 = make_orientation(
+                creation_date=self.orientation_1_start_date,
+                processing_date=None,
+                beneficiary_email=self.beneficiary_email,
+            )
 
-        self.expired_orientation_2 = make_orientation(
-            creation_date=timezone.now() - timedelta(days=51),
-            processing_date=self.orientation_2_start_date,
-        )
+            self.orientation_2_start_date = timezone.now() - timedelta(days=41)
+
+            self.expired_orientation_2 = make_orientation(
+                creation_date=timezone.now() - timedelta(days=51),
+                processing_date=self.orientation_2_start_date,
+            )
 
     @staticmethod
     def call_command():
@@ -42,16 +44,28 @@ class CloseExpiredOrientationsTestCase(TestCase):
     def test_should_close_expired_orientations_and_send_emails(
         self, mock_delete_attachments, mock_send_emails
     ):
-        with self.assertNumQueries(3):
-            self.call_command()
+        with freeze_time("2022-02-01"):
+            expected_processing_time = timezone.now()
 
-        self.expired_orientation_1.refresh_from_db()
-        self.assertEqual(self.expired_orientation_1.status, OrientationStatus.EXPIRED)
-        self.assertEqual(self.expired_orientation_1.processing_date, timezone.now())
+            with self.assertNumQueries(3):
+                self.call_command()
 
-        self.expired_orientation_2.refresh_from_db()
-        self.assertEqual(self.expired_orientation_2.status, OrientationStatus.EXPIRED)
-        self.assertEqual(self.expired_orientation_2.processing_date, timezone.now())
+            self.expired_orientation_1.refresh_from_db()
+            self.assertEqual(
+                self.expired_orientation_1.status, OrientationStatus.EXPIRED
+            )
+            # This proves the command set processing_date, not that it was already this value
+            self.assertEqual(
+                self.expired_orientation_1.processing_date, expected_processing_time
+            )
+
+            self.expired_orientation_2.refresh_from_db()
+            self.assertEqual(
+                self.expired_orientation_2.status, OrientationStatus.EXPIRED
+            )
+            self.assertEqual(
+                self.expired_orientation_2.processing_date, expected_processing_time
+            )
 
         self.assertEqual(mock_send_emails.call_count, 2)
         self.assertEqual(
@@ -72,37 +86,44 @@ class CloseExpiredOrientationsTestCase(TestCase):
         self.assertEqual(mock_delete_attachments.call_count, 2)
 
     def test_should_not_close_unexpired_orientations(self):
-        self.valid_orientation = make_orientation(
-            creation_date=timezone.now() - timedelta(days=1),
-        )
-        self.orientation_in_moderation = make_orientation(
-            status=OrientationStatus.MODERATION_PENDING,
-            creation_date=timezone.now() - timedelta(days=31),
-            processing_date=None,
-        )
+        with freeze_time(self.starting_date):
+            self.valid_orientation = make_orientation(
+                creation_date=timezone.now() - timedelta(days=1),
+            )
+            self.orientation_in_moderation = make_orientation(
+                status=OrientationStatus.MODERATION_PENDING,
+                creation_date=timezone.now() - timedelta(days=31),
+                processing_date=None,
+            )
 
-        self.call_command()
+            self.call_command()
 
-        self.valid_orientation.refresh_from_db()
-        self.assertEqual(self.valid_orientation.status, OrientationStatus.PENDING)
+            self.valid_orientation.refresh_from_db()
+            self.assertEqual(self.valid_orientation.status, OrientationStatus.PENDING)
 
-        self.orientation_in_moderation.refresh_from_db()
-        self.assertEqual(
-            self.orientation_in_moderation.status, OrientationStatus.MODERATION_PENDING
-        )
+            self.orientation_in_moderation.refresh_from_db()
+            self.assertEqual(
+                self.orientation_in_moderation.status,
+                OrientationStatus.MODERATION_PENDING,
+            )
 
     @patch(
         "dora.orientations.management.commands.close_expired_orientations.send_orientation_expiration_emails"
     )
     def test_should_not_send_email_if_orientation_is_too_old(self, mock_send_emails):
-        self.expired_orientation_1.creation_date = timezone.now() - timedelta(days=61)
-        self.expired_orientation_1.save()
+        with freeze_time(self.starting_date):
+            self.expired_orientation_1.creation_date = timezone.now() - timedelta(
+                days=61
+            )
+            self.expired_orientation_1.save()
 
-        self.expired_orientation_2.creation_date = timezone.now() - timedelta(days=61)
-        self.expired_orientation_2.save()
+            self.expired_orientation_2.creation_date = timezone.now() - timedelta(
+                days=61
+            )
+            self.expired_orientation_2.save()
 
-        self.call_command()
-        self.assertEqual(mock_send_emails.call_count, 0)
+            self.call_command()
+            self.assertEqual(mock_send_emails.call_count, 0)
 
     def test_should_send_three_emails_when_prescriber_and_referent_are_the_same(
         self,
@@ -116,7 +137,9 @@ class CloseExpiredOrientationsTestCase(TestCase):
         self.expired_orientation_2.status = OrientationStatus.ACCEPTED
         self.expired_orientation_2.save()
 
-        self.call_command()
+        with freeze_time(self.starting_date):
+            self.call_command()
+
         self.assertEqual(len(mail.outbox), 3)
 
         self.assertEqual(
@@ -144,7 +167,8 @@ class CloseExpiredOrientationsTestCase(TestCase):
         self.expired_orientation_2.status = OrientationStatus.ACCEPTED
         self.expired_orientation_2.save()
 
-        self.call_command()
+        with freeze_time(self.starting_date):
+            self.call_command()
 
         self.assertEqual(len(mail.outbox), 4)
 
