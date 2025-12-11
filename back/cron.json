@@ -21,7 +21,7 @@
       "size": "S"
     },
     {
-      "command": "0 9 * * * tools/close-expired-orientations.sh",
+      "command": "0 10 * * * tools/close-expired-orientations.sh",
       "size": "S"
     }
   ]
