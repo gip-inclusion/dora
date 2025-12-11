@@ -370,17 +370,10 @@ def send_orientation_expiration_emails(
         tags=["orientation"],
     )
 
-    send_mail(
-        "Votre demande d’orientation a expiré",
-        orientation.prescriber.email,
-        mjml2html(render_to_string("orientation-expired-prescriber.mjml", context)),
-        tags=["orientation"],
-    )
-
-    if orientation.referent_email != orientation.prescriber.email:
+    for email in {orientation.prescriber.email, orientation.referent_email}:
         send_mail(
             "Votre demande d’orientation a expiré",
-            orientation.referent_email,
+            email,
             mjml2html(render_to_string("orientation-expired-prescriber.mjml", context)),
             tags=["orientation"],
         )

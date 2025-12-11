@@ -166,10 +166,11 @@ class CloseExpiredOrientationsTestCase(TestCase):
             mail.outbox[1].subject, "Cette demande d’orientation a été annulée."
         )
 
-        self.assertEqual(
-            mail.outbox[2].to, [self.expired_orientation_1.prescriber.email]
-        )
-        self.assertEqual(mail.outbox[2].subject, "Votre demande d’orientation a expiré")
+        prescriber_and_referent_emails = mail.outbox[2:4]
+        recipients = [email.to[0] for email in prescriber_and_referent_emails]
 
-        self.assertEqual(mail.outbox[3].to, [self.expired_orientation_1.referent_email])
-        self.assertEqual(mail.outbox[3].subject, "Votre demande d’orientation a expiré")
+        self.assertIn(self.expired_orientation_1.prescriber.email, recipients)
+        self.assertIn(self.expired_orientation_1.referent_email, recipients)
+
+        for email in prescriber_and_referent_emails:
+            self.assertEqual(email.subject, "Votre demande d’orientation a expiré")
