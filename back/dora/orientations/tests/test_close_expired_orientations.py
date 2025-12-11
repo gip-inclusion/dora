@@ -64,13 +64,15 @@ class CloseExpiredOrientationsTestCase(TestCase):
             mock_send_emails.call_args_list[0][0][0], self.expired_orientation_1
         )
         self.assertEqual(
-            mock_send_emails.call_args_list[0][0][1], self.orientation_1_start_date
+            mock_send_emails.call_args_list[0][0][1],
+            self.orientation_1_start_date,
         )
         self.assertEqual(
             mock_send_emails.call_args_list[1][0][0], self.expired_orientation_2
         )
         self.assertEqual(
-            mock_send_emails.call_args_list[1][0][1], self.orientation_2_start_date
+            mock_send_emails.call_args_list[1][0][1],
+            self.orientation_2_start_date,
         )
 
         self.assertEqual(mock_delete_attachments.call_count, 2)

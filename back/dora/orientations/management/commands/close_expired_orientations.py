@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.management import BaseCommand
-from django.db.models import BooleanField, Case, Q, Value, When
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 
 from dora.orientations.emails import send_orientation_expiration_emails
@@ -17,28 +17,17 @@ class Command(BaseCommand):
             f"Clôture automatique des orientations en attente après {settings.ORIENTATION_EXPIRATION_PERIOD_DAYS} jours."
         )
 
-        expiration_date = timezone.now() - timedelta(
+        expiration_date = timezone.localdate() - timedelta(
             days=settings.ORIENTATION_EXPIRATION_PERIOD_DAYS
         )
-        email_cutoff_date = timezone.now() - timedelta(days=60)
 
         expired_orientations = (
-            Orientation.objects.filter(
-                Q(
-                    processing_date__isnull=True,
-                    creation_date__lte=expiration_date,
-                )
-                | Q(
-                    processing_date__lte=expiration_date,
-                ),
-                status=OrientationStatus.PENDING,
+            Orientation.objects.alias(
+                effective_start_date=Coalesce("processing_date", "creation_date")
             )
-            .annotate(
-                should_send_email=Case(
-                    When(creation_date__gte=email_cutoff_date, then=Value(True)),
-                    default=Value(False),
-                    output_field=BooleanField(),
-                )
+            .filter(
+                effective_start_date__lte=expiration_date,
+                status=OrientationStatus.PENDING,
             )
             .select_related("service")
         )
@@ -48,10 +37,8 @@ class Command(BaseCommand):
         emails_attempted = 0
 
         for orientation in expired_orientations:
-            start_date = (
-                orientation.processing_date
-                if orientation.processing_date
-                else orientation.creation_date
+            effective_start_date = (
+                orientation.processing_date or orientation.creation_date
             )
 
             orientation.status = OrientationStatus.EXPIRED
@@ -64,10 +51,14 @@ class Command(BaseCommand):
                     f"Erreur lors de la suppression des pièces jointes pour l'orientation {orientation.id}: {e}"
                 )
 
-            if orientation.should_send_email:
+            email_cutoff_date = timezone.localdate() - timedelta(days=60)
+            if orientation.creation_date.date() >= email_cutoff_date:
                 emails_attempted += 1
+
                 try:
-                    send_orientation_expiration_emails(orientation, start_date)
+                    send_orientation_expiration_emails(
+                        orientation, effective_start_date
+                    )
                     orientation.last_reminder_email_sent = timezone.now()
                     emails_sent += 1
                 except Exception as e:
