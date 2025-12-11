@@ -40,10 +40,7 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
     @patch(
         "dora.orientations.management.commands.close_expired_orientations.send_orientation_expiration_emails"
     )
-    @patch("dora.orientations.models.Orientation.delete_attachments")
-    def test_should_close_expired_orientations_and_send_emails(
-        self, mock_delete_attachments, mock_send_emails
-    ):
+    def test_should_close_expired_orientations_and_send_emails(self, mock_send_emails):
         with freeze_time("2022-02-01"):
             expected_processing_time = timezone.now()
 
@@ -54,7 +51,6 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
             self.assertEqual(
                 self.expired_orientation_1.status, OrientationStatus.EXPIRED
             )
-            # This proves the command set processing_date, not that it was already this value
             self.assertEqual(
                 self.expired_orientation_1.processing_date, expected_processing_time
             )
@@ -82,8 +78,6 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
             mock_send_emails.call_args_list[1][0][1],
             self.orientation_2_start_date,
         )
-
-        self.assertEqual(mock_delete_attachments.call_count, 2)
 
     def test_should_not_close_unexpired_orientations(self):
         with freeze_time(self.starting_date):

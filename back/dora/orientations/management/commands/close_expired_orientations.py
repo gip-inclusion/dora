@@ -42,8 +42,6 @@ class Command(BaseCommand):
 
                     orientation.set_status(OrientationStatus.EXPIRED)
 
-                    orientation.delete_attachments()
-
                     self.stdout.write(f"L'orientation {orientation.id} a été clôturée.")
 
                     transaction.on_commit(
