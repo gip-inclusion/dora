@@ -41,8 +41,7 @@ class Command(BaseCommand):
                 orientation.processing_date or orientation.creation_date
             )
 
-            orientation.status = OrientationStatus.EXPIRED
-            orientation.processing_date = timezone.now()
+            orientation.set_status(OrientationStatus.EXPIRED)
 
             try:
                 orientation.delete_attachments()
