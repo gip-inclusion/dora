@@ -1,4 +1,5 @@
 import logging
+import textwrap
 from datetime import timedelta
 
 import requests
@@ -839,7 +840,9 @@ class BookmarkSerializer(BookmarkListSerializer):
                 "postal_code": di_service["code_postal"],
                 "city": di_service["commune"],
                 "name": di_service["nom"],
-                "shortDesc": di_service["presentation_resume"] or "",
+                "shortDesc": textwrap.shorten(
+                    di_service["description"], width=200, placeholder="…"
+                ),
                 "source": di_service["source"],
             }
 
