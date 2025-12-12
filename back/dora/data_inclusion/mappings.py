@@ -48,6 +48,12 @@ DI_TO_DORA_DIFFUSION_ZONE_TYPE_MAPPING = {
 # On pourrait tout de même implémenter les mappings avec des serializers basés sur ceux existants.
 
 
+def shorten_and_clean_description(description: str) -> str:
+    shortened = textwrap.shorten(description, width=250, placeholder="…")
+    cleaned = shortened.replace("#", "")  # Remove markdown headers
+    return cleaned
+
+
 def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
     # On transforme les champs nécessaires à l'affichage des resultats de recherche au format DORA
     # (c.a.d qu'on veut un objet similaire à ce que renvoie le SearchResultSerializer)
@@ -89,9 +95,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         "funding_labels": [],
         "modification_date": service_data["date_maj"],
         "name": service_data["nom"],
-        "short_desc": textwrap.shorten(
-            service_data["description"], width=200, placeholder="…"
-        )
+        "short_desc": shorten_and_clean_description(service_data["description"])
         if service_data["description"]
         else "",
         "slug": service_data["id"],
@@ -338,9 +342,7 @@ def map_service(service_data: dict, is_authenticated: bool) -> dict:
         "remote_url": None,
         "requirements": requirements,
         "requirements_display": requirements_display,
-        "short_desc": textwrap.shorten(
-            service_data["description"], width=200, placeholder="…"
-        )
+        "short_desc": shorten_and_clean_description(service_data["description"])
         if service_data["description"]
         else "",
         "slug": service_data["id"],
