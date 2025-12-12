@@ -19,26 +19,23 @@
     data: PageData;
   }
 
-  let { data = $bindable() }: Props = $props();
+  let { data: initialData }: Props = $props();
+  let data = $state(initialData);
 
   let modalAddUserIsOpen = $state(false);
 
-  let showNoMemberNotice = $state(
+  let showNoMemberNotice = $derived(
     !hasAtLeastTwoMembersOrInvitedMembers(data.members, data.putativeMembers)
   );
 
   async function handleRefreshMemberList() {
-    data.members = await getMembers($structure.slug);
-    data.putativeMembers = await getPutativeMembers($structure.slug);
-
-    showNoMemberNotice = !hasAtLeastTwoMembersOrInvitedMembers(
-      data.members,
-      data.putativeMembers
-    );
+    data.members = (await getMembers($structure.slug)) ?? undefined;
+    data.putativeMembers =
+      (await getPutativeMembers($structure.slug)) ?? undefined;
   }
 
-  function sortedMembers(items) {
-    return items.sort((a, b) => {
+  function sortMembers(items) {
+    return [...items].sort((a, b) => {
       if (a.isAdmin && !b.isAdmin) {
         return -1;
       }
@@ -50,6 +47,13 @@
       return nameA.localeCompare(nameB, "fr");
     });
   }
+
+  let sortedMembersList = $derived(
+    data.members ? sortMembers(data.members) : []
+  );
+  let sortedPutativeMembersList = $derived(
+    data.putativeMembers ? sortMembers(data.putativeMembers) : []
+  );
 
   let canAdd = $derived($structure.canEditMembers);
 </script>
@@ -85,7 +89,7 @@
 
     <div class="mb-s32 mt-s32 gap-s8 flex flex-col">
       {#if canAdd && data.putativeMembers}
-        {#each sortedMembers(data.putativeMembers) as member}
+        {#each sortedPutativeMembersList as member}
           {#if member.invitedByAdmin}
             <MemberInvited
               {member}
@@ -101,12 +105,12 @@
           {/if}
         {/each}
       {/if}
-      {#each sortedMembers(data.members) as member}
+      {#each sortedMembersList as member}
         <MemberStandard
           {member}
           structureSlug={data.structure.slug}
           onRefresh={handleRefreshMemberList}
-          isMyself={member.user.email === $userInfo.email}
+          isMyself={member.user.email === $userInfo?.email}
           readOnly={!$structure.canEditMembers}
         />
       {/each}
