@@ -24,7 +24,9 @@ class Command(BaseCommand):
 
         expired_orientations = (
             Orientation.objects.alias(
-                effective_start_date=Coalesce("processing_date", "creation_date")
+                effective_start_date=Coalesce(
+                    "processing_date__date", "creation_date__date"
+                )
             )
             .filter(
                 effective_start_date__lte=expiration_date,
