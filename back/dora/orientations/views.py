@@ -313,6 +313,12 @@ class OrientationExportView(APIView):
     ) -> Response:
         orientations = (
             Orientation.objects.filter(service__structure=structure)
+            .exclude(
+                status__in=[
+                    OrientationStatus.MODERATION_PENDING,
+                    OrientationStatus.MODERATION_REJECTED,
+                ]
+            )
             .order_by("-creation_date")
             .select_related("service__structure", "prescriber_structure", "prescriber")
         )
