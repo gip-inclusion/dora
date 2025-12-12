@@ -1,13 +1,8 @@
 import { CANONICAL_URL } from "$lib/env";
-import { setToken } from "$lib/utils/auth";
 import { redirect } from "@sveltejs/kit";
 import { getNextPage } from "../utils";
 
 export const load = ({ url }) => {
-  const token = window.location.hash.substring(1);
-
-  setToken(token);
-
   const nextPage = getNextPage(url);
   url.searchParams.delete("next");
 
