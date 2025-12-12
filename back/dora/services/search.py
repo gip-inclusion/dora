@@ -16,6 +16,7 @@ import dora.services.models as models
 from dora import data_inclusion
 from dora.admin_express.models import City
 from dora.core.constants import WGS84
+from dora.decoupage_administratif.models import Commune
 from dora.services.models import ServiceStatus, ServiceSubCategory
 from dora.structures.models import Structure
 
@@ -24,6 +25,8 @@ from .serializers import FundingLabelSerializer, SearchResultSerializer
 from .utils import filter_services_by_city_code
 
 MAX_DISTANCE = 50
+DEPARTMENT_CODE_SOMME = "80"
+DEPARTMENT_CODE_VOSGES = "88"
 
 
 def _filter_and_annotate_dora_services(services, location, with_remote, with_onsite):
@@ -88,6 +91,34 @@ def _sort_services(services):
         except StopIteration:
             no_more_remote = True
     return results
+
+
+def _filter_di_results(raw_di_results: list, city_code: str) -> list:
+    commune = Commune.objects.filter(code=city_code).first()
+
+    if not commune:
+        return raw_di_results
+
+    department_code = commune.code_departement
+
+    if not department_code:
+        return raw_di_results
+
+    if department_code == DEPARTMENT_CODE_VOSGES:
+        return [
+            result
+            for result in raw_di_results
+            if result["service"]["source"] != "mediation-numerique"
+        ]
+
+    if department_code == DEPARTMENT_CODE_SOMME:
+        return [
+            result
+            for result in raw_di_results
+            if result["service"]["source"] != "mediation-numerique"
+        ]
+
+    return raw_di_results
 
 
 def _get_raw_di_results(
@@ -166,7 +197,9 @@ def _get_raw_di_results(
     if raw_di_results is None:
         return []
 
-    return raw_di_results
+    filtered_di_results = _filter_di_results(raw_di_results, city_code)
+
+    return filtered_di_results
 
 
 def _map_di_results(
