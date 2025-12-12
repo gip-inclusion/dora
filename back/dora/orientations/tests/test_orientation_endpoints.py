@@ -575,6 +575,12 @@ class OrientationsExportTestCase(APITestCase):
 
         baker.make(
             Orientation,
+            service=self.service,
+            status=OrientationStatus.MODERATION_REJECTED,
+        )
+
+        baker.make(
+            Orientation,
             service=make_service(),
         )
 
