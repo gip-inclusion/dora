@@ -381,6 +381,12 @@ class Orientation(models.Model):
     def query_expired(self) -> bool:
         return timezone.now() > self.query_expires_at
 
+    def set_status(self, status: OrientationStatus):
+        self.status = status
+        self.processing_date = timezone.now()
+
+        self.save(update_fields=["status", "processing_date"])
+
 
 class ContactRecipient(models.TextChoices):
     BENEFICIARY = "BÉNÉFICIAIRE", "Bénéficiaire"

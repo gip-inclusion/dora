@@ -118,8 +118,8 @@ class OrientationViewSet(
                 orientation.service.duration_weekly_hours
             )
             orientation.duration_weeks = orientation.service.duration_weeks
-        orientation.status = OrientationStatus.ACCEPTED
-        orientation.save()
+            orientation.save(update_fields=["duration_weekly_hours", "duration_weeks"])
+        orientation.set_status(OrientationStatus.ACCEPTED)
 
         send_orientation_accepted_emails(
             orientation, sanitized_prescriber_message, sanitized_beneficiary_message
@@ -141,8 +141,7 @@ class OrientationViewSet(
         except ValidationError as error:
             raise serializers.ValidationError({"message": error.messages})
 
-        orientation.status = OrientationStatus.REJECTED
-        orientation.save()
+        orientation.set_status(OrientationStatus.REJECTED)
         orientation.rejection_reasons.set(
             RejectionReason.objects.filter(value__in=reasons)
         )

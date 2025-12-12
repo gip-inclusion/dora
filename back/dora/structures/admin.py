@@ -350,8 +350,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
 
         # Passage des demandes d'orientation en attente au statut Ouverte / En cours de traitement et envoi des e-mails
         for orientation in moderation_pending_orientations:
-            orientation.status = OrientationStatus.PENDING
-            orientation.save()
+            orientation.set_status(OrientationStatus.PENDING)
             send_orientation_created_emails(orientation)
 
         # Message de confirmation
