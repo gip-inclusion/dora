@@ -29,9 +29,12 @@
   );
 
   async function handleRefreshMemberList() {
-    data.members = (await getMembers($structure.slug)) ?? undefined;
-    data.putativeMembers =
-      (await getPutativeMembers($structure.slug)) ?? undefined;
+    const [members, putativeMembers] = await Promise.all([
+      getMembers($structure.slug),
+      getPutativeMembers($structure.slug),
+    ]);
+    data.members = members ?? undefined;
+    data.putativeMembers = putativeMembers ?? undefined;
   }
 
   function sortMembers(items) {
