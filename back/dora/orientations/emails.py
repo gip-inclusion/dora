@@ -357,14 +357,14 @@ def send_orientation_expiration_emails(
     }
 
     send_mail(
-        "Cette demande d’orientation a expiré.",
+        "Cette demande d’orientation a expiré",
         orientation.get_contact_email(),
         mjml2html(render_to_string("orientation-expired-service.mjml", context)),
         tags=["orientation"],
     )
 
     send_mail(
-        "Cette demande d’orientation a été annulée.",
+        "Cette demande d’orientation a été annulée",
         orientation.beneficiary_email,
         mjml2html(render_to_string("orientation-expired-beneficiary.mjml", context)),
         tags=["orientation"],
@@ -372,7 +372,7 @@ def send_orientation_expiration_emails(
 
     for email in {orientation.prescriber.email, orientation.referent_email}:
         send_mail(
-            "Votre demande d’orientation a expiré.",
+            "Votre demande d’orientation a expiré",
             email,
             mjml2html(render_to_string("orientation-expired-prescriber.mjml", context)),
             tags=["orientation"],
