@@ -118,6 +118,7 @@ class OrientationViewSet(
                 orientation.service.duration_weekly_hours
             )
             orientation.duration_weeks = orientation.service.duration_weeks
+            orientation.save(update_fields=["duration_weekly_hours", "duration_weeks"])
         orientation.set_status(OrientationStatus.ACCEPTED)
 
         send_orientation_accepted_emails(

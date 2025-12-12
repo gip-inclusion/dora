@@ -385,7 +385,7 @@ class Orientation(models.Model):
         self.status = status
         self.processing_date = timezone.now()
 
-        self.save()
+        self.save(update_fields=["status", "processing_date"])
 
 
 class ContactRecipient(models.TextChoices):
