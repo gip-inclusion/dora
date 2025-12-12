@@ -13,6 +13,7 @@ import dora.structures.views
 import dora.support.views
 import dora.users.views
 from dora.auth_links.urls import auth_links_patterns
+from dora.nexus.urls import nexus_patterns
 from dora.oidc.urls import oidc_patterns
 
 from .url_converters import InseeCodeConverter, SiretConverter
@@ -122,6 +123,7 @@ urlpatterns = [
     path("oidc/", include("mozilla_django_oidc.urls")),
     # "magic links"
     *auth_links_patterns,
+    *nexus_patterns,
 ]
 
 if settings.PROFILE:
