@@ -7,7 +7,7 @@ django-csp==4.0
 django-filter==25.2
 django-storages==1.14.6
 django-datadog-logger==0.7.3
-boto3==1.42.4
+boto3==1.42.9
 djangorestframework-camel-case==1.4.2
 djangorestframework-gis==1.2.0
 djangorestframework==3.16.1
