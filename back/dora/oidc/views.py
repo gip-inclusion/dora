@@ -64,12 +64,8 @@ def oidc_logged_in(request):
         "httponly": False,
     }
 
-    frontend_domain = None
-    if settings.FRONTEND_URL:
-        parsed_url = urlparse(settings.FRONTEND_URL)
-        frontend_domain = parsed_url.hostname
-    if frontend_domain:
-        cookie_kwargs["domain"] = frontend_domain
+    parsed_frontend_url = urlparse(settings.FRONTEND_URL)
+    cookie_kwargs["domain"] = parsed_frontend_url.hostname
 
     response.set_cookie("token", token.key, **cookie_kwargs)
 
