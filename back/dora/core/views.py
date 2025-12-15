@@ -1,7 +1,9 @@
 import logging
 
+import magic
 from django.conf import settings
 from django.core.files.storage import default_storage
+from django.core.files.uploadedfile import UploadedFile
 from django.shortcuts import get_object_or_404
 from django.utils.crypto import get_random_string
 from django.utils.text import get_valid_filename
@@ -19,14 +21,57 @@ from dora.structures.models import Structure
 logger = logging.getLogger(__name__)
 
 
-def _validate_upload(file_name: str, file_size: int) -> None:
-    if file_size > settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024:
+def _validate_upload(filename: str, file_obj: UploadedFile, structure_id=None) -> None:
+    if file_obj.size > settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024:
+        logger.warning(
+            "file_upload_rejected",
+            extra={
+                "reason": "FILE_TOO_BIG",
+                "size": file_obj.size,
+                "max_allowed": settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024,
+                "structure_id": structure_id,
+            },
+        )
         raise ValidationError("FILE_TOO_BIG")
-    if (
-        "." not in file_name
-        or file_name.split(".")[-1] not in settings.ALLOWED_UPLOADED_FILES_EXTENSIONS
-    ):
+
+    if len(filename) > settings.MAX_FILENAME_LENGTH:
+        raise ValidationError("FILENAME_TOO_LONG")
+
+    if "." not in filename:
+        raise ValidationError("MISSING_EXTENSION")
+
+    declared_extension = filename.rsplit(".", 1)[-1].lower()
+    if declared_extension not in settings.ALLOWED_UPLOADED_FILES_EXTENSIONS:
+        logger.warning(
+            "file_upload_rejected",
+            extra={
+                "reason": "INVALID_EXTENSION",
+                "structure_id": structure_id,
+                "filename": filename,
+                "declared_extension": declared_extension,
+            },
+        )
         raise ValidationError("INVALID_EXTENSION")
+
+    mime = magic.Magic(mime=True)
+    detected_mime_type = mime.from_buffer(file_obj.read(2048))
+    file_obj.seek(0)
+
+    allowed_extensions_for_mime = settings.ALLOWED_MIME_TYPES.get(
+        detected_mime_type, []
+    )
+    if declared_extension not in allowed_extensions_for_mime:
+        logger.warning(
+            "file_upload_rejected",
+            extra={
+                "reason": "MIME_MISMATCH",
+                "structure_id": structure_id,
+                "filename": filename,
+                "declared_extension": declared_extension,
+                "detected_mime": detected_mime_type,
+            },
+        )
+        raise ValidationError("INVALID_FILE_CONTENT")
 
 
 @api_view(["POST"])
@@ -41,7 +86,7 @@ def upload(request: Request, filename: str, structure_slug: str) -> Response:
         )
 
     file_obj = request.data["file"]
-    _validate_upload(filename, file_obj.size)
+    _validate_upload(filename, file_obj)
     clean_filename = (
         f"{settings.ENVIRONMENT}/{structure.pk}/{get_valid_filename(filename)}"
     )

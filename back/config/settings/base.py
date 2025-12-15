@@ -218,6 +218,7 @@ AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_QUERYSTRING_EXPIRE = 24 * 3600  # secondes
 
 MAX_UPLOAD_SIZE_MB = 6
+MAX_FILENAME_LENGTH = 225
 ALLOWED_UPLOADED_FILES_EXTENSIONS = [
     "doc",
     "docx",
@@ -229,6 +230,17 @@ ALLOWED_UPLOADED_FILES_EXTENSIONS = [
     "xls",
     "xlsx",
 ]
+
+ALLOWED_MIME_TYPES = {
+    "application/pdf": ["pdf"],
+    "application/msword": ["doc"],
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ["docx"],
+    "application/vnd.oasis.opendocument.text": ["odt"],
+    "application/vnd.ms-excel": ["xls"],
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ["xlsx"],
+    "image/png": ["png"],
+    "image/jpeg": ["jpeg", "jpg"],
+}
 
 # Type de clé primaire par défaut :
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
