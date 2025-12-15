@@ -47,7 +47,6 @@ def _validate_upload(filename: str, file_obj: UploadedFile, structure_id=None) -
             extra={
                 "reason": "INVALID_EXTENSION",
                 "structure_id": structure_id,
-                "filename": filename,
                 "declared_extension": declared_extension,
             },
         )
@@ -66,7 +65,6 @@ def _validate_upload(filename: str, file_obj: UploadedFile, structure_id=None) -
             extra={
                 "reason": "MIME_MISMATCH",
                 "structure_id": structure_id,
-                "filename": filename,
                 "declared_extension": declared_extension,
                 "detected_mime": detected_mime_type,
             },
@@ -86,7 +84,7 @@ def upload(request: Request, filename: str, structure_slug: str) -> Response:
         )
 
     file_obj = request.data["file"]
-    _validate_upload(filename, file_obj)
+    _validate_upload(filename, file_obj, structure.id)
     clean_filename = (
         f"{settings.ENVIRONMENT}/{structure.pk}/{get_valid_filename(filename)}"
     )
@@ -99,7 +97,7 @@ def upload(request: Request, filename: str, structure_slug: str) -> Response:
 @permission_classes([IsAuthenticated])
 def safe_upload(request: Request, filename: str) -> Response:
     file_obj = request.data["file"]
-    _validate_upload(filename, file_obj.size)
+    _validate_upload(filename, file_obj)
     clean_filename = f"{settings.ENVIRONMENT}/#orientations/{get_random_string(32)}/{get_valid_filename(filename)}"
     result = default_storage.save(clean_filename, file_obj)
     return Response({"key": result}, status=201)
