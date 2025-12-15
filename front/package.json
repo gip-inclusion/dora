@@ -28,14 +28,14 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
-    "@eslint/js": "^9.39.1",
+    "@eslint/js": "^9.39.2",
     "@iframe-resizer/parent": "^5.5.7",
     "@nazka/map-gl-js-spiderfy": "^1.2.10",
     "@sveltejs/adapter-node": "^5.4.0",
-    "@sveltejs/kit": "^2.49.1",
+    "@sveltejs/kit": "^2.49.2",
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
     "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.1.17",
+    "@tailwindcss/vite": "^4.1.18",
     "@tiptap/core": "^3.13.0",
     "@tiptap/extension-link": "^3.13.0",
     "@tiptap/extension-placeholder": "^3.13.0",
@@ -44,12 +44,12 @@
     "@types/insane": "^1.0.0",
     "@types/js-cookie": "^3.0.6",
     "@types/showdown": "^2.0.6",
-    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/eslint-plugin": "^8.49.0",
     "@typescript-eslint/parser": "^8.48.0",
     "@zerodevx/svelte-toast": "^0.9.6",
     "bits-ui": "^2.14.4",
     "dayjs": "^1.11.19",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.13.1",
     "globals": "^16.5.0",
@@ -61,7 +61,7 @@
     "maplibre-gl": "^5.14.0",
     "opening_hours": "^3.9.0",
     "prettier": "^3.7.4",
-    "prettier-plugin-svelte": "^3.4.0",
+    "prettier-plugin-svelte": "^3.4.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "remixicon": "^4.7.0",
     "showdown": "^2.1.0",
@@ -96,6 +96,6 @@
     ]
   },
   "dependencies": {
-    "@sentry/sveltekit": "^10.29.0"
+    "@sentry/sveltekit": "^10.30.0"
   }
 }
