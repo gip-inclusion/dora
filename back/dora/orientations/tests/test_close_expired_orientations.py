@@ -1,6 +1,6 @@
 from datetime import timedelta
 from io import StringIO
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 from django.core import mail
 from django.core.management import call_command
@@ -27,7 +27,6 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
             )
 
             self.orientation_2_start_date = timezone.now() - timedelta(days=41)
-
             self.expired_orientation_2 = make_orientation(
                 creation_date=timezone.now() - timedelta(days=51),
                 processing_date=self.orientation_2_start_date,
@@ -65,18 +64,11 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
 
         self.assertEqual(mock_send_emails.call_count, 2)
         self.assertEqual(
-            mock_send_emails.call_args_list[0][0][0], self.expired_orientation_1
-        )
-        self.assertEqual(
-            mock_send_emails.call_args_list[0][0][1],
-            self.orientation_1_start_date,
-        )
-        self.assertEqual(
-            mock_send_emails.call_args_list[1][0][0], self.expired_orientation_2
-        )
-        self.assertEqual(
-            mock_send_emails.call_args_list[1][0][1],
-            self.orientation_2_start_date,
+            mock_send_emails.call_args_list,
+            [
+                call(self.expired_orientation_1, self.orientation_1_start_date),
+                call(self.expired_orientation_2, self.orientation_2_start_date),
+            ],
         )
 
     def test_should_not_close_unexpired_orientations(self):
