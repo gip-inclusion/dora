@@ -35,9 +35,11 @@ def validate_file_extension(filename: str, structure_id=None):
 
 
 def validate_file_content(filename: str, file_obj: UploadedFile, structure_id=None):
-    mime = magic.Magic(mime=True)
-    detected_mime_type = mime.from_buffer(file_obj.read(2048))
+    buffer = file_obj.read(4096)
+
     file_obj.seek(0)
+
+    detected_mime_type = magic.from_buffer(buffer, mime=True)
 
     declared_extension = filename.rsplit(".", 1)[-1].lower()
     allowed_extensions_for_mime = settings.ALLOWED_MIME_TYPES.get(

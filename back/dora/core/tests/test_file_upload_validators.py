@@ -13,12 +13,10 @@ from dora.core.file_upload_validators import (
 )
 
 
-@patch("dora.core.file_upload_validators.magic.Magic")
+@patch("dora.core.file_upload_validators.magic")
 class ValidateUploadTestCase(TestCase):
     def test_does_not_raise_when_valid_upload(self, mock_magic_bytes):
-        mock_magic_instance = Mock()
-        mock_magic_instance.from_buffer.return_value = "application/pdf"
-        mock_magic_bytes.return_value = mock_magic_instance
+        mock_magic_bytes.from_buffer.return_value = "application/pdf"
 
         file_obj = SimpleUploadedFile("test.pdf", b"content")
         validate_upload("test.pdf", file_obj)  # Should not raise
