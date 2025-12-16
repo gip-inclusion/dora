@@ -26,14 +26,14 @@ class StructureFileUploadTestCase(APITestCase):
 
         self.assertEqual(mock_validate.call_count, 1)
         self.assertEqual(mock_validate.call_args[0][0], "test.pdf")
-        self.assertEqual(mock_validate.call_args[0][1].name, "test.pdf")
+        self.assertEqual(mock_validate.call_args[0][1], ["content"])
         self.assertEqual(mock_validate.call_args[0][2], self.structure.id)
 
         self.assertEqual(mock_save.call_count, 1)
         self.assertEqual(
             mock_save.call_args[0][0], f"local/{self.structure.pk}/test.pdf"
         )
-        self.assertEqual(mock_save.call_args[0][1].name, self.file_mock.name)
+        self.assertEqual(mock_save.call_args[0][1], ["content"])
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data["key"], "upload_key")
 
@@ -84,11 +84,11 @@ class SafeFileUploadTestCase(APITestCase):
 
         self.assertEqual(mock_validate.call_count, 1)
         self.assertEqual(mock_validate.call_args[0][0], "test.pdf")
-        self.assertEqual(mock_validate.call_args[0][1].name, "test.pdf")
+        self.assertEqual(mock_validate.call_args[0][1], ["content"])
 
         self.assertEqual(
             mock_save.call_args[0][0], "local/#orientations/random_string/test.pdf"
         )
-        self.assertEqual(mock_save.call_args[0][1].name, self.file_mock.name)
+        self.assertEqual(mock_save.call_args[0][1], ["content"])
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data["key"], "upload_key")

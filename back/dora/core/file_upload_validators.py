@@ -8,6 +8,12 @@ from django.core.files.uploadedfile import UploadedFile
 logger = logging.getLogger(__name__)
 
 
+def sanitize_for_log(value: str) -> str:
+    if not isinstance(value, str):
+        return value
+    return value.replace("\r", "").replace("\n", "")
+
+
 def validate_file_size(file_size: int, structure_id=None):
     if file_size > settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024:
         extra = {
@@ -26,7 +32,7 @@ def validate_file_extension(filename: str, structure_id=None):
     if declared_extension not in settings.ALLOWED_UPLOADED_FILES_EXTENSIONS:
         extra = {
             "reason": "INVALID_EXTENSION",
-            "declared_extension": declared_extension,
+            "declared_extension": sanitize_for_log(declared_extension),
         }
         if structure_id is not None:
             extra["structure_id"] = structure_id
@@ -49,7 +55,7 @@ def validate_file_content(filename: str, file_obj: UploadedFile, structure_id=No
     if declared_extension not in allowed_extensions_for_mime:
         extra = {
             "reason": "MIME_MISMATCH",
-            "declared_extension": declared_extension,
+            "declared_extension": sanitize_for_log(declared_extension),
             "detected_mime": detected_mime_type,
         }
         if structure_id is not None:
