@@ -1,3 +1,4 @@
+import functools
 from datetime import timedelta
 
 from django.conf import settings
@@ -44,11 +45,13 @@ class Command(BaseCommand):
 
                     orientation.set_status(OrientationStatus.EXPIRED)
 
-                    self.stdout.write(f"L'orientation {orientation.id} a été clôturée.")
+                    self.stdout.write(f"L'orientation {orientation.pk} a été clôturée.")
 
                     transaction.on_commit(
-                        lambda: self.send_email_notifications(
-                            orientation, effective_start_date
+                        functools.partial(
+                            self.send_email_notifications,
+                            orientation,
+                            effective_start_date,
                         )
                     )
 
