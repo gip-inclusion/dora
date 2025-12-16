@@ -5,11 +5,10 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from itoutils.django.nexus.token import decode_token, generate_token
+from itoutils.urls import add_url_params
 from rest_framework import exceptions, permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-
-from dora.core.utils import add_url_params
 
 logger = logging.getLogger(__name__)
 

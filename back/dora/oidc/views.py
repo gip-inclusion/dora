@@ -7,6 +7,7 @@ from django.http.response import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from furl import furl
+from itoutils.urls import add_url_params
 from mozilla_django_oidc.views import (
     OIDCAuthenticationCallbackView,
     OIDCAuthenticationRequestView,
@@ -18,7 +19,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 
 from dora.core.constants import FRONTEND_PC_CALLBACK_URL
-from dora.core.utils import add_url_params
 
 logger = logging.getLogger(__name__)
 

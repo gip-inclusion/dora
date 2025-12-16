@@ -7,7 +7,7 @@ from django.contrib.gis.geos import Point
 
 from dora.core import utils
 from dora.core.constants import WGS84
-from dora.core.utils import add_url_params, address_to_one_line
+from dora.core.utils import address_to_one_line
 
 
 class UtilsTestCase(TestCase):
@@ -222,34 +222,3 @@ class UtilsTestCase(TestCase):
 )
 def test_address_to_one_line(address1, address2, postal_code, city, expected):
     assert address_to_one_line(address1, address2, postal_code, city) == expected
-
-
-def test_add_url_params():
-    base_url = "http://localhost/test?next=/siae/search%3Fdistance%3D100%26city%3Dstrasbourg-67"
-
-    url_test = add_url_params(base_url, {"test": "value"})
-    assert (
-        url_test
-        == "http://localhost/test?next=%2Fsiae%2Fsearch%3Fdistance%3D100%26city%3Dstrasbourg-67&test=value"
-    )
-
-    url_test = add_url_params(base_url, {"mypath": "%2Fvalue%2Fpath"})
-
-    assert url_test == (
-        "http://localhost/test?next=%2Fsiae%2Fsearch%3Fdistance%3D100%26city%3Dstrasbourg-67"
-        "&mypath=%252Fvalue%252Fpath"
-    )
-
-    url_test = add_url_params(base_url, {"mypath": None})
-
-    assert (
-        url_test
-        == "http://localhost/test?next=%2Fsiae%2Fsearch%3Fdistance%3D100%26city%3Dstrasbourg-67"
-    )
-
-    url_test = add_url_params(base_url, {"mypath": ""})
-
-    assert (
-        url_test
-        == "http://localhost/test?next=%2Fsiae%2Fsearch%3Fdistance%3D100%26city%3Dstrasbourg-67&mypath="
-    )
