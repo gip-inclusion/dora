@@ -4,12 +4,12 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
+from itoutils.django.nexus.token import decode_token, generate_token
 from rest_framework import exceptions, permissions, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from dora.core.utils import add_url_params
-from dora.nexus.utils import decode_jwt, generate_jwt
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ def auto_login_in(request):
 
     email = None
     try:
-        claims = decode_jwt(token)
+        claims = decode_token(token)
         email = claims.get("email")
     except ValueError:
         logger.info("Nexus auto login: Invalid auto login token")
@@ -67,7 +67,7 @@ def auto_login_out(request):
         next_url, settings.NEXUS_ALLOWED_REDIRECT_HOSTS, require_https=True
     ):
         redirect_url = add_url_params(
-            next_url, {"auto_login": generate_jwt(request.user)}
+            next_url, {"auto_login": generate_token(request.user)}
         )
         return Response({"redirect_url": redirect_url}, status=status.HTTP_200_OK)
 

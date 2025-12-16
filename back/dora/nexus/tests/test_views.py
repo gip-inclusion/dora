@@ -4,10 +4,10 @@ from urllib.parse import parse_qs, urlencode, urlparse
 import pytest
 from django.conf import settings
 from django.urls import reverse
+from itoutils.django.nexus.token import decode_token, generate_token
 from rest_framework import status
 
 from dora.core.test_utils import make_user
-from dora.nexus.utils import decode_jwt, generate_jwt
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ class TestAutoLoginIn:
 
     def test_jwt_without_email(self, api_client, user):
         """Test avec un token JWT valide mais sans email dans les claims"""
-        with patch("dora.nexus.views.decode_jwt") as mock_decode:
+        with patch("itoutils.django.nexus.token.decode_token") as mock_decode:
             mock_decode.return_value = {}  # Pas d'email dans les claims
             response = api_client.post(
                 reverse("auto-login-in"),
@@ -52,7 +52,7 @@ class TestAutoLoginIn:
 
     def test_user_not_authenticated_with_valid_jwt(self, api_client, user):
         """Test avec un utilisateur non authentifié et un token JWT valide"""
-        token = generate_jwt(user)
+        token = generate_token(user)
         response = api_client.post(
             reverse("auto-login-in"),
             data={"jwt": token},
@@ -69,7 +69,7 @@ class TestAutoLoginIn:
 
     def test_user_not_authenticated_with_valid_jwt_and_next_url(self, api_client, user):
         """Test avec un utilisateur non authentifié, un token valide et un next_url"""
-        token = generate_jwt(user)
+        token = generate_token(user)
         next_url = "/some/path"
         response = api_client.post(
             reverse("auto-login-in"),
@@ -87,7 +87,7 @@ class TestAutoLoginIn:
 
     def test_user_already_authenticated_same_email(self, api_client, user):
         """Test avec un utilisateur déjà authentifié avec le même email"""
-        token = generate_jwt(user)
+        token = generate_token(user)
         api_client.force_authenticate(user=user)
         response = api_client.post(
             reverse("auto-login-in"),
@@ -100,7 +100,7 @@ class TestAutoLoginIn:
         self, api_client, user, other_user
     ):
         """Test avec un utilisateur déjà authentifié avec un email différent"""
-        token = generate_jwt(user)
+        token = generate_token(user)
         api_client.force_authenticate(user=other_user)
         response = api_client.post(
             reverse("auto-login-in"),
@@ -116,7 +116,7 @@ class TestAutoLoginIn:
         self, api_client, user, other_user
     ):
         """Test avec un utilisateur déjà authentifié avec un email différent et un next_url"""
-        token = generate_jwt(user)
+        token = generate_token(user)
         api_client.force_authenticate(user=other_user)
         next_url = "/some/path"
         response = api_client.post(
@@ -129,9 +129,9 @@ class TestAutoLoginIn:
         expected_url = f"{settings.FRONTEND_URL}/auth/pc-logout/"
         assert response.data["redirect_url"] == expected_url
 
-    def test_decode_jwt_raises_value_error(self, api_client):
-        """Test quand decode_jwt lève une ValueError"""
-        with patch("dora.nexus.views.decode_jwt") as mock_decode:
+    def test_decode_token_raises_value_error(self, api_client):
+        """Test quand decode_token lève une ValueError"""
+        with patch("itoutils.django.nexus.token.decode_token") as mock_decode:
             mock_decode.side_effect = ValueError("Invalid token")
             response = api_client.post(
                 reverse("auto-login-in"),
@@ -193,7 +193,7 @@ class TestAutoLoginOut:
 
         # Vérifier que le token JWT est valide
         auto_login_token = query_params["auto_login"][0]
-        claims = decode_jwt(auto_login_token)
+        claims = decode_token(auto_login_token)
         assert claims["email"] == user.email
 
     def test_user_authenticated_with_next_url_and_existing_params(
@@ -264,5 +264,5 @@ class TestAutoLoginOut:
 
         # Vérifier que le token JWT est valide
         auto_login_token = query_params["auto_login"][0]
-        claims = decode_jwt(auto_login_token)
+        claims = decode_token(auto_login_token)
         assert claims["email"] == user.email
