@@ -56,7 +56,7 @@ def validate_file_content(filename: str, file_obj: UploadedFile, structure_id=No
         extra = {
             "reason": "MIME_MISMATCH",
             "declared_extension": sanitize_for_log(declared_extension),
-            "detected_mime": detected_mime_type,
+            "detected_mime": sanitize_for_log(detected_mime_type),
         }
         if structure_id is not None:
             extra["structure_id"] = structure_id
