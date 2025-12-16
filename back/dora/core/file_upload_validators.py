@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 def sanitize_for_log(value: str) -> str:
     if not isinstance(value, str):
         value = str(value)
-    return re.sub(r"[\x00-\x1f\x7f]", "", value)
+    value = value.replace("\r", "").replace("\n", "")
+    return re.sub(r"[\x00-\x1f\x7f\u2028\u2029]", "", value)
 
 
 def validate_file_size(file_size: int, structure_id=None):
