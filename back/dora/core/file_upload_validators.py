@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def sanitize_for_log(value: str) -> str:
+    """Supprimer les caractères de contrôle pour prévenir l'injection de logs."""
     if not isinstance(value, str):
         value = str(value)
     value = value.replace("\r", "").replace("\n", "")
@@ -17,11 +18,13 @@ def sanitize_for_log(value: str) -> str:
 
 
 def validate_file_size(file_size: int, structure_id=None):
-    if file_size > settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024:
+    max_upload_size_bytes = settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024
+
+    if file_size > max_upload_size_bytes:
         extra = {
             "reason": "FILE_TOO_BIG",
             "size": file_size,
-            "max_allowed": settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024,
+            "max_allowed": max_upload_size_bytes,
         }
         if structure_id is not None:
             extra["structure_id"] = structure_id
