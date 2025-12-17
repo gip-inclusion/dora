@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import json
 import os
 
 from botocore.config import Config
@@ -411,6 +412,10 @@ LOGIN_REDIRECT_URL_FAILURE = FRONTEND_URL
 # (essentiellement pour la gestion du `next_url`).
 OIDC_CALLBACK_CLASS = "dora.oidc.views.CustomAuthorizationCallbackView"
 
+# OIDC : permet de préciser quelle est la class/vue en charge de l'initiation de l'authentification
+# (pour l'ajout du paramètre `login_hint`).
+OIDC_AUTHENTICATE_CLASS = "dora.oidc.views.CustomAuthenticationRequestView"
+
 # Notifications :
 # voir management command `process_notification_tasks`
 
@@ -625,13 +630,16 @@ if DJANGO_ADMIN_2FA_ENABLED:
     MIDDLEWARE += ["django_otp.middleware.OTPMiddleware"]  # noqa
 
 
-# Nexus metabase db
+# Nexus
 # ---------------------------------------
 NEXUS_METABASE_DB_HOST = os.getenv("NEXUS_METABASE_DB_HOST")
 NEXUS_METABASE_DB_PORT = os.getenv("NEXUS_METABASE_DB_PORT")
 NEXUS_METABASE_DB_DATABASE = os.getenv("NEXUS_METABASE_DB_DATABASE")
 NEXUS_METABASE_DB_USER = os.getenv("NEXUS_METABASE_DB_USER")
 NEXUS_METABASE_DB_PASSWORD = os.getenv("NEXUS_METABASE_DB_PASSWORD")
+nexus_key = os.getenv("NEXUS_AUTO_LOGIN_KEY")
+NEXUS_AUTO_LOGIN_KEY = json.loads(nexus_key) if nexus_key else None
+NEXUS_ALLOWED_REDIRECT_HOSTS = os.getenv("NEXUS_ALLOWED_REDIRECT_HOSTS", "").split(",")
 
 
 # API de découpage administratif
