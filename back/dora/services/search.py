@@ -134,12 +134,7 @@ def _filter_di_results(raw_di_results: list, city_code: str) -> list:
     if not commune:
         return raw_di_results
 
-    department_code = commune.code_departement
-
-    if not department_code:
-        return raw_di_results
-
-    if department_code == DEPARTMENT_CODE_VOSGES:
+    if commune.code_departement == DEPARTMENT_CODE_VOSGES:
         # Exclusion des services mediation-numerique
         return [
             result
@@ -147,7 +142,7 @@ def _filter_di_results(raw_di_results: list, city_code: str) -> list:
             if result["service"]["source"] != "mediation-numerique"
         ]
 
-    if department_code == DEPARTMENT_CODE_SOMME:
+    if commune.code_departement == DEPARTMENT_CODE_SOMME:
         # Exclusion des services mediation-numerique, sauf les services de France Services
         return [
             result
