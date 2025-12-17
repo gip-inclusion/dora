@@ -67,7 +67,7 @@ def _extract_file_from_multipart(file_obj: UploadedFile) -> UploadedFile:
 
 def validate_file_content(filename: str, file_obj: UploadedFile, structure_id=None):
     extracted_file = _extract_file_from_multipart(file_obj)
-    buffer = extracted_file.read(4096)
+    buffer = extracted_file.read(settings.FILE_VALIDATION_BUFFER_LENGTH)
 
     extracted_file.seek(0)
 
