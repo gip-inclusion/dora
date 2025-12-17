@@ -22,7 +22,9 @@ class StructureFileUploadTestCase(APITestCase):
 
     @patch("dora.core.views.default_storage.save", return_value="upload_key")
     def test_structure_file_upload(self, mock_save, mock_validate):
-        response = self.client.post(self.url, {"file": self.file_mock})
+        response = self.client.post(
+            self.url, {"file": self.file_mock}, format="multipart"
+        )
 
         self.assertEqual(mock_validate.call_count, 1)
         self.assertEqual(mock_validate.call_args[0][0], "test.pdf")
@@ -42,7 +44,9 @@ class StructureFileUploadTestCase(APITestCase):
 
         self.client.force_authenticate(user=non_member_user)
 
-        response = self.client.post(self.url, {"file": self.file_mock})
+        response = self.client.post(
+            self.url, {"file": self.file_mock}, format="multipart"
+        )
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(
@@ -58,7 +62,9 @@ class StructureFileUploadTestCase(APITestCase):
 
         self.client.force_authenticate(user=department_manager)
 
-        response = self.client.post(self.url, {"file": self.file_mock})
+        response = self.client.post(
+            self.url, {"file": self.file_mock}, format="multipart"
+        )
 
         self.assertEqual(response.status_code, 201)
 
@@ -78,7 +84,9 @@ class SafeFileUploadTestCase(APITestCase):
     @patch("dora.core.views.get_random_string", return_value="random_string")
     @patch("dora.core.views.default_storage.save", return_value="upload_key")
     def test_safe_file_upload(self, mock_save, mock_random_string, mock_validate):
-        response = self.client.post(self.url, {"file": self.file_mock})
+        response = self.client.post(
+            self.url, {"file": self.file_mock}, format="multipart"
+        )
 
         self.assertEqual(mock_save.call_count, 1)
 
