@@ -240,9 +240,7 @@ def _get_raw_di_results(
     if raw_di_results is None:
         return []
 
-    filtered_di_results = _filter_di_results(raw_di_results, city_code)
-
-    return filtered_di_results
+    return _filter_di_results(raw_di_results, city_code)
 
 
 def _map_di_results(
