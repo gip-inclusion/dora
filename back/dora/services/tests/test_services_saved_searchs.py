@@ -19,10 +19,10 @@ from dora.services.management.commands.send_saved_searches_notifications import 
 from ..models import SavedSearch, SavedSearchFrequency
 
 SAVE_SEARCH_ARGS = {
-    "category": "accompagnement-social-et-professionnel-personnalise",
+    "category": "choisir-un-metier",
     "subcategories": [
-        "accompagnement-social-et-professionnel-personnalise--definition-du-projet-professionnel",
-        "accompagnement-social-et-professionnel-personnalise--parcours-d-insertion-socioprofessionnel",
+        "choisir-un-metier--confirmer-son-choix-de-metier",
+        "choisir-un-metier--connaitre-les-opportunites-demploi",
     ],
     "city_code": "58211",
     "city_label": "Poil (58)",
@@ -57,21 +57,6 @@ class ServiceSavedSearchTestCase(APITestCase):
             self.assertEqual(response.status_code, 400)
 
     def test_create_search(self):
-        baker.make(
-            "ServiceCategory",
-            value=SAVE_SEARCH_ARGS.get("category"),
-            label="Mobilite",
-        )
-        baker.make(
-            "ServiceSubCategory",
-            value=SAVE_SEARCH_ARGS.get("subcategories")[0],
-            label="cat1--sub1",
-        )
-        baker.make(
-            "ServiceSubCategory",
-            value=SAVE_SEARCH_ARGS.get("subcategories")[1],
-            label="cat1--sub2",
-        )
         baker.make(
             "FundingLabel",
             value=SAVE_SEARCH_ARGS.get("funding_labels")[0],

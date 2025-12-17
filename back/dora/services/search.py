@@ -90,6 +90,40 @@ def _sort_services(services):
     return results
 
 
+DI_SERVICE_KINDS = {
+    "accompagnement",
+    "aide-financiere",
+    "aide-materielle",
+    "atelier",
+    "formation",
+    "information",
+}
+
+
+def _map_kinds_dora_to_di(kinds: list[str]) -> list[str]:
+    return [kind for kind in kinds if kind in DI_SERVICE_KINDS]
+
+
+FEES_DORA_TO_DI_MAPPING = {
+    "gratuit": "gratuit",
+    "gratuit-sous-conditions": "gratuit",
+    "payant": "payant",
+    "adhesion": "payant",
+}
+
+
+def _map_fees_dora_to_di(fees: list[str]) -> list[str]:
+    return list(
+        set(
+            [
+                FEES_DORA_TO_DI_MAPPING[fee]
+                for fee in fees
+                if fee in FEES_DORA_TO_DI_MAPPING
+            ]
+        )
+    )
+
+
 def _get_raw_di_results(
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
@@ -146,6 +180,9 @@ def _get_raw_di_results(
     # Sinon, on spécifie les sources à récupérer (liste des sources sauf Dora).
     sources = None if with_dora else settings.DATA_INCLUSION_STREAM_SOURCES
 
+    types = _map_kinds_dora_to_di(kinds) if kinds else None
+    frais = _map_fees_dora_to_di(fees) if fees else None
+
     try:
         raw_di_results = di_client.search_services(
             sources=sources,
@@ -155,8 +192,8 @@ def _get_raw_di_results(
             ),
             code_commune=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
-            types=kinds,
-            frais=fees,
+            types=types,
+            frais=frais,
             lat=lat,
             lon=lon,
         )

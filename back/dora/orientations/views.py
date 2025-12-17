@@ -118,8 +118,8 @@ class OrientationViewSet(
                 orientation.service.duration_weekly_hours
             )
             orientation.duration_weeks = orientation.service.duration_weeks
-        orientation.status = OrientationStatus.ACCEPTED
-        orientation.save()
+            orientation.save(update_fields=["duration_weekly_hours", "duration_weeks"])
+        orientation.set_status(OrientationStatus.ACCEPTED)
 
         send_orientation_accepted_emails(
             orientation, sanitized_prescriber_message, sanitized_beneficiary_message
@@ -141,8 +141,7 @@ class OrientationViewSet(
         except ValidationError as error:
             raise serializers.ValidationError({"message": error.messages})
 
-        orientation.status = OrientationStatus.REJECTED
-        orientation.save()
+        orientation.set_status(OrientationStatus.REJECTED)
         orientation.rejection_reasons.set(
             RejectionReason.objects.filter(value__in=reasons)
         )
@@ -301,7 +300,7 @@ class OrientationExportView(APIView):
         orientations = (
             Orientation.objects.filter(prescriber_structure=structure)
             .order_by("-creation_date")
-            .select_related("service__structure")
+            .select_related("service__structure", "prescriber")
         )
 
         serializer = SentOrientationExportSerializer(orientations, many=True)
@@ -313,8 +312,14 @@ class OrientationExportView(APIView):
     ) -> Response:
         orientations = (
             Orientation.objects.filter(service__structure=structure)
+            .exclude(
+                status__in=[
+                    OrientationStatus.MODERATION_PENDING,
+                    OrientationStatus.MODERATION_REJECTED,
+                ]
+            )
             .order_by("-creation_date")
-            .select_related("service__structure", "prescriber_structure")
+            .select_related("service__structure", "prescriber_structure", "prescriber")
         )
 
         serializer = ReceivedOrientationExportSerializer(orientations, many=True)

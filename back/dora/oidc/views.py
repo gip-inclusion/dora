@@ -1,5 +1,5 @@
 import logging
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 
 from django.conf import settings
 from django.core.exceptions import SuspiciousOperation
@@ -55,10 +55,21 @@ def oidc_logged_in(request):
         )
         redirect_uri += "&" + urlencode(url_params)
 
-    redirect_uri += f"#{token.key}"
+    response = HttpResponseRedirect(redirect_to=redirect_uri)
 
-    # on redirige (pour l'instant) vers le front en faisant passer le token DRF
-    return HttpResponseRedirect(redirect_to=redirect_uri)
+    cookie_kwargs = {
+        "path": "/",
+        "samesite": "Lax",
+        "secure": True,
+        "httponly": False,
+    }
+
+    parsed_frontend_url = urlparse(settings.FRONTEND_URL)
+    cookie_kwargs["domain"] = parsed_frontend_url.hostname
+
+    response.set_cookie("token", token.key, **cookie_kwargs)
+
+    return response
 
 
 @api_view(["GET"])

@@ -245,7 +245,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "json": {"()": "dora.logs.utils.RedactUserInformationDataDogJSONFormatter"},
+        "json": {"()": "itoutils.django.logging.DataDogJSONFormatter"},
     },
     "handlers": {
         "console": {"class": "logging.StreamHandler", "formatter": "json"},
@@ -469,9 +469,12 @@ SUPPORT_EMAIL = os.getenv("SUPPORT_EMAIL")
 
 SUPPORT_LINK = "https://aide.dora.inclusion.beta.gouv.fr"
 
-# Rientations :
+# Orientations :
 ORIENTATION_SUPPORT_LINK = os.getenv("ORIENTATION_SUPPORT_LINK")
 ORIENTATION_EMAILS_DEBUG = os.getenv("ORIENTATION_EMAILS_DEBUG") == "true"
+ORIENTATION_EXPIRATION_PERIOD_DAYS = int(
+    os.getenv("ORIENTATION_EXPIRATION_PERIOD_DAYS", 30)
+)
 ORIENTATION_SIRENE_BLACKLIST = [
     # France Travail
     "130005481",
