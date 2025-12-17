@@ -198,6 +198,7 @@ STORAGES = {
                 request_checksum_calculation="when_required",
                 response_checksum_validation="when_required",
             ),
+            "object_parameters": {"ContentDisposition": "attachment"},
         },
     },
     "staticfiles": {
