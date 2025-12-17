@@ -19,6 +19,10 @@
     {
       "command": "0 0 1 * * tools/import-decoupage-administratif.sh",
       "size": "S"
+    },
+    {
+      "command": "0 8 * * * tools/close-expired-orientations.sh",
+      "size": "S"
     }
   ]
 }

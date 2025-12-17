@@ -1,0 +1,29 @@
+{% extends "orientation-email-base.mjml" %}
+
+{% block preview %}
+  Expiration de la demande d’orientation à {{ data.get_structure_name }}
+{% endblock %}
+
+{% block title %}
+  Votre demande d’orientation pour {{ data.get_beneficiary_full_name }} est restée sans réponse.
+{% endblock %}
+
+{% block content %}
+  <p>
+    <strong>Bonjour,</strong>
+  </p>
+  <p>
+    La structure {{ data.get_structure_name }} n’a pas répondu dans le délai limite des {{ expiration_period_days }} jours à votre demande d’orientation pour {{ data.get_beneficiary_full_name }} auprès du service {{ data.get_service_name }}.
+  </p>
+
+  <p>Cette demande a été automatiquement annulée.</p>
+
+  <p>Vous pouvez rechercher un autre service pour votre bénéficiaire.</p>
+{% endblock %}
+
+{% block cta %}
+  <mj-button mj-class="cta" href="{{ search_link }}">
+    Rechercher un service
+  </mj-button>
+  <mj-spacer height="24px"/>
+{% endblock %}
