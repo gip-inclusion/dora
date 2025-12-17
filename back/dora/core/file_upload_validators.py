@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def sanitize_for_log(value: str) -> str:
-    """Supprimer les caractères de contrôle pour prévenir l'injection de logs."""
+    """Supprime les caractères de contrôle pour prévenir l'injection de logs."""
     if not isinstance(value, str):
         value = str(value)
     value = value.replace("\r", "").replace("\n", "")
