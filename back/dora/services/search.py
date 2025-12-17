@@ -27,6 +27,7 @@ from .utils import filter_services_by_city_code
 MAX_DISTANCE = 50
 DEPARTMENT_CODE_SOMME = "80"
 DEPARTMENT_CODE_VOSGES = "88"
+FRANCE_SERVICES_STRUCTURE_ID_PREFIX = "mediation-numerique--France-Services"
 
 
 def _filter_and_annotate_dora_services(services, location, with_remote, with_onsite):
@@ -153,7 +154,7 @@ def _filter_di_results(raw_di_results: list, city_code: str) -> list:
             for result in raw_di_results
             if result["service"]["source"] != "mediation-numerique"
             or result["service"]["structure"]["id"].startswith(
-                "mediation-numerique--France-Services"
+                FRANCE_SERVICES_STRUCTURE_ID_PREFIX
             )
         ]
 
