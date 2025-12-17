@@ -16,6 +16,7 @@ import dora.services.models as models
 from dora import data_inclusion
 from dora.admin_express.models import City
 from dora.core.constants import WGS84
+from dora.decoupage_administratif.models import Commune
 from dora.services.models import ServiceStatus, ServiceSubCategory
 from dora.structures.models import Structure
 
@@ -24,6 +25,10 @@ from .serializers import FundingLabelSerializer, SearchResultSerializer
 from .utils import filter_services_by_city_code
 
 MAX_DISTANCE = 50
+DEPARTMENT_CODE_SOMME = "80"
+DEPARTMENT_CODE_VOSGES = "88"
+MEDIATION_NUMERIQUE_SOURCE = "mediation-numerique"
+FRANCE_SERVICES_STRUCTURE_ID_PREFIX = "mediation-numerique--France-Services"
 
 
 def _filter_and_annotate_dora_services(services, location, with_remote, with_onsite):
@@ -124,6 +129,34 @@ def _map_fees_dora_to_di(fees: list[str]) -> list[str]:
     )
 
 
+def _filter_di_results(raw_di_results: list, city_code: str) -> list:
+    commune = Commune.objects.filter(code=city_code).first()
+
+    if not commune:
+        return raw_di_results
+
+    if commune.code_departement == DEPARTMENT_CODE_VOSGES:
+        # Exclusion des services mediation-numerique
+        return [
+            result
+            for result in raw_di_results
+            if result["service"]["source"] != MEDIATION_NUMERIQUE_SOURCE
+        ]
+
+    if commune.code_departement == DEPARTMENT_CODE_SOMME:
+        # Exclusion des services mediation-numerique, sauf les services de France Services
+        return [
+            result
+            for result in raw_di_results
+            if result["service"]["source"] != MEDIATION_NUMERIQUE_SOURCE
+            or result["service"]["structure"]["id"].startswith(
+                FRANCE_SERVICES_STRUCTURE_ID_PREFIX
+            )
+        ]
+
+    return raw_di_results
+
+
 def _get_raw_di_results(
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
@@ -203,7 +236,7 @@ def _get_raw_di_results(
     if raw_di_results is None:
         return []
 
-    return raw_di_results
+    return _filter_di_results(raw_di_results, city_code)
 
 
 def _map_di_results(
