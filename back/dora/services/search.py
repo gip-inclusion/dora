@@ -27,6 +27,7 @@ from .utils import filter_services_by_city_code
 MAX_DISTANCE = 50
 DEPARTMENT_CODE_SOMME = "80"
 DEPARTMENT_CODE_VOSGES = "88"
+MEDIATION_NUMERIQUE_SOURCE = "mediation-numerique"
 FRANCE_SERVICES_STRUCTURE_ID_PREFIX = "mediation-numerique--France-Services"
 
 
@@ -139,7 +140,7 @@ def _filter_di_results(raw_di_results: list, city_code: str) -> list:
         return [
             result
             for result in raw_di_results
-            if result["service"]["source"] != "mediation-numerique"
+            if result["service"]["source"] != MEDIATION_NUMERIQUE_SOURCE
         ]
 
     if commune.code_departement == DEPARTMENT_CODE_SOMME:
@@ -147,7 +148,7 @@ def _filter_di_results(raw_di_results: list, city_code: str) -> list:
         return [
             result
             for result in raw_di_results
-            if result["service"]["source"] != "mediation-numerique"
+            if result["service"]["source"] != MEDIATION_NUMERIQUE_SOURCE
             or result["service"]["structure"]["id"].startswith(
                 FRANCE_SERVICES_STRUCTURE_ID_PREFIX
             )
