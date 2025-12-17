@@ -122,7 +122,9 @@
       });
 
       // send POST request to server
-      request.send(file);
+      const formData = new FormData();
+      formData.append('file', file);
+      request.send(formData);
     }
   }
 

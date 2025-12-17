@@ -1,11 +1,10 @@
 import logging
 import re
-from io import BytesIO
 
 import magic
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.files.uploadedfile import InMemoryUploadedFile, UploadedFile
+from django.core.files.uploadedfile import UploadedFile
 
 logger = logging.getLogger(__name__)
 
@@ -43,33 +42,10 @@ def validate_file_extension(filename: str, structure_id=None):
         raise ValidationError("INVALID_EXTENSION")
 
 
-def _extract_file_from_multipart(file_obj: UploadedFile) -> UploadedFile:
-    file_obj.seek(0)
-    content = file_obj.read()
-
-    header_end = content.find(b"\r\n\r\n")
-    if header_end != -1:
-        actual_content = content[header_end + 4 :]
-
-        clean_file = InMemoryUploadedFile(
-            file=BytesIO(actual_content),
-            field_name=file_obj.field_name if hasattr(file_obj, "field_name") else None,
-            name=file_obj.name,
-            content_type=file_obj.content_type,
-            size=len(actual_content),
-            charset=file_obj.charset if hasattr(file_obj, "charset") else None,
-        )
-        return clean_file
-
-    file_obj.seek(0)
-    return file_obj
-
-
 def validate_file_content(filename: str, file_obj: UploadedFile, structure_id=None):
-    extracted_file = _extract_file_from_multipart(file_obj)
-    buffer = extracted_file.read(settings.FILE_VALIDATION_BUFFER_LENGTH)
+    buffer = file_obj.read(settings.FILE_VALIDATION_BUFFER_LENGTH)
 
-    extracted_file.seek(0)
+    file_obj.seek(0)
 
     detected_mime_type = magic.from_buffer(buffer, mime=True)
 

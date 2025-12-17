@@ -8,7 +8,7 @@ from django.utils.text import get_valid_filename
 from rest_framework import permissions
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 @api_view(["POST"])
-@parser_classes([FileUploadParser])
+@parser_classes([MultiPartParser])
 @permission_classes([IsAuthenticated])
 def upload(request: Request, filename: str, structure_slug: str) -> Response:
     structure = get_object_or_404(Structure.objects.all(), slug=structure_slug)
@@ -41,7 +41,7 @@ def upload(request: Request, filename: str, structure_slug: str) -> Response:
 
 
 @api_view(["POST"])
-@parser_classes([FileUploadParser])
+@parser_classes([MultiPartParser])
 @permission_classes([IsAuthenticated])
 def safe_upload(request: Request, filename: str) -> Response:
     file_obj = request.data["file"]
