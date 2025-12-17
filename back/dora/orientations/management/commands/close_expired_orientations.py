@@ -2,11 +2,11 @@ import functools
 from datetime import timedelta
 
 from django.conf import settings
-from django.core.management import BaseCommand
 from django.db import transaction
 from django.db.models.functions import Coalesce
 from django.utils import timezone
 
+from dora.core.commands import BaseCommand
 from dora.orientations.emails import send_orientation_expiration_emails
 from dora.orientations.models import Orientation, OrientationStatus
 

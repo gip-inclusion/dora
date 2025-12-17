@@ -1,9 +1,9 @@
 import csv
 
 from django.core.exceptions import ValidationError
-from django.core.management import BaseCommand
 from django.db import transaction
 
+from dora.core.commands import BaseCommand
 from dora.core.validators import validate_siret
 from dora.structures.models import Structure, StructureNationalLabel
 

@@ -2,8 +2,8 @@ import logging
 import time
 
 from django.conf import settings
-from django.core.management.base import BaseCommand
 
+from dora.core.commands import BaseCommand
 from dora.notifications.tasks.core import Task
 
 """
