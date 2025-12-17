@@ -67,9 +67,7 @@ class Command(BaseCommand):
     def send_email_notifications(
         self, orientation: Orientation, start_date: str
     ) -> None:
-        email_cutoff_date = timezone.localdate() - timedelta(days=60)
-
-        if orientation.creation_date.date() >= email_cutoff_date:
+        if settings.ORIENTATION_EXPIRATION_EMAILS_ENABLED:
             send_orientation_expiration_emails(orientation, start_date)
             self.stdout.write(
                 f"Des mails ont été envoyés pour l'orientation {orientation.id}."
