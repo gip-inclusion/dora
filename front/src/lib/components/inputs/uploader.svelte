@@ -107,11 +107,17 @@
             message = JSON.parse(target.response)[0].message;
 
             if (message === "INVALID_EXTENSION") {
-              errorMessage = `Le fichier "${file.name}" n’est pas au bon format`;
+              errorMessage = `Le fichier "${file.name}" n'est pas au bon format`;
             } else if (message === "FILE_TOO_BIG") {
               errorMessage = `Le fichier "${file.name}" est trop volumineux`;
+            } else if (message === "INVALID_FILE_CONTENT") {
+              errorMessage = `Le contenu du fichier "${file.name}" ne correspond pas à son extension`;
+            } else if (message === "FILENAME_TOO_LONG") {
+              errorMessage = `Le nom du fichier "${file.name}" est trop long`;
+            } else if (message === "MISSING_EXTENSION") {
+              errorMessage = `Le fichier "${file.name}" doit avoir une extension`;
             } else {
-              errorMessage = `Erreur lors de l’envoi du fichier "${file.name}"`;
+              errorMessage = `Erreur lors de l'envoi du fichier "${file.name}"`;
             }
           } catch {
             errorMessage = `Erreur lors de l’envoi du fichier "${file.name}"`;
@@ -123,7 +129,7 @@
 
       // send POST request to server
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
       request.send(formData);
     }
   }

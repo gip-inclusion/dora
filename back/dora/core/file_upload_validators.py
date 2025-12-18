@@ -3,8 +3,8 @@ import re
 
 import magic
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import UploadedFile
+from rest_framework.exceptions import ValidationError
 
 logger = logging.getLogger(__name__)
 
