@@ -107,7 +107,7 @@
             message = JSON.parse(target.response)[0].message;
 
             if (message === "INVALID_EXTENSION") {
-              errorMessage = `Le fichier "${file.name}" n'est pas au bon format`;
+              errorMessage = `Le fichier "${file.name}" n’est pas au bon format`;
             } else if (message === "FILE_TOO_BIG") {
               errorMessage = `Le fichier "${file.name}" est trop volumineux`;
             } else if (message === "INVALID_FILE_CONTENT") {
