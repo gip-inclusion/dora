@@ -44,6 +44,8 @@ class Command(BaseCommand):
                         orientation.processing_date or orientation.creation_date
                     )
 
+                    orientation.delete_attachments()
+
                     orientation.set_status(OrientationStatus.EXPIRED)
 
                     self.logger.info("L'orientation %s a été clôturée.", orientation.pk)
