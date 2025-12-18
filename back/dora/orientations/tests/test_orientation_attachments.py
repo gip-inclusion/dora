@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from rest_framework import serializers
 
-from dora.core.test_utils import make_published_service
+from dora.core.test_utils import make_orientation, make_published_service
 from dora.orientations.models import Orientation
 from dora.orientations.serializers import OrientationSerializer
 from dora.services.models import Credential
@@ -25,7 +25,7 @@ def orientation():
         address2="Plateforme de l'inclusion",
         postal_code="75010",
     )
-    return Orientation.objects.create(
+    return make_orientation(
         service=service,
         beneficiary_last_name="Doe",
         beneficiary_first_name="John",
