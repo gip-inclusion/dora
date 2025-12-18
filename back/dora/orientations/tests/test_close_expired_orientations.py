@@ -37,14 +37,33 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
     def call_command():
         call_command("close_expired_orientations", stdout=StringIO())
 
+    @patch("dora.orientations.models.default_storage.delete")
+    @patch("dora.orientations.models.default_storage.exists")
     @patch(
         "dora.orientations.management.commands.close_expired_orientations.send_orientation_expiration_emails"
     )
-    def test_should_close_expired_orientations_and_send_emails(self, mock_send_emails):
+    def test_should_close_expired_orientations_and_send_emails(
+        self, mock_send_emails, mock_exists, mock_delete
+    ):
+        mock_exists.return_value = True
+
+        attachment_paths_1 = [
+            "test_attachment_email_1.txt",
+            "test_attachment_email_2.txt",
+        ]
+        attachment_paths_2 = ["test_attachment_email_3.txt"]
+        self.expired_orientation_1.beneficiary_attachments = attachment_paths_1
+        self.expired_orientation_1.save()
+        self.expired_orientation_2.beneficiary_attachments = attachment_paths_2
+        self.expired_orientation_2.save()
+
+        self.assertEqual(len(self.expired_orientation_1.beneficiary_attachments), 2)
+        self.assertEqual(len(self.expired_orientation_2.beneficiary_attachments), 1)
+
         with freeze_time("2022-02-01"):
             expected_processing_time = timezone.now()
 
-            with self.assertNumQueries(7):
+            with self.assertNumQueries(13):
                 self.call_command()
 
             self.expired_orientation_1.refresh_from_db()
@@ -63,6 +82,14 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
                 self.expired_orientation_2.processing_date, expected_processing_time
             )
 
+        all_attachment_paths = attachment_paths_1 + attachment_paths_2
+        self.assertEqual(mock_delete.call_count, len(all_attachment_paths))
+        for path in all_attachment_paths:
+            mock_delete.assert_any_call(path)
+
+        self.assertEqual(len(self.expired_orientation_1.beneficiary_attachments), 0)
+        self.assertEqual(len(self.expired_orientation_2.beneficiary_attachments), 0)
+
         self.assertEqual(mock_send_emails.call_count, 2)
         self.assertEqual(
             mock_send_emails.call_args_list,
@@ -72,7 +99,11 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
             ],
         )
 
-    def test_should_not_close_unexpired_orientations(self):
+    @patch("dora.orientations.models.default_storage.delete")
+    @patch("dora.orientations.models.default_storage.exists")
+    def test_should_not_close_unexpired_orientations(self, mock_exists, mock_delete):
+        mock_exists.return_value = True
+
         with freeze_time(self.starting_date):
             self.valid_orientation = make_orientation(
                 creation_date=timezone.now() - timedelta(days=1),
@@ -83,6 +114,21 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
                 processing_date=None,
             )
 
+        # Création de pièces jointes pour les orientations non expirées
+        self.valid_orientation.beneficiary_attachments = [
+            "test_attachment_valid_1.txt",
+            "test_attachment_valid_2.txt",
+        ]
+        self.valid_orientation.save()
+        self.orientation_in_moderation.beneficiary_attachments = [
+            "test_attachment_moderation.txt",
+        ]
+        self.orientation_in_moderation.save()
+
+        self.assertEqual(len(self.valid_orientation.beneficiary_attachments), 2)
+        self.assertEqual(len(self.orientation_in_moderation.beneficiary_attachments), 1)
+
+        with freeze_time(self.starting_date):
             self.call_command()
 
             self.valid_orientation.refresh_from_db()
@@ -93,6 +139,12 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
                 self.orientation_in_moderation.status,
                 OrientationStatus.MODERATION_PENDING,
             )
+
+        # Vérification que les pièces jointes des orientations non expirées n'ont pas été supprimées du stockage
+        self.assertEqual(mock_delete.call_count, 0)
+
+        self.assertEqual(len(self.valid_orientation.beneficiary_attachments), 2)
+        self.assertEqual(len(self.orientation_in_moderation.beneficiary_attachments), 1)
 
     @patch(
         "dora.orientations.management.commands.close_expired_orientations.send_orientation_expiration_emails"
