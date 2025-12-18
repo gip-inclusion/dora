@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.messages import get_messages
 from django.core import mail
 from django.urls import reverse
@@ -173,7 +175,11 @@ def test_moderation_approve(admin_client):
     assert response.redirect_chain[-1][0] == pending_moderation_structure_list_url
 
 
-def test_moderation_reject(admin_client):
+@patch("dora.orientations.models.default_storage.exists")
+@patch("dora.orientations.models.default_storage.delete")
+def test_moderation_reject(mock_delete, mock_exists, admin_client):
+    mock_exists.return_value = True
+
     # Création de la structure
     structure = make_structure(
         moderation_status=ModerationStatus.NEED_INITIAL_MODERATION
@@ -213,6 +219,13 @@ def test_moderation_reject(admin_client):
         prescriber=members[0],
         status=OrientationStatus.MODERATION_PENDING,
     )
+
+    attachment_paths_1 = ["test_attachment1.txt", "test_attachment2.txt"]
+    orientation_moderation_pending_1.beneficiary_attachments = attachment_paths_1
+    orientation_moderation_pending_1.save()
+    attachment_paths_2 = ["test_attachment3.txt"]
+    orientation_moderation_pending_2.beneficiary_attachments = attachment_paths_2
+    orientation_moderation_pending_2.save()
 
     # Création d'autres orientations avec les autres statuts
     orientation_moderation_rejected = make_orientation(
@@ -276,6 +289,16 @@ def test_moderation_reject(admin_client):
     assert (
         orientation_moderation_pending_2.status == OrientationStatus.MODERATION_REJECTED
     )
+
+    # Vérification que les pièces jointes des deux orientations avec le statut MODERATION_PENDING ont été supprimées du stockage
+    all_attachment_paths = attachment_paths_1 + attachment_paths_2
+    assert mock_delete.call_count == len(all_attachment_paths)
+    for path in all_attachment_paths:
+        mock_delete.assert_any_call(path)
+
+    # Vérification que la liste des pièces jointes est vide dans les orientations
+    assert len(orientation_moderation_pending_1.beneficiary_attachments) == 0
+    assert len(orientation_moderation_pending_2.beneficiary_attachments) == 0
 
     # Vérification que les autres orientations n'ont pas vu leur statut changer
     assert (
