@@ -1,3 +1,4 @@
 p7zip
 gdal-bin
 libgdal-dev
+libmagic1

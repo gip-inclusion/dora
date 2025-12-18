@@ -54,7 +54,18 @@ Pour Linux:
 ```bash
 sudo apt install graphviz
 ```
+
 Les consignes d'installation sont [ici](https://graphviz.org/download/).'
+
+# Installer libmagic
+Pour Mac:
+```bash
+brew install libmagic
+```
+Pour Linux:
+```bash
+sudo apt-get install libmagic1
+```
 
 # Installer les dépendances
 ```bash

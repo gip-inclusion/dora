@@ -199,6 +199,7 @@ STORAGES = {
                 request_checksum_calculation="when_required",
                 response_checksum_validation="when_required",
             ),
+            "object_parameters": {"ContentDisposition": "attachment"},
         },
     },
     "staticfiles": {
@@ -219,6 +220,8 @@ AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_QUERYSTRING_EXPIRE = 24 * 3600  # secondes
 
 MAX_UPLOAD_SIZE_MB = 6
+MAX_FILENAME_LENGTH = 64
+FILE_VALIDATION_BUFFER_LENGTH = int(os.getenv("FILE_VALIDATION_BUFFER_LENGTH", 2048))
 ALLOWED_UPLOADED_FILES_EXTENSIONS = [
     "doc",
     "docx",
@@ -226,10 +229,23 @@ ALLOWED_UPLOADED_FILES_EXTENSIONS = [
     "png",
     "jpeg",
     "jpg",
+    "ods",
     "odt",
     "xls",
     "xlsx",
 ]
+
+ALLOWED_MIME_TYPES = {
+    "application/pdf": ["pdf"],
+    "application/msword": ["doc"],
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ["docx"],
+    "application/vnd.oasis.opendocument.text": ["odt"],
+    "application/vnd.oasis.opendocument.spreadsheet": ["ods"],
+    "application/vnd.ms-excel": ["xls"],
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ["xlsx"],
+    "image/png": ["png"],
+    "image/jpeg": ["jpeg", "jpg"],
+}
 
 # Type de clé primaire par défaut :
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
