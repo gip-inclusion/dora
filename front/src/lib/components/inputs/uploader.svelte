@@ -117,7 +117,7 @@
             } else if (message === "MISSING_EXTENSION") {
               errorMessage = `Le fichier "${file.name}" doit avoir une extension`;
             } else {
-              errorMessage = `Erreur lors de l'envoi du fichier "${file.name}"`;
+              errorMessage = `Erreur lors du traitement du fichier "${file.name}"`;
             }
           } catch {
             errorMessage = `Erreur lors de l’envoi du fichier "${file.name}"`;
