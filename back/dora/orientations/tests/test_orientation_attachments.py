@@ -8,7 +8,7 @@ from django.core.files.storage import default_storage
 from rest_framework import serializers
 
 from dora.core.test_utils import make_orientation, make_published_service
-from dora.orientations.models import Orientation
+from dora.orientations.models import Orientation, OrientationStatus
 from dora.orientations.serializers import OrientationSerializer
 from dora.services.models import Credential
 
@@ -337,3 +337,44 @@ def test_validate_existing_instance_service():
         serializer.validate(data)
 
     assert "beneficiary_attachments" in exc_info.value.detail
+
+
+@patch("dora.orientations.models.default_storage.delete")
+@patch("dora.orientations.models.default_storage.exists")
+def test_reject_orientation_deletes_attachments(
+    mock_exists, mock_delete, api_client, orientation
+):
+    """Teste que les attachments sont supprimés lorsqu'une orientation est rejetée."""
+    mock_exists.return_value = True
+
+    # Création de plusieurs pièces jointes factices et ajout à l'orientation
+    attachment_paths = ["test_attachment1.txt", "test_attachment2.txt"]
+    orientation.beneficiary_attachments = attachment_paths
+    orientation.save()
+
+    # Vérification que les pièces jointes existent avant le rejet
+    assert len(orientation.beneficiary_attachments) == 2
+
+    # Rejet de l'orientation via l'API
+    url = f"/orientations/{orientation.query_id}/reject/?h={orientation.get_query_id_hash()}"
+    data = {
+        "message": "test_message",
+        "reasons": [],
+    }
+    response = api_client.post(url, data=data, follow=True)
+
+    # Vérification que la requête a réussi
+    assert response.status_code == 204
+
+    # Rechargement de l'orientation depuis la base de données
+    orientation.refresh_from_db()
+
+    # Vérification que toutes les pièces jointes ont été supprimées du stockage
+    assert mock_delete.call_count == len(attachment_paths)
+    for path in attachment_paths:
+        mock_delete.assert_any_call(path)
+
+    # Vérification que la liste des pièces jointes est vide dans l'orientation
+    assert len(orientation.beneficiary_attachments) == 0
+
+    assert orientation.status == OrientationStatus.REJECTED

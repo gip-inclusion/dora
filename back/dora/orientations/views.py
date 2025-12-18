@@ -142,6 +142,7 @@ class OrientationViewSet(
             raise serializers.ValidationError({"message": error.messages})
 
         orientation.set_status(OrientationStatus.REJECTED)
+        orientation.delete_attachments()
         orientation.rejection_reasons.set(
             RejectionReason.objects.filter(value__in=reasons)
         )
