@@ -23,6 +23,10 @@
     {
       "command": "0 8 * * * tools/close-expired-orientations.sh",
       "size": "S"
+    },
+    {
+      "command": "0 2 * * * tools/delete-old-accepted-orientation-attachments.sh",
+      "size": "S"
     }
   ]
 }
