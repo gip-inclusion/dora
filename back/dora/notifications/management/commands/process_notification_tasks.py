@@ -1,4 +1,4 @@
-import logging
+import operator
 import time
 
 from django.conf import settings
@@ -8,7 +8,7 @@ from dora.notifications.tasks.core import Task
 
 """
 Lancement / activation des notifications :
-    - récupère la liste des tâches actuellement enregitrées
+    - récupère la liste des tâches actuellement enregistrées
     - effectue un `run()` sur chaque tâche (rafraichissement, purge, et actions)
 
 Limite d'enregistrements à traiter possible et dry-run par défaut.
@@ -21,8 +21,6 @@ d'environnement sur l'environnement cible :
 
 Ces variables sont définies dans les `settings` de Django.
 """
-
-logger = logging.getLogger("dora.logs.core")
 
 
 class Command(BaseCommand):
@@ -70,10 +68,8 @@ class Command(BaseCommand):
         force = options["force"]
 
         if not (settings.NOTIFICATIONS_ENABLED or force):
-            self.stdout.write(
-                self.style.WARNING(
-                    "Le système de notification n'est pas activé sur cet environnement."
-                )
+            self.logger.info(
+                "Le système de notification n'est pas activé sur cet environnement."
             )
             return
 
@@ -82,34 +78,22 @@ class Command(BaseCommand):
         types = options["types"]
 
         if wet_run:
-            self.stdout.write(self.style.WARNING("PRODUCTION RUN"))
+            self.logger.info("PRODUCTION RUN")
         else:
-            self.stdout.write(self.style.NOTICE("DRY-RUN"))
-            self.stdout.write(
-                self.style.WARNING(
-                    " - les notifications ne sont pas créées dans ce mode"
-                )
-            )
+            self.logger.info("DRY-RUN")
+            self.logger.info(" - les notifications ne sont pas créées dans ce mode")
 
         if force:
-            self.stdout.write(
-                self.style.NOTICE(" - activation FORCÉE des notifications\n")
-            )
+            self.logger.info(" - activation FORCÉE des notifications")
 
         if types:
-            self.stdout.write(
-                self.style.WARNING(f" - tâche(s) sélectionnée(s) : {types}")
-            )
+            self.logger.info(" - tâche(s) sélectionnée(s) : %s", types)
 
         if limit:
-            self.stdout.write(
-                self.style.WARNING(f" - limite de notifications par tâche : {limit}")
-            )
-
-        self.stdout.write()
+            self.logger.info(" - limite de notifications par tâche : %d", limit)
 
         if not Task.registered_tasks():
-            self.stdout.write(" > aucune tâche enregistrée !")
+            self.logger.info(" > aucune tâche enregistrée !")
             return
 
         # Par défaut, tous les types de tâches enregistrés sont sélectionnés
@@ -123,27 +107,21 @@ class Command(BaseCommand):
             ]
 
         if not selected_types:
-            self.stdout.write(
-                self.style.WARNING(
-                    "Aucun type de tâche de notification sélectionné : fin du traitement"
-                )
+            self.logger.info(
+                "Aucun type de tâche de notification sélectionné : fin du traitement"
             )
             return
 
         total_timer = 0
 
-        for task_class in selected_types:
+        for task_class in sorted(
+            selected_types, key=operator.methodcaller("task_type")
+        ):
             task = task_class()
 
-            self.stdout.write(
-                self.style.NOTICE(
-                    f"> {task_class.__name__} ({task_class.task_type()}) :"
-                )
-            )
-            self.stdout.write(
-                self.style.WARNING(
-                    f" > nombre d'éléments candidats : {len(task.candidates())}"
-                )
+            self.logger.info("> %s (%s) :", task_class.__name__, task_class.task_type())
+            self.logger.info(
+                " > nombre d'éléments candidats : %d", len(task.candidates())
             )
 
             timer = time.time()
@@ -153,37 +131,26 @@ class Command(BaseCommand):
             timer = time.time() - timer
 
             if ok:
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f" > {ok} notification(s) traitée(s) en {timer:.2f}s"
-                    )
-                )
+                self.logger.info(" > %d notification(s) traitée(s) en %.2f", ok, timer)
                 total_timer += timer
             else:
-                self.stdout.write(" > aucune notification traitée")
+                self.logger.info(" > aucune notification traitée")
 
             if errors:
-                self.stdout.write(
-                    self.style.ERROR(f" > {errors} notification(s) en erreur")
-                )
+                self.logger.info(" > %s notification(s) en erreur", errors)
             else:
-                self.stdout.write(" > aucune erreur")
+                self.logger.info(" > aucune erreur")
 
             if obsolete:
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f" > {obsolete} notification(s) obsolètes modifiées"
-                    )
-                )
+                self.logger.info(" > %d notification(s) obsolètes modifiées", obsolete)
             else:
-                self.stdout.write(" > aucune notification obsolète")
-
-            self.stdout.write()
+                self.logger.info(" > aucune notification obsolète")
 
             if wet_run:
-                logger.info(
-                    f"process_notification_tasks:{task_class.task_type()}",
-                    {
+                self.logger.info(
+                    "process_notification_tasks:%s",
+                    task_class.task_type(),
+                    extra={
                         "taskType": task_class.task_type(),
                         "nbCandidates": len(task.candidates()),
                         "nbProcessed": ok,
@@ -192,5 +159,3 @@ class Command(BaseCommand):
                         "processingTimeSecs": round(timer, 2),
                     },
                 )
-
-        self.stdout.write(self.style.NOTICE(f"Terminé en {total_timer:.2f}s !"))

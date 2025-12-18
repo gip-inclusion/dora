@@ -15,8 +15,9 @@ class Command(BaseCommand):
     help = "Clôturer les orientations qui sont en cours sans réponse après un délai"
 
     def handle(self, *args, **options):
-        self.stdout.write(
-            f"Clôture des orientations qui sont en cours sans réponse après {settings.ORIENTATION_EXPIRATION_PERIOD_DAYS} jours."
+        self.logger.info(
+            "Clôture des orientations qui sont en cours sans réponse après %d jours.",
+            settings.ORIENTATION_EXPIRATION_PERIOD_DAYS,
         )
 
         expiration_date = timezone.localdate() - timedelta(
@@ -45,7 +46,7 @@ class Command(BaseCommand):
 
                     orientation.set_status(OrientationStatus.EXPIRED)
 
-                    self.stdout.write(f"L'orientation {orientation.pk} a été clôturée.")
+                    self.logger.info("L'orientation %s a été clôturée.", orientation.pk)
 
                     transaction.on_commit(
                         functools.partial(
@@ -56,12 +57,14 @@ class Command(BaseCommand):
                     )
 
             except Exception as e:
-                self.stderr.write(
-                    f"Erreur lors de la clôture de l'orientation {orientation.id}: {e}"
+                self.logger.warning(
+                    "Erreur lors de la clôture de l'orientation %s: %s",
+                    orientation.id,
+                    e,
                 )
 
-        self.stdout.write(
-            f"{len(expired_orientations)} orientations ont été clôturées."
+        self.logger.info(
+            "%d orientations ont été clôturées.", len(expired_orientations)
         )
 
     def send_email_notifications(
@@ -69,6 +72,6 @@ class Command(BaseCommand):
     ) -> None:
         if settings.ORIENTATION_EXPIRATION_EMAILS_ENABLED:
             send_orientation_expiration_emails(orientation, start_date)
-            self.stdout.write(
-                f"Des mails ont été envoyés pour l'orientation {orientation.id}."
+            self.logger.info(
+                "Des mails ont été envoyés pour l'orientation %s.", orientation.id
             )

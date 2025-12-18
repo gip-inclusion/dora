@@ -1,0 +1,14 @@
+# serializer version: 1
+# name: test_management_command[logs]
+  list([
+    'PRODUCTION RUN',
+    'Vérification des orientations de plus de 10 jours…',
+    '0 orientations concernées',
+  ])
+# ---
+# name: test_management_command[output]
+  CaptureResult(
+    err='',
+    out='',
+  )
+# ---
