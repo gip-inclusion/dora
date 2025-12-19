@@ -38,15 +38,13 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
         call_command("close_expired_orientations", stdout=StringIO())
 
     @patch("dora.orientations.models.default_storage.delete")
-    @patch("dora.orientations.models.default_storage.exists")
+    @patch("dora.orientations.models.default_storage.exists", return_value=True)
     @patch(
         "dora.orientations.management.commands.close_expired_orientations.send_orientation_expiration_emails"
     )
     def test_should_close_expired_orientations_and_send_emails(
         self, mock_send_emails, mock_exists, mock_delete
     ):
-        mock_exists.return_value = True
-
         attachment_paths_1 = [
             "test_attachment_email_1.txt",
             "test_attachment_email_2.txt",
@@ -100,10 +98,8 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
         )
 
     @patch("dora.orientations.models.default_storage.delete")
-    @patch("dora.orientations.models.default_storage.exists")
+    @patch("dora.orientations.models.default_storage.exists", return_value=True)
     def test_should_not_close_unexpired_orientations(self, mock_exists, mock_delete):
-        mock_exists.return_value = True
-
         with freeze_time(self.starting_date):
             self.valid_orientation = make_orientation(
                 creation_date=timezone.now() - timedelta(days=1),

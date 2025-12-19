@@ -175,11 +175,9 @@ def test_moderation_approve(admin_client):
     assert response.redirect_chain[-1][0] == pending_moderation_structure_list_url
 
 
-@patch("dora.orientations.models.default_storage.exists")
+@patch("dora.orientations.models.default_storage.exists", return_value=True)
 @patch("dora.orientations.models.default_storage.delete")
 def test_moderation_reject(mock_delete, mock_exists, admin_client):
-    mock_exists.return_value = True
-
     # Création de la structure
     structure = make_structure(
         moderation_status=ModerationStatus.NEED_INITIAL_MODERATION

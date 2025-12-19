@@ -21,12 +21,10 @@ class DeleteOldAcceptedOrientationAttachmentsTestCase(TransactionTestCase):
         call_command("delete_old_closed_orientation_attachments", stdout=StringIO())
 
     @patch("dora.orientations.models.default_storage.delete")
-    @patch("dora.orientations.models.default_storage.exists")
+    @patch("dora.orientations.models.default_storage.exists", return_value=True)
     def test_should_delete_attachments_for_old_closed_orientations(
         self, mock_exists, mock_delete
     ):
-        mock_exists.return_value = True
-
         # Tous les statuts qui doivent être traités par la commande
         closed_statuses = [
             OrientationStatus.ACCEPTED,
