@@ -82,7 +82,7 @@
           {#if title}
             <svelte:element
               this={titleLevel}
-              class="text-f18 mb-s0 leading-32 {types[type].title}"
+              class="text-f18 mb-s0 leading-24 {types[type].title}"
             >
               {title}
             </svelte:element>
