@@ -8,7 +8,7 @@ from dora.orientations.models import Orientation, OrientationStatus
 
 
 class Command(BaseCommand):
-    help = "Supprime les pièces-jointes de orientations acceptées après un délai"
+    help = "Supprime les pièces jointes des orientations acceptées après un certain délai"
 
     def handle(self, *args, **options):
         self.logger.info(
