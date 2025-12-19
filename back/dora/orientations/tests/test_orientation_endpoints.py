@@ -87,6 +87,7 @@ def test_query_validate_service_di(api_client, di_orientation):
 
 
 @freeze_time("2022-01-01")
+@pytest.mark.django_db(transaction=True)
 def test_query_reject(api_client, orientation):
     url = f"/orientations/{orientation.query_id}/reject/"
     response = api_client.post(url, follow=True)

@@ -1,4 +1,8 @@
+import functools
+import logging
+
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.db import transaction
 from django.db.models import Count, Exists, OuterRef, Q
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, permissions, serializers, viewsets
@@ -34,6 +38,8 @@ from .serializers import (
     ReceivedOrientationExportSerializer,
     SentOrientationExportSerializer,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ModeratedOrientationPermission(permissions.BasePermission):
@@ -141,13 +147,30 @@ class OrientationViewSet(
         except ValidationError as error:
             raise serializers.ValidationError({"message": error.messages})
 
-        orientation.set_status(OrientationStatus.REJECTED)
-        orientation.delete_attachments()
-        orientation.rejection_reasons.set(
-            RejectionReason.objects.filter(value__in=reasons)
-        )
+        try:
+            with transaction.atomic():
+                orientation.delete_attachments()
+                orientation.rejection_reasons.set(
+                    RejectionReason.objects.filter(value__in=reasons)
+                )
+                orientation.set_status(OrientationStatus.REJECTED)
 
-        send_orientation_rejected_emails(orientation, sanitized_message)
+                transaction.on_commit(
+                    functools.partial(
+                        send_orientation_rejected_emails, orientation, sanitized_message
+                    )
+                )
+        except Exception as e:
+            logger.error(
+                "Erreur inattendue lors du rejet de l'orientation",
+                {
+                    "orientationId": orientation.id,
+                    "error": str(e),
+                },
+                exc_info=True,
+            )
+            raise
+
         return Response(status=204)
 
     @action(
