@@ -16,6 +16,7 @@
       cssClass: "text-blue-information-dark",
     },
     REFUSÉE: { label: "Refusé", cssClass: "text-error" },
+    EXPIRÉE: { label: "Expirée", cssClass: "text-warning" },
   };
   interface Props {
     orientation: Orientation;
@@ -136,6 +137,18 @@
       >
         <p class="text-f14 text-gray-text text-left">
           Vous ne pouvez plus revenir sur une décision qui a déjà été actée.
+        </p>
+      </Notice>
+    {:else if orientation.status === "EXPIRÉE"}
+      <Notice
+        type="warning"
+        title="N’ayant pas reçu de réponse, cette demande a expiré."
+      >
+        <p class="text-f14 text-gray-text text-left">
+          Une demande d'orientation reçue requiert une réponse du service dans
+          un délai maximal de 30 jours. Passé ce délai, cette demande est
+          automatiquement annulée. Le prescripteur a été tenu informé de cette
+          expiration.
         </p>
       </Notice>
     {/if}
