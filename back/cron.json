@@ -25,7 +25,7 @@
       "size": "S"
     },
     {
-      "command": "0 2 * * * tools/delete-old-accepted-orientation-attachments.sh",
+      "command": "0 2 * * * tools/delete-old-closed-orientation-attachments.sh",
       "size": "S"
     }
   ]
