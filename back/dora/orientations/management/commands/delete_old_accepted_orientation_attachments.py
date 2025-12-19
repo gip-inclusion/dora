@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.logger.info(
-            "Suppression des pièces-jointes des orientations acceptées il y a plus de %d mois.",
+            "Suppression des pièces jointes des orientations acceptées il y a plus de %d mois.",
             settings.ORIENTATION_ATTACHMENTS_EXPIRATION_PERIOD_MONTHS,
         )
 
