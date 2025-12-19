@@ -37,8 +37,8 @@ class Command(BaseCommand):
 
             except Exception as e:
                 self.logger.warning(
-                    "Erreur lors de la suppression des pièces-jointes de l'orientation %s: %s",
-                    orientation.id,
+                    "Erreur lors de la suppression des pièces jointes de l'orientation %s: %s",
+                    orientation.pk,
                     e,
                 )
 
