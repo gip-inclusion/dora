@@ -9,12 +9,13 @@ from dora.orientations.models import Orientation, OrientationStatus
 
 class Command(BaseCommand):
     help = (
-        "Supprime les pièces jointes des orientations acceptées après un certain délai"
+        "Supprime les pièces jointes des orientations terminées (acceptées, rejetées, expirées) "
+        "après un certain délai"
     )
 
     def handle(self, *args, **options):
         self.logger.info(
-            "Suppression des pièces jointes des orientations acceptées il y a plus de %d mois.",
+            "Suppression des pièces jointes des orientations terminées il y a plus de %d mois.",
             settings.ORIENTATION_ATTACHMENTS_EXPIRATION_PERIOD_MONTHS,
         )
 
@@ -24,7 +25,12 @@ class Command(BaseCommand):
 
         orientations = Orientation.objects.filter(
             processing_date__lte=expiration_date,
-            status=OrientationStatus.ACCEPTED,
+            status__in=[
+                OrientationStatus.ACCEPTED,
+                OrientationStatus.MODERATION_REJECTED,
+                OrientationStatus.REJECTED,
+                OrientationStatus.EXPIRED,
+            ],
         )
 
         for orientation in orientations:
@@ -45,7 +51,7 @@ class Command(BaseCommand):
                 )
 
         self.logger.info(
-            "%d orientations acceptées il y a plus de %d mois ont vu leurs pièces jointes supprimées.",
+            "%d orientations terminées il y a plus de %d mois ont vu leurs pièces jointes supprimées.",
             len(orientations),
             settings.ORIENTATION_ATTACHMENTS_EXPIRATION_PERIOD_MONTHS,
         )
