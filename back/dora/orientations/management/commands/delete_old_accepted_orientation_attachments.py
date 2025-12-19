@@ -43,7 +43,7 @@ class Command(BaseCommand):
                 )
 
         self.logger.info(
-            "%d orientations acceptées il y a plus de %d mois ont vu leurs pièces-jointes supprimées.",
+            "%d orientations acceptées il y a plus de %d mois ont vu leurs pièces jointes supprimées.",
             len(orientations),
             settings.ORIENTATION_ATTACHMENTS_EXPIRATION_PERIOD_MONTHS,
         )
