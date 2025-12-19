@@ -31,7 +31,7 @@ class Command(BaseCommand):
                     orientation.delete_attachments()
 
                     self.logger.info(
-                        "Les pièces-jointes de l'orientation %s ont été supprimées.",
+                        "Les pièces jointes de l'orientation %s ont été supprimées.",
                         orientation.pk,
                     )
 
