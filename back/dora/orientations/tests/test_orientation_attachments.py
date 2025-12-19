@@ -93,12 +93,9 @@ def test_delete_attachments(orientation):
 
 
 @only_local
-@patch("dora.orientations.models.default_storage.exists")
+@patch("dora.orientations.models.default_storage.exists", return_value=True)
 @patch("dora.orientations.models.default_storage.delete")
 def test_delete_attachments_with_mock(mock_delete, mock_exists, orientation):
-    # Configurer le mock pour simuler l'existence des pièces jointes
-    mock_exists.return_value = True
-
     # Ajouter des pièces jointes factices à l'orientation
     attachment_paths = ["test_attachment1.txt", "test_attachment2.txt"]
     orientation.beneficiary_attachments.extend(attachment_paths)
@@ -340,13 +337,11 @@ def test_validate_existing_instance_service():
 
 
 @patch("dora.orientations.models.default_storage.delete")
-@patch("dora.orientations.models.default_storage.exists")
+@patch("dora.orientations.models.default_storage.exists", return_value=True)
 def test_reject_orientation_deletes_attachments(
     mock_exists, mock_delete, api_client, orientation
 ):
     """Teste que les attachments sont supprimés lorsqu'une orientation est rejetée."""
-    mock_exists.return_value = True
-
     # Création de plusieurs pièces jointes factices et ajout à l'orientation
     attachment_paths = ["test_attachment1.txt", "test_attachment2.txt"]
     orientation.beneficiary_attachments = attachment_paths
