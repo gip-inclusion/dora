@@ -8,7 +8,9 @@ from dora.orientations.models import Orientation, OrientationStatus
 
 
 class Command(BaseCommand):
-    help = "Supprime les pièces jointes des orientations acceptées après un certain délai"
+    help = (
+        "Supprime les pièces jointes des orientations acceptées après un certain délai"
+    )
 
     def handle(self, *args, **options):
         self.logger.info(
@@ -23,7 +25,7 @@ class Command(BaseCommand):
         orientations = Orientation.objects.filter(
             processing_date__lte=expiration_date,
             status=OrientationStatus.ACCEPTED,
-        ).select_related("service")
+        )
 
         for orientation in orientations:
             try:
