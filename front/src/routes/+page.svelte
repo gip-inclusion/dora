@@ -140,7 +140,7 @@
     </p>
 
     <LinkButton
-      to={`${URL_HELP_SITE}/article/participer-a-un-webinaire-dora-h3n747/`}
+      to={`${URL_HELP_SITE}article/participer-a-un-webinaire-dora-h3n747/`}
       otherTab
       nofollow
       noBackground

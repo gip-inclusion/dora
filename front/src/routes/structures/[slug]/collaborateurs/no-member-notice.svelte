@@ -12,7 +12,7 @@
   title="Vous n’avez pas encore invité vos collaborateurs"
   links={[
     {
-      url: `${URL_HELP_SITE}/article/inviter-un-collaborateur-1e3lyy2/`,
+      url: `${URL_HELP_SITE}article/inviter-un-collaborateur-1e3lyy2/`,
       label: "Découvrez comment gérer les collaborateurs",
     },
   ]}

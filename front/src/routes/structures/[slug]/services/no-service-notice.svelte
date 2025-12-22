@@ -12,16 +12,16 @@
   title="Vous n’avez pas encore renseigné vos services sur DORA"
   links={[
     {
-      url: `${URL_HELP_SITE}/article/referencer-son-offre-de-service-xpivaw/`,
+      url: `${URL_HELP_SITE}article/referencer-son-offre-de-service-xpivaw/`,
       label: "Découvrez comment référencer son premier service",
     },
     {
-      url: `${URL_HELP_SITE}/category/conseils-1vz0ity/`,
+      url: `${URL_HELP_SITE}category/conseils-1vz0ity/`,
       label:
         "Découvrez quelques conseils sur la présentation de votre offre de service",
     },
     {
-      url: `${URL_HELP_SITE}/article/participer-a-un-webinaire-dora-h3n747/`,
+      url: `${URL_HELP_SITE}article/participer-a-un-webinaire-dora-h3n747/`,
       label: "Participez à un webinaire",
     },
     {

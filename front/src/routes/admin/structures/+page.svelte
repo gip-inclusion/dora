@@ -258,7 +258,7 @@
                     Action(s)&#8239;: {filterActions}
                   {/if}
                   <a
-                    href={`${URL_HELP_SITE}/article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/`}
+                    href={`${URL_HELP_SITE}article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/`}
                     target="_blank"
                     class="text-magenta-cta underline"
                   >

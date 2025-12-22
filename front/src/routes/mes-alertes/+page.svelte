@@ -81,7 +81,7 @@
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
             rel="noopener"
-            href={`${URL_HELP_SITE}/article/alertes-comment-enregistrer-des-recherches-1xpnlc9/?bust=1698336652095`}
+            href={`${URL_HELP_SITE}article/alertes-comment-enregistrer-des-recherches-1xpnlc9/?bust=1698336652095`}
             class="text-magenta-cta inline-block h-full"
           >
             Découvrez comment créer une alerte

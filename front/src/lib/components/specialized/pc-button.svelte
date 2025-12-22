@@ -4,6 +4,7 @@
   import { getApiURL } from "$lib/utils/api";
   import logoPC from "$lib/assets/proconnect/bouton_proconnect.svg";
   import { URL_HELP_SITE } from "$lib/consts";
+
   interface Props {
     nextPage: string;
     pcHelpLink?: Snippet;
@@ -28,7 +29,7 @@
         target="_blank"
         title="Aide DORA - ouverture dans une nouvelle fenêtre"
         rel="noopener noreferrer"
-        href={`${URL_HELP_SITE}/category/inscription-et-gestion-du-compte-ha8m5b/`}
+        href={`${URL_HELP_SITE}category/inscription-et-gestion-du-compte-ha8m5b/`}
       >
         Besoin d’aide&#8239;? Contactez-nous
       </a>

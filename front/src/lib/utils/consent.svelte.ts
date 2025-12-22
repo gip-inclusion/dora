@@ -51,7 +51,7 @@ export const CONSENT_CONFIG: Record<string, ConsentConfig> = {
   support: {
     consentKey: "crisp",
     title: "Support et assistance utilisateur",
-    description: `Nous utilisons Crisp pour vous proposer un chat de support en direct. Ces cookies proviennent de notre site d'aide (${URL_HELP_SITE}/) et peuvent être supprimés si vous retirez votre consentement.`,
+    description: `Nous utilisons Crisp pour vous proposer un chat de support en direct. Ces cookies proviennent de notre site d'aide (${URL_HELP_SITE}) et peuvent être supprimés si vous retirez votre consentement.`,
     cookies: [
       {
         title: "Crisp",

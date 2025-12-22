@@ -12,7 +12,7 @@
   {/snippet}
 
   <a
-    href={`${URL_HELP_SITE}/`}
+    href={URL_HELP_SITE}
     target="_blank"
     rel="noopener noreferrer"
     class={aClass}
@@ -30,7 +30,7 @@
   </a>
 
   <a
-    href={`${URL_HELP_SITE}/article/participer-a-un-webinaire-dora-h3n747/`}
+    href={`${URL_HELP_SITE}article/participer-a-un-webinaire-dora-h3n747/`}
     target="_blank"
     rel="noopener noreferrer"
     class={aClass}

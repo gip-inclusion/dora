@@ -45,7 +45,7 @@
     </p>
     <p class="text-f16 leading-s24 text-gray-dark mb-s0">
       <a
-        href={`${URL_HELP_SITE}/article/definir-les-publics-et-criteres-dacces-a-votre-service-tos25n/`}
+        href={`${URL_HELP_SITE}article/definir-les-publics-et-criteres-dacces-a-votre-service-tos25n/`}
         class="text-magenta-cta font-bold"
         target="_blank"
         title="Ouverture dans une nouvelle fenêtre"
