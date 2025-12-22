@@ -1,4 +1,5 @@
 import csv
+import logging
 from pprint import pformat
 from typing import Dict, List, Union
 
@@ -23,6 +24,8 @@ from dora.structures.models import (
 )
 from dora.users.models import User
 
+logger = logging.getLogger(__name__)
+
 
 class ImportStructuresHelper:
     def __init__(self, *args, **kwargs) -> None:
@@ -46,9 +49,9 @@ class ImportStructuresHelper:
         should_remove_first_two_lines: bool = False,
     ) -> Dict[str, Union[Dict[int, List[str]], int]]:
         if wet_run:
-            print("⚠️ PRODUCTION RUN ⚠️")
+            logger.info("⚠️ PRODUCTION RUN ⚠️")
         else:
-            print("🧘 DRY RUN 🧘")
+            logger.info("🧘 DRY RUN 🧘")
 
         self._initialize_trackers()
         self.importing_user = importing_user
@@ -67,7 +70,7 @@ class ImportStructuresHelper:
                 headers_list
             }"
 
-            print(error_message)
+            logger.warning(error_message.replace("<br/>", "\n"))
             return {"errors_map": {1: [error_message]}}
 
         lines = [dict(zip(headers, line)) for line in lines]
@@ -89,16 +92,21 @@ class ImportStructuresHelper:
 
             if serializer.is_valid():
                 data = serializer.validated_data
-                print(
-                    f"{idx}. Import de la structure {serializer.data['name']} (SIRET:{serializer.data['siret']})"
+                logger.info(
+                    "%d. Import de la structure %s (SIRET:%s)",
+                    idx,
+                    serializer.data["name"],
+                    serializer.data["siret"],
                 )
                 if wet_run:
                     try:
                         self._get_structure_source(source_info)
                     except IntegrityError:
-                        error_message = f'Le fichier nommé "{source_info["value"]}" a déjà un nom de source stocké dans le base de données. Veuillez refaire l\'import avec un nouveau nom de source.'
-                        print(error_message)
-                        return {"errors_map": {1: [error_message]}}
+                        error_message = """Le fichier nommé "%s" a déjà un nom de source stocké dans le base de données. Veuillez refaire l'import avec un nouveau nom de source."""
+                        logger.warning(error_message, source_info["value"])
+                        return {
+                            "errors_map": {1: [error_message % source_info["value"]]}
+                        }
 
                     structure = self.get_or_create_structure(
                         data["name"],
@@ -108,7 +116,7 @@ class ImportStructuresHelper:
                         phone=data.get("phone"),
                         email=data.get("email"),
                     )
-                    print(f"{structure.get_frontend_url()}")
+                    logger.info(structure.get_frontend_url())
                     self.invite_users(structure, data["admins"])
                     self.add_labels(structure, data["labels"])
                     self.create_services(structure, data["models"], importing_user)
@@ -116,7 +124,7 @@ class ImportStructuresHelper:
                 self.map_line_to_errors[idx] = [
                     str(error[0]) for error in serializer.errors.values()
                 ]
-                print(pformat(dict(serializer.errors.items())))
+                logger.warning(pformat(dict(serializer.errors.items())))
         return {
             "errors_map": self.map_line_to_errors,
             "created_structures_count": self.created_structures_count,
@@ -158,14 +166,14 @@ class ImportStructuresHelper:
                 member = StructurePutativeMember.objects.get(
                     user=user, structure=structure
                 )
-                print(f"{email} a déjà été invité·e")
+                logger.info("%s a déjà été invité·e", email)
                 if not member.is_admin:
                     member.is_admin = True
                     member.save()
             except StructurePutativeMember.DoesNotExist:
                 try:
                     member = StructureMember.objects.get(user=user, structure=structure)
-                    print(f"{email} est déjà membre de la structure")
+                    logger.info("%s est déjà membre de la structure", email)
                     if not member.is_admin:
                         member.is_admin = True
                         member.save()
@@ -177,7 +185,7 @@ class ImportStructuresHelper:
                         is_admin=True,
                     )
 
-                    print(f"{email} invité·e comme administrateur·rice")
+                    logger.info("%s invité·e comme administrateur·rice", email)
                     send_invitation_email(
                         member,
                         "L’équipe DORA",
@@ -188,7 +196,7 @@ class ImportStructuresHelper:
     ) -> None:
         for label in labels:
             if label not in structure.national_labels.all():
-                print(f"Ajout du label {label.value}")
+                logger.info("Ajout du label %s", label.value)
                 structure.national_labels.add(label)
 
     def create_services(
@@ -199,7 +207,11 @@ class ImportStructuresHelper:
                 service = instantiate_service_from_model(
                     model, structure, importing_user
                 )
-                print(f"Ajout du service {service.name} ({service.get_frontend_url()})")
+                logger.info(
+                    "Ajout du service %s (%s)",
+                    service.name,
+                    service.get_frontend_url(),
+                )
                 self.created_services_count += 1
 
     def _get_or_create_branch(
@@ -211,7 +223,9 @@ class ImportStructuresHelper:
             else:
                 branch = Structure.objects.get(parent=parent_structure, name=name)
 
-            print(f"L'antenne {branch.name} ({branch.get_frontend_url()}) existe déjà")
+            logger.info(
+                "L'antenne %s (%s) existe déjà", branch.name, branch.get_frontend_url()
+            )
         except Structure.DoesNotExist:
             if siret:
                 establishment = Establishment.objects.get(siret=siret)
@@ -229,7 +243,9 @@ class ImportStructuresHelper:
             )
             self.created_structures_count += 1
 
-            print(f"Création de l'antenne {branch.name} ({branch.get_frontend_url()})")
+            logger.info(
+                "Création de l'antenne %s (%s)", branch.name, branch.get_frontend_url()
+            )
             send_moderation_notification(
                 branch,
                 self.importing_user,
@@ -243,8 +259,11 @@ class ImportStructuresHelper:
     ) -> Structure:
         try:
             structure = Structure.objects.get(siret=siret)
-            print(
-                f"La structure {'parente' if is_parent else ''} {structure.name} ({structure.get_frontend_url()}) existe déjà"
+            logger.info(
+                "La structure %s %s (%s) existe déjà",
+                "parente" if is_parent else "",
+                structure.name,
+                structure.get_frontend_url(),
             )
             if not is_parent and any(value for value in kwargs.values()):
                 self._update_optional_fields(structure, **kwargs)
@@ -258,8 +277,11 @@ class ImportStructuresHelper:
             structure.source = self.source
             structure.save()
 
-            print(
-                f"Création de la structure  {'parente' if is_parent else ''} {structure.name} ({structure.get_frontend_url()})"
+            logger.info(
+                "Création de la structure %s %s (%s)",
+                "parente" if is_parent else "",
+                structure.name,
+                structure.get_frontend_url(),
             )
             self.created_structures_count += 1
             send_moderation_notification(
@@ -275,7 +297,7 @@ class ImportStructuresHelper:
         # Même si la structure existe déjà,
         # les champs optionnels (comme le téléphone et l'adresse mail) peuvent être mis à jour s'ils contiennent une valeur
         to_update = dict({(k, v) for k, v in kwargs.items() if v})
-        print(f" > mise à jour des champs : {to_update}")
+        logger.info(" > mise à jour des champs : %s", to_update)
         Structure.objects.filter(pk=structure.pk).update(
             **to_update,
             modification_date=timezone.now(),
