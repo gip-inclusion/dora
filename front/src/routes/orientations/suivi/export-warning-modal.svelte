@@ -55,6 +55,7 @@
       <Button
         label="Confirmer et télécharger le fichier"
         onclick={handleSubmit}
+        id={`download-export-${orientationState.selectedType}`}
       />
     </div>
   </div></Modal

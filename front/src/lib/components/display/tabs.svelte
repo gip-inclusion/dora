@@ -12,6 +12,7 @@
   {#each items as item}
     <li>
       <button
+        id={`tab-${item.id}`}
         class="px-s20 py-s12 rounded-t font-bold {itemId === item.id
           ? 'text-france-blue bg-white'
           : 'bg-magenta-dark text-white'}"
