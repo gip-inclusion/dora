@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import eslintJs from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
 import sveltePlugin from "eslint-plugin-svelte";
+import importPlugin from "eslint-plugin-import";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,6 +45,7 @@ export default [
     plugins: {
       "@typescript-eslint": typescriptEslint,
       svelte: sveltePlugin,
+      import: importPlugin,
     },
 
     languageOptions: {
@@ -82,6 +84,8 @@ export default [
           exceptions: ["i", "a", "b", "v", "x", "y", "id", "ok", "to"],
         },
       ],
+
+      "import/newline-after-import": ["error", { count: 1 }],
 
       "func-style": [
         "error",

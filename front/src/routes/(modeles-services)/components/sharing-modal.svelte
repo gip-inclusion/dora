@@ -12,6 +12,7 @@
   import { trackServiceShare } from "$lib/utils/stats";
   import { page } from "$app/stores";
   import { browser } from "$app/environment";
+
   interface Props {
     isOpen?: boolean;
     service: Service;

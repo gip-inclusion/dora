@@ -16,6 +16,7 @@
     hasAtLeastOneServiceNotArchived,
     hasAtLeastTwoMembersOrInvitedMembers,
   } from "./quick-start";
+
   interface Props {
     structure: Structure;
     members: StructureMember[];

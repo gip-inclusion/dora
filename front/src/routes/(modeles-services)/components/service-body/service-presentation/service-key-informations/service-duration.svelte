@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Model, Service } from "$lib/types";
   import { isDurationValid } from "$lib/utils/service";
+
   interface Props {
     service: Service | Model;
   }

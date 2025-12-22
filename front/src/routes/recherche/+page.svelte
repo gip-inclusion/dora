@@ -19,6 +19,7 @@
   import ResultFilters, { type Filters } from "./result-filters.svelte";
   import SearchResults from "./search-results.svelte";
   import { SEARCH_RESULTS_PAGE_LENGTH } from "./search-results.svelte";
+
   interface Props {
     data: PageData;
   }

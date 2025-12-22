@@ -3,6 +3,7 @@
 
   import { getApiURL } from "$lib/utils/api";
   import logoPC from "$lib/assets/proconnect/bouton_proconnect.svg";
+
   interface Props {
     nextPage: string;
     pcHelpLink?: Snippet;
