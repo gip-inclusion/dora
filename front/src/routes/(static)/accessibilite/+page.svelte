@@ -19,7 +19,7 @@
     </p>
     <p>
       Cette déclaration d’accessibilité s’applique à <strong>DORA</strong>
-      <span> (https://dora.inclusion.beta.gouv.fr/)</span>.
+      <span> (https://dora.inclusion.gouv.fr/)</span>.
     </p>
     <h2>État de conformité</h2>
     <p>

@@ -20,7 +20,7 @@
 
   Je vous contacte concernant l’offre ${
     service.name
-  } sur dora.inclusion.beta.gouv.fr.
+  } sur dora.inclusion.gouv.fr.
   ${CANONICAL_URL}/services/${service.slug}
 
 
