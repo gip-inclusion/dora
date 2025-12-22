@@ -56,7 +56,9 @@
       </li>
 
       <li>
-        Formulaire de contact&nbsp;: <a href={URL_HELP_SITE}>{URL_HELP_SITE}</a>
+        Formulaire de contact&nbsp;: <a href={`${URL_HELP_SITE}/`}
+          >{`${URL_HELP_SITE}/`}</a
+        >
       </li>
       <li>
         Adresse&nbsp;: <span>127 rue de Grenelle 75007 Paris </span>

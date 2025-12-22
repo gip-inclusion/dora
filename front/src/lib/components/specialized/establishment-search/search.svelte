@@ -97,7 +97,7 @@
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
             rel="noopener"
-            href={URL_HELP_SITE}>nous contacter</a
+            href={`${URL_HELP_SITE}/`}>nous contacter</a
           >.
         {/if}
       </p>

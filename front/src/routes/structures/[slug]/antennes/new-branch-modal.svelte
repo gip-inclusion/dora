@@ -15,11 +15,11 @@
       Pour demander la création d’une ou plusieurs antennes, il suffit
       simplement de nous en faire la demande via notre chatbot (bouton “Discuter
       avec nous” en bas de la page <a
-        href={`${URL_HELP_SITE}`}
+        href={`${URL_HELP_SITE}/`}
         class="text-magenta-cta underline"
         target="_blank"
         title="Ouverture dans une nouvelle fenêtre"
-        rel="noopener">{URL_HELP_SITE}</a
+        rel="noopener">{`${URL_HELP_SITE}/`}</a
       >).
     </p>
 
