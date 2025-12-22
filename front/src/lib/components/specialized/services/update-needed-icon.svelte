@@ -1,6 +1,7 @@
 <script lang="ts">
   import ErrorWarningLineSystem from "svelte-remix/ErrorWarningLineSystem.svelte";
   import HistoryLineSystem from "svelte-remix/HistoryLineSystem.svelte";
+
   interface Props {
     small?: boolean;
     updateNeeded: boolean;

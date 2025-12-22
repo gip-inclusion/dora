@@ -2,6 +2,7 @@ import type { PageLoad } from "./$types";
 import { getOrientation } from "$lib/utils/orientation";
 import { error } from "@sveltejs/kit";
 import type { Orientation } from "$lib/types";
+
 export const ssr = false;
 
 export const load: PageLoad = async ({ fetch, parent, url }) => {

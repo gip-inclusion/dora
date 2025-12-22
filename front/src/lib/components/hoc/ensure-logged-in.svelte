@@ -5,6 +5,7 @@
   import { page } from "$app/state";
   import { getToken, userInfo } from "$lib/utils/auth";
   import { onMount } from "svelte";
+
   interface Props {
     children?: Snippet;
   }
