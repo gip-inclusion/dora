@@ -3,6 +3,7 @@
 
   import illuMember from "$lib/assets/illustrations/collaborateurs.svg";
   import EmptyNotice from "../empty-notice.svelte";
+  import { URL_HELP_SITE } from "$lib/consts";
 </script>
 
 <EmptyNotice
@@ -11,7 +12,7 @@
   title="Vous n’avez pas encore invité vos collaborateurs"
   links={[
     {
-      url: "https://aide.dora.inclusion.beta.gouv.fr/fr/article/inviter-un-collaborateur-1e3lyy2/",
+      url: `${URL_HELP_SITE}/article/inviter-un-collaborateur-1e3lyy2/`,
       label: "Découvrez comment gérer les collaborateurs",
     },
   ]}

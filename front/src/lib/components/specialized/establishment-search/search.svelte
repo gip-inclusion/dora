@@ -7,6 +7,7 @@
   import SearchBySafir from "./search-by-safir.svelte";
   import SearchBySiret from "./search-by-siret.svelte";
   import type { Establishment, GeoApiValue } from "$lib/types";
+  import { URL_HELP_SITE } from "$lib/consts";
 
   type Tab = "nom" | "siret" | "safir";
 
@@ -96,8 +97,7 @@
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
             rel="noopener"
-            href="https://aide.dora.inclusion.beta.gouv.fr/fr/"
-            >nous contacter</a
+            href={URL_HELP_SITE}>nous contacter</a
           >.
         {/if}
       </p>

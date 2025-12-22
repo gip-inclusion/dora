@@ -12,6 +12,7 @@
   import { fetchData } from "$lib/utils/misc";
   import { onMount } from "svelte";
   import SavedSearchCard from "./saved-search-card.svelte";
+  import { URL_HELP_SITE } from "$lib/consts";
 
   let savedSearches: SavedSearch[] | undefined = $state();
 
@@ -80,7 +81,7 @@
             target="_blank"
             title="Ouverture dans une nouvelle fenêtre"
             rel="noopener"
-            href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/alertes-comment-enregistrer-des-recherches-1xpnlc9/?bust=1698336652095"
+            href={`${URL_HELP_SITE}/article/alertes-comment-enregistrer-des-recherches-1xpnlc9/?bust=1698336652095`}
             class="text-magenta-cta inline-block h-full"
           >
             Découvrez comment créer une alerte

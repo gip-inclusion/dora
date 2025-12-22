@@ -8,6 +8,7 @@
   import {
     DI_METABASE_DASHBOARD_URL,
     METABASE_DASHBOARD_URL,
+    URL_HELP_SITE,
   } from "$lib/consts";
   import { CANONICAL_URL } from "$lib/env";
   import AddFillSystem from "svelte-remix/AddFillSystem.svelte";
@@ -257,7 +258,7 @@
                     Action(s)&#8239;: {filterActions}
                   {/if}
                   <a
-                    href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/"
+                    href={`${URL_HELP_SITE}/article/comment-utiliser-le-tableau-de-bord-de-gestionnaire-de-territoire-b5do49/`}
                     target="_blank"
                     class="text-magenta-cta underline"
                   >

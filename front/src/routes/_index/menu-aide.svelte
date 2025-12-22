@@ -1,5 +1,6 @@
 <script lang="ts">
   import DropdownMenu from "$lib/components/display/dropdown-menu.svelte";
+  import { URL_HELP_SITE } from "$lib/consts";
 
   const aClass =
     "flex w-full lg:min-w-[200px] items-center p-s12 text-gray-text hover:text-magenta-cta hover:bg-magenta-10 rounded-sm";
@@ -11,7 +12,7 @@
   {/snippet}
 
   <a
-    href="https://aide.dora.inclusion.beta.gouv.fr/fr/"
+    href={URL_HELP_SITE}
     target="_blank"
     rel="noopener noreferrer"
     class={aClass}
@@ -29,7 +30,7 @@
   </a>
 
   <a
-    href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/participer-a-un-webinaire-dora-h3n747/"
+    href={`${URL_HELP_SITE}article/participer-a-un-webinaire-dora-h3n747/`}
     target="_blank"
     rel="noopener noreferrer"
     class={aClass}

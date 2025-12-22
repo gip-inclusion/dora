@@ -11,6 +11,7 @@
   import loopImg from "$lib/assets/icons/loop.svg";
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
+  import { URL_HELP_SITE } from "$lib/consts";
 
   interface Props {
     data: PageData;
@@ -145,7 +146,7 @@
 
     <div class="mt-s24 border-gray-02 px-s32 py-s24 rounded-lg border bg-white">
       <a
-        href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/comment-sinscrire-sur-dora-14d64n0/#3-03-adherer-a-votre-structure"
+        href={`${URL_HELP_SITE}/article/comment-sinscrire-sur-dora-14d64n0/#3-03-adherer-a-votre-structure`}
         target="_blank"
         rel="noopener"
         class="flex items-center"
