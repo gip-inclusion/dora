@@ -3,6 +3,7 @@
 
   import connexionPic from "$lib/assets/illustrations/illu-connexion.svg";
   import CenteredGrid from "$lib/components/display/centered-grid.svelte";
+
   interface Props {
     children?: Snippet;
   }
