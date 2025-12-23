@@ -64,12 +64,15 @@
         >
       {:else if orientationState.selectedType === "received" && data.stats.structureHasServices}
         <a
+          id="service-review-link"
           href={`/structures/${data.structure.slug}/services`}
           class="text-magenta-cta font-bold">Passer en revue mes services</a
         >
         <div class="relative">
-          <button class="text-magenta-cta font-bold" onclick={handleCopy}
-            >Copier le lien de ma structure</button
+          <button
+            id="structure-copy-button"
+            class="text-magenta-cta font-bold"
+            onclick={handleCopy}>Copier le lien de ma structure</button
           >
           {#if linkCopied}
             <div
@@ -82,15 +85,18 @@
         </div>
       {:else if orientationState.selectedType === "received" && !data.stats.structureHasServices}
         <a
+          id="service-reference-link"
           href={`/services/creer?structure=${data.structure.slug}`}
           class="text-magenta-cta font-bold"
           >Référencer un service
         </a>
       {:else}
-        <a href="/recherche-textuelle" class="text-magenta-cta font-bold"
-          >Rechercher par mots-clé</a
+        <a
+          id="text-search-link"
+          href="/recherche-textuelle"
+          class="text-magenta-cta font-bold">Rechercher par mots-clé</a
         >
-        <a href="/" class="text-magenta-cta font-bold"
+        <a id="keyword-search-link" href="/" class="text-magenta-cta font-bold"
           >Rechercher par lieu et besoins</a
         >
       {/if}
