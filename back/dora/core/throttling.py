@@ -13,11 +13,5 @@ class StructureUploadThrottle(UserRateThrottle):
     scope = "structure_upload"
 
     def get_cache_key(self, request, view):
-        if not request.user.is_authenticated:
-            return None
-
-        structure_slug = view.kwargs.get("structure_slug")
-        if not structure_slug:
-            return None
-
+        structure_slug = view.kwargs["structure_slug"]
         return self.cache_format % {"scope": self.scope, "ident": structure_slug}
