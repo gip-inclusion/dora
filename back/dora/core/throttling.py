@@ -13,5 +13,5 @@ class StructureUploadThrottle(SimpleRateThrottle):
     scope = "structure_upload"
 
     def get_cache_key(self, request, view):
-        structure_slug = view.kwargs["structure_slug"]
+        structure_slug = request.resolver_match.kwargs["structure_slug"]
         return self.cache_format % {"scope": self.scope, "ident": structure_slug}
