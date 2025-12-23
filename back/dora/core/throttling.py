@@ -1,4 +1,4 @@
-from rest_framework.throttling import UserRateThrottle
+from rest_framework.throttling import SimpleRateThrottle, UserRateThrottle
 
 
 class UploadRateThrottle(UserRateThrottle):
@@ -7,7 +7,7 @@ class UploadRateThrottle(UserRateThrottle):
     scope = "upload"
 
 
-class StructureUploadThrottle(UserRateThrottle):
+class StructureUploadThrottle(SimpleRateThrottle):
     """Throttle par structure pour éviter l'abus d'une structure compromise."""
 
     scope = "structure_upload"
