@@ -418,10 +418,20 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
         structure.moderation_date = timezone.now()
         structure.save()
 
-        # Passage des demandes d'orientation en cours de modération au statut Supprimée par la modération
-        moderation_pending_orientations.update(
-            status=OrientationStatus.MODERATION_REJECTED
-        )
+        # Suppression des pièces jointes des orientations en cours de modération
+        # et passage au statut Rejetée par la modération
+        for orientation in moderation_pending_orientations:
+            try:
+                orientation.delete_attachments()
+                orientation.set_status(OrientationStatus.MODERATION_REJECTED)
+            except Exception as e:
+                logger.error(
+                    "Erreur lors de la suppression des pièces jointes de l'orientation %s: %s",
+                    orientation.pk,
+                    e,
+                    exc_info=True,
+                )
+                raise
 
         # Message de confirmation
         self.message_user(
