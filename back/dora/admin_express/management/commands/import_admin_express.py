@@ -4,6 +4,8 @@ import subprocess
 import tempfile
 
 from django.conf import settings
+from django.contrib.gis.gdal import DataSource
+from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.utils import LayerMapping
 from django.db import connection
 from django.db.models import F, Func, Value
@@ -15,10 +17,9 @@ from dora.core.utils import code_insee_to_code_dept
 
 EXE_7ZR = "/app/.apt/usr/lib/p7zip/7zr" if not settings.DEBUG else "7zr"
 
-# Using the fast OpenDataArchive mirror
-# The original is at ftp://Admin_Express_ext:Dahnoh0eigheeFok@ftp3.ign.fr/ADMIN-EXPRESS-COG_3-0__SHP__FRA_WM_2021-05-19.7z
-AE_COG_LINK = "http://files.opendatarchives.fr/professionnels.ign.fr/adminexpress/ADMIN-EXPRESS-COG_3-0__SHP__FRA_WM_2021-05-19.7z"
-AE_COG_FILE = "ADMIN-EXPRESS-COG_3-0__SHP__FRA_WM_2021-05-19.7z"
+# GPKG version with WGS84 coordinates (mainland France + most overseas)
+AE_COG_LINK = "https://data.geopf.fr/telechargement/download/ADMIN-EXPRESS-COG/ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01/ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01.7z"
+AE_COG_FILE = "ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01.7z"
 USE_TEMP_DIR = not settings.DEBUG
 
 
@@ -32,7 +33,7 @@ def normalize_model(Model, with_dept=False):
 
 
 class Command(BaseCommand):
-    help = "Import the latest Admin Express COG database"
+    help = "Import the latest Admin Express COG database (GPKG format)"
 
     def handle(self, *args, **options):
         with tempfile.TemporaryDirectory() as tmp_dir_name:
@@ -57,26 +58,34 @@ class Command(BaseCommand):
                     check=True,
                 )
 
-            shapefile_dir = (
-                the_dir
-                / "ADMIN-EXPRESS-COG_3-0__SHP__FRA_2021-05-19"
-                / "ADMIN-EXPRESS-COG"
-                / "1_DONNEES_LIVRAISON_2021-05-19"
-                / "ADECOG_3-0_SHP_WGS84G_FRA"
-            )
-            # Communes
-            shapefile = shapefile_dir / "COMMUNE.shp"
+            # Find the GPKG file
+            gpkg_files = list(the_dir.glob("**/*.gpkg"))
+
+            if not gpkg_files:
+                self.stdout.write(self.style.ERROR("No GPKG file found!"))
+                return
+
+            gpkg_file = str(gpkg_files[0])
+            self.stdout.write(f"Found GPKG: {gpkg_file}")
+
+            # Communes from GPKG layer
             mapping = {
-                "code": "INSEE_COM",
-                "name": "NOM",
-                "department": "INSEE_DEP",
-                "region": "INSEE_REG",
-                "epci": "SIREN_EPCI",
-                "population": "POPULATION",
+                "code": "code_insee",
+                "name": "nom_officiel",
+                "department": "code_insee_du_departement",
+                "region": "code_insee_de_la_region",
+                "epci": "codes_siren_des_epci",  # Note: plural, contains EPCI codes
+                "population": "population",
                 "geom": "MULTIPOLYGON",
             }
             self.stdout.write(self.style.SUCCESS("Importing cities"))
-            lm = LayerMapping(City, shapefile, mapping)
+            lm = LayerMapping(
+                City,
+                gpkg_file,
+                mapping,
+                layer="commune",  # GPKG layer name
+                transform=False,  # Already in WGS84
+            )
             lm.save(progress=True, strict=True)
             self.stdout.write(self.style.SUCCESS("Import successful"))
             self.stdout.write(self.style.SUCCESS("Normalizing…"))
@@ -84,15 +93,20 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Done"))
 
             # EPCI
-            shapefile = shapefile_dir / "EPCI.shp"
             mapping = {
-                "code": "CODE_SIREN",
-                "name": "NOM",
-                "nature": "NATURE",
+                "code": "code_siren",
+                "name": "nom_officiel",
+                "nature": "nature",
                 "geom": "MULTIPOLYGON",
             }
             self.stdout.write(self.style.SUCCESS("Importing EPCIs"))
-            lm = LayerMapping(EPCI, shapefile, mapping)
+            lm = LayerMapping(
+                EPCI,
+                gpkg_file,
+                mapping,
+                layer="epci",
+                transform=False,
+            )
             lm.save(progress=True, strict=True)
             self.stdout.write(self.style.SUCCESS("Import successful"))
             self.stdout.write(self.style.SUCCESS("Normalizing…"))
@@ -112,15 +126,20 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Done"))
 
             # Departements
-            shapefile = shapefile_dir / "DEPARTEMENT.shp"
             mapping = {
-                "code": "INSEE_DEP",
-                "name": "NOM",
-                "region": "INSEE_REG",
+                "code": "code_insee",
+                "name": "nom_officiel",
+                "region": "code_insee_de_la_region",
                 "geom": "MULTIPOLYGON",
             }
             self.stdout.write(self.style.SUCCESS("Importing Departments"))
-            lm = LayerMapping(Department, shapefile, mapping)
+            lm = LayerMapping(
+                Department,
+                gpkg_file,
+                mapping,
+                layer="departement",
+                transform=False,
+            )
             lm.save(progress=True, strict=True)
             self.stdout.write(self.style.SUCCESS("Import successful"))
             self.stdout.write(self.style.SUCCESS("Normalizing…"))
@@ -128,20 +147,97 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("Done"))
 
             # Regions
-            shapefile = shapefile_dir / "REGION.shp"
             mapping = {
-                "code": "INSEE_REG",
-                "name": "NOM",
+                "code": "code_insee",
+                "name": "nom_officiel",
                 "geom": "MULTIPOLYGON",
             }
             self.stdout.write(self.style.SUCCESS("Importing Regions"))
-            lm = LayerMapping(Region, shapefile, mapping)
+            lm = LayerMapping(
+                Region,
+                gpkg_file,
+                mapping,
+                layer="region",
+                transform=False,
+            )
             lm.save(progress=True, strict=True)
             self.stdout.write(self.style.SUCCESS("Import successful"))
             self.stdout.write(self.style.SUCCESS("Normalizing…"))
             normalize_model(Region)
             self.stdout.write(self.style.SUCCESS("Done"))
 
+            # Import Saint-Martin from collectivite_territoriale layer
+            self._import_saint_martin(gpkg_file)
+
         self.stdout.write(self.style.SUCCESS("VACUUM ANALYZE"))
         cursor = connection.cursor()
         cursor.execute("VACUUM ANALYZE")
+
+    def _import_saint_martin(self, gpkg_file):
+        if City.objects.filter(code="97801").exists():
+            self.stdout.write(
+                self.style.WARNING("Saint-Martin (97801) already exists. Skipping.")
+            )
+            return
+
+        self.stdout.write(
+            self.style.SUCCESS("Importing Saint-Martin from collectivite_territoriale")
+        )
+
+        try:
+            ds = DataSource(gpkg_file)
+            layer = ds["collectivite_territoriale"]
+
+            saint_martin_feature = None
+            for feature in layer:
+                code_insee = feature.get("code_insee")
+                nom = feature.get("nom_officiel")
+
+                if code_insee == "978" or (nom and "Saint-Martin" in nom):
+                    saint_martin_feature = feature
+                    self.stdout.write(f"Found: {nom} (code: {code_insee})")
+                    break
+
+            if not saint_martin_feature:
+                self.stdout.write(
+                    self.style.WARNING(
+                        "Saint-Martin not found in collectivite_territoriale layer"
+                    )
+                )
+                return
+
+            geom = saint_martin_feature.geom
+            geom_geos = GEOSGeometry(geom.wkt, srid=geom.srid)
+
+            official_name = saint_martin_feature.get("nom_officiel")
+            region_code = saint_martin_feature.get("code_insee_de_la_region") or "NR"
+
+            saint_martin = City(
+                code="97801",  # Il faut utiliser le code insee de 5 chiffres
+                name=official_name,
+                department="978",
+                region=region_code,
+                geom=geom_geos,
+                epci="NR",  # Pas disponible dans la layer collectivite_territoriale
+                epcis=["NR"],
+                population=31496,  # https://fr.wikipedia.org/wiki/Saint-Martin_(Antilles_fran%C3%A7aises)
+            )
+            saint_martin.normalized_name = normalize_string_for_search(
+                saint_martin.name
+            )
+            saint_martin.normalized_name += (
+                f" {code_insee_to_code_dept(saint_martin.code)}"
+            )
+            saint_martin.save()
+
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Successfully imported: {saint_martin.name} (code: {saint_martin.code})"
+                )
+            )
+
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f"Saint-Martin import failed: {e}"))
+            import traceback
+
+            traceback.print_exc()
