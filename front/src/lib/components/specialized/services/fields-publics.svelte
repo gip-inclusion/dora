@@ -6,6 +6,7 @@
   import FieldModel from "$lib/components/specialized/services/field-model.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import { currentSchema } from "$lib/validation/validation";
+  import { URL_HELP_SITE } from "$lib/consts";
 
   interface Props {
     servicesOptions: ServicesOptions;
@@ -44,7 +45,7 @@
     </p>
     <p class="text-f16 leading-s24 text-gray-dark mb-s0">
       <a
-        href="https://aide.dora.inclusion.beta.gouv.fr/fr/article/definir-les-publics-et-criteres-dacces-a-votre-service-tos25n/"
+        href={`${URL_HELP_SITE}article/definir-les-publics-et-criteres-dacces-a-votre-service-tos25n/`}
         class="text-magenta-cta font-bold"
         target="_blank"
         title="Ouverture dans une nouvelle fenêtre"

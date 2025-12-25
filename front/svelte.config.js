@@ -39,7 +39,7 @@ const config = {
         ],
         "worker-src": ["self", "blob:"],
         "child-src": [
-          "https://aide.dora.inclusion.beta.gouv.fr/",
+          "https://aide.dora.inclusion.gouv.fr/",
           "https://metabase.dora.inclusion.gouv.fr",
           "https://tally.so",
           "https://tube.numerique.gouv.fr",
