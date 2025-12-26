@@ -79,7 +79,6 @@ class Command(BaseCommand):
                 send_mail(
                     "Export des mails pour les orientations expirées",
                     [
-                        "david.cohen@inclusion.gouv.fr",
                         "gael.giffard@inclusion.gouv.fr",
                     ],
                     body,
