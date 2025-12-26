@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
         self._import_regions(gpkg_file)
 
-        self.stdout.write(self.style.SUCCESS("VACUUM ANALYZE"))
+        self.logger.info("VACUUM ANALYZE")
         cursor = connection.cursor()
         cursor.execute("VACUUM ANALYZE")
 
@@ -59,18 +59,18 @@ class Command(BaseCommand):
                 the_dir = pathlib.Path(tmp_dir_name)
             else:
                 the_dir = pathlib.Path("/tmp")
-            self.stdout.write("Saving AE files to " + str(the_dir))
+            self.logger.info("Sauvegarde des fichiers AE dans %s", the_dir)
 
             compressed_AE_file = the_dir / AE_COG_FILE
 
             if not os.path.exists(compressed_AE_file):
-                self.stdout.write(self.style.NOTICE("Downloading AE COG file"))
+                self.logger.info("Téléchargement du fichier AE COG")
                 subprocess.run(
                     ["curl", AE_COG_LINK, "-o", compressed_AE_file],
                     check=True,
                 )
 
-                self.stdout.write(self.style.NOTICE("Decompressing the AE COG"))
+                self.logger.info("Décompression du fichier AE COG")
                 subprocess.run(
                     [EXE_7ZR, "-bd", "x", compressed_AE_file, f"-o{the_dir}"],
                     check=True,
@@ -79,11 +79,11 @@ class Command(BaseCommand):
             gpkg_files = list(the_dir.glob("**/*.gpkg"))
 
             if not gpkg_files:
-                self.stdout.write(self.style.ERROR("No GPKG file found!"))
+                self.logger.error("Aucun fichier GPKG trouvé !")
                 return
 
             gpkg_file = str(gpkg_files[0])
-            self.stdout.write(f"Found GPKG: {gpkg_file}")
+            self.logger.info("GPKG trouvé : %s", gpkg_file)
 
             return gpkg_file
 
@@ -97,7 +97,7 @@ class Command(BaseCommand):
             "population": "population",
             "geom": "MULTIPOLYGON",
         }
-        self.stdout.write(self.style.SUCCESS("Importing cities"))
+        self.logger.info("Import des communes")
         lm = LayerMapping(
             City,
             gpkg_file,
@@ -106,22 +106,17 @@ class Command(BaseCommand):
             transform=False,  # Already in WGS84
         )
         lm.save(progress=True, strict=True)
-        self.stdout.write(self.style.SUCCESS("Import successful"))
-        self.stdout.write(self.style.SUCCESS("Normalizing…"))
+        self.logger.info("Import réussi")
+        self.logger.info("Normalisation…")
         normalize_model(City, with_dept=True)
-
-        self.stdout.write(self.style.SUCCESS("Done"))
+        self.logger.info("Terminé")
 
     def _import_saint_martin(self, gpkg_file):
         if City.objects.filter(code="97801").exists():
-            self.stdout.write(
-                self.style.WARNING("Saint-Martin (97801) already exists. Skipping.")
-            )
+            self.logger.warning("Saint-Martin (97801) existe déjà. Ignoré.")
             return
 
-        self.stdout.write(
-            self.style.SUCCESS("Importing Saint-Martin from collectivite_territoriale")
-        )
+        self.logger.info("Import de Saint-Martin depuis collectivite_territoriale")
 
         ds = DataSource(gpkg_file)
         layer = ds["collectivite_territoriale"]
@@ -133,14 +128,12 @@ class Command(BaseCommand):
 
             if code_insee == "978" or (nom and "Saint-Martin" in nom):
                 saint_martin_feature = feature
-                self.stdout.write(f"Found: {nom} (code: {code_insee})")
+                self.logger.info("Trouvé : %s (code : %s)", nom, code_insee)
                 break
 
         if not saint_martin_feature:
-            self.stdout.write(
-                self.style.WARNING(
-                    "Saint-Martin not found in collectivite_territoriale layer"
-                )
+            self.logger.warning(
+                "Saint-Martin non trouvé dans la couche collectivite_territoriale"
             )
             return
 
@@ -164,10 +157,8 @@ class Command(BaseCommand):
         saint_martin.normalized_name += f" {code_insee_to_code_dept(saint_martin.code)}"
         saint_martin.save()
 
-        self.stdout.write(
-            self.style.SUCCESS(
-                f"Successfully imported: {saint_martin.name} (code: {saint_martin.code})"
-            )
+        self.logger.info(
+            "Import réussi : %s (code : %s)", saint_martin.name, saint_martin.code
         )
 
     def _import_epci(self, gpkg_file):
@@ -177,7 +168,7 @@ class Command(BaseCommand):
             "nature": "nature",
             "geom": "MULTIPOLYGON",
         }
-        self.stdout.write(self.style.SUCCESS("Importing EPCIs"))
+        self.logger.info("Import des EPCI")
         lm = LayerMapping(
             EPCI,
             gpkg_file,
@@ -186,22 +177,22 @@ class Command(BaseCommand):
             transform=False,
         )
         lm.save(progress=True, strict=True)
-        self.stdout.write(self.style.SUCCESS("Import successful"))
-        self.stdout.write(self.style.SUCCESS("Normalizing…"))
+        self.logger.info("Import réussi")
+        self.logger.info("Normalisation…")
         normalize_model(EPCI)
 
-        self.stdout.write(self.style.SUCCESS("Linking to Cities"))
+        self.logger.info("Liaison aux communes")
         City.objects.update(
             epcis=Func(F("epci"), Value("/"), function="string_to_array")
         )
-        self.stdout.write(self.style.SUCCESS("Linking depts and regions"))
+        self.logger.info("Liaison des départements et régions")
         for epci in EPCI.objects.all():
             cities = City.objects.filter(epcis__contains=[epci.code])
             epci.departments = list(set(c.department for c in cities))
             epci.regions = list(set(c.region for c in cities))
             epci.save()
 
-        self.stdout.write(self.style.SUCCESS("Done"))
+        self.logger.info("Terminé")
 
     def _import_departments(self, gpkg_file):
         mapping = {
@@ -210,7 +201,7 @@ class Command(BaseCommand):
             "region": "code_insee_de_la_region",
             "geom": "MULTIPOLYGON",
         }
-        self.stdout.write(self.style.SUCCESS("Importing Departments"))
+        self.logger.info("Import des départements")
         lm = LayerMapping(
             Department,
             gpkg_file,
@@ -219,10 +210,10 @@ class Command(BaseCommand):
             transform=False,
         )
         lm.save(progress=True, strict=True)
-        self.stdout.write(self.style.SUCCESS("Import successful"))
-        self.stdout.write(self.style.SUCCESS("Normalizing…"))
+        self.logger.info("Import réussi")
+        self.logger.info("Normalisation…")
         normalize_model(Department)
-        self.stdout.write(self.style.SUCCESS("Done"))
+        self.logger.info("Terminé")
 
     def _import_regions(self, gpkg_file):
         mapping = {
@@ -230,7 +221,7 @@ class Command(BaseCommand):
             "name": "nom_officiel",
             "geom": "MULTIPOLYGON",
         }
-        self.stdout.write(self.style.SUCCESS("Importing Regions"))
+        self.logger.info("Import des régions")
         lm = LayerMapping(
             Region,
             gpkg_file,
@@ -239,7 +230,7 @@ class Command(BaseCommand):
             transform=False,
         )
         lm.save(progress=True, strict=True)
-        self.stdout.write(self.style.SUCCESS("Import successful"))
-        self.stdout.write(self.style.SUCCESS("Normalizing…"))
+        self.logger.info("Import réussi")
+        self.logger.info("Normalisation…")
         normalize_model(Region)
-        self.stdout.write(self.style.SUCCESS("Done"))
+        self.logger.info("Terminé")
