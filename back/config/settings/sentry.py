@@ -44,7 +44,15 @@ def sentry_init():
     sentry_sdk.init(
         dsn=os.getenv("SENTRY_DSN"),
         environment=os.getenv("ENVIRONMENT"),
-        integrations=[sentry_logging, DjangoIntegration(middleware_spans=True)],
+        integrations=[
+            sentry_logging,
+            DjangoIntegration(
+                middleware_spans=True,
+                signals_spans=True,
+                cache_spans=True,
+                db_transaction_spans=True,
+            ),
+        ],
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
         # We recommend adjusting this value in production.
