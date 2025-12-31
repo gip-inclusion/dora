@@ -46,8 +46,38 @@ models:
           - not_null
   - name: int_iMER
     description: |
-      Intentions de mise en relation.
-      Combinaison des tables orientation et mobilisation.
+      Table contenant les intentions de mise en relation (mobilisation et orientations)
+    columns:
+      - name: event_id
+        description: identifiant de la mise en relation
+        tests:
+          - unique
+          - not_null
+  - name: int_mobilisation_to_orientation
+    description: 
+      Cette vue associe à chaque mobilisation la première orientation qui en suit si il y en a une. 
+      Une orientation suit une mobilisation si elle a le même user_id, est faite dans l'heure après la mobilisation,
+      et concerne le même service (slug)
+    columns:
+      - name: mobilisation_id
+        description: identifiant de la mobilisation
+        tests: 
+          - unique
+          - not_null  
+      - name: user_id
+        description: identifiant de l'utilisateur à l'origine de la prescription
+        tests: 
+          - not_null
+      - name: first_following_orientation_id
+        description: id de la première orientation qui suit la mobilisation. Peut être null si aucune orientation est faite suite à la mobilisation.
+      - name: mobilisation_date
+        description: date de la mobilisation
+        tests: 
+          - not_null
+      - name: first_following_orientation_date
+        description: date de la première orientation qui suit la mobilisation. Peut être null si aucune orientation est faite suite à la mobilisation.
+      - name: delay
+        description: temps passé en entre la mobilisation et l'orientation. 
   - name: int_services_models
     description: |
       Services créés à partir de modèles.
@@ -59,7 +89,16 @@ models:
     config:
       indexes:
         - columns: [mobilisation_id]
-
+    columns: 
+      - name: orientation_id
+        description: identifiant de l'orientation
+        tests: 
+          - unique
+          - not_null
+      - name: mobilisation_id
+        description: identifiant de la mobilisation
+        tests:
+          - not_null
   - name: int_pilotage_bizdev
     description: |
       Indicateurs de pilotage du déploiement par département.
@@ -75,13 +114,26 @@ models:
   - name: int_mobilisationevent_user
     description: |
       Événements de mobilisation des utilisateurs.
-
+    columns: 
+      - name: event_id
+        description: |
+          Identifiant de l'événement de mobilisation
+        tests:
+          - unique
+          - not_null
   - name: int_orientation_user_service
     description: |
       Orientations des utilisateurs vers des services.
     config:
       indexes:
         - columns: [user_id, orientation_creation_date, service_slug]
+    columns:  
+      - name: orientation_id 
+        description: |
+          Identifiant de l'orientation
+        tests:
+          - unique
+          - not_null
 
   - name: int_user_page_views
     description: |

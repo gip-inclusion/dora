@@ -28,5 +28,5 @@ FROM {{ ref('int_mobilisationevent_user') }} AS m
 LEFT JOIN
     {{ ref('int_structure_members') }} AS struct_members
     ON m.user_id = struct_members.user_id AND m.event_structure_id = CAST(struct_members.structure_id AS text)
-LEFT JOIN {{ ref('int_orientations_following_mobilisation') }} AS o_m
+LEFT JOIN {{ ref('int_mobilisation_to_orientation') }} AS o_m
     ON m.event_id = o_m.mobilisation_id

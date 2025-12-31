@@ -22,3 +22,8 @@ models:
     intermediate:
       +schema: intermediate
       +materialized: table
+    ephemeral:
+      +materialized: ephemeral
+    marts: 
+      +schema: marts
+      +materialized: table

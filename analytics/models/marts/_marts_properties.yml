@@ -1,0 +1,7 @@
+models:
+  - name: dim_users
+    description: |
+      Table contenant les informations descriptives des utilisateurs. 
+  - name: fact_iMer
+    description: /
+      Table fact contenant les informations sur les intentions de mise en rélation.
