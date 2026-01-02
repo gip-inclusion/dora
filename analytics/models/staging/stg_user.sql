@@ -22,7 +22,7 @@ final AS (
         main_activity,
         departments[1]                          AS department,
         last_service_reminder_email_sent        AS last_notification_email_sent,
-        NOT COALESCE(last_login IS NULL, FALSE) AS is_activated
+        last_login IS NOT NULL                  AS is_activated
     FROM src
 )
 

@@ -47,8 +47,6 @@ models:
         tests: 
           - not_null
       - name: user_id
-        description: identifiant de l'utilisateur
-        tests: 
-          - not_null
+        description: identifiant de l'utilisateur. Il est null lorsque la MER
       - name: generates_orientation
         description: boolean indiquant si la mobilisation est suivie par une orientation. Valeur null pour les orientations. 

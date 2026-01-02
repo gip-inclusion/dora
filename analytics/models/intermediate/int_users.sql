@@ -16,7 +16,7 @@ usr_with_imer AS (
 
 SELECT
     usr.*,
-    NOT COALESCE(usr_with_imer.user_id IS NULL, FALSE) AS user_with_imer
+    usr_with_imer.user_id IS NOT NULL       AS user_with_imer
 FROM usr
 LEFT JOIN usr_with_imer
     ON usr.id = usr_with_imer.user_id
