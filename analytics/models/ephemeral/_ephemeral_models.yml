@@ -1,4 +1,0 @@
-models:
-  - name: eph_users_with_iMer
-    description: |
-      Vue des utilisateurs ayant fait au moins une intention de mise en relation

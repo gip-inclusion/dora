@@ -140,6 +140,9 @@ models:
   - name: int_users 
     description: |
       Vue contenant les informations sur les utilisateurs.
+  - name: int_users_with_iMer
+    description: |
+      Modèle ephemeral contenant les utilisateurs ayant fait au moins une intention de mise en relation
   - name: int_user_page_views
     description: |
       Vues de pages par les utilisateurs.
