@@ -2,6 +2,53 @@ models:
   - name: dim_users
     description: |
       Table contenant les informations descriptives des utilisateurs. 
+    columns: 
+      - name: id
+        description: identifiant de l'utilisateur
+        tests:
+          - unique
+          - not_null
+      - name: email
+      - name: last_name
+      - name: first_name 
+      - name: is_manager
+        description: |
+          L'utilisateur a les droits de gestionnaire de territoires sur les départements spécifiés.
+      - name: departements
+        description: |
+          Liste des départements auxquels l'utilisateur est rattaché
+      - name: date_joined
+        description: |
+          Date de création de l'utilisateur. Il est crée car il a été invité mais il peut ne s'être jamais connecté. 
+      - name: last_login 
+      - name: last_service_reminder_email_sent 
+      - name: newsletter
+      - name: main_activity
+      - name: departement 
+        description: Premier département dans la liste de la colonne departments
+      - name: last_notification_email_sent
+      - name: is_activated
+        description: Un utilisateur est activé s'il s'est connecté au moins une fois.
   - name: fact_iMer
-    description: /
+    description: |
       Table fact contenant les informations sur les intentions de mise en rélation.
+    columns: 
+      - name: kind
+        description: type d'intention de mise en relation, cela peut être une mobilisation ou une orientation
+        tests: 
+          - not_null
+      - name: event_id
+        description: identifiant de la mise en rélation 
+        tests: 
+          - not_null
+          - unique
+      - name: date
+        description: date de la mise en rélation
+        tests: 
+          - not_null
+      - name: user_id
+        description: identifiant de l'utilisateur
+        tests: 
+          - not_null
+      - name: generates_orientation
+        description: boolean indiquant si la mobilisation est suivie par une orientation. Valeur null pour les orientations. 

@@ -134,7 +134,9 @@ models:
         tests:
           - unique
           - not_null
-
+  - name: int_users 
+    description: |
+      Vue contenant les informations sur les utilisateurs.
   - name: int_user_page_views
     description: |
       Vues de pages par les utilisateurs.

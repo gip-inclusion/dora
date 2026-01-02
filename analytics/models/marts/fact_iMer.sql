@@ -3,9 +3,9 @@ WITH int_iMer AS (
 )
 
 SELECT
-    KIND,
-    EVENT_ID,
-    DATE,
-    USER_ID,
-    GENERATES_ORIENTATION
+    kind,
+    event_id,
+    date,
+    user_id,
+    generates_orientation
 FROM int_iMer
