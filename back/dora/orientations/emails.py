@@ -354,6 +354,9 @@ def send_orientation_expiration_emails(
         "expiration_period_days": settings.ORIENTATION_EXPIRATION_PERIOD_DAYS,
         "search_link": settings.FRONTEND_URL + "/recherche",
         "start_date": start_date.strftime("%-d %B %Y"),
+        "orientation_support_link": settings.ORIENTATION_SUPPORT_LINK,
+        "with_dora_info": True,
+        "with_legal_info": True,
     }
 
     send_mail(
