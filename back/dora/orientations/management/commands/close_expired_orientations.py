@@ -47,6 +47,16 @@ class Command(BaseCommand):
                         orientation.processing_date or orientation.creation_date
                     )
 
+                    try:
+                        orientation.delete_attachments()
+                    except Exception as e:
+                        self.logger.error(
+                            "Erreur de suppression des pièces jointes pour l'orientation %s: %s",
+                            orientation.id,
+                            e,
+                        )
+                        raise
+
                     orientation.set_status(OrientationStatus.EXPIRED)
 
                     self.logger.info("L'orientation %s a été clôturée.", orientation.pk)
