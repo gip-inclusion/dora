@@ -24,7 +24,7 @@ class Command(BaseCommand):
         )
 
         orientations = Orientation.objects.filter(
-            processing_date__lte=expiration_date,
+            processing_date__date__lte=expiration_date,
             status__in=[
                 OrientationStatus.ACCEPTED,
                 OrientationStatus.MODERATION_REJECTED,
