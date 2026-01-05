@@ -10,12 +10,12 @@
   import { formatNumericDate } from "$lib/utils/date";
 
   const statusMap = {
-    VALIDÉE: { label: "Validé", cssClass: "text-success" },
+    VALIDÉE: { label: "Validée", cssClass: "text-success" },
     OUVERTE: {
       label: "Ouverte / En cours de traitement",
       cssClass: "text-blue-information-dark",
     },
-    REFUSÉE: { label: "Refusé", cssClass: "text-error" },
+    REFUSÉE: { label: "Refusée", cssClass: "text-error" },
     EXPIRÉE: { label: "Expirée", cssClass: "text-warning" },
   };
   interface Props {
