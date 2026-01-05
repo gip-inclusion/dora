@@ -95,30 +95,24 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
             )
 
     @override_settings(ORIENTATION_EXPIRATION_EMAILS_ENABLED=False)
-    def test_should_log_emails_without_sending_notifications_when_emailing_sending_disabled(
-        self,
-    ):
-        with self.assertLogs(
-            "dora.orientations.management.commands.close_expired_orientations",
-            level="INFO",
-        ) as logs:
-            self.call_command()
+    def test_should_send_export_email_if_notifications_disabled(self):
+        self.call_command()
 
-        self.assertEqual(len(mail.outbox), 0)
+        self.assertEqual(len(mail.outbox), 1)
 
-        export_logs = [log for log in logs.output if "Export des emails" in log]
-        self.assertEqual(len(export_logs), 1)
+        email = mail.outbox[0]
 
-        log_message = export_logs[0]
+        self.assertEqual(
+            email.subject, "Export des mails pour les orientations expirées"
+        )
+        self.assertIn(self.expired_orientation_1.get_contact_email(), email.body)
+        self.assertIn(self.expired_orientation_2.get_contact_email(), email.body)
 
-        self.assertIn(self.expired_orientation_1.get_contact_email(), log_message)
-        self.assertIn(self.expired_orientation_2.get_contact_email(), log_message)
+        self.assertIn(self.expired_orientation_1.prescriber.email, email.body)
+        self.assertIn(self.expired_orientation_2.prescriber.email, email.body)
 
-        self.assertIn(self.expired_orientation_1.prescriber.email, log_message)
-        self.assertIn(self.expired_orientation_2.prescriber.email, log_message)
-
-        self.assertIn(self.expired_orientation_1.referent_email, log_message)
-        self.assertIn(self.expired_orientation_2.referent_email, log_message)
+        self.assertIn(self.expired_orientation_1.referent_email, email.body)
+        self.assertIn(self.expired_orientation_2.referent_email, email.body)
 
     def test_should_send_three_emails_when_prescriber_and_referent_are_the_same(
         self,

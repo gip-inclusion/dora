@@ -7,6 +7,7 @@ from django.db.models.functions import Coalesce
 from django.utils import timezone
 
 from dora.core.commands import BaseCommand
+from dora.core.emails import send_mail
 from dora.orientations.emails import send_orientation_expiration_emails
 from dora.orientations.models import Orientation, OrientationStatus
 
@@ -70,13 +71,23 @@ class Command(BaseCommand):
         )
 
         if not settings.ORIENTATION_EXPIRATION_EMAILS_ENABLED and self.emails_to_export:
-            valid_emails = sorted([email for email in self.emails_to_export if email])
+            valid_emails = [email for email in self.emails_to_export if email]
 
             if valid_emails:
+                body = "<br/>".join(valid_emails)
+
+                send_mail(
+                    "Export des mails pour les orientations expirées",
+                    [
+                        "gael.giffard@inclusion.gouv.fr",
+                    ],
+                    body,
+                    tags=["orientation"],
+                )
+
                 self.logger.info(
-                    "Export des emails pour orientations expirées (%d emails): %s",
+                    "%s emails uniques exportés.",
                     len(valid_emails),
-                    ", ".join(valid_emails),
                 )
 
     def send_email_notifications(
