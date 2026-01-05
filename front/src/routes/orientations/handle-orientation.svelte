@@ -145,7 +145,7 @@
         title="N’ayant pas reçu de réponse, cette demande a expiré."
       >
         <p class="text-f14 text-gray-text text-left">
-          Une demande d'orientation reçue requiert une réponse du service dans
+          Une demande d’orientation reçue requiert une réponse du service dans
           un délai maximal de 30 jours. Passé ce délai, cette demande est
           automatiquement annulée. Le prescripteur a été tenu informé de cette
           expiration.
