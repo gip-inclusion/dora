@@ -108,7 +108,7 @@
             </div>
           </div>
 
-          {#if orientation.status !== "REFUSÉE"}
+          {#if orientation.status !== "REFUSÉE" && orientation.status !== "EXPIRÉE"}
             <div class="border-gray-02 flex-2 rounded-lg border md:relative">
               <div
                 class="gap-s12 border-gray-02 px-s16 py-s20 md:px-s36 flex flex-wrap items-center justify-between border-b"
