@@ -147,29 +147,18 @@ class OrientationViewSet(
         except ValidationError as error:
             raise serializers.ValidationError({"message": error.messages})
 
-        try:
-            with transaction.atomic():
-                orientation.delete_attachments()
-                orientation.rejection_reasons.set(
-                    RejectionReason.objects.filter(value__in=reasons)
-                )
-                orientation.set_status(OrientationStatus.REJECTED)
-
-                transaction.on_commit(
-                    functools.partial(
-                        send_orientation_rejected_emails, orientation, sanitized_message
-                    )
-                )
-        except Exception as e:
-            logger.error(
-                "Erreur inattendue lors du rejet de l'orientation",
-                {
-                    "orientationId": orientation.id,
-                    "error": str(e),
-                },
-                exc_info=True,
+        with transaction.atomic():
+            orientation.delete_attachments()
+            orientation.rejection_reasons.set(
+                RejectionReason.objects.filter(value__in=reasons)
             )
-            raise
+            orientation.set_status(OrientationStatus.REJECTED)
+
+            transaction.on_commit(
+                functools.partial(
+                    send_orientation_rejected_emails, orientation, sanitized_message
+                )
+            )
 
         return Response(status=204)
 
