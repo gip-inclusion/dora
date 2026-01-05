@@ -711,7 +711,7 @@ export interface Orientation {
     slug: string;
   };
   processingDate?: string;
-  status: "OUVERTE" | "VALIDÉE" | "REFUSÉE";
+  status: "OUVERTE" | "VALIDÉE" | "REFUSÉE" | "EXPIRÉE";
   beneficiaryAttachmentsDetails?: {
     name: string;
     url: string;
