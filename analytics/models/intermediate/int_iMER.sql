@@ -23,10 +23,10 @@ SELECT
     struct_members.structure_department,
     event_is_di                                                                           AS is_di_service,
     COALESCE(m.user_main_activity IN ('accompagnateur', 'accompagnateur_offreur'), FALSE) AS is_prescriber,
-    o_m.delay IS NOT NULL                                                                 AS generates_orientation
+    generates_orientation
 FROM {{ ref('int_mobilisationevent_user') }} AS m
 LEFT JOIN
     {{ ref('int_structure_members') }} AS struct_members
     ON m.user_id = struct_members.user_id AND m.event_structure_id = CAST(struct_members.structure_id AS text)
-LEFT JOIN {{ ref('int_orientations_following_mobilisation') }} AS o_m
+LEFT JOIN {{ ref('int_mobilisation_to_orientation') }} AS o_m
     ON m.event_id = o_m.mobilisation_id

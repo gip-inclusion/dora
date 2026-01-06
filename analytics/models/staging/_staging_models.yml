@@ -71,7 +71,9 @@ models:
         data_tests:
           - unique
           - not_null
-
+      - name: prescriber_id
+        data_test: 
+          - unique
   - name: stg_mobilisationevent
     config:
       indexes:
