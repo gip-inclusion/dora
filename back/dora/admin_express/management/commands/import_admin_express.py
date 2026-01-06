@@ -18,7 +18,7 @@ from dora.core.utils import code_insee_to_code_dept
 EXE_7ZR = "/app/.apt/usr/lib/p7zip/7zr" if not settings.DEBUG else "7zr"
 
 # Version GPKG avec coordonnées WGS84 (France métropolitaine + DOM-TOM)
-# Inclut les données géographiques pour Saint-Martin (97801) dans la couche collectivite_territoriale
+# Inclut les données géographiques pour Saint-Martin (97801) et Saint-Barthélemy(97701) dans la couche "collectivite_territoriale"
 AE_COG_LINK = "https://data.geopf.fr/telechargement/download/ADMIN-EXPRESS-COG/ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01/ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01.7z"
 AE_COG_FILE = "ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01.7z"
 USE_TEMP_DIR = not settings.DEBUG
@@ -111,115 +111,78 @@ class Command(BaseCommand):
         normalize_model(City, with_dept=True)
         self.logger.info("Terminé")
 
-    def _import_saint_martin(self, gpkg_file):
-        if City.objects.filter(code="97801").exists():
-            self.logger.warning("Saint-Martin (97801) existe déjà. Ignoré.")
+    def _import_collective_territoriale(
+        self, gpkg_file, territory_name, city_code, department_code, population
+    ):
+        if City.objects.filter(code=city_code).exists():
+            self.logger.warning(
+                "%s (%s) existe déjà. Ignoré.", territory_name, city_code
+            )
             return
 
-        self.logger.info("Import de Saint-Martin depuis collectivite_territoriale")
+        self.logger.info(
+            "Import de %s depuis collectivite_territoriale", territory_name
+        )
 
         ds = DataSource(gpkg_file)
         layer = ds["collectivite_territoriale"]
 
-        saint_martin_feature = None
+        target_feature = None
         for feature in layer:
             code_insee = feature.get("code_insee")
             nom = feature.get("nom_officiel")
 
-            if code_insee == "978" or (nom and "Saint-Martin" in nom):
-                saint_martin_feature = feature
+            if code_insee == department_code or (nom and territory_name in nom):
+                target_feature = feature
                 self.logger.info("Trouvé : %s (code : %s)", nom, code_insee)
                 break
 
-        if not saint_martin_feature:
+        if not target_feature:
             self.logger.warning(
-                "Saint-Martin non trouvé dans la couche collectivite_territoriale"
+                "%s non trouvé dans la couche collectivite_territoriale", territory_name
             )
             return
 
-        geom = saint_martin_feature.geom
+        geom = target_feature.geom
         geom_geos = GEOSGeometry(geom.wkt, srid=geom.srid)
 
-        official_name = saint_martin_feature.get("nom_officiel")
-        region_code = saint_martin_feature.get("code_insee_de_la_region") or "NR"
+        official_name = target_feature.get("nom_officiel")
+        region_code = target_feature.get("code_insee_de_la_region") or "NR"
 
-        saint_martin = City(
-            code="97801",  # Il faut utiliser le code insee de 5 chiffres
+        city = City(
+            code=city_code,  # Il faut utiliser le code insee de 5 chiffres
             name=official_name,
-            department="978",
+            department=department_code,
             region=region_code,
             geom=geom_geos,
-            epci="NR",  # Pas disponible dans la layer collectivite_territoriale
+            epci="NR",  # Pas disponible dans la couche "collectivite_territoriale"
             epcis=["NR"],
-            population=31951,  # https://adresse.data.gouv.fr/carte-base-adresse-nationale?id=97801#18.086004_-63.062500_12.41
+            population=population,
         )
-        saint_martin.normalized_name = normalize_string_for_search(saint_martin.name)
-        saint_martin.normalized_name += f" {code_insee_to_code_dept(saint_martin.code)}"
-        saint_martin.save()
+        city.normalized_name = normalize_string_for_search(city.name)
+        city.normalized_name += f" {code_insee_to_code_dept(city.code)}"
+        city.save()
 
-        self.logger.info(
-            "Import réussi : %s (code : %s)", saint_martin.name, saint_martin.code
-        )
-
-    def _import_saint_barthelemy(self, gpkg_file):
-        if City.objects.filter(code="97701").exists():
-            self.logger.warning("Saint-Barthélemy (97701) existe déjà. Ignoré.")
-            return
-
-        self.logger.info("Import de Saint-Barthélemy depuis collectivite_territoriale")
-
-        ds = DataSource(gpkg_file)
-        layer = ds["collectivite_territoriale"]
-
-        saint_barthelemy_feature = None
-        for feature in layer:
-            code_insee = feature.get("code_insee")
-            nom = feature.get("nom_officiel")
-
-            if code_insee == "977" or (nom and "Saint-Barthélemy" in nom):
-                saint_barthelemy_feature = feature
-                self.logger.info("Trouvé : %s (code : %s)", nom, code_insee)
-                break
-
-        if not saint_barthelemy_feature:
-            self.logger.warning(
-                "Saint-Barthélemy non trouvé dans la couche collectivite_territoriale"
-            )
-            return
-
-        geom = saint_barthelemy_feature.geom
-        geom_geos = GEOSGeometry(geom.wkt, srid=geom.srid)
-
-        official_name = saint_barthelemy_feature.get("nom_officiel")
-        region_code = saint_barthelemy_feature.get("code_insee_de_la_region") or "NR"
-
-        saint_barthelemy = City(
-            code="97701",  # Il faut utiliser le code insee de 5 chiffres
-            name=official_name,
-            department="977",
-            region=region_code,
-            geom=geom_geos,
-            epci="NR",  # Pas disponible dans la layer collectivite_territoriale
-            epcis=["NR"],
-            population=10656,  # https://adresse.data.gouv.fr/carte-base-adresse-nationale?id=97701#17.919505_-62.849500_12.57
-        )
-        saint_barthelemy.normalized_name = normalize_string_for_search(
-            saint_barthelemy.name
-        )
-        saint_barthelemy.normalized_name += (
-            f" {code_insee_to_code_dept(saint_barthelemy.code)}"
-        )
-        saint_barthelemy.save()
-
-        self.logger.info(
-            "Import réussi : %s (code : %s)",
-            saint_barthelemy.name,
-            saint_barthelemy.code,
-        )
+        self.logger.info("Import réussi : %s (code : %s)", city.name, city.code)
 
     def _import_collectivites_territoriales(self, gpkg_file):
-        self._import_saint_martin(gpkg_file)
-        self._import_saint_barthelemy(gpkg_file)
+        collectivites_territoriale_map = {
+            "Saint-Martin": {
+                "territory_name": "Saint-Martin",
+                "city_code": "97801",
+                "department_code": "978",
+                "population": 31951,  # https://adresse.data.gouv.fr/carte-base-adresse-nationale?id=97801#18.086004_-63.062500_12.41
+            },
+            "Saint-Barthélemy": {
+                "territory_name": "Saint-Barthélemy",
+                "city_code": "97701",
+                "department_code": "977",
+                "population": 10656,  # https://adresse.data.gouv.fr/carte-base-adresse-nationale?id=97701#17.919505_-62.849500_12.57
+            },
+        }
+
+        for data in collectivites_territoriale_map.values():
+            self._import_collective_territoriale(gpkg_file, **data)
 
     def _import_epci(self, gpkg_file):
         mapping = {
