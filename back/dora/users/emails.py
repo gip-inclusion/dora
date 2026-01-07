@@ -7,7 +7,7 @@ from furl import furl
 from mjml import mjml2html
 
 from dora.core.emails import send_mail
-from dora.support.views import StructureAdminViewSet
+from dora.structures.models import Structure
 
 
 def send_invitation_reminder(user, structure, notification=False):
@@ -104,12 +104,8 @@ def send_weekly_email_to_department_managers(manager):
     # envoyé aux gestionnaires de territoire tous les mercredis
     # avec la liste des structures qui exigent une action de leur part
 
-    relevant_structures = StructureAdminViewSet.get_base_queryset_for_manager(manager)
-
-    all_awaiting_moderation = relevant_structures.filter(
-        is_orphan=False, is_waiting=False, awaiting_moderation=True
-    )
-    all_orphans = relevant_structures.filter(is_orphan=True)
+    all_awaiting_moderation = Structure.objects.awaiting_moderation(manager)
+    all_orphans = Structure.objects.orphans_for_manager(manager)
     total_structures_count = all_awaiting_moderation.count() + all_orphans.count()
 
     awaiting_moderation = all_awaiting_moderation.order_by("name")[
