@@ -149,10 +149,24 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
 
         make_structure(
             department=self.department,
+            user=make_user(),
+            moderation_status=ModerationStatus.NEED_NEW_MODERATION,
+            name="Beta",
+        )
+
+        make_structure(
+            department=self.department,
             user=None,
             putative_member=None,
             moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
-            name="Zeta",
+            name="Gamma",
+        )
+
+        make_structure(
+            department=self.department,
+            putative_member=make_user(),
+            moderation_status=ModerationStatus.NEED_INITIAL_MODERATION,
+            name="Delta",
         )
 
         send_weekly_email_to_department_managers(self.manager)
@@ -165,9 +179,9 @@ class SendWeeklyDepartmentManagerEmail(TestCase):
             "Vous avez des structures à modérer cette semaine",
         )
         self.assertIn(
-            "<p>À valider :</p><ul><li>Alpha</li><li>Zeta</li>"
+            "<p>À valider :</p><ul><li>Beta</li><li>Delta</li>"
             "</ul><p>Sans utilisateur :</p>"
-            "<ul><li>Alpha</li><li>Zeta</li></ul></p>",
+            "<ul><li>Alpha</li><li>Gamma</li></ul></p>",
             mail.outbox[0].body,
         )
         self.assertIn("4 structure(s) en attente", mail.outbox[0].body)
