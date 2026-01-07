@@ -80,11 +80,9 @@ class StructureAdminViewSet(
 
     lookup_field = "slug"
 
-    def get_queryset(self):
-        user = self.request.user
-        department = self.request.query_params.get("department")
-
-        structures = (
+    @staticmethod
+    def _get_base_queryset():
+        return (
             Structure.objects.all()
             .prefetch_related(
                 "national_labels",
@@ -149,6 +147,29 @@ class StructureAdminViewSet(
                     default=Value(False),
                     output_field=BooleanField(),
                 ),
+                is_waiting=Case(
+                    When(
+                        ~Exists(
+                            StructureMember.objects.filter(
+                                structure=OuterRef("pk"),
+                                is_admin=True,
+                                user__is_valid=True,
+                                user__is_active=True,
+                            )
+                        )
+                        & Exists(
+                            StructurePutativeMember.objects.filter(
+                                structure=OuterRef("pk"),
+                                is_admin=True,
+                                invited_by_admin=True,
+                                user__is_active=True,
+                            )
+                        ),
+                        then=Value(True),
+                    ),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                ),
                 categories_list=ArrayAgg(
                     "services__categories__value",
                     distinct=True,
@@ -174,6 +195,18 @@ class StructureAdminViewSet(
                 ),
             )
         )
+
+    @staticmethod
+    def get_base_queryset_for_manager(manager):
+        return StructureAdminViewSet._get_base_queryset().filter(
+            is_obsolete=False, department__in=manager.departments
+        )
+
+    def get_queryset(self):
+        user = self.request.user
+        department = self.request.query_params.get("department")
+
+        structures = self._get_base_queryset()
 
         if not self.action == "list":
             structures = structures.select_related(
