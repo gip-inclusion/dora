@@ -9,6 +9,7 @@ services:
       - pgconf:/etc/postgresql
     ports:
       - "127.0.0.1:5432:5432"
+    shm_size: 512mb
   pgadmin:
     image: dpage/pgadmin4
     env_file:
