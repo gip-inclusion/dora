@@ -5,7 +5,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0046_auto_20220308_1754"),
+        ("services", "0046_b_rename_m2m_tables_django6"),
     ]
 
     operations = [
