@@ -21,6 +21,7 @@
   import { getCurrentlySelectedStructure } from "$lib/utils/current-structure";
 
   import type { PageData } from "./$types";
+  import { URL_HELP_SITE } from "$lib/consts";
 
   interface Props {
     data: PageData;
@@ -139,7 +140,7 @@
     </p>
 
     <LinkButton
-      to="https://aide.dora.inclusion.beta.gouv.fr/fr/article/participer-a-un-webinaire-dora-h3n747/"
+      to={`${URL_HELP_SITE}article/participer-a-un-webinaire-dora-h3n747/`}
       otherTab
       nofollow
       noBackground
