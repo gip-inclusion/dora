@@ -47,5 +47,5 @@ export function deleteMatomoCookies() {
 }
 
 export function deleteCrispCookie() {
-  deleteCookieByPrefix("crisp-client", ".beta.gouv.fr");
+  deleteCookieByPrefix("crisp-client", ".inclusion.gouv.fr");
 }
