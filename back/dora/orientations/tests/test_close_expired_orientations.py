@@ -13,7 +13,6 @@ from dora.orientations.models import OrientationStatus
 
 
 @override_settings(ORIENTATION_EXPIRATION_PERIOD_DAYS=30)
-@override_settings(ORIENTATION_EXPIRATION_EMAILS_ENABLED=True)
 class CloseExpiredOrientationsTestCase(TransactionTestCase):
     def setUp(self):
         self.beneficiary_email = "test@email.com"
@@ -141,26 +140,6 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
 
         self.assertEqual(len(self.valid_orientation.beneficiary_attachments), 2)
         self.assertEqual(len(self.orientation_in_moderation.beneficiary_attachments), 1)
-
-    @override_settings(ORIENTATION_EXPIRATION_EMAILS_ENABLED=False)
-    def test_should_send_export_email_if_notifications_disabled(self):
-        self.call_command()
-
-        self.assertEqual(len(mail.outbox), 1)
-
-        email = mail.outbox[0]
-
-        self.assertEqual(
-            email.subject, "Export des mails pour les orientations expirées"
-        )
-        self.assertIn(self.expired_orientation_1.get_contact_email(), email.body)
-        self.assertIn(self.expired_orientation_2.get_contact_email(), email.body)
-
-        self.assertIn(self.expired_orientation_1.prescriber.email, email.body)
-        self.assertIn(self.expired_orientation_2.prescriber.email, email.body)
-
-        self.assertIn(self.expired_orientation_1.referent_email, email.body)
-        self.assertIn(self.expired_orientation_2.referent_email, email.body)
 
     def test_should_send_three_emails_when_prescriber_and_referent_are_the_same(
         self,
