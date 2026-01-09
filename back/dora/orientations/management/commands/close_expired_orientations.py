@@ -20,8 +20,6 @@ class Command(BaseCommand):
             settings.ORIENTATION_EXPIRATION_PERIOD_DAYS,
         )
 
-        self.emails_to_export = set()
-
         expiration_date = timezone.localdate() - timedelta(
             days=settings.ORIENTATION_EXPIRATION_PERIOD_DAYS
         )
