@@ -200,6 +200,9 @@ class Orientation(models.Model):
         verbose_name="statut",
     )
     last_reminder_email_sent = models.DateTimeField(blank=True, null=True)
+    is_anonymized = models.BooleanField(
+        verbose_name="Orientation anonymisée", default=False
+    )
 
     class Meta:
         constraints = (
