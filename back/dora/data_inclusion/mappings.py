@@ -90,6 +90,7 @@ def map_search_result(result: dict, supported_service_kinds: list[str]) -> dict:
         #
         # ServiceSerializer
         #
+        "di_publics": service_data["publics"] or [],
         "location_kinds": location_kinds,
         "kinds": kinds,
         "fee_condition": service_data["frais"],
