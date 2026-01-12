@@ -8,11 +8,11 @@ from dora.orientations.models import Orientation
 
 
 class Command(BaseCommand):
-    help = "Anonymiser les orientations en supprimant les données personnelles après un délai"
+    help = "Anonymise les orientations en supprimant les données personnelles après un délai"
 
     def handle(self, *args, **options):
         self.logger.info(
-            "Anonymisation des orientations qui ont été créées au mois %d jours.",
+            "Anonymisation des orientations qui ont été créées il y a plus de %d jours.",
             settings.ORIENTATION_ANONYMIZATION_PERIOD_DAYS,
         )
 
@@ -21,7 +21,7 @@ class Command(BaseCommand):
         )
 
         orientations_to_anonymize = Orientation.objects.filter(
-            creation_date__date__lte=anonymization_date
+            creation_date__date__lt=anonymization_date
         )
 
         orientations_to_update = []
@@ -44,26 +44,23 @@ class Command(BaseCommand):
 
             orientations_to_update.append(orientation)
 
-        Orientation.objects.bulk_update(
-            orientations_to_update,
-            [
-                "beneficiary_first_name",
-                "beneficiary_last_name",
-                "beneficiary_phone",
-                "beneficiary_email",
-                "beneficiary_france_travail_number",
-                "referent_first_name",
-                "referent_last_name",
-                "referent_phone",
-                "referent_email",
-                "di_contact_name",
-                "di_contact_email",
-                "is_anonymized",
-                "processing_date",
-            ],
+        count = orientations_to_anonymize.update(
+            beneficiary_first_name="",
+            beneficiary_last_name="",
+            beneficiary_phone="",
+            beneficiary_email="",
+            beneficiary_france_travail_number="",
+            referent_first_name="",
+            referent_last_name="",
+            referent_phone="",
+            referent_email="",
+            di_contact_name="",
+            di_contact_email="",
+            is_anonymized=True,
+            processing_date=timezone.now(),
         )
 
         self.logger.info(
             "%s orientations ont été anonymisées.",
-            len(orientations_to_update),
+            count,
         )
