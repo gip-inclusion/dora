@@ -2,3 +2,5 @@ p7zip
 gdal-bin
 libgdal-dev
 libmagic1
+libopenblas-base
+libgfortran5
