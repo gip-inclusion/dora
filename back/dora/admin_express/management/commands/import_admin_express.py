@@ -111,7 +111,7 @@ class Command(BaseCommand):
         normalize_model(City, with_dept=True)
         self.logger.info("Terminé")
 
-    def _import_collective_territoriale(
+    def _import_collectivite_territoriale(
         self, gpkg_file, territory_name, city_code, department_code, population
     ):
         if City.objects.filter(code=city_code).exists():
@@ -166,23 +166,23 @@ class Command(BaseCommand):
         self.logger.info("Import réussi : %s (code : %s)", city.name, city.code)
 
     def _import_collectivites_territoriales(self, gpkg_file):
-        collectivites_territoriale_map = {
-            "Saint-Martin": {
+        collectivites_territoriales = [
+            {
                 "territory_name": "Saint-Martin",
                 "city_code": "97801",
                 "department_code": "978",
                 "population": 31951,  # https://adresse.data.gouv.fr/carte-base-adresse-nationale?id=97801#18.086004_-63.062500_12.41
             },
-            "Saint-Barthélemy": {
+            {
                 "territory_name": "Saint-Barthélemy",
                 "city_code": "97701",
                 "department_code": "977",
                 "population": 10656,  # https://adresse.data.gouv.fr/carte-base-adresse-nationale?id=97701#17.919505_-62.849500_12.57
             },
-        }
+        ]
 
-        for data in collectivites_territoriale_map.values():
-            self._import_collective_territoriale(gpkg_file, **data)
+        for collectivite in collectivites_territoriales:
+            self._import_collectivite_territoriale(gpkg_file, **collectivite)
 
     def _import_epci(self, gpkg_file):
         mapping = {
