@@ -1,10 +1,11 @@
+import os
 import os.path
 import pathlib
 import subprocess
 import tempfile
 
 from django.conf import settings
-from django.contrib.gis.gdal import DataSource
+from django.contrib.gis.gdal import DataSource, gdal_version
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.utils import LayerMapping
 from django.db import connection
@@ -16,7 +17,6 @@ from dora.core.commands import BaseCommand
 from dora.core.utils import code_insee_to_code_dept
 
 EXE_7ZR = "/app/.apt/usr/lib/p7zip/7zr" if not settings.DEBUG else "7zr"
-
 
 # Version GPKG avec coordonnées WGS84 (France métropolitaine + DOM-TOM)
 # Inclut les données géographiques pour Saint-Martin (97801) et Saint-Barthélemy(97701) dans la couche "collectivite_territoriale"
@@ -38,7 +38,39 @@ class Command(BaseCommand):
     help = "Importer la base de donnée d'Admin Express COG la plus récente dans le format GPKG."
 
     def handle(self, *args, **options):
+        # Configure GDAL for Scalingo environment
+        if not settings.DEBUG:
+            # Set environment variables for GDAL to find libraries and data
+            apt_root = "/app/.apt/usr"
+            os.environ.setdefault("GDAL_DATA", f"{apt_root}/share/gdal")
+            os.environ.setdefault("PROJ_LIB", f"{apt_root}/share/proj")
+
+            # Add apt lib directory to LD_LIBRARY_PATH
+            ld_lib_path = os.environ.get("LD_LIBRARY_PATH", "")
+            apt_lib = f"{apt_root}/lib"
+            if apt_lib not in ld_lib_path:
+                os.environ["LD_LIBRARY_PATH"] = (
+                    f"{apt_lib}:{ld_lib_path}" if ld_lib_path else apt_lib
+                )
+
+            self.logger.info("GDAL_DATA: %s", os.environ.get("GDAL_DATA"))
+            self.logger.info("PROJ_LIB: %s", os.environ.get("PROJ_LIB"))
+            self.logger.info("LD_LIBRARY_PATH: %s", os.environ.get("LD_LIBRARY_PATH"))
+
+        # Log GDAL configuration info
+        try:
+            from django.contrib.gis.gdal import libgdal
+
+            self.logger.info("GDAL library path: %s", libgdal.lib_path)
+            self.logger.info("GDAL version: %s", gdal_version())
+        except Exception as e:
+            self.logger.error("Error getting GDAL info: %s", e)
+
         gpkg_file = self._get_gpkg_file()
+
+        if not gpkg_file:
+            self.logger.error("Pas de fichier GPKG, arrêt de l'import")
+            return
 
         self._import_communes(gpkg_file)
 
