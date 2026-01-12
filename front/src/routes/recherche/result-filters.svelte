@@ -7,6 +7,7 @@
   } from "$lib/types";
 
   export interface Filters {
+    diPublics: Array<string>;
     kinds: Array<ServiceKind>;
     fundingLabels: Array<FundingLabel["value"]>;
     feeConditions: Array<FeeCondition>;
@@ -33,6 +34,12 @@
 </script>
 
 <div class="gap-s32 flex flex-col">
+  <ResultFilter
+    id="diPublics"
+    label="Publics"
+    choices={servicesOptions.diPublics}
+    bind:group={filters.diPublics}
+  />
   <ResultFilter
     id="kinds"
     label="Type de service"
