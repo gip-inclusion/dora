@@ -15,7 +15,7 @@ from dora.admin_express.utils import normalize_string_for_search
 from dora.core.commands import BaseCommand
 from dora.core.utils import code_insee_to_code_dept
 
-EXE_7ZR = "/app/.apt/usr/bin/7zr" if not settings.DEBUG else "7zr"
+EXE_7ZR = "/app/.apt/usr/lib/p7zip/7zr" if not settings.DEBUG else "7zr"
 
 # Version GPKG avec coordonnées WGS84 (France métropolitaine + DOM-TOM)
 # Inclut les données géographiques pour Saint-Martin (97801) et Saint-Barthélemy(97701) dans la couche "collectivite_territoriale"
