@@ -17,6 +17,7 @@ from dora.core.utils import code_insee_to_code_dept
 
 EXE_7ZR = "/app/.apt/usr/lib/p7zip/7zr" if not settings.DEBUG else "7zr"
 
+
 # Version GPKG avec coordonnées WGS84 (France métropolitaine + DOM-TOM)
 # Inclut les données géographiques pour Saint-Martin (97801) et Saint-Barthélemy(97701) dans la couche "collectivite_territoriale"
 AE_COG_LINK = "https://data.geopf.fr/telechargement/download/ADMIN-EXPRESS-COG/ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01/ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01.7z"
@@ -84,6 +85,42 @@ class Command(BaseCommand):
 
             gpkg_file = str(gpkg_files[0])
             self.logger.info("GPKG trouvé : %s", gpkg_file)
+
+            # Vérifier que le fichier existe et afficher sa taille
+            gpkg_path = pathlib.Path(gpkg_file)
+            if not gpkg_path.exists():
+                self.logger.error("Le fichier GPKG n'existe pas : %s", gpkg_file)
+                return
+
+            file_size = gpkg_path.stat().st_size
+            self.logger.info(
+                "Taille du fichier GPKG : %d bytes (%.2f MB)",
+                file_size,
+                file_size / (1024 * 1024),
+            )
+
+            if file_size == 0:
+                self.logger.error("Le fichier GPKG est vide !")
+                return
+
+            # Tester avec ogrinfo pour vérifier que GDAL peut lire le fichier
+            try:
+                result = subprocess.run(
+                    ["ogrinfo", "-so", "-al", gpkg_file],
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+                if result.returncode != 0:
+                    self.logger.error("ogrinfo a échoué : %s", result.stderr)
+                else:
+                    self.logger.info("ogrinfo a réussi à lire le fichier GPKG")
+            except subprocess.TimeoutExpired:
+                self.logger.warning(
+                    "ogrinfo timeout - le fichier est peut-être très volumineux"
+                )
+            except Exception as e:
+                self.logger.error("Erreur lors de l'exécution de ogrinfo : %s", e)
 
             return gpkg_file
 
