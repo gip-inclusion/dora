@@ -4,6 +4,40 @@ import pathlib
 import subprocess
 import tempfile
 
+# Configure GDAL environment BEFORE any Django imports
+# This must happen before any module that might import GDAL
+# Check for Scalingo environment by looking for apt directory
+if os.path.exists("/app/.apt/usr"):
+    apt_root = "/app/.apt/usr"
+
+    # Set GDAL data directory
+    gdal_data = f"{apt_root}/share/gdal"
+    if os.path.exists(gdal_data):
+        os.environ.setdefault("GDAL_DATA", gdal_data)
+
+    # Set PROJ data directory
+    proj_lib = f"{apt_root}/share/proj"
+    if os.path.exists(proj_lib):
+        os.environ.setdefault("PROJ_LIB", proj_lib)
+
+    # Add apt lib directory to LD_LIBRARY_PATH for shared libraries
+    ld_lib_path = os.environ.get("LD_LIBRARY_PATH", "")
+    apt_lib = f"{apt_root}/lib"
+    if apt_lib not in ld_lib_path:
+        os.environ["LD_LIBRARY_PATH"] = (
+            f"{apt_lib}:{ld_lib_path}" if ld_lib_path else apt_lib
+        )
+
+    # Also check for x86_64-linux-gnu specific libraries
+    apt_lib_arch = f"{apt_root}/lib/x86_64-linux-gnu"
+    if (
+        os.path.exists(apt_lib_arch)
+        and apt_lib_arch not in os.environ["LD_LIBRARY_PATH"]
+    ):
+        os.environ["LD_LIBRARY_PATH"] = (
+            f"{apt_lib_arch}:{os.environ['LD_LIBRARY_PATH']}"
+        )
+
 from django.conf import settings
 from django.contrib.gis.gdal import DataSource, gdal_version
 from django.contrib.gis.geos import GEOSGeometry
