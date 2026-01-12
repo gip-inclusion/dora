@@ -91,6 +91,18 @@ make venv
 
 Pour que l’application soit utilisable, il faut _a minima_ importer les données géographiques et les labels nationaux :
 
+Pour faire tourner `import_admin_express` localement, il faut installer 7zip
+
+Pour Mac :
+```bash
+brew install p7zip
+```
+
+Pour Linux :
+```bash
+sudo apt-get install p7zip*
+```
+
 ```bash
 ./manage.py import_admin_express
 ./manage.py loaddata dora/structures/fixtures/01_structure_national_labels.json.gz
