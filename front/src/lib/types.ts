@@ -580,6 +580,7 @@ export type ServicesOptions = {
   coachOrientationModes: { value: CoachOrientationModes; label: string }[];
 
   publics: CustomChoice[];
+  diPublics: { value: string; label: string }[];
   credentials: CustomChoice[];
   deploymentDepartments: string[];
   diffusionZoneType: { value: AdminDivisionType; label: string }; // TODO: should be plural

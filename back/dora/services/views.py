@@ -744,7 +744,11 @@ def options(request):
             many=True,
             context={"request": request},
         ).data,
-        "di_publics": [{"value": p.value, "label": p.label} for p in DiPublic],
+        "di_publics": [
+            {"value": p.value, "label": p.label}
+            for p in DiPublic
+            if p.value != "tous-publics"
+        ],
         "requirements": RequirementSerializer(
             filter_custom_choices(
                 Requirement.objects.select_related("structure").all()
