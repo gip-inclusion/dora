@@ -21,7 +21,7 @@ class Command(BaseCommand):
         )
 
         orientations_to_anonymize = Orientation.objects.filter(
-            creation_date__date__lte=anonymization_date
+            is_anonymized=False, creation_date__date__lte=anonymization_date
         )
 
         count = orientations_to_anonymize.update(
