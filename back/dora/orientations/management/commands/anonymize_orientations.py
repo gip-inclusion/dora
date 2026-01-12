@@ -24,26 +24,6 @@ class Command(BaseCommand):
             creation_date__date__lte=anonymization_date
         )
 
-        orientations_to_update = []
-
-        for orientation in orientations_to_anonymize:
-            orientation.beneficiary_first_name = ""
-            orientation.beneficiary_last_name = ""
-            orientation.beneficiary_phone = ""
-            orientation.beneficiary_email = ""
-            orientation.beneficiary_france_travail_number = ""
-            orientation.referent_first_name = ""
-            orientation.referent_last_name = ""
-            orientation.referent_phone = ""
-            orientation.referent_email = ""
-            orientation.di_contact_name = ""
-            orientation.di_contact_email = ""
-
-            orientation.is_anonymized = True
-            orientation.processing_date = timezone.now()
-
-            orientations_to_update.append(orientation)
-
         count = orientations_to_anonymize.update(
             beneficiary_first_name="",
             beneficiary_last_name="",
