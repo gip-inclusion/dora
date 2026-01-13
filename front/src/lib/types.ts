@@ -275,16 +275,11 @@ export type OsmOpeningHours = {
 
 export type ServiceKind =
   | "accompagnement"
-  | "accueil"
   | "aide-financiere"
   | "aide-materielle"
   | "atelier"
-  | "autonomie"
-  | "delegation"
-  | "financement"
   | "formation"
-  | "information"
-  | "numerique";
+  | "information";
 
 export type FeeCondition = "gratuit" | "payant";
 
