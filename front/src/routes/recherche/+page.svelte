@@ -33,6 +33,7 @@
   }
 
   const FILTER_KEY_TO_QUERY_PARAM = {
+    diPublics: "publics",
     kinds: "kinds",
     fundingLabels: "funding",
     feeConditions: "fees",
@@ -90,6 +91,7 @@
 
   function resetFilters() {
     filters = {
+      diPublics: [],
       kinds: [],
       fundingLabels: [],
       feeConditions: [],
@@ -116,6 +118,9 @@
   // Filtre les services en fonctions des filtres sélectionnés
   let filteredServices = $derived(
     data.services.filter((service) => {
+      const diPublicsMatch =
+        filters.diPublics.length === 0 ||
+        filters.diPublics.some((value) => service.diPublics.includes(value));
       const kindsMatch =
         filters.kinds.length === 0 ||
         (service.kinds &&
@@ -141,6 +146,7 @@
         service.distance > 50
       );
       return (
+        diPublicsMatch &&
         kindsMatch &&
         fundingLabelsMatch &&
         feeConditionMatch &&

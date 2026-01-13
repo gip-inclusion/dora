@@ -3,6 +3,7 @@ from operator import itemgetter
 from urllib.parse import unquote
 
 import requests
+from data_inclusion.schema.v1.publics import Public as DiPublic
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Q
@@ -743,6 +744,11 @@ def options(request):
             many=True,
             context={"request": request},
         ).data,
+        "di_publics": [
+            {"value": p.value, "label": p.label}
+            for p in DiPublic
+            if p.value != DiPublic.TOUS_PUBLICS.value
+        ],
         "requirements": RequirementSerializer(
             filter_custom_choices(
                 Requirement.objects.select_related("structure").all()

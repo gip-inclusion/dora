@@ -364,6 +364,7 @@ export interface ServiceSearchResult {
   structure: string;
   status: ServiceStatus;
   updateNeeded: boolean;
+  diPublics: Array<string>;
   kinds: ServiceKind[] | null;
   feeCondition: FeeCondition | null;
   locationKinds: LocationKind[];
@@ -580,6 +581,7 @@ export type ServicesOptions = {
   coachOrientationModes: { value: CoachOrientationModes; label: string }[];
 
   publics: CustomChoice[];
+  diPublics: { value: string; label: string }[];
   credentials: CustomChoice[];
   deploymentDepartments: string[];
   diffusionZoneType: { value: AdminDivisionType; label: string }; // TODO: should be plural
