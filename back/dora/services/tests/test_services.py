@@ -2049,9 +2049,7 @@ class ServiceSearchTestCase(APITestCase):
         make_service(
             status=ServiceStatus.PUBLISHED,
             diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(
-                value="gratuit-sous-conditions"
-            ).first(),
+            fee_condition=ServiceFee.objects.filter(value="payant").first(),
         )
         response = self.client.get(f"/search/?city={self.city1.code}&fees=gratuit")
         assert response.status_code == 200
@@ -2073,41 +2071,13 @@ class ServiceSearchTestCase(APITestCase):
         make_service(
             status=ServiceStatus.PUBLISHED,
             diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(
-                value="gratuit-sous-conditions"
-            ).first(),
+            fee_condition=ServiceFee.objects.filter(value="gratuit").first(),
         )
         response = self.client.get(f"/search/?city={self.city1.code}&fees=payant")
         assert response.status_code == 200
         assert len(response.data) == 3
         assert len(response.data["services"]) == 1
         assert response.data["services"][0]["slug"] == service2.slug
-
-    def test_filter_by_fee_gratuit_sous_condition(self):
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="gratuit").first(),
-        )
-        make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(value="payant").first(),
-        )
-        service3 = make_service(
-            status=ServiceStatus.PUBLISHED,
-            diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(
-                value="gratuit-sous-conditions"
-            ).first(),
-        )
-        response = self.client.get(
-            f"/search/?city={self.city1.code}&fees=gratuit-sous-conditions"
-        )
-        assert response.status_code == 200
-        assert len(response.data) == 3
-        assert len(response.data["services"]) == 1
-        assert response.data["services"][0]["slug"] == service3.slug
 
     def test_filter_without_fee(self):
         make_service(
@@ -2123,9 +2093,7 @@ class ServiceSearchTestCase(APITestCase):
         make_service(
             status=ServiceStatus.PUBLISHED,
             diffusion_zone_type=AdminDivisionType.COUNTRY,
-            fee_condition=ServiceFee.objects.filter(
-                value="gratuit-sous-conditions"
-            ).first(),
+            fee_condition=ServiceFee.objects.filter(value="gratuit").first(),
         )
         response = self.client.get(f"/search/?city={self.city1.code}")
         assert response.status_code == 200
