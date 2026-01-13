@@ -887,10 +887,10 @@ class SearchResultSerializer(ServiceListSerializer):
             return (obj.geom.x, obj.geom.y)
 
     def get_di_publics(self, obj):
-        di_publics = []
+        di_publics = set()
         for public in obj.publics.all():
-            di_publics.extend(public.corresponding_di_publics)
-        return di_publics
+            di_publics.update(public.corresponding_di_publics)
+        return list(di_publics)
 
 
 class FundingLabelSerializer(serializers.ModelSerializer):
