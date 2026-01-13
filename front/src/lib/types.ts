@@ -286,11 +286,7 @@ export type ServiceKind =
   | "information"
   | "numerique";
 
-export type FeeCondition =
-  | "gratuit"
-  | "gratuit-sous-conditions"
-  | "payant"
-  | "adhesion";
+export type FeeCondition = "gratuit" | "payant";
 
 export type SavedSearchNotificationFrequency =
   | "NEVER"
