@@ -18,6 +18,13 @@ from corsheaders.defaults import default_headers
 
 from . import BASE_DIR
 
+# GDAL/GEOS Configuration:
+# CRITICAL: Must be set BEFORE django.contrib.gis is loaded (before INSTALLED_APPS)
+if "GDAL_LIBRARY_PATH" in os.environ:
+    GDAL_LIBRARY_PATH = os.getenv("GDAL_LIBRARY_PATH")
+if "GEOS_LIBRARY_PATH" in os.environ:
+    GEOS_LIBRARY_PATH = os.getenv("GEOS_LIBRARY_PATH")
+
 # Paramètres Django
 # Voir : https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -460,12 +467,6 @@ except Exception:
 # ces paramètres ne sont pas liés au système de notification
 NUM_DAYS_BEFORE_DRAFT_SERVICE_NOTIFICATION = 7
 NUM_DAYS_BEFORE_ORIENTATIONS_NOTIFICATION = 10
-
-# GDAL :
-if "GDAL_LIBRARY_PATH" in os.environ:
-    GDAL_LIBRARY_PATH = os.getenv("GDAL_LIBRARY_PATH")
-if "GEOS_LIBRARY_PATH" in os.environ:
-    GEOS_LIBRARY_PATH = os.getenv("GEOS_LIBRARY_PATH")
 
 # DJANGO_ADMINS=Name1:email1,Name2:email2
 ADMINS = (
