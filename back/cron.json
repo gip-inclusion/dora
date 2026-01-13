@@ -27,6 +27,10 @@
     {
       "command": "0 2 * * * tools/delete-old-closed-orientation-attachments.sh",
       "size": "S"
+    },
+    {
+      "command": "0 6 * * * tools/anonymize-orientations.sh",
+      "size": "S"
     }
   ]
 }
