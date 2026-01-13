@@ -156,7 +156,7 @@ def fix_all_services_with_incorrect_diffusion_zone_details(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("services", "0124_rename_concerned_public_service_publics"),
+        ("services", "0124_b_rename_publics_m2m_table_django6"),
     ]
 
     operations = [
