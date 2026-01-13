@@ -747,7 +747,7 @@ def options(request):
         "di_publics": [
             {"value": p.value, "label": p.label}
             for p in DiPublic
-            if p.value != "tous-publics"
+            if p.value != DiPublic.TOUS_PUBLICS.value
         ],
         "requirements": RequirementSerializer(
             filter_custom_choices(
