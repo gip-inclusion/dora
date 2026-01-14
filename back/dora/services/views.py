@@ -1,5 +1,6 @@
 from datetime import timedelta
 from operator import itemgetter
+from typing import Optional
 from urllib.parse import unquote
 
 import requests
@@ -870,6 +871,47 @@ def post_di_service_feedback(request, di_id: str):
     return Response(status=201)
 
 
+def _validate_search_categories_and_subcategories(
+    categories_list: Optional[list[str]], subcategories_list: Optional[list[str]]
+) -> None:
+    """Valide que les catégories et sous-catégories fournies existent et ne sont pas obsolètes.
+
+    Raises:
+        serializers.ValidationError: Si des catégories ou sous-catégories sont invalides
+    """
+    invalid_categories = []
+    invalid_subcategories = []
+
+    if categories_list:
+        valid_categories = set(ServiceCategory.objects.values_list("value", flat=True))
+        invalid_categories = [
+            cat for cat in categories_list if cat not in valid_categories
+        ]
+
+    if subcategories_list:
+        valid_subcategories = set(
+            ServiceSubCategory.objects.values_list("value", flat=True)
+        )
+        invalid_subcategories = [
+            subcat for subcat in subcategories_list if subcat not in valid_subcategories
+        ]
+
+    if invalid_categories or invalid_subcategories:
+        error_parts = []
+        if invalid_categories:
+            error_parts.append(
+                f"Catégories invalides : {', '.join(invalid_categories)}"
+            )
+        if invalid_subcategories:
+            error_parts.append(
+                f"Sous-catégories invalides : {', '.join(invalid_subcategories)}"
+            )
+        raise serializers.ValidationError(
+            " ; ".join(error_parts),
+            code="invalid_categories_or_subcategories",
+        )
+
+
 @api_view()
 @permission_classes([permissions.AllowAny])
 def search(request):
@@ -893,6 +935,9 @@ def search(request):
     funding_labels_list = funding.split(",") if funding is not None else None
     lat = float(lat) if lat else None
     lon = float(lon) if lon else None
+
+    _validate_search_categories_and_subcategories(categories_list, subcategories_list)
+
     from .search import search_services
 
     city_code = arrdt_to_main_insee_code(city_code)
