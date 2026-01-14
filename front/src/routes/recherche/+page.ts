@@ -66,17 +66,15 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
 
   const query = url.searchParams;
 
-  let categoryIds = query.get("cats") ? query.get("cats").split(",") : [];
-  const subCategoryIds = query.get("subs") ? query.get("subs").split(",") : [];
-  const cityCode = query.get("city");
-  const cityLabel = query.get("cl");
-  const label = query.get("l") || cityLabel;
-  const kindIds = query.get("kinds") ? query.get("kinds").split(",") : [];
-  const feeConditions = query.get("fees") ? query.get("fees").split(",") : [];
-  const locationKinds = query.get("locs") ? query.get("locs").split(",") : [];
-  const fundingLabels = query.get("funding")
-    ? query.get("funding").split(",")
-    : [];
+  let categoryIds = query.get("cats")?.split(",") ?? [];
+  const subCategoryIds = query.get("subs")?.split(",") ?? [];
+  const cityCode = query.get("city") ?? undefined;
+  const cityLabel = query.get("cl") ?? undefined;
+  const label = query.get("l") ?? cityLabel;
+  const kindIds = query.get("kinds")?.split(",") ?? [];
+  const feeConditions = query.get("fees")?.split(",") ?? [];
+  const locationKinds = query.get("locs")?.split(",") ?? [];
+  const fundingLabels = query.get("funding")?.split(",") ?? [];
   const lon = query.get("lon");
   const lat = query.get("lat");
 
