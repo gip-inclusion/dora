@@ -37,55 +37,58 @@ class Command(BaseCommand):
     help = "Importer la base de donnée d'Admin Express COG la plus récente dans le format GPKG."
 
     def handle(self, *args, **options):
-        gpkg_file = self._get_gpkg_file()
-
-        self._import_communes(gpkg_file)
-
-        self._import_collectivites_territoriales(gpkg_file)
-
-        self._import_epci(gpkg_file)
-
-        self._import_departments(gpkg_file)
-
-        self._import_regions(gpkg_file)
-
-        self.logger.info("VACUUM ANALYZE")
-        cursor = connection.cursor()
-        cursor.execute("VACUUM ANALYZE")
-
-    def _get_gpkg_file(self):
         with tempfile.TemporaryDirectory() as tmp_dir_name:
-            if USE_TEMP_DIR:
-                the_dir = pathlib.Path(tmp_dir_name)
-            else:
-                the_dir = pathlib.Path("/tmp")
-            self.logger.info("Sauvegarde des fichiers AE dans %s", the_dir)
+            gpkg_file = self._get_gpkg_file(tmp_dir_name)
 
-            compressed_AE_file = the_dir / AE_COG_FILE
-
-            if not os.path.exists(compressed_AE_file):
-                self.logger.info("Téléchargement du fichier AE COG")
-                subprocess.run(
-                    ["curl", AE_COG_LINK, "-o", compressed_AE_file],
-                    check=True,
-                )
-
-                self.logger.info("Décompression du fichier AE COG")
-                subprocess.run(
-                    [EXE_7ZR, "-bd", "x", compressed_AE_file, f"-o{the_dir}"],
-                    check=True,
-                )
-
-            gpkg_files = list(the_dir.glob("**/*.gpkg"))
-
-            if not gpkg_files:
-                self.logger.error("Aucun fichier GPKG trouvé !")
+            if not gpkg_file:
                 return
 
-            gpkg_file = str(gpkg_files[0])
-            self.logger.info("GPKG trouvé : %s", gpkg_file)
+            self._import_communes(gpkg_file)
 
-            return gpkg_file
+            self._import_collectivites_territoriales(gpkg_file)
+
+            self._import_epci(gpkg_file)
+
+            self._import_departments(gpkg_file)
+
+            self._import_regions(gpkg_file)
+
+            self.logger.info("VACUUM ANALYZE")
+            cursor = connection.cursor()
+            cursor.execute("VACUUM ANALYZE")
+
+    def _get_gpkg_file(self, tmp_dir_name):
+        if USE_TEMP_DIR:
+            the_dir = pathlib.Path(tmp_dir_name)
+        else:
+            the_dir = pathlib.Path("/tmp")
+        self.logger.info("Sauvegarde des fichiers AE dans %s", the_dir)
+
+        compressed_AE_file = the_dir / AE_COG_FILE
+
+        if not os.path.exists(compressed_AE_file):
+            self.logger.info("Téléchargement du fichier AE COG")
+            subprocess.run(
+                ["curl", AE_COG_LINK, "-o", compressed_AE_file],
+                check=True,
+            )
+
+            self.logger.info("Décompression du fichier AE COG")
+            subprocess.run(
+                [EXE_7ZR, "-bd", "x", compressed_AE_file, f"-o{the_dir}"],
+                check=True,
+            )
+
+        gpkg_files = list(the_dir.glob("**/*.gpkg"))
+
+        if not gpkg_files:
+            self.logger.error("Aucun fichier GPKG trouvé !")
+            return None
+
+        gpkg_file = str(gpkg_files[0])
+        self.logger.info("GPKG trouvé : %s", gpkg_file)
+
+        return gpkg_file
 
     def _import_communes(self, gpkg_file):
         mapping = {
