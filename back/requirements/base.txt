@@ -2,7 +2,7 @@ data-inclusion-schema==1.0.5
 dj-database-url==3.1.0
 numpy>=1.20.0
 Django==5.2.9
-GDAL==3.4.1
+GDAL==3.9.3
 django-cors-headers==4.9.0
 django-otp==1.7.0
 django-csp==4.0

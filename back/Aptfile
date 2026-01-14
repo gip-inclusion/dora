@@ -1,3 +1,4 @@
+:repo:deb [trusted=yes] http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu focal main
 p7zip
 gdal-bin
 libgdal-dev
