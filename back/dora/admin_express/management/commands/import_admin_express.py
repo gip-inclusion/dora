@@ -1,7 +1,6 @@
 import os.path
 import pathlib
 import subprocess
-import tempfile
 
 from django.conf import settings
 from django.contrib.gis.gdal import DataSource
@@ -21,7 +20,7 @@ EXE_7ZR = "/app/.apt/usr/lib/p7zip/7zr" if not settings.DEBUG else "7zr"
 # Inclut les données géographiques pour Saint-Martin (97801) et Saint-Barthélemy(97701) dans la couche "collectivite_territoriale"
 AE_COG_LINK = "https://data.geopf.fr/telechargement/download/ADMIN-EXPRESS-COG/ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01/ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01.7z"
 AE_COG_FILE = "ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01.7z"
-USE_TEMP_DIR = not settings.DEBUG
+PERSISTENT_DIR = "/tmp/admin_express"
 
 
 def normalize_model(Model, with_dept=False):
@@ -36,56 +35,106 @@ def normalize_model(Model, with_dept=False):
 class Command(BaseCommand):
     help = "Importer la base de donnée d'Admin Express COG la plus récente dans le format GPKG."
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--communes",
+            action="store_true",
+            help="Importer uniquement les communes",
+        )
+        parser.add_argument(
+            "--collectivites",
+            action="store_true",
+            help="Importer uniquement les collectivités territoriales",
+        )
+        parser.add_argument(
+            "--epci",
+            action="store_true",
+            help="Importer uniquement les EPCI",
+        )
+        parser.add_argument(
+            "--departments",
+            action="store_true",
+            help="Importer uniquement les départements",
+        )
+        parser.add_argument(
+            "--regions",
+            action="store_true",
+            help="Importer uniquement les régions",
+        )
+
     def handle(self, *args, **options):
+        run_all = not any(
+            [
+                options.get("communes"),
+                options.get("collectivites"),
+                options.get("epci"),
+                options.get("departments"),
+                options.get("regions"),
+            ]
+        )
+
         gpkg_file = self._get_gpkg_file()
 
-        self._import_communes(gpkg_file)
+        if not gpkg_file:
+            return
 
-        self._import_collectivites_territoriales(gpkg_file)
+        if run_all or options.get("communes"):
+            self._import_communes(gpkg_file)
 
-        self._import_epci(gpkg_file)
+        if run_all or options.get("collectivites"):
+            self._import_collectivites_territoriales(gpkg_file)
 
-        self._import_departments(gpkg_file)
+        if run_all or options.get("epci"):
+            self._import_epci(gpkg_file)
 
-        self._import_regions(gpkg_file)
+        if run_all or options.get("departments"):
+            self._import_departments(gpkg_file)
+
+        if run_all or options.get("regions"):
+            self._import_regions(gpkg_file)
 
         self.logger.info("VACUUM ANALYZE")
         cursor = connection.cursor()
         cursor.execute("VACUUM ANALYZE")
 
     def _get_gpkg_file(self):
-        with tempfile.TemporaryDirectory() as tmp_dir_name:
-            if USE_TEMP_DIR:
-                the_dir = pathlib.Path(tmp_dir_name)
-            else:
-                the_dir = pathlib.Path("/tmp")
-            self.logger.info("Sauvegarde des fichiers AE dans %s", the_dir)
+        the_dir = pathlib.Path(PERSISTENT_DIR)
+        the_dir.mkdir(parents=True, exist_ok=True)
+        self.logger.info("Sauvegarde des fichiers AE dans %s", the_dir)
 
-            compressed_AE_file = the_dir / AE_COG_FILE
+        compressed_AE_file = the_dir / AE_COG_FILE
 
-            if not os.path.exists(compressed_AE_file):
-                self.logger.info("Téléchargement du fichier AE COG")
-                subprocess.run(
-                    ["curl", AE_COG_LINK, "-o", compressed_AE_file],
-                    check=True,
-                )
-
-                self.logger.info("Décompression du fichier AE COG")
-                subprocess.run(
-                    [EXE_7ZR, "-bd", "x", compressed_AE_file, f"-o{the_dir}"],
-                    check=True,
-                )
-
-            gpkg_files = list(the_dir.glob("**/*.gpkg"))
-
-            if not gpkg_files:
-                self.logger.error("Aucun fichier GPKG trouvé !")
-                return
-
+        # Check if we already have the extracted GPKG file
+        gpkg_files = list(the_dir.glob("**/*.gpkg"))
+        if gpkg_files:
             gpkg_file = str(gpkg_files[0])
-            self.logger.info("GPKG trouvé : %s", gpkg_file)
-
+            self.logger.info("GPKG déjà présent : %s", gpkg_file)
             return gpkg_file
+
+        # Download if not present
+        if not os.path.exists(compressed_AE_file):
+            self.logger.info("Téléchargement du fichier AE COG")
+            subprocess.run(
+                ["curl", AE_COG_LINK, "-o", compressed_AE_file],
+                check=True,
+            )
+
+        self.logger.info("Décompression du fichier AE COG")
+        subprocess.run(
+            [EXE_7ZR, "-bd", "x", compressed_AE_file, f"-o{the_dir}"],
+            check=True,
+        )
+
+        gpkg_files = list(the_dir.glob("**/*.gpkg"))
+
+        if not gpkg_files:
+            self.logger.error("Aucun fichier GPKG trouvé !")
+            return None
+
+        gpkg_file = str(gpkg_files[0])
+        self.logger.info("GPKG trouvé : %s", gpkg_file)
+
+        return gpkg_file
 
     def _import_communes(self, gpkg_file):
         mapping = {
