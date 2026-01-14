@@ -2,7 +2,7 @@
   "name": "dora-front",
   "version": "0.0.20",
   "engines": {
-    "npm": ">=8",
+    "npm": ">=11.7",
     "node": ">=24.13"
   },
   "repository": {
