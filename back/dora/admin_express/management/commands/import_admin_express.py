@@ -23,13 +23,16 @@ AE_COG_FILE = "ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01.7z"
 PERSISTENT_DIR = "/tmp/admin_express"
 
 
-def normalize_model(Model, with_dept=False):
-    objects = Model.objects.all()
-    for object in objects:
-        object.normalized_name = normalize_string_for_search(object.name)
-        if with_dept:
-            object.normalized_name += f" {code_insee_to_code_dept(object.code)}"
-    Model.objects.bulk_update(objects, ["normalized_name"], 1000)
+def normalize_model(Model, with_dept=False, batch_size=500):
+    """Normalize model names in batches to avoid memory exhaustion."""
+    total = Model.objects.count()
+    for offset in range(0, total, batch_size):
+        objects = list(Model.objects.all()[offset : offset + batch_size])
+        for obj in objects:
+            obj.normalized_name = normalize_string_for_search(obj.name)
+            if with_dept:
+                obj.normalized_name += f" {code_insee_to_code_dept(obj.code)}"
+        Model.objects.bulk_update(objects, ["normalized_name"])
 
 
 class Command(BaseCommand):
@@ -195,6 +198,9 @@ class Command(BaseCommand):
         geom = target_feature.geom
         geom_geos = GEOSGeometry(geom.wkt, srid=geom.srid)
 
+        # Simplify geometry to reduce memory usage (tolerance in degrees)
+        geom_geos = geom_geos.simplify(tolerance=0.0001, preserve_topology=True)
+
         official_name = target_feature.get("nom_officiel")
         region_code = target_feature.get("code_insee_de_la_region") or "NR"
 
@@ -258,11 +264,15 @@ class Command(BaseCommand):
             epcis=Func(F("epci"), Value("/"), function="string_to_array")
         )
         self.logger.info("Liaison des départements et régions")
-        for epci in EPCI.objects.all():
-            cities = City.objects.filter(epcis__contains=[epci.code])
-            epci.departments = list(set(c.department for c in cities))
-            epci.regions = list(set(c.region for c in cities))
-            epci.save()
+        epci_batch_size = 100
+        epci_count = EPCI.objects.count()
+        for offset in range(0, epci_count, epci_batch_size):
+            epcis = EPCI.objects.all()[offset : offset + epci_batch_size]
+            for epci in epcis:
+                cities = City.objects.filter(epcis__contains=[epci.code])
+                epci.departments = list(set(c.department for c in cities))
+                epci.regions = list(set(c.region for c in cities))
+                epci.save()
 
         self.logger.info("Terminé")
 
