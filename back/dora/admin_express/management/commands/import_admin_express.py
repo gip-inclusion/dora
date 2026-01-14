@@ -6,7 +6,6 @@ from django.conf import settings
 from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.utils import LayerMapping
-from django.db import connection
 from django.db.models import F, Func, Value
 
 from dora.admin_express.models import EPCI, City, Department, Region
@@ -95,10 +94,6 @@ class Command(BaseCommand):
 
         if run_all or options.get("regions"):
             self._import_regions(gpkg_file)
-
-        self.logger.info("VACUUM ANALYZE")
-        cursor = connection.cursor()
-        cursor.execute("VACUUM ANALYZE")
 
     def _get_gpkg_file(self):
         the_dir = pathlib.Path(PERSISTENT_DIR)
@@ -197,9 +192,6 @@ class Command(BaseCommand):
 
         geom = target_feature.geom
         geom_geos = GEOSGeometry(geom.wkt, srid=geom.srid)
-
-        # Simplify geometry to reduce memory usage (tolerance in degrees)
-        geom_geos = geom_geos.simplify(tolerance=0.0001, preserve_topology=True)
 
         official_name = target_feature.get("nom_officiel")
         region_code = target_feature.get("code_insee_de_la_region") or "NR"
