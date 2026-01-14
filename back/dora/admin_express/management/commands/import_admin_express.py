@@ -26,7 +26,7 @@ def normalize_model(Model, with_dept=False, batch_size=500):
     """Normalize model names in batches to avoid memory exhaustion."""
     total = Model.objects.count()
     for offset in range(0, total, batch_size):
-        objects = list(Model.objects.all()[offset : offset + batch_size])
+        objects = list(Model.objects.all().order_by("pk")[offset : offset + batch_size])
         for obj in objects:
             obj.normalized_name = normalize_string_for_search(obj.name)
             if with_dept:
@@ -54,7 +54,7 @@ class Command(BaseCommand):
             help="Importer uniquement les EPCI",
         )
         parser.add_argument(
-            "--departments",
+            "--departements",
             action="store_true",
             help="Importer uniquement les départements",
         )
@@ -70,7 +70,7 @@ class Command(BaseCommand):
                 options.get("communes"),
                 options.get("collectivites"),
                 options.get("epci"),
-                options.get("departments"),
+                options.get("departements"),
                 options.get("regions"),
             ]
         )
@@ -89,8 +89,8 @@ class Command(BaseCommand):
         if run_all or options.get("epci"):
             self._import_epci(gpkg_file)
 
-        if run_all or options.get("departments"):
-            self._import_departments(gpkg_file)
+        if run_all or options.get("departements"):
+            self._import_departements(gpkg_file)
 
         if run_all or options.get("regions"):
             self._import_regions(gpkg_file)
@@ -268,7 +268,7 @@ class Command(BaseCommand):
 
         self.logger.info("Terminé")
 
-    def _import_departments(self, gpkg_file):
+    def _import_departements(self, gpkg_file):
         mapping = {
             "code": "code_insee",
             "name": "nom_officiel",
