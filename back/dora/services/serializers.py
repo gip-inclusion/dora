@@ -850,7 +850,6 @@ class BookmarkSerializer(BookmarkListSerializer):
 class SearchResultSerializer(ServiceListSerializer):
     distance = serializers.SerializerMethodField()
     coordinates = serializers.SerializerMethodField()
-    di_publics = serializers.SerializerMethodField()
 
     class Meta:
         model = Service
@@ -862,7 +861,6 @@ class SearchResultSerializer(ServiceListSerializer):
             "coach_orientation_modes",
             "coordinates",
             "diffusion_zone_type",
-            "di_publics",
             "distance",
             "fee_condition",
             "funding_labels",
@@ -885,12 +883,6 @@ class SearchResultSerializer(ServiceListSerializer):
     def get_coordinates(self, obj):
         if obj.geom:
             return (obj.geom.x, obj.geom.y)
-
-    def get_di_publics(self, obj):
-        di_publics = set()
-        for public in obj.publics.all():
-            di_publics.update(public.corresponding_di_publics)
-        return list(di_publics)
 
 
 class FundingLabelSerializer(serializers.ModelSerializer):
