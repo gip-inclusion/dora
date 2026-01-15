@@ -1,3 +1,4 @@
+import { toast } from "@zerodevx/svelte-toast";
 import { getServicesOptions } from "$lib/requests/services";
 import type { SearchQuery, ServiceSearchResult } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
@@ -28,6 +29,7 @@ async function getResults(
   cityBounds: [number, number, number, number];
   fundingLabels: Array<{ value: string; label: string }>;
   services: ServiceSearchResult[];
+  wrongCategoriesOrSubcategories?: boolean;
 }> {
   const querystring = getQueryString({
     categoryIds,
@@ -52,13 +54,27 @@ async function getResults(
     return res.json();
   }
 
-  // TODO: log errors
-  try {
-    console.error(await res.json());
-  } catch (err) {
-    console.error(err);
+  if (res.status === 400) {
+    const errors = await res.json();
+    const error = errors[0];
+    if (error?.code === "invalid_categories_or_subcategories") {
+      toast.push(
+        "Les thématiques et besoins sélectionnés sont invalides. Veuillez les corriger."
+      );
+      return {
+        cityBounds: [0, 0, 0, 0],
+        fundingLabels: [],
+        services: [],
+        wrongCategoriesOrSubcategories: true,
+      };
+    }
   }
-  return [];
+
+  return {
+    cityBounds: [0, 0, 0, 0],
+    fundingLabels: [],
+    services: [],
+  };
 }
 
 export const load: PageLoad = async ({ fetch, url, parent }) => {
@@ -67,7 +83,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   const query = url.searchParams;
 
   let categoryIds = query.get("cats")?.split(",") ?? [];
-  const subCategoryIds = query.get("subs")?.split(",") ?? [];
+  let subCategoryIds = query.get("subs")?.split(",") ?? [];
   const cityCode = query.get("city") ?? undefined;
   const cityLabel = query.get("cl") ?? undefined;
   const label = query.get("l") ?? cityLabel;
@@ -82,6 +98,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     cityBounds,
     fundingLabels: availableFundingLabels,
     services,
+    wrongCategoriesOrSubcategories,
   } = await getResults(
     {
       // La priorité est donnée aux sous-catégories
@@ -100,6 +117,11 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     },
     fetch
   );
+
+  if (wrongCategoriesOrSubcategories) {
+    categoryIds = [];
+    subCategoryIds = [];
+  }
 
   const searchId = await trackSearch(
     url,
