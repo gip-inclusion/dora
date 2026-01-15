@@ -9,7 +9,7 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.utils import timezone
 
-from dora.core.models import EnumModel
+from dora.core.models import EnumModel, LogItem
 from dora.services.models import Service
 from dora.structures.models import Structure
 
@@ -228,6 +228,9 @@ class Orientation(models.Model):
 
     def __str__(self):
         return f"Orientation #{self.id}"
+
+    def log_note(self, user, msg):
+        LogItem.objects.create(orientation=self, user=user, message=msg.strip())
 
     def get_query_id_hash(self) -> str:
         return hashlib.sha256(
