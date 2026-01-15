@@ -26,6 +26,8 @@ class LabelServicesHelper:
         self.wet_run = wet_run
         self.labeler = labeler
 
+        self._initialize_trackers()
+
         if self.wet_run:
             logger.info("⚠️ PRODUCTION RUN ⚠️")
         else:
@@ -91,7 +93,7 @@ class LabelServicesHelper:
                         continue
 
                     if len(self.errors) > 0 and self.wet_run:
-                        self.created_count = 0
+                        self.services_labeled_count = 0
                         raise Exception(
                             f"{len(self.errors)} erreurs rencontrées lors du traitement du fichier CSV.\n"
                             "Toutes les modifications sont annulées."
