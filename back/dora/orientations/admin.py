@@ -1,5 +1,7 @@
 from django.contrib import admin, messages
 
+from dora.core.models import LogItem
+
 from .checks import check_orientation, format_warnings
 from .models import Orientation, SentContactEmail
 
@@ -9,6 +11,14 @@ class SentContactEmailInline(admin.TabularInline):
     max_num = 0
     can_delete = False
     readonly_fields = ("date_sent", "recipient", "carbon_copies")
+
+
+class LogItemInline(admin.TabularInline):
+    model = LogItem
+    max_num = 0
+    can_delete = False
+    fields = ("date", "message", "user")
+    readonly_fields = ("date", "message", "user")
 
 
 class OrientationAdmin(admin.ModelAdmin):
@@ -59,7 +69,7 @@ class OrientationAdmin(admin.ModelAdmin):
     date_hierarchy = "creation_date"
     ordering = ("-id",)
     filter_horizontal = ("rejection_reasons",)
-    inlines = [SentContactEmailInline]
+    inlines = [SentContactEmailInline, LogItemInline]
 
     @admin.display(description="e-mail prescripteur")
     def prescriber_email(self, obj) -> str:
@@ -87,7 +97,9 @@ class OrientationAdmin(admin.ModelAdmin):
             super()
             .get_queryset(request)
             .prefetch_related(
-                "prescriber_structure__membership", "service__structure__membership"
+                "prescriber_structure__membership",
+                "service__structure__membership",
+                "logitem_set",
             )
             .select_related(
                 "prescriber", "prescriber_structure", "service", "service__structure"
