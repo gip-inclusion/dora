@@ -118,9 +118,6 @@ class UserAdmin(BaseUserAdmin):
             )
             rows.append(row)
 
-        if not rows:
-            return "Aucune version des CGU acceptée"
-
         rows_html = mark_safe("".join(str(row) for row in rows))
 
         html = format_html(
