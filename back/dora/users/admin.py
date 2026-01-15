@@ -108,12 +108,19 @@ class UserAdmin(BaseUserAdmin):
             except (ValueError, AttributeError):
                 formatted_date = date_str
 
+            try:
+                formatted_version = timezone.datetime.strptime(
+                    version, "%Y%m%d"
+                ).strftime("%d/%m/%Y")
+            except (ValueError, AttributeError):
+                formatted_version = version
+
             row = format_html(
                 "<tr>"
                 '<td style="padding: 8px; font-weight: bold;">{}</td>'
                 '<td style="padding: 8px;">{}</td>'
                 "</tr>",
-                version,
+                formatted_version,
                 formatted_date,
             )
             rows.append(row)
