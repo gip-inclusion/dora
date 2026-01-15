@@ -50,16 +50,18 @@
       <div class="form-section">
         <h3>⚙️ Configuration</h3>
         <div class="form-row">
-          <div class="form-field">
-            <label for="source_label">Nom de la source :</label>
-            <input
-              type="text"
-              name="source_label"
-              id="source_label"
-              placeholder="Ex: Mairie de Paris, CAF..."
-            >
-            <div class="help">Nom du producteur de données. Laisser vide si c'est DORA qui produit les données.</div>
-          </div>
+          {% if not hide_source_field %}
+            <div class="form-field">
+              <label for="source_label">Nom de la source :</label>
+              <input
+                type="text"
+                name="source_label"
+                id="source_label"
+                placeholder="Ex: Mairie de Paris, CAF..."
+              >
+              <div class="help">Nom du producteur de données. Laisser vide si c'est DORA qui produit les données.</div>
+            </div>
+          {% endif %}
 
           <div class="form-field">
             <div class="checkbox-field">
