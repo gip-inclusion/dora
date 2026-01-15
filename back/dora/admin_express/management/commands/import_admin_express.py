@@ -23,7 +23,6 @@ PERSISTENT_DIR = "/tmp/admin_express"
 
 
 def normalize_model(Model, with_dept=False, batch_size=500):
-    """Normalize model names in batches to avoid memory exhaustion."""
     total = Model.objects.count()
     for offset in range(0, total, batch_size):
         objects = list(Model.objects.all().order_by("pk")[offset : offset + batch_size])
@@ -102,20 +101,27 @@ class Command(BaseCommand):
 
         compressed_AE_file = the_dir / AE_COG_FILE
 
-        # Check if we already have the extracted GPKG file
         gpkg_files = list(the_dir.glob("**/*.gpkg"))
         if gpkg_files:
             gpkg_file = str(gpkg_files[0])
             self.logger.info("GPKG déjà présent : %s", gpkg_file)
             return gpkg_file
 
-        # Download if not present
         if not os.path.exists(compressed_AE_file):
-            self.logger.info("Téléchargement du fichier AE COG")
-            subprocess.run(
-                ["curl", AE_COG_LINK, "-o", compressed_AE_file],
-                check=True,
-            )
+            # Télécharger comme fichier temporaire pour assurer que le fichier est complèt
+            temp_file = the_dir / f"{AE_COG_FILE}.tmp"
+            try:
+                self.logger.info("Téléchargement du fichier AE COG")
+                subprocess.run(
+                    ["curl", AE_COG_LINK, "-o", temp_file],
+                    check=True,
+                )
+                # Renommer le fichier uniquement après le téléchargement réussit
+                temp_file.rename(compressed_AE_file)
+            except Exception:
+                if temp_file.exists():
+                    temp_file.unlink()
+                raise
 
         self.logger.info("Décompression du fichier AE COG")
         subprocess.run(
@@ -140,7 +146,7 @@ class Command(BaseCommand):
             "name": "nom_officiel",
             "department": "code_insee_du_departement",
             "region": "code_insee_de_la_region",
-            "epci": "codes_siren_des_epci",  # Note: plural, contains EPCI codes
+            "epci": "codes_siren_des_epci",
             "population": "population",
             "geom": "MULTIPOLYGON",
         }
@@ -149,8 +155,8 @@ class Command(BaseCommand):
             City,
             gpkg_file,
             mapping,
-            layer="commune",  # GPKG layer name
-            transform=False,  # Already in WGS84
+            layer="commune",  # Le nom de la couche dans le fichier GPKG
+            transform=False,  # Déjà dans le format WGS84
         )
         lm.save(progress=True, strict=True)
         self.logger.info("Import réussi")
