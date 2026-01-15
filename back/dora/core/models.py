@@ -53,6 +53,12 @@ class LogItem(models.Model):
         blank=True,
         null=True,
     )
+    orientation = models.ForeignKey(
+        "orientations.Orientation",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
