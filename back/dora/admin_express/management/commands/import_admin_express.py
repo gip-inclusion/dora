@@ -1,13 +1,11 @@
 import os.path
 import pathlib
 import subprocess
-import tempfile
 
 from django.conf import settings
 from django.contrib.gis.gdal import DataSource
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.utils import LayerMapping
-from django.db import connection
 from django.db.models import F, Func, Value
 
 from dora.admin_express.models import EPCI, City, Department, Region
@@ -21,71 +19,126 @@ EXE_7ZR = "/app/.apt/usr/lib/p7zip/7zr" if not settings.DEBUG else "7zr"
 # Inclut les données géographiques pour Saint-Martin (97801) et Saint-Barthélemy(97701) dans la couche "collectivite_territoriale"
 AE_COG_LINK = "https://data.geopf.fr/telechargement/download/ADMIN-EXPRESS-COG/ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01/ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01.7z"
 AE_COG_FILE = "ADMIN-EXPRESS-COG_4-0__GPKG_WGS84G_FRA_2025-01-01.7z"
-USE_TEMP_DIR = not settings.DEBUG
+PERSISTENT_DIR = "/tmp/admin_express"
 
 
-def normalize_model(Model, with_dept=False):
-    objects = Model.objects.all()
-    for object in objects:
-        object.normalized_name = normalize_string_for_search(object.name)
-        if with_dept:
-            object.normalized_name += f" {code_insee_to_code_dept(object.code)}"
-    Model.objects.bulk_update(objects, ["normalized_name"], 1000)
+def normalize_model(Model, with_dept=False, batch_size=500):
+    total = Model.objects.count()
+    for offset in range(0, total, batch_size):
+        objects = list(Model.objects.all().order_by("pk")[offset : offset + batch_size])
+        for obj in objects:
+            obj.normalized_name = normalize_string_for_search(obj.name)
+            if with_dept:
+                obj.normalized_name += f" {code_insee_to_code_dept(obj.code)}"
+        Model.objects.bulk_update(objects, ["normalized_name"])
 
 
 class Command(BaseCommand):
     help = "Importer la base de donnée d'Admin Express COG la plus récente dans le format GPKG."
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--communes",
+            action="store_true",
+            help="Importer uniquement les communes",
+        )
+        parser.add_argument(
+            "--collectivites",
+            action="store_true",
+            help="Importer uniquement les collectivités territoriales",
+        )
+        parser.add_argument(
+            "--epci",
+            action="store_true",
+            help="Importer uniquement les EPCI",
+        )
+        parser.add_argument(
+            "--departements",
+            action="store_true",
+            help="Importer uniquement les départements",
+        )
+        parser.add_argument(
+            "--regions",
+            action="store_true",
+            help="Importer uniquement les régions",
+        )
+
     def handle(self, *args, **options):
+        run_all = not any(
+            [
+                options.get("communes"),
+                options.get("collectivites"),
+                options.get("epci"),
+                options.get("departements"),
+                options.get("regions"),
+            ]
+        )
+
         gpkg_file = self._get_gpkg_file()
 
-        self._import_communes(gpkg_file)
+        if not gpkg_file:
+            return
 
-        self._import_collectivites_territoriales(gpkg_file)
+        if run_all or options.get("communes"):
+            self._import_communes(gpkg_file)
 
-        self._import_epci(gpkg_file)
+        if run_all or options.get("collectivites"):
+            self._import_collectivites_territoriales(gpkg_file)
 
-        self._import_departments(gpkg_file)
+        if run_all or options.get("epci"):
+            self._import_epci(gpkg_file)
 
-        self._import_regions(gpkg_file)
+        if run_all or options.get("departements"):
+            self._import_departements(gpkg_file)
 
-        self.logger.info("VACUUM ANALYZE")
-        cursor = connection.cursor()
-        cursor.execute("VACUUM ANALYZE")
+        if run_all or options.get("regions"):
+            self._import_regions(gpkg_file)
 
     def _get_gpkg_file(self):
-        with tempfile.TemporaryDirectory() as tmp_dir_name:
-            if USE_TEMP_DIR:
-                the_dir = pathlib.Path(tmp_dir_name)
-            else:
-                the_dir = pathlib.Path("/tmp")
-            self.logger.info("Sauvegarde des fichiers AE dans %s", the_dir)
+        the_dir = pathlib.Path(PERSISTENT_DIR)
+        the_dir.mkdir(parents=True, exist_ok=True)
+        self.logger.info("Sauvegarde des fichiers AE dans %s", the_dir)
 
-            compressed_AE_file = the_dir / AE_COG_FILE
+        compressed_AE_file = the_dir / AE_COG_FILE
 
-            if not os.path.exists(compressed_AE_file):
+        gpkg_files = list(the_dir.glob("**/*.gpkg"))
+        if gpkg_files:
+            gpkg_file = str(gpkg_files[0])
+            self.logger.info("GPKG déjà présent : %s", gpkg_file)
+            return gpkg_file
+
+        if not os.path.exists(compressed_AE_file):
+            # Télécharger comme fichier temporaire pour assurer que le fichier est complèt
+            temp_file = the_dir / f"{AE_COG_FILE}.tmp"
+            try:
                 self.logger.info("Téléchargement du fichier AE COG")
                 subprocess.run(
-                    ["curl", AE_COG_LINK, "-o", compressed_AE_file],
+                    ["curl", AE_COG_LINK, "-o", temp_file],
                     check=True,
                 )
+                # Renommer le fichier uniquement après le téléchargement réussit
+                temp_file.rename(compressed_AE_file)
+            except Exception:
+                if temp_file.exists():
+                    temp_file.unlink()
+                raise
 
-                self.logger.info("Décompression du fichier AE COG")
-                subprocess.run(
-                    [EXE_7ZR, "-bd", "x", compressed_AE_file, f"-o{the_dir}"],
-                    check=True,
-                )
+        self.logger.info("Décompression du fichier AE COG")
+        subprocess.run(
+            [EXE_7ZR, "-bd", "x", compressed_AE_file, f"-o{the_dir}"],
+            check=True,
+        )
 
-            gpkg_files = list(the_dir.glob("**/*.gpkg"))
+        gpkg_files = list(the_dir.glob("**/*.gpkg"))
 
-            if not gpkg_files:
-                self.logger.error("Aucun fichier GPKG trouvé !")
-                return
+        if not gpkg_files:
+            self.logger.error("Aucun fichier GPKG trouvé !")
+            return None
 
-            gpkg_file = str(gpkg_files[0])
-            self.logger.info("GPKG trouvé : %s", gpkg_file)
+        gpkg_file = str(gpkg_files[0])
+        self.logger.info("GPKG trouvé : %s", gpkg_file)
 
-            return gpkg_file
+        return gpkg_file
 
     def _import_communes(self, gpkg_file):
         mapping = {
@@ -93,7 +146,7 @@ class Command(BaseCommand):
             "name": "nom_officiel",
             "department": "code_insee_du_departement",
             "region": "code_insee_de_la_region",
-            "epci": "codes_siren_des_epci",  # Note: plural, contains EPCI codes
+            "epci": "codes_siren_des_epci",
             "population": "population",
             "geom": "MULTIPOLYGON",
         }
@@ -102,8 +155,8 @@ class Command(BaseCommand):
             City,
             gpkg_file,
             mapping,
-            layer="commune",  # GPKG layer name
-            transform=False,  # Already in WGS84
+            layer="commune",  # Le nom de la couche dans le fichier GPKG
+            transform=False,  # Déjà dans le format WGS84
         )
         lm.save(progress=True, strict=True)
         self.logger.info("Import réussi")
@@ -209,15 +262,19 @@ class Command(BaseCommand):
             epcis=Func(F("epci"), Value("/"), function="string_to_array")
         )
         self.logger.info("Liaison des départements et régions")
-        for epci in EPCI.objects.all():
-            cities = City.objects.filter(epcis__contains=[epci.code])
-            epci.departments = list(set(c.department for c in cities))
-            epci.regions = list(set(c.region for c in cities))
-            epci.save()
+        epci_batch_size = 100
+        epci_count = EPCI.objects.count()
+        for offset in range(0, epci_count, epci_batch_size):
+            epcis = EPCI.objects.all()[offset : offset + epci_batch_size]
+            for epci in epcis:
+                cities = City.objects.filter(epcis__contains=[epci.code])
+                epci.departments = list(set(c.department for c in cities))
+                epci.regions = list(set(c.region for c in cities))
+                epci.save()
 
         self.logger.info("Terminé")
 
-    def _import_departments(self, gpkg_file):
+    def _import_departements(self, gpkg_file):
         mapping = {
             "code": "code_insee",
             "name": "nom_officiel",
