@@ -297,7 +297,9 @@ class LabelServicesHelper:
         # Errors
         if errors:
             message_title = mark_safe(
-                "Échec de l'import" if is_wet_run else "Test terminé - Erreurs à corriger"
+                "Échec de l'import"
+                if is_wet_run
+                else "Test terminé - Erreurs à corriger"
             )
             message_text = mark_safe(
                 "Aucun service n'a été labellisé, car le fichier comporte des erreurs."
@@ -318,7 +320,6 @@ class LabelServicesHelper:
                 }
             ]
 
-        # Success
         if is_wet_run and no_errors:
             success_messages.append(
                 {
