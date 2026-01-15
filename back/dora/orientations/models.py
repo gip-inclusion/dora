@@ -230,7 +230,8 @@ class Orientation(models.Model):
         return f"Orientation #{self.id}"
 
     def log_note(self, user, msg):
-        LogItem.objects.create(orientation=self, user=user, message=msg.strip())
+        user_id = user if (user and user.is_authenticated) else None
+        LogItem.objects.create(orientation=self, user=user_id, message=msg.strip())
 
     def get_query_id_hash(self) -> str:
         return hashlib.sha256(
