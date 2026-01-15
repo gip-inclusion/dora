@@ -127,6 +127,8 @@ class OrientationViewSet(
             orientation.save(update_fields=["duration_weekly_hours", "duration_weeks"])
         orientation.set_status(OrientationStatus.ACCEPTED)
 
+        orientation.log_note(request.user, "Orientation validée")
+
         send_orientation_accepted_emails(
             orientation, sanitized_prescriber_message, sanitized_beneficiary_message
         )
@@ -153,6 +155,8 @@ class OrientationViewSet(
                 RejectionReason.objects.filter(value__in=reasons)
             )
             orientation.set_status(OrientationStatus.REJECTED)
+
+            orientation.log_note(request.user, "Orientation refusée")
 
             transaction.on_commit(
                 functools.partial(
