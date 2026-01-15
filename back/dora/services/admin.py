@@ -1,8 +1,11 @@
+import csv
+import io
+
 from data_inclusion.schema.v1.publics import Public as DiPublic
 from django import forms
 from django.contrib.admin import RelatedOnlyFieldListFilter
 from django.contrib.gis import admin
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import path
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
@@ -11,6 +14,7 @@ from dora.core.admin import EnumAdmin
 
 from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportServicesHelper
+from .label_services import LabelServicesHelper
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -129,6 +133,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         extra_context["import_url"] = "import-services/"
+        extra_context["label_services_url"] = "label-services/"
         return super().changelist_view(request, extra_context)
 
     def get_urls(self):
@@ -143,6 +148,11 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                 "import-job-status/<uuid:job_id>/",
                 self.admin_site.admin_view(self.import_job_status),
                 name="services_import_job_status",
+            ),
+            path(
+                "label-services/",
+                self.admin_site.admin_view(self.label_services_view),
+                name="services_label_services",
             ),
         ]
         return custom_urls + urls
@@ -161,6 +171,40 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
         job_id = request.GET.get("job_id")
         if job_id:
             context["job_id"] = job_id
+
+        return render(request, "admin/import_csv_form.html", context)
+
+    def label_services_view(self, request):
+        if request.method == "POST":
+            label_services_helper = LabelServicesHelper()
+
+            is_wet_run = request.POST.get("test_run") != "on"
+            should_remove_instructions_from_csv = (
+                request.POST.get("should_remove_instructions") == "on"
+            )
+
+            csv_file = request.FILES.get("csv_file")
+
+            csv_content = csv_file.read().decode("utf-8")
+
+            reader = csv.reader(io.StringIO(csv_content))
+
+            label_services_helper.label_services(
+                reader, request.user, is_wet_run, should_remove_instructions_from_csv
+            )
+
+            label_services_helper.label_services(request)
+            # formatted_results = self.format_results(result, is_wet_run=False)
+
+            return redirect(request.path)
+
+        context = {
+            "title": "Module de labellisation des services",
+            "opts": self.model._meta,
+            "has_view_permission": True,
+            "csv_headers": LabelServicesHelper.CSV_HEADERS,
+            "hide_source_field": True,
+        }
 
         return render(request, "admin/import_csv_form.html", context)
 
