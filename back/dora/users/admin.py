@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
@@ -89,6 +90,56 @@ class UserAdmin(BaseUserAdmin):
             del actions["delete_selected"]
         return actions
 
+    @admin.display(description="Versions des CGU acceptées")
+    def get_cgu_versions_accepted_display(self, obj):
+        if not obj.cgu_versions_accepted:
+            return "Aucune version des CGU acceptée"
+
+        rows = []
+        sorted_versions = sorted(
+            obj.cgu_versions_accepted.items(), key=lambda x: x[0], reverse=True
+        )
+
+        for version, date_str in sorted_versions:
+            try:
+                date_obj = timezone.datetime.fromisoformat(date_str)
+                local_date = timezone.localtime(date_obj)
+                formatted_date = local_date.strftime("%d/%m/%Y à %H:%M:%S %Z")
+            except (ValueError, AttributeError):
+                formatted_date = date_str
+
+            row = format_html(
+                "<tr>"
+                '<td style="padding: 8px; font-weight: bold;">{}</td>'
+                '<td style="padding: 8px;">{}</td>'
+                "</tr>",
+                version,
+                formatted_date,
+            )
+            rows.append(row)
+
+        if not rows:
+            return "Aucune version des CGU acceptée"
+
+        rows_html = mark_safe("".join(str(row) for row in rows))
+
+        html = format_html(
+            '<table style="border-collapse: collapse; width: 100%; max-width: 500px;">'
+            "<thead>"
+            '<tr style="background-color: var(--darkened-bg);">'
+            '<th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border-color);">Version</th>'
+            '<th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border-color);">Date d\'acceptation</th>'
+            "</tr>"
+            "</thead>"
+            "<tbody>"
+            "{}"
+            "</tbody>"
+            "</table>",
+            rows_html,
+        )
+
+        return html
+
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
@@ -126,6 +177,7 @@ class UserAdmin(BaseUserAdmin):
                     "main_activity",
                     "discovery_method",
                     "discovery_method_other",
+                    "get_cgu_versions_accepted_display",
                 )
             },
         ),
@@ -155,7 +207,11 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
     search_fields = ("email", "last_name", "first_name")
-    readonly_fields = ["discovery_method", "discovery_method_other"]
+    readonly_fields = [
+        "discovery_method",
+        "discovery_method_other",
+        "get_cgu_versions_accepted_display",
+    ]
     ordering = ("-date_joined",)
     filter_horizontal = ()
     inlines = [
