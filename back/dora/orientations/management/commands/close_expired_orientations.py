@@ -54,7 +54,7 @@ class Command(BaseCommand):
                         )
                         raise
 
-                    orientation.set_status(OrientationStatus.EXPIRED)
+                    orientation.set_status(OrientationStatus.EXPIRED, None)
 
                     self.logger.info("L'orientation %s a été clôturée.", orientation.pk)
 
