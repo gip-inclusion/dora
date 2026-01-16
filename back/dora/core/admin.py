@@ -16,9 +16,8 @@ class EnumAdmin(admin.ModelAdmin):
 
 
 class LogItemAdmin(admin.ModelAdmin):
-    list_display = ["service", "structure", "user", "message"]
-    readonly_fields = ["date"]
-    raw_id_fields = ["structure", "service", "user"]
+    list_display = ["date", "message", "user", "service", "structure", "orientation"]
+    readonly_fields = ["date", "message", "user", "service", "structure", "orientation"]
 
 
 class ImportJobAdmin(admin.ModelAdmin):
