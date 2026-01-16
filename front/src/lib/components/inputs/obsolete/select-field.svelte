@@ -219,9 +219,9 @@
     tabindex={disabled ? "-1" : "0"}
     aria-label={placeholder}
     aria-disabled={disabled}
-    onclick={() => !disabled && toggleCombobox()}
-    onkeydown={disabled ? undefined : handleKeydown}
-    {@attach clickOutside(() => !disabled && toggleCombobox(false))}
+    onclick={() => toggleCombobox()}
+    onkeydown={handleKeydown}
+    {@attach clickOutside(() => toggleCombobox(false))}
   >
     <div class="current-value flex cursor-pointer items-center justify-between">
       <div class="w-[90%] overflow-hidden text-ellipsis whitespace-nowrap">
