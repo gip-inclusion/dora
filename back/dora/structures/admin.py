@@ -350,7 +350,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
 
         # Passage des demandes d'orientation en attente au statut Ouverte / En cours de traitement et envoi des e-mails
         for orientation in moderation_pending_orientations:
-            orientation.set_status(OrientationStatus.PENDING)
+            orientation.set_status(OrientationStatus.PENDING, request.user)
             send_orientation_created_emails(orientation)
 
         # Message de confirmation
@@ -423,7 +423,9 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
         for orientation in moderation_pending_orientations:
             try:
                 orientation.delete_attachments()
-                orientation.set_status(OrientationStatus.MODERATION_REJECTED)
+                orientation.set_status(
+                    OrientationStatus.MODERATION_REJECTED, request.user
+                )
             except Exception as e:
                 logger.error(
                     "Erreur lors de la suppression des pièces jointes de l'orientation %s: %s",

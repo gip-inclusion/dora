@@ -12,6 +12,7 @@ from django.utils import timezone
 from dora.core.models import EnumModel, LogItem
 from dora.services.models import Service
 from dora.structures.models import Structure
+from dora.users.models import User
 
 ORIENTATION_QUERY_LINK_TTL_DAY = 8
 
@@ -377,11 +378,15 @@ class Orientation(models.Model):
     def query_expired(self) -> bool:
         return timezone.now() > self.query_expires_at
 
-    def set_status(self, status: OrientationStatus):
+    def set_status(self, status: OrientationStatus, user: User | None = None):
+        old_status = OrientationStatus(self.status)
         self.status = status
         self.processing_date = timezone.now()
-
         self.save(update_fields=["status", "processing_date"])
+        self.log_note(
+            user,
+            f"Orientation passée de {old_status.label} à {status.label}",
+        )
 
 
 class ContactRecipient(models.TextChoices):
