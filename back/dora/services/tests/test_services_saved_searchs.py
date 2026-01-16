@@ -27,7 +27,7 @@ SAVE_SEARCH_ARGS = {
     "city_code": "58211",
     "city_label": "Poil (58)",
     "kinds": ["aide-financiere", "aide-materielle"],
-    "fees": ["gratuit-sous-conditions", "payant"],
+    "fees": ["gratuit", "payant"],
     "funding_labels": ["funding-label-1", "funding-label-2"],
 }
 
