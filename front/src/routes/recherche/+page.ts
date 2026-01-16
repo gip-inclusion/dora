@@ -1,4 +1,5 @@
 import { toast } from "@zerodevx/svelte-toast";
+import { redirect } from "@sveltejs/kit";
 import { getServicesOptions } from "$lib/requests/services";
 import type { SearchQuery, ServiceSearchResult } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
@@ -119,8 +120,9 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   );
 
   if (wrongCategoriesOrSubcategories) {
-    categoryIds = [];
-    subCategoryIds = [];
+    url.searchParams.delete("cats");
+    url.searchParams.delete("subs");
+    redirect(302, `/recherche?${url.searchParams.toString()}`);
   }
 
   const searchId = await trackSearch(
