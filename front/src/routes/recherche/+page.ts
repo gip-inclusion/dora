@@ -1,3 +1,5 @@
+import { toast } from "@zerodevx/svelte-toast";
+import { redirect } from "@sveltejs/kit";
 import { getServicesOptions } from "$lib/requests/services";
 import type { SearchQuery, ServiceSearchResult } from "$lib/types";
 import { getApiURL } from "$lib/utils/api";
@@ -28,6 +30,7 @@ async function getResults(
   cityBounds: [number, number, number, number];
   fundingLabels: Array<{ value: string; label: string }>;
   services: ServiceSearchResult[];
+  wrongCategoriesOrSubcategories?: boolean;
 }> {
   const querystring = getQueryString({
     categoryIds,
@@ -52,13 +55,27 @@ async function getResults(
     return res.json();
   }
 
-  // TODO: log errors
-  try {
-    console.error(await res.json());
-  } catch (err) {
-    console.error(err);
+  if (res.status === 400) {
+    const errors = await res.json();
+    const error = errors[0];
+    if (error?.code === "invalid_categories_or_subcategories") {
+      toast.push(
+        "Les thématiques et besoins sélectionnés étaient invalides. Ils ont été désélectionnés."
+      );
+      return {
+        cityBounds: [0, 0, 0, 0],
+        fundingLabels: [],
+        services: [],
+        wrongCategoriesOrSubcategories: true,
+      };
+    }
   }
-  return [];
+
+  return {
+    cityBounds: [0, 0, 0, 0],
+    fundingLabels: [],
+    services: [],
+  };
 }
 
 export const load: PageLoad = async ({ fetch, url, parent }) => {
@@ -66,17 +83,15 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
 
   const query = url.searchParams;
 
-  let categoryIds = query.get("cats") ? query.get("cats").split(",") : [];
-  const subCategoryIds = query.get("subs") ? query.get("subs").split(",") : [];
-  const cityCode = query.get("city");
-  const cityLabel = query.get("cl");
-  const label = query.get("l") || cityLabel;
-  const kindIds = query.get("kinds") ? query.get("kinds").split(",") : [];
-  const feeConditions = query.get("fees") ? query.get("fees").split(",") : [];
-  const locationKinds = query.get("locs") ? query.get("locs").split(",") : [];
-  const fundingLabels = query.get("funding")
-    ? query.get("funding").split(",")
-    : [];
+  let categoryIds = query.get("cats")?.split(",") ?? [];
+  let subCategoryIds = query.get("subs")?.split(",") ?? [];
+  const cityCode = query.get("city") ?? undefined;
+  const cityLabel = query.get("cl") ?? undefined;
+  const label = query.get("l") ?? cityLabel;
+  const kindIds = query.get("kinds")?.split(",") ?? [];
+  const feeConditions = query.get("fees")?.split(",") ?? [];
+  const locationKinds = query.get("locs")?.split(",") ?? [];
+  const fundingLabels = query.get("funding")?.split(",") ?? [];
   const lon = query.get("lon");
   const lat = query.get("lat");
 
@@ -84,6 +99,7 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     cityBounds,
     fundingLabels: availableFundingLabels,
     services,
+    wrongCategoriesOrSubcategories,
   } = await getResults(
     {
       // La priorité est donnée aux sous-catégories
@@ -102,6 +118,12 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     },
     fetch
   );
+
+  if (wrongCategoriesOrSubcategories) {
+    url.searchParams.delete("cats");
+    url.searchParams.delete("subs");
+    redirect(302, `/recherche?${url.searchParams.toString()}`);
+  }
 
   const searchId = await trackSearch(
     url,
