@@ -60,7 +60,7 @@ async function getResults(
     const error = errors[0];
     if (error?.code === "invalid_categories_or_subcategories") {
       toast.push(
-        "Les thématiques et besoins sélectionnés sont invalides. Veuillez les corriger."
+        "Les thématiques et besoins sélectionnés étaient invalides. Ils ont été désélectionnés."
       );
       return {
         cityBounds: [0, 0, 0, 0],
