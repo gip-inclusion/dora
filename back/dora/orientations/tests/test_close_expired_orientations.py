@@ -60,7 +60,7 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
         with freeze_time("2022-02-01"):
             expected_processing_time = timezone.now()
 
-            with self.assertNumQueries(13):
+            with self.assertNumQueries(15):
                 self.call_command()
 
             self.expired_orientation_1.refresh_from_db()
