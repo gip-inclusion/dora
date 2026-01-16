@@ -85,6 +85,8 @@
     })
   );
 
+  let subCategoriesDisabled = $derived(subCategories.length === 0);
+
   const categories = servicesOptions?.categories
     ? associateIconToCategory(sortCategory(servicesOptions.categories))
     : [];
@@ -245,7 +247,10 @@
             class="subcategories-search border-gray-02 px-s16 py-s24 text-f14 lg:py-s16 flex border-b lg:border-r lg:border-b-0"
           >
             <div
-              class="mr-s8 h-s24 w-s24 text-magenta-cta self-center fill-current"
+              class={[
+                "mr-s8 h-s24 w-s24 text-magenta-cta self-center fill-current",
+                { "opacity-25": subCategoriesDisabled },
+              ]}
             >
               <ListCheck2Editor />
             </div>
@@ -263,6 +268,7 @@
                 bind:value={subCategoryIds}
                 choices={subCategories}
                 onChange={enableRefreshButton}
+                disabled={subCategoriesDisabled}
               />
             {/key}
           </div>
