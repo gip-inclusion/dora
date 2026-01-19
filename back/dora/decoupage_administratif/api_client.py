@@ -23,7 +23,7 @@ class DecoupageAdministratifAPIClient:
 
     def _get(self, path: str, params: dict[str, Any] | None = None) -> Any:
         url = f"{self.base_url}{path}"
-        print(url, params)
+        logger.info("Fetching %s", url)
         response = self.session.get(url, params=params, timeout=self.timeout_seconds)
         response.raise_for_status()
         return response.json()
@@ -40,6 +40,8 @@ class DecoupageAdministratifAPIClient:
                         "codeRegion",
                         "codesPostaux",
                         "codeEpci",
+                        "population",
+                        "centre",
                     ]
                 ),
                 "format": "json",

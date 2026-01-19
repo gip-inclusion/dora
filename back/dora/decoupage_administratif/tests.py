@@ -32,7 +32,7 @@ class DecoupageAdministratifAPIClientTests(SimpleTestCase):
         self.session.get.assert_called_once_with(
             "https://example.com/communes",
             params={
-                "fields": "code,nom,codeDepartement,codeRegion,codesPostaux,codeEpci",
+                "fields": "code,nom,codeDepartement,codeRegion,codesPostaux,codeEpci,population,centre",
                 "format": "json",
             },
             timeout=5,
