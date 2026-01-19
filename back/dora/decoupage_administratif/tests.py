@@ -7,7 +7,7 @@ from django.core.management import call_command
 from django.test import SimpleTestCase, TestCase
 
 from .api_client import DecoupageAdministratifAPIClient
-from .importer import DecoupageAdministratifImporter
+from .importer import DecoupageAdministratifImporter, _parse_center
 from .models import EPCI, City, Department, Region
 
 
@@ -140,6 +140,82 @@ class DecoupageAdministratifImporterTests(TestCase):
         self.assertEqual(city.epci, "")
         self.assertEqual(city.region, "")
         self.assertEqual(city.postal_codes, ["75001"])
+        self.assertEqual(city.population, 0)
+        self.assertIsNone(city.center)
+
+    def test_import_communes_sets_population_and_center(self):
+        self.client.fetch_communes.return_value = [
+            {
+                "code": "75056",
+                "nom": "Paris",
+                "codeDepartement": "75",
+                "codeRegion": "11",
+                "codeEpci": "200054781",
+                "codesPostaux": ["75001"],
+                "population": 2161000,
+                "centre": {"type": "Point", "coordinates": [2.347, 48.8589]},
+            }
+        ]
+
+        self.importer.import_communes()
+
+        city = City.objects.get(code="75056")
+        self.assertEqual(city.population, 2161000)
+        self.assertIsNotNone(city.center)
+        self.assertAlmostEqual(city.center.x, 2.347, places=3)
+        self.assertAlmostEqual(city.center.y, 48.8589, places=3)
+
+    def test_import_regions_sets_normalized_name(self):
+        self.client.fetch_regions.return_value = [
+            {"code": "44", "nom": "Grand Est"},
+        ]
+
+        self.importer.import_regions()
+
+        region = Region.objects.get(code="44")
+        self.assertEqual(region.normalized_name, "GRAND EST")
+
+    def test_import_departements_sets_normalized_name(self):
+        self.client.fetch_departements.return_value = [
+            {"code": "75", "nom": "Paris", "codeRegion": "11"},
+        ]
+
+        self.importer.import_departements()
+
+        department = Department.objects.get(code="75")
+        self.assertEqual(department.normalized_name, "PARIS")
+
+    def test_import_epci_sets_normalized_name(self):
+        self.client.fetch_epci.return_value = [
+            {
+                "code": "200054781",
+                "nom": "Métropole du Grand Paris",
+                "codesDepartements": ["75"],
+                "codesRegions": ["11"],
+            }
+        ]
+
+        self.importer.import_epci()
+
+        epci = EPCI.objects.get(code="200054781")
+        self.assertEqual(epci.normalized_name, "METROPOLE DU GRAND PARIS")
+
+    def test_import_communes_sets_normalized_name_with_department(self):
+        self.client.fetch_communes.return_value = [
+            {
+                "code": "75056",
+                "nom": "Paris",
+                "codeDepartement": "75",
+                "codeRegion": "11",
+                "codesPostaux": ["75001"],
+            }
+        ]
+
+        self.importer.import_communes()
+
+        city = City.objects.get(code="75056")
+        self.assertIn("PARIS", city.normalized_name)
+        self.assertIn("75", city.normalized_name)
 
     def test_import_all_runs_every_step(self):
         with (
@@ -156,6 +232,36 @@ class DecoupageAdministratifImporterTests(TestCase):
         import_departements.assert_called_once_with()
         import_epci.assert_called_once_with()
         import_communes.assert_called_once_with()
+
+
+@pytest.mark.no_django_db
+class ParseCenterTests(SimpleTestCase):
+    def test_parse_center_with_valid_point(self):
+        center_data = {"type": "Point", "coordinates": [2.347, 48.8589]}
+
+        result = _parse_center(center_data)
+
+        self.assertIsNotNone(result)
+        self.assertAlmostEqual(result.x, 2.347, places=3)
+        self.assertAlmostEqual(result.y, 48.8589, places=3)
+
+    def test_parse_center_with_none(self):
+        self.assertIsNone(_parse_center(None))
+
+    def test_parse_center_with_empty_dict(self):
+        self.assertIsNone(_parse_center({}))
+
+    def test_parse_center_with_wrong_type(self):
+        center_data = {"type": "Polygon", "coordinates": [[0, 0], [1, 1]]}
+        self.assertIsNone(_parse_center(center_data))
+
+    def test_parse_center_with_missing_coordinates(self):
+        center_data = {"type": "Point"}
+        self.assertIsNone(_parse_center(center_data))
+
+    def test_parse_center_with_invalid_coordinates(self):
+        center_data = {"type": "Point", "coordinates": [2.347]}
+        self.assertIsNone(_parse_center(center_data))
 
 
 @pytest.mark.no_django_db
