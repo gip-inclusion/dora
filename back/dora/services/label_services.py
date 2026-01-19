@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class LabelServicesHelper(BaseImportAdminMixin):
-    CSV_HEADERS = ["service_url", "label"]
+    CSV_HEADERS = ["service_url_or_slug", "label"]
 
     def __init__(self):
         self.wet_run: bool = False
@@ -79,13 +79,10 @@ class LabelServicesHelper(BaseImportAdminMixin):
                 for idx, line in enumerate(lines, 2):
                     logger.info(f"\nTraitement de la ligne {idx} :")
 
-                    service_url = line["service_url"]
-                    label_name = line["label"]
-                    slug = service_url.split("/")[-1]
-
                     has_error = False
 
                     try:
+                        slug = self._get_service_slug(line)
                         service = Service.objects.get(slug=slug)
                     except Service.DoesNotExist:
                         error_msg = (
@@ -96,6 +93,7 @@ class LabelServicesHelper(BaseImportAdminMixin):
                         has_error = True
 
                     try:
+                        label_name = line["label"]
                         label = FundingLabel.objects.get(label=label_name)
                     except FundingLabel.DoesNotExist:
                         error_msg = f"[{idx}] Le label de financement '{label_name}' n'existe pas."
@@ -140,6 +138,13 @@ class LabelServicesHelper(BaseImportAdminMixin):
             "labeled_count": self.services_labeled_count,
             "errors": self.errors,
         }
+
+    @staticmethod
+    def _get_service_slug(line):
+        service_url_or_slug = line["service_url_or_slug"]
+        if service_url_or_slug.startswith("http"):
+            return service_url_or_slug.split("/")[-1]
+        return service_url_or_slug
 
     def format_results(self, result, is_wet_run):
         success_messages = []

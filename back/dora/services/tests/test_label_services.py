@@ -13,7 +13,7 @@ from dora.services.label_services import LabelServicesHelper
 class LabelServicesTestCase(TestCase):
     def setUp(self):
         self.labeler = make_user()
-        self.csv_headers = "service_url,label"
+        self.csv_headers = "service_url_or_slug,label"
         self.service = make_service()
         self.service_url = (
             f"https://dora.inclusion.gouv.fr/services/{self.service.slug}"
@@ -24,9 +24,8 @@ class LabelServicesTestCase(TestCase):
         self.label_services_helper = LabelServicesHelper()
 
     def test_label_services_wet_run(self):
-        csv_content = (
-            f"{self.csv_headers}\n{self.service_url},{self.funding_label.label}"
-        )
+        service_2 = make_service()
+        csv_content = f"{self.csv_headers}\n{self.service_url},{self.funding_label.label}\n{service_2.slug},{self.funding_label.label}"
         reader = csv.reader(io.StringIO(csv_content))
 
         with freeze_time("2026-01-01"):
@@ -35,16 +34,25 @@ class LabelServicesTestCase(TestCase):
             )
             expected_modification_date = timezone.now()
 
-        self.assertEqual(result["labeled_count"], 1)
+        self.assertEqual(result["labeled_count"], 2)
         self.assertEqual(result["errors"], [])
 
         self.service.refresh_from_db()
+        service_2.refresh_from_db()
+
         self.assertEqual(self.service.funding_labels.count(), 1)
         self.assertEqual(
             self.service.funding_labels.first().value, self.funding_label.value
         )
         self.assertEqual(self.service.last_editor, self.labeler)
         self.assertEqual(self.service.modification_date, expected_modification_date)
+
+        self.assertEqual(service_2.funding_labels.count(), 1)
+        self.assertEqual(
+            service_2.funding_labels.first().value, self.funding_label.value
+        )
+        self.assertEqual(service_2.last_editor, self.labeler)
+        self.assertEqual(service_2.modification_date, expected_modification_date)
 
     def test_label_services_dry_run(self):
         csv_content = (
