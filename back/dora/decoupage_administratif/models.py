@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 
@@ -7,7 +8,11 @@ class Commune(models.Model):
     code_departement = models.CharField(max_length=3)
     code_epci = models.CharField(max_length=9)
     code_region = models.CharField(max_length=3)
-    codes_postaux = models.JSONField(default=list)
+    codes_postaux = ArrayField(
+        models.CharField(max_length=5),
+        blank=True,
+        default=list,
+    )
 
     class Meta:
         verbose_name = "commune"
@@ -33,8 +38,16 @@ class Departement(models.Model):
 class Epci(models.Model):
     nom = models.CharField(max_length=255)
     code = models.CharField(max_length=9, unique=True)
-    codes_departements = models.JSONField(default=list)
-    codes_regions = models.JSONField(default=list)
+    codes_departements = ArrayField(
+        models.CharField(max_length=3),
+        blank=True,
+        default=list,
+    )
+    codes_regions = ArrayField(
+        models.CharField(max_length=3),
+        blank=True,
+        default=list,
+    )
 
     class Meta:
         verbose_name = "EPCI"
