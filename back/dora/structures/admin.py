@@ -453,6 +453,7 @@ class StructureAdmin(BaseImportAdminMixin, admin.ModelAdmin):
 
         context = {
             "title": "Module d'import de structures",
+            "breadcrumb_title": "Importer structures",
             "opts": self.model._meta,
             "has_view_permission": True,
             "csv_headers": ImportStructuresHelper.CSV_HEADERS,

@@ -10,7 +10,7 @@
     <a href="{% url 'admin:index' %}">Home</a>
     &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">Administration de {{ opts.app_label|title }}</a>
     &rsaquo; <a href="{% url 'admin:'|add:opts.app_label|add:'_'|add:opts.model_name|add:'_changelist' %}">{{ opts.verbose_name_plural|title }}</a>
-    &rsaquo; Importer {{ opts.verbose_name_plural|lower }}
+    &rsaquo; {{ breadcrumb_title }}
   </div>
 {% endblock %}
 

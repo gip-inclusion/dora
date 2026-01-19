@@ -160,6 +160,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
 
         context = {
             "title": "Module d'import de services",
+            "breadcrumb_title": "Importer services",
             "opts": self.model._meta,
             "has_view_permission": True,
             "csv_headers": ImportServicesHelper.CSV_HEADERS,
@@ -178,6 +179,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
 
         context = {
             "title": "Module de labellisation des services",
+            "breadcrumb_title": "Labellisation de services",
             "opts": self.model._meta,
             "has_view_permission": True,
             "csv_headers": LabelServicesHelper.CSV_HEADERS,
