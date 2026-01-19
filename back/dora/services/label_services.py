@@ -1,18 +1,12 @@
-import csv
-import io
 import logging
-import threading
-import traceback
 from typing import Optional
 
-from django.core.cache import cache
 from django.db import transaction
-from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 
-from dora.core.models import ImportJob
+from dora.core.mixins import BaseImportAdminMixin
 from dora.core.utils import skip_csv_lines
 from dora.services.models import FundingLabel, Service
 from dora.users.models import User
@@ -20,10 +14,28 @@ from dora.users.models import User
 logger = logging.getLogger(__name__)
 
 
-class LabelServicesHelper:
+class LabelServicesHelper(BaseImportAdminMixin):
+    CSV_HEADERS = ["service_url", "label"]
+
     def __init__(self):
         self.wet_run: bool = False
         self.labeler: Optional[User] = None
+
+    # BaseImportAdminMixin abstract methods
+    def get_import_type_name(self):
+        return "label_services"
+
+    def get_import_helper(self):
+        return self
+
+    def get_import_method_name(self):
+        return "label_services"
+
+    def get_import_title(self):
+        return "Labellisation de services"
+
+    def get_csv_headers(self):
+        return self.CSV_HEADERS
 
     def _initialize_trackers(self):
         self.errors = []
@@ -126,151 +138,6 @@ class LabelServicesHelper:
             "errors": self.errors,
         }
 
-    def handle_csv_upload(self, request):
-        """Handle CSV upload for label services"""
-        csv_file = request.FILES.get("csv_file")
-
-        if not csv_file:
-            return self._create_failed_job(
-                request,
-                "fichier-manquant.csv",
-                "Veuillez sélectionner un fichier CSV.",
-            )
-
-        if not csv_file.name.lower().endswith(".csv"):
-            return self._create_failed_job(
-                request,
-                csv_file.name,
-                "<b>Échec de l'import - Format de fichier non valide</b><br/>"
-                "Le fichier n'est pas au format CSV attendu. Assurez-vous d'utiliser un fichier .csv avec des colonnes séparées par des virgules.",
-            )
-
-        upload_size_limit = 50 * 1024 * 1024  # 50MB
-        if csv_file.size > upload_size_limit:
-            return self._create_failed_job(
-                request,
-                csv_file.name,
-                "<b>Échec de l'import - Fichier trop volumineux</b><br/>Le fichier doit faire moins de 50 Mio.",
-            )
-
-        try:
-            is_wet_run = request.POST.get("test_run") != "on"
-            should_remove_instructions = (
-                request.POST.get("should_remove_instructions") == "on"
-            )
-
-            csv_content = csv_file.read().decode("utf-8")
-
-            import_job = ImportJob.objects.create(
-                user=request.user,
-                import_type="label_services",
-                filename=csv_file.name,
-                status="pending",
-            )
-
-            thread = threading.Thread(
-                target=self._run_in_background,
-                args=(
-                    import_job.id,
-                    csv_content,
-                    request.user.id,
-                    is_wet_run,
-                    should_remove_instructions,
-                ),
-            )
-            thread.daemon = True
-            thread.start()
-
-            return redirect(f"{request.path}?job_id={import_job.id}")
-
-        except UnicodeDecodeError:
-            return self._create_failed_job(
-                request,
-                csv_file.name,
-                "<b>Échec de l'import - Erreur d'encodage du fichier</b><br/>"
-                "Le fichier contient des caractères spéciaux illisibles. Sauvegardez votre fichier en UTF-8 et relancez l'import.",
-            )
-        except Exception as e:
-            return self._create_failed_job(
-                request,
-                csv_file.name,
-                f"<b>Échec de l'import - Erreur inattendue</b><br/>"
-                f"L'erreur suivante s'est produite :<br/>"
-                f"{e}<br/>"
-                f"Si le problème persiste, contactez les développeurs.",
-            )
-
-    def _create_failed_job(self, request, filename, error_message):
-        """Create a failed ImportJob for label services"""
-        import_job = ImportJob.objects.create(
-            user=request.user,
-            import_type="label_services",
-            filename=filename,
-            status="failed",
-        )
-
-        cache_key = f"import_results:{import_job.id}"
-        cache.set(
-            cache_key,
-            {"messages": [{"level": "error", "message": error_message}]},
-            timeout=3600,  # 1 hour
-        )
-
-        return redirect(f"{request.path}?job_id={import_job.id}")
-
-    def _run_in_background(
-        self,
-        job_id,
-        csv_content,
-        user_id,
-        is_wet_run,
-        should_remove_instructions,
-    ):
-        """Run label services import in background thread"""
-        try:
-            job = ImportJob.objects.get(id=job_id)
-            job.status = "processing"
-            job.started_at = timezone.now()
-            job.save()
-
-            user = User.objects.get(id=user_id)
-            reader = csv.reader(io.StringIO(csv_content))
-
-            result = self.label_services(
-                reader,
-                user,
-                source_info=None,
-                wet_run=is_wet_run,
-                should_remove_first_two_lines=should_remove_instructions,
-            )
-
-            cache_key = f"import_results:{job_id}"
-            cache.set(
-                cache_key,
-                {
-                    "messages": self.format_results(result, is_wet_run),
-                    "is_wet_run": is_wet_run,
-                },
-                timeout=3600,  # 1 hour
-            )
-
-            job.status = "completed"
-            job.completed_at = timezone.now()
-            job.save()
-
-        except Exception as e:
-            cache_key = f"import_results:{job_id}"
-            cache.set(
-                cache_key,
-                {"error_message": f"{str(e)}\n\n{traceback.format_exc()}"},
-                timeout=3600,  # 1 hour
-            )
-
-            job = ImportJob.objects.get(id=job_id)
-            job.status = "failed"
-            job.completed_at = timezone.now()
-            job.save()
-
     def format_results(self, result, is_wet_run):
         """Format label services results for display"""
         success_messages = []
@@ -343,5 +210,3 @@ class LabelServicesHelper:
             )
 
         return success_messages
-
-    CSV_HEADERS = ["service_url", "label"]

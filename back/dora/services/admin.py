@@ -174,7 +174,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
     def label_services_view(self, request):
         if request.method == "POST":
             label_services_helper = LabelServicesHelper()
-            return label_services_helper.handle_csv_upload(request)
+            return label_services_helper.import_csv(request)
 
         context = {
             "title": "Module de labellisation des services",
