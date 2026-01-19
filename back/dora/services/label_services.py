@@ -21,7 +21,6 @@ class LabelServicesHelper(BaseImportAdminMixin):
         self.wet_run: bool = False
         self.labeler: Optional[User] = None
 
-    # BaseImportAdminMixin abstract methods
     def get_import_type_name(self):
         return "label_services"
 
@@ -143,7 +142,6 @@ class LabelServicesHelper(BaseImportAdminMixin):
         }
 
     def format_results(self, result, is_wet_run):
-        """Format label services results for display"""
         success_messages = []
         labeled_count = result.get("labeled_count", 0)
         missing_headers = result.get("missing_headers", [])
@@ -151,7 +149,6 @@ class LabelServicesHelper(BaseImportAdminMixin):
 
         no_errors = not missing_headers and not errors
 
-        # Missing headers
         if missing_headers:
             return [
                 {
@@ -165,7 +162,6 @@ class LabelServicesHelper(BaseImportAdminMixin):
                 }
             ]
 
-        # Errors
         if errors:
             message_title = mark_safe(
                 "Échec de l'import"
