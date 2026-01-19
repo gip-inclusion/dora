@@ -42,7 +42,7 @@ def test_search_services_with_obsolete_structure(api_client):
     service = make_published_service(diffusion_zone_type=AdminDivisionType.COUNTRY)
 
     # le paramètre `city` est nécessaire a minima
-    city = baker.make("City")
+    city = baker.make("admin_express.City")
 
     fake_di_client = FakeDataInclusionClient()
 
@@ -82,7 +82,7 @@ def test_search_services_with_orphan_structure(
     # doivent être filtrés lors de la recherche
 
     # le paramètre `city` est nécessaire a minima
-    city = baker.make("City")
+    city = baker.make("admin_express.City")
 
     fake_di_client = FakeDataInclusionClient()
 
@@ -119,7 +119,7 @@ def test_search_services_includes_thematiques_empty_list(api_client):
     # Un service service DI ayant le champ thematiques avec une liste vide doit être retourné
 
     # le paramètre `city` est nécessaire a minima
-    city = baker.make("City")
+    city = baker.make("admin_express.City")
 
     with mock.patch("dora.data_inclusion.di_client_factory") as mock_di_client_factory:
         di_client = FakeDataInclusionClient()
@@ -139,7 +139,7 @@ def test_search_services_includes_thematiques_null(api_client):
     # Un service service DI ayant le champ thematiques à null doit être retourné
 
     # le paramètre `city` est nécessaire a minima
-    city = baker.make("City")
+    city = baker.make("admin_express.City")
 
     with mock.patch("dora.data_inclusion.di_client_factory") as mock_di_client_factory:
         di_client = FakeDataInclusionClient()
@@ -215,7 +215,7 @@ class TestValidateSearchCategoriesAndSubcategories:
 
 def test_search_endpoint_rejects_invalid_categories(api_client):
     """Teste que le endpoint de recherche rejette les catégories invalides."""
-    city = baker.make("City")
+    city = baker.make("admin_express.City")
     baker.make("ServiceCategory", value="cat1", label="Catégorie 1")
 
     fake_di_client = FakeDataInclusionClient()
@@ -234,7 +234,7 @@ def test_search_endpoint_rejects_invalid_categories(api_client):
 
 def test_search_endpoint_rejects_invalid_subcategories(api_client):
     """Teste que le endpoint de recherche rejette les sous-catégories invalides."""
-    city = baker.make("City")
+    city = baker.make("admin_express.City")
     baker.make("ServiceSubCategory", value="cat1--sub1", label="Sous-catégorie 1")
 
     fake_di_client = FakeDataInclusionClient()
