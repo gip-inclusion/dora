@@ -78,44 +78,48 @@ class LabelServicesHelper(BaseImportAdminMixin):
 
             with transaction.atomic():
                 for idx, line in enumerate(lines, 2):
+                    logger.info(f"\nTraitement de la ligne {idx} :")
+
+                    service_url = line["service_url"]
+                    label_name = line["label"]
+                    slug = service_url.split("/")[-1]
+
+                    has_error = False
+
                     try:
-                        logger.info(f"\nTraitement de la ligne {idx} :")
-
-                        service_url = line["service_url"]
-                        label_name = line["label"]
-
-                        label = FundingLabel.objects.get(label=label_name)
-
-                        slug = service_url.split("/")[-1]
                         service = Service.objects.get(slug=slug)
-
-                        service.funding_labels.add(label)
-
-                        service.last_editor = self.labeler
-                        service.modification_date = timezone.now()
-                        service.save()
-
-                        logger.info(
-                            "Le label de financement %s a été ajouté au service avec le slug %s.",
-                            label_name,
-                            slug,
-                        )
-
-                        self.services_labeled_count += 1
-
-                    except FundingLabel.DoesNotExist:
-                        error_msg = f"[{idx}] Le label de financement '{label_name}' n'existe pas."
-                        logger.warning(error_msg)
-                        self.errors.append(error_msg)
-                        continue
-
                     except Service.DoesNotExist:
                         error_msg = (
                             f"[{idx}] Le service avec le slug '{slug}' n'existe pas."
                         )
                         logger.warning(error_msg)
                         self.errors.append(error_msg)
+                        has_error = True
+
+                    try:
+                        label = FundingLabel.objects.get(label=label_name)
+                    except FundingLabel.DoesNotExist:
+                        error_msg = f"[{idx}] Le label de financement '{label_name}' n'existe pas."
+                        logger.warning(error_msg)
+                        self.errors.append(error_msg)
+                        has_error = True
+
+                    if has_error:
                         continue
+
+                    service.funding_labels.add(label)
+
+                    service.last_editor = self.labeler
+                    service.modification_date = timezone.now()
+                    service.save()
+
+                    logger.info(
+                        "Le label de financement %s a été ajouté au service avec le slug %s.",
+                        label_name,
+                        slug,
+                    )
+
+                    self.services_labeled_count += 1
 
                 if len(self.errors) > 0 and self.wet_run:
                     self.services_labeled_count = 0

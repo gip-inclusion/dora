@@ -95,3 +95,22 @@ class LabelServicesTestCase(TestCase):
 
         self.service.refresh_from_db()
         self.assertEqual(self.service.funding_labels.count(), 0)
+
+    def test_handles_both_errors_on_same_line(self):
+        csv_content = f"{self.csv_headers}\ninvalid-service,invalid-label"
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.label_services_helper.label_services(
+            reader, self.labeler, source_info=None, wet_run=True
+        )
+
+        self.assertEqual(result["labeled_count"], 0)
+        self.assertEqual(
+            result["errors"][0],
+            "[2] Le service avec le slug 'invalid-service' n'existe pas.",
+        )
+
+        self.assertEqual(
+            result["errors"][1],
+            "[2] Le label de financement 'invalid-label' n'existe pas.",
+        )
