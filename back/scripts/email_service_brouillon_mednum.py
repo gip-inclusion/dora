@@ -47,7 +47,7 @@ def send_service_draft_notification(admin, structure, services):
         "user": admin,
         "draft_services": draft_services,
         "cta_draft_services_link": cta_draft_services_link,
-        "help_update_services_url": "https://aide.dora.inclusion.beta.gouv.fr/fr/article/actualiser-ses-services-1u0a101/",
+        "help_update_services_url": "https://aide.dora.inclusion.gouv.fr/fr/article/actualiser-ses-services-1u0a101/",
     }
 
     send_mail(

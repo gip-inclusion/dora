@@ -173,7 +173,7 @@ def send_orphan_structure_notification(structure):
     )
     context = {
         "structure": structure,
-        "dora_doc_link": "https://aide.dora.inclusion.beta.gouv.fr/fr/",
+        "dora_doc_link": "https://aide.dora.inclusion.gouv.fr/fr/",
         "webinar_link": "https://app.livestorm.co/itou/dora-presentation-et-prise-en-main-de-loutil",
         "cta_link": cta_link.url,
     }
@@ -195,8 +195,8 @@ def send_admin_invited_users_20_notification(structure, user):
             "structure": structure,
             "user": user,
             "admin": admin,
-            "contact_link": "https://aide.dora.inclusion.beta.gouv.fr/",
-            "help_link": "https://aide.dora.inclusion.beta.gouv.fr/fr/article/gerer-le-compte-de-ses-collaborateurs-en-tant-quadministrateur-xkonvm/",
+            "contact_link": "https://aide.dora.inclusion.gouv.fr/",
+            "help_link": "https://aide.dora.inclusion.gouv.fr/fr/article/gerer-le-compte-de-ses-collaborateurs-en-tant-quadministrateur-xkonvm/",
         }
         send_mail(
             "Invitation non acceptée : Action requise",
@@ -249,8 +249,8 @@ def send_admin_self_invited_users_notification(structure, user):
             "user": user,
             "admin": admin,
             "cta_link": cta_link.url,
-            "contact_link": "https://aide.dora.inclusion.beta.gouv.fr/",
-            "help_link": "https://aide.dora.inclusion.beta.gouv.fr/fr/article/gerer-le-compte-de-ses-collaborateurs-en-tant-quadministrateur-xkonvm/",
+            "contact_link": "https://aide.dora.inclusion.gouv.fr/",
+            "help_link": "https://aide.dora.inclusion.gouv.fr/fr/article/gerer-le-compte-de-ses-collaborateurs-en-tant-quadministrateur-xkonvm/",
         }
         send_mail(
             "Rappel : Demande de rattachement en attente",
@@ -269,7 +269,7 @@ def send_structure_activation_notification(structure):
     next_link = f"/structures/{structure.slug}/services"
     context = {
         "structure": structure,
-        "dora_doc_link": "https://aide.dora.inclusion.beta.gouv.fr/fr/article/referencer-son-offre-de-service-xpivaw/",
+        "dora_doc_link": "https://aide.dora.inclusion.gouv.fr/fr/article/referencer-son-offre-de-service-xpivaw/",
         "webinar_link": "https://app.livestorm.co/itou/dora-presentation-et-prise-en-main-de-loutil",
     }
 
