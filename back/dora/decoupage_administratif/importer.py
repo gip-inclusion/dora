@@ -3,7 +3,7 @@ import logging
 from django.db import transaction
 
 from .api_client import DecoupageAdministratifAPIClient
-from .models import Commune, Departement, Epci, Region
+from .models import EPCI, City, Department, Region
 
 logger = logging.getLogger(__name__)
 
@@ -21,19 +21,19 @@ class DecoupageAdministratifImporter:
             Region.objects.update_or_create(
                 code=region["code"],
                 defaults={
-                    "nom": region["nom"],
+                    "name": region["nom"],
                 },
             )
 
     @transaction.atomic
     def import_departements(self) -> None:
         payload = self.client.fetch_departements()
-        for departement in payload:
-            Departement.objects.update_or_create(
-                code=departement["code"],
+        for dept in payload:
+            Department.objects.update_or_create(
+                code=dept["code"],
                 defaults={
-                    "nom": departement["nom"],
-                    "code_region": departement["codeRegion"],
+                    "name": dept["nom"],
+                    "region": dept["codeRegion"],
                 },
             )
 
@@ -41,12 +41,12 @@ class DecoupageAdministratifImporter:
     def import_epci(self) -> None:
         payload = self.client.fetch_epci()
         for epci in payload:
-            Epci.objects.update_or_create(
+            EPCI.objects.update_or_create(
                 code=epci["code"],
                 defaults={
-                    "nom": epci["nom"],
-                    "codes_departements": epci.get("codesDepartements", []),
-                    "codes_regions": epci.get("codesRegions", []),
+                    "name": epci["nom"],
+                    "departments": epci.get("codesDepartements", []),
+                    "regions": epci.get("codesRegions", []),
                 },
             )
 
@@ -54,14 +54,14 @@ class DecoupageAdministratifImporter:
     def import_communes(self) -> None:
         payload = self.client.fetch_communes()
         for commune in payload:
-            Commune.objects.update_or_create(
+            City.objects.update_or_create(
                 code=commune["code"],
                 defaults={
-                    "nom": commune["nom"],
-                    "code_departement": commune.get("codeDepartement", ""),
-                    "code_epci": commune.get("codeEpci", ""),
-                    "code_region": commune.get("codeRegion", ""),
-                    "codes_postaux": commune.get("codesPostaux", []),
+                    "name": commune["nom"],
+                    "department": commune.get("codeDepartement", ""),
+                    "epci": commune.get("codeEpci", ""),
+                    "region": commune.get("codeRegion", ""),
+                    "postal_codes": commune.get("codesPostaux", []),
                 },
             )
 

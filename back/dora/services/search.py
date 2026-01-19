@@ -16,7 +16,7 @@ import dora.services.models as models
 from dora import data_inclusion
 from dora.admin_express.models import City
 from dora.core.constants import WGS84
-from dora.decoupage_administratif.models import Commune
+from dora.decoupage_administratif.models import City as DACity
 from dora.services.models import ServiceStatus, ServiceSubCategory
 from dora.structures.models import Structure
 
@@ -130,12 +130,12 @@ def _map_fees_dora_to_di(fees: list[str]) -> list[str]:
 
 
 def _filter_di_results(raw_di_results: list, city_code: str) -> list:
-    commune = Commune.objects.filter(code=city_code).first()
+    city = DACity.objects.filter(code=city_code).first()
 
-    if not commune:
+    if not city:
         return raw_di_results
 
-    if commune.code_departement == DEPARTMENT_CODE_VOSGES:
+    if city.department == DEPARTMENT_CODE_VOSGES:
         # Exclusion des services mediation-numerique
         return [
             result
@@ -143,7 +143,7 @@ def _filter_di_results(raw_di_results: list, city_code: str) -> list:
             if result["service"]["source"] != MEDIATION_NUMERIQUE_SOURCE
         ]
 
-    if commune.code_departement == DEPARTMENT_CODE_SOMME:
+    if city.department == DEPARTMENT_CODE_SOMME:
         # Exclusion des services mediation-numerique, sauf les services de France Services
         return [
             result

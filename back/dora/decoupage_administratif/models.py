@@ -2,13 +2,13 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 
-class Commune(models.Model):
-    nom = models.CharField(max_length=255)
+class City(models.Model):
+    name = models.CharField(max_length=255)
     code = models.CharField(max_length=5, unique=True)
-    code_departement = models.CharField(max_length=3)
-    code_epci = models.CharField(max_length=9)
-    code_region = models.CharField(max_length=3)
-    codes_postaux = ArrayField(
+    department = models.CharField(max_length=3)
+    epci = models.CharField(max_length=9)
+    region = models.CharField(max_length=3)
+    postal_codes = ArrayField(
         models.CharField(max_length=5),
         blank=True,
         default=list,
@@ -19,31 +19,31 @@ class Commune(models.Model):
         verbose_name_plural = "communes"
 
     def __str__(self) -> str:
-        return f"{self.nom} ({self.code})"
+        return f"{self.name} ({self.code})"
 
 
-class Departement(models.Model):
-    nom = models.CharField(max_length=255)
+class Department(models.Model):
+    name = models.CharField(max_length=255)
     code = models.CharField(max_length=3, unique=True)
-    code_region = models.CharField(max_length=3)
+    region = models.CharField(max_length=3)
 
     class Meta:
         verbose_name = "département"
         verbose_name_plural = "départements"
 
     def __str__(self) -> str:
-        return f"{self.nom} ({self.code})"
+        return f"{self.name} ({self.code})"
 
 
-class Epci(models.Model):
-    nom = models.CharField(max_length=255)
+class EPCI(models.Model):
+    name = models.CharField(max_length=255)
     code = models.CharField(max_length=9, unique=True)
-    codes_departements = ArrayField(
+    departments = ArrayField(
         models.CharField(max_length=3),
         blank=True,
         default=list,
     )
-    codes_regions = ArrayField(
+    regions = ArrayField(
         models.CharField(max_length=3),
         blank=True,
         default=list,
@@ -54,11 +54,11 @@ class Epci(models.Model):
         verbose_name_plural = "EPCI"
 
     def __str__(self) -> str:
-        return f"{self.nom} ({self.code})"
+        return f"{self.name} ({self.code})"
 
 
 class Region(models.Model):
-    nom = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
     code = models.CharField(max_length=3, unique=True)
 
     class Meta:
@@ -66,4 +66,4 @@ class Region(models.Model):
         verbose_name_plural = "régions"
 
     def __str__(self) -> str:
-        return f"{self.nom} ({self.code})"
+        return f"{self.name} ({self.code})"

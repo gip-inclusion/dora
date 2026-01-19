@@ -8,7 +8,7 @@ from django.test import SimpleTestCase, TestCase
 
 from .api_client import DecoupageAdministratifAPIClient
 from .importer import DecoupageAdministratifImporter
-from .models import Commune, Departement, Epci, Region
+from .models import EPCI, City, Department, Region
 
 
 @pytest.mark.no_django_db
@@ -85,7 +85,7 @@ class DecoupageAdministratifImporterTests(TestCase):
         self.importer = DecoupageAdministratifImporter(client=self.client)
 
     def test_import_regions_updates_names(self):
-        Region.objects.create(code="44", nom="Old Name")
+        Region.objects.create(code="44", name="Old Name")
         self.client.fetch_regions.return_value = [
             {"code": "44", "nom": "Grand Est"},
             {"code": "01", "nom": "Guadeloupe"},
@@ -94,20 +94,20 @@ class DecoupageAdministratifImporterTests(TestCase):
         self.importer.import_regions()
 
         self.assertEqual(Region.objects.count(), 2)
-        self.assertEqual(Region.objects.get(code="44").nom, "Grand Est")
-        self.assertEqual(Region.objects.get(code="01").nom, "Guadeloupe")
+        self.assertEqual(Region.objects.get(code="44").name, "Grand Est")
+        self.assertEqual(Region.objects.get(code="01").name, "Guadeloupe")
 
     def test_import_departements_sets_region_codes(self):
-        Region.objects.create(code="11", nom="Île-de-France")
+        Region.objects.create(code="11", name="Île-de-France")
         self.client.fetch_departements.return_value = [
             {"code": "75", "nom": "Paris", "codeRegion": "11"},
         ]
 
         self.importer.import_departements()
 
-        departement = Departement.objects.get(code="75")
-        self.assertEqual(departement.nom, "Paris")
-        self.assertEqual(departement.code_region, "11")
+        department = Department.objects.get(code="75")
+        self.assertEqual(department.name, "Paris")
+        self.assertEqual(department.region, "11")
 
     def test_import_epci_defaults_empty_lists(self):
         self.client.fetch_epci.return_value = [
@@ -120,9 +120,9 @@ class DecoupageAdministratifImporterTests(TestCase):
 
         self.importer.import_epci()
 
-        epci = Epci.objects.get(code="200069193")
-        self.assertEqual(epci.codes_departements, [])
-        self.assertEqual(epci.codes_regions, [])
+        epci = EPCI.objects.get(code="200069193")
+        self.assertEqual(epci.departments, [])
+        self.assertEqual(epci.regions, [])
 
     def test_import_communes_handles_missing_values(self):
         self.client.fetch_communes.return_value = [
@@ -135,11 +135,11 @@ class DecoupageAdministratifImporterTests(TestCase):
 
         self.importer.import_communes()
 
-        commune = Commune.objects.get(code="75056")
-        self.assertEqual(commune.code_departement, "")
-        self.assertEqual(commune.code_epci, "")
-        self.assertEqual(commune.code_region, "")
-        self.assertEqual(commune.codes_postaux, ["75001"])
+        city = City.objects.get(code="75056")
+        self.assertEqual(city.department, "")
+        self.assertEqual(city.epci, "")
+        self.assertEqual(city.region, "")
+        self.assertEqual(city.postal_codes, ["75001"])
 
     def test_import_all_runs_every_step(self):
         with (
