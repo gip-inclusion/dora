@@ -2,6 +2,7 @@ from datetime import timedelta
 from io import StringIO
 from unittest.mock import call, patch
 
+from django.conf import settings
 from django.core import mail
 from django.core.management import call_command
 from django.test import TransactionTestCase, override_settings
@@ -10,11 +11,14 @@ from freezegun import freeze_time
 
 from dora.core.test_utils import make_orientation
 from dora.orientations.models import OrientationStatus
+from dora.users.models import User
 
 
 @override_settings(ORIENTATION_EXPIRATION_PERIOD_DAYS=30)
 class CloseExpiredOrientationsTestCase(TransactionTestCase):
     def setUp(self):
+        User.objects.get_or_create(email=settings.DORA_BOT_USER)
+
         self.beneficiary_email = "test@email.com"
         self.starting_date = "2022-01-28"
 
@@ -60,7 +64,7 @@ class CloseExpiredOrientationsTestCase(TransactionTestCase):
         with freeze_time("2022-02-01"):
             expected_processing_time = timezone.now()
 
-            with self.assertNumQueries(13):
+            with self.assertNumQueries(16):
                 self.call_command()
 
             self.expired_orientation_1.refresh_from_db()

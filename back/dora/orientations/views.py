@@ -125,7 +125,7 @@ class OrientationViewSet(
             )
             orientation.duration_weeks = orientation.service.duration_weeks
             orientation.save(update_fields=["duration_weekly_hours", "duration_weeks"])
-        orientation.set_status(OrientationStatus.ACCEPTED)
+        orientation.set_status(OrientationStatus.ACCEPTED, request.user)
 
         send_orientation_accepted_emails(
             orientation, sanitized_prescriber_message, sanitized_beneficiary_message
@@ -152,7 +152,7 @@ class OrientationViewSet(
             orientation.rejection_reasons.set(
                 RejectionReason.objects.filter(value__in=reasons)
             )
-            orientation.set_status(OrientationStatus.REJECTED)
+            orientation.set_status(OrientationStatus.REJECTED, request.user)
 
             transaction.on_commit(
                 functools.partial(

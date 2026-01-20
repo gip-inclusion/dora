@@ -9,6 +9,7 @@ from django.utils import timezone
 from dora.core.commands import BaseCommand
 from dora.orientations.emails import send_orientation_expiration_emails
 from dora.orientations.models import Orientation, OrientationStatus
+from dora.users.models import User
 
 
 class Command(BaseCommand):
@@ -19,6 +20,8 @@ class Command(BaseCommand):
             "Clôture des orientations qui sont en cours sans réponse après %d jours.",
             settings.ORIENTATION_EXPIRATION_PERIOD_DAYS,
         )
+
+        dora_bot = User.objects.get_dora_bot()
 
         expiration_date = timezone.localdate() - timedelta(
             days=settings.ORIENTATION_EXPIRATION_PERIOD_DAYS
@@ -54,7 +57,7 @@ class Command(BaseCommand):
                         )
                         raise
 
-                    orientation.set_status(OrientationStatus.EXPIRED)
+                    orientation.set_status(OrientationStatus.EXPIRED, dora_bot)
 
                     self.logger.info("L'orientation %s a été clôturée.", orientation.pk)
 
