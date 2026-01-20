@@ -26,5 +26,5 @@ class Command(BaseCommand):
     def handle(self, file_path: pathlib.Path, wet_run=False, **options):
         with file_path.open() as f:
             self.label_services_helper.label_services(
-                csv.reader(f), User.objects.get_dora_bot(), wet_run
+                csv.reader(f), User.objects.get_dora_bot(), wet_run=wet_run
             )
