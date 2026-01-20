@@ -78,7 +78,11 @@ export function removeToken() {
     return;
   }
 
-  Cookies.remove(TOKEN_KEY, { path: "/" });
+  Cookies.remove(TOKEN_KEY, {
+    path: "/",
+    secure: true,
+    domain: window.location.hostname,
+  });
 }
 
 function getUserInfo(authToken) {
