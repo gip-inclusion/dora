@@ -11,6 +11,7 @@ from dora.core.admin import EnumAdmin
 
 from ..core.mixins import BaseImportAdminMixin
 from .csv_import import ImportServicesHelper
+from .label_services import LabelServicesHelper
 from .models import (
     AccessCondition,
     BeneficiaryAccessMode,
@@ -129,6 +130,7 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
         extra_context["import_url"] = "import-services/"
+        extra_context["label_services_url"] = "label-services/"
         return super().changelist_view(request, extra_context)
 
     def get_urls(self):
@@ -144,6 +146,11 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
                 self.admin_site.admin_view(self.import_job_status),
                 name="services_import_job_status",
             ),
+            path(
+                "label-services/",
+                self.admin_site.admin_view(self.label_services_view),
+                name="services_label_services",
+            ),
         ]
         return custom_urls + urls
 
@@ -153,9 +160,30 @@ class ServiceAdmin(BaseImportAdminMixin, admin.GISModelAdmin):
 
         context = {
             "title": "Module d'import de services",
+            "breadcrumb_title": "Importer services",
             "opts": self.model._meta,
             "has_view_permission": True,
             "csv_headers": ImportServicesHelper.CSV_HEADERS,
+        }
+
+        job_id = request.GET.get("job_id")
+        if job_id:
+            context["job_id"] = job_id
+
+        return render(request, "admin/import_csv_form.html", context)
+
+    def label_services_view(self, request):
+        if request.method == "POST":
+            label_services_helper = LabelServicesHelper()
+            return label_services_helper.import_csv(request)
+
+        context = {
+            "title": "Module de labellisation des services",
+            "breadcrumb_title": "Labellisation de services",
+            "opts": self.model._meta,
+            "has_view_permission": True,
+            "csv_headers": LabelServicesHelper.CSV_HEADERS,
+            "hide_source_field": True,
         }
 
         job_id = request.GET.get("job_id")
