@@ -101,6 +101,9 @@ def migrate_delegation_kind(apps, schema_editor):
         "ergos-79-642-ouvrier-dabattoir": "accompagnement",
         "ergos-79-642-preparateur-de-comma": "accompagnement",
         "ergos-79-642-conducteur-de-ligne-": "accompagnement",
+        "prestim-trouver-en-emploi": "accompagnement",
+        "isa-interim-ofkf-isa-interim": "accompagnement",
+        "communaute-de-commun-lmix-clause-sociale-emplo": "accompagnement",
     }
 
     count_migrated = 0
