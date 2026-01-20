@@ -377,3 +377,71 @@
         flex-direction: column;
     }
 }
+
+html[data-theme="dark"] .spinner-content {
+    background: var(--body-bg, #121212);
+    color: var(--body-fg, #f5f5f5);
+}
+
+html[data-theme="dark"] .spinner-text {
+    color: var(--body-fg, #f5f5f5);
+}
+
+html[data-theme="dark"] .error-details {
+    background: var(--darkened-bg, #1e1e1e);
+    color: var(--body-fg, #f5f5f5);
+}
+
+html[data-theme="dark"] .messagelist li.error {
+    background-color: #5c1a1a;
+    color: #f8d7da;
+    border-color: #842029;
+}
+
+html[data-theme="dark"] .messagelist li.warning,
+html[data-theme="dark"] .messagelist li.info {
+    background-color: #5c4d1a;
+    color: #fff3cd;
+    border-color: #997404;
+}
+
+html[data-theme="dark"] .messagelist li.success {
+    background-color: #1a5c2e;
+    color: #d4edda;
+    border-color: #198754;
+}
+
+@media (prefers-color-scheme: dark) {
+    .spinner-content {
+        background: var(--body-bg, #121212);
+        color: var(--body-fg, #f5f5f5);
+    }
+
+    .spinner-text {
+        color: var(--body-fg, #f5f5f5);
+    }
+
+    .error-details {
+        background: var(--darkened-bg, #1e1e1e);
+        color: var(--body-fg, #f5f5f5);
+    }
+
+    .messagelist li.error {
+        background-color: #5c1a1a;
+        color: #f8d7da;
+        border-color: #842029;
+    }
+
+    .messagelist li.warning,
+    .messagelist li.info {
+        background-color: #5c4d1a;
+        color: #fff3cd;
+        border-color: #997404;
+    }
+
+    .messagelist li.success {
+        background-color: #1a5c2e;
+        color: #d4edda;
+        border-color: #198754;
+    }
+}
