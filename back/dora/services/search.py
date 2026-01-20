@@ -109,26 +109,6 @@ def _map_kinds_dora_to_di(kinds: list[str]) -> list[str]:
     return [kind for kind in kinds if kind in DI_SERVICE_KINDS]
 
 
-FEES_DORA_TO_DI_MAPPING = {
-    "gratuit": "gratuit",
-    "gratuit-sous-conditions": "gratuit",
-    "payant": "payant",
-    "adhesion": "payant",
-}
-
-
-def _map_fees_dora_to_di(fees: list[str]) -> list[str]:
-    return list(
-        set(
-            [
-                FEES_DORA_TO_DI_MAPPING[fee]
-                for fee in fees
-                if fee in FEES_DORA_TO_DI_MAPPING
-            ]
-        )
-    )
-
-
 def _filter_di_results(raw_di_results: list, city_code: str) -> list:
     city = DACity.objects.filter(code=city_code).first()
 
@@ -214,7 +194,6 @@ def _get_raw_di_results(
     sources = None if with_dora else settings.DATA_INCLUSION_STREAM_SOURCES
 
     types = _map_kinds_dora_to_di(kinds) if kinds else None
-    frais = _map_fees_dora_to_di(fees) if fees else None
 
     try:
         raw_di_results = di_client.search_services(
@@ -226,7 +205,7 @@ def _get_raw_di_results(
             code_commune=city_code,
             thematiques=thematiques if len(thematiques) > 0 else None,
             types=types,
-            frais=frais,
+            frais=fees,
             lat=lat,
             lon=lon,
         )
