@@ -1,7 +1,7 @@
 import re
 
 from dora.admin_express.models import AdminDivisionType
-from dora.decoupage_administratif.models import Commune, Departement, Epci, Region
+from dora.decoupage_administratif.models import EPCI, City, Department, Region
 
 FRANCE_INSEE_CODE = "99100"
 
@@ -22,31 +22,31 @@ def get_diffusion_zone_info_for_zone_code(zone_code: str) -> dict:
         }
 
     if re.match(CITY_CODE_PATTERN, zone_code):
-        commune = Commune.objects.filter(code=zone_code).first()
-        if commune:
+        city = City.objects.filter(code=zone_code).first()
+        if city:
             return {
-                "diffusion_zone_details": commune.code,
-                "diffusion_zone_details_display": f"{commune.nom} ({commune.code_departement})",
+                "diffusion_zone_details": city.code,
+                "diffusion_zone_details_display": f"{city.name} ({city.department})",
                 "diffusion_zone_type": AdminDivisionType.CITY.value,
                 "diffusion_zone_type_display": AdminDivisionType.CITY.label,
             }
 
     if re.match(DEPARTMENT_CODE_PATTERN, zone_code):
-        department = Departement.objects.filter(code=zone_code).first()
+        department = Department.objects.filter(code=zone_code).first()
         if department:
             return {
                 "diffusion_zone_details": department.code,
-                "diffusion_zone_details_display": department.nom,
+                "diffusion_zone_details_display": department.name,
                 "diffusion_zone_type": AdminDivisionType.DEPARTMENT.value,
                 "diffusion_zone_type_display": AdminDivisionType.DEPARTMENT.label,
             }
 
     if re.match(EPCI_CODE_PATTERN, zone_code):
-        epci = Epci.objects.filter(code=zone_code).first()
+        epci = EPCI.objects.filter(code=zone_code).first()
         if epci:
             return {
                 "diffusion_zone_details": epci.code,
-                "diffusion_zone_details_display": epci.nom,
+                "diffusion_zone_details_display": epci.name,
                 "diffusion_zone_type": AdminDivisionType.EPCI.value,
                 "diffusion_zone_type_display": AdminDivisionType.EPCI.label,
             }
@@ -78,25 +78,21 @@ def get_region_if_all_department_codes_belong_to_it(
         return None
 
     departments = list(
-        Departement.objects.filter(code__in=department_codes).values(
-            "code", "code_region"
-        )
+        Department.objects.filter(code__in=department_codes).values("code", "region")
     )
 
     if len(departments) != len(department_codes):
         # Un ou plusieurs codes ne correspondent pas à des départements
         return None
 
-    region_codes = {dept["code_region"] for dept in departments}
+    region_codes = {dept["region"] for dept in departments}
 
     if len(region_codes) != 1:
         # Les départements ne correspondent pas à une seule région
         return None
 
     region_code = region_codes.pop()
-    region_departments_count = Departement.objects.filter(
-        code_region=region_code
-    ).count()
+    region_departments_count = Department.objects.filter(region=region_code).count()
 
     if region_departments_count != len(department_codes):
         # La région comporte un nombre de départements différent des départements fournis
@@ -122,7 +118,7 @@ def get_diffusion_zone_info(zone_codes: list[str] | None) -> list[str]:
     if region:
         return {
             "diffusion_zone_details": None,
-            "diffusion_zone_details_display": region.nom,
+            "diffusion_zone_details_display": region.name,
             "diffusion_zone_type": AdminDivisionType.REGION.value,
             "diffusion_zone_type_display": AdminDivisionType.REGION.label,
         }

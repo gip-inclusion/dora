@@ -88,7 +88,7 @@ class ImportServicesTestCase(TestCase):
             lon="2.3522",
             score=1.0,
         )
-        self.city = baker.make("City", code="75056", epci="012345678")
+        self.city = baker.make("admin_express.City", code="75056", epci="012345678")
 
     def test_import_services_wet_run(self):
         csv_content = (
@@ -384,7 +384,7 @@ class ImportServicesTestCase(TestCase):
             lon="2.3522",
             score=1.0,
         )
-        dom_tom_city = baker.make("City", code="97123")
+        dom_tom_city = baker.make("admin_express.City", code="97123")
 
         csv_content = (
             f"{self.csv_headers}\n"

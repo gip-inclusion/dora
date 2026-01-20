@@ -44,12 +44,12 @@ class FilterDiResultsTestCase(APITestCase):
 
     def test_filter_excludes_mediation_numerique_for_vosges(self):
         """Test que les services mediation-numerique sont exclus pour les Vosges."""
-        commune_vosges = baker.make(
-            "decoupage_administratif.Commune",
+        city_vosges = baker.make(
+            "decoupage_administratif.City",
             code="88000",
-            code_departement="88",
+            department="88",
         )
-        filtered = _filter_di_results(self.raw_di_results, commune_vosges.code)
+        filtered = _filter_di_results(self.raw_di_results, city_vosges.code)
         assert len(filtered) == 1
         assert filtered[0]["service"]["source"] == "emplois-de-linclusion"
 
@@ -59,12 +59,12 @@ class FilterDiResultsTestCase(APITestCase):
         """Test que les services mediation-numerique sont exclus pour la Somme,
         mais que les services France Services sont conservés.
         """
-        commune_somme = baker.make(
-            "decoupage_administratif.Commune",
+        city_somme = baker.make(
+            "decoupage_administratif.City",
             code="80000",
-            code_departement="80",
+            department="80",
         )
-        filtered = _filter_di_results(self.raw_di_results, commune_somme.code)
+        filtered = _filter_di_results(self.raw_di_results, city_somme.code)
         assert len(filtered) == 2
         assert filtered[0]["service"]["source"] == "mediation-numerique"
         assert (
@@ -75,13 +75,13 @@ class FilterDiResultsTestCase(APITestCase):
 
     def test_filter_returns_all_results_for_other_departments(self):
         """Test que tous les résultats sont retournés pour les autres départements."""
-        commune = baker.make(
-            "decoupage_administratif.Commune",
+        city = baker.make(
+            "decoupage_administratif.City",
             code="75001",
-            code_departement="75",
+            department="75",
         )
 
-        filtered = _filter_di_results(self.raw_di_results, commune.code)
+        filtered = _filter_di_results(self.raw_di_results, city.code)
 
         assert len(filtered) == 3
         assert filtered == self.raw_di_results

@@ -1,44 +1,33 @@
 from django.contrib import admin
 
-from .models import Commune, Departement, Epci, Region
+from .models import EPCI, City, Department, Region
 
 
-@admin.register(Commune)
-class CommuneAdmin(admin.ModelAdmin):
-    list_display = ("nom", "code", "code_departement", "code_epci", "code_region")
-    search_fields = ("nom", "code")
-    list_filter = (
-        "code_departement",
-        "code_epci",
-        "code_region",
-    )
-    readonly_fields = (
-        "nom",
-        "code",
-        "code_departement",
-        "code_epci",
-        "code_region",
-        "codes_postaux",
-    )
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ("name", "code", "department", "epci", "region")
+    search_fields = ("name", "code")
+    list_filter = ("department", "region")
+    readonly_fields = ("name", "code", "department", "epci", "region", "postal_codes")
 
 
-@admin.register(Departement)
-class DepartementAdmin(admin.ModelAdmin):
-    list_display = ("nom", "code", "code_region")
-    search_fields = ("nom", "code")
-    list_filter = ("code_region",)
-    readonly_fields = ("nom", "code", "code_region")
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ("name", "code", "region")
+    search_fields = ("name", "code")
+    list_filter = ("region",)
+    readonly_fields = ("name", "code", "region")
 
 
-@admin.register(Epci)
-class EpciAdmin(admin.ModelAdmin):
-    list_display = ("nom", "code", "codes_departements", "codes_regions")
-    search_fields = ("nom", "code")
-    readonly_fields = ("nom", "code", "codes_departements", "codes_regions")
+@admin.register(EPCI)
+class EPCIAdmin(admin.ModelAdmin):
+    list_display = ("name", "code", "departments", "regions")
+    search_fields = ("name", "code")
+    readonly_fields = ("name", "code", "departments", "regions")
 
 
 @admin.register(Region)
 class RegionAdmin(admin.ModelAdmin):
-    list_display = ("nom", "code")
-    search_fields = ("nom", "code")
-    readonly_fields = ("nom", "code")
+    list_display = ("name", "code")
+    search_fields = ("name", "code")
+    readonly_fields = ("name", "code")

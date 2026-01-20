@@ -1138,7 +1138,7 @@ class DataInclusionSearchTestCase(APITestCase):
         self.epci11 = baker.make("admin_express.EPCI", code="11111")
         self.epci12 = baker.make("admin_express.EPCI", code="22222")
         self.city1 = baker.make(
-            "City",
+            "admin_express.City",
             name="Sainte Jacquelineboeuf",
             code="12345",
             epcis=[self.epci11.code, self.epci12.code],
@@ -1146,12 +1146,12 @@ class DataInclusionSearchTestCase(APITestCase):
             region=self.region.code,
         )
         self.city1_decoupage_administratif = baker.make(
-            "Commune",
+            "decoupage_administratif.City",
             code="12345",
-            nom="Sainte Jacquelineboeuf",
-            code_departement=self.dept.code,
+            name="Sainte Jacquelineboeuf",
+            department=self.dept.code,
         )
-        self.city2 = baker.make("City")
+        self.city2 = baker.make("admin_express.City")
 
         self.di_client = FakeDataInclusionClient()
         self.factory = APIRequestFactory()
@@ -1851,13 +1851,13 @@ class ServiceSearchTestCase(APITestCase):
         self.epci11 = baker.make("admin_express.EPCI", code="11111")
         self.epci12 = baker.make("admin_express.EPCI", code="22222")
         self.city1 = baker.make(
-            "City",
+            "admin_express.City",
             code="12345",
             epcis=[self.epci11.code, self.epci12.code],
             department=self.dept.code,
             region=self.region.code,
         )
-        self.city2 = baker.make("City")
+        self.city2 = baker.make("admin_express.City")
 
         self.di_client = FakeDataInclusionClient()
         self.patcher = mock.patch("dora.data_inclusion.di_client_factory")
@@ -2543,7 +2543,7 @@ class ServiceSearchOrderingTestCase(APITestCase):
         region = baker.make("admin_express.Region", code="76")
         dept = baker.make("admin_express.Department", region=region.code, code="31")
         toulouse = baker.make(
-            "City",
+            "admin_express.City",
             code="31555",
             department=dept.code,
             region=region.code,
@@ -3019,7 +3019,7 @@ class ServiceArchiveTestCase(APITestCase):
         self.assertEqual(response.data["archived_services"][0]["slug"], service.slug)
 
     def test_archives_dont_appear_in_search_results_anon(self):
-        city = baker.make("City", code="12345")
+        city = baker.make("admin_express.City", code="12345")
         make_service(
             status=ServiceStatus.ARCHIVED,
             diffusion_zone_type=AdminDivisionType.COUNTRY,
@@ -3031,7 +3031,7 @@ class ServiceArchiveTestCase(APITestCase):
         assert len(response.data["services"]) == 0
 
     def test_archives_dont_appear_in_search_results_auth(self):
-        city = baker.make("City", code="12345")
+        city = baker.make("admin_express.City", code="12345")
         make_service(
             status=ServiceStatus.ARCHIVED,
             diffusion_zone_type=AdminDivisionType.COUNTRY,
