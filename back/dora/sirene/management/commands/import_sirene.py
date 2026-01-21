@@ -93,15 +93,13 @@ class Command(BaseCommand):
         """Download and extract legal units file. Returns path to CSV."""
         zipped_file = tmp_dir / "StockUniteLegale_utf8.zip"
 
-        self.stdout.write(
-            self.style.NOTICE("Téléchargement des 'unités légales' (entreprises mères)")
-        )
+        self.logger.info("Téléchargement des 'unités légales' (entreprises mères)")
         subprocess.run(
             ["curl", "-L", LEGAL_UNITS_FILE_URL, "-o", zipped_file],
             check=True,
         )
 
-        self.stdout.write(self.style.NOTICE("Décompression fichier unités légales"))
+        self.logger.info("Décompression fichier unités légales")
         subprocess.run(
             ["unzip", "-o", zipped_file, "-d", tmp_dir],
             check=True,
@@ -113,13 +111,13 @@ class Command(BaseCommand):
         """Download and extract establishments file. Returns path to CSV."""
         gzipped_file = tmp_dir / "StockEtablissementActif_utf8_geo.csv.gz"
 
-        self.stdout.write(self.style.NOTICE("Téléchargement des établissements"))
+        self.logger.info("Téléchargement des établissements")
         subprocess.run(
             ["curl", "-L", ESTABLISHMENTS_FILE_URL, "-o", gzipped_file],
             check=True,
         )
 
-        self.stdout.write(self.style.NOTICE("Décompression du fichier établissements"))
+        self.logger.info("Décompression du fichier établissements")
         subprocess.run(
             ["gzip", "-dk", gzipped_file],
             check=True,
@@ -212,68 +210,63 @@ class Command(BaseCommand):
             return
 
         # No flag: run both import phases sequentially
-        self.stdout.write(
-            self.style.WARNING("Exécution des deux phases d'import séquentiellement...")
-        )
+        self.logger.warning("Exécution des deux phases d'import séquentiellement...")
         self._handle_import_units()
         self._handle_import_estab()
 
     def _handle_activate(self):
         """Activate the temp table as the production table."""
-        self.stdout.write(self.style.WARNING("Activation de la table de travail"))
+        self.logger.warning("Activation de la table de travail")
 
         if not table_exists(TMP_TABLE):
-            self.stdout.write(
-                self.style.ERROR(
-                    f"La table {TMP_TABLE} n'existe pas. Exécutez d'abord --import-units puis --import-estab."
-                )
+            self.logger.error(
+                "La table %s n'existe pas. Exécutez d'abord --import-units puis --import-estab.",
+                TMP_TABLE,
             )
             return
 
         # on sauvegarde la base de production
-        self.stdout.write(self.style.NOTICE(" > sauvegarde de la table actuelle"))
+        self.logger.info(" > sauvegarde de la table actuelle")
         # suppression d'un backup existant
         clean_tmp_tables(BACKUP_TABLE)
         # backup de la table actuelle
         rename_table(SIRENE_TABLE, BACKUP_TABLE)
 
         # on renomme la table de travail
-        self.stdout.write(self.style.NOTICE(" > renommage de la table de travail"))
+        self.logger.info(" > renommage de la table de travail")
         rename_table(TMP_TABLE, SIRENE_TABLE)
 
-        self.stdout.write(self.style.SUCCESS("Activation terminée"))
+        self.logger.info("Activation terminée")
 
     def _handle_rollback(self):
         """Rollback to the backup table."""
-        self.stdout.write(self.style.WARNING("Activation de la table sauvegardée"))
+        self.logger.warning("Activation de la table sauvegardée")
 
         if not table_exists(BACKUP_TABLE):
-            self.stdout.write(
-                self.style.ERROR(f"La table {BACKUP_TABLE} n'existe pas.")
-            )
+            self.logger.error("La table %s n'existe pas.", BACKUP_TABLE)
             return
 
         rename_table(SIRENE_TABLE, TMP_TABLE)
         rename_table(BACKUP_TABLE, SIRENE_TABLE)
         rename_table(TMP_TABLE, BACKUP_TABLE)
 
-        self.stdout.write(self.style.SUCCESS("Rollback terminé"))
+        self.logger.info("Rollback terminé")
 
     def _handle_analyze(self):
         """Run VACUUM ANALYZE on the database."""
-        self.stdout.write(self.style.WARNING("Analyse de la DB en cours..."))
+        self.logger.warning("Analyse de la DB en cours...")
         vacuum_analyze()
-        self.stdout.write(self.style.SUCCESS("Analyse terminée"))
+        self.logger.info("Analyse terminée")
 
     def _handle_clean(self):
         """Drop all temporary tables."""
-        self.stdout.write(self.style.WARNING("Suppression des tables temporaires..."))
+        self.logger.warning("Suppression des tables temporaires...")
         clean_tmp_tables(TMP_TABLE, BACKUP_TABLE, LEGAL_UNITS_TMP_TABLE)
-        self.stdout.write(self.style.SUCCESS("Suppression terminée"))
+        self.logger.info("Suppression terminée")
 
     def _handle_import_units(self):
         """Phase 1: Download and import legal units to temp table."""
-        self.stdout.write(self.style.WARNING("Phase 1: Import des unités légales"))
+        self.logger.warning("Phase 1: Import des unités légales")
 
         with tempfile.TemporaryDirectory() as tmp_dir_name:
             tmp_dir = pathlib.Path(tmp_dir_name)
@@ -282,15 +275,11 @@ class Command(BaseCommand):
             stock_file = self.download_legal_units(tmp_dir)
 
             # Create temp table
-            self.stdout.write(
-                self.style.NOTICE(" > création de la table des unités légales...")
-            )
+            self.logger.info(" > création de la table des unités légales...")
             create_legal_units_table(LEGAL_UNITS_TMP_TABLE)
 
             # Import legal units
-            self.stdout.write(
-                self.style.NOTICE(" > import des unités légales dans la DB...")
-            )
+            self.logger.info(" > import des unités légales dans la DB...")
             legal_units_batch_size = 10_000
             legal_units_batch = []
             legal_units_count = 0
@@ -300,9 +289,7 @@ class Command(BaseCommand):
 
                 for i, row in enumerate(legal_units_reader):
                     if (i % 1_000_000) == 0:
-                        self.stdout.write(
-                            self.style.NOTICE(f" > {i:,} unités légales traitées...")
-                        )
+                        self.logger.info(" > %s unités légales traitées...", f"{i:,}")
                     if row["etatAdministratifUniteLegale"] == "A":
                         # On ignore les unités légales fermées
                         siren = row["siren"][:9]
@@ -320,35 +307,27 @@ class Command(BaseCommand):
                 if legal_units_batch:
                     bulk_add_legal_units(LEGAL_UNITS_TMP_TABLE, legal_units_batch)
 
-            self.stdout.write(
-                self.style.NOTICE(
-                    f" > {legal_units_count:,} unités légales importées dans la DB"
-                )
+            self.logger.info(
+                " > %s unités légales importées dans la DB", f"{legal_units_count:,}"
             )
 
             # Create index for fast lookups
-            self.stdout.write(
-                self.style.NOTICE(" > création de l'index sur les unités légales...")
-            )
+            self.logger.info(" > création de l'index sur les unités légales...")
             create_legal_units_index(LEGAL_UNITS_TMP_TABLE)
 
-        self.stdout.write(
-            self.style.SUCCESS(
-                "Phase 1 terminée. Exécutez maintenant --import-estab pour la phase 2."
-            )
+        self.logger.info(
+            "Phase 1 terminée. Exécutez maintenant --import-estab pour la phase 2."
         )
 
     def _handle_import_estab(self):
         """Phase 2: Download and import establishments using legal units table."""
-        self.stdout.write(self.style.WARNING("Phase 2: Import des établissements"))
+        self.logger.warning("Phase 2: Import des établissements")
 
         # Check prerequisite
         if not table_exists(LEGAL_UNITS_TMP_TABLE):
-            self.stdout.write(
-                self.style.ERROR(
-                    f"La table {LEGAL_UNITS_TMP_TABLE} n'existe pas. "
-                    "Exécutez d'abord --import-units."
-                )
+            self.logger.error(
+                "La table %s n'existe pas. Exécutez d'abord --import-units.",
+                LEGAL_UNITS_TMP_TABLE,
             )
             return
 
@@ -359,20 +338,16 @@ class Command(BaseCommand):
             estab_file = self.download_establishments(tmp_dir)
 
             # Create establishments temp table
-            self.stdout.write(self.style.NOTICE(" > création de la table de travail"))
+            self.logger.info(" > création de la table de travail")
             create_table(TMP_TABLE)
 
             # Import establishments
-            self.stdout.write(self.style.NOTICE(" > import des établissements..."))
+            self.logger.info(" > import des établissements...")
 
             with open(estab_file) as establishment_file:
                 reader = csv.DictReader(establishment_file, delimiter=",")
 
-                self.stdout.write(
-                    self.style.NOTICE(
-                        " > insertion des données dans la table temporaire..."
-                    )
-                )
+                self.logger.info(" > insertion des données dans la table temporaire...")
 
                 batch_size = 5_000
                 estab_batch = []
@@ -389,10 +364,10 @@ class Command(BaseCommand):
                         estab_batch = []
 
                         if (processed_count % 100_000) == 0:
-                            self.stdout.write(
-                                self.style.NOTICE(
-                                    f" > {processed_count:,} établissements traités, {inserted_count:,} insérés..."
-                                )
+                            self.logger.info(
+                                " > %s établissements traités, %s insérés...",
+                                f"{processed_count:,}",
+                                f"{inserted_count:,}",
                             )
 
                 # Process remaining batch
@@ -401,26 +376,22 @@ class Command(BaseCommand):
                     inserted_count += inserted
                     processed_count += len(estab_batch)
 
-            self.stdout.write(
-                self.style.NOTICE(
-                    f" > {processed_count:,} établissements traités, {inserted_count:,} insérés"
-                )
+            self.logger.info(
+                " > %s établissements traités, %s insérés",
+                f"{processed_count:,}",
+                f"{inserted_count:,}",
             )
 
             # Cleanup: drop legal units temp table
-            self.stdout.write(
-                self.style.NOTICE(" > suppression de la table des unités légales...")
-            )
+            self.logger.info(" > suppression de la table des unités légales...")
             drop_table(LEGAL_UNITS_TMP_TABLE)
 
             # Create indexes on establishments table
-            self.stdout.write(self.style.NOTICE(" > création des indexes"))
+            self.logger.info(" > création des indexes")
             create_indexes(TMP_TABLE)
 
-        self.stdout.write(
-            self.style.SUCCESS(
-                "Phase 2 terminée. Exécutez --activate pour activer la nouvelle table."
-            )
+        self.logger.info(
+            "Phase 2 terminée. Exécutez --activate pour activer la nouvelle table."
         )
 
     def _process_establishment_batch(self, estab_rows: list[dict]) -> int:
@@ -443,8 +414,8 @@ class Command(BaseCommand):
                         self.create_establishment(siren, parent_name, row)
                     )
             except DataError as err:
-                self.stdout.write(self.style.ERROR(str(err)))
-                self.stdout.write(self.style.ERROR(str(row)))
+                self.logger.error("%s", err)
+                self.logger.error("%s", row)
 
         # Bulk insert
         if establishments:
