@@ -36,7 +36,10 @@
   }: Props = $props();
 
   async function searchAdminDivision(query) {
-    const url = `${getApiURL()}/admin-division-search/?type=${searchType}&q=${encodeURIComponent(
+    const endpoint = withGeom
+      ? "admin-division-search-geo"
+      : "admin-division-search";
+    const url = `${getApiURL()}/${endpoint}/?type=${searchType}&q=${encodeURIComponent(
       query
     )}&${withGeom ? "with_geom=1" : ""}`;
     const response = await fetch(url);
