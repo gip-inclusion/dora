@@ -5,7 +5,6 @@ import subprocess
 import tempfile
 
 from django.conf import settings
-from django.db import transaction
 from django.db.utils import DataError
 
 from dora.core.commands import BaseCommand
@@ -13,9 +12,14 @@ from dora.sirene.models import Establishment
 
 from ._backup import (
     bulk_add_establishments,
+    bulk_add_legal_units,
     clean_tmp_tables,
     create_indexes,
+    create_legal_units_index,
+    create_legal_units_table,
     create_table,
+    drop_table,
+    get_legal_units_batch,
     rename_table,
     vacuum_analyze,
 )
@@ -25,14 +29,11 @@ USE_TEMP_DIR = not settings.DEBUG
 SIRENE_TABLE = "sirene_establishment"
 TMP_TABLE = "_sirene_establishment_tmp"
 BACKUP_TABLE = "_sirene_establishment_bak"
+LEGAL_UNITS_TMP_TABLE = "_sirene_legal_units_tmp"
 
 
 def clean_spaces(string):
     return string.replace("  ", " ").strip()
-
-
-def commit(rows):
-    bulk_add_establishments(TMP_TABLE, rows)
 
 
 class Command(BaseCommand):
@@ -223,88 +224,143 @@ class Command(BaseCommand):
         with tempfile.TemporaryDirectory() as tmp_dir_name:
             stock_file, estab_file = self.download_data(tmp_dir_name)
 
-            num_stock_items = 0
-            with open(stock_file) as f:
-                num_stock_items = sum(1 for _ in f)
+            # Phase 1: Import legal units to temp DB table (instead of memory)
+            self.stdout.write(
+                self.style.NOTICE(" > création de la table des unités légales...")
+            )
+            create_legal_units_table(LEGAL_UNITS_TMP_TABLE)
 
-            legal_units = {}
+            self.stdout.write(
+                self.style.NOTICE(" > import des unités légales dans la DB...")
+            )
+            legal_units_batch_size = 10_000
+            legal_units_batch = []
+            legal_units_count = 0
+
             with open(stock_file) as units_file:
                 legal_units_reader = csv.DictReader(units_file, delimiter=",")
-
-                self.stdout.write(self.style.NOTICE("Parsing legal units"))
 
                 for i, row in enumerate(legal_units_reader):
                     if (i % 1_000_000) == 0:
                         self.stdout.write(
-                            self.style.NOTICE(
-                                f"{round(100 * i / num_stock_items)}% done"
-                            )
+                            self.style.NOTICE(f" > {i:,} unités légales traitées...")
                         )
                     if row["etatAdministratifUniteLegale"] == "A":
                         # On ignore les unités légales fermées
-                        legal_units[row["siren"]] = self.get_ul_name(row)
+                        siren = row["siren"][:9]
+                        name = self.get_ul_name(row)[:255]
+                        legal_units_batch.append((siren, name))
+                        legal_units_count += 1
 
-                self.stdout.write(
-                    self.style.NOTICE(" > décompte des établissements...")
+                        if len(legal_units_batch) >= legal_units_batch_size:
+                            bulk_add_legal_units(LEGAL_UNITS_TMP_TABLE, legal_units_batch)
+                            legal_units_batch = []
+
+                # Commit remaining batch
+                if legal_units_batch:
+                    bulk_add_legal_units(LEGAL_UNITS_TMP_TABLE, legal_units_batch)
+
+            self.stdout.write(
+                self.style.NOTICE(
+                    f" > {legal_units_count:,} unités légales importées dans la DB"
                 )
+            )
 
-                num_establishments = 0
-                with open(estab_file) as f:
-                    num_establishments = sum(1 for _ in f)
-                last_prog = 0
+            # Create index for fast lookups
+            self.stdout.write(
+                self.style.NOTICE(" > création de l'index sur les unités légales...")
+            )
+            create_legal_units_index(LEGAL_UNITS_TMP_TABLE)
 
-                self.stdout.write(
-                    self.style.NOTICE(f" > {num_establishments} établissements")
-                )
+            # Phase 2: Import establishments with batch lookups
+            self.stdout.write(self.style.NOTICE(" > import des établissements..."))
 
             with open(estab_file) as establishment_file:
-                self.stdout.write(self.style.NOTICE(" > import des établissements..."))
                 reader = csv.DictReader(establishment_file, delimiter=",")
 
-                with transaction.atomic(durable=True):
-                    self.stdout.write(
-                        self.style.WARNING(
-                            " > insertion des données dans la table temporaire..."
-                        )
-                    )
-                    # Establishment.objects.all().delete()
-                    batch_size = 1_000
-                    rows = []
-                    for i, row in enumerate(reader):
-                        if (i % batch_size) == 0:
-                            prog = round(100 * i / num_establishments)
-                            if prog != last_prog:
-                                last_prog = prog
-                            self.stdout.write(self.style.NOTICE(f"{prog}% done"))
-                            commit(rows)
-                            rows = []
-                        try:
-                            siren = row["siren"]
-                            parent = legal_units.get(siren)
-                            if parent:
-                                rows.append(
-                                    self.create_establishment(
-                                        siren,
-                                        parent,
-                                        row,
-                                    )
-                                )
-
-                        except DataError as err:
-                            self.stdout.write(self.style.ERROR(err))
-                            self.stdout.write(self.style.ERROR(row))
-
-                    commit(rows)
-
-                # recréation des indexes sur la table de travail
-                self.stdout.write(self.style.NOTICE(" > re-création des indexes"))
-                create_indexes(TMP_TABLE)
-
-                # la sauvegarde de la base de production et l'analyse de la DB
-                # ne sont pas automatique, voir arguments `--activate` et `--analyze`
-
                 self.stdout.write(
-                    self.style.SUCCESS(
-                        "L'import est terminé. Ne pas oublier d'activer la table de travail (--activate)"
+                    self.style.WARNING(
+                        " > insertion des données dans la table temporaire..."
                     )
                 )
+
+                batch_size = 5_000
+                estab_batch = []
+                processed_count = 0
+                inserted_count = 0
+
+                for row in reader:
+                    estab_batch.append(row)
+
+                    if len(estab_batch) >= batch_size:
+                        inserted = self._process_establishment_batch(estab_batch)
+                        inserted_count += inserted
+                        processed_count += len(estab_batch)
+                        estab_batch = []
+
+                        if (processed_count % 100_000) == 0:
+                            self.stdout.write(
+                                self.style.NOTICE(
+                                    f" > {processed_count:,} établissements traités, {inserted_count:,} insérés..."
+                                )
+                            )
+
+                # Process remaining batch
+                if estab_batch:
+                    inserted = self._process_establishment_batch(estab_batch)
+                    inserted_count += inserted
+                    processed_count += len(estab_batch)
+
+            self.stdout.write(
+                self.style.NOTICE(
+                    f" > {processed_count:,} établissements traités, {inserted_count:,} insérés"
+                )
+            )
+
+            # Cleanup: drop legal units temp table
+            self.stdout.write(
+                self.style.NOTICE(" > suppression de la table des unités légales...")
+            )
+            drop_table(LEGAL_UNITS_TMP_TABLE)
+
+            # recréation des indexes sur la table de travail
+            self.stdout.write(self.style.NOTICE(" > re-création des indexes"))
+            create_indexes(TMP_TABLE)
+
+            # la sauvegarde de la base de production et l'analyse de la DB
+            # ne sont pas automatique, voir arguments `--activate` et `--analyze`
+
+            self.stdout.write(
+                self.style.SUCCESS(
+                    "L'import est terminé. Ne pas oublier d'activer la table de travail (--activate)"
+                )
+            )
+
+    def _process_establishment_batch(self, estab_rows: list[dict]) -> int:
+        """Process a batch of establishments with batch lookup for legal units.
+        Returns the number of establishments inserted."""
+        # Get unique SIRENs from this batch
+        sirens = list({row["siren"] for row in estab_rows})
+
+        # Batch lookup: get all legal unit names in one query
+        legal_units = get_legal_units_batch(LEGAL_UNITS_TMP_TABLE, sirens)
+
+        # Create establishments for rows with matching legal units
+        establishments = []
+        for row in estab_rows:
+            try:
+                siren = row["siren"]
+                parent_name = legal_units.get(siren)
+                if parent_name:
+                    establishments.append(
+                        self.create_establishment(siren, parent_name, row)
+                    )
+            except DataError as err:
+                self.stdout.write(self.style.ERROR(str(err)))
+                self.stdout.write(self.style.ERROR(str(row)))
+
+        # Bulk insert
+        if establishments:
+            bulk_add_establishments(TMP_TABLE, establishments)
+
+        return len(establishments)
