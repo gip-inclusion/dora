@@ -880,7 +880,10 @@ class SearchResultSerializer(ServiceListSerializer):
         ]
 
     def get_distance(self, obj):
-        return obj.distance.km if obj.distance is not None else None
+        if obj.distance is None:
+            return None
+        # La distance peut être un objet Distance (GeoDjango) ou un nombre (DI)
+        return obj.distance.km if hasattr(obj.distance, "km") else obj.distance
 
     def get_coordinates(self, obj):
         if obj.geom:
