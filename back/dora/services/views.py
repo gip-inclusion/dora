@@ -961,9 +961,20 @@ def search(request):
         unified_search_enabled=unified_search_enabled,
     )
 
+    from .search import MAX_DISTANCE
+
+    # Le centre de recherche est soit les coordonnées fournies, soit le centre de la ville
+    if lat and lon:
+        search_center = [lon, lat]
+    elif city.center:
+        search_center = [city.center.x, city.center.y]
+    else:
+        search_center = None
+
     return Response(
         {
-            "city_bounds": city.geom.extent,
+            "search_center": search_center,
+            "search_radius_km": MAX_DISTANCE,
             "funding_labels": metadata["funding_labels"],
             "services": sorted_services,
         }
