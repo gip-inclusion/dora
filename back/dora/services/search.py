@@ -400,7 +400,6 @@ def _get_unified_results(
     request,
     di_client: data_inclusion.DataInclusionClient,
     city_code: str,
-    city: City,
     categories: Optional[list[str]] = None,
     subcategories: Optional[list[str]] = None,
     kinds: Optional[list[str]] = None,
@@ -427,14 +426,19 @@ def _get_unified_results(
     )
 
     # Les ID de services DI sont de la forme "source--id".
-    # On récupère uniquement l'ID Dora du service.
-    dora_results_ids = [
-        result["service"]["id"].split("--")[1]
+    # On récupère l'ID Dora du service et la distance calculée par DI,
+    # en conservant l'ordre des résultats DI (triés par distance).
+    dora_results_from_di = [
+        (result["service"]["id"].split("--")[1], result["distance"])
         for result in raw_di_results
         if result["service"]["source"] == "dora"
     ]
-    dora_results = (
-        models.Service.objects.filter(id__in=dora_results_ids)
+    dora_ids = [dora_id for dora_id, _ in dora_results_from_di]
+    dora_distances = {dora_id: distance for dora_id, distance in dora_results_from_di}
+
+    dora_services_by_id = {
+        str(service.id): service
+        for service in models.Service.objects.filter(id__in=dora_ids)
         .select_related(
             "structure",
         )
@@ -449,27 +453,26 @@ def _get_unified_results(
             "coach_orientation_modes",
             "beneficiaries_access_modes",
         )
-    ).distinct()
+        .filter(status=ServiceStatus.PUBLISHED)
+        .exclude(structure__is_obsolete=True)
+        .exclude(structure__in=Structure.objects.orphans())
+        .distinct()
+    }
 
-    dora_results = dora_results.filter(status=ServiceStatus.PUBLISHED)
+    # Annotation des services avec la distance calculée par DI,
+    # en conservant l'ordre des résultats DI.
+    annotated_dora_results = []
+    for dora_id in dora_ids:
+        service = dora_services_by_id.get(dora_id)
+        if service:
+            service.distance = dora_distances.get(dora_id)
+            annotated_dora_results.append(service)
 
-    # Certains services DORA venant de DI ont une structure obsolète ou orpheline
-    dora_results = dora_results.exclude(structure__is_obsolete=True)
-    dora_results = dora_results.exclude(structure__in=Structure.objects.orphans())
-
-    with_remote = not location_kinds or "a-distance" in location_kinds
-    with_onsite = not location_kinds or "en-presentiel" in location_kinds
-    filtered_and_annotated_dora_results = _filter_and_annotate_dora_services(
-        dora_results,
-        city.geom if not lat or not lon else Point(lon, lat, srid=WGS84),
-        with_remote,
-        with_onsite,
-    )
     serialized_dora_results = SearchResultSerializer(
-        filtered_and_annotated_dora_results, many=True, context={"request": request}
+        annotated_dora_results, many=True, context={"request": request}
     ).data
     funding_labels_found = FundingLabel.objects.filter(
-        service__in=filtered_and_annotated_dora_results
+        service__in=annotated_dora_results
     ).distinct()
 
     other_raw_results = [
@@ -530,7 +533,6 @@ def search_services(
             categories=categories,
             subcategories=subcategories,
             city_code=city_code,
-            city=city,
             kinds=kinds,
             fees=fees,
             location_kinds=location_kinds,
