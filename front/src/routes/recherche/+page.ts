@@ -27,7 +27,8 @@ async function getResults(
   }: SearchQuery,
   fetchFunction: typeof fetch
 ): Promise<{
-  cityBounds: [number, number, number, number];
+  searchCenter: [number, number] | null;
+  searchRadiusKm: number;
   fundingLabels: Array<{ value: string; label: string }>;
   services: ServiceSearchResult[];
   wrongCategoriesOrSubcategories?: boolean;
@@ -52,7 +53,13 @@ async function getResults(
   });
 
   if (res.ok) {
-    return res.json();
+    const data = await res.json();
+    return {
+      searchCenter: data.searchCenter ?? null,
+      searchRadiusKm: data.searchRadiusKm ?? 50,
+      fundingLabels: data.fundingLabels ?? [],
+      services: data.services ?? [],
+    };
   }
 
   if (res.status === 400) {
@@ -63,7 +70,8 @@ async function getResults(
         "Les thématiques et besoins sélectionnés étaient invalides. Ils ont été désélectionnés."
       );
       return {
-        cityBounds: [0, 0, 0, 0],
+        searchCenter: null,
+        searchRadiusKm: 50,
         fundingLabels: [],
         services: [],
         wrongCategoriesOrSubcategories: true,
@@ -72,7 +80,8 @@ async function getResults(
   }
 
   return {
-    cityBounds: [0, 0, 0, 0],
+    searchCenter: null,
+    searchRadiusKm: 50,
     fundingLabels: [],
     services: [],
   };
@@ -96,7 +105,8 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
   const lat = query.get("lat");
 
   const {
-    cityBounds,
+    searchCenter,
+    searchRadiusKm,
     fundingLabels: availableFundingLabels,
     services,
     wrongCategoriesOrSubcategories,
@@ -154,7 +164,8 @@ export const load: PageLoad = async ({ fetch, url, parent }) => {
     noIndex: true,
     categoryIds,
     subCategoryIds,
-    cityBounds,
+    searchCenter,
+    searchRadiusKm,
     cityCode,
     cityLabel,
     label,
