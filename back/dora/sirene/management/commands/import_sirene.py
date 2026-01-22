@@ -3,7 +3,6 @@ import pathlib
 import subprocess
 import tempfile
 
-from django.db import connection
 from django.db.utils import DataError
 
 from dora.core.commands import BaseCommand
@@ -21,6 +20,7 @@ from ._backup import (
     drop_table,
     get_legal_units_batch,
     rename_table,
+    table_exists,
 )
 
 # Documentation des variables SIRENE : https://www.sirene.fr/static-resources/htm/v_sommaire.htm
@@ -37,16 +37,6 @@ ESTABLISHMENTS_FILE_URL = (
 
 def clean_spaces(string):
     return string.replace("  ", " ").strip()
-
-
-def table_exists(table_name: str) -> bool:
-    """Check if a table exists in the database."""
-    with connection.cursor() as c:
-        c.execute(
-            "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = %s)",
-            [table_name],
-        )
-        return c.fetchone()[0]
 
 
 class Command(BaseCommand):
@@ -90,7 +80,7 @@ class Command(BaseCommand):
         )
 
     def download_legal_units(self, tmp_dir: pathlib.Path) -> pathlib.Path:
-        """Download and extract legal units file. Returns path to CSV."""
+        """Télécharge et extrait le fichier des unités légales. Retourne le chemin du CSV."""
         zipped_file = tmp_dir / "StockUniteLegale_utf8.zip"
 
         self.logger.info("Téléchargement des 'unités légales' (entreprises mères)")
@@ -108,7 +98,7 @@ class Command(BaseCommand):
         return tmp_dir / "StockUniteLegale_utf8.csv"
 
     def download_establishments(self, tmp_dir: pathlib.Path) -> pathlib.Path:
-        """Download and extract establishments file. Returns path to CSV."""
+        """Télécharge et extrait le fichier des établissements. Retourne le chemin du CSV."""
         gzipped_file = tmp_dir / "StockEtablissementActif_utf8_geo.csv.gz"
 
         self.logger.info("Téléchargement des établissements")
@@ -209,13 +199,13 @@ class Command(BaseCommand):
             self._handle_import_estab()
             return
 
-        # No flag: run both import phases sequentially
+        # Aucun flag : exécuter les deux phases d'import séquentiellement
         self.logger.warning("Exécution des deux phases d'import séquentiellement...")
         self._handle_import_units()
         self._handle_import_estab()
 
     def _handle_activate(self):
-        """Activate the temp table as the production table."""
+        """Active la table temporaire comme table de production."""
         self.logger.warning("Activation de la table de travail")
 
         if not table_exists(TMP_TABLE):
@@ -239,7 +229,7 @@ class Command(BaseCommand):
         self.logger.info("Activation terminée")
 
     def _handle_rollback(self):
-        """Rollback to the backup table."""
+        """Restaure la table de sauvegarde."""
         self.logger.warning("Activation de la table sauvegardée")
 
         if not table_exists(BACKUP_TABLE):
@@ -253,32 +243,32 @@ class Command(BaseCommand):
         self.logger.info("Rollback terminé")
 
     def _handle_analyze(self):
-        """Run ANALYZE on the sirene table."""
+        """Exécute ANALYZE sur la table SIRENE."""
         self.logger.warning("Analyse de la table %s en cours...", SIRENE_TABLE)
         analyze(SIRENE_TABLE)
         self.logger.info("Analyse terminée")
 
     def _handle_clean(self):
-        """Drop all temporary tables."""
+        """Supprime toutes les tables temporaires."""
         self.logger.warning("Suppression des tables temporaires...")
         clean_tmp_tables(TMP_TABLE, BACKUP_TABLE, LEGAL_UNITS_TMP_TABLE)
         self.logger.info("Suppression terminée")
 
     def _handle_import_units(self):
-        """Phase 1: Download and import legal units to temp table."""
+        """Phase 1 : Télécharge et importe les unités légales dans une table temporaire."""
         self.logger.warning("Phase 1: Import des unités légales")
 
         with tempfile.TemporaryDirectory() as tmp_dir_name:
             tmp_dir = pathlib.Path(tmp_dir_name)
 
-            # Download legal units file
+            # Téléchargement du fichier des unités légales
             stock_file = self.download_legal_units(tmp_dir)
 
-            # Create temp table
+            # Création de la table temporaire
             self.logger.info(" > création de la table des unités légales...")
             create_legal_units_table(LEGAL_UNITS_TMP_TABLE)
 
-            # Import legal units
+            # Import des unités légales
             self.logger.info(" > import des unités légales dans la DB...")
             legal_units_batch_size = 10_000
             legal_units_batch = []
@@ -303,7 +293,7 @@ class Command(BaseCommand):
                             )
                             legal_units_batch = []
 
-                # Commit remaining batch
+                # Insertion du reste du batch
                 if legal_units_batch:
                     bulk_add_legal_units(LEGAL_UNITS_TMP_TABLE, legal_units_batch)
 
@@ -311,7 +301,7 @@ class Command(BaseCommand):
                 " > %s unités légales importées dans la DB", f"{legal_units_count:,}"
             )
 
-            # Create index for fast lookups
+            # Création de l'index pour accélérer les recherches
             self.logger.info(" > création de l'index sur les unités légales...")
             create_legal_units_index(LEGAL_UNITS_TMP_TABLE)
 
@@ -320,10 +310,10 @@ class Command(BaseCommand):
         )
 
     def _handle_import_estab(self):
-        """Phase 2: Download and import establishments using legal units table."""
+        """Phase 2 : Télécharge et importe les établissements via la table des unités légales."""
         self.logger.warning("Phase 2: Import des établissements")
 
-        # Check prerequisite
+        # Vérification des prérequis
         if not table_exists(LEGAL_UNITS_TMP_TABLE):
             self.logger.error(
                 "La table %s n'existe pas. Exécutez d'abord --import-units.",
@@ -334,14 +324,14 @@ class Command(BaseCommand):
         with tempfile.TemporaryDirectory() as tmp_dir_name:
             tmp_dir = pathlib.Path(tmp_dir_name)
 
-            # Download establishments file
+            # Téléchargement du fichier des établissements
             estab_file = self.download_establishments(tmp_dir)
 
-            # Create establishments temp table
+            # Création de la table temporaire des établissements
             self.logger.info(" > création de la table de travail")
             create_table(TMP_TABLE)
 
-            # Import establishments
+            # Import des établissements
             self.logger.info(" > import des établissements...")
 
             with open(estab_file) as establishment_file:
@@ -370,7 +360,7 @@ class Command(BaseCommand):
                                 f"{inserted_count:,}",
                             )
 
-                # Process remaining batch
+                # Traitement du reste du batch
                 if estab_batch:
                     inserted = self._process_establishment_batch(estab_batch)
                     inserted_count += inserted
@@ -382,11 +372,11 @@ class Command(BaseCommand):
                 f"{inserted_count:,}",
             )
 
-            # Cleanup: drop legal units temp table
+            # Nettoyage : suppression de la table temporaire des unités légales
             self.logger.info(" > suppression de la table des unités légales...")
             drop_table(LEGAL_UNITS_TMP_TABLE)
 
-            # Create indexes on establishments table
+            # Création des indexes sur la table des établissements
             self.logger.info(" > création des indexes")
             create_indexes(TMP_TABLE)
 
@@ -395,15 +385,15 @@ class Command(BaseCommand):
         )
 
     def _process_establishment_batch(self, estab_rows: list[dict]) -> int:
-        """Process a batch of establishments with batch lookup for legal units.
-        Returns the number of establishments inserted."""
-        # Get unique SIRENs from this batch
+        """Traite un batch d'établissements avec recherche groupée des unités légales.
+        Retourne le nombre d'établissements insérés."""
+        # Récupération des SIREN uniques de ce batch
         sirens = list({row["siren"] for row in estab_rows})
 
-        # Batch lookup: get all legal unit names in one query
+        # Recherche groupée : récupère tous les noms d'unités légales en une requête
         legal_units = get_legal_units_batch(LEGAL_UNITS_TMP_TABLE, sirens)
 
-        # Create establishments for rows with matching legal units
+        # Création des établissements pour les lignes avec une unité légale correspondante
         establishments = []
         for row in estab_rows:
             try:
@@ -417,7 +407,7 @@ class Command(BaseCommand):
                 self.logger.error("%s", err)
                 self.logger.error("%s", row)
 
-        # Bulk insert
+        # Insertion groupée
         if establishments:
             bulk_add_establishments(TMP_TABLE, establishments)
 

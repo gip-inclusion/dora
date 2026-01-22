@@ -87,10 +87,8 @@ def analyze(table_name: str):
 
 
 def clean_tmp_tables(*tmp_tables):
-    # attention ...
     with connection.cursor() as c:
-        # petite sécurité supplémentaire:
-        # les tables temporaires sont obligatoirement préfixées par `_`
+        # les tables temporaires sont préfixées par `_`
         for tmp_table in [tt for tt in tmp_tables if tt.startswith("_")]:
             print(f" > suppression de {tmp_table}")
             c.execute(f"DROP TABLE IF EXISTS {tmp_table}")
@@ -114,9 +112,6 @@ def bulk_add_establishments(table_name: str, ee: list[Establishment]):
     stmt, fields = create_insert_statement(table_name)
     for e in ee:
         add_establishment(stmt, e, fields)
-
-
-# --- Legal Units temp table functions ---
 
 
 def create_legal_units_table(table_name: str):
@@ -148,7 +143,7 @@ def bulk_add_legal_units(table_name: str, rows: list[tuple[str, str]]):
 
 
 def get_legal_units_batch(table_name: str, sirens: list[str]) -> dict[str, str]:
-    """Fetch multiple legal unit names in one query, returns {siren: name}"""
+    """Récupère plusieurs noms d'unités légales en une requête, retourne {siren: name}."""
     if not sirens:
         return {}
     with connection.cursor() as c:
@@ -163,3 +158,13 @@ def get_legal_units_batch(table_name: str, sirens: list[str]) -> dict[str, str]:
 def drop_table(table_name: str):
     with connection.cursor() as c:
         c.execute(f"DROP TABLE IF EXISTS public.{table_name}")
+
+
+def table_exists(table_name: str) -> bool:
+    """Vérifie si une table existe dans la base de données."""
+    with connection.cursor() as c:
+        c.execute(
+            "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = %s)",
+            [table_name],
+        )
+        return c.fetchone()[0]
