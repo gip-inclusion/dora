@@ -1,6 +1,6 @@
 from django.contrib.postgres.search import TrigramSimilarity
 from django.db.models import Value
-from rest_framework import exceptions, permissions, serializers
+from rest_framework import exceptions, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
@@ -8,16 +8,12 @@ from dora.admin_express.models import AdminDivisionType
 from dora.admin_express.utils import normalize_string_for_search
 
 from .models import EPCI, City, Department, Region
+from .serializers import AdminDivisionSerializer
 
 
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def search(request):
-    class AdminDivisionSerializer(serializers.Serializer):
-        code = serializers.CharField()
-        name = serializers.CharField()
-        similarity = serializers.FloatField()
-
     type = request.GET.get("type", "")
     q = request.GET.get("q", "")
     if not type or not q:
