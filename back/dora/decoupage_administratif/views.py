@@ -36,7 +36,7 @@ def search(request):
         qs = (
             Model.objects.filter(code__startswith=q)
             .annotate(similarity=Value(1))
-            .order_by(*sort_fields, "code")[:10]
+            .order_by(*sort_fields, "normalized_name")[:10]
         )
     else:
         qs = (
