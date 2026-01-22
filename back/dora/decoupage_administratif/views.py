@@ -1,6 +1,6 @@
 from django.contrib.postgres.search import TrigramSimilarity
 from django.db.models import Value
-from rest_framework import exceptions, permissions
+from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
@@ -8,16 +8,18 @@ from dora.admin_express.models import AdminDivisionType
 from dora.admin_express.utils import normalize_string_for_search
 
 from .models import EPCI, City, Department, Region
-from .serializers import AdminDivisionSerializer
+from .serializers import AdminDivisionSerializer, SearchQuerySerializer
 
 
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def search(request):
-    type = request.GET.get("type", "")
-    q = request.GET.get("q", "")
-    if not type or not q:
-        raise exceptions.ValidationError("type and q are required")
+    serializer = SearchQuerySerializer(data=request.GET)
+    serializer.is_valid(raise_exception=True)
+
+    type = serializer.validated_data["type"]
+    q = serializer.validated_data["q"]
+
     norm_q = normalize_string_for_search(q)
 
     sort_fields = ["-similarity"]
@@ -30,10 +32,6 @@ def search(request):
         Model = Department
     elif type == AdminDivisionType.REGION:
         Model = Region
-    else:
-        raise exceptions.ValidationError(
-            f"Invalid type, expected one of {AdminDivisionType.CITY}, {AdminDivisionType.EPCI}, {AdminDivisionType.DEPARTMENT}, {AdminDivisionType.REGION}"
-        )
 
     if q.isdigit() or q == "2A" or q == "2B":
         qs = (
