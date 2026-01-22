@@ -10,7 +10,7 @@ from dora.admin_express.utils import normalize_string_for_search
 from .models import EPCI, City, Department, Region
 
 
-@api_view()
+@api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def search(request):
     class AdminDivisionSerializer(serializers.Serializer):
