@@ -6,9 +6,21 @@ from django.db import models
 from dora.core.constants import WGS84
 
 
-class City(models.Model):
+class AdminDivision(models.Model):
+    """Classe abstraite pour les divisions administratives sans géométrie."""
+
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=5, unique=True)
+    normalized_name = models.CharField(max_length=255, blank=True, default="")
+
+    class Meta:
+        abstract = True
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.code})"
+
+
+class City(AdminDivision):
+    code = models.CharField(max_length=5, primary_key=True)
     department = models.CharField(max_length=3, db_index=True)
     epci = models.CharField(max_length=9, db_index=True)
     region = models.CharField(max_length=3, db_index=True)
@@ -19,7 +31,6 @@ class City(models.Model):
     )
     population = models.IntegerField(default=0)
     center = gis_models.PointField(srid=WGS84, geography=True, null=True, blank=True)
-    normalized_name = models.CharField(max_length=255, blank=True, default="")
 
     class Meta:
         verbose_name = "commune"
@@ -32,15 +43,10 @@ class City(models.Model):
             )
         ]
 
-    def __str__(self) -> str:
-        return f"{self.name} ({self.code})"
 
-
-class Department(models.Model):
-    name = models.CharField(max_length=255)
-    code = models.CharField(max_length=3, unique=True)
+class Department(AdminDivision):
+    code = models.CharField(max_length=3, primary_key=True)
     region = models.CharField(max_length=3, db_index=True)
-    normalized_name = models.CharField(max_length=255, blank=True, default="")
 
     class Meta:
         verbose_name = "département"
@@ -53,13 +59,9 @@ class Department(models.Model):
             )
         ]
 
-    def __str__(self) -> str:
-        return f"{self.name} ({self.code})"
 
-
-class EPCI(models.Model):
-    name = models.CharField(max_length=255)
-    code = models.CharField(max_length=9, unique=True)
+class EPCI(AdminDivision):
+    code = models.CharField(max_length=9, primary_key=True)
     departments = ArrayField(
         models.CharField(max_length=3),
         blank=True,
@@ -70,7 +72,6 @@ class EPCI(models.Model):
         blank=True,
         default=list,
     )
-    normalized_name = models.CharField(max_length=255, blank=True, default="")
 
     class Meta:
         verbose_name = "EPCI"
@@ -83,14 +84,9 @@ class EPCI(models.Model):
             )
         ]
 
-    def __str__(self) -> str:
-        return f"{self.name} ({self.code})"
 
-
-class Region(models.Model):
-    name = models.CharField(max_length=255)
-    code = models.CharField(max_length=3, unique=True)
-    normalized_name = models.CharField(max_length=255, blank=True, default="")
+class Region(AdminDivision):
+    code = models.CharField(max_length=3, primary_key=True)
 
     class Meta:
         verbose_name = "région"
@@ -102,6 +98,3 @@ class Region(models.Model):
                 opclasses=("gin_trgm_ops",),
             )
         ]
-
-    def __str__(self) -> str:
-        return f"{self.name} ({self.code})"
