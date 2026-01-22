@@ -28,12 +28,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="city",
             name="code",
-            field=models.CharField(max_length=9, primary_key=True, serialize=False),
+            field=models.CharField(max_length=5, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name="department",
             name="code",
-            field=models.CharField(max_length=9, primary_key=True, serialize=False),
+            field=models.CharField(max_length=3, primary_key=True, serialize=False),
         ),
         migrations.AlterField(
             model_name="epci",
@@ -43,6 +43,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="region",
             name="code",
-            field=models.CharField(max_length=9, primary_key=True, serialize=False),
+            field=models.CharField(max_length=3, primary_key=True, serialize=False),
         ),
     ]

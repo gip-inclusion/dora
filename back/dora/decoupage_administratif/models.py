@@ -9,7 +9,6 @@ from dora.core.constants import WGS84
 class AdminDivision(models.Model):
     """Classe abstraite pour les divisions administratives sans géométrie."""
 
-    code = models.CharField(max_length=9, primary_key=True)
     name = models.CharField(max_length=255)
     normalized_name = models.CharField(max_length=255, blank=True, default="")
 
@@ -21,6 +20,7 @@ class AdminDivision(models.Model):
 
 
 class City(AdminDivision):
+    code = models.CharField(max_length=5, primary_key=True)
     department = models.CharField(max_length=3, db_index=True)
     epci = models.CharField(max_length=9, db_index=True)
     region = models.CharField(max_length=3, db_index=True)
@@ -45,6 +45,7 @@ class City(AdminDivision):
 
 
 class Department(AdminDivision):
+    code = models.CharField(max_length=3, primary_key=True)
     region = models.CharField(max_length=3, db_index=True)
 
     class Meta:
@@ -60,6 +61,7 @@ class Department(AdminDivision):
 
 
 class EPCI(AdminDivision):
+    code = models.CharField(max_length=9, primary_key=True)
     departments = ArrayField(
         models.CharField(max_length=3),
         blank=True,
@@ -84,6 +86,8 @@ class EPCI(AdminDivision):
 
 
 class Region(AdminDivision):
+    code = models.CharField(max_length=3, primary_key=True)
+
     class Meta:
         verbose_name = "région"
         verbose_name_plural = "régions"
