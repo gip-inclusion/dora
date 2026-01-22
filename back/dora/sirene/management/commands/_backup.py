@@ -81,9 +81,9 @@ def rename_table(orig_table_name: str, dest_table_name: str):
         c.execute(order)
 
 
-def vacuum_analyze():
+def analyze(table_name: str):
     with connection.cursor() as c:
-        c.execute("VACUUM ANALYZE;")
+        c.execute(f"ANALYZE {table_name};")
 
 
 def clean_tmp_tables(*tmp_tables):

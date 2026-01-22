@@ -10,6 +10,7 @@ from dora.core.commands import BaseCommand
 from dora.sirene.models import Establishment
 
 from ._backup import (
+    analyze,
     bulk_add_establishments,
     bulk_add_legal_units,
     clean_tmp_tables,
@@ -20,7 +21,6 @@ from ._backup import (
     drop_table,
     get_legal_units_batch,
     rename_table,
-    vacuum_analyze,
 )
 
 # Documentation des variables SIRENE : https://www.sirene.fr/static-resources/htm/v_sommaire.htm
@@ -80,7 +80,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--analyze",
             action="store_true",
-            help="Effectue un VACUUM ANALYZE sur la base.",
+            help="Effectue un ANALYZE sur la table SIRENE.",
         )
 
         parser.add_argument(
@@ -253,9 +253,9 @@ class Command(BaseCommand):
         self.logger.info("Rollback terminé")
 
     def _handle_analyze(self):
-        """Run VACUUM ANALYZE on the database."""
-        self.logger.warning("Analyse de la DB en cours...")
-        vacuum_analyze()
+        """Run ANALYZE on the sirene table."""
+        self.logger.warning("Analyse de la table %s en cours...", SIRENE_TABLE)
+        analyze(SIRENE_TABLE)
         self.logger.info("Analyse terminée")
 
     def _handle_clean(self):
