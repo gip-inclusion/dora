@@ -1,7 +1,9 @@
-import { getApiURL } from "./api";
-import { fetchData } from "./misc";
 import { TEST_WORDS } from "$lib/consts";
 import type { Choice, Orientation, Service } from "$lib/types";
+
+import { getApiURL } from "./api";
+import { getToken } from "./auth";
+import { fetchData } from "./misc";
 
 export function getOrientation(
   queryId: string,
@@ -75,11 +77,13 @@ export function denyOrientation(
 ) {
   const url = `${getApiURL()}/orientations/${queryId}/reject/?h=${queryHash}`;
   const method = "POST";
+  const token = getToken();
   return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Token ${token}` } : {}),
     },
     body: JSON.stringify({
       reasons,
@@ -101,11 +105,13 @@ export function acceptOrientation(
 ) {
   const url = `${getApiURL()}/orientations/${queryId}/validate/?h=${queryHash}`;
   const method = "POST";
+  const token = getToken();
   return fetch(url, {
     method,
     headers: {
       Accept: "application/json; version=1.0",
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Token ${token}` } : {}),
     },
     body: JSON.stringify({
       message,
