@@ -18,8 +18,7 @@ def search(request):
     serializer.is_valid(raise_exception=True)
 
     type = serializer.validated_data["type"]
-    q = serializer.validated_data["q"]
-
+    q = serializer.validated_data["q"].upper()
     norm_q = normalize_string_for_search(q)
 
     sort_fields = ["-similarity"]
@@ -33,7 +32,7 @@ def search(request):
     elif type == AdminDivisionType.REGION:
         Model = Region
 
-    if q.isdigit() or q == "2A" or q == "2B":
+    if q.isdigit() or q.startswith("2A") or q.startswith("2B"):
         qs = (
             Model.objects.filter(code__startswith=q)
             .annotate(similarity=Value(1))
