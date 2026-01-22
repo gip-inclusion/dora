@@ -917,3 +917,21 @@ class ImportServicesTestCase(TestCase):
 
         self.assertEqual(result["created_count"], 1)
         self.assertEqual(result["errors"], [])
+
+    def test_should_handle_trailing_comma_in_column_with_multiple_values(self):
+        other_funding_label = baker.make(
+            "FundingLabel", value="other-value", label="other-label"
+        )
+
+        csv_content = (
+            f"{self.csv_headers}\n"
+            f'{self.service_model.slug},{self.structure.siret},referent@email.com,"{self.funding_label.value},{other_funding_label.value},",,,,,,,,'
+        )
+
+        reader = csv.reader(io.StringIO(csv_content))
+
+        result = self.import_services_helper.import_services(
+            reader, self.importing_user, self.source_info, wet_run=True
+        )
+
+        self.assertEqual(result["created_count"], 1)

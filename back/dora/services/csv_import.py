@@ -196,7 +196,7 @@ class ImportServicesHelper:
         self, line: Dict[str, str], header_name: str, model: Any, category_label: str
     ) -> QuerySet:
         values = [
-            label.strip()
+            label.strip().strip(",")
             for label in line.get(header_name, "").split(",")
             if label.strip()
         ]

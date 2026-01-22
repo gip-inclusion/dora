@@ -879,3 +879,19 @@ class StructuresImportTestCase(APITestCase):
 
         self.assertEqual(len(result["errors_map"].keys()), 0)
         self.assertEqual(result["created_structures_count"], 1)
+
+    def test_handle_trailing_comma_in_column_with_multiple_elements(self):
+        structure = make_structure()
+        csv_content = f'{self.csv_headers}\n{structure.name},{structure.siret},,"foo@buzz.com,",,,,'
+
+        reader = csv.reader(io.StringIO(csv_content))
+        result = self.import_structures_helper.import_structures(
+            reader,
+            self.importing_user,
+            self.source_info,
+            wet_run=True,
+            should_remove_first_two_lines=False,
+        )
+
+        self.assertEqual(len(result["errors_map"].keys()), 0)
+        self.assertTrue(User.objects.get(email="foo@buzz.com"))
