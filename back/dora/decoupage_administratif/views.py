@@ -24,7 +24,6 @@ def search(request):
         raise exceptions.ValidationError("type and q are required")
     norm_q = normalize_string_for_search(q)
 
-    Model = None
     sort_fields = ["-similarity"]
     if type == AdminDivisionType.CITY:
         Model = City
