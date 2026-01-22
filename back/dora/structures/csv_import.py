@@ -306,7 +306,7 @@ class ImportStructuresHelper:
         self.edited_structures_count += 1
 
     def _to_string_array(self, strings_list: str) -> List[str]:
-        clean_str = strings_list.strip()
+        clean_str = strings_list.strip().strip(",")
         if clean_str:
             return [value.strip() for value in clean_str.split(",")]
         return []
