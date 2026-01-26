@@ -15,15 +15,15 @@ UNION ALL
 SELECT
     'mobilisation'                                                                        AS kind,
     m.event_id,
-    event_date                                                                            AS date,
+    m.event_date                                                                          AS date,
     m.user_id,
     m.event_user_kind                                                                     AS user_kind,
     m.event_is_manager                                                                    AS is_manager,
     struct_members.structure_typology,
     struct_members.structure_department,
-    event_is_di                                                                           AS is_di_service,
+    m.event_is_di                                                                         AS is_di_service,
     COALESCE(m.user_main_activity IN ('accompagnateur', 'accompagnateur_offreur'), FALSE) AS is_prescriber,
-    generates_orientation
+    m.generates_orientation
 FROM {{ ref('int_mobilisationevent_user') }} AS m
 LEFT JOIN
     {{ ref('int_structure_members') }} AS struct_members

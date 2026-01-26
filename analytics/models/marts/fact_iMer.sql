@@ -1,4 +1,4 @@
-WITH int_iMer AS (
+WITH int_imer AS (
     SELECT * FROM {{ ref('int_iMER') }}
 )
 
@@ -8,4 +8,4 @@ SELECT
     date,
     user_id,
     generates_orientation
-FROM int_iMer
+FROM int_imer
