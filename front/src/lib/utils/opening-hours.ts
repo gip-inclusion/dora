@@ -180,61 +180,106 @@ function formatHour(hour: string) {
   return hour;
 }
 
-export function isValidformatOsmHours(value: string) {
-  try {
-    new openingHours(value, null, { locale: "fr" });
-    return true;
-  } catch {
-    return false;
+export function formatOsmHours(value: string): Array<[string, string]> | null {
+  if (!value || typeof value !== "string") {
+    return null;
   }
-}
 
-export function formatOsmHours(value: string) {
-  let monday = "Fermé";
-  let tuesday = "Fermé";
-  let wednesday = "Fermé";
-  let thursday = "Fermé";
-  let friday = "Fermé";
-  let saturday = "";
-  let sunday = "";
+  try {
+    const openingHoursInstance = new openingHours(value, null, {
+      locale: "fr",
+    } as any);
 
-  const hoursByDay = value.split(";");
+    const timeFormatter = new Intl.DateTimeFormat("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
 
-  hoursByDay.forEach((hoursForDay) => {
-    const [dayPrefix, hours] = hoursForDay.trim().split(" ");
+    const dayFormatter = new Intl.DateTimeFormat("fr-FR", {
+      weekday: "short",
+    });
 
-    if (dayPrefix === "Mo") {
-      monday = formatHour(hours);
-    }
-    if (dayPrefix === "Tu") {
-      tuesday = formatHour(hours);
-    }
-    if (dayPrefix === "We") {
-      wednesday = formatHour(hours);
-    }
-    if (dayPrefix === "Th") {
-      thursday = formatHour(hours);
-    }
-    if (dayPrefix === "Fr") {
-      friday = formatHour(hours);
-    }
-    if (dayPrefix === "Sa") {
-      saturday = formatHour(hours);
-    }
-    if (dayPrefix === "Su") {
-      sunday = formatHour(hours);
-    }
-  });
+    // Calcule le lundi de la semaine courante comme référence
+    const now = new Date();
+    const currentDay = now.getDay(); // 0 = dimanche, 1 = lundi, etc.
+    const daysFromMonday = currentDay === 0 ? 6 : currentDay - 1;
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - daysFromMonday);
+    weekStart.setHours(0, 0, 0, 0);
 
-  return [
-    ["Lun.", monday],
-    ["Mar.", tuesday],
-    ["Mer.", wednesday],
-    ["Jeu.", thursday],
-    ["Ven.", friday],
-    saturday && ["Sam.", saturday],
-    sunday && ["Dim.", sunday],
-  ].filter(Boolean);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 7);
+
+    // Récupère tous les intervalles ouverts de la semaine
+    const intervals = openingHoursInstance.getOpenIntervals(weekStart, weekEnd);
+
+    // Convertit l'index de jour JavaScript (0=dimanche) vers notre format (0=lundi)
+    const toDayIndex = (jsDayIndex: number): number => {
+      return jsDayIndex === 0 ? 6 : jsDayIndex - 1;
+    };
+
+    // Groupe les intervalles par jour de la semaine (0 = lundi, 6 = dimanche)
+    const intervalsByDay: Array<Array<[Date, Date]>> = Array.from(
+      { length: 7 },
+      () => []
+    );
+
+    intervals.forEach(([start, end]) => {
+      const dayIndex = toDayIndex(start.getDay());
+      intervalsByDay[dayIndex].push([start, end]);
+    });
+
+    // Formate les horaires d'un jour
+    const formatDayHours = (dayIntervals: Array<[Date, Date]>): string => {
+      if (dayIntervals.length === 0) {
+        return "Fermé";
+      }
+
+      // Trie les intervalles par heure de début
+      const sortedIntervals = [...dayIntervals].sort(
+        (a, b) => a[0].getTime() - b[0].getTime()
+      );
+
+      // Formate chaque intervalle en "HH:mm-HH:mm"
+      const timeRanges = sortedIntervals.map(([start, end]) => {
+        const startTime = timeFormatter.format(start);
+        const endTime = timeFormatter.format(end);
+        return `${startTime}-${endTime}`;
+      });
+
+      // Applique le formatage français (":" -> "h", "," -> " / ")
+      return formatHour(timeRanges.join(","));
+    };
+
+    // Obtient le nom localisé d'un jour (ex: "Lun.")
+    const getDayName = (dayIndex: number): string => {
+      const dayDate = new Date(weekStart);
+      dayDate.setDate(weekStart.getDate() + dayIndex);
+      const dayName = dayFormatter.format(dayDate);
+      return dayName.charAt(0).toUpperCase() + dayName.slice(1);
+    };
+
+    // Formate tous les jours de la semaine
+    const formattedDays = intervalsByDay.map((dayIntervals, dayIndex) => {
+      const hours = formatDayHours(dayIntervals);
+      const isWeekday = dayIndex < 5; // 0-4 = lundi à vendredi
+
+      // Toujours afficher les jours de semaine, même s'ils sont fermés
+      if (isWeekday) {
+        return [getDayName(dayIndex), hours];
+      }
+
+      // Pour samedi-dimanche, n'afficher que s'ils ne sont pas fermés
+      return hours !== "Fermé" ? [getDayName(dayIndex), hours] : null;
+    });
+
+    // Filtre uniquement les jours weekend fermés (null) et retourne le résultat
+    return formattedDays.filter((day): day is [string, string] => day !== null);
+  } catch {
+    // En cas d'erreur de parsing, retourne null pour indiquer un format invalide
+    return null;
+  }
 }
 
 export function fromJsonToOsmString(data: OsmOpeningHours) {

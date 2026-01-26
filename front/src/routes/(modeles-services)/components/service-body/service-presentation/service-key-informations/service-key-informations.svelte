@@ -12,7 +12,6 @@
   import type { Model, Service, ServicesOptions } from "$lib/types";
   import { getLabelFromValue } from "$lib/utils/choice";
   import { shortenString } from "$lib/utils/misc";
-  import { isValidformatOsmHours } from "$lib/utils/opening-hours";
   import { isNotFreeService, isDurationValid } from "$lib/utils/service";
 
   import ServiceFeedbackButton from "../../../../services/[slug]/service-feedback-button.svelte";
@@ -145,7 +144,7 @@
             icon={TimeFillSystem}
             title="Fréquence et horaires"
           >
-            {#if isDI && isValidformatOsmHours(service.recurrence)}
+            {#if isDI}
               <OsmHours osmHours={service.recurrence} />
             {:else}
               {service.recurrence}
