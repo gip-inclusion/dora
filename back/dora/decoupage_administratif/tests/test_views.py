@@ -99,7 +99,8 @@ class SearchViewTests(TestCase):
     def test_search_rejects_invalid_type(self):
         response = self.client.get("/admin-division-search/?type=invalid&q=paris")
         assert response.status_code == 400
-        assert "Invalid type" in str(response.data)
+        assert "type" in response.data
+        assert "n'est pas un choix valide" in str(response.data["type"])
 
     def test_search_empty_query_returns_error(self):
         """Une requête vide doit retourner une erreur."""
