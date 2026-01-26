@@ -8,4 +8,4 @@ pre-commit==4.5.1
 pygraphviz==1.14
 
 # Génération d'un bilan de sécurité
-bandit==1.9.2
+bandit==1.9.3
