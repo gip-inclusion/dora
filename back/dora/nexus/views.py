@@ -59,7 +59,7 @@ def auto_login_in(request):
 def auto_login_out(request):
     next_url = request.data.get("next_url")
 
-    if next_url is None or settings.NEXUS_AUTO_LOGIN_KEY is None:
+    if next_url is None or settings.PDI_JWT_KEY is None:
         raise exceptions.NotFound
 
     if url_has_allowed_host_and_scheme(

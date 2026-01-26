@@ -668,9 +668,9 @@ NEXUS_METABASE_DB_PORT = os.getenv("NEXUS_METABASE_DB_PORT")
 NEXUS_METABASE_DB_DATABASE = os.getenv("NEXUS_METABASE_DB_DATABASE")
 NEXUS_METABASE_DB_USER = os.getenv("NEXUS_METABASE_DB_USER")
 NEXUS_METABASE_DB_PASSWORD = os.getenv("NEXUS_METABASE_DB_PASSWORD")
-nexus_key = os.getenv("NEXUS_AUTO_LOGIN_KEY")
-NEXUS_AUTO_LOGIN_KEY = json.loads(nexus_key) if nexus_key else None
 NEXUS_ALLOWED_REDIRECT_HOSTS = os.getenv("NEXUS_ALLOWED_REDIRECT_HOSTS", "").split(",")
+pdi_jwt_key = os.getenv("PDI_JWT_KEY")
+PDI_JWT_KEY = json.loads(pdi_jwt_key) if pdi_jwt_key else None
 
 
 # API de découpage administratif
