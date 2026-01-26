@@ -78,7 +78,6 @@ private_api_patterns = [
         dora.services.views.post_di_service_feedback,
     ),
     path("admin-division-search/", dora.decoupage_administratif.views.search),
-    path("admin-division-search-geo/", dora.admin_express.views.search),
     path("admin-division-reverse-search/", dora.admin_express.views.reverse_search),
     path("admin-division-departments/", dora.admin_express.views.get_departments),
     path(
