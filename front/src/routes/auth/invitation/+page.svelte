@@ -18,8 +18,11 @@
   let { data }: Props = $props();
   let cguAccepted = $state(false);
   let joinError = $state("");
+  let loading = $state(false);
 
   async function handleJoin() {
+    loading = true;
+
     const targetUrl = `${getApiURL()}/auth/join-structure/`;
 
     const response = await fetch(targetUrl, {
@@ -44,11 +47,14 @@
       result.data = await response.json();
       await validateCredsAndFillUserInfo();
       await goto(`/structures/${result.data.slug}`);
+      loading = false;
     } else {
       try {
         joinError = (await response.json()).detail.message;
       } catch (err) {
         console.error(err);
+      } finally {
+        loading = false;
       }
     }
     return result;
@@ -116,7 +122,7 @@
             label="Adhérer à la structure"
             onclick={handleJoin}
             preventDefaultOnMouseDown
-            disabled={!cguAccepted}
+            disabled={!cguAccepted || loading}
           />
         </div>
       </div>
