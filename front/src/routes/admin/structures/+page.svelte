@@ -154,7 +154,6 @@
         searchType="department"
         onChange={handleDepartmentChange}
         placeholder="numéro ou nom"
-        withGeom
       />
     </div>
   </CenteredGrid>
