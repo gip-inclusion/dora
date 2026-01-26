@@ -1,44 +1,60 @@
 import csv
-import os.path
 import pathlib
 import subprocess
 import tempfile
 
-from django.conf import settings
-from django.db import transaction
 from django.db.utils import DataError
 
 from dora.core.commands import BaseCommand
 from dora.sirene.models import Establishment
 
 from ._backup import (
+    analyze,
     bulk_add_establishments,
+    bulk_add_legal_units,
     clean_tmp_tables,
     create_indexes,
+    create_legal_units_index,
+    create_legal_units_table,
     create_table,
+    drop_table,
+    get_legal_units_batch,
     rename_table,
-    vacuum_analyze,
+    table_exists,
 )
 
-# Documentation des variables SIRENE : https://www.sirene.fr/static-resources/htm/v_sommaire.htm
-USE_TEMP_DIR = not settings.DEBUG
+# Documentation des variables SIRENE : https://www.sirene.fr/static-resources/htm/v_sommaire.htm
 SIRENE_TABLE = "sirene_establishment"
 TMP_TABLE = "_sirene_establishment_tmp"
 BACKUP_TABLE = "_sirene_establishment_bak"
+LEGAL_UNITS_TMP_TABLE = "_sirene_legal_units_tmp"
+
+LEGAL_UNITS_FILE_URL = "https://object.files.data.gouv.fr/data-pipeline-open/siren/stock/StockUniteLegale_utf8.zip"
+ESTABLISHMENTS_FILE_URL = (
+    "https://files.data.gouv.fr/geo-sirene/last/StockEtablissementActif_utf8_geo.csv.gz"
+)
 
 
 def clean_spaces(string):
     return string.replace("  ", " ").strip()
 
 
-def commit(rows):
-    bulk_add_establishments(TMP_TABLE, rows)
-
-
 class Command(BaseCommand):
     help = "Import de la dernière base SIRENE géolocalisée"
 
     def add_arguments(self, parser):
+        parser.add_argument(
+            "--import-units",
+            action="store_true",
+            help="Phase 1: Télécharge et importe les unités légales dans une table temporaire.",
+        )
+
+        parser.add_argument(
+            "--import-estab",
+            action="store_true",
+            help="Phase 2: Télécharge et importe les établissements (nécessite --import-units d'abord).",
+        )
+
         parser.add_argument(
             "--activate",
             action="store_true",
@@ -54,7 +70,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--analyze",
             action="store_true",
-            help="Effectue un VACUUM ANALYZE sur la base.",
+            help="Effectue un ANALYZE sur la table SIRENE.",
         )
 
         parser.add_argument(
@@ -63,56 +79,41 @@ class Command(BaseCommand):
             help="Efface les tables de travail temporaires en DB.",
         )
 
-    def download_data(self, tmp_dir_name):
-        if USE_TEMP_DIR:
-            the_dir = pathlib.Path(tmp_dir_name)
-        else:
-            the_dir = pathlib.Path("/tmp")
-        self.stdout.write("Sauvegarde des fichiers SIRENE dans : " + str(the_dir))
+    def download_legal_units(self, tmp_dir: pathlib.Path) -> pathlib.Path:
+        """Télécharge et extrait le fichier des unités légales. Retourne le chemin du CSV."""
+        zipped_file = tmp_dir / "StockUniteLegale_utf8.zip"
 
-        legal_units_file_url = "https://object.files.data.gouv.fr/data-pipeline-open/siren/stock/StockUniteLegale_utf8.zip"
-        zipped_stock_file = the_dir / "StockUniteLegale_utf8.zip"
+        self.logger.info("Téléchargement des 'unités légales' (entreprises mères)")
+        subprocess.run(
+            ["curl", "-L", LEGAL_UNITS_FILE_URL, "-o", zipped_file],
+            check=True,
+        )
 
-        if not os.path.exists(zipped_stock_file):
-            self.stdout.write(
-                self.style.NOTICE(
-                    "Téléchargement des 'unités légales' (entreprises mères)"
-                )
-            )
-            subprocess.run(
-                ["curl", legal_units_file_url, "-o", zipped_stock_file],
-                check=True,
-            )
+        self.logger.info("Décompression fichier unités légales")
+        subprocess.run(
+            ["unzip", "-o", zipped_file, "-d", tmp_dir],
+            check=True,
+        )
 
-            self.stdout.write(self.style.NOTICE("Décompression fichier unités légales"))
-            subprocess.run(
-                ["unzip", zipped_stock_file, "-d", the_dir],
-                check=True,
-            )
+        return tmp_dir / "StockUniteLegale_utf8.csv"
 
-        stock_file = the_dir / "StockUniteLegale_utf8.csv"
+    def download_establishments(self, tmp_dir: pathlib.Path) -> pathlib.Path:
+        """Télécharge et extrait le fichier des établissements. Retourne le chemin du CSV."""
+        gzipped_file = tmp_dir / "StockEtablissementActif_utf8_geo.csv.gz"
 
-        establishments_geo_file_url = "https://files.data.gouv.fr/geo-sirene/last/StockEtablissementActif_utf8_geo.csv.gz"
-        gzipped_estab_file = the_dir / "StockEtablissementActif_utf8_geo.csv.gz"
+        self.logger.info("Téléchargement des établissements")
+        subprocess.run(
+            ["curl", "-L", ESTABLISHMENTS_FILE_URL, "-o", gzipped_file],
+            check=True,
+        )
 
-        if not os.path.exists(gzipped_estab_file):
-            self.stdout.write(self.style.NOTICE("Télécharchement des établissements"))
-            subprocess.run(
-                ["curl", establishments_geo_file_url, "-o", gzipped_estab_file],
-                check=True,
-            )
+        self.logger.info("Décompression du fichier établissements")
+        subprocess.run(
+            ["gzip", "-dk", gzipped_file],
+            check=True,
+        )
 
-            self.stdout.write(
-                self.style.NOTICE("Décompression du fichier établissements")
-            )
-            subprocess.run(
-                ["gzip", "-dk", gzipped_estab_file],
-                check=True,
-            )
-
-        estab_file = the_dir / "StockEtablissementActif_utf8_geo.csv"
-
-        return stock_file, estab_file
+        return tmp_dir / "StockEtablissementActif_utf8_geo.csv"
 
     def get_ul_name(self, row):
         if row["categorieJuridiqueUniteLegale"] == "1000":
@@ -175,136 +176,239 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options.get("activate"):
-            # activation de la table temporaire (si existante),
-            # comme table de production (`sirene_establishment`)
-            self.stdout.write(self.style.WARNING("Activation de la table de travail"))
-
-            # on sauvegarde la base de production
-            self.stdout.write(self.style.NOTICE(" > sauvegarde de la table actuelle"))
-            # suppression d'un backup existant
-            clean_tmp_tables(BACKUP_TABLE)
-            # backup de la table actuelle
-            rename_table(SIRENE_TABLE, BACKUP_TABLE)
-
-            # on renomme la table de travail
-            self.stdout.write(self.style.NOTICE(" > renommage de la table de travail"))
-            rename_table(TMP_TABLE, SIRENE_TABLE)
-
-            self.stdout.write(self.style.NOTICE("Activation terminée"))
+            self._handle_activate()
             return
 
         if options.get("rollback"):
-            # activation de la table sauvegardée
-            self.stdout.write(self.style.WARNING("Activation de la table sauvegardée"))
-            rename_table(SIRENE_TABLE, TMP_TABLE)
-            rename_table(BACKUP_TABLE, SIRENE_TABLE)
-            rename_table(TMP_TABLE, BACKUP_TABLE)
+            self._handle_rollback()
+            return
 
         if options.get("analyze"):
-            # lance une analyse statistique sur la base Postgres
-            self.stdout.write(self.style.WARNING("Analyse de la DB en cours..."))
-            vacuum_analyze()
-            self.stdout.write(self.style.NOTICE("Analyse terminée"))
+            self._handle_analyze()
             return
 
         if options.get("clean"):
-            # Supprime les tables de travail / temporaires de la base Postgres
-            self.stdout.write(
-                self.style.WARNING("Suppression des tables temporaires...")
-            )
-            clean_tmp_tables(TMP_TABLE, BACKUP_TABLE)
-            self.stdout.write(self.style.NOTICE("Suppression terminée"))
+            self._handle_clean()
             return
 
-        self.stdout.write(self.style.NOTICE(" > création de la base de travail"))
-        # efface la précédente
-        create_table(TMP_TABLE)
+        if options.get("import_units"):
+            self._handle_import_units()
+            return
+
+        if options.get("import_estab"):
+            self._handle_import_estab()
+            return
+
+        # Aucun flag : exécuter les deux phases d'import séquentiellement
+        self.logger.warning("Exécution des deux phases d'import séquentiellement...")
+        self._handle_import_units()
+        self._handle_import_estab()
+
+    def _handle_activate(self):
+        """Active la table temporaire comme table de production."""
+        self.logger.warning("Activation de la table de travail")
+
+        if not table_exists(TMP_TABLE):
+            self.logger.error(
+                "La table %s n'existe pas. Exécutez d'abord --import-units puis --import-estab.",
+                TMP_TABLE,
+            )
+            return
+
+        # on sauvegarde la base de production
+        self.logger.info(" > sauvegarde de la table actuelle")
+        # suppression d'un backup existant
+        clean_tmp_tables(BACKUP_TABLE)
+        # backup de la table actuelle
+        rename_table(SIRENE_TABLE, BACKUP_TABLE)
+
+        # on renomme la table de travail
+        self.logger.info(" > renommage de la table de travail")
+        rename_table(TMP_TABLE, SIRENE_TABLE)
+
+        self.logger.info("Activation terminée")
+
+    def _handle_rollback(self):
+        """Restaure la table de sauvegarde."""
+        self.logger.warning("Activation de la table sauvegardée")
+
+        if not table_exists(BACKUP_TABLE):
+            self.logger.error("La table %s n'existe pas.", BACKUP_TABLE)
+            return
+
+        rename_table(SIRENE_TABLE, TMP_TABLE)
+        rename_table(BACKUP_TABLE, SIRENE_TABLE)
+        rename_table(TMP_TABLE, BACKUP_TABLE)
+
+        self.logger.info("Rollback terminé")
+
+    def _handle_analyze(self):
+        """Exécute ANALYZE sur la table SIRENE."""
+        self.logger.warning("Analyse de la table %s en cours...", SIRENE_TABLE)
+        analyze(SIRENE_TABLE)
+        self.logger.info("Analyse terminée")
+
+    def _handle_clean(self):
+        """Supprime toutes les tables temporaires."""
+        self.logger.warning("Suppression des tables temporaires...")
+        clean_tmp_tables(TMP_TABLE, BACKUP_TABLE, LEGAL_UNITS_TMP_TABLE)
+        self.logger.info("Suppression terminée")
+
+    def _handle_import_units(self):
+        """Phase 1 : Télécharge et importe les unités légales dans une table temporaire."""
+        self.logger.warning("Phase 1: Import des unités légales")
 
         with tempfile.TemporaryDirectory() as tmp_dir_name:
-            stock_file, estab_file = self.download_data(tmp_dir_name)
+            tmp_dir = pathlib.Path(tmp_dir_name)
 
-            num_stock_items = 0
-            with open(stock_file) as f:
-                num_stock_items = sum(1 for _ in f)
+            # Téléchargement du fichier des unités légales
+            stock_file = self.download_legal_units(tmp_dir)
 
-            legal_units = {}
+            # Création de la table temporaire
+            self.logger.info(" > création de la table des unités légales...")
+            create_legal_units_table(LEGAL_UNITS_TMP_TABLE)
+
+            # Import des unités légales
+            self.logger.info(" > import des unités légales dans la DB...")
+            legal_units_batch_size = 10_000
+            legal_units_batch = []
+            legal_units_count = 0
+
             with open(stock_file) as units_file:
                 legal_units_reader = csv.DictReader(units_file, delimiter=",")
 
-                self.stdout.write(self.style.NOTICE("Parsing legal units"))
-
                 for i, row in enumerate(legal_units_reader):
                     if (i % 1_000_000) == 0:
-                        self.stdout.write(
-                            self.style.NOTICE(
-                                f"{round(100 * i / num_stock_items)}% done"
-                            )
-                        )
+                        self.logger.info(" > %s unités légales traitées...", f"{i:,}")
                     if row["etatAdministratifUniteLegale"] == "A":
                         # On ignore les unités légales fermées
-                        legal_units[row["siren"]] = self.get_ul_name(row)
+                        siren = row["siren"][:9]
+                        name = self.get_ul_name(row)[:255]
+                        legal_units_batch.append((siren, name))
+                        legal_units_count += 1
 
-                self.stdout.write(
-                    self.style.NOTICE(" > décompte des établissements...")
-                )
+                        if len(legal_units_batch) >= legal_units_batch_size:
+                            bulk_add_legal_units(
+                                LEGAL_UNITS_TMP_TABLE, legal_units_batch
+                            )
+                            legal_units_batch = []
 
-                num_establishments = 0
-                with open(estab_file) as f:
-                    num_establishments = sum(1 for _ in f)
-                last_prog = 0
+                # Insertion du reste du batch
+                if legal_units_batch:
+                    bulk_add_legal_units(LEGAL_UNITS_TMP_TABLE, legal_units_batch)
 
-                self.stdout.write(
-                    self.style.NOTICE(f" > {num_establishments} établissements")
-                )
+            self.logger.info(
+                " > %s unités légales importées dans la DB", f"{legal_units_count:,}"
+            )
+
+            # Création de l'index pour accélérer les recherches
+            self.logger.info(" > création de l'index sur les unités légales...")
+            create_legal_units_index(LEGAL_UNITS_TMP_TABLE)
+
+        self.logger.info(
+            "Phase 1 terminée. Exécutez maintenant --import-estab pour la phase 2."
+        )
+
+    def _handle_import_estab(self):
+        """Phase 2 : Télécharge et importe les établissements via la table des unités légales."""
+        self.logger.warning("Phase 2: Import des établissements")
+
+        # Vérification des prérequis
+        if not table_exists(LEGAL_UNITS_TMP_TABLE):
+            self.logger.error(
+                "La table %s n'existe pas. Exécutez d'abord --import-units.",
+                LEGAL_UNITS_TMP_TABLE,
+            )
+            return
+
+        with tempfile.TemporaryDirectory() as tmp_dir_name:
+            tmp_dir = pathlib.Path(tmp_dir_name)
+
+            # Téléchargement du fichier des établissements
+            estab_file = self.download_establishments(tmp_dir)
+
+            # Création de la table temporaire des établissements
+            self.logger.info(" > création de la table de travail")
+            create_table(TMP_TABLE)
+
+            # Import des établissements
+            self.logger.info(" > import des établissements...")
 
             with open(estab_file) as establishment_file:
-                self.stdout.write(self.style.NOTICE(" > import des établissements..."))
                 reader = csv.DictReader(establishment_file, delimiter=",")
 
-                with transaction.atomic(durable=True):
-                    self.stdout.write(
-                        self.style.WARNING(
-                            " > insertion des données dans la table temporaire..."
-                        )
+                self.logger.info(" > insertion des données dans la table temporaire...")
+
+                batch_size = 5_000
+                estab_batch = []
+                processed_count = 0
+                inserted_count = 0
+
+                for row in reader:
+                    estab_batch.append(row)
+
+                    if len(estab_batch) >= batch_size:
+                        inserted = self._process_establishment_batch(estab_batch)
+                        inserted_count += inserted
+                        processed_count += len(estab_batch)
+                        estab_batch = []
+
+                        if (processed_count % 100_000) == 0:
+                            self.logger.info(
+                                " > %s établissements traités, %s insérés...",
+                                f"{processed_count:,}",
+                                f"{inserted_count:,}",
+                            )
+
+                # Traitement du reste du batch
+                if estab_batch:
+                    inserted = self._process_establishment_batch(estab_batch)
+                    inserted_count += inserted
+                    processed_count += len(estab_batch)
+
+            self.logger.info(
+                " > %s établissements traités, %s insérés",
+                f"{processed_count:,}",
+                f"{inserted_count:,}",
+            )
+
+            # Nettoyage : suppression de la table temporaire des unités légales
+            self.logger.info(" > suppression de la table des unités légales...")
+            drop_table(LEGAL_UNITS_TMP_TABLE)
+
+            # Création des indexes sur la table des établissements
+            self.logger.info(" > création des indexes")
+            create_indexes(TMP_TABLE)
+
+        self.logger.info(
+            "Phase 2 terminée. Exécutez --activate pour activer la nouvelle table."
+        )
+
+    def _process_establishment_batch(self, estab_rows: list[dict]) -> int:
+        """Traite un batch d'établissements avec recherche groupée des unités légales.
+        Retourne le nombre d'établissements insérés."""
+        # Récupération des SIREN uniques de ce batch
+        sirens = list({row["siren"] for row in estab_rows})
+
+        # Recherche groupée : récupère tous les noms d'unités légales en une requête
+        legal_units = get_legal_units_batch(LEGAL_UNITS_TMP_TABLE, sirens)
+
+        # Création des établissements pour les lignes avec une unité légale correspondante
+        establishments = []
+        for row in estab_rows:
+            try:
+                siren = row["siren"]
+                parent_name = legal_units.get(siren)
+                if parent_name:
+                    establishments.append(
+                        self.create_establishment(siren, parent_name, row)
                     )
-                    # Establishment.objects.all().delete()
-                    batch_size = 1_000
-                    rows = []
-                    for i, row in enumerate(reader):
-                        if (i % batch_size) == 0:
-                            prog = round(100 * i / num_establishments)
-                            if prog != last_prog:
-                                last_prog = prog
-                            self.stdout.write(self.style.NOTICE(f"{prog}% done"))
-                            commit(rows)
-                            rows = []
-                        try:
-                            siren = row["siren"]
-                            parent = legal_units.get(siren)
-                            if parent:
-                                rows.append(
-                                    self.create_establishment(
-                                        siren,
-                                        parent,
-                                        row,
-                                    )
-                                )
+            except DataError as err:
+                self.logger.error("%s", err)
+                self.logger.error("%s", row)
 
-                        except DataError as err:
-                            self.stdout.write(self.style.ERROR(err))
-                            self.stdout.write(self.style.ERROR(row))
+        # Insertion groupée
+        if establishments:
+            bulk_add_establishments(TMP_TABLE, establishments)
 
-                    commit(rows)
-
-                # recréation des indexes sur la table de travail
-                self.stdout.write(self.style.NOTICE(" > re-création des indexes"))
-                create_indexes(TMP_TABLE)
-
-                # la sauvegarde de la base de production et l'analyse de la DB
-                # ne sont pas automatique, voir arguments `--activate` et `--analyze`
-
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        "L'import est terminé. Ne pas oublier d'activer la table de travail (--activate)"
-                    )
-                )
+        return len(establishments)

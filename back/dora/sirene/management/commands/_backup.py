@@ -81,16 +81,14 @@ def rename_table(orig_table_name: str, dest_table_name: str):
         c.execute(order)
 
 
-def vacuum_analyze():
+def analyze(table_name: str):
     with connection.cursor() as c:
-        c.execute("VACUUM ANALYZE;")
+        c.execute(f"ANALYZE {table_name};")
 
 
 def clean_tmp_tables(*tmp_tables):
-    # attention ...
     with connection.cursor() as c:
-        # petite sécurité supplémentaire:
-        # les tables temporaires sont obligatoirement préfixées par `_`
+        # les tables temporaires sont préfixées par `_`
         for tmp_table in [tt for tt in tmp_tables if tt.startswith("_")]:
             print(f" > suppression de {tmp_table}")
             c.execute(f"DROP TABLE IF EXISTS {tmp_table}")
@@ -114,3 +112,59 @@ def bulk_add_establishments(table_name: str, ee: list[Establishment]):
     stmt, fields = create_insert_statement(table_name)
     for e in ee:
         add_establishment(stmt, e, fields)
+
+
+def create_legal_units_table(table_name: str):
+    create_table_ddl = f"""
+    DROP TABLE IF EXISTS public.{table_name};
+    CREATE TABLE public.{table_name} (
+        siren varchar(9) NOT NULL,
+        name varchar(255) NOT NULL,
+        CONSTRAINT {table_name}_{_suffix()}_pkey PRIMARY KEY (siren)
+    );
+    """
+    with connection.cursor() as c:
+        c.execute(create_table_ddl)
+
+
+def create_legal_units_index(table_name: str):
+    create_index_ddl = f"""
+    CREATE INDEX {table_name}_siren_{_suffix()}_idx ON public.{table_name} USING btree (siren);
+    """
+    with connection.cursor() as c:
+        c.execute(create_index_ddl)
+
+
+@transaction.atomic
+def bulk_add_legal_units(table_name: str, rows: list[tuple[str, str]]):
+    stmt = f"INSERT INTO public.{table_name}(siren, name) VALUES(%s, %s)"
+    with connection.cursor() as c:
+        c.executemany(stmt, rows)
+
+
+def get_legal_units_batch(table_name: str, sirens: list[str]) -> dict[str, str]:
+    """Récupère plusieurs noms d'unités légales en une requête, retourne {siren: name}."""
+    if not sirens:
+        return {}
+    with connection.cursor() as c:
+        placeholders = ",".join(["%s"] * len(sirens))
+        c.execute(
+            f"SELECT siren, name FROM public.{table_name} WHERE siren IN ({placeholders})",
+            sirens,
+        )
+        return {row[0]: row[1] for row in c.fetchall()}
+
+
+def drop_table(table_name: str):
+    with connection.cursor() as c:
+        c.execute(f"DROP TABLE IF EXISTS public.{table_name}")
+
+
+def table_exists(table_name: str) -> bool:
+    """Vérifie si une table existe dans la base de données."""
+    with connection.cursor() as c:
+        c.execute(
+            "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = %s)",
+            [table_name],
+        )
+        return c.fetchone()[0]
