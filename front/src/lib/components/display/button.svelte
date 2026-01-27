@@ -1,7 +1,7 @@
-<script lang="ts">
+<script module lang="ts">
   import type { Component } from "svelte";
 
-  interface Props {
+  export interface Props {
     label?: string;
     type?: "button" | "submit";
     id?: string;
@@ -27,7 +27,9 @@
     }>;
     onclick?: (event: MouseEvent) => void;
   }
+</script>
 
+<script lang="ts">
   let {
     label = "",
     type = "button",
