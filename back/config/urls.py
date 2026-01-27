@@ -5,6 +5,7 @@ from rest_framework.routers import SimpleRouter
 
 import dora.admin_express.views
 import dora.core.views
+import dora.decoupage_administratif.views
 import dora.orientations.views
 import dora.services.views
 import dora.sirene.views
@@ -76,7 +77,7 @@ private_api_patterns = [
         "services-di/<str:di_id>/feedback/",
         dora.services.views.post_di_service_feedback,
     ),
-    path("admin-division-search/", dora.admin_express.views.search),
+    path("admin-division-search/", dora.decoupage_administratif.views.search),
     path("admin-division-reverse-search/", dora.admin_express.views.reverse_search),
     path("admin-division-departments/", dora.admin_express.views.get_departments),
     path(
