@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import Button from "$lib/components/display/button.svelte";
+  import LoadingButton from "$lib/components/display/loading-button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
@@ -135,15 +135,13 @@
                 {/if}
               </div>
               <div class="mt-s24 flex justify-end">
-                <Button
+                <LoadingButton
                   type="submit"
                   label={ctaLabel}
                   onclick={handleJoin}
                   preventDefaultOnMouseDown
-                  disabled={(!alreadyMember &&
-                    !alreadyRequested &&
-                    !cguAccepted) ||
-                    loading}
+                  disabled={!alreadyMember && !alreadyRequested && !cguAccepted}
+                  {loading}
                 />
               </div>
             </div>
