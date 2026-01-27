@@ -162,9 +162,9 @@ class TestAutoLoginOut:
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
     def test_user_authenticated_with_next_url_but_no_key(self, api_client, user):
-        """Test avec un utilisateur authentifié avec next_url mais NEXUS_AUTO_LOGIN_KEY est None"""
+        """Test avec un utilisateur authentifié avec next_url mais PDI_JWT_KEY est None"""
         api_client.force_authenticate(user=user)
-        with patch.object(settings, "NEXUS_AUTO_LOGIN_KEY", None):
+        with patch.object(settings, "PDI_JWT_KEY", None):
             response = api_client.post(
                 reverse("auto-login-out"),
                 data={"next_url": "https://domain.fr/some/path"},
