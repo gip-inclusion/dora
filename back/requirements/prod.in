@@ -1,0 +1,3 @@
+-r ./base.in
+
+gunicorn==24.1.1

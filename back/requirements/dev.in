@@ -1,0 +1,11 @@
+-r ./test.in
+
+django-extensions==4.1
+django-silk==5.4.3
+pre-commit==4.5.1
+
+# Génération du schéma de données
+pygraphviz==1.14
+
+# Génération d'un bilan de sécurité
+bandit==1.9.3

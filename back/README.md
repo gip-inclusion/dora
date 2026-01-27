@@ -69,7 +69,7 @@ sudo apt-get install libmagic1
 
 # Installer les dépendances
 ```bash
-pip install -r requirements/dev.txt
+pip install --require-hashes -r requirements/dev.txt
 ```
 
 Vous pouvez aussi utiliser la recette `venv` du Makefile pour créer et/ou mettre à jour votre _virtualenv_,
@@ -234,4 +234,34 @@ make quality
 Pour lancer la suite de tests :
 ```bash
 pytest # Ou make test
+```
+
+### Dépendances
+
+Les dépendances sont suivies dans le dossier `requirements/`. Plusieurs
+fichiers permettent de séparer les dépendances par environnement.
+
+### Ajouter une dépendance
+
+Pour ajouter une nouvelle dépendance, ajoutez une ligne avec la dépendance
+dans le fichier `*.in` correspondant, par exemple `dev.in` pour une dépendance
+de développement.
+Lancer ensuite la commande `make compile-deps`, qui met à jour les fichiers
+`requirements/*.txt` avec la version précise et le hash de la dépendances.
+
+### Mettre à jour une dépendance
+
+```
+make PIP_COMPILE_OPTIONS=--upgrade-package=django compile-deps
+```
+
+### Contraindre la version d’une dépendance
+
+Dans le fichier `requirements/*.in`, ajoutez les contraintes sur la dépendance
+(exemple, `django<7`), voir
+https://packaging.python.org/en/latest/specifications/version-specifiers/#id5
+pour une référence complète, puis exécutez :
+
+```
+make compile-deps
 ```

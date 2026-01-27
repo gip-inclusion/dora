@@ -11,14 +11,21 @@ REQUIREMENTS_PATH ?= requirements/dev.txt
 VIRTUAL_ENV ?= .venv
 export PATH := $(VIRTUAL_ENV)/bin:$(PATH)
 
-.PHONY: venv
+.PHONY: compile-deps venv
 
 $(VIRTUAL_ENV): $(REQUIREMENTS_PATH)
 	uv venv
-	uv pip install -r $^
+	uv pip install --require-hashes -r $^
 	touch $@
 
 venv: $(VIRTUAL_ENV)
+
+PIP_COMPILE_FLAGS := --no-strip-extras --generate-hashes $(PIP_COMPILE_OPTIONS)
+compile-deps:
+	uv pip compile $(PIP_COMPILE_FLAGS) --output-file requirements/base.txt requirements/base.in
+	uv pip compile $(PIP_COMPILE_FLAGS) --output-file requirements/test.txt requirements/test.in
+	uv pip compile $(PIP_COMPILE_FLAGS) --output-file requirements/dev.txt requirements/dev.in
+	uv pip compile $(PIP_COMPILE_FLAGS) --output-file requirements/prod.txt requirements/prod.in
 
 # Quality
 # =============================================================================
