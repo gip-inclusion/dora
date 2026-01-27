@@ -23,8 +23,10 @@
   let { establishment } = $state(data);
   const { proposedSiret, proposedSafir, userIsFranceTravail } = data;
   let joinError = $state("");
+  let loading = $state(false);
 
   async function handleJoin() {
+    loading = true;
     const targetUrl = `${getApiURL()}/auth/join-structure/`;
     const response = await fetch(targetUrl, {
       method: "POST",
@@ -48,11 +50,14 @@
       result.data = await response.json();
       await refreshUserInfo();
       await goto(`/structures/${result.data.slug}`);
+      loading = false;
     } else {
       try {
         joinError = (await response.json()).detail.message;
       } catch (err) {
         console.error(err);
+      } finally {
+        loading = false;
       }
     }
   }
@@ -135,7 +140,10 @@
                   label={ctaLabel}
                   onclick={handleJoin}
                   preventDefaultOnMouseDown
-                  disabled={!alreadyMember && !alreadyRequested && !cguAccepted}
+                  disabled={(!alreadyMember &&
+                    !alreadyRequested &&
+                    !cguAccepted) ||
+                    loading}
                 />
               </div>
             </div>
