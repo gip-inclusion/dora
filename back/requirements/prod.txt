@@ -310,7 +310,6 @@ django==6.0.1 \
     #   djangorestframework
     #   djangorestframework-gis
     #   itoutils
-    #   model-bakery
     #   mozilla-django-oidc
 django-cors-headers==4.9.0 \
     --hash=sha256:15c7f20727f90044dcee2216a9fd7303741a864865f0c3657e28b7056f61b449 \
@@ -522,10 +521,6 @@ mjml-python==1.3.7 \
     --hash=sha256:c7308410451f86d535069e29a3179fd7f8daf19d663b565ffa4560e9f2081d93 \
     --hash=sha256:ce2511cd93b61f82c2f005b49045517e2d989064a30dc93f3b973ab04b7e7c3c \
     --hash=sha256:f3aaa5703bf446336e1335c3c10b949c38e8b42fa801adb552c09ca922885e9e
-    # via -r requirements/./base.in
-model-bakery==1.23.2 \
-    --hash=sha256:31f1067df0879ea5f0f158aaa7a8b26fd9a6c62cc1f1f08ea288a35023b9f9b1 \
-    --hash=sha256:42d249903bcdb96875d289b4733c22c8e7b46c3e59604e0538aabe8a3a743fad
     # via -r requirements/./base.in
 mozilla-django-oidc==5.0.2 \
     --hash=sha256:4e953dcd963c036daaa2ac42b5bb6ea89a1c6ea7be0387c2022a59aca2f83043 \

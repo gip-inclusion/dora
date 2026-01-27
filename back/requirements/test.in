@@ -4,6 +4,7 @@ django-environ
 django-querycount
 djhtml
 freezegun
+model-bakery
 ruff
 pytest
 pytest-django
