@@ -1,12 +1,12 @@
 -r ./base.in
 
-django-environ==0.12.0
-django-querycount==0.8.3
-djhtml==3.0.10
-freezegun==1.5.5
-ruff==0.14.14
-pytest==9.0.2
-pytest-django==4.11.1
-sqlfluff==4.0.0
-requests-mock==1.12.1
-syrupy==5.1.0
+django-environ
+django-querycount
+djhtml
+freezegun
+ruff
+pytest
+pytest-django
+sqlfluff
+requests-mock
+syrupy
