@@ -55,10 +55,6 @@
     onclick,
   }: Props = $props();
 
-  let spinnerColor = $derived(
-    secondary || noBackground ? "border-magenta-cta" : "border-white"
-  );
-
   let paddingX: string = $derived.by(() => {
     if (noPadding) {
       return "";
