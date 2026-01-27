@@ -1,4 +1,4 @@
-import OpeningHours from "opening_hours";
+import OpeningHours, { type optional_conf as OpeningConf } from "opening_hours";
 
 import type { DayPeriod, DayPrefix, OsmDay, OsmOpeningHours } from "$lib/types";
 
@@ -185,7 +185,7 @@ export function formatOsmHours(value: string): Array<[string, string]> | null {
   try {
     const openingHoursInstance = new OpeningHours(value, null, {
       locale: "fr",
-    } as any);
+    } as OpeningConf);
 
     const timeFormatter = new Intl.DateTimeFormat("fr-FR", {
       hour: "2-digit",
