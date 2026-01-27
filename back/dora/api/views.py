@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Exists, OuterRef
 from django.utils import timezone
 from rest_framework import permissions, viewsets
 from rest_framework.renderers import JSONRenderer
@@ -8,8 +8,9 @@ from rest_framework.versioning import NamespaceVersioning
 from dora.core.pagination import OptionalPageNumberPagination
 from dora.services.models import (
     Service,
+    ServiceStatus,
 )
-from dora.structures.models import Structure
+from dora.structures.models import Structure, StructureMember
 
 from .serializers import (
     ServiceSerializer,
@@ -52,9 +53,21 @@ class StructureViewSet(viewsets.ReadOnlyModelViewSet):
             .prefetch_related("national_labels")
             .filter(is_obsolete=False)
         )
-        structures = structures.exclude(
-            Q(membership=None) & Q(source__value__startswith="di-")
+
+        has_published_service = Exists(
+            Service.objects.filter(
+                structure=OuterRef("pk"),
+                status=ServiceStatus.PUBLISHED,
+            )
         )
+        has_member = Exists(
+            StructureMember.objects.filter(
+                structure=OuterRef("pk"),
+            )
+        )
+
+        structures = structures.filter(has_published_service | has_member)
+
         return structures.order_by("pk")
 
 

@@ -55,6 +55,103 @@ def test_structures_api_response(authenticated_user, api_client):
     assert [] == response.data
 
 
+def test_structure_with_published_service_is_included(authenticated_user, api_client):
+    """Structure avec au moins un service publié est incluse (même sans membre)"""
+    structure = make_structure(user=None)
+    make_service(structure=structure, status=ServiceStatus.PUBLISHED)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) in structure_ids
+
+
+def test_structure_with_published_service_and_member_is_included(
+    authenticated_user, api_client
+):
+    """Structure avec service publié ET membre réel est incluse"""
+    user = make_user()
+    structure = make_structure(user=user)
+    make_service(structure=structure, status=ServiceStatus.PUBLISHED)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) in structure_ids
+
+
+def test_structure_without_published_service_but_with_member_is_included(
+    authenticated_user, api_client
+):
+    """Structure sans service publié mais avec au moins un membre réel est incluse"""
+    user = make_user()
+    structure = make_structure(user=user)
+    # Pas de service publié, seulement un brouillon
+    make_service(structure=structure, status=ServiceStatus.DRAFT)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) in structure_ids
+
+
+def test_structure_without_published_service_and_without_member_is_excluded(
+    authenticated_user, api_client
+):
+    """Structure sans service publié et sans membre réel est exclue"""
+    structure = make_structure(user=None)
+    # Pas de service publié, seulement un brouillon
+    make_service(structure=structure, status=ServiceStatus.DRAFT)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) not in structure_ids
+
+
+def test_structure_without_services_and_without_member_is_excluded(
+    authenticated_user, api_client
+):
+    """Structure sans aucun service et sans membre réel est exclue"""
+    structure = make_structure(user=None)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) not in structure_ids
+
+
+def test_obsolete_structure_with_published_service_is_excluded(
+    authenticated_user, api_client
+):
+    """Structure obsolète avec service publié est exclue"""
+    structure = make_structure(user=None, is_obsolete=True)
+    make_service(structure=structure, status=ServiceStatus.PUBLISHED)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) not in structure_ids
+
+
+def test_obsolete_structure_with_member_is_excluded(authenticated_user, api_client):
+    """Structure obsolète avec membre réel est exclue"""
+    user = make_user()
+    structure = make_structure(user=user, is_obsolete=True)
+
+    response = api_client.get("/api/v2/structures/")
+
+    assert 200 == response.status_code
+    structure_ids = [s["id"] for s in response.data]
+    assert str(structure.id) not in structure_ids
+
+
 # TODO: plus tard ...
 # @pytest.mark.loaddata("structure_typology", "service_subcategory")
 def test_structures_serialization_exemple(
