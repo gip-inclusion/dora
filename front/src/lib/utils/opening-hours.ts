@@ -182,10 +182,6 @@ function formatHour(hour: string) {
 }
 
 export function formatOsmHours(value: string): Array<[string, string]> | null {
-  if (!value || typeof value !== "string") {
-    return null;
-  }
-
   try {
     const openingHoursInstance = new OpeningHours(value, null, {
       locale: "fr",
