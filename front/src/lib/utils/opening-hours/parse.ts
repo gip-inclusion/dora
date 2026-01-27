@@ -42,7 +42,10 @@ function isAfternoonHour(hour: string): boolean {
   return Number.parseInt(hourStart) > 12;
 }
 
-export function formatDay(lineday: OsmDay, prefix: DayPrefix): string | undefined {
+export function formatDay(
+  lineday: OsmDay,
+  prefix: DayPrefix
+): string | undefined {
   const { timeSlot1, timeSlot2 } = lineday;
 
   const timeSlot1HasValues: boolean = !!timeSlot1.openAt || !!timeSlot1.closeAt;
