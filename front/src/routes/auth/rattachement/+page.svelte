@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import LoadingButton from "$lib/components/display/loading-button.svelte";
+  import Button from "$lib/components/display/button.svelte";
   import EnsureLoggedIn from "$lib/components/hoc/ensure-logged-in.svelte";
   import StructureSearch from "$lib/components/specialized/establishment-search/search.svelte";
   import { defaultAcceptHeader, getApiURL } from "$lib/utils/api";
@@ -135,7 +135,7 @@
                 {/if}
               </div>
               <div class="mt-s24 flex justify-end">
-                <LoadingButton
+                <Button
                   type="submit"
                   label={ctaLabel}
                   onclick={handleJoin}

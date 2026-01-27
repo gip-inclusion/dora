@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import LoadingButton from "$lib/components/display/loading-button.svelte";
+  import Button from "$lib/components/display/button.svelte";
   import Fieldset from "$lib/components/display/fieldset.svelte";
   import Notice from "$lib/components/display/notice.svelte";
   import CheckboxMark from "$lib/components/display/checkbox-mark.svelte";
@@ -118,7 +118,7 @@
           {/if}
         </div>
         <div class="mt-s24 flex justify-end">
-          <LoadingButton
+          <Button
             label="Adhérer à la structure"
             onclick={handleJoin}
             preventDefaultOnMouseDown

@@ -1,7 +1,8 @@
-<script module lang="ts">
+<script lang="ts">
   import type { Component } from "svelte";
+  import Spinner from "./spinner.svelte";
 
-  export interface Props {
+  interface Props {
     label?: string;
     type?: "button" | "submit";
     id?: string;
@@ -12,6 +13,7 @@
     iconOnRight?: boolean;
     hideLabel?: boolean;
     disabled?: boolean;
+    loading?: boolean;
     small?: boolean;
     big?: boolean;
     secondary?: boolean;
@@ -27,9 +29,7 @@
     }>;
     onclick?: (event: MouseEvent) => void;
   }
-</script>
 
-<script lang="ts">
   let {
     label = "",
     type = "button",
@@ -41,6 +41,7 @@
     iconOnRight = false,
     hideLabel = false,
     disabled = false,
+    loading = false,
     small = false,
     big = false,
     secondary = false,
@@ -53,6 +54,10 @@
     ariaAttributes = {},
     onclick,
   }: Props = $props();
+
+  let spinnerColor = $derived(
+    secondary || noBackground ? "border-magenta-cta" : "border-white"
+  );
 
   let paddingX: string = $derived.by(() => {
     if (noPadding) {
@@ -125,15 +130,23 @@
   class:w-full={wFull}
   class:whitespace-nowrap={noWrap}
   class:hover:underline={hoverUnderline}
-  class:flex={!!Icon}
-  class:flex-row={!!Icon}
-  class:items-center={!!Icon}
+  class:flex={!!Icon || loading}
+  class:flex-row={!!Icon || loading}
+  class:items-center={!!Icon || loading}
   {...ariaAttributes}
   {onclick}
   onmousedown={handleMouseDown}
-  {disabled}
+  disabled={disabled || loading}
 >
-  {#if Icon && !iconOnRight}
+  {#if loading}
+    <span
+      class="{iconWidth} {iconHeight}"
+      class:mr-s8={!!label && !hideLabel}
+      class:-my-s2={small}
+    >
+      <Spinner size="100%" />
+    </span>
+  {:else if Icon && !iconOnRight}
     <span
       class="{iconWidth} {iconHeight} fill-current"
       class:mr-s8={!!label && !hideLabel}
@@ -145,7 +158,7 @@
 
   <span class:sr-only={hideLabel}>{label}</span>
 
-  {#if Icon && iconOnRight}
+  {#if Icon && iconOnRight && !loading}
     <span
       class="{iconWidth} {iconHeight} ml-s8 justify-end fill-current"
       class:-my-s2={small}
