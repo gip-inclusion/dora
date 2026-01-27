@@ -1,0 +1,1 @@
+export const INVALID_OPENING_HOURS_MARKER = "##INVALID##";
