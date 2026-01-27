@@ -181,6 +181,48 @@ function formatHour(hour: string) {
   return hour;
 }
 
+// Convertit l'index de jour JavaScript (0=dimanche) vers notre format (0=lundi)
+function toDayIndex(jsDayIndex: number): number {
+  return jsDayIndex === 0 ? 6 : jsDayIndex - 1;
+}
+
+// Formate les horaires d'un jour
+function formatDayHours(
+  dayIntervals: Array<[Date, Date]>,
+  timeFormatter: Intl.DateTimeFormat
+): string {
+  if (dayIntervals.length === 0) {
+    return "Fermé";
+  }
+
+  // Trie les intervalles par heure de début
+  const sortedIntervals = [...dayIntervals].sort(
+    (a, b) => a[0].getTime() - b[0].getTime()
+  );
+
+  // Formate chaque intervalle en "HH:mm-HH:mm"
+  const timeRanges = sortedIntervals.map(([start, end]) => {
+    const startTime = timeFormatter.format(start);
+    const endTime = timeFormatter.format(end);
+    return `${startTime}-${endTime}`;
+  });
+
+  // Applique le formatage français (":" -> "h", "," -> " / ")
+  return formatHour(timeRanges.join(","));
+}
+
+// Obtient le nom localisé d'un jour (ex: "Lun.")
+function getDayName(
+  dayIndex: number,
+  weekStart: Date,
+  dayFormatter: Intl.DateTimeFormat
+): string {
+  const dayDate = new Date(weekStart);
+  dayDate.setDate(weekStart.getDate() + dayIndex);
+  const dayName = dayFormatter.format(dayDate);
+  return dayName.charAt(0).toUpperCase() + dayName.slice(1);
+}
+
 export function formatOsmHours(value: string): Array<[string, string]> | null {
   try {
     const openingHoursInstance = new OpeningHours(value, null, {
@@ -211,11 +253,6 @@ export function formatOsmHours(value: string): Array<[string, string]> | null {
     // Récupère tous les intervalles ouverts de la semaine
     const intervals = openingHoursInstance.getOpenIntervals(weekStart, weekEnd);
 
-    // Convertit l'index de jour JavaScript (0=dimanche) vers notre format (0=lundi)
-    const toDayIndex = (jsDayIndex: number): number => {
-      return jsDayIndex === 0 ? 6 : jsDayIndex - 1;
-    };
-
     // Groupe les intervalles par jour de la semaine (0 = lundi, 6 = dimanche)
     const intervalsByDay: Array<Array<[Date, Date]>> = Array.from(
       { length: 7 },
@@ -227,48 +264,20 @@ export function formatOsmHours(value: string): Array<[string, string]> | null {
       intervalsByDay[dayIndex].push([start, end]);
     });
 
-    // Formate les horaires d'un jour
-    const formatDayHours = (dayIntervals: Array<[Date, Date]>): string => {
-      if (dayIntervals.length === 0) {
-        return "Fermé";
-      }
-
-      // Trie les intervalles par heure de début
-      const sortedIntervals = [...dayIntervals].sort(
-        (a, b) => a[0].getTime() - b[0].getTime()
-      );
-
-      // Formate chaque intervalle en "HH:mm-HH:mm"
-      const timeRanges = sortedIntervals.map(([start, end]) => {
-        const startTime = timeFormatter.format(start);
-        const endTime = timeFormatter.format(end);
-        return `${startTime}-${endTime}`;
-      });
-
-      // Applique le formatage français (":" -> "h", "," -> " / ")
-      return formatHour(timeRanges.join(","));
-    };
-
-    // Obtient le nom localisé d'un jour (ex: "Lun.")
-    const getDayName = (dayIndex: number): string => {
-      const dayDate = new Date(weekStart);
-      dayDate.setDate(weekStart.getDate() + dayIndex);
-      const dayName = dayFormatter.format(dayDate);
-      return dayName.charAt(0).toUpperCase() + dayName.slice(1);
-    };
-
     // Formate tous les jours de la semaine
     const formattedDays = intervalsByDay.map((dayIntervals, dayIndex) => {
-      const hours = formatDayHours(dayIntervals);
+      const hours = formatDayHours(dayIntervals, timeFormatter);
       const isWeekday = dayIndex < 5; // 0-4 = lundi à vendredi
 
       // Toujours afficher les jours de semaine, même s'ils sont fermés
       if (isWeekday) {
-        return [getDayName(dayIndex), hours];
+        return [getDayName(dayIndex, weekStart, dayFormatter), hours];
       }
 
       // Pour samedi-dimanche, n'afficher que s'ils ne sont pas fermés
-      return hours !== "Fermé" ? [getDayName(dayIndex), hours] : null;
+      return hours !== "Fermé"
+        ? [getDayName(dayIndex, weekStart, dayFormatter), hours]
+        : null;
     });
 
     // Filtre uniquement les jours weekend fermés (null) et retourne le résultat
