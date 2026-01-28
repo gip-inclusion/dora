@@ -140,7 +140,7 @@
       class:mr-s8={!!label && !hideLabel}
       class:-my-s2={small}
     >
-      <Spinner size="100%" />
+      <Spinner size="100%" colorClass="border-gray-text" />
     </span>
   {:else if Icon && !iconOnRight}
     <span
