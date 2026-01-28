@@ -6,9 +6,9 @@ from django.utils import timezone
 from django.utils.timezone import timedelta
 from model_bakery import baker
 
-from dora.admin_express.models import City, Department
 from dora.core.constants import WGS84
 from dora.core.test_utils import make_service, make_structure, make_user
+from dora.decoupage_administratif.models import City, Department
 from dora.services.models import (
     BeneficiaryAccessMode,
     CoachOrientationMode,
@@ -275,8 +275,16 @@ def test_unpublished_service_is_not_serialized(authenticated_user, api_client):
 def test_service_serialization_exemple(authenticated_user, api_client, settings):
     # Example adapté de la doc data·inclusion :
     # https://www.data.inclusion.beta.gouv.fr/schemas-de-donnees-de-loffre/schema-des-structures-et-services-dinsertion
-    baker.make(Department, code="29", name="Finistère")
-    baker.make(City, code="29188", name="Plougasnou")
+    baker.make(Department, code="29", name="Finistère", region="53")
+    baker.make(
+        City,
+        code="29188",
+        name="Plougasnou",
+        department="29",
+        epci="",
+        region="53",
+        center=Point(3.8, 48.7, srid=WGS84),
+    )
 
     user = make_user()
     structure = make_structure(user=user)
@@ -465,8 +473,16 @@ def test_service_serialization_formulaire_en_ligne(
 
 
 def test_service_serialization_exemple_need_di_user(api_client):
-    baker.make(Department, code="29", name="Finistère")
-    baker.make(City, code="29188", name="Plougasnou")
+    baker.make(Department, code="29", name="Finistère", region="53")
+    baker.make(
+        City,
+        code="29188",
+        name="Plougasnou",
+        department="29",
+        epci="",
+        region="53",
+        center=Point(3.8, 48.7, srid=WGS84),
+    )
 
     structure = make_structure()
     service = make_service(
