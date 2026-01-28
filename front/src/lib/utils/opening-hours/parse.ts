@@ -1,9 +1,51 @@
 import type { DayPeriod, DayPrefix, OsmDay, OsmOpeningHours } from "$lib/types";
-import openingHours from "opening_hours";
 
-export const INVALID_OPENING_HOURS_MARKER = "##INVALID##";
+import { INVALID_OPENING_HOURS_MARKER } from "./constants";
 
-function formatDay(lineday: OsmDay, prefix: DayPrefix): string | undefined {
+export function returnEmptyHoursData(): OsmOpeningHours {
+  return {
+    monday: {
+      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
+    },
+    tuesday: {
+      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
+    },
+    wednesday: {
+      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
+    },
+    thursday: {
+      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
+    },
+    friday: {
+      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
+    },
+    saturday: {
+      timeSlot1: { isOpen: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
+    },
+    sunday: {
+      timeSlot1: { isOpen: false, openAt: "", closeAt: "" },
+      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
+    },
+  };
+}
+
+// On se base sur l'heure pour déterminer s'il s'agit d'une horaire d'après-midi ou non
+// Note : une méthode plus fiable est-elle possible ?
+function isAfternoonHour(hour: string): boolean {
+  const hourStart = hour.substring(0, 2);
+  return Number.parseInt(hourStart) > 12;
+}
+
+export function formatDay(
+  lineday: OsmDay,
+  prefix: DayPrefix
+): string | undefined {
   const { timeSlot1, timeSlot2 } = lineday;
 
   const timeSlot1HasValues: boolean = !!timeSlot1.openAt || !!timeSlot1.closeAt;
@@ -51,46 +93,6 @@ function formatDay(lineday: OsmDay, prefix: DayPrefix): string | undefined {
   }
 
   return str;
-}
-
-// On se base sur l'heure pour déterminer s'il s'agit d'une horaire d'après-midi ou non
-// Note : une méthode plus fiable est-elle possible ?
-function isAfternoonHour(hour: string): boolean {
-  const hourStart = hour.substring(0, 2);
-  return Number.parseInt(hourStart) > 12;
-}
-
-export function returnEmptyHoursData(): OsmOpeningHours {
-  return {
-    monday: {
-      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
-    },
-    tuesday: {
-      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
-    },
-    wednesday: {
-      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
-    },
-    thursday: {
-      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
-    },
-    friday: {
-      timeSlot1: { isOpen: true, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
-    },
-    saturday: {
-      timeSlot1: { isOpen: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
-    },
-    sunday: {
-      timeSlot1: { isOpen: false, openAt: "", closeAt: "" },
-      timeSlot2: { isOpen: false, openAt: "", closeAt: "" },
-    },
-  };
 }
 
 export function getHoursFromStr(value: string): OsmOpeningHours {
@@ -170,89 +172,4 @@ export function getHoursFromStr(value: string): OsmOpeningHours {
   });
 
   return baseObject;
-}
-
-// 09:00-12:00,14:00-18:30 => 09h00 - 12:00 / 14h00 - 18h30
-function formatHour(hour: string) {
-  hour = hour.replace(/-/g, " - ");
-  hour = hour.replace(/:/g, "h");
-  hour = hour.replace(/,/g, " / ");
-  return hour;
-}
-
-export function isValidformatOsmHours(value: string) {
-  try {
-    new openingHours(value, null, { locale: "fr" });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function formatOsmHours(value: string) {
-  let monday = "Fermé";
-  let tuesday = "Fermé";
-  let wednesday = "Fermé";
-  let thursday = "Fermé";
-  let friday = "Fermé";
-  let saturday = "";
-  let sunday = "";
-
-  const hoursByDay = value.split(";");
-
-  hoursByDay.forEach((hoursForDay) => {
-    const [dayPrefix, hours] = hoursForDay.trim().split(" ");
-
-    if (dayPrefix === "Mo") {
-      monday = formatHour(hours);
-    }
-    if (dayPrefix === "Tu") {
-      tuesday = formatHour(hours);
-    }
-    if (dayPrefix === "We") {
-      wednesday = formatHour(hours);
-    }
-    if (dayPrefix === "Th") {
-      thursday = formatHour(hours);
-    }
-    if (dayPrefix === "Fr") {
-      friday = formatHour(hours);
-    }
-    if (dayPrefix === "Sa") {
-      saturday = formatHour(hours);
-    }
-    if (dayPrefix === "Su") {
-      sunday = formatHour(hours);
-    }
-  });
-
-  return [
-    ["Lun.", monday],
-    ["Mar.", tuesday],
-    ["Mer.", wednesday],
-    ["Jeu.", thursday],
-    ["Ven.", friday],
-    saturday && ["Sam.", saturday],
-    sunday && ["Dim.", sunday],
-  ].filter(Boolean);
-}
-
-export function fromJsonToOsmString(data: OsmOpeningHours) {
-  let days: string[] = [];
-
-  days.push(formatDay(data.monday, "Mo") || "");
-  days.push(formatDay(data.tuesday, "Tu") || "");
-  days.push(formatDay(data.wednesday, "We") || "");
-  days.push(formatDay(data.thursday, "Th") || "");
-  days.push(formatDay(data.friday, "Fr") || "");
-  days.push(formatDay(data.saturday, "Sa") || "");
-  days.push(formatDay(data.sunday, "Su") || "");
-
-  days = days.filter(Boolean);
-  if (days.length) {
-    return days.join(";");
-  }
-
-  // TODO: vérifier le meilleur moyen de propager l'erreur
-  return null;
 }
