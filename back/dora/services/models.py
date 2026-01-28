@@ -16,11 +16,12 @@ from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
-from dora.admin_express.models import EPCI, AdminDivisionType, City, Department, Region
+from dora.admin_express.models import AdminDivisionType
 from dora.admin_express.utils import arrdt_to_main_insee_code, get_clean_city_name
 from dora.core.constants import WGS84
 from dora.core.models import EnumModel, LogItem, ModerationMixin
 from dora.core.utils import address_to_one_line
+from dora.decoupage_administratif.models import EPCI, City, Department, Region
 from dora.structures.models import Structure
 
 from .enums import ServiceStatus
