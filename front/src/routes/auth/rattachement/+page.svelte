@@ -140,10 +140,8 @@
                   label={ctaLabel}
                   onclick={handleJoin}
                   preventDefaultOnMouseDown
-                  disabled={(!alreadyMember &&
-                    !alreadyRequested &&
-                    !cguAccepted) ||
-                    loading}
+                  disabled={!alreadyMember && !alreadyRequested && !cguAccepted}
+                  {loading}
                 />
               </div>
             </div>

@@ -122,7 +122,8 @@
             label="Adhérer à la structure"
             onclick={handleJoin}
             preventDefaultOnMouseDown
-            disabled={!cguAccepted || loading}
+            disabled={!cguAccepted}
+            {loading}
           />
         </div>
       </div>
