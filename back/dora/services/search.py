@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
-from django.db.models import IntegerField, Q, Value
+from django.db.models import IntegerField, Q, QuerySet, Value
 from django.utils import timezone
 
 import dora.services.models as models
@@ -31,7 +31,12 @@ MEDIATION_NUMERIQUE_SOURCE = "mediation-numerique"
 FRANCE_SERVICES_STRUCTURE_ID_PREFIX = "mediation-numerique--France-Services"
 
 
-def _filter_and_annotate_dora_services(services, location, with_remote, with_onsite):
+def _filter_and_annotate_dora_services(
+    services: QuerySet[models.Service],
+    location: Point,
+    with_remote: bool,
+    with_onsite: bool,
+) -> QuerySet[models.Service]:
     no_services = models.Service.objects.none()
     # 1) services ayant un lieu de déroulement, à moins de MAX_DISTANCE km
     services_on_site = (
