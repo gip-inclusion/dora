@@ -1,6 +1,8 @@
+from django.contrib.gis.geos import Point
 from django.test import TestCase
 from rest_framework.test import APIClient
 
+from dora.core.constants import WGS84
 from dora.decoupage_administratif.models import EPCI, City, Department, Region
 
 
@@ -21,6 +23,7 @@ class SearchViewTests(TestCase):
             postal_codes=["75001", "75002"],
             population=2161000,
             normalized_name="PARIS 75",
+            center=Point(2.3522, 48.8566, srid=WGS84),
         )
         cls.lyon = City.objects.create(
             code="69123",
@@ -31,6 +34,7 @@ class SearchViewTests(TestCase):
             postal_codes=["69001", "69002"],
             population=522969,
             normalized_name="LYON 69",
+            center=Point(4.8357, 45.7640, srid=WGS84),
         )
         cls.marseille = City.objects.create(
             code="13055",
@@ -41,6 +45,7 @@ class SearchViewTests(TestCase):
             postal_codes=["13001", "13002"],
             population=870731,
             normalized_name="MARSEILLE 13",
+            center=Point(5.3698, 43.2965, srid=WGS84),
         )
 
         # Création de données de test pour les départements
@@ -141,6 +146,7 @@ class SearchViewTests(TestCase):
             postal_codes=["77000"],
             population=1000,
             normalized_name="PARIS SUR SEINE 77",
+            center=Point(2.5, 48.5, srid=WGS84),
         )
         response = self.client.get("/admin-division-search/?type=city&q=paris")
         assert response.status_code == 200
@@ -243,6 +249,7 @@ class SearchViewTests(TestCase):
                 postal_codes=[f"99{i:03d}"],
                 population=1000 + i,
                 normalized_name=f"TESTVILLE{i} 99",
+                center=Point(2.0 + i * 0.01, 48.0 + i * 0.01, srid=WGS84),
             )
         response = self.client.get("/admin-division-search/?type=city&q=testville")
         assert response.status_code == 200

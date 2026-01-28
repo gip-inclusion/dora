@@ -61,6 +61,7 @@ class DecoupageAdministratifImporterTests(TestCase):
                 "code": "75056",
                 "nom": "Paris",
                 "codesPostaux": ["75001"],
+                "centre": {"type": "Point", "coordinates": [2.347, 48.8589]},
             }
         ]
 
@@ -72,7 +73,9 @@ class DecoupageAdministratifImporterTests(TestCase):
         self.assertEqual(city.region, "")
         self.assertEqual(city.postal_codes, ["75001"])
         self.assertEqual(city.population, 0)
-        self.assertIsNone(city.center)
+        self.assertIsNotNone(city.center)
+        self.assertAlmostEqual(city.center.x, 2.347, places=3)
+        self.assertAlmostEqual(city.center.y, 48.8589, places=3)
 
     def test_import_communes_sets_population_and_center(self):
         self.client.fetch_communes.return_value = [
@@ -139,6 +142,7 @@ class DecoupageAdministratifImporterTests(TestCase):
                 "codeDepartement": "75",
                 "codeRegion": "11",
                 "codesPostaux": ["75001"],
+                "centre": {"type": "Point", "coordinates": [2.347, 48.8589]},
             }
         ]
 

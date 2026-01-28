@@ -1,6 +1,8 @@
 import pytest
+from django.contrib.gis.geos import Point
 
 from dora.admin_express.models import AdminDivisionType
+from dora.core.constants import WGS84
 from dora.decoupage_administratif.models import EPCI, City, Department, Region
 
 from .diffusion_zone_info import get_diffusion_zone_info
@@ -24,6 +26,7 @@ def test_get_diffusion_zone_info_city():
         epci="200054781",
         region="11",
         postal_codes=["75001"],
+        center=Point(2.347, 48.8589, srid=WGS84),
     )
 
     result = get_diffusion_zone_info(["75056"])
@@ -217,6 +220,7 @@ def test_get_diffusion_zone_info_multiple_codes():
         epci="200054781",
         region="11",
         postal_codes=["75001"],
+        center=Point(2.347, 48.8589, srid=WGS84),
     )
     City.objects.create(
         code="13001",
@@ -225,6 +229,7 @@ def test_get_diffusion_zone_info_multiple_codes():
         epci="200054781",
         region="93",
         postal_codes=["13100"],
+        center=Point(4.8357, 45.7640, srid=WGS84),
     )
 
     zone_codes = ["75056", "13001"]
@@ -246,6 +251,7 @@ def test_get_diffusion_zone_info_with_empty_display():
         epci="200054781",
         region="11",
         postal_codes=["75001"],
+        center=Point(2.347, 48.8589, srid=WGS84),
     )
     City.objects.create(
         code="13001",
@@ -254,6 +260,7 @@ def test_get_diffusion_zone_info_with_empty_display():
         epci="200054781",
         region="93",
         postal_codes=["13100"],
+        center=Point(4.8357, 45.7640, srid=WGS84),
     )
 
     zone_codes = ["75056", "99999", "13001"]
