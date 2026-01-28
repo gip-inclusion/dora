@@ -495,9 +495,9 @@ importlib-resources==6.5.2 \
     --hash=sha256:185f87adef5bcc288449d98fb4fba07cea78bc036455dd44c5fc4a2fe78fed2c \
     --hash=sha256:789cfdc3ed28c78b67a06acb8126751ced69a3d5f79c095a98298cd8a760ccec
     # via yachalk
-itoutils[django]==26.1.26.1 \
-    --hash=sha256:9255e86e7872495290533c906add6f938e13257a74cab63486258d754b6ddcf5 \
-    --hash=sha256:a1c3422075d2342227cd0bb4824611f5675d5f524f206b6b5ca4c970c746b4b5
+itoutils[django]==26.1.28.0 \
+    --hash=sha256:35096692175965ca0d20ab271a3ad1d81733121ec5a7a869c6b91f53ba23ae7f \
+    --hash=sha256:9e983ab097edd9f39428cd26fc15ee3d36e23b36092e8a7cce8ae0cb95504048
     # via -r requirements/./base.in
 jmespath==1.1.0 \
     --hash=sha256:472c87d80f36026ae83c6ddd0f1d05d4e510134ed462851fd5f754c8c3cbb88d \
