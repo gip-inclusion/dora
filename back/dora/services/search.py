@@ -14,9 +14,8 @@ from django.utils import timezone
 
 import dora.services.models as models
 from dora import data_inclusion
-from dora.admin_express.models import City
 from dora.core.constants import WGS84
-from dora.decoupage_administratif.models import City as DACity
+from dora.decoupage_administratif.models import City
 from dora.services.models import ServiceStatus, ServiceSubCategory
 from dora.structures.models import Structure
 
@@ -115,7 +114,7 @@ def _map_kinds_dora_to_di(kinds: list[str]) -> list[str]:
 
 
 def _filter_di_results(raw_di_results: list, city_code: str) -> list:
-    city = DACity.objects.filter(code=city_code).first()
+    city = City.objects.filter(code=city_code).first()
 
     if not city:
         return raw_di_results
@@ -387,7 +386,7 @@ def _get_dora_results(
 
     results = _filter_and_annotate_dora_services(
         services_to_display,
-        city.geom if not lat or not lon else Point(lon, lat, srid=WGS84),
+        city.center if not lat or not lon else Point(lon, lat, srid=WGS84),
         with_remote,
         with_onsite,
     )
