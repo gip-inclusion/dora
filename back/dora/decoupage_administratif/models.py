@@ -30,7 +30,7 @@ class City(AdminDivision):
         default=list,
     )
     population = models.IntegerField(default=0)
-    center = gis_models.PointField(srid=WGS84, geography=True, null=True, blank=True)
+    center = gis_models.PointField(srid=WGS84, geography=True)
 
     class Meta:
         verbose_name = "commune"
