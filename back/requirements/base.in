@@ -19,7 +19,6 @@ hiredis
 humanize
 jwcrypto
 mjml-python
-model-bakery
 osm_opening_hours
 psycopg[binary]
 PyJWT
