@@ -31,13 +31,12 @@ from dora.core.models import ModerationStatus
 from dora.core.notify import send_moderation_notification
 from dora.core.pagination import OptionalPageNumberPagination
 from dora.core.utils import TRUTHY_VALUES
-from dora.decoupage_administratif.models import City
+from dora.decoupage_administratif.models import AdminDivisionType, City
 from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.emails import send_service_feedback_email, send_service_sharing_email
 from dora.services.enums import ServiceStatus
 from dora.services.models import (
     AccessCondition,
-    AdminDivisionType,
     BeneficiaryAccessMode,
     Bookmark,
     CoachOrientationMode,

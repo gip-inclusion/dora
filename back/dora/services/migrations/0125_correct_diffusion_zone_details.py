@@ -5,7 +5,7 @@ from django.db import migrations
 from django.db.models import Q
 from django.utils import timezone
 
-from dora.admin_express.models import AdminDivisionType
+from dora.decoupage_administratif.models import AdminDivisionType
 from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 
 logger = logging.getLogger(__name__)

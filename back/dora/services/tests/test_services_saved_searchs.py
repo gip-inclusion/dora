@@ -9,11 +9,15 @@ from django.utils import timezone
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
-from dora.admin_express.models import AdminDivisionType
 from dora.core.constants import WGS84
 from dora.core.test_utils import make_service
 from dora.data_inclusion.test_utils import FakeDataInclusionClient
-from dora.decoupage_administratif.models import City, Department, Region
+from dora.decoupage_administratif.models import (
+    AdminDivisionType,
+    City,
+    Department,
+    Region,
+)
 from dora.services.enums import ServiceStatus
 from dora.services.management.commands.send_saved_searches_notifications import (
     get_saved_search_notifications_to_send,

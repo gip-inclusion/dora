@@ -4,7 +4,7 @@ from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from dora.admin_express.models import AdminDivisionType
+from dora.decoupage_administratif.models import AdminDivisionType
 from dora.decoupage_administratif.utils import normalize_string_for_search
 
 from .models import EPCI, City, Department, Region

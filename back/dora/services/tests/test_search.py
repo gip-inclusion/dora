@@ -4,7 +4,6 @@ import pytest
 from model_bakery import baker
 from rest_framework import serializers
 
-from dora.admin_express.models import AdminDivisionType
 from dora.core.test_utils import (
     make_published_service,
     make_service,
@@ -12,6 +11,7 @@ from dora.core.test_utils import (
     make_user,
 )
 from dora.data_inclusion.test_utils import FakeDataInclusionClient, make_di_service_data
+from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
 from dora.services.views import _validate_search_categories_and_subcategories
 

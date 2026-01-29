@@ -4,15 +4,6 @@ from django.contrib.postgres.indexes import GinIndex
 
 from dora.core.constants import WGS84
 
-
-class AdminDivisionType(models.TextChoices):
-    CITY = ("city", "Commune")
-    EPCI = ("epci", "Intercommunalité (EPCI)")
-    DEPARTMENT = ("department", "Département")
-    REGION = ("region", "Région")
-    COUNTRY = ("country", "France entière")
-
-
 sentinel = object()
 
 

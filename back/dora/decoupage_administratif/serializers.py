@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from dora.admin_express.models import AdminDivisionType
+from dora.decoupage_administratif.models import AdminDivisionType
 
 
 class SearchQuerySerializer(serializers.Serializer):

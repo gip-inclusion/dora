@@ -12,12 +12,12 @@ from rest_framework.relations import PrimaryKeyRelatedField
 
 import dora.data_inclusion.client
 from dora.core.utils import code_insee_to_code_dept
+from dora.decoupage_administratif.models import AdminDivisionType
 from dora.services.enums import ServiceStatus
 from dora.structures.models import Structure, StructureMember
 
 from .models import (
     AccessCondition,
-    AdminDivisionType,
     BeneficiaryAccessMode,
     Bookmark,
     CoachOrientationMode,

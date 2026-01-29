@@ -1,9 +1,14 @@
 import pytest
 from django.contrib.gis.geos import Point
 
-from dora.admin_express.models import AdminDivisionType
 from dora.core.constants import WGS84
-from dora.decoupage_administratif.models import EPCI, City, Department, Region
+from dora.decoupage_administratif.models import (
+    EPCI,
+    AdminDivisionType,
+    City,
+    Department,
+    Region,
+)
 
 from .diffusion_zone_info import get_diffusion_zone_info
 
