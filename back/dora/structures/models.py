@@ -25,7 +25,6 @@ from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
-from dora.admin_express.utils import get_clean_city_name
 from dora.core.models import EnumModel, LogItem, ModerationMixin, ModerationStatus
 from dora.core.utils import code_insee_to_code_dept
 from dora.core.validators import (
@@ -35,6 +34,7 @@ from dora.core.validators import (
     validate_safir,
     validate_siret,
 )
+from dora.decoupage_administratif.utils import get_clean_city_name
 from dora.sirene.models import Establishment
 from dora.sirene.serializers import EstablishmentSerializer
 from dora.structures.emails import (

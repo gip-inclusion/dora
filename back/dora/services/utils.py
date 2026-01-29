@@ -6,10 +6,10 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from dora.admin_express.models import AdminDivisionType
-from dora.admin_express.utils import arrdt_to_main_insee_code
 from dora.core.constants import WGS84
 from dora.core.models import ModerationStatus
 from dora.decoupage_administratif.models import EPCI, City, Department, Region
+from dora.decoupage_administratif.utils import arrdt_to_main_insee_code
 from dora.services.enums import ServiceStatus
 
 SYNC_FIELDS = [

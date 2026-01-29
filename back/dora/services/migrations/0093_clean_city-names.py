@@ -2,8 +2,8 @@
 
 from django.db import migrations
 
-from dora.admin_express.utils import get_clean_city_name
 from dora.core.utils import code_insee_to_code_dept
+from dora.decoupage_administratif.utils import get_clean_city_name
 
 
 def clean_city_names(apps, _):
