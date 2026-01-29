@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_city_by_code(apps, city_code):
-    City = apps.get_model("admin_express", "City")
+    City = apps.get_model("decoupage_administratif", "City")
 
     insee_code = arrdt_to_main_insee_code(city_code)
 

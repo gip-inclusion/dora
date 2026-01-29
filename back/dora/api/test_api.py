@@ -36,7 +36,7 @@ def setup_structure_data():
     baker.make("structures.StructureSource", value="solidagregateur")
     baker.make("structures.StructureNationalLabel", value="MOBIN")
     baker.make("structures.StructureNationalLabel", value="AFPA")
-    baker.make("admin_express.City", name="Robinboeuf CEDEX", code="09890")
+    baker.make("decoupage_administratif.City", name="Robinboeuf CEDEX", code="09890")
 
 
 # API publique : structures

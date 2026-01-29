@@ -1,6 +1,6 @@
 from unidecode import unidecode
 
-from dora.admin_express.models import City
+from dora.decoupage_administratif.models import City
 
 CODE_INSEE_PARIS = "75056"
 CODE_INSEE_PARIS_ARRDTS = [

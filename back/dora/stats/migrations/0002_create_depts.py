@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-from dora.admin_express.models import Department
+from dora.decoupage_administratif.models import Department
 
 
 def create_depts(apps, schema_editor):
