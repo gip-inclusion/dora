@@ -89,7 +89,11 @@ make venv
 ./manage.py migrate
 ```
 
-Pour que l’application soit utilisable, il faut _a minima_ importer les données géographiques et les labels nationaux :
+Pour que l’application soit utilisable, il faut _a minima_ importer les données géographiques et les labels nationaux.
+
+Mais pour avoir un jeu de données complet, il est plus simple d’importer la base de _staging_ entière.
+
+## Import des données admin_express
 
 Pour faire tourner `import_admin_express` localement, il faut installer 7zip
 
@@ -109,7 +113,24 @@ sudo apt-get install p7zip*
 # Ou make populate_db
 ```
 
-Mais pour avoir un jeu de données complet, il est plus simple d’importer la base de _staging_ entière.
+## Import des données decoupage_administratif
+
+L’application s’appuie sur les données du découpage administratif (communes, départements, EPCI, régions) importées depuis l’[API geo.api.gouv.fr](https://geo.api.gouv.fr) :
+
+```bash
+./manage.py import_decoupage_administratif
+```
+
+Par défaut, toutes les entités sont importées. Pour limiter l’import à un type d’entité :
+
+```bash
+./manage.py import_decoupage_administratif --scope=regions
+./manage.py import_decoupage_administratif --scope=departements
+./manage.py import_decoupage_administratif --scope=epci
+./manage.py import_decoupage_administratif --scope=communes
+```
+
+L’URL de l’API est configurable via la variable d’environnement `GEO_API_GOUV_BASE_URL` (par défaut : `https://geo.api.gouv.fr`).
 
 # Configurer le téléchargement de documents en local
 Vous devez créer un bucket dans Minio pour les téléchargements de documents.
