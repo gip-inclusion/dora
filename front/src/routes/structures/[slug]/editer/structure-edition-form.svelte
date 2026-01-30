@@ -75,7 +75,7 @@
         name="validate"
         type="submit"
         label="Valider les modifications"
-        disabled={requesting}
+        loading={requesting}
       />
     </div>
   </Form>
