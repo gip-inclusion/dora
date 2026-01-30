@@ -6,6 +6,7 @@ import { getApiURL } from "$lib/utils/api";
 import { trackSearch } from "$lib/utils/stats";
 import { getQueryString, storeLastSearchCity } from "$lib/utils/service-search";
 import type { PageLoad } from "./$types";
+import { SEARCH_RADIUS_KM } from "$lib/consts";
 
 // pour raison de performance, les requêtes étant lourdes, et on ne tient pas forcément
 // à ce qu'elles soient indexées
@@ -56,7 +57,7 @@ async function getResults(
     const data = await res.json();
     return {
       searchCenter: data.searchCenter ?? null,
-      searchRadiusKm: data.searchRadiusKm ?? 50,
+      searchRadiusKm: data.searchRadiusKm ?? SEARCH_RADIUS_KM,
       fundingLabels: data.fundingLabels ?? [],
       services: data.services ?? [],
     };
@@ -71,7 +72,7 @@ async function getResults(
       );
       return {
         searchCenter: null,
-        searchRadiusKm: 50,
+        searchRadiusKm: SEARCH_RADIUS_KM,
         fundingLabels: [],
         services: [],
         wrongCategoriesOrSubcategories: true,
@@ -81,7 +82,7 @@ async function getResults(
 
   return {
     searchCenter: null,
-    searchRadiusKm: 50,
+    searchRadiusKm: SEARCH_RADIUS_KM,
     fundingLabels: [],
     services: [],
   };
