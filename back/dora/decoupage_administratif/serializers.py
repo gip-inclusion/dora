@@ -16,6 +16,25 @@ class SearchQuerySerializer(serializers.Serializer):
     q = serializers.CharField(required=True)
 
 
+class ReverseSearchQuerySerializer(serializers.Serializer):
+    type = serializers.ChoiceField(
+        choices=[
+            AdminDivisionType.CITY,
+            AdminDivisionType.EPCI,
+            AdminDivisionType.DEPARTMENT,
+            AdminDivisionType.REGION,
+        ],
+        required=True,
+    )
+    lat = serializers.FloatField(required=True)
+    lon = serializers.FloatField(required=True)
+
+
+class ReverseSearchAdminDivisionSerializer(serializers.Serializer):
+    code = serializers.CharField()
+    name = serializers.CharField()
+
+
 class GetDepartmentsQuerySerializer(serializers.Serializer):
     dept_codes = serializers.CharField(required=False, allow_blank=True, default="")
 
