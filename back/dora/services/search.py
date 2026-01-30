@@ -16,7 +16,7 @@ import dora.services.models as models
 from dora import data_inclusion
 from dora.core.constants import WGS84
 from dora.decoupage_administratif.models import City
-from dora.services.models import ServiceStatus, ServiceSubCategory
+from dora.services.models import ServiceSubCategory
 from dora.structures.models import Structure
 
 from .models import FundingLabel
@@ -330,15 +330,10 @@ def _get_dora_results(
             "coach_orientation_modes",
             "beneficiaries_access_modes",
         )
+        .exclude(structure__is_obsolete=True)
+        .exclude(structure__in=Structure.objects.orphans())
+        .exclude(suspension_date__lt=timezone.localdate())
     )
-
-    # On exclus les services dont la structure est marquèe comme obsolète
-    services = services.exclude(structure__is_obsolete=True)
-
-    # Par souci de qualité des données,
-    # les services DORA rattachés à une structure orpheline
-    # sont filtrés lors de la recherche.
-    services = services.exclude(structure__in=Structure.objects.orphans())
 
     if kinds:
         services = services.filter(kinds__value__in=kinds)
@@ -442,7 +437,7 @@ def _get_unified_results(
 
     dora_services_by_id = {
         str(service.id): service
-        for service in models.Service.objects.filter(id__in=dora_ids)
+        for service in models.Service.objects.published()
         .select_related(
             "structure",
         )
@@ -457,9 +452,10 @@ def _get_unified_results(
             "coach_orientation_modes",
             "beneficiaries_access_modes",
         )
-        .filter(status=ServiceStatus.PUBLISHED)
+        .filter(id__in=dora_ids)
         .exclude(structure__is_obsolete=True)
         .exclude(structure__in=Structure.objects.orphans())
+        .exclude(suspension_date__lt=timezone.localdate())
         .distinct()
     }
 
