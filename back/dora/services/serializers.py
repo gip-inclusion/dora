@@ -851,6 +851,7 @@ class SearchResultSerializer(ServiceListSerializer):
     distance = serializers.SerializerMethodField()
     coordinates = serializers.SerializerMethodField()
     di_publics = serializers.SerializerMethodField()
+    location_kinds = serializers.SerializerMethodField()
 
     class Meta:
         model = Service
@@ -894,6 +895,22 @@ class SearchResultSerializer(ServiceListSerializer):
         for public in obj.publics.all():
             di_publics.update(public.corresponding_di_publics)
         return list(di_publics)
+
+    def get_location_kinds(self, obj):
+        """
+        On enlève le lieu d'accueil en présentiel si le service est à distance et que la distance
+        est nulle pour que le frontend le considère comme un service purement à distance.
+        """
+        location_kind_values = [lk.value for lk in obj.location_kinds.all()]
+        if (
+            obj.distance is None
+            and "a-distance" in location_kind_values
+            and "en-presentiel" in location_kind_values
+        ):
+            location_kind_values = [
+                v for v in location_kind_values if v != "en-presentiel"
+            ]
+        return location_kind_values
 
 
 class FundingLabelSerializer(serializers.ModelSerializer):
