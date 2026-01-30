@@ -79,7 +79,7 @@ def main_insee_code_to_arrdts(insee_code):
 
 
 def normalize_string_for_search(str):
-    return unidecode(str).upper().replace("-", " ").replace("'", "'").rstrip()
+    return unidecode(str).upper().replace("-", " ").replace("’", "'").rstrip()
 
 
 def get_clean_city_name(insee_code):
