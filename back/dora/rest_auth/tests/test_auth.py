@@ -2,7 +2,7 @@ from model_bakery import baker
 from rest_framework.test import APITestCase
 
 from dora.core.models import ModerationStatus
-from dora.core.test_utils import make_structure
+from dora.core.test_utils import make_structure, make_structure_member
 from dora.structures.models import Structure, StructureMember, StructurePutativeMember
 
 DUMMY_SIRET = "12345678901234"
@@ -59,12 +59,7 @@ class AuthenticationTestCase(APITestCase):
         baker.make("Establishment", siret=DUMMY_SIRET)
         struct = make_structure(siret=DUMMY_SIRET)
         user = baker.make("users.User", is_valid=True)
-        struct.members.add(
-            user,
-            through_defaults={
-                "is_admin": True,
-            },
-        )
+        make_structure_member(user=user, structure=struct, is_admin=True)
         user2 = baker.make("users.User", is_valid=True)
         self.client.force_authenticate(user=user2)
         response = self.client.post(
@@ -128,12 +123,7 @@ class AuthenticationTestCase(APITestCase):
             siret=DUMMY_SIRET, moderation_status=ModerationStatus.VALIDATED
         )
         user = baker.make("users.User", is_valid=True)
-        struct.members.add(
-            user,
-            through_defaults={
-                "is_admin": True,
-            },
-        )
+        make_structure_member(user=user, structure=struct, is_admin=True)
         user2 = baker.make("users.User", is_valid=True)
         self.client.force_authenticate(user=user2)
         response = self.client.post(

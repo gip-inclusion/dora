@@ -2,7 +2,12 @@ from django.core import mail
 from model_bakery import baker
 from rest_framework.test import APITestCase
 
-from dora.core.test_utils import make_service, make_structure
+from dora.core.test_utils import (
+    make_service,
+    make_structure,
+    make_structure_member,
+    make_user,
+)
 from dora.services.enums import ServiceStatus
 from dora.structures.constants import RESTRICTED_NATIONAL_LABELS
 from dora.structures.models import (
@@ -32,15 +37,10 @@ class StructureTestCase(APITestCase):
         )
         # Structure dont je suis administrateur
         self.my_struct = make_structure()
-        self.my_struct.members.add(
-            self.me,
-            through_defaults={
-                "is_admin": True,
-            },
-        )
+        make_structure_member(user=self.me, structure=self.my_struct, is_admin=True)
         # Structure dont je ne suis pas administrateur
         self.my_other_struct = make_structure(creator=None, last_editor=None)
-        self.my_other_struct.members.add(self.me)
+        make_structure_member(user=self.me, structure=self.my_other_struct)
 
         # Structure dont je ne suis pas membre
         self.other_struct = make_structure()
@@ -354,68 +354,35 @@ class StructureMemberTestCase(APITestCase):
             is_valid=True,
         )
         self.my_struct = make_structure()
-        self.my_struct.members.add(
-            self.me,
-            through_defaults={
-                "is_admin": True,
-            },
-        )
-
-        self.my_struct.members.add(
-            self.user1,
-            through_defaults={
-                "is_admin": True,
-            },
-        )
-        self.my_struct.members.add(
-            self.user2,
-            through_defaults={
-                "is_admin": False,
-            },
-        )
+        make_structure_member(user=self.me, structure=self.my_struct, is_admin=True)
+        make_structure_member(user=self.user1, structure=self.my_struct, is_admin=True)
+        make_structure_member(user=self.user2, structure=self.my_struct, is_admin=False)
 
         self.my_other_struct = make_structure(creator=None, last_editor=None)
-        self.my_other_struct.members.add(
-            self.me,
-            through_defaults={
-                "is_admin": True,
-            },
+        make_structure_member(
+            user=self.me, structure=self.my_other_struct, is_admin=True
         )
-        self.my_other_struct.members.add(self.my_other_struct_user)
+        make_structure_member(
+            user=self.my_other_struct_user, structure=self.my_other_struct
+        )
 
         self.other_struct = make_structure()
-        self.other_struct.members.add(
-            self.another_struct_user,
-            through_defaults={
-                "is_admin": True,
-            },
+        make_structure_member(
+            user=self.another_struct_user, structure=self.other_struct, is_admin=True
         )
 
         # Structure dans le departement 31 (pour tester les gestionnaires de territoire)
         self.struct_31 = make_structure(department="31")
-        self.struct_31.members.add(
-            self.me,
-            through_defaults={
-                "is_admin": True,
-            },
-        )
-        self.struct_31.members.add(
-            self.other_struct31_user,
-            through_defaults={
-                "is_admin": False,
-            },
+        make_structure_member(user=self.me, structure=self.struct_31, is_admin=True)
+        make_structure_member(
+            user=self.other_struct31_user, structure=self.struct_31, is_admin=False
         )
 
         self.struct_31_2 = make_structure(department="31")
 
         # Structure dans un autre departement (pour tester les gestionnaires de territoire)
         self.struct_44 = make_structure(department="44")
-        self.struct_44.members.add(
-            self.me,
-            through_defaults={
-                "is_admin": True,
-            },
-        )
+        make_structure_member(user=self.me, structure=self.struct_44, is_admin=True)
 
     def test_create_struct_creates_member(self):
         # For now, this is only open to staff members
@@ -798,12 +765,7 @@ class StructureMemberTestCase(APITestCase):
     def test_manager_can_invite_once_theres_an_admin(self):
         self.client.force_authenticate(user=self.manager)
         struct_31 = make_structure(department="31")
-        struct_31.members.add(
-            baker.make("users.User", is_valid=True),
-            through_defaults={
-                "is_admin": True,
-            },
-        )
+        make_structure_member(user=make_user(), structure=self.struct_31, is_admin=True)
 
         response = self.client.post(
             f"/structure-putative-members/?structure={struct_31.slug}",
@@ -1002,9 +964,7 @@ class StructureMemberTestCase(APITestCase):
     def test_admin_cant_resend_invite_to_valid_member(self):
         self.client.force_authenticate(user=self.me)
         user = baker.make("users.User", is_valid=True)
-        self.my_struct.members.add(
-            user,
-        )
+        make_structure_member(user=user, structure=self.my_struct)
         member = user.membership.get(structure=self.my_struct)
 
         response = self.client.post(
@@ -1125,7 +1085,7 @@ class StructureMemberTestCase(APITestCase):
         admin = baker.make("users.User", is_valid=True)
         structure = make_structure()
         baker.make("Establishment", siret=structure.siret)
-        structure.members.add(admin, through_defaults={"is_admin": True})
+        make_structure_member(user=admin, structure=structure, is_admin=True)
 
         self.client.force_authenticate(user=admin)
         response = self.client.post(
